@@ -2,7 +2,7 @@
 
 Perma Plan(t) is a multi-platform app for
 
-- Android (main target, available via FDroid)
+- Android 9+ (main target, available via FDroid)
 - Web
 - iOS
 
@@ -11,9 +11,15 @@ to avoid updates if knowledge about plants improve.
 
 ## Features
 
-- beautiful UI
 - easy to use
+- beautiful UI
+- robust
 - undo
+- todos/upcoming
+
+Probably later:
+
+- Nextcloud integration
 
 ## Modes
 
@@ -33,14 +39,25 @@ to avoid updates if knowledge about plants improve.
 - Bed
 - Zones
 
-### Step Plants
+### New Plants
 
-- selection of plants (suggest what fits now from time of year)
-- stepping stone
-- Trees
-- Bush
-- Small Plant
-- Field Plant
+- add photos+general infos
+- add infos (to enable checks below)
+
+### Step Plan Plants
+
+- selection of plants; suggested by:
+  - what was used recently
+  - what makes sense on the current screen/checks
+  - what fits in the time of year
+- zoom
+- drag & drop of:
+  - stepping stone
+  - Trees
+  - Bush
+  - Small Plant (area)
+  - Field Plant (area)
+- visual & sound indication for checks
 
 ## Checks
 
@@ -48,4 +65,5 @@ to avoid updates if knowledge about plants improve.
 - soil
 - good/bad neighbor
 - time (good bad successor plants)
+- wet/dry
 
