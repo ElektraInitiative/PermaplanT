@@ -2,9 +2,8 @@
 
 Perma Plan(t) is a multi-platform app for
 
-- Android 9+ (main target, available via FDroid)
-- Web
-- iOS
+- Web (Firefox, Chromium)
+- Progressive Web App (PWAs) Android 9+ (available via FDroid)
 
 It has a server-side component with a database for plants
 to avoid updates if knowledge about plants improve.
@@ -20,10 +19,14 @@ to avoid updates if knowledge about plants improve.
 Probably later:
 
 - Nextcloud integration
+- GPS
 
 ## Modes
 
 - Planing of landscape
+- Zones
+- Dry/Wet
+- Planning of Trees
 - Planning of plants
 - Recording (What planting was done)
 - Strolling (Information Mode)
@@ -37,7 +40,6 @@ Probably later:
 - Fence
 - Way
 - Bed
-- Zones
 
 ### New Plants
 
@@ -66,4 +68,3 @@ Probably later:
 - good/bad neighbor
 - time (good bad successor plants)
 - wet/dry
-
