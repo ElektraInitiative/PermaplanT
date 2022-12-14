@@ -14,6 +14,8 @@ to avoid updates if knowledge about plants improve.
 - beautiful UI
 - robust
 - undo
+- translation: English, German
+- everything included: no external JavaScript, Fonts, etc.
 - todos/upcoming
 
 Probably later:
