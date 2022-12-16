@@ -63,10 +63,5 @@ Probably later:
   - Field Plant (area)
 - visual & sound indication for checks
 
-## Checks
 
-- sun
-- soil
-- good/bad neighbor
-- time (good bad successor plants)
-- wet/dry
+
