@@ -2,7 +2,7 @@
 
 ## Problem
 
-The Perma Plan(t) app needs a frontend programming language to build its user interface and provide interactivity for its users.
+The Permaplant app needs a frontend programming language to build its user interface and provide interactivity for its users.
 
 ## Constraints
 
