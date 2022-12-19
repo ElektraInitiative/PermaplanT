@@ -36,7 +36,8 @@ We will use JavaScript ([ES6](https://www.w3schools.com/js/js_es6.asp)) as the f
 
 JavaScript is a widely-used and well-supported language with a large and active developer community. 
 It is also a highly flexible and versatile language, which makes it well-suited to a wide range of applications, including web-based applications like the Perma Plan(t) app. Additionally, JavaScript has good support for modern web technologies, which will enable the creation of visually appealing and interactive user interfaces for the app.
-ES6 (ECMAScript 2015) introduces new syntax, enhanced object-oriented programming, improved asynchronous programming, and a native module system to JavaScript. These features can help developers write more efficient and maintainable code.
+The version ES6 (ECMAScript 2015) introduces new syntax, enhanced object-oriented programming, improved asynchronous programming, and a native module system to JavaScript. 
+These features can help developers write more efficient and maintainable code.
 
 The app will be able to take advantage of the large ecosystem of libraries and resources available for JavaScript development.
 

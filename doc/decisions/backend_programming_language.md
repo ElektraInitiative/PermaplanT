@@ -6,7 +6,12 @@ When selecting a backend programming language, a major issue is the range of opt
 
 ## Constraints
 
-- The language must be performant and easily maintainable
+- The language and its ecosystem must be free software.
+- The language must be performant.
+- The code must be easily maintainable.
+- scalability
+- security
+- availability of developers and support
 
 ## Assumptions
 
@@ -18,10 +23,12 @@ When selecting a backend programming language, a major issue is the range of opt
 
 ## Decision
 
-Rust has a growing community of developers and a robust ecosystem of libraries and tools, which can make it easier to build and maintain backend applications.
-Overall, Rust's combination of performance, safety, and support make it a viable option for backend development.
+We will use Rust as the backend programming language for Permaplant.
 
 ## Rationale
+
+Rust has a growing community of developers and a robust ecosystem of libraries and tools, which can make it easier to build and maintain backend applications.
+Overall, Rust's combination of performance, safety, and support make it a viable option for backend development.
 
 ## Implications
 
