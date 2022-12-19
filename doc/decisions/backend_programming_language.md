@@ -2,16 +2,17 @@
 
 ## Problem
 
-When selecting a backend programming language, a major issue is the range of options available, each with its own strengths and capabilities. This makes it challenging to determine the best language for a particular project or application. Factors to consider include performance, scalability, security, and the availability of developers and support.
+When selecting a backend programming language, a major issue is the range of options available, each with its own strengths and capabilities. 
+This makes it challenging to determine the best language for a particular project or application.
 
 ## Constraints
 
 - The language and its ecosystem must be free software.
 - The language must be performant.
 - The code must be easily maintainable.
-- scalability
-- security
-- availability of developers and support
+- Scalability
+- Security
+- Availability of developers and support
 
 ## Assumptions
 
