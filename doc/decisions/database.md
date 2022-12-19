@@ -27,7 +27,7 @@ A relational database would be more suited.
 
 ## Decision
 
-We will use [PostgreSQL](https://www.postgresql.org/) as the database for the Perma Plan(t) app in addition with a [PostGIS](https://postgis.net/) extension for spatial queries.
+We will use [PostgreSQL](https://www.postgresql.org/) as the database for the Permaplant app in addition with a [PostGIS](https://postgis.net/) extension for spatial queries.
 
 ## Rationale
 
