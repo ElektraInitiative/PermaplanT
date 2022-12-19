@@ -22,9 +22,14 @@ We need to choose a UI framework for the Perma Plan(t) app that will enable us t
 
 ## Decision
 
-React is a popular JavaScript library for building user interfaces, and it is a good choice for building progressive web apps (PWAs) for several reasons. Some of the key advantages of using React for PWAs include its performance, flexibility, and developer-friendly ecosystem. React uses a declarative approach to building user interfaces, which makes it easy to create complex and interactive PWAs. Additionally, React has a large and active community of developers, with a wealth of resources and tools available, such as libraries, components, and tutorials.
+We will use [React](https://reactjs.org/) (18.2.0) as the frontend ui framework for app. 
 
 ## Rationale
+
+React is a popular JavaScript library for building user interfaces, and it is a good choice for building progressive web apps (PWAs) for several reasons. 
+Some of the key advantages of using React for PWAs include its performance, flexibility, and developer-friendly ecosystem. 
+React uses a declarative approach to building user interfaces, which makes it easy to create complex and interactive PWAs. 
+Additionally, React has a large and active community of developers, with a wealth of resources and tools available, such as libraries, components, and tutorials.
 
 ## Implications
 
