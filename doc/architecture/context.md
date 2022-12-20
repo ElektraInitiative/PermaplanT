@@ -2,15 +2,24 @@
 
 ## Global for Garden
 
-- Bodenschwereklassen: Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) [Klassen]
-  to be entered when creating a garden, from:
-  - 1 sehr leicht/very light (S, uS)
-  - 2 leicht/light (U, sU, IS)
-  - 3 mittelschwer/medium (tS, sL, IU)
-  - 4 schwer/heavy (sT, L, uL)
-  - 5 sehr schwer/very heavy (T, IT)
-- ph Wert (Bodenreaktion): Pflanzenauswahl (Kohl basisch, ph3 Heidelbeeren), dynamisch, **wichtig**
-- Ages Ertragsklasse (NPK), eigentlich für Intensivkultur, 1-4 (Stark/Schwachzehrer)
+To be entered when creating a garden.
+
+- soil weight class (German: Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) [Klassen])
+  from:
+  - 1 very light (S, uS) (German: sehr leicht)
+  - 2 light (U, sU, IS) (German: leicht)
+  - 3 medium (tS, sL, IU) (German: mittelschwer)
+  - 4 heavy (sT, L, uL) (German: schwer)
+  - 5 very heavy (T, IT) (German: sehr schwer)
+- ph base value from 0-14
+  (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamisch
+- yield grade (German: Ages Gehaltsklasse (Nährstoffversorgung und Humusgehalt) ÖNORM L 1210, determined from NPK, eigentlich für Intensivkultur, Stark/Schwachzehrer)
+  from:
+  - A sehr niedrig
+  - B niedrig
+  - C ausreichend
+  - D hoch
+  - E sehr hoch
 
 ### Later Versions
 
@@ -33,8 +42,18 @@
 - Fruchtfolge, time (good bad successor plants)
 - good/bad neighbor
 - wet/dry places (e.g. by Oberflächenwasser or watering)
+- ph local value from 0-14 to do corrections of the base value on specific places
+- Zonen, nähe von weg
 
 ### Later Versions
 
 - Straßennähe (Salz, Staub)
 - Baumkronenüberschattung/Overshadowing
+
+# Output Parameters
+
+- when to do what&where
+
+### later
+
+- weather alerts?
