@@ -3,7 +3,7 @@
 Perma Plan(t) is a multi-platform app for
 
 - Web (Firefox, Chromium)
-- Progressive Web App (PWAs) Android 9+ (available via FDroid)
+- Progressive Web App (PWAs) Android 9+
 
 It has a server-side component with a database for plants
 to avoid updates if knowledge about plants improve.
