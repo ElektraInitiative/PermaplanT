@@ -40,7 +40,6 @@ To be entered when creating a garden.
 
 - Abstände zu Bäume/Sträuche (Wurzel)
 - Fruchtfolge, time (good bad successor plants)
-- good/bad neighbor
 - wet/dry places (e.g. by Oberflächenwasser or watering)
 - ph local value from 0-14 to do corrections of the base value on specific places
 - Zonen, nähe von weg
@@ -50,9 +49,25 @@ To be entered when creating a garden.
 - Straßennähe (Salz, Staub)
 - Baumkronenüberschattung/Overshadowing
 
+## Plant Database
+
+- photos
+- general infos
+- size/distances
+- constraints where they want to be:
+  - sun
+  - soil weight
+  - ph value
+  - yield grade
+  - freeze resistance
+  - good/bad neighbors
+  - wet/dry
+  - zones
+
 # Output Parameters
 
-- when to do what&where
+- coordinates of plants to plant
+- yield (Ertrag)
 
 ### later
 
