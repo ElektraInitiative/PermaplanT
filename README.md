@@ -21,6 +21,9 @@ to avoid updates if knowledge about plants improve.
 - zoom
 - translation: English, German
 - everything included: no external JavaScript, Fonts, etc.
+
+Later:
+
 - Nextcloud integration (calender entries, Deck tasks)
 - GPS
 
@@ -32,10 +35,11 @@ In any layer other layers might be displayed or hidden.
 - Base (import base image, define borders, scale, orient)
 - Landscape (height&sketch of permanent structures like walls, ponds, buildings, beds)
 - Trees (stem position&height&sketch&type of trees, bushes etc.)
-- Shadows (more/less sun exposure, with suggestions from previous steps Landscape and Trees)
-- Wind
+- Shadows (more/less sun exposure)
+- Wind (more windy places)
 - Zones
 - Infrastructure (cables, wifi spots, pipes, ...)
+- PH values
 - Dry/Wet
 - Paths (ways, fences, stepping stones)
 - Plants
@@ -47,5 +51,5 @@ In any layer other layers might be displayed or hidden.
   - what makes sense on the current screen/checks
   - what fits in the time of year
 - drag & drop
-- visual & sound indication for checks
+- visual indication for checks
 
