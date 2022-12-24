@@ -1,6 +1,6 @@
-# Perma Plan(t)
+# PermaplanT
 
-Perma Plan(t) is a Web App for
+PermaplanT is an app for
 
 - Web (Firefox, Chromium)
 - Progressive Web App (PWAs) Android 9+
@@ -9,56 +9,59 @@ It has a server-side component with a database for plants.
 
 ## Goal
 
-The overall goal of the web app is to enable planning:
+The overall goal of the app is to enable planning:
 
-- with good yield, while still
-- providing a fully functioning and diverse ecosystem.
+- for a good yield, while
+- providing a diverse and fully functioning ecosystem.
 
-To achieve that:
+To achieve that the app provides, e.g.:
 
-- suggestion for:
-  - increasing diversity, not only what was used recently
+- visual indications for what:
+  1. makes sense according to natural constraints
+  2. is practical
+  3. enhances diversity and supports the ecosystem
+- suggestions for:
+  - increasing diversity (not only what was used recently)
   - what fits well in the time of the year
-- visual indication for:
-  - what makes sense for the given constraints
-  - what improves diversity and the ecosystem
 
 ## Non-functional Goals
 
 - easy to use
-- efficient to use
-- beautiful UI
+- aesthetic UI
 
 ## Features
 
 - layers (see below)
-- undo
-- copy&paste of selection
+- undo/redo
+- copy&paste of selection including succeeding crops
 - zoom
 - translation: English, German
 - everything included: no external JavaScript, Fonts, etc.
 
-Later:
+Later (probably out-of-scope for first version):
 
 - Nextcloud integration (calender entries, Deck tasks)
 - GPS tagging in the field
+- Import/Export
+- Timelaps of historic garden development
 
 ### Layers
 
-In all layers --- but base --- current, past or future entities might be intermixed.
-In any layer other layers might be displayed or hidden.
+In all layers --- except for base --- past, current or future entities might be intermixed.
+While editing any layer other layers might be displayed or hidden.
 
-- Base¹ (import base image, define borders, scale, orient)
+- Base¹ (import base image, define borders, scale, orientation)
 - Landscape¹ (height&sketch of permanent structures like walls, ponds, buildings, beds)
 - Trees¹ (stem position&height&sketch&type of trees, bushes etc.)
-- Shadows (more/less sun exposure)
 - Wind (more windy places)
-- Zones
-- Animals (where Ducks may walk)
+- Shadows (more/less sun exposure)
 - Infrastructure (cables, wifi spots, pipes, ...)
+- Moisture (watering systems, surface water, ...)
 - PH values
-- Dry/Wet (watering systems, surface water, ...)
+- Animals (e.g. where ducks may walk)
+- Aids (especially nesting aids, heaps of stones or leaves, ...)
 - Paths (ways, fences, stepping stones)
+- Zones
 - Plants¹
 
 ¹ Essential (most used) layers: are more prominently shown than others.
