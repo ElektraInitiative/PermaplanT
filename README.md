@@ -38,12 +38,14 @@ To achieve that the app provides, e.g.:
 - translation: English, German
 - everything included: no external JavaScript, Fonts, etc.
 
-Later (probably out-of-scope for first version):
+Later, i.e. likely out of scope for first version:
 
-- Nextcloud integration (calender entries, Deck tasks)
-- GPS tagging in the field
+- Nextcloud integrations (calender entries, Deck tasks)
+- GPS coordinates
 - Import/Export
 - Timelaps of historic garden development
+- 3D modes (forest garden)
+- automatic shadow and moisture calculation
 
 ### Layers
 
