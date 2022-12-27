@@ -41,11 +41,12 @@ To achieve that the app provides, e.g.:
 Later, i.e. likely out of scope for first version:
 
 - Nextcloud integrations (calender entries, Deck tasks)
-- GPS coordinates
 - Import/Export
-- Timelaps of historic garden development
-- 3D modes (forest garden)
+- GPS coordinates
+- weather data (warnings on frost etc.)
 - automatic shadow and moisture calculation
+- 3D modes (forest garden)
+- Timelaps of historic garden development
 
 ### Layers
 
