@@ -47,6 +47,7 @@ Later, i.e. likely out of scope for first version:
 - automatic shadow and moisture calculation
 - 3D modes (forest garden)
 - Timelaps of historic garden development
+- Social features (notification that someone entered the garden, Chat&Photograph layer)
 
 ### Layers
 
