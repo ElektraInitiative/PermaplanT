@@ -54,7 +54,7 @@ In all layers --- except for base --- past, current or future entities might be 
 While editing any layer other layers might be displayed or hidden.
 
 - Base¹ (import base image, define borders, scale, orientation)
-- Landscape¹ (height&sketch of permanent structures like walls, ponds, buildings, beds)
+- Landscape¹ (height&sketch of permanent structures like walls, ponds, constructions, beds)
 - Trees¹ (stem position&height&sketch&type of trees, bushes etc.)
 - Wind (more windy places)
 - Shadows (more/less sun exposure)
