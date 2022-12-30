@@ -10,10 +10,19 @@
 
 ## Scenarios
 
-- **Precondition:** User has opened the app and selected the "New Plants" mode.
-- **Main success scenario:** User successfully adds a new plant to the app's database by providing photos and general information about the plant.
-- **Alternative scenario:** User accidentally provides incorrect information about the plant and can request to reedit the information.
-- **Error scenario:** User attempts to add a plant that is already in the app's database and the app displays an error message.
-- **Postcondition:** The app's database has been updated with the new plant.
+- **Precondition:**
+  User has opened the app and selected the "New Plants" mode.
+
+- **Main success scenario:**
+  User successfully adds a new plant to the app's database by providing photos and general information about the plant.
+
+- **Alternative scenario:**
+  User accidentally toggles the visibility of the wrong layer and uses the app's visibility function again to toggle it to the correct state.
+
+- **Error scenario:**
+  User attempts to toggle the visibility of a layer but the app is unable to process the request and the app displays an error message.
+
+- **Postcondition:**
+  The user has changed the visibility of the selected layer in their landscape plan.
+
 - **Non-functional Constraints:**
-  - Accurate plant information
