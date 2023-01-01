@@ -25,8 +25,8 @@ We will use [Jenkins](https://www.jenkins.io/) for our CI/CD process.
 
 ## Rationale
 
-While GitHub Actions is a convenient and easy-to-use option, it may not be as flexible as Jenkins, which has a wider range of features and plugins. 
-In addition, Jenkins is an open-source tool that is widely used and has a large community of users and developers, which means that it is likely to be well-documented and supported. 
+While GitHub Actions is a convenient and easy-to-use option, it may not be as flexible as Jenkins, which has a wider range of features and plugins.
+In addition, Jenkins is an open-source tool that is widely used and has a large community of users and developers, which means that it is likely to be well-documented and supported.
 Finally, Jenkins is compatible with a wide range of tools and services, which may be important for the app as it grows and evolves.
 
 ## Implications

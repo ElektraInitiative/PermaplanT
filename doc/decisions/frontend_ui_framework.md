@@ -2,23 +2,25 @@
 
 ## Problem
 
-We need to choose a UI framework for the Perma Plan(t) app that will enable us to create a beautiful and easy-to-use interface and that is well-suited for building PWAs with JavaScript.
+We need to choose a UI framework for the PermaplanT app that will enable us to create a beautiful and easy-to-use interface and that is well-suited for building PWAs with JavaScript.
 
 ## Constraints
 
-- The framework must be compatible with the progressive web app (PWA) architecture.
+- The framework must be compatible with the PWA architecture.
 - The framework must be able to handle complex, data-intensive operations such as checks for sun, soil, good/bad neighbors, and time of year.
 
 ## Assumptions
 
 - React is a popular and widely-used framework for building user interfaces, which means that there will be a large community of developers available to help with any issues that arise.
-- React allows for the creation of reusable components, which will be useful for building the various modes and features of the Perma Plan(t) app.
+- React allows for the creation of reusable components, which will be useful for building the various modes and features of the PermaplanT app.
 - React is fast and efficient, which will be important for providing users with a smooth and responsive experience.
 
 ## Considered Alternatives
 
-- Angular
-- Vue.js
+- [Tamagui](https://tamagui.dev/blog/version-one)
+- [React Native](https://reactnative.dev/)
+- [AngularJS](https://angularjs.org/)
+- [Vue.js](https://vuejs.org/)
 
 ## Decision
 
