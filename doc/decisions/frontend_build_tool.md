@@ -2,7 +2,7 @@
 
 ## Problem
 
-We need to choose a build tool for the React frontend of our application that can bundle various types of assets, such as JavaScript, CSS, and images, into a single package that can be efficiently loaded by the browser.
+We need to choose a build tool for the React frontend of our application that can bundle various types of assets, such as JavaScript, CSS, and images that can be efficiently loaded by the browser.
 
 ## Constraints
 
