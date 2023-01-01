@@ -2,7 +2,7 @@
 
 ## Problem
 
-The Perma Plan(t) Web App needs a 2D graphics library to build one of its core features using the canvas.
+The PermaplanT App needs a 2D graphics library to build one of its core features using the canvas.
 
 ## Constraints
 
@@ -40,7 +40,7 @@ Additionally, Fabric.js does not have a built-in layering system like Konva.
 
 ## Decision
 
-We will use [Konva](https://konvajs.org/) as the 2D graphics library for the Permaplant app.
+We will use [Konva](https://konvajs.org/) as the 2D graphics library for the PermaplanT app.
 
 ## Rationale
 
