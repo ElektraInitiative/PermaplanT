@@ -31,7 +31,8 @@ To achieve that the app provides, e.g.:
 
 ## Features
 
-- layers (see below)
+- users can have any number of maps
+- maps have a fixed number of layers (see below)
 - undo/redo
 - copy&paste of selection including succeeding crops
 - zoom
@@ -56,14 +57,14 @@ While editing any layer other layers might be displayed or hidden.
 
 - Base¹ (import base image, define borders, scale, orientation)
 - Landscape¹ (height&sketch of permanent structures like walls, ponds, constructions, beds)
-- Trees¹ (stem position&height&sketch&type of trees, bushes etc.)
-- Wind (more windy places)
+- Trees¹ (stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
+- Wind (more or less windy places)
 - Shadows (more/less sun exposure)
 - Infrastructure (cables, wifi spots, pipes, ...)
 - Moisture (watering systems, surface water, ...)
-- PH values
+- pH Values
 - Animals (e.g. where ducks may walk)
-- Aids (especially nesting aids, heaps of stones or leaves, ...)
+- Habitats (especially nesting aids, heaps of stones or leaves, perches)
 - Paths (ways, fences, stepping stones)
 - Zones
 - Plants¹
