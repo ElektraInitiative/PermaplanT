@@ -20,5 +20,5 @@
 - **Error scenario:**
   The user tries to add a label with more characters than the maximum allowed, and the app displays an error message indicating the maximum character limit.
 - **Postcondition:**
-  The user's landscape plan includes labels as desired.
+  The user's map includes labels as desired.
 - **Non-functional Constraints:**
