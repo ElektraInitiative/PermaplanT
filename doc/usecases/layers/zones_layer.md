@@ -5,7 +5,7 @@
 - **Scope:** Zones Layer
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can add, edit, move and delete zones in their plan using the zones layer. Zones can be added via common shapes or hand drawn polygons.
+- **Brief:** The user can add, edit, move and delete zones in their plan using the zones layer.
 - **Status:** Draft
 
 ## Scenarios
@@ -13,7 +13,10 @@
 - **Precondition:**
   The user has opened the app and has selected the zones layer.
 - **Main success scenario:**
-  The user successfully adds, edits, moves and deletes zones in their plan using the zones layer. This includes positioning the zones in the appropriate location.
+  The user successfully adds, edits, moves and deletes zones in their plan using the zones layer. 
+  This includes positioning the zones in the appropriate location. 
+  Zones can be added via common shapes, hand drawn polygons or a big brush to draw on the zones layer.
+  The zones exclude each other (different to animals, where they can overlap).
 - **Alternative scenario:**
   The user accidentally adds or moves a zone in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**

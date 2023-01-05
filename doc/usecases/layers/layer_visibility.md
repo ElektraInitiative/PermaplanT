@@ -2,7 +2,7 @@
 
 ## Summary
 
-- **Scope:** Layer Visibility
+- **Scope:** All Layers
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User changes the visibility of layers in their plan
@@ -13,13 +13,11 @@
 - **Precondition:**
   User has opened the app and has multiple layers available to view.
 - **Main success scenario:**
-  User successfully changes the visibility of layers in their landscape plan by selecting the desired layer from the app's menu and toggling the visibility on or off.
+  User successfully changes the visibility of layers in their map by selecting the desired layers and can toggle the visibility on or off.
 - **Alternative scenario:**
-  User accidentally selects the wrong image and selects another image to correct the mistake.
+  User accidentally toggles the visibility of the wrong layer and uses the app's undo function or toggling it again to correct the mistake.
 - **Error scenario:**
-  - User attempts to import a file that is not a supported image format or is corrupted and the app displays an error message.
-  - Borders do not close: the app displays an error message.
+  The user attempts to toggle the visibility but the app is experiencing technical difficulties and is unable to complete the request, displaying an error message.
 - **Postcondition:**
-  The user's selected background image and borders are used for further planning.
+  The user has changed the visibility of the selected layer.
 - **Non-functional Constraints:**
-  - Support for multiple image formats

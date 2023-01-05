@@ -13,7 +13,7 @@
 - **Precondition:**
   The user has opened the app and has selected the infrastructure layer.
 - **Main success scenario:**
-  The user successfully adds, edits, moves and deletes infrastructure elements plan using the infrastructure layer.
+  The user successfully adds, edits, moves and deletes infrastructure elements using the infrastructure layer.
   This includes positioning the elements in the appropriate locations and adjusting their properties as needed.
 - **Alternative scenario:**
   The user accidentally adds or edits an infrastructure element in the wrong location and uses the app's undo function to correct the mistake.

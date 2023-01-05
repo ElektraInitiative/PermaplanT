@@ -2,10 +2,10 @@
 
 ## Summary
 
-- **Scope:** Measuring Distance
+- **Scope:** All Layers
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can measure the distance between different elements in their plan in order to ensure that the layout is practical and accurate.
+- **Brief:** The user can measure the distance between different elements in their map.
 - **Status:** Draft
 
 ## Scenarios
@@ -14,10 +14,9 @@
   The user has opened the app and has selected the desired layer (e.g. plants, paths).
 - **Main success scenario:**
   - The user selects the "Measure Distance" button.
-  - The user clicks on the first element they want to measure the distance from.
-  - The user clicks on the second element they want to measure the distance to.
-  - The app displays the distance between the two elements in the desired unit (e.g. meters, feet).
-  - The user adjusts the layout of their landscape plan as needed based on the measured distance.
+  - The user clicks on the first point they want to measure the distance from.
+  - The user clicks on the multiple elements they want to measure the distance to.
+  - The app displays the distance between the multiple elements in the desired unit (e.g. meters, feet).
 - **Alternative scenario:**  
   The user accidentally clicks on the wrong element and uses the app's undo function to correct the mistake.
 - **Error scenario:**

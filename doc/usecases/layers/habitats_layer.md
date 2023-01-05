@@ -1,11 +1,11 @@
-# Use Case: Aids Layer
+# Use Case: Habitats Layer
 
 ## Summary
 
-- **Scope:** Zones Layer
+- **Scope:** Habitats Layer
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can add, edit, move and delete aids such as nesting aids, heaps of stones, leaves etc in their plan using the aids layer to support their plants and ecosystem
+- **Brief:** The user can add, edit, move and delete habitats of wild animals to support their plants and ecosystem in their map using the habitats layer
 - **Status:** Draft
 
 ## Scenarios
@@ -13,7 +13,10 @@
 - **Precondition:**
   The user has opened the app and has selected the aids layer.
 - **Main success scenario:**
-  The user successfully adds, edits, moves and deletes aids in their landscape plan using the aids layer. This includes positioning the aids in the appropriate location.
+  The user successfully adds, edits, moves and deletes aids in their map using the habitats layer.
+  For example: nesting aids, heaps of stones or leaves, perches etc.
+  This includes positioning the aids in the appropriate location.
+  Habitats can be added by a big brush to draw on the habitats layer.
 - **Alternative scenario:**
   The user accidentally adds or moves an aid in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**

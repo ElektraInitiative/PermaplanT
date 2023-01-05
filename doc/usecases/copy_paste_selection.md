@@ -2,7 +2,7 @@
 
 ## Summary
 
-- **Scope:** Planning
+- **Scope:** All Layers, except Base
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can copy and paste a selection of elements, including succeeding crops, in their plan
@@ -13,7 +13,7 @@
 - **Precondition:**
   The user has opened the app and has made a selection of elements that they want to copy and paste.
 - **Main success scenario:**
-  The user successfully copies and pastes the selection of elements.
+  The user successfully copies and pastes the selection of elements, within the same map, between own maps or between an own map and a map of another user.
 - **Alternative scenario:**
   The user accidentally pastes the selection in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**

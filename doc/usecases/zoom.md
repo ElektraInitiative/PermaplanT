@@ -5,7 +5,7 @@
 - **Scope:** Zoom
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can zoom in and out on their landscape plan to view details more clearly or get a better overview of their garden.
+- **Brief:** The user can zoom in and out on their landscape map to view details more clearly or get a better overview of their map.
 - **Status:** Draft
 
 ## Scenarios
@@ -13,8 +13,7 @@
 - **Precondition:**
   The user has opened the app and has selected the desired layer (e.g. plants, paths).
 - **Main success scenario:**
-  - The user is able to zoom in on a specific area of the plan.
-  - The user is able to zoom out and view a wider area of the plan.
+  The user is able to zoom in on a specific area of the plan and zoom out to view a wider area of the plan.
 - **Alternative scenario:**  
   The user accidentally zooms in or out too far and uses the "Zoom Reset" button to return to the default zoom level.
 - **Error scenario:**
