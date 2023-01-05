@@ -28,6 +28,7 @@ To achieve that the app provides, e.g.:
 
 - easy to use
 - aesthetic UI
+- collaborative use
 
 ## Features
 
@@ -57,6 +58,7 @@ While editing any layer other layers might be displayed or hidden.
 
 - Base¹ (import base image, define borders, scale, orientation)
 - Landscape¹ (height&sketch of permanent structures like walls, ponds, constructions, beds)
+- Labels (allows to put text labels, e.g. names for beds)
 - Trees¹ (stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
 - Wind (more or less windy places)
 - Shadows (more/less sun exposure)
@@ -67,6 +69,6 @@ While editing any layer other layers might be displayed or hidden.
 - Habitats (especially nesting aids, heaps of stones or leaves, perches)
 - Paths (ways, fences, stepping stones)
 - Zones
-- Plants¹
+- Plants¹ (individual and fields of plants)
 
 ¹ Essential (most used) layers: are more prominently shown than others.
