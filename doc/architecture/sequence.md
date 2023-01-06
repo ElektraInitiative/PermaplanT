@@ -1,3 +1,7 @@
+# Sequence
+
+Example of a typical sequence in one season:
+
 ```mermaid
 sequenceDiagram
     actor User
