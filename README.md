@@ -59,7 +59,7 @@ While editing any layer other layers might be displayed or hidden.
 - Base¹ (import base image, define borders, scale, orientation)
 - Landscape¹ (height&sketch of permanent structures like walls, ponds, constructions, beds)
 - Labels (allows to put text labels, e.g. names for beds)
-- Trees¹ (stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
+- Trees (stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
 - Wind (more or less windy places)
 - Shadows (more/less sun exposure)
 - Infrastructure (cables, wifi spots, pipes, ...)
