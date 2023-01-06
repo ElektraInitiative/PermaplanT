@@ -11,8 +11,8 @@ sequenceDiagram
     User->>App: planning of plants
     App->>-User: list of needed seeds
     User->World: get missing seeds
-    User->>World: start small plants indoor (vorziehen)
-    User->>App: set batch as started
+    User->>World: raise plants indoor (vorziehen)
+    User->>App: set batch as raised
 
     World->>User: plants ready, weather ok
     loop
