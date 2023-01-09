@@ -14,7 +14,7 @@
   The user has opened the app and is on the map search page.
 - **Main success scenario:**
   The user enters a keyword into the search field and the app displays a list of maps that match the keyword, including both the user's own maps and public maps created by other users. 
-  The user can then select a map to view it in more detail.
+  The user can then select a map to view it.
 - **Alternative scenario:**
   The user enters a keyword that does not match any maps in the app. 
   In this case, the app displays a message to the user indicating that no maps were found.
