@@ -14,6 +14,7 @@
   The user has opened the app and selected the map view.
 - **Main success scenario:**
   The user selects the timeline view and uses the scroll bar with a month granularity or date field to navigate to a different point in time. 
+  The scroll bar visually indicates in which months there are changes and at which months the map is empty (without plants).
   The map updates to show the state of the garden at the selected time.
 - **Alternative scenario:**
   The user tries to navigate to a date that is outside the range of the timeline. 

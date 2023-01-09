@@ -18,7 +18,7 @@
 - **Alternative scenario:**
   The user accidentally adds a label in the wrong location and uses the app's undo function to correct the mistake
 - **Error scenario:**
-  The user tries to add a label with more characters than the maximum allowed, and the app displays an error message indicating the maximum character limit.
+  The user tries to add a label with more than 2000 characters, and the app displays an error message indicating the maximum character limit.
 - **Postcondition:**
   The user's map includes labels as desired.
 - **Non-functional Constraints:**
