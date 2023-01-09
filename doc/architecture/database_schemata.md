@@ -1,7 +1,14 @@
-classDiagram
 
-class tag {
-  <<enumeration>>
+# Database Schemata
+
+## Seeds
+Tag and Quality in this case are enum. 
+Postgres supports [enums](https://www.postgresql.org/docs/current/datatype-enum.html) so it is easy to define a static set of values. 
+
+```mermaid
+erDiagram
+
+tag {
   Leaf crops
   Fruit crops
   Root crops
@@ -10,49 +17,48 @@ class tag {
   Other
 }
 
-class quality {
-  <<enumeration>>
+quality {
   Organic
   Not organic
   Unknown
 }
 
-class seeds {
-  --
-  id
-  tag
-  type
-  plant_id
-  harvest_year
-  use_by
-  origin
-  flavor
-  yield
-  quantity
-  quality
-  price
-  generation
-  notes
+seeds {
+  INT id PK
+  tag[] tag "NOT NULL"
+  VARCHAR type "NOT NULL"
+  INT plant_id "NOT NULL"
+  SMALLINT harvest_year "NOT NULL"
+  DATE use_by
+  VARCHAR origin
+  VARCHAR flavor
+  INT yield
+  INT quantity
+  quality quality
+  INT price
+  INT generation
+  VARCHAR notes
 }
 
-class plants {
-  --
-  id
-  tag
-  type
-  synonym
-  sowing
-  sowing_depth
-  germination_temperature
-  prick_out
-  transplant
-  row_spacing
-  plant_density
-  germination_time
-  harvest_time
-  location
-  care
-  height
+plants {
+  INT id PK
+  tag[] tag "NOT NULL"
+  VARCHAR type "NOT NULL"
+  VARCHAR synonym
+  DATE sowing
+  INT sowing_depth
+  INT germination_temperature
+  INT prick_out
+  INT transplant
+  INT row_spacing
+  INT plant_density
+  INT germination_time
+  INT harvest_time
+  VARCHAR location
+  VARCHAR care
+  INT height
 }
 
-seeds -- plants : 1 to 1
+
+plants ||--o{ seeds : ""
+```
