@@ -20,23 +20,6 @@ CREATE TYPE quality AS ENUM (
   'Unknown'
 );
 
-CREATE TABLE seeds (
-  id SERIAL PRIMARY KEY,
-  tag tag[] NOT NULL,
-  type VARCHAR(255) NOT NULL,
-  plant_id INTEGER REFERENCES plants(id) NOT NULL,
-  harvest_year INTEGER NOT NULL,
-  use_by DATE,
-  origin VARCHAR(255),
-  flavor VARCHAR(255),
-  yield INTEGER,
-  quantity INTEGER,
-  quality quality,
-  price NUMERIC(10, 2),
-  generation INTEGER,
-  notes TEXT
-);
-
 CREATE TABLE plants (
   id SERIAL PRIMARY KEY,
   tag tag[] NOT NULL,
@@ -55,9 +38,26 @@ CREATE TABLE plants (
   care VARCHAR(255),
   height INTEGER
 );
+
+CREATE TABLE seeds (
+  id SERIAL PRIMARY KEY,
+  tag tag[] NOT NULL,
+  type VARCHAR(255) NOT NULL,
+  plant_id INTEGER REFERENCES plants(id) NOT NULL,
+  harvest_year INTEGER NOT NULL,
+  use_by DATE,
+  origin VARCHAR(255),
+  flavor VARCHAR(255),
+  yield INTEGER,
+  quantity INTEGER,
+  quality quality,
+  price NUMERIC(10, 2),
+  generation INTEGER,
+  notes TEXT
+);
 ```
 # ER Diagram
-```mermaid
+```mermaid 
 erDiagram
 
 tag {
