@@ -77,7 +77,7 @@ quality {
 
 seeds {
   INT id PK
-  tag[] tag "NOT NULL"
+  tags tag "NOT NULL"
   VARCHAR type "NOT NULL"
   INT plant_id "NOT NULL"
   SMALLINT harvest_year "NOT NULL"
@@ -94,7 +94,7 @@ seeds {
 
 plants {
   INT id PK
-  tag[] tag "NOT NULL"
+  tags tag "NOT NULL"
   VARCHAR type "NOT NULL"
   VARCHAR synonym
   DATE sowing
