@@ -3,24 +3,26 @@
 
 Tag and Quality in this case are enum. 
 Postgres supports [enums](https://www.postgresql.org/docs/current/datatype-enum.html) so it is easy to define a static set of values. 
+Right now, Mermaid doesn't support enum types so a `_` character denotes white spaces in enums.
 
 # ER Diagram
 ```mermaid 
 erDiagram
 
-tag {
-  Leaf crops
-  Fruit crops
-  Root crops
-  Flowering crops
-  Herbs
-  Other
+enum_tag {
+  VARCHAR Leaf_crops
+  VARCHAR Fruit_crops
+  VARCHAR Root_crops
+  VARCHAR Flowering_crops
+  VARCHAR Herbs
+  VARCHAR Other
 }
 
-quality {
-  Organic
-  Not organic
-  Unknown
+
+enum_quality {
+  VARCHAR Organic
+  VARCHAR Not_organic
+  VARCHAR Unknown
 }
 
 seeds {
