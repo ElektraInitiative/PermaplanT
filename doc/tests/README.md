@@ -1,7 +1,7 @@
 # Test Setup
 
 ## Testing Approach
-The testing approach for Permaplant will follow a mix of unit testing, integration testing, and manual testing.
+The testing approach for PermaplanT will follow a mix of unit testing, integration testing, and manual testing.
 Unit testing will be conducted for individual components and functions to ensure that they are working as expected.
 Integration testing will be conducted for API endpoints and interactions between components to ensure that they are functioning correctly together.
 Manual testing will be conducted for end-to-end functionality and overall user experience.
@@ -37,6 +37,7 @@ Backend:
 ## Manual Testing
 Manual testing will include performing an end-to-end testing of the application to ensure overall functionality and user experience.
 This will include testing of all features, navigation, and error handling.
+Manual tests will be documented under `doc/tests`.
 
 ## Other Considerations
  - Tests should be run automatically on every push to the repository
