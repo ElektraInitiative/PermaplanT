@@ -66,5 +66,5 @@ varieties {
   INT height
 }
 
-plants ||--o{ seeds : ""
+varieties ||--o{ seeds : ""
 ```
