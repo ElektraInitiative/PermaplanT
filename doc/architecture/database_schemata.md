@@ -1,4 +1,3 @@
-
 # Database Schemata
 
 Tag and Quality in this case are enum. 
@@ -18,6 +17,12 @@ enum_tag {
   VARCHAR Other
 }
 
+enum_quantity {
+  VARCHAR Nothing
+  VARCHAR Not enough
+  VARCHAR Enough
+  VARCHAR More than enough
+}
 
 enum_quality {
   VARCHAR Organic
@@ -28,7 +33,6 @@ enum_quality {
 seeds {
   INT id PK
   tags tag "NOT NULL"
-  VARCHAR type "NOT NULL"
   INT plant_id "NOT NULL"
   SMALLINT harvest_year "NOT NULL"
   DATE use_by
@@ -37,21 +41,22 @@ seeds {
   INT yield
   INT quantity
   quality quality
-  INT price
+  MONEY price
   INT generation
   VARCHAR notes
 }
 
-plants {
+varieties {
   INT id PK
   tags tag "NOT NULL"
   VARCHAR type "NOT NULL"
   VARCHAR synonym
-  DATE sowing
+  SMALLINT sowing_from
+  SMALLINT sowing_to
   INT sowing_depth
   INT germination_temperature
-  INT prick_out
-  INT transplant
+  BOOLEAN prick_out
+  DATE transplant
   INT row_spacing
   INT plant_density
   INT germination_time
