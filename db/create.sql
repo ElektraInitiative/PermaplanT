@@ -25,8 +25,8 @@ CREATE TABLE varieties ( -- German: Sorten
   tag tag[] NOT NULL,
   species VARCHAR(255) NOT NULL,
   synonym VARCHAR(255),
-  sowing_from SMALLINT, -- January = 1, ... , December = 12
-  sowing_to SMALLINT
+  sowing_from smallint, -- January = 1, ... , December = 12
+  sowing_to smallint,
   sowing_depth INTEGER, -- depth in cm
   germination_temperature INTEGER,
   prick_out BOOLEAN,
@@ -38,8 +38,8 @@ CREATE TABLE varieties ( -- German: Sorten
   location VARCHAR(255),
   care VARCHAR(255),
   height INTEGER,
-  CHECK (sowing_from >= 1 sowing_from month <= 12)
-  CHECK (sowing_to >= 1 sowing_to month <= 12)
+  CHECK (sowing_from >= 1 sowing_from <= 12)
+  CHECK (sowing_to >= 1 sowing_to <= 12)
 );
 
 CREATE TABLE seeds (
