@@ -14,6 +14,14 @@ Frontend
 Backend
  - [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 
+Rust formatting can be achieved by adding the following to settings.json in VSCode after installing rust-analyzer: 
+```
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.formatOnSave": true
+  }
+``` 
+
 ## Package Managers
  - Frontend [npm](https://www.npmjs.com/)
  - Backend [cargo](https://crates.io/)
