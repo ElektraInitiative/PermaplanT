@@ -22,7 +22,7 @@ CREATE TYPE quantity AS ENUM (
 
 CREATE TABLE varieties ( -- German: Sorten
   id SERIAL PRIMARY KEY,
-  tag tag[] NOT NULL,
+  tag tag[] NOT NULL, -- if not given (via inserting an empty array: ARRAY[]::tag[]), plants take preference.
   species VARCHAR(255) NOT NULL,
   synonym VARCHAR(255),
   sowing_from SMALLINT, 
