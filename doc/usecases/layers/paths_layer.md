@@ -13,7 +13,8 @@
 - **Precondition:**
   The user has opened the app and has selected the paths layer.
 - **Main success scenario:**
-  The user successfully adds, edits, moves and deletes a connected network of paths and fences in their plan using the paths layer with the chosen path thickness (stepping stones, small way, ... roads). This includes positioning the connected network of paths and fences in the appropriate location. 
+  The user successfully adds, edits, moves and deletes a connected network of paths and fences in their plan using the paths layer with the chosen path thickness (stepping stones, small way, ... roads).
+  This includes positioning the connected network of paths and fences in the appropriate location. 
 - **Alternative scenario:**
   The user accidentally adds or moves a connected network of paths and fences in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**

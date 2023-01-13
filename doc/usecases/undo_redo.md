@@ -11,7 +11,7 @@
 ## Scenarios
 
 - **Precondition:**
-  The user has made a change in a single layer in the app that they want to undo or redo.
+  The user has made a change in the map that they want to undo or redo.
 - **Main success scenario:**
   The user selects the undo or redo option and the app successfully undoes or redoes the previous action.
 - **Alternative scenario:**  
