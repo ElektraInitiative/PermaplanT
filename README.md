@@ -5,8 +5,6 @@ PermaplanT is an app for
 - Web: Firefox, Chromium
 - Larger mobile devices like tablets: Progressive Web App (PWA) Android 9+
 
-It has a server-side component with a database for plants.
-
 ## Goals
 
 The overall goals of the app is to enable planning:

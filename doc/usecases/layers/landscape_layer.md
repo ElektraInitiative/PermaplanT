@@ -1,4 +1,4 @@
-# Use Case: Adding Hand-Drawn or Common Shape Elements to the Landscape
+# Use Case: Landscape Layer
 
 ## Summary
 
