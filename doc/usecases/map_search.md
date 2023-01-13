@@ -1,4 +1,4 @@
-# Use Case: Map Search via Keywords
+# Use Case: Map Search
 
 ## Summary
 

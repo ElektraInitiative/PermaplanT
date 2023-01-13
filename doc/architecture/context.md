@@ -48,6 +48,8 @@ To be entered when creating a map.
 
 ### Later Versions
 
+- active coal distributions
+- mulching (Mulchen)
 - influences of street (German: Einflüsse durch Straßennähe, wie Salz und Staub)
 - automatic overshadowing (German: Baumkronenüberschattung)
 
@@ -68,6 +70,7 @@ To be entered when creating a map.
 
 # Output Parameters
 
+- which seeds are needed
 - coordinates of plants to plant
 - yield (Ertrag)
 

@@ -5,7 +5,7 @@
 - **Scope:** Undo/Redo
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can undo or redo their actions in the app to correct mistakes or revert changes
+- **Brief:** The user can undo or redo their actions in the app to correct mistakes or revert changes.
 - **Status:** Draft
 
 ## Scenarios
@@ -24,4 +24,5 @@
   The user's action within the current layer has been undone or redone as desired.
 - **Non-functional Constraints:**
   - The app must clearly communicate to the user whether an action can be undone or redone.
+  - The app must clearly communicate which undo/redo action was done.
   - The app must store the changes for undo/redo client-side and only persist them for the duration of the current session.

@@ -5,7 +5,7 @@
 - **Scope:** All Layers, except Base
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can copy and paste a selection of elements, including succeeding crops, in their plan
+- **Brief:** The user can copy and paste a selection of elements, including succeeding crops, in their map
 - **Status:** Draft
 
 ## Scenarios
@@ -19,5 +19,5 @@
 - **Error scenario:**
   User attempts to copy and paste a selection but the app is experiencing technical difficulties and is unable to complete the request, displaying an error message.
 - **Postcondition:**
-  The user's landscape plan includes the copied and pasted selection of elements.
+  The user's map includes the copied and pasted selection of elements.
 - **Non-functional Constraints:**

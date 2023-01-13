@@ -1,11 +1,11 @@
-# Use Case: New Plants
+# Use Case: New Plant
 
 ## Summary
 
 - **Scope:** New Plants
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** User adds a new plant to the app's database
+- **Brief:** User adds a new plant to the app's database.
 - **Status:** Draft
 
 ## Scenarios
@@ -16,6 +16,7 @@
   User successfully adds a new plant to the app's database by providing photos and general information about the plant.
 - **Alternative scenario:**
 - **Error scenario:**
+  - Input is invalid: The user is requested to correct the input.
 - **Postcondition:**
   Plant was added to database.
 

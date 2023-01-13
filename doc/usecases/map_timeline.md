@@ -1,4 +1,4 @@
-# Use Case: Map Timeline View
+# Use Case: Map Timeline
 
 ## Summary
 

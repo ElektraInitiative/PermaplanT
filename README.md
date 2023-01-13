@@ -7,12 +7,13 @@ PermaplanT is an app for
 
 ## Goals
 
-The overall goals of the app is to enable planning:
+The overall goals of the app are to enable planning:
 
 1. for a good yield, while
-2. providing a diverse and fully functioning ecosystem.
+2. providing a diverse and fully functioning ecosystem, and
+3. creating living spaces for both animals & humans.
 
-To achieve these two goals the app provides, e.g.:
+To achieve these goals the app provides, e.g.:
 
 - visual indications for what:
   1. makes sense according to natural constraints
@@ -21,12 +22,6 @@ To achieve these two goals the app provides, e.g.:
 - suggestions for:
   - increasing diversity (not only what was used recently)
   - what fits well in the time of the year
-
-## Non-functional Goals
-
-- easy to use
-- aesthetic UI
-- collaborative use
 
 ## Main Features
 
@@ -37,7 +32,8 @@ To achieve these two goals the app provides, e.g.:
 - copy&paste of selection including succeeding crops across maps
 - zoom
 - internationalization: English, German
-- everything included: no external JavaScript, Fonts, etc.
+- algorithms for mixed crops, considerations of environmental properties and automatic suggestions
+- privacy: no external JavaScript, Fonts, etc.
 
 ### Layers
 
@@ -73,3 +69,9 @@ Later features, i.e., out of scope for first version:
 - 3D modes (forest garden)
 - Timelaps of historic garden development
 - Social network features (notification that someone entered the garden, Chat&Photograph layer)
+
+## Non-functional Goals
+
+- easy to use
+- aesthetic UI
+- collaborative use
