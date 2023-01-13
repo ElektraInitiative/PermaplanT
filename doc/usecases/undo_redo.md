@@ -14,7 +14,7 @@
   The user has made a change in the map that they want to undo or redo.
 - **Main success scenario:**
   The user selects the undo or redo option and the app successfully undoes or redoes the previous action.
-- **Alternative scenario:**  
+- **Alternative scenario:**
   The user tries to undo or redo an action that cannot be undone or redone within the current layer.
   In this case, the app displays an error message to the user indicating that the action cannot be undone or redone within the current layer.
 - **Error scenario:**

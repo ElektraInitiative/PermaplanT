@@ -14,7 +14,7 @@
   The user has opened the app and has selected the desired layer (e.g. plants, paths).
 - **Main success scenario:**
   The user is able to zoom in on a specific area of the plan and zoom out to view a wider area of the plan.
-- **Alternative scenario:**  
+- **Alternative scenario:**
   The user accidentally zooms in or out too far and uses the "Zoom Reset" button to return to the default zoom level.
 - **Error scenario:**
   There is an error in the app's zoom functionality and the plan is not displayed correctly at the selected zoom level.
