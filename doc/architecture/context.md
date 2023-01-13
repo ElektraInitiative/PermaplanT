@@ -71,6 +71,6 @@ To be entered when creating a map.
 - coordinates of plants to plant
 - yield (Ertrag)
 
-### later
+### Later Versions
 
 - weather alerts
