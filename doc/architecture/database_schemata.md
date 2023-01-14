@@ -19,9 +19,9 @@ enum_tag {
 
 enum_quantity {
   VARCHAR Nothing
-  VARCHAR Not enough
+  VARCHAR Not_enough
   VARCHAR Enough
-  VARCHAR More than enough
+  VARCHAR More_than_enough
 }
 
 enum_quality {
@@ -66,5 +66,5 @@ varieties {
   INT height
 }
 
-plants ||--o{ seeds : ""
+varieties ||--o{ seeds : ""
 ```
