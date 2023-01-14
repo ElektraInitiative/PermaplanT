@@ -1,4 +1,4 @@
-# Use Case: Entry and list of seeds
+# Use Case: Entry and List of Seeds
 
 ## Summary
 
@@ -13,8 +13,8 @@
 - **Precondition:**
   The user has opened the seed management feature in the app.
 - **Main success scenario:**
-  The user is able to add new seeds to their list by specifying the name, amount, and expiration date. 
-  They can also view and delete seeds from their list. 
+  The user is able to add new seeds to their list by specifying the name, amount, and expiration date.
+  They can also view and delete seeds from their list.
 - **Alternative scenario:**
   The user accidentally deletes a seed from their list and uses the seed insert feature to correct it.
 - **Error scenario:**

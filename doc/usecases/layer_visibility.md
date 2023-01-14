@@ -5,7 +5,7 @@
 - **Scope:** All Layers
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** User changes the visibility of layers in their plan
+- **Brief:** User changes the visibility of layers in their map
 - **Status:** Draft
 
 ## Scenarios

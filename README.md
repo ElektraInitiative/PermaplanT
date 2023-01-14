@@ -2,19 +2,18 @@
 
 PermaplanT is an app for
 
-- Web (Firefox, Chromium)
-- Progressive Web App (PWAs) Android 9+
+- Web: Firefox, Chromium
+- Larger mobile devices like tablets: Progressive Web App (PWA) Android 9+
 
-It has a server-side component with a database for plants.
+## Goals
 
-## Goal
+The overall goals of the app are to enable planning:
 
-The overall goal of the app is to enable planning:
+1. for a good yield, while
+2. providing a diverse and fully functioning ecosystem, and
+3. creating living spaces for both animals & humans.
 
-- for a good yield, while
-- providing a diverse and fully functioning ecosystem.
-
-To achieve that the app provides, e.g.:
+To achieve these goals the app provides, e.g.:
 
 - visual indications for what:
   1. makes sense according to natural constraints
@@ -24,32 +23,17 @@ To achieve that the app provides, e.g.:
   - increasing diversity (not only what was used recently)
   - what fits well in the time of the year
 
-## Non-functional Goals
-
-- easy to use
-- aesthetic UI
-- collaborative use
-
-## Features
+## Main Features
 
 - users can have any number of maps
+- users can work on the same map together
 - maps have a fixed number of layers (see below)
 - undo/redo
-- copy&paste of selection including succeeding crops
+- copy&paste of selection including succeeding crops across maps
 - zoom
-- translation: English, German
-- everything included: no external JavaScript, Fonts, etc.
-
-Later, i.e. likely out of scope for first version:
-
-- Nextcloud integrations (calender entries, Deck tasks)
-- Import/Export
-- GPS coordinates
-- weather data (warnings on frost etc.)
-- automatic shadow and moisture calculation
-- 3D modes (forest garden)
-- Timelaps of historic garden development
-- Social features (notification that someone entered the garden, Chat&Photograph layer)
+- internationalization: English, German
+- algorithms for mixed crops, considerations of environmental properties and automatic suggestions
+- privacy: no external JavaScript, Fonts, etc.
 
 ### Layers
 
@@ -72,3 +56,22 @@ While editing any layer other layers might be displayed or hidden.
 - Plants¹ (individual and fields of plants)
 
 ¹ Essential (most used) layers: are more prominently shown than others.
+
+### Later Versions
+
+Later features, i.e., out of scope for first version:
+
+- Nextcloud integrations (calender entries, Deck tasks)
+- Import/Export
+- GPS coordinates
+- weather data (warnings on frost etc.)
+- automatic shadow and moisture calculation
+- 3D modes (forest garden)
+- Timelaps of historic garden development
+- Social network features (notification that someone entered the garden, Chat&Photograph layer)
+
+## Non-functional Goals
+
+- easy to use
+- aesthetic UI
+- collaborative use

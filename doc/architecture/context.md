@@ -2,7 +2,7 @@
 
 ## Global for Garden
 
-To be entered when creating a garden.
+To be entered when creating a map.
 
 - soil weight class (German: Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) [Klassen])
   from:
@@ -11,7 +11,7 @@ To be entered when creating a garden.
   - 3 medium (tS, sL, IU) (German: mittelschwer)
   - 4 heavy (sT, L, uL) (German: schwer)
   - 5 very heavy (T, IT) (German: sehr schwer)
-- ph base value from 0-14
+- pH base value from 0-14
   (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamisch
 - yield grade (German: Ages Gehaltsklasse (Nährstoffversorgung und Humusgehalt) ÖNORM L 1210, determined from NPK, eigentlich für Intensivkultur, Stark/Schwachzehrer)
   from:
@@ -38,16 +38,20 @@ To be entered when creating a garden.
 
 ## Local (for each place in the Garden)
 
-- Abstände zu Bäume/Sträuche (Wurzel)
-- Fruchtfolge, time (good bad successor plants)
-- wet/dry places (e.g. by Oberflächenwasser or watering)
-- ph local value from 0-14 to do corrections of the base value on specific places
-- Zonen, nähe von weg
+- distances to plants/trees due to roots (German: Abstände zu Bäume/Sträuche because of Wurzeln)
+- moisture, i.e., wet/dry places (German: Oberflächenwasser)
+- pH local value from 0-14 to do corrections of the base value on specific places
+- animal and habitat influences
+- zones (German: Zonen)
+- wind
+- sun/shadow
 
 ### Later Versions
 
-- Straßennähe (Salz, Staub)
-- Baumkronenüberschattung/Overshadowing
+- active coal distributions
+- mulching (Mulchen)
+- influences of street (German: Einflüsse durch Straßennähe, wie Salz und Staub)
+- automatic overshadowing (German: Baumkronenüberschattung)
 
 ## Plant Database
 
@@ -57,18 +61,19 @@ To be entered when creating a garden.
 - constraints where they want to be:
   - sun
   - soil weight
-  - ph value
+  - pH value
   - yield grade
   - freeze resistance
   - good/bad neighbors
   - wet/dry
-  - zones
+  - preferable zone
 
 # Output Parameters
 
+- which seeds are needed
 - coordinates of plants to plant
 - yield (Ertrag)
 
-### later
+### Later Versions
 
-- weather alerts?
+- weather alerts

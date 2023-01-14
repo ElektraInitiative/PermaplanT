@@ -15,14 +15,16 @@
 - **Main success scenario:**
   - The user selects the "Measure Distance" button.
   - The user clicks on the first point they want to measure the distance from.
-  - The user clicks on the multiple elements they want to measure the distance to.
-  - The app displays the distance between the multiple elements in the desired unit (e.g. meters, feet).
-- **Alternative scenario:**  
-  The user accidentally clicks on the wrong element and uses the app's undo function to correct the mistake.
+  - The user clicks on the multiple elements between which the user wants to create the path of the length measurement.
+  - The app displays all the measurements and the total sum in the desired unit (e.g. meters, feet).
+  - New measurements can be started while keeping the previous measurements on the display.
+- **Alternative scenario:**
+  - The user accidentally clicks on the wrong element and can remove this element from the measurement.
+  - The user started a new measurement in between by accident and can remove the start of the measurement.
 - **Error scenario:**
-  - The user attempts to measure the distance between elements that are not in the same layer. In this case, the app displays an error message indicating that the elements must be in the same layer.
-  - There is an error in the app's distance measurement function and the displayed distance is not accurate. In this case, the app displays an error message and allows the user to try again.
+  - There is an error in the app's distance measurement function and the displayed distance would not be accurate.
+    In this case, the app displays an error message and allows the user to try again.
 - **Postcondition:**
-  The user has measured the distance between elements in their landscape plan as desired.
+  No change on the elements of the map.
 - **Non-functional Constraints:**
   - The app must accurately measure the distance between elements in the selected unit.
