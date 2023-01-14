@@ -20,14 +20,19 @@ CREATE TYPE quantity AS ENUM (
   'More than enough' -- Mehr als genug
 );
 
+CREATE TABLE variety_synonyms (
+  id SERIAL PRIMARY KEY,
+  synonym_name VARCHAR(255) NOT NULL,
+  variety_id INTEGER REFERENCES varieties(id) NOT NULL
+)
+
 CREATE TABLE varieties ( -- German: Sorten
   id SERIAL PRIMARY KEY,
-  tag tag[] NOT NULL, -- if not given (via inserting an empty array: ARRAY[]::tag[]), plants take preference.
+  tags tag[] NOT NULL, -- if not given (via inserting an empty array: ARRAY[]::tag[]), plants take preference.
   species VARCHAR(255) NOT NULL,
-  synonym VARCHAR(255),
-  sowing_from SMALLINT, 
+  sowing_from SMALLINT, -- 1 = January, ... , 12 = December
   sowing_to SMALLINT,
-  sowing_depth INTEGER, 
+  sowing_depth INTEGER, -- in cm
   germination_temperature INTEGER,
   prick_out BOOLEAN,
   transplant DATE,
@@ -44,7 +49,7 @@ CREATE TABLE varieties ( -- German: Sorten
 
 CREATE TABLE seeds (
   id SERIAL PRIMARY KEY,
-  tag tag[] NOT NULL,
+  tags tag[] NOT NULL,
   species VARCHAR(255) NOT NULL, -- German: Art
   variety_id INTEGER REFERENCES varieties(id) NOT NULL,
   harvest_year SMALLINT NOT NULL,
