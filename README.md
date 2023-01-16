@@ -54,6 +54,7 @@ While editing any layer other layers might be displayed or hidden.
 - Paths (ways, fences, stepping stones)
 - Zones
 - Plants¹ (individual and fields of plants)
+- Warnings¹
 
 ¹ Essential (most used) layers: are more prominently shown than others.
 
