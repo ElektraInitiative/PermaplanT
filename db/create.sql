@@ -16,14 +16,15 @@ CREATE TYPE quality AS ENUM (
 CREATE TYPE quantity AS ENUM (
 'Nothing',-- German: Nichts
 'Not enough',-- German: Nicht Genug
-'Enough' -- German: Genug
+'Enough', -- German: Genug
 'More than enough' -- Mehr als genug
 );
 
 CREATE TABLE varieties ( -- German: Sorten
   id SERIAL PRIMARY KEY,
   tags tag[] NOT NULL, -- if not given (via inserting an empty array: ARRAY[]::tag[]), plants take preference.
-  name VARCHAR(255) NOT NULL,
+  species VARCHAR(255) NOT NULL, -- German: Art
+  variety VARCHAR(255) -- German: Sorte
 );
 
 CREATE TABLE variety_synonyms (
@@ -35,7 +36,7 @@ CREATE TABLE variety_synonyms (
 CREATE TABLE seeds (
   id SERIAL PRIMARY KEY,
   tags tag[] NOT NULL, -- German: Kategorien
-  name VARCHAR(255) NOT NULL, -- German: Art
+  name VARCHAR(255) NOT NULL, -- German: Name
   variety_id INTEGER REFERENCES varieties(id) NOT NULL,
   harvest_year SMALLINT NOT NULL, -- German: Erntejahr
   use_by DATE, -- German: Verbrauch Bis
@@ -50,6 +51,6 @@ CREATE TABLE seeds (
 );
 
 -- Minimal insert examples
-INSERT INTO varieties (id, tags, name) VALUES (1, ARRAY['Fruit crops']::tag[], 'Wildtomate');
+INSERT INTO varieties (id, tags, species) VALUES (1, ARRAY['Fruit crops']::tag[], 'Wildtomate');
 INSERT INTO variety_synonyms (variety_id, synonym_name) VALUES (1, 'Tomate Synonym');
-INSERT INTO seeds (variety_id, tags, name, harvest_year, quantity) VALUES (1, ARRAY['Fruit crops']::tag[], 2023, 'Enough');
+INSERT INTO seeds (variety_id, tags, name, harvest_year, quantity) VALUES (1, ARRAY['Fruit crops']::tag[], 'Tomate', 2023, 'Enough');
