@@ -29,14 +29,14 @@ CREATE TABLE varieties ( -- German: Sorten
 
 CREATE TABLE variety_synonyms (
   id SERIAL PRIMARY KEY,
-  synonym_name VARCHAR(255) NOT NULL,
+  synonym VARCHAR(255) NOT NULL -- German: Synonym,
   variety_id INTEGER REFERENCES varieties(id) NOT NULL
 );
 
 CREATE TABLE seeds (
   id SERIAL PRIMARY KEY,
   tags tag[] NOT NULL, -- German: Kategorien
-  name VARCHAR(255) NOT NULL, -- German: Name
+  name VARCHAR(255) NOT NULL, -- German: Art
   variety_id INTEGER REFERENCES varieties(id) NOT NULL,
   harvest_year SMALLINT NOT NULL, -- German: Erntejahr
   use_by DATE, -- German: Verbrauch Bis
@@ -52,5 +52,5 @@ CREATE TABLE seeds (
 
 -- Minimal insert examples
 INSERT INTO varieties (id, tags, species) VALUES (1, ARRAY['Fruit crops']::tag[], 'Wildtomate');
-INSERT INTO variety_synonyms (variety_id, synonym_name) VALUES (1, 'Tomate Synonym');
+INSERT INTO variety_synonyms (variety_id, synonym) VALUES (1, 'Tomate Synonym');
 INSERT INTO seeds (variety_id, tags, name, harvest_year, quantity) VALUES (1, ARRAY['Fruit crops']::tag[], 'Tomate', 2023, 'Enough');
