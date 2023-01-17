@@ -14,11 +14,12 @@
 - **Main success scenario:**
   User successfully adds elements to their map using hand-drawn shapes or common shapes such as circles, ellipses, squares, and rectangles.
   Element types include:
-  - Wall
-  - Plain
-  - Pond
-  - Construction
-  - Bed
+  - wall
+  - plain
+  - pond
+  - (glas)houses
+  - barns
+  - plant beds
 - **Alternative scenario:**
   User accidentally adds a shape in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**

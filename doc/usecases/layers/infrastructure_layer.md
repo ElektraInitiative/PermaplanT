@@ -5,7 +5,7 @@
 - **Scope:** Infrastructure Layer
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can add, edit, move and delete infrastructure elements such as cables, WLAN spots and pipes in their plan.
+- **Brief:** The user can add, edit, move and delete infrastructure elements in their plan.
 - **Status:** Draft
 
 ## Scenarios
@@ -14,7 +14,16 @@
   The user has opened the app and has selected the infrastructure layer.
 - **Main success scenario:**
   The user successfully adds, edits, moves and deletes infrastructure elements in the infrastructure layer.
-  This includes positioning the elements in the appropriate locations and adjusting their properties as needed.
+  Infrastructure elements are, e.g.:
+  - outlets
+  - wifi spots
+  - taps
+  - water storage tanks
+  - irrigation systems
+  For placement:
+  - positioning the elements in the appropriate locations
+  - adjusting their properties
+  as needed.
 - **Alternative scenario:**
   The user accidentally adds or edits an infrastructure element in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**
