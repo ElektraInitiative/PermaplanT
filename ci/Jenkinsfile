@@ -1,5 +1,5 @@
 pipeline {
-    agent permaplant
+    agent { label 'permaplant' }
 
     stages {
         stage('Build') {
