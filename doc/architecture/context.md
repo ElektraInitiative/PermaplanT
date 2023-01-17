@@ -11,7 +11,7 @@ To be entered when creating a map.
   - 3 medium (tS, sL, IU) (German: mittelschwer)
   - 4 heavy (sT, L, uL) (German: schwer)
   - 5 very heavy (T, IT) (German: sehr schwer)
-- pH base value from 0-14
+- pH base value for topsoil from 0-14
   (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamisch
 - yield grade (German: Ages Gehaltsklasse (Nährstoffversorgung und Humusgehalt) ÖNORM L 1210, determined from NPK, eigentlich für Intensivkultur, Stark/Schwachzehrer)
   from:
@@ -33,22 +33,26 @@ To be entered when creating a map.
   first version: assume "sehr tiefgründig" `> 100cm`
 - (SkelG: Skelettgehalt: Anteil der Anteil der Korngrößenfraktion > 2 mm (Grobanteil) am Mineralboden [%])
   first version we assume geringer Grobanteil `<= 10%`
+- Available water capacity
+- Field capacity
+- Permanent wilting point
 - (Gesamtniederschlag - Verdunstung)
   first version: use data from Ostösterreich
 
 ## Local (for each place in the Garden)
 
-- distances to plants/trees due to roots (German: Abstände zu Bäume/Sträuche because of Wurzeln)
-- moisture, i.e., wet/dry places (German: Oberflächenwasser)
-- pH local value from 0-14 to do corrections of the base value on specific places
-- animal and habitat influences
-- zones (German: Zonen)
+- distances to plants/trees (German: Abstände zu Bäume/Sträuche)
 - wind
-- sun/shadow
+- shadows
+- surface water, i.e., wet/dry places (German: Oberflächenwasser)
+- soil weight
+- pH local value for topsoil from 0-14
+- habitats
+- permaculture zones (German: Permakultur Zonen)
 
 ### Later Versions
 
-- active coal distributions
+- soil amendments
 - mulching (Mulchen)
 - influences of street (German: Einflüsse durch Straßennähe, wie Salz und Staub)
 - automatic overshadowing (German: Baumkronenüberschattung)
@@ -56,23 +60,25 @@ To be entered when creating a map.
 ## Plant Database
 
 - photos
-- general infos
-- size/distances
+- genus and species
+- other general infos
+- size (height, width, depth)
 - constraints where they want to be:
+  - recommended distances to other plants
   - sun
   - soil weight
-  - pH value
+  - pH value of topsoil
   - yield grade
   - freeze resistance
   - good/bad neighbors
   - wet/dry
-  - preferable zone
+  - preferable permaculture zone (needs visits rare or often)
 
 # Output Parameters
 
-- which seeds are needed
+- which seeds are needed (seedling plants excluded)
 - coordinates of plants to plant
-- yield (Ertrag)
+- warnings (violation of natural constraints etc.)
 
 ### Later Versions
 

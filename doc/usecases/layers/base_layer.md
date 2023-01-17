@@ -5,17 +5,20 @@
 - **Scope:** Base Layer
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** User imports a picture to use as a background to copy borders, landscapes, trees etc.
+- **Brief:** User imports a picture to use as a background.
 - **Status:** Draft
 
 ## Scenarios
 
-- **Precondition:** User has opened the app and selected the base layer.
+- **Precondition:**
+  - User has opened the app and selected the base layer.
+  - The user has an orthophoto or site plan and knows the real length of a flat part of the orthophoto (e.g. length of house's roof).
 - **Main success scenario:**
-  - User successfully imports a picture to use as a background by selecting the option to import a picture and choosing the desired image from their device or providing an image URL.
-  - User draw a polygon telling us where the borders of this image are.
-  - User tells the real length of a line so that we know how big this image in reality is (see use case "measuring distance").
-  - User chooses an orientation of the picture, i.e., rotate the image to where north is.
+  - User successfully imports an orthophoto or site plan to be used as a background by selecting the option to import a picture.
+  - Then the user chooses the desired image from their device or by providing an image URL.
+  - The user draws a polygon telling us where the borders of this image are.
+  - The user tells the real length of a line (on flat land) so that we know how big this image in reality is (see use case "measuring distance").
+  - The user chooses an orientation of the picture, i.e., rotate the image to where north is.
 - **Alternative scenario:** User accidentally selects the wrong image and selects another image to correct the mistake.
 - **Error scenario:**
   - User attempts to import a file that is not a supported image format or is corrupted and the app displays an error message.

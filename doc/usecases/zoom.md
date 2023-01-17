@@ -13,7 +13,10 @@
 - **Precondition:**
   The user has opened the app and has selected the desired layer (e.g. plants, paths).
 - **Main success scenario:**
-  The user is able to zoom in on a specific area of the map and zoom out to view a wider area of the map.
+  The user is able:
+  - to set a scaling factor,
+  - to zoom in on a specific area down to 10x10cm, and
+  - to zoom out to view a wider area up to 1000mx1000m.
 - **Alternative scenario:**
   The user accidentally zooms in or out too far and uses the "Zoom Reset" button to return to the default zoom level.
 - **Error scenario:**

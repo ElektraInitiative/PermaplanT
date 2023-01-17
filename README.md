@@ -9,30 +9,30 @@ PermaplanT is an app for
 
 The overall goals of the app are to enable planning:
 
-1. for a good yield, while
-2. providing a diverse and fully functioning ecosystem, and
-3. creating living spaces for both animals & humans.
+1. vital growth of delicious edible crops, while
+2. providing a diverse and functioning ecosystem, and
+3. creating outdoor living spaces for both animals & humans.
 
 To achieve these goals the app provides, e.g.:
 
 - visual indications for what:
-  1. makes sense according to natural constraints
-  2. is practical
+  1. makes sense according to known and easily measurable natural constraints
+  2. is practical for the gardener
   3. enhances diversity and supports the ecosystem
 - suggestions for:
-  - increasing diversity (not only what was used recently)
-  - what fits well in the time of the year
+  - what is seasonal
+  - increasing diversity
 
 ## Main Features
 
 - users can have any number of maps
 - users can work on the same map together
 - maps have a fixed number of layers (see below)
-- undo/redo
+- undo/redo within current session for changes in the map
 - copy&paste of selection including succeeding crops across maps
 - zoom
 - internationalization: English, German
-- algorithms for mixed crops, considerations of environmental properties and automatic suggestions
+- algorithms for mixed crops, considerations of natural constraints and automatic suggestions
 - privacy: no external JavaScript, Fonts, etc.
 
 ### Layers
@@ -40,20 +40,19 @@ To achieve these goals the app provides, e.g.:
 In all layers --- except for base --- past, current or future entities might be intermixed.
 While editing any layer other layers might be displayed or hidden.
 
-- Base¹ (import base image, define borders, scale, orientation)
+- Base¹ (import orthophoto or site plan as base image, define borders, scale, orientation)
 - Landscape¹ (height&sketch of permanent structures like walls, ponds, constructions, beds)
 - Labels (allows to put text labels, e.g. names for beds)
-- Trees (stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
-- Wind (more or less windy places)
+- Trees (taxa, stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
+- Wind (more or less windy places, wind orientation)
 - Shadows (more/less sun exposure)
-- Infrastructure (cables, wifi spots, pipes, ...)
-- Moisture (watering systems, surface water, ...)
-- pH Values
-- Animals (e.g. where ducks may walk)
-- Habitats (especially nesting aids, heaps of stones or leaves, perches)
+- Infrastructure (outlets, wifi spots, taps, water storage tanks, irrigation systems, ...)
+- Hydrology (surface water runoff, natural reservoirs, gullies, rills, ...)
+- Soil (pH Values of topsoil, subsoil)
 - Paths (ways, fences, stepping stones)
-- Zones
-- Plants¹ (individual and fields of plants)
+- Habitats (taxa, areas for (wild)life, nesting aids, heaps of stones or leaves, perches)
+- Zones (of different visitation frequency)
+- Plants¹ (taxa, individual and fields of plants)
 - Warnings¹
 
 ¹ Essential (most used) layers: are more prominently shown than others.

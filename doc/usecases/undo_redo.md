@@ -15,8 +15,8 @@
 - **Main success scenario:**
   The user selects the undo or redo option and the app successfully undoes or redoes the previous action.
 - **Alternative scenario:**
-  The user tries to undo or redo an action that cannot be undone or redone within the current layer.
-  In this case, the app displays an error message to the user indicating that the action cannot be undone or redone within the current layer.
+  The user tries to undo or redo an action that cannot be undone or redone.
+  In this case, the app displays an error message to the user indicating that the action cannot be undone or redone.
 - **Error scenario:**
   There is an error in the app's undo/redo functionality and the action is not correctly undone or redone.
   In this case, the app displays an error message to the user and allows them to try again.

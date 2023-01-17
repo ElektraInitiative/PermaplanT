@@ -11,7 +11,9 @@
 ## Scenarios
 
 - **Precondition:** The user has not yet authenticated against the app.
-- **Main success scenario:** The user enters their login credentials and the app successfully authenticates them.
+- **Main success scenario:**
+  - The user enters their login credentials and the app successfully authenticates them.
+  - Alternatively, they go to a permalink for their user or map, where no login is needed.
 - **Alternative scenario:**
   The user enters incorrect login credentials.
   In this case, the app displays an error message to the user indicating that the login failed.
