@@ -48,6 +48,7 @@ Konva is a well-supported and widely-used 2D graphics library that works in all 
 It has support for a wide range of features, including drawing shapes, text, and images, as well as transformations and animations.
 It is built on top of the HTML Canvas API and provides a higher-level, more declarative interface for creating and manipulating canvas elements.
 Additionally, it is very performant even with a large number of objects: [Konva drag and drop with 10000 shapes stress test](https://konvajs.org/docs/sandbox/Drag_and_Drop_Stress_Test.html).
+It also has [layer](https://konvajs.org/docs/groups_and_layers/Layering.html) and [opacity/transparency](https://konvajs.org/docs/sandbox/Transparent_Group.html) features.
 
 ## Implications
 
