@@ -4,11 +4,13 @@ import Pages from './routes/Pages';
 
 function App() {
   return (
-    <Fragment>
-      <BrowserRouter>
-        <Pages />
-      </BrowserRouter>
-    </Fragment>
+    <div className="text-white ">
+      <Fragment>
+        <BrowserRouter>
+          <Pages />
+        </BrowserRouter>
+      </Fragment>
+    </div>
   );
 }
 
