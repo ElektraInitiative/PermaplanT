@@ -19,14 +19,14 @@ export default function SimpleTextField({
 }: FormFieldOptions) {
   return (
     <div>
-      <label htmlFor={forText} className="block mb-2 text-sm font-medium  text-white">
+      <label htmlFor={forText} className="mb-2 block text-sm font-medium  text-white">
         {labelText}
         {required ? <span className="text-red-800"> *</span> : <></>}
       </label>
       {isArea ? (
         <textarea
           id={forText}
-          className="bg-primary-textfield border text-sm rounded-lg block w-full p-2.5 border-zinc-800 focus:outline-none placeholder-neutral-700 text-white focus:border-gray-600"
+          className="block w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
           placeholder={placeHolder}
           required={required}
         />
@@ -34,7 +34,7 @@ export default function SimpleTextField({
         <input
           type={type}
           id={forText}
-          className="bg-primary-textfield border text-sm rounded-lg block w-full p-2.5 border-zinc-800 focus:outline-none placeholder-neutral-700 text-white focus:border-gray-600"
+          className="block w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
           placeholder={placeHolder}
           required={required}
         />

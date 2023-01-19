@@ -1,15 +1,15 @@
-import DropdownTextField from '../../components/Input/DropdownTextField';
+import DropdownTextField from '../../components/Input/DropdownMenu';
 import SimpleTextField from '../../components/Input/SimpleTextField';
 
 export default function NewSeed() {
   const ButtonRow = () => (
     <div className="flex flex-row justify-between space-x-4">
-      <button className="grow max-w-[240px] text-white border border-zinc-600 hover:bg-zinc-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center">
+      <button className="max-w-[240px] grow rounded-lg border border-zinc-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-zinc-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto">
         Abbrechen
       </button>
       <button
         type="submit"
-        className="grow max-w-[240px] text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center"
+        className="max-w-[240px] grow rounded-lg bg-gray-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
       >
         Eintragen
       </button>
@@ -19,28 +19,24 @@ export default function NewSeed() {
   const SeedInsertionForm = () => (
     <>
       <form>
-        <div className="grid gap-8 mb-6 md:grid-cols-2">
+        <div className="mb-6 grid gap-8 md:grid-cols-2">
           <SimpleTextField
             labelText="Bezugsjahr"
             placeHolder="2023"
             required={true}
             forText="harvest_year"
           />
-          {
-            // Should not be simple Textfield for Kategorien
-          }
-          <SimpleTextField
-            labelText="Kategorien"
-            placeHolder="2023"
+          <DropdownTextField
+            placeHolder="Blattpflanze"
+            forText="categories"
             required={true}
-            forText="tags"
+            options={['Blattpflanze', 'Fruchtpflanze']}
           />
           <SimpleTextField labelText="Art" placeHolder="Feldsalat" required={true} forText="name" />
-          <SimpleTextField
-            labelText="Sorte"
+          <DropdownTextField
             placeHolder="Unbekannt"
-            required={true}
             forText="variety"
+            options={['Unbekannt', 'Sorte1', 'Sorte2']}
           />
           <SimpleTextField
             labelText="Menge"
@@ -50,7 +46,11 @@ export default function NewSeed() {
           />
           <SimpleTextField labelText="Herkunft" placeHolder="Billa" forText="origin" />
           <SimpleTextField labelText="Verbrauch bis" placeHolder="2024" forText="use_by" />
-          <SimpleTextField labelText="Qualität" placeHolder="Bio" forText="quality" />
+          <DropdownTextField
+            placeHolder="Blattpflanze"
+            forText="quality"
+            options={['Bio', 'Nicht-Bio']}
+          />
           <SimpleTextField labelText="Geschmack" placeHolder="nussig" forText="taste" />
           <SimpleTextField labelText="Ertrag" placeHolder="1" forText="yield" />
           <SimpleTextField labelText="Preis" placeHolder="2,99€" forText="price" />
@@ -65,7 +65,7 @@ export default function NewSeed() {
   );
 
   return (
-    <div className="w-full md:w-[700px] mx-auto p-4">
+    <div className="mx-auto w-full p-4 md:w-[700px]">
       <h2 className="mb-8">Neuer Eintrag</h2>
       <SeedInsertionForm />
     </div>
