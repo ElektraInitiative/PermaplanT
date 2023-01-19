@@ -4,7 +4,6 @@
 
 PermaplanT is a web application built with React that requires efficient and flexible state management.
 
-
 ## Constraints
 
 - The state management library must support React and work seamlessly with the rest of the application's technology stack.
