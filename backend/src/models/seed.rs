@@ -1,4 +1,6 @@
 use crate::{config::db::Connection, schema::seeds};
+use bigdecimal::BigDecimal;
+use chrono::NaiveDate;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -13,6 +15,13 @@ pub struct Seed {
 pub struct NewSeed {
     pub name: String,
     pub variety_id: i32,
+    pub harvest_year: i16,
+    pub use_by: Option<NaiveDate>,
+    pub origin: Option<String>,
+    pub taste: Option<String>,
+    pub yield_: Option<String>,
+    pub generation: Option<i32>,
+    pub notes: Option<String>,
 }
 
 impl Seed {

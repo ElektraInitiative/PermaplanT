@@ -8,7 +8,11 @@ edition = "2021"
 [dependencies]
 actix-cors = "0.6.4"
 actix-web = "4"
-diesel = { version = "2.0.2", features = ["postgres", "r2d2"] }
+diesel = { version = "2.0.2", features = ["postgres", "r2d2", "chrono"] }
 serde = { version = "1.0.152", features = ["derive"] }
 dotenvy = "0.15.0"
 diesel-derive-enum = { version = "2.0.0-rc.0", features = ["postgres"] }
+
+[dependencies.chrono]
+version = "0.4.23"
+features = ["serde"]

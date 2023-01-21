@@ -11,6 +11,14 @@ diesel::table! {
         id -> Int4,
         name -> Varchar,
         variety_id -> Int4,
+        harvest_year -> Int2,
+        use_by -> Nullable<Date>,
+        origin -> Nullable<Varchar>,
+        taste -> Nullable<Varchar>,
+        #[sql_name = "yield"]
+        yield_ -> Nullable<Varchar>,
+        generation -> Nullable<Int4>,
+        notes -> Nullable<Text>,
     }
 }
 
