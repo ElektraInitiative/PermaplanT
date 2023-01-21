@@ -9,6 +9,7 @@ pub mod sql_types {
 diesel::table! {
     seeds (id) {
         id -> Int4,
+        tags -> Array<Nullable<Text>>,
         name -> Varchar,
         variety_id -> Int4,
         harvest_year -> Int2,
@@ -17,6 +18,9 @@ diesel::table! {
         taste -> Nullable<Varchar>,
         #[sql_name = "yield"]
         yield_ -> Nullable<Varchar>,
+        quantity -> Varchar,
+        quality -> Nullable<Varchar>,
+        price -> Nullable<Numeric>,
         generation -> Nullable<Int4>,
         notes -> Nullable<Text>,
     }

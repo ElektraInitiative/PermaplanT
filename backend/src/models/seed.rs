@@ -10,17 +10,21 @@ pub struct Seed {
     pub name: String,
     pub variety_id: i32,
 }
-#[derive(Insertable, Serialize, Deserialize)]
-#[table_name = "seeds"]
+#[derive(Insertable, Serialize, Deserialize, Debug)]
+#[diesel(table_name = seeds)]
 pub struct NewSeed {
     pub name: String,
     pub variety_id: i32,
     pub harvest_year: i16,
+    pub quantity: String,
+    pub tags: Vec<String>,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
     pub taste: Option<String>,
     pub yield_: Option<String>,
     pub generation: Option<i32>,
+    pub quality: Option<String>,
+    pub price: Option<BigDecimal>,
     pub notes: Option<String>,
 }
 
