@@ -10,6 +10,7 @@ pub struct Seed {
     pub name: String,
     pub variety_id: i32,
 }
+
 #[derive(Insertable, Serialize, Deserialize, Debug)]
 #[diesel(table_name = seeds)]
 pub struct NewSeed {
