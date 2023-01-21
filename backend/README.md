@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- Rust 1.66.1 or higher
-- PostgreSQL 14.6 or
+- Rust 1.66.1
+- PostgreSQL 14.6
 
 ## Installation
 
