@@ -2,6 +2,7 @@ use std::{env, num::ParseIntError};
 
 pub struct Config {
     pub bind_address: (String, u16),
+    pub database_url: String,
 }
 
 impl Config {
@@ -12,6 +13,10 @@ impl Config {
             .map_err(|_| "Failed to get BIND_ADDRESS_PORT from environment")?;
         let port: u16 = port.parse().map_err(|e: ParseIntError| e.to_string())?;
         let bind_address = (host, port);
-        Ok(Self { bind_address })
+        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+        Ok(Self {
+            bind_address,
+            database_url,
+        })
     }
 }

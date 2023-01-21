@@ -7,7 +7,8 @@ use crate::{
 };
 
 pub fn create(new_seed: NewSeed, pool: &Data<Pool>) -> Result<(), ServiceError> {
-    match Seed::create(&mut pool.get().unwrap(), new_seed) {
+    let mut conn = pool.get().expect("Failed to retrieve pool.");
+    match Seed::create(&mut conn, new_seed) {
         Ok(_) => Ok(()),
         Err(msg) => Err(ServiceError::new(
             StatusCode::INTERNAL_SERVER_ERROR,
