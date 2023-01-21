@@ -62,13 +62,14 @@ While editing any layer other layers might be displayed or hidden.
 Later features, i.e., out of scope for first version:
 
 - Nextcloud integrations (calender entries, Deck tasks)
-- Import/Export
+- import/export
 - GPS coordinates
 - weather data (warnings on frost etc.)
+- hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
 - 3D modes (forest garden)
-- Timelaps of historic garden development
-- Social network features (notification that someone entered the garden, Chat&Photograph layer)
+- timelaps of historic garden development, simulate growth
+- social network features (notification that someone entered the garden, Chat&Photograph layer)
 
 ## Non-functional Goals
 
