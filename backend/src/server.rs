@@ -16,8 +16,8 @@ pub async fn start(config: Config) -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .configure(routes::config)
             .app_data(Data::clone(&pool))
+            .configure(routes::config)
     })
     .bind(config.bind_address)?
     .run()

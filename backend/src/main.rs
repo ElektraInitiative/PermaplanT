@@ -1,7 +1,9 @@
 use dotenvy::dotenv;
 
 pub mod config;
+pub mod constants;
 pub mod controllers;
+pub mod error;
 pub mod models;
 pub mod schema;
 pub mod server;
