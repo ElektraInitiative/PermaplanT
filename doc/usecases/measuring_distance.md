@@ -16,7 +16,7 @@
   - The user selects the "Measure Distance" button.
   - The user clicks on the first point they want to measure the distance from.
   - The user clicks on the multiple elements between which the user wants to create the path of the length measurement.
-  - The app displays all the measurements and the total sum in the desired unit (e.g. meters, feet).
+  - The App displays all the measurements and the total sum in the desired unit (e.g. meters, feet).
   - New measurements can be started while keeping the previous measurements on the display.
 - **Alternative scenario:**
   - The user accidentally clicks on the wrong element and can remove this element from the measurement.

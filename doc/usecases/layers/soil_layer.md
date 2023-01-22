@@ -13,14 +13,16 @@
 - **Precondition:**
   The user has opened the app and has selected the soil layer.
 - **Main success scenario:**
-  1. First the user globally tells a pH topsoil value and soil weight.
+  1. First the user globally tells a pH topsoil value, soil weight and yield grade.
   2. Then the user successfully adds, moves, deletes and edits:
      - pH value areas for topsoil
      - pH value areas for subsoil
      - soil weight class
-     in their map using the soil layer.
+     - yield grade
+     in their map using the soil layer, where it differs from the global value.
      This includes positioning the pH value areas in the appropriate locations and adjusting their values as needed.
-     A big brush is used to draw on the ph Value layer.
+     A big brush is used to draw on the pH Value layer.
+  3. The user can check the values at individual spots by clicking on it.
 - **Alternative scenario:**
   The user accidentally adds or moves a pH values or soil weight classes in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**
