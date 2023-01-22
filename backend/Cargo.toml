@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 actix-cors = "0.6.4"
 actix-web = "4"
+actix-rt = "2.8.0"
 dotenvy = "0.15.0"
 typeshare = "1.0.0"
 
