@@ -1,5 +1,5 @@
 import CreateSeedForm from '../components/CreateSeedForm';
-import { NewSeed as NewSeedDTO } from '@/bindings/rust_ts_definitions';
+import { NewSeedDTO } from '@/bindings/rust_ts_definitions';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import { createSeed } from '../api/createSeed';
 import { useState } from 'react';
@@ -11,19 +11,12 @@ export function CreateSeed() {
     setShowCancelModal(!showCancelModal);
   };
 
-  const onSubmit = () => {
-    const dto: NewSeedDTO = {
-      name: 'from frontend',
-      variety_id: 1,
-      harvest_year: 2023,
-      tags: ['Leaf crops'],
-      quantity: 'Nothing',
-    };
-    createSeed(dto);
+  const onSubmit = (newSeedDTO: NewSeedDTO) => {
+    createSeed(newSeedDTO);
   };
 
   return (
-    <div className="mx-auto w-full p-4 md:w-[700px]">
+    <div className="mx-auto w-full p-4 md:w-[900px]">
       <h2 className="mb-8">Neuer Eintrag</h2>
       <CreateSeedForm onCancel={onCancel} onSubmit={onSubmit} />
       <SimpleModal
@@ -36,7 +29,9 @@ export function CreateSeed() {
         onCancel={() => {
           setShowCancelModal(false);
         }}
-        onSubmit={onSubmit}
+        onSubmit={() => {
+          // TODO: redirect to previous page or another page when cancelling
+        }}
       />
     </div>
   );
