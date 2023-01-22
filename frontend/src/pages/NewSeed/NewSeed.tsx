@@ -1,7 +1,7 @@
-import { NewSeedDTO, createSeeds } from './api';
-
 import DropdownTextField from '../../components/Input/Dropdown/DropdownMenu';
+import { NewSeed as NewSeedDTO } from '@/bindings/rust_ts_definitions';
 import SimpleTextField from '../../components/Input/SimpleTextField';
+import { createSeeds } from './api';
 
 export default function NewSeed() {
   const onSubmit = () => {
