@@ -1,11 +1,5 @@
 // @generated automatically by Diesel CLI.
 
-pub mod sql_types {
-    #[derive(diesel::sql_types::SqlType)]
-    #[diesel(postgres_type(name = "tag"))]
-    pub struct Tag;
-}
-
 diesel::table! {
     seeds (id) {
         id -> Int4,
@@ -27,12 +21,9 @@ diesel::table! {
 }
 
 diesel::table! {
-    use diesel::sql_types::*;
-    use super::sql_types::Tag;
-
     varieties (id) {
         id -> Int4,
-        tags -> Array<Nullable<Tag>>,
+        tags -> Array<Nullable<Text>>,
         species -> Varchar,
         variety -> Nullable<Varchar>,
     }
