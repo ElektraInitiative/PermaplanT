@@ -33,7 +33,7 @@ To achieve these goals the app provides, e.g.:
 - zoom
 - internationalization: English, German
 - algorithms for mixed crops, considerations of natural constraints and automatic suggestions
-- privacy: no external JavaScript, Fonts, etc.
+- privacy: no cookies, tracking, analytics, external JavaScript, fonts, etc.
 
 ### Layers
 
@@ -68,6 +68,7 @@ Later features, i.e., out of scope for first version:
 - hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
 - 3D modes (forest garden)
+- differences of versions of the same garden
 - timelaps of historic garden development, simulate growth
 - social network features (notification that someone entered the garden, Chat&Photograph layer)
 

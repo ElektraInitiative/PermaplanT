@@ -14,6 +14,9 @@
   The user has opened the app and is on the map management screen.
 - **Main success scenario:**
   - The user successfully creates a new map by providing a name and selecting any desired customization options.
+    The map itself can be either:
+    - empty
+    - a duplication of an existing map
   - The user can also delete a map by selecting it from the list of maps and confirming the deletion.
   - If the user decides to undo the deletion within one month, the map is restored.
 - **Alternative scenario:**
