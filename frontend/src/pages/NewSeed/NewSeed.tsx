@@ -1,14 +1,26 @@
-import DropdownTextField from '../../components/Input/DropdownMenu';
+import { NewSeedDTO, createSeeds } from './api';
+
+import DropdownTextField from '../../components/Input/Dropdown/DropdownMenu';
 import SimpleTextField from '../../components/Input/SimpleTextField';
 
 export default function NewSeed() {
+  const onSubmit = () => {
+    const dto: NewSeedDTO = {
+      name: 'from frontend',
+      variety_id: 1,
+      harvest_year: 2023,
+      tags: ['Leaf crops'],
+      quantity: 'Nothing',
+    };
+    createSeeds(dto);
+  };
   const ButtonRow = () => (
     <div className="flex flex-row justify-between space-x-4">
       <button className="max-w-[240px] grow rounded-lg border border-zinc-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-zinc-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto">
         Abbrechen
       </button>
       <button
-        type="submit"
+        onClick={onSubmit}
         className="max-w-[240px] grow rounded-lg bg-gray-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
       >
         Eintragen
@@ -30,12 +42,15 @@ export default function NewSeed() {
             placeHolder="Blattpflanze"
             forText="categories"
             required={true}
+            multiple={true}
+            labelText="Kategorie"
             options={['Blattpflanze', 'Fruchtpflanze']}
           />
           <SimpleTextField labelText="Art" placeHolder="Feldsalat" required={true} forText="name" />
           <DropdownTextField
             placeHolder="Unbekannt"
             forText="variety"
+            labelText="Sorte"
             options={['Unbekannt', 'Sorte1', 'Sorte2']}
           />
           <SimpleTextField
@@ -47,6 +62,7 @@ export default function NewSeed() {
           <SimpleTextField labelText="Herkunft" placeHolder="Billa" forText="origin" />
           <SimpleTextField labelText="Verbrauch bis" placeHolder="2024" forText="use_by" />
           <DropdownTextField
+            labelText="Qualität"
             placeHolder="Blattpflanze"
             forText="quality"
             options={['Bio', 'Nicht-Bio']}

@@ -8,12 +8,14 @@ pub struct Config {
 impl Config {
     pub fn from_env() -> Result<Self, Box<dyn std::error::Error>> {
         let host = env::var("BIND_ADDRESS_HOST")
-            .map_err(|_| "Failed to get BIND_ADDRESS_HOST from environment")?;
+            .map_err(|_| "Failed to get BIND_ADDRESS_HOST from environment.")?;
         let port = env::var("BIND_ADDRESS_PORT")
-            .map_err(|_| "Failed to get BIND_ADDRESS_PORT from environment")?;
+            .map_err(|_| "Failed to get BIND_ADDRESS_PORT from environment.")?;
         let port: u16 = port.parse().map_err(|e: ParseIntError| e.to_string())?;
         let bind_address = (host, port);
-        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+        let database_url =
+            env::var("DATABASE_URL").map_err(|_| "Failed to get DATABASE_URL from environment.")?;
+
         Ok(Self {
             bind_address,
             database_url,

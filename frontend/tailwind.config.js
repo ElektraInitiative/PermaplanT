@@ -8,6 +8,7 @@ module.exports = {
         primary: {
           background: '#212121',
           textfield: '#181818',
+          button: '#181818',
         },
       },
     },

@@ -34,7 +34,7 @@ export default function SimpleTextField({
         <input
           type={type}
           id={forText}
-          className="block w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
+          className="block h-11 w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
           placeholder={placeHolder}
           required={required}
         />
