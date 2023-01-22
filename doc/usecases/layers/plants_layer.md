@@ -15,7 +15,7 @@
 - **Main success scenario:**
   - The user is able to add plants and is presented with a list of seasonal plants (for the selected time of the year), in following groups:
     - available seeds with early expiration days first
-    - diversity constraints: suggestions which not-yet-used plants fit next to the plant just added place or at a place selected (spatial and temporal)
+    - diversity constraints: suggestions which not-yet-used plants fit next to the plant just added, or at a place selected (spatial and temporal)
     - which were recently planted
     - and lastly favourites of users
   - The user gets a visual indication which parts of the map are better suited for the plant to be placed (e.g. zones, pH value, moisture, animals or shadows).

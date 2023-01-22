@@ -19,7 +19,7 @@
   - The user draws a polygon telling us where the borders of this image are.
   - The user tells the real length of a line (on flat land) so that we know how big this image in reality is (see use case "measuring distance").
   - The user chooses an orientation of the picture, i.e., rotate the image to where north is.
-  - The user chooses where north related to the screen is by rotating an north arrow (this rotates the image and the polygen together).
+  - The user chooses where north related to the screen is by rotating an north arrow (this rotates the image and the polygon together).
 - **Alternative scenario:** User accidentally selects the wrong image and selects another image to correct the mistake.
 - **Error scenario:**
   - User attempts to import a file that is not a supported image format or is corrupted and the app displays an error message.
