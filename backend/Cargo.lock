@@ -13,6 +13,7 @@ dependencies = [
  "diesel",
  "dotenvy",
  "serde",
+ "typeshare",
 ]
 
 [[package]]
@@ -1327,6 +1328,28 @@ name = "typenum"
 version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "497961ef93d974e23eb6f433eb5fe1b7930b659f06d12dec6fc44a8f554c0bba"
+
+[[package]]
+name = "typeshare"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d7f096d7253207ace684191e2c22d6480345975c15bbccd7c14d5de713f08bd6"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_json",
+ "typeshare-annotation",
+]
+
+[[package]]
+name = "typeshare-annotation"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "389b0235d70d7c762268e3b693e5efbe0879b036de868a39188309e2ced169ec"
+dependencies = [
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "unicode-bidi"

@@ -3,6 +3,7 @@ use bigdecimal::BigDecimal;
 use chrono::NaiveDate;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
+use typeshare::typeshare;
 
 #[derive(Identifiable, Queryable, Serialize, Deserialize)]
 pub struct Seed {
@@ -11,6 +12,7 @@ pub struct Seed {
     pub variety_id: i32,
 }
 
+#[typeshare]
 #[derive(Insertable, Serialize, Deserialize, Debug)]
 #[diesel(table_name = seeds)]
 pub struct NewSeed {
