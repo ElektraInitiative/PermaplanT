@@ -11,7 +11,7 @@ interface CreateSeedFormProps {
 
 const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
   const { register, handleSubmit, control } = useForm<NewSeedDTO>();
-  const onFormSubmit: SubmitHandler<NewSeedDTO> = (data) => console.log(data);
+  const onFormSubmit: SubmitHandler<NewSeedDTO> = (data) => onSubmit(data);
 
   const tags: SelectOption[] = Object.values(Tag).map((element) => {
     return { value: element, label: element };
