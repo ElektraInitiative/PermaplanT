@@ -2,8 +2,7 @@ import { FC } from 'react';
 import { PathRouteProps } from 'react-router-dom';
 
 enum Pages {
-  Welcome,
-  NewSeed,
+  CreateSeed,
 }
 
 type PathRouteCustomProps = {

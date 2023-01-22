@@ -1,16 +1,10 @@
 import { Pages, Routes } from './types';
 
-import Page1 from '@/pages/NewSeed';
-import Welcome from '@/pages/Welcome';
+import { CreateSeed } from '@/features/seeds';
 
 const routes: Routes = {
-  [Pages.Welcome]: {
-    component: Welcome,
-    path: '/',
-    title: 'Welcome',
-  },
-  [Pages.NewSeed]: {
-    component: Page1,
+  [Pages.CreateSeed]: {
+    component: CreateSeed,
     path: '/seeds/new',
     title: 'Neuer Eintrag',
   },

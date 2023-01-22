@@ -1,6 +1,6 @@
 import { HTMLInputTypeAttribute } from 'react';
 
-interface FormFieldOptions {
+interface SimpleTextFieldProps {
   forText: string;
   labelText: string;
   placeHolder: string;
@@ -16,7 +16,7 @@ export default function SimpleTextField({
   isArea = false,
   type = 'text',
   forText,
-}: FormFieldOptions) {
+}: SimpleTextFieldProps) {
   return (
     <div>
       <label htmlFor={forText} className="mb-2 block text-sm font-medium  text-white">

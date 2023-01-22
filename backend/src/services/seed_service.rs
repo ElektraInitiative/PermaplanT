@@ -3,10 +3,10 @@ use actix_web::{http::StatusCode, web::Data};
 use crate::{
     config::db::Pool,
     error::ServiceError,
-    models::seed::{NewSeed, Seed},
+    models::{dto::new_seed_dto::NewSeedDTO, seed::Seed},
 };
 
-pub fn create(new_seed: NewSeed, pool: &Data<Pool>) -> Result<(), ServiceError> {
+pub fn create(new_seed: NewSeedDTO, pool: &Data<Pool>) -> Result<(), ServiceError> {
     let mut conn = pool.get().expect("Failed to retrieve pool.");
     match Seed::create(new_seed, &mut conn) {
         Ok(_) => Ok(()),

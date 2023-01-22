@@ -3,35 +3,17 @@ use bigdecimal::BigDecimal;
 use chrono::NaiveDate;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
-use typeshare::typeshare;
 
-#[derive(Identifiable, Queryable, Serialize, Deserialize)]
-pub struct Seed {
-    pub id: i32,
-    pub name: String,
-    pub variety_id: i32,
-    pub harvest_year: i16,
-    pub quantity: String,
-    pub tags: Vec<String>,
-    pub use_by: Option<NaiveDate>,
-    pub origin: Option<String>,
-    pub taste: Option<String>,
-    pub yield_: Option<String>,
-    pub generation: Option<i32>,
-    pub quality: Option<String>,
-    pub price: Option<BigDecimal>,
-    pub notes: Option<String>,
-}
+use super::dto::new_seed_dto::NewSeedDTO;
 
-#[typeshare]
-#[derive(Insertable, Serialize, Deserialize, Debug)]
+#[derive(Identifiable, Insertable, Queryable, Serialize, Deserialize)]
 #[diesel(table_name = seeds)]
-pub struct NewSeed {
+pub struct Seed {
+    pub id: Option<i32>,
     pub name: String,
     pub variety_id: i32,
     pub harvest_year: i16,
     pub quantity: String,
-    pub id: Option<i32>,
     pub tags: Vec<String>,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
@@ -44,9 +26,9 @@ pub struct NewSeed {
 }
 
 impl Seed {
-    pub fn create(new_seed: NewSeed, conn: &mut Connection) -> QueryResult<usize> {
+    pub fn create(new_seed: NewSeedDTO, conn: &mut Connection) -> QueryResult<usize> {
         diesel::insert_into(seeds::table)
-            .values(&new_seed)
+            .values(Seed::from(new_seed))
             .execute(conn)
     }
 

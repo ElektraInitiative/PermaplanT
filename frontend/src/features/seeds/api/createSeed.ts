@@ -1,7 +1,7 @@
-import { NewSeed } from '../../bindings/rust_ts_definitions';
+import { NewSeed as NewSeedDTO } from '@/bindings/rust_ts_definitions';
 import axios from 'axios';
 
-export function createSeeds(newSeedDTO: NewSeed) {
+export const createSeed = async (newSeedDTO: NewSeedDTO) => {
   axios
     .post('http://localhost:8080/api/seeds', newSeedDTO)
     .then((response) => {
@@ -10,4 +10,4 @@ export function createSeeds(newSeedDTO: NewSeed) {
     .catch((error) => {
       console.log(error);
     });
-}
+};

@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom';
 import { Fragment } from 'react';
-import Pages from './routes/Pages';
+import Pages from './routes/pages';
 
 function App() {
   return (

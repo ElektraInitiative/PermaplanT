@@ -6,11 +6,11 @@ use actix_web::{
 use crate::{
     config::db::Pool,
     constants,
-    models::{response::ResponseBody, seed::NewSeed},
+    models::{dto::new_seed_dto::NewSeedDTO, response::ResponseBody},
     services,
 };
 
-pub async fn create(new_seed_json: Json<NewSeed>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn create(new_seed_json: Json<NewSeedDTO>, pool: Data<Pool>) -> Result<HttpResponse> {
     match services::seed_service::create(new_seed_json.0, &pool) {
         Ok(_) => Ok(HttpResponse::Created()
             .json(ResponseBody::new(constants::MESSAGE_OK, constants::EMPTY))),
@@ -34,7 +34,9 @@ mod tests {
     use crate::config::app;
     use crate::config::db;
     use crate::config::routes;
-    use crate::models::seed::NewSeed;
+    use crate::models::dto::new_seed_dto::NewSeedDTO;
+    use crate::models::r#enum::quantity::Quantity;
+    use crate::models::r#enum::tag::Tag;
     use actix_cors::Cors;
     use actix_web::App;
     use actix_web::{http, http::StatusCode, test, web::Data};
@@ -64,13 +66,13 @@ mod tests {
         )
         .await;
 
-        let new_seed = NewSeed {
+        let new_seed = NewSeedDTO {
             id: Some(-1),
             name: "tomato2".to_string(),
             variety_id: 1,
             harvest_year: 2022,
-            quantity: "Nothing".to_string(),
-            tags: vec!["Leaf crops".to_string()],
+            quantity: Quantity::Nothing,
+            tags: vec![Tag::LeafCrops],
             use_by: None,
             origin: None,
             taste: None,
