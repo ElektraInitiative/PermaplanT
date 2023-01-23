@@ -4,6 +4,7 @@
 
 - Rust 1.66.1
 - [min. PostgreSQL 13](https://www.postgresql.org/download/)
+- libpq-dev
 
 ## Installation
 
