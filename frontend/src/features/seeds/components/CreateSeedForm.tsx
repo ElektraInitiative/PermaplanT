@@ -4,7 +4,7 @@ import {
   Quantity,
   Tag,
   VarietyDto,
-} from '../../../bindings/rust_ts_definitions';
+} from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';

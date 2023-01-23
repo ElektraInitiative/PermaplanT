@@ -1,5 +1,5 @@
 import CreateSeedForm from '../components/CreateSeedForm';
-import { NewSeedDTO } from '@/bindings/rust_ts_definitions';
+import { NewSeedDTO } from '@/bindings/definitions';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import { createSeed } from '../api/createSeed';
 import useCreateSeedLoadingStore from '../store/CreateSeedStore';

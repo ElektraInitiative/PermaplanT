@@ -1,4 +1,4 @@
-import { VarietyDto } from '../../../bindings/rust_ts_definitions';
+import { VarietyDto } from '../../../bindings/definitions';
 import axios from 'axios';
 
 export const findAllVarieties = async (
