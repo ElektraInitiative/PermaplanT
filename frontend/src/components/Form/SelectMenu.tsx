@@ -1,8 +1,8 @@
-import { Control, FieldValues, Path } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path, UseFormSetValue } from 'react-hook-form';
 import Select, { StylesConfig } from 'react-select';
 
 export interface SelectOption {
-  value: string;
+  value: string | number;
   label: string;
 }
 
@@ -14,8 +14,7 @@ export interface SelectMenuProps<T extends FieldValues> {
   options: SelectOption[];
   required?: boolean;
   placeholder?: string;
-  type?: string;
-  handleChange?: (options: any) => void;
+  handleOptionsChange?: (option: any) => void;
 }
 
 export default function SelectMenu<T extends FieldValues>({
@@ -26,8 +25,7 @@ export default function SelectMenu<T extends FieldValues>({
   options,
   required = false,
   placeholder,
-  handleChange,
-  type,
+  handleOptionsChange,
 }: SelectMenuProps<T>) {
   const customStyles: StylesConfig = {
     menu: (styles) => ({
@@ -85,14 +83,21 @@ export default function SelectMenu<T extends FieldValues>({
         </label>
       )}
 
-      <Select
+      <Controller
         name={id}
-        onChange={handleChange}
-        placeholder={placeholder}
-        options={options}
-        isMulti={isMulti}
-        styles={customStyles}
-        required={required}
+        control={control}
+        render={({ field }) => (
+          <Select
+            name={id}
+            isClearable
+            onChange={handleOptionsChange}
+            placeholder={placeholder}
+            options={options}
+            isMulti={isMulti}
+            styles={customStyles}
+            required={required}
+          />
+        )}
       />
     </div>
   );

@@ -1,4 +1,3 @@
-import { FormEvent, useEffect, useState } from 'react';
 import {
   NewSeedDTO,
   Quality,
@@ -6,10 +5,12 @@ import {
   Tag,
   VarietyDto,
 } from '../../../bindings/rust_ts_definitions';
-import SelectMenu, { SelectOption } from '../../../components/Select/SelectMenu';
+import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 
-import SimpleFormInput from '@/components/Input/SimpleFormInput';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { enumToSelectOptionArr } from '@/utils/enum';
 import { findAllVarieties } from '../api/findAllVarieties';
 
 interface CreateSeedFormProps {
@@ -18,24 +19,12 @@ interface CreateSeedFormProps {
 }
 
 const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
-  const { register, handleSubmit, control } = useForm<NewSeedDTO>();
-  const onFormSubmit: SubmitHandler<NewSeedDTO> = (data) => onSubmit(data);
-
-  const tags: SelectOption[] = Object.values(Tag).map((element) => {
-    return { value: element, label: element };
-  });
+  const tags: SelectOption[] = enumToSelectOptionArr(Tag);
+  const quality: SelectOption[] = enumToSelectOptionArr(Quality);
+  const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
   const [varieties, setVarieties] = useState<SelectOption[]>([]);
-
-  const quality: SelectOption[] = Object.values(Quality).map((element) => {
-    return { value: element, label: element };
-  });
-
-  const quantity: SelectOption[] = Object.values(Quantity).map((element) => {
-    return { value: element, label: element };
-  });
-
-  useEffect(() => {
+  const fetchAndMapVarieties = () => {
     const onSuccess = (varieties: VarietyDto[]) => {
       setVarieties(
         varieties.map((element) => {
@@ -43,106 +32,35 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
         }),
       );
     };
-
-    const onError = (error: Error) => {};
+    const onError = (error: Error) => {
+      console.log('Error: failed to fetch varieties');
+    };
     findAllVarieties(onSuccess, onError);
+  };
+
+  useEffect(() => {
+    fetchAndMapVarieties();
   }, []);
 
-  const newSeed: NewSeedDTO = {
-    id: undefined,
-    name: '',
-    variety_id: -1,
-    harvest_year: 2023,
-    quantity: Quantity.Enough,
-    tags: [],
-    use_by: undefined,
-    origin: undefined,
-    taste: undefined,
-    yield_: undefined,
-    generation: undefined,
-    quality: undefined,
-    price: undefined,
-    notes: undefined,
-  };
+  const { register, handleSubmit, control, setValue } = useForm<NewSeedDTO>();
+  const onFormSubmit: SubmitHandler<NewSeedDTO> = (data) => {
+    if (data.origin === '') delete data.origin;
+    if (data.taste === '') delete data.taste;
+    if (data.yield_ === '') delete data.yield_;
+    if (data.use_by === '') delete data.use_by;
+    if (Number.isNaN(data.generation)) delete data.generation;
+    if (Number.isNaN(data.price)) delete data.price;
+    if (data.use_by) {
+      // Change the date to YYYY-MM-DD format which Postgres has
+      data.use_by = new Date(String(data.use_by)).toISOString().split('T')[0];
+    }
 
-  const handleTagsChange = (option: any) => {
-    const temp = option as SelectOption[];
-    const mapped = temp.map((element) => element.value as Tag);
-    newSeed.tags = mapped;
-  };
-
-  const handleQuantityChange = (option: any) => {
-    const temp = option as SelectOption;
-    const mapped = temp.value as Quantity;
-    newSeed.quantity = mapped;
-  };
-
-  const handleQualityChange = (option: any) => {
-    const temp = option as SelectOption;
-    const mapped = temp.value as Quality;
-    newSeed.quality = mapped;
-  };
-
-  const handleVarietyChange = (option: any) => {
-    const temp = option as SelectOption;
-    console.log(temp);
-    const mapped = Number(temp.value);
-    newSeed.variety_id = mapped;
-  };
-
-  const handleNameChange = (event: FormEvent<HTMLInputElement>) => {
-    const temp = event.currentTarget.value;
-    newSeed.name = temp;
-  };
-
-  const handleHarvestYearChange = (event: FormEvent<HTMLInputElement>) => {
-    const temp = Number(event.currentTarget.value);
-    newSeed.harvest_year = temp;
-  };
-
-  const handleOriginChange = (event: FormEvent<HTMLInputElement>) => {
-    const temp = event.currentTarget.value;
-    newSeed.origin = temp;
-  };
-
-  const handleUseByChange = (event: FormEvent<HTMLInputElement>) => {
-    const dateString = new Date(event.currentTarget.value).toISOString().split('T')[0];
-    newSeed.use_by = dateString;
-  };
-
-  const handleYieldChange = (event: FormEvent<HTMLInputElement>) => {
-    const temp = event.currentTarget.value;
-    newSeed.yield_ = temp;
-  };
-
-  const handlePriceChange = (event: FormEvent<HTMLInputElement>) => {
-    const temp = Number(event.currentTarget.value);
-    newSeed.price = temp;
-  };
-
-  const handleGenerationChange = (event: FormEvent<HTMLInputElement>) => {
-    const temp = Number(event.currentTarget.value);
-    newSeed.generation = temp;
-  };
-
-  const handleNotesChange = (event: FormEvent<HTMLTextAreaElement>) => {
-    const temp = event.currentTarget.value;
-    newSeed.notes = temp;
-  };
-
-  const handleTasteChange = (event: FormEvent<HTMLInputElement>) => {
-    const temp = event.currentTarget.value;
-    newSeed.taste = temp;
-  };
-
-  const submitForm = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit(newSeed);
+    onSubmit(data);
   };
 
   return (
     <div>
-      <form onSubmit={submitForm}>
+      <form onSubmit={handleSubmit(onFormSubmit)}>
         <div className="mb-6 grid gap-8 md:grid-cols-2">
           <SimpleFormInput
             type="number"
@@ -150,7 +68,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             placeHolder="2023"
             required={true}
             id="harvest_year"
-            handleInputChange={handleHarvestYearChange}
+            register={register}
           />
           <SelectMenu
             id="tags"
@@ -159,14 +77,18 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             options={tags}
             labelText="Kategorie"
             required={true}
-            handleOptionsChange={handleTagsChange}
+            handleOptionsChange={(option) => {
+              const temp = option as SelectOption[];
+              const mapped = temp.map((element) => element.value as Tag);
+              setValue('tags', mapped);
+            }}
           />
           <SimpleFormInput
             labelText="Art"
             placeHolder="Feldsalat"
             required={true}
             id="name"
-            handleInputChange={handleNameChange}
+            register={register}
           />
           <SelectMenu
             id="variety_id"
@@ -174,7 +96,9 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             options={varieties}
             labelText="Sorte"
             required={true}
-            handleOptionsChange={handleVarietyChange}
+            handleOptionsChange={(option) => {
+              setValue('variety_id', Number(option.value));
+            }}
           />
           <SelectMenu
             id="quantity"
@@ -182,52 +106,56 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             options={quantity}
             labelText="Menge"
             required={true}
-            handleOptionsChange={handleQuantityChange}
+            handleOptionsChange={(option) => {
+              const temp = option as SelectOption;
+              const mapped = temp.value as Quantity;
+              setValue('quantity', mapped);
+            }}
           />
           <SimpleFormInput
             labelText="Herkunft"
             placeHolder="Billa"
             id="origin"
-            handleInputChange={handleOriginChange}
+            register={register}
           />
           <SimpleFormInput
+            type="date"
             labelText="Verbrauch bis"
-            placeHolder="2024"
+            placeHolder="Verbrauch bis"
             id="use_by"
-            handleInputChange={handleUseByChange}
+            register={register}
           />
           <SelectMenu
             id="quality"
             control={control}
             options={quality}
             labelText="Qualität"
-            handleOptionsChange={handleQualityChange}
+            handleOptionsChange={(option) => {
+              const temp = option as SelectOption;
+              const mapped = temp.value as Quality;
+              setValue('quality', mapped);
+            }}
           />
           <SimpleFormInput
             labelText="Geschmack"
             placeHolder="nussig"
             id="taste"
-            handleInputChange={handleTasteChange}
+            register={register}
           />
-          <SimpleFormInput
-            labelText="Ertrag"
-            placeHolder="1"
-            id="yield_"
-            handleInputChange={handleYieldChange}
-          />
+          <SimpleFormInput labelText="Ertrag" placeHolder="1" id="yield_" register={register} />
           <SimpleFormInput
             type="number"
             labelText="Preis"
             placeHolder="2,99€"
             id="price"
-            handleInputChange={handlePriceChange}
+            register={register}
           />
           <SimpleFormInput
             type="number"
             labelText="Generation"
             placeHolder="0"
             id="generation"
-            handleInputChange={handleGenerationChange}
+            register={register}
           />
         </div>
         <div className="mb-6">
@@ -237,7 +165,6 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             placeHolder="..."
             id="notes"
             register={register}
-            handleTextAreaChange={handleNotesChange}
           />
         </div>
         <div className="flex flex-row justify-between space-x-4">

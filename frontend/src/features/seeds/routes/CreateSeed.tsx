@@ -12,8 +12,12 @@ export function CreateSeed() {
   };
 
   const onSubmit = (newSeedDTO: NewSeedDTO) => {
-    const onSuccess = () => {};
-    const onError = (error: Error) => {};
+    const onSuccess = () => {
+      console.log('Seed creation succeded');
+    };
+    const onError = (error: Error) => {
+      console.log(error);
+    };
     createSeed(newSeedDTO, onSuccess, onError);
   };
 
@@ -32,7 +36,7 @@ export function CreateSeed() {
           setShowCancelModal(false);
         }}
         onSubmit={() => {
-          // TODO: redirect to previous page or another page when cancelling
+          // TODO: redirect to previous page or another page
         }}
       />
     </div>

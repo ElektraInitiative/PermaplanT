@@ -6,7 +6,6 @@ export const createSeed = async (
   onSuccess: () => void,
   onError: (error: Error) => void,
 ) => {
-  console.log(JSON.stringify(newSeedDTO));
   axios
     .post('http://localhost:8080/api/seeds', newSeedDTO)
     .then((_) => {
