@@ -5,15 +5,16 @@ use serde::{Deserialize, Serialize};
 use crate::config::db::Connection;
 
 #[derive(Identifiable, Queryable, Serialize, Deserialize)]
-pub struct Varietie {
+#[diesel(table_name = varieties)]
+pub struct Variety {
     pub id: i32,
     pub tags: Vec<Option<String>>,
     pub species: String,
     pub variety: Option<String>,
 }
 
-impl Varietie {
-    pub fn find_all(conn: &mut Connection) -> QueryResult<Vec<Varietie>> {
-        varieties::table.select(all_columns).load::<Varietie>(conn)
+impl Variety {
+    pub fn find_all(conn: &mut Connection) -> QueryResult<Vec<Variety>> {
+        varieties::table.select(all_columns).load::<Variety>(conn)
     }
 }
