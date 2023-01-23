@@ -2,7 +2,7 @@ import { Control, FieldValues, Path } from 'react-hook-form';
 import Select, { StylesConfig } from 'react-select';
 
 export interface SelectOption {
-  value: string | number;
+  value: string;
   label: string;
 }
 
@@ -14,7 +14,8 @@ export interface SelectMenuProps<T extends FieldValues> {
   options: SelectOption[];
   required?: boolean;
   placeholder?: string;
-  handleOptionsChange?: (option: any) => void;
+  type?: string;
+  handleChange?: (options: any) => void;
 }
 
 export default function SelectMenu<T extends FieldValues>({
@@ -25,7 +26,8 @@ export default function SelectMenu<T extends FieldValues>({
   options,
   required = false,
   placeholder,
-  handleOptionsChange,
+  handleChange,
+  type,
 }: SelectMenuProps<T>) {
   const customStyles: StylesConfig = {
     menu: (styles) => ({
@@ -85,8 +87,7 @@ export default function SelectMenu<T extends FieldValues>({
 
       <Select
         name={id}
-        isClearable
-        onChange={handleOptionsChange}
+        onChange={handleChange}
         placeholder={placeholder}
         options={options}
         isMulti={isMulti}

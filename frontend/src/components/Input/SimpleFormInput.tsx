@@ -1,6 +1,5 @@
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
-
-import { HTMLInputTypeAttribute } from 'react';
+import { FormEvent, HTMLInputTypeAttribute } from 'react';
 
 interface SimpleFormInputProps<T extends FieldValues> {
   id: Path<T>;
@@ -10,6 +9,8 @@ interface SimpleFormInputProps<T extends FieldValues> {
   required?: boolean;
   type?: HTMLInputTypeAttribute;
   register?: UseFormRegister<T>;
+  handleInputChange?: (event: FormEvent<HTMLInputElement>) => void;
+  handleTextAreaChange?: (event: FormEvent<HTMLTextAreaElement>) => void;
 }
 
 export default function SimpleFormInput<T extends FieldValues>({
@@ -20,6 +21,8 @@ export default function SimpleFormInput<T extends FieldValues>({
   type = 'text',
   id,
   register,
+  handleInputChange,
+  handleTextAreaChange,
 }: SimpleFormInputProps<T>) {
   return (
     <div>
@@ -34,7 +37,7 @@ export default function SimpleFormInput<T extends FieldValues>({
           className="block w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
           placeholder={placeHolder}
           required={required}
-          {...register?.(id)}
+          onChange={handleTextAreaChange}
         />
       ) : (
         <input
@@ -43,7 +46,7 @@ export default function SimpleFormInput<T extends FieldValues>({
           className="block h-11 w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
           placeholder={placeHolder}
           required={required}
-          {...register?.(id)}
+          onChange={handleInputChange}
         />
       )}
     </div>

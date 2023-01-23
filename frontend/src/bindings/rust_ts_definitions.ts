@@ -9,7 +9,7 @@ export interface NewSeedDTO {
 	harvest_year: number;
 	quantity: Quantity;
 	tags: Tag[];
-	use_by?: Date;
+	use_by?: string;
 	origin?: string;
 	taste?: string;
 	yield_?: string;
@@ -17,6 +17,13 @@ export interface NewSeedDTO {
 	quality?: Quality;
 	price?: number;
 	notes?: string;
+}
+
+export interface VarietyDto {
+	id: number;
+	tags: Tag[];
+	species: string;
+	variety?: string;
 }
 
 export enum Quality {

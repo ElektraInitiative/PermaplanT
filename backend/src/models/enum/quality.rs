@@ -4,9 +4,11 @@ use typeshare::typeshare;
 #[typeshare]
 #[derive(Serialize, Deserialize)]
 pub enum Quality {
+    #[serde(rename = "Organic")]
     Organic,
     #[serde(rename = "Not organic")]
     NotOrganic,
+    #[serde(rename = "Unknown")]
     Unknown,
 }
 

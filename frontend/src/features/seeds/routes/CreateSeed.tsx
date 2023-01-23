@@ -12,7 +12,9 @@ export function CreateSeed() {
   };
 
   const onSubmit = (newSeedDTO: NewSeedDTO) => {
-    createSeed(newSeedDTO);
+    const onSuccess = () => {};
+    const onError = (error: Error) => {};
+    createSeed(newSeedDTO, onSuccess, onError);
   };
 
   return (
