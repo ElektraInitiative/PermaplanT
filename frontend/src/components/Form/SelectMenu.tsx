@@ -1,4 +1,4 @@
-import { Control, Controller, FieldValues, Path, UseFormSetValue } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import Select, { StylesConfig } from 'react-select';
 
 export interface SelectOption {

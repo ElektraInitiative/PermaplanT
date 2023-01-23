@@ -14,8 +14,8 @@ diesel::table! {
         yield_ -> Nullable<Varchar>,
         quantity -> Varchar,
         quality -> Nullable<Varchar>,
-        price -> Nullable<Numeric>,
-        generation -> Nullable<Int4>,
+        price -> Nullable<Int2>,
+        generation -> Nullable<Int2>,
         notes -> Nullable<Text>,
     }
 }

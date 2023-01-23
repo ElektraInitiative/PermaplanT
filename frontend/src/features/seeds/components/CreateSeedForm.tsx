@@ -1,15 +1,10 @@
-import {
-  NewSeedDTO,
-  Quality,
-  Quantity,
-  Tag,
-  VarietyDto,
-} from '../../../bindings/definitions';
+import { NewSeedDTO, Quality, Quantity, Tag, VarietyDto } from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import SimpleModal from '@/components/Modals/SimpleModal';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { findAllVarieties } from '../api/findAllVarieties';
 import useCreateSeedLoadingStore from '../store/CreateSeedStore';
@@ -21,13 +16,14 @@ interface CreateSeedFormProps {
 
 const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
   const loadingStore = useCreateSeedLoadingStore();
-
   const tags: SelectOption[] = enumToSelectOptionArr(Tag);
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
-
   const [varieties, setVarieties] = useState<SelectOption[]>([]);
-  const fetchAndMapVarieties = () => {
+  const [showErrorModal, setShowErrorModal] = useState(false);
+
+  useEffect(() => {
+    loadingStore.updateIsFetchingVarieties(true);
     const onSuccess = (varieties: VarietyDto[]) => {
       setVarieties(
         varieties.map((element) => {
@@ -38,14 +34,10 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
     };
     const onError = (error: Error) => {
       console.log('Error: failed to fetch varieties: ' + error);
+      setShowErrorModal(true);
       loadingStore.updateIsFetchingVarieties(false);
     };
     findAllVarieties(onSuccess, onError);
-  };
-
-  useEffect(() => {
-    loadingStore.updateIsFetchingVarieties(true);
-    fetchAndMapVarieties();
   }, []);
 
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDTO>();
@@ -211,6 +203,14 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
           </button>
         </div>
       </form>
+      <SimpleModal
+        title="Fehler"
+        body="Ein Fehler ist aufgetreten"
+        show={showErrorModal}
+        setShow={setShowErrorModal}
+        submitBtnTitle="Ok"
+        onSubmit={() => {}}
+      ></SimpleModal>
     </div>
   );
 };

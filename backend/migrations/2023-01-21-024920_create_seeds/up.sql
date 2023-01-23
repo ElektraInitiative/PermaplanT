@@ -11,8 +11,8 @@ CREATE TABLE seeds (
   yield VARCHAR(255), -- German: Ertrag
   quantity VARCHAR(255) NOT NULL, -- German: Menge
   quality VARCHAR(255), -- German: Qualität
-  price NUMERIC, -- German: Preis
-  generation INTEGER, -- German: Generation
+  price SMALLINT, -- in cents, German: Preis
+  generation SMALLINT, -- German: Generation
   notes TEXT -- German: Notizen,
 );
 

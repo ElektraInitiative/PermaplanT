@@ -1,5 +1,4 @@
 use crate::{config::db::Connection, schema::seeds};
-use bigdecimal::BigDecimal;
 use chrono::NaiveDate;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -19,9 +18,9 @@ pub struct Seed {
     pub origin: Option<String>,
     pub taste: Option<String>,
     pub yield_: Option<String>,
-    pub generation: Option<i32>,
+    pub generation: Option<i16>,
     pub quality: Option<String>,
-    pub price: Option<BigDecimal>,
+    pub price: Option<i16>,
     pub notes: Option<String>,
 }
 

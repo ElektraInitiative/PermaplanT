@@ -1,7 +1,6 @@
-use crate::models::{r#enum::quality::Quality, seed::Seed};
 use crate::models::r#enum::quantity::Quantity;
 use crate::models::r#enum::tag::Tag;
-use bigdecimal::BigDecimal;
+use crate::models::{r#enum::quality::Quality, seed::Seed};
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
@@ -19,9 +18,9 @@ pub struct NewSeedDTO {
     pub origin: Option<String>,
     pub taste: Option<String>,
     pub yield_: Option<String>,
-    pub generation: Option<i32>,
+    pub generation: Option<i16>,
     pub quality: Option<Quality>,
-    pub price: Option<BigDecimal>,
+    pub price: Option<i16>,
     pub notes: Option<String>,
 }
 

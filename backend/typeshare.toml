@@ -1,3 +1,2 @@
 [typescript.type_mappings]
 "NaiveDate" = "string"
-"BigDecimal" = "number"

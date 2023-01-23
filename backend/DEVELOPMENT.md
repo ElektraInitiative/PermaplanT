@@ -1,0 +1,72 @@
+# Development
+
+## Migrations
+
+### Create new migrations
+
+You can generate new migrations with the diesel cli:
+
+``` shell
+diesel migration generate migration_name
+```
+
+This will create two empty sql files that look something like this:
+
+- migrations/20160815133237_migration_name/up.sql
+- migrations/20160815133237_migration_name/down.sql
+
+`up.sql` applies the migration and `down.sql` reverts the migration.
+
+Now we have to write the migrations in the respective `up.sql` and `down.sql` files.
+
+Examples:
+
+``` SQL
+-- up.sql
+CREATE TABLE seeds (
+  id SERIAL PRIMARY KEY,
+);
+```
+
+``` SQL
+-- down.sql
+DROP TABLE seeds;
+```
+
+### Apply migrations
+
+``` shell
+diesel migration run
+```
+
+### Redo migrations
+
+This is especially useful for incremental improvements to the database.
+For example if you need to change one field in one of your tables, you can change it and redo the migration.
+
+``` shell
+# Redo latest migration
+diesel migration redo
+
+# Or redo all migration
+diesel migration redo --all
+```
+
+## Type Safety
+
+In order to ensure type safety between the TypeScript frontend and Rust backend, we use [typeshare](https://github.com/1Password/typeshare) to synchronize our Rust type definitions with TypeScript.
+
+After installing the typeshare cli we can run:
+
+``` shell
+typeshare ./ --lang=typescript --output-file=../frontend/src/bindings/definitions.ts
+```
+
+Or directly in the frontend:
+
+``` shell
+# change directory into frontend first
+npm run generate-api-types
+```
+
+Now we can find our rust-typescript bindings under `/frontend/src/bindings` and use them directly in our TypeScript codebase.
