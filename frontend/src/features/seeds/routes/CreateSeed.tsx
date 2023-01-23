@@ -2,10 +2,12 @@ import CreateSeedForm from '../components/CreateSeedForm';
 import { NewSeedDTO } from '@/bindings/rust_ts_definitions';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import { createSeed } from '../api/createSeed';
+import useCreateSeedLoadingStore from '../store/CreateSeedStore';
 import { useState } from 'react';
 
 export function CreateSeed() {
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const loadingStore = useCreateSeedLoadingStore();
 
   const onCancel = () => {
     setShowCancelModal(!showCancelModal);
@@ -14,9 +16,11 @@ export function CreateSeed() {
   const onSubmit = (newSeedDTO: NewSeedDTO) => {
     const onSuccess = () => {
       console.log('Seed creation succeded');
+      loadingStore.updateIsUploadingSeed(false);
     };
     const onError = (error: Error) => {
       console.log(error);
+      loadingStore.updateIsUploadingSeed(false);
     };
     createSeed(newSeedDTO, onSuccess, onError);
   };

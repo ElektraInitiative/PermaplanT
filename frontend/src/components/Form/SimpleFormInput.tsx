@@ -29,6 +29,7 @@ export default function SimpleFormInput<T extends FieldValues>({
       </label>
       {isArea ? (
         <textarea
+          rows={6}
           name={id}
           id={id}
           className="block w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
