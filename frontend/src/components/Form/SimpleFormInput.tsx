@@ -44,6 +44,7 @@ export default function SimpleFormInput<T extends FieldValues>({
           className="block h-11 w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
           placeholder={placeHolder}
           required={required}
+          style={{ colorScheme: 'dark' }}
           {...register?.(id, {
             valueAsNumber: type === 'number',
           })}
