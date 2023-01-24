@@ -1,5 +1,5 @@
 import { NewSeedDTO } from '../../../bindings/definitions';
-import { VarietyDto } from '@/bindings/definitions';
+import { VarietyDTO } from '@/bindings/definitions';
 import { create } from 'zustand';
 import { createSeed } from '../api/createSeed';
 import { findAllVarieties } from '../api/findAllVarieties';
@@ -7,7 +7,7 @@ import { findAllVarieties } from '../api/findAllVarieties';
 interface CreateSeedState {
   isUploadingSeed: boolean;
   isFetchingVarieties: boolean;
-  varieties: VarietyDto[];
+  varieties: VarietyDTO[];
   error: Error | null | undefined;
   showErrorModal: boolean;
   setShowErrorModal: (showErrorModal: boolean) => void;

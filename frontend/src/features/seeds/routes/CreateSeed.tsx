@@ -3,9 +3,12 @@ import { NewSeedDTO } from '@/bindings/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import useCreateSeedStore from '../store/CreateSeedStore';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 export function CreateSeed() {
+  const navigate = useNavigate();
+
   const [showCancelModal, setShowCancelModal] = useState(false);
   const createSeed = useCreateSeedStore((state) => state.createSeed);
   const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
@@ -18,6 +21,9 @@ export function CreateSeed() {
 
   const onSubmit = async (newSeed: NewSeedDTO) => {
     await createSeed(newSeed);
+    if (error === null) {
+      navigate('/seeds');
+    }
   };
 
   return (

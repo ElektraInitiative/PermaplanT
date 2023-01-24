@@ -38,11 +38,6 @@ impl From<NewSeedDTO> for NewSeed {
             .map(|tag| Some(String::from(tag)))
             .collect();
 
-        let id = match new_seed.id {
-            Some(id) => id,
-            None => 0,
-        };
-
         NewSeed {
             name: new_seed.name,
             variety_id: new_seed.variety_id,
