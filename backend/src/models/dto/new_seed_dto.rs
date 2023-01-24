@@ -1,6 +1,7 @@
+use crate::models::r#enum::quality::Quality;
 use crate::models::r#enum::quantity::Quantity;
 use crate::models::r#enum::tag::Tag;
-use crate::models::{r#enum::quality::Quality, seed::Seed};
+use crate::models::seed::NewSeed;
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
@@ -24,19 +25,25 @@ pub struct NewSeedDTO {
     pub notes: Option<String>,
 }
 
-impl From<NewSeedDTO> for Seed {
+impl From<NewSeedDTO> for NewSeed {
     fn from(new_seed: NewSeedDTO) -> Self {
         let quality = match new_seed.quality {
             Some(quality) => Some(String::from(quality)),
             None => None,
         };
+
         let tags = new_seed
             .tags
             .into_iter()
-            .map(|tag| String::from(tag))
+            .map(|tag| Some(String::from(tag)))
             .collect();
-        Seed {
-            id: None,
+
+        let id = match new_seed.id {
+            Some(id) => id,
+            None => 0,
+        };
+
+        NewSeed {
             name: new_seed.name,
             variety_id: new_seed.variety_id,
             harvest_year: new_seed.harvest_year,

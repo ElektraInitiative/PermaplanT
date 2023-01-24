@@ -1,17 +1,11 @@
-import { NewSeedDTO } from '@/bindings/rust_ts_definitions';
+import { NewSeedDTO } from '@/bindings/definitions';
 import axios from 'axios';
+import { baseApiUrl } from '@/config';
 
-export const createSeed = async (
-  newSeedDTO: NewSeedDTO,
-  onSuccess: () => void,
-  onError: (error: Error) => void,
-) => {
-  axios
-    .post('http://localhost:8080/api/seeds', newSeedDTO)
-    .then((_) => {
-      onSuccess();
-    })
-    .catch((error) => {
-      onError(error);
-    });
+export const createSeed = async (seed: NewSeedDTO) => {
+  try {
+    await axios.post(`${baseApiUrl}/api/seeds`, seed);
+  } catch (error) {
+    throw error as Error;
+  }
 };

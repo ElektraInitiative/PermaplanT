@@ -1,29 +1,21 @@
-use std::str::FromStr;
-
-use crate::models::{r#enum::tag::Tag, variety::Varietie};
+use crate::models::variety::Variety;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
 #[typeshare]
 #[derive(Serialize, Deserialize)]
-pub struct VarietyDto {
+pub struct VarietyDTO {
     pub id: i32,
-    pub tags: Vec<Tag>,
+    pub tags: Vec<Option<String>>,
     pub species: String,
     pub variety: Option<String>,
 }
 
-impl From<Varietie> for VarietyDto {
-    fn from(variety: Varietie) -> Self {
-        let tags: Vec<Tag> = variety
-            .tags
-            .into_iter()
-            .filter_map(|tag| Tag::from_str(tag?.as_str()).ok())
-            .collect();
-
-        VarietyDto {
+impl From<Variety> for VarietyDTO {
+    fn from(variety: Variety) -> Self {
+        VarietyDTO {
             id: variety.id,
-            tags: tags,
+            tags: variety.tags,
             species: variety.species,
             variety: variety.variety,
         }

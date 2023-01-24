@@ -21,3 +21,14 @@ impl From<Quality> for String {
         }
     }
 }
+
+impl From<String> for Quality {
+    fn from(quality: String) -> Quality {
+        match quality.as_str() {
+            "Organic" => Quality::Organic,
+            "Not organic" => Quality::NotOrganic,
+            "Unknown" => Quality::Unknown,
+            _ => Quality::Unknown,
+        }
+    }
+}

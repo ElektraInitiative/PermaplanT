@@ -1,47 +1,40 @@
-import { NewSeedDTO, Quality, Quantity, Tag, VarietyDto } from '../../../bindings/definitions';
+import { NewSeedDTO, Quality, Quantity, Tag } from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
 
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import SimpleModal from '@/components/Modals/SimpleModal';
 import { enumToSelectOptionArr } from '@/utils/enum';
-import { findAllVarieties } from '../api/findAllVarieties';
-import useCreateSeedLoadingStore from '../store/CreateSeedStore';
+import useCreateSeedStore from '../store/CreateSeedStore';
+import { useEffect } from 'react';
 
 interface CreateSeedFormProps {
   onCancel: () => void;
-  onSubmit: (newSeedDTO: NewSeedDTO) => void;
+  onSubmit: (newSeed: NewSeedDTO) => void;
 }
 
 const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
-  const loadingStore = useCreateSeedLoadingStore();
   const tags: SelectOption[] = enumToSelectOptionArr(Tag);
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
-  const [varieties, setVarieties] = useState<SelectOption[]>([]);
-  const [showErrorModal, setShowErrorModal] = useState(false);
+
+  const findAllVarieties = useCreateSeedStore((state) => state.findAllVarieties);
+  const varieties = useCreateSeedStore((state) =>
+    state.varieties.map((variety) => {
+      return { value: variety.id, label: variety.species };
+    }),
+  );
 
   useEffect(() => {
-    loadingStore.updateIsFetchingVarieties(true);
-    const onSuccess = (varieties: VarietyDto[]) => {
-      setVarieties(
-        varieties.map((element) => {
-          return { value: element.id, label: element.species };
-        }),
-      );
-      loadingStore.updateIsFetchingVarieties(false);
+    // This is a small workaround so it's possible to use async/await in useEffect
+    const _findAllVarieties = async () => {
+      await findAllVarieties();
     };
-    const onError = (error: Error) => {
-      console.log('Error: failed to fetch varieties: ' + error);
-      setShowErrorModal(true);
-      loadingStore.updateIsFetchingVarieties(false);
-    };
-    findAllVarieties(onSuccess, onError);
+
+    _findAllVarieties();
   }, []);
 
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDTO>();
-  const onFormSubmit: SubmitHandler<NewSeedDTO> = (data) => {
+  const onFormSubmit: SubmitHandler<NewSeedDTO> = async (data) => {
     if (data.origin === '') delete data.origin;
     if (data.taste === '') delete data.taste;
     if (data.yield_ === '') delete data.yield_;
@@ -49,10 +42,10 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
     if (Number.isNaN(data.generation)) delete data.generation;
     if (Number.isNaN(data.price)) delete data.price;
     if (data.use_by) {
-      // Change the date to YYYY-MM-DD format which Postgres has
+      // Change the date to YYYY-MM-DD format so it can be parsed by the backend
       data.use_by = new Date(String(data.use_by)).toISOString().split('T')[0];
     }
-    loadingStore.updateIsUploadingSeed(true);
+
     onSubmit(data);
   };
 
@@ -142,11 +135,12 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
           />
           <SimpleFormInput labelText="Ertrag" placeHolder="1" id="yield_" register={register} />
           <SimpleFormInput
-            type="number"
             labelText="Preis"
             placeHolder="2,99€"
             id="price"
             register={register}
+            valueAsNumber={true}
+            errorTitle="Der Preis muss eine Zahl sein. z.B. 2,99"
           />
           <SimpleFormInput
             type="number"
@@ -178,7 +172,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             className="max-w-[240px] grow rounded-lg bg-gray-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
           >
             Eintragen
-            {useCreateSeedLoadingStore((state) => state.isUploadingSeed) && (
+            {useCreateSeedStore((state) => state.isUploadingSeed) && (
               <svg
                 className="ml-4 inline-block h-5 w-5 animate-spin text-white"
                 xmlns="http://www.w3.org/2000/svg"
@@ -203,14 +197,6 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
           </button>
         </div>
       </form>
-      <SimpleModal
-        title="Fehler"
-        body="Ein Fehler ist aufgetreten"
-        show={showErrorModal}
-        setShow={setShowErrorModal}
-        submitBtnTitle="Ok"
-        onSubmit={() => {}}
-      ></SimpleModal>
     </div>
   );
 };

@@ -10,6 +10,8 @@ interface SimpleFormInputProps<T extends FieldValues> {
   required?: boolean;
   type?: HTMLInputTypeAttribute;
   register?: UseFormRegister<T>;
+  valueAsNumber?: boolean;
+  errorTitle?: string;
 }
 
 export default function SimpleFormInput<T extends FieldValues>({
@@ -20,6 +22,8 @@ export default function SimpleFormInput<T extends FieldValues>({
   type = 'text',
   id,
   register,
+  valueAsNumber = false,
+  errorTitle,
 }: SimpleFormInputProps<T>) {
   return (
     <div>
@@ -45,8 +49,10 @@ export default function SimpleFormInput<T extends FieldValues>({
           placeholder={placeHolder}
           required={required}
           style={{ colorScheme: 'dark' }}
+          pattern={valueAsNumber ? '^[0-9]+([,][0-9]{1,2})?$' : undefined}
+          title={errorTitle}
           {...register?.(id, {
-            valueAsNumber: type === 'number',
+            valueAsNumber: type === 'number' || valueAsNumber,
           })}
         />
       )}

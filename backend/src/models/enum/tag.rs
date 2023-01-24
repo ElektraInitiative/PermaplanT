@@ -30,3 +30,17 @@ impl From<Tag> for String {
         }
     }
 }
+
+impl From<String> for Tag {
+    fn from(tag: String) -> Tag {
+        match tag.as_str() {
+            "Leaf crops" => Tag::LeafCrops,
+            "Fruit crops" => Tag::FruitCrops,
+            "Root crops" => Tag::RootCrops,
+            "Flowering crops" => Tag::FloweringCrops,
+            "Herbs" => Tag::Herbs,
+            "Other" => Tag::Other,
+            _ => Tag::Other,
+        }
+    }
+}

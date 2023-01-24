@@ -10,6 +10,13 @@ use crate::{
     services,
 };
 
+pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
+    match services::seed_service::find_all(&pool) {
+        Ok(seeds) => Ok(HttpResponse::Ok().json(ResponseBody::new(constants::MESSAGE_OK, seeds))),
+        Err(err) => Ok(err.response()),
+    }
+}
+
 pub async fn create(new_seed_json: Json<NewSeedDTO>, pool: Data<Pool>) -> Result<HttpResponse> {
     match services::seed_service::create(new_seed_json.0, &pool) {
         Ok(_) => Ok(HttpResponse::Created()

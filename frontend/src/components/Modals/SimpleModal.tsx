@@ -4,7 +4,7 @@ import TransparentBackground from '@/components/TransparentBackground';
 interface SimpleModalProps {
   title: string;
   body: string;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setShow: (show: boolean) => void;
   show: boolean;
   cancelBtnTitle?: string;
   submitBtnTitle: string;

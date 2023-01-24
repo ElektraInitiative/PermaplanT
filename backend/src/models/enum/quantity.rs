@@ -24,3 +24,15 @@ impl From<Quantity> for String {
         }
     }
 }
+
+impl From<String> for Quantity {
+    fn from(quantity: String) -> Quantity {
+        match quantity.as_str() {
+            "Nothing" => Quantity::Nothing,
+            "Not enough" => Quantity::NotEnough,
+            "Enough" => Quantity::Enough,
+            "More than enough" => Quantity::MoreThanEnough,
+            _ => Quantity::Nothing, // TODO: should this be handled differently? if everything is right this should never occur though
+        }
+    }
+}
