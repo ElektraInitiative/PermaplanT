@@ -53,10 +53,12 @@ impl Seed {
         return query_result.map(|v| v.into_iter().map(|v| v.into()).collect());
     }
 
-    pub fn create(new_seed: NewSeedDTO, conn: &mut Connection) -> QueryResult<usize> {
-        diesel::insert_into(seeds::table)
-            .values(NewSeed::from(new_seed))
-            .execute(conn)
+    pub fn create(new_seed: NewSeedDTO, conn: &mut Connection) -> QueryResult<SeedDTO> {
+        let new_seed = NewSeed::from(new_seed);
+        let query_result = diesel::insert_into(seeds::table)
+            .values(&new_seed)
+            .get_result(conn);
+        return query_result.map(|v: Seed| v.into());
     }
 
     pub fn delete_by_id(id: i32, conn: &mut Connection) -> QueryResult<usize> {

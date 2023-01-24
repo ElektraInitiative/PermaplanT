@@ -20,10 +20,10 @@ pub fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDTO>, ServiceError> {
     }
 }
 
-pub fn create(new_seed: NewSeedDTO, pool: &Data<Pool>) -> Result<(), ServiceError> {
+pub fn create(new_seed: NewSeedDTO, pool: &Data<Pool>) -> Result<SeedDTO, ServiceError> {
     let mut conn = pool.get().expect("Failed to retrieve pool.");
     match Seed::create(new_seed, &mut conn) {
-        Ok(_) => Ok(()),
+        Ok(seed) => Ok(seed),
         Err(msg) => Err(ServiceError::new(
             StatusCode::INTERNAL_SERVER_ERROR,
             msg.to_string(),
