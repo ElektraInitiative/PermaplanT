@@ -1,5 +1,5 @@
-import { ResponseBody } from '@/types';
-import { VarietyDTO } from '@/bindings/definitions';
+import { ResponseBody, VarietyDTO } from '@/bindings/definitions';
+
 import axios from 'axios';
 import { baseApiUrl } from '@/config';
 

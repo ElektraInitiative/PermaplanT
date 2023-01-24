@@ -1,5 +1,5 @@
-import { ResponseBody } from '@/types';
-import { SeedDTO } from '@/bindings/definitions';
+import { ResponseBody, SeedDTO } from '@/bindings/definitions';
+
 import axios from 'axios';
 import { baseApiUrl } from '@/config';
 
