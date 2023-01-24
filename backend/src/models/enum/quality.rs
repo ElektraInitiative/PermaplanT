@@ -1,34 +1,18 @@
+use diesel_derive_enum::DbEnum;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
 #[typeshare]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, DbEnum, Debug)]
+#[DieselTypePath = "crate::schema::sql_types::Quality"]
 pub enum Quality {
     #[serde(rename = "Organic")]
+    #[db_rename = "Organic"]
     Organic,
     #[serde(rename = "Not organic")]
+    #[db_rename = "Not organic"]
     NotOrganic,
+    #[db_rename = "Unknown"]
     #[serde(rename = "Unknown")]
     Unknown,
-}
-
-impl From<Quality> for String {
-    fn from(quality: Quality) -> String {
-        match quality {
-            Quality::Organic => "Organic".to_string(),
-            Quality::NotOrganic => "Not organic".to_string(),
-            Quality::Unknown => "Unknown".to_string(),
-        }
-    }
-}
-
-impl From<String> for Quality {
-    fn from(quality: String) -> Quality {
-        match quality.as_str() {
-            "Organic" => Quality::Organic,
-            "Not organic" => Quality::NotOrganic,
-            "Unknown" => Quality::Unknown,
-            _ => Quality::Unknown,
-        }
-    }
 }

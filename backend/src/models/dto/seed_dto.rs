@@ -28,31 +28,19 @@ pub struct SeedDTO {
 
 impl From<Seed> for SeedDTO {
     fn from(seed: Seed) -> Self {
-        let quantity = Quantity::from(seed.quantity);
-        let quality = match seed.quality {
-            Some(quality) => Some(Quality::from(quality)),
-            None => None,
-        };
-
-        let tags: Vec<Option<Tag>> = seed
-            .tags
-            .into_iter()
-            .map(|tag| tag.map(|tag| Tag::from(tag)))
-            .collect();
-
         SeedDTO {
             id: seed.id,
             name: seed.name,
             variety_id: seed.variety_id,
             harvest_year: seed.harvest_year,
-            quantity: quantity,
-            tags: tags,
+            quantity: seed.quantity,
+            tags: seed.tags,
             use_by: seed.use_by,
             origin: seed.origin,
             taste: seed.taste,
             yield_: seed.yield_,
             generation: seed.generation,
-            quality: quality,
+            quality: seed.quality,
             price: seed.price,
             notes: seed.notes,
         }

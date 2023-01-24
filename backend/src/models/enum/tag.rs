@@ -1,46 +1,27 @@
+use diesel_derive_enum::DbEnum;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
 #[typeshare]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, DbEnum)]
+#[DieselTypePath = "crate::schema::sql_types::Tag"]
 pub enum Tag {
     #[serde(rename = "Leaf crops")]
+    #[db_rename = "Leaf crops"]
     LeafCrops,
     #[serde(rename = "Fruit crops")]
+    #[db_rename = "Fruit crops"]
     FruitCrops,
     #[serde(rename = "Root crops")]
+    #[db_rename = "Root crops"]
     RootCrops,
     #[serde(rename = "Flowering crops")]
+    #[db_rename = "Flowering crops"]
     FloweringCrops,
     #[serde(rename = "Herbs")]
+    #[db_rename = "Herbs"]
     Herbs,
     #[serde(rename = "Other")]
+    #[db_rename = "Other"]
     Other,
-}
-
-impl From<Tag> for String {
-    fn from(tag: Tag) -> String {
-        match tag {
-            Tag::LeafCrops => "Leaf crops".to_string(),
-            Tag::FruitCrops => "Fruit crops".to_string(),
-            Tag::RootCrops => "Root crops".to_string(),
-            Tag::FloweringCrops => "Flowering crops".to_string(),
-            Tag::Herbs => "Herbs".to_string(),
-            Tag::Other => "Other".to_string(),
-        }
-    }
-}
-
-impl From<String> for Tag {
-    fn from(tag: String) -> Tag {
-        match tag.as_str() {
-            "Leaf crops" => Tag::LeafCrops,
-            "Fruit crops" => Tag::FruitCrops,
-            "Root crops" => Tag::RootCrops,
-            "Flowering crops" => Tag::FloweringCrops,
-            "Herbs" => Tag::Herbs,
-            "Other" => Tag::Other,
-            _ => Tag::Other,
-        }
-    }
 }

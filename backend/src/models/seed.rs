@@ -5,13 +5,16 @@ use crate::{
 use chrono::NaiveDate;
 use diesel::prelude::*;
 
-use super::dto::{new_seed_dto::NewSeedDTO, seed_dto::SeedDTO};
+use super::{
+    dto::{new_seed_dto::NewSeedDTO, seed_dto::SeedDTO},
+    r#enum::{quality::Quality, quantity::Quantity, tag::Tag},
+};
 
 #[derive(Identifiable, Insertable, Queryable)]
 #[diesel(table_name = seeds)]
 pub struct Seed {
     pub id: i32,
-    pub tags: Vec<Option<String>>,
+    pub tags: Vec<Option<Tag>>,
     pub name: String,
     pub variety_id: i32,
     pub harvest_year: i16,
@@ -19,8 +22,8 @@ pub struct Seed {
     pub origin: Option<String>,
     pub taste: Option<String>,
     pub yield_: Option<String>,
-    pub quantity: String,
-    pub quality: Option<String>,
+    pub quantity: Quantity,
+    pub quality: Option<Quality>,
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
@@ -29,7 +32,7 @@ pub struct Seed {
 #[derive(Insertable)]
 #[diesel(table_name = seeds)]
 pub struct NewSeed {
-    pub tags: Vec<Option<String>>,
+    pub tags: Vec<Option<Tag>>,
     pub name: String,
     pub variety_id: i32,
     pub harvest_year: i16,
@@ -37,8 +40,8 @@ pub struct NewSeed {
     pub origin: Option<String>,
     pub taste: Option<String>,
     pub yield_: Option<String>,
-    pub quantity: String,
-    pub quality: Option<String>,
+    pub quantity: Quantity,
+    pub quality: Option<Quality>,
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,

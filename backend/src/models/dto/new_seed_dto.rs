@@ -27,29 +27,18 @@ pub struct NewSeedDTO {
 
 impl From<NewSeedDTO> for NewSeed {
     fn from(new_seed: NewSeedDTO) -> Self {
-        let quality = match new_seed.quality {
-            Some(quality) => Some(String::from(quality)),
-            None => None,
-        };
-
-        let tags = new_seed
-            .tags
-            .into_iter()
-            .map(|tag| Some(String::from(tag)))
-            .collect();
-
         NewSeed {
             name: new_seed.name,
             variety_id: new_seed.variety_id,
             harvest_year: new_seed.harvest_year,
-            quantity: String::from(new_seed.quantity),
-            tags: tags,
+            quantity: new_seed.quantity,
+            tags: new_seed.tags.into_iter().map(|tag| Some(tag)).collect(),
             use_by: new_seed.use_by,
             origin: new_seed.origin,
             taste: new_seed.taste,
             yield_: new_seed.yield_,
             generation: new_seed.generation,
-            quality: quality,
+            quality: new_seed.quality,
             price: new_seed.price,
             notes: new_seed.notes,
         }
