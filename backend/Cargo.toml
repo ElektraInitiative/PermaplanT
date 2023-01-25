@@ -1,0 +1,27 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-cors = "0.6.4"
+actix-web = "4"
+actix-rt = "2.8.0"
+dotenvy = "0.15.0"
+typeshare = "1.0.0"
+
+[dependencies.diesel]
+version = "2.0.2"
+features = ["postgres", "r2d2", "chrono"]
+
+[dependencies.diesel-derive-enum]
+version = "2.0.0-rc.0"
+features = ["postgres"]
+
+[dependencies.serde]
+version = "1.0.152"
+features = ["derive"]
+
+[dependencies.chrono]
+version = "0.4.23"
+features = ["serde"]
