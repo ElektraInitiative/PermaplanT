@@ -15,7 +15,7 @@ pub struct SeedDTO {
     pub variety_id: i32,
     pub harvest_year: i16,
     pub quantity: Quantity,
-    pub tags: Vec<Option<Tag>>,
+    pub tags: Option<Vec<Option<Tag>>>,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
     pub taste: Option<String>,

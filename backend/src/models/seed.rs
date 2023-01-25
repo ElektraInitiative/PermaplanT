@@ -10,11 +10,11 @@ use super::{
     r#enum::{quality::Quality, quantity::Quantity, tag::Tag},
 };
 
-#[derive(Identifiable, Insertable, Queryable)]
+#[derive(Identifiable, Queryable)]
 #[diesel(table_name = seeds)]
 pub struct Seed {
     pub id: i32,
-    pub tags: Vec<Option<Tag>>,
+    pub tags: Option<Vec<Option<Tag>>>,
     pub name: String,
     pub variety_id: i32,
     pub harvest_year: i16,
