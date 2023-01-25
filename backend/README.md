@@ -14,6 +14,13 @@
 - `BIND_ADDRESS_HOST` defines the host on which the server will run on
 - `BIND_ADDRESS_PORT` defines the port on which the server will run on
 
+Ensure that you grant the necessary permissions for the user to use Postgres. One way to do this is by using the following command:
+
+``` shell
+sudo -u postgres psql
+CREATE USER permaplant WITH CREATEDB PASSWORD 'permaplant';
+```
+
 2. Install Diesel CLI:
 
 ``` shell
