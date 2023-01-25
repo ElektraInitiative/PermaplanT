@@ -10,10 +10,6 @@ If you find a bug in the code or a mistake in the documentation, you can help us
   - A minimal, self-contained code sample that reproduces the problem (if possible).
   - Information about the environment in which the problem occurs (e.g. operating system, version of Rust, version of Diesel, etc.)
 
-## Requesting a feature
-
-You can request a new feature by submitting an issue to our [issue tracker](https://github.com/[username]/
-
 ## Development
 
 You can find more info on the development process here:

@@ -1,7 +1,5 @@
+import { CreateSeed, ViewSeeds } from '@/features/seeds';
 import { Pages, Routes } from './types';
-
-import { CreateSeed } from '@/features/seeds';
-import { ViewSeeds } from '../features/seeds/routes/ViewSeeds';
 
 const routes: Routes = {
   [Pages.CreateSeed]: {

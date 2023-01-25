@@ -1,4 +1,4 @@
--- Your SQL goes here
+-- this up.sql file creates enums used in other tables
 
 CREATE TYPE tag AS ENUM (
   'Leaf crops', -- German: Blattpflanzen

@@ -1,2 +1,2 @@
--- This file should undo anything in `up.sql`
+-- This file undos `up.sql`
 DROP TABLE varieties;

@@ -51,22 +51,3 @@ diesel migration redo
 # Or redo all migration
 diesel migration redo --all
 ```
-
-## Type Safety
-
-In order to ensure type safety between the TypeScript frontend and Rust backend, we use [typeshare](https://github.com/1Password/typeshare) to synchronize our Rust type definitions with TypeScript.
-
-After installing the typeshare cli we can run:
-
-``` shell
-typeshare ./ --lang=typescript --output-file=../frontend/src/bindings/definitions.ts
-```
-
-Or directly in the frontend:
-
-``` shell
-# change directory into frontend first
-npm run generate-api-types
-```
-
-Now we can find our rust-typescript bindings under `/frontend/src/bindings` and use them directly in our TypeScript codebase.

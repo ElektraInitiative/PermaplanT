@@ -28,6 +28,8 @@ npm run dev
 
 This will start the development server on <http://localhost:5173/> and will open the application in your default web browser. The server will automatically reload the page when you make changes to the code.
 
+To test that it is working, you can visit this url on your preferred browser: <http://localhost:5173/seeds>
+
 ## Production
 
 To build the application for production, run:
@@ -43,3 +45,8 @@ To view the build locally, run:
 ```shell
 npm run preview
 ```
+
+## Type Safety
+
+In order to ensure type safety between the TypeScript frontend and Rust backend, we use [typeshare](https://github.com/1Password/typeshare) to synchronize our Rust type definitions with TypeScript.
+These types are auto-generated and we can find our rust-typescript bindings under `/src/bindings` and use them directly in our TypeScript codebase.

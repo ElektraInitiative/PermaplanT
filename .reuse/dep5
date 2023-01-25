@@ -1,0 +1,18 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: PermaplanT
+Upstream-Contact: Markus Raab <elektra@markus-raab.org>
+Source: www.permaplant.net
+
+Files: *
+Copyright: PermaplanT contributors (https://github.com/ElektraInitiative/PermaplanT/graphs/contributors)
+License: BSD-3-Clause
+
+Files: backend/src/config/*
+       backend/src/server.rs
+       backend/src/error.rs
+Copyright: 2018 Ba Hai Phan
+License: MIT
+
+Files: frontend/src/routes/Pages/*
+Copyright: 2022 Suren Atoyan
+License: MIT

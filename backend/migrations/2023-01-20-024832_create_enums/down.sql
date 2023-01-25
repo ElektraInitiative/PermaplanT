@@ -1,4 +1,4 @@
--- This file should undo anything in `up.sql`
+-- This file undos `up.sql`
 DROP TYPE quality;
 
 DROP TYPE tag;
