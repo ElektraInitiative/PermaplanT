@@ -1,10 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: PermaplanT
-Upstream-Contact: Markus Raab <elektra@markus-raab.org>
+Upstream-Contact: Markus Raab <markus@permaplant.net>
 Source: www.permaplant.net
 
 Files: *
-Copyright: PermaplanT contributors (https://github.com/ElektraInitiative/PermaplanT/graphs/contributors)
+Copyright: PermaplanT contributors
 License: BSD-3-Clause
 
 Files: backend/src/config/*
