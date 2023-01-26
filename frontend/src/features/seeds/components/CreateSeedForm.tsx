@@ -76,7 +76,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
           />
           <SimpleFormInput
             labelText="Art"
-            placeHolder="Feldsalat"
+            placeHolder="Tomate"
             required={true}
             id="name"
             register={register}
@@ -105,7 +105,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
           />
           <SimpleFormInput
             labelText="Herkunft"
-            placeHolder="Billa"
+            placeHolder="Daheim"
             id="origin"
             register={register}
           />
