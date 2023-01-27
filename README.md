@@ -33,7 +33,7 @@ To achieve these goals the app provides, e.g.:
 - zoom
 - internationalization: English, German
 - algorithms for mixed crops, considerations of natural constraints and automatic suggestions
-- privacy: no cookies, tracking, analytics, external JavaScript, fonts, etc.
+- privacy: no tracking, analytics, external JavaScript, fonts, etc.
 
 ### Layers
 
