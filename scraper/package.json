@@ -1,0 +1,19 @@
+{
+    "name": "scraper",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "npx playwright test",
+        "report": "npx playwright show-report"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@playwright/test": "^1.30.0"
+    },
+    "dependencies": {
+        "json2csv": "^6.0.0-alpha.2"
+    }
+}
