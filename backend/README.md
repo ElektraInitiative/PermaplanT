@@ -33,13 +33,20 @@ cargo install diesel_cli --no-default-features --features postgres
 LC_ALL=C diesel setup
 ```
 
-4. Install the typeshare cli to enable type safety between Rust and TypeScript:
+4. Run diesel migrations, to bring the database up to date with the current schema.
+
+``` shell
+LC_ALL=C diesel migration run
+```
+
+
+5. Install the typeshare cli to enable type safety between Rust and TypeScript:
 
 ``` shell
 cargo install typeshare-cli
 ```
 
-5. Start the server:
+6. Start the server:
 
 ``` shell
 cargo run
