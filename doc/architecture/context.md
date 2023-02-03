@@ -1,8 +1,8 @@
 # Input Parameters
 
-## Global for Garden
+## Soil
 
-To be entered when creating a map.
+Global value and local values in the Soil layer:
 
 - soil weight class (German: Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) [Klassen])
   from:
@@ -13,6 +13,7 @@ To be entered when creating a map.
   - 5 very heavy (T, IT) (German: sehr schwer)
 - pH base value for topsoil from 0-14
   (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamisch
+- pH base value for subsoil from 0-14
 - yield grade (German: Ages Gehaltsklasse (Nährstoffversorgung und Humusgehalt) ÖNORM L 1210, determined from NPK, eigentlich für Intensivkultur, Stark/Schwachzehrer)
   from:
   - A sehr niedrig
@@ -45,8 +46,6 @@ To be entered when creating a map.
 - wind
 - shadows
 - surface water, i.e., wet/dry places (German: Oberflächenwasser)
-- soil weight
-- pH local value for topsoil from 0-14
 - habitats
 - permaculture zones (German: Permakultur Zonen)
 
