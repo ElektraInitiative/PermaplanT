@@ -4,8 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "fetch": "npx playwright test",
-        "s": "npx playwright show-report",
+        "fetch:list": "npx playwright test plants",
+        "fetch:details": "npx playwright test details",
+        "fetch": "npm run fetch:list && npm run fetch:details",
+        "report": "npx playwright show-report",
         "insert:list": "node src/insert_plant_list.js",
         "insert:details": "node src/insert_plant_details.js"
     },

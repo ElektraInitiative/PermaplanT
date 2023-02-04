@@ -34,13 +34,17 @@ test.describe('Fetch plant list', () => {
                     // const title = await section.$('.infobox-title');
                     const content = await section.$('div.infobox-content');
                     const subSections = await content.$$('div.infobox-subsection');
-                    const contentText = await Promise.all(
+                    await Promise.all(
                         subSections.map(async (subSection) => {
                             const subSectionTitle = await subSection.$('.infobox-title');
                             const subSectionTitleText = await subSectionTitle.innerText();
                             const subSectionContent = await subSection.$('.infobox-content');
                             const subSectionContentText = await subSectionContent.innerText();
-                            details[subSectionTitleText] = subSectionContentText;
+                            if (subSectionContentText === '?' || subSectionContentText === '') {
+                                details[subSectionTitleText] = null;
+                            } else {
+                                details[subSectionTitleText] = subSectionContentText;
+                            }
                         }),
                     );
                 }

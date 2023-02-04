@@ -39,5 +39,7 @@ CREATE TABLE plant_detail (
   pollinators VARCHAR,
   flower_colour VARCHAR,
   flower_type VARCHAR,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   CONSTRAINT plant_detail_binomial_name_key UNIQUE (binomial_name)
 );

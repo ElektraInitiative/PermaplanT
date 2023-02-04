@@ -24,6 +24,9 @@ function sanitizeColumnNames(jsonArray) {
             }
             obj[newKey] = obj[key];
             delete obj[key];
+            if (obj[newKey] === '') {
+                obj[newKey] = null;
+            }
         });
     });
 }
