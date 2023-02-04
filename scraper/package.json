@@ -4,8 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "npx playwright test",
-        "report": "npx playwright show-report"
+        "fetch": "npx playwright test",
+        "s": "npx playwright show-report",
+        "insert": "node src/insert_data.js"
     },
     "keywords": [],
     "author": "",
@@ -14,6 +15,9 @@
         "@playwright/test": "^1.30.0"
     },
     "dependencies": {
-        "json2csv": "^6.0.0-alpha.2"
+        "csvtojson": "^2.0.10",
+        "dotenv": "^16.0.3",
+        "json2csv": "^6.0.0-alpha.2",
+        "pg-promise": "^11.2.0"
     }
 }

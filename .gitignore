@@ -31,3 +31,5 @@ diesel.toml
 scraper/.DS_Store
 
 scraper/data/
+
+scraper/.env
