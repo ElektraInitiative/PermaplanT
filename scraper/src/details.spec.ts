@@ -9,15 +9,14 @@ test.describe('Fetch plant list', () => {
         const browser = await chromium.launch({
             headless: true,
         });
-        const data: any[] = [];
+        const data: Object = {};
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('https://practicalplants.org/wiki/solanum_lycopersicum/');
         const plantDatatable = await page.$('div#plant-datatable');
         const sections = await plantDatatable.$$('div.infobox-section');
         for (const section of sections) {
-            const title = await section.$('.infobox-title');
-            const titleText = await title.innerText();
+            // const title = await section.$('.infobox-title');
             const content = await section.$('div.infobox-content');
             const subSections = await content.$$('div.infobox-subsection');
             const contentText = await Promise.all(
@@ -26,13 +25,11 @@ test.describe('Fetch plant list', () => {
                     const subSectionTitleText = await subSectionTitle.innerText();
                     const subSectionContent = await subSection.$('.infobox-content');
                     const subSectionContentText = await subSectionContent.innerText();
-                    return `${subSectionTitleText}: ${subSectionContentText}`;
+                    data[subSectionTitleText] = subSectionContentText;
                 }),
             );
-            data.push({ title: titleText, content: contentText });
         }
-        writeFileSync('data/detail.json', JSON.stringify(data));
-
-        await page.pause();
+        const csv = parse(data);
+        writeFileSync('data/detail.csv', csv);
     });
 });
