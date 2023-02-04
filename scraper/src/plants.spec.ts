@@ -16,9 +16,9 @@ test.describe('Fetch plant list', () => {
         const articleContent = await page.$('div.article-content');
         const links = await articleContent.$$('li a');
         for (const link of links) {
-            const href = await link.getAttribute('href');
-            const text = await link.innerText();
-            data.push({ href, text });
+            const url = await link.getAttribute('href');
+            const name = await link.innerText();
+            data.push({ url, name });
         }
         const csv = parse(data);
         writeFileSync('data/plants.csv', csv);
