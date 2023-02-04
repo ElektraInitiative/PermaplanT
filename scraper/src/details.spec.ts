@@ -31,7 +31,6 @@ test.describe('Fetch plant list', () => {
                 }
                 const sections = await plantDatatable.$$('div.infobox-section');
                 for (const section of sections) {
-                    // const title = await section.$('.infobox-title');
                     const content = await section.$('div.infobox-content');
                     const subSections = await content.$$('div.infobox-subsection');
                     await Promise.all(
