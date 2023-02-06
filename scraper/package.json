@@ -4,10 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "fetch:list": "npx playwright test plants",
-        "fetch:details": "npx playwright test details",
-        "fetch": "npm run fetch:list && npm run fetch:details",
-        "report": "npx playwright show-report",
+        "start": "node src/parse.js",
         "insert:list": "node src/insert_plant_list.js",
         "insert:details": "node src/insert_plant_details.js",
         "insert": "npm run insert:list && npm run insert:details"
@@ -22,6 +19,8 @@
         "csvtojson": "^2.0.10",
         "dotenv": "^16.0.3",
         "json2csv": "^6.0.0-alpha.2",
-        "pg-promise": "^11.2.0"
-    }
+        "pg-promise": "^11.2.0",
+        "node-html-parser": "^6.1.4"
+    },
+    "type": "module"
 }

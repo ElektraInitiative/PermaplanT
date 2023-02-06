@@ -28,10 +28,4 @@ target
 
 diesel.toml
 
-scraper/.DS_Store
-
-scraper/data/
-
-scraper/.env
-
 .DS_Store
