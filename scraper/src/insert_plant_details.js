@@ -35,11 +35,19 @@ function sanitizeColumnNames(jsonArray) {
             } else if (obj[newKey] === '?') {
                 obj[newKey] = null;
             }
-            if (newKey === 'soil_ph' && obj[newKey] !== null) {
+            if (
+                (newKey === 'soil_ph' && obj[newKey] !== null) ||
+                (newKey === 'soil_texture' && obj[newKey] !== null) ||
+                (newKey === 'soil_water_retention' && obj[newKey] !== null) ||
+                (newKey === 'fertility' && obj[newKey] !== null) ||
+                (newKey === 'life_cycle' && obj[newKey] !== null)
+            ) {
                 obj[newKey] = obj[newKey].split(',');
                 obj[newKey] = obj[newKey].map((item) => {
-                    item.trim();
+                    return item.trim();
                 });
+            } else if (typeof obj[newKey] === 'string' && obj[newKey] !== null) {
+                obj[newKey] = obj[newKey].trim();
             }
         });
     });
