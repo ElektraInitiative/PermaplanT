@@ -1,8 +1,0 @@
-CREATE TABLE plants (
-  id SERIAL PRIMARY KEY,
-  url VARCHAR,
-  name VARCHAR NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  CONSTRAINT plants_name_ukey UNIQUE (name)
-);

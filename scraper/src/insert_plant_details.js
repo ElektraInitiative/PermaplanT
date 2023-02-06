@@ -1,7 +1,10 @@
-const pgp = require('pg-promise')();
-const csv = require('csvtojson');
+import pgPromise from 'pg-promise';
+import csv from 'csvtojson';
+import columnNames from './column_names.js';
 
-require('dotenv').config();
+import { config } from 'dotenv';
+config();
+const pgp = pgPromise({});
 
 const db = pgp({
     host: process.env.HOST,
@@ -16,6 +19,9 @@ function sanitizeColumnNames(jsonArray) {
         Object.keys(obj).forEach((key) => {
             let newKey = key;
             newKey = newKey.toLowerCase();
+            if (newKey.includes('&amp;')) {
+                newKey = newKey.split('&amp;').join('and');
+            }
             if (newKey.includes('&')) {
                 newKey = newKey.split('&').join('and');
             }
@@ -26,6 +32,14 @@ function sanitizeColumnNames(jsonArray) {
             delete obj[key];
             if (obj[newKey] === '') {
                 obj[newKey] = null;
+            } else if (obj[newKey] === '?') {
+                obj[newKey] = null;
+            }
+            if (newKey === 'soil_ph' && obj[newKey] !== null) {
+                obj[newKey] = obj[newKey].split(',');
+                obj[newKey] = obj[newKey].map((item) => {
+                    item.trim();
+                });
             }
         });
     });
@@ -36,7 +50,7 @@ async function insertPlantDetails() {
 
     sanitizeColumnNames(jsonArray);
 
-    const cs = new pgp.helpers.ColumnSet(Object.keys(jsonArray[0]), {
+    const cs = new pgp.helpers.ColumnSet(columnNames, {
         table: 'plant_detail',
     });
 

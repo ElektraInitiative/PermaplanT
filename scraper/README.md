@@ -2,15 +2,15 @@
 
 ## Requirements
 
-- nodejs 19.4.0
-- npm
+-   nodejs 19.4.0
+-   npm
 
 ## Installation and Usage
 
 1. Install dependencies
 
 ```shell
-npm install
+npm install && mkdir data
 ```
 
 2. Start the scraper
