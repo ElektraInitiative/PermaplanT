@@ -22,6 +22,7 @@ CREATE TYPE GROWTH_RATE AS ENUM ('slow', 'moderate', 'vigorous');
 CREATE TYPE FLOWER_TYPE AS ENUM ('dioecious', 'monoecious', 'hermaphrodite');
 CREATE TYPE FERTILITY AS ENUM ('self fertile', 'self sterile');
 CREATE TYPE HERBACEOUS_OR_WOODY AS ENUM ('herbaceous', 'woody');
+CREATE TYPE DECIDUOUS_OR_EVERGREEN AS ENUM ('deciduous', 'evergreen');
 CREATE TYPE ROOT_ZONE_TENDANCY AS ENUM ('surface', 'shallow', 'deep');
 CREATE TABLE plant_detail (
   id SERIAL PRIMARY KEY,
@@ -57,7 +58,7 @@ CREATE TABLE plant_detail (
   native_environment VARCHAR,
   ecosystem_niche VARCHAR,
   root_zone_tendancy ROOT_ZONE_TENDANCY,
-  deciduous_or_evergreen VARCHAR,
+  deciduous_or_evergreen DECIDUOUS_OR_EVERGREEN,
   herbaceous_or_woody HERBACEOUS_OR_WOODY,
   life_cycle LIFE_CYCLE ARRAY,
   growth_rate GROWTH_RATE,

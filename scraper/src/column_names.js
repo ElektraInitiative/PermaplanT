@@ -31,7 +31,7 @@ export default [
     { name: 'native_environment' },
     { name: 'ecosystem_niche' },
     { name: 'root_zone_tendancy', cast: 'root_zone_tendancy' },
-    { name: 'deciduous_or_evergreen' },
+    { name: 'deciduous_or_evergreen', cast: 'deciduous_or_evergreen' },
     { name: 'herbaceous_or_woody', cast: 'herbaceous_or_woody' },
     { name: 'life_cycle', cast: 'life_cycle[]' },
     { name: 'growth_rate', cast: 'growth_rate' },
