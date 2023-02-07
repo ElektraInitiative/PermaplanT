@@ -58,20 +58,28 @@ Global value and local values in the Soil layer:
 
 ## Plant Database
 
-- photos
-- genus and species
-- other general infos
-- size (height, width, depth)
+- family, subfamily (MISSING), genus, species, variety
+- common English name
+- common German name (MISSING)
+- icon (MISSING)
+- dates (MISSING):
+  - begin/end raising
+  - begin/end planting
+  - begin/end seeding
+  - begin/end harvest
+- size (height, width)
 - constraints where they want to be:
-  - recommended distances to other plants
+  - good/bad neighbors (MISSING)
+  - recommended distances to other plants (MISSING)
   - sun
   - soil weight
   - pH value of topsoil
-  - yield grade
-  - freeze resistance
-  - good/bad neighbors
+  - nutrition demand (MISSING, start with "Nutritionally poor soil" in "Environmental Tolerances")
+  - freeze resistance (hardiness zone)
   - wet/dry
-  - preferable permaculture zone (needs visits rare or often)
+  - preferable permaculture zone (MISSING)
+- is a tree/bush (MISSING, start with Herbaceous/Woody (woody) AND life cycle (perennial))
+- notes German (MISSING)
 
 # Output Parameters
 
