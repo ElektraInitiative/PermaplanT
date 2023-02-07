@@ -42,7 +42,7 @@ CREATE TABLE plant_detail (
   provides_forage_for VARCHAR,
   provides_shelter_for VARCHAR,
   hardiness_zone SMALLINT,
-  heat_zone VARCHAR,
+  heat_zone SMALLINT,
   water WATER,
   sun SUN,
   shade VARCHAR,
@@ -67,12 +67,21 @@ CREATE TABLE plant_detail (
   flower_type FLOWER_TYPE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  has_drought_tolerance BOOLEAN,
+  tolerates_wind BOOLEAN,
   CONSTRAINT plant_detail_binomial_name_key UNIQUE (binomial_name),
   CHECK (
     hardiness_zone IS NULL
     OR (
       hardiness_zone >= 0
       AND hardiness_zone <= 13
+    )
+  ),
+  CHECK (
+    heat_zone IS NULL
+    OR (
+      heat_zone >= 0
+      AND heat_zone <= 13
     )
   )
 );

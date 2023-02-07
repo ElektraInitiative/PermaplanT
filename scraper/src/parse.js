@@ -39,6 +39,37 @@ function parseSinglePage(fileName) {
         errors['Plant Datatable'] = 'Not Found';
         throw errors;
     }
+
+    try {
+        const factTable = root.querySelector('.smwfacttable');
+        if (!factTable) {
+            throw new Error('No Fact Table');
+        }
+        const facts = factTable.querySelectorAll('tr');
+        facts.forEach((fact) => {
+            const factTitle = fact.querySelector('.smwpropname')?.innerText;
+            const factData = fact.querySelector('.smwprops')?.textContent;
+            if (factTitle?.includes('Has&#160;drought&#160;tolerance')) {
+                const isTolerant = factData.replace('+', '').trim();
+                if (isTolerant === 'Tolerant') {
+                    details['Has drought tolerance'] = true;
+                } else if (isTolerant === 'Intolerant') {
+                    details['Has drought tolerance'] = false;
+                }
+            }
+            if (factTitle?.includes('Tolerates&#160;wind')) {
+                const isTolerant = factData.replace('+', '').trim();
+                if (isTolerant === 'Yes') {
+                    details['Tolerates wind'] = true;
+                } else if (isTolerant === 'No' || isTolerant === 'FALSE') {
+                    details['Tolerates wind'] = false;
+                }
+            }
+        });
+    } catch (error) {
+        // The following error can occur if there is no fact table on the page
+        // errors['Fact Table'] = 'Not Found';
+    }
     return details;
 }
 
@@ -67,6 +98,8 @@ function parseAllPages() {
     writeFileSync('data/detail.csv', csv);
     const errorsCsv = json2csv(errorsArray);
     writeFileSync('data/errors.csv', errorsCsv);
+    console.log('Parsed ' + details.length + ' pages');
+    console.log('Encountered ' + errorsArray.length + ' errors');
 }
 
 parseAllPages();

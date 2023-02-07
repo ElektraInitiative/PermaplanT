@@ -6,13 +6,7 @@ import { config } from 'dotenv';
 config();
 const pgp = pgPromise({});
 
-const db = pgp({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    port: process.env.PORT,
-});
+const db = pgp(process.env.DATABASE_URL);
 
 function sanitizeColumnNames(jsonArray) {
     jsonArray.forEach((obj) => {

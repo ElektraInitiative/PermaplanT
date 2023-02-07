@@ -40,4 +40,6 @@ export default [
     { name: 'pollinators' },
     { name: 'flower_colour' },
     { name: 'flower_type', cast: 'flower_type' },
+    { name: 'has_drought_tolerance' },
+    { name: 'tolerates_wind' },
 ];
