@@ -9,8 +9,9 @@ const pgp = pgPromise({});
 const db = pgp(process.env.DATABASE_URL);
 
 function sanitizeColumnNames(jsonArray) {
-    jsonArray.forEach((obj) => {
-        Object.keys(obj).forEach((key) => {
+    return jsonArray.map((obj) => {
+        const keys = Object.keys(obj);
+        keys.forEach((key) => {
             let newKey = key;
             newKey = newKey.toLowerCase();
             if (newKey.includes('&amp;')) {
@@ -24,11 +25,25 @@ function sanitizeColumnNames(jsonArray) {
             }
             obj[newKey] = obj[key];
             delete obj[key];
+        });
+    });
+}
+
+function sanitizeValues(jsonArray) {
+    return jsonArray.map((obj) => {
+        const keys = Object.keys(obj);
+        Object.assign(obj, {
+            mature_size_height: null,
+            mature_size_width: null,
+        });
+        keys.forEach((newKey) => {
+            obj[newKey] = obj[newKey].trim();
             if (obj[newKey] === '') {
                 obj[newKey] = null;
             } else if (obj[newKey] === '?') {
                 obj[newKey] = null;
             }
+
             if (
                 (newKey === 'soil_ph' && obj[newKey] !== null) ||
                 (newKey === 'soil_texture' && obj[newKey] !== null) ||
@@ -40,10 +55,20 @@ function sanitizeColumnNames(jsonArray) {
                 obj[newKey] = obj[newKey].map((item) => {
                     return item.trim();
                 });
-            } else if (typeof obj[newKey] === 'string' && obj[newKey] !== null) {
-                obj[newKey] = obj[newKey].trim();
+            }
+
+            if (newKey === 'mature_size' && obj[newKey] !== null) {
+                obj[newKey] = obj[newKey].replace('metres', '').replace('meters', '');
+                obj[newKey] = obj[newKey].split('x');
+                obj['mature_size_height'] = obj[newKey][0]?.trim() || null;
+                obj['mature_size_width'] = obj[newKey][1]?.trim() || null;
+                delete obj[newKey];
+            }
+            if (obj[newKey] === 'None listed.') {
+                obj[newKey] = null;
             }
         });
+        return obj;
     });
 }
 
@@ -51,6 +76,8 @@ async function insertPlantDetails() {
     const jsonArray = await csv().fromFile('data/detail.csv');
 
     sanitizeColumnNames(jsonArray);
+
+    sanitizeValues(jsonArray);
 
     const cs = new pgp.helpers.ColumnSet(columnNames, {
         table: 'plant_detail',

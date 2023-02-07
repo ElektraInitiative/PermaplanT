@@ -22,6 +22,7 @@ CREATE TYPE GROWTH_RATE AS ENUM ('slow', 'moderate', 'vigorous');
 CREATE TYPE FLOWER_TYPE AS ENUM ('dioecious', 'monoecious', 'hermaphrodite');
 CREATE TYPE FERTILITY AS ENUM ('self fertile', 'self sterile');
 CREATE TYPE HERBACEOUS_OR_WOODY AS ENUM ('herbaceous', 'woody');
+CREATE TYPE ROOT_ZONE_TENDANCY AS ENUM ('surface', 'shallow', 'deep');
 CREATE TABLE plant_detail (
   id SERIAL PRIMARY KEY,
   binomial_name VARCHAR NOT NULL,
@@ -55,12 +56,13 @@ CREATE TABLE plant_detail (
   native_geographical_range VARCHAR,
   native_environment VARCHAR,
   ecosystem_niche VARCHAR,
-  root_zone_tendancy VARCHAR,
+  root_zone_tendancy ROOT_ZONE_TENDANCY,
   deciduous_or_evergreen VARCHAR,
   herbaceous_or_woody HERBACEOUS_OR_WOODY,
   life_cycle LIFE_CYCLE ARRAY,
   growth_rate GROWTH_RATE,
-  mature_size VARCHAR,
+  mature_size_height VARCHAR,
+  mature_size_width VARCHAR,
   fertility FERTILITY ARRAY,
   pollinators VARCHAR,
   flower_colour VARCHAR,
