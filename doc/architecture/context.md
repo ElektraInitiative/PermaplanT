@@ -58,7 +58,9 @@ Global value and local values in the Soil layer:
 
 ## Plant Database
 
-- family, subfamily (MISSING), genus, species, variety
+- hierarchy: family, subfamily (MISSING), genus, species, variety
+- pointer to one hierarchy up (MISSING)
+- if it is abstract/concrete (MISSING: we assume all plants of Practical Plants to be concrete)
 - common English name
 - common German name (MISSING)
 - icon (MISSING)
@@ -69,8 +71,8 @@ Global value and local values in the Soil layer:
   - begin/end harvest
 - size (height, width)
 - constraints where they want to be:
-  - good/bad neighbors (MISSING)
-  - recommended distances to other plants (MISSING)
+  - good/bad neighbors to other specific plants of any hierarchy (MISSING)
+  - recommended distances to any other plant, needed for area calculations (MISSING)
   - sun
   - soil weight
   - pH value of topsoil
@@ -80,6 +82,8 @@ Global value and local values in the Soil layer:
   - preferable permaculture zone (MISSING)
 - is a tree/bush (MISSING, start with Herbaceous/Woody (woody) AND life cycle (perennial))
 - notes German (MISSING)
+
+All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes presence.
 
 # Output Parameters
 
