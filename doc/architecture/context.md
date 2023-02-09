@@ -63,20 +63,32 @@ Global value and local values in the Soil layer:
 
 ## Plant Database
 
-- photos
-- genus and species
-- other general infos
-- size (height, width, depth)
+- hierarchy: family, subfamily (MISSING), genus, species, variety
+- pointer to one hierarchy up (MISSING)
+- if it is abstract/concrete (MISSING: we assume all plants of Practical Plants to be concrete)
+- common English name
+- common German name (MISSING)
+- icon (MISSING)
+- dates (MISSING):
+  - begin/end raising
+  - begin/end planting
+  - begin/end seeding
+  - begin/end harvest
+- size (height, width)
 - constraints where they want to be:
-  - recommended distances to other plants
+  - good/bad neighbors to other specific plants of any hierarchy (MISSING)
+  - recommended distances to any other plant, needed for area calculations (MISSING)
   - sun
   - soil weight
   - pH value of topsoil
-  - yield grade
-  - freeze resistance
-  - good/bad neighbors
+  - nutrition demand (MISSING, start with "Nutritionally poor soil" in "Environmental Tolerances")
+  - freeze resistance (hardiness zone)
   - wet/dry
-  - preferable permaculture zone (needs visits rare or often)
+  - preferable permaculture zone (MISSING)
+- is a tree/bush (MISSING, start with Herbaceous/Woody (woody) AND life cycle (perennial))
+- notes German (MISSING)
+
+All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes presence.
 
 # Output Parameters
 
