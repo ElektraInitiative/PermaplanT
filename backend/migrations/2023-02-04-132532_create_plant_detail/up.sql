@@ -16,7 +16,7 @@ CREATE TYPE SOIL_PH AS ENUM (
   'very alkaline'
 );
 CREATE TYPE SOIL_TEXTURE AS ENUM ('sandy', 'loamy', 'clay', 'heavy clay');
-CREATE TYPE SOIL_WATER_RETENTION AS ENUM ('moist', 'wet', 'well drained');
+CREATE TYPE SOIL_WATER_RETENTION AS ENUM ('well drained', 'moist', 'wet');
 CREATE TYPE LIFE_CYCLE AS ENUM ('annual', 'biennial', 'perennial');
 CREATE TYPE GROWTH_RATE AS ENUM ('slow', 'moderate', 'vigorous');
 CREATE TYPE FLOWER_TYPE AS ENUM ('dioecious', 'monoecious', 'hermaphrodite');
