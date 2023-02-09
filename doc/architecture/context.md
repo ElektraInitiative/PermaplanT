@@ -63,11 +63,11 @@ Global value and local values in the Soil layer:
 
 ## Plant Database
 
-- hierarchy: family, subfamily (MISSING), genus, species, variety
+- hierarchy: family, subfamily, genus, species, variety
 - pointer to one hierarchy up (MISSING)
 - if it is abstract/concrete (MISSING: we assume all plants of Practical Plants to be concrete)
 - common English name
-- common German name (MISSING)
+- common German name
 - icon (MISSING)
 - dates (MISSING):
   - begin/end raising

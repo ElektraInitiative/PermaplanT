@@ -74,6 +74,13 @@ function sanitizeValues(jsonArray) {
                 delete obj[newKey];
             }
 
+            if (newKey === 'environmental_tolerances' && obj[newKey] !== null) {
+                obj[newKey] = obj[newKey].split('\n');
+                obj[newKey] = obj[newKey].map((item) => {
+                    return item.trim();
+                });
+            }
+
             if (obj[newKey] === 'None listed.') {
                 obj[newKey] = null;
             }

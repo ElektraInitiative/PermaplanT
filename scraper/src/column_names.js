@@ -25,7 +25,7 @@ export default [
     { name: 'soil_ph', cast: 'soil_ph[]' },
     { name: 'soil_texture', cast: 'soil_texture[]' },
     { name: 'soil_water_retention', cast: 'soil_water_retention[]' },
-    { name: 'environmental_tolerances' },
+    { name: 'environmental_tolerances', cast: 'text[]' },
     { name: 'native_climate_zones' },
     { name: 'adapted_climate_zones' },
     { name: 'native_geographical_range' },

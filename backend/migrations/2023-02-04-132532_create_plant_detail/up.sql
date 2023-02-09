@@ -24,6 +24,11 @@ CREATE TYPE FERTILITY AS ENUM ('self fertile', 'self sterile');
 CREATE TYPE HERBACEOUS_OR_WOODY AS ENUM ('herbaceous', 'woody');
 CREATE TYPE DECIDUOUS_OR_EVERGREEN AS ENUM ('deciduous', 'evergreen');
 CREATE TYPE ROOT_ZONE_TENDANCY AS ENUM ('surface', 'shallow', 'deep');
+CREATE type NUTRITION_DEMAND AS ENUM (
+  'light feeder',
+  'moderate feeder',
+  'heavy feeder'
+);
 CREATE TABLE plant_detail (
   id SERIAL PRIMARY KEY,
   binomial_name VARCHAR NOT NULL,
@@ -52,7 +57,7 @@ CREATE TABLE plant_detail (
   soil_ph SOIL_PH ARRAY,
   soil_texture SOIL_TEXTURE ARRAY,
   soil_water_retention SOIL_WATER_RETENTION ARRAY,
-  environmental_tolerances VARCHAR,
+  environmental_tolerances TEXT ARRAY,
   native_climate_zones VARCHAR,
   adapted_climate_zones VARCHAR,
   native_geographical_range VARCHAR,
@@ -75,6 +80,8 @@ CREATE TABLE plant_detail (
   tolerates_wind BOOLEAN,
   plant_references TEXT ARRAY,
   is_tree BOOLEAN,
+  nutrition_demand NUTRITION_DEMAND,
+  preferable_permaculture_zone SMALLINT,
   CONSTRAINT plant_detail_binomial_name_key UNIQUE (binomial_name),
   CHECK (
     hardiness_zone IS NULL
@@ -88,6 +95,13 @@ CREATE TABLE plant_detail (
     OR (
       heat_zone >= 0
       AND heat_zone <= 13
+    )
+  ),
+  CHECK (
+    preferable_permaculture_zone IS NULL
+    OR (
+      preferable_permaculture_zone >= -1
+      AND preferable_permaculture_zone <= 6
     )
   )
 );
