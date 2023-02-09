@@ -1,5 +1,4 @@
 export default [
-    { name: 'folder_name' },
     { name: 'common_name', cast: 'text[]' },
     { name: 'common_name_de', cast: 'text[]' },
     { name: 'binomial_name' },

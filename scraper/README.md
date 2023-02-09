@@ -2,7 +2,7 @@
 
 ## Requirements
 
--   nodejs 19.4.0
+-   nodejs v14.21.2
 -   npm
 
 ## Installation and Usage
@@ -10,42 +10,28 @@
 1. Install dependencies
 
 ```shell
-npm install && mkdir data
+npm install && mkdir -p data
 ```
 
-2. Start the scraper
-
-In this step data is scraped from the source webpage and stored in the `data` folder in a csv format. There are two types of data that can be scraped: `list` with all available plants and `details` for each specific plant. The scraper can be started with the following commands.
-
-Fetch plants list:
+2. Create .env file from .env.example and fill in the required values
 
 ```shell
-npm run fetch:list
+cp .env.example .env
 ```
 
-Fetch details for each plant in the list:
+`PRACTICALPLANTSPATH` is the path on your local filesystem to the Practical Plants wiki dump, that could be fetched from our [repository](https://github.com/ElektraInitiative/practicalplants). This is required to scrape the data.
+
+3. Start the scraper
 
 ```shell
-npm run fetch:details
+npm run start
 ```
 
-Combine both methods with a single command:
+4. Insert data into database
 
-```shell
-npm run fetch
-```
+After the data is scraped and stored in `csv` format, we should now insert it into the database. This can be done with the following command:
 
-3. Insert data into database
-
-After the data is scraped and stored in `csv` format, we should now insert it into the database. This can be done with the following commands:
-
-```shell
-npm run insert:list
-```
-
-```shell
-npm run insert:details
-```
+_Note:_ Please make sure that the database is up-to-date with latest migrations before running this command.
 
 ```shell
 npm run insert

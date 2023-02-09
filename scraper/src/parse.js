@@ -14,6 +14,9 @@ function parseSinglePage(fileName) {
         'Common Name': '',
         'Common Name DE': '',
         Subfamily: '',
+        'To check': false,
+        'Mature Size Height': null,
+        'Mature Size Width': null,
     };
     const errors = {};
     try {
@@ -90,6 +93,21 @@ function parseSinglePage(fileName) {
         }
     });
 
+    try {
+        const mature_size = details['Mature Size']
+            .replace('metres', '')
+            .replace('meters', '')
+            .replace('?', '');
+        const arr = mature_size.split('x');
+        const mature_size_height = arr[0]?.trim() || null;
+        const mature_size_width = arr[1]?.trim() || null;
+        details['To check'] = isNaN(mature_size_height) || isNaN(mature_size_width);
+        details['Mature Size Height'] = mature_size_height;
+        details['Mature Size Width'] = mature_size_width;
+        delete details['Mature Size'];
+    } catch (error) {
+        console.log(error);
+    }
     return details;
 }
 

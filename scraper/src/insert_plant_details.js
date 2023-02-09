@@ -33,8 +33,6 @@ function sanitizeValues(jsonArray) {
     return jsonArray.map((obj) => {
         const keys = Object.keys(obj);
         Object.assign(obj, {
-            mature_size_height: null,
-            mature_size_width: null,
             is_tree: null,
         });
         keys.forEach((newKey) => {
@@ -64,14 +62,6 @@ function sanitizeValues(jsonArray) {
                 obj[newKey] = obj[newKey].map((item) => {
                     return item.trim();
                 });
-            }
-
-            if (newKey === 'mature_size' && obj[newKey] !== null) {
-                obj[newKey] = obj[newKey].replace('metres', '').replace('meters', '');
-                obj[newKey] = obj[newKey].split('x');
-                obj['mature_size_height'] = obj[newKey][0]?.trim() || null;
-                obj['mature_size_width'] = obj[newKey][1]?.trim() || null;
-                delete obj[newKey];
             }
 
             if (newKey === 'environmental_tolerances' && obj[newKey] !== null) {

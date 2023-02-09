@@ -64,7 +64,6 @@ Global value and local values in the Soil layer:
 ## Plant Database
 
 - hierarchy: family, subfamily, genus, species, variety
-- pointer to one hierarchy up (MISSING)
 - if it is abstract/concrete (MISSING: we assume all plants of Practical Plants to be concrete)
 - common English name
 - common German name
@@ -84,8 +83,8 @@ Global value and local values in the Soil layer:
   - nutrition demand (MISSING, start with "Nutritionally poor soil" in "Environmental Tolerances")
   - freeze resistance (hardiness zone)
   - wet/dry
-  - preferable permaculture zone (MISSING)
-- is a tree/bush (MISSING, start with Herbaceous/Woody (woody) AND life cycle (perennial))
+  - preferable permaculture zone
+- is a tree/bush
 - notes German (MISSING)
 
 All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes presence.
