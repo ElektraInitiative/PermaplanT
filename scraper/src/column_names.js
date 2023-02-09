@@ -1,10 +1,11 @@
 export default [
     { name: 'folder_name' },
-    { name: 'common_name' },
-    { name: 'synonyms' },
+    { name: 'common_name', cast: 'text[]' },
+    { name: 'common_name_de', cast: 'text[]' },
     { name: 'binomial_name' },
     { name: 'genus' },
     { name: 'family' },
+    { name: 'subfamily' },
     { name: 'edible_uses' },
     { name: 'medicinal_uses' },
     { name: 'material_uses_and_functions' },
@@ -43,4 +44,6 @@ export default [
     { name: 'flower_type', cast: 'flower_type' },
     { name: 'has_drought_tolerance' },
     { name: 'tolerates_wind' },
+    { name: 'plant_references', cast: 'text[]' },
+    { name: 'is_tree' },
 ];

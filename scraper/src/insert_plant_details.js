@@ -35,6 +35,7 @@ function sanitizeValues(jsonArray) {
         Object.assign(obj, {
             mature_size_height: null,
             mature_size_width: null,
+            is_tree: null,
         });
         keys.forEach((newKey) => {
             obj[newKey] = obj[newKey].trim();
@@ -49,9 +50,17 @@ function sanitizeValues(jsonArray) {
                 (newKey === 'soil_texture' && obj[newKey] !== null) ||
                 (newKey === 'soil_water_retention' && obj[newKey] !== null) ||
                 (newKey === 'fertility' && obj[newKey] !== null) ||
-                (newKey === 'life_cycle' && obj[newKey] !== null)
+                (newKey === 'life_cycle' && obj[newKey] !== null) ||
+                (newKey === 'common_name' && obj[newKey] !== null)
             ) {
                 obj[newKey] = obj[newKey].split(',');
+                obj[newKey] = obj[newKey].map((item) => {
+                    return item.trim();
+                });
+            }
+
+            if (newKey === 'plant_references' && obj[newKey] !== null) {
+                obj[newKey] = obj[newKey].split('///ref///');
                 obj[newKey] = obj[newKey].map((item) => {
                     return item.trim();
                 });
@@ -64,10 +73,20 @@ function sanitizeValues(jsonArray) {
                 obj['mature_size_width'] = obj[newKey][1]?.trim() || null;
                 delete obj[newKey];
             }
+
             if (obj[newKey] === 'None listed.') {
                 obj[newKey] = null;
             }
         });
+
+        if (
+            obj['herbaceous_or_woody'] === 'woody' &&
+            obj['life_cycle'] &&
+            obj['life_cycle'].includes('perennial')
+        ) {
+            obj['is_tree'] = true;
+        }
+
         return obj;
     });
 }

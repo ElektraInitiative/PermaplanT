@@ -27,11 +27,12 @@ CREATE TYPE ROOT_ZONE_TENDANCY AS ENUM ('surface', 'shallow', 'deep');
 CREATE TABLE plant_detail (
   id SERIAL PRIMARY KEY,
   binomial_name VARCHAR NOT NULL,
-  common_name VARCHAR,
+  common_name TEXT ARRAY,
+  common_name_de TEXT ARRAY,
   folder_name VARCHAR,
-  synonyms VARCHAR,
   genus VARCHAR,
   family VARCHAR,
+  subfamily VARCHAR,
   edible_uses VARCHAR,
   medicinal_uses VARCHAR,
   material_uses_and_functions VARCHAR,
@@ -72,6 +73,8 @@ CREATE TABLE plant_detail (
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   has_drought_tolerance BOOLEAN,
   tolerates_wind BOOLEAN,
+  plant_references TEXT ARRAY,
+  is_tree BOOLEAN,
   CONSTRAINT plant_detail_binomial_name_key UNIQUE (binomial_name),
   CHECK (
     hardiness_zone IS NULL

@@ -12,16 +12,13 @@ function parseSinglePage(fileName) {
     const details = {
         'Folder Name': fileName,
         'Common Name': '',
-        Synonyms: '',
+        'Common Name DE': '',
+        Subfamily: '',
     };
     const errors = {};
     try {
         const commonNames = root.querySelectorAll('#common-name li');
-        details['Common Name'] = commonNames[0].innerText;
-        details['Synonyms'] = commonNames
-            .slice(1)
-            .map((node) => node.innerText)
-            .join(', ');
+        details['Common Name'] = commonNames.map((node) => node.innerText).join(', ');
     } catch (error) {
         errors['Folder Name'] = fileName;
         errors['Common Name'] = 'Not Found';
@@ -70,6 +67,29 @@ function parseSinglePage(fileName) {
         // The following error can occur if there is no fact table on the page
         // errors['Fact Table'] = 'Not Found';
     }
+
+    const plantSections = {
+        'Plant References': '#article-references .reference-text',
+        // 'Plant Uses': '#plant-uses',
+        // 'Plant Functions': '#plant-functions',
+        // 'Plant Propagation': '#plant-propagation',
+        // 'Plant Cultivation': '#plant-cultivation',
+        // 'Plant Crops': '#plant-crops',
+        // 'Plant Problems': '#plant-problems',
+        // 'Plant Interactions': '#plant-interactions',
+        // 'Plant Polycultures': '#plant-polycultures',
+        // 'Plant Descedants': '#plant-descendants',
+    };
+
+    Object.keys(plantSections).forEach((section) => {
+        try {
+            const sectionNode = root.querySelectorAll(plantSections[section]);
+            details[section] = sectionNode.map((node) => node.innerText).join('///ref///');
+        } catch (error) {
+            errors[section] = 'Not Found';
+        }
+    });
+
     return details;
 }
 
