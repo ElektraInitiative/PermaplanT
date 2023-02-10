@@ -6,6 +6,82 @@ config();
 
 const archivePath = process.env.PRACTICALPLANTSPATH;
 
+function createDistinctFamilyDetails(details) {
+    const detailsCopy = JSON.parse(JSON.stringify(details));
+    const distinctFamilyDetails = [];
+    const distinctFamilyList = [];
+    detailsCopy.forEach((detail) => {
+        const family = detail['Family'];
+        if (!distinctFamilyList.includes(family)) {
+            distinctFamilyList.push(family);
+            Object.keys(detail).forEach((key) => {
+                if (key !== 'Family') {
+                    detail[key] = null;
+                }
+            });
+            distinctFamilyDetails.push(detail);
+        }
+    });
+    return distinctFamilyDetails;
+}
+
+function createDistinctGenusDetails(details) {
+    const detailsCopy = JSON.parse(JSON.stringify(details));
+    const distinctGenusDetails = [];
+    const distinctGenusList = [];
+
+    detailsCopy.forEach((detail) => {
+        const genus = detail['Genus'];
+        if (!distinctGenusList.includes(genus)) {
+            distinctGenusList.push(genus);
+            Object.keys(detail).forEach((key) => {
+                if (key !== 'Genus') {
+                    detail[key] = null;
+                }
+            });
+            distinctGenusDetails.push(detail);
+        }
+    });
+    return distinctGenusDetails;
+}
+
+function processData(details) {
+    try {
+        const mature_size = details['Mature Size']
+            .replace('metres', '')
+            .replace('meters', '')
+            .replace('?', '');
+        const arr = mature_size.split('x');
+        const mature_size_height = arr[0]?.trim() || null;
+        const mature_size_width = arr[1]?.trim() || null;
+        details['To check'] = isNaN(mature_size_height) || isNaN(mature_size_width);
+        details['Mature Size Height'] = mature_size_height;
+        details['Mature Size Width'] = mature_size_width;
+        delete details['Mature Size'];
+    } catch (error) {
+        console.log(error);
+    }
+
+    Object.keys(details).forEach((key) => {
+        if (details[key] === '?') {
+            details[key] = null;
+        } else if (details[key] === 'None listed.') {
+            details[key] = null;
+        }
+
+        if (
+            details['Herbaceous or Woody'] === 'Herbaceous' &&
+            details['Life Cycle'] === 'Perennial'
+        ) {
+            details['Is Tree'] = true;
+        }
+
+        if (key == 'Environmental Tolerances' && details[key].includes('Nutritionally poor soil')) {
+            details['Nutrition Demand'] = 'light feeder';
+        }
+    });
+}
+
 function parseSinglePage(fileName) {
     const file = readFileSync(archivePath + '/wiki/' + fileName + '/index.html', 'utf8');
     const root = parse(file);
@@ -15,8 +91,10 @@ function parseSinglePage(fileName) {
         'Common Name DE': '',
         Subfamily: '',
         'To check': false,
+        'Is Tree': null,
         'Mature Size Height': null,
         'Mature Size Width': null,
+        'Nutrition Demand': null,
     };
     const errors = {};
     try {
@@ -93,21 +171,8 @@ function parseSinglePage(fileName) {
         }
     });
 
-    try {
-        const mature_size = details['Mature Size']
-            .replace('metres', '')
-            .replace('meters', '')
-            .replace('?', '');
-        const arr = mature_size.split('x');
-        const mature_size_height = arr[0]?.trim() || null;
-        const mature_size_width = arr[1]?.trim() || null;
-        details['To check'] = isNaN(mature_size_height) || isNaN(mature_size_width);
-        details['Mature Size Height'] = mature_size_height;
-        details['Mature Size Width'] = mature_size_width;
-        delete details['Mature Size'];
-    } catch (error) {
-        console.log(error);
-    }
+    processData(details);
+
     return details;
 }
 
@@ -131,11 +196,23 @@ function parseAllPages() {
                 errorsArray.push(errors);
             }
         });
+
+    const distinctGenusDetails = createDistinctGenusDetails(details);
+    const distinctFamilyDetails = createDistinctFamilyDetails(details);
+
     console.log('Writing to CSV');
     const csv = json2csv(details);
     writeFileSync('data/detail.csv', csv);
+
     const errorsCsv = json2csv(errorsArray);
     writeFileSync('data/errors.csv', errorsCsv);
+
+    const distinctGenusCsv = json2csv(distinctGenusDetails);
+    writeFileSync('data/distinctGenus.csv', distinctGenusCsv);
+
+    const distinctFamilyCsv = json2csv(distinctFamilyDetails);
+    writeFileSync('data/distinctFamily.csv', distinctFamilyCsv);
+
     console.log('Parsed ' + details.length + ' pages');
     console.log('Encountered ' + errorsArray.length + ' errors');
 }

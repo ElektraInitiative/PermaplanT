@@ -32,15 +32,10 @@ function sanitizeColumnNames(jsonArray) {
 function sanitizeValues(jsonArray) {
     return jsonArray.map((obj) => {
         const keys = Object.keys(obj);
-        Object.assign(obj, {
-            is_tree: null,
-            nutrition_demand: null,
-        });
+        Object.assign(obj, {});
         keys.forEach((newKey) => {
             obj[newKey] = obj[newKey].trim();
             if (obj[newKey] === '') {
-                obj[newKey] = null;
-            } else if (obj[newKey] === '?') {
                 obj[newKey] = null;
             }
 
@@ -70,24 +65,8 @@ function sanitizeValues(jsonArray) {
                 obj[newKey] = obj[newKey].map((item) => {
                     return item.trim();
                 });
-
-                if (obj[newKey].includes('Nutritionally poor soil')) {
-                    obj['nutrition_demand'] = 'light feeder';
-                }
-            }
-
-            if (obj[newKey] === 'None listed.') {
-                obj[newKey] = null;
             }
         });
-
-        if (
-            obj['herbaceous_or_woody'] === 'woody' &&
-            obj['life_cycle'] &&
-            obj['life_cycle'].includes('perennial')
-        ) {
-            obj['is_tree'] = true;
-        }
 
         return obj;
     });
