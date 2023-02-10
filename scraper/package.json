@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "start": "node src/parse.js",
-        "insert": "node src/insert_plant_details.js"
+        "insert": "node src/insert_plant_details.js",
+        "merge": "node src/merge.js"
     },
     "keywords": [],
     "author": "",

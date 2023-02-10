@@ -27,7 +27,15 @@ cp .env.example .env
 npm run start
 ```
 
-4. Insert data into database
+4. Correct data manually and merge with generated data (optional)
+
+The scraped data contains inconsistencies and mistakes made by practicalplants users. In order to correct these mistakes, we need to manually correct the data. The corrected data should be stored in the same format as the generated data i.e. columns may not be changed. Since the scraper process could be changed in the future, we should garantee that the data will not be lost when the scraper is run again. Therefore, we should merge the corrected data with the generated data. This can be done with the following command:
+
+```shell
+npm run merge <path-to-original-csv-file> <path-to-corrected-csv-file>
+```
+
+5. Insert data into database
 
 After the data is scraped and stored in `csv` format, we should now insert it into the database. This can be done with the following command:
 
@@ -36,3 +44,4 @@ _Note:_ Please make sure that the database is up-to-date with latest migrations 
 ```shell
 npm run insert
 ```
+
