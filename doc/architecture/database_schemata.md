@@ -47,7 +47,7 @@ seeds {
   VARCHAR notes
 }
 
-varieties {
+plants {
   INT id PK
   tags tag "NOT NULL"
   VARCHAR type "NOT NULL"
@@ -67,18 +67,121 @@ varieties {
   INT height
 }
 
-varieties ||--o{ seeds : ""
+plant_detail{}
+
+plants }o--|| plant_detail: "type"
+
+plants ||--o{ seeds : ""
+
+plant_detail }o--o{ plant_detail: "likes"
+
+plant_detail }o--o{ plant_detail: "dislikes"
+
 ```
+
+
 
 ```mermaid
 erDiagram
+
+enum_water {
+  VARCHAR low
+  VARCHAR moderate
+  VARCHAR high
+  VARCHAR aquatic
+}
+enum_water {
+  VARCHAR low
+  VARCHAR moderate
+  VARCHAR high
+  VARCHAR aquatic
+}
+
+enum_sun { 
+  VARCHAR indirect_sun
+  VARCHAR partial_sun
+  VARCHAR full_sun
+}
+
+enum_shade {
+  VARCHAR no_shade
+  VARCHAR light_shade
+  VARCHAR partial_shade
+  VARCHAR permanent_shade
+  VARCHAR permanent_deep_shade
+}
+
+enum_soil_ph {
+  VARCHAR very_acid
+  VARCHAR acid
+  VARCHAR neutral
+  VARCHAR alkaline
+  VARCHAR very_alkaline
+}
+
+enum_soil_texture {
+  VARCHAR sandy
+  VARCHAR loamy
+  VARCHAR clay
+  VARCHAR heavy_clay
+}
+
+enum_soil_water_retention {
+  VARCHAR well_drained
+  VARCHAR moist
+  VARCHAR wet
+}
+
+enum_life_cycle {
+  VARCHAR annual
+  VARCHAR biennial
+  VARCHAR perennial
+}
+
+enum_growth_rate {
+  VARCHAR slow
+  VARCHAR moderate
+  VARCHAR vigorous
+}
+
+enum_flower_type {
+  VARCHAR dioecious
+  VARCHAR monoecious
+  VARCHAR hermaphrodite
+}
+
+enum_fertility {
+  VARCHAR self_fertile
+  VARCHAR self_sterile
+}
+
+enum_herbaceous_or_woody {
+  VARCHAR herbaceous
+  VARCHAR woody
+}
+
+enum_deciduous_or_evergreen {
+  VARCHAR deciduous
+  VARCHAR evergreen
+}
+
+enum_root_zone_tendency {
+  VARCHAR surface
+  VARCHAR shallow
+  VARCHAR deep
+}
+
+enum_nutrition_demand {
+  VARCHAR light_feeder
+  VARCHAR moderate_feeder
+  VARCHAR heavy_feeder
+}
 
 plant_detail{
   id INT PK
   binomial_name VARCHAR "NOT NULL"
   common_name TEXT[]
   common_name_de TEXT[]
-  folder_name VARCHAR
   genus VARCHAR
   family VARCHAR
   subfamily VARCHAR
@@ -140,10 +243,9 @@ plant_detail{
 | **binomial_name**                | Abelia triflora                  |
 | **common_name**                  | NULL                             |
 | **common_name_de**               | NULL                             |
-| **folder_name**                  | Abelia_triflora                  |
-| **genus**                        | Abelia                           |
 | **family**                       | Caprifoliaceae                   |
 | **subfamily**                    | NULL                             |
+| **genus**                        | Abelia                           |
 | **edible_uses**                  | NULL                             |
 | **medicinal_uses**               | NULL                             |
 | **material_uses_and_functions**  | \[1\]\[2\]                       |
@@ -186,4 +288,5 @@ plant_detail{
 | **tolerates_wind**               | false                            |
 | **plant_references**             | {ref1, ref2)}                    |
 | **is_tree**                      | true                             | Herbaceous/Woody (woody) AND life cycle (perennial) |
+| **nutrition_demand**             | NULL                             |
 | **preferable_permaculture_zone** | NULL                             | -1..6 (-1 should be printed as 00)                  |
