@@ -288,5 +288,5 @@ plant_detail{
 | **tolerates_wind**               | false                            |
 | **plant_references**             | {ref1, ref2)}                    |
 | **is_tree**                      | true                             | Herbaceous/Woody (woody) AND life cycle (perennial) |
-| **nutrition_demand**             | NULL                             |
+| **nutrition_demand**             | NULL                             | If "Nutritionally poor soil" in `environmental_tolerances` is given `light feeder` should be set.
 | **preferable_permaculture_zone** | NULL                             | -1..6 (-1 should be printed as 00)                  |

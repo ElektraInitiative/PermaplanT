@@ -45,4 +45,5 @@ export default [
     { name: 'tolerates_wind' },
     { name: 'plant_references', cast: 'text[]' },
     { name: 'is_tree' },
+    { name: 'nutrition_demand', cast: 'nutrition_demand' },
 ];

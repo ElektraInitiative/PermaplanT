@@ -34,6 +34,7 @@ function sanitizeValues(jsonArray) {
         const keys = Object.keys(obj);
         Object.assign(obj, {
             is_tree: null,
+            nutrition_demand: null,
         });
         keys.forEach((newKey) => {
             obj[newKey] = obj[newKey].trim();
@@ -69,6 +70,10 @@ function sanitizeValues(jsonArray) {
                 obj[newKey] = obj[newKey].map((item) => {
                     return item.trim();
                 });
+
+                if (obj[newKey].includes('Nutritionally poor soil')) {
+                    obj['nutrition_demand'] = 'light feeder';
+                }
             }
 
             if (obj[newKey] === 'None listed.') {
