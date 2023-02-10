@@ -41,26 +41,9 @@ classDiagram
 
 ## Considered Alternatives
 
-## Decision
+1. Inheritance feature of PSQL
 
-
-1. Hierarchy
-
-Hierarchy of entities should be implemented using foreign keys and table relationships instead of Inheritance feauture of PSQL(see point 1 under Rationale section below for detailed exaplanation). In case of a conflict, the lowest entity level in the hierarchy is prioritized. E.g. when there is a height value in a species and in a variety, variety wins.
-
-Plant relations(e.g. like, dislike, etc.) should be implemented using separate many-to-many tables. This is because the relations are not part of the plant entity, but rather a property of the relationship between two plants. This is not possible with inheritance feature of PSQL.
-
-1. plants as a flat table
-
-
-2. Metatables for parent entities i.e. genus, subfamily, family
-
-
-## Rationale
-
-1. Inheritance
-
-Inheritance feature of PSQL cannot solve the challenge described above. I'll leave the main points from the [PSQL documentation](https://www.postgresql.org/docs/current/ddl-inherit.html) here:
+Inheritance cannot solve the challenge described above. I'll leave the main points from the [PSQL documentation](https://www.postgresql.org/docs/current/ddl-inherit.html) here:
 
 > Inheritance does not automatically propagate data from INSERT or COPY commands to other tables in the inheritance hierarchy.
 
@@ -70,6 +53,23 @@ Inheritance feature of PSQL cannot solve the challenge described above. I'll lea
 
 So the inheritance is useful to deal with complex DDL structure on the startup, but will not help us to avoid bulk operations e.g. updating a column for every `variety` in the entire `genus`
 
+## Decision
+
+1. Hierarchy
+
+Hierarchy of entities should be implemented using foreign keys and table relationships instead of Inheritance feature of PSQL. In case of a conflict, the lowest entity level in the hierarchy is prioritized. E.g. when there is a height value in a species and in a variety, variety wins.
+
+Plant relations(e.g. like, dislike, etc.) should be implemented using separate many-to-many tables. This is because the relations are not part of the plant entity, but rather a property of the relationship between two plants.
+
+2. Metatables for parent entities i.e. genus, subfamily, family
+
+Metatables are tables that contain information about the parent entities. E.g. genus table will contain information about the genus, while the data of plants of that genus will be stored in the plant_detail table.
+
+The reason for this is that the data of the parent entities is not going to change very often, while the data of the child entities will change more often. So it makes sense to separate the data into two tables.
+
+Since there is no information about the parent entities on the practicalplants website, we will have to populate the metatables manually. For this purpose, during the parsing we are creating csv files with distinct values of genus, subfamily, family. These csv files will be used to populate the metatables.
+
+## Rationale
 
 ## Implications
 
