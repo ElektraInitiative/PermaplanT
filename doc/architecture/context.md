@@ -12,7 +12,12 @@ Global value and local values in the Soil layer:
   - 4 heavy (sT, L, uL) (German: schwer)
   - 5 very heavy (T, IT) (German: sehr schwer)
 - pH base value for topsoil from 0-14
-  (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamisch
+  (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamisch:
+  - 1 very acid (pH 5.0 and below)
+  - 2 acid (pH 6.0 - 6.5)
+  - 3 neutral (pH 6.6 - 7.3)
+  - 4 alkaline (pH 7.4 - 7.8)
+  - 5 very alkaline (pH 7.9 and above)
 - pH base value for subsoil from 0-14
 - yield grade (German: Ages Gehaltsklasse (Nährstoffversorgung und Humusgehalt) ÖNORM L 1210, determined from NPK, eigentlich für Intensivkultur, Stark/Schwachzehrer)
   from:
@@ -58,20 +63,31 @@ Global value and local values in the Soil layer:
 
 ## Plant Database
 
-- photos
-- genus and species
-- other general infos
-- size (height, width, depth)
+- hierarchy: family, subfamily, genus, species, variety
+- if it is abstract/concrete (MISSING: we assume all plants of Practical Plants to be concrete)
+- common English name
+- common German name
+- icon (MISSING)
+- dates (MISSING):
+  - begin/end raising
+  - begin/end planting
+  - begin/end seeding
+  - begin/end harvest
+- size (height, width)
 - constraints where they want to be:
-  - recommended distances to other plants
+  - good/bad neighbors to other specific plants of any hierarchy (MISSING)
+  - recommended distances to any other plant, needed for area calculations (MISSING)
   - sun
   - soil weight
   - pH value of topsoil
-  - yield grade
-  - freeze resistance
-  - good/bad neighbors
+  - nutrition demand (MISSING, start with "Nutritionally poor soil" in "Environmental Tolerances")
+  - freeze resistance (hardiness zone)
   - wet/dry
-  - preferable permaculture zone (needs visits rare or often)
+  - preferable permaculture zone
+- is a tree/bush
+- notes German (MISSING)
+
+All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes presence.
 
 # Output Parameters
 

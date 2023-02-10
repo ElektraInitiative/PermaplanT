@@ -27,3 +27,5 @@ pdfs
 target
 
 diesel.toml
+
+.DS_Store

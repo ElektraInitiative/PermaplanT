@@ -1,0 +1,22 @@
+{
+    "name": "scraper",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/parse.js",
+        "insert": "node src/insert_plant_details.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {},
+    "dependencies": {
+        "csvtojson": "^2.0.10",
+        "dotenv": "^16.0.3",
+        "json2csv": "^6.0.0-alpha.2",
+        "pg-promise": "^11.2.0",
+        "node-html-parser": "^6.1.4"
+    },
+    "type": "module"
+}

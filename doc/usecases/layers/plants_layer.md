@@ -23,7 +23,7 @@
   - When drawing an area of plants, the size of the arena and the number of plants is shown next to the mouse.
   - The user is able to view the relationships between the plants by looking at the lines connecting them.
     The lines indicate the strength of the relationship.
-  - The user is able to move, edit and delete selected plants.
+  - The user is able to move, edit (e.g. when planted, when harvested) and delete (either that it never existed or that it was removed from the garden) selected plants.
   - The user adjusts the plant elements and their relationships as needed.
 - **Alternative scenario:**
   - The user accidentally adds or moves a plant element in the wrong location and uses the app's undo function to correct the mistake.

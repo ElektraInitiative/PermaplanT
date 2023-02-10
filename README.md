@@ -33,6 +33,9 @@ To achieve these goals the app provides, e.g.:
 - zoom
 - internationalization: English, German
 - algorithms for mixed crops, considerations of natural constraints and automatic suggestions
+- Nextcloud integrations (calender entries, Deck tasks)
+- social network features (e.g. notification that someone entered your garden)
+- GPS coordinates
 - privacy: no tracking, analytics, external JavaScript, fonts, etc.
 
 ### Layers
@@ -54,6 +57,8 @@ While editing any layer other layers might be displayed or hidden.
 - Zones (of different visitation frequency)
 - Plants¹ (taxa, individual and fields of plants)
 - Warnings¹
+- Chat (Possibility to join chats in different places of the garden)
+- Photos (sharing of photo with GPS coordinates)
 
 ¹ Essential (most used) layers: are more prominently shown than others.
 
@@ -61,16 +66,13 @@ While editing any layer other layers might be displayed or hidden.
 
 Later features, i.e., out of scope for first version:
 
-- Nextcloud integrations (calender entries, Deck tasks)
 - import/export
-- GPS coordinates
 - weather data (warnings on frost etc.)
 - hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
 - 3D modes (forest garden)
 - differences of versions of the same garden
 - timelaps of historic garden development, simulate growth
-- social network features (notification that someone entered the garden, Chat&Photograph layer)
 
 ## Non-functional Goals
 

@@ -1,4 +1,4 @@
-# PermaplanT Backend
+# PermaplanT Frontend
 
 ## Requirements
 
