@@ -1,3 +1,5 @@
+#![recursion_limit = "256"]
+
 use dotenvy::dotenv;
 
 pub mod config;
