@@ -24,7 +24,7 @@ This makes it challenging to determine the best language for a particular projec
 
 ## Decision
 
-We will use **stable** Rust, installed by `rustup`, as the backend programming language for PermaplanT.
+We will use **stable** Rust version 1.67.1 (2023-02-09), installed by `rustup`, as the backend programming language for PermaplanT.
 
 ## Rationale
 
