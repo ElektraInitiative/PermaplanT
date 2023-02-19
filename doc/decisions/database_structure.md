@@ -21,7 +21,9 @@ Please take a look at the diagram below.
 Each of these entities can have their own properties.
 E.g., a variety under a specie can have different height than the specie that it belongs to.
 
-The challenge is to define the structure of the database in a way that the data can be easily queried and updated.
+The challenge is to define the structure of the database in a way that the data
+- can be easily queried and
+. updated without redundancy (e.g. setting attributes for a whole family).
 
 Another goal is to be able to define relations between entities, e.g., a plant of one variety doesn't want to be neighbor to plant of some other variety.
 
