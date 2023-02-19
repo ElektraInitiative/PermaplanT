@@ -4,7 +4,22 @@ The main goal of this document is to describe the database structure/layout espe
 
 ## Problem
 
-Semantically the plant information can be described as a hierarchy of entities. E.g., a plant is always a member on the variety level, while a variety is a part of species, species is a part of genus, genus is a part of subfamily, subfamily is a part of family. Please take a look at the diagram below. Each of these entities can have their own properties, e.g., a variety under a specie can have different height than the specie that it belongs to.
+Semantically the plant information can be described as a hierarchy of entities.
+
+A plant can be classified
+- on variety level, and/or
+- on species level.
+
+Furthermore:
+- a variety belongs to a specie
+- specie belongs to a genus
+- genus belongs to a subfamily or family
+- subfamily belongs to a family.
+
+Please take a look at the diagram below.
+
+Each of these entities can have their own properties.
+E.g., a variety under a specie can have different height than the specie that it belongs to.
 
 The challenge is to define the structure of the database in a way that the data can be easily queried and updated.
 
