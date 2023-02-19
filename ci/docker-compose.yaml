@@ -1,0 +1,51 @@
+version: "3.3"
+services:
+  frontend:
+    build:
+      context: ../
+      dockerfile: ci/frontend/Dockerfile
+    networks:
+      - frontend-net
+    volumes:
+      - bindings-volume:/bindings
+    depends_on:
+      - backend
+    ports:
+      - 5173:5173
+
+  backend:
+    build:
+      context: ../
+      dockerfile: ci/backend/Dockerfile
+    environment:
+      - DATABASE_URL=postgres://permaplant:permaplant@db:5432/permaplant
+    networks:
+      - frontend-net
+      - backend-net
+    volumes:
+      - bindings-volume:/bindings
+    depends_on:
+      db:
+        # ensure DB is reachable before running backend's entry point
+        condition: service_healthy
+
+  db:
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=permaplant
+      - POSTGRES_PASSWORD=permaplant
+    networks:
+      - backend-net
+    healthcheck:
+      test: "pg_isready --username=permaplant"
+      timeout: 5s
+      retries: 10
+
+networks:
+  frontend-net: {}
+  backend-net: {}
+
+# we have to share the bindings from typeshare
+volumes:
+  bindings-volume:
