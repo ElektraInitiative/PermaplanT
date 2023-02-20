@@ -100,7 +100,8 @@ Metatables are independent tables that contain information about the parent enti
 
 The reason for this is that the data of the parent entities is not going to change very often, while the data of the child entities will change more often. So it makes sense to separate the data into two tables.
 
-Since there is no information about the parent entities on the practicalplants website, we will have to populate the metatables manually. For this purpose, during the parsing we are creating csv files with distinct values of genus, subfamily, family. These csv files will be used to populate the metatables.
+Since there is no information about the parent entities on the practicalplants website, we will have to populate the metatables manually.
+For this purpose, during the parsing we are creating csv files with distinct values of genus, subfamily, family. These csv files will be used to populate the metatables.
 
 ## Implications
 
