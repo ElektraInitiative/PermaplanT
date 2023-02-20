@@ -31,4 +31,4 @@ CREATE TABLE species (
   CONSTRAINT species_binomial_name_key UNIQUE (binomial_name)
 );
 ALTER TABLE plant_detail
-ADD COLUMN species_id INTEGER REFERENCES species (id);
+ADD COLUMN species INTEGER REFERENCES species (id);
