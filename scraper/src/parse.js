@@ -95,6 +95,8 @@ function parseSinglePage(fileName) {
         'Mature Size Height': null,
         'Mature Size Width': null,
         'Nutrition Demand': null,
+        License: 'CC BY-SA 3.0',
+        'Article Last Modified': null,
     };
     const errors = {};
     try {
@@ -147,6 +149,32 @@ function parseSinglePage(fileName) {
     } catch (error) {
         // The following error can occur if there is no fact table on the page
         // errors['Fact Table'] = 'Not Found';
+    }
+
+    try {
+        const footerInfo = root.querySelector('#mw-footer-info');
+        const listElements = footerInfo.querySelectorAll('li');
+        listElements.forEach((listElement) => {
+            const text = listElement.innerText;
+            if (text.includes('last modified')) {
+                // Use a regular expression to extract the date and time strings
+                const datePattern = /(\d{1,2}\s\w+\s\d{4}), at (\d{1,2}):(\d{2})/;
+                const matches = datePattern.exec(text);
+
+                const date = new Date(matches[1]);
+                const hours = parseInt(matches[2], 10);
+                const minutes = parseInt(matches[3], 10);
+                date.setHours(hours);
+                date.setMinutes(minutes);
+                details['Article Last Modified'] = date.toISOString();
+            }
+
+            if (!text.includes('Creative Commons Attribution-NonCommercial-ShareAlike')) {
+                details['License'] = null;
+            }
+        });
+    } catch (error) {
+        // errors['Footer Info'] = 'Not Found';
     }
 
     const plantSections = {
