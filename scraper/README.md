@@ -29,7 +29,11 @@ npm run start
 
 4. Correct data manually and merge with generated data (optional)
 
-The scraped data contains inconsistencies and mistakes made by practicalplants users. In order to correct these mistakes, we need to manually correct the data. The corrected data should be stored in the same format as the generated data i.e. columns may not be changed. Since the scraper process could be changed in the future, we should garantee that the data will not be lost when the scraper is run again. Therefore, we should merge the corrected data with the generated data. This can be done with the following command:
+The scraped data contains inconsistencies and mistakes made by practicalplants users. In order to correct these mistakes, we need to manually correct the data. The corrected data should be stored in the same format as the generated data i.e. columns may not be changed. Since the scraper process could be changed in the future, we should garantee that the data will not be lost when the scraper is run again. Therefore, we should merge the corrected data with the generated data. 
+
+The script that takes in two CSV files as command line arguments, merges the data from the two files based on a common key, and writes the merged data to a new CSV file called `merged.csv`.
+
+This can be done with the following command:
 
 ```shell
 npm run merge <path-to-original-csv-file> <path-to-corrected-csv-file>

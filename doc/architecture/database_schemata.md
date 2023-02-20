@@ -77,6 +77,19 @@ plant_detail }o--o{ plant_detail: "likes"
 
 plant_detail }o--o{ plant_detail: "dislikes"
 
+species{}
+genus{}
+subfamily{}
+family{}
+
+plant_detail }|--|| species : ""
+species }|--|| genus : ""
+genus }|--|| subfamily : ""
+subfamily }|--|| family : ""
+
+
+
+
 ```
 
 # Table descriptions
