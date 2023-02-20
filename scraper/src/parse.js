@@ -95,8 +95,8 @@ function parseSinglePage(fileName) {
         'Mature Size Height': null,
         'Mature Size Width': null,
         'Nutrition Demand': null,
-        License: 'CC BY-SA 3.0',
-        'Article Last Modified': null,
+        License: null,
+        'Article Last Modified At': null,
     };
     const errors = {};
     try {
@@ -166,11 +166,11 @@ function parseSinglePage(fileName) {
                 const minutes = parseInt(matches[3], 10);
                 date.setHours(hours);
                 date.setMinutes(minutes);
-                details['Article Last Modified'] = date.toISOString();
+                details['Article Last Modified At'] = date.toISOString();
             }
 
-            if (!text.includes('Creative Commons Attribution-NonCommercial-ShareAlike')) {
-                details['License'] = null;
+            if (text.includes('Creative Commons Attribution-NonCommercial-ShareAlike')) {
+                details['License'] = 'CC BY-SA 3.0';
             }
         });
     } catch (error) {
