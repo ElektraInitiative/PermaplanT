@@ -113,5 +113,6 @@ In order to finish this decision, we need to understand the semantics of the dat
 
 TODO:
 
-- [] define how exactly hierarchy tables will look like. E.g. will there be a separate table for genus, subfamily, family or will there be a single table with a column for each of these entities?
-- [] define how metatables should be connected to the hierarchy tables.
+- [] define how exactly hierarchy tables will look like
+- [] define how metatables should be connected to the hierarchy tables
+- [] define how the relations between plants will be stored
