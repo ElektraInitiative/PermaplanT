@@ -88,4 +88,40 @@ async function insertPlantDetails() {
     db.none(query);
 }
 
+async function insertGenus() {
+    let jsonArray = await csv().fromFile('data/distinctGenus.csv');
+
+    sanitizeColumnNames(jsonArray);
+
+    jsonArray = jsonArray.map((obj) => {
+        return { binomial_name: obj['genus'].trim() };
+    });
+    const cs = new pgp.helpers.ColumnSet(['binomial_name'], {
+        table: 'genus',
+    });
+
+    const query = pgp.helpers.insert(jsonArray, cs) + ' ON CONFLICT DO NOTHING';
+
+    db.none(query);
+}
+
+async function insertFamily() {
+    let jsonArray = await csv().fromFile('data/distinctFamily.csv');
+
+    sanitizeColumnNames(jsonArray);
+
+    jsonArray = jsonArray.map((obj) => {
+        return { binomial_name: obj['family'].trim() };
+    });
+    const cs = new pgp.helpers.ColumnSet(['binomial_name'], {
+        table: 'family',
+    });
+
+    const query = pgp.helpers.insert(jsonArray, cs) + ' ON CONFLICT DO NOTHING';
+
+    db.none(query);
+}
+
 insertPlantDetails();
+insertGenus();
+insertFamily();

@@ -1,4 +1,4 @@
-# Database Structure
+# Database Structure (TBD)
 
 The main goal of this document is to describe the database structure/layout especially in terms of relations between data entities.
 
@@ -60,7 +60,7 @@ The challenge is to define the structure of the database in a way that the data
 
 ## Assumptions
 
--   Performance of the structure, which described in this decision, of the PSQL database is satisfiable for the our case.
+-   Performance of the database utilizing structure described in this decision is efficient enough for our use case.
 
 ## Considered Alternatives
 
@@ -94,7 +94,7 @@ Metatables are independent tables that contain information about the parent enti
 
 1. Hierarchy
 
- in the section "Considered Alternatives".
+discussed in the section "Considered Alternatives".
 
 2. Metatables
 
@@ -108,3 +108,10 @@ For this purpose, during the parsing we are creating csv files with distinct val
 ## Related Decisions
 
 ## Notes
+
+In order to finish this decision, we need to understand the semantics of the data better.
+
+TODO:
+
+- [] define how exactly hierarchy tables will look like. E.g. will there be a separate table for genus, subfamily, family or will there be a single table with a column for each of these entities?
+- [] define how metatables should be connected to the hierarchy tables.
