@@ -8,6 +8,13 @@ const pgp = pgPromise({});
 
 const db = pgp(process.env.DATABASE_URL);
 
+if (process.argv.length < 3) {
+    console.log('USAGE: npm run insert <generated-file>');
+    process.exit(1);
+}
+
+const generatedFile = process.argv[2];
+
 function sanitizeColumnNames(jsonArray) {
     return jsonArray.map((obj) => {
         const keys = Object.keys(obj);
@@ -72,8 +79,8 @@ function sanitizeValues(jsonArray) {
     });
 }
 
-async function insertPlantDetails() {
-    const jsonArray = await csv().fromFile('data/detail.csv');
+async function insertPlantDetails(fileName) {
+    const jsonArray = await csv().fromFile(fileName);
 
     sanitizeColumnNames(jsonArray);
 
@@ -122,6 +129,6 @@ async function insertFamily() {
     db.none(query);
 }
 
-insertPlantDetails();
+insertPlantDetails(generatedFile);
 insertGenus();
 insertFamily();

@@ -5,7 +5,7 @@ import { config } from 'dotenv';
 config();
 
 if (process.argv.length < 4) {
-    console.log('USAGE: node index.js <generated-file> <file_yvonne>');
+    console.log('USAGE: npm run merge <generated-file> <corrected-file>');
     process.exit(1);
 }
 
