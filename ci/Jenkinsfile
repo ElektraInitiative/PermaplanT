@@ -7,16 +7,18 @@ pipeline {
                 echo 'Building...'
                 sh './ci/build-scripts/build-backend.sh'
                 sh './ci/build-scripts/build-frontend.sh'
+                stash includes: './backend/target/release/backend', name: 'backend'
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
+
+        stage('Deploy to Dev') {
+            when {
+                branch "master"
             }
-        }
-        stage('Deploy') {
+
             steps {
-                echo 'Deploying....'
+                unstash 'backend'
+                echo 'Deploying to Dev ...'
             }
         }
     }
