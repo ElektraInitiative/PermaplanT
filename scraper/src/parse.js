@@ -56,7 +56,11 @@ function processData(details) {
         const arr = mature_size.split('x');
         const mature_size_height = arr[0]?.trim() || null;
         const mature_size_width = arr[1]?.trim() || null;
-        details['To check'] = isNaN(mature_size_height) || isNaN(mature_size_width);
+        if (isNaN(mature_size_height) || isNaN(mature_size_width)) {
+            details['To check'] = details['To check']
+                ? details['To check'] + ', Mature Size or Height'
+                : 'Mature Size or Height';
+        }
         details['Mature Size Height'] = mature_size_height;
         details['Mature Size Width'] = mature_size_width;
         delete details['Mature Size'];
@@ -81,6 +85,13 @@ function processData(details) {
         if (key == 'Environmental Tolerances' && details[key].includes('Nutritionally poor soil')) {
             details['Nutrition Demand'] = 'light feeder';
         }
+
+        if (key == 'Binomial name' && details[key].split(' ').length > 2) {
+            details['Is Variety'] = true;
+            details['To check'] = details['To check']
+                ? details['To check'] + ', Is Variety'
+                : 'Is Variety';
+        }
     });
 }
 
@@ -92,13 +103,14 @@ function parseSinglePage(fileName) {
         'Common Name': '',
         'Common Name DE': '',
         Subfamily: '',
-        'To check': false,
+        'To check': null,
         'Is Tree': null,
         'Mature Size Height': null,
         'Mature Size Width': null,
         'Nutrition Demand': null,
         License: null,
         'Article Last Modified At': null,
+        'Is Variety': null,
     };
     const errors = {};
     try {
@@ -227,7 +239,7 @@ async function fetchGermanName(binomialName) {
             return dewiki.title;
         }
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
 }
 
