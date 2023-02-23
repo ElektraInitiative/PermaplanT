@@ -9,6 +9,7 @@ use crate::{
     },
 };
 
+#[allow(clippy::expect_used)]
 pub fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDTO>, ServiceError> {
     let mut conn = pool.get().expect("Failed to retrieve pool.");
     match Seed::find_all(&mut conn) {
@@ -20,6 +21,7 @@ pub fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDTO>, ServiceError> {
     }
 }
 
+#[allow(clippy::expect_used)]
 pub fn create(new_seed: NewSeedDTO, pool: &Data<Pool>) -> Result<SeedDTO, ServiceError> {
     let mut conn = pool.get().expect("Failed to retrieve pool.");
     match Seed::create(new_seed, &mut conn) {
@@ -31,6 +33,7 @@ pub fn create(new_seed: NewSeedDTO, pool: &Data<Pool>) -> Result<SeedDTO, Servic
     }
 }
 
+#[allow(clippy::expect_used)]
 pub fn delete_by_id(id: i32, pool: &Data<Pool>) -> Result<(), ServiceError> {
     let mut conn = pool.get().expect("Failed to retrieve pool.");
     match Seed::delete_by_id(id, &mut conn) {

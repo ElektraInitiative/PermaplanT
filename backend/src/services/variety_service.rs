@@ -6,6 +6,7 @@ use crate::{
     models::{dto::variety_dto::VarietyDTO, variety::Variety},
 };
 
+#[allow(clippy::expect_used)]
 pub fn find_all(pool: &Data<Pool>) -> Result<Vec<VarietyDTO>, ServiceError> {
     let mut conn = pool.get().expect("Failed to retrieve pool.");
     match Variety::find_all(&mut conn) {
