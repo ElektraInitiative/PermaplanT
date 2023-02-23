@@ -17,6 +17,6 @@ pub struct Variety {
 impl Variety {
     pub fn find_all(conn: &mut Connection) -> QueryResult<Vec<VarietyDTO>> {
         let query_result = varieties::table.select(all_columns).load::<Variety>(conn);
-        return query_result.map(|v| v.into_iter().map(|v| v.into()).collect());
+        query_result.map(|v| v.into_iter().map(|v| v.into()).collect())
     }
 }
