@@ -95,6 +95,11 @@ async function insertPlantDetails(fileName) {
     db.none(query);
 }
 
+/**
+ * Since the structure is not finalized, we're not inserting the genus and family data yet. 
+ * However, the insertion steps are ready.
+ */
+/*
 async function insertGenus() {
     let jsonArray = await csv().fromFile('data/distinctGenus.csv');
 
@@ -128,7 +133,10 @@ async function insertFamily() {
 
     db.none(query);
 }
+*/
 
 insertPlantDetails(generatedFile);
+/*
 insertGenus();
 insertFamily();
+*/
