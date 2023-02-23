@@ -29,6 +29,8 @@ The scraper will scrape the data from the Practical Plants wiki dump and store i
 npm run start
 ```
 
+As an additional step the script will also lookup the german common name through Wikidata API and store it under the column `Column Name DE` in the `detail.csv` file.
+
 There will be several CSV files generated in the `data` directory:
 
 -   `detail.csv`: This file contains the data scraped from the Practical Plants wiki dump.
@@ -38,9 +40,9 @@ There will be several CSV files generated in the `data` directory:
 
 4. Correct data manually and merge with generated data (optional)
 
-The scraped data contains inconsistencies and mistakes made by practicalplants users. In order to correct these mistakes, we need to manually correct the data. In order to achieve this, you should copy the `detail.csv` file into a new one. The corrected data in the new file should be stored in the same format as the generated data i.e. columns may not be changed. Since the scraper process could be changed in the future, we should garantee that the data will not be lost when the scraper is run again. Therefore, we should merge the corrected data with the generated data.
+The scraped data contains inconsistencies and mistakes made by practicalplants users. In order to correct these mistakes, we need to manually correct the data i.e. copy the `detail.csv` file into a new file. The corrected data in the new file should be stored in the same format as the generated data i.e. columns may not be changed. Since the scraper process could be changed in the future, we should garantee that the data will not be lost when the scraper is run again. Therefore, we should merge the corrected data with the generated data.
 
-The script that takes in two CSV files as command line arguments, merges the data from the two files based on a common key, and writes the merged data to a new CSV file called `merged.csv`.
+The merge script takes two CSV files as command line arguments, merges the data from the two files based on a common key `binomial_name`, and writes the merged data to a new CSV file called `merged.csv`.
 
 This can be done with the following command:
 
