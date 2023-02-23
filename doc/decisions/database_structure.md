@@ -24,10 +24,16 @@ Please take a look at the diagram below, which shows the hierarchy of entities w
 classDiagram
 
     class Family:::abstract {
+         +int height
+         +int width
     }
     class Subfamily:::abstract {
+         +int height
+         +int width
     }
     class Genus:::abstract {
+         +int height
+         +int width
     }
     class Species {
       +int height
