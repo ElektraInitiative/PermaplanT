@@ -52,7 +52,8 @@ function sanitizeValues(jsonArray) {
                 (newKey === 'soil_water_retention' && obj[newKey] !== null) ||
                 (newKey === 'fertility' && obj[newKey] !== null) ||
                 (newKey === 'life_cycle' && obj[newKey] !== null) ||
-                (newKey === 'common_name' && obj[newKey] !== null)
+                (newKey === 'common_name' && obj[newKey] !== null) ||
+                (newKey === 'common_name_de' && obj[newKey] !== null)
             ) {
                 obj[newKey] = obj[newKey].split(',');
                 obj[newKey] = obj[newKey].map((item) => {
@@ -96,7 +97,7 @@ async function insertPlantDetails(fileName) {
 }
 
 /**
- * Since the structure is not finalized, we're not inserting the genus and family data yet. 
+ * Since the structure is not finalized, we're not inserting the genus and family data yet.
  * However, the insertion steps are ready.
  */
 /*

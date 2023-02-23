@@ -2,6 +2,8 @@ import { readFileSync, readdirSync, writeFileSync } from 'fs';
 import { parse } from 'node-html-parser';
 import { parse as json2csv } from 'json2csv';
 import { config } from 'dotenv';
+import axios from 'axios';
+
 config();
 
 const archivePath = process.env.PRACTICALPLANTSPATH;
@@ -204,26 +206,56 @@ function parseSinglePage(fileName) {
     return details;
 }
 
-function parseAllPages() {
+async function fetchGermanName(binomialName) {
+    try {
+        const url = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${binomialName}&language=en&format=json`;
+        const response = await axios.get(url);
+        const data = response.data;
+        const results = data.search;
+        if (results.length === 0) {
+            return null;
+        }
+        const result = results[0];
+        const id = result.id;
+        const url2 = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${id}&languages=de&format=json`;
+        const response2 = await axios.get(url2);
+        const data2 = response2.data;
+        const entities = data2.entities;
+        const entity = entities[id];
+        const dewiki = entity['sitelinks']['dewiki'];
+        if (dewiki) {
+            return dewiki.title;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function parseAllPages() {
     console.log('Parsing all pages');
     const files = readdirSync(archivePath + '/wiki');
     const details = [];
     const errorsArray = [];
-    files
-        .filter(
-            (fileName) =>
-                fileName !== '.DS_Store' &&
-                fileName !== 'A-Z_of_all_plants' &&
-                fileName !== 'A-Z_of_common_names',
-        )
-        .forEach((fileName) => {
-            try {
-                const fileDetails = parseSinglePage(fileName);
-                details.push(fileDetails);
-            } catch (errors) {
-                errorsArray.push(errors);
-            }
-        });
+
+    await Promise.all(
+        files
+            .filter(
+                (fileName) =>
+                    fileName !== '.DS_Store' &&
+                    fileName !== 'A-Z_of_all_plants' &&
+                    fileName !== 'A-Z_of_common_names',
+            )
+            .map(async (fileName) => {
+                try {
+                    const fileDetails = parseSinglePage(fileName);
+                    const germanCommonName = await fetchGermanName(fileDetails['Binomial name']);
+                    fileDetails['Common Name DE'] = germanCommonName;
+                    details.push(fileDetails);
+                } catch (errors) {
+                    errorsArray.push(errors);
+                }
+            }),
+    );
 
     const distinctGenusDetails = createDistinctGenusDetails(details);
     const distinctFamilyDetails = createDistinctFamilyDetails(details);
