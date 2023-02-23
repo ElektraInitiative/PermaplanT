@@ -45,7 +45,7 @@ classDiagram
 
 ```
 
-Each of these entities can have their own properties.
+Each of these entities can have their own attributes.
 E.g., a variety under a specie can have different height than the specie that it belongs to.
 
 The challenge is to define the structure of the database in a way that the data
