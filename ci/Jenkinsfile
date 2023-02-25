@@ -15,7 +15,7 @@ pipeline {
                 sh './ci/build-scripts/build-backend.sh'
                 sh './ci/build-scripts/build-frontend.sh'
                 stash includes: 'backend/target/release/backend', name: 'backend'
-                stash includes: 'frontend/dist', name: 'frontend'
+                stash includes: 'frontend/dist/**/*', name: 'frontend'
             }
         }
 
