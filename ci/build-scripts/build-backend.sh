@@ -1,12 +1,13 @@
 #!/bin/bash
 
 echo "building backend"
-cd ./backend/
-
-source /opt/rust.env
 
 # Echo on and fail fast
 set -ex
+
+cd ./backend/
+
+source /opt/rust.env
 
 # Download Cargo Modules
 cargo fetch
