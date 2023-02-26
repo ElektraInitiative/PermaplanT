@@ -31,7 +31,7 @@ impl From<NewSeedDTO> for NewSeed {
             variety_id: new_seed.variety_id,
             harvest_year: new_seed.harvest_year,
             quantity: new_seed.quantity,
-            tags: new_seed.tags.into_iter().map(|tag| Some(tag)).collect(),
+            tags: new_seed.tags.into_iter().map(Some).collect(),
             use_by: new_seed.use_by,
             origin: new_seed.origin,
             taste: new_seed.taste,

@@ -50,7 +50,7 @@ pub struct NewSeed {
 impl Seed {
     pub fn find_all(conn: &mut Connection) -> QueryResult<Vec<SeedDTO>> {
         let query_result = seeds::table.select(all_columns).load::<Seed>(conn);
-        return query_result.map(|v| v.into_iter().map(|v| v.into()).collect());
+        query_result.map(|v| v.into_iter().map(|v| v.into()).collect())
     }
 
     pub fn create(new_seed: NewSeedDTO, conn: &mut Connection) -> QueryResult<SeedDTO> {
@@ -58,7 +58,7 @@ impl Seed {
         let query_result = diesel::insert_into(seeds::table)
             .values(&new_seed)
             .get_result(conn);
-        return query_result.map(|v: Seed| v.into());
+        query_result.map(|v: Seed| v.into())
     }
 
     pub fn delete_by_id(id: i32, conn: &mut Connection) -> QueryResult<usize> {
