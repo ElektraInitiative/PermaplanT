@@ -1,0 +1,4 @@
+-- Your SQL goes here
+CREATE TYPE LICENSE AS ENUM ('CC BY-NC-SA 3.0', 'CC BY-SA 3.0');
+ALTER TABLE plant_detail
+ALTER COLUMN license TYPE LICENSE USING license::LICENSE;

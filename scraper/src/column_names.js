@@ -46,6 +46,6 @@ export default [
     { name: 'plant_references', cast: 'text[]' },
     { name: 'is_tree' },
     { name: 'nutrition_demand', cast: 'nutrition_demand' },
-    { name: 'license' },
+    { name: 'license', cast: 'license' },
     { name: 'article_last_modified_at' },
 ];

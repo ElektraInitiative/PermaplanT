@@ -166,7 +166,8 @@ function parseSinglePage(fileName) {
     }
 
     try {
-        const footerInfo = root.querySelector('#mw-footer-info');
+        const footerInfo =
+            root.querySelector('#mw-footer-info') || root.querySelector('#footer-info');
         const listElements = footerInfo.querySelectorAll('li');
         listElements.forEach((listElement) => {
             const text = listElement.innerText;
@@ -184,6 +185,11 @@ function parseSinglePage(fileName) {
             }
 
             if (text.includes('Creative Commons Attribution-NonCommercial-ShareAlike')) {
+                details['License'] = 'CC BY-NC-SA 3.0';
+            } else if (
+                text.includes('Creative Commons Attribution--ShareAlike') ||
+                text.includes('Creative Commons Attribution-ShareAlike')
+            ) {
                 details['License'] = 'CC BY-SA 3.0';
             }
         });
