@@ -76,8 +76,8 @@ function processData(details) {
         }
 
         if (
-            details['Herbaceous or Woody'] === 'Herbaceous' &&
-            details['Life Cycle'] === 'Perennial'
+            details['Herbaceous or Woody'] === 'herbaceous' &&
+            details['Life Cycle'] === 'perennial'
         ) {
             details['Is Tree'] = true;
         }
