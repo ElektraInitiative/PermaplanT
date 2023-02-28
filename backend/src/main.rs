@@ -1,6 +1,5 @@
 #![recursion_limit = "256"]
-#![deny(clippy::unwrap_used)]
-#![deny(clippy::expect_used)]
+#![deny(clippy::unwrap_used, clippy::expect_used)]
 
 use dotenvy::dotenv;
 
@@ -16,7 +15,7 @@ pub mod services;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
-    
+
     let config = match config::app::Config::from_env() {
         Ok(config) => config,
         Err(e) => panic!("Error reading configuration: {}", e),
