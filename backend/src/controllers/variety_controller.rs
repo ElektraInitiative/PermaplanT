@@ -1,5 +1,5 @@
 use crate::{config::db::Pool, constants, models::response::ResponseBody, services};
-use actix_web::{web::Data, HttpResponse, Result, get};
+use actix_web::{get, web::Data, HttpResponse, Result};
 
 #[get("")]
 pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {

@@ -1,6 +1,7 @@
 use actix_web::{
+    delete, get, post,
     web::{Data, Json, Path},
-    HttpResponse, Result, get, post, delete,
+    HttpResponse, Result,
 };
 
 use crate::{

@@ -18,7 +18,7 @@ async fn main() -> std::io::Result<()> {
 
     let config = match config::app::Config::from_env() {
         Ok(config) => config,
-        Err(e) => panic!("Error reading configuration: {}", e),
+        Err(e) => panic!("Error reading configuration: {e}"),
     };
 
     server::start(config).await

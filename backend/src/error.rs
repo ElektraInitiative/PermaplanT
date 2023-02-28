@@ -12,8 +12,8 @@ pub struct ServiceError {
 }
 
 impl ServiceError {
-    pub fn new(status_code: StatusCode, reason: String) -> ServiceError {
-        ServiceError {
+    pub const fn new(status_code: StatusCode, reason: String) -> Self {
+        Self {
             status_code,
             reason,
         }
