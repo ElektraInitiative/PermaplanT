@@ -63,11 +63,12 @@ async function fetchGermanName(binomialName) {
         const data2 = response2.data;
         const entities = data2.entities;
         const entity = entities[id];
-        const dewiki = entity['sitelinks']['dewiki'];
+        const dewiki = await entity['sitelinks']['dewiki'];
         if (dewiki) {
             return dewiki.title;
         }
     } catch (error) {}
+    return null;
 }
 
 function processData(details) {
@@ -244,26 +245,25 @@ async function parseAllPages() {
     const details = [];
     const errorsArray = [];
 
-    await Promise.all(
-        files
-            .filter(
-                (fileName) =>
-                    fileName !== '.DS_Store' &&
-                    fileName !== 'A-Z_of_all_plants' &&
-                    fileName !== 'A-Z_of_common_names',
-            )
-            .map(async (fileName) => {
-                try {
-                    const fileDetails = parseSinglePage(fileName);
-                    const germanCommonName = await fetchGermanName(fileDetails['Binomial name']);
-                    fileDetails['Common Name DE'] = germanCommonName;
-                    details.push(fileDetails);
-                } catch (errors) {
-                    errorsArray.push(errors);
-                }
-            }),
+    const plantFiles = files.filter(
+        (fileName) =>
+            fileName !== '.DS_Store' &&
+            fileName !== 'A-Z_of_all_plants' &&
+            fileName !== 'A-Z_of_common_names',
     );
 
+    await Promise.all(
+        plantFiles.map(async (fileName) => {
+            try {
+                const fileDetails = parseSinglePage(fileName);
+                const germanCommonName = await fetchGermanName(fileDetails['Binomial name']);
+                fileDetails['Common Name DE'] = germanCommonName;
+                details.push(fileDetails);
+            } catch (errors) {
+                errorsArray.push(errors);
+            }
+        }),
+    );
     const distinctGenusDetails = createDistinctGenusDetails(details);
     const distinctFamilyDetails = createDistinctFamilyDetails(details);
 
