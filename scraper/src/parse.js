@@ -47,6 +47,29 @@ function createDistinctGenusDetails(details) {
     return distinctGenusDetails;
 }
 
+async function fetchGermanName(binomialName) {
+    try {
+        const url = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${binomialName}&language=en&format=json`;
+        const response = await axios.get(url);
+        const data = response.data;
+        const results = data.search;
+        if (results.length === 0) {
+            return null;
+        }
+        const result = results[0];
+        const id = result.id;
+        const url2 = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${id}&languages=de&format=json`;
+        const response2 = await axios.get(url2);
+        const data2 = response2.data;
+        const entities = data2.entities;
+        const entity = entities[id];
+        const dewiki = entity['sitelinks']['dewiki'];
+        if (dewiki) {
+            return dewiki.title;
+        }
+    } catch (error) {}
+}
+
 function processData(details) {
     try {
         const mature_size = details['Mature Size']
@@ -108,7 +131,6 @@ function parseSinglePage(fileName) {
         'Mature Size Height': null,
         'Mature Size Width': null,
         'Nutrition Demand': null,
-        License: null,
         'Article Last Modified At': null,
         'Is Variety': null,
     };
@@ -183,17 +205,9 @@ function parseSinglePage(fileName) {
                 date.setMinutes(minutes);
                 details['Article Last Modified At'] = date.toISOString();
             }
-
-            if (text.includes('Creative Commons Attribution-NonCommercial-ShareAlike')) {
-                details['License'] = 'CC BY-NC-SA 3.0';
-            } else if (
-                text.includes('Creative Commons Attribution--ShareAlike') ||
-                text.includes('Creative Commons Attribution-ShareAlike')
-            ) {
-                details['License'] = 'CC BY-SA 3.0';
-            }
         });
     } catch (error) {
+        // The following error can occur if there is no footer info on the page
         // errors['Footer Info'] = 'Not Found';
     }
 
@@ -222,31 +236,6 @@ function parseSinglePage(fileName) {
     processData(details);
 
     return details;
-}
-
-async function fetchGermanName(binomialName) {
-    try {
-        const url = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${binomialName}&language=en&format=json`;
-        const response = await axios.get(url);
-        const data = response.data;
-        const results = data.search;
-        if (results.length === 0) {
-            return null;
-        }
-        const result = results[0];
-        const id = result.id;
-        const url2 = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${id}&languages=de&format=json`;
-        const response2 = await axios.get(url2);
-        const data2 = response2.data;
-        const entities = data2.entities;
-        const entity = entities[id];
-        const dewiki = entity['sitelinks']['dewiki'];
-        if (dewiki) {
-            return dewiki.title;
-        }
-    } catch (error) {
-        // console.log(error);
-    }
 }
 
 async function parseAllPages() {
