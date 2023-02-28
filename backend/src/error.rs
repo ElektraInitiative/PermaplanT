@@ -27,3 +27,9 @@ impl From<diesel::r2d2::PoolError> for ServiceError {
         Self::new(StatusCode::INTERNAL_SERVER_ERROR, value.to_string())
     }
 }
+
+impl From<diesel::result::Error> for ServiceError {
+    fn from(value: diesel::result::Error) -> Self {
+        Self::new(StatusCode::INTERNAL_SERVER_ERROR, value.to_string())
+    }    
+}
