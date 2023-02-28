@@ -1,6 +1,6 @@
 use actix_web::{
     web::{Data, Json, Path},
-    HttpResponse, Result,
+    HttpResponse, Result, get, post, delete,
 };
 
 use crate::{
@@ -10,16 +10,19 @@ use crate::{
     services,
 };
 
+#[get("")]
 pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
     let response = services::seed_service::find_all(&pool)?;
     Ok(HttpResponse::Ok().json(ResponseBody::new(constants::MESSAGE_OK, response)))
 }
 
+#[post("")]
 pub async fn create(new_seed_json: Json<NewSeedDTO>, pool: Data<Pool>) -> Result<HttpResponse> {
     let response = services::seed_service::create(new_seed_json.0, &pool)?;
     Ok(HttpResponse::Created().json(ResponseBody::new(constants::MESSAGE_OK, response)))
 }
 
+#[delete("/{id}")]
 pub async fn delete_by_id(path: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
     services::seed_service::delete_by_id(*path, &pool)?;
     Ok(HttpResponse::Ok().json(ResponseBody::new(constants::MESSAGE_OK, constants::EMPTY)))
