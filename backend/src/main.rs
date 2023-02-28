@@ -1,3 +1,7 @@
+#![recursion_limit = "256"]
+#![deny(clippy::unwrap_used)]
+#![deny(clippy::expect_used)]
+
 use dotenvy::dotenv;
 
 pub mod config;

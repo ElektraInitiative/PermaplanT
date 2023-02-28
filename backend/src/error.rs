@@ -21,3 +21,9 @@ impl ServiceError {
         HttpResponse::build(self.http_status).json(&self.body)
     }
 }
+
+impl From<diesel::r2d2::PoolError> for ServiceError {
+    fn from(value: diesel::r2d2::PoolError) -> Self {
+        Self::new(StatusCode::INTERNAL_SERVER_ERROR, value.to_string())
+    }
+}

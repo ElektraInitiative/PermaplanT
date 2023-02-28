@@ -12,7 +12,7 @@ typeshare = "1.0.0"
 
 [dependencies.diesel]
 version = "2.0.2"
-features = ["postgres", "r2d2", "chrono"]
+features = ["postgres", "r2d2", "chrono", "64-column-tables"]
 
 [dependencies.diesel-derive-enum]
 version = "2.0.0-rc.0"

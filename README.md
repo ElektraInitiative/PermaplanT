@@ -70,7 +70,7 @@ Later features, i.e., out of scope for first version:
 - weather data (warnings on frost etc.)
 - hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
-- 3D modes (forest garden)
+- 3D modes (forest garden), contour lines etc.
 - differences of versions of the same garden
 - timelaps of historic garden development, simulate growth
 
