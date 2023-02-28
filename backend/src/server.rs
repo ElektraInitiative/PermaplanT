@@ -11,7 +11,7 @@ pub async fn start(app_config: Config) -> std::io::Result<()> {
     dotenv().ok();
 
     HttpServer::new(move || {
-        let pool = db::config(&app_config.database_url);
+        let pool = db::init_pool(&app_config.database_url);
         let data = Data::new(pool);
 
         App::new()

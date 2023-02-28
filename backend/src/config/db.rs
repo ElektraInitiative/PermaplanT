@@ -6,7 +6,7 @@ use diesel::{
 pub type Connection = PgConnection;
 pub type Pool = r2d2::Pool<ConnectionManager<Connection>>;
 
-pub fn config(url: &str) -> Pool {
+pub fn init_pool(url: &str) -> Pool {
     let manager = ConnectionManager::<Connection>::new(url);
 
     match r2d2::Pool::builder().build(manager) {
