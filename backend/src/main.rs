@@ -16,11 +16,11 @@ pub mod services;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
-    match config::app::Config::from_env() {
-        Ok(config) => server::start(config).await,
-        Err(e) => {
-            eprintln!("Error reading configuration: {}", e);
-            std::process::exit(1);
-        }
-    }
+    
+    let config = match config::app::Config::from_env() {
+        Ok(config) => config,
+        Err(e) => panic!("Error reading configuration: {}", e),
+    };
+
+    server::start(config).await
 }
