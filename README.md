@@ -79,6 +79,6 @@ Later features, i.e., out of scope for first version:
 
 ## Non-functional Goals
 
-- easy to use
-- aesthetic UI
-- collaborative use
+1. easy to use (aesthetic UI, collaborative use)
+2. uptime (robustness, no restarts)
+3. performance (serve many concurrent users)
