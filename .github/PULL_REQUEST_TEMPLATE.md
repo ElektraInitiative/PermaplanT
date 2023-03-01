@@ -15,16 +15,14 @@ These points need to be fulfilled for every PR.
 - [ ] The PR is rebased with current master.
 
 <!--
-If you have any troubles fulfilling these criteria, please write
-about the trouble as comment in the PR. We will help you,
-but we cannot accept PRs that do not fulfill the basics.
+If you have any troubles fulfilling these criteria, please write about the trouble as comment in the PR.
+We will help you, but we cannot accept PRs that do not fulfill the basics.
 -->
 
 ## Checklist
 
 <!--
-For docu fixes, spell checking, and similar none of these points below
-need to be checked.
+For docu fixes, spell checking, and similar none of these points below need to be checked.
 -->
 
 - [ ] I added unit tests for my code
