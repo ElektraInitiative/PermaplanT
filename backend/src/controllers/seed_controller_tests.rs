@@ -19,7 +19,7 @@ mod tests {
         dotenv().ok();
 
         let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::config(&app_config.database_url);
+        let pool = db::init_pool(&app_config.database_url);
         let pool = Data::new(pool.clone());
 
         let mut app = test::init_service(
@@ -54,7 +54,7 @@ mod tests {
         dotenv().ok();
 
         let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::config(&app_config.database_url);
+        let pool = db::init_pool(&app_config.database_url);
         let pool = Data::new(pool.clone());
 
         let mut app = test::init_service(
@@ -89,7 +89,7 @@ mod tests {
         dotenv().ok();
 
         let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::config(&app_config.database_url);
+        let pool = db::init_pool(&app_config.database_url);
         let pool = Data::new(pool.clone());
 
         let mut app = test::init_service(
@@ -125,7 +125,7 @@ mod tests {
         dotenv().ok();
 
         let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::config(&app_config.database_url);
+        let pool = db::init_pool(&app_config.database_url);
         let pool = Data::new(pool.clone());
 
         let mut app = test::init_service(

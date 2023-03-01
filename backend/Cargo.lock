@@ -261,6 +261,7 @@ dependencies = [
  "actix-rt",
  "actix-web",
  "chrono",
+ "derive_more",
  "diesel",
  "diesel-derive-enum",
  "dotenvy",

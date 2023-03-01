@@ -9,9 +9,9 @@ pub struct ResponseBody<T> {
 }
 
 impl<T> ResponseBody<T> {
-    pub fn new(message: &str, data: T) -> ResponseBody<T> {
-        ResponseBody {
-            message: message.to_string(),
+    pub fn new(message: &str, data: T) -> Self {
+        Self {
+            message: message.to_owned(),
             data,
         }
     }
