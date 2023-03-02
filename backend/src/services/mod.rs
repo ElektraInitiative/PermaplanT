@@ -1,2 +1,2 @@
 pub mod seed_service;
-pub mod variety_service;
+pub mod plants_service;

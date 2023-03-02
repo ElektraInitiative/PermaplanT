@@ -12,7 +12,7 @@ use crate::models::{
 pub struct SeedDTO {
     pub id: i32,
     pub name: String,
-    pub variety_id: i32,
+    pub plant_id: i32,
     pub harvest_year: i16,
     pub quantity: Quantity,
     pub tags: Option<Vec<Option<Tag>>>,
@@ -31,7 +31,7 @@ impl From<Seed> for SeedDTO {
         Self {
             id: seed.id,
             name: seed.name,
-            variety_id: seed.variety_id,
+            plant_id: seed.plant_id,
             harvest_year: seed.harvest_year,
             quantity: seed.quantity,
             tags: seed.tags,
