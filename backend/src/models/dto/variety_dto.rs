@@ -13,7 +13,7 @@ pub struct VarietyDTO {
 
 impl From<Variety> for VarietyDTO {
     fn from(variety: Variety) -> Self {
-        VarietyDTO {
+        Self {
             id: variety.id,
             tags: variety.tags,
             species: variety.species,

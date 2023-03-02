@@ -28,7 +28,7 @@ pub struct SeedDTO {
 
 impl From<Seed> for SeedDTO {
     fn from(seed: Seed) -> Self {
-        SeedDTO {
+        Self {
             id: seed.id,
             name: seed.name,
             variety_id: seed.variety_id,

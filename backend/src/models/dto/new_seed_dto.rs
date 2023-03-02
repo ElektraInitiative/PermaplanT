@@ -26,7 +26,7 @@ pub struct NewSeedDTO {
 
 impl From<NewSeedDTO> for NewSeed {
     fn from(new_seed: NewSeedDTO) -> Self {
-        NewSeed {
+        Self {
             name: new_seed.name,
             variety_id: new_seed.variety_id,
             harvest_year: new_seed.harvest_year,
