@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
 use crate::models::{
-    r#enum::{quality::Quality, quantity::Quantity, tag::Tag},
+    r#enum::{quality::Quality, quantity::Quantity},
     seed::Seed,
 };
 
@@ -15,7 +15,6 @@ pub struct SeedDTO {
     pub variety_id: i32,
     pub harvest_year: i16,
     pub quantity: Quantity,
-    pub tags: Option<Vec<Option<Tag>>>,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
     pub taste: Option<String>,
@@ -34,7 +33,6 @@ impl From<Seed> for SeedDTO {
             variety_id: seed.variety_id,
             harvest_year: seed.harvest_year,
             quantity: seed.quantity,
-            tags: seed.tags,
             use_by: seed.use_by,
             origin: seed.origin,
             taste: seed.taste,

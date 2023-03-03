@@ -7,14 +7,13 @@ use diesel::prelude::*;
 
 use super::{
     dto::{new_seed_dto::NewSeedDTO, seed_dto::SeedDTO},
-    r#enum::{quality::Quality, quantity::Quantity, tag::Tag},
+    r#enum::{quality::Quality, quantity::Quantity},
 };
 
 #[derive(Identifiable, Queryable)]
 #[diesel(table_name = seeds)]
 pub struct Seed {
     pub id: i32,
-    pub tags: Option<Vec<Option<Tag>>>,
     pub name: String,
     pub variety_id: i32,
     pub harvest_year: i16,
@@ -32,7 +31,6 @@ pub struct Seed {
 #[derive(Insertable)]
 #[diesel(table_name = seeds)]
 pub struct NewSeed {
-    pub tags: Vec<Option<Tag>>,
     pub name: String,
     pub variety_id: i32,
     pub harvest_year: i16,
