@@ -1,4 +1,4 @@
-# Title: Garden Planter
+# Garden Planter
 
 ## Summary
 
@@ -41,7 +41,7 @@ Overall, Smart Gardener does not offer as many functionalities as PermaplanT and
 
 ---
 
-# Title: Veggie Planner
+# Veggie Planner
 
 ## Summary
 
@@ -56,7 +56,7 @@ Veggie Planner offers more flexibility than other gardening apps, but it is agai
 
 ---
 
-# Title: Fryd
+# Fryd
 
 ## Summary
 
@@ -91,3 +91,29 @@ In PermaplanT:
 - concept for menu should be simpler
 - doesn't have rows of plants (but only areas if chosen by user)
 - there is no "magic stick"
+
+---
+
+# powerplant
+
+## Summary
+
+[powerplant](https://wiki.ecohackerfarm.org/powerplant:software_specification) is a FLOSS MIT-licensed web app, which is inactive since a few years.
+
+## Similarities
+
+- technology: react
+- goals: yield
+
+## Differences
+
+- focus on offline functionality and less on collaboration
+- focus on beds
+- quite different in technology: uses JavaScript instead of TypeScript/Rust
+
+## Interesting Ideas
+
+- provides an easy to follow schedule for planting, transplanting, and harvesting
+- gives suggestions which plants should be grown in which environment - location, climate, …
+- see [here](https://wiki.ecohackerfarm.org/companion_planting:software) for several other even longer inactive projects
+
