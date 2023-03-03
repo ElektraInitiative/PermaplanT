@@ -1,4 +1,4 @@
-import { NewSeedDTO, Quality, Quantity, Tag } from '../../../bindings/definitions';
+import { NewSeedDTO, Quality, Quantity } from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -13,7 +13,6 @@ interface CreateSeedFormProps {
 }
 
 const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
-  const tags: SelectOption[] = enumToSelectOptionArr(Tag);
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
@@ -60,19 +59,6 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             required={true}
             id="harvest_year"
             register={register}
-          />
-          <SelectMenu
-            id="tags"
-            control={control}
-            isMulti={true}
-            options={tags}
-            labelText="Kategorie"
-            required={true}
-            handleOptionsChange={(option) => {
-              const temp = option as SelectOption[];
-              const mapped = temp.map((element) => element.value as Tag);
-              setValue('tags', mapped);
-            }}
           />
           <SimpleFormInput
             labelText="Art"
