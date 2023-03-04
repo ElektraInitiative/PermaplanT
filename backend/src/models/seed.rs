@@ -48,11 +48,19 @@ pub struct NewSeed {
 }
 
 impl Seed {
+    /// Fetch all seeds from the database.
+    ///
+    /// # Errors
+    /// Unknown, diesel doesn't say why it might error.
     pub fn find_all(conn: &mut Connection) -> QueryResult<Vec<SeedDTO>> {
         let query_result = seeds::table.select(all_columns).load::<Self>(conn);
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
 
+    /// Create a new seed in the database.
+    ///
+    /// # Errors
+    /// Unknown, diesel doesn't say why it might error.
     pub fn create(new_seed: NewSeedDTO, conn: &mut Connection) -> QueryResult<SeedDTO> {
         let new_seed = NewSeed::from(new_seed);
         let query_result = diesel::insert_into(seeds::table)
@@ -61,6 +69,10 @@ impl Seed {
         query_result.map(Into::into)
     }
 
+    /// Delete the seed from the database.
+    ///
+    /// # Errors
+    /// Unknown, diesel doesn't say why it might error.
     pub fn delete_by_id(id: i32, conn: &mut Connection) -> QueryResult<usize> {
         diesel::delete(seeds::table.find(id)).execute(conn)
     }

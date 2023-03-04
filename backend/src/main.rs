@@ -49,7 +49,6 @@
 // Allow for now. Remove one after another as part of #60.
 #![allow(
     clippy::missing_docs_in_private_items,
-    clippy::missing_errors_doc,
     clippy::module_name_repetitions
 )]
 
