@@ -47,15 +47,11 @@
 // Cannot fix some errors because dependecies import them.
 #![allow(clippy::multiple_crate_versions)]
 // Allow for now. Remove one after another as part of #60.
-#![allow(
-    clippy::missing_docs_in_private_items,
-    clippy::module_name_repetitions
-)]
+#![allow(clippy::missing_docs_in_private_items, clippy::module_name_repetitions)]
 
 use actix_cors::Cors;
 use actix_web::{http, web::Data, App, HttpServer};
 use config::{db, routes};
-use dotenvy::dotenv;
 
 pub mod config;
 pub mod constants;
@@ -67,8 +63,6 @@ pub mod services;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    dotenv().ok();
-
     let config = match config::app::Config::from_env() {
         Ok(config) => config,
         Err(e) => panic!("Error reading configuration: {e}"),

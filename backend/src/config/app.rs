@@ -1,5 +1,7 @@
 use std::env;
 
+use dotenvy::dotenv;
+
 pub struct Config {
     pub bind_address: (String, u16),
     pub database_url: String,
@@ -9,9 +11,12 @@ impl Config {
     /// Load the configuration using environment variables.
     ///
     /// # Errors
+    /// * If the .env file is missing.
     /// * If an environment variable is missing.
     /// * If a variable could not be parsed correctly.
     pub fn from_env() -> Result<Self, Box<dyn std::error::Error>> {
+        dotenv().map_err(|_| ".env file not found")?;
+
         let host = env::var("BIND_ADDRESS_HOST")
             .map_err(|_| "Failed to get BIND_ADDRESS_HOST from environment.")?;
         let port = env::var("BIND_ADDRESS_PORT")
