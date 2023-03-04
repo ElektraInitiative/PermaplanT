@@ -13,6 +13,7 @@
     clippy::format_push_string,
     clippy::get_unwrap,
     clippy::if_then_some_else_none,
+    clippy::indexing_slicing,
     clippy::integer_division,
     clippy::large_include_file,
     clippy::missing_docs_in_private_items,
