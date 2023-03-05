@@ -1,7 +1,10 @@
+//! [`VarietyDTO`] and its implementation.
+
 use crate::models::variety::Variety;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
+#[allow(clippy::missing_docs_in_private_items)] // TODO: document
 #[typeshare]
 #[derive(Serialize, Deserialize)]
 pub struct VarietyDTO {

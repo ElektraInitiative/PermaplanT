@@ -1,3 +1,5 @@
+//! Service layer for plants.
+
 use actix_web::web::Data;
 
 use crate::{
@@ -7,7 +9,7 @@ use crate::{
 };
 
 /// Fetch all plants from the database.
-/// 
+///
 /// # Errors
 /// If the connection to the database could not be established.
 pub fn find_all(pool: &Data<Pool>) -> Result<Vec<VarietyDTO>, ServiceError> {

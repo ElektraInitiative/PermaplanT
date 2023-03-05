@@ -1,3 +1,5 @@
+//! Tests for [`super::seed_controller`].
+
 #[cfg(test)]
 mod tests {
     use std::vec;

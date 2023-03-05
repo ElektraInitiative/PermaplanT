@@ -1,3 +1,5 @@
+//! [`NewSeedDTO`] and its implementation.
+
 use crate::models::r#enum::quality::Quality;
 use crate::models::r#enum::quantity::Quantity;
 use crate::models::r#enum::tag::Tag;
@@ -6,6 +8,7 @@ use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
+#[allow(clippy::missing_docs_in_private_items)] // TODO: document
 #[typeshare]
 #[derive(Serialize, Deserialize)]
 pub struct NewSeedDTO {

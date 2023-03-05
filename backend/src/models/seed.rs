@@ -1,15 +1,18 @@
-use crate::{
-    config::db::Connection,
-    schema::seeds::{self, all_columns},
-};
+//! [`Seed`] entity and its implementation.
+
+use crate::schema::seeds::{self, all_columns};
 use chrono::NaiveDate;
-use diesel::prelude::*;
+use diesel::{
+    Identifiable, Insertable, PgConnection, QueryDsl, QueryResult, Queryable, RunQueryDsl,
+};
 
 use super::{
     dto::{new_seed_dto::NewSeedDTO, seed_dto::SeedDTO},
     r#enum::{quality::Quality, quantity::Quantity, tag::Tag},
 };
 
+/// The `Seed` entity.
+#[allow(clippy::missing_docs_in_private_items)] // TODO: document
 #[derive(Identifiable, Queryable)]
 #[diesel(table_name = seeds)]
 pub struct Seed {
@@ -29,6 +32,7 @@ pub struct Seed {
     pub notes: Option<String>,
 }
 
+#[allow(clippy::missing_docs_in_private_items)] // TODO: document
 #[derive(Insertable)]
 #[diesel(table_name = seeds)]
 pub struct NewSeed {
@@ -52,7 +56,7 @@ impl Seed {
     ///
     /// # Errors
     /// Unknown, diesel doesn't say why it might error.
-    pub fn find_all(conn: &mut Connection) -> QueryResult<Vec<SeedDTO>> {
+    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<SeedDTO>> {
         let query_result = seeds::table.select(all_columns).load::<Self>(conn);
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
@@ -61,7 +65,7 @@ impl Seed {
     ///
     /// # Errors
     /// Unknown, diesel doesn't say why it might error.
-    pub fn create(new_seed: NewSeedDTO, conn: &mut Connection) -> QueryResult<SeedDTO> {
+    pub fn create(new_seed: NewSeedDTO, conn: &mut PgConnection) -> QueryResult<SeedDTO> {
         let new_seed = NewSeed::from(new_seed);
         let query_result = diesel::insert_into(seeds::table)
             .values(&new_seed)
@@ -73,7 +77,7 @@ impl Seed {
     ///
     /// # Errors
     /// Unknown, diesel doesn't say why it might error.
-    pub fn delete_by_id(id: i32, conn: &mut Connection) -> QueryResult<usize> {
+    pub fn delete_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<usize> {
         diesel::delete(seeds::table.find(id)).execute(conn)
     }
 }

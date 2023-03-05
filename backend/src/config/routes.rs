@@ -1,7 +1,10 @@
+//! Routes in the backend.
+
 use actix_web::web;
 
 use crate::controllers::{seed_controller, variety_controller};
 
+/// Defines all routes of the backend and which functions they map to.
 pub fn config(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/api")

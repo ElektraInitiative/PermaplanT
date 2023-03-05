@@ -1,3 +1,5 @@
+//! The backend of `PermaplanT`.
+
 #![recursion_limit = "256"]
 // Enable all lints apart from clippy::restriction by default.
 // See https://rust-lang.github.io/rust-clippy/master/index.html#blanket_clippy_restriction_lints for as to why restriction is not enabled.
@@ -47,7 +49,7 @@
 // Cannot fix some errors because dependecies import them.
 #![allow(clippy::multiple_crate_versions)]
 // Allow for now. Remove one after another as part of #60.
-#![allow(clippy::missing_docs_in_private_items, clippy::module_name_repetitions)]
+#![allow(clippy::module_name_repetitions)]
 
 use actix_cors::Cors;
 use actix_web::{http, web::Data, App, HttpServer};
@@ -58,9 +60,12 @@ pub mod constants;
 pub mod controllers;
 pub mod error;
 pub mod models;
+// Auto generated, therefore impossible add documentation.
+#[allow(clippy::missing_docs_in_private_items)]
 pub mod schema;
 pub mod services;
 
+/// Main function.
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let config = match config::app::Config::from_env() {
@@ -82,6 +87,7 @@ async fn main() -> std::io::Result<()> {
     .await
 }
 
+/// Create a cors configuration for the server.
 fn cors_configuration() -> Cors {
     Cors::default() // allowed_origin return access-control-allow-origin: * by default
         .allowed_origin("http://127.0.0.1:5173")

@@ -1,3 +1,5 @@
+//! [`SeedDTO`] and its implementation.
+
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
@@ -7,6 +9,7 @@ use crate::models::{
     seed::Seed,
 };
 
+#[allow(clippy::missing_docs_in_private_items)] // TODO: document
 #[typeshare]
 #[derive(Serialize, Deserialize)]
 pub struct SeedDTO {
