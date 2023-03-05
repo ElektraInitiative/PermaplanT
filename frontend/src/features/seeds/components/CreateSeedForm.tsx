@@ -16,22 +16,6 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
-  const findAllVarieties = useCreateSeedStore((state) => state.findAllVarieties);
-  const varieties = useCreateSeedStore((state) =>
-    state.varieties.map((variety) => {
-      return { value: variety.id, label: variety.species };
-    }),
-  );
-
-  useEffect(() => {
-    // This is a small workaround so it's possible to use async/await in useEffect
-    const _findAllVarieties = async () => {
-      await findAllVarieties();
-    };
-
-    _findAllVarieties();
-  }, []);
-
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDTO>();
   const onFormSubmit: SubmitHandler<NewSeedDTO> = async (data) => {
     if (data.origin === '') delete data.origin;
@@ -67,15 +51,12 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             id="name"
             register={register}
           />
-          <SelectMenu
-            id="variety_id"
-            control={control}
-            options={varieties}
+          <SimpleFormInput
             labelText="Sorte"
+            placeHolder="Cherry"
             required={true}
-            handleOptionsChange={(option) => {
-              setValue('variety_id', Number(option.value));
-            }}
+            id="variety"
+            register={register}
           />
           <SelectMenu
             id="quantity"
