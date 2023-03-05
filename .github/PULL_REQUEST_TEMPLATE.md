@@ -22,7 +22,7 @@ We will help you, but we cannot accept PRs that do not fulfill the basics.
 ## Checklist
 
 <!--
-For docu fixes, spell checking, and similar none of these points below need to be checked.
+For documentation fixes, spell checking, and similar none of these points below need to be checked.
 -->
 
 - [ ] I added unit tests for my code
@@ -34,3 +34,13 @@ For docu fixes, spell checking, and similar none of these points below need to b
 - [ ] I mentioned [every code](/.reuse/dep5) not directly written by me in [reuse syntax](https://reuse.software/)
 
 
+## Review
+
+<!--
+Reviewers should check the following.
+-->
+
+- [ ] Documentation is conforming to [our Documentation Guidelines](/doc/documentation.md)
+- [ ] Examples are well chosen and understandable
+- [ ] Code is conforming to our Coding Guidelines
+- [ ] Code is consistent to [our Design Decisions](/doc/decisions)
