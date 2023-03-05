@@ -15,7 +15,6 @@ use super::{
 pub struct Seed {
     pub id: i32,
     pub name: String,
-    pub variety_id: i32,
     pub harvest_year: i16,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
@@ -26,13 +25,13 @@ pub struct Seed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
+    pub variety: String
 }
 
 #[derive(Insertable)]
 #[diesel(table_name = seeds)]
 pub struct NewSeed {
     pub name: String,
-    pub variety_id: i32,
     pub harvest_year: i16,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
@@ -43,6 +42,7 @@ pub struct NewSeed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
+    pub variety: String
 }
 
 impl Seed {

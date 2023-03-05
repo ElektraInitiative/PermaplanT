@@ -9,7 +9,7 @@ use typeshare::typeshare;
 #[derive(Serialize, Deserialize)]
 pub struct NewSeedDTO {
     pub name: String,
-    pub variety_id: i32,
+    pub variety: String,
     pub harvest_year: i16,
     pub quantity: Quantity,
     pub use_by: Option<NaiveDate>,
@@ -26,7 +26,7 @@ impl From<NewSeedDTO> for NewSeed {
     fn from(new_seed: NewSeedDTO) -> Self {
         Self {
             name: new_seed.name,
-            variety_id: new_seed.variety_id,
+            variety: new_seed.variety,
             harvest_year: new_seed.harvest_year,
             quantity: new_seed.quantity,
             use_by: new_seed.use_by,

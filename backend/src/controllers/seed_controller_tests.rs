@@ -124,7 +124,7 @@ mod tests {
 
         let new_seed = NewSeedDTO {
             name: "tomato test".to_string(),
-            variety_id: 1,
+            variety: "testvariety".to_string(),
             harvest_year: 2022,
             quantity: Quantity::Nothing,
             use_by: None,
