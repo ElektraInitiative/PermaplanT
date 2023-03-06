@@ -9,6 +9,7 @@ pub struct PlantsDTO {
     pub tags: Vec<Option<String>>,
     pub species: String,
     pub plant: Option<String>,
+    pub plant_type: Option<i32>,
 }
 
 impl From<Plants> for PlantsDTO {
@@ -18,6 +19,7 @@ impl From<Plants> for PlantsDTO {
             tags: plants.tags,
             species: plants.species,
             plant: plants.plant,
+            plant_type: plants.plant_type,
         }
     }
 }

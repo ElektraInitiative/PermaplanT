@@ -12,6 +12,7 @@ pub struct Plants {
     pub tags: Vec<Option<String>>,
     pub species: String,
     pub plant: Option<String>,
+    pub plant_type: Option<i32>,
 }
 
 impl Plants {
