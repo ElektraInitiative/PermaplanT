@@ -1,11 +1,10 @@
 import { NewSeedDTO, Quality, Quantity, Tag } from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
-import { SubmitHandler, useForm } from 'react-hook-form';
-
+import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
-import useCreateSeedStore from '../store/CreateSeedStore';
 import { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface CreateSeedFormProps {
   onCancel: () => void;
@@ -17,20 +16,20 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
-  const findAllVarieties = useCreateSeedStore((state) => state.findAllVarieties);
-  const varieties = useCreateSeedStore((state) =>
-    state.varieties.map((variety) => {
-      return { value: variety.id, label: variety.species };
+  const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
+  const plants = useCreateSeedStore((state) =>
+    state.plants.map((plant) => {
+      return { value: plant.id, label: plant.species };
     }),
   );
 
   useEffect(() => {
     // This is a small workaround so it's possible to use async/await in useEffect
-    const _findAllVarieties = async () => {
-      await findAllVarieties();
+    const _findAllPlants = async () => {
+      await findAllPlants();
     };
 
-    _findAllVarieties();
+    _findAllPlants();
   }, []);
 
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDTO>();
@@ -82,13 +81,13 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             register={register}
           />
           <SelectMenu
-            id="variety_id"
+            id="plant_id"
             control={control}
-            options={varieties}
+            options={plants}
             labelText="Sorte"
             required={true}
             handleOptionsChange={(option) => {
-              setValue('variety_id', Number(option.value));
+              setValue('plant_id', Number(option.value));
             }}
           />
           <SelectMenu
