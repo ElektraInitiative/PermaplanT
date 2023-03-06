@@ -15,7 +15,7 @@
   - A user triggers an event (e.g. has finished planning their map)
   - The users are located nearby (requires location settings of both users, nearby is a defined radius).
 - **Main success scenario:**
-  The user gets a notification which informs them about the event (e.g. virtual invitation to the map).
+  Nearby users gets a notification which informs them about the event (e.g. invitation to visit the map virtually).
 - **Alternative scenario:**
   One or both of the users have no location information: The user doesn't receive a notification.
 - **Error scenario:**
