@@ -22,3 +22,5 @@
 - **Postcondition:**
   The user's map includes labels as desired.
 - **Non-functional Constraints:**
+
+offline avialability
