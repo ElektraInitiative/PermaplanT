@@ -8,6 +8,8 @@
   The main planning utility for PermaplanT, which contains _elements_ in several _layers_.
 - Nextcloud map:
   A Nextcloud app which is used as overview where which garden is, see [here](https://apps.nextcloud.com/apps/maps).
+- GeoMap:
+  The geographical map which is found in Nextcloud under the "Maps" tab.
 - version (of a map):
   A version (of a map) is a named snapshot of a map at a certain point in time while working on that map.
   It is possible to switch to a different version of a layer.
