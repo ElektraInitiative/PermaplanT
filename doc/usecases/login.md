@@ -23,7 +23,7 @@
   In this case, the app displays an error message to the user and tells them to try again.
 - **Postcondition:** 
   - The user is authenticated and has access to the PermaplanT app.
-  - The user is authenticated and has access to the Nextcloud app.
+  - The user is authenticated and has access to Nextcloud.
 - **Non-functional Constraints:**
   - The login process must be secure to protect the user's personal information.
   - The app must clearly communicate to the user whether the login was successful or not.
