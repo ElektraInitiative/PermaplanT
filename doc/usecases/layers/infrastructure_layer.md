@@ -31,3 +31,5 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved or deleted infrastructure elements as desired.
 - **Non-functional Constraints:**
+
+offline avialability
