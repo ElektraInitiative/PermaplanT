@@ -12,7 +12,7 @@
 
 - **Precondition:**
   - The user has opened the app and is logged in.
-  - A user triggers an event (e.g. has finished planning their map)
+  - A user announces an event (e.g. a "virtual welcome party" because planning of the map was finished)
   - The users are located nearby (requires location settings of both users, nearby is a defined radius).
 - **Main success scenario:**
   Nearby users gets a notification which informs them about the event (e.g. invitation to visit the map virtually).
