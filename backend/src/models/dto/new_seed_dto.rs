@@ -10,7 +10,7 @@ use typeshare::typeshare;
 #[derive(Serialize, Deserialize)]
 pub struct NewSeedDTO {
     pub name: String,
-    pub variety_id: i32,
+    pub plant_id: i32,
     pub harvest_year: i16,
     pub quantity: Quantity,
     pub tags: Vec<Tag>,
@@ -28,7 +28,7 @@ impl From<NewSeedDTO> for NewSeed {
     fn from(new_seed: NewSeedDTO) -> Self {
         Self {
             name: new_seed.name,
-            variety_id: new_seed.variety_id,
+            plant_id: new_seed.plant_id,
             harvest_year: new_seed.harvest_year,
             quantity: new_seed.quantity,
             tags: new_seed.tags.into_iter().map(Some).collect(),
