@@ -28,4 +28,3 @@
   The user's map includes elements added using hand-drawn or common shapes.
 - **Non-functional Constraints:**
 
-offline avialability
