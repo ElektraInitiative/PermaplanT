@@ -1,8 +1,8 @@
-# Use Case: Nextcloud Map
+# Use Case: GeoMap
 
 ## Summary
 
-- **Scope:** Global Map
+- **Scope:** GeoMap
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can view sites/maps on a GeoMap
@@ -11,8 +11,10 @@
 ## Scenarios
 
 - **Precondition:**
-  - The user has opened and logged into the PermaPlanT Nextcloud instance
-  - The user has navigated to the map
+  - The user has navigated to the map:
+  The user is either logged into the PermaPlanT Nextcloud instance and clicked on the "Maps" tab or
+  the user has navigated to the "static map"
+
 - **Main success scenario:**
   - The user can see sites/maps of other users indicated by markers
   - The user can view a picture of the site/map by clicking on a marker
