@@ -4,16 +4,20 @@
 
 - **Scope:** Map View
 - **Level:** User Goal
-- **Actors:** App User
+- **Actors:** 
+  - App User who owns the map: owner
+  - App User who visits the map: visitor
 - **Brief:** The user can interact with a visitor chat.
 - **Status:** Draft
 
 ## Scenarios
 
 - **Precondition:**
-  The user has opened the app and selected a map.
+  The visitor has opened the app and selected a map.
 - **Main success scenario:**
-  The user is automatically greeted by the chat. The user can interact with the chat.
+  The visitor is automatically greeted by the chat. 
+  The visitor can interact with the owner and other visitors via the chat.
+  The owner can view the chat and interact with all visitors.
 - **Alternative scenario:**
 - **Error scenario:**
 - **Postcondition:**
