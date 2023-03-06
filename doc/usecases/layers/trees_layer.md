@@ -25,5 +25,3 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved or deleted forests, trees and, hedge bushes as desired.
 - **Non-functional Constraints:**
-
-offline avialability
