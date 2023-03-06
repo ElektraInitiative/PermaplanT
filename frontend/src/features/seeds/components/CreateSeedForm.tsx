@@ -54,7 +54,6 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
           <SimpleFormInput
             labelText="Sorte"
             placeHolder="Cherry"
-            required={true}
             id="variety"
             register={register}
           />

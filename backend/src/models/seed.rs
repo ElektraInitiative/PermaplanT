@@ -25,7 +25,7 @@ pub struct Seed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
-    pub variety: String
+    pub variety: Option<String>
 }
 
 #[derive(Insertable)]
@@ -42,7 +42,7 @@ pub struct NewSeed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
-    pub variety: String
+    pub variety: Option<String>
 }
 
 impl Seed {
