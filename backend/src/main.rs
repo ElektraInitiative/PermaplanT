@@ -87,7 +87,7 @@ async fn main() -> std::io::Result<()> {
     .await
 }
 
-/// Create a cors configuration for the server.
+/// Create a CORS configuration for the server.
 fn cors_configuration() -> Cors {
     Cors::default() // allowed_origin return access-control-allow-origin: * by default
         .allowed_origin("http://127.0.0.1:5173")

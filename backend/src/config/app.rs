@@ -6,7 +6,7 @@ use dotenvy::dotenv;
 
 /// Configuration data for the server.
 pub struct Config {
-    /// The address the server should be started on.
+    /// The address and port the server should be started on.
     pub bind_address: (String, u16),
     /// The location of the database as a URL.
     pub database_url: String,

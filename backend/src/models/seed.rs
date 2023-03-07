@@ -55,7 +55,7 @@ impl Seed {
     /// Fetch all seeds from the database.
     ///
     /// # Errors
-    /// Unknown, diesel doesn't say why it might error.
+    /// * Unknown, diesel doesn't say why it might error.
     pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<SeedDTO>> {
         let query_result = seeds::table.select(all_columns).load::<Self>(conn);
         query_result.map(|v| v.into_iter().map(Into::into).collect())
@@ -64,7 +64,7 @@ impl Seed {
     /// Create a new seed in the database.
     ///
     /// # Errors
-    /// Unknown, diesel doesn't say why it might error.
+    /// * Unknown, diesel doesn't say why it might error.
     pub fn create(new_seed: NewSeedDTO, conn: &mut PgConnection) -> QueryResult<SeedDTO> {
         let new_seed = NewSeed::from(new_seed);
         let query_result = diesel::insert_into(seeds::table)
@@ -76,7 +76,7 @@ impl Seed {
     /// Delete the seed from the database.
     ///
     /// # Errors
-    /// Unknown, diesel doesn't say why it might error.
+    /// * Unknown, diesel doesn't say why it might error.
     pub fn delete_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<usize> {
         diesel::delete(seeds::table.find(id)).execute(conn)
     }
