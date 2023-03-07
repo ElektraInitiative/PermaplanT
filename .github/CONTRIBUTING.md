@@ -16,8 +16,8 @@ Please refer to #issues/#PRs/@mention as useful.
 
 Branch names:
 
-- feature/<name>
-- bug_fix/<name>
+- feature/<issue_nr>
+- bug_fix/<issue_nr>
 - documentation/<name>
 - meeting/<date>
 
