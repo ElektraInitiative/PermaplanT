@@ -14,4 +14,11 @@ The first line in commit messages should be short.
 From the third line you can have more elaborate descriptions of the changes.
 Please refer to #issues/#PRs/@mention as useful.
 
+Branch names:
+
+- feature/<name>
+- bug_fix/<name>
+- documentation/<name>
+- meeting/<date>
+
 If requested, and in any case before you start making fundamental changes, create a [decision](/doc/decisions/) before creating a code PR.
