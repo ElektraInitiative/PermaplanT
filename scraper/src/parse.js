@@ -242,7 +242,6 @@ function parseSinglePage(fileName) {
 async function parseAllPages() {
     console.log('Parsing all pages');
     const files = readdirSync(archivePath + '/wiki');
-    const details = [];
     const errorsArray = [];
 
     const plantFiles = files.filter(
@@ -252,23 +251,29 @@ async function parseAllPages() {
             fileName !== 'A-Z_of_common_names',
     );
 
-    await Promise.all(
-        plantFiles.map(async (fileName) => {
+    const details = await Promise.all(
+        plantFiles.map(async (fileName, index) => {
             try {
+                await new Promise((resolve) => setTimeout(resolve, index * 50));
+                console.log('Parsing', fileName);
                 const fileDetails = parseSinglePage(fileName);
                 const germanCommonName = await fetchGermanName(fileDetails['Binomial name']);
                 fileDetails['Common Name DE'] = germanCommonName;
-                details.push(fileDetails);
+                return fileDetails;
             } catch (errors) {
                 errorsArray.push(errors);
+                return null;
             }
         }),
     );
-    const distinctGenusDetails = createDistinctGenusDetails(details);
-    const distinctFamilyDetails = createDistinctFamilyDetails(details);
+    const filteredDetails = details.filter((detail) => detail !== null);
+
+    console.log('Finished parsing all pages');
+    const distinctGenusDetails = createDistinctGenusDetails(filteredDetails);
+    const distinctFamilyDetails = createDistinctFamilyDetails(filteredDetails);
 
     console.log('Writing to CSV');
-    const csv = json2csv(details);
+    const csv = json2csv(filteredDetails);
     writeFileSync('data/detail.csv', csv);
 
     const errorsCsv = json2csv(errorsArray);
@@ -280,7 +285,7 @@ async function parseAllPages() {
     const distinctFamilyCsv = json2csv(distinctFamilyDetails);
     writeFileSync('data/distinctFamily.csv', distinctFamilyCsv);
 
-    console.log('Parsed ' + details.length + ' pages');
+    console.log('Parsed ' + filteredDetails.length + ' pages');
     console.log('Encountered ' + errorsArray.length + ' errors');
 }
 
