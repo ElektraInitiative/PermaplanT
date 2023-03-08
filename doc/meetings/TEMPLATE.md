@@ -1,12 +1,20 @@
-# Meeting 2023-03-03
+# Meeting 2023-XX-XX
 
 _Protocolled by: X_
 
 ## Attendees:
 
 -   X
--   Y
--   Z
+-   X
+-   X
+
+## Buddies:
+
+-   X & X
+
+## Tasks:
+
+- X
 
 ## Agenda:
 
