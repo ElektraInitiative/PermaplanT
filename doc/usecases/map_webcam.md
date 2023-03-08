@@ -13,8 +13,8 @@
 - **Precondition:**
   - The user has opened the app and is logged in and navigated to their map.
 - **Main success scenario:**
-  - The user can place a webcam to their map.
-  - The user can view the live image of a webcam by clicking on it in their map.
+  - The user can choose the photo layer to place a webcam to their map.
+  - When the photo layer is visible the user can view the live image of a webcam by clicking on it in their map.
   - Other users can view the live image of the webcam if it is set to public.
   - The user can remove the webcam from their map.
 - **Alternative scenario:**
