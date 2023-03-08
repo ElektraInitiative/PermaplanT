@@ -2,7 +2,7 @@
 
 ## Summary
 
-- **Scope:** Map View
+- **Scope:** Photo Layer Extension
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, remove and view webcams in their map
@@ -22,3 +22,5 @@
   - The application displays an error message when the webcam is not reachable.
 - **Postcondition:**
 - **Non-functional Constraints:**
+- **Linked Use Cases:**
+  - [Photo Layer](./photo_layer.md)
