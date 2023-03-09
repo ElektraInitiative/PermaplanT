@@ -71,6 +71,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             placeHolder="Cherry"
             id="variety"
             register={register}
+          />
           <SelectMenu
             id="plant_id"
             control={control}
