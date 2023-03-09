@@ -8,6 +8,13 @@ const pgp = pgPromise({});
 
 const db = pgp(process.env.DATABASE_URL);
 
+if (process.argv.length < 3) {
+    console.log('USAGE: npm run insert <generated-file>');
+    process.exit(1);
+}
+
+const generatedFile = process.argv[2];
+
 function sanitizeColumnNames(jsonArray) {
     return jsonArray.map((obj) => {
         const keys = Object.keys(obj);
@@ -32,15 +39,10 @@ function sanitizeColumnNames(jsonArray) {
 function sanitizeValues(jsonArray) {
     return jsonArray.map((obj) => {
         const keys = Object.keys(obj);
-        Object.assign(obj, {
-            is_tree: null,
-            nutrition_demand: null,
-        });
+        Object.assign(obj, {});
         keys.forEach((newKey) => {
             obj[newKey] = obj[newKey].trim();
             if (obj[newKey] === '') {
-                obj[newKey] = null;
-            } else if (obj[newKey] === '?') {
                 obj[newKey] = null;
             }
 
@@ -50,7 +52,8 @@ function sanitizeValues(jsonArray) {
                 (newKey === 'soil_water_retention' && obj[newKey] !== null) ||
                 (newKey === 'fertility' && obj[newKey] !== null) ||
                 (newKey === 'life_cycle' && obj[newKey] !== null) ||
-                (newKey === 'common_name' && obj[newKey] !== null)
+                (newKey === 'common_name' && obj[newKey] !== null) ||
+                (newKey === 'common_name_de' && obj[newKey] !== null)
             ) {
                 obj[newKey] = obj[newKey].split(',');
                 obj[newKey] = obj[newKey].map((item) => {
@@ -70,31 +73,15 @@ function sanitizeValues(jsonArray) {
                 obj[newKey] = obj[newKey].map((item) => {
                     return item.trim();
                 });
-
-                if (obj[newKey].includes('Nutritionally poor soil')) {
-                    obj['nutrition_demand'] = 'light feeder';
-                }
-            }
-
-            if (obj[newKey] === 'None listed.') {
-                obj[newKey] = null;
             }
         });
-
-        if (
-            obj['herbaceous_or_woody'] === 'woody' &&
-            obj['life_cycle'] &&
-            obj['life_cycle'].includes('perennial')
-        ) {
-            obj['is_tree'] = true;
-        }
 
         return obj;
     });
 }
 
-async function insertPlantDetails() {
-    const jsonArray = await csv().fromFile('data/detail.csv');
+async function insertPlantDetails(fileName) {
+    const jsonArray = await csv().fromFile(fileName);
 
     sanitizeColumnNames(jsonArray);
 
@@ -109,4 +96,48 @@ async function insertPlantDetails() {
     db.none(query);
 }
 
-insertPlantDetails();
+/**
+ * Since the structure is not finalized, we're not inserting the genus and family data yet.
+ * However, the insertion steps are ready.
+ */
+/*
+async function insertGenus() {
+    let jsonArray = await csv().fromFile('data/distinctGenus.csv');
+
+    sanitizeColumnNames(jsonArray);
+
+    jsonArray = jsonArray.map((obj) => {
+        return { binomial_name: obj['genus'].trim() };
+    });
+    const cs = new pgp.helpers.ColumnSet(['binomial_name'], {
+        table: 'genus',
+    });
+
+    const query = pgp.helpers.insert(jsonArray, cs) + ' ON CONFLICT DO NOTHING';
+
+    db.none(query);
+}
+
+async function insertFamily() {
+    let jsonArray = await csv().fromFile('data/distinctFamily.csv');
+
+    sanitizeColumnNames(jsonArray);
+
+    jsonArray = jsonArray.map((obj) => {
+        return { binomial_name: obj['family'].trim() };
+    });
+    const cs = new pgp.helpers.ColumnSet(['binomial_name'], {
+        table: 'family',
+    });
+
+    const query = pgp.helpers.insert(jsonArray, cs) + ' ON CONFLICT DO NOTHING';
+
+    db.none(query);
+}
+*/
+
+insertPlantDetails(generatedFile);
+/*
+insertGenus();
+insertFamily();
+*/
