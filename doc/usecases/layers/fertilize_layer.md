@@ -5,7 +5,7 @@
 -   **Scope:** Fertilize Layer
 -   **Level:** User Goal
 -   **Actors:** App User
--   **Brief:** The user can add, edit, move and delete fertilizers to support their plants and ecosystem in their map in the fertilize layer.
+-   **Brief:** The user can add, edit, move and delete fertilizers in their map in the fertilize layer.
 -   **Status:** Draft
 
 ## Scenarios
@@ -13,7 +13,8 @@
 -   **Precondition:**
     The user has opened the app and has selected the fertilize layer.
 -   **Main success scenario:**
-    -   The user successfully adds, edits, moves and deletes fertilizers to support their plants and ecosystem in their map in the fertilize layer.
+    -   The user successfully adds, edits, moves and deletes fertilizers in their map in the fertilize layer.
+    -   Fertilizers can be drawn using brushes of different sizes.
 -   **Alternative scenario:**
     -   The user accidentally adds or moves a fertilizer and deletes it with the "delete" functionality.
 -   **Error scenario:**
