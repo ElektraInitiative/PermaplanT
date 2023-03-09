@@ -87,3 +87,45 @@ links:
 
 nextcloud/contacts is based on [sabredav](https://github.com/sabre-io/dav)(most popular WebDAV framework for PHP)
 
+## Chat
+
+sending a message:
+
+```rust
+// sends once, Err if it does not work on network or nextcloud level
+fn send_message (
+	&self,
+	message: String,
+	chat: String,
+) -> Result<reqwest::Response, reqwest::Error> {
+	let mut headers = header::HeaderMap::new();
+	headers.insert("Content-Type", "application/json".parse().unwrap());
+	headers.insert("Accept", "application/json".parse().unwrap());
+	headers.insert("OCS-APIRequest", "true".parse().unwrap());
+
+	let result = reqwest::Client::new()
+		.post(&format!(
+			"{}/ocs/v2.php/apps/spreed/api/v1/chat/{}",
+			&self.url, chat
+		))
+		.basic_auth(&self.user, self.pass.as_ref())
+		.headers(headers)
+		.body(format!(
+			"{{\"token\": \"{}\", \"message\": \"{}\"}}",
+			chat, message
+		))
+		.send();
+	match result {
+		Ok(response) => match response.error_for_status() {
+			Ok(response) => Ok(response),
+			Err(error) => Err(error),
+		},
+		Err(error) => Err(error),
+	}
+}
+```
+
+or via CURL:
+```
+curl -sS -d "{\"token\": \"$CHAT\", \"message\": \"$*\"}" -H "Content-Type: application/json" -H "Accept: application/json" -H "OCS-APIRequest: true" -u "user:password" https://nextcloud.markus-raab.org/nextcloud/ocs/v2.php/apps/spreed/api/v1/chat/$CHAT
+```
