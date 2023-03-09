@@ -73,22 +73,17 @@ plants }o--|| plant_detail: "type"
 
 plants ||--o{ seeds : ""
 
-plant_detail }o--o{ plant_detail: "likes"
-
-plant_detail }o--o{ plant_detail: "dislikes"
-
 species{}
 genus{}
 subfamily{}
 family{}
 
+relation{}
+
 plant_detail }|--|| species : ""
-species }|--|| genus : ""
-genus }|--|| subfamily : ""
-subfamily }|--|| family : ""
-
-
-
+plant_detail }|--|| genus : ""
+plant_detail }|--|| subfamily : ""
+plant_detail }|--|| family : ""
 
 ```
 
@@ -149,6 +144,19 @@ subfamily }|--|| family : ""
 | **is_tree**                      | true                             | Set of Herbaceous/Woody (woody) AND life cycle (perennial)                                        |
 | **nutrition_demand**             | NULL                             | If "Nutritionally poor soil" in `environmental_tolerances` is given `light feeder` should be set. |
 | **preferable_permaculture_zone** | NULL                             |                                                                                                   | -1..6 (-1 should be printed as 00) |
+
+## `Relation`
+
+| **_Column name_** | **_Example_**              | **_Description_** |
+| :---------------- | :------------------------- | :---------------- |
+| **id**            | 1                          |
+| **from_id**       | 1                          |
+| **from_type**     | genus                      |
+| **to_id**         | 1                          |
+| **to_type**       | family                     |
+| **relation_type** | dislikes                   |
+| **created_at**    | 2023-02-09 14:06:01.451028 |
+| **updated_at**    | 2023-02-09 14:06:01.451028 |
 
 # Example queries
 
