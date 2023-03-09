@@ -28,3 +28,4 @@
   No change on the elements of the map.
 - **Non-functional Constraints:**
   - The app must accurately measure the distance between elements in the selected unit.
+  - Offline availability

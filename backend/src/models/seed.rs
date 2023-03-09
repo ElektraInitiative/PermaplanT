@@ -19,7 +19,7 @@ pub struct Seed {
     pub id: i32,
     pub tags: Option<Vec<Option<Tag>>>,
     pub name: String,
-    pub variety_id: i32,
+    pub plant_id: i32,
     pub harvest_year: i16,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
@@ -38,7 +38,7 @@ pub struct Seed {
 pub struct NewSeed {
     pub tags: Vec<Option<Tag>>,
     pub name: String,
-    pub variety_id: i32,
+    pub plant_id: i32,
     pub harvest_year: i16,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,

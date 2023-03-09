@@ -36,7 +36,7 @@ mod tests {
             .set_json(
                 r#"{
                 "name": "Tomate",
-                "variety_id": 1,
+                "plant_id": 1,
                 "harvest_year": 2022,
                 "quantity": "Invalid",
                 "tags": [
@@ -71,7 +71,7 @@ mod tests {
             .set_json(
                 r#"{
                 "name": "Tomate",
-                "variety_id": 1,
+                "plant_id": 1,
                 "harvest_year": 2022,
                 "quantity": "Enough",
                 "tags": [
@@ -106,7 +106,7 @@ mod tests {
             .set_json(
                 r#"{
                 "name": "Tomate",
-                "variety_id": 1,
+                "plant_id": 1,
                 "harvest_year": 2022,
                 "quantity": "Enough",
                 "tags": [
@@ -139,7 +139,7 @@ mod tests {
 
         let new_seed = NewSeedDTO {
             name: "tomato test".to_string(),
-            variety_id: 1,
+            plant_id: 1,
             harvest_year: 2022,
             quantity: Quantity::Nothing,
             tags: vec![Tag::LeafCrops],
