@@ -5,7 +5,7 @@
 -   **Scope:** Matchmaking
 -   **Level:** User Goal
 -   **Actors:** App User
--   **Brief:** The users can find other gardening enthusiasts who have space but lack time and those who have time but lack space.
+-   **Brief:** The users can find other gardening enthusiasts to establish a gardening partnership.
 
 ## Scenarios
 
