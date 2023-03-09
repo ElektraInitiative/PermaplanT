@@ -26,13 +26,15 @@ ALTER TABLE plant_detail
 ADD COLUMN subfamily_id INTEGER REFERENCES subfamily (id);
 ALTER TABLE plant_detail
 ADD COLUMN family_id INTEGER REFERENCES family (id);
-CREATE TYPE LIKE_TYPE AS ENUM ('plant', 'genus', 'family', 'subfamily');
-CREATE TABLE likes (
+CREATE TYPE RELATION_TYPE AS ENUM ('likes', 'dislikes');
+CREATE TYPE HIERARCHY_LEVEL_TYPE AS ENUM ('plant', 'genus', 'subfamily', 'family');
+CREATE TABLE relations (
     id SERIAL PRIMARY KEY,
     from_id INTEGER NOT NULL,
-    from_type LIKE_TYPE NOT NULL,
+    from_type HIERARCHY_LEVEL_TYPE NOT NULL,
     to_id INTEGER NOT NULL,
-    to_type LIKE_TYPE NOT NULL,
+    to_type HIERARCHY_LEVEL_TYPE NOT NULL,
+    relation_type RELATION_TYPE NOT NULL,
     created_at TIMESTAMP DEFAULT now() NOT NULL,
     updated_at TIMESTAMP DEFAULT now() NOT NULL
 );
