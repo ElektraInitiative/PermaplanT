@@ -10,6 +10,7 @@ use typeshare::typeshare;
 pub struct NewSeedDTO {
     pub name: String,
     pub variety: Option<String>,
+    pub plant_id: i32,
     pub harvest_year: i16,
     pub quantity: Quantity,
     pub use_by: Option<NaiveDate>,
@@ -27,6 +28,7 @@ impl From<NewSeedDTO> for NewSeed {
         Self {
             name: new_seed.name,
             variety: new_seed.variety,
+            plant_id: new_seed.plant_id,
             harvest_year: new_seed.harvest_year,
             quantity: new_seed.quantity,
             use_by: new_seed.use_by,

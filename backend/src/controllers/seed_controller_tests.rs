@@ -33,7 +33,7 @@ mod tests {
             .set_json(
                 r#"{
                 "name": "Tomate",
-                "variety_id": 1,
+                "plant_id": 1,
                 "harvest_year": 2022,
                 "quantity": "Invalid"
             }"#,
@@ -64,7 +64,7 @@ mod tests {
             .set_json(
                 r#"{
                 "name": "Tomate",
-                "variety_id": 1,
+                "plant_id": 1,
                 "harvest_year": 2022,
                 "quantity": "Enough"
             }"#,
@@ -95,7 +95,7 @@ mod tests {
             .set_json(
                 r#"{
                 "name": "Tomate",
-                "variety_id": 1,
+                "plant_id": 1,
                 "harvest_year": 2022,
                 "quantity": "Enough",
                 "quality": "Invalid"
@@ -125,6 +125,7 @@ mod tests {
         let new_seed = NewSeedDTO {
             name: "tomato test".to_string(),
             variety: Some("testvariety".to_string()),
+            plant_id: 1,
             harvest_year: 2022,
             quantity: Quantity::Nothing,
             use_by: None,

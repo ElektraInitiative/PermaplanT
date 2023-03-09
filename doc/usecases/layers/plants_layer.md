@@ -34,3 +34,4 @@
   The user's map includes the added, edited, moved or deleted plant element as desired.
 - **Non-functional Constraints:**
   - Performance
+  - Partial offline availability

@@ -16,3 +16,7 @@ License: MIT
 Files: frontend/src/routes/Pages/*
 Copyright: 2022 Suren Atoyan
 License: MIT
+
+Files: scraper/src/data/*
+Source: common german names from Wikidata(CC-BY-SA-3.0), other columns from practicalplants.org and Yvonne Markl(CC-BY-NC-SA-3.0)
+License: CC-BY-SA-3.0, CC-BY-NC-SA-3.0

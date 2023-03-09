@@ -58,4 +58,4 @@ Now the server is running and will start listening at <http://localhost:8080/> (
 
 Example requests:
 
-- `curl localhost:8080/api/seeds`
+- `curl localhost:8080/api/plants`

@@ -1,11 +1,10 @@
 import { NewSeedDTO, Quality, Quantity } from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
-import { SubmitHandler, useForm } from 'react-hook-form';
-
+import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
-import useCreateSeedStore from '../store/CreateSeedStore';
 import { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface CreateSeedFormProps {
   onCancel: () => void;
@@ -15,6 +14,22 @@ interface CreateSeedFormProps {
 const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
+
+  const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
+  const plants = useCreateSeedStore((state) =>
+    state.plants.map((plant) => {
+      return { value: plant.id, label: plant.species };
+    }),
+  );
+
+  useEffect(() => {
+    // This is a small workaround so it's possible to use async/await in useEffect
+    const _findAllPlants = async () => {
+      await findAllPlants();
+    };
+
+    _findAllPlants();
+  }, []);
 
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDTO>();
   const onFormSubmit: SubmitHandler<NewSeedDTO> = async (data) => {
@@ -56,6 +71,15 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             placeHolder="Cherry"
             id="variety"
             register={register}
+          <SelectMenu
+            id="plant_id"
+            control={control}
+            options={plants}
+            labelText="Pflanzentyp"
+            required={true}
+            handleOptionsChange={(option) => {
+              setValue('plant_id', Number(option.value));
+            }}
           />
           <SelectMenu
             id="quantity"
