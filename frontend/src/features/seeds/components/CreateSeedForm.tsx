@@ -1,5 +1,6 @@
 import { NewSeedDTO, Quality, Quantity } from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
+import CreatableSelectMenu from '../../../components/Form/CreatableSelectMenu';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
@@ -66,20 +67,26 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             id="name"
             register={register}
           />
-          <SimpleFormInput
-            labelText="Sorte"
-            placeHolder="Cherry"
-            id="variety"
-            register={register}
-          />
-          <SelectMenu
+          <CreatableSelectMenu
             id="plant_id"
             control={control}
             options={plants}
-            labelText="Pflanzentyp"
+            labelText="Sorte"
             required={true}
             handleOptionsChange={(option) => {
-              setValue('plant_id', Number(option.value));
+              // The user may either select existing plants,
+              // in which case plant_id ist set or create a new
+              // variety.
+
+              // If the latter option is chosen, the variety field
+              // of the seed is set and plant_id remains empty.
+              
+              // option.value is a only a number, if a plant is chosen,
+              // otherwhise its a string that contains the users input.
+              if (typeof option.value === "number")
+                setValue('plant_id', Number(option.value));
+              else if (option !== null)
+                setValue('variety', option.value); 
             }}
           />
           <SelectMenu
