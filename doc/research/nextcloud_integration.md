@@ -45,7 +45,8 @@ curl -u USERNAME:PSWD -X GET 'https://BASE_URL/nextcloud/ocs/v2.php/apps/circles
 ```
 This returns a list of circles visible to the authenticated user.
 
-Tested API calls:
+Working API calls (tested with NC version 25.0.4-1~deb11):
+
 * add member
 ```
 curl -u USERNAME:PSWD -X POST 'https://BASE_URL/nextcloud/ocs/v2.php/apps/circles/circles/CIRCLE_ID/members/multi' -H "OCS-APIRequest: true" -H "Content-Type: application/json" -d '{"members":[{"id":"USER_ID","type":1}]}'
