@@ -13,11 +13,10 @@
 ## Scenarios
 
 - **Precondition:**
-  - The existing user has opened the app and is logged in.
   - The new user is registered.
   - The new user is located nearby (requires location settings of both users, nearby is a defined radius).
 - **Main success scenario:**
-  The existing user gets a notification which informs them about the new user.
+  The existing user gets a notification (email) which informs them about the new user.
 - **Alternative scenario:**
   One or both of the users have no location information: The user doesn't receive a notification.
 - **Error scenario:**
