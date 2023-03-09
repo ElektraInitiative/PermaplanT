@@ -2,7 +2,7 @@
 
 use actix_web::web;
 
-use crate::controllers::{seed_controller, plants_controller};
+use crate::controllers::{plants_controller, seed_controller};
 
 /// Defines all routes of the backend and which functions they map to.
 pub fn config(cfg: &mut web::ServiceConfig) {
