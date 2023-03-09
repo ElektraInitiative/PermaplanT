@@ -15,7 +15,7 @@ use super::{
 pub struct Seed {
     pub id: i32,
     pub name: String,
-    pub plant_id: i32,
+    pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
@@ -33,7 +33,7 @@ pub struct Seed {
 #[diesel(table_name = seeds)]
 pub struct NewSeed {
     pub name: String,
-    pub plant_id: i32,
+    pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,

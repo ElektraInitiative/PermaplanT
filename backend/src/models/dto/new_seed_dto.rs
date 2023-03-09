@@ -10,7 +10,7 @@ use typeshare::typeshare;
 pub struct NewSeedDTO {
     pub name: String,
     pub variety: Option<String>,
-    pub plant_id: i32,
+    pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub quantity: Quantity,
     pub use_by: Option<NaiveDate>,
