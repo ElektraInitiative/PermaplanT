@@ -49,4 +49,22 @@ CREATE TABLE relations (
  family
  FROM plant_detail
  WHERE family IS NOT NULL
+ 
+ UPDATE plant_detail pd
+ SET
+ genus_id = g.id
+ FROM genus g
+ WHERE pd.genus = g.name;
+ 
+ UPDATE plant_detail pd
+ SET
+ family_id = f.id
+ FROM family f
+ WHERE pd.family = f.name;
+ 
+ UPDATE plant_detail pd
+ SET
+ subfamily_id = sf.id
+ FROM subfamily sf
+ WHERE pd.subfamily = sf.name;
  */

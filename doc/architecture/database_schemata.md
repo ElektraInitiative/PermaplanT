@@ -149,3 +149,54 @@ subfamily }|--|| family : ""
 | **is_tree**                      | true                             | Set of Herbaceous/Woody (woody) AND life cycle (perennial)                                        |
 | **nutrition_demand**             | NULL                             | If "Nutritionally poor soil" in `environmental_tolerances` is given `light feeder` should be set. |
 | **preferable_permaculture_zone** | NULL                             |                                                                                                   | -1..6 (-1 should be printed as 00) |
+
+# Example queries
+
+## Get all plants with their hierarchy information
+
+```sql
+SELECT *
+  FROM plant_detail
+  LEFT JOIN genus
+            ON plant_detail.genus_id = genus.id
+  LEFT JOIN subfamily
+            ON plant_detail.subfamily_id = subfamily.id
+  LEFT JOIN family
+            ON plant_detail.family_id = family.id;
+```
+
+## Insert a relation between a plant with a specific genus and a specific family
+
+```sql
+INSERT INTO relations (from_id, from_type, to_id, to_type, relation_type)
+VALUES (1, 'genus', 156, 'family', 'dislikes');
+```
+
+## Get all plants that dislike a specific family
+
+```sql
+SELECT p.id,
+       p.binomial_name,
+       p.genus,
+       p.genus_id,
+       p.family,
+       p.family_id,
+       p.subfamily,
+       p.subfamily_id,
+       r.*
+  FROM plant_detail p
+  LEFT JOIN genus
+            ON p.genus_id = genus.id
+  LEFT JOIN subfamily
+            ON p.subfamily_id = subfamily.id
+  LEFT JOIN family
+            ON p.family_id = family.id
+  JOIN relations r
+       ON r.relation_type = 'dislikes' AND r.to_type = 'family' AND r.to_id = 156 AND
+          CASE
+              WHEN r.from_type = 'plant' THEN r.id = p.id
+              WHEN r.from_type = 'genus' THEN r.id = genus.id
+              WHEN r.from_type = 'subfamily' THEN r.id = subfamily.id
+              WHEN r.from_type = 'family' THEN r.id = family.id
+              END
+```
