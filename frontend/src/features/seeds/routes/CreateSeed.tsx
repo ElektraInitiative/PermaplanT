@@ -10,12 +10,18 @@ export function CreateSeed() {
   const navigate = useNavigate();
 
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [formTouched, setFormTouched] = useState(false);
   const createSeed = useCreateSeedStore((state) => state.createSeed);
   const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
   const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
   const error = useCreateSeedStore((state) => state.error);
 
   const onCancel = () => {
+    if (!formTouched) {
+      navigate('/seeds');
+      return;
+    }
+      
     setShowCancelModal(!showCancelModal);
   };
 
@@ -26,10 +32,15 @@ export function CreateSeed() {
     }
   };
 
+  const onChange = () => {
+    console.log('State change');
+    setFormTouched(true);
+  }
+
   return (
     <div className="mx-auto w-full p-4 md:w-[900px]">
       <PageTitle title="Neuer Eintrag" />
-      <CreateSeedForm onCancel={onCancel} onSubmit={onSubmit} />
+      <CreateSeedForm onCancel={onCancel} onChange={onChange} onSubmit={onSubmit} />
       <SimpleModal
         title="Eintrag abbrechen"
         body="Änderungen, die Sie vorgenommen haben, werden nicht gespeichert. Wollen Sie wirklich abbrechen?"
@@ -41,7 +52,7 @@ export function CreateSeed() {
           setShowCancelModal(false);
         }}
         onSubmit={() => {
-          // TODO: redirect to previous page or another page
+          navigate('/seeds');
         }}
       />
       <SimpleModal
