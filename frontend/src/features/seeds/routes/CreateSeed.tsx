@@ -33,7 +33,6 @@ export function CreateSeed() {
   };
 
   const onChange = () => {
-    console.log('State change');
     setFormTouched(true);
   }
 
