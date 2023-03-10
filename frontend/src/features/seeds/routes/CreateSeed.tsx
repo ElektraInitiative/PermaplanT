@@ -17,6 +17,8 @@ export function CreateSeed() {
   const error = useCreateSeedStore((state) => state.error);
 
   const onCancel = () => {
+    // There is no need to show the cancel warning modal if the user
+    // has not made any changes yet.
     if (!formTouched) {
       navigate('/seeds');
       return;
