@@ -1,44 +1,69 @@
 # Authors
 
-This is a list of people that contributed to PermaplanT,
-including their responsibilities and focus.
+This is a list of people that contribute to PermaplanT,
+including their responsibilities, skills, etc.
 
 ## Markus Raab
 
 - email: markus@permaplant.net
+- GitHub: @markus2330
 - devel/test on: Debian stable
-- responsibilities: lead
+- main responsibility: lead
+- focus groups: all
 
 ## Yvonne Markl
 
 - email: yvonne@permaplant.net
-- responsibilities: biology
+- GitHub: @yvonnemarkl
+- main responsibility: Biology
+- focus groups: all
 
 ## Samuel
 
-- focus group: UX, Polyculture
-- responsibilities: Nextcloud
+- GitHub: @absurd-turtle
+- main responsibilities: Nextcloud Integration, Frontend Architecture
+- focus groups: UX, (Polyculture?)
+- special skills: Frontend, SQL, Tailwind CSS, TypeScript
 
 ## Gabriel
 
-- responsibilities: Backend
+- GitHub: @kitzbergerg
+- main responsibility: Backend
+- special skills: Rust
 
 ## Moritz
 
-- focus group: DB, Geometry/GIS, Polyculture
-- responsibilities: -||-
+- GitHub: @badnames
+- main responsibilities: DB, Polyculture
+- focus groups: DB, PostGIS, Polyculture
 
 ## Giancarlo
 
+- GitHub: @buenaflor
+- main responsibility: Drawing Part of Frontend (Canvas)
 - focus group: UX
-- responsibilities: Frontend
 
 ## Nursultan
 
+- GitHub: aidnurs
+- main responsibility: scraper
 - focus group: DB
-- frontend tests, react
-- SQL optimizations
+- special skills: frontend tests
+- research: optimizations
 
 ## Lukas
 
-- responsibilities: CI
+- GitHub: lukashartl
+- main responsibility: CI
+
+## Ramzan
+
+- main responsibility: PostGIS
+- focus group: DB, Polyculture
+
+## Thorben Julian
+
+- main responsibility: Gamification, (PostGIS?)
+- focus group: Polyculture
+- special skills: Jenkins
+
