@@ -1,0 +1,1 @@
+ALTER TABLE seeds ALTER COLUMN plant_id DROP NOT NULL;

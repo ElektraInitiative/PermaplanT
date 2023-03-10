@@ -1,5 +1,6 @@
-import { NewSeedDTO, Quality, Quantity, Tag } from '../../../bindings/definitions';
+import { NewSeedDTO, Quality, Quantity } from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
+import CreatableSelectMenu from '../../../components/Form/CreatableSelectMenu';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
@@ -12,7 +13,6 @@ interface CreateSeedFormProps {
 }
 
 const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
-  const tags: SelectOption[] = enumToSelectOptionArr(Tag);
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
@@ -60,19 +60,6 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             id="harvest_year"
             register={register}
           />
-          <SelectMenu
-            id="tags"
-            control={control}
-            isMulti={true}
-            options={tags}
-            labelText="Kategorie"
-            required={true}
-            handleOptionsChange={(option) => {
-              const temp = option as SelectOption[];
-              const mapped = temp.map((element) => element.value as Tag);
-              setValue('tags', mapped);
-            }}
-          />
           <SimpleFormInput
             labelText="Art"
             placeHolder="Tomate"
@@ -80,14 +67,26 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             id="name"
             register={register}
           />
-          <SelectMenu
+          <CreatableSelectMenu
             id="plant_id"
             control={control}
             options={plants}
             labelText="Sorte"
             required={true}
             handleOptionsChange={(option) => {
-              setValue('plant_id', Number(option.value));
+              // The user may either select existing plants,
+              // in which case plant_id ist set or create a new
+              // variety.
+
+              // If the latter option is chosen, the variety field
+              // of the seed is set and plant_id remains empty.
+              
+              // option.value is a only a number, if a plant is chosen,
+              // otherwhise its a string that contains the users input.
+              if (typeof option.value === "number")
+                setValue('plant_id', Number(option.value));
+              else if (option !== null)
+                setValue('variety', option.value); 
             }}
           />
           <SelectMenu
