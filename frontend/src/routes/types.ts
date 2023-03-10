@@ -3,7 +3,8 @@ import { PathRouteProps } from 'react-router-dom';
 
 enum Pages {
   CreateSeed,
-  ViewSeeds
+  ViewSeeds,
+  ViewDemo
 }
 
 type PathRouteCustomProps = {
