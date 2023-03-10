@@ -142,6 +142,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
           />
           <SimpleFormInput
             type="number"
+            min={0}
             labelText="Generation"
             placeHolder="0"
             id="generation"
