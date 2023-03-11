@@ -53,6 +53,7 @@ use actix_cors::Cors;
 use actix_web::{http, web::Data, App, HttpServer};
 use config::{db, routes};
 
+mod test;
 pub mod config;
 pub mod constants;
 pub mod controller;
