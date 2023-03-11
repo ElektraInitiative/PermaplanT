@@ -57,7 +57,7 @@ pub mod config;
 pub mod constants;
 pub mod controller;
 pub mod error;
-pub mod models;
+pub mod model;
 // Auto generated, therefore impossible add documentation.
 #[allow(clippy::missing_docs_in_private_items)]
 pub mod schema;

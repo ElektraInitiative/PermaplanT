@@ -1,6 +1,6 @@
 //! Contains the implementation of [`PlantsDTO`].
 
-use crate::models::entity::Plants;
+use crate::model::entity::Plants;
 
 use super::PlantsDto;
 

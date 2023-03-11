@@ -9,7 +9,7 @@ use actix_web::{
 use crate::{
     config::db::Pool,
     constants,
-    models::{dto::NewSeedDto, response::Body},
+    model::{dto::NewSeedDto, response::Body},
     service,
 };
 

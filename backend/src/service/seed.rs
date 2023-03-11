@@ -5,7 +5,7 @@ use actix_web::web::Data;
 use crate::{
     config::db::Pool,
     error::ServiceError,
-    models::{
+    model::{
         dto::{NewSeedDto, SeedDto},
         entity::Seed,
     },

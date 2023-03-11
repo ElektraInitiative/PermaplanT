@@ -5,10 +5,10 @@ mod tests {
     use crate::config::app;
     use crate::config::db;
     use crate::config::routes;
-    use crate::models::dto::NewSeedDto;
-    use crate::models::dto::SeedDto;
-    use crate::models::r#enum::quantity::Quantity;
-    use crate::models::response::Body;
+    use crate::model::dto::NewSeedDto;
+    use crate::model::dto::SeedDto;
+    use crate::model::r#enum::quantity::Quantity;
+    use crate::model::response::Body;
     use actix_web::App;
     use actix_web::{http::StatusCode, test, web::Data};
     use dotenvy::dotenv;

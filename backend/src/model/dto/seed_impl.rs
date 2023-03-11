@@ -1,6 +1,6 @@
 //! Contains the implementation of [`SeedDTO`].
 
-use crate::models::entity::Seed;
+use crate::model::entity::Seed;
 
 use super::SeedDto;
 

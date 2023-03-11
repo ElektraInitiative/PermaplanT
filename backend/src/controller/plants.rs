@@ -1,6 +1,6 @@
 //! `Variety` endpoints.
 
-use crate::{config::db::Pool, constants, models::response::Body, service};
+use crate::{config::db::Pool, constants, model::response::Body, service};
 use actix_web::{
     get,
     web::{self, Data},

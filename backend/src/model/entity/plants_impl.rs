@@ -3,7 +3,7 @@
 use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 
 use crate::{
-    models::dto::PlantsDto,
+    model::dto::PlantsDto,
     schema::plants::{self, all_columns},
 };
 
