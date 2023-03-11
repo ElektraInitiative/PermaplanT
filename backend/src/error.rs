@@ -9,6 +9,7 @@ use derive_more::{Display, Error};
 /// The default error used by the server.
 #[derive(Debug, Display, Error)]
 #[display(fmt = "{status_code}: {reason}")]
+#[allow(clippy::module_name_repetitions)] // Error structs need to be easily recognizable.
 pub struct ServiceError {
     /// The status code to be used for the response.
     pub status_code: StatusCode,

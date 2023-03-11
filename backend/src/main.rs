@@ -53,12 +53,12 @@ use actix_cors::Cors;
 use actix_web::{http, web::Data, App, HttpServer};
 use config::{db, routes};
 
-mod test;
 pub mod config;
 pub mod constants;
 pub mod controller;
 pub mod error;
 pub mod model;
+mod test;
 // Auto generated, therefore impossible add documentation.
 #[allow(clippy::missing_docs_in_private_items)]
 pub mod schema;

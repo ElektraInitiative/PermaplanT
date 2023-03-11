@@ -31,8 +31,7 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
 /// * If [web::block] fails.
 #[post("")]
 pub async fn create(new_seed_json: Json<NewSeedDto>, pool: Data<Pool>) -> Result<HttpResponse> {
-    let response =
-        web::block(move || service::seed::create(new_seed_json.0, &pool)).await??;
+    let response = web::block(move || service::seed::create(new_seed_json.0, &pool)).await??;
     Ok(HttpResponse::Created().json(Body::new(constants::MESSAGE_OK, response)))
 }
 

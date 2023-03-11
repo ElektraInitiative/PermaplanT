@@ -1,4 +1,5 @@
 //! DTOs of `PermaplanT`.
+#![allow(clippy::module_name_repetitions)] // There needs to be a difference between DTOs and entities otherwise imports will be messy.
 
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
