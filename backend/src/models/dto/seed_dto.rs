@@ -9,7 +9,7 @@ use crate::models::{
     seed::Seed,
 };
 
-#[allow(clippy::missing_docs_in_private_items)] // TODO: document
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
 #[derive(Serialize, Deserialize)]
 pub struct SeedDTO {

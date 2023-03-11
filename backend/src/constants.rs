@@ -1,5 +1,5 @@
 //! Constants used throughout the backend.
-// TODO: Remove this. Use error enums instead (or just the normal error).
+// TODO: See #80. Remove this. Use error enums instead (or just the normal error).
 
 /// ok
 pub const MESSAGE_OK: &str = "ok";

@@ -2,8 +2,6 @@
 
 #[cfg(test)]
 mod tests {
-    use std::vec;
-
     use crate::config::app;
     use crate::config::db;
     use crate::config::routes;

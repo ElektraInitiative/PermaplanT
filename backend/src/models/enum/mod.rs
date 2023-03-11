@@ -1,4 +1,4 @@
-#![allow(clippy::missing_docs_in_private_items)] // TODO: document
+//! Enums used in the database.
 
 pub mod quality;
 pub mod quantity;

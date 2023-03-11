@@ -12,7 +12,7 @@ use super::{
 };
 
 /// The `Seed` entity.
-#[allow(clippy::missing_docs_in_private_items)] // TODO: document
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[derive(Identifiable, Queryable)]
 #[diesel(table_name = seeds)]
 pub struct Seed {
@@ -29,10 +29,10 @@ pub struct Seed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
-    pub variety: Option<String>
+    pub variety: Option<String>,
 }
 
-#[allow(clippy::missing_docs_in_private_items)] // TODO: document
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[derive(Insertable)]
 #[diesel(table_name = seeds)]
 pub struct NewSeed {
@@ -48,7 +48,7 @@ pub struct NewSeed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
-    pub variety: Option<String>
+    pub variety: Option<String>,
 }
 
 impl Seed {
