@@ -1,6 +1,6 @@
 //! [`PlantsDTO`] and its implementation.
 
-use crate::models::plants::Plants;
+use crate::models::entity::Plants;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 

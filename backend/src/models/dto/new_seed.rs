@@ -2,7 +2,7 @@
 
 use crate::models::r#enum::quality::Quality;
 use crate::models::r#enum::quantity::Quantity;
-use crate::models::seed::NewSeed;
+use crate::models::entity::NewSeed;
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;

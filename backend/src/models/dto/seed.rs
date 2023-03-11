@@ -6,7 +6,7 @@ use typeshare::typeshare;
 
 use crate::models::{
     r#enum::{quality::Quality, quantity::Quantity},
-    seed::Seed,
+    entity::Seed,
 };
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.

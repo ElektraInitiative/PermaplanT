@@ -4,11 +4,7 @@ use actix_web::web::Data;
 
 use crate::{
     config::db::Pool,
-    error::ServiceError,
-    models::{
-        dto::{new_seed::NewSeedDTO, seed::SeedDTO},
-        seed::Seed,
-    },
+    error::ServiceError, models::{entity::Seed, dto::{seed::SeedDTO, new_seed::NewSeedDTO}},
 };
 
 /// Fetch all seeds from the database.
