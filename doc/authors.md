@@ -46,7 +46,7 @@ including their responsibilities, skills, etc.
 ## Nursultan
 
 - GitHub: aidnurs
-- main responsibility: scraper
+- main responsibility: scraper, plant DB
 - focus group: DB
 - special skills: frontend tests
 - research: optimizations
