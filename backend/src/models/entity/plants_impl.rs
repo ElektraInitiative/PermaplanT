@@ -3,7 +3,7 @@
 use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 
 use crate::{
-    models::dto::plants::PlantsDTO,
+    models::dto::PlantsDto,
     schema::plants::{self, all_columns},
 };
 
@@ -14,7 +14,7 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<PlantsDTO>> {
+    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<PlantsDto>> {
         let query_result = plants::table.select(all_columns).load::<Self>(conn);
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }

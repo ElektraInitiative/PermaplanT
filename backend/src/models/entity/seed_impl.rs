@@ -3,7 +3,7 @@
 use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 
 use crate::{
-    models::dto::{new_seed::NewSeedDTO, seed::SeedDTO},
+    models::dto::{NewSeedDto, SeedDto},
     schema::seeds::{self, all_columns},
 };
 
@@ -14,7 +14,7 @@ impl Seed {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<SeedDTO>> {
+    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<SeedDto>> {
         let query_result = seeds::table.select(all_columns).load::<Self>(conn);
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
@@ -23,7 +23,7 @@ impl Seed {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn create(new_seed: NewSeedDTO, conn: &mut PgConnection) -> QueryResult<SeedDTO> {
+    pub fn create(new_seed: NewSeedDto, conn: &mut PgConnection) -> QueryResult<SeedDto> {
         let new_seed = NewSeed::from(new_seed);
         let query_result = diesel::insert_into(seeds::table)
             .values(&new_seed)

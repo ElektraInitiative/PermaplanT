@@ -9,7 +9,7 @@ use actix_web::{
 use crate::{
     config::db::Pool,
     constants,
-    models::{dto::new_seed::NewSeedDTO, response::Body},
+    models::{dto::NewSeedDto, response::Body},
     services,
 };
 
@@ -30,7 +30,7 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
 /// * If the connection to the database could not be established.
 /// * If [web::block] fails.
 #[post("")]
-pub async fn create(new_seed_json: Json<NewSeedDTO>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn create(new_seed_json: Json<NewSeedDto>, pool: Data<Pool>) -> Result<HttpResponse> {
     let response =
         web::block(move || services::seed_service::create(new_seed_json.0, &pool)).await??;
     Ok(HttpResponse::Created().json(Body::new(constants::MESSAGE_OK, response)))

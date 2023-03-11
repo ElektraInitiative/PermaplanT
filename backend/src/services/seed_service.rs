@@ -4,14 +4,18 @@ use actix_web::web::Data;
 
 use crate::{
     config::db::Pool,
-    error::ServiceError, models::{entity::Seed, dto::{seed::SeedDTO, new_seed::NewSeedDTO}},
+    error::ServiceError,
+    models::{
+        dto::{NewSeedDto, SeedDto},
+        entity::Seed,
+    },
 };
 
 /// Fetch all seeds from the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDTO>, ServiceError> {
+pub fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDto>, ServiceError> {
     let mut conn = pool.get()?;
     let result = Seed::find_all(&mut conn)?;
     Ok(result)
@@ -21,7 +25,7 @@ pub fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDTO>, ServiceError> {
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn create(new_seed: NewSeedDTO, pool: &Data<Pool>) -> Result<SeedDTO, ServiceError> {
+pub fn create(new_seed: NewSeedDto, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
     let mut conn = pool.get()?;
     let result = Seed::create(new_seed, &mut conn)?;
     Ok(result)

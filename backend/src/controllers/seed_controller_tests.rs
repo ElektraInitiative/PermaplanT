@@ -5,8 +5,8 @@ mod tests {
     use crate::config::app;
     use crate::config::db;
     use crate::config::routes;
-    use crate::models::dto::new_seed::NewSeedDTO;
-    use crate::models::dto::seed::SeedDTO;
+    use crate::models::dto::NewSeedDto;
+    use crate::models::dto::SeedDto;
     use crate::models::r#enum::quantity::Quantity;
     use crate::models::response::Body;
     use actix_web::App;
@@ -122,7 +122,7 @@ mod tests {
         )
         .await;
 
-        let new_seed = NewSeedDTO {
+        let new_seed = NewSeedDto {
             name: "tomato test".to_string(),
             variety: Some("testvariety".to_string()),
             plant_id: Some(1),
@@ -145,7 +145,7 @@ mod tests {
             .await;
         assert_eq!(resp.status(), StatusCode::CREATED);
 
-        let body: Body<SeedDTO> = test::read_body_json(resp).await;
+        let body: Body<SeedDto> = test::read_body_json(resp).await;
         let seed = body.data;
         let resp = test::TestRequest::delete()
             .uri(&format!("/api/seeds/{}", seed.id))
