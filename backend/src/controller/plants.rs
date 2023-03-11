@@ -1,6 +1,6 @@
 //! `Variety` endpoints.
 
-use crate::{config::db::Pool, constants, models::response::Body, services};
+use crate::{config::db::Pool, constants, models::response::Body, service};
 use actix_web::{
     get,
     web::{self, Data},
@@ -14,6 +14,6 @@ use actix_web::{
 /// * If [web::block] fails.
 #[get("")]
 pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = web::block(move || services::plants_service::find_all(&pool)).await??;
+    let response = web::block(move || service::plants::find_all(&pool)).await??;
     Ok(HttpResponse::Ok().json(Body::new(constants::MESSAGE_OK, response)))
 }

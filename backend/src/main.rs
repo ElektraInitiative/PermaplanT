@@ -55,13 +55,13 @@ use config::{db, routes};
 
 pub mod config;
 pub mod constants;
-pub mod controllers;
+pub mod controller;
 pub mod error;
 pub mod models;
 // Auto generated, therefore impossible add documentation.
 #[allow(clippy::missing_docs_in_private_items)]
 pub mod schema;
-pub mod services;
+pub mod service;
 
 /// Main function.
 #[actix_web::main]
