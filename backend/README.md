@@ -66,3 +66,15 @@ To view the documentation run
 ```shell
 cargo doc --open
 ```
+
+## Tools
+
+I would suggest using [cargo-watch](https://github.com/watchexec/cargo-watch) to check for errors.
+
+After install via `cargo install cargo-watch --locked` run
+
+```shell
+cargo watch -x clippy -x check -x doc
+```
+
+to check for warnings/errors automatically on every code change.
