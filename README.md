@@ -25,9 +25,9 @@ To achieve these goals the app provides, e.g.:
 
 ## Main Features
 
-- users can have any number of maps
+- users have any number of maps
+- maps have any number of layers (see below)
 - users can work on the same map together
-- maps have a fixed number of layers (see below)
 - undo/redo within current session for changes in the map
 - copy&paste of selection including succeeding crops across maps
 - zoom
@@ -37,6 +37,7 @@ To achieve these goals the app provides, e.g.:
 - social network features (e.g. notification that someone entered your garden)
 - GPS coordinates
 - privacy: no tracking, analytics, external JavaScript, fonts, etc.
+- differences of versions of the same garden
 
 ### Layers
 
@@ -44,6 +45,7 @@ In all layers --- except for base --- past, current or future entities might be 
 While editing any layer other layers might be displayed or hidden.
 
 - Base¹ (import orthophoto or site plan as base image, define borders, scale, orientation)
+- Terrain
 - Landscape¹ (height&sketch of permanent structures like walls, ponds, constructions, beds)
 - Labels (allows to put text labels, e.g. names for beds)
 - Trees (taxa, stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
@@ -57,8 +59,10 @@ While editing any layer other layers might be displayed or hidden.
 - Zones (of different visitation frequency)
 - Plants¹ (taxa, individual and fields of plants)
 - Warnings¹
-- Chat (Possibility to join chats in different places of the garden)
-- Photos (sharing of photo with GPS coordinates)
+- Photos (sharing of photo with GPS coordinates and a Nextcloud chats per photo)
+- Fertilize
+- Todos (creates Deck cards in Nextcloud)
+- Drawing (for anything else)
 
 ¹ Essential (most used) layers: are more prominently shown than others.
 
@@ -71,11 +75,10 @@ Later features, i.e., out of scope for first version:
 - hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
 - 3D modes (forest garden), contour lines etc.
-- differences of versions of the same garden
 - timelaps of historic garden development, simulate growth
 
 ## Non-functional Goals
 
-- easy to use
-- aesthetic UI
-- collaborative use
+1. easy to use (aesthetic UI, collaborative use)
+2. uptime (robustness, no restarts)
+3. performance (serve many concurrent users)

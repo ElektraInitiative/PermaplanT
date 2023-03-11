@@ -8,7 +8,7 @@ use diesel::{
 
 use super::{
     dto::{new_seed_dto::NewSeedDTO, seed_dto::SeedDTO},
-    r#enum::{quality::Quality, quantity::Quantity, tag::Tag},
+    r#enum::{quality::Quality, quantity::Quantity},
 };
 
 /// The `Seed` entity.
@@ -17,9 +17,8 @@ use super::{
 #[diesel(table_name = seeds)]
 pub struct Seed {
     pub id: i32,
-    pub tags: Option<Vec<Option<Tag>>>,
     pub name: String,
-    pub plant_id: i32,
+    pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
@@ -30,15 +29,15 @@ pub struct Seed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
+    pub variety: Option<String>
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: document
 #[derive(Insertable)]
 #[diesel(table_name = seeds)]
 pub struct NewSeed {
-    pub tags: Vec<Option<Tag>>,
     pub name: String,
-    pub plant_id: i32,
+    pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
@@ -49,6 +48,7 @@ pub struct NewSeed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
+    pub variety: Option<String>
 }
 
 impl Seed {

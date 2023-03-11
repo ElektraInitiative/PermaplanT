@@ -91,7 +91,14 @@ async function insertPlantDetails(fileName) {
         table: 'plant_detail',
     });
 
-    const query = pgp.helpers.insert(jsonArray, cs) + ' ON CONFLICT DO NOTHING';
+    const query =
+        pgp.helpers.insert(jsonArray, cs) +
+        ` ON CONFLICT ON CONSTRAINT plant_detail_binomial_name_key DO UPDATE SET ${cs.assignColumns(
+            {
+                from: 'EXCLUDED',
+                skip: 'binomial_name',
+            },
+        )}, updated_at = NOW()`;
 
     db.none(query);
 }

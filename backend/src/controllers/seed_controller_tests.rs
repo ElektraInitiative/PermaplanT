@@ -10,7 +10,6 @@ mod tests {
     use crate::models::dto::new_seed_dto::NewSeedDTO;
     use crate::models::dto::seed_dto::SeedDTO;
     use crate::models::r#enum::quantity::Quantity;
-    use crate::models::r#enum::tag::Tag;
     use crate::models::response::ResponseBody;
     use actix_web::App;
     use actix_web::{http::StatusCode, test, web::Data};
@@ -38,11 +37,7 @@ mod tests {
                 "name": "Tomate",
                 "plant_id": 1,
                 "harvest_year": 2022,
-                "quantity": "Invalid",
-                "tags": [
-                    "Fruit crops",
-                    "Leaf crops"
-                ],
+                "quantity": "Invalid"
             }"#,
             )
             .send_request(&mut app)
@@ -73,11 +68,7 @@ mod tests {
                 "name": "Tomate",
                 "plant_id": 1,
                 "harvest_year": 2022,
-                "quantity": "Enough",
-                "tags": [
-                    "Invalid",
-                    "Leaf crops"
-                ],
+                "quantity": "Enough"
             }"#,
             )
             .send_request(&mut app)
@@ -109,10 +100,6 @@ mod tests {
                 "plant_id": 1,
                 "harvest_year": 2022,
                 "quantity": "Enough",
-                "tags": [
-                    "Fruit crops",
-                    "Leaf crops"
-                ],
                 "quality": "Invalid"
             }"#,
             )
@@ -139,10 +126,10 @@ mod tests {
 
         let new_seed = NewSeedDTO {
             name: "tomato test".to_string(),
-            plant_id: 1,
+            variety: Some("testvariety".to_string()),
+            plant_id: Some(1),
             harvest_year: 2022,
             quantity: Quantity::Nothing,
-            tags: vec![Tag::LeafCrops],
             use_by: None,
             origin: None,
             taste: None,
