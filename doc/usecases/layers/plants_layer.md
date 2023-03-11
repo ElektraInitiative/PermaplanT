@@ -22,7 +22,7 @@
     - The user gets a visual indication which parts of the map are ideally, okay and not suited for the plant to be placed
       (based on e.g. zones, pH value, moisture, animals or shadows).
     - The user is able to view the relationships between the plants by looking at the lines connecting them (companion or antagonist).
-      The thickness indicates the certainty of the relationship.
+      The thickness indicates the confidence of the relationship.
     - The user positions the plant element in the appropriate location in the map.
   - When drawing an area of plants, the size of the arena and the number of plants is shown next to the mouse.
   - The user is able to move, edit (e.g. when planted, when harvested) and delete (either that it never existed or that it was removed from the garden) selected plants.
