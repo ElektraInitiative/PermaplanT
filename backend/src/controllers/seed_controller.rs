@@ -9,7 +9,7 @@ use actix_web::{
 use crate::{
     config::db::Pool,
     constants,
-    models::{dto::new_seed_dto::NewSeedDTO, response::ResponseBody},
+    models::{dto::new_seed::NewSeedDTO, response::Body},
     services,
 };
 
@@ -21,7 +21,7 @@ use crate::{
 #[get("")]
 pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
     let response = web::block(move || services::seed_service::find_all(&pool)).await??;
-    Ok(HttpResponse::Ok().json(ResponseBody::new(constants::MESSAGE_OK, response)))
+    Ok(HttpResponse::Ok().json(Body::new(constants::MESSAGE_OK, response)))
 }
 
 /// Endpoint for creating a new `Seed`.
@@ -33,7 +33,7 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
 pub async fn create(new_seed_json: Json<NewSeedDTO>, pool: Data<Pool>) -> Result<HttpResponse> {
     let response =
         web::block(move || services::seed_service::create(new_seed_json.0, &pool)).await??;
-    Ok(HttpResponse::Created().json(ResponseBody::new(constants::MESSAGE_OK, response)))
+    Ok(HttpResponse::Created().json(Body::new(constants::MESSAGE_OK, response)))
 }
 
 /// Endpoint for deleting a `Seed`.
@@ -44,5 +44,5 @@ pub async fn create(new_seed_json: Json<NewSeedDTO>, pool: Data<Pool>) -> Result
 #[delete("/{id}")]
 pub async fn delete_by_id(path: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
     web::block(move || services::seed_service::delete_by_id(*path, &pool)).await??;
-    Ok(HttpResponse::Ok().json(ResponseBody::new(constants::MESSAGE_OK, constants::EMPTY)))
+    Ok(HttpResponse::Ok().json(Body::new(constants::MESSAGE_OK, constants::EMPTY)))
 }

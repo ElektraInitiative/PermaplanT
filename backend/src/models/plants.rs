@@ -3,7 +3,7 @@
 use crate::schema::plants::{self, all_columns};
 use diesel::{Identifiable, PgConnection, QueryDsl, QueryResult, Queryable, RunQueryDsl};
 
-use super::dto::plants_dto::PlantsDTO;
+use super::dto::plants::PlantsDTO;
 
 /// The `Plants` entity.
 #[allow(clippy::missing_docs_in_private_items)] // TODO: document

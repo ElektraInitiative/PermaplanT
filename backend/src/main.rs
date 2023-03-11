@@ -48,8 +48,6 @@
 )]
 // Cannot fix some errors because dependecies import them.
 #![allow(clippy::multiple_crate_versions)]
-// Allow for now. Remove one after another as part of #60.
-#![allow(clippy::module_name_repetitions)]
 
 use actix_cors::Cors;
 use actix_web::{http, web::Data, App, HttpServer};

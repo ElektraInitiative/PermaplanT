@@ -5,7 +5,7 @@ use actix_web::web::Data;
 use crate::{
     config::db::Pool,
     error::ServiceError,
-    models::{dto::plants_dto::PlantsDTO, plants::Plants},
+    models::{dto::plants::PlantsDTO, plants::Plants},
 };
 
 /// Fetch all plants from the database.

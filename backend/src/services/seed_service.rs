@@ -6,7 +6,7 @@ use crate::{
     config::db::Pool,
     error::ServiceError,
     models::{
-        dto::{new_seed_dto::NewSeedDTO, seed_dto::SeedDTO},
+        dto::{new_seed::NewSeedDTO, seed::SeedDTO},
         seed::Seed,
     },
 };

@@ -7,7 +7,7 @@ use diesel::{
 };
 
 use super::{
-    dto::{new_seed_dto::NewSeedDTO, seed_dto::SeedDTO},
+    dto::{new_seed::NewSeedDTO, seed::SeedDTO},
     r#enum::{quality::Quality, quantity::Quantity},
 };
 

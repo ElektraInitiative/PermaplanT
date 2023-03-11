@@ -5,10 +5,10 @@ mod tests {
     use crate::config::app;
     use crate::config::db;
     use crate::config::routes;
-    use crate::models::dto::new_seed_dto::NewSeedDTO;
-    use crate::models::dto::seed_dto::SeedDTO;
+    use crate::models::dto::new_seed::NewSeedDTO;
+    use crate::models::dto::seed::SeedDTO;
     use crate::models::r#enum::quantity::Quantity;
-    use crate::models::response::ResponseBody;
+    use crate::models::response::Body;
     use actix_web::App;
     use actix_web::{http::StatusCode, test, web::Data};
     use dotenvy::dotenv;
@@ -145,7 +145,7 @@ mod tests {
             .await;
         assert_eq!(resp.status(), StatusCode::CREATED);
 
-        let body: ResponseBody<SeedDTO> = test::read_body_json(resp).await;
+        let body: Body<SeedDTO> = test::read_body_json(resp).await;
         let seed = body.data;
         let resp = test::TestRequest::delete()
             .uri(&format!("/api/seeds/{}", seed.id))
