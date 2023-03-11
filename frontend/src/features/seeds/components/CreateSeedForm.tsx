@@ -1,4 +1,4 @@
-import { NewSeedDTO, Quality, Quantity } from '../../../bindings/definitions';
+import { NewSeedDto, Quality, Quantity } from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import CreatableSelectMenu from '../../../components/Form/CreatableSelectMenu';
 import useCreateSeedStore from '../store/CreateSeedStore';
@@ -9,7 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface CreateSeedFormProps {
   onCancel: () => void;
-  onSubmit: (newSeed: NewSeedDTO) => void;
+  onSubmit: (newSeed: NewSeedDto) => void;
 }
 
 const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
@@ -32,8 +32,8 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
     _findAllPlants();
   }, []);
 
-  const { register, handleSubmit, control, setValue } = useForm<NewSeedDTO>();
-  const onFormSubmit: SubmitHandler<NewSeedDTO> = async (data) => {
+  const { register, handleSubmit, control, setValue } = useForm<NewSeedDto>();
+  const onFormSubmit: SubmitHandler<NewSeedDto> = async (data) => {
     if (data.origin === '') delete data.origin;
     if (data.taste === '') delete data.taste;
     if (data.yield_ === '') delete data.yield_;
