@@ -13,7 +13,7 @@ use crate::{
     service,
 };
 
-/// Endpoint for fetching all [SeedDTOs](crate::models::dto::seed_dto::SeedDTO).
+/// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -24,7 +24,7 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok().json(Body::new(constants::MESSAGE_OK, response)))
 }
 
-/// Endpoint for creating a new `Seed`.
+/// Endpoint for creating a new [`Seed`](crate::model::entity::Seed).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -35,7 +35,7 @@ pub async fn create(new_seed_json: Json<NewSeedDto>, pool: Data<Pool>) -> Result
     Ok(HttpResponse::Created().json(Body::new(constants::MESSAGE_OK, response)))
 }
 
-/// Endpoint for deleting a `Seed`.
+/// Endpoint for deleting a [`Seed`](crate::model::entity::Seed).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

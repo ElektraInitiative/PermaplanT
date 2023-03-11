@@ -1,4 +1,4 @@
-//! Contains the implementation of [`PlantsDTO`].
+//! Contains the implementation of [`PlantsDto`].
 
 use crate::model::entity::Plants;
 

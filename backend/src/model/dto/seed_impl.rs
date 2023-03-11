@@ -1,4 +1,4 @@
-//! Contains the implementation of [`SeedDTO`].
+//! Contains the implementation of [`SeedDto`].
 
 use crate::model::entity::Seed;
 

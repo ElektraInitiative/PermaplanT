@@ -1,4 +1,4 @@
-//! Tests for [`super::seed_controller`].
+//! Tests for [`crate::controller::seed`].
 
 #[cfg(test)]
 mod tests {

@@ -1,4 +1,4 @@
-//! [`ResponseBody`] and its implementation.
+//! [`Body`] and its implementation.
 
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;

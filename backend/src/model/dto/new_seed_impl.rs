@@ -1,4 +1,4 @@
-//! Contains the implementation of [`NewSeedDTO`].
+//! Contains the implementation of [`NewSeedDto`].
 
 use crate::model::entity::NewSeed;
 

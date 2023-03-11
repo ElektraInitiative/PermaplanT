@@ -1,4 +1,4 @@
-//! `Variety` endpoints.
+//! `Plants` endpoints.
 
 use crate::{config::db::Pool, constants, model::response::Body, service};
 use actix_web::{
@@ -7,7 +7,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-/// Endpoint for fetching all [VarietyDTOs](crate::models::dto::variety_dto::VarietyDTO).
+/// Endpoint for fetching all [`PlantsDto`](crate::model::dto::PlantsDto).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
