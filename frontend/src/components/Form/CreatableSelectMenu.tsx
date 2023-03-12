@@ -13,6 +13,7 @@ export interface CreatableSelectMenuProps<T extends FieldValues> {
   placeholder?: string;
   handleOptionsChange?: (option: any) => void;
   handleCreate?: (inputValue: string) => void;
+  onChange?: () => void;
 }
 
 export default function CreatableSelectMenu<T extends FieldValues>({
@@ -25,6 +26,7 @@ export default function CreatableSelectMenu<T extends FieldValues>({
   placeholder,
   handleOptionsChange,
   handleCreate,
+  onChange,
 }: CreatableSelectMenuProps<T>) {
   const customStyles: StylesConfig = {
     menu: (styles) => ({
@@ -96,6 +98,7 @@ export default function CreatableSelectMenu<T extends FieldValues>({
             isMulti={isMulti}
             styles={customStyles}
             required={required}
+            onInputChange={onChange}
           />
         )}
       />

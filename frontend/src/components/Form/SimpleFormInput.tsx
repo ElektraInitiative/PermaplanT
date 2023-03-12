@@ -12,6 +12,7 @@ interface SimpleFormInputProps<T extends FieldValues> {
   min?: number;
   max?: number;
   register?: UseFormRegister<T>;
+  onChange?: () => void;
   valueAsNumber?: boolean;
   errorTitle?: string;
 }
@@ -26,6 +27,7 @@ export default function SimpleFormInput<T extends FieldValues>({
   max,
   id,
   register,
+  onChange,
   valueAsNumber = false,
   errorTitle,
 }: SimpleFormInputProps<T>) {
@@ -37,6 +39,7 @@ export default function SimpleFormInput<T extends FieldValues>({
       </label>
       {isArea ? (
         <textarea
+          onKeyUp={onChange}
           rows={6}
           name={id}
           id={id}
@@ -47,6 +50,7 @@ export default function SimpleFormInput<T extends FieldValues>({
         />
       ) : (
         <input
+          onKeyUp={onChange}
           type={type}
           min={min}
           max={max}
