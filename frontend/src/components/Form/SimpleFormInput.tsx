@@ -9,7 +9,10 @@ interface SimpleFormInputProps<T extends FieldValues> {
   isArea?: boolean;
   required?: boolean;
   type?: HTMLInputTypeAttribute;
+  min?: number;
+  max?: number;
   register?: UseFormRegister<T>;
+  onChange?: () => void;
   valueAsNumber?: boolean;
   errorTitle?: string;
 }
@@ -20,8 +23,11 @@ export default function SimpleFormInput<T extends FieldValues>({
   required = false,
   isArea = false,
   type = 'text',
+  min,
+  max,
   id,
   register,
+  onChange,
   valueAsNumber = false,
   errorTitle,
 }: SimpleFormInputProps<T>) {
@@ -33,6 +39,7 @@ export default function SimpleFormInput<T extends FieldValues>({
       </label>
       {isArea ? (
         <textarea
+          onKeyUp={onChange}
           rows={6}
           name={id}
           id={id}
@@ -43,7 +50,10 @@ export default function SimpleFormInput<T extends FieldValues>({
         />
       ) : (
         <input
+          onKeyUp={onChange}
           type={type}
+          min={min}
+          max={max}
           id={id}
           className="block h-11 w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
           placeholder={placeHolder}
