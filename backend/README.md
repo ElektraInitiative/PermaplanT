@@ -61,7 +61,9 @@ Example requests:
 
 ## Documentation
 
-To view the documentation run
+To view api documentation go to <http://localhost:8080/swagger-ui/>.
+
+To view code documentation run
 
 ```shell
 cargo doc --open

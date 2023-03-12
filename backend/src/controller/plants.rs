@@ -12,6 +12,12 @@ use actix_web::{
 /// # Errors
 /// * If the connection to the database could not be established.
 /// * If [web::block] fails.
+#[utoipa::path(
+    context_path = "/api/plants",
+    responses(
+        (status = 200, description = "Fetch all plants", body = BodyVecPlants)
+    )
+)]
 #[get("")]
 pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
     let response = web::block(move || service::plants::find_all(&pool)).await??;

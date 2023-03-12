@@ -4,6 +4,7 @@
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
+use utoipa::ToSchema;
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
@@ -13,7 +14,7 @@ pub mod seed_impl;
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct SeedDto {
     pub id: i32,
     pub name: String,
@@ -21,6 +22,7 @@ pub struct SeedDto {
     pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub quantity: Quantity,
+    #[schema(value_type = Option<String>)]
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
     pub taste: Option<String>,
@@ -33,13 +35,14 @@ pub struct SeedDto {
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewSeedDto {
     pub name: String,
     pub variety: Option<String>,
     pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub quantity: Quantity,
+    #[schema(value_type = Option<String>)]
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
     pub taste: Option<String>,
@@ -52,7 +55,7 @@ pub struct NewSeedDto {
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct PlantsDto {
     pub id: i32,
     pub tags: Vec<Option<String>>,

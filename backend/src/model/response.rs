@@ -2,10 +2,19 @@
 
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
+use utoipa::ToSchema;
+
+use super::dto::{PlantsDto, SeedDto};
 
 /// The default return type of the server.
 #[typeshare]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[aliases(
+    BodyVecSeed = Body<VecSeed>, VecSeed = Vec<SeedDto>, // TODO: not rendered as array in swagger
+    BodyVecPlants = Body<VecPlants>, VecPlants = Vec<PlantsDto>, // TODO: not rendered as array in swagger
+    BodySeed = Body<SeedDto>,
+    BodyString = Body<String>
+)]
 pub struct Body<T> {
     /// An additional message to be sent back together with the actual data.
     pub message: String,
