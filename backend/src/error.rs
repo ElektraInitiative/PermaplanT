@@ -1,17 +1,25 @@
+//! Error of the server and their implementation.
+
 use actix_web::{
     http::{header::ContentType, StatusCode},
     HttpResponse, ResponseError,
 };
 use derive_more::{Display, Error};
 
+/// The default error used by the server.
 #[derive(Debug, Display, Error)]
 #[display(fmt = "{status_code}: {reason}")]
+#[allow(clippy::module_name_repetitions)] // Error structs need to be easily recognizable.
 pub struct ServiceError {
+    /// The status code to be used for the response.
     pub status_code: StatusCode,
+    /// The reason for the error.
     pub reason: String,
 }
 
 impl ServiceError {
+    /// Creates a new service errro containing an [`Http status code`][StatusCode] and a reason for the error.
+    #[must_use]
     pub const fn new(status_code: StatusCode, reason: String) -> Self {
         Self {
             status_code,

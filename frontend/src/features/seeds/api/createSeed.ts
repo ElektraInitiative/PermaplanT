@@ -1,12 +1,12 @@
-import { NewSeedDTO, SeedDTO } from '@/bindings/definitions';
+import { NewSeedDto, SeedDto } from '@/bindings/definitions';
 
-import { ResponseBody } from '../../../bindings/definitions';
+import { Body } from '../../../bindings/definitions';
 import axios from 'axios';
 import { baseApiUrl } from '@/config';
 
-export const createSeed = async (seed: NewSeedDTO) => {
+export const createSeed = async (seed: NewSeedDto) => {
   try {
-    await axios.post<ResponseBody<SeedDTO>>(`${baseApiUrl}/api/seeds`, seed);
+    await axios.post<Body<SeedDto>>(`${baseApiUrl}/api/seeds`, seed);
   } catch (error) {
     throw error as Error;
   }

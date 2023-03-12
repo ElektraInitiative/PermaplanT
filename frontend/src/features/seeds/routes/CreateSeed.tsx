@@ -1,5 +1,5 @@
 import CreateSeedForm from '../components/CreateSeedForm';
-import { NewSeedDTO } from '@/bindings/definitions';
+import { NewSeedDto } from '@/bindings/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import useCreateSeedStore from '../store/CreateSeedStore';
@@ -27,7 +27,7 @@ export function CreateSeed() {
     setShowCancelModal(!showCancelModal);
   };
 
-  const onSubmit = async (newSeed: NewSeedDTO) => {
+  const onSubmit = async (newSeed: NewSeedDto) => {
     await createSeed(newSeed);
     if (error === null) {
       navigate('/seeds');

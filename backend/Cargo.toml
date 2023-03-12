@@ -1,6 +1,11 @@
 [package]
 name = "backend"
 version = "0.1.0"
+description = "The backend of PermaplanT"
+repository = "https://github.com/ElektraInitiative/PermaplanT"
+license = "BSD 3-Clause"
+keywords = ["PermaplanT"]
+categories = ["web-programming", "web-programming::http-server"]
 edition = "2021"
 
 [dependencies]
