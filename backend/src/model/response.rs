@@ -15,10 +15,13 @@ pub struct Body<T> {
 
 impl<T> Body<T> {
     /// Creates a response to be sent back containing a message and some data.
-    pub fn new(message: &str, data: T) -> Self {
-        Self {
-            message: message.to_owned(),
-            data,
-        }
+    pub const fn new(message: String, data: T) -> Self {
+        Self { message, data }
+    }
+}
+
+impl<T> From<T> for Body<T> {
+    fn from(value: T) -> Self {
+        Self::new("ok".to_owned(), value)
     }
 }
