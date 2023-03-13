@@ -113,7 +113,7 @@ For this purpose, during the parsing we are creating csv files with distinct val
 
 3. Relations between plants
 
-The relations are not part of the plant entity, but rather a property of the relationship between two plants. Additionally, the relation should provide cross-table relationships e.g. a genus doesn't like a family.
+The relations are not part of the plant entity, but rather a property of the relationship between two plants. Additionally, the relation should provide cross-table relationships, e.g., a genus doesn't like a family.
 
 ## Implications
 
