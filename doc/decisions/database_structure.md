@@ -96,7 +96,7 @@ Metatables are independent tables that contain information about the parent enti
 
 3. Relations between plants
 
-Plant relations(e.g. like, dislike, etc.) should be implemented using separate many-to-many table.
+Plant relations (e.g. companion) should be implemented using a separate many-to-many table.
 
 ## Rationale
 
