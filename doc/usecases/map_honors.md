@@ -5,7 +5,7 @@
 - **Scope:** Map Honors
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The users can give an honor to/likes the map of another user they visit.
+- **Brief:** The users can give an honor/like to the map of another user they visit.
 - **Status:** Draft
 
 ## Scenarios
