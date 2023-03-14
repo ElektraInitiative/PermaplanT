@@ -23,25 +23,29 @@ including their responsibilities, skills, etc.
 - GitHub: @absurd-turtle
 - main responsibilities: Nextcloud Integration, Frontend Architecture
 - focus groups: UX, (Polyculture?)
-- special skills: Frontend, SQL, Tailwind CSS, TypeScript
+- special skills: SQL, Tailwind CSS, TypeScript
+- positioning: frontend
 
 ## Gabriel
 
 - GitHub: @kitzbergerg
 - main responsibility: Backend
 - special skills: Rust
+- positioning: backend
 
 ## Moritz
 
 - GitHub: @badnames
 - main responsibilities: DB, Polyculture
 - focus groups: DB, PostGIS, Polyculture
+- positioning: full-stack
 
 ## Giancarlo
 
 - GitHub: @buenaflor
 - main responsibility: Drawing Part of Frontend (Canvas)
 - focus group: UX
+- positioning: full-stack
 
 ## Nursultan
 
@@ -50,20 +54,30 @@ including their responsibilities, skills, etc.
 - focus group: DB
 - special skills: frontend tests
 - research: optimizations
+- positioning: full-stack
 
 ## Lukas
 
 - GitHub: lukashartl
 - main responsibility: CI
+- positioning: CI
 
 ## Ramzan
 
 - main responsibility: PostGIS
 - focus group: DB, Polyculture
+- positioning: DB
 
 ## Thorben Julian
 
 - main responsibility: Gamification, (PostGIS?)
 - focus group: Polyculture
 - special skills: Jenkins
+- positioning: DB
 
+## Benjamin
+
+- main responsibility: Polyculture, PostGIS
+- focus group: ?
+- special skills: BOKU
+- positioning: backend
