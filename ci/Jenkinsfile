@@ -8,6 +8,8 @@ pipeline {
             }
 
             steps {
+                echo "Workspace is '${WORKSPACE}'"
+
                 echo 'Resetting the CI DB ...'
                 sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
