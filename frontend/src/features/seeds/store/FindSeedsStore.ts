@@ -1,10 +1,10 @@
-import { SeedDTO } from '../../../bindings/definitions';
+import { SeedDto } from '../../../bindings/definitions';
 import { create } from 'zustand';
 import { findAllSeeds } from '../api/findAllSeeds';
 
 interface FindSeedsStore {
   isFetchingSeeds: boolean;
-  seeds: SeedDTO[];
+  seeds: SeedDto[];
   error: Error | null | undefined;
   showErrorModal: boolean;
   setShowErrorModal: (showErrorModal: boolean) => void;

@@ -1,6 +1,11 @@
 [package]
 name = "backend"
 version = "0.1.0"
+description = "The backend of PermaplanT"
+repository = "https://github.com/ElektraInitiative/PermaplanT"
+license = "BSD 3-Clause"
+keywords = ["PermaplanT"]
+categories = ["web-programming", "web-programming::http-server"]
 edition = "2021"
 
 [dependencies]
@@ -10,6 +15,7 @@ actix-rt = "2.8.0"
 dotenvy = "0.15.0"
 typeshare = "1.0.0"
 derive_more = "0.99.17"
+postgis_diesel = "2.1.0"
 
 [dependencies.diesel]
 version = "2.0.2"
