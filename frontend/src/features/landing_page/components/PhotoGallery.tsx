@@ -1,3 +1,6 @@
+import '@/components/Modals/ImageModal';
+import ImageModal from '@/components/Modals/ImageModal';
+import SimpleModal from '@/components/Modals/SimpleModal';
 import { useState } from 'react';
 
 export const PhotoGallery = () => {
@@ -18,9 +21,7 @@ export const PhotoGallery = () => {
   ];
   const [selectedImage, setSelectedImage] = useState(NaN);
   const [imageSize, setImageSize] = useState('mid');
-  const switchSelection = (index: number) => {
-    setSelectedImage(index === selectedImage ? NaN : index);
-  };
+  const [showModal, setShowModal] = useState(false);
   const getItemSize = (index: number) => {
     const sizes = [
       ' row-span-2 col-span-3 ',
@@ -68,6 +69,14 @@ export const PhotoGallery = () => {
 
   return (
     <div>
+      <ImageModal 
+        title = "Image" 
+        body = {
+          <img src={imageUrls[selectedImage]}/>
+        } 
+        setShow = {setShowModal} show = {showModal} 
+        onCancel = {() => {setShowModal(false)}}
+      />
       <div className="mt-8 flex justify-center gap-4">
         <button
           onClick={() => {
@@ -96,17 +105,17 @@ export const PhotoGallery = () => {
         style={{ ...getAutoRows(imageSize), ...getGridCols(imageSize) }}
       >
         {imageUrls.map((image, index) => {
-          const selectedSpan = index === selectedImage ? ' row-span-6 col-span-6 ' : '';
-
           const className =
             'w-full h-full p-1 pt-4 pb-6 bg-white hover:bg-stone-300 border-b-4 rounded ' +
-            getItemSize(index) +
-            selectedSpan;
+            getItemSize(index) 
           return (
             <div
               key={image + '_container'}
               className={className}
-              onClick={() => switchSelection(index)}
+              onClick={() => {
+                setSelectedImage(index)
+                setShowModal(true)
+              }}
             >
               <img
                 src={image}
