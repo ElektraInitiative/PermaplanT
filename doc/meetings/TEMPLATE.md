@@ -14,15 +14,16 @@ _Protocolled by: X_
 
 ## Tasks:
 
-- X
+-   X
 
 ## Agenda:
 
-*Please describe three points that you want to discuss in the meeting in a few sentences.*
+_Please describe three points that you want to discuss in the meeting in a few sentences._
 
 ### Persons
 
--   Person1's questions ([link](#person1)):
+-   Person1
+    -   Status updates ([link](#person1)):
     -   Question 1
     -   Question 2
     -   Question 3
@@ -35,13 +36,13 @@ _Protocolled by: X_
 -   lorem ipsum
 -   lorem ipsum
 
-## Extended personal questions
+## Personal status updates:
 
 ### Person1
 
--   Question 1
+-   Issue 1
     lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quae voluptas, quod, quidem, voluptates voluptatibus quibusdam necessitatibus voluptatem quia voluptatum quos. Quisquam, quia
--   Question 2
+-   Issue 2
     lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quae voluptas, quod, quidem, voluptates voluptatibus quibusdam necessitatibus voluptatem quia voluptatum quos. Quisquam, quia
--   Question 3
+-   Issue 3
     lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quae voluptas, quod, quidem, voluptates voluptatibus quibusdam necessitatibus voluptatem quia voluptatum quos. Quisquam, quia
