@@ -30,8 +30,7 @@ export default function SimpleModal({ title, body, show, setShow, onCancel }: Im
               x
             </button>
           </div>
-          <p className="">{body}</p>
-          <div className="space-between flex flex-row justify-center space-x-8"></div>
+          <div className="flex justify-center">{body}</div>
         </div>
       </ModalContainer>
     </>
