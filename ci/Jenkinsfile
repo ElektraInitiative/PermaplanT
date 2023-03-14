@@ -2,7 +2,7 @@ pipeline {
     agent { label 'permaplant' }
 
     stages {
-        stage('Build') {
+        stage('Build PR') {
             environment {
                 DATABASE_URL = 'postgres://cidb:cidb@127.0.0.1/cidb'
             }
@@ -16,18 +16,20 @@ pipeline {
                 echo 'Building...'
                 sh './ci/build-scripts/build-backend.sh'
                 sh './ci/build-scripts/build-frontend.sh'
+
+                echo 'Deploying'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
             }
         }
 
-        stage('Deploy to Dev') {
+        stage('Deploy Dev') {
             when {
                 branch "master"
             }
 
             steps {
                 echo 'Deploying to Dev ...'
-                sh 'sudo -u permaplant /usr/local/bin/permaplant-setup-dev.sh'
-                sh 'sudo /usr/local/bin/permaplant-deploy-dev.sh'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
             }
         }
     }
