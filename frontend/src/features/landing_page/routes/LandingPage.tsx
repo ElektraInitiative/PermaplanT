@@ -1,16 +1,17 @@
 import '../../../styles/geoMap.css';
 import { GeoMap } from '../components/GeoMap';
 import { Navbar } from '../components/Navbar';
+import { PhotoGallery } from '../components/PhotoGallery';
 
 export const LandingPage = () => {
   return (
-    <div>
+    <div className="h-full">
       <Navbar />
       <div className="mb-8 flex flex-col items-center p-8">
         {/* <div className="max-w-3xl rounded bg-white p-4 border-b-4 mt-10"> */}
         {/*   <img src="/permaplant_drawing.jpeg" alt="Permaplant drawing" /> */}
         {/* </div> */}
-        <div className="mt-10 flex flex-col items-center gap-4">
+        <div className="mt-10 flex flex-col items-center gap-4" id="home">
           <div className="flex w-1/2 items-end justify-end">
             <img src="/permaplant-logo-2.svg" alt="Permaplant drawing" />
           </div>
@@ -49,21 +50,38 @@ export const LandingPage = () => {
             </ul>
           </div>
         </div>
-        <h2 className="mt-12 mb-4 border-l-2 pl-4">Who uses PermaPlanT</h2>
-        <div className="mt-2 min-w-full grow grow rounded border-b-4 bg-white p-10">
+        <h2 className="mt-12 mb-4 border-l-2 pl-4" id="map">
+          Who uses PermaPlanT
+        </h2>
+        <div className="mt-2 h-[50vh] min-h-[24rem] w-full min-w-[32rem] max-w-6xl grow rounded border-b-4 bg-white p-10">
           <GeoMap />
         </div>
+      </div>
+      {/* todo: image gallery */}
+      {/* <img src="https://nextcloud.markus-raab.org/nextcloud/index.php/apps/files_sharing/publicpreview/BLfGxHDZxrF4NKo?file=/logo_draft.png&fileId=466975&x=1080&y=1920&a=true" /> */}
+      {/* <img src="https://nextcloud.markus-raab.org/nextcloud/index.php/apps/files_sharing/publicpreview/BLfGxHDZxrF4NKo?file=/20230204_Entwurf_Yvonne.jpeg&fileId=466982&x=1080&y=1920&a=true" /> */}
+
+      <section className="m-8" id="gallery">
+        <h2 className="mt-12 ml-8 border-l-2 pl-4">Gallery</h2>
+        <PhotoGallery />
+      </section>
+      <footer className="flex justify-center gap-4 bg-white p-4 px-8">
         <a
           className="border-b border-stone-700"
           href="https://github.com/ElektraInitiative/PermaPlant/"
         >
           github
         </a>
-      </div>
-      {/* todo: image gallery */}
-      <img src="https://nextcloud.markus-raab.org/nextcloud/index.php/apps/files_sharing/publicpreview/BLfGxHDZxrF4NKo?file=/logo_draft.png&fileId=466975&x=1080&y=1920&a=true" />
-      <img src="https://nextcloud.markus-raab.org/nextcloud/index.php/apps/files_sharing/publicpreview/BLfGxHDZxrF4NKo?file=/20230204_Entwurf_Yvonne.jpeg&fileId=466982&x=1080&y=1920&a=true" />
-
+        <a className="border-b border-stone-700" href="#home">
+          home
+        </a>
+        <a className="border-b border-stone-700" href="#gallery">
+          gallery
+        </a>
+        <a className="border-b border-stone-700" href="#map">
+          map
+        </a>
+      </footer>
     </div>
   );
 };
