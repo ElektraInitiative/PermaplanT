@@ -10,6 +10,9 @@ pipeline {
             steps {
                 echo "Workspace is '${WORKSPACE}'"
 
+                echo 'Ensure pr service is stopped'
+                sh 'sudo /usr/sbin/service permaplant-pr stop'
+
                 echo 'Resetting the CI DB ...'
                 sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
