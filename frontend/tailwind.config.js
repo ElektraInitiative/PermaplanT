@@ -6,7 +6,7 @@ module.exports = {
       border: ['focus'],
       colors: {
         primary: {
-          background: '#212121',
+          background: '#fefefe',
           textfield: '#181818',
           button: '#181818',
         },
