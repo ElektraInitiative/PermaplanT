@@ -34,31 +34,36 @@ export const PhotoGallery = () => {
     return sizes[sizeIndex];
   };
 
-  // lookup functions are created because the classnames
-  // (due to treeshaking) cannot be dynmically created.
-  const getAutoRows = (rowHeight: string) => {
-    return {
-      small: 'auto-rows-[6vw]',
-      mid: 'auto-rows-[8vw]',
-      large: 'auto-rows-[12vw]',
-    }[rowHeight];
+  const getAutoRows = (imageSize: string) => {
+    const size = {
+      small: '6vw',
+      mid: '8vw',
+      large: '12vw',
+    }[imageSize];
+    const style = {
+      gridAutoRows: size ? size : '6vw',
+    };
+    return style;
   };
-  const getGridCols = (cols: string) => {
-    return {
-      large: 'grid-cols-[repeat(5,_minmax(0,_1fr))]',
-      mid: 'grid-cols-[repeat(10,_minmax(0,_1fr))]',
-      small: 'grid-cols-[repeat(15,_minmax(0,_1fr))]',
-    }[cols];
+
+  const getGridCols = (imageSize: string) => {
+    const cols = {
+      large: 5,
+      mid: 10,
+      small: 15,
+    }[imageSize];
+    const style = {
+      gridTemplateColumns: 'repeat(' + cols + ', 1fr)',
+    };
+    return style;
   };
 
   const gridClasses = ` 
       grid
       grid-flow-dense 
-      ${getAutoRows(imageSize)}
       grid-cols-6  
       gap-4 
       p-8 
-      ${getGridCols(imageSize)}
     `;
 
   return (
@@ -86,7 +91,10 @@ export const PhotoGallery = () => {
           large
         </button>
       </div>
-      <section className={gridClasses}>
+      <section
+        className={gridClasses}
+        style={{ ...getAutoRows(imageSize), ...getGridCols(imageSize) }}
+      >
         {imageUrls.map((image, index) => {
           const selectedSpan = index === selectedImage ? ' row-span-6 col-span-6 ' : '';
 
