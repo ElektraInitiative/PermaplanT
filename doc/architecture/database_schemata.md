@@ -145,6 +145,33 @@ plant_detail }|--|| family : ""
 | **nutrition_demand**             | NULL                             | If "Nutritionally poor soil" in `environmental_tolerances` is given `light feeder` should be set. |
 | **preferable_permaculture_zone** | NULL                             |                                                                                                   | -1..6 (-1 should be printed as 00) |
 
+## `Genus`
+
+| **_Column name_** | **_Example_** | **_Description_** |
+| :---------------- | :------------ | :---------------- |
+| **id**            | 1             |                   |
+| **name**          | Abelia        |                   |
+| **created_at**    |               |                   |
+| **updated_at**    |               |                   |
+
+## `Subfamily`
+
+| **_Column name_** | **_Example_** | **_Description_** |
+| :---------------- | :------------ | :---------------- |
+| **id**            | 1             |                   |
+| **name**          | Lorem ipsum   |                   |
+| **created_at**    |               |                   |
+| **updated_at**    |               |                   |
+
+## `Family`
+
+| **_Column name_** | **_Example_** | **_Description_** |
+| :---------------- | :------------ | :---------------- |
+| **id**            | 1             |                   |
+| **name**          | Malvaceae     |                   |
+| **created_at**    |               |                   |
+| **updated_at**    |               |                   |
+
 ## `Relation`
 
 Many-to-many table to store relations between plants, genus, subfamily and family.
@@ -207,4 +234,13 @@ SELECT p.id,
               WHEN r.from_type = 'subfamily' THEN r.id = subfamily.id
               WHEN r.from_type = 'family' THEN r.id = family.id
               END;
+```
+
+## Set height and width of all plants of a specific genus
+
+```sql
+UPDATE plant_detail
+   SET mature_size_height = 3.5,
+       mature_size_width = 3
+ WHERE genus = 'Abelia';
 ```
