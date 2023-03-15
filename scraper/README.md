@@ -19,7 +19,7 @@ npm install && mkdir -p data
 cp .env.example .env
 ```
 
-`PRACTICALPLANTSPATH` mentioned in .env is the path on your local filesystem to the Practical Plants wiki dump, that could be fetched from our [repository](https://github.com/ElektraInitiative/practicalplants). This is required to scrape the data.
+`PRACTICALPLANTSPATH` mentioned in .env is the path on your local filesystem to the Practical Plants wiki dump, which could be fetched from our [repository](https://github.com/ElektraInitiative/practicalplants). This is required to scrape the data.
 
 3. Start the scraper
 
@@ -29,7 +29,7 @@ The scraper will scrape the data from the Practical Plants wiki dump and store i
 npm run start
 ```
 
-As an additional step the script will also lookup the german common name through Wikidata API and store it under the column `Column Name DE` in the `detail.csv` file.
+As an additional step, the script will also look up the german common name through Wikidata API and store it under the column `Column Name DE` in the `detail.csv` file.
 
 There will be several CSV files generated in the `data` directory:
 
