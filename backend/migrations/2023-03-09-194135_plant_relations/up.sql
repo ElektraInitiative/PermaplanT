@@ -41,5 +41,6 @@ CREATE TABLE relations (
     CHECK(
         relation_strength >= 0
         AND relation_strength <= 3
-    )
+    ),
+    CONSTRAINT relations_from_id_from_type_to_id_to_type_key UNIQUE (from_id, from_type, to_id, to_type)
 );

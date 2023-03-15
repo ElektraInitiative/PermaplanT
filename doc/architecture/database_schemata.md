@@ -169,45 +169,42 @@ Many-to-many table to store relations between plants, genus, subfamily and famil
 SELECT *
   FROM plant_detail
   LEFT JOIN genus
-            ON plant_detail.genus_id = genus.id
+            ON plant_detail.genus = genus.name
   LEFT JOIN subfamily
-            ON plant_detail.subfamily_id = subfamily.id
+            ON plant_detail.subfamily = subfamily.name
   LEFT JOIN family
-            ON plant_detail.family_id = family.id;
+            ON plant_detail.family = family.name;
 ```
 
 ## Insert a relation between a plant with a specific genus and a specific family
 
 ```sql
-INSERT INTO relations (from_id, from_type, to_id, to_type, relation_type)
-VALUES (1, 'genus', 156, 'family', 'dislikes');
+INSERT INTO relations (from_id, from_type, to_id, to_type, relation_type, relation_strength)
+VALUES (1, 'genus', 156, 'family', 'companion', 3);
 ```
 
-## Get all plants that dislike a specific family
+## Get all plants that are companions to a specific family
 
 ```sql
 SELECT p.id,
        p.binomial_name,
        p.genus,
-       p.genus_id,
        p.family,
-       p.family_id,
        p.subfamily,
-       p.subfamily_id,
        r.*
   FROM plant_detail p
   LEFT JOIN genus
-            ON p.genus_id = genus.id
+            ON p.genus = genus.name
   LEFT JOIN subfamily
-            ON p.subfamily_id = subfamily.id
+            ON p.subfamily = subfamily.name
   LEFT JOIN family
-            ON p.family_id = family.id
+            ON p.family = family.name
   JOIN relations r
-       ON r.relation_type = 'dislikes' AND r.to_type = 'family' AND r.to_id = 156 AND
+       ON r.relation_type = 'companion' AND r.to_type = 'family' AND r.to_id = 156 AND
           CASE
               WHEN r.from_type = 'plant' THEN r.id = p.id
               WHEN r.from_type = 'genus' THEN r.id = genus.id
               WHEN r.from_type = 'subfamily' THEN r.id = subfamily.id
               WHEN r.from_type = 'family' THEN r.id = family.id
-              END
+              END;
 ```
