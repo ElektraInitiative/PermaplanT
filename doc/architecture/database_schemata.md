@@ -149,16 +149,17 @@ plant_detail }|--|| family : ""
 
 Many-to-many table to store relations between plants, genus, subfamily and family.
 
-| **_Column name_** | **_Example_**              | **_Description_**                                                             |
-| :---------------- | :------------------------- | :---------------------------------------------------------------------------- |
-| **id**            | 1                          | relation id                                                                   |
-| **from_id**       | 1                          | id of the left side of the relation(id of plant, genus, subfamily or family)  |
-| **from_type**     | genus                      | type can be plant, genus, subfamily or family                                 |
-| **to_id**         | 1                          | id of the right side of the relation(id of plant, genus, subfamily or family) |
-| **to_type**       | family                     | type can be plant, genus, subfamily or family                                 |
-| **relation_type** | dislikes                   | type of the relation can be "likes" and "dislikes"                            |
-| **created_at**    | 2023-02-09 14:06:01.451028 | creation timestamp                                                            |
-| **updated_at**    | 2023-02-09 14:06:01.451028 | update timestamp                                                              |
+| **_Column name_**     | **_Example_**              | **_Description_**                                                             |
+| :-------------------- | :------------------------- | :---------------------------------------------------------------------------- |
+| **id**                | 1                          | relation id                                                                   |
+| **from_id**           | 1                          | id of the left side of the relation(id of plant, genus, subfamily or family)  |
+| **from_type**         | genus                      | type can be plant, genus, subfamily or family                                 |
+| **to_id**             | 1                          | id of the right side of the relation(id of plant, genus, subfamily or family) |
+| **to_type**           | family                     | type can be plant, genus, subfamily or family                                 |
+| **relation_type**     | companion                  | type of the relation can be companion, antagonist, neutral                    |
+| **relation_strength** | 2                          | strength of the relation, can be 0 to 3                                       |
+| **created_at**        | 2023-02-09 14:06:01.451028 | creation timestamp                                                            |
+| **updated_at**        | 2023-02-09 14:06:01.451028 | update timestamp                                                              |
 
 # Example queries
 

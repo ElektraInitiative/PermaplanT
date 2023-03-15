@@ -26,7 +26,7 @@ ALTER TABLE plant_detail
 ADD COLUMN subfamily_id INTEGER REFERENCES subfamily (id);
 ALTER TABLE plant_detail
 ADD COLUMN family_id INTEGER REFERENCES family (id);
-CREATE TYPE RELATION_TYPE AS ENUM ('likes', 'dislikes');
+CREATE TYPE RELATION_TYPE AS ENUM ('companion', 'antagonist', 'neutral');
 CREATE TYPE HIERARCHY_LEVEL_TYPE AS ENUM ('plant', 'genus', 'subfamily', 'family');
 CREATE TABLE relations (
     id SERIAL PRIMARY KEY,
@@ -35,8 +35,13 @@ CREATE TABLE relations (
     to_id INTEGER NOT NULL,
     to_type HIERARCHY_LEVEL_TYPE NOT NULL,
     relation_type RELATION_TYPE NOT NULL,
+    relation_strength INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT now() NOT NULL,
-    updated_at TIMESTAMP DEFAULT now() NOT NULL
+    updated_at TIMESTAMP DEFAULT now() NOT NULL,
+    CHECK(
+        relation_strength >= 0
+        AND relation_strength <= 3
+    )
 );
 /*
  INSERT INTO genus (name)
