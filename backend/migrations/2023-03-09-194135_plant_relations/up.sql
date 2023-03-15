@@ -21,11 +21,11 @@ CREATE TABLE family (
     CONSTRAINT family_name_key UNIQUE (name)
 );
 ALTER TABLE plant_detail
-ADD COLUMN genus_id INTEGER REFERENCES genus (id);
+ADD CONSTRAINT plant_detail_genus_fkey FOREIGN KEY (genus) REFERENCES genus (name);
 ALTER TABLE plant_detail
-ADD COLUMN subfamily_id INTEGER REFERENCES subfamily (id);
+ADD CONSTRAINT plant_detail_subfamily_fkey FOREIGN KEY (subfamily) REFERENCES subfamily (name);
 ALTER TABLE plant_detail
-ADD COLUMN family_id INTEGER REFERENCES family (id);
+ADD CONSTRAINT plant_detail_family_fkey FOREIGN KEY (family) REFERENCES family (name);
 CREATE TYPE RELATION_TYPE AS ENUM ('companion', 'antagonist', 'neutral');
 CREATE TYPE HIERARCHY_LEVEL_TYPE AS ENUM ('plant', 'genus', 'subfamily', 'family');
 CREATE TABLE relations (
@@ -43,33 +43,3 @@ CREATE TABLE relations (
         AND relation_strength <= 3
     )
 );
-/*
- INSERT INTO genus (name)
- SELECT DISTINCT
- genus
- FROM plant_detail;
- 
- INSERT INTO family (name)
- SELECT DISTINCT
- family
- FROM plant_detail
- WHERE family IS NOT NULL
- 
- UPDATE plant_detail pd
- SET
- genus_id = g.id
- FROM genus g
- WHERE pd.genus = g.name;
- 
- UPDATE plant_detail pd
- SET
- family_id = f.id
- FROM family f
- WHERE pd.family = f.name;
- 
- UPDATE plant_detail pd
- SET
- subfamily_id = sf.id
- FROM subfamily sf
- WHERE pd.subfamily = sf.name;
- */
