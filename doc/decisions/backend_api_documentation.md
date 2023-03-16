@@ -37,7 +37,8 @@ There is also a [lot of tooling](https://apiblueprint.org/tools.html) for API Bl
 
 ## Decision
 
-Utoipa
+We will use Utoipa to automatically generate API documentation from code.  
+Additionally we will provide an endpoint which will display the API documentation using Swagger.
 
 ## Rationale
 
