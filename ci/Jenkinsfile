@@ -1,33 +1,38 @@
 pipeline {
     agent { label 'permaplant' }
 
-    environment {
-        DATABASE_URL = 'postgres://cidb:cidb@127.0.0.1/cidb'
-    }
-
     stages {
-        stage('Build') {
+        stage('Build PR') {
+            environment {
+                DATABASE_URL = 'postgres://cidb:cidb@127.0.0.1/cidb'
+            }
+
             steps {
+                echo "Workspace is '${WORKSPACE}'"
+
+                echo 'Ensure pr service is stopped'
+                sh 'sudo /usr/sbin/service permaplant-pr stop'
+
                 echo 'Resetting the CI DB ...'
                 sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
                 echo 'Building...'
                 sh './ci/build-scripts/build-backend.sh'
                 sh './ci/build-scripts/build-frontend.sh'
-                stash includes: 'backend/target/release/backend', name: 'backend'
-                stash includes: 'frontend/dist/**/*', name: 'frontend'
+
+                echo 'Deploying'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
             }
         }
 
-        stage('Deploy to Dev') {
+        stage('Deploy Dev') {
             when {
                 branch "master"
             }
 
             steps {
                 echo 'Deploying to Dev ...'
-                unstash 'backend'
-                unstash 'frontend'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
             }
         }
     }
