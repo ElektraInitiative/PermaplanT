@@ -56,5 +56,3 @@ This leads to a clean API in the long run, however it is more difficult to quick
 ## Related Decisions
 
 ## Notes
-
-Once the project is in a later stage we might consider additionally using API Blueprint. At that point a cleaner API becomes more important and making changes requires more careful consideration.
