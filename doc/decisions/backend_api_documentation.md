@@ -7,7 +7,12 @@ Otherwise we would have to read the Rust Code every time we want to develop a ne
 
 ## Constraints
 
+- it must be easy enough to use as most people know only a little bit of Rust
+- it should take less time compared to manually maintaining API documentation
+
 ## Assumptions
+
+- the backend's API is only used by the frontend
 
 ## Solutions
 
