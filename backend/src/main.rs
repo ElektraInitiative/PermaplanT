@@ -51,7 +51,7 @@
 
 use actix_cors::Cors;
 use actix_web::{http, web::Data, App, HttpServer};
-use config::{db, routes};
+use config::{api_doc, db, routes};
 
 pub mod config;
 pub mod controller;
@@ -79,7 +79,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors_configuration())
             .app_data(data)
             .configure(routes::config)
-            .configure(routes::api_doc)
+            .configure(api_doc::config)
     })
     .bind(config.bind_address)?
     .run()
