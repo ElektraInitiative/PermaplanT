@@ -22,7 +22,6 @@ pub struct SeedDto {
     pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub quantity: Quantity,
-    #[schema(value_type = Option<String>)]
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
     pub taste: Option<String>,
@@ -42,7 +41,6 @@ pub struct NewSeedDto {
     pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub quantity: Quantity,
-    #[schema(value_type = Option<String>)]
     pub use_by: Option<NaiveDate>,
     pub origin: Option<String>,
     pub taste: Option<String>,

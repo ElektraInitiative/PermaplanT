@@ -15,8 +15,8 @@ actix-rt = "2.8.0"
 dotenvy = "0.15.0"
 typeshare = "1.0.0"
 derive_more = "0.99.17"
-utoipa = { version = "3.1.0", features = ["actix_extras"] }
-utoipa-swagger-ui = { version = "3.1.0", features = ["actix-web"] }
+utoipa = { version = "3.1.1", features = ["actix_extras", "chrono"] }
+utoipa-swagger-ui = { version = "3.1.1", features = ["actix-web"] }
 
 [dependencies.diesel]
 version = "2.0.2"
