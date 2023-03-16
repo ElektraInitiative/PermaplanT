@@ -18,7 +18,7 @@ use crate::{
 /// * If the connection to the database could not be established.
 /// * If [web::block] fails.
 #[utoipa::path(
-    context_path = "/api/seed",
+    context_path = "/api/seeds",
     responses(
         (status = 200, description = "Fetch all seeds", body = BodyVecSeed)
     )
@@ -35,7 +35,7 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
 /// * If the connection to the database could not be established.
 /// * If [web::block] fails.
 #[utoipa::path(
-    context_path = "/api/seed",
+    context_path = "/api/seeds",
     request_body = NewSeedDto,
     responses(
         (status = 201, description = "Create a seed", body = BodySeed)
@@ -53,7 +53,7 @@ pub async fn create(new_seed_json: Json<NewSeedDto>, pool: Data<Pool>) -> Result
 /// * If the connection to the database could not be established.
 /// * If [web::block] fails.
 #[utoipa::path(
-    context_path = "/api/seed",
+    context_path = "/api/seeds",
     responses(
         (status = 200, description = "Delete a seed", body = BodyString)
     )
