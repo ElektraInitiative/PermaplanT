@@ -1,18 +1,18 @@
-import { NewSeedDTO } from '../../../bindings/definitions';
+import { NewSeedDto } from '../../../bindings/definitions';
 import { createSeed } from '../api/createSeed';
 import { findAllPlants } from '../api/findAllPlants';
-import { PlantsDTO } from '@/bindings/definitions';
+import { PlantsDto } from '@/bindings/definitions';
 import { create } from 'zustand';
 
 interface CreateSeedState {
   isUploadingSeed: boolean;
   isFetchingPlants: boolean;
-  plants: PlantsDTO[];
+  plants: PlantsDto[];
   error: Error | null | undefined;
   showErrorModal: boolean;
   setShowErrorModal: (showErrorModal: boolean) => void;
   findAllPlants: () => Promise<void>;
-  createSeed: (seed: NewSeedDTO) => Promise<void>;
+  createSeed: (seed: NewSeedDto) => Promise<void>;
 }
 
 const useCreateSeedStore = create<CreateSeedState>((set) => ({
@@ -22,7 +22,7 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
   error: null,
   showErrorModal: false,
   setShowErrorModal: (showErrorModal: boolean) => set((state) => ({ ...state, showErrorModal })),
-  createSeed: async (seed: NewSeedDTO) => {
+  createSeed: async (seed: NewSeedDto) => {
     try {
       set((state) => ({ ...state, isUploadingSeed: true }));
       await createSeed(seed);

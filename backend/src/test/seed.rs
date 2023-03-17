@@ -1,14 +1,14 @@
+//! Tests for [`crate::controller::seed`].
+
 #[cfg(test)]
 mod tests {
-    use std::vec;
-
     use crate::config::app;
     use crate::config::db;
     use crate::config::routes;
-    use crate::models::dto::new_seed_dto::NewSeedDTO;
-    use crate::models::dto::seed_dto::SeedDTO;
-    use crate::models::r#enum::quantity::Quantity;
-    use crate::models::response::ResponseBody;
+    use crate::model::dto::NewSeedDto;
+    use crate::model::dto::SeedDto;
+    use crate::model::r#enum::quantity::Quantity;
+    use crate::model::response::Body;
     use actix_web::App;
     use actix_web::{http::StatusCode, test, web::Data};
     use dotenvy::dotenv;
@@ -122,7 +122,7 @@ mod tests {
         )
         .await;
 
-        let new_seed = NewSeedDTO {
+        let new_seed = NewSeedDto {
             name: "tomato test".to_string(),
             variety: Some("testvariety".to_string()),
             plant_id: Some(1),
@@ -145,7 +145,7 @@ mod tests {
             .await;
         assert_eq!(resp.status(), StatusCode::CREATED);
 
-        let body: ResponseBody<SeedDTO> = test::read_body_json(resp).await;
+        let body: Body<SeedDto> = test::read_body_json(resp).await;
         let seed = body.data;
         let resp = test::TestRequest::delete()
             .uri(&format!("/api/seeds/{}", seed.id))
