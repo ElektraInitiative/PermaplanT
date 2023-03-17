@@ -15,7 +15,7 @@ The overall goals of the app are to enable planning:
 
 To achieve these goals the app provides, e.g.:
 
-- visual indications for what:
+- visual indications for permaculture:
   1. makes sense according to known and easily measurable natural constraints
   2. is practical for the gardener
   3. enhances diversity and supports the ecosystem
@@ -27,12 +27,12 @@ To achieve these goals the app provides, e.g.:
 
 - users have any number of maps
 - maps have any number of layers (see below)
-- users can work on the same map together
-- undo/redo within current session for changes in the map
+- users can work on the same map or on alternatives of layers together
+- undo/redo and versions for changes in the map
 - copy&paste of selection including succeeding crops across maps
 - zoom
 - internationalization: English, German
-- algorithms for mixed crops, considerations of natural constraints and automatic suggestions
+- algorithms for polyculture, considerations of natural constraints and automatic suggestions
 - Nextcloud integrations (calender entries, Deck tasks)
 - social network features (e.g. notification that someone entered your garden)
 - GPS coordinates

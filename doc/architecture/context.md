@@ -52,7 +52,7 @@ Global value and local values in the Soil layer:
 - shadows
 - surface water, i.e., wet/dry places (German: Oberflächenwasser)
 - habitats
-- permaculture zones (German: Permakultur Zonen)
+- permaculture zones, see [glossary](glossary.md)
 
 ### Later Versions
 
@@ -75,7 +75,7 @@ Global value and local values in the Soil layer:
   - begin/end harvest
 - size (height, width)
 - constraints where they want to be:
-  - good/bad neighbors to other specific plants of any hierarchy (MISSING)
+  - companions and antagonists to other specific plants of any hierarchy (MISSING)
   - recommended distances to any other plant, needed for area calculations (MISSING)
   - sun
   - soil weight
