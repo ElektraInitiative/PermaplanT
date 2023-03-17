@@ -1,4 +1,4 @@
-import { NewSeedDTO, Quality, Quantity } from '../../../bindings/definitions';
+import { NewSeedDto, Quality, Quantity } from '../../../bindings/definitions';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import CreatableSelectMenu from '../../../components/Form/CreatableSelectMenu';
 import useCreateSeedStore from '../store/CreateSeedStore';
@@ -9,10 +9,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface CreateSeedFormProps {
   onCancel: () => void;
-  onSubmit: (newSeed: NewSeedDTO) => void;
+  onChange: () => void;
+  onSubmit: (newSeed: NewSeedDto) => void;
 }
 
-const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
+const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
   
@@ -34,8 +35,8 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
     _findAllPlants();
   }, []);
 
-  const { register, handleSubmit, control, setValue } = useForm<NewSeedDTO>();
-  const onFormSubmit: SubmitHandler<NewSeedDTO> = async (data) => {
+  const { register, handleSubmit, control, setValue } = useForm<NewSeedDto>();
+  const onFormSubmit: SubmitHandler<NewSeedDto> = async (data) => {
     if (data.origin === '') delete data.origin;
     if (data.taste === '') delete data.taste;
     if (data.yield_ === '') delete data.yield_;
@@ -62,6 +63,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             required={true}
             id="harvest_year"
             register={register}
+            onChange={onChange}
           />
           <SimpleFormInput
             labelText="Art"
@@ -69,6 +71,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             required={true}
             id="name"
             register={register}
+            onChange={onChange}
           />
           <CreatableSelectMenu
             id="plant_id"
@@ -91,6 +94,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
               else if (option !== null)
                 setValue('variety', option.value); 
             }}
+            onChange={onChange}
           />
           <SelectMenu
             id="quantity"
@@ -103,12 +107,14 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
               const mapped = temp.value as Quantity;
               setValue('quantity', mapped);
             }}
+            onChange={onChange}
           />
           <SimpleFormInput
             labelText="Herkunft"
             placeHolder="Daheim"
             id="origin"
             register={register}
+            onChange={onChange}
           />
           <SimpleFormInput
             type="date"
@@ -116,6 +122,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             placeHolder="Verbrauch bis"
             id="use_by"
             register={register}
+            onChange={onChange}
           />
           <SelectMenu
             id="quality"
@@ -127,14 +134,22 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
               const mapped = temp.value as Quality;
               setValue('quality', mapped);
             }}
+            onChange={onChange}
           />
           <SimpleFormInput
             labelText="Geschmack"
             placeHolder="nussig"
             id="taste"
             register={register}
+            onChange={onChange}
           />
-          <SimpleFormInput labelText="Ertrag" placeHolder="1" id="yield_" register={register} />
+          <SimpleFormInput 
+            labelText="Ertrag"
+            placeHolder="1" 
+            id="yield_" 
+            register={register} 
+            onChange={onChange}
+            />
           <SimpleFormInput
             labelText="Preis"
             placeHolder="2,99€"
@@ -142,13 +157,16 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             register={register}
             valueAsNumber={true}
             errorTitle="Der Preis muss eine Zahl sein. z.B. 2,99"
+            onChange={onChange}
           />
           <SimpleFormInput
             type="number"
+            min={0}
             labelText="Generation"
             placeHolder="0"
             id="generation"
             register={register}
+            onChange={onChange}
           />
         </div>
         <div className="mb-6">
@@ -158,6 +176,7 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
             placeHolder="..."
             id="notes"
             register={register}
+            onChange={onChange}
           />
         </div>
         <div className="flex flex-row justify-between space-x-4">
