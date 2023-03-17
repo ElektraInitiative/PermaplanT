@@ -15,6 +15,8 @@ interface CreateSeedFormProps {
 const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
+  
+  const currentYear = new Date().getFullYear();
 
   const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
   const plants = useCreateSeedStore((state) =>
@@ -55,7 +57,8 @@ const CreateSeedForm = ({ onCancel, onSubmit }: CreateSeedFormProps) => {
           <SimpleFormInput
             type="number"
             labelText="Bezugsjahr"
-            placeHolder="2023"
+            defaultValue={currentYear}
+            placeHolder={currentYear.toString()}
             required={true}
             id="harvest_year"
             register={register}
