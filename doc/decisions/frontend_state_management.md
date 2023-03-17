@@ -12,8 +12,13 @@ PermaplanT is a web application built with React that requires efficient and fle
 ## Considered Alternatives
 
 - [Redux](https://redux.js.org/)
+  Requires more complex setup, boilerplate and has a steeper learning curve than Zustand.
 - [React context](https://reactjs.org/docs/context.html)
+  Requires complex custom state management solution for complex application
 - [MobX](https://mobx.js.org/)
+  Requires basic understanding of reactive programming - may otherwise lead to inconsistencies and performance problems.
+- [Recoil](https://recoiljs.org/)
+  Recoil is still in experimental state, not yet recommended for production (16.03.2023).
 
 ## Decision
 
@@ -21,7 +26,8 @@ PermaplanT is a web application built with React that requires efficient and fle
 
 ## Rationale
 
-Zustand is a lightweight and easy-to-use library that uses hooks, which makes it easy to integrate with React. Its simplicity also reduces the amount of boilerplate code and the need for complex setup and configuration.
+Zustand is a lightweight and easy-to-use library that uses hooks, which makes it easy to integrate with React. 
+Its simplicity also reduces the amount of boilerplate code and the need for complex setup and configuration.
 
 ## Implications
 
@@ -29,3 +35,7 @@ Zustand is a lightweight and easy-to-use library that uses hooks, which makes it
  - Choosing React as the frontend library for PermaplanT
 
 ## Notes
+
+## Links
+https://medium.com/readytowork-org/its-zustand-vs-redux-8e24424df713
+
