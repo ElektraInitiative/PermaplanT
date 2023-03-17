@@ -28,4 +28,3 @@
 - **Postcondition:**
   The user has successfully navigated to the desired date on the timeline.
 - **Non-functional Constraints:**
-  - Offline availability

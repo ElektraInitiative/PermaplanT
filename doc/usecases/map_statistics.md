@@ -25,3 +25,4 @@
 -   **Postcondition:**
     The user has successfully viewed statistics about their garden and plants.
 -   **Non-functional Constraints:**
+  - Alternatives (statistics depend on which alternative layers are selected)

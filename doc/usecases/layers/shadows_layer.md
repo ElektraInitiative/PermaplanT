@@ -23,4 +23,3 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved or deleted shadow area as desired.
 - **Non-functional Constraints:**
-- Offline availability

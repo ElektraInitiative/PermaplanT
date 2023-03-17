@@ -27,3 +27,4 @@
 - **Postcondition:** The user's selected background image and borders are used for further planning.
 - **Non-functional Constraints:**
   - Support for multiple image formats
+  - Supports alternatives (use of different pictures)

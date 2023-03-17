@@ -26,4 +26,4 @@
   The user has zoomed in or out on their map as desired.
 - **Non-functional Constraints:**
   - The app must accurately measure the distance between elements in the selected unit.
-  - Offline availability
+  - Offline availability (if zoom is within the range of previously used zoom anywhere on the map)

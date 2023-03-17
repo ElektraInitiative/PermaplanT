@@ -25,3 +25,4 @@
 - **Error scenario:**
 - **Postcondition:**
 - **Non-functional Constraints:**
+  - Alternatives (dates depend on which alternative plant layer is selected)

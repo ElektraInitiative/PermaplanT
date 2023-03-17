@@ -37,4 +37,5 @@
   - If constraints are violated for the place where a plant was added or moved, warnings get added (or removed) to (from) the [warnings layer](warnings_layer.md).
 - **Non-functional Constraints:**
   - Performance
-  - Partial offline availability
+  - Partial offline availability: editing attributes, especially for planting and harvesting
+  - Supports alternatives

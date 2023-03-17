@@ -23,3 +23,4 @@
   The user's map includes labels as desired.
 - **Non-functional Constraints:**
   - Offline availability
+  - New Layers can be created.

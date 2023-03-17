@@ -27,3 +27,4 @@
 - **Non-functional Constraints:**
   - The app must clearly communicate to the user whether an action can be undone or redone.
   - The app must clearly communicate which undo/redo action was done.
+  - Must also work on concurrent use of the same map (users can undo what others did).

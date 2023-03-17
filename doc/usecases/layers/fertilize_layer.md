@@ -22,3 +22,4 @@
 -   **Postcondition:**
     The user has successfully added, edited, moved and deleted fertilizers in the fertilize layer.
 -   **Non-functional Constraints:**
+    - Offline availability

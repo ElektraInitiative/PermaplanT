@@ -18,7 +18,8 @@
     -   User duplicates the layer
     -   User gives the layer a name
     -   User modifies the layer
-    -   User may select another alternative of the layer
+    -   User may select another alternative of the layer.
+        This change doesn't affect layer selections of other users (that work on the same map).
 
 -   **Alternative scenario:**
     -   User accidentally duplicates the layer and deletes the duplicate with "delete layer" functionality

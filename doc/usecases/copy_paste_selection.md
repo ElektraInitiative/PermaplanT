@@ -21,3 +21,4 @@
 - **Postcondition:**
   The user's map includes the copied and pasted selection of elements.
 - **Non-functional Constraints:**
+  - Alternatives (selected elements depend on which alternative layer is selected)

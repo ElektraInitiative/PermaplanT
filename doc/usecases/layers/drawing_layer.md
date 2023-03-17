@@ -21,3 +21,5 @@
 -   **Postcondition:**
     The user's map includes the added, edited, moved or deleted drawings as desired.
 -   **Non-functional Constraints:**
+    - Offline availability
+    - New Layers can be created.

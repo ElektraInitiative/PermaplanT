@@ -24,3 +24,4 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved or deleted zone elements as desired.
 - **Non-functional Constraints:**
+  - Supports alternatives (different perspectives, e.g. guests)
