@@ -1,4 +1,4 @@
-# Use Case: Plant suggestions
+# Use Case: Suggest plants
 
 ## Summary
 
@@ -12,22 +12,24 @@
 
 - **Precondition:**
   - The user has opened the app.
-  - At least some of these layers are filled with data:
-    - Hydrology
-    - Terrain
-    - Shadows
-    - Soil
-    - Trees
-    - Winds
-    - Zones
-  - At least one plant is placed in the plants layer.
+  - The plants layer is enabled.
+  - Plant(s) are selected.
 - **Main success scenario:**
-  - A choice of plants that work well with the given environmental conditions and already placed plants is presented to the user.
+
+  - A choice of plants that
+
+    1. work well with already placed plants and
+    2. fit the environmental conditions
+
+    are presented to the user.
+
   - Within those suggestions the user can see what plants go well with each other.
-  - Plants that have a higher ecological value are highlighted.
+
 - **Alternative scenario:**
+  - No plants are selected.
+  - Polyculture groups that fit the environmental conditions are suggested.
 - **Error scenario:**
-  - In case of any technical error the users is notified about these.
+  - In case of any technical errors the users is notified about these.
   - When there are no matches due to too many constraints the user is informed that she has to remove a plant and try again.
 - **Postcondition:**
   - The user has a selection of fitting plants to add to her garden.
