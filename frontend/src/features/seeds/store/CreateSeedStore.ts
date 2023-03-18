@@ -12,7 +12,7 @@ interface CreateSeedState {
   showErrorModal: boolean;
   setShowErrorModal: (showErrorModal: boolean) => void;
   findAllPlants: () => Promise<void>;
-  createSeed: (seed: NewSeedDto) => Promise<void>;
+  createSeed: (seed: NewSeedDto, successCallback?: () => void) => Promise<void>;
 }
 
 const useCreateSeedStore = create<CreateSeedState>((set) => ({
@@ -21,12 +21,13 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
   plants: [],
   error: null,
   showErrorModal: false,
-  setShowErrorModal: (showErrorModal: boolean) => set((state) => ({ ...state, showErrorModal })),
-  createSeed: async (seed: NewSeedDto) => {
+  setShowErrorModal: (showErrorModal) => set((state) => ({ ...state, showErrorModal })),
+  createSeed: async (seed, successCallback) => {
     try {
       set((state) => ({ ...state, isUploadingSeed: true }));
       await createSeed(seed);
       set((state) => ({ ...state, isUploadingSeed: false }));
+      successCallback?.();
     } catch (error) {
       set((state) => ({
         ...state,

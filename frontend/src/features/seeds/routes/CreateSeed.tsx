@@ -1,10 +1,10 @@
 import CreateSeedForm from '../components/CreateSeedForm';
+import useCreateSeedStore from '../store/CreateSeedStore';
 import { NewSeedDto } from '@/bindings/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import useCreateSeedStore from '../store/CreateSeedStore';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function CreateSeed() {
   const navigate = useNavigate();
@@ -23,20 +23,17 @@ export function CreateSeed() {
       navigate('/seeds');
       return;
     }
-      
+
     setShowCancelModal(!showCancelModal);
   };
 
   const onSubmit = async (newSeed: NewSeedDto) => {
-    await createSeed(newSeed);
-    if (error === null) {
-      navigate('/seeds');
-    }
+    await createSeed(newSeed, () => navigate('/seeds'));
   };
 
   const onChange = () => {
     setFormTouched(true);
-  }
+  };
 
   return (
     <div className="mx-auto w-full p-4 md:w-[900px]">
