@@ -1,6 +1,7 @@
 FROM rust:1.68.0-slim
 
 RUN apt update && apt install -y libpq-dev
+RUN rustup component add clippy
 RUN cargo install diesel_cli --no-default-features --features postgres
 RUN cargo install typeshare-cli
 RUN chown 47110:47110 -R /usr/local/cargo
