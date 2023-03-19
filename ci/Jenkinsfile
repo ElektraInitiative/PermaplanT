@@ -1,10 +1,10 @@
 
 stage('Build in Docker'){
     node('docker') {
-        docker.image('rust:1.68.0-slim').inside {
-            stage('Show Rust Version') {
+        docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            docker.image('rust:1.68.0-slim').inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 checkout scm
-                sh 'rustc --version'
+                sh './ci/build-scripts/build-backend.sh'
             }
         }
     }
