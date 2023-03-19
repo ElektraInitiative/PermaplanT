@@ -26,6 +26,7 @@ _Protocolled by: Nursultan_
   - plant relations: https://github.com/ElektraInitiative/PermaplanT/pull/89
   - undo
   - alternatives
+  - singular vs. plural
   - ?
 - which tasks do we have?
 - who wants to work on which task?
