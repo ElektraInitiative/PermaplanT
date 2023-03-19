@@ -1,4 +1,15 @@
 
+stage('Build in Docker'){
+    node('docker') {
+        docker.image('rust:1.68.0-slim').inside {
+            stage('Show Rust Version') {
+                checkout scm
+                sh 'rustc --version'
+            }
+        }
+    }
+}
+
 stage('Build PR') {
     node('permaplant') {
         checkout scm
