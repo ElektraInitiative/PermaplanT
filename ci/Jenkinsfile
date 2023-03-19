@@ -48,7 +48,15 @@ stage('Checks') {
                     checkout scm
                     unstash 'schema.rs'
 
-                    echo "HC SVNT DRACONES"
+                    dir("backend") {
+                        withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
+                            // sh "cargo fmt --check"
+                            sh "cargo check"
+                            sh "cargo clippy"
+                            sh "cargo doc"
+                            sh "cargo test"
+                        }
+                    }
                 }
             }
         }
