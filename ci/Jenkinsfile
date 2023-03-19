@@ -54,7 +54,10 @@ stage('Checks') {
                             sh "cargo check"
                             sh "cargo clippy"
                             sh "cargo doc"
-                            sh "cargo test"
+                            withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080']) {
+                                sh "touch .env"
+                                sh "cargo test"
+                            }
                         }
                     }
                 }
