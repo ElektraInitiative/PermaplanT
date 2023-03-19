@@ -11,7 +11,7 @@ _Protocolled by: Nursultan_
 - Ramzan
 - Paul
 - Markus
-- (everyone on the list is welcomed)
+- (everyone on the mailing list is welcomed)
 
 ## Agenda:
 
