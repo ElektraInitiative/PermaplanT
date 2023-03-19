@@ -1,10 +1,14 @@
 
 stage('Build in Docker'){
     node('docker') {
+        checkout scm
+        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+
         docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            docker.image('rust:1.68.0-slim').inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                sh "id"
+
                 checkout scm
-                sh 'cargo install diesel_cli'
                 sh './ci/build-scripts/build-backend.sh'
             }
         }
