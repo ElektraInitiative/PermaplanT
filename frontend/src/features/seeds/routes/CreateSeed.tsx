@@ -28,6 +28,12 @@ export function CreateSeed() {
   };
 
   const onSubmit = async (newSeed: NewSeedDto) => {
+    // we can not directly check for an error here because the data would be stale 
+    // and not reflect the current state of the store
+    //
+    // an alternative would be to get a reference to the store and get the error from there
+    // const store = useCreateSeedStore.getState();
+    // if (!store.error) {...}
     await createSeed(newSeed, () => navigate('/seeds'));
   };
 
