@@ -16,9 +16,10 @@ _Protocolled by: Nursultan_
 ## Agenda:
 
 - welcome ☺️
-- goals
-- migrations
-- maintenance
+- goals:
+  - stable migrations
+  - maintenance
+  - performance
 - scraper/new columns:
   - permapeople.org https://github.com/ElektraInitiative/PermaplanT/issues/102
   - reinsaat.at https://github.com/ElektraInitiative/PermaplanT/issues/123
