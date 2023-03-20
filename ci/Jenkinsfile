@@ -1,33 +1,16 @@
 
-stage('Build in Docker'){
+stage('Build Schema'){
     node('docker') {
         checkout scm
         def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
-        def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
 
-        stage('Backend'){
-            docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                    sh "id"
-
-                    checkout scm
-                    sh './ci/build-scripts/build-backend.sh'
-
-                    stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                    stash includes: 'backend/target/release/backend', name: 'backend'
-                    stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
-                }
-            }
-        }
-
-        stage('Frontend'){
-            node_image.inside {
-                sh "id"
-
+        docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 checkout scm
-                unstash 'definitions.ts'
-                sh './ci/build-scripts/build-frontend.sh'
-                stash includes: 'frontend/dist/**/*', name: 'frontend'
+                sh './ci/build-scripts/build-schema.sh'
+
+                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
+                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
             }
         }
     }
@@ -43,10 +26,7 @@ stage('Checks') {
 
             docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                    sh "id"
-
                     checkout scm
-
                     sh './ci/build-scripts/build-schema.sh'
 
                     dir("backend") {
@@ -73,6 +53,43 @@ stage('Checks') {
     }
 
     parallel(parallel_checks)
+}
+
+stage('Build in Docker'){
+    def parallel_build = [:]
+
+    parallel_build['Backend'] = {
+        node('docker') {
+            checkout scm
+            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+
+            docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                    checkout scm
+                    sh './ci/build-scripts/build-backend.sh'
+
+                    stash includes: 'backend/target/release/backend', name: 'backend'
+                }
+            }
+        }
+    }
+
+    parallel_build['Frontend'] = {
+        node('docker') {
+            checkout scm
+            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+
+            node_image.inside {
+                checkout scm
+                unstash 'definitions.ts'
+
+                sh './ci/build-scripts/build-frontend.sh'
+                stash includes: 'frontend/dist/**/*', name: 'frontend'
+            }
+        }
+    }
+
+    parallel(parallel_build)
 }
 
 stage('Build PR') {
