@@ -13,8 +13,11 @@
 - **Precondition:**
   The user has opened the app and has navigated to a map.
 - **Main success scenario:**
-  - The user successfully adds, moves and deletes pictures in a map using the photo layer.
-  - When adding a picture the user can choose to upload one or choose from a preselection (emoticons, icons, etc..).
+  - The user successfully adds, moves and deletes elements in a map using the photo layer. The elements can be:
+     - a photo taken directly with the app
+     - a photo/picture uploaded from the local file storage
+     - a photo/picture already uploaded in Nextcloud
+     - a picture from a preselection (emoticons like thumbs up 👍, various smiles 😂, hearts 💞, icons...)
   - When the user clicks on a picture a chat shows up where the photo can be discussed.
 - **Alternative scenario:**
 - **Error scenario:**
