@@ -56,7 +56,7 @@ OpenID Connect authentication & authorization flow with:
 Authorization server: PermaplanT
 Resource server 1: Nextcloud
 Resource server 2: PermaplanT
-Client 1: [Nextcloud WebClient with oidc login](https://github.com/pulsejet/nextcloud-oidc-login)
+Client 1: Nextcloud WebClient [with oidc login](https://github.com/pulsejet/nextcloud-oidc-login) or [user\_oidc](https://github.com/nextcloud/user_oidc)
 Client 2: PermaplanT
 
 **Notes:**
@@ -64,3 +64,5 @@ In this approach the accounts are managed by PermaplanT,
 therefore requires implementing an identity provider in PermaplanT.
 Alternatively to developing an identity provider a servive like [keycloak](https://www.keycloak.org/) can be used.
 
+## Further Notes
+There was an attempt to implement OIDC in nextcloud/server but the issue lost traction and was finally not merged because of missing integration tests (https://github.com/nextcloud/server/pull/12567)
