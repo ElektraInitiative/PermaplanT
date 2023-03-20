@@ -1,33 +1,52 @@
-import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+import SimpleButton from '@/components/Button/SimpleButton';
+import SearchInput from '@/components/Form/SearchInput';
+import PageTitle from '@/components/Header/PageTitle';
+import { useNavigate } from 'react-router-dom';
+import { SeedDto } from '../../../bindings/definitions';
+import PageLayout from '../../../components/Layout/PageLayout';
+import SeedsOverviewList from '../components/SeedsOverviewList';
 import useFindSeedsStore from '../store/FindSeedsStore';
 
 export const ViewSeeds = () => {
+  const navigate = useNavigate();
+
   const seeds = useFindSeedsStore((state) => state.seeds);
 
   useEffect(() => {
     const _findAllSeeds = async () => {
       await useFindSeedsStore.getState().findAllSeeds();
+      setFilteredSeeds(useFindSeedsStore.getState().seeds);
     };
     _findAllSeeds();
   }, []);
 
+    // Set the filter when the user types in the search input
+    const [filteredSeeds, setFilteredSeeds] = useState<SeedDto[]>([]);
+
+  const handleCreateSeedClick = () => {
+    navigate('/seeds/new');
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = event.target.value.toLowerCase();
+    const temp = seeds.filter(
+      (seed) =>
+        seed.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        seed.harvest_year.toString().toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilteredSeeds(temp)
+  };
+
   return (
-    <div>
-      <h1>Seeds</h1>
-      <ul>
-        {seeds.map((seed) => (
-          <li key={seed.id}>{seed.name}</li>
-        ))}
-      </ul>
-      <div className="w-[200px]">
-        <Link
-          to="/seeds/new"
-          className="text-blue-600 underline visited:text-blue-600 hover:text-blue-800"
-        >
-          Neuer Eintrag
-        </Link>
+    <PageLayout styleNames="flex flex-col space-y-4">
+      <PageTitle title="My Seeds" />
+      <div className="flex flex-row justify-between space-x-6">
+        <SearchInput handleSearch={handleSearch} />
+        <SimpleButton title="Neuer Eintrag" onClick={handleCreateSeedClick} />
       </div>
-    </div>
+      <SeedsOverviewList seeds={filteredSeeds} />
+    </PageLayout>
   );
 };
