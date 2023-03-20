@@ -1,4 +1,4 @@
-FROM rust:1.68.0-slim
+FROM rust:1.67.1-slim
 
 RUN apt update && apt install -y libpq-dev
 RUN rustup component add clippy
