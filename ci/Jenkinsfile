@@ -48,7 +48,15 @@ stage('Checks') {
 
     parallel_checks["check-frontend"] = {
         node('docker') {
-            echo "HC SVNT DRACONES"
+            checkout scm
+            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+
+            node_image.inside {
+                checkout scm
+                unstash 'definitions.ts'
+
+                echo "HC SVNT DRACONES"
+            }
         }
     }
 
