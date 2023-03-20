@@ -19,7 +19,6 @@ impl Seed {
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
 
-
     /// Fetch seed by id from the database.
     ///
     /// # Errors
