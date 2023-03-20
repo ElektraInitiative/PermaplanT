@@ -1,10 +1,11 @@
-import CreateSeedForm from '../components/CreateSeedForm';
-import useCreateSeedStore from '../store/CreateSeedStore';
 import { NewSeedDto } from '@/bindings/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PageLayout from '../../../components/Layout/PageLayout';
+import CreateSeedForm from '../components/CreateSeedForm';
+import useCreateSeedStore from '../store/CreateSeedStore';
 
 export function CreateSeed() {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export function CreateSeed() {
   };
 
   return (
-    <div className="mx-auto w-full p-4 md:w-[900px]">
+    <PageLayout>
       <PageTitle title="Neuer Eintrag" />
       <CreateSeedForm onCancel={onCancel} onChange={onChange} onSubmit={onSubmit} />
       <SimpleModal
@@ -69,6 +70,6 @@ export function CreateSeed() {
           setShowErrorModal(false);
         }}
       ></SimpleModal>
-    </div>
+    </PageLayout>
   );
 }

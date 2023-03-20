@@ -1,6 +1,5 @@
-import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
-
 import { HTMLInputTypeAttribute } from 'react';
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
 interface SimpleFormInputProps<T extends FieldValues> {
   id: Path<T>;
@@ -16,6 +15,8 @@ interface SimpleFormInputProps<T extends FieldValues> {
   onChange?: () => void;
   valueAsNumber?: boolean;
   errorTitle?: string;
+  disabled?: boolean;
+  value?: string;
 }
 
 export default function SimpleFormInput<T extends FieldValues>({
@@ -32,8 +33,9 @@ export default function SimpleFormInput<T extends FieldValues>({
   onChange,
   valueAsNumber = false,
   errorTitle,
+  disabled = false,
+  value,
 }: SimpleFormInputProps<T>) {
-
   return (
     <div>
       <label htmlFor={id} className="mb-2 block text-sm font-medium  text-white">
@@ -42,6 +44,7 @@ export default function SimpleFormInput<T extends FieldValues>({
       </label>
       {isArea ? (
         <textarea
+          disabled={disabled}
           onKeyUp={onChange}
           rows={6}
           name={id}
@@ -53,6 +56,7 @@ export default function SimpleFormInput<T extends FieldValues>({
         />
       ) : (
         <input
+          disabled={disabled}
           onKeyUp={onChange}
           type={type}
           min={min}
@@ -65,6 +69,7 @@ export default function SimpleFormInput<T extends FieldValues>({
           style={{ colorScheme: 'dark' }}
           pattern={valueAsNumber ? '^[0-9]+([,][0-9]{1,2})?$' : undefined}
           title={errorTitle}
+          value={value?.toString()}
           {...register?.(id, {
             valueAsNumber: type === 'number' || valueAsNumber,
           })}
