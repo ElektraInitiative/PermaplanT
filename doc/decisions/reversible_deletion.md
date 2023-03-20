@@ -39,6 +39,6 @@ They will allow us to run the deletion on a custom schedule e.g. every day, ever
 
 ## Notes
 
--   Related [use case](doc/usecases/map_create_delete.md)
+-   Related [use case](/doc/usecases/map_create_delete.md)
 -   Example of the deletion query:
     -   `DELETE FROM plants WHERE deleted_at IS NOT NULL and deleted_at < NOW() - INTERVAL '1 month'`
