@@ -46,7 +46,8 @@ stage('Checks') {
                     sh "id"
 
                     checkout scm
-                    unstash 'schema.rs'
+
+                    sh './ci/build-scripts/build-schema.sh'
 
                     dir("backend") {
                         withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
