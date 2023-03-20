@@ -1,5 +1,4 @@
 import { Body, SeedDto } from '@/bindings/definitions';
-
 import { baseApiUrl } from '@/config';
 import axios from 'axios';
 
