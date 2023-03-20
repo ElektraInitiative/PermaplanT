@@ -8,6 +8,7 @@ and get the appropriate authorization (does the user have the right priviliges)
 to perform the action.
 
 **OAuth2.0:** **User** can authorize **client** to fetch resources from **resource server**.
+
 **OpenID Connect:** Extension of OAuth2.0 for authentication
 
 ## Constraints
@@ -20,8 +21,11 @@ to perform the action.
 OpenID Connect authentication & authorization flow with:
 
 Authorization server: [Nextcloud OIDC App](https://github.com/H2CK/oidc)
+
 Resource server 1: [Nextcloud OAuth2](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/oauth2.html)
+
 Resource server 2: PermaplanT backend
+
 Client: PermaplanT frontend
 
 **Notes:**
@@ -54,9 +58,13 @@ and therefore seperate accounts!
 OpenID Connect authentication & authorization flow with:
 
 Authorization server: PermaplanT
+
 Resource server 1: Nextcloud
+
 Resource server 2: PermaplanT
+
 Client 1: Nextcloud WebClient [with oidc login](https://github.com/pulsejet/nextcloud-oidc-login) or [user\_oidc](https://github.com/nextcloud/user_oidc)
+
 Client 2: PermaplanT
 
 **Notes:**
