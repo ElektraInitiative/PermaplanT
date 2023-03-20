@@ -23,6 +23,17 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok().json(Body::from(response)))
 }
 
+/// Endpoint for fetching a [`Seed`](crate::model::entity::Seed).
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+/// * If [web::block] fails.
+#[get("/{id}")]
+pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
+    let response = web::block(move || service::seed::find_by_id(*id, &pool)).await??;
+    Ok(HttpResponse::Ok().json(Body::from(response)))
+}
+
 /// Endpoint for creating a new [`Seed`](crate::model::entity::Seed).
 ///
 /// # Errors
