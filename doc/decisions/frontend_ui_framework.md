@@ -7,7 +7,7 @@ We need to choose a UI framework for the PermaplanT app that will enable us to c
 ## Constraints
 
 - The framework must be compatible with the PWA architecture.
-- The framework must be able to handle complex, data-intensive operations such as checks for sun, soil, good/bad neighbors, and time of year.
+- The framework must be able to handle complex, data-intensive operations such as checks for sun, soil, companion/antagonist and time of year.
 
 ## Assumptions
 

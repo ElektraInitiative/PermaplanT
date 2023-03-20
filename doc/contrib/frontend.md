@@ -35,7 +35,7 @@ src
 +-- utils             # shared utility functions
 ```
 
-Ulimately we develop a new feature in the `features` folder that contains domain specific code for a given feature.
+Ultimately we develop a new feature in the `features` folder that contains domain specific code for a given feature.
 
 A feature could have the following structure:
 
