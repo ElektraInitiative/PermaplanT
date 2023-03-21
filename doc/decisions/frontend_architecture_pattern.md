@@ -9,11 +9,11 @@ Permaplant needs to be designed with a documented, consistent and maintainable a
 The architecture pattern should be
 
 - easy to understand and follow
-- The architecture pattern should be easy to test
-- The architecture pattern should be easy to scale
-- The architecture pattern should be suitable for a large, complex application
-- The architecture pattern should promote code reuse
-- The architecture pattern should be well-documented and widely used in the React community
+- be easy to test
+- be easy to scale
+- be suitable for a large, complex application
+- promote code reuse
+- be well-documented and widely used in the React community
 
 ## Considered Alternatives
 
@@ -27,7 +27,10 @@ Choices or derivations of this guidelines will be documented in `doc/architectur
 
 ## Rationale
 
-Bulletproof React is a set of best practices and conventions that promote code reuse and make it easy to reason about the structure of the application. It's simple, easy to understand, and easy to test. This makes it a good choice for a large, complex application like Permaplant. Additionally, it is well-documented and widely used in the React community, which means that there is a lot of resources and support available for it.
+Bulletproof React is a set of best practices and conventions that promote code reuse and make it easy to reason about the structure of the application.
+It's simple, easy to understand, and easy to test.
+This makes it a good choice for a large, complex application like Permaplant.
+Additionally, it is well-documented and widely used in the React community, which means that there is a lot of resources and support available for it.
 
 ## Implications
 
