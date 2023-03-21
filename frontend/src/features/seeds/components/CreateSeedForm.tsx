@@ -57,7 +57,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
         <div className="mb-6 grid gap-8 md:grid-cols-2">
           <SimpleFormInput
             type="number"
-            labelText="Bezugsjahr"
+            labelText="Harvest Year"
             defaultValue={currentYear}
             placeHolder={currentYear.toString()}
             required={true}
@@ -66,8 +66,8 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             onChange={onChange}
           />
           <SimpleFormInput
-            labelText="Art"
-            placeHolder="Tomate"
+            labelText="Name"
+            placeHolder="Tomato"
             required={true}
             id="name"
             register={register}
@@ -77,7 +77,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             id="plant_id"
             control={control}
             options={plants}
-            labelText="Sorte"
+            labelText="Variety"
             required={true}
             handleOptionsChange={(option) => {
               // The user may either select existing plants,
@@ -100,7 +100,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             id="quantity"
             control={control}
             options={quantity}
-            labelText="Menge"
+            labelText="Quantity"
             required={true}
             handleOptionsChange={(option) => {
               const temp = option as SelectOption;
@@ -110,16 +110,16 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             onChange={onChange}
           />
           <SimpleFormInput
-            labelText="Herkunft"
-            placeHolder="Daheim"
+            labelText="Origin"
+            placeHolder="My Home"
             id="origin"
             register={register}
             onChange={onChange}
           />
           <SimpleFormInput
             type="date"
-            labelText="Verbrauch bis"
-            placeHolder="Verbrauch bis"
+            labelText="Best by"
+            placeHolder=""
             id="use_by"
             register={register}
             onChange={onChange}
@@ -128,7 +128,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             id="quality"
             control={control}
             options={quality}
-            labelText="Qualität"
+            labelText="Quality"
             handleOptionsChange={(option) => {
               const temp = option as SelectOption;
               const mapped = temp.value as Quality;
@@ -137,26 +137,26 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             onChange={onChange}
           />
           <SimpleFormInput
-            labelText="Geschmack"
-            placeHolder="nussig"
+            labelText="Taste"
+            placeHolder="sweet"
             id="taste"
             register={register}
             onChange={onChange}
           />
           <SimpleFormInput 
-            labelText="Ertrag"
+            labelText="Yield"
             placeHolder="1" 
             id="yield_" 
             register={register} 
             onChange={onChange}
             />
           <SimpleFormInput
-            labelText="Preis"
+            labelText="Price"
             placeHolder="2,99€"
             id="price"
             register={register}
             valueAsNumber={true}
-            errorTitle="Der Preis muss eine Zahl sein. z.B. 2,99"
+            errorTitle="Price must be a number"
             onChange={onChange}
           />
           <SimpleFormInput
@@ -172,7 +172,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
         <div className="mb-6">
           <SimpleFormInput
             isArea={true}
-            labelText="Notizen"
+            labelText="Notes"
             placeHolder="..."
             id="notes"
             register={register}
