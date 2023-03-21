@@ -6,7 +6,9 @@ Permaplant needs to be designed with a documented, consistent and maintainable a
 
 ## Constraints
 
-- The architecture pattern should be easy to understand and follow
+The architecture pattern should be
+
+- easy to understand and follow
 - The architecture pattern should be easy to test
 - The architecture pattern should be easy to scale
 - The architecture pattern should be suitable for a large, complex application
