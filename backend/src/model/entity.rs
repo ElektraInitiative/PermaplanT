@@ -2,6 +2,7 @@
 
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod map_impl;
 
 use chrono::NaiveDate;
 use diesel::{Identifiable, Insertable, Queryable};

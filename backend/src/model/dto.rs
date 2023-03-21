@@ -11,6 +11,7 @@ use super::r#enum::{quality::Quality, quantity::Quantity};
 pub mod new_seed_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod map_impl;
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
