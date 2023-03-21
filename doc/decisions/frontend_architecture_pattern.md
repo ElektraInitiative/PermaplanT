@@ -34,4 +34,5 @@ Bulletproof React is a set of best practices and conventions that promote code r
 ## Related Decisions
 
 ## Notes
+
  - "bulletproof react" architecture pattern is developed by the team at Level Up Tutorials. It is not an official pattern by React.
