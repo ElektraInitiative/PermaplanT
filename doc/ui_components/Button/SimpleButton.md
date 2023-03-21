@@ -1,7 +1,7 @@
 # SimpleButton
 
 ## Description
-A simple HTML button.
+A simple HTML button that may contain other react nodes.
 
 ## Props
 | Name                | Type                | Optional | Description                                               |

@@ -1,7 +1,7 @@
 # PageTitle
 
 ## Description
-Displays a simple heading.
+Displays an <h1> heading.
 
 ## Props
 | Name                | Type                   | Optional | Description                                    |
