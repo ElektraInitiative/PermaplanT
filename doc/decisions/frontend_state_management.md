@@ -45,4 +45,5 @@ Its simplicity also reduces the amount of boilerplate code and the need for comp
 
 ## Links
 https://medium.com/readytowork-org/its-zustand-vs-redux-8e24424df713
+https://tanstack.com/query/latest/docs/react/guides/does-this-replace-client-state
 
