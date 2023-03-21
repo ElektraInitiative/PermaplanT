@@ -1,6 +1,6 @@
 import { NewSeedDto, Quality, Quantity } from '../../../bindings/definitions';
-import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import CreatableSelectMenu from '../../../components/Form/CreatableSelectMenu';
+import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
@@ -16,7 +16,7 @@ interface CreateSeedFormProps {
 const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
-  
+
   const currentYear = new Date().getFullYear();
 
   const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
@@ -86,13 +86,11 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
 
               // If the latter option is chosen, the variety field
               // of the seed is set and plant_id remains empty.
-              
+
               // option.value is a only a number, if a plant is chosen,
-              // otherwhise its a string that contains the users input.
-              if (typeof option.value === "number")
-                setValue('plant_id', Number(option.value));
-              else if (option !== null)
-                setValue('variety', option.value); 
+              // otherwise its a string that contains the users input.
+              if (typeof option.value === 'number') setValue('plant_id', Number(option.value));
+              else if (option !== null) setValue('variety', option.value);
             }}
             onChange={onChange}
           />
@@ -143,13 +141,13 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             register={register}
             onChange={onChange}
           />
-          <SimpleFormInput 
+          <SimpleFormInput
             labelText="Yield"
-            placeHolder="1" 
-            id="yield_" 
-            register={register} 
+            placeHolder="1"
+            id="yield_"
+            register={register}
             onChange={onChange}
-            />
+          />
           <SimpleFormInput
             labelText="Price"
             placeHolder="2,99€"
@@ -185,13 +183,13 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             onClick={onCancel}
             className="max-w-[240px] grow rounded-lg border border-zinc-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-zinc-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
           >
-            Abbrechen
+            Cancel
           </button>
           <button
             type="submit"
             className="max-w-[240px] grow rounded-lg bg-gray-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
           >
-            Eintragen
+            Create Seed
             {useCreateSeedStore((state) => state.isUploadingSeed) && (
               <svg
                 className="ml-4 inline-block h-5 w-5 animate-spin text-white"
