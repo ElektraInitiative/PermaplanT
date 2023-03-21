@@ -3,6 +3,13 @@
 ## Problem
 
 PermaplanT is a web application built with React that requires efficient and flexible state management.
+Inside a React application we can usually distinguish between three types of state.
+
+- Local Component State: Is the dropdown open or not, is the link active or not, and so on.
+
+- Global Application State (Synchronous): Local user preferences, Sidenav is open, UI state in a visual design app.
+
+- Server State (Asynchronous): A network request is needed before any state can be derived.
 
 ## Constraints
 
