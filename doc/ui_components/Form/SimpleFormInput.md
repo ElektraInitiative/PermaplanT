@@ -1,7 +1,7 @@
 # SimpleFormInput
 
 ## Description
-Textfield that can be used for single line or multi line input.
+Textfield that can be used for single line or multi-line input.
 
 ## Props
 | Name                | Type                   | Optional | Description                                                                                                       |
