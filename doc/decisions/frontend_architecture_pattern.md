@@ -18,6 +18,9 @@ The architecture pattern should be
 ## Considered Alternatives
 
 - [Flux](https://reactjs.org/blog/2014/05/06/flux.html)
+
+  The pattern is rather complicated to understand and leads to a lot of boilerplate.
+
 - [MVVM](https://www.detroitlabs.com/blog/intro-to-mvvm-in-react-with-mobx/)
 
 ## Decision
