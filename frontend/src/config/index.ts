@@ -13,4 +13,4 @@ axios.interceptors.response.use(
   },
 );
 
-export const baseApiUrl = 'http://localhost:8080';
+export const baseApiUrl = import.meta.env.VITE_BASE_API_URL;
