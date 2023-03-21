@@ -5,8 +5,10 @@ pub mod seed_impl;
 
 use chrono::NaiveDate;
 use diesel::{Identifiable, Insertable, Queryable};
+use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 
-use crate::schema::{plants, seeds};
+use crate::schema::{plants, seeds, map};
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
@@ -61,4 +63,15 @@ pub struct NewSeed {
     pub generation: Option<i16>,
     pub notes: Option<String>,
     pub variety: Option<String>,
+}
+
+/// The `Map` entity.
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[derive(Queryable, Serialize, Deserialize)]
+#[diesel(table_name = map)]
+pub struct Map {
+    pub id: i32,
+    pub detail: Value,
+    pub created_at: chrono::NaiveDateTime,
+    pub updated_at: chrono::NaiveDateTime,
 }

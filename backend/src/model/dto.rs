@@ -4,6 +4,7 @@
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
+use serde_json::Value;
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
@@ -59,4 +60,14 @@ pub struct PlantsDto {
     pub species: String,
     pub plant: Option<String>,
     pub plant_type: Option<i32>,
+}
+
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[typeshare]
+#[derive(Serialize, Deserialize)]
+pub struct MapDto {
+    pub id: i32,
+    pub detail: Value,
+    pub created_at: chrono::NaiveDateTime,
+    pub updated_at: chrono::NaiveDateTime,
 }
