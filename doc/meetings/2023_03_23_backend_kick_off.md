@@ -14,15 +14,18 @@ _Protocolled by: Nursultan_
 
 -   welcome ☺️
 -   goals:
-    -   stable migrations
     -   maintenance
     -   performance
+    -   hot reloading
 -   APIs:
     -   to DB
     -   to Frontend
 -   which important decisions do we need to make?
     -   API documentation
+        - https://github.com/ElektraInitiative/PermaplanT/pull/101
     -   DB documentation
+        -     https://github.com/ElektraInitiative/PermaplanT/issues/97
+        -     what about SQL queries?
 -   which tasks do we have?
 -   who wants to work on which task?
 
