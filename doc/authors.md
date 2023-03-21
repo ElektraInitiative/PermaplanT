@@ -81,3 +81,11 @@ including their responsibilities, skills, etc.
 - focus group: ?
 - special skills: BOKU
 - positioning: backend
+
+## Paul
+
+- GitHub: @Bushuo
+- main responsibility: Offline Database Integration, (frontend?)
+- focus group: DB
+- special skills: React, TypeScript, Tailwind CSS
+- positioning: full-stack
