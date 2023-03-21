@@ -54,9 +54,9 @@
     To choose one alternative of one layer.
     E.g. if there are several plant layers, only one of these alternatives can be selected at once.
 -   canvas context
-    -   TBD
+    -   TBD Konva elements e.g. rectangle, circle, etc.
 -   map context
-    -   TBD
+    -   TBD layers and their attributes e.g. warning layer and its visibility
 -   reversible deletion vs undo-redo functionality
     -   reversible deletion: a database entity i.e. map and plant is deleted and can be restored within a certain time
     -   undo-redo functionality: a user can undo and redo changes in the map, but the changes are local to the frontend and not stored in the database

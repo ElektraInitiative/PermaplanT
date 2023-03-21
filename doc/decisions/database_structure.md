@@ -119,6 +119,6 @@ In order to finish this decision, we need to understand the semantics of the dat
 
 TODO:
 
-- [] define how exactly hierarchy tables will look like
-- [] define how metatables should be connected to the hierarchy tables
-- [] define how the relations between plants will be stored
+-   [ ] define how exactly hierarchy tables will look like
+-   [ ] define how metatables should be connected to the hierarchy tables
+-   [ ] define how the relations between plants will be stored
