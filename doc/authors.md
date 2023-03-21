@@ -30,7 +30,7 @@ including their responsibilities, skills, etc.
 
 - GitHub: @kitzbergerg
 - main responsibility: Backend
-- special skills: Rust
+- special skills: Rust, Docker, OAuth2
 - positioning: backend
 
 ## Moritz
