@@ -119,7 +119,6 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
           <SimpleFormInput
             type="date"
             labelText="Best by"
-            placeHolder="01.01.2000"
             id="use_by"
             register={register}
             onChange={onChange}
