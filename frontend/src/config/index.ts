@@ -1,7 +1,7 @@
 import mapErrorToString from '@/utils/map-error-to-string';
 import axios from 'axios';
 
-// Intercept the axios response to map errors to strings.
+// Intercept the axios response to map errors messages to more sensible messages.
 axios.interceptors.response.use(
   (r) => r,
   (error) => {
