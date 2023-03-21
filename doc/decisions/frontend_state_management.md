@@ -39,7 +39,7 @@ Its simplicity also reduces the amount of boilerplate code and the need for comp
 ## Implications
 
 ## Related Decisions
- - Choosing React as the frontend library for PermaplanT
+ - Choosing React as the [frontend library](./frontend_ui_framework.md) for PermaplanT
 
 ## Notes
 
