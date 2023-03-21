@@ -100,7 +100,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             id="quantity"
             control={control}
             options={quantity}
-            labelText="Quantitiy"
+            labelText="Quantity"
             required={true}
             handleOptionsChange={(option) => {
               const temp = option as SelectOption;
@@ -119,6 +119,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
           <SimpleFormInput
             type="date"
             labelText="Best by"
+            placeHolder=""
             id="use_by"
             register={register}
             onChange={onChange}
