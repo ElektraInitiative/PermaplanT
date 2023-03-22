@@ -2,16 +2,17 @@
 #![allow(clippy::module_name_repetitions)] // There needs to be a difference between DTOs and entities otherwise imports will be messy.
 
 use chrono::NaiveDate;
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use typeshare::typeshare;
 use serde_json::Value;
+use typeshare::typeshare;
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
 pub mod new_seed_impl;
 pub mod plants_impl;
 pub mod seed_impl;
-pub mod map_impl;
+pub mod fruit_impl;
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
@@ -66,9 +67,9 @@ pub struct PlantsDto {
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
 #[derive(Serialize, Deserialize)]
-pub struct MapDto {
+pub struct FruitDto {
     pub id: i32,
-    pub detail: Value,
-    pub created_at: chrono::NaiveDateTime,
-    pub updated_at: chrono::NaiveDateTime,
+    pub name: String,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
 }

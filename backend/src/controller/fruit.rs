@@ -1,5 +1,3 @@
-//! `Map` endpoints.
-
 use crate::{config::db::Pool, model::response::Body, service};
 use actix_web::{
     get,
@@ -9,6 +7,6 @@ use actix_web::{
 
 #[get("")]
 pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = web::block(move || service::map::find_all(&pool)).await??;
+    let response = web::block(move || service::fruit::find_all(&pool)).await??;
     Ok(HttpResponse::Ok().json(Body::from(response)))
 }
