@@ -1,40 +1,33 @@
-import { useState } from 'react';
+import useFindMapsStore from '../store/FindMapsStore';
+import { useEffect, useState } from 'react';
 import { Stage, Layer, Rect, Text, Circle } from 'react-konva';
 
-const INITIAL_STATE = {
+interface CanvasState {
+  history: {
+    stage: {
+      layers: {
+        objects: {
+          id: string;
+          type: string;
+          x: number;
+          y: number;
+          width: number;
+          height: number;
+          radius: number;
+        }[];
+      }[];
+    };
+  }[];
+  historyStep: number;
+}
+
+const defaultCanvasState: CanvasState = {
   history: [
     {
       stage: {
         layers: [
           {
-            objects: [
-              {
-                id: '0',
-                type: 'rect',
-                x: 20,
-                y: 20,
-                width: 50,
-                height: 50,
-                fill: 'black',
-              },
-              {
-                id: '1',
-                type: 'circle',
-                x: 100,
-                y: 100,
-                fill: 'black',
-                radius: 25,
-              },
-              {
-                id: '2',
-                type: 'rect',
-                fill: 'red',
-                x: 120,
-                y: 120,
-                width: 50,
-                height: 50,
-              },
-            ],
+            objects: [],
           },
         ],
       },
@@ -44,7 +37,29 @@ const INITIAL_STATE = {
 };
 
 export const ViewDemo = () => {
-  const [state, setState] = useState(INITIAL_STATE);
+  const [state, setState] = useState<CanvasState>(defaultCanvasState);
+  const map = useFindMapsStore((state) => state.map);
+
+  useEffect(() => {
+    const _findMapById = async () => {
+      await useFindMapsStore.getState().findMapById('1');
+    };
+    _findMapById();
+  }, []);
+
+  useEffect(() => {
+    if (map) {
+      const canvasState = JSON.parse(map.detail || '');
+      console.log(canvasState.stage.layers[0].objects);
+      setState((state) => {
+        return {
+          ...state,
+          history: [canvasState],
+          historyStep: 0,
+        };
+      });
+    }
+  }, [map]);
 
   const handleUndo = () => {
     if (state.historyStep === 0) {

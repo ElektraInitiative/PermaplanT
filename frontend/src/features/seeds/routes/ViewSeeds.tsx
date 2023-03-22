@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
 import useFindSeedsStore from '../store/FindSeedsStore';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export const ViewSeeds = () => {
   const seeds = useFindSeedsStore((state) => state.seeds);
