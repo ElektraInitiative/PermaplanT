@@ -16,13 +16,13 @@ including their responsibilities, skills, etc.
 - email: yvonne@permaplant.net
 - GitHub: @yvonnemarkl
 - main responsibility: Biology
-- focus groups: all
+- focus groups: frontend, UX
 
 ## Samuel
 
 - GitHub: @absurd-turtle
 - main responsibilities: Nextcloud Integration, Frontend Architecture
-- focus groups: UX, (Polyculture?)
+- focus groups: UX
 - special skills: SQL, Tailwind CSS, TypeScript
 - positioning: frontend
 
@@ -36,8 +36,8 @@ including their responsibilities, skills, etc.
 ## Moritz
 
 - GitHub: @badnames
-- main responsibilities: DB, Polyculture
-- focus groups: DB, PostGIS, Polyculture
+- main responsibilities: DB
+- focus groups: DB, PostGIS, polyculture
 - positioning: full-stack
 
 ## Giancarlo
@@ -65,27 +65,27 @@ including their responsibilities, skills, etc.
 ## Ramzan
 
 - main responsibility: PostGIS
-- focus group: DB, Polyculture
+- focus group: DB, PostGIS
 - positioning: DB
 
 ## Thorben Julian
 
-- main responsibility: Gamification, (PostGIS?)
-- focus group: Polyculture
+- main responsibility: Gamification
+- focus group: polyculture
 - special skills: Jenkins
 - positioning: DB
 
 ## Benjamin
 
-- main responsibility: Polyculture, PostGIS
-- focus group: ?
+- main responsibility: Polyculture
+- focus group: polyculture, PostGIS
 - special skills: BOKU
 - positioning: backend
 
 ## Paul
 
 - GitHub: @Bushuo
-- main responsibility: Offline Database Integration, (frontend?)
-- focus group: DB
+- main responsibility: Offline Database Integration
+- focus group: DB, frontend
 - special skills: React, TypeScript, Tailwind CSS
 - positioning: full-stack
