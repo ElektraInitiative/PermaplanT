@@ -1,11 +1,10 @@
-import { Body, MapDto } from '@/bindings/definitions';
+import { Body, NewMapDto } from '@/bindings/definitions';
 import { baseApiUrl } from '@/config';
 import axios from 'axios';
 
-export const updateMapById = async (id: string): Promise<MapDto> => {
+export const updateMapById = async (id: string, map: NewMapDto) => {
   try {
-    const response = await axios.post<Body<MapDto>>(`${baseApiUrl}/api/maps/${id}`);
-    return response.data.data;
+    await axios.post<Body<NewMapDto>>(`${baseApiUrl}/api/maps/${id}`, map);
   } catch (error) {
     throw error as Error;
   }

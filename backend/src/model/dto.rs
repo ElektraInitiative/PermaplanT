@@ -80,6 +80,4 @@ pub struct MapDto {
 #[derive(Serialize, Deserialize)]
 pub struct NewMapDto {
     pub detail: Option<String>,
-    pub created_at: Option<NaiveDateTime>,
-    pub updated_at: Option<NaiveDateTime>,
 }

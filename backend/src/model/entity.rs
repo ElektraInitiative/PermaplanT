@@ -83,6 +83,4 @@ pub struct Map {
 #[diesel(table_name = map)]
 pub struct NewMap {
     pub detail: Option<String>,
-    pub created_at: Option<NaiveDateTime>,
-    pub updated_at: Option<NaiveDateTime>,
 }

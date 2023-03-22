@@ -39,6 +39,7 @@ const defaultCanvasState: CanvasState = {
 export const ViewDemo = () => {
   const [state, setState] = useState<CanvasState>(defaultCanvasState);
   const map = useFindMapsStore((state) => state.map);
+  const updateMapById = useFindMapsStore((state) => state.updateMapById);
 
   useEffect(() => {
     const _findMapById = async () => {
@@ -159,6 +160,9 @@ export const ViewDemo = () => {
 
   const saveStage = () => {
     console.log(state.history[state.historyStep]);
+    updateMapById('1', {
+      detail: JSON.stringify(state.history[state.historyStep]),
+    });
   };
 
   return (
