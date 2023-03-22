@@ -10,6 +10,7 @@ use typeshare::typeshare;
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
 pub mod map_impl;
+pub mod new_map_impl;
 pub mod new_seed_impl;
 pub mod plants_impl;
 pub mod seed_impl;
@@ -69,6 +70,15 @@ pub struct PlantsDto {
 #[derive(Serialize, Deserialize)]
 pub struct MapDto {
     pub id: i32,
+    pub detail: Option<String>,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+}
+
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[typeshare]
+#[derive(Serialize, Deserialize)]
+pub struct NewMapDto {
     pub detail: Option<String>,
     pub created_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,

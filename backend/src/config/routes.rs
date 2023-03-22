@@ -18,7 +18,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             .service(
                 web::scope("/maps")
                     .service(map::find_all)
-                    .service(map::find_by_id),
+                    .service(map::find_by_id)
+                    .service(map::update_by_id),
             ),
     );
 }

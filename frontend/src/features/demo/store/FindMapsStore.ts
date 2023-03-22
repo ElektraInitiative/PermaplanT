@@ -1,6 +1,7 @@
 import { MapDto } from '../../../bindings/definitions';
 import { findAllMaps } from '../api/findAllMaps';
 import { findMapById } from '../api/findMapById';
+import { updateMapById } from '../api/updateMapById';
 import { create } from 'zustand';
 
 interface FindMapsStore {
@@ -12,6 +13,7 @@ interface FindMapsStore {
   setShowErrorModal: (showErrorModal: boolean) => void;
   findAllMaps: () => Promise<void>;
   findMapById: (id: string) => Promise<void>;
+  updateMapById: (id: string, map: MapDto) => Promise<void>;
 }
 
 const useFindMapsStore = create<FindMapsStore>((set) => ({
@@ -40,6 +42,20 @@ const useFindMapsStore = create<FindMapsStore>((set) => ({
       set((state) => ({ ...state, isFetchingMaps: true }));
       const map = await findMapById(id);
       set((state) => ({ ...state, map, isFetchingMaps: false }));
+    } catch (error) {
+      set((state) => ({
+        ...state,
+        error: error as Error,
+        showErrorModal: true,
+        isFetchingMaps: false,
+      }));
+    }
+  },
+  updateMapById: async (id: string, map: MapDto) => {
+    try {
+      set((state) => ({ ...state, isFetchingMaps: true }));
+      const updatedMap = await updateMapById(id, map);
+      set((state) => ({ ...state, map: updatedMap, isFetchingMaps: false }));
     } catch (error) {
       set((state) => ({
         ...state,

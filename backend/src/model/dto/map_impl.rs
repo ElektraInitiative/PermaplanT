@@ -12,3 +12,4 @@ impl From<Map> for MapDto {
         }
     }
 }
+

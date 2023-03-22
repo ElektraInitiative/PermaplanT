@@ -1,11 +1,12 @@
 //! Contains all entities used in `PermaplanT`.
 
+pub mod map_impl;
 pub mod plants_impl;
 pub mod seed_impl;
-pub mod map_impl;
 
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
+use diesel::AsChangeset;
 use diesel::{Identifiable, Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
@@ -72,6 +73,15 @@ pub struct NewSeed {
 #[diesel(table_name = map)]
 pub struct Map {
     pub id: i32,
+    pub detail: Option<String>,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+}
+
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[derive(Insertable, AsChangeset)]
+#[diesel(table_name = map)]
+pub struct NewMap {
     pub detail: Option<String>,
     pub created_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,

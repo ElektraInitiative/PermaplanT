@@ -143,8 +143,8 @@ export const ViewDemo = () => {
       });
       return (
         <Layer key={index}>
-          <Text text="undo" onClick={handleUndo} />
-          <Text text="redo" x={40} onClick={handleRedo} />
+          <Text text="undo" className="" onClick={handleUndo} />
+          <Text text="redo" className="" x={40} onClick={handleRedo} />
           {objects}
         </Layer>
       );
@@ -157,9 +157,16 @@ export const ViewDemo = () => {
     );
   };
 
+  const saveStage = () => {
+    console.log(state.history[state.historyStep]);
+  };
+
   return (
     <div>
       <h1>Demo</h1>
+      <button className="" onClick={saveStage}>
+        Save
+      </button>
       {buildStage()}
     </div>
   );
