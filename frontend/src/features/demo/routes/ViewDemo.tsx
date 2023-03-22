@@ -1,4 +1,5 @@
 import useFindMapsStore from '../store/FindMapsStore';
+import Konva from 'konva';
 import { useEffect, useState } from 'react';
 import { Stage, Layer, Rect, Text, Circle } from 'react-konva';
 
@@ -6,6 +7,7 @@ interface CanvasState {
   history: {
     stage: {
       layers: {
+        visible: boolean;
         objects: {
           id: string;
           type: string;
@@ -27,6 +29,7 @@ const defaultCanvasState: CanvasState = {
       stage: {
         layers: [
           {
+            visible: true,
             objects: [],
           },
         ],
@@ -51,7 +54,6 @@ export const ViewDemo = () => {
   useEffect(() => {
     if (map) {
       const canvasState = JSON.parse(map.detail || '');
-      console.log(canvasState.stage.layers[0].objects);
       setState((state) => {
         return {
           ...state,
@@ -129,6 +131,117 @@ export const ViewDemo = () => {
     // setPosition(next);
   };
 
+  const saveStage = () => {
+    updateMapById('1', {
+      detail: JSON.stringify(state.history[state.historyStep]),
+    });
+  };
+
+  const generateRandomCircles = () => {
+    const randomCircles = Array(1000)
+      .fill(null)
+      .map((_, index) => {
+        return {
+          id: index.toString(),
+          type: 'circle',
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          radius: 10,
+          width: Math.random() * 100,
+          height: Math.random() * 100,
+          fill: Konva.Util.getRandomColor(),
+        };
+      });
+
+    setState((state) => {
+      const updatedCanvasState = {
+        ...state.history[state.historyStep],
+        stage: {
+          layers: [
+            ...state.history[state.historyStep].stage.layers,
+            {
+              objects: [
+                ...state.history[state.historyStep].stage.layers[0].objects,
+                ...randomCircles,
+              ],
+            },
+          ],
+        },
+      };
+      return {
+        history: [...state.history, updatedCanvasState],
+        historyStep: state.historyStep + 1,
+      };
+    });
+  };
+
+  const generateRandomRects = () => {
+    const randomRects = Array(1000)
+      .fill(null)
+      .map((_, index) => {
+        return {
+          id: index.toString(),
+          type: 'rect',
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          radius: 10,
+          width: 10,
+          height: 10,
+          fill: Konva.Util.getRandomColor(),
+          stroke: Konva.Util.getRandomColor(),
+          strokeWidth: 1,
+        };
+      });
+
+    setState((state) => {
+      const updatedCanvasState = {
+        ...state.history[state.historyStep],
+        stage: {
+          layers: [
+            ...state.history[state.historyStep].stage.layers,
+            {
+              objects: [
+                ...state.history[state.historyStep].stage.layers[0].objects,
+                ...randomRects,
+              ],
+            },
+          ],
+        },
+      };
+      return {
+        history: [...state.history, updatedCanvasState],
+        historyStep: state.historyStep + 1,
+      };
+    });
+  };
+
+  // const hideLayer = (index: number) => {
+  //   console.log(index);
+  //   setState((state) => {
+  //     return {
+  //       ...state,
+  //       history: [
+  //         ...state.history.slice(0, state.historyStep + 1),
+  //         {
+  //           ...state.history[state.historyStep],
+  //           stage: {
+  //             layers: state.history[state.historyStep].stage.layers.map((layer, i) => {
+  //               if (i === index) {
+  //                 return {
+  //                   ...layer,
+  //                   visible: false,
+  //                 };
+  //               }
+  //               return layer;
+  //             }),
+  //           },
+  //         },
+  //       ],
+  //       historyStep: state.historyStep + 1,
+  //     };
+  //   });
+  // };
+
   const buildStage = () => {
     const layers = state.history[state.historyStep].stage.layers;
     const layerObjects = layers.map((layer, index) => {
@@ -142,10 +255,9 @@ export const ViewDemo = () => {
             return;
         }
       });
+
       return (
-        <Layer key={index}>
-          <Text text="undo" className="" onClick={handleUndo} />
-          <Text text="redo" className="" x={40} onClick={handleRedo} />
+        <Layer key={index} visible={layer.visible}>
           {objects}
         </Layer>
       );
@@ -158,19 +270,47 @@ export const ViewDemo = () => {
     );
   };
 
-  const saveStage = () => {
-    console.log(state.history[state.historyStep]);
-    updateMapById('1', {
-      detail: JSON.stringify(state.history[state.historyStep]),
-    });
-  };
-
   return (
     <div>
       <h1>Demo</h1>
-      <button className="" onClick={saveStage}>
-        Save
-      </button>
+      <div>
+        <button
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={saveStage}
+        >
+          Save
+        </button>
+        <button
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={generateRandomCircles}
+        >
+          Generate
+        </button>
+        <button
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={generateRandomRects}
+        >
+          Generate Rects
+        </button>
+        <button
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={handleUndo}
+        >
+          undo
+        </button>
+        <button
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={handleRedo}
+        >
+          redo
+        </button>
+        {/* <button
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={hideLayer.bind(null, 0)}
+        >
+          Hide rect layer
+        </button> */}
+      </div>
       {buildStage()}
     </div>
   );
