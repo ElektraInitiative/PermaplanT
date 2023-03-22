@@ -17,7 +17,7 @@ Company: Percula LLC
 ## Differences
 
 PermaplanT is a gardening app that offers more variety via permaculture planning, which is not available in Garden Planter.
-PermaplanT also includes more complex input parameters, such as soil type, shade, and wet/dry conditions, to provide more accurate results for good/bad neighbors.
+PermaplanT also includes more complex input parameters, such as soil type, shade, and wet/dry conditions, to provide more accurate results for companion/antagonist.
 In summary, PermaplanT has more features than Garden Planter and should lead to more diverse ecosystems for permaculture gardens.
 
 ---
@@ -36,7 +36,7 @@ Layer activation and visibility (but list of plants etc. is shown somewhere else
 
 ## Differences
 
-Smart Gardener does not have many of the functionalities offered by PermaplanT, such as checks to determine whether a plant is well-suited for a particular location based on factors such as sun, soil, good/bad neighbors, and time of year.
+Smart Gardener does not have many of the functionalities offered by PermaplanT, such as checks to determine whether a plant is well-suited for a particular location based on factors such as sun, soil, companion/antagonist, and time of year.
 Overall, Smart Gardener does not offer as many functionalities as PermaplanT and is not as comprehensive in its approach to planning and maintaining a permaculture garden.
 
 ---
