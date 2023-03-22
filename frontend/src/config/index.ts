@@ -4,12 +4,10 @@ import axios from 'axios';
 // Intercept the axios response to map errors messages to more sensible messages.
 axios.interceptors.response.use(
   (r) => r,
-  (error) => {
+  (error: Error) => {
     console.error(error);
 
-    if (error instanceof Error) {
-      error.message = mapErrorToString(error);
-    }
+    error.message = mapErrorToString(error);
 
     return Promise.reject(error);
   },
