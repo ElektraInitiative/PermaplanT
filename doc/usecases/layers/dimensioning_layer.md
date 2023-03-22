@@ -14,7 +14,7 @@
   The user has opened the app and has selected the dimensioning layer.
 - **Main success scenario:**
   - The user selects elements.
-  - An line with arrows at the end and the distance in the middle gets added to the dimensioning layer.
+  - A line with arrows at the end and the distance in the middle gets added to the dimensioning layer.
 - **Alternative scenario:**
   - The user accidentally clicks on the wrong element and can remove the dimensioning.
 - **Error scenario:**

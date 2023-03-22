@@ -82,4 +82,4 @@
     E.g. if there are several plant layers, a user can select only one of these alternatives at once.
     When working together on a map, every user can select their own layers.
 -   offline availability:
-    Means that layers can be edited also offline, data gets synced when device is again online.
+    Means that layers can be edited also offline, data gets synced when device is online again.
