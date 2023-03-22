@@ -2,4 +2,4 @@
 
 pub mod plants;
 pub mod seed;
-pub mod fruit;
+pub mod map;

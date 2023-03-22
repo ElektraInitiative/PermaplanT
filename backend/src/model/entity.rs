@@ -2,7 +2,7 @@
 
 pub mod plants_impl;
 pub mod seed_impl;
-pub mod fruit_impl;
+pub mod map_impl;
 
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
@@ -10,7 +10,7 @@ use diesel::{Identifiable, Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-use crate::schema::{fruit, plants, seeds};
+use crate::schema::{map, plants, seeds};
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
@@ -69,10 +69,10 @@ pub struct NewSeed {
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[derive(Identifiable, Queryable)]
-#[diesel(table_name = fruit)]
-pub struct Fruit {
+#[diesel(table_name = map)]
+pub struct Map {
     pub id: i32,
-    pub name: String,
+    pub name: Option<String>,
     pub created_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
 }
