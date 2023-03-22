@@ -15,6 +15,10 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                     .service(seed::delete_by_id),
             )
             .service(web::scope("/plants").service(plants::find_all))
-            .service(web::scope("/maps").service(map::find_all)),
+            .service(
+                web::scope("/maps")
+                    .service(map::find_all)
+                    .service(map::find_by_id),
+            ),
     );
 }
