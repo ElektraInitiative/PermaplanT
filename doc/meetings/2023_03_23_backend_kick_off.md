@@ -18,30 +18,29 @@ _Protocolled by: Nursultan_
         -   maintenance
         -   performance
         -   hot reloading
-    - which modules do we have?
-    - solution strategy?
-    - where to add which code, e.g.:
-        - polyculture algorithms
-        - switching of layer/time
-        - session handling
-        - transaction handling
-        - threading
-        - validation
-        - reporting
-        - regular tasks (see decision below)
-        - ?
-    - can we be stateless?
+    -   which modules do we have?
+    -   solution strategy?
+    -   where to add which code, e.g.:
+        -   polyculture algorithms
+        -   switching of layer/time
+        -   session handling
+        -   transaction handling
+        -   threading
+        -   validation
+        -   reporting
+        -   regular tasks (see decision below)
+        -   ?
+    -   can we be stateless?
 -   APIs:
     -   to DB
     -   to Frontend
 -   which decisions do we need to make?
     -   API documentation
-        - https://github.com/ElektraInitiative/PermaplanT/pull/101
+        -   https://github.com/ElektraInitiative/PermaplanT/pull/101
     -   DB documentation
-        -     https://github.com/ElektraInitiative/PermaplanT/issues/97
-        -     what about SQL queries?
-    -   regular tasks  https://github.com/ElektraInitiative/PermaplanT/pull/130
+        -   https://github.com/ElektraInitiative/PermaplanT/issues/97
+        -   what about SQL queries?
+    -   regular tasks https://github.com/ElektraInitiative/PermaplanT/pull/130
 -   which tasks do we have?
-    - logging?
+    -   logging?
 -   who wants to work on which task?
-
