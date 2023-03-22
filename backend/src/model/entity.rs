@@ -72,7 +72,7 @@ pub struct NewSeed {
 #[diesel(table_name = map)]
 pub struct Map {
     pub id: i32,
-    pub name: Option<String>,
+    pub detail: Option<String>,
     pub created_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
 }
