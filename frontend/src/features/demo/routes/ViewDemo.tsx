@@ -160,6 +160,7 @@ export const ViewDemo = () => {
           layers: [
             ...state.history[state.historyStep].stage.layers,
             {
+              visible: true,
               objects: [
                 ...state.history[state.historyStep].stage.layers[0].objects,
                 ...randomCircles,
@@ -200,6 +201,7 @@ export const ViewDemo = () => {
           layers: [
             ...state.history[state.historyStep].stage.layers,
             {
+              visible: true,
               objects: [
                 ...state.history[state.historyStep].stage.layers[0].objects,
                 ...randomRects,
@@ -215,32 +217,32 @@ export const ViewDemo = () => {
     });
   };
 
-  // const hideLayer = (index: number) => {
-  //   console.log(index);
-  //   setState((state) => {
-  //     return {
-  //       ...state,
-  //       history: [
-  //         ...state.history.slice(0, state.historyStep + 1),
-  //         {
-  //           ...state.history[state.historyStep],
-  //           stage: {
-  //             layers: state.history[state.historyStep].stage.layers.map((layer, i) => {
-  //               if (i === index) {
-  //                 return {
-  //                   ...layer,
-  //                   visible: false,
-  //                 };
-  //               }
-  //               return layer;
-  //             }),
-  //           },
-  //         },
-  //       ],
-  //       historyStep: state.historyStep + 1,
-  //     };
-  //   });
-  // };
+  const hideLayer = (index: number) => {
+    console.log(index);
+    setState((state) => {
+      return {
+        ...state,
+        history: [
+          ...state.history.slice(0, state.historyStep + 1),
+          {
+            ...state.history[state.historyStep],
+            stage: {
+              layers: state.history[state.historyStep].stage.layers.map((layer, i) => {
+                if (i === index) {
+                  return {
+                    ...layer,
+                    visible: false,
+                  };
+                }
+                return layer;
+              }),
+            },
+          },
+        ],
+        historyStep: state.historyStep + 1,
+      };
+    });
+  };
 
   const buildStage = () => {
     const layers = state.history[state.historyStep].stage.layers;
@@ -304,12 +306,12 @@ export const ViewDemo = () => {
         >
           redo
         </button>
-        {/* <button
+        <button
           className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-          onClick={hideLayer.bind(null, 0)}
+          onClick={hideLayer.bind(null, 1)}
         >
           Hide rect layer
-        </button> */}
+        </button>
       </div>
       {buildStage()}
     </div>
