@@ -12,5 +12,8 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+if (!import.meta.env.VITE_BASE_API_URL) {
+  throw 'VITE_BASE_API_URL no set';
+}
 
 export const baseApiUrl = import.meta.env.VITE_BASE_API_URL;
