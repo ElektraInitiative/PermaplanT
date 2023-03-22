@@ -6,6 +6,10 @@ import { Stage, Layer, Rect, Text, Circle } from 'react-konva';
 interface CanvasState {
   history: {
     stage: {
+      scaleX: number;
+      scaleY: number;
+      stageX: number;
+      stageY: number;
       layers: {
         visible: boolean;
         objects: {
@@ -27,6 +31,10 @@ const defaultCanvasState: CanvasState = {
   history: [
     {
       stage: {
+        scaleX: 1,
+        scaleY: 1,
+        stageX: window.innerWidth / 2,
+        stageY: window.innerHeight / 2,
         layers: [
           {
             visible: true,
@@ -91,33 +99,35 @@ export const ViewDemo = () => {
   const handleDragEnd = (e) => {
     const id = e.target.id();
     setState((state) => {
-      const history = state.history.slice(0, state.historyStep + 1);
-      const historyStep = state.historyStep + 1;
-      const stage = history[historyStep - 1].stage;
-      const layers = stage.layers;
-      const layer = layers[0];
-      const objects = layer.objects;
-      const object = objects.find((object) => object.id === id);
-      const updatedObject = { ...object, x: e.target.x(), y: e.target.y() };
       return {
+        ...state,
         history: [
-          ...history,
+          ...state.history.slice(0, state.historyStep + 1),
           {
+            ...state.history[state.historyStep],
             stage: {
+              ...state.history[state.historyStep].stage,
               layers: [
-                {
-                  objects: objects.map((object) => {
-                    if (object.id === id) {
-                      return updatedObject;
-                    }
-                    return object;
-                  }),
-                },
+                ...state.history[state.historyStep].stage.layers.map((layer) => {
+                  return {
+                    ...layer,
+                    objects: layer.objects.map((object) => {
+                      if (object.id === id) {
+                        return {
+                          ...object,
+                          x: e.target.x(),
+                          y: e.target.y(),
+                        };
+                      }
+                      return object;
+                    }),
+                  };
+                }),
               ],
             },
           },
         ],
-        historyStep,
+        historyStep: state.historyStep + 1,
       };
     });
 
@@ -157,6 +167,7 @@ export const ViewDemo = () => {
       const updatedCanvasState = {
         ...state.history[state.historyStep],
         stage: {
+          ...state.history[state.historyStep].stage,
           layers: [
             ...state.history[state.historyStep].stage.layers,
             {
@@ -198,6 +209,7 @@ export const ViewDemo = () => {
       const updatedCanvasState = {
         ...state.history[state.historyStep],
         stage: {
+          ...state.history[state.historyStep].stage,
           layers: [
             ...state.history[state.historyStep].stage.layers,
             {
@@ -227,6 +239,7 @@ export const ViewDemo = () => {
           {
             ...state.history[state.historyStep],
             stage: {
+              ...state.history[state.historyStep].stage,
               layers: state.history[state.historyStep].stage.layers.map((layer, i) => {
                 if (i === index) {
                   return {
@@ -239,6 +252,41 @@ export const ViewDemo = () => {
             },
           },
         ],
+        historyStep: state.historyStep + 1,
+      };
+    });
+  };
+
+  const handleWheel = (e) => {
+    e.evt.preventDefault();
+
+    const scaleBy = 1.02;
+    const stage = e.target.getStage();
+    const oldScale = stage.scaleX();
+    const mousePointTo = {
+      x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+      y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale,
+    };
+
+    const newScale = e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+
+    setState((state) => {
+      return {
+        ...state,
+        history: [
+          ...state.history.slice(0, state.historyStep + 1),
+          {
+            ...state.history[state.historyStep],
+            stage: {
+              ...state.history[state.historyStep].stage,
+              scaleX: newScale,
+              scaleY: newScale,
+              stageX: -(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale,
+              stageY: -(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale,
+            },
+          },
+        ],
+
         historyStep: state.historyStep + 1,
       };
     });
@@ -266,7 +314,16 @@ export const ViewDemo = () => {
     });
 
     return (
-      <Stage className="bg-gray-50" width={window.innerWidth} height={window.innerHeight}>
+      <Stage
+        className="bg-gray-50"
+        width={window.innerWidth}
+        height={window.innerHeight}
+        onWheel={handleWheel}
+        scaleX={state.history[state.historyStep].stage.scaleX}
+        scaleY={state.history[state.historyStep].stage.scaleY}
+        x={state.history[state.historyStep].stage.stageX}
+        y={state.history[state.historyStep].stage.stageY}
+      >
         {layerObjects}
       </Stage>
     );
