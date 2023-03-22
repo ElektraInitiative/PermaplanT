@@ -27,3 +27,4 @@
 -   **Postcondition:**
     The map is exactly like at that time when the version was saved.
 -   **Non-functional Constraints:**
+    - Must also work on concurrent use of the same map (users can undo what others did).
