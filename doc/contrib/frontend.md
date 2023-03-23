@@ -1,14 +1,5 @@
 # Contributing to Frontend
 
-## Hooks
-
-The frontend uses pre-commit hooks to ensure certain actions such as linting will be done before a commit succeeds.
-To enable this, make sure to set the right permissions:
-
-```shell
-chmod ug+x .husky/*
-```
-
 ## Project Structure
 
 The majority of the code resides in `src.
