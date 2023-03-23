@@ -38,3 +38,12 @@ repos:
           - eslint@8.24.0
           - eslint-plugin-react@7.31.8
           - eslint-plugin-react-hooks@4.6.0
+  # Backend hooks
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: v1.0
+    hooks:
+      - id: fmt
+        name: backend format
+        args: [--manifest-path=backend/Cargo.toml]
+        files: ^backend/
+        pass_filenames: false
