@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete plant elements in their map in the plants layer.
-- **Status:** Draft
+- **Status:** Split in Polyculture Use Cases Open
 
 ## Scenarios
 
