@@ -2,7 +2,10 @@
 
 ## Problem
 
-The application's main component is the map, which consists of multiple layers and even more objects. However, not all layers are visible simultaneously, nor are they required during the initial loading of the application. Loading all the data at once during the initial load may result in slower performance, therefore a strategy must be developed to preload data on the map to optimize its performance.
+The application's main component is the map, which consists of multiple layers and even more objects.
+One more thing to consider is that the map consists not only of the data for the current date, but also for the past and future dates e.g. harvest time, planting history.
+However, not all layers are visible simultaneously, nor are they required during the initial loading of the application.
+Loading all the data at once during the initial load may result in slower performance, therefore a strategy must be developed to preload data on the map to optimize its performance.
 
 ## Constraints
 
