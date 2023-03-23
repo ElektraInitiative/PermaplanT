@@ -11,7 +11,10 @@
 -   version (of a map):
     A version (of a map) is a named snapshot of a map at a certain point in time while working on that map.
     It is possible to switch to a different version of a layer.
-    It is similar to the undo-redo feature with the difference that the snapshots have a name and any of them can be selected.
+    It is similar to the undo-redo feature with the difference that the snapshots:
+    - are persistent
+    - have a name and
+    - any specific snapshotcan be selected.
 -   offline:
     Means the ability to use a feature without Internet connection, i.e., without calling REST APIs.
 -   canvas:
