@@ -2,7 +2,7 @@
 
 ## Problem
 
-Permaplant needs to be designed with a documented, consistent and maintainable architecture pattern.
+PermaplanT needs to be designed with a documented, consistent and maintainable architecture pattern.
 
 ## Constraints
 
