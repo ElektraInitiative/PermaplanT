@@ -13,6 +13,8 @@ Since there is no built-in time-based job handling feature(like cron jobs in Uni
 
 ## Assumptions
 
+N/A
+
 ## Solutions
 
 ### PSQL partitioning
@@ -26,12 +28,11 @@ This means that some entries marked to be removed could stay in the database for
 ## Decision
 
 In order to keep the entries for a certain period of time, we introduce a new column in the database tables, e.g. `deleted_at`, which will contain the timestamp of the deletion.
-The deletion of the entities will be handled by the cron jobs, not by the database.
+The deletion of the entities will be handled either by a cron job on the server level or a scheduled task in the backend.
 
 ## Rationale
 
-Cron jobs are a standard way of scheduling tasks in Unix systems.
-They will allow us to run the deletion on a custom schedule e.g. every day, every week, etc.
+PSQL has no built-in time-based job handling feature, therefore it should be handled either on the server level or in the backend.
 
 ## Implications
 
