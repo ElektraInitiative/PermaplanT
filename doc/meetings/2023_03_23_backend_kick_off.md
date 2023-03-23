@@ -1,6 +1,6 @@
 # Meeting 2023-03-23 Backend Kick-Off
 
-_Protocolled by: Nursultan_
+_Protocolled by: Markus_
 
 ## Attendees:
 
@@ -29,13 +29,12 @@ _Protocolled by: Nursultan_
         -   threading -> tokio
         -   regular tasks (see decision below) -> Rust/tokio if easy, otherwise cronjob
         -   validation -> done by diesel
-        -   reporting/monitoring (Nursultan haven't found the mentioned tool)
-        -   ?
+        -   reporting/monitoring tool
     -   solution strategy?
-       - description of 3 layers
-       - types/structs
-       - diesel/rust intro in docs(Gabriel)
-       - be stateless (all state in DB)
+        -   description of 3 layers
+        -   types/structs
+        -   diesel/rust intro in docs(Gabriel)
+        -   be stateless (all state in DB)
 -   documentation:
     1. mdBook (general intro)
     2. API documentation (swagger?)
@@ -45,18 +44,18 @@ _Protocolled by: Nursultan_
 -   which decisions do we need to make?
     -   API documentation
         -   https://github.com/ElektraInitiative/PermaplanT/pull/101
-        - typescript generation of openapi?
+        -   typescript generation of openapi?
     -   DB documentation
         -   https://github.com/ElektraInitiative/PermaplanT/issues/97 -> yes, we document the structs
         -   what about SQL queries?
-        - open decision: best Rust OAuth Client/Server
+        -   open decision: best Rust OAuth Client/Server
     -   regular tasks https://github.com/ElektraInitiative/PermaplanT/pull/130
 -   which tasks do we have?
     -   logging decision
     -   extend pre-commit hook for backend (Benjamin)
     -   cargo watch (Gabriel)
 -   who wants to work on which task?
-   - Gabriel: mdBook, API docu
-   - Benjamin: pre-commit hook, review mdBook, API frontend
-   - Nursultan: documenting structs
-   - Ramzan: Diesel Postgis, check how to document algorithm
+-   Gabriel: mdBook, API docu
+-   Benjamin: pre-commit hook, review mdBook, API frontend
+-   Nursultan: documenting structs
+-   Ramzan: Diesel Postgis, check how to document algorithm
