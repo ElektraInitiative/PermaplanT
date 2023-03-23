@@ -9,7 +9,6 @@ use crate::{
     model::{
         dto::{NewSeedDto, PlantsDto, SeedDto},
         r#enum::{quality::Quality, quantity::Quantity},
-        response::{BodySeed, BodyString, BodyVecPlants, BodyVecSeed},
     },
 };
 
@@ -18,9 +17,6 @@ use crate::{
 #[openapi(paths(seed::find_all, seed::create, seed::delete_by_id),
         components(
             schemas(
-                BodyVecSeed,
-                BodySeed,
-                BodyString,
                 SeedDto,
                 NewSeedDto,
                 Quality,
@@ -37,7 +33,6 @@ struct SeedApiDoc;
 #[openapi(paths(plants::find_all),
         components(
             schemas(
-                BodyVecPlants,
                 PlantsDto
             )
         ),

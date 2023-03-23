@@ -8,7 +8,6 @@ mod tests {
     use crate::model::dto::NewSeedDto;
     use crate::model::dto::SeedDto;
     use crate::model::r#enum::quantity::Quantity;
-    use crate::model::response::Body;
     use actix_web::App;
     use actix_web::{http::StatusCode, test, web::Data};
     use dotenvy::dotenv;
@@ -145,8 +144,7 @@ mod tests {
             .await;
         assert_eq!(resp.status(), StatusCode::CREATED);
 
-        let body: Body<SeedDto> = test::read_body_json(resp).await;
-        let seed = body.data;
+        let seed: SeedDto = test::read_body_json(resp).await;
         let resp = test::TestRequest::delete()
             .uri(&format!("/api/seeds/{}", seed.id))
             .send_request(&mut app)
