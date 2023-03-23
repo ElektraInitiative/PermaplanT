@@ -50,7 +50,7 @@
 #![allow(clippy::multiple_crate_versions)]
 
 use actix_cors::Cors;
-use actix_web::{http, web::Data, App, HttpServer, middleware::NormalizePath};
+use actix_web::{http, middleware::NormalizePath, web::Data, App, HttpServer};
 use config::{db, routes};
 
 pub mod config;

@@ -28,7 +28,7 @@ export function CreateSeed() {
   };
 
   const onSubmit = async (newSeed: NewSeedDto) => {
-    // we can not directly check for an error here because the data would be stale 
+    // we can not directly check for an error here because the data would be stale
     // and not reflect the current state of the store
     //
     // an alternative would be to get a reference to the store and get the error from there
@@ -43,13 +43,13 @@ export function CreateSeed() {
 
   return (
     <div className="mx-auto w-full p-4 md:w-[900px]">
-      <PageTitle title="Neuer Eintrag" />
+      <PageTitle title="New Seed Entry" />
       <CreateSeedForm onCancel={onCancel} onChange={onChange} onSubmit={onSubmit} />
       <SimpleModal
-        title="Eintrag abbrechen"
-        body="Änderungen, die Sie vorgenommen haben, werden nicht gespeichert. Wollen Sie wirklich abbrechen?"
-        cancelBtnTitle="Nein"
-        submitBtnTitle="Ja"
+        title="Cancel Changes?"
+        body="Changes you have made will not be saved. Do you really want to cancel?"
+        cancelBtnTitle="No"
+        submitBtnTitle="Yes"
         show={showCancelModal}
         setShow={setShowCancelModal}
         onCancel={() => {
@@ -60,8 +60,8 @@ export function CreateSeed() {
         }}
       />
       <SimpleModal
-        title="Fehler"
-        body={`Ein Fehler ist aufgetreten: ${error}`}
+        title="Error"
+        body={error?.message || 'An unknown error occurred.'} // Error should always have a message
         show={showErrorModal}
         setShow={setShowErrorModal}
         submitBtnTitle="Ok"
