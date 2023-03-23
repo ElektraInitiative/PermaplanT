@@ -13,7 +13,7 @@ axios.interceptors.response.use(
   },
 );
 if (!import.meta.env.VITE_BASE_API_URL) {
-  throw 'VITE_BASE_API_URL no set';
+  throw 'VITE_BASE_API_URL not set';
 }
 
 export const baseApiUrl = import.meta.env.VITE_BASE_API_URL;
