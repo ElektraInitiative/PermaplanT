@@ -13,7 +13,8 @@
 - **Precondition:**
   The user has opened the app and has selected the warnings layer.
 - **Main success scenario:**
-  The user successfully adds, edits, moves and hides warnings.
+  - Warnings can be individual elements or connecting two elements (e.g. antagonists).
+  - The user successfully adds, edits, moves and hides warnings.
 - **Alternative scenario:**
   The user accidentally adds, edits, moves or hides the wrong warnings and uses the app's undo function to correct the mistake.
 - **Error scenario:**

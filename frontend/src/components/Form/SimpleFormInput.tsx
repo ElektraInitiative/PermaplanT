@@ -9,6 +9,7 @@ interface SimpleFormInputProps<T extends FieldValues> {
   isArea?: boolean;
   required?: boolean;
   type?: HTMLInputTypeAttribute;
+  defaultValue?: string | number | readonly string[];
   min?: number;
   max?: number;
   register?: UseFormRegister<T>;
@@ -23,6 +24,7 @@ export default function SimpleFormInput<T extends FieldValues>({
   required = false,
   isArea = false,
   type = 'text',
+  defaultValue,
   min,
   max,
   id,
@@ -31,6 +33,7 @@ export default function SimpleFormInput<T extends FieldValues>({
   valueAsNumber = false,
   errorTitle,
 }: SimpleFormInputProps<T>) {
+
   return (
     <div>
       <label htmlFor={id} className="mb-2 block text-sm font-medium  text-white">
@@ -55,6 +58,7 @@ export default function SimpleFormInput<T extends FieldValues>({
           min={min}
           max={max}
           id={id}
+          defaultValue={defaultValue}
           className="block h-11 w-full rounded-lg border border-zinc-800 bg-primary-textfield p-2.5 text-sm text-white placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
           placeholder={placeHolder}
           required={required}
