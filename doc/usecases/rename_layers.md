@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User renames created or alternative layers
-- **Status:** Draft
+- **Status:** Ready to be Assigned
 
 ## Scenarios
 

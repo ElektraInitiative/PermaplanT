@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can measure the distance between different elements in their map.
-- **Status:** Draft
+- **Status:** Ready to be Assigned
+- **Assignee:** Ramzan
 
 ## Scenarios
 

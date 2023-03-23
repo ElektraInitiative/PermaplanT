@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can view the map at different points in time by using the timeline feature.
-- **Status:** Draft
+- **Status:** Ready to be Assigned
+- **Assignee:** Moritz
 
 ## Scenarios
 

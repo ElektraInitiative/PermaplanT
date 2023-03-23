@@ -6,7 +6,7 @@
 -   **Level:** User Goal
 -   **Actors:** App User
 -   **Brief:** The user can view statistics about their garden and plants.
--   **Status:** Draft
+-   **Status:** Ready to be Assigned
 
 ## Scenarios
 

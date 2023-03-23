@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can choose the app's interface to be in English or German.
-- **Status:** Draft
+- **Status:** Ready to be Assigned
 
 ## Scenarios
 
