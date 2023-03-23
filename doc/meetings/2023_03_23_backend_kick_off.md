@@ -20,28 +20,28 @@ _Protocolled by: Nursultan_
         3. performance
         4. privacy
     -   which modules do we have?
+        -   modules ~ endpoints, so it is map, users, ...
     -   where to add which code, e.g.:
-        -   polyculture algorithms -> subfolder services
+        -   polyculture algorithms -> subfolder in services (documentation will be written)
         -   switching of layer/time -> parameters to endpoint
         -   session handling -> nextcloud (OAuth client lib), token only in browser, not in backend or DB, open decision: best Rust OAuth Client (https://auth0.com/blog/build-an-api-in-rust-with-jwt-authentication-using-actix-web/)
-        -   transaction handling -> dont need
+        -   transaction handling -> not needed
         -   threading -> tokio
-        -   regular tasks (see decision below) -> cronjob
+        -   regular tasks (see decision below) -> Rust/tokio if easy, otherwise cronjob
         -   validation -> done by diesel
         -   reporting/monitoring (Nursultan haven't found the mentioned tool)
         -   ?
     -   solution strategy?
-       - types
+       - description of 3 layers
+       - types/structs
        - diesel/rust intro in docs(Gabriel)
-    -   can we be stateless?
-- documentation:
+       - be stateless (all state in DB)
+-   documentation:
     1. mdBook (general intro)
     2. API documentation (swagger?)
     3. code documentation of backend
     4. code documentation of frontend
--   APIs:
-    -   to DB -> Diesel must be learned
-    -   to Frontend
+-   to work with DB -> Diesel must be learned
 -   which decisions do we need to make?
     -   API documentation
         -   https://github.com/ElektraInitiative/PermaplanT/pull/101
