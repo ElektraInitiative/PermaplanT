@@ -1,0 +1,40 @@
+# https://pre-commit.com/
+repos:
+  # Frontend hooks
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        name: frontend format
+        args: [--config=frontend/prettier.config.js, --ignore-path=frontend/.prettierignore]
+        files: ^frontend/
+        types_or:
+          - javascript
+          - jsx
+          - ts
+          - tsx
+          - json
+          - css
+          - scss
+          - markdown
+        additional_dependencies:
+          - prettier@2.7.1
+          - prettier-plugin-tailwindcss@0.2.1
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.24.0
+    hooks:
+      - id: eslint
+        name: frontend lint
+        args: [--config=frontend/.eslintrc.json, --max-warnings=0]
+        verbose: true
+        files: ^frontend/
+        types: [file]
+        types_or:
+          - javascript
+          - jsx
+          - ts
+          - tsx
+        additional_dependencies:
+          - eslint@8.24.0
+          - eslint-plugin-react@7.31.8
+          - eslint-plugin-react-hooks@4.6.0
