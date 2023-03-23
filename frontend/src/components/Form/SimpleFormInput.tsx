@@ -5,7 +5,7 @@ import { HTMLInputTypeAttribute } from 'react';
 interface SimpleFormInputProps<T extends FieldValues> {
   id: Path<T>;
   labelText: string;
-  placeHolder: string;
+  placeHolder?: string;
   isArea?: boolean;
   required?: boolean;
   type?: HTMLInputTypeAttribute;
@@ -20,7 +20,7 @@ interface SimpleFormInputProps<T extends FieldValues> {
 
 export default function SimpleFormInput<T extends FieldValues>({
   labelText,
-  placeHolder,
+  placeHolder = '',
   required = false,
   isArea = false,
   type = 'text',
