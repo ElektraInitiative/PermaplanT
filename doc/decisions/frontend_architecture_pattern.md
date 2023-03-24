@@ -32,7 +32,7 @@ Choices or derivations of this guidelines will be documented in `doc/architectur
 
 Bulletproof React is a set of best practices and conventions that promote code reuse and make it easy to reason about the structure of the application.
 It's simple, easy to understand, and easy to test.
-This makes it a good choice for a large, complex application like Permaplant.
+This makes it a good choice for a large, complex application like PermaplanT.
 Additionally, it is well-documented and widely used in the React community, which means that there is a lot of resources and support available for it.
 
 ## Implications
