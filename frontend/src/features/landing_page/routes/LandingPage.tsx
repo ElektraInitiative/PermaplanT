@@ -68,7 +68,7 @@ export const LandingPage = () => {
       <footer className="flex justify-center gap-4 bg-white p-4 px-8">
         <a
           className="border-b border-stone-700"
-          href="https://github.com/ElektraInitiative/PermaPlant/"
+          href="https://github.com/ElektraInitiative/Permaplant/"
         >
           github
         </a>
