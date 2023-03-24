@@ -26,3 +26,4 @@
   The user's map includes the added, edited, moved or deleted forests, trees and, hedge bushes as desired.
 - **Non-functional Constraints:**
   - Supports alternatives
+  - Performance: more than 500 elements per year and alternative should be usable without noticeable delays and acceptable memory overhead

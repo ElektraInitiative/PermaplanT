@@ -23,3 +23,4 @@
 -   **Non-functional Constraints:**
     - Offline availability
     - New Layers can be created.
+    - Performance: at least 1000 elements per year per drawing layer should be usable without noticeable delays and acceptable memory overhead

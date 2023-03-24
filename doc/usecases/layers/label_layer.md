@@ -24,3 +24,4 @@
 - **Non-functional Constraints:**
   - Offline availability
   - New Layers can be created.
+  - Performance: more than 1000 elements per year and per layer should be usable without noticeable delays and acceptable memory overhead

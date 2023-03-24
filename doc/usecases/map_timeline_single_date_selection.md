@@ -29,3 +29,4 @@
 - **Postcondition:**
   The user has successfully navigated to the desired date on the timeline.
 - **Non-functional Constraints:**
+    -   Performance: data in up to 100 years should be fast to use

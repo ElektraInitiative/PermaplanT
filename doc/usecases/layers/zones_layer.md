@@ -25,3 +25,4 @@
   The user's map includes the added, edited, moved or deleted zone elements as desired.
 - **Non-functional Constraints:**
   - Supports alternatives (different perspectives, e.g. guests)
+  - Performance: Map sizes with more than 1ha in 10000 raster elements (m²) per year should be usable without noticeable delays and acceptable memory overhead

@@ -29,3 +29,4 @@
 -   **Postcondition:**
     The user has successfully modified and selected an alternative of a layer.
 -   **Non-functional Constraints:**
+    -   Performance: up to 10 alternatives should be fast to use

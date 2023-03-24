@@ -23,3 +23,4 @@
     The user has successfully added, edited, moved and deleted fertilizers in the fertilize layer.
 -   **Non-functional Constraints:**
     - Offline availability
+    - Performance: Map sizes with more than 1ha in 10000 raster elements (m²) per year should be usable without noticeable delays and acceptable memory overhead

@@ -36,6 +36,6 @@
   - The user's map includes the added, edited, moved or deleted plant element as desired.
   - If constraints are violated for the place where a plant was added or moved, warnings get added (or removed) to (from) the [warnings layer](warnings_layer.md).
 - **Non-functional Constraints:**
-  - Performance
   - Partial offline availability: editing attributes, especially for planting and harvesting
   - Supports alternatives
+  - Performance: more than 10000 elements per year and per alternative should be usable without noticeable delays and acceptable memory overhead
