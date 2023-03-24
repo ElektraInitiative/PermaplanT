@@ -13,7 +13,7 @@ export const LandingPage = () => {
         {/* </div> */}
         <div className="mt-10 flex flex-col items-center gap-4" id="home">
           <div className="flex w-1/2 items-end justify-end">
-            <img src="/permaplant-logo-2.svg" alt="Permaplant drawing" />
+            <img src="/permaplant-logo-2.svg" alt="PermaplanT drawing" />
           </div>
           <h1 className="w-1/2 max-w-md self-end text-4xl font-light">
             BE <span className="bg-yellow-500">GOOD</span> TO YOUR
