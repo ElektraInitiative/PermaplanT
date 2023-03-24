@@ -1,0 +1,16 @@
+{
+    "name": "benchmarks",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {},
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@playwright/test": "^1.32.0",
+        "lighthouse": "^9.6.8",
+        "playwright": "^1.32.0",
+        "playwright-lighthouse": "^2.2.2"
+    }
+}
