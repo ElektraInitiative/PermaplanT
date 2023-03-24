@@ -36,7 +36,7 @@ export const LandingPage = () => {
             </ul>
           </div>
           <div className="mt-8 flex h-fit w-full max-w-3xl flex-col gap-4 p-8 md:w-2/3">
-            <h5 className="mt-12 border-l-2 pl-2 text-xl">Reasons to join PermaPlanT</h5>
+            <h5 className="mt-12 border-l-2 pl-2 text-xl">Reasons to join PermaplanT</h5>
             <ul className="ml-12 mt-4 flex max-w-xs flex-col items-center gap-8 rounded border-b-4 bg-white p-10 text-center">
               <li className="border-stone-400 pl-2 pb-2 hover:border-l hover:font-bold">
                 ecosystem suggestions{' '}
