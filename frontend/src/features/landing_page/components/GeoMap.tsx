@@ -9,7 +9,7 @@ export const GeoMap = () => (
     />
     <Marker position={[51.505, -0.09]}>
       <Popup>
-        This is a PermaPlanT site. Click <a href="/sites/1">here</a> to visit.
+        This is a PermaplanT site. Click <a href="/sites/1">here</a> to visit.
       </Popup>
     </Marker>
   </MapContainer>
