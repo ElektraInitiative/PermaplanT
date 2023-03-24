@@ -25,14 +25,14 @@ We have to store the entire state of the canvas for every step taken by the user
 This could lead to performance issues in the future.
 
 Let's assume that there are 1000 users using the app.
-we have 19 layers in the app.
-if the user places 10 shapes on each layer and modifies the properties of each shape 3 times, we have 19 _ 10 _ 3 = 570 actions taken by the user for each layer.
-If we store the entire state of the canvas for every action taken by the user, we have 570 _ 19 = 10,830 actions stored in the database for each user.
-If we have 1000 users, we have 10,830 _ 1000 = 10,830,000 actions stored in the database for a single day.
+we have ~19 layers in the app.
+if the user places 10 shapes on each layer and modifies the properties of each shape 3 times, we have 570 actions taken by the user for each layer.
+If we store the entire state of the canvas for every action taken by the user, we have 10,830 actions stored in the database for each user.
+If we have 1000 users, we have 10,830,000 actions stored in the database for a single day. This number will grow drastically over time.
 
 ## Decision
 
-Implement undo/redo functionality on the frontend side by storing intermediate states of the canvas in the store of the frontend.
+Implement undo/redo functionality on the frontend side by storing intermediate states of the canvas in the frontend.
 Only the final state of the canvas should be stored in the database.
 
 To keep the backend state in sync with the frontend state, the current state of the map should be periodically synced to the backend, according to some custom rule, such as every X seconds or when the user is inactive.
@@ -46,11 +46,15 @@ The canvas library, that we use, provides a suggestion on how to implement undo-
 
 > If you want to save/load simple canvas content you can use the built-in Konva methods: node.toJSON() and Node.create(json). But those methods are useful only in very small apps. In bigger apps it is VERY hard to use those methods. Why? Because the tree structure is usually very complex in larger apps, you may have a lot of event listeners, images, filters, etc. That data is not serializable into JSON (or it is very hard to do that).
 
-In other words, the Konva nodes contain too much information e.g. color or shape which could be set by default. So there is no reason to store them in the database if they are set by default by Konva anyways. Instead, we should only store the information that the user has changed.
+In other words, the Konva nodes contain too much information e.g. color or shape which could be set by default.
+So there is no reason to store them in the database if they are set by default by Konva anyways.
+Instead, we should only store the information that the user has changed.
 
 > You just need to save a history of all the state changes within your app.
 
-Implementing the undo/redo functionality on the frontend, as suggested above, provides a simpler and more efficient solution than storing every step of the user in the database. Storing intermediate states of the canvas in the frontend store allows the user to work locally in the canvas without significant performance impact. Additionally, syncing the backend state with the frontend state periodically ensures that the user's data is always up-to-date.
+Implementing the undo/redo functionality on the frontend, as suggested above, provides a simpler and more efficient solution than storing every step of the user in the database.
+Storing intermediate states of the canvas in the frontend store allows the user to work locally in the canvas without significant performance impact.
+Additionally, syncing the backend state with the frontend state periodically ensures that the user's data is always up-to-date.
 
 ## Implications
 
@@ -66,7 +70,7 @@ TBD
 2.  Konva suggestion on how to implement undo-redo functionality
     -   https://konvajs.org/docs/react/Undo-Redo.html
     -   https://konvajs.org/docs/data_and_serialization/Best_Practices.html#page-title
-3.  Example JSON of the state
+3.  Example JSON of the state in the frontend store
 
     ```JSON
     {
