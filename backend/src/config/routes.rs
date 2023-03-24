@@ -1,6 +1,6 @@
 //! Routes in the backend.
 
-use actix_web::web;
+use actix_web::{middleware::NormalizePath, web};
 
 use crate::controller::{plants, seed};
 
@@ -14,6 +14,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                     .service(seed::create)
                     .service(seed::delete_by_id),
             )
-            .service(web::scope("/plants").service(plants::find_all)),
+            .service(web::scope("/plants").service(plants::find_all))
+            .wrap(NormalizePath::default()),
     );
 }
