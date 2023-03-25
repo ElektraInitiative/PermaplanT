@@ -11,9 +11,15 @@ interface CreateSeedFormProps {
   onCancel: () => void;
   onChange: () => void;
   onSubmit: (newSeed: NewSeedDto) => void;
+  onVarietyInputChange: (inputValue: string) => void;
 }
 
-const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) => {
+const CreateSeedForm = ({
+  onCancel,
+  onChange,
+  onSubmit,
+  onVarietyInputChange,
+}: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
@@ -79,9 +85,9 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             options={plants}
             labelText="Variety"
             required={true}
-            handleOptionsChange={(option) => {
+            handleOptionsChange={(option, meta) => {
               // The user may either select existing plants,
-              // in which case plant_id ist set or create a new
+              // in which case plant_id is set or create a new
               // variety.
 
               // If the latter option is chosen, the variety field
@@ -89,9 +95,18 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
 
               // option.value is a only a number, if a plant is chosen,
               // otherwise its a string that contains the users input.
-              if (typeof option.value === 'number') setValue('plant_id', Number(option.value));
-              else if (option !== null) setValue('variety', option.value);
+
+              if (meta.action === 'clear') {
+                // user clears the input
+                setValue('plant_id', undefined);
+                setValue('variety', undefined);
+              } else if (typeof option?.value === 'number') {
+                setValue('plant_id', Number(option.value));
+              } else if (option !== null) {
+                setValue('variety', option.value);
+              }
             }}
+            onInputChange={onVarietyInputChange}
             onChange={onChange}
           />
           <SelectMenu

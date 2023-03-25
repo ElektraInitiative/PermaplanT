@@ -1,5 +1,5 @@
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { StylesConfig } from 'react-select';
+import { ActionMeta, StylesConfig } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { SelectOption } from './SelectMenu';
 
@@ -11,9 +11,10 @@ export interface CreatableSelectMenuProps<T extends FieldValues> {
   options: SelectOption[];
   required?: boolean;
   placeholder?: string;
-  handleOptionsChange?: (option: any) => void;
+  handleOptionsChange?: (option: any, actionMeta: ActionMeta<any>) => void;
   handleCreate?: (inputValue: string) => void;
   onChange?: () => void;
+  onInputChange?: (inputValue: string) => void;
 }
 
 export default function CreatableSelectMenu<T extends FieldValues>({
@@ -27,6 +28,7 @@ export default function CreatableSelectMenu<T extends FieldValues>({
   handleOptionsChange,
   handleCreate,
   onChange,
+  onInputChange,
 }: CreatableSelectMenuProps<T>) {
   const customStyles: StylesConfig = {
     menu: (styles) => ({
@@ -98,7 +100,10 @@ export default function CreatableSelectMenu<T extends FieldValues>({
             isMulti={isMulti}
             styles={customStyles}
             required={required}
-            onInputChange={onChange}
+            onInputChange={(inputValue) => {
+              onChange?.();
+              onInputChange?.(inputValue);
+            }}
           />
         )}
       />
