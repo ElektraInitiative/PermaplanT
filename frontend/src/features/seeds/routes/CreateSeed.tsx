@@ -7,6 +7,24 @@ import SimpleModal from '@/components/Modals/SimpleModal';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+function useDebounce(searchFunction: (searchTerm: string) => void, delay: number) {
+  const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
+
+  const debouncedSearch = (searchTerm: string) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    const timeout = setTimeout(() => {
+      searchFunction(searchTerm);
+    }, delay);
+
+    setTimeoutId(timeout);
+  };
+
+  return [debouncedSearch];
+}
+
 export function CreateSeed() {
   const navigate = useNavigate();
 
@@ -14,9 +32,11 @@ export function CreateSeed() {
   const [formTouched, setFormTouched] = useState(false);
   const createSeed = useCreateSeedStore((state) => state.createSeed);
   const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
+  const searchPlants = useCreateSeedStore((state) => state.searchPlants);
   const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
   const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
   const error = useCreateSeedStore((state) => state.error);
+  const [debouncedSearchPlants] = useDebounce(searchPlants, 350);
 
   const onCancel = () => {
     // There is no need to show the cancel warning modal if the user
@@ -53,7 +73,7 @@ export function CreateSeed() {
   };
 
   const onVarietyInputChange = (inputValue: string) => {
-    // TODO: pagination and search
+    debouncedSearchPlants(inputValue);
   };
 
   const plants: SelectOption[] = useCreateSeedStore((state) =>
