@@ -1,9 +1,10 @@
 import CreateSeedForm from '../components/CreateSeedForm';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import { NewSeedDto } from '@/bindings/definitions';
+import { SelectOption } from '@/components/Form/SelectMenu';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function CreateSeed() {
@@ -12,6 +13,7 @@ export function CreateSeed() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
   const createSeed = useCreateSeedStore((state) => state.createSeed);
+  const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
   const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
   const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
   const error = useCreateSeedStore((state) => state.error);
@@ -26,6 +28,15 @@ export function CreateSeed() {
 
     setShowCancelModal(!showCancelModal);
   };
+
+  useEffect(() => {
+    // This is a small workaround so it's possible to use async/await in useEffect
+    const _findAllPlants = async () => {
+      await findAllPlants();
+    };
+
+    _findAllPlants();
+  }, []);
 
   const onSubmit = async (newSeed: NewSeedDto) => {
     // we can not directly check for an error here because the data would be stale
@@ -45,10 +56,17 @@ export function CreateSeed() {
     // TODO: pagination and search
   };
 
+  const plants: SelectOption[] = useCreateSeedStore((state) =>
+    state.plants.map((plant) => {
+      return { value: plant.id, label: plant.species };
+    }),
+  );
+
   return (
     <div className="mx-auto w-full p-4 md:w-[900px]">
       <PageTitle title="New Seed Entry" />
       <CreateSeedForm
+        plants={plants}
         onCancel={onCancel}
         onChange={onChange}
         onSubmit={onSubmit}

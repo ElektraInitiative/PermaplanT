@@ -4,10 +4,10 @@ import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
-import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface CreateSeedFormProps {
+  plants: SelectOption[];
   onCancel: () => void;
   onChange: () => void;
   onSubmit: (newSeed: NewSeedDto) => void;
@@ -15,6 +15,7 @@ interface CreateSeedFormProps {
 }
 
 const CreateSeedForm = ({
+  plants,
   onCancel,
   onChange,
   onSubmit,
@@ -24,22 +25,6 @@ const CreateSeedForm = ({
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
   const currentYear = new Date().getFullYear();
-
-  const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
-  const plants = useCreateSeedStore((state) =>
-    state.plants.map((plant) => {
-      return { value: plant.id, label: plant.species };
-    }),
-  );
-
-  useEffect(() => {
-    // This is a small workaround so it's possible to use async/await in useEffect
-    const _findAllPlants = async () => {
-      await findAllPlants();
-    };
-
-    _findAllPlants();
-  }, []);
 
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDto>();
   const onFormSubmit: SubmitHandler<NewSeedDto> = async (data) => {
