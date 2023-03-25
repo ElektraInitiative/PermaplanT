@@ -41,10 +41,19 @@ export function CreateSeed() {
     setFormTouched(true);
   };
 
+  const onVarietyInputChange = (inputValue: string) => {
+    // TODO: pagination and search
+  };
+
   return (
     <div className="mx-auto w-full p-4 md:w-[900px]">
       <PageTitle title="New Seed Entry" />
-      <CreateSeedForm onCancel={onCancel} onChange={onChange} onSubmit={onSubmit} />
+      <CreateSeedForm
+        onCancel={onCancel}
+        onChange={onChange}
+        onSubmit={onSubmit}
+        onVarietyInputChange={onVarietyInputChange}
+      />
       <SimpleModal
         title="Cancel Changes?"
         body="Changes you have made will not be saved. Do you really want to cancel?"
