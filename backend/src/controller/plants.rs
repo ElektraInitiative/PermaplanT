@@ -47,7 +47,7 @@ pub struct QueryParameters {
     )
 )]
 #[get("/search")]
-pub async fn find(query: web::Query<QueryParameters>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn search(query: web::Query<QueryParameters>, pool: Data<Pool>) -> Result<HttpResponse> {
     let response = web::block(move || service::plants::search(&query.query, &query.limit, &pool)).await??;
     Ok(HttpResponse::Ok().json(response))
 }

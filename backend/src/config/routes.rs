@@ -14,7 +14,11 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                     .service(seed::create)
                     .service(seed::delete_by_id),
             )
-            .service(web::scope("/plants").service(plants::find_all))
+            .service(
+                web::scope("/plants")
+                    .service(plants::find_all)
+                    .service(plants::search)
+            )
             .wrap(NormalizePath::default()),
     );
 }
