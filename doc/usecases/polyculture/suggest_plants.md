@@ -13,7 +13,7 @@
 - **Precondition:**
   - The user has opened the app.
   - The plants layer is enabled.
-  - Plant(s) are selected.
+  - Plant(s) or a position on the map are selected.
 - **Main success scenario:**
 
   - A choice of plants that
@@ -26,7 +26,7 @@
   - Within those suggestions the user can see what plants go well with each other.
 
 - **Alternative scenario:**
-  - No plants are selected.
+  - No plant(s) or position are selected.
   - Polyculture groups that fit the environmental conditions are suggested.
 - **Error scenario:**
   - In case of any technical errors the users is notified about these.
