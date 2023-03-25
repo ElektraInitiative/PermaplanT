@@ -5,7 +5,10 @@ use actix_web::web::Data;
 use crate::{
     config::db::Pool,
     error::ServiceError,
-    model::{dto::PlantsDto, entity::Plants},
+    model::{
+        dto::{PlantsDto, QueryParameters},
+        entity::Plants,
+    },
 };
 
 /// Fetch all plants from the database.
@@ -22,8 +25,8 @@ pub fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsDto>, ServiceError> {
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn search(query: &String, limit: &i64, pool: &Data<Pool>) -> Result<Vec<PlantsDto>, ServiceError> {
+pub fn search(pool: &Data<Pool>, query: &QueryParameters) -> Result<Vec<PlantsDto>, ServiceError> {
     let mut conn = pool.get()?;
-    let result = Plants::search(query, limit, &mut conn)?;
+    let result = Plants::search(query, &mut conn)?;
     Ok(result)
 }

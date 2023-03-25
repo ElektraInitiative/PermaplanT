@@ -1,11 +1,11 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 use diesel::dsl::sql;
 use diesel::sql_types::{Bool, Text};
+use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 
 use crate::{
-    model::dto::PlantsDto,
+    model::dto::{PlantsDto, QueryParameters},
     schema::plants::{self, all_columns},
 };
 
@@ -26,20 +26,21 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn search(query: &String, limit: &i64, conn: &mut PgConnection) -> QueryResult<Vec<PlantsDto>> {
-        let query_with_placeholders = format!("%{}%", query);
-        
+    pub fn search(query: &QueryParameters, conn: &mut PgConnection) -> QueryResult<Vec<PlantsDto>> {
+        let query_with_placeholders = format!("%{}%", query.search_term);
+
         // We have to add some raw SQL, because the relevant columns
         // do not implement the TextExpressionMethods trait.
-        let query_result = plants::table.select(all_columns)
-                                        .filter(
-                                            sql::<Bool>("species LIKE ")
-                                            .bind::<Text, _>(&query_with_placeholders)
-                                            .sql(" OR plant LIKE ")
-                                            .bind::<Text, _>(&query_with_placeholders)
-                                        )
-                                        .limit(*limit)
-                                        .load::<Self>(conn);
+        let query_result = plants::table
+            .select(all_columns)
+            .filter(
+                sql::<Bool>("species LIKE ")
+                    .bind::<Text, _>(&query_with_placeholders)
+                    .sql(" OR plant LIKE ")
+                    .bind::<Text, _>(&query_with_placeholders),
+            )
+            .limit(query.limit)
+            .load::<Self>(conn);
 
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }

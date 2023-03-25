@@ -1,12 +1,11 @@
 //! `Plants` endpoints.
 
-use crate::{config::db::Pool, service};
+use crate::{config::db::Pool, model::dto::QueryParameters, service};
 use actix_web::{
     get,
     web::{self, Data},
     HttpResponse, Result,
 };
-use serde::Deserialize;
 
 /// Endpoint for fetching all [`PlantsDto`](crate::model::dto::PlantsDto).
 ///
@@ -25,14 +24,6 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok().json(response))
 }
 
-
-
-#[derive(Debug, Deserialize)]
-pub struct QueryParameters {
-    query: String,
-    limit: i64
-}
-
 /// Endpoint for searching [`PlantsDto`](crate::model::dto::PlantsDto) by their common name or
 /// species name.
 /// Search parameters are taken from the URLs query string (e.g. .../api/plants/search?query=example&limit=5).
@@ -48,6 +39,7 @@ pub struct QueryParameters {
 )]
 #[get("/search")]
 pub async fn search(query: web::Query<QueryParameters>, pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = web::block(move || service::plants::search(&query.query, &query.limit, &pool)).await??;
+    let query = query.into_inner();
+    let response = web::block(move || service::plants::search(&pool, &query)).await??;
     Ok(HttpResponse::Ok().json(response))
 }
