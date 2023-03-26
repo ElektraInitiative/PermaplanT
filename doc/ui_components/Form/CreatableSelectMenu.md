@@ -13,6 +13,6 @@ Similar to SelectMenu, but allows the user to create new menu entries.
 | options             | SelectOption[]      | no       | Options that can be selected by the user. I.e. the contents of this component.                                      |
 | required            | boolean             | yes      | If set to true, the user has to select an option before the form can be completed (default false).                  |
 | placeholder         | string              | yes      | Text that is displayed instead of the input if has been selected yet.                                               |
-| handleOptionsChange | (any) => void       | yes      | Callback that is invoked every time the user selects a new option. The only argument repesents the selected option. |
+| handleOptionsChange | (any) => void       | yes      | Callback that is invoked every time the user selects a new option. The single argument represents the selected option. |
 | handleCreate        | (string) => void    | yes      | Gets called if a new item was created with the users input as the only argument. If not set, the component will automatically add all created items to the available options.                        |
 | onChange            | () => void          | yes      | Callback that is invoked if the user performs ANY input. This includes type and click events among others.          |   
