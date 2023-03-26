@@ -1,3 +1,4 @@
+import SimpleButton from '@/components/Button/SimpleButton';
 import '@/components/Modals/ImageModal';
 import ImageModal from '@/components/Modals/ImageModal';
 import SimpleModal from '@/components/Modals/SimpleModal';
@@ -78,27 +79,27 @@ export const PhotoGallery = () => {
         onCancel = {() => {setShowModal(false)}}
       />
       <div className="mt-8 flex justify-center gap-4">
-        <button
+        <SimpleButton
           onClick={() => {
             setImageSize('small');
           }}
         >
           small
-        </button>
-        <button
+        </SimpleButton>
+        <SimpleButton
           onClick={() => {
             setImageSize('mid');
           }}
         >
           mid
-        </button>
-        <button
+        </SimpleButton>
+        <SimpleButton
           onClick={() => {
             setImageSize('large');
           }}
         >
           large
-        </button>
+        </SimpleButton>
       </div>
       <section
         className={gridClasses}
@@ -106,7 +107,7 @@ export const PhotoGallery = () => {
       >
         {imageUrls.map((image, index) => {
           const className =
-            'w-full h-full p-1 pt-4 pb-6 bg-white hover:bg-stone-300 border-b-4 rounded ' +
+            'w-full h-full p-1 pt-4 pb-6 bg-background-100 dark:bg-background-200-dark hover:bg-background-300 dark:hover:bg-background-400-dark border-b-4 dark:border-background-300-dark rounded ' +
             getItemSize(index) 
           return (
             <div
@@ -119,7 +120,7 @@ export const PhotoGallery = () => {
             >
               <img
                 src={image}
-                className="h-full w-full border-white bg-stone-200 object-contain"
+                className="h-full w-full border-white bg-background-200 dark:bg-background-300-dark object-contain"
               ></img>
             </div>
           );

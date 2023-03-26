@@ -8,9 +8,6 @@ export const LandingPage = () => {
     <div className="h-full">
       <Navbar />
       <div className="mb-8 flex flex-col items-center p-8">
-        {/* <div className="max-w-3xl rounded bg-white p-4 border-b-4 mt-10"> */}
-        {/*   <img src="/permaplant_drawing.jpeg" alt="Permaplant drawing" /> */}
-        {/* </div> */}
         <div className="mt-10 flex flex-col items-center gap-4" id="home">
           <div className="flex w-1/2 items-end justify-end">
             <img src="/permaplant-logo-2.svg" alt="PermaplanT drawing" />
@@ -23,7 +20,7 @@ export const LandingPage = () => {
         <div className="flex flex-col items-center gap-8 md:flex-row">
           <div className="flex flex-col md:w-1/3">
             <h5 className="border-l-2 pl-2 text-xl">Why?</h5>
-            <ul className="ml-12 mt-4 flex max-w-xs flex-col items-center gap-8 rounded border-b-4 bg-white p-10 text-center">
+            <ul className="ml-12 mt-4 flex max-w-xs flex-col items-center gap-8 rounded border-b-4 bg-white p-10 text-center dark:bg-background-200-dark dark:border-background-300-dark">
               <li className="border-stone-400 pl-2 hover:border-l hover:font-bold">
                 vital growth of delicious edible crops
               </li>
@@ -37,7 +34,7 @@ export const LandingPage = () => {
           </div>
           <div className="mt-8 flex h-fit w-full max-w-3xl flex-col gap-4 p-8 md:w-2/3">
             <h5 className="mt-12 border-l-2 pl-2 text-xl">Reasons to join PermaplanT</h5>
-            <ul className="ml-12 mt-4 flex max-w-xs flex-col items-center gap-8 rounded border-b-4 bg-white p-10 text-center">
+            <ul className="ml-12 mt-4 flex max-w-xs flex-col items-center gap-8 rounded border-b-4 bg-white p-10 text-center dark:bg-background-200-dark dark:border-background-300-dark">
               <li className="border-stone-400 pl-2 pb-2 hover:border-l hover:font-bold">
                 ecosystem suggestions{' '}
               </li>
@@ -53,7 +50,7 @@ export const LandingPage = () => {
         <h2 className="mt-12 mb-4 border-l-2 pl-4" id="map">
           The PermaplanT world
         </h2>
-        <div className="mt-2 h-[50vh] min-h-[24rem] w-full min-w-[32rem] max-w-6xl grow rounded border-b-4 bg-white p-10">
+        <div className="mt-2 h-[50vh] min-h-[24rem] w-full min-w-[32rem] max-w-6xl grow rounded border-b-4 bg-white p-10 dark:bg-background-200-dark dark:border-background-300-dark">
           <GeoMap />
         </div>
       </div>
@@ -65,7 +62,7 @@ export const LandingPage = () => {
         <h2 className="mt-12 ml-8 border-l-2 pl-4">Gallery</h2>
         <PhotoGallery />
       </section>
-      <footer className="flex justify-center gap-4 bg-white p-4 px-8">
+      <footer className="flex justify-center gap-4 p-4 px-8">
         <a
           className="border-b border-stone-700"
           href="https://github.com/ElektraInitiative/Permaplant/"

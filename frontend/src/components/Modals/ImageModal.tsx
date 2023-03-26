@@ -20,7 +20,7 @@ export default function SimpleModal({ title, body, show, setShow, onCancel }: Im
         show={show}
       />
       <ModalContainer show={show}>
-        <div className="flex h-full min-h-[40vh] w-full min-w-[40vw] flex-col rounded-lg bg-primary-background p-6">
+        <div className="flex h-full min-h-[40vh] w-full min-w-[40vw] flex-col rounded-lg bg-background-100 p-6 dark:bg-background-100-dark">
           <div className="flex justify-between">
             <h2>{title}</h2>
             <button

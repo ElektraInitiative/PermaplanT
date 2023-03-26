@@ -32,7 +32,7 @@ export default function SimpleModal({
         show={show}
       />
       <ModalContainer show={show}>
-        <div className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-primary-background p-6 dark:bg-primary-background-dark">
+        <div className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-background-100 p-6 dark:bg-background-100-dark">
           <h2>{title}</h2>
           <p className="mb">{body}</p>
           <div className="space-between flex flex-row justify-center space-x-8">
