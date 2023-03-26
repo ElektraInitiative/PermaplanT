@@ -1,10 +1,10 @@
-import { PlantsDto } from '../../../bindings/definitions';
-import PageLayout from '../../../components/Layout/PageLayout';
 import { findPlantById } from '../api/findPlantById';
 import { findSeedById } from '../api/findSeedById';
-import { SeedDto } from '@/bindings/definitions';
+import { PlantsDto, SeedDto } from '@/bindings/definitions';
 import SimpleCard from '@/components/Card/SimpleCard';
 import PageTitle from '@/components/Header/PageTitle';
+import PageLayout from '@/components/Layout/PageLayout';
+import SimpleModal from '@/components/Modals/SimpleModal';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -13,15 +13,24 @@ export function SeedDetails() {
 
   const [seed, setSeed] = useState<SeedDto | null>(null);
   const [plant, setPlant] = useState<PlantsDto | null>(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [error, setError] = useState<Error>();
 
   useEffect(() => {
     // fetch seed
     const _findOneSeed = async () => {
-      const seed = await findSeedById(Number(id));
-      setSeed(seed);
+      try {
+        const seed = await findSeedById(Number(id));
+        setSeed(seed);
 
-      const plant = await findPlantById(Number(seed.plant_id));
-      setPlant(plant);
+        const plant = await findPlantById(Number(seed.plant_id));
+        setPlant(plant);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error);
+          setShowErrorModal(true);
+        }
+      }
     };
     _findOneSeed();
   }, []);
@@ -53,6 +62,16 @@ export function SeedDetails() {
           </div>
         </div>
       )}
+      <SimpleModal
+        title="Error"
+        body={error?.message || 'An unknown error occurred.'} // Error should always have a message
+        show={showErrorModal}
+        setShow={setShowErrorModal}
+        submitBtnTitle="Ok"
+        onSubmit={() => {
+          setShowErrorModal(false);
+        }}
+      ></SimpleModal>
     </PageLayout>
   );
 }
