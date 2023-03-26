@@ -11,7 +11,7 @@ The architecture pattern should be
 - easy to understand and follow
 - be easy to test
 - be easy to scale
-- be suitable for a large, complex application
+- be suitable for a large, highly-interactive application
 - promote code reuse
 - be well-documented and widely used in the React community
 
