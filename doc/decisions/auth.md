@@ -3,9 +3,8 @@
 ## Problem
 The user wants to log in once and be able to fetch resources
 from the Nextcloud instance as well as from PermaplanT database.
-The user needs to authenticate themself (who is the user)
-and get the appropriate authorization (does the user have the right priviliges)
-to perform the action.
+The users need to authenticate themself (who is the user).
+Then they get the appropriate authorization (does the user have the right privileges) to perform the action.
 
 **OAuth2.0:** **User** can authorize **client** to fetch resources from **resource server**.
 
