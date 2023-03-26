@@ -1,4 +1,4 @@
-import SimpleButton from '@/components/Button/SimpleButton';
+import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import '@/components/Modals/ImageModal';
 import ImageModal from '@/components/Modals/ImageModal';
 import SimpleModal from '@/components/Modals/SimpleModal';
@@ -83,6 +83,8 @@ export const PhotoGallery = () => {
           onClick={() => {
             setImageSize('small');
           }}
+          variant={ButtonVariant.secondary}
+          className="w-24"
         >
           small
         </SimpleButton>
@@ -90,6 +92,8 @@ export const PhotoGallery = () => {
           onClick={() => {
             setImageSize('mid');
           }}
+          variant={ButtonVariant.secondary}
+          className="w-24"
         >
           mid
         </SimpleButton>
@@ -97,6 +101,8 @@ export const PhotoGallery = () => {
           onClick={() => {
             setImageSize('large');
           }}
+          variant={ButtonVariant.secondary}
+          className="w-24"
         >
           large
         </SimpleButton>
@@ -107,7 +113,7 @@ export const PhotoGallery = () => {
       >
         {imageUrls.map((image, index) => {
           const className =
-            'w-full h-full p-1 pt-4 pb-6 bg-background-100 dark:bg-background-200-dark hover:bg-background-300 dark:hover:bg-background-400-dark border-b-4 dark:border-background-300-dark rounded ' +
+            'w-full h-full p-1 pt-4 pb-6 bg-background-200 dark:bg-background-200-dark hover:bg-background-300 dark:hover:bg-background-400-dark border-b-4 border-background-300 dark:border-background-300-dark rounded ' +
             getItemSize(index) 
           return (
             <div

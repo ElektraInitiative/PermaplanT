@@ -6,7 +6,7 @@ import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import SimpleButton from '@/components/Button/SimpleButton';
+import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 
 interface CreateSeedFormProps {
   onCancel: () => void;
@@ -183,6 +183,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             type="button"
             onClick={onCancel}
             className='max-w-[240px] grow sm:w-auto'
+            variant={ButtonVariant.neutral}
           >
             Cancel
           </SimpleButton>
