@@ -1,8 +1,8 @@
 # Authentication & Authorization
 
 ## Problem
-The user wants to log in once and be able to fetch ressources
-from the Nextcloud Instance as well as from PermaplanT database.
+The user wants to log in once and be able to fetch resources
+from the Nextcloud instance as well as from PermaplanT database.
 The user needs to authenticate themself (who is the user)
 and get the appropriate authorization (does the user have the right priviliges)
 to perform the action.
