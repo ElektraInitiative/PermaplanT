@@ -16,11 +16,11 @@ impl Config {
     /// Load the configuration using environment variables.
     ///
     /// # Errors
-    /// * If the .env file is missing.
+    /// * If the .env file is present, but there was an error loading it.
     /// * If an environment variable is missing.
     /// * If a variable could not be parsed correctly.
     pub fn from_env() -> Result<Self, Box<dyn std::error::Error>> {
-        dotenv().map_err(|_| ".env file not found")?;
+        load_env_file()?;
 
         let host = env::var("BIND_ADDRESS_HOST")
             .map_err(|_| "Failed to get BIND_ADDRESS_HOST from environment.")?;
@@ -36,5 +36,17 @@ impl Config {
             bind_address: (host, port),
             database_url,
         })
+    }
+}
+
+/// Load the .env file. A missing file does not result in an error.
+///
+/// # Errors
+/// * If the .env file is present, but there was an error loading it.
+fn load_env_file() -> Result<(), Box<dyn std::error::Error>> {
+    match dotenv() {
+        Err(e) if e.not_found() => Ok(()), // missing .env is ok
+        Err(e) => Err(e.into()),           // any other errors are a problem
+        _ => Ok(()),
     }
 }

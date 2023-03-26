@@ -72,3 +72,15 @@ import {MyComponent} from "@/features/my-feature/components/MyComponent
 ```
 
 Think of a feature as a library or a module that is self-contained but can expose different parts to other features via its entry point.
+
+## Helpful Links
+
+React:
+
+- [The new React documentation (as of 16.03.2023)](https://react.dev/learn)
+- [Advanced and detailed blog](https://kentcdodds.com/blog?q=react)
+
+Zustand (Global State Management):
+
+- [Tutorial](https://blog.logrocket.com/managing-react-state-zustand/)
+- [The Zustand documentation](https://github.com/pmndrs/zustand)

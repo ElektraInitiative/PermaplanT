@@ -50,8 +50,8 @@
 #![allow(clippy::multiple_crate_versions)]
 
 use actix_cors::Cors;
-use actix_web::{http, web::Data, App, HttpServer, middleware::NormalizePath};
-use config::{db, routes};
+use actix_web::{http, web::Data, App, HttpServer};
+use config::{api_doc, db, routes};
 
 pub mod config;
 pub mod controller;
@@ -77,9 +77,9 @@ async fn main() -> std::io::Result<()> {
 
         App::new()
             .wrap(cors_configuration())
-            .wrap(NormalizePath::default())
             .app_data(data)
             .configure(routes::config)
+            .configure(api_doc::config)
     })
     .bind(config.bind_address)?
     .run()
