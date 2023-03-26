@@ -32,7 +32,7 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
 #[utoipa::path(
     context_path = "/api/plants/{id}",
     responses(
-        (status = 200, description = "Fetch plant by id", body = SeedDto)
+        (status = 200, description = "Fetch plant by id", body = PlantsDto)
     )
 )]
 #[get("/{id}")]
