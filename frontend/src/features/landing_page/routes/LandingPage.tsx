@@ -20,28 +20,28 @@ export const LandingPage = () => {
         <div className="flex flex-col items-center gap-8 md:flex-row">
           <div className="flex flex-col md:w-1/3">
             <h5 className="border-l-2 pl-2 text-xl">Why?</h5>
-            <ul className="ml-12 mt-4 flex max-w-xs flex-col items-center gap-8 rounded border-b-4 bg-white p-10 text-center dark:bg-background-200-dark dark:border-background-300-dark">
-              <li className="border-stone-400 pl-2 hover:border-l hover:font-bold">
+            <ul className="ml-12 mt-4 flex max-w-xs flex-col items-center gap-8 rounded border-b-4 bg-background-200 border-background-300 p-10 text-center dark:border-background-300-dark dark:bg-background-200-dark">
+              <li className="pl-2 m-[1px] border-background-400 hover:border-l hover:ml-0 hover:font-bold">
                 vital growth of delicious edible crops
               </li>
-              <li className="border-stone-400 p-1 pl-2 hover:border hover:font-bold">
+              <li className="border-background-400 p-1 pl-2 m-[1px] hover:m-0 hover:border hover:font-bold">
                 providing a diverse and functioning ecosystem
               </li>
-              <li className="border-stone-400 pl-2 pb-2 hover:border-b hover:font-bold">
+              <li className="border-background-400 pl-2 pb-2 m-[1px] hover:mb-0 hover:border-b hover:font-bold">
                 creating outdoor living spaces for both animals & humans
               </li>
             </ul>
           </div>
           <div className="mt-8 flex h-fit w-full max-w-3xl flex-col gap-4 p-8 md:w-2/3">
             <h5 className="mt-12 border-l-2 pl-2 text-xl">Reasons to join PermaplanT</h5>
-            <ul className="ml-12 mt-4 flex max-w-xs flex-col items-center gap-8 rounded border-b-4 bg-white p-10 text-center dark:bg-background-200-dark dark:border-background-300-dark">
-              <li className="border-stone-400 pl-2 pb-2 hover:border-l hover:font-bold">
-                ecosystem suggestions{' '}
+            <ul className="ml-12 mt-4 flex max-w-xs flex-col items-center gap-8 rounded border-b-4 border-background-300 bg-background-200 p-10 text-center dark:border-background-300-dark dark:bg-background-200-dark">
+              <li className="border-background-400 m-[1px] pl-2 pb-2 hover:ml-0 hover:border-l hover:font-bold">
+                ecosystem suggestions
               </li>
-              <li className="border-stone-400 pl-2 pb-2 hover:border-b hover:font-bold">
+              <li className="border-background-400 m-[1px] pl-2 pb-2 hover:mb-0 hover:border-b hover:font-bold">
                 practical for the gardener
               </li>
-              <li className="border-stone-400 pl-2 pb-2 hover:border-b hover:font-bold">
+              <li className="border-background-400 m-[1px] pl-2 pb-2 hover:mb-0 hover:border-b hover:font-bold">
                 enhances diversity
               </li>
             </ul>
@@ -50,7 +50,7 @@ export const LandingPage = () => {
         <h2 className="mt-12 mb-4 border-l-2 pl-4" id="map">
           The PermaplanT world
         </h2>
-        <div className="mt-2 h-[50vh] min-h-[24rem] w-full min-w-[32rem] max-w-6xl grow rounded border-b-4 bg-white p-10 dark:bg-background-200-dark dark:border-background-300-dark">
+        <div className="mt-2 h-[50vh] min-h-[24rem] w-full min-w-[32rem] max-w-6xl grow rounded border-b-4 bg-white p-10 dark:border-background-300-dark dark:bg-background-200-dark">
           <GeoMap />
         </div>
       </div>
@@ -64,18 +64,18 @@ export const LandingPage = () => {
       </section>
       <footer className="flex justify-center gap-4 p-4 px-8">
         <a
-          className="border-b border-stone-700"
+          className="border-b border-background-700"
           href="https://github.com/ElektraInitiative/Permaplant/"
         >
           github
         </a>
-        <a className="border-b border-stone-700" href="#home">
+        <a className="border-b border-background-700" href="#home">
           home
         </a>
-        <a className="border-b border-stone-700" href="#gallery">
+        <a className="border-b border-background-700" href="#gallery">
           gallery
         </a>
-        <a className="border-b border-stone-700" href="#map">
+        <a className="border-b border-background-700" href="#map">
           map
         </a>
       </footer>
