@@ -10,17 +10,11 @@
   h3 {
     @apply text-lg;
   }
-  button {
-    @apply border border-stone-200 px-2 py-1 rounded text-stone-900 hover:border-stone-500 hover:text-stone-500 active:bg-stone-500 active:text-stone-900
-  }
   body {
-    @apply bg-neutral-100 text-black
+    @apply bg-background-100 dark:bg-background-100-dark dark:text-white
   }
 }
 
 @tailwind components;
 @tailwind utilities;
 
-.btn {
-  @apply border border-stone-200 text-stone-100 px-2 py-1 rounded hover:border-stone-500 hover:text-stone-500 active:bg-stone-500 active:text-stone-900
-}
