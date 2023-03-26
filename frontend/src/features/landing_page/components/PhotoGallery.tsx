@@ -1,7 +1,6 @@
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import '@/components/Modals/ImageModal';
 import ImageModal from '@/components/Modals/ImageModal';
-import SimpleModal from '@/components/Modals/SimpleModal';
 import { useState } from 'react';
 
 export const PhotoGallery = () => {
