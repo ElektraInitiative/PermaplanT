@@ -63,7 +63,7 @@ export default function SimpleFormInput<T extends FieldValues>({
           max={max}
           id={id}
           defaultValue={defaultValue}
-          className="block h-11 w-full rounded-lg border border-zinc-800 bg-primary-textfield dark:bg-primary-textfield-dark p-2.5 text-sm placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
+          className="block h-11 w-full rounded-lg border border-zinc-800 bg-background-100 dark:bg-background-100-dark p-2.5 text-sm placeholder-neutral-700 focus:border-gray-600 focus:outline-none"
           placeholder={placeHolder}
           required={required}
           style={{ colorScheme: 'dark' }}
