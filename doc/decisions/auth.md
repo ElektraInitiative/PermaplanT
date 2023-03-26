@@ -14,6 +14,13 @@ to perform the action.
 ## Constraints
 
 - single account to access PermaplanT and Nextcloud
+- we don't implement our own auth solution
+
+## Assumptions
+
+- Nextcloud and PermaplanT backend are the only services we provide
+- we don't need roles/scopes (everyone can access all parts of the API)
+- access control is quite simple, e.g., which users can read or write on which map
 
 ## Solutions
 
