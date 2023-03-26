@@ -41,4 +41,5 @@ Additionally, it is well-documented and widely used in the React community, whic
 
 ## Notes
 
- - "bulletproof react" architecture pattern is developed by the team at Level Up Tutorials. It is not an official pattern by React.
+ - "bulletproof react" architecture pattern is developed by the team at Level Up Tutorials.
+ It is not an official pattern by React.
