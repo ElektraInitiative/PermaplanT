@@ -14,7 +14,7 @@ export interface SelectMenuProps<T extends FieldValues> {
   options: SelectOption[];
   required?: boolean;
   placeholder?: string;
-  handleOptionsChange?: (option: any) => void;
+  handleOptionsChange?: (option: unknown) => void;
   onChange?: () => void;
 }
 
@@ -88,7 +88,7 @@ export default function SelectMenu<T extends FieldValues>({
       <Controller
         name={id}
         control={control}
-        render={({ field }) => (
+        render={() => (
           <Select
             name={id}
             isClearable
