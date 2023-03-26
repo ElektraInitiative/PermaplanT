@@ -1,0 +1,70 @@
+# Backend ORM/SQL crate
+
+## Problem
+
+We are currently using [diesel](https://github.com/diesel-rs/diesel) as our ORM in Rust.  
+Since diesel doesn't support async out of the box we will look at other alteratives and see if a switch is reasonable.  
+There might also be advantages of other ORM crates that as of writing this have not been considered.
+
+## Constraints
+
+1. Migrations need to be supported
+
+## Assumptions
+
+1. diesel is a solid choice, therefore unless other ORMs have obvious advantages differences will not be looked at in detail
+
+## Solutions
+
+### [diesel](https://github.com/diesel-rs/diesel)
+
+Diesel currently is the most used ORM in the Rust ecosystem.  
+It supports migrations written in SQL that can be executed from command line.
+
+Diesel is the ORM we are using as of writing this decisions.
+
+### [diesel](https://github.com/diesel-rs/diesel) + [diesel_async](https://github.com/weiznich/diesel_async)
+
+diesel_async is a drop-in replacement of corresponding diesel methods providing async support.
+
+### [sea-orm](https://github.com/SeaQL/sea-orm)
+
+Sea-orm is based upon [sqlx](https://github.com/jmoiron/sqlx) and supports async out of the box.  
+It supports [migrations](https://www.sea-ql.org/SeaORM/docs/migration/setting-up-migration/) written in Rust.
+
+## Decision
+
+Use diesel + diesel_async. There are no obvious disadvantages to diesel_async and required code changes are minimal.
+
+At the current state the small advantages sea-orm might have over diesel don't justify switching as this would involve quite a big change.
+
+## Rationale
+
+An interesting article to look at is <https://www.sea-ql.org/SeaORM/docs/internal-design/diesel/>.  
+Apart from minor differences diesel and sea-orm provide similar functionality.
+
+### async
+
+Both diesel_async and sea-orm provide async support.
+
+This might not necessarily lead to a performance increase, but it is easier for (especially inexperienced) developers to stay in full async.  
+
+For example if you forget `web::block` when executing a query using diesel you block the async executor (tokio in our case) until the query is finished.  
+We currently have a lint warning about async functions that do not use await, you will therefore notice this mistake.  
+However for inexperienced Rust developers it might be difficult to find out why this warning occurred as the code compiles and runs perfectly fine (especially with small loads).
+
+### Performance 
+
+Metrics by diesel: <https://github.com/diesel-rs/metrics/>
+
+To sum up the above article:  
+According to this article diesel performs the best on basically all metrics. Diesel_async brings a slight performance decrease.  
+These results might however be biased. We should do our own analysis at some point.
+
+### Documentation: 
+
+[sea-orm-doc](https://www.sea-ql.org/SeaORM/docs/index/)  
+[diesel-doc](https://diesel.rs/guides/)  
+
+In my opinion sea-orm provides better and more easily readable documentation out of the box. This might however just be my personal preference.
+
