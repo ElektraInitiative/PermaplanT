@@ -19,7 +19,6 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
 
   const currentYear = new Date().getFullYear();
 
-  const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
   const plants = useCreateSeedStore((state) =>
     state.plants.map((plant) => {
       return { value: plant.id, label: plant.species };
@@ -29,7 +28,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
   useEffect(() => {
     // This is a small workaround so it's possible to use async/await in useEffect
     const _findAllPlants = async () => {
-      await findAllPlants();
+      await useCreateSeedStore((state) => state.findAllPlants);
     };
 
     _findAllPlants();
