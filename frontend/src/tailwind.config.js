@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
@@ -53,18 +55,9 @@ module.exports = {
             dark: '#cdcdcd'
           },
         },
-        primary: {
-          textfield: {
-            light: '#fefefe',
-            DEFAULT: '#fefefe',
-            dark: '#181818'
-          },
-          button: {
-            light: '#fefefe',
-            DEFAULT: '#fefefe',
-            dark: '#181818'
-          },
-        },
+        primary: colors.emerald,
+        secondary: colors.amber,
+        neutral: colors.gray,
       },
     },
   },
