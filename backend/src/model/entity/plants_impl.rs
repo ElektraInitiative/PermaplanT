@@ -27,16 +27,17 @@ impl Plants {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub fn search(query: &QueryParameters, conn: &mut PgConnection) -> QueryResult<Vec<PlantsDto>> {
-        let query_with_placeholders = format!("%{}%", query.search_term);
+        let capitalized_query = query.search_term.to_uppercase(); 
+        let query_with_placeholders = format!("%{}%", capitalized_query);
 
         // We have to add some raw SQL, because the relevant columns
         // do not implement the TextExpressionMethods trait.
         let query_result = plants::table
             .select(all_columns)
             .filter(
-                sql::<Bool>("species LIKE ")
+                sql::<Bool>("UPPER(species) LIKE ")
                     .bind::<Text, _>(&query_with_placeholders)
-                    .sql(" OR plant LIKE ")
+                    .sql(" OR UPPER(plant) LIKE ")
                     .bind::<Text, _>(&query_with_placeholders),
             )
             .limit(query.limit)
