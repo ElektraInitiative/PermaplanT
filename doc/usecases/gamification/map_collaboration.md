@@ -11,12 +11,12 @@
 ## Scenarios
 
 - **Precondition:**
-  - A user has created a map and at least on other user is registered in Nextcloud.
+  - A user has created a map and at least one other user is registered in Nextcloud.
 - **Main success scenario:**
   - The map creator is able to open the map for collaboration and picks a set of constraints for the collaborators 
     (e.g. editing only a part of the map or only specific layers).
   - The user can choose if the map is open to edit for everyone or only through directly assigned permissions, 
-    in which case users can be searched by their name and get sent an invitation to collaboration.
+    in which case users can be searched by their name and get an invitation to collaboration.
   - [Alternative versions](layers_alternatives.md) of the relevant layers will be created by the app. 
     Other users collaborating to this map can only affect these layers.
   - Additionaly, the map creator can leave a comment with additional information for other users on what the finished map should contain, 

@@ -13,9 +13,9 @@
 - **Precondition:**
   - The user has opened the app and is editing a map.
 - **Main success scenario:**
-  - The user has a list of fruits and vegetables that are needed, e.g. for a smoothie or a party.
+  - The user has a list of fruits and vegetables that are either needed for a specific event or continuously over the course of a timespan, e.g. for a party or a daily smoothie.
   - The user inputs the items into a form in the map editor and can set a name and picture for the ingredient list.
-  - The user is able to have multiple of those ingredient lists, which are shown in a side panel of the map editor.
+  - The user is able to have multiple of those ingredient lists.
   - The lists will automatically track which fruits and vegetables have been harvested and update the still missing ingredients accordingly.
     If multiple lists require the same item, then the app will prioritize the oldest ingredient list.
 - **Alternative scenario:**
