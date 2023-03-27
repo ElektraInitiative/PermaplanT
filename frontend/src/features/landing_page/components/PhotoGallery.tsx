@@ -112,7 +112,7 @@ export const PhotoGallery = () => {
       >
         {imageUrls.map((image, index) => {
           const className =
-            'w-full h-full p-1 pt-4 pb-6 bg-background-200 dark:bg-background-200-dark hover:bg-background-300 dark:hover:bg-background-400-dark border-b-4 border-background-300 dark:border-background-300-dark rounded ' +
+            'w-full h-full p-1 pt-4 pb-6 bg-background-100 dark:bg-background-200-dark hover:bg-background-300 dark:hover:bg-background-400-dark border-b-4 border-background-300 dark:border-background-300-dark rounded ' +
             getItemSize(index) 
           return (
             <div
@@ -125,7 +125,7 @@ export const PhotoGallery = () => {
             >
               <img
                 src={image}
-                className="h-full w-full border-white bg-background-200 dark:bg-background-300-dark object-contain"
+                className="h-full w-full border-white bg-background-100 dark:bg-background-300-dark object-contain"
               ></img>
             </div>
           );
