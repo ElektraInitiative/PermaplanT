@@ -25,8 +25,8 @@ We have to store the entire state of the canvas for every step taken by the user
 This could lead to performance issues in the future.
 
 Let's assume that there are 1000 users using the app.
-we have ~19 layers in the app.
-if the user places 10 shapes on each layer and modifies the properties of each shape 3 times, we have 570 actions taken by the user for each layer.
+We have ~19 layers in the app.
+If the user places 10 shapes on each layer and modifies the properties of each shape 3 times, we have 570 actions taken by the user for each layer.
 If we store the entire state of the canvas for every action taken by the user, we have 10,830 actions stored in the database for each user.
 If we have 1000 users, we have 10,830,000 actions stored in the database for a single day. This number will grow drastically over time.
 
