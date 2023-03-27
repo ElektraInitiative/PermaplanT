@@ -27,11 +27,18 @@ stage('Checks') {
             docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
-                    sh './ci/build-scripts/build-schema.sh'
 
                     dir("backend") {
                         withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
+                            // Workardoung: we can't stop rustfmt from linting the generated schema.rs
+                            sh "touch src/schema.rs"
                             sh "cargo fmt --check"
+                            // End of Workaround
+
+                            // generate schema (overwriting src/schema.rs)
+                            sh './ci/build-scripts/build-schema.sh'
+
+                            // continue checking
                             sh "cargo check"
                             sh "cargo clippy"
                             sh "cargo doc"
