@@ -50,7 +50,7 @@ export const LandingPage = () => {
         <h2 className="mt-12 mb-4 border-l-2 pl-4" id="map">
           The PermaplanT world
         </h2>
-        <div className="mt-2 h-[50vh] min-h-[24rem] w-full min-w-[32rem] max-w-6xl grow rounded border-b-4 bg-white p-10 dark:border-background-300-dark dark:bg-background-200-dark">
+        <div className="mt-2 h-[50vh] min-h-[24rem] w-full min-w-[32rem] max-w-6xl grow rounded border-b-4 p-10 bg-background-200 dark:border-background-300-dark dark:bg-background-200-dark">
           <GeoMap />
         </div>
       </div>
