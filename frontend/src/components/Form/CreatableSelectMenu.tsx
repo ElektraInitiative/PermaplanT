@@ -11,7 +11,7 @@ export interface CreatableSelectMenuProps<T extends FieldValues> {
   options: SelectOption[];
   required?: boolean;
   placeholder?: string;
-  handleOptionsChange?: (option: any) => void;
+  handleOptionsChange?: (option: unknown) => void;
   handleCreate?: (inputValue: string) => void;
   onChange?: () => void;
 }
@@ -87,7 +87,7 @@ export default function CreatableSelectMenu<T extends FieldValues>({
       <Controller
         name={id}
         control={control}
-        render={({ field }) => (
+        render={() => (
           <CreatableSelect
             name={id}
             isClearable

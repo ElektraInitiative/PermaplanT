@@ -88,7 +88,12 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
 
               // option.value is a only a number, if a plant is chosen,
               // otherwise its a string that contains the users input.
+              if (typeof option !== 'object' || option == null || !('value' in option)) return;
+              
+              // Ignore linter warning since we already checked whether option.value exists.
+              //@ts-ignore
               if (typeof option.value === 'number') setValue('plant_id', Number(option.value));
+              //@ts-ignore
               else if (option !== null) setValue('variety', option.value);
             }}
             onChange={onChange}
