@@ -4,15 +4,15 @@ interface SimpleButtonProps {
   children?: React.ReactNode;
 }
 
-export default function SimpleButton({ title, onClick, children = <></> }: SimpleButtonProps) {
+export default function SimpleButton({ title, onClick }: SimpleButtonProps) {
   return (
     <button
       type="button"
-      className="inline-flex h-11 w-full items-center justify-between rounded-lg bg-primary-button px-4 py-2.5 text-center text-sm font-medium text-white"
+      className="inline-flex h-10 items-center justify-between rounded-lg bg-gray-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300"
       onClick={onClick}
     >
       {title}
-      {children}
     </button>
   );
 }
+
