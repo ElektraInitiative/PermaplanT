@@ -31,7 +31,6 @@ export function CreateSeed() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
   const createSeed = useCreateSeedStore((state) => state.createSeed);
-  const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
   const searchPlants = useCreateSeedStore((state) => state.searchPlants);
   const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
   const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
@@ -51,11 +50,11 @@ export function CreateSeed() {
 
   useEffect(() => {
     // This is a small workaround so it's possible to use async/await in useEffect
-    const _findAllPlants = async () => {
-      await findAllPlants();
+    const _searchPlants = async () => {
+      await searchPlants('');
     };
 
-    _findAllPlants();
+    _searchPlants();
   }, []);
 
   const onSubmit = async (newSeed: NewSeedDto) => {

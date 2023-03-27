@@ -56,42 +56,30 @@ const CreateSeedForm = ({
             register={register}
             onChange={onChange}
           />
-          <SimpleFormInput
-            labelText="Name"
-            placeHolder="Tomato"
-            required={true}
-            id="name"
-            register={register}
-            onChange={onChange}
-          />
-          <CreatableSelectMenu
+          <SelectMenu
             id="plant_id"
             control={control}
             options={plants}
-            labelText="Variety"
+            labelText="Species / Variety"
             required={true}
-            handleOptionsChange={(option, meta) => {
-              // The user may either select existing plants,
-              // in which case plant_id is set or create a new
-              // variety.
-
-              // If the latter option is chosen, the variety field
-              // of the seed is set and plant_id remains empty.
-
-              // option.value is a only a number, if a plant is chosen,
-              // otherwise its a string that contains the users input.
-
-              if (meta.action === 'clear') {
-                // user clears the input
+            handleOptionsChange={(option) => {
+              if (!option) {
                 setValue('plant_id', undefined);
-                setValue('variety', undefined);
-              } else if (typeof option?.value === 'number') {
-                setValue('plant_id', Number(option.value));
-              } else if (option !== null) {
-                setValue('variety', option.value);
+              } else {
+                const temp = option as SelectOption;
+                const mapped = temp.value as number;
+                setValue('plant_id', mapped);
               }
             }}
             onInputChange={onVarietyInputChange}
+            onChange={onChange}
+          />
+          <SimpleFormInput
+            labelText="Additional name"
+            placeHolder=""
+            required={true}
+            id="name"
+            register={register}
             onChange={onChange}
           />
           <SelectMenu
