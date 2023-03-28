@@ -24,8 +24,8 @@ impl Seed {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub fn find_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<SeedDto> {
-        let query_result = seeds::table.find(id).first::<Seed>(conn);
-        return query_result.map(|v| v.into());
+        let query_result = seeds::table.find(id).first::<Self>(conn);
+        query_result.map(Into::into)
     }
 
     /// Create a new seed in the database.

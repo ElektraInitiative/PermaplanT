@@ -24,7 +24,7 @@ impl Plants {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub fn find_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<PlantsDto> {
-        let query_result = plants::table.find(id).first::<Plants>(conn);
-        return query_result.map(|v| v.into());
+        let query_result = plants::table.find(id).first::<Self>(conn);
+        query_result.map(Into::into)
     }
 }
