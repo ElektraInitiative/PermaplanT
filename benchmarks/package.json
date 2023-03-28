@@ -11,7 +11,9 @@
     "license": "ISC",
     "devDependencies": {
         "@playwright/test": "^1.32.0",
+        "csv-parser": "^3.0.0",
         "lighthouse": "^9.6.8",
+        "pg": "^8.10.0",
         "playwright": "^1.32.0",
         "playwright-lighthouse": "^2.2.2"
     }
