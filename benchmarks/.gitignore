@@ -4,3 +4,5 @@ node_modules/
 /playwright/.cache/
 
 *-report.json
+
+*-results.csv
