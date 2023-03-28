@@ -1,32 +1,10 @@
+import LayerList from '../components/LayerList';
 import useFindMapsStore from '../store/FindMapsStore';
+import { CanvasState } from '@/types';
 import Konva from 'konva';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Stage, Layer, Rect, Text, Circle } from 'react-konva';
 import { useParams } from 'react-router-dom';
-
-interface CanvasState {
-  history: {
-    stage: {
-      scaleX: number;
-      scaleY: number;
-      stageX: number;
-      stageY: number;
-      layers: {
-        visible: boolean;
-        objects: {
-          id: string;
-          type: string;
-          x: number;
-          y: number;
-          width: number;
-          height: number;
-          radius: number;
-        }[];
-      }[];
-    };
-  }[];
-  historyStep: number;
-}
 
 const defaultCanvasState: CanvasState = {
   history: [
@@ -54,6 +32,7 @@ export const ViewDemo = () => {
   const [state, setState] = useState<CanvasState>(defaultCanvasState);
   const map = useFindMapsStore((state) => state.map);
   const updateMapById = useFindMapsStore((state) => state.updateMapById);
+  const stageRef = useRef(null);
 
   useEffect(() => {
     if (id) {
@@ -222,7 +201,6 @@ export const ViewDemo = () => {
   };
 
   const hideLayer = (index: number) => {
-    console.log(index);
     setState((state) => {
       return {
         ...state,
@@ -236,7 +214,7 @@ export const ViewDemo = () => {
                 if (i === index) {
                   return {
                     ...layer,
-                    visible: false,
+                    visible: !layer.visible,
                   };
                 }
                 return layer;
@@ -285,19 +263,15 @@ export const ViewDemo = () => {
   };
 
   const buildStage = () => {
+    if (!stageRef.current) {
+      return null;
+    }
     const layers = state.history[state.historyStep].stage.layers;
     const layerObjects = layers.map((layer, index) => {
       const objects = layer.objects.map((object, object_index) => {
         switch (object.type) {
           case 'rect':
-            return (
-              <Rect
-                key={object_index}
-                draggable
-                onDragEnd={handleDragEnd}
-                {...object}
-              />
-            );
+            return <Rect key={object_index} draggable onDragEnd={handleDragEnd} {...object} />;
           case 'circle':
             return <Circle key={object_index} draggable onDragEnd={handleDragEnd} {...object} />;
           default:
@@ -315,7 +289,7 @@ export const ViewDemo = () => {
     return (
       <Stage
         className="bg-gray-50"
-        width={window.innerWidth}
+        width={stageRef.current.offsetWidth}
         height={window.innerHeight}
         onWheel={handleWheel}
         scaleX={state.history[state.historyStep].stage.scaleX}
@@ -362,14 +336,18 @@ export const ViewDemo = () => {
         >
           redo
         </button>
-        <button
-          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-          onClick={hideLayer.bind(null, 1)}
-        >
-          Hide rect layer
-        </button>
       </div>
-      {buildStage()}
+      <div className="flex">
+        <div className="w-10/12" ref={stageRef}>
+          {buildStage()}
+        </div>
+        <div className="w-2/12">
+          <LayerList
+            layers={state.history[state.historyStep].stage.layers}
+            onHideLayer={hideLayer}
+          ></LayerList>
+        </div>
+      </div>
     </div>
   );
 };
