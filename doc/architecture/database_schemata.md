@@ -67,25 +67,25 @@ plants {
   INT height
 }
 
-plant_detail{}
+plant_details{}
 
 plants }o--|| plant_detail: "type"
 
 plants ||--o{ seeds : ""
 
-plant_detail }o--o{ plant_detail: "likes"
+plant_details }o--o{ plant_details: "likes"
 
-plant_detail }o--o{ plant_detail: "dislikes"
+plant_details }o--o{ plant_details: "dislikes"
 
 species{}
-genus{}
-subfamily{}
-family{}
+genera{}
+subfamilies{}
+families{}
 
-plant_detail }|--|| species : ""
-species }|--|| genus : ""
-genus }|--|| subfamily : ""
-subfamily }|--|| family : ""
+plant_details }|--|| species : ""
+species }|--|| genera : ""
+genera }|--|| subfamilies : ""
+subfamilies }|--|| families : ""
 
 
 
@@ -94,10 +94,10 @@ subfamily }|--|| family : ""
 
 # Table descriptions
 
-## `Plant_detail`
+## `Plant_details`
 
 | **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
-| :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
+|:---------------------------------| :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
 | **id**                           | 1                                |
 | **binomial_name**                | Abelia triflora                  |
 | **common_name**                  | NULL                             |
