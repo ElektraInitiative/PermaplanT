@@ -5,18 +5,18 @@ import { useState } from 'react';
 
 export const PhotoGallery = () => {
   const imageUrls = [
-    '/gallery_images/permaplant_illustration_01.png',
-    '/gallery_images/permaplant_illustration_02.png',
-    '/gallery_images/permaplant_illustration_03.png',
-    '/gallery_images/permaplant_illustration_04.png',
-    '/gallery_images/permaplant_illustration_05.png',
-    '/gallery_images/permaplant_illustration_06.png',
-    '/gallery_images/permaplant_illustration_07.png',
-    '/gallery_images/permaplant_illustration_08.png',
-    '/gallery_images/permaplant_illustration_09.png',
-    '/gallery_images/permaplant_illustration_10.png',
-    '/gallery_images/permaplant_illustration_11.png',
-    '/gallery_images/permaplant_illustration_12.png',
+    '/gallery_images/permaplant_illustration_01.svg',
+    '/gallery_images/permaplant_illustration_02.svg',
+    '/gallery_images/permaplant_illustration_03.svg',
+    '/gallery_images/permaplant_illustration_04.svg',
+    '/gallery_images/permaplant_illustration_05.svg',
+    '/gallery_images/permaplant_illustration_06.svg',
+    '/gallery_images/permaplant_illustration_07.svg',
+    '/gallery_images/permaplant_illustration_08.svg',
+    '/gallery_images/permaplant_illustration_09.svg',
+    '/gallery_images/permaplant_illustration_10.svg',
+    '/gallery_images/permaplant_illustration_11.svg',
+    '/gallery_images/permaplant_illustration_12.svg',
     '/permaplant_drawing.jpeg',
   ];
   const [selectedImage, setSelectedImage] = useState(NaN);
