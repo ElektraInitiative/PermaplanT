@@ -230,9 +230,10 @@ export const ViewDemo = () => {
   const handleWheel = (e) => {
     e.evt.preventDefault();
 
-    const scaleBy = 1.02;
+    const scaleBy = 0.98;
     const stage = e.target.getStage();
     const oldScale = stage.scaleX();
+
     const mousePointTo = {
       x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
       y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale,
@@ -253,6 +254,29 @@ export const ViewDemo = () => {
               scaleY: newScale,
               stageX: -(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale,
               stageY: -(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale,
+            },
+          },
+        ],
+
+        historyStep: state.historyStep + 1,
+      };
+    });
+  };
+
+  const resetZoom = () => {
+    setState((state) => {
+      return {
+        ...state,
+        history: [
+          ...state.history.slice(0, state.historyStep + 1),
+          {
+            ...state.history[state.historyStep],
+            stage: {
+              ...state.history[state.historyStep].stage,
+              scaleX: 1,
+              scaleY: 1,
+              stageX: 0,
+              stageY: 0,
             },
           },
         ],
@@ -335,6 +359,13 @@ export const ViewDemo = () => {
           onClick={handleRedo}
         >
           redo
+        </button>
+
+        <button
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={resetZoom}
+        >
+          reset zoom
         </button>
       </div>
       <div className="flex">
