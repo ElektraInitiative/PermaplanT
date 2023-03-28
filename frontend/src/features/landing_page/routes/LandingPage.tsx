@@ -13,8 +13,8 @@ export const LandingPage = () => {
             <img src="/permaplant-logo-2.svg" alt="PermaplanT drawing" />
           </div>
           <h1 className="w-1/2 max-w-md self-end text-4xl font-light">
-            BE <span className="bg-yellow-500">GOOD</span> TO YOUR
-            <span className="bg-emerald-500"> PLANTS</span>
+            BE <span className="bg-primary-500">GOOD</span> TO YOUR
+            <span className="bg-secondary-500"> PLANTS</span>
           </h1>
         </div>
         <div className="flex flex-col items-center gap-8 md:flex-row">
@@ -54,10 +54,6 @@ export const LandingPage = () => {
           <GeoMap />
         </div>
       </div>
-      {/* todo: image gallery */}
-      {/* <img src="https://nextcloud.markus-raab.org/nextcloud/index.php/apps/files_sharing/publicpreview/BLfGxHDZxrF4NKo?file=/logo_draft.png&fileId=466975&x=1080&y=1920&a=true" /> */}
-      {/* <img src="https://nextcloud.markus-raab.org/nextcloud/index.php/apps/files_sharing/publicpreview/BLfGxHDZxrF4NKo?file=/20230204_Entwurf_Yvonne.jpeg&fileId=466982&x=1080&y=1920&a=true" /> */}
-
       <section className="m-8" id="gallery">
         <h2 className="mt-12 ml-8 border-l-2 pl-4 border-background-400">Gallery</h2>
         <PhotoGallery />
