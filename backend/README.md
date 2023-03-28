@@ -61,7 +61,7 @@ Example requests:
 
 ## Documentation
 
-To view API documentation go to <http://localhost:8080/swagger-ui/>.
+To view API documentation go to <http://localhost:8080/api-doc/swagger-ui/>.
 
 To view code documentation run
 
