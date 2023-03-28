@@ -1,7 +1,7 @@
+import { SelectOption } from './SelectMenu';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { ActionMeta, StylesConfig } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { SelectOption } from './SelectMenu';
 
 export interface CreatableSelectMenuProps<T extends FieldValues> {
   isMulti?: boolean;
@@ -42,12 +42,12 @@ export default function CreatableSelectMenu<T extends FieldValues>({
       borderRadius: '5px',
       border: '1px solid rgb(39 39 42);',
     }),
-    option: (styles) => ({
+    option: (styles, state) => ({
       ...styles,
       color: 'white',
-      backgroundColor: '#181818',
+      backgroundColor: state.isSelected || state.isFocused ? '#4b5563' : '#181818',
       ':hover': {
-        backgroundColor: 'gray',
+        backgroundColor: '#4b5563',
         color: 'white',
       },
     }),

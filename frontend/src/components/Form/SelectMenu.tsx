@@ -43,12 +43,12 @@ export default function SelectMenu<T extends FieldValues>({
       borderRadius: '5px',
       border: '1px solid rgb(39 39 42);',
     }),
-    option: (styles) => ({
+    option: (styles, state) => ({
       ...styles,
       color: 'white',
-      backgroundColor: '#181818',
+      backgroundColor: state.isSelected || state.isFocused ? '#4b5563' : '#181818',
       ':hover': {
-        backgroundColor: 'gray',
+        backgroundColor: '#4b5563',
         color: 'white',
       },
     }),
