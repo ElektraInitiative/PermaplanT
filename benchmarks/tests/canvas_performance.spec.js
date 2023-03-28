@@ -3,8 +3,8 @@ import playwright from 'playwright';
 import { test } from '@playwright/test';
 import { writeFileSync } from 'fs';
 
-test.describe('audit example', () => {
-    test('open browser', async () => {
+test.describe('Canvas performance audit', () => {
+    test('measure page performance', async () => {
         const browser = await playwright['chromium'].launch({
             args: ['--remote-debugging-port=9222'],
         });

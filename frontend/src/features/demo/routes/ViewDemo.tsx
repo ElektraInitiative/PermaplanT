@@ -2,6 +2,7 @@ import useFindMapsStore from '../store/FindMapsStore';
 import Konva from 'konva';
 import { useEffect, useState } from 'react';
 import { Stage, Layer, Rect, Text, Circle } from 'react-konva';
+import { useParams } from 'react-router-dom';
 
 interface CanvasState {
   history: {
@@ -48,16 +49,20 @@ const defaultCanvasState: CanvasState = {
 };
 
 export const ViewDemo = () => {
+  const { id } = useParams();
+
   const [state, setState] = useState<CanvasState>(defaultCanvasState);
   const map = useFindMapsStore((state) => state.map);
   const updateMapById = useFindMapsStore((state) => state.updateMapById);
 
   useEffect(() => {
-    const _findMapById = async () => {
-      await useFindMapsStore.getState().findMapById('1');
-    };
-    _findMapById();
-  }, []);
+    if (id) {
+      const _findMapById = async () => {
+        await useFindMapsStore.getState().findMapById(id);
+      };
+      _findMapById();
+    }
+  }, [id]);
 
   useEffect(() => {
     if (map) {
@@ -97,7 +102,8 @@ export const ViewDemo = () => {
   };
 
   const handleDragEnd = (e) => {
-    const id = e.target.id();
+    const id: string = e.target.id();
+    const layerId: number = e.target.parent.index;
     setState((state) => {
       return {
         ...state,
@@ -107,8 +113,8 @@ export const ViewDemo = () => {
             ...state.history[state.historyStep],
             stage: {
               ...state.history[state.historyStep].stage,
-              layers: [
-                ...state.history[state.historyStep].stage.layers.map((layer) => {
+              layers: state.history[state.historyStep].stage.layers.map((layer, index: number) => {
+                if (index === layerId) {
                   return {
                     ...layer,
                     objects: layer.objects.map((object) => {
@@ -122,23 +128,15 @@ export const ViewDemo = () => {
                       return object;
                     }),
                   };
-                }),
-              ],
+                }
+                return layer;
+              }),
             },
           },
         ],
         historyStep: state.historyStep + 1,
       };
     });
-
-    console.log(e.target);
-    // setState((state) => {
-    //   return {
-    //     history: state.history.slice(0, state.historyStep + 1),
-    //     historyStep: state.historyStep + 1,
-    //   };
-    // });
-    // setPosition(next);
   };
 
   const saveStage = () => {
@@ -172,10 +170,7 @@ export const ViewDemo = () => {
             ...state.history[state.historyStep].stage.layers,
             {
               visible: true,
-              objects: [
-                ...state.history[state.historyStep].stage.layers[0].objects,
-                ...randomCircles,
-              ],
+              objects: [...randomCircles],
             },
           ],
         },
@@ -214,10 +209,7 @@ export const ViewDemo = () => {
             ...state.history[state.historyStep].stage.layers,
             {
               visible: true,
-              objects: [
-                ...state.history[state.historyStep].stage.layers[0].objects,
-                ...randomRects,
-              ],
+              objects: [...randomRects],
             },
           ],
         },
@@ -298,7 +290,14 @@ export const ViewDemo = () => {
       const objects = layer.objects.map((object, object_index) => {
         switch (object.type) {
           case 'rect':
-            return <Rect key={object_index} draggable onDragEnd={handleDragEnd} {...object} />;
+            return (
+              <Rect
+                key={object_index}
+                draggable
+                onDragEnd={handleDragEnd}
+                {...object}
+              />
+            );
           case 'circle':
             return <Circle key={object_index} draggable onDragEnd={handleDragEnd} {...object} />;
           default:

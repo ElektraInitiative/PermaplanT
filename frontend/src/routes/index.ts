@@ -15,7 +15,7 @@ const routes: Routes = {
   },
   [Pages.ViewDemo]: {
     component: ViewDemo,
-    path: '/demo',
+    path: '/demo/:id',
     title: 'Demo',
   },
 };
