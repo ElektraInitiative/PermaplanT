@@ -36,7 +36,7 @@ Steps for all PRs are:
 
 Each and every pull request will be deployed on a publicly available instance on [pr.permaplant.net](pr.permaplant.net).
 
-Since there is only one PR Environment available, the last built PR wins.
+Since there is only one agent for PRs available, the last built PR wins.
 
 ### Deploy to Dev Environment
 
