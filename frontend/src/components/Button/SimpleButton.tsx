@@ -6,14 +6,12 @@ interface SimpleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 export enum ButtonVariant {
   primary,
   secondary,
-  neutral,
 }
 
 export default function SimpleButton(props: SimpleButtonProps) {
   const colors = [
-    'bg-primary-800 border-primary-500 hover:bg-primary-600 active:bg-primary-900 ',
-    'bg-secondary-800 border-secondary-500 hover:bg-secondary-600 active:bg-secondary-900 ',
-    'bg-neutral-800 border-neutral-500 hover:bg-neutral-600 active:bg-neutral-900 ',
+    'bg-primary-600 dark:bg-primary-800 border-primary-500 hover:bg-primary-700 dark:hover:bg-primary-700 active:bg-primary-900 ',
+    'bg-secondary-600 dark:bg-secondary-800 border-secondary-500 hover:bg-secondary-700 dark:hover:bg-secondary-700 active:bg-secondary-900 ',
   ];
   const variant = props.variant ? props.variant : ButtonVariant.primary;
   const className =
