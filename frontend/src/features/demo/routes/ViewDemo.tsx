@@ -119,7 +119,7 @@ export const ViewDemo = () => {
   };
 
   const saveStage = () => {
-    updateMapById('1', {
+    updateMapById(id, {
       detail: JSON.stringify(state.history[state.historyStep]),
     });
   };
