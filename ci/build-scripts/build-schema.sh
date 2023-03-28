@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "building backend"
+echo "building schema only"
 
 # Echo on and fail fast
 set -ex
@@ -12,13 +12,8 @@ then
     source /opt/rust.env
 fi
 
-# Download Cargo Modules
-cargo fetch
-
-# Migrate DB
+# Migrate DB and create schema.rs
 LC_ALL=C diesel migration run
 
 # Create Bindings
 typeshare ./ --lang=typescript --output-file=../frontend/src/bindings/definitions.ts
-
-cargo build --release
