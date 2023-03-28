@@ -31,7 +31,7 @@ stage('Checks') {
                     dir("backend") {
                         withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
                             // Workardoung: we can't stop rustfmt from linting the generated schema.rs
-                            sh "touch src/schema.rs"
+                            sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
                             sh "cargo fmt --check"
                             // End of Workaround
 
