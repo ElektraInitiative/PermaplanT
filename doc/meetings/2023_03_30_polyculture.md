@@ -14,5 +14,8 @@ _Protocolled by: Benjamin_
 
 -   09:00 Hello
 -   Which database (columns) are best?
--   Participation of Uliana
 -   Grouping algorithms
+-   Taxonomy
+-   Test Data
+-   Participation of Uliana
+-   Tasks
