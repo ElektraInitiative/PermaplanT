@@ -60,3 +60,7 @@
 -   reversible deletion vs undo-redo functionality
     -   reversible deletion: a database entity i.e. map and plant is deleted and can be restored within a certain time
     -   undo-redo functionality: a user can undo and redo changes in the map, but the changes are local to the frontend and not stored in the database
+-   lazy loading
+    -   TBD
+-   map offloading
+    -   TBD

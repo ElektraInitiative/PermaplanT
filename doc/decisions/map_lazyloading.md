@@ -11,7 +11,8 @@ In other words, the data which is not required for the user to start working wit
 
 ## Constraints
 
-N/A
+-   Fast startup time
+-   Supports performance constraints of the usecases
 
 ## Assumptions
 
@@ -26,7 +27,8 @@ Fetching all the data from the backend during the initial load, while making the
 
 ### Pagination
 
-If data is stored in a single table with uniform entries in a database, we can use pagination to retrieve the data in sections. This approach enables us to load only the essential data during the initial load and browse through it in portions as the user scrolls through the content.
+If data is stored in a single table with uniform entries in a database, we can use pagination to retrieve the data in sections.
+This approach enables to load only the essential data during the initial load by fetching a specific portion i.e. page of the data.
 
 However, since canvas data is structured in a nested manner, we cannot implement the same approach of fetching data in sections as we would do with a flat array structure.
 
