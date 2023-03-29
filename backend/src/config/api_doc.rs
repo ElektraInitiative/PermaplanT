@@ -47,5 +47,5 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = SeedApiDoc::openapi();
     openapi.merge(PlantsApiDoc::openapi());
 
-    cfg.service(SwaggerUi::new("/doc/api/swagger-ui/{_:.*}").url("/doc/api/openapi.json", openapi));
+    cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }

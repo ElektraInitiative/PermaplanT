@@ -61,7 +61,7 @@ Example requests:
 
 ## Documentation
 
-To view an interactive API documentation go to <http://localhost:8080/doc/api/swagger-ui/>.
+To view an interactive API documentation go to <http://localhost:8080/doc/api/swagger/ui/>.
 Alternatively there is a [OpenAPI specification](https://spec.openapis.org/oas/latest.html) in json format at <http://localhost:8080/doc/api/openapi.json>.
 
 To view code documentation run
