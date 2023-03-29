@@ -10,7 +10,15 @@ interface ImageModalProps {
   onCancel: () => void;
 }
 
-export default function SimpleModal({ title, body, show, setShow, onCancel }: ImageModalProps) {
+/**
+ * A modal component used to display images.
+ * @param props.title Modal headline displayed on top.
+ * @param props.body The main element of the modal, usually an image.
+ * @param props.setShow Callback that informs the parent when the modal should be hidden/displayed (e.g. when the user pressed the close button).
+ * @param props.show Decides whether the modal should be shown.
+ * @param props.onCancel Click callback for cancel/close button.
+ */
+export default function ImageModal({ title, body, setShow, show, onCancel }: ImageModalProps) {
   return (
     <>
       <TransparentBackground

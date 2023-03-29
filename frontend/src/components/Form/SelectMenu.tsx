@@ -8,11 +8,11 @@ export interface SelectOption {
   label: string;
 }
 
-export interface SelectMenuProps<TFieldValues extends FieldValues> {
+export interface SelectMenuProps<T extends FieldValues> {
   isMulti?: boolean;
-  id: Path<TFieldValues>;
+  id: Path<T>;
   labelText?: string;
-  control?: Control<TFieldValues, unknown>;
+  control?: Control<T, unknown>;
   options: SelectOption[];
   required?: boolean;
   placeholder?: string;
