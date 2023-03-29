@@ -6,13 +6,14 @@ pub mod seed_impl;
 use chrono::NaiveDate;
 use diesel::{Identifiable, Insertable, Queryable};
 
-use crate::schema::{plants, seeds, plant_detail};
+use crate::schema::{plant_detail, plants, seeds};
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
-use super::r#enum::{Water, Sun, Shade, SoilPh, SoilTexture, SoilWaterRetention, LifeCycle, GrowthRate, FlowerType,
-    Fertility, HerbaceousOrWoody, DeciduousOrEvergreen, RootZoneTendancy, NutritionDemand};
-
+use super::r#enum::{
+    DeciduousOrEvergreen, Fertility, FlowerType, GrowthRate, HerbaceousOrWoody, LifeCycle,
+    NutritionDemand, RootZoneTendancy, Shade, SoilPh, SoilTexture, SoilWaterRetention, Sun, Water,
+};
 
 /// The `Plants` entity.
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
@@ -68,7 +69,7 @@ pub struct NewSeed {
 }
 
 /// The `PlantDetail` entity.
-#[derive( Identifiable, Queryable)]
+#[derive(Identifiable, Queryable)]
 #[diesel(table_name = plant_detail)]
 pub struct PlantDetail {
     /// The plant id.
