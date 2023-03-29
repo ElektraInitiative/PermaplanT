@@ -18,6 +18,9 @@
     E.g. a variety can have a different height than the species it belongs to.
 -   polyculture (aka companion planting, German: Mischkultur):
     Mutually beneficial way of growing plants together.
+-   relationship:
+    Two plants are in a relationship if they either enhance (companion) 
+    or diminish each others health and growth.
 -   companion (to plant according polyculture):
     Plants that should be planted together.
 -   antagonist (to plant according polyculture):
