@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The quality of a user created plant relationship is assessed by others.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee:** Benjamin
 
 ## Scenarios
 
