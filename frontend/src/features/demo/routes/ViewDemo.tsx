@@ -3,8 +3,8 @@ import useFindMapsStore from '../store/FindMapsStore';
 import { CanvasState } from '@/types';
 import Konva from 'konva';
 import { useEffect, useRef, useState } from 'react';
-import { Stage, Layer, Rect, Text, Circle } from 'react-konva';
-import { useParams } from 'react-router-dom';
+import { Stage, Layer, Rect, Text, Circle, Star } from 'react-konva';
+import { NavLink, useParams } from 'react-router-dom';
 
 const defaultCanvasState: CanvasState = {
   history: [
@@ -298,6 +298,8 @@ export const ViewDemo = () => {
             return <Rect key={object_index} draggable onDragEnd={handleDragEnd} {...object} />;
           case 'circle':
             return <Circle key={object_index} draggable onDragEnd={handleDragEnd} {...object} />;
+          case 'star':
+            return <Star key={object_index} draggable onDragEnd={handleDragEnd} {...object} />;
           default:
             return;
         }
@@ -329,6 +331,54 @@ export const ViewDemo = () => {
   return (
     <div>
       <h1>Demo</h1>
+      <nav className="flex">
+        <NavLink
+          to="/demo/1"
+          className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+        >
+          Empty canvas
+        </NavLink>
+
+        <NavLink
+          to="/demo/2"
+          className="ml-4 font-medium text-blue-600 hover:underline dark:text-blue-500"
+        >
+          3 elements
+        </NavLink>
+
+        <NavLink
+          to="/demo/3"
+          className="ml-4 font-medium text-blue-600 hover:underline dark:text-blue-500"
+        >
+          3 circles
+        </NavLink>
+
+        <NavLink
+          to="/demo/4"
+          className="ml-4 font-medium text-blue-600 hover:underline dark:text-blue-500"
+        >
+          100 circles
+        </NavLink>
+
+        <NavLink
+          to="/demo/5"
+          className="ml-4 font-medium text-blue-600 hover:underline dark:text-blue-500"
+        >
+          1000 circles
+        </NavLink>
+        <NavLink
+          to="/demo/6"
+          className="ml-4 font-medium text-blue-600 hover:underline dark:text-blue-500"
+        >
+          10000 circles
+        </NavLink>
+        <NavLink
+          to="/demo/7"
+          className="ml-4 font-medium text-blue-600 hover:underline dark:text-blue-500"
+        >
+          10000 circles(10 layers)
+        </NavLink>
+      </nav>
       <div>
         <button
           className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"

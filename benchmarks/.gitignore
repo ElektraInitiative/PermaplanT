@@ -6,3 +6,4 @@ node_modules/
 *-report.json
 
 *-results.csv
+*-results-shapes.csv
