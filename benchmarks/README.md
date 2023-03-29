@@ -26,7 +26,19 @@ npm run start
 
 Note: This will clean the `maps` table and insert the maps from the CSV file.
 
-3. Run benchmarks
+3. Start the backend from the backend folder
+
+```shell
+cargo run
+```
+
+4. Start the frontend from the frontend folder
+
+```shell
+npm run dev
+```
+
+5. Run benchmarks
 
 ```shell
 npm run benchmark
