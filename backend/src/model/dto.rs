@@ -7,9 +7,11 @@ use typeshare::typeshare;
 use utoipa::ToSchema;
 
 use super::r#enum::{
-    quality::Quality, quantity::Quantity, DeciduousOrEvergreen, Fertility, FlowerType, GrowthRate,
-    HerbaceousOrWoody, LifeCycle, NutritionDemand, RootZoneTendancy, Shade, SoilPh, SoilTexture,
-    SoilWaterRetention, Sun, Water,
+    deciduous_or_evergreen::DeciduousOrEvergreen, fertility::Fertility, flower_type::FlowerType,
+    growth_rate::GrowthRate, herbaceous_or_woody::HerbaceousOrWoody, life_cycle::LifeCycle,
+    nutrition_demand::NutritionDemand, quality::Quality, quantity::Quantity,
+    root_zone_tendancy::RootZoneTendancy, shade::Shade, soil_ph::SoilPh, soil_texture::SoilTexture,
+    soil_water_retention::SoilWaterRetention, sun::Sun, water::Water,
 };
 
 pub mod new_seed_impl;

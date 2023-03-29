@@ -11,8 +11,11 @@ use crate::schema::{plant_detail, plants, seeds};
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
 use super::r#enum::{
-    DeciduousOrEvergreen, Fertility, FlowerType, GrowthRate, HerbaceousOrWoody, LifeCycle,
-    NutritionDemand, RootZoneTendancy, Shade, SoilPh, SoilTexture, SoilWaterRetention, Sun, Water,
+    deciduous_or_evergreen::DeciduousOrEvergreen, fertility::Fertility, flower_type::FlowerType,
+    growth_rate::GrowthRate, herbaceous_or_woody::HerbaceousOrWoody, life_cycle::LifeCycle,
+    nutrition_demand::NutritionDemand, root_zone_tendancy::RootZoneTendancy, shade::Shade,
+    soil_ph::SoilPh, soil_texture::SoilTexture, soil_water_retention::SoilWaterRetention, sun::Sun,
+    water::Water,
 };
 
 /// The `Plants` entity.

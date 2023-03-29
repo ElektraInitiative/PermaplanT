@@ -1,7 +1,11 @@
-use diesel::sql_types::*;
+use diesel_derive_enum::DbEnum;
 use serde::{Deserialize, Serialize};
+use typeshare::typeshare;
+use utoipa::ToSchema;
 
-#[derive(DbEnum, Debug, Serialize, Deserialize, ToSchema)]
+#[typeshare]
+#[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
+#[DieselTypePath = "crate::schema::sql_types::Sun"]
 pub enum Sun {
     IndirectSun,
     PartialSun,
