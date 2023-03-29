@@ -20,7 +20,6 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
 
   const currentYear = new Date().getFullYear();
 
-  const findAllPlants = useCreateSeedStore((state) => state.findAllPlants);
   const plants = useCreateSeedStore((state) =>
     state.plants.map((plant) => {
       return { value: plant.id, label: plant.species };
@@ -30,7 +29,7 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
   useEffect(() => {
     // This is a small workaround so it's possible to use async/await in useEffect
     const _findAllPlants = async () => {
-      await findAllPlants();
+      await useCreateSeedStore((state) => state.findAllPlants);
     };
 
     _findAllPlants();
@@ -90,7 +89,14 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
 
               // option.value is a only a number, if a plant is chosen,
               // otherwise its a string that contains the users input.
+              if (typeof option !== 'object' || option == null || !('value' in option)) return;
+
+              // Ignore linter warning since we already checked whether option.value exists.
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               if (typeof option.value === 'number') setValue('plant_id', Number(option.value));
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               else if (option !== null) setValue('variety', option.value);
             }}
             onChange={onChange}
