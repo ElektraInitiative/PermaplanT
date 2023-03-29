@@ -1,16 +1,9 @@
-const { Pool } = require('pg');
+const pgPromise = require('pg-promise');
+const csv = require('csvtojson');
 
-const fs = require('fs');
-const csv = require('csv-parser');
+const pgp = pgPromise({});
 
-// Create a PostgreSQL pool
-const pool = new Pool({
-    user: 'permaplant',
-    host: '127.0.0.1',
-    database: 'permaplant',
-    password: 'permaplant',
-    port: 5432,
-});
+const db = pgp('postgres://permaplant:permaplant@127.0.0.1/permaplant');
 
 console.log('[INFO] Connected to PostgreSQL database');
 
@@ -23,24 +16,15 @@ const insertMap = async () => {
 
     console.log('[INFO] Inserting data into maps table');
 
-    // Read the CSV file and insert the data into the database
-    fs.createReadStream('map.csv')
-        .pipe(csv())
-        .on('data', async (row) => {
-            const query = {
-                text: 'INSERT INTO map(detail) VALUES($1)',
-                values: [row.detail],
-            };
-            try {
-                await pool.query(query);
-            } catch (err) {
-                console.error(err);
-            }
-        })
-        .on('end', () => {
-            console.log('[INFO] Finished inserting data into maps table');
-            pool.end(); // close the pool
-        });
+    const jsonArray = await csv().fromFile('map.csv');
+
+    const cs = new pgp.helpers.ColumnSet([{ name: 'id', name: 'detail' }], {
+        table: 'map',
+    });
+
+    const query = pgp.helpers.insert(jsonArray, cs) + ` ON CONFLICT DO NOTHING`;
+
+    db.none(query);
 };
 
 insertMap();
