@@ -4,7 +4,7 @@
 
 - **Scope:** Plants Layer
 - **Level:** User Goal
-- **Actors:** App User
+- **Actors:** App User, App User
 - **Brief:** The quality of a user created plant relationship is assessed by others.
 - **Status:** Assigned
 - **Assignee:** Benjamin
