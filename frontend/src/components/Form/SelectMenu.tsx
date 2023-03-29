@@ -32,24 +32,24 @@ export default function SelectMenu<T extends FieldValues>({
   onChange,
 }: SelectMenuProps<T>) {
   const customClassNames: ClassNamesConfig = {
-    menu: () => 'bg-background-100 dark:bg-background-50-dark',
+    menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
     control: (state) => {
       return `
-        h-[44px] bg-background-200 rounded border 
-        dark:bg-background-50-dark focus:border-primary-500
+        h-[44px] bg-neutral-200 rounded border 
+        dark:bg-neutral-50-dark focus:border-primary-500
         hover:border-primary-500 dark:focus:border-primary-500 dark:hover:border-primary-500
-        ${state.isFocused ? " border-primary-500 dark:border-primary-500" : " dark:border-background-400-dark border-background-500"}
+        ${state.isFocused ? " border-primary-500 dark:border-primary-500" : " dark:border-neutral-400-dark border-neutral-500"}
       `
     },
     option: (state) => {
       return `
-        hover:bg-background-200 dark:hover:bg-background-400-dark
-        ${state.isFocused ? ' bg-background-300 dark:bg-background-500' : ''}
+        hover:bg-neutral-200 dark:hover:bg-neutral-400-dark
+        ${state.isFocused ? ' bg-neutral-300 dark:bg-neutral-500' : ''}
         ${state.isSelected ? ' bg-primary-500' : ''}
       `
     },
     valueContainer: () => 'flex-nowrap',
-    multiValue: () => 'bg-background-400 dark:bg-background-400-dark',
+    multiValue: () => 'bg-neutral-400 dark:bg-neutral-400-dark',
     multiValueRemove: () => 'hover:bg-neutral-500',
   };
   const customStyles: StylesConfig = {

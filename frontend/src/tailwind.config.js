@@ -145,19 +145,16 @@ module.exports = {
       border: ['focus'],
       colors: {
         // variant 1
-        // background: brown,
         // primary: colors.emerald,
         // secondary: blue,
         // neutral: brown,
 
         // variant 2
-        // background: gray,
         // primary: colors.emerald,
         // secondary: blue,
         // neutral: gray,
 
         // variant 3
-        // background: brown,
         // primary: green,
         // secondary: yellow,
         // neutral: brown,
