@@ -33,7 +33,7 @@ export default function ImageModal({ title, body, setShow, show, onCancel }: Ima
             <h2>{title}</h2>
             <button
               onClick={onCancel}
-              className="rounded-lg border border-zinc-600 px-5 py-2.5 text-center text-sm font-medium hover:bg-zinc-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
+              className="rounded-lg border border-neutral-600 px-5 py-2.5 text-center text-sm font-medium hover:bg-neutral-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
             >
               x
             </button>
