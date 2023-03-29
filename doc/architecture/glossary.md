@@ -14,7 +14,7 @@
     It is similar to the undo-redo feature with the difference that the snapshots:
     - are persistent
     - have a name and
-    - any specific snapshotcan be selected.
+    - any specific snapshot can be selected.
 -   offline:
     Means the ability to use a feature without Internet connection, i.e., without calling REST APIs.
 -   canvas:
@@ -31,7 +31,7 @@
 -   (German: Vorkulturen)
 -   Rank:
     Rank is a level within taxonomy.
-    They are:
+    There are:
     - Variety (optional)
     - Species or Hybrid
     - Genus

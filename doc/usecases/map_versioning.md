@@ -24,10 +24,10 @@
 
 -   **Alternative scenario:**
     -   User doesn't save the current version of the map.
-    -   In this case, the current version automatically gets saved for:
+    -   In this case, the current version automatically gets saved:
         -      hourly (for last 7 hours),
         -      daily (for last 7 days) and
-        -      version after logout/disconnect of every user.
+        -      after logout/disconnect of every user.
 -   **Error scenario:**
     -   If the user encounters technical issues or errors while loading a version, the platform should display an error message and allows the user to try again.
 -   **Postcondition:**

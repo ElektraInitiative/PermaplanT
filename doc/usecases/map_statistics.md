@@ -18,7 +18,7 @@
     -   The user views statistics about their garden and plants.
         Examples of statistics include:
         -   Total number of plants in the garden
-        -   Number of Elements in each Layer
+        -   Number of elements in each layer
         -   Total number of visits to the garden
 
 -   **Alternative scenario:**
