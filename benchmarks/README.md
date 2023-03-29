@@ -65,9 +65,9 @@ The audit measures the performance of a web page by generating a performance sco
 
 Metrics:
 
--   `First Contentful Paint (FCP)` - the time it takes for the browser to render the first bit of content on the page.
--   `Interactive` - the time it takes for the page to become fully interactive.
--   `Score` - the performance score of the page.
+-   `First Contentful Paint (FCP)` - the time it takes for the browser to render the first bit of content on the page. Measured in milliseconds.
+-   `Interactive` - the time it takes for the page to become fully interactive. Measured in milliseconds.
+-   `Score` - the performance score of the page. Measured in percentage. The metric is calculated based on the weighted average of the other metrics. (PENDING, will probably be removed because it depends on the other metrics, which are not considered in the study)
 
 #### Test cases
 
