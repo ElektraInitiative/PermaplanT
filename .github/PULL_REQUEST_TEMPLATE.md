@@ -31,7 +31,7 @@ For documentation fixes, spell checking, and similar none of these points below 
 - [ ] I fixed all affected documentation
 - [ ] I fixed all affected decisions
 - [ ] I added code comments, logging, and assertions as appropriate
-- [ ] I mentioned [every code](/.reuse/dep5) not directly written by me in [reuse syntax](https://reuse.software/)
+- [ ] I mentioned [every code or binary](/.reuse/dep5) not directly written or done by me in [reuse syntax](https://reuse.software/)
 
 
 ## Review
