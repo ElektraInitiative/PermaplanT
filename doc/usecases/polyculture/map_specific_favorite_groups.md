@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user change a set of favorite plant groups per map.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee:** Benjamin
 
 ## Scenarios
 
