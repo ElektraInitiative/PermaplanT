@@ -15,10 +15,12 @@
   - The user has opened the app
   - The plants layer is visible
   - At least one plant is placed
-  - At least one of the placed plants is in need of another companion plant.
+  - At least to one of the placed plants a companion plant can be added.
 - **Main success scenario:**
-  - Groups which need more companions are visually highlighted.
+  - Groups, where further companions are available, are visually highlighted.
 - **Alternative scenario:**
+  - No groups have further companions available.
+    This is visually indicated.
 - **Error scenario:**
 - **Postcondition:**
   - The user knows which groups need more attention.
