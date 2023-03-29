@@ -16,8 +16,13 @@
   - The plants layer is selected.
 - **Main success scenario:**
   - The user types something into the search text box.  
-    This will search for partial matches of names of specific plants or names of higher taxonomic levels.
-  - The results can be sorted by the following criterion.
+    This will search for partial matches of:
+    - names of specific plants (specie or variety)
+    - Binomial name (Latin name)
+    - German and English common names
+    - German and English synonyms
+    - Furthermore, other columns can be matched with extra syntax
+  - The results can be sorted by the following criteria:
     - Companions of existing plants (default)
     - Environmental fit
     - Ecological value
@@ -28,3 +33,5 @@
 - **Postcondition:**
   - The user has found the plant or a similar one to add to her map.
 - **Non-functional Constraints:**
+  - Performance
+  - Search accuracy (stop words, stemming, etc.)
