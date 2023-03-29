@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can search for plants to add to her map and sort results by different criterion.
-- **Status:** Draft
+- **Status:** In Progress
+- **Assignee:** Moritz, Paul
 
 ## Scenarios
 
