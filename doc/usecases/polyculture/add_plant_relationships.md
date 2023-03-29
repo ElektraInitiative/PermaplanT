@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** A new plant relationship is added to the system.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee:** Benjamin
 
 ## Scenarios
 
