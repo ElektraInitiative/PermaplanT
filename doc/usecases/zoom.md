@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can zoom in and out on their landscape map to view details more clearly or get a better overview of their map.
-- **Status:** Ready to be Assigned
+- **Status:** Assigned
+- **Assignee:** Giancarlo
 
 ## Scenarios
 

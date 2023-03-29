@@ -6,7 +6,8 @@
 -   **Level:** User Goal
 -   **Actors:** App User
 -   **Brief:** The user can view statistics about their garden and plants.
--   **Status:** Ready to be Assigned
+-   **Status:** Assigned
+-   **Assignee:** Nursultan, Thorben
 
 ## Scenarios
 
@@ -17,6 +18,7 @@
     -   The user views statistics about their garden and plants.
         Examples of statistics include:
         -   Total number of plants in the garden
+        -   Number of Elements in each Layer
         -   Total number of visits to the garden
 
 -   **Alternative scenario:**

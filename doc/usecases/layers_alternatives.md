@@ -6,7 +6,8 @@
 -   **Level:** User Goal
 -   **Actors:** App User
 -   **Brief:** User selects and modifies alternatives of a layer
--   **Status:** Ready to be Assigned
+-   **Status:** Assigned
+-   **Assignee:** Paul
 
 ## Scenarios
 
@@ -30,3 +31,4 @@
     The user has successfully modified and selected an alternative of a layer.
 -   **Non-functional Constraints:**
     -   Performance: up to 10 alternatives should be fast to use
+    -   Offline functionality depending on the layer

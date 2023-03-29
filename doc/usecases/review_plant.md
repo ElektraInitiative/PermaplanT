@@ -6,7 +6,7 @@
 -   **Level:** User Goal
 -   **Actors:** App User
 -   **Brief:** User reviews a plant information and submits form with corrections of the plant's information.
--   **Status:** Ready to be Assigned
+-   **Status:** Assigned
 -   **Assignee:** Thorben
 
 ## Scenarios

@@ -24,4 +24,3 @@
 - **Postcondition:**
   The user's seed list is updated with the added, deleted, or restored seeds.
 - **Non-functional Constraints:**
-  - Alternatives (list depends on which alternative plant layer is selected)

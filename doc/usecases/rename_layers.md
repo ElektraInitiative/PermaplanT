@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User renames created or alternative layers
-- **Status:** Ready to be Assigned
+- **Status:** Assigned
+- **Assignee:** Giancarlo
 
 ## Scenarios
 

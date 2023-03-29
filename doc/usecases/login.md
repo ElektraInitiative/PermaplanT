@@ -7,6 +7,7 @@
 - **Actors:** App User, App System
 - **Brief:** The user authenticates against the app to gain access to their account.
 - **Status:** Needs Clarification (NC decision)
+- **Assignee:** Samuel, Gabriel
 
 ## Scenarios
 
