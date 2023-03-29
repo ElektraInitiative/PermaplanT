@@ -12,21 +12,23 @@
 ## Scenarios
 
 - **Precondition:**
-  - The user has the opened the UI to propose a new relationship.
+  - The user has opened the UI to propose a new relationship.
 - **Main success scenario:**
   - Details about the relationship are provided by the user.
      - The two sides of the relationship can be
        - Specific plants
-       - Any higher taxonomic level (e.g. family, subfamily)
+       - Any higher taxonomic rank
      - The type of the relationship can be
        - Companion
        - Antagonist
-     - A description providing information on the whys and hows.
+     - Confidence
+     - A description providing information on the why's and how's.
 - **Alternative scenario:**
   - The user creates a relationship which is only effective for one or more of her selected maps.  
     In this case there is no review process.
+    Map-specific relationships take precedence.
 - **Error scenario:**
-  - A relationship with identical sides already exits.  
+  - The user tries to add a global relationship where another with identical sides already exits.  
     The user is informed about this and can't create the relationship.
 - **Postcondition:**
   - A new relationship between plants is [reviewable by other users](review_relationship.md).
