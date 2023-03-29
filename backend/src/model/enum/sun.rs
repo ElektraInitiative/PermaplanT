@@ -10,16 +10,16 @@ use utoipa::ToSchema;
 #[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
 #[DieselTypePath = "crate::schema::sql_types::Sun"]
 pub enum Sun {
-    #[serde(rename = "indirect sun")]
-    #[db_rename = "indirect sun"]
-    Indirect,
+#[serde(rename = "indirect sun")]
+#[db_rename = "indirect sun"]
+Indirect,
 
-    #[serde(rename = "partial sun")]
-    #[db_rename = "partial sun"]
-    Partial,
+#[serde(rename = "partial sun")]
+#[db_rename = "partial sun"]
+Partial,
 
-    #[serde(rename = "full sun")]
-    #[db_rename = "full sun"]
-    Full,
+#[serde(rename = "full sun")]
+#[db_rename = "full sun"]
+Full,
 
 }
