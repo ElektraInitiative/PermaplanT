@@ -1,0 +1,6 @@
+[book]
+authors = ["kitzbergerg"]
+language = "en"
+multilingual = false
+src = "doc"
+title = "PermaplanT"
