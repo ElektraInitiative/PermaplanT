@@ -8,7 +8,7 @@ const SearchInput = ({ handleSearch }: SearchInputProps) => {
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         <svg
           aria-hidden="true"
-          className="h-5 w-5 text-gray-500 dark:text-gray-400"
+          className="h-5 w-5 text-neutral-500 dark:text-neutral-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -24,7 +24,7 @@ const SearchInput = ({ handleSearch }: SearchInputProps) => {
       </div>
       <input
         type="search"
-        className="w-full rounded-lg border-gray-300 bg-gray-50 p-3 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-primary-textfield dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 md:w-[400px]"
+        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 pl-10 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-500 md:w-[400px]"
         placeholder="Search seeds..."
         onChange={handleSearch}
       />

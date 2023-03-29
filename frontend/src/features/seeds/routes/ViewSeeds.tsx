@@ -54,7 +54,7 @@ export const ViewSeeds = () => {
       <PageTitle title="My Seeds" />
       <div className="flex flex-row justify-between space-x-6">
         <SearchInput handleSearch={handleSearch} />
-        <SimpleButton title="Neuer Eintrag" onClick={handleCreateSeedClick} />
+        <SimpleButton onClick={handleCreateSeedClick}>New Entry</SimpleButton>
       </div>
       <SeedsOverviewList seeds={filteredSeeds} />
       <SimpleModal
