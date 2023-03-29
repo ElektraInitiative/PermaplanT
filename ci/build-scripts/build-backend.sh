@@ -7,7 +7,10 @@ set -ex
 
 cd ./backend/
 
-source /opt/rust.env
+if [[ -f /opt/rust.env ]]
+then
+    source /opt/rust.env
+fi
 
 # Download Cargo Modules
 cargo fetch

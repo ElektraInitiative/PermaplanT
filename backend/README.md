@@ -2,7 +2,7 @@
 
 ## Requirements
 
--   Rust 1.67.1 or later
+-   Rust 1.67.1 or later ([Installation guide](../doc/development_setup.md))
 -   [PostgreSQL](https://www.postgresql.org/download/) version 13 or later
 -   libpq-dev
 

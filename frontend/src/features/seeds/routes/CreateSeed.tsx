@@ -1,3 +1,4 @@
+import PageLayout from '../../../components/Layout/PageLayout';
 import CreateSeedForm from '../components/CreateSeedForm';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import { NewSeedDto } from '@/bindings/definitions';
@@ -42,8 +43,8 @@ export function CreateSeed() {
   };
 
   return (
-    <div className="mx-auto w-full p-4 md:w-[900px]">
-      <PageTitle title="New Seed Entry" />
+    <PageLayout>
+      <PageTitle title="Neuer Eintrag" />
       <CreateSeedForm onCancel={onCancel} onChange={onChange} onSubmit={onSubmit} />
       <SimpleModal
         title="Cancel Changes?"
@@ -69,6 +70,6 @@ export function CreateSeed() {
           setShowErrorModal(false);
         }}
       ></SimpleModal>
-    </div>
+    </PageLayout>
   );
 }
