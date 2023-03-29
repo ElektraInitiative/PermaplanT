@@ -3,7 +3,10 @@
 ## Problem
 
 We are currently using [diesel](https://github.com/diesel-rs/diesel) as our ORM in Rust.  
+
 Since diesel doesn't support async out of the box we will look at other alteratives and see if a switch is reasonable.  
+The reason why I believe pure async is better in our case is that it quite difficult (especially for Rust beginners) to mix async and blocking code.
+
 There might also be advantages of other ORM crates that as of writing this have not been considered.
 
 ## Constraints
@@ -55,7 +58,7 @@ However for inexperienced Rust developers it might be difficult to find out why 
 
 ### Performance 
 
-Metrics by diesel: <https://github.com/diesel-rs/metrics/>
+[Metrics by diesel](https://github.com/diesel-rs/metrics/)
 
 To sum up the above article:  
 According to this article diesel performs the best on basically all metrics. Diesel_async brings a slight performance decrease.  
