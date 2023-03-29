@@ -7,6 +7,7 @@
 - **Actors:** App User
 - **Brief:** The user can copy and paste a selection of elements, including succeeding crops, in their map
 - **Status:** Ready to be Assigned
+- **Assignee:** Giancarlo
 
 ## Scenarios
 
