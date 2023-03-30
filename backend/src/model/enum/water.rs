@@ -22,7 +22,7 @@ pub enum Water {
     #[db_rename = "high"]
     High,
 
-    #[serde(rename = "Aquatic")]
-    #[db_rename = "Aquatic"]
+    #[serde(rename = "aquatic")]
+    #[db_rename = "aquatic"]
     Aquatic,
 }

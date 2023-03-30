@@ -6,7 +6,7 @@ use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 
 use crate::{
     model::dto::{PlantsSearchDto, QueryParameters},
-    schema::plants::{self, all_columns},
+    schema::plants::{self, all_columns, binomial_name, common_name},
 };
 
 use super::Plants;
@@ -26,22 +26,27 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn search(query: &QueryParameters, conn: &mut PgConnection) -> QueryResult<Vec<PlantsSearchDto>> {
-        let capitalized_query = query.search_term.to_uppercase(); 
+    pub fn search(
+        query: &QueryParameters,
+        conn: &mut PgConnection,
+    ) -> QueryResult<Vec<PlantsSearchDto>> {
+        let capitalized_query = query.search_term.to_lowercase();
         let query_with_placeholders = format!("%{}%", capitalized_query);
+
+        let query = plants::table
+            .select(all_columns)
+            .filter(
+                sql::<Bool>("LOWER(binomial_name) LIKE ")
+                    .bind::<Text, _>(&query_with_placeholders)
+                    .sql(" OR LOWER(ARRAY_TO_STRING(common_name, ' ')) LIKE ")
+                    .bind::<Text, _>(&query_with_placeholders),
+            )
+            .order((binomial_name, common_name))
+            .limit(query.limit as i64);
 
         // We have to add some raw SQL, because the relevant columns
         // do not implement the TextExpressionMethods trait.
-        let query_result = plants::table
-            .select(all_columns)
-            .filter(
-                sql::<Bool>("UPPER(binomial_name) LIKE ")
-                    .bind::<Text, _>(&query_with_placeholders)
-                    .sql(" OR UPPER(ARRAY_TO_STRING(common_name, ', ')) LIKE ")
-                    .bind::<Text, _>(&query_with_placeholders),
-            )
-            .limit(query.limit)
-            .load::<Self>(conn);
+        let query_result = query.load::<Self>(conn);
 
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
