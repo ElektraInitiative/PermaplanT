@@ -4,7 +4,7 @@ const CTA = () => {
   return (
     <section className="body-font text-gray-600">
       <div className="container mx-auto flex flex-wrap items-center py-24">
-        <div className="pr-0 md:w-1/2 md:pr-16 lg:w-3/5 lg:pr-0">
+        <div className="pr-0 md:w-full md:pr-16 lg:w-1/2 lg:pr-0">
           <h1 className="title-font text-3xl font-medium text-gray-900">
             Slow-carb next level shoindcgoitch ethical authentic, poko scenester
           </h1>
@@ -13,7 +13,7 @@ const CTA = () => {
             roathse. Craies vegan tousled etsy austin.
           </p>
         </div>
-        <div className="mt-10 flex w-full flex-col rounded-lg bg-gray-100 p-8 md:ml-auto md:mt-0 md:w-1/2 lg:w-2/6">
+        <div className="mt-10 flex w-full flex-col rounded-lg bg-gray-100 p-8 md:ml-auto md:mt-0 md:w-full lg:w-1/2">
           <h2 className="title-font mb-5 text-lg font-medium text-gray-900">Sign Up</h2>
           <div className="relative mb-4">
             <label htmlFor="full-name" className="text-sm leading-7 text-gray-600">
