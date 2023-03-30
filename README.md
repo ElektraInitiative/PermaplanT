@@ -35,7 +35,7 @@ To achieve these goals the app provides, e.g.:
 - algorithms for polyculture, considerations of natural constraints and automatic suggestions
 - Nextcloud integrations (calender entries, Deck tasks)
 - social network features (e.g. notification that someone entered your garden)
-- GPS coordinates
+- GIS: positions and distances relate to the real word, e.g. you can use GPS coordinates
 - privacy: no tracking, analytics, external JavaScript, fonts, etc.
 - differences of versions of the same garden
 
