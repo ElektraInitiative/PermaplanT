@@ -13,7 +13,7 @@ const Team = () => {
         </div>
         <div className="-m-2 flex flex-wrap">
           <div className="w-full p-2 md:w-1/2 lg:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4">
+            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
@@ -26,7 +26,7 @@ const Team = () => {
             </div>
           </div>
           <div className="w-full p-2 md:w-1/2 lg:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4">
+            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
@@ -39,7 +39,7 @@ const Team = () => {
             </div>
           </div>
           <div className="w-full p-2 md:w-1/2 lg:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4">
+            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
@@ -52,7 +52,7 @@ const Team = () => {
             </div>
           </div>
           <div className="w-full p-2 md:w-1/2 lg:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4">
+            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
@@ -65,7 +65,7 @@ const Team = () => {
             </div>
           </div>
           <div className="w-full p-2 md:w-1/2 lg:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4">
+            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
@@ -78,7 +78,7 @@ const Team = () => {
             </div>
           </div>
           <div className="w-full p-2 md:w-1/2 lg:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4">
+            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
@@ -91,7 +91,7 @@ const Team = () => {
             </div>
           </div>
           <div className="w-full p-2 md:w-1/2 lg:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4">
+            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
@@ -104,7 +104,7 @@ const Team = () => {
             </div>
           </div>
           <div className="w-full p-2 md:w-1/2 lg:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4">
+            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
@@ -117,7 +117,7 @@ const Team = () => {
             </div>
           </div>
           <div className="w-full p-2 md:w-1/2 lg:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4">
+            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
