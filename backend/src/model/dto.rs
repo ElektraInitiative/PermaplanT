@@ -65,5 +65,5 @@ pub struct PlantsSearchDto {
 #[derive(Debug, Deserialize)]
 pub struct QueryParameters {
     pub search_term: String,
-    pub limit: i64,
+    pub limit: i32,
 }
