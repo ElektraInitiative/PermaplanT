@@ -1,5 +1,6 @@
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
 export const GeoMap = () => (
   <MapContainer center={[47.57, 16.496]} zoom={8} scrollWheelZoom={false}>

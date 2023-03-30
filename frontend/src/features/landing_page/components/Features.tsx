@@ -1,0 +1,72 @@
+import { ReactComponent as GlobeSVG } from '../../../../public/features/globe.svg';
+import { ReactComponent as PlanningSVG } from '../../../../public/features/planning.svg';
+import { ReactComponent as PlantSVG } from '../../../../public/features/plant.svg';
+
+interface Feature {
+  icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  title: string;
+  description: string;
+}
+
+const features: Feature[] = [
+  {
+    icon: PlanningSVG,
+    title: 'Garden Planning',
+    description:
+      'Plan your garden using our intuitive design tools. Choose from a variety of plants to create a beautiful garden space.',
+  },
+  {
+    icon: PlantSVG,
+    title: 'Why Permaculture',
+    description:
+      'The growth of edible crops is vital for creating a diverse and functioning ecosystem, while also providing outdoor living spaces for both animals and humans.',
+  },
+  {
+    icon: GlobeSVG,
+    title: 'Community',
+    description:
+      'Connect with other permaculture gardeners, share your successes and challenges, and get inspired by the beautiful gardens of others.',
+  },
+];
+
+const Features = () => {
+  return (
+    <section className="body-font text-gray-600">
+      <div className="container mx-auto py-24">
+        <div className="mb-20 text-center">
+          <h1 className="title-font mb-4 text-2xl font-medium text-gray-900 sm:text-3xl">
+            BE <span className="text-primary-500">GOOD</span> TO YOUR
+            <span className="text-secondary-500"> PLANTS</span>
+          </h1>
+          <p className="text-gray-500s mx-auto text-base leading-relaxed lg:w-3/4 xl:w-2/4">
+            Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub
+            indxgo juice poutine, ramps microdosing banh mi pug.
+          </p>
+          <div className="mt-6 flex justify-center">
+            <div className="inline-flex h-1 w-16 rounded-full bg-indigo-500"></div>
+          </div>
+        </div>
+        <div className="-mx-4 -mb-10 -mt-4 flex flex-wrap space-y-6 sm:-m-4 md:space-y-0">
+          {features.map((feature) => (
+            <div
+              key={feature.title}
+              className="flex flex-col items-center p-4 text-center md:w-1/3"
+            >
+              <div className="mb-5 inline-flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-secondary-300">
+                {<feature.icon className="h-8 w-8" />}
+              </div>
+              <div className="flex-grow">
+                <h2 className="title-font mb-3 text-lg font-medium text-gray-900">
+                  {feature.title}
+                </h2>
+                <p className="text-base leading-relaxed">{feature.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Features;

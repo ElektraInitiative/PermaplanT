@@ -1,5 +1,6 @@
-import { DarkModeSwitcher } from './DarkModeSwitcher';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+
+import { DarkModeSwitcher } from '../../features/landing_page/components/DarkModeSwitcher';
 
 export const Navbar = () => (
   <header className="flex items-center gap-10 bg-neutral-800 p-4">
