@@ -20,7 +20,14 @@ npm install
 npm run generate-api-types
 ```
 
-3. Start development server
+3. Create '.env' file and copy content from '.env.sample'.
+   Modify env variables to fit the environment.
+
+```shell
+cp .env.sample .env
+```
+
+4. Start development server
 
 ```shell
 npm run dev
