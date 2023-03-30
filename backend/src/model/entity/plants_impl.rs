@@ -5,7 +5,7 @@ use diesel::sql_types::{Bool, Text};
 use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 
 use crate::{
-    model::dto::{PlantsDto, QueryParameters},
+    model::dto::{PlantsSearchDto, QueryParameters},
     schema::plants::{self, all_columns},
 };
 
@@ -16,7 +16,7 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<PlantsDto>> {
+    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<PlantsSearchDto>> {
         let query_result = plants::table.select(all_columns).load::<Self>(conn);
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
@@ -26,7 +26,7 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn search(query: &QueryParameters, conn: &mut PgConnection) -> QueryResult<Vec<PlantsDto>> {
+    pub fn search(query: &QueryParameters, conn: &mut PgConnection) -> QueryResult<Vec<PlantsSearchDto>> {
         let capitalized_query = query.search_term.to_uppercase(); 
         let query_with_placeholders = format!("%{}%", capitalized_query);
 
@@ -35,9 +35,9 @@ impl Plants {
         let query_result = plants::table
             .select(all_columns)
             .filter(
-                sql::<Bool>("UPPER(species) LIKE ")
+                sql::<Bool>("UPPER(binomial_name) LIKE ")
                     .bind::<Text, _>(&query_with_placeholders)
-                    .sql(" OR UPPER(plant) LIKE ")
+                    .sql(" OR UPPER(ARRAY_TO_STRING(common_name, ', ')) LIKE ")
                     .bind::<Text, _>(&query_with_placeholders),
             )
             .limit(query.limit)

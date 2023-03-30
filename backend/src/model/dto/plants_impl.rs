@@ -2,16 +2,14 @@
 
 use crate::model::entity::Plants;
 
-use super::PlantsDto;
+use super::PlantsSearchDto;
 
-impl From<Plants> for PlantsDto {
+impl From<Plants> for PlantsSearchDto {
     fn from(plants: Plants) -> Self {
         Self {
             id: plants.id,
-            tags: plants.tags,
-            species: plants.species,
-            plant: plants.plant,
-            plant_type: plants.plant_type,
+            binomial_name: plants.binomial_name,
+            common_name: plants.common_name,
         }
     }
 }

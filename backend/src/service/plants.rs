@@ -6,7 +6,7 @@ use crate::{
     config::db::Pool,
     error::ServiceError,
     model::{
-        dto::{PlantsDto, QueryParameters},
+        dto::{PlantsSearchDto, QueryParameters},
         entity::Plants,
     },
 };
@@ -15,7 +15,7 @@ use crate::{
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsDto>, ServiceError> {
+pub fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSearchDto>, ServiceError> {
     let mut conn = pool.get()?;
     let result = Plants::find_all(&mut conn)?;
     Ok(result)
@@ -25,7 +25,7 @@ pub fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsDto>, ServiceError> {
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn search(pool: &Data<Pool>, query: &QueryParameters) -> Result<Vec<PlantsDto>, ServiceError> {
+pub fn search(pool: &Data<Pool>, query: &QueryParameters) -> Result<Vec<PlantsSearchDto>, ServiceError> {
     let mut conn = pool.get()?;
     let result = Plants::search(query, &mut conn)?;
     Ok(result)

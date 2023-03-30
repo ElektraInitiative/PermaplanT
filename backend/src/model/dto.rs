@@ -54,12 +54,10 @@ pub struct NewSeedDto {
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
-pub struct PlantsDto {
+pub struct PlantsSearchDto {
     pub id: i32,
-    pub tags: Vec<Option<String>>,
-    pub species: String,
-    pub plant: Option<String>,
-    pub plant_type: Option<i32>,
+    pub binomial_name: String,
+    pub common_name: Option<Vec<Option<String>>>,
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
