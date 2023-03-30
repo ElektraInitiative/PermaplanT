@@ -1,6 +1,6 @@
-import { ReactComponent as GlobeSVG } from '../../../../public/features/globe.svg';
-import { ReactComponent as PlanningSVG } from '../../../../public/features/planning.svg';
-import { ReactComponent as PlantSVG } from '../../../../public/features/plant.svg';
+import { ReactComponent as GlobeSVG } from './../globe.svg';
+import { ReactComponent as PlanningSVG } from './../planning.svg';
+import { ReactComponent as PlantSVG } from './../plant.svg';
 
 interface Feature {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -43,7 +43,7 @@ const Features = () => {
             indxgo juice poutine, ramps microdosing banh mi pug.
           </p>
           <div className="mt-6 flex justify-center">
-            <div className="inline-flex h-1 w-16 rounded-full bg-indigo-500"></div>
+            <div className="inline-flex h-1 w-16 rounded-full bg-secondary-400"></div>
           </div>
         </div>
         <div className="-mx-4 -mb-10 -mt-4 flex flex-wrap space-y-6 sm:-m-4 md:space-y-0">
