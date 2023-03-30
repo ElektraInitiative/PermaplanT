@@ -3,14 +3,9 @@ import { DarkModeSwitcher } from '../../features/landing_page/components/DarkMod
 
 const Navbar = () => {
   return (
-    <nav className="fixed top-0 left-0 z-20 w-full border-b-[0.5px] border-gray-200 dark:border-gray-700">
+    <nav className="fixed top-0 left-0 z-20 w-full border-b-[0.5px] border-gray-200 bg-white dark:border-gray-700 dark:bg-neutral-100-dark">
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
-        <a href="https://flowbite.com/" className="flex items-center">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="mr-3 h-8"
-            alt="Flowbite Logo"
-          />
+        <a href="/" className="flex items-center">
           <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
             PermaPlanT
           </span>

@@ -6,16 +6,18 @@ export const DarkModeSwitcher = () => {
   );
 
   function toggleDarkMode() {
-    if (localStorage.getItem('darkMode') === 'true') {
-      localStorage.setItem('darkMode', 'false');
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
       setIsDarkMode(false);
+      localStorage.setItem('darkMode', 'false');
       document.documentElement.classList.remove('dark');
     } else {
-      localStorage.setItem('darkMode', 'true');
       setIsDarkMode(true);
+      localStorage.setItem('darkMode', 'true');
       document.documentElement.classList.add('dark');
     }
   }
+
   return (
     <button
       aria-label="Toggle Dark Mode"

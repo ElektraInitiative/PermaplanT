@@ -13,7 +13,7 @@ const Pricing = () => {
           </p>
         </div>
         <div className="mx-auto w-full overflow-auto">
-          <table className="whitespace-no-wrap w-full table-auto text-left">
+          <table className="whitespace-no-wrap w-full table-auto rounded text-left">
             <thead>
               <tr>
                 <th className="title-font rounded-tl rounded-bl bg-gray-100 px-4 py-3 text-sm font-medium tracking-wider text-gray-900">

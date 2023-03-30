@@ -8,7 +8,7 @@ const Testimonials = () => {
           </h1>
           <div className="-m-4 flex flex-wrap">
             <div className="w-full p-4 md:w-1/2">
-              <div className="h-full rounded bg-gray-100 p-8">
+              <div className="h-full rounded bg-gray-100 p-8 dark:bg-neutral-300-dark">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -36,7 +36,7 @@ const Testimonials = () => {
               </div>
             </div>
             <div className="w-full p-4 md:w-1/2">
-              <div className="h-full rounded bg-gray-100 p-8">
+              <div className="h-full rounded bg-gray-100 p-8 dark:bg-neutral-300-dark">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
