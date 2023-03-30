@@ -73,7 +73,7 @@ _Protocolled by: Benjamin_
 ### Decisions
 
 1. Uliana will start research on plant relationships.  
-   Frist the quality of the following datasources is be assessed.
+   First the quality of the following datasources has to be assessed.
 
    - [Plants for a Future](https://pfaf.org/)
    - [Natural Capital Plant Database](https://permacultureplantdata.com/)
