@@ -46,21 +46,11 @@ const CreateSeedForm = ({
     <div>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <div className="mb-6 grid gap-8 md:grid-cols-2">
-          <SimpleFormInput
-            type="number"
-            labelText="Harvest Year"
-            defaultValue={currentYear}
-            placeHolder={currentYear.toString()}
-            required={true}
-            id="harvest_year"
-            register={register}
-            onChange={onChange}
-          />
           <SelectMenu
             id="plant_id"
             control={control}
             options={plants}
-            labelText="Species / Variety"
+            labelText="Plant Name"
             required={true}
             handleOptionsChange={(option) => {
               if (!option) {
@@ -82,6 +72,16 @@ const CreateSeedForm = ({
             register={register}
             onChange={onChange}
           />
+          <SimpleFormInput
+            type="number"
+            labelText="Harvest Year"
+            defaultValue={currentYear}
+            placeHolder={currentYear.toString()}
+            required={true}
+            id="harvest_year"
+            register={register}
+            onChange={onChange}
+          />
           <SelectMenu
             id="quantity"
             control={control}
@@ -96,17 +96,17 @@ const CreateSeedForm = ({
             onChange={onChange}
           />
           <SimpleFormInput
-            labelText="Origin"
-            placeHolder="My Home"
-            id="origin"
+            type="date"
+            labelText="Best before"
+            placeHolder=""
+            id="use_by"
             register={register}
             onChange={onChange}
           />
           <SimpleFormInput
-            type="date"
-            labelText="Best by"
-            placeHolder=""
-            id="use_by"
+            labelText="Origin"
+            placeHolder="My Home"
+            id="origin"
             register={register}
             onChange={onChange}
           />
