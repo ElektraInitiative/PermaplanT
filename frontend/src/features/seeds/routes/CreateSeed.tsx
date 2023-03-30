@@ -7,16 +7,16 @@ import SimpleModal from '@/components/Modals/SimpleModal';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function useDebounce(searchFunction: (searchTerm: string) => void, delay: number) {
+function useDebounce<T>(searchFunction: (searchParam: T) => void, delay: number) {
   const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
 
-  const debouncedSearch = (searchTerm: string) => {
+  const debouncedSearch = (searchParam: T) => {
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
 
     const timeout = setTimeout(() => {
-      searchFunction(searchTerm);
+      searchFunction(searchParam);
     }, delay);
 
     setTimeoutId(timeout);
@@ -26,8 +26,7 @@ function useDebounce(searchFunction: (searchTerm: string) => void, delay: number
 }
 
 function formatCommonName(commonName: string[] | undefined) {
-  if (commonName == null) 
-    return '';
+  if (commonName == null) return '';
 
   return commonName[0] == null ? '' : '(' + commonName[0] + ')';
 }

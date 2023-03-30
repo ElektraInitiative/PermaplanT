@@ -24,7 +24,7 @@ const TransparentBackground = ({ onClick, show }: TransparentBackgroundProps) =>
                 opacity: 0,
               }}
             >
-              <div style={{ backgroundColor: 'black', height: '100vh', width: '100vw' }}></div>
+              <div className="h-screen w-screen bg-[#000]" />
             </motion.div>
           )}
         </AnimatePresence>
