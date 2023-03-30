@@ -17,11 +17,6 @@ export const LandingPage = () => {
       <Navbar />
       <WidePageLayout>
         <div className="mb-8 flex flex-col items-center p-8">
-          <div className="mt-10 flex flex-col items-center gap-4" id="home">
-            <div className="flex w-1/2 items-end justify-end">
-              <img src="/permaplant-logo-2.svg" alt="PermaplanT drawing" />
-            </div>
-          </div>
           <Features />
           <Testimonials />
           <Pricing />
