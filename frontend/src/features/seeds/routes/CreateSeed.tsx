@@ -4,6 +4,7 @@ import { NewSeedDto } from '@/bindings/definitions';
 import { SelectOption } from '@/components/Form/SelectMenu';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
+import usePreventNavigation from '@/hooks/usePreventNavigation';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -62,6 +63,7 @@ export function CreateSeed() {
 
     _searchPlants();
   }, []);
+  usePreventNavigation(formTouched);
 
   const onSubmit = async (newSeed: NewSeedDto) => {
     // we can not directly check for an error here because the data would be stale
