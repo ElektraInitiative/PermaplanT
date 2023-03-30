@@ -10,17 +10,11 @@
   h3 {
     @apply text-lg;
   }
-  p, span, h1, h2, h3, li, label, a {
-    @apply dark:text-white;
+  p, span, h1, h2, h3, li, label, a, th, td {
+    @apply text-gray-600 dark:text-white;
   }
   a:hover {
     @apply hover:text-neutral-300 dark:text-neutral-300-dark;
-  }
-  th, table {
-    @apply dark:bg-neutral-300-dark dark:text-white;
-  }
-  td {
-    @apply dark:bg-neutral-200-dark dark:text-white dark:border-neutral-200-dark;
   }
   body {
     @apply bg-neutral-200 dark:bg-neutral-100-dark dark:text-white

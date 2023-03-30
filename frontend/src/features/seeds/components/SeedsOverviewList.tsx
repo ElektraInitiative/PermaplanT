@@ -15,16 +15,16 @@ const SeedsOverviewList = ({ seeds }: SeedsOverviewListProps) => {
   return (
     <section className="">
       <div className="relative overflow-x-auto rounded-lg">
-        <table className="w-full text-left text-sm text-neutral-500 dark:text-neutral-400">
-          <thead className="bg-neutral-800 text-xs uppercase text-neutral-300">
+        <table className="w-full bg-gray-200 text-left text-sm dark:bg-neutral-300-dark">
+          <thead className="text-xs uppercase text-neutral-300">
             <tr>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
                 Name
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
                 Quantity
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
                 Harvest Year
               </th>
             </tr>
@@ -33,7 +33,7 @@ const SeedsOverviewList = ({ seeds }: SeedsOverviewListProps) => {
             {seeds.map((seed) => (
               <tr
                 key={seed.id}
-                className="cursor-pointer bg-primary-textfield hover:bg-neutral-700"
+                className="bg-primary-textfield cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-600"
                 onClick={() => {
                   handleSeedClick(seed);
                 }}

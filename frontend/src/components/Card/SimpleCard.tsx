@@ -6,8 +6,8 @@ interface SimpleCardProps {
 export default function SimpleCard(props: SimpleCardProps) {
   return (
     <div>
-      <h2 className="mb-2 text-sm font-medium  text-white">{props.title}</h2>
-      <p className="text-gray-400">{props.body}</p>
+      <h2 className="mb-2 text-sm font-medium">{props.title}</h2>
+      <p>{props.body}</p>
     </div>
   );
 }
