@@ -21,6 +21,7 @@
      - The type of the relationship can be
        - Companion
        - Antagonist
+       - Neutral (needed to indicate certainty about neither companion nor antagonist)
      - Confidence
      - A description providing information on the why's and how's.
 - **Alternative scenario:**
