@@ -1,55 +1,61 @@
-import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
-
+import ButtonLink from '../Button/ButtonLink';
 import { DarkModeSwitcher } from '../../features/landing_page/components/DarkModeSwitcher';
 
-export const Navbar = () => (
-  <header className="flex items-center gap-10 bg-neutral-800 p-4">
-    <img className="w-12" src="/permaplant-logo.svg" />
-    <h2 className="text-white">PermaPlanT</h2>
-    <div className="flex flex-grow justify-end gap-10">
-      <a href="seeds">
-        <SimpleButton variant={ButtonVariant.secondary}>seeds</SimpleButton>
-      </a>
-      <a className="border-b border-neutral-700" href="/#gallery">
-        <SimpleButton variant={ButtonVariant.secondary}>gallery</SimpleButton>
-      </a>
-      <a className="border-b border-neutral-700" href="/#map">
-        <SimpleButton variant={ButtonVariant.secondary}>map</SimpleButton>
-      </a>
-      <DarkModeSwitcher />
-    </div>
-    <a href="https://github.com/ElektraInitiative/PermaplanT" className="w-8">
-      <img src="/github-mark/github-mark-white.svg"></img>
-    </a>
-  </header>
-);
-
-export const Navbar2 = () => {
+const Navbar = () => {
   return (
-    <header className="body-font text-gray-600">
-      <div className="container mx-auto flex flex-col flex-wrap items-center p-5 md:flex-row">
-        <a className="title-font mb-4 flex items-center font-medium text-gray-900 md:mb-0">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            className="h-10 w-10 rounded-full bg-indigo-500 p-2 text-white"
-            viewBox="0 0 24 24"
-          >
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-          </svg>
-          <span className="ml-3 text-xl">PermaPlanT</span>
+    <nav className="fixed top-0 left-0 z-20 w-full border-b-[0.5px] border-gray-200 dark:border-gray-700">
+      <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
+        <a href="https://flowbite.com/" className="flex items-center">
+          <img
+            src="https://flowbite.com/docs/images/logo.svg"
+            className="mr-3 h-8"
+            alt="Flowbite Logo"
+          />
+          <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
+            PermaPlanT
+          </span>
         </a>
-        <nav className="flex flex-wrap items-center justify-center text-base md:ml-auto">
-          <a className="mr-5 hover:text-gray-900">Seeds</a>
-          <a className="mr-5 hover:text-gray-900">Gallery</a>
-          <a className="mr-5 hover:text-gray-900">Map</a>
-        </nav>
-        <DarkModeSwitcher />
+        <div className="flex md:order-2">
+          <DarkModeSwitcher />
+          <button
+            data-collapse-toggle="navbar-sticky"
+            type="button"
+            className="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 md:hidden"
+            aria-controls="navbar-sticky"
+            aria-expanded="false"
+          >
+            <span className="sr-only">Open main menu</span>
+            <svg
+              className="h-6 w-6"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div
+          className="hidden w-full items-center justify-between md:order-1 md:flex md:w-auto"
+          id="navbar-sticky"
+        >
+          <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 p-4 font-medium dark:border-gray-700 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0 ">
+            <li>
+              <ButtonLink title="Home" to="/" />
+            </li>
+            <li>
+              <ButtonLink title="Seeds" to="/" />
+            </li>
+          </ul>
+        </div>
       </div>
-    </header>
+    </nav>
   );
 };
+
+export default Navbar;
