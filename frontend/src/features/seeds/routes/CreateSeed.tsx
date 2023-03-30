@@ -25,6 +25,13 @@ function useDebounce(searchFunction: (searchTerm: string) => void, delay: number
   return [debouncedSearch];
 }
 
+function formatCommonName(commonName: string[] | undefined) {
+  if (commonName == null) 
+    return '';
+
+  return commonName[0] == null ? '' : '(' + commonName[0] + ')';
+}
+
 export function CreateSeed() {
   const navigate = useNavigate();
 
@@ -77,7 +84,8 @@ export function CreateSeed() {
 
   const plants: SelectOption[] = useCreateSeedStore((state) =>
     state.plants.map((plant) => {
-      return { value: plant.id, label: plant.species };
+      const commonName = formatCommonName(plant.common_name);
+      return { value: plant.id, label: plant.binomial_name + ' ' + commonName };
     }),
   );
 
