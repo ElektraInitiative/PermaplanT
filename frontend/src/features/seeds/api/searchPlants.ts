@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const searchPlants = async (searchTerm: string): Promise<PlantsSummaryDto[]> => {
   try {
-    const url = new URL(`${baseApiUrl}/api/plants/search`);
+    const url = new URL(`${baseApiUrl}/api/plants`);
     url.searchParams.append('search_term', searchTerm);
     url.searchParams.append('limit', '10');
 

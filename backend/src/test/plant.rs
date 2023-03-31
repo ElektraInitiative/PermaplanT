@@ -108,7 +108,7 @@ mod tests {
         .await;
 
         let resp = test::TestRequest::get()
-            .uri("/api/plants/search?search_term=Testplant&limit=10")
+            .uri("/api/plants?search_term=Testplant&limit=10")
             .send_request(&mut app)
             .await;
 

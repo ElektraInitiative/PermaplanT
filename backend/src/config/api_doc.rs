@@ -30,7 +30,7 @@ struct SeedApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plant endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(plants::find_all),
+#[openapi(paths(plants::find_all_or_search),
         components(
             schemas(
                 PlantsSummaryDto
