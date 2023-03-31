@@ -21,5 +21,4 @@ pub enum Sun {
     #[serde(rename = "full sun")]
     #[db_rename = "full sun"]
     Full,
-
 }
