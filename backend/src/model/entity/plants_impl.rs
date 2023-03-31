@@ -31,7 +31,7 @@ impl Plants {
         conn: &mut PgConnection,
     ) -> QueryResult<Vec<PlantsSearchDto>> {
         let capitalized_query = query.search_term.to_lowercase();
-        let query_with_placeholders = format!("%{}%", capitalized_query);
+        let query_with_placeholders = format!("%{capitalized_query}%");
 
         let query = plants::table
             .select(all_columns)
@@ -42,7 +42,7 @@ impl Plants {
                     .bind::<Text, _>(&query_with_placeholders),
             )
             .order((binomial_name, common_name))
-            .limit(query.limit as i64);
+            .limit(query.limit.into());
 
         let query_result = query.load::<Self>(conn);
         query_result.map(|v| v.into_iter().map(Into::into).collect())
