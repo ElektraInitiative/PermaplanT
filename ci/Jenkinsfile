@@ -67,7 +67,12 @@ stage('Checks') {
                 checkout scm
                 unstash 'definitions.ts'
 
-                echo "HC SVNT DRACONES"
+                dir("frontend") {
+                    sh "npm ci"
+                    sh "npm run format:check"
+                    sh "npm run lint"
+                    sh "npm run test"
+                }
             }
         }
     }
