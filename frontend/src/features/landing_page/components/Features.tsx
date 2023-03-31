@@ -56,9 +56,7 @@ const Features = () => {
                 {<feature.icon className="h-8 w-8" />}
               </div>
               <div className="flex-grow">
-                <h2 className="title-font mb-3 text-lg font-medium text-gray-900">
-                  {feature.title}
-                </h2>
+                <h2 className="title-font mb-3 text-lg font-medium">{feature.title}</h2>
                 <p className="text-base leading-relaxed">{feature.description}</p>
               </div>
             </div>
