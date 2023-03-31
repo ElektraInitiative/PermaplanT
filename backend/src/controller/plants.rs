@@ -1,6 +1,6 @@
 //! `Plants` endpoints.
 
-use crate::{config::db::Pool, model::dto::QueryParameters, service};
+use crate::{config::db::Pool, model::dto::PlantsSearchParameters, service};
 use actix_web::{
     get,
     web::{self, Data, Path},
@@ -38,7 +38,10 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
     )
 )]
 #[get("/search")]
-pub async fn search(query: web::Query<QueryParameters>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn search(
+    query: web::Query<PlantsSearchParameters>,
+    pool: Data<Pool>,
+) -> Result<HttpResponse> {
     let query = query.into_inner();
     let response = web::block(move || service::plants::search(&pool, &query)).await??;
     Ok(HttpResponse::Ok().json(response))

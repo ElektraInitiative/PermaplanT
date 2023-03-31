@@ -5,7 +5,7 @@ use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 
 use crate::{
     model::diesel_extensions::array_to_string,
-    model::dto::{PlantsSummaryDto, QueryParameters},
+    model::dto::{PlantsSearchParameters, PlantsSummaryDto},
     schema::plants::{self, all_columns, binomial_name, common_name},
 };
 
@@ -27,7 +27,7 @@ impl Plants {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub fn search(
-        query: &QueryParameters,
+        query: &PlantsSearchParameters,
         conn: &mut PgConnection,
     ) -> QueryResult<Vec<PlantsSummaryDto>> {
         let query_with_placeholders = format!("%{}%", query.search_term);

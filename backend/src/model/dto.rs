@@ -63,7 +63,7 @@ pub struct PlantsSummaryDto {
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
 #[derive(Debug, Deserialize)]
-pub struct QueryParameters {
+pub struct PlantsSearchParameters {
     pub search_term: String,
     pub limit: i32,
 }
