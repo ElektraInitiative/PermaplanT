@@ -50,4 +50,69 @@ mod tests {
         
         assert!(dtos.contains(&test_plant));
     }
+
+    #[actix_rt::test]
+    async fn test_get_one_plant_succeeds() {
+        dotenv().ok();
+
+        let app_config = app::Config::from_env().expect("Error loading configuration");
+        let pool = db::init_pool(&app_config.database_url);
+        let pool = Data::new(pool.clone());
+
+        let mut app = test::init_service(
+            App::new()
+                .app_data(Data::clone(&pool))
+                .configure(routes::config),
+        )
+        .await;
+
+        let resp = test::TestRequest::get()
+            .uri("/api/plants/-1")
+            .send_request(&mut app)
+            .await;
+
+        assert_eq!(resp.status(), StatusCode::OK);
+
+        assert_eq!(
+            resp.headers().get(CONTENT_TYPE).unwrap(),
+            "application/json"
+        );
+
+        let test_plant = PlantsSearchDto {
+            id: -1,
+            binomial_name: "Testia testia".to_string(),
+            common_name: Some(vec![Some("Testplant".to_string())]), 
+        };
+        
+        let result = test::read_body(resp).await;
+        let result_string = std::str::from_utf8(&result).unwrap();
+        
+        let dto: PlantsSearchDto = serde_json::from_str(result_string).unwrap();
+        
+        assert_eq!(dto, test_plant);
+    }
+
+    #[actix_rt::test]
+    async fn test_get_nonexistant_plant_fails_with_404() {
+        dotenv().ok();
+
+        let app_config = app::Config::from_env().expect("Error loading configuration");
+        let pool = db::init_pool(&app_config.database_url);
+        let pool = Data::new(pool.clone());
+
+        let mut app = test::init_service(
+            App::new()
+                .app_data(Data::clone(&pool))
+                .configure(routes::config),
+        )
+        .await;
+
+        let resp = test::TestRequest::get()
+            .uri("/api/plants/-99999999")
+            .send_request(&mut app)
+            .await;
+
+        assert_eq!(resp.status(), StatusCode::NOT_FOUND);
+    }
+
 }
