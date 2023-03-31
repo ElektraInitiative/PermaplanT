@@ -6,7 +6,7 @@ interface NavContainerProps {
 
 const NavContainer = ({ children }: NavContainerProps) => {
   return (
-    <div className="">
+    <div>
       <Navbar />
       {children}
     </div>

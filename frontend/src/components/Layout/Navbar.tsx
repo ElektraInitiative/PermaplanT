@@ -3,7 +3,7 @@ import { DarkModeSwitcher } from '../../features/landing_page/components/DarkMod
 
 const Navbar = () => {
   return (
-    <nav className="fixed top-0 left-0 z-20 w-full border-b-[0.5px] border-gray-200 bg-white dark:border-gray-700 dark:bg-neutral-100-dark">
+    <nav className="fixed top-0 left-0 z-50 w-full border-b-[0.5px] border-gray-200 bg-white dark:border-gray-700 dark:bg-neutral-100-dark">
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
         <div className="flex space-x-16">
           <div className="flex space-x-6">

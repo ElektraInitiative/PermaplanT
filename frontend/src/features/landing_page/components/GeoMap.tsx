@@ -7,7 +7,7 @@ export const GeoMap = () => (
     <h1 className="title-font mb-12 text-center text-3xl font-medium">
       Discover the PermaplanT world
     </h1>
-    <div className="h-[50vh] min-h-[24rem] grow rounded border-neutral-400 bg-neutral-100 dark:border-neutral-300-dark dark:bg-neutral-200-dark">
+    <div className="z-0 h-[50vh] min-h-[24rem] rounded border-neutral-400 bg-neutral-100 dark:border-neutral-300-dark dark:bg-neutral-200-dark">
       <MapContainer center={[47.57, 16.496]} zoom={8} scrollWheelZoom={false}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
