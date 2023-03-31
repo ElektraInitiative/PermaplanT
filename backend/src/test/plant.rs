@@ -7,7 +7,7 @@ mod tests {
     use crate::config::routes;
     use crate::model::dto::PlantsSearchDto;
     use actix_web::App;
-    use actix_web::{http::StatusCode, http::header::CONTENT_TYPE, test, web::Data};
+    use actix_web::{http::header::CONTENT_TYPE, http::StatusCode, test, web::Data};
     use dotenvy::dotenv;
 
     #[actix_rt::test]
@@ -40,14 +40,14 @@ mod tests {
         let test_plant = PlantsSearchDto {
             id: -1,
             binomial_name: "Testia testia".to_string(),
-            common_name: Some(vec![Some("Testplant".to_string())]), 
+            common_name: Some(vec![Some("Testplant".to_string())]),
         };
-        
+
         let result = test::read_body(resp).await;
         let result_string = std::str::from_utf8(&result).unwrap();
-        
+
         let dtos: Vec<PlantsSearchDto> = serde_json::from_str(result_string).unwrap();
-        
+
         assert!(dtos.contains(&test_plant));
     }
 
@@ -81,14 +81,14 @@ mod tests {
         let test_plant = PlantsSearchDto {
             id: -1,
             binomial_name: "Testia testia".to_string(),
-            common_name: Some(vec![Some("Testplant".to_string())]), 
+            common_name: Some(vec![Some("Testplant".to_string())]),
         };
-        
+
         let result = test::read_body(resp).await;
         let result_string = std::str::from_utf8(&result).unwrap();
-        
+
         let dto: PlantsSearchDto = serde_json::from_str(result_string).unwrap();
-        
+
         assert_eq!(dto, test_plant);
     }
 
@@ -122,15 +122,14 @@ mod tests {
         let test_plant = PlantsSearchDto {
             id: -1,
             binomial_name: "Testia testia".to_string(),
-            common_name: Some(vec![Some("Testplant".to_string())]), 
+            common_name: Some(vec![Some("Testplant".to_string())]),
         };
-        
+
         let result = test::read_body(resp).await;
         let result_string = std::str::from_utf8(&result).unwrap();
-        
+
         let dtos: Vec<PlantsSearchDto> = serde_json::from_str(result_string).unwrap();
-        
+
         assert!(dtos.contains(&test_plant));
     }
-
 }
