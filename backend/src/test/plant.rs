@@ -93,7 +93,7 @@ mod tests {
     }
 
     #[actix_rt::test]
-    async fn test_get_nonexistant_plant_fails_with_404() {
+    async fn test_search_plants_succeeds() {
         dotenv().ok();
 
         let app_config = app::Config::from_env().expect("Error loading configuration");
@@ -108,11 +108,29 @@ mod tests {
         .await;
 
         let resp = test::TestRequest::get()
-            .uri("/api/plants/-99999999")
+            .uri("/api/plants/search?search_term=Testplant&limit=10")
             .send_request(&mut app)
             .await;
 
-        assert_eq!(resp.status(), StatusCode::NOT_FOUND);
+        assert_eq!(resp.status(), StatusCode::OK);
+
+        assert_eq!(
+            resp.headers().get(CONTENT_TYPE).unwrap(),
+            "application/json"
+        );
+
+        let test_plant = PlantsSearchDto {
+            id: -1,
+            binomial_name: "Testia testia".to_string(),
+            common_name: Some(vec![Some("Testplant".to_string())]), 
+        };
+        
+        let result = test::read_body(resp).await;
+        let result_string = std::str::from_utf8(&result).unwrap();
+        
+        let dtos: Vec<PlantsSearchDto> = serde_json::from_str(result_string).unwrap();
+        
+        assert!(dtos.contains(&test_plant));
     }
 
 }
