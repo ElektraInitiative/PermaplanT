@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** A user can see a preview of future rewards for his efforts.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee** Thorben
 
 ## Scenarios
 

@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user is awarded with Blossoms for achieving certain milestones.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee** Thorben
 
 ## Scenarios
 

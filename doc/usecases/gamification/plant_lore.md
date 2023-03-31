@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user gets shown information on recommended plants.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee** Thorben
 
 ## Scenarios
 
