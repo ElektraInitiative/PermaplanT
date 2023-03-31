@@ -1,10 +1,10 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::dsl::sql;
-use diesel::sql_types::{Bool, Text};
+use diesel::prelude::*;
 use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 
 use crate::{
+    model::diesel_extensions::array_to_string,
     model::dto::{PlantsSearchDto, QueryParameters},
     schema::plants::{self, all_columns, binomial_name, common_name},
 };
@@ -30,17 +30,15 @@ impl Plants {
         query: &QueryParameters,
         conn: &mut PgConnection,
     ) -> QueryResult<Vec<PlantsSearchDto>> {
-        let capitalized_query = query.search_term.to_lowercase();
-        let query_with_placeholders = format!("%{capitalized_query}%");
+        let query_with_placeholders = format!("%{}%", query.search_term);
 
         let query = plants::table
-            .select(all_columns)
             .filter(
-                sql::<Bool>("LOWER(binomial_name) LIKE ")
-                    .bind::<Text, _>(&query_with_placeholders)
-                    .sql(" OR LOWER(ARRAY_TO_STRING(common_name, ' ')) LIKE ")
-                    .bind::<Text, _>(&query_with_placeholders),
+                binomial_name
+                    .ilike(&query_with_placeholders)
+                    .or(array_to_string(common_name, " ").ilike(&query_with_placeholders)),
             )
+            .select(all_columns)
             .order((binomial_name, common_name))
             .limit(query.limit.into());
 
