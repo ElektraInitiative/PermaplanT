@@ -23,7 +23,6 @@ export const NamedSlider = (props: SliderProps) => {
       const sliderWidth = sliderDivRef.current.clientWidth
       setWidth(newWidth);
       props.onChange(newWidth / sliderWidth)
-      console.log(pointerEvent.pageX)
     }
     function onMouseUp() {
       document.body.removeEventListener('pointermove', onMouseMove);
@@ -45,9 +44,7 @@ export const NamedSlider = (props: SliderProps) => {
       if(!sliderDivRef.current) return 0
       const sliderWidth = sliderDivRef.current.clientWidth
       const p = width/sliderWidth + sliderWidth * value / 100
-      console.log(width, sliderWidth, p)
       const percentage = p > 1 ? 1 : p < 0 ? 0 : p
-      console.log(percentage)
       setWidth(percentage * sliderWidth)
       props.onChange(percentage)
   }
