@@ -29,7 +29,9 @@
     In this case there is no review process.
     Map-specific relationships take precedence.
 - **Error scenario:**
-  - The user tries to add a global relationship where another with identical sides already exits.  
+  - The user tries to add a global relationship where another global with identical sides already exits.  
+    The user is informed about this and can't create the relationship.
+  - The user tries to add a map-specific relationship where another map-specific with identical sides already exits.  
     The user is informed about this and can't create the relationship.
 - **Postcondition:**
   - A new relationship between plants is [reviewable by other users](review_relationship.md).
