@@ -1,5 +1,5 @@
 import ButtonLink from '../Button/ButtonLink';
-import { DarkModeSwitcher } from '../../features/landing_page/components/DarkModeSwitcher';
+import { DarkModeSwitcher } from '@/features/landing_page/components/DarkModeSwitcher';
 
 const Navbar = () => {
   return (
@@ -28,7 +28,10 @@ const Navbar = () => {
           </div>
         </div>
         <div className="flex md:order-2">
-          <DarkModeSwitcher />
+          <div className="flex items-center space-x-4">
+            <a href="https://github.com/ElektraInitiative/PermaPlant">GitHub</a>
+            <DarkModeSwitcher />
+          </div>
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"

@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 interface ButtonLinkProps {
   title: string;
   to: string;
+  className?: string;
 }
 
-const ButtonLink = ({ title, to }: ButtonLinkProps) => {
+const ButtonLink = ({ title, to, className = '' }: ButtonLinkProps) => {
   return (
-    <Link to={to} className="items-center justify-center space-x-2 text-lg">
+    <Link to={to} className={`items-center ${className} justify-center space-x-2`}>
       <button>{title}</button>
     </Link>
   );
