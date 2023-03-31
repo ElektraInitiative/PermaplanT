@@ -5,7 +5,7 @@
 - **Scope:** Plant Lore
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user gets shown information on recommended plants.
+- **Brief:** The user gets shown information of plants recommended for diversity.
 - **Status:** Assigned
 - **Assignee** Thorben
 
@@ -14,7 +14,7 @@
 - **Precondition:**
   - The user has opened the app and is editing a map.
 - **Main success scenario:**
-  - The user hovers over the [for diversity reasons recommended plant](layers/plants_layer.md).
+  - The user hovers over the [for diversity recommended plant](../layers/plants_layer.md).
   - The user is shown a little box with additional information and interesting facts about that plant.
   - The user is interested in the plant and places it on the map.
 - **Alternative scenario:**

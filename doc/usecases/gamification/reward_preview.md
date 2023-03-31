@@ -13,7 +13,7 @@
 
 - **Precondition:**
   - The user has opened the app and is editing a map.
-  - The user has planted at least one plan on his map.
+  - The user has planted at least one plant on his map.
 - **Main success scenario:**
   - The app calculates the dates for receiving potential rewards of the existing plants, like e.g. the flowering time or harvesting periods of a certain plant.
   - The user can see a marker on the [map timeline](map_timeline.md) indicating those rewards.

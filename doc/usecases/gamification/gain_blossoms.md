@@ -19,8 +19,8 @@
   - Upon completing a milestone, the user is informed of their achievement and is awarded the corresponding Blossom.
 - **Alternative scenario:**
 - **Error scenario:**
-  The user meets the criteria for a certain medal, but it will not be awarded due to an error in the app.
-  The medal will be awarded the next time its criteria will be checked.
+  The user meets the criteria for a certain Blossom, but it will not be awarded due to an error in the app.
+  The Blossom will be awarded the next time its criteria will be checked.
 - **Postcondition:**
   The awarded Blossoms will be shown in the users profile.
 - **Non-functional Constraints:**
