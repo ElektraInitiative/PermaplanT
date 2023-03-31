@@ -3,6 +3,7 @@ import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { Map } from '@/features/map_planning';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
+import { MapPlanner } from '@/features/map_planner';
 
 const routes: Routes = {
   [Pages.ImprintPage]: {
