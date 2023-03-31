@@ -1,5 +1,7 @@
-import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import '@/components/Modals/ImageModal';
+
+import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+
 import ImageModal from '@/components/Modals/ImageModal';
 import { useState } from 'react';
 
@@ -59,23 +61,24 @@ export const PhotoGallery = () => {
     return style;
   };
 
-  const gridClasses = ` 
+  const gridClasses = `
       grid
-      grid-flow-dense 
-      grid-cols-6  
-      gap-4 
-      p-8 
+      grid-flow-dense
+      grid-cols-6
+      gap-4
+      p-8
     `;
 
   return (
     <div>
-      <ImageModal 
-        title = "Image" 
-        body = {
-          <img src={imageUrls[selectedImage]}/>
-        } 
-        setShow = {setShowModal} show = {showModal} 
-        onCancel = {() => {setShowModal(false)}}
+      <ImageModal
+        title="Image"
+        body={<img src={imageUrls[selectedImage]} />}
+        setShow={setShowModal}
+        show={showModal}
+        onCancel={() => {
+          setShowModal(false);
+        }}
       />
       <div className="mt-8 flex justify-center gap-4">
         <SimpleButton
@@ -113,19 +116,19 @@ export const PhotoGallery = () => {
         {imageUrls.map((image, index) => {
           const className =
             'w-full h-full p-1 pt-4 pb-6 bg-neutral-100 dark:bg-neutral-200-dark hover:bg-neutral-300 dark:hover:bg-neutral-400-dark border-b-4 border-neutral-300 dark:border-neutral-300-dark rounded ' +
-            getItemSize(index) 
+            getItemSize(index);
           return (
             <div
               key={image + '_container'}
               className={className}
               onClick={() => {
-                setSelectedImage(index)
-                setShowModal(true)
+                setSelectedImage(index);
+                setShowModal(true);
               }}
             >
               <img
                 src={image}
-                className="h-full w-full border-white bg-neutral-100 dark:bg-neutral-300-dark object-contain"
+                className="h-full w-full border-white bg-neutral-100 object-contain dark:bg-neutral-300-dark"
               ></img>
             </div>
           );
