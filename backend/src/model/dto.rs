@@ -53,7 +53,7 @@ pub struct NewSeedDto {
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, PartialEq, Deserialize, ToSchema)]
 pub struct PlantsSearchDto {
     pub id: i32,
     pub binomial_name: String,
