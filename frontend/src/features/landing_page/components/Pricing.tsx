@@ -3,7 +3,7 @@ const Pricing = () => {
     <section className="body-font text-gray-600">
       <div className="mx-auto py-24">
         <div className="mb-20 flex w-full flex-col text-center">
-          <h1 className="title-font mb-2 text-3xl font-medium sm:text-4xl">Pricing</h1>
+          <h1 className="title-font mb-12 text-center text-3xl font-medium">Pricing</h1>
           <p className="mx-auto text-base leading-relaxed">
             Banh mi cornhole echo park skateboard authentic crucifix neutra tilde lyft biodiesel
             artisan direct trade mumblecore 3 wolf moon twee Banh mi cornhole echo park skateboard

@@ -1,6 +1,6 @@
-import { ReactComponent as GlobeSVG } from './../globe.svg';
-import { ReactComponent as PlanningSVG } from './../planning.svg';
-import { ReactComponent as PlantSVG } from './../plant.svg';
+import { ReactComponent as GlobeSVG } from '@/assets/globe.svg';
+import { ReactComponent as PlanningSVG } from '@/assets/planning.svg';
+import { ReactComponent as PlantSVG } from '@/assets/plant.svg';
 
 interface Feature {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -31,19 +31,19 @@ const features: Feature[] = [
 
 const Features = () => {
   return (
-    <section className="body-font text-gray-600">
-      <div className="container mx-auto py-24">
+    <section>
+      <div className="py-24">
         <div className="mb-20 text-center">
-          <h1 className="title-font mb-4 text-2xl font-medium text-gray-900 sm:text-3xl">
-            BE <span className="text-primary-500">GOOD</span> TO YOUR
-            <span className="text-secondary-500"> PLANTS</span>
+          <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">
+            BE <span className="text-primary-500 dark:text-primary-500">GOOD</span> TO YOUR
+            <span className="text-secondary-500 dark:text-primary-500"> PLANTS</span>
           </h1>
-          <p className="text-gray-500s mx-auto text-base leading-relaxed lg:w-3/4 xl:w-2/4">
+          <p className="mx-auto w-[500px]">
             Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub
             indxgo juice poutine, ramps microdosing banh mi pug.
           </p>
           <div className="mt-6 flex justify-center">
-            <div className="inline-flex h-1 w-16 rounded-full bg-secondary-400"></div>
+            <div className="h-1 w-16 rounded-full bg-secondary-400"></div>
           </div>
         </div>
         <div className="-mx-4 -mb-10 -mt-4 flex flex-wrap space-y-6 sm:-m-4 md:space-y-0">

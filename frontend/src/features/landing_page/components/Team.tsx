@@ -3,9 +3,7 @@ const Team = () => {
     <section className="body-font text-gray-600">
       <div className="container mx-auto py-24">
         <div className="mb-20 flex w-full flex-col text-center">
-          <h1 className="title-font mb-4 text-2xl font-medium text-gray-900 sm:text-3xl">
-            Our Team
-          </h1>
+          <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">Our Team</h1>
           <p className="mx-auto text-base leading-relaxed lg:w-2/3">
             Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile
             poke farm-to-table. Franzen you probably havent heard of them.

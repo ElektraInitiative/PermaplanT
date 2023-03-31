@@ -3,9 +3,7 @@ const Testimonials = () => {
     <>
       <section className="body-font text-gray-600">
         <div className="container mx-auto py-12">
-          <h1 className="title-font mb-12 text-center text-3xl font-medium text-gray-900">
-            Testimonials
-          </h1>
+          <h1 className="title-font mb-12 text-center text-3xl font-medium">Testimonials</h1>
           <div className="-m-4 flex flex-wrap">
             <div className="w-full p-4 md:w-1/2">
               <div className="h-full rounded bg-gray-100 p-8 dark:bg-neutral-300-dark">
