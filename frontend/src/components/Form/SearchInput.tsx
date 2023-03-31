@@ -1,6 +1,7 @@
 interface SearchInputProps {
   placeholder: string;
   handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
 }
 
 const SearchInput = ({ placeholder, handleSearch }: SearchInputProps) => {
