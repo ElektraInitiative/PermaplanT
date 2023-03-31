@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** A users map gets a permaculure score depending on his usage of diversity and polyculture.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee** Thorben
 
 ## Scenarios
 
