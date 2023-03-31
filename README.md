@@ -35,7 +35,8 @@ To achieve these goals the app provides, e.g.:
 - algorithms for polyculture, considerations of natural constraints and automatic suggestions
 - Nextcloud integrations (calender entries, Deck tasks)
 - social network features (e.g. notification that someone entered your garden)
-- GIS: positions and distances relate to the real word, e.g. you can use GPS coordinates
+- positions and distances relate to the real word, e.g. you can use GPS coordinates
+- GIS import/export
 - privacy: no tracking, analytics, external JavaScript, fonts, etc.
 - differences of versions of the same garden
 
@@ -70,7 +71,6 @@ While editing any layer other layers might be displayed or hidden.
 
 Later features, i.e., out of scope for first version:
 
-- import/export
 - weather data (warnings on frost etc.)
 - hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
