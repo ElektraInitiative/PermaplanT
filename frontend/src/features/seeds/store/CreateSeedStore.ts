@@ -2,13 +2,13 @@ import { NewSeedDto } from '../../../bindings/definitions';
 import { createSeed } from '../api/createSeed';
 import { findAllPlants } from '../api/findAllPlants';
 import { searchPlants } from '../api/searchPlants';
-import { PlantsSearchDto } from '@/bindings/definitions';
+import { PlantsSummaryDto } from '@/bindings/definitions';
 import { create } from 'zustand';
 
 interface CreateSeedState {
   isUploadingSeed: boolean;
   isFetchingPlants: boolean;
-  plants: PlantsSearchDto[];
+  plants: PlantsSummaryDto[];
   error: Error | null | undefined;
   showErrorModal: boolean;
   setShowErrorModal: (showErrorModal: boolean) => void;

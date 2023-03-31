@@ -5,7 +5,7 @@ use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 
 use crate::{
     model::diesel_extensions::array_to_string,
-    model::dto::{PlantsSearchDto, QueryParameters},
+    model::dto::{PlantsSummaryDto, QueryParameters},
     schema::plants::{self, all_columns, binomial_name, common_name},
 };
 
@@ -16,7 +16,7 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<PlantsSearchDto>> {
+    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<PlantsSummaryDto>> {
         let query_result = plants::table.select(all_columns).load::<Self>(conn);
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
@@ -29,7 +29,7 @@ impl Plants {
     pub fn search(
         query: &QueryParameters,
         conn: &mut PgConnection,
-    ) -> QueryResult<Vec<PlantsSearchDto>> {
+    ) -> QueryResult<Vec<PlantsSummaryDto>> {
         let query_with_placeholders = format!("%{}%", query.search_term);
 
         let query = plants::table
@@ -50,7 +50,7 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn find_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<PlantsSearchDto> {
+    pub fn find_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<PlantsSummaryDto> {
         let query_result = plants::table.find(id).first::<Self>(conn);
         query_result.map(Into::into)
     }

@@ -1,6 +1,6 @@
 import { findPlantById } from '../api/findPlantById';
 import { findSeedById } from '../api/findSeedById';
-import { PlantsSearchDto, SeedDto } from '@/bindings/definitions';
+import { PlantsSummaryDto, SeedDto } from '@/bindings/definitions';
 import SimpleCard from '@/components/Card/SimpleCard';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
@@ -12,7 +12,7 @@ export function SeedDetails() {
   const { id } = useParams();
 
   const [seed, setSeed] = useState<SeedDto | null>(null);
-  const [plant, setPlant] = useState<PlantsSearchDto | null>(null);
+  const [plant, setPlant] = useState<PlantsSummaryDto | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [error, setError] = useState<Error>();
 
@@ -45,7 +45,9 @@ export function SeedDetails() {
               <SimpleCard title="Harvest Year" body={seed?.harvest_year.toString()} />
             )}
             {seed?.name && <SimpleCard title="Name" body={seed?.name.toString()} />}
-            {plant?.binomial_name && <SimpleCard title="Species / Variety" body={plant?.binomial_name} />}
+            {plant?.binomial_name && (
+              <SimpleCard title="Species / Variety" body={plant?.binomial_name} />
+            )}
             {seed?.quantity && <SimpleCard title="Quantity" body={seed?.quantity.toString()} />}
             {seed?.origin && <SimpleCard title="Origin" body={seed?.origin?.toString()} />}
             {seed?.use_by && <SimpleCard title="Best by" body={seed?.use_by?.toString()} />}

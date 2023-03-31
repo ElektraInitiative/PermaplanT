@@ -7,7 +7,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-/// Endpoint for fetching all [`PlantsSearchDto`](crate::model::dto::PlantsSearchDto).
+/// Endpoint for fetching all [`PlantsSummaryDto`](crate::model::dto::PlantsSummaryDto).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -15,7 +15,7 @@ use actix_web::{
 #[utoipa::path(
     context_path = "/api/plants",
     responses(
-        (status = 200, description = "Fetch all plants", body = Vec<PlantsSearchDto>)
+        (status = 200, description = "Fetch all plants", body = Vec<PlantsSummaryDto>)
     )
 )]
 #[get("")]
@@ -24,7 +24,7 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Endpoint for searching [`PlantsSearchDto`](crate::model::dto::PlantsSearchDto) by their common name or
+/// Endpoint for searching [`PlantsSummaryDto`](crate::model::dto::PlantsSummaryDto) by their common name or
 /// species name.
 /// Search parameters are taken from the URLs query string (e.g. .../api/plants/search?query=example&limit=5).
 ///
@@ -34,7 +34,7 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
 #[utoipa::path(
     context_path = "/api/plants/search",
     responses(
-        (status = 200, description = "Search for plants by their common or speices name", body = Vec<PlantsSearchDto>)
+        (status = 200, description = "Search for plants by their common or speices name", body = Vec<PlantsSummaryDto>)
     )
 )]
 #[get("/search")]
@@ -52,7 +52,7 @@ pub async fn search(query: web::Query<QueryParameters>, pool: Data<Pool>) -> Res
 #[utoipa::path(
     context_path = "/api/plants/{id}",
     responses(
-        (status = 200, description = "Fetch plant by id", body = PlantsSearchDto)
+        (status = 200, description = "Fetch plant by id", body = PlantsSummaryDto)
     )
 )]
 #[get("/{id}")]

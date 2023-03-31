@@ -1,10 +1,10 @@
-//! Contains the implementation of [`PlantsSearchDto`].
+//! Contains the implementation of [`PlantsSummaryDto`].
 
 use crate::model::entity::Plants;
 
-use super::PlantsSearchDto;
+use super::PlantsSummaryDto;
 
-impl From<Plants> for PlantsSearchDto {
+impl From<Plants> for PlantsSummaryDto {
     fn from(plants: Plants) -> Self {
         Self {
             id: plants.id,

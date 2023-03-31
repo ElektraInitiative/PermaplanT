@@ -7,7 +7,7 @@ use utoipa_swagger_ui::SwaggerUi;
 use crate::{
     controller::{plants, seed},
     model::{
-        dto::{NewSeedDto, PlantsSearchDto, SeedDto},
+        dto::{NewSeedDto, PlantsSummaryDto, SeedDto},
         r#enum::{quality::Quality, quantity::Quantity},
     },
 };
@@ -33,7 +33,7 @@ struct SeedApiDoc;
 #[openapi(paths(plants::find_all),
         components(
             schemas(
-                PlantsSearchDto
+                PlantsSummaryDto
             )
         ),
         tags(
