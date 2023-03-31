@@ -11,3 +11,5 @@ src/bindings/*
 *.njsproj
 *.sln
 *.sw?
+
+.env

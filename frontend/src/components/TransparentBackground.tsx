@@ -10,7 +10,7 @@ const TransparentBackground = ({ onClick, show }: TransparentBackgroundProps) =>
     <>
       <div
         onClick={onClick}
-        className={`fixed right-0 bottom-0 z-0 ${show ? '' : 'pointer-events-none'}`}
+        className={`fixed right-0 bottom-0 z-[1010] ${show ? '' : 'pointer-events-none'}`}
       >
         <AnimatePresence>
           {show && (

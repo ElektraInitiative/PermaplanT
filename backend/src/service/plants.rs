@@ -28,5 +28,17 @@ pub fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSearchDto>, ServiceError>
 pub fn search(pool: &Data<Pool>, query: &QueryParameters) -> Result<Vec<PlantsSearchDto>, ServiceError> {
     let mut conn = pool.get()?;
     let result = Plants::search(query, &mut conn)?;
+
+    Ok(result)
+}
+
+/// Find the plant by id from the database.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<PlantsSearchDto, ServiceError> {
+    let mut conn = pool.get()?;
+    let result = Plants::find_by_id(id, &mut conn)?;
+
     Ok(result)
 }

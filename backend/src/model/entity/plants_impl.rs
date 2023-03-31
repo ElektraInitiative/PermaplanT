@@ -40,9 +40,18 @@ impl Plants {
                     .sql(" OR UPPER(ARRAY_TO_STRING(common_name, ', ')) LIKE ")
                     .bind::<Text, _>(&query_with_placeholders),
             )
-            .limit(query.limit)
+            .limit(query.limit.into())
             .load::<Self>(conn);
 
         query_result.map(|v| v.into_iter().map(Into::into).collect())
+    }
+    
+    /// Fetch plant by id from the database.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub fn find_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<PlantsSearchDto> {
+        let query_result = plants::table.find(id).first::<Self>(conn);
+        query_result.map(Into::into)
     }
 }

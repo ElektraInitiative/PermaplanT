@@ -5,6 +5,7 @@ import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 
 interface CreateSeedFormProps {
   plants: SelectOption[];
@@ -70,7 +71,7 @@ const CreateSeedForm = ({
                 const mapped = temp.value as number;
                 setValue('plant_id', mapped);
               }
-            }}
+           }}
             onInputChange={onVarietyInputChange}
             onChange={onChange}
           />
@@ -166,21 +167,19 @@ const CreateSeedForm = ({
           />
         </div>
         <div className="flex flex-row justify-between space-x-4">
-          <button
+          <SimpleButton
             type="button"
             onClick={onCancel}
-            className="max-w-[240px] grow rounded-lg border border-zinc-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-zinc-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
+            className='max-w-[240px] grow sm:w-auto'
+            variant={ButtonVariant.secondary}
           >
             Cancel
-          </button>
-          <button
-            type="submit"
-            className="max-w-[240px] grow rounded-lg bg-gray-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
-          >
+          </SimpleButton>
+          <SimpleButton title="Create Seed" type="submit" className='max-w-[240px] grow sm:w-auto'>
             Create Seed
             {useCreateSeedStore((state) => state.isUploadingSeed) && (
               <svg
-                className="ml-4 inline-block h-5 w-5 animate-spin text-white"
+                className="ml-4 inline-block h-5 w-5 animate-spin"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -200,7 +199,7 @@ const CreateSeedForm = ({
                 ></path>
               </svg>
             )}
-          </button>
+          </SimpleButton>
         </div>
       </form>
     </div>

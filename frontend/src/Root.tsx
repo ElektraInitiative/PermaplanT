@@ -1,7 +1,5 @@
 import './styles/globals.css';
-
 import { ComponentType, StrictMode } from 'react';
-
 import { createRoot } from 'react-dom/client';
 
 const container = document.getElementById('root') as HTMLElement;
