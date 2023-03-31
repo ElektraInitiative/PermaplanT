@@ -22,7 +22,6 @@ pub enum SoilPh {
     #[db_rename = "neutral"]
     Neutral,
 
-
     #[serde(rename = "alkaline")]
     #[db_rename = "alkaline"]
     Alkaline,

@@ -11,21 +11,11 @@ use diesel::{Identifiable, Insertable, Queryable};
 use crate::schema::{plants, seeds};
 
 use super::r#enum::{
-    quality::Quality,
-    quantity::Quantity,
-    sun::Sun,
-    soil_ph::SoilPh,
-    soil_texture::SoilTexture,
-    soil_water_retention::SoilWaterRetention,
-    root_zone_tendancy::RootZoneTendancy,
-    deciduous_or_evergreen::DeciduousOrEvergreen,
-    herbaceous_or_woody::HerbaceousOrWoody,
-    life_cycle::LifeCycle,
-    growth_rate::GrowthRate,
-    fertility::Fertility,
-    flower_type::FlowerType,
-    nutrition_demand::NutritionDemand,
-    water::Water,
+    deciduous_or_evergreen::DeciduousOrEvergreen, fertility::Fertility, flower_type::FlowerType,
+    growth_rate::GrowthRate, herbaceous_or_woody::HerbaceousOrWoody, life_cycle::LifeCycle,
+    nutrition_demand::NutritionDemand, quality::Quality, quantity::Quantity,
+    root_zone_tendancy::RootZoneTendancy, soil_ph::SoilPh, soil_texture::SoilTexture,
+    soil_water_retention::SoilWaterRetention, sun::Sun, water::Water,
 };
 
 /// The `Plants` entity.

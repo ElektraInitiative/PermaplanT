@@ -47,7 +47,7 @@ impl Plants {
         let query_result = query.load::<Self>(conn);
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
-    
+
     /// Fetch plant by id from the database.
     ///
     /// # Errors
