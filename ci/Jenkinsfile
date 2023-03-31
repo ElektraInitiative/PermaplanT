@@ -33,7 +33,7 @@ stage('Checks') {
                     checkout scm
 
                     withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-                        // Workardoung: we can't stop rustfmt from linting the generated schema.rs
+                        // Workaround: we can't stop rustfmt from linting the generated schema.rs
                         dir("backend") {
                             sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
                             sh "cargo fmt --check"
