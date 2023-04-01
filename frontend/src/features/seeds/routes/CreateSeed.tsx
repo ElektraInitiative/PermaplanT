@@ -5,27 +5,10 @@ import { NewSeedDto } from '@/bindings/definitions';
 import { SelectOption } from '@/components/Form/SelectMenu';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
+import useDebouncedValue from '@/hooks/useDebouncedValue';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-function useDebounce<T>(searchFunction: (searchParam: T) => void, delay: number) {
-  const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
-
-  const debouncedSearch = (searchParam: T) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-
-    const timeout = setTimeout(() => {
-      searchFunction(searchParam);
-    }, delay);
-
-    setTimeoutId(timeout);
-  };
-
-  return [debouncedSearch];
-}
 
 function formatCommonName(commonName: string[] | undefined) {
   if (commonName == null) return '';
@@ -43,7 +26,9 @@ export function CreateSeed() {
   const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
   const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
   const error = useCreateSeedStore((state) => state.error);
-  const [debouncedSearchPlants] = useDebounce(searchPlants, 350);
+
+  const [plantSearchParam, setPlantSearchParam] = useState('');
+  const debouncedPlantSearchParam = useDebouncedValue(plantSearchParam, 250);
 
   const onCancel = () => {
     // There is no need to show the cancel warning modal if the user
@@ -59,11 +44,12 @@ export function CreateSeed() {
   useEffect(() => {
     // This is a small workaround so it's possible to use async/await in useEffect
     const _searchPlants = async () => {
-      await searchPlants('');
+      await searchPlants(debouncedPlantSearchParam);
     };
 
     _searchPlants();
-  }, []);
+  }, [debouncedPlantSearchParam]);
+
   usePreventNavigation(formTouched);
 
   const onSubmit = async (newSeed: NewSeedDto) => {
@@ -81,7 +67,7 @@ export function CreateSeed() {
   };
 
   const onVarietyInputChange = (inputValue: string) => {
-    debouncedSearchPlants(inputValue);
+    setPlantSearchParam(inputValue);
   };
 
   const plants: SelectOption[] = useCreateSeedStore((state) =>
@@ -92,7 +78,7 @@ export function CreateSeed() {
   );
 
   return (
-   <PageLayout>
+    <PageLayout>
       <PageTitle title="Neuer Eintrag" />
       <CreateSeedForm
         plants={plants}
