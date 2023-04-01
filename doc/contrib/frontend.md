@@ -11,7 +11,7 @@ chmod ug+x .husky/*
 
 ## Project Structure
 
-The majority of the code resides in `src.
+The majority of the code resides in `src`.
 
 ```
 src
@@ -68,10 +68,24 @@ import {MyComponent} from "@/features/my-feature"
 Avoid importing elements directly from subdirectories within a feature, like this:
 
 ``` typescript
-import {MyComponent} from "@/features/my-feature/components/MyComponent
+import {MyComponent} from "@/features/my-feature/components/MyComponent"
 ```
 
 Think of a feature as a library or a module that is self-contained but can expose different parts to other features via its entry point.
+
+## Component Design
+
+Purely presentational components should be side effect free.
+That means they should not make any network requests or communicate with external systems.
+
+Take of example a button component that is used as the login button.
+
+- It should not make the login request itself.
+It should rather have an `onClick` prop that is passed to it.
+- Neither should the login button make a request to see if the user is already logged in.
+It should be hidden by one of it's ancestor components.
+
+That has the added benefit, that presentational components can be easily integrated into Storybook.
 
 ## Helpful Links
 
@@ -84,3 +98,5 @@ Zustand (Global State Management):
 
 - [Tutorial](https://blog.logrocket.com/managing-react-state-zustand/)
 - [The Zustand documentation](https://github.com/pmndrs/zustand)
+
+

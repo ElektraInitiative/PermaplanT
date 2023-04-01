@@ -15,10 +15,8 @@ Without proper documentation maintenance becomes increasingly more difficult as 
 ## Assumptions
 
 1. With a good and beautiful documentation tool, developers are more likely to use and maintain it.
-2. With a documentation tool that enables the viewing of react components, the code quality is improved. 
-Presentation components, should not contain logic with side effects.
-Hooks should be used outside of presentation components, with props passed into them.
-If those rules are not followed, it will be hard to display the components inside the documentation.
+2. With a documentation tool that enables the viewing of react components, the code quality is improved.
+If the rules about component design in [contrib/frontend](../contrib/frontend.md#component-design) are not followed, it will be hard to display the components inside the documentation.
 3. With an overview of all presentation components, the whole team can instantly see what is available.
 
 ## Considered Alternatives (documentation extraction)
