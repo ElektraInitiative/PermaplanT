@@ -44,6 +44,10 @@ We will use [TypeDoc](https://typedoc.org/) with the markdown plugin to extract 
 Is a popular and maintained solution to develop a project-wide style guide in React.
 It has fewer features than Storybook.
 It is hard to setup, as it assumes the usage of Create React App.
+- Docusaurus: [Docusaurus](https://docusaurus.io/)
+Is a popular solution for generating static documentation websites.
+It is more targeted towards manually written documentation and has less features specifically targeting how a component should be used.
+
 
 ## Decision
 We will use [Storybook](https://storybook.js.org/) to enable a project wide component overview and style-guide.
