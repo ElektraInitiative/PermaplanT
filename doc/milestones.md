@@ -1,51 +1,51 @@
 ## April
 
-KW 14: methods written
+KW14: methods written
        M1 released (landing page+seeds use case)
        implementation M2 mostly done (eastern)
 
-KW 15: Glossary&Goals written
+KW15: Glossary&Goals written
        Decisions implemented
        Docu mdBook+storybook stabilized
        M2 implementation done
 
-KW 16: Hypothesis written
+KW16: Hypothesis written
        M2 bug fixes
 
-KW 17: related work written
+KW17: related work written
        M2 release
 
 ## May
 
-KW 18:
+KW18:
 
-KW 19:
+KW19:
 
-KW 20: abstract&conclusion
+KW20: abstract&conclusion
        RQs answered
 
-KW 21:
+KW21:
 
 ## Juni
 
-KW 22:
+KW22:
 
-KW 23: submission of complete thesis
+KW23: submission of complete thesis
        all tasks done (only fixing of unknown bugs remains)
 
-KW 24:
+KW24:
 
-KW 25:
+KW25:
 
-KW 26: (end of term)
+KW26: (end of term)
 
 
 
 ## March (past)
 
-KW 12: RQs (DONE)
+KW12: RQs (DONE)
 
-KW 13: Methods
+KW13: Methods
        Read Decisions
        M1 mostly done
 
