@@ -18,7 +18,7 @@ const insertMap = async () => {
 
     const jsonArray = await csv().fromFile('map.csv');
 
-    const cs = new pgp.helpers.ColumnSet([{ name: 'id', name: 'detail' }], {
+    const cs = new pgp.helpers.ColumnSet([{ name: 'id' }, { name: 'detail' }], {
         table: 'map',
     });
 

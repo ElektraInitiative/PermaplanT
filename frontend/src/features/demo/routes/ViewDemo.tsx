@@ -3,7 +3,7 @@ import useFindMapsStore from '../store/FindMapsStore';
 import { CanvasState } from '@/types';
 import Konva from 'konva';
 import { useEffect, useRef, useState } from 'react';
-import { Stage, Layer, Rect, Text, Circle, Star } from 'react-konva';
+import { Stage, Layer, Rect, Text, Circle, Star, RegularPolygon } from 'react-konva';
 import { NavLink, useParams } from 'react-router-dom';
 
 const defaultCanvasState: CanvasState = {
@@ -300,6 +300,10 @@ export const ViewDemo = () => {
             return <Circle key={object_index} draggable onDragEnd={handleDragEnd} {...object} />;
           case 'star':
             return <Star key={object_index} draggable onDragEnd={handleDragEnd} {...object} />;
+          case 'regularPolygon':
+            return (
+              <RegularPolygon key={object_index} draggable onDragEnd={handleDragEnd} {...object} />
+            );
           default:
             return;
         }

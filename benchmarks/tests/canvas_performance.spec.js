@@ -33,7 +33,6 @@ const audit = async (testname, url, result_arr) => {
         testname: testname,
         firstContentfulPaint: result.lhr.audits.metrics.details.items[0].firstContentfulPaint,
         interactive: result.lhr.audits.metrics.details.items[0].interactive,
-        performance: result.lhr.categories.performance.score,
     });
 
     console.log(`Lighthouse report saved to ${reportFilename}`);
@@ -111,11 +110,21 @@ test.describe('Canvas performance audit of different shapes', () => {
 
     test('100 circles', async () => {
         const testname = '100 circles';
-        await audit(testname, 'http://localhost:5173/demo/5', results_shapes);
+        await audit(testname, 'http://localhost:5173/demo/4', results_shapes);
     });
 
     test('100 stars', async () => {
         const testname = '100 stars';
         await audit(testname, 'http://localhost:5173/demo/8', results_shapes);
+    });
+
+    test('100 rectangles', async () => {
+        const testname = '100 rectangles';
+        await audit(testname, 'http://localhost:5173/demo/9', results_shapes);
+    });
+
+    test('100 polygons', async () => {
+        const testname = '100 polygons';
+        await audit(testname, 'http://localhost:5173/demo/10', results_shapes);
     });
 });
