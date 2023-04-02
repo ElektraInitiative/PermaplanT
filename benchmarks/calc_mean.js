@@ -51,7 +51,7 @@ const calculateMean = async (fileName, files, output) => {
 
                     // Write the output to a new CSV file
                     const outputPath = path.join(reportFolderPath, fileName);
-                    const outputCsv = ['testname,testrun,firstContentfulPaint,interactive']
+                    const outputCsv = ['testname,firstContentfulPaint,interactive']
                         .concat(averageOutput.map((row) => Object.values(row).join(',')))
                         .join('\n');
                     fs.writeFileSync(outputPath, outputCsv);
