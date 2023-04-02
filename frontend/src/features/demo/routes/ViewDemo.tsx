@@ -200,6 +200,22 @@ export const ViewDemo = () => {
     });
   };
 
+  const incrementState = () => {
+    Array(1000)
+      .fill(null)
+      .forEach((_) => {
+        setState((state) => {
+          const updatedCanvasState = {
+            ...state.history[state.historyStep],
+          };
+          return {
+            history: [...state.history, updatedCanvasState],
+            historyStep: state.historyStep + 1,
+          };
+        });
+      });
+  };
+
   const hideLayer = (index: number) => {
     setState((state) => {
       return {
@@ -421,12 +437,19 @@ export const ViewDemo = () => {
         >
           reset zoom
         </button>
+        <button
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={incrementState}
+        >
+          increment state
+        </button>
       </div>
       <div className="flex">
         <div className="w-10/12" ref={stageRef}>
           {buildStage()}
         </div>
         <div className="w-2/12">
+          <p> State size:{state.history.length} </p>
           <LayerList
             layers={state.history[state.historyStep].stage.layers}
             onHideLayer={hideLayer}
