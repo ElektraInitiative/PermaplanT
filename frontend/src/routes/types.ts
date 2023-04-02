@@ -7,6 +7,7 @@ enum Pages {
   ViewSeeds,
   SeedDetails,
   LandingPage,
+  DrawingPage,
 }
 
 type PathRouteCustomProps = {
@@ -16,5 +17,5 @@ type PathRouteCustomProps = {
 
 type Routes = Record<Pages, PathRouteProps & PathRouteCustomProps>;
 
-export type { Routes };
 export { Pages };
+export type { Routes };

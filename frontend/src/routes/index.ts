@@ -1,5 +1,6 @@
 import { Pages, Routes } from './types';
 import { ImprintPage } from '@/features/imprint_page';
+import { DrawingPage } from '@/features/map_planning';
 import { LandingPage } from '@/features/landing_page';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 
@@ -28,6 +29,11 @@ const routes: Routes = {
     component: LandingPage,
     path: '/',
     title: 'PermaplanT',
+  },
+  [Pages.DrawingPage]: {
+    component: DrawingPage,
+    path: '/drawing-page',
+    title: 'Drawing Page',
   },
 };
 
