@@ -33,7 +33,7 @@ const Navbar = () => {
         </div>
         <div className="flex md:order-2">
           <div className="flex items-center space-x-4">
-            <a href="https://github.com/ElektraInitiative/PermaPlant">GitHub</a>
+            <a href="https://github.com/ElektraInitiative/PermaplanT">GitHub</a>
             <DarkModeSwitcher />
           </div>
           <button
