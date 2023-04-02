@@ -16,7 +16,7 @@ npm install
 2. Populate the database with example maps
 
 In order to benchmark the performance of the canvas, we need to populate the database with example maps.
-There are maps of different sizes and complexity, which are stored in a single CSV file called `maps.csv` in the `/benchmarks` folder.
+There are maps of different sizes and complexity, which are stored in a single CSV file called `map.csv` in the `/benchmarks` folder.
 The maps are stored in a CSV file because they are huge and it is easier to store them in a CSV file than in a database migrations,
 To populate the database with the maps, run the following command:
 
