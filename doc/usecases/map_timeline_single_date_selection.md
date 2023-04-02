@@ -14,7 +14,7 @@
   The user has opened the app and selected a map.
 - **Main success scenario:**
   The user selects the timeline view and uses the scroll bar with a month granularity or date field.
-  This allows navigation to a different points in the past, present and future.
+  This allows navigation to a different point in the past, present and future.
   The map updates to show the state of the garden at the selected point in time (removing or adding elements accordingly).
   The date is used as a reference to when an element (plant/construction) got added to/removed from the map.
   The scroll bar visually indicates in which months there are changes and at which months the map is empty (without plants).
