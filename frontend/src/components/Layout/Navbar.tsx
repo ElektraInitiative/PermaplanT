@@ -1,6 +1,10 @@
 import ButtonLink from '../Button/ButtonLink';
 import { DarkModeSwitcher } from '@/features/landing_page/components/DarkModeSwitcher';
 
+/**
+ * The navigation component that is fixed on the top.
+ *
+ */
 const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 z-50 w-full border-b-[0.5px] border-gray-200 bg-white dark:border-gray-700 dark:bg-neutral-100-dark">
@@ -9,7 +13,7 @@ const Navbar = () => {
           <div className="flex space-x-6">
             <a href="/" className="flex items-center">
               <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
-                PermaPlanT
+                PermaplanT
               </span>
             </a>
           </div>
