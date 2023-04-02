@@ -18,10 +18,11 @@
   - The user comments on the relationship to note something that seems relevant to her.
   - The user approves the relationship because she agrees with it.
 - **Alternative scenario:**
-  - The user only comments on the relationship but doesn't approve it.  
-    No changes are made to the relationships confidence score.
+  - The user only comments on the relationship but doesn't approve it and might suggest a different relationship (e.g. neutral). 
+  - No changes are made to the relationships confidence score.
+  - One administrator decides on the outcome.
 - **Error scenario:**
 - **Postcondition:**
-  - The confidence score of the relationship is higher due to the approval.  
+  - The number of approvals are counted for the administrator to decide.
     Relationships with higher confidence score will have a higher weight when [suggesting plants](suggest_plants.md) or [suggesting alternatives](suggest_alternatives.md).
 - **Non-functional Constraints:**
