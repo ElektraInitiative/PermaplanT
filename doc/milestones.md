@@ -40,6 +40,11 @@ KW25:
 KW26: (end of term)
 
 
+## Every Month
+
+-   Update doc/authors.md to reflect what you are working on
+
+
 
 ## March (past)
 
