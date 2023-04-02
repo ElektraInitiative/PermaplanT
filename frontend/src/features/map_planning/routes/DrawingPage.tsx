@@ -103,6 +103,7 @@ export const DrawingPage = () => {
     );
 
     if (intersectingShapes) {
+      console.log('adding');
       const nodes = intersectingShapes.filter((shape) => shape !== undefined);
       trRef.current?.nodes(nodes as Shape<ShapeConfig>[]);
     }
@@ -173,7 +174,7 @@ export const DrawingPage = () => {
       height: Math.abs(y2 - y1),
     });
 
-    findAndMarkSelected();
+    //findAndMarkSelected();
   };
 
   const onMouseDown = (e: KonvaEventObject<MouseEvent>) => {
@@ -221,6 +222,8 @@ export const DrawingPage = () => {
         isVisible: false,
       });
     }
+
+    findAndMarkSelected();
   };
 
   const onClick = (e: KonvaEventObject<MouseEvent>) => {
