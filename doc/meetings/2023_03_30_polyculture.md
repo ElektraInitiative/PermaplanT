@@ -60,8 +60,8 @@ _Protocolled by: Benjamin_
 - We could also take relationship data from multiple sources and grade by this.
   How many databases say the same.
   Are there any contradictions?
--  Pavlo's concern is that a computer program would be more objective and efficient in the long term.
-  Markus's concern is that scraping would be a big effort with little long-term benefits (scraping would need to be redone in future). 
+- Pavlo's concern is that a computer program would be more objective and efficient in the long term.
+  Markus's concern is that scraping would be a big effort with little long-term benefits (scraping would need to be redone in future).
   Therefore we concluded the work will be done manually by Uliana.
   To keep the work at an acceptable level, we only include common vegetables on higher taxonomical ranks.
   As far as we know, this is novel, as other databases don't define relationships on higher taxonomical ranks.
@@ -79,7 +79,9 @@ _Protocolled by: Benjamin_
    - [Kaggle](https://www.kaggle.com/datasets/aramacus/companion-plants) uses [Wikipedia](https://en.wikipedia.org/wiki/List_of_companion_plants)
 
    Then a collection of relationships in the following format is created.  
-   You can find the document [here](https://docs.google.com/spreadsheets/d/1jtsng8H4SkwK2gxK_qF1XkC0ygpjXZgMUKKj1x3TA9M/).
+   You can find the document [here](https://docs.google.com/spreadsheets/d/1jtsng8H4SkwK2gxK_qF1XkC0ygpjXZgMUKKj1x3TA9M/).  
+   The left and right side of a relationship are plants where the order doesn't make a difference.  
+   E.g. the relationship `A companion B` is identical to `B companion A` so only one of them should be added.
 
    - Left side
      - Common name
