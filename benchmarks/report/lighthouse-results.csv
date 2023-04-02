@@ -1,0 +1,8 @@
+testname,testrun,firstContentfulPaint,interactive
+empty canvas,4971.2,6184.8
+3 elements,4968.6,6232.8
+3 circles of same shape,4966.2,6266.8
+100 circles,4966.6,6175.6
+1000 circles,4690,7634.6
+10000 circles with 1 layer,4963,26389.2
+10000 circles with 10 layer,4958.4,26790.6
