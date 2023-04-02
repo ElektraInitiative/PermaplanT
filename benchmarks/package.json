@@ -9,7 +9,7 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
+    "license": "BSD",
     "devDependencies": {
         "@playwright/test": "^1.32.0",
         "csv-parser": "^3.0.0",
