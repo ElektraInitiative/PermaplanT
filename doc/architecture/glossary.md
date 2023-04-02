@@ -19,8 +19,8 @@
 -   polyculture (aka companion planting, German: Mischkultur):
     Mutually beneficial way of growing plants together.
 -   relationship:
-    Two plants are in a relationship if they either enhance (companion) 
-    or diminish each others health and growth.
+    Two plants are in a non-neutral relationship if they either enhance (companion) 
+    or diminish (antagonist) each others health and growth.
 -   companion (to plant according polyculture):
     Plants that should be planted together.
 -   antagonist (to plant according polyculture):

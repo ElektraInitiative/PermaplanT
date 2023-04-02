@@ -17,11 +17,11 @@
   - Details about the relationship are provided by the user.
      - The two sides of the relationship can be
        - Specific plants
-       - Any higher taxonomic rank
+       - Taxonomic ranks which are not specific plants
      - The type of the relationship can be
        - Companion
        - Antagonist
-       - Neutral (needed to indicate certainty about neither companion nor antagonist)
+       - Neutral
      - Confidence
      - A description providing information on the why's and how's.
 - **Alternative scenario:**
