@@ -7,3 +7,6 @@ node_modules/
 
 *-results.csv
 *-results-shapes.csv
+
+!lighthouse-results.csv
+!lighthouse-results-shapes.csv
