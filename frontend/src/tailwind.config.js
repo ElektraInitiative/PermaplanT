@@ -52,12 +52,13 @@ const gray = {
 }
 
 /*
-* Example color roles for light/dark mode:
-*
-* 500/100: main color (e.g. buttons)
-* 50/800: on main color (e.g. text on buttons)
-* 100/500: supporting main color
-* 800/50: on supporting main color
+* Definitions for accent colors used by frontend themes.
+* Each color comes in 10 shades that can be addressed by their respective number.
+* Recommended shade usage:
+*   - base color: 500 (light), 300 (dark)
+*   - on base: 50 (light), 700 (dark)
+*   - alternative: 200 (light), 600 (dark)
+*   - on alternative: 800/900 (light), 200 (dark)
 */
 const accentColors = {
   asparagus: {
