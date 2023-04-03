@@ -20,10 +20,10 @@
   - Elements on the map that do not exist over the whole range of dates, appear grey.
   - Elements on the map can be edited/moved, but not be added/deleted.
 - **Alternative scenario:**
-  The user tries to select a date that is outside the range of the timeline. 
+  The user tries to select a date that is outside the range of the timeline.
   In this case, the app displays an error message indicating that the requested date is not available.
 - **Error scenario:**
-  There is an error in the timeline display or navigation functionality. 
+  There is an error in the timeline display or navigation functionality.
   In this case, the app displays an error message and allows the user to try again.
 - **Postcondition:**
   The user successfully sees the map containing the elements in the desired range of dates.
