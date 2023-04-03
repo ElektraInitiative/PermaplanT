@@ -51,7 +51,7 @@ pub struct NewSeedDto {
     pub notes: Option<String>,
 }
 
-/// The essential identifying information of a plant. 
+/// The essential identifying information of a plant.
 #[typeshare]
 #[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
 pub struct PlantsSummaryDto {
