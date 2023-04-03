@@ -3,7 +3,7 @@ import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
 import { Transformer } from 'konva/lib/shapes/Transformer';
 
-/** Selects shapes that intersect with the selection rectangle */
+/** Select shapes that intersect with the selection rect. */
 export const selectIntersectingShapes = (
   stageRef: React.RefObject<Stage>,
   trRef: React.RefObject<Transformer>,
@@ -34,6 +34,7 @@ export const unselectShapes = (trRef: React.RefObject<Transformer>) => {
   trRef.current?.nodes([]);
 };
 
+/** Starts the selection and positions the selection rect to the current mouse position. */
 export const startSelection = (
   stage: Stage,
   setSelectionRectAttrs: React.Dispatch<
@@ -80,6 +81,7 @@ export const startSelection = (
   }
 };
 
+/** Update the selection box's size based on mouse position. */
 export const updateSelection = (
   stage: Stage,
   setSelectionRectAttrs: React.Dispatch<
@@ -116,6 +118,8 @@ export const updateSelection = (
   const pointerVector = stage.getPointerPosition();
   if (pointerVector == null) return;
 
+  // We need to adjust the selection box based on the stage's position.
+  // The position might change due to dragging the stage.
   const pointerX = pointerVector.x + stage.getPosition().x * -1;
   const pointerY = pointerVector.y + stage.getPosition().y * -1;
 
@@ -143,6 +147,7 @@ export const updateSelection = (
   }
 };
 
+/** Ends the selection which means the selection rect turns invisible. */
 export const endSelection = (
   setSelectionRectAttrs: React.Dispatch<
     React.SetStateAction<{
