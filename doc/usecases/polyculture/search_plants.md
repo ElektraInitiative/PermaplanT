@@ -13,7 +13,7 @@
 
 - **Precondition:**
   - The user is logged in to the app.
-  - The plants layer is selected.
+  - The plants layer or seed entry dialog is shown.
 - **Main success scenario:**
   - The user types something into the search text box.  
     This will search for partial matches of:
@@ -22,8 +22,7 @@
     - German and English common names
     - German and English synonyms
     - Furthermore, other columns can be matched with extra syntax
-  - The results can be sorted by the following criteria:
-    - Companions of existing plants (default)
+  - The results are ranked by:
     - Environmental fit
     - Ecological value
 - **Alternative scenario:**
