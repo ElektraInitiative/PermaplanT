@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can view the map at different points in time by using the timeline feature.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee:** Moritz
 
 ## Scenarios
 
@@ -28,4 +29,4 @@
 - **Postcondition:**
   The user has successfully navigated to the desired date on the timeline.
 - **Non-functional Constraints:**
-  - Offline availability
+    -   Performance: data in up to 100 years should be fast to use

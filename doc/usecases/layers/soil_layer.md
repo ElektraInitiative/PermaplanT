@@ -34,3 +34,4 @@
   - The app must clearly communicate to the user the constraints for editing pH values in the soil layer.
 - **Notes:**
   - pH values have one significant digit, not more (e.g. 4.5, 6.7, 8.4)
+  - Performance: Map sizes with more than 1ha in 100 raster elements (in 1a=100m²) per year with 4 values per raster element should be usable without noticeable delays and acceptable memory overhead

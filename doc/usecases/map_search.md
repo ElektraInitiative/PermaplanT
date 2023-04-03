@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can search for maps within the app using keywords, including the ability to search for public maps created by other users.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee:** Moritz, Paul
 
 ## Scenarios
 

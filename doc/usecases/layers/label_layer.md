@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user adds labels to their map to identify different elements or areas
-- **Status:** Draft
+- **Status:** Ready to be Assigned
 
 ## Scenarios
 
@@ -23,3 +23,5 @@
   The user's map includes labels as desired.
 - **Non-functional Constraints:**
   - Offline availability
+  - New Layers can be created.
+  - Performance: more than 1000 elements per year and per layer should be usable without noticeable delays and acceptable memory overhead
