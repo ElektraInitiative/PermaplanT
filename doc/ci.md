@@ -32,7 +32,7 @@ Each and every pull request will be built and tested against a separate CI datab
 
 Steps for all PRs are:
 
-- prepare an empty PostgreSQL database
+- prepare an empty PostgreSQL database with the PostGIS extension installed
 - call `./ci/build-scripts/build-backend.sh`, which builds the rust binary as well as the bindings' definition via `typeshare`
 - call `./ci/build-scripts/build-frontend.sh`, which does a full release build of the frontend
 
