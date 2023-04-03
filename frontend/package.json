@@ -7,7 +7,6 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "https-preview": "serve dist",
-    "prepare": "cd .. && husky install frontend/.husky",
     "generate-api-types": "cd ../backend && typeshare ./ --lang=typescript --output-file=../frontend/src/bindings/definitions.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
