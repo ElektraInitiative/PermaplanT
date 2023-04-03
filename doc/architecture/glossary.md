@@ -12,16 +12,16 @@
     A version (of a map) is a named snapshot of a map at a certain point in time while working on that map.
     It is possible to switch to a different version of a layer.
     It is similar to the undo-redo feature with the difference that the snapshots:
-    - are persistent
-    - have a name and
-    - any specific snapshot can be selected.
+    -   are persistent
+    -   have a name and
+    -   any specific snapshot can be selected.
 -   offline:
     Means the ability to use a feature without Internet connection, i.e., without calling REST APIs.
 -   canvas:
     The main and middle part of the screen which provides the planning/drawing functionality.
 -   elements (of a map in a layer):
     Can be drawn or added to the map via drag and drop.
-    They have *attributes*.
+    They have _attributes_.
 
 ## Biology
 
@@ -32,11 +32,11 @@
 -   Rank:
     Rank is a level within taxonomy.
     There are:
-    - Variety (optional)
-    - Species or Hybrid
-    - Genus
-    - Subfamily (optional)
-    - Family
+    -   Variety (optional)
+    -   Species or Hybrid
+    -   Genus
+    -   Subfamily (optional)
+    -   Family
 -   Variety:
     Has the main characteristics of its species but differs in minor heritable characteristics.
 -   Hybrid:
@@ -60,19 +60,19 @@
 -   Zone (in permaculture, German: Permakultur Zonen):
     Is an area which has the same frequency of human visitors.
     The areas are numbered from:
-    - 00 (represented numerically as -1)
-    - 0: physical body of permaculturist
-    - 1: extremely frequently visited
-    - 2: frequently visited
-    - 3: less frequently visited
-    - 4: rarely visited
-    - 5: usually not visited
-    - 6: never visited/protection zone
+    -   00 (represented numerically as -1)
+    -   0: physical body of permaculturist
+    -   1: extremely frequently visited
+    -   2: frequently visited
+    -   3: less frequently visited
+    -   4: rarely visited
+    -   5: usually not visited
+    -   6: never visited/protection zone
 
 ## Layers
 
 -   enable (a layer):
-    Changes the canvas in a way that *elements* in the enabled layer are the ones to be edited, selected and added.
+    Changes the canvas in a way that _elements_ in the enabled layer are the ones to be edited, selected and added.
     When working together on a map, every user can enable the layer of their choice.
 -   visibility and opacity (of a layer):
     The elements in a layer are (not) shown or with a user-selected transparency.
