@@ -45,11 +45,12 @@ Therefore, keeping the state as structured as possible and avoiding storing larg
 
 ## Implications
 
-N/A
+-   Undo/redo functionality
+    -   Once the data is offloaded and permanently removed from the frontend state, it can't be retrieved to utilize the undo/redo functionality anymore. So for the undo/redo functionality, it will be the same as the fresh start of the application.
 
 ## Related Decisions
 
-N/A
+-   [Map undo redo implementation](/doc/decisions/map_undo_redo_implementation.md)
 
 ## Notes
 

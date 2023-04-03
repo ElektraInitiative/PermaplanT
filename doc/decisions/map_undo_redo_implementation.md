@@ -8,6 +8,7 @@ The user should be able to undo/redo the actions taken within the canvas.
 ## Constraints
 
 1. The implementation of undo/redo should not have a significant impact on the performance of the app.
+2. The implementation of undo/redo should correspond to the related [use case](/doc/usecases/map_undo_redo.md)
 
 ## Assumptions
 
@@ -30,15 +31,18 @@ If the user places 10 shapes on each layer and modifies the properties of each s
 If we store the entire state of the canvas for every action taken by the user, we have 10,830 actions stored in the database for each user.
 If we have 1000 users, we have 10,830,000 actions stored in the database for a single day. This number will grow drastically over time.
 
+Alternatively, storing only the final state of the canvas in the database would result in a much smaller number of entries. Since there is only one entry per map, we would have a maximum of 1000 entries for a single day or even for a longer period of time.
+
 ## Decision
 
-Implement undo/redo functionality on the frontend side by storing intermediate states of the canvas in the frontend.
-Only the final state of the canvas should be stored in the database.
+The decision is to implement undo/redo functionality by storing intermediate states of the canvas on the frontend and only storing the final state in the database.
 
-To keep the backend state in sync with the frontend state, the current state of the map should be periodically synced to the backend, according to some custom rule, such as every X seconds or when the user is inactive.
-This approach allows the user to work locally in the canvas, minimizing performance issues related to storing and retrieving data from the database.
+To keep the backend state in sync with the frontend, a periodic sync strategy will be used according to some custom rule, rather than an immediate sync every time the user takes an action on the canvas.
+This avoids the potential for delays and performance issues caused by excessive processing and network traffic.
+Instead, syncing periodically ensures up-to-date data while minimizing network traffic and data transfer costs.
+The periodic sync approach allows the user to work locally on the canvas, reducing the performance impact of storing and retrieving data from the database.
 
-When the user refreshes the app, the frontend local state will be fresh, and the frontend will rebuild the map from scratch based on the data fetched from the backend.
+When the app is refreshed, the frontend will rebuild the map from scratch based on the data fetched from the backend.
 
 ## Rationale
 
@@ -58,19 +62,18 @@ Additionally, syncing the backend state with the frontend state periodically ens
 
 ## Implications
 
-TBD
+N/A
 
 ## Related Decisions
 
-TBD
+-   [Frontend State Management](/doc/decisions/frontend_state_management.md)
 
 ## Notes
 
-1.  Related [use case](/doc/usecases/map_undo_redo.md)
-2.  Konva suggestion on how to implement undo-redo functionality
+1.  Konva suggestion on how to implement undo-redo functionality
     -   https://konvajs.org/docs/react/Undo-Redo.html
     -   https://konvajs.org/docs/data_and_serialization/Best_Practices.html#page-title
-3.  Example JSON of the state in the frontend store
+2.  Example JSON of the state in the frontend store
 
     ```JSON
     {
