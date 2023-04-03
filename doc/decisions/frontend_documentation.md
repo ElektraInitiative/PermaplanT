@@ -3,21 +3,21 @@
 ## Problem
 
 We need to choose a workflow, tooling that helps us to keep the documentation up to date.
-An easy to read and up-to-date documentation reduces the entry barrier for newcomers.
+An easy-to-read and up-to-date documentation reduces the entry barrier for newcomers.
 Without proper documentation maintenance becomes increasingly more difficult as the project grows.
 
 ## Constraints
 
 1. The documentation should be easy to navigate.
-2. The documentation should for the most part, be automatically extracted from the source code.
+2. The documentation should, for the most part, be automatically extracted from the source code.
 3. The documentation should be searchable.
 
 ## Assumptions
 
 1. With a good and beautiful documentation tool, developers are more likely to use and maintain it.
 2. With a documentation tool that enables the viewing of react components, the code quality is improved.
-If the rules about component design in [contrib/frontend](../contrib/frontend.md#component-design) are not followed, it will be hard to display the components inside the documentation.
-3. With an overview of all presentation components, the whole team can instantly see what is available.
+3. The rules about component design in [contrib/frontend](../contrib/frontend.md#component-design) are followed.
+4. With an overview of all presentation components, the whole team can instantly see what is available.
 
 ## Considered Alternatives (documentation extraction)
 
@@ -34,9 +34,10 @@ We will use [TypeDoc](https://typedoc.org/) with the markdown plugin to extract 
 
 ## Rationale
 
-- TypeDoc has automatic support for most Tags of JSDoc via the TypeScript compiler.
-- Additional Tags are supported as well.
-- It is easy to configure and invoke and extensible via plugins.
+- TypeDoc has automatic support for most tags of JSDoc via the TypeScript compiler.
+- Additional tags are supported as well.
+- It is easy to configure and invoke.
+- It is extensible via plugins.
 
 ## Considered Alternatives (viewing components)
 
