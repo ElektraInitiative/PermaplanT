@@ -39,13 +39,16 @@ export const handleScroll = (dx: number, dy: number, stage: Stage) => {
   const x = stage.position().x;
   const y = stage.position().y;
   const scrollingScalePx = 15;
+
   // Diagonal scaling factor is used to enable diagonal scrolling.
-  // Formula used is the pythagoras theorem
+  // Formula used is the pythagoras theorem.
   const diagonalScalingFactor = Math.sqrt(dx * dx + dy * dy) / scrollingScalePx;
+
+  // Decay factor is used to give the scrolling a more natural feel that decays/slows over time.
   const decayFactor = 1;
   // todo: decayFactor = 1 / (1 + (0.1 * scrollCount) / 2);
   // difficult part is figuring out how to reset the scroll count.
-  // how do we determine a scroll has finished? ideas: debounce or timeout
+  // how do we determine a scroll has finished? ideas: debounce or timeout.
 
   if (dx !== 0 && dy !== 0) {
     stage.setPosition({
