@@ -2,21 +2,27 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::config::app;
-    use crate::config::db;
     use crate::config::routes;
     use crate::model::dto::PlantsSummaryDto;
+    use crate::test::test_utils::init_test_database;
     use actix_web::App;
     use actix_web::{http::header::CONTENT_TYPE, http::StatusCode, test, web::Data};
-    use dotenvy::dotenv;
+    use diesel::prelude::*;
 
     #[actix_rt::test]
     async fn test_get_all_plants_succeeds() {
-        dotenv().ok();
+        let pool = init_test_database(|mut conn| {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::binomial_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(&mut conn)?;
 
-        let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::init_pool(&app_config.database_url);
-        let pool = Data::new(pool.clone());
+            Ok(())
+        });
 
         let mut app = test::init_service(
             App::new()
@@ -53,11 +59,18 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_get_one_plant_succeeds() {
-        dotenv().ok();
+        let pool = init_test_database(|mut conn| {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::binomial_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(&mut conn)?;
 
-        let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::init_pool(&app_config.database_url);
-        let pool = Data::new(pool.clone());
+            Ok(())
+        });
 
         let mut app = test::init_service(
             App::new()
@@ -94,11 +107,18 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_search_plants_succeeds() {
-        dotenv().ok();
+        let pool = init_test_database(|mut conn| {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::binomial_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(&mut conn)?;
 
-        let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::init_pool(&app_config.database_url);
-        let pool = Data::new(pool.clone());
+            Ok(())
+        });
 
         let mut app = test::init_service(
             App::new()
