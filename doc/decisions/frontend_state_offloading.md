@@ -20,21 +20,19 @@ N/A
 ### Remove unused data from the frontend state
 
 One solution to offload the data from the frontend state is to remove the data that is not required for the user to continue working with the map.
-However, this approach can increase the application's complexity, as it requires defining the conditions under which data should be removed from the state e.g. offload data that is not visible on the map or offload data that is not required for the current date.
+However, this approach can increase the application's complexity, as it requires defining the conditions under which data should be removed from the state e.g. offload data that is not visible on the map or offload data that is not required for the currently selected date.
 
 ### Store data in IndexedDB
 
-Another solution is to store the data in IndexedDB, which is a browser-based object-oriented database.
-This approach could reduce memory usage and improve performance, as objects can be loaded on-demand from the IndexedDB, but it could increase the complexity of the application, as it requires additional strategies to manage the synchronization of data between the IndexedDB and the real database.
+Another solution is to store the offloaded data in IndexedDB, which is a browser-based object-oriented database.
+This approach could reduce memory usage and improve performance, as objects can be offloaded and loaded on-demand from the IndexedDB, while not storing them in the PermaplanT database.
+But this method could increase the complexity of the application, as it requires additional strategies to manage the synchronization of data between the IndexedDB and the PermaplanT database.
 
 ## Decision
 
-The maximum size of the React state is not explicitly defined in the official documentation, but it is related to the device's RAM.
-In most cases, the size of the state shouldn't cause a problem, even for large states.
-However, it's recommended to keep the state as structured as possible and avoid storing large objects in it to optimize memory usage.
-
-In summary, we don't need to worry about the maximum size of the React state, but it's still important to maintain a well-structured state to prevent performance issues.
-By keeping the state structured, we can optimize application rendering and ensure optimal performance, even for larger states.
+The maximum size of the React state is not explicitly defined in the official documentation, but it is related to the device's RAM and the browser's memory usage.
+In general, the size of the state shouldn't cause a problem, even for large states.
+However, it's recommended to keep the state as structured as possible.
 
 ## Rationale
 

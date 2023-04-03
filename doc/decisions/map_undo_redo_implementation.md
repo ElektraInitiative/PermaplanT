@@ -31,7 +31,7 @@ If the user places 10 shapes on each layer and modifies the properties of each s
 If we store the entire state of the canvas for every action taken by the user, we have 10,830 actions stored in the database for each user.
 If we have 1000 users, we have 10,830,000 actions stored in the database for a single day. This number will grow drastically over time.
 
-Alternatively, storing only the final state of the canvas in the database would result in a much smaller number of entries. Since there is only one entry per map, we would have a maximum of 1000 entries for a single day or even for a longer period of time.
+Alternatively, storing only the final state of the canvas in the database would result in a much smaller number of entries. Since there is only one entry per map, we would have a maximum of 1000 entries for the same amount of users for a single day or even for a longer period of time.
 
 ## Decision
 
