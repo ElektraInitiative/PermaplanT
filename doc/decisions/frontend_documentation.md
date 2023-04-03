@@ -23,13 +23,15 @@ Without proper documentation maintenance becomes increasingly more difficult as 
 
 - API-Extractor: [API-Extractor](https://api-extractor.com/) is a tool to extract the public API of a typescript project. It is more suited for libraries.
 - React Docgen: [React Docgen](https://github.com/reactjs/react-docgen) is a tool from the React Community to extract information from React Components for documentation generation purposes.
+
   - It is not actively maintained anymore.
   - It does not generate markdown files, so an additional step is needed, to get just the most basic information.
 
 - JSDoc: [JSDoc](https://jsdoc.app/) is an API documentation generator for JavaScript.
-It is more suited for JavaScript.
+  It is more suited for JavaScript.
 
 ## Decision
+
 We will use [TypeDoc](https://typedoc.org/) with the markdown plugin to extract documentation from the source code.
 
 ## Rationale
@@ -42,15 +44,15 @@ We will use [TypeDoc](https://typedoc.org/) with the markdown plugin to extract 
 ## Considered Alternatives (viewing components)
 
 - React Styleguidist: [React Styleguidist](https://react-styleguidist.js.org/)
-Is a popular and maintained solution to develop a project-wide style guide in React.
-It has fewer features than Storybook.
-It is hard to setup, as it assumes the usage of Create React App.
+  Is a popular and maintained solution to develop a project-wide style guide in React.
+  It has fewer features than Storybook.
+  It is hard to setup, as it assumes the usage of Create React App.
 - Docusaurus: [Docusaurus](https://docusaurus.io/)
-Is a popular solution for generating static documentation websites.
-It is more targeted towards manually written documentation and has less features specifically targeting how a component should be used.
-
+  Is a popular solution for generating static documentation websites.
+  It is more targeted towards manually written documentation and has less features specifically targeting how a component should be used.
 
 ## Decision
+
 We will use [Storybook](https://storybook.js.org/) to enable a project wide component overview and style-guide.
 It has support for `MDX`, a format that enables embeddable components in markdown.
 It has support for automated testing via `Jest` and `Playwright`.
@@ -63,8 +65,8 @@ It works well with Vite and is relatively easy to setup.
 ## Implications
 
 - To install storybook a `.npmrc` file with `legacy-peer-deps=true` is required.
-This causes npm to behave like in version 6, not installing peer-dependencies automatically.
-This should not cause any problems down the line, but storybook could be extracted into it's own package, with more configuration involved.
+  This causes npm to behave like in version 6, not installing peer-dependencies automatically.
+  This should not cause any problems down the line, but storybook could be extracted into it's own package, with more configuration involved.
 
 - A little plugin needs to be developed to link `Storybook` and the extracted markdown files from `TypeDoc` automatically.
 
@@ -76,6 +78,7 @@ This should not cause any problems down the line, but storybook could be extract
 
 Without the plugin, we will need to write a `.mdx` file for each extracted markdown file.
 Also links inside the markdown will not work without the plugin.
+
 ```jsx
 import Md from './docs/enums/bindings_definitions.Quality.md';
 import './markdown.css';
@@ -96,5 +99,5 @@ import React from 'react';
 ```
 
 ### How to structure a storybook
-https://storybook.js.org/blog/structuring-your-storybook/
 
+https://storybook.js.org/blog/structuring-your-storybook/
