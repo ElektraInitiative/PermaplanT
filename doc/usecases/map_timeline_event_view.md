@@ -18,7 +18,7 @@
     - addition of an element to the map
     - deletion of an element from the map
   - The timeline can be scaled with the mouse wheel, adjusting it's start and end date, thus showing more events of the future and the past.
-  - 
+  - The timeline can be filtered to only show one kind of event, e.g. only events related to additions of elements.
 
 - **Alternative scenario:**
   - The user has not yet added/removed any elements, therefore no events are visible on the timeline.
