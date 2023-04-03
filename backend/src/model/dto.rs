@@ -51,7 +51,7 @@ pub struct NewSeedDto {
     pub notes: Option<String>,
 }
 
-#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+/// The essential identifying information of a plant. 
 #[typeshare]
 #[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
 pub struct PlantsSummaryDto {
