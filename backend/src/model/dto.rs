@@ -55,8 +55,11 @@ pub struct NewSeedDto {
 #[typeshare]
 #[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
 pub struct PlantsSummaryDto {
+    /// The plants database id.
     pub id: i32,
+    /// Biological name of this plant (E.g. "Triticum aestivum", "Prunus cerasus")
     pub binomial_name: String,
+    /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
     pub common_name: Option<Vec<Option<String>>>,
 }
 
