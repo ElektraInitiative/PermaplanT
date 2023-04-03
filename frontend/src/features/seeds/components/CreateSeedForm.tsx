@@ -4,36 +4,28 @@ import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
-import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 
 interface CreateSeedFormProps {
+  plants: SelectOption[];
   onCancel: () => void;
   onChange: () => void;
   onSubmit: (newSeed: NewSeedDto) => void;
+  onVarietyInputChange: (inputValue: string) => void;
 }
 
-const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) => {
+const CreateSeedForm = ({
+  plants,
+  onCancel,
+  onChange,
+  onSubmit,
+  onVarietyInputChange,
+}: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
   const currentYear = new Date().getFullYear();
-
-  const plants = useCreateSeedStore((state) =>
-    state.plants.map((plant) => {
-      return { value: plant.id, label: plant.species };
-    }),
-  );
-
-  useEffect(() => {
-    // This is a small workaround so it's possible to use async/await in useEffect
-    const _findAllPlants = async () => {
-      await useCreateSeedStore((state) => state.findAllPlants);
-    };
-
-    _findAllPlants();
-  }, []);
 
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDto>();
   const onFormSubmit: SubmitHandler<NewSeedDto> = async (data) => {
@@ -55,6 +47,32 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
     <div>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <div className="mb-6 grid gap-8 md:grid-cols-2">
+          <SelectMenu
+            id="plant_id"
+            control={control}
+            options={plants}
+            labelText="Plant Name"
+            required={true}
+            handleOptionsChange={(option) => {
+              if (!option) {
+                setValue('plant_id', undefined);
+              } else {
+                const temp = option as SelectOption;
+                const mapped = temp.value as number;
+                setValue('plant_id', mapped);
+              }
+           }}
+            onInputChange={onVarietyInputChange}
+            onChange={onChange}
+          />
+          <SimpleFormInput
+            labelText="Additional name"
+            placeHolder=""
+            required={true}
+            id="name"
+            register={register}
+            onChange={onChange}
+          />
           <SimpleFormInput
             type="number"
             labelText="Harvest Year"
@@ -63,42 +81,6 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             required={true}
             id="harvest_year"
             register={register}
-            onChange={onChange}
-          />
-          <SimpleFormInput
-            labelText="Name"
-            placeHolder="Tomato"
-            required={true}
-            id="name"
-            register={register}
-            onChange={onChange}
-          />
-          <CreatableSelectMenu
-            id="plant_id"
-            control={control}
-            options={plants}
-            labelText="Variety"
-            required={true}
-            handleOptionsChange={(option) => {
-              // The user may either select existing plants,
-              // in which case plant_id ist set or create a new
-              // variety.
-
-              // If the latter option is chosen, the variety field
-              // of the seed is set and plant_id remains empty.
-
-              // option.value is a only a number, if a plant is chosen,
-              // otherwise its a string that contains the users input.
-              if (typeof option !== 'object' || option == null || !('value' in option)) return;
-
-              // Ignore linter warning since we already checked whether option.value exists.
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              if (typeof option.value === 'number') setValue('plant_id', Number(option.value));
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              else if (option !== null) setValue('variety', option.value);
-            }}
             onChange={onChange}
           />
           <SelectMenu
@@ -115,17 +97,17 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
             onChange={onChange}
           />
           <SimpleFormInput
-            labelText="Origin"
-            placeHolder="My Home"
-            id="origin"
+            type="date"
+            labelText="Best before"
+            placeHolder=""
+            id="use_by"
             register={register}
             onChange={onChange}
           />
           <SimpleFormInput
-            type="date"
-            labelText="Best by"
-            placeHolder=""
-            id="use_by"
+            labelText="Origin"
+            placeHolder="My Home"
+            id="origin"
             register={register}
             onChange={onChange}
           />

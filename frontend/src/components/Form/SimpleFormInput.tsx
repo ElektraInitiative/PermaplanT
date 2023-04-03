@@ -46,6 +46,7 @@ export default function SimpleFormInput<T extends FieldValues>({
         <textarea
           disabled={disabled}
           onKeyUp={onChange}
+          onChange={onChange}
           rows={6}
           name={id}
           id={id}
@@ -58,6 +59,7 @@ export default function SimpleFormInput<T extends FieldValues>({
         <input
           disabled={disabled}
           onKeyUp={onChange}
+          onChange={onChange}
           type={type}
           min={min}
           max={max}

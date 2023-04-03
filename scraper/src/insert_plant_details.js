@@ -88,7 +88,7 @@ async function insertPlantDetails(fileName) {
     sanitizeValues(jsonArray);
 
     const cs = new pgp.helpers.ColumnSet(columnNames, {
-        table: 'plant_detail',
+        table: 'plants',
     });
 
     const query =

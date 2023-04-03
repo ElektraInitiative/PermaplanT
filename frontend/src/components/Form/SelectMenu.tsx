@@ -18,6 +18,7 @@ export interface SelectMenuProps<T extends FieldValues> {
   placeholder?: string;
   handleOptionsChange?: (option: unknown) => void;
   onChange?: () => void;
+  onInputChange?: (inputValue: string) => void;
 }
 
 export default function SelectMenu<T extends FieldValues>({
@@ -30,6 +31,7 @@ export default function SelectMenu<T extends FieldValues>({
   placeholder,
   handleOptionsChange,
   onChange,
+  onInputChange,
 }: SelectMenuProps<T>) {
   const customClassNames: ClassNamesConfig = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
@@ -86,7 +88,10 @@ export default function SelectMenu<T extends FieldValues>({
             styles={customStyles}
             classNames={customClassNames}
             required={required}
-            onInputChange={onChange}
+            onInputChange={(inputValue) => {
+              onChange?.();
+              onInputChange?.(inputValue);
+            }}
           />
         )}
       />

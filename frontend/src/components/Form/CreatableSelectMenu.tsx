@@ -1,7 +1,7 @@
 import { SelectOption } from './SelectMenu';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { ClassNamesConfig, StylesConfig } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
+import { ActionMeta, ClassNamesConfig, StylesConfig } from 'react-select';
 import filterObject from '@/utils/filterObject';
 
 export interface CreatableSelectMenuProps<T extends FieldValues> {
@@ -12,9 +12,10 @@ export interface CreatableSelectMenuProps<T extends FieldValues> {
   options: SelectOption[];
   required?: boolean;
   placeholder?: string;
-  handleOptionsChange?: (option: unknown) => void;
+  handleOptionsChange?: (option: any, actionMeta: ActionMeta<any>) => void;
   handleCreate?: (inputValue: string) => void;
   onChange?: () => void;
+  onInputChange?: (inputValue: string) => void;
 }
 
 export default function CreatableSelectMenu<T extends FieldValues>({
@@ -28,6 +29,7 @@ export default function CreatableSelectMenu<T extends FieldValues>({
   handleOptionsChange,
   handleCreate,
   onChange,
+  onInputChange,
 }: CreatableSelectMenuProps<T>) {
   const customClassNames: ClassNamesConfig = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
@@ -85,7 +87,10 @@ export default function CreatableSelectMenu<T extends FieldValues>({
             styles={customStyles}
             classNames={customClassNames}
             required={required}
-            onInputChange={onChange}
+            onInputChange={(inputValue) => {
+              onChange?.();
+              onInputChange?.(inputValue);
+            }}
           />
         )}
       />
