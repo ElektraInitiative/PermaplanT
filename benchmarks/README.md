@@ -44,3 +44,13 @@ Metrics:
 -   `First Contentful Paint (FCP)` - the time it takes for the browser to render the first bit of content on the page. Measured in milliseconds.
 -   `Interactive` - the time it takes for the page to become fully interactive. Measured in milliseconds.
 -   other metrics are described in the [Lighthouse documentation](https://web.dev/performance-scoring/)
+
+Pages to audit are defined in `performance-audit.spec.js` file as individual test cases.
+In order to add new pages to the audit, add a new test case to the file e.g.:
+
+```javascript
+test('Another page', async () => {
+    const testname = 'Another page';
+    await audit(testname, 'http://localhost:5173/another_page', results);
+});
+```
