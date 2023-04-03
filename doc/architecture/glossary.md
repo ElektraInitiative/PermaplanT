@@ -19,7 +19,7 @@
 -   polyculture (aka companion planting, German: Mischkultur):
     Mutually beneficial way of growing plants together.
 -   relationship:
-    Two plants are in a non-neutral relationship if they either enhance (companion) 
+    Two plants are in a non-neutral relationship if they either enhance (companion)
     or diminish (antagonist) each others health and growth.
 -   companion (to plant according polyculture):
     Plants that should be planted together.
@@ -64,6 +64,7 @@
     -   reversible deletion: a database entity i.e. map and plant is deleted and can be restored within a certain time
     -   undo-redo functionality: a user can undo and redo changes in the map, but the changes are local to the frontend and not stored in the database
 -   lazy loading
-    -   TBD
+    -   Lazy loading refers to the process of loading data on-demand, rather than loading everything upfront during the initial load of the app.
+        For example, with lazy loading, only the data for the currently visible portion of the map is loaded, rather than loading all the data for the entire map at once.
 -   map offloading
-    -   TBD
+    -   The process of cleaning up the frontend state by removing data that has already been synchronized with the backend and is no longer needed. This can help to reduce the amount of unnecessary data in the frontend, which can improve the performance and efficiency of the application.

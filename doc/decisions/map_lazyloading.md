@@ -44,7 +44,7 @@ The most effective way to achieve this is through the backend, which can define 
 
 ## Rationale
 
-Creating endpoints with additional parameters that allow the frontend to request only the required data for the initial load is more flexible way to implement lazyloading compared to other approaches.
+Creating endpoints with additional parameters that allow the frontend to request only the required data for the initial load is more flexible way to implement lazy loading compared to other approaches.
 This will allow backend developers to define the strategy themselves and have the full control over the data that is being loaded.
 
 ## Implications
