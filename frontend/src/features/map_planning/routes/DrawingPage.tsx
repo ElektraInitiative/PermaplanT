@@ -1,7 +1,15 @@
+import {
+  endSelection,
+  selectIntersectingShapes,
+  startSelection,
+  unselectShapes,
+  updateSelection,
+} from '../utils/ShapesSelection';
+import { handleScroll, handleZoom } from '../utils/StageTransform';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Circle, Layer, Rect, Stage, Transformer } from 'react-konva';
 
 export const DrawingPage = () => {
@@ -26,8 +34,14 @@ export const DrawingPage = () => {
     y2: 0,
   });
 
-  let scrollCount = 0;
-  const handleWheel = (e: KonvaEventObject<WheelEvent>) => {
+  const trRef = useRef<Konva.Transformer>(null);
+
+  // https://konvajs.org/docs/react/Access_Konva_Nodes.html
+  const stageRef = useRef<Konva.Stage>(null);
+
+  let isSelectionEnabled = true;
+
+  const onWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
     const stage = e.target.getStage();
     if (stage == null) return;
@@ -35,85 +49,11 @@ export const DrawingPage = () => {
     const pointerVector = stage.getPointerPosition();
     if (pointerVector == null) return;
 
-    const pointerX = pointerVector.x;
-    const pointerY = pointerVector.y;
-
-    const scaleBy = 1.1;
-
     if (e.evt.ctrlKey) {
-      const oldScale = stage.scaleX();
-      const mousePointTo = {
-        x: pointerX / oldScale - stage.x() / oldScale,
-        y: pointerY / oldScale - stage.y() / oldScale,
-      };
-
-      const newScale = e.evt.deltaY < 0 ? oldScale * scaleBy : oldScale / scaleBy;
-
-      if (newScale < 0.05) return;
-
-      setStage({
-        scale: newScale,
-        x: (pointerX / newScale - mousePointTo.x) * newScale,
-        y: (pointerY / newScale - mousePointTo.y) * newScale,
-      });
+      handleZoom(pointerVector, e.evt.deltaY, stage, setStage);
     } else {
-      const x = stage.position().x;
-      const y = stage.position().y;
-      const dx = e.evt.deltaX;
-      const dy = e.evt.deltaY;
-      const scrollingScalePx = 15;
-      const diagonalScalingFactor = Math.sqrt(dx * dx + dy * dy) / scrollingScalePx;
-      let decayFactor = 1;
-      if (scrollCount > 0) {
-        // decayFactor = 1 / (1 + (0.1 * scrollCount) / 2);
-        decayFactor = 1;
-      }
-
-      if (dx !== 0 && dy !== 0) {
-        stage.setPosition({
-          x: x - (dx / diagonalScalingFactor) * decayFactor,
-          y: y - (dy / diagonalScalingFactor) * decayFactor,
-        });
-      } else if (dx !== 0) {
-        stage.setPosition({ x: x - (dx / scrollingScalePx) * decayFactor, y });
-      } else if (dy !== 0) {
-        stage.setPosition({ x, y: y - (dy / scrollingScalePx) * decayFactor });
-      }
-
-      scrollCount++;
+      handleScroll(e.evt.deltaX, e.evt.deltaY, stage);
     }
-  };
-
-  const findAndMarkSelected = () => {
-    if (stageRef.current === null) return;
-    const box = stageRef.current.findOne('.selectionRect').getClientRect();
-
-    if (stageRef.current.children === null) return;
-
-    // we dont always have to look for them, we can store them
-    const allShapes = stageRef.current.children
-      ?.flatMap((layer) => layer.children)
-      .filter(
-        (shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'),
-      );
-
-    if (!allShapes) return;
-    const intersectingShapes = allShapes.filter(
-      (shape) => shape && Konva.Util.haveIntersection(box, shape.getClientRect()),
-    );
-
-    if (intersectingShapes) {
-      console.log('adding');
-      const nodes = intersectingShapes.filter((shape) => shape !== undefined);
-      trRef.current?.nodes(nodes as Shape<ShapeConfig>[]);
-    }
-  };
-
-  const shadowLayerRef = useRef<Konva.Layer>(null);
-  const trRef = useRef<Konva.Transformer>(null);
-
-  const removeSelectedShapes = () => {
-    trRef.current?.nodes([]);
   };
 
   const onDragStart = (e: KonvaEventObject<DragEvent>) => {
@@ -129,8 +69,6 @@ export const DrawingPage = () => {
     }
   };
 
-  let isSelectionEnabled = true;
-
   const onMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     if (e.evt.buttons !== 4) {
       document.body.style.cursor = 'default';
@@ -143,38 +81,13 @@ export const DrawingPage = () => {
 
     if (!isSelectionEnabled) return;
 
-    const pointerVector = stage.getPointerPosition();
-    if (pointerVector == null) return;
-
-    const pointerX = pointerVector.x + stage.getPosition().x * -1;
-    const pointerY = pointerVector.y + stage.getPosition().y * -1;
-
-    setSelectionRectBoundingBox({
-      ...selectionRectBoundingBox,
-      x2: pointerX,
-      y2: pointerY,
-    });
-
-    setSelectionRectAttrs({
-      ...selectionRectAttrs,
-      x: pointerX,
-      y: pointerY,
-    });
-
-    const x1 = selectionRectBoundingBox.x1;
-    const y1 = selectionRectBoundingBox.y1;
-    const x2 = selectionRectBoundingBox.x2;
-    const y2 = selectionRectBoundingBox.y2;
-
-    setSelectionRectAttrs({
-      ...selectionRectAttrs,
-      x: Math.min(x1, x2),
-      y: Math.min(y1, y2),
-      width: Math.abs(x2 - x1),
-      height: Math.abs(y2 - y1),
-    });
-
-    //findAndMarkSelected();
+    updateSelection(
+      stage,
+      setSelectionRectAttrs,
+      selectionRectAttrs,
+      setSelectionRectBoundingBox,
+      selectionRectBoundingBox,
+    );
   };
 
   const onMouseDown = (e: KonvaEventObject<MouseEvent>) => {
@@ -187,51 +100,22 @@ export const DrawingPage = () => {
 
     if (!isSelectionEnabled) return;
 
-    const pointerVector = stage.getPointerPosition();
-    if (pointerVector == null) return;
-
-    const pointerX = pointerVector.x + stage.getPosition().x * -1;
-    const pointerY = pointerVector.y + stage.getPosition().y * -1;
-
-    setSelectionRectBoundingBox({
-      x1: pointerX,
-      y1: pointerY,
-      x2: pointerX,
-      y2: pointerY,
-    });
-    setSelectionRectAttrs({
-      ...selectionRectAttrs,
-      x: pointerX,
-      y: pointerY,
-    });
-    setSelectionRectAttrs({
-      ...selectionRectAttrs,
-      width: 0,
-      height: 0,
-      isVisible: true,
-    });
+    startSelection(stage, setSelectionRectAttrs, setSelectionRectBoundingBox);
   };
 
   const onMouseUp = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
     if (!isSelectionEnabled) return;
 
-    if (selectionRectAttrs.isVisible) {
-      setSelectionRectAttrs({
-        ...selectionRectAttrs,
-        isVisible: false,
-      });
-    }
-
-    findAndMarkSelected();
+    endSelection(setSelectionRectAttrs, selectionRectAttrs);
+    selectIntersectingShapes(stageRef, trRef);
   };
 
   const onClick = (e: KonvaEventObject<MouseEvent>) => {
     const isStage = e.target instanceof Konva.Stage;
     const nodeSize = trRef.current?.getNodes().length || 0;
-    console.log(e.target);
     if (nodeSize > 0 && isStage) {
-      removeSelectedShapes();
+      unselectShapes(trRef);
     }
   };
 
@@ -242,8 +126,30 @@ export const DrawingPage = () => {
     }
   };
 
-  // https://konvajs.org/docs/react/Access_Konva_Nodes.html
-  const stageRef = useRef<Konva.Stage>(null);
+  const [circles, setCircles] = useState<JSX.Element[]>([]);
+  useEffect(() => {
+    const newCircles = [];
+    for (let i = 1; i <= 10; i++) {
+      newCircles.push(
+        <Circle
+          key={i}
+          x={100 * i}
+          y={100 * i}
+          radius={50}
+          fill="red"
+          draggable={true}
+          shadowBlur={5}
+          onClick={(e: KonvaEventObject<MouseEvent>) => {
+            const nodes = trRef.current?.getNodes() || [];
+            if (!nodes.includes(e.target)) {
+              trRef.current?.nodes([e.target]);
+            }
+          }}
+        />,
+      );
+    }
+    setCircles(newCircles);
+  }, []);
 
   return (
     <div className="h-screen w-screen overflow-hidden">
@@ -252,7 +158,7 @@ export const DrawingPage = () => {
         draggable={true}
         width={window.innerWidth}
         height={window.innerHeight}
-        onWheel={handleWheel}
+        onWheel={onWheel}
         onDragStart={onDragStart}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
@@ -263,53 +169,7 @@ export const DrawingPage = () => {
         x={stage.x}
         y={stage.y}
       >
-        <Layer>
-          <Circle
-            x={window.innerWidth / 2}
-            y={window.innerHeight / 2}
-            radius={50}
-            fill="red"
-            draggable={true}
-            shadowBlur={5}
-            onClick={(e: KonvaEventObject<MouseEvent>) => {
-              const nodes = trRef.current?.getNodes() || [];
-              if (!nodes.includes(e.target)) {
-                trRef.current?.nodes([e.target]);
-              }
-            }}
-          />
-          <Circle
-            draggable={true}
-            x={window.innerWidth / 3}
-            y={window.innerHeight / 3}
-            radius={50}
-            fill="green"
-            shadowBlur={5}
-            onClick={(e: KonvaEventObject<MouseEvent>) => {
-              addToTransformer(e.target as Shape<ShapeConfig>);
-            }}
-          />
-          <Circle
-            x={window.innerWidth / 4}
-            y={window.innerHeight / 4}
-            radius={50}
-            fill="green"
-            shadowBlur={5}
-            onClick={(e: KonvaEventObject<MouseEvent>) => {
-              addToTransformer(e.target as Shape<ShapeConfig>);
-            }}
-          />
-          <Circle
-            x={window.innerWidth / 4}
-            y={window.innerHeight / 5}
-            radius={50}
-            fill="green"
-            shadowBlur={5}
-            onClick={(e: KonvaEventObject<MouseEvent>) => {
-              addToTransformer(e.target as Shape<ShapeConfig>);
-            }}
-          />
-        </Layer>
+        <Layer>{circles.map((circle) => circle)}</Layer>
         <Layer>
           <Rect
             x={selectionRectAttrs.x}
@@ -322,12 +182,10 @@ export const DrawingPage = () => {
             name="selectionRect"
           />
           <Transformer
-            onTransformStart={(e: KonvaEventObject<MouseEvent>) => {
-              console.log('down');
+            onTransformStart={() => {
               isSelectionEnabled = false;
             }}
-            onTransformEnd={(e: KonvaEventObject<MouseEvent>) => {
-              console.log('up');
+            onTransformEnd={() => {
               isSelectionEnabled = true;
             }}
             ref={trRef}
@@ -335,7 +193,6 @@ export const DrawingPage = () => {
             anchorSize={8}
           />
         </Layer>
-        <Layer ref={shadowLayerRef} />
       </Stage>
     </div>
   );
