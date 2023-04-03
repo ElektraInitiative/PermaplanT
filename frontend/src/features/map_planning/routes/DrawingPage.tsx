@@ -140,10 +140,7 @@ export const DrawingPage = () => {
           draggable={true}
           shadowBlur={5}
           onClick={(e: KonvaEventObject<MouseEvent>) => {
-            const nodes = trRef.current?.getNodes() || [];
-            if (!nodes.includes(e.target)) {
-              trRef.current?.nodes([e.target]);
-            }
+            addToTransformer(e.target as Shape<ShapeConfig>);
           }}
         />,
       );
