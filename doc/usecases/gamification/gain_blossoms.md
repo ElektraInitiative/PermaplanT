@@ -15,17 +15,18 @@
   - The user has opened the app and uses it.
 - **Main success scenario:**
   - The user can see a list of incompleted milestones and their respective requirements. An user can reach a certain milestone by e.g.:
+    - becoming a member.
     - starting their first map.
     - planting their first plant.
     - planting their first full group of companions.
-    - planting their first recommended plant.
+    - planting their first recommended diversity plant.
     - using an element from a new layer for the first time.
+    - uploading their first photo in the [photo layer](../layers/photo_layer.md).
     - submitting updated plant data.
     - harvesting a plant for the first time.
-    - becoming a member.
+    - updating their plant relations with data from the harvest for the first time.
     - reaching a specific [diversity score](diversity_score.md) goal.
     - gathering all ingredients for an ingredient list for the first time.
-    - uploading their first photo in the [photo layer](../layers/photo_layer.md).
     - buying their first batch of seeds.
     - creating their first event.
     - honoring a map from another user for the first time.
@@ -38,13 +39,19 @@
     - having their first conversation with another user through [matchmaking](../matchmaking.md).
     - adding their first new plant in the apps database.
     - adding their first new seed in the apps database.
+  - Blossoms are grouped in four different tracks by what goal they try to incentivize:
+    - Beginners Track: leading new users through the basic features of PermaplanT.
+    - Seasonal Track: motivate users to completely plan out their map and keep it updated through the seasons.
+    - Completionist Track: rewarding users for enriching their own data with the results of their harvest.
+    - Expert Track: incentivize users to support the platform and it's other users to gain a free membership.
   - Progress of the individual milestones is tracked independently and they can be accomplished in any order.
   - The user is being kept updated on their progress when pursuing actions to complete a milestone.
   - Upon completing a milestone, the user is informed of their achievement and is awarded the corresponding Blossom.
+  - Some Blossoms reset after a year to engage the user to continue the work in following seasons.
 - **Alternative scenario:**
 - **Error scenario:**
   The user meets the criteria for a certain Blossom, but it will not be awarded due to an error in the app.
   The Blossom will be awarded the next time its criteria will be checked.
 - **Postcondition:**
-  The awarded Blossoms will be shown in the users profile.
+  The awarded Blossoms will be shown in the users profile with a number indicating the amount of times this blossom was earned in previous seasons.
 - **Non-functional Constraints:**
