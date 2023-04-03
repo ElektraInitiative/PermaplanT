@@ -66,9 +66,9 @@
 -   lazy loading
     -   Lazy loading refers to the process of loading data on-demand, rather than loading everything upfront during the initial load of the app.
         For example, with lazy loading, only the data for the currently visible portion of the map is loaded, rather than loading all the data for the entire map at once.
--   map offloading
-    -   The process of cleaning up the frontend state by removing data that has already been synchronized with the backend and is no longer needed. This can help to reduce the amount of unnecessary data in the frontend, which can improve the performance and efficiency of the application.
--   First contentful paint (FCP)
+-   offloading of the frontend state
+    -   the process of cleaning up the frontend state by removing data that has already been synchronized with the backend and is no longer needed. This can help to reduce the amount of unnecessary data in the frontend, which can improve the performance and efficiency of the application.
+-   first contentful paint (FCP)
     -   the time it takes for the browser to render the first bit of content on the page.
 -   time to interactive (TTI)
     -   the time it takes for the page to become fully interactive.
