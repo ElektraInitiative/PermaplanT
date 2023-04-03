@@ -34,22 +34,6 @@ pub async fn find_all_or_search(
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Helper function for searching for [`PlantsSummaryDto`](crate::model::dto::PlantsSummaryDto).
-async fn search(
-    query: web::Query<PlantsSearchParameters>,
-    pool: Data<Pool>,
-) -> Result<HttpResponse> {
-    let query = query.into_inner();
-    let response = web::block(move || service::plants::search(&pool, &query)).await??;
-    Ok(HttpResponse::Ok().json(response))
-}
-
-/// Helper function for fetching all [`PlantsSummaryDto`](crate::model::dto::PlantsSummaryDto).
-async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = web::block(move || service::plants::find_all(&pool)).await??;
-    Ok(HttpResponse::Ok().json(response))
-}
-
 /// Endpoint for fetching a [`Plant`](crate::model::entity::Plants).
 ///
 /// # Errors
