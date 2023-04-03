@@ -3,4 +3,3 @@
 pub mod dto;
 pub mod entity;
 pub mod r#enum;
-pub mod response;

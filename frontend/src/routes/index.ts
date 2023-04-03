@@ -1,16 +1,28 @@
-import { CreateSeed, ViewSeeds } from '@/features/seeds';
+import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 import { Pages, Routes } from './types';
+
+import { LandingPage } from '@/features/landing_page';
 
 const routes: Routes = {
   [Pages.CreateSeed]: {
     component: CreateSeed,
     path: '/seeds/new',
-    title: 'Neuer Eintrag',
+    title: 'New Seed Entry',
   },
   [Pages.ViewSeeds]: {
     component: ViewSeeds,
     path: '/seeds',
-    title: 'Meine Saatgüter',
+    title: 'My Seeds',
+  },
+  [Pages.SeedDetails]: {
+    component: SeedDetails,
+    path: '/seeds/:id',
+    title: 'Seed',
+  },
+  [Pages.LandingPage]: {
+    component: LandingPage,
+    path: '/',
+    title: 'PermaplanT',
   },
 };
 

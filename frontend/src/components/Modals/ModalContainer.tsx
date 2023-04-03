@@ -10,7 +10,7 @@ export default function ModalContainer({ children, show }: ModalContainerProps) 
     <AnimatePresence>
       {show && (
         <motion.div
-          className="fixed top-[15%] left-[50%]"
+          className="fixed top-[15%] left-[50%] z-[1020]"
           initial={{ opacity: 0, translateX: '-50%' }}
           animate={{
             opacity: 100,

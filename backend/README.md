@@ -2,7 +2,7 @@
 
 ## Requirements
 
--   Rust 1.67.1 or later
+-   Rust 1.67.1 or later ([Installation guide](../doc/development_setup.md))
 -   [PostgreSQL](https://www.postgresql.org/download/) version 13 or later
 -   libpq-dev
 
@@ -61,7 +61,10 @@ Example requests:
 
 ## Documentation
 
-To view the documentation run
+To view an interactive API documentation go to <http://localhost:8080/doc/api/swagger/ui/>.
+Alternatively there is a [OpenAPI specification](https://spec.openapis.org/oas/latest.html) in json format at <http://localhost:8080/doc/api/openapi.json>.
+
+To view code documentation run
 
 ```shell
 cargo doc --open
