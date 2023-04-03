@@ -1,4 +1,4 @@
-# PermaplanT Benchmarks
+# PermaplanT Performance Audit
 
 ## Requirements
 
@@ -43,3 +43,4 @@ Metrics:
 
 -   `First Contentful Paint (FCP)` - the time it takes for the browser to render the first bit of content on the page. Measured in milliseconds.
 -   `Interactive` - the time it takes for the page to become fully interactive. Measured in milliseconds.
+-   other metrics are described in the [Lighthouse documentation](https://web.dev/performance-scoring/)
