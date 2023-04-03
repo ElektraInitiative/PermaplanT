@@ -14,7 +14,7 @@ const BlogOverview = () => {
               havent heard of them hexagon kickstarter craft beer pork chic.
             </p>
             <div className="mb-4 mt-auto flex w-full flex-wrap items-center border-b-2 border-gray-100 pb-4">
-              <a className="inline-flex items-center text-indigo-500">
+              <a className="inline-flex items-center text-secondary-500 dark:text-secondary-300">
                 Learn More
                 <svg
                   className="ml-2 h-4 w-4"
@@ -66,7 +66,7 @@ const BlogOverview = () => {
                 className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
               />
               <span className="flex flex-grow flex-col pl-4">
-                <span className="title-font font-medium text-gray-900">Holden Caulfield</span>
+                <span className="title-font font-medium text-primary-500 dark:text-primary-300">Holden Caulfield</span>
                 <span className="mt-0.5 text-xs tracking-widest text-gray-400">UI DEVELOPER</span>
               </span>
             </a>
@@ -81,7 +81,7 @@ const BlogOverview = () => {
               unicorn. Plaid fixie chambray 90s, slow-carb etsy tumeric.
             </p>
             <div className="mb-4 mt-auto flex w-full flex-wrap items-center border-b-2 border-gray-100 pb-4">
-              <a className="inline-flex items-center text-indigo-500">
+              <a className="inline-flex items-center text-secondary-500 dark:text-secondary-300">
                 Learn More
                 <svg
                   className="ml-2 h-4 w-4"
@@ -133,7 +133,7 @@ const BlogOverview = () => {
                 className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
               />
               <span className="flex flex-grow flex-col pl-4">
-                <span className="title-font font-medium text-gray-900">Alper Kamu</span>
+                <span className="title-font font-medium text-gray-900 text-primary-500 dark:text-primary-300">Alper Kamu</span>
                 <span className="mt-0.5 text-xs tracking-widest text-gray-400">DESIGNER</span>
               </span>
             </a>
