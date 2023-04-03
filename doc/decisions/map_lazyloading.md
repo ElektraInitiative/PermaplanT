@@ -47,6 +47,19 @@ The most effective way to achieve this is through the backend, which can define 
 Creating endpoints with additional parameters that allow the frontend to request only the required data for the initial load is more flexible way to implement lazy loading compared to other approaches.
 This will allow backend developers to define the strategy themselves and have the full control over the data that is being loaded.
 
+The following table is the outcome of the performance tests that were conducted by measuring the loading times of the application with different number of elements and layers on the map.
+As it can be seen, the number of layers does not have a significant impact on the loading time, however, the number of elements does.
+
+| Test name                   | firstContentfulPaint (ms) | interactive (ms) |
+| --------------------------- | ------------------------- | ---------------- |
+| empty canvas                | 4971.2                    | 6184.8           |
+| 3 elements                  | 4968.6                    | 6232.8           |
+| 3 circles of same shape     | 4966.2                    | 6266.8           |
+| 100 circles                 | 4966.6                    | 6175.6           |
+| 1000 circles                | 4690                      | 7634.6           |
+| 10000 circles with 1 layer  | 4963                      | 26389.2          |
+| 10000 circles with 10 layer | 4958.4                    | 26790.6          |
+
 ## Implications
 
 N/A
@@ -59,3 +72,5 @@ N/A
 
 -   Performance tips from KonvaJS:
     https://konvajs.org/docs/performance/All_Performance_Tips.html
+-   Drag and Drop Stress Test with 10000 Shapes
+    https://konvajs.org/docs/sandbox/Drag_and_Drop_Stress_Test.html
