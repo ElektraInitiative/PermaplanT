@@ -1,4 +1,3 @@
-const colors = require('tailwindcss/colors')
 const gray = {
   '50': {
     light: '#fefefe',
@@ -50,90 +49,6 @@ const gray = {
     DEFAULT: '#161616',
     dark: '#cdcdcd'
   },
-}
-
-const brown = {
-  '100': {
-    light: "#E5E2E0",
-    DEFAULT: "#E5E2E0",
-    dark: "#1F1C19",
-  },
-  '200': {
-    light: "#D8D4D1",
-    DEFAULT: "#D8D4D1",
-    dark: "#443D37",
-  },
-  '300': {
-    light: "#BEB7B2",
-    DEFAULT: "#BEB7B2",
-    dark: "#695E55",
-  },
-  '400': {
-    light: "#AAA19A",
-    DEFAULT: "#AAA19A",
-    dark: "#83766C",
-  },
-  '500': {
-    light: "#968C83",
-    DEFAULT: "#968C83",
-    dark: "#968C83",
-  },
-  '600': {
-    light: "#83766C",
-    DEFAULT: "#83766C",
-    dark: "#AAA19A",
-  },
-  '700': {
-    light: "#695E55",
-    DEFAULT: "#695E55",
-    dark: "#BEB7B2",
-  },
-  '800': {
-    light: "#443D37",
-    DEFAULT: "#443D37",
-    dark: "#D8D4D1",
-  },
-  '900': {
-    light: "#1F1C19",
-    DEFAULT: "#1F1C19",
-    dark: "#E5E2E0"
-  },
-}
-
-const blue = {
-  '900': "#001f23",
-  '800': "#004249",
-  '700': "#005b65",
-  '600': "#006973",
-  '500': "#008491",
-  '400': "#00a0af",
-  '300': "#22bcce",
-  '200': "#4fd8ea",
-  '100': "#94f1ff",
-}
-
-const green = {
-  '900': "#1d1d00",
-  '800': "#3e3e00",
-  '700': "#4a4900",
-  '600': "#626200",
-  '500': "#969518",
-  '400': "#b1b034",
-  '300': "#cdcc4e",
-  '200': "#eae867",
-  '100': "#fffdbd",
-}
-
-const yellow = {
-  '900': '#281900',
-  '800': '#513600',
-  '700': '#6f4c00',
-  '600': '#9f6e00',
-  '500': '#dfa028',
-  '400': '#feba43',
-  '300': '#ffdead',
-  '200': '#ffeeda',
-  '100': '#fffbff',
 }
 
 /*
