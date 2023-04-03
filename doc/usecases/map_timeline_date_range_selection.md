@@ -13,12 +13,12 @@
 - **Precondition:**
   The user has opened the app and selected a map.
 - **Main success scenario:**
-  The user selects the timeline view and uses the scroll bar with a month granularity, or a date input that allows date range selection.
-  Using the scroll bar, the user clicks and drags the mouse to span a range of dates.
-  Dragging over the scroll bar hints which month represents the start and which the end of the selected date range.
-  Finalizing the date selection updates the map to show the state of the garden over a range of points in time.
-  Elements on the map that do not exist over the whole range of dates, appear grey.
-  Elements on the map can be edited/moved, but not be added/deleted.
+  - The user selects the timeline view and uses the scroll bar with a month granularity, or a date input that allows date range selection.
+  - Using the scroll bar, the user clicks and drags the mouse to span a range of dates.
+  - Dragging over the scroll bar hints which month represents the start and which the end of the selected date range.
+  - Finalizing the date selection updates the map to show the state of the garden over a range of points in time.
+  - Elements on the map that do not exist over the whole range of dates, appear grey.
+  - Elements on the map can be edited/moved, but not be added/deleted.
 - **Alternative scenario:**
   The user tries to select a date that is outside the range of the timeline. 
   In this case, the app displays an error message indicating that the requested date is not available.
