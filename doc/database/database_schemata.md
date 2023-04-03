@@ -67,22 +67,20 @@ plants {
   INT height
 }
 
-plant_details{}
-
 plants }o--|| plant_detail: "type"
 
 plants ||--o{ seeds : ""
 
-plant_details }o--o{ plant_details: "likes"
+plants }o--o{ plants: "likes"
 
-plant_details }o--o{ plant_details: "dislikes"
+plants }o--o{ plants: "dislikes"
 
 species{}
 genera{}
 subfamilies{}
 families{}
 
-plant_details }|--|| species : ""
+plants }|--|| species : ""
 species }|--|| genera : ""
 genera }|--|| subfamilies : ""
 subfamilies }|--|| families : ""
@@ -94,7 +92,7 @@ subfamilies }|--|| families : ""
 
 # Table descriptions
 
-## `Plant_details`
+## `Plant`
 
 | **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
 |:---------------------------------| :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
