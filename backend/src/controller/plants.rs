@@ -25,11 +25,13 @@ pub async fn find_all_or_search(
     query: Option<web::Query<PlantsSearchParameters>>,
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
-    if let Some(query) = query {
-        search(query, pool).await
-    } else {
-        find_all(pool).await
-    }
+    let response = match query {
+        Some(parameters) => {
+            web::block(move || service::plants::search(&pool, &parameters)).await??
+        }
+        None => web::block(move || service::plants::find_all(&pool)).await??,
+    };
+    Ok(HttpResponse::Ok().json(response))
 }
 
 /// Helper function for searching for [`PlantsSummaryDto`](crate::model::dto::PlantsSummaryDto).
