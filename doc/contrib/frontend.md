@@ -99,4 +99,5 @@ Zustand (Global State Management):
 - [Tutorial](https://blog.logrocket.com/managing-react-state-zustand/)
 - [The Zustand documentation](https://github.com/pmndrs/zustand)
 
-
+Storybook:
+- [How to structure a storybook](https://storybook.js.org/blog/structuring-your-storybook/)
