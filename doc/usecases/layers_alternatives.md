@@ -6,7 +6,8 @@
 -   **Level:** User Goal
 -   **Actors:** App User
 -   **Brief:** User selects and modifies alternatives of a layer
--   **Status:** Draft
+-   **Status:** Assigned
+-   **Assignee:** Paul
 
 ## Scenarios
 
@@ -18,7 +19,8 @@
     -   User duplicates the layer
     -   User gives the layer a name
     -   User modifies the layer
-    -   User may select another alternative of the layer
+    -   User may select another alternative of the layer.
+        This change doesn't affect layer selections of other users (that work on the same map).
 
 -   **Alternative scenario:**
     -   User accidentally duplicates the layer and deletes the duplicate with "delete layer" functionality
@@ -28,3 +30,5 @@
 -   **Postcondition:**
     The user has successfully modified and selected an alternative of a layer.
 -   **Non-functional Constraints:**
+    -   Performance: up to 10 alternatives should be fast to use
+    -   Offline functionality depending on the layer

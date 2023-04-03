@@ -31,3 +31,4 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved or deleted infrastructure elements as desired.
 - **Non-functional Constraints:**
+  - Performance: more than 500 elements per year should be usable without noticeable delays and acceptable memory overhead

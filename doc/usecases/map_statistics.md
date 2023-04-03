@@ -6,7 +6,8 @@
 -   **Level:** User Goal
 -   **Actors:** App User
 -   **Brief:** The user can view statistics about their garden and plants.
--   **Status:** Draft
+-   **Status:** Assigned
+-   **Assignee:** Nursultan, Thorben
 
 ## Scenarios
 
@@ -17,6 +18,7 @@
     -   The user views statistics about their garden and plants.
         Examples of statistics include:
         -   Total number of plants in the garden
+        -   Number of elements in each layer
         -   Total number of visits to the garden
 
 -   **Alternative scenario:**
@@ -25,3 +27,4 @@
 -   **Postcondition:**
     The user has successfully viewed statistics about their garden and plants.
 -   **Non-functional Constraints:**
+  - Alternatives (statistics depend on which alternative layers are selected)

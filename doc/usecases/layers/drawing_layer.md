@@ -6,7 +6,8 @@
 -   **Level:** User Goal
 -   **Actors:** App User
 -   **Brief:** User can add, edit, move and delete custom drawings of any shape and color in their map in the drawing layer.
--   **Status:** Draft
+-   **Status:** Assigned
+-   **Assignee:** Giancarlo
 
 ## Scenarios
 
@@ -21,3 +22,6 @@
 -   **Postcondition:**
     The user's map includes the added, edited, moved or deleted drawings as desired.
 -   **Non-functional Constraints:**
+    - Offline availability
+    - New Layers can be created.
+    - Performance: at least 1000 elements per year per drawing layer should be usable without noticeable delays and acceptable memory overhead
