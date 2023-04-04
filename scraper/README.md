@@ -1,4 +1,11 @@
-# PermaplanT Scraper
+# Scrapers
+
+This directory contains the following scrapers:
+
+- [PracticalPlants](#scraper-for-practical-plants)
+- [Permapeople](#scraper-for-permapeople)
+
+# Scraper for Practical Plants
 
 ## Requirements
 
@@ -70,3 +77,47 @@ npm run insert <path-to-csv-file>
 ```
 
 _Note:_ Please make sure that the database is up-to-date with latest migrations before running this command.
+
+# Scraper for Permapeople
+
+## Requirements
+
+- nodejs v14.21.2
+- npm
+
+## Installation and Usage
+
+1. Install dependencies
+
+```shell
+npm install && mkdir -p data
+```
+
+2. Create .env file from .env.example and fill in the required values
+
+```shell
+cp .env.example .env
+```
+
+`PERMAPEOPLE_KEY_ID` and `PERMAPEOPLE_SECRET_KEY` mentioned in .env are the key ids and secret keys for the Permapeople API.
+This is required to scrape the data.
+You can get these keys from the Permapeople team.
+
+3. Start the scraper
+
+The scraper will scrape the data from the Permapeople API and store it in `csv` format in the `data` directory. This can be done with the following command:
+
+```shell
+npm run fetch:permapeople
+```
+
+The scraper will also compare the scraped data with the data in the database and store the differences in `csv` format in the `data` directory. This can be done with the following command:
+
+```shell
+npm run compare
+```
+
+There will be several CSV files generated in the `data` directory:
+
+- `permapeopleRawData.csv`: This file contains the raw data scraped from the Permapeople API.
+- `permapeopleDifferences.csv`: This file contains the differences between the scraped data and the data in the database.
