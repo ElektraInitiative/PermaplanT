@@ -14,15 +14,15 @@ export const LandingPage = () => {
     <WidePageLayout>
       <div className="mb-8 flex flex-col items-center p-8">
         <Features />
-        <Testimonials />
+        {/* <Testimonials /> */}
         {/*
         map overlaps with navbar. playing around with zIndex didn't work so far
         <GeoMap />
          */}
-        <Pricing />
-        <CTA />
+        {/* <Pricing /> */}
+        {/* <CTA /> */}
         <BlogOverview />
-        <Team />
+        {/* <Team /> */}
         <ContactUs />
       </div>
       <Footer />
