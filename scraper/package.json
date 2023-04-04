@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/parse.js",
     "insert": "node src/insert_plant_details.js",
-    "merge": "node src/merge.js"
+    "merge": "node src/merge.js",
+    "fetch:reinsaat": "node src/fetch_reinsaat.js"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +19,8 @@
     "dotenv": "^16.0.3",
     "json2csv": "^6.0.0-alpha.2",
     "node-html-parser": "^6.1.4",
-    "pg-promise": "^11.2.0"
+    "pg-promise": "^11.2.0",
+    "playwright": "^1.32.2"
   },
   "type": "module"
 }
