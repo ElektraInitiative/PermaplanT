@@ -77,10 +77,13 @@ function ComponentInFeatureSeeds() {
     const { t } = useTranslation(['seeds', 'common'])
 
     // use the t function to translate some key of feature 'seeds' and 'common'
-    return <Suspense>
-        <div>{t('common_key')}</div>
-        <div>{t('seeds:key_of_feature_seeds')}</div>
-    </Suspense>
+    // use <Suspense> to wait for the data fetching of useTranslation
+    return (
+        <Suspense>
+            <div>{t('common_key')}</div>
+            <div>{t('seeds:key_of_feature_seeds')}</div>
+        </Suspense>
+    );
 }
 
 ```
