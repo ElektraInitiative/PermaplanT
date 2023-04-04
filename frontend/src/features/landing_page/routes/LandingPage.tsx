@@ -5,6 +5,7 @@ import ContactUs from '../components/ContactUs';
 import Features from '../components/Features';
 import { GeoMap } from '../components/GeoMap';
 import WidePageLayout from '@/components/Layout/WidePageLayout';
+import { PhotoGallery } from '../components/PhotoGallery';
 
 export const LandingPage = () => {
   return (
@@ -18,8 +19,8 @@ export const LandingPage = () => {
         <div className="mt-2 h-[50vh] min-h-[24rem] w-full min-w-[32rem] max-w-6xl grow rounded bg-neutral-100 p-10 dark:border-neutral-300-dark dark:bg-neutral-200-dark">
           <GeoMap />
         </div>
-
         <BlogOverview />
+        <PhotoGallery />
         <ContactUs />
       </div>
       <Footer />
