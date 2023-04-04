@@ -23,11 +23,15 @@ CREATE TABLE family (
 ALTER TABLE plants
 ADD CONSTRAINT plants_genus_fkey FOREIGN KEY (genus) REFERENCES genus (name);
 ALTER TABLE plants
-ADD CONSTRAINT plants_subfamily_fkey FOREIGN KEY (subfamily) REFERENCES subfamily (name);
+ADD CONSTRAINT plants_subfamily_fkey FOREIGN KEY (
+    subfamily
+) REFERENCES subfamily (name);
 ALTER TABLE plants
 ADD CONSTRAINT plants_family_fkey FOREIGN KEY (family) REFERENCES family (name);
-CREATE TYPE RELATION_TYPE AS ENUM ('companion', 'antagonist', 'neutral');
-CREATE TYPE HIERARCHY_LEVEL_TYPE AS ENUM ('plant', 'genus', 'subfamily', 'family');
+CREATE TYPE relation_type AS ENUM ('companion', 'antagonist', 'neutral');
+CREATE TYPE hierarchy_level_type AS ENUM (
+    'plant', 'genus', 'subfamily', 'family'
+);
 CREATE TABLE relations (
     id SERIAL PRIMARY KEY,
     from_id INTEGER NOT NULL,
@@ -38,9 +42,11 @@ CREATE TABLE relations (
     relation_strength INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT now() NOT NULL,
     updated_at TIMESTAMP DEFAULT now() NOT NULL,
-    CHECK(
+    CHECK (
         relation_strength >= 0
         AND relation_strength <= 3
     ),
-    CONSTRAINT relations_from_id_from_type_to_id_to_type_key UNIQUE (from_id, from_type, to_id, to_type)
+    CONSTRAINT relations_from_id_from_type_to_id_to_type_key UNIQUE (
+        from_id, from_type, to_id, to_type
+    )
 );
