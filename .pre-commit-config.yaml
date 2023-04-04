@@ -71,3 +71,9 @@ repos:
         args: [--manifest-path=backend/Cargo.toml]
         files: ^backend/
         pass_filenames: false
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 2.0.2
+    hooks:
+      - id: sqlfluff-fix
+        name: sql format
+        args: [--config=backend/.sqlfluff]
