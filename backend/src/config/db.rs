@@ -13,9 +13,9 @@ pub type Pool = deadpool::Pool<AsyncPgConnection>;
 /// If the pool is unable to open its minimum number of connections.
 #[must_use]
 pub fn init_pool(url: &str) -> Pool {
-    let config = AsyncDieselConnectionManager::<AsyncPgConnection>::new(url);
+    let manager = AsyncDieselConnectionManager::<AsyncPgConnection>::new(url);
 
-    match deadpool::Pool::builder(config).build() {
+    match deadpool::Pool::builder(manager).build() {
         Ok(pool) => pool,
         Err(e) => panic!("Error while creating pool: {e}"),
     }
