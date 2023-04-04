@@ -57,3 +57,30 @@ npm run preview
 
 In order to ensure type safety between the TypeScript frontend and Rust backend, we use [typeshare](https://github.com/1Password/typeshare) to synchronize our Rust type definitions with TypeScript.
 These types are auto-generated and we can find our rust-typescript bindings under `/src/bindings` and use them directly in our TypeScript codebase.
+
+## Internationalization
+
+For internationalization we use [react-i18next](https://react.i18next.com/latest/usetranslation-hook), which is a powerful framework to provide translation functionality and more.
+The translations live in the `src/config/i18n` directory together with the respective `i18next` configuration.
+We use a feature based translation approach.
+Each language has it's own folder which holds all translations in files that are named like the features under `src/features`.
+In case a translation is more common there is an additional common namespace defined.
+The translations are loaded from JSON modules to enable type safety.
+For this there is a special file `@types/i18next.d.ts`.
+
+If you want to translate a string living in feature `seeds`, follow this schema:
+
+```tsx
+
+function ComponentInFeatureSeeds() {
+    // load the translation namespaces 'seeds' and 'common'
+    const { t } = useTranslation(['seeds', 'common'])
+
+    // use the t function to translate some key of feature 'seeds' and 'common'
+    return <Suspense>
+        <div>{t('common_key')}</div>
+        <div>{t('seeds:key_of_feature_seeds')}</div>
+    </Suspense>
+}
+
+```
