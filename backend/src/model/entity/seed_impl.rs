@@ -19,6 +19,15 @@ impl Seed {
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
 
+    /// Fetch seed by id from the database.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub fn find_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<SeedDto> {
+        let query_result = seeds::table.find(id).first::<Self>(conn);
+        query_result.map(Into::into)
+    }
+
     /// Create a new seed in the database.
     ///
     /// # Errors

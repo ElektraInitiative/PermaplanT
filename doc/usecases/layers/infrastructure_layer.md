@@ -20,10 +20,10 @@
   - taps
   - water storage tanks
   - irrigation systems
-  For placement:
+    For placement:
   - positioning the elements in the appropriate locations
   - adjusting their properties
-  as needed.
+    as needed.
 - **Alternative scenario:**
   The user accidentally adds or edits an infrastructure element in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**
@@ -31,3 +31,4 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved or deleted infrastructure elements as desired.
 - **Non-functional Constraints:**
+  - Performance: more than 500 elements per year should be usable without noticeable delays and acceptable memory overhead

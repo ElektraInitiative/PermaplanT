@@ -2,24 +2,18 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::config::app;
-    use crate::config::db;
     use crate::config::routes;
     use crate::model::dto::NewSeedDto;
     use crate::model::dto::SeedDto;
     use crate::model::r#enum::quantity::Quantity;
-    use crate::model::response::Body;
+    use crate::test::test_utils::init_test_database;
     use actix_web::App;
     use actix_web::{http::StatusCode, test, web::Data};
-    use dotenvy::dotenv;
+    use diesel::prelude::*;
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_quantity() {
-        dotenv().ok();
-
-        let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::init_pool(&app_config.database_url);
-        let pool = Data::new(pool.clone());
+        let pool = init_test_database(|_| Ok(()));
 
         let mut app = test::init_service(
             App::new()
@@ -46,11 +40,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_tags() {
-        dotenv().ok();
-
-        let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::init_pool(&app_config.database_url);
-        let pool = Data::new(pool.clone());
+        let pool = init_test_database(|_| Ok(()));
 
         let mut app = test::init_service(
             App::new()
@@ -77,11 +67,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_quality() {
-        dotenv().ok();
-
-        let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::init_pool(&app_config.database_url);
-        let pool = Data::new(pool.clone());
+        let pool = init_test_database(|_| Ok(()));
 
         let mut app = test::init_service(
             App::new()
@@ -109,11 +95,18 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_ok() {
-        dotenv().ok();
+        let pool = init_test_database(|mut conn| {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::binomial_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(&mut conn)?;
 
-        let app_config = app::Config::from_env().expect("Error loading configuration");
-        let pool = db::init_pool(&app_config.database_url);
-        let pool = Data::new(pool.clone());
+            Ok(())
+        });
 
         let mut app = test::init_service(
             App::new()
@@ -125,7 +118,7 @@ mod tests {
         let new_seed = NewSeedDto {
             name: "tomato test".to_string(),
             variety: Some("testvariety".to_string()),
-            plant_id: Some(1),
+            plant_id: Some(-1),
             harvest_year: 2022,
             quantity: Quantity::Nothing,
             use_by: None,
@@ -145,8 +138,7 @@ mod tests {
             .await;
         assert_eq!(resp.status(), StatusCode::CREATED);
 
-        let body: Body<SeedDto> = test::read_body_json(resp).await;
-        let seed = body.data;
+        let seed: SeedDto = test::read_body_json(resp).await;
         let resp = test::TestRequest::delete()
             .uri(&format!("/api/seeds/{}", seed.id))
             .send_request(&mut app)

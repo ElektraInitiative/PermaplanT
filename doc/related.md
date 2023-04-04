@@ -116,4 +116,3 @@ In PermaplanT:
 - provides an easy to follow schedule for planting, transplanting, and harvesting
 - gives suggestions which plants should be grown in which environment - location, climate, …
 - see [here](https://wiki.ecohackerfarm.org/companion_planting:software) for several other even longer inactive projects
-

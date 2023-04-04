@@ -22,7 +22,6 @@ const useFindSeedsStore = create<FindSeedsStore>((set) => ({
       set((state) => ({ ...state, isFetchingSeeds: true }));
       const seeds = await findAllSeeds();
       set((state) => ({ ...state, seeds, isFetchingSeeds: false }));
-      
     } catch (error) {
       set((state) => ({
         ...state,

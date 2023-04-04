@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can zoom in and out on their landscape map to view details more clearly or get a better overview of their map.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee:** Giancarlo
 
 ## Scenarios
 
@@ -26,4 +27,4 @@
   The user has zoomed in or out on their map as desired.
 - **Non-functional Constraints:**
   - The app must accurately measure the distance between elements in the selected unit.
-  - Offline availability
+  - Offline availability (if zoom is within the range of previously used zoom anywhere on the map)

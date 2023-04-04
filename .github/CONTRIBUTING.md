@@ -2,6 +2,8 @@
 
 We use [GitHub](https://github.com/ElektraInitiative/PermaplanT/) to maintain this initiative.
 
+Before you start working on anything, please make sure you have [pre-commit hooks](../doc/contrib/README.md#Hooks) set up.
+
 For any non-trival work, i.e. not only updates in docu or tests, there should be an underlying issue.
 Make sure the issue is:
 
@@ -10,9 +12,11 @@ Make sure the issue is:
 
 Once you created a PR, please request a review from @markus2330, who will also merge.
 
-The first line in commit messages should be short.
-From the third line you can have more elaborate descriptions of the changes.
-Please refer to #issues/#PRs/@mention as useful.
+Commit messages:
+
+- The first line in commit messages should be short.
+- From the third line you can have more elaborate descriptions of the changes.
+- Please refer to #issues/#PRs/@mention as useful.
 
 Branch names:
 

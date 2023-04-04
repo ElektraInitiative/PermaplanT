@@ -4,6 +4,7 @@
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
+use utoipa::ToSchema;
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
@@ -13,7 +14,7 @@ pub mod seed_impl;
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct SeedDto {
     pub id: i32,
     pub name: String,
@@ -33,7 +34,7 @@ pub struct SeedDto {
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewSeedDto {
     pub name: String,
     pub variety: Option<String>,
@@ -50,13 +51,22 @@ pub struct NewSeedDto {
     pub notes: Option<String>,
 }
 
+/// The essential identifying information of a plant.
+#[typeshare]
+#[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
+pub struct PlantsSummaryDto {
+    /// The plants database id.
+    pub id: i32,
+    /// Biological name of this plant (E.g. "Triticum aestivum", "Prunus cerasus")
+    pub binomial_name: String,
+    /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
+    pub common_name: Option<Vec<Option<String>>>,
+}
+
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
-#[derive(Serialize, Deserialize)]
-pub struct PlantsDto {
-    pub id: i32,
-    pub tags: Vec<Option<String>>,
-    pub species: String,
-    pub plant: Option<String>,
-    pub plant_type: Option<i32>,
+#[derive(Debug, Deserialize)]
+pub struct PlantsSearchParameters {
+    pub search_term: String,
+    pub limit: i32,
 }

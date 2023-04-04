@@ -21,6 +21,16 @@ pub fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDto>, ServiceError> {
     Ok(result)
 }
 
+/// Find the seed by id from the database.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
+    let mut conn = pool.get()?;
+    let result = Seed::find_by_id(id, &mut conn)?;
+    Ok(result)
+}
+
 /// Create a new seed in the database.
 ///
 /// # Errors

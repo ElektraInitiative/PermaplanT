@@ -1,14 +1,5 @@
 # Contributing to Frontend
 
-## Hooks
-
-The frontend uses pre-commit hooks to ensure certain actions such as linting will be done before a commit succeeds.
-To enable this, make sure to set the right permissions:
-
-```shell
-chmod ug+x .husky/*
-```
-
 ## Project Structure
 
 The majority of the code resides in `src.
@@ -61,14 +52,26 @@ src/features/new-feature
 
 The index.ts file of each feature should serve as its public API, and all elements within that feature should be exported from it. When importing elements from other features, use the feature's root directory, like this:
 
-``` typescript
-import {MyComponent} from "@/features/my-feature"
+```typescript
+import { MyComponent } from "@/features/my-feature";
 ```
 
 Avoid importing elements directly from subdirectories within a feature, like this:
 
-``` typescript
+```typescript
 import {MyComponent} from "@/features/my-feature/components/MyComponent
 ```
 
 Think of a feature as a library or a module that is self-contained but can expose different parts to other features via its entry point.
+
+## Helpful Links
+
+React:
+
+- [The new React documentation (as of 16.03.2023)](https://react.dev/learn)
+- [Advanced and detailed blog](https://kentcdodds.com/blog?q=react)
+
+Zustand (Global State Management):
+
+- [Tutorial](https://blog.logrocket.com/managing-react-state-zustand/)
+- [The Zustand documentation](https://github.com/pmndrs/zustand)

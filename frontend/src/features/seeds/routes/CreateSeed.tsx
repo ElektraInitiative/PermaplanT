@@ -1,10 +1,20 @@
+import PageLayout from '../../../components/Layout/PageLayout';
 import CreateSeedForm from '../components/CreateSeedForm';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import { NewSeedDto } from '@/bindings/definitions';
+import { SelectOption } from '@/components/Form/SelectMenu';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import { useState } from 'react';
+import useDebouncedValue from '@/hooks/useDebouncedValue';
+import usePreventNavigation from '@/hooks/usePreventNavigation';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+function formatCommonName(commonName: string[] | undefined) {
+  if (commonName == null) return '';
+
+  return commonName[0] == null ? '' : '(' + commonName[0] + ')';
+}
 
 export function CreateSeed() {
   const navigate = useNavigate();
@@ -12,9 +22,13 @@ export function CreateSeed() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
   const createSeed = useCreateSeedStore((state) => state.createSeed);
+  const searchPlants = useCreateSeedStore((state) => state.searchPlants);
   const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
   const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
   const error = useCreateSeedStore((state) => state.error);
+
+  const [plantSearchParam, setPlantSearchParam] = useState('');
+  const debouncedPlantSearchParam = useDebouncedValue(plantSearchParam, 250);
 
   const onCancel = () => {
     // There is no need to show the cancel warning modal if the user
@@ -27,8 +41,19 @@ export function CreateSeed() {
     setShowCancelModal(!showCancelModal);
   };
 
+  useEffect(() => {
+    // This is a small workaround so it's possible to use async/await in useEffect
+    const _searchPlants = async () => {
+      await searchPlants(debouncedPlantSearchParam);
+    };
+
+    _searchPlants();
+  }, [debouncedPlantSearchParam]);
+
+  usePreventNavigation(formTouched);
+
   const onSubmit = async (newSeed: NewSeedDto) => {
-    // we can not directly check for an error here because the data would be stale 
+    // we can not directly check for an error here because the data would be stale
     // and not reflect the current state of the store
     //
     // an alternative would be to get a reference to the store and get the error from there
@@ -41,15 +66,32 @@ export function CreateSeed() {
     setFormTouched(true);
   };
 
+  const onVarietyInputChange = (inputValue: string) => {
+    setPlantSearchParam(inputValue);
+  };
+
+  const plants: SelectOption[] = useCreateSeedStore((state) =>
+    state.plants.map((plant) => {
+      const commonName = formatCommonName(plant.common_name);
+      return { value: plant.id, label: plant.binomial_name + ' ' + commonName };
+    }),
+  );
+
   return (
-    <div className="mx-auto w-full p-4 md:w-[900px]">
+    <PageLayout>
       <PageTitle title="Neuer Eintrag" />
-      <CreateSeedForm onCancel={onCancel} onChange={onChange} onSubmit={onSubmit} />
+      <CreateSeedForm
+        plants={plants}
+        onCancel={onCancel}
+        onChange={onChange}
+        onSubmit={onSubmit}
+        onVarietyInputChange={onVarietyInputChange}
+      />
       <SimpleModal
-        title="Eintrag abbrechen"
-        body="Änderungen, die Sie vorgenommen haben, werden nicht gespeichert. Wollen Sie wirklich abbrechen?"
-        cancelBtnTitle="Nein"
-        submitBtnTitle="Ja"
+        title="Cancel Changes?"
+        body="Changes you have made will not be saved. Do you really want to cancel?"
+        cancelBtnTitle="No"
+        submitBtnTitle="Yes"
         show={showCancelModal}
         setShow={setShowCancelModal}
         onCancel={() => {
@@ -60,8 +102,8 @@ export function CreateSeed() {
         }}
       />
       <SimpleModal
-        title="Fehler"
-        body={`Ein Fehler ist aufgetreten: ${error}`}
+        title="Error"
+        body={error?.message || 'An unknown error occurred.'} // Error should always have a message
         show={showErrorModal}
         setShow={setShowErrorModal}
         submitBtnTitle="Ok"
@@ -69,6 +111,6 @@ export function CreateSeed() {
           setShowErrorModal(false);
         }}
       ></SimpleModal>
-    </div>
+    </PageLayout>
   );
 }

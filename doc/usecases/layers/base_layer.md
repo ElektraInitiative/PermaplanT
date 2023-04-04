@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User imports a picture to use as a background.
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee:** Moritz
 
 ## Scenarios
 
@@ -27,3 +28,4 @@
 - **Postcondition:** The user's selected background image and borders are used for further planning.
 - **Non-functional Constraints:**
   - Support for multiple image formats
+  - Supports alternatives (use of different pictures)
