@@ -12,5 +12,8 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+if (!import.meta.env.hasOwnProperty('VITE_BASE_API_URL')) {
+  throw new Error('VITE_BASE_API_URL not set');
+}
 
-export const baseApiUrl = 'http://localhost:8080';
+export const baseApiUrl = import.meta.env.VITE_BASE_API_URL;
