@@ -7,5 +7,3 @@ CREATE TABLE varieties (
   species TEXT NOT NULL, -- German: Art
   variety TEXT -- German: Sorte
 );
-
-INSERT INTO varieties (id, tags, species) VALUES (1, ARRAY['Fruit crops']::TEXT[], 'Wildtomate');
