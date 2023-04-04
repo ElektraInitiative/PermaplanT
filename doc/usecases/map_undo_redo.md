@@ -5,8 +5,9 @@
 - **Scope:** All Layers
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can undo or redo their actions in the app to correct mistakes or revert changes.
-- **Status:** Draft
+- **Brief:** The user can undo or redo their own actions to correct mistakes made to the map.
+- **Status:** Needs Clarification (Collaborative/Offline Feasibility)
+- **Assignee:** Paul
 
 ## Scenarios
 
@@ -27,3 +28,4 @@
 - **Non-functional Constraints:**
   - The app must clearly communicate to the user whether an action can be undone or redone.
   - The app must clearly communicate which undo/redo action was done.
+  - Offline availability

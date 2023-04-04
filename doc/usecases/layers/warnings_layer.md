@@ -21,5 +21,7 @@
 - **Postcondition:**
   The user's map shows the warnings as desired, or hides all of them if the layer has visibility off.
 - **Non-functional Constraints:**
+  - Performance: more than 10000 elements per year and per alternative should be usable without noticeable delays and acceptable memory overhead
 - **Note:**
-  While doing drag and drop of [plants](plants_layer.md), warnings are anyway shown.
+  - it gets dynamically generated based on alternatives
+  - while doing drag and drop of [plants](plants_layer.md), warnings are shown anyway.

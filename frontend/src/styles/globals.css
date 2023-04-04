@@ -10,6 +10,12 @@
   h3 {
     @apply text-lg;
   }
+  p, span, h1, h2, h3, li, label, a, th, td {
+    @apply text-gray-600 dark:text-white;
+  }
+  a:hover {
+    @apply hover:text-neutral-300 dark:text-neutral-300-dark;
+  }
   body {
     @apply bg-neutral-200 dark:bg-neutral-100-dark dark:text-white
   }
@@ -17,4 +23,3 @@
 
 @tailwind components;
 @tailwind utilities;
-

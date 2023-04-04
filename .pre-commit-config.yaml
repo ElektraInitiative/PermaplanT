@@ -1,0 +1,73 @@
+# https://pre-commit.com/
+repos:
+  # General hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+        args: ["--markdown-linebreak-ext=md"]
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        name: doc format
+        exclude: ^frontend/
+  # Frontend hooks
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        name: frontend format
+        args:
+          [
+            --config=frontend/prettier.config.js,
+            --ignore-path=frontend/.prettierignore,
+          ]
+        files: ^frontend/
+        types_or:
+          - javascript
+          - jsx
+          - ts
+          - tsx
+          - json
+          - css
+          - scss
+          - markdown
+        additional_dependencies:
+          - prettier@2.7.1
+          - prettier-plugin-tailwindcss@0.2.1
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.24.0
+    hooks:
+      - id: eslint
+        name: frontend lint
+        args:
+          [
+            --config=frontend/.eslintrc.json,
+            --max-warnings=0,
+            --ignore-path=frontend/.eslintignore,
+          ]
+        verbose: true
+        files: ^frontend/
+        types: [file]
+        types_or:
+          - javascript
+          - jsx
+          - ts
+          - tsx
+        additional_dependencies:
+          - eslint@8.24.0
+          - eslint-plugin-react@7.31.8
+          - eslint-plugin-react-hooks@4.6.0
+  # Backend hooks
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: v1.0
+    hooks:
+      - id: fmt
+        name: backend format
+        args: [--manifest-path=backend/Cargo.toml]
+        files: ^backend/
+        pass_filenames: false

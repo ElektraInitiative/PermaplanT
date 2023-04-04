@@ -17,7 +17,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             )
             .service(
                 web::scope("/plants")
-                    .service(plants::find_all)
+                    .service(plants::find_all_or_search)
                     .service(plants::find_by_id),
             )
             .wrap(NormalizePath::default()),
