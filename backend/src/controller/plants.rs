@@ -3,7 +3,7 @@
 use crate::{config::db::Pool, model::dto::PlantsSearchParameters, service};
 use actix_web::{
     get,
-    web::{Data, Path},
+    web::{Data, Path, Query},
     HttpResponse, Result,
 };
 
@@ -21,7 +21,7 @@ use actix_web::{
 )]
 #[get("")]
 pub async fn find_all_or_search(
-    query: Option<web::Query<PlantsSearchParameters>>,
+    query: Option<Query<PlantsSearchParameters>>,
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
     let response = match query {

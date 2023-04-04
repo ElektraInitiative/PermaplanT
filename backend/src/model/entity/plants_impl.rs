@@ -1,6 +1,6 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::{QueryDsl, QueryResult};
+use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::{
@@ -26,9 +26,9 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn search(
+    pub async fn search(
         query: &PlantsSearchParameters,
-        conn: &mut PgConnection,
+        conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantsSummaryDto>> {
         let query_with_placeholders = format!("%{}%", query.search_term);
 
@@ -42,7 +42,7 @@ impl Plants {
             .order((binomial_name, common_name))
             .limit(query.limit.into());
 
-        let query_result = query.load::<Self>(conn);
+        let query_result = query.load::<Self>(conn).await;
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
 

@@ -25,13 +25,12 @@ pub async fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSummaryDto>, Servic
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn search(
+pub async fn search(
     pool: &Data<Pool>,
     query: &PlantsSearchParameters,
 ) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
-    let mut conn = pool.get()?;
-    let result = Plants::search(query, &mut conn)?;
-
+    let mut conn = pool.get().await?;
+    let result = Plants::search(query, &mut conn).await?;
     Ok(result)
 }
 
