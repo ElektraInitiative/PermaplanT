@@ -20,12 +20,12 @@ CREATE TABLE family (
     updated_at TIMESTAMP DEFAULT now() NOT NULL,
     CONSTRAINT family_name_key UNIQUE (name)
 );
-ALTER TABLE plant_detail
-ADD CONSTRAINT plant_detail_genus_fkey FOREIGN KEY (genus) REFERENCES genus (name);
-ALTER TABLE plant_detail
-ADD CONSTRAINT plant_detail_subfamily_fkey FOREIGN KEY (subfamily) REFERENCES subfamily (name);
-ALTER TABLE plant_detail
-ADD CONSTRAINT plant_detail_family_fkey FOREIGN KEY (family) REFERENCES family (name);
+ALTER TABLE plants
+ADD CONSTRAINT plants_genus_fkey FOREIGN KEY (genus) REFERENCES genus (name);
+ALTER TABLE plants
+ADD CONSTRAINT plants_subfamily_fkey FOREIGN KEY (subfamily) REFERENCES subfamily (name);
+ALTER TABLE plants
+ADD CONSTRAINT plants_family_fkey FOREIGN KEY (family) REFERENCES family (name);
 CREATE TYPE RELATION_TYPE AS ENUM ('companion', 'antagonist', 'neutral');
 CREATE TYPE HIERARCHY_LEVEL_TYPE AS ENUM ('plant', 'genus', 'subfamily', 'family');
 CREATE TABLE relations (
