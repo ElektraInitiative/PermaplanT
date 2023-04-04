@@ -21,12 +21,14 @@ cp .env.example .env
 
 `PRACTICALPLANTSPATH` mentioned in .env is the path on your local filesystem to the Practical Plants wiki dump, that could be fetched from our [repository](https://github.com/ElektraInitiative/practicalplants). This is required to scrape the data.
 
+### Option 1: Run the scraper and insert data into database in separate steps
+
 3. Start the scraper
 
 The scraper will scrape the data from the Practical Plants wiki dump and store it in `csv` format in the `data` directory. This can be done with the following command:
 
 ```shell
-npm run start
+npm run parse
 ```
 
 As an additional step the script will also lookup the german common name through Wikidata API and store it under the column `Column Name DE` in the `detail.csv` file.
@@ -70,3 +72,11 @@ npm run insert <path-to-csv-file>
 ```
 
 _Note:_ Please make sure that the database is up-to-date with latest migrations before running this command.
+
+### Option 2: Run the scraper and insert data into database in one step
+
+3. Start the scraper and insert data into database
+
+```shell
+npm run start
+```

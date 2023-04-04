@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/parse.js",
+    "parse": "node src/parse.js",
     "insert": "node src/insert_plant_details.js",
+    "start":"node src/parse.js && node src/insert_plant_details.js data/detail.csv",
     "merge": "node src/merge.js"
   },
   "keywords": [],
