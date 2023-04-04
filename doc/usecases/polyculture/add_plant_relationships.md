@@ -15,15 +15,15 @@
   - The user has opened the UI to propose a new relationship.
 - **Main success scenario:**
   - Details about the relationship are provided by the user.
-     - The two sides of the relationship can be
-       - Specific plants
-       - Taxonomic ranks which are not specific plants
-     - The type of the relationship can be
-       - Companion
-       - Antagonist
-       - Neutral
-     - Confidence
-     - A description providing information on the why's and how's.
+    - The two sides of the relationship can be
+      - Specific plants
+      - Taxonomic ranks which are not specific plants
+    - The type of the relationship can be
+      - Companion
+      - Antagonist
+      - Neutral
+    - Confidence
+    - A description providing information on the why's and how's.
 - **Alternative scenario:**
   - The user creates a relationship which is only effective for one or more of her selected maps.  
     In this case there is no review process.

@@ -61,7 +61,7 @@ const CreateSeedForm = ({
                 const mapped = temp.value as number;
                 setValue('plant_id', mapped);
               }
-           }}
+            }}
             onInputChange={onVarietyInputChange}
             onChange={onChange}
           />
@@ -170,12 +170,12 @@ const CreateSeedForm = ({
           <SimpleButton
             type="button"
             onClick={onCancel}
-            className='max-w-[240px] grow sm:w-auto'
+            className="max-w-[240px] grow sm:w-auto"
             variant={ButtonVariant.secondaryBase}
           >
             Cancel
           </SimpleButton>
-          <SimpleButton title="Create Seed" type="submit" className='max-w-[240px] grow sm:w-auto'>
+          <SimpleButton title="Create Seed" type="submit" className="max-w-[240px] grow sm:w-auto">
             Create Seed
             {useCreateSeedStore((state) => state.isUploadingSeed) && (
               <svg

@@ -18,7 +18,9 @@ const Team = () => {
                 src="https://dummyimage.com/80x80"
               />
               <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">Holden Caulfield</h2>
+                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  Holden Caulfield
+                </h2>
                 <p className="text-gray-500">UI Designer</p>
               </div>
             </div>
@@ -31,7 +33,9 @@ const Team = () => {
                 src="https://dummyimage.com/84x84"
               />
               <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">Henry Letham</h2>
+                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  Henry Letham
+                </h2>
                 <p className="text-gray-500">CTO</p>
               </div>
             </div>
@@ -44,7 +48,9 @@ const Team = () => {
                 src="https://dummyimage.com/88x88"
               />
               <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">Oskar Blinde</h2>
+                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  Oskar Blinde
+                </h2>
                 <p className="text-gray-500">Founder</p>
               </div>
             </div>
@@ -57,7 +63,9 @@ const Team = () => {
                 src="https://dummyimage.com/90x90"
               />
               <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">John Doe</h2>
+                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  John Doe
+                </h2>
                 <p className="text-gray-500">DevOps</p>
               </div>
             </div>
@@ -70,7 +78,9 @@ const Team = () => {
                 src="https://dummyimage.com/94x94"
               />
               <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">Martin Eden</h2>
+                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  Martin Eden
+                </h2>
                 <p className="text-gray-500">Software Engineer</p>
               </div>
             </div>
@@ -83,7 +93,9 @@ const Team = () => {
                 src="https://dummyimage.com/98x98"
               />
               <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">Boris Kitua</h2>
+                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  Boris Kitua
+                </h2>
                 <p className="text-gray-500">UX Researcher</p>
               </div>
             </div>
@@ -96,7 +108,9 @@ const Team = () => {
                 src="https://dummyimage.com/100x90"
               />
               <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">Atticus Finch</h2>
+                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  Atticus Finch
+                </h2>
                 <p className="text-gray-500">QA Engineer</p>
               </div>
             </div>
@@ -109,7 +123,9 @@ const Team = () => {
                 src="https://dummyimage.com/104x94"
               />
               <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">Alper Kamu</h2>
+                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  Alper Kamu
+                </h2>
                 <p className="text-gray-500">System</p>
               </div>
             </div>
@@ -122,7 +138,9 @@ const Team = () => {
                 src="https://dummyimage.com/108x98"
               />
               <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">Rodrigo Monchi</h2>
+                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  Rodrigo Monchi
+                </h2>
                 <p className="text-gray-500">Product Manager</p>
               </div>
             </div>

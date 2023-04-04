@@ -28,9 +28,9 @@ Each and every pull request will be built and tested against a separate CI datab
 
 Steps for all PRs are:
 
-* prepare an empty Postgres database
-* call `./ci/build-scripts/build-backend.sh`, which builds the rust binary as well as the bindings' definition via `typeshare`
-* call `./ci/build-scripts/build-frontend.sh`, which does a full release build of the frontend
+- prepare an empty Postgres database
+- call `./ci/build-scripts/build-backend.sh`, which builds the rust binary as well as the bindings' definition via `typeshare`
+- call `./ci/build-scripts/build-frontend.sh`, which does a full release build of the frontend
 
 ### Deploy to PR Environment
 

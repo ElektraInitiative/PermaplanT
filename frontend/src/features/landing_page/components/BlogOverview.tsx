@@ -66,7 +66,9 @@ const BlogOverview = () => {
                 className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
               />
               <span className="flex flex-grow flex-col pl-4">
-                <span className="title-font font-medium text-primary-500 dark:text-primary-300">Holden Caulfield</span>
+                <span className="title-font font-medium text-primary-500 dark:text-primary-300">
+                  Holden Caulfield
+                </span>
                 <span className="mt-0.5 text-xs tracking-widest text-gray-400">UI DEVELOPER</span>
               </span>
             </a>
@@ -133,7 +135,9 @@ const BlogOverview = () => {
                 className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
               />
               <span className="flex flex-grow flex-col pl-4">
-                <span className="title-font font-medium text-gray-900 text-primary-500 dark:text-primary-300">Alper Kamu</span>
+                <span className="title-font font-medium text-gray-900 text-primary-500 dark:text-primary-300">
+                  Alper Kamu
+                </span>
                 <span className="mt-0.5 text-xs tracking-widest text-gray-400">DESIGNER</span>
               </span>
             </a>
