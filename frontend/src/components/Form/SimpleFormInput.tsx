@@ -50,7 +50,7 @@ export default function SimpleFormInput<T extends FieldValues>({
           rows={6}
           name={id}
           id={id}
-          className="block w-full rounded-lg border border-neutral-500 bg-neutral-100 dark:bg-neutral-100-dark dark:bg-primary-textfield-dark p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 dark:focus:border-primary-500 focus:outline-none"
+          className="block w-full rounded-lg border border-neutral-500 bg-neutral-100 dark:bg-neutral-100-dark dark:bg-primary-textfield-dark p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 dark:focus:border-primary-300 focus:outline-none"
           placeholder={placeHolder}
           required={required}
           {...register?.(id)}
@@ -65,7 +65,7 @@ export default function SimpleFormInput<T extends FieldValues>({
           max={max}
           id={id}
           defaultValue={defaultValue}
-          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 dark:bg-neutral-50-dark dark:border-neutral-400-dark p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 dark:focus:border-primary-500 focus:outline-none"
+          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 dark:bg-neutral-50-dark dark:border-neutral-400-dark p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 dark:focus:border-primary-300 focus:outline-none"
           placeholder={placeHolder}
           required={required}
           style={{ colorScheme: 'dark' }}

@@ -3,8 +3,10 @@ interface SimpleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 }
 
 export enum ButtonVariant {
-  primary,
-  secondary,
+  primaryBase,
+  secondaryBase,
+  primaryContainer,
+  secondaryContainer,
 }
 
 /**
@@ -13,12 +15,14 @@ export enum ButtonVariant {
  * @param props All React props for buttons can be applied.
  */
 export default function SimpleButton({
-  variant = ButtonVariant.primary,
+  variant = ButtonVariant.primaryBase,
   ...props
 }: SimpleButtonProps) {
   const colors = [
-    'bg-primary-600 dark:bg-primary-800 border-primary-500 hover:bg-primary-700 dark:hover:bg-primary-700 active:bg-primary-900 ',
-    'bg-secondary-600 dark:bg-secondary-800 border-secondary-500 hover:bg-secondary-700 dark:hover:bg-secondary-700 active:bg-secondary-900 ',
+    'bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700',
+    'bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700',
+    'bg-primary-200 dark:bg-primary-600 border-primary-500 hover:bg-primary-200 dark:hover:bg-primary-600 active:bg-primary-900 text-primary-900 dark:text-primary-200',
+    'bg-secondary-200 dark:bg-secondary-600 border-secondary-500 hover:bg-secondary-200 dark:hover:bg-secondary-600 active:bg-secondary-900 text-secondary-900 dark:text-secondary-200',
   ];
   const className =
     'inline-flex h-10 w-full items-center justify-center rounded-lg text-white px-4 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300 border ' +

@@ -35,15 +35,15 @@ const Features = () => {
       <div className="py-24">
         <div className="mb-20 text-center">
           <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">
-            BE <span className="text-primary-500 dark:text-primary-500">GOOD</span> TO YOUR
-            <span className="text-secondary-500 dark:text-primary-500"> PLANTS</span>
+            BE <span className="text-primary-400 dark:text-primary-300">GOOD</span> TO YOUR
+            <span className="text-secondary-500 dark:text-secondary-300"> PLANTS</span>
           </h1>
           <p className="mx-auto w-[500px]">
             Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub
             indxgo juice poutine, ramps microdosing banh mi pug.
           </p>
           <div className="mt-6 flex justify-center">
-            <div className="h-1 w-16 rounded-full bg-secondary-400"></div>
+            <div className="h-1 w-16 rounded-full bg-secondary-500 dark:bg-secondary-300"></div>
           </div>
         </div>
         <div className="-mx-4 -mb-10 -mt-4 flex flex-wrap space-y-6 sm:-m-4 md:space-y-0">
@@ -52,7 +52,7 @@ const Features = () => {
               key={feature.title}
               className="flex flex-col items-center p-4 text-center md:w-1/3"
             >
-              <div className="mb-5 inline-flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-secondary-300">
+              <div className="mb-5 inline-flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-primary-400 dark:bg-primary-300">
                 {<feature.icon className="h-8 w-8" />}
               </div>
               <div className="flex-grow">

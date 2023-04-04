@@ -171,7 +171,7 @@ const CreateSeedForm = ({
             type="button"
             onClick={onCancel}
             className='max-w-[240px] grow sm:w-auto'
-            variant={ButtonVariant.secondary}
+            variant={ButtonVariant.secondaryBase}
           >
             Cancel
           </SimpleButton>

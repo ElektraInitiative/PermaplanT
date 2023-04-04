@@ -37,8 +37,8 @@ export default function CreatableSelectMenu<T extends FieldValues>({
       return `
         h-[44px] bg-neutral-200 rounded border 
         dark:bg-neutral-50-dark focus:border-primary-500
-        hover:border-primary-500 dark:focus:border-primary-500 dark:hover:border-primary-500
-        ${state.isFocused ? " border-primary-500 dark:border-primary-500" : " dark:border-neutral-400-dark border-neutral-500"}
+        hover:border-primary-500 dark:focus:border-primary-300 dark:hover:border-primary-300
+        ${state.isFocused ? " border-primary-500 dark:border-primary-300" : " dark:border-neutral-400-dark border-neutral-500"}
       `
     },
     option: (state) => {

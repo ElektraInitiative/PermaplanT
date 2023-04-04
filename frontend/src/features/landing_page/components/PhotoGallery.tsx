@@ -85,7 +85,7 @@ export const PhotoGallery = () => {
           onClick={() => {
             setImageSize('small');
           }}
-          variant={ButtonVariant.secondary}
+          variant={ButtonVariant.secondaryBase}
           className="w-24"
         >
           small
@@ -94,7 +94,7 @@ export const PhotoGallery = () => {
           onClick={() => {
             setImageSize('mid');
           }}
-          variant={ButtonVariant.secondary}
+          variant={ButtonVariant.secondaryBase}
           className="w-24"
         >
           mid
@@ -103,7 +103,7 @@ export const PhotoGallery = () => {
           onClick={() => {
             setImageSize('large');
           }}
-          variant={ButtonVariant.secondary}
+          variant={ButtonVariant.secondaryBase}
           className="w-24"
         >
           large
