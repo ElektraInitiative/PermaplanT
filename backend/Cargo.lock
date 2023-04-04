@@ -292,6 +292,7 @@ dependencies = [
  "diesel-derive-enum",
  "dotenvy",
  "serde",
+ "serde_json",
  "typeshare",
  "utoipa",
  "utoipa-swagger-ui",

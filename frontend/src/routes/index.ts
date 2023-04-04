@@ -1,5 +1,6 @@
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 import { Pages, Routes } from './types';
+
 import { LandingPage } from '@/features/landing_page';
 
 const routes: Routes = {
@@ -21,7 +22,7 @@ const routes: Routes = {
   [Pages.LandingPage]: {
     component: LandingPage,
     path: '/',
-    title: 'PermaPlanT',
+    title: 'PermaplanT',
   },
 };
 

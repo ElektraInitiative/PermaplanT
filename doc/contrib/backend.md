@@ -6,7 +6,7 @@
 
 You can generate new migrations with the diesel cli:
 
-``` shell
+```shell
 diesel migration generate migration_name
 ```
 
@@ -21,21 +21,21 @@ Now we have to write the migrations in the respective `up.sql` and `down.sql` fi
 
 Examples:
 
-``` SQL
+```SQL
 -- up.sql
 CREATE TABLE seeds (
   id SERIAL PRIMARY KEY,
 );
 ```
 
-``` SQL
+```SQL
 -- down.sql
 DROP TABLE seeds;
 ```
 
 ### Apply migrations
 
-``` shell
+```shell
 diesel migration run
 ```
 
@@ -44,7 +44,7 @@ diesel migration run
 This is especially useful for incremental improvements to the database.
 For example if you need to change one field in one of your tables, you can change it and redo the migration.
 
-``` shell
+```shell
 # Redo latest migration
 diesel migration redo
 

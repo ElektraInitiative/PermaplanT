@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User adds a new plant to the app's database.
-- **Status:** Draft
+- **Status:** Needs Clarification (permapeople.org import/sync)
 
 ## Scenarios
 

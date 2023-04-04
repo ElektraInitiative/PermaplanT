@@ -16,6 +16,3 @@ CREATE TABLE seeds (
   generation SMALLINT, -- German: Generation
   notes TEXT -- German: Notizen,
 );
-
--- This is only temporary so we can get some rows into the database
-INSERT INTO seeds (variety_id, tags, name, harvest_year, quantity) VALUES (1, ARRAY['Fruit crops']::tag[], 'Tomate', 2023, 'Enough');

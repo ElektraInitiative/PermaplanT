@@ -32,40 +32,40 @@ Inside a React application we can usually distinguish between three types of sta
 ### Server State
 
 - [SWR](https://github.com/vercel/swr)
-  Fewer features than React Query 
+  Fewer features than React Query
 
 ## Decision
 
 ### Local Component State
 
-  No library is needed. 
+No library is needed.
 
 #### Rationale
 
-  Managing component state can be accomplished with React features (useState, Context + useReducer).
+Managing component state can be accomplished with React features (useState, Context + useReducer).
 
 ### Global Application State
 
-  [Zustand](https://github.com/pmndrs/zustand) will be used as the global state management library for PermaplanT.
+[Zustand](https://github.com/pmndrs/zustand) will be used as the global state management library for PermaplanT.
 
 #### Rationale
 
-Zustand is a lightweight and easy-to-use library that uses hooks, which makes it easy to integrate with React. 
+Zustand is a lightweight and easy-to-use library that uses hooks, which makes it easy to integrate with React.
 Its simplicity also reduces the amount of boilerplate code and the need for complex setup and configuration.
 
 ### Server State
 
-  [React Query](https://react-query-v3.tanstack.com/) will be used for managing asynchronous state
+[React Query](https://react-query-v3.tanstack.com/) will be used for managing asynchronous state
 
 #### Rationale
-  
-  React Query is a feature rich, up to date library for managing asynchronous data. 
+
+React Query is a feature rich, up to date library for managing asynchronous data.
 
 ## Implications
 
 ## Related Decisions
 
- - Choosing React as the [frontend library](./frontend_ui_framework.md) for PermaplanT
+- Choosing React as the [frontend library](./frontend_ui_framework.md) for PermaplanT
 
 ## Notes
 
@@ -74,4 +74,3 @@ Its simplicity also reduces the amount of boilerplate code and the need for comp
 - https://medium.com/readytowork-org/its-zustand-vs-redux-8e24424df713
 - https://tanstack.com/query/latest/docs/react/guides/does-this-replace-client-state
 - https://tanstack.com/query/v4/docs/react/comparison
-

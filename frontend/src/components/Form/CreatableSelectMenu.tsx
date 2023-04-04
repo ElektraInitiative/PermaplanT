@@ -1,7 +1,7 @@
 import { SelectOption } from './SelectMenu';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { ClassNamesConfig, StylesConfig } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
+import { ActionMeta, ClassNamesConfig, StylesConfig } from 'react-select';
 import filterObject from '@/utils/filterObject';
 
 export interface CreatableSelectMenuProps<T extends FieldValues> {
@@ -12,9 +12,10 @@ export interface CreatableSelectMenuProps<T extends FieldValues> {
   options: SelectOption[];
   required?: boolean;
   placeholder?: string;
-  handleOptionsChange?: (option: unknown) => void;
+  handleOptionsChange?: (option: any, actionMeta: ActionMeta<any>) => void;
   handleCreate?: (inputValue: string) => void;
   onChange?: () => void;
+  onInputChange?: (inputValue: string) => void;
 }
 
 export default function CreatableSelectMenu<T extends FieldValues>({
@@ -28,23 +29,28 @@ export default function CreatableSelectMenu<T extends FieldValues>({
   handleOptionsChange,
   handleCreate,
   onChange,
+  onInputChange,
 }: CreatableSelectMenuProps<T>) {
   const customClassNames: ClassNamesConfig = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
     control: (state) => {
       return `
-        h-[44px] bg-neutral-200 rounded border 
+        h-[44px] bg-neutral-200 rounded border
         dark:bg-neutral-50-dark focus:border-primary-500
-        hover:border-primary-500 dark:focus:border-primary-500 dark:hover:border-primary-500
-        ${state.isFocused ? " border-primary-500 dark:border-primary-500" : " dark:border-neutral-400-dark border-neutral-500"}
-      `
+        hover:border-primary-500 dark:focus:border-primary-300 dark:hover:border-primary-300
+        ${
+          state.isFocused
+            ? ' border-primary-500 dark:border-primary-300'
+            : ' dark:border-neutral-400-dark border-neutral-500'
+        }
+      `;
     },
     option: (state) => {
       return `
         hover:bg-neutral-200 dark:hover:bg-neutral-400-dark
         ${state.isFocused ? ' bg-neutral-300 dark:bg-neutral-500' : ''}
         ${state.isSelected ? ' bg-primary-500' : ''}
-      `
+      `;
     },
     valueContainer: () => 'flex-nowrap',
     multiValue: () => 'bg-neutral-400 dark:bg-neutral-400-dark',
@@ -53,12 +59,20 @@ export default function CreatableSelectMenu<T extends FieldValues>({
   const customStyles: StylesConfig = {
     // remove css attributes from predefined styles
     // this needs to be done so the custom css classes take effect
-    control: (styles) => filterObject(styles, ["border", "borderColor", "borderRadius", "boxShadow", "color", "&:hover"]),
-    option: (styles) => filterObject(styles, ["backgroundColor", "color"]),
-    singleValue: (styles) => filterObject(styles, ["color"]),
-    multiValue: (styles) => filterObject(styles, ["color"]),
-    multiValueLabel: (styles) => filterObject(styles, ["color"]),
-    multiValueRemove: (styles) => filterObject(styles, ["color"]),
+    control: (styles) =>
+      filterObject(styles, [
+        'border',
+        'borderColor',
+        'borderRadius',
+        'boxShadow',
+        'color',
+        '&:hover',
+      ]),
+    option: (styles) => filterObject(styles, ['backgroundColor', 'color']),
+    singleValue: (styles) => filterObject(styles, ['color']),
+    multiValue: (styles) => filterObject(styles, ['color']),
+    multiValueLabel: (styles) => filterObject(styles, ['color']),
+    multiValueRemove: (styles) => filterObject(styles, ['color']),
   };
 
   return (
@@ -85,7 +99,10 @@ export default function CreatableSelectMenu<T extends FieldValues>({
             styles={customStyles}
             classNames={customClassNames}
             required={required}
-            onInputChange={onChange}
+            onInputChange={(inputValue) => {
+              onChange?.();
+              onInputChange?.(inputValue);
+            }}
           />
         )}
       />

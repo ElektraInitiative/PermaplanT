@@ -8,15 +8,15 @@ Semantically the plant information can be described as a hierarchy of entities.
 
 A plant can be classified
 
--   on variety level, and/or
--   on species level.
+- on variety level, and/or
+- on species level.
 
 Furthermore:
 
--   a variety belongs to a specie
--   specie belongs to a genus
--   genus belongs to a subfamily or family
--   subfamily belongs to a family.
+- a variety belongs to a specie
+- specie belongs to a genus
+- genus belongs to a subfamily or family
+- subfamily belongs to a family.
 
 Please take a look at the diagram below, which shows the hierarchy of entities with `height` and `width` as an example of attribute classification described above.
 
@@ -56,17 +56,17 @@ E.g., a variety under a specie can have different height than the specie that it
 
 The challenge is to define the structure of the database in a way that the data
 
--   can be easily queried and
--   updated without redundancy (e.g. setting attributes for a whole family).
+- can be easily queried and
+- updated without redundancy (e.g. setting attributes for a whole family).
 
 ## Constraints
 
--   The database structure should represent the hierarchy of entities described above.
--   The database structure should be able to store relations between entities.
+- The database structure should represent the hierarchy of entities described above.
+- The database structure should be able to store relations between entities.
 
 ## Assumptions
 
--   Performance of the database utilizing structure described in this decision is efficient enough for our use case.
+- Performance of the database utilizing structure described in this decision is efficient enough for our use case.
 
 ## Considered Alternatives
 

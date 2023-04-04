@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can copy and paste a selection of elements, including succeeding crops, in their map
-- **Status:** Draft
+- **Status:** Assigned
+- **Assignee:** Giancarlo
 
 ## Scenarios
 
@@ -21,3 +22,4 @@
 - **Postcondition:**
   The user's map includes the copied and pasted selection of elements.
 - **Non-functional Constraints:**
+  - Alternatives (selected elements depend on which alternative layer is selected)
