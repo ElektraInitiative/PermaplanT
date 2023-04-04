@@ -1,0 +1,15 @@
+DROP TABLE plants;
+DROP TYPE fertility;
+DROP TYPE deciduous_or_evergreen;
+DROP TYPE flower_type;
+DROP TYPE herbaceous_or_woody;
+DROP TYPE growth_rate;
+DROP TYPE life_cycle;
+DROP TYPE root_zone_tendancy;
+DROP TYPE nutrition_demand;
+DROP TYPE shade;
+DROP TYPE soil_texture;
+DROP TYPE soil_ph;
+DROP TYPE soil_water_retention;
+DROP TYPE water;
+DROP TYPE sun;
