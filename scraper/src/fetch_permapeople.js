@@ -17,7 +17,7 @@ async function fetchAllPlants() {
   let plants = response.data.plants;
   let i = 0;
   while (plants.length > 0) {
-    if (i == 1) break;
+    // if (i == 1) break;
     console.log(`Fetching page ${i + 1}`);
     plants.forEach((plant) => {
       plant = plant.data.reduce((acc, curr) => {

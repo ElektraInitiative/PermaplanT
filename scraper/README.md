@@ -111,7 +111,7 @@ The scraper will scrape the data from the Permapeople API and store it in `csv` 
 npm run fetch:permapeople
 ```
 
-The scraper will also compare the scraped data with the data in the database and store the differences in `csv` format in the `data` directory. This can be done with the following command:
+The scraper will also compare the scraped data with the data in the database(this data will be referenced as practicalPlants data and vice versa) and store the differences in `csv` format in the `data` directory. This can be done with the following command:
 
 ```shell
 npm run compare
@@ -121,3 +121,13 @@ There will be several CSV files generated in the `data` directory:
 
 - `permapeopleRawData.csv`: This file contains the raw data scraped from the Permapeople API.
 - `permapeopleDifferences.csv`: This file contains the differences between the scraped data and the data in the database.
+
+### How the comparison works
+
+The comparison is done by merging the scraped data with the data in the database.
+The merge is done based on the `binomial_name` column on the side of practicalPlants and `scientificName` column on the side of permapeople.
+There are 3 possible cases:
+
+- `both` - the data is present in both scraped data and database.
+- `practicalPlants` - the data is present in the database but not in scraped data.
+- `permapeople` - the data is present in scraped data but not in database.
