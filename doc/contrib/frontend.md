@@ -52,13 +52,13 @@ src/features/new-feature
 
 The index.ts file of each feature should serve as its public API, and all elements within that feature should be exported from it. When importing elements from other features, use the feature's root directory, like this:
 
-``` typescript
-import {MyComponent} from "@/features/my-feature"
+```typescript
+import { MyComponent } from "@/features/my-feature";
 ```
 
 Avoid importing elements directly from subdirectories within a feature, like this:
 
-``` typescript
+```typescript
 import {MyComponent} from "@/features/my-feature/components/MyComponent
 ```
 

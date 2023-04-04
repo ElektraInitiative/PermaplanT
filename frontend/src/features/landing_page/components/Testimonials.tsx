@@ -27,7 +27,9 @@ const Testimonials = () => {
                     className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
                   />
                   <span className="flex flex-grow flex-col pl-4">
-                    <span className="title-font font-medium text-primary-500 dark:text-primary-300">Holden Caulfield</span>
+                    <span className="title-font font-medium text-primary-500 dark:text-primary-300">
+                      Holden Caulfield
+                    </span>
                     <span className="text-sm text-gray-500">UI DEVELOPER</span>
                   </span>
                 </a>
@@ -55,7 +57,9 @@ const Testimonials = () => {
                     className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
                   />
                   <span className="flex flex-grow flex-col pl-4">
-                    <span className="title-font font-medium text-primary-500 dark:text-primary-300">Alper Kamu</span>
+                    <span className="title-font font-medium text-primary-500 dark:text-primary-300">
+                      Alper Kamu
+                    </span>
                     <span className="text-sm text-gray-500">DESIGNER</span>
                   </span>
                 </a>

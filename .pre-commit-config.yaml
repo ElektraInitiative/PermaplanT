@@ -21,7 +21,11 @@ repos:
     hooks:
       - id: prettier
         name: frontend format
-        args: [--config=frontend/prettier.config.js, --ignore-path=frontend/.prettierignore]
+        args:
+          [
+            --config=frontend/prettier.config.js,
+            --ignore-path=frontend/.prettierignore,
+          ]
         files: ^frontend/
         types_or:
           - javascript
@@ -40,7 +44,12 @@ repos:
     hooks:
       - id: eslint
         name: frontend lint
-        args: [--config=frontend/.eslintrc.json, --max-warnings=0, --ignore-path=frontend/.eslintignore]
+        args:
+          [
+            --config=frontend/.eslintrc.json,
+            --max-warnings=0,
+            --ignore-path=frontend/.eslintignore,
+          ]
         verbose: true
         files: ^frontend/
         types: [file]

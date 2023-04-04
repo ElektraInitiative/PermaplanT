@@ -35,4 +35,3 @@ export default function SimpleButton({
     ></button>
   );
 }
-

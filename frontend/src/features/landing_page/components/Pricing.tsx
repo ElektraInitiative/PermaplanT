@@ -95,7 +95,7 @@ const Pricing = () => {
               <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
           </a>
-          <button className="ml-auto flex rounded border-0 bg-primary-500 dark:bg-primary-300 py-2 px-6 text-primary-50 dark:text-primary-700 hover:bg-primary-600 dark:hover:bg-primary-200 focus:outline-none">
+          <button className="ml-auto flex rounded border-0 bg-primary-500 py-2 px-6 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200">
             Button
           </button>
         </div>

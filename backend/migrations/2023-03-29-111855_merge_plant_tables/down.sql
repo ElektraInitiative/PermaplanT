@@ -9,4 +9,4 @@ CREATE TABLE plants (
 );
 
 ALTER TABLE seeds DROP COLUMN plant_id;
-ALTER TABLE seeds ADD COLUMN plant_id INTEGER REFERENCES plants(id); 
+ALTER TABLE seeds ADD COLUMN plant_id INTEGER REFERENCES plants(id);

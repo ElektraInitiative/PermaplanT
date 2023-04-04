@@ -15,4 +15,4 @@ const filterObject = (raw: FieldValues, blacklist: Array<keyof FieldValues>) => 
     }, {} as FieldValues);
 };
 
-export default filterObject
+export default filterObject;
