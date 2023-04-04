@@ -9,7 +9,7 @@ import svgr from 'vite-plugin-svgr';
 export default defineConfig(() => {
   const env = loadEnv(process.env.NODE_ENV, process.cwd());
 
-  if (!env?.VITE_BASE_CLIENT_URL) {
+  if (typeof env?.VITE_BASE_CLIENT_URL !== 'string') {
     throw new Error('VITE_BASE_CLIENT_URL not set');
   }
 
