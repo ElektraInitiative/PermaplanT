@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { parse as json2csv } from 'json2csv';
 import csv from 'csvtojson';
+import columnMapping from './column_mapping.js';
 
 function sanitizeColumnNames(jsonArray) {
   return jsonArray.map((obj) => {
@@ -59,8 +60,6 @@ async function compareDatabases() {
       allPlants.push({
         ...plant,
         contained_in: 'practicalPlants',
-        practicalPlantsValue: plant,
-        permapeopleValue: null,
       });
     }
   });
@@ -74,8 +73,6 @@ async function compareDatabases() {
       allPlants.push({
         ...plant,
         contained_in: 'permapeople',
-        practicalPlantsValue: null,
-        permapeopleValue: plant,
       });
     }
   });
@@ -84,13 +81,30 @@ async function compareDatabases() {
 }
 
 function writePlantsToCsv(plants) {
+  plants.sort((a, b) => a['contained_in'].localeCompare(b['contained_in']));
+
+  const permapeopleKeys = Object.keys(columnMapping).filter((key) => key !== 'scientific_name');
+
+  const mappedKeys = permapeopleKeys
+    .filter((key) => columnMapping[key] !== null)
+    .map((permapeopleKey) => {
+      const practicalPlantsKey = columnMapping[permapeopleKey];
+      return [permapeopleKey, practicalPlantsKey];
+    })
+    .flat();
+
+  const unmappedKeys = permapeopleKeys.filter((key) => key !== null && !mappedKeys.includes(key));
+
   const fields = [
     'contained_in',
     'binomial_name',
     'scientific_name',
-    ...Object.keys(plants[0]).filter(
-      (key) => key !== 'contained_in' && key !== 'binomial_name' && key !== 'scientific_name',
-    ),
+    ...mappedKeys,
+    ...unmappedKeys,
+    ...Object.keys(plants[0]).filter((key) => {
+      const isMappedColumn = Object.values(mappedKeys).includes(key);
+      return !['contained_in', 'binomial_name', 'scientific_name'].includes(key) && !isMappedColumn;
+    }),
   ];
 
   if (!fs.existsSync('data')) {

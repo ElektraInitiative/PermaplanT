@@ -18,7 +18,7 @@ export default {
   soil_type: 'soil_texture',
   height: 'mature_size_height',
   layer: null,
-  edible_parts: 'edible_uses',
+  edible_parts: null,
   propagation_method: 'propagation',
   wikipedia: null,
   growth: 'growth_rate',
