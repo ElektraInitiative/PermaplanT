@@ -23,6 +23,7 @@
     - German and English synonyms
     - Furthermore, other columns can be matched with extra syntax
   - The results are ranked by:
+    - Alphabetical common name
     - Environmental fit
     - Ecological value
 - **Alternative scenario:**
