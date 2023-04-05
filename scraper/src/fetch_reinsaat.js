@@ -193,16 +193,3 @@ function writeToCsv(plants, path) {
 }
 
 fetchAllPlants();
-
-// const test = async () => {
-//   const browser = await chromium.launch();
-//   await fetchSublinks(browser, {
-//     category: 'Cucumbers',
-//     // url: 'https://www.reinsaat.at/shop/EN/wild_flowers_seeds/',
-//     url: 'https://www.reinsaat.at/shop/EN/cucumbers/',
-//   });
-//   console.log('results', results);
-//   await browser.close();
-// };
-
-// test();
