@@ -9,7 +9,7 @@ const fetchPlant = async (context, { name, subcategory = null, category, url }) 
   const page = await context.newPage();
 
   try {
-    await page.goto(url, { timeout: 90000 });
+    await page.goto(url, { timeout: 360000 });
     console.log('fetching', name, category, subcategory, url);
 
     const plant = {
