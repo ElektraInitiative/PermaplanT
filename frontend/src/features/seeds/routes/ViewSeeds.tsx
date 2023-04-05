@@ -56,7 +56,7 @@ export const ViewSeeds = () => {
   return (
     <Suspense>
       <PageLayout styleNames="flex flex-col space-y-4">
-        <PageTitle title={t('seeds:view_seeds_title')} />
+        <PageTitle title={t('seeds:view_seeds.title')} />
         <div className="flex flex-row justify-between space-x-6">
           <SearchInput handleSearch={handleSearch} />
           <SimpleButton onClick={handleCreateSeedClick}>New Entry</SimpleButton>
@@ -64,7 +64,7 @@ export const ViewSeeds = () => {
         <SeedsOverviewList seeds={filteredSeeds} />
         <SimpleModal
           title="Error"
-          body={error?.message || t('unknown_error')} // Error should always have a message
+          body={error?.message || t('common:unknown_error')} // Error should always have a message
           show={showErrorModal}
           setShow={setShowErrorModal}
           submitBtnTitle="Ok"

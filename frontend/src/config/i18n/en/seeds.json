@@ -1,3 +1,5 @@
 {
-  "view_seeds_title": "My Seeds"
+  "view_seeds": {
+    "title": "My Seeds"
+  }
 }
