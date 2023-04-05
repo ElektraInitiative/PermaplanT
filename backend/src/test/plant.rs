@@ -7,22 +7,28 @@ mod tests {
     use crate::test::test_utils::init_test_database;
     use actix_web::App;
     use actix_web::{http::header::CONTENT_TYPE, http::StatusCode, test, web::Data};
-    use diesel::prelude::*;
+    use diesel::ExpressionMethods;
+    use diesel_async::scoped_futures::ScopedFutureExt;
+    use diesel_async::RunQueryDsl;
 
     #[actix_rt::test]
     async fn test_get_all_plants_succeeds() {
-        let pool = init_test_database(|mut conn| {
-            diesel::insert_into(crate::schema::plants::table)
-                .values((
-                    &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::binomial_name.eq("Testia testia"),
-                    &crate::schema::plants::common_name
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                ))
-                .execute(&mut conn)?;
-
-            Ok(())
-        });
+        let pool = init_test_database(|conn| {
+            async {
+                diesel::insert_into(crate::schema::plants::table)
+                    .values((
+                        &crate::schema::plants::id.eq(-1),
+                        &crate::schema::plants::binomial_name.eq("Testia testia"),
+                        &crate::schema::plants::common_name
+                            .eq(Some(vec![Some("Testplant".to_string())])),
+                    ))
+                    .execute(conn)
+                    .await?;
+                Ok(())
+            }
+            .scope_boxed()
+        })
+        .await;
 
         let mut app = test::init_service(
             App::new()
@@ -59,18 +65,22 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_get_one_plant_succeeds() {
-        let pool = init_test_database(|mut conn| {
-            diesel::insert_into(crate::schema::plants::table)
-                .values((
-                    &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::binomial_name.eq("Testia testia"),
-                    &crate::schema::plants::common_name
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                ))
-                .execute(&mut conn)?;
-
-            Ok(())
-        });
+        let pool = init_test_database(|conn| {
+            async {
+                diesel::insert_into(crate::schema::plants::table)
+                    .values((
+                        &crate::schema::plants::id.eq(-1),
+                        &crate::schema::plants::binomial_name.eq("Testia testia"),
+                        &crate::schema::plants::common_name
+                            .eq(Some(vec![Some("Testplant".to_string())])),
+                    ))
+                    .execute(conn)
+                    .await?;
+                Ok(())
+            }
+            .scope_boxed()
+        })
+        .await;
 
         let mut app = test::init_service(
             App::new()
@@ -107,18 +117,22 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_search_plants_succeeds() {
-        let pool = init_test_database(|mut conn| {
-            diesel::insert_into(crate::schema::plants::table)
-                .values((
-                    &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::binomial_name.eq("Testia testia"),
-                    &crate::schema::plants::common_name
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                ))
-                .execute(&mut conn)?;
-
-            Ok(())
-        });
+        let pool = init_test_database(|conn| {
+            async {
+                diesel::insert_into(crate::schema::plants::table)
+                    .values((
+                        &crate::schema::plants::id.eq(-1),
+                        &crate::schema::plants::binomial_name.eq("Testia testia"),
+                        &crate::schema::plants::common_name
+                            .eq(Some(vec![Some("Testplant".to_string())])),
+                    ))
+                    .execute(conn)
+                    .await?;
+                Ok(())
+            }
+            .scope_boxed()
+        })
+        .await;
 
         let mut app = test::init_service(
             App::new()
