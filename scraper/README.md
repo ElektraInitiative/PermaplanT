@@ -101,6 +101,6 @@ The scraper will scrape the data from the Reinsaat webpage and store it in `csv`
 npm run fetch:reinsaat
 ```
 
-There will be several CSV files generated in the `data` directory:
+The following CSV files will be generated in the `data` directory:
 
 - `reinsaatRawData.csv`: This file contains the raw data scraped from the Reinsaat webpage.
