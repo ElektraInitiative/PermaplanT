@@ -1,4 +1,11 @@
-# PermaplanT Scraper
+# Scrapers
+
+This directory contains the following scrapers:
+
+- [PracticalPlants](#scraper-for-practical-plants)
+- [Reinsaat](#scraper-for-reinsaat)
+
+# Scraper for Practical Plants
 
 ## Requirements
 
@@ -70,3 +77,30 @@ npm run insert <path-to-csv-file>
 ```
 
 _Note:_ Please make sure that the database is up-to-date with latest migrations before running this command.
+
+# Scraper for Reinsaat
+
+## Requirements
+
+- nodejs v14.21.2
+- npm
+
+## Installation and Usage
+
+1. Install dependencies
+
+```shell
+npm install && mkdir -p data
+```
+
+2. Start the scraper
+
+The scraper will scrape the data from the Reinsaat webpage and store it in `csv` format in the `data` directory. This can be done with the following command:
+
+```shell
+npm run fetch:reinsaat
+```
+
+There will be several CSV files generated in the `data` directory:
+
+- `reinsaatRawData.csv`: This file contains the raw data scraped from the Reinsaat webpage.
