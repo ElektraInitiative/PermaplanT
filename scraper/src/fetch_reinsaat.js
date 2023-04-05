@@ -9,7 +9,7 @@ const fetchPlant = async (context, { name, subcategory = null, category, url }) 
   const page = await context.newPage();
 
   try {
-    await page.goto(url);
+    await page.goto(url, { timeout: 60000 });
     console.log('fetching', name, category, subcategory, url);
 
     const plant = {
@@ -63,9 +63,12 @@ const fetchPlant = async (context, { name, subcategory = null, category, url }) 
         const strong = await paragraph.$('strong');
         if (strong) {
           let key = await strong.innerText();
-          key = key.replace(':', '');
+          if (!key.includes(':')) {
+            continue;
+          }
           const text = await paragraph.innerText();
           const value = text.replace(key, '').trim();
+          key = key.replace(':', '');
           plant[key] = value;
         }
       }
@@ -78,6 +81,7 @@ const fetchPlant = async (context, { name, subcategory = null, category, url }) 
 };
 
 const fetchSubSublinks = async (context, { name, category, url }) => {
+  console.log('[INFO] Fetching subsublinks', name, category, url);
   const pageSubSublinks = await context.newPage();
   await pageSubSublinks.goto(url);
 
@@ -93,7 +97,9 @@ const fetchSubSublinks = async (context, { name, category, url }) => {
       }),
   );
 
-  await SubSublinks.close();
+  console.log('[INFO] Found subsublinks', subsublinks.length);
+
+  await pageSubSublinks.close();
 
   if (subsublinks.length > 0) {
     await Promise.all(
@@ -107,7 +113,10 @@ const fetchSubSublinks = async (context, { name, category, url }) => {
 };
 
 const fetchSublinks = async (browser, { category, url }) => {
-  const context = await browser.newContext();
+  console.log('[INFO] Fetching sublinks', category, url);
+  const context = await browser.newContext({
+    maximumConcurrency: 20,
+  });
   const pageSublinks = await context.newPage();
 
   await pageSublinks.goto(url);
@@ -123,6 +132,8 @@ const fetchSublinks = async (browser, { category, url }) => {
       }),
   );
 
+  console.log('[INFO] Found sublinks', sublinks.length);
+
   await pageSublinks.close();
   await Promise.all(sublinks.map((sublink) => fetchSubSublinks(context, { ...sublink, category })));
   await context.close();
@@ -135,7 +146,7 @@ const fetchAllPlants = async () => {
     const page = await browser.newPage();
     await page.goto('https://www.reinsaat.at/shop/EN/');
 
-    const superlinks = await await page.$$eval('.s_subnavi a', (links) =>
+    const superlinks = await page.$$eval('.s_subnavi a', (links) =>
       links.map((link) => {
         return {
           category: link.innerText,
@@ -143,6 +154,7 @@ const fetchAllPlants = async () => {
         };
       }),
     );
+    console.log('[INFO] Found superlinks', superlinks.length);
 
     await Promise.all(superlinks.map((superlink) => fetchSublinks(browser, superlink)));
     await browser.close();
