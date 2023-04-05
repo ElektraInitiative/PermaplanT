@@ -62,8 +62,8 @@ These types are auto-generated and we can find our rust-typescript bindings unde
 
 For internationalization we use [react-i18next](https://react.i18next.com/latest/usetranslation-hook), which is a powerful framework to provide translation functionality and more.
 The translations live in the `src/config/i18n` directory together with the respective `i18next` configuration.
-We use a feature based translation approach.
-Each language has it's own folder which holds all translations in files that are named like the features under `src/features`.
+We use a feature-based translation approach.
+Each language has its own folder which holds all translations in files that are named like the features under `src/features`.
 In case a translation is more common there is an additional common namespace defined.
 The translations are loaded from JSON modules to enable type safety.
 For this there is a special file `@types/i18next.d.ts`.
