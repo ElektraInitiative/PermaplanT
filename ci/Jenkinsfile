@@ -163,8 +163,7 @@ if (env.BRANCH_NAME == 'master') {
     }
 }
 
-// Deploying to Prod only happens on branch "master" and if parameter is set
-if (env.BRANCH_NAME == 'master' && params.DEPLOY_PROD) {
+if (params.DEPLOY_PROD) {
     stage('Deploy Prod') {
         node('permaplant && prod') {
             checkout scm
