@@ -1,7 +1,13 @@
 
-parameters {
-    booleanParam(name: 'DEPLOY_PROD', defaultValue: false, description: 'deploy to production')
-}
+properties(
+    [
+        parameters(
+            [
+                booleanParam(name: 'DEPLOY_PROD', defaultValue: false, description: 'deploy to production')
+            ]
+        )
+    ]
+)
 
 stage('Build Schema'){
     node('docker') {
