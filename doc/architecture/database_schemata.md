@@ -145,6 +145,27 @@ plant_detail }|--|| family : ""
 | **nutrition_demand**             | NULL                             | If "Nutritionally poor soil" in `environmental_tolerances` is given `light feeder` should be set. |
 | **preferable_permaculture_zone** | NULL                             |                                                                                                   | -1..6 (-1 should be printed as 00) |
 
+## `Maps`
+
+| **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
+| **id**                           | 1                                |
+| **owner**                        | 1                                |
+| **name**                         | My Map                           |
+| **is_variant**                   | false                            |
+| **version_name**                 | NULL                             |
+| **is_inactive**                  | false                            |
+| **last_visit**                   | 2023-04-04                       |
+| **honors**                       | 0                                |
+| **visits**                       | 0                                |
+| **creation_date**                | 2023-04-04                       |
+| **deletion_date**                | 2023-04-04                       |
+| **zoom_factor**                  | 100                              |
+| **background**                   | NULL                             |
+| **background_scale**             | NULL                             |
+| **geo_data**                     | NULL                             |
+| **epgs_code**                    | NULL                             |
+
 ## `Relation`
 
 Many-to-many table to store relations between plants, genus, subfamily and family.
