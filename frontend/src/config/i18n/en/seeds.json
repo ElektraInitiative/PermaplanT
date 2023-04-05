@@ -1,5 +1,20 @@
 {
   "view_seeds": {
     "title": "My Seeds"
-  }
+  },
+  "seed_details": {
+    "simple_card_harvest_year": "Harvest Year",
+    "simple_card_name": "Additional Name",
+    "simple_card_binomial_name": "Plant",
+    "simple_card_quantity": "Quantity",
+    "simple_card_origin": "Origin",
+    "simple_card_use_by": "Best By",
+    "simple_card_quality": "Quality",
+    "simple_card_taste": "Taste",
+    "simple_card_yield": "Yield",
+    "simple_card_price": "Price",
+    "simple_card_generation": "Generation",
+    "simple_card_notes": "Notes"
+  },
+  "error_modal_title": "Error"
 }

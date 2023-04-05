@@ -63,11 +63,11 @@ export const ViewSeeds = () => {
         </div>
         <SeedsOverviewList seeds={filteredSeeds} />
         <SimpleModal
-          title="Error"
+          title={t('seeds:error_modal_title')}
           body={error?.message || t('common:unknown_error')} // Error should always have a message
           show={showErrorModal}
           setShow={setShowErrorModal}
-          submitBtnTitle="Ok"
+          submitBtnTitle={t('common:ok')}
           onSubmit={() => {
             setShowErrorModal(false);
           }}

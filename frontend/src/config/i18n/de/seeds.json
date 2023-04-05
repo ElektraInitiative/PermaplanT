@@ -1,3 +1,20 @@
 {
-  "view_seeds_title": "Meine Samen"
+  "view_seeds": {
+    "title": "Meine Samen"
+  },
+  "seed_details": {
+    "simple_card_harvest_year": "Bezugsjahr",
+    "simple_card_name": "Zusätzlicher Name",
+    "simple_card_binomial_name": "Pflanze",
+    "simple_card_quantity": "Menge",
+    "simple_card_origin": "Herkunft",
+    "simple_card_use_by": "Verbrauch bis",
+    "simple_card_quality": "Qualität",
+    "simple_card_taste": "Geschmack",
+    "simple_card_yield": "Ertrag",
+    "simple_card_price": "Preis",
+    "simple_card_generation": "Generation",
+    "simple_card_notes": "Notizen"
+  },
+  "error_modal_title": "Error"
 }
