@@ -22,6 +22,7 @@
   - The user wants to remove favorite plant groups.
 - **Error scenario:**
   - The user attempts to add a plant group that is already in their favorites.
+  - The user attempts to remove a group that is not in the favorites.
 - **Postcondition:**
   - The set of map-specific favorites has changed according to the changes the user made.  
     The state of these favorites can be seen in the plant layer.
