@@ -15,7 +15,7 @@ const Team = () => {
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="https://dummyimage.com/80x80"
+                src="/gallery_images/permaplant_illustration_12.svg"
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
@@ -30,7 +30,7 @@ const Team = () => {
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="https://dummyimage.com/84x84"
+                src="/gallery_images/permaplant_illustration_12.svg"
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
@@ -45,7 +45,7 @@ const Team = () => {
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="https://dummyimage.com/88x88"
+                src="/gallery_images/permaplant_illustration_12.svg"
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
@@ -60,7 +60,7 @@ const Team = () => {
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="https://dummyimage.com/90x90"
+                src="/gallery_images/permaplant_illustration_12.svg"
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
@@ -75,7 +75,7 @@ const Team = () => {
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="https://dummyimage.com/94x94"
+                src="/gallery_images/permaplant_illustration_12.svg"
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
@@ -90,7 +90,7 @@ const Team = () => {
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="https://dummyimage.com/98x98"
+                src="/gallery_images/permaplant_illustration_12.svg"
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
@@ -105,7 +105,7 @@ const Team = () => {
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="https://dummyimage.com/100x90"
+                src="/gallery_images/permaplant_illustration_12.svg"
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
@@ -120,7 +120,7 @@ const Team = () => {
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="https://dummyimage.com/104x94"
+                src="/gallery_images/permaplant_illustration_12.svg"
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
@@ -135,7 +135,7 @@ const Team = () => {
               <img
                 alt="team"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="https://dummyimage.com/108x98"
+                src="/gallery_images/permaplant_illustration_12.svg"
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">

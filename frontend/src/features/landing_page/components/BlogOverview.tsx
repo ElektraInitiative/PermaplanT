@@ -62,7 +62,7 @@ const BlogOverview = () => {
             <a className="inline-flex items-center">
               <img
                 alt="blog"
-                src="https://dummyimage.com/104x104"
+                src="/gallery_images/permaplant_illustration_12.svg"
                 className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
               />
               <span className="flex flex-grow flex-col pl-4">
@@ -131,11 +131,11 @@ const BlogOverview = () => {
             <a className="inline-flex items-center">
               <img
                 alt="blog"
-                src="https://dummyimage.com/103x103"
+                src="/gallery_images/permaplant_illustration_12.svg"
                 className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
               />
               <span className="flex flex-grow flex-col pl-4">
-                <span className="title-font font-medium text-gray-900 text-primary-500 dark:text-primary-300">
+                <span className="title-font font-medium text-primary-500 dark:text-primary-300">
                   Alper Kamu
                 </span>
                 <span className="mt-0.5 text-xs tracking-widest text-gray-400">DESIGNER</span>
