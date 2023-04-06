@@ -23,9 +23,8 @@
     - German and English synonyms
     - Furthermore, other columns can be matched with extra syntax
   - The results are ranked by:
-    - Alphabetical common name
-    - Environmental fit
-    - Ecological value
+    1. Environmental fit (from selected plant or position)
+    2. Ecological value
 - **Alternative scenario:**
 - **Error scenario:**
   - No match can be found for what the user was searching for.  
