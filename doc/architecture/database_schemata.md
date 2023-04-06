@@ -138,7 +138,7 @@ blossoms_gained {
   INT times_gained
 }
 
-maps }o--|| users : owned by
+maps }o--|| users : "owned by"
 blossoms ||--o{ blossoms_gained : ""
 blossoms_gained }o--|| users : ""
 
