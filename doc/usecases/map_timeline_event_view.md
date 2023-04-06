@@ -23,8 +23,9 @@
 - **Alternative scenario:**
   - The user has not yet added/removed any elements, therefore no events are visible on the timeline.
   - The timeline is scaled to encompass +/- three years, and the center is this present day.
+  - If no events are visible, a message is displayed that no events could be loaded.
 - **Error scenario:**
-  There is an error in the timeline display or event loading functionality. 
+  There is an error in the timeline display or event loading functionality.
   In this case, the app displays an error message and allows the user to try again.
 - **Postcondition:**
   The user successfully sees the events on the timeline scrollbar.
