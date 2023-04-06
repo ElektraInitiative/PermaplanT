@@ -48,7 +48,7 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
       set((state) => ({ ...state, plants, isFetchingPlants: false }));
     } catch (error) {
       console.log(error);
-
+      
       set((state) => ({
         ...state,
         error: error as Error,
@@ -60,11 +60,12 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
   searchPlants: async (searchTerm: string, page: number) => {
     try {
       set((state) => ({ ...state, isFetchingPlants: true }));
-      const plants = await searchPlants(searchTerm, page);
-      set((state) => ({ ...state, plants, isFetchingPlants: false }));
+      const result = await searchPlants(searchTerm, page);
+      const plants = result.dtos;
+      const hasMore = result.hasMore;
+      set((state) => ({ ...state, plants, hasMore, isFetchingPlants: false }));
     } catch (error) {
       console.log(error);
-      
       set((state) => ({
         ...state,
         error: error as Error,
