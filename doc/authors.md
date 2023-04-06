@@ -68,12 +68,13 @@ including their responsibilities, skills, etc.
 - focus group: DB, PostGIS
 - positioning: DB
 
-## Thorben Julian
+## Thorben
 
+- GitHub: @ThorbenStaufer
 - main responsibility: Gamification
-- focus group: polyculture
+- focus group: DB, frontend, gamification
 - special skills: Jenkins
-- positioning: DB
+- positioning: frontend, DB
 
 ## Benjamin
 
