@@ -34,7 +34,7 @@ impl Plants {
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantsSummaryDto>> {
         let query_with_placeholders = format!("%{}%", search_term);
-        
+
         let query = plants::table
             .filter(
                 binomial_name

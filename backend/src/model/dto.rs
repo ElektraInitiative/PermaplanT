@@ -72,6 +72,6 @@ pub struct PlantsSearchParameters {
     /// How many plants will be part of a single page.
     pub limit: i32,
     /// Which page should be returned.
-    /// Note: pages start at one. 
+    /// Note: pages start at one.
     pub page: i32,
 }
