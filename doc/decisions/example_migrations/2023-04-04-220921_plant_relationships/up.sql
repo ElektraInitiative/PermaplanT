@@ -7,7 +7,7 @@ CREATE TABLE taxons (
 );
 
 CREATE TYPE relationship_kind AS ENUM ('companion', 'antagonist');
-CREATE TABLE relationships (
+CREATE TABLE taxon_relationships (
     id SERIAL PRIMARY KEY NOT NULL,
     strength INTEGER CHECK (strength >= 0) NOT NULL,
     kind relationship_kind NOT NULL,
@@ -148,7 +148,7 @@ potato AS (
     FROM potato_species RETURNING id
 )
 
-INSERT INTO relationships (kind, strength, left_taxon_id, right_taxon_id)
+INSERT INTO taxon_relationships (kind, strength, left_taxon_id, right_taxon_id)
 -- Radish <-> carrot
 VALUES (
     'companion', 1, (SELECT id FROM radish_species), (SELECT id FROM carrot_species)
@@ -178,7 +178,7 @@ WITH potential_companions AS (
     SELECT
         r1.left_taxon_id AS taxon_id,
         r1.kind
-    FROM relationships AS r1
+    FROM taxon_relationships AS r1
     WHERE
         r1.right_taxon_id IN (3, 7)
         AND r1.left_taxon_id NOT IN (3, 7)
@@ -186,7 +186,7 @@ WITH potential_companions AS (
     SELECT
         r2.right_taxon_id AS taxon_id,
         r2.kind
-    FROM relationships AS r2
+    FROM taxon_relationships AS r2
     WHERE
         r2.left_taxon_id IN (3, 7)
         AND r2.right_taxon_id NOT IN (5, 7)
