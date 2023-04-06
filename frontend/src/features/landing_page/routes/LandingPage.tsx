@@ -7,6 +7,7 @@ import { GeoMap } from '../components/GeoMap';
 import { PhotoGallery } from '../components/PhotoGallery';
 import Team from '../components/Team';
 import WidePageLayout from '@/components/Layout/WidePageLayout';
+import Pricing from '../components/Pricing';
 
 export const LandingPage = () => {
   return (
@@ -28,6 +29,7 @@ export const LandingPage = () => {
         <Team />
         <BlogOverview />
         <PhotoGallery />
+        <Pricing />
         <ContactUs />
       </div>
       <Footer />
