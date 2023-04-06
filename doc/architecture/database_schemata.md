@@ -120,14 +120,26 @@ blossoms {
   VARCHAR title
   VARCHAR description
   VARCHAR condition
+  TRACKS track
   BYTEA icon
   BOOLEAN is_seasonal
 }
 
-tracks {}
+enum_tracks {
+  VARCHAR Beginners_Track
+  VARCHAR Seasonal_Track
+  VARCHAR Completionist_Track
+  VARCHAR Expert_Track
+}
 
-maps }o--|| users : ownes
-blossoms }o--|| tracks : ""
+blossoms_gained {
+  INT id PK
+  INT times_gained
+}
+
+maps }o--|| users : owned by
+blossoms ||--o{ blossoms_gained : ""
+blossoms_gained }o--|| users : ""
 
 ```
 
@@ -232,9 +244,16 @@ blossoms }o--|| tracks : ""
 | **title**                        | Novice Gardener                  |
 | **description**                  | Plant your first plant           |
 | **condition**                    | plants.count() >= 1              |
-| **track_id**                     | 1                                |
+| **track**                        | Beginners Track                  |
 | **icon**                         | NULL                             |
 | **is_seasonal**                  | false                            |
+
+## `Blossoms Gained`
+
+| **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
+| **id**                           | 1                                |
+| **times_gained**                 | 1                                |
 
 ## `Relation`
 
