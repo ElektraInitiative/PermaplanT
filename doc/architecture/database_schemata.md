@@ -85,6 +85,50 @@ plant_detail }|--|| genus : ""
 plant_detail }|--|| subfamily : ""
 plant_detail }|--|| family : ""
 
+maps {
+  INT id PK
+  VARCHAR name "NOT NULL"
+  BOOLEAN is_variant "NOT NULL"
+  VARCHAR version_name
+  BOOLEAN is_inactive
+  DATE last_visit
+  INT honors
+  INT visits
+  INT harvested
+  DATE creation_date
+  DATE deletion_date
+  INT zoom_factor
+  BYTEA background
+  INT background_scale
+  GEOGRAPHY geo_data
+  INT epsg_code
+}
+
+users {
+  INT id PK
+  VARCHAR nc_uid
+  DATE free_until
+  VARCHAR app_language
+  DATE member_since
+  VARCHAR experience
+  VARCHAR preferences
+  GEOGRAPHY location
+}
+
+blossoms {
+  INT id PK
+  VARCHAR title
+  VARCHAR description
+  VARCHAR condition
+  BYTEA icon
+  BOOLEAN is_seasonal
+}
+
+tracks {}
+
+maps }o--|| users : ownes
+blossoms }o--|| tracks : ""
+
 ```
 
 # Table descriptions
@@ -150,7 +194,7 @@ plant_detail }|--|| family : ""
 | **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
 | :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
 | **id**                           | 1                                |
-| **owner**                        | 1                                |
+| **owner_id**                     | 1                                |
 | **name**                         | My Map                           |
 | **is_variant**                   | false                            |
 | **version_name**                 | NULL                             |
@@ -158,13 +202,39 @@ plant_detail }|--|| family : ""
 | **last_visit**                   | 2023-04-04                       |
 | **honors**                       | 0                                |
 | **visits**                       | 0                                |
+| **harvested**                    | 0                                |
 | **creation_date**                | 2023-04-04                       |
 | **deletion_date**                | 2023-04-04                       |
 | **zoom_factor**                  | 100                              |
 | **background**                   | NULL                             |
 | **background_scale**             | NULL                             |
-| **geo_data**                     | NULL                             |
-| **epgs_code**                    | NULL                             |
+| **geo_data**                     | NULL                             | | PostGis Geodata
+| **epsg_code**                    | NULL                             | | PostGis EPSG Code
+
+## `Users`
+
+| **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
+| **id**                           | 1                                |
+| **nc_uid**                       | 1                                | | Nextcloud ID
+| **free_until**                   | 2023-04-04                       |
+| **app_language**                 | English                          |
+| **member_since**                 | 2023-04-04                       |
+| **experience**                   | {beginner, hobbyist, expert}     |
+| **preferences**                  | raised vegetable beds            |
+| **location**                     | Vienna, Austria                  |
+
+## `Blossoms`
+
+| **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
+| **id**                           | 1                                |
+| **title**                        | Novice Gardener                  |
+| **description**                  | Plant your first plant           |
+| **condition**                    | plants.count() >= 1              |
+| **track_id**                     | 1                                |
+| **icon**                         | NULL                             |
+| **is_seasonal**                  | false                            |
 
 ## `Relation`
 
