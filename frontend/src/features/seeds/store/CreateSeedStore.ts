@@ -31,6 +31,8 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
       set((state) => ({ ...state, isUploadingSeed: false }));
       successCallback?.();
     } catch (error) {
+      console.log(error);
+
       set((state) => ({
         ...state,
         error: error as Error,
@@ -45,6 +47,8 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
       const plants = await findAllPlants();
       set((state) => ({ ...state, plants, isFetchingPlants: false }));
     } catch (error) {
+      console.log(error);
+
       set((state) => ({
         ...state,
         error: error as Error,
@@ -59,6 +63,8 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
       const plants = await searchPlants(searchTerm);
       set((state) => ({ ...state, plants, isFetchingPlants: false }));
     } catch (error) {
+      console.log(error);
+      
       set((state) => ({
         ...state,
         error: error as Error,
