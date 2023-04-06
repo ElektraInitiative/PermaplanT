@@ -6,6 +6,13 @@ CREATE TABLE taxons (
     parent_id INTEGER REFERENCES taxons (id) NULL
 );
 
+-- TODO: drop taxonomic names in plants (family, subfamily, genus, species)
+ALTER TABLE plants
+    ADD COLUMN family_id INTEGER REFERENCES taxons (id) NOT NULL,
+    ADD COLUMN subfamily_id INTEGER REFERENCES taxons (id) NULL,
+    ADD COLUMN genus_id INTEGER REFERENCES taxons (id) NOT NULL,
+    ADD COLUMN species_id INTEGER REFERENCES taxons (id) NOT NULL;
+
 CREATE TYPE relationship_kind AS ENUM ('companion', 'antagonist');
 CREATE TABLE taxon_relationships (
     id SERIAL PRIMARY KEY NOT NULL,
@@ -14,8 +21,6 @@ CREATE TABLE taxon_relationships (
     left_taxon_id INTEGER REFERENCES taxons (id) NOT NULL,
     right_taxon_id INTEGER REFERENCES taxons (id) NOT NULL
 );
-
-ALTER TABLE plants ADD COLUMN taxon_id INTEGER REFERENCES taxons (id) NOT NULL;
 
 -- Example
 --
@@ -59,9 +64,15 @@ carrot_species AS (
 ),
 
 carrot AS (
-    INSERT INTO plants (binomial_name, common_name, taxon_id)
-    SELECT 'Daucus carota', '{"Carrot"}', carrot_species.id
-    FROM carrot_species RETURNING id
+    INSERT INTO plants (binomial_name, common_name, family_id, subfamily_id, genus_id, species_id)
+    SELECT
+        'Daucus carota',
+        '{"Carrot"}',
+        (Select id from carrot_family),
+        (SELECT id FROM carrot_subfamily),
+        (SELECT id from carrot_genus),
+        (SELECT id from carrot_species)
+    RETURNING id
 ),
 
 -- insert radish
@@ -83,9 +94,14 @@ radish_species AS (
 ),
 
 radish AS (
-    INSERT INTO plants (binomial_name, common_name, taxon_id)
-    SELECT 'Raphanus raphanistrum', '{"Radish"}', radish_species.id
-    FROM radish_species RETURNING id
+    INSERT INTO plants (binomial_name, common_name, family_id, genus_id, species_id)
+    SELECT
+        'Raphanus raphanistrum',
+        '{"Radish"}',
+        (Select id from radish_family),
+        (SELECT id from radish_genus),
+        (SELECT id from radish_species)
+    RETURNING id
 ),
 
 -- insert marigold
@@ -113,9 +129,15 @@ marigold_species AS (
 ),
 
 marigold AS (
-    INSERT INTO plants (binomial_name, common_name, taxon_id)
-    SELECT 'Calendula officinalis', '{"Marigold"}', marigold_species.id
-    FROM marigold_species RETURNING id
+    INSERT INTO plants (binomial_name, common_name, family_id, subfamily_id, genus_id, species_id)
+    SELECT
+        'Calendula officinalis',
+        '{"Marigold"}',
+        (Select id from marigold_family),
+        (SELECT id FROM marigold_subfamily),
+        (SELECT id from marigold_genus),
+        (SELECT id from marigold_species)
+    RETURNING id
 ),
 
 -- insert potato
@@ -143,8 +165,14 @@ potato_species AS (
 ),
 
 potato AS (
-    INSERT INTO plants (binomial_name, common_name, taxon_id)
-    SELECT 'Solanum tuberosum', '{"Potato"}', potato_species.id
+    INSERT INTO plants (binomial_name, common_name, family_id, subfamily_id, genus_id, species_id)
+    SELECT
+        'Solanum tuberosum',
+        '{"Potato"}',
+        (Select id from potato_family),
+        (SELECT id FROM potato_subfamily),
+        (SELECT id from potato_genus),
+        (SELECT id from potato_species)
     FROM potato_species RETURNING id
 )
 
@@ -195,7 +223,7 @@ WITH potential_companions AS (
 SELECT *
 FROM potential_companions companions
 LEFT JOIN taxons AS t ON companions.taxon_id = t.id
-LEFT JOIN plants AS p ON t.id = p.taxon_id
+LEFT JOIN plants AS p ON t.id IN (p.family_id, p.subfamily_id, p.genus_id, p.species_id)
 -- Then we need to remove companions are antagonists as well
 WHERE
     kind = 'companion'
@@ -220,14 +248,13 @@ SELECT
 FROM plants
 LEFT JOIN
     taxons AS species
-    ON (species.rank = 'species' AND species.id = plants.taxon_id)
+    ON (species.rank = 'species' AND species.id = plants.species_id)
 LEFT JOIN
     taxons AS genus
-    ON (genus.rank = 'genus' AND genus.id = species.parent_id)
+    ON (genus.rank = 'genus' AND genus.id = plants.genus_id)
 LEFT JOIN
     taxons AS subfamily
-    ON (subfamily.rank = 'subfamily' AND subfamily.id = genus.parent_id)
--- Some genera don't belong to a subfamily so we might need to hop one level it.
+    ON (subfamily.rank = 'subfamily' AND subfamily.id = plants.subfamily_id)
 LEFT JOIN
     taxons AS family
-    ON (family.rank = 'family' AND (family.id = subfamily.parent_id OR family.id = genus.parent_id));
+    ON (family.rank = 'family' AND family.id = plants.family_id);
