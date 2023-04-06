@@ -13,7 +13,7 @@ interface CreateSeedState {
   showErrorModal: boolean;
   setShowErrorModal: (showErrorModal: boolean) => void;
   findAllPlants: () => Promise<void>;
-  searchPlants: (searchTerm: string) => Promise<void>;
+  searchPlants: (searchTerm: string, page: number) => Promise<void>;
   createSeed: (seed: NewSeedDto, successCallback?: () => void) => Promise<void>;
 }
 
@@ -57,10 +57,10 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
       }));
     }
   },
-  searchPlants: async (searchTerm: string) => {
+  searchPlants: async (searchTerm: string, page: number) => {
     try {
       set((state) => ({ ...state, isFetchingPlants: true }));
-      const plants = await searchPlants(searchTerm);
+      const plants = await searchPlants(searchTerm, page);
       set((state) => ({ ...state, plants, isFetchingPlants: false }));
     } catch (error) {
       console.log(error);

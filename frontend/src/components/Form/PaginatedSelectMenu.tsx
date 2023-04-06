@@ -5,12 +5,20 @@ import AnycPaginate, { AsyncPaginate } from 'react-select-async-paginate';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
 import { SelectOption } from './SelectMenu';
 
+/**
+ * Contains the information needed by react-select-async-paginate for loading a single page.
+* See https://github.com/vtaits/react-select-async-paginate/tree/master/packages/react-select-async-paginate#loadoptions for more information.
+ */
 export interface Page {
   options: SelectOption[],
   hasMore: boolean,
   additional: PageAdditionalInfo,
 }
 
+/**
+ * All values that are neither options nor the hasMore flag are required to be inside an object that implements this interface.
+ * See https://github.com/vtaits/react-select-async-paginate/tree/master/packages/react-select-async-paginate#loadoptions for more information.
+ */
 export interface PageAdditionalInfo {
   page: number
 }
@@ -66,26 +74,6 @@ export default function SelectMenu<T extends FieldValues>({
     multiValue: () => 'bg-neutral-400 dark:bg-neutral-400-dark',
     multiValueRemove: () => 'hover:bg-neutral-500',
   };
-/*
-  const customStyles: StylesConfig = {
-    // remove css attributes from predefined styles
-    // this needs to be done so the custom css classes take effect
-    control: (styles) =>
-      filterObject(styles, [
-        'border',
-        'borderColor',
-        'borderRadius',
-        'boxShadow',
-        'color',
-        '&:hover',
-      ]),
-    option: (styles) => filterObject(styles, ['backgroundColor', 'color']),
-    singleValue: (styles) => filterObject(styles, ['color']),
-    multiValue: (styles) => filterObject(styles, ['color']),
-    multiValueLabel: (styles) => filterObject(styles, ['color']),
-    multiValueRemove: (styles) => filterObject(styles, ['color']),
-  };
-*/
 
   return (
     <div>
