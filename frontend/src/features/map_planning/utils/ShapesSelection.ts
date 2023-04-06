@@ -28,24 +28,25 @@ export const selectIntersectingShapes = (
   const allNodes = trRef.current?.getNodes();
   if (!allNodes) return;
 
-  let selectionChanged = true;
-
   const mappedShapes = allShapes.map((shape) => {
     return shape as Shape<ShapeConfig>;
   });
 
-  for (const shape of previouslySelectedShapes) {
-    if (!allNodes.map((node) => node._id).includes(shape._id)) {
-      selectionChanged = false;
-      break;
-    }
-  }
-
-  if (selectionChanged && previouslySelectedShapes.length > 0) return;
-
   const intersectingShapes = mappedShapes.filter(
     (shape) => shape && Util.haveIntersection(box, shape.getClientRect()),
   );
+
+  // if intersectingShape and previouslySelectedShapes are the same, dont update
+  if (intersectingShapes.length === previouslySelectedShapes.length) {
+    let same = true;
+    for (const shape of intersectingShapes) {
+      if (!previouslySelectedShapes.map((node) => node._id).includes(shape._id)) {
+        same = false;
+        break;
+      }
+    }
+    if (same) return;
+  }
 
   if (intersectingShapes) {
     const nodes = intersectingShapes.filter((shape) => shape !== undefined);

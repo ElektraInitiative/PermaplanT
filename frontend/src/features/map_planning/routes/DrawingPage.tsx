@@ -44,6 +44,7 @@ export const DrawingPage = () => {
 
   const onWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
+
     const stage = e.target.getStage();
     if (stage == null) return;
 
@@ -58,6 +59,8 @@ export const DrawingPage = () => {
   };
 
   const onDragStart = (e: KonvaEventObject<DragEvent>) => {
+    e.evt.preventDefault();
+
     const stage = e.target.getStage();
     if (stage == null) return;
     if (e.evt.buttons) {
@@ -71,17 +74,16 @@ export const DrawingPage = () => {
   };
 
   const onMouseMove = (e: KonvaEventObject<MouseEvent>) => {
+    e.evt.preventDefault();
+
     if (e.evt.buttons !== 4) {
       document.body.style.cursor = 'default';
     }
-    const stage = e.target.getStage();
 
+    const stage = e.target.getStage();
     if (stage == null || !selectionRectAttrs.isVisible) return;
 
-    e.evt.preventDefault();
-
     if (!isSelectionEnabled) return;
-
     updateSelection(
       stage,
       setSelectionRectAttrs,
@@ -89,26 +91,28 @@ export const DrawingPage = () => {
       setSelectionRectBoundingBox,
       selectionRectBoundingBox,
     );
+    selectIntersectingShapes(stageRef, trRef);
   };
 
   const onMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+    e.evt.preventDefault();
+
     if (e.evt.buttons === 4) {
       document.body.style.cursor = 'grabbing';
     }
+
     const stage = e.target.getStage();
     if (stage == null) return;
-    e.evt.preventDefault();
-    if (!isSelectionEnabled) return;
 
+    if (!isSelectionEnabled) return;
     startSelection(stage, setSelectionRectAttrs, setSelectionRectBoundingBox);
   };
 
   const onMouseUp = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
-    if (!isSelectionEnabled) return;
 
+    if (!isSelectionEnabled) return;
     endSelection(setSelectionRectAttrs, selectionRectAttrs);
-    selectIntersectingShapes(stageRef, trRef);
   };
 
   const onClick = (e: KonvaEventObject<MouseEvent>) => {
@@ -185,9 +189,18 @@ export const DrawingPage = () => {
             onTransformEnd={() => {
               isSelectionEnabled = true;
             }}
+            onMouseDown={() => {
+              isSelectionEnabled = false;
+            }}
+            onMouseUp={() => {
+              isSelectionEnabled = true;
+            }}
             ref={trRef}
             name="transformer"
             anchorSize={8}
+            // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
+            // It's an experimental property so we should keep an eye out for possible issues
+            shouldOverdrawWholeArea={true}
           />
         </Layer>
       </Stage>
