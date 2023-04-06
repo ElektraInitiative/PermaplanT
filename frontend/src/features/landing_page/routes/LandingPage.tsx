@@ -12,7 +12,12 @@ export const LandingPage = () => {
   return (
     <WidePageLayout>
       <div className="mb-8 flex flex-col items-center p-8">
-        <img className="mt-10" id="home" src="/permaplant-logo-2.svg" alt="PermaplanT drawing" />
+        <img
+          className="mt-10"
+          id="home"
+          src="/permaplant-logo-2-colors.svg"
+          alt="PermaplanT drawing"
+        />
         <Features />
         <h2 className="mt-12 mb-4 border-l-2 border-neutral-400 pl-4" id="map">
           The PermaplanT world
