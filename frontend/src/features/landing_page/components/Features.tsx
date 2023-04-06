@@ -39,10 +39,13 @@ const Features = () => {
           <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">
             make your <span className="text-primary-400 dark:text-primary-300">garden </span>
             <TypewriterComponent
-              options={{
-                strings: ['fruitful', 'diverse', 'colorful', 'practical', 'useful', 'abundant'],
-                autoStart: true,
-                loop: true,
+              onInit={(typewriter) => {
+                const strings = ['fruitful', 'colorful', 'practical', 'useful', 'abundant'];
+                strings.forEach((s) => {
+                  typewriter.typeString(s).deleteAll();
+                });
+                typewriter.typeString('diverse');
+                typewriter.start();
               }}
             />
           </h1>
