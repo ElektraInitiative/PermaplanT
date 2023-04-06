@@ -17,10 +17,12 @@ typeshare = "1.0.0"
 derive_more = "0.99.17"
 utoipa = { version = "3.1.1", features = ["actix_extras", "chrono"] }
 utoipa-swagger-ui = { version = "3.1.1", features = ["actix-web"] }
+diesel-async = { version = "0.2.1", features = ["deadpool", "postgres"] }
+serde_json = "1.0.95"
 
 [dependencies.diesel]
 version = "2.0.2"
-features = ["postgres", "r2d2", "chrono", "64-column-tables"]
+features = ["postgres", "chrono", "64-column-tables"]
 
 [dependencies.diesel-derive-enum]
 version = "2.0.0-rc.0"

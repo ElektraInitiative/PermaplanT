@@ -15,9 +15,9 @@ use crate::{
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDto>, ServiceError> {
-    let mut conn = pool.get()?;
-    let result = Seed::find_all(&mut conn)?;
+pub async fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDto>, ServiceError> {
+    let mut conn = pool.get().await?;
+    let result = Seed::find_all(&mut conn).await?;
     Ok(result)
 }
 
@@ -25,9 +25,9 @@ pub fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDto>, ServiceError> {
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
-    let mut conn = pool.get()?;
-    let result = Seed::find_by_id(id, &mut conn)?;
+pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
+    let mut conn = pool.get().await?;
+    let result = Seed::find_by_id(id, &mut conn).await?;
     Ok(result)
 }
 
@@ -35,9 +35,9 @@ pub fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn create(new_seed: NewSeedDto, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
-    let mut conn = pool.get()?;
-    let result = Seed::create(new_seed, &mut conn)?;
+pub async fn create(new_seed: NewSeedDto, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
+    let mut conn = pool.get().await?;
+    let result = Seed::create(new_seed, &mut conn).await?;
     Ok(result)
 }
 
@@ -45,8 +45,8 @@ pub fn create(new_seed: NewSeedDto, pool: &Data<Pool>) -> Result<SeedDto, Servic
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn delete_by_id(id: i32, pool: &Data<Pool>) -> Result<(), ServiceError> {
-    let mut conn = pool.get()?;
-    let _ = Seed::delete_by_id(id, &mut conn)?;
+pub async fn delete_by_id(id: i32, pool: &Data<Pool>) -> Result<(), ServiceError> {
+    let mut conn = pool.get().await?;
+    let _ = Seed::delete_by_id(id, &mut conn).await?;
     Ok(())
 }
