@@ -1,4 +1,4 @@
-CREATE TYPE taxonomic_rank AS ENUM ('species', 'genus', 'subfamily', 'family');
+CREATE TYPE taxonomic_rank AS ENUM ('family', 'subfamily', 'genus', 'species');
 CREATE TABLE taxons (
     id SERIAL PRIMARY KEY NOT NULL,
     rank TAXONOMIC_RANK NOT NULL,
@@ -6,11 +6,11 @@ CREATE TABLE taxons (
     parent_id INTEGER REFERENCES taxons (id) NULL
 );
 
-CREATE TYPE relationship_type AS ENUM ('companion', 'antagonist');
+CREATE TYPE relationship_kind AS ENUM ('companion', 'antagonist');
 CREATE TABLE relationships (
     id SERIAL PRIMARY KEY NOT NULL,
     strength INTEGER CHECK (strength >= 0) NOT NULL,
-    type RELATIONSHIP_TYPE NOT NULL,
+    kind relationship_kind NOT NULL,
     left_taxon_id INTEGER REFERENCES taxons (id) NOT NULL,
     right_taxon_id INTEGER REFERENCES taxons (id) NOT NULL
 );
@@ -148,7 +148,7 @@ potato AS (
     FROM potato_species RETURNING id
 )
 
-INSERT INTO relationships (type, strength, left_taxon_id, right_taxon_id)
+INSERT INTO relationships (kind, strength, left_taxon_id, right_taxon_id)
 -- Radish <-> carrot
 VALUES (
     'companion', 1, (SELECT id FROM radish_species), (SELECT id FROM carrot_species)
@@ -177,7 +177,7 @@ VALUES (
 WITH potential_companions AS (
     SELECT
         r1.left_taxon_id AS taxon_id,
-        r1.type
+        r1.kind
     FROM relationships AS r1
     WHERE
         r1.right_taxon_id IN (3, 7)
@@ -185,7 +185,7 @@ WITH potential_companions AS (
     UNION
     SELECT
         r2.right_taxon_id AS taxon_id,
-        r2.type
+        r2.kind
     FROM relationships AS r2
     WHERE
         r2.left_taxon_id IN (3, 7)
@@ -198,12 +198,12 @@ LEFT JOIN taxons AS t ON companions.taxon_id = t.id
 LEFT JOIN plants AS p ON t.id = p.taxon_id
 -- Then we need to remove companions are antagonists as well
 WHERE
-    type = 'companion'
+    kind = 'companion'
     AND NOT EXISTS (
         SELECT 1
         FROM potential_companions antagonists
         WHERE
-            type = 'antagonist'
+            kind = 'antagonist'
             AND companions.taxon_id = antagonists.taxon_id
     );
 
