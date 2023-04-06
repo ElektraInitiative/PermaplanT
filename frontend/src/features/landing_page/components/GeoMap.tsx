@@ -1,12 +1,29 @@
+import { useDarkModeStore } from '@/features/dark_mode';
+import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { useDarkModeStore } from '@/features/dark_mode';
 
 export const GeoMap = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
 
+  const locations: Array<LatLngExpression> = [
+    [47.57, 16.496],
+    [48.220778, 16.3100205],
+    [45.9666245, 14.4132204],
+    [48.1069151, 14.6971373],
+  ];
+  const markers = locations.map((location, index) => {
+    return (
+      <Marker key={'marker-' + index} position={location}>
+        <Popup>
+          This is a PermaplanT site. Click <a href={`/sites/${index}`}>here</a> to visit.
+        </Popup>
+      </Marker>
+    );
+  });
+
   return (
-    <MapContainer center={[47.57, 16.496]} zoom={8} scrollWheelZoom={false}>
+    <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={false}>
       {darkMode ? (
         <TileLayer
           url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
@@ -18,12 +35,7 @@ export const GeoMap = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       )}
-
-      <Marker position={[47.57, 16.496]}>
-        <Popup>
-          This is a PermaplanT site. Click <a href="/sites/1">here</a> to visit.
-        </Popup>
-      </Marker>
+      {markers}
     </MapContainer>
   );
 };
