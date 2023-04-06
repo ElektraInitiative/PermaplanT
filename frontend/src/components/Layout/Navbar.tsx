@@ -13,6 +13,11 @@ const Navbar = () => {
         <div className="flex space-x-16">
           <div className="flex space-x-6">
             <a href="/" className="flex items-center">
+              <img
+                src="/permaplant-logo.svg"
+                className="w-12 pr-2"
+                alt="permaplant logo small"
+              ></img>
               <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
                 PermaplanT
               </span>
