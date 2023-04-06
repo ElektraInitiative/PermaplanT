@@ -2,11 +2,10 @@
 
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
-use std::cmp;
 
 use crate::{
     model::diesel_extensions::array_to_string,
-    model::dto::{PlantsSearchParameters, PlantsSummaryDto},
+    model::dto::{PlantsSummaryDto},
     schema::plants::{self, all_columns, binomial_name, common_name},
 };
 
