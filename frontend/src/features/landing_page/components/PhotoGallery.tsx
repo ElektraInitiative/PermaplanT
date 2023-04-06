@@ -64,7 +64,7 @@ export const PhotoGallery = () => {
       grid-flow-dense
       grid-cols-6
       gap-4
-      p-8
+      mt-4
     `;
 
   return (
