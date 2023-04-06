@@ -11,6 +11,8 @@ use crate::{
     },
 };
 
+use std::cmp;
+
 /// Fetch all plants from the database.
 ///
 /// # Errors
@@ -30,7 +32,13 @@ pub async fn search(
     query: &PlantsSearchParameters,
 ) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Plants::search(query, &mut conn).await?;
+
+    // pages start at 1
+    let calculated_offset = query.limit * (query.page - 1);
+    // dissalow negative offsets
+    let offset = cmp::min(calculated_offset, 0);
+
+    let result = Plants::search(&query.search_term, query.limit, offset, &mut conn).await?;
     Ok(result)
 }
 

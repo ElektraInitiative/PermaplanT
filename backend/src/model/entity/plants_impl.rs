@@ -2,6 +2,7 @@
 
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
+use std::cmp;
 
 use crate::{
     model::diesel_extensions::array_to_string,
@@ -27,11 +28,13 @@ impl Plants {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn search(
-        query: &PlantsSearchParameters,
+        search_term: &String,
+        limit: i32,
+        offset: i32,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantsSummaryDto>> {
-        let query_with_placeholders = format!("%{}%", query.search_term);
-
+        let query_with_placeholders = format!("%{}%", search_term);
+        
         let query = plants::table
             .filter(
                 binomial_name
@@ -40,8 +43,8 @@ impl Plants {
             )
             .select(all_columns)
             .order((binomial_name, common_name))
-            .limit(query.limit.into())
-            .offset(query.offset.into());
+            .limit(limit.into())
+            .offset(offset.into());
 
         let query_result = query.load::<Self>(conn).await;
         query_result.map(|v| v.into_iter().map(Into::into).collect())
