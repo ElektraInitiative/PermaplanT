@@ -3,6 +3,11 @@ import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
 import { Transformer } from 'konva/lib/shapes/Transformer';
 
+// Keep track of our previously selected shapes so we can trigger the selection
+// only if we have new shapes in our bounds. This fixes a bug where deselection
+// would happen after you moved a single or a group of selected shapes.
+let previouslySelectedShapes: Shape<ShapeConfig>[] = [];
+
 /** Select shapes that intersect with the selection rect. */
 export const selectIntersectingShapes = (
   stageRef: React.RefObject<Stage>,
@@ -19,13 +24,33 @@ export const selectIntersectingShapes = (
     .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'));
 
   if (!allShapes) return;
-  const intersectingShapes = allShapes.filter(
+
+  const allNodes = trRef.current?.getNodes();
+  if (!allNodes) return;
+
+  let selectionChanged = true;
+
+  const mappedShapes = allShapes.map((shape) => {
+    return shape as Shape<ShapeConfig>;
+  });
+
+  for (const shape of previouslySelectedShapes) {
+    if (!allNodes.map((node) => node._id).includes(shape._id)) {
+      selectionChanged = false;
+      break;
+    }
+  }
+
+  if (selectionChanged && previouslySelectedShapes.length > 0) return;
+
+  const intersectingShapes = mappedShapes.filter(
     (shape) => shape && Util.haveIntersection(box, shape.getClientRect()),
   );
 
   if (intersectingShapes) {
     const nodes = intersectingShapes.filter((shape) => shape !== undefined);
-    trRef.current?.nodes(nodes as Shape<ShapeConfig>[]);
+    previouslySelectedShapes = nodes;
+    trRef.current?.nodes(nodes);
   }
 };
 

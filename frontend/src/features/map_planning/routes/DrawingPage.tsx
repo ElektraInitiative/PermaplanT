@@ -39,6 +39,7 @@ export const DrawingPage = () => {
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
   const stageRef = useRef<Konva.Stage>(null);
 
+  // We need this to disable selection when we are transforming
   let isSelectionEnabled = true;
 
   const onWheel = (e: KonvaEventObject<WheelEvent>) => {
@@ -97,7 +98,6 @@ export const DrawingPage = () => {
     const stage = e.target.getStage();
     if (stage == null) return;
     e.evt.preventDefault();
-
     if (!isSelectionEnabled) return;
 
     startSelection(stage, setSelectionRectAttrs, setSelectionRectBoundingBox);
