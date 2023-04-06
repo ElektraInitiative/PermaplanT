@@ -1,11 +1,13 @@
 import ButtonLink from '../Button/ButtonLink';
 import { DarkModeSwitcher } from '@/features/dark_mode';
+import { useDarkModeStore } from '@/features/dark_mode';
 
 /**
  * The navigation component that is fixed on the top.
  *
  */
 const Navbar = () => {
+  const darkMode = useDarkModeStore((state) => state.darkMode);
   return (
     // z-index 1001 is needed because of leaflet GeoMap
     <nav className="fixed top-0 left-0 z-[1001] w-full border-b-[0.5px] border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-100-dark">
@@ -13,11 +15,19 @@ const Navbar = () => {
         <div className="flex space-x-16">
           <div className="flex space-x-6">
             <a href="/" className="flex items-center">
-              <img
-                src="/permaplant-logo.svg"
-                className="w-12 pr-2"
-                alt="permaplant logo small"
-              ></img>
+              {darkMode ? (
+                <img
+                  src="/permaplant-logo.svg"
+                  className="w-12 pr-2"
+                  alt="permaplant logo small"
+                ></img>
+              ) : (
+                <img
+                  src="/permaplant-logo-gray.svg"
+                  className="w-12 pr-2"
+                  alt="permaplant logo small"
+                ></img>
+              )}
               <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
                 PermaplanT
               </span>
