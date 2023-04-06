@@ -5,7 +5,7 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::{
     model::diesel_extensions::array_to_string,
-    model::dto::{PlantsSummaryDto},
+    model::dto::PlantsSummaryDto,
     schema::plants::{self, all_columns, binomial_name, common_name},
 };
 
