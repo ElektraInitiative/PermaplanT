@@ -69,4 +69,5 @@ pub struct PlantsSummaryDto {
 pub struct PlantsSearchParameters {
     pub search_term: String,
     pub limit: i32,
+    pub offset: i32,
 }

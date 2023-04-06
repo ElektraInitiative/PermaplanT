@@ -40,7 +40,8 @@ impl Plants {
             )
             .select(all_columns)
             .order((binomial_name, common_name))
-            .limit(query.limit.into());
+            .limit(query.limit.into())
+            .offset(query.offset.into());
 
         let query_result = query.load::<Self>(conn).await;
         query_result.map(|v| v.into_iter().map(Into::into).collect())
