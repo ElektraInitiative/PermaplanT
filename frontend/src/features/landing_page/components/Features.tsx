@@ -46,7 +46,7 @@ const Features = () => {
               }}
             />
           </h1>
-          <p className="mx-auto w-[500px]">
+          <p className="mx-auto md:w-[500px]">
             Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub
             indxgo juice poutine, ramps microdosing banh mi pug.
           </p>
