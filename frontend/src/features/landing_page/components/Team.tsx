@@ -18,7 +18,7 @@ const Team = () => {
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Markus Raab
+                  Dr. Markus Raab
                 </h2>
                 <p className="text-gray-500">Project Lead</p>
               </div>
@@ -33,7 +33,7 @@ const Team = () => {
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Yvonne Markl
+                  Yvonne Markl, MSc.
                 </h2>
                 <p className="text-gray-500">Permaculture Expert</p>
               </div>
@@ -138,7 +138,7 @@ const Team = () => {
               />
               <div className="flex-grow">
                 <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Ramzan M.
+                  Ramzan Magomadow
                 </h2>
                 <p className="text-gray-500">Software Engineer</p>
               </div>
