@@ -1,3 +1,4 @@
+import { SelectionRectAttrs } from '../types/selectionRectAttrs';
 import {
   endSelection,
   selectIntersectingShapes,
@@ -10,28 +11,33 @@ import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { useEffect, useRef, useState } from 'react';
-import { Circle, Layer, Rect, Stage, Transformer } from 'react-konva';
+import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
-export const DrawingPage = () => {
+interface BaseStageProps {
+  children: React.ReactNode;
+}
+
+export const BaseStage = (props: BaseStageProps) => {
+  // Represents the state of the stage
   const [stage, setStage] = useState({
     scale: 1,
     x: 0,
     y: 0,
   });
 
-  const [selectionRectAttrs, setSelectionRectAttrs] = useState({
+  // Represents the state of the current selection rectangle
+  const [selectionRectAttrs, setSelectionRectAttrs] = useState<SelectionRectAttrs>({
     x: 0,
     y: 0,
     width: 0,
     height: 0,
     isVisible: false,
-  });
-
-  const [selectionRectBoundingBox, setSelectionRectBoundingBox] = useState({
-    x1: 0,
-    y1: 0,
-    x2: 0,
-    y2: 0,
+    boundingBox: {
+      x1: 0,
+      y1: 0,
+      x2: 0,
+      y2: 0,
+    },
   });
 
   const trRef = useRef<Konva.Transformer>(null);
@@ -42,7 +48,8 @@ export const DrawingPage = () => {
   // We need this to disable selection when we are transforming
   let isSelectionEnabled = true;
 
-  const onWheel = (e: KonvaEventObject<WheelEvent>) => {
+  // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
+  const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
 
     const stage = e.target.getStage();
@@ -58,7 +65,8 @@ export const DrawingPage = () => {
     }
   };
 
-  const onDragStart = (e: KonvaEventObject<DragEvent>) => {
+  // Event listener responsible for allowing dragging of the stage only with the wheel mouse button
+  const onStageDragStart = (e: KonvaEventObject<DragEvent>) => {
     e.evt.preventDefault();
 
     const stage = e.target.getStage();
@@ -73,6 +81,7 @@ export const DrawingPage = () => {
     }
   };
 
+  // Event listener responsible for updating the selection rectangle
   const onMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
 
@@ -84,17 +93,12 @@ export const DrawingPage = () => {
     if (stage == null || !selectionRectAttrs.isVisible) return;
 
     if (!isSelectionEnabled) return;
-    updateSelection(
-      stage,
-      setSelectionRectAttrs,
-      selectionRectAttrs,
-      setSelectionRectBoundingBox,
-      selectionRectBoundingBox,
-    );
+    updateSelection(stage, setSelectionRectAttrs);
     selectIntersectingShapes(stageRef, trRef);
   };
 
-  const onMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+  // Event listener responsible for positioning the selection rectangle to the current mouse position
+  const onStageMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
 
     if (e.evt.buttons === 4) {
@@ -105,17 +109,19 @@ export const DrawingPage = () => {
     if (stage == null) return;
 
     if (!isSelectionEnabled) return;
-    startSelection(stage, setSelectionRectAttrs, setSelectionRectBoundingBox);
+    startSelection(stage, setSelectionRectAttrs);
   };
 
-  const onMouseUp = (e: KonvaEventObject<MouseEvent>) => {
+  // Event listener responsible for ending the selection rectangle
+  const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
 
     if (!isSelectionEnabled) return;
     endSelection(setSelectionRectAttrs, selectionRectAttrs);
   };
 
-  const onClick = (e: KonvaEventObject<MouseEvent>) => {
+  // Event listener responsible for unselecting shapes when clicking on the stage
+  const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
     const isStage = e.target instanceof Konva.Stage;
     const nodeSize = trRef.current?.getNodes().length || 0;
     if (nodeSize > 0 && isStage) {
@@ -123,6 +129,7 @@ export const DrawingPage = () => {
     }
   };
 
+  // Event listener responsible for adding a single shape to the transformer
   const addToTransformer = (node: Shape<ShapeConfig>) => {
     const nodes = trRef.current?.getNodes() || [];
     if (!nodes.includes(node)) {
@@ -130,26 +137,19 @@ export const DrawingPage = () => {
     }
   };
 
-  const [circles, setCircles] = useState<JSX.Element[]>([]);
   useEffect(() => {
-    const newCircles = [];
-    for (let i = 1; i <= 10; i++) {
-      newCircles.push(
-        <Circle
-          key={i}
-          x={100 * i}
-          y={100 * i}
-          radius={50}
-          fill="red"
-          draggable={true}
-          shadowBlur={5}
-          onClick={(e: KonvaEventObject<MouseEvent>) => {
-            addToTransformer(e.target as Shape<ShapeConfig>);
-          }}
-        />,
-      );
-    }
-    setCircles(newCircles);
+    if (stageRef.current?.children === null) return;
+
+    // Add an event listener to all shapes except transformer and selectionRect
+    // Reason is so a shape can be selected/transformed on a single click
+    stageRef.current?.children
+      ?.flatMap((layer) => layer.children)
+      .filter(
+        (shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'),
+      )
+      .forEach((shape) => {
+        shape?.addEventListener('click', () => addToTransformer(shape as Shape<ShapeConfig>));
+      });
   }, []);
 
   return (
@@ -159,18 +159,18 @@ export const DrawingPage = () => {
         draggable={true}
         width={window.innerWidth}
         height={window.innerHeight}
-        onWheel={onWheel}
-        onDragStart={onDragStart}
-        onMouseDown={onMouseDown}
+        onWheel={onStageWheel}
+        onDragStart={onStageDragStart}
+        onMouseDown={onStageMouseDown}
         onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onClick={onClick}
+        onMouseUp={onStageMouseUp}
+        onClick={onStageClick}
         scaleX={stage.scale}
         scaleY={stage.scale}
         x={stage.x}
         y={stage.y}
       >
-        <Layer>{circles.map((circle) => circle)}</Layer>
+        {props.children}
         <Layer>
           <Rect
             x={selectionRectAttrs.x}

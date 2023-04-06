@@ -7,7 +7,7 @@ enum Pages {
   ViewSeeds,
   SeedDetails,
   LandingPage,
-  DrawingPage,
+  Map,
 }
 
 type PathRouteCustomProps = {

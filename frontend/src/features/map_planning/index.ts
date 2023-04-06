@@ -1,1 +1,1 @@
-export * from './routes/DrawingPage';
+export * from './routes/Map';

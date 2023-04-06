@@ -1,3 +1,4 @@
+import { SelectionRectAttrs } from '../types/selectionRectAttrs';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
@@ -63,23 +64,7 @@ export const unselectShapes = (trRef: React.RefObject<Transformer>) => {
 /** Starts the selection and positions the selection rect to the current mouse position. */
 export const startSelection = (
   stage: Stage,
-  setSelectionRectAttrs: React.Dispatch<
-    React.SetStateAction<{
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      isVisible: boolean;
-    }>
-  >,
-  setSelectionRectBoundingBox: React.Dispatch<
-    React.SetStateAction<{
-      x1: number;
-      y1: number;
-      x2: number;
-      y2: number;
-    }>
-  >,
+  setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
 ) => {
   const pointerVector = stage.getPointerPosition();
   if (pointerVector == null) return;
@@ -91,18 +76,18 @@ export const startSelection = (
   if (scale !== undefined) {
     // We need to adjust the selection box based on the stage's scale.
     // The scale might change due to zooming.
-    setSelectionRectBoundingBox({
-      x1: pointerX / scale.x,
-      y1: pointerY / scale.y,
-      x2: pointerX / scale.x,
-      y2: pointerY / scale.y,
-    });
     setSelectionRectAttrs({
       x: pointerX,
       y: pointerY,
       width: 0,
       height: 0,
       isVisible: true,
+      boundingBox: {
+        x1: pointerX / scale.x,
+        y1: pointerY / scale.y,
+        x2: pointerX / scale.x,
+        y2: pointerY / scale.y,
+      },
     });
   }
 };
@@ -110,36 +95,7 @@ export const startSelection = (
 /** Update the selection box's size based on mouse position. */
 export const updateSelection = (
   stage: Stage,
-  setSelectionRectAttrs: React.Dispatch<
-    React.SetStateAction<{
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      isVisible: boolean;
-    }>
-  >,
-  selectionRectAttrs: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    isVisible: boolean;
-  },
-  setSelectionRectBoundingBox: React.Dispatch<
-    React.SetStateAction<{
-      x1: number;
-      y1: number;
-      x2: number;
-      y2: number;
-    }>
-  >,
-  selectionRectBoundingBox: {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-  },
+  setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
 ) => {
   const pointerVector = stage.getPointerPosition();
   if (pointerVector == null) return;
@@ -152,45 +108,32 @@ export const updateSelection = (
   const scale = stage.scale();
 
   if (scale !== undefined) {
-    setSelectionRectBoundingBox({
-      ...selectionRectBoundingBox,
-      x2: pointerX / scale.x,
-      y2: pointerY / scale.y,
-    });
+    setSelectionRectAttrs((prevSelectionRectAttrs) => {
+      const x1 = prevSelectionRectAttrs.boundingBox.x1;
+      const y1 = prevSelectionRectAttrs.boundingBox.y1;
+      const x2 = pointerX / scale.x;
+      const y2 = pointerY / scale.y;
 
-    const x1 = selectionRectBoundingBox.x1;
-    const y1 = selectionRectBoundingBox.y1;
-    const x2 = selectionRectBoundingBox.x2;
-    const y2 = selectionRectBoundingBox.y2;
-
-    setSelectionRectAttrs({
-      ...selectionRectAttrs,
-      x: Math.min(x1, x2),
-      y: Math.min(y1, y2),
-      width: Math.abs(x2 - x1),
-      height: Math.abs(y2 - y1),
+      return {
+        ...prevSelectionRectAttrs,
+        boundingBox: {
+          ...prevSelectionRectAttrs.boundingBox,
+          x2: x2,
+          y2: y2,
+        },
+        x: Math.min(x1, x2),
+        y: Math.min(y1, y2),
+        width: Math.abs(x2 - x1),
+        height: Math.abs(y2 - y1),
+      };
     });
   }
 };
 
 /** Ends the selection which means the selection rect turns invisible. */
 export const endSelection = (
-  setSelectionRectAttrs: React.Dispatch<
-    React.SetStateAction<{
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      isVisible: boolean;
-    }>
-  >,
-  selectionRectAttrs: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    isVisible: boolean;
-  },
+  setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
+  selectionRectAttrs: SelectionRectAttrs,
 ) => {
   if (selectionRectAttrs.isVisible) {
     setSelectionRectAttrs({

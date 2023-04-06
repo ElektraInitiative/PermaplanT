@@ -1,7 +1,7 @@
 import { Pages, Routes } from './types';
 import { ImprintPage } from '@/features/imprint_page';
-import { DrawingPage } from '@/features/map_planning';
 import { LandingPage } from '@/features/landing_page';
+import { Map } from '@/features/map_planning';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 
 const routes: Routes = {
@@ -30,10 +30,11 @@ const routes: Routes = {
     path: '/',
     title: 'PermaplanT',
   },
-  [Pages.DrawingPage]: {
-    component: DrawingPage,
-    path: '/drawing-page',
-    title: 'Drawing Page',
+  [Pages.Map]: {
+    component: Map,
+    // path needs to change later to something like /user/:id/map/:id
+    path: '/map',
+    title: 'Map',
   },
 };
 
