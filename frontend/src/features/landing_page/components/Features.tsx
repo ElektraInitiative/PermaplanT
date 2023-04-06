@@ -1,6 +1,8 @@
 import { ReactComponent as GlobeSVG } from '@/assets/globe.svg';
 import { ReactComponent as PlanningSVG } from '@/assets/planning.svg';
 import { ReactComponent as PlantSVG } from '@/assets/plant.svg';
+import TypewriterComponent from 'typewriter-effect';
+import './Features.css';
 
 interface Feature {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -35,8 +37,14 @@ const Features = () => {
       <div className="py-24">
         <div className="mb-20 text-center">
           <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">
-            BE <span className="text-primary-400 dark:text-primary-300">GOOD</span> TO YOUR
-            <span className="text-secondary-500 dark:text-secondary-300"> PLANTS</span>
+            make your <span className="text-primary-400 dark:text-primary-300">garden </span>
+            <TypewriterComponent
+              options={{
+                strings: ['fruitful', 'diverse', 'colorful', 'practical', 'useful', 'abundant'],
+                autoStart: true,
+                loop: true,
+              }}
+            />
           </h1>
           <p className="mx-auto w-[500px]">
             Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub
