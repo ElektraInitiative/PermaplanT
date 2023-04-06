@@ -20,7 +20,7 @@ export const PhotoGallery = () => {
     '/permaplant_drawing.jpeg',
   ];
   const [selectedImage, setSelectedImage] = useState(NaN);
-  const [imageSize, setImageSize] = useState('mid');
+  const [imageSize, setImageSize] = useState('small');
   const [showModal, setShowModal] = useState(false);
   const getItemSize = (index: number) => {
     const sizes = [
