@@ -1,23 +1,42 @@
-import { SelectionRectAttrs } from '../types/selectionRectAttrs';
+import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
+  deselectShapes,
   endSelection,
   selectIntersectingShapes,
   startSelection,
-  unselectShapes,
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
 interface BaseStageProps {
+  zoomable?: boolean;
+  scrollable?: boolean;
+  selectable?: boolean;
+  draggable?: boolean;
   children: React.ReactNode;
 }
 
-export const BaseStage = (props: BaseStageProps) => {
+/**
+ * This component is responsible for rendering the base stage that the user is going to draw on.
+ *
+ * It supports the following features out of the box and are enabled by default:
+ *  - Zooming
+ *  - Scrolling
+ *  - Select & Multi-Select
+ *  - Dragging
+ */
+export const BaseStage = ({
+  children,
+  zoomable = true,
+  scrollable = true,
+  selectable = true,
+  draggable = true,
+}: BaseStageProps) => {
   // Represents the state of the stage
   const [stage, setStage] = useState({
     scale: 1,
@@ -40,43 +59,51 @@ export const BaseStage = (props: BaseStageProps) => {
     },
   });
 
+  // Ref to the transformer
   const trRef = useRef<Konva.Transformer>(null);
 
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
+  // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
-
-  // We need this to disable selection when we are transforming
-  let isSelectionEnabled = true;
 
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
 
     const stage = e.target.getStage();
-    if (stage == null) return;
+    if (stage === null) return;
 
     const pointerVector = stage.getPointerPosition();
-    if (pointerVector == null) return;
+    if (pointerVector === null) return;
 
     if (e.evt.ctrlKey) {
-      handleZoom(pointerVector, e.evt.deltaY, stage, setStage);
+      if (zoomable) {
+        handleZoom(pointerVector, e.evt.deltaY, stage, setStage);
+      }
     } else {
-      handleScroll(e.evt.deltaX, e.evt.deltaY, stage);
+      if (scrollable) {
+        handleScroll(e.evt.deltaX, e.evt.deltaY, stage);
+      }
     }
   };
 
   // Event listener responsible for allowing dragging of the stage only with the wheel mouse button
   const onStageDragStart = (e: KonvaEventObject<DragEvent>) => {
+    if (e.evt === null || e.evt === undefined) return;
     e.evt.preventDefault();
 
     const stage = e.target.getStage();
-    if (stage == null) return;
+    if (stage === null) return;
+
+    // If the mouse pointer is starting the drag on an element that is not a stage then we don't drag
+    // It works for now but there should be a better way since it's a bit wonky
+    // Should work better with .draggable(false)
     if (e.evt.buttons) {
       if (e.evt.buttons !== 4 && e.target === stage) {
         stage.stopDrag();
       }
-      if (e.evt.buttons === 4 && e.target._id === 270) {
-        stage.startDrag();
+      if (e.evt.buttons === 4 && e.target !== stage) {
+        stage.stopDrag();
       }
     }
   };
@@ -90,9 +117,8 @@ export const BaseStage = (props: BaseStageProps) => {
     }
 
     const stage = e.target.getStage();
-    if (stage == null || !selectionRectAttrs.isVisible) return;
+    if (stage === null || !selectionRectAttrs.isVisible || !selectable) return;
 
-    if (!isSelectionEnabled) return;
     updateSelection(stage, setSelectionRectAttrs);
     selectIntersectingShapes(stageRef, trRef);
   };
@@ -106,9 +132,8 @@ export const BaseStage = (props: BaseStageProps) => {
     }
 
     const stage = e.target.getStage();
-    if (stage == null) return;
+    if (stage == null || !selectable) return;
 
-    if (!isSelectionEnabled) return;
     startSelection(stage, setSelectionRectAttrs);
   };
 
@@ -116,7 +141,7 @@ export const BaseStage = (props: BaseStageProps) => {
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
 
-    if (!isSelectionEnabled) return;
+    if (!selectable) return;
     endSelection(setSelectionRectAttrs, selectionRectAttrs);
   };
 
@@ -125,7 +150,7 @@ export const BaseStage = (props: BaseStageProps) => {
     const isStage = e.target instanceof Konva.Stage;
     const nodeSize = trRef.current?.getNodes().length || 0;
     if (nodeSize > 0 && isStage) {
-      unselectShapes(trRef);
+      deselectShapes(trRef);
     }
   };
 
@@ -137,26 +162,22 @@ export const BaseStage = (props: BaseStageProps) => {
     }
   };
 
-  useEffect(() => {
-    if (stageRef.current?.children === null) return;
-
-    // Add an event listener to all shapes except transformer and selectionRect
-    // Reason is so a shape can be selected/transformed on a single click
-    stageRef.current?.children
-      ?.flatMap((layer) => layer.children)
-      .filter(
-        (shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'),
-      )
-      .forEach((shape) => {
-        shape?.addEventListener('click', () => addToTransformer(shape as Shape<ShapeConfig>));
+  // Add event listeners to all shapes
+  // This will trigger on every rerender, maybe this could be improved?
+  stageRef.current?.children
+    ?.flatMap((layer) => layer.children)
+    .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'))
+    .forEach((shape) => {
+      shape?.addEventListener('click', () => {
+        addToTransformer(shape as Shape<ShapeConfig>);
       });
-  }, []);
+    });
 
   return (
     <div className="h-screen w-screen overflow-hidden">
       <Stage
         ref={stageRef}
-        draggable={true}
+        draggable={draggable}
         width={window.innerWidth}
         height={window.innerHeight}
         onWheel={onStageWheel}
@@ -165,12 +186,15 @@ export const BaseStage = (props: BaseStageProps) => {
         onMouseMove={onMouseMove}
         onMouseUp={onStageMouseUp}
         onClick={onStageClick}
+        onDblClick={() => {
+          // deselectShapes(trRef);
+        }}
         scaleX={stage.scale}
         scaleY={stage.scale}
         x={stage.x}
         y={stage.y}
       >
-        {props.children}
+        {children}
         <Layer>
           <Rect
             x={selectionRectAttrs.x}
@@ -183,17 +207,18 @@ export const BaseStage = (props: BaseStageProps) => {
             name="selectionRect"
           />
           <Transformer
+            // We need to manually disable selection when we are transforming
             onTransformStart={() => {
-              isSelectionEnabled = false;
+              selectable = false;
             }}
             onTransformEnd={() => {
-              isSelectionEnabled = true;
+              selectable = true;
             }}
             onMouseDown={() => {
-              isSelectionEnabled = false;
+              selectable = false;
             }}
             onMouseUp={() => {
-              isSelectionEnabled = true;
+              selectable = true;
             }}
             ref={trRef}
             name="transformer"

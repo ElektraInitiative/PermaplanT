@@ -1,4 +1,4 @@
-import { SelectionRectAttrs } from '../types/selectionRectAttrs';
+import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
@@ -7,6 +7,7 @@ import { Transformer } from 'konva/lib/shapes/Transformer';
 // Keep track of our previously selected shapes so we can trigger the selection
 // only if we have new shapes in our bounds. This fixes a bug where deselection
 // would happen after you moved a single or a group of selected shapes.
+// Todo: optimization -> could probably use a set here
 let previouslySelectedShapes: Shape<ShapeConfig>[] = [];
 
 /** Select shapes that intersect with the selection rect. */
@@ -37,7 +38,7 @@ export const selectIntersectingShapes = (
     (shape) => shape && Util.haveIntersection(box, shape.getClientRect()),
   );
 
-  // if intersectingShape and previouslySelectedShapes are the same, dont update
+  // If intersectingShape and previouslySelectedShapes are the same, dont update
   if (intersectingShapes.length === previouslySelectedShapes.length) {
     let same = true;
     for (const shape of intersectingShapes) {
@@ -56,8 +57,8 @@ export const selectIntersectingShapes = (
   }
 };
 
-/** Unselects the shapes */
-export const unselectShapes = (trRef: React.RefObject<Transformer>) => {
+/** Deselects the shapes */
+export const deselectShapes = (trRef: React.RefObject<Transformer>) => {
   trRef.current?.nodes([]);
 };
 
