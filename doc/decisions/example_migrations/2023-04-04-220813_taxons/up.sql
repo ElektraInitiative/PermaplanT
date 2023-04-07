@@ -3,6 +3,7 @@ CREATE TABLE taxons (
     id SERIAL PRIMARY KEY NOT NULL,
     rank TAXONOMIC_RANK NOT NULL,
     name VARCHAR NOT NULL,
+    icon_url VARCHAR NULL,
     parent_id INTEGER REFERENCES taxons (id) NULL
 );
 

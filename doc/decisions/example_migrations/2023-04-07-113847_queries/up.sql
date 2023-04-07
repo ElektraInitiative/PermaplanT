@@ -201,13 +201,21 @@ WHERE kind = 'companion'
 --
 -- Example: Hierarchical information
 --
+-- Let's set an for the family of potato and one for the carrot species.
+UPDATE taxons
+SET icon_url = '/assets/img/solanaceae.png'
+WHERE name = 'Solanaceae';
+UPDATE taxons
+SET icon_url = '/assets/img/daucus_carota.png'
+WHERE name = 'Daucus carota';
 -- Get all plants with their hierarchy information
 SELECT
     plants.common_name,
     species.name,
     genus.name,
     subfamily.name,
-    family.name
+    family.name,
+    COALESCE(species.icon_url, genus.icon_url, subfamily.icon_url, family.icon_url) AS icon_url
 FROM plants
     LEFT JOIN taxons AS species
         ON (species.rank = 'species' AND species.id = plants.species_id)
