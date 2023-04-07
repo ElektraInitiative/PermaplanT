@@ -1,6 +1,6 @@
 # Database Structure
 
-The main goal of this document is to describe the database structure/layout especially in terms of relations between data entities.
+The main goal of this document is to describe the database schema focusing on hierarchical information of plants and relationships between them.
 
 ## Problem
 
@@ -82,6 +82,42 @@ Inheritance cannot solve the challenge described above. I'll leave the main poin
 
 So the inheritance is useful to deal with complex DDL structure on the startup, but will not help us to avoid bulk operations e.g. updating a column for every `variety` in the entire `genus`
 
+2. One table per taxonomy rank and one for concrete plants.
+
+Pros:
+
+- Schema is easy to understand.
+
+Cons:
+
+By splitting the taxonomy ranks into multiple tables we loose the ability to have simple foreign keys to these when defining plant relationships.
+There would be two approaches to alleviate this.
+
+- Manage multiple nullable foreign keys and make sure that exactly one of them is set.
+  Would lead to complex validations for inserts and updates.
+- Generalize it to a self-managed compound foreign key with a table name and id.
+  We would lose referential integrity here.
+
+3. One table for taxonomy ranks and one for concrete plants.
+
+Pros:
+
+-
+
+Cons:
+
+-
+
+4. Plants and ranks in one table.
+
+Pros:
+
+-
+
+Cons:
+
+-
+
 ## Decision
 
 1. Hierarchy
@@ -122,9 +158,3 @@ The relations are not part of the plant entity, but rather a property of the rel
 ## Notes
 
 In order to finish this decision, we need to understand the semantics of the data better.
-
-TODO:
-
-- [] define how exactly hierarchy tables will look like
-- [x] define how metatables should be connected to the hierarchy tables
-- [x] define how the relations between plants will be stored
