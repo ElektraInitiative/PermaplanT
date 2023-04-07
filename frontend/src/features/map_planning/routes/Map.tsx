@@ -2,9 +2,7 @@ import { BaseStage } from '../components/BaseStage';
 import { useEffect, useState } from 'react';
 import { Circle, Layer, Rect } from 'react-konva';
 
-/**
- * This component is responsible for rendering the map that the user is going to draw on.
- */
+/** This component is responsible for rendering the map that the user is going to draw on. */
 export const Map = () => {
   const [shapes, setShapes] = useState<JSX.Element[]>([]);
 

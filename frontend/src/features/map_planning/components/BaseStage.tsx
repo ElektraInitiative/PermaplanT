@@ -112,6 +112,8 @@ export const BaseStage = ({
   const onMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
 
+    if (e.evt.buttons === 4) return;
+
     if (e.evt.buttons !== 4) {
       document.body.style.cursor = 'default';
     }
@@ -168,9 +170,11 @@ export const BaseStage = ({
     ?.flatMap((layer) => layer.children)
     .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'))
     .forEach((shape) => {
-      shape?.addEventListener('click', () => {
-        addToTransformer(shape as Shape<ShapeConfig>);
-      });
+      if (!shape?.eventListeners['click']) {
+        shape?.addEventListener('click', () => {
+          addToTransformer(shape as Shape<ShapeConfig>);
+        });
+      }
     });
 
   return (
@@ -186,9 +190,6 @@ export const BaseStage = ({
         onMouseMove={onMouseMove}
         onMouseUp={onStageMouseUp}
         onClick={onStageClick}
-        onDblClick={() => {
-          // deselectShapes(trRef);
-        }}
         scaleX={stage.scale}
         scaleY={stage.scale}
         x={stage.x}
