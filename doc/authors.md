@@ -40,6 +40,7 @@ including their responsibilities, skills, etc.
 - special skills: SQL, TypeScript
 - focus groups: DB, Frontend
 - positioning: full-stack
+- worked on: seeds use case, db, frontend, backend
 
 ## Giancarlo
 
