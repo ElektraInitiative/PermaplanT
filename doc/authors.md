@@ -37,7 +37,8 @@ including their responsibilities, skills, etc.
 
 - GitHub: @badnames
 - main responsibilities: DB
-- focus groups: DB, PostGIS, polyculture
+- special skills: SQL, TypeScript
+- focus groups: DB, Frontend
 - positioning: full-stack
 
 ## Giancarlo
