@@ -116,7 +116,7 @@ Pros:
 
 Cons:
 
--
+- Almost everything in the plants table needs to be nullable.
 
 ## Decision
 
