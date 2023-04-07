@@ -113,6 +113,7 @@ users {
   VARCHAR experience
   VARCHAR preferences
   GEOGRAPHY location
+  INT membership_points
 }
 
 blossoms {
@@ -212,12 +213,12 @@ blossoms_gained }o--|| users : ""
 | **version_name**                 | NULL                             |
 | **is_inactive**                  | false                            |
 | **last_visit**                   | 2023-04-04                       |
-| **honors**                       | 0                                |
-| **visits**                       | 0                                |
-| **harvested**                    | 0                                |
+| **honors**                       | 0                                | | 0 to infinity
+| **visits**                       | 0                                | | 0 to infinity
+| **harvested**                    | 0                                | | 0 to infinity
 | **creation_date**                | 2023-04-04                       |
 | **deletion_date**                | 2023-04-04                       |
-| **zoom_factor**                  | 100                              |
+| **zoom_factor**                  | 100                              | | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000
 | **background**                   | NULL                             |
 | **background_scale**             | NULL                             |
 | **geo_data**                     | NULL                             | | PostGis Geodata
@@ -235,6 +236,7 @@ blossoms_gained }o--|| users : ""
 | **experience**                   | {beginner, hobbyist, expert}     |
 | **preferences**                  | raised vegetable beds            |
 | **location**                     | Vienna, Austria                  |
+| **membership_points**            | 0                                | | 0 to infinity
 
 ## `Blossoms`
 
@@ -243,7 +245,7 @@ blossoms_gained }o--|| users : ""
 | **id**                           | 1                                |
 | **title**                        | Novice Gardener                  |
 | **description**                  | Plant your first plant           |
-| **condition**                    | plants.count() >= 1              |
+| **condition**                    | plants.count() >= 1              | | condition used to check if milestone is reached
 | **track**                        | Beginners Track                  |
 | **icon**                         | NULL                             |
 | **is_seasonal**                  | false                            |
@@ -253,7 +255,7 @@ blossoms_gained }o--|| users : ""
 | **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
 | :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
 | **id**                           | 1                                |
-| **times_gained**                 | 1                                |
+| **times_gained**                 | 1                                | | 0 to infinity
 
 ## `Relation`
 
