@@ -26,7 +26,7 @@ However, this approach can increase the application's complexity, as it requires
 
 Another solution is to store the offloaded data in IndexedDB, which is a browser-based object-oriented database.
 This approach could reduce memory usage and improve performance, as objects can be offloaded and loaded on-demand from the IndexedDB, while not storing them in the PermaplanT database.
-But this method could increase the complexity of the application, as it requires additional strategies to manage the synchronization of data between the IndexedDB and the PermaplanT database.
+But this method increases the complexity of the application, as it requires additional strategies to manage the synchronization of data between the IndexedDB and the PermaplanT database.
 
 ## Decision
 
