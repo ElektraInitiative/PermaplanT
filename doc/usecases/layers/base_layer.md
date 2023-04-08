@@ -19,10 +19,11 @@
   - The user draws a polygon telling the app where the borders of this image are.
   - Georeferencing: The user tells real lengths of lines (on flat land) so that we know how big this image in reality is (see use case "measuring distance").
   - The user chooses an orientation of the picture, i.e., rotate the image to where north is.
+  - The user chooses where north related to the screen is by rotating an north arrow (this rotates the image and the polygon together).
 - **Alternative scenario:**
   - User selects an alternative image.
   - The user scales the image, so that it fits to prior georeferencing.
-  - The user chooses where north related to the screen is by rotating an north arrow (this rotates the image and the polygon together).
+  - The user chooses an orientation of the picture, i.e., rotate the image to where north already is to fit prior north orientation
 - **Error scenario:**
   - User attempts to import a file that is not a supported image format or is corrupted and the app displays an error message.
     The user is prompted to choose a correct image in one of the supported formats instead.
