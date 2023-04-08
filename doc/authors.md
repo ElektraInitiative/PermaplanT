@@ -80,10 +80,12 @@ including their responsibilities, skills, etc.
 
 ## Benjamin
 
+- GitHub: @Benjaminimal
 - main responsibility: Polyculture
-- focus group: polyculture, PostGIS
+- focus group: polyculture, DB
 - special skills: BOKU
 - positioning: backend
+- worked on: ployculture use cases, DB
 
 ## Paul
 
