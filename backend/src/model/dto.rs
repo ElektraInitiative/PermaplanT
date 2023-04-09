@@ -63,7 +63,7 @@ pub struct PlantsSummaryDto {
     pub common_name: Option<Vec<Option<String>>>,
 }
 
-/// Query parameters for the searching plants.
+/// Query parameters for searching plants.
 #[typeshare]
 #[derive(Debug, Deserialize)]
 pub struct PlantsSearchParameters {
