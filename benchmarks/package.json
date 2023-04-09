@@ -4,8 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "benchmark": "playwright test",
-        "start": "node insert_maps.js"
+        "benchmark": "playwright test"
     },
     "keywords": [],
     "author": "",
