@@ -73,22 +73,17 @@ plants }o--|| plant_detail: "type"
 
 plants ||--o{ seeds : ""
 
-plant_detail }o--o{ plant_detail: "likes"
-
-plant_detail }o--o{ plant_detail: "dislikes"
-
 species{}
 genus{}
 subfamily{}
 family{}
 
+relation{}
+
 plant_detail }|--|| species : ""
-species }|--|| genus : ""
-genus }|--|| subfamily : ""
-subfamily }|--|| family : ""
-
-
-
+plant_detail }|--|| genus : ""
+plant_detail }|--|| subfamily : ""
+plant_detail }|--|| family : ""
 
 ```
 
@@ -149,3 +144,103 @@ subfamily }|--|| family : ""
 | **is_tree**                      | true                             | Set of Herbaceous/Woody (woody) AND life cycle (perennial)                                        |
 | **nutrition_demand**             | NULL                             | If "Nutritionally poor soil" in `environmental_tolerances` is given `light feeder` should be set. |
 | **preferable_permaculture_zone** | NULL                             |                                                                                                   | -1..6 (-1 should be printed as 00) |
+
+## `Genus`
+
+| **_Column name_** | **_Example_** | **_Description_** |
+| :---------------- | :------------ | :---------------- |
+| **id**            | 1             |                   |
+| **name**          | Abelia        |                   |
+| **created_at**    |               |                   |
+| **updated_at**    |               |                   |
+
+## `Subfamily`
+
+| **_Column name_** | **_Example_** | **_Description_** |
+| :---------------- | :------------ | :---------------- |
+| **id**            | 1             |                   |
+| **name**          | Lorem ipsum   |                   |
+| **created_at**    |               |                   |
+| **updated_at**    |               |                   |
+
+## `Family`
+
+| **_Column name_** | **_Example_** | **_Description_** |
+| :---------------- | :------------ | :---------------- |
+| **id**            | 1             |                   |
+| **name**          | Malvaceae     |                   |
+| **created_at**    |               |                   |
+| **updated_at**    |               |                   |
+
+## `Relation`
+
+Many-to-many table to store relations between plants, genus, subfamily and family.
+
+| **_Column name_**     | **_Example_**              | **_Description_**                                                             |
+| :-------------------- | :------------------------- | :---------------------------------------------------------------------------- |
+| **id**                | 1                          | relation id                                                                   |
+| **from_id**           | 1                          | id of the left side of the relation(id of plant, genus, subfamily or family)  |
+| **from_type**         | genus                      | type can be plant, genus, subfamily or family                                 |
+| **to_id**             | 1                          | id of the right side of the relation(id of plant, genus, subfamily or family) |
+| **to_type**           | family                     | type can be plant, genus, subfamily or family                                 |
+| **relation_type**     | companion                  | type of the relation can be companion, antagonist, neutral                    |
+| **relation_strength** | 2                          | strength of the relation, can be 0 to 3                                       |
+| **created_at**        | 2023-02-09 14:06:01.451028 | creation timestamp                                                            |
+| **updated_at**        | 2023-02-09 14:06:01.451028 | update timestamp                                                              |
+
+# Example queries
+
+## Get all plants with their hierarchy information
+
+```sql
+SELECT *
+  FROM plant_detail
+  LEFT JOIN genus
+            ON plant_detail.genus = genus.name
+  LEFT JOIN subfamily
+            ON plant_detail.subfamily = subfamily.name
+  LEFT JOIN family
+            ON plant_detail.family = family.name;
+```
+
+## Insert a relation between a plant with a specific genus and a specific family
+
+```sql
+INSERT INTO relations (from_id, from_type, to_id, to_type, relation_type, relation_strength)
+VALUES (1, 'genus', 156, 'family', 'companion', 3);
+```
+
+## Get all plants that are companions to a specific family
+
+```sql
+SELECT p.id,
+       p.binomial_name,
+       p.genus,
+       p.family,
+       p.subfamily,
+       r.*
+  FROM plant_detail p
+  LEFT JOIN genus
+            ON p.genus = genus.name
+  LEFT JOIN subfamily
+            ON p.subfamily = subfamily.name
+  LEFT JOIN family
+            ON p.family = family.name
+  JOIN relations r
+       ON r.relation_type = 'companion' AND r.to_type = 'family' AND r.to_id = 156 AND
+          CASE
+              WHEN r.from_type = 'plant' THEN r.id = p.id
+              WHEN r.from_type = 'genus' THEN r.id = genus.id
+              WHEN r.from_type = 'subfamily' THEN r.id = subfamily.id
+              WHEN r.from_type = 'family' THEN r.id = family.id
+              END;
+```
+
+## Set height and width of all plants of a specific genus
+
+```sql
+UPDATE plant_detail
+   SET mature_size_height = 3.5,
+       mature_size_width = 3
+ WHERE genus = 'Abelia';
+```
