@@ -10,14 +10,17 @@ export interface SearchResult {
 export const searchPlants = async (searchTerm: string, page: number): Promise<SearchResult> => {
   try {
     // A page must always be defined in order for the search to work.
-    const pageString: string = page != undefined ? page.toString() : "1";
+    const pageString: string = page != undefined ? page.toString() : '1';
 
-    const url = new URL(`${baseApiUrl}/api/plants`);
-    url.searchParams.append('search_term', searchTerm);
-    url.searchParams.append('limit', '10');
-    url.searchParams.append('page', pageString);
+    const searchParams = new URLSearchParams();
+    searchParams.append('search_term', searchTerm);
+    searchParams.append('limit', '10');
+    searchParams.append('page', pageString);
 
-    const response = await axios.get<PlantsSummaryDto[]>(url.toString());
+    const response = await axios.get<PlantsSummaryDto[]>(
+      `${baseApiUrl}/api/plants?${searchParams}`,
+    );
+    
     return {
       dtos: response.data,
       // If a page could not be filled completely, there will propably be no more data.

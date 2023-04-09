@@ -33,9 +33,9 @@ pub async fn search(
 ) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
     let mut conn = pool.get().await?;
 
-    // pages start at 1
-    let calculated_offset = query.limit * (query.page - 1);
-    // dissalow negative offsets
+    let pages_start_at_1 = 1;
+    let calculated_offset = query.limit * (query.page - pages_start_at_1);
+    // disallows negative offsets
     let offset = cmp::max(calculated_offset, 0);
 
     let result = Plants::search(&query.search_term, query.limit, offset, &mut conn).await?;

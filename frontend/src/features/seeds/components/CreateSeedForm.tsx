@@ -41,11 +41,9 @@ const CreateSeedForm = ({
   };
 
   const loadPlants = async (search: string, options: unknown, additional: PageAdditionalInfo | undefined): Promise<Page> => {
-    const page = additional != undefined ? additional.page : 1;
-    
-    console.log(page);
-    
+    const page = additional != undefined ? additional.page : 1;    
     const searchResult = await searchPlants(search, page);
+
     const plant_options: SelectOption[] = searchResult.dtos.map((plant) => {
         const common_name = plant.common_name != null ? " (" + plant.common_name[0] + ")" : "";    
         
