@@ -22,6 +22,7 @@ const fetchPlant = async (context, { name, subcategory = null, category, url }) 
     const rows = await page.$$('.rs-growing-time table tr');
     const plantInfo = await page.$('.fce_shop_inhalt_right_artikelnummer');
     const growingInfo = await page.$('.growingInfos');
+    const productIcons = await page.$('.product-icons.clearfix');
 
     if (rows.length === 0) {
       return;
@@ -73,6 +74,14 @@ const fetchPlant = async (context, { name, subcategory = null, category, url }) 
         }
       }
     }
+
+    if (productIcons) {
+      const isSuitableForCultivation = !!(await productIcons.$(
+        'img[src="/shop/Bibliothek/medial_lib/product_icons/traktor.svg"]',
+      ));
+      plant['Suitable for professional cultivation'] = isSuitableForCultivation;
+    }
+
     results.push(plant);
   } catch (error) {
     console.error('[ERROR] Error fetching plant', name, category, subcategory, url, error);
@@ -156,7 +165,7 @@ const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath) => {
     );
     console.log('[INFO] Found superlinks', superlinks.length);
 
-    await Promise.all(superlinks.slice(0, 2).map((superlink) => fetchSublinks(browser, superlink)));
+    await Promise.all(superlinks.map((superlink) => fetchSublinks(browser, superlink)));
     await browser.close();
     console.log('[INFO] Done fetching plants');
     console.log('[INFO] Writing to CSV. Length:', results.length);
@@ -195,8 +204,16 @@ function writeToCsv(plants, path) {
 }
 
 const fetchReinsaat = async () => {
-  // await fetchAllPlants('https://www.reinsaat.at/shop/EN/', 'data/reinsaatRawDataEN.csv');
-  await fetchAllPlants('https://www.reinsaat.at/shop/DE', 'data/reinsaatRawDataDE.csv');
+  await fetchAllPlants(
+    'https://www.reinsaat.at/shop/EN/',
+    'data/reinsaatRawDataEN.csv',
+    'data/errorsEN.csv',
+  );
+  await fetchAllPlants(
+    'https://www.reinsaat.at/shop/DE',
+    'data/reinsaatRawDataDE.csv',
+    'data/errorsDE.csv',
+  );
 };
 
 fetchReinsaat();
