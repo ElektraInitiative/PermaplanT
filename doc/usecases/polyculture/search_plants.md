@@ -23,8 +23,10 @@
     - German and English synonyms
     - Furthermore, other columns can be matched with extra syntax
   - The results are ranked by:
-    1. Environmental fit (from selected plant or position)
-    2. Ecological value
+    1. Exact matches, e.g. the user wrote "fir", "fir" should be first hit
+    2. Language settings, e.g., when typing "fi" on English setting "fir" should rank higher than German "Fichte" (and the other way round)
+    3. Environmental fit (from selected plant or position)
+    4. Ecological value
 - **Alternative scenario:**
 - **Error scenario:**
   - No match can be found for what the user was searching for.  
