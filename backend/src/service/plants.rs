@@ -6,7 +6,7 @@ use crate::{
     config::db::Pool,
     error::ServiceError,
     model::{
-        dto::{PlantsSearchParameters, PlantsSummaryDto},
+        dto::{PlantsSearchParameters, PlantsSummaryDto, PlantsSearchDto},
         entity::Plants,
     },
 };
@@ -30,7 +30,7 @@ pub async fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSummaryDto>, Servic
 pub async fn search(
     pool: &Data<Pool>,
     query: &PlantsSearchParameters,
-) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
+) -> Result<PlantsSearchDto, ServiceError> {
     let mut conn = pool.get().await?;
 
     let pages_start_at_1 = 1;

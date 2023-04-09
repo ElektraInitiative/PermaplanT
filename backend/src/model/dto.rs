@@ -63,6 +63,16 @@ pub struct PlantsSummaryDto {
     pub common_name: Option<Vec<Option<String>>>,
 }
 
+/// An array of PlantsSummaryDto with some basic pagination information used by the plants search endpoint.
+#[typeshare]
+#[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
+pub struct PlantsSearchDto {
+    /// A single page of searched plants.
+    pub plants: Vec<PlantsSummaryDto>,
+    /// Flag indicating whether there 
+    pub has_more: bool,
+}
+
 /// Query parameters for searching plants.
 #[typeshare]
 #[derive(Debug, Deserialize)]

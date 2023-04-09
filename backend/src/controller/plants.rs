@@ -1,6 +1,7 @@
 //! `Plants` endpoints.
 
-use crate::{config::db::Pool, model::dto::PlantsSearchParameters, service};
+use crate::{config::db::Pool, model::dto::PlantsSearchDto, model::dto::PlantsSearchParameters,
+            service};
 use actix_web::{
     get,
     web::{Data, Path, Query},
@@ -16,7 +17,7 @@ use actix_web::{
 #[utoipa::path(
     context_path = "/api/plants",
     responses(
-        (status = 200, description = "Fetch or search for all plants by their common or species name", body = Vec<PlantsSummaryDto>)
+        (status = 200, description = "Fetch or search for all plants by their common or species name", body = PlantsSearchDto)
     )
 )]
 #[get("")]
@@ -26,7 +27,10 @@ pub async fn find_all_or_search(
 ) -> Result<HttpResponse> {
     let response = match query {
         Some(parameters) => service::plants::search(&pool, &parameters).await?,
-        None => service::plants::find_all(&pool).await?,
+        None => PlantsSearchDto {
+            plants: service::plants::find_all(&pool).await?,
+            has_more: false,
+        }
     };
     Ok(HttpResponse::Ok().json(response))
 }
