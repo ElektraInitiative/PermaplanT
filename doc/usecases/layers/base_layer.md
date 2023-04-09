@@ -39,5 +39,5 @@
 - **Postcondition:** The user's selected background image and borders are used for further planning.
 - **Non-functional Constraints:**
   - Support for multiple image formats
-  - Supports alternatives, see Alternative scenario 1.
+  - Supports alternatives, see Alternative scenario 1 (but alternatives is **not supported** for Alternative scenario 3.)
   - Support for undo for most changes but not for Alternative scenario 3.
