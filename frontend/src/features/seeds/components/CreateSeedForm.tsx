@@ -45,7 +45,7 @@ const CreateSeedForm = ({
     
     console.log(page);
     
-    const searchResult = await searchPlants(search, page + 1);
+    const searchResult = await searchPlants(search, page);
     const plant_options: SelectOption[] = searchResult.dtos.map((plant) => {
         const common_name = plant.common_name != null ? " (" + plant.common_name[0] + ")" : "";    
         
