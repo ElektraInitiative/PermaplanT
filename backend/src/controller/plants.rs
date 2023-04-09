@@ -1,7 +1,6 @@
 //! `Plants` endpoints.
 
-use crate::{config::db::Pool, model::dto::PlantsSearchDto, model::dto::PlantsSearchParameters,
-            service};
+use crate::{config::db::Pool, model::dto::PlantsSearchParameters, service};
 use actix_web::{
     get,
     web::{Data, Path, Query},
@@ -26,13 +25,10 @@ pub async fn find_all_or_search(
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
     let response = match query {
-        Some(parameters) => service::plants::search(&pool, &parameters).await?,
-        None => PlantsSearchDto {
-            plants: service::plants::find_all(&pool).await?,
-            has_more: false,
-        }
+        Some(parameters) => HttpResponse::Ok().json(service::plants::search(&pool, &parameters).await?),
+        None => HttpResponse::Ok().json(service::plants::find_all(&pool).await?),
     };
-    Ok(HttpResponse::Ok().json(response))
+    Ok(response)
 }
 
 /// Endpoint for fetching a [`Plant`](crate::model::entity::Plants).
