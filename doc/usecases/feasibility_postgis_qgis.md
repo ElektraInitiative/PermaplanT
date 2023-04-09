@@ -1,7 +1,8 @@
 # Feasibility Study for Visualizing and Rasterizing 5D Data (x, y, z, time, alternative) in QGIS
 
 ## Introduction
-This feasibility study aims to assess the possibility of creating, visualizing and rasterizing a table with 5D data (x, y, z, time, alternative) using QGIS, a popular open-source geographic information system (GIS) software. Based on the research it, the best course of action for visualizing the data in a 2D map and rasterizing the data will be determined.
+This feasibility study aims to assess the possibility of creating, visualizing and rasterizing a table with 5D data (x, y, z, time, alternative) using QGIS, a popular open-source geographic information system (GIS) software.
+Based on the research, the best course of action for projecting the data in a 2D map and rasterizing the data will be determined.
 
 ### 1. 5D Data Table
 A 5D data table contains five dimensions: spatial (x, y, z), temporal (time), and alternative scenarios (alternative). Spatial dimensions (x, y, z) represent the location in a three-dimensional space, while the time dimension refers to the temporal aspect of the data. The alternative dimension represents various scenarios for the data points.
