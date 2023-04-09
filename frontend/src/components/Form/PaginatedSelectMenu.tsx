@@ -7,7 +7,7 @@ import { SelectOption } from './SelectMenu';
 
 /**
  * Contains the information needed by react-select-async-paginate for loading a single page.
-* See https://github.com/vtaits/react-select-async-paginate/tree/master/packages/react-select-async-paginate#loadoptions for more information.
+ * See https://github.com/vtaits/react-select-async-paginate/tree/master/packages/react-select-async-paginate#loadoptions for more information.
  */
 export interface Page {
   options: SelectOption[],
