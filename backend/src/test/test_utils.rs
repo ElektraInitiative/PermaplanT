@@ -4,29 +4,16 @@
 
 use actix_web::web::Data;
 
-use diesel::prelude::*;
-
-use diesel::{
-    r2d2::{self, ConnectionManager, CustomizeConnection, PooledConnection},
-    PgConnection,
-};
+use diesel_async::pooled_connection::AsyncDieselConnectionManager;
+use diesel_async::scoped_futures::ScopedBoxFuture;
+use diesel_async::{AsyncConnection, AsyncPgConnection};
 use dotenvy::dotenv;
 
 use crate::config::app;
 use crate::config::db::Pool;
 use crate::error::ServiceError;
 
-#[derive(Debug)]
-struct TestTransaction;
-
-impl CustomizeConnection<PgConnection, r2d2::Error> for TestTransaction {
-    fn on_acquire(&self, conn: &mut PgConnection) -> ::std::result::Result<(), r2d2::Error> {
-        conn.begin_test_transaction()
-            .expect("Failed to begin test transaction");
-
-        Ok(())
-    }
-}
+// TODO: Think about test_transactions
 
 /// Initializes a test database with the given initializer function.
 ///
@@ -34,22 +21,32 @@ impl CustomizeConnection<PgConnection, r2d2::Error> for TestTransaction {
 /// method.
 /// Because the test transaction is started by the controller and is never committed, the different controller methods
 /// can not see each other's changes.
-pub fn init_test_database<F>(mut initializer_fn: F) -> Data<Pool>
+pub async fn init_test_database<'a, F>(initializer_fn: F) -> Data<Pool>
 where
-    F: FnMut(PooledConnection<ConnectionManager<PgConnection>>) -> Result<(), ServiceError>,
+    F: for<'r> FnOnce(
+            &'r mut AsyncPgConnection,
+        ) -> ScopedBoxFuture<'a, 'r, Result<(), ServiceError>>
+        + Send
+        + 'a,
 {
     dotenv().ok();
-
     let app_config = app::Config::from_env().expect("Error loading configuration");
-    let manager = ConnectionManager::<PgConnection>::new(&app_config.database_url);
-    let pool = Pool::builder()
-        .connection_customizer(Box::new(TestTransaction))
-        .build(manager)
-        .expect("Failed to init pool");
 
-    let conn = pool.get().expect("Failed to get connection from pool");
+    let manager = AsyncDieselConnectionManager::<AsyncPgConnection>::new(app_config.database_url);
+    let pool = Pool::builder(manager).build().expect("Failed to init pool");
 
-    initializer_fn(conn).expect("Failed to initialize test database");
+    let mut conn = pool
+        .get()
+        .await
+        .expect("Failed to get connection from pool");
+
+    conn.begin_test_transaction()
+        .await
+        .expect("Failed to begin test transaction");
+
+    conn.transaction(|conn| initializer_fn(conn))
+        .await
+        .expect("Failed to initialize test database");
 
     Data::new(pool.clone())
 }

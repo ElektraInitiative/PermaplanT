@@ -10,10 +10,12 @@ mod tests {
     use actix_web::App;
     use actix_web::{http::StatusCode, test, web::Data};
     use diesel::prelude::*;
+    use diesel_async::scoped_futures::ScopedFutureExt;
+    use diesel_async::RunQueryDsl;
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_quantity() {
-        let pool = init_test_database(|_| Ok(()));
+        let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
 
         let mut app = test::init_service(
             App::new()
@@ -40,7 +42,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_tags() {
-        let pool = init_test_database(|_| Ok(()));
+        let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
 
         let mut app = test::init_service(
             App::new()
@@ -67,7 +69,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_quality() {
-        let pool = init_test_database(|_| Ok(()));
+        let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
 
         let mut app = test::init_service(
             App::new()
@@ -95,18 +97,22 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_ok() {
-        let pool = init_test_database(|mut conn| {
-            diesel::insert_into(crate::schema::plants::table)
-                .values((
-                    &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::binomial_name.eq("Testia testia"),
-                    &crate::schema::plants::common_name
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                ))
-                .execute(&mut conn)?;
-
-            Ok(())
-        });
+        let pool = init_test_database(|conn| {
+            async {
+                diesel::insert_into(crate::schema::plants::table)
+                    .values((
+                        &crate::schema::plants::id.eq(-1),
+                        &crate::schema::plants::binomial_name.eq("Testia testia"),
+                        &crate::schema::plants::common_name
+                            .eq(Some(vec![Some("Testplant".to_string())])),
+                    ))
+                    .execute(conn)
+                    .await?;
+                Ok(())
+            }
+            .scope_boxed()
+        })
+        .await;
 
         let mut app = test::init_service(
             App::new()
