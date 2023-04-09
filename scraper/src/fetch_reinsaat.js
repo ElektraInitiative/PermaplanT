@@ -139,12 +139,12 @@ const fetchSublinks = async (browser, { category, url }) => {
   await context.close();
 };
 
-const fetchAllPlants = async () => {
+const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath) => {
   console.log('[INFO] Fetching plants');
   const browser = await chromium.launch();
   try {
     const page = await browser.newPage();
-    await page.goto('https://www.reinsaat.at/shop/EN/');
+    await page.goto(rootUrl);
 
     const superlinks = await page.$$eval('.s_subnavi a', (links) =>
       links.map((link) => {
@@ -156,11 +156,11 @@ const fetchAllPlants = async () => {
     );
     console.log('[INFO] Found superlinks', superlinks.length);
 
-    await Promise.all(superlinks.map((superlink) => fetchSublinks(browser, superlink)));
+    await Promise.all(superlinks.slice(0, 2).map((superlink) => fetchSublinks(browser, superlink)));
     await browser.close();
     console.log('[INFO] Done fetching plants');
     console.log('[INFO] Writing to CSV. Length:', results.length);
-    writeToCsv(results, 'data/reinsaatRawData.csv');
+    writeToCsv(results, outputCsvPath);
     console.log('[INFO] Done writing to CSV');
   } catch (error) {
     console.error(error);
@@ -169,7 +169,7 @@ const fetchAllPlants = async () => {
   } finally {
     if (errors.length > 0) {
       console.log('[INFO] Writing errors to CSV. Length:', errors.length);
-      writeToCsv(errors, 'data/reinsaatErrors.csv');
+      writeToCsv(errors, errorsCsvPath);
       console.log('[INFO] Done writing errors to CSV');
     }
   }
@@ -180,16 +180,23 @@ function writeToCsv(plants, path) {
     fs.mkdirSync('data');
   }
   const sanitizedPlants = plants.map((plant) => {
+    const sanitizedPlant = {};
     for (const [key, value] of Object.entries(plant)) {
       if (typeof key === 'object' && !Array.isArray(key) && key !== null) {
         plant[key] = value.map((v) => v.toString()).join(',');
       }
+      sanitizedPlant[key.trim()] = value;
     }
-    return plant;
+    return sanitizedPlant;
   });
 
   const csv = json2csv(sanitizedPlants);
   fs.writeFileSync(path, csv);
 }
 
-fetchAllPlants();
+const fetchReinsaat = async () => {
+  // await fetchAllPlants('https://www.reinsaat.at/shop/EN/', 'data/reinsaatRawDataEN.csv');
+  await fetchAllPlants('https://www.reinsaat.at/shop/DE', 'data/reinsaatRawDataDE.csv');
+};
+
+fetchReinsaat();
