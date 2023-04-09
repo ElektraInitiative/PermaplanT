@@ -207,12 +207,12 @@ const fetchReinsaat = async () => {
   await fetchAllPlants(
     'https://www.reinsaat.at/shop/EN/',
     'data/reinsaatRawDataEN.csv',
-    'data/errorsEN.csv',
+    'data/reinsaatErrorsEN.csv',
   );
   await fetchAllPlants(
     'https://www.reinsaat.at/shop/DE',
     'data/reinsaatRawDataDE.csv',
-    'data/errorsDE.csv',
+    'data/reinsaatErrorsDE.csv',
   );
 };
 
