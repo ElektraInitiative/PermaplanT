@@ -58,8 +58,13 @@ export const ViewSeeds = () => {
       <PageLayout styleNames="flex flex-col space-y-4">
         <PageTitle title={t('seeds:view_seeds.title')} />
         <div className="flex flex-row justify-between space-x-6">
-          <SearchInput handleSearch={handleSearch} />
-          <SimpleButton onClick={handleCreateSeedClick}>New Entry</SimpleButton>
+          <SearchInput
+            placeholder={t('seeds:view_seeds.search_placeholder')}
+            handleSearch={handleSearch}
+          />
+          <SimpleButton onClick={handleCreateSeedClick}>
+            {t('seeds:view_seeds.btn_new_entry')}
+          </SimpleButton>
         </div>
         <SeedsOverviewList seeds={filteredSeeds} />
         <SimpleModal

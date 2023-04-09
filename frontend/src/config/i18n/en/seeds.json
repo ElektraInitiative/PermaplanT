@@ -1,20 +1,35 @@
 {
   "view_seeds": {
-    "title": "My Seeds"
+    "title": "My Seeds",
+    "btn_new_entry": "New Entry",
+    "search_placeholder": "Search seeds..."
   },
-  "seed_details": {
-    "simple_card_harvest_year": "Harvest Year",
-    "simple_card_name": "Additional Name",
-    "simple_card_binomial_name": "Plant",
-    "simple_card_quantity": "Quantity",
-    "simple_card_origin": "Origin",
-    "simple_card_use_by": "Best By",
-    "simple_card_quality": "Quality",
-    "simple_card_taste": "Taste",
-    "simple_card_yield": "Yield",
-    "simple_card_price": "Price",
-    "simple_card_generation": "Generation",
-    "simple_card_notes": "Notes"
+  "create_seed": {
+    "title": "New Seed Entry",
+    "changes_model_title": "Cancel Changes?",
+    "changes_model_message": "Changes you have made will not be saved. Do you really want to cancel?"
   },
-  "error_modal_title": "Error"
+  "create_seed_form": {
+    "placeholder_binomial_name": "Tomato",
+    "placeholder_origin": "My Home",
+    "placeholder_taste": "sweet",
+    "placeholder_yield": "1",
+    "placeholder_price": "2,99€",
+    "placeholder_generation": "0",
+    "error_price_must_be_number": "Price must be a number",
+    "btn_create_seed": "Create Seed"
+  },
+  "error_modal_title": "Error",
+  "harvest_year": "Bezugsjahr",
+  "additional_name": "Zusätzlicher Name",
+  "binomial_name": "Pflanzen Name",
+  "quantity": "Menge",
+  "origin": "Herkunft",
+  "use_by": "Verbrauch bis",
+  "quality": "Qualität",
+  "taste": "Geschmack",
+  "yield": "Ertrag",
+  "price": "Preis",
+  "generation": "Generation",
+  "notes": "Notizen"
 }

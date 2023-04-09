@@ -5,19 +5,23 @@ import PaginatedSelectMenu, {
 } from '../../../components/Form/PaginatedSelectMenu';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
-import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
+import { Suspense } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 interface CreateSeedFormProps {
+  isUploadingSeed: boolean;
   onCancel: () => void;
   onChange: () => void;
   onSubmit: (newSeed: NewSeedDto) => void;
 }
 
-const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) => {
+const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: CreateSeedFormProps) => {
+  const { t } = useTranslation(['common', 'seeds']);
+
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
@@ -66,164 +70,171 @@ const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) =
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onFormSubmit)}>
-        <div className="mb-6 grid gap-8 md:grid-cols-2">
-          <PaginatedSelectMenu
-            id="plant_id"
-            control={control}
-            labelText="Plant Name"
-            required={true}
-            loadOptions={loadPlants}
-            handleOptionsChange={(option) => {
-              if (!option) {
-                setValue('plant_id', undefined);
-              } else {
+    <Suspense>
+      <div>
+        <form onSubmit={handleSubmit(onFormSubmit)}>
+          <div className="mb-6 grid gap-8 md:grid-cols-2">
+            <PaginatedSelectMenu
+              id="plant_id"
+              control={control}
+              labelText={t('seeds:binomial_name')}
+              placeholder={t('seeds:create_seed_form.placeholder_binomial_name')}
+              required={true}
+              loadOptions={loadPlants}
+              handleOptionsChange={(option) => {
+                if (!option) {
+                  setValue('plant_id', undefined);
+                } else {
+                  const temp = option as SelectOption;
+                  const mapped = temp.value as number;
+                  setValue('plant_id', mapped);
+                }
+              }}
+              onChange={onChange}
+            />
+            <SimpleFormInput
+              labelText={t('seeds:additional_name')}
+              placeHolder=""
+              required={true}
+              id="name"
+              register={register}
+              onChange={onChange}
+            />
+            <SimpleFormInput
+              type="number"
+              labelText={t('seeds:harvest_year')}
+              defaultValue={currentYear}
+              placeHolder={currentYear.toString()}
+              required={true}
+              id="harvest_year"
+              register={register}
+              onChange={onChange}
+            />
+            <SelectMenu
+              id="quantity"
+              control={control}
+              options={quantity}
+              labelText={t('seeds:quantity')}
+              required={true}
+              handleOptionsChange={(option) => {
                 const temp = option as SelectOption;
-                const mapped = temp.value as number;
-                setValue('plant_id', mapped);
-              }
-            }}
-            onChange={onChange}
-          />
-          <SimpleFormInput
-            labelText="Additional name"
-            placeHolder=""
-            required={true}
-            id="name"
-            register={register}
-            onChange={onChange}
-          />
-          <SimpleFormInput
-            type="number"
-            labelText="Harvest Year"
-            defaultValue={currentYear}
-            placeHolder={currentYear.toString()}
-            required={true}
-            id="harvest_year"
-            register={register}
-            onChange={onChange}
-          />
-          <SelectMenu
-            id="quantity"
-            control={control}
-            options={quantity}
-            labelText="Quantity"
-            required={true}
-            handleOptionsChange={(option) => {
-              const temp = option as SelectOption;
-              const mapped = temp.value as Quantity;
-              setValue('quantity', mapped);
-            }}
-            onChange={onChange}
-          />
-          <SimpleFormInput
-            type="date"
-            labelText="Best before"
-            placeHolder=""
-            id="use_by"
-            register={register}
-            onChange={onChange}
-          />
-          <SimpleFormInput
-            labelText="Origin"
-            placeHolder="My Home"
-            id="origin"
-            register={register}
-            onChange={onChange}
-          />
-          <SelectMenu
-            id="quality"
-            control={control}
-            options={quality}
-            labelText="Quality"
-            handleOptionsChange={(option) => {
-              const temp = option as SelectOption;
-              const mapped = temp.value as Quality;
-              setValue('quality', mapped);
-            }}
-            onChange={onChange}
-          />
-          <SimpleFormInput
-            labelText="Taste"
-            placeHolder="sweet"
-            id="taste"
-            register={register}
-            onChange={onChange}
-          />
-          <SimpleFormInput
-            labelText="Yield"
-            placeHolder="1"
-            id="yield_"
-            register={register}
-            onChange={onChange}
-          />
-          <SimpleFormInput
-            labelText="Price"
-            placeHolder="2,99€"
-            id="price"
-            register={register}
-            valueAsNumber={true}
-            errorTitle="Price must be a number"
-            onChange={onChange}
-          />
-          <SimpleFormInput
-            type="number"
-            min={0}
-            labelText="Generation"
-            placeHolder="0"
-            id="generation"
-            register={register}
-            onChange={onChange}
-          />
-        </div>
-        <div className="mb-6">
-          <SimpleFormInput
-            isArea={true}
-            labelText="Notes"
-            placeHolder="..."
-            id="notes"
-            register={register}
-            onChange={onChange}
-          />
-        </div>
-        <div className="flex flex-row justify-between space-x-4">
-          <SimpleButton
-            type="button"
-            onClick={onCancel}
-            className="max-w-[240px] grow sm:w-auto"
-            variant={ButtonVariant.secondaryBase}
-          >
-            Cancel
-          </SimpleButton>
-          <SimpleButton title="Create Seed" type="submit" className="max-w-[240px] grow sm:w-auto">
-            Create Seed
-            {useCreateSeedStore((state) => state.isUploadingSeed) && (
-              <svg
-                className="ml-4 inline-block h-5 w-5 animate-spin"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-            )}
-          </SimpleButton>
-        </div>
-      </form>
-    </div>
+                const mapped = temp.value as Quantity;
+                setValue('quantity', mapped);
+              }}
+              onChange={onChange}
+            />
+            <SimpleFormInput
+              type="date"
+              labelText={t('seeds:use_by')}
+              placeHolder=""
+              id="use_by"
+              register={register}
+              onChange={onChange}
+            />
+            <SimpleFormInput
+              labelText={t('seeds:origin')}
+              placeHolder={t('seeds:create_seed_form.placeholder_origin')}
+              id="origin"
+              register={register}
+              onChange={onChange}
+            />
+            <SelectMenu
+              id="quality"
+              control={control}
+              options={quality}
+              labelText={t('seeds:quality')}
+              handleOptionsChange={(option) => {
+                const temp = option as SelectOption;
+                const mapped = temp.value as Quality;
+                setValue('quality', mapped);
+              }}
+              onChange={onChange}
+            />
+            <SimpleFormInput
+              labelText={t('seeds:taste')}
+              placeHolder={t('seeds:create_seed_form.placeholder_taste')}
+              id="taste"
+              register={register}
+              onChange={onChange}
+            />
+            <SimpleFormInput
+              labelText={t('seeds:yield')}
+              placeHolder={t('seeds:create_seed_form.placeholder_yield')}
+              id="yield_"
+              register={register}
+              onChange={onChange}
+            />
+            <SimpleFormInput
+              labelText={t('seeds:price')}
+              placeHolder={t('seeds:create_seed_form.placeholder_price')}
+              id="price"
+              register={register}
+              valueAsNumber={true}
+              errorTitle={t('seeds:create_seed_form.error_price_must_be_number')}
+              onChange={onChange}
+            />
+            <SimpleFormInput
+              type="number"
+              min={0}
+              labelText={t('seeds:generation')}
+              placeHolder={t('seeds:create_seed_form.placeholder_generation')}
+              id="generation"
+              register={register}
+              onChange={onChange}
+            />
+          </div>
+          <div className="mb-6">
+            <SimpleFormInput
+              isArea={true}
+              labelText={t('seeds:notes')}
+              placeHolder="..."
+              id="notes"
+              register={register}
+              onChange={onChange}
+            />
+          </div>
+          <div className="flex flex-row justify-between space-x-4">
+            <SimpleButton
+              type="button"
+              onClick={onCancel}
+              className="max-w-[240px] grow sm:w-auto"
+              variant={ButtonVariant.secondaryBase}
+            >
+              {t('common:cancel')}
+            </SimpleButton>
+            <SimpleButton
+              title={t('seeds:create_seed_form.btn_create_seed')}
+              type="submit"
+              className="max-w-[240px] grow sm:w-auto"
+            >
+              {t('seeds:create_seed_form.btn_create_seed')}
+              {isUploadingSeed && (
+                <svg
+                  className="ml-4 inline-block h-5 w-5 animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              )}
+            </SimpleButton>
+          </div>
+        </form>
+      </div>
+    </Suspense>
   );
 };
 
