@@ -25,4 +25,4 @@
 - **Non-functional Constraints:**
   - Must be printable.
   - New Layers can be created.
-  -   Performance: at least 100 elements per year should be usable without noticeable delays and acceptable memory overhead
+  - Performance: at least 100 elements per year should be usable without noticeable delays and acceptable memory overhead

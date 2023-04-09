@@ -20,10 +20,10 @@
   - taps
   - water storage tanks
   - irrigation systems
-  For placement:
+    For placement:
   - positioning the elements in the appropriate locations
   - adjusting their properties
-  as needed.
+    as needed.
 - **Alternative scenario:**
   The user accidentally adds or edits an infrastructure element in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**

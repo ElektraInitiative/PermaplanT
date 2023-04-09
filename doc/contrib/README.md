@@ -12,6 +12,18 @@ If you find a bug in the code or a mistake in the documentation, you can help us
 
 ## Development
 
+### Hooks
+
+The project uses [pre-commit](https://pre-commit.com/index.html#filtering-files-with-types) hooks to ensure a consistent style is used.
+
+#### Setup
+
+1. [Install pre-commit](https://pre-commit.com/index.html#intro) via `pip` or the package manager of you choice.
+2. If you had husky installed before make sure to remove preexisting hooks. `git config --unset core.hooksPath`
+3. Run `pre-commit install`.
+
+### Sub-Projects
+
 You can find more info on the development process here:
 
 - [Frontend](https://github.com/ElektraInitiative/PermaplanT/tree/master/doc/contrib/frontend.md)

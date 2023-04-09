@@ -1,4 +1,4 @@
 /* eslint-env node */
-const tailwindConfig = require("./src/tailwind.config")
+const tailwindConfig = require('./src/tailwind.config');
 
-module.exports = tailwindConfig
+module.exports = tailwindConfig;

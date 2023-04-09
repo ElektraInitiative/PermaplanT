@@ -49,7 +49,7 @@ const ContactUs = () => {
               </div>
             </div>
             <div className="w-full p-2">
-              <button className="mx-auto flex rounded border-0 bg-indigo-500 py-2 px-8 text-lg text-white hover:bg-indigo-600 focus:outline-none">
+              <button className="mx-auto flex rounded border-0 bg-primary-500 py-2 px-8 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200">
                 Button
               </button>
             </div>

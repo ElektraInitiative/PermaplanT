@@ -7,15 +7,15 @@ Otherwise we would have to read the Rust Code every time we want to develop a ne
 
 ## Constraints
 
--   It must be easy enough to use as most people know only a little bit of Rust.
--   It should take less time compared to manually maintaining API documentation.
+- It must be easy enough to use as most people know only a little bit of Rust.
+- It should take less time compared to manually maintaining API documentation.
 
 ## Assumptions
 
--   The backend's API is only used by the frontend.
--   The API documentation is not used while a new endpoint is being created as there will be a lot of breaking changes during that time.
--   The API documentation is used by developers wanting a nice easily accessible overview of all APIs.
--   The API documentation is not fixed, it might change as the code evolves.
+- The backend's API is only used by the frontend.
+- The API documentation is not used while a new endpoint is being created as there will be a lot of breaking changes during that time.
+- The API documentation is used by developers wanting a nice easily accessible overview of all APIs.
+- The API documentation is not fixed, it might change as the code evolves.
 
 ## Solutions
 
@@ -57,14 +57,14 @@ This leads to a clean API in the long run, however it is more difficult to quick
 
 ## Implications
 
--   When deciding on a new endpoint it will take longer for the API documentation to be done, as:
-    -   the Rust structs must be implemented
-    -   `#[derive(ToSchema)]` must be present for all of those structs, and
-    -   you also might need to change the API config.
--   The API documentation will not deviate from the actual implementation as it is generated from code.
--   Developers have to know Swagger, but once they do they can easily check the API in the browser served by the backend.
--   Backend Developers have to invest some time into reading Utoipa's documentation.  
-    If you have some understanding of Rust it shouldn't take longer than 1h to use Utoipa when creating a new endpoint for the first time (that includes reading the documentation quite thoroughly).
+- When deciding on a new endpoint it will take longer for the API documentation to be done, as:
+  - the Rust structs must be implemented
+  - `#[derive(ToSchema)]` must be present for all of those structs, and
+  - you also might need to change the API config.
+- The API documentation will not deviate from the actual implementation as it is generated from code.
+- Developers have to know Swagger, but once they do they can easily check the API in the browser served by the backend.
+- Backend Developers have to invest some time into reading Utoipa's documentation.  
+  If you have some understanding of Rust it shouldn't take longer than 1h to use Utoipa when creating a new endpoint for the first time (that includes reading the documentation quite thoroughly).
 
 ## Related Decisions
 

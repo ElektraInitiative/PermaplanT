@@ -1,1 +1,1 @@
-export * from "./routes/LandingPage"
+export * from './routes/LandingPage';

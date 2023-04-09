@@ -41,10 +41,7 @@ export default function SimpleModal({
                 {cancelBtnTitle}
               </SimpleButton>
             )}
-            <SimpleButton
-              onClick={onSubmit}
-              className="max-w-[240px] grow"
-            >
+            <SimpleButton onClick={onSubmit} className="max-w-[240px] grow">
               {submitBtnTitle}
             </SimpleButton>
           </div>

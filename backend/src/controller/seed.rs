@@ -2,7 +2,7 @@
 
 use actix_web::{
     delete, get, post,
-    web::{self, Data, Json, Path},
+    web::{Data, Json, Path},
     HttpResponse, Result,
 };
 
@@ -12,7 +12,6 @@ use crate::{config::db::Pool, model::dto::NewSeedDto, service};
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-/// * If [web::block] fails.
 #[utoipa::path(
     context_path = "/api/seeds",
     responses(
@@ -21,7 +20,7 @@ use crate::{config::db::Pool, model::dto::NewSeedDto, service};
 )]
 #[get("")]
 pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = web::block(move || service::seed::find_all(&pool)).await??;
+    let response = service::seed::find_all(&pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -29,7 +28,6 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-/// * If [web::block] fails.
 #[utoipa::path(
     context_path = "/api/seeds/{id}",
     responses(
@@ -38,7 +36,7 @@ pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
 )]
 #[get("/{id}")]
 pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = web::block(move || service::seed::find_by_id(*id, &pool)).await??;
+    let response = service::seed::find_by_id(*id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -46,7 +44,6 @@ pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse>
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-/// * If [web::block] fails.
 #[utoipa::path(
     context_path = "/api/seeds",
     request_body = NewSeedDto,
@@ -56,7 +53,7 @@ pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse>
 )]
 #[post("")]
 pub async fn create(new_seed_json: Json<NewSeedDto>, pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = web::block(move || service::seed::create(new_seed_json.0, &pool)).await??;
+    let response = service::seed::create(new_seed_json.0, &pool).await?;
     Ok(HttpResponse::Created().json(response))
 }
 
@@ -64,7 +61,6 @@ pub async fn create(new_seed_json: Json<NewSeedDto>, pool: Data<Pool>) -> Result
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-/// * If [web::block] fails.
 #[utoipa::path(
     context_path = "/api/seeds",
     responses(
@@ -73,6 +69,6 @@ pub async fn create(new_seed_json: Json<NewSeedDto>, pool: Data<Pool>) -> Result
 )]
 #[delete("/{id}")]
 pub async fn delete_by_id(path: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
-    web::block(move || service::seed::delete_by_id(*path, &pool)).await??;
+    service::seed::delete_by_id(*path, &pool).await?;
     Ok(HttpResponse::Ok().json(""))
 }

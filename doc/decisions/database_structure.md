@@ -1,4 +1,4 @@
-# Database Structure (TBD)
+# Database Structure
 
 The main goal of this document is to describe the database structure/layout especially in terms of relations between data entities.
 
@@ -8,15 +8,15 @@ Semantically the plant information can be described as a hierarchy of entities.
 
 A plant can be classified
 
--   on variety level, and/or
--   on species level.
+- on variety level, and/or
+- on species level.
 
 Furthermore:
 
--   a variety belongs to a specie
--   specie belongs to a genus
--   genus belongs to a subfamily or family
--   subfamily belongs to a family.
+- a variety belongs to a specie
+- specie belongs to a genus
+- genus belongs to a subfamily or family
+- subfamily belongs to a family.
 
 Please take a look at the diagram below, which shows the hierarchy of entities with `height` and `width` as an example of attribute classification described above.
 
@@ -56,17 +56,17 @@ E.g., a variety under a specie can have different height than the specie that it
 
 The challenge is to define the structure of the database in a way that the data
 
--   can be easily queried and
--   updated without redundancy (e.g. setting attributes for a whole family).
+- can be easily queried and
+- updated without redundancy (e.g. setting attributes for a whole family).
 
 ## Constraints
 
--   The database structure should represent the hierarchy of entities described above.
--   The database structure should be able to store relations between entities.
+- The database structure should represent the hierarchy of entities described above.
+- The database structure should be able to store relations between entities.
 
 ## Assumptions
 
--   Performance of the database utilizing structure described in this decision is efficient enough for our use case.
+- Performance of the database utilizing structure described in this decision is efficient enough for our use case.
 
 ## Considered Alternatives
 
@@ -90,11 +90,13 @@ Hierarchy of entities should be implemented using foreign keys and table relatio
 
 In case of a conflict, the lowest entity level in the hierarchy is prioritized. E.g. when there is a height value in a species and in a variety, variety wins.
 
-Plant relations(e.g. like, dislike, etc.) should be implemented using separate many-to-many tables. This is because the relations are not part of the plant entity, but rather a property of the relationship between two plants.
-
 2. Metatables for parent entities i.e. genus, subfamily, family
 
 Metatables are independent tables that contain information about the parent entities. E.g. genus table will contain information about the genus, while the data of plants of that genus will be stored in the `plant_detail` table.
+
+3. Relations between plants
+
+Plant relations (e.g. companion) should be implemented using a separate many-to-many table.
 
 ## Rationale
 
@@ -109,6 +111,10 @@ The reason for this is that the data of the parent entities is not going to chan
 Since there is no information about the parent entities on the practicalplants website, we will have to populate the metatables manually.
 For this purpose, during the parsing we are creating csv files with distinct values of genus, subfamily, family. These csv files will be used to populate the metatables.
 
+3. Relations between plants
+
+The relations are not part of the plant entity, but rather a property of the relationship between two plants. Additionally, the relation should provide cross-table relationships, e.g., a genus doesn't like a family.
+
 ## Implications
 
 ## Related Decisions
@@ -119,6 +125,6 @@ In order to finish this decision, we need to understand the semantics of the dat
 
 TODO:
 
--   [ ] define how exactly hierarchy tables will look like
--   [ ] define how metatables should be connected to the hierarchy tables
--   [ ] define how the relations between plants will be stored
+- [] define how exactly hierarchy tables will look like
+- [x] define how metatables should be connected to the hierarchy tables
+- [x] define how the relations between plants will be stored
