@@ -44,7 +44,7 @@ const CreateSeedForm = ({
     const page = additional != undefined ? additional.page : 1;    
     const searchResult = await searchPlants(search, page);
 
-    const plant_options: SelectOption[] = searchResult.dtos.map((plant) => {
+    const plant_options: SelectOption[] = searchResult.plants.map((plant) => {
         const common_name = plant.common_name != null ? " (" + plant.common_name[0] + ")" : "";    
         
         return {
@@ -55,7 +55,7 @@ const CreateSeedForm = ({
 
     return {
       options: plant_options,
-      hasMore: searchResult.hasMore,
+      hasMore: searchResult.has_more,
       additional: {
         page: page + 1,
       }

@@ -61,8 +61,8 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
     try {
       set((state) => ({ ...state, isFetchingPlants: true }));
       const result = await searchPlants(searchTerm, page);
-      const plants = result.dtos;
-      const hasMore = result.hasMore;
+      const plants = result.plants;
+      const hasMore = result.has_more;
       set((state) => ({ ...state, plants, hasMore, isFetchingPlants: false }));
     } catch (error) {
       console.log(error);
