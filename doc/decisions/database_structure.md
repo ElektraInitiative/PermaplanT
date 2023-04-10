@@ -141,7 +141,7 @@ We will go with variant 4 from [Considered Alternatives](#considered-alternative
 Plant relations (e.g. companion) should be implemented using a separate many-to-many table.
 
 For details on the schema see this [example sql](example_migrations/normalized-plants-and-ranks/2023-04-07-130215_plant_relationships/up.sql)
-Here are some [example queries](example_migrations/normalized-plants-and-ranks/2023-04-07-130215_queries/up.sql)
+Here are some [example queries](example_migrations/normalized-plants-and-ranks/example_queries.sql)
 
 ## Rationale
 
