@@ -15,9 +15,9 @@ use crate::{
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
-    let mut conn = pool.get()?;
-    let result = Plants::find_all(&mut conn)?;
+pub async fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
+    let mut conn = pool.get().await?;
+    let result = Plants::find_all(&mut conn).await?;
     Ok(result)
 }
 
@@ -25,13 +25,12 @@ pub fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSummaryDto>, ServiceError
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn search(
+pub async fn search(
     pool: &Data<Pool>,
     query: &PlantsSearchParameters,
 ) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
-    let mut conn = pool.get()?;
-    let result = Plants::search(query, &mut conn)?;
-
+    let mut conn = pool.get().await?;
+    let result = Plants::search(query, &mut conn).await?;
     Ok(result)
 }
 
@@ -39,9 +38,8 @@ pub fn search(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<PlantsSummaryDto, ServiceError> {
-    let mut conn = pool.get()?;
-    let result = Plants::find_by_id(id, &mut conn)?;
-
+pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<PlantsSummaryDto, ServiceError> {
+    let mut conn = pool.get().await?;
+    let result = Plants::find_by_id(id, &mut conn).await?;
     Ok(result)
 }

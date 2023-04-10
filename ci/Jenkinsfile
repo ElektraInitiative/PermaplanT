@@ -1,4 +1,8 @@
 
+parameters {
+    booleanParam(name: 'DEPLOY_PROD', defaultValue: false, description: 'deploy to production')
+}
+
 stage('Build Schema'){
     node('docker') {
         checkout scm
@@ -109,7 +113,7 @@ stage('Build in Docker'){
 }
 
 stage('Deploy PR') {
-    node('permaplant') {
+    node('permaplant && pr') {
         checkout scm
 
         echo "Workspace is '${WORKSPACE}'"
@@ -134,9 +138,33 @@ stage('Deploy PR') {
 // Deploying to Dev only happens on branch "master"
 if (env.BRANCH_NAME == 'master') {
     stage('Deploy Dev') {
-        node('permaplant') {
+        node('permaplant && dev') {
+            checkout scm
+
+            echo "Unstash Artifacts"
+            unstash 'schema.rs'
+            unstash 'frontend'
+            unstash 'backend'
+
             echo 'Deploying to Dev ...'
             sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+        }
+    }
+}
+
+// Deploying to Prod only happens on branch "master" and if parameter is set
+if (env.BRANCH_NAME == 'master' && params.DEPLOY_PROD) {
+    stage('Deploy Prod') {
+        node('permaplant && prod') {
+            checkout scm
+
+            echo "Unstash Artifacts"
+            unstash 'schema.rs'
+            unstash 'frontend'
+            unstash 'backend'
+
+            echo 'Deploying to Prod ...'
+            sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
         }
     }
 }

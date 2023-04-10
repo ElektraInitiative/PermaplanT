@@ -1,7 +1,7 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::prelude::*;
-use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
+use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::{
     model::diesel_extensions::array_to_string,
@@ -16,8 +16,8 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<PlantsSummaryDto>> {
-        let query_result = plants::table.select(all_columns).load::<Self>(conn);
+    pub async fn find_all(conn: &mut AsyncPgConnection) -> QueryResult<Vec<PlantsSummaryDto>> {
+        let query_result = plants::table.select(all_columns).load::<Self>(conn).await;
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
 
@@ -26,9 +26,9 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn search(
+    pub async fn search(
         query: &PlantsSearchParameters,
-        conn: &mut PgConnection,
+        conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantsSummaryDto>> {
         let query_with_placeholders = format!("%{}%", query.search_term);
 
@@ -42,7 +42,7 @@ impl Plants {
             .order((binomial_name, common_name))
             .limit(query.limit.into());
 
-        let query_result = query.load::<Self>(conn);
+        let query_result = query.load::<Self>(conn).await;
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
 
@@ -50,8 +50,11 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn find_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<PlantsSummaryDto> {
-        let query_result = plants::table.find(id).first::<Self>(conn);
+    pub async fn find_by_id(
+        id: i32,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<PlantsSummaryDto> {
+        let query_result = plants::table.find(id).first::<Self>(conn).await;
         query_result.map(Into::into)
     }
 }

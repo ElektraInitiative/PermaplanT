@@ -3,7 +3,7 @@
 use crate::{config::db::Pool, model::dto::PlantsSearchParameters, service};
 use actix_web::{
     get,
-    web::{self, Data, Path},
+    web::{Data, Path, Query},
     HttpResponse, Result,
 };
 
@@ -13,7 +13,6 @@ use actix_web::{
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-/// * If [web::block] fails.
 #[utoipa::path(
     context_path = "/api/plants",
     responses(
@@ -22,14 +21,12 @@ use actix_web::{
 )]
 #[get("")]
 pub async fn find_all_or_search(
-    query: Option<web::Query<PlantsSearchParameters>>,
+    query: Option<Query<PlantsSearchParameters>>,
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
     let response = match query {
-        Some(parameters) => {
-            web::block(move || service::plants::search(&pool, &parameters)).await??
-        }
-        None => web::block(move || service::plants::find_all(&pool)).await??,
+        Some(parameters) => service::plants::search(&pool, &parameters).await?,
+        None => service::plants::find_all(&pool).await?,
     };
     Ok(HttpResponse::Ok().json(response))
 }
@@ -38,7 +35,6 @@ pub async fn find_all_or_search(
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-/// * If [web::block] fails.
 #[utoipa::path(
     context_path = "/api/plants/{id}",
     responses(
@@ -47,6 +43,6 @@ pub async fn find_all_or_search(
 )]
 #[get("/{id}")]
 pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = web::block(move || service::plants::find_by_id(*id, &pool)).await??;
+    let response = service::plants::find_by_id(*id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
