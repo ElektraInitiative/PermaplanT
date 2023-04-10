@@ -34,6 +34,7 @@ async function fetchAllPlants() {
     });
     plants = plantResponse.data.plants;
     i++;
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Add a sleep of 1 second
   }
 
   return allPlants;
