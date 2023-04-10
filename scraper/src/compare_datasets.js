@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { parse as json2csv } from 'json2csv';
 import csv from 'csvtojson';
-import columnMapping from './column_mapping.js';
+import columnMapping from './column_mapping_permapeople.js';
 
 function sanitizeColumnNames(jsonArray) {
   return jsonArray.map((obj) => {
@@ -118,18 +118,3 @@ function writePlantsToCsv(plants) {
 compareDatabases()
   .then((plants) => writePlantsToCsv(plants))
   .catch((error) => console.error(error));
-
-// const mappedValues = {};
-// for (const permapeopleKey in columnMapping) {
-//   const practicalPlantsKey = columnMapping[permapeopleKey];
-//   if (
-//     practicalPlantsKeys.includes(practicalPlantsKey) &&
-//     Object.keys(plant).includes(practicalPlantsKey) &&
-//     Object.keys(permapeoplePlant).includes(permapeopleKey)
-//   ) {
-//     mappedValues[permapeopleKey] = {
-//       practicalPlantsValue: plant[practicalPlantsKey],
-//       permapeopleValue: permapeoplePlant[permapeopleKey],
-//     };
-//   }
-// }F
