@@ -6,6 +6,9 @@ import { Circle, Rect } from 'react-konva';
 /**
  * This component is responsible for rendering the map that the user is going to draw on.
  * In order to add a new layer you can add another layer file under the "layers" folder.
+ * Features such as zooming and panning are handled by the BaseStage component.
+ * You only have to make sure that every shape has the property "draggable" set to true.
+ * Otherwise they cannot be moved.
  */
 export const Map = () => {
   const [shapes, setShapes] = useState<JSX.Element[]>([]);
