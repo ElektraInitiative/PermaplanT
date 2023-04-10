@@ -10,13 +10,13 @@ For example: `users` and `plants`.
 ## 2. Enum Names
 
 **Singular**: Enum names should be singular, as they represent a single value within a predefined set of values.
-For example, use color instead of colors.
+For example: `color` and `type`.
 
 ## 3. Naming Conventions
 
 **Snake Case**: Use snake_case for all database objects (tables, columns, enums, etc.) to maintain consistency and readability.
 Snake case involves using lowercase letters and underscores to separate words.
-For example, use first_name instead of FirstName.
+For example: `first_name` and `last_change`. 
 
 ### Exceptions:
 
