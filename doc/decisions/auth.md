@@ -93,6 +93,18 @@ The only limitation is that Nextcloud does not offer scoped access at the moment
 
 We will use oidc with the separate identity provider [Keycloak](https://www.keycloak.org/).
 
+Keycloak itself will run as a separate service like Nextcloud. Users are created there instead of in Nextcloud/PermaplanT and users can then log in via Keycloak.
+
+So in the PermaplanT frontend the user will be redirected to Keycloak. They can login in Keycloak and then they get redirected back to PermaplanT.
+From then on all requests are authorized via JWT.
+How that happens in detail is specified by the OAuth2 spec and there are also multiple ways of doing that.
+We will use the recommended variant which is Authorization Code Flow with PKCE.
+The backend will then simply validate the tokens and extract roles/user information out of them.
+This will be done by either by a library or implemented by us as this part is not that complicated.
+
+Keycloak itself can either run as an executable or as a container.
+Apart from that it only requires a database so we can use our existing PostgreSQL for that.
+
 ### Rationale
 
 > OpenID Connect is an interoperable authentication protocol based on the OAuth 2.0 family of specifications. It uses straightforward REST/JSON message flows with a design goal of “making simple things simple and complicated things possible”. It’s uniquely easy for developers to integrate, compared to any preceding Identity protocol.
