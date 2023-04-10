@@ -5,7 +5,7 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::{
     model::diesel_extensions::array_to_string,
-    model::dto::{PlantsSummaryDto, PlantsSearchDto},
+    model::dto::{PlantsSearchDto, PlantsSummaryDto},
     schema::plants::{self, all_columns, binomial_name, common_name},
 };
 
@@ -23,7 +23,7 @@ impl Plants {
 
     /// Search all plants whose name or species name contains the user provided query string.
     /// To save traffic, the maximum number of results is limited.
-    /// 
+    ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn search(
@@ -34,7 +34,7 @@ impl Plants {
     ) -> QueryResult<PlantsSearchDto> {
         let query_with_placeholders = format!("%{search_term}%");
         // Load one additional row to check whether there are more pages available.
-        let limit_plus_one = limit + 1; 
+        let limit_plus_one = limit + 1;
 
         let query = plants::table
             .filter(
@@ -44,7 +44,7 @@ impl Plants {
             )
             .select(all_columns)
             .order((binomial_name, common_name))
-            .limit(limit_plus_one.into())  
+            .limit(limit_plus_one.into())
             .offset(offset.into());
 
         let query_result = query.load::<Self>(conn).await;

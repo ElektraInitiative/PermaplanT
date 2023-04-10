@@ -69,7 +69,7 @@ pub struct PlantsSummaryDto {
 pub struct PlantsSearchDto {
     /// A single page of searched plants.
     pub plants: Vec<PlantsSummaryDto>,
-    /// Flag indicating whether there 
+    /// Flag indicating whether there is more data on the next page.
     pub has_more: bool,
 }
 

@@ -25,7 +25,9 @@ pub async fn find_all_or_search(
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
     let response = match query {
-        Some(parameters) => HttpResponse::Ok().json(service::plants::search(&pool, &parameters).await?),
+        Some(parameters) => {
+            HttpResponse::Ok().json(service::plants::search(&pool, &parameters).await?)
+        },
         None => HttpResponse::Ok().json(service::plants::find_all(&pool).await?),
     };
     Ok(response)

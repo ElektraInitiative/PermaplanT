@@ -6,7 +6,7 @@ use crate::{
     config::db::Pool,
     error::ServiceError,
     model::{
-        dto::{PlantsSearchParameters, PlantsSummaryDto, PlantsSearchDto},
+        dto::{PlantsSearchDto, PlantsSearchParameters, PlantsSummaryDto},
         entity::Plants,
     },
 };
