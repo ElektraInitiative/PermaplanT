@@ -7,10 +7,10 @@ ALTER TABLE plants
     ADD COLUMN species_id INTEGER REFERENCES plants (id) NULL;
 
 
-CREATE TYPE relationship_kind AS ENUM ('companion', 'antagonist');
+CREATE TYPE relationship_kind AS ENUM ('companion', 'antagonist', 'neutral');
 CREATE TABLE plant_relationships (
     id SERIAL PRIMARY KEY NOT NULL,
-    strength INTEGER CHECK (strength >= 0) NOT NULL,
+    confidence INTEGER CHECK (confidence >= 0) NOT NULL,
     kind relationship_kind NOT NULL,
     left_plant_id INTEGER REFERENCES plants (id) NOT NULL,
     right_plant_id INTEGER REFERENCES plants (id) NOT NULL

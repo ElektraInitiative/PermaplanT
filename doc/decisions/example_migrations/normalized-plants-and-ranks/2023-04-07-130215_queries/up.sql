@@ -149,7 +149,7 @@ WITH carrot_family AS (
      RETURNING id
  )
 
-INSERT INTO plant_relationships (kind, strength, left_plant_id, right_plant_id)
+INSERT INTO plant_relationships (kind, confidence, left_plant_id, right_plant_id)
 -- Radish <-> carrot
 VALUES
     ('companion', 1, (SELECT id FROM radish_species), (SELECT id FROM carrot_species)),
