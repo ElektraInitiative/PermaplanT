@@ -31,6 +31,7 @@
 - (German: Vorkulturen)
 - Taxonomy:
   A scientific classification of plants into hierarchical groups.
+  See [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy) for details.
 - Rank:
   Rank is a level within taxonomy.
   Plants within one taxonomic rank share traits with each other.
@@ -56,10 +57,8 @@
   Has the main characteristics of its species but differs in minor heritable characteristics.
 - Hybrid:
   Resulting individual from cross-pollination of species or varieties.
-- Traits:
-  See attributes.
 - (German: Sortenrein, ohne/wenig Vermischung anderer Sorten, wenig/keine Fremdbestäubung)
-- attributes (of plants):
+- attributes (traits):
   A characteristic of a variety, species, genus, subfamily or family.
   E.g. height, width, color, etc.
   Attributes can be defined on different levels of the hierarchy.
