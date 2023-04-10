@@ -30,9 +30,9 @@ The database schema consists of multiple tables and relationships, including:
 
 Enums are used to represent predefined sets of values, such as:
 
-- `enum_tag`
-- `enum_quantity`
-- `enum_quality`
+- `tag`
+- `quantity`
+- `quality`
 
 For further information, see [Database Schemata](./database_schemata.md).
 
@@ -44,7 +44,7 @@ This diagram can be created using Mermaid syntax and then viewed using a Mermaid
 ## Table Descriptions
 
 Each table in the database has a detailed description that includes the column names, data types, examples, initial rules, and descriptions.
-For example, the `Plants` table contains information about plant species, their binomial names, common names, family, genus, cultivation details, environmental preferences, and much more.
+For example, the `plants` table contains information about plant species, their binomial names, common names, family, genus, cultivation details, environmental preferences, and much more.
 
 ## Database Guidelines
 

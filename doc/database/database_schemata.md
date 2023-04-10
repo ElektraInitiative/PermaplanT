@@ -9,7 +9,7 @@ Right now, Mermaid doesn't support enum types so a `_` character denotes white s
 ```mermaid
 erDiagram
 
-enum_tag {
+tag {
   VARCHAR Leaf_crops
   VARCHAR Fruit_crops
   VARCHAR Root_crops
@@ -18,14 +18,14 @@ enum_tag {
   VARCHAR Other
 }
 
-enum_quantity {
+quantity {
   VARCHAR Nothing
   VARCHAR Not_enough
   VARCHAR Enough
   VARCHAR More_than_enough
 }
 
-enum_quality {
+quality {
   VARCHAR Organic
   VARCHAR Not_organic
   VARCHAR Unknown
