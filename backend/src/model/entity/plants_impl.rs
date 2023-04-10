@@ -54,7 +54,7 @@ impl Plants {
 
             PlantsSearchDto {
                 plants: results.into_iter().take(limit as usize).collect(),
-                // If there is at least one more element than the defined limit, 
+                // If there is at least one more element than the defined limit,
                 // more pages may still be loaded.
                 has_more: results_len == limit_plus_one as usize,
             }
