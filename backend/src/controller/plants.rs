@@ -24,12 +24,14 @@ pub async fn find_all_or_search(
     query: Option<Query<PlantsSearchParameters>>,
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
-    let response = match query {
-        Some(parameters) => {
-            HttpResponse::Ok().json(service::plants::search(&pool, &parameters).await?)
-        }
-        None => HttpResponse::Ok().json(service::plants::find_all(&pool).await?),
+    let response = if let Some(parameters) = query {
+        let response = service::plants::search(&pool, &parameters).await?;
+        HttpResponse::Ok().json(response)
+    } else {
+        let response = service::plants::find_all(&pool).await?;
+        HttpResponse::Ok().json(response)
     };
+
     Ok(response)
 }
 

@@ -51,12 +51,15 @@ impl Plants {
         query_result.map(|v| {
             let results: Vec<PlantsSummaryDto> = v.into_iter().map(Into::into).collect();
             let results_len = results.len();
+            // Perform an explicit conversion to make clippy happy.
+            let unsigned_limit = limit.unsigned_abs() as usize;
+            let unsigned_limit_plus_one = limit_plus_one.unsigned_abs() as usize;
 
             PlantsSearchDto {
-                plants: results.into_iter().take(limit as usize).collect(),
+                plants: results.into_iter().take(unsigned_limit).collect(),
                 // If there is at least one more element than the defined limit,
                 // more pages may still be loaded.
-                has_more: results_len == limit_plus_one as usize,
+                has_more: results_len == unsigned_limit_plus_one,
             }
         })
     }
