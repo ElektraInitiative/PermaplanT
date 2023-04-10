@@ -22,8 +22,10 @@
   - Elements on the map can be edited/moved, but not be added/deleted.
 - **Alternative scenario:**
 - **Error scenario:**
-  There is an error in the timeline display or navigation functionality.
-  In this case, the app displays an error message and allows the user to try again.
+  - There is an error in the timeline display or navigation functionality.
+    In this case, the app displays an error message and allows the user to try again.
+  - The user tries to add/remove elements while being in the active date range.
+    In this case, the app displays an error message that adding/removing elements is not allowed.
 - **Postcondition:**
   The user successfully sees the map containing the elements in the desired range of dates.
 - **Non-functional Constraints:**
