@@ -77,7 +77,11 @@ Client 2: PermaplanT
 **Notes:**
 In this approach the accounts are managed by PermaplanT,
 therefore requires implementing an identity provider in PermaplanT.
-Alternatively to developing an identity provider a service like [keycloak](https://www.keycloak.org/) can be used.
+
+## Decision
+
+We will use [Keycloak](https://www.keycloak.org/).
+
 
 ## Further Notes
 There was an attempt to implement OIDC in nextcloud/server but the issue lost traction and was finally not merged because of missing integration tests (https://github.com/nextcloud/server/pull/12567)
