@@ -1,6 +1,7 @@
 # Authentication & Authorization
 
 ## Problem
+
 The user wants to log in once and be able to fetch resources
 from the Nextcloud instance as well as from PermaplanT database.
 The users need to authenticate themself (who is the user).
@@ -36,6 +37,7 @@ Resource server 2: PermaplanT backend
 Client: PermaplanT frontend
 
 **Notes:**
+
 > Currently it is not yet possible to use an issued Access Token or ID Token to access resources at the Nextcloud instance it self.
 
 \- [H2CK/oidc](https://github.com/H2CK/oidc)
@@ -51,7 +53,8 @@ This is a major problem with this approach.
 
 \- [Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/oauth2.html)
 
-### Alternative B
+### Nextcloud app password login flow
+
 [App password login flow](https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html)
 
 This is the login flow described in the Nextcloud documentation.
@@ -61,16 +64,17 @@ is permanent and should not be stored anywhere in the frontend.
 This approach requires PermaplanT to have its own authentication server
 and therefore seperate accounts!
 
-### Alternative C
+### Seperate identity provider
+
 OpenID Connect authentication & authorization flow with:
 
-Authorization server: PermaplanT
+Authorization server / Idenentity provider: PermaplanT
 
 Resource server 1: Nextcloud
 
 Resource server 2: PermaplanT
 
-Client 1: Nextcloud WebClient [with oidc login](https://github.com/pulsejet/nextcloud-oidc-login) or [user\_oidc](https://github.com/nextcloud/user_oidc)
+Client 1: Nextcloud WebClient [with oidc login](https://github.com/pulsejet/nextcloud-oidc-login) or [user_oidc](https://github.com/nextcloud/user_oidc)
 
 Client 2: PermaplanT
 
@@ -78,10 +82,24 @@ Client 2: PermaplanT
 In this approach the accounts are managed by PermaplanT,
 therefore requires implementing an identity provider in PermaplanT.
 
+This approach was tested with Keycloak as identity provider and [user_oidc](https://github.com/nextcloud/user_oidc)(official oidc app) for oidc capabilities in Nextcloud and works as intended.
+The only limitation is that Nextcloud does not offer scoped access at the moment -> the authenticated app can access all of the resources the user has access to.
+
+#### Identity providers
+
+[comparison of identity providers](https://gist.github.com/bmaupin/6878fae9abcb63ef43f8ac9b9de8fafd)
+
 ## Decision
 
-We will use [Keycloak](https://www.keycloak.org/).
+We will use oidc with the separate identity provider [Keycloak](https://www.keycloak.org/).
 
+### Rationale
+
+> OpenID Connect is an interoperable authentication protocol based on the OAuth 2.0 family of specifications. It uses straightforward REST/JSON message flows with a design goal of “making simple things simple and complicated things possible”. It’s uniquely easy for developers to integrate, compared to any preceding Identity protocol.
+> -- **[openid.net](https://openid.net/connect/faq/)**
+
+Keycloak is a FLOSS solution for identity and access management which is one the most popular self hosted solutions. Some of the PermaplanT team members have already experience with it.
 
 ## Further Notes
+
 There was an attempt to implement OIDC in nextcloud/server but the issue lost traction and was finally not merged because of missing integration tests (https://github.com/nextcloud/server/pull/12567)
