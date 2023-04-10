@@ -88,9 +88,9 @@ plant_detail }|--|| family : ""
 maps {
   INT id PK
   VARCHAR name "NOT NULL"
-  BOOLEAN is_variant "NOT NULL"
+  BOOLEAN is_version "NOT NULL"
   VARCHAR version_name
-  BOOLEAN is_inactive
+  BOOLEAN is_inactive "NOT NULL"
   DATE last_visit
   INT honors
   INT visits
@@ -98,7 +98,6 @@ maps {
   DATE creation_date
   DATE deletion_date
   INT zoom_factor
-  BYTEA background
   INT background_scale
   GEOGRAPHY geo_data
   INT epsg_code
@@ -110,10 +109,11 @@ users {
   DATE free_until
   VARCHAR app_language
   DATE member_since
-  VARCHAR experience
+  INT[] member_years
+  EXPERIENCE experience
   VARCHAR preferences
   GEOGRAPHY location
-  INT membership_points
+  INT[] membership_points
 }
 
 blossoms {
@@ -133,9 +133,16 @@ enum_tracks {
   VARCHAR Expert_Track
 }
 
+enum_experience {
+  VARCHAR beginner
+  VARCHAR advanced
+  VARCHAR expert
+}
+
 blossoms_gained {
   INT id PK
   INT times_gained
+  DATE gained_date
 }
 
 maps }o--|| users : "owned by"
@@ -204,58 +211,61 @@ blossoms_gained }o--|| users : ""
 
 ## `Maps`
 
-| **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
-| :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
+| **_Column name_**                | **_Example_**                    | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :----------------------------------|
 | **id**                           | 1                                |
 | **owner_id**                     | 1                                |
 | **name**                         | My Map                           |
-| **is_variant**                   | false                            |
+| **is_version**                   | false                            |
 | **version_name**                 | NULL                             |
 | **is_inactive**                  | false                            |
 | **last_visit**                   | 2023-04-04                       |
-| **honors**                       | 0                                | | 0 to infinity
-| **visits**                       | 0                                | | 0 to infinity
-| **harvested**                    | 0                                | | 0 to infinity
+| **honors**                       | 0                                | 0 to infinity
+| **visits**                       | 0                                | 0 to infinity
+| **harvested**                    | 0                                | 0 to infinity, amount of plants harvested on this map
 | **creation_date**                | 2023-04-04                       |
 | **deletion_date**                | 2023-04-04                       |
-| **zoom_factor**                  | 100                              | | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000
-| **background**                   | NULL                             |
+| **zoom_factor**                  | 100                              | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000
 | **background_scale**             | NULL                             |
-| **geo_data**                     | NULL                             | | PostGis Geodata
-| **epsg_code**                    | NULL                             | | PostGis EPSG Code
+| **geo_data**                     | NULL                             | PostGis Geodata, location of the map
+| **epsg_code**                    | NULL                             | PostGis EPSG Code
 
 ## `Users`
 
-| **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
-| :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
+| **_Column name_**                | **_Example_**                    | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :----------------------------------|
 | **id**                           | 1                                |
-| **nc_uid**                       | 1                                | | Nextcloud ID
-| **free_until**                   | 2023-04-04                       |
+| **nc_uid**                       | 1                                | Nextcloud ID
+| **free_until**                   | 2023-04-04                       | has free membership until the given date
 | **app_language**                 | English                          |
 | **member_since**                 | 2023-04-04                       |
-| **experience**                   | {beginner, hobbyist, expert}     |
+| **member_years**                 | {2023}                           | Array of years
+| **experience**                   | beginner                         |
 | **preferences**                  | raised vegetable beds            |
 | **location**                     | Vienna, Austria                  |
-| **membership_points**            | 0                                | | 0 to infinity
+| **membership_points**            | {0}                              | 0 to infinity, one entry for every year since account creation
 
 ## `Blossoms`
 
-| **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
-| :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
+| **_Column name_**                | **_Example_**                    | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :----------------------------------|
 | **id**                           | 1                                |
 | **title**                        | Novice Gardener                  |
 | **description**                  | Plant your first plant           |
-| **condition**                    | plants.count() >= 1              | | condition used to check if milestone is reached
-| **track**                        | Beginners Track                  |
+| **condition**                    | plants.count() >= 1              | condition used to check if milestone is reached
+| **track**                        | Beginners Track                  | the track (category) this blossom belongs to
 | **icon**                         | NULL                             |
-| **is_seasonal**                  | false                            |
+| **is_seasonal**                  | false                            | resets and repeats every year
 
 ## `Blossoms Gained`
 
-| **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
-| :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
+| **_Column name_**                | **_Example_**                    | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :----------------------------------|
 | **id**                           | 1                                |
-| **times_gained**                 | 1                                | | 0 to infinity
+| **user_id**                      | 1                                |
+| **blossom_id**                   | 1                                |
+| **times_gained**                 | 1                                | 0 to infinity
+| **gained_date**                  | 2023-04-10                       |
 
 ## `Relation`
 
