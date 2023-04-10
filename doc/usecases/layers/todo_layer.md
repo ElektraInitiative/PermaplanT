@@ -16,7 +16,8 @@
   The users successfully adds a task to their map by selecting the location where they want to add the task and entering the desired text.
   The task is displayed on the map and can be edited or removed at any time.
 - **Alternative scenario:**
-  The user accidentally adds a task in the wrong location and uses the app's undo function to correct the mistake.
+  - The user accidentally adds a task in the wrong location and uses the app's undo function to correct the mistake.
+  - The user has no Board or List configured where cards should be added.
 - **Error scenario:**
   The user tries to add a task with more than 2000 characters and the app prevents it by stopping any further insertions into the task input field.
 - **Postcondition:**
