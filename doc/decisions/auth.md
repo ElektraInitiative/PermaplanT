@@ -23,7 +23,8 @@ Then they get the appropriate authorization (does the user have the right privil
 
 ## Solutions
 
-### Alternative A
+### Nextcloud-only
+
 OpenID Connect authentication & authorization flow with:
 
 Authorization server: [Nextcloud OIDC App](https://github.com/H2CK/oidc)
