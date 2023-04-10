@@ -5,6 +5,7 @@ use actix_web::{
     HttpResponse, ResponseError,
 };
 use derive_more::{Display, Error};
+use diesel::result::Error as DieselError;
 
 /// The default error used by the server.
 #[derive(Debug, Display, Error)]
@@ -40,14 +41,19 @@ impl ResponseError for ServiceError {
     }
 }
 
-impl From<diesel::r2d2::PoolError> for ServiceError {
-    fn from(value: diesel::r2d2::PoolError) -> Self {
+impl From<diesel_async::pooled_connection::deadpool::PoolError> for ServiceError {
+    fn from(value: diesel_async::pooled_connection::deadpool::PoolError) -> Self {
         Self::new(StatusCode::INTERNAL_SERVER_ERROR, value.to_string())
     }
 }
 
-impl From<diesel::result::Error> for ServiceError {
-    fn from(value: diesel::result::Error) -> Self {
-        Self::new(StatusCode::INTERNAL_SERVER_ERROR, value.to_string())
+impl From<DieselError> for ServiceError {
+    fn from(value: DieselError) -> Self {
+        let status_code = match value {
+            DieselError::NotFound => StatusCode::NOT_FOUND,
+            _ => StatusCode::INTERNAL_SERVER_ERROR,
+        };
+
+        Self::new(status_code, value.to_string())
     }
 }

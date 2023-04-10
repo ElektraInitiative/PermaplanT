@@ -10,7 +10,7 @@ const TransparentBackground = ({ onClick, show }: TransparentBackgroundProps) =>
     <>
       <div
         onClick={onClick}
-        className={`fixed right-0 bottom-0 z-0 ${show ? '' : 'pointer-events-none'}`}
+        className={`fixed right-0 bottom-0 z-[1010] ${show ? '' : 'pointer-events-none'}`}
       >
         <AnimatePresence>
           {show && (
@@ -24,7 +24,7 @@ const TransparentBackground = ({ onClick, show }: TransparentBackgroundProps) =>
                 opacity: 0,
               }}
             >
-              <div style={{ backgroundColor: 'black', height: '100vh', width: '100vw' }}></div>
+              <div className="h-screen w-screen bg-[#000]" />
             </motion.div>
           )}
         </AnimatePresence>

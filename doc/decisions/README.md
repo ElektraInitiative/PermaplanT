@@ -76,7 +76,7 @@ This is the only non-technical decision, so no issues are related.
 
 - Even though they use the decision template, following decisions are not decisions:
   - [Template](TEMPLATE.md): copy this to start a new decision
-  - [Explanations](EXPLANATIONS.md): read this 
+  - [Explanations](EXPLANATIONS.md): read this
 - The first idea often is not the best, don't fixate on it.
   Abraham Luchins called this the “Einstellung effect.”
   Thus we encourage to generate as many ideas as possible for any problem (interrupt effect).

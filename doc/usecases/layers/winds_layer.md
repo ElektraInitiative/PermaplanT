@@ -24,3 +24,4 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved or deleted wind areas as desired.
 - **Non-functional Constraints:**
+  - Performance: Map sizes with more than 1ha in 100 raster elements (in 1a=100m²) per year should be usable without noticeable delays and acceptable memory overhead

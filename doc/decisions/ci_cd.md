@@ -15,8 +15,8 @@ We need to implement a continuous integration and delivery (CI/CD) process to au
 
 ## Considered Alternatives
 
-GitHub Actions: [GitHub Actions](https://github.com/features/actions) is a cloud-based service that is built into GitHub and is specifically designed for CI/CD with GitHub repositories. 
-It is easy to use and requires little technical knowledge to set up. 
+GitHub Actions: [GitHub Actions](https://github.com/features/actions) is a cloud-based service that is built into GitHub and is specifically designed for CI/CD with GitHub repositories.
+It is easy to use and requires little technical knowledge to set up.
 However, it may not be as flexible as some other alternatives, and it may not be suitable for projects that require more advanced CI/CD capabilities.
 
 ## Decision

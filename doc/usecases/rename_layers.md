@@ -1,19 +1,20 @@
-# Use Case: Rename Drawing Layers
+# Use Case: Rename Layers
 
 ## Summary
 
-- **Scope:** All Drawing Layers
+- **Scope:** Created or Alternative Layers
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** User renames drawing layers
-- **Status:** Draft
+- **Brief:** User renames created or alternative layers
+- **Status:** Assigned
+- **Assignee:** Giancarlo
 
 ## Scenarios
 
 - **Precondition:**
-  - User has opened the app and has at least one drawing layer available to view.
+  - User has opened the app and has at least one created or alternative layer.
 - **Main success scenario:**
-  User successfully renames drawing layers by selecting the desired layer and entering a new name.
+  User successfully renames created or alternative layers by selecting the desired layer and entering a new name.
 - **Alternative scenario:**
   - The user accidentally renames a layer to a name that is already in use and uses the app's undo function to correct the mistake.
 - **Error scenario:**

@@ -1,6 +1,8 @@
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 import { Pages, Routes } from './types';
 
+import { LandingPage } from '@/features/landing_page';
+
 const routes: Routes = {
   [Pages.CreateSeed]: {
     component: CreateSeed,
@@ -16,6 +18,11 @@ const routes: Routes = {
     component: SeedDetails,
     path: '/seeds/:id',
     title: 'Seed',
+  },
+  [Pages.LandingPage]: {
+    component: LandingPage,
+    path: '/',
+    title: 'PermaplanT',
   },
 };
 

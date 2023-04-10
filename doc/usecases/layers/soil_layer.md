@@ -19,9 +19,9 @@
      - pH value areas for subsoil
      - soil weight class
      - yield grade
-     in their map using the soil layer, where it differs from the global value.
-     This includes positioning the pH value areas in the appropriate locations and adjusting their values as needed.
-     A big brush is used to draw on the soil layer.
+       in their map using the soil layer, where it differs from the global value.
+       This includes positioning the pH value areas in the appropriate locations and adjusting their values as needed.
+       A big brush is used to draw on the soil layer.
   3. The user can check the values at individual spots by clicking on it.
 - **Alternative scenario:**
   The user accidentally adds or moves a pH values or soil weight classes in the wrong location and uses the app's undo function to correct the mistake.
@@ -34,3 +34,4 @@
   - The app must clearly communicate to the user the constraints for editing pH values in the soil layer.
 - **Notes:**
   - pH values have one significant digit, not more (e.g. 4.5, 6.7, 8.4)
+  - Performance: Map sizes with more than 1ha in 100 raster elements (in 1a=100m²) per year with 4 values per raster element should be usable without noticeable delays and acceptable memory overhead

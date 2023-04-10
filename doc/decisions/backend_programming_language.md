@@ -2,7 +2,7 @@
 
 ## Problem
 
-When selecting a backend programming language, a major issue is the range of options available, each with its own strengths and capabilities. 
+When selecting a backend programming language, a major issue is the range of options available, each with its own strengths and capabilities.
 This makes it challenging to determine the best language for a particular project or application.
 
 ## Constraints

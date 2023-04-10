@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User adds elements to their map using hand-drawn shapes or common shapes.
-- **Status:** Draft
+- **Status:** Ready to be Assigned
 
 ## Scenarios
 
@@ -27,4 +27,4 @@
 - **Postcondition:**
   The user's map includes elements added using hand-drawn or common shapes.
 - **Non-functional Constraints:**
-
+  - Performance: more than 200 elements per year should be usable without noticeable delays and acceptable memory overhead

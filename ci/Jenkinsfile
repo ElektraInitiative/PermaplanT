@@ -1,39 +1,170 @@
-pipeline {
-    agent { label 'permaplant' }
 
-    stages {
-        stage('Build PR') {
-            environment {
-                DATABASE_URL = 'postgres://cidb:cidb@127.0.0.1/cidb'
-            }
+parameters {
+    booleanParam(name: 'DEPLOY_PROD', defaultValue: false, description: 'deploy to production')
+}
 
-            steps {
-                echo "Workspace is '${WORKSPACE}'"
+stage('Build Schema'){
+    node('docker') {
+        checkout scm
+        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
-                echo 'Ensure pr service is stopped'
-                sh 'sudo /usr/sbin/service permaplant-pr stop'
+        docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                checkout scm
+                sh './ci/build-scripts/build-schema.sh'
 
-                echo 'Resetting the CI DB ...'
-                sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
-
-                echo 'Building...'
-                sh './ci/build-scripts/build-backend.sh'
-                sh './ci/build-scripts/build-frontend.sh'
-
-                echo 'Deploying'
-                sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
+                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
+                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
             }
         }
+    }
+}
 
-        stage('Deploy Dev') {
-            when {
-                branch "master"
-            }
+stage('Checks') {
+    def parallel_checks = [:]
 
-            steps {
-                echo 'Deploying to Dev ...'
-                sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+    parallel_checks["check-backend"] = {
+        node('docker') {
+            checkout scm
+            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+
+            docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                    checkout scm
+
+                    withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
+                        // Workardoung: we can't stop rustfmt from linting the generated schema.rs
+                        dir("backend") {
+                            sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
+                            sh "cargo fmt --check"
+                        }
+                        // End of Workaround
+
+                        // generate schema (overwriting src/schema.rs)
+                        sh './ci/build-scripts/build-schema.sh'
+
+                        dir("backend") {
+                            // continue checking
+                            sh "cargo check"
+                            sh "cargo clippy"
+                            sh "cargo doc"
+                            withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080']) {
+                                sh "cargo test"
+                            }
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    parallel_checks["check-frontend"] = {
+        node('docker') {
+            checkout scm
+            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+
+            node_image.inside {
+                checkout scm
+                unstash 'definitions.ts'
+
+                echo "HC SVNT DRACONES"
+            }
+        }
+    }
+
+    parallel(parallel_checks)
+}
+
+stage('Build in Docker'){
+    def parallel_build = [:]
+
+    parallel_build['build-backend'] = {
+        node('docker') {
+            checkout scm
+            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+
+            docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                    checkout scm
+                    sh './ci/build-scripts/build-backend.sh'
+
+                    stash includes: 'backend/target/release/backend', name: 'backend'
+                }
+            }
+        }
+    }
+
+    parallel_build['build-frontend'] = {
+        node('docker') {
+            checkout scm
+            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+
+            node_image.inside {
+                checkout scm
+                unstash 'definitions.ts'
+
+                sh './ci/build-scripts/build-frontend.sh'
+                stash includes: 'frontend/dist/**/*', name: 'frontend'
+            }
+        }
+    }
+
+    parallel(parallel_build)
+}
+
+stage('Deploy PR') {
+    node('permaplant && pr') {
+        checkout scm
+
+        echo "Workspace is '${WORKSPACE}'"
+        echo 'Ensure pr service is stopped'
+        sh 'sudo /usr/sbin/service permaplant-pr stop'
+
+        withEnv(['DATABASE_URL=postgres://cidb:cidb@127.0.0.1/cidb']) {
+            echo 'Resetting the CI DB ...'
+            sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
+
+            echo "Unstash Artifacts"
+            unstash 'schema.rs'
+            unstash 'frontend'
+            unstash 'backend'
+
+            echo 'Deploying'
+            sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
+        }
+    }
+}
+
+// Deploying to Dev only happens on branch "master"
+if (env.BRANCH_NAME == 'master') {
+    stage('Deploy Dev') {
+        node('permaplant && dev') {
+            checkout scm
+
+            echo "Unstash Artifacts"
+            unstash 'schema.rs'
+            unstash 'frontend'
+            unstash 'backend'
+
+            echo 'Deploying to Dev ...'
+            sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+        }
+    }
+}
+
+// Deploying to Prod only happens on branch "master" and if parameter is set
+if (env.BRANCH_NAME == 'master' && params.DEPLOY_PROD) {
+    stage('Deploy Prod') {
+        node('permaplant && prod') {
+            checkout scm
+
+            echo "Unstash Artifacts"
+            unstash 'schema.rs'
+            unstash 'frontend'
+            unstash 'backend'
+
+            echo 'Deploying to Prod ...'
+            sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
         }
     }
 }

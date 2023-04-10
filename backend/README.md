@@ -2,17 +2,17 @@
 
 ## Requirements
 
--   Rust 1.67.1 or later
--   [PostgreSQL](https://www.postgresql.org/download/) version 13 or later
--   libpq-dev
+- Rust 1.67.1 or later ([Installation guide](../doc/development_setup.md))
+- [PostgreSQL](https://www.postgresql.org/download/) version 13 or later
+- libpq-dev
 
 ## Installation
 
 1. Rename `.env.sample` to `.env` and enter the data according to your setup.
 
--   `DATABASE_URL` is the Connection [URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) to your PostgreSQL database
--   `BIND_ADDRESS_HOST` defines the host on which the server will run on
--   `BIND_ADDRESS_PORT` defines the port on which the server will run on
+- `DATABASE_URL` is the Connection [URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) to your PostgreSQL database
+- `BIND_ADDRESS_HOST` defines the host on which the server will run on
+- `BIND_ADDRESS_PORT` defines the port on which the server will run on
 
 Ensure that you grant the necessary permissions for the user to use Postgres. One way to do this is by using the following command:
 
@@ -57,11 +57,12 @@ Now the server is running and will start listening at <http://localhost:8080/> (
 
 Example requests:
 
--   `curl localhost:8080/api/plants`
+- `curl localhost:8080/api/plants`
 
 ## Documentation
 
-To view API documentation go to <http://localhost:8080/swagger-ui/>.
+To view an interactive API documentation go to <http://localhost:8080/doc/api/swagger/ui/>.
+Alternatively there is a [OpenAPI specification](https://spec.openapis.org/oas/latest.html) in json format at <http://localhost:8080/doc/api/openapi.json>.
 
 To view code documentation run
 
