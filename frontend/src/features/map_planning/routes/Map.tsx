@@ -1,8 +1,12 @@
 import { BaseStage } from '../components/BaseStage';
+import PlantsLayer from '../layers/PlantsLayer';
 import { useEffect, useState } from 'react';
-import { Circle, Layer, Rect } from 'react-konva';
+import { Circle, Rect } from 'react-konva';
 
-/** This component is responsible for rendering the map that the user is going to draw on. */
+/**
+ * This component is responsible for rendering the map that the user is going to draw on.
+ * In order to add a new layer you can add another layer file under the "layers" folder.
+ */
 export const Map = () => {
   const [shapes, setShapes] = useState<JSX.Element[]>([]);
 
@@ -36,7 +40,7 @@ export const Map = () => {
 
   return (
     <BaseStage>
-      <Layer>{shapes}</Layer>
+      <PlantsLayer>{shapes}</PlantsLayer>
     </BaseStage>
   );
 };
