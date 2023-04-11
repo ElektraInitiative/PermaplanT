@@ -36,8 +36,8 @@ const Features = () => {
     <section>
       <div className="py-24">
         <div className="mb-20 text-center">
-          <h1 className="title-font mb-4 grid grid-cols-5 gap-2 text-2xl font-medium sm:text-3xl">
-            <div className="col-span-3 text-right">
+          <h1 className="title-font mx-auto mb-4 grid grid-cols-3 gap-2 text-2xl font-medium sm:text-3xl md:w-[500px]">
+            <div className="col-span-2 text-right">
               make your <span className="text-primary-400 dark:text-primary-300">garden </span>
             </div>
             <div className="text-left">
