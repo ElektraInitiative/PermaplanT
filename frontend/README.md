@@ -112,23 +112,23 @@ If you want to translate a string, for example from the `seeds` feature in the `
 
 ```tsx
 function CreateSeed() {
-    // load the translation namespaces 'seeds' and 'common'
-    const { t } = useTranslation(['seeds', 'common'])
+  // load the translation namespaces 'seeds' and 'common'
+  const { t } = useTranslation(['seeds', 'common']);
 
-    // this is just an example
-    const hasError = false;
+  // this is just an example
+  const hasError = false;
 
-    // wrap in <Suspense> to wait for the data fetching of useTranslation
-    // use the t function to translate a key of namespace 'seeds' and 'common'
-    return (
-        <Suspense>
-            {
-                hasError
-                    ? <div>{t('common:unknown_error')}</div>
-                    : <button>{t('seeds:create_seed.btn_create_seed')}</button>
-            }
-        </Suspense>
-    );
+  // wrap in <Suspense> to wait for the data fetching of useTranslation
+  // use the t function to translate a key of namespace 'seeds' and 'common'
+  return (
+    <Suspense>
+      {hasError ? (
+        <div>{t('common:unknown_error')}</div>
+      ) : (
+        <button>{t('seeds:create_seed.btn_create_seed')}</button>
+      )}
+    </Suspense>
+  );
 }
 ```
 
