@@ -5,6 +5,7 @@ import columnMapping from './column_mapping_permapeople.js';
 
 /**
  * Sanitize the column names of the csv files.
+ *
  * The column names are converted to lowercase and special characters are removed.
  *
  * @param {*} jsonArray Array of objects
@@ -40,6 +41,7 @@ function sanitizeColumnNames(jsonArray) {
 
 /**
  * Compare the permapeople dataset with the practical plants dataset.
+ *
  * The practical plants dataset has a column called binomial_name which is the scientific name of the plant.
  * Merge the two datasets based on the scientific name.
  * @returns Array of plants
@@ -86,6 +88,17 @@ async function compareDatabases() {
   return allPlants;
 }
 
+/**
+ * Write the plants to a csv file.
+ *
+ * The csv file is sorted by the column contained_in.
+ * The columns from the permapeople dataset are mapped to the columns of the practical plants dataset.
+ * The mapping is defined in the column_mapping_permapeople.js file.
+ * The mapped columns are written to the beginning of the csv file next to each other.
+ * There is an additional column called contained_in which indicates if a plant is contained in both datasets or only in one of them.
+ *
+ * @param {*} plants Array of plants
+ */
 function writePlantsToCsv(plants) {
   plants.sort((a, b) => a['contained_in'].localeCompare(b['contained_in']));
 

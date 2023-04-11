@@ -13,6 +13,7 @@ const headers = {
 
 /**
  * Fetch all plants from permapeople API.
+ *
  * The API returns 100 plants per page.
  * This function fetches all the pages sequentially.
  * The API has a rate limit, so we add a sleep of 1 second between each request.
@@ -57,6 +58,7 @@ async function fetchAllPlants() {
 
 /**
  * Write the plants to a csv file
+ *
  * @param {*} plants Array of plants
  */
 function writePlantsToCsv(plants) {
