@@ -5,7 +5,11 @@ This directory contains the following scrapers:
 - [PracticalPlants](#scraper-for-practical-plants)
 - [Permapeople](#scraper-for-permapeople)
 
-# Scraper for Practical Plants
+# Scraper for PracticalPlants
+
+PracticalPlants are not maintained since 2013, however, there is a dump of the entire webpage available in our [cloned repository](https://github.com/ElektraInitiative/practicalplants).
+The scraper will scrape the data from the Practical Plants wiki dump and store it in `csv` format in the `data` directory.
+See the [Installation and Usage](#installation-and-usage) section for more details.
 
 ## Requirements
 
@@ -26,11 +30,11 @@ npm install && mkdir -p data
 cp .env.example .env
 ```
 
-`PRACTICALPLANTSPATH` mentioned in .env is the path on your local filesystem to the Practical Plants wiki dump, which could be fetched from our [repository](https://github.com/ElektraInitiative/practicalplants). This is required to scrape the data.
+`PRACTICALPLANTSPATH` mentioned in .env is the path on your local filesystem to the PracticalPlants wiki dump, which could be fetched from our [repository](https://github.com/ElektraInitiative/practicalplants). This is required to scrape the data.
 
 3. Start the scraper
 
-The scraper will scrape the data from the Practical Plants wiki dump and store it in `csv` format in the `data` directory. This can be done with the following command:
+The scraper will scrape the data from the PracticalPlants wiki dump and store it in `csv` format in the `data` directory. This can be done with the following command:
 
 ```shell
 npm run start
@@ -47,7 +51,7 @@ There will be several CSV files generated in the `data` directory:
 
 4. Correct data manually and merge with generated data (optional)
 
-The scraped data contains inconsistencies and mistakes made by practicalplants users. In order to correct these mistakes, we need to manually correct the data i.e. copy the `detail.csv` file into a new file. The corrected data in the new file should be stored in the same format as the generated data i.e. columns may not be changed. Since the scraper process could be changed in the future, we should guarantee that the data will not be lost when the scraper is run again. Therefore, we should merge the corrected data with the generated data.
+The scraped data contains inconsistencies and mistakes made by PracticalPlants users. In order to correct these mistakes, we need to manually correct the data i.e. copy the `detail.csv` file into a new file. The corrected data in the new file should be stored in the same format as the generated data i.e. columns may not be changed. Since the scraper process could be changed in the future, we should guarantee that the data will not be lost when the scraper is run again. Therefore, we should merge the corrected data with the generated data.
 
 Please note the following points when correcting the data:
 
@@ -94,6 +98,8 @@ npm run insert <path-to-csv-file> [family|genus]
 _Note:_ Please make sure that the database is up-to-date with the latest migrations before running this command.
 
 # Scraper for Permapeople
+
+The official documentation for the Permapeople API can be found [here](https://permapeople.org/knowledgebase/api-docs.html).
 
 ## Requirements
 

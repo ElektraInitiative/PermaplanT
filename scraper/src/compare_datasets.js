@@ -4,38 +4,31 @@ import csv from 'csvtojson';
 import columnMapping from './column_mapping_permapeople.js';
 
 function sanitizeColumnNames(jsonArray) {
-  return jsonArray.map((obj) => {
+  const sanitizeKey = (key) => {
+    let newKey = key
+      .toLowerCase()
+      .replaceAll('&amp;', 'and')
+      .replaceAll('&', 'and')
+      .replaceAll(' ', '_')
+      .replaceAll('(', '')
+      .replaceAll(')', '')
+      .replaceAll('-', '_')
+      .replaceAll('___', '_');
+    return newKey;
+  };
+
+  jsonArray.forEach((obj) => {
     const keys = Object.keys(obj);
     keys.forEach((key) => {
-      let newKey = key;
-      newKey = newKey.toLowerCase();
-      if (newKey.includes('&amp;')) {
-        newKey = newKey.split('&amp;').join('and');
-      }
-      if (newKey.includes('&')) {
-        newKey = newKey.split('&').join('and');
-      }
-      if (newKey.includes(' ')) {
-        newKey = newKey.split(' ').join('_');
-      }
-      if (newKey.includes('(')) {
-        newKey = newKey.split('(').join('');
-      }
-      if (newKey.includes(')')) {
-        newKey = newKey.split(')').join('');
-      }
-      if (newKey.includes('-')) {
-        newKey = newKey.split('-').join('_');
-      }
-      if (newKey.includes('___')) {
-        newKey = newKey.split('___').join('_');
-      }
-      obj[newKey] = obj[key];
-      if (key !== newKey) {
+      const newKey = sanitizeKey(key);
+      if (newKey !== key) {
+        obj[newKey] = obj[key];
         delete obj[key];
       }
     });
   });
+
+  return jsonArray;
 }
 
 async function compareDatabases() {
