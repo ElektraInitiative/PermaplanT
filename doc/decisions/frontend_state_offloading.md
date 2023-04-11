@@ -45,7 +45,7 @@ Even though modern browsers handle memory usage well, it's important to consider
 
 React utilizes a [virtual DOM](https://legacy.reactjs.org/docs/faq-internals.html)(The Document Object Model i.e. _DOM_) that's a copy of the real DOM, and it compares them when the state changes to update only the necessary parts of the real DOM.
 
-As a result, if the entire map information is stored in a single object, any state changes(e.g. changing the position of an object) will require updates to every element of the real DOM, which can negatively impact application rendering.
+As a result, if the entire map information is stored in a single object, any state changes(e.g. changing the position of an object) will require updates to every element of the real DOM, which depend on the map information i.e. the entire map.
 Therefore, keeping the state as structured as possible in it can help optimize application rendering.
 
 ## Implications
