@@ -3,6 +3,13 @@ import { parse as json2csv } from 'json2csv';
 import csv from 'csvtojson';
 import columnMapping from './column_mapping_permapeople.js';
 
+/**
+ * Sanitize the column names of the csv files.
+ * The column names are converted to lowercase and special characters are removed.
+ *
+ * @param {*} jsonArray Array of objects
+ * @returns Array of objects
+ */
 function sanitizeColumnNames(jsonArray) {
   const sanitizeKey = (key) => {
     let newKey = key
@@ -31,11 +38,17 @@ function sanitizeColumnNames(jsonArray) {
   return jsonArray;
 }
 
+/**
+ * Compare the permapeople dataset with the practical plants dataset.
+ * The practical plants dataset has a column called binomial_name which is the scientific name of the plant.
+ * Merge the two datasets based on the scientific name.
+ * @returns Array of plants
+ */
 async function compareDatabases() {
   const allPlants = [];
 
-  const practicalPlants = await csv().fromFile('data/detail.csv');
-  const permapeople = await csv().fromFile('data/permapeopleRawData.csv');
+  const practicalPlants = await csv().fromFile('data/detail.csv'); // Practical plants dataset
+  const permapeople = await csv().fromFile('data/permapeopleRawData.csv'); // Permapeople dataset
 
   sanitizeColumnNames(practicalPlants);
   sanitizeColumnNames(permapeople);
