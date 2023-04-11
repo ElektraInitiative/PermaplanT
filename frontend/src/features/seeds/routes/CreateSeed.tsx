@@ -5,7 +5,7 @@ import { NewSeedDto } from '@/bindings/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function CreateSeed() {
@@ -48,11 +48,7 @@ export function CreateSeed() {
   return (
     <PageLayout>
       <PageTitle title="Neuer Eintrag" />
-      <CreateSeedForm
-        onCancel={onCancel}
-        onChange={onChange}
-        onSubmit={onSubmit}
-      />
+      <CreateSeedForm onCancel={onCancel} onChange={onChange} onSubmit={onSubmit} />
       <SimpleModal
         title="Cancel Changes?"
         body="Changes you have made will not be saved. Do you really want to cancel?"
