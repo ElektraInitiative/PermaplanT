@@ -36,18 +36,22 @@ const Features = () => {
     <section>
       <div className="py-24">
         <div className="mb-20 text-center">
-          <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">
-            make your <span className="text-primary-400 dark:text-primary-300">garden </span>
-            <TypewriterComponent
-              onInit={(typewriter) => {
-                const strings = ['fruitful', 'colorful', 'practical', 'useful', 'abundant'];
-                strings.forEach((s) => {
-                  typewriter.typeString(s).deleteAll();
-                });
-                typewriter.typeString('diverse');
-                typewriter.start();
-              }}
-            />
+          <h1 className="title-font mb-4 grid grid-cols-5 gap-2 text-2xl font-medium sm:text-3xl">
+            <div className="col-span-3 text-right">
+              make your <span className="text-primary-400 dark:text-primary-300">garden </span>
+            </div>
+            <div className="text-left">
+              <TypewriterComponent
+                onInit={(typewriter) => {
+                  const strings = [' fruitful', ' colorful', ' practical', ' useful', ' abundant'];
+                  strings.forEach((s) => {
+                    typewriter.typeString(s).deleteAll();
+                  });
+                  typewriter.typeString(' diverse');
+                  typewriter.start();
+                }}
+              />
+            </div>
           </h1>
           <p className="mx-auto md:w-[500px]">
             Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub
