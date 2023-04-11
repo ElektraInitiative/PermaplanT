@@ -7,10 +7,9 @@ The purpose of this documentation is to ensure consistency, readability, and eas
 
 1. [Introduction](#introduction)
 2. [Database Schema](#database-schema)
-3. [Entity-Relationship Diagram](#entity-relationship-diagram)
-4. [Table Descriptions](#table-descriptions)
-5. [Database Guidelines](#database-guidelines)
-6. [Contributing](#contributing)
+3. [Table Descriptions](#table-descriptions)
+4. [Database Guidelines](#database-guidelines)
+5. [Contributing](#contributing)
 
 ## Introduction
 
@@ -23,10 +22,8 @@ The database schema consists of multiple tables and relationships, including:
 
 - `plants`
 - `seeds`
-- `species`
-- `genera`
-- `subfamilies`
-- `families`
+- `maps`
+- `users`
 
 Enums are used to represent predefined sets of values, such as:
 
@@ -35,11 +32,6 @@ Enums are used to represent predefined sets of values, such as:
 - `quality`
 
 For further information, see [Database Schemata](./database_schemata.md).
-
-## Entity-Relationship Diagram
-
-The ER diagram provides a visual representation of the tables, relationships, and cardinalities within the database.
-This diagram can be created using Mermaid syntax and then viewed using a Mermaid-compatible viewer.
 
 ## Table Descriptions
 
@@ -61,5 +53,7 @@ For further information, see [Database Guidelines](./database_guidelines.md).
 Contributions to the database are welcome.
 Please ensure that any changes follow the established guidelines and conventions outlined in this documentation.
 If you have any questions or need assistance, please contact the project maintainer.
+
+For further information on how to contribute, see [Contribution](../contrib/README.md) and [Backend](../contrib/backend.md)
 
 ---

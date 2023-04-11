@@ -235,7 +235,7 @@ SELECT p.id,
 ## Set height and width of all plants of a specific genus
 
 ```sql
-UPDATE plant
+UPDATE plants
    SET mature_size_height = 3.5,
        mature_size_width = 3
  WHERE genus = 'Abelia';
