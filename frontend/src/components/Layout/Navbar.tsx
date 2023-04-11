@@ -1,8 +1,8 @@
 import ButtonLink from '../Button/ButtonLink';
+import { ReactComponent as LogoSmallGraySVG } from '@/assets/permaplant-logo-dark.svg';
+import { ReactComponent as LogoSmallSVG } from '@/assets/permaplant-logo.svg';
 import { DarkModeSwitcher } from '@/features/dark_mode';
 import { useDarkModeStore } from '@/features/dark_mode';
-import { ReactComponent as LogoSmallSVG } from '@/assets/permaplant-logo.svg';
-import { ReactComponent as LogoSmallGraySVG } from '@/assets/permaplant-logo-dark.svg';
 
 /**
  * The navigation component that is fixed on the top.

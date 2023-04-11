@@ -1,2 +1,2 @@
-export { DarkModeSwitcher } from "./components/DarkModeSwitcher";
-export { useDarkModeStore } from "./store/DarkModeStore"
+export { DarkModeSwitcher } from './components/DarkModeSwitcher';
+export { useDarkModeStore } from './store/DarkModeStore';

@@ -1,4 +1,4 @@
-import { useDarkModeStore } from '../index'
+import { useDarkModeStore } from '../index';
 
 export const DarkModeSwitcher = () => {
   const isDarkMode = useDarkModeStore((state) => state.darkMode);

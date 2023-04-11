@@ -1,8 +1,8 @@
+import './Features.css';
 import { ReactComponent as GlobeSVG } from '@/assets/globe.svg';
 import { ReactComponent as PlanningSVG } from '@/assets/planning.svg';
 import { ReactComponent as PlantSVG } from '@/assets/plant.svg';
 import TypewriterComponent from 'typewriter-effect';
-import './Features.css';
 
 interface Feature {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;

@@ -5,9 +5,9 @@ import ContactUs from '../components/ContactUs';
 import Features from '../components/Features';
 import { GeoMap } from '../components/GeoMap';
 import { PhotoGallery } from '../components/PhotoGallery';
+import Pricing from '../components/Pricing';
 import Team from '../components/Team';
 import WidePageLayout from '@/components/Layout/WidePageLayout';
-import Pricing from '../components/Pricing';
 
 export const LandingPage = () => {
   return (
