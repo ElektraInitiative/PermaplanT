@@ -114,7 +114,7 @@ npm install && mkdir -p data
 cp .env.sample .env
 ```
 
-`PERMAPEOPLE_KEY_ID` and `PERMAPEOPLE_SECRET_KEY` mentioned in .env are the key ids and secret keys for the Permapeople API.
+`PERMAPEOPLE_KEY_ID` and `PERMAPEOPLE_SECRET_KEY` mentioned in .env are the credentials for the Permapeople API.
 This is required to scrape the data.
 You can get these keys from the Permapeople team.
 
