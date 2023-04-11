@@ -3,18 +3,19 @@ import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
+const locations: Array<LatLngExpression> = [
+  [47.57, 16.496],
+  [48.220778, 16.3100205],
+  [45.9666245, 14.4132204],
+  [48.1069151, 14.6971373],
+  [44.0601985, 10.4295918],
+  [46.6665335, 11.5916032],
+  [47.5835126, 12.1893057],
+];
+
 export const GeoMap = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
 
-  const locations: Array<LatLngExpression> = [
-    [47.57, 16.496],
-    [48.220778, 16.3100205],
-    [45.9666245, 14.4132204],
-    [48.1069151, 14.6971373],
-    [44.0601985, 10.4295918],
-    [46.6665335, 11.5916032],
-    [47.5835126, 12.1893057],
-  ];
   const markers = locations.map((location, index) => {
     return (
       <Marker key={'marker-' + index} position={location}>
