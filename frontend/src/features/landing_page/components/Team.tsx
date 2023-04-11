@@ -1,3 +1,5 @@
+import { Teammember } from './Teammember';
+
 const Team = () => {
   return (
     <section className="body-font text-gray-600">
@@ -9,201 +11,71 @@ const Team = () => {
           </p>
         </div>
         <div className="-m-2 flex flex-wrap">
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Dr. Markus Raab
-                </h2>
-                <p className="text-gray-500">Project Lead</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Yvonne Markl, MSc.
-                </h2>
-                <p className="text-gray-500">Permaculture Expert</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Samuel Daurer
-                </h2>
-                <p className="text-gray-500">Software Engineer</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Gabriel Kitzberger
-                </h2>
-                <p className="text-gray-500">Software Engineer</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Moritz Schalk
-                </h2>
-                <p className="text-gray-500">Software Engineer</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Giancarlo Buenaflor
-                </h2>
-                <p className="text-gray-500">Software Engineer</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Nursultan Imanov
-                </h2>
-                <p className="text-gray-500">Software Engineer</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Lukas Hartl
-                </h2>
-                <p className="text-gray-500">DevOps</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Ramzan Magomadow
-                </h2>
-                <p className="text-gray-500">Software Engineer</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Thorben Staufer
-                </h2>
-                <p className="text-gray-500">Software Engineer</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Benjamin Zinschitz
-                </h2>
-                <p className="text-gray-500">Software Engineer</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Paul Buschmann
-                </h2>
-                <p className="text-gray-500">Software Engineer</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full p-2 md:w-1/2 xl:w-1/3">
-            <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">
-              <img
-                alt="team"
-                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="/gallery_images/permaplant_illustration_12.svg"
-              />
-              <div className="flex-grow">
-                <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">
-                  Dr. Pavlo Ardanov
-                </h2>
-                <p className="text-gray-500">Permaculture Expert</p>
-              </div>
-            </div>
-          </div>
+          <Teammember
+            name="Dr. Markus Raab"
+            role="Project Lead"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Yvonne Markl, MSc."
+            role="Permaculture Expert"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Samuel Daurer"
+            role="Software Engineer"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Gabriel Kitzberger"
+            role="Software Engineer"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Moritz Schalk"
+            role="Software Engineer"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Giancarlo Buenaflor"
+            role="Software Engineer"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Nursultan Imanov"
+            role="Software Engineer"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Lukas Hartl"
+            role="DevOps"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Ramzan Magomadow"
+            role="Software Engineer"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Thorben Staufer"
+            role="Software Engineer"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Benjamin Zinschitz"
+            role="Software Engineer"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Paul Buschmann"
+            role="Software Engineer"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
+          <Teammember
+            name="Dr. Pavlo Ardanov"
+            role="Permaculture Expert"
+            imageUri="/gallery_images/permaplant_illustration_12.svg"
+          />
         </div>
       </div>
     </section>
