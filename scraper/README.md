@@ -111,7 +111,7 @@ npm install && mkdir -p data
 2. Create .env file from .env.sample and fill in the required values
 
 ```shell
-cp .env.example .env
+cp .env.sample .env
 ```
 
 `PERMAPEOPLE_KEY_ID` and `PERMAPEOPLE_SECRET_KEY` mentioned in .env are the key ids and secret keys for the Permapeople API.
