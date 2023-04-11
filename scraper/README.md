@@ -108,7 +108,7 @@ _Note:_ Please make sure that the database is up-to-date with the latest migrati
 npm install && mkdir -p data
 ```
 
-2. Create .env file from .env.example and fill in the required values
+2. Create .env file from .env.sample and fill in the required values
 
 ```shell
 cp .env.example .env
