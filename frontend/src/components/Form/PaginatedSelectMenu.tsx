@@ -1,7 +1,7 @@
+import { SelectOption } from './SelectMenu';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { AsyncPaginate } from 'react-select-async-paginate';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
-import { SelectOption } from './SelectMenu';
 
 /**
  * Contains the information needed by react-select-async-paginate for loading a single page.

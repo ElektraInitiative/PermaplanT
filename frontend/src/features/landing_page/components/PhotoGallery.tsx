@@ -1,7 +1,5 @@
-import '@/components/Modals/ImageModal';
-
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
-
+import '@/components/Modals/ImageModal';
 import ImageModal from '@/components/Modals/ImageModal';
 import { useState } from 'react';
 

@@ -1,7 +1,6 @@
-import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 import { Pages, Routes } from './types';
-
 import { LandingPage } from '@/features/landing_page';
+import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 
 const routes: Routes = {
   [Pages.CreateSeed]: {

@@ -1,12 +1,15 @@
 import { NewSeedDto, Quality, Quantity } from '../../../bindings/definitions';
-import PaginatedSelectMenu, { PageAdditionalInfo, Page } from '../../../components/Form/PaginatedSelectMenu';
+import PaginatedSelectMenu, {
+  PageAdditionalInfo,
+  Page,
+} from '../../../components/Form/PaginatedSelectMenu';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
+import { searchPlants } from '../api/searchPlants';
 import useCreateSeedStore from '../store/CreateSeedStore';
+import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
-import { searchPlants } from '../api/searchPlants';
 
 interface CreateSeedFormProps {
   onCancel: () => void;
@@ -14,11 +17,7 @@ interface CreateSeedFormProps {
   onSubmit: (newSeed: NewSeedDto) => void;
 }
 
-const CreateSeedForm = ({
-  onCancel,
-  onChange,
-  onSubmit,
-}: CreateSeedFormProps) => {
+const CreateSeedForm = ({ onCancel, onChange, onSubmit }: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
 
@@ -40,17 +39,21 @@ const CreateSeedForm = ({
     onSubmit(data);
   };
 
-  const loadPlants = async (search: string, options: unknown, additional: PageAdditionalInfo | undefined): Promise<Page> => {
-    const page = additional != undefined ? additional.page : 1;    
+  const loadPlants = async (
+    search: string,
+    options: unknown,
+    additional: PageAdditionalInfo | undefined,
+  ): Promise<Page> => {
+    const page = additional != undefined ? additional.page : 1;
     const searchResult = await searchPlants(search, page);
 
     const plant_options: SelectOption[] = searchResult.plants.map((plant) => {
-        const common_name = plant.common_name != null ? " (" + plant.common_name[0] + ")" : "";    
-        
-        return {
-          value: plant.id,
-          label: plant.binomial_name + common_name,
-        };
+      const common_name = plant.common_name != null ? ' (' + plant.common_name[0] + ')' : '';
+
+      return {
+        value: plant.id,
+        label: plant.binomial_name + common_name,
+      };
     });
 
     return {
@@ -58,9 +61,9 @@ const CreateSeedForm = ({
       hasMore: searchResult.has_more,
       additional: {
         page: page + 1,
-      }
+      },
     };
-  }
+  };
 
   return (
     <div>
