@@ -20,11 +20,13 @@ N/A
 ### Remove unused data from the frontend state
 
 One solution to offload the data from the frontend state is to frequently remove the data that is not required for the user to continue working with the map.
+
 However, this approach can increase the application's complexity, as it requires defining the conditions under which data should be removed from the state e.g. offload data that is not visible on the map or offload data that is not required for the currently selected date.
 
 ### Store data in IndexedDB
 
 Another solution is to store the offloaded data in IndexedDB, which is a browser-based object-oriented database.
+
 This approach could reduce memory usage and improve performance, as objects can be offloaded and loaded on-demand from the IndexedDB, while not storing them in the PermaplanT database.
 But this method increases the complexity of the application, as it requires additional strategies to manage the synchronization of data between the IndexedDB and the PermaplanT database.
 
