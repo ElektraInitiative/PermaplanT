@@ -3,7 +3,7 @@
 use actix_web::web::Data;
 
 use crate::{
-    config::db::Pool,
+    db::connection::Pool,
     error::ServiceError,
     model::{
         dto::{PlantsSearchDto, PlantsSearchParameters, PlantsSummaryDto},

@@ -3,8 +3,8 @@
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
+use crate::db::function::array_to_string;
 use crate::{
-    model::diesel_extensions::array_to_string,
     model::dto::{PlantsSearchDto, PlantsSummaryDto},
     schema::plants::{self, all_columns, binomial_name, common_name},
 };

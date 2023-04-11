@@ -6,7 +6,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::{config::db::Pool, model::dto::NewSeedDto, service};
+use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
 
 /// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
 ///

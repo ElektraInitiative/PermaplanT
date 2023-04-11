@@ -1,6 +1,6 @@
 //! `Plants` endpoints.
 
-use crate::{config::db::Pool, model::dto::PlantsSearchParameters, service};
+use crate::{db::connection::Pool, model::dto::PlantsSearchParameters, service};
 use actix_web::{
     get,
     web::{Data, Path, Query},

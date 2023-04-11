@@ -1,4 +1,4 @@
-//! Extensions of the diesel ORM.
+//! Database functions for diesel query-builder.
 
 use diesel::{
     sql_function,
