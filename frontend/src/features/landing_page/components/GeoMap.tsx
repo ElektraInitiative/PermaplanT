@@ -1,5 +1,5 @@
 import { useDarkModeStore } from '@/features/dark_mode';
-import { LatLngExpression } from 'leaflet';
+import { LatLngExpression, Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
@@ -15,10 +15,15 @@ const locations: Array<LatLngExpression> = [
 
 export const GeoMap = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
-
+  const myIcon = new Icon({
+    iconUrl: '/plant.svg',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, 0],
+  });
   const markers = locations.map((location, index) => {
     return (
-      <Marker key={'marker-' + index} position={location}>
+      <Marker key={'marker-' + index} position={location} icon={myIcon}>
         <Popup>
           This is a PermaplanT site. Click <a href={`/sites/${index}`}>here</a> to visit.
         </Popup>
