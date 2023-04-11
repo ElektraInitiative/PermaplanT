@@ -1,6 +1,6 @@
 import { SelectOption } from './SelectMenu';
+import filterObject from '@/utils/filterObject';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import CreatableSelect from 'react-select/creatable';
 import {
   ActionMeta,
   ClassNamesConfig,
@@ -9,7 +9,7 @@ import {
   SingleValue,
   StylesConfig,
 } from 'react-select';
-import filterObject from '@/utils/filterObject';
+import CreatableSelect from 'react-select/creatable';
 
 export interface CreatableSelectMenuProps<
   T extends FieldValues,

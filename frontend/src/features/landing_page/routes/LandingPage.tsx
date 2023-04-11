@@ -1,10 +1,9 @@
+import Footer from '../../../components/Layout/Footer';
 import '../../../styles/geoMap.css';
-
 import BlogOverview from '../components/BlogOverview';
 import CTA from '../components/CTA';
 import ContactUs from '../components/ContactUs';
 import Features from '../components/Features';
-import Footer from '../../../components/Layout/Footer';
 import Pricing from '../components/Pricing';
 import Team from '../components/Team';
 import Testimonials from '../components/Testimonials';

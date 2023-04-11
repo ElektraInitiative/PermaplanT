@@ -48,7 +48,7 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
       set((state) => ({ ...state, plants, isFetchingPlants: false }));
     } catch (error) {
       console.log(error);
-      
+
       set((state) => ({
         ...state,
         error: error as Error,
