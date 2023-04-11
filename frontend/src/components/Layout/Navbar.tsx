@@ -1,5 +1,5 @@
 import ButtonLink from '../Button/ButtonLink';
-import { ReactComponent as LogoSmallGraySVG } from '@/assets/permaplant-logo-dark.svg';
+import { ReactComponent as LogoSmallGraySVG } from '@/assets/permaplant-logo-gray.svg';
 import { ReactComponent as LogoSmallSVG } from '@/assets/permaplant-logo.svg';
 import { DarkModeSwitcher } from '@/features/dark_mode';
 import { useDarkModeStore } from '@/features/dark_mode';
