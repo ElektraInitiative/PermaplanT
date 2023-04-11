@@ -1,6 +1,8 @@
 import ButtonLink from '../Button/ButtonLink';
 import { DarkModeSwitcher } from '@/features/dark_mode';
 import { useDarkModeStore } from '@/features/dark_mode';
+import { ReactComponent as LogoSmallSVG } from '@/assets/permaplant-logo.svg';
+import { ReactComponent as LogoSmallGraySVG } from '@/assets/permaplant-logo-dark.svg';
 
 /**
  * The navigation component that is fixed on the top.
@@ -16,17 +18,9 @@ const Navbar = () => {
           <div className="flex space-x-6">
             <a href="/" className="flex items-center">
               {darkMode ? (
-                <img
-                  src="/permaplant-logo.svg"
-                  className="w-12 pr-2"
-                  alt="permaplant logo small"
-                ></img>
+                <LogoSmallSVG className="h-12 w-12 pr-2" />
               ) : (
-                <img
-                  src="/permaplant-logo-gray.svg"
-                  className="w-12 pr-2"
-                  alt="permaplant logo small"
-                ></img>
+                <LogoSmallGraySVG className="h-12 w-12 pr-2" />
               )}
               <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
                 PermaplanT
