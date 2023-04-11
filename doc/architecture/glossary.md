@@ -37,6 +37,8 @@
   - the time it takes for the browser to render the first bit of content on the page.
 - time to interactive (TTI)
   - the time it takes for the page to become fully interactive.
+- The Document Object Model (DOM)
+  - the data representation of the objects that comprise the structure and content of a document on the web.
 
 ## Biology
 
