@@ -18,7 +18,7 @@
     "error_price_must_be_number": "Der Preis muss eine Zahl sein. z.B. 2,99",
     "btn_create_seed": "Samen speichern"
   },
-  "error_modal_title": "Error",
+  "error_modal_title": "Fehler",
   "harvest_year": "Bezugsjahr",
   "additional_name": "Zusätzlicher Name",
   "binomial_name": "Pflanzen Name",

@@ -20,16 +20,16 @@
     "btn_create_seed": "Create Seed"
   },
   "error_modal_title": "Error",
-  "harvest_year": "Bezugsjahr",
-  "additional_name": "Zusätzlicher Name",
-  "binomial_name": "Pflanzen Name",
-  "quantity": "Menge",
-  "origin": "Herkunft",
-  "use_by": "Verbrauch bis",
-  "quality": "Qualität",
-  "taste": "Geschmack",
-  "yield": "Ertrag",
-  "price": "Preis",
+  "harvest_year": "Harvest Year",
+  "additional_name": "Additional Name",
+  "binomial_name": "Plant Name",
+  "quantity": "Amount",
+  "origin": "Origin",
+  "use_by": "Best by",
+  "quality": "Quality",
+  "taste": "Taste",
+  "yield": "Yield",
+  "price": "Price",
   "generation": "Generation",
-  "notes": "Notizen"
+  "notes": "Notes"
 }
