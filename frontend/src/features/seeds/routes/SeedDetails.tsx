@@ -33,7 +33,7 @@ export function SeedDetails() {
       }
     };
     _findOneSeed();
-  }, []);
+  }, [id]);
 
   return (
     <PageLayout>

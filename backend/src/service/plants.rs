@@ -6,10 +6,12 @@ use crate::{
     config::db::Pool,
     error::ServiceError,
     model::{
-        dto::{PlantsSearchParameters, PlantsSummaryDto},
+        dto::{PlantsSearchDto, PlantsSearchParameters, PlantsSummaryDto},
         entity::Plants,
     },
 };
+
+use std::cmp;
 
 /// Fetch all plants from the database.
 ///
@@ -28,9 +30,15 @@ pub async fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSummaryDto>, Servic
 pub async fn search(
     pool: &Data<Pool>,
     query: &PlantsSearchParameters,
-) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
+) -> Result<PlantsSearchDto, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Plants::search(query, &mut conn).await?;
+
+    let pages_start_at_1 = 1;
+    let calculated_offset = query.limit * (query.page - pages_start_at_1);
+    // disallows negative offsets
+    let offset = cmp::max(calculated_offset, 0);
+
+    let result = Plants::search(&query.search_term, query.limit, offset, &mut conn).await?;
     Ok(result)
 }
 

@@ -1,31 +1,15 @@
-import { useState } from 'react';
+import { useDarkModeStore } from '../index';
 
 export const DarkModeSwitcher = () => {
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem('darkMode') === 'true' ? true : false,
-  );
-
-  function toggleDarkMode() {
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    if (isDarkMode) {
-      setIsDarkMode(false);
-      localStorage.setItem('darkMode', 'false');
-      document.documentElement.classList.remove('dark');
-    } else {
-      setIsDarkMode(true);
-      localStorage.setItem('darkMode', 'true');
-      document.documentElement.classList.add('dark');
-    }
-  }
+  const isDarkMode = useDarkModeStore((state) => state.darkMode);
+  const toggle = useDarkModeStore((state) => state.toggleDarkMode);
 
   return (
     <button
       aria-label="Toggle Dark Mode"
       type="button"
       className="ml-1 mr-1 h-9 w-9 rounded p-1 sm:ml-4"
-      onClick={() => {
-        toggleDarkMode();
-      }}
+      onClick={toggle}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
