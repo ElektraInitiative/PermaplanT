@@ -10,8 +10,9 @@ tab_width = 4
 indent_size = tab
 indent_style = space
 
-[*.{html,css,scss,js,json,yml,yaml}]
+[*.{html,css,scss,js,json,yml,yaml,tsx,ts}]
 tab_width = 2
+indent_size = tab
 
 [*.md]
 max_line_length = 0

@@ -1,17 +1,27 @@
 import ButtonLink from '../Button/ButtonLink';
-import { DarkModeSwitcher } from '@/features/landing_page/components/DarkModeSwitcher';
+import { ReactComponent as LogoSmallGraySVG } from '@/assets/permaplant-logo-gray.svg';
+import { ReactComponent as LogoSmallSVG } from '@/assets/permaplant-logo.svg';
+import { DarkModeSwitcher } from '@/features/dark_mode';
+import { useDarkModeStore } from '@/features/dark_mode';
 
 /**
  * The navigation component that is fixed on the top.
  *
  */
 const Navbar = () => {
+  const darkMode = useDarkModeStore((state) => state.darkMode);
   return (
-    <nav className="fixed top-0 left-0 z-50 w-full border-b-[0.5px] border-gray-200 bg-white dark:border-gray-700 dark:bg-neutral-100-dark">
+    // z-index 1001 is needed because of leaflet GeoMap
+    <nav className="fixed top-0 left-0 z-[1001] w-full border-b-[0.5px] border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-100-dark">
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
         <div className="flex space-x-16">
           <div className="flex space-x-6">
             <a href="/" className="flex items-center">
+              {darkMode ? (
+                <LogoSmallSVG className="h-12 w-12 pr-2" />
+              ) : (
+                <LogoSmallGraySVG className="h-12 w-12 pr-2" />
+              )}
               <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
                 PermaplanT
               </span>
