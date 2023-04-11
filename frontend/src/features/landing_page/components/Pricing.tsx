@@ -1,4 +1,8 @@
+import { useState } from 'react';
+
 const Pricing = () => {
+  const [selected, setSelected] = useState(NaN);
+
   return (
     <section className="body-font text-neutral-600">
       <div className="mx-auto py-24">
@@ -23,19 +27,27 @@ const Pricing = () => {
                 <th className="title-font bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">
                   Price
                 </th>
-                <th className="title-font w-10 rounded-tr rounded-br bg-neutral-100 text-sm font-medium tracking-wider dark:bg-neutral-200-dark"></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr
+                className={
+                  'cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-400-dark' +
+                  (selected == 0 ? ' bg-primary-400' : '')
+                }
+                onClick={() => setSelected(0)}
+              >
                 <td className="px-4 py-3">Start</td>
                 <td className="px-4 py-3">5 Mb/s</td>
                 <td className="px-4 py-3 text-lg">Free</td>
-                <td className="w-10 text-center">
-                  <input name="plan" type="radio" />
-                </td>
               </tr>
-              <tr>
+              <tr
+                className={
+                  'cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-400-dark' +
+                  (selected == 1 ? ' bg-primary-400' : '')
+                }
+                onClick={() => setSelected(1)}
+              >
                 <td className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
                   Pro
                 </td>
@@ -45,11 +57,14 @@ const Pricing = () => {
                 <td className="border-t-2 border-neutral-100 px-4 py-3 text-lg dark:border-neutral-400-dark ">
                   $24
                 </td>
-                <td className="w-10 border-t-2 border-neutral-100 text-center dark:border-neutral-400-dark ">
-                  <input name="plan" type="radio" />
-                </td>
               </tr>
-              <tr>
+              <tr
+                className={
+                  'cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-400-dark' +
+                  (selected == 2 ? ' bg-primary-400' : '')
+                }
+                onClick={() => setSelected(2)}
+              >
                 <td className="border-t-2 border-neutral-100 py-3 px-4 dark:border-neutral-400-dark ">
                   Business
                 </td>
@@ -59,11 +74,14 @@ const Pricing = () => {
                 <td className="border-t-2 border-neutral-100 px-4 py-3 text-lg dark:border-neutral-400-dark">
                   $50
                 </td>
-                <td className="w-10 border-t-2 border-neutral-100 text-center dark:border-neutral-400-dark">
-                  <input name="plan" type="radio" />
-                </td>
               </tr>
-              <tr>
+              <tr
+                className={
+                  'cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-400-dark' +
+                  (selected == 3 ? ' bg-primary-400' : '')
+                }
+                onClick={() => setSelected(3)}
+              >
                 <td className="border-t-2 border-b-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
                   Exclusive
                 </td>
@@ -72,9 +90,6 @@ const Pricing = () => {
                 </td>
                 <td className="border-t-2 border-b-2 border-neutral-100 px-4 py-3 text-lg dark:border-neutral-400-dark">
                   $72
-                </td>
-                <td className="w-10 border-t-2 border-b-2 border-neutral-100 text-center dark:border-neutral-400-dark">
-                  <input name="plan" type="radio" />
                 </td>
               </tr>
             </tbody>
