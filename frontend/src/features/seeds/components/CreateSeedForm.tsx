@@ -8,6 +8,7 @@ import { searchPlants } from '../api/searchPlants';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
+import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
 import { Suspense } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -22,8 +23,11 @@ interface CreateSeedFormProps {
 const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: CreateSeedFormProps) => {
   const { t } = useTranslation(['common', 'seeds']);
 
-  const quality: SelectOption[] = enumToSelectOptionArr(Quality);
-  const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
+  const translatedQuality = useTranslatedQuality();
+  const translatedQuantity = useTranslatedQuantity();
+
+  const quality: SelectOption[] = enumToSelectOptionArr(Quality, translatedQuality);
+  const quantity: SelectOption[] = enumToSelectOptionArr(Quantity, translatedQuantity);
 
   const currentYear = new Date().getFullYear();
 

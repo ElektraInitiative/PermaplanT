@@ -1,0 +1,13 @@
+{
+  "Quality": {
+    "Organic": "Organic",
+    "NotOrganic": "Not organic",
+    "Unknown": "Unknown"
+  },
+  "Quantity": {
+    "Nothing": "Nothing",
+    "NotEnough": "Not enough",
+    "Enough": "Enough",
+    "MoreThanEnough": "More than enough"
+  }
+}

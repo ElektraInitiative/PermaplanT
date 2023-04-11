@@ -1,0 +1,13 @@
+{
+  "Quality": {
+    "Organic": "Biologisch",
+    "NotOrganic": "Nicht biologisch",
+    "Unknown": "Unbekannt"
+  },
+  "Quantity": {
+    "Nothing": "Nichts",
+    "NotEnough": "Nicht genug",
+    "Enough": "Genug",
+    "MoreThanEnough": "Mehr als genug"
+  }
+}

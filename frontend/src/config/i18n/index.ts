@@ -18,5 +18,3 @@ i18next.use(initReactI18next).use(LanguageDetector).init({
   resources,
   defaultNS,
 });
-
-export {};
