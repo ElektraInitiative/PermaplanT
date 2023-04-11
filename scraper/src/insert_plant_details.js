@@ -8,12 +8,23 @@ const pgp = pgPromise({});
 
 const db = pgp(process.env.DATABASE_URL);
 
-if (process.argv.length < 3) {
-  console.log("USAGE: npm run insert <generated-file>");
-  process.exit(1);
+if (process.argv.length == 2) {
+    insertGenus("data/distinctGenus.csv");
+    insertFamily("data/distinctFamily.csv");
+    insertPlantDetails("data/detail.csv");
+} else if (process.argv.length === 3) {
+    insertPlantDetails(process.argv[2]);
+} else if (process.argv.length === 4) {
+    const fileName = process.argv[2];
+    if (process.argv[3] === "genus") {
+        insertGenus(fileName);
+    } else if (process.argv[3] === "family") {
+        insertFamily(fileName);
+    } else {
+        console.log("USAGE: npm run insert <generated-file> [genus|family]");
+        process.exit(1);
+    }
 }
-
-const generatedFile = process.argv[2];
 
 function sanitizeColumnNames(jsonArray) {
   return jsonArray.map((obj) => {
@@ -103,20 +114,15 @@ async function insertPlantDetails(fileName) {
   db.none(query);
 }
 
-/**
- * Since the structure is not finalized, we're not inserting the genus and family data yet.
- * However, the insertion steps are ready.
- */
-/*
-async function insertGenus() {
-    let jsonArray = await csv().fromFile('data/distinctGenus.csv');
+async function insertGenus(fileName) {
+    let jsonArray = await csv().fromFile(fileName);
 
     sanitizeColumnNames(jsonArray);
 
     jsonArray = jsonArray.map((obj) => {
-        return { binomial_name: obj['genus'].trim() };
+        return { name: obj['genus'].trim() };
     });
-    const cs = new pgp.helpers.ColumnSet(['binomial_name'], {
+    const cs = new pgp.helpers.ColumnSet(['name'], {
         table: 'genus',
     });
 
@@ -125,15 +131,15 @@ async function insertGenus() {
     db.none(query);
 }
 
-async function insertFamily() {
-    let jsonArray = await csv().fromFile('data/distinctFamily.csv');
+async function insertFamily(fileName) {
+    let jsonArray = await csv().fromFile(fileName);
 
     sanitizeColumnNames(jsonArray);
 
     jsonArray = jsonArray.map((obj) => {
-        return { binomial_name: obj['family'].trim() };
+        return { name: obj['family'].trim() };
     });
-    const cs = new pgp.helpers.ColumnSet(['binomial_name'], {
+    const cs = new pgp.helpers.ColumnSet(['name'], {
         table: 'family',
     });
 
@@ -141,10 +147,3 @@ async function insertFamily() {
 
     db.none(query);
 }
-*/
-
-insertPlantDetails(generatedFile);
-/*
-insertGenus();
-insertFamily();
-*/

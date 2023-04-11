@@ -1,6 +1,6 @@
-# Database Structure (TBD)
+# Database Structure
 
-The main goal of this document is to describe the database structure/layout especially in terms of relations between data entities.
+The main goal of this document is to describe the database schema focusing on hierarchical information of plants and relationships between them.
 
 ## Problem
 
@@ -82,19 +82,66 @@ Inheritance cannot solve the challenge described above. I'll leave the main poin
 
 So the inheritance is useful to deal with complex DDL structure on the startup, but will not help us to avoid bulk operations e.g. updating a column for every `variety` in the entire `genus`
 
+2. One table per taxonomy rank and one for concrete plants.
+
+[Example](example_migrations/one-table-per-taxonomy)
+
+Pros:
+
+- Schema is easy to understand.
+
+Cons:
+
+By splitting the taxonomy ranks into multiple tables we loose the ability to have simple foreign keys to these when defining plant relationships.
+There would be two approaches to alleviate this.
+
+- Manage multiple nullable foreign keys and make sure that exactly one of them is set.
+  Would lead to complex validations for inserts and updates.
+- Generalize it to a self-managed compound foreign key with a table name and id.
+  We would lose referential integrity here.
+
+3. One table for taxonomy ranks and one for concrete plants.
+
+[Example](example_migrations/taxonomy-ranks-and-concrete-plants)
+
+Pros:
+
+- Inserting new plants is easy.
+
+Cons:
+
+- Attribute overrides can only be done on variety level.
+
+4. Plants and ranks in one table.
+
+[Example](example_migrations/normalized-plants-and-ranks)
+
+Pros:
+
+- Flexible and extendable.
+- Allow attribute overrides on arbitrary level.
+
+Cons:
+
+- Almost everything in the plants table needs to be nullable.
+- More complex insert and update logic.
+  When a species/variety is added or updated the columns can't just be set.
+  First we need to make sure all higher levels are in the table.
+  Then we need to check for each column value if there is a higher rank that already defines the same value.
+  Only if we can't find a match the value should be written.
+
 ## Decision
 
 1. Hierarchy
 
-Hierarchy of entities should be implemented using foreign keys and table relationships instead of Inheritance feature of PSQL. So the main idea is to consider entries in the `plant_detail` table as varieties and look up information about parent entities in the metatables described in the next point, if needed.
+We will go with variant 4 from [Considered Alternatives](#considered-alternatives).
 
-In case of a conflict, the lowest entity level in the hierarchy is prioritized. E.g. when there is a height value in a species and in a variety, variety wins.
+2. Relations between plants
 
-Plant relations(e.g. like, dislike, etc.) should be implemented using separate many-to-many tables. This is because the relations are not part of the plant entity, but rather a property of the relationship between two plants.
+Plant relations (e.g. companion) should be implemented using a separate many-to-many table.
 
-2. Metatables for parent entities i.e. genus, subfamily, family
-
-Metatables are independent tables that contain information about the parent entities. E.g. genus table will contain information about the genus, while the data of plants of that genus will be stored in the `plant_detail` table.
+For details on the schema see this [example sql](example_migrations/normalized-plants-and-ranks/2023-04-07-130215_plant_relationships/up.sql)
+Here are some [example queries](example_migrations/normalized-plants-and-ranks/example_queries.sql)
 
 ## Rationale
 
@@ -102,23 +149,20 @@ Metatables are independent tables that contain information about the parent enti
 
 discussed in the section "Considered Alternatives".
 
-2. Metatables
+3. Relations between plants
 
-The reason for this is that the data of the parent entities is not going to change very often, while the data of the child entities will change more often. So it makes sense to separate the data into two tables.
-
-Since there is no information about the parent entities on the practicalplants website, we will have to populate the metatables manually.
-For this purpose, during the parsing we are creating csv files with distinct values of genus, subfamily, family. These csv files will be used to populate the metatables.
+The relations are not part of the plant entity, but rather a property of the relationship between two plants.
+Additionally, the relation should provide cross-hierarchy relationships, e.g., a genus doesn't like a family.
 
 ## Implications
+
+The most complex aspect of this solution is described at variant 4 in [Considered Alternatives](#considered-alternatives).
+This will be especially important when the database receives an update via the scraper.
+To reuse inserting and updating logic the backend should implement an executable that enables csv imports of what the scraper produces.
 
 ## Related Decisions
 
 ## Notes
 
-In order to finish this decision, we need to understand the semantics of the data better.
-
-TODO:
-
-- [] define how exactly hierarchy tables will look like
-- [] define how metatables should be connected to the hierarchy tables
-- [] define how the relations between plants will be stored
+The relationships schemata shown in these examples all have a column that distinguished between companions and antagonists.
+Looking at the example queries for selecting companion plants for groups it might be more efficient to split this table.

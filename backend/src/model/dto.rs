@@ -63,10 +63,25 @@ pub struct PlantsSummaryDto {
     pub common_name: Option<Vec<Option<String>>>,
 }
 
-#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+/// An array of PlantsSummaryDto with some basic pagination information used by the plants search endpoint.
+#[typeshare]
+#[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
+pub struct PlantsSearchDto {
+    /// A single page of searched plants.
+    pub plants: Vec<PlantsSummaryDto>,
+    /// Flag indicating whether there is more data on the next page.
+    pub has_more: bool,
+}
+
+/// Query parameters for searching plants.
 #[typeshare]
 #[derive(Debug, Deserialize)]
 pub struct PlantsSearchParameters {
+    /// The system will check if this string occurs in the plants common name or binomial name.
     pub search_term: String,
+    /// How many plants will be part of a single page.
     pub limit: i32,
+    /// Which page should be returned.
+    /// Note: pages start at one.
+    pub page: i32,
 }
