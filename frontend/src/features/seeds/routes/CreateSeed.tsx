@@ -22,7 +22,6 @@ export function CreateSeed() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
   const createSeed = useCreateSeedStore((state) => state.createSeed);
-  const searchPlants = useCreateSeedStore((state) => state.searchPlants);
   const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
   const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
   const error = useCreateSeedStore((state) => state.error);
@@ -40,15 +39,6 @@ export function CreateSeed() {
 
     setShowCancelModal(!showCancelModal);
   };
-
-  useEffect(() => {
-    // This is a small workaround so it's possible to use async/await in useEffect
-    const _searchPlants = async () => {
-      await searchPlants(debouncedPlantSearchParam);
-    };
-
-    _searchPlants();
-  }, [debouncedPlantSearchParam]);
 
   usePreventNavigation(formTouched);
 
@@ -81,11 +71,9 @@ export function CreateSeed() {
     <PageLayout>
       <PageTitle title="Neuer Eintrag" />
       <CreateSeedForm
-        plants={plants}
         onCancel={onCancel}
         onChange={onChange}
         onSubmit={onSubmit}
-        onVarietyInputChange={onVarietyInputChange}
       />
       <SimpleModal
         title="Cancel Changes?"

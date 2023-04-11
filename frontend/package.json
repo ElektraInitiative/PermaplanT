@@ -25,6 +25,7 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.4.1",
     "react-select": "^5.7.0",
+    "react-select-async-paginate": "^0.7.2",
     "vite-plugin-svgr": "^2.4.0",
     "zustand": "^4.3.2"
   },

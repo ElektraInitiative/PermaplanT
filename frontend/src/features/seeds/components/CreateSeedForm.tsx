@@ -1,26 +1,23 @@
 import { NewSeedDto, Quality, Quantity } from '../../../bindings/definitions';
-import CreatableSelectMenu from '../../../components/Form/CreatableSelectMenu';
+import PaginatedSelectMenu, { PageAdditionalInfo, Page } from '../../../components/Form/PaginatedSelectMenu';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+import { searchPlants } from '../api/searchPlants';
 
 interface CreateSeedFormProps {
-  plants: SelectOption[];
   onCancel: () => void;
   onChange: () => void;
   onSubmit: (newSeed: NewSeedDto) => void;
-  onVarietyInputChange: (inputValue: string) => void;
 }
 
 const CreateSeedForm = ({
-  plants,
   onCancel,
   onChange,
   onSubmit,
-  onVarietyInputChange,
 }: CreateSeedFormProps) => {
   const quality: SelectOption[] = enumToSelectOptionArr(Quality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity);
@@ -43,16 +40,38 @@ const CreateSeedForm = ({
     onSubmit(data);
   };
 
+  const loadPlants = async (search: string, options: unknown, additional: PageAdditionalInfo | undefined): Promise<Page> => {
+    const page = additional != undefined ? additional.page : 1;    
+    const searchResult = await searchPlants(search, page);
+
+    const plant_options: SelectOption[] = searchResult.plants.map((plant) => {
+        const common_name = plant.common_name != null ? " (" + plant.common_name[0] + ")" : "";    
+        
+        return {
+          value: plant.id,
+          label: plant.binomial_name + common_name,
+        };
+    });
+
+    return {
+      options: plant_options,
+      hasMore: searchResult.has_more,
+      additional: {
+        page: page + 1,
+      }
+    };
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <div className="mb-6 grid gap-8 md:grid-cols-2">
-          <SelectMenu
+          <PaginatedSelectMenu
             id="plant_id"
             control={control}
-            options={plants}
             labelText="Plant Name"
             required={true}
+            loadOptions={loadPlants}
             handleOptionsChange={(option) => {
               if (!option) {
                 setValue('plant_id', undefined);
@@ -62,7 +81,6 @@ const CreateSeedForm = ({
                 setValue('plant_id', mapped);
               }
             }}
-            onInputChange={onVarietyInputChange}
             onChange={onChange}
           />
           <SimpleFormInput
