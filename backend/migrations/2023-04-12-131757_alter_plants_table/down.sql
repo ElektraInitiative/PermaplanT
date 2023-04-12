@@ -54,3 +54,22 @@ ALTER TABLE plants
 ALTER COLUMN mature_size_height TYPE VARCHAR USING mature_size_height::VARCHAR;
 ALTER TABLE plants
 ALTER COLUMN mature_size_width TYPE VARCHAR USING mature_size_width::VARCHAR;
+ALTER TABLE plants
+    RENAME COLUMN common_name_en TO common_name;
+-- change hardiness_zone to a range
+ALTER TABLE plants
+    RENAME COLUMN hardiness_zone TO hardiness_zone_range;
+ALTER TABLE plants
+ADD COLUMN hardiness_zone smallint CONSTRAINT plant_detail_hardiness_zone_check CHECK (
+        (hardiness_zone IS NULL)
+        OR (
+            (hardiness_zone >= 0)
+            AND (hardiness_zone <= 13)
+        )
+    );
+UPDATE plants
+SET hardiness_zone = lower(hardiness_zone_range);
+ALTER TABLE plants DROP COLUMN hardiness_zone_range;
+-- drop propagation column
+ALTER TABLE plants
+ADD COLUMN propagation text;

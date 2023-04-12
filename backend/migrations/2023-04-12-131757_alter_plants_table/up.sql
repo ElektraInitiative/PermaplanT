@@ -53,3 +53,15 @@ ALTER TABLE plants
 ALTER COLUMN mature_size_height TYPE TEXT USING mature_size_height::TEXT;
 ALTER TABLE plants
 ALTER COLUMN mature_size_width TYPE TEXT USING mature_size_width::TEXT;
+ALTER TABLE plants
+    RENAME COLUMN common_name TO common_name_en;
+-- change hardiness_zone to a range
+ALTER TABLE plants
+ADD COLUMN hardiness_zone_range int4range;
+UPDATE plants
+SET hardiness_zone_range = int4range(hardiness_zone, hardiness_zone, '[]');
+ALTER TABLE plants DROP COLUMN hardiness_zone;
+ALTER TABLE plants
+    RENAME COLUMN hardiness_zone_range TO hardiness_zone;
+-- drop propagation column
+ALTER TABLE plants DROP COLUMN propagation;
