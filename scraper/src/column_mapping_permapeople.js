@@ -64,7 +64,7 @@ export default {
   cold_stratification_time: null,
   genus: 'genus',
   danish_name: null,
-  root_depth: null,
+  root_depth: 'root_zone_tendency',
   medicinal_parts: null,
   when_to_plant_division: null,
   propagation_direct_sowing: null,

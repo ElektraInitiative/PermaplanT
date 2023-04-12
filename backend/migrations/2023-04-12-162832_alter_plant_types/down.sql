@@ -44,3 +44,21 @@ ALTER TABLE plants DROP COLUMN water_requirement;
 ALTER TABLE plants
     RENAME COLUMN new_water_requirement TO water_requirement;
 DROP TYPE WATER_REQUIREMENT;
+-- propagation_method
+ALTER TABLE plants DROP COLUMN propagation_method;
+DROP TYPE PROPAGATION_METHOD;
+-- growth
+CREATE TYPE GROWTH_RATE AS ENUM ('slow', 'moderate', 'vigorous');
+ALTER TABLE plants
+ADD COLUMN new_growth GROWTH_RATE;
+UPDATE plants
+SET new_growth = CASE
+        WHEN growth = ARRAY ['Slow'::GROWTH] THEN 'slow'::GROWTH_RATE
+        WHEN growth = ARRAY ['Medium'::GROWTH] THEN 'moderate'::GROWTH_RATE
+        WHEN growth = ARRAY ['Fast'::GROWTH] THEN 'vigorous'::GROWTH_RATE
+        ELSE NULL
+    END;
+ALTER TABLE plants DROP COLUMN growth;
+ALTER TABLE plants
+    RENAME COLUMN new_growth TO growth;
+DROP TYPE GROWTH;

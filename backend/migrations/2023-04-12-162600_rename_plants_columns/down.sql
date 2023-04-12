@@ -13,3 +13,5 @@ ALTER TABLE plants
     RENAME column water_requirement TO water;
 ALTER TABLE plants
     RENAME column height TO mature_size_height;
+ALTER TABLE plants
+    RENAME column growth TO growth_rate;
