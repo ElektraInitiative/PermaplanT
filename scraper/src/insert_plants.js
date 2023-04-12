@@ -1,52 +1,21 @@
 import pgPromise from 'pg-promise';
 import csv from 'csvtojson';
-import columnNames from './column_names.js';
+import dbPlantsColumns from './dp_plants_columns.js';
+import { sanitizeColumnNames } from './helpers/helpers.js';
 
 import { config } from 'dotenv';
 config();
 const pgp = pgPromise({});
 
 const db = pgp(process.env.DATABASE_URL);
+const plantsFilePath = process.argv[2] || 'data/detail.csv';
 
-if (process.argv.length == 2) {
-  insertGenus('data/distinctGenus.csv');
-  insertFamily('data/distinctFamily.csv');
-  insertPlantDetails('data/detail.csv');
-} else if (process.argv.length === 3) {
-  insertPlantDetails(process.argv[2]);
-} else if (process.argv.length === 4) {
-  const fileName = process.argv[2];
-  if (process.argv[3] === 'genus') {
-    insertGenus(fileName);
-  } else if (process.argv[3] === 'family') {
-    insertFamily(fileName);
-  } else {
-    console.log('USAGE: npm run insert <generated-file> [genus|family]');
-    process.exit(1);
-  }
-}
-
-function sanitizeColumnNames(jsonArray) {
-  return jsonArray.map((obj) => {
-    const keys = Object.keys(obj);
-    keys.forEach((key) => {
-      let newKey = key;
-      newKey = newKey.toLowerCase();
-      if (newKey.includes('&amp;')) {
-        newKey = newKey.split('&amp;').join('and');
-      }
-      if (newKey.includes('&')) {
-        newKey = newKey.split('&').join('and');
-      }
-      if (newKey.includes(' ')) {
-        newKey = newKey.split(' ').join('_');
-      }
-      obj[newKey] = obj[key];
-      delete obj[key];
-    });
-  });
-}
-
+/**
+ * Sanitizes the values of the json array
+ *
+ * @param {*} jsonArray - The json array to be sanitized
+ * @returns - The sanitized json array
+ */
 function sanitizeValues(jsonArray) {
   return jsonArray.map((obj) => {
     const keys = Object.keys(obj);
@@ -91,14 +60,21 @@ function sanitizeValues(jsonArray) {
   });
 }
 
-async function insertPlantDetails(fileName) {
+/**
+ * Inserts the plants into the database
+ *
+ * @param {*} fileName - The file name of the csv file
+ */
+async function insertPlants(fileName) {
+  console.log('[INFO] Starting the insertion of plants into database.');
+
   const jsonArray = await csv().fromFile(fileName);
 
   sanitizeColumnNames(jsonArray);
 
   sanitizeValues(jsonArray);
 
-  const cs = new pgp.helpers.ColumnSet(columnNames, {
+  const cs = new pgp.helpers.ColumnSet(dbPlantsColumns, {
     table: 'plants',
   });
 
@@ -109,39 +85,11 @@ async function insertPlantDetails(fileName) {
       skip: 'binomial_name',
     })}, updated_at = NOW()`;
 
-  db.none(query);
-}
-
-async function insertGenus(fileName) {
-  let jsonArray = await csv().fromFile(fileName);
-
-  sanitizeColumnNames(jsonArray);
-
-  jsonArray = jsonArray.map((obj) => {
-    return { name: obj['genus'].trim() };
-  });
-  const cs = new pgp.helpers.ColumnSet(['name'], {
-    table: 'genus',
-  });
-
-  const query = pgp.helpers.insert(jsonArray, cs) + ' ON CONFLICT DO NOTHING';
+  console.log('[INFO] Inserting plant details into database.');
 
   db.none(query);
+
+  console.log('[INFO] Plant details inserted into database.');
 }
 
-async function insertFamily(fileName) {
-  let jsonArray = await csv().fromFile(fileName);
-
-  sanitizeColumnNames(jsonArray);
-
-  jsonArray = jsonArray.map((obj) => {
-    return { name: obj['family'].trim() };
-  });
-  const cs = new pgp.helpers.ColumnSet(['name'], {
-    table: 'family',
-  });
-
-  const query = pgp.helpers.insert(jsonArray, cs) + ' ON CONFLICT DO NOTHING';
-
-  db.none(query);
-}
+insertPlants(plantsFilePath);
