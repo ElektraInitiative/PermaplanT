@@ -6,7 +6,6 @@ import { sanitizeColumnNames } from './helpers/helpers.js';
 
 const finalColumnMapping = {
   common_name: 'common_name_en',
-  binomial_name: 'scientific_name',
 };
 
 const renameColumns = async (plants, columnMapping) => {
@@ -14,9 +13,8 @@ const renameColumns = async (plants, columnMapping) => {
 
   plants.forEach((plant) => {
     mappedColumns.forEach((column) => {
-      const newColumnName = columnMapping[column];
-      plant[newColumnName] = plant[column];
-      delete plant[column];
+      plant[column] = plant[columnMapping[column]];
+      delete plant[columnMapping[column]];
     });
   });
   return plants;
@@ -34,7 +32,7 @@ async function mergeDatasets() {
   sanitizeColumnNames(practicalPlants);
   sanitizeColumnNames(permapeople);
 
-  permapeople = await renameColumns(permapeople, permapeopleColumnMapping);
+  practicalPlants = await renameColumns(practicalPlants, permapeopleColumnMapping);
 
   practicalPlants.forEach((plant) => {
     const binomial_name = plant['binomial_name'];
