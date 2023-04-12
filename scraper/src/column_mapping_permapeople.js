@@ -1,3 +1,7 @@
+/**
+ * This file contains the mapping between the PermaPeople column names and the
+ * column names of the database.
+ */
 export default {
   id: null,
   name: 'common_name',
