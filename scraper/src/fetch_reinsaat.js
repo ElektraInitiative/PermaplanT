@@ -1,21 +1,27 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 import { parse as json2csv } from 'json2csv';
+import pLimit from 'p-limit';
 
 const results = [];
 const errors = [];
+const limit = pLimit(1);
 
-const fetchPlant = async (context, { name, subcategory = null, category, url }) => {
+const fetchPlant = async (
+  context,
+  { name, category = null, subcategory = null, subsubsubcategory = null, url },
+) => {
   const page = await context.newPage();
 
   try {
     await page.goto(url, { timeout: 360000 });
-    console.log('fetching', name, category, subcategory, url);
+    console.log('fetching', name, category, subcategory, subsubsubcategory, url);
 
     const plant = {
       name,
       category,
       subcategory,
+      subsubsubcategory,
       url,
     };
 
@@ -89,16 +95,15 @@ const fetchPlant = async (context, { name, subcategory = null, category, url }) 
   }
 };
 
-const fetchSubSublinks = async (context, { name, category, url }) => {
-  console.log('[INFO] Fetching subsublinks', name, category, url);
-  const pageSubSublinks = await context.newPage();
-  await pageSubSublinks.goto(url);
+const fetchThirdLevel = async (context, { name, category, subcategory, url }) => {
+  // console.log('[INFO] Fetching subsubsublinks', name, category, url);
+  const page = await context.newPage();
+  await page.goto(url);
 
-  const subsublinks = await pageSubSublinks.$$eval(
-    '.s_subnavi .s_subnavi_active .s_sub_subnavi .s_sub_sub_subnavi a',
+  const subsubsublinks = await page.$$eval(
+    '.s_subnavi .s_subnavi_active .s_sub_subnavi .s_sub_sub_subnavi .submenu_3 a',
     (links) =>
       links.map((link) => {
-        console.log('link', link.innerText, link.href);
         return {
           name: link.innerText,
           url: link.href,
@@ -106,14 +111,45 @@ const fetchSubSublinks = async (context, { name, category, url }) => {
       }),
   );
 
-  console.log('[INFO] Found subsublinks', subsublinks.length);
+  await page.close();
+  if (subsubsublinks.length > 0) {
+    await Promise.all(
+      subsubsublinks.map((subsubsublink) =>
+        fetchPlant(context, {
+          ...subsubsublink,
+          subcategory,
+          category,
+          subsubsubcategory: name,
+        }),
+      ),
+    );
+  } else {
+    await fetchPlant(context, { name, category, subcategory, url });
+  }
+};
 
-  await pageSubSublinks.close();
+const fetchSubSublinks = async (context, { name, category, url }) => {
+  // console.log('[INFO] Fetching subsublinks', name, category, url);
+  const page = await context.newPage();
+  await page.goto(url);
+
+  const subsublinks = await page.$$eval(
+    '.s_subnavi .s_subnavi_active .s_sub_subnavi .s_sub_sub_subnavi a',
+    (links) =>
+      links.map((link) => {
+        return {
+          name: link.innerText,
+          url: link.href,
+        };
+      }),
+  );
+
+  await page.close();
 
   if (subsublinks.length > 0) {
     await Promise.all(
       subsublinks.map((subsublinks) =>
-        fetchPlant(context, { ...subsublinks, subcategory: name, category }),
+        fetchThirdLevel(context, { ...subsublinks, subcategory: name, category }),
       ),
     );
   } else {
@@ -122,35 +158,34 @@ const fetchSubSublinks = async (context, { name, category, url }) => {
 };
 
 const fetchSublinks = async (browser, { category, url }) => {
-  console.log('[INFO] Fetching sublinks', category, url);
-  const context = await browser.newContext({
-    maximumConcurrency: 20,
-  });
-  const pageSublinks = await context.newPage();
+  // console.log('[INFO] Fetching sublinks', category, url);
+  const context = await browser.newContext();
+  const page = await context.newPage();
 
-  await pageSublinks.goto(url);
+  await page.goto(url);
 
-  const sublinks = await pageSublinks.$$eval(
-    '.s_subnavi .s_subnavi_active .s_sub_subnavi a',
-    (links) =>
-      links.map((link) => {
-        return {
-          name: link.innerText,
-          url: link.href,
-        };
-      }),
+  const sublinks = await page.$$eval('.s_subnavi .s_subnavi_active .s_sub_subnavi a', (links) =>
+    links.map((link) => {
+      return {
+        name: link.innerText,
+        url: link.href,
+      };
+    }),
   );
 
-  console.log('[INFO] Found sublinks', sublinks.length);
-
-  await pageSublinks.close();
-  await Promise.all(sublinks.map((sublink) => fetchSubSublinks(context, { ...sublink, category })));
+  await page.close();
+  await Promise.all(
+    sublinks.map((sublink) => {
+      return limit(() => fetchSubSublinks(context, { ...sublink, category }));
+    }),
+  );
   await context.close();
 };
 
 const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath) => {
   console.log('[INFO] Fetching plants');
   const browser = await chromium.launch();
+
   try {
     const page = await browser.newPage();
     await page.goto(rootUrl);
@@ -164,6 +199,7 @@ const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath) => {
       }),
     );
     console.log('[INFO] Found superlinks', superlinks.length);
+    await page.close();
 
     await Promise.all(superlinks.map((superlink) => fetchSublinks(browser, superlink)));
     await browser.close();
