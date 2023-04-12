@@ -43,10 +43,11 @@ impl Plants {
             )
             .filter(
                 // Feel free to change if there is a way to this without raw sql.
-                sql::<Bool>("ANY(common_name) = ")
+                sql::<Bool>("")
                 .bind::<Text, _>(search_term)
-                .sql("OR ANY(common_name_de) = ")
+                .sql(" = ANY(common_name) OR ")
                 .bind::<Text, _>(search_term)
+                .sql(" = ANY(common_name_de)")
             )
             .select(all_columns)
             .order((binomial_name, common_name))

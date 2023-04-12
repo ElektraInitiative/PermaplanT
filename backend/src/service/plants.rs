@@ -58,7 +58,7 @@ pub async fn search(
 
     // Again, no need to continue if the page is already full.
     if result.plants.len() >= unsigned_limit { 
-        result.has_more = result.plants.len() > unsigned_limit;
+        result.has_more = result.has_more || common_name_result.has_more;
         result.plants = result.plants.into_iter().take(unsigned_limit).collect(); 
         
         return Ok(result)
@@ -71,7 +71,7 @@ pub async fn search(
     result.plants.extend(deduplicated_common_name_result);
 
     if result.plants.len() >= unsigned_limit { 
-        result.has_more = result.plants.len() > unsigned_limit;
+        result.has_more = result.has_more || common_name_result.has_more;
         result.plants = result.plants.into_iter().take(unsigned_limit).collect(); 
         
         return Ok(result)
@@ -84,7 +84,7 @@ pub async fn search(
     result.plants.extend(deduplicated_common_name_result);
 
     if result.plants.len() >= unsigned_limit { 
-        result.has_more = result.plants.len() > unsigned_limit;
+        result.has_more = result.has_more || common_name_result.has_more;
         result.plants = result.plants.into_iter().take(unsigned_limit).collect(); 
         
         return Ok(result)

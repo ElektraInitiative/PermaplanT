@@ -11,6 +11,8 @@ export const searchPlants = async (searchTerm: string, page: number): Promise<Pl
     searchParams.append('search_term', searchTerm);
     searchParams.append('limit', '10');
     searchParams.append('page', pageString);
+    // TODO: change according to language settings
+    searchParams.append('preferred_language', 'english')
 
     const response = await axios.get<PlantsSearchDto>(`${baseApiUrl}/api/plants?${searchParams}`);
 
