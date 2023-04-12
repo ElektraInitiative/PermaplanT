@@ -29,3 +29,4 @@
   - The app must clearly communicate to the user whether an action can be undone or redone.
   - The app must clearly communicate which undo/redo action was done.
   - Offline availability
+  - All operations changing the map or elements must support undo/redo, unless specified differently in **non-functional constraint**.

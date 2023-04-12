@@ -1,8 +1,9 @@
 interface SearchInputProps {
+  placeholder: string;
   handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const SearchInput = ({ handleSearch }: SearchInputProps) => {
+const SearchInput = ({ placeholder, handleSearch }: SearchInputProps) => {
   return (
     <div className="relative grow">
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -25,7 +26,7 @@ const SearchInput = ({ handleSearch }: SearchInputProps) => {
       <input
         type="search"
         className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 pl-10 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 md:w-[400px]"
-        placeholder="Search seeds..."
+        placeholder={placeholder}
         onChange={handleSearch}
       />
     </div>

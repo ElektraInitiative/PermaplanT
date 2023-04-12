@@ -1,7 +1,7 @@
-import { BrowserRouter } from 'react-router-dom';
-import { Fragment } from 'react';
 import NavContainer from './components/Layout/NavContainer';
 import Pages from './routes/Pages';
+import { Fragment } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   if (localStorage.getItem('darkMode') === 'true') {

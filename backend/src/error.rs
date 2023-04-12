@@ -41,8 +41,8 @@ impl ResponseError for ServiceError {
     }
 }
 
-impl From<diesel::r2d2::PoolError> for ServiceError {
-    fn from(value: diesel::r2d2::PoolError) -> Self {
+impl From<diesel_async::pooled_connection::deadpool::PoolError> for ServiceError {
+    fn from(value: diesel_async::pooled_connection::deadpool::PoolError) -> Self {
         Self::new(StatusCode::INTERNAL_SERVER_ERROR, value.to_string())
     }
 }

@@ -1,0 +1,34 @@
+{
+  "view_seeds": {
+    "title": "Meine Samen",
+    "btn_new_entry": "Neuer Eintrag",
+    "search_placeholder": "Suche Samen..."
+  },
+  "create_seed": {
+    "title": "Neuer Eintrag",
+    "changes_model_title": "Eintrag abbrechen?",
+    "changes_model_message": "Änderungen, die Sie vorgenommen haben, werden nicht gespeichert. Wollen Sie wirklich abbrechen?"
+  },
+  "create_seed_form": {
+    "placeholder_origin": "Daheim",
+    "placeholder_taste": "nussig",
+    "placeholder_yield": "1",
+    "placeholder_price": "2,99€",
+    "placeholder_generation": "0",
+    "error_price_must_be_number": "Der Preis muss eine Zahl sein. z.B. 2,99",
+    "btn_create_seed": "Samen speichern"
+  },
+  "error_modal_title": "Fehler",
+  "harvest_year": "Bezugsjahr",
+  "additional_name": "Zusätzlicher Name",
+  "binomial_name": "Pflanzen Name",
+  "quantity": "Menge",
+  "origin": "Herkunft",
+  "use_by": "Verbrauch bis",
+  "quality": "Qualität",
+  "taste": "Geschmack",
+  "yield": "Ertrag",
+  "price": "Preis",
+  "generation": "Generation",
+  "notes": "Notizen"
+}

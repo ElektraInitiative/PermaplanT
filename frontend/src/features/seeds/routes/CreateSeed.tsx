@@ -2,33 +2,24 @@ import PageLayout from '../../../components/Layout/PageLayout';
 import CreateSeedForm from '../components/CreateSeedForm';
 import useCreateSeedStore from '../store/CreateSeedStore';
 import { NewSeedDto } from '@/bindings/definitions';
-import { SelectOption } from '@/components/Form/SelectMenu';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import useDebouncedValue from '@/hooks/useDebouncedValue';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-function formatCommonName(commonName: string[] | undefined) {
-  if (commonName == null) return '';
-
-  return commonName[0] == null ? '' : '(' + commonName[0] + ')';
-}
 
 export function CreateSeed() {
   const navigate = useNavigate();
+  const { t } = useTranslation(['seeds', 'common']);
 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
   const createSeed = useCreateSeedStore((state) => state.createSeed);
-  const searchPlants = useCreateSeedStore((state) => state.searchPlants);
   const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
   const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
   const error = useCreateSeedStore((state) => state.error);
-
-  const [plantSearchParam, setPlantSearchParam] = useState('');
-  const debouncedPlantSearchParam = useDebouncedValue(plantSearchParam, 250);
+  const isUploadingSeed = useCreateSeedStore((state) => state.isUploadingSeed);
 
   const onCancel = () => {
     // There is no need to show the cancel warning modal if the user
@@ -40,15 +31,6 @@ export function CreateSeed() {
 
     setShowCancelModal(!showCancelModal);
   };
-
-  useEffect(() => {
-    // This is a small workaround so it's possible to use async/await in useEffect
-    const _searchPlants = async () => {
-      await searchPlants(debouncedPlantSearchParam);
-    };
-
-    _searchPlants();
-  }, [debouncedPlantSearchParam]);
 
   usePreventNavigation(formTouched);
 
@@ -66,51 +48,41 @@ export function CreateSeed() {
     setFormTouched(true);
   };
 
-  const onVarietyInputChange = (inputValue: string) => {
-    setPlantSearchParam(inputValue);
-  };
-
-  const plants: SelectOption[] = useCreateSeedStore((state) =>
-    state.plants.map((plant) => {
-      const commonName = formatCommonName(plant.common_name);
-      return { value: plant.id, label: plant.binomial_name + ' ' + commonName };
-    }),
-  );
-
   return (
-    <PageLayout>
-      <PageTitle title="Neuer Eintrag" />
-      <CreateSeedForm
-        plants={plants}
-        onCancel={onCancel}
-        onChange={onChange}
-        onSubmit={onSubmit}
-        onVarietyInputChange={onVarietyInputChange}
-      />
-      <SimpleModal
-        title="Cancel Changes?"
-        body="Changes you have made will not be saved. Do you really want to cancel?"
-        cancelBtnTitle="No"
-        submitBtnTitle="Yes"
-        show={showCancelModal}
-        setShow={setShowCancelModal}
-        onCancel={() => {
-          setShowCancelModal(false);
-        }}
-        onSubmit={() => {
-          navigate('/seeds');
-        }}
-      />
-      <SimpleModal
-        title="Error"
-        body={error?.message || 'An unknown error occurred.'} // Error should always have a message
-        show={showErrorModal}
-        setShow={setShowErrorModal}
-        submitBtnTitle="Ok"
-        onSubmit={() => {
-          setShowErrorModal(false);
-        }}
-      ></SimpleModal>
-    </PageLayout>
+    <Suspense>
+      <PageLayout>
+        <PageTitle title={t('seeds:create_seed.title')} />
+        <CreateSeedForm
+          isUploadingSeed={isUploadingSeed}
+          onCancel={onCancel}
+          onChange={onChange}
+          onSubmit={onSubmit}
+        />
+        <SimpleModal
+          title={t('seeds:create_seed.changes_model_title')}
+          body={t('seeds:create_seed.changes_model_message')}
+          cancelBtnTitle={t('common:no')}
+          submitBtnTitle={t('common:yes')}
+          show={showCancelModal}
+          setShow={setShowCancelModal}
+          onCancel={() => {
+            setShowCancelModal(false);
+          }}
+          onSubmit={() => {
+            navigate('/seeds');
+          }}
+        />
+        <SimpleModal
+          title={t('seeds:error_modal_title')}
+          body={error?.message || t('common:unknown_error')} // Error should always have a message
+          show={showErrorModal}
+          setShow={setShowErrorModal}
+          submitBtnTitle={t('common:ok')}
+          onSubmit={() => {
+            setShowErrorModal(false);
+          }}
+        ></SimpleModal>
+      </PageLayout>
+    </Suspense>
   );
 }

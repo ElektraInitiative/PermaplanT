@@ -1,4 +1,8 @@
 
+parameters {
+    booleanParam(name: 'DEPLOY_PROD', defaultValue: false, description: 'deploy to production')
+}
+
 stage('Build Schema'){
     node('docker') {
         checkout scm
@@ -29,7 +33,7 @@ stage('Checks') {
                     checkout scm
 
                     withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-                        // Workardoung: we can't stop rustfmt from linting the generated schema.rs
+                        // Workaround: we can't stop rustfmt from linting the generated schema.rs
                         dir("backend") {
                             sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
                             sh "cargo fmt --check"
@@ -63,7 +67,12 @@ stage('Checks') {
                 checkout scm
                 unstash 'definitions.ts'
 
-                echo "HC SVNT DRACONES"
+                dir("frontend") {
+                    sh "npm ci"
+                    sh "npm run format:check"
+                    sh "npm run lint"
+                    sh "npm run test"
+                }
             }
         }
     }
@@ -109,7 +118,7 @@ stage('Build in Docker'){
 }
 
 stage('Deploy PR') {
-    node('permaplant') {
+    node('permaplant && pr') {
         checkout scm
 
         echo "Workspace is '${WORKSPACE}'"
@@ -134,9 +143,33 @@ stage('Deploy PR') {
 // Deploying to Dev only happens on branch "master"
 if (env.BRANCH_NAME == 'master') {
     stage('Deploy Dev') {
-        node('permaplant') {
+        node('permaplant && dev') {
+            checkout scm
+
+            echo "Unstash Artifacts"
+            unstash 'schema.rs'
+            unstash 'frontend'
+            unstash 'backend'
+
             echo 'Deploying to Dev ...'
             sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+        }
+    }
+}
+
+// Deploying to Prod only happens on branch "master" and if parameter is set
+if (env.BRANCH_NAME == 'master' && params.DEPLOY_PROD) {
+    stage('Deploy Prod') {
+        node('permaplant && prod') {
+            checkout scm
+
+            echo "Unstash Artifacts"
+            unstash 'schema.rs'
+            unstash 'frontend'
+            unstash 'backend'
+
+            echo 'Deploying to Prod ...'
+            sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
         }
     }
 }

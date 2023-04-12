@@ -1,6 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
-
 import routes from '..';
+import { Route, Routes } from 'react-router-dom';
 
 function Pages() {
   return (

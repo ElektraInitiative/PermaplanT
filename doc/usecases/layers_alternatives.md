@@ -32,3 +32,5 @@
 - **Non-functional Constraints:**
   - Performance: up to 10 alternatives should be fast to use
   - Offline functionality depending on the layer
+- **Note:**
+  - Layers that support alternatives, have this specified as **non-functional constraint**.

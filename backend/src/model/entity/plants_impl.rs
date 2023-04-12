@@ -1,11 +1,11 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::prelude::*;
-use diesel::{PgConnection, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
+use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::{
     model::diesel_extensions::array_to_string,
-    model::dto::{PlantsSearchParameters, PlantsSummaryDto},
+    model::dto::{PlantsSearchDto, PlantsSummaryDto},
     schema::plants::{self, all_columns, binomial_name, common_name},
 };
 
@@ -16,8 +16,8 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn find_all(conn: &mut PgConnection) -> QueryResult<Vec<PlantsSummaryDto>> {
-        let query_result = plants::table.select(all_columns).load::<Self>(conn);
+    pub async fn find_all(conn: &mut AsyncPgConnection) -> QueryResult<Vec<PlantsSummaryDto>> {
+        let query_result = plants::table.select(all_columns).load::<Self>(conn).await;
         query_result.map(|v| v.into_iter().map(Into::into).collect())
     }
 
@@ -26,11 +26,15 @@ impl Plants {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn search(
-        query: &PlantsSearchParameters,
-        conn: &mut PgConnection,
-    ) -> QueryResult<Vec<PlantsSummaryDto>> {
-        let query_with_placeholders = format!("%{}%", query.search_term);
+    pub async fn search(
+        search_term: &String,
+        limit: i32,
+        offset: i32,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<PlantsSearchDto> {
+        let query_with_placeholders = format!("%{search_term}%");
+        // Load one additional row to check whether there are more pages available.
+        let limit_plus_one = limit + 1;
 
         let query = plants::table
             .filter(
@@ -40,18 +44,35 @@ impl Plants {
             )
             .select(all_columns)
             .order((binomial_name, common_name))
-            .limit(query.limit.into());
+            .limit(limit_plus_one.into())
+            .offset(offset.into());
 
-        let query_result = query.load::<Self>(conn);
-        query_result.map(|v| v.into_iter().map(Into::into).collect())
+        let query_result = query.load::<Self>(conn).await;
+        query_result.map(|v| {
+            let results: Vec<PlantsSummaryDto> = v.into_iter().map(Into::into).collect();
+            let results_len = results.len();
+            // Perform an explicit conversion to make clippy happy.
+            let unsigned_limit = limit.unsigned_abs() as usize;
+            let unsigned_limit_plus_one = limit_plus_one.unsigned_abs() as usize;
+
+            PlantsSearchDto {
+                plants: results.into_iter().take(unsigned_limit).collect(),
+                // If there is at least one more element than the defined limit,
+                // more pages may still be loaded.
+                has_more: results_len == unsigned_limit_plus_one,
+            }
+        })
     }
 
     /// Fetch plant by id from the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub fn find_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<PlantsSummaryDto> {
-        let query_result = plants::table.find(id).first::<Self>(conn);
+    pub async fn find_by_id(
+        id: i32,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<PlantsSummaryDto> {
+        let query_result = plants::table.find(id).first::<Self>(conn).await;
         query_result.map(Into::into)
     }
 }

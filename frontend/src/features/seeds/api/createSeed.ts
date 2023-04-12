@@ -1,7 +1,6 @@
 import { NewSeedDto, SeedDto } from '@/bindings/definitions';
-
-import axios from 'axios';
 import { baseApiUrl } from '@/config';
+import axios from 'axios';
 
 export const createSeed = async (seed: NewSeedDto) => {
   try {

@@ -8,7 +8,7 @@ use utoipa::ToSchema;
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
 #[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
-#[DieselTypePath = "crate::schema::sql_types::NutritionDemand"]
+#[ExistingTypePath = "crate::schema::sql_types::NutritionDemand"]
 pub enum NutritionDemand {
     #[serde(rename = "light feeder")]
     #[db_rename = "light feeder"]
