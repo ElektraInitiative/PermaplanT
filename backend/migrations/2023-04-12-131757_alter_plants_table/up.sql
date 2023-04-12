@@ -1,10 +1,13 @@
 -- Your SQL goes here
+-- rename binomial_name to scientific_name
 ALTER TABLE plants
     RENAME COLUMN binomial_name TO scientific_name;
+-- rename plant_detail_binomial_name_key to plant_detail_scientific_name_key
 ALTER TABLE plants
     RENAME CONSTRAINT plant_detail_binomial_name_key TO plant_detail_scientific_name_key;
 ALTER TABLE plants
 ALTER COLUMN scientific_name TYPE TEXT USING scientific_name::TEXT;
+-- change type from varchar to text
 ALTER TABLE plants
 ALTER COLUMN family TYPE TEXT USING family::TEXT;
 ALTER TABLE plants

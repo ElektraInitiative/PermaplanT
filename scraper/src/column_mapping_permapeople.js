@@ -23,7 +23,7 @@ export default {
   height: 'mature_size_height',
   layer: null,
   edible_parts: null,
-  propagation_method: 'propagation',
+  propagation_method: null,
   wikipedia: null,
   growth: 'growth_rate',
   alternate_name: null,

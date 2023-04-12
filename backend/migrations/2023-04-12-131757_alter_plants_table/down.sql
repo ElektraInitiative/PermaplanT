@@ -1,9 +1,11 @@
 -- This file should undo anything in `up.sql`
--- Your SQL goes here
+-- rename binomial_name to scientific_name
 ALTER TABLE plants
     RENAME COLUMN scientific_name TO binomial_name;
+-- rename plant_detail_binomial_name_key to plant_detail_scientific_name_key
 ALTER TABLE plants
     RENAME CONSTRAINT plant_detail_scientific_name_key TO plant_detail_binomial_name_key;
+-- change type from varchar to text
 ALTER TABLE plants
 ALTER COLUMN binomial_name TYPE VARCHAR USING binomial_name::VARCHAR;
 ALTER TABLE plants

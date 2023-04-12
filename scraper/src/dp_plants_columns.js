@@ -2,7 +2,7 @@
  * This file contains the database columns and their corresponding types
  */
 export default [
-  { name: 'common_name', cast: 'text[]' },
+  { name: 'common_name_en', cast: 'text[]' },
   { name: 'common_name_de', cast: 'text[]' },
   { name: 'binomial_name' },
   { name: 'genus' },

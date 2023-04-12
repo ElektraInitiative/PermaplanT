@@ -17,8 +17,10 @@ function sanitizeColumnNames(jsonArray) {
         .replaceAll('-', '_')
         .replaceAll(/_+/g, '_')
         .toLowerCase();
-      obj[newKey] = obj[key];
-      delete obj[key];
+      if (newKey !== key) {
+        obj[newKey] = obj[key];
+        delete obj[key];
+      }
     });
     return obj;
   });
