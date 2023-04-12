@@ -8,7 +8,6 @@
     "fetch:permapeople": "node src/fetch_permapeople.js",
     "compare": "node src/compare_datasets.js",
     "insert": "node src/insert_plant_details.js",
-    "start": "node src/parse.js && node src/insert_plant_details.js data/detail.csv",
     "merge": "node src/merge.js"
   },
   "keywords": [],

@@ -38,7 +38,7 @@ This is required to scrape the data.
 The scraper will scrape the data from the PracticalPlants wiki dump and store it in `csv` format in the `data` directory. This can be done with the following command:
 
 ```shell
-npm run parse
+npm run start
 ```
 
 As an additional step, the script will also look up the german common name through Wikidata API and store it under the column `Column Name DE` in the `detail.csv` file.
@@ -98,6 +98,10 @@ npm run insert <path-to-csv-file>
 ```
 
 3. Inserts the data from the specified `csv` file into the database. The second argument specifies the type of data to be inserted i.e. `family` or `genus`.
+
+```shell
+npm run insert <path-to-csv-file> [family|genus]
+```
 
 _Note:_ Please make sure that the database is up-to-date with the latest migrations before running this command.
 
