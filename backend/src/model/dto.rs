@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::ToSchema;
 
-use super::r#enum::{quality::Quality, quantity::Quantity};
+use super::r#enum::{quality::Quality, quantity::Quantity, language::Language};
 
 pub mod new_seed_impl;
 pub mod plants_impl;
@@ -53,7 +53,7 @@ pub struct NewSeedDto {
 
 /// The essential identifying information of a plant.
 #[typeshare]
-#[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
 pub struct PlantsSummaryDto {
     /// The plants database id.
     pub id: i32,
@@ -84,4 +84,7 @@ pub struct PlantsSearchParameters {
     /// Which page should be returned.
     /// Note: pages start at one.
     pub page: i32,
+    /// The users preferred search language.
+    /// Influences how search results will be ranked.
+    pub preferred_language: Language
 }
