@@ -223,6 +223,7 @@ blossoms_gained }o--|| users : ""
 | **honors**                       | 0                                | 0 to infinity
 | **visits**                       | 0                                | 0 to infinity
 | **harvested**                    | 0                                | 0 to infinity, amount of plants harvested on this map
+| **version_date**                 | 2023-04-04                       | the date the snapshot for this version was taken
 | **creation_date**                | 2023-04-04                       |
 | **deletion_date**                | 2023-04-04                       |
 | **zoom_factor**                  | 100                              | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000
