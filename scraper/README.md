@@ -33,8 +33,6 @@ cp .env.example .env
 `PRACTICALPLANTSPATH` mentioned in .env is the path on your local filesystem to the PracticalPlants wiki dump, which could be fetched from our [repository](https://github.com/ElektraInitiative/practicalplants).
 This is required to scrape the data.
 
-### Option 1: Run the scraper and insert data into database in separate steps
-
 3. Start the scraper
 
 The scraper will scrape the data from the PracticalPlants wiki dump and store it in `csv` format in the `data` directory. This can be done with the following command:
@@ -100,18 +98,6 @@ npm run insert <path-to-csv-file>
 ```
 
 3. Inserts the data from the specified `csv` file into the database. The second argument specifies the type of data to be inserted i.e. `family` or `genus`.
-
-### Option 2: Run the scraper and insert data into database in one step
-
-3. Start the scraper and insert data into database
-
-```shell
-npm run start
-```
-
-```shell
-npm run insert <path-to-csv-file> [family|genus]
-```
 
 _Note:_ Please make sure that the database is up-to-date with the latest migrations before running this command.
 
