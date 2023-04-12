@@ -6,11 +6,15 @@ import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 export const ViewSeeds = () => {
   const navigate = useNavigate();
+
+  // load seeds namespace for the translation
+  const { t } = useTranslation(['seeds', 'common']);
 
   const [seeds, setSeeds] = useState<SeedDto[]>([]);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -50,23 +54,30 @@ export const ViewSeeds = () => {
   };
 
   return (
-    <PageLayout styleNames="flex flex-col space-y-4">
-      <PageTitle title="My Seeds" />
-      <div className="flex flex-row justify-between space-x-6">
-        <SearchInput handleSearch={handleSearch} />
-        <SimpleButton onClick={handleCreateSeedClick}>New Entry</SimpleButton>
-      </div>
-      <SeedsOverviewList seeds={filteredSeeds} />
-      <SimpleModal
-        title="Error"
-        body={error?.message || 'An unknown error occurred.'} // Error should always have a message
-        show={showErrorModal}
-        setShow={setShowErrorModal}
-        submitBtnTitle="Ok"
-        onSubmit={() => {
-          setShowErrorModal(false);
-        }}
-      ></SimpleModal>
-    </PageLayout>
+    <Suspense>
+      <PageLayout styleNames="flex flex-col space-y-4">
+        <PageTitle title={t('seeds:view_seeds.title')} />
+        <div className="flex flex-row justify-between space-x-6">
+          <SearchInput
+            placeholder={t('seeds:view_seeds.search_placeholder')}
+            handleSearch={handleSearch}
+          />
+          <SimpleButton onClick={handleCreateSeedClick}>
+            {t('seeds:view_seeds.btn_new_entry')}
+          </SimpleButton>
+        </div>
+        <SeedsOverviewList seeds={filteredSeeds} />
+        <SimpleModal
+          title={t('seeds:error_modal_title')}
+          body={error?.message || t('common:unknown_error')} // Error should always have a message
+          show={showErrorModal}
+          setShow={setShowErrorModal}
+          submitBtnTitle={t('common:ok')}
+          onSubmit={() => {
+            setShowErrorModal(false);
+          }}
+        ></SimpleModal>
+      </PageLayout>
+    </Suspense>
   );
 };

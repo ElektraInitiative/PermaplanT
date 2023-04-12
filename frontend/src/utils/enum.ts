@@ -6,8 +6,11 @@ export function enumFromStringValue<T>(enm: { [s: string]: T }, value: string): 
     : undefined;
 }
 
-export function enumToSelectOptionArr<T>(obj: { [key: string]: T }): SelectOption[] {
-  return Object.values(obj).map((element) => {
-    return { value: `${element}`, label: `${element}` };
+export function enumToSelectOptionArr<T extends string | number>(
+  originalEnum: { [key: string]: T },
+  translatedEnum: Record<T, string>,
+): SelectOption[] {
+  return Object.values(originalEnum).map((element) => {
+    return { value: `${element}`, label: `${translatedEnum[element]}` };
   });
 }
