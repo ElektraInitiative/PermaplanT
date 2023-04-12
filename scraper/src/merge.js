@@ -1,11 +1,11 @@
-import { writeFileSync } from "fs";
-import { parse as json2csv } from "json2csv";
-import csv from "csvtojson";
-import { config } from "dotenv";
+import { writeFileSync } from 'fs';
+import { parse as json2csv } from 'json2csv';
+import csv from 'csvtojson';
+import { config } from 'dotenv';
 config();
 
 if (process.argv.length < 4) {
-  console.log("USAGE: npm run merge <generated-file> <corrected-file>");
+  console.log('USAGE: npm run merge <generated-file> <corrected-file>');
   process.exit(1);
 }
 
@@ -32,4 +32,4 @@ function mergeArrays(generated, corrected) {
 const merged = mergeArrays(jsonArray, jsonArrayCorrected);
 
 const mergedCsv = json2csv(merged);
-writeFileSync("data/merged.csv", mergedCsv);
+writeFileSync('data/merged.csv', mergedCsv);
