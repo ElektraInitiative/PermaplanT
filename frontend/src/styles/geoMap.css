@@ -1,3 +1,12 @@
 .leaflet-container {
   height: 100%;
+  background-color: inherit !important;
+}
+
+/* TODO: use css variable for color */
+.dark .leaflet-bar a {
+  background-color: #333333;
+}
+.dark .leaflet-bar a:hover {
+  background-color: #333333;
 }

@@ -1,6 +1,6 @@
 import filterObject from '@/utils/filterObject';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import Select, { StylesConfig } from 'react-select';
+import Select, { ActionMeta, GroupBase, MultiValue, SingleValue, StylesConfig } from 'react-select';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
 
 export interface SelectOption {
@@ -8,21 +8,32 @@ export interface SelectOption {
   label: string;
 }
 
-export interface SelectMenuProps<T extends FieldValues> {
-  isMulti?: boolean;
+export interface SelectMenuProps<
+  T extends FieldValues,
+  Option = SelectOption,
+  IsMulti extends boolean = false,
+> {
+  isMulti?: IsMulti;
   id: Path<T>;
   labelText?: string;
   control?: Control<T, unknown>;
-  options: SelectOption[];
+  options: Option[];
   required?: boolean;
   placeholder?: string;
-  handleOptionsChange?: (option: unknown) => void;
+  handleOptionsChange?: (
+    option: SingleValue<Option> | MultiValue<Option>,
+    actionMeta: ActionMeta<Option>,
+  ) => void;
   onChange?: () => void;
   onInputChange?: (inputValue: string) => void;
 }
 
-export default function SelectMenu<T extends FieldValues>({
-  isMulti = false,
+export default function SelectMenu<
+  T extends FieldValues,
+  Option = SelectOption,
+  IsMulti extends boolean = false,
+>({
+  isMulti = false as IsMulti,
   id,
   labelText,
   control,
@@ -32,8 +43,8 @@ export default function SelectMenu<T extends FieldValues>({
   handleOptionsChange,
   onChange,
   onInputChange,
-}: SelectMenuProps<T>) {
-  const customClassNames: ClassNamesConfig = {
+}: SelectMenuProps<T, Option, IsMulti>) {
+  const customClassNames: ClassNamesConfig<Option, IsMulti, GroupBase<Option>> = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
     control: (state) => {
       return `
@@ -58,7 +69,7 @@ export default function SelectMenu<T extends FieldValues>({
     multiValue: () => 'bg-neutral-400 dark:bg-neutral-400-dark',
     multiValueRemove: () => 'hover:bg-neutral-500',
   };
-  const customStyles: StylesConfig = {
+  const customStyles: StylesConfig<Option, IsMulti, GroupBase<Option>> = {
     // remove css attributes from predefined styles
     // this needs to be done so the custom css classes take effect
     control: (styles) =>

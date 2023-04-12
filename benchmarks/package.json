@@ -1,0 +1,25 @@
+{
+    "name": "benchmarks",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "benchmark": "playwright test"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "BSD",
+    "devDependencies": {
+        "@playwright/test": "^1.32.0",
+        "csv-parser": "^3.0.0",
+        "json2csv": "^6.0.0-alpha.2",
+        "lighthouse": "^9.6.8",
+        "pg": "^8.10.0",
+        "playwright": "^1.32.0",
+        "playwright-lighthouse": "^2.2.2"
+    },
+    "dependencies": {
+        "csvtojson": "^2.0.10",
+        "pg-promise": "^11.4.3"
+    }
+}
