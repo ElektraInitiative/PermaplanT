@@ -46,21 +46,36 @@
   From the seeds of a fruit you get again similar fruits.
 - raising (German: Anzucht, vorziehen)
 - (German: Vorkulturen)
+- Taxonomy:
+  A scientific classification of plants into hierarchical groups.
+  See [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy) for details.
 - Rank:
   Rank is a level within taxonomy.
-  There are:
-  - Variety (optional)
-  - Species or Hybrid
-  - Genus
-  - Subfamily (optional)
+  Plants within one taxonomic rank share traits with each other.
+  The levels relevant for PermaplanT are (high to low):
   - Family
+  - Subfamily (optional)
+  - Genus
+  - Species or Hybrid
+  - Variety (optional)
+- Family:
+  A taxonomic rank that consists of multiple genera or subfamilies.
+- Subfamily:
+  A taxonomic rank which is part of a family.
+  Consists of multiple genera.
+- Genus:
+  A taxonomic rank which is part of a family or subfamily.
+  Consists of multiple species.
+- Species:
+  A taxonomic rank which is part of a genus.
+  Can have multiple varieties.
+  Members of one species are able to breed and produce offspring.
 - Variety:
   Has the main characteristics of its species but differs in minor heritable characteristics.
 - Hybrid:
   Resulting individual from cross-pollination of species or varieties.
-- Traits:
 - (German: Sortenrein, ohne/wenig Vermischung anderer Sorten, wenig/keine Fremdbestäubung)
-- attributes (of plants):
+- attributes (traits):
   A characteristic of a variety, species, genus, subfamily or family.
   E.g. height, width, color, etc.
   Attributes can be defined on different levels of the hierarchy.
@@ -69,7 +84,7 @@
   Mutually beneficial way of growing plants together.
 - relationship:
   Two plants are in a non-neutral relationship if they either enhance (companion)
-  or diminish (antagonist) each others health and growth.
+  or diminish (antagonist) each other's health and growth.
 - companion (to plant according polyculture):
   Plants that should be planted together.
 - antagonist (to plant according polyculture):
