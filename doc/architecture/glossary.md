@@ -22,6 +22,23 @@
 - elements (of a map in a layer):
   Can be drawn or added to the map via drag and drop.
   They have _attributes_.
+- canvas context
+  - canvas node elements i.e. HTML representation of rectangle, circle, etc. on the canvas
+- map context
+  - layers and their attributes e.g. warning layer and its visibility
+- reversible deletion vs undo-redo functionality
+  - reversible deletion: a database entity i.e. map and plant is deleted and can be restored within a certain time
+  - undo-redo functionality: a user can undo and redo changes in the map, but the changes are local to the frontend and not stored in the database
+- lazy loading
+  - Lazy loading refers to the process of loading data on-demand, rather than loading everything upfront during the initial load of the app.
+- offloading of the frontend state
+  - the process of cleaning up the frontend state by removing data that has already been synchronized with the backend and is no longer needed. This can help to reduce the amount of unnecessary data in the frontend, which can improve the performance and efficiency of the application.
+- first contentful paint (FCP)
+  - the time it takes for the browser to render the first bit of content on the page.
+- time to interactive (TTI)
+  - the time it takes for the page to become fully interactive.
+- The Document Object Model (DOM)
+  - the data representation of the objects that comprise the structure and content of a document on the web.
 
 ## Biology
 
