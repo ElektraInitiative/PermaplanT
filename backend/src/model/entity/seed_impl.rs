@@ -3,6 +3,8 @@
 use diesel::{QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
+use crate::db::pagination::{Page, Paginate};
+use crate::model::dto::PageParameters;
 use crate::{
     model::dto::{NewSeedDto, SeedDto},
     schema::seeds::{self, all_columns},
@@ -11,13 +13,21 @@ use crate::{
 use super::{NewSeed, Seed};
 
 impl Seed {
-    /// Fetch all seeds from the database.
+    /// Get a page of seeds.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find_all(conn: &mut AsyncPgConnection) -> QueryResult<Vec<SeedDto>> {
-        let query_result = seeds::table.select(all_columns).load::<Self>(conn).await;
-        query_result.map(|v| v.into_iter().map(Into::into).collect())
+    pub async fn find(
+        page_parameters: PageParameters,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<Page<SeedDto>> {
+        let query_page = seeds::table
+            .select(all_columns)
+            .paginate(page_parameters.page)
+            .per_page(page_parameters.per_page)
+            .load_page::<Self>(conn)
+            .await;
+        query_page.map(Page::from)
     }
 
     /// Fetch seed by id from the database.

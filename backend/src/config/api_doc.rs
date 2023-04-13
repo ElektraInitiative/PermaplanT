@@ -15,7 +15,7 @@ use crate::{
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(seed::find_all, seed::create, seed::delete_by_id),
+#[openapi(paths(seed::find, seed::create, seed::delete_by_id),
         components(
             schemas(
                 SeedDto,

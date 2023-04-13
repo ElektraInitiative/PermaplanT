@@ -10,7 +10,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         web::scope("/api")
             .service(
                 web::scope("/seeds")
-                    .service(seed::find_all)
+                    .service(seed::find)
                     .service(seed::create)
                     .service(seed::delete_by_id)
                     .service(seed::find_by_id),
