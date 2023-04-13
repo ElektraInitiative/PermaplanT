@@ -70,6 +70,7 @@ E.g., a variety under a specie can have different height than the specie that it
 
 ## Unique Name
 
+In the database we have a column `unique_name`.
 The unique name are, either for abstract plants:
 
 - single latin word to specify "family", which always ends on: `-aceae`
@@ -124,21 +125,24 @@ Plants are additionally classified as:
 
 ### from Reinsaat
 
-- `L.`, `MIll.` can be removed
+- use `Scientific name subheading` together with `name` (as cultivar, see above) for our `unique_name`
+  (`Cucurbita ssp.` from `Scientific name kulturhinweise` shouldn't exist)
+- Remove all occurrences of `L.`, `MIll.`, and `var.`.
 - Entries on Reinsaat that are spelled like "Brassica oleracea convar. botrytis var. italica" (https://www.reinsaat.at/shop/EN/brassica/broccoli/limba/) exist in our database as "Brassica oleracea italica".
-  - Ignore the term "convar." and the following word.
-  - Ignore the "var.".
-  - Ignore the "ssp." and the "ssp." with its following word.
-- cultivar (de: Sorte) is a rank below variety and is expressed in non-latin words, such as 'Limba', and is mostly found aside the Latin name. In our database we want them back together in one name (the unique name). The spelling should be:
-  - cultivar name in single quotes.
-  - cultivar name capitalized.
-  - e.g. Brassica oleracea italica 'Limba' or Malus domestica 'Gala'.
-- Add the Reinsaat entry to our database in a different row with the following nomenclature: Brassica oleracea italica 'Limba'.
-- Use database information of "Brassica oleracea italica" (if no new information comes with "Limba", otherwise use all "Limba"-specific information and supplement with already existing data from database for higher rank).
-
-- Cucurbita ssp. --> Cucurbita maxima/pepo/moschata
+  Add the Reinsaat entry to our database in a different row with the following nomenclature:
+  Brassica oleracea italica 'Limba', with `Brassica oleracea italica` as parent, by following rules:
+  - Remove the term "convar." and its following word.
+  - Remove the "ssp." and its following word.
+- The `name` maps to cultivar (de: Sorte), i.e. a rank below variety and is expressed in non-latin words, such as 'Limba'.
+  In our database we want them:
+  - back together in one name (the unique name, as described above) e.g. Brassica oleracea italica 'Limba' or Malus domestica 'Gala'.
+  - with a link to the variety, if present, otherwise species
 - Daucus carota L. ssp. sativus --> Daucus carota sativus
 - Petroselinum crispum ssp. tuberosum --> Petroselinum crispum tuberosum
+- Papaver somnif. var. paeonifl. --> Papaver somniferum paeoniflorum
+- Alcea rosea fl. pl. --> Alcea rosea flore pleno
+- Campanula lat. macr. --> Campanula latifolia macrantha
+- Malva sylvestris ssp. maur. --> Malva sylvestris mauritiana
 
 - edible_uses (practicalplants) contains oil
 
