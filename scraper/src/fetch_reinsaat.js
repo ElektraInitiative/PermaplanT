@@ -139,10 +139,6 @@ const fetchThirdLevel = async (context, resultsArray, { name, category, subcateg
 
 /**
  * Fetch the subsublinks(2nd level) of a category.
- *
- * @param {*} context
- * @param {*} resultsArray
- * @param {*} param2
  */
 const fetchSubSublinks = async (context, resultsArray, { name, category, url }) => {
   // console.log('[INFO] Fetching subsublinks', name, category, url);
@@ -210,10 +206,10 @@ const fetchSublinks = async (browser, resultsArray, { category, url }) => {
  * Since the subcategories are loaded dynamically, we need to open each superlink in a new page.
  * Finally, write the results to a CSV file.
  *
- * @param {*} rootUrl
- * @param {*} outputCsvPath
- * @param {*} errorsCsvPath
- * @param {*} resultsArray
+ * @param {*} rootUrl - The root url of the website
+ * @param {*} outputCsvPath - The path to the output CSV file
+ * @param {*} errorsCsvPath - The path to the errors CSV file
+ * @param {*} resultsArray - The array to store the results
  */
 const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath, resultsArray) => {
   console.log('[INFO] Fetching plants');
@@ -257,6 +253,12 @@ const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath, resultsArra
   }
 };
 
+/**
+ * Write the results to a CSV file.
+ *
+ * @param {*} plants Array of plants
+ * @param {*} path Path to the CSV file
+ */
 function writeToCsv(plants, path) {
   if (!fs.existsSync('data')) {
     fs.mkdirSync('data');
