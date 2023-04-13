@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { parse as json2csv } from 'json2csv';
 import csv from 'csvtojson';
-import permapeopleColumnMapping from './column_mapping_permapeople.js';
+import permapeopleColumnMapping from './helpers/column_mapping_permapeople.js';
 import { sanitizeColumnNames } from './helpers/helpers.js';
 
 const finalColumnMapping = {
@@ -13,8 +13,8 @@ const renameColumns = async (plants, columnMapping) => {
 
   plants.forEach((plant) => {
     mappedColumns.forEach((column) => {
-      plant[column] = plant[columnMapping[column]];
-      delete plant[columnMapping[column]];
+      plant[column] = plant[columnMapping[column]['map']];
+      delete plant[columnMapping[column]['map']];
     });
   });
   return plants;
@@ -34,14 +34,31 @@ async function mergeDatasets() {
 
   practicalPlants = await renameColumns(practicalPlants, permapeopleColumnMapping);
 
+  console.log(Object.keys(permapeople[0]));
+
   practicalPlants.forEach((plant) => {
     const binomial_name = plant['binomial_name'];
     const plantInPermapeople = permapeople.find((plant) => plant.scientific_name === binomial_name);
     if (plantInPermapeople) {
-      allPlants.push({
-        ...plantInPermapeople,
-        ...plant,
+      const mergedPlant = {};
+      Object.keys(plantInPermapeople).forEach((key) => {
+        if (
+          key in mappedColumns &&
+          mappedColumns[key]['priority'] === 'permapeople' &&
+          !!plantInPermapeople[key]
+        ) {
+          mergedPlant[key] = plantInPermapeople[key];
+        } else if (
+          key in mappedColumns &&
+          mappedColumns[key]['priority'] === 'practicalplants' &&
+          !!plant[key]
+        ) {
+          mergedPlant[key] = plant[key];
+        } else {
+          mergedPlant[key] = plantInPermapeople[key] || plant[key];
+        }
       });
+      allPlants.push(mergedPlant);
     } else {
       allPlants.push({
         ...plant,
@@ -61,7 +78,7 @@ async function mergeDatasets() {
     }
   });
 
-  allPlants = renameColumns(allPlants, finalColumnMapping);
+  // allPlants = renameColumns(allPlants, finalColumnMapping);
 
   return allPlants;
 }
