@@ -4,14 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/parse.js",
     "fetch:permapeople": "node src/fetch_permapeople.js",
     "fetch:practicalplants": "node src/fetch_practicalplants.js",
-    "merge": "node src/merge_datasets.js",
+    "fetch:reinsaat": "node src/fetch_reinsaat.js",
+    "merge:datasets": "node src/merge_datasets.js",
+    "merge:csvfiles": "node src/helpers/merge_csv_files.js",
     "compare": "node src/compare_datasets.js",
-    "insert": "node src/insert_plants.js",
-    "merge_files": "node src/helpers/merge_files.js",
-    "fetch:reinsaat": "node src/fetch_reinsaat.js"
+    "insert": "node src/insert_plants.js"
   },
   "keywords": [],
   "author": "",
