@@ -224,6 +224,7 @@ Copy columns:
 - `Distances` should be copied to `spacing_en`
 - `Sowing depth` should be copied to `seed_planting_depth_en`
 - `1st harvest` should be copied to `days_to_harvest`
+- `Keimtemperatur` should be copied to `germination_temperature`
 
 Individual problems:
 
