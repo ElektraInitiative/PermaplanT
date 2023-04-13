@@ -170,6 +170,7 @@ Because it is impossible to type based on the chosen language, only the types of
 
 React:
 
+- [React Visualized](https://react.gg/visualized)
 - [The new React documentation (as of 16.03.2023)](https://react.dev/learn)
 - [Advanced and detailed blog](https://kentcdodds.com/blog?q=react)
 
@@ -177,6 +178,11 @@ Zustand (Global State Management):
 
 - [Tutorial](https://blog.logrocket.com/managing-react-state-zustand/)
 - [The Zustand documentation](https://github.com/pmndrs/zustand)
+
+React Query (Server State Management):
+
+- [Quick Start](https://tanstack.com/query/v4/docs/react/quick-start)
+- [Blog Of The Maintainer](https://tkdodo.eu/blog/all)
 
 Storybook:
 
