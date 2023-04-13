@@ -10,19 +10,22 @@
     "merge": "node src/merge_datasets.js",
     "compare": "node src/compare_datasets.js",
     "insert": "node src/insert_plants.js",
-    "merge_files": "node src/helpers/merge_files.js"
+    "merge_files": "node src/helpers/merge_files.js",
+    "fetch:reinsaat": "node src/fetch_reinsaat.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
   "dependencies": {
+    "@playwright/test": "^1.32.0",
     "axios": "^1.3.4",
     "csvtojson": "^2.0.10",
     "dotenv": "^16.0.3",
     "json2csv": "^6.0.0-alpha.2",
     "node-html-parser": "^6.1.4",
-    "pg-promise": "^11.2.0"
+    "p-limit": "^4.0.0",
+    "pg-promise": "^11.2.0",
+    "playwright": "^1.32.2"
   },
   "type": "module"
 }
