@@ -17,7 +17,7 @@
 - **Main success scenario:**
   - The user types something into the search text box.  
     This will search for partial matches of actual plants (not higher ranks) in:
-    - Scientific name
+    - Unique name
     - German common names
     - English common names
     - Furthermore, other columns can be matched with extra syntax (e.g. environmental fit or ecological value)
@@ -30,7 +30,7 @@
   - The resulting list is constructed (e.g., Tomatillo *Physalis philadelphica*):
     - common names according to language settings (German or English), if available, then
     - a hyphen `-` (if there was a common name), then
-    - *latin name* in italics
+    - unique name rendered as described in [hierarchy description](doc/database/hierarchy.md)
   - The matched part of the text should be bold.
 - **Alternative scenario:**
 - **Error scenario:**

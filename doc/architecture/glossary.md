@@ -42,53 +42,55 @@
 
 ## Biology
 
-- seedproof (German: Samenfest):
-  From the seeds of a fruit you get again similar fruits.
-- raising (German: Anzucht, vorziehen)
-- (German: Vorkulturen)
 - Taxonomy:
   A scientific classification of plants into hierarchical groups.
-  See [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy) for details.
+  As introduction read:
+  - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/) or
+  - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy).
 - Rank:
   Rank is a level within taxonomy.
   Plants within one taxonomic rank share traits with each other.
   The levels relevant for PermaplanT are (high to low):
   - Family
-  - Subfamily (optional)
   - Genus
   - Species or Hybrid
-  - Variety (optional)
+  - Variety
+  - Cultivar
 - Family:
-  A taxonomic rank that consists of multiple genera or subfamilies.
-- Subfamily:
-  A taxonomic rank which is part of a family.
-  Consists of multiple genera.
+  A taxonomic rank that consists of multiple genera.
 - Genus:
-  A taxonomic rank which is part of a family or subfamily.
+  A taxonomic rank which is part of a family.
   Consists of multiple species.
-- Species:
+- Species (German: Art):
   A taxonomic rank which is part of a genus.
-  Can have multiple varieties.
-  Members of one species are able to breed and produce offspring.
-- Variety:
-  Has the main characteristics of its species but differs in minor heritable characteristics.
+  Can have multiple varieties or cultivars.
+- Variety (German: Varietät):
+  Has the main characteristics of its species but differs in heritable characteristics.
+  Can have multiple cultivars.
+- Cultivar (abbreviated from cultivated variety, German: Sorte):
+  Has the main characteristics of its species or variety but differs in minor heritable characteristics.
+  These characteristics were cultivated on purpose.
 - Hybrid:
   Resulting individual from cross-pollination of species or varieties.
-- (German: Sortenrein, ohne/wenig Vermischung anderer Sorten, wenig/keine Fremdbestäubung)
-- attributes (traits):
+- Attributes (traits):
   A characteristic of a variety, species, genus, subfamily or family.
   E.g. height, width, color, etc.
   Attributes can be defined on different levels of the hierarchy.
   E.g. a variety can have a different height than the species it belongs to.
-- polyculture (aka companion planting, German: Mischkultur):
+- Polyculture (aka companion planting, German: Mischkultur):
   Mutually beneficial way of growing plants together.
-- relationship:
+- Relationship:
   Two plants are in a non-neutral relationship if they either enhance (companion)
   or diminish (antagonist) each other's health and growth.
-- companion (to plant according polyculture):
+- Companion (to plant according polyculture):
   Plants that should be planted together.
-- antagonist (to plant according polyculture):
+- Antagonist (to plant according polyculture):
   Plants that should be avoided next to each other.
+- Seedproof (German: Samenfest):
+  From the seeds of a fruit you get again similar fruits.
+- Raising (German: Anzucht, vorziehen)
+- (German: Vorkulturen)
+- (German: Sortenrein, ohne/wenig Vermischung anderer Sorten, wenig/keine Fremdbestäubung)
 - Zone (in permaculture, German: Permakultur Zonen):
   Is an area which has the same frequency of human visitors.
   The areas are numbered from:
