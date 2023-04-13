@@ -6,6 +6,7 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use crate::{
     controller::{plants, seed},
+    db::pagination::Page,
     model::{
         dto::{NewSeedDto, PlantsSummaryDto, SeedDto},
         r#enum::{quality::Quality, quantity::Quantity},
@@ -30,10 +31,10 @@ struct SeedApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plant endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(plants::find_all_or_search),
+#[openapi(paths(plants::find),
         components(
             schemas(
-                PlantsSummaryDto
+                Page<PlantsSummaryDto>
             )
         ),
         tags(
