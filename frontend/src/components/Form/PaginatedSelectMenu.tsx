@@ -1,6 +1,8 @@
+import filterObject from '@/utils/filterObject';
 import { SelectOption } from './SelectMenu';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { AsyncPaginate } from 'react-select-async-paginate';
+import { GroupBase, StylesConfig } from 'react-select';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
 
 /**
@@ -76,6 +78,25 @@ export default function SelectMenu<T extends FieldValues>({
     multiValue: () => 'bg-neutral-400 dark:bg-neutral-400-dark',
     multiValueRemove: () => 'hover:bg-neutral-500',
   };
+  
+  const customStyles: StylesConfig<T> = {
+    // remove css attributes from predefined styles
+    // this needs to be done so the custom css classes take effect
+    control: (styles) =>
+      filterObject(styles, [
+        'border',
+        'borderColor',
+        'borderRadius',
+        'boxShadow',
+        'color',
+        '&:hover',
+      ]),
+    option: (styles) => filterObject(styles, ['backgroundColor', 'color']),
+    singleValue: (styles) => filterObject(styles, ['color']),
+    multiValue: (styles) => filterObject(styles, ['color']),
+    multiValueLabel: (styles) => filterObject(styles, ['color']),
+    multiValueRemove: (styles) => filterObject(styles, ['color']),
+  };
 
   return (
     <div>
@@ -95,6 +116,7 @@ export default function SelectMenu<T extends FieldValues>({
             loadOptions={loadOptions}
             isClearable
             onChange={handleOptionsChange}
+            styles={customStyles}
             placeholder={placeholder}
             isMulti={isMulti}
             classNames={customClassNames}
