@@ -48,6 +48,7 @@
   As first introduction read:
   - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/) or
   - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy).
+  - [Garten Treffpunkt](https://www.garten-treffpunkt.de/lexikon/botanik.aspx)
 - Rank:
   Rank is a level within taxonomy.
   Plants within one taxonomic rank share traits with each other.
@@ -57,8 +58,10 @@
   - Species
   - Variety
   - Cultivar
-- Plant:
-  Is in an actually existing species, variety and cultivar (including trees etc.).
+- Concrete Plant:
+  Is in an actually existing species, variety and cultivar.
+- Abstract Plant:
+  Representants of ranks, which are not actually existing plants.
 - Family:
   A taxonomic rank that consists of multiple genera.
 - Genus:
@@ -74,7 +77,6 @@
   Has the main characteristics of its species or variety but differs in minor heritable characteristics.
   These characteristics were cultivated on purpose.
 - Hybrid:
-  Hybrid have a `x` in their unique name.
   Hybrids are otherwise not relevant for PermaplanT's functionality.
 - Attributes of plants (traits in scientific literature):
   A characteristic of a variety, species, genus, subfamily or family.

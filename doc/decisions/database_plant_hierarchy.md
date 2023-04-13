@@ -98,8 +98,7 @@ Here are some [example queries](example_migrations/normalized-plants-and-ranks/e
 ## Rationale
 
 Having everything in one table makes maintenance of the database easier:
-  - Attributes of plants, and especially icons, can be defined on any rank level.
-  - Some species cannot be planted, which makes the separation of concrete plants and taxonomy ranks vague vague.
+Attributes of plants, and especially icons, can be defined on any rank level.
 
 We need a unique name (across all entries) for updates.
 We call it unique name (and not scientific or Latin) because cultivar:
