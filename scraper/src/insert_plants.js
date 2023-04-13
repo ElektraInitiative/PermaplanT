@@ -1,6 +1,6 @@
 import pgPromise from 'pg-promise';
 import csv from 'csvtojson';
-import dbPlantsColumns from './dp_plants_columns.js';
+import dbPlantsColumns from './helpers/dp_plants_columns.js';
 import { sanitizeColumnNames } from './helpers/helpers.js';
 
 import { config } from 'dotenv';
@@ -8,7 +8,7 @@ config();
 const pgp = pgPromise({});
 
 const db = pgp(process.env.DATABASE_URL);
-const plantsFilePath = process.argv[2] || 'data/detail.csv';
+const plantsFilePath = process.argv[2] || 'data/mergedDatasets.csv';
 
 /**
  * Sanitizes the values of the json array

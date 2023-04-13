@@ -7,6 +7,7 @@ export default {
   name: {
     map: 'common_name',
     priority: 'permapeople',
+    newName: 'common_name_en',
   },
   slug: null,
   description: null,
@@ -15,6 +16,7 @@ export default {
   scientific_name: {
     map: 'binomial_name',
     priority: 'permapeople',
+    newName: 'scientific_name',
   },
   parent_id: null,
   version: null,
@@ -24,26 +26,32 @@ export default {
   usda_hardiness_zone: {
     map: 'hardiness_zone',
     priority: 'permapeople',
+    newName: 'hardiness_zone',
   },
   life_cycle: {
     map: 'life_cycle',
     priority: 'permapeople',
+    newName: 'life_cycle',
   },
   light_requirement: {
     map: 'sun',
     priority: 'permapeople',
+    newName: 'light_requirement',
   },
   water_requirement: {
     map: 'water',
     priority: 'permapeople',
+    newName: 'water_requirement',
   },
   soil_type: {
     map: 'soil_texture',
     priority: 'permapeople',
+    newName: 'soil_type',
   },
   height: {
     map: 'mature_size_height',
     priority: 'permapeople',
+    newName: 'height',
   },
   layer: null,
   edible_parts: null,
@@ -52,28 +60,34 @@ export default {
   growth: {
     map: 'growth_rate',
     priority: 'permapeople',
+    newName: 'growth',
   },
   alternate_name: null,
   family: {
     map: 'family',
     priority: 'permapeople',
+    newName: 'family',
   },
   german_name: {
     map: 'common_name_de',
     priority: 'permapeople',
+    newName: 'common_name_de',
   },
   edible_uses: {
     map: 'edible_uses',
     priority: 'permapeople',
+    newName: 'edible_uses',
   },
   plants_for_a_future: null,
   medicinal: {
     map: 'medicinal_uses',
     priority: 'permapeople',
+    newName: 'medicinal_uses',
   },
   soil_ph: {
     map: 'soil_ph',
     priority: 'permapeople',
+    newName: 'soil_ph',
   },
   propagation_transplanting: null,
   germination_time: null,
@@ -93,7 +107,11 @@ export default {
   when_to_start_outdoors_weeks: null,
   days_to_harvest: null,
   when_to_sow_indoors: null,
-  '1000_seed_weight_g': null,
+  '1000_seed_weight_g': {
+    map: null,
+    priority: 'permapeople',
+    newName: 'seed_weight_g',
+  },
   seed_planting_depth: null,
   dutch_name: null,
   leaves: null,
@@ -103,21 +121,25 @@ export default {
   drought_resistant: {
     map: 'has_drought_tolerance',
     priority: 'permapeople',
+    newName: 'drought_resistant',
   },
   habitat: {
     map: 'environment',
     priority: 'permapeople',
+    newName: 'environment',
   },
   cold_stratification_temperature: null,
   cold_stratification_time: null,
   genus: {
     map: 'genus',
     priority: 'permapeople',
+    newName: 'genus',
   },
   danish_name: null,
   root_depth: {
     map: 'root_zone_tendency',
     priority: 'permapeople',
+    newName: 'root_depth',
   },
   medicinal_parts: null,
   when_to_plant_division: null,

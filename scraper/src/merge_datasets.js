@@ -4,12 +4,29 @@ import csv from 'csvtojson';
 import permapeopleColumnMapping from './helpers/column_mapping_permapeople.js';
 import { sanitizeColumnNames } from './helpers/helpers.js';
 
-const finalColumnMapping = {
-  common_name: 'common_name_en',
+const renameColumns2 = (plants, columnMapping) => {
+  const mappedColumns = Object.keys(columnMapping).filter(
+    (key) => columnMapping[key] !== null && columnMapping[key]['newName'] !== null,
+  );
+
+  plants.forEach((plant) => {
+    console.log(plant['scientific_name']);
+    mappedColumns.forEach((column) => {
+      // console.log(columnMapping[column]['newName'], column);
+      plant[columnMapping[column]['newName']] = plant[column];
+      if (column !== columnMapping[column]['newName']) {
+        delete plant[column];
+      }
+    });
+  });
+
+  return plants;
 };
 
 const renameColumns = async (plants, columnMapping) => {
-  const mappedColumns = Object.keys(columnMapping).filter((key) => columnMapping[key] !== null);
+  const mappedColumns = Object.keys(columnMapping).filter(
+    (key) => columnMapping[key] !== null && columnMapping[key]['map'] !== null,
+  );
 
   plants.forEach((plant) => {
     mappedColumns.forEach((column) => {
@@ -33,8 +50,6 @@ async function mergeDatasets() {
   sanitizeColumnNames(permapeople);
 
   practicalPlants = await renameColumns(practicalPlants, permapeopleColumnMapping);
-
-  console.log(Object.keys(permapeople[0]));
 
   practicalPlants.forEach((plant) => {
     const binomial_name = plant['binomial_name'];
@@ -78,8 +93,6 @@ async function mergeDatasets() {
     }
   });
 
-  // allPlants = renameColumns(allPlants, finalColumnMapping);
-
   return allPlants;
 }
 
@@ -87,9 +100,12 @@ function writePlantsToCsv(plants) {
   if (!fs.existsSync('data')) {
     fs.mkdirSync('data');
   }
-  const csv = json2csv(plants);
+
+  const updatedPlants = renameColumns2(plants, permapeopleColumnMapping);
+
+  const csv = json2csv(updatedPlants);
   fs.writeFileSync('data/mergedDatasets.csv', csv);
-  return plants;
+  return updatedPlants;
 }
 
 mergeDatasets()
