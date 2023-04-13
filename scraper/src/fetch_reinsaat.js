@@ -4,11 +4,17 @@ import { parse as json2csv } from 'json2csv';
 import pLimit from 'p-limit';
 
 const results = [];
+const resultsDE = [];
 const errors = [];
 const limit = pLimit(1);
+const limitSubSublinks = pLimit(3);
 
+/**
+ * Fetch the data of a plant.
+ */
 const fetchPlant = async (
   context,
+  resultsArray,
   { name, category = null, subcategory = null, subsubsubcategory = null, url },
 ) => {
   const page = await context.newPage();
@@ -88,14 +94,17 @@ const fetchPlant = async (
       plant['Suitable for professional cultivation'] = isSuitableForCultivation;
     }
 
-    results.push(plant);
+    resultsArray.push(plant);
   } catch (error) {
     console.error('[ERROR] Error fetching plant', name, category, subcategory, url, error);
     errors.push({ name, category, subcategory, url, error });
   }
 };
 
-const fetchThirdLevel = async (context, { name, category, subcategory, url }) => {
+/**
+ *  Fetch the subsubsublinks(3rd level) of a category.
+ */
+const fetchThirdLevel = async (context, resultsArray, { name, category, subcategory, url }) => {
   // console.log('[INFO] Fetching subsubsublinks', name, category, url);
   const page = await context.newPage();
   await page.goto(url);
@@ -115,7 +124,7 @@ const fetchThirdLevel = async (context, { name, category, subcategory, url }) =>
   if (subsubsublinks.length > 0) {
     await Promise.all(
       subsubsublinks.map((subsubsublink) =>
-        fetchPlant(context, {
+        fetchPlant(context, resultsArray, {
           ...subsubsublink,
           subcategory,
           category,
@@ -124,11 +133,18 @@ const fetchThirdLevel = async (context, { name, category, subcategory, url }) =>
       ),
     );
   } else {
-    await fetchPlant(context, { name, category, subcategory, url });
+    await fetchPlant(context, resultsArray, { name, category, subcategory, url });
   }
 };
 
-const fetchSubSublinks = async (context, { name, category, url }) => {
+/**
+ * Fetch the subsublinks(2nd level) of a category.
+ *
+ * @param {*} context
+ * @param {*} resultsArray
+ * @param {*} param2
+ */
+const fetchSubSublinks = async (context, resultsArray, { name, category, url }) => {
   // console.log('[INFO] Fetching subsublinks', name, category, url);
   const page = await context.newPage();
   await page.goto(url);
@@ -149,15 +165,18 @@ const fetchSubSublinks = async (context, { name, category, url }) => {
   if (subsublinks.length > 0) {
     await Promise.all(
       subsublinks.map((subsublinks) =>
-        fetchThirdLevel(context, { ...subsublinks, subcategory: name, category }),
+        fetchThirdLevel(context, resultsArray, { ...subsublinks, subcategory: name, category }),
       ),
     );
   } else {
-    await fetchPlant(context, { name, category, url });
+    await fetchPlant(context, resultsArray, { name, category, url });
   }
 };
 
-const fetchSublinks = async (browser, { category, url }) => {
+/**
+ * Fetch the sublinks(1st level) of a category.
+ */
+const fetchSublinks = async (browser, resultsArray, { category, url }) => {
   // console.log('[INFO] Fetching sublinks', category, url);
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -176,13 +195,27 @@ const fetchSublinks = async (browser, { category, url }) => {
   await page.close();
   await Promise.all(
     sublinks.map((sublink) => {
-      return limit(() => fetchSubSublinks(context, { ...sublink, category }));
+      return limitSubSublinks(() =>
+        fetchSubSublinks(context, resultsArray, { ...sublink, category }),
+      );
     }),
   );
   await context.close();
 };
 
-const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath) => {
+/**
+ * Fetches all plants from the website.
+ *
+ * Collect all superlinks i.e. categories from the navigation bar.
+ * Since the subcategories are loaded dynamically, we need to open each superlink in a new page.
+ * Finally, write the results to a CSV file.
+ *
+ * @param {*} rootUrl
+ * @param {*} outputCsvPath
+ * @param {*} errorsCsvPath
+ * @param {*} resultsArray
+ */
+const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath, resultsArray) => {
   console.log('[INFO] Fetching plants');
   const browser = await chromium.launch();
 
@@ -201,11 +234,15 @@ const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath) => {
     console.log('[INFO] Found superlinks', superlinks.length);
     await page.close();
 
-    await Promise.all(superlinks.map((superlink) => fetchSublinks(browser, superlink)));
+    await Promise.all(
+      superlinks.map((superlink) => {
+        return limit(() => fetchSublinks(browser, resultsArray, superlink));
+      }),
+    );
     await browser.close();
     console.log('[INFO] Done fetching plants');
-    console.log('[INFO] Writing to CSV. Length:', results.length);
-    writeToCsv(results, outputCsvPath);
+    console.log('[INFO] Writing to CSV. Length:', resultsArray.length);
+    writeToCsv(resultsArray, outputCsvPath);
     console.log('[INFO] Done writing to CSV');
   } catch (error) {
     console.error(error);
@@ -239,16 +276,21 @@ function writeToCsv(plants, path) {
   fs.writeFileSync(path, csv);
 }
 
+/**
+ * Fetch both languages
+ */
 const fetchReinsaat = async () => {
   await fetchAllPlants(
     'https://www.reinsaat.at/shop/EN/',
     'data/reinsaatRawDataEN.csv',
     'data/reinsaatErrorsEN.csv',
+    results,
   );
   await fetchAllPlants(
     'https://www.reinsaat.at/shop/DE',
     'data/reinsaatRawDataDE.csv',
     'data/reinsaatErrorsDE.csv',
+    resultsDE,
   );
 };
 

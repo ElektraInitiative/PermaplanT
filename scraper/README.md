@@ -4,6 +4,7 @@ This directory contains the following scrapers:
 
 - [PracticalPlants](#scraper-for-practical-plants)
 - [Permapeople](#scraper-for-permapeople)
+- [Reinsaat](#scraper-for-reinsaat)
 
 # Scraper for PracticalPlants
 
@@ -165,6 +166,9 @@ There are 3 possible cases:
 
 # Scraper for Reinsaat
 
+There is no open API for the Reinsaat webpage.
+Therefore, we need to scrape the data from the webpage, whic can be found [here](https://www.reinsaat.at/).
+
 ## Requirements
 
 - nodejs v14.21.2
@@ -188,4 +192,5 @@ npm run fetch:reinsaat
 
 The following CSV files will be generated in the `data` directory:
 
-- `reinsaatRawData.csv`: This file contains the raw data scraped from the Reinsaat webpage.
+- `reinsaatRawDataEN.csv`: This file contains the raw data scraped from the english version of the Reinsaat webpage.
+- `reinsaatRawDataDE.csv`: This file contains the raw data scraped from the german version of the Reinsaat webpage.

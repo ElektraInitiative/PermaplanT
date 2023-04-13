@@ -1,4 +1,7 @@
-const columnMapping = {
+/**
+ * Column translations for Reinsaat data
+ */
+const columnTranslationsReinsaat = {
   name: 'name',
   category: 'category',
   subcategory: 'subcategory',
@@ -38,4 +41,4 @@ const columnMapping = {
   Abstände: 'Distances',
 };
 
-export default columnMapping;
+export default columnTranslationsReinsaat;

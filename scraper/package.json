@@ -9,7 +9,7 @@
     "compare": "node src/compare_datasets.js",
     "insert": "node src/insert_plant_details.js",
     "merge": "node src/merge.js",
-    "fetch:reinsaat": "node src/fetch_reinsaat2.js"
+    "fetch:reinsaat": "node src/fetch_reinsaat.js"
   },
   "keywords": [],
   "author": "",
