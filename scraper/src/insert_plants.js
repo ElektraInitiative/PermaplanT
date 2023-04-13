@@ -33,7 +33,11 @@ function sanitizeValues(jsonArray) {
         (newKey === 'fertility' && obj[newKey] !== null) ||
         (newKey === 'life_cycle' && obj[newKey] !== null) ||
         (newKey === 'common_name' && obj[newKey] !== null) ||
-        (newKey === 'common_name_de' && obj[newKey] !== null)
+        (newKey === 'common_name_de' && obj[newKey] !== null) ||
+        (newKey === 'light_requirement' && obj[newKey] !== null) ||
+        (newKey === 'water_requirement' && obj[newKey] !== null) ||
+        (newKey === 'growth' && obj[newKey] !== null) ||
+        (newKey === 'propagation_method' && obj[newKey] !== null)
       ) {
         obj[newKey] = obj[newKey].split(',');
         obj[newKey] = obj[newKey].map((item) => {

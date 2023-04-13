@@ -31,6 +31,17 @@ const renameColumns = async (plants, columnMapping) => {
   plants.forEach((plant) => {
     mappedColumns.forEach((column) => {
       plant[column] = plant[columnMapping[column]['map']];
+      if (!!columnMapping[column]['valueMapping']) {
+        plant[column] = plant[column]
+          .split(',')
+          .map((value) => {
+            if (columnMapping[column]['valueMapping'][value]) {
+              return columnMapping[column]['valueMapping'][value];
+            }
+            return value;
+          })
+          .join(',');
+      }
       delete plant[columnMapping[column]['map']];
     });
   });

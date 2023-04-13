@@ -8,12 +8,12 @@ ALTER TABLE plants DROP COLUMN hardiness_zone;
 ALTER TABLE plants
     RENAME COLUMN hardiness_zone_range TO hardiness_zone;
 -- Light_requirement
-CREATE TYPE LIGHT_REQUIREMENT AS ENUM ('Full Sun', 'Partial sun/shade', 'Full shade');
+CREATE TYPE LIGHT_REQUIREMENT AS ENUM ('Full sun', 'Partial sun/shade', 'Full shade');
 ALTER TABLE plants
 ADD COLUMN new_light_requirement LIGHT_REQUIREMENT [];
 UPDATE plants
 SET new_light_requirement = CASE
-        WHEN light_requirement = 'full sun' THEN ARRAY ['Full Sun'::LIGHT_REQUIREMENT]
+        WHEN light_requirement = 'full sun' THEN ARRAY ['Full sun'::LIGHT_REQUIREMENT]
         WHEN light_requirement = 'partial sun' THEN ARRAY ['Partial sun/shade'::LIGHT_REQUIREMENT]
         WHEN light_requirement = 'indirect sun' THEN ARRAY ['Full shade'::LIGHT_REQUIREMENT]
         ELSE NULL

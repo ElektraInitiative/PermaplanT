@@ -37,16 +37,32 @@ export default {
     map: 'sun',
     priority: 'permapeople',
     newName: 'light_requirement',
+    valueMapping: {
+      'full sun': 'Full sun',
+      'partial sun': 'Partial sun/shade',
+      'indirect sun': 'Full shade',
+    },
   },
   water_requirement: {
     map: 'water',
     priority: 'permapeople',
     newName: 'water_requirement',
+    valueMapping: {
+      low: 'Dry',
+      moderate: 'Moist',
+      high: 'Wet',
+      aquatic: 'Water',
+    },
   },
   soil_type: {
     map: 'soil_texture',
     priority: 'permapeople',
-    newName: 'soil_type',
+    newName: 'soil_texture',
+    valueMapping: {
+      'Light (sandy)': 'Light',
+      Medium: 'loamy',
+      'Heavy (clay)': 'clay',
+    },
   },
   height: {
     map: 'mature_size_height',
@@ -61,6 +77,11 @@ export default {
     map: 'growth_rate',
     priority: 'permapeople',
     newName: 'growth',
+    valueMapping: {
+      Slow: 'slow',
+      Moderate: 'moderate',
+      Fast: 'vigorous',
+    },
   },
   alternate_name: null,
   family: {
@@ -120,7 +141,7 @@ export default {
   when_to_plant_cuttings: null,
   drought_resistant: {
     map: 'has_drought_tolerance',
-    priority: 'permapeople',
+    priority: 'practicalplants',
     newName: 'drought_resistant',
   },
   habitat: {

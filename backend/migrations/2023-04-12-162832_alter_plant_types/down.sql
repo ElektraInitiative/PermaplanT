@@ -19,7 +19,7 @@ ALTER TABLE plants
 ADD COLUMN new_light_requirement SUN;
 UPDATE plants
 SET new_light_requirement = CASE
-        WHEN light_requirement = ARRAY ['Full Sun'::LIGHT_REQUIREMENT] THEN 'full sun'::SUN
+        WHEN light_requirement = ARRAY ['Full sun'::LIGHT_REQUIREMENT] THEN 'full sun'::SUN
         WHEN light_requirement = ARRAY ['Partial sun/shade'::LIGHT_REQUIREMENT] THEN 'partial sun'::SUN
         WHEN light_requirement = ARRAY ['Full shade'::LIGHT_REQUIREMENT] THEN 'indirect sun'::SUN
         ELSE NULL
