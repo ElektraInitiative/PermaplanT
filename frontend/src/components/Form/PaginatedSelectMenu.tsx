@@ -23,10 +23,7 @@ export interface PageAdditionalInfo {
   page: number;
 }
 
-export interface PaginatedSelectMenuProps<
-  T extends FieldValues,
-  IsMulti extends boolean = false,
-> {
+export interface PaginatedSelectMenuProps<T extends FieldValues, IsMulti extends boolean = false> {
   isMulti?: IsMulti;
   id: Path<T>;
   labelText?: string;
@@ -44,10 +41,7 @@ export interface PaginatedSelectMenuProps<
   onInputChange?: (inputValue: string) => void;
 }
 
-export default function SelectMenu<
-  T extends FieldValues,
-  IsMulti extends boolean = false,
->({
+export default function SelectMenu<T extends FieldValues, IsMulti extends boolean = false>({
   isMulti = false as IsMulti,
   id,
   labelText,
