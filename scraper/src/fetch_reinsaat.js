@@ -72,6 +72,11 @@ const fetchPlant = async (
 
     if (growingInfo) {
       const paragraphs = await growingInfo.$$('p');
+      const scientificName = await growingInfo.$('p>em');
+      if (scientificName) {
+        plant['Scientific name'] = await scientificName.innerText();
+      }
+
       for (const paragraph of paragraphs) {
         const strong = await paragraph.$('strong');
         if (strong) {
@@ -92,6 +97,12 @@ const fetchPlant = async (
         'img[src="/shop/Bibliothek/medial_lib/product_icons/traktor.svg"]',
       ));
       plant['Suitable for professional cultivation'] = isSuitableForCultivation;
+    }
+
+    if (!plant['Scientific name']) {
+      const fceShopKurztext = await page.$('.fce_shop_kurztext');
+      plant['Scientific name'] = await fceShopKurztext.innerText();
+      plant['Scientific name'] = plant['Scientific name'].trim();
     }
 
     resultsArray.push(plant);
