@@ -110,7 +110,7 @@ export default {
   edible_uses: {
     map: 'edible_uses',
     priority: 'permapeople',
-    newName: 'edible_uses',
+    newName: 'edible_uses_en',
   },
   plants_for_a_future: null,
   medicinal: {
@@ -125,7 +125,9 @@ export default {
   },
   propagation_transplanting: null,
   germination_time: null,
-  when_to_sow_outdoors: null,
+  when_to_sow_outdoors: {
+    newName: 'sowing_outdoors_en',
+  },
   utility: null,
   edible: null,
   native_to: null,
@@ -136,7 +138,9 @@ export default {
   seed_viability: null,
   when_to_plant_transplant: null,
   days_to_maturity: null,
-  spacing: null,
+  spacing: {
+    newName: 'spacing_en',
+  },
   germination_temperature: null,
   when_to_start_outdoors_weeks: null,
   days_to_harvest: null,
@@ -146,7 +150,9 @@ export default {
     priority: 'permapeople',
     newName: 'seed_weight_g',
   },
-  seed_planting_depth: null,
+  seed_planting_depth: {
+    newName: 'seed_planting_depth_en',
+  },
   dutch_name: null,
   leaves: null,
   warning: null,
@@ -155,7 +161,7 @@ export default {
   drought_resistant: {
     map: 'has_drought_tolerance',
     priority: 'practicalplants',
-    newName: 'drought_resistant',
+    newName: 'has_drought_tolerance',
   },
   habitat: {
     map: 'environment',
