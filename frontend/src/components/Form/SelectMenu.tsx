@@ -1,8 +1,9 @@
 import filterObject from '@/utils/filterObject';
+import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import Select, { ActionMeta, GroupBase, MultiValue, SingleValue, StylesConfig } from 'react-select';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
-import {useState} from 'react';
+
 export interface SelectOption {
   value: string | number;
   label: string;
@@ -89,7 +90,7 @@ export default function SelectMenu<
   };
 
   const [inputValue, setInputValue] = useState('');
-  
+
   return (
     <div>
       {labelText && (
