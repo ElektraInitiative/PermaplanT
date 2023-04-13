@@ -1,5 +1,6 @@
 import { SelectOption } from './SelectMenu';
 import filterObject from '@/utils/filterObject';
+import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import {
   ActionMeta,
@@ -10,7 +11,6 @@ import {
   StylesConfig,
 } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import {useState} from 'react';
 
 export interface CreatableSelectMenuProps<
   T extends FieldValues,
@@ -95,7 +95,7 @@ export default function CreatableSelectMenu<
   };
 
   const [inputValue, setInputValue] = useState('');
-  
+
   return (
     <div>
       {labelText && (

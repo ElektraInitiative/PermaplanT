@@ -1,8 +1,8 @@
 import { SelectOption } from './SelectMenu';
+import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { AsyncPaginate } from 'react-select-async-paginate';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
-import { useState } from 'react';
 
 /**
  * Contains the information needed by react-select-async-paginate for loading a single page.
@@ -77,7 +77,7 @@ export default function SelectMenu<T extends FieldValues>({
     multiValue: () => 'bg-neutral-400 dark:bg-neutral-400-dark',
     multiValueRemove: () => 'hover:bg-neutral-500',
   };
-  
+
   const [inputValue, setInputValue] = useState('');
 
   return (
