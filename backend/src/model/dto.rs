@@ -77,8 +77,8 @@ pub struct PlantsSearchParameters {
 pub struct PageParameters {
     /// The system will check if this string occurs in the plants common name or binomial name.
     /// How many plants will be part of a single page.
-    pub per_page: Option<i64>,
+    pub per_page: Option<i32>,
     /// Which page should be returned.
     /// Note: pages start at one.
-    pub page: Option<i64>,
+    pub page: Option<i32>,
 }
