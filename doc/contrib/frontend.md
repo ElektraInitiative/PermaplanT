@@ -78,6 +78,17 @@ Take of example a button component that is used as the login button.
 
 That has the added benefit, that presentational components can be easily integrated into Storybook.
 
+## Bootstrapping (Order of Execution)
+
+The entry point for the frontend is `src/main.tsx`.
+From there three modules get imported `src/Root.tsx`, `src/App.tsx` and `src/config/index.ts`.
+All top level statements will also be executed during this module loading.
+This is true for the following in this order:
+
+1. Environment configuration `src/config/env.ts`
+2. i18n configuration `src/config/i18n/index.ts`
+3. axios configuration `src/config/index.ts`
+
 ## Internationalization
 
 For internationalization we use [react-i18next](https://react.i18next.com/latest/usetranslation-hook), which is a powerful framework to provide translation functionality and more.
