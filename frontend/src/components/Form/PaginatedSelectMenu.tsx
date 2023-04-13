@@ -21,7 +21,7 @@ export interface Page {
  * See https://github.com/vtaits/react-select-async-paginate/tree/master/packages/react-select-async-paginate#loadoptions for more information.
  */
 export interface PageAdditionalInfo {
-  page: number;
+  pageNumber: number;
 }
 
 export interface PaginatedSelectMenuProps<T extends FieldValues, IsMulti extends boolean = false> {
