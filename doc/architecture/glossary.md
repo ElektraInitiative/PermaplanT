@@ -43,8 +43,9 @@
 ## Biology
 
 - Taxonomy:
-  A scientific classification of plants into hierarchical groups.
-  As introduction read:
+  A scientific classification of plants into a hierarchy.
+  The hierarchy we use is described [here](/doc/database/hierarchy.md).
+  As first introduction read:
   - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/) or
   - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy).
 - Rank:
@@ -53,9 +54,11 @@
   The levels relevant for PermaplanT are (high to low):
   - Family
   - Genus
-  - Species or Hybrid
+  - Species
   - Variety
   - Cultivar
+- Plant:
+  Is in an actually existing species, variety and cultivar (including trees etc.).
 - Family:
   A taxonomic rank that consists of multiple genera.
 - Genus:
@@ -71,8 +74,9 @@
   Has the main characteristics of its species or variety but differs in minor heritable characteristics.
   These characteristics were cultivated on purpose.
 - Hybrid:
-  Resulting individual from cross-pollination of species or varieties.
-- Attributes (traits):
+  Hybrid have a `x` in their unique name.
+  Hybrids are otherwise not relevant for PermaplanT's functionality.
+- Attributes of plants (traits in scientific literature):
   A characteristic of a variety, species, genus, subfamily or family.
   E.g. height, width, color, etc.
   Attributes can be defined on different levels of the hierarchy.
