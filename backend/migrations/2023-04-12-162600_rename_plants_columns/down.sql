@@ -15,3 +15,5 @@ ALTER TABLE plants
     RENAME column height TO mature_size_height;
 ALTER TABLE plants
     RENAME column growth TO growth_rate;
+ALTER TABLE plants
+    RENAME column width TO mature_size_width;

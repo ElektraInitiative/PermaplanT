@@ -46,4 +46,4 @@ ALTER COLUMN flower_colour TYPE TEXT USING flower_colour::TEXT;
 ALTER TABLE plants
 ALTER COLUMN height TYPE TEXT USING height::TEXT;
 ALTER TABLE plants
-ALTER COLUMN mature_size_width TYPE TEXT USING mature_size_width::TEXT;
+ALTER COLUMN width TYPE TEXT USING width::TEXT;
