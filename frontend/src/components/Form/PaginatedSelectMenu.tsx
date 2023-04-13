@@ -1,18 +1,16 @@
-import filterObject from '@/utils/filterObject';
-import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import StylesConfig from 'react-select';
-import AnycPaginate, { AsyncPaginate } from 'react-select-async-paginate';
-import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
 import { SelectOption } from './SelectMenu';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { AsyncPaginate } from 'react-select-async-paginate';
+import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
 
 /**
  * Contains the information needed by react-select-async-paginate for loading a single page.
  * See https://github.com/vtaits/react-select-async-paginate/tree/master/packages/react-select-async-paginate#loadoptions for more information.
  */
 export interface Page {
-  options: SelectOption[],
-  hasMore: boolean,
-  additional: PageAdditionalInfo,
+  options: SelectOption[];
+  hasMore: boolean;
+  additional: PageAdditionalInfo;
 }
 
 /**
@@ -20,7 +18,7 @@ export interface Page {
  * See https://github.com/vtaits/react-select-async-paginate/tree/master/packages/react-select-async-paginate#loadoptions for more information.
  */
 export interface PageAdditionalInfo {
-  page: number
+  page: number;
 }
 
 export interface PaginatedSelectMenuProps<T extends FieldValues> {
@@ -31,7 +29,11 @@ export interface PaginatedSelectMenuProps<T extends FieldValues> {
   required?: boolean;
   placeholder?: string;
   debounceTimeout?: number;
-  loadOptions: (search: string, old_options: unknown, additional: PageAdditionalInfo | undefined) => Promise<Page>;
+  loadOptions: (
+    search: string,
+    old_options: unknown,
+    additional: PageAdditionalInfo | undefined,
+  ) => Promise<Page>;
   handleOptionsChange?: (option: unknown) => void;
   onChange?: () => void;
   onInputChange?: (inputValue: string) => void;
@@ -95,7 +97,6 @@ export default function SelectMenu<T extends FieldValues>({
             onChange={handleOptionsChange}
             placeholder={placeholder}
             isMulti={isMulti}
-            //styles={customStyles}
             classNames={customClassNames}
             required={required}
             onInputChange={(inputValue) => {

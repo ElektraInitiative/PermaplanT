@@ -5,7 +5,7 @@
 - **Scope:** All Layers
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** User saves and loads different versions of a layer
+- **Brief:** User saves and loads different versions of a map
 - **Status:** Assigned
 - **Assignee:** Paul
 
@@ -16,7 +16,7 @@
 - **Main success scenario:**
 
   - User saves the current version of the map.
-  - User gives the version a name.
+  - User gives the version a name (optional).
   - User modifies the map.
   - User loads another version of the map by selecting
     -      the name or time of a version, and

@@ -23,7 +23,7 @@ const Testimonials = () => {
                 <a className="inline-flex items-center">
                   <img
                     alt="testimonial"
-                    src="https://dummyimage.com/106x106"
+                    src=""
                     className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
                   />
                   <span className="flex flex-grow flex-col pl-4">
@@ -53,7 +53,7 @@ const Testimonials = () => {
                 <a className="inline-flex items-center">
                   <img
                     alt="testimonial"
-                    src="https://dummyimage.com/107x107"
+                    src=""
                     className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
                   />
                   <span className="flex flex-grow flex-col pl-4">

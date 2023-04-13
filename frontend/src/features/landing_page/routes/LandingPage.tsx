@@ -1,29 +1,35 @@
+import Footer from '../../../components/Layout/Footer';
 import '../../../styles/geoMap.css';
-
 import BlogOverview from '../components/BlogOverview';
-import CTA from '../components/CTA';
 import ContactUs from '../components/ContactUs';
 import Features from '../components/Features';
-import Footer from '../../../components/Layout/Footer';
+import { GeoMap } from '../components/GeoMap';
+import { PhotoGallery } from '../components/PhotoGallery';
 import Pricing from '../components/Pricing';
 import Team from '../components/Team';
-import Testimonials from '../components/Testimonials';
 import WidePageLayout from '@/components/Layout/WidePageLayout';
 
 export const LandingPage = () => {
   return (
     <WidePageLayout>
       <div className="mb-8 flex flex-col items-center p-8">
+        <img
+          className="mt-10"
+          id="home"
+          src="/permaplant-logo-2-colors.svg"
+          alt="PermaplanT drawing"
+        />
         <Features />
-        <Testimonials />
-        {/*
-        map overlaps with navbar. playing around with zIndex didn't work so far
-        <GeoMap />
-         */}
-        <Pricing />
-        <CTA />
-        <BlogOverview />
+        <h2 className="mt-12 mb-4 border-l-2 border-neutral-400 pl-4" id="map">
+          The PermaplanT world
+        </h2>
+        <div className="mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-10">
+          <GeoMap />
+        </div>
         <Team />
+        <BlogOverview />
+        <PhotoGallery />
+        <Pricing />
         <ContactUs />
       </div>
       <Footer />

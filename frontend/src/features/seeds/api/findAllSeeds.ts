@@ -1,7 +1,6 @@
 import { SeedDto } from '@/bindings/definitions';
-
-import axios from 'axios';
 import { baseApiUrl } from '@/config';
+import axios from 'axios';
 
 export const findAllSeeds = async (): Promise<SeedDto[]> => {
   try {

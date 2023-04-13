@@ -1,6 +1,6 @@
 import { SeedDto } from '../../../bindings/definitions';
-import { create } from 'zustand';
 import { findAllSeeds } from '../api/findAllSeeds';
+import { create } from 'zustand';
 
 interface FindSeedsStore {
   isFetchingSeeds: boolean;

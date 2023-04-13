@@ -1,4 +1,4 @@
-import { PlantsSearchDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantsSearchDto } from '@/bindings/definitions';
 import { baseApiUrl } from '@/config';
 import axios from 'axios';
 
@@ -12,10 +12,8 @@ export const searchPlants = async (searchTerm: string, page: number): Promise<Pl
     searchParams.append('limit', '10');
     searchParams.append('page', pageString);
 
-    const response = await axios.get<PlantsSearchDto>(
-      `${baseApiUrl}/api/plants?${searchParams}`,
-    );
-    
+    const response = await axios.get<PlantsSearchDto>(`${baseApiUrl}/api/plants?${searchParams}`);
+
     return response.data;
   } catch (error) {
     throw error as Error;
