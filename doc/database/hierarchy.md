@@ -89,7 +89,7 @@ E.g. `Brassica oleracea italica 'Ramoso calabrese'`
 
 Hybrid names are built up differently.
 Either two parent binomials, separated by a "x" or "×" or a given binomial, with or without an intercalated "×"
-(see [Wikipedia](https://en.wikipedia.org/wiki/Hybrid_name).
+(see [Wikipedia](https://en.wikipedia.org/wiki/Hybrid_name)).
 So the name does not necessarily say if a plant is a hybrid.
 
 ### Rendering
