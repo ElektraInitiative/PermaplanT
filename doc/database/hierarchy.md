@@ -139,7 +139,7 @@ Column names should be:
 - `propagation_method` (and not `propagation`)
 - `growth_rate` (and not `growth`)
 - `has_drought_tolerance`
-- `id` should be `permaplant_id`
+- `id` should be `permapeople_id`
 - `parent_id`
 - `root_depth` (and not `root_zone_tendancy`)
 
