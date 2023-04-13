@@ -13,6 +13,6 @@ ALTER TABLE plants
 ALTER TABLE plants
     RENAME column mature_size_height TO height;
 ALTER TABLE plants
-    RENAME column growth_rate TO growth;
-ALTER TABLE plants
     RENAME column mature_size_width TO width;
+ALTER TABLE plants
+    RENAME column edible_uses TO edible_uses_en;

@@ -42,7 +42,7 @@ ADD COLUMN root_depth TEXT;
 ALTER TABLE plants
 ADD COLUMN root_type TEXT;
 ALTER TABLE plants
-ADD COLUMN seed_planting_depth TEXT;
+ADD COLUMN seed_planting_depth_en TEXT;
 ALTER TABLE plants
 ADD COLUMN seed_viability TEXT;
 ALTER TABLE plants
@@ -66,7 +66,7 @@ ADD COLUMN when_to_plant_transplant TEXT;
 ALTER TABLE plants
 ADD COLUMN when_to_sow_indoors TEXT;
 ALTER TABLE plants
-ADD COLUMN when_to_sow_outdoors TEXT;
+ADD COLUMN sowing_outdoors_en TEXT;
 ALTER TABLE plants
 ADD COLUMN when_to_start_indoors_weeks TEXT;
 ALTER TABLE plants
@@ -82,11 +82,9 @@ ADD COLUMN seed_weight_g text;
 ALTER TABLE plants
 ADD COLUMN habitat text;
 ALTER TABLE plants
-ADD COLUMN mature_size_height text;
-ALTER TABLE plants
 ADD COLUMN pest text;
 ALTER TABLE plants
-ADD COLUMN spacing text;
+ADD COLUMN spacing_en text;
 ALTER TABLE plants
 ADD COLUMN wikipedia TEXT;
 ALTER TABLE plants

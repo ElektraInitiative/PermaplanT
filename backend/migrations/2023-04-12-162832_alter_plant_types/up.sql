@@ -50,18 +50,3 @@ CREATE TYPE PROPAGATION_METHOD AS ENUM (
 );
 ALTER TABLE plants
 ADD COLUMN propagation_method PROPAGATION_METHOD [];
--- growth
-CREATE TYPE GROWTH AS ENUM ('Slow', 'Medium', 'Fast');
-ALTER TABLE plants
-ADD COLUMN new_growth GROWTH [];
-UPDATE plants
-SET new_growth = CASE
-        WHEN growth = 'slow' THEN ARRAY ['Slow'::GROWTH]
-        WHEN growth = 'moderate' THEN ARRAY ['Medium'::GROWTH]
-        WHEN growth = 'vigorous' THEN ARRAY ['Fast'::GROWTH]
-        ELSE NULL
-    END;
-ALTER TABLE plants DROP COLUMN growth;
-ALTER TABLE plants
-    RENAME COLUMN new_growth TO growth;
-DROP TYPE GROWTH_RATE;

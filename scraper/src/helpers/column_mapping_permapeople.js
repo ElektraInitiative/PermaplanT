@@ -89,7 +89,7 @@ export default {
   growth: {
     map: 'growth_rate',
     priority: 'permapeople',
-    newName: 'growth',
+    newName: 'growth_rate',
     valueMapping: {
       Slow: 'slow',
       Moderate: 'moderate',

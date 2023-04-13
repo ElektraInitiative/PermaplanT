@@ -8,7 +8,7 @@ ALTER COLUMN subfamily TYPE TEXT USING subfamily::TEXT;
 ALTER TABLE plants
 ALTER COLUMN genus TYPE TEXT USING genus::TEXT;
 ALTER TABLE plants
-ALTER COLUMN edible_uses TYPE TEXT USING edible_uses::TEXT;
+ALTER COLUMN edible_uses_en TYPE TEXT USING edible_uses_en::TEXT;
 ALTER TABLE plants
 ALTER COLUMN medicinal_uses TYPE TEXT USING medicinal_uses::TEXT;
 ALTER TABLE plants
