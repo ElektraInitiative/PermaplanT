@@ -2,6 +2,7 @@ import { SelectOption } from './SelectMenu';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { AsyncPaginate } from 'react-select-async-paginate';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
+import { useState } from 'react';
 
 /**
  * Contains the information needed by react-select-async-paginate for loading a single page.
@@ -76,6 +77,8 @@ export default function SelectMenu<T extends FieldValues>({
     multiValue: () => 'bg-neutral-400 dark:bg-neutral-400-dark',
     multiValueRemove: () => 'hover:bg-neutral-500',
   };
+  
+  const [inputValue, setInputValue] = useState('');
 
   return (
     <div>
@@ -94,14 +97,19 @@ export default function SelectMenu<T extends FieldValues>({
             name={id}
             loadOptions={loadOptions}
             isClearable
+            inputValue={inputValue}
             onChange={handleOptionsChange}
             placeholder={placeholder}
             isMulti={isMulti}
             classNames={customClassNames}
             required={required}
-            onInputChange={(inputValue) => {
+            onInputChange={(value, event) => {
+              // prevent the text from disapearing when clicking inside the input field
+              if (event.action === 'input-change' || event.action === 'set-value') {
+                setInputValue(value);
+              }
               onChange?.();
-              onInputChange?.(inputValue);
+              onInputChange?.(value);
             }}
           />
         )}
