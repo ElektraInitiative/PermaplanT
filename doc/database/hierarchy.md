@@ -123,7 +123,68 @@ Plants are additionally classified as:
 
 ## Mappings
 
+### from Permapeople
+
+Column names should be:
+
+- `unique_name` (see above), instead of `binomial_name`
+- `common_name_en` (still with arrays of Text as content)
+- `common_name_de` should be from Wikipedia (still with arrays of Text as content), `german_name` gets removed
+- `hardiness_zone` (usda in documentation)
+- `light_requirement` (and not `sun`)
+- `water_requirement` (and not `water`)
+- `soil_texture` (and not `soil_type`)
+- `height` (and not `mature_size_height`, mature height in documentation)
+- `width` (and not `mature_size_width`, mature width in documentation)
+- `propagation_method` (and not `propagation`)
+- `growth_rate` (and not `growth`)
+- `has_drought_tolerance`
+- `id` should be `permaplant_id`
+- `parent_id`
+- `root_depth` (and not `root_zone_tendancy`)
+
+Following columns should be removed:
+
+- `environment` (and its references)
+- `type` and `is_variety`, as variety is now determined from the name (`rank` to be calculated from name, see above)
+- `wildflower`
+- `plants_of_the_world_online_name_synonym` (redundant to link)
+- `dutch_name`, `danish_name`, `french_name`
+- `when_to_harvest`
+- `propagation_cuttings`
+- `alternate_scientific_name`
+- `hortipedia`
+- `invasive_in`
+- `years_to_bear`
+- `useful_tropical_plants`
+- `thinning`
+- `light_tolerance`
+-  `chill_hours`, `beef_tomato`, `invasive`
+- `folder_name` (at least in DB)
+- `native_climate_zones`
+- `adapted_climate_zones`
+- `propagation_direct_sowing` 
+
+
+Rename:
+
+- `when_to_sow_outdoors` to `sowing_outdoors_en`
+- `edible_uses` to `edible_uses_en`
+- `spacing` to `spacing_en`
+- `seed_planting_depth` to `seed_planting_depth_en`
+
+Bug:
+
+- `provides_forage_for` or `provides_shelter_for`: seems to be a bug in scraper (currently empty but was in practical plants?)
+
+Other minor problems:
+
+- fix Labiatae to be lamiaceae (family rank)
+- Remove all "var." from the database entries (staying with the 3 words).
+
 ### from Reinsaat
+
+Unique name:
 
 - use `Scientific name subheading` together with `name` (as cultivar, see above) for our `unique_name`
   (`Cucurbita ssp.` from `Scientific name kulturhinweise` shouldn't exist)
@@ -137,19 +198,42 @@ Plants are additionally classified as:
   In our database we want them:
   - back together in one name (the unique name, as described above) e.g. Brassica oleracea italica 'Limba' or Malus domestica 'Gala'.
   - with a link to the variety, if present, otherwise species
+
+New columns:
+
+- `Artikelnummer` should be called `reinsaat_article_number`
+- `Portionsinhalt` should be called `reinsaat_portion_content`
+- `Direktsaat` should be called `sowing_outdoors_de`
+- `url` to `reinsaat_url`
+- `Aussaat/ Pflanzung Freiland` should be called `sowing_outdoors`
+- `Ernte` should be called `harvest_time`
+- `Direktsaat` should be called `sowing_de`
+- `Abstände` should be called `spacing_de`
+- `Saatgutbedarf` should be called `required_quantity_of_seeds_de`
+- `Required quantity of seeds` should be called `required_quantity_of_seeds_en`
+- `Saattiefe` should be called `seed_planting_depth_de`
+- `Tausendkornmasse` should be called `1000_seed_weight_de`
+- `Thousand seeds mass` should be called `1000_seed_weight_en`
+- `Suitable for professional cultivation` should be called `machine_cultivation_possible`
+
+Copy columns:
+
+- `subcategory`  should be copied to `edible_uses_de` and `edible_uses_en` respectively (DE and EN version)
+- `Tausendkorngewicht (TKG)` should be copied to `1000_seed_weight` (remove ` g`)
+- `Sowing` should be copied to `sowing_en`
+- `Distances` should be copied to `spacing_en`
+- `Sowing depth` should be copied to `seed_planting_depth_en`
+- `1st harvest` should be copied to `days_to_harvest`
+
+Individual problems:
+
 - Daucus carota L. ssp. sativus --> Daucus carota sativus
 - Petroselinum crispum ssp. tuberosum --> Petroselinum crispum tuberosum
 - Papaver somnif. var. paeonifl. --> Papaver somniferum paeoniflorum
 - Alcea rosea fl. pl. --> Alcea rosea flore pleno
 - Campanula lat. macr. --> Campanula latifolia macrantha
 - Malva sylvestris ssp. maur. --> Malva sylvestris mauritiana
-
-- edible_uses (practicalplants) contains oil
-
-### from Permapeople
-
-Labiatae = lamiaceae (family rank)
-- Remove all "var." from the database entries (staying with the 3 words). -> TODO kommt nur 2x vor
+- Sonnenblume, Velvet Queen: `None` should be `Helianthus annuus`
 
 ## Further Readings
 
