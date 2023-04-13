@@ -1,6 +1,17 @@
 /**
  * This file contains the mapping between the PermaPeople column names and the
  * column names of the database.
+ *
+ * Key is the permapeople column name.
+ * Value is an object with the following properties:
+ * - map: The name of the column in the database.
+ * - priority: The priority of the column. If there are multiple sources for
+ *  the same column, the one with the highest priority will be used.
+ * - newName: The name of the column in the database.
+ * - valueMapping: A translation table for the values of the column. Each key
+ * is a source value and the value is the target value i.e. key will be replaced
+ * by value.
+ *
  */
 export default {
   id: null,
@@ -91,7 +102,7 @@ export default {
   },
   german_name: {
     map: 'common_name_de',
-    priority: 'permapeople',
+    priority: 'practicalplants',
     newName: 'common_name_de',
   },
   edible_uses: {
