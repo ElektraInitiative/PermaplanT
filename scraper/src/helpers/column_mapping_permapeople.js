@@ -7,10 +7,12 @@
  * - map: The name of the column in the database.
  * - priority: The priority of the column. If there are multiple sources for
  *  the same column, the one with the highest priority will be used.
- * - newName: The name of the column in the database.
- * - valueMapping: A translation table for the values of the column. Each key
- * is a source value and the value is the target value i.e. key will be replaced
- * by value.
+ * - newName: The final name of the column in the database.
+ * - valueMapping: A translation table for the values of the column
+ *    to unify the values in both datasets.
+ *    Each key is a source value and the value is the target value
+ *    i.e. key will be replaced by value.
+ *    For example, replace 'partial sun' with 'Partial sun/shade'.
  *
  */
 export default {
