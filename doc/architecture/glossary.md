@@ -100,7 +100,7 @@
 - Zone (in permaculture, German: Permakultur Zonen):
   Is an area which has the same frequency of human visitors.
   The areas are numbered from:
-  - 00 (represented numerically as -1)
+  - 00: (represented numerically as -1)
   - 0: physical body of permaculturist
   - 1: extremely frequently visited
   - 2: frequently visited

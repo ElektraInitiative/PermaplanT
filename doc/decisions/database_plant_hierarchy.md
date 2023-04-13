@@ -127,6 +127,8 @@ Subfamily gets removed because:
 
 ## Related Decisions
 
+NA
+
 ## Notes
 
 The relationships schemata shown in these examples all have a column that distinguished between companions and antagonists.

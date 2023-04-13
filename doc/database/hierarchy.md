@@ -10,12 +10,12 @@ The plants table contains entries of:
 - concrete plants, or
 - abstract plants (representants of ranks)
 
-*Concrete plants* can be:
+_Concrete plants_ can be:
 
 - dragged and dropped to the map and
 - used as seed entry.
 
-*Abstract plants* can be:
+_Abstract plants_ can be:
 
 - used to inherit attributes.
 
@@ -96,10 +96,10 @@ So the name does not necessarily say if a plant is a hybrid.
 
 The unique name must be rendered:
 
-- Latin name in *italics*.
+- Latin name in _italics_.
 - Cultivar name normal font in single quotes (as in database).
 
-E.g.: *Brassica oleracea italica* 'Ramoso calabrese'
+E.g.: _Brassica oleracea italica_ 'Ramoso calabrese'
 
 ### Rules
 
@@ -159,12 +159,11 @@ Following columns should be removed:
 - `useful_tropical_plants`
 - `thinning`
 - `light_tolerance`
--  `chill_hours`, `beef_tomato`, `invasive`
+- `chill_hours`, `beef_tomato`, `invasive`
 - `folder_name` (at least in DB)
 - `native_climate_zones`
 - `adapted_climate_zones`
-- `propagation_direct_sowing` 
-
+- `propagation_direct_sowing`
 
 Rename:
 
@@ -218,7 +217,7 @@ New columns:
 
 Copy columns:
 
-- `subcategory`  should be copied to `edible_uses_de` and `edible_uses_en` respectively (DE and EN version)
+- `subcategory` should be copied to `edible_uses_de` and `edible_uses_en` respectively (DE and EN version)
 - `Tausendkorngewicht (TKG)` should be copied to `1000_seed_weight` (remove ` g`)
 - `Sowing` should be copied to `sowing_en`
 - `Distances` should be copied to `spacing_en`
