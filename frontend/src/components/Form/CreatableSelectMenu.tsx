@@ -10,6 +10,7 @@ import {
   StylesConfig,
 } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
+import {useState} from 'react';
 
 export interface CreatableSelectMenuProps<
   T extends FieldValues,
@@ -93,6 +94,8 @@ export default function CreatableSelectMenu<
     multiValueRemove: (styles) => filterObject(styles, ['color']),
   };
 
+  const [inputValue, setInputValue] = useState('');
+  
   return (
     <div>
       {labelText && (
@@ -111,15 +114,20 @@ export default function CreatableSelectMenu<
             isClearable
             onChange={handleOptionsChange}
             onCreateOption={handleCreate}
+            inputValue={inputValue}
             placeholder={placeholder}
             options={options}
             isMulti={isMulti}
             styles={customStyles}
             classNames={customClassNames}
             required={required}
-            onInputChange={(inputValue) => {
+            onInputChange={(value, event) => {
+              // prevent the text from disapearing when clicking inside the input field
+              if (event.action === 'input-change' || event.action === 'set-value') {
+                setInputValue(value);
+              }
               onChange?.();
-              onInputChange?.(inputValue);
+              onInputChange?.(value);
             }}
           />
         )}
