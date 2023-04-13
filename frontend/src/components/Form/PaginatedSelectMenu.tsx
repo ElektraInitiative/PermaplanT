@@ -1,7 +1,7 @@
 import { SelectOption } from './SelectMenu';
 import filterObject from '@/utils/filterObject';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { StylesConfig } from 'react-select';
+import { GroupBase, StylesConfig } from 'react-select';
 import { AsyncPaginate } from 'react-select-async-paginate';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
 
@@ -23,8 +23,11 @@ export interface PageAdditionalInfo {
   page: number;
 }
 
-export interface PaginatedSelectMenuProps<T extends FieldValues> {
-  isMulti?: boolean;
+export interface PaginatedSelectMenuProps<
+  T extends FieldValues,
+  IsMulti extends boolean = false,
+> {
+  isMulti?: IsMulti;
   id: Path<T>;
   labelText?: string;
   control?: Control<T, unknown>;
@@ -41,8 +44,11 @@ export interface PaginatedSelectMenuProps<T extends FieldValues> {
   onInputChange?: (inputValue: string) => void;
 }
 
-export default function SelectMenu<T extends FieldValues>({
-  isMulti = false,
+export default function SelectMenu<
+  T extends FieldValues,
+  IsMulti extends boolean = false,
+>({
+  isMulti = false as IsMulti,
   id,
   labelText,
   control,
@@ -52,7 +58,7 @@ export default function SelectMenu<T extends FieldValues>({
   handleOptionsChange,
   onChange,
   onInputChange,
-}: PaginatedSelectMenuProps<T>) {
+}: PaginatedSelectMenuProps<T, IsMulti>) {
   const customClassNames: ClassNamesConfig = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
     control: (state) => {
@@ -79,7 +85,7 @@ export default function SelectMenu<T extends FieldValues>({
     multiValueRemove: () => 'hover:bg-neutral-500',
   };
 
-  const customStyles: StylesConfig<T> = {
+  const customStyles: StylesConfig<unknown, IsMulti, GroupBase<unknown>> = {
     // remove css attributes from predefined styles
     // this needs to be done so the custom css classes take effect
     control: (styles) =>
