@@ -72,6 +72,16 @@ pub struct PlantsSearchParameters {
     pub name: Option<String>,
 }
 
+/// Query parameters for searching seeds.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct SeedSearchParameters {
+    /// Name of the seed to search for.
+    pub name: Option<String>,
+    /// The exact harvest year of the seed.
+    pub harvest_year: Option<i16>,
+}
+
 /// Query parameters paginating list endpoints.
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]

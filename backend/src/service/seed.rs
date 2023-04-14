@@ -2,8 +2,8 @@
 
 use actix_web::web::Data;
 
-use crate::model::dto::Page;
 use crate::model::dto::PageParameters;
+use crate::model::dto::{Page, SeedSearchParameters};
 use crate::{
     db::connection::Pool,
     error::ServiceError,
@@ -18,11 +18,12 @@ use crate::{
 /// # Errors
 /// If the connection to the database could not be established.
 pub async fn find(
+    search_parameters: SeedSearchParameters,
     page_parameters: PageParameters,
     pool: &Data<Pool>,
 ) -> Result<Page<SeedDto>, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Seed::find(page_parameters, &mut conn).await?;
+    let result = Seed::find(search_parameters, page_parameters, &mut conn).await?;
     Ok(result)
 }
 

@@ -1,13 +1,13 @@
 //! Contains the implementation of [`Seed`].
 
-use diesel::{QueryDsl, QueryResult};
+use diesel::{debug_query, ExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::db::pagination::Paginate;
-use crate::model::dto::{Page, PageParameters};
+use crate::model::dto::{Page, PageParameters, SeedSearchParameters};
 use crate::{
     model::dto::{NewSeedDto, SeedDto},
-    schema::seeds::{self, all_columns},
+    schema::seeds::{self, all_columns, harvest_year, name},
 };
 
 use super::{NewSeed, Seed};
@@ -18,11 +18,20 @@ impl Seed {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find(
+        search_parameters: SeedSearchParameters,
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<SeedDto>> {
-        let query_page = seeds::table
-            .select(all_columns)
+        let mut query = seeds::table.select(all_columns).into_boxed();
+
+        if let Some(name_search) = search_parameters.name {
+            query = query.filter(name.ilike(format!("%{name_search}%")));
+        }
+        if let Some(harvest_year_search) = search_parameters.harvest_year {
+            query = query.filter(harvest_year.eq(harvest_year_search));
+        }
+
+        let query_page = query
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page)
             .load_page::<Self>(conn)

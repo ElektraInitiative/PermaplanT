@@ -7,7 +7,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::model::dto::PageParameters;
+use crate::model::dto::{PageParameters, SeedSearchParameters};
 use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
 
 /// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
@@ -18,6 +18,7 @@ use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
 #[utoipa::path(
     context_path = "/api/seeds",
     params(
+        SeedSearchParameters,
         PageParameters
     ),
     responses(
@@ -25,8 +26,13 @@ use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
     )
 )]
 #[get("")]
-pub async fn find(page_query: Query<PageParameters>, pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = service::seed::find(page_query.into_inner(), &pool).await?;
+pub async fn find(
+    search_query: Query<SeedSearchParameters>,
+    page_query: Query<PageParameters>,
+    pool: Data<Pool>,
+) -> Result<HttpResponse> {
+    let response =
+        service::seed::find(search_query.into_inner(), page_query.into_inner(), &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
