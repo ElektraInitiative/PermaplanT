@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<a
+  className="items-center  justify-center space-x-2"
+  href="/https://dev.permaplant.net"
+  onClick={[Function]}
+>
+  <button>
+    Permaplant
+  </button>
+</a>
+`;
