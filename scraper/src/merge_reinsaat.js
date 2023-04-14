@@ -2,33 +2,9 @@ import fs from 'fs';
 import { parse as json2csv } from 'json2csv';
 import csv from 'csvtojson';
 import { sanitizeColumnNames } from './helpers/helpers.js';
+import mapping from './helpers/column_mapping_reinsaat.js';
 
-const mapping = {
-  Artikelnummer: 'reinsaat_article_number',
-  Portionsinhalt: 'reinsaat_portion_content',
-  Direktsaat: 'sowing_outdoors_de',
-  url: 'reinsaat_url',
-  'Aussaat/ Pflanzung Freiland': 'sowing_outdoors',
-  Ernte: 'harvest_time',
-  Abstände: 'spacing_de',
-  Aussaat: 'sowing_de',
-  Saatgutbedarf: 'required_quantity_of_seeds_de',
-  'Required quantity of seeds': 'required_quantity_of_seeds_en',
-  Saattiefe: 'seed_planting_depth_de',
-  Tausendkornmasse: '1000_seed_weight_de',
-  'Thousand seeds mass': '1000_seed_weight_en',
-  'Suitable for professional cultivation': 'machine_cultivation_possible',
-  subcategory: 'edible_uses_de',
-  'Tausendkorngewicht (TKG)': '1000_seed_weight',
-  Sowing: 'sowing_en',
-  Distances: 'spacing_en',
-  'Sowing depth': 'seed_planting_depth_en',
-  '1st harvest': 'days_to_harvest',
-  Keimtemperatur: 'germination_temperature',
-  'Unique name': 'unique_name',
-};
-
-const renameColumns = async (plants) => {
+const renameColumns = (plants) => {
   return plants.map((plant) => {
     const renamedPlant = {};
     Object.keys(plant).forEach((key) => {
@@ -57,8 +33,41 @@ const sanitizeValues = (plants) => {
           .replaceAll('var.', '')
           .replaceAll('  ', ' ');
       }
-      plant[key] = plant[key].trim();
+      if (plant[key]) {
+        plant[key] = plant[key].trim();
+      }
     });
+    return plant;
+  });
+};
+
+const mergeColumns = (plant, oldCols, newCol) => {
+  let mergedValue = '';
+  for (let i = 0; i < oldCols.length; i++) {
+    if (plant[oldCols[i]] !== '') {
+      mergedValue = plant[oldCols[i]];
+      break;
+    }
+  }
+
+  if (mergedValue !== '') {
+    plant[newCol] = mergedValue;
+  }
+
+  oldCols.forEach((oldCol) => {
+    if (oldCol !== newCol) {
+      delete plant[oldCol];
+    }
+  });
+};
+
+const renameCategory = (plants, lang) => {
+  return plants.map((plant) => {
+    if (plant['subcategory'] === undefined) {
+      return plant;
+    }
+    plant['subcategory ' + lang] = plant['subcategory'];
+    delete plant['subcategory'];
     return plant;
   });
 };
@@ -72,9 +81,22 @@ async function mergeDatasets() {
   reinsaatRawDataEN = reinsaatRawDataEN.slice(0, 1);
   reinsaatRawDataDE = reinsaatRawDataDE.slice(0, 1);
 
+  reinsaatRawDataEN = renameCategory(reinsaatRawDataEN, 'EN');
+  reinsaatRawDataDE = renameCategory(reinsaatRawDataDE, 'DE');
+
   allPlants = reinsaatRawDataEN.concat(reinsaatRawDataDE);
 
-  allPlants = await renameColumns(allPlants);
+  allPlants.forEach((plant) => {
+    mergeColumns(plant, ['Aussaat', 'Direktsaat'], 'Direktsaat');
+    mergeColumns(
+      plant,
+      ['Sowing', 'Direct Sowing', 'Sowing outdoors', 'Sowing Direct Outdoors'],
+      'Sowing',
+    );
+    mergeColumns(plant, ['Distances', 'Spacing'], 'Distances');
+  });
+
+  allPlants = renameColumns(allPlants);
 
   allPlants = sanitizeValues(allPlants);
 
