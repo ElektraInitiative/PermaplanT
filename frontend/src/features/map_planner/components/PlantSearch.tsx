@@ -1,6 +1,6 @@
 import SearchInput from '@/components/Form/SearchInput';
-import { useState } from 'react';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
+import { useState } from 'react';
 
 const allPlants = ['Strawberry', 'Cherry', 'Tomato', 'Potato', 'Onion'];
 

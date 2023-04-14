@@ -6,7 +6,7 @@ import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
 
 export const Layers = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col p-2">
       <section className="flex justify-between">
         <h2>Layers</h2>
         <div className="flex gap-2">
@@ -23,11 +23,22 @@ export const Layers = () => {
       </section>
       <section className="mt-6">
         <div className="grid grid-cols-6 gap-2">
-          <label className="text-center text-sm">vis</label>
-          <label className="text-center text-sm">enabl</label>
-          <div className="col-span-4"></div>
+          <LayerSettings name="Dimension" />
+          <LayerSettings name="Draw" />
+          <LayerSettings name="Fertilize" />
+          <LayerSettings name="Habitats" />
+          <LayerSettings name="Hydrology" />
+          <LayerSettings name="Infrastructure" />
+          <LayerSettings name="Labels" />
           <LayerSettings name="Landscape" />
+          <LayerSettings name="Paths" />
           <LayerSettings name="Plants" />
+          <LayerSettings name="Shadows" />
+          <LayerSettings name="Soil" />
+          <LayerSettings name="Terrain" />
+          <LayerSettings name="Trees" />
+          <LayerSettings name="Warnings" />
+          <LayerSettings name="Winds" />
           <LayerSettings name="Zones" />
         </div>
       </section>

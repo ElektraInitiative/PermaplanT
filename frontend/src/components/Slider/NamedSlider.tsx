@@ -59,7 +59,7 @@ export const NamedSlider = (props: SliderProps) => {
 
   return (
     <div
-      className="flex h-8 w-full items-center bg-neutral-200 dark:bg-neutral-100-dark"
+      className="relative flex h-8 w-full items-center bg-neutral-200 dark:bg-neutral-100-dark"
       tabIndex={0}
       onClick={clickHandler}
       ref={sliderDivRef}
