@@ -45,6 +45,11 @@ export default {
     map: 'life_cycle',
     priority: 'permapeople',
     newName: 'life_cycle',
+    valueMapping: {
+      Annual: 'annual',
+      Biennial: 'biennial',
+      Perennial: 'perennial',
+    },
   },
   light_requirement: {
     map: 'sun',
@@ -72,7 +77,7 @@ export default {
     priority: 'permapeople',
     newName: 'soil_texture',
     valueMapping: {
-      'Light (sandy)': 'light',
+      'Light (sandy)': 'sandy',
       Medium: 'loamy',
       'Heavy (clay)': 'clay',
     },

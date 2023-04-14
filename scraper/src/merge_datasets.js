@@ -11,8 +11,21 @@ const renameColumns2 = (plants, columnMapping) => {
 
   plants.forEach((plant) => {
     mappedColumns.forEach((column) => {
-      // console.log(columnMapping[column]['newName'], column);
+      if (plant[column] && !!columnMapping[column]['valueMapping']) {
+        plant[column] = plant[column]
+          .split(',')
+          .map((value) => {
+            const updatedValue = value.trim();
+            if (columnMapping[column]['valueMapping'][updatedValue]) {
+              return columnMapping[column]['valueMapping'][updatedValue];
+            }
+            return updatedValue;
+          })
+          .join(',');
+      }
+
       plant[columnMapping[column]['newName']] = plant[column];
+
       if (column !== columnMapping[column]['newName']) {
         delete plant[column];
       }
@@ -30,17 +43,6 @@ const renameColumns = async (plants, columnMapping) => {
   plants.forEach((plant) => {
     mappedColumns.forEach((column) => {
       plant[column] = plant[columnMapping[column]['map']];
-      if (!!columnMapping[column]['valueMapping']) {
-        plant[column] = plant[column]
-          .split(',')
-          .map((value) => {
-            if (columnMapping[column]['valueMapping'][value]) {
-              return columnMapping[column]['valueMapping'][value];
-            }
-            return value;
-          })
-          .join(',');
-      }
       delete plant[columnMapping[column]['map']];
     });
   });

@@ -37,7 +37,9 @@ function sanitizeValues(jsonArray) {
         (newKey === 'light_requirement' && obj[newKey] !== null) ||
         (newKey === 'water_requirement' && obj[newKey] !== null) ||
         (newKey === 'growth_rate' && obj[newKey] !== null) ||
-        (newKey === 'propagation_method' && obj[newKey] !== null)
+        (newKey === 'propagation_method' && obj[newKey] !== null) ||
+        (newKey === 'common_name_en' && obj[newKey] !== null) ||
+        (newKey === 'edible_parts' && obj[newKey] !== null)
       ) {
         obj[newKey] = obj[newKey].split(',');
         obj[newKey] = obj[newKey].map((item) => {
@@ -60,8 +62,9 @@ function sanitizeValues(jsonArray) {
       }
 
       if (newKey === 'hardiness_zone' && obj[newKey] !== null) {
-        if (obj[newKey].includes('–')) {
-          obj[newKey] = obj[newKey].split('–');
+        obj[newKey] = obj[newKey].replace(/[\u2013-\u2014]/g, '-');
+        if (obj[newKey].includes('-')) {
+          obj[newKey] = obj[newKey].split('-');
           obj[newKey] = `[${obj[newKey][0]},${obj[newKey][1]})`;
         } else {
           obj[newKey] = `[${obj[newKey]},${obj[newKey]})`;
