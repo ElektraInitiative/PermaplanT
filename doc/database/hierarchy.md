@@ -229,8 +229,8 @@ Copy columns:
 
 - `subcategory` should be copied to `edible_uses_de` and `edible_uses_en` respectively (DE and EN version)
 - `Tausendkorngewicht (TKG)` should be copied to `1000_seed_weight` (remove ` g`)
-- `Sowing` or `Direct Sowing` or `Sowing outdoors` should be copied to `sowing_outdoors_en`
-- `Distances` should be copied to `spacing_en`
+- `Sowing` or `Direct Sowing` or `Sowing outdoors` or `Sowing Direct Outdoors` should be copied to `sowing_outdoors_en`
+- `Distances` or `Spacing` should be copied to `spacing_en`
 - `Sowing depth` should be copied to `seed_planting_depth_en`
 - `1st harvest` should be copied to `days_to_harvest`
 - `Keimtemperatur` should be copied to `germination_temperature`
