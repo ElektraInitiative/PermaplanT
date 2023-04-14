@@ -120,7 +120,7 @@ const accentColors = {
     700: '#003647',
     800: '#002733',
     900: '#00171f',
-  }
+  },
 };
 
 /** @type {import('tailwindcss').Config} */
