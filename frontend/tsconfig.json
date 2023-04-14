@@ -18,6 +18,7 @@
     "baseUrl": ".",
     "types": [
       "vite-plugin-pwa/client",
+      "jest",
     ],
     "paths": {
       "@/*": ["./src/*"]
