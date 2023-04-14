@@ -68,7 +68,7 @@ pub struct PlantsSummaryDto {
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct PlantsSearchParameters {
-    /// The system will check if this string occurs in the plants common name or binomial name.
+    /// The system will check if this string occurs in the plants common name or unique name.
     pub name: Option<String>,
 }
 
