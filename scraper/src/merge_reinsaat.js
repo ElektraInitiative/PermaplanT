@@ -25,6 +25,7 @@ const mapping = {
   'Sowing depth': 'seed_planting_depth_en',
   '1st harvest': 'days_to_harvest',
   Keimtemperatur: 'germination_temperature',
+  'Unique name': 'unique_name',
 };
 
 const renameColumns = async (plants) => {
@@ -45,6 +46,23 @@ const renameColumns = async (plants) => {
   });
 };
 
+const sanitizeValues = (plants) => {
+  return plants.map((plant) => {
+    Object.keys(plant).forEach((key) => {
+      if (key === 'unique_name') {
+        plant[key] = plant[key].replace(/convar\.\s?\w+\s/g, '').replace(/ssp\.\s?\w+\s/g, '');
+        plant[key] = plant[key]
+          .replaceAll('L.', '')
+          .replaceAll('MIll.', '')
+          .replaceAll('var.', '')
+          .replaceAll('  ', ' ');
+      }
+      plant[key] = plant[key].trim();
+    });
+    return plant;
+  });
+};
+
 async function mergeDatasets() {
   let allPlants = [];
 
@@ -57,6 +75,8 @@ async function mergeDatasets() {
   allPlants = reinsaatRawDataEN.concat(reinsaatRawDataDE);
 
   allPlants = await renameColumns(allPlants);
+
+  allPlants = sanitizeValues(allPlants);
 
   return allPlants;
 }
