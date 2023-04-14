@@ -1,0 +1,8 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "out": "src/generated/docs",
+  "plugin": ["typedoc-plugin-markdown"],
+  "entryPointStrategy": "expand",
+  "exclude": ["src/components/**/*", "src/features/**/components/**/*", "src/stories/**/*"],
+  "useStorybook": true
+}
