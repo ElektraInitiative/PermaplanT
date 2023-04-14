@@ -18,7 +18,7 @@ use actix_web::{
 #[utoipa::path(
     context_path = "/api/plants",
     responses(
-        (status = 200, description = "Fetch or search for all plants", body = Page<PlantsSummaryDto>),
+        (status = 200, description = "Fetch or search for all plants", body = PagePlantsSummaryDto),
     )
 )]
 #[get("")]

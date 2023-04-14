@@ -19,7 +19,7 @@ use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
 #[utoipa::path(
     context_path = "/api/seeds",
     responses(
-        (status = 200, description = "Fetch all seeds", body = Page<SeedDto>)
+        (status = 200, description = "Fetch all seeds", body = PageSeedDto)
     )
 )]
 #[get("")]

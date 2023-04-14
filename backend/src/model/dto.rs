@@ -87,6 +87,7 @@ pub struct PageParameters {
 /// A page of results returned from a list endpoint.
 #[typeshare]
 #[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
+#[aliases(PagePlantsSummaryDto = Page<PlantsSummaryDto>, PageSeedDto = Page<SeedDto>)]
 pub struct Page<T> {
     /// Resulting records.
     pub results: Vec<T>,

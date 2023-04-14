@@ -4,11 +4,10 @@ use actix_web::web;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
-use crate::model::dto::Page;
 use crate::{
     controller::{plants, seed},
     model::{
-        dto::{NewSeedDto, PlantsSummaryDto, SeedDto},
+        dto::{NewSeedDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, SeedDto},
         r#enum::{quality::Quality, quantity::Quantity},
     },
 };
@@ -18,10 +17,12 @@ use crate::{
 #[openapi(paths(seed::find, seed::create, seed::delete_by_id),
         components(
             schemas(
+                PageSeedDto,
                 SeedDto,
                 NewSeedDto,
                 Quality,
-                Quantity)
+                Quantity
+            )
         ),
         tags(
             (name = "seed")
@@ -34,7 +35,8 @@ struct SeedApiDoc;
 #[openapi(paths(plants::find),
         components(
             schemas(
-                Page<PlantsSummaryDto>
+                PagePlantsSummaryDto,
+                PlantsSummaryDto
             )
         ),
         tags(
