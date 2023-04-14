@@ -116,6 +116,17 @@ We know about names (abstract and concrete, including hybrid):
 
 ## Attributes
 
+We prefer strongly-typed data, e.g.:
+
+- enums
+- array of enums
+- numbers
+
+Columns that contain text should be postfixed with:
+
+- `_en` for English text
+- `_de` for German text
+
 Plants are additionally classified as:
 
 - is_concrete_plant (is a concrete plant as opposite to an abstract plant)
@@ -202,11 +213,10 @@ New columns:
 
 - `Artikelnummer` should be called `reinsaat_article_number`
 - `Portionsinhalt` should be called `reinsaat_portion_content`
-- `Direktsaat` should be called `sowing_outdoors_de`
+- `Direktsaat` or `Aussaat` should be called `sowing_outdoors_de`
 - `url` to `reinsaat_url`
 - `Aussaat/ Pflanzung Freiland` should be called `sowing_outdoors`
 - `Ernte` should be called `harvest_time`
-- `Direktsaat` should be called `sowing_de`
 - `Abstände` should be called `spacing_de`
 - `Saatgutbedarf` should be called `required_quantity_of_seeds_de`
 - `Required quantity of seeds` should be called `required_quantity_of_seeds_en`
@@ -219,7 +229,7 @@ Copy columns:
 
 - `subcategory` should be copied to `edible_uses_de` and `edible_uses_en` respectively (DE and EN version)
 - `Tausendkorngewicht (TKG)` should be copied to `1000_seed_weight` (remove ` g`)
-- `Sowing` should be copied to `sowing_en`
+- `Sowing` or `Direct Sowing` or `Sowing outdoors` should be copied to `sowing_outdoors_en`
 - `Distances` should be copied to `spacing_en`
 - `Sowing depth` should be copied to `seed_planting_depth_en`
 - `1st harvest` should be copied to `days_to_harvest`
