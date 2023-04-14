@@ -10,6 +10,7 @@ import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import useDebounce from '@/utils/use-debounced-value';
 
 export const ViewSeeds = () => {
   const navigate = useNavigate();
@@ -17,12 +18,15 @@ export const ViewSeeds = () => {
   // load seeds namespace for the translation
   const { t } = useTranslation(['seeds', 'common']);
 
+  // Set the filter when the user types in the search input
+  const [seedNameFilter, setSeedNameFilter] = useState<string>('');
+  const debouncedNameFilter = useDebounce(seedNameFilter, 200);
   const { fetchNextPage, data, isLoading, isFetching, error } = useInfiniteQuery<
     Page<SeedDto>,
     Error
   >({
-    queryKey: ['seeds'],
-    queryFn: ({ pageParam = 1 }) => findAllSeeds(pageParam),
+    queryKey: ['seeds', debouncedNameFilter],
+    queryFn: ({ pageParam = 1, queryKey }) => findAllSeeds(pageParam, queryKey[1] as string),
     getNextPageParam: (lastPage) => {
       const hasMore = lastPage.total_pages > lastPage.page;
       return hasMore ? lastPage.page + 1 : undefined;
@@ -31,9 +35,6 @@ export const ViewSeeds = () => {
   });
   const [showErrorModal, setShowErrorModal] = useState(false);
   const seeds = data?.pages.flatMap((page) => page.results) ?? [];
-
-  // Set the filter when the user types in the search input
-  const [_, setFilteredSeeds] = useState<SeedDto[]>([]);
 
   const handleCreateSeedClick = () => {
     navigate('/seeds/new');
@@ -47,12 +48,7 @@ export const ViewSeeds = () => {
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value.toLowerCase();
-    const temp = seeds.filter(
-      (seed) =>
-        seed.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        seed.harvest_year.toString().toLowerCase().includes(searchValue.toLowerCase()),
-    );
-    setFilteredSeeds(temp);
+    setSeedNameFilter(searchValue);
   };
 
   return (
