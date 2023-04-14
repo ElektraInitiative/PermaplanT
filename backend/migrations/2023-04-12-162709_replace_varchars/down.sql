@@ -1,6 +1,6 @@
 -- This file should undo anything in `up.sql`
 ALTER TABLE plants
-ALTER COLUMN scientific_name TYPE VARCHAR USING scientific_name::VARCHAR;
+ALTER COLUMN unique_name TYPE VARCHAR USING unique_name::VARCHAR;
 ALTER TABLE plants
 ALTER COLUMN family TYPE VARCHAR USING family::VARCHAR;
 ALTER TABLE plants
@@ -17,8 +17,6 @@ ALTER TABLE plants
 ALTER COLUMN botanic TYPE VARCHAR USING botanic::VARCHAR;
 ALTER TABLE plants
 ALTER COLUMN cultivation TYPE VARCHAR USING cultivation::VARCHAR;
-ALTER TABLE plants
-ALTER COLUMN environment TYPE VARCHAR USING environment::VARCHAR;
 ALTER TABLE plants
 ALTER COLUMN material_uses TYPE VARCHAR USING material_uses::VARCHAR;
 ALTER TABLE plants

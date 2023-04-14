@@ -72,7 +72,7 @@ export default {
     priority: 'permapeople',
     newName: 'soil_texture',
     valueMapping: {
-      'Light (sandy)': 'Light',
+      'Light (sandy)': 'light',
       Medium: 'loamy',
       'Heavy (clay)': 'clay',
     },
@@ -163,11 +163,7 @@ export default {
     priority: 'practicalplants',
     newName: 'has_drought_tolerance',
   },
-  habitat: {
-    map: 'environment',
-    priority: 'permapeople',
-    newName: 'environment',
-  },
+  habitat: null,
   cold_stratification_temperature: null,
   cold_stratification_time: null,
   genus: {

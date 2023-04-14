@@ -1,6 +1,6 @@
 -- Your SQL goes here
 ALTER TABLE plants
-ALTER COLUMN scientific_name TYPE TEXT USING scientific_name::TEXT;
+ALTER COLUMN unique_name TYPE TEXT USING unique_name::TEXT;
 ALTER TABLE plants
 ALTER COLUMN family TYPE TEXT USING family::TEXT;
 ALTER TABLE plants
@@ -17,8 +17,6 @@ ALTER TABLE plants
 ALTER COLUMN botanic TYPE TEXT USING botanic::TEXT;
 ALTER TABLE plants
 ALTER COLUMN cultivation TYPE TEXT USING cultivation::TEXT;
-ALTER TABLE plants
-ALTER COLUMN environment TYPE TEXT USING environment::TEXT;
 ALTER TABLE plants
 ALTER COLUMN material_uses TYPE TEXT USING material_uses::TEXT;
 ALTER TABLE plants
