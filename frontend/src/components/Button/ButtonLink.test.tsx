@@ -1,5 +1,5 @@
 import renderer from 'react-test-renderer';
-import ButtonLink from '../Button/ButtonLink';
+import ButtonLink from './ButtonLink';
 import {MemoryRouter, MemoryRouter as Router} from 'react-router-dom';
 
 it('renders correctly', () => {
