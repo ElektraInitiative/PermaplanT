@@ -51,12 +51,16 @@ const unifyValueFormat = (plants, columnMapping) => {
           plant[column] = plant[column]
             .split(',')
             .map((value) => {
-              const updatedValue = value.trim();
-              if (columnMapping[column]['valueMapping'][updatedValue]) {
+              const updatedValue = value.trim().toLowerCase();
+              if (
+                columnMapping[column]['valueMapping'][updatedValue] ||
+                columnMapping[column]['valueMapping'][updatedValue] === null
+              ) {
                 return columnMapping[column]['valueMapping'][updatedValue];
               }
-              return updatedValue;
+              return value.trim();
             })
+            .filter((value) => value !== null)
             .join(',');
         }
 
@@ -64,8 +68,8 @@ const unifyValueFormat = (plants, columnMapping) => {
           plant[column] = getSoilPH(plant[column]);
         }
       }
+
       if (columnMapping[column]['newName']) {
-        console.log(columnMapping[column]['newName']);
         plant[columnMapping[column]['newName']] = plant[column];
         if (columnMapping[column]['newName'] !== column) {
           delete plant[column];
@@ -92,18 +96,21 @@ const renameColumns = async (plants, columnMapping) => {
 };
 
 async function mergeDatasets() {
+  console.log('[INFO] Merging datasets...');
+
   let allPlants = [];
 
   let practicalPlants = await csv().fromFile('data/detail.csv'); // Practical plants dataset
   let permapeople = await csv().fromFile('data/permapeopleRawData.csv'); // Permapeople dataset
   let reinsaat = await csv().fromFile('data/reinsaatRawData.csv'); // Reinsaat dataset
 
-  practicalPlants = practicalPlants.slice(0, 1);
-  permapeople = permapeople.slice(0, 1);
-
   sanitizeColumnNames(practicalPlants);
   sanitizeColumnNames(permapeople);
   sanitizeColumnNames(reinsaat);
+
+  console.log('[INFO] practicalPlants: ', practicalPlants.length);
+  console.log('[INFO] permapeople: ', permapeople.length);
+  console.log('[INFO] reinsaat: ', reinsaat.length);
 
   practicalPlants = await renameColumns(practicalPlants, permapeopleColumnMapping);
 
@@ -140,7 +147,7 @@ async function mergeDatasets() {
   permapeople.forEach((plant) => {
     const scientific_name = plant['scientific_name'];
     const plantInPracticalPlants = practicalPlants.find(
-      (plant) => plant.binomial_name === scientific_name,
+      (plant) => plant.scientific_name === scientific_name,
     );
     if (!plantInPracticalPlants) {
       allPlants.push({
@@ -148,6 +155,8 @@ async function mergeDatasets() {
       });
     }
   });
+
+  console.log('[INFO] Merged practicalPlants and permapeople: ', allPlants.length);
 
   allPlants = allPlants.concat(reinsaat);
 
@@ -160,6 +169,9 @@ function writePlantsToCsv(plants) {
   }
 
   const updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
+
+  console.log('[INFO] Writing merged dataset to CSV file...');
+  console.log('[INFO] Total number of plants: ', updatedPlants.length);
 
   const csv = json2csv(updatedPlants);
   fs.writeFileSync('data/mergedDatasets.csv', csv);

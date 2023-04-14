@@ -78,9 +78,6 @@ async function mergeDatasets() {
   let reinsaatRawDataEN = await csv().fromFile('data/reinsaatRawDataEN.csv');
   let reinsaatRawDataDE = await csv().fromFile('data/reinsaatRawDataDE.csv');
 
-  reinsaatRawDataEN = reinsaatRawDataEN.slice(0, 1);
-  reinsaatRawDataDE = reinsaatRawDataDE.slice(0, 1);
-
   reinsaatRawDataEN = renameCategory(reinsaatRawDataEN, 'EN');
   reinsaatRawDataDE = renameCategory(reinsaatRawDataDE, 'DE');
 

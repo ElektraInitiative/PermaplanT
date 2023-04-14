@@ -46,9 +46,9 @@ export default {
     priority: 'permapeople',
     newName: 'life_cycle',
     valueMapping: {
-      Annual: 'annual',
-      Biennial: 'biennial',
-      Perennial: 'perennial',
+      annual: 'annual',
+      biennial: 'biennial',
+      perennial: 'perennial',
     },
   },
   light_requirement: {
@@ -70,6 +70,12 @@ export default {
       moderate: 'Moist',
       high: 'Wet',
       aquatic: 'Water',
+      dry: 'Dry',
+      moist: 'Moist',
+      wet: 'Wet',
+      water: 'Water',
+      'well-drained': null,
+      'wet to moist': null,
     },
   },
   soil_type: {
@@ -77,9 +83,11 @@ export default {
     priority: 'permapeople',
     newName: 'soil_texture',
     valueMapping: {
-      'Light (sandy)': 'sandy',
-      Medium: 'loamy',
-      'Heavy (clay)': 'clay',
+      'light (sandy)': 'sandy',
+      medium: 'loamy',
+      'heavy (clay)': 'clay',
+      'rich in humus': null,
+      'well draining': null,
     },
   },
   height: {
@@ -96,9 +104,9 @@ export default {
     priority: 'permapeople',
     newName: 'growth_rate',
     valueMapping: {
-      Slow: 'slow',
-      Moderate: 'moderate',
-      Fast: 'vigorous',
+      slow: 'slow',
+      medium: 'moderate',
+      fast: 'vigorous',
     },
   },
   alternate_name: null,

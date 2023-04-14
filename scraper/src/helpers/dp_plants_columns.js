@@ -52,7 +52,7 @@ export default [
   { name: 'has_drought_tolerance', cast: 'boolean' },
   { name: 'edible', cast: 'boolean' },
   { name: 'edible_parts', cast: 'text[]' },
-  { name: 'germination_temperature', cast: 'integer' },
+  // { name: 'germination_temperature', cast: 'integer' },
   { name: 'introduced_into' },
   { name: 'layer' },
   { name: 'leaves' },
