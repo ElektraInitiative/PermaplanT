@@ -12,7 +12,7 @@ export const searchPlants = async (
 
     const searchParams = new URLSearchParams();
     searchParams.append('search_term', searchTerm);
-    searchParams.append('limit', '10');
+    searchParams.append('per_page', '10');
     searchParams.append('page', pageString);
 
     const response = await axios.get<Page<PlantsSummaryDto>>(
