@@ -4,8 +4,6 @@ ADD COLUMN alternate_name TEXT;
 ALTER TABLE plants
 ADD COLUMN diseases TEXT;
 ALTER TABLE plants
-ADD COLUMN drought_resistant BOOLEAN;
-ALTER TABLE plants
 ADD COLUMN edible BOOLEAN;
 ALTER TABLE plants
 ADD COLUMN edible_parts TEXT [];
@@ -19,8 +17,6 @@ ALTER TABLE plants
 ADD COLUMN leaves TEXT;
 ALTER TABLE plants
 ADD COLUMN link TEXT;
-ALTER TABLE plants
-ADD COLUMN medicinal TEXT;
 ALTER TABLE plants
 ADD COLUMN medicinal_parts TEXT;
 ALTER TABLE plants
@@ -47,8 +43,6 @@ ALTER TABLE plants
 ADD COLUMN seed_viability TEXT;
 ALTER TABLE plants
 ADD COLUMN slug TEXT;
-ALTER TABLE plants
-ADD COLUMN soil_type TEXT;
 ALTER TABLE plants
 ADD COLUMN spread TEXT;
 ALTER TABLE plants

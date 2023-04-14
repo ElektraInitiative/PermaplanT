@@ -1,7 +1,6 @@
 -- This file should undo anything in `up.sql`
 ALTER TABLE plants DROP COLUMN alternate_name;
 ALTER TABLE plants DROP COLUMN diseases;
-ALTER TABLE plants DROP COLUMN drought_resistant;
 ALTER TABLE plants DROP COLUMN edible;
 ALTER TABLE plants DROP COLUMN edible_parts;
 ALTER TABLE plants DROP COLUMN germination_temperature;
@@ -9,7 +8,6 @@ ALTER TABLE plants DROP COLUMN introduced_into;
 ALTER TABLE plants DROP COLUMN layer;
 ALTER TABLE plants DROP COLUMN leaves;
 ALTER TABLE plants DROP COLUMN link;
-ALTER TABLE plants DROP COLUMN medicinal;
 ALTER TABLE plants DROP COLUMN medicinal_parts;
 ALTER TABLE plants DROP COLUMN native_to;
 ALTER TABLE plants DROP COLUMN plants_for_a_future;
@@ -23,7 +21,6 @@ ALTER TABLE plants DROP COLUMN root_type;
 ALTER TABLE plants DROP COLUMN seed_planting_depth_en;
 ALTER TABLE plants DROP COLUMN seed_viability;
 ALTER TABLE plants DROP COLUMN slug;
-ALTER TABLE plants DROP COLUMN soil_type;
 ALTER TABLE plants DROP COLUMN spread;
 ALTER TABLE plants DROP COLUMN thining;
 ALTER TABLE plants DROP COLUMN utility;
