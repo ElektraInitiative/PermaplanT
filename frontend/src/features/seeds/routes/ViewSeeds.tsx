@@ -1,14 +1,15 @@
 import { findAllSeeds } from '../api/findAllSeeds';
 import SeedsOverviewList from '../components/SeedsOverviewList';
-import { SeedDto } from '@/bindings/definitions';
+import { Page, SeedDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 export const ViewSeeds = () => {
   const navigate = useNavigate();
@@ -16,31 +17,32 @@ export const ViewSeeds = () => {
   // load seeds namespace for the translation
   const { t } = useTranslation(['seeds', 'common']);
 
-  const [seeds, setSeeds] = useState<SeedDto[]>([]);
+  const { fetchNextPage, data, isLoading, isFetching, error } = useInfiniteQuery<
+    Page<SeedDto>,
+    Error
+  >({
+    queryKey: ['seeds'],
+    queryFn: ({ pageParam = 1 }) => findAllSeeds(pageParam),
+    getNextPageParam: (lastPage) => {
+      const hasMore = lastPage.total_pages > lastPage.page;
+      return hasMore ? lastPage.page + 1 : undefined;
+    },
+    getPreviousPageParam: () => undefined,
+  });
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [error, setError] = useState<Error>();
-
-  useEffect(() => {
-    const _findAllSeeds = async () => {
-      try {
-        const seeds = await findAllSeeds();
-        setSeeds(seeds);
-        setFilteredSeeds(seeds);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error);
-          setShowErrorModal(true);
-        }
-      }
-    };
-    _findAllSeeds();
-  }, []);
+  const seeds = data?.pages.flatMap((page) => page.results) ?? [];
 
   // Set the filter when the user types in the search input
-  const [filteredSeeds, setFilteredSeeds] = useState<SeedDto[]>([]);
+  const [_, setFilteredSeeds] = useState<SeedDto[]>([]);
 
   const handleCreateSeedClick = () => {
     navigate('/seeds/new');
+  };
+
+  const pageFetcher = {
+    isLoading,
+    isFetching,
+    fetcher: fetchNextPage,
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +68,7 @@ export const ViewSeeds = () => {
             {t('seeds:view_seeds.btn_new_entry')}
           </SimpleButton>
         </div>
-        <SeedsOverviewList seeds={filteredSeeds} />
+        <SeedsOverviewList seeds={seeds} pageFetcher={pageFetcher} />
         <SimpleModal
           title={t('seeds:error_modal_title')}
           body={error?.message || t('common:unknown_error')} // Error should always have a message
