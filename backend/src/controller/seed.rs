@@ -15,9 +15,11 @@ use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-// TODO: add parameters to api doc
 #[utoipa::path(
     context_path = "/api/seeds",
+    params(
+        PageParameters
+    ),
     responses(
         (status = 200, description = "Fetch all seeds", body = PageSeedDto)
     )

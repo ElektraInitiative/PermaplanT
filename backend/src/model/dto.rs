@@ -4,7 +4,7 @@
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
-use utoipa::ToSchema;
+use utoipa::{IntoParams, ToSchema};
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
@@ -66,7 +66,7 @@ pub struct PlantsSummaryDto {
 
 /// Query parameters for searching plants.
 #[typeshare]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, IntoParams)]
 pub struct PlantsSearchParameters {
     /// The system will check if this string occurs in the plants common name or binomial name.
     pub name: Option<String>,
@@ -74,12 +74,11 @@ pub struct PlantsSearchParameters {
 
 /// Query parameters paginating list endpoints.
 #[typeshare]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, IntoParams)]
 pub struct PageParameters {
-    /// The system will check if this string occurs in the plants common name or binomial name.
-    /// How many plants will be part of a single page.
+    /// Number of results in per page.
     pub per_page: Option<i32>,
-    /// Which page should be returned.
+    /// Page number to be returned.
     /// Note: pages start at one.
     pub page: Option<i32>,
 }

@@ -14,9 +14,12 @@ use actix_web::{
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-// TODO: add parameters to api doc
 #[utoipa::path(
     context_path = "/api/plants",
+    params(
+        PlantsSearchParameters,
+        PageParameters,
+    ),
     responses(
         (status = 200, description = "Fetch or search for all plants", body = PagePlantsSummaryDto),
     )
