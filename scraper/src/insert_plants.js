@@ -36,7 +36,7 @@ function sanitizeValues(jsonArray) {
         (newKey === 'common_name_de' && obj[newKey] !== null) ||
         (newKey === 'light_requirement' && obj[newKey] !== null) ||
         (newKey === 'water_requirement' && obj[newKey] !== null) ||
-        (newKey === 'growth' && obj[newKey] !== null) ||
+        (newKey === 'growth_rate' && obj[newKey] !== null) ||
         (newKey === 'propagation_method' && obj[newKey] !== null)
       ) {
         obj[newKey] = obj[newKey].split(',');
@@ -57,6 +57,15 @@ function sanitizeValues(jsonArray) {
         obj[newKey] = obj[newKey].map((item) => {
           return item.trim();
         });
+      }
+
+      if (newKey === 'hardiness_zone' && obj[newKey] !== null) {
+        if (obj[newKey].includes('–')) {
+          obj[newKey] = obj[newKey].split('–');
+          obj[newKey] = `[${obj[newKey][0]},${obj[newKey][1]})`;
+        } else {
+          obj[newKey] = `[${obj[newKey]},${obj[newKey]})`;
+        }
       }
     });
 
@@ -84,9 +93,9 @@ async function insertPlants(fileName) {
 
   const query =
     pgp.helpers.insert(jsonArray, cs) +
-    ` ON CONFLICT ON CONSTRAINT plant_detail_binomial_name_key DO UPDATE SET ${cs.assignColumns({
+    ` ON CONFLICT ON CONSTRAINT plant_unique_name_key DO UPDATE SET ${cs.assignColumns({
       from: 'EXCLUDED',
-      skip: 'binomial_name',
+      skip: 'unique_name',
     })}, updated_at = NOW()`;
 
   console.log('[INFO] Inserting plant details into database.');

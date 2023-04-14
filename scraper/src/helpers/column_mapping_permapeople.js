@@ -29,7 +29,7 @@ export default {
   scientific_name: {
     map: 'binomial_name',
     priority: 'permapeople',
-    newName: 'scientific_name',
+    newName: 'unique_name',
   },
   parent_id: null,
   version: null,

@@ -10,7 +10,6 @@ const renameColumns2 = (plants, columnMapping) => {
   );
 
   plants.forEach((plant) => {
-    console.log(plant['scientific_name']);
     mappedColumns.forEach((column) => {
       // console.log(columnMapping[column]['newName'], column);
       plant[columnMapping[column]['newName']] = plant[column];
@@ -116,6 +115,7 @@ function writePlantsToCsv(plants) {
 
   const csv = json2csv(updatedPlants);
   fs.writeFileSync('data/mergedDatasets.csv', csv);
+
   return updatedPlants;
 }
 

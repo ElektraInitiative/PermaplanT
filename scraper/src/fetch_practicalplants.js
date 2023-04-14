@@ -103,8 +103,8 @@ function processData(details) {
         ? details['To check'] + ', Mature Size or Height'
         : 'Mature Size or Height';
     }
-    details['Mature Size Height'] = mature_size_height;
-    details['Mature Size Width'] = mature_size_width;
+    details['Height'] = mature_size_height;
+    details['Width'] = mature_size_width;
     delete details['Mature Size'];
   } catch (error) {
     console.log(error);
@@ -150,8 +150,8 @@ function parseSinglePage(fileName) {
     Subfamily: '',
     'To check': null,
     'Is Tree': null,
-    'Mature Size Height': null,
-    'Mature Size Width': null,
+    Height: null,
+    Width: null,
     'Nutrition Demand': null,
     'Article Last Modified At': null,
     'Is Variety': null,

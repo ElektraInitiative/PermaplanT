@@ -50,3 +50,6 @@ CREATE TYPE PROPAGATION_METHOD AS ENUM (
 );
 ALTER TABLE plants
 ADD COLUMN propagation_method PROPAGATION_METHOD [];
+-- growth_rate
+ALTER TABLE plants
+ALTER COLUMN growth_rate TYPE GROWTH_RATE [] USING ARRAY [growth_rate];
