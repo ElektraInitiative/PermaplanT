@@ -68,7 +68,7 @@
     "eslint-plugin-storybook": "^0.6.11",
     "https-localhost": "^4.7.1",
     "postcss": "^8.4.21",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "^0.2.1",
     "prop-types": "^15.8.1",
     "remark-gfm": "^3.0.1",
