@@ -1,15 +1,13 @@
 //! Paginate queries.
 
+use crate::model::dto::Page;
 use diesel::pg::Pg;
 use diesel::query_builder::{AstPass, Query, QueryFragment};
 use diesel::sql_types::{BigInt, Integer};
 use diesel::{QueryId, QueryResult};
 use diesel_async::methods::LoadQuery;
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
-use serde::{Deserialize, Serialize};
 use std::cmp::max;
-use typeshare::typeshare;
-use utoipa::ToSchema;
 
 /// The default number of results for a paginated query.
 const DEFAULT_PER_PAGE: i32 = 10;
@@ -113,48 +111,5 @@ where
         out.push_sql(" OFFSET ");
         out.push_bind_param::<Integer, _>(&self.offset)?;
         Ok(())
-    }
-}
-
-/// A page of results returned from a list endpoint.
-#[typeshare]
-#[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
-pub struct Page<T> {
-    /// Resulting records.
-    pub results: Vec<T>,
-    /// Current page number.
-    pub page: i32,
-    /// Results per page.
-    pub per_page: i32,
-    /// Number of pages in total.
-    pub total_pages: i32,
-}
-
-impl<T> Page<T> {
-    /// Used to convert from a page of entities to a page of dto.
-    //
-    // NOTE: I tried to use the `From` trait like this but got the following error.
-    // conflicting implementations of trait `std::convert::From<db::pagination::Page<_>>`
-    // for type `db::pagination::Page<_>` [E0119] Note: conflicting implementation in crate `core`:,
-    // ```
-    // impl<T, U> From<Page<U>> for Page<T>
-    //     where
-    //         T: From<U>,
-    // {
-    //     fn from(value: Page<U>) -> Self {
-    //         ...
-    //     }
-    // }
-    // ```
-    pub fn from<U>(value: Page<U>) -> Self
-    where
-        T: From<U>,
-    {
-        Self {
-            results: value.results.into_iter().map(Into::into).collect(),
-            page: value.page,
-            per_page: value.per_page,
-            total_pages: value.total_pages,
-        }
     }
 }

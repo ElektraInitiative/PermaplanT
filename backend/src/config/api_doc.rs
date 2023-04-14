@@ -4,9 +4,9 @@ use actix_web::web;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
+use crate::model::dto::Page;
 use crate::{
     controller::{plants, seed},
-    db::pagination::Page,
     model::{
         dto::{NewSeedDto, PlantsSummaryDto, SeedDto},
         r#enum::{quality::Quality, quantity::Quantity},

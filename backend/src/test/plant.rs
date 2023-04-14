@@ -3,7 +3,7 @@
 #[cfg(test)]
 mod tests {
     use crate::config::routes;
-    use crate::db::pagination::Page;
+    use crate::model::dto::Page;
     use crate::model::dto::PlantsSummaryDto;
     use crate::test::test_utils::init_test_database;
     use actix_web::App;

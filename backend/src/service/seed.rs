@@ -2,7 +2,7 @@
 
 use actix_web::web::Data;
 
-use crate::db::pagination::Page;
+use crate::model::dto::Page;
 use crate::model::dto::PageParameters;
 use crate::{
     db::connection::Pool,

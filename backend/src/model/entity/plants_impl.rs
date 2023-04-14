@@ -4,8 +4,8 @@ use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResu
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::db::function::array_to_string;
-use crate::db::pagination::{Page, Paginate};
-use crate::model::dto::{PageParameters, PlantsSearchParameters};
+use crate::db::pagination::Paginate;
+use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
     model::dto::PlantsSummaryDto,
     schema::plants::{self, all_columns, binomial_name, common_name},

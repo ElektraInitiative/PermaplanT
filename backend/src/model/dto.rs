@@ -9,6 +9,7 @@ use utoipa::ToSchema;
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
 pub mod new_seed_impl;
+pub mod page_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
@@ -81,4 +82,18 @@ pub struct PageParameters {
     /// Which page should be returned.
     /// Note: pages start at one.
     pub page: Option<i32>,
+}
+
+/// A page of results returned from a list endpoint.
+#[typeshare]
+#[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
+pub struct Page<T> {
+    /// Resulting records.
+    pub results: Vec<T>,
+    /// Current page number.
+    pub page: i32,
+    /// Results per page.
+    pub per_page: i32,
+    /// Number of pages in total.
+    pub total_pages: i32,
 }

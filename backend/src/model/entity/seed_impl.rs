@@ -3,8 +3,8 @@
 use diesel::{QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
-use crate::db::pagination::{Page, Paginate};
-use crate::model::dto::PageParameters;
+use crate::db::pagination::Paginate;
+use crate::model::dto::{Page, PageParameters};
 use crate::{
     model::dto::{NewSeedDto, SeedDto},
     schema::seeds::{self, all_columns},
