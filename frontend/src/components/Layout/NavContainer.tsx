@@ -10,6 +10,7 @@ interface NavContainerProps {
  * @param props.children The children of the NavContainer.
  */
 const NavContainer = ({ children }: NavContainerProps) => {
+  // Add some to the main content in order to prevent contentto the main content in order to prevent content from being clipped by the nav-bar.
   return (
     <div>
       <Navbar />
