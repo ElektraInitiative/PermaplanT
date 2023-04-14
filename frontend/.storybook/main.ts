@@ -1,6 +1,7 @@
+import type { StorybookConfig } from '@storybook/react-vite';
 import remarkGfm from 'remark-gfm';
 
-export default {
+const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
     '@storybook/addon-links',
@@ -21,6 +22,15 @@ export default {
       },
     },
   ],
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+    },
+  },
+  core: {
+    disableTelemetry: true,
+  },
   framework: {
     name: '@storybook/react-vite',
     options: {},
@@ -32,3 +42,5 @@ export default {
     autodocs: true,
   },
 };
+
+export default config;
