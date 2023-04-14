@@ -1,6 +1,6 @@
 //! Contains the implementation of [`Seed`].
 
-use diesel::{debug_query, ExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
+use diesel::{ExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::db::pagination::Paginate;
