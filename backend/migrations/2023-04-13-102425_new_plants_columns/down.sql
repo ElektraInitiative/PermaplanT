@@ -38,7 +38,6 @@ ALTER TABLE plants DROP COLUMN when_to_start_outdoors_weeks;
 ALTER TABLE plants DROP COLUMN spacing_en;
 ALTER TABLE plants DROP COLUMN pest;
 ALTER TABLE plants DROP COLUMN habitat;
-ALTER TABLE plants DROP COLUMN seed_weight_g;
 ALTER TABLE plants DROP COLUMN days_to_harvest;
 ALTER TABLE plants DROP COLUMN cold_stratification_time;
 ALTER TABLE plants DROP COLUMN cold_stratification_temperature;

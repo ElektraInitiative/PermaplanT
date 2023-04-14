@@ -78,8 +78,6 @@ ADD COLUMN cold_stratification_time integer;
 ALTER TABLE plants
 ADD COLUMN days_to_harvest text;
 ALTER TABLE plants
-ADD COLUMN seed_weight_g text;
-ALTER TABLE plants
 ADD COLUMN habitat text;
 ALTER TABLE plants
 ADD COLUMN pest text;
