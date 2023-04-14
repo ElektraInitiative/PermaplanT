@@ -74,8 +74,6 @@ ADD COLUMN days_to_harvest text;
 ALTER TABLE plants
 ADD COLUMN habitat text;
 ALTER TABLE plants
-ADD COLUMN pest text;
-ALTER TABLE plants
 ADD COLUMN spacing_en text;
 ALTER TABLE plants
 ADD COLUMN wikipedia TEXT;

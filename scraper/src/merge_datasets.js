@@ -42,9 +42,7 @@ function getSoilPH(pH) {
 }
 
 const unifyValueFormat = (plants, columnMapping) => {
-  const mappedColumns = Object.keys(columnMapping).filter(
-    (key) => columnMapping[key] !== null && columnMapping[key]['newName'] !== null,
-  );
+  const mappedColumns = Object.keys(columnMapping).filter((key) => columnMapping[key] !== null);
 
   plants.forEach((plant) => {
     mappedColumns.forEach((column) => {
@@ -65,10 +63,11 @@ const unifyValueFormat = (plants, columnMapping) => {
         if (column === 'soil_ph') {
           plant[column] = getSoilPH(plant[column]);
         }
-
+      }
+      if (columnMapping[column]['newName']) {
+        console.log(columnMapping[column]['newName']);
         plant[columnMapping[column]['newName']] = plant[column];
-
-        if (column !== columnMapping[column]['newName']) {
+        if (columnMapping[column]['newName'] !== column) {
           delete plant[column];
         }
       }

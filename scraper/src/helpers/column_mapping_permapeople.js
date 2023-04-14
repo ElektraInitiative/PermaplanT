@@ -151,8 +151,6 @@ export default {
   days_to_harvest: null,
   when_to_sow_indoors: null,
   '1000_seed_weight_g': {
-    map: null,
-    priority: 'permapeople',
     newName: '1000_seed_weight',
   },
   seed_planting_depth: {
