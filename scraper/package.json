@@ -8,6 +8,7 @@
     "fetch:practicalplants": "node src/fetch_practicalplants.js",
     "fetch:reinsaat": "node src/fetch_reinsaat.js",
     "merge:datasets": "node src/merge_datasets.js",
+    "merge:reinsaat": "node src/merge_reinsaat.js",
     "merge:csvfiles": "node src/helpers/merge_csv_files.js",
     "compare": "node src/compare_datasets.js",
     "insert": "node src/insert_plants.js"

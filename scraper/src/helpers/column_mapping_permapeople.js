@@ -153,7 +153,7 @@ export default {
   '1000_seed_weight_g': {
     map: null,
     priority: 'permapeople',
-    newName: 'seed_weight_g',
+    newName: '1000_seed_weight',
   },
   seed_planting_depth: {
     newName: 'seed_planting_depth_en',

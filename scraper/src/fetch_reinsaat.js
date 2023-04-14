@@ -72,10 +72,6 @@ const fetchPlant = async (
 
     if (growingInfo) {
       const paragraphs = await growingInfo.$$('p');
-      const scientificName = await growingInfo.$('p>em');
-      if (scientificName) {
-        plant['Scientific name'] = await scientificName.innerText();
-      }
 
       for (const paragraph of paragraphs) {
         const strong = await paragraph.$('strong');
@@ -99,11 +95,9 @@ const fetchPlant = async (
       plant['Suitable for professional cultivation'] = isSuitableForCultivation;
     }
 
-    if (!plant['Scientific name']) {
-      const fceShopKurztext = await page.$('.fce_shop_kurztext');
-      plant['Scientific name'] = await fceShopKurztext.innerText();
-      plant['Scientific name'] = plant['Scientific name'].trim();
-    }
+    const fceShopKurztext = await page.$('.fce_shop_kurztext');
+    plant['Unique name'] = await fceShopKurztext.innerText();
+    plant['Unique name'] = plant['Unique name'].trim();
 
     resultsArray.push(plant);
   } catch (error) {
@@ -118,7 +112,7 @@ const fetchPlant = async (
 const fetchThirdLevel = async (context, resultsArray, { name, category, subcategory, url }) => {
   // console.log('[INFO] Fetching subsubsublinks', name, category, url);
   const page = await context.newPage();
-  await page.goto(url);
+  await page.goto(url, { timeout: 360000 });
 
   const subsubsublinks = await page.$$eval(
     '.s_subnavi .s_subnavi_active .s_sub_subnavi .s_sub_sub_subnavi .submenu_3 a',
