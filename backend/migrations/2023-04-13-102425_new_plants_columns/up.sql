@@ -1,6 +1,6 @@
 -- Your SQL goes here
 ALTER TABLE plants
-ADD COLUMN alternate_name TEXT [];
+ADD COLUMN alternate_name TEXT;
 ALTER TABLE plants
 ADD COLUMN diseases TEXT;
 ALTER TABLE plants
@@ -34,7 +34,7 @@ ADD COLUMN plants_of_the_world_online_link_synonym TEXT;
 ALTER TABLE plants
 ADD COLUMN pollination TEXT;
 ALTER TABLE plants
-ADD COLUMN propagation_transplanting BOOLEAN;
+ADD COLUMN propagation_transplanting TEXT;
 ALTER TABLE plants
 ADD COLUMN resistance TEXT;
 ALTER TABLE plants

@@ -20,7 +20,7 @@ export default [
   { name: 'hardiness_zone' },
   { name: 'heat_zone' },
   { name: 'shade' },
-  // { name: 'soil_ph', cast: 'soil_ph[]' },
+  { name: 'soil_ph', cast: 'soil_ph[]' },
   { name: 'soil_water_retention', cast: 'soil_water_retention[]' },
   { name: 'environmental_tolerances', cast: 'text[]' },
   { name: 'native_climate_zones' },

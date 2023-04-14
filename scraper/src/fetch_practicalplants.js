@@ -9,57 +9,6 @@ config();
 const archivePath = process.env.PRACTICALPLANTSPATH;
 
 /**
- * Creates an array of distinct family from the array of plants.
- *
- * @param {*} details Array of plants
- * @returns Array of distinct family
- */
-function createDistinctFamilyDetails(details) {
-  const detailsCopy = JSON.parse(JSON.stringify(details));
-  const distinctFamilyDetails = [];
-  const distinctFamilyList = [];
-  detailsCopy.forEach((detail) => {
-    const family = detail['Family'];
-    if (!distinctFamilyList.includes(family)) {
-      distinctFamilyList.push(family);
-      Object.keys(detail).forEach((key) => {
-        if (key !== 'Family') {
-          detail[key] = null;
-        }
-      });
-      distinctFamilyDetails.push(detail);
-    }
-  });
-  return distinctFamilyDetails;
-}
-
-/**
- * Creates an array of distinct genus from the array of plants.
- *
- * @param {*} details Array of plants
- * @returns Array of distinct genus
- */
-function createDistinctGenusDetails(details) {
-  const detailsCopy = JSON.parse(JSON.stringify(details));
-  const distinctGenusDetails = [];
-  const distinctGenusList = [];
-
-  detailsCopy.forEach((detail) => {
-    const genus = detail['Genus'];
-    if (!distinctGenusList.includes(genus)) {
-      distinctGenusList.push(genus);
-      Object.keys(detail).forEach((key) => {
-        if (key !== 'Genus') {
-          detail[key] = null;
-        }
-      });
-      distinctGenusDetails.push(detail);
-    }
-  });
-  return distinctGenusDetails;
-}
-
-/**
  * Fetches the German name of the plant from wikidata API.
  *
  * @param {*} binomialName
@@ -286,8 +235,6 @@ async function parseAllPages() {
   const filteredDetails = details.filter((detail) => detail !== null);
 
   console.log('Finished parsing all pages');
-  const distinctGenusDetails = createDistinctGenusDetails(filteredDetails);
-  const distinctFamilyDetails = createDistinctFamilyDetails(filteredDetails);
 
   if (!existsSync('data')) {
     mkdirSync('data');
@@ -299,12 +246,6 @@ async function parseAllPages() {
 
   const errorsCsv = json2csv(errorsArray);
   writeFileSync('data/errors.csv', errorsCsv);
-
-  const distinctGenusCsv = json2csv(distinctGenusDetails);
-  writeFileSync('data/distinctGenus.csv', distinctGenusCsv);
-
-  const distinctFamilyCsv = json2csv(distinctFamilyDetails);
-  writeFileSync('data/distinctFamily.csv', distinctFamilyCsv);
 
   console.log('Parsed ' + filteredDetails.length + ' pages');
   console.log('Encountered ' + errorsArray.length + ' errors');

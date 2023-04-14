@@ -47,8 +47,6 @@ As an additional step, the script will also look up the german common name throu
 There will be several CSV files generated in the `data` directory:
 
 - `detail.csv`: This file contains the data scraped from the PracticalPlants wiki dump.
-- `distinctFamily.csv`: This file contains the distinct family names scraped from the PracticalPlants wiki dump.
-- `distinctGenus.csv`: This file contains the distinct genus names scraped from the PracticalPlants wiki dump.
 - `errors.csv`: This file contains the errors encountered during the scraping process.
   The columns in the file identify the type of error i.e. which part of the data was missing.
   The main error type occurs under the column "Plant Datatable" and represents listing pages e.g. [/abelia][https://practicalplants.org/wiki/abelia/].
@@ -81,27 +79,18 @@ npm run merge <path-to-original-csv-file> <path-to-corrected-csv-file>
 
 After the data is scraped and stored in `csv` format, we should now insert it into the database.
 
-Along with the plant data, we can now populate the `family` and `genus` tables from the files created during the scraping step.
-
 This can be done with the following commands:
 
-1. Inserts the data from the default-named `detail.csv`, `distinctFamily.csv` and `distinctGenus.csv` files into the
-   database.
+1. Inserts the data from the default-named `detail.csv` files into the database:
 
 ```shell
 npm run insert
 ```
 
-2. Inserts the plant data only from the specified `csv` file into the database. Keep in mind that due to the foreign key relationships, the `family` and `genus` tables should be populated before inserting the plant data.
+2. Inserts the plant data only from the specified `csv` file into the database:
 
 ```shell
 npm run insert <path-to-csv-file>
-```
-
-3. Inserts the data from the specified `csv` file into the database. The second argument specifies the type of data to be inserted i.e. `family` or `genus`.
-
-```shell
-npm run insert <path-to-csv-file> [family|genus]
 ```
 
 _Note:_ Please make sure that the database is up-to-date with the latest migrations before running this command.
