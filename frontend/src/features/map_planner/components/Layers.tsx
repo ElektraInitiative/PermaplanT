@@ -24,7 +24,7 @@ export const Layers = () => {
       <section className="mt-6">
         <div className="grid grid-cols-6 gap-2">
           <LayerSettings name="Dimension" />
-          <LayerSettings name="Draw" />
+          <LayerSettings name="Draw" alternatives={['draw1', 'draw2']} />
           <LayerSettings name="Fertilize" />
           <LayerSettings name="Habitats" />
           <LayerSettings name="Hydrology" />

@@ -53,7 +53,7 @@ export const Toolbar = () => {
         <div className="overflow-y-scroll" style={{ height: height }}>
           <Layers />
         </div>
-        <div className="z-10 grow bg-neutral-100 dark:bg-neutral-100-dark">
+        <div className="z-10 grow bg-neutral-100 dark:bg-neutral-200-dark">
           <div
             className="mb-6 h-[10px] w-full bg-neutral-500 hover:cursor-row-resize"
             onPointerDown={horizontalHandler}
