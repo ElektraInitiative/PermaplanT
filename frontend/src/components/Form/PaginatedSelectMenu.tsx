@@ -1,5 +1,6 @@
 import { SelectOption } from './SelectMenu';
 import filterObject from '@/utils/filterObject';
+import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { GroupBase, StylesConfig } from 'react-select';
 import { AsyncPaginate } from 'react-select-async-paginate';
@@ -79,6 +80,7 @@ export default function SelectMenu<T extends FieldValues, IsMulti extends boolea
     multiValueRemove: () => 'hover:bg-neutral-500',
   };
 
+  const [inputValue, setInputValue] = useState('');
   const customStyles: StylesConfig<unknown, IsMulti, GroupBase<unknown>> = {
     // remove css attributes from predefined styles
     // this needs to be done so the custom css classes take effect
@@ -115,15 +117,20 @@ export default function SelectMenu<T extends FieldValues, IsMulti extends boolea
             name={id}
             loadOptions={loadOptions}
             isClearable
+            inputValue={inputValue}
             onChange={handleOptionsChange}
             styles={customStyles}
             placeholder={placeholder}
             isMulti={isMulti}
             classNames={customClassNames}
             required={required}
-            onInputChange={(inputValue) => {
+            onInputChange={(value, event) => {
+              // prevent the text from disapearing when clicking inside the input field
+              if (event.action === 'input-change' || event.action === 'set-value') {
+                setInputValue(value);
+              }
               onChange?.();
-              onInputChange?.(inputValue);
+              onInputChange?.(value);
             }}
           />
         )}
