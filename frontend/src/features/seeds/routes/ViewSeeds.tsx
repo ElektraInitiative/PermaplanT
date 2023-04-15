@@ -6,11 +6,11 @@ import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import useDebounce from '@/utils/use-debounced-value';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import useDebouncedValue from '@/hooks/useDebouncedValue';
 
 export const ViewSeeds = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export const ViewSeeds = () => {
 
   // Set the filter when the user types in the search input
   const [seedNameFilter, setSeedNameFilter] = useState<string>('');
-  const debouncedNameFilter = useDebounce(seedNameFilter, 200);
+  const debouncedNameFilter = useDebouncedValue(seedNameFilter, 200);
   const { fetchNextPage, data, isLoading, isFetching, error } = useInfiniteQuery<
     Page<SeedDto>,
     Error
