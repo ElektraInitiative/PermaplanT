@@ -189,6 +189,7 @@ Rename:
 - `edible_uses` to `edible_uses_en`
 - `spacing` to `spacing_en`
 - `seed_planting_depth` to `seed_planting_depth_en`
+- `1000_seed_weight` to `seed_weight` (Documentation should state it is "thousand grain weight/Tausendkornmasse")
 
 Bug:
 
@@ -227,14 +228,14 @@ New columns:
 - `Saatgutbedarf` should be called `required_quantity_of_seeds_de`
 - `Required quantity of seeds` should be called `required_quantity_of_seeds_en`
 - `Saattiefe` should be called `seed_planting_depth_de`
-- `Tausendkornmasse` should be called `1000_seed_weight_de`
-- `Thousand seeds mass` should be called `1000_seed_weight_en`
+- `Tausendkornmasse` should be called `seed_weight_de`
+- `Thousand seeds mass` should be called `seed_weight_en`
 - `Suitable for professional cultivation` should be called `machine_cultivation_possible`
 
 Copy columns:
 
 - `subcategory` should be copied to `edible_uses_de` and `edible_uses_en` respectively (DE and EN version)
-- `Tausendkorngewicht (TKG)` should be copied to `1000_seed_weight` (remove ` g`)
+- `Tausendkorngewicht (TKG)` should be copied to `seed_weight` (remove ` g`)
 - `Sowing` or `Direct Sowing` or `Sowing outdoors` or `Sowing Direct Outdoors` should be copied to `sowing_outdoors_en`
 - `Distances` or `Spacing` should be copied to `spacing_en`
 - `Sowing depth` should be copied to `seed_planting_depth_en`
