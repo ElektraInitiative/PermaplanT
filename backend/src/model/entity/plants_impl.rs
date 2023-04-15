@@ -6,7 +6,7 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use crate::{
     model::diesel_extensions::array_to_string,
     model::dto::{PlantsSearchDto, PlantsSummaryDto},
-    schema::plants::{self, all_columns, binomial_name, common_name},
+    schema::plants::{self, all_columns, common_name_en, unique_name},
 };
 
 use super::Plants;
@@ -38,12 +38,12 @@ impl Plants {
 
         let query = plants::table
             .filter(
-                binomial_name
+                unique_name
                     .ilike(&query_with_placeholders)
-                    .or(array_to_string(common_name, " ").ilike(&query_with_placeholders)),
+                    .or(array_to_string(common_name_en, " ").ilike(&query_with_placeholders)),
             )
             .select(all_columns)
-            .order((binomial_name, common_name))
+            .order((unique_name, common_name_en))
             .limit(limit_plus_one.into())
             .offset(offset.into());
 
