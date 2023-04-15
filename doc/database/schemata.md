@@ -146,6 +146,52 @@ maps }o--|| users : "owned by"
 blossoms ||--o{ blossoms_gained : ""
 blossoms_gained }o--|| users : ""
 
+ingredientLists {
+  INT id PK
+  VARCHAR name "NOT NULL"
+  VARCHAR description
+  BYTEA image
+  BOOLEAN is_recurring "NOT NULL"
+  DATE end_date "NOT NULL"
+  INT accomplished
+}
+
+ingredients {
+  INT needed "NOT NULL"
+  INT gathered
+}
+
+ingredientLists }o--|| users : ""
+ingredientLists }o--|| maps : ""
+ingredients }|--|| ingredientLists : ""
+ingredients }|--|| plant_detail : ""
+
+events {
+  INT id PK
+  BOOLEAN system_event "NOT NULL"
+  VARCHAR name "NOT NULL"
+  VARCHAR description
+  DATE event_date "NOT NULL"
+}
+
+events }o--|| maps : ""
+
+favourites {}
+
+favourites }o--|| maps : ""
+favourites }o--|| users : ""
+favourites }o--|| plant_detail : ""
+
+companionGroups {
+  INT id PK
+  VARCHAR name "NOT NULL"
+}
+
+companions {}
+
+companions }|--|| companionGroups : ""
+companions }o--|| plant_detail : ""
+
 ```
 
 # Table descriptions
@@ -261,6 +307,70 @@ blossoms_gained }o--|| users : ""
 | **blossom_id**    | 1             |
 | **times_gained**  | 1             | 0 to infinity                   |
 | **gained_date**   | {2023-04-10}  | one entry for every time gained |
+
+## `IngredientLists`
+
+| **_Column name_** | **_Example_**                          | **_Description_**                                                              |
+| :---------------- | :------------------------------------- | :----------------------------------------------------------------------------- |
+| **id**            | 1                                      | list id                                                                        |
+| **owner_id**      | 1                                      | user id                                                                        |
+| **map_id**        | 1                                      | id of the map this list is for                                                 |
+| **name**          | Smoothie Ingredients                   | name of the list                                                               |
+| **description**   | Ingredients for my strawberry smoothie | description of the list                                                        |
+| **image**         | NULL                                   | an image for further customizing the list                                      |
+| **is_recurring**  | true                                   | a flag representing whether the objectives repeat themselves or not            |
+| **end_date**      | 2023-04-15                             | an optional date at which point the owner wants the objectives to be fulfilled |
+| **accomplished**  | 0                                      | the number of times the list was fulfilled; only relevant for recurring lists  |
+
+## `Ingredients`
+
+Many-to-many table to store relations between plants and ingredient lists.
+
+| **_Column name_** | **_Example_** | **_Description_**                                    |
+| :---------------- | :------------ | :--------------------------------------------------- |
+| **list_id**       | 1             | id of the ingredient list                            |
+| **plant_id**      | 1             | id of the plant used as an ingredient                |
+| **needed**        | 1             | the amount of this plant that is needed for the list |
+| **gathered**      | 0             | the amount of this plant that was already gathered   |
+
+## `Events`
+
+| **_Column name_** | **_Example_**        | **_Description_**                                                  |
+| :---------------- | :------------------- | :----------------------------------------------------------------- |
+| **id**            | 1                    | event id                                                           |
+| **map_id**        | 1                    | id of the map the event is taking place on                         |
+| **system_event**  | true                 | a flag representing whether this event is system or user generated |
+| **name**          | Harvest strawberries | name of the event                                                  |
+| **description**   | NULL                 | description of the event details                                   |
+| **event_date**    | 2023-04-15           | the date the event is taking place on                              |
+
+## `Favourites`
+
+Many-to-many table to store map-specific favourites.
+
+| **_Column name_** | **_Example_** | **_Description_** |
+| :---------------- | :------------ | :---------------- |
+| **map_id**        | 1             | id of the map     |
+| **user_id**       | 1             | id of the user    |
+| **plant_id**      | 1             | id of the plant   |
+
+## `CompanionGroups`
+
+| **_Column name_** | **_Example_**      | **_Description_**                                                         |
+| :---------------- | :----------------- | :------------------------------------------------------------------------ |
+| **id**            | 1                  | companion group id                                                        |
+| **name**          | My Companion Group | name of the companion group                                               |
+| **[user_id]**     | 1                  | id of the user that owns this companion group (are groups user specific?) |
+| **[map_id]**      | 1                  | id of the map that this companion group belongs to (map specific?)        |
+
+## `Companions`
+
+Many-to-many table to store relations between companion groups and plants.
+
+| **_Column name_** | **_Example_** | **_Description_**  |
+| :---------------- | :------------ | :----------------- |
+| **group_id**      | 1             | companion group id |
+| **plant_id**      | 1             | plant id           |
 
 ## `Relation`
 
