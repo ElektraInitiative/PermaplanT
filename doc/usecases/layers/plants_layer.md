@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete plant elements in their map in the plants layer.
-- **Status:** Split in Polyculture Use Cases Open
+- **Status:** In Progress
 - **Assignee:** Benjamin
 
 ## Scenarios
@@ -21,7 +21,7 @@
     - and lastly favourites of users
   - While the user drags or moves a plant element, constraints are shown:
     - The user gets a visual indication which parts of the map are ideally, okay and not suited for the plant to be placed
-      (based on e.g. zones, pH value, moisture, animals or shadows).
+      (based on e.g. previous plants, zones, pH value, moisture, animals or shadows).
     - The user is able to view the relationships between the plants by looking at the lines connecting them (companion or antagonist).
       The thickness indicates the confidence of the relationship.
     - The user positions the plant element in the appropriate location in the map.

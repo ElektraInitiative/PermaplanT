@@ -6,8 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can search for plants to add to her map and sort results by different criterion.
-- **Status:** In Progress
-- **Assignee:** Moritz, Paul
+- **Status:** Partly Done
+- **Assignee:** Benjamin
 
 ## Scenarios
 
@@ -27,7 +27,7 @@
        (and the other way round)
     3. Environmental fit (from selected plant or position)
     4. Ecological value
-  - The resulting list is constructed (e.g., Tomatillo *Physalis philadelphica*):
+  - The resulting list is constructed (e.g., Tomatillo _Physalis philadelphica_):
     - common names according to language settings (German or English), if available, then
     - a hyphen `-` (if there was a common name), then
     - unique name rendered as described in [hierarchy description](doc/database/hierarchy.md)

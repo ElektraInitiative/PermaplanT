@@ -6,8 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User saves and loads different versions of a map
-- **Status:** Assigned
-- **Assignee:** Paul
+- **Status:** In Progress
+- **Assignee:** Thorben
 
 ## Scenarios
 
