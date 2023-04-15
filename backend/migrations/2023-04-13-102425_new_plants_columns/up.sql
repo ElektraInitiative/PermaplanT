@@ -1,89 +1,49 @@
 -- Your SQL goes here
+CREATE TYPE EXTERNAL_SOURCE as ENUM ('practicalplants', 'permapeople', 'reinsaat');
 ALTER TABLE plants
-ADD COLUMN alternate_name TEXT;
-ALTER TABLE plants
-ADD COLUMN diseases TEXT;
-ALTER TABLE plants
-ADD COLUMN edible BOOLEAN;
-ALTER TABLE plants
-ADD COLUMN edible_parts TEXT [];
-ALTER TABLE plants
-ADD COLUMN germination_temperature INTEGER;
-ALTER TABLE plants
-ADD COLUMN introduced_into TEXT;
-ALTER TABLE plants
-ADD COLUMN layer TEXT;
-ALTER TABLE plants
-ADD COLUMN leaves TEXT;
-ALTER TABLE plants
-ADD COLUMN link TEXT;
-ALTER TABLE plants
-ADD COLUMN medicinal_parts TEXT;
-ALTER TABLE plants
-ADD COLUMN native_to TEXT;
-ALTER TABLE plants
-ADD COLUMN plants_for_a_future TEXT;
-ALTER TABLE plants
-ADD COLUMN plants_of_the_world_online_link TEXT;
-ALTER TABLE plants
-ADD COLUMN plants_of_the_world_online_link_synonym TEXT;
-ALTER TABLE plants
-ADD COLUMN pollination TEXT;
-ALTER TABLE plants
-ADD COLUMN propagation_transplanting TEXT;
-ALTER TABLE plants
-ADD COLUMN resistance TEXT;
-ALTER TABLE plants
-ADD COLUMN root_depth TEXT;
-ALTER TABLE plants
-ADD COLUMN root_type TEXT;
-ALTER TABLE plants
-ADD COLUMN seed_planting_depth_en TEXT;
-ALTER TABLE plants
-ADD COLUMN seed_viability TEXT;
-ALTER TABLE plants
-ADD COLUMN slug TEXT;
-ALTER TABLE plants
-ADD COLUMN spread TEXT;
-ALTER TABLE plants
-ADD COLUMN thining TEXT;
-ALTER TABLE plants
-ADD COLUMN utility TEXT;
-ALTER TABLE plants
-ADD COLUMN warning TEXT;
-ALTER TABLE plants
-ADD COLUMN when_to_plant_cuttings TEXT;
-ALTER TABLE plants
-ADD COLUMN when_to_plant_division TEXT;
-ALTER TABLE plants
-ADD COLUMN when_to_plant_transplant TEXT;
-ALTER TABLE plants
-ADD COLUMN when_to_sow_indoors TEXT;
-ALTER TABLE plants
-ADD COLUMN sowing_outdoors_en TEXT;
-ALTER TABLE plants
-ADD COLUMN when_to_start_indoors_weeks TEXT;
-ALTER TABLE plants
-ADD COLUMN when_to_start_outdoors_weeks TEXT;
-ALTER TABLE plants
-ADD COLUMN cold_stratification_temperature integer;
-ALTER TABLE plants
-ADD COLUMN cold_stratification_time integer;
-ALTER TABLE plants
-ADD COLUMN days_to_harvest text;
-ALTER TABLE plants
-ADD COLUMN habitat text;
-ALTER TABLE plants
-ADD COLUMN spacing_en text;
-ALTER TABLE plants
-ADD COLUMN wikipedia TEXT;
-ALTER TABLE plants
-ADD COLUMN days_to_maturity TEXT;
-ALTER TABLE plants
-ADD COLUMN pests TEXT;
-ALTER TABLE plants
-ADD COLUMN version TEXT;
-ALTER TABLE plants
-ADD COLUMN germination_time TEXT;
-ALTER TABLE plants
-ADD COLUMN description TEXT;
+ADD COLUMN alternate_name TEXT,
+    ADD COLUMN diseases TEXT,
+    ADD COLUMN edible BOOLEAN,
+    ADD COLUMN edible_parts TEXT [],
+    ADD COLUMN germination_temperature TEXT,
+    ADD COLUMN introduced_into TEXT,
+    ADD COLUMN layer TEXT,
+    ADD COLUMN leaves TEXT,
+    ADD COLUMN link TEXT,
+    ADD COLUMN medicinal_parts TEXT,
+    ADD COLUMN native_to TEXT,
+    ADD COLUMN plants_for_a_future TEXT,
+    ADD COLUMN plants_of_the_world_online_link TEXT,
+    ADD COLUMN plants_of_the_world_online_link_synonym TEXT,
+    ADD COLUMN pollination TEXT,
+    ADD COLUMN propagation_transplanting TEXT,
+    ADD COLUMN resistance TEXT,
+    ADD COLUMN root_depth TEXT,
+    ADD COLUMN root_type TEXT,
+    ADD COLUMN seed_planting_depth_en TEXT,
+    ADD COLUMN seed_viability TEXT,
+    ADD COLUMN slug TEXT,
+    ADD COLUMN spread TEXT,
+    ADD COLUMN thining TEXT,
+    ADD COLUMN utility TEXT,
+    ADD COLUMN warning TEXT,
+    ADD COLUMN when_to_plant_cuttings TEXT,
+    ADD COLUMN when_to_plant_division TEXT,
+    ADD COLUMN when_to_plant_transplant TEXT,
+    ADD COLUMN when_to_sow_indoors TEXT,
+    ADD COLUMN sowing_outdoors_en TEXT,
+    ADD COLUMN when_to_start_indoors_weeks TEXT,
+    ADD COLUMN when_to_start_outdoors_weeks TEXT,
+    ADD COLUMN cold_stratification_temperature TEXT,
+    ADD COLUMN cold_stratification_time TEXT,
+    ADD COLUMN days_to_harvest text,
+    ADD COLUMN habitat text,
+    ADD COLUMN spacing_en text,
+    ADD COLUMN wikipedia TEXT,
+    ADD COLUMN days_to_maturity TEXT,
+    ADD COLUMN pests TEXT,
+    ADD COLUMN version TEXT,
+    ADD COLUMN germination_time TEXT,
+    ADD COLUMN description TEXT,
+    ADD COLUMN parent_id TEXT,
+    ADD COLUMN external_source EXTERNAL_SOURCE;

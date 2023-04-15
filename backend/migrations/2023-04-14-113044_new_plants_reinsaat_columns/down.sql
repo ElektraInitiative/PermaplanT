@@ -11,4 +11,5 @@ ALTER TABLE plants DROP COLUMN reinsaat_article_number,
     DROP COLUMN "1000_seed_weight_de",
     DROP COLUMN "1000_seed_weight_en",
     DROP COLUMN "1000_seed_weight",
-    DROP COLUMN machine_cultivation_possible;
+    DROP COLUMN machine_cultivation_possible,
+    DROP COLUMN edible_uses_de;

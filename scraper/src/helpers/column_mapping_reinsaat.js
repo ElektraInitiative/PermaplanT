@@ -1,3 +1,8 @@
+/**
+ * This file contains the mapping between the German and English column names
+ * of the Reinsaat dataset.
+ *
+ */
 const mapping = {
   Artikelnummer: 'reinsaat_article_number',
   Portionsinhalt: 'reinsaat_portion_content',

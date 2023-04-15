@@ -14,4 +14,4 @@ ADD COLUMN reinsaat_article_number TEXT,
     ADD COLUMN "1000_seed_weight_en" TEXT,
     ADD COLUMN "1000_seed_weight" TEXT,
     ADD COLUMN machine_cultivation_possible TEXT,
-    ADD COLUMN edible_uses_de TEXT
+    ADD COLUMN edible_uses_de TEXT;

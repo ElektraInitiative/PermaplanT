@@ -52,7 +52,7 @@ export default [
   { name: 'has_drought_tolerance', cast: 'boolean' },
   { name: 'edible', cast: 'boolean' },
   { name: 'edible_parts', cast: 'text[]' },
-  // { name: 'germination_temperature', cast: 'integer' },
+  { name: 'germination_temperature' },
   { name: 'introduced_into' },
   { name: 'layer' },
   { name: 'leaves' },
@@ -90,4 +90,8 @@ export default [
   { name: '1000_seed_weight_en' },
   { name: '1000_seed_weight' },
   { name: 'machine_cultivation_possible' },
+  { name: 'edible_uses_de' },
+  { name: 'germination_time' },
+  { name: 'days_to_harvest' },
+  { name: 'cold_stratification_temperature' },
 ];

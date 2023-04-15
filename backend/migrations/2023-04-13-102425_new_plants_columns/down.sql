@@ -43,3 +43,6 @@ ALTER TABLE plants DROP COLUMN pests;
 ALTER TABLE plants DROP COLUMN version;
 ALTER TABLE plants DROP COLUMN germination_time;
 ALTER TABLE plants DROP COLUMN description;
+ALTER TABLE plants DROP COLUMN parent_id;
+ALTER TABLE plants DROP COLUMN external_source;
+DROP TYPE EXTERNAL_SOURCE;
