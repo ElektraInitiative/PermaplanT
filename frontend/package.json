@@ -12,7 +12,7 @@
     "format:check": "prettier --check .",
     "lint": "eslint --max-warnings=0 .",
     "test": "echo 'no tests for now :/'",
-    "typedoc": "typedoc --options typedoc.json src",
+    "doc": "typedoc src",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

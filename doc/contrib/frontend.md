@@ -85,16 +85,15 @@ Story files are named `*.stories.tsx` and should be located in the same folder a
 For an example please take a look in the `src/components` folder.
 
 For other API documentation like Hooks and utility functions, we use [TypeDoc](https://typedoc.org/).
-To generate the TypeDoc documentation under `src/generated/docs` simply run `npm run typedoc`.
+Run `npm run doc` to generate the TypeDoc documentation under `src/generated/docs`.
 The generated documentation is automatically integrated into Storybook under the menu `DOCS`.
 To display an arbitrary other `.mdx` file in the `DOCS` menu, it has to export a header like this.
-The `.mdx` files should have valid [MDX2](https://mdxjs.com/blog/v2/) syntax, otherwise Storybook will crash.
 
 ```tsx
 import { Meta } from "@storybook/addon-docs";
 
 <Meta
-  title="docs/<name>"
+  title="docs/<name_of_documentation_file>"
   parameters={{
     viewMode: "docs",
     previewTabs: {
@@ -103,6 +102,8 @@ import { Meta } from "@storybook/addon-docs";
   }}
 />;
 ```
+
+Storybook will display an error if the `.mdx` files do not have valid [MDX2](https://mdxjs.com/blog/v2/) syntax.
 
 ## Bootstrapping (Order of Execution)
 

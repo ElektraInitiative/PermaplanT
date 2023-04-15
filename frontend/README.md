@@ -35,7 +35,21 @@ npm run dev
 
 This will start the development server on [http://localhost:5173/](http://localhost:5173/) and will open the application in your default web browser. The server will automatically reload the page when you make changes to the code.
 
-To test that it is working, you can visit this url on your preferred browser: [http://localhost:5173/seeds](http://localhost:5173/seeds)
+To view the documentation
+
+1. Generate the documentation via TypeDoc.
+
+```shell
+npm run doc
+```
+
+2. Start storybook
+
+```shell
+npm run storybook
+```
+
+This will start the storybook dev server on [http://localhost:6006/](http://localhost:6006/) and will open it up on your default web browser.
 
 ## Production
 
