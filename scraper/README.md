@@ -13,9 +13,31 @@ This directory contains the following scrapers:
 
 ## Installation and Usage
 
+### With single command
+
+The following command will fetch the data from the sources, merge the datasets and insert the data into the database:
+
+```shell
+npm run start:full
+```
+
+If you would like to skip the fetching steps and import your csv files from Nextcloud, you can use the following command:
+
+```shell
+npm run start
+```
+
+**_Note:_** you will need the following files in the `data` directory:
+
+1. `detail.csv` - scraped from PracticalPlants
+2. `permapeopleRawData.csv` - scraped from Permapeople
+3. `reinsaatRawData.csv` - scraped from Reinsaat and merged from `reinsaatRawDataEN.csv` and `reinsaatRawDataDE.csv`
+
+### Step by step
+
 The following steps describe how to use the scraper to fetch the data from the sources and insert it into the database.
 The steps are simplified and only the most important commands are listed.
-For more information, please refer to the documentation linked above of the individual scrapers.
+For more information, please refer to the documentation of the individual scrapers linked in the first paragraph of this doc.
 
 1. Install dependencies
 

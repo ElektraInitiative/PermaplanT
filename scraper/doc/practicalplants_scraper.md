@@ -5,10 +5,22 @@ The scraper scrapes the data from the PracticalPlants wiki dump and stores it in
 
 ## Installation and Usage
 
+1. Install dependencies
+
+```shell
+npm install && mkdir -p data
+```
+
+2. Create .env file from .env.example and fill in the required values:
+
+```shell
+cp .env.example .env
+```
+
 `PRACTICALPLANTSPATH` mentioned in .env is the path on your local filesystem to the PracticalPlants wiki dump, which could be fetched from our [repository](https://github.com/ElektraInitiative/practicalplants).
 This is required to scrape the data.
 
-1. Start the scraper
+3. Start the scraper
 
 The scraper scrapes the data from the PracticalPlants wiki dump and stores it in `csv` format in the `data` directory. This can be done with the following command:
 
@@ -25,7 +37,7 @@ There will be several CSV files generated in the `data` directory:
   The columns in the file identify the type of error i.e. which part of the data was missing.
   The main error type occurs under the column "Plant Datatable" and represents listing pages e.g. [/abelia][https://practicalplants.org/wiki/abelia/].
 
-2. Correct data manually and merge with generated data (optional)
+4. Correct data manually and merge with generated data (optional)
 
 The scraped data contains inconsistencies and mistakes made by PracticalPlants users.
 In order to correct these mistakes, we need to manually correct the data i.e. copy the `detail.csv` file into a new file.
@@ -48,15 +60,3 @@ This can be done with the following command:
 ```shell
 npm run merge <path-to-original-csv-file> <path-to-corrected-csv-file>
 ```
-
-3. Insert data into the database
-
-After the data is scraped and stored in `csv` format, we should now insert it into the database.
-
-This can be done with the following commands:
-
-```shell
-npm run insert
-```
-
-_Note:_ Please make sure that the database is up-to-date with the latest migrations before running this command.

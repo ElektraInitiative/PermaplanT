@@ -4,11 +4,23 @@ The official documentation for the Permapeople API can be found [here](https://p
 
 ## Installation and Usage
 
+1. Install dependencies
+
+```shell
+npm install && mkdir -p data
+```
+
+2. Create .env file from .env.example and fill in the required values:
+
+```shell
+cp .env.example .env
+```
+
 `PERMAPEOPLE_KEY_ID` and `PERMAPEOPLE_SECRET_KEY` mentioned in .env are the credentials for the Permapeople API.
 This is required to scrape the data.
 You can get these keys from the Permapeople team.
 
-1. Start the scraper
+3. Start the scraper
 
 The scraper scrapes the data from the Permapeople API and stores it in `csv` format in the `data` directory. This can be done with the following command:
 
@@ -16,7 +28,8 @@ The scraper scrapes the data from the Permapeople API and stores it in `csv` for
 npm run fetch:permapeople
 ```
 
-_OPTIONAL:_
+4. Compare the scraped data with the data in the database **(optional)**
+
 The scraper can also compare the scraped data with the data in the database(this data will be referenced as practicalPlants data and vice versa) and store the differences in `csv` format in the `data` directory.
 This can be done with the following command:
 

@@ -11,7 +11,13 @@ Therefore, we need to scrape the data from the webpage, which can be found [here
 npm install && mkdir -p data
 ```
 
-2. Fetch the English and German data
+2. Create .env file from .env.example and fill in the required values:
+
+```shell
+cp .env.example .env
+```
+
+3. Fetch the English and German data
 
 The scraper scrapes the data from the Reinsaat webpage and stores it in `csv` format in the `data` directory:
 
@@ -24,7 +30,7 @@ This can be done with the following command:
 npm run fetch:reinsaat
 ```
 
-3. Merge the scraped data
+4. Merge the scraped data
 
 The scraper also merges the scraped data of both the english and german version of the Reinsaat webpage and stores it in `csv` format in the `data` directory:
 
