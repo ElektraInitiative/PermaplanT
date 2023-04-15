@@ -21,6 +21,11 @@ const renameColumns = (plants) => {
   });
 };
 
+/**
+ * Sanitize and construct the scientific name of the plant
+ *
+ * @param {*} plants
+ */
 const sanitizeValues = (plants) => {
   return plants.map((plant) => {
     Object.keys(plant).forEach((key) => {
@@ -40,6 +45,13 @@ const sanitizeValues = (plants) => {
   });
 };
 
+/**
+ * Merge the values of the old columns into the new column
+ *
+ * @param {*} plant
+ * @param {*} oldCols
+ * @param {*} newCol
+ */
 const mergeColumns = (plant, oldCols, newCol) => {
   let mergedValue = '';
   for (let i = 0; i < oldCols.length; i++) {
@@ -60,6 +72,13 @@ const mergeColumns = (plant, oldCols, newCol) => {
   });
 };
 
+/**
+ *  Rename the subcategory column to subcategory either EN or DE
+ *
+ * @param {*} plants - the plants to rename the category for
+ * @param {*} lang - the language of the plants
+ * @returns
+ */
 const renameCategory = (plants, lang) => {
   return plants.map((plant) => {
     if (plant['subcategory'] === undefined) {
@@ -71,6 +90,9 @@ const renameCategory = (plants, lang) => {
   });
 };
 
+/**
+ * Merge both the EN and DE datasets into one dataset
+ */
 async function mergeDatasets() {
   let allPlants = [];
 

@@ -4,7 +4,7 @@
  * @param {*} jsonArray
  * @returns
  */
-function sanitizeColumnNames(jsonArray) {
+function sanitizeColumnNames(jsonArray, external_source = null) {
   return jsonArray.map((obj) => {
     const keys = Object.keys(obj);
     keys.forEach((key) => {
@@ -22,6 +22,9 @@ function sanitizeColumnNames(jsonArray) {
         delete obj[key];
       }
     });
+    if (external_source) {
+      obj['external_source'] = external_source;
+    }
     return obj;
   });
 }

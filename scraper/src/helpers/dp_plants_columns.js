@@ -94,4 +94,6 @@ export default [
   { name: 'germination_time' },
   { name: 'days_to_harvest' },
   { name: 'cold_stratification_temperature' },
+  { name: 'parent_id' },
+  { name: 'external_source' },
 ];

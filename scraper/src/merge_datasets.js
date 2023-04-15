@@ -100,9 +100,9 @@ async function mergeDatasets() {
   let permapeople = await csv().fromFile('data/permapeopleRawData.csv'); // Permapeople dataset
   let reinsaat = await csv().fromFile('data/reinsaatRawData.csv'); // Reinsaat dataset
 
-  sanitizeColumnNames(practicalPlants);
-  sanitizeColumnNames(permapeople);
-  sanitizeColumnNames(reinsaat);
+  sanitizeColumnNames(practicalPlants, 'practicalplants');
+  sanitizeColumnNames(permapeople, 'permapeople');
+  sanitizeColumnNames(reinsaat, 'reinsaat');
 
   console.log('[INFO] practicalPlants: ', practicalPlants.length);
   console.log('[INFO] permapeople: ', permapeople.length);
