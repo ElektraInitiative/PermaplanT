@@ -8,8 +8,7 @@ Check relevant points but **please do not remove entries**.
 These points need to be fulfilled for every PR.
 -->
 
-- [ ] Details of what you changed are in commit messages
-      (first line should have `module: short statement` syntax)
+- [ ] Details of what you changed are in commit messages.
 - [ ] References to issues, e.g. `close #X`, are in the commit messages.
 - [ ] The buildserver is happy.
 - [ ] The PR is rebased with current master.
@@ -31,14 +30,17 @@ For documentation fixes, spell checking, and similar none of these points below 
 - [ ] I fixed all affected documentation
 - [ ] I fixed all affected decisions
 - [ ] I added code comments, logging, and assertions as appropriate
+- [ ] I translated all strings visible to the user
 - [ ] I mentioned [every code or binary](/.reuse/dep5) not directly written or done by me in [reuse syntax](https://reuse.software/)
 
 ## Review
 
 <!--
-Reviewers should check the following.
+Reviewers can copy&check the following to their review
 -->
 
+- [ ] I've tested the code
+- [ ] I've read through the whole code
 - [ ] Documentation is conforming to [our Documentation Guidelines](/doc/documentation.md)
 - [ ] Examples are well chosen and understandable
 - [ ] Code is conforming to our Coding Guidelines
