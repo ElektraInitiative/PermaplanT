@@ -3,6 +3,15 @@
   "out": "src/generated/docs",
   "plugin": ["typedoc-plugin-markdown"],
   "entryPointStrategy": "expand",
-  "exclude": ["src/components/**/*", "src/features/**/components/**/*", "src/stories/**/*"],
+  "exclude": [
+    // Exclude components, they are documented in Storybook
+    "src/components/**/*.tsx",
+    // Exclude feature components, they are either documented in Storybook or not public API.
+    "src/features/**/components/**/*.tsx",
+    // Exclude route components, they are not public API
+    "src/features/**/routes/**/*.tsx",
+    // Exclude Storybook stories
+    "src/**/*.stories.tsx"
+  ],
   "useStorybook": true
 }
