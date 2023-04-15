@@ -4,10 +4,6 @@ import renderer from 'react-test-renderer';
 import SearchInput from './SearchInput';
 import {MemoryRouter} from 'react-router-dom';
 
-/**
- * @jest-environment jsdom
- */
-
 it('renders correctly', () => {
     const tree = renderer
         .create(<MemoryRouter><SearchInput placeholder='Test' handleSearch={() => {}}/></MemoryRouter>)
