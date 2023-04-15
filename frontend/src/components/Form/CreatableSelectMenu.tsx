@@ -1,5 +1,6 @@
 import { SelectOption } from './SelectMenu';
 import filterObject from '@/utils/filterObject';
+import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import {
   ActionMeta,
@@ -93,6 +94,8 @@ export default function CreatableSelectMenu<
     multiValueRemove: (styles) => filterObject(styles, ['color']),
   };
 
+  const [inputValue, setInputValue] = useState('');
+
   return (
     <div>
       {labelText && (
@@ -111,15 +114,20 @@ export default function CreatableSelectMenu<
             isClearable
             onChange={handleOptionsChange}
             onCreateOption={handleCreate}
+            inputValue={inputValue}
             placeholder={placeholder}
             options={options}
             isMulti={isMulti}
             styles={customStyles}
             classNames={customClassNames}
             required={required}
-            onInputChange={(inputValue) => {
+            onInputChange={(value, event) => {
+              // prevent the text from disapearing when clicking inside the input field
+              if (event.action === 'input-change' || event.action === 'set-value') {
+                setInputValue(value);
+              }
               onChange?.();
-              onInputChange?.(inputValue);
+              onInputChange?.(value);
             }}
           />
         )}
