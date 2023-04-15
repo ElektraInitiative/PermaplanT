@@ -52,12 +52,16 @@
 - Rank:
   Rank is a level within taxonomy.
   Plants within one taxonomic rank share traits with each other.
-  The levels relevant for PermaplanT are (high to low):
+  The levels relevant for PermaplanT are from highest to lowest:
   - Family
   - Genus
   - Species
   - Variety
   - Cultivar
+- below:
+  We say a plant or rank _B_ is _below_ another rank _A_ if it is at least one rank lower than _A_.
+- belong:
+  We say a plant _B_ is _belongs_ to rank _A_ if it is exactly rank _A_ (and not below).
 - Concrete Plant:
   Is in an actually existing species, variety and cultivar.
 - Abstract Plant:

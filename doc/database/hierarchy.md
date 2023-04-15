@@ -27,9 +27,9 @@ A concrete plant can be of following rank:
 
 Furthermore following must be true:
 
-- genus belongs to a family,
-- specie belongs to a genus,
-- a variety belongs to a specie,
+- genus is below a family,
+- specie is below a genus,
+- a variety is below a specie,
 - a cultivar is below to a specie or a variety
 
 The diagram below shows the hierarchy of entities with `height` and `width` as an example of attribute classification.
@@ -66,7 +66,7 @@ classDiagram
 ```
 
 Each of these entities can have their own attributes.
-E.g., a variety under a specie can have different height than the specie that it belongs to.
+E.g., a variety below a specie can have different height than the specie itself.
 
 ## Unique Name
 
