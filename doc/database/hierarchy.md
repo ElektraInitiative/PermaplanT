@@ -127,6 +127,12 @@ Columns that contain text should be postfixed with:
 - `_en` for English text
 - `_de` for German text
 
+As we often copy data from other sources, we maintain following columns for external references:
+
+- `external_source`: an array from enum where the first entry is the "main source" the other columns refer to:
+- `external_id`: an identifier of that source
+- `external_url`: the URL from where the data was taken
+
 Plants are additionally classified as:
 
 - is_concrete_plant (is a concrete plant as opposite to an abstract plant)
@@ -150,9 +156,10 @@ Column names should be:
 - `propagation_method` (and not `propagation`)
 - `growth_rate` (and not `growth`)
 - `has_drought_tolerance`
-- `id` should be `permapeople_id`
 - `parent_id`
 - `root_depth` (and not `root_zone_tendancy`)
+- `id` should be `external_id`
+- `external_source` should contain the enum value for `permapeople`
 
 Following columns should be removed:
 
@@ -211,10 +218,9 @@ Unique name:
 
 New columns:
 
-- `Artikelnummer` should be called `reinsaat_article_number`
-- `Portionsinhalt` should be called `reinsaat_portion_content`
+- `Artikelnummer` should be called `external_article_number`
+- `Portionsinhalt` should be called `external_portion_content`
 - `Direktsaat` or `Aussaat` should be called `sowing_outdoors_de`
-- `url` to `reinsaat_url`
 - `Aussaat/ Pflanzung Freiland` should be called `sowing_outdoors`
 - `Ernte` should be called `harvest_time`
 - `Abstände` should be called `spacing_de`
@@ -234,6 +240,9 @@ Copy columns:
 - `Sowing depth` should be copied to `seed_planting_depth_en`
 - `1st harvest` should be copied to `days_to_harvest`
 - `Keimtemperatur` should be copied to `germination_temperature`
+- `external_url`
+- `external_id`
+- `external_source` should contain the enum value for `reinsaat`
 
 Individual problems:
 
