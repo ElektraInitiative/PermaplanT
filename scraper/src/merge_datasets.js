@@ -196,7 +196,6 @@ async function mergeDatasets() {
     const scientific_name = plant['scientific_name'];
     const plantInMerged = allPlants.find((plant) => plant['scientific_name'] === scientific_name);
     if (!plantInMerged) {
-      console.log('[INFO] Plant not found in merged dataset: ', scientific_name);
       allPlants.push({
         ...plant,
       });
