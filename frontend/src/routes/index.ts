@@ -1,7 +1,7 @@
 import { Pages, Routes } from './types';
+import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
-import { ImprintPage } from '@/features/imprint_page';
 
 const routes: Routes = {
   [Pages.ImprintPage]: {
