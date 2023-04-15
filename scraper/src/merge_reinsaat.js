@@ -25,7 +25,7 @@ const renameColumns = (plants) => {
 const sanitizeValues = (plants) => {
   return plants.map((plant) => {
     Object.keys(plant).forEach((key) => {
-      if (key === 'unique_name') {
+      if (key === 'scientific_name') {
         plant[key] = plant[key].replace(/convar\.\s?\w+\s/g, '').replace(/ssp\.\s?\w+\s/g, '');
         plant[key] = plant[key]
           .replaceAll('L.', '')
@@ -81,7 +81,25 @@ async function mergeDatasets() {
   reinsaatRawDataEN = renameCategory(reinsaatRawDataEN, 'EN');
   reinsaatRawDataDE = renameCategory(reinsaatRawDataDE, 'DE');
 
-  allPlants = reinsaatRawDataEN.concat(reinsaatRawDataDE);
+  reinsaatRawDataEN.forEach((plant) => {
+    const plantDE = reinsaatRawDataDE.find(
+      (p) => p['Scientific name'] === plant['Scientific name'],
+    );
+    if (plantDE) {
+      allPlants.push({ ...plant, ...plantDE });
+    } else {
+      allPlants.push(plant);
+    }
+  });
+
+  reinsaatRawDataDE.forEach((plant) => {
+    const plantEN = reinsaatRawDataEN.find(
+      (p) => p['Scientific name'] === plant['Scientific name'],
+    );
+    if (!plantEN) {
+      allPlants.push(plant);
+    }
+  });
 
   allPlants.forEach((plant) => {
     mergeColumns(plant, ['Aussaat', 'Direktsaat'], 'Direktsaat');

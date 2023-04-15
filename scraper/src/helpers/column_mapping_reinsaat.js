@@ -20,7 +20,7 @@ const mapping = {
   'Sowing depth': 'seed_planting_depth_en',
   '1st harvest': 'days_to_harvest',
   Keimtemperatur: 'germination_temperature',
-  'Unique name': 'unique_name',
+  'Scientific name': 'scientific_name',
 };
 
 export default mapping;

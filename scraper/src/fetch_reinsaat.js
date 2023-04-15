@@ -96,9 +96,9 @@ const fetchPlant = async (
     }
 
     const fceShopKurztext = await page.$('.fce_shop_kurztext');
-    plant['Unique name'] = await fceShopKurztext.innerText();
-    plant['Unique name'] = plant['Unique name'].trim();
-    plant['Unique name'] = plant['Unique name'] + " '" + name + "'";
+    plant['Scientific name'] = await fceShopKurztext.innerText();
+    plant['Scientific name'] = plant['Scientific name'].trim();
+    plant['Scientific name'] = plant['Scientific name'] + " '" + name + "'";
 
     resultsArray.push(plant);
   } catch (error) {

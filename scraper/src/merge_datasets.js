@@ -95,6 +95,39 @@ const renameColumns = async (plants, columnMapping) => {
   return plants;
 };
 
+const sanitizeValues = async (plants) => {
+  const uniqueScientificNames = new Set();
+  let sanitizedPlants = [];
+
+  plants.forEach((plant) => {
+    if (
+      plant['scientific_name'] === 'Citrullus lanatus' &&
+      plant['name'] === 'Blacktail' &&
+      plant['slug'] === 'blacktail'
+    ) {
+      return;
+    }
+
+    const scientificName = plant['scientific_name'];
+    if (uniqueScientificNames.has(scientificName)) {
+      if (
+        plant['type'] === 'Variety' ||
+        (scientificName === 'Brassica oleracea acephala' && plant['name'] === 'Taunton Deane Kale')
+      ) {
+        plant['type'] = 'Variety';
+        plant['scientific_name'] = plant['scientific_name'] + " '" + plant['name'] + "'";
+
+        sanitizedPlants.push(plant);
+      }
+    } else {
+      uniqueScientificNames.add(scientificName);
+      sanitizedPlants.push(plant);
+    }
+  });
+
+  return sanitizedPlants;
+};
+
 async function mergeDatasets() {
   console.log('[INFO] Merging datasets...');
 
@@ -113,6 +146,7 @@ async function mergeDatasets() {
   console.log('[INFO] reinsaat: ', reinsaat.length);
 
   practicalPlants = await renameColumns(practicalPlants, permapeopleColumnMapping);
+  permapeople = await sanitizeValues(permapeople);
 
   practicalPlants.forEach((plant) => {
     const binomial_name = plant['binomial_name'];
@@ -158,7 +192,22 @@ async function mergeDatasets() {
 
   console.log('[INFO] Merged practicalPlants and permapeople: ', allPlants.length);
 
-  allPlants = allPlants.concat(reinsaat);
+  reinsaat.forEach((plant) => {
+    const scientific_name = plant['scientific_name'];
+    const plantInMerged = allPlants.find((plant) => plant['scientific_name'] === scientific_name);
+    if (!plantInMerged) {
+      console.log('[INFO] Plant not found in merged dataset: ', scientific_name);
+      allPlants.push({
+        ...plant,
+      });
+    } else {
+      Object.keys(plant).forEach((key) => {
+        if (plant[key] && !plantInMerged[key]) {
+          plantInMerged[key] = plant[key];
+        }
+      });
+    }
+  });
 
   return allPlants;
 }
