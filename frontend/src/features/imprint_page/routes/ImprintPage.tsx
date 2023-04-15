@@ -13,7 +13,7 @@ export function ImprintPage() {
       </h1>
       <section
         id="general"
-        className="mx-auto mb-4 flex flex-col text-base leading-relaxed lg:w-2/3"
+        className="mx-auto mb-24 flex flex-col text-base leading-relaxed lg:w-2/3"
       >
         <p>PermaplanT</p>
         <p>{t('imprint:chairman')}: Markus Raab</p>
@@ -26,7 +26,7 @@ export function ImprintPage() {
         id="address"
         className="mx-auto mb-4 flex flex-col text-base leading-relaxed lg:w-2/3"
       >
-        <b className="title-font text-1xl mb-4 font-medium sm:text-2xl">Address</b>
+        <b className="title-font text-1xl mb-4 font-medium sm:text-2xl">{t('imprint:address')}</b>
         <p>Feldgasse 19</p>
         <p>7321 Unterfrauenhaid</p>
         <p>{t('imprint:country')}</p>
