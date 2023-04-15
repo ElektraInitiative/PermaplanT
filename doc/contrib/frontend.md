@@ -78,6 +78,32 @@ Take of example a button component that is used as the login button.
 
 That has the added benefit, that presentational components can be easily integrated into Storybook.
 
+## Documentation
+
+We use Storybook [Storybook](https://storybook.js.org) to document shared components.
+Story files are named `*.stories.tsx` and should be located in the same folder as the component they are documenting.
+For an example please take a look in the `src/components` folder.
+
+For other API documentation like Hooks and utility functions, we use [TypeDoc](https://typedoc.org/).
+To generate the TypeDoc documentation under `src/generated/docs` simply run `npm run typedoc`.
+The generated documentation is automatically integrated into Storybook under the menu `DOCS`.
+To display an arbitrary other `.mdx` file in the `DOCS` menu, it has to export a header like this.
+The `.mdx` files should have valid [MDX2](https://mdxjs.com/blog/v2/) syntax, otherwise Storybook will crash.
+
+```tsx
+import { Meta } from "@storybook/addon-docs";
+
+<Meta
+  title="docs/<name>"
+  parameters={{
+    viewMode: "docs",
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+/>;
+```
+
 ## Bootstrapping (Order of Execution)
 
 The entry point for the frontend is `src/main.tsx`.
