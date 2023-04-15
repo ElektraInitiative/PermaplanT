@@ -1,7 +1,6 @@
 import fs from 'fs';
 import { parse as json2csv } from 'json2csv';
 import csv from 'csvtojson';
-import { sanitizeColumnNames } from './helpers/helpers.js';
 import mapping from './helpers/column_mapping_reinsaat.js';
 
 const renameColumns = (plants) => {

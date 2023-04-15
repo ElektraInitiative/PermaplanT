@@ -46,7 +46,8 @@ const fetchPlant = async (
         if (!typeLabelTd) {
           continue;
         }
-        const typeLabel = await typeLabelTd.innerText();
+        let typeLabel = await typeLabelTd.innerText();
+        typeLabel = typeLabel + '_datestable';
         plant[typeLabel] = [];
 
         const tds = await row.$$('td');
