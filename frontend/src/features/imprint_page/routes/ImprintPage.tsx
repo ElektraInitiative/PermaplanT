@@ -17,9 +17,11 @@ export function ImprintPage() {
       >
         <p>PermaplanT</p>
         <p>{t('imprint:chairman')}: Markus Raab</p>
-        <p>ZVR Nr.: {t('imprint:zvr_placeholder')}</p>
         <p>
-          E-Mail: <a href="mailto://contact@permaplant.net">contact@permaplant.net</a>
+          {t('imprint:zvr_number')}: {t('imprint:zvr_placeholder')}
+        </p>
+        <p>
+          {t('imprint:email')}: <a href="mailto://contact@permaplant.net">contact@permaplant.net</a>
         </p>
       </section>
       <section

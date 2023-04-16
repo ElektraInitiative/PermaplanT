@@ -1,8 +1,10 @@
 {
     "title": "Imprint",
     "chairman": "Chairman",
+    "zvr_number": "ZVR No.",
     "zvr_placeholder": "not yet registered",
-    "address": "address",
+    "email": "Email",
+    "address": "Address",
     "country": "Austria",
     "legal_notice": "This website is purely non-commercial, this website does not sell anything. It only offers you various forms of memberships."
 }
