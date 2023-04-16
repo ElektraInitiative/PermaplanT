@@ -36,7 +36,7 @@ impl Seed {
             .per_page(page_parameters.per_page)
             .load_page::<Self>(conn)
             .await;
-        query_page.map(Page::from)
+        query_page.map(Page::from_entity)
     }
 
     /// Fetch seed by id from the database.
