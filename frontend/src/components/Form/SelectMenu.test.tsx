@@ -2,22 +2,8 @@ import {render} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderer from 'react-test-renderer';
 import SelectMenu from './SelectMenu';
-import {FormProvider, useForm} from 'react-hook-form';
 import {MemoryRouter} from 'react-router-dom';
-
-interface TestDto {
-    foo: string;
-}
-
-const FormWrapper = (props: any) => {
-    const formMethods = useForm<TestDto>();
-
-    return (
-        <FormProvider {...formMethods}>
-            {props.children}
-        </FormProvider>
-    );
-};
+import { FormWrapper } from '@/utils/testing';
 
 it('renders correctly', () => {
     const tree = renderer
