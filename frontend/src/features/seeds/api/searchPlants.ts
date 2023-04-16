@@ -11,7 +11,7 @@ export const searchPlants = async (
     const pageString: string = page != undefined ? page.toString() : '1';
 
     const searchParams = new URLSearchParams();
-    searchParams.append('search_term', searchTerm);
+    searchParams.append('name', searchTerm);
     searchParams.append('per_page', '30');
     searchParams.append('page', pageString);
 
