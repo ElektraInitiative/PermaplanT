@@ -1,6 +1,8 @@
 import { useDarkModeStore } from '@/features/dark_mode';
 import { LatLngExpression, Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
 const locations: Array<LatLngExpression> = [
@@ -14,7 +16,9 @@ const locations: Array<LatLngExpression> = [
 ];
 
 export const GeoMap = () => {
+  const [isVisible, setIsVisible] = useState(false);
   const darkMode = useDarkModeStore((state) => state.darkMode);
+  const { t } = useTranslation(['geomap']);
   const myIcon = new Icon({
     iconUrl: '/plant.svg',
     iconSize: [40, 40],
@@ -30,8 +34,7 @@ export const GeoMap = () => {
       </Marker>
     );
   });
-
-  return (
+  const map = (
     <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={false}>
       {darkMode ? (
         <TileLayer
@@ -47,4 +50,29 @@ export const GeoMap = () => {
       {markers}
     </MapContainer>
   );
+
+  function handleClick() {
+    setIsVisible(true);
+  }
+
+  let content;
+
+  if (isVisible) {
+    content = map;
+  } else {
+    content = (
+      <div className="text-center" id="placeholder">
+        <img
+          src="/permaplant-map-placeholder.png"
+          alt="PermaplanT Map"
+          className="mb-2 hover:cursor-pointer"
+          onClick={handleClick}
+        />
+        <i>{t('geomap:hint')}</i>
+        <br />
+      </div>
+    );
+  }
+
+  return <>{content}</>;
 };
