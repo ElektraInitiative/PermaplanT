@@ -126,8 +126,8 @@
   In the backend unit tests can be found in the `src/` directory. They are to be put in separate modules and annotated with `#[cfg(test)]` (that way they are only compiled when actually running tests).  
   Example: Test an individual function for specific behaviour.
 - integration test:  
-  Used to test whether different parts of the code work together correctly.  
-  In the backend integraton tests can be found in the `tests/` directory (which is separate from the `src/` directory).  
+  Used to test if different parts of the code work together correctly.  
+  In the backend integration tests can be found in the `tests/` directory (which is separate from the `src/` directory).  
   Example: Make an HTTP request to the backend and let it run through controller, service and persistance layer while mocking the database.
 - end to end test (e2e test):  
   Used to test the whole application from end to end.  
