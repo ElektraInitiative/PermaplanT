@@ -51,7 +51,6 @@ impl<T> Paginate for T {
 impl<T> PaginatedQuery<T> {
     /// Set the number of rows returned by the query.
     #[must_use]
-    #[allow(clippy::missing_const_for_fn)]
     pub fn per_page(self, per_page: Option<i32>) -> Self {
         // allow optional per_page and disallow non positive per_page
         let actual_per_page = max(per_page.unwrap_or(DEFAULT_PER_PAGE), MIN_PER_PAGE);
