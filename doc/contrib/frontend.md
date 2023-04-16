@@ -87,7 +87,9 @@ For an example please take a look in the `src/components` folder.
 For other API documentation like Hooks and utility functions, we use [TypeDoc](https://typedoc.org/).
 Run `npm run doc` to generate the TypeDoc documentation under `src/generated/docs`.
 The generated documentation is automatically integrated into Storybook under the menu `DOCS`.
-To display an arbitrary other `.mdx` file in the `DOCS` menu, it has to export a header like this.
+There is also the possibility to display additional documentation inside the `DOCS` menu in storybook.
+Such additional documentation files should be created in the `src/docs` directory for Storybook to recognize them.
+Furthermore, an additional documentation file must be a `.mdx` file and it has to export a header like this.
 
 ```tsx
 import { Meta } from "@storybook/addon-docs";
@@ -103,7 +105,7 @@ import { Meta } from "@storybook/addon-docs";
 />;
 ```
 
-Storybook will display an error if the `.mdx` files do not have valid [MDX2](https://mdxjs.com/blog/v2/) syntax.
+Storybook will display an error if the `.mdx` file does not have valid [MDX2](https://mdxjs.com/blog/v2/) syntax.
 
 ## Bootstrapping (Order of Execution)
 
