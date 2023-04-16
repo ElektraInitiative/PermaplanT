@@ -9,11 +9,11 @@ use diesel_async::methods::LoadQuery;
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use std::cmp::max;
 
-/// The default number of results for a paginated query.
+/// The default number of rows returned from a paginated query.
 const DEFAULT_PER_PAGE: i32 = 10;
 /// The minimum value for page number in a paginated query.
 const MIN_PAGE: i32 = 1;
-/// The minimum value for `per_page` in a paginated query.
+/// The minimum number of rows returned from a paginated query.
 const MIN_PER_PAGE: i32 = 1;
 
 /// An executable paginated query.
@@ -23,13 +23,13 @@ pub struct PaginatedQuery<T> {
     query: T,
     /// Page number to be loaded.
     page: i32,
-    /// Number of rows loaded in a the query.
+    /// Number of rows loaded in the query.
     per_page: i32,
     /// Offset to the the first row in the query.
     offset: i32,
 }
 
-/// A trait intended for enabling pagination in diesels query builder.
+/// A trait intended for enabling pagination in diesel's query builder.
 pub trait Paginate: Sized {
     /// Return a paginated version of a query for a specific page number.
     fn paginate(self, page: Option<i32>) -> PaginatedQuery<Self>;

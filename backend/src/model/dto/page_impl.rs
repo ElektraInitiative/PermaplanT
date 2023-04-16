@@ -1,5 +1,5 @@
 //! Contains the implementation of [`Page`].
-//!
+
 use crate::model::dto::Page;
 
 impl<T> Page<T> {

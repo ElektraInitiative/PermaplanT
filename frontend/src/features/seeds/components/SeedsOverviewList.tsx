@@ -24,7 +24,6 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
   }, [ref, pageFetcher]);
 
   const handleScroll = async (event: UIEvent<EventTarget>) => {
-    // event.target.
     const target = event.target;
     if (!(target instanceof Element)) return;
     if (target.scrollTop + target.clientHeight === target.scrollHeight) {
