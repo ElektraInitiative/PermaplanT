@@ -28,7 +28,7 @@ Backend will be checked against a sidecar-container running PostgreSQL.
 
 ### Build
 
-Each and every pull request will be built and tested against a separate CI database.
+Every pull request will be built and tested against a separate CI database.
 
 Steps for all PRs are:
 
@@ -45,3 +45,8 @@ Since there is only one agent for PRs available, the last built PR wins.
 ### Deploy to Dev Environment
 
 The `master` branch will be automatically deployed to [dev.permaplant.net](https://dev.permaplant.net).
+
+### Deploy to Prod Environment
+
+The production environment is available on [www.permaplant.net](https://www.permaplant.net).
+Deployment to production will not happen automatically.
