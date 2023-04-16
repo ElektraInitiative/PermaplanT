@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import renderer from 'react-test-renderer';
 import CreatableSelectMenu from './CreatableSelectMenu';
 import {MemoryRouter} from 'react-router-dom';
-import { FormWrapper } from '@/utils/testing';
+import { FormWrapper } from '../../utils/testing';
 
 it('renders correctly', () => {
     const tree = renderer
@@ -86,7 +86,7 @@ it('calls handleOptionsChange on options change', async () => {
 
 it('creates new option if none exists', async () => {
     const callback = jest.fn(); 
-    const {getByRole, getByText} = render(
+    const {getByRole} = render(
         <MemoryRouter>
             <FormWrapper> 
                 <CreatableSelectMenu 

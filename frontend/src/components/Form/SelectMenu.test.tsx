@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import renderer from 'react-test-renderer';
 import SelectMenu from './SelectMenu';
 import {MemoryRouter} from 'react-router-dom';
-import { FormWrapper } from '@/utils/testing';
+import { FormWrapper } from '../../utils/testing';
 
 it('renders correctly', () => {
     const tree = renderer
