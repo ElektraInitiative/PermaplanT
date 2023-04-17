@@ -33,7 +33,10 @@ cp .env.sample .env
 npm run dev
 ```
 
-This will start the development server on [http://localhost:5173/](http://localhost:5173/) and will open the application in your default web browser. The server will automatically reload the page when you make changes to the code.
+This will start the development server on [http://localhost:5173/](http://localhost:5173/) and will open the application in your default web browser.
+The server will automatically reload the page when you make changes to the code.
+
+## Documentation
 
 To view the documentation
 
