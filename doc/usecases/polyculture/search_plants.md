@@ -20,13 +20,14 @@
     - Unique name
     - German common names
     - English common names
+    - Attributes that describe the plant, especially `edible_uses`, so that people can search for `popcorn`.
     - Furthermore, other columns can be matched with extra syntax (e.g. environmental fit or ecological value)
+  - Results then get extended by the whole hierarchy below, e.g., a search for `Tomato` should include all cultivars.
   - The results are ranked by:
     1. Exact matches, without additional letters before or after, e.g. the user wrote "fir", "fir" should be first hit
     2. Language settings, e.g., when typing "fi" on English setting "fir" should rank higher than German "Fichte"
        (and the other way round)
-    3. Environmental fit (from selected plant or position)
-    4. Ecological value
+    3. Names of a plant should be preferred (over text found in attributes or plants found of the hierarchy below).
   - The resulting list is constructed (e.g., Tomatillo _Physalis philadelphica_):
     - common names according to language settings (German or English), if available, then
     - a hyphen `-` (if there was a common name), then
