@@ -6,6 +6,15 @@ interface PricingOptionProps {
   onClickHandler(id: string): void;
 }
 
+/**
+ * A card-like container detailing one specific pricing option.
+ *
+ * @param title the title of the pricing option.
+ * @param info additional information about the pricing option.
+ * @param advantages an array of featured bullet points about the pricing option.
+ * @param isSelected a flag indicating whether this option was selected.
+ * @param onClickHandler the event handler for the click action.
+ */
 export default function PricingOption({
   title,
   info,
