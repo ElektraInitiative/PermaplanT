@@ -1,4 +1,5 @@
 import '../src/styles/globals.css';
+import './storybook.css';
 import { Preview } from '@storybook/react';
 
 const preview: Preview = {
@@ -16,6 +17,11 @@ const preview: Preview = {
         order: ['docs', ['Readme', '*'], 'Components', '*'],
         locales: 'en-US',
       },
+    },
+    darkMode: {
+      // enable dark mode for all stories
+      classTarget: 'html',
+      stylePreview: true,
     },
   },
 };

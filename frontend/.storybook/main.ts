@@ -22,6 +22,7 @@ const config: StorybookConfig = {
         },
       },
     },
+    'storybook-dark-mode',
   ],
   typescript: {
     reactDocgen: 'react-docgen-typescript',
