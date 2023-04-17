@@ -96,7 +96,10 @@ const Pricing = () => {
           </table>
         </div>
         <div className="mx-auto mt-4 flex w-full pl-4 lg:w-2/3">
-          <a className="inline-flex items-center text-secondary-500 dark:text-secondary-300 md:mb-2 lg:mb-0">
+          <a
+            className="inline-flex items-center text-secondary-500 dark:text-secondary-300 md:mb-2 lg:mb-0"
+            href="/pricing"
+          >
             Learn More
             <svg
               fill="none"

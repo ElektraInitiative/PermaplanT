@@ -1,5 +1,6 @@
 import { Pages, Routes } from './types';
 import { LandingPage } from '@/features/landing_page';
+import PricingPage from '@/features/pricing_page/routes/PricingPage';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 
 const routes: Routes = {
@@ -22,6 +23,11 @@ const routes: Routes = {
     component: LandingPage,
     path: '/',
     title: 'PermaplanT',
+  },
+  [Pages.PricingPage]: {
+    component: PricingPage,
+    path: '/pricing',
+    title: 'Pricing',
   },
 };
 

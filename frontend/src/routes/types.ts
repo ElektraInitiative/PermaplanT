@@ -6,6 +6,7 @@ enum Pages {
   ViewSeeds,
   SeedDetails,
   LandingPage,
+  PricingPage,
 }
 
 type PathRouteCustomProps = {
