@@ -10,6 +10,7 @@ const config: StorybookConfig = {
     '@storybook/addon-backgrounds',
     '@storybook/addon-toolbars',
     '@storybook/addon-measure',
+    '@storybook/addon-actions',
     '@storybook/addon-interactions',
     {
       name: '@storybook/addon-docs',
