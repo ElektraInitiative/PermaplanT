@@ -1,12 +1,12 @@
-# Use Case: Generate Printable Map PDF
+# Use Case: Map to PDF
 
 ## Summary
 
 - **Scope:** Map View
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** Users can generate a PDF file containing a screenshot of their current map view with a header/footer displaying relevant metadata, such as current time, map timestamp, GPS coordinates, and scale.
-- **Status:** Draft
+- **Brief:** Users can generate a PDF file of the map.
+- **Status:** Assigned
 - **Assignee:** Ramzan
 
 ## Scenarios
@@ -18,10 +18,9 @@
  - The app adds a header/footer to the PDF containing the current time, map timestamp, GPS coordinates, and scale.
  - The user receives the generated PDF file for printing or saving.
 - **Alternative scenario:**
- - The user selects custom options e.g. for the header/footer, such as changing the format or choosing which metadata to include.
 - **Error scenario:**
  - The app encounters an issue while generating the PDF file, such as insufficient storage space or an unexpected error.
-- **Postconition:**
+- **Postcondition:**
  - The user has successfully generated a printable PDF file containing the current map view and relevant metadata in the header/footer.
 - **Non-functional Contstrains:**
  - The generated PDF should be compatible with common PDF readers and printers.
