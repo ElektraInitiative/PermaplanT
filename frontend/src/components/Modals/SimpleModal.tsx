@@ -1,6 +1,6 @@
 import SimpleButton from '../Button/SimpleButton';
 import ModalContainer from './ModalContainer';
-import TransparentBackground from '@/components/TransparentBackground';
+import TransparentBackground from '../TransparentBackground';
 
 interface SimpleModalProps {
   title: string;
