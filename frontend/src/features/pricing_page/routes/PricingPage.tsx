@@ -4,19 +4,21 @@ import PageTitle from '@/components/Header/PageTitle';
 import Footer from '@/components/Layout/Footer';
 import PageLayout from '@/components/Layout/PageLayout';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function PricingPage() {
+  const { t } = useTranslation(['pricing']);
   const initialOptions = [
     {
-      title: 'Option A',
-      info: 'The first option.',
-      advantages: ['Is an option.', 'Would recommend'],
+      title: 'pricing:OptionA.title',
+      info: 'pricing:OptionA.info',
+      advantages: ['pricing:OptionA.advantages.one', 'pricing:OptionA.advantages.two'],
       isSelected: false,
     },
     {
-      title: 'Option B',
-      info: 'The second option.',
-      advantages: ['Also an option.', 'Maybe better.'],
+      title: 'pricing:OptionB.title',
+      info: 'pricing:OptionB.info',
+      advantages: ['pricing:OptionB.advantages.one', 'pricing:OptionB.advantages.two'],
       isSelected: false,
     },
   ];
@@ -41,14 +43,14 @@ export default function PricingPage() {
 
   return (
     <PageLayout styleNames="flex flex-col gap-12 space-y-4">
-      <PageTitle title="Pricing" />
-      <span className="text-center">This text tells you a little about our pricing strategy!</span>
+      <PageTitle title={t('pricing:title')} />
+      <span className="text-center">{t('pricing:info')}</span>
       <div className="grid grid-cols-2 gap-8">{options}</div>
       <SimpleButton
         disabled={!selected}
         className={!selected ? 'opacity-50 hover:bg-primary-500 dark:hover:bg-primary-300' : ''}
       >
-        Apply Now!
+        {t('pricing:apply')}
       </SimpleButton>
       <Footer />
     </PageLayout>
