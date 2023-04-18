@@ -37,6 +37,20 @@ This will start the development server on <http://localhost:5173/> and will open
 
 To test that it is working, you can visit this url on your preferred browser: <http://localhost:5173/seeds>
 
+## Testing
+
+1. Make sure you are in the frontend directory
+2. Run the test script
+```shell
+npm run test
+```
+
+### Testing individual files
+
+```shell
+npm run test -- path/to/component.test.tsx
+```
+
 ## Production
 
 To build the application for production, run:
