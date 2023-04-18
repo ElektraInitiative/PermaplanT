@@ -1,0 +1,26 @@
+{
+  "garden_planning": {
+    "title": "Gartenplanung",
+    "description": "Planen Sie Ihren Garten mit unseren intuitiven Design-Tools. Wählen Sie aus einer Vielzahl von Pflanzen, um einen schönen Gartenraum zu gestalten."
+  },
+  "why": {
+    "title": "Warum Permakultur",
+    "description": "Das Wachstum von essbaren Pflanzen ist entscheidend für die Schaffung eines vielfältigen und funktionierenden Ökosystems und bietet gleichzeitig Freiluft-Lebensräume für Tiere und Menschen."
+  },
+  "community": {
+    "title": "Gemeinschaft",
+    "description": "Vernetzen Sie sich mit anderen Permakultur-Gärtnern, teilen Sie Ihre Erfolge und Herausforderungen und lassen Sie sich von den schönen Gärten anderer inspirieren."
+  },
+  "slogan": {
+    "first_part": "Mach deinen",
+    "second_part": "Garten",
+    "third_part": [
+      "fruchtbar",
+      "bunt",
+      "praktisch",
+      "nützlich",
+      "reichhaltig"
+    ],
+    "last_word": "vielfältig"
+  }
+}

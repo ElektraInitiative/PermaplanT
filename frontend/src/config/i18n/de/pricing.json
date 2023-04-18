@@ -1,0 +1,28 @@
+{
+  "header": "Preisgestaltung",
+  "subheader": "Unterüberschrift: Informationen zur Funktionsweise der Mitgliedschaften",
+  "table_headers": {
+    "membership": "Mitgliedschaft",
+    "price": "Preis",
+    "description": "Beschreibung"
+  },
+  "membership_types": {
+    "starter": {
+      "name": "Starter",
+      "price": "nach Vereinbarung",
+      "description": "eine Beschreibung"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "nach Vereinbarung",
+      "description": "eine Beschreibung"
+    },
+    "collab": {
+      "name": "Kollaborativ",
+      "price": "nach Vereinbarung",
+      "description": "eine Beschreibung"
+    }
+  },
+  "apply": "Um Mitgliedschaft bewerben",
+  "learn_more": "Erfahre mehr"
+}

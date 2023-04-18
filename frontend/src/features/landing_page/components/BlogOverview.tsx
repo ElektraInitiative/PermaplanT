@@ -1,10 +1,10 @@
 const BlogOverview = () => {
   return (
-    <section className="body-font overflow-hidden text-neutral-600">
+    <section className="body-font overflow-hidden">
       <div className="container mx-auto py-24">
         <div className="-m-12 flex flex-wrap">
           <div className="flex flex-col items-start p-12 md:w-1/2">
-            <h2 className="title-font mb-4 mt-4 text-2xl font-medium text-neutral-900 sm:text-3xl">
+            <h2 className="title-font mt-4 mb-4 text-2xl font-medium sm:text-3xl">
               Roof party normcore before they sold out, cornhole vape
             </h2>
             <p className="mb-8 leading-relaxed">
@@ -14,7 +14,7 @@ const BlogOverview = () => {
               havent heard of them hexagon kickstarter craft beer pork chic.
             </p>
             <div className="mb-4 mt-auto flex w-full flex-wrap items-center border-b-2 border-neutral-100 pb-4">
-              <span className="ml-auto mr-3 inline-flex items-center text-sm leading-none text-neutral-600">
+              <span className="mr-3 ml-auto inline-flex items-center text-sm leading-none">
                 04.04.2023
               </span>
             </div>
@@ -35,7 +35,7 @@ const BlogOverview = () => {
             </a>
           </div>
           <div className="flex flex-col items-start p-12 md:w-1/2">
-            <h2 className="title-font mb-4 mt-4 text-2xl font-medium text-neutral-900 sm:text-3xl">
+            <h2 className="title-font mt-4 mb-4 text-2xl font-medium sm:text-3xl">
               Pinterest DIY dreamcatcher gentrify single-origin coffee
             </h2>
             <p className="mb-8 leading-relaxed">

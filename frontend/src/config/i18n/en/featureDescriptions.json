@@ -1,0 +1,26 @@
+{
+  "garden_planning": {
+    "title": "Garden Planning",
+    "description": "Plan your garden using our intuitive design tools. Choose from a variety of plants to create a beautiful garden space."
+  },
+  "why": {
+    "title": "Why Permaculture",
+    "description": "The growth of edible crops is vital for creating a diverse and functioning ecosystem, while also providing outdoor living spaces for both animals and humans."
+  },
+  "community": {
+    "title": "Community",
+    "description": "Connect with other permaculture gardeners, share your successes and challenges, and get inspired by the beautiful gardens of others."
+  },
+  "slogan": {
+    "first_part": "make your",
+    "second_part": "garden",
+    "third_part": [
+      " fruitful",
+      " colorful",
+      " practical",
+      " useful",
+      " abundant"
+    ],
+    "last_word": " diverse"
+  }
+}

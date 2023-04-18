@@ -1,13 +1,15 @@
+import { useTranslation } from 'react-i18next';
 import { Teammember } from './Teammember';
 
 const Team = () => {
+  const { t } = useTranslation(['team']);
   return (
-    <section className="body-font text-gray-600">
+    <section className="body-font">
       <div className="container mx-auto py-24">
         <div className="mb-20 flex w-full flex-col text-center">
-          <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">Our Team</h1>
+          <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">{t('team:header')}</h1>
           <p className="mx-auto text-base leading-relaxed xl:w-2/3">
-            This project is made possible due to fantastic effort of
+            {t('team:subheader')}
           </p>
         </div>
         <div className="-m-2 flex flex-wrap">

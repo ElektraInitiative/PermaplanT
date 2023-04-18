@@ -1,0 +1,28 @@
+{
+  "header": "Pricing",
+  "subheader": "Subheader: Something about how the memberhsips work",
+  "table_headers": {
+    "membership": "membership",
+    "price": "price",
+    "description": "description"
+  },
+  "membership_types": {
+    "starter": {
+      "name": "starter",
+      "price": "tba",
+      "description": "some description"
+    },
+    "pro": {
+      "name": "pro",
+      "price": "tba",
+      "description": "some description"
+    },
+    "collab": {
+      "name": "collab",
+      "price": "tba",
+      "description": "some description"
+    }
+  },
+  "apply": "Apply for membership",
+  "learn_more": "learn more"
+}
