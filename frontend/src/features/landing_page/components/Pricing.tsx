@@ -4,15 +4,27 @@ import { useTranslation } from 'react-i18next';
 const Pricing = () => {
   const [selected, setSelected] = useState(NaN);
   const { t } = useTranslation(['pricing']);
+  const email = 'office@permaplant.net';
+
+  const generateMessage = () => {
+    return (
+      t('pricing:email_text') +
+      (selected === 0
+        ? t('pricing:membership_types.starter.name')
+        : selected === 1
+        ? t('pricing:membership_types.pro.name')
+        : t('pricing:membership_types.collab.name'))
+    );
+  };
 
   return (
     <section className="body-font">
       <div className="mx-auto py-24">
         <div className="mb-20 flex w-full flex-col text-center">
-          <h1 className="title-font mb-12 text-center text-3xl font-medium">{t('pricing:header')}</h1>
-          <p className="mx-auto text-base leading-relaxed">
-            {t('pricing:subheader')}
-          </p>
+          <h1 className="title-font mb-12 text-center text-3xl font-medium">
+            {t('pricing:header')}
+          </h1>
+          <p className="mx-auto text-base leading-relaxed">{t('pricing:subheader')}</p>
         </div>
         <div className="mx-auto w-full overflow-auto">
           <table className="whitespace-no-wrap w-full table-auto rounded text-left dark:bg-neutral-300-dark">
@@ -37,11 +49,11 @@ const Pricing = () => {
                 }
                 onClick={() => setSelected(0)}
               >
-                <td className="px-4 py-3">
-                  {t('pricing:membership_types.starter.name')}
-                </td>
+                <td className="px-4 py-3">{t('pricing:membership_types.starter.name')}</td>
                 <td className="px-4 py-3">{t('pricing:membership_types.starter.price')}</td>
-                <td className="px-4 py-3 text-lg">{t('pricing:membership_types.starter.description')}</td>
+                <td className="px-4 py-3 text-lg">
+                  {t('pricing:membership_types.starter.description')}
+                </td>
               </tr>
               <tr
                 className={
@@ -81,7 +93,10 @@ const Pricing = () => {
           </table>
         </div>
         <div className="mx-auto mt-4 flex w-full pl-4">
-          <a className="inline-flex items-center text-secondary-500 dark:text-secondary-300 md:mb-2 lg:mb-0" href='/pricing'>
+          <a
+            className="inline-flex items-center text-secondary-500 dark:text-secondary-300 md:mb-2 lg:mb-0"
+            href="/pricing"
+          >
             {t('pricing:learn_more')}
             <svg
               fill="none"
@@ -95,9 +110,14 @@ const Pricing = () => {
               <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
           </a>
-          <button className="ml-auto flex rounded border-0 bg-primary-500 py-2 px-6 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200">
-            {t('pricing:apply')}
-          </button>
+          <a
+            href={`mailto:${email}?subject=${encodeURIComponent(
+              t('pricing:subject'),
+            )}&body=${encodeURIComponent(generateMessage())}`}
+            className="ml-auto flex rounded border-0 bg-primary-500 py-2 px-6 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200"
+          >
+            <button>{t('pricing:apply')}</button>
+          </a>
         </div>
       </div>
     </section>
