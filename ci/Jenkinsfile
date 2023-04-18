@@ -9,6 +9,8 @@ properties(
     ]
 )
 
+// REQUIRED for Deployment
+// see Jenkinsfile.release
 stage('Build Schema'){
     node('docker') {
         checkout scm
@@ -26,6 +28,7 @@ stage('Build Schema'){
     }
 }
 
+// NOT REQUIRED for Deployment
 stage('Checks') {
     def parallel_checks = [:]
 
@@ -86,6 +89,8 @@ stage('Checks') {
     parallel(parallel_checks)
 }
 
+// REQUIRED for Deployment
+// see Jenkinsfile.release
 stage('Build in Docker'){
     def parallel_build = [:]
 
@@ -163,6 +168,8 @@ if (env.BRANCH_NAME == 'master') {
     }
 }
 
+// REQUIRED for Deployment
+// see Jenkinsfile.release
 if (params.DEPLOY_PROD) {
     stage('Deploy Prod') {
         node('permaplant && prod') {
