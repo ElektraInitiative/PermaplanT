@@ -36,9 +36,6 @@ const Navbar = () => {
               <li>
                 <ButtonLink title="Home" to="/" />
               </li>
-              <li>
-                <ButtonLink title="Seeds" to="/seeds" />
-              </li>
             </ul>
           </div>
         </div>
