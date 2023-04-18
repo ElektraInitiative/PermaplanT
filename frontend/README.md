@@ -58,6 +58,7 @@ This will start the storybook dev server on [http://localhost:6006/](http://loca
 
 1. Make sure you are in the frontend directory
 2. Run the test script
+
 ```shell
 npm run test
 ```
