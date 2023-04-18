@@ -1,10 +1,14 @@
-import renderer from 'react-test-renderer';
 import SimpleCard from './SimpleCard';
-import {MemoryRouter, MemoryRouter as Router} from 'react-router-dom';
+import { MemoryRouter, MemoryRouter as Router } from 'react-router-dom';
+import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
-    const tree = renderer
-        .create(<MemoryRouter><SimpleCard title="Permaplant" body="This is a test." /></MemoryRouter>)
-        .toJSON();
-    expect(tree).toMatchSnapshot();
+  const tree = renderer
+    .create(
+      <MemoryRouter>
+        <SimpleCard title="Permaplant" body="This is a test." />
+      </MemoryRouter>,
+    )
+    .toJSON();
+  expect(tree).toMatchSnapshot();
 });

@@ -1,40 +1,45 @@
-import {fireEvent, render} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import renderer from 'react-test-renderer';
-import PaginatedSelectMenu from './PaginatedSelectMenu';
-import {MemoryRouter} from 'react-router-dom';
 import { FormWrapper } from '../../utils/testing';
+import PaginatedSelectMenu from './PaginatedSelectMenu';
+import { fireEvent, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
+import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
-    const tree = renderer
-        .create(
-            <MemoryRouter>
-                <FormWrapper>
-                    <PaginatedSelectMenu id="test" labelText="Some Label" loadOptions={
-                        async (search, oldOptions, additional) => {return {options: [], hasMore: false, additional: {page: 0}}}
-                    }/>
-                </FormWrapper>
-            </MemoryRouter>
-        )
-        .toJSON();
-    expect(tree).toMatchSnapshot();
+  const tree = renderer
+    .create(
+      <MemoryRouter>
+        <FormWrapper>
+          <PaginatedSelectMenu
+            id="test"
+            labelText="Some Label"
+            loadOptions={async (search, oldOptions, additional) => {
+              return { options: [], hasMore: false, additional: { page: 0 } };
+            }}
+          />
+        </FormWrapper>
+      </MemoryRouter>,
+    )
+    .toJSON();
+  expect(tree).toMatchSnapshot();
 });
 
 it('calls loadOptions on interaction', async () => {
-    const loadOptions = jest.fn()
-        .mockReturnValue({options: [], hasMore: false, additional: {page: 0}});
-    
-    const {getByRole} = render(
-        <MemoryRouter>
-            <FormWrapper>
-                <PaginatedSelectMenu id="test" labelText="Some Label" loadOptions={loadOptions}/>
-            </FormWrapper>
-        </MemoryRouter>
-    );
-    
-    const input = getByRole("combobox");
+  const loadOptions = jest
+    .fn()
+    .mockReturnValue({ options: [], hasMore: false, additional: { page: 0 } });
 
-    await userEvent.click(input);
+  const { getByRole } = render(
+    <MemoryRouter>
+      <FormWrapper>
+        <PaginatedSelectMenu id="test" labelText="Some Label" loadOptions={loadOptions} />
+      </FormWrapper>
+    </MemoryRouter>,
+  );
 
-    expect(loadOptions).toBeCalled();
+  const input = getByRole('combobox');
+
+  await userEvent.click(input);
+
+  expect(loadOptions).toBeCalled();
 });

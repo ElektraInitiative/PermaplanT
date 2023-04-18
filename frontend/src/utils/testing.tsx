@@ -1,15 +1,11 @@
-import {FormProvider, useForm} from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 export interface TestDto {
-    foo: string;
+  foo: string;
 }
 
 export const FormWrapper = (props: any) => {
-    const formMethods = useForm<TestDto>();
+  const formMethods = useForm<TestDto>();
 
-    return (
-        <FormProvider {...formMethods}>
-            {props.children}
-        </FormProvider>
-    );
+  return <FormProvider {...formMethods}>{props.children}</FormProvider>;
 };

@@ -1,5 +1,5 @@
-import ModalContainer from './ModalContainer';
 import TransparentBackground from '../TransparentBackground';
+import ModalContainer from './ModalContainer';
 import { ReactNode } from 'react';
 
 interface ImageModalProps {
