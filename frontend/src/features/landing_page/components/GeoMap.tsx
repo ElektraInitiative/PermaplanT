@@ -53,7 +53,7 @@ export const GeoMap = () => {
   const placeholder = (
     <div className="flex h-full w-full flex-col text-center" id="placeholder">
       <img
-        src="/permaplant-map-placeholder.png"
+        src="https://nextcloud.markus-raab.org/nextcloud/index.php/s/6GNcCSQigdBXXd9/download/permaplant-map-placeholder.png"
         alt="PermaplanT Map"
         className="h-full w-full object-cover hover:cursor-pointer"
         onClick={() => setIsVisible(true)}
