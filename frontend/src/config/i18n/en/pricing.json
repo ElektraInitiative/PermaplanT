@@ -1,26 +1,26 @@
 {
   "header": "Pricing",
-  "subheader": "Subheader: Something about how the memberhsips work",
+  "subheader": "Sei Teil der solidarisch gestalteten PermaplanT-Welt! Deine jährliche Vereinsmitgliedschaft kannst du einzahlen oder dir durch deine aktive Beteiligung in Form von 'Permacoins' verdienen.",
   "table_headers": {
-    "membership": "membership",
+    "membership": "type",
     "price": "price",
     "description": "description"
   },
   "membership_types": {
     "starter": {
-      "name": "starter",
-      "price": "tba",
-      "description": "some description"
+      "name": "Fördermitglied ",
+      "price": "EUR 100,-",
+      "description": "Als Fördermitglied bist du nicht nur rechtmäßiges Vereinsmitglied und genießt die Funktionen der App, der Community sowie unseren Support, sondern du ermöglichst auch einer finanzschwächeren Person eine Mitgliedschaft. Danke!"
     },
     "pro": {
-      "name": "pro",
-      "price": "tba",
-      "description": "some description"
+      "name": "Standardmitgliedschaft",
+      "price": "EUR 50,-",
+      "description": "Mit einer Standardmitgliedschaft bist du rechtmäßiges Vereinsmitglied und genießt die Funktionen der App, der Community sowie unseren Support."
     },
     "collab": {
-      "name": "collab",
-      "price": "tba",
-      "description": "some description"
+      "name": "Beteiligungsmitglied",
+      "price": "50 Permacoins",
+      "description": "Für eine Beteiligungsmitgliedschaft brauchst du mind. 50 permacoins. Erreichst du am Ende des Jahres diese Anzahl oder mehr, fällt für dich keine Jahresgebühr in Euro an."
     }
   },
   "apply": "Apply for membership",

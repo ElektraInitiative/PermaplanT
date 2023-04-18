@@ -1,16 +1,17 @@
 {
   "garden_planning": {
-    "title": "Garden Planning",
-    "description": "Plan your garden using our intuitive design tools. Choose from a variety of plants to create a beautiful garden space."
+    "title": "5-D Design",
+    "description": "Design your garden using our intuitive planning tool. Layer by layer build up your personal map. Choose from over 8.500 plants to create a beautiful and abundant permaculture map, across space, time and alternatives."
   },
   "why": {
-    "title": "Why Permaculture",
-    "description": "The growth of edible crops is vital for creating a diverse and functioning ecosystem, while also providing outdoor living spaces for both animals and humans."
+    "title": "Instant Feedback",
+    "description": "Good neighbours? Crop rotation? Let the app do the work! Drag and drop your chosen plants on your individual garden and receive instant feedback for their favorite spots - up to 7 years back and forwards!"
   },
   "community": {
     "title": "Community",
-    "description": "Connect with other permaculture gardeners, share your successes and challenges, and get inspired by the beautiful gardens of others."
+    "description": "Connect and collaborate with other permaculturists, gardeners and friends. Share your successes and challenges. Get inspired by other beautiful beds, gardens and fields nearby you or around the world."
   },
+  "world": "Together, we grow the PermaplanT world!",
   "slogan": {
     "first_part": "make your",
     "second_part": "garden",
