@@ -32,6 +32,7 @@ module.exports = {
       'error',
       { packageJsonLocation: path.resolve(__dirname, 'package.json') },
     ],
+    '@typescript-eslint/no-unused-vars': ['warn', { varsIgnorePattern: '^_+$' }],
   },
   ignorePatterns: ['!.storybook'],
   settings: {

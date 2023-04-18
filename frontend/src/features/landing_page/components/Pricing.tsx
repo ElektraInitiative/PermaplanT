@@ -18,7 +18,7 @@ const Pricing = () => {
           <table className="whitespace-no-wrap w-full table-auto rounded text-left dark:bg-neutral-300-dark">
             <thead>
               <tr>
-                <th className="title-font rounded-tl rounded-bl bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">
+                <th className="title-font rounded-bl rounded-tl bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">
                   Plan
                 </th>
                 <th className="title-font bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">
@@ -65,7 +65,7 @@ const Pricing = () => {
                 }
                 onClick={() => setSelected(2)}
               >
-                <td className="border-t-2 border-neutral-100 py-3 px-4 dark:border-neutral-400-dark ">
+                <td className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark ">
                   Business
                 </td>
                 <td className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
@@ -82,13 +82,13 @@ const Pricing = () => {
                 }
                 onClick={() => setSelected(3)}
               >
-                <td className="border-t-2 border-b-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
+                <td className="border-b-2 border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
                   Exclusive
                 </td>
-                <td className="border-t-2 border-b-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
+                <td className="border-b-2 border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
                   48 Mb/s
                 </td>
-                <td className="border-t-2 border-b-2 border-neutral-100 px-4 py-3 text-lg dark:border-neutral-400-dark">
+                <td className="border-b-2 border-t-2 border-neutral-100 px-4 py-3 text-lg dark:border-neutral-400-dark">
                   $72
                 </td>
               </tr>
@@ -110,7 +110,7 @@ const Pricing = () => {
               <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
           </a>
-          <button className="ml-auto flex rounded border-0 bg-primary-500 py-2 px-6 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200">
+          <button className="ml-auto flex rounded border-0 bg-primary-500 px-6 py-2 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200">
             Button
           </button>
         </div>

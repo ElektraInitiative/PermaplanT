@@ -1,15 +1,35 @@
 import { SeedDto } from '@/bindings/definitions';
-import { Suspense } from 'react';
+import { Suspense, UIEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface SeedsOverviewListProps {
   seeds: SeedDto[];
+  pageFetcher: { isLoading: boolean; isFetching: boolean; fetcher: () => Promise<unknown> };
 }
 
-const SeedsOverviewList = ({ seeds }: SeedsOverviewListProps) => {
+const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['seeds', 'common']);
+
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (
+      ref?.current?.clientHeight === ref?.current?.scrollHeight &&
+      !pageFetcher.isLoading &&
+      !pageFetcher.isFetching
+    ) {
+      pageFetcher.fetcher();
+    }
+  }, [ref, pageFetcher]);
+
+  const handleScroll = async (event: UIEvent<EventTarget>) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (target.scrollTop + target.clientHeight === target.scrollHeight) {
+      await pageFetcher.fetcher();
+    }
+  };
 
   const handleSeedClick = (seed: SeedDto) => {
     navigate(`/seeds/${seed.id}`);
@@ -18,7 +38,12 @@ const SeedsOverviewList = ({ seeds }: SeedsOverviewListProps) => {
   return (
     <Suspense>
       <section>
-        <div className="relative overflow-x-auto rounded-lg">
+        <div
+          className="relative overflow-auto rounded-lg"
+          style={{ height: '75vh' }}
+          onScroll={handleScroll}
+          ref={ref}
+        >
           <table className="w-full bg-gray-200 text-left text-sm dark:bg-neutral-300-dark">
             <thead className="text-xs uppercase text-neutral-300">
               <tr>
