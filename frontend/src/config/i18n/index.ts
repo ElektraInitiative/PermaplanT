@@ -5,7 +5,10 @@ import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
-export const defaultNS = 'common';
+const defaultNS = 'common';
+
+export type DefaultLanguage = typeof en;
+export type DefaultNamespace = typeof defaultNS;
 
 export const resources = {
   en,
@@ -18,3 +21,5 @@ i18next.use(initReactI18next).use(LanguageDetector).init({
   resources,
   defaultNS,
 });
+
+export default i18next;

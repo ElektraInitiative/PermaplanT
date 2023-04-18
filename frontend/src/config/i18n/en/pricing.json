@@ -1,21 +1,17 @@
 {
-    "title": "Pricing",
-    "info": "This text tells you a little about our pricing strategy!",
-    "apply": "Apply Now!",
-    "OptionA": {
-        "title": "Option A",
-        "info": "The first option.",
-        "advantages": {
-            "one": "Is an option.",
-            "two": "Would recommend."
-        }
+  "title": "Pricing",
+  "info": "This text tells you a little about our pricing strategy!",
+  "apply": "Apply Now!",
+  "options": [
+    {
+      "title": "Option A",
+      "info": "The first option.",
+      "advantages": ["Is an option.", "Would recommend."]
     },
-    "OptionB": {
-        "title": "Option B",
-        "info": "The second option.",
-        "advantages": {
-            "one": "Also an option.",
-            "two": "Maybe better."
-        }
+    {
+      "title": "Option B",
+      "info": "The second option.",
+      "advantages": ["Also an option.", "Maybe better."]
     }
+  ]
 }

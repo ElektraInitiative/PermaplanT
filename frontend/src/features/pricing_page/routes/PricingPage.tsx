@@ -8,38 +8,23 @@ import { useTranslation } from 'react-i18next';
 
 export default function PricingPage() {
   const { t } = useTranslation(['pricing']);
-  const initialOptions = [
-    {
-      title: 'pricing:OptionA.title',
-      info: 'pricing:OptionA.info',
-      advantages: ['pricing:OptionA.advantages.one', 'pricing:OptionA.advantages.two'],
-      isSelected: false,
-    },
-    {
-      title: 'pricing:OptionB.title',
-      info: 'pricing:OptionB.info',
-      advantages: ['pricing:OptionB.advantages.one', 'pricing:OptionB.advantages.two'],
-      isSelected: false,
-    },
-  ];
-  const [pricingOptions, setPricingOptions] = useState(initialOptions);
-  const selected = pricingOptions.find((option) => option.isSelected) !== undefined;
 
-  const options = pricingOptions.map((option) => {
-    return <PricingOption key={option.title} {...option} onClickHandler={selectPricingOption} />;
+  const pricingOptions = t('pricing:options', { returnObjects: true });
+  const [selectedOption, setSelectedOption] = useState(NaN);
+
+  const options = pricingOptions.map((option, i) => {
+    return (
+      <PricingOption
+        key={option.title}
+        pricingOption={option}
+        isSelected={selectedOption === i}
+        index={i}
+        onClickHandler={() => setSelectedOption(i)}
+      />
+    );
   });
 
-  function selectPricingOption(id: string) {
-    setPricingOptions(
-      pricingOptions.map((option) => {
-        if (option.title === id) {
-          return { ...option, isSelected: true };
-        } else {
-          return { ...option, isSelected: false };
-        }
-      }),
-    );
-  }
+  const selected = !isNaN(selectedOption);
 
   return (
     <PageLayout styleNames="flex flex-col gap-12 space-y-4">

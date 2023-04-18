@@ -1,21 +1,17 @@
 {
-    "title": "Preisgestaltung",
-    "info": "Dieser Text erzählt dir etwas über unsere Preisstrategie!",
-    "apply": "Jetzt Anfragen!",
-    "OptionA": {
-        "title": "Option A",
-        "info": "Die erste Option.",
-        "advantages": {
-            "one": "Ist eine Option.",
-            "two": "Würde empfehlen."
-        }
+  "title": "Preisgestaltung",
+  "info": "Dieser Text erzählt dir etwas über unsere Preisstrategie!",
+  "apply": "Jetzt Anfragen!",
+  "options": [
+    {
+      "title": "Option A",
+      "info": "Die erste Option.",
+      "advantages": ["Ist eine Option.", "Würde empfehlen."]
     },
-    "OptionB": {
-        "title": "Option B",
-        "info": "Die zweite Option.",
-        "advantages": {
-            "one": "Auch eine Option.",
-            "two": "Vielleicht besser."
-        }
+    {
+      "title": "Option B",
+      "info": "Die zweite Option.",
+      "advantages": ["Auch eine Option.", "Vielleicht besser."]
     }
+  ]
 }
