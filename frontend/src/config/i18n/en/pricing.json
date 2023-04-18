@@ -7,12 +7,12 @@
     "description": "Description"
   },
   "membership_types": {
-    "starter": {
+    "pro": {
       "name": "Supporting Member",
       "price": "EUR 100,-",
       "description": "As a supporting member, you not only become a legal member of the association and enjoy the features of the app, community, and our support, but you also enable a person with lower financial means to become a member. Thank you!"
     },
-    "pro": {
+    "starter": {
       "name": "Standard Membership",
       "price": "EUR 50,-",
       "description": "With a standard membership, you become a legal member of the association and enjoy the features of the app, community, and our support."
@@ -24,5 +24,7 @@
     }
   },
   "apply": "Apply for membership",
-  "learn_more": "Learn more"
+  "learn_more": "Learn more",
+  "email_text": "I want to apply for following membership: ",
+  "subject": "Membership application"
 }

@@ -20,7 +20,7 @@ const BlogOverview = () => {
               <a className="inline-flex items-center">
                 <img
                   alt="blog"
-                  src="/gallery_images/permaplant_illustration_12.svg"
+                  src={entry.picture}
                   className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
                 />
                 <span className="flex flex-grow flex-col pl-4">

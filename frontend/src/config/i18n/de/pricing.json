@@ -7,12 +7,12 @@
     "description": "Beschreibung"
   },
   "membership_types": {
-    "starter": {
+    "pro": {
       "name": "Fördermitglied ",
       "price": "EUR 100,-",
       "description": "Als Fördermitglied bist du nicht nur rechtmäßiges Vereinsmitglied und genießt die Funktionen der App, der Community sowie unseren Support, sondern du ermöglichst auch einer finanzschwächeren Person eine Mitgliedschaft. Danke!"
     },
-    "pro": {
+    "starter": {
       "name": "Standardmitgliedschaft",
       "price": "EUR 50,-",
       "description": "Mit einer Standardmitgliedschaft bist du rechtmäßiges Vereinsmitglied und genießt die Funktionen der App, der Community sowie unseren Support."
@@ -24,5 +24,7 @@
     }
   },
   "apply": "Mitgliedschaft beantragen",
-  "learn_more": "Mehr erfahren"
+  "learn_more": "Mehr erfahren",
+  "email_text": "Ich möchte mich für folgende Mitgliedschaft bewerben: ",
+  "subject": "Mitgliedschaftsbewerbung"
 }
