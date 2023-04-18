@@ -1,14 +1,4 @@
 
-properties(
-    [
-        parameters(
-            [
-                booleanParam(name: 'DEPLOY_PROD', defaultValue: false, description: 'deploy to production')
-            ]
-        )
-    ]
-)
-
 // REQUIRED for Deployment
 // see Jenkinsfile.release
 stage('Build Schema'){
@@ -168,20 +158,5 @@ if (env.BRANCH_NAME == 'master') {
     }
 }
 
-// REQUIRED for Deployment
+// PRODUCTION DEPLOYMENT
 // see Jenkinsfile.release
-if (params.DEPLOY_PROD) {
-    stage('Deploy Prod') {
-        node('permaplant && prod') {
-            checkout scm
-
-            echo "Unstash Artifacts"
-            unstash 'schema.rs'
-            unstash 'frontend'
-            unstash 'backend'
-
-            echo 'Deploying to Prod ...'
-            sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
-        }
-    }
-}
