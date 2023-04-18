@@ -50,29 +50,21 @@ export const GeoMap = () => {
       {markers}
     </MapContainer>
   );
-
-  function handleClick() {
-    setIsVisible(true);
-  }
-
-  let content;
+  const placeholder = (
+    <div className="flex h-full w-full flex-col text-center" id="placeholder">
+      <img
+        src="/permaplant-map-placeholder.png"
+        alt="PermaplanT Map"
+        className="h-full w-full object-cover hover:cursor-pointer"
+        onClick={() => setIsVisible(true)}
+      />
+      <span className="my-2 flex-1 shrink-0 grow text-sm italic">{t('geomap:hint')}</span>
+    </div>
+  );
 
   if (isVisible) {
-    content = map;
-  } else {
-    content = (
-      <div className="text-center" id="placeholder">
-        <img
-          src="/permaplant-map-placeholder.png"
-          alt="PermaplanT Map"
-          className="mb-2 hover:cursor-pointer"
-          onClick={handleClick}
-        />
-        <i>{t('geomap:hint')}</i>
-        <br />
-      </div>
-    );
+    return map;
   }
 
-  return <>{content}</>;
+  return placeholder;
 };
