@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
 
 interface ButtonLinkProps {
+  /** The title of the button. */
   title: string;
+  /** The path to navigate to. */
   to: string;
+  /** The className styling of the button. */
   className?: string;
 }
 
 /**
  * A styled link that has properties of a button.
- * @param props.title The title of the button.
- * @param props.to The path to navigate to.
- * @param props.className The className styling of the button.
  */
 const ButtonLink = ({ title, to, className = '' }: ButtonLinkProps) => {
   return (
