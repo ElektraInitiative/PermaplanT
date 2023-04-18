@@ -3,17 +3,18 @@ import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
+  const callback = jest.fn();
   const tree = renderer
     .create(
       <MemoryRouter>
         <SimpleModal
           title="Test"
           body="Test"
-          setShow={() => {}}
+          setShow={callback}
           show={true}
           submitBtnTitle={'Ok'}
           cancelBtnTitle={'Cancel'}
-          onSubmit={() => {}}
+          onSubmit={callback}
         />
       </MemoryRouter>,
     )

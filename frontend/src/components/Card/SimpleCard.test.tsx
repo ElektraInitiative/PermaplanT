@@ -1,5 +1,5 @@
 import SimpleCard from './SimpleCard';
-import { MemoryRouter, MemoryRouter as Router } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {

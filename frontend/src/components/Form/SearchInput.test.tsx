@@ -5,10 +5,11 @@ import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
+  const callback = jest.fn();
   const tree = renderer
     .create(
       <MemoryRouter>
-        <SearchInput placeholder="Test" handleSearch={() => {}} />
+        <SearchInput placeholder="Test" handleSearch={callback} />
       </MemoryRouter>,
     )
     .toJSON();

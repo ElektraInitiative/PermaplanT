@@ -1,6 +1,6 @@
 import { FormWrapper } from '../../utils/testing';
 import PaginatedSelectMenu from './PaginatedSelectMenu';
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
@@ -13,7 +13,7 @@ it('renders correctly', () => {
           <PaginatedSelectMenu
             id="test"
             labelText="Some Label"
-            loadOptions={async (search, oldOptions, additional) => {
+            loadOptions={async () => {
               return { options: [], hasMore: false, additional: { page: 0 } };
             }}
           />

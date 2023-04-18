@@ -6,7 +6,8 @@ it('renders correctly', () => {
   const tree = renderer
     .create(
       <MemoryRouter>
-        <ModalContainer children={[]} show={true} />
+        <ModalContainer show={true} >
+        </ModalContainer>
       </MemoryRouter>,
     )
     .toJSON();
