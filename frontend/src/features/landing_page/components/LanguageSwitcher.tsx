@@ -7,7 +7,7 @@ const languages = [
   { value: 'de', label: 'Deutsch' },
 ];
 
-type Option = typeof languages[number];
+type Option = (typeof languages)[number];
 
 // since we render our own menu, we filter out all styles that are not needed
 const customStyles: StylesConfig<Option, false> = {

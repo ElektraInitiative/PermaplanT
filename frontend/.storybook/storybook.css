@@ -1,0 +1,12 @@
+#storybook-docs p,
+#storybook-docs span,
+#storybook-docs h1,
+#storybook-docs h2,
+#storybook-docs h3,
+#storybook-docs li,
+#storybook-docs label,
+#storybook-docs a,
+#storybook-docs th,
+#storybook-docs td {
+  @apply text-gray-600;
+}

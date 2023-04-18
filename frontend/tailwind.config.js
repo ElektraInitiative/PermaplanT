@@ -109,6 +109,18 @@ const accentColors = {
     800: '#001f26',
     900: '#001f26',
   },
+  sea_blue: {
+    50: '#ffffff',
+    100: '#8fe4ff',
+    200: '#00b2eb',
+    300: '#0093c2',
+    400: '#0084ad',
+    500: '#007499',
+    600: '#005570',
+    700: '#003647',
+    800: '#002733',
+    900: '#00171f',
+  },
 };
 
 /** @type {import('tailwindcss').Config} */
@@ -126,7 +138,7 @@ module.exports = {
 
         // variant 2
         primary: accentColors.asparagus,
-        secondary: accentColors.rackley,
+        secondary: accentColors.sea_blue,
         neutral: gray,
       },
     },
