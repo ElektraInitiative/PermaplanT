@@ -9,5 +9,7 @@ exports[`renders correctly 1`] = `
       "transform": "translateX(-50%) translateZ(0)",
     }
   }
-/>
+>
+   
+</div>
 `;
