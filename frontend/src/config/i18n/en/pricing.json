@@ -1,28 +1,28 @@
 {
   "header": "Pricing",
-  "subheader": "Sei Teil der solidarisch gestalteten PermaplanT-Welt! Deine jährliche Vereinsmitgliedschaft kannst du einzahlen oder dir durch deine aktive Beteiligung in Form von 'Permacoins' verdienen.",
+  "subheader": "Be part of the collectively designed PermaplanT world! You can pay your annual membership fee or earn it through your active participation in the form of 'Permacoins'.",
   "table_headers": {
-    "membership": "type",
-    "price": "price",
-    "description": "description"
+    "membership": "Type",
+    "price": "Price",
+    "description": "Description"
   },
   "membership_types": {
     "starter": {
-      "name": "Fördermitglied ",
+      "name": "Supporting Member",
       "price": "EUR 100,-",
-      "description": "Als Fördermitglied bist du nicht nur rechtmäßiges Vereinsmitglied und genießt die Funktionen der App, der Community sowie unseren Support, sondern du ermöglichst auch einer finanzschwächeren Person eine Mitgliedschaft. Danke!"
+      "description": "As a supporting member, you not only become a legal member of the association and enjoy the features of the app, community, and our support, but you also enable a person with lower financial means to become a member. Thank you!"
     },
     "pro": {
-      "name": "Standardmitgliedschaft",
+      "name": "Standard Membership",
       "price": "EUR 50,-",
-      "description": "Mit einer Standardmitgliedschaft bist du rechtmäßiges Vereinsmitglied und genießt die Funktionen der App, der Community sowie unseren Support."
+      "description": "With a standard membership, you become a legal member of the association and enjoy the features of the app, community, and our support."
     },
     "collab": {
-      "name": "Beteiligungsmitglied",
+      "name": "Participation Membership",
       "price": "50 Permacoins",
-      "description": "Für eine Beteiligungsmitgliedschaft brauchst du mind. 50 permacoins. Erreichst du am Ende des Jahres diese Anzahl oder mehr, fällt für dich keine Jahresgebühr in Euro an."
+      "description": "For a participation membership, you need at least 50 Permacoins. If you reach this amount or more by the end of the year, no annual fee in Euro will be charged for you."
     }
   },
   "apply": "Apply for membership",
-  "learn_more": "learn more"
+  "learn_more": "Learn more"
 }

@@ -1,16 +1,17 @@
 {
   "garden_planning": {
-    "title": "Gartenplanung",
-    "description": "Planen Sie Ihren Garten mit unseren intuitiven Design-Tools. Wählen Sie aus einer Vielzahl von Pflanzen, um einen schönen Gartenraum zu gestalten."
+    "title": "5-D Design",
+    "description": "Gestalte deinen Garten mit unserem intuitiven Planungstool. Schicht für Schicht baust du deine persönliche Karte auf. Wähle aus über 8.500 Pflanzen, um eine schöne und reichhaltige Permakulturkarte über Raum, Zeit und Alternativen zu erstellen."
   },
   "why": {
-    "title": "Warum Permakultur",
-    "description": "Das Wachstum von essbaren Pflanzen ist entscheidend für die Schaffung eines vielfältigen und funktionierenden Ökosystems und bietet gleichzeitig Freiluft-Lebensräume für Tiere und Menschen."
+    "title": "Sofortiges Feedback",
+    "description": "Gute Nachbarn? Fruchtwechsel? Lass die App die Arbeit erledigen! Zieh deine ausgewählten Pflanzen in deinen individuellen Garten und erhalte sofortiges Feedback für ihre besten Standorte - bis zu 7 Jahre zurück und nach vorne!"
   },
   "community": {
     "title": "Gemeinschaft",
-    "description": "Vernetzen Sie sich mit anderen Permakultur-Gärtnern, teilen Sie Ihre Erfolge und Herausforderungen und lassen Sie sich von den schönen Gärten anderer inspirieren."
+    "description": "Verbinde und kooperiere mit anderen Permakulturisten, Gärtnern und Freunden. Teile deine Erfolge und Herausforderungen. Lass dich von anderen schönen Beeten, Gärten und Feldern in deiner Nähe oder auf der ganzen Welt inspirieren."
   },
+  "world": "Gemeinsam lassen wir die PermaplanT-Welt wachsen!",
   "slogan": {
     "first_part": "Mach deinen",
     "second_part": "Garten",
