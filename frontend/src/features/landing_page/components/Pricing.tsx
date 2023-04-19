@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Pricing = () => {
-  const [selected, setSelected] = useState(NaN);
+  const [selected, setSelected] = useState(0);
   const { t } = useTranslation(['pricing']);
   const email = 'office@permaplant.net';
 
@@ -10,9 +10,9 @@ const Pricing = () => {
     return (
       t('pricing:email_text') +
       (selected === 0
-        ? t('pricing:membership_types.starter.name')
-        : selected === 1
         ? t('pricing:membership_types.pro.name')
+        : selected === 1
+        ? t('pricing:membership_types.starter.name')
         : t('pricing:membership_types.collab.name'))
     );
   };
@@ -44,23 +44,10 @@ const Pricing = () => {
             <tbody>
               <tr
                 className={
-                  'cursor-pointer hover:bg-primary-300 dark:hover:bg-primary-400' +
+                  'cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400' +
                   (selected == 0 ? ' bg-primary-500 text-neutral-100' : '')
                 }
                 onClick={() => setSelected(0)}
-              >
-                <td className="px-4 py-3">{t('pricing:membership_types.starter.name')}</td>
-                <td className="px-4 py-3">{t('pricing:membership_types.starter.price')}</td>
-                <td className="px-4 py-3 text-lg">
-                  {t('pricing:membership_types.starter.description')}
-                </td>
-              </tr>
-              <tr
-                className={
-                  'cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400' +
-                  (selected == 1 ? ' bg-primary-500 text-neutral-100' : '')
-                }
-                onClick={() => setSelected(1)}
               >
                 <td className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
                   {t('pricing:membership_types.pro.name')}
@@ -72,6 +59,21 @@ const Pricing = () => {
                   {t('pricing:membership_types.pro.description')}
                 </td>
               </tr>
+
+              <tr
+                className={
+                  'cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400' +
+                  (selected == 1 ? ' bg-primary-500 text-neutral-100' : '')
+                }
+                onClick={() => setSelected(1)}
+              >
+                <td className="px-4 py-3">{t('pricing:membership_types.starter.name')}</td>
+                <td className="px-4 py-3">{t('pricing:membership_types.starter.price')}</td>
+                <td className="px-4 py-3 text-lg">
+                  {t('pricing:membership_types.starter.description')}
+                </td>
+              </tr>
+
               <tr
                 className={
                   'cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400' +

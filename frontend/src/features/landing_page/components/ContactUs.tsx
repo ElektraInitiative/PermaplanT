@@ -33,7 +33,9 @@ const ContactUs = () => {
             </div>
             <div className="w-full p-2">
               <a
-                href={`mailto:${email}?subject=first%20contact&body=${encodeURIComponent(message)}`}
+                href={`mailto:${email}?subject=first%20contact&body=${t(
+                  'contact:email_text',
+                )}${encodeURIComponent(message)}`}
               >
                 <button className="mx-auto flex rounded border-0 bg-primary-500 px-8 py-2 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200">
                   {t('contact:compose')}
