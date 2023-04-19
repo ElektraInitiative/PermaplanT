@@ -94,23 +94,6 @@ const Pricing = () => {
         </div>
         <div className="mx-auto mt-4 flex w-full pl-4">
           <a
-            className="inline-flex items-center text-secondary-500 dark:text-secondary-300 md:mb-2 lg:mb-0"
-            href="/pricing"
-          >
-            {t('pricing:learn_more')}
-            <svg
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="ml-2 h-4 w-4"
-              viewBox="0 0 24 24"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-          <a
             href={`mailto:${email}?subject=${encodeURIComponent(
               t('pricing:subject'),
             )}&body=${encodeURIComponent(generateMessage())}`}
