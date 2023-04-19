@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Pricing = () => {
-  const [selected, setSelected] = useState(NaN);
+  const [selected, setSelected] = useState(0);
   const { t } = useTranslation(['pricing']);
   const email = 'office@permaplant.net';
 
@@ -10,9 +10,9 @@ const Pricing = () => {
     return (
       t('pricing:email_text') +
       (selected === 0
-        ? t('pricing:membership_types.starter.name')
-        : selected === 1
         ? t('pricing:membership_types.pro.name')
+        : selected === 1
+        ? t('pricing:membership_types.starter.name')
         : t('pricing:membership_types.collab.name'))
     );
   };
@@ -24,7 +24,7 @@ const Pricing = () => {
           <h1 className="title-font mb-12 text-center text-3xl font-medium">
             {t('pricing:header')}
           </h1>
-          <p className="mx-auto text-base leading-relaxed">{t('pricing:subheader')}</p>
+          <p className="mx-auto text-base leading-relaxed xl:w-2/3">{t('pricing:subheader')}</p>
         </div>
         <div className="mx-auto w-full overflow-auto">
           <table className="whitespace-no-wrap w-full table-auto rounded text-left dark:bg-neutral-300-dark">
@@ -44,23 +44,10 @@ const Pricing = () => {
             <tbody>
               <tr
                 className={
-                  'cursor-pointer hover:bg-primary-300 dark:hover:bg-primary-400' +
+                  'cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400' +
                   (selected == 0 ? ' bg-primary-500 text-neutral-100' : '')
                 }
                 onClick={() => setSelected(0)}
-              >
-                <td className="px-4 py-3">{t('pricing:membership_types.starter.name')}</td>
-                <td className="px-4 py-3">{t('pricing:membership_types.starter.price')}</td>
-                <td className="px-4 py-3 text-lg">
-                  {t('pricing:membership_types.starter.description')}
-                </td>
-              </tr>
-              <tr
-                className={
-                  'cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400' +
-                  (selected == 1 ? ' bg-primary-500 text-neutral-100' : '')
-                }
-                onClick={() => setSelected(1)}
               >
                 <td className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
                   {t('pricing:membership_types.pro.name')}
@@ -72,6 +59,21 @@ const Pricing = () => {
                   {t('pricing:membership_types.pro.description')}
                 </td>
               </tr>
+
+              <tr
+                className={
+                  'cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400' +
+                  (selected == 1 ? ' bg-primary-500 text-neutral-100' : '')
+                }
+                onClick={() => setSelected(1)}
+              >
+                <td className="px-4 py-3">{t('pricing:membership_types.starter.name')}</td>
+                <td className="px-4 py-3">{t('pricing:membership_types.starter.price')}</td>
+                <td className="px-4 py-3 text-lg">
+                  {t('pricing:membership_types.starter.description')}
+                </td>
+              </tr>
+
               <tr
                 className={
                   'cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400' +
@@ -93,23 +95,6 @@ const Pricing = () => {
           </table>
         </div>
         <div className="mx-auto mt-4 flex w-full pl-4">
-          <a
-            className="inline-flex items-center text-secondary-500 dark:text-secondary-300 md:mb-2 lg:mb-0"
-            href="/pricing"
-          >
-            {t('pricing:learn_more')}
-            <svg
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="ml-2 h-4 w-4"
-              viewBox="0 0 24 24"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
           <a
             href={`mailto:${email}?subject=${encodeURIComponent(
               t('pricing:subject'),

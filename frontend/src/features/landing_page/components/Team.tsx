@@ -13,18 +13,18 @@ const Team = () => {
         <div className="-m-2 flex flex-wrap">
           <Teammember
             name="Dr. Markus Raab"
-            role="Project Lead"
-            imageUri="https://nextcloud.markus-raab.org/nextcloud/index.php/s/9dFfZrHXWDx67xx/download/Markus_Raab.jpg"
+            role="Project Lead, Software Engineer"
+            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FAvatars&files=Markus_Raab.jpg"
           />
           <Teammember
             name="Yvonne Markl, MSc."
-            role="Permaculture Expert"
-            imageUri="https://nextcloud.markus-raab.org/nextcloud/index.php/s/Zg3qpiECGdLYLfc/download/Yvonne_Markl.jpg"
+            role="Project Lead, Permaculture Expert"
+            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/Zg3qpiECGdLYLfc/download/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Samuel Daurer"
             role="Software Engineer"
-            imageUri="https://nextcloud.markus-raab.org/nextcloud/index.php/s/EbkxrCDLrHdeNFm/download/Samuel_Daurer_profile.jpg"
+            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/EbkxrCDLrHdeNFm/download/Samuel_Daurer_profile.jpg"
           />
           <Teammember
             name="Gabriel Kitzberger"
@@ -54,27 +54,27 @@ const Team = () => {
           <Teammember
             name="Ramzan Magomadow"
             role="Software Engineer"
-            imageUri="https://nextcloud.markus-raab.org/nextcloud/index.php/s/3s8jxENdt5Mz543/download/Ramzan_Magomadow.jpg"
+            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/3s8jxENdt5Mz543/download/Ramzan_Magomadow.jpg"
           />
           <Teammember
             name="Thorben Staufer"
             role="Software Engineer"
-            imageUri="https://nextcloud.markus-raab.org/nextcloud/index.php/s/eLNAYdKw73Kn6df/download/Thorben_Staufer.jpg"
+            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/eLNAYdKw73Kn6df/download/Thorben_Staufer.jpg"
           />
           <Teammember
             name="Benjamin Zinschitz"
             role="Software Engineer"
-            imageUri="https://nextcloud.markus-raab.org/nextcloud/index.php/s/BTQBYPbaSFsrt3f/download/Benjamin_Zinschitz.jpg"
+            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/BTQBYPbaSFsrt3f/download/Benjamin_Zinschitz.jpg"
           />
           <Teammember
             name="Paul Buschmann"
             role="Software Engineer"
-            imageUri="https://nextcloud.markus-raab.org/nextcloud/index.php/s/azpBktirRTNmtaN/download/Paul_Buschmann.jpg"
+            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/azpBktirRTNmtaN/download/Paul_Buschmann.jpg"
           />
           <Teammember
             name="Dr. Pavlo Ardanov"
             role="Permaculture Expert"
-            imageUri="https://nextcloud.markus-raab.org/nextcloud/index.php/s/SdzHJyAsRDQGyaW/download/Pavlo_Ardanov.jpg"
+            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/SdzHJyAsRDQGyaW/download/Pavlo_Ardanov.jpg"
           />
         </div>
       </div>

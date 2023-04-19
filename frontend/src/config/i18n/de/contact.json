@@ -1,6 +1,7 @@
 {
-  "header": "Kontakt aufnehmen",
+  "header": "Kontaktiere uns",
   "subheader": "",
-  "message": "Nachricht",
-  "compose": "Email verfassen"
+  "message": "Meine Nachricht:",
+  "compose": "E-Mail verfassen",
+  "email_text": "Liebes PermaplanTeam!%0A%0AIch möchte im E-Mail-Verteiler aufgenommen werden: Ja%0A%0AMeine Nachricht:%0A"
 }

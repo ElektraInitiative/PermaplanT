@@ -1,4 +1,3 @@
-import ButtonLink from '../Button/ButtonLink';
 import { ReactComponent as LogoSmallGraySVG } from '@/assets/permaplant-logo-gray.svg';
 import { ReactComponent as LogoSmallSVG } from '@/assets/permaplant-logo.svg';
 import { DarkModeSwitcher } from '@/features/dark_mode';
@@ -27,16 +26,6 @@ const Navbar = () => {
                 PermaplanT
               </span>
             </a>
-          </div>
-          <div
-            className="hidden w-full items-center justify-between md:order-1 md:flex md:w-auto"
-            id="navbar-sticky"
-          >
-            <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 p-4 font-medium dark:border-gray-700 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0 ">
-              <li>
-                <ButtonLink title="Home" to="/" />
-              </li>
-            </ul>
           </div>
         </div>
         <div className="flex md:order-2">
