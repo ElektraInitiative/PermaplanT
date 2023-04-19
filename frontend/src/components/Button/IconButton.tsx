@@ -18,7 +18,7 @@ export default function IconButton({ variant = ButtonVariant.primary, ...props }
     'hover:text-secondary-500 dark:hover:text-secondary-500 active:stroke-secondary-900 dark:active:stroke-secondary-900',
   ];
   const className =
-    'inline-flex h-6 w-full items-center justify-center rounded-lg items-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300 stroke-neutral-800 dark:stroke-neutral-800-dark' +
+    'inline-flex h-6 w-6 justify-center rounded-lg items-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300 stroke-neutral-800 dark:stroke-neutral-800-dark' +
     ' ' +
     colors[variant];
   return (
