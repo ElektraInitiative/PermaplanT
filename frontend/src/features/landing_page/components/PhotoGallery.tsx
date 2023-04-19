@@ -5,6 +5,11 @@ import { useState } from 'react';
 
 export const PhotoGallery = () => {
   const imageUrls = [
+    'https://nextcloud.markus-raab.org/nextcloud/index.php/s/CxMxEcjNWFrnma4/download/YvonneMarkl02.jpg',
+    'https://nextcloud.markus-raab.org/nextcloud/index.php/s/DnDGNyPYiGa88FK/download/YvonneMarkl03.jpg',
+    'https://nextcloud.markus-raab.org/nextcloud/index.php/s/mL5F4g8i7HQPixB/download/YvonneMarkl04.jpg',
+    'https://nextcloud.markus-raab.org/nextcloud/index.php/s/rfpsC7CqL3aEqJQ/download/YvonneMarkl05.jpg',
+    'https://nextcloud.markus-raab.org/nextcloud/index.php/s/CQiTzMGM6YXgDrF/download/YvonneMarkl06.jpg',
     '/gallery_images/permaplant_illustration_01.svg',
     '/gallery_images/permaplant_illustration_02.svg',
     '/gallery_images/permaplant_illustration_03.svg',
