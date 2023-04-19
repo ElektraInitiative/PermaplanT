@@ -1,6 +1,6 @@
 import Footer from '@/components/Layout/Footer';
 import PageLayout from '@/components/Layout/PageLayout';
-import ContactUs from '@/features/landing_page/components/ContactUs';
+import Contact from '@/features/landing_page/components/Contact';
 import { useTranslation } from 'react-i18next';
 
 export function ImprintPage() {
@@ -36,7 +36,7 @@ export function ImprintPage() {
       <i className="mx-auto mb-4 flex flex-col text-base leading-relaxed lg:w-2/3">
         {t('imprint:legal_notice')}
       </i>
-      <ContactUs />
+      <Contact />
       <Footer />
     </PageLayout>
   );

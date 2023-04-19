@@ -1,7 +1,7 @@
 import Footer from '../../../components/Layout/Footer';
 import '../../../styles/geoMap.css';
 import BlogOverview from '../components/BlogOverview';
-import ContactUs from '../components/ContactUs';
+import Contact from '../components/Contact';
 import Features from '../components/Features';
 import { GeoMap } from '../components/GeoMap';
 import { PhotoGallery } from '../components/PhotoGallery';
@@ -32,7 +32,7 @@ export const LandingPage = () => {
         <BlogOverview />
         <PhotoGallery />
         <Pricing />
-        <ContactUs />
+        <Contact />
       </div>
       <Footer />
     </WidePageLayout>

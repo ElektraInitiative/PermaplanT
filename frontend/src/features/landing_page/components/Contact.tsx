@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const ContactUs = () => {
+const Contact = () => {
   const { t } = useTranslation(['contact']);
   const [message, setMessage] = useState('');
   const email = 'office@permaplant.net';
@@ -49,4 +49,4 @@ const ContactUs = () => {
   );
 };
 
-export default ContactUs;
+export default Contact;
