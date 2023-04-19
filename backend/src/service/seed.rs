@@ -2,8 +2,10 @@
 
 use actix_web::web::Data;
 
+use crate::model::dto::PageParameters;
+use crate::model::dto::{Page, SeedSearchParameters};
 use crate::{
-    config::db::Pool,
+    db::connection::Pool,
     error::ServiceError,
     model::{
         dto::{NewSeedDto, SeedDto},
@@ -11,13 +13,17 @@ use crate::{
     },
 };
 
-/// Fetch all seeds from the database.
+/// Search seeds from the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn find_all(pool: &Data<Pool>) -> Result<Vec<SeedDto>, ServiceError> {
+pub async fn find(
+    search_parameters: SeedSearchParameters,
+    page_parameters: PageParameters,
+    pool: &Data<Pool>,
+) -> Result<Page<SeedDto>, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Seed::find_all(&mut conn).await?;
+    let result = Seed::find(search_parameters, page_parameters, &mut conn).await?;
     Ok(result)
 }
 

@@ -6,18 +6,17 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User changes the visibility of layers in their map
-- **Status:** Assigned
-- **Assignee:** Giancarlo
+- **Status:** In Progress
+- **Assignee:** Samuel
 
 ## Scenarios
 
 - **Precondition:**
   User has opened the app and has multiple layers available to view.
 - **Main success scenario:**
-  User successfully changes the visibility of layers in their map by selecting the desired layers and can toggle the visibility:
-  - on (elements and colors on layer are fully visible)
-  - transparent (elements and colors on layer are transparent)
-  - off (nothing from the layer is visible
+  User successfully changes the visibility of layers:
+  - visibility on/off (elements and colors on layer are fully visible or invisible)
+  - opacity in % (elements and colors on layer have a chosen opacity)
 - **Alternative scenario:**
   - On activation of a layer, also the visibility gets turned on.
   - On activation of some layers, the visibility of others layer changes; e.g.,

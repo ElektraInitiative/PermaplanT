@@ -1,8 +1,6 @@
 
-parameters {
-    booleanParam(name: 'DEPLOY_PROD', defaultValue: false, description: 'deploy to production')
-}
-
+// REQUIRED for Deployment
+// see Jenkinsfile.release
 stage('Build Schema'){
     node('docker') {
         checkout scm
@@ -20,6 +18,7 @@ stage('Build Schema'){
     }
 }
 
+// NOT REQUIRED for Deployment
 stage('Checks') {
     def parallel_checks = [:]
 
@@ -80,6 +79,8 @@ stage('Checks') {
     parallel(parallel_checks)
 }
 
+// REQUIRED for Deployment
+// see Jenkinsfile.release
 stage('Build in Docker'){
     def parallel_build = [:]
 
@@ -157,19 +158,5 @@ if (env.BRANCH_NAME == 'master') {
     }
 }
 
-// Deploying to Prod only happens on branch "master" and if parameter is set
-if (env.BRANCH_NAME == 'master' && params.DEPLOY_PROD) {
-    stage('Deploy Prod') {
-        node('permaplant && prod') {
-            checkout scm
-
-            echo "Unstash Artifacts"
-            unstash 'schema.rs'
-            unstash 'frontend'
-            unstash 'backend'
-
-            echo 'Deploying to Prod ...'
-            sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
-        }
-    }
-}
+// PRODUCTION DEPLOYMENT
+// see Jenkinsfile.release

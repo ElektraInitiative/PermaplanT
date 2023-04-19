@@ -4,11 +4,12 @@
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
-use utoipa::ToSchema;
+use utoipa::{IntoParams, ToSchema};
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
 pub mod new_seed_impl;
+pub mod page_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
@@ -63,25 +64,46 @@ pub struct PlantsSummaryDto {
     pub common_name: Option<Vec<Option<String>>>,
 }
 
-/// An array of PlantsSummaryDto with some basic pagination information used by the plants search endpoint.
-#[typeshare]
-#[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
-pub struct PlantsSearchDto {
-    /// A single page of searched plants.
-    pub plants: Vec<PlantsSummaryDto>,
-    /// Flag indicating whether there is more data on the next page.
-    pub has_more: bool,
-}
-
 /// Query parameters for searching plants.
 #[typeshare]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, IntoParams)]
 pub struct PlantsSearchParameters {
-    /// The system will check if this string occurs in the plants common name or binomial name.
-    pub search_term: String,
-    /// How many plants will be part of a single page.
-    pub limit: i32,
-    /// Which page should be returned.
+    /// The system will check if this string occurs in the plants common name or unique name.
+    pub name: Option<String>,
+}
+
+/// Query parameters for searching seeds.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct SeedSearchParameters {
+    /// Name of the seed to search for.
+    pub name: Option<String>,
+    /// The exact harvest year of the seed.
+    pub harvest_year: Option<i16>,
+}
+
+/// Query parameters paginating list endpoints.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct PageParameters {
+    /// Number of results in per page.
+    pub per_page: Option<i32>,
+    /// Page number to be returned.
     /// Note: pages start at one.
+    pub page: Option<i32>,
+}
+
+/// A page of results returned from a list endpoint.
+#[typeshare]
+#[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
+#[aliases(PagePlantsSummaryDto = Page<PlantsSummaryDto>, PageSeedDto = Page<SeedDto>)]
+pub struct Page<T> {
+    /// Resulting records.
+    pub results: Vec<T>,
+    /// Current page number.
     pub page: i32,
+    /// Results per page.
+    pub per_page: i32,
+    /// Number of pages in total.
+    pub total_pages: i32,
 }

@@ -52,10 +52,10 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
     options: unknown,
     additional: PageAdditionalInfo | undefined,
   ): Promise<Page> => {
-    const page = additional != undefined ? additional.page : 1;
-    const searchResult = await searchPlants(search, page);
+    const pageNumber = additional != undefined ? additional.pageNumber : 1;
+    const page = await searchPlants(search, pageNumber);
 
-    const plant_options: SelectOption[] = searchResult.plants.map((plant) => {
+    const plant_options: SelectOption[] = page.results.map((plant) => {
       const common_name = plant.common_name != null ? ' (' + plant.common_name[0] + ')' : '';
 
       return {
@@ -66,9 +66,9 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
 
     return {
       options: plant_options,
-      hasMore: searchResult.has_more,
+      hasMore: page.total_pages > pageNumber,
       additional: {
-        page: page + 1,
+        pageNumber: pageNumber + 1,
       },
     };
   };

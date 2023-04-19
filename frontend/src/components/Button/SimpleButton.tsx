@@ -1,4 +1,5 @@
 interface SimpleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** The variant specifies the look of the button. */
   variant?: ButtonVariant;
 }
 
@@ -11,8 +12,6 @@ export enum ButtonVariant {
 
 /**
  * A styled HTML button.
- * @param props.variant The variant specifies the look of the button.
- * @param props All React props for buttons can be applied.
  */
 export default function SimpleButton({
   variant = ButtonVariant.primaryBase,

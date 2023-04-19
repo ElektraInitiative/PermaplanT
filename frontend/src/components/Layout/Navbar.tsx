@@ -13,7 +13,7 @@ const Navbar = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
   return (
     // z-index 1001 is needed because of leaflet GeoMap
-    <nav className="fixed top-0 left-0 z-[1001] w-full border-b-[0.5px] border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-100-dark">
+    <nav className="fixed left-0 top-0 z-[1001] w-full border-b-[0.5px] border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-100-dark">
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
         <div className="flex space-x-16">
           <div className="flex space-x-6">
@@ -35,9 +35,6 @@ const Navbar = () => {
             <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 p-4 font-medium dark:border-gray-700 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0 ">
               <li>
                 <ButtonLink title="Home" to="/" />
-              </li>
-              <li>
-                <ButtonLink title="Seeds" to="/seeds" />
               </li>
             </ul>
           </div>

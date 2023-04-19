@@ -10,7 +10,7 @@ use diesel_async::{AsyncConnection, AsyncPgConnection};
 use dotenvy::dotenv;
 
 use crate::config::app;
-use crate::config::db::Pool;
+use crate::db::connection::Pool;
 use crate::error::ServiceError;
 
 // TODO: Think about test_transactions
