@@ -2,19 +2,17 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::config::routes;
     use crate::model::dto::Page;
     use crate::model::dto::PlantsSummaryDto;
-    use crate::test::test_utils::init_test_database;
-    use actix_web::App;
-    use actix_web::{http::header::CONTENT_TYPE, http::StatusCode, test, web::Data};
+    use crate::test::test_utils::init_test_app;
+    use actix_web::{http::header::CONTENT_TYPE, http::StatusCode, test};
     use diesel::ExpressionMethods;
     use diesel_async::scoped_futures::ScopedFutureExt;
     use diesel_async::RunQueryDsl;
 
     #[actix_rt::test]
     async fn test_get_all_plants_succeeds() {
-        let pool = init_test_database(|conn| {
+        let app = init_test_app(|conn| {
             async {
                 diesel::insert_into(crate::schema::plants::table)
                     .values((
@@ -31,16 +29,9 @@ mod tests {
         })
         .await;
 
-        let mut app = test::init_service(
-            App::new()
-                .app_data(Data::clone(&pool))
-                .configure(routes::config),
-        )
-        .await;
-
         let resp = test::TestRequest::get()
             .uri("/api/plants")
-            .send_request(&mut app)
+            .send_request(&app)
             .await;
 
         assert_eq!(resp.status(), StatusCode::OK);
@@ -66,7 +57,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_get_one_plant_succeeds() {
-        let pool = init_test_database(|conn| {
+        let app = init_test_app(|conn| {
             async {
                 diesel::insert_into(crate::schema::plants::table)
                     .values((
@@ -83,16 +74,9 @@ mod tests {
         })
         .await;
 
-        let mut app = test::init_service(
-            App::new()
-                .app_data(Data::clone(&pool))
-                .configure(routes::config),
-        )
-        .await;
-
         let resp = test::TestRequest::get()
             .uri("/api/plants/-1")
-            .send_request(&mut app)
+            .send_request(&app)
             .await;
 
         assert_eq!(resp.status(), StatusCode::OK);
@@ -118,7 +102,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_search_plants_succeeds() {
-        let pool = init_test_database(|conn| {
+        let app = init_test_app(|conn| {
             async {
                 diesel::insert_into(crate::schema::plants::table)
                     .values((
@@ -135,16 +119,9 @@ mod tests {
         })
         .await;
 
-        let mut app = test::init_service(
-            App::new()
-                .app_data(Data::clone(&pool))
-                .configure(routes::config),
-        )
-        .await;
-
         let resp = test::TestRequest::get()
             .uri("/api/plants?name=Testplant&per_page=10")
-            .send_request(&mut app)
+            .send_request(&app)
             .await;
 
         assert_eq!(resp.status(), StatusCode::OK);

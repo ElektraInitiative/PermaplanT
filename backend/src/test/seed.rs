@@ -2,27 +2,18 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::config::routes;
     use crate::model::dto::NewSeedDto;
     use crate::model::dto::SeedDto;
     use crate::model::r#enum::quantity::Quantity;
-    use crate::test::test_utils::init_test_database;
-    use actix_web::App;
-    use actix_web::{http::StatusCode, test, web::Data};
+    use crate::test::test_utils::init_test_app;
+    use actix_web::{http::StatusCode, test};
     use diesel::prelude::*;
     use diesel_async::scoped_futures::ScopedFutureExt;
     use diesel_async::RunQueryDsl;
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_quantity() {
-        let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-
-        let mut app = test::init_service(
-            App::new()
-                .app_data(Data::clone(&pool))
-                .configure(routes::config),
-        )
-        .await;
+        let app = init_test_app(|_| async { Ok(()) }.scope_boxed()).await;
 
         let resp = test::TestRequest::post()
             .uri("/api/seeds")
@@ -34,7 +25,7 @@ mod tests {
                 "quantity": "Invalid"
             }"#,
             )
-            .send_request(&mut app)
+            .send_request(&app)
             .await;
 
         assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
@@ -42,14 +33,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_tags() {
-        let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-
-        let mut app = test::init_service(
-            App::new()
-                .app_data(Data::clone(&pool))
-                .configure(routes::config),
-        )
-        .await;
+        let app = init_test_app(|_| async { Ok(()) }.scope_boxed()).await;
 
         let resp = test::TestRequest::post()
             .uri("/api/seeds")
@@ -61,7 +45,7 @@ mod tests {
                 "quantity": "Enough"
             }"#,
             )
-            .send_request(&mut app)
+            .send_request(&app)
             .await;
 
         assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
@@ -69,14 +53,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_quality() {
-        let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-
-        let mut app = test::init_service(
-            App::new()
-                .app_data(Data::clone(&pool))
-                .configure(routes::config),
-        )
-        .await;
+        let app = init_test_app(|_| async { Ok(()) }.scope_boxed()).await;
 
         let resp = test::TestRequest::post()
             .uri("/api/seeds")
@@ -89,7 +66,7 @@ mod tests {
                 "quality": "Invalid"
             }"#,
             )
-            .send_request(&mut app)
+            .send_request(&app)
             .await;
 
         assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
@@ -97,7 +74,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_ok() {
-        let pool = init_test_database(|conn| {
+        let app = init_test_app(|conn| {
             async {
                 diesel::insert_into(crate::schema::plants::table)
                     .values((
@@ -112,13 +89,6 @@ mod tests {
             }
             .scope_boxed()
         })
-        .await;
-
-        let mut app = test::init_service(
-            App::new()
-                .app_data(Data::clone(&pool))
-                .configure(routes::config),
-        )
         .await;
 
         let new_seed = NewSeedDto {
@@ -140,14 +110,14 @@ mod tests {
         let resp = test::TestRequest::post()
             .uri("/api/seeds")
             .set_json(new_seed)
-            .send_request(&mut app)
+            .send_request(&app)
             .await;
         assert_eq!(resp.status(), StatusCode::CREATED);
 
         let seed: SeedDto = test::read_body_json(resp).await;
         let resp = test::TestRequest::delete()
             .uri(&format!("/api/seeds/{}", seed.id))
-            .send_request(&mut app)
+            .send_request(&app)
             .await;
 
         assert_eq!(resp.status(), StatusCode::OK);
