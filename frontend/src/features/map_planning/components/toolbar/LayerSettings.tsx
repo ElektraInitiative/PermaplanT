@@ -1,9 +1,9 @@
 import IconButton from '@/components/Button/IconButton';
 import { NamedSlider } from '@/components/Slider/NamedSlider';
-import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
-import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
 import { ReactComponent as CaretDownIcon } from '@/icons/caret-down.svg';
 import { ReactComponent as CaretRightIcon } from '@/icons/caret-right.svg';
+import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
+import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
 import { useState } from 'react';
 
 export const LayerSettings = ({
@@ -46,7 +46,7 @@ export const LayerSettings = ({
       <div className="col-span-4 flex items-center">
         {alternatives && alternatives.length > 0 && (
           <IconButton
-            className="h-6 w-6"
+            className="flex-shrink"
             onClick={() => setAlternativesVisible(!alternativesVisible)}
           >
             {alternativesVisible ? <CaretDownIcon /> : <CaretRightIcon />}

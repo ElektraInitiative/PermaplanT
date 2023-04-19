@@ -1,4 +1,5 @@
 import { BaseStage } from '../components/BaseStage';
+import { Toolbar } from '../components/toolbar/Toolbar';
 import PlantsLayer from '../layers/PlantsLayer';
 import { useEffect, useState } from 'react';
 import { Circle, Rect } from 'react-konva';
@@ -42,8 +43,13 @@ export const Map = () => {
   }, []);
 
   return (
-    <BaseStage>
-      <PlantsLayer>{shapes}</PlantsLayer>
-    </BaseStage>
+    <div className="flex h-full justify-between">
+      <BaseStage>
+        <PlantsLayer>{shapes}</PlantsLayer>
+      </BaseStage>
+      <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
+        <Toolbar></Toolbar>
+      </section>
+    </div>
   );
 };
