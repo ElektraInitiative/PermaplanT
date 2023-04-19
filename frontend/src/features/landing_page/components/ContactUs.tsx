@@ -10,10 +10,10 @@ const ContactUs = () => {
     <section className="body-font relative w-full">
       <div className="container mx-auto py-24">
         <div className="mb-12 flex flex-col text-center">
-          <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">{t('contact:header')}</h1>
-          <p className="mx-auto text-base leading-relaxed lg:w-2/3">
-            {t('contact:subheader')}
-          </p>
+          <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">
+            {t('contact:header')}
+          </h1>
+          <p className="mx-auto text-base leading-relaxed lg:w-2/3">{t('contact:subheader')}</p>
         </div>
         <div className="mx-auto w-full">
           <div className="-m-2 flex flex-wrap">
@@ -35,7 +35,7 @@ const ContactUs = () => {
               <a
                 href={`mailto:${email}?subject=first%20contact&body=${encodeURIComponent(message)}`}
               >
-                <button className="mx-auto flex rounded border-0 bg-primary-500 py-2 px-8 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200">
+                <button className="mx-auto flex rounded border-0 bg-primary-500 px-8 py-2 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200">
                   {t('contact:compose')}
                 </button>
               </a>
