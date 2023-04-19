@@ -1,6 +1,7 @@
 {
   "header": "Pricing",
-  "subheader": "Be part of the collectively designed PermaplanT world! You can pay your annual membership fee or earn it through your active participation via Permacoins:",
+  "subheader": "Sei Teil der solidarischen und gemeinnützigen PermaplanT-Welt! Die gesamten Einnahmen werden aufgewendet um weitere Entwicklung, Forschung und den laufenden Betrieb von Permaplant zu finanzieren.",
+  "subheader": "Be part of the solidary and non-profit PermaplanT world! The whole income will be used to pay for further development, research and continous operation.",
   "table_headers": {
     "membership": "Type",
     "price": "Price",
@@ -13,14 +14,14 @@
       "description": "As a supporting member, you not only become a legal member of the association and enjoy the community and all the features of the app, but you also enable a person with lower financial means to become a working member. Thank you!"
     },
     "starter": {
-      "name": "Standard Membership",
-      "price": "50\u00a0",
+      "name": "Membership",
+      "price": "50\u00a0€",
       "description": "With a standard membership, you become a legal member of the association and enjoy the community and the features of the app."
     },
     "collab": {
       "name": "Worker Membership",
       "price": "50\u00a0Permacoins",
-      "description": "You enjoy all features of the app, but you help others to collect Permacoins. If you reach this amount or more by the end of the year, no annual fee in Euro will be charged."
+      "description": "You enjoy all features of the app, but you need to collect Permapoints by helping others. If you reach the required amount before the end of the year, no annual fee in Euro will be charged."
     }
   },
   "apply": "Apply for Membership",
