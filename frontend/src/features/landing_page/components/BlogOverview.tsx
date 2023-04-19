@@ -8,12 +8,12 @@ const BlogOverview = () => {
         <div className="-m-12 flex flex-wrap">
           {t('blog:blog_entries', { returnObjects: true }).map((entry) => (
             <div key={entry.title} className="flex flex-col items-start p-12 md:w-1/2">
-              <h2 className="title-font mt-4 mb-4 text-2xl font-medium sm:text-3xl">
+              <h2 className="title-font mb-4 mt-4 text-2xl font-medium sm:text-3xl">
                 {entry.title}
               </h2>
               <p className="mb-8 leading-relaxed">{entry.content}</p>
               <div className="mb-4 mt-auto flex w-full flex-wrap items-center border-b-2 border-neutral-100 pb-4">
-                <span className="mr-3 ml-auto inline-flex items-center text-sm leading-none">
+                <span className="ml-auto mr-3 inline-flex items-center text-sm leading-none">
                   {entry.date}
                 </span>
               </div>

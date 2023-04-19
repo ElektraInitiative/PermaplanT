@@ -30,7 +30,7 @@ const Pricing = () => {
           <table className="whitespace-no-wrap w-full table-auto rounded text-left dark:bg-neutral-300-dark">
             <thead>
               <tr>
-                <th className="title-font rounded-tl rounded-bl bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">
+                <th className="title-font rounded-bl rounded-tl bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">
                   {t('pricing:table_headers.membership')}
                 </th>
                 <th className="title-font bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">
@@ -79,7 +79,7 @@ const Pricing = () => {
                 }
                 onClick={() => setSelected(2)}
               >
-                <td className="border-t-2 border-neutral-100 py-3 px-4 dark:border-neutral-400-dark ">
+                <td className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark ">
                   {t('pricing:membership_types.collab.name')}
                 </td>
                 <td className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark">
@@ -114,7 +114,7 @@ const Pricing = () => {
             href={`mailto:${email}?subject=${encodeURIComponent(
               t('pricing:subject'),
             )}&body=${encodeURIComponent(generateMessage())}`}
-            className="ml-auto flex rounded border-0 bg-primary-500 py-2 px-6 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200"
+            className="ml-auto flex rounded border-0 bg-primary-500 px-6 py-2 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200"
           >
             <button>{t('pricing:apply')}</button>
           </a>

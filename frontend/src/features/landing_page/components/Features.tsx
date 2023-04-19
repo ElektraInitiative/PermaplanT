@@ -2,8 +2,8 @@ import './Features.css';
 import { ReactComponent as GlobeSVG } from '@/assets/globe.svg';
 import { ReactComponent as PlanningSVG } from '@/assets/planning.svg';
 import { ReactComponent as PlantSVG } from '@/assets/plant.svg';
-import TypewriterComponent from 'typewriter-effect';
 import { useTranslation } from 'react-i18next';
+import TypewriterComponent from 'typewriter-effect';
 
 interface Feature {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -11,27 +11,23 @@ interface Feature {
   description: string;
 }
 
-
 const Features = () => {
   const { t } = useTranslation(['featureDescriptions']);
   const features: Feature[] = [
     {
       icon: PlanningSVG,
       title: t('featureDescriptions:garden_planning.title'),
-      description:
-        t('featureDescriptions:garden_planning.description'),
+      description: t('featureDescriptions:garden_planning.description'),
     },
     {
       icon: PlantSVG,
       title: t('featureDescriptions:why.title'),
-      description:
-        t('featureDescriptions:why.description'),
+      description: t('featureDescriptions:why.description'),
     },
     {
       icon: GlobeSVG,
       title: t('featureDescriptions:community.title'),
-      description:
-        t('featureDescriptions:community.description'),
+      description: t('featureDescriptions:community.description'),
     },
   ];
   return (
@@ -40,13 +36,18 @@ const Features = () => {
         <div className="mb-20 text-center">
           <h1 className="title-font mx-auto mb-4 grid grid-cols-3 gap-2 text-2xl font-medium sm:text-3xl md:w-[500px]">
             <div className="col-span-2 text-right">
-              {t('featureDescriptions:slogan.first_part')} <span className="text-primary-400 dark:text-primary-300">{t('featureDescriptions:slogan.second_part')} </span>
+              {t('featureDescriptions:slogan.first_part')}{' '}
+              <span className="text-primary-400 dark:text-primary-300">
+                {t('featureDescriptions:slogan.second_part')}{' '}
+              </span>
             </div>
             <div className="text-left">
               <TypewriterComponent
                 onInit={(typewriter) => {
-                  const strings = t('featureDescriptions:slogan.third_part', { returnObjects: true })
-                  console.log(strings)
+                  const strings = t('featureDescriptions:slogan.third_part', {
+                    returnObjects: true,
+                  });
+                  console.log(strings);
                   strings.forEach((s) => {
                     typewriter.typeString(s).deleteAll();
                   });
@@ -56,8 +57,7 @@ const Features = () => {
               />
             </div>
           </h1>
-          <p className="mx-auto md:w-[500px]">
-          </p>
+          <p className="mx-auto md:w-[500px]"></p>
           <div className="mt-6 flex justify-center">
             <div className="h-1 w-16 rounded-full bg-secondary-500 dark:bg-secondary-300"></div>
           </div>
