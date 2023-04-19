@@ -6,12 +6,12 @@ import { useState } from 'react';
 export const PhotoGallery = () => {
   const imageUrls = [
     'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl02.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl03.jpg',
+    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl08.jpg',
     'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl04.jpg',
     'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl05.jpg',
     'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl06.jpg',
     'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl07.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl08.jpg',
+    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl03.jpg',
     'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl09.jpg',
     'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl10.jpg',
     'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl11.jpg',

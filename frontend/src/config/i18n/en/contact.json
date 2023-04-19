@@ -1,7 +1,7 @@
 {
-  "header": "First Contact",
+  "header": "Contact us",
   "subheader": "",
-  "message": "My Message:",
-  "compose": "Compose Email",
-  "email_text": "Dear PermaplanTeam%0A%0AI want to be subscribed: Yes%0AMy Message:%0A"
+  "message": "My message:",
+  "compose": "Compose email",
+  "email_text": "Dear PermaplanTeam%0A%0AI want to be subscribed: Yes%0A%0AMy Message:%0A"
 }

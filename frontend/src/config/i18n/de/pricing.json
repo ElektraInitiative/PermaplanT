@@ -1,6 +1,6 @@
 {
   "header": "Preisgestaltung",
-  "subheader": "Sei Teil der solidarischen und gemeinnützigen PermaplanT-Welt! Die gesamten Einnahmen werden aufgewendet um weitere Entwicklung, Forschung und den laufenden Betrieb von Permaplant zu finanzieren. Preise sind pro Kalenderjahr:",
+  "subheader": "Sei Teil der solidarischen und gemeinnützigen PermaplanT-Welt! Die gesamten Einnahmen werden aufgewendet, um weitere Entwicklung, Forschung und den laufenden Betrieb von PermaplanT zu finanzieren. Preise sind pro Kalenderjahr:",
   "table_headers": {
     "membership": "Typ",
     "price": "Preis",
@@ -10,21 +10,21 @@
     "pro": {
       "name": "Fördermitglied",
       "price": "100\u00a0Euro",
-      "description": "Als Fördermitglied genießt du nicht nur die Community und alle Funktionen der App, sondern du ermöglichst auch einer finanzschwächeren Person eine Mitarbeitsmitgliedschaft. Danke!"
+      "description": "Als Fördermitglied genießt du nicht nur die Community und alle Funktionen der App, sondern du ermöglichst auch einer finanzschwächeren Person, mitwirkendes Mitglied zu sein. Danke!"
     },
     "starter": {
-      "name": "Mitglied",
+      "name": "Reguläres Mitglied",
       "price": "50\u00a0Euro",
       "description": "Mit einer Mitgliedschaft bist du Vereinsmitglied und genießt die Community und alle Funktionen der App."
     },
     "collab": {
-      "name": "Mitarbeitsmitglied",
+      "name": "Mitwirkendes Mitglied",
       "price": "50\u00a0Permacoins",
       "description": "Du genießt alle Funktionen der App, hilfst aber anderen um selber Permacoins zu sammeln. Erreichst du am Ende des Jahres 50\u00a0Permacoins oder mehr, fällt für dich keine Jahresgebühr in Euro an."
     }
   },
-  "apply": "Antrag Mitgliedschaft PermaplanT",
+  "apply": "Mitgliedschaft beantragen",
   "learn_more": "Mehr erfahren",
-  "email_text": "Liebes PermaplanTeam!\n\nIch möchte auf den E-Mail Verteiler aufgenommen werden: Ja\nIch möchte folgende Mitgliedschaft beantragen: ",
+  "email_text": "Liebes PermaplanTeam!\n\nIch möchte im E-Mail-Verteiler aufgenommen werden: Ja\nIch möchte folgende Mitgliedschaft beantragen: ",
   "subject": "Mitgliedschaftsbewerbung"
 }

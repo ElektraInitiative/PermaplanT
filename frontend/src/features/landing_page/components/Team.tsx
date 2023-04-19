@@ -13,12 +13,12 @@ const Team = () => {
         <div className="-m-2 flex flex-wrap">
           <Teammember
             name="Dr. Markus Raab"
-            role="Project Lead"
-            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/9dFfZrHXWDx67xx/download/Markus_Raab.jpg"
+            role="Project Lead, Software Engineer"
+            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FAvatars&files=Markus_Raab.jpg"
           />
           <Teammember
             name="Yvonne Markl, MSc."
-            role="Permaculture Expert"
+            role="Project Lead, Permaculture Expert"
             imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/Zg3qpiECGdLYLfc/download/Yvonne_Markl.jpg"
           />
           <Teammember

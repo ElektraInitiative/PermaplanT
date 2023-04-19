@@ -24,7 +24,7 @@ const Pricing = () => {
           <h1 className="title-font mb-12 text-center text-3xl font-medium">
             {t('pricing:header')}
           </h1>
-          <p className="mx-auto text-base leading-relaxed">{t('pricing:subheader')}</p>
+          <p className="mx-auto text-base leading-relaxed xl:w-2/3">{t('pricing:subheader')}</p>
         </div>
         <div className="mx-auto w-full overflow-auto">
           <table className="whitespace-no-wrap w-full table-auto rounded text-left dark:bg-neutral-300-dark">
