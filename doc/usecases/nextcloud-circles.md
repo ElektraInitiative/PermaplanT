@@ -16,8 +16,8 @@
 - **Main success scenario:**
   The user can open the chat window and communicate with all the members of the map.
 - **Alternative scenario:**
-  The user has opened a map where they are not a member of.
-  They are not able to interact with the chat.
+  - The user has opened a map where they are not a member of.
+    They are able to interact with the chat only if visitors are allowed.
 - **Error scenario:**
 - **Postcondition:**
   The conversations are persisted in Nextcloud.
