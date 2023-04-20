@@ -1,9 +1,8 @@
 -- Your SQL goes here
 ALTER TABLE plants
-ADD COLUMN reinsaat_article_number TEXT,
-    ADD COLUMN reinsaat_portion_content TEXT,
+ADD COLUMN external_article_number TEXT,
+    ADD COLUMN external_portion_content TEXT,
     ADD COLUMN sowing_outdoors_de TEXT,
-    ADD COLUMN reinsaat_url TEXT,
     ADD COLUMN sowing_outdoors TEXT,
     ADD COLUMN harvest_time TEXT,
     ADD COLUMN spacing_de TEXT,

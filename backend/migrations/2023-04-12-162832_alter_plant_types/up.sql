@@ -1,4 +1,13 @@
 -- Your SQL goes here
+-- Hardiness_zone
+ALTER TABLE plants
+ADD COLUMN new_hardiness_zone TEXT;
+ALTER TABLE plants DROP CONSTRAINT plant_detail_hardiness_zone_check;
+UPDATE plants
+SET new_hardiness_zone = CAST(hardiness_zone AS TEXT);
+ALTER TABLE plants DROP COLUMN hardiness_zone;
+ALTER TABLE plants
+    RENAME COLUMN new_hardiness_zone TO hardiness_zone;
 -- Light_requirement
 CREATE TYPE LIGHT_REQUIREMENT AS ENUM ('Full sun', 'Partial sun/shade', 'Full shade');
 ALTER TABLE plants

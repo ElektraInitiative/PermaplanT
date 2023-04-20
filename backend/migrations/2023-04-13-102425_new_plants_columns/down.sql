@@ -45,4 +45,6 @@ ALTER TABLE plants DROP COLUMN germination_time;
 ALTER TABLE plants DROP COLUMN description;
 ALTER TABLE plants DROP COLUMN parent_id;
 ALTER TABLE plants DROP COLUMN external_source;
+ALTER TABLE plants DROP COLUMN external_id;
+ALTER TABLE plants DROP COLUMN external_url;
 DROP TYPE EXTERNAL_SOURCE;

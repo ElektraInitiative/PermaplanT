@@ -46,4 +46,6 @@ ADD COLUMN alternate_name TEXT,
     ADD COLUMN germination_time TEXT,
     ADD COLUMN description TEXT,
     ADD COLUMN parent_id TEXT,
-    ADD COLUMN external_source EXTERNAL_SOURCE;
+    ADD COLUMN external_source EXTERNAL_SOURCE,
+    ADD COLUMN external_id TEXT,
+    ADD COLUMN external_url TEXT;
