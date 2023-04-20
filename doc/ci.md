@@ -28,7 +28,7 @@ Backend will be checked against a sidecar-container running PostgreSQL.
 
 ### Build
 
-Each and every pull request will be built and tested against a separate CI database.
+Every pull request will be built and tested against a separate CI database.
 
 Steps for all PRs are:
 
@@ -45,3 +45,12 @@ Since there is only one agent for PRs available, the last built PR wins.
 ### Deploy to Dev Environment
 
 The `master` branch will be automatically deployed to [dev.permaplant.net](https://dev.permaplant.net).
+
+### Deploy to Prod Environment
+
+There is a separate Jenkinsfile (`/ci/Jenkinsfile.release`) for production deployments.
+It can only be manually triggered inside Jenkins ([here](https://build.libelektra.org/job/PermaplanT-Release/)).
+
+This Jenkinsfile only executes the necessary build steps (no checks) and deploys to the production server.
+
+The production environment is available on [www.permaplant.net](https://www.permaplant.net).

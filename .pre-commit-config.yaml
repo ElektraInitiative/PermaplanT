@@ -37,7 +37,7 @@ repos:
           - scss
           - markdown
         additional_dependencies:
-          - prettier@2.7.1
+          - prettier@2.8.7
           - prettier-plugin-tailwindcss@0.2.1
           - "@trivago/prettier-plugin-sort-imports"
   - repo: https://github.com/pre-commit/mirrors-eslint
@@ -47,7 +47,7 @@ repos:
         name: frontend lint
         args:
           [
-            --config=frontend/.eslintrc.json,
+            --config=frontend/.eslintrc.js,
             --max-warnings=0,
             --ignore-path=frontend/.eslintignore,
           ]
@@ -63,6 +63,7 @@ repos:
           - eslint@8.24.0
           - eslint-plugin-react@7.31.8
           - eslint-plugin-react-hooks@4.6.0
+          - eslint-plugin-storybook@0.6.11
   # Backend hooks
   - repo: https://github.com/doublify/pre-commit-rust
     rev: v1.0

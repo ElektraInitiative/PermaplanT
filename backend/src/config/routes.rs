@@ -10,14 +10,14 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         web::scope("/api")
             .service(
                 web::scope("/seeds")
-                    .service(seed::find_all)
+                    .service(seed::find)
                     .service(seed::create)
                     .service(seed::delete_by_id)
                     .service(seed::find_by_id),
             )
             .service(
                 web::scope("/plants")
-                    .service(plants::find_all_or_search)
+                    .service(plants::find)
                     .service(plants::find_by_id),
             )
             .wrap(NormalizePath::default()),

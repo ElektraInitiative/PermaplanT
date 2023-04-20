@@ -2,43 +2,28 @@
 
 use actix_web::web::Data;
 
+use crate::model::dto::Page;
+use crate::model::dto::PageParameters;
 use crate::{
-    config::db::Pool,
+    db::connection::Pool,
     error::ServiceError,
     model::{
-        dto::{PlantsSearchDto, PlantsSearchParameters, PlantsSummaryDto},
+        dto::{PlantsSearchParameters, PlantsSummaryDto},
         entity::Plants,
     },
 };
-
-use std::cmp;
-
-/// Fetch all plants from the database.
-///
-/// # Errors
-/// If the connection to the database could not be established.
-pub async fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
-    let mut conn = pool.get().await?;
-    let result = Plants::find_all(&mut conn).await?;
-    Ok(result)
-}
 
 /// Search plants from in the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn search(
+pub async fn find(
+    search_parameters: PlantsSearchParameters,
+    page_parameters: PageParameters,
     pool: &Data<Pool>,
-    query: &PlantsSearchParameters,
-) -> Result<PlantsSearchDto, ServiceError> {
+) -> Result<Page<PlantsSummaryDto>, ServiceError> {
     let mut conn = pool.get().await?;
-
-    let pages_start_at_1 = 1;
-    let calculated_offset = query.limit * (query.page - pages_start_at_1);
-    // disallows negative offsets
-    let offset = cmp::max(calculated_offset, 0);
-
-    let result = Plants::search(&query.search_term, query.limit, offset, &mut conn).await?;
+    let result = Plants::find(search_parameters, page_parameters, &mut conn).await?;
     Ok(result)
 }
 

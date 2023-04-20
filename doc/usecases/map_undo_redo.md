@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can undo or redo their own actions to correct mistakes made to the map.
-- **Status:** Needs Clarification (Collaborative/Offline Feasibility)
+- **Status:** In Progress
 - **Assignee:** Paul
 
 ## Scenarios

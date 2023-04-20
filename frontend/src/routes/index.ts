@@ -1,8 +1,15 @@
 import { Pages, Routes } from './types';
+import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
+import { Map } from '@/features/map_planning';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 
 const routes: Routes = {
+  [Pages.ImprintPage]: {
+    component: ImprintPage,
+    path: '/imprint',
+    title: 'Imprint',
+  },
   [Pages.CreateSeed]: {
     component: CreateSeed,
     path: '/seeds/new',
@@ -22,6 +29,12 @@ const routes: Routes = {
     component: LandingPage,
     path: '/',
     title: 'PermaplanT',
+  },
+  [Pages.Map]: {
+    component: Map,
+    // path needs to change later to something like /user/:id/map/:id
+    path: '/map',
+    title: 'Map',
   },
 };
 
