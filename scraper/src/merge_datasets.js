@@ -103,6 +103,10 @@ const sanitizeValues = async (plants) => {
     if (plant['edible'].split(',').length > 1) {
       plant['edible'] = plant['edible'].split(',')[0];
     }
+
+    if (plant['medicinal'] && plant['medicinal'].toLowerCase() === 'true') {
+      plant['medicinal'] = null;
+    }
   });
 
   return sanitizedPlants;
