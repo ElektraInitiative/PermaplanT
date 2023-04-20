@@ -15,7 +15,6 @@ ALTER TABLE plants DROP COLUMN plants_of_the_world_online_link_synonym;
 ALTER TABLE plants DROP COLUMN pollination;
 ALTER TABLE plants DROP COLUMN propagation_transplanting;
 ALTER TABLE plants DROP COLUMN resistance;
-ALTER TABLE plants DROP COLUMN root_depth;
 ALTER TABLE plants DROP COLUMN root_type;
 ALTER TABLE plants DROP COLUMN seed_planting_depth_en;
 ALTER TABLE plants DROP COLUMN seed_viability;
@@ -47,3 +46,14 @@ ALTER TABLE plants DROP COLUMN external_source;
 ALTER TABLE plants DROP COLUMN external_id;
 ALTER TABLE plants DROP COLUMN external_url;
 DROP TYPE EXTERNAL_SOURCE;
+CREATE TYPE ROOT_ZONE_TENDANCY AS ENUM ('surface', 'shallow', 'deep');
+ALTER TABLE plants
+ADD COLUMN root_zone_tendancy ROOT_ZONE_TENDANCY;
+UPDATE plants
+SET root_zone_tendancy = CASE
+        WHEN root_depth LIKE '%surface%' THEN 'surface'::ROOT_ZONE_TENDANCY
+        WHEN root_depth LIKE '%shallow%' THEN 'shallow'::ROOT_ZONE_TENDANCY
+        WHEN root_depth LIKE '%deep%' THEN 'deep'::ROOT_ZONE_TENDANCY
+        ELSE NULL
+    END;
+ALTER TABLE plants DROP COLUMN root_depth;

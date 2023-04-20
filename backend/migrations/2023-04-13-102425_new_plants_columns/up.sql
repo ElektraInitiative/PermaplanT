@@ -17,7 +17,6 @@ ADD COLUMN alternate_name TEXT,
     ADD COLUMN pollination TEXT,
     ADD COLUMN propagation_transplanting TEXT,
     ADD COLUMN resistance TEXT,
-    ADD COLUMN root_depth TEXT,
     ADD COLUMN root_type TEXT,
     ADD COLUMN seed_planting_depth_en TEXT,
     ADD COLUMN seed_viability TEXT,
@@ -48,3 +47,9 @@ ADD COLUMN alternate_name TEXT,
     ADD COLUMN external_source EXTERNAL_SOURCE,
     ADD COLUMN external_id TEXT,
     ADD COLUMN external_url TEXT;
+ALTER TABLE plants
+ADD COLUMN root_depth TEXT;
+UPDATE plants
+SET root_depth = CAST (root_zone_tendancy as TEXT);
+ALTER TABLE plants DROP COLUMN root_zone_tendancy;
+DROP TYPE ROOT_ZONE_TENDANCY;

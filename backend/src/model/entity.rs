@@ -15,9 +15,9 @@ use super::r#enum::{
     fertility::Fertility, flower_type::FlowerType, growth_rate::GrowthRate,
     herbaceous_or_woody::HerbaceousOrWoody, life_cycle::LifeCycle,
     light_requirement::LightRequirement, nutrition_demand::NutritionDemand,
-    propagation_method::PropagationMethod, quality::Quality, quantity::Quantity,
-    root_zone_tendancy::RootZoneTendancy, soil_ph::SoilPh, soil_texture::SoilTexture,
-    soil_water_retention::SoilWaterRetention, water_requirement::WaterRequirement,
+    propagation_method::PropagationMethod, quality::Quality, quantity::Quantity, soil_ph::SoilPh,
+    soil_texture::SoilTexture, soil_water_retention::SoilWaterRetention,
+    water_requirement::WaterRequirement,
 };
 
 /// The `Plants` entity.
@@ -59,7 +59,6 @@ pub struct Plants {
     pub native_geographical_range: Option<String>,
     pub native_environment: Option<String>,
     pub ecosystem_niche: Option<String>,
-    pub root_zone_tendancy: Option<RootZoneTendancy>,
     pub deciduous_or_evergreen: Option<DeciduousOrEvergreen>,
     pub herbaceous_or_woody: Option<HerbaceousOrWoody>,
     pub life_cycle: Option<Vec<Option<LifeCycle>>>,

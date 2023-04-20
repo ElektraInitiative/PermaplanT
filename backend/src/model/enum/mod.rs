@@ -12,7 +12,6 @@ pub mod nutrition_demand;
 pub mod propagation_method;
 pub mod quality;
 pub mod quantity;
-pub mod root_zone_tendancy;
 pub mod soil_ph;
 pub mod soil_texture;
 pub mod soil_water_retention;
