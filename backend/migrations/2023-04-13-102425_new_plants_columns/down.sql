@@ -7,7 +7,6 @@ ALTER TABLE plants DROP COLUMN germination_temperature;
 ALTER TABLE plants DROP COLUMN introduced_into;
 ALTER TABLE plants DROP COLUMN layer;
 ALTER TABLE plants DROP COLUMN leaves;
-ALTER TABLE plants DROP COLUMN link;
 ALTER TABLE plants DROP COLUMN medicinal_parts;
 ALTER TABLE plants DROP COLUMN native_to;
 ALTER TABLE plants DROP COLUMN plants_for_a_future;

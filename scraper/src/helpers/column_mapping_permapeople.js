@@ -16,7 +16,9 @@
  *
  */
 export default {
-  id: null,
+  id: {
+    newName: 'external_id',
+  },
   name: {
     map: 'common_name',
     priority: 'permapeople',
@@ -34,7 +36,9 @@ export default {
   parent_id: null,
   version: null,
   type: null,
-  link: null,
+  link: {
+    map: 'external_url',
+  },
   wildflower: null,
   usda_hardiness_zone: {
     map: 'hardiness_zone',
@@ -159,7 +163,7 @@ export default {
   days_to_harvest: null,
   when_to_sow_indoors: null,
   '1000_seed_weight_g': {
-    newName: '1000_seed_weight',
+    newName: 'seed_weight_1000',
   },
   seed_planting_depth: {
     newName: 'seed_planting_depth_en',
