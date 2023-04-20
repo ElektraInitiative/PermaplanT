@@ -179,18 +179,7 @@ events }o--|| maps : ""
 favourites {}
 
 favourites }o--|| maps : ""
-favourites }o--|| users : ""
 favourites }o--|| plant_detail : ""
-
-companionGroups {
-  INT id PK
-  VARCHAR name "NOT NULL"
-}
-
-companions {}
-
-companions }|--|| companionGroups : ""
-companions }o--|| plant_detail : ""
 
 ```
 
@@ -351,26 +340,7 @@ Many-to-many table to store map-specific favourites.
 | **_Column name_** | **_Example_** | **_Description_** |
 | :---------------- | :------------ | :---------------- |
 | **map_id**        | 1             | id of the map     |
-| **user_id**       | 1             | id of the user    |
 | **plant_id**      | 1             | id of the plant   |
-
-## `CompanionGroups`
-
-| **_Column name_** | **_Example_**      | **_Description_**                                                         |
-| :---------------- | :----------------- | :------------------------------------------------------------------------ |
-| **id**            | 1                  | companion group id                                                        |
-| **name**          | My Companion Group | name of the companion group                                               |
-| **[user_id]**     | 1                  | id of the user that owns this companion group (are groups user specific?) |
-| **[map_id]**      | 1                  | id of the map that this companion group belongs to (map specific?)        |
-
-## `Companions`
-
-Many-to-many table to store relations between companion groups and plants.
-
-| **_Column name_** | **_Example_** | **_Description_**  |
-| :---------------- | :------------ | :----------------- |
-| **group_id**      | 1             | companion group id |
-| **plant_id**      | 1             | plant id           |
 
 ## `Relation`
 
