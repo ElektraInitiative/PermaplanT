@@ -1,18 +1,4 @@
 -- This file should undo anything in `up.sql`
--- hardiness_zone
-ALTER TABLE plants
-    RENAME COLUMN hardiness_zone TO hardiness_zone_range;
-ALTER TABLE plants
-ADD COLUMN hardiness_zone smallint CONSTRAINT plant_detail_hardiness_zone_check CHECK (
-        (hardiness_zone IS NULL)
-        OR (
-            (hardiness_zone >= 0)
-            AND (hardiness_zone <= 13)
-        )
-    );
-UPDATE plants
-SET hardiness_zone = lower(hardiness_zone_range);
-ALTER TABLE plants DROP COLUMN hardiness_zone_range;
 -- Light_requirement
 CREATE TYPE SUN AS ENUM ('full sun', 'partial sun', 'indirect sun');
 ALTER TABLE plants

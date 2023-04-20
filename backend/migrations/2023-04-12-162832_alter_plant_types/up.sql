@@ -1,12 +1,4 @@
 -- Your SQL goes here
--- hardiness_zone
-ALTER TABLE plants
-ADD COLUMN hardiness_zone_range INT4RANGE;
-UPDATE plants
-SET hardiness_zone_range = int4range(hardiness_zone, hardiness_zone, '[]');
-ALTER TABLE plants DROP COLUMN hardiness_zone;
-ALTER TABLE plants
-    RENAME COLUMN hardiness_zone_range TO hardiness_zone;
 -- Light_requirement
 CREATE TYPE LIGHT_REQUIREMENT AS ENUM ('Full sun', 'Partial sun/shade', 'Full shade');
 ALTER TABLE plants
