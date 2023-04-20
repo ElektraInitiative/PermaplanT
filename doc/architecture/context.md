@@ -53,7 +53,7 @@ Global value and local values in the Soil layer:
 - surface water, i.e., wet/dry places (German: Oberflächenwasser)
 - habitats
 - permaculture zones, see [glossary](glossary.md)
-- events: when did a plant/construction in the garden get added/removed (accurate to the day)
+- events: e.g. elements in the garden get added/removed accurate to the day
 
 ### Later Versions
 

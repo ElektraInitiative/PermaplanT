@@ -5,7 +5,7 @@
 - **Scope:** Map View
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can see the addition/removal of elements as events using the timeline feature, allowing them to understand how the map changed over time.
+- **Brief:** The user sees addition/removal of elements as events using the timeline feature.
 - **Status:** Draft
 
 ## Scenarios
@@ -13,11 +13,11 @@
 - **Precondition:**
   The user has opened the app and selected a map.
 - **Main success scenario:**
-  - The user sees events represented on the scrollbar of the timeline feature.
+  - The user sees events represented on the scrollbar of the timeline feature, allowing them to understand how the map changed over time.
   Events include:
     - addition of an element to the map
     - deletion of an element from the map
-  - The timeline can be scaled with the mouse wheel, adjusting it's start and end date, thus showing more events of the future and the past.
+  - The timeline can be scaled, adjusting its start and end date, thus showing more events of the future and the past.
   - The timeline can be filtered to only show one kind of event, e.g. only events related to additions of elements.
 
 - **Alternative scenario:**
