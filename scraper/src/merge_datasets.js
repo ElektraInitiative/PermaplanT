@@ -2,7 +2,20 @@ import fs from 'fs';
 import { parse as json2csv } from 'json2csv';
 import csv from 'csvtojson';
 import permapeopleColumnMapping from './helpers/column_mapping_permapeople.js';
-import { sanitizeColumnNames, getSoilPH } from './helpers/helpers.js';
+import { sanitizeColumnNames, getSoilPH, fetchGermanName } from './helpers/helpers.js';
+
+const fetchGermanNames = async (plants) => {
+  return Promise.all(
+    plants.map(async (plant) => {
+      if (plant['common_name_de']) {
+        return plant;
+      }
+      const germanName = await fetchGermanName(plant['unique_name']);
+      plant['common_name_de'] = germanName;
+      return plant;
+    }),
+  );
+};
 
 const unifyValueFormat = (plants, columnMapping) => {
   const mappedColumns = Object.keys(columnMapping).filter((key) => columnMapping[key] !== null);
@@ -86,6 +99,10 @@ const sanitizeValues = async (plants) => {
       uniqueScientificNames.add(scientificName);
       sanitizedPlants.push(plant);
     }
+
+    if (plant['edible'].split(',').length > 1) {
+      plant['edible'] = plant['edible'].split(',')[0];
+    }
   });
 
   return sanitizedPlants;
@@ -111,14 +128,19 @@ async function mergeDatasets() {
   practicalPlants = await renameColumns(practicalPlants, permapeopleColumnMapping);
   permapeople = await sanitizeValues(permapeople);
 
+  const mappedColumns = Object.keys(permapeopleColumnMapping).filter(
+    (key) => permapeopleColumnMapping[key] !== null,
+  );
+
   practicalPlants.forEach((plant) => {
-    const binomial_name = plant['binomial_name'];
+    const scientific_name = plant['scientific_name'];
     const plantInPermapeople = permapeople.find(
-      (plant) => plant['scientific_name'] === binomial_name,
+      (plant) => plant['scientific_name'] === scientific_name,
     );
 
     if (plantInPermapeople) {
       const mergedPlant = {};
+
       Object.keys(plantInPermapeople).forEach((key) => {
         if (
           key in mappedColumns &&
@@ -177,12 +199,14 @@ async function mergeDatasets() {
   return allPlants;
 }
 
-function writePlantsToCsv(plants) {
+async function writePlantsToCsv(plants) {
   if (!fs.existsSync('data')) {
     fs.mkdirSync('data');
   }
 
-  const updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
+  let updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
+
+  updatedPlants = await fetchGermanNames(updatedPlants);
 
   console.log('[INFO] Writing merged dataset to CSV file...');
   console.log('[INFO] Total number of plants: ', updatedPlants.length);
