@@ -21,7 +21,7 @@ All tests related to a component can be found under the same directory in `<comp
 ## Render tests
 
 Render tests make use of [React Test Renderer](https://legacy.reactjs.org/docs/test-renderer.html) to check if a components layout has unexpectedly changed by transforming it to plain html.
-Since most components are made up of other sub-components, most tests of this kind will considered to be integration tests.
+Since most components are made up of other sub-components, most tests of this kind are considered to be integration tests.
 
 After a new render test is run for the first time, [React Test Renderer](https://legacy.reactjs.org/docs/test-renderer.html) will record a snapshot of the selected component and store it in the `__snapshots__` subfolder.
 If the same component renders differently in the future, e.g. because a subcomponent was changed, the test will fail.
