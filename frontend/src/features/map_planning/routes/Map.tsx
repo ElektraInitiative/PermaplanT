@@ -14,6 +14,8 @@ import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Rect } from 'react-konva';
+import BaseLayer from '../layers/BaseLayer';
+import { Input } from 'postcss';
 
 /**
  * This component is responsible for rendering the map that the user is going to draw on.
