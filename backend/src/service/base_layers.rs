@@ -28,3 +28,13 @@ pub async fn create(new_base_layer: NewBaseLayerDto, pool: &Data<Pool>) -> Resul
     let result = BaseLayer::create(new_base_layer, &mut conn).await?;
     Ok(result)
 }
+
+/// Find a base layer by its id in the database.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub async fn delete_by_id(id: i32, pool: &Data<Pool>) -> Result<usize, ServiceError> {
+    let mut conn = pool.get().await?;
+    let result = BaseLayer::delete_by_id(id, &mut conn).await?;
+    Ok(result)
+}
