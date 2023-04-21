@@ -47,12 +47,13 @@ Global value and local values in the Soil layer:
 
 ## Local (for each place in the Garden)
 
-- distances to plants/trees (German: Abstände zu Bäume/Sträuche)
+- distances to plants/trees (German: Abstände zu Bäumen/Sträuchern)
 - wind
 - shadows
 - surface water, i.e., wet/dry places (German: Oberflächenwasser)
 - habitats
 - permaculture zones, see [glossary](glossary.md)
+- events: e.g. elements in the garden get added/removed accurate to the day
 
 ### Later Versions
 
@@ -87,7 +88,7 @@ Global value and local values in the Soil layer:
 - is a tree/bush
 - notes German (MISSING)
 
-All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes presence.
+All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes precedence.
 
 # Output Parameters
 
