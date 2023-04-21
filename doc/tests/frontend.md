@@ -30,7 +30,7 @@ To fix the issue, the programmer has to decide if the changes are intentional an
 
 ## DOM tests
 
-DOM tests are be used to test a components response to user interaction.
+DOM tests are used to test a components response to user interaction.
 In the current test setup this is acomplished using a simulated DOM provided by [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and js-dom.
 This makes it possible to run these tests without even when a browser is not available (e.g. as part of the CI-pipeline).
 
