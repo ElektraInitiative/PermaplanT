@@ -15,10 +15,12 @@ const BaseLayer = ({ imageUrl, pixels_per_meter, rotation }: BaseLayerProps) => 
     const [image] = useImage(imageUrl); 
 
     const scale = pixels_per_meter / conva_pixels_per_meter;
-
+    const width = image?.width ?? 0;
+    const height = image?.height ?? 0;
+    
     return (
         <Layer>
-            <Image image={image} rotation={rotation} scaleX={scale} scaleY={scale}/>
+            <Image image={image} rotation={rotation} scaleX={scale} scaleY={scale} offset={{x: width / 2, y: height / 2}}/>
         </Layer>
     );
 };

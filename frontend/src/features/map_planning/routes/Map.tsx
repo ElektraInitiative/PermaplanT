@@ -2,6 +2,8 @@ import { BaseStage } from '../components/BaseStage';
 import PlantsLayer from '../layers/PlantsLayer';
 import { useEffect, useState } from 'react';
 import { Circle, Rect } from 'react-konva';
+import BaseLayer from '../layers/BaseLayer';
+import { Input } from 'postcss';
 
 /**
  * This component is responsible for rendering the map that the user is going to draw on.
@@ -41,8 +43,14 @@ export const Map = () => {
     setShapes(newShapes);
   }, []);
 
+  // for debugging purposes
+  const [rotation, setRotation] = useState(0);
+  setTimeout(() => {
+    setRotation(rotation + 10);
+  }, 100);
   return (
     <BaseStage>
+      <BaseLayer imageUrl='https://nextcloud.markus-raab.org/nextcloud/index.php/s/KRdEQgNeBTnJRag/download/earth.jpg' rotation={rotation} pixels_per_meter={5} />
       <PlantsLayer>{shapes}</PlantsLayer>
     </BaseStage>
   );
