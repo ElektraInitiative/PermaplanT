@@ -36,4 +36,12 @@ impl BaseLayer {
             .await;
         query_result.map(Into::into)
     }
+
+    /// Delete the seed from the database.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn delete_by_id(id: i32, conn: &mut AsyncPgConnection) -> QueryResult<usize> {
+        diesel::delete(base_layers::table.find(id)).execute(conn).await
+    }
 }
