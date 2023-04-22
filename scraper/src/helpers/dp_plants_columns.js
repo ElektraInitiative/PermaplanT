@@ -15,8 +15,6 @@ export default [
   { name: 'cultivation' },
   { name: 'material_uses' },
   { name: 'functions' },
-  { name: 'provides_forage_for' },
-  { name: 'provides_shelter_for' },
   { name: 'hardiness_zone' },
   { name: 'heat_zone' },
   { name: 'shade' },

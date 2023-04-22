@@ -54,10 +54,6 @@ pub struct Plants {
     ///
     pub functions: Option<String>,
     ///
-    pub provides_forage_for: Option<String>,
-    ///
-    pub provides_shelter_for: Option<String>,
-    ///
     pub heat_zone: Option<i16>,
     ///
     pub shade: Option<String>,

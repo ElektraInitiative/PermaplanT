@@ -46,3 +46,7 @@ DROP TYPE WATER_REQUIREMENT;
 -- propagation_method
 ALTER TABLE plants DROP COLUMN propagation_method;
 DROP TYPE PROPAGATION_METHOD;
+ALTER TABLE plants
+ADD COLUMN provides_forage_for TEXT;
+ALTER TABLE plants
+ADD COLUMN provides_shelter_for TEXT;

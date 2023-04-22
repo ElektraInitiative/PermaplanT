@@ -54,3 +54,5 @@ ADD COLUMN propagation_method PROPAGATION_METHOD [];
 -- growth_rate
 ALTER TABLE plants
 ALTER COLUMN growth_rate TYPE GROWTH_RATE [] USING ARRAY [growth_rate];
+ALTER TABLE plants DROP COLUMN provides_forage_for;
+ALTER TABLE plants DROP COLUMN provides_shelter_for;
