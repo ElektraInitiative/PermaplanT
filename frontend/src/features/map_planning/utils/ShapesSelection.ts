@@ -3,6 +3,7 @@ import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
 import { Transformer } from 'konva/lib/shapes/Transformer';
+import { element } from 'prop-types';
 
 // Keep track of our previously selected shapes so we can trigger the selection
 // only if we have new shapes in our bounds. This fixes a bug where deselection
@@ -32,12 +33,12 @@ export const selectIntersectingShapes = (
   const allNodes = trRef.current?.getNodes();
   if (!allNodes) return;
 
-  const mappedShapes = allShapes.map((shape) => {
-    // ignore shapes that are marked as not selectable
-    if (!shape?.getLayer()?.isListening()) return;
-
-    return shape as Shape<ShapeConfig>;
-  });
+  const mappedShapes = allShapes
+    // ignore shapes from non editable layers
+    .filter((shape) => !shape?.getLayer()?.isListening())
+    .map((shape) => {
+      return shape as Shape<ShapeConfig>;
+    });
 
   const intersectingShapes = mappedShapes.filter(
     (shape) => shape && Util.haveIntersection(box, shape.getClientRect()),
