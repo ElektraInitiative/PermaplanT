@@ -6,6 +6,7 @@ mod tests {
     use crate::model::dto::SeedDto;
     use crate::model::r#enum::quantity::Quantity;
     use crate::test::test_utils::init_test_app;
+    use crate::test::test_utils::init_test_database;
     use actix_web::{http::StatusCode, test};
     use diesel::prelude::*;
     use diesel_async::scoped_futures::ScopedFutureExt;
@@ -13,7 +14,8 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_quantity() {
-        let app = init_test_app(|_| async { Ok(()) }.scope_boxed()).await;
+        let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
+        let app = init_test_app(pool.clone()).await;
 
         let resp = test::TestRequest::post()
             .uri("/api/seeds")
@@ -33,7 +35,8 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_tags() {
-        let app = init_test_app(|_| async { Ok(()) }.scope_boxed()).await;
+        let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
+        let app = init_test_app(pool.clone()).await;
 
         let resp = test::TestRequest::post()
             .uri("/api/seeds")
@@ -53,7 +56,8 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_fails_with_invalid_quality() {
-        let app = init_test_app(|_| async { Ok(()) }.scope_boxed()).await;
+        let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
+        let app = init_test_app(pool.clone()).await;
 
         let resp = test::TestRequest::post()
             .uri("/api/seeds")
@@ -74,7 +78,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_create_seed_ok() {
-        let app = init_test_app(|conn| {
+        let pool = init_test_database(|conn| {
             async {
                 diesel::insert_into(crate::schema::plants::table)
                     .values((
@@ -106,6 +110,7 @@ mod tests {
             price: None,
             notes: None,
         };
+        let app = init_test_app(pool.clone()).await;
 
         let resp = test::TestRequest::post()
             .uri("/api/seeds")

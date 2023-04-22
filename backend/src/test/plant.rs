@@ -5,6 +5,7 @@ mod tests {
     use crate::model::dto::Page;
     use crate::model::dto::PlantsSummaryDto;
     use crate::test::test_utils::init_test_app;
+    use crate::test::test_utils::init_test_database;
     use actix_web::{http::header::CONTENT_TYPE, http::StatusCode, test};
     use diesel::ExpressionMethods;
     use diesel_async::scoped_futures::ScopedFutureExt;
@@ -12,7 +13,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_get_all_plants_succeeds() {
-        let app = init_test_app(|conn| {
+        let pool = init_test_database(|conn| {
             async {
                 diesel::insert_into(crate::schema::plants::table)
                     .values((
@@ -28,6 +29,7 @@ mod tests {
             .scope_boxed()
         })
         .await;
+        let app = init_test_app(pool.clone()).await;
 
         let resp = test::TestRequest::get()
             .uri("/api/plants")
@@ -57,7 +59,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_get_one_plant_succeeds() {
-        let app = init_test_app(|conn| {
+        let pool = init_test_database(|conn| {
             async {
                 diesel::insert_into(crate::schema::plants::table)
                     .values((
@@ -73,6 +75,7 @@ mod tests {
             .scope_boxed()
         })
         .await;
+        let app = init_test_app(pool.clone()).await;
 
         let resp = test::TestRequest::get()
             .uri("/api/plants/-1")
@@ -102,7 +105,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_search_plants_succeeds() {
-        let app = init_test_app(|conn| {
+        let pool = init_test_database(|conn| {
             async {
                 diesel::insert_into(crate::schema::plants::table)
                     .values((
@@ -118,6 +121,7 @@ mod tests {
             .scope_boxed()
         })
         .await;
+        let app = init_test_app(pool.clone()).await;
 
         let resp = test::TestRequest::get()
             .uri("/api/plants?name=Testplant&per_page=10")
