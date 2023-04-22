@@ -1,16 +1,18 @@
 //! Test utilities
 
-#![cfg(test)]
-
 use actix_http::Request;
-use actix_web::body::MessageBody;
-use actix_web::dev::{Service, ServiceResponse};
-use actix_web::web::Data;
-use actix_web::{test, App, Error};
-use diesel_async::pooled_connection::deadpool::Pool;
-use diesel_async::pooled_connection::AsyncDieselConnectionManager;
-use diesel_async::scoped_futures::ScopedBoxFuture;
-use diesel_async::{AsyncConnection, AsyncPgConnection};
+use actix_web::{
+    body::MessageBody,
+    dev::{Service, ServiceResponse},
+    test,
+    web::Data,
+    App, Error,
+};
+use diesel_async::{
+    pooled_connection::{deadpool::Pool, AsyncDieselConnectionManager},
+    scoped_futures::ScopedBoxFuture,
+    AsyncConnection, AsyncPgConnection,
+};
 use dotenvy::dotenv;
 
 use crate::config::{app, routes};
@@ -21,7 +23,7 @@ use crate::error::ServiceError;
 /// All transactions are run inside [`AsyncConnection::begin_test_transaction`].
 ///
 /// The pool is limited to 1 connection.
-pub(in crate::test) async fn init_test_database<'a, F>(init_database: F) -> Pool<AsyncPgConnection>
+pub async fn init_test_database<'a, F>(init_database: F) -> Pool<AsyncPgConnection>
 where
     F: for<'r> FnOnce(
             &'r mut AsyncPgConnection,
@@ -55,7 +57,7 @@ where
 }
 
 /// Create the test service out of the connection pool.
-pub(in crate::test) async fn init_test_app(
+pub async fn init_test_app(
     pool: Pool<AsyncPgConnection>,
 ) -> impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error> {
     test::init_service(
