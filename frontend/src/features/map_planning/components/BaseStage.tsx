@@ -7,6 +7,8 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
+import SimpleButton from '@/components/Button/SimpleButton';
+import useMapState from '@/features/undo_redo/store/MapHistoryStore';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
@@ -177,8 +179,91 @@ export const BaseStage = ({
       }
     });
 
+  const dispatch = useMapState((s) => s.dispatch);
+  const canUndo = useMapState((s) => s.canUndo);
+  const canRedo = useMapState((s) => s.canRedo);
+  const step = useMapState((s) => s.step);
+  const historyLength = useMapState((s) => s.history.length);
+
   return (
     <div className="h-full w-full overflow-hidden">
+      <div className="absolute z-10 pt-8">
+        <div className="flex justify-center">
+          <SimpleButton
+            className="w-32"
+            onClick={() =>
+              dispatch({
+                type: 'OBJECT_ADD',
+                payload: {
+                  index: 'plant',
+                  id: Math.random().toString(36).slice(2, 9),
+                  x: 0,
+                  y: 0,
+                  width: 100,
+                  height: 100,
+                  type: 'rect',
+                  rotation: 0,
+                  scaleX: 1,
+                  scaleY: 1,
+                },
+              })
+            }
+          >
+            CREATE OBJECT
+          </SimpleButton>
+          <button
+            className="items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
+            disabled={!canUndo}
+            onClick={() =>
+              dispatch({
+                type: 'UNDO',
+              })
+            }
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+              />
+            </svg>
+          </button>
+          <button
+            className="items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
+            disabled={!canRedo}
+            onClick={() =>
+              dispatch({
+                type: 'REDO',
+              })
+            }
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"
+              />
+            </svg>
+          </button>
+          Step: {step}
+          <br />
+          History length: {historyLength}
+        </div>
+      </div>
       <Stage
         ref={stageRef}
         draggable={draggable}
