@@ -12,7 +12,7 @@ interface Feature {
 }
 
 const Features = () => {
-  const { t } = useTranslation(['featureDescriptions']);
+  const { t, i18n } = useTranslation(['featureDescriptions']);
   const features: Feature[] = [
     {
       icon: PlanningSVG,
@@ -43,11 +43,13 @@ const Features = () => {
             </div>
             <div className="text-left">
               <TypewriterComponent
+                // remount the component when language changes, so that the typewriter effect is reset
+                key={i18n.resolvedLanguage}
                 onInit={(typewriter) => {
                   const strings = t('featureDescriptions:slogan.third_part', {
                     returnObjects: true,
                   });
-                  console.log(strings);
+
                   strings.forEach((s) => {
                     typewriter.typeString(s).deleteAll();
                   });
