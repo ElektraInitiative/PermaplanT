@@ -43,14 +43,9 @@ export const Map = () => {
     setShapes(newShapes);
   }, []);
 
-  // for debugging purposes
-  const [rotation, setRotation] = useState(0);
-  setTimeout(() => {
-    setRotation(rotation + 10);
-  }, 100);
   return (
     <BaseStage>
-      <BaseLayer imageUrl='https://nextcloud.markus-raab.org/nextcloud/index.php/s/KRdEQgNeBTnJRag/download/earth.jpg' rotation={rotation} pixels_per_meter={5} />
+      <BaseLayer imageUrl='https://nextcloud.markus-raab.org/nextcloud/index.php/s/KRdEQgNeBTnJRag/download/earth.jpg' rotation={20} pixels_per_meter={5} />
       <PlantsLayer>{shapes}</PlantsLayer>
     </BaseStage>
   );

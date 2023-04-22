@@ -19,7 +19,7 @@ const BaseLayer = ({ imageUrl, pixels_per_meter, rotation }: BaseLayerProps) => 
     const height = image?.height ?? 0;
     
     return (
-        <Layer>
+        <Layer listening={false}>
             <Image image={image} rotation={rotation} scaleX={scale} scaleY={scale} offset={{x: width / 2, y: height / 2}}/>
         </Layer>
     );
