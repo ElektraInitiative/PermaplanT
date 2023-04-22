@@ -127,7 +127,8 @@ export const BaseStage = ({
     }
 
     const stage = e.target.getStage();
-    if (stage === null || !selectionRectAttrs.isVisible || !selectable) return;
+    const layerListening = e.target.getLayer() != null ? e.target.getLayer().isListening() : false;
+    if (stage === null || !selectionRectAttrs.isVisible || !layerListening || !selectable) return;
 
     updateSelection(stage, setSelectionRectAttrs);
     selectIntersectingShapes(stageRef, trRef);
@@ -142,7 +143,8 @@ export const BaseStage = ({
     }
 
     const stage = e.target.getStage();
-    if (stage == null || !selectable) return;
+    const layerListening = e.target.getLayer() != null ? e.target.getLayer().isListening() : false;
+    if (stage == null || !layerListening || !selectable) return;
 
     startSelection(stage, setSelectionRectAttrs);
   };
