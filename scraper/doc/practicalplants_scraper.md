@@ -1,6 +1,6 @@
 # Scraper for PracticalPlants
 
-PracticalPlants are officially maintained since 2013, however, there is a dump of the entire webpage available in our [cloned repository](https://github.com/ElektraInitiative/practicalplants).
+PracticalPlants are not officially maintained since 2013, however, there is a dump of the entire webpage available in our [cloned repository](https://github.com/ElektraInitiative/practicalplants).
 The scraper scrapes the data from the PracticalPlants wiki dump and stores it in `csv` format in the `data` directory.
 
 ## Installation and Usage
