@@ -213,9 +213,9 @@ pub struct Plants {
     pub external_portion_content: Option<String>,
     ///
     pub sowing_outdoors_de: Option<String>,
-    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "[8,9,10]" means from the 2nd half of April to the 2nd half of May incl.
+    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "\[8,9,10\]" means from the 2nd half of April to the 2nd half of May incl.
     pub sowing_outdoors: Option<String>,
-    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "[8,9,10]" means from the 2nd half of April to the 2nd half of May incl.
+    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "\[8,9,10\]" means from the 2nd half of April to the 2nd half of May incl.
     pub harvest_time: Option<String>,
     ///
     pub spacing_de: Option<String>,
