@@ -33,7 +33,7 @@ export const selectIntersectingShapes = (
 
   const mappedShapes = allShapes
     // ignore shapes from non editable layers
-    .filter((shape) => !shape?.getLayer()?.isListening())
+    .filter((shape) => shape?.getLayer()?.isListening())
     .map((shape) => {
       return shape as Shape<ShapeConfig>;
     });
