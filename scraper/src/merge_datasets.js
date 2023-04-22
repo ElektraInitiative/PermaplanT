@@ -52,6 +52,27 @@ const unifyValueFormat = (plants, columnMapping) => {
         }
       }
     });
+    if (plant['unique_name'].startsWith('Papaver somnif. paeonifl.')) {
+      plant['unique_name'] = plant['unique_name'].replace(
+        'Papaver somnif. paeonifl.',
+        'Papaver somniferum paeoniflorum',
+      );
+    } else if (plant['unique_name'].startsWith('Alcea rosea fl. pl.')) {
+      plant['unique_name'] = plant['unique_name'].replace(
+        'Alcea rosea fl. pl.',
+        'Alcea rosea flore pleno',
+      );
+    } else if (plant['unique_name'].startsWith('Campanula lat. macr.')) {
+      plant['unique_name'] = plant['unique_name'].replace(
+        'Campanula lat. macr.',
+        'Campanula latifolia macrantha',
+      );
+    } else if (plant['unique_name'].startsWith('Malva sylvestris ssp. maur.')) {
+      plant['unique_name'] = plant['unique_name'].replace(
+        'Malva sylvestris ssp. maur.',
+        'Malva sylvestris mauritiana',
+      );
+    }
   });
 
   return plants;
