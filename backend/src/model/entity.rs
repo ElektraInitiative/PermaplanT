@@ -27,11 +27,11 @@ use super::r#enum::{
 pub struct Plants {
     /// The internal id of the plant.
     pub id: i32,
-    /// The unique name of the plant.
+    /// The unique name of the plant. The structure is described in the /doc/database/hierarchy.md document in the repository.
     pub unique_name: String,
     /// The list of the common names of the plant.
     pub common_name_en: Option<Vec<Option<String>>>,
-    /// The list of the common names of the plant in german. Additionally fetched from Wikidata API.
+    /// The list of the common names of the plant in german. Fetched from Wikidata API if not present in the source datasets.
     pub common_name_de: Option<Vec<Option<String>>>,
     /// Family of the plant.
     pub family: Option<String>,
@@ -113,7 +113,7 @@ pub struct Plants {
     pub light_requirement: Option<Vec<Option<LightRequirement>>>,
     /// The list of enum values.
     pub water_requirement: Option<Vec<Option<WaterRequirement>>>,
-    ///
+    /// The list of enum values.
     pub propagation_method: Option<Vec<Option<PropagationMethod>>>,
     ///
     pub alternate_name: Option<String>,
@@ -213,9 +213,9 @@ pub struct Plants {
     pub external_portion_content: Option<String>,
     ///
     pub sowing_outdoors_de: Option<String>,
-    ///
+    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "[8,9,10]" means from the 2nd half of April to the 2nd half of May incl.
     pub sowing_outdoors: Option<String>,
-    ///
+    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "[8,9,10]" means from the 2nd half of April to the 2nd half of May incl.
     pub harvest_time: Option<String>,
     ///
     pub spacing_de: Option<String>,
