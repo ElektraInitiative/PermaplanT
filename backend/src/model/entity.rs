@@ -31,7 +31,7 @@ pub struct Plants {
     pub unique_name: String,
     /// The list of the common names of the plant.
     pub common_name_en: Option<Vec<Option<String>>>,
-    /// The list of the common names of the plant in german. Fetched from Wikidata API if not present in the source datasets.
+    /// The list of the common names of the plant in German. Fetched from Wikidata API if not present in the source datasets.
     pub common_name_de: Option<Vec<Option<String>>>,
     /// Family of the plant.
     pub family: Option<String>,
