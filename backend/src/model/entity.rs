@@ -48,8 +48,6 @@ pub struct Plants {
     ///
     pub botanic: Option<String>,
     ///
-    pub cultivation: Option<String>,
-    ///
     pub material_uses: Option<String>,
     ///
     pub functions: Option<String>,
@@ -65,10 +63,6 @@ pub struct Plants {
     pub soil_water_retention: Option<Vec<Option<SoilWaterRetention>>>,
     ///
     pub environmental_tolerances: Option<Vec<Option<String>>>,
-    ///
-    pub native_climate_zones: Option<String>,
-    ///
-    pub adapted_climate_zones: Option<String>,
     ///
     pub native_geographical_range: Option<String>,
     ///
@@ -163,8 +157,6 @@ pub struct Plants {
     pub slug: Option<String>,
     ///
     pub spread: Option<String>,
-    ///
-    pub thining: Option<String>,
     ///
     pub utility: Option<String>,
     ///

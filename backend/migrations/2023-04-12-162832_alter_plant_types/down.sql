@@ -50,3 +50,9 @@ ALTER TABLE plants
 ADD COLUMN provides_forage_for TEXT;
 ALTER TABLE plants
 ADD COLUMN provides_shelter_for TEXT;
+ALTER TABLE plants
+ADD COLUMN cultivation TEXT;
+ALTER TABLE plants
+ADD COLUMN native_climate_zones TEXT;
+ALTER TABLE plants
+ADD COLUMN adapted_climate_zones TEXT;

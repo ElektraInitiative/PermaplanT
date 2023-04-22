@@ -20,7 +20,6 @@ ALTER TABLE plants DROP COLUMN seed_planting_depth_en;
 ALTER TABLE plants DROP COLUMN seed_viability;
 ALTER TABLE plants DROP COLUMN slug;
 ALTER TABLE plants DROP COLUMN spread;
-ALTER TABLE plants DROP COLUMN thining;
 ALTER TABLE plants DROP COLUMN utility;
 ALTER TABLE plants DROP COLUMN warning;
 ALTER TABLE plants DROP COLUMN when_to_plant_cuttings;

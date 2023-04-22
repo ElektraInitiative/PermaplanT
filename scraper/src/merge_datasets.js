@@ -144,7 +144,7 @@ async function mergeDatasets() {
     );
 
     if (plantInPermapeople) {
-      const mergedPlant = {};
+      const mergedPlant = { ...plant };
 
       Object.keys(plantInPermapeople).forEach((key) => {
         if (
