@@ -58,14 +58,15 @@ const unifyValueFormat = (plants, columnMapping) => {
 };
 
 const renameColumns = async (plants, columnMapping) => {
-  const mappedColumns = Object.keys(columnMapping).filter(
-    (key) => columnMapping[key] !== null && columnMapping[key]['map'] !== null,
+  const mappedColumns = Object.fromEntries(
+    Object.entries(columnMapping).filter(([_, value]) => value !== null),
   );
-
   plants.forEach((plant) => {
-    mappedColumns.forEach((column) => {
+    Object.keys(mappedColumns).forEach((column) => {
       plant[column] = plant[columnMapping[column]['map']];
-      delete plant[columnMapping[column]['map']];
+      if (column !== columnMapping[column]['map']) {
+        delete plant[columnMapping[column]['map']];
+      }
     });
   });
   return plants;
@@ -132,8 +133,8 @@ async function mergeDatasets() {
   practicalPlants = await renameColumns(practicalPlants, permapeopleColumnMapping);
   permapeople = await sanitizeValues(permapeople);
 
-  const mappedColumns = Object.keys(permapeopleColumnMapping).filter(
-    (key) => permapeopleColumnMapping[key] !== null,
+  const mappedColumns = Object.fromEntries(
+    Object.entries(permapeopleColumnMapping).filter(([_, value]) => value !== null),
   );
 
   practicalPlants.forEach((plant) => {
