@@ -33,6 +33,9 @@ export const selectIntersectingShapes = (
   if (!allNodes) return;
 
   const mappedShapes = allShapes.map((shape) => {
+    // ignore shapes that are marked as not selectable
+    if (!shape?.getLayer()?.isListening()) return;
+
     return shape as Shape<ShapeConfig>;
   });
 
