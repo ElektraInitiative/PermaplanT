@@ -12,7 +12,7 @@ interface SimpleFormInputProps<T extends FieldValues> {
   min?: number;
   max?: number;
   register?: UseFormRegister<T>;
-  onChange?: () => void;
+  onChange?: (value: string | number) => void;
   valueAsNumber?: boolean;
   errorTitle?: string;
   disabled?: boolean;
@@ -36,6 +36,29 @@ export default function SimpleFormInput<T extends FieldValues>({
   disabled = false,
   value,
 }: SimpleFormInputProps<T>) {
+  const callOnKeyUp = function <E>(event: React.KeyboardEvent<E>) {
+    if (onChange == null) return;
+    const value = (event.target as HTMLInputElement).value;
+    
+    if (type === 'number') {
+      onChange(parseInt(value));
+    }
+
+    onChange(value);
+  }
+
+  const callOnChange = function <E>(event: React.ChangeEvent<E>) {
+    if (onChange == null) return;
+    // If somebody finds a way of fixing the next line, please do! 
+    const value = (event.target as unknown as HTMLInputElement).value;
+    
+    if (type === 'number') {
+      onChange(parseInt(value));
+    }
+   
+    onChange(value);
+  }
+
   return (
     <div className="dark:text-white">
       <label htmlFor={id} className="mb-2 block text-sm font-medium">
@@ -45,8 +68,8 @@ export default function SimpleFormInput<T extends FieldValues>({
       {isArea ? (
         <textarea
           disabled={disabled}
-          onKeyUp={onChange}
-          onChange={onChange}
+          onKeyUp={(event) => callOnKeyUp(event)}
+          onChange={(event) => callOnChange(event)}
           rows={6}
           name={id}
           id={id}
@@ -58,8 +81,8 @@ export default function SimpleFormInput<T extends FieldValues>({
       ) : (
         <input
           disabled={disabled}
-          onKeyUp={onChange}
-          onChange={onChange}
+          onKeyUp={(event) => callOnKeyUp(event)}
+          onChange={(event) => callOnChange(event)}
           type={type}
           min={min}
           max={max}
