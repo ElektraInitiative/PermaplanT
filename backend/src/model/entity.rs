@@ -184,7 +184,7 @@ pub struct Plants {
     ///
     pub spacing_en: Option<String>,
     ///
-    pub wikipedia: Option<String>,
+    pub wikipedia_url: Option<String>,
     ///
     pub days_to_maturity: Option<String>,
     ///

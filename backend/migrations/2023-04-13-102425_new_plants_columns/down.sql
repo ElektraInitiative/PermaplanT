@@ -34,7 +34,7 @@ ALTER TABLE plants DROP COLUMN habitat;
 ALTER TABLE plants DROP COLUMN days_to_harvest;
 ALTER TABLE plants DROP COLUMN cold_stratification_time;
 ALTER TABLE plants DROP COLUMN cold_stratification_temperature;
-ALTER TABLE plants DROP COLUMN wikipedia;
+ALTER TABLE plants DROP COLUMN wikipedia_url;
 ALTER TABLE plants DROP COLUMN days_to_maturity;
 ALTER TABLE plants DROP COLUMN pests;
 ALTER TABLE plants DROP COLUMN version;

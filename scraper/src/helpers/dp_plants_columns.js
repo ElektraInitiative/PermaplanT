@@ -77,7 +77,7 @@ export default [
   { name: 'days_to_harvest' },
   { name: 'habitat' },
   { name: 'spacing_en' },
-  { name: 'wikipedia' },
+  { name: 'wikipedia_url' },
   { name: 'days_to_maturity' },
   { name: 'pests' },
   { name: 'version' },

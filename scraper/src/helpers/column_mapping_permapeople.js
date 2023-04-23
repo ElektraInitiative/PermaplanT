@@ -104,7 +104,9 @@ export default {
   },
   edible_parts: null,
   propagation_method: null,
-  wikipedia: null,
+  wikipedia: {
+    newName: 'wikipedia_url',
+  },
   growth: {
     map: 'growth_rate',
     priority: 'permapeople',
