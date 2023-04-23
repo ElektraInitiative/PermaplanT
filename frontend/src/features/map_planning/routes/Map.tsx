@@ -12,6 +12,7 @@ import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
+import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Rect } from 'react-konva';
 
 /**
@@ -24,6 +25,16 @@ import { Rect } from 'react-konva';
 export const Map = () => {
   const state = useMapStore((map) => map.state);
   const dispatch = useMapStore((map) => map.dispatch);
+
+  // Event listener responsible for adding a single shape to the transformer
+  const addToTransformer = (node: Shape<ShapeConfig>) => {
+    const transformer = useMapStore.getState().transformer.current;
+
+    const nodes = transformer?.getNodes() || [];
+    if (!nodes.includes(node)) {
+      transformer?.nodes([node]);
+    }
+  };
 
   return (
     <div className="flex h-full justify-between">
@@ -134,6 +145,9 @@ export const Map = () => {
               fill="blue"
               draggable={true}
               shadowBlur={5}
+              onClick={(e) => {
+                addToTransformer(e.target as Shape<ShapeConfig>);
+              }}
               onDragEnd={(e) => {
                 const transformer = useMapStore.getState().transformer.current;
                 const nodes = transformer?.getNodes() || [];

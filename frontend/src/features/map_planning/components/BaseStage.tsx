@@ -11,7 +11,6 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import useMapStore from '@/features/undo_redo';
 import Konva from 'konva';
 import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
-import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
@@ -167,14 +166,6 @@ export const BaseStage = ({
     }
   };
 
-  // Event listener responsible for adding a single shape to the transformer
-  const addToTransformer = (node: Shape<ShapeConfig>) => {
-    const nodes = trRef.current?.getNodes() || [];
-    if (!nodes.includes(node)) {
-      trRef.current?.nodes([node]);
-    }
-  };
-
   const dispatchUpdate = (nodes: Node<NodeConfig>[]) => {
     dispatch({
       type: 'OBJECT_UPDATE',
@@ -192,19 +183,6 @@ export const BaseStage = ({
       })),
     });
   };
-
-  // Add event listeners to all shapes
-  // This will trigger on every rerender, maybe this could be improved?
-  stageRef.current?.children
-    ?.flatMap((layer) => layer.children)
-    .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'))
-    .forEach((shape) => {
-      if (!shape?.eventListeners['click']) {
-        shape?.addEventListener('click', () => {
-          addToTransformer(shape as Shape<ShapeConfig>);
-        });
-      }
-    });
 
   return (
     <div className="h-full w-full overflow-hidden">
