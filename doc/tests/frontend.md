@@ -26,7 +26,10 @@ Since most components are made up of other sub-components, most tests of this ki
 After a new render test is run for the first time, [React Test Renderer](https://legacy.reactjs.org/docs/test-renderer.html) will record a snapshot of the selected component and store it in the `__snapshots__` subfolder.
 If the same component renders differently in the future, e.g. because a subcomponent was changed, the test will fail.
 
-To fix the issue, the programmer has to decide if the changes are intentional and then either fix the issue, or delete the old snapshot file, forcing [React Test Renderer](https://legacy.reactjs.org/docs/test-renderer.html) to create a new one on the next test run.
+To fix the issue, the programmer has to decide if the changes are intentional and then either fix the issue, or regenerate the affected snapshots using:
+```
+npm run -- --updateSnapshot
+```
 
 ## DOM tests
 
