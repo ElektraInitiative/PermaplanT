@@ -6,7 +6,7 @@ import PlantsLayer from '../layers/PlantsLayer';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import useMapState from '@/features/undo_redo';
+import useMapStore from '@/features/undo_redo';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
@@ -22,8 +22,8 @@ import { Rect } from 'react-konva';
  * Otherwise they cannot be moved.
  */
 export const Map = () => {
-  const state = useMapState((state) => state.state);
-  const dispatch = useMapState((s) => s.dispatch);
+  const state = useMapStore((map) => map.state);
+  const dispatch = useMapStore((map) => map.dispatch);
 
   return (
     <div className="flex h-full justify-between">
@@ -134,29 +134,21 @@ export const Map = () => {
               fill="blue"
               draggable={true}
               shadowBlur={5}
-              onDragEnd={(e) =>
+              onDragEnd={(e) => {
+                const transformer = useMapStore.getState().transformer.current;
+                const nodes = transformer?.getNodes() || [];
+
+                // workaround, because objects can be dragged without being selected...
+                for (const n of nodes) {
+                  if (n.id() === o.id) {
+                    // we return here, because selected objects are updated via the transformer
+                    return;
+                  }
+                }
+
                 dispatch({
                   type: 'OBJECT_UPDATE',
-                  payload: {
-                    ...o,
-                    x: e.target.x(),
-                    y: e.target.y(),
-                    height: e.target.height(),
-                    width: e.target.width(),
-                  },
-                })
-              }
-              onTransformEnd={(e) => {
-                dispatch({
-                  type: 'OBJECT_UPDATE',
-                  payload: {
-                    ...o,
-                    x: e.target.x(),
-                    y: e.target.y(),
-                    rotation: e.target.rotation(),
-                    scaleX: e.target.scaleX(),
-                    scaleY: e.target.scaleY(),
-                  },
+                  payload: [{ ...o, x: e.target.x(), y: e.target.y() }],
                 });
               }}
             />

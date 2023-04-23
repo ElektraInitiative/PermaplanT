@@ -1,11 +1,14 @@
 import type { MapAction, ObjectAddAction, ObjectUpdateAction } from './action-types';
 import type { MapState } from './state-types';
+import Konva from 'konva';
+import { createRef } from 'react';
 import { create } from 'zustand';
 
 type MapHistoryState = {
   history: MapAction[];
   step: number;
   state: MapState;
+  transformer: React.RefObject<Konva.Transformer>;
 };
 
 interface MapStateAPI {
@@ -26,13 +29,14 @@ const DEFAULT_STATE: MapState = {
   },
 };
 
-const useMapState = create<MapStore>((set) => ({
+const useMapStore = create<MapStore>((set) => ({
   history: [],
   step: 0,
   state: DEFAULT_STATE,
   dispatch: (action) => set((state) => handleDispatch(state, action)),
   canUndo: false,
   canRedo: false,
+  transformer: createRef<Konva.Transformer>(),
 }));
 
 function handleDispatch(state: MapStore, action: MapAction): MapStore {
@@ -104,15 +108,23 @@ function handleUpdateObject(state: MapState, action: ObjectUpdateAction): MapSta
     ...state,
     layers: {
       ...state.layers,
-      [action.payload.index]: {
-        ...state.layers[action.payload.index],
-        objects: state.layers[action.payload.index].objects.map((object) => {
-          if (object.id === action.payload.id) {
-            return action.payload;
-          }
-          return object;
+      ...action.payload.reduce(
+        (updates, object) => ({
+          ...updates,
+          [object.index]: {
+            ...updates[object.index],
+            objects: updates[object.index].objects.map((obj) => {
+              if (obj.id === object.id) {
+                return object;
+              }
+
+              return obj;
+            }),
+          },
         }),
-      },
+        // start with the current state
+        state.layers,
+      ),
     },
   };
 }
@@ -134,4 +146,4 @@ function reduceHistory(history: MapAction[]): MapState {
   return state;
 }
 
-export default useMapState;
+export default useMapStore;
