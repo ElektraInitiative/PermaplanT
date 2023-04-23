@@ -36,17 +36,9 @@ export type LayerState = {
  */
 export type MapState = {
   /**
-   * The state of the stage of the map.
+   * The state of the layers of the map.
    */
-  stage: {
-    scale: number;
-    x: number;
-    y: number;
-    /**
-     * The state of the layers of the map.
-     */
-    layers: {
-      [key in LayerName]: LayerState;
-    };
+  layers: {
+    [key in LayerName]: LayerState;
   };
 };

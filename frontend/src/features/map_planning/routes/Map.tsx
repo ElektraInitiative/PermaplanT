@@ -17,7 +17,7 @@ export const Map = () => {
   return (
     <BaseStage>
       <PlantsLayer>
-        {state.stage.layers['plant'].objects.map((o) => (
+        {state.layers['plant'].objects.map((o) => (
           <Rect
             {...o}
             key={o.id}
