@@ -24,7 +24,6 @@ import { Rect } from 'react-konva';
  */
 export const Map = () => {
   const state = useMapStore((map) => map.state);
-  const dispatch = useMapStore((map) => map.dispatch);
 
   // Event listener responsible for adding a single shape to the transformer
   const addToTransformer = (node: Shape<ShapeConfig>) => {
@@ -148,22 +147,9 @@ export const Map = () => {
               onClick={(e) => {
                 addToTransformer(e.target as Shape<ShapeConfig>);
               }}
-              onDragEnd={(e) => {
-                const transformer = useMapStore.getState().transformer.current;
-                const nodes = transformer?.getNodes() || [];
-
-                // workaround, because objects can be dragged without being selected...
-                for (const n of nodes) {
-                  if (n.id() === o.id) {
-                    // we return here, because selected objects are updated via the transformer
-                    return;
-                  }
-                }
-
-                dispatch({
-                  type: 'OBJECT_UPDATE',
-                  payload: [{ ...o, x: e.target.x(), y: e.target.y() }],
-                });
+              onDragStart={(e) => {
+                // sometimes the click event is not fired, so we have to add the object to the transformer here
+                addToTransformer(e.target as Shape<ShapeConfig>);
               }}
             />
           ))}
