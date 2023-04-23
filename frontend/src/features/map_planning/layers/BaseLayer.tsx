@@ -12,6 +12,8 @@ const BaseLayer = ({ imageUrl, pixels_per_meter, rotation }: BaseLayerProps) => 
     // TODO: replace this with some global constant as soon as #303 has been decided.  
     const conva_pixels_per_meter = 10;
 
+    console.log(imageUrl);
+
     const [image] = useImage(imageUrl); 
 
     const scale = pixels_per_meter / conva_pixels_per_meter;

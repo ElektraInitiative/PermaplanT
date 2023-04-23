@@ -1,7 +1,7 @@
 import { Pages, Routes } from './types';
 import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
-import { Map } from '@/features/map_planning';
+import { Map, CreateMap } from '@/features/map_planning';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 
 const routes: Routes = {
@@ -35,6 +35,12 @@ const routes: Routes = {
     // path needs to change later to something like /user/:id/map/:id
     path: '/map',
     title: 'Map',
+  },
+  [Pages.CreateMap]: {
+    component: CreateMap,
+    // path needs to change later to something like /user/:id/map/create
+    path: '/map/create',
+    title: 'Create new Map',
   },
 };
 
