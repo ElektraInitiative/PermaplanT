@@ -1,26 +1,38 @@
 //! `Seed` endpoints.
 
+use actix_web::web::Query;
 use actix_web::{
     delete, get, post,
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
 
-use crate::{config::db::Pool, model::dto::NewSeedDto, service};
+use crate::model::dto::{PageParameters, SeedSearchParameters};
+use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
 
 /// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
+/// If no page parameters are provided, the first page is returned.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/seeds",
+    params(
+        SeedSearchParameters,
+        PageParameters
+    ),
     responses(
-        (status = 200, description = "Fetch all seeds", body = Vec<SeedDto>)
+        (status = 200, description = "Fetch all seeds", body = PageSeedDto)
     )
 )]
 #[get("")]
-pub async fn find_all(pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = service::seed::find_all(&pool).await?;
+pub async fn find(
+    search_query: Query<SeedSearchParameters>,
+    page_query: Query<PageParameters>,
+    pool: Data<Pool>,
+) -> Result<HttpResponse> {
+    let response =
+        service::seed::find(search_query.into_inner(), page_query.into_inner(), &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 

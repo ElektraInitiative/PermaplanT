@@ -26,6 +26,7 @@
   - canvas node elements i.e. HTML representation of rectangle, circle, etc. on the canvas
 - map context
   - layers and their attributes e.g. warning layer and its visibility
+- event: a day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
 - reversible deletion vs undo-redo functionality
   - reversible deletion: a database entity i.e. map and plant is deleted and can be restored within a certain time
   - undo-redo functionality: a user can undo and redo changes in the map, but the changes are local to the frontend and not stored in the database

@@ -3,6 +3,7 @@
 #[cfg(test)]
 mod tests {
     use crate::config::routes;
+    use crate::model::dto::Page;
     use crate::model::dto::PlantsSummaryDto;
     use crate::test::test_utils::init_test_database;
     use actix_web::App;
@@ -58,9 +59,9 @@ mod tests {
         let result = test::read_body(resp).await;
         let result_string = std::str::from_utf8(&result).unwrap();
 
-        let dtos: Vec<PlantsSummaryDto> = serde_json::from_str(result_string).unwrap();
+        let page: Page<PlantsSummaryDto> = serde_json::from_str(result_string).unwrap();
 
-        assert!(dtos.contains(&test_plant));
+        assert!(page.results.contains(&test_plant));
     }
 
     #[actix_rt::test]
@@ -142,7 +143,7 @@ mod tests {
         .await;
 
         let resp = test::TestRequest::get()
-            .uri("/api/plants?search_term=Testplant&limit=10")
+            .uri("/api/plants?name=Testplant&per_page=10")
             .send_request(&mut app)
             .await;
 
@@ -162,8 +163,8 @@ mod tests {
         let result = test::read_body(resp).await;
         let result_string = std::str::from_utf8(&result).unwrap();
 
-        let dtos: Vec<PlantsSummaryDto> = serde_json::from_str(result_string).unwrap();
+        let page: Page<PlantsSummaryDto> = serde_json::from_str(result_string).unwrap();
 
-        assert!(dtos.contains(&test_plant));
+        assert!(page.results.contains(&test_plant));
     }
 }
