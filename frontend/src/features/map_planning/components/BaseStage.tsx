@@ -8,11 +8,11 @@ import {
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import SimpleButton from '@/components/Button/SimpleButton';
-import useMapState from '@/features/undo_redo';
+import useMapStore from '@/features/undo_redo';
 import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
+import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
 interface BaseStageProps {
@@ -63,10 +63,19 @@ export const BaseStage = ({
 
   // Ref to the transformer
   const trRef = useRef<Konva.Transformer>(null);
+  useEffect(() => {
+    useMapStore.setState({ transformer: trRef });
+  }, [trRef]);
 
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
   // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
+
+  const dispatch = useMapStore((map) => map.dispatch);
+  const canUndo = useMapStore((map) => map.canUndo);
+  const canRedo = useMapStore((map) => map.canRedo);
+  const step = useMapStore((map) => map.step);
+  const historyLength = useMapStore((map) => map.history.length);
 
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
@@ -166,6 +175,24 @@ export const BaseStage = ({
     }
   };
 
+  const dispatchUpdate = (nodes: Node<NodeConfig>[]) => {
+    dispatch({
+      type: 'OBJECT_UPDATE',
+      payload: nodes.map((o) => ({
+        id: o.id(),
+        type: o.attrs.type,
+        index: o.attrs.index,
+        height: o.height(),
+        width: o.width(),
+        x: o.x(),
+        y: o.y(),
+        rotation: o.rotation(),
+        scaleX: o.scaleX(),
+        scaleY: o.scaleY(),
+      })),
+    });
+  };
+
   // Add event listeners to all shapes
   // This will trigger on every rerender, maybe this could be improved?
   stageRef.current?.children
@@ -179,12 +206,6 @@ export const BaseStage = ({
       }
     });
 
-  const dispatch = useMapState((s) => s.dispatch);
-  const canUndo = useMapState((s) => s.canUndo);
-  const canRedo = useMapState((s) => s.canRedo);
-  const step = useMapState((s) => s.step);
-  const historyLength = useMapState((s) => s.history.length);
-
   return (
     <div className="h-screen w-screen overflow-hidden">
       <div className="absolute z-10 pt-8">
@@ -197,8 +218,8 @@ export const BaseStage = ({
                 payload: {
                   index: 'plant',
                   id: Math.random().toString(36).slice(2, 9),
-                  x: 0,
-                  y: 0,
+                  x: 300,
+                  y: 300,
                   width: 100,
                   height: 100,
                   type: 'rect',
@@ -300,6 +321,10 @@ export const BaseStage = ({
             }}
             onTransformEnd={() => {
               selectable = true;
+              dispatchUpdate(trRef.current?.getNodes() || []);
+            }}
+            onDragEnd={() => {
+              dispatchUpdate(trRef.current?.getNodes() || []);
             }}
             onMouseDown={() => {
               selectable = false;

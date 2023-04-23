@@ -17,7 +17,7 @@ export type ObjectAddAction = {
  */
 export type ObjectUpdateAction = {
   type: 'OBJECT_UPDATE';
-  payload: ObjectState;
+  payload: ObjectState[];
 };
 
 /**
