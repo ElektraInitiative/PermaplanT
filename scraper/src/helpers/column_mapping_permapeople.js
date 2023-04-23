@@ -175,7 +175,7 @@ export default {
   dutch_name: null,
   leaves: {
     map: 'deciduous_or_evergreen',
-    priority: 'praacticalplants',
+    priority: 'practicalplants',
     newName: 'deciduous_or_evergreen',
   },
   warning: null,

@@ -421,18 +421,18 @@ CREATE TABLE public.plants (
     seed_weight_1000 double precision,
     machine_cultivation_possible text,
     edible_uses_de text,
-    CONSTRAINT plant_detail_heat_zone_check CHECK (((heat_zone IS NULL) OR ((heat_zone >= 0) AND (heat_zone <= 13)))),
-    CONSTRAINT plant_detail_preferable_permaculture_zone_check CHECK (((preferable_permaculture_zone IS NULL) OR ((preferable_permaculture_zone >= '-1'::integer) AND (preferable_permaculture_zone <= 6))))
+    CONSTRAINT plants_heat_zone_check CHECK (((heat_zone IS NULL) OR ((heat_zone >= 0) AND (heat_zone <= 13)))),
+    CONSTRAINT plants_preferable_permaculture_zone_check CHECK (((preferable_permaculture_zone IS NULL) OR ((preferable_permaculture_zone >= '-1'::integer) AND (preferable_permaculture_zone <= 6))))
 );
 
 
 ALTER TABLE public.plants OWNER TO permaplant;
 
 --
--- Name: plant_detail_id_seq; Type: SEQUENCE; Schema: public; Owner: permaplant
+-- Name: plants_id_seq; Type: SEQUENCE; Schema: public; Owner: permaplant
 --
 
-CREATE SEQUENCE public.plant_detail_id_seq
+CREATE SEQUENCE public.plants_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -441,13 +441,13 @@ CREATE SEQUENCE public.plant_detail_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.plant_detail_id_seq OWNER TO permaplant;
+ALTER TABLE public.plants_id_seq OWNER TO permaplant;
 
 --
--- Name: plant_detail_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: permaplant
+-- Name: plants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: permaplant
 --
 
-ALTER SEQUENCE public.plant_detail_id_seq OWNED BY public.plants.id;
+ALTER SEQUENCE public.plants_id_seq OWNED BY public.plants.id;
 
 
 --
@@ -500,7 +500,7 @@ ALTER SEQUENCE public.seeds_id_seq OWNED BY public.seeds.id;
 -- Name: plants id; Type: DEFAULT; Schema: public; Owner: permaplant
 --
 
-ALTER TABLE ONLY public.plants ALTER COLUMN id SET DEFAULT nextval('public.plant_detail_id_seq'::regclass);
+ALTER TABLE ONLY public.plants ALTER COLUMN id SET DEFAULT nextval('public.plants_id_seq'::regclass);
 
 
 --
@@ -519,19 +519,19 @@ ALTER TABLE ONLY public.__diesel_schema_migrations
 
 
 --
--- Name: plants plant_detail_pkey; Type: CONSTRAINT; Schema: public; Owner: permaplant
+-- Name: plants plant_detail_unique_name_key; Type: CONSTRAINT; Schema: public; Owner: permaplant
 --
 
 ALTER TABLE ONLY public.plants
-    ADD CONSTRAINT plant_detail_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT plant_detail_unique_name_key UNIQUE (unique_name);
 
 
 --
--- Name: plants plant_unique_name_key; Type: CONSTRAINT; Schema: public; Owner: permaplant
+-- Name: plants plants_pkey; Type: CONSTRAINT; Schema: public; Owner: permaplant
 --
 
 ALTER TABLE ONLY public.plants
-    ADD CONSTRAINT plant_unique_name_key UNIQUE (unique_name);
+    ADD CONSTRAINT plants_pkey PRIMARY KEY (id);
 
 
 --
