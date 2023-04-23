@@ -188,7 +188,7 @@ export const BaseStage = ({
   return (
     <div className="h-screen w-screen overflow-hidden">
       <div className="absolute z-10 pt-8">
-        <div className="flex justify-center">
+        <div className="flex h-10 gap-2">
           <SimpleButton
             className="w-32"
             onClick={() =>
@@ -212,7 +212,7 @@ export const BaseStage = ({
             CREATE OBJECT
           </SimpleButton>
           <button
-            className="items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
+            className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
             disabled={!canUndo}
             onClick={() =>
               dispatch({
@@ -236,7 +236,7 @@ export const BaseStage = ({
             </svg>
           </button>
           <button
-            className="items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
+            className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
             disabled={!canRedo}
             onClick={() =>
               dispatch({
@@ -259,9 +259,10 @@ export const BaseStage = ({
               />
             </svg>
           </button>
-          Step: {step}
-          <br />
-          History length: {historyLength}
+          <div>
+            <div className="whitespace-nowrap text-sm">Step: {step}</div>
+            <div className="whitespace-nowrap text-sm">History length: {historyLength}</div>
+          </div>
         </div>
       </div>
       <Stage
