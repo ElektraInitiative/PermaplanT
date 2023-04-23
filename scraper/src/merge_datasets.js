@@ -129,6 +129,10 @@ const sanitizeValues = async (plants) => {
     if (plant['medicinal'] && plant['medicinal'].toLowerCase() === 'true') {
       plant['medicinal'] = null;
     }
+
+    if (plant['leaves']) {
+      plant['leaves'] = plant['leaves'].toLowerCase();
+    }
   });
 
   return sanitizedPlants;

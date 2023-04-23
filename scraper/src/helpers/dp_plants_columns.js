@@ -49,7 +49,6 @@ export default [
   { name: 'germination_temperature' },
   { name: 'introduced_into' },
   { name: 'habitus' },
-  { name: 'leaves' },
   { name: 'medicinal_parts' },
   { name: 'native_to' },
   { name: 'plants_for_a_future' },

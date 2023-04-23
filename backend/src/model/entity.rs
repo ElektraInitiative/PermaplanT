@@ -128,8 +128,6 @@ pub struct Plants {
     ///
     pub habitus: Option<String>,
     ///
-    pub leaves: Option<String>,
-    ///
     pub medicinal_parts: Option<String>,
     ///
     pub native_to: Option<String>,
@@ -228,7 +226,7 @@ pub struct Plants {
     ///
     pub seed_weight_1000_en: Option<String>,
     ///
-    pub seed_weight_1000: Option<String>,
+    pub seed_weight_1000: Option<f64>,
     ///
     pub machine_cultivation_possible: Option<String>,
     ///

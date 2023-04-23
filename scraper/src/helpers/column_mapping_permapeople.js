@@ -173,7 +173,11 @@ export default {
     newName: 'seed_planting_depth_en',
   },
   dutch_name: null,
-  leaves: null,
+  leaves: {
+    map: 'deciduous_or_evergreen',
+    priority: 'praacticalplants',
+    newName: 'deciduous_or_evergreen',
+  },
   warning: null,
   root_type: null,
   when_to_plant_cuttings: null,

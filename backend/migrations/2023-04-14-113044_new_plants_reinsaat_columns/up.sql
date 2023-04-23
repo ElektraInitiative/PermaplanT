@@ -11,6 +11,6 @@ ADD COLUMN external_article_number TEXT,
     ADD COLUMN seed_planting_depth_de TEXT,
     ADD COLUMN "seed_weight_1000_de" TEXT,
     ADD COLUMN "seed_weight_1000_en" TEXT,
-    ADD COLUMN "seed_weight_1000" TEXT,
+    ADD COLUMN "seed_weight_1000" FLOAT,
     ADD COLUMN machine_cultivation_possible TEXT,
     ADD COLUMN edible_uses_de TEXT;
