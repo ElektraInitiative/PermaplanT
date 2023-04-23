@@ -24,16 +24,16 @@ export const selectIntersectingShapes = (
   // we dont always have to look for them, we can store them
   const allShapes = stageRef.current.children
     ?.flatMap((layer) => layer.children)
-    .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'));
-
+    .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'))
+    // ignore shapes from non editable layers
+    .filter((shape) => shape?.getLayer()?.isListening());
+  
   if (!allShapes) return;
 
   const allNodes = trRef.current?.getNodes();
   if (!allNodes) return;
 
   const mappedShapes = allShapes
-    // ignore shapes from non editable layers
-    .filter((shape) => shape?.getLayer()?.isListening())
     .map((shape) => {
       return shape as Shape<ShapeConfig>;
     });
