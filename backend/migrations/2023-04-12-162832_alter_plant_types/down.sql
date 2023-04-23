@@ -56,3 +56,5 @@ ALTER TABLE plants
 ADD COLUMN native_climate_zones TEXT;
 ALTER TABLE plants
 ADD COLUMN adapted_climate_zones TEXT;
+ALTER TABLE plants
+ADD COLUMN subfamily TEXT;

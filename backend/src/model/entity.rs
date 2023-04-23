@@ -35,8 +35,6 @@ pub struct Plants {
     pub common_name_de: Option<Vec<Option<String>>>,
     /// Family of the plant.
     pub family: Option<String>,
-    /// Subfamily of the plant.
-    pub subfamily: Option<String>,
     /// Genus of the plant.
     pub genus: Option<String>,
     ///

@@ -66,7 +66,6 @@ function parseSinglePage(fileName) {
     'Folder Name': fileName,
     'Common Name': '',
     'Common Name DE': '',
-    Subfamily: '',
     'To check': null,
     'Is Tree': null,
     Height: null,

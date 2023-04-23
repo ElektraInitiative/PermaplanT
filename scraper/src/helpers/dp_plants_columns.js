@@ -7,7 +7,6 @@ export default [
   { name: 'unique_name' },
   { name: 'genus' },
   { name: 'family' },
-  { name: 'subfamily' },
   { name: 'edible_uses_en' },
   { name: 'medicinal_uses' },
   { name: 'material_uses_and_functions' },
