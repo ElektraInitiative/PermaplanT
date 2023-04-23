@@ -82,8 +82,6 @@ pub struct Plants {
     ///
     pub fertility: Option<Vec<Option<Fertility>>>,
     ///
-    pub pollinators: Option<String>,
-    ///
     pub flower_colour: Option<String>,
     ///
     pub flower_type: Option<FlowerType>,

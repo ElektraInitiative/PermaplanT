@@ -206,7 +206,11 @@ export default {
   when_to_harvest: null,
   when_to_start_indoors_weeks: null,
   spread: null,
-  pollination: null,
+  pollination: {
+    map: 'pollinators',
+    priority: 'permapeople',
+    newName: 'pollination',
+  },
   pests: null,
   diseases: null,
   propagation_cuttings: null,

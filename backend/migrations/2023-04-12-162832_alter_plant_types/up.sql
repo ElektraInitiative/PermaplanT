@@ -60,3 +60,4 @@ ALTER TABLE plants DROP COLUMN cultivation;
 ALTER TABLE plants DROP COLUMN native_climate_zones;
 ALTER TABLE plants DROP COLUMN adapted_climate_zones;
 ALTER TABLE plants DROP COLUMN subfamily;
+ALTER TABLE plants DROP COLUMN pollinators;

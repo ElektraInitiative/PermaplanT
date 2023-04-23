@@ -29,7 +29,6 @@ export default [
   { name: 'height' },
   { name: 'width' },
   { name: 'fertility', cast: 'fertility[]' },
-  { name: 'pollinators' },
   { name: 'flower_colour' },
   { name: 'flower_type', cast: 'flower_type' },
   { name: 'has_drought_tolerance', cast: 'boolean' },

@@ -58,3 +58,5 @@ ALTER TABLE plants
 ADD COLUMN adapted_climate_zones TEXT;
 ALTER TABLE plants
 ADD COLUMN subfamily TEXT;
+ALTER TABLE plants
+ADD COLUMN pollinators TEXT;
