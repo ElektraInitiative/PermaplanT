@@ -5,7 +5,7 @@ ALTER TABLE plants DROP COLUMN edible;
 ALTER TABLE plants DROP COLUMN edible_parts;
 ALTER TABLE plants DROP COLUMN germination_temperature;
 ALTER TABLE plants DROP COLUMN introduced_into;
-ALTER TABLE plants DROP COLUMN layer;
+ALTER TABLE plants DROP COLUMN habitus;
 ALTER TABLE plants DROP COLUMN leaves;
 ALTER TABLE plants DROP COLUMN medicinal_parts;
 ALTER TABLE plants DROP COLUMN native_to;

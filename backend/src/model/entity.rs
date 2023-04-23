@@ -55,11 +55,11 @@ pub struct Plants {
     pub heat_zone: Option<i16>,
     ///
     pub shade: Option<String>,
-    /// The list of enum values.
+    ///
     pub soil_ph: Option<Vec<Option<SoilPh>>>,
-    /// The list of enum values.
+    ///
     pub soil_texture: Option<Vec<Option<SoilTexture>>>,
-    /// The list of enum values.
+    ///
     pub soil_water_retention: Option<Vec<Option<SoilWaterRetention>>>,
     ///
     pub environmental_tolerances: Option<Vec<Option<String>>>,
@@ -69,25 +69,25 @@ pub struct Plants {
     pub native_environment: Option<String>,
     ///
     pub ecosystem_niche: Option<String>,
-    /// Enum value.
+    ///
     pub deciduous_or_evergreen: Option<DeciduousOrEvergreen>,
-    /// Enum value.
+    ///
     pub herbaceous_or_woody: Option<HerbaceousOrWoody>,
-    /// The list of enum values.
+    ///
     pub life_cycle: Option<Vec<Option<LifeCycle>>>,
-    /// The list of enum values.
+    ///
     pub growth_rate: Option<Vec<Option<GrowthRate>>>,
     ///
     pub height: Option<String>,
     ///
     pub width: Option<String>,
-    /// The list of enum values.
+    ///
     pub fertility: Option<Vec<Option<Fertility>>>,
     ///
     pub pollinators: Option<String>,
     ///
     pub flower_colour: Option<String>,
-    /// Enum value.
+    ///
     pub flower_type: Option<FlowerType>,
     /// The creation date of the entry.
     pub created_at: NaiveDateTime,
@@ -101,7 +101,7 @@ pub struct Plants {
     pub plant_references: Option<Vec<Option<String>>>,
     /// Boolean value indicating whether the plant is a tree. The initial value is to `True` if  herbaceous_or_woody (woody) and life_cycle (perennial)
     pub is_tree: Option<bool>,
-    /// Enum value. The initial value is to `light feeder` if "Nutritionally poor soil" in `environmental_tolerances` is present.
+    ///  The initial value is to `light feeder` if "Nutritionally poor soil" in `environmental_tolerances` is present.
     pub nutrition_demand: Option<NutritionDemand>,
     /// Number value between -1..6 (-1 should be printed as 00)
     pub preferable_permaculture_zone: Option<i16>,
@@ -109,11 +109,11 @@ pub struct Plants {
     pub article_last_modified_at: Option<NaiveDateTime>,
     ///
     pub hardiness_zone: Option<String>,
-    /// The list of enum values.
+    ///
     pub light_requirement: Option<Vec<Option<LightRequirement>>>,
-    /// The list of enum values.
+    ///
     pub water_requirement: Option<Vec<Option<WaterRequirement>>>,
-    /// The list of enum values.
+    ///
     pub propagation_method: Option<Vec<Option<PropagationMethod>>>,
     ///
     pub alternate_name: Option<String>,
@@ -128,7 +128,7 @@ pub struct Plants {
     ///
     pub introduced_into: Option<String>,
     ///
-    pub layer: Option<String>,
+    pub habitus: Option<String>,
     ///
     pub leaves: Option<String>,
     ///

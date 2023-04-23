@@ -49,7 +49,7 @@ export default [
   { name: 'edible_parts', cast: 'text[]' },
   { name: 'germination_temperature' },
   { name: 'introduced_into' },
-  { name: 'layer' },
+  { name: 'habitus' },
   { name: 'leaves' },
   { name: 'medicinal_parts' },
   { name: 'native_to' },

@@ -99,7 +99,9 @@ export default {
     priority: 'permapeople',
     newName: 'height',
   },
-  layer: null,
+  layer: {
+    newName: 'habitus',
+  },
   edible_parts: null,
   propagation_method: null,
   wikipedia: null,
