@@ -201,17 +201,17 @@ pub struct Plants {
     pub external_url: Option<String>,
     ///
     pub root_depth: Option<String>,
-    ///
+    /// The article number of the plant in the Reinsaat database. (fetched from Reinsaat)
     pub external_article_number: Option<String>,
-    ///
+    /// (fetched from Reinsaat)
     pub external_portion_content: Option<String>,
     ///
     pub sowing_outdoors_de: Option<String>,
-    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "\[8,9,10\]" means from the 2nd half of April to the 2nd half of May incl.
-    pub sowing_outdoors: Option<String>,
-    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "\[8,9,10\]" means from the 2nd half of April to the 2nd half of May incl.
-    pub harvest_time: Option<String>,
-    ///
+    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "\[8,9,10\]" means from the 2nd half of April to the 2nd half of May incl. (fetched from Reinsaat)
+    pub sowing_outdoors: Option<Vec<Option<i16>>>,
+    /// String array of numbers representing a time period. The year is divided into 24 periods of half a month each. For example "\[8,9,10\]" means from the 2nd half of April to the 2nd half of May incl. (fetched from Reinsaat)
+    pub harvest_time: Option<Vec<Option<i16>>>,
+    /// (fetched from Reinsaat)
     pub spacing_de: Option<String>,
     ///
     pub required_quantity_of_seeds_de: Option<String>,

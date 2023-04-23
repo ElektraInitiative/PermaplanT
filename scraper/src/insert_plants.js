@@ -70,6 +70,16 @@ function sanitizeValues(jsonArray) {
           obj[newKey] = `[${obj[newKey]},${obj[newKey]})`;
         }
       }
+
+      if (
+        (newKey === 'harvest_time' && obj[newKey] !== null) ||
+        (newKey === 'sowing_outdoors' && obj[newKey] !== null)
+      ) {
+        obj[newKey] = JSON.parse(obj[newKey]);
+        obj[newKey] = obj[newKey].map((item) => {
+          return parseInt(item);
+        });
+      }
     });
 
     return obj;
