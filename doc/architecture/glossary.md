@@ -123,11 +123,11 @@
 
 - unit test:  
   Used to test parts of our code in isolation.  
-  In the backend unit tests can be found in the `src/` directory. They are to be put in the same file as the functions or modules they are supposed to test. Create separate modules called test in that file and annotated with `#[cfg(test)]` (that way they are only compiled when actually running tests). See the [rust doc](https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html) for reference.  
+  See [test doc](../tests) for further information.  
   Example: Test an individual function for specific behavior.
-- backend integration test:  
+- integration test:  
   Used to test if different parts of the code work together correctly.  
-  In the backend integration tests can be found in the `src/test/` directory. The whole modules is annotated with `#[cfg(test)]` and will therefore only be compiled for tests.  
+  See [test doc](../tests) for further information.  
   Example: Make an HTTP request to the backend and let it run through controller, service and persistance layer requiring a running database.
 - end to end test (e2e test):  
   Used to test the whole application from end to end.  
