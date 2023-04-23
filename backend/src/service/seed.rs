@@ -24,6 +24,7 @@ pub async fn find(
 ) -> Result<Page<SeedDto>, ServiceError> {
     let mut conn = pool.get().await?;
     let result = Seed::find(search_parameters, page_parameters, &mut conn).await?;
+    let result = Page::from_entity(result);
     Ok(result)
 }
 
@@ -33,7 +34,7 @@ pub async fn find(
 /// If the connection to the database could not be established.
 pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Seed::find_by_id(id, &mut conn).await?;
+    let result = Seed::find_by_id(id, &mut conn).await?.into();
     Ok(result)
 }
 
@@ -43,7 +44,7 @@ pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<SeedDto, ServiceEr
 /// If the connection to the database could not be established.
 pub async fn create(new_seed: NewSeedDto, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Seed::create(new_seed, &mut conn).await?;
+    let result = Seed::create(new_seed.into(), &mut conn).await?.into();
     Ok(result)
 }
 

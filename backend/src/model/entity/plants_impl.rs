@@ -6,10 +6,7 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use crate::db::function::array_to_string;
 use crate::db::pagination::Paginate;
 use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
-use crate::{
-    model::dto::PlantsSummaryDto,
-    schema::plants::{self, all_columns, binomial_name, common_name},
-};
+use crate::schema::plants::{self, all_columns, binomial_name, common_name};
 
 use super::Plants;
 
@@ -23,7 +20,7 @@ impl Plants {
         search_parameters: PlantsSearchParameters,
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Page<PlantsSummaryDto>> {
+    ) -> QueryResult<Page<Self>> {
         let mut query = plants::table.select(all_columns).into_boxed();
 
         if let Some(term) = search_parameters.name {
@@ -36,23 +33,18 @@ impl Plants {
                 .order((binomial_name, common_name));
         }
 
-        let query_page = query
+        query
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page)
             .load_page::<Self>(conn)
-            .await;
-        query_page.map(Page::from_entity)
+            .await
     }
 
     /// Fetch plant by id from the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find_by_id(
-        id: i32,
-        conn: &mut AsyncPgConnection,
-    ) -> QueryResult<PlantsSummaryDto> {
-        let query_result = plants::table.find(id).first::<Self>(conn).await;
-        query_result.map(Into::into)
+    pub async fn find_by_id(id: i32, conn: &mut AsyncPgConnection) -> QueryResult<Self> {
+        plants::table.find(id).first::<Self>(conn).await
     }
 }

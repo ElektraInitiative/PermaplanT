@@ -24,6 +24,7 @@ pub async fn find(
 ) -> Result<Page<PlantsSummaryDto>, ServiceError> {
     let mut conn = pool.get().await?;
     let result = Plants::find(search_parameters, page_parameters, &mut conn).await?;
+    let result = Page::from_entity(result);
     Ok(result)
 }
 
@@ -33,6 +34,6 @@ pub async fn find(
 /// If the connection to the database could not be established.
 pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<PlantsSummaryDto, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Plants::find_by_id(id, &mut conn).await?;
+    let result = Plants::find_by_id(id, &mut conn).await?.into();
     Ok(result)
 }
