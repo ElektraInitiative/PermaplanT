@@ -1,6 +1,6 @@
 import { BaseStage } from '../components/BaseStage';
 import PlantsLayer from '../layers/PlantsLayer';
-import useMapState from '@/features/undo_redo/store/MapHistoryStore';
+import useMapState from '@/features/undo_redo';
 import { Rect } from 'react-konva';
 
 /**
