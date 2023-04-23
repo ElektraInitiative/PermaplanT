@@ -1,54 +1,6 @@
+import type { MapAction, ObjectAddAction, ObjectUpdateAction } from './action-types';
+import type { MapState } from './state-types';
 import { create } from 'zustand';
-
-interface ObjectState {
-  index: LayerName;
-  id: string;
-  type: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotation: number;
-  scaleX: number;
-  scaleY: number;
-}
-
-type ObjectAddAction = {
-  type: 'OBJECT_ADD';
-  payload: ObjectState;
-};
-
-type ObjectUpdateAction = {
-  type: 'OBJECT_UPDATE';
-  payload: ObjectState;
-};
-
-type UndoAction = {
-  type: 'UNDO';
-};
-
-type RedoAction = {
-  type: 'REDO';
-};
-
-type MapAction = ObjectAddAction | ObjectUpdateAction | UndoAction | RedoAction;
-
-type LayerName = 'plant';
-
-type MapState = {
-  stage: {
-    scale: number;
-    x: number;
-    y: number;
-    layers: {
-      [key in LayerName]: {
-        index: string;
-        visible: boolean;
-        objects: ObjectState[];
-      };
-    };
-  };
-};
 
 type MapHistoryState = {
   history: MapAction[];

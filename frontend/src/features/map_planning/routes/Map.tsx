@@ -6,7 +6,7 @@ import PlantsLayer from '../layers/PlantsLayer';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import useMapState from '@/features/undo_redo/store/MapHistoryStore';
+import useMapState from '@/features/undo_redo';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';

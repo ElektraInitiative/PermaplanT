@@ -8,7 +8,7 @@ import {
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import SimpleButton from '@/components/Button/SimpleButton';
-import useMapState from '@/features/undo_redo/store/MapHistoryStore';
+import useMapState from '@/features/undo_redo';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
