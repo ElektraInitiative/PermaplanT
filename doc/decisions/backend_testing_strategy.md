@@ -2,7 +2,7 @@
 
 ## Problem
 
-Our current setup regarding test in the backend isn't completly thought through.  
+Our current setup regarding test in the backend isn't completely thought through.  
 There is no differentiation between unit and integration tests.  
 Setting up new tests seems more complicated than necessary.  
 It isn't clear how the test database/connection is actually setup up or how it works with `begin_test_transaction()`.
@@ -15,19 +15,19 @@ It isn't clear how the test database/connection is actually setup up or how it w
 
 ## Solutions
 
-### Run all tests as unit tests
+### Run all tests from the `src/` directory
 
 This is the current solution.
 
 All tests are put into the `src/` directory and run from there.  
 There is no real separation between unit and integration tests as all tests are treated the same.
 
-### Split into unit and integration tests
+### Split into tests in `src/` and `tests/`
 
-This would involve splitting the backend into a binary and library part (see the [rust book](https://doc.rust-lang.org/book/ch11-03-test-organization.html#integration-tests-for-binary-crates) for reference.  
+This would involve splitting the backend into a binary and library part (see the [rust book](https://doc.rust-lang.org/book/ch11-03-test-organization.html#integration-tests-for-binary-crates) for reference).  
 The code change required for this would be rather small, mainly consisting of renaming the current `main.rs` into `lib.rs` and creating a new `main.rs` that calls into the library.
 
-After this is done there would be a clear differentiation between unit and integration tests.
+After this is done there would be a clear differentiation between unit and integration tests (according to the rust book definition of unit/integration tests).
 
 - Unit tests are in `src/`.  
   They are modules annotated with `#[cfg(test)]` and are supposed to test individual functions or smaller parts of the code (see [here](https://doc.rust-lang.org/book/ch11-03-test-organization.html#unit-tests)).  
@@ -42,7 +42,25 @@ On the other hand it might be more difficult to set up tests as you first have t
 
 ## Decision
 
-We should keep the test as unit tests. We should still do a bit of refactoring for the tests we currently have, although there won't be major changes.
+We should keep the tests only in `src/`. We should still do a bit of refactoring for the tests we currently have, although there won't be major changes.
+
+Tests in `src/test/` are from now on defined as `backend integration tests`.  
+Tests in other modules/files have to look like the following and are defined as unit tests:
+
+```rust
+struct Plants;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_plants() {
+      // Test complicated plants function here
+      todo!()
+    }
+}
+```
 
 ## Rationale
 
