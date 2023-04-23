@@ -17,16 +17,11 @@ interface MapStateAPI {
 type MapStore = MapHistoryState & MapStateAPI;
 
 const DEFAULT_STATE: MapState = {
-  stage: {
-    scale: 1,
-    x: 0,
-    y: 0,
-    layers: {
-      plant: {
-        index: 'plant',
-        visible: true,
-        objects: [],
-      },
+  layers: {
+    plant: {
+      index: 'plant',
+      visible: true,
+      objects: [],
     },
   },
 };
@@ -94,14 +89,11 @@ function handleDispatch(state: MapStore, action: MapAction): MapStore {
 function handleAddObject(state: MapState, action: ObjectAddAction): MapState {
   return {
     ...state,
-    stage: {
-      ...state.stage,
-      layers: {
-        ...state.stage.layers,
-        [action.payload.index]: {
-          ...state.stage.layers[action.payload.index],
-          objects: [...state.stage.layers[action.payload.index].objects, action.payload],
-        },
+    layers: {
+      ...state.layers,
+      [action.payload.index]: {
+        ...state.layers[action.payload.index],
+        objects: [...state.layers[action.payload.index].objects, action.payload],
       },
     },
   };
@@ -110,19 +102,16 @@ function handleAddObject(state: MapState, action: ObjectAddAction): MapState {
 function handleUpdateObject(state: MapState, action: ObjectUpdateAction): MapState {
   return {
     ...state,
-    stage: {
-      ...state.stage,
-      layers: {
-        ...state.stage.layers,
-        [action.payload.index]: {
-          ...state.stage.layers[action.payload.index],
-          objects: state.stage.layers[action.payload.index].objects.map((object) => {
-            if (object.id === action.payload.id) {
-              return action.payload;
-            }
-            return object;
-          }),
-        },
+    layers: {
+      ...state.layers,
+      [action.payload.index]: {
+        ...state.layers[action.payload.index],
+        objects: state.layers[action.payload.index].objects.map((object) => {
+          if (object.id === action.payload.id) {
+            return action.payload;
+          }
+          return object;
+        }),
       },
     },
   };
