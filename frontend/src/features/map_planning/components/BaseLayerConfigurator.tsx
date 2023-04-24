@@ -128,7 +128,7 @@ const BaseLayerConfigurator = () => {
                 </div>
             </ModalContainer>
 
-            <div className="flex flex-column">
+            <div className="flex flex-column gap-4">
                 <SimpleFormInput id={"url"}
                                  labelText={"Background image URL"}
                                  onChange={onUrlInputChange}></SimpleFormInput>
@@ -144,7 +144,7 @@ const BaseLayerConfigurator = () => {
                 <SimpleFormInput id={"scale"}
                                  labelText={"Pixels per Meter"}
                                  onChange={onScaleInputChange}
-                                 defaultValue={scale}
+                                 value={scale.toString()}
                                  type={'number'}
                                  min={1}></SimpleFormInput>
             </div>
