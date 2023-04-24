@@ -67,7 +67,8 @@ const BaseLayerConfigurator = () => {
                 // use the pythagorean theorem to get the measured length
                 const lineLength  = Math.sqrt(lineLengthX * lineLengthX + lineLengthY * lineLengthY);
 
-                setMeasuredLengh(lineLength);
+                // compensate for previously applied scaling
+                setMeasuredLength(lineLength / scale);
                 
                 // Promt the user to input the real world length of the measured distance
                 setShowDistanceInputModal(true);
