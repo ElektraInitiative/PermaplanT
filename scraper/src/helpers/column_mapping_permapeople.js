@@ -146,7 +146,9 @@ export default {
     priority: 'permapeople',
     newName: 'soil_ph',
   },
-  propagation_transplanting: null,
+  propagation_transplanting: {
+    newName: 'propagation_transplanting_en',
+  },
   germination_time: null,
   when_to_sow_outdoors: {
     newName: 'sowing_outdoors_en',
@@ -159,7 +161,9 @@ export default {
   plants_of_the_world_online_name_synonym: null,
   plants_of_the_world_online_link_synonym: null,
   seed_viability: null,
-  when_to_plant_transplant: null,
+  when_to_plant_transplant: {
+    newName: 'when_to_plant_transplant_en',
+  },
   days_to_maturity: null,
   spacing: {
     newName: 'spacing_en',
@@ -167,7 +171,9 @@ export default {
   germination_temperature: null,
   when_to_start_outdoors_weeks: null,
   days_to_harvest: null,
-  when_to_sow_indoors: null,
+  when_to_sow_indoors: {
+    newName: 'when_to_sow_indoors_en',
+  },
   '1000_seed_weight_g': {
     newName: 'seed_weight_1000',
   },
@@ -182,7 +188,9 @@ export default {
   },
   warning: null,
   root_type: null,
-  when_to_plant_cuttings: null,
+  when_to_plant_cuttings: {
+    newName: 'when_to_plant_cuttings_en',
+  },
   drought_resistant: {
     map: 'has_drought_tolerance',
     priority: 'practicalplants',
@@ -203,7 +211,9 @@ export default {
     newName: 'root_depth',
   },
   medicinal_parts: null,
-  when_to_plant_division: null,
+  when_to_plant_division: {
+    newName: 'when_to_plant_division_en',
+  },
   propagation_direct_sowing: null,
   when_to_harvest: null,
   when_to_start_indoors_weeks: null,

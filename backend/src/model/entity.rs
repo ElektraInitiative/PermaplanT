@@ -138,7 +138,7 @@ pub struct Plants {
     /// Fetched from PracticalPlants as \`pollinators\` and merged with \`pollination\` of Permapeople. (fetched from PracticalPlants and Permapeople)
     pub pollination: Option<String>,
     /// (fetched from Permapeople)
-    pub propagation_transplanting: Option<String>,
+    pub propagation_transplanting_en: Option<String>,
     /// (fetched from Permapeople)
     pub resistance: Option<String>,
     /// (fetched from Permapeople)
@@ -156,13 +156,13 @@ pub struct Plants {
     /// (fetched from Permapeople)
     pub warning: Option<String>,
     /// (fetched from Permapeople)
-    pub when_to_plant_cuttings: Option<String>,
+    pub when_to_plant_cuttings_en: Option<String>,
     /// (fetched from Permapeople)
-    pub when_to_plant_division: Option<String>,
+    pub when_to_plant_division_en: Option<String>,
     /// (fetched from Permapeople)
-    pub when_to_plant_transplant: Option<String>,
+    pub when_to_plant_transplant_en: Option<String>,
     /// (fetched from Permapeople)
-    pub when_to_sow_indoors: Option<String>,
+    pub when_to_sow_indoors_en: Option<String>,
     /// Fetched from Permapeople as \`when_to_sow_outdoors\` and renamed. (fetched from Permapeople)
     pub sowing_outdoors_en: Option<String>,
     /// (fetched from Permapeople)
