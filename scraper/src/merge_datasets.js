@@ -4,6 +4,9 @@ import csv from 'csvtojson';
 import permapeopleColumnMapping from './helpers/column_mapping_permapeople.js';
 import { sanitizeColumnNames, getSoilPH, fetchGermanName } from './helpers/helpers.js';
 
+/**
+ * Fetches the German names for the plants from Wikidata API
+ */
 const fetchGermanNames = async (plants) => {
   return Promise.all(
     plants.map(async (plant) => {
@@ -17,6 +20,12 @@ const fetchGermanNames = async (plants) => {
   );
 };
 
+/**
+ *  Custom rules to unify the value format of merged datasets.
+ *
+ * @param {*} plants - Array of plants
+ * @param {*} columnMapping - Column mapping
+ */
 const unifyValueFormat = (plants, columnMapping) => {
   const mappedColumns = Object.keys(columnMapping).filter((key) => columnMapping[key] !== null);
 
@@ -78,6 +87,13 @@ const unifyValueFormat = (plants, columnMapping) => {
   return plants;
 };
 
+/**
+ * Renames the columns according to the column mapping
+ *
+ * @param {*} plants - Array of plants
+ * @param {*} columnMapping - Column mapping
+ * @returns - Array of plants
+ */
 const renameColumns = async (plants, columnMapping) => {
   const mappedColumns = Object.fromEntries(
     Object.entries(columnMapping).filter(([_, value]) => value !== null),
@@ -93,6 +109,12 @@ const renameColumns = async (plants, columnMapping) => {
   return plants;
 };
 
+/**
+ * Sanitize the values of the merged datasets.
+ *
+ * @param {*} plants - Array of plants
+ * @returns - Array of plants
+ */
 const sanitizeValues = async (plants) => {
   const uniqueScientificNames = new Set();
   let sanitizedPlants = [];
@@ -138,6 +160,11 @@ const sanitizeValues = async (plants) => {
   return sanitizedPlants;
 };
 
+/**
+ * The function reads the datasets from the CSV files from the data folder and merges them based on the unique_name column.
+ *
+ * @returns - Array of plants
+ */
 async function mergeDatasets() {
   console.log('[INFO] Merging datasets...');
 
@@ -229,6 +256,11 @@ async function mergeDatasets() {
   return allPlants;
 }
 
+/**
+ * The function writes the merged dataset to a CSV file.
+ *
+ * @param {*} plants - Array of plants
+ */
 async function writePlantsToCsv(plants) {
   if (!fs.existsSync('data')) {
     fs.mkdirSync('data');
