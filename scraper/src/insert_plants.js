@@ -43,7 +43,7 @@ function sanitizeValues(jsonArray) {
       ) {
         obj[newKey] = obj[newKey].split(',');
         obj[newKey] = obj[newKey].map((item) => {
-          return item.trim();
+          return item.toLowerCase().trim();
         });
       }
 
@@ -57,7 +57,7 @@ function sanitizeValues(jsonArray) {
       if (newKey === 'environmental_tolerances' && obj[newKey] !== null) {
         obj[newKey] = obj[newKey].split('\n');
         obj[newKey] = obj[newKey].map((item) => {
-          return item.trim();
+          return item.toLowerCase().trim();
         });
       }
 

@@ -2,7 +2,6 @@ import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 
 import { parse } from 'node-html-parser';
 import { parse as json2csv } from 'json2csv';
 import { config } from 'dotenv';
-import { fetchGermanName } from './helpers/helpers.js';
 
 config();
 
@@ -171,7 +170,6 @@ function parseSinglePage(fileName) {
 /**
  * Read all the files in the wiki dump and parse data from each page.
  *
- * Also fetches the German common name for each plant from the Wikidata API.
  * Finally, writes the data to a CSV file.
  */
 async function parseAllPages() {
@@ -191,10 +189,7 @@ async function parseAllPages() {
       try {
         await new Promise((resolve) => setTimeout(resolve, index * 50));
         console.log('Parsing', fileName);
-        const fileDetails = parseSinglePage(fileName);
-        const germanCommonName = await fetchGermanName(fileDetails['Binomial name']);
-        fileDetails['Common Name DE'] = germanCommonName;
-        return fileDetails;
+        return parseSinglePage(fileName);
       } catch (errors) {
         errorsArray.push(errors);
         return null;

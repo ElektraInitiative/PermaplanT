@@ -10,15 +10,15 @@ use utoipa::ToSchema;
 #[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
 #[ExistingTypePath = "crate::schema::sql_types::LightRequirement"]
 pub enum LightRequirement {
-    #[serde(rename = "Full shade")]
-    #[db_rename = "Full shade"]
+    #[serde(rename = "full shade")]
+    #[db_rename = "full shade"]
     FullShade,
 
-    #[serde(rename = "Partial sun/shade")]
-    #[db_rename = "Partial sun/shade"]
+    #[serde(rename = "partial sun/shade")]
+    #[db_rename = "partial sun/shade"]
     Partial,
 
-    #[serde(rename = "Full sun")]
-    #[db_rename = "Full sun"]
+    #[serde(rename = "full sun")]
+    #[db_rename = "full sun"]
     Full,
 }

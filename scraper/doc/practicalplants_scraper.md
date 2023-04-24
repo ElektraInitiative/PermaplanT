@@ -28,8 +28,6 @@ The scraper scrapes the data from the PracticalPlants wiki dump and stores it in
 npm run fetch:practicalplants
 ```
 
-As an additional step, the script will also look up the german common name through Wikidata API and store it under the column `Column Name DE` in the `detail.csv` file.
-
 There will be several CSV files generated in the `data` directory:
 
 - `detail.csv`: This file contains the data scraped from the PracticalPlants wiki dump.

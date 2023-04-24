@@ -10,26 +10,26 @@ use utoipa::ToSchema;
 #[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
 #[ExistingTypePath = "crate::schema::sql_types::PropagationMethod"]
 pub enum PropagationMethod {
-    #[serde(rename = "Seed - direct sow")]
-    #[db_rename = "Seed - direct sow"]
+    #[serde(rename = "seed - direct sow")]
+    #[db_rename = "seed - direct sow"]
     SeedDirectSow,
 
-    #[serde(rename = "Seed - transplant")]
-    #[db_rename = "Seed - transplant"]
+    #[serde(rename = "seed - transplant")]
+    #[db_rename = "seed - transplant"]
     SeedTransplant,
 
-    #[serde(rename = "Division")]
+    #[serde(rename = "division")]
     Division,
 
-    #[serde(rename = "Cuttings")]
+    #[serde(rename = "cuttings")]
     Cuttings,
 
-    #[serde(rename = "Layering")]
+    #[serde(rename = "layering")]
     Layering,
 
-    #[serde(rename = "Spores")]
+    #[serde(rename = "spores")]
     Spores,
 
-    #[serde(rename = "Seed")]
+    #[serde(rename = "seed")]
     Seed,
 }

@@ -18,9 +18,9 @@ ALTER TABLE plants
 ADD COLUMN new_light_requirement SUN;
 UPDATE plants
 SET new_light_requirement = CASE
-        WHEN light_requirement = ARRAY ['Full sun'::LIGHT_REQUIREMENT] THEN 'full sun'::SUN
-        WHEN light_requirement = ARRAY ['Partial sun/shade'::LIGHT_REQUIREMENT] THEN 'partial sun'::SUN
-        WHEN light_requirement = ARRAY ['Full shade'::LIGHT_REQUIREMENT] THEN 'indirect sun'::SUN
+        WHEN light_requirement = ARRAY ['full sun'::LIGHT_REQUIREMENT] THEN 'full sun'::SUN
+        WHEN light_requirement = ARRAY ['partial sun/shade'::LIGHT_REQUIREMENT] THEN 'partial sun'::SUN
+        WHEN light_requirement = ARRAY ['full shade'::LIGHT_REQUIREMENT] THEN 'indirect sun'::SUN
         ELSE NULL
     END;
 ALTER TABLE plants DROP COLUMN light_requirement;
@@ -33,10 +33,10 @@ ALTER TABLE plants
 ADD COLUMN new_water_requirement WATER;
 UPDATE plants
 SET new_water_requirement = CASE
-        WHEN water_requirement = ARRAY ['Dry'::WATER_REQUIREMENT] THEN 'low'::WATER
-        WHEN water_requirement = ARRAY ['Moist'::WATER_REQUIREMENT] THEN 'moderate'::WATER
-        WHEN water_requirement = ARRAY ['Wet'::WATER_REQUIREMENT] THEN 'high'::WATER
-        WHEN water_requirement = ARRAY ['Water'::WATER_REQUIREMENT] THEN 'aquatic'::WATER
+        WHEN water_requirement = ARRAY ['dry'::WATER_REQUIREMENT] THEN 'low'::WATER
+        WHEN water_requirement = ARRAY ['moist'::WATER_REQUIREMENT] THEN 'moderate'::WATER
+        WHEN water_requirement = ARRAY ['wet'::WATER_REQUIREMENT] THEN 'high'::WATER
+        WHEN water_requirement = ARRAY ['water'::WATER_REQUIREMENT] THEN 'aquatic'::WATER
         ELSE NULL
     END;
 ALTER TABLE plants DROP COLUMN water_requirement;
@@ -60,3 +60,5 @@ ALTER TABLE plants
 ADD COLUMN subfamily TEXT;
 ALTER TABLE plants
 ADD COLUMN pollinators TEXT;
+ALTER TABLE plants
+ALTER COLUMN shade TYPE TEXT USING shade::TEXT;

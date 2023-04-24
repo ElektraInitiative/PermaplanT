@@ -15,8 +15,8 @@ use super::r#enum::{
     fertility::Fertility, flower_type::FlowerType, growth_rate::GrowthRate,
     herbaceous_or_woody::HerbaceousOrWoody, life_cycle::LifeCycle,
     light_requirement::LightRequirement, nutrition_demand::NutritionDemand,
-    propagation_method::PropagationMethod, quality::Quality, quantity::Quantity, soil_ph::SoilPh,
-    soil_texture::SoilTexture, soil_water_retention::SoilWaterRetention,
+    propagation_method::PropagationMethod, quality::Quality, quantity::Quantity, shade::Shade,
+    soil_ph::SoilPh, soil_texture::SoilTexture, soil_water_retention::SoilWaterRetention,
     water_requirement::WaterRequirement,
 };
 
@@ -52,7 +52,7 @@ pub struct Plants {
     /// (fetched from PracticalPlants)
     pub heat_zone: Option<i16>,
     /// (fetched from PracticalPlants)
-    pub shade: Option<String>,
+    pub shade: Option<Shade>,
     /// Merged between Permapeople and PracticalPlants. (fetched from PracticalPlants and Permapeople)
     pub soil_ph: Option<Vec<Option<SoilPh>>>,
     /// Merged with soil_type of Permapeople. (fetched from PracticalPlants and Permapeople)
