@@ -161,7 +161,7 @@ const BaseLayerConfigurator = () => {
                                  onChange={onUrlInputChange}></SimpleFormInput>
                 
                 <SimpleFormInput id={"rotation"}
-                                 labelText={"Rotation"}
+                                 labelText={"Rotation (Degrees)"}
                                  onChange={onRotationInputChange}
                                  type={'number'}
                                  defaultValue={0}
@@ -171,7 +171,7 @@ const BaseLayerConfigurator = () => {
                 <SimpleFormInput id={"scale"}
                                  labelText={"Pixels per Meter"}
                                  onChange={onScaleInputChange}
-                                 value={scale.toString()}
+                                 value={scale.toFixed(2)}
                                  type={'number'}
                                  min={1}></SimpleFormInput>
             </div>
