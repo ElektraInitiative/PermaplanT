@@ -4,6 +4,9 @@
     "btn_new_entry": "Neuer Eintrag",
     "search_placeholder": "Suche Samen..."
   },
+  "delete_seed": {
+    "btn_delete_seed": "Samen löschen"
+  },
   "create_seed": {
     "title": "Neuer Eintrag",
     "changes_model_title": "Eintrag abbrechen?",

@@ -4,6 +4,9 @@
     "btn_new_entry": "New Entry",
     "search_placeholder": "Search seeds..."
   },
+  "delete_seed": {
+    "btn_delete_seed": "Delete seed"
+  },
   "create_seed": {
     "title": "New Seed Entry",
     "changes_model_title": "Cancel Changes?",

@@ -1,3 +1,4 @@
+import { deleteSeed } from '../api/deleteSeed';
 import { findPlantById } from '../api/findPlantById';
 import { findSeedById } from '../api/findSeedById';
 import { PlantsSummaryDto, SeedDto } from '@/bindings/definitions';
@@ -40,6 +41,18 @@ export function SeedDetails() {
     _findOneSeed();
   }, [id]);
 
+  const _deleteSeed = async () => {
+    try {
+      await deleteSeed(Number(id));
+      navigate(`/seeds`);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error);
+        setShowErrorModal(true);
+      }
+    }
+  };
+
   return (
     <Suspense>
       <PageLayout>
@@ -47,14 +60,24 @@ export function SeedDetails() {
           <div className="w-full">
             <div className="flex justify-between">
               <PageTitle title={seed?.name.toString()} />
-              <SimpleButton
-                className="w-32"
-                onClick={() => {
-                  navigate(`edit`);
-                }}
-              >
-                {t('seeds:edit_seed_form.btn_edit_seed')}
-              </SimpleButton>
+              <div className="flex space-x-4">
+                <SimpleButton
+                  className="w-32"
+                  onClick={async () => {
+                    await _deleteSeed();
+                  }}
+                >
+                  {t('seeds:delete_seed.btn_delete_seed')}
+                </SimpleButton>
+                <SimpleButton
+                  className="w-32"
+                  onClick={() => {
+                    navigate(`edit`);
+                  }}
+                >
+                  {t('seeds:edit_seed_form.btn_edit_seed')}
+                </SimpleButton>
+              </div>
             </div>
             <div className="mb-6 grid gap-8 md:grid-cols-2">
               {seed?.harvest_year && (
