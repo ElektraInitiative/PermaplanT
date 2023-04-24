@@ -125,9 +125,9 @@ ALTER TYPE public.life_cycle OWNER TO permaplant;
 --
 
 CREATE TYPE public.light_requirement AS ENUM (
-    'Full sun',
-    'Partial sun/shade',
-    'Full shade'
+    'full sun',
+    'partial sun/shade',
+    'full shade'
 );
 
 
@@ -151,13 +151,13 @@ ALTER TYPE public.nutrition_demand OWNER TO permaplant;
 --
 
 CREATE TYPE public.propagation_method AS ENUM (
-    'Seed - direct sow',
-    'Seed - transplant',
-    'Division',
-    'Cuttings',
-    'Layering',
-    'Spores',
-    'Seed'
+    'seed - direct sow',
+    'seed - transplant',
+    'division',
+    'cuttings',
+    'layering',
+    'spores',
+    'seed'
 );
 
 
@@ -252,10 +252,10 @@ ALTER TYPE public.soil_water_retention OWNER TO permaplant;
 --
 
 CREATE TYPE public.water_requirement AS ENUM (
-    'Dry',
-    'Moist',
-    'Wet',
-    'Water'
+    'dry',
+    'moist',
+    'wet',
+    'water'
 );
 
 
@@ -332,7 +332,7 @@ CREATE TABLE public.plants (
     material_uses text,
     functions text,
     heat_zone smallint,
-    shade text,
+    shade public.shade,
     soil_ph public.soil_ph[],
     soil_texture public.soil_texture[],
     soil_water_retention public.soil_water_retention[],
@@ -375,7 +375,7 @@ CREATE TABLE public.plants (
     plants_of_the_world_online_link text,
     plants_of_the_world_online_link_synonym text,
     pollination text,
-    propagation_transplanting text,
+    propagation_transplanting_en text,
     resistance text,
     root_type text,
     seed_planting_depth_en text,
@@ -384,10 +384,10 @@ CREATE TABLE public.plants (
     spread text,
     utility text,
     warning text,
-    when_to_plant_cuttings text,
-    when_to_plant_division text,
-    when_to_plant_transplant text,
-    when_to_sow_indoors text,
+    when_to_plant_cuttings_en text,
+    when_to_plant_division_en text,
+    when_to_plant_transplant_en text,
+    when_to_sow_indoors_en text,
     sowing_outdoors_en text,
     when_to_start_indoors_weeks text,
     when_to_start_outdoors_weeks text,
@@ -399,7 +399,7 @@ CREATE TABLE public.plants (
     wikipedia_url text,
     days_to_maturity text,
     pests text,
-    version text,
+    version smallint,
     germination_time text,
     description text,
     parent_id text,
@@ -419,7 +419,7 @@ CREATE TABLE public.plants (
     seed_weight_1000_de text,
     seed_weight_1000_en text,
     seed_weight_1000 double precision,
-    machine_cultivation_possible text,
+    machine_cultivation_possible boolean,
     edible_uses_de text,
     CONSTRAINT plants_heat_zone_check CHECK (((heat_zone IS NULL) OR ((heat_zone >= 0) AND (heat_zone <= 13)))),
     CONSTRAINT plants_preferable_permaculture_zone_check CHECK (((preferable_permaculture_zone IS NULL) OR ((preferable_permaculture_zone >= '-1'::integer) AND (preferable_permaculture_zone <= 6))))
@@ -519,19 +519,19 @@ ALTER TABLE ONLY public.__diesel_schema_migrations
 
 
 --
--- Name: plants plant_detail_unique_name_key; Type: CONSTRAINT; Schema: public; Owner: permaplant
---
-
-ALTER TABLE ONLY public.plants
-    ADD CONSTRAINT plant_detail_unique_name_key UNIQUE (unique_name);
-
-
---
 -- Name: plants plants_pkey; Type: CONSTRAINT; Schema: public; Owner: permaplant
 --
 
 ALTER TABLE ONLY public.plants
     ADD CONSTRAINT plants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: plants plants_unique_name_key; Type: CONSTRAINT; Schema: public; Owner: permaplant
+--
+
+ALTER TABLE ONLY public.plants
+    ADD CONSTRAINT plants_unique_name_key UNIQUE (unique_name);
 
 
 --
