@@ -112,20 +112,23 @@ const BaseLayerConfigurator = () => {
     return (
         <div>
             <ModalContainer show={showDistanceInputModal}>
-               <SimpleFormInput id={"distance-input"}
-                                labelText={"Length of the selected distance"}
-                                type={"number"}
-                                min={0}
-                                onChange={onDistanceInputChange} 
-                />
-                <div className="space-between flex flex-row justify-center space-x-8">
-                    <SimpleButton onClick={onDistanceInputModalCancel} className="max-w-[240px] grow">
-                        Cancel
-                    </SimpleButton>
-                    <SimpleButton onClick={onDistanceInputModalSubmit} className="max-w-[240px] grow">
-                        Submit 
-                    </SimpleButton>
-            </div>
+                <div className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+                    <SimpleFormInput id={"distance-input"}
+                                    labelText={"Length of the selected distance"}
+                                    type={"number"}
+                                    min={0}
+                                    onChange={onDistanceInputChange} 
+                    />
+                    <div className="space-between flex flex-row justify-center space-x-8">
+                        <SimpleButton onClick={onDistanceInputModalCancel} className="max-w-[240px] grow">
+                            Cancel
+                        </SimpleButton>
+                        <SimpleButton onClick={onDistanceInputModalSubmit} className="max-w-[240px] grow">
+                            Submit 
+                        </SimpleButton>
+                
+                    </div>
+                </div>
             </ModalContainer>
 
             <div className="flex flex-column">
