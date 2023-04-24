@@ -14,3 +14,10 @@ export function enumToSelectOptionArr<T extends string | number>(
     return { value: `${element}`, label: `${translatedEnum[element]}` };
   });
 }
+
+export function enumToSelectOption<T extends string | number>(
+  originalEnum: T,
+  translatedEnum: T,
+): SelectOption {
+  return { value: `${originalEnum}`, label: `${translatedEnum}` };
+}

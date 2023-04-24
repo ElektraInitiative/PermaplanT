@@ -2,7 +2,7 @@
 
 use actix_web::web::Query;
 use actix_web::{
-    delete, get, post,
+    delete, get, post, put,
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
@@ -83,4 +83,18 @@ pub async fn create(new_seed_json: Json<NewSeedDto>, pool: Data<Pool>) -> Result
 pub async fn delete_by_id(path: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
     service::seed::delete_by_id(*path, &pool).await?;
     Ok(HttpResponse::Ok().json(""))
+}
+
+/// Endpoint for editing a [`Seed`](crate::model::entity::Seed).
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+#[put("/{id}")]
+pub async fn edit_by_id(
+    id: Path<i32>,
+    edit_seed_json: Json<NewSeedDto>,
+    pool: Data<Pool>,
+) -> Result<HttpResponse> {
+    let response = service::seed::edit(*id, edit_seed_json.0, &pool).await?;
+    Ok(HttpResponse::Accepted().json(response))
 }

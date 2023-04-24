@@ -64,6 +64,37 @@ impl Seed {
         query_result.map(Into::into)
     }
 
+    /// Edits a seed in the database.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn edit(
+        id: i32,
+        new_seed: NewSeedDto,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<SeedDto> {
+        let new_seed = NewSeed::from(new_seed);
+        let query_result = diesel::update(seeds::table.filter(seeds::id.eq(id)))
+            .set((
+                seeds::name.eq(new_seed.name),
+                seeds::harvest_year.eq(new_seed.harvest_year),
+                seeds::variety.eq(new_seed.variety),
+                seeds::plant_id.eq(new_seed.plant_id),
+                seeds::use_by.eq(new_seed.use_by),
+                seeds::origin.eq(new_seed.origin),
+                seeds::taste.eq(new_seed.taste),
+                seeds::yield_.eq(new_seed.yield_),
+                seeds::generation.eq(new_seed.generation),
+                seeds::price.eq(new_seed.price),
+                seeds::notes.eq(new_seed.notes),
+                seeds::quantity.eq(new_seed.quantity),
+                seeds::quality.eq(new_seed.quality),
+            ))
+            .get_result::<Self>(conn)
+            .await;
+        query_result.map(Into::into)
+    }
+
     /// Delete the seed from the database.
     ///
     /// # Errors

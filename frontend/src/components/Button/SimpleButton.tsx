@@ -3,11 +3,13 @@ interface SimpleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
   variant?: ButtonVariant;
 }
 
+
 export enum ButtonVariant {
   primaryBase,
   secondaryBase,
   primaryContainer,
   secondaryContainer,
+  Primary
 }
 
 /**

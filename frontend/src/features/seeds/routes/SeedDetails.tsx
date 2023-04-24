@@ -1,13 +1,14 @@
 import { findPlantById } from '../api/findPlantById';
 import { findSeedById } from '../api/findSeedById';
 import { PlantsSummaryDto, SeedDto } from '@/bindings/definitions';
+import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleCard from '@/components/Card/SimpleCard';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import { Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export function SeedDetails() {
   const { t } = useTranslation(['seeds', 'common']);
@@ -17,6 +18,8 @@ export function SeedDetails() {
   const [plant, setPlant] = useState<PlantsSummaryDto | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [error, setError] = useState<Error>();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // fetch seed
@@ -40,9 +43,19 @@ export function SeedDetails() {
   return (
     <Suspense>
       <PageLayout>
-        {seed && plant && (
-          <div>
-            <PageTitle title={seed?.name.toString()} />
+        {seed && (
+          <div className="w-full">
+            <div className="flex justify-between">
+              <PageTitle title={seed?.name.toString()} />
+              <SimpleButton
+                className="w-32"
+                onClick={() => {
+                  navigate(`edit`);
+                }}
+              >
+                {t('seeds:view_seeds.btn_new_entry')}
+              </SimpleButton>
+            </div>
             <div className="mb-6 grid gap-8 md:grid-cols-2">
               {seed?.harvest_year && (
                 <SimpleCard title={t('seeds:harvest_year')} body={seed?.harvest_year.toString()} />

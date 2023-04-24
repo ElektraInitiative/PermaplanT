@@ -3,6 +3,7 @@ import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { Map } from '@/features/map_planning';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
+import { EditSeed } from '@/features/seeds/routes/EditSeed';
 
 const routes: Routes = {
   [Pages.ImprintPage]: {
@@ -19,6 +20,11 @@ const routes: Routes = {
     component: ViewSeeds,
     path: '/seeds',
     title: 'My Seeds',
+  },
+  [Pages.EditSeed]: {
+    component: EditSeed,
+    path: '/seeds/:id/edit',
+    title: 'Edit Seed',
   },
   [Pages.SeedDetails]: {
     component: SeedDetails,

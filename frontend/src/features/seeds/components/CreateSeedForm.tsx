@@ -1,7 +1,7 @@
-import { NewSeedDto, Quality, Quantity } from '../../../bindings/definitions';
+import { NewSeedDto, Quality, Quantity, SeedDto } from '../../../bindings/definitions';
 import PaginatedSelectMenu, {
-  PageAdditionalInfo,
   Page,
+  PageAdditionalInfo,
 } from '../../../components/Form/PaginatedSelectMenu';
 import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
@@ -9,18 +9,25 @@ import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 interface CreateSeedFormProps {
   isUploadingSeed: boolean;
+  existingSeed?: SeedDto;
   onCancel: () => void;
   onChange: () => void;
   onSubmit: (newSeed: NewSeedDto) => void;
 }
 
-const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: CreateSeedFormProps) => {
+const CreateSeedForm = ({
+  isUploadingSeed,
+  existingSeed,
+  onCancel,
+  onChange,
+  onSubmit,
+}: CreateSeedFormProps) => {
   const { t } = useTranslation(['common', 'seeds']);
 
   const translatedQuality = useTranslatedQuality();
@@ -28,10 +35,28 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
 
   const quality: SelectOption[] = enumToSelectOptionArr(Quality, translatedQuality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity, translatedQuantity);
+  const [defaultQuantity, setDefaultQuantity] = useState<SelectOption | undefined>(undefined);
 
   const currentYear = new Date().getFullYear();
 
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDto>();
+
+  useEffect(() => {
+    if (existingSeed) {
+      setValue('harvest_year', existingSeed?.harvest_year);
+      setValue('name', existingSeed?.name);
+      setValue('generation', existingSeed?.generation);
+      setValue('origin', existingSeed?.origin);
+      setValue('taste', existingSeed?.taste);
+      setValue('yield_', existingSeed?.yield_);
+      setValue('use_by', existingSeed?.use_by);
+      setValue('price', existingSeed?.price);
+      setValue('quality', existingSeed?.quality);
+      setValue('notes', existingSeed?.notes);
+      setValue('plant_id', 1);
+    }
+  }, [existingSeed, setValue]);
+
   const onFormSubmit: SubmitHandler<NewSeedDto> = async (data) => {
     if (data.origin === '') delete data.origin;
     if (data.taste === '') delete data.taste;
@@ -118,6 +143,7 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
               id="quantity"
               control={control}
               options={quantity}
+              defaultValue={defaultQuantity}
               labelText={t('seeds:quantity')}
               required={true}
               handleOptionsChange={(option) => {

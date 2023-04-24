@@ -17,6 +17,7 @@ export interface SelectMenuProps<
   isMulti?: IsMulti;
   id: Path<T>;
   labelText?: string;
+  defaultValue?: Option;
   control?: Control<T, unknown>;
   options: Option[];
   required?: boolean;
@@ -37,6 +38,7 @@ export default function SelectMenu<
   isMulti = false as IsMulti,
   id,
   labelText,
+  defaultValue,
   control,
   options,
   required = false,
