@@ -18,6 +18,12 @@ interface BaseStageProps {
   scrollable?: boolean;
   selectable?: boolean;
   draggable?: boolean;
+  onWheel?: (event: KonvaEventObject<WheelEvent>) => void;
+  onDragStart?: (event: KonvaEventObject<DragEvent>) => void;
+  onMouseMove?: (event: KonvaEventObject<MouseEvent>) => void;  
+  onMouseDown?: (event: KonvaEventObject<MouseEvent>) => void;  
+  onMouseUp?: (event: KonvaEventObject<MouseEvent>) => void;  
+  onClick?: (event: KonvaEventObject<MouseEvent>) => void;  
   children: React.ReactNode;
 }
 
@@ -32,6 +38,12 @@ interface BaseStageProps {
  */
 export const BaseStage = ({
   children,
+  onWheel,
+  onDragStart,
+  onMouseMove,
+  onMouseDown,
+  onMouseUp,
+  onClick,
   zoomable = true,
   scrollable = true,
   selectable = true,
@@ -85,6 +97,8 @@ export const BaseStage = ({
         handleScroll(e.evt.deltaX, e.evt.deltaY, stage);
       }
     }
+
+    if (onWheel != undefined) onWheel(e);
   };
 
   // Event listener responsible for allowing dragging of the stage only with the wheel mouse button
@@ -106,10 +120,12 @@ export const BaseStage = ({
         stage.stopDrag();
       }
     }
+
+    if (onDragStart != undefined) onDragStart(e);
   };
 
   // Event listener responsible for updating the selection rectangle
-  const onMouseMove = (e: KonvaEventObject<MouseEvent>) => {
+  const onStageMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
 
     if (e.evt.buttons === 4) return;
@@ -124,6 +140,8 @@ export const BaseStage = ({
 
     updateSelection(stage, setSelectionRectAttrs);
     selectIntersectingShapes(stageRef, trRef);
+
+    if (onMouseMove != undefined) onMouseMove(e);
   };
 
   // Event listener responsible for positioning the selection rectangle to the current mouse position
@@ -139,6 +157,8 @@ export const BaseStage = ({
     if (stage == null || !layerListening || !selectable) return;
 
     startSelection(stage, setSelectionRectAttrs);
+
+    if (onMouseDown != undefined) onMouseDown(e);
   };
 
   // Event listener responsible for ending the selection rectangle
@@ -147,6 +167,8 @@ export const BaseStage = ({
 
     if (!selectable) return;
     endSelection(setSelectionRectAttrs, selectionRectAttrs);
+
+    if (onMouseUp != undefined) onMouseUp(e);
   };
 
   // Event listener responsible for unselecting shapes when clicking on the stage
@@ -156,6 +178,8 @@ export const BaseStage = ({
     if (nodeSize > 0 && isStage) {
       deselectShapes(trRef);
     }
+
+    if (onClick != undefined) onClick(e);
   };
 
   // Event listener responsible for adding a single shape to the transformer
@@ -189,7 +213,7 @@ export const BaseStage = ({
         onWheel={onStageWheel}
         onDragStart={onStageDragStart}
         onMouseDown={onStageMouseDown}
-        onMouseMove={onMouseMove}
+        onMouseMove={onStageMouseMove}
         onMouseUp={onStageMouseUp}
         onClick={onStageClick}
         scaleX={stage.scale}
