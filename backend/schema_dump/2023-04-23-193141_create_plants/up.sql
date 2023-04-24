@@ -15,9 +15,9 @@ CREATE TYPE GROWTH_RATE AS ENUM ('slow', 'moderate', 'vigorous');
 CREATE TYPE HERBACEOUS_OR_WOODY AS ENUM ('herbaceous', 'woody');
 CREATE TYPE LIFE_CYCLE AS ENUM ('annual', 'biennial', 'perennial');
 CREATE TYPE LIGHT_REQUIREMENT AS ENUM (
-    'Full sun',
-    'Partial sun/shade',
-    'Full shade'
+    'full sun',
+    'partial sun/shade',
+    'full shade'
 );
 CREATE TYPE NUTRITION_DEMAND AS ENUM (
     'light feeder',
@@ -25,13 +25,13 @@ CREATE TYPE NUTRITION_DEMAND AS ENUM (
     'heavy feeder'
 );
 CREATE TYPE PROPAGATION_METHOD AS ENUM (
-    'Seed - direct sow',
-    'Seed - transplant',
-    'Division',
-    'Cuttings',
-    'Layering',
-    'Spores',
-    'Seed'
+    'seed - direct sow',
+    'seed - transplant',
+    'division',
+    'cuttings',
+    'layering',
+    'spores',
+    'seed'
 );
 CREATE TYPE SHADE AS ENUM (
     'no shade',
@@ -54,7 +54,7 @@ CREATE TYPE SOIL_TEXTURE AS ENUM (
     'heavy clay'
 );
 CREATE TYPE SOIL_WATER_RETENTION AS ENUM ('well drained', 'moist', 'wet');
-CREATE TYPE WATER_REQUIREMENT AS ENUM ('Dry', 'Moist', 'Wet', 'Water');
+CREATE TYPE WATER_REQUIREMENT AS ENUM ('dry', 'moist', 'wet', 'water');
 CREATE TABLE plants (
     id SERIAL PRIMARY KEY,
     unique_name TEXT NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE plants (
     material_uses TEXT,
     functions TEXT,
     heat_zone SMALLINT,
-    shade TEXT,
+    shade SHADE,
     soil_ph SOIL_PH [],
     soil_texture SOIL_TEXTURE [],
     soil_water_retention SOIL_WATER_RETENTION [],
@@ -112,7 +112,7 @@ CREATE TABLE plants (
     plants_of_the_world_online_link TEXT,
     plants_of_the_world_online_link_synonym TEXT,
     pollination TEXT,
-    propagation_transplanting TEXT,
+    propagation_transplanting_en TEXT,
     resistance TEXT,
     root_type TEXT,
     seed_planting_depth_en TEXT,
@@ -121,10 +121,10 @@ CREATE TABLE plants (
     spread TEXT,
     utility TEXT,
     warning TEXT,
-    when_to_plant_cuttings TEXT,
-    when_to_plant_division TEXT,
-    when_to_plant_transplant TEXT,
-    when_to_sow_indoors TEXT,
+    when_to_plant_cuttings_en TEXT,
+    when_to_plant_division_en TEXT,
+    when_to_plant_transplant_en TEXT,
+    when_to_sow_indoors_en TEXT,
     sowing_outdoors_en TEXT,
     when_to_start_indoors_weeks TEXT,
     when_to_start_outdoors_weeks TEXT,
@@ -136,7 +136,7 @@ CREATE TABLE plants (
     wikipedia_url TEXT,
     days_to_maturity TEXT,
     pests TEXT,
-    version TEXT,
+    version SMALLINT,
     germination_time TEXT,
     description TEXT,
     parent_id TEXT,
@@ -156,7 +156,7 @@ CREATE TABLE plants (
     seed_weight_1000_de TEXT,
     seed_weight_1000_en TEXT,
     seed_weight_1000 FLOAT,
-    machine_cultivation_possible TEXT,
+    machine_cultivation_possible BOOLEAN,
     edible_uses_de TEXT,
     CONSTRAINT plants_unique_name_key UNIQUE (unique_name),
     CHECK (
