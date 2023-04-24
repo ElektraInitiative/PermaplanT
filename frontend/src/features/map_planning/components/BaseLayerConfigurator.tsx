@@ -44,7 +44,7 @@ const BaseLayerConfigurator = () => {
     // Determine the scale of the image using the length of a known distance
     const [measureState, setMeasureState]           = useState(MeasurementState.Initial);
     const [measureLinePoints, setMeasureLinePoints] = useState<number[]>([]);
-    const [measuredLength, setMeasuredLengh]        = useState(0);
+    const [measuredLength, setMeasuredLength]       = useState(0);
 
     const [showDistanceInputModal, setShowDistanceInputModal] = useState(false);
 
@@ -154,7 +154,7 @@ const BaseLayerConfigurator = () => {
                     onMouseMove={onBaseStageMouseMove}
                     onClick={onBaseStageClick}>
                     <BaseLayer imageUrl={imageUrl} rotation={rotation} pixels_per_meter={scale}></BaseLayer>
-                    <Layer>
+                    <Layer listening={false}>
                         <Line
                             points={measureLinePoints}
                             stroke={"#ff0000"}
