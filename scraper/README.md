@@ -33,7 +33,7 @@ npm run start
 2. `permapeopleRawData.csv` - scraped from Permapeople
 3. `reinsaatRawData.csv` - scraped from Reinsaat and merged from `reinsaatRawDataEN.csv` and `reinsaatRawDataDE.csv`
 
-### Step by step
+### Step by Step
 
 The following steps describe how to use the scraper to fetch the data from the sources and insert it into the database.
 The steps are simplified and only the most important commands are listed.

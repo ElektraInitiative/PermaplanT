@@ -32,7 +32,7 @@ npm run fetch:reinsaat
 
 4. Merge the scraped data
 
-The scraper also merges the scraped data of both the english and german version of the Reinsaat webpage and stores it in `csv` format in the `data` directory:
+The scraper also merges the scraped data of both the English and German version of the Reinsaat webpage and stores it in `csv` format in the `data` directory:
 
 - `reinsaatRawData.csv`: This file contains the merged data
 
