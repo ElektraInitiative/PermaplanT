@@ -205,7 +205,6 @@ export const BaseStage = ({
     });
 
   return (
-    <div className="h-screen w-screen overflow-hidden">
       <Stage
         ref={stageRef}
         draggable={draggable}
@@ -257,6 +256,5 @@ export const BaseStage = ({
           />
         </Layer>
       </Stage>
-    </div>
   );
 };

@@ -44,9 +44,11 @@ export const Map = () => {
   }, []);
 
   return (
-    <BaseStage>
-      <BaseLayer imageUrl='https://nextcloud.markus-raab.org/nextcloud/index.php/s/E4TTrPnpt4Qfade/download/garden-plan.jpg' rotation={0} pixels_per_meter={5} />
-      <PlantsLayer>{shapes}</PlantsLayer>
-    </BaseStage>
+    <div className="h-screen w-screen overflow-hidden">
+      <BaseStage>
+        <BaseLayer imageUrl='https://nextcloud.markus-raab.org/nextcloud/index.php/s/E4TTrPnpt4Qfade/download/garden-plan.jpg' rotation={0} pixels_per_meter={5} />
+        <PlantsLayer>{shapes}</PlantsLayer>
+      </BaseStage>
+    </div>
   );
 };
