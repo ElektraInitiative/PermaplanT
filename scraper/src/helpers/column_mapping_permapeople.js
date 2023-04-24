@@ -14,6 +14,8 @@
  *    i.e. key will be replaced by value.
  *    For example, replace 'partial sun' with 'Partial sun/shade'.
  *
+ * If the value is null, there is no mapping for this column and it will be
+ * taken from the source as is.
  */
 export default {
   id: {

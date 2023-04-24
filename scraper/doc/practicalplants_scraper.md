@@ -25,7 +25,7 @@ This is required to scrape the data.
 The scraper scrapes the data from the PracticalPlants wiki dump and stores it in `csv` format in the `data` directory. This can be done with the following command:
 
 ```shell
-npm run start
+npm run fetch:practicalplants
 ```
 
 As an additional step, the script will also look up the german common name through Wikidata API and store it under the column `Column Name DE` in the `detail.csv` file.
@@ -58,5 +58,5 @@ The merge script takes two CSV files as command line arguments, merges the data 
 This can be done with the following command:
 
 ```shell
-npm run merge <path-to-original-csv-file> <path-to-corrected-csv-file>
+npm run merge:csvfiles <path-to-original-csv-file> <path-to-corrected-csv-file>
 ```
