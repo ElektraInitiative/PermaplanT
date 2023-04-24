@@ -18,6 +18,9 @@
     "error_price_must_be_number": "Der Preis muss eine Zahl sein. z.B. 2,99",
     "btn_create_seed": "Samen speichern"
   },
+  "edit_seed_form": {
+    "btn_edit_seed": "Samen editieren"
+  },
   "error_modal_title": "Fehler",
   "harvest_year": "Bezugsjahr",
   "additional_name": "Zusätzlicher Name",

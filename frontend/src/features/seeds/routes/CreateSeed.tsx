@@ -53,6 +53,7 @@ export function CreateSeed() {
       <PageLayout>
         <PageTitle title={t('seeds:create_seed.title')} />
         <CreateSeedForm
+          submitButtonTitle={t('seeds:create_seed_form.btn_create_seed')}
           isUploadingSeed={isUploadingSeed}
           onCancel={onCancel}
           onChange={onChange}

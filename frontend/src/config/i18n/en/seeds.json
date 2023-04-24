@@ -19,6 +19,9 @@
     "error_price_must_be_number": "Price must be a number",
     "btn_create_seed": "Create Seed"
   },
+  "edit_seed_form": {
+    "btn_edit_seed": "Edit seed"
+  },
   "error_modal_title": "Error",
   "harvest_year": "Harvest Year",
   "additional_name": "Additional Name",

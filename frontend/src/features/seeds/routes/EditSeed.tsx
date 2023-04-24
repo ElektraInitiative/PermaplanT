@@ -61,6 +61,7 @@ export function EditSeed() {
         <PageTitle title={t('seeds:create_seed.title')} />
         <CreateSeedForm
           isUploadingSeed={false}
+          submitButtonTitle={t('seeds:edit_seed_form.btn_edit_seed')}
           existingSeed={seed ? seed : undefined}
           onCancel={onCancel}
           onChange={onChange}

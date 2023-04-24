@@ -9,13 +9,14 @@ import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 interface CreateSeedFormProps {
   isUploadingSeed: boolean;
   existingSeed?: SeedDto;
+  submitButtonTitle: string;
   onCancel: () => void;
   onChange: () => void;
   onSubmit: (newSeed: NewSeedDto) => void;
@@ -24,6 +25,7 @@ interface CreateSeedFormProps {
 const CreateSeedForm = ({
   isUploadingSeed,
   existingSeed,
+  submitButtonTitle,
   onCancel,
   onChange,
   onSubmit,
@@ -35,7 +37,6 @@ const CreateSeedForm = ({
 
   const quality: SelectOption[] = enumToSelectOptionArr(Quality, translatedQuality);
   const quantity: SelectOption[] = enumToSelectOptionArr(Quantity, translatedQuantity);
-  const [defaultQuantity, setDefaultQuantity] = useState<SelectOption | undefined>(undefined);
 
   const currentYear = new Date().getFullYear();
 
@@ -143,7 +144,6 @@ const CreateSeedForm = ({
               id="quantity"
               control={control}
               options={quantity}
-              defaultValue={defaultQuantity}
               labelText={t('seeds:quantity')}
               required={true}
               handleOptionsChange={(option) => {
@@ -233,11 +233,11 @@ const CreateSeedForm = ({
               {t('common:cancel')}
             </SimpleButton>
             <SimpleButton
-              title={t('seeds:create_seed_form.btn_create_seed')}
+              title={submitButtonTitle}
               type="submit"
               className="max-w-[240px] grow sm:w-auto"
             >
-              {t('seeds:create_seed_form.btn_create_seed')}
+              {submitButtonTitle}
               {isUploadingSeed && (
                 <svg
                   className="ml-4 inline-block h-5 w-5 animate-spin"

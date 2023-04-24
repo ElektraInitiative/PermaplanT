@@ -53,7 +53,7 @@ export function SeedDetails() {
                   navigate(`edit`);
                 }}
               >
-                {t('seeds:view_seeds.btn_new_entry')}
+                {t('seeds:edit_seed_form.btn_edit_seed')}
               </SimpleButton>
             </div>
             <div className="mb-6 grid gap-8 md:grid-cols-2">
