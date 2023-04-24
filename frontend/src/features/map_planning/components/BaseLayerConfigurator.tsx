@@ -107,11 +107,11 @@ const BaseLayerConfigurator = () => {
     } 
     
     return (
-        <div>
+        <div className="pb-1">
             <ModalContainer show={showDistanceInputModal}>
                 <div className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
                     <SimpleFormInput id={"distance-input"}
-                                    labelText={"Length of the selected distance"}
+                                    labelText={"Length of the selected distance in Meters"}
                                     type={"number"}
                                     min={0}
                                     onChange={onDistanceInputChange} 
@@ -148,19 +148,21 @@ const BaseLayerConfigurator = () => {
                                  type={'number'}
                                  min={1}></SimpleFormInput>
             </div>
-            <BaseStage
-                onMouseMove={onBaseStageMouseMove}
-                onClick={onBaseStageClick}>
-                <BaseLayer imageUrl={imageUrl} rotation={rotation} pixels_per_meter={scale}></BaseLayer>
-                <Layer>
-                    <Line
-                        points={measureLinePoints}
-                        stroke={"#ff0000"}
-                        lineWidth={10}
-                        lineCap="square"  
-                    />
-                </Layer>
-            </BaseStage>
+            <div className="left-0 absolute mt-2">
+                <BaseStage
+                    onMouseMove={onBaseStageMouseMove}
+                    onClick={onBaseStageClick}>
+                    <BaseLayer imageUrl={imageUrl} rotation={rotation} pixels_per_meter={scale}></BaseLayer>
+                    <Layer>
+                        <Line
+                            points={measureLinePoints}
+                            stroke={"#ff0000"}
+                            lineWidth={10}
+                            lineCap="square"  
+                        />
+                    </Layer>
+                </BaseStage>
+            </div>
         </div>
     );
 };
