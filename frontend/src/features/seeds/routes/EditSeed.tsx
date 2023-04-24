@@ -1,7 +1,6 @@
 import { editSeed } from '../api/editSeeds';
 import { findSeedById } from '../api/findSeedById';
 import CreateSeedForm from '../components/CreateSeedForm';
-import useCreateSeedStore from '../store/CreateSeedStore';
 import { NewSeedDto, SeedDto } from '@/bindings/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
@@ -17,9 +16,8 @@ export function EditSeed() {
   const navigate = useNavigate();
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
-  const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
-  const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
-  const error = useCreateSeedStore((state) => state.error);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const onCancel = () => {
     // There is no need to show the cancel warning modal if the user
@@ -43,7 +41,10 @@ export function EditSeed() {
       try {
         const seed = await findSeedById(Number(id));
         setSeed(seed);
-      } catch (error) {}
+      } catch (error) {
+        setError(error as Error);
+        setShowErrorModal(true);
+      }
     };
     _findOneSeed();
   }, [id]);
@@ -52,7 +53,10 @@ export function EditSeed() {
     try {
       await editSeed(newSeed, Number(id));
       navigate(`/seeds/${id}`);
-    } catch (error) {}
+    } catch (error) {
+      setError(error as Error);
+      setShowErrorModal(true);
+    }
   };
 
   return (
