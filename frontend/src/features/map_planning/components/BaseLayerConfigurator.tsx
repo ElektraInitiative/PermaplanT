@@ -61,13 +61,11 @@ const BaseLayerConfigurator = () => {
                 break;
             
             case MeasurementState.OnePointSelected:
-                console.log(measureLinePoints);
                 const lineLengthX = Math.abs(measureLinePoints[2] - measureLinePoints[0]);
                 const lineLengthY = Math.abs(measureLinePoints[3] - measureLinePoints[1]);
 
                 // use the pythagorean theorem to get the measured length
                 const lineLength  = Math.sqrt(lineLengthX * lineLengthX + lineLengthY * lineLengthY);
-                console.log(lineLength);
 
                 setMeasuredLengh(lineLength);
                 
@@ -96,16 +94,15 @@ const BaseLayerConfigurator = () => {
    
     const onDistanceInputModalSubmit = () => {
         // TODO: replace 10 with a global constant
-        console.log(measuredLength);
-        console.log(realWorldLength);
-
         setImageScale(measuredLength / realWorldLength); 
         setShowDistanceInputModal(false);
         
-        console.log(scale);
+        setMeasureState(MeasurementState.Initial);
     } 
    
     const onDistanceInputModalCancel = () => {
+        setMeasureLinePoints([]);
+        setMeasureState(MeasurementState.Initial);
         setShowDistanceInputModal(false);
     } 
     
@@ -147,7 +144,7 @@ const BaseLayerConfigurator = () => {
                 <SimpleFormInput id={"scale"}
                                  labelText={"Pixels per Meter"}
                                  onChange={onScaleInputChange}
-                                 defaultValue={10}
+                                 defaultValue={scale}
                                  type={'number'}
                                  min={1}></SimpleFormInput>
             </div>
