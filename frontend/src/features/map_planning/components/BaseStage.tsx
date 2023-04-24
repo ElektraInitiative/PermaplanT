@@ -114,6 +114,8 @@ export const BaseStage = ({
     if (e.evt === null || e.evt === undefined) return;
     e.evt.preventDefault();
 
+    if (onDragStart != undefined) onDragStart(e);
+    
     const stage = e.target.getStage();
     if (stage === null) return;
 
@@ -128,14 +130,14 @@ export const BaseStage = ({
         stage.stopDrag();
       }
     }
-
-    if (onDragStart != undefined) onDragStart(e);
   };
 
   // Event listener responsible for updating the selection rectangle
   const onStageMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
 
+    if (onMouseMove != undefined) onMouseMove(e);
+    
     if (e.evt.buttons === 4) return;
 
     if (e.evt.buttons !== 4) {
@@ -148,14 +150,14 @@ export const BaseStage = ({
 
     updateSelection(stage, setSelectionRectAttrs);
     selectIntersectingShapes(stageRef, trRef);
-
-    if (onMouseMove != undefined) onMouseMove(e);
   };
 
   // Event listener responsible for positioning the selection rectangle to the current mouse position
   const onStageMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
 
+    if (onMouseDown != undefined) onMouseDown(e);
+    
     if (e.evt.buttons === 4) {
       document.body.style.cursor = 'grabbing';
     }
@@ -166,17 +168,16 @@ export const BaseStage = ({
 
     startSelection(stage, setSelectionRectAttrs);
 
-    if (onMouseDown != undefined) onMouseDown(e);
   };
 
   // Event listener responsible for ending the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
-
+    
+    if (onMouseUp != undefined) onMouseUp(e);
+    
     if (!selectable) return;
     endSelection(setSelectionRectAttrs, selectionRectAttrs);
-
-    if (onMouseUp != undefined) onMouseUp(e);
   };
 
   // Event listener responsible for unselecting shapes when clicking on the stage
