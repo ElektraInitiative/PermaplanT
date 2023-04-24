@@ -10,7 +10,6 @@
     "merge:datasets": "node src/merge_datasets.js",
     "merge:reinsaat": "node src/merge_reinsaat.js",
     "merge:csvfiles": "node src/helpers/merge_csv_files.js",
-    "compare": "node src/compare_datasets.js",
     "insert": "node src/insert_plants.js",
     "start:full": "npm run fetch:permapeople && npm run fetch:practicalplants && npm run fetch:reinsaat && npm run merge:reinsaat && npm run merge:datasets && npm run insert",
     "start": "npm run merge:datasets && npm run insert"

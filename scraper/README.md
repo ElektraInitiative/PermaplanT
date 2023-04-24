@@ -13,7 +13,21 @@ This directory contains the following scrapers:
 
 ## Installation and Usage
 
-### With single command
+Configure your environment:
+
+1. Install dependencies
+
+```shell
+npm install && mkdir -p data
+```
+
+2. Create .env file from .env.example and fill in the required values:
+
+```shell
+cp .env.example .env
+```
+
+### Installation Option 1: With a single command
 
 The following command will fetch the data from the sources, merge the datasets and insert the data into the database:
 
@@ -33,25 +47,13 @@ npm run start
 2. `permapeopleRawData.csv` - scraped from Permapeople
 3. `reinsaatRawData.csv` - scraped from Reinsaat and merged from `reinsaatRawDataEN.csv` and `reinsaatRawDataDE.csv`
 
-### Step by Step
+### Installation Option 2: Step by Step
 
 The following steps describe how to use the scraper to fetch the data from the sources and insert it into the database.
 The steps are simplified and only the most important commands are listed.
 For more information, please refer to the documentation of the individual scrapers linked in the first paragraph of this doc.
 
-1. Install dependencies
-
-```shell
-npm install && mkdir -p data
-```
-
-2. Create .env file from .env.example and fill in the required values:
-
-```shell
-cp .env.example .env
-```
-
-3. Fetch the data
+1. Fetch the data
 
 The scraper scrapes the data from the sources and stores it in `csv` format in the `data` directory:
 
@@ -75,7 +77,7 @@ The scraped data is stored in the `data` directory:
 - `reinsaatRawDataDE.csv`: This file contains the raw data scraped from the german version of the Reinsaat webpage.
 - `reinsaatRawData.csv`: This file contains the merged data scraped from the english and german version of the Reinsaat webpage.
 
-4. Merge the scraped datasets
+2. Merge the scraped datasets
 
 The scraper also merges the scraped data of all the sources and stores it in `csv` format in the `data` directory:
 
@@ -87,7 +89,13 @@ This can be done with the following command:
 npm run merge:datasets
 ```
 
-5. Insert the data into the database
+3. Correct data manually before the insertion (optional)
+
+The scraped data can contain inconsistencies and errors.
+In order to correct these mistakes, we can manually correct the data i.e. change the values in the `mergedDatasets.csv` file.
+The corrected data in the new file should be stored in the same format as the generated data i.e. columns may not be changed.
+
+4. Insert the data into the database
 
 The scraper also inserts the scraped data into the database:
 
