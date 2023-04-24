@@ -17,7 +17,7 @@ cp .env.example .env
 ```
 
 `PERMAPEOPLE_KEY_ID` and `PERMAPEOPLE_SECRET_KEY` mentioned in .env are the credentials for the Permapeople API.
-This is required to scrape the data.
+This is required to use their API.
 You can get these keys from the Permapeople team.
 
 3. Start the scraper
