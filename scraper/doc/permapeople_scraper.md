@@ -30,7 +30,7 @@ npm run fetch:permapeople
 
 4. Compare the scraped data with the data in the database **(optional)**
 
-The scraper can also compare the scraped data with the data in the database(this data will be referenced as practicalPlants data and vice versa) and store the differences in `csv` format in the `data` directory.
+The scraper can also compare the scraped data with the data in the database (this data will be referenced as practicalPlants data and vice versa) and store the differences in `csv` format in the `data` directory.
 The script needs the `detail.csv` and `permapeopleRawData.csv` files in the `data` directory to compare the data.
 This can be done with the following command:
 
