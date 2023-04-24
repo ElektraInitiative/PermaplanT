@@ -16,7 +16,10 @@ npm install && mkdir -p data
 cp .env.example .env
 ```
 
-`PERMAPEOPLE_KEY_ID` and `PERMAPEOPLE_SECRET_KEY` mentioned in .env are the credentials for the Permapeople API.
+- `PERMAPEOPLE_KEY_ID` (called `API_KEY_ID` by permapeople) and
+- `PERMAPEOPLE_KEY_SECRET` (called `API_KEY_SECRET` by permapeople)
+
+mentioned in .env are the credentials for the Permapeople API.
 This is required to use their API.
 You can get these keys from the Permapeople team after creating an account.
 
