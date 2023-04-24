@@ -186,7 +186,7 @@ pub struct Plants {
     /// (fetched from Permapeople)
     pub pests: Option<String>,
     /// The version of the entry. (fetched from Permapeople)
-    pub version: Option<String>,
+    pub version: Option<i16>,
     /// (fetched from Permapeople)
     pub germination_time: Option<String>,
     /// The description of the entry. (fetched from Permapeople)
