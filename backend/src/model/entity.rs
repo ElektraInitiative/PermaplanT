@@ -226,7 +226,7 @@ pub struct Plants {
     /// Fetched from Permapeople as \`1000_seed_weight_g\` and renamed. (fetched from Permapeople)
     pub seed_weight_1000: Option<f64>,
     /// (fetched from Reinsaat)
-    pub machine_cultivation_possible: Option<String>,
+    pub machine_cultivation_possible: Option<bool>,
     /// (fetched from Reinsaat)
     pub edible_uses_de: Option<String>,
 }

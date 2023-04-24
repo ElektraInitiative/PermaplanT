@@ -98,6 +98,6 @@ export default [
   { name: 'seed_weight_1000_de' },
   { name: 'seed_weight_1000_en' },
   { name: 'seed_weight_1000' },
-  { name: 'machine_cultivation_possible' },
+  { name: 'machine_cultivation_possible', cast: 'boolean' },
   { name: 'edible_uses_de' },
 ];
