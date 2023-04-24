@@ -36,9 +36,21 @@ const BaseLayerConfigurator = () => {
         setImageScale(value);
     }
 
-    const onDistanceInputChange = (value: string | number) => {
-        if (typeof value === 'string') return;
-        setRealWorldLength(value);
+    const onMetersInputChange = (value: string | number) => {
+        if (typeof value === 'string' || Number.isNaN(value)) return;
+        
+        const centimeters = realWorldLength - Math.floor(realWorldLength);
+        setRealWorldLength(value + centimeters);
+
+        console.log(realWorldLength);
+    }
+
+    const onCentimetersInputChange = (value: string | number) => {
+        if (typeof value === 'string' || Number.isNaN(value)) return;
+
+        const meters = Math.floor(realWorldLength);
+        setRealWorldLength(meters + (value / 100));
+        console.log(realWorldLength);
     }
 
     // Determine the scale of the image using the length of a known distance
@@ -98,6 +110,7 @@ const BaseLayerConfigurator = () => {
         setImageScale(measuredLength / realWorldLength); 
         setShowDistanceInputModal(false);
         
+        setMeasureLinePoints([]);
         setMeasureState(MeasurementState.Initial);
     } 
    
@@ -110,18 +123,31 @@ const BaseLayerConfigurator = () => {
     return (
         <div className="pb-1">
             <ModalContainer show={showDistanceInputModal}>
-                <div className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
-                    <SimpleFormInput id={"distance-input"}
-                                    labelText={"Length of the selected distance in Meters"}
-                                    type={"number"}
-                                    min={0}
-                                    onChange={onDistanceInputChange} 
-                    />
+                <div className="flex min-h-[200px] w-[400px] space-y-8 flex-col justify-between rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+                    <h1>Set length of drawn distance</h1>
+
+                    <div className="flex flex-row space-between justify-center space-x-4"> 
+                        <SimpleFormInput id={"distance-input-meters"}
+                                        labelText={"Meters"}
+                                        type={"number"}
+                                        min={0}
+                                        defaultValue={0}
+                                        onChange={onMetersInputChange} 
+                        />
+                        <SimpleFormInput id={"distance-input-centimeters"}
+                                        labelText={"Centimeters"}
+                                        type={"number"}
+                                        min={0}
+                                        defaultValue={0}
+                                        max={99}
+                                        onChange={onCentimetersInputChange} 
+                        />
+                    </div>
                     <div className="space-between flex flex-row justify-center space-x-8">
                         <SimpleButton onClick={onDistanceInputModalCancel} className="max-w-[240px] grow">
                             Cancel
                         </SimpleButton>
-                        <SimpleButton onClick={onDistanceInputModalSubmit} className="max-w-[240px] grow">
+                        <SimpleButton disabled={realWorldLength === 0} onClick={onDistanceInputModalSubmit} className="max-w-[240px] grow">
                             Submit 
                         </SimpleButton>
                 
