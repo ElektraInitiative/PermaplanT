@@ -14,7 +14,7 @@ it('renders correctly', () => {
             id="test"
             labelText="Some Label"
             loadOptions={async () => {
-              return { options: [], hasMore: false, additional: { page: 0 } };
+              return { options: [], hasMore: false, additional: { pageNumber: 0 } };
             }}
           />
         </FormWrapper>
