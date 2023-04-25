@@ -15,8 +15,16 @@ export type ObjectAddAction = {
 /**
  * An action for updating an object on the map.
  */
-export type ObjectUpdateAction = {
-  type: 'OBJECT_UPDATE';
+export type ObjectUpdatePositionAction = {
+  type: 'OBJECT_UPDATE_POSITION';
+  payload: ObjectState[];
+};
+
+/**
+ * An action for updating an object on the map.
+ */
+export type ObjectUpdateTransformAction = {
+  type: 'OBJECT_UPDATE_TRANSFORM';
   payload: ObjectState[];
 };
 
@@ -37,4 +45,14 @@ export type RedoAction = {
 /**
  * A union type for all actions.
  */
-export type MapAction = ObjectAddAction | ObjectUpdateAction | UndoAction | RedoAction;
+export type MapAction =
+  | ObjectAddAction
+  | ObjectUpdatePositionAction
+  | ObjectUpdateTransformAction
+  | UndoAction
+  | RedoAction;
+
+/**
+ * A union type for all actions that are tracked in the history.
+ */
+export type TrackedAction = Exclude<MapAction, UndoAction | RedoAction>;

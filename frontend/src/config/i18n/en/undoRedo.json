@@ -1,0 +1,7 @@
+{
+  "successful_undo": "Successfully reverted '{{action}}'",
+  "successful_redo": "Successfully reapplied '{{action}}'",
+  "OBJECT_ADD": "Add {{name}}",
+  "OBJECT_UPDATE_POSITION": "Move {{name}}",
+  "OBJECT_UPDATE_TRANSFORM": "Transform {{name}}"
+}

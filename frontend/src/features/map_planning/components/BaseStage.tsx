@@ -166,9 +166,12 @@ export const BaseStage = ({
     }
   };
 
-  const dispatchUpdate = (nodes: Node<NodeConfig>[]) => {
+  const dispatchUpdate = (
+    nodes: Node<NodeConfig>[],
+    type: 'OBJECT_UPDATE_POSITION' | 'OBJECT_UPDATE_TRANSFORM',
+  ) => {
     dispatch({
-      type: 'OBJECT_UPDATE',
+      type,
       payload: nodes.map((o) => ({
         id: o.id(),
         type: o.attrs.type,
@@ -186,82 +189,80 @@ export const BaseStage = ({
 
   return (
     <div className="h-full w-full overflow-hidden">
-      <div className="absolute z-10 pt-8">
-        <div className="flex h-10 gap-2">
-          <SimpleButton
-            className="w-32"
-            onClick={() =>
-              dispatch({
-                type: 'OBJECT_ADD',
-                payload: {
-                  index: 'plant',
-                  id: Math.random().toString(36).slice(2, 9),
-                  x: 300,
-                  y: 300,
-                  width: 100,
-                  height: 100,
-                  type: 'rect',
-                  rotation: 0,
-                  scaleX: 1,
-                  scaleY: 1,
-                },
-              })
-            }
+      <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
+        <SimpleButton
+          className="w-32"
+          onClick={() =>
+            dispatch({
+              type: 'OBJECT_ADD',
+              payload: {
+                index: 'plant',
+                id: Math.random().toString(36).slice(2, 9),
+                x: 300,
+                y: 300,
+                width: 100,
+                height: 100,
+                type: 'rect',
+                rotation: 0,
+                scaleX: 1,
+                scaleY: 1,
+              },
+            })
+          }
+        >
+          CREATE OBJECT
+        </SimpleButton>
+        <button
+          className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
+          disabled={!canUndo}
+          onClick={() =>
+            dispatch({
+              type: 'UNDO',
+            })
+          }
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-6 w-6"
           >
-            CREATE OBJECT
-          </SimpleButton>
-          <button
-            className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
-            disabled={!canUndo}
-            onClick={() =>
-              dispatch({
-                type: 'UNDO',
-              })
-            }
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+            />
+          </svg>
+        </button>
+        <button
+          className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
+          disabled={!canRedo}
+          onClick={() =>
+            dispatch({
+              type: 'REDO',
+            })
+          }
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-6 w-6"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-6 w-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
-              />
-            </svg>
-          </button>
-          <button
-            className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
-            disabled={!canRedo}
-            onClick={() =>
-              dispatch({
-                type: 'REDO',
-              })
-            }
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-6 w-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"
-              />
-            </svg>
-          </button>
-          <div>
-            <div className="whitespace-nowrap text-sm">Step: {step}</div>
-            <div className="whitespace-nowrap text-sm">History length: {historyLength}</div>
-          </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"
+            />
+          </svg>
+        </button>
+        <div>
+          <div className="whitespace-nowrap text-sm">Step: {step}</div>
+          <div className="whitespace-nowrap text-sm">History length: {historyLength}</div>
         </div>
       </div>
       <Stage
@@ -299,10 +300,10 @@ export const BaseStage = ({
             }}
             onTransformEnd={() => {
               selectable = true;
-              dispatchUpdate(trRef.current?.getNodes() || []);
+              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_TRANSFORM');
             }}
             onDragEnd={() => {
-              dispatchUpdate(trRef.current?.getNodes() || []);
+              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_POSITION');
             }}
             onMouseDown={() => {
               selectable = false;
