@@ -28,20 +28,23 @@ const useMapStore = create<MapStore>((set) => ({
   history: [],
   step: 0,
   state: DEFAULT_STATE,
-  dispatch: (action) => set((state) => handleDispatch(state, action)),
+  dispatch: (action) => set((state) => applyActionToState(action, state)),
   canUndo: false,
   canRedo: false,
   transformer: createRef<Konva.Transformer>(),
 }));
 
-function handleDispatch(state: MapStore, action: MapAction): MapStore {
+/**
+ * given an action and the current state, return the new state
+ */
+function applyActionToState(action: MapAction, state: MapStore): MapStore {
   switch (action.type) {
     case 'OBJECT_ADD':
       return {
         ...state,
         history: [...state.history.slice(0, state.step), action],
         step: state.step + 1,
-        state: handleAddObject(state.state, action),
+        state: handleAddObjectAction(state.state, action),
         canUndo: true,
       };
 
@@ -50,7 +53,7 @@ function handleDispatch(state: MapStore, action: MapAction): MapStore {
         ...state,
         history: [...state.history.slice(0, state.step), action],
         step: state.step + 1,
-        state: handleUpdateObject(state.state, action),
+        state: handleUpdateObjectAction(state.state, action),
         canUndo: true,
       };
 
@@ -85,7 +88,7 @@ function handleDispatch(state: MapStore, action: MapAction): MapStore {
   }
 }
 
-function handleAddObject(state: MapState, action: ObjectAddAction): MapState {
+function handleAddObjectAction(state: MapState, action: ObjectAddAction): MapState {
   return {
     ...state,
     layers: {
@@ -98,7 +101,7 @@ function handleAddObject(state: MapState, action: ObjectAddAction): MapState {
   };
 }
 
-function handleUpdateObject(state: MapState, action: ObjectUpdateAction): MapState {
+function handleUpdateObjectAction(state: MapState, action: ObjectUpdateAction): MapState {
   return {
     ...state,
     layers: {
@@ -124,14 +127,17 @@ function handleUpdateObject(state: MapState, action: ObjectUpdateAction): MapSta
   };
 }
 
+/**
+ * given a history of actions, reduce it into a single state, that is the sum of all actions
+ */
 function reduceHistory(history: MapAction[]): MapState {
   const state = history.reduce((state, action) => {
     switch (action.type) {
       case 'OBJECT_ADD':
-        return handleAddObject(state, action);
+        return handleAddObjectAction(state, action);
 
       case 'OBJECT_UPDATE':
-        return handleUpdateObject(state, action);
+        return handleUpdateObjectAction(state, action);
 
       default:
         return state;
