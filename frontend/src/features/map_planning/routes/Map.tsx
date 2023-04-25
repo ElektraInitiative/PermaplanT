@@ -1,4 +1,6 @@
 import { BaseStage } from '../components/BaseStage';
+import { Layers } from '../components/toolbar/Layers';
+import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
 import PlantsLayer from '../layers/PlantsLayer';
 import { useEffect, useState } from 'react';
@@ -48,7 +50,7 @@ export const Map = () => {
         <PlantsLayer>{shapes}</PlantsLayer>
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
-        <Toolbar></Toolbar>
+        <Toolbar contentTop={<Layers />} contentBottom={<PlantSearch />}></Toolbar>
       </section>
     </div>
   );

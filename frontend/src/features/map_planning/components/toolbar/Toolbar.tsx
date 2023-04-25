@@ -1,7 +1,5 @@
-import { Layers } from './Layers';
-import { PlantSearch } from './PlantSearch';
-import { useState } from 'react';
-import { DraggableCore } from 'react-draggable';
+import { ReactNode, useState } from 'react';
+import { DraggableCore, DraggableEventHandler } from 'react-draggable';
 
 const HorizontalHandle = () => (
   <div className={`horizontal-handle w-full pb-2 pr-2 pt-2 hover:cursor-row-resize`}>
@@ -15,16 +13,22 @@ const VerticalHandle = () => (
   </div>
 );
 
-export const Toolbar = () => {
+export const Toolbar = ({
+  contentTop,
+  contentBottom,
+}: {
+  contentTop: ReactNode;
+  contentBottom: ReactNode;
+}) => {
   const [sizeState, setSizeState] = useState({ height: 300, width: 300 });
   const minWidth = 200;
 
-  const onResizeWidth = (event, data) => {
+  const onResizeWidth: DraggableEventHandler = (event, data) => {
     if (sizeState.width - data.deltaX > minWidth) {
       setSizeState({ height: sizeState.height, width: sizeState.width - data.deltaX });
     }
   };
-  const onResizeHeight = (event, data) => {
+  const onResizeHeight: DraggableEventHandler = (event, data) => {
     setSizeState({ height: sizeState.height + data.deltaY, width: sizeState.width });
   };
 
@@ -43,12 +47,15 @@ export const Toolbar = () => {
             onDrag={onResizeHeight}
             onStop={onResizeHeight}
           >
-            <div className="flex-1 p-2">
-              <div className="mb-4 overflow-y-scroll" style={{ height: sizeState.height + 'px' }}>
-                <Layers />
+            <div className="flex flex-1 flex-col p-2">
+              <div
+                className="mb-4 shrink-0 overflow-y-scroll"
+                style={{ height: sizeState.height + 'px' }}
+              >
+                {contentTop}
               </div>
               <HorizontalHandle />
-              <PlantSearch />
+              <div className="flex-shrink overflow-y-scroll">{contentBottom}</div>
             </div>
           </DraggableCore>
           <VerticalHandle />
