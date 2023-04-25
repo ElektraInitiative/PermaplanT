@@ -72,11 +72,12 @@ npm run test -- path/to/component.test.tsx
 ### Watch mode
 
 Our test framework provides an interactive watch mode that can be executed with
+
 ```shell
 npm run test -- --watchAll
 ```
 
-This command starts an interactive CLI that can be used to rerun specific tests after implementing changes. 
+This command starts an interactive CLI that can be used to rerun specific tests after implementing changes.
 
 ## Production
 
