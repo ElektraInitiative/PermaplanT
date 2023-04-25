@@ -4,20 +4,15 @@ import Konva from 'konva';
 import { createRef } from 'react';
 import { create } from 'zustand';
 
-type MapHistoryState = {
+type MapStore = {
   history: MapAction[];
   step: number;
   state: MapState;
   transformer: React.RefObject<Konva.Transformer>;
-};
-
-interface MapStateAPI {
   dispatch: (action: MapAction) => void;
   canUndo: boolean;
   canRedo: boolean;
-}
-
-type MapStore = MapHistoryState & MapStateAPI;
+};
 
 const DEFAULT_STATE: MapState = {
   layers: {
