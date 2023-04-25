@@ -2,13 +2,15 @@ import { ReactNode, useState } from 'react';
 import { DraggableCore, DraggableEventHandler } from 'react-draggable';
 
 const HorizontalHandle = () => (
-  <div className={`horizontal-handle w-full pb-2 pr-2 pt-2 hover:cursor-row-resize`}>
+  <div className={`horizontal-handle w-full pb-2 pt-2 hover:cursor-row-resize`}>
     <div className="h-[2px] w-full bg-neutral-700" />
   </div>
 );
 
-const VerticalHandle = () => (
-  <div className={`vertical-handle pr-2 hover:cursor-col-resize`}>
+const VerticalHandle = ({ position }: { position: 'right' | 'left' }) => (
+  <div
+    className={`vertical-handle hover:cursor-col-resize ${position === 'right' ? 'pr-2' : 'pl-2'}`}
+  >
     <div className="h-full w-[2px] bg-neutral-700" />
   </div>
 );
@@ -16,16 +18,24 @@ const VerticalHandle = () => (
 export const Toolbar = ({
   contentTop,
   contentBottom,
+  position,
 }: {
   contentTop: ReactNode;
   contentBottom: ReactNode;
+  position: 'left' | 'right';
 }) => {
   const [sizeState, setSizeState] = useState({ height: 300, width: 300 });
   const minWidth = 200;
 
   const onResizeWidth: DraggableEventHandler = (event, data) => {
-    if (sizeState.width - data.deltaX > minWidth) {
-      setSizeState({ height: sizeState.height, width: sizeState.width - data.deltaX });
+    if (position === 'right') {
+      if (sizeState.width - data.deltaX > minWidth) {
+        setSizeState({ height: sizeState.height, width: sizeState.width - data.deltaX });
+      }
+    } else {
+      if (sizeState.width + data.deltaX > minWidth) {
+        setSizeState({ height: sizeState.height, width: sizeState.width + data.deltaX });
+      }
     }
   };
   const onResizeHeight: DraggableEventHandler = (event, data) => {
@@ -41,6 +51,7 @@ export const Toolbar = ({
         onStop={onResizeWidth}
       >
         <div className="flex h-full flex-row-reverse" style={{ width: sizeState.width + 'px' }}>
+          {position === 'left' && <VerticalHandle position="left" />}
           <DraggableCore
             handle=".horizontal-handle"
             onStart={onResizeHeight}
@@ -58,7 +69,7 @@ export const Toolbar = ({
               <div className="flex-shrink overflow-y-scroll">{contentBottom}</div>
             </div>
           </DraggableCore>
-          <VerticalHandle />
+          {position === 'right' && <VerticalHandle position="right" />}
         </div>
       </DraggableCore>
     </div>

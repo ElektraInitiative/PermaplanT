@@ -3,6 +3,7 @@ import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
 import PlantsLayer from '../layers/PlantsLayer';
+import SimpleButton from '@/components/Button/SimpleButton';
 import { useEffect, useState } from 'react';
 import { Circle, Rect } from 'react-konva';
 
@@ -46,11 +47,36 @@ export const Map = () => {
 
   return (
     <div className="flex h-full justify-between">
+      <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
+        <Toolbar
+          contentTop={
+            <div>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+            </div>
+          }
+          contentBottom={
+            <div>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+              <SimpleButton>Test</SimpleButton>
+            </div>
+          }
+          position="left"
+        ></Toolbar>
+      </section>
       <BaseStage>
         <PlantsLayer>{shapes}</PlantsLayer>
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
-        <Toolbar contentTop={<Layers />} contentBottom={<PlantSearch />}></Toolbar>
+        <Toolbar contentTop={<Layers />} contentBottom={<PlantSearch />} position="right"></Toolbar>
       </section>
     </div>
   );
