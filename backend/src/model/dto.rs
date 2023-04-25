@@ -59,9 +59,9 @@ pub struct PlantsSummaryDto {
     /// The plants database id.
     pub id: i32,
     /// Biological name of this plant (E.g. "Triticum aestivum", "Prunus cerasus")
-    pub binomial_name: String,
+    pub unique_name: String,
     /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
-    pub common_name: Option<Vec<Option<String>>>,
+    pub common_name_en: Option<Vec<Option<String>>>,
 }
 
 /// Query parameters for searching plants.

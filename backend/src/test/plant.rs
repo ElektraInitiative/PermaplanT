@@ -15,8 +15,8 @@ async fn test_get_all_plants_succeeds() {
             diesel::insert_into(crate::schema::plants::table)
                 .values((
                     &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::binomial_name.eq("Testia testia"),
-                    &crate::schema::plants::common_name
+                    &crate::schema::plants::unique_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
                 ))
                 .execute(conn)
@@ -42,8 +42,8 @@ async fn test_get_all_plants_succeeds() {
 
     let test_plant = PlantsSummaryDto {
         id: -1,
-        binomial_name: "Testia testia".to_string(),
-        common_name: Some(vec![Some("Testplant".to_string())]),
+        unique_name: "Testia testia".to_string(),
+        common_name_en: Some(vec![Some("Testplant".to_string())]),
     };
 
     let result = test::read_body(resp).await;
@@ -61,8 +61,8 @@ async fn test_get_one_plant_succeeds() {
             diesel::insert_into(crate::schema::plants::table)
                 .values((
                     &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::binomial_name.eq("Testia testia"),
-                    &crate::schema::plants::common_name
+                    &crate::schema::plants::unique_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
                 ))
                 .execute(conn)
@@ -88,8 +88,8 @@ async fn test_get_one_plant_succeeds() {
 
     let test_plant = PlantsSummaryDto {
         id: -1,
-        binomial_name: "Testia testia".to_string(),
-        common_name: Some(vec![Some("Testplant".to_string())]),
+        unique_name: "Testia testia".to_string(),
+        common_name_en: Some(vec![Some("Testplant".to_string())]),
     };
 
     let result = test::read_body(resp).await;
@@ -107,8 +107,8 @@ async fn test_search_plants_succeeds() {
             diesel::insert_into(crate::schema::plants::table)
                 .values((
                     &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::binomial_name.eq("Testia testia"),
-                    &crate::schema::plants::common_name
+                    &crate::schema::plants::unique_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
                 ))
                 .execute(conn)
@@ -134,8 +134,8 @@ async fn test_search_plants_succeeds() {
 
     let test_plant = PlantsSummaryDto {
         id: -1,
-        binomial_name: "Testia testia".to_string(),
-        common_name: Some(vec![Some("Testplant".to_string())]),
+        unique_name: "Testia testia".to_string(),
+        common_name_en: Some(vec![Some("Testplant".to_string())]),
     };
 
     let result = test::read_body(resp).await;

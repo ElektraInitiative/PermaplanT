@@ -7,7 +7,7 @@
 - **Actors:** App User
 - **Brief:** The user can view statistics about their garden and plants.
 - **Status:** Assigned
-- **Assignee:** Nursultan, Thorben
+- **Assignee:** Thorben
 
 ## Scenarios
 
