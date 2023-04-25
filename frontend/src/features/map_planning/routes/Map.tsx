@@ -152,7 +152,12 @@ export const Map = () => {
         <PlantsLayer>{shapes}</PlantsLayer>
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
-        <Toolbar contentTop={<Layers />} contentBottom={<PlantSearch />} position="right"></Toolbar>
+        <Toolbar
+          contentTop={<Layers />}
+          contentBottom={<PlantSearch />}
+          position="right"
+          minWidth={200}
+        ></Toolbar>
       </section>
     </div>
   );

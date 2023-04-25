@@ -2,6 +2,7 @@ import IconButton from '@/components/Button/IconButton';
 import SearchInput from '@/components/Form/SearchInput';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 const allPlants = ['Strawberry', 'Cherry', 'Tomato', 'Potato', 'Onion'];
@@ -29,33 +30,47 @@ export const PlantSearch = () => {
           </IconButton>
         )}
       </div>
-      {searchVisible && (
-        <>
-          <SearchInput
-            placeholder="Search plants..."
-            handleSearch={(event) => {
-              const exp = new RegExp('.*' + event.target.value + '.*');
-              setPlants(allPlants.filter((plant) => exp.test(plant)));
+      <AnimatePresence>
+        {searchVisible && (
+          <motion.div
+            initial={{ opacity: 0, translateY: '-20%' }}
+            animate={{
+              opacity: 100,
+              translateY: 0,
+              transition: { delay: 0, duration: 0.2 },
             }}
-            ref={searchInputRef}
-            onBlur={() => setSearchVisible(false)}
-            onKeyDown={(e) => {
-              if (e.key === 'Escape') setSearchVisible(false);
+            exit={{
+              opacity: 0,
+              translateY: '-20%',
+              transition: { delay: 0, duration: 0.2 },
             }}
-          ></SearchInput>
-          <ul>
-            {plants.map((plant) => (
-              <li
-                className="flex items-center gap-4 stroke-neutral-700 hover:stroke-primary-500 hover:text-primary-500 dark:stroke-neutral-700-dark"
-                key={plant}
-              >
-                <PlantIcon />
-                {plant}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+          >
+            <SearchInput
+              placeholder="Search plants..."
+              handleSearch={(event) => {
+                const exp = new RegExp('.*' + event.target.value + '.*');
+                setPlants(allPlants.filter((plant) => exp.test(plant)));
+              }}
+              ref={searchInputRef}
+              onBlur={() => setSearchVisible(false)}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') setSearchVisible(false);
+              }}
+            ></SearchInput>
+            <ul>
+              {plants.map((plant) => (
+                <li
+                  className="flex items-center gap-4 stroke-neutral-700 hover:stroke-primary-500 hover:text-primary-500 dark:stroke-neutral-700-dark"
+                  key={plant}
+                >
+                  <PlantIcon />
+                  {plant}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
