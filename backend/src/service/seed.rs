@@ -51,7 +51,11 @@ pub async fn create(new_seed: NewSeedDto, pool: &Data<Pool>) -> Result<SeedDto, 
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn edit(id: i32, new_seed: NewSeedDto, pool: &Data<Pool>) -> Result<SeedDto, ServiceError> {
+pub async fn edit(
+    id: i32,
+    new_seed: NewSeedDto,
+    pool: &Data<Pool>,
+) -> Result<SeedDto, ServiceError> {
     let mut conn = pool.get().await?;
     let result = Seed::edit(id, new_seed, &mut conn).await?;
     Ok(result)
