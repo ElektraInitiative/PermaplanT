@@ -1,5 +1,16 @@
 # Backend Architecture
 
+## Code documentation
+
+The code documentation of the backend can be built using `cargo doc --open`.
+
+You can find a more detailed explanation of which modules do what there.
+
+## API documentation
+
+The API documentation can be viewed by running the backend with `cargo run` and then navigating to <http://localhost:8080/doc/api/swagger/ui/>.  
+It is automatically built using [utoipa](https://github.com/juhaku/utoipa).
+
 ## Structure
 
 The backend is split using a 3-layer architecture with controller, service and persistence layer.
@@ -50,13 +61,8 @@ Tests are split into unit and integration tests (see [here](/doc/tests/) for ref
 Integration tests can be found in [test/](/backend/src/test/).  
 Unit tests can be found in the modules they are supposed to test.
 
-## Code documentation
+## Graceful Shutdown
 
-The code documentation of the backend can be built using `cargo doc --open`.
-
-You can find a more detailed explanation of which modules do what there.
-
-## API documentation
-
-The API documentation can be viewed by running the backend with `cargo run` and then navigating to <http://localhost:8080/doc/api/swagger/ui/>.  
-It is automatically built using [utoipa](https://github.com/juhaku/utoipa).
+Actix by default handles shutdowns (see [here](https://actix.rs/docs/server/#graceful-shutdown) for reference).  
+As soon as the signal `SIGTERM` is issued to the backend no new connections will be accepted.
+Still running connection will be finished or terminated after 30sec.
