@@ -61,7 +61,7 @@ export const Toolbar = ({
           >
             <div className="flex flex-1 flex-col p-2">
               <div
-                className="mb-4 shrink-0 overflow-y-scroll"
+                className="mb-4 shrink-0 overflow-x-hidden overflow-y-scroll"
                 style={{ height: sizeState.height + 'px' }}
               >
                 {contentTop}

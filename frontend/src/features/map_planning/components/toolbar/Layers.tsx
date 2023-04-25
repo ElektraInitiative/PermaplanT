@@ -22,7 +22,7 @@ export const Layers = () => {
         </div>
       </section>
       <section className="mt-6">
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid-cols grid grid-cols-[1.5rem_1.5rem_minmax(0,_1fr)] gap-2">
           <LayerSettings name="Dimension" />
           <LayerSettings name="Draw" alternatives={['draw1', 'draw2']} />
           <LayerSettings name="Fertilize" />

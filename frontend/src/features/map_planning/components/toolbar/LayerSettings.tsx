@@ -24,13 +24,11 @@ export const LayerSettings = ({
 
   return (
     <>
-      <IconButton
-        title="show/hide layer"
-        className="h-full"
-        onClick={() => setLayerVisible(!layerVisible)}
-      >
-        {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
-      </IconButton>
+      <div className="flex items-center justify-center">
+        <IconButton title="show/hide layer" onClick={() => setLayerVisible(!layerVisible)}>
+          {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
+        </IconButton>
+      </div>
       <div className="flex items-center justify-center">
         <input
           title="select layer"
@@ -43,7 +41,7 @@ export const LayerSettings = ({
           name="layer_enable"
         ></input>
       </div>
-      <div className="col-span-4 flex items-center">
+      <div className="flex items-center">
         {alternatives && alternatives.length > 0 && (
           <IconButton
             className="flex-shrink"
