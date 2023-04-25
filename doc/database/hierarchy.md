@@ -191,10 +191,6 @@ Rename:
 - `seed_planting_depth` to `seed_planting_depth_en`
 - `1000_seed_weight` to `seed_weight` (Documentation should state it is "thousand grain weight/Tausendkornmasse")
 
-Bug:
-
-- `provides_forage_for` or `provides_shelter_for`: seems to be a bug in scraper (currently empty but was in practical plants?)
-
 Other minor problems:
 
 - fix Labiatae to be lamiaceae (family rank)

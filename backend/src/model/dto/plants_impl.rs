@@ -8,8 +8,8 @@ impl From<Plants> for PlantsSummaryDto {
     fn from(plants: Plants) -> Self {
         Self {
             id: plants.id,
-            binomial_name: plants.binomial_name,
-            common_name: plants.common_name,
+            unique_name: plants.unique_name,
+            common_name_en: plants.common_name_en,
         }
     }
 }

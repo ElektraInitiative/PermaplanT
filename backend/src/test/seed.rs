@@ -102,8 +102,8 @@ mod tests {
                 diesel::insert_into(crate::schema::plants::table)
                     .values((
                         &crate::schema::plants::id.eq(-1),
-                        &crate::schema::plants::binomial_name.eq("Testia testia"),
-                        &crate::schema::plants::common_name
+                        &crate::schema::plants::unique_name.eq("Testia testia"),
+                        &crate::schema::plants::common_name_en
                             .eq(Some(vec![Some("Testplant".to_string())])),
                     ))
                     .execute(conn)
