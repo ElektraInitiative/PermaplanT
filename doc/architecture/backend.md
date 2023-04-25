@@ -2,7 +2,14 @@
 
 ## Structure
 
-The backend is split using a 3-layer architecture with controller, service and persistence layer.  
+The backend is split using a 3-layer architecture with controller, service and persistence layer.
+
+```mermaid
+graph LR;
+    Controller<-->Service;
+    Service<-->Persistence;
+```
+
 The controller can be found in [controller/](/backend/src/controller/) and service layer can be found in [service/](/backend/src/service/).  
 The persistence layer is part of [model/entity/](/backend/src/model/entity/).
 We should move this into [db/](/backend/src/db/) or create a new module like `persistance/`.
