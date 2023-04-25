@@ -39,11 +39,11 @@
     - having their first conversation with another user through [matchmaking](../matchmaking.md).
     - adding their first new plant in the apps database.
     - adding their first new seed in the apps database.
-  - Blossoms are grouped in four different tracks by what goal they try to incentivize:
+  - Blossoms are grouped in different tracks by what goal they try to incentivize, e.g.:
     - Beginners Track: leading new users through the basic features of PermaplanT.
     - Seasonal Track: motivate users to completely plan out their map and keep it updated through the seasons.
     - Completionist Track: rewarding users for enriching their own data with the results of their harvest.
-    - Expert Track: incentivize users to support the platform and it's other users to gain a free membership.
+    - Expert Track: incentivize users to support the platform and its other users to gain a free membership.
   - Progress of the individual milestones is tracked independently and they can be accomplished in any order.
   - The user is being kept updated on their progress when pursuing actions to complete a milestone.
   - Upon completing a milestone, the user is informed of their achievement and is awarded the corresponding Blossom.

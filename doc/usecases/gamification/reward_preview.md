@@ -17,8 +17,8 @@
 - **Main success scenario:**
   - The dates for the blooming or harvesting periods of all planted plants will be marked on the [map timeline](../map_timeline.md).
   - When viewing the map on such a date, the plants with an active blooming or harvesting period at that time will be marked on the map.
-  - Optionally, this can be disabled in the users' preferences.
 - **Alternative scenario:**
+  - Optionally, this can be disabled in the users' preferences.
 - **Error scenario:**
   The app incorrectly displays a plant as having an active blooming or harvesting period or does not display it for a plant that should have one.
   In this case the user should reload the layer to let the system recalculate the conditions for displaying active blooming or harvesting periods.

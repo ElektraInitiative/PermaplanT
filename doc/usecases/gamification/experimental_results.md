@@ -5,7 +5,7 @@
 - **Scope:** Experimental Results
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can give a feedback to the actual results of the map in a measuring cycle.
+- **Brief:** The user can give a feedback of the actual results for a map in a measuring cycle.
 - **Status:** Assigned
 - **Assignee** Thorben
 
@@ -23,5 +23,5 @@
 - **Error scenario:**
   A technical error occurs, preventing the user from submitting the feedback form. In this case the system should display an error message and allow the user to try again.
 - **Postcondition:**
-  The accumulated data from this and previous measuring cycles can be viewed as a report in a seperate details screen of the map.
+  The accumulated data from this and previous measuring cycles can be viewed as a report in a separate details screen of the map.
 - **Non-functional Constraints:**
