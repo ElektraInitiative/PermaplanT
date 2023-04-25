@@ -12,7 +12,8 @@ You can also build and view the documentation in your browser by running the fol
 
 ```sh
 cargo install mdbook
-cargo install --version 0.1.1 --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary
+cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary
+cargo install mdbook-mermaid
 mdbook serve --open
 ```
 

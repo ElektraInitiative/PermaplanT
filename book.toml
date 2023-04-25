@@ -7,3 +7,9 @@ title = "PermaplanT"
 
 [preprocessor.generate-summary]
 get_chapter_name_from_file = true
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html]
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
