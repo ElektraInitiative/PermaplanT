@@ -19,13 +19,14 @@ export const Toolbar = ({
   contentTop,
   contentBottom,
   position,
+  minWidth = 200,
 }: {
   contentTop: ReactNode;
   contentBottom: ReactNode;
   position: 'left' | 'right';
+  minWidth: number;
 }) => {
   const [sizeState, setSizeState] = useState({ height: 300, width: 300 });
-  const minWidth = 200;
 
   const onResizeWidth: DraggableEventHandler = (event, data) => {
     if (position === 'right') {
