@@ -63,6 +63,7 @@ pub mod model;
 #[allow(clippy::missing_docs_in_private_items)]
 pub mod schema;
 pub mod service;
+#[cfg(test)]
 mod test;
 
 /// Main function.
