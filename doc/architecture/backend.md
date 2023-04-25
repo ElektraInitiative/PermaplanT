@@ -3,15 +3,16 @@
 ## Structure
 
 The backend is split using a 3-layer architecture with controller, service and persistence layer.  
-Controller and service layer can be found in their respective folders.  
-The persistence layer is currently part of `model/entity/`.
+The controller can be found in [controller/](/backend/src/controller/) and service layer can be found in [service/](/backend/src/service/).  
+The persistence layer is part of [model/entity/](/backend/src/model/entity/).
+We should move this into [db/](/backend/src/db/) or create a new module like `persistance/`.
 
 ### Controller
 
 The controller layer contains all endpoints of the application.  
-The actual routes are defined in `config/routes/` while the controller layer only contains the actual implementation of the endpoints.
+The actual routes are defined in [config/routes.rs](/backend/src/config/routes.rs) while the controller layer only contains the actual implementation of the endpoints.
 
-Actix passes the data the application is acting upon (in our case a pool of connections to the database) to the endpoints.  
+When an endpoint gets called Actix clones an internally stored pool of connections to the database and passes it to the endpoint to be used.  
 We then 'forward' the pool to the service layer where a connection is retrieved from the pool.  
 The persistence layer then uses that connection to make calls to the database.
 
@@ -27,28 +28,26 @@ The persistance layer is responsible for making connections to the database and 
 
 ### Model
 
-The `model/` folder contains the data PermaplanT is acting upon.  
+The [model/](/backend/src/model/) folder contains the data PermaplanT is acting upon.  
 Entities are shared with the database using the ORM [diesel](https://github.com/diesel-rs/diesel).  
-DTOs are shared with the frontend using [typeshare](https://github.com/1Password/typeshare).  
-The mapping of entities to DTOs occurs in the service layer.
+DTOs are shared with the frontend using [typeshare](https://github.com/1Password/typeshare).
 
-The files `entity.rs` and `dto.rs` in `model` contain the actual structs.
+The files [entity.rs](/backend/src/model/entity.rs) and [dto.rs](/backend/src/model/dto.rs) contain the actual structs.
 That way you have a quick overview of what the data looks like without having to navigate multiple files.  
-The actual implementation (mappings, ...) is separate from the structs to reduce the size of the files.
+The actual implementation of the structs is in separate files to reduce the line length of the files.
 
 ### Tests
 
-Tests are split into unit and integration tests (see [here](../tests) for reference).
+Tests are split into unit and integration tests (see [here](/doc/tests/) for reference).
 
-Integration tests can be found in `test/`.  
+Integration tests can be found in [test/](/backend/src/test/).  
 Unit tests can be found in the modules they are supposed to test.
 
 ## Code documentation
 
-The code documentation of the backend can be built using `cargo doc --open`.  
-There will also be a web page available (WIP).
+The code documentation of the backend can be built using `cargo doc --open`.
 
-You can find a more detailed explanation of which modules to what there.
+You can find a more detailed explanation of which modules do what there.
 
 ## API documentation
 
