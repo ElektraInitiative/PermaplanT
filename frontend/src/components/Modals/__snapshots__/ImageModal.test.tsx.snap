@@ -3,7 +3,7 @@
 exports[`renders correctly 1`] = `
 [
   <div
-    className="fixed right-0 bottom-0 z-[1010] "
+    className="fixed bottom-0 right-0 z-[1010] "
     onClick={[Function]}
   >
     <div
@@ -19,7 +19,7 @@ exports[`renders correctly 1`] = `
     </div>
   </div>,
   <div
-    className="fixed top-[15%] left-[50%] z-[1020]"
+    className="fixed left-[50%] top-[15%] z-[1020]"
     style={
       {
         "opacity": 0,

@@ -2,7 +2,7 @@
 
 exports[`renders correctly 1`] = `
 <div
-  className="fixed top-[15%] left-[50%] z-[1020]"
+  className="fixed left-[50%] top-[15%] z-[1020]"
   style={
     {
       "opacity": 0,
