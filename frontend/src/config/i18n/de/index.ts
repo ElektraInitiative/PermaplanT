@@ -9,6 +9,7 @@ import landingPage from './landingPage.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
+import undoRedo from './undoRedo.json';
 
 const de = {
   blog,
@@ -22,6 +23,7 @@ const de = {
   pricing,
   seeds,
   team,
+  undoRedo,
 };
 
 export default de;

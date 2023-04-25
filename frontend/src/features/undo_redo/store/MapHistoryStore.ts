@@ -1,11 +1,19 @@
-import type { MapAction, ObjectAddAction, ObjectUpdateAction } from './action-types';
+import type {
+  MapAction,
+  ObjectAddAction,
+  ObjectUpdatePositionAction,
+  ObjectUpdateTransformAction,
+  TrackedAction,
+} from './action-types';
 import type { MapState } from './state-types';
+import i18next from '@/config/i18n';
 import Konva from 'konva';
 import { createRef } from 'react';
+import { toast } from 'react-toastify';
 import { create } from 'zustand';
 
 type MapStore = {
-  history: MapAction[];
+  history: TrackedAction[];
   step: number;
   state: MapState;
   transformer: React.RefObject<Konva.Transformer>;
@@ -48,7 +56,8 @@ function applyActionToState(action: MapAction, state: MapStore): MapStore {
         canUndo: true,
       };
 
-    case 'OBJECT_UPDATE':
+    case 'OBJECT_UPDATE_POSITION':
+    case 'OBJECT_UPDATE_TRANSFORM':
       return {
         ...state,
         history: [...state.history.slice(0, state.step), action],
@@ -57,10 +66,15 @@ function applyActionToState(action: MapAction, state: MapStore): MapStore {
         canUndo: true,
       };
 
-    case 'UNDO':
+    case 'UNDO': {
       if (state.step <= 0) {
         return state;
       }
+
+      const lastAction = state.history[state.step - 1];
+      // TODO: read 'Placeholder' from the lastAction/nextAction
+      const action = i18next.t(`undoRedo:${lastAction.type}`, { name: 'Placeholder' });
+      toast(i18next.t('undoRedo:successful_undo', { action }));
 
       return {
         ...state,
@@ -69,11 +83,17 @@ function applyActionToState(action: MapAction, state: MapStore): MapStore {
         canUndo: state.step - 1 > 0,
         canRedo: state.step - 1 < state.history.length,
       };
+    }
 
-    case 'REDO':
+    case 'REDO': {
       if (state.step >= state.history.length) {
         return state;
       }
+
+      const nextAction = state.history[state.step];
+      // TODO: read 'Placeholder' from the lastAction/nextAction
+      const action = i18next.t(`undoRedo:${nextAction.type}`, { name: 'Placeholder' });
+      toast(i18next.t('undoRedo:successful_redo', { action }));
 
       return {
         ...state,
@@ -82,6 +102,7 @@ function applyActionToState(action: MapAction, state: MapStore): MapStore {
         canRedo: state.step + 1 < state.history.length,
         canUndo: state.step + 1 > 0,
       };
+    }
 
     default:
       return state;
@@ -101,7 +122,10 @@ function handleAddObjectAction(state: MapState, action: ObjectAddAction): MapSta
   };
 }
 
-function handleUpdateObjectAction(state: MapState, action: ObjectUpdateAction): MapState {
+function handleUpdateObjectAction(
+  state: MapState,
+  action: ObjectUpdatePositionAction | ObjectUpdateTransformAction,
+): MapState {
   return {
     ...state,
     layers: {
@@ -130,13 +154,14 @@ function handleUpdateObjectAction(state: MapState, action: ObjectUpdateAction): 
 /**
  * given a history of actions, reduce it into a single state, that is the sum of all actions
  */
-function reduceHistory(history: MapAction[]): MapState {
+function reduceHistory(history: TrackedAction[]): MapState {
   const state = history.reduce((state, action) => {
     switch (action.type) {
       case 'OBJECT_ADD':
         return handleAddObjectAction(state, action);
 
-      case 'OBJECT_UPDATE':
+      case 'OBJECT_UPDATE_POSITION':
+      case 'OBJECT_UPDATE_TRANSFORM':
         return handleUpdateObjectAction(state, action);
 
       default:
