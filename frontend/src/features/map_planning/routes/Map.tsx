@@ -3,7 +3,10 @@ import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
 import PlantsLayer from '../layers/PlantsLayer';
+import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { useEffect, useState } from 'react';
 import { Circle, Rect } from 'react-konva';
 
@@ -49,24 +52,97 @@ export const Map = () => {
     <div className="flex h-full justify-between">
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
+          minWidth={160}
           contentTop={
             <div>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
+              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+                <PlantIcon></PlantIcon>
+              </IconButton>
             </div>
           }
           contentBottom={
-            <div>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
-              <SimpleButton>Test</SimpleButton>
+            <div className="flex flex-col gap-2 p-2">
+              <h2>edit attributes</h2>
+              <SimpleFormInput
+                id="input1"
+                labelText="Some attribute"
+                placeHolder="some input"
+              ></SimpleFormInput>
+              <SimpleFormInput
+                id="input1"
+                labelText="Some attribute"
+                placeHolder="some input"
+              ></SimpleFormInput>
+              <SimpleFormInput
+                id="input1"
+                labelText="Some attribute"
+                placeHolder="some input"
+              ></SimpleFormInput>
+              <SimpleFormInput
+                id="input1"
+                labelText="Some attribute"
+                placeHolder="some input"
+              ></SimpleFormInput>
+              <SimpleFormInput
+                id="input1"
+                labelText="Some attribute"
+                placeHolder="some input"
+              ></SimpleFormInput>
+              <SimpleButton>Submit data</SimpleButton>
             </div>
           }
           position="left"
