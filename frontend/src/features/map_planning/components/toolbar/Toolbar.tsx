@@ -1,66 +1,59 @@
 import { Layers } from './Layers';
 import { PlantSearch } from './PlantSearch';
-import { PointerEventHandler, useState } from 'react';
+import { useState } from 'react';
+import { DraggableCore } from 'react-draggable';
+
+const HorizontalHandle = () => (
+  <div className={`horizontal-handle w-full pb-2 pr-2 pt-2 hover:cursor-row-resize`}>
+    <div className="h-[2px] w-full bg-neutral-700" />
+  </div>
+);
+
+const VerticalHandle = () => (
+  <div className={`vertical-handle pr-2 hover:cursor-col-resize`}>
+    <div className="h-full w-[2px] bg-neutral-700" />
+  </div>
+);
 
 export const Toolbar = () => {
+  const [sizeState, setSizeState] = useState({ height: 300, width: 300 });
   const minWidth = 200;
-  const minHeight = 0;
-  const [width, setWidth] = useState(300);
-  const [height, setHeight] = useState(300);
 
-  const verticalHandler: PointerEventHandler = (event: React.PointerEvent) => {
-    const startWidth = width;
-    const startPosition = { x: event.pageX, y: event.pageY };
-
-    function onPointerMove(event: PointerEvent) {
-      const newWidth = startWidth + startPosition.x - event.pageX;
-      setWidth(newWidth > minWidth ? newWidth : minWidth);
+  const onResizeWidth = (event, data) => {
+    if (sizeState.width - data.deltaX > minWidth) {
+      setSizeState({ height: sizeState.height, width: sizeState.width - data.deltaX });
     }
-    function onPointerUp() {
-      document.body.removeEventListener('pointermove', onPointerMove);
-    }
-
-    document.body.addEventListener('pointermove', onPointerMove);
-    document.body.addEventListener('pointerup', onPointerUp, { once: true });
   };
-
-  const horizontalHandler = (event: React.PointerEvent) => {
-    const startHeight = height;
-    const startPosition = { x: event.pageX, y: event.pageY };
-
-    const onPointerMove = (event: PointerEvent) => {
-      const newHeight = startHeight - startPosition.y + event.pageY;
-      setHeight(newHeight > minHeight ? newHeight : minHeight);
-    };
-    const onPointerUp = (event: PointerEvent) => {
-      document.body.removeEventListener('pointermove', onPointerMove);
-      const newHeight = startHeight - startPosition.y + event.pageY;
-      setHeight(newHeight > minHeight ? newHeight : minHeight);
-      console.log(newHeight);
-    };
-
-    document.body.addEventListener('pointermove', onPointerMove);
-    document.body.addEventListener('pointerup', onPointerUp, { once: true });
+  const onResizeHeight = (event, data) => {
+    setSizeState({ height: sizeState.height + data.deltaY, width: sizeState.width });
   };
 
   return (
-    <div className="flex h-full" style={{ width: width }}>
-      <div
-        className="h-full w-[2px] flex-none bg-neutral-500 hover:cursor-col-resize"
-        onPointerDown={verticalHandler}
-      ></div>
-      <div className="flex flex-1 flex-col p-8">
-        <div className="overflow-y-scroll" style={{ height: height }}>
-          <Layers />
+    <div className="h-full">
+      <DraggableCore
+        handle=".vertical-handle"
+        onStart={onResizeWidth}
+        onDrag={onResizeWidth}
+        onStop={onResizeWidth}
+      >
+        <div className="flex h-full flex-row-reverse" style={{ width: sizeState.width + 'px' }}>
+          <DraggableCore
+            handle=".horizontal-handle"
+            onStart={onResizeHeight}
+            onDrag={onResizeHeight}
+            onStop={onResizeHeight}
+          >
+            <div className="flex-1 p-2">
+              <div className="mb-4 overflow-y-scroll" style={{ height: sizeState.height + 'px' }}>
+                <Layers />
+              </div>
+              <HorizontalHandle />
+              <PlantSearch />
+            </div>
+          </DraggableCore>
+          <VerticalHandle />
         </div>
-        <div className="z-10 grow bg-neutral-100 dark:bg-neutral-200-dark">
-          <div
-            className="mb-6 h-[10px] w-full bg-neutral-500 hover:cursor-row-resize"
-            onPointerDown={horizontalHandler}
-          ></div>
-          <PlantSearch />
-        </div>
-      </div>
+      </DraggableCore>
     </div>
   );
 };
