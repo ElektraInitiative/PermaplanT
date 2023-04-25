@@ -11,6 +11,8 @@ Manual testing will be conducted for end-to-end functionality and overall user e
 
 Unit tests are used to test individual units of code in isolation from the rest of the system. This is important because it allows us to validate that each unit is working as intended, without interference from other parts of the system.
 
+### Frontend
+
 For the frontend unit tests will be used to test the following areas:
 
 - State management logic: Since the frontend relies heavily on state management, it is important to ensure that the state is being properly managed and updated.
@@ -19,6 +21,8 @@ For the frontend unit tests will be used to test the following areas:
 - Async actions, such as API calls or event handling
 - Form validation and submission
 
+### Backend
+
 For the backend, unit tests will be used to test the following areas:
 
 - Database queries and operations
@@ -26,18 +30,45 @@ For the backend, unit tests will be used to test the following areas:
 - Authentication and authorization
 - Error handling
 
+In the backend unit tests can be found in the `src/` directory.
+They are to be put in the same file as the functions or modules they are supposed to test.
+Create separate modules called test in that file annotated with `#[cfg(test)]` (that way they are only compiled when actually running tests).  
+See the [rust doc](https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html) for reference.
+
+Short example:
+
+```rust
+struct Plants;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_plants() {
+      // Test complicated plants function here
+      todo!()
+    }
+}
+```
+
 ## Integration Testing
 
 Integration tests are used to test the integration between different parts of the system. This is important because it allows us to validate that the different parts of the system are working together correctly.
 
 In the application the integration tests will be used to test the following areas:
 
-Frontend:
+### Frontend
 
 - API calls using a mock API
-  Backend:
+
+### Backend
+
 - API endpoints
 - Database queries
+
+In the backend integration tests can be found in the `src/test/` directory.
+The whole module is annotated with `#[cfg(test)]` and will therefore only be compiled for tests.
 
 ## Manual Testing
 
