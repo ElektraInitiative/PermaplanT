@@ -3,15 +3,14 @@ import { DraggableCore, DraggableEventHandler } from 'react-draggable';
 
 const HorizontalHandle = () => (
   <div className={`horizontal-handle w-full pb-2 pt-2 hover:cursor-row-resize`}>
-    <div className="h-[2px] w-full bg-neutral-700" />
+    <div className="h-[3px] w-full bg-neutral-700" />
   </div>
 );
 
-const VerticalHandle = ({ position }: { position: 'right' | 'left' }) => (
-  <div
-    className={`vertical-handle hover:cursor-col-resize ${position === 'right' ? 'pr-2' : 'pl-2'}`}
-  >
-    <div className="h-full w-[2px] bg-neutral-700" />
+const VerticalHandle = () => (
+  <div className={`vertical-handle relative flex hover:cursor-col-resize`}>
+    <div className="h-full w-[3px] bg-neutral-700" />
+    <div className={`absolute ml-[-3px] h-full w-[9px]`} />
   </div>
 );
 
@@ -52,14 +51,14 @@ export const Toolbar = ({
         onStop={onResizeWidth}
       >
         <div className="flex h-full flex-row-reverse" style={{ width: sizeState.width + 'px' }}>
-          {position === 'left' && <VerticalHandle position="left" />}
+          {position === 'left' && <VerticalHandle />}
           <DraggableCore
             handle=".horizontal-handle"
             onStart={onResizeHeight}
             onDrag={onResizeHeight}
             onStop={onResizeHeight}
           >
-            <div className="flex flex-1 flex-col p-2">
+            <div className="flex flex-1 flex-col">
               <div
                 className="mb-4 shrink-0 overflow-x-hidden overflow-y-scroll"
                 style={{ height: sizeState.height + 'px' }}
@@ -70,7 +69,7 @@ export const Toolbar = ({
               <div className="flex-shrink overflow-y-scroll">{contentBottom}</div>
             </div>
           </DraggableCore>
-          {position === 'right' && <VerticalHandle position="right" />}
+          {position === 'right' && <VerticalHandle />}
         </div>
       </DraggableCore>
     </div>
