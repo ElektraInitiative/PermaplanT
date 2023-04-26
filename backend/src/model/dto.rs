@@ -175,3 +175,34 @@ pub struct Page<T> {
     /// Number of pages in total.
     pub total_pages: i32,
 }
+
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct MapDto {
+    pub id: i32,
+    pub name: String,
+    pub creation_date: NaiveDate,
+    pub deletion_date: Option<NaiveDate>,
+    pub last_visit: Option<NaiveDate>,
+    pub is_inactive: bool,
+    pub zoom_factor: i16,
+    pub honors: i16,
+    pub visits: i16,
+    pub harvested: i16,
+}
+
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct NewMapDto {
+    pub name: String,
+    pub creation_date: NaiveDate,
+    pub deletion_date: Option<NaiveDate>,
+    pub last_visit: Option<NaiveDate>,
+    pub is_inactive: bool,
+    pub zoom_factor: i16,
+    pub honors: i16,
+    pub visits: i16,
+    pub harvested: i16,
+}

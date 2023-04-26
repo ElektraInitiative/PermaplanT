@@ -8,7 +8,7 @@ use chrono::NaiveDateTime;
 
 use diesel::{Identifiable, Insertable, Queryable};
 
-use crate::schema::{plants, seeds};
+use crate::schema::{maps, plants, seeds};
 
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
@@ -683,4 +683,37 @@ pub struct NewSeed {
     pub generation: Option<i16>,
     pub notes: Option<String>,
     pub variety: Option<String>,
+}
+
+/// The `Map` entity.
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[derive(Identifiable, Queryable)]
+#[diesel(table_name = maps)]
+pub struct Map {
+    pub id: i32,
+    pub name: String,
+    pub creation_date: NaiveDate,
+    pub deletion_date: Option<NaiveDate>,
+    pub last_visit: Option<NaiveDate>,
+    pub is_inactive: bool,
+    pub zoom_factor: i16,
+    pub honors: i16,
+    pub visits: i16,
+    pub harvested: i16,
+}
+
+/// The `NewMap` entity.
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[derive(Insertable)]
+#[diesel(table_name = maps)]
+pub struct NewMap {
+    pub name: String,
+    pub creation_date: NaiveDate,
+    pub deletion_date: Option<NaiveDate>,
+    pub last_visit: Option<NaiveDate>,
+    pub is_inactive: bool,
+    pub zoom_factor: i16,
+    pub honors: i16,
+    pub visits: i16,
+    pub harvested: i16,
 }
