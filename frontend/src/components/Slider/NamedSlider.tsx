@@ -1,10 +1,15 @@
 import { ReactNode, useState, MouseEventHandler, useRef, KeyboardEventHandler } from 'react';
 
 interface SliderProps {
+  /** children passed to the slider appear in the Slider */
   children: Array<ReactNode> | ReactNode;
+  /** onChange event is triggered whenever the current percentage value of the slider changes */
   onChange: (percentage: number) => void;
 }
 
+/**
+ * A Slider with a label which can be controlled by dragging, clicking and arrow up/down.
+ */
 export const NamedSlider = (props: SliderProps) => {
   const [width, setWidth] = useState(0);
   const sliderDivRef = useRef<HTMLDivElement>(null);
@@ -34,7 +39,8 @@ export const NamedSlider = (props: SliderProps) => {
 
   const clickHandler: MouseEventHandler = (mouseClickEvent) => {
     if (!sliderDivRef.current) return;
-    const newWidth = mouseClickEvent.pageX - sliderDivRef.current.offsetLeft;
+    const offsetLeft = sliderDivRef.current.getBoundingClientRect().left;
+    const newWidth = mouseClickEvent.pageX - offsetLeft;
     const sliderWidth = sliderDivRef.current.clientWidth;
     setWidth(newWidth);
     props.onChange(newWidth / sliderWidth);
@@ -43,7 +49,7 @@ export const NamedSlider = (props: SliderProps) => {
   const changePercentage = (value: number) => {
     if (!sliderDivRef.current) return 0;
     const sliderWidth = sliderDivRef.current.clientWidth;
-    const p = width / sliderWidth + (sliderWidth * value) / 100;
+    const p = width / sliderWidth + (sliderWidth * value) / sliderWidth;
     const percentage = p > 1 ? 1 : p < 0 ? 0 : p;
     setWidth(percentage * sliderWidth);
     props.onChange(percentage);
