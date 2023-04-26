@@ -66,7 +66,7 @@ export const Toolbar = ({
                 {contentTop}
               </div>
               <HorizontalHandle />
-              <div className="flex-shrink overflow-y-scroll">{contentBottom}</div>
+              <div className="flex-shrink overflow-x-hidden overflow-y-scroll">{contentBottom}</div>
             </div>
           </DraggableCore>
           {position === 'right' && <VerticalHandle />}
