@@ -60,9 +60,9 @@ export const LayerSettings = ({
       </div>
       {alternativesVisible &&
         alternatives?.map((a) => (
-          <div className="col-span-6 grid grid-cols-6" key={a}>
+          <div className="col-span-3 grid grid-cols-[1.5rem_1.5rem_minmax(0,_1fr)] gap-2" key={a}>
             <div className="col-span-2"></div>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-start gap-2">
               <input
                 type="radio"
                 value={a}
@@ -72,8 +72,8 @@ export const LayerSettings = ({
                   if (setLayerAlternative) setLayerAlternative(name, a);
                 }}
               ></input>
+              <div className="flex flex-col">{a}</div>
             </div>
-            <div className="col-span-3 flex flex-col">{a}</div>
           </div>
         ))}
     </>
