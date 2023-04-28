@@ -8,6 +8,7 @@ import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import plantSearch from './plantSearch.json';
+import maps from './maps.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
@@ -26,6 +27,7 @@ const de = {
   team,
   plantSearch,
   layerSettings,
+  maps,
 };
 
 export default de;
