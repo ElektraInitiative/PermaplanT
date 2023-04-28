@@ -4,7 +4,7 @@ use diesel::{ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::db::pagination::Paginate;
-use crate::model::dto::{MapSearchParameter, Page, PageParameters};
+use crate::model::dto::{MapSearchParameters, Page, PageParameters};
 use crate::{
     model::dto::{MapDto, NewMapDto},
     schema::maps::{self, all_columns, is_inactive},
@@ -19,7 +19,7 @@ impl Map {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find(
-        search_parameters: MapSearchParameter,
+        search_parameters: MapSearchParameters,
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<MapDto>> {

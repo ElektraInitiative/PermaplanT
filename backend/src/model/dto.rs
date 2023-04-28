@@ -212,6 +212,6 @@ pub struct NewMapDto {
 
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
-pub struct MapSearchParameter {
+pub struct MapSearchParameters {
     pub is_inactive: Option<bool>,
 }
