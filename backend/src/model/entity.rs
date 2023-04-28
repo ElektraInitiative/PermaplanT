@@ -1,5 +1,6 @@
 //! Contains all entities used in `PermaplanT`.
 
+pub mod map_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 

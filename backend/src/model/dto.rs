@@ -8,6 +8,8 @@ use utoipa::{IntoParams, ToSchema};
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
+pub mod map_impl;
+pub mod new_map_impl;
 pub mod new_seed_impl;
 pub mod page_impl;
 pub mod plants_impl;
@@ -162,7 +164,8 @@ pub struct PageParameters {
 #[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
 #[aliases(
     PagePlantsSummaryDto = Page<PlantsSummaryDto>,
-    PageSeedDto = Page<SeedDto>,
+    PageSeedDto = Page<SeedDto>, 
+    PageMapDto = Page<MapDto>,
     PagePlantingDto = Page<PlantingDto>,
 )]
 pub struct Page<T> {
@@ -205,4 +208,10 @@ pub struct NewMapDto {
     pub honors: i16,
     pub visits: i16,
     pub harvested: i16,
+}
+
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct MapSearchParameter {
+    pub is_inactive: Option<bool>,
 }
