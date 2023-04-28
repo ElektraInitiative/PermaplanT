@@ -8,7 +8,7 @@ use crate::db::pagination::Paginate;
 use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
     model::dto::PlantsSummaryDto,
-    schema::plants::{self, all_columns, binomial_name, common_name},
+    schema::plants::{self, all_columns, common_name_en, unique_name},
 };
 
 use super::Plants;
@@ -29,11 +29,11 @@ impl Plants {
         if let Some(term) = search_parameters.name {
             query = query
                 .filter(
-                    binomial_name
+                    unique_name
                         .ilike(format!("%{term}%"))
-                        .or(array_to_string(common_name, " ").ilike(format!("%{term}%"))),
+                        .or(array_to_string(common_name_en, " ").ilike(format!("%{term}%"))),
                 )
-                .order((binomial_name, common_name));
+                .order((unique_name, common_name_en));
         }
 
         let query_page = query
