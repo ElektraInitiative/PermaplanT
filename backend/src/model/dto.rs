@@ -210,8 +210,10 @@ pub struct NewMapDto {
     pub harvested: i16,
 }
 
+/// Query parameters for searching maps.
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct MapSearchParameters {
+    /// Whether or not the map is active.
     pub is_inactive: Option<bool>,
 }
