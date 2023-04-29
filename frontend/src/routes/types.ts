@@ -8,6 +8,7 @@ enum Pages {
   SeedDetails,
   LandingPage,
   Map,
+  Maps,
 }
 
 type PathRouteCustomProps = {

@@ -1,4 +1,5 @@
 import { MapDto } from '@/bindings/definitions';
+import { useDarkModeStore } from '@/features/dark_mode';
 
 interface MapCardProps {
   map: MapDto;
@@ -6,30 +7,56 @@ interface MapCardProps {
 
 export default function MapCard({ map }: MapCardProps) {
   return (
-    <div>
+    <div className="flex rounded-lg bg-neutral-100 p-4 shadow-md dark:bg-neutral-800">
+      {/* A preview image of the map can be placed here later */}
       <div id="placeholderImage" />
-      <section>
-        <span>{map.name}</span>
-        <span>{map.creation_date}</span>
+      <section className="flex flex-col">
+        <span className="text-lg font-medium text-primary-500 dark:text-primary-300">
+          {map.name}
+        </span>
+        <span className="text-sm italic">{map.creation_date}</span>
       </section>
-      <section>
-        <CountingButton count={map.honors} />
-        <CountingButton count={map.visits} />
+      <section className="ml-auto flex items-center">
+        <CountingButton iconType={IconType.honors} count={map.honors} />
+        <CountingButton iconType={IconType.visits} count={map.visits} />
       </section>
     </div>
   );
 }
 
+enum IconType {
+  honors,
+  visits,
+}
+
 interface CountingButtonProps {
-  icon?: string;
+  iconType: IconType;
   count: number;
 }
 
-function CountingButton({ icon, count }: CountingButtonProps) {
+function CountingButton({ iconType, count }: CountingButtonProps) {
+  const darkMode = useDarkModeStore((state) => state.darkMode);
+  let iconSrc = 'src/assets/';
+
+  if (iconType === IconType.honors) {
+    iconSrc += 'heart';
+  } else if (iconType === IconType.visits) {
+    iconSrc += 'person';
+  }
+
+  if (darkMode) {
+    iconSrc += '_dark.svg';
+  } else {
+    iconSrc += '.svg';
+  }
+
   return (
-    <div>
-      <div>{icon}</div>
-      <div>{count}</div>
+    <div
+      className="m-1 flex h-2/3 rounded-xl bg-neutral-200 p-1 dark:bg-neutral-700"
+      title={IconType[iconType]}
+    >
+      <img src={iconSrc} className="mr-1 h-6 w-6" alt={`Number of ${IconType[iconType]}`} />
+      <span className="mr-1">{count}</span>
     </div>
   );
 }
