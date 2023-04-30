@@ -54,9 +54,9 @@ Unit tests can be found in the modules they are supposed to test.
 Actix by default handles shutdowns (see [here](https://actix.rs/docs/server/#graceful-shutdown) for reference).  
 As soon as the signal `SIGTERM` is issued to the backend no new connections will be accepted.
 
-Still running connection will be finished or terminated after 5sec.  
-API requests should ideally take no longer than a few seconds, with a 5-second limit for logging and optimization purposes.
-Implementing this limit improves convenience for both developers (termination of endless loops) and continuous integration (faster restart on hanging API calls), with minimal complexity in the code.
+- Still running connection will be finished or terminated after 5sec.
+- API requests should ideally take no longer than a few seconds, with a 5-second limit for logging and optimization purposes.
+- Implementing this limit improves convenience for both developers (termination of endless loops) and continuous integration (faster restart on hanging API calls), with minimal complexity in the code.
 
 ## Code documentation
 
