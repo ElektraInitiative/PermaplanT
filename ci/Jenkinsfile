@@ -30,7 +30,7 @@ stage('Checks') {
             mdbook_image.inside {
                 checkout scm
 
-                mdbook test
+                sh "mdbook test"
             }
         }
     }
