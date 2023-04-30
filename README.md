@@ -11,9 +11,8 @@ Relevant documentation for this initiative can be found in the folder `doc`.
 You can also build and view the documentation in your browser by running the following commands in the projects root folder:
 
 ```sh
-cargo install mdbook
+cargo install mdbook mdbook-mermaid
 cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary
-cargo install mdbook-mermaid
 mdbook serve --open
 ```
 
