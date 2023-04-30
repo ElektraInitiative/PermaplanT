@@ -87,7 +87,7 @@ While editing any layer other layers might be displayed or hidden.
 
 Later features, i.e., out of scope for first version:
 
-- weather data (automatically add rain to , warnings on frost etc.)
+- weather data (automatically add rain to watering layer, warnings on frost etc.)
 - hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
 - 3D modes (forest garden), contour lines etc.
