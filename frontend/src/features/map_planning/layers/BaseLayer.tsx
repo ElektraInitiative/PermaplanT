@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Layer, Image } from 'react-konva';
 import useImage from 'use-image';
+import { MAP_PIXELS_PER_METER } from "../utils/Constants";
 
 interface BaseLayerProps {
   imageUrl: string,
@@ -9,14 +10,11 @@ interface BaseLayerProps {
 }
 
 const BaseLayer = ({ imageUrl, pixels_per_meter, rotation }: BaseLayerProps) => {
-    // TODO: replace this with some global constant as soon as #303 has been decided.  
-    const conva_pixels_per_meter = 10;
-
     console.log(imageUrl);
 
     const [image] = useImage(imageUrl); 
 
-    const scale = pixels_per_meter / conva_pixels_per_meter;
+    const scale = pixels_per_meter / MAP_PIXELS_PER_METER;
     const width = image?.width ?? 0;
     const height = image?.height ?? 0;
     
