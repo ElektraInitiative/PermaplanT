@@ -1,12 +1,12 @@
 import SimpleButton from "@/components/Button/SimpleButton";
 import SimpleFormInput from "@/components/Form/SimpleFormInput";
 import ModalContainer from "@/components/Modals/ModalContainer";
-import { returnStatement } from "@babel/types";
 import { KonvaEventObject } from "konva/lib/Node";
 import { useState } from "react";
 import { Layer, Line } from "react-konva";
 import BaseLayer from "../layers/BaseLayer";
 import { BaseStage } from "./BaseStage";
+import { MAP_PIXELS_PER_METER } from "../utils/Constants";
 
 enum MeasurementState {
     Initial,
@@ -80,7 +80,7 @@ const BaseLayerConfigurator = () => {
                 const lineLength  = Math.sqrt(lineLengthX * lineLengthX + lineLengthY * lineLengthY);
 
                 // compensate for previously applied scaling
-                setMeasuredLength(lineLength / scale);
+                setMeasuredLength(lineLength / scale * MAP_PIXELS_PER_METER);
                 
                 // Promt the user to input the real world length of the measured distance
                 setShowDistanceInputModal(true);
