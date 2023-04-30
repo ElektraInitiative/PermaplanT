@@ -4,7 +4,7 @@
 
 The majority of the code resides in `src`.
 
-```
+```txt
 src
 |
 +-- components        # shared components used across the entire application
@@ -30,7 +30,7 @@ Ultimately we develop a new feature in the `features` folder that contains domai
 
 A feature could have the following structure:
 
-```
+```txt
 src/features/new-feature
 |
 +-- api         # exported API request declarations and api hooks related to a specific feature
