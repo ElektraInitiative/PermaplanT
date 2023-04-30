@@ -1,4 +1,4 @@
-import filterObject from '@/utils/filterObject';
+import filterObject from '../../../utils/filterObject';
 import { useTranslation } from 'react-i18next';
 import Select, { ClassNamesConfig, SingleValueProps, StylesConfig } from 'react-select';
 

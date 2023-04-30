@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="fixed left-[50%] top-[15%] z-[1020]"
+  style={
+    {
+      "opacity": 0,
+      "transform": "translateX(-50%) translateZ(0)",
+    }
+  }
+>
+   
+</div>
+`;
