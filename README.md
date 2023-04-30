@@ -1,6 +1,6 @@
 # PermaplanT
 
-PermaplanT is an app for
+[PermaplanT](https://www.permaplant.net) is an app for
 
 - Web: Firefox, Chromium
 - Larger mobile devices like tablets: Progressive Web App (PWA) Android 9+
@@ -16,7 +16,9 @@ cargo install --version 0.1.1 --git https://github.com/ElektraInitiative/mdbook-
 mdbook serve --open
 ```
 
-Note that Rust needs to be installed for it to work.
+Important links:
+
+- [Web API Documentation](https://www.permaplant.net/doc/api/swagger/ui/)
 
 ## Goals
 
