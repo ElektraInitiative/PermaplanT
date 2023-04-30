@@ -7,7 +7,7 @@
 - **Actors:** App User
 - **Brief:** The user can create and delete maps within the app, with the option to undo a deletion for a limited time period.
 - **Status:** In Progress
-- **Assignee:** Ramzan
+- **Assignee:** Thorben
 
 ## Scenarios
 

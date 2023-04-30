@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+[
+  <div
+    className="fixed bottom-0 right-0 z-[1010] "
+    onClick={[Function]}
+  >
+    <div
+      style={
+        {
+          "opacity": 0,
+        }
+      }
+    >
+      <div
+        className="h-screen w-screen bg-[#000]"
+      />
+    </div>
+  </div>,
+  <div
+    className="fixed left-[50%] top-[15%] z-[1020]"
+    style={
+      {
+        "opacity": 0,
+        "transform": "translateX(-50%) translateZ(0)",
+      }
+    }
+  >
+    <div
+      className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark"
+    >
+      <h2>
+        Test
+      </h2>
+      <p
+        className="mb"
+      >
+        Test
+      </p>
+      <div
+        className="space-between flex flex-row justify-center space-x-8"
+      >
+        <button
+          className="inline-flex h-10 w-full items-center justify-center rounded-lg text-white px-4 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 max-w-[240px] grow"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          className="inline-flex h-10 w-full items-center justify-center rounded-lg text-white px-4 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 max-w-[240px] grow"
+          onClick={[MockFunction]}
+          type="button"
+        >
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>,
+]
+`;

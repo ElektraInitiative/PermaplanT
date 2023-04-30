@@ -12,9 +12,9 @@ Global value and local values in the Soil layer:
   - 4 heavy (sT, L, uL) (German: schwer)
   - 5 very heavy (T, IT) (German: sehr schwer)
 - pH base value for topsoil from 0-14
-  (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamisch:
+  (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamic value using one decimal digit after the comma:
   - 1 very acid (pH 5.0 and below)
-  - 2 acid (pH 6.0 - 6.5)
+  - 2 acid (pH 5.1 - 6.5)
   - 3 neutral (pH 6.6 - 7.3)
   - 4 alkaline (pH 7.4 - 7.8)
   - 5 very alkaline (pH 7.9 and above)
