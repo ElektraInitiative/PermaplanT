@@ -22,6 +22,19 @@ stage('Build Schema'){
 stage('Checks') {
     def parallel_checks = [:]
 
+    parallel_checks["check-mdbook"] = {
+        node('docker') {
+            checkout scm
+            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+
+            mdbook_image.inside {
+                checkout scm
+
+                mdbook build
+            }
+        }
+    }
+
     parallel_checks["check-backend"] = {
         node('docker') {
             checkout scm
