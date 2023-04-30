@@ -66,7 +66,7 @@ While editing any layer other layers might be displayed or hidden.
 - Labels (allows to put text labels, e.g. names for beds)
 - Trees (taxa, stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
 - Wind (more or less windy places, wind orientation)
-- Shadows (more/less sun exposure)
+- Shade (more/less sun exposure vs. shade)
 - Infrastructure (outlets, wifi spots, taps, water storage tanks, irrigation systems, ...)
 - Hydrology (surface water runoff, natural reservoirs, gullies, rills, ...)
 - Soil (pH Values of topsoil, subsoil)
@@ -76,7 +76,8 @@ While editing any layer other layers might be displayed or hidden.
 - Plants¹ (taxa, individual and fields of plants)
 - Warnings¹
 - Photos (sharing of photo with GPS coordinates and a Nextcloud chats per photo)
-- Fertilize
+- Fertilization
+- Watering
 - Todos (creates Deck cards in Nextcloud)
 - Drawing (for anything else)
 
@@ -86,7 +87,7 @@ While editing any layer other layers might be displayed or hidden.
 
 Later features, i.e., out of scope for first version:
 
-- weather data (warnings on frost etc.)
+- weather data (automatically add rain to , warnings on frost etc.)
 - hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
 - 3D modes (forest garden), contour lines etc.
