@@ -12,4 +12,4 @@ get_chapter_name_from_file = true
 command = "mdbook-mermaid"
 
 [output.html]
-additional-js = ["mermaid.min.js", "mermaid-init.js"]
+additional-js = ["doc/mermaid.min.js", "doc/mermaid-init.js"]
