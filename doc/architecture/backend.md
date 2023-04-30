@@ -1,16 +1,5 @@
 # Backend Architecture
 
-## Code documentation
-
-The code documentation of the backend can be built using `cargo doc --open`.
-
-You can find a more detailed explanation of which modules do what there.
-
-## API documentation
-
-The API documentation can be viewed by running the backend with `cargo run` and then navigating to <http://localhost:8080/doc/api/swagger/ui/>.  
-It is automatically built using [utoipa](https://github.com/juhaku/utoipa).
-
 ## Structure
 
 The backend is split using a 3-layer architecture with controller, service and persistence layer.
@@ -23,7 +12,6 @@ graph LR;
 
 The controller can be found in [controller/](/backend/src/controller/) and service layer can be found in [service/](/backend/src/service/).  
 The persistence layer is part of [model/entity/](/backend/src/model/entity/).
-We should move this into [db/](/backend/src/db/) or create a new module like `persistance/`.
 
 ### Controller
 
@@ -66,3 +54,14 @@ Unit tests can be found in the modules they are supposed to test.
 Actix by default handles shutdowns (see [here](https://actix.rs/docs/server/#graceful-shutdown) for reference).  
 As soon as the signal `SIGTERM` is issued to the backend no new connections will be accepted.
 Still running connection will be finished or terminated after 30sec.
+
+## Code documentation
+
+The code documentation of the backend can be built using `cargo doc --open`.
+
+You can find a more detailed explanation of which modules do what there.
+
+## API documentation
+
+The API documentation can be viewed by running the backend with `cargo run` and then navigating to <http://localhost:8080/doc/api/swagger/ui/>.  
+It is automatically built using [utoipa](https://github.com/juhaku/utoipa).
