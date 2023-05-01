@@ -9,8 +9,6 @@ interface BaseLayerProps {
 }
 
 const BaseLayer = ({ imageUrl, pixels_per_meter, rotation }: BaseLayerProps) => {
-  console.log(imageUrl);
-
   const [image] = useImage(imageUrl);
 
   const scale = pixels_per_meter / MAP_PIXELS_PER_METER;
