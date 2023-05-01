@@ -151,7 +151,7 @@ export const PlantSearch = () => {
             }}
           >
             <SearchInput
-              placeholder="Search plants..."
+              placeholder={t('plantSearch:placeholder')}
               handleSearch={(event) => {
                 const exp = new RegExp('.*' + event.target.value + '.*');
                 setPlants(allPlants.filter((plant) => exp.test(plant)));
