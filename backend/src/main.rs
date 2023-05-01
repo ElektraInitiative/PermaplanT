@@ -50,9 +50,15 @@
 #![allow(clippy::multiple_crate_versions)]
 
 use actix_cors::Cors;
+use actix_web::dev::ServiceRequest;
+use actix_web::Error;
 use actix_web::{http, web::Data, App, HttpServer};
+use actix_web_grants::GrantsMiddleware;
 use config::{api_doc, routes};
+use core::time::Duration;
 use db::connection;
+use jwtk::jwk::RemoteJwksVerifier;
+use serde::Deserialize;
 
 pub mod config;
 pub mod controller;
@@ -66,6 +72,30 @@ pub mod service;
 #[cfg(test)]
 mod test;
 
+async fn extract(request: &ServiceRequest) -> Result<Vec<String>, Error> {
+    let headers = request.headers();
+    let auth_header = headers.get("Authorization").unwrap().to_str().unwrap();
+    let token = auth_header.strip_prefix("Bearer ").unwrap();
+    println!("{token}");
+
+    #[derive(Debug, Clone, Deserialize)]
+    struct Claims {
+        scope: String,
+    }
+
+    let jkws_url =
+        "http://localhost:8081/realms/PermaplanT/protocol/openid-connect/certs".to_string();
+    let verifier = RemoteJwksVerifier::new(jkws_url, None, Duration::from_secs(60));
+    let e = verifier.verify::<Claims>(token).await.unwrap();
+    println!("{e:?}");
+    Ok(e.claims()
+        .extra
+        .scope
+        .split(" ")
+        .map(str::to_owned)
+        .collect())
+}
+
 /// Main function.
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -77,12 +107,14 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         let pool = connection::init_pool(&config.database_url);
         let data = Data::new(pool);
+        let auth = GrantsMiddleware::with_extractor(extract);
 
         App::new()
             .wrap(cors_configuration())
             .app_data(data)
             .configure(routes::config)
             .configure(api_doc::config)
+            .wrap(auth)
     })
     .bind(config.bind_address)?
     .run()
