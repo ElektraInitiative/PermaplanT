@@ -7,14 +7,19 @@ import { Layer, Line } from "react-konva";
 import BaseLayer from "../layers/BaseLayer";
 import { BaseStage } from "./BaseStage";
 import { MAP_PIXELS_PER_METER } from "../utils/Constants";
+import { NewBaseLayerDto} from "@/bindings/definitions";
+
+interface BaseLayerConfiguratorProps {
+    onSubmit: (baseLayer: NewBaseLayerDto) => void;
+}
 
 enum MeasurementState {
     Initial,
     OnePointSelected,
     TwoPointsSelected,
-};
+}
 
-const BaseLayerConfigurator = () => {
+const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     const [imageUrl, setImageUrl]      = useState('');
     const [rotation, setImageRotation] = useState(0);
     const [scale, setImageScale]       = useState(10);
@@ -36,7 +41,7 @@ const BaseLayerConfigurator = () => {
         setImageScale(value);
     }
 
-    const onMetersInputChange = (value: string | number) => {
+    const onMetersInputChange = (value: string | number) =>{
         if (typeof value === 'string' || Number.isNaN(value)) return;
         
         const centimeters = realWorldLength - Math.floor(realWorldLength);
@@ -118,8 +123,8 @@ const BaseLayerConfigurator = () => {
         setMeasureLinePoints([]);
         setMeasureState(MeasurementState.Initial);
         setShowDistanceInputModal(false);
-    } 
-    
+    }
+
     return (
         <div className="pb-1">
             <ModalContainer show={showDistanceInputModal}>
@@ -155,7 +160,7 @@ const BaseLayerConfigurator = () => {
                 </div>
             </ModalContainer>
 
-            <div className="flex flex-column gap-4">
+            <div className="flex flex-column items-end gap-4">
                 <SimpleFormInput id={"url"}
                                  labelText={"Background image URL"}
                                  onChange={onUrlInputChange}></SimpleFormInput>
@@ -174,6 +179,11 @@ const BaseLayerConfigurator = () => {
                                  value={scale.toFixed(2)}
                                  type={'number'}
                                  min={1}></SimpleFormInput>
+
+                <SimpleButton onClick={() => props.onSubmit({base_image_url: imageUrl, pixels_per_meter: scale, north_orientation_degrees: rotation})}
+                              className="max-w-[240px] grow py-5">
+                    Done
+                </SimpleButton>
             </div>
             <div className="left-0 absolute mt-2">
                 <BaseStage
