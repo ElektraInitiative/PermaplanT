@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created using Krita: https://krita.org -->
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:krita="http://krita.org/namespaces/svg/krita"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    width="280.56pt"
+    height="280.56pt"
+    viewBox="0 0 280.56 280.56">
+<defs/>
+<path id="shape0" transform="translate(76.6799977157734, 70.980003131428)" sodipodi:type="arc" sodipodi:rx="69.4200011421133" sodipodi:ry="69.299996868572" sodipodi:cx="69.4200011421133" sodipodi:cy="69.299996868572" sodipodi:start="6.28318530717959" sodipodi:end="0" sodipodi:open="true" d="M138.84 69.3C138.84 31.0267 107.76 1.17174e-14 69.42 0C31.0804 -1.17174e-14 1.40853e-14 31.0267 0 69.3C-1.40853e-14 107.573 31.0804 138.6 69.42 138.6C107.76 138.6 138.84 107.573 138.84 69.3Z" fill="none" stroke="#999999" stroke-width="27.24" stroke-linecap="square" stroke-linejoin="bevel"/><path id="shape1" transform="translate(42.9011524724757, 122.717569936571)" fill="#ffffff" fill-rule="evenodd" stroke="#ffffff" stroke-width="4.8" stroke-linecap="square" stroke-linejoin="bevel" d="M6.53885 0L58.3788 17.52L105.539 68.04L85.7389 89.5624L83.0989 107.802L0 62.2167Z" sodipodi:nodetypes="ccccccc"/><g id="group0" transform="translate(42.1021757801274, 67.7973268303998)" fill="none">
+  <path id="shape2" transform="matrix(0.978585271319822 -0.205841848893539 0.205841848893539 0.978585271319822 7.105427357601e-15 17.6452770767887)" fill="#999999" fill-rule="evenodd" stroke="#999999" stroke-width="4.8" stroke-linecap="square" stroke-linejoin="bevel" d="M3.0607 0.703498C8.5262 43.2344 4.68657 65.4896 0 89.6583C16.0692 77.4943 50.2881 61.4962 85.7225 55.0949L4.10192 0" sodipodi:nodetypes="cccc"/>
+  <path id="shape3" transform="matrix(0.996552704184318 -0.0829620864185763 0.0829620864185763 0.996552704184318 0.884690398351772 14.6082408934465)" fill="none" stroke="#999999" stroke-width="1.3416" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M0 1.59L1.635 0" sodipodi:nodetypes="cc"/>
+ </g>
+</svg>

@@ -6,7 +6,11 @@ import PlantsLayer from '../layers/PlantsLayer';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
+import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
+import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
+import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import { useEffect, useState } from 'react';
 import { Circle, Rect } from 'react-konva';
 
@@ -59,16 +63,16 @@ export const Map = () => {
                 <PlantIcon></PlantIcon>
               </IconButton>
               <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
+                <ArrowIcon></ArrowIcon>
               </IconButton>
               <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
+                <RedoIcon></RedoIcon>
               </IconButton>
               <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
+                <UndoIcon></UndoIcon>
               </IconButton>
               <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
+                <MoveIcon></MoveIcon>
               </IconButton>
               <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
                 <PlantIcon></PlantIcon>
