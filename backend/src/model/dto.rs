@@ -194,6 +194,7 @@ pub struct Page<T> {
     pub total_pages: i32,
 }
 
+/// Contains all data that is necessary to display a maps base layer.
 #[typeshare]
 #[derive(Debug, Serialize, PartialEq, Deserialize, ToSchema)]
 pub struct BaseLayerDto {
