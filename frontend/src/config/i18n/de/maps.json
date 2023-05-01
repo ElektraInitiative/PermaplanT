@@ -1,5 +1,12 @@
 {
     "overview": {
-        "page_title": "Meine Karten"
+        "page_title": "Meine Karten",
+        "create_button": "Neue Karte",
+        "missing_name": "Bitte geben Sie einen Namen ein"
+    },
+    "create": {
+        "modal_title": "Neue Karte",
+        "cancel_button": "Abbrechen",
+        "submit_button": "Erstellen"
     }
 }

@@ -1,5 +1,12 @@
 {
     "overview": {
-        "page_title": "My Maps"
+        "page_title": "My Maps",
+        "create_button": "New Map",
+        "missing_name": "Please enter a name"
+    },
+    "create": {
+        "modal_title": "New Map",
+        "cancel_button": "Cancel",
+        "submit_button": "Create"
     }
 }
