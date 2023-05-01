@@ -5,6 +5,7 @@ import { ReactComponent as CaretRightIcon } from '@/icons/caret-right.svg';
 import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
 import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const LayerSettings = ({
   name,
@@ -21,6 +22,7 @@ export const LayerSettings = ({
 }) => {
   const [layerVisible, setLayerVisible] = useState(false);
   const [alternativesVisible, setAlternativesVisible] = useState(false);
+  const { t } = useTranslation(['layerSettings'])
 
   return (
     <>
@@ -54,6 +56,7 @@ export const LayerSettings = ({
           onChange={(percentage) => {
             if (setLayerOpacity) setLayerOpacity(name, percentage);
           }}
+          title={t('layerSettings:sliderTooltip')}
         >
           {name}
         </NamedSlider>

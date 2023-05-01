@@ -5,6 +5,8 @@ interface SliderProps {
   children: Array<ReactNode> | ReactNode;
   /** onChange event is triggered whenever the current percentage value of the slider changes */
   onChange: (percentage: number) => void;
+  /** sets the title attribute for the outer div */
+  title: string
 }
 
 /**
@@ -70,6 +72,7 @@ export const NamedSlider = (props: SliderProps) => {
       onClick={clickHandler}
       ref={sliderDivRef}
       onKeyDown={keyDownHandler}
+      title={props.title}
     >
       <div className="h-full bg-secondary-400 dark:bg-secondary-600" style={{ width: width }}></div>
       <div

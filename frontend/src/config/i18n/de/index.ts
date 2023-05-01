@@ -10,6 +10,7 @@ import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import plantSearch from './plantSearch.json'
+import layerSettings from './layerSettings.json'
 
 const de = {
   blog,
@@ -23,7 +24,8 @@ const de = {
   pricing,
   seeds,
   team,
-  plantSearch
+  plantSearch,
+  layerSettings
 };
 
 export default de;
