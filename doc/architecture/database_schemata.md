@@ -88,8 +88,6 @@ plant_detail }|--|| family : ""
 maps {
   INT id PK
   VARCHAR name "NOT NULL"
-  BOOLEAN is_version "NOT NULL"
-  VARCHAR version_name
   BOOLEAN is_inactive "NOT NULL"
   DATE last_visit
   INT honors
@@ -97,23 +95,22 @@ maps {
   INT harvested
   DATE creation_date
   DATE deletion_date
+  DATE inactivity_date
   INT zoom_factor
-  INT background_scale
   GEOGRAPHY geo_data
-  INT epsg_code
 }
 
 users {
   INT id PK
   VARCHAR nc_uid
-  DATE free_until
+  DATE contributor_until
   VARCHAR app_language
   DATE member_since
   INT[] member_years
   EXPERIENCE experience
   VARCHAR preferences
   GEOGRAPHY location
-  INT[] membership_points
+  INT[] permacoins
 }
 
 blossoms {
@@ -127,10 +124,10 @@ blossoms {
 }
 
 enum_tracks {
-  VARCHAR Beginners_Track
-  VARCHAR Seasonal_Track
-  VARCHAR Completionist_Track
-  VARCHAR Expert_Track
+  VARCHAR beginners_track
+  VARCHAR seasonal_track
+  VARCHAR completionist_track
+  VARCHAR expert_track
 }
 
 enum_experience {
@@ -142,7 +139,7 @@ enum_experience {
 blossoms_gained {
   INT id PK
   INT times_gained
-  DATE gained_date
+  DATE[] gained_date
 }
 
 maps }o--|| users : "owned by"
@@ -215,9 +212,7 @@ blossoms_gained }o--|| users : ""
 | :------------------------------- | :------------------------------- | :----------------------------------|
 | **id**                           | 1                                |
 | **owner_id**                     | 1                                |
-| **name**                         | My Map                           |
-| **is_version**                   | false                            |
-| **version_name**                 | NULL                             |
+| **name**                         | My Map                           | only alphanumerical values
 | **is_inactive**                  | false                            |
 | **last_visit**                   | 2023-04-04                       |
 | **honors**                       | 0                                | 0 to infinity
@@ -226,10 +221,9 @@ blossoms_gained }o--|| users : ""
 | **version_date**                 | 2023-04-04                       | the date the snapshot for this version was taken
 | **creation_date**                | 2023-04-04                       |
 | **deletion_date**                | 2023-04-04                       |
+| **inactivity_date**              | 2023-04-04                       |
 | **zoom_factor**                  | 100                              | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000
-| **background_scale**             | NULL                             |
 | **geo_data**                     | NULL                             | PostGis Geodata, location of the map
-| **epsg_code**                    | NULL                             | PostGis EPSG Code
 
 ## `Users`
 
@@ -237,14 +231,14 @@ blossoms_gained }o--|| users : ""
 | :------------------------------- | :------------------------------- | :----------------------------------|
 | **id**                           | 1                                |
 | **nc_uid**                       | 1                                | Nextcloud ID
-| **free_until**                   | 2023-04-04                       | has free membership until the given date
+| **contributor_until**            | 2023-04-04                       | has contributing membership until the given date
 | **app_language**                 | English                          |
 | **member_since**                 | 2023-04-04                       |
 | **member_years**                 | {2023}                           | Array of years
 | **experience**                   | beginner                         |
 | **preferences**                  | raised vegetable beds            |
 | **location**                     | Vienna, Austria                  |
-| **membership_points**            | {0}                              | 0 to infinity, one entry for every year since account creation
+| **permacoins**                   | {0}                              | 0 to infinity, one entry for every year since account creation
 
 ## `Blossoms`
 
@@ -266,7 +260,7 @@ blossoms_gained }o--|| users : ""
 | **user_id**                      | 1                                |
 | **blossom_id**                   | 1                                |
 | **times_gained**                 | 1                                | 0 to infinity
-| **gained_date**                  | 2023-04-10                       |
+| **gained_date**                  | {2023-04-10}                     | one entry for every time gained
 
 ## `Relation`
 
