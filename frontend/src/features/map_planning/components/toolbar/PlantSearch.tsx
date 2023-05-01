@@ -4,6 +4,7 @@ import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const allPlants = [
   'Aloe vera',
@@ -111,9 +112,10 @@ const allPlants = [
 ];
 
 export const PlantSearch = () => {
-  const [plants, setPlants] = useState(['Strawberry', 'Cherry', 'Tomato', 'Potato', 'Onion']);
+  const [plants, setPlants] = useState(allPlants);
   const [searchVisible, setSearchVisible] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation(['plantSearch'])
 
   useEffect(() => {
     searchInputRef.current?.focus();
@@ -122,7 +124,7 @@ export const PlantSearch = () => {
   return (
     <div className="flex flex-col gap-4 p-2">
       <div className="flex items-center justify-between">
-        <h2>Drag & drop plants</h2>
+        <h2>{t('plantSearch:dnd')}</h2>
         {!searchVisible && (
           <IconButton
             onClick={() => {
