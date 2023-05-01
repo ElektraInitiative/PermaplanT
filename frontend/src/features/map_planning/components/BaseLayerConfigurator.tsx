@@ -135,6 +135,10 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
         ? 0
         : e.target.getStage()?.getRelativePointerPosition()?.y;
 
+    assert(
+      measureLinePoints[0] != undefined && measureLinePoints[1] != undefined,
+      'First measure point undefined.',
+    );
     setMeasureLinePoints([measureLinePoints[0], measureLinePoints[1], x ?? 0, y ?? 0]);
   };
 
