@@ -4,8 +4,8 @@ use actix_web::web::Data;
 
 use crate::{
     db::connection::Pool,
-    model::dto::{BaseLayerDto, NewBaseLayerDto},
     error::ServiceError,
+    model::dto::{BaseLayerDto, NewBaseLayerDto},
 };
 
 use crate::model::entity::BaseLayer;
@@ -24,7 +24,10 @@ pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<BaseLayerDto, Serv
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn create(new_base_layer: NewBaseLayerDto, pool: &Data<Pool>) -> Result<BaseLayerDto, ServiceError> {
+pub async fn create(
+    new_base_layer: NewBaseLayerDto,
+    pool: &Data<Pool>,
+) -> Result<BaseLayerDto, ServiceError> {
     let mut conn = pool.get().await?;
     let result = BaseLayer::create(new_base_layer, &mut conn).await?;
     Ok(result)

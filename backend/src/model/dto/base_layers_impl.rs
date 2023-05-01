@@ -1,7 +1,7 @@
 //! Contains the implementation of [`BaseLayer`].
 
-use crate::model::entity::BaseLayer;
 use super::BaseLayerDto;
+use crate::model::entity::BaseLayer;
 
 impl From<BaseLayer> for BaseLayerDto {
     fn from(base_layer: BaseLayer) -> Self {

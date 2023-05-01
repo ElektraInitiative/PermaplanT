@@ -1,10 +1,10 @@
 //! Contains all entities used in `PermaplanT`.
 
+pub mod base_layers_impl;
 pub mod map_impl;
 pub mod map_version_impl;
 pub mod plants_impl;
 pub mod seed_impl;
-pub mod base_layers_impl;
 
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
@@ -223,10 +223,7 @@ pub struct Plants {
     /// - Only for administration.
     /// - *Fill ratio:* 100%
     pub created_at: NaiveDateTime,
-
-    /// - The last update date of the entry.
-    /// - Only for administration.
-    /// - *Fill ratio:* 100%
+    /// The last update date of the entry.
     pub updated_at: NaiveDateTime,
 
     /// - *Used* in hydrology layer.
