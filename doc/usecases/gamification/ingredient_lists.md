@@ -17,6 +17,7 @@
   - The user inputs the items into a form in the map editor and can set a name and picture for the ingredient list.
   - The user is able to have multiple of those ingredient lists.
   - The lists will display what ingredients are available on the map and which still need to be planted by the user.
+  - While harvesting or after harvesting (if the user has conserved some of it, e.g., stored fresh fruits, dried herbs), (s)he can mark ingredients as available over a specific timespan and unmark it once the harvest is over or storage is exhausted.
   - The user is awarded every month with some [permacoins](./collaborating_member.md) for having all neccessary ingredients for a list.
 - **Alternative scenario:**
 - **Error scenario:**
