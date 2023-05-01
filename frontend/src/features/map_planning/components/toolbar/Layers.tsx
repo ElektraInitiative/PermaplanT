@@ -23,17 +23,18 @@ export const Layers = () => {
       </section>
       <section className="mt-6">
         <div className="grid-cols grid grid-cols-[1.5rem_1.5rem_minmax(0,_1fr)] gap-2">
+          <LayerSettings name="Base" />
+          <LayerSettings name="Plant" />
+          <LayerSettings name="Drawing" />
           <LayerSettings name="Dimension" />
-          <LayerSettings name="Draw" alternatives={['draw1', 'draw2']} />
-          <LayerSettings name="Fertilize" />
+          <LayerSettings name="Fertilization" />
           <LayerSettings name="Habitats" />
           <LayerSettings name="Hydrology" />
           <LayerSettings name="Infrastructure" />
           <LayerSettings name="Labels" />
           <LayerSettings name="Landscape" />
           <LayerSettings name="Paths" />
-          <LayerSettings name="Plants" />
-          <LayerSettings name="Shadows" />
+          <LayerSettings name="Shade" />
           <LayerSettings name="Soil" />
           <LayerSettings name="Terrain" />
           <LayerSettings name="Trees" />
