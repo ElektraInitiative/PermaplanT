@@ -116,7 +116,7 @@ export const Map = () => {
           }
           contentBottom={
             <div className="flex flex-col gap-2 p-2">
-              <h2>edit attributes</h2>
+              <h2>Edit attributes</h2>
               <SimpleFormInput
                 id="input1"
                 labelText="Some attribute"
