@@ -2,16 +2,25 @@
 
 ## Structure
 
-The backend is split using a 3-layer architecture with controller, service and persistence layer.
+- `config/`: Contains the servers configuration.
+- `controller/`: Contains all endpoints of the application.
+- `db/`: Contains utility functions for the database.
+- `model/`: Contains the data PermaplanT is acting upon and their implementation.
+- `service/`: Contains business logic and maps between entities and DTOs.
+- `test/`: Contains integration tests.
 
 ```mermaid
 graph LR;
-    Controller<-->Service;
-    Service<-->Persistence;
+    config -->|Configures routes<br>Uses endpoints for OpenAPI doc| controller
+    config -->|Uses DTOs for OpenAPI doc| model
+    controller -->|Calls functions| service
+    controller -->|Uses DTOs| model
+    controller -->|Uses data pool| db
+    db -->|Uses `Page` struct| model
+    model -->|Uses helper functions| db
+    service -->|Calls database| model
+    service -->|Uses DTOs and Entities| db
 ```
-
-The controller can be found in [controller/](/backend/src/controller/) and service layer can be found in [service/](/backend/src/service/).  
-The persistence layer is part of [model/entity/](/backend/src/model/entity/).
 
 ### Controller
 
@@ -27,10 +36,6 @@ The endpoints are automatically documented using [utoipa](https://github.com/juh
 ### Service
 
 The service layer is responsible for handling our business logic as well as mapping entities and DTOs.
-
-### Persistance
-
-The persistance layer is responsible for making connections to the database and retrieving/updating the state of the database.
 
 ### Model
 
