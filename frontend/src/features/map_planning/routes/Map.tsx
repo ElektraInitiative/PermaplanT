@@ -1,7 +1,6 @@
 import { BaseStage } from '../components/BaseStage';
 import BaseLayer from '../layers/BaseLayer';
 import PlantsLayer from '../layers/PlantsLayer';
-import { Input } from 'postcss';
 import { useEffect, useState } from 'react';
 import { Circle, Rect } from 'react-konva';
 

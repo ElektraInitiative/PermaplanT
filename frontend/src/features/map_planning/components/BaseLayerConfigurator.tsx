@@ -69,7 +69,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     if (e.evt.button !== 0) return;
 
     switch (measureState) {
-      case MeasurementState.Initial:
+      case MeasurementState.Initial: {
         const x =
           e.target.getStage()?.getRelativePointerPosition()?.x == null
             ? 0
@@ -82,8 +82,9 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
         setMeasureLinePoints([x ?? 0, y ?? 0]);
         setMeasureState(MeasurementState.OnePointSelected);
         break;
+      }
 
-      case MeasurementState.OnePointSelected:
+      case MeasurementState.OnePointSelected: {
         const lineLengthX = Math.abs(measureLinePoints[2] - measureLinePoints[0]);
         const lineLengthY = Math.abs(measureLinePoints[3] - measureLinePoints[1]);
 
@@ -98,11 +99,13 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
         setMeasureState(MeasurementState.TwoPointsSelected);
         break;
+      }
 
-      case MeasurementState.TwoPointsSelected:
+      case MeasurementState.TwoPointsSelected: {
         setMeasureLinePoints([]);
         setMeasureState(MeasurementState.Initial);
         break;
+      }
     }
   };
 
