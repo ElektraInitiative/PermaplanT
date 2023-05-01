@@ -1,3 +1,4 @@
+//! Service layer for base layers (map component)
 
 use actix_web::web::Data;
 
