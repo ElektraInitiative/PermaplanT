@@ -1,11 +1,14 @@
 //! Routes in the backend.
 
 use actix_web::{middleware::NormalizePath, web};
+use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::controller::{plantings, plants, seed};
 
 /// Defines all routes of the backend and which functions they map to.
 pub fn config(cfg: &mut web::ServiceConfig) {
+    let auth = HttpAuthentication::bearer(super::auth::validator);
+
     cfg.service(
         web::scope("/api")
             .service(
@@ -27,6 +30,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                     .service(plantings::update)
                     .service(plantings::delete),
             )
-            .wrap(NormalizePath::default()),
+            .wrap(NormalizePath::default())
+            .wrap(auth),
     );
 }
