@@ -39,25 +39,25 @@ export default function SimpleFormInput<T extends FieldValues>({
   const callOnKeyUp = function <E>(event: React.KeyboardEvent<E>) {
     if (onChange == null) return;
     const value = (event.target as HTMLInputElement).value;
-    
+
     if (type === 'number') {
       onChange(parseInt(value));
     }
 
     onChange(value);
-  }
+  };
 
   const callOnChange = function <E>(event: React.ChangeEvent<E>) {
     if (onChange == null) return;
-    // If somebody finds a way of fixing the next line, please do! 
+    // If somebody finds a way of fixing the next line, please do!
     const value = (event.target as unknown as HTMLInputElement).value;
-    
+
     if (type === 'number') {
       onChange(parseInt(value));
     }
-   
+
     onChange(value);
-  }
+  };
 
   return (
     <div className="dark:text-white">

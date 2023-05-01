@@ -27,16 +27,15 @@ export const selectIntersectingShapes = (
     .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'))
     // ignore shapes from non editable layers
     .filter((shape) => shape?.getLayer()?.isListening());
-  
+
   if (!allShapes) return;
 
   const allNodes = trRef.current?.getNodes();
   if (!allNodes) return;
 
-  const mappedShapes = allShapes
-    .map((shape) => {
-      return shape as Shape<ShapeConfig>;
-    });
+  const mappedShapes = allShapes.map((shape) => {
+    return shape as Shape<ShapeConfig>;
+  });
 
   const intersectingShapes = mappedShapes.filter(
     (shape) => shape && Util.haveIntersection(box, shape.getClientRect()),

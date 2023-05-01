@@ -1,9 +1,9 @@
 import { BaseStage } from '../components/BaseStage';
+import BaseLayer from '../layers/BaseLayer';
 import PlantsLayer from '../layers/PlantsLayer';
+import { Input } from 'postcss';
 import { useEffect, useState } from 'react';
 import { Circle, Rect } from 'react-konva';
-import BaseLayer from '../layers/BaseLayer';
-import { Input } from 'postcss';
 
 /**
  * This component is responsible for rendering the map that the user is going to draw on.
@@ -46,7 +46,11 @@ export const Map = () => {
   return (
     <div className="h-screen w-screen overflow-hidden">
       <BaseStage>
-        <BaseLayer imageUrl='https://nextcloud.markus-raab.org/nextcloud/index.php/s/E4TTrPnpt4Qfade/download/garden-plan.jpg' rotation={0} pixels_per_meter={5} />
+        <BaseLayer
+          imageUrl="https://nextcloud.markus-raab.org/nextcloud/index.php/s/E4TTrPnpt4Qfade/download/garden-plan.jpg"
+          rotation={0}
+          pixels_per_meter={5}
+        />
         <PlantsLayer>{shapes}</PlantsLayer>
       </BaseStage>
     </div>
