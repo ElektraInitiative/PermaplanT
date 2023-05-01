@@ -22,10 +22,10 @@
     - recruiting new members.
   - The user can see their exact count of current and previous permacoins in their profile.
   - If the user applied for the contributing membership and when reaching a certain milestone with the amount of gathered permacoins, the user will be given the current calendar year of membership without compensation via money.
-  - Permacoins can not be transferred from the current into the next year.
+  - Permacoins can not be transferred from the current into another year nor be exchanged to money in any way.
 - **Alternative scenario:**
   - The user does not gather enough permacoins and has to pay the full price for this years membership.
 - **Error scenario:**
 - **Postcondition:**
-  - The user can use the app without compensation via money if (s)he is a valuable member of the community.
+  - The user has the permission to use the app and to be part of the community.
 - **Non-functional Constraints:**
