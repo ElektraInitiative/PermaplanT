@@ -5,10 +5,10 @@ import { NewBaseLayerDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
+import assert from 'assert';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
 import { Layer, Line } from 'react-konva';
-import assert from "assert";
 
 interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
@@ -16,9 +16,9 @@ interface BaseLayerConfiguratorProps {
 
 // Setting the maps scale using a known distance is handled using a state machine.
 enum MeasurementState {
-  Initial,            // The user has not selected any points on the map.
-  OnePointSelected,   // A single point was selected. Display a line between the selected point and the mouse cursor.
-  TwoPointsSelected,  // Two points have been selected. Draw a line between both points.
+  Initial, // The user has not selected any points on the map.
+  OnePointSelected, // A single point was selected. Display a line between the selected point and the mouse cursor.
+  TwoPointsSelected, // Two points have been selected. Draw a line between both points.
 }
 
 const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
@@ -87,10 +87,13 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
       }
 
       case MeasurementState.OnePointSelected: {
-        assert(measureLinePoints[0] != undefined, 'measureLinePoints should contain 4 defined elements.');
-        assert(measureLinePoints[1] != undefined, 'measureLinePoints should contain 4 defined elements.');
-        assert(measureLinePoints[2] != undefined, 'measureLinePoints should contain 4 defined elements.');
-        assert(measureLinePoints[3] != undefined, 'measureLinePoints should contain 4 defined elements.');
+        assert(
+          measureLinePoints[0] != undefined &&
+            measureLinePoints[1] != undefined &&
+            measureLinePoints[2] != undefined &&
+            measureLinePoints[3] != undefined,
+          'measureLinePoints should contain 4 defined elements.',
+        );
 
         const lineLengthX = Math.abs(measureLinePoints[2] - measureLinePoints[0]);
         const lineLengthY = Math.abs(measureLinePoints[3] - measureLinePoints[1]);
