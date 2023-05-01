@@ -46,8 +46,6 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
     const centimeters = realWorldLength - Math.floor(realWorldLength);
     setRealWorldLength(value + centimeters);
-
-    console.log(realWorldLength);
   };
 
   const onCentimetersInputChange = (value: string | number) => {
@@ -55,7 +53,6 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
     const meters = Math.floor(realWorldLength);
     setRealWorldLength(meters + value / 100);
-    console.log(realWorldLength);
   };
 
   // Determine the scale of the image using the length of a known distance
