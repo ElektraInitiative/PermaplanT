@@ -135,8 +135,18 @@ stage('Deploy PR') {
             unstash 'frontend'
             unstash 'backend'
 
-            echo 'Deploying'
+            echo 'Deploying to PR'
             sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
+
+            echo 'Loading Data to PR'
+            dir('scraper') {
+                sh 'npm ci'
+                sh 'mkdir ./data/'
+                sh 'cp /nextcloud/mergedDatasets.csv ./data/'
+                sh 'npm run insert'
+                sh 'rm -rf ./data/'
+                sh 'rm -rf ./node_modules/'
+            }
         }
     }
 }
