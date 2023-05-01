@@ -2,7 +2,7 @@
 
 use actix_web::{middleware::NormalizePath, web};
 
-use crate::controller::{plantings, plants, seed, base_layers};
+use crate::controller::{base_layers, plantings, plants, seed};
 
 /// Defines all routes of the backend and which functions they map to.
 pub fn config(cfg: &mut web::ServiceConfig) {
@@ -22,8 +22,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             )
             .service(
                 web::scope("/base_layers")
-                .service(base_layers::find_by_id)
-                .service(base_layers::create)
+                    .service(base_layers::find_by_id)
+                    .service(base_layers::create),
             )
             .service(
                 web::scope("/plantings")

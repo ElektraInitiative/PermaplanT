@@ -2,14 +2,12 @@
 
 use crate::{db::connection::Pool, service};
 use actix_web::{
-    delete,
-    get,
-    post,
+    delete, get, post,
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
 
-use crate::model::dto::{NewBaseLayerDto};
+use crate::model::dto::NewBaseLayerDto;
 
 /// Fetch a single [`BaseLayerDto`](crate::model::dto::BaseLayerDto) by its id.
 ///
@@ -38,7 +36,10 @@ pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse>
     )
 )]
 #[post("")]
-pub async fn create(new_base_layer_json: Json<NewBaseLayerDto>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn create(
+    new_base_layer_json: Json<NewBaseLayerDto>,
+    pool: Data<Pool>,
+) -> Result<HttpResponse> {
     let response = service::base_layers::create(new_base_layer_json.0, &pool).await?;
     Ok(HttpResponse::Created().json(response))
 }

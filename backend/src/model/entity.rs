@@ -1,8 +1,8 @@
 //! Contains all entities used in `PermaplanT`.
 
+pub mod base_layers_impl;
 pub mod plants_impl;
 pub mod seed_impl;
-pub mod base_layers_impl;
 
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
@@ -297,4 +297,3 @@ pub struct NewBaseLayer {
     /// the amount of rotation required to align the base image with geographical north.
     pub north_orientation_degrees: f64,
 }
-
