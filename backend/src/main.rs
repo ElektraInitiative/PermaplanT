@@ -53,7 +53,10 @@ use actix_cors::Cors;
 use actix_web::dev::ServiceRequest;
 use actix_web::Error;
 use actix_web::{http, web::Data, App, HttpServer};
-use actix_web_grants::GrantsMiddleware;
+use actix_web_httpauth::extractors::bearer::BearerAuth;
+use actix_web_httpauth::middleware::HttpAuthentication;
+// Used for integration with `actix-web-httpauth`
+use actix_web_grants::permissions::AttachPermissions;
 use config::{api_doc, routes};
 use core::time::Duration;
 use db::connection;
@@ -72,12 +75,10 @@ pub mod service;
 #[cfg(test)]
 mod test;
 
-async fn extract(request: &ServiceRequest) -> Result<Vec<String>, Error> {
-    let headers = request.headers();
-    let auth_header = headers.get("Authorization").unwrap().to_str().unwrap();
-    let token = auth_header.strip_prefix("Bearer ").unwrap();
-    println!("{token}");
-
+async fn validator(
+    req: ServiceRequest,
+    credentials: BearerAuth,
+) -> Result<ServiceRequest, (Error, ServiceRequest)> {
     #[derive(Debug, Clone, Deserialize)]
     struct Claims {
         scope: String,
@@ -86,14 +87,21 @@ async fn extract(request: &ServiceRequest) -> Result<Vec<String>, Error> {
     let jkws_url =
         "http://localhost:8081/realms/PermaplanT/protocol/openid-connect/certs".to_string();
     let verifier = RemoteJwksVerifier::new(jkws_url, None, Duration::from_secs(60));
-    let e = verifier.verify::<Claims>(token).await.unwrap();
+    let e = verifier
+        .verify::<Claims>(credentials.token())
+        .await
+        .unwrap();
     println!("{e:?}");
-    Ok(e.claims()
+
+    let scopes = e
+        .claims()
         .extra
         .scope
         .split(" ")
         .map(str::to_owned)
-        .collect())
+        .collect();
+    req.attach(scopes);
+    Ok(req)
 }
 
 /// Main function.
@@ -107,7 +115,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         let pool = connection::init_pool(&config.database_url);
         let data = Data::new(pool);
-        let auth = GrantsMiddleware::with_extractor(extract);
+        let auth = HttpAuthentication::bearer(validator);
 
         App::new()
             .wrap(cors_configuration())
