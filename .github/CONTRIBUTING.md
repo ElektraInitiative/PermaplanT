@@ -2,6 +2,8 @@
 
 We use [GitHub](https://github.com/ElektraInitiative/PermaplanT/) to maintain this initiative.
 
+If you are new, it is probably best if you first [write us](mailto:contact@permaplant.net).
+
 Before you start working on anything, please make sure you have [pre-commit hooks](../doc/contrib/README.md#Hooks) set up.
 
 For any non-trival work, i.e. not only updates in docu or tests, there should be an underlying issue.
