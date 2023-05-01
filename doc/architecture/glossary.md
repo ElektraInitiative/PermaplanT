@@ -26,6 +26,7 @@
   - canvas node elements i.e. HTML representation of rectangle, circle, etc. on the canvas
 - map context
   - layers and their attributes e.g. warning layer and its visibility
+- event: a day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
 - reversible deletion vs undo-redo functionality
   - reversible deletion: a database entity i.e. map and plant is deleted and can be restored within a certain time
   - undo-redo functionality: a user can undo and redo changes in the map, but the changes are local to the frontend and not stored in the database
@@ -130,3 +131,17 @@
   When working together on a map, every user can select their own layers.
 - offline availability:
   Means that layers can be edited also offline, data gets synced when device is online again.
+
+## Testing
+
+- unit test:  
+  Used to test parts of our code in isolation.  
+  See [test doc](../tests) for further information.  
+  Example: Test an individual function for specific behavior.
+- integration test:  
+  Used to test if different parts of the code work together correctly.  
+  See [test doc](../tests) for further information.  
+  Example: Make an HTTP request to the backend and let it run through controller, service and persistance layer requiring a running database.
+- end to end test (e2e test):  
+  Used to test the whole application from end to end.  
+  Example: Simulate a user clicking a button (e.g. with [Selenium](https://www.selenium.dev/)) resulting in an HTTP request to the backend. Wait for the response and validate the resulting change in the frontend.

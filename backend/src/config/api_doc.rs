@@ -5,9 +5,12 @@ use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
 use crate::{
-    controller::{plants, seed},
+    controller::{plantings, plants, seed},
     model::{
-        dto::{NewSeedDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, SeedDto},
+        dto::{
+            NewPlantingDto, NewSeedDto, PagePlantingDto, PagePlantsSummaryDto, PageSeedDto,
+            PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
+        },
         r#enum::{quality::Quality, quantity::Quantity},
     },
 };
@@ -45,10 +48,28 @@ struct SeedApiDoc;
     )]
 struct PlantsApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all planting endpoints.
+#[derive(OpenApi)]
+#[openapi(paths(plantings::find, plantings::create, plantings::update, plantings::delete),
+    components(
+        schemas(
+            NewPlantingDto,
+            PlantingDto,
+            UpdatePlantingDto,
+            PagePlantingDto
+        )
+    ),
+    tags(
+        (name = "plantings")
+    )
+)]
+struct PlantingsApiDoc;
+
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = SeedApiDoc::openapi();
     openapi.merge(PlantsApiDoc::openapi());
+    openapi.merge(PlantingsApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }

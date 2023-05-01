@@ -61,9 +61,73 @@ pub struct PlantsSummaryDto {
     /// The plants database id.
     pub id: i32,
     /// Biological name of this plant (E.g. "Triticum aestivum", "Prunus cerasus")
-    pub binomial_name: String,
+    pub unique_name: String,
     /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
-    pub common_name: Option<Vec<Option<String>>>,
+    pub common_name_en: Option<Vec<Option<String>>>,
+}
+
+/// Represents plant planted on a map.
+/// E.g. a user drags a plant from the search results and drops it on the map.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct PlantingDto {
+    /// The database id of the record.
+    pub id: i32,
+    /// The plant that is planted.
+    pub plant_id: i32,
+    /// The plant layer of the map the plant is placed on.
+    /// NOTE:
+    ///     could be replaced by a `map_id` as the relation between `maps` and
+    ///     `plants_layers` should be non-nullable and one to one.
+    pub plants_layer_id: i32,
+    /// The x coordinate of the position on the map.
+    pub x: i32,
+    /// The y coordinate of the position on the map.
+    pub y: i32,
+}
+
+/// Used to create a new planting.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct NewPlantingDto {
+    /// The plant that is planted.
+    pub plant_id: i32,
+    /// The plant layer of the map the plant is placed on.
+    /// NOTE:
+    ///     could be replaced by a `map_id` as the relation between `maps` and
+    ///     `plants_layers` should be non-nullable and one to one.
+    pub plants_layer_id: i32,
+    /// The x coordinate of the position on the map.
+    pub x: i32,
+    /// The y coordinate of the position on the map.
+    pub y: i32,
+}
+
+/// Used to update an existing planting.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct UpdatePlantingDto {
+    /// The plant that is planted.
+    pub plant_id: Option<i32>,
+    /// The plant layer of the map the plant is placed on.
+    /// NOTE:
+    ///     could be replaced by a `map_id` as the relation between `maps` and
+    ///     `plants_layers` should be non-nullable and one to one.
+    pub plants_layer_id: Option<i32>,
+    /// The x coordinate of the position on the map.
+    pub x: Option<i32>,
+    /// The y coordinate of the position on the map.
+    pub y: Option<i32>,
+}
+
+/// Query parameters for searching plantings.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct PlantingSearchParameters {
+    /// The id of the map the planting belongs to.
+    pub map_id: Option<i32>,
+    /// The id of the plants layer the planting is placed on.
+    pub plants_layer_id: Option<i32>,
 }
 
 /// Query parameters for searching plants.
@@ -98,7 +162,11 @@ pub struct PageParameters {
 /// A page of results returned from a list endpoint.
 #[typeshare]
 #[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
-#[aliases(PagePlantsSummaryDto = Page<PlantsSummaryDto>, PageSeedDto = Page<SeedDto>)]
+#[aliases(
+    PagePlantsSummaryDto = Page<PlantsSummaryDto>,
+    PageSeedDto = Page<SeedDto>,
+    PagePlantingDto = Page<PlantingDto>,
+)]
 pub struct Page<T> {
     /// Resulting records.
     pub results: Vec<T>,
