@@ -1,8 +1,13 @@
+def node_info() {
+    echo "Running this Stage on ${env.NODE_NAME}"
+}
 
 // REQUIRED for Deployment
 // see Jenkinsfile.release
 stage('Build Schema'){
     node('docker') {
+        node_info()
+
         checkout scm
         def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
@@ -24,6 +29,8 @@ stage('Checks') {
 
     parallel_checks["check-backend"] = {
         node('docker') {
+            node_info()
+
             checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
@@ -59,6 +66,8 @@ stage('Checks') {
 
     parallel_checks["check-frontend"] = {
         node('docker') {
+            node_info()
+
             checkout scm
             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
 
@@ -86,6 +95,8 @@ stage('Build in Docker'){
 
     parallel_build['build-backend'] = {
         node('docker') {
+            node_info()
+
             checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
@@ -102,6 +113,8 @@ stage('Build in Docker'){
 
     parallel_build['build-frontend'] = {
         node('docker') {
+            node_info()
+
             checkout scm
             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
 
@@ -120,6 +133,8 @@ stage('Build in Docker'){
 
 stage('Deploy PR') {
     node('permaplant && pr') {
+        node_info()
+
         checkout scm
 
         echo "Workspace is '${WORKSPACE}'"
@@ -155,6 +170,8 @@ stage('Deploy PR') {
 if (env.BRANCH_NAME == 'master') {
     stage('Deploy Dev') {
         node('permaplant && dev') {
+            node_info()
+
             checkout scm
 
             echo "Unstash Artifacts"
