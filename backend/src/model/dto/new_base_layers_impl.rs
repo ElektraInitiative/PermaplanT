@@ -1,7 +1,7 @@
 //! Contains the implementation of [`NewBaseLayer`].
 
-use crate::model::entity::NewBaseLayer;
 use super::NewBaseLayerDto;
+use crate::model::entity::NewBaseLayer;
 
 impl From<NewBaseLayerDto> for NewBaseLayer {
     fn from(bew_base_layer: NewBaseLayerDto) -> Self {

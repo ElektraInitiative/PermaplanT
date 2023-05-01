@@ -1,10 +1,10 @@
 //! Contains the implementation of [`BaseLayer`]
-use diesel::{QueryResult, QueryDsl};
-use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use crate::{
     model::dto::{BaseLayerDto, NewBaseLayerDto},
     schema::base_layers::{self},
 };
+use diesel::{QueryDsl, QueryResult};
+use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use super::{BaseLayer, NewBaseLayer};
 
@@ -13,13 +13,10 @@ impl BaseLayer {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find_by_id(
-        id: i32,
-        conn: &mut AsyncPgConnection,
-    ) -> QueryResult<BaseLayerDto> {
+    pub async fn find_by_id(id: i32, conn: &mut AsyncPgConnection) -> QueryResult<BaseLayerDto> {
         let query_result = base_layers::table.find(id).first::<Self>(conn).await;
         query_result.map(Into::into)
-    } 
+    }
 
     /// Create a new base layer in the database.
     ///
@@ -42,6 +39,8 @@ impl BaseLayer {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn delete_by_id(id: i32, conn: &mut AsyncPgConnection) -> QueryResult<usize> {
-        diesel::delete(base_layers::table.find(id)).execute(conn).await
+        diesel::delete(base_layers::table.find(id))
+            .execute(conn)
+            .await
     }
 }
