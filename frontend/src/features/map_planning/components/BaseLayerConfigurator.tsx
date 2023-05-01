@@ -64,6 +64,8 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
   const onBaseStageClick = (e: KonvaEventObject<MouseEvent>) => {
     if (e.evt.button !== 0) return;
+    // There is no point in setting the scaling if no image was selected.
+    if ((imageUrl ?? '') === '') return;
 
     switch (measureState) {
       case MeasurementState.Initial: {
@@ -191,6 +193,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
           defaultValue={0}
           min={0}
           max={359}
+          disabled={(imageUrl ?? '') === ''}
         ></SimpleFormInput>
 
         <SimpleFormInput
@@ -200,6 +203,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
           value={scale.toFixed(2)}
           type={'number'}
           min={1}
+          disabled={(imageUrl ?? '') === ''}
         ></SimpleFormInput>
 
         <SimpleButton
@@ -211,6 +215,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
             })
           }
           className="max-w-[240px] grow py-5"
+          disabled={(imageUrl ?? '') === ''}
         >
           Done
         </SimpleButton>
