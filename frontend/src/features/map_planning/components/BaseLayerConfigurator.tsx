@@ -8,15 +8,17 @@ import ModalContainer from '@/components/Modals/ModalContainer';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
 import { Layer, Line } from 'react-konva';
+import assert from "assert";
 
 interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
 }
 
+// Setting the maps scale using a known distance is handled using a state machine.
 enum MeasurementState {
-  Initial,
-  OnePointSelected,
-  TwoPointsSelected,
+  Initial,            // The user has not selected any points on the map.
+  OnePointSelected,   // A single point was selected. Display a line between the selected point and the mouse cursor.
+  TwoPointsSelected,  // Two points have been selected. Draw a line between both points.
 }
 
 const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
@@ -67,6 +69,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     // There is no point in setting the scaling if no image was selected.
     if ((imageUrl ?? '') === '') return;
 
+    // Each click on the displayed image causes the component to advance to the next state.
     switch (measureState) {
       case MeasurementState.Initial: {
         const x =
@@ -84,6 +87,11 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
       }
 
       case MeasurementState.OnePointSelected: {
+        assert(measureLinePoints[0] != undefined, 'measureLinePoints should contain 4 defined elements.');
+        assert(measureLinePoints[1] != undefined, 'measureLinePoints should contain 4 defined elements.');
+        assert(measureLinePoints[2] != undefined, 'measureLinePoints should contain 4 defined elements.');
+        assert(measureLinePoints[3] != undefined, 'measureLinePoints should contain 4 defined elements.');
+
         const lineLengthX = Math.abs(measureLinePoints[2] - measureLinePoints[0]);
         const lineLengthY = Math.abs(measureLinePoints[3] - measureLinePoints[1]);
 
@@ -94,6 +102,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
         setMeasuredLength((lineLength / scale) * MAP_PIXELS_PER_METER);
 
         // Promt the user to input the real world length of the measured distance
+        // This will complete the distance measuring process.
         setShowDistanceInputModal(true);
 
         setMeasureState(MeasurementState.TwoPointsSelected);
@@ -111,6 +120,9 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
   const onBaseStageMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     if (measureState !== MeasurementState.OnePointSelected) return;
 
+    // The user has already selected a single point on the map.
+    // We continuously store the cursors position in the measureLinePoints array to get a line going from the
+    // selected point to the mouse cursor.
     const x =
       e.target.getStage()?.getRelativePointerPosition()?.x == null
         ? 0
@@ -124,7 +136,6 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
   };
 
   const onDistanceInputModalSubmit = () => {
-    // TODO: replace 10 with a global constant
     setImageScale(measuredLength / realWorldLength);
     setShowDistanceInputModal(false);
 
