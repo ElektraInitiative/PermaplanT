@@ -8,7 +8,7 @@ interface SliderProps {
 }
 
 /**
- * A Slider with a label which can be controlled by dragging, clicking and arrow up/down.
+ * A Slider with a label which can be controlled by dragging, clicking, arrow left/right and j/k.
  */
 export const NamedSlider = (props: SliderProps) => {
   const [width, setWidth] = useState(0);
@@ -56,9 +56,9 @@ export const NamedSlider = (props: SliderProps) => {
   };
 
   const keyDownHandler: KeyboardEventHandler = (event) => {
-    if (event.key === 'j' || event.key === 'ArrowUp') {
+    if (event.key === 'j' || event.key === 'ArrowRight') {
       changePercentage(0.05);
-    } else if (event.key === 'k' || event.key === 'ArrowDown') {
+    } else if (event.key === 'k' || event.key === 'ArrowLeft') {
       changePercentage(-0.05);
     }
   };
