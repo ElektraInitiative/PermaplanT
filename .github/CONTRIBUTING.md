@@ -5,12 +5,13 @@ We use [GitHub](https://github.com/ElektraInitiative/PermaplanT/) to maintain th
 Before you start working on anything, please make sure you have [pre-commit hooks](../doc/contrib/README.md#Hooks) set up.
 
 For any non-trival work, i.e. not only updates in docu or tests, there should be an underlying issue.
+You can create such issues yourself.
 Make sure the issue is:
 
 - assigned to you and
 - ["In Progress" in our project](https://github.com/orgs/ElektraInitiative/projects/4).
 
-Once you created a PR, please request a review from @markus2330, who will also merge.
+Once you created a PR, please request reviews, including also from @markus2330, who will also merge.
 
 Commit messages:
 
