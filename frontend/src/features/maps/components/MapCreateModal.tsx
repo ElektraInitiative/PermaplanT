@@ -13,7 +13,6 @@ interface MapCreateModalProps {
 
 export default function MapCreateModal({ show, setShow }: MapCreateModalProps) {
   const { t } = useTranslation(['maps']);
-  const [mapName, setMapName] = useState('');
   const [missingName, setMissingName] = useState(false);
 
   const missingNameText = (
@@ -21,6 +20,8 @@ export default function MapCreateModal({ show, setShow }: MapCreateModalProps) {
   );
 
   async function onSubmit() {
+    const mapNameInput = document.getElementById('mapNameInput') as HTMLInputElement;
+    const mapName = mapNameInput ? mapNameInput.value : '';
     if (mapName === '') {
       setMissingName(true);
       return;
@@ -35,20 +36,15 @@ export default function MapCreateModal({ show, setShow }: MapCreateModalProps) {
       harvested: 0,
     };
     setShow(false);
-    setMapName('');
-    console.log(newMap);
-    await createMap(newMap);
+    createMap(newMap).then(
+      () => console.log('success'),
+      (error) => console.log(error.message),
+    );
   }
 
   function onCancel() {
     setShow(false);
-    setMapName('');
     setMissingName(false);
-  }
-
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setMissingName(false);
-    setMapName(e.target.value);
   }
 
   return (
@@ -58,9 +54,9 @@ export default function MapCreateModal({ show, setShow }: MapCreateModalProps) {
         <div className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h2>{t('maps:create.modal_title')}</h2>
           <input
-            onChange={onChange}
+            id="mapNameInput"
+            onChange={() => setMissingName(false)}
             className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-            value={mapName}
             style={{ colorScheme: 'dark' }}
             placeholder="Name"
           />
