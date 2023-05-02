@@ -76,7 +76,7 @@ async fn main() -> std::io::Result<()> {
         Err(e) => panic!("Error reading configuration: {e}"),
     };
 
-    Jwks::init_from_remote(&config.auth_server_url).await;
+    Jwks::init_from_remote(&config.remote_jwks_url).await;
 
     HttpServer::new(move || {
         let pool = connection::init_pool(&config.database_url);
