@@ -1,6 +1,6 @@
 //! Handles authentication and authorization.
 
-mod jwt_claims_extractor;
+mod jwt_claims;
 pub mod user_info_extractor;
 
 use actix_web::dev::ServiceRequest;
@@ -20,9 +20,9 @@ pub async fn validator(
     req: ServiceRequest,
     credentials: BearerAuth,
 ) -> Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
-    let claims = jwt_claims_extractor::Claims::from_request(credentials.token())
+    let claims = jwt_claims::Claims::validate(credentials.token())
         .await
         .unwrap();
-    req.attach(UserInfo::from(claims).scope);
+    req.attach(UserInfo::from(claims).roles);
     Ok(req)
 }

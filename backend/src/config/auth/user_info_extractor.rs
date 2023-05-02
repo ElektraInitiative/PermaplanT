@@ -4,19 +4,19 @@ use serde::Deserialize;
 
 use crate::error::ServiceError;
 
-use super::jwt_claims_extractor::{get_token_from_request, Claims};
+use super::jwt_claims::{get_token_from_request, Claims};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct UserInfo {
-    pub sub: String,
-    pub scope: Vec<String>,
+    pub id: String,
+    pub roles: Vec<String>,
 }
 
 impl From<Claims> for UserInfo {
     fn from(value: Claims) -> Self {
         Self {
-            sub: value.sub,
-            scope: value.scope.split(' ').map(str::to_owned).collect(),
+            id: value.sub,
+            roles: value.scope.split(' ').map(str::to_owned).collect(),
         }
     }
 }
@@ -30,6 +30,6 @@ impl FromRequest for UserInfo {
         _payload: &mut actix_http::Payload,
     ) -> Self::Future {
         let token = get_token_from_request(req).unwrap();
-        Box::pin(async move { Claims::from_request(&token).await.map(UserInfo::from) })
+        Box::pin(async move { Claims::validate(&token).await.map(UserInfo::from) })
     }
 }

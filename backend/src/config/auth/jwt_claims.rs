@@ -1,5 +1,5 @@
 use actix_web::http::{header, StatusCode};
-use jsonwebtoken::{decode, decode_header, jwk::JwkSet, DecodingKey, Validation};
+use jsonwebtoken::{decode, decode_header, jwk::Jwk, DecodingKey, Validation};
 use serde::Deserialize;
 
 use crate::error::ServiceError;
@@ -8,30 +8,39 @@ use crate::error::ServiceError;
 const JKWS_URL: &str = "http://localhost:8081/realms/PermaplanT/protocol/openid-connect/certs";
 
 #[derive(Debug, Clone, Deserialize)]
+struct JwkSetHelper {
+    keys: Vec<serde_json::Value>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
 pub struct Claims {
     pub sub: String,
     pub scope: String,
 }
 
 impl Claims {
-    pub async fn from_request(token: &str) -> Result<Self, ServiceError> {
+    pub async fn validate(token: &str) -> Result<Self, ServiceError> {
+        let header = decode_header(token).unwrap();
+
         // TODO: use extensions or middleware. Otherwise this function gets called twice
-        // TODO: cannot deserialize as Keycloak uses RSA-OAEP Alogrithm which jsonwebtoken doesn't know
-        let jwks = reqwest::get(JKWS_URL)
+        // [`JwkSet`] doesn't work as Keycloak uses algorithms jsonwebtoken doesn't support. This mean deserialization would fail.
+        let jwk = reqwest::get(JKWS_URL)
             .await
             .unwrap()
-            .json::<JwkSet>()
+            .json::<JwkSetHelper>()
             .await
+            .unwrap()
+            .keys
+            .into_iter()
+            .filter_map(|key| serde_json::from_value::<Jwk>(key).ok())
+            .find(|a| a.common.key_id.as_ref().unwrap() == header.kid.as_ref().unwrap())
             .unwrap();
 
-        let header = decode_header(token).unwrap();
-        let jwk = jwks.find(&header.kid.unwrap()).unwrap();
-        println!("{jwks:?}");
         println!("{jwk:?}");
 
         let claims = decode(
             token,
-            &DecodingKey::from_jwk(jwk).unwrap(),
+            &DecodingKey::from_jwk(&jwk).unwrap(),
             &Validation::new(header.alg),
         )
         .unwrap()
