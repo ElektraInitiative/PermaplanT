@@ -31,7 +31,7 @@ When an endpoint gets called Actix clones an internally stored pool of connectio
 We then 'forward' the pool to the service layer where a connection is retrieved from the pool.  
 The persistence layer then uses that connection to make calls to the database.
 
-The endpoints are automatically documented using [utoipa](https://github.com/juhaku/utoipa) which can generated OpenAPI documentation from code.
+The endpoints are automatically documented using [utoipa](https://github.com/juhaku/utoipa) which can generate OpenAPI documentation from code.
 
 ### Service
 
