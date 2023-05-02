@@ -5,7 +5,7 @@ use serde::Deserialize;
 
 use crate::error::ServiceError;
 
-use super::jwt_claims::Claims;
+use super::claims::Claims;
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct UserInfo {

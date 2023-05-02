@@ -9,6 +9,8 @@ categories = ["web-programming", "web-programming::http-server"]
 edition = "2021"
 
 [dependencies]
+tokio = { version = "1.28.0", features = ["full"]}
+
 # Actix
 actix-cors = "0.6.4"
 actix-web = "4.3.1"

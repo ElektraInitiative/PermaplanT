@@ -7,7 +7,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::config::auth::user_info_extractor::UserInfo;
+use crate::config::auth::user_info::UserInfo;
 use crate::model::dto::{PageParameters, SeedSearchParameters};
 use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
 
