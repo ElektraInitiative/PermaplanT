@@ -85,6 +85,67 @@ plant_detail }|--|| genus : ""
 plant_detail }|--|| subfamily : ""
 plant_detail }|--|| family : ""
 
+maps {
+  INT id PK
+  VARCHAR name "NOT NULL"
+  BOOLEAN is_inactive "NOT NULL"
+  DATE last_visit
+  INT honors
+  INT visits
+  INT harvested
+  DATE creation_date
+  DATE deletion_date
+  DATE inactivity_date
+  INT zoom_factor
+  GEOGRAPHY geo_data
+}
+
+users {
+  INT id PK
+  VARCHAR nc_uid
+  DATE contributor_until
+  VARCHAR app_language
+  DATE member_since
+  INT[] member_years
+  EXPERIENCE experience
+  VARCHAR preferences
+  GEOGRAPHY location
+  INT[] permacoins
+}
+
+blossoms {
+  INT id PK
+  VARCHAR title
+  VARCHAR description
+  VARCHAR condition
+  TRACKS track
+  BYTEA icon
+  BOOLEAN is_seasonal
+}
+
+enum_tracks {
+  VARCHAR beginners_track
+  VARCHAR seasonal_track
+  VARCHAR completionist_track
+  VARCHAR expert_track
+}
+
+enum_experience {
+  VARCHAR beginner
+  VARCHAR advanced
+  VARCHAR expert
+}
+
+blossoms_gained {
+  INT id PK
+  INT times_gained
+  DATE[] gained_date
+}
+
+maps }o--|| users : "owned by"
+blossoms ||--o{ blossoms_gained : ""
+blossoms_gained }o--|| users : ""
+
 ```
 
 # Table descriptions
@@ -144,6 +205,62 @@ plant_detail }|--|| family : ""
 | **is_tree**                      | true                             | Set of Herbaceous/Woody (woody) AND life cycle (perennial)                                        |
 | **nutrition_demand**             | NULL                             | If "Nutritionally poor soil" in `environmental_tolerances` is given `light feeder` should be set. |
 | **preferable_permaculture_zone** | NULL                             |                                                                                                   | -1..6 (-1 should be printed as 00) |
+
+## `Maps`
+
+| **_Column name_**                | **_Example_**                    | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :----------------------------------|
+| **id**                           | 1                                |
+| **owner_id**                     | 1                                |
+| **name**                         | My Map                           | only alphanumerical values
+| **is_inactive**                  | false                            |
+| **last_visit**                   | 2023-04-04                       |
+| **honors**                       | 0                                | 0 to infinity
+| **visits**                       | 0                                | 0 to infinity
+| **harvested**                    | 0                                | 0 to infinity, amount of plants harvested on this map
+| **version_date**                 | 2023-04-04                       | the date the snapshot for this version was taken
+| **creation_date**                | 2023-04-04                       |
+| **deletion_date**                | 2023-04-04                       |
+| **inactivity_date**              | 2023-04-04                       |
+| **zoom_factor**                  | 100                              | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000
+| **geo_data**                     | NULL                             | PostGis Geodata, location of the map
+
+## `Users`
+
+| **_Column name_**                | **_Example_**                    | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :----------------------------------|
+| **id**                           | 1                                |
+| **nc_uid**                       | 1                                | Nextcloud ID
+| **contributor_until**            | 2023-04-04                       | has contributing membership until the given date
+| **app_language**                 | English                          |
+| **member_since**                 | 2023-04-04                       |
+| **member_years**                 | {2023}                           | Array of years
+| **experience**                   | beginner                         |
+| **preferences**                  | raised vegetable beds            |
+| **location**                     | Vienna, Austria                  |
+| **permacoins**                   | {0}                              | 0 to infinity, one entry for every year since account creation
+
+## `Blossoms`
+
+| **_Column name_**                | **_Example_**                    | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :----------------------------------|
+| **id**                           | 1                                |
+| **title**                        | Novice Gardener                  |
+| **description**                  | Plant your first plant           |
+| **condition**                    | plants.count() >= 1              | condition used to check if milestone is reached
+| **track**                        | Beginners Track                  | the track (category) this blossom belongs to
+| **icon**                         | NULL                             |
+| **is_seasonal**                  | false                            | resets and repeats every year
+
+## `Blossoms Gained`
+
+| **_Column name_**                | **_Example_**                    | **_Description_**                  |
+| :------------------------------- | :------------------------------- | :----------------------------------|
+| **id**                           | 1                                |
+| **user_id**                      | 1                                |
+| **blossom_id**                   | 1                                |
+| **times_gained**                 | 1                                | 0 to infinity
+| **gained_date**                  | {2023-04-10}                     | one entry for every time gained
 
 ## `Relation`
 
