@@ -1,4 +1,4 @@
-use actix_web::http::{header, StatusCode};
+use actix_web::http::StatusCode;
 use jsonwebtoken::{
     decode, decode_header,
     jwk::{Jwk, JwkSet},
@@ -19,7 +19,6 @@ impl Claims {
         let header = decode_header(token).unwrap();
         let kid = header.kid.as_ref().unwrap();
 
-        // TODO: use extensions or middleware. Otherwise this function gets called twice
         // [`JwkSet`] doesn't work as Keycloak uses algorithms jsonwebtoken doesn't support. This mean deserialization would fail.
         let jwks = fetch_keys().await?;
 
@@ -70,23 +69,4 @@ async fn fetch_keys() -> Result<JwkSet, ServiceError> {
         .collect::<Vec<_>>();
     let jwks = JwkSet { keys };
     Ok(jwks)
-}
-
-pub fn get_token_from_request(req: &actix_web::HttpRequest) -> Result<String, ServiceError> {
-    let auth_header = req
-        .headers()
-        .get(header::AUTHORIZATION)
-        .ok_or(ServiceError::new(
-            StatusCode::UNAUTHORIZED,
-            "missing token".to_owned(),
-        ))?;
-    auth_header
-        .to_str()
-        .map_err(|err| ServiceError::new(StatusCode::UNAUTHORIZED, err.to_string()))?
-        .strip_prefix("Bearer ")
-        .ok_or(ServiceError::new(
-            StatusCode::UNAUTHORIZED,
-            "invalid format".to_owned(),
-        ))
-        .map(str::to_owned)
 }

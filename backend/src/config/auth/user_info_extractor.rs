@@ -1,10 +1,11 @@
-use actix_service::boxed::BoxFuture;
+use actix_http::HttpMessage;
+use actix_utils::future::{ready, Ready};
 use actix_web::FromRequest;
 use serde::Deserialize;
 
 use crate::error::ServiceError;
 
-use super::jwt_claims::{get_token_from_request, Claims};
+use super::jwt_claims::Claims;
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct UserInfo {
@@ -22,14 +23,15 @@ impl From<Claims> for UserInfo {
 }
 
 impl FromRequest for UserInfo {
-    type Future = BoxFuture<Result<Self, Self::Error>>;
+    type Future = Ready<Result<Self, Self::Error>>;
     type Error = ServiceError;
 
     fn from_request(
         req: &actix_web::HttpRequest,
         _payload: &mut actix_http::Payload,
     ) -> Self::Future {
-        let token = get_token_from_request(req).unwrap();
-        Box::pin(async move { Claims::validate(&token).await.map(UserInfo::from) })
+        let extensions = req.extensions();
+        let user_info = extensions.get::<UserInfo>().unwrap().clone();
+        ready(Ok(user_info))
     }
 }
