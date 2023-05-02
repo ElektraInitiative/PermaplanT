@@ -20,20 +20,16 @@ impl Jwks {
     /// * If it was already initialized.
     #[cfg(not(test))]
     pub fn init(keys: JwkSet) {
-        eprintln!("JWKS init: {JWKS:?}");
         JWKS.set(keys).expect("Already initialized!");
     }
 
-    /// Set the [`JwkSet`]. Needed for tests as static variables are shared by tests.
+    /// Set the [`JwkSet`].
     ///
-    /// # Panics
-    /// * If it was already initialized.
+    /// Needed for tests as static variables are shared by tests.
+    /// Error is ignored on purpose as this function will be called multiple times.
     #[cfg(test)]
     pub fn init(keys: JwkSet) {
-        eprintln!("JWKS init test: {JWKS:?}");
-        if !JWKS.initialized() {
-            JWKS.set(keys).expect("Already initialized!");
-        }
+        let _ = JWKS.set(keys);
     }
 
     /// Fetches the [`JwkSet`] from a remote url.
@@ -41,7 +37,6 @@ impl Jwks {
     /// # Panics
     /// * If it was already initialized.
     pub async fn init_from_remote(url: &str) {
-        eprintln!("JWKS init_from_remote: {JWKS:?}");
         let keys = fetch_keys(url).await;
         Self::init(keys);
     }
@@ -51,7 +46,6 @@ impl Jwks {
     /// # Panics
     /// * If it wasn't initialized.
     pub fn get() -> &'static JwkSet {
-        eprintln!("JWKS get: {JWKS:?}");
         JWKS.get().expect("Not yet initialized!")
     }
 }

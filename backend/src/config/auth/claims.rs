@@ -24,7 +24,6 @@ impl Claims {
     /// # Errors
     /// * If the token is invalid.
     pub fn validate(token: &str) -> Result<Self, ServiceError> {
-        eprintln!("token {token}");
         let header = decode_header(token)
             .map_err(|_| ServiceError::new(StatusCode::UNAUTHORIZED, "invalid token".to_owned()))?;
         let kid = header.kid.as_ref().ok_or_else(|| {
@@ -37,16 +36,13 @@ impl Claims {
                 "no valid key found".to_owned(),
             )
         })?;
-        eprintln!("jwk {jwk:?}");
 
         let decoding_key = &DecodingKey::from_jwk(jwk)
             .map_err(|err| ServiceError::new(StatusCode::INTERNAL_SERVER_ERROR, err.to_string()))?;
 
-        eprintln!("Got key");
         let claims = decode(token, decoding_key, &Validation::new(header.alg))
             .map_err(|_| ServiceError::new(StatusCode::UNAUTHORIZED, "invalid token".to_owned()))?
             .claims;
-        eprintln!("Decoded");
         Ok(claims)
     }
 }
