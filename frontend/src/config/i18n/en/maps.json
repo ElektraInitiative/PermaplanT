@@ -2,7 +2,10 @@
     "overview": {
         "page_title": "My Maps",
         "create_button": "New Map",
-        "missing_name": "Please enter a name"
+        "create_button_title": "Create new map",
+        "missing_name": "Please enter a name",
+        "honors_title": "Number of honors",
+        "visits_title": "Number of visits"
     },
     "create": {
         "modal_title": "New Map",

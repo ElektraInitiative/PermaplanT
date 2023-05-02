@@ -57,7 +57,11 @@ export default function MapOverview() {
       <PageLayout>
         {infoMessage.message !== '' && infoMessageContainer}
         <PageTitle title={t('maps:overview.page_title')} />
-        <SimpleButton onClick={() => setShow(true)} className="mb-8 max-w-[240px] grow">
+        <SimpleButton
+          onClick={() => setShow(true)}
+          className="mb-8 max-w-[240px] grow"
+          title={t('maps:overview.create_button_title')}
+        >
           {t('maps:overview.create_button')}
         </SimpleButton>
         <section className="mb-12">{mapList}</section>

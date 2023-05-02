@@ -59,10 +59,18 @@ export default function MapCreateModal({ show, setShow, successCallback }: MapCr
           />
           {missingName && missingNameText}
           <div className="space-between flex flex-row justify-center space-x-8">
-            <SimpleButton onClick={onCancel} className="max-w-[240px] grow">
+            <SimpleButton
+              onClick={onCancel}
+              className="max-w-[240px] grow"
+              title={t('maps:create.cancel_button')}
+            >
               {t('maps:create.cancel_button')}
             </SimpleButton>
-            <SimpleButton onClick={onSubmit} className="max-w-[240px] grow">
+            <SimpleButton
+              onClick={onSubmit}
+              className="max-w-[240px] grow"
+              title={t('maps:create.submit_button')}
+            >
               {t('maps:create.submit_button')}
             </SimpleButton>
           </div>

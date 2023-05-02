@@ -2,7 +2,10 @@
     "overview": {
         "page_title": "Meine Karten",
         "create_button": "Neue Karte",
-        "missing_name": "Bitte geben Sie einen Namen ein"
+        "create_button_title": "Neue Karte erstellen",
+        "missing_name": "Bitte geben Sie einen Namen ein",
+        "honors_title": "Anzahl der Ehrungen",
+        "visits_title": "Anzahl der Besucher"
     },
     "create": {
         "modal_title": "Neue Karte",

@@ -7,7 +7,10 @@ interface MapCardProps {
 
 export default function MapCard({ map }: MapCardProps) {
   return (
-    <div className="mb-4 flex rounded-lg bg-neutral-100 p-4 shadow-md dark:bg-neutral-800">
+    <div
+      className="mb-4 flex rounded-lg bg-neutral-100 p-4 shadow-md dark:bg-neutral-800"
+      title={map.name}
+    >
       {/* A preview image of the map can be placed here later */}
       <div id="placeholderImage" />
       <section className="flex flex-col">
