@@ -7,6 +7,7 @@ import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+/** Layer setting UI to control visibility, layer selection, opacity and alternatives */
 export const LayerSettings = ({
   name,
   setSelectedLayer,
@@ -22,7 +23,7 @@ export const LayerSettings = ({
 }) => {
   const [layerVisible, setLayerVisible] = useState(false);
   const [alternativesVisible, setAlternativesVisible] = useState(false);
-  const { t } = useTranslation(['layerSettings'])
+  const { t } = useTranslation(['layerSettings']);
 
   return (
     <>

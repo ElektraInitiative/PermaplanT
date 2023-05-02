@@ -4,6 +4,7 @@ import { ReactComponent as AddIcon } from '@/icons/add.svg';
 import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
 import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
 
+/** Layer controls including visibility, layer selection, opacity and alternatives */
 export const Layers = () => {
   return (
     <div className="flex flex-col p-2">

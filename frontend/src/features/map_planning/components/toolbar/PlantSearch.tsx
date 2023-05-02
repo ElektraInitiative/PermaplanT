@@ -6,6 +6,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+/** plants list mock */
+/** TODO: fetch plant data from backend */
 const allPlants = [
   'Aloe vera',
   'Bamboo',
@@ -111,11 +113,12 @@ const allPlants = [
   'Zelkova',
 ];
 
+/** UI component intended for searching plants that can be drag and dropped to the plant layer */
 export const PlantSearch = () => {
   const [plants, setPlants] = useState(allPlants);
   const [searchVisible, setSearchVisible] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const { t } = useTranslation(['plantSearch'])
+  const { t } = useTranslation(['plantSearch']);
 
   useEffect(() => {
     searchInputRef.current?.focus();

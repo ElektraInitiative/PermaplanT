@@ -1,12 +1,16 @@
 import { ReactNode, useState } from 'react';
 import { DraggableCore, DraggableEventHandler } from 'react-draggable';
 
+/** horizontal toolbar handle used to hide and show content */
+/** includes extra padding to increase surface size */
 const HorizontalHandle = () => (
   <div className={`horizontal-handle w-full pb-2 pt-2 hover:cursor-row-resize`}>
     <div className="h-[3px] w-full bg-neutral-700" />
   </div>
 );
 
+/** vertical toolbar handle used to hide and show content */
+/** includes extra transparent div to increase surface size */
 const VerticalHandle = () => (
   <div className={`vertical-handle relative flex hover:cursor-col-resize`}>
     <div className="h-full w-[3px] bg-neutral-700" />
@@ -14,19 +18,23 @@ const VerticalHandle = () => (
   </div>
 );
 
-export const Toolbar = ({
-  contentTop,
-  contentBottom,
-  position,
-  minWidth = 200,
-}: {
+interface ToolbarProps {
+  /** content that is placed in the upper part of the toolbar */
   contentTop: ReactNode;
+  /** content that is placed in the lower part of the toolbar */
   contentBottom: ReactNode;
+  /** position where the toolbar is intended to be on the screen */
+  /** The layout is controlled by the parent but the value is needed for correctly resizing the toolbar */
   position: 'left' | 'right';
+  /** Minimum width of the toolbar, can't be resized to a smaller width*/
   minWidth: number;
-}) => {
+}
+
+/** Toolbar with two content slots that can be used left and right of the screen */
+export const Toolbar = ({ contentTop, contentBottom, position, minWidth = 200 }: ToolbarProps) => {
   const [sizeState, setSizeState] = useState({ height: 300, width: 300 });
 
+  /** DraggableEventHandler used for resizing the width of the toolbar */
   const onResizeWidth: DraggableEventHandler = (event, data) => {
     if (position === 'right') {
       if (sizeState.width - data.deltaX > minWidth) {
@@ -38,6 +46,7 @@ export const Toolbar = ({
       }
     }
   };
+  /** DraggableEventHandler used for resizing the height of the top toolbar content */
   const onResizeHeight: DraggableEventHandler = (event, data) => {
     setSizeState({ height: sizeState.height + data.deltaY, width: sizeState.width });
   };

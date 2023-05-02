@@ -6,7 +6,7 @@ interface SliderProps {
   /** onChange event is triggered whenever the current percentage value of the slider changes */
   onChange: (percentage: number) => void;
   /** sets the title attribute for the outer div */
-  title: string
+  title: string;
 }
 
 /**
@@ -18,6 +18,12 @@ export const NamedSlider = (props: SliderProps) => {
 
   const minWidth = 0;
   const maxWidth = sliderDivRef.current ? sliderDivRef.current.clientWidth : 100;
+
+  /** keybinding for changing the value */
+  const keybindings = {
+    valueUp: ['k', 'ArrowLeft'],
+    valueDown: ['j', 'ArrowDown'],
+  };
 
   const dragHandler: MouseEventHandler = (pointerEvent) => {
     const startWidth = width;
@@ -48,6 +54,8 @@ export const NamedSlider = (props: SliderProps) => {
     props.onChange(newWidth / sliderWidth);
   };
 
+  /** adds the given value to the current slider value */
+  /** the slider value is float between 0 and 1 */
   const changePercentage = (value: number) => {
     if (!sliderDivRef.current) return 0;
     const sliderWidth = sliderDivRef.current.clientWidth;
@@ -57,10 +65,11 @@ export const NamedSlider = (props: SliderProps) => {
     props.onChange(percentage);
   };
 
+  /** increases or decreases the slider value when one of the corresponding keys defined in keybindings are pressed */
   const keyDownHandler: KeyboardEventHandler = (event) => {
-    if (event.key === 'j' || event.key === 'ArrowRight') {
+    if (keybindings.valueUp.includes(event.key)) {
       changePercentage(0.05);
-    } else if (event.key === 'k' || event.key === 'ArrowLeft') {
+    } else if (keybindings.valueDown.includes(event.key)) {
       changePercentage(-0.05);
     }
   };
