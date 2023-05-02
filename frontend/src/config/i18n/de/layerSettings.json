@@ -1,3 +1,5 @@
 {
-  "sliderTooltip": "Verändern der Transparenz:\n j oder linke Pfeiltaste - erhöht Undurchsichtigkeit\n k oder rechte Pfeiltaste - veringert Undurchsichtigkeit"
+  "sliderTooltip": "Verändern der Transparenz:\n j oder linke Pfeiltaste - erhöht Undurchsichtigkeit\n k oder rechte Pfeiltaste - veringert Undurchsichtigkeit",
+  "show_hide_layer": "zeige/verstecke Ebene",
+  "select_layer": "wähle Ebene"
 }

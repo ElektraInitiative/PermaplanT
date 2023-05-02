@@ -7,6 +7,21 @@ import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+interface LayerSettingsProps {
+  /** name of the layer - this is displayed on top of the slider */
+  name: string;
+  /** function that gets triggered when the layer is selected */
+  setSelectedLayer?: (name: string) => void;
+  /** function that gets triggered when slider value is changed */
+  setLayerOpacity?: (name: string, value: number) => void;
+  /** function that gets triggered when an alternative is selected */
+  setLayerAlternative?: (name: string, value: string) => void;
+  /** list of names of the possible alternatives for this layer
+   * if alternatives are given they can be selected in a menu
+   **/
+  alternatives?: Array<string>;
+}
+
 /** Layer setting UI to control visibility, layer selection, opacity and alternatives */
 export const LayerSettings = ({
   name,
@@ -14,13 +29,7 @@ export const LayerSettings = ({
   setLayerOpacity,
   setLayerAlternative,
   alternatives,
-}: {
-  name: string;
-  setSelectedLayer?: (name: string) => void;
-  setLayerOpacity?: (name: string, value: number) => void;
-  setLayerAlternative?: (name: string, value: string) => void;
-  alternatives?: Array<string>;
-}) => {
+}: LayerSettingsProps) => {
   const [layerVisible, setLayerVisible] = useState(false);
   const [alternativesVisible, setAlternativesVisible] = useState(false);
   const { t } = useTranslation(['layerSettings']);
@@ -28,7 +37,10 @@ export const LayerSettings = ({
   return (
     <>
       <div className="flex items-center justify-center">
-        <IconButton title="show/hide layer" onClick={() => setLayerVisible(!layerVisible)}>
+        <IconButton
+          title={t('layerSettings:show_hide_layer')}
+          onClick={() => setLayerVisible(!layerVisible)}
+        >
           {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
         </IconButton>
       </div>
