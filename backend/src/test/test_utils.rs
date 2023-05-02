@@ -18,6 +18,7 @@ use diesel_async::{
 use dotenvy::dotenv;
 use jsonwebtoken::jwk::JwkSet;
 use serde::Serialize;
+use uuid::Uuid;
 
 use crate::config::{app, auth::jwks::Jwks, routes};
 use crate::error::ServiceError;
@@ -61,16 +62,30 @@ where
 }
 
 /// Create the test service out of the connection pool.
+///
+/// Returns a token in bearer format ("Bearer <token>") and the app to send the request to.
 pub async fn init_test_app(
     pool: Pool<AsyncPgConnection>,
 ) -> (
     String,
     impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error>,
 ) {
+    let token = setup_auth();
+
+    let app = test::init_service(
+        App::new()
+            .app_data(Data::new(pool))
+            .configure(routes::config),
+    )
+    .await;
+    (format!("Bearer {token}"), app)
+}
+
+fn setup_auth() -> String {
     #[derive(Debug, Clone, Serialize)]
     struct TokenClaims {
         exp: u64,
-        sub: String,
+        sub: Uuid,
         scope: String,
     }
     let jwk_json = "{
@@ -89,6 +104,10 @@ pub async fn init_test_app(
     let jwk1 = serde_json::from_str::<jsonwebtoken::jwk::Jwk>(jwk_json).unwrap();
     let jwk2 = serde_json::from_str::<jsonwebkey::JsonWebKey>(jwk_json).unwrap();
 
+    Jwks::init(JwkSet {
+        keys: vec![jwk1.clone()],
+    });
+
     let mut header = jsonwebtoken::Header::new(jwk2.algorithm.unwrap().into());
     header.kid = Some(jwk2.key_id.clone().unwrap());
     let token = jsonwebtoken::encode(
@@ -99,13 +118,14 @@ pub async fn init_test_app(
                 .unwrap()
                 .as_secs()
                 + 300,
-            sub: "6b0269b3-4953-48b6-8733-83f0a3db798e".to_string(),
-            scope: "profile email".to_string(),
+            sub: Uuid::new_v4(),
+            scope: "".to_string(),
         },
         &jwk2.key.to_encoding_key(),
     )
     .unwrap();
 
+    // Validate token
     println!("{token}");
     let header = jsonwebtoken::decode_header(&token).unwrap();
     let value = jsonwebtoken::decode::<serde_json::Value>(
@@ -116,13 +136,5 @@ pub async fn init_test_app(
     .unwrap();
     println!("{:?}", value.claims);
 
-    Jwks::init(JwkSet { keys: vec![jwk1] });
-
-    let app = test::init_service(
-        App::new()
-            .app_data(Data::new(pool))
-            .configure(routes::config),
-    )
-    .await;
-    (format!("Bearer {token}"), app)
+    token
 }

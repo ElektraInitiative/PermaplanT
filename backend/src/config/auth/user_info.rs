@@ -4,6 +4,7 @@ use actix_http::{HttpMessage, StatusCode};
 use actix_utils::future::{ready, Ready};
 use actix_web::FromRequest;
 use serde::Deserialize;
+use uuid::Uuid;
 
 use crate::error::ServiceError;
 
@@ -13,7 +14,7 @@ use super::claims::Claims;
 #[derive(Debug, Clone, Deserialize)]
 pub struct UserInfo {
     /// The current users id.
-    pub id: String,
+    pub id: Uuid,
     /// The roles the current user has.
     pub roles: Vec<String>,
 }

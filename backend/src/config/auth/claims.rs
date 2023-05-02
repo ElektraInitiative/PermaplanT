@@ -3,6 +3,7 @@
 use actix_web::http::StatusCode;
 use jsonwebtoken::{decode, decode_header, DecodingKey, Validation};
 use serde::Deserialize;
+use uuid::Uuid;
 
 use crate::error::ServiceError;
 
@@ -12,7 +13,7 @@ use super::jwks::Jwks;
 #[derive(Debug, Clone, Deserialize)]
 pub struct Claims {
     /// The subject
-    pub sub: String,
+    pub sub: Uuid,
     /// The OAuth2 scope
     pub scope: String,
 }
