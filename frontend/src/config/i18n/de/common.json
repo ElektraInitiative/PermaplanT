@@ -3,5 +3,9 @@
   "yes": "Ja",
   "no": "Nein",
   "cancel": "Abbrechen",
-  "unknown_error": "Ein unbekannter Fehler ist aufgetreten."
+  "unknown_error": "Ein unbekannter Fehler ist aufgetreten.",
+  "meters": "Meter",
+  "centimeters": "Centimeter",
+  "meters_short": "m",
+  "centimeters_short": "cm"
 }
