@@ -9,7 +9,7 @@ categories = ["web-programming", "web-programming::http-server"]
 edition = "2021"
 
 [dependencies]
-tokio = { version = "1.28.0", features = ["full"]}
+tokio = { version = "1.28.0", features = ["full"] }
 
 # Actix
 actix-cors = "0.6.4"
@@ -45,3 +45,7 @@ serde = { version = "1.0.152", features = ["derive"] }
 dotenvy = "0.15.0"
 typeshare = "1.0.0"
 derive_more = "0.99.17"
+
+
+[dev-dependencies]
+jsonwebkey = { version = "0.3.5", features = ["generate", "jwt-convert"] }

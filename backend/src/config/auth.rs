@@ -21,6 +21,7 @@ pub fn validator(
     req: ServiceRequest,
     credentials: &BearerAuth,
 ) -> Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
+    println!("Validating...");
     let user_info = match claims::Claims::validate(credentials.token()) {
         Ok(claims) => UserInfo::from(claims),
         Err(err) => return Err((err.into(), req)),
