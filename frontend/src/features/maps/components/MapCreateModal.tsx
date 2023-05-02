@@ -1,4 +1,3 @@
-import { createMap } from '../api/createMap';
 import { NewMapDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import ModalContainer from '@/components/Modals/ModalContainer';
@@ -9,9 +8,10 @@ import { useTranslation } from 'react-i18next';
 interface MapCreateModalProps {
   show: boolean;
   setShow: (show: boolean) => void;
+  successCallback: (map: NewMapDto) => void;
 }
 
-export default function MapCreateModal({ show, setShow }: MapCreateModalProps) {
+export default function MapCreateModal({ show, setShow, successCallback }: MapCreateModalProps) {
   const { t } = useTranslation(['maps']);
   const [missingName, setMissingName] = useState(false);
 
@@ -36,10 +36,7 @@ export default function MapCreateModal({ show, setShow }: MapCreateModalProps) {
       harvested: 0,
     };
     setShow(false);
-    createMap(newMap).then(
-      () => console.log('success'),
-      (error) => console.log(error.message),
-    );
+    successCallback(newMap);
   }
 
   function onCancel() {

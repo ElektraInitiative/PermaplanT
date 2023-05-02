@@ -7,6 +7,8 @@
     "create": {
         "modal_title": "New Map",
         "cancel_button": "Cancel",
-        "submit_button": "Create"
+        "submit_button": "Create",
+        "success": "Map successfully created!",
+        "failure": "Something went wrong, please try again later!"
     }
 }

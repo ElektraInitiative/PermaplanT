@@ -4,7 +4,8 @@ import axios from 'axios';
 
 export async function createMap(map: NewMapDto) {
   try {
-    await axios.post<MapDto>(`${baseApiUrl}/api/maps`, map);
+    const response = await axios.post<MapDto>(`${baseApiUrl}/api/maps`, map);
+    return response.data;
   } catch (error) {
     throw error as Error;
   }

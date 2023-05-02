@@ -7,6 +7,8 @@
     "create": {
         "modal_title": "Neue Karte",
         "cancel_button": "Abbrechen",
-        "submit_button": "Erstellen"
+        "submit_button": "Erstellen",
+        "success": "Karte wurde erfolgreich erstellt!",
+        "failure": "Etwas ist schief gelaufen, bitte versuchen Sie es später erneut!"
     }
 }
