@@ -18,7 +18,6 @@ impl Jwks {
     ///
     /// # Panics
     /// * If it was already initialized.
-    #[cfg(not(test))]
     pub fn init(keys: JwkSet) {
         JWKS.set(keys).expect("Already initialized!");
     }
@@ -28,7 +27,7 @@ impl Jwks {
     /// Needed for tests as static variables are shared by tests.
     /// Error is ignored on purpose as this function will be called multiple times.
     #[cfg(test)]
-    pub fn init(keys: JwkSet) {
+    pub fn init_for_tests(keys: JwkSet) {
         let _ = JWKS.set(keys);
     }
 
