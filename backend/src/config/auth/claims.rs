@@ -13,11 +13,11 @@ pub struct Claims {
 }
 
 impl Claims {
-    pub async fn validate(token: &str) -> Result<Self, ServiceError> {
+    pub fn validate(token: &str) -> Result<Self, ServiceError> {
         let header = decode_header(token).unwrap();
         let kid = header.kid.as_ref().unwrap();
 
-        let jwk = Jwks::get().await.find(kid).ok_or(ServiceError::new(
+        let jwk = Jwks::get().find(kid).ok_or(ServiceError::new(
             StatusCode::INTERNAL_SERVER_ERROR,
             "no valid key found".to_owned(),
         ))?;

@@ -54,6 +54,8 @@ use actix_web::{http, web::Data, App, HttpServer};
 use config::{api_doc, routes};
 use db::connection;
 
+use crate::config::auth::jwks::Jwks;
+
 pub mod config;
 pub mod controller;
 pub mod db;
@@ -73,6 +75,8 @@ async fn main() -> std::io::Result<()> {
         Ok(config) => config,
         Err(e) => panic!("Error reading configuration: {e}"),
     };
+
+    Jwks::init_from_remote(&config.auth_server_url).await;
 
     HttpServer::new(move || {
         let pool = connection::init_pool(&config.database_url);

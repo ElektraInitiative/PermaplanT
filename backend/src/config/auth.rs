@@ -1,7 +1,7 @@
 //! Handles authentication and authorization.
 
 mod claims;
-mod jwks;
+pub mod jwks;
 pub mod user_info;
 
 use actix_http::HttpMessage;
@@ -22,7 +22,7 @@ pub async fn validator(
     req: ServiceRequest,
     credentials: BearerAuth,
 ) -> Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
-    let user_info = match claims::Claims::validate(credentials.token()).await {
+    let user_info = match claims::Claims::validate(credentials.token()) {
         Ok(claims) => UserInfo::from(claims),
         Err(err) => return Err((err.into(), req)),
     };

@@ -10,6 +10,10 @@ pub struct Config {
     pub bind_address: (String, u16),
     /// The location of the database as a URL.
     pub database_url: String,
+    /// The location of the authorization server.
+    ///
+    /// Will be used to fetch jwks to validate tokens.
+    pub auth_server_url: String,
 }
 
 impl Config {
@@ -31,10 +35,13 @@ impl Config {
 
         let database_url =
             env::var("DATABASE_URL").map_err(|_| "Failed to get DATABASE_URL from environment.")?;
+        let auth_server_url = env::var("AUTH_SERVER_URL")
+            .map_err(|_| "Failed to get AUTH_SERVER_URL from environment.")?;
 
         Ok(Self {
             bind_address: (host, port),
             database_url,
+            auth_server_url,
         })
     }
 }
