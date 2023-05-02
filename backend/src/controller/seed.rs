@@ -7,7 +7,6 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::config::auth::user_info::UserInfo;
 use crate::model::dto::{PageParameters, SeedSearchParameters};
 use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
 
@@ -30,10 +29,8 @@ use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
 pub async fn find(
     search_query: Query<SeedSearchParameters>,
     page_query: Query<PageParameters>,
-    user: UserInfo,
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
-    println!("{user:?}");
     let response =
         service::seed::find(search_query.into_inner(), page_query.into_inner(), &pool).await?;
     Ok(HttpResponse::Ok().json(response))

@@ -1,5 +1,6 @@
 //! Routes in the backend.
 
+use actix_utils::future::ready;
 use actix_web::{middleware::NormalizePath, web};
 use actix_web_httpauth::middleware::HttpAuthentication;
 
@@ -7,7 +8,9 @@ use crate::controller::{plantings, plants, seed};
 
 /// Defines all routes of the backend and which functions they map to.
 pub fn config(cfg: &mut web::ServiceConfig) {
-    let auth = HttpAuthentication::bearer(super::auth::validator);
+    let auth = HttpAuthentication::bearer(|req, credentials| {
+        ready(super::auth::validator(req, &credentials))
+    });
 
     cfg.service(
         web::scope("/api")

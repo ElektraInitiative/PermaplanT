@@ -17,10 +17,9 @@ use self::user_info::UserInfo;
 ///
 /// # Errors
 /// * If the token is missing or invalid
-#[allow(clippy::future_not_send)] // function signature is required by [`actix_web_httpauth`]
-pub async fn validator(
+pub fn validator(
     req: ServiceRequest,
-    credentials: BearerAuth,
+    credentials: &BearerAuth,
 ) -> Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
     let user_info = match claims::Claims::validate(credentials.token()) {
         Ok(claims) => UserInfo::from(claims),
