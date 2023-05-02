@@ -82,6 +82,7 @@ pub async fn init_test_app(
 }
 
 fn setup_auth() -> String {
+    // TODO: cleanup
     #[derive(Debug, Clone, Serialize)]
     struct TokenClaims {
         exp: u64,
@@ -104,7 +105,7 @@ fn setup_auth() -> String {
     let jwk1 = serde_json::from_str::<jsonwebtoken::jwk::Jwk>(jwk_json).unwrap();
     let jwk2 = serde_json::from_str::<jsonwebkey::JsonWebKey>(jwk_json).unwrap();
 
-    Jwks::init(JwkSet {
+    Jwks::init_for_tests(JwkSet {
         keys: vec![jwk1.clone()],
     });
 
