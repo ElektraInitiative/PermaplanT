@@ -82,60 +82,55 @@ pub async fn init_test_app(
 }
 
 fn setup_auth() -> String {
-    // TODO: cleanup
-    #[derive(Debug, Clone, Serialize)]
-    struct TokenClaims {
-        exp: u64,
-        sub: Uuid,
-        scope: String,
-    }
-    let jwk_json = "{
-        \"p\": \"4hnyVSiCG5huFRbWmxii72CvGGF3OCQmdJsKMmsqklYg9cBSfu7N8JfSJ6P5yiMA7uzJc5uVpaZYBIu3lEYAoWKHGYMw0GQaLXb7lhyzOwTvgmhx4cHgKJAmMhiGogAyOBfpLiFYfF9idEvuANOhv5MoqF4DIeubSaTOz3btwws\",
-        \"kty\": \"RSA\",
-        \"q\": \"t4h-2-Jw2x9F1A4Gh_pynFkOkeZ2wMDdFhn3N9_ESoNUfQzlxSo83f8458xDgCX18soEHN5bdebi-Ct0Z-2cZ82Uylq3qc-RwYnomDG3XHAkvktHzInBq7D6OSjlby7mqZRT02304K8yku52Ij3WK6OwvlkYwg2nPWDY5OVYSCM\",
-        \"d\": \"UCrR9D0W6alQTgeX-o0Ccm9eHo1sBhD46ikNMOnD3ZjFKZebjBBDG7-2wqTGl8px_36XcncxyTI28VfJxzK2dv6OwKRL5b2l0-GjTtjd0EeIJGKeJJWPxXKDI7cCgc6PzDpIkjnqKGbSsoMjicqdneFWMW8vn9tyyBIE7A2bXM4ut--kO-TkcbFUkCSj7F0ILn_l5s1faHax2mEjWiEfuuDQd50WvHT2ZHU5f1mAY4aBai7lL8X3_47CdnwmTRiKtroVyLaafB5X1BjpdAtaEjXyJxNx1ruBQxmsvIjJ6upJty3qVDUVzZ_xrV3BZ_jeQN2uDIkfOVyWrha32sIPMQ\",
-        \"e\": \"AQAB\",
-        \"kid\": \"xbAmoPN1JqIdB8OBXSV_VWCqa_abNt5_P_Pz3K-j4p8\",
-        \"qi\": \"2oMDuZbhKBZ5J1DROzJIe31bu8DeL5rBow_i45bKh1gSY1Hesz2Tl27zTPp0wwYa6NPpmJZ1zSqlTvpF1eRk9xmUZAAI9qhPnA8vm2ofLR7kllVTSbCLIWFq3DR5lQHN29dM95cirWcv8uTwj9kspl0Obtj26DBhmtqQoycFR_s\",
-        \"dp\": \"jHnudDZcz-Re0L-Fyor-AJgjcZRsy_a55czGAxlOM-lLRSSenLqmPQs2yOY6NfqVg9yeNTO_QFIfcYOVJYxwq9RZd-Jom7D2CrVYDqX6PXsNjAp0Zv1b1hfpg0p1q4VPrkY83CpfnbZtpy_dyamzXyGBK0pty89khdbdn0yW4I0\",
-        \"alg\": \"RS256\",
-        \"dq\": \"k5kI9Iqh2gbHYGc7J2XpgAU662jdPdycsGaHY37oXEhLzRlvO2Xhd2MGf5vM-SUOK4f9UL4d7a6V_6Dqx53Wd8BkFWxpYf4VKQFgde0dmhBx7DucbUin4Qy93vQdt5GPXPd1hoZaNcuPr4xootb6AzRsMlhyybSzN3BIXaR3n-M\",
-        \"n\": \"ohkaDpapVHNUsj-Mw8qFQYHSLGKHLvSWOA_azHaTWId-XCneus8ukYpuBrnHKxHdQ0RDvocwf6sUFv1nBH14SffEmTAnAIyeOyNo3J3wl2_f_tI9ykHwGcxRbvDaUNLt2x2T3EGPGqQOevGcE_PM4tTH8aLO7Zr8VNWL6UXZGKEsfyO57r7GPg0dwiT7BbI4kYX4LfxdWA-5OIUsNMo6rm7fM5AE3EEjZcE19IMsHyBOz5srDTD0rCZ_xirqzbdR6OdzCbML_pn8_KnnUuiyazDIyD3v9qAXaR2C13BaAQkvRwK6fePDYJSUlio_nE6cyC12Vv7q6YZj2S7QBCTCgQ\"
-    }";
+    // Load key from pre generated one. Both crates are necessary as jsonwebtoken cannot generate an encoding key from a jwk.
+    let jwk_json = include_str!("test_jwk.json");
     let jwk1 = serde_json::from_str::<jsonwebtoken::jwk::Jwk>(jwk_json).unwrap();
     let jwk2 = serde_json::from_str::<jsonwebkey::JsonWebKey>(jwk_json).unwrap();
 
+    // Init application jwks
     Jwks::init_for_tests(JwkSet {
         keys: vec![jwk1.clone()],
     });
 
+    // Generate token
     let mut header = jsonwebtoken::Header::new(jwk2.algorithm.unwrap().into());
     header.kid = Some(jwk2.key_id.clone().unwrap());
     let token = jsonwebtoken::encode(
         &header,
-        &TokenClaims {
+        &TokenClaims::default(),
+        &jwk2.key.to_encoding_key(),
+    )
+    .unwrap();
+
+    // Check if generated token is correct
+    let header = jsonwebtoken::decode_header(&token).unwrap();
+    jsonwebtoken::decode::<serde_json::Value>(
+        &token,
+        &jsonwebtoken::DecodingKey::from_jwk(&jwk1).unwrap(),
+        &jsonwebtoken::Validation::new(header.alg),
+    )
+    .unwrap();
+
+    token
+}
+
+#[derive(Debug, Clone, Serialize)]
+struct TokenClaims {
+    exp: u64,
+    sub: Uuid,
+    scope: String,
+}
+
+impl Default for TokenClaims {
+    fn default() -> Self {
+        Self {
             exp: SystemTime::now()
                 .duration_since(UNIX_EPOCH)
                 .unwrap()
                 .as_secs()
                 + 300,
             sub: Uuid::new_v4(),
-            scope: "".to_string(),
-        },
-        &jwk2.key.to_encoding_key(),
-    )
-    .unwrap();
-
-    // Validate token
-    println!("{token}");
-    let header = jsonwebtoken::decode_header(&token).unwrap();
-    let value = jsonwebtoken::decode::<serde_json::Value>(
-        &token,
-        &jsonwebtoken::DecodingKey::from_jwk(&jwk1).unwrap(),
-        &jsonwebtoken::Validation::new(header.alg),
-    )
-    .unwrap();
-    println!("{:?}", value.claims);
-
-    token
+            scope: Default::default(),
+        }
+    }
 }
