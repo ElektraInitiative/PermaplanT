@@ -1,5 +1,7 @@
 import IconButton from '@/components/Button/IconButton';
 import { NamedSlider } from '@/components/Slider/NamedSlider';
+import { LayerName } from '@/features/undo_redo';
+import useMapStore from '@/features/undo_redo';
 import { ReactComponent as CaretDownIcon } from '@/icons/caret-down.svg';
 import { ReactComponent as CaretRightIcon } from '@/icons/caret-right.svg';
 import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
@@ -9,13 +11,13 @@ import { useTranslation } from 'react-i18next';
 
 interface LayerSettingsProps {
   /** name of the layer - this is displayed on top of the slider */
-  name: string;
+  name: LayerName;
   /** function that gets triggered when the layer is selected */
-  setSelectedLayer?: (name: string) => void;
+  setSelectedLayer?: (name: LayerName) => void;
   /** function that gets triggered when slider value is changed */
-  setLayerOpacity?: (name: string, value: number) => void;
+  setLayerOpacity?: (name: LayerName, value: number) => void;
   /** function that gets triggered when an alternative is selected */
-  setLayerAlternative?: (name: string, value: string) => void;
+  setLayerAlternative?: (name: LayerName, value: string) => void;
   /** list of names of the possible alternatives for this layer
    * if alternatives are given they can be selected in a menu
    **/
@@ -30,7 +32,9 @@ export const LayerSettings = ({
   setLayerAlternative,
   alternatives,
 }: LayerSettingsProps) => {
-  const [layerVisible, setLayerVisible] = useState(false);
+  const layerVisible = useMapStore((map) => map.state.layers[name].visible);
+  const selectedLayer = useMapStore((map) => map.state.selectedLayer);
+  const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
   const [alternativesVisible, setAlternativesVisible] = useState(false);
   const { t } = useTranslation(['layerSettings']);
 
@@ -39,7 +43,7 @@ export const LayerSettings = ({
       <div className="flex items-center justify-center">
         <IconButton
           title={t('layerSettings:show_hide_layer')}
-          onClick={() => setLayerVisible(!layerVisible)}
+          onClick={() => updateLayerVisible(name, !layerVisible)}
         >
           {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
         </IconButton>
@@ -50,6 +54,7 @@ export const LayerSettings = ({
           className="h-4 w-4"
           type="radio"
           value={name}
+          checked={selectedLayer === name}
           onClick={() => {
             if (setSelectedLayer) setSelectedLayer(name);
           }}
