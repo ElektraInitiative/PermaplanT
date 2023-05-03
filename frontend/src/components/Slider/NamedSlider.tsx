@@ -21,8 +21,8 @@ export const NamedSlider = (props: SliderProps) => {
 
   /** keybinding for changing the value */
   const keybindings = {
-    valueUp: ['k', 'ArrowLeft'],
-    valueDown: ['j', 'ArrowDown'],
+    valueUp: ['k', 'ArrowRight'],
+    valueDown: ['j', 'ArrowLeft'],
   };
 
   const dragHandler: MouseEventHandler = (pointerEvent) => {
