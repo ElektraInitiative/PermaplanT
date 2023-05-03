@@ -8,7 +8,7 @@ PermaplanT uses the [Jest](https://jestjs.io) testing framework.
 
 ## Types and organization of test
 
-We distinguish three different kinds of tests in the frontend of PermaplanT. 
+We distinguish three different kinds of tests in the frontend of PermaplanT.
 
 - Render tests
 - DOM tests
@@ -16,7 +16,7 @@ We distinguish three different kinds of tests in the frontend of PermaplanT.
 
 Each of these test-types may be used for unit testing or integration testing.
 
-All tests related to a component can be found under the same directory in `<component name>.test.tsx`  
+All tests related to a component can be found under the same directory in `<component name>.test.tsx`
 
 ## Render tests
 
@@ -27,7 +27,8 @@ After a new render test is run for the first time, [React Test Renderer](https:/
 If the same component renders differently in the future, e.g. because a subcomponent was changed, the test will fail.
 
 To fix the issue, the programmer has to decide if the changes are intentional and then either fix the issue, or regenerate the affected snapshots using:
-```
+
+```bash
 npm run -- --updateSnapshot
 ```
 
@@ -43,4 +44,4 @@ If possible, [User Event](https://testing-library.com/docs/user-event/intro) sho
 
 The remaining tests are used to test our frontends endpoints, helper functions and in general code that is not tied to the DOM.
 
-[Jest](https://jestjs.io) provides plenty of APIs that can be used to mock functions and backend routes for this purpose. 
+[Jest](https://jestjs.io) provides plenty of APIs that can be used to mock functions and backend routes for this purpose.

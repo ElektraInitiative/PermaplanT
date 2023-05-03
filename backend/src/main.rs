@@ -90,6 +90,7 @@ async fn main() -> std::io::Result<()> {
             .configure(routes::config)
             .configure(api_doc::config)
     })
+    .shutdown_timeout(5)
     .bind(config.bind_address)?
     .run()
     .await
