@@ -103,13 +103,13 @@ fn setup_auth() -> String {
     .unwrap();
 
     // Check if generated token is correct
-    let header = jsonwebtoken::decode_header(&token).unwrap();
+    let alg = jsonwebtoken::decode_header(&token).unwrap().alg;
     jsonwebtoken::decode::<serde_json::Value>(
         &token,
         &jsonwebtoken::DecodingKey::from_jwk(&jwk1).unwrap(),
-        &jsonwebtoken::Validation::new(header.alg),
+        &jsonwebtoken::Validation::new(alg),
     )
-    .unwrap();
+    .expect("Failed to decode token. Something in the test setup is wrong.");
 
     token
 }
@@ -126,11 +126,11 @@ impl Default for TokenClaims {
         Self {
             exp: SystemTime::now()
                 .duration_since(UNIX_EPOCH)
-                .unwrap()
+                .expect("Time went backwards!")
                 .as_secs()
                 + 300,
             sub: Uuid::new_v4(),
-            scope: Default::default(),
+            scope: String::new(),
         }
     }
 }
