@@ -2,7 +2,7 @@
 
 use crate::{
     model::dto::{Page, PlantsSummaryDto},
-    test::test_utils::{init_test_app, init_test_database},
+    test::util::{init_test_app, init_test_database},
 };
 use actix_web::{
     http::header::{self, CONTENT_TYPE},

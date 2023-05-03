@@ -1,6 +1,6 @@
 //! Tests for authorization.
 
-use crate::test::test_utils::{init_test_app, init_test_database};
+use crate::test::util::{init_test_app, init_test_database};
 use actix_web::{
     http::{header, StatusCode},
     test,

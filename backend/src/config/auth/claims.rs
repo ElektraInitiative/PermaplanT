@@ -46,3 +46,30 @@ impl Claims {
         Ok(claims)
     }
 }
+
+#[cfg(test)]
+mod test {
+    use crate::test::util::{jwks::init_jwks, token::generate_token};
+
+    use super::Claims;
+
+    #[test]
+    fn test_simple_token_succeeds() {
+        let jwk = init_jwks();
+        let token = generate_token(jwk, 300);
+        assert!(Claims::validate(&token).is_ok())
+    }
+
+    #[test]
+    fn test_expired_token_fails() {
+        let jwk = init_jwks();
+        let token = generate_token(jwk, -300);
+        assert!(Claims::validate(&token).is_err())
+    }
+
+    #[test]
+    fn test_invalid_token_fails() {
+        let _ = init_jwks();
+        assert!(Claims::validate("not a token").is_err())
+    }
+}

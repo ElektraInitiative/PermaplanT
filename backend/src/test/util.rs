@@ -1,7 +1,5 @@
 //! Test utilities
 
-use std::time::{SystemTime, UNIX_EPOCH};
-
 use actix_http::Request;
 use actix_web::{
     body::MessageBody,
@@ -16,12 +14,14 @@ use diesel_async::{
     AsyncConnection, AsyncPgConnection,
 };
 use dotenvy::dotenv;
-use jsonwebtoken::jwk::JwkSet;
-use serde::Serialize;
-use uuid::Uuid;
 
-use crate::config::{app, auth::jwks::Jwks, routes};
+use crate::config::{app, routes};
 use crate::error::ServiceError;
+
+use self::token::generate_token;
+
+pub mod jwks;
+pub mod token;
 
 /// Initializes a test database with the given initializer function.
 ///
@@ -82,55 +82,6 @@ pub async fn init_test_app(
 }
 
 fn setup_auth() -> String {
-    // Load key from pre generated one. Both crates are necessary as jsonwebtoken cannot generate an encoding key from a jwk.
-    let jwk_json = include_str!("test_jwk.json");
-    let jwk1 = serde_json::from_str::<jsonwebtoken::jwk::Jwk>(jwk_json).unwrap();
-    let jwk2 = serde_json::from_str::<jsonwebkey::JsonWebKey>(jwk_json).unwrap();
-
-    // Init application jwks
-    Jwks::init_for_tests(JwkSet {
-        keys: vec![jwk1.clone()],
-    });
-
-    // Generate token
-    let mut header = jsonwebtoken::Header::new(jwk2.algorithm.unwrap().into());
-    header.kid = Some(jwk2.key_id.clone().unwrap());
-    let token = jsonwebtoken::encode(
-        &header,
-        &TokenClaims::default(),
-        &jwk2.key.to_encoding_key(),
-    )
-    .unwrap();
-
-    // Check if generated token is correct
-    let alg = jsonwebtoken::decode_header(&token).unwrap().alg;
-    jsonwebtoken::decode::<serde_json::Value>(
-        &token,
-        &jsonwebtoken::DecodingKey::from_jwk(&jwk1).unwrap(),
-        &jsonwebtoken::Validation::new(alg),
-    )
-    .expect("Failed to decode token. Something in the test setup is wrong.");
-
-    token
-}
-
-#[derive(Debug, Clone, Serialize)]
-struct TokenClaims {
-    exp: u64,
-    sub: Uuid,
-    scope: String,
-}
-
-impl Default for TokenClaims {
-    fn default() -> Self {
-        Self {
-            exp: SystemTime::now()
-                .duration_since(UNIX_EPOCH)
-                .expect("Time went backwards!")
-                .as_secs()
-                + 300,
-            sub: Uuid::new_v4(),
-            scope: String::new(),
-        }
-    }
+    let jwk = jwks::init_jwks();
+    generate_token(jwk, 300)
 }

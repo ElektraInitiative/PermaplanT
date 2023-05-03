@@ -5,7 +5,7 @@ use crate::{
         dto::{NewSeedDto, SeedDto},
         r#enum::quantity::Quantity,
     },
-    test::test_utils::{init_test_app, init_test_database},
+    test::util::{init_test_app, init_test_database},
 };
 use actix_web::{
     http::{header, StatusCode},

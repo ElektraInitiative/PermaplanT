@@ -6,4 +6,4 @@
 mod auth;
 mod plant;
 mod seed;
-mod test_utils;
+pub mod util;

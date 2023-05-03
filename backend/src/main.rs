@@ -66,7 +66,7 @@ pub mod model;
 pub mod schema;
 pub mod service;
 #[cfg(test)]
-mod test;
+pub mod test;
 
 /// Main function.
 #[actix_web::main]

@@ -11,7 +11,7 @@ use actix_web_httpauth::extractors::bearer::BearerAuth;
 
 use self::user_info::UserInfo;
 
-/// Validates JWTs in request and sets user information as part of the request.
+/// Validates JWTs in requests and sets user information as part of the request.
 ///
 /// Used by [`actix_web_httpauth::middleware::HttpAuthentication`].
 ///
