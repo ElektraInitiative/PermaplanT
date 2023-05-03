@@ -54,6 +54,7 @@ use actix_web::{http, web::Data, App, HttpServer};
 use config::{api_doc, routes};
 use db::connection;
 
+#[cfg(any(test, feature = "auth"))]
 use crate::config::auth::jwks::Jwks;
 
 pub mod config;
@@ -76,6 +77,7 @@ async fn main() -> std::io::Result<()> {
         Err(e) => panic!("Error reading configuration: {e}"),
     };
 
+    #[cfg(any(test, feature = "auth"))]
     Jwks::init_from_remote(&config.remote_jwks_url).await;
 
     HttpServer::new(move || {
