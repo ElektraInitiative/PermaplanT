@@ -40,6 +40,9 @@
   - the time it takes for the page to become fully interactive.
 - The Document Object Model (DOM)
   - the data representation of the objects that comprise the structure and content of a document on the web.
+- endpoints
+  - The API endpoints that can be called in the backend.  
+    Their documentation can be viewed using swagger-ui (see [here](/doc/architecture/backend.md#api-documentation) for reference).
 
 ## Biology
 
