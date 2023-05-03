@@ -6,13 +6,14 @@ import PlantsLayer from '../layers/PlantsLayer';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import useMapStore from '@/features/undo_redo';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
-import { useEffect, useState } from 'react';
-import { Circle, Rect } from 'react-konva';
+import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { Rect } from 'react-konva';
 
 /**
  * This component is responsible for rendering the map that the user is going to draw on.
@@ -22,35 +23,17 @@ import { Circle, Rect } from 'react-konva';
  * Otherwise they cannot be moved.
  */
 export const Map = () => {
-  const [shapes, setShapes] = useState<JSX.Element[]>([]);
+  const state = useMapStore((map) => map.state);
 
-  useEffect(() => {
-    const newShapes = [];
-    for (let i = 1; i <= 10; i++) {
-      newShapes.push(
-        <Circle
-          key={i}
-          x={100 * i}
-          y={100 * i}
-          radius={50}
-          fill="red"
-          draggable={true}
-          shadowBlur={5}
-        />,
-        <Rect
-          key={i + 100}
-          x={100 * i + 200}
-          y={100 * i + 10}
-          width={100}
-          height={100}
-          fill="blue"
-          draggable={true}
-          shadowBlur={5}
-        />,
-      );
+  // Event listener responsible for adding a single shape to the transformer
+  const addToTransformer = (node: Shape<ShapeConfig>) => {
+    const transformer = useMapStore.getState().transformer.current;
+
+    const nodes = transformer?.getNodes() || [];
+    if (!nodes.includes(node)) {
+      transformer?.nodes([node]);
     }
-    setShapes(newShapes);
-  }, []);
+  };
 
   return (
     <div className="flex h-full justify-between">
@@ -153,7 +136,24 @@ export const Map = () => {
         ></Toolbar>
       </section>
       <BaseStage>
-        <PlantsLayer>{shapes}</PlantsLayer>
+        <PlantsLayer>
+          {state.layers['plant'].objects.map((o) => (
+            <Rect
+              {...o}
+              key={o.id}
+              fill="blue"
+              draggable={true}
+              shadowBlur={5}
+              onClick={(e) => {
+                addToTransformer(e.target as Shape<ShapeConfig>);
+              }}
+              onDragStart={(e) => {
+                // sometimes the click event is not fired, so we have to add the object to the transformer here
+                addToTransformer(e.target as Shape<ShapeConfig>);
+              }}
+            />
+          ))}
+        </PlantsLayer>
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar

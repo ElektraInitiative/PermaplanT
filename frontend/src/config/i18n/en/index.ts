@@ -11,6 +11,7 @@ import plantSearch from './plantSearch.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
+import undoRedo from './undoRedo.json';
 
 const en = {
   blog,
@@ -26,6 +27,7 @@ const en = {
   team,
   plantSearch,
   layerSettings,
+  undoRedo,
 };
 
 export default en;

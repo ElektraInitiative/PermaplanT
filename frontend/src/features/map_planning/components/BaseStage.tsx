@@ -7,10 +7,11 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
+import SimpleButton from '@/components/Button/SimpleButton';
+import useMapStore from '@/features/undo_redo';
 import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
-import { Shape, ShapeConfig } from 'konva/lib/Shape';
-import { useRef, useState } from 'react';
+import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
+import { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
 interface BaseStageProps {
@@ -61,10 +62,19 @@ export const BaseStage = ({
 
   // Ref to the transformer
   const trRef = useRef<Konva.Transformer>(null);
+  useEffect(() => {
+    useMapStore.setState({ transformer: trRef });
+  }, [trRef]);
 
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
   // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
+
+  const dispatch = useMapStore((map) => map.dispatch);
+  const canUndo = useMapStore((map) => map.canUndo);
+  const canRedo = useMapStore((map) => map.canRedo);
+  const step = useMapStore((map) => map.step);
+  const historyLength = useMapStore((map) => map.history.length);
 
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
@@ -156,29 +166,105 @@ export const BaseStage = ({
     }
   };
 
-  // Event listener responsible for adding a single shape to the transformer
-  const addToTransformer = (node: Shape<ShapeConfig>) => {
-    const nodes = trRef.current?.getNodes() || [];
-    if (!nodes.includes(node)) {
-      trRef.current?.nodes([node]);
-    }
-  };
-
-  // Add event listeners to all shapes
-  // This will trigger on every rerender, maybe this could be improved?
-  stageRef.current?.children
-    ?.flatMap((layer) => layer.children)
-    .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'))
-    .forEach((shape) => {
-      if (!shape?.eventListeners['click']) {
-        shape?.addEventListener('click', () => {
-          addToTransformer(shape as Shape<ShapeConfig>);
-        });
-      }
+  const dispatchUpdate = (
+    nodes: Node<NodeConfig>[],
+    type: 'OBJECT_UPDATE_POSITION' | 'OBJECT_UPDATE_TRANSFORM',
+  ) => {
+    dispatch({
+      type,
+      payload: nodes.map((o) => ({
+        id: o.id(),
+        type: o.attrs.type,
+        index: o.attrs.index,
+        height: o.height(),
+        width: o.width(),
+        x: o.x(),
+        y: o.y(),
+        rotation: o.rotation(),
+        scaleX: o.scaleX(),
+        scaleY: o.scaleY(),
+      })),
     });
+  };
 
   return (
     <div className="h-full w-full overflow-hidden">
+      <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
+        <SimpleButton
+          className="w-32"
+          onClick={() =>
+            dispatch({
+              type: 'OBJECT_ADD',
+              payload: {
+                index: 'plant',
+                id: Math.random().toString(36).slice(2, 9),
+                x: 300,
+                y: 300,
+                width: 100,
+                height: 100,
+                type: 'rect',
+                rotation: 0,
+                scaleX: 1,
+                scaleY: 1,
+              },
+            })
+          }
+        >
+          CREATE OBJECT
+        </SimpleButton>
+        <button
+          className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
+          disabled={!canUndo}
+          onClick={() =>
+            dispatch({
+              type: 'UNDO',
+            })
+          }
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+            />
+          </svg>
+        </button>
+        <button
+          className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
+          disabled={!canRedo}
+          onClick={() =>
+            dispatch({
+              type: 'REDO',
+            })
+          }
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"
+            />
+          </svg>
+        </button>
+        <div>
+          <div className="whitespace-nowrap text-sm">Step: {step}</div>
+          <div className="whitespace-nowrap text-sm">History length: {historyLength}</div>
+        </div>
+      </div>
       <Stage
         ref={stageRef}
         draggable={draggable}
@@ -214,6 +300,10 @@ export const BaseStage = ({
             }}
             onTransformEnd={() => {
               selectable = true;
+              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_TRANSFORM');
+            }}
+            onDragEnd={() => {
+              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_POSITION');
             }}
             onMouseDown={() => {
               selectable = false;
