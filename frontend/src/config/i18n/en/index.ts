@@ -13,9 +13,11 @@ import plantSearch from './plantSearch.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
+import baseLayerConfigurator from './baseLayerConfigurator.json';
 import undoRedo from './undoRedo.json';
 
 const en = {
+  baseLayerConfigurator,
   blog,
   common,
   contact,
