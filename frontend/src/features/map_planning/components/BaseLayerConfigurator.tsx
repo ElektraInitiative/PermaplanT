@@ -5,7 +5,6 @@ import { NewBaseLayerDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
-import assert from 'assert';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
 import { Layer, Line } from 'react-konva';
@@ -87,7 +86,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
       }
 
       case MeasurementState.OnePointSelected: {
-        assert(
+        console.assert(
           measureLinePoints[0] != undefined &&
             measureLinePoints[1] != undefined &&
             measureLinePoints[2] != undefined &&
@@ -135,7 +134,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
         ? 0
         : e.target.getStage()?.getRelativePointerPosition()?.y;
 
-    assert(
+    console.assert(
       measureLinePoints[0] != undefined && measureLinePoints[1] != undefined,
       'First measure point undefined.',
     );
