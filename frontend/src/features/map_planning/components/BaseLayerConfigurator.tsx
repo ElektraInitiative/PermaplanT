@@ -36,7 +36,7 @@ const correctForPreviousMapScaling = (distance: number, oldScale: number): numbe
 
 // coordinates of mouse events might be null or undefined
 const mouseEventX = (e: KonvaEventObject<MouseEvent>): number => {
-  const value =  e.target.getStage()?.getRelativePointerPosition()?.x
+  const value =  e.target.getStage()?.getRelativePointerPosition()?.x == null
           ? 0
           : e.target.getStage()?.getRelativePointerPosition()?.x;
 
@@ -44,7 +44,7 @@ const mouseEventX = (e: KonvaEventObject<MouseEvent>): number => {
 }
 
 const mouseEventY = (e: KonvaEventObject<MouseEvent>): number => {
-  const value =  e.target.getStage()?.getRelativePointerPosition()?.y
+  const value =  e.target.getStage()?.getRelativePointerPosition()?.y == null
       ? 0
       : e.target.getStage()?.getRelativePointerPosition()?.y;
 
