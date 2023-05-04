@@ -57,12 +57,13 @@ pub struct Plants {
     /// - Is also first word of unique_name, see above (`/doc/database/hierarchy.md`)
     /// - *See also* `/doc/architecture/glossary.md`.
     /// - *Used* to build up hierarchy.
+    /// - Genus is determined by botanical nomenclature. Sometimes gets changed due to modern insights through genetical research.
     /// - *Fetched from* PracticalPlants and Permapeople.
     /// - *TODO:* copy from first word of unique name.
     /// - *Fill ratio:* 63%
     pub genus: Option<String>,
 
-    /// - The edible use of the plant, answering: Which food can be produced from this plant?
+    /// - The edible use of the plant, answering: Which food type can be produced from this plant, e.g. oil?
     /// - Interesting for search functionality.
     /// - *Fetched from* Permapeople as `edible_uses` and merged with Reinsaat.
     /// - *Fill ratio:* 6%
@@ -85,16 +86,19 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
+    /// - Plants are not only used for food but also for other uses, e.g. fiber to produce paper.
     /// - *Fill ratio:* 1%
     pub material_uses: Option<String>,
 
     /// - *Used* for search ranking (diversity).
+    /// - ecological and environmental function of the plant, especially nitrogen fixer is relevant for PermaplanT.
     /// - *Fetched from* PracticalPlants)
     /// - *Fill ratio:* 13%
     pub functions: Option<String>,
 
     /// - Not used.
     /// - *Use* hardiness_zone instead.
+    /// - indication of the heat range a plant endures.
     /// - *Fetched from* PracticalPlants
     /// - *Fill ratio:* 0.05%
     pub heat_zone: Option<i16>,
@@ -102,11 +106,19 @@ pub struct Plants {
     /// - Shade tolerance of the plant, to be used together with light_requirement.
     /// - *Used* in shade layer.
     /// - *For example* a plant that has "no shade", should get a warning if placed in a shade.
+    /// - No shade: full sun exposure
+    /// - Light shade: moderately shaded throughout the day
+    /// - Partial shade: about 3-6 hours of direct sunlight
+    /// - Permanent shade: less than 3 hours of direct sunlight
+    /// - Permanent deep shade: almost no sunlight/no direct sunlight
+    /// - Shade indicates the shade tolerance. Plants obviously grow better with better light conditions.
+Warnings should only show if the a plant is moved into a too dark spot. No warning when moved into a lighter spot.
     /// - *Fetched from* PracticalPlants.
     /// - *Fill ratio:* 63%
     pub shade: Option<Shade>,
 
     /// - *See* explanation in `/doc/architecture/context.md`
+    /// - Soil PH can be tested by the user with simple means (e.g. litmus).
     /// - *Used* in soil layer.
     /// - *Fetched from* PracticalPlants and Permapeople (merged between Permapeople and PracticalPlants).
     /// - *Fill ratio:* 1%
@@ -120,11 +132,16 @@ pub struct Plants {
 
     /// - *Used* in hydrology layer.
     /// - *Fetched from* PracticalPlants
+    /// - wet = drowned, (often) flooded or in general very moist, e.g. swamp
+    /// - moist = humid, can hold some water, e.g. flat bed with humus
+    /// - well drained = dry, low capacity to hold water, e.g. sandhill.
     /// - *Fill ratio:* 37%
+    
     pub soil_water_retention: Option<Vec<Option<SoilWaterRetention>>>,
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
+    /// - gives information about environmental conditions, such as drought or wind tolerance
     /// - *Fill ratio:* 15%
     pub environmental_tolerances: Option<Vec<Option<String>>>,
 
@@ -140,11 +157,13 @@ pub struct Plants {
 
     /// - Interesting for search functionality.
     /// - *Fetched from* PracticalPlants
+    /// - informs about the (vertical) layer, that the plant usually inhabits, e.g. soil surface or canopy
     /// - *Fill ratio:* 16%
     pub ecosystem_niche: Option<String>,
 
     /// - Only informational.
-    /// - If plants loose leaves in winter.
+    /// - deciduous = plants loose leaves in winter.
+    /// - evergreen = Plants don't throw leaves (e.g. pine tree).
     /// - Not applicable for annual plants.
     /// - *Fetched from* PracticalPlants and merged with `leaves` of Permapeople.
     /// - *Fill ratio:* 30%
@@ -152,6 +171,9 @@ pub struct Plants {
 
     /// - Only informational.
     /// - Fetched from PracticalPlants
+    /// - informs about the plant physiology
+    /// - woody = grows woody parts
+    /// - herbaceous = doesn't grow wood, shoots remain soft/green.
     /// - *Fill ratio:* 26%
     pub herbaceous_or_woody: Option<HerbaceousOrWoody>,
 
@@ -167,10 +189,11 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants as `mature_size_height` and merged with Permapeople.
+    /// - informs about the maximum height that the plant gains
     /// - *Fill ratio:* 80%
     pub height: Option<String>,
 
-    /// - Determines how large the plant should be.
+    /// - Determines how large the plant can grow in diameter.
     /// - Other plants should get a warning if planted within this area.
     /// - *TODO:* should be number and then be used for map.
     /// - *Fetched from* PracticalPlants as `mature_size_width` and merged with Permapeople.
@@ -189,6 +212,7 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
+    /// - a plant can contain flowers of two different sexes, male or female (monoecious), a plant can contain only flowers of one specific sex and therefore needs at least another plant of the other sex to reproduce (dioecious) or can contain flowers that have both the sexes within the same flower (hermaphrodite).
     /// - *Fill ratio:* 62%
     pub flower_type: Option<FlowerType>,
 
@@ -251,16 +275,21 @@ pub struct Plants {
     /// - *Used* in shade layer.
     /// - *For example* a plant that has "Full sun", should get a warning if placed in a shade.
     /// - **Fetched from*** PracticalPlants and Permapeople (merged with `sun` of PracticalPlants)
+    /// - Full sun: full sun exposure
+    /// - Partial sun/shade: about 3-6 hours of direct sunlight or moderately shaded throughout the day
+    /// - Full shade: less than 3 hours of direct sunlight or almost no sunlight/no direct sunlight
     /// - *Fill ratio:* 88%
     pub light_requirement: Option<Vec<Option<LightRequirement>>>,
 
     /// - *Used* in hydrology layer.
     /// - *Fetched from* PracticalPlants and Permapeople (merged with `water` of PracticalPlants).
+    /// - water = completely aquatic; wet = drowned, (often) flooded or in general very moist, e.g. swamp; moist = humid, regular water supply, e.g. flat bed with humus; well drained = dry, little water input.
     /// - *Fill ratio:* 88%
     pub water_requirement: Option<Vec<Option<WaterRequirement>>>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople (renamed from `propagation`)
+    /// - How to reproduce a plant: cuttings = cut pieces of wood; layering = let low branches reach the soil to root; Seed - direct sow = sow directly the seeds; division = split the rhizomes (roots) into pieces; Spores = plant reproduces via spores (e.g. ferns, funghi); seed - transplant = raise indoors from seed and transplant to outdoors later
     /// - *Fill ratio:* 0.9%
     pub propagation_method: Option<Vec<Option<PropagationMethod>>>,
 
@@ -282,12 +311,14 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
+    /// - which organ of the plant can be eaten, e.g. root, leaves.
     /// - *Fill ratio:* 61%
     pub edible_parts: Option<Vec<Option<String>>>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - Reinsaat: `Keimtemperatur` should be copied to `germination_temperature`
+    /// - Germination means that all conditions are right for a seed to start growing. Temperature is one essential factor.
     /// - *Fill ratio:* 2%
     pub germination_temperature: Option<String>,
 
@@ -298,6 +329,7 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* Permapeople as \`layer\` and renamed.
+    /// - Habitus describes the shape of a plant.
     /// - *Fill ratio:* 48%
     pub habitus: Option<String>,
 
@@ -328,6 +360,7 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants as `pollinators` and merged with `pollination` of Permapeople.
+    /// - Pollination is the process that the pollen (male part) gets united with the pistil (female part), e.g. via bees, wind.
     /// - *Fill ratio:* 48%
     pub pollination: Option<String>,
 
@@ -344,17 +377,20 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
+    /// - Root type describes the shape of the roots.
     /// - *Fill ratio:* 0.24%
     pub root_type: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople as `seed_planting_depth` and renamed.
     /// - Reinsaat: `Sowing depth` should be copied to `seed_planting_depth_en`
+    /// - When sowing each plant has a specific value how deep the seeds should be covered with soil.
     /// - *Fill ratio:* 0.07%
     pub seed_planting_depth_en: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
+    /// - expected average life span (in years) of a seed of a certain specie.
     /// - *Fill ratio:* 0.6%
     pub seed_viability: Option<String>,
 
@@ -379,6 +415,7 @@ pub struct Plants {
 
     /// - Important information.
     /// - *Fetched from* Permapeople.
+    /// - specific warnings for eather human, animal or environmental well-being, e.g. toxic, invasive.
     /// - *Fill ratio:* 8%
     pub warning: Option<String>,
 
@@ -422,11 +459,16 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
+    /// - Stratification is the process that a seed must go through to get triggered for germination, e.g. by a certain threshold of minus degrees.
     /// - *Fill ratio:* 0.03%
     pub cold_stratification_temperature: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
+    /// - Suggested change
+    /// - *Fetched from* Permapeople.
+    /// - Stratification is the process that a seed must go through to get triggered for germination, e.g. by a certain amount of time under cold temperatures.
+
     /// - *Fill ratio:* 0.05%
     pub cold_stratification_time: Option<String>,
 
@@ -474,6 +516,7 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
+    /// - Germination time describes the time (days, weeks, months) that a seed needs to germinate given the right conditions.
     /// - *Fill ratio:* 0.5%
     pub germination_time: Option<String>,
 
@@ -506,6 +549,7 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants as `root_zone_tendency` and merged with root_depth of Permapeople.
+    /// - Root depth can be considered when planning polycultures, e.g. combining shallow roots with deep roots.
     /// - *Fill ratio:* 0.2%
     pub root_depth: Option<String>,
 
@@ -563,17 +607,18 @@ pub struct Plants {
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - `Saattiefe` should be called `seed_planting_depth_de`
+    /// - When sowing, each plant has a specific value how deep the seeds should be covered with soil.
     /// - *Fill ratio:* 5%
     pub seed_planting_depth_de: Option<String>,
 
-    /// - German version of housand grain weight (German: Tausendkornmasse)
+    /// - German version of thousand grain weight (German: Tausendkornmasse)
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - Called `Tausendkornmasse` in Reinsaat
     /// - *Fill ratio:* 4%
     pub seed_weight_1000_de: Option<String>,
 
-    /// - English version of housand grain weight (German: Tausendkornmasse)
+    /// - English version of thousand grain weight (German: Tausendkornmasse)
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - Called `Thousand seeds mass` in Reinsaat
