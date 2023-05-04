@@ -34,6 +34,23 @@ const correctForPreviousMapScaling = (distance: number, oldScale: number): numbe
   return (distance / oldScale) * MAP_PIXELS_PER_METER;
 };
 
+// coordinates of mouse events might be null or undefined
+const mouseEventX = (e: KonvaEventObject<MouseEvent>): number => {
+  const value =  e.target.getStage()?.getRelativePointerPosition()?.x
+          ? 0
+          : e.target.getStage()?.getRelativePointerPosition()?.x;
+
+  return value ?? 0;
+}
+
+const mouseEventY = (e: KonvaEventObject<MouseEvent>): number => {
+  const value =  e.target.getStage()?.getRelativePointerPosition()?.y
+      ? 0
+      : e.target.getStage()?.getRelativePointerPosition()?.y;
+
+  return value ?? 0;
+}
+
 const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
   const [imageUrl, setImageUrl] = useState('');
   const [rotation, setImageRotation] = useState(0);
@@ -85,16 +102,10 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     // Each click on the displayed image causes the component to advance to the next state.
     switch (measureState) {
       case MeasurementState.Initial: {
-        const x =
-          e.target.getStage()?.getRelativePointerPosition()?.x == null
-            ? 0
-            : e.target.getStage()?.getRelativePointerPosition()?.x;
-        const y =
-          e.target.getStage()?.getRelativePointerPosition()?.y == null
-            ? 0
-            : e.target.getStage()?.getRelativePointerPosition()?.y;
+        const x = mouseEventX(e);
+        const y = mouseEventY(e);
 
-        setMeasureLinePoints([x ?? 0, y ?? 0]);
+        setMeasureLinePoints([x, y]);
         setMeasureState(MeasurementState.OnePointSelected);
         break;
       }
@@ -135,20 +146,14 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     // The user has already selected a single point on the map.
     // We continuously store the cursors position in the measureLinePoints array to get a line going from the
     // selected point to the mouse cursor.
-    const x =
-      e.target.getStage()?.getRelativePointerPosition()?.x == null
-        ? 0
-        : e.target.getStage()?.getRelativePointerPosition()?.x;
-    const y =
-      e.target.getStage()?.getRelativePointerPosition()?.y == null
-        ? 0
-        : e.target.getStage()?.getRelativePointerPosition()?.y;
+    const x = mouseEventX(e);
+    const y = mouseEventY(e);
 
     console.assert(
       measureLinePoints[0] != undefined && measureLinePoints[1] != undefined,
       'First measure point undefined.',
     );
-    setMeasureLinePoints([measureLinePoints[0], measureLinePoints[1], x ?? 0, y ?? 0]);
+    setMeasureLinePoints([measureLinePoints[0], measureLinePoints[1], x, y]);
   };
 
   const onDistanceInputModalSubmit = () => {
