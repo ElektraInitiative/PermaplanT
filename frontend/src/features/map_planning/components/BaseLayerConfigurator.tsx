@@ -9,7 +9,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
 import { Layer, Line } from 'react-konva';
 
-interface BaseLayerConfiguratorProps {
+export interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
 }
 
@@ -19,6 +19,20 @@ enum MeasurementState {
   OnePointSelected, // A single point was selected. Display a line between the selected point and the mouse cursor.
   TwoPointsSelected, // Two points have been selected. Draw a line between both points.
 }
+
+// Expects an array of line coordinates as returned by Konva [x1, y1, x2, y2].
+const calculateLineLength = (line: number[]): number => {
+  console.assert(line.length === 4);
+
+  const lineLengthX = Math.abs(line[2] - line[0]);
+  const lineLengthY = Math.abs(line[3] - line[1]);
+
+  return Math.sqrt(lineLengthX * lineLengthX + lineLengthY * lineLengthY);
+};
+
+const correctForPreviousMapScaling = (distance: number, oldScale: number): number => {
+  return (distance / oldScale) * MAP_PIXELS_PER_METER;
+};
 
 const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
   const [imageUrl, setImageUrl] = useState('');
@@ -94,14 +108,10 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
           'measureLinePoints should contain 4 defined elements.',
         );
 
-        const lineLengthX = Math.abs(measureLinePoints[2] - measureLinePoints[0]);
-        const lineLengthY = Math.abs(measureLinePoints[3] - measureLinePoints[1]);
-
-        // use the pythagorean theorem to get the measured length
-        const lineLength = Math.sqrt(lineLengthX * lineLengthX + lineLengthY * lineLengthY);
+        const lineLength = calculateLineLength(measureLinePoints);
 
         // compensate for previously applied scaling
-        setMeasuredLength((lineLength / scale) * MAP_PIXELS_PER_METER);
+        setMeasuredLength(correctForPreviousMapScaling(lineLength, scale));
 
         // Promt the user to input the real world length of the measured distance
         // This will complete the distance measuring process.
