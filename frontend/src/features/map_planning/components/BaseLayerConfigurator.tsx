@@ -94,6 +94,37 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
   const [showDistanceInputModal, setShowDistanceInputModal] = useState(false);
 
+  const stateResetInitial = () => {
+    setMeasureLinePoints([]);
+    setMeasureState(MeasurementState.Initial);
+  };
+
+  const stateTransitionInitialOnePointSelected = (x: number, y: number) => {
+    setMeasureLinePoints([x, y]);
+    setMeasureState(MeasurementState.OnePointSelected);
+  };
+
+  const stateTransitionOnePointSelectedTwoPointsSelected = () => {
+    console.assert(
+        measureLinePoints[0] != undefined &&
+        measureLinePoints[1] != undefined &&
+        measureLinePoints[2] != undefined &&
+        measureLinePoints[3] != undefined,
+        'measureLinePoints should contain 4 defined elements.',
+    );
+
+    const lineLength = calculateLineLength(measureLinePoints);
+
+    // compensate for previously applied scaling
+    setMeasuredLength(correctForPreviousMapScaling(lineLength, scale));
+
+    // Promt the user to input the real world length of the measured distance
+    // This will complete the distance measuring process.
+    setShowDistanceInputModal(true);
+
+    setMeasureState(MeasurementState.TwoPointsSelected);
+  }
+
   const onBaseStageClick = (e: KonvaEventObject<MouseEvent>) => {
     if (e.evt.button !== 0) return;
     // There is no point in setting the scaling if no image was selected.
@@ -101,42 +132,20 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
     // Each click on the displayed image causes the component to advance to the next state.
     switch (measureState) {
-      case MeasurementState.Initial: {
+      case MeasurementState.Initial:
         const x = mouseEventX(e);
         const y = mouseEventY(e);
 
-        setMeasureLinePoints([x, y]);
-        setMeasureState(MeasurementState.OnePointSelected);
+        stateTransitionInitialOnePointSelected(x, y);
         break;
-      }
 
-      case MeasurementState.OnePointSelected: {
-        console.assert(
-          measureLinePoints[0] != undefined &&
-            measureLinePoints[1] != undefined &&
-            measureLinePoints[2] != undefined &&
-            measureLinePoints[3] != undefined,
-          'measureLinePoints should contain 4 defined elements.',
-        );
-
-        const lineLength = calculateLineLength(measureLinePoints);
-
-        // compensate for previously applied scaling
-        setMeasuredLength(correctForPreviousMapScaling(lineLength, scale));
-
-        // Promt the user to input the real world length of the measured distance
-        // This will complete the distance measuring process.
-        setShowDistanceInputModal(true);
-
-        setMeasureState(MeasurementState.TwoPointsSelected);
+      case MeasurementState.OnePointSelected:
+        stateTransitionOnePointSelectedTwoPointsSelected();
         break;
-      }
 
-      case MeasurementState.TwoPointsSelected: {
-        setMeasureLinePoints([]);
-        setMeasureState(MeasurementState.Initial);
+      case MeasurementState.TwoPointsSelected:
+        stateResetInitial();
         break;
-      }
     }
   };
 
@@ -158,16 +167,14 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
   const onDistanceInputModalSubmit = () => {
     setImageScale(measuredLength / realWorldLength);
-    setShowDistanceInputModal(false);
 
-    setMeasureLinePoints([]);
-    setMeasureState(MeasurementState.Initial);
+    setShowDistanceInputModal(false);
+    stateResetInitial();
   };
 
   const onDistanceInputModalCancel = () => {
-    setMeasureLinePoints([]);
-    setMeasureState(MeasurementState.Initial);
     setShowDistanceInputModal(false);
+    stateResetInitial();
   };
 
   return (
