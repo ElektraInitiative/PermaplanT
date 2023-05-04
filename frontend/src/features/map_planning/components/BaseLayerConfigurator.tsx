@@ -5,13 +5,12 @@ import { NewBaseLayerDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
-import assert from 'assert';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
 import { Layer, Line } from 'react-konva';
 import { useTranslation } from 'react-i18next';
 
-interface BaseLayerConfiguratorProps {
+export interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
 }
 
@@ -20,6 +19,37 @@ enum MeasurementState {
   Initial, // The user has not selected any points on the map.
   OnePointSelected, // A single point was selected. Display a line between the selected point and the mouse cursor.
   TwoPointsSelected, // Two points have been selected. Draw a line between both points.
+}
+
+// Expects an array of line coordinates as returned by Konva [x1, y1, x2, y2].
+const calculateLineLength = (line: number[]): number => {
+  console.assert(line.length === 4);
+
+  const lineLengthX = Math.abs(line[2] - line[0]);
+  const lineLengthY = Math.abs(line[3] - line[1]);
+
+  return Math.sqrt(lineLengthX * lineLengthX + lineLengthY * lineLengthY);
+};
+
+const correctForPreviousMapScaling = (distance: number, oldScale: number): number => {
+  return (distance / oldScale) * MAP_PIXELS_PER_METER;
+};
+
+// coordinates of mouse events might be null or undefined
+const mouseEventX = (e: KonvaEventObject<MouseEvent>): number => {
+  const value =  e.target.getStage()?.getRelativePointerPosition()?.x == null
+          ? 0
+          : e.target.getStage()?.getRelativePointerPosition()?.x;
+
+  return value ?? 0;
+}
+
+const mouseEventY = (e: KonvaEventObject<MouseEvent>): number => {
+  const value =  e.target.getStage()?.getRelativePointerPosition()?.y == null
+      ? 0
+      : e.target.getStage()?.getRelativePointerPosition()?.y;
+
+  return value ?? 0;
 }
 
 const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
@@ -67,6 +97,37 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
   const [showDistanceInputModal, setShowDistanceInputModal] = useState(false);
 
+  const stateResetInitial = () => {
+    setMeasureLinePoints([]);
+    setMeasureState(MeasurementState.Initial);
+  };
+
+  const stateTransitionInitialOnePointSelected = (x: number, y: number) => {
+    setMeasureLinePoints([x, y]);
+    setMeasureState(MeasurementState.OnePointSelected);
+  };
+
+  const stateTransitionOnePointSelectedTwoPointsSelected = () => {
+    console.assert(
+        measureLinePoints[0] != undefined &&
+        measureLinePoints[1] != undefined &&
+        measureLinePoints[2] != undefined &&
+        measureLinePoints[3] != undefined,
+        'measureLinePoints should contain 4 defined elements.',
+    );
+
+    const lineLength = calculateLineLength(measureLinePoints);
+
+    // compensate for previously applied scaling
+    setMeasuredLength(correctForPreviousMapScaling(lineLength, scale));
+
+    // Promt the user to input the real world length of the measured distance
+    // This will complete the distance measuring process.
+    setShowDistanceInputModal(true);
+
+    setMeasureState(MeasurementState.TwoPointsSelected);
+  }
+
   const onBaseStageClick = (e: KonvaEventObject<MouseEvent>) => {
     if (e.evt.button !== 0) return;
     // There is no point in setting the scaling if no image was selected.
@@ -74,52 +135,20 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
     // Each click on the displayed image causes the component to advance to the next state.
     switch (measureState) {
-      case MeasurementState.Initial: {
-        const x =
-          e.target.getStage()?.getRelativePointerPosition()?.x == null
-            ? 0
-            : e.target.getStage()?.getRelativePointerPosition()?.x;
-        const y =
-          e.target.getStage()?.getRelativePointerPosition()?.y == null
-            ? 0
-            : e.target.getStage()?.getRelativePointerPosition()?.y;
+      case MeasurementState.Initial:
+        const x = mouseEventX(e);
+        const y = mouseEventY(e);
 
-        setMeasureLinePoints([x ?? 0, y ?? 0]);
-        setMeasureState(MeasurementState.OnePointSelected);
+        stateTransitionInitialOnePointSelected(x, y);
         break;
-      }
 
-      case MeasurementState.OnePointSelected: {
-        assert(
-          measureLinePoints[0] != undefined &&
-            measureLinePoints[1] != undefined &&
-            measureLinePoints[2] != undefined &&
-            measureLinePoints[3] != undefined,
-          'measureLinePoints should contain 4 defined elements.',
-        );
-
-        const lineLengthX = Math.abs(measureLinePoints[2] - measureLinePoints[0]);
-        const lineLengthY = Math.abs(measureLinePoints[3] - measureLinePoints[1]);
-
-        // use the pythagorean theorem to get the measured length
-        const lineLength = Math.sqrt(lineLengthX * lineLengthX + lineLengthY * lineLengthY);
-
-        // compensate for previously applied scaling
-        setMeasuredLength((lineLength / scale) * MAP_PIXELS_PER_METER);
-
-        // Promt the user to input the real world length of the measured distance
-        // This will complete the distance measuring process.
-        setShowDistanceInputModal(true);
-
-        setMeasureState(MeasurementState.TwoPointsSelected);
+      case MeasurementState.OnePointSelected:
+        stateTransitionOnePointSelectedTwoPointsSelected();
         break;
-      }
 
-      case MeasurementState.TwoPointsSelected: {
-        setMeasureLinePoints([]);
-        setMeasureState(MeasurementState.Initial);
+      case MeasurementState.TwoPointsSelected:
+        stateResetInitial();
         break;
-      }
     }
   };
 
@@ -129,34 +158,26 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     // The user has already selected a single point on the map.
     // We continuously store the cursors position in the measureLinePoints array to get a line going from the
     // selected point to the mouse cursor.
-    const x =
-      e.target.getStage()?.getRelativePointerPosition()?.x == null
-        ? 0
-        : e.target.getStage()?.getRelativePointerPosition()?.x;
-    const y =
-      e.target.getStage()?.getRelativePointerPosition()?.y == null
-        ? 0
-        : e.target.getStage()?.getRelativePointerPosition()?.y;
+    const x = mouseEventX(e);
+    const y = mouseEventY(e);
 
-    assert(
+    console.assert(
       measureLinePoints[0] != undefined && measureLinePoints[1] != undefined,
       'First measure point undefined.',
     );
-    setMeasureLinePoints([measureLinePoints[0], measureLinePoints[1], x ?? 0, y ?? 0]);
+    setMeasureLinePoints([measureLinePoints[0], measureLinePoints[1], x, y]);
   };
 
   const onDistanceInputModalSubmit = () => {
     setImageScale(measuredLength / realWorldLength);
-    setShowDistanceInputModal(false);
 
-    setMeasureLinePoints([]);
-    setMeasureState(MeasurementState.Initial);
+    setShowDistanceInputModal(false);
+    stateResetInitial();
   };
 
   const onDistanceInputModalCancel = () => {
-    setMeasureLinePoints([]);
-    setMeasureState(MeasurementState.Initial);
     setShowDistanceInputModal(false);
+    stateResetInitial();
   };
 
   return (
