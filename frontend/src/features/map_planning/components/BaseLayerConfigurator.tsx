@@ -9,6 +9,7 @@ import assert from 'assert';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
 import { Layer, Line } from 'react-konva';
+import { useTranslation } from 'react-i18next';
 
 interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
@@ -22,11 +23,13 @@ enum MeasurementState {
 }
 
 const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
+  const { t } = useTranslation(['baseLayerConfigurator', 'common']); 
+
   const [imageUrl, setImageUrl] = useState('');
   const [rotation, setImageRotation] = useState(0);
   const [scale, setImageScale] = useState(10);
   const [realWorldLength, setRealWorldLength] = useState(0);
-
+  
   const onUrlInputChange = (value: string | number) => {
     // TODO: add error handling
     if (typeof value === 'number') return;
@@ -160,12 +163,12 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     <div className="pb-1">
       <ModalContainer show={showDistanceInputModal}>
         <div className="flex min-h-[200px] w-[400px] flex-col justify-between space-y-8 rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
-          <h1>Set length of drawn distance</h1>
+          <h1>{t('baseLayerConfigurator:distance_modal_header')}</h1>
 
           <div className="space-between flex flex-row justify-center space-x-4">
             <SimpleFormInput
               id={'distance-input-meters'}
-              labelText={'Meters'}
+              labelText={t('common:meters')}
               type={'number'}
               min={0}
               defaultValue={0}
@@ -173,7 +176,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
             />
             <SimpleFormInput
               id={'distance-input-centimeters'}
-              labelText={'Centimeters'}
+              labelText={t('common:centimeters')}
               type={'number'}
               min={0}
               defaultValue={0}
@@ -199,13 +202,13 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
       <div className="flex-column flex items-end gap-4">
         <SimpleFormInput
           id={'url'}
-          labelText={'Background image URL'}
+          labelText={t('baseLayerConfigurator:background_image_url')}
           onChange={onUrlInputChange}
         ></SimpleFormInput>
 
         <SimpleFormInput
           id={'rotation'}
-          labelText={'Rotation (Degrees)'}
+          labelText={t('baseLayerConfigurator:rotation_degrees')}
           onChange={onRotationInputChange}
           type={'number'}
           defaultValue={0}
@@ -216,7 +219,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
         <SimpleFormInput
           id={'scale'}
-          labelText={'Pixels per Meter'}
+          labelText={t('baseLayerConfigurator:pixels_per_meter')}
           onChange={onScaleInputChange}
           value={scale.toFixed(2)}
           type={'number'}
