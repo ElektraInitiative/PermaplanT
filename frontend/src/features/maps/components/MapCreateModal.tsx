@@ -34,6 +34,7 @@ export default function MapCreateModal({ show, setShow, successCallback }: MapCr
       honors: 0,
       visits: 0,
       harvested: 0,
+      owner_id: 1,
     };
     setShow(false);
     successCallback(newMap);
