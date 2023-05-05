@@ -16,6 +16,7 @@ impl From<NewMapDto> for NewMap {
             honors: new_map.honors,
             visits: new_map.visits,
             harvested: new_map.harvested,
+            owner_id: new_map.owner_id,
         }
     }
 }

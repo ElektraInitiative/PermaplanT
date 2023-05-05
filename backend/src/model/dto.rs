@@ -195,6 +195,7 @@ pub struct MapDto {
     pub honors: i16,
     pub visits: i16,
     pub harvested: i16,
+    pub owner_id: i32,
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
@@ -210,6 +211,7 @@ pub struct NewMapDto {
     pub honors: i16,
     pub visits: i16,
     pub harvested: i16,
+    pub owner_id: i32,
 }
 
 /// Query parameters for searching maps.
@@ -218,6 +220,8 @@ pub struct NewMapDto {
 pub struct MapSearchParameters {
     /// Whether or not the map is active.
     pub is_inactive: Option<bool>,
+    /// The owner of the map.
+    pub owner_id: Option<i32>,
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.

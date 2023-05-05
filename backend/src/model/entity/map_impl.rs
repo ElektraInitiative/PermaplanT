@@ -7,7 +7,7 @@ use crate::db::pagination::Paginate;
 use crate::model::dto::{MapSearchParameters, Page, PageParameters};
 use crate::{
     model::dto::{MapDto, NewMapDto},
-    schema::maps::{self, all_columns, is_inactive},
+    schema::maps::{self, all_columns, is_inactive, owner_id},
 };
 
 use super::{Map, NewMap};
@@ -27,6 +27,9 @@ impl Map {
 
         if let Some(is_inactive_search) = search_parameters.is_inactive {
             query = query.filter(is_inactive.eq(is_inactive_search));
+        }
+        if let Some(owner_id_search) = search_parameters.owner_id {
+            query = query.filter(owner_id.eq(owner_id_search));
         }
 
         let query_page = query

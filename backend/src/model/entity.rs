@@ -702,6 +702,7 @@ pub struct Map {
     pub honors: i16,
     pub visits: i16,
     pub harvested: i16,
+    pub owner_id: i32,
 }
 
 /// The `NewMap` entity.
@@ -718,6 +719,7 @@ pub struct NewMap {
     pub honors: i16,
     pub visits: i16,
     pub harvested: i16,
+    pub owner_id: i32,
 }
 
 /// The `MapVersion` entity.
