@@ -22,7 +22,7 @@ type MapStore = {
   canRedo: boolean;
 };
 
-const DEFAULT_STATE: MapState = {
+export const DEFAULT_STATE: MapState = {
   layers: {
     plant: {
       index: 'plant',
