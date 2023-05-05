@@ -1,6 +1,7 @@
 //! Contains all entities used in `PermaplanT`.
 
 pub mod map_impl;
+pub mod map_version_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
@@ -9,7 +10,7 @@ use chrono::NaiveDateTime;
 
 use diesel::{Identifiable, Insertable, Queryable};
 
-use crate::schema::{maps, plants, seeds};
+use crate::schema::{map_versions, maps, plants, seeds};
 
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
@@ -717,4 +718,25 @@ pub struct NewMap {
     pub honors: i16,
     pub visits: i16,
     pub harvested: i16,
+}
+
+/// The `MapVersion` entity.
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[derive(Identifiable, Queryable)]
+#[diesel(table_name = map_versions)]
+pub struct MapVersion {
+    pub id: i32,
+    pub map_id: i32,
+    pub version_name: String,
+    pub snapshot_date: NaiveDate,
+}
+
+/// The `NewMapVersion` entity.
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[derive(Insertable)]
+#[diesel(table_name = map_versions)]
+pub struct NewMapVersion {
+    pub map_id: i32,
+    pub version_name: String,
+    pub snapshot_date: NaiveDate,
 }

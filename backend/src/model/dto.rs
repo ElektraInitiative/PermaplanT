@@ -9,7 +9,9 @@ use utoipa::{IntoParams, ToSchema};
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
 pub mod map_impl;
+pub mod map_version_impl;
 pub mod new_map_impl;
+pub mod new_map_version_impl;
 pub mod new_seed_impl;
 pub mod page_impl;
 pub mod plants_impl;
@@ -216,4 +218,31 @@ pub struct NewMapDto {
 pub struct MapSearchParameters {
     /// Whether or not the map is active.
     pub is_inactive: Option<bool>,
+}
+
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct MapVersionDto {
+    pub id: i32,
+    pub map_id: i32,
+    pub version_name: String,
+    pub snapshot_date: NaiveDate,
+}
+
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct NewMapVersionDto {
+    pub map_id: i32,
+    pub version_name: String,
+    pub snapshot_date: NaiveDate,
+}
+
+/// Query parameters for searching map versions.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct MapVersionSearchParameters {
+    /// Whether or not the map is active.
+    pub map_id: Option<i32>,
 }
