@@ -36,19 +36,11 @@ export default function SimpleFormInput<T extends FieldValues>({
   disabled = false,
   value,
 }: SimpleFormInputProps<T>) {
-  const callOnKeyUp = function <E>(event: React.KeyboardEvent<E>) {
+  
+  // Extract the input fields value from the respective Events before calling onChange.
+  const callOnChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
     if (onChange == null) return;
-    const value = (event.target as HTMLInputElement).value;
 
-    if (type === 'number') {
-      onChange(parseInt(value));
-    }
-
-    onChange(value);
-  };
-
-  const callOnChange = function <E>(event: React.ChangeEvent<E>) {
-    if (onChange == null) return;
     // If somebody finds a way of fixing the next line, please do!
     const value = (event.target as unknown as HTMLInputElement).value;
 
@@ -68,7 +60,7 @@ export default function SimpleFormInput<T extends FieldValues>({
       {isArea ? (
         <textarea
           disabled={disabled}
-          onKeyUp={(event) => callOnKeyUp(event)}
+          onKeyUp={(event) => callOnChange(event)}
           onChange={(event) => callOnChange(event)}
           rows={6}
           name={id}
@@ -81,7 +73,7 @@ export default function SimpleFormInput<T extends FieldValues>({
       ) : (
         <input
           disabled={disabled}
-          onKeyUp={(event) => callOnKeyUp(event)}
+          onKeyUp={(event) => callOnChange(event)}
           onChange={(event) => callOnChange(event)}
           type={type}
           min={min}
