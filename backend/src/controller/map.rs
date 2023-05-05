@@ -17,7 +17,7 @@ use crate::{db::connection::Pool, model::dto::NewMapDto, service};
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/maps",
+    context_path = "/api/users/{user_id}/maps",
     params(
         MapSearchParameters,
         PageParameters
@@ -42,14 +42,14 @@ pub async fn find(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/maps/{id}",
+    context_path = "/api/users/{user_id}/maps/{map_id}",
     responses(
         (status = 200, description = "Fetch a map by id", body = MapDto)
     )
 )]
-#[get("/{id}")]
-pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
-    let response = service::map::find_by_id(*id, &pool).await?;
+#[get("/{map_id}")]
+pub async fn find_by_id(map_id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
+    let response = service::map::find_by_id(*map_id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -58,7 +58,7 @@ pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse>
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/maps",
+    context_path = "/api/users/{user_id}/maps",
     request_body = NewMapDto,
     responses(
         (status = 201, description = "Create a new map", body = MapDto)
