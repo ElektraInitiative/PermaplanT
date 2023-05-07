@@ -3,15 +3,15 @@ import { MAP_PIXELS_PER_METER } from '../utils/Constants';
 import { BaseStage } from './BaseStage';
 import { NewBaseLayerDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
-import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import ModalContainer from '@/components/Modals/ModalContainer';
+import SimpleFormInput from '@/components/Form/SimpleFormInput'; import ModalContainer from '@/components/Modals/ModalContainer';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
 import { Layer, Line } from 'react-konva';
-import { useTranslation } from 'react-i18next';
+import { TFunction, withTranslation } from 'react-i18next';
 
 export interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
+  t: TFunction;
 }
 
 // Setting the maps scale using a known distance is handled using a state machine.
@@ -22,7 +22,7 @@ enum MeasurementState {
 }
 
 // Expects an array of line coordinates as returned by Konva [x1, y1, x2, y2].
-const calculateLineLength = (line: number[]): number => {
+export const calculateLineLength = (line: number[]): number => {
   console.assert(line.length === 4);
 
   const lineLengthX = Math.abs(line[2] - line[0]);
@@ -31,7 +31,7 @@ const calculateLineLength = (line: number[]): number => {
   return Math.sqrt(lineLengthX * lineLengthX + lineLengthY * lineLengthY);
 };
 
-const correctForPreviousMapScaling = (distance: number, oldScale: number): number => {
+export const correctForPreviousMapScaling = (distance: number, oldScale: number): number => {
   return (distance / oldScale) * MAP_PIXELS_PER_METER;
 };
 
@@ -52,8 +52,7 @@ const mouseEventY = (e: KonvaEventObject<MouseEvent>): number => {
   return value ?? 0;
 }
 
-const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
-  const { t } = useTranslation(['baseLayerConfigurator', 'common']); 
+const BaseLayerConfigurator = ({onSubmit, t}: BaseLayerConfiguratorProps) => {
 
   const [imageUrl, setImageUrl] = useState('');
   const [rotation, setImageRotation] = useState(0);
@@ -250,7 +249,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
         <SimpleButton
           onClick={() =>
-            props.onSubmit({
+            onSubmit({
               base_image_url: imageUrl,
               pixels_per_meter: scale,
               north_orientation_degrees: rotation,
@@ -274,4 +273,5 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
   );
 };
 
-export default BaseLayerConfigurator;
+export {BaseLayerConfigurator};
+export default withTranslation(['common', 'baseLayerConfigurator'])(BaseLayerConfigurator);
