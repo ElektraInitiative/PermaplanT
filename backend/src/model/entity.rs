@@ -112,7 +112,8 @@ pub struct Plants {
     /// - Permanent shade: less than 3 hours of direct sunlight
     /// - Permanent deep shade: almost no sunlight/no direct sunlight
     /// - Shade indicates the shade tolerance. Plants obviously grow better with better light conditions.
-Warnings should only show if the a plant is moved into a too dark spot. No warning when moved into a lighter spot.
+    /// - Warnings should only show if a plant is moved into a too dark spot.
+    ///   No warning should be shown when moved into a lighter spot.
     /// - *Fetched from* PracticalPlants.
     /// - *Fill ratio:* 63%
     pub shade: Option<Shade>,
@@ -136,7 +137,6 @@ Warnings should only show if the a plant is moved into a too dark spot. No warni
     /// - moist = humid, can hold some water, e.g. flat bed with humus
     /// - well drained = dry, low capacity to hold water, e.g. sandhill.
     /// - *Fill ratio:* 37%
-    
     pub soil_water_retention: Option<Vec<Option<SoilWaterRetention>>>,
 
     /// - Only informational.
