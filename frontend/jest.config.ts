@@ -7,6 +7,10 @@ const config: Config = {
     '^.+\\.tsx?$': 'babel-jest',
     '^.+\\.svg$': '<rootDir>/svg-transform.ts',
   },
+  moduleNameMapper: {
+    '^konva': 'konva/konva',
+    '^@/(.*)': '<rootDir>/src/$1',
+  },
 };
 
 export default config;
