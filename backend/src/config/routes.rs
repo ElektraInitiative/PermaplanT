@@ -24,7 +24,9 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 web::scope("/maps")
                     .service(map::find)
                     .service(map::find_by_id)
-                    .service(map::create),
+                    .service(map::create)
+                    .service(map::show_versions)
+                    .service(map::save_snapshot),
             )
             .service(
                 web::scope("/plantings")
