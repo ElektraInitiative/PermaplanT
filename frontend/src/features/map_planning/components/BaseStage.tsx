@@ -190,6 +190,7 @@ export const BaseStage = ({
   return (
     <div className="h-full w-full overflow-hidden">
       <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
+        {/* TODO: This is example code that shows how to interact with the store, the final code handling object creation is TBD */}
         <SimpleButton
           className="w-32"
           onClick={() =>
