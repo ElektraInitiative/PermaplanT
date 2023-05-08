@@ -1,3 +1,4 @@
+import baseLayerConfigurator from './baseLayerConfigurator.json';
 import blog from './blog.json';
 import common from './common.json';
 import contact from './contact.json';
@@ -9,7 +10,6 @@ import landingPage from './landingPage.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
-import baseLayerConfigurator from './baseLayerConfigurator.json';
 
 const de = {
   baseLayerConfigurator,

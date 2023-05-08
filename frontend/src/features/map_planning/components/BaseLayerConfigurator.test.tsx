@@ -1,4 +1,5 @@
-import {calculateLineLength, correctForPreviousMapScaling} from "./BaseLayerConfigurator";
+import { calculateLineLength, correctForPreviousMapScaling } from './BaseLayerConfigurator';
+
 // import renderer from 'react-test-renderer';
 // import { MemoryRouter } from 'react-router-dom';
 
@@ -20,12 +21,9 @@ import {calculateLineLength, correctForPreviousMapScaling} from "./BaseLayerConf
 it('calculates line lengths correctly', () => {
   // Line from x: 0, y: 0 to x: 1, y: 1
   // Length should be sqrt(1^2 + 1^2) = sqrt(2)
-  expect(calculateLineLength([0, 0, 1, 1])).toBe(Math.sqrt(2)); 
-}); 
+  expect(calculateLineLength([0, 0, 1, 1])).toBe(Math.sqrt(2));
+});
 
-it ('corrects for current map scaling', () => {
-  expect(correctForPreviousMapScaling(1, 2)).toBe(5);  
-}); 
-
-
-
+it('corrects for current map scaling', () => {
+  expect(correctForPreviousMapScaling(1, 2)).toBe(5);
+});

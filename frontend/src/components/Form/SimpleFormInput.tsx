@@ -36,7 +36,6 @@ export default function SimpleFormInput<T extends FieldValues>({
   disabled = false,
   value,
 }: SimpleFormInputProps<T>) {
-  
   // Extract the input fields value from the respective Events before calling onChange.
   const callOnChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
     if (onChange == null) return;
