@@ -166,7 +166,7 @@ pub struct PageParameters {
 #[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
 #[aliases(
     PagePlantsSummaryDto = Page<PlantsSummaryDto>,
-    PageSeedDto = Page<SeedDto>, 
+    PageSeedDto = Page<SeedDto>,
     PageMapDto = Page<MapDto>,
     PagePlantingDto = Page<PlantingDto>,
 )]
