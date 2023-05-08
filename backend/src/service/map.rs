@@ -72,7 +72,7 @@ pub async fn save_snapshot(
     new_map_version: NewMapVersionDto,
     pool: &Data<Pool>,
 ) -> Result<MapVersionDto, ServiceError> {
-    // TODO: create element entries for all layers with reference to this version.
+    // TODO: create element entries for all layers with reference to this version - see issue #341.
     let mut conn = pool.get().await?;
     let result = MapVersion::create(new_map_version, &mut conn).await?;
     Ok(result)
