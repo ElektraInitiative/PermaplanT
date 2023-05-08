@@ -24,7 +24,7 @@ export default function MapOverview() {
 
   const { data } = useInfiniteQuery({
     queryKey: ['maps'],
-    queryFn: ({ pageParam = 1 }) => findAllMaps(1, pageParam),
+    queryFn: ({ pageParam = 1 }) => findAllMaps(pageParam),
     getNextPageParam: (lastPage) => lastPage.page + 1,
   });
 
@@ -32,7 +32,7 @@ export default function MapOverview() {
   const mapList = maps.map((map) => <MapCard key={map.id} map={map} />);
 
   function createNewMap(map: NewMapDto) {
-    createMap(1, map).then(
+    createMap(map).then(
       (newMap) => {
         mapList.push(<MapCard key={newMap.id} map={newMap} />);
         setInfoMessage({ isSuccess: true, message: t('maps:create.success') });

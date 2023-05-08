@@ -21,7 +21,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                     .service(plants::find_by_id),
             )
             .service(
-                web::scope("/users/{user_id}/maps")
+                web::scope("/maps")
                     .service(map::find)
                     .service(map::find_by_id)
                     .service(map::create),
