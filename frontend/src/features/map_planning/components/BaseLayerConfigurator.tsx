@@ -3,12 +3,12 @@ import { MAP_PIXELS_PER_METER } from '../utils/Constants';
 import { BaseStage } from './BaseStage';
 import { NewBaseLayerDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
-import SimpleFormInput from '@/components/Form/SimpleFormInput'; 
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
-import { Layer, Line } from 'react-konva';
 import { TFunction, withTranslation } from 'react-i18next';
+import { Layer, Line } from 'react-konva';
 
 export interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
@@ -38,28 +38,29 @@ export const correctForPreviousMapScaling = (distance: number, oldScale: number)
 
 // coordinates of mouse events might be null or undefined
 const mouseEventX = (e: KonvaEventObject<MouseEvent>): number => {
-  const value =  e.target.getStage()?.getRelativePointerPosition()?.x == null
-          ? 0
-          : e.target.getStage()?.getRelativePointerPosition()?.x;
+  const value =
+    e.target.getStage()?.getRelativePointerPosition()?.x == null
+      ? 0
+      : e.target.getStage()?.getRelativePointerPosition()?.x;
 
   return value ?? 0;
-}
+};
 
 const mouseEventY = (e: KonvaEventObject<MouseEvent>): number => {
-  const value =  e.target.getStage()?.getRelativePointerPosition()?.y == null
+  const value =
+    e.target.getStage()?.getRelativePointerPosition()?.y == null
       ? 0
       : e.target.getStage()?.getRelativePointerPosition()?.y;
 
   return value ?? 0;
-}
+};
 
-const BaseLayerConfigurator = ({onSubmit, t}: BaseLayerConfiguratorProps) => {
-
+const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
   const [imageUrl, setImageUrl] = useState('');
   const [rotation, setImageRotation] = useState(0);
   const [scale, setImageScale] = useState(10);
   const [realWorldLength, setRealWorldLength] = useState(0);
-  
+
   const onUrlInputChange = (value: string | number) => {
     // TODO: add nextcloud support with error handling
     if (typeof value === 'number') return;
@@ -109,11 +110,11 @@ const BaseLayerConfigurator = ({onSubmit, t}: BaseLayerConfiguratorProps) => {
 
   const stateTransitionOnePointSelectedTwoPointsSelected = () => {
     console.assert(
-        measureLinePoints[0] != undefined &&
+      measureLinePoints[0] != undefined &&
         measureLinePoints[1] != undefined &&
         measureLinePoints[2] != undefined &&
         measureLinePoints[3] != undefined,
-        'measureLinePoints should contain 4 defined elements.',
+      'measureLinePoints should contain 4 defined elements.',
     );
 
     const lineLength = calculateLineLength(measureLinePoints);
@@ -126,7 +127,7 @@ const BaseLayerConfigurator = ({onSubmit, t}: BaseLayerConfiguratorProps) => {
     setShowDistanceInputModal(true);
 
     setMeasureState(MeasurementState.TwoPointsSelected);
-  }
+  };
 
   const onBaseStageClick = (e: KonvaEventObject<MouseEvent>) => {
     if (e.evt.button !== 0) return;
@@ -136,10 +137,7 @@ const BaseLayerConfigurator = ({onSubmit, t}: BaseLayerConfiguratorProps) => {
     // Each click on the displayed image causes the component to advance to the next state.
     switch (measureState) {
       case MeasurementState.Initial:
-        const x = mouseEventX(e);
-        const y = mouseEventY(e);
-
-        stateTransitionInitialOnePointSelected(x, y);
+        stateTransitionInitialOnePointSelected(mouseEventX(e), mouseEventX(e));
         break;
 
       case MeasurementState.OnePointSelected:
@@ -274,5 +272,5 @@ const BaseLayerConfigurator = ({onSubmit, t}: BaseLayerConfiguratorProps) => {
   );
 };
 
-export {BaseLayerConfigurator};
+export { BaseLayerConfigurator };
 export default withTranslation(['common', 'baseLayerConfigurator'])(BaseLayerConfigurator);

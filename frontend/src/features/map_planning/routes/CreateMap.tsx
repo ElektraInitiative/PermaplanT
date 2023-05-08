@@ -3,12 +3,12 @@ import { NewBaseLayerDto } from '@/bindings/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import { createBaseLayer } from '@/features/map_planning/api/CreateBaseLayer';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'i18next';
+import { useNavigate } from 'react-router-dom';
 
 export const CreateMap = () => {
   const navigate = useNavigate();
-  const {t} = useTranslation('createMap'); 
+  const { t } = useTranslation('createMap');
 
   const onSubmit = async (baseLayer: NewBaseLayerDto) => {
     await createBaseLayer(baseLayer);
