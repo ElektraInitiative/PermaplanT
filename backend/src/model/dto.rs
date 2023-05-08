@@ -181,36 +181,57 @@ pub struct Page<T> {
     pub total_pages: i32,
 }
 
-#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+/// The whole information of a map.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct MapDto {
+    /// The id of the map.
     pub id: i32,
+    /// The name of the map.
     pub name: String,
+    /// The date the map was created.
     pub creation_date: NaiveDate,
+    /// The date the map is supposed to be deleted.
     pub deletion_date: Option<NaiveDate>,
+    /// The date the last time the map view was opened by any user.
     pub last_visit: Option<NaiveDate>,
+    /// A flag indicating if this map is marked for deletion.
     pub is_inactive: bool,
+    /// The zoom factor of the map.
     pub zoom_factor: i16,
+    /// The amount of honors the map received.
     pub honors: i16,
+    /// The amount of visits the map had.
     pub visits: i16,
+    /// The amount of plants harvested on the map.
     pub harvested: i16,
+    /// The id of the owner of the map.
     pub owner_id: i32,
 }
 
-#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+/// The information of a map neccessary for its creation.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewMapDto {
+    /// The name of the map.
     pub name: String,
+    /// The date the map was created.
     pub creation_date: NaiveDate,
+    /// The date the map is supposed to be deleted.
     pub deletion_date: Option<NaiveDate>,
+    /// The date the last time the map view was opened by any user.
     pub last_visit: Option<NaiveDate>,
+    /// A flag indicating if this map is marked for deletion.
     pub is_inactive: bool,
+    /// The zoom factor of the map.
     pub zoom_factor: i16,
+    /// The amount of honors the map received.
     pub honors: i16,
+    /// The amount of visits the map had.
     pub visits: i16,
+    /// The amount of plants harvested on the map.
     pub harvested: i16,
+    /// The id of the owner of the map.
     pub owner_id: i32,
 }
 
@@ -224,22 +245,29 @@ pub struct MapSearchParameters {
     pub owner_id: Option<i32>,
 }
 
-#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+/// The whole information of a map version.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct MapVersionDto {
+    /// The id of the map version.
     pub id: i32,
+    /// The id of the parent map.
     pub map_id: i32,
+    /// The name of this version.
     pub version_name: String,
+    /// The date this snapshot was taken.
     pub snapshot_date: NaiveDate,
 }
 
-#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+/// The information of a map version neccessary for its creation.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewMapVersionDto {
+    /// The id of the parent map.
     pub map_id: i32,
+    /// The name of this version.
     pub version_name: String,
+    /// The date this snapshot was taken.
     pub snapshot_date: NaiveDate,
 }
 
