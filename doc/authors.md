@@ -74,6 +74,7 @@ including their responsibilities, skills, etc.
 
 - GitHub: @ThorbenStaufer
 - main responsibility: Gamification
+- worked on: DB, gamification, frontend, colors
 - focus group: DB, frontend, gamification
 - special skills: Jenkins
 - positioning: frontend, DB
