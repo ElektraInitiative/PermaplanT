@@ -8,8 +8,6 @@ const config: Config = {
   },
   moduleNameMapper: {
     '^.+\\.svg$': '<rootDir>/src/__mocks__/svg.ts',
-  },
-  moduleNameMapper: {
     '^konva': 'konva/konva',
     '^@/(.*)': '<rootDir>/src/$1',
   },
