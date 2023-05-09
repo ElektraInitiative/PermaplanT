@@ -1,5 +1,5 @@
 def node_info() {
-    echo "Running this Stage on ${env.NODE_NAME}"
+    echo "Running stage on ${env.NODE_NAME}"
 }
 
 // REQUIRED for Deployment
