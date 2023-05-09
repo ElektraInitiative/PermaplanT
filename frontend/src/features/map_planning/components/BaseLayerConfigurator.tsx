@@ -139,7 +139,7 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
     // Each click on the displayed image causes the component to advance to the next state.
     switch (measureState) {
       case MeasurementState.Initial:
-        stateTransitionInitialOnePointSelected(mouseEventX(e), mouseEventX(e));
+        stateTransitionInitialOnePointSelected(mouseEventX(e), mouseEventY(e));
         break;
 
       case MeasurementState.OnePointSelected:
