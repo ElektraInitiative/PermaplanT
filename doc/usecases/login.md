@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User, App System
 - **Brief:** The user authenticates against the app to gain access to their account.
-- **Status:** Done
+- **Status:** In Progress (Backend merge pending)
 - **Assignee:** Gabriel, Samuel
 
 ## Scenarios

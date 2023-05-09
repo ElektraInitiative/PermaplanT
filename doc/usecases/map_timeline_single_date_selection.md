@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can view the map at different points in time by using the timeline feature.
-- **Status:** In Progress
+- **Status:** Workaround with date selector
 - **Assignee:** Paul
 
 ## Scenarios
