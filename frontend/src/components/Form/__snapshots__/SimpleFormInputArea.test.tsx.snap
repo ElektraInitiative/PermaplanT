@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="dark:text-white"
+>
+  <label
+    className="mb-2 block text-sm font-medium"
+    htmlFor="test"
+  >
+    Some Label
+  </label>
+  <textarea
+    className="dark:bg-primary-textfield-dark block w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:bg-neutral-100-dark dark:focus:border-primary-300"
+    id="test"
+  />
+</div>
+`;
