@@ -61,31 +61,33 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
   const [scale, setImageScale] = useState(10);
   const [realWorldLength, setRealWorldLength] = useState(0);
 
-  const onUrlInputChange = (value: string | number) => {
+  const onUrlInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
     // TODO: add error handling
-    if (typeof value === 'number') return;
+    const value = (event.target as unknown as HTMLInputElement).value;
     setImageUrl(value);
   };
 
-  const onRotationInputChange = (value: string | number) => {
-    if (typeof value === 'string') return;
-    setImageRotation(value);
+  const onRotationInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+    const value = (event.target as unknown as HTMLInputElement).value;
+    setImageRotation(parseInt(value));
   };
 
-  const onScaleInputChange = (value: string | number) => {
-    if (typeof value === 'string') return;
-    setImageScale(value);
+  const onScaleInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+    const value = (event.target as unknown as HTMLInputElement).value;
+    setImageScale(parseInt(value));
   };
 
-  const onMetersInputChange = (value: string | number) => {
-    if (typeof value === 'string' || Number.isNaN(value)) return;
+  const onMetersInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+    const stringValue = (event.target as unknown as HTMLInputElement).value;
+    const value = parseInt(stringValue);
 
     const centimeters = realWorldLength - Math.floor(realWorldLength);
     setRealWorldLength(value + centimeters);
   };
 
-  const onCentimetersInputChange = (value: string | number) => {
-    if (typeof value === 'string' || Number.isNaN(value)) return;
+  const onCentimetersInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+    const stringValue = (event.target as unknown as HTMLInputElement).value;
+    const value = parseInt(stringValue);
 
     const meters = Math.floor(realWorldLength);
     setRealWorldLength(meters + value / 100);
