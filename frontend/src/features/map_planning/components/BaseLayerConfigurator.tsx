@@ -58,7 +58,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
   const [realWorldLength, setRealWorldLength] = useState(0);
 
   const onUrlInputChange = (value: string | number) => {
-    // TODO: add error handling
+    // TODO: add nextcloud support with error handling
     if (typeof value === 'number') return;
     setImageUrl(value);
   };
