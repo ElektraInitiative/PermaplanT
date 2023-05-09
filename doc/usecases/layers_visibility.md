@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User changes the visibility of layers in their map
-- **Status:** In Progress
+- **Status:** Done
 - **Assignee:** Samuel
 
 ## Scenarios

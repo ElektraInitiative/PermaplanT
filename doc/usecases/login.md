@@ -6,8 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User, App System
 - **Brief:** The user authenticates against the app to gain access to their account.
-- **Status:** In Progress
-- **Assignee:** Gabriel
+- **Status:** Done
+- **Assignee:** Gabriel, Samuel
 
 ## Scenarios
 
