@@ -1,7 +1,7 @@
 import { HTMLInputTypeAttribute } from 'react';
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
-interface SimpleFormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface SimpleFormInputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   labelText: string;
 }
 
@@ -29,8 +29,8 @@ export default function SimpleFormInput ({
         {labelText}
         {props.required ? <span className="text-red-800"> *</span> : <></>}
       </label>
-      <input
-         {...props} 
+      <textarea
+        {...props}
       />
     </div>
   );
