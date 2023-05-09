@@ -116,6 +116,8 @@ We know about names (abstract and concrete, including hybrid):
 
 ## Attributes
 
+Columns are documented in their [respective structs](/backend/src/model/entity.rs).
+
 We prefer strongly-typed data, e.g.:
 
 - enums
@@ -138,30 +140,9 @@ Plants are additionally classified as:
 - is_concrete_plant (is a concrete plant as opposite to an abstract plant)
 - is_tree (as search help within the tree layer)
 
-## Mappings
-
 ### from Permapeople
 
-Column names should be:
-
-- `unique_name` (see above), instead of `binomial_name`
-- `common_name_en` (still with arrays of Text as content)
-- `common_name_de` should be from Wikipedia (still with arrays of Text as content), `german_name` gets removed
-- `hardiness_zone` (usda in documentation)
-- `light_requirement` (and not `sun`)
-- `water_requirement` (and not `water`)
-- `soil_texture` (and not `soil_type`)
-- `height` (and not `mature_size_height`, mature height in documentation)
-- `width` (and not `mature_size_width`, mature width in documentation)
-- `propagation_method` (and not `propagation`)
-- `growth_rate` (and not `growth`)
-- `has_drought_tolerance`
-- `parent_id`
-- `root_depth` (and not `root_zone_tendancy`)
-- `id` should be `external_id`
-- `external_source` should contain the enum value for `permapeople`
-
-Following columns should be removed:
+Following columns are removed:
 
 - `environment` (and its references)
 - `type` and `is_variety`, as variety is now determined from the name (`rank` to be calculated from name, see above)
@@ -183,14 +164,6 @@ Following columns should be removed:
 - `adapted_climate_zones`
 - `propagation_direct_sowing`
 
-Rename:
-
-- `when_to_sow_outdoors` to `sowing_outdoors_en`
-- `edible_uses` to `edible_uses_en`
-- `spacing` to `spacing_en`
-- `seed_planting_depth` to `seed_planting_depth_en`
-- `1000_seed_weight` to `seed_weight` (Documentation should state it is "thousand grain weight/Tausendkornmasse")
-
 Other minor problems:
 
 - fix Labiatae to be lamiaceae (family rank)
@@ -203,7 +176,7 @@ Unique name:
 - use `Scientific name subheading` together with `name` (as cultivar, see above) for our `unique_name`
   (`Cucurbita ssp.` from `Scientific name kulturhinweise` shouldn't exist)
 - Remove all occurrences of `L.`, `MIll.`, and `var.`.
-- Entries on Reinsaat that are spelled like "Brassica oleracea convar. botrytis var. italica" (https://www.reinsaat.at/shop/EN/brassica/broccoli/limba/) exist in our database as "Brassica oleracea italica".
+- Entries on Reinsaat that are spelled like "Brassica oleracea convar. botrytis var. italica" <https://www.reinsaat.at/shop/EN/brassica/broccoli/limba/> exist in our database as "Brassica oleracea italica".
   Add the Reinsaat entry to our database in a different row with the following nomenclature:
   Brassica oleracea italica 'Limba', with `Brassica oleracea italica` as parent, by following rules:
   - Remove the term "convar." and its following word.
@@ -212,34 +185,6 @@ Unique name:
   In our database we want them:
   - back together in one name (the unique name, as described above) e.g. Brassica oleracea italica 'Limba' or Malus domestica 'Gala'.
   - with a link to the variety, if present, otherwise species
-
-New columns:
-
-- `Artikelnummer` should be called `external_article_number`
-- `Portionsinhalt` should be called `external_portion_content`
-- `Direktsaat` or `Aussaat` should be called `sowing_outdoors_de`
-- `Aussaat/ Pflanzung Freiland` should be called `sowing_outdoors`
-- `Ernte` should be called `harvest_time`
-- `Abstände` should be called `spacing_de`
-- `Saatgutbedarf` should be called `required_quantity_of_seeds_de`
-- `Required quantity of seeds` should be called `required_quantity_of_seeds_en`
-- `Saattiefe` should be called `seed_planting_depth_de`
-- `Tausendkornmasse` should be called `seed_weight_de`
-- `Thousand seeds mass` should be called `seed_weight_en`
-- `Suitable for professional cultivation` should be called `machine_cultivation_possible`
-
-Copy columns:
-
-- `subcategory` should be copied to `edible_uses_de` and `edible_uses_en` respectively (DE and EN version)
-- `Tausendkorngewicht (TKG)` should be copied to `seed_weight` (remove ` g`)
-- `Sowing` or `Direct Sowing` or `Sowing outdoors` or `Sowing Direct Outdoors` should be copied to `sowing_outdoors_en`
-- `Distances` or `Spacing` should be copied to `spacing_en`
-- `Sowing depth` should be copied to `seed_planting_depth_en`
-- `1st harvest` should be copied to `days_to_harvest`
-- `Keimtemperatur` should be copied to `germination_temperature`
-- `external_url`
-- `external_id`
-- `external_source` should contain the enum value for `reinsaat`
 
 Individual problems:
 

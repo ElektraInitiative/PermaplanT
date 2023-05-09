@@ -4,13 +4,7 @@
 
 Global value and local values in the Soil layer:
 
-- soil weight class (German: Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) [Klassen])
-  from:
-  - 1 very light (S, uS) (German: sehr leicht)
-  - 2 light (U, sU, IS) (German: leicht)
-  - 3 medium (tS, sL, IU) (German: mittelschwer)
-  - 4 heavy (sT, L, uL) (German: schwer)
-  - 5 very heavy (T, IT) (German: sehr schwer)
+- soil texture (German: orientiert an Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) [Klassen])
 - pH base value for topsoil from 0-14
   (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamic value using one decimal digit after the comma:
   - 1 very acid (pH 5.0 and below)

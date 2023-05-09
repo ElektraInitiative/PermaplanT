@@ -18,12 +18,6 @@ interface BaseStageProps {
   scrollable?: boolean;
   selectable?: boolean;
   draggable?: boolean;
-  onWheel?: (event: KonvaEventObject<WheelEvent>) => void;
-  onDragStart?: (event: KonvaEventObject<DragEvent>) => void;
-  onMouseMove?: (event: KonvaEventObject<MouseEvent>) => void;
-  onMouseDown?: (event: KonvaEventObject<MouseEvent>) => void;
-  onMouseUp?: (event: KonvaEventObject<MouseEvent>) => void;
-  onClick?: (event: KonvaEventObject<MouseEvent>) => void;
   children: React.ReactNode;
 }
 
@@ -204,56 +198,58 @@ export const BaseStage = ({
     });
 
   return (
-    <Stage
-      ref={stageRef}
-      draggable={draggable}
-      width={window.innerWidth}
-      height={window.innerHeight}
-      onWheel={onStageWheel}
-      onDragStart={onStageDragStart}
-      onMouseDown={onStageMouseDown}
-      onMouseMove={onStageMouseMove}
-      onMouseUp={onStageMouseUp}
-      onClick={onStageClick}
-      scaleX={stage.scale}
-      scaleY={stage.scale}
-      x={stage.x}
-      y={stage.y}
-    >
-      {children}
-      <Layer>
-        <Rect
-          x={selectionRectAttrs.x}
-          y={selectionRectAttrs.y}
-          width={selectionRectAttrs.width}
-          height={selectionRectAttrs.height}
-          fill={'blue'}
-          visible={selectionRectAttrs.isVisible}
-          opacity={0.2}
-          name="selectionRect"
-        />
-        <Transformer
-          // We need to manually disable selection when we are transforming
-          onTransformStart={() => {
-            selectable = false;
-          }}
-          onTransformEnd={() => {
-            selectable = true;
-          }}
-          onMouseDown={() => {
-            selectable = false;
-          }}
-          onMouseUp={() => {
-            selectable = true;
-          }}
-          ref={trRef}
-          name="transformer"
-          anchorSize={8}
-          // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
-          // It's an experimental property so we should keep an eye out for possible issues
-          shouldOverdrawWholeArea={true}
-        />
-      </Layer>
-    </Stage>
+    <div className="h-full w-full overflow-hidden">
+      <Stage
+        ref={stageRef}
+        draggable={draggable}
+        width={window.innerWidth}
+        height={window.innerHeight}
+        onWheel={onStageWheel}
+        onDragStart={onStageDragStart}
+        onMouseDown={onStageMouseDown}
+        onMouseMove={onStageMouseMove}
+        onMouseUp={onStageMouseUp}
+        onClick={onStageClick}
+        scaleX={stage.scale}
+        scaleY={stage.scale}
+        x={stage.x}
+        y={stage.y}
+      >
+        {children}
+        <Layer>
+          <Rect
+            x={selectionRectAttrs.x}
+            y={selectionRectAttrs.y}
+            width={selectionRectAttrs.width}
+            height={selectionRectAttrs.height}
+            fill={'blue'}
+            visible={selectionRectAttrs.isVisible}
+            opacity={0.2}
+            name="selectionRect"
+          />
+          <Transformer
+            // We need to manually disable selection when we are transforming
+            onTransformStart={() => {
+              selectable = false;
+            }}
+            onTransformEnd={() => {
+              selectable = true;
+            }}
+            onMouseDown={() => {
+              selectable = false;
+            }}
+            onMouseUp={() => {
+              selectable = true;
+            }}
+            ref={trRef}
+            name="transformer"
+            anchorSize={8}
+            // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
+            // It's an experimental property so we should keep an eye out for possible issues
+            shouldOverdrawWholeArea={true}
+          />
+        </Layer>
+      </Stage>
+    </div>
   );
 };

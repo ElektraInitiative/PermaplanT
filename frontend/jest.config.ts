@@ -5,7 +5,9 @@ const config: Config = {
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.tsx?$': 'babel-jest',
-    '^.+\\.svg$': '<rootDir>/svg-transform.ts',
+  },
+  moduleNameMapper: {
+    '^.+\\.svg$': '<rootDir>/src/__mocks__/svg.ts',
   },
   moduleNameMapper: {
     '^konva': 'konva/konva',

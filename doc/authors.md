@@ -37,8 +37,10 @@ including their responsibilities, skills, etc.
 
 - GitHub: @badnames
 - main responsibilities: DB
-- focus groups: DB, PostGIS, polyculture
+- special skills: SQL, TypeScript
+- focus groups: DB, Frontend
 - positioning: full-stack
+- worked on: seeds use case, db, frontend, backend
 
 ## Giancarlo
 
@@ -59,12 +61,14 @@ including their responsibilities, skills, etc.
 - focus group: DB, PostGIS
 - positioning: DB
 
-## Thorben Julian
+## Thorben
 
+- GitHub: @ThorbenStaufer
 - main responsibility: Gamification
-- focus group: polyculture
+- worked on: DB, gamification, frontend, colors
+- focus group: DB, frontend, gamification
 - special skills: Jenkins
-- positioning: DB
+- positioning: frontend, DB
 
 ## Paul
 
