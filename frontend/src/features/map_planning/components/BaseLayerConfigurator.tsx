@@ -9,6 +9,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
 import { TFunction, withTranslation } from 'react-i18next';
 import { Layer, Line } from 'react-konva';
+import {string} from "prop-types";
 
 export interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
@@ -81,6 +82,8 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
     const stringValue = (event.target as unknown as HTMLInputElement).value;
     const value = parseInt(stringValue);
 
+    if (Number.isNaN(value)) return;
+
     const centimeters = realWorldLength - Math.floor(realWorldLength);
     setRealWorldLength(value + centimeters);
   };
@@ -90,6 +93,8 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
   ) {
     const stringValue = (event.target as unknown as HTMLInputElement).value;
     const value = parseInt(stringValue);
+
+    if (Number.isNaN(value)) return;
 
     const meters = Math.floor(realWorldLength);
     setRealWorldLength(meters + value / 100);
