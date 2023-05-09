@@ -9,6 +9,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Layer, Line } from 'react-konva';
+import {string} from "prop-types";
 
 export interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
