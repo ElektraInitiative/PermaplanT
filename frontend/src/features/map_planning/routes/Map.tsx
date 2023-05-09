@@ -1,8 +1,8 @@
 import { BaseStage } from '../components/BaseStage';
-import BaseLayer from '../layers/BaseLayer';
 import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
+import BaseLayer from '../layers/BaseLayer';
 import PlantsLayer from '../layers/PlantsLayer';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
@@ -156,9 +156,9 @@ export const Map = () => {
       <BaseStage>
         <PlantsLayer>{shapes}</PlantsLayer>
         <BaseLayer
-            imageUrl="https://nextcloud.markus-raab.org/nextcloud/index.php/s/E4TTrPnpt4Qfade/download/garden-plan.jpg"
-            rotation={0}
-            pixels_per_meter={5}
+          imageUrl="https://nextcloud.markus-raab.org/nextcloud/index.php/s/E4TTrPnpt4Qfade/download/garden-plan.jpg"
+          rotation={0}
+          pixels_per_meter={5}
         />
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">

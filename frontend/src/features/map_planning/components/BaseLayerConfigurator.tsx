@@ -61,23 +61,23 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
   const [scale, setImageScale] = useState(10);
   const [realWorldLength, setRealWorldLength] = useState(0);
 
-  const onUrlInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+  const onUrlInputChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
     // TODO: add error handling
     const value = (event.target as unknown as HTMLInputElement).value;
     setImageUrl(value);
   };
 
-  const onRotationInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+  const onRotationInputChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
     const value = (event.target as unknown as HTMLInputElement).value;
     setImageRotation(parseInt(value));
   };
 
-  const onScaleInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+  const onScaleInputChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
     const value = (event.target as unknown as HTMLInputElement).value;
     setImageScale(parseInt(value));
   };
 
-  const onMetersInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+  const onMetersInputChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
     const stringValue = (event.target as unknown as HTMLInputElement).value;
     const value = parseInt(stringValue);
 
@@ -85,7 +85,9 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
     setRealWorldLength(value + centimeters);
   };
 
-  const onCentimetersInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+  const onCentimetersInputChange = function <E>(
+    event: React.ChangeEvent<E> | React.KeyboardEvent<E>,
+  ) {
     const stringValue = (event.target as unknown as HTMLInputElement).value;
     const value = parseInt(stringValue);
 
