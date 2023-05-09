@@ -1,20 +1,20 @@
-import { HTMLInputTypeAttribute } from 'react';
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
-interface SimpleFormInputAreaProps<T extends FieldValues> extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  id: Path<T>; 
+interface SimpleFormInputAreaProps<T extends FieldValues>
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  id: Path<T>;
   labelText: string;
   register?: UseFormRegister<T>;
 }
 
-export default function SimpleFormAreaInput<T extends FieldValues> ({
-  id, 
+export default function SimpleFormAreaInput<T extends FieldValues>({
+  id,
   labelText = '',
   register,
- ...props
+  ...props
 }: SimpleFormInputAreaProps<T>) {
   // Extract the input fields value from the respective Events before calling onChange.
-/*  const callOnChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+  /*  const callOnChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
     if (onChange == null) return;
 
     // If somebody finds a way of fixing the next line, please do!
