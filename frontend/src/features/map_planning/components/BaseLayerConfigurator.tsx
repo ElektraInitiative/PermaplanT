@@ -207,14 +207,14 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
           </div>
           <div className="space-between flex flex-row justify-center space-x-8">
             <SimpleButton onClick={onDistanceInputModalCancel} className="max-w-[240px] grow">
-              {t('common:ok')}
+              {t('common:cancel')}
             </SimpleButton>
             <SimpleButton
               disabled={realWorldLength === 0}
               onClick={onDistanceInputModalSubmit}
               className="max-w-[240px] grow"
             >
-              {t('common:cancel')}
+              {t('common:ok')}
             </SimpleButton>
           </div>
         </div>
