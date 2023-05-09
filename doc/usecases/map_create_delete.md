@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can create and delete maps within the app, with the option to undo a deletion for a limited time period.
-- **Status:** In Progress
+- **Status:** Done (Without Deletion)
 - **Assignee:** Thorben
 
 ## Scenarios
