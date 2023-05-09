@@ -7,10 +7,12 @@ import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
+import { TFunction, withTranslation } from 'react-i18next';
 import { Layer, Line } from 'react-konva';
 
 export interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
+  t: TFunction;
 }
 
 // Setting the maps scale using a known distance is handled using a state machine.
@@ -21,7 +23,7 @@ enum MeasurementState {
 }
 
 // Expects an array of line coordinates as returned by Konva [x1, y1, x2, y2].
-const calculateLineLength = (line: number[]): number => {
+export const calculateLineLength = (line: number[]): number => {
   console.assert(line.length === 4);
 
   const lineLengthX = Math.abs(line[2] - line[0]);
@@ -30,58 +32,62 @@ const calculateLineLength = (line: number[]): number => {
   return Math.sqrt(lineLengthX * lineLengthX + lineLengthY * lineLengthY);
 };
 
-const correctForPreviousMapScaling = (distance: number, oldScale: number): number => {
+export const correctForPreviousMapScaling = (distance: number, oldScale: number): number => {
   return (distance / oldScale) * MAP_PIXELS_PER_METER;
 };
 
 // coordinates of mouse events might be null or undefined
 const mouseEventX = (e: KonvaEventObject<MouseEvent>): number => {
-  const value =  e.target.getStage()?.getRelativePointerPosition()?.x == null
-          ? 0
-          : e.target.getStage()?.getRelativePointerPosition()?.x;
+  const value =
+    e.target.getStage()?.getRelativePointerPosition()?.x == null
+      ? 0
+      : e.target.getStage()?.getRelativePointerPosition()?.x;
 
   return value ?? 0;
-}
+};
 
 const mouseEventY = (e: KonvaEventObject<MouseEvent>): number => {
-  const value =  e.target.getStage()?.getRelativePointerPosition()?.y == null
+  const value =
+    e.target.getStage()?.getRelativePointerPosition()?.y == null
       ? 0
       : e.target.getStage()?.getRelativePointerPosition()?.y;
 
   return value ?? 0;
-}
+};
 
-const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
+const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
   const [imageUrl, setImageUrl] = useState('');
   const [rotation, setImageRotation] = useState(0);
   const [scale, setImageScale] = useState(10);
   const [realWorldLength, setRealWorldLength] = useState(0);
 
-  const onUrlInputChange = (value: string | number) => {
-    // TODO: add nextcloud support with error handling
-    if (typeof value === 'number') return;
+  const onUrlInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+    // TODO: add error handling
+    const value = (event.target as unknown as HTMLInputElement).value;
     setImageUrl(value);
   };
 
-  const onRotationInputChange = (value: string | number) => {
-    if (typeof value === 'string') return;
-    setImageRotation(value);
+  const onRotationInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+    const value = (event.target as unknown as HTMLInputElement).value;
+    setImageRotation(parseInt(value));
   };
 
-  const onScaleInputChange = (value: string | number) => {
-    if (typeof value === 'string') return;
-    setImageScale(value);
+  const onScaleInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+    const value = (event.target as unknown as HTMLInputElement).value;
+    setImageScale(parseInt(value));
   };
 
-  const onMetersInputChange = (value: string | number) => {
-    if (typeof value === 'string' || Number.isNaN(value)) return;
+  const onMetersInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+    const stringValue = (event.target as unknown as HTMLInputElement).value;
+    const value = parseInt(stringValue);
 
     const centimeters = realWorldLength - Math.floor(realWorldLength);
     setRealWorldLength(value + centimeters);
   };
 
-  const onCentimetersInputChange = (value: string | number) => {
-    if (typeof value === 'string' || Number.isNaN(value)) return;
+  const onCentimetersInputChange = function<E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
+    const stringValue = (event.target as unknown as HTMLInputElement).value;
+    const value = parseInt(stringValue);
 
     const meters = Math.floor(realWorldLength);
     setRealWorldLength(meters + value / 100);
@@ -106,11 +112,11 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
   const stateTransitionOnePointSelectedTwoPointsSelected = () => {
     console.assert(
-        measureLinePoints[0] != undefined &&
+      measureLinePoints[0] != undefined &&
         measureLinePoints[1] != undefined &&
         measureLinePoints[2] != undefined &&
         measureLinePoints[3] != undefined,
-        'measureLinePoints should contain 4 defined elements.',
+      'measureLinePoints should contain 4 defined elements.',
     );
 
     const lineLength = calculateLineLength(measureLinePoints);
@@ -123,7 +129,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     setShowDistanceInputModal(true);
 
     setMeasureState(MeasurementState.TwoPointsSelected);
-  }
+  };
 
   const onBaseStageClick = (e: KonvaEventObject<MouseEvent>) => {
     if (e.evt.button !== 0) return;
@@ -133,10 +139,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     // Each click on the displayed image causes the component to advance to the next state.
     switch (measureState) {
       case MeasurementState.Initial:
-        const x = mouseEventX(e);
-        const y = mouseEventY(e);
-
-        stateTransitionInitialOnePointSelected(x, y);
+        stateTransitionInitialOnePointSelected(mouseEventX(e), mouseEventY(e));
         break;
 
       case MeasurementState.OnePointSelected:
@@ -181,12 +184,12 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
     <div className="pb-1">
       <ModalContainer show={showDistanceInputModal}>
         <div className="flex min-h-[200px] w-[400px] flex-col justify-between space-y-8 rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
-          <h1>Set length of drawn distance</h1>
+          <h1>{t('baseLayerConfigurator:distance_modal_header')}</h1>
 
           <div className="space-between flex flex-row justify-center space-x-4">
             <SimpleFormInput
               id={'distance-input-meters'}
-              labelText={'Meters'}
+              labelText={t('common:meters')}
               type={'number'}
               min={0}
               defaultValue={0}
@@ -194,7 +197,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
             />
             <SimpleFormInput
               id={'distance-input-centimeters'}
-              labelText={'Centimeters'}
+              labelText={t('common:centimeters')}
               type={'number'}
               min={0}
               defaultValue={0}
@@ -204,14 +207,14 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
           </div>
           <div className="space-between flex flex-row justify-center space-x-8">
             <SimpleButton onClick={onDistanceInputModalCancel} className="max-w-[240px] grow">
-              Cancel
+              {t('common:cancel')}
             </SimpleButton>
             <SimpleButton
               disabled={realWorldLength === 0}
               onClick={onDistanceInputModalSubmit}
               className="max-w-[240px] grow"
             >
-              Submit
+              {t('common:ok')}
             </SimpleButton>
           </div>
         </div>
@@ -220,13 +223,13 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
       <div className="flex-column flex items-end gap-4">
         <SimpleFormInput
           id={'url'}
-          labelText={'Background image URL'}
+          labelText={t('baseLayerConfigurator:background_image_url')}
           onChange={onUrlInputChange}
         ></SimpleFormInput>
 
         <SimpleFormInput
           id={'rotation'}
-          labelText={'Rotation (Degrees)'}
+          labelText={t('baseLayerConfigurator:rotation_degrees')}
           onChange={onRotationInputChange}
           type={'number'}
           defaultValue={0}
@@ -237,7 +240,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
         <SimpleFormInput
           id={'scale'}
-          labelText={'Pixels per Meter'}
+          labelText={t('baseLayerConfigurator:pixels_per_meter')}
           onChange={onScaleInputChange}
           value={scale.toFixed(2)}
           type={'number'}
@@ -247,7 +250,7 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
 
         <SimpleButton
           onClick={() =>
-            props.onSubmit({
+            onSubmit({
               base_image_url: imageUrl,
               pixels_per_meter: scale,
               north_orientation_degrees: rotation,
@@ -271,4 +274,5 @@ const BaseLayerConfigurator = (props: BaseLayerConfiguratorProps) => {
   );
 };
 
-export default BaseLayerConfigurator;
+export { BaseLayerConfigurator };
+export default withTranslation(['common', 'baseLayerConfigurator'])(BaseLayerConfigurator);

@@ -3,10 +3,12 @@ import { NewBaseLayerDto } from '@/bindings/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import { createBaseLayer } from '@/features/map_planning/api/CreateBaseLayer';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 export const CreateMap = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation(['createMap']);
 
   const onSubmit = async (baseLayer: NewBaseLayerDto) => {
     await createBaseLayer(baseLayer);
@@ -18,7 +20,7 @@ export const CreateMap = () => {
 
   return (
     <PageLayout>
-      <PageTitle title={'Create a new Map'} />
+      <PageTitle title={t('createMap:header')} />
       <BaseLayerConfigurator onSubmit={onSubmit}></BaseLayerConfigurator>
     </PageLayout>
   );
