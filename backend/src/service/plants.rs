@@ -2,8 +2,10 @@
 
 use actix_web::web::Data;
 
+use crate::model::dto::Page;
+use crate::model::dto::PageParameters;
 use crate::{
-    config::db::Pool,
+    db::connection::Pool,
     error::ServiceError,
     model::{
         dto::{PlantsSearchParameters, PlantsSummaryDto},
@@ -11,26 +13,17 @@ use crate::{
     },
 };
 
-/// Fetch all plants from the database.
-///
-/// # Errors
-/// If the connection to the database could not be established.
-pub async fn find_all(pool: &Data<Pool>) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
-    let mut conn = pool.get().await?;
-    let result = Plants::find_all(&mut conn).await?;
-    Ok(result)
-}
-
 /// Search plants from in the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn search(
+pub async fn find(
+    search_parameters: PlantsSearchParameters,
+    page_parameters: PageParameters,
     pool: &Data<Pool>,
-    query: &PlantsSearchParameters,
-) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
+) -> Result<Page<PlantsSummaryDto>, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Plants::search(query, &mut conn).await?;
+    let result = Plants::find(search_parameters, page_parameters, &mut conn).await?;
     Ok(result)
 }
 

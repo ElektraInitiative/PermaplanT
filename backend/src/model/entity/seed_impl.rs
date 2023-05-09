@@ -1,23 +1,42 @@
 //! Contains the implementation of [`Seed`].
 
-use diesel::{QueryDsl, QueryResult};
+use diesel::{ExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
+use crate::db::pagination::Paginate;
+use crate::model::dto::{Page, PageParameters, SeedSearchParameters};
 use crate::{
     model::dto::{NewSeedDto, SeedDto},
-    schema::seeds::{self, all_columns},
+    schema::seeds::{self, all_columns, harvest_year, name},
 };
 
 use super::{NewSeed, Seed};
 
 impl Seed {
-    /// Fetch all seeds from the database.
+    /// Get a page of seeds.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find_all(conn: &mut AsyncPgConnection) -> QueryResult<Vec<SeedDto>> {
-        let query_result = seeds::table.select(all_columns).load::<Self>(conn).await;
-        query_result.map(|v| v.into_iter().map(Into::into).collect())
+    pub async fn find(
+        search_parameters: SeedSearchParameters,
+        page_parameters: PageParameters,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<Page<SeedDto>> {
+        let mut query = seeds::table.select(all_columns).into_boxed();
+
+        if let Some(name_search) = search_parameters.name {
+            query = query.filter(name.ilike(format!("%{name_search}%")));
+        }
+        if let Some(harvest_year_search) = search_parameters.harvest_year {
+            query = query.filter(harvest_year.eq(harvest_year_search));
+        }
+
+        let query_page = query
+            .paginate(page_parameters.page)
+            .per_page(page_parameters.per_page)
+            .load_page::<Self>(conn)
+            .await;
+        query_page.map(Page::from_entity)
     }
 
     /// Fetch seed by id from the database.

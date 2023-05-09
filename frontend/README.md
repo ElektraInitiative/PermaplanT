@@ -33,9 +33,51 @@ cp .env.sample .env
 npm run dev
 ```
 
-This will start the development server on <http://localhost:5173/> and will open the application in your default web browser. The server will automatically reload the page when you make changes to the code.
+This will start the development server on [http://localhost:5173/](http://localhost:5173/) and will open the application in your default web browser.
+The server will automatically reload the page when you make changes to the code.
 
-To test that it is working, you can visit this url on your preferred browser: <http://localhost:5173/seeds>
+## Documentation
+
+To view the documentation
+
+1. Generate the documentation via TypeDoc.
+
+```shell
+npm run doc
+```
+
+2. Start storybook
+
+```shell
+npm run storybook
+```
+
+This will start the storybook dev server on [http://localhost:6006/](http://localhost:6006/) and will open it up on your default web browser.
+
+## Testing
+
+1. Make sure you are in the frontend directory
+2. Run the test script
+
+```shell
+npm run test
+```
+
+### Testing individual files
+
+```shell
+npm run test -- path/to/component.test.tsx
+```
+
+### Watch mode
+
+Our test framework provides an interactive watch mode that can be executed with
+
+```shell
+npm run test -- --watchAll
+```
+
+This command starts an interactive CLI that can be used to rerun specific tests after implementing changes.
 
 ## Production
 

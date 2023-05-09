@@ -20,3 +20,8 @@ License: MIT
 Files: scraper/src/data/*
 Source: common german names from Wikidata(CC-BY-SA-3.0), other columns from practicalplants.org and Yvonne Markl(CC-BY-NC-SA-3.0)
 License: CC-BY-SA-3.0, CC-BY-NC-SA-3.0
+
+Files: doc/mermaid-init.js
+       doc/mermaid.min.js
+Source: https://github.com/badboy/mdbook-mermaid/tree/main/src/bin/assets
+License: MPL-2.0 license

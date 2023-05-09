@@ -1,0 +1,15 @@
+[book]
+authors = ["PermaplanT Contributors"]
+language = "en"
+multilingual = false
+src = "doc"
+title = "PermaplanT"
+
+[preprocessor.generate-summary]
+get_chapter_name_from_file = true
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html]
+additional-js = ["doc/mermaid.min.js", "doc/mermaid-init.js"]

@@ -1,8 +1,6 @@
 
-parameters {
-    booleanParam(name: 'DEPLOY_PROD', defaultValue: false, description: 'deploy to production')
-}
-
+// REQUIRED for Deployment
+// see Jenkinsfile.release
 stage('Build Schema'){
     node('docker') {
         checkout scm
@@ -20,8 +18,22 @@ stage('Build Schema'){
     }
 }
 
+// NOT REQUIRED for Deployment
 stage('Checks') {
     def parallel_checks = [:]
+
+    parallel_checks["check-mdbook"] = {
+        node('docker') {
+            checkout scm
+            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+
+            mdbook_image.inside {
+                checkout scm
+
+                sh "mdbook test"
+            }
+        }
+    }
 
     parallel_checks["check-backend"] = {
         node('docker') {
@@ -33,7 +45,7 @@ stage('Checks') {
                     checkout scm
 
                     withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-                        // Workardoung: we can't stop rustfmt from linting the generated schema.rs
+                        // Workaround: we can't stop rustfmt from linting the generated schema.rs
                         dir("backend") {
                             sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
                             sh "cargo fmt --check"
@@ -67,7 +79,12 @@ stage('Checks') {
                 checkout scm
                 unstash 'definitions.ts'
 
-                echo "HC SVNT DRACONES"
+                dir("frontend") {
+                    sh "npm ci"
+                    sh "npm run format:check"
+                    sh "npm run lint"
+                    sh "npm run test"
+                }
             }
         }
     }
@@ -75,6 +92,8 @@ stage('Checks') {
     parallel(parallel_checks)
 }
 
+// REQUIRED for Deployment
+// see Jenkinsfile.release
 stage('Build in Docker'){
     def parallel_build = [:]
 
@@ -152,19 +171,5 @@ if (env.BRANCH_NAME == 'master') {
     }
 }
 
-// Deploying to Prod only happens on branch "master" and if parameter is set
-if (env.BRANCH_NAME == 'master' && params.DEPLOY_PROD) {
-    stage('Deploy Prod') {
-        node('permaplant && prod') {
-            checkout scm
-
-            echo "Unstash Artifacts"
-            unstash 'schema.rs'
-            unstash 'frontend'
-            unstash 'backend'
-
-            echo 'Deploying to Prod ...'
-            sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
-        }
-    }
-}
+// PRODUCTION DEPLOYMENT
+// see Jenkinsfile.release

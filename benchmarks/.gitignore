@@ -1,0 +1,12 @@
+node_modules/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+*-report.json
+
+*-results.csv
+*-results-shapes.csv
+
+!lighthouse-results.csv
+!lighthouse-results-shapes.csv

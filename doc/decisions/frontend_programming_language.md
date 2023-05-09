@@ -29,6 +29,8 @@ The PermaplanT app needs a frontend programming language to build its user inter
 - Rust:
   [Rust](https://www.rust-lang.org/) is primarily used for creating backend systems, applications, and libraries.
   It is not typically used for frontend development, as it does not have built-in support for graphical user interface development.
+  Libraries like [yew](https://yew.rs) are simply not stable enough yet.
+  See also [this lengthy comparison of web UI libraries](https://monadical.com/posts/shades-of-rust-gui-library-list.html).
 
 ## Decision
 

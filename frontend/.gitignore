@@ -4,6 +4,7 @@ dist-ssr
 
 # Auto generated
 src/bindings/*
+src/generated/*
 
 # Editor directories and files
 *.suo
@@ -13,3 +14,6 @@ src/bindings/*
 *.sw?
 
 .env
+
+# storybook build
+storybook-static

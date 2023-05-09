@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<h1
+  className="mb-8 text-2xl"
+>
+  Hello World!
+</h1>
+`;

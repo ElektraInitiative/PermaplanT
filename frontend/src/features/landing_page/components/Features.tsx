@@ -1,6 +1,9 @@
+import './Features.css';
 import { ReactComponent as GlobeSVG } from '@/assets/globe.svg';
 import { ReactComponent as PlanningSVG } from '@/assets/planning.svg';
 import { ReactComponent as PlantSVG } from '@/assets/plant.svg';
+import { useTranslation } from 'react-i18next';
+import TypewriterComponent from 'typewriter-effect';
 
 interface Feature {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -8,40 +11,55 @@ interface Feature {
   description: string;
 }
 
-const features: Feature[] = [
-  {
-    icon: PlanningSVG,
-    title: 'Garden Planning',
-    description:
-      'Plan your garden using our intuitive design tools. Choose from a variety of plants to create a beautiful garden space.',
-  },
-  {
-    icon: PlantSVG,
-    title: 'Why Permaculture',
-    description:
-      'The growth of edible crops is vital for creating a diverse and functioning ecosystem, while also providing outdoor living spaces for both animals and humans.',
-  },
-  {
-    icon: GlobeSVG,
-    title: 'Community',
-    description:
-      'Connect with other permaculture gardeners, share your successes and challenges, and get inspired by the beautiful gardens of others.',
-  },
-];
-
 const Features = () => {
+  const { t, i18n } = useTranslation(['featureDescriptions']);
+  const features: Feature[] = [
+    {
+      icon: PlanningSVG,
+      title: t('featureDescriptions:garden_planning.title'),
+      description: t('featureDescriptions:garden_planning.description'),
+    },
+    {
+      icon: PlantSVG,
+      title: t('featureDescriptions:why.title'),
+      description: t('featureDescriptions:why.description'),
+    },
+    {
+      icon: GlobeSVG,
+      title: t('featureDescriptions:community.title'),
+      description: t('featureDescriptions:community.description'),
+    },
+  ];
   return (
     <section>
       <div className="py-24">
         <div className="mb-20 text-center">
-          <h1 className="title-font mb-4 text-2xl font-medium sm:text-3xl">
-            BE <span className="text-primary-400 dark:text-primary-300">GOOD</span> TO YOUR
-            <span className="text-secondary-500 dark:text-secondary-300"> PLANTS</span>
+          <h1 className="title-font mx-auto mb-4 grid grid-cols-3 gap-2 text-2xl font-medium sm:text-3xl md:w-[500px]">
+            <div className="col-span-2 text-right">
+              {t('featureDescriptions:slogan.first_part')}{' '}
+              <span className="text-primary-400 dark:text-primary-300">
+                {t('featureDescriptions:slogan.second_part')}{' '}
+              </span>
+            </div>
+            <div className="text-left">
+              <TypewriterComponent
+                // remount the component when language changes, so that the typewriter effect is reset
+                key={i18n.resolvedLanguage}
+                onInit={(typewriter) => {
+                  const strings = t('featureDescriptions:slogan.third_part', {
+                    returnObjects: true,
+                  });
+
+                  strings.forEach((s) => {
+                    typewriter.typeString(s).deleteAll();
+                  });
+                  typewriter.typeString(t('featureDescriptions:slogan.last_word'));
+                  typewriter.start();
+                }}
+              />
+            </div>
           </h1>
-          <p className="mx-auto w-[500px]">
-            Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub
-            indxgo juice poutine, ramps microdosing banh mi pug.
-          </p>
+          <p className="mx-auto md:w-[500px]"></p>
           <div className="mt-6 flex justify-center">
             <div className="h-1 w-16 rounded-full bg-secondary-500 dark:bg-secondary-300"></div>
           </div>

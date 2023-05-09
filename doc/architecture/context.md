@@ -4,17 +4,11 @@
 
 Global value and local values in the Soil layer:
 
-- soil weight class (German: Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) [Klassen])
-  from:
-  - 1 very light (S, uS) (German: sehr leicht)
-  - 2 light (U, sU, IS) (German: leicht)
-  - 3 medium (tS, sL, IU) (German: mittelschwer)
-  - 4 heavy (sT, L, uL) (German: schwer)
-  - 5 very heavy (T, IT) (German: sehr schwer)
+- soil texture (German: orientiert an Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) [Klassen])
 - pH base value for topsoil from 0-14
-  (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamisch:
+  (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamic value using one decimal digit after the comma:
   - 1 very acid (pH 5.0 and below)
-  - 2 acid (pH 6.0 - 6.5)
+  - 2 acid (pH 5.1 - 6.5)
   - 3 neutral (pH 6.6 - 7.3)
   - 4 alkaline (pH 7.4 - 7.8)
   - 5 very alkaline (pH 7.9 and above)
@@ -47,12 +41,13 @@ Global value and local values in the Soil layer:
 
 ## Local (for each place in the Garden)
 
-- distances to plants/trees (German: Abstände zu Bäume/Sträuche)
+- distances to plants/trees (German: Abstände zu Bäumen/Sträuchern)
 - wind
 - shadows
 - surface water, i.e., wet/dry places (German: Oberflächenwasser)
 - habitats
 - permaculture zones, see [glossary](glossary.md)
+- events: e.g. elements in the garden get added/removed accurate to the day
 
 ### Later Versions
 
@@ -87,7 +82,7 @@ Global value and local values in the Soil layer:
 - is a tree/bush
 - notes German (MISSING)
 
-All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes presence.
+All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes precedence.
 
 # Output Parameters
 

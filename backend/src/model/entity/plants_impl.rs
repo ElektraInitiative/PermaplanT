@@ -3,47 +3,45 @@
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
+use crate::db::function::array_to_string;
+use crate::db::pagination::Paginate;
+use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
-    model::diesel_extensions::array_to_string,
-    model::dto::{PlantsSearchParameters, PlantsSummaryDto},
-    schema::plants::{self, all_columns, binomial_name, common_name},
+    model::dto::PlantsSummaryDto,
+    schema::plants::{self, all_columns, common_name_en, unique_name},
 };
 
 use super::Plants;
 
 impl Plants {
-    /// Fetch all plants from the database.
+    /// Get a page of plants.
+    /// Can be filtered by name if one is provided in `search_parameters`.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find_all(conn: &mut AsyncPgConnection) -> QueryResult<Vec<PlantsSummaryDto>> {
-        let query_result = plants::table.select(all_columns).load::<Self>(conn).await;
-        query_result.map(|v| v.into_iter().map(Into::into).collect())
-    }
-
-    /// Search all plants whose name or species name contains the user provided query string.
-    /// To save traffic, the maximum number of results is limited.
-    ///
-    /// # Errors
-    /// * Unknown, diesel doesn't say why it might error.
-    pub async fn search(
-        query: &PlantsSearchParameters,
+    pub async fn find(
+        search_parameters: PlantsSearchParameters,
+        page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Vec<PlantsSummaryDto>> {
-        let query_with_placeholders = format!("%{}%", query.search_term);
+    ) -> QueryResult<Page<PlantsSummaryDto>> {
+        let mut query = plants::table.select(all_columns).into_boxed();
 
-        let query = plants::table
-            .filter(
-                binomial_name
-                    .ilike(&query_with_placeholders)
-                    .or(array_to_string(common_name, " ").ilike(&query_with_placeholders)),
-            )
-            .select(all_columns)
-            .order((binomial_name, common_name))
-            .limit(query.limit.into());
+        if let Some(term) = search_parameters.name {
+            query = query
+                .filter(
+                    unique_name
+                        .ilike(format!("%{term}%"))
+                        .or(array_to_string(common_name_en, " ").ilike(format!("%{term}%"))),
+                )
+                .order((unique_name, common_name_en));
+        }
 
-        let query_result = query.load::<Self>(conn).await;
-        query_result.map(|v| v.into_iter().map(Into::into).collect())
+        let query_page = query
+            .paginate(page_parameters.page)
+            .per_page(page_parameters.per_page)
+            .load_page::<Self>(conn)
+            .await;
+        query_page.map(Page::from_entity)
     }
 
     /// Fetch plant by id from the database.

@@ -1,0 +1,6 @@
+.Typewriter__wrapper {
+  @apply text-secondary-500 dark:text-secondary-300
+}
+.Typewriter {
+  @apply inline
+}

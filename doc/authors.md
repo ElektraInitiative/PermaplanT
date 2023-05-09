@@ -49,15 +49,6 @@ including their responsibilities, skills, etc.
 - focus group: UX
 - positioning: full-stack
 
-## Nursultan
-
-- GitHub: aidnurs
-- main responsibility: scraper, plant DB
-- focus group: DB
-- special skills: frontend tests
-- research: optimizations
-- positioning: full-stack
-
 ## Lukas
 
 - GitHub: lukashartl
@@ -79,15 +70,6 @@ including their responsibilities, skills, etc.
 - special skills: Jenkins
 - positioning: frontend, DB
 
-## Benjamin
-
-- GitHub: @Benjaminimal
-- main responsibility: Polyculture
-- focus group: polyculture, DB
-- special skills: BOKU
-- positioning: backend
-- worked on: ployculture use cases, DB
-
 ## Paul
 
 - GitHub: @Bushuo
@@ -95,3 +77,21 @@ including their responsibilities, skills, etc.
 - focus group: DB, frontend
 - special skills: React, TypeScript, Tailwind CSS
 - positioning: full-stack
+
+# Previous Authors
+
+## Nursultan
+
+- GitHub: aidnurs
+- main responsibility: scraper, plant DB
+- focus group: DB
+- special skills: frontend tests
+- research: optimizations
+- positioning: full-stack
+
+## Benjamin
+
+- main responsibility: Polyculture
+- focus group: polyculture, PostGIS
+- special skills: BOKU
+- positioning: backend

@@ -1,25 +1,44 @@
+import filterObject from '../../utils/filterObject';
 import { SelectOption } from './SelectMenu';
+import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import {
+  ActionMeta,
+  ClassNamesConfig,
+  GroupBase,
+  MultiValue,
+  SingleValue,
+  StylesConfig,
+} from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { ActionMeta, ClassNamesConfig, StylesConfig } from 'react-select';
-import filterObject from '@/utils/filterObject';
 
-export interface CreatableSelectMenuProps<T extends FieldValues> {
-  isMulti?: boolean;
+export interface CreatableSelectMenuProps<
+  T extends FieldValues,
+  Option = SelectOption,
+  IsMulti extends boolean = false,
+> {
+  isMulti?: IsMulti;
   id: Path<T>;
   labelText?: string;
   control?: Control<T, unknown>;
-  options: SelectOption[];
+  options: Option[];
   required?: boolean;
   placeholder?: string;
-  handleOptionsChange?: (option: any, actionMeta: ActionMeta<any>) => void;
+  handleOptionsChange?: (
+    option: SingleValue<Option> | MultiValue<Option>,
+    actionMeta: ActionMeta<Option>,
+  ) => void;
   handleCreate?: (inputValue: string) => void;
   onChange?: () => void;
   onInputChange?: (inputValue: string) => void;
 }
 
-export default function CreatableSelectMenu<T extends FieldValues>({
-  isMulti = false,
+export default function CreatableSelectMenu<
+  T extends FieldValues,
+  Option = SelectOption,
+  IsMulti extends boolean = false,
+>({
+  isMulti = false as IsMulti,
   id,
   labelText,
   control,
@@ -30,8 +49,8 @@ export default function CreatableSelectMenu<T extends FieldValues>({
   handleCreate,
   onChange,
   onInputChange,
-}: CreatableSelectMenuProps<T>) {
-  const customClassNames: ClassNamesConfig = {
+}: CreatableSelectMenuProps<T, Option, IsMulti>) {
+  const customClassNames: ClassNamesConfig<Option, IsMulti, GroupBase<Option>> = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
     control: (state) => {
       return `
@@ -56,7 +75,7 @@ export default function CreatableSelectMenu<T extends FieldValues>({
     multiValue: () => 'bg-neutral-400 dark:bg-neutral-400-dark',
     multiValueRemove: () => 'hover:bg-neutral-500',
   };
-  const customStyles: StylesConfig = {
+  const customStyles: StylesConfig<Option, IsMulti, GroupBase<Option>> = {
     // remove css attributes from predefined styles
     // this needs to be done so the custom css classes take effect
     control: (styles) =>
@@ -74,6 +93,8 @@ export default function CreatableSelectMenu<T extends FieldValues>({
     multiValueLabel: (styles) => filterObject(styles, ['color']),
     multiValueRemove: (styles) => filterObject(styles, ['color']),
   };
+
+  const [inputValue, setInputValue] = useState('');
 
   return (
     <div>
@@ -93,15 +114,20 @@ export default function CreatableSelectMenu<T extends FieldValues>({
             isClearable
             onChange={handleOptionsChange}
             onCreateOption={handleCreate}
+            inputValue={inputValue}
             placeholder={placeholder}
             options={options}
             isMulti={isMulti}
             styles={customStyles}
             classNames={customClassNames}
             required={required}
-            onInputChange={(inputValue) => {
+            onInputChange={(value, event) => {
+              // prevent the text from disapearing when clicking inside the input field
+              if (event.action === 'input-change' || event.action === 'set-value') {
+                setInputValue(value);
+              }
               onChange?.();
-              onInputChange?.(inputValue);
+              onInputChange?.(value);
             }}
           />
         )}
