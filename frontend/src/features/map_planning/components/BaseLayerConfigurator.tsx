@@ -131,7 +131,7 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
     // compensate for previously applied scaling
     setMeasuredLength(correctForPreviousMapScaling(lineLength, scale));
 
-    // Promt the user to input the real world length of the measured distance
+    // Prompt the user to input the real world length of the measured distance
     // This will complete the distance measuring process.
     setShowDistanceInputModal(true);
 
