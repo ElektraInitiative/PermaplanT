@@ -17,20 +17,6 @@ export default function SimpleFormInput<T extends FieldValues>({
   errorTitle,
   ...props
 }: SimpleFormInputProps<T>) {
-  // Extract the input fields value from the respective Events before calling onChange.
-  /*  const callOnChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
-    if (onChange == null) return;
-
-    // If somebody finds a way of fixing the next line, please do!
-    const value = (event.target as unknown as HTMLInputElement).value;
-
-    if (type === 'number') {
-      onChange(parseInt(value));
-    }
-
-    onChange(value);
-  }; */
-
   return (
     <div className="dark:text-white">
       <label htmlFor={id} className="mb-2 block text-sm font-medium">
