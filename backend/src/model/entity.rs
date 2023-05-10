@@ -1,6 +1,8 @@
 //! Contains all entities used in `PermaplanT`.
 
 pub mod base_layers_impl;
+pub mod map_impl;
+pub mod map_version_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
@@ -9,7 +11,7 @@ use chrono::NaiveDateTime;
 
 use diesel::{Identifiable, Insertable, Queryable};
 
-use crate::schema::{base_layers, plants, seeds};
+use crate::schema::{base_layers, map_versions, maps, plants, seeds};
 
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
@@ -710,4 +712,84 @@ pub struct NewBaseLayer {
     pub pixels_per_meter: f64,
     /// the amount of rotation required to align the base image with geographical north.
     pub north_orientation_degrees: f64,
+}
+
+/// The `Map` entity.
+#[derive(Identifiable, Queryable)]
+#[diesel(table_name = maps)]
+pub struct Map {
+    /// The id of the map.
+    pub id: i32,
+    /// The name of the map.
+    pub name: String,
+    /// The date the map was created.
+    pub creation_date: NaiveDate,
+    /// The date the map is supposed to be deleted.
+    pub deletion_date: Option<NaiveDate>,
+    /// The date the last time the map view was opened by any user.
+    pub last_visit: Option<NaiveDate>,
+    /// A flag indicating if this map is marked for deletion.
+    pub is_inactive: bool,
+    /// The zoom factor of the map.
+    pub zoom_factor: i16,
+    /// The amount of honors the map received.
+    pub honors: i16,
+    /// The amount of visits the map had.
+    pub visits: i16,
+    /// The amount of plants harvested on the map.
+    pub harvested: i16,
+    /// The id of the owner of the map.
+    pub owner_id: i32,
+}
+
+/// The `NewMap` entity.
+#[derive(Insertable)]
+#[diesel(table_name = maps)]
+pub struct NewMap {
+    /// The name of the map.
+    pub name: String,
+    /// The date the map was created.
+    pub creation_date: NaiveDate,
+    /// The date the map is supposed to be deleted.
+    pub deletion_date: Option<NaiveDate>,
+    /// The date the last time the map view was opened by any user.
+    pub last_visit: Option<NaiveDate>,
+    /// A flag indicating if this map is marked for deletion.
+    pub is_inactive: bool,
+    /// The zoom factor of the map.
+    pub zoom_factor: i16,
+    /// The amount of honors the map received.
+    pub honors: i16,
+    /// The amount of visits the map had.
+    pub visits: i16,
+    /// The amount of plants harvested on the map.
+    pub harvested: i16,
+    /// The id of the owner of the map.
+    pub owner_id: i32,
+}
+
+/// The `MapVersion` entity.
+#[derive(Identifiable, Queryable)]
+#[diesel(table_name = map_versions)]
+pub struct MapVersion {
+    /// The id of the map version.
+    pub id: i32,
+    /// The id of the parent map.
+    pub map_id: i32,
+    /// The name of this version.
+    pub version_name: String,
+    /// The date this snapshot was taken.
+    pub snapshot_date: NaiveDate,
+}
+
+/// The `NewMapVersion` entity.
+#[derive(Insertable)]
+#[diesel(table_name = map_versions)]
+pub struct NewMapVersion {
+    /// The id of the parent map.
+    pub map_id: i32,
+    /// The name of this version.
+    pub version_name: String,
+    /// The date this snapshot was taken.
+    pub snapshot_date: NaiveDate,
 }
