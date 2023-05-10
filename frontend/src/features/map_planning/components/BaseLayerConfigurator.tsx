@@ -63,7 +63,6 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
   const [realWorldLength, setRealWorldLength] = useState(0);
 
   const onUrlInputChange = function <E>(event: React.ChangeEvent<E> | React.KeyboardEvent<E>) {
-    // TODO: add error handling
     const value = (event.target as unknown as HTMLInputElement).value;
     setImageUrl(value);
   };
