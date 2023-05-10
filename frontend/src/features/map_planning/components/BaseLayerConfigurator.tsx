@@ -5,9 +5,9 @@ import { NewBaseLayerDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
+import { TFunction } from 'i18next';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
-import { TFunction } from "i18next";
 import { withTranslation } from 'react-i18next';
 import { Layer, Line } from 'react-konva';
 
