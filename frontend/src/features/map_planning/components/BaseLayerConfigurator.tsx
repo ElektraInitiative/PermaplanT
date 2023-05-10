@@ -6,7 +6,6 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { string } from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Layer, Line } from 'react-konva';
