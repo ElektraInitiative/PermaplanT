@@ -43,6 +43,7 @@ const routes: Routes = {
     // path needs to change later to something like /user/:id/maps
     path: '/maps',
     title: 'Map Overview',
+  },
   [Pages.Login]: {
     component: Login,
     path: '/login',
