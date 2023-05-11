@@ -10,6 +10,9 @@ pub struct Config {
     pub bind_address: (String, u16),
     /// The location of the database as a URL.
     pub database_url: String,
+    /// The location of the remote jwks which will be used to validate tokens.
+    #[cfg(feature = "auth")]
+    pub remote_jwks_url: String,
 }
 
 impl Config {
@@ -31,10 +34,15 @@ impl Config {
 
         let database_url =
             env::var("DATABASE_URL").map_err(|_| "Failed to get DATABASE_URL from environment.")?;
+        #[cfg(feature = "auth")]
+        let remote_jwks_url = env::var("REMOTE_JWKS_URL")
+            .map_err(|_| "Failed to get REMOTE_JWKS_URL from environment.")?;
 
         Ok(Self {
             bind_address: (host, port),
             database_url,
+            #[cfg(feature = "auth")]
+            remote_jwks_url,
         })
     }
 }

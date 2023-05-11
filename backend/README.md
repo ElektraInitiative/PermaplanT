@@ -4,7 +4,10 @@
 
 - Rust 1.67.1 or later ([Installation guide](../doc/development_setup.md))
 - [PostgreSQL](https://www.postgresql.org/download/) version 13 or later
+- [Keycloak](https://www.keycloak.org/getting-started/getting-started-docker) (run the container, but change the port to 8081)
 - libpq-dev
+- libssl-dev
+- pkg-config
 
 ## Installation
 
@@ -13,6 +16,7 @@
 - `DATABASE_URL` is the Connection [URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) to your PostgreSQL database
 - `BIND_ADDRESS_HOST` defines the host on which the server will run on
 - `BIND_ADDRESS_PORT` defines the port on which the server will run on
+- `REMOTE_JWKS_URL` the location of the remote jwks which will be used to validate tokens
 
 Ensure that you grant the necessary permissions for the user to use Postgres. One way to do this is by using the following command:
 

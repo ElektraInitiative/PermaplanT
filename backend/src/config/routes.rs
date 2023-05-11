@@ -1,40 +1,51 @@
 //! Routes in the backend.
 
+#[cfg(any(test, feature = "auth"))]
+use actix_utils::future::ready;
 use actix_web::{middleware::NormalizePath, web};
+#[cfg(any(test, feature = "auth"))]
+use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::controller::{map, plantings, plants, seed};
 
 /// Defines all routes of the backend and which functions they map to.
 pub fn config(cfg: &mut web::ServiceConfig) {
-    cfg.service(
-        web::scope("/api")
-            .service(
-                web::scope("/seeds")
-                    .service(seed::find)
-                    .service(seed::create)
-                    .service(seed::delete_by_id)
-                    .service(seed::find_by_id),
-            )
-            .service(
-                web::scope("/plants")
-                    .service(plants::find)
-                    .service(plants::find_by_id),
-            )
-            .service(
-                web::scope("/maps")
-                    .service(map::find)
-                    .service(map::find_by_id)
-                    .service(map::create)
-                    .service(map::show_versions)
-                    .service(map::save_snapshot),
-            )
-            .service(
-                web::scope("/plantings")
-                    .service(plantings::find)
-                    .service(plantings::create)
-                    .service(plantings::update)
-                    .service(plantings::delete),
-            )
-            .wrap(NormalizePath::default()),
-    );
+    let routes = web::scope("/api")
+        .service(
+            web::scope("/seeds")
+                .service(seed::find)
+                .service(seed::create)
+                .service(seed::delete_by_id)
+                .service(seed::find_by_id),
+        )
+        .service(
+            web::scope("/plants")
+                .service(plants::find)
+                .service(plants::find_by_id),
+        )
+        .service(
+            web::scope("/maps")
+                .service(map::find)
+                .service(map::find_by_id)
+                .service(map::create)
+                .service(map::show_versions)
+                .service(map::save_snapshot),
+        )
+        .service(
+            web::scope("/plantings")
+                .service(plantings::find)
+                .service(plantings::create)
+                .service(plantings::update)
+                .service(plantings::delete),
+        )
+        .wrap(NormalizePath::default());
+
+    #[cfg(any(test, feature = "auth"))]
+    let auth = HttpAuthentication::bearer(|req, credentials| {
+        ready(super::auth::validator(req, &credentials))
+    });
+    #[cfg(any(test, feature = "auth"))]
+    let routes = routes.wrap(auth);
+
+    cfg.service(routes);
 }
