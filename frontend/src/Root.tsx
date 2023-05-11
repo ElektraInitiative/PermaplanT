@@ -1,3 +1,4 @@
+import { authority, client_id, client_secret, redirect_uri } from './config';
 import './styles/globals.css';
 import { ComponentType, StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -11,12 +12,11 @@ const onSigninCallback = (): void => {
 };
 
 const oidcConfig = {
-  authority: 'http://0.0.0.0:8081/realms/permaplant',
-  client_id: 'frontend',
-  redirect_uri: 'http://localhost:5173/login',
-  client_secret: 'wbcEY4MpSZQeCkkBlf3cfLeb8jMihj7R',
+  authority,
+  client_id,
+  redirect_uri,
+  client_secret,
   onSigninCallback: onSigninCallback,
-  // ...
 };
 
 function render(App: ComponentType) {
