@@ -6,11 +6,16 @@ import { AuthProvider } from 'react-oidc-context';
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);
 
+const onSigninCallback = (): void => {
+  window.history.replaceState({}, document.title, window.location.pathname);
+};
+
 const oidcConfig = {
   authority: 'http://0.0.0.0:8081/realms/permaplant',
   client_id: 'frontend',
   redirect_uri: 'http://localhost:5173/login',
   client_secret: 'wbcEY4MpSZQeCkkBlf3cfLeb8jMihj7R',
+  onSigninCallback: onSigninCallback,
   // ...
 };
 
