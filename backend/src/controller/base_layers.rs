@@ -14,7 +14,7 @@ use crate::model::dto::NewBaseLayerDto;
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/base_layers/{id}",
+    context_path = "/api/layers/base/{id}",
     responses(
         (status = 200, description = "Fetch a base layer by its id", body = BaseLayerDto),
     )
@@ -30,7 +30,7 @@ pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse>
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/base_layers",
+    context_path = "/api/layers/base/",
     responses(
         (status = 200, description = "Fetch a base layer by its id", body = BaseLayerDto),
     )
@@ -49,7 +49,7 @@ pub async fn create(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/base_layers/{id}",
+    context_path = "/api/layers/base/{id}",
     responses(
         (status = 200, description = "Fetch a base layer by its id", body = BaseLayerDto),
     )
