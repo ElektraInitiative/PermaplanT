@@ -21,12 +21,11 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                     .service(plants::find_by_id),
             )
             .service(
-                web::scope("/layers")
-                    .service(
-                       web::scope("/base")
+                web::scope("/layers").service(
+                    web::scope("/base")
                         .service(base_layers::find_by_id)
-                        .service(base_layers::create)
-                    )
+                        .service(base_layers::create),
+                ),
             )
             .service(
                 web::scope("/maps")
