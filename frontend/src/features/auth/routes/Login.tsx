@@ -1,3 +1,6 @@
+import SimpleButton from '@/components/Button/SimpleButton';
+import { getImage, getPhotos } from '@/features/landing_page/api/getImages';
+import { useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 
 const LoginInner = () => {
@@ -31,5 +34,26 @@ const LoginInner = () => {
 };
 
 export const Login = () => {
-  return <div className="mt-20">{LoginInner()}</div>;
+  const [image, setImage] = useState(undefined);
+
+  const fetchFirstImage = async () => {
+    const imageUrls = await getPhotos();
+    const image = await getImage(imageUrls[1]);
+    setImage(image);
+  };
+
+  const renderImage = () => {
+    console.log(image);
+    if (image) {
+      const url = URL.createObjectURL(image);
+      return <img src={url} />;
+    }
+  };
+  return (
+    <div className="mt-20">
+      {LoginInner()}
+      <SimpleButton onClick={fetchFirstImage}>get photos</SimpleButton>
+      {renderImage()}
+    </div>
+  );
 };

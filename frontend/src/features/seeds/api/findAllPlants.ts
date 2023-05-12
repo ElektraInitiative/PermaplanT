@@ -1,10 +1,10 @@
 import { PlantsSummaryDto } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { createAPI } from '@/config/axios';
 
 export const findAllPlants = async (): Promise<PlantsSummaryDto[]> => {
+  const http = createAPI();
   try {
-    const response = await axios.get<PlantsSummaryDto[]>(`${baseApiUrl}/api/plants`);
+    const response = await http.get<PlantsSummaryDto[]>(`/api/plants`);
     return response.data;
   } catch (error) {
     throw error as Error;

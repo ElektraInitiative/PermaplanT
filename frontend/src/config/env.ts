@@ -16,6 +16,8 @@ if (typeof import.meta.env.VITE_CLIENT_SECRET !== 'string') {
 
 export const baseApiUrl = import.meta.env.VITE_BASE_API_URL;
 
+export const nextcloudUri = import.meta.env.VITE_NEXTCLOUD_URI;
+
 export const authority = import.meta.env.VITE_AUTHORITY;
 export const client_id = import.meta.env.VITE_CLIENT_ID;
 export const redirect_uri = import.meta.env.VITE_REDIRECT_URI;

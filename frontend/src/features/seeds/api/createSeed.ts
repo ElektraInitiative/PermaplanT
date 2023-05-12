@@ -1,10 +1,10 @@
 import { NewSeedDto, SeedDto } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { createAPI } from '@/config/axios';
 
 export const createSeed = async (seed: NewSeedDto) => {
+  const http = createAPI();
   try {
-    await axios.post<SeedDto>(`${baseApiUrl}/api/seeds`, seed);
+    await http.post<SeedDto>('/api/seeds', seed);
   } catch (error) {
     throw error as Error;
   }

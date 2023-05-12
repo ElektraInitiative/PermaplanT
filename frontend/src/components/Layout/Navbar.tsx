@@ -3,6 +3,7 @@ import { ReactComponent as LogoSmallSVG } from '../../assets/permaplant-logo.svg
 import { DarkModeSwitcher } from '../../features/dark_mode';
 import { useDarkModeStore } from '../../features/dark_mode';
 import LanguageSwitcher from '../../features/landing_page/components/LanguageSwitcher';
+import { LoginButton } from '@/features/auth/components/LoginButton';
 
 /**
  * The navigation component that is fixed on the top.
@@ -55,6 +56,7 @@ const Navbar = () => {
                 ></path>
               </svg>
             </button>
+            <LoginButton></LoginButton>
           </div>
         </div>
       </div>
