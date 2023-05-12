@@ -5,15 +5,13 @@ import { NewBaseLayerDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
-import { TFunction } from 'i18next';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Layer, Line } from 'react-konva';
 
 export interface BaseLayerConfiguratorProps {
   onSubmit: (baseLayer: NewBaseLayerDto) => void;
-  t: TFunction;
 }
 
 // Setting the maps scale using a known distance is handled using a state machine.
@@ -56,7 +54,9 @@ const mouseEventY = (e: KonvaEventObject<MouseEvent>): number => {
   return value ?? 0;
 };
 
-const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
+const BaseLayerConfigurator = ({ onSubmit }: BaseLayerConfiguratorProps) => {
+  const { t } = useTranslation(['common', 'baseLayerConfigurator']);
+
   const [imageUrl, setImageUrl] = useState('');
   const [rotation, setImageRotation] = useState(0);
   const [scale, setImageScale] = useState(10);
@@ -280,5 +280,4 @@ const BaseLayerConfigurator = ({ onSubmit, t }: BaseLayerConfiguratorProps) => {
   );
 };
 
-export { BaseLayerConfigurator };
-export default withTranslation(['common', 'baseLayerConfigurator'])(BaseLayerConfigurator);
+export default BaseLayerConfigurator;
