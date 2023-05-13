@@ -13,7 +13,6 @@ pub struct Config {
     /// The location of the server that issues tokens.
     ///
     /// Other relevant URLs such as the `jwks_uri` or the `token_endpoint`.
-    #[cfg(feature = "auth")]
     pub oauth2_issuer_uri: String,
 }
 
@@ -36,14 +35,12 @@ impl Config {
 
         let database_url =
             env::var("DATABASE_URL").map_err(|_| "Failed to get DATABASE_URL from environment.")?;
-        #[cfg(feature = "auth")]
         let oauth2_issuer_uri = env::var("OAUTH2_ISSUER_URI")
             .map_err(|_| "Failed to get OAUTH2_ISSUER_URI from environment.")?;
 
         Ok(Self {
             bind_address: (host, port),
             database_url,
-            #[cfg(feature = "auth")]
             oauth2_issuer_uri,
         })
     }

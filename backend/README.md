@@ -49,21 +49,11 @@ LC_ALL=C diesel migration run
 cargo install typeshare-cli
 ```
 
-6. Start the server:
-
-```shell
-cargo run
-```
-
-## Authorization
-
-To use authorization do the following:
-
-### Start Keycloak
+6. Start Keycloak
 
 `docker run -p 8081:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:21.1.1 start-dev`
 
-### Setup Keycloak
+7. Setup Keycloak:
 
 Open <http://localhost:8081/admin>.  
 Sign in with user `admin` and password `admin`.  
@@ -81,13 +71,13 @@ Create a second client `swagger-ui` with `Root URL = http://localhost:8080/doc/a
 Got to `Users` and create a user `test`.  
 Click `Credentials` and set password to `test`.
 
-### Run the backend
+8. Run the backend
 
 ```bash
-cargo run --features auth
+cargo run
 ```
 
-### Test Auth
+### Test server using Swagger
 
 Got to <http://localhost:8080/doc/api/swagger/ui/>.  
 Try to execute a request (it should return error 401).  
@@ -95,14 +85,6 @@ Click `Authorize`.
 In `oauth2 (OAuth2, authorizationCode)` enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.  
 Enter user credentials (username: `test`, password: `test`).  
 You should now be able to execute a request in swagger.
-
-## Usage
-
-Now the server is running and will start listening at <http://localhost:8080/> (or whichever port you specified in `.env`).
-
-Example requests:
-
-- `curl localhost:8080/api/plants`
 
 ## Documentation
 

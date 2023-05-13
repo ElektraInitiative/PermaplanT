@@ -51,11 +51,8 @@
 
 use actix_cors::Cors;
 use actix_web::{http, web::Data, App, HttpServer};
-use config::{api_doc, routes};
+use config::{api_doc, auth::Config, routes};
 use db::connection;
-
-#[cfg(feature = "auth")]
-use config::auth::Config;
 
 pub mod config;
 pub mod controller;
@@ -77,7 +74,6 @@ async fn main() -> std::io::Result<()> {
         Err(e) => panic!("Error reading configuration: {e}"),
     };
 
-    #[cfg(feature = "auth")]
     Config::init(&config.oauth2_issuer_uri).await;
 
     HttpServer::new(move || {

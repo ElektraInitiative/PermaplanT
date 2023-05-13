@@ -7,6 +7,7 @@ use utoipa::{
 };
 use utoipa_swagger_ui::SwaggerUi;
 
+use super::auth::Config;
 use crate::{
     controller::{plantings, plants, seed},
     model::{
@@ -17,9 +18,6 @@ use crate::{
         r#enum::{quality::Quality, quantity::Quantity},
     },
 };
-
-#[cfg(feature = "auth")]
-use super::auth::Config;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
 #[derive(OpenApi)]
