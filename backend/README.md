@@ -55,6 +55,47 @@ cargo install typeshare-cli
 cargo run
 ```
 
+## Authorization
+
+To use authorization do the following:
+
+### Start Keycloak
+
+`docker run -p 8081:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:21.1.1 start-dev`
+
+### Setup Keycloak
+
+Open <http://localhost:8081/admin>.  
+Sign in with user `admin` and password `admin`.  
+Click on `master` -> `Create Realm`.  
+Name the realm `PermaplanT` and click `Create`.
+
+Click on `Clients` -> `Create client`.  
+Name the client `PermaplanT`.
+Click `Next` two times.  
+Set values: `Root URL = http://localhost:8080`, `Valid redirect URIs = /*`, `Web origins = +`.  
+Click `Save`.
+
+Create a second client `swagger-ui` with `Root URL = http://localhost:8080/doc/api/swagger/ui` (everything else the same as above).
+
+Got to `Users` and create a user `test`.  
+Click `Credentials` and set password to `test`.
+
+### Run the backend
+
+```bash
+cargo run --features auth
+```
+
+### Test Auth
+
+Got to <http://localhost:8080/doc/api/swagger/ui/>.  
+Try to execute a request (it should return error 401).  
+Click `Authorize`.  
+In `oauth2 (OAuth2, authorizationCode)` enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.  
+Enter user credentials (username: `test`, password: `test`).  
+You should now be able to execute a request in swagger.
+
 ## Usage
 
 Now the server is running and will start listening at <http://localhost:8080/> (or whichever port you specified in `.env`).
@@ -73,15 +114,3 @@ To view code documentation run
 ```shell
 cargo doc --open
 ```
-
-## Tools
-
-I would suggest using [cargo-watch](https://github.com/watchexec/cargo-watch) to check for errors.
-
-After install via `cargo install cargo-watch --locked` run
-
-```shell
-cargo watch -x clippy -x check -x doc
-```
-
-to check for warnings/errors automatically on every code change.

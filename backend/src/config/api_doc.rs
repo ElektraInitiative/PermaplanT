@@ -93,6 +93,7 @@ struct SecurityAddon;
 
 impl Modify for SecurityAddon {
     fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
+        // TODO: remove hardcoded URLs
         let components = openapi.components.as_mut().unwrap(); // we can unwrap safely since there already is components registered.
         let oauth2 = OAuth2::new([
             Flow::AuthorizationCode(AuthorizationCode::new(
