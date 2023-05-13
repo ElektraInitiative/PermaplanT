@@ -30,7 +30,7 @@ pub struct AuthConfig {
 impl AuthConfig {
     #[cfg(test)]
     pub fn set(config: Self) {
-        let _ = AUTH_CONFIG.set(config).expect("Already initialized!");
+        let _ = AUTH_CONFIG.set(config);
     }
 
     pub async fn init(issuer_uri: &str) {
@@ -50,7 +50,6 @@ impl AuthConfig {
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct OpenidConfiguration {
-    pub issuer: String,
     pub authorization_endpoint: String,
     pub token_endpoint: String,
     pub jwks_uri: String,

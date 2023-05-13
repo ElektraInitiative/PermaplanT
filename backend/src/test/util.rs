@@ -82,6 +82,6 @@ pub async fn init_test_app(
 }
 
 fn setup_auth() -> String {
-    let jwk = jwks::init_jwks();
+    let jwk = jwks::init_auth();
     generate_token(jwk, 300)
 }

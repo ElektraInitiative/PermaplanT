@@ -40,9 +40,7 @@ impl Claims {
         let decoding_key = &DecodingKey::from_jwk(jwk)
             .map_err(|err| ServiceError::new(StatusCode::INTERNAL_SERVER_ERROR, err.to_string()))?;
 
-        let mut validation = Validation::new(header.alg);
-        validation.set_issuer(&[AuthConfig::get().openid_configuration.issuer.clone()]);
-        let claims = decode(token, decoding_key, &validation)
+        let claims = decode(token, decoding_key, &Validation::new(header.alg))
             .map_err(|_| ServiceError::new(StatusCode::UNAUTHORIZED, "invalid token".to_owned()))?
             .claims;
         Ok(claims)
@@ -51,27 +49,27 @@ impl Claims {
 
 #[cfg(test)]
 mod test {
-    use crate::test::util::{jwks::init_jwks, token::generate_token};
+    use crate::test::util::{jwks::init_auth, token::generate_token};
 
     use super::Claims;
 
     #[test]
     fn test_simple_token_succeeds() {
-        let jwk = init_jwks();
+        let jwk = init_auth();
         let token = generate_token(jwk, 300);
         assert!(Claims::validate(&token).is_ok())
     }
 
     #[test]
     fn test_expired_token_fails() {
-        let jwk = init_jwks();
+        let jwk = init_auth();
         let token = generate_token(jwk, -300);
         assert!(Claims::validate(&token).is_err())
     }
 
     #[test]
     fn test_invalid_token_fails() {
-        let _ = init_jwks();
+        let _ = init_auth();
         assert!(Claims::validate("not a token").is_err())
     }
 }

@@ -1,21 +1,20 @@
 use jsonwebkey::JsonWebKey;
 use jsonwebtoken::jwk::JwkSet;
 
-use crate::config::auth::AuthConfig;
+use crate::config::auth::{AuthConfig, OpenidConfiguration};
 
 /// Pre generated jwk
 const JWK: &'static str = include_str!("test_jwk.json");
 
 /// Load key from pre generated one. Init [`Jwks`] using it.
-pub fn init_jwks() -> JsonWebKey {
+pub fn init_auth() -> JsonWebKey {
     // Both crates are necessary as jsonwebtoken cannot generate an encoding key from a jwk.
     let jwk1 = serde_json::from_str::<jsonwebtoken::jwk::Jwk>(JWK).unwrap();
     let jwk2 = serde_json::from_str::<jsonwebkey::JsonWebKey>(JWK).unwrap();
 
-    // Init application jwks
+    // Init application auth settings
     AuthConfig::set(AuthConfig {
-        openid_configuration: crate::config::auth::OpenidConfiguration {
-            issuer: String::new(),
+        openid_configuration: OpenidConfiguration {
             authorization_endpoint: String::new(),
             token_endpoint: String::new(),
             jwks_uri: String::new(),
