@@ -1,11 +1,12 @@
-# 2D Drawing Library
+# Drawing Library
 
 ## Problem
 
-The PermaplanT App needs a 2D graphics library to build one of its core features using the canvas.
+The PermaplanT App needs a graphics library to build one of its core features using the canvas.
 
 ## Constraints
 
+- Should work without WebGL etc.
 - The library must provide an easy-to-use API for creating and manipulating canvas elements.
 - The library should be well-supported and have a strong community.
 - The library should be able to import well-known raster formats.

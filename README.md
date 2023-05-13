@@ -1,6 +1,6 @@
 # PermaplanT
 
-PermaplanT is an app for
+[PermaplanT](https://www.permaplant.net) is an app for
 
 - Web: Firefox, Chromium
 - Larger mobile devices like tablets: Progressive Web App (PWA) Android 9+
@@ -16,7 +16,9 @@ cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary
 mdbook serve --open
 ```
 
-Note that Rust needs to be installed for it to work.
+Important links:
+
+- [Web API Documentation](https://www.permaplant.net/doc/api/swagger/ui/)
 
 ## Goals
 
@@ -40,7 +42,8 @@ To achieve these goals the app provides, e.g.:
 
 - users have any number of maps
 - maps have any number of layers (see below)
-- users can work on the same map or on alternatives of layers together
+- some layers can have alternatives and/or can be used offline
+- users work on the same map or on alternatives of layers together
 - undo/redo and versions for changes in the map
 - copy&paste of selection including succeeding crops across maps
 - zoom
@@ -48,10 +51,9 @@ To achieve these goals the app provides, e.g.:
 - algorithms for polyculture, considerations of natural constraints and automatic suggestions
 - Nextcloud integrations (calender entries, Deck tasks)
 - social network features (e.g. notification that someone entered your garden)
-- positions and distances relate to the real word, e.g. you can use GPS coordinates
+- positions and distances relate to the real world, for example, you can use GPS coordinates
 - GIS import/export
 - privacy: no tracking, analytics, external JavaScript, fonts, etc.
-- differences of versions of the same garden
 
 ### Layers
 
@@ -64,7 +66,7 @@ While editing any layer other layers might be displayed or hidden.
 - Labels (allows to put text labels, e.g. names for beds)
 - Trees (taxa, stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
 - Wind (more or less windy places, wind orientation)
-- Shadows (more/less sun exposure)
+- Shade (more/less sun exposure vs. shade)
 - Infrastructure (outlets, wifi spots, taps, water storage tanks, irrigation systems, ...)
 - Hydrology (surface water runoff, natural reservoirs, gullies, rills, ...)
 - Soil (pH Values of topsoil, subsoil)
@@ -74,7 +76,8 @@ While editing any layer other layers might be displayed or hidden.
 - Plants¹ (taxa, individual and fields of plants)
 - Warnings¹
 - Photos (sharing of photo with GPS coordinates and a Nextcloud chats per photo)
-- Fertilize
+- Fertilization
+- Watering
 - Todos (creates Deck cards in Nextcloud)
 - Drawing (for anything else)
 
@@ -84,7 +87,7 @@ While editing any layer other layers might be displayed or hidden.
 
 Later features, i.e., out of scope for first version:
 
-- weather data (warnings on frost etc.)
+- weather data (automatically add rain to watering layer, warnings on frost etc.)
 - hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
 - 3D modes (forest garden), contour lines etc.

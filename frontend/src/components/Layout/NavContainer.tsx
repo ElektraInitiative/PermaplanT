@@ -12,9 +12,9 @@ interface NavContainerProps {
 const NavContainer = ({ children }: NavContainerProps) => {
   // Add some padding to the main content in order to prevent content from being clipped by the nav-bar.
   return (
-    <div>
+    <div className="h-screen">
       <Navbar />
-      <main className="pt-16">{children}</main>
+      <main className="h-full pt-16">{children}</main>
     </div>
   );
 };

@@ -1,8 +1,8 @@
-# Use Case: Shadows Layer
+# Use Case: Shade Layer
 
 ## Summary
 
-- **Scope:** Shadow Layer
+- **Scope:** Shade Layer
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete shadow areas in their map in the shadow layer and adjust the intensity.
@@ -15,7 +15,7 @@
 - **Main success scenario:**
   The user successfully adds, edits, moves and deletes shadow areas in their map in the shadow layer.
   This includes positioning the indicators in areas of the landscape that receive more or less sun exposure and adjusting the intensity of the shadow area.
-  Shadow areas can be added by a big brush to draw on the shadow layer.
+  Shade areas can be added by a big brush to draw on the shadow layer.
 - **Alternative scenario:**
   The user accidentally adds or moves a shadow area in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**

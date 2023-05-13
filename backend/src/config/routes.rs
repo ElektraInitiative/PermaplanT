@@ -6,7 +6,7 @@ use actix_web::{middleware::NormalizePath, web};
 #[cfg(any(test, feature = "auth"))]
 use actix_web_httpauth::middleware::HttpAuthentication;
 
-use crate::controller::{plantings, plants, seed};
+use crate::controller::{map, plantings, plants, seed};
 
 /// Defines all routes of the backend and which functions they map to.
 pub fn config(cfg: &mut web::ServiceConfig) {
@@ -22,6 +22,14 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             web::scope("/plants")
                 .service(plants::find)
                 .service(plants::find_by_id),
+        )
+        .service(
+            web::scope("/maps")
+                .service(map::find)
+                .service(map::find_by_id)
+                .service(map::create)
+                .service(map::show_versions)
+                .service(map::save_snapshot),
         )
         .service(
             web::scope("/plantings")

@@ -4,6 +4,7 @@
 #![allow(clippy::expect_used, clippy::unwrap_used)]
 
 mod auth;
+mod map;
 mod plant;
 mod seed;
 pub mod util;
