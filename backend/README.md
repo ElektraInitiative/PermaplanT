@@ -16,7 +16,7 @@
 - `DATABASE_URL` is the Connection [URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) to your PostgreSQL database
 - `BIND_ADDRESS_HOST` defines the host on which the server will run on
 - `BIND_ADDRESS_PORT` defines the port on which the server will run on
-- `REMOTE_JWKS_URL` the location of the remote jwks which will be used to validate tokens
+- `OAUTH2_ISSUER_URI` the .well-known endpoint of the auth server (see [RFC 8414](https://www.rfc-editor.org/rfc/rfc8414.html#section-2) for more detail)
 
 Ensure that you grant the necessary permissions for the user to use Postgres. One way to do this is by using the following command:
 
@@ -61,14 +61,14 @@ Click on `master` -> `Create Realm`.
 Name the realm `PermaplanT` and click `Create`.
 
 Click on `Clients` -> `Create client`.  
-Name the client `PermaplanT`.
+Set the `Client ID` to `PermaplanT`.
 Click `Next` two times.  
 Set values: `Root URL = http://localhost:5173`, `Valid redirect URIs = /*`, `Web origins = +`.  
 Click `Save`.
 
 Create a second client `swagger-ui` with `Root URL = http://localhost:8080/doc/api/swagger/ui` (everything else the same as above).
 
-Got to `Users` and create a user `test`.  
+Go to `Users` and create a user `test`.  
 Click `Credentials` and set password to `test`.
 
 8. Run the backend
@@ -79,12 +79,14 @@ cargo run
 
 ### Test server using Swagger
 
-Got to <http://localhost:8080/doc/api/swagger/ui/>.  
+Go to <http://localhost:8080/doc/api/swagger/ui/>.  
 Try to execute a request (it should return error 401).  
-Click `Authorize`.  
-In `oauth2 (OAuth2, authorizationCode)` enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.  
-Enter user credentials (username: `test`, password: `test`).  
-You should now be able to execute a request in swagger.
+Click `Authorize`.
+
+> Use the `authorizationCode` auth flow.  
+> Enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.  
+> Enter user credentials (username: `test`, password: `test`).  
+> You should now be able to execute a request in Swagger.
 
 ## Documentation
 
