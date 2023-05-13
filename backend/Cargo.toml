@@ -52,5 +52,5 @@ uuid = { version = "1.3.2", features = ["serde", "v4"] }
 jsonwebkey = { version = "0.3.5", features = ["generate", "jwt-convert"] }
 
 [features]
-default = []
+default = ["auth"]
 auth = []

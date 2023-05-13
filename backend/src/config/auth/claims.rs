@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 use crate::error::ServiceError;
 
-use super::jwks::Jwks;
+use super::AuthConfig;
 
 /// Fields the token has (only the necessary fields are actually extracted).
 #[derive(Debug, Clone, Deserialize)]
@@ -30,7 +30,7 @@ impl Claims {
             ServiceError::new(StatusCode::UNAUTHORIZED, "missing kid in token".to_owned())
         })?;
 
-        let jwk = Jwks::get().find(kid).ok_or_else(|| {
+        let jwk = AuthConfig::get().jwk_set.find(kid).ok_or_else(|| {
             ServiceError::new(
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "no valid key found".to_owned(),
@@ -40,7 +40,9 @@ impl Claims {
         let decoding_key = &DecodingKey::from_jwk(jwk)
             .map_err(|err| ServiceError::new(StatusCode::INTERNAL_SERVER_ERROR, err.to_string()))?;
 
-        let claims = decode(token, decoding_key, &Validation::new(header.alg))
+        let mut validation = Validation::new(header.alg);
+        validation.set_issuer(&[AuthConfig::get().openid_configuration.issuer.clone()]);
+        let claims = decode(token, decoding_key, &validation)
             .map_err(|_| ServiceError::new(StatusCode::UNAUTHORIZED, "invalid token".to_owned()))?
             .claims;
         Ok(claims)

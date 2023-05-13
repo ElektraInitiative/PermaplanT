@@ -1,7 +1,7 @@
 use jsonwebkey::JsonWebKey;
 use jsonwebtoken::jwk::JwkSet;
 
-use crate::config::auth::jwks::Jwks;
+use crate::config::auth::AuthConfig;
 
 /// Pre generated jwk
 const JWK: &'static str = include_str!("test_jwk.json");
@@ -13,7 +13,15 @@ pub fn init_jwks() -> JsonWebKey {
     let jwk2 = serde_json::from_str::<jsonwebkey::JsonWebKey>(JWK).unwrap();
 
     // Init application jwks
-    Jwks::init_for_tests(JwkSet { keys: vec![jwk1] });
+    AuthConfig::set(AuthConfig {
+        openid_configuration: crate::config::auth::OpenidConfiguration {
+            issuer: String::new(),
+            authorization_endpoint: String::new(),
+            token_endpoint: String::new(),
+            jwks_uri: String::new(),
+        },
+        jwk_set: JwkSet { keys: vec![jwk1] },
+    });
 
     jwk2
 }

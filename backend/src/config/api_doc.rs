@@ -18,6 +18,8 @@ use crate::{
     },
 };
 
+use super::auth::AuthConfig;
+
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
 #[derive(OpenApi)]
 #[openapi(paths(seed::find, seed::create, seed::delete_by_id),
@@ -93,18 +95,16 @@ struct SecurityAddon;
 
 impl Modify for SecurityAddon {
     fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
-        // TODO: remove hardcoded URLs
         let components = openapi.components.as_mut().unwrap(); // we can unwrap safely since there already is components registered.
+
+        let config = &AuthConfig::get().openid_configuration;
         let oauth2 = OAuth2::new([
             Flow::AuthorizationCode(AuthorizationCode::new(
-                "http://localhost:8081/realms/PermaplanT/protocol/openid-connect/auth".to_owned(),
-                "http://localhost:8081/realms/PermaplanT/protocol/openid-connect/token".to_owned(),
+                config.authorization_endpoint.clone(),
+                config.token_endpoint.clone(),
                 Scopes::new(),
             )),
-            Flow::Password(Password::new(
-                "http://localhost:8081/realms/PermaplanT/protocol/openid-connect/token".to_owned(),
-                Scopes::new(),
-            )),
+            Flow::Password(Password::new(config.token_endpoint.clone(), Scopes::new())),
         ]);
         components.add_security_scheme("oauth2", SecurityScheme::OAuth2(oauth2));
     }
