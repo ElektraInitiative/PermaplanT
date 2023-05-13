@@ -73,7 +73,7 @@ Name the realm `PermaplanT` and click `Create`.
 Click on `Clients` -> `Create client`.  
 Name the client `PermaplanT`.
 Click `Next` two times.  
-Set values: `Root URL = http://localhost:8080`, `Valid redirect URIs = /*`, `Web origins = +`.  
+Set values: `Root URL = http://localhost:5173`, `Valid redirect URIs = /*`, `Web origins = +`.  
 Click `Save`.
 
 Create a second client `swagger-ui` with `Root URL = http://localhost:8080/doc/api/swagger/ui` (everything else the same as above).
