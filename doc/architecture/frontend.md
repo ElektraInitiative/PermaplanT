@@ -16,8 +16,8 @@
 - `utils/`: Contains additional utility functions, that are shared across features or components and are not hooks.
 
 ```mermaid
-graph LR;
-  features -->|Uses another feature's public API| f
+flowchart LR
+  routes --> |Renders route features| features
   features -->|Uses bindings for API calls| bindings
   features -->|Uses shared components| components
   features -->|Calls functions| config
@@ -26,13 +26,14 @@ graph LR;
   features -->|Uses icon files| icons
   features -->|Uses asset files| assets
   features -->|Uses some miscellaneous styles| styles
-  routes --> |Renders route features| features
+  features ---->|Uses another feature's public API| i
     subgraph f[example feature]
-      direction LR
-      i[index] -->|Components scoped to a specific feature| c[components]
-      i -->|API request declarations and API hooks related to a specific feature| a[API]
-      i -->|Route components for a specific feature's pages| r[routes]
-      i -->|State stores for a specific feature| s[stores]
+      direction TB
+      i[index]
+      e[fa:fa-folder example feature structure] --> |Components scoped to a specific feature| c[components]
+      e -->|API request declarations and API hooks related to a specific feature| a[API]
+      e -->|Route components for a specific feature's pages| r[routes]
+      e -->|State stores for a specific feature| s[stores]
     end
 ```
 
@@ -66,6 +67,8 @@ The minimum requirements for documentation are:
 
 Most of the application's code lives here.
 Every folder created here represents a given feature and contains its domain specific code.
+For example, if a feature interacts with the backend via network requests, it would have a sub module `api` that encapsulates this.
+
 Features are allowed to import another features public API which is exported from its `index.ts` file.
 Features are also allowed to import all other previously mentioned modules if needed.
 
