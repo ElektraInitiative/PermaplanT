@@ -19,6 +19,7 @@ struct JwkSetHelper {
 /// # Panics
 /// * If the request to the auth server fails.
 /// * If the keys cannot be deserialized to [`JwkSetHelper`].
+#[allow(clippy::expect_used)]
 pub async fn fetch_keys(url: &str) -> JwkSet {
     let keys = reqwest::get(url)
         .await

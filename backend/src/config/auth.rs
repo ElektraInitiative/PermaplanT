@@ -1,61 +1,84 @@
 //! Handles authentication and authorization.
 
-// If any function in this module would fail it would always lead to irrecoverable errors.
-#![allow(clippy::expect_used)]
-
 mod claims;
 pub mod jwks;
+pub mod middleware;
 pub mod user_info;
-
-use actix_http::HttpMessage;
-use actix_web::dev::ServiceRequest;
-use actix_web_grants::permissions::AttachPermissions;
-use actix_web_httpauth::extractors::bearer::BearerAuth;
 
 use jsonwebtoken::jwk::JwkSet;
 use serde::Deserialize;
 use tokio::sync::OnceCell;
 
-use self::{jwks::fetch_keys, user_info::UserInfo};
+use self::jwks::fetch_keys;
 
-/// Stores the servers [`AuthConfig`].
-static AUTH_CONFIG: OnceCell<AuthConfig> = OnceCell::const_new();
+/// Stores the servers [`Config`].
+static CONFIG: OnceCell<Config> = OnceCell::const_new();
 
+/// Contains information about the auth server.
 #[derive(Debug, Clone)]
-pub struct AuthConfig {
-    pub openid_configuration: OpenidConfiguration,
+pub struct Config {
+    /// Metadata relevant for Oauth2
+    pub openid_configuration: OpenIDEndpointConfiguration,
+    /// The [`JwkSet`] that can be used to validate tokens
     pub jwk_set: JwkSet,
 }
 
-impl AuthConfig {
+impl Config {
+    /// Set the [`Config`].
+    ///
+    /// Needed for tests as static variables are shared by tests.
+    /// Error is ignored on purpose as this function will be called multiple times.
     #[cfg(test)]
     pub fn set(config: Self) {
-        let _ = AUTH_CONFIG.set(config);
+        let _ = CONFIG.set(config);
     }
 
+    /// Initialize the server authorization and authentication.
+    ///
+    /// # Panics
+    /// * If it was already initialized.
+    /// * If the auth server is unreachable or is set up incorrectly.
+    #[allow(clippy::expect_used)]
     pub async fn init(issuer_uri: &str) {
-        let config = OpenidConfiguration::fetch(issuer_uri).await;
+        let config = OpenIDEndpointConfiguration::fetch(issuer_uri).await;
 
-        let config = AuthConfig {
+        let config = Self {
             jwk_set: fetch_keys(&config.jwks_uri).await,
             openid_configuration: config,
         };
-        let _ = AUTH_CONFIG.set(config);
+
+        CONFIG.set(config).expect("Already initialized!");
     }
 
+    /// Get the [`Config`].
+    ///
+    /// # Panics
+    /// * If it wasn't initialized.
+    #[allow(clippy::expect_used)]
     pub fn get() -> &'static Self {
-        AUTH_CONFIG.get().expect("Not yet initialized!")
+        CONFIG.get().expect("Not yet initialized!")
     }
 }
 
-#[derive(Debug, Clone, Deserialize)]
-pub struct OpenidConfiguration {
+/// Metadata provided by the auth server.
+///
+/// See [RFC 8414](https://www.rfc-editor.org/rfc/rfc8414.html#section-2) for more detail.
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct OpenIDEndpointConfiguration {
+    /// URL of the authorization server's authorization endpoint
     pub authorization_endpoint: String,
+    /// URL of the authorization server's token endpoint
     pub token_endpoint: String,
+    /// URL of the authorization server's JWK Set
     pub jwks_uri: String,
 }
 
-impl OpenidConfiguration {
+impl OpenIDEndpointConfiguration {
+    /// Fetch relevant URL endpoints from the auth server.
+    ///
+    /// # Panics
+    /// * If the auth server is set up incorrectly. This would always lead to irrecoverable errors.
+    #[allow(clippy::expect_used)]
     async fn fetch(issuer_uri: &str) -> Self {
         reqwest::get(issuer_uri)
             .await
@@ -64,25 +87,4 @@ impl OpenidConfiguration {
             .await
             .expect("Auth server returned invalid keys!")
     }
-}
-
-/// Validates JWTs in requests and sets user information as part of the request.
-///
-/// Used by [`actix_web_httpauth::middleware::HttpAuthentication`].
-///
-/// # Errors
-/// * If the token is missing or invalid
-pub fn validator(
-    req: ServiceRequest,
-    credentials: &BearerAuth,
-) -> Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
-    let user_info = match claims::Claims::validate(credentials.token()) {
-        Ok(claims) => UserInfo::from(claims),
-        Err(err) => return Err((err.into(), req)),
-    };
-
-    req.extensions_mut().insert(user_info.clone());
-    req.attach(user_info.roles);
-
-    Ok(req)
 }

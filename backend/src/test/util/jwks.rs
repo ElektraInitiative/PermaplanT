@@ -1,7 +1,7 @@
 use jsonwebkey::JsonWebKey;
 use jsonwebtoken::jwk::JwkSet;
 
-use crate::config::auth::{AuthConfig, OpenidConfiguration};
+use crate::config::auth::{Config, OpenIDEndpointConfiguration};
 
 /// Pre generated jwk
 const JWK: &'static str = include_str!("test_jwk.json");
@@ -13,12 +13,8 @@ pub fn init_auth() -> JsonWebKey {
     let jwk2 = serde_json::from_str::<jsonwebkey::JsonWebKey>(JWK).unwrap();
 
     // Init application auth settings
-    AuthConfig::set(AuthConfig {
-        openid_configuration: OpenidConfiguration {
-            authorization_endpoint: String::new(),
-            token_endpoint: String::new(),
-            jwks_uri: String::new(),
-        },
+    Config::set(Config {
+        openid_configuration: OpenIDEndpointConfiguration::default(),
         jwk_set: JwkSet { keys: vec![jwk1] },
     });
 

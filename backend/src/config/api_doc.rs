@@ -18,7 +18,8 @@ use crate::{
     },
 };
 
-use super::auth::AuthConfig;
+#[cfg(feature = "auth")]
+use super::auth::Config;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
 #[derive(OpenApi)]
@@ -91,13 +92,16 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }
 
+/// Used by [`utoipa`] for `OAuth2`.
 struct SecurityAddon;
 
 impl Modify for SecurityAddon {
     fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
-        let components = openapi.components.as_mut().unwrap(); // we can unwrap safely since there already is components registered.
+        // We can unwrap safely since there already is components registered.
+        #[allow(clippy::unwrap_used)]
+        let components = openapi.components.as_mut().unwrap();
 
-        let config = &AuthConfig::get().openid_configuration;
+        let config = &Config::get().openid_configuration;
         let oauth2 = OAuth2::new([
             Flow::AuthorizationCode(AuthorizationCode::new(
                 config.authorization_endpoint.clone(),
