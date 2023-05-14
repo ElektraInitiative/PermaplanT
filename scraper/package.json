@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/parse.js",
     "fetch:permapeople": "node src/fetch_permapeople.js",
-    "compare": "node src/compare_datasets.js",
-    "insert": "node src/insert_plant_details.js",
-    "merge": "node src/merge.js",
-    "fetch:reinsaat": "node src/fetch_reinsaat.js"
+    "fetch:practicalplants": "node src/fetch_practicalplants.js",
+    "fetch:reinsaat": "node src/fetch_reinsaat.js",
+    "merge:datasets": "node src/merge_datasets.js",
+    "merge:reinsaat": "node src/merge_reinsaat.js",
+    "merge:csvfiles": "node src/helpers/merge_csv_files.js",
+    "insert": "node src/insert_plants.js",
+    "start:full": "npm run fetch:permapeople && npm run fetch:practicalplants && npm run fetch:reinsaat && npm run merge:reinsaat && npm run merge:datasets && npm run insert",
+    "start": "npm run merge:datasets && npm run insert"
   },
   "keywords": [],
   "author": "",

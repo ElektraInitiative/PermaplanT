@@ -1,6 +1,6 @@
 //! The backend of `PermaplanT`.
 
-#![recursion_limit = "256"]
+#![recursion_limit = "1024"]
 // Enable all lints apart from clippy::restriction by default.
 // See https://rust-lang.github.io/rust-clippy/master/index.html#blanket_clippy_restriction_lints for as to why restriction is not enabled.
 #![warn(clippy::pedantic)]
@@ -63,6 +63,7 @@ pub mod model;
 #[allow(clippy::missing_docs_in_private_items)]
 pub mod schema;
 pub mod service;
+#[cfg(test)]
 mod test;
 
 /// Main function.
@@ -83,6 +84,7 @@ async fn main() -> std::io::Result<()> {
             .configure(routes::config)
             .configure(api_doc::config)
     })
+    .shutdown_timeout(5)
     .bind(config.bind_address)?
     .run()
     .await

@@ -37,23 +37,16 @@ including their responsibilities, skills, etc.
 
 - GitHub: @badnames
 - main responsibilities: DB
-- focus groups: DB, PostGIS, polyculture
+- special skills: SQL, TypeScript
+- focus groups: DB, Frontend
 - positioning: full-stack
+- worked on: seeds use case, db, frontend, backend
 
 ## Giancarlo
 
 - GitHub: @buenaflor
 - main responsibility: Drawing Part of Frontend (Canvas)
 - focus group: UX
-- positioning: full-stack
-
-## Nursultan
-
-- GitHub: aidnurs
-- main responsibility: scraper, plant DB
-- focus group: DB
-- special skills: frontend tests
-- research: optimizations
 - positioning: full-stack
 
 ## Lukas
@@ -68,19 +61,14 @@ including their responsibilities, skills, etc.
 - focus group: DB, PostGIS
 - positioning: DB
 
-## Thorben Julian
+## Thorben
 
+- GitHub: @ThorbenStaufer
 - main responsibility: Gamification
-- focus group: polyculture
+- worked on: DB, gamification, frontend, colors
+- focus group: DB, frontend, gamification
 - special skills: Jenkins
-- positioning: DB
-
-## Benjamin
-
-- main responsibility: Polyculture
-- focus group: polyculture, PostGIS
-- special skills: BOKU
-- positioning: backend
+- positioning: frontend, DB
 
 ## Paul
 
@@ -89,3 +77,21 @@ including their responsibilities, skills, etc.
 - focus group: DB, frontend
 - special skills: React, TypeScript, Tailwind CSS
 - positioning: full-stack
+
+# Previous Authors
+
+## Nursultan
+
+- GitHub: aidnurs
+- main responsibility: scraper, plant DB
+- focus group: DB
+- special skills: frontend tests
+- research: optimizations
+- positioning: full-stack
+
+## Benjamin
+
+- main responsibility: Polyculture
+- focus group: polyculture, PostGIS
+- special skills: BOKU
+- positioning: backend

@@ -2,6 +2,7 @@ import { Pages, Routes } from './types';
 import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { Map } from '@/features/map_planning';
+import MapOverview from '@/features/maps/routes/MapOverview';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
 import { EditSeed } from '@/features/seeds/routes/EditSeed';
 
@@ -41,6 +42,12 @@ const routes: Routes = {
     // path needs to change later to something like /user/:id/map/:id
     path: '/map',
     title: 'Map',
+  },
+  [Pages.Maps]: {
+    component: MapOverview,
+    // path needs to change later to something like /user/:id/maps
+    path: '/maps',
+    title: 'Map Overview',
   },
 };
 

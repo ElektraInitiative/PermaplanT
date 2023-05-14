@@ -82,11 +82,12 @@ const CreateSeedForm = ({
     const page = await searchPlants(search, pageNumber);
 
     const plant_options: SelectOption[] = page.results.map((plant) => {
-      const common_name = plant.common_name != null ? ' (' + plant.common_name[0] + ')' : '';
+      const common_name_en =
+        plant.common_name_en != null ? ' (' + plant.common_name_en[0] + ')' : '';
 
       return {
         value: plant.id,
-        label: plant.binomial_name + common_name,
+        label: plant.unique_name + common_name_en,
       };
     });
 

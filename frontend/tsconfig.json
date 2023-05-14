@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "allowJs": false,
     "skipLibCheck": false,
     "esModuleInterop": false,
@@ -16,9 +20,14 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
-    "types": ["vite-plugin-pwa/client"],
+    "types": [
+      "vite-plugin-pwa/client",
+      "jest",
+    ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
   "include": ["src", "custom.ts.d"],

@@ -86,8 +86,8 @@ export function SeedDetails() {
               {seed?.name && (
                 <SimpleCard title={t('seeds:additional_name')} body={seed?.name.toString()} />
               )}
-              {plant?.binomial_name && (
-                <SimpleCard title={t('seeds:binomial_name')} body={plant?.binomial_name} />
+              {plant?.unique_name && (
+                <SimpleCard title={t('seeds:binomial_name')} body={plant?.unique_name} />
               )}
               {seed?.quantity && (
                 <SimpleCard title={t('seeds:quantity')} body={seed?.quantity.toString()} />

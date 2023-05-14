@@ -1,4 +1,4 @@
-import filterObject from '@/utils/filterObject';
+import filterObject from '../../utils/filterObject';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import Select, { ActionMeta, GroupBase, MultiValue, SingleValue, StylesConfig } from 'react-select';
@@ -17,7 +17,6 @@ export interface SelectMenuProps<
   isMulti?: IsMulti;
   id: Path<T>;
   labelText?: string;
-  defaultValue?: Option;
   control?: Control<T, unknown>;
   options: Option[];
   required?: boolean;
@@ -38,7 +37,6 @@ export default function SelectMenu<
   isMulti = false as IsMulti,
   id,
   labelText,
-  defaultValue,
   control,
   options,
   required = false,

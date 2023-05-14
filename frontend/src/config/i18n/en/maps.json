@@ -1,0 +1,17 @@
+{
+    "overview": {
+        "page_title": "My Maps",
+        "create_button": "New Map",
+        "create_button_title": "Create new map",
+        "missing_name": "Please enter a name",
+        "honors_title": "Number of honors",
+        "visits_title": "Number of visits"
+    },
+    "create": {
+        "modal_title": "New Map",
+        "cancel_button": "Cancel",
+        "submit_button": "Create",
+        "success": "Map successfully created!",
+        "failure": "Something went wrong, please try again later!"
+    }
+}
