@@ -26,7 +26,7 @@ async fn test_get_all_plants_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/plants")
@@ -72,7 +72,7 @@ async fn test_get_one_plant_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/plants/-1")
@@ -118,7 +118,7 @@ async fn test_search_plants_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/plants?name=Testplant&per_page=10")

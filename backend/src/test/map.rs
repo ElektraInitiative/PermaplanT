@@ -33,7 +33,7 @@ async fn test_can_find_map() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/maps/-1")
@@ -67,7 +67,7 @@ async fn test_can_search_maps() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/maps?is_inactive=false&per_page=10")
@@ -86,7 +86,7 @@ async fn test_can_search_maps() {
 #[actix_rt::test]
 async fn test_can_create_map() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let new_map = NewMapDto {
         name: "My Map".to_string(),
@@ -142,7 +142,7 @@ async fn test_can_save_snapshot() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let new_version = NewMapVersionDto {
         map_id: -1,
@@ -193,7 +193,7 @@ async fn test_can_show_versions() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/maps/-1/versions?map_id=-1&per_page=10")

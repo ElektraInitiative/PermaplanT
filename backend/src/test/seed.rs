@@ -38,7 +38,7 @@ async fn test_find_two_seeds_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/seeds")
@@ -95,7 +95,7 @@ async fn test_search_seeds_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/seeds?name=Testia%20testia&per_page=10")
@@ -147,7 +147,7 @@ async fn test_find_by_id_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/seeds/-1")
@@ -196,7 +196,7 @@ async fn test_find_by_non_existing_id_fails() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/seeds/-3")
@@ -209,7 +209,7 @@ async fn test_find_by_non_existing_id_fails() {
 #[actix_rt::test]
 async fn test_create_seed_fails_with_invalid_quantity() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::post()
         .uri("/api/seeds")
@@ -230,7 +230,7 @@ async fn test_create_seed_fails_with_invalid_quantity() {
 #[actix_rt::test]
 async fn test_create_seed_fails_with_invalid_tags() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::post()
         .uri("/api/seeds")
@@ -251,7 +251,7 @@ async fn test_create_seed_fails_with_invalid_tags() {
 #[actix_rt::test]
 async fn test_create_seed_fails_with_invalid_quality() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::post()
         .uri("/api/seeds")
@@ -288,7 +288,7 @@ async fn test_create_seed_ok() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let new_seed = NewSeedDto {
         name: "tomato test".to_string(),
@@ -340,7 +340,7 @@ async fn test_delete_by_id_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::delete()
         .uri("/api/seeds/-1")
@@ -368,7 +368,7 @@ async fn test_delete_by_non_existing_id_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let app = init_test_app(pool).await;
 
     let resp = test::TestRequest::delete()
         .uri("/api/seeds/-2")
