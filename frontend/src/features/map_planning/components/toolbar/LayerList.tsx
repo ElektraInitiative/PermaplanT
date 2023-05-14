@@ -9,7 +9,7 @@ import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface LayerSettingsProps {
+interface LayerListProps {
   /** name of the layer - this is displayed on top of the slider */
   name: LayerName;
   /** function that gets triggered when the layer is selected */
@@ -25,13 +25,13 @@ interface LayerSettingsProps {
 }
 
 /** Layer setting UI to control visibility, layer selection, opacity and alternatives */
-export const LayerSettings = ({
+export const LayerList = ({
   name,
   setSelectedLayer,
   setLayerOpacity,
   setLayerAlternative,
   alternatives,
-}: LayerSettingsProps) => {
+}: LayerListProps) => {
   const layerVisible = useMapStore((map) => map.state.layers[name].visible);
   const selectedLayer = useMapStore((map) => map.state.selectedLayer);
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
