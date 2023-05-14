@@ -1,6 +1,6 @@
 import { FormWrapper } from '../../utils/testing';
 import PaginatedSelectMenu from './PaginatedSelectMenu';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
@@ -39,7 +39,9 @@ it('calls loadOptions on interaction', async () => {
 
   const input = getByRole('combobox');
 
-  await userEvent.click(input);
+  await act(async () => {
+    await userEvent.click(input);
+  });
 
   expect(loadOptions).toBeCalled();
 });

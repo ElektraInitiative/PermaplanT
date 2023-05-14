@@ -1,6 +1,6 @@
 import { FormWrapper } from '../../utils/testing';
 import CreatableSelectMenu from './CreatableSelectMenu';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
@@ -35,8 +35,10 @@ it('calls onInputChange on input change', async () => {
     </MemoryRouter>,
   );
 
-  await userEvent.click(getByRole('combobox'));
-  await userEvent.paste('Hello World!');
+  await act(async () => {
+    await userEvent.click(getByRole('combobox'));
+    await userEvent.paste('Hello World!');
+  });
 
   expect(callback).toBeCalled();
   expect(callback).toBeCalledWith('Hello World!');
@@ -58,8 +60,10 @@ it('calls onChange on input change', async () => {
     </MemoryRouter>,
   );
 
-  await userEvent.click(getByRole('combobox'));
-  await userEvent.paste('Hello World!');
+  await act(async () => {
+    await userEvent.click(getByRole('combobox'));
+    await userEvent.paste('Hello World!');
+  });
 
   expect(callback).toBeCalled();
 });
@@ -80,9 +84,11 @@ it('calls handleOptionsChange on options change', async () => {
     </MemoryRouter>,
   );
 
-  await userEvent.click(getByRole('combobox'));
-  await userEvent.paste('fo');
-  await userEvent.click(getByText('foo'));
+  await act(async () => {
+    await userEvent.click(getByRole('combobox'));
+    await userEvent.paste('fo');
+    await userEvent.click(getByText('foo'));
+  });
 
   expect(callback).toBeCalled();
 });
@@ -103,8 +109,10 @@ it('creates new option if none exists', async () => {
     </MemoryRouter>,
   );
 
-  await userEvent.click(getByRole('combobox'));
-  await userEvent.keyboard('does not exist{Enter}');
+  await act(async () => {
+    await userEvent.click(getByRole('combobox'));
+    await userEvent.keyboard('does not exist{Enter}');
+  });
 
   const first_arg = {
     __isNew__: true,
