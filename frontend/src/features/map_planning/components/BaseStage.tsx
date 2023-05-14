@@ -73,6 +73,7 @@ export const BaseStage = ({
   const dispatch = useMapStore((map) => map.dispatch);
   const step = useMapStore((map) => map.step);
   const historyLength = useMapStore((map) => map.history.length);
+  const clipboard = useMapStore((map) => map.clipboard);
 
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
@@ -186,7 +187,33 @@ export const BaseStage = ({
   };
 
   return (
-    <div className="h-full w-full overflow-hidden">
+    <div
+      className="h-full w-full overflow-hidden"
+      onKeyDown={(e) => {
+        if (e.key === 'c' && e.ctrlKey) {
+          dispatch({
+            type: 'OBJECT_COPY_TO_CLIPBOARD',
+            payload: [
+              {
+                index: 'plant',
+                id: Math.random().toString(36).slice(2, 9),
+                x: 300,
+                y: 300,
+                width: 100,
+                height: 100,
+                type: 'rect',
+                rotation: 0,
+                scaleX: 1,
+                scaleY: 1,
+              },
+            ],
+          });
+          dispatch({
+            type: 'OBJECT_PASTE_CLIPBOARD',
+          });
+        }
+      }}
+    >
       <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
         {/* TODO: This is example code that shows how to interact with the store, the final code handling object creation is TBD */}
         <SimpleButton

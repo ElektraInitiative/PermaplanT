@@ -1,6 +1,7 @@
 import type {
   MapAction,
   ObjectAddAction,
+  ObjectCopyToClipboardAction,
   ObjectUpdatePositionAction,
   ObjectUpdateTransformAction,
   TrackedAction,
@@ -16,6 +17,7 @@ type MapStore = {
   history: TrackedAction[];
   step: number;
   state: MapState;
+  clipboard: MapState;
   transformer: React.RefObject<Konva.Transformer>;
   dispatch: (action: MapAction) => void;
   canUndo: boolean;
@@ -36,6 +38,7 @@ const useMapStore = create<MapStore>((set) => ({
   history: [],
   step: 0,
   state: DEFAULT_STATE,
+  clipboard: DEFAULT_STATE,
   dispatch: (action) => set((state) => applyActionToState(action, state)),
   canUndo: false,
   canRedo: false,
@@ -63,6 +66,21 @@ function applyActionToState(action: MapAction, state: MapStore): MapStore {
         history: [...state.history.slice(0, state.step), action],
         step: state.step + 1,
         state: handleUpdateObjectAction(state.state, action),
+        canUndo: true,
+      };
+
+    case 'OBJECT_COPY_TO_CLIPBOARD':
+      return {
+        ...state,
+        clipboard: handleCopyToClipboardAction(state.clipboard, action),
+      };
+
+    case 'OBJECT_PASTE_CLIPBOARD':
+      return {
+        ...state,
+        history: [...state.history.slice(0, state.step), action],
+        step: state.step + 1,
+        state: handlePasteClipboardAction(state.state, state.clipboard),
         canUndo: true,
       };
 
@@ -122,6 +140,36 @@ function handleAddObjectAction(state: MapState, action: ObjectAddAction): MapSta
   };
 }
 
+function handlePasteClipboardAction(state: MapState, clipboard: MapState): MapState {
+  const newLayers = { ...state.layers };
+
+  clipboard.layers.plant.objects.forEach((object) => {
+    const layerIndex = object.index;
+    const newObject = { ...object };
+    const existingObjects = newLayers[layerIndex]?.objects || [];
+
+    newLayers[layerIndex] = {
+      ...newLayers[layerIndex],
+      objects: [...existingObjects, newObject],
+    };
+  });
+
+  return {
+    ...state,
+    layers: newLayers,
+  };
+}
+
+function handleCopyToClipboardAction(
+  state: MapState,
+  action: ObjectCopyToClipboardAction,
+): MapState {
+  return {
+    ...state,
+    layers: action.payload.reduce(reduceObjectsToLayers, state.layers),
+  };
+}
+
 function handleUpdateObjectAction(
   state: MapState,
   action: ObjectUpdatePositionAction | ObjectUpdateTransformAction,
@@ -136,7 +184,6 @@ function handleUpdateObjectAction(
 }
 function reduceObjectUpdatesToLayers(layers: Layers, objectUpdate: ObjectState): Layers {
   const layerIndex = objectUpdate.index;
-
   return {
     ...layers,
     [layerIndex]: {
@@ -148,6 +195,17 @@ function reduceObjectUpdatesToLayers(layers: Layers, objectUpdate: ObjectState):
 
         return obj;
       }),
+    },
+  };
+}
+
+function reduceObjectsToLayers(layers: Layers, objectUpdate: ObjectState): Layers {
+  const layerIndex = objectUpdate.index;
+  return {
+    ...layers,
+    [layerIndex]: {
+      ...layers[layerIndex],
+      objects: [objectUpdate],
     },
   };
 }

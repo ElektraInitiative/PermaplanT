@@ -28,6 +28,15 @@ export type ObjectUpdateTransformAction = {
   payload: ObjectState[];
 };
 
+export type ObjectCopyToClipboardAction = {
+  type: 'OBJECT_COPY_TO_CLIPBOARD';
+  payload: ObjectState[];
+};
+
+export type ObjectPasteClipboardAction = {
+  type: 'OBJECT_PASTE_CLIPBOARD';
+};
+
 /**
  * An action for undoing the previous action in the history.
  */
@@ -49,6 +58,8 @@ export type MapAction =
   | ObjectAddAction
   | ObjectUpdatePositionAction
   | ObjectUpdateTransformAction
+  | ObjectCopyToClipboardAction
+  | ObjectPasteClipboardAction
   | UndoAction
   | RedoAction;
 
