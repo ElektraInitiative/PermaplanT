@@ -13,7 +13,7 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
 #[actix_rt::test]
-async fn test_get_2_seeds_succeeds() {
+async fn test_find_two_seeds_succeeds() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::seeds::table)
@@ -67,6 +67,58 @@ async fn test_get_2_seeds_succeeds() {
     assert_eq!(seed_dto2.name, "Testia testium".to_owned());
     assert_eq!(seed_dto2.harvest_year, 2023);
     assert_eq!(seed_dto2.quantity, Quantity::NotEnough);
+}
+
+#[actix_rt::test]
+async fn test_search_seeds_succeeds() {
+    let pool = init_test_database(|conn| {
+        async {
+            diesel::insert_into(crate::schema::seeds::table)
+                .values(vec![
+                    (
+                        &crate::schema::seeds::id.eq(-1),
+                        &crate::schema::seeds::name.eq("Testia testia"),
+                        &crate::schema::seeds::harvest_year.eq(2022),
+                        &crate::schema::seeds::quantity.eq(Quantity::Enough),
+                    ),
+                    (
+                        &crate::schema::seeds::id.eq(-2),
+                        &crate::schema::seeds::name.eq("Testia testium"),
+                        &crate::schema::seeds::harvest_year.eq(2023),
+                        &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
+                    ),
+                ])
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let app = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri("/api/seeds?name=Testia%20testia&per_page=10")
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(CONTENT_TYPE).unwrap(),
+        "application/json"
+    );
+
+    let result = test::read_body(resp).await;
+    let result_string = std::str::from_utf8(&result).unwrap();
+
+    let page: Page<SeedDto> = serde_json::from_str(result_string).unwrap();
+    assert_eq!(page.results.len(), 1);
+
+    let seed_dto = page.results.get(0).unwrap();
+    assert_eq!(seed_dto.id, -1);
+    assert_eq!(seed_dto.name, "Testia testia".to_owned());
+    assert_eq!(seed_dto.harvest_year, 2022);
+    assert_eq!(seed_dto.quantity, Quantity::Enough);
 }
 
 #[actix_rt::test]
