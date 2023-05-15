@@ -1,4 +1,4 @@
-//! `Plants` endpoints.
+//! `BaseLayer` endpoints.
 
 use crate::{db::connection::Pool, service};
 use actix_web::{
@@ -32,7 +32,7 @@ pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse>
 #[utoipa::path(
     context_path = "/api/layers/base/",
     responses(
-        (status = 200, description = "Fetch a base layer by its id", body = BaseLayerDto),
+        (status = 200, description = "Publish a new base layer.", body = BaseLayerDto),
     )
 )]
 #[post("")]
@@ -44,14 +44,14 @@ pub async fn create(
     Ok(HttpResponse::Created().json(response))
 }
 
-/// Fetch a single [`BaseLayerDto`](crate::model::dto::BaseLayerDto) by its id.
+/// Delete a single [`BaseLayerDto`](crate::model::dto::BaseLayerDto) by its id.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/layers/base/{id}",
     responses(
-        (status = 200, description = "Fetch a base layer by its id", body = BaseLayerDto),
+        (status = 200, description = "Delete a base layer by its id.", body = BaseLayerDto),
     )
 )]
 #[delete("/{id}")]
