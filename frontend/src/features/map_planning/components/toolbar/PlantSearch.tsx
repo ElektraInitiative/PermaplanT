@@ -141,7 +141,7 @@ export const PlantSearch = () => {
       type: 'OBJECT_ADD',
       payload: {
         index: 'plant',
-        id: Math.random().toString(36).slice(2, 9),
+        id: plant + Math.random().toString(36).slice(2, 9),
         x: 300,
         y: 300,
         width: 100,
