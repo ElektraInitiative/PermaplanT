@@ -54,7 +54,7 @@ export const LayerList = ({
           className="h-4 w-4"
           type="radio"
           value={name}
-          checked={selectedLayer === name}
+          defaultChecked={selectedLayer === name}
           onClick={() => {
             if (setSelectedLayer) setSelectedLayer(name);
           }}

@@ -5,7 +5,7 @@ import type {
   ObjectUpdateTransformAction,
   TrackedAction,
 } from './action-types';
-import type { LayerName, LayerState, MapState, ObjectState, Layers } from './state-types';
+import type { LayerName, Layers, LayerState, MapState, ObjectState } from './state-types';
 import i18next from '@/config/i18n';
 import Konva from 'konva';
 import { createRef } from 'react';
@@ -20,7 +20,7 @@ type MapStore = {
   dispatch: (action: MapAction) => void;
   canUndo: boolean;
   canRedo: boolean;
-  updateSelectedLayer: (selectedLayer: MapState['selectedLayer']) => void;
+  updateSelectedLayer: (selectedLayer: LayerName) => void;
   updateLayerVisible: (layerName: LayerName, visible: LayerState['visible']) => void;
   updateLayerOpacity: (layerName: LayerName, opacity: LayerState['opacity']) => void;
 };
