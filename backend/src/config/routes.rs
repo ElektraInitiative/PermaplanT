@@ -1,15 +1,17 @@
 //! Routes in the backend.
 
-#[cfg(any(test, feature = "auth"))]
 use actix_utils::future::ready;
 use actix_web::{middleware::NormalizePath, web};
-#[cfg(any(test, feature = "auth"))]
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::controller::{map, plantings, plants, seed};
 
+use super::auth::middleware::validator;
+
 /// Defines all routes of the backend and which functions they map to.
 pub fn config(cfg: &mut web::ServiceConfig) {
+    let auth = HttpAuthentication::bearer(|req, credentials| ready(validator(req, &credentials)));
+
     let routes = web::scope("/api")
         .service(
             web::scope("/seeds")
@@ -38,14 +40,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(plantings::update)
                 .service(plantings::delete),
         )
-        .wrap(NormalizePath::default());
-
-    #[cfg(any(test, feature = "auth"))]
-    let auth = HttpAuthentication::bearer(|req, credentials| {
-        ready(super::auth::validator(req, &credentials))
-    });
-    #[cfg(any(test, feature = "auth"))]
-    let routes = routes.wrap(auth);
+        .wrap(NormalizePath::default())
+        .wrap(auth);
 
     cfg.service(routes);
 }

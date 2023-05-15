@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 use crate::error::ServiceError;
 
-use super::jwks::Jwks;
+use super::Config;
 
 /// Fields the token has (only the necessary fields are actually extracted).
 #[derive(Debug, Clone, Deserialize)]
@@ -30,7 +30,7 @@ impl Claims {
             ServiceError::new(StatusCode::UNAUTHORIZED, "missing kid in token".to_owned())
         })?;
 
-        let jwk = Jwks::get().find(kid).ok_or_else(|| {
+        let jwk = Config::get().jwk_set.find(kid).ok_or_else(|| {
             ServiceError::new(
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "no valid key found".to_owned(),
@@ -49,27 +49,27 @@ impl Claims {
 
 #[cfg(test)]
 mod test {
-    use crate::test::util::{jwks::init_jwks, token::generate_token};
+    use crate::test::util::{jwks::init_auth, token::generate_token};
 
     use super::Claims;
 
     #[test]
     fn test_simple_token_succeeds() {
-        let jwk = init_jwks();
+        let jwk = init_auth();
         let token = generate_token(jwk, 300);
         assert!(Claims::validate(&token).is_ok())
     }
 
     #[test]
     fn test_expired_token_fails() {
-        let jwk = init_jwks();
+        let jwk = init_auth();
         let token = generate_token(jwk, -300);
         assert!(Claims::validate(&token).is_err())
     }
 
     #[test]
     fn test_invalid_token_fails() {
-        let _ = init_jwks();
+        let _ = init_auth();
         assert!(Claims::validate("not a token").is_err())
     }
 }

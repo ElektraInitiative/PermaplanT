@@ -16,7 +16,7 @@
 - `DATABASE_URL` is the Connection [URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) to your PostgreSQL database
 - `BIND_ADDRESS_HOST` defines the host on which the server will run on
 - `BIND_ADDRESS_PORT` defines the port on which the server will run on
-- `REMOTE_JWKS_URL` the location of the remote jwks which will be used to validate tokens
+- `OAUTH2_ISSUER_URI` the .well-known endpoint of the auth server (see [RFC 8414](https://www.rfc-editor.org/rfc/rfc8414.html#section-2) for more detail)
 
 Ensure that you grant the necessary permissions for the user to use Postgres. One way to do this is by using the following command:
 
@@ -49,19 +49,44 @@ LC_ALL=C diesel migration run
 cargo install typeshare-cli
 ```
 
-6. Start the server:
+6. Start Keycloak
 
-```shell
+`docker run -p 8081:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:21.1.1 start-dev`
+
+7. Setup Keycloak:
+
+Open <http://localhost:8081/admin>.  
+Sign in with user `admin` and password `admin`.  
+Click on `master` -> `Create Realm`.  
+Name the realm `PermaplanT` and click `Create`.
+
+Click on `Clients` -> `Create client`.  
+Set the `Client ID` to `PermaplanT`.
+Click `Next` two times.  
+Set values: `Root URL = http://localhost:5173`, `Valid redirect URIs = /*`, `Web origins = +`.  
+Click `Save`.
+
+Create a second client `swagger-ui` with `Root URL = http://localhost:8080/doc/api/swagger/ui` (everything else the same as above).
+
+Go to `Users` and create a user `test`.  
+Click `Credentials` and set password to `test`.
+
+8. Run the backend
+
+```bash
 cargo run
 ```
 
-## Usage
+### Test server using Swagger
 
-Now the server is running and will start listening at <http://localhost:8080/> (or whichever port you specified in `.env`).
+Go to <http://localhost:8080/doc/api/swagger/ui/>.  
+Try to execute a request (it should return error 401).  
+Click `Authorize`.
 
-Example requests:
-
-- `curl localhost:8080/api/plants`
+> Use the `authorizationCode` auth flow.  
+> Enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.  
+> Enter user credentials (username: `test`, password: `test`).  
+> You should now be able to execute a request in Swagger.
 
 ## Documentation
 
@@ -73,15 +98,3 @@ To view code documentation run
 ```shell
 cargo doc --open
 ```
-
-## Tools
-
-I would suggest using [cargo-watch](https://github.com/watchexec/cargo-watch) to check for errors.
-
-After install via `cargo install cargo-watch --locked` run
-
-```shell
-cargo watch -x clippy -x check -x doc
-```
-
-to check for warnings/errors automatically on every code change.

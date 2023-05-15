@@ -51,11 +51,8 @@
 
 use actix_cors::Cors;
 use actix_web::{http, web::Data, App, HttpServer};
-use config::{api_doc, routes};
+use config::{api_doc, auth::Config, routes};
 use db::connection;
-
-#[cfg(feature = "auth")]
-use crate::config::auth::jwks::Jwks;
 
 pub mod config;
 pub mod controller;
@@ -77,8 +74,7 @@ async fn main() -> std::io::Result<()> {
         Err(e) => panic!("Error reading configuration: {e}"),
     };
 
-    #[cfg(feature = "auth")]
-    Jwks::init_from_remote(&config.remote_jwks_url).await;
+    Config::init(&config.oauth2_issuer_uri).await;
 
     HttpServer::new(move || {
         let pool = connection::init_pool(&config.database_url);
