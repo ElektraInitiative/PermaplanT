@@ -51,14 +51,15 @@ export type LayerState = {
 };
 
 /**
+ * The state of the layers of the map.
+ */
+export type Layers = {
+  [key in LayerName]: LayerState;
+};
+
+/**
  * The state of the map.
  */
 export type MapState = {
-  /**
-   * The state of the layers of the map.
-   */
-  layers: {
-    [key in LayerName]: LayerState;
-  };
-  selectedLayer: LayerName;
+  layers: Layers;
 };

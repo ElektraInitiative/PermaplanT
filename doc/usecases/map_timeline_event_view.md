@@ -7,14 +7,16 @@
 - **Actors:** App User
 - **Brief:** The user sees addition/removal of elements as events using the timeline feature.
 - **Status:** Draft
+- **Assignee:** Paul
 
 ## Scenarios
 
 - **Precondition:**
   The user has opened the app and selected a map.
 - **Main success scenario:**
+
   - The user sees events represented on the scrollbar of the timeline feature, allowing them to understand how the map changed over time.
-  Events include:
+    Events include:
     - addition of an element to the map
     - deletion of an element from the map
   - The timeline can be scaled, adjusting its start and end date, thus showing more events of the future and the past.

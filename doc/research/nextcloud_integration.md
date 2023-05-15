@@ -19,14 +19,14 @@ links:
 
 opening a connection
 
-```
+```bash
 cadaver
 open https://nextcloud.markus-raab.org/nextcloud/remote.php/dav/files/USERNAME/Documents
 ```
 
 type help for a list of commands
 
-```
+```bash
 help
 ```
 
@@ -49,7 +49,7 @@ https://github.com/nextcloud/circles/blob/22238597fb9045e748119247fceaac7321f0a3
 
 API test with curl (USERNAME, PSWD and BASE_URL have to set):
 
-```
+```bash
 curl -u USERNAME:PSWD -X GET 'https://BASE_URL/nextcloud/ocs/v2.php/apps/circles/circles' -H "OCS-APIRequest: true"
 ```
 
@@ -59,31 +59,31 @@ Working API calls (tested with NC version 25.0.4-1~deb11):
 
 - add member
 
-```
+```bash
 curl -u USERNAME:PSWD -X POST 'https://BASE_URL/nextcloud/ocs/v2.php/apps/circles/circles/CIRCLE_ID/members/multi' -H "OCS-APIRequest: true" -H "Content-Type: application/json" -d '{"members":[{"id":"USER_ID","type":1}]}'
 ```
 
 - create circle
 
-```
+```bash
 curl -u USERNAME:PSWD -X POST 'https://BASE_URL/nextcloud/ocs/v2.php/apps/circles/circles' -H "OCS-APIRequest: true" -H "Content-Type: application/json" -d '{"name":"test_circle_3","personal":false,"local":false}'
 ```
 
 - delete member from circle
 
-```
+```bash
 curl -u USERNAME:PSWD -X DELETE 'https://BASE_URL/nextcloud/ocs/v2.php/apps/circles/circles/CIRCLE_ID/members/MEMBER_ID' -H "OCS-APIRequest: true"
 ```
 
 - get circles
 
-```
+```bash
 curl -u USERNAME:PSWD -X GET 'https://BASE_URL/nextcloud/ocs/v2.php/apps/circles/circles' -H "OCS-APIRequest: true"
 ```
 
 - get members
 
-```
+```bash
 curl -u USERNAME:PSWD -X GET 'https://BASE_URL/nextcloud/ocs/v2.php/apps/circles/circles/CIRCLE_ID/members' -H "OCS-APIRequest: true"
 ```
 
@@ -113,7 +113,7 @@ The maps Nextcloud plugin offers a REST API. The documentation can be found [her
 
 The GET endpoint /favorite was tested with curl and basic authentication:
 
-```
+```bash
 curl -u USERNAME:PSWD -X GET 'https://BASE_URL/nextcloud/index.php/apps/maps/api/1.0/favorites'
 ```
 
@@ -121,7 +121,7 @@ curl -u USERNAME:PSWD -X GET 'https://BASE_URL/nextcloud/index.php/apps/maps/api
 
 sending a message:
 
-```rust
+```rust,ignore
 // sends once, Err if it does not work on network or nextcloud level
 fn send_message (
 	&self,
@@ -157,6 +157,6 @@ fn send_message (
 
 or via CURL:
 
-```
+```bash
 curl -sS -d "{\"token\": \"$CHAT\", \"message\": \"$*\"}" -H "Content-Type: application/json" -H "Accept: application/json" -H "OCS-APIRequest: true" -u "user:password" https://nextcloud.markus-raab.org/nextcloud/ocs/v2.php/apps/spreed/api/v1/chat/$CHAT
 ```

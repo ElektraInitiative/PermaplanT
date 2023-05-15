@@ -21,7 +21,7 @@ Backend
 
 Rust formatting can be achieved by adding the following to settings.json in VSCode after installing rust-analyzer:
 
-```
+```json
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer",
     "editor.formatOnSave": true

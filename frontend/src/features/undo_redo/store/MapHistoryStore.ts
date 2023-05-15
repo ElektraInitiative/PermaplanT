@@ -5,7 +5,7 @@ import type {
   ObjectUpdateTransformAction,
   TrackedAction,
 } from './action-types';
-import type { LayerName, LayerState, MapState } from './state-types';
+import type { LayerName, LayerState, MapState, ObjectState, Layers } from './state-types';
 import i18next from '@/config/i18n';
 import Konva from 'konva';
 import { createRef } from 'react';
@@ -135,9 +135,9 @@ const DEFAULT_STATE: MapState = {
       visible: true,
       opacity: 1,
       objects: [],
-    },
-  },
-};
+    }
+  }
+}
 
 const useMapStore = create<MapStore>((set) => ({
   history: [],
@@ -273,23 +273,24 @@ function handleUpdateObjectAction(
     ...state,
     layers: {
       ...state.layers,
-      ...action.payload.reduce(
-        (updates, object) => ({
-          ...updates,
-          [object.index]: {
-            ...updates[object.index],
-            objects: updates[object.index].objects.map((obj) => {
-              if (obj.id === object.id) {
-                return object;
-              }
+      ...action.payload.reduce(reduceObjectUpdatesToLayers, state.layers),
+    },
+  };
+}
+function reduceObjectUpdatesToLayers(layers: Layers, objectUpdate: ObjectState): Layers {
+  const layerIndex = objectUpdate.index;
 
-              return obj;
-            }),
-          },
-        }),
-        // start with the current state
-        state.layers,
-      ),
+  return {
+    ...layers,
+    [layerIndex]: {
+      ...layers[layerIndex],
+      objects: layers[layerIndex].objects.map((obj) => {
+        if (obj.id === objectUpdate.id) {
+          return objectUpdate;
+        }
+
+        return obj;
+      }),
     },
   };
 }

@@ -8,6 +8,8 @@
   The main planning utility for PermaplanT, which contains _elements_ in several _layers_.
 - Nextcloud map:
   A Nextcloud app which is used as overview where which garden is, see [here](https://apps.nextcloud.com/apps/maps).
+- GeoMap:
+  The geographical map which is found in Nextcloud under the "Maps" tab.
 - version (of a map):
   A version (of a map) is a named snapshot of a map at a certain point in time while working on that map.
   It is possible to switch to a different version of a layer.
@@ -40,6 +42,9 @@
   - the time it takes for the page to become fully interactive.
 - The Document Object Model (DOM)
   - the data representation of the objects that comprise the structure and content of a document on the web.
+- endpoints
+  - The API endpoints that can be called in the backend.  
+    Their documentation can be viewed using swagger-ui (see [here](/doc/architecture/backend.md#api-documentation) for reference).
 
 ## Biology
 

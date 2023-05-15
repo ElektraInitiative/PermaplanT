@@ -12,13 +12,16 @@ use utoipa::ToSchema;
 pub enum LifeCycle {
     #[serde(rename = "annual")]
     #[db_rename = "annual"]
+    /// on the map for current year
     Annual,
 
     #[serde(rename = "biennial")]
     #[db_rename = "biennial"]
+    /// on the map for current and next year
     Biennial,
 
     #[serde(rename = "perennial")]
     #[db_rename = "perennial"]
+    /// on the map until removed by user
     Perennial,
 }

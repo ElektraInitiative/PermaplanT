@@ -190,6 +190,7 @@ export const BaseStage = ({
   return (
     <div className="h-full w-full overflow-hidden">
       <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
+        {/* TODO: This is example code that shows how to interact with the store, the final code handling object creation is TBD */}
         <SimpleButton
           className="w-32"
           onClick={() =>
@@ -212,54 +213,6 @@ export const BaseStage = ({
         >
           CREATE OBJECT
         </SimpleButton>
-        <button
-          className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
-          disabled={!canUndo}
-          onClick={() =>
-            dispatch({
-              type: 'UNDO',
-            })
-          }
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
-            />
-          </svg>
-        </button>
-        <button
-          className="flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 disabled:dark:text-gray-600"
-          disabled={!canRedo}
-          onClick={() =>
-            dispatch({
-              type: 'REDO',
-            })
-          }
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"
-            />
-          </svg>
-        </button>
         <div>
           <div className="whitespace-nowrap text-sm">Step: {step}</div>
           <div className="whitespace-nowrap text-sm">History length: {historyLength}</div>

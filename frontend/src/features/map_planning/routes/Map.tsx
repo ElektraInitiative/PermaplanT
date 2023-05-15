@@ -24,6 +24,7 @@ import { Rect } from 'react-konva';
  */
 export const Map = () => {
   const state = useMapStore((map) => map.state);
+  const dispatch = useMapStore((map) => map.dispatch);
 
   // Event listener responsible for adding a single shape to the transformer
   const addToTransformer = (node: Shape<ShapeConfig>) => {
@@ -104,11 +105,17 @@ export const Map = () => {
               <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
                 <ArrowIcon></ArrowIcon>
               </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <RedoIcon></RedoIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
+              <IconButton
+                className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                onClick={() => dispatch({ type: 'UNDO' })}
+              >
                 <UndoIcon></UndoIcon>
+              </IconButton>
+              <IconButton
+                className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                onClick={() => dispatch({ type: 'REDO' })}
+              >
+                <RedoIcon></RedoIcon>
               </IconButton>
               <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
                 <MoveIcon></MoveIcon>

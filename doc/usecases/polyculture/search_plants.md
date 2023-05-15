@@ -6,8 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can search for plants to add to her map and sort results by different criterion.
-- **Status:** Partly Done
-- **Assignee:** Benjamin
+- **Status:** In Progress
+- **Assignee:** Gabriel
 
 ## Scenarios
 
