@@ -94,11 +94,13 @@ async fn main() -> std::io::Result<()> {
 
 /// Create a CORS configuration for the server.
 fn cors_configuration() -> Cors {
-    Cors::default() // allowed_origin return access-control-allow-origin: * by default
-        .allowed_origin("http://127.0.0.1:5173")
+    Cors::default()
         .allowed_origin("http://localhost:5173")
-        .send_wildcard()
         .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
-        .allowed_header(http::header::CONTENT_TYPE)
+        .allowed_headers(vec![
+            http::header::AUTHORIZATION,
+            http::header::ACCEPT,
+            http::header::CONTENT_TYPE,
+        ])
         .max_age(3600)
 }
