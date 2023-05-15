@@ -42,7 +42,8 @@ impl Config {
     /// * If the auth server is unreachable or is set up incorrectly.
     #[allow(clippy::expect_used)]
     pub async fn init(app_config: &crate::config::app::Config) {
-        let openid_config = OpenIDEndpointConfiguration::fetch(&app_config.auth_issuer_uri).await;
+        let openid_config =
+            OpenIDEndpointConfiguration::fetch(&app_config.auth_discovery_uri).await;
 
         let config = Self {
             client_id: app_config.client_id.clone(),
@@ -68,6 +69,8 @@ impl Config {
 /// See [RFC 8414](https://www.rfc-editor.org/rfc/rfc8414.html#section-2) for more detail.
 #[derive(Debug, Clone, Default, Deserialize)]
 pub struct OpenIDEndpointConfiguration {
+    /// The base URL of the authorization server
+    pub issuer: String,
     /// URL of the authorization server's authorization endpoint
     pub authorization_endpoint: String,
     /// URL of the authorization server's token endpoint

@@ -16,7 +16,8 @@
 - `DATABASE_URL` is the Connection [URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) to your PostgreSQL database
 - `BIND_ADDRESS_HOST` defines the host on which the server will run on
 - `BIND_ADDRESS_PORT` defines the port on which the server will run on
-- `AUTH_ISSUER_URI` the .well-known endpoint of the auth server (see [RFC 8414](https://www.rfc-editor.org/rfc/rfc8414.html#section-2) for more detail)
+- `AUTH_DISCOVERY_URI` the .well-known endpoint of the auth server (see [RFC 8414](https://www.rfc-editor.org/rfc/rfc8414.html#section-2) for more detail)
+- `AUTH_CLIENT_ID` the client id the frontend should use to log in
 
 Ensure that you grant the necessary permissions for the user to use Postgres. One way to do this is by using the following command:
 

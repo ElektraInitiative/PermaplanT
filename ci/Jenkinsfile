@@ -60,7 +60,7 @@ stage('Checks') {
                             sh "cargo check"
                             sh "cargo clippy"
                             sh "cargo doc"
-                            withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_ISSUER_URI=unused']) {
+                            withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused']) {
                                 sh "cargo test"
                             }
                         }

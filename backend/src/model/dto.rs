@@ -21,8 +21,8 @@ pub mod seed_impl;
 #[typeshare]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct ConfigDto {
-    /// The location of the authorization endpoint
-    pub authorization_endpoint: String,
+    /// The base URL of the authorization server
+    pub issuer_uri: String,
     /// The client_id the frontend should use to log in
     pub client_id: String,
 }

@@ -2,8 +2,8 @@ import { baseApiUrl } from '@/config';
 import axios from 'axios';
 
 interface AuthInfoDto {
-  authorization_endpoint: string
-  client_id: string
+  issuer_uri: string;
+  client_id: string;
 }
 
 export const getAuthInfo = async (): Promise<AuthInfoDto> => {

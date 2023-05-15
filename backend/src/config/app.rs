@@ -10,10 +10,10 @@ pub struct Config {
     pub bind_address: (String, u16),
     /// The location of the database as a URL.
     pub database_url: String,
-    /// The location of the server that issues tokens.
+    /// The discovery URI of the server that issues tokens.
     ///
-    /// Other relevant URLs such as the `jwks_uri` or the `token_endpoint`.
-    pub auth_issuer_uri: String,
+    /// Can be used to fetch other relevant URLs such as the `jwks_uri` or the `token_endpoint`.
+    pub auth_discovery_uri: String,
     /// The `client_id` the frontend should use to log in its users.
     pub client_id: String,
 }
@@ -37,15 +37,15 @@ impl Config {
 
         let database_url =
             env::var("DATABASE_URL").map_err(|_| "Failed to get DATABASE_URL from environment.")?;
-        let auth_issuer_uri = env::var("AUTH_ISSUER_URI")
-            .map_err(|_| "Failed to get AUTH_ISSUER_URI from environment.")?;
+        let auth_discovery_uri = env::var("AUTH_DISCOVERY_URI")
+            .map_err(|_| "Failed to get AUTH_DISCOVERY_URI from environment.")?;
         let client_id = env::var("AUTH_CLIENT_ID")
             .map_err(|_| "Failed to get AUTH_CLIENT_ID from environment.")?;
 
         Ok(Self {
             bind_address: (host, port),
             database_url,
-            auth_issuer_uri,
+            auth_discovery_uri,
             client_id,
         })
     }

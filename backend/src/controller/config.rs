@@ -17,7 +17,7 @@ use crate::model::dto::ConfigDto;
 pub async fn get() -> HttpResponse {
     let config = auth::Config::get();
     let response = ConfigDto {
-        authorization_endpoint: config.openid_configuration.authorization_endpoint.clone(),
+        issuer_uri: config.openid_configuration.issuer.clone(),
         client_id: config.client_id.clone(),
     };
     HttpResponse::Ok().json(response)
