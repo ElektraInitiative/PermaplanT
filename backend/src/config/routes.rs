@@ -1,7 +1,7 @@
 //! Routes in the backend.
 //! Routes should be organized in a hierarchical fashion.
 //! Use plural for names of endpoints (e.g. "plants" instead of "plant").
-//! Individual words should be seperated by slashes (e.g. `/api/layers/base` instead of `/api/base_layer`).
+//! Individual words should be seperated by slashes (e.g. `/api/layers/base`).
 
 use actix_web::{middleware::NormalizePath, web};
 
