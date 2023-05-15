@@ -1,5 +1,5 @@
 import SearchInput from './SearchInput';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
@@ -28,6 +28,8 @@ it('calls handleSearch on input change', async () => {
     </MemoryRouter>,
   );
 
-  await userEvent.click(getByPlaceholderText('Test'));
-  await userEvent.paste('Hello World!');
+  await act(async () => {
+    await userEvent.click(getByPlaceholderText('Test'));
+    await userEvent.paste('Hello World!');
+  });
 });

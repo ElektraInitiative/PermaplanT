@@ -14,6 +14,7 @@ import plantSearch from './plantSearch.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
+import undoRedo from './undoRedo.json';
 
 const de = {
   baseLayerConfigurator,
@@ -32,6 +33,7 @@ const de = {
   plantSearch,
   layerSettings,
   maps,
+  undoRedo,
 };
 
 export default de;
