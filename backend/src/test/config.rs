@@ -2,16 +2,8 @@
 
 use actix_http::header::CONTENT_TYPE;
 use actix_web::{http::StatusCode, test, App};
-use jsonwebtoken::jwk::JwkSet;
 
-use crate::{
-    config::{
-        auth::{Config, OpenIDEndpointConfiguration},
-        routes,
-    },
-    model::dto::ConfigDto,
-    test::util::jwks::init_auth,
-};
+use crate::{config::routes, model::dto::ConfigDto, test::util::jwks::init_auth};
 
 #[actix_rt::test]
 async fn test_search_plants_succeeds() {
