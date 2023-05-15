@@ -73,7 +73,6 @@ export const BaseStage = ({
   const dispatch = useMapStore((map) => map.dispatch);
   const step = useMapStore((map) => map.step);
   const historyLength = useMapStore((map) => map.history.length);
-  const clipboard = useMapStore((map) => map.clipboard);
 
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
