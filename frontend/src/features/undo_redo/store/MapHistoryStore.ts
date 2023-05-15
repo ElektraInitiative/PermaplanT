@@ -166,7 +166,7 @@ function handleCopyToClipboardAction(
 ): MapState {
   return {
     ...state,
-    layers: action.payload.reduce(reduceObjectsToLayers, state.layers),
+    layers: reduceObjectsToLayers(state.layers, action.payload),
   };
 }
 
@@ -199,15 +199,13 @@ function reduceObjectUpdatesToLayers(layers: Layers, objectUpdate: ObjectState):
   };
 }
 
-function reduceObjectsToLayers(layers: Layers, objectUpdate: ObjectState): Layers {
-  const layerIndex = objectUpdate.index;
-  return {
-    ...layers,
-    [layerIndex]: {
-      ...layers[layerIndex],
-      objects: [objectUpdate],
-    },
-  };
+function reduceObjectsToLayers(layers: Layers, objectStates: ObjectState[]): Layers {
+  const updatedLayers = { ...layers };
+  objectStates.forEach((objectState) => {
+    const layerIndex = objectState.index;
+    updatedLayers[layerIndex].objects.push(objectState);
+  });
+  return updatedLayers;
 }
 
 /**

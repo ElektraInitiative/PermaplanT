@@ -28,11 +28,17 @@ export type ObjectUpdateTransformAction = {
   payload: ObjectState[];
 };
 
+/**
+ * An action for copying objects to the clipboard.
+ */
 export type ObjectCopyToClipboardAction = {
   type: 'OBJECT_COPY_TO_CLIPBOARD';
   payload: ObjectState[];
 };
 
+/**
+ * An action for pasting objects from the clipboard.
+ */
 export type ObjectPasteClipboardAction = {
   type: 'OBJECT_PASTE_CLIPBOARD';
 };

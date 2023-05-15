@@ -191,23 +191,25 @@ export const BaseStage = ({
       className="h-full w-full overflow-hidden"
       onKeyDown={(e) => {
         if (e.key === 'c' && e.ctrlKey) {
+          const nodes = trRef.current?.getNodes() || [];
+          if (nodes.length === 0) return;
           dispatch({
             type: 'OBJECT_COPY_TO_CLIPBOARD',
-            payload: [
-              {
-                index: 'plant',
-                id: Math.random().toString(36).slice(2, 9),
-                x: 300,
-                y: 300,
-                width: 100,
-                height: 100,
-                type: 'rect',
-                rotation: 0,
-                scaleX: 1,
-                scaleY: 1,
-              },
-            ],
+            payload: nodes.map((o) => ({
+              id: o.id() + Math.random().toString(36).slice(2, 9), // TODO: How should we handle ids?
+              type: o.attrs.type,
+              index: o.attrs.index,
+              height: o.height(),
+              width: o.width(),
+              x: o.x(),
+              y: o.y(),
+              rotation: o.rotation(),
+              scaleX: o.scaleX(),
+              scaleY: o.scaleY(),
+            })),
           });
+        }
+        if (e.key === 'v' && e.ctrlKey) {
           dispatch({
             type: 'OBJECT_PASTE_CLIPBOARD',
           });
