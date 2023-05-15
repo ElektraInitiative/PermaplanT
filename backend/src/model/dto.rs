@@ -17,6 +17,16 @@ pub mod page_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
+/// Contains configuration the frontend needs to run.
+#[typeshare]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
+pub struct ConfigDto {
+    /// The location of the authorization endpoint
+    pub authorization_endpoint: String,
+    /// The client_id the frontend should use to log in
+    pub client_id: String,
+}
+
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]

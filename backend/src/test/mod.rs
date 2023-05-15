@@ -3,6 +3,7 @@
 #![allow(clippy::expect_used, clippy::unwrap_used)]
 
 mod auth;
+mod config;
 mod map;
 mod plant;
 mod seed;

@@ -74,7 +74,7 @@ async fn main() -> std::io::Result<()> {
         Err(e) => panic!("Error reading configuration: {e}"),
     };
 
-    Config::init(&config.auth_issuer_uri).await;
+    Config::init(&config).await;
 
     HttpServer::new(move || {
         let pool = connection::init_pool(&config.database_url);

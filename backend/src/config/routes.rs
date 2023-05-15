@@ -4,7 +4,7 @@ use actix_utils::future::ready;
 use actix_web::{middleware::NormalizePath, web};
 use actix_web_httpauth::middleware::HttpAuthentication;
 
-use crate::controller::{map, plantings, plants, seed};
+use crate::controller::{config, map, plantings, plants, seed};
 
 use super::auth::middleware::validator;
 
@@ -43,5 +43,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .wrap(NormalizePath::default())
         .wrap(auth);
 
-    cfg.service(routes);
+    let config_route = web::scope("/api/config").service(config::get);
+    cfg.service(config_route).service(routes);
 }

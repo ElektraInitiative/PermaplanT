@@ -9,15 +9,29 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{plantings, plants, seed},
+    controller::{config, plantings, plants, seed},
     model::{
         dto::{
-            NewPlantingDto, NewSeedDto, PagePlantingDto, PagePlantsSummaryDto, PageSeedDto,
-            PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
+            ConfigDto, NewPlantingDto, NewSeedDto, PagePlantingDto, PagePlantsSummaryDto,
+            PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
         },
         r#enum::{quality::Quality, quantity::Quantity},
     },
 };
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
+#[derive(OpenApi)]
+#[openapi(paths(config::get),
+        components(
+            schemas(
+                ConfigDto
+            )
+        ),
+        tags(
+            (name = "config")
+        ),
+    )]
+struct ConfigApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
 #[derive(OpenApi)]
@@ -83,7 +97,8 @@ struct PlantingsApiDoc;
 
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
-    let mut openapi = SeedApiDoc::openapi();
+    let mut openapi = ConfigApiDoc::openapi();
+    openapi.merge(SeedApiDoc::openapi());
     openapi.merge(PlantsApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
 
