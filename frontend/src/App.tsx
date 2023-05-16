@@ -1,13 +1,10 @@
 import NavContainer from './components/Layout/NavContainer';
 import Pages from './routes/Pages';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from 'react-oidc-context';
-import { BrowserRouter } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const queryClient = new QueryClient();
 function App() {
   const auth = useAuth();
 
@@ -50,15 +47,9 @@ function App() {
 
   return (
     <div>
-      <QueryClientProvider client={queryClient}>
-        <Fragment>
-          <BrowserRouter>
-            <NavContainer>
-              <Pages />
-            </NavContainer>
-          </BrowserRouter>
-        </Fragment>
-      </QueryClientProvider>
+      <NavContainer>
+        <Pages />
+      </NavContainer>
       <ToastContainer
         position="top-right"
         progressClassName={() =>
