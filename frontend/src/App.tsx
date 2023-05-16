@@ -1,6 +1,7 @@
 import NavContainer from './components/Layout/NavContainer';
 import Pages from './routes/Pages';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +19,7 @@ const useInitDarkMode = () => {
 };
 
 const useAuthEffect = () => {
+  const { t } = useTranslation(['auth']);
   const auth = useAuth();
   useEffect(() => {
     if (auth.error) {
@@ -25,15 +27,15 @@ const useAuthEffect = () => {
     }
     switch (auth.activeNavigator) {
       case 'signinSilent':
-        toast('Signing you in...');
+        toast(t('auth:signing_in'));
         break;
       case 'signoutRedirect':
-        toast(`Signing you out...`);
+        toast(t('auth:signing_out'));
     }
     if (auth.isAuthenticated) {
-      toast(`Hello ${auth.user?.profile.preferred_username}`);
+      toast(`${t('auth:hello')} ${auth.user?.profile.preferred_username}`);
     }
-  }, [auth]);
+  }, [auth, t]);
 };
 
 function App() {

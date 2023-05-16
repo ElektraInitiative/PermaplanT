@@ -1,19 +1,25 @@
 import SimpleButton from '@/components/Button/SimpleButton';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 
 const ConditionalLoadingSpinner = ({ show }: { show: boolean }) => {
   return <div className="h-6 w-6">{show ? <LoadingSpinner /> : null}</div>;
 };
 
+/**
+ * Attempts to log in the user with oidc
+ *
+ */
 export const LoginButton = () => {
+  const { t } = useTranslation(['auth']);
   const auth = useAuth();
 
   if (auth.isAuthenticated) {
     return (
       <div>
         <SimpleButton className="pl-6 pr-0" onClick={() => void auth.removeUser()}>
-          Log out
+          {t('auth:log_out')}
           <ConditionalLoadingSpinner show={auth.isLoading} />
         </SimpleButton>
       </div>
@@ -22,7 +28,7 @@ export const LoginButton = () => {
 
   return (
     <SimpleButton className="pl-6 pr-0" onClick={() => void auth.signinRedirect()}>
-      Login
+      {t('auth:log_in')}
       <ConditionalLoadingSpinner show={auth.isLoading} />
     </SimpleButton>
   );
