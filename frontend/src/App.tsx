@@ -24,18 +24,9 @@ function App() {
   // authentication notifications
   useEffect(() => {
     console.log('auth loading: ', auth.isLoading);
-    if (auth.isLoading) {
-      toast(`Loading...`);
-    }
-  }, [auth.isLoading]);
-
-  useEffect(() => {
     if (auth.error) {
       toast(`Oops... ${auth.error.message}`);
     }
-  }, [auth.error]);
-
-  useEffect(() => {
     switch (auth.activeNavigator) {
       case 'signinSilent':
         toast('Signing you in...');
@@ -43,14 +34,11 @@ function App() {
       case 'signoutRedirect':
         toast(`Signing you out...`);
     }
-  }, [auth.activeNavigator]);
-
-  useEffect(() => {
     console.log('authenticated: ', auth.isAuthenticated);
     if (auth.isAuthenticated) {
       toast(`Hello ${auth.user?.profile.sub}`);
     }
-  }, [auth.isAuthenticated, auth.user]);
+  }, [auth]);
 
   return (
     <>

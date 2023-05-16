@@ -1,3 +1,4 @@
+import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
 import { getAuthInfo } from './features/auth/api/getAuthInfo';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
@@ -13,7 +14,7 @@ const queryClient = new QueryClient();
 const getOidcConfig = async () => {
   //TODO: store config in store
   const config = await getAuthInfo();
-
+  console.log(config);
   return {
     authority: config.issuer_uri,
     client_id: config.client_id,
@@ -31,11 +32,36 @@ function AuthProviderWrapper({ children }: ProviderProps) {
     queryFn: getOidcConfig,
     queryKey: ['oidcConfig'],
   });
+
+  const SpinnerWrapper = (
+    <div className="z-1000 absolute left-1/2 top-1/2 h-16 w-16 translate-x--1/2 translate-y--1">
+      <LoadingSpinner />
+    </div>
+  );
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <p>Loading...</p>
+        {SpinnerWrapper}
+      </div>
+    );
   }
   if (isError) {
-    return <div>{'error occured: ' + error}</div>;
+    return (
+      <div>
+        <p>{'error occured: ' + error}</p>
+        {SpinnerWrapper}
+      </div>
+    );
+  }
+  if (!data) {
+    return (
+      <div>
+        <p>config empty</p>
+        {SpinnerWrapper}
+      </div>
+    );
   }
   return <AuthProvider {...data}>{children}</AuthProvider>;
 }
