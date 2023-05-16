@@ -26,6 +26,9 @@ use crate::{db::connection::Pool, model::dto::NewMapDto, service};
     ),
     responses(
         (status = 200, description = "Fetch or search all maps", body = PageMapDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[get("")]
@@ -47,6 +50,9 @@ pub async fn find(
     context_path = "/api/users/{user_id}/maps/{map_id}",
     responses(
         (status = 200, description = "Fetch a map by id", body = MapDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[get("/{map_id}")]
@@ -64,6 +70,9 @@ pub async fn find_by_id(map_id: Path<i32>, pool: Data<Pool>) -> Result<HttpRespo
     request_body = NewMapDto,
     responses(
         (status = 201, description = "Create a new map", body = MapDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[post("")]
@@ -86,6 +95,9 @@ pub async fn create(new_map_json: Json<NewMapDto>, pool: Data<Pool>) -> Result<H
     ),
     responses(
         (status = 200, description = "Fetch or search all map versions", body = PageMapVersionDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[get("/{map_id}/versions")]
@@ -109,6 +121,9 @@ pub async fn show_versions(
     request_body = NewMapVersionDto,
     responses(
         (status = 201, description = "Save a new map version", body = MapVersionDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[post("/{map_id}/versions")]

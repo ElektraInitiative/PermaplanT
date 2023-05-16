@@ -32,6 +32,9 @@ use crate::model::dto::{
     ),
     responses(
         (status = 200, description = "Find plantings", body = PagePlantingDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[get("")]
@@ -67,6 +70,9 @@ pub async fn find(
     request_body = NewPlantingDto,
     responses(
         (status = 201, description = "Create a planting", body = PlantingDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[post("")]
@@ -93,6 +99,9 @@ pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Re
     request_body = UpdatePlantingDto,
     responses(
         (status = 200, description = "Update a planting", body = PlantingDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[patch("")]
@@ -122,6 +131,9 @@ pub async fn update(
 context_path = "/api/plantings",
     responses(
         (status = 200, description = "Delete a planting", body = String)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[delete("/{id}")]

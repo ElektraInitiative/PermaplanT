@@ -19,7 +19,7 @@ use crate::{
     },
 };
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all config endpoints.
 #[derive(OpenApi)]
 #[openapi(paths(config::get),
         components(
@@ -29,7 +29,7 @@ use crate::{
         ),
         tags(
             (name = "config")
-        ),
+        )
     )]
 struct ConfigApiDoc;
 
@@ -48,10 +48,7 @@ struct ConfigApiDoc;
         tags(
             (name = "seed")
         ),
-        modifiers(&SecurityAddon),
-        security(
-            ("oauth2" = [])
-        )
+        modifiers(&SecurityAddon)
     )]
 struct SeedApiDoc;
 
@@ -67,10 +64,7 @@ struct SeedApiDoc;
         tags(
             (name = "plants")
         ),
-        modifiers(&SecurityAddon),
-        security(
-            ("oauth2" = [])
-        )
+        modifiers(&SecurityAddon)
     )]
 struct PlantsApiDoc;
 
@@ -88,10 +82,7 @@ struct PlantsApiDoc;
     tags(
         (name = "plantings")
     ),
-    modifiers(&SecurityAddon),
-    security(
-        ("oauth2" = [])
-    )
+    modifiers(&SecurityAddon)
 )]
 struct PlantingsApiDoc;
 
