@@ -1,10 +1,10 @@
 import { MapDto, NewMapDto } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { createAPI } from '@/config/axios';
 
 export async function createMap(map: NewMapDto) {
+  const http = createAPI();
   try {
-    const response = await axios.post<MapDto>(`${baseApiUrl}/api/maps`, map);
+    const response = await http.post<MapDto>('/api/maps', map);
     return response.data;
   } catch (error) {
     throw error as Error;

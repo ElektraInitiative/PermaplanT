@@ -1,5 +1,5 @@
 import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
-import { getAuthInfo } from './features/auth/api/getAuthInfo';
+import { getAuthInfo } from './features/auth/getAuthInfo';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { AuthProvider } from 'react-oidc-context';

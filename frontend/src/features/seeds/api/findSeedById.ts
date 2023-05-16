@@ -1,10 +1,10 @@
 import { SeedDto } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { createAPI } from '@/config/axios';
 
 export const findSeedById = async (id: number): Promise<SeedDto> => {
+  const http = createAPI();
   try {
-    const response = await axios.get<SeedDto>(`${baseApiUrl}/api/seeds/${id}`);
+    const response = await http.get<SeedDto>(`/api/seeds/${id}`);
     return response.data;
   } catch (error) {
     throw error as Error;
