@@ -28,10 +28,18 @@ interface ToolbarProps {
   position: 'left' | 'right';
   /** Minimum width of the toolbar, can't be resized to a smaller width*/
   minWidth: number;
+  /** content that is placed on the bottom of the toolbar */
+  fixedContentBottom?: ReactNode;
 }
 
 /** Toolbar with two content slots that can be used left and right of the screen */
-export const Toolbar = ({ contentTop, contentBottom, position, minWidth = 200 }: ToolbarProps) => {
+export const Toolbar = ({
+  contentTop,
+  contentBottom,
+  position,
+  minWidth = 200,
+  fixedContentBottom,
+}: ToolbarProps) => {
   const [sizeState, setSizeState] = useState({ height: 300, width: 300 });
 
   /** DraggableEventHandler used for resizing the width of the toolbar */
@@ -71,11 +79,18 @@ export const Toolbar = ({ contentTop, contentBottom, position, minWidth = 200 }:
               <div
                 className="shrink-0 overflow-x-hidden overflow-y-scroll"
                 style={{ height: sizeState.height + 'px' }}
+                data-tourid={position === 'left' ? 'toolbox' : 'layers'}
               >
                 {contentTop}
               </div>
               <HorizontalHandle />
-              <div className="flex-shrink overflow-x-hidden overflow-y-scroll">{contentBottom}</div>
+              <div
+                className="flex-shrink overflow-x-hidden overflow-y-scroll"
+                data-tourid={position === 'left' ? 'bottom_left_toolbar' : 'bottom_right_toolbar'}
+              >
+                {contentBottom}
+              </div>
+              {fixedContentBottom}
             </div>
           </DraggableCore>
           {position === 'right' && <VerticalHandle />}

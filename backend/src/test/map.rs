@@ -1,8 +1,11 @@
 //! Tests for [`crate::controller::map`].
 
 use crate::{
-    model::dto::{MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, Page},
-    test::util::{init_test_app, init_test_database},
+    model::{
+        dto::{MapDto, NewMapDto, Page, UpdateMapDto},
+        r#enum::privacy_option::PrivacyOption,
+    },
+    test::util::{dummy_map_polygons::tall_rectangle, init_test_app, init_test_database},
 };
 use actix_web::{
     http::{header, StatusCode},
@@ -11,15 +14,16 @@ use actix_web::{
 use chrono::NaiveDate;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
+use uuid::Uuid;
 
 #[actix_rt::test]
-async fn test_can_find_map() {
+async fn test_can_search_maps() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values((
+                .values(vec![(
                     &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("My Map"),
+                    &crate::schema::maps::name.eq("Test Map: can find map"),
                     &crate::schema::maps::creation_date
                         .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
                     &crate::schema::maps::is_inactive.eq(false),
@@ -27,7 +31,79 @@ async fn test_can_find_map() {
                     &crate::schema::maps::honors.eq(0),
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::owner_id.eq(-1),
+                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
+                ),(
+                    &crate::schema::maps::id.eq(-2),
+                    &crate::schema::maps::name.eq("Other"),
+                    &crate::schema::maps::creation_date
+                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
+                    &crate::schema::maps::is_inactive.eq(false),
+                    &crate::schema::maps::zoom_factor.eq(100),
+                    &crate::schema::maps::honors.eq(0),
+                    &crate::schema::maps::visits.eq(0),
+                    &crate::schema::maps::harvested.eq(0),
+                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
+                )])
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+
+    let result = test::read_body(resp).await;
+    let result_string = std::str::from_utf8(&result).unwrap();
+    let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
+
+    assert!(page.results.len() == 2);
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps?name=Other")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+
+    let result = test::read_body(resp).await;
+    let result_string = std::str::from_utf8(&result).unwrap();
+    let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
+
+    assert!(page.results.len() == 1);
+}
+
+#[actix_rt::test]
+async fn test_can_find_map_by_id() {
+    let pool = init_test_database(|conn| {
+        async {
+            diesel::insert_into(crate::schema::maps::table)
+                .values((
+                    &crate::schema::maps::id.eq(-1),
+                    &crate::schema::maps::name.eq("Test Map: can search map"),
+                    &crate::schema::maps::creation_date
+                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
+                    &crate::schema::maps::is_inactive.eq(false),
+                    &crate::schema::maps::zoom_factor.eq(100),
+                    &crate::schema::maps::honors.eq(0),
+                    &crate::schema::maps::visits.eq(0),
+                    &crate::schema::maps::harvested.eq(0),
+                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 ))
                 .execute(conn)
                 .await?;
@@ -48,53 +124,12 @@ async fn test_can_find_map() {
 }
 
 #[actix_rt::test]
-async fn test_can_search_maps() {
-    let pool = init_test_database(|conn| {
-        async {
-            diesel::insert_into(crate::schema::maps::table)
-                .values((
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("My Map"),
-                    &crate::schema::maps::creation_date
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::owner_id.eq(-1),
-                ))
-                .execute(conn)
-                .await?;
-            Ok(())
-        }
-        .scope_boxed()
-    })
-    .await;
-    let (token, app) = init_test_app(pool.clone()).await;
-
-    let resp = test::TestRequest::get()
-        .uri("/api/maps?is_inactive=false&per_page=10")
-        .insert_header((header::AUTHORIZATION, token))
-        .send_request(&app)
-        .await;
-
-    assert_eq!(resp.status(), StatusCode::OK);
-
-    let result = test::read_body(resp).await;
-    let result_string = std::str::from_utf8(&result).unwrap();
-    let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
-
-    assert!(page.results.len() > 0);
-}
-
-#[actix_rt::test]
 async fn test_can_create_map() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
 
     let new_map = NewMapDto {
-        name: "My Map".to_string(),
+        name: "Test Map: can create map".to_string(),
         creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
         deletion_date: None,
         last_visit: None,
@@ -103,7 +138,10 @@ async fn test_can_create_map() {
         honors: 0,
         visits: 0,
         harvested: 0,
-        owner_id: -1,
+        privacy: PrivacyOption::Public,
+        description: None,
+        location: None,
+        geometry: tall_rectangle(),
     };
 
     let resp = test::TestRequest::post()
@@ -126,13 +164,13 @@ async fn test_can_create_map() {
 }
 
 #[actix_rt::test]
-async fn test_can_save_snapshot() {
+async fn test_update_fails_for_not_owner() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
                 .values((
                     &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("My Map"),
+                    &crate::schema::maps::name.eq("Test Map: no update permission"),
                     &crate::schema::maps::creation_date
                         .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
                     &crate::schema::maps::is_inactive.eq(false),
@@ -140,7 +178,9 @@ async fn test_can_save_snapshot() {
                     &crate::schema::maps::honors.eq(0),
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::owner_id.eq(-1),
+                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 ))
                 .execute(conn)
                 .await?;
@@ -151,69 +191,67 @@ async fn test_can_save_snapshot() {
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let new_version = NewMapVersionDto {
-        map_id: -1,
-        version_name: "Version 1".to_string(),
-        snapshot_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+    let map_update = UpdateMapDto {
+        name: Some("This will fail".to_string()),
+        privacy: None,
+        description: None,
+        location: None,
+        geometry: None,
     };
 
-    let resp = test::TestRequest::post()
-        .uri("/api/maps/-1/versions")
+    let resp = test::TestRequest::patch()
+        .uri("/api/maps/-1")
         .insert_header((header::AUTHORIZATION, token))
-        .set_json(new_version)
+        .set_json(map_update)
         .send_request(&app)
         .await;
-
-    assert_eq!(resp.status(), StatusCode::CREATED);
+    assert_eq!(resp.status(), StatusCode::FORBIDDEN);
 }
 
 #[actix_rt::test]
-async fn test_can_show_versions() {
-    let pool = init_test_database(|conn| {
-        async {
-            diesel::insert_into(crate::schema::maps::table)
-                .values((
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("My Map"),
-                    &crate::schema::maps::creation_date
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::owner_id.eq(-1),
-                ))
-                .execute(conn)
-                .await?;
-            diesel::insert_into(crate::schema::map_versions::table)
-                .values((
-                    &crate::schema::map_versions::id.eq(-1),
-                    &crate::schema::map_versions::map_id.eq(-1),
-                    &crate::schema::map_versions::version_name.eq("Version 1"),
-                    &crate::schema::map_versions::snapshot_date
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                ))
-                .execute(conn)
-                .await?;
-            Ok(())
-        }
-        .scope_boxed()
-    })
-    .await;
+async fn test_can_update_map() {
+    let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/versions?map_id=-1&per_page=10")
+    let new_map = NewMapDto {
+        name: "Test Map: can update map".to_string(),
+        creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        deletion_date: None,
+        last_visit: None,
+        is_inactive: false,
+        zoom_factor: 100,
+        honors: 0,
+        visits: 0,
+        harvested: 0,
+        privacy: PrivacyOption::Public,
+        description: None,
+        location: None,
+        geometry: tall_rectangle(),
+    };
+
+    let resp = test::TestRequest::post()
+        .uri("/api/maps")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .set_json(new_map)
+        .send_request(&app)
+        .await;
+    let map: MapDto = test::read_body_json(resp).await;
+
+    let map_update = UpdateMapDto {
+        name: Some("This will succeed".to_string()),
+        privacy: None,
+        description: None,
+        location: None,
+        geometry: None,
+    };
+
+    let resp = test::TestRequest::patch()
+        .uri(&format!("/api/maps/{}", map.id))
         .insert_header((header::AUTHORIZATION, token))
+        .set_json(map_update)
         .send_request(&app)
         .await;
 
-    assert_eq!(resp.status(), StatusCode::OK);
-
-    let result = test::read_body(resp).await;
-    let result_string = std::str::from_utf8(&result).unwrap();
-    let page: Page<MapVersionDto> = serde_json::from_str(result_string).unwrap();
-
-    assert!(page.results.len() > 0);
+    let updated_map: MapDto = test::read_body_json(resp).await;
+    assert_ne!(updated_map.name, map.name)
 }

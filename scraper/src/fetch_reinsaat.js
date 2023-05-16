@@ -1,7 +1,7 @@
-import { chromium } from 'playwright';
-import fs from 'fs';
-import { parse as json2csv } from 'json2csv';
-import pLimit from 'p-limit';
+import { chromium } from "playwright";
+import fs from "fs";
+import { parse as json2csv } from "json2csv";
+import pLimit from "p-limit";
 
 const results = [];
 const resultsDE = [];
@@ -15,13 +15,20 @@ const limitSubSublinks = pLimit(3);
 const fetchPlant = async (
   context,
   resultsArray,
-  { name, category = null, subcategory = null, subsubsubcategory = null, url },
+  { name, category = null, subcategory = null, subsubsubcategory = null, url }
 ) => {
   const page = await context.newPage();
 
   try {
     await page.goto(url, { timeout: 360000 });
-    console.log('fetching', name, category, subcategory, subsubsubcategory, url);
+    console.log(
+      "fetching",
+      name,
+      category,
+      subcategory,
+      subsubsubcategory,
+      url
+    );
 
     const plant = {
       name,
@@ -31,10 +38,10 @@ const fetchPlant = async (
       url,
     };
 
-    const rows = await page.$$('.rs-growing-time table tr');
-    const plantInfo = await page.$('.fce_shop_inhalt_right_artikelnummer');
-    const growingInfo = await page.$('.growingInfos');
-    const productIcons = await page.$('.product-icons.clearfix');
+    const rows = await page.$$(".rs-growing-time table tr");
+    const plantInfo = await page.$(".fce_shop_inhalt_right_artikelnummer");
+    const growingInfo = await page.$(".growingInfos");
+    const productIcons = await page.$(".product-icons.clearfix");
 
     if (rows.length === 0) {
       return;
@@ -42,19 +49,22 @@ const fetchPlant = async (
 
     if (rows.length > 0) {
       for (const row of rows) {
-        const typeLabelTd = await row.$('td.type-lable');
+        const typeLabelTd = await row.$("td.type-lable");
         if (!typeLabelTd) {
           continue;
         }
         let typeLabel = await typeLabelTd.innerText();
-        typeLabel = typeLabel + '_datestable';
+        typeLabel = typeLabel + "_datestable";
         plant[typeLabel] = [];
 
-        const tds = await row.$$('td');
+        const tds = await row.$$("td");
         for (let i = 0; i < tds.length; i++) {
           const td = tds[i];
-          const backgroundColor = await td.getAttribute('style');
-          if (backgroundColor && backgroundColor !== 'background-color: none;') {
+          const backgroundColor = await td.getAttribute("style");
+          if (
+            backgroundColor &&
+            backgroundColor !== "background-color: none;"
+          ) {
             plant[typeLabel].push(i);
           }
         }
@@ -72,18 +82,18 @@ const fetchPlant = async (
     }
 
     if (growingInfo) {
-      const paragraphs = await growingInfo.$$('p');
+      const paragraphs = await growingInfo.$$("p");
 
       for (const paragraph of paragraphs) {
-        const strong = await paragraph.$('strong');
+        const strong = await paragraph.$("strong");
         if (strong) {
           let key = await strong.innerText();
-          if (!key.includes(':')) {
+          if (!key.includes(":")) {
             continue;
           }
           const text = await paragraph.innerText();
-          const value = text.replace(key, '').trim();
-          key = key.replace(':', '');
+          const value = text.replace(key, "").trim();
+          key = key.replace(":", "");
           plant[key] = value;
         }
       }
@@ -91,19 +101,26 @@ const fetchPlant = async (
 
     if (productIcons) {
       const isSuitableForCultivation = !!(await productIcons.$(
-        'img[src="/shop/Bibliothek/medial_lib/product_icons/traktor.svg"]',
+        'img[src="/shop/Bibliothek/medial_lib/product_icons/traktor.svg"]'
       ));
-      plant['Suitable for professional cultivation'] = isSuitableForCultivation;
+      plant["Suitable for professional cultivation"] = isSuitableForCultivation;
     }
 
-    const fceShopKurztext = await page.$('.fce_shop_kurztext');
-    plant['Scientific name'] = await fceShopKurztext.innerText();
-    plant['Scientific name'] = plant['Scientific name'].trim();
-    plant['Scientific name'] = plant['Scientific name'] + " '" + name + "'";
+    const fceShopKurztext = await page.$(".fce_shop_kurztext");
+    plant["Scientific name"] = await fceShopKurztext.innerText();
+    plant["Scientific name"] = plant["Scientific name"].trim();
+    plant["Scientific name"] = plant["Scientific name"] + " '" + name + "'";
 
     resultsArray.push(plant);
   } catch (error) {
-    console.error('[ERROR] Error fetching plant', name, category, subcategory, url, error);
+    console.error(
+      "[ERROR] Error fetching plant",
+      name,
+      category,
+      subcategory,
+      url,
+      error
+    );
     errors.push({ name, category, subcategory, url, error });
   }
 };
@@ -111,20 +128,24 @@ const fetchPlant = async (
 /**
  *  Fetch the subsubsublinks(3rd level) of a category.
  */
-const fetchThirdLevel = async (context, resultsArray, { name, category, subcategory, url }) => {
+const fetchThirdLevel = async (
+  context,
+  resultsArray,
+  { name, category, subcategory, url }
+) => {
   // console.log('[INFO] Fetching subsubsublinks', name, category, url);
   const page = await context.newPage();
   await page.goto(url, { timeout: 360000 });
 
   const subsubsublinks = await page.$$eval(
-    '.s_subnavi .s_subnavi_active .s_sub_subnavi .s_sub_sub_subnavi .submenu_3 a',
+    ".s_subnavi .s_subnavi_active .s_sub_subnavi .s_sub_sub_subnavi .submenu_3 a",
     (links) =>
       links.map((link) => {
         return {
           name: link.innerText,
           url: link.href,
         };
-      }),
+      })
   );
 
   await page.close();
@@ -136,31 +157,40 @@ const fetchThirdLevel = async (context, resultsArray, { name, category, subcateg
           subcategory,
           category,
           subsubsubcategory: name,
-        }),
-      ),
+        })
+      )
     );
   } else {
-    await fetchPlant(context, resultsArray, { name, category, subcategory, url });
+    await fetchPlant(context, resultsArray, {
+      name,
+      category,
+      subcategory,
+      url,
+    });
   }
 };
 
 /**
  * Fetch the subsublinks(2nd level) of a category.
  */
-const fetchSubSublinks = async (context, resultsArray, { name, category, url }) => {
+const fetchSubSublinks = async (
+  context,
+  resultsArray,
+  { name, category, url }
+) => {
   // console.log('[INFO] Fetching subsublinks', name, category, url);
   const page = await context.newPage();
   await page.goto(url);
 
   const subsublinks = await page.$$eval(
-    '.s_subnavi .s_subnavi_active .s_sub_subnavi .s_sub_sub_subnavi a',
+    ".s_subnavi .s_subnavi_active .s_sub_subnavi .s_sub_sub_subnavi a",
     (links) =>
       links.map((link) => {
         return {
           name: link.innerText,
           url: link.href,
         };
-      }),
+      })
   );
 
   await page.close();
@@ -168,8 +198,12 @@ const fetchSubSublinks = async (context, resultsArray, { name, category, url }) 
   if (subsublinks.length > 0) {
     await Promise.all(
       subsublinks.map((subsublinks) =>
-        fetchThirdLevel(context, resultsArray, { ...subsublinks, subcategory: name, category }),
-      ),
+        fetchThirdLevel(context, resultsArray, {
+          ...subsublinks,
+          subcategory: name,
+          category,
+        })
+      )
     );
   } else {
     await fetchPlant(context, resultsArray, { name, category, url });
@@ -186,22 +220,24 @@ const fetchSublinks = async (browser, resultsArray, { category, url }) => {
 
   await page.goto(url);
 
-  const sublinks = await page.$$eval('.s_subnavi .s_subnavi_active .s_sub_subnavi a', (links) =>
-    links.map((link) => {
-      return {
-        name: link.innerText,
-        url: link.href,
-      };
-    }),
+  const sublinks = await page.$$eval(
+    ".s_subnavi .s_subnavi_active .s_sub_subnavi a",
+    (links) =>
+      links.map((link) => {
+        return {
+          name: link.innerText,
+          url: link.href,
+        };
+      })
   );
 
   await page.close();
   await Promise.all(
     sublinks.map((sublink) => {
       return limitSubSublinks(() =>
-        fetchSubSublinks(context, resultsArray, { ...sublink, category }),
+        fetchSubSublinks(context, resultsArray, { ...sublink, category })
       );
-    }),
+    })
   );
   await context.close();
 };
@@ -218,44 +254,49 @@ const fetchSublinks = async (browser, resultsArray, { category, url }) => {
  * @param {*} errorsCsvPath - The path to the errors CSV file
  * @param {*} resultsArray - The array to store the results
  */
-const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath, resultsArray) => {
-  console.log('[INFO] Fetching plants');
+const fetchAllPlants = async (
+  rootUrl,
+  outputCsvPath,
+  errorsCsvPath,
+  resultsArray
+) => {
+  console.log("[INFO] Fetching plants");
   const browser = await chromium.launch();
 
   try {
     const page = await browser.newPage();
     await page.goto(rootUrl);
 
-    const superlinks = await page.$$eval('.s_subnavi a', (links) =>
+    const superlinks = await page.$$eval(".s_subnavi a", (links) =>
       links.map((link) => {
         return {
           category: link.innerText,
           url: link.href,
         };
-      }),
+      })
     );
-    console.log('[INFO] Found superlinks', superlinks.length);
+    console.log("[INFO] Found superlinks", superlinks.length);
     await page.close();
 
     await Promise.all(
       superlinks.map((superlink) => {
         return limit(() => fetchSublinks(browser, resultsArray, superlink));
-      }),
+      })
     );
     await browser.close();
-    console.log('[INFO] Done fetching plants');
-    console.log('[INFO] Writing to CSV. Length:', resultsArray.length);
+    console.log("[INFO] Done fetching plants");
+    console.log("[INFO] Writing to CSV. Length:", resultsArray.length);
     writeToCsv(resultsArray, outputCsvPath);
-    console.log('[INFO] Done writing to CSV');
+    console.log("[INFO] Done writing to CSV");
   } catch (error) {
     console.error(error);
     await browser.close();
-    console.log('[INFO] browser closed');
+    console.log("[INFO] browser closed");
   } finally {
     if (errors.length > 0) {
-      console.log('[INFO] Writing errors to CSV. Length:', errors.length);
+      console.log("[INFO] Writing errors to CSV. Length:", errors.length);
       writeToCsv(errors, errorsCsvPath);
-      console.log('[INFO] Done writing errors to CSV');
+      console.log("[INFO] Done writing errors to CSV");
     }
   }
 };
@@ -267,14 +308,14 @@ const fetchAllPlants = async (rootUrl, outputCsvPath, errorsCsvPath, resultsArra
  * @param {*} path Path to the CSV file
  */
 function writeToCsv(plants, path) {
-  if (!fs.existsSync('data')) {
-    fs.mkdirSync('data');
+  if (!fs.existsSync("data")) {
+    fs.mkdirSync("data");
   }
   const sanitizedPlants = plants.map((plant) => {
     const sanitizedPlant = {};
     for (const [key, value] of Object.entries(plant)) {
-      if (typeof key === 'object' && !Array.isArray(key) && key !== null) {
-        plant[key] = value.map((v) => v.toString()).join(',');
+      if (typeof key === "object" && !Array.isArray(key) && key !== null) {
+        plant[key] = value.map((v) => v.toString()).join(",");
       }
       sanitizedPlant[key.trim()] = value;
     }
@@ -290,16 +331,16 @@ function writeToCsv(plants, path) {
  */
 const fetchReinsaat = async () => {
   await fetchAllPlants(
-    'https://www.reinsaat.at/shop/EN/',
-    'data/reinsaatRawDataEN.csv',
-    'data/reinsaatErrorsEN.csv',
-    results,
+    "https://www.reinsaat.at/shop/EN/",
+    "data/reinsaatRawDataEN.csv",
+    "data/reinsaatErrorsEN.csv",
+    results
   );
   await fetchAllPlants(
-    'https://www.reinsaat.at/shop/DE',
-    'data/reinsaatRawDataDE.csv',
-    'data/reinsaatErrorsDE.csv',
-    resultsDE,
+    "https://www.reinsaat.at/shop/DE",
+    "data/reinsaatRawDataDE.csv",
+    "data/reinsaatErrorsDE.csv",
+    resultsDE
   );
 };
 

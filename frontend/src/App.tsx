@@ -1,71 +1,62 @@
 import NavContainer from './components/Layout/NavContainer';
+import { useSafeAuth } from './hooks/useSafeAuth';
 import Pages from './routes/Pages';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Fragment, useEffect } from 'react';
-import { useAuth } from 'react-oidc-context';
-import { BrowserRouter } from 'react-router-dom';
+import './styles/guidedTour.css';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'shepherd.js/dist/css/shepherd.css';
 
-const queryClient = new QueryClient();
-function App() {
-  const auth = useAuth();
+const useInitDarkMode = () => {
+  const darkMode = localStorage.getItem('darkMode');
 
-  if (localStorage.getItem('darkMode') === 'true') {
-    document.documentElement.classList.add('dark');
-  } else {
-    localStorage.setItem('darkMode', 'false');
-  }
-
-  // authentication notifications
   useEffect(() => {
-    console.log('auth loading: ', auth.isLoading);
-    if (auth.isLoading) {
-      toast(`Loading...`);
+    if (darkMode === 'true') {
+      document.documentElement.classList.add('dark');
+    } else {
+      localStorage.setItem('darkMode', 'false');
     }
-  }, [auth.isLoading]);
+  }, [darkMode]);
+};
 
+const useAuthEffect = () => {
+  const { t } = useTranslation(['auth']);
+  const auth = useSafeAuth();
   useEffect(() => {
     if (auth.error) {
-      toast(`Oops... ${auth.error.message}`);
+      console.error(auth.error.message);
+      toast.error(t('auth:error_failed_authentication'), { autoClose: false });
     }
-  }, [auth.error]);
-
-  useEffect(() => {
     switch (auth.activeNavigator) {
       case 'signinSilent':
-        toast('Signing you in...');
+        toast.info(t('auth:signing_in'));
         break;
       case 'signoutRedirect':
-        toast(`Signing you out...`);
+        toast.info(t('auth:signing_out'));
     }
-  }, [auth.activeNavigator]);
+  }, [auth, t]);
+
+  const isAuth = auth.isAuthenticated;
+  const preferredUsername = auth.user?.profile.preferred_username;
 
   useEffect(() => {
-    console.log('authenticated: ', auth.isAuthenticated);
-    if (auth.isAuthenticated) {
-      toast(`Hello ${auth.user?.profile.sub}`);
+    if (isAuth) {
+      toast.info(`${t('auth:hello')} ${preferredUsername}`, { icon: false });
     }
-  }, [auth.isAuthenticated, auth.user]);
+  }, [isAuth, t, preferredUsername]);
+};
 
+function App() {
+  useInitDarkMode();
+  useAuthEffect();
   return (
-    <div>
-      <QueryClientProvider client={queryClient}>
-        <Fragment>
-          <BrowserRouter>
-            <NavContainer>
-              <Pages />
-            </NavContainer>
-          </BrowserRouter>
-        </Fragment>
-      </QueryClientProvider>
-      <ToastContainer
-        position="top-right"
-        progressClassName={() =>
-          'Toastify__progress-bar--animated bottom-0 left-0 origin-left absolute h-1 w-full bg-primary-500 dark:bg-primary-300'
-        }
-      />
-    </div>
+    <>
+      <NavContainer>
+        <Pages />
+      </NavContainer>
+      <ToastContainer />
+    </>
   );
 }
 

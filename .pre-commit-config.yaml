@@ -37,7 +37,7 @@ repos:
           - scss
           - markdown
         additional_dependencies:
-          - prettier@2.8.7
+          - prettier@2.8.8
           - prettier-plugin-tailwindcss@0.2.1
           - "@trivago/prettier-plugin-sort-imports"
   - repo: https://github.com/pre-commit/mirrors-eslint
@@ -73,3 +73,40 @@ repos:
         args: [--manifest-path=backend/Cargo.toml]
         files: ^backend/
         pass_filenames: false
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 2.0.2
+    hooks:
+      - id: sqlfluff-fix
+        name: sql format
+        args: [--config=backend/.sqlfluff]
+  - repo: https://github.com/nvuillam/npm-groovy-lint
+    rev: v11.1.1
+    hooks:
+      - id: fix-npm-groovy-lint
+        name: Fix Lint groovy findings
+        description: Groovy & Jenkinsfile Auto-fixer
+        entry: npm-groovy-lint --fix ci/Jenkinsfile ci/Jenkinsfile.release --failon warning --loglevel warning
+  - repo: https://github.com/psf/black
+    rev: 23.7.0
+    hooks:
+      - id: black
+        language_version: python3
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args:
+          - --max-line-length=120
+          - --statistics
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.4.1
+    hooks:
+      - id: mypy
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.4
+    hooks:
+      - id: codespell
+        # Scan all .md files, exclude folders /meetings & /reports.
+        files: ^(?!.*\/(meetings|reports)\/).*\.md$
+        args: [-L crate]
+        stages: [manual]

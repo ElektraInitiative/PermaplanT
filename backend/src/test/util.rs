@@ -15,11 +15,14 @@ use diesel_async::{
 };
 use dotenvy::dotenv;
 
-use crate::config::{app, routes};
+use crate::config::{app, data::AppDataInner, routes};
 use crate::error::ServiceError;
+use crate::sse::broadcaster::Broadcaster;
 
-use self::token::generate_token;
+use self::token::{generate_token, generate_token_for_user};
 
+pub mod data;
+pub mod dummy_map_polygons;
 pub mod jwks;
 pub mod token;
 
@@ -70,18 +73,45 @@ pub async fn init_test_app(
     String,
     impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error>,
 ) {
+    let app = init_test_app_impl(pool).await;
     let token = setup_auth();
 
-    let app = test::init_service(
+    (format!("Bearer {token}"), app)
+}
+
+pub async fn init_test_app_for_user(
+    pool: Pool<AsyncPgConnection>,
+    user_id: uuid::Uuid,
+) -> (
+    String,
+    impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error>,
+) {
+    let app = init_test_app_impl(pool).await;
+    let token = setup_auth_for_user(user_id);
+
+    (format!("Bearer {token}"), app)
+}
+
+async fn init_test_app_impl(
+    pool: Pool<AsyncPgConnection>,
+) -> impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error> {
+    test::init_service(
         App::new()
-            .app_data(Data::new(pool))
+            .app_data(Data::new(AppDataInner {
+                pool,
+                broadcaster: Broadcaster::new(),
+            }))
             .configure(routes::config),
     )
-    .await;
-    (format!("Bearer {token}"), app)
+    .await
 }
 
 fn setup_auth() -> String {
     let jwk = jwks::init_auth();
     generate_token(jwk, 300)
+}
+
+fn setup_auth_for_user(user_id: uuid::Uuid) -> String {
+    let jwk = jwks::init_auth();
+    generate_token_for_user(jwk, 300, user_id)
 }

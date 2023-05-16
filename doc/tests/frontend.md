@@ -29,13 +29,13 @@ If the same component renders differently in the future, e.g. because a subcompo
 To fix the issue, the programmer has to decide if the changes are intentional and then either fix the issue, or regenerate the affected snapshots using:
 
 ```bash
-npm run -- --updateSnapshot
+npm run test -- --updateSnapshot
 ```
 
 ## DOM tests
 
 DOM tests are used to test a components response to user interaction.
-In the current test setup this is acomplished using a simulated DOM provided by [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and js-dom.
+In the current test setup this is accomplished using a simulated DOM provided by [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and js-dom.
 This makes it possible to run these tests even when a browser is not available (e.g. as part of the CI-pipeline).
 
 If possible, [User Event](https://testing-library.com/docs/user-event/intro) should be used to mock user input.

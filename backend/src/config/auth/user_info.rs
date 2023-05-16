@@ -15,15 +15,15 @@ use super::claims::Claims;
 pub struct UserInfo {
     /// The current users id.
     pub id: Uuid,
-    /// The roles the current user has.
-    pub roles: Vec<String>,
+    /// The scopes the current user has.
+    pub scopes: Vec<String>,
 }
 
 impl From<Claims> for UserInfo {
     fn from(value: Claims) -> Self {
         Self {
             id: value.sub,
-            roles: value.scope.split(' ').map(str::to_owned).collect(),
+            scopes: value.scope.split(' ').map(str::to_owned).collect(),
         }
     }
 }

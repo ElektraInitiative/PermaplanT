@@ -1,11 +1,13 @@
 //! Contains the implementation of [`NewSeedDto`].
 
+use uuid::Uuid;
+
 use crate::model::entity::NewSeed;
 
 use super::NewSeedDto;
 
-impl From<NewSeedDto> for NewSeed {
-    fn from(new_seed: NewSeedDto) -> Self {
+impl From<(NewSeedDto, Uuid)> for NewSeed {
+    fn from((new_seed, owner_id): (NewSeedDto, Uuid)) -> Self {
         Self {
             name: new_seed.name,
             variety: new_seed.variety,
@@ -20,6 +22,7 @@ impl From<NewSeedDto> for NewSeed {
             quality: new_seed.quality,
             price: new_seed.price,
             notes: new_seed.notes,
+            owner_id,
         }
     }
 }

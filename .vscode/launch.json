@@ -11,6 +11,13 @@
       "program": "${workspaceFolder}/backend/target/debug/backend",
       "args": [],
       "cwd": "${workspaceFolder}/backend"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/frontend"
     }
   ]
 }

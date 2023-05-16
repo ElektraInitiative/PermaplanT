@@ -1,4 +1,4 @@
-# Meeting 2023-03-15 Focus Group Gamification
+# Meeting 2023-03-15 Gamification
 
 _Protocolled by: Markus_
 

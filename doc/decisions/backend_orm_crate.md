@@ -2,9 +2,9 @@
 
 ## Problem
 
-We are currently using [diesel](https://github.com/diesel-rs/diesel) as our ORM in Rust.  
+We are currently using [diesel](https://github.com/diesel-rs/diesel) as our ORM in Rust.
 
-Since diesel doesn't support async out of the box we will look at other alteratives and see if a switch is reasonable.  
+Since diesel doesn't support async out of the box we will look at other alternatives and see if a switch is reasonable.  
 The reason why I believe pure async is better in our case is that it quite difficult (especially for Rust beginners) to mix async and blocking code.
 
 There might also be advantages of other ORM crates that as of writing this have not been considered.
@@ -58,19 +58,19 @@ Apart from minor differences diesel and sea-orm provide similar functionality.
 
 Both diesel_async and sea-orm provide async support.
 
-This might not necessarily lead to a performance increase, but it is easier for (especially inexperienced) developers to stay in full async.  
+This might not necessarily lead to a performance increase, but it is easier for (especially inexperienced) developers to stay in full async.
 
 For example if you forget `web::block` when executing a query using diesel you block the async executor (tokio in our case) until the query is finished.  
 We currently have a lint warning about async functions that do not use await, you will therefore notice this mistake.  
 However for inexperienced Rust developers it might be difficult to find out why this warning occurred as the code compiles and runs perfectly fine (especially with small loads).
 
-This has already happend in [our code](https://github.com/ElektraInitiative/PermaplanT/pull/68/commits/167466d2661f694d6fd55b19d6b750bcba6f6028).
+This has already happened in [our code](https://github.com/ElektraInitiative/PermaplanT/pull/68/commits/167466d2661f694d6fd55b19d6b750bcba6f6028).
 
 Furthermore it is really difficult to spot blocking functions without actually knowing the whole codebase (and therefore knowing which functions are blocking).  
 As an example as of writing this every call to any of the functions in the `service` directory would block the executor.  
 In a PR it is almost impossible to spot something like this when you are not the one who actually wrote the function originally.
 
-### Performance 
+### Performance
 
 [Metrics by diesel](https://github.com/diesel-rs/metrics/)
 
@@ -81,7 +81,7 @@ These results might however be biased. We should do our own analysis at some poi
 ### Documentation
 
 [sea-orm-doc](https://www.sea-ql.org/SeaORM/docs/index/)  
-[diesel-doc](https://diesel.rs/guides/)  
+[diesel-doc](https://diesel.rs/guides/)
 
 In my opinion sea-orm provides better and more easily readable documentation out of the box. This might however just be my personal preference.
 

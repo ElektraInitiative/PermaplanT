@@ -2,8 +2,8 @@
 
 ## Requirements
 
--   nodejs 19.4.0
--   npm
+- nodejs 19.4.0
+- npm
 
 ## Installation and Usage
 
@@ -36,21 +36,21 @@ npm run benchmark
 The benchmarking script runs a performance audit on a web page using [Lighthouse](https://github.com/GoogleChrome/lighthouse) and [Playwright](https://playwright.dev/).
 The audit measures the performance of a web page by generating a performance score and then saves the results of the audit in `report` folder:
 
--   `<test_name>-report.json` - the raw report of LightHouse for a single test case defined in `performance-audit.spec.js`
--   `<timestamp>-lighthouse-results.csv` - the results of the audit for all test cases
+- `<test_name>-report.json` - the raw report of LightHouse for a single test case defined in `performance-audit.spec.js`
+- `<timestamp>-lighthouse-results.csv` - the results of the audit for all test cases
 
 Metrics:
 
--   `First Contentful Paint (FCP)` - the time it takes for the browser to render the first bit of content on the page. Measured in milliseconds.
--   `Interactive` - the time it takes for the page to become fully interactive. Measured in milliseconds.
--   other metrics are described in the [Chrome Developers documentation](https://web.dev/performance-scoring/)
+- `First Contentful Paint (FCP)` - the time it takes for the browser to render the first bit of content on the page. Measured in milliseconds.
+- `Interactive` - the time it takes for the page to become fully interactive. Measured in milliseconds.
+- other metrics are described in the [Chrome Developers documentation](https://web.dev/performance-scoring/)
 
 Pages to audit are defined in `performance-audit.spec.js` file as individual test cases.
 In order to add new pages to the audit, add a new test case to the file e.g.:
 
 ```javascript
-test('Another page', async () => {
-    const testname = 'Another page';
-    await audit(testname, 'http://localhost:5173/another_page', results);
+test("Another page", async () => {
+  const testname = "Another page";
+  await audit(testname, "http://localhost:5173/another_page", results);
 });
 ```

@@ -17,7 +17,17 @@ impl From<Map> for MapDto {
             honors: map.honors,
             visits: map.visits,
             harvested: map.harvested,
+            privacy: map.privacy,
+            description: map.description,
+            location: map.location.map(From::from),
             owner_id: map.owner_id,
+            geometry: map.geometry,
         }
+    }
+}
+
+impl<T> From<(T, Map)> for MapDto {
+    fn from((_, map): (T, Map)) -> Self {
+        Self::from(map)
     }
 }

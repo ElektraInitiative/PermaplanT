@@ -4,7 +4,10 @@ use actix_utils::future::ready;
 use actix_web::{middleware::NormalizePath, web};
 use actix_web_httpauth::middleware::HttpAuthentication;
 
-use crate::controller::{config, map, plantings, plants, seed};
+use crate::controller::{
+    base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer,
+    planting_suggestions, plantings, plants, seed, sse, users,
+};
 
 use super::auth::middleware::validator;
 
@@ -30,19 +33,52 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(map::find)
                 .service(map::find_by_id)
                 .service(map::create)
-                .service(map::show_versions)
-                .service(map::save_snapshot),
+                .service(map::update)
+                .service(
+                    web::scope("/{map_id}/layers")
+                        .service(layers::find)
+                        .service(layers::find_by_id)
+                        .service(layers::create)
+                        .service(layers::delete)
+                        .service(
+                            web::scope("/base/images")
+                                .service(base_layer_image::create)
+                                .service(base_layer_image::update)
+                                .service(base_layer_image::delete),
+                        )
+                        .service(
+                            web::scope("/base/{layer_id}/images").service(base_layer_image::find),
+                        )
+                        .service(
+                            web::scope("/plants")
+                                .service(plant_layer::heatmap)
+                                .service(plant_layer::find_relations)
+                                .service(
+                                    web::scope("/suggestions").service(planting_suggestions::find),
+                                )
+                                .service(
+                                    web::scope("/plantings")
+                                        .service(plantings::find)
+                                        .service(plantings::create)
+                                        .service(plantings::update)
+                                        .service(plantings::delete),
+                                ),
+                        ),
+                ),
         )
         .service(
-            web::scope("/plantings")
-                .service(plantings::find)
-                .service(plantings::create)
-                .service(plantings::update)
-                .service(plantings::delete),
+            web::scope("/tours")
+                .service(guided_tours::setup)
+                .service(guided_tours::find_by_user)
+                .service(guided_tours::update),
         )
-        .wrap(NormalizePath::default())
+        .service(web::scope("/users").service(users::create))
+        .service(web::scope("/blossoms").service(blossoms::gain))
+        .wrap(NormalizePath::trim())
         .wrap(auth);
 
+    let sse_route = web::scope("/api/updates/maps").service(sse::connect_to_map);
     let config_route = web::scope("/api/config").service(config::get);
-    cfg.service(config_route).service(routes);
+
+    cfg.service(sse_route).service(config_route).service(routes);
 }

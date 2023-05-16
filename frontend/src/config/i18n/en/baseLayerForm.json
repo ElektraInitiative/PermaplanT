@@ -1,0 +1,10 @@
+{
+  "title": "Edit Base Layer",
+  "image_path_field": "Background Image File Path",
+  "rotation_field": "Rotation (Degrees)",
+  "selectImage": "Choose an image",
+  "scale": "Scaling (pixels/meter)",
+  "set_scale": "Auto-Scale",
+  "distance_modal_title": "How long is this distance in real life?",
+  "error_actual_distance_zero": "Please enter a distance greater than 0."
+}

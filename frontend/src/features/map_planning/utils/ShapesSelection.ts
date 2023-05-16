@@ -20,9 +20,11 @@ export const selectIntersectingShapes = (
 
   if (stageRef.current.children === null) return;
 
-  // we dont always have to look for them, we can store them
+  // we don't always have to look for them, we can store them
   const allShapes = stageRef.current.children
-    ?.flatMap((layer) => layer.children)
+    //filter out layers which are not selected
+    ?.filter((layer) => layer.attrs.listening)
+    .flatMap((layer) => layer.children)
     .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'));
 
   if (!allShapes) return;
@@ -38,7 +40,7 @@ export const selectIntersectingShapes = (
     (shape) => shape && Util.haveIntersection(box, shape.getClientRect()),
   );
 
-  // If intersectingShape and previouslySelectedShapes are the same, dont update
+  // If intersectingShape and previouslySelectedShapes are the same, don't update
   if (intersectingShapes.length === previouslySelectedShapes.length) {
     let same = true;
     for (const shape of intersectingShapes) {

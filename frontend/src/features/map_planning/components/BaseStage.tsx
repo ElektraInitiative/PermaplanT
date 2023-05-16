@@ -1,4 +1,6 @@
+import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
+import { MapLabel } from '../utils/MapLabel';
 import {
   deselectShapes,
   endSelection,
@@ -7,11 +9,12 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
+import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
+import { useDimensions } from '@/hooks/useDimensions';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Shape, ShapeConfig } from 'konva/lib/Shape';
-import { useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { useEffect, useRef, useState } from 'react';
+import { Layer, Stage, Transformer } from 'react-konva';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -61,30 +64,71 @@ export const BaseStage = ({
 
   // Ref to the transformer
   const trRef = useRef<Konva.Transformer>(null);
+  useEffect(() => {
+    useMapStore.setState({ transformer: trRef });
+  }, [trRef]);
 
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
   // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
+  useEffect(() => {
+    useMapStore.setState({ stageRef: stageRef });
+  }, [stageRef]);
+  const tooltipRef = useRef<Konva.Label>(null);
+  useEffect(() => {
+    useMapStore.setState({ tooltipRef: tooltipRef });
+  }, [tooltipRef]);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dimensions = useDimensions(containerRef);
+
+  const updateMapBounds = useMapStore((store) => store.updateMapBounds);
+  const mapBounds = useMapStore((store) => store.untrackedState.editorBounds);
+  useEffect(() => {
+    if (mapBounds.width !== 0 || mapBounds.height !== 0) return;
+    updateMapBounds({
+      x: 0,
+      y: 0,
+      width: Math.floor(window.innerWidth / stage.scale),
+      height: Math.floor(window.innerHeight / stage.scale),
+    });
+  });
+
+  const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
+  const tooltipPosition = useMapStore((state) => state.untrackedState.tooltipPosition);
 
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
 
-    const stage = e.target.getStage();
-    if (stage === null) return;
+    const targetStage = e.target.getStage();
+    if (targetStage === null) return;
 
-    const pointerVector = stage.getPointerPosition();
+    if (tooltipRef.current) {
+      setTooltipPositionToMouseCursor();
+    }
+
+    const pointerVector = targetStage.getPointerPosition();
     if (pointerVector === null) return;
 
     if (e.evt.ctrlKey) {
       if (zoomable) {
-        handleZoom(pointerVector, e.evt.deltaY, stage, setStage);
+        handleZoom(pointerVector, e.evt.deltaY, targetStage, setStage);
       }
     } else {
       if (scrollable) {
-        handleScroll(e.evt.deltaX, e.evt.deltaY, stage);
+        handleScroll(e.evt.deltaX, e.evt.deltaY, targetStage);
       }
     }
+
+    if (stageRef.current === null) return;
+
+    updateMapBounds({
+      x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
+      y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
+      width: Math.floor(window.innerWidth / stage.scale),
+      height: Math.floor(window.innerHeight / stage.scale),
+    });
   };
 
   // Event listener responsible for allowing dragging of the stage only with the wheel mouse button
@@ -106,6 +150,20 @@ export const BaseStage = ({
         stage.stopDrag();
       }
     }
+  };
+
+  const onStageDragEnd = (e: KonvaEventObject<DragEvent>) => {
+    if (e.evt === null || e.evt === undefined) return;
+    e.evt.preventDefault();
+
+    if (stageRef.current === null) return;
+
+    updateMapBounds({
+      x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
+      y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
+      width: Math.floor(window.innerWidth / stage.scale),
+      height: Math.floor(window.innerHeight / stage.scale),
+    });
   };
 
   // Event listener responsible for updating the selection rectangle
@@ -149,6 +207,8 @@ export const BaseStage = ({
 
   // Event listener responsible for unselecting shapes when clicking on the stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+
     const isStage = e.target instanceof Konva.Stage;
     const nodeSize = trRef.current?.getNodes().length || 0;
     if (nodeSize > 0 && isStage) {
@@ -156,35 +216,15 @@ export const BaseStage = ({
     }
   };
 
-  // Event listener responsible for adding a single shape to the transformer
-  const addToTransformer = (node: Shape<ShapeConfig>) => {
-    const nodes = trRef.current?.getNodes() || [];
-    if (!nodes.includes(node)) {
-      trRef.current?.nodes([node]);
-    }
-  };
-
-  // Add event listeners to all shapes
-  // This will trigger on every rerender, maybe this could be improved?
-  stageRef.current?.children
-    ?.flatMap((layer) => layer.children)
-    .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'))
-    .forEach((shape) => {
-      if (!shape?.eventListeners['click']) {
-        shape?.addEventListener('click', () => {
-          addToTransformer(shape as Shape<ShapeConfig>);
-        });
-      }
-    });
-
   return (
-    <div className="h-full w-full overflow-hidden">
+    <div className="h-full w-full overflow-hidden" data-testid="canvas" ref={containerRef}>
       <Stage
         ref={stageRef}
         draggable={draggable}
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={dimensions.width}
+        height={dimensions.height}
         onWheel={onStageWheel}
+        onDragEnd={onStageDragEnd}
         onDragStart={onStageDragStart}
         onMouseDown={onStageMouseDown}
         onMouseMove={onMouseMove}
@@ -197,15 +237,14 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
-          <Rect
-            x={selectionRectAttrs.x}
-            y={selectionRectAttrs.y}
-            width={selectionRectAttrs.width}
-            height={selectionRectAttrs.height}
-            fill={'blue'}
-            visible={selectionRectAttrs.isVisible}
-            opacity={0.2}
-            name="selectionRect"
+          {/* Tooltip */}
+          <MapLabel
+            content={tooltipContent}
+            visible={tooltipContent !== ''}
+            scaleX={2 / stage.scale}
+            scaleY={2 / stage.scale}
+            x={tooltipPosition.x}
+            y={tooltipPosition.y}
           />
           <Transformer
             // We need to manually disable selection when we are transforming
@@ -227,9 +266,14 @@ export const BaseStage = ({
             // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
             // It's an experimental property so we should keep an eye out for possible issues
             shouldOverdrawWholeArea={true}
+            enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
           />
         </Layer>
       </Stage>
+      {/** Portal to display something from different layers */}
+      <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
+        <div id="bottom-portal" />
+      </div>
     </div>
   );
 };

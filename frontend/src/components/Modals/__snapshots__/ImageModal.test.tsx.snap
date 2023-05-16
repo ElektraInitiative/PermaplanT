@@ -28,7 +28,7 @@ exports[`renders correctly 1`] = `
     }
   >
     <div
-      className="flex h-full min-h-[40vh] w-full min-w-[40vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark"
+      className="flex h-[70vh] w-[80vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark"
     >
       <div
         className="flex justify-between"
@@ -44,7 +44,7 @@ exports[`renders correctly 1`] = `
         </button>
       </div>
       <div
-        className="flex justify-center"
+        className="flex h-full max-h-[60vh] w-full justify-center p-4"
       >
         Test
       </div>

@@ -1,7 +1,7 @@
 # Hierarchy
 
 This document explains the hierarchy of the plants table.
-Please make sure that you already read the [biology section of the glossary](/doc/architecture/glossary.md).
+Please make sure that you already read the [biology section of the glossary](../architecture/12glossary.md).
 
 ## Introduction
 
@@ -92,14 +92,49 @@ Either two parent binomials, separated by a "x" or "×" or a given binomial, wit
 (see [Wikipedia](https://en.wikipedia.org/wiki/Hybrid_name)).
 So the name does not necessarily say if a plant is a hybrid.
 
-### Rendering
+### Rendering the Unique Name
 
-The unique name must be rendered:
+The unique name of a plant needs to be displayed in the following manner:
 
-- Latin name in _italics_.
-- Cultivar name normal font in single quotes (as in database).
+- Latin name should be displayed in _italics_.
+- The cultivar name should be in regular font, enclosed in single quotes (as stored in the database).
 
-E.g.: _Brassica oleracea italica_ 'Ramoso calabrese'
+For example: _Brassica oleracea italica_ 'Ramoso calabrese'
+
+### Rendering the Complete Name
+
+The complete name of a plant should be displayed as follows:
+
+- If there is a common name, the common name appears first and should start with a capital letter (e.g., "tomato" becomes "Tomato").
+- If it is a plant name from the seed database, the name continues with hyphen `-` and the additional name.
+- This is followed by the unique name in brackets, unique name as described above in [Rendering the Complete Name](###rendering-the-complete-name).
+
+The general format is:
+
+Common name - additional name (_unique name_)
+
+In cases where the common name is not available in the current language, it should be displayed as:
+
+_unique name_ - additional name
+
+The cultivar is a part of the unique name.
+
+For example:
+
+- Italian broccoli - violett (_Brassica oleracea italica_ 'Ramoso calabrese')
+- Italian broccoli - violett (_Brassica oleracea italica_)
+- Italian broccoli (_Brassica oleracea italica_)
+- _Brassica oleracea italica_ 'Ramoso calabrese' - violett
+- _Brassica oleracea italica_ 'Ramoso calabrese'
+- _Brassica oleracea italica_ - violett
+- _Brassica oleracea italica_
+
+### Usage of plant names
+
+- The common name alone is enough for overview, e.g. when you see all labels in the map editor at once.
+  - If no common name exists, it's acceptable to display the unique name as shown in [Rendering the Complete Name](###rendering-the-complete-name).
+- The complete name should always be given if the user wants to know precisely which plant she is dealing with, e.g. in search results or in plant details.
+- The additional name created when adding a new seed needs to be provided as explained above if a plant is connected with a seed.
 
 ### Rules
 
@@ -116,7 +151,7 @@ We know about names (abstract and concrete, including hybrid):
 
 ## Attributes
 
-Columns are documented in their [respective structs](/backend/src/model/entity.rs).
+Columns are documented in their [respective structs](https://github.com/ElektraInitiative/PermaplanT/blob/master/backend/src/model/entity.rs).
 
 We prefer strongly-typed data, e.g.:
 
@@ -198,4 +233,4 @@ Individual problems:
 
 ## Further Readings
 
-- Rationale is explained [in this decision](doc/decisions/database_plant_hierarchy.md).
+- Rationale is explained [in this decision](../decisions/database_plant_hierarchy.md).

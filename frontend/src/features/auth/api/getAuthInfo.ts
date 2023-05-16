@@ -1,14 +1,10 @@
-import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { ConfigDto } from '@/bindings/definitions';
+import { createUnauthorizedAPI } from '@/config/axios';
 
-interface AuthInfoDto {
-  issuer_uri: string;
-  client_id: string;
-}
-
-export const getAuthInfo = async (): Promise<AuthInfoDto> => {
+export const getAuthInfo = async (): Promise<ConfigDto> => {
   try {
-    const response = await axios.get<AuthInfoDto>(`${baseApiUrl}/api/config`);
+    const http = createUnauthorizedAPI();
+    const response = await http.get<ConfigDto>('api/config');
     return response.data;
   } catch (error) {
     throw error as Error;
