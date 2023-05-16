@@ -8,7 +8,11 @@ const config: Config = {
   },
   moduleNameMapper: {
     '^.+\\.svg$': '<rootDir>/src/__mocks__/svg.ts',
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^import.meta.env$': '<rootDir>/src/env.ts',
   },
+  watchPathIgnorePatterns: ['node_modules'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };
 
 export default config;
