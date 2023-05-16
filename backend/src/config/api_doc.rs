@@ -22,56 +22,69 @@ use crate::{
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all config endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(config::get),
-        components(
-            schemas(
-                ConfigDto
-            )
-        ),
-        tags(
-            (name = "config")
+#[openapi(
+    paths(
+        config::get
+    ),
+    components(
+        schemas(
+            ConfigDto
         )
-    )]
+    ),
+    tags((name = "config"))
+)]
 struct ConfigApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(seed::find, seed::find_by_id, seed::create, seed::delete_by_id),
-        components(
-            schemas(
-                PageSeedDto,
-                SeedDto,
-                NewSeedDto,
-                Quality,
-                Quantity
-            )
-        ),
-        tags(
-            (name = "seed")
-        ),
-        modifiers(&SecurityAddon)
-    )]
+#[openapi(
+    paths(
+        seed::find,
+        seed::find_by_id,
+        seed::create,
+        seed::delete_by_id
+    ),
+    components(
+        schemas(
+            PageSeedDto,
+            SeedDto,
+            NewSeedDto,
+            Quality,
+            Quantity
+        )
+    ),
+    tags((name = "seed")),
+    modifiers(&SecurityAddon)
+)]
 struct SeedApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plant endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(plants::find, plants::find_by_id),
-        components(
-            schemas(
-                PagePlantsSummaryDto,
-                PlantsSummaryDto
-            )
-        ),
-        tags(
-            (name = "plants")
-        ),
-        modifiers(&SecurityAddon)
-    )]
+#[openapi(
+    paths(
+        plants::find,
+        plants::find_by_id
+    ),
+    components(
+        schemas(
+            PagePlantsSummaryDto,
+            PlantsSummaryDto
+        )
+    ),
+    tags((name = "plants")),
+    modifiers(&SecurityAddon)
+)]
 struct PlantsApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all planting endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plantings endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(plantings::find, plantings::create, plantings::update, plantings::delete),
+#[openapi(
+    paths(
+        plantings::find,
+        plantings::create,
+        plantings::update,
+        plantings::delete
+    ),
     components(
         schemas(
             NewPlantingDto,
@@ -80,31 +93,34 @@ struct PlantsApiDoc;
             PagePlantingDto
         )
     ),
-    tags(
-        (name = "plantings")
-    ),
+    tags((name = "plantings")),
     modifiers(&SecurityAddon)
 )]
 struct PlantingsApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all map endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(map::find, map::find_by_id, map::create, map::show_versions, map::save_snapshot),
-        components(
-            schemas(
-                PageMapDto,
-                MapDto,
-                PageMapVersionDto,
-                MapVersionDto,
-                NewMapDto,
-                NewMapVersionDto
-            )
-        ),
-        tags(
-            (name = "map")
-        ),
-        modifiers(&SecurityAddon)
-    )]
+#[openapi(
+    paths(
+        map::find,
+        map::find_by_id,
+        map::create,
+        map::show_versions,
+        map::save_snapshot
+    ),
+    components(
+        schemas(
+            PageMapDto,
+            MapDto,
+            PageMapVersionDto,
+            MapVersionDto,
+            NewMapDto,
+            NewMapVersionDto
+        )
+    ),
+    tags((name = "map")),
+    modifiers(&SecurityAddon)
+)]
 struct MapApiDoc;
 
 /// Merges `OpenApi` and then serves it using `Swagger`.
