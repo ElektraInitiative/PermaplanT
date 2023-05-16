@@ -12,9 +12,9 @@ interface ProviderProps {
 const queryClient = new QueryClient();
 
 const getOidcConfig = async () => {
-  //TODO: store config in store
   const config = await getAuthInfo();
-  console.log(config);
+  sessionStorage.setItem('authority', config.issuer_uri);
+  sessionStorage.setItem('client_id', config.client_id);
   return {
     authority: config.issuer_uri,
     client_id: config.client_id,
