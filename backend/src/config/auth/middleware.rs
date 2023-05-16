@@ -23,7 +23,7 @@ pub fn validator(
     };
 
     req.extensions_mut().insert(user_info.clone());
-    req.attach(user_info.roles);
+    req.attach(user_info.scopes);
 
     Ok(req)
 }

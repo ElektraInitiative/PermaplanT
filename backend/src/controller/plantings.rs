@@ -95,7 +95,7 @@ pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Re
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
 #[utoipa::path(
-    context_path = "/api/plantings/{id}",
+    context_path = "/api/plantings",
     request_body = UpdatePlantingDto,
     responses(
         (status = 200, description = "Update a planting", body = PlantingDto)
@@ -104,7 +104,7 @@ pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Re
         ("oauth2" = [])
     )
 )]
-#[patch("")]
+#[patch("/{id}")]
 pub async fn update(
     id: Path<i32>,
     update_seed_json: Json<UpdatePlantingDto>,
@@ -128,7 +128,7 @@ pub async fn update(
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
 #[utoipa::path(
-context_path = "/api/plantings",
+    context_path = "/api/plantings",
     responses(
         (status = 200, description = "Delete a planting", body = String)
     ),

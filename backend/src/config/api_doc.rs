@@ -9,10 +9,11 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{config, plantings, plants, seed},
+    controller::{config, map, plantings, plants, seed},
     model::{
         dto::{
-            ConfigDto, NewPlantingDto, NewSeedDto, PagePlantingDto, PagePlantsSummaryDto,
+            ConfigDto, MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, NewPlantingDto,
+            NewSeedDto, PageMapDto, PageMapVersionDto, PagePlantingDto, PagePlantsSummaryDto,
             PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
         },
         r#enum::{quality::Quality, quantity::Quantity},
@@ -35,7 +36,7 @@ struct ConfigApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(seed::find, seed::create, seed::delete_by_id),
+#[openapi(paths(seed::find, seed::find_by_id, seed::create, seed::delete_by_id),
         components(
             schemas(
                 PageSeedDto,
@@ -54,7 +55,7 @@ struct SeedApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plant endpoints.
 #[derive(OpenApi)]
-#[openapi(paths(plants::find),
+#[openapi(paths(plants::find, plants::find_by_id),
         components(
             schemas(
                 PagePlantsSummaryDto,
@@ -86,12 +87,33 @@ struct PlantsApiDoc;
 )]
 struct PlantingsApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all map endpoints.
+#[derive(OpenApi)]
+#[openapi(paths(map::find, map::find_by_id, map::create, map::show_versions, map::save_snapshot),
+        components(
+            schemas(
+                PageMapDto,
+                MapDto,
+                PageMapVersionDto,
+                MapVersionDto,
+                NewMapDto,
+                NewMapVersionDto
+            )
+        ),
+        tags(
+            (name = "map")
+        ),
+        modifiers(&SecurityAddon)
+    )]
+struct MapApiDoc;
+
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = ConfigApiDoc::openapi();
     openapi.merge(SeedApiDoc::openapi());
     openapi.merge(PlantsApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
+    openapi.merge(MapApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }

@@ -44,7 +44,7 @@ pub async fn find(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/seeds/{id}",
+    context_path = "/api/seeds",
     responses(
         (status = 200, description = "Fetch seed by id", body = SeedDto)
     ),

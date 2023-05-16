@@ -7,6 +7,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
+use crate::config::auth::user_info::UserInfo;
 use crate::model::dto::{
     MapSearchParameters, MapVersionSearchParameters, NewMapVersionDto, PageParameters,
 };
@@ -19,7 +20,7 @@ use crate::{db::connection::Pool, model::dto::NewMapDto, service};
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/users/{user_id}/maps",
+    context_path = "/api/maps",
     params(
         MapSearchParameters,
         PageParameters
@@ -35,8 +36,12 @@ use crate::{db::connection::Pool, model::dto::NewMapDto, service};
 pub async fn find(
     search_query: Query<MapSearchParameters>,
     page_query: Query<PageParameters>,
+
+    _user_info: UserInfo,
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
+    // TODO: #360 validate owner
+    // println!("User is: {}", user_info.id);
     let response =
         service::map::find(search_query.into_inner(), page_query.into_inner(), &pool).await?;
     Ok(HttpResponse::Ok().json(response))
@@ -47,7 +52,7 @@ pub async fn find(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/users/{user_id}/maps/{map_id}",
+    context_path = "/api/maps",
     responses(
         (status = 200, description = "Fetch a map by id", body = MapDto)
     ),
@@ -56,7 +61,12 @@ pub async fn find(
     )
 )]
 #[get("/{map_id}")]
-pub async fn find_by_id(map_id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn find_by_id(
+    map_id: Path<i32>,
+
+    _user_info: UserInfo,
+    pool: Data<Pool>,
+) -> Result<HttpResponse> {
     let response = service::map::find_by_id(*map_id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
@@ -66,7 +76,7 @@ pub async fn find_by_id(map_id: Path<i32>, pool: Data<Pool>) -> Result<HttpRespo
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/users/{user_id}/maps",
+    context_path = "/api/maps",
     request_body = NewMapDto,
     responses(
         (status = 201, description = "Create a new map", body = MapDto)
@@ -76,7 +86,12 @@ pub async fn find_by_id(map_id: Path<i32>, pool: Data<Pool>) -> Result<HttpRespo
     )
 )]
 #[post("")]
-pub async fn create(new_map_json: Json<NewMapDto>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn create(
+    new_map_json: Json<NewMapDto>,
+
+    _user_info: UserInfo,
+    pool: Data<Pool>,
+) -> Result<HttpResponse> {
     let response = service::map::create(new_map_json.0, &pool).await?;
     Ok(HttpResponse::Created().json(response))
 }
@@ -88,7 +103,7 @@ pub async fn create(new_map_json: Json<NewMapDto>, pool: Data<Pool>) -> Result<H
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/users/{user_id}/maps",
+    context_path = "/api/maps",
     params(
         MapVersionSearchParameters,
         PageParameters
@@ -102,8 +117,11 @@ pub async fn create(new_map_json: Json<NewMapDto>, pool: Data<Pool>) -> Result<H
 )]
 #[get("/{map_id}/versions")]
 pub async fn show_versions(
+    _map_id: Path<i32>,
     search_query: Query<MapVersionSearchParameters>,
     page_query: Query<PageParameters>,
+
+    _user_info: UserInfo,
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
     let response =
@@ -117,7 +135,7 @@ pub async fn show_versions(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/users/{user_id}/maps",
+    context_path = "/api/maps",
     request_body = NewMapVersionDto,
     responses(
         (status = 201, description = "Save a new map version", body = MapVersionDto)
@@ -128,7 +146,10 @@ pub async fn show_versions(
 )]
 #[post("/{map_id}/versions")]
 pub async fn save_snapshot(
+    _map_id: Path<i32>,
     new_map_version_json: Json<NewMapVersionDto>,
+
+    _user_info: UserInfo,
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
     let response = service::map::save_snapshot(new_map_version_json.0, &pool).await?;
