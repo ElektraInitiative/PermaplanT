@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User, App System
 - **Brief:** The user authenticates against the app to gain access to their account.
-- **Status:** In Progress (Backend merge pending)
+- **Status:** Done
 - **Assignee:** Gabriel, Samuel
 
 ## Scenarios
@@ -21,7 +21,7 @@
 - **Error scenario:**
   There is an error in the app's authentication process.
   In this case, the app displays an error message to the user and tells them to try again.
-- **Postcondition:** 
+- **Postcondition:**
   - The user is authenticated and has access to the PermaplanT app.
   - The user is authenticated and has access to Nextcloud.
 - **Non-functional Constraints:**

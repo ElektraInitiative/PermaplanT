@@ -7,7 +7,7 @@
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete plant elements in their map in the plants layer.
 - **Status:** In Progress
-- **Assignee:** Moritz
+- **Assignee:** Giancarlo
 
 ## Scenarios
 
