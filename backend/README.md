@@ -80,14 +80,14 @@ cargo run
 
 ### Test server using Swagger
 
-Go to <http://localhost:8080/doc/api/swagger/ui/>.  
-Try to execute a request (it should return error 401).  
-Click `Authorize`.
+- Go to <http://localhost:8080/doc/api/swagger/ui/>.  
+  If you try to execute a request now it should return error 401.
+- Click `Authorize`.
 
-> Use the `authorizationCode` auth flow.  
-> Enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.  
-> Enter user credentials (username: `test`, password: `test`).  
-> You should now be able to execute a request in Swagger.
+- Use the `authorizationCode` auth flow.
+- Enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.
+- Enter user credentials (username: `test`, password: `test`).
+- You should now be able to execute a request in Swagger.
 
 ## Documentation
 
