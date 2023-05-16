@@ -1,1 +1,2 @@
-export * from './routes/Login';
+export { LoginButton } from './components/LoginButton';
+export { getAuthInfo } from './api/getAuthInfo';
