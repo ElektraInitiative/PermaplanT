@@ -1,21 +1,22 @@
 import { useDarkModeStore } from '../index';
+import IconButton from '@/components/Button/IconButton';
 
 export const DarkModeSwitcher = () => {
   const isDarkMode = useDarkModeStore((state) => state.darkMode);
   const toggle = useDarkModeStore((state) => state.toggleDarkMode);
 
   return (
-    <button
+    <IconButton
       aria-label="Toggle Dark Mode"
       type="button"
-      className="ml-1 mr-1 h-9 w-9 rounded p-1 sm:ml-4"
+      className="flex-shrink-0"
       onClick={toggle}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
-        className="text-gray-900 dark:text-gray-100"
+        strokeWidth="0.5"
       >
         {isDarkMode ? (
           <path
@@ -27,6 +28,6 @@ export const DarkModeSwitcher = () => {
           <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
         )}
       </svg>
-    </button>
+    </IconButton>
   );
 };

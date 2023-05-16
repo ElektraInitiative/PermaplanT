@@ -1,8 +1,8 @@
 import { MapDto, Page } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { createAPI } from '@/config/axios';
 
 export const findAllMaps = async (page: number, is_inactive?: boolean): Promise<Page<MapDto>> => {
+  const http = createAPI();
   const pageString: string = page !== undefined ? page.toString() : '1';
   const searchParams = new URLSearchParams();
 
@@ -13,7 +13,7 @@ export const findAllMaps = async (page: number, is_inactive?: boolean): Promise<
   searchParams.append('page', pageString);
 
   try {
-    const response = await axios.get<Page<MapDto>>(`${baseApiUrl}/api/maps?${searchParams}`);
+    const response = await http.get<Page<MapDto>>(`/api/maps?${searchParams}`);
     return response.data;
   } catch (error) {
     throw error as Error;

@@ -52,27 +52,15 @@ cargo install typeshare-cli
 
 6. Start Keycloak
 
-`docker run -p 8081:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:21.1.1 start-dev`
+You can do one of the following two steps, the first one being the simpler one, but with less configuration options.
 
-7. Setup Keycloak:
+- To use the preconfigured Keycloak instance simply copy the newest version of `.env.sample` to `.env`
+- To use the local Keycloak variant follow the steps in [/doc/setups/keycloak/](/doc/setups/keycloak/README.md)  
+  You then also have to change following two env variables in `.env`
+  - `AUTH_DISCOVERY_URI=http://localhost:8081/realms/PermaplanT/.well-known/openid-configuration`
+  - `AUTH_CLIENT_ID=PermaplanT`
 
-Open <http://localhost:8081/admin>.  
-Sign in with user `admin` and password `admin`.  
-Click on `master` -> `Create Realm`.  
-Name the realm `PermaplanT` and click `Create`.
-
-Click on `Clients` -> `Create client`.  
-Set the `Client ID` to `PermaplanT`.
-Click `Next` two times.  
-Set values: `Root URL = http://localhost:5173`, `Valid redirect URIs = /*`, `Web origins = +`.  
-Click `Save`.
-
-Create a second client `swagger-ui` with `Root URL = http://localhost:8080/doc/api/swagger/ui` (everything else the same as above).
-
-Go to `Users` and create a user `test`.  
-Click `Credentials` and set password to `test`.
-
-8. Run the backend
+7. Run the backend
 
 ```bash
 cargo run
@@ -80,14 +68,14 @@ cargo run
 
 ### Test server using Swagger
 
-Go to <http://localhost:8080/doc/api/swagger/ui/>.  
-Try to execute a request (it should return error 401).  
-Click `Authorize`.
+- Go to <http://localhost:8080/doc/api/swagger/ui/>.  
+  If you try to execute a request now it should return error 401.
+- Click `Authorize`.
 
-> Use the `authorizationCode` auth flow.  
-> Enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.  
-> Enter user credentials (username: `test`, password: `test`).  
-> You should now be able to execute a request in Swagger.
+- Use the `authorizationCode` auth flow.
+- Enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.
+- Enter user credentials (username: `test`, password: `test`).
+- You should now be able to execute a request in Swagger.
 
 ## Documentation
 

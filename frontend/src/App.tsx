@@ -1,71 +1,58 @@
 import NavContainer from './components/Layout/NavContainer';
 import Pages from './routes/Pages';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { BrowserRouter } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const queryClient = new QueryClient();
-function App() {
-  const auth = useAuth();
+const useInitDarkMode = () => {
+  const darkMode = localStorage.getItem('darkMode');
 
-  if (localStorage.getItem('darkMode') === 'true') {
-    document.documentElement.classList.add('dark');
-  } else {
-    localStorage.setItem('darkMode', 'false');
-  }
-
-  // authentication notifications
   useEffect(() => {
-    console.log('auth loading: ', auth.isLoading);
-    if (auth.isLoading) {
-      toast(`Loading...`);
+    if (darkMode === 'true') {
+      document.documentElement.classList.add('dark');
+    } else {
+      localStorage.setItem('darkMode', 'false');
     }
-  }, [auth.isLoading]);
+  }, [darkMode]);
+};
 
+const useAuthEffect = () => {
+  const { t } = useTranslation(['auth']);
+  const auth = useAuth();
   useEffect(() => {
     if (auth.error) {
       toast(`Oops... ${auth.error.message}`);
     }
-  }, [auth.error]);
-
-  useEffect(() => {
     switch (auth.activeNavigator) {
       case 'signinSilent':
-        toast('Signing you in...');
+        toast(t('auth:signing_in'));
         break;
       case 'signoutRedirect':
-        toast(`Signing you out...`);
+        toast(t('auth:signing_out'));
     }
-  }, [auth.activeNavigator]);
-
-  useEffect(() => {
-    console.log('authenticated: ', auth.isAuthenticated);
     if (auth.isAuthenticated) {
-      toast(`Hello ${auth.user?.profile.sub}`);
+      toast(`${t('auth:hello')} ${auth.user?.profile.preferred_username}`);
     }
-  }, [auth.isAuthenticated, auth.user]);
+  }, [auth, t]);
+};
 
+function App() {
+  useInitDarkMode();
+  useAuthEffect();
   return (
-    <div>
-      <QueryClientProvider client={queryClient}>
-        <Fragment>
-          <BrowserRouter>
-            <NavContainer>
-              <Pages />
-            </NavContainer>
-          </BrowserRouter>
-        </Fragment>
-      </QueryClientProvider>
+    <>
+      <NavContainer>
+        <Pages />
+      </NavContainer>
       <ToastContainer
         position="top-right"
         progressClassName={() =>
           'Toastify__progress-bar--animated bottom-0 left-0 origin-left absolute h-1 w-full bg-primary-500 dark:bg-primary-300'
         }
       />
-    </div>
+    </>
   );
 }
 

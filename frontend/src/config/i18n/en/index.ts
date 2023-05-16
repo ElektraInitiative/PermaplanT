@@ -1,3 +1,4 @@
+import auth from './auth.json';
 import blog from './blog.json';
 import common from './common.json';
 import contact from './contact.json';
@@ -12,6 +13,7 @@ import plantSearch from './plantSearch.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
+import undoRedo from './undoRedo.json';
 
 const en = {
   blog,
@@ -28,6 +30,8 @@ const en = {
   plantSearch,
   layerSettings,
   maps,
+  undoRedo,
+  auth,
 };
 
 export default en;

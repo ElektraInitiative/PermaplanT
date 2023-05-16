@@ -9,7 +9,6 @@ enum Pages {
   LandingPage,
   Map,
   Maps,
-  Login,
 }
 
 type PathRouteCustomProps = {

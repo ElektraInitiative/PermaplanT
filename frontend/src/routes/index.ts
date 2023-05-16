@@ -1,5 +1,4 @@
 import { Pages, Routes } from './types';
-import { Login } from '@/features/auth';
 import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { Map } from '@/features/map_planning';
@@ -43,11 +42,6 @@ const routes: Routes = {
     // path needs to change later to something like /user/:id/maps
     path: '/maps',
     title: 'Map Overview',
-  },
-  [Pages.Login]: {
-    component: Login,
-    path: '/login',
-    title: 'Login',
   },
 };
 
