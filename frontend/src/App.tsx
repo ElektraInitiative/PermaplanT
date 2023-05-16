@@ -17,13 +17,9 @@ const useInitDarkMode = () => {
   }, [darkMode]);
 };
 
-function App() {
+const useAuthEffect = () => {
   const auth = useAuth();
-  useInitDarkMode();
-
-  // authentication notifications
   useEffect(() => {
-    console.log('auth loading: ', auth.isLoading);
     if (auth.error) {
       toast(`Oops... ${auth.error.message}`);
     }
@@ -34,12 +30,15 @@ function App() {
       case 'signoutRedirect':
         toast(`Signing you out...`);
     }
-    console.log('authenticated: ', auth.isAuthenticated);
     if (auth.isAuthenticated) {
-      toast(`Hello ${auth.user?.profile.sub}`);
+      toast(`Hello ${auth.user?.profile.preferred_username}`);
     }
   }, [auth]);
+};
 
+function App() {
+  useInitDarkMode();
+  useAuthEffect();
   return (
     <>
       <NavContainer>
