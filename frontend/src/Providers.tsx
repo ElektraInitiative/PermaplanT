@@ -1,7 +1,8 @@
-import { getAuthInfo } from './features/auth';
+import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
+import { getAuthInfo } from './features/auth/getAuthInfo';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
-import { AuthProvider, AuthProviderProps } from 'react-oidc-context';
+import { AuthProvider } from 'react-oidc-context';
 import { BrowserRouter } from 'react-router-dom';
 
 interface ProviderProps {
@@ -26,21 +27,43 @@ const onSigninCallback = (): void => {
   window.history.replaceState({}, document.title, window.location.pathname);
 };
 
-// TODO: add error handling
 function AuthProviderWrapper({ children }: ProviderProps) {
-  const { data } = useQuery({
+  const { isLoading, isError, data, error } = useQuery({
     queryFn: getOidcConfig,
     queryKey: ['oidcConfig'],
-    retry: true,
   });
 
-  const defaultConfig: AuthProviderProps = {
-    authority: 'default',
-    client_id: 'default',
-    redirect_uri: window.location.href,
-    onSigninCallback: onSigninCallback,
-  };
-  return <AuthProvider {...(data ?? defaultConfig)}>{children}</AuthProvider>;
+  const SpinnerWrapper = (
+    <div className="z-1000 absolute left-1/2 top-1/2 h-16 w-16 translate-x--1/2 translate-y--1">
+      <LoadingSpinner />
+    </div>
+  );
+
+  if (isLoading) {
+    return (
+      <div>
+        <p>Loading...</p>
+        {SpinnerWrapper}
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div>
+        <p>{'error occured: ' + error}</p>
+        {SpinnerWrapper}
+      </div>
+    );
+  }
+  if (!data) {
+    return (
+      <div>
+        <p>config empty</p>
+        {SpinnerWrapper}
+      </div>
+    );
+  }
+  return <AuthProvider {...data}>{children}</AuthProvider>;
 }
 
 export function Providers({ children }: ProviderProps) {
