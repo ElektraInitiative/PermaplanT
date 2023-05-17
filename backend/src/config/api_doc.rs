@@ -98,6 +98,23 @@ struct PlantsApiDoc;
 )]
 struct PlantingsApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all base layer endpoints.
+#[derive(OpenApi)]
+#[openapi(paths(base_layers::find_by_id, plantings::create, plantings::delete),
+    components(
+        schemas(
+            NewBaseLayerDto,
+            BaseLayerDto,
+        )
+    ),
+    tags(
+        (name = "layers")
+    )
+)]
+struct BaseLayersApiDoc;
+
+
+
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all map endpoints.
 #[derive(OpenApi)]
 #[openapi(
