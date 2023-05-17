@@ -1,4 +1,4 @@
-//! `BaseLayer` endpoints.
+//! `Plants` endpoints.
 
 use crate::{db::connection::Pool, service};
 use actix_web::{
@@ -14,7 +14,7 @@ use crate::model::dto::NewBaseLayerDto;
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/layers/base/{id}",
+    context_path = "/api/base_layers/{id}",
     responses(
         (status = 200, description = "Fetch a base layer by its id", body = BaseLayerDto),
     )
@@ -30,9 +30,9 @@ pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse>
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/layers/base/",
+    context_path = "/api/base_layers",
     responses(
-        (status = 200, description = "Publish a new base layer.", body = BaseLayerDto),
+        (status = 200, description = "Fetch a base layer by its id", body = BaseLayerDto),
     )
 )]
 #[post("")]
@@ -44,14 +44,14 @@ pub async fn create(
     Ok(HttpResponse::Created().json(response))
 }
 
-/// Delete a single [`BaseLayerDto`](crate::model::dto::BaseLayerDto) by its id.
+/// Fetch a single [`BaseLayerDto`](crate::model::dto::BaseLayerDto) by its id.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/layers/base/{id}",
+    context_path = "/api/base_layers/{id}",
     responses(
-        (status = 200, description = "Delete a base layer by its id.", body = BaseLayerDto),
+        (status = 200, description = "Fetch a base layer by its id", body = BaseLayerDto),
     )
 )]
 #[delete("/{id}")]
