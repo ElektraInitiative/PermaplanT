@@ -80,8 +80,6 @@ struct PlantingsApiDoc;
 )]
 struct BaseLayersApiDoc;
 
-
-
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = SeedApiDoc::openapi();
