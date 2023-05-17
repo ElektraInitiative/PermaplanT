@@ -2,7 +2,6 @@ import { BaseStage } from '../components/BaseStage';
 import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
-import BaseLayer from '../layers/BaseLayer';
 import PlantsLayer from '../layers/PlantsLayer';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
