@@ -1,5 +1,5 @@
 import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
-import { getAuthInfo } from './features/auth/getAuthInfo';
+import { getAuthInfo } from './features/auth';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { AuthProvider } from 'react-oidc-context';
@@ -15,10 +15,11 @@ const getOidcConfig = async () => {
   const config = await getAuthInfo();
   sessionStorage.setItem('authority', config.issuer_uri);
   sessionStorage.setItem('client_id', config.client_id);
+  const redirect_uri = window.location.href.split('?')[0];
   return {
     authority: config.issuer_uri,
     client_id: config.client_id,
-    redirect_uri: window.location.href,
+    redirect_uri,
     onSigninCallback: onSigninCallback,
   };
 };
