@@ -65,6 +65,23 @@ struct PlantsApiDoc;
 )]
 struct PlantingsApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all base layer endpoints.
+#[derive(OpenApi)]
+#[openapi(paths(base_layers::find_by_id, plantings::create, plantings::delete),
+    components(
+        schemas(
+            NewBaseLayerDto,
+            BaseLayerDto,
+        )
+    ),
+    tags(
+        (name = "layers")
+    )
+)]
+struct BaseLayersApiDoc;
+
+
+
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = SeedApiDoc::openapi();
