@@ -27,4 +27,4 @@
 - **Postcondition:**
   - Calendar is synchronized to Nextcloud
 - **Non-functional Constraints:**
-  - Alternatives (dates depend on which alternative plant layer is selected)
+  - Alternatives (dates depend on which alternative plants layer is selected)

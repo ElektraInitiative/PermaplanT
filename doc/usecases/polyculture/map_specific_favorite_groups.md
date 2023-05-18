@@ -25,6 +25,6 @@
   - The user attempts to remove a group that is not in the favorites.
 - **Postcondition:**
   - The set of map-specific favorites has changed according to the changes the user made.  
-    The state of these favorites can be seen in the plant layer.
+    The state of these favorites can be seen in the plants layer.
 - **Non-functional Constraints:**
   - It must be clear that a favorite was added or removed.
