@@ -77,7 +77,7 @@ pub struct PlantingDto {
     pub id: i32,
     /// The plant that is planted.
     pub plant_id: i32,
-    /// The plant layer of the map the plant is placed on.
+    /// The plants layer of the map the plant is placed on.
     /// NOTE:
     ///     could be replaced by a `map_id` as the relation between `maps` and
     ///     `plants_layers` should be non-nullable and one to one.
@@ -94,7 +94,7 @@ pub struct PlantingDto {
 pub struct NewPlantingDto {
     /// The plant that is planted.
     pub plant_id: i32,
-    /// The plant layer of the map the plant is placed on.
+    /// The plants layer of the map the plant is placed on.
     /// NOTE:
     ///     could be replaced by a `map_id` as the relation between `maps` and
     ///     `plants_layers` should be non-nullable and one to one.
@@ -111,7 +111,7 @@ pub struct NewPlantingDto {
 pub struct UpdatePlantingDto {
     /// The plant that is planted.
     pub plant_id: Option<i32>,
-    /// The plant layer of the map the plant is placed on.
+    /// The plants layer of the map the plant is placed on.
     /// NOTE:
     ///     could be replaced by a `map_id` as the relation between `maps` and
     ///     `plants_layers` should be non-nullable and one to one.
