@@ -2,7 +2,7 @@ import SimpleCard from './SimpleCard';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof SimpleCard> = {
-  title: 'Components/Button/SimpleCard',
+  title: 'Components/Cards/SimpleCard',
   component: SimpleCard,
 };
 
