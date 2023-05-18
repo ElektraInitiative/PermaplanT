@@ -9,10 +9,10 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{config, map, plantings, plants, seed},
+    controller::{base_layers, config, map, plantings, plants, seed},
     model::{
         dto::{
-            ConfigDto, MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, NewPlantingDto,
+            BaseLayerDto, NewBaseLayerDto, ConfigDto, MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, NewPlantingDto,
             NewSeedDto, PageMapDto, PageMapVersionDto, PagePlantingDto, PagePlantsSummaryDto,
             PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
         },
