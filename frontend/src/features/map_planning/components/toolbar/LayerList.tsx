@@ -75,6 +75,7 @@ export const LayerList = ({
             if (setLayerOpacity) setLayerOpacity(name, percentage);
           }}
           title={t('layerSettings:sliderTooltip')}
+          value={1}
         >
           {name}
         </NamedSlider>

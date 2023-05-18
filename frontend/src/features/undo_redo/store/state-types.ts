@@ -61,6 +61,6 @@ export type Layers = {
  * The state of the map.
  */
 export type MapState = {
-  selectedLayer: string;
+  selectedLayer: LayerName;
   layers: Layers;
 };

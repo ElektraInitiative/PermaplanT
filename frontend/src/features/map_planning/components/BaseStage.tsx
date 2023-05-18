@@ -71,8 +71,6 @@ export const BaseStage = ({
   const stageRef = useRef<Konva.Stage>(null);
 
   const dispatch = useMapStore((map) => map.dispatch);
-  const canUndo = useMapStore((map) => map.canUndo);
-  const canRedo = useMapStore((map) => map.canRedo);
   const step = useMapStore((map) => map.step);
   const historyLength = useMapStore((map) => map.history.length);
 
