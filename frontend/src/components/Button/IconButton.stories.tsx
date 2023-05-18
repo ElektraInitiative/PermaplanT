@@ -1,7 +1,7 @@
 import IconButton from './IconButton';
+import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 
 const meta: Meta<typeof IconButton> = {
   title: 'Components/Button/IconButton',
@@ -15,6 +15,6 @@ type Story = StoryObj<typeof IconButton>;
 
 export const Default: Story = {
   args: {
-    children: <PlantIcon />
+    children: <PlantIcon />,
   },
 };

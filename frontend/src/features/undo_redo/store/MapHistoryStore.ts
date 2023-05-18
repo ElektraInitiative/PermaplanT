@@ -135,9 +135,9 @@ const DEFAULT_STATE: MapState = {
       visible: true,
       opacity: 1,
       objects: [],
-    }
-  }
-}
+    },
+  },
+};
 
 const useMapStore = create<MapStore>((set) => ({
   history: [],
