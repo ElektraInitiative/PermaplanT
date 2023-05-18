@@ -5,11 +5,12 @@ use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
 use crate::{
-    controller::{plantings, plants, seed},
+    controller::{base_layers, plantings, plants, seed},
     model::{
         dto::{
-            NewPlantingDto, NewSeedDto, PagePlantingDto, PagePlantsSummaryDto, PageSeedDto,
-            PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
+            BaseLayerDto, NewBaseLayerDto, NewPlantingDto, NewSeedDto, PagePlantingDto,
+            PagePlantsSummaryDto, PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto,
+            UpdatePlantingDto,
         },
         r#enum::{quality::Quality, quantity::Quantity},
     },
