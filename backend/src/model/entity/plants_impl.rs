@@ -17,8 +17,8 @@ use super::Plants;
 impl Plants {
     /// Get the top 10 plants matching the search query.
     ///
-    /// Uses pg_trgm to find matches in `unique_name`, `common_name_de`, `common_name_en` and `edible_uses_en`.
-    /// Ranks them using the PostgreSQL function `similarity()`.
+    /// Uses `pg_trgm` to find matches in `unique_name`, `common_name_de`, `common_name_en` and `edible_uses_en`.
+    /// Ranks them using the `PostgreSQL` function `similarity()`.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
