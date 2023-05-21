@@ -15,11 +15,14 @@ Partial matches of the following fields should be returned.
 2. Exact matches should be ranked high.
 3. The users language preference should be taken into account when ranking.
 4. Matches in names should have a higher rank than those in edible uses.
+5. We don't want to add additional databases like Elasticsearch.
 
 ## Assumptions
 
 1. Postgres will perform reasonable with these search queries.
 2. Using postgres or even extension specific functions with diesel is possible and maintainable.
+3. The plants table stays relatively small (it won't reach millions of rows).
+4. The query entered in the search typically has 1-2 words with no more than 4 words.
 
 ## Solutions
 
@@ -90,7 +93,16 @@ Cons:
 
 ## Decision
 
+Given the constrains and assumptions Partial Match with String Similarity (pg_trgm) seems to be the best option for us.
+
 ## Rationale
+
+As there is a relatively small number of rows and search terms performance isn't that much of an issue.
+
+The ability to handle spelling mistakes and loose matches is also great for us as plant names can be somewhat complicated to spell.
+
+Generally it is seems to fit best for our usecase.
+Something like elasticsearch could cover the usecase better, however it adds a lot of complexity.
 
 ## Implications
 
