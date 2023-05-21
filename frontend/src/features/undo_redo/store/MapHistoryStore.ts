@@ -25,7 +25,7 @@ type MapStore = {
   updateLayerOpacity: (layerName: LayerName, opacity: LayerState['opacity']) => void;
 };
 
-const DEFAULT_STATE: MapState = {
+export const DEFAULT_STATE: MapState = {
   selectedLayer: 'Base',
   layers: {
     Plant: {
