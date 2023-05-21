@@ -15,11 +15,18 @@ use crate::{
 use super::Plants;
 
 impl Plants {
+    /// Get the top 10 plants matching the search query.
+    ///
+    /// Uses pg_trgm to find matches in `unique_name`, `common_name_de`, `common_name_en` and `edible_uses_en`.
+    /// Ranks them using the PostgreSQL function `similarity()`.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
     pub async fn search(
         search_query: &str,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantsSummaryDto>> {
-        let query = format!("%{}%", search_query);
+        let query = format!("%{search_query}%");
         let query_sql = r#"
             SELECT *,
                 greatest(
@@ -41,7 +48,6 @@ impl Plants {
             .bind::<Text, _>(&query)
             .load::<Self>(conn)
             .await;
-        println!("{query_result:?}");
         query_result.map(|plants| plants.into_iter().map(Into::into).collect())
     }
 
