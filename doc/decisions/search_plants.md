@@ -106,7 +106,12 @@ Something like elasticsearch could cover the usecase better, however it adds a l
 
 ## Implications
 
--
+The following points are difficult if not impossible to implement using PostgreSQL.  
+Before trying them it should be evaluated if a different database like elasticsearch might be a better fit for this usecase.
+
+- Other columns can be matched with extra syntax (e.g. environmental fit or ecological value)
+- Search in hierarchy is difficult
+- Search accuracy (stop words, stemming, etc.)
 
 ## Related Decisions
 
