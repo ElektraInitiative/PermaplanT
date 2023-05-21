@@ -25,4 +25,20 @@ pub enum WaterRequirement {
     #[serde(rename = "aquatic")]
     #[db_rename = "aquatic"]
     Aquatic,
+
+    #[serde(rename = "dry")]
+    #[db_rename = "dry"]
+    Dry,
+
+    #[serde(rename = "moist")]
+    #[db_rename = "moist"]
+    Moist,
+
+    #[serde(rename = "wet")]
+    #[db_rename = "wet"]
+    Wet,
+
+    #[serde(rename = "water")]
+    #[db_rename = "water"]
+    Water,
 }
