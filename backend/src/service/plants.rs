@@ -13,6 +13,19 @@ use crate::{
     },
 };
 
+/// Full-text search plants from in the database.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub async fn search(
+    search_query: &str,
+    pool: &Data<Pool>,
+) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
+    let mut conn = pool.get().await?;
+    let result = Plants::search(search_query, &mut conn).await?;
+    Ok(result)
+}
+
 /// Search plants from in the database.
 ///
 /// # Errors

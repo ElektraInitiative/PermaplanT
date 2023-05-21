@@ -17,6 +17,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             )
             .service(
                 web::scope("/plants")
+                    .service(plants::search)
                     .service(plants::find)
                     .service(plants::find_by_id),
             )

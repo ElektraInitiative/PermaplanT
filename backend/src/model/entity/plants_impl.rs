@@ -1,5 +1,6 @@
 //! Contains the implementation of [`Plants`].
 
+use diesel::sql_types::Text;
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
@@ -14,6 +15,36 @@ use crate::{
 use super::Plants;
 
 impl Plants {
+    pub async fn search(
+        search_query: &str,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<Vec<PlantsSummaryDto>> {
+        let query = format!("%{}%", search_query);
+        let query_sql = r#"
+            SELECT *,
+                greatest(
+                    similarity(unique_name, $1),
+                    similarity(ARRAY_TO_STRING(common_name_de, ' '), $1),
+                    similarity(ARRAY_TO_STRING(common_name_en, ' '), $1),
+                    similarity(edible_uses_en, $1)
+                ) AS rank
+            FROM plants
+            WHERE unique_name ILIKE $1
+            OR ARRAY_TO_STRING(common_name_de, ' ') ILIKE $1
+            OR ARRAY_TO_STRING(common_name_en, ' ') ILIKE $1
+            OR edible_uses_en ILIKE $1
+            ORDER BY rank DESC
+            LIMIT 10
+        "#;
+
+        let query_result = diesel::sql_query(query_sql)
+            .bind::<Text, _>(&query)
+            .load::<Self>(conn)
+            .await;
+        println!("{query_result:?}");
+        query_result.map(|plants| plants.into_iter().map(Into::into).collect())
+    }
+
     /// Get a page of plants.
     /// Can be filtered by name if one is provided in `search_parameters`.
     ///
