@@ -13,7 +13,10 @@
 - **Precondition:**
   The user has opened the app and is on the map search page.
 - **Main success scenario:**
-  - A list of all maps are shown, including both the user's own maps and public maps created by other users.
+  - A list of all maps are shown, including both the user's own maps and public/protected maps created by other users.
+    For each map:
+    - A small image either of the photo or of its content is shown
+    - The name is shown
   - The user enters a keyword into the search field and the app filters the list of maps that match the keyword.
   - The user can then select a map to view it.
 - **Alternative scenario:**

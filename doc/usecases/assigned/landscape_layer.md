@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User adds elements to their map using hand-drawn shapes or common shapes.
-- **Status:** Ready to be Assigned
+- **Assignee:** Moritz
 
 ## Scenarios
 
