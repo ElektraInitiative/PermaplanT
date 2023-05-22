@@ -14,8 +14,8 @@
   The user has opened the seed management feature in the app.
 - **Main success scenario:**
   - The user is able to add new seeds to their list.
-  - The user is able to view a list of seeds where plant name, additional name, harvest year, and amount is visible.
-  - The user is able to edit or delete seeds of their list.
+  - The user is able to view a list of seeds where plant name, additional name, harvest year, amount, and origin is visible.
+  - The user is able to edit or delete seeds of the list.
 - **Alternative scenario:**
   The user accidentally deletes a seed from their list and uses the undo feature to correct it.
 - **Error scenario:**

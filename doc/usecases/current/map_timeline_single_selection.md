@@ -1,4 +1,4 @@
-# Use Case: Map Timeline Single Date Selection
+# Use Case: Map Timeline Single Selection
 
 ## Summary
 

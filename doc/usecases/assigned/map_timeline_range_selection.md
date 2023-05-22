@@ -1,4 +1,4 @@
-# Use Case: Map Timeline Date Range Selection
+# Use Case: Map Timeline Range Selection
 
 ## Summary
 
@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can view the map over a range of consecutive points in time by using the timeline feature.
-- **Status:** Assigned
 - **Assignee:** Paul
 
 ## Scenarios
