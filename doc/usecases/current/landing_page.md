@@ -15,6 +15,7 @@
 - **Main success scenario:**
   - The user can interact with the displayed GeoMap
   - The user can apply for a membership
+  - The user can contact us
   - The user can read imprint (Impressum)
   - The user can read about privacy (Datenschutz)
   - The user can read about copyright

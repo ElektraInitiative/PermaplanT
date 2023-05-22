@@ -5,8 +5,8 @@
 - **Scope:** Plants Layer
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user is provided with suggestions on which plants to use.
-- **Status:** Draft
+- **Brief:** The user gets plant suggestions that she would not have thought of herself.
+- **Assignee:** Moritz
 
 ## Scenarios
 
@@ -20,10 +20,18 @@
 
     1. work well with already placed plants and
     2. fit the environmental conditions
+    3. have a high ecological value
 
     are presented to the user.
 
   - Within those suggestions the user can see what plants go well with each other.
+  - The user can see why these plants have a high ecological value. e.g.:
+    - Attracts wildlife
+    - Attracts pollinating insects
+    - Is a nitrogen fixer
+    - Is a cover crop
+    - Are less commonly planted
+    - etc.
 
 - **Alternative scenario:**
   - No plant(s) or position are selected.
@@ -32,6 +40,6 @@
   - In case of any technical errors the users is notified about these.
   - When there are no matches due to too many constraints the user is informed that she has to remove a plant and try again.
 - **Postcondition:**
-  - The user has a selection of fitting plants to add to her garden.
+  - The user can consider plants she would have never though of herself.
 - **Non-functional Constraints:**
   - Performance
