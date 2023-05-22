@@ -8,7 +8,7 @@
   - Owner: App User who owns the map
   - Visitor: App User who visits the map
 - **Brief:** The user can interact with a visitor chat.
-- **Status:** Draft
+- **Assignee:** Samuel
 
 ## Scenarios
 
@@ -19,9 +19,10 @@
   - The visitor is automatically greeted by the chat.
   - The visitor can interact with the owner and other current visitors via the chat.
   - The owner can view the chat and interact with all visitors.
-  - The visitor leaves the chat
+  - The visitor leaves the chat.
 - **Alternative scenario:**
-  - The owner marks a comment as helpful. The author of the comment gets points for the free membership.
+  - The owner marks a comment as helpful.
+    The author of the comment gets points for the free membership.
 - **Error scenario:**
 - **Postcondition:**
   The chat is synchronized to Nextcloud

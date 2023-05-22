@@ -1,4 +1,4 @@
-# Use Case: Gardening Matchmaking
+# Use Case: Matchmaking
 
 ## Summary
 
@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The users can find other gardening enthusiasts to establish a gardening partnership.
-- **Status:** Assigned
 - **Assignee:** Thorben
 
 ## Scenarios
