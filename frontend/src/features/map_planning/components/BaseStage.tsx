@@ -195,7 +195,7 @@ export const BaseStage = ({
             dispatch({
               type: 'OBJECT_ADD',
               payload: {
-                index: 'Plant',
+                index: 'plant',
                 id: Math.random().toString(36).slice(2, 9),
                 x: 300,
                 y: 300,

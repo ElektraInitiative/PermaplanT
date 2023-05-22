@@ -1,5 +1,4 @@
 interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** The variant specifies the look of the button. */
   variant?: ButtonVariant;
 }
 

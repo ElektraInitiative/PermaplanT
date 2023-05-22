@@ -5,7 +5,7 @@ import type {
   ObjectUpdateTransformAction,
   TrackedAction,
 } from './action-types';
-import type { LayerName, Layers, LayerState, MapState, ObjectState } from './state-types';
+import type { Layers, MapState, ObjectState } from './state-types';
 import i18next from '@/config/i18n';
 import Konva from 'konva';
 import { createRef } from 'react';
@@ -20,120 +20,13 @@ type MapStore = {
   dispatch: (action: MapAction) => void;
   canUndo: boolean;
   canRedo: boolean;
-  updateSelectedLayer: (selectedLayer: LayerName) => void;
-  updateLayerVisible: (layerName: LayerName, visible: LayerState['visible']) => void;
-  updateLayerOpacity: (layerName: LayerName, opacity: LayerState['opacity']) => void;
 };
 
 export const DEFAULT_STATE: MapState = {
-  selectedLayer: 'Base',
   layers: {
-    Plant: {
-      index: 'Plant',
+    plant: {
+      index: 'plant',
       visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Base: {
-      index: 'Base',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Drawing: {
-      index: 'Drawing',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Dimension: {
-      index: 'Dimension',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Fertilization: {
-      index: 'Fertilization',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Habitats: {
-      index: 'Habitats',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Hydrology: {
-      index: 'Hydrology',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Infrastructure: {
-      index: 'Infrastructure',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Labels: {
-      index: 'Labels',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Landscape: {
-      index: 'Landscape',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Paths: {
-      index: 'Paths',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Shade: {
-      index: 'Shade',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Soil: {
-      index: 'Soil',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Terrain: {
-      index: 'Terrain',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Trees: {
-      index: 'Trees',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Warnings: {
-      index: 'Warnings',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Winds: {
-      index: 'Winds',
-      visible: true,
-      opacity: 1,
-      objects: [],
-    },
-    Zones: {
-      index: 'Zones',
-      visible: true,
-      opacity: 1,
       objects: [],
     },
   },
@@ -147,42 +40,6 @@ const useMapStore = create<MapStore>((set) => ({
   canUndo: false,
   canRedo: false,
   transformer: createRef<Konva.Transformer>(),
-  updateSelectedLayer: (selectedLayer: LayerName) =>
-    set((state) => ({
-      ...state,
-      state: {
-        ...state.state,
-        selectedLayer: selectedLayer,
-      },
-    })),
-  updateLayerVisible: (layerName: LayerName, visible: LayerState['visible']) =>
-    set((state) => ({
-      ...state,
-      state: {
-        ...state.state,
-        layers: {
-          ...state.state.layers,
-          [layerName]: {
-            ...state.state.layers[layerName],
-            visible: visible,
-          },
-        },
-      },
-    })),
-  updateLayerOpacity: (layerName: LayerName, opacity: LayerState['opacity']) =>
-    set((state) => ({
-      ...state,
-      state: {
-        ...state.state,
-        layers: {
-          ...state.state.layers,
-          [layerName]: {
-            ...state.state.layers[layerName],
-            opacity: opacity,
-          },
-        },
-      },
-    })),
 }));
 
 /**

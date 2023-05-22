@@ -1,25 +1,7 @@
 /**
  * A union type of the map layer's names.
  */
-export type LayerName =
-  | 'Base'
-  | 'Plant'
-  | 'Drawing'
-  | 'Dimension'
-  | 'Fertilization'
-  | 'Habitats'
-  | 'Hydrology'
-  | 'Infrastructure'
-  | 'Labels'
-  | 'Landscape'
-  | 'Paths'
-  | 'Shade'
-  | 'Soil'
-  | 'Terrain'
-  | 'Trees'
-  | 'Warnings'
-  | 'Winds'
-  | 'Zones';
+export type LayerName = 'plant';
 
 /**
  * The state of a layer's object.
@@ -43,7 +25,6 @@ export type ObjectState = {
 export type LayerState = {
   index: LayerName;
   visible: boolean;
-  opacity: number;
   /**
    * The state of the objects on the layer.
    */
@@ -61,6 +42,5 @@ export type Layers = {
  * The state of the map.
  */
 export type MapState = {
-  selectedLayer: LayerName;
   layers: Layers;
 };

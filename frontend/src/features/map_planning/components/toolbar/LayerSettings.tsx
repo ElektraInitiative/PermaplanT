@@ -1,7 +1,5 @@
 import IconButton from '@/components/Button/IconButton';
 import { NamedSlider } from '@/components/Slider/NamedSlider';
-import { LayerName } from '@/features/undo_redo';
-import useMapStore from '@/features/undo_redo';
 import { ReactComponent as CaretDownIcon } from '@/icons/caret-down.svg';
 import { ReactComponent as CaretRightIcon } from '@/icons/caret-right.svg';
 import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
@@ -9,15 +7,15 @@ import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface LayerListProps {
+interface LayerSettingsProps {
   /** name of the layer - this is displayed on top of the slider */
-  name: LayerName;
+  name: string;
   /** function that gets triggered when the layer is selected */
-  setSelectedLayer?: (name: LayerName) => void;
+  setSelectedLayer?: (name: string) => void;
   /** function that gets triggered when slider value is changed */
-  setLayerOpacity?: (name: LayerName, value: number) => void;
+  setLayerOpacity?: (name: string, value: number) => void;
   /** function that gets triggered when an alternative is selected */
-  setLayerAlternative?: (name: LayerName, value: string) => void;
+  setLayerAlternative?: (name: string, value: string) => void;
   /** list of names of the possible alternatives for this layer
    * if alternatives are given they can be selected in a menu
    **/
@@ -25,16 +23,14 @@ interface LayerListProps {
 }
 
 /** Layer setting UI to control visibility, layer selection, opacity and alternatives */
-export const LayerList = ({
+export const LayerSettings = ({
   name,
   setSelectedLayer,
   setLayerOpacity,
   setLayerAlternative,
   alternatives,
-}: LayerListProps) => {
-  const layerVisible = useMapStore((map) => map.state.layers[name].visible);
-  const selectedLayer = useMapStore((map) => map.state.selectedLayer);
-  const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
+}: LayerSettingsProps) => {
+  const [layerVisible, setLayerVisible] = useState(false);
   const [alternativesVisible, setAlternativesVisible] = useState(false);
   const { t } = useTranslation(['layerSettings']);
 
@@ -43,7 +39,7 @@ export const LayerList = ({
       <div className="flex items-center justify-center">
         <IconButton
           title={t('layerSettings:show_hide_layer')}
-          onClick={() => updateLayerVisible(name, !layerVisible)}
+          onClick={() => setLayerVisible(!layerVisible)}
         >
           {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
         </IconButton>
@@ -54,7 +50,6 @@ export const LayerList = ({
           className="h-4 w-4"
           type="radio"
           value={name}
-          defaultChecked={selectedLayer === name}
           onClick={() => {
             if (setSelectedLayer) setSelectedLayer(name);
           }}
@@ -75,7 +70,6 @@ export const LayerList = ({
             if (setLayerOpacity) setLayerOpacity(name, percentage);
           }}
           title={t('layerSettings:sliderTooltip')}
-          value={1}
         >
           {name}
         </NamedSlider>

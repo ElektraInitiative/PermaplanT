@@ -12,7 +12,6 @@ describe('MapHistoryStore', () => {
       expect(state.layers[layerName as keyof Layers]).toEqual({
         index: layerName,
         visible: true,
-        opacity: 1,
         objects: [],
       });
     }
@@ -32,11 +31,11 @@ describe('MapHistoryStore', () => {
     });
 
     const { state: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(2);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plant.objects).toHaveLength(2);
+    expect(newState.layers.plant.objects[0]).toMatchObject({
       id: '1',
     });
-    expect(newState.layers.Plant.objects[1]).toMatchObject({
+    expect(newState.layers.plant.objects[1]).toMatchObject({
       id: '2',
       x: 2,
       y: 2,
@@ -56,7 +55,7 @@ describe('MapHistoryStore', () => {
       payload: [
         {
           id: '1',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 123,
           y: 123,
@@ -70,8 +69,8 @@ describe('MapHistoryStore', () => {
     });
 
     const { state: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(1);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plant.objects).toHaveLength(1);
+    expect(newState.layers.plant.objects[0]).toMatchObject({
       id: '1',
       x: 123,
       y: 123,
@@ -91,7 +90,7 @@ describe('MapHistoryStore', () => {
       payload: [
         {
           id: '1',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 100,
           y: 100,
@@ -105,8 +104,8 @@ describe('MapHistoryStore', () => {
     });
 
     const { state: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(1);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plant.objects).toHaveLength(1);
+    expect(newState.layers.plant.objects[0]).toMatchObject({
       id: '1',
       x: 100,
       y: 100,
@@ -135,7 +134,7 @@ describe('MapHistoryStore', () => {
       payload: [
         {
           id: '1',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 123,
           y: 123,
@@ -147,7 +146,7 @@ describe('MapHistoryStore', () => {
         },
         {
           id: '2',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 123,
           y: 123,
@@ -161,13 +160,13 @@ describe('MapHistoryStore', () => {
     });
 
     const { state: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(2);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plant.objects).toHaveLength(2);
+    expect(newState.layers.plant.objects[0]).toMatchObject({
       id: '1',
       x: 123,
       y: 123,
     });
-    expect(newState.layers.Plant.objects[1]).toMatchObject({
+    expect(newState.layers.plant.objects[1]).toMatchObject({
       id: '2',
       x: 123,
       y: 123,
@@ -191,7 +190,7 @@ describe('MapHistoryStore', () => {
       payload: [
         {
           id: '1',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 123,
           y: 123,
@@ -203,7 +202,7 @@ describe('MapHistoryStore', () => {
         },
         {
           id: '2',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 123,
           y: 123,
@@ -217,13 +216,13 @@ describe('MapHistoryStore', () => {
     });
 
     const { state: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(2);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plant.objects).toHaveLength(2);
+    expect(newState.layers.plant.objects[0]).toMatchObject({
       id: '1',
       x: 123,
       y: 123,
     });
-    expect(newState.layers.Plant.objects[1]).toMatchObject({
+    expect(newState.layers.plant.objects[1]).toMatchObject({
       id: '2',
       x: 123,
       y: 123,
@@ -243,7 +242,7 @@ describe('MapHistoryStore', () => {
       payload: [
         {
           id: '1',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 123,
           y: 123,
@@ -261,15 +260,15 @@ describe('MapHistoryStore', () => {
     });
 
     const { state: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(1);
-    expect(newState.layers.Plant.objects[0]).toEqual(createPlantTestObject(1));
+    expect(newState.layers.plant.objects).toHaveLength(1);
+    expect(newState.layers.plant.objects[0]).toEqual(createPlantTestObject(1));
 
     dispatch({
       type: 'UNDO',
     });
 
     const { state: newState2 } = useMapStore.getState();
-    expect(newState2.layers.Plant.objects).toHaveLength(0);
+    expect(newState2.layers.plant.objects).toHaveLength(0);
   });
 
   it('reverts multiple objects to their original state on ObjectUndoAction', () => {
@@ -289,7 +288,7 @@ describe('MapHistoryStore', () => {
       payload: [
         {
           id: '1',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 123,
           y: 123,
@@ -301,7 +300,7 @@ describe('MapHistoryStore', () => {
         },
         {
           id: '2',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 123,
           y: 123,
@@ -319,9 +318,9 @@ describe('MapHistoryStore', () => {
     });
 
     const { state: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(2);
-    expect(newState.layers.Plant.objects[0]).toEqual(createPlantTestObject(1));
-    expect(newState.layers.Plant.objects[1]).toEqual(createPlantTestObject(2));
+    expect(newState.layers.plant.objects).toHaveLength(2);
+    expect(newState.layers.plant.objects[0]).toEqual(createPlantTestObject(1));
+    expect(newState.layers.plant.objects[1]).toEqual(createPlantTestObject(2));
   });
 
   it('repeats one action per ObjectRedoAction after ObjectUndoAction', () => {
@@ -337,7 +336,7 @@ describe('MapHistoryStore', () => {
       payload: [
         {
           id: '1',
-          index: 'Plant',
+          index: 'plant',
           type: 'plant',
           x: 123,
           y: 123,
@@ -359,8 +358,8 @@ describe('MapHistoryStore', () => {
     });
 
     const { state: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(1);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plant.objects).toHaveLength(1);
+    expect(newState.layers.plant.objects[0]).toMatchObject({
       id: '1',
       x: 123,
       y: 123,
@@ -374,8 +373,8 @@ function initPlantLayerInStore(objects: ObjectState[] = []) {
       ...DEFAULT_STATE,
       layers: {
         ...DEFAULT_STATE.layers,
-        Plant: {
-          ...DEFAULT_STATE.layers.Plant,
+        plant: {
+          ...DEFAULT_STATE.layers.plant,
           objects,
         },
       },
@@ -387,7 +386,7 @@ function createPlantTestObject(testValue: number): ObjectState {
   return {
     id: testValue.toString(),
     type: 'plant',
-    index: 'Plant',
+    index: 'plant',
     height: testValue,
     width: testValue,
     x: testValue,

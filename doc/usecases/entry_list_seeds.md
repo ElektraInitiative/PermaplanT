@@ -6,8 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The users can manage their seeds by adding, viewing, and deleting them in the app.
-- **Status:** In Progress (login/users)
-- **Assignee:** Moritz
+- **Status:** Done (except users)
+- **Assignee:** Giancarlo, Moritz
 
 ## Scenarios
 
