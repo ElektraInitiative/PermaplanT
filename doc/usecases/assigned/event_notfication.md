@@ -9,7 +9,7 @@
   - Nearby user: App User that is nearby the host
   - User without location: App User that has no location
 - **Brief:** The user gets a notfication when another user has an event.
-- **Status:** Draft
+- **Assignee:** Thorben
 
 ## Scenarios
 

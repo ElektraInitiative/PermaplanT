@@ -7,7 +7,7 @@
 - **Actors:** App User
 - **Brief:** The user can search for plants.
 - **Status:** In Progress
-- **Assignee:** Gabriel
+- **Assignee:** Moritz (Frontend), Gabriel (Backend)
 
 ## Scenarios
 

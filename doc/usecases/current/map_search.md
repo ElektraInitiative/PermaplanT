@@ -6,16 +6,16 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can search for maps within the app using keywords, including the ability to search for public maps created by other users.
-- **Status:** Assigned
-- **Assignee:** Moritz, Paul
+- **Assignee:** Gabriel (Backend), Moritz (Frontend)
 
 ## Scenarios
 
 - **Precondition:**
   The user has opened the app and is on the map search page.
 - **Main success scenario:**
-  The user enters a keyword into the search field and the app displays a list of maps that match the keyword, including both the user's own maps and public maps created by other users.
-  The user can then select a map to view it.
+  - A list of all maps are shown, including both the user's own maps and public maps created by other users.
+  - The user enters a keyword into the search field and the app filters the list of maps that match the keyword.
+  - The user can then select a map to view it.
 - **Alternative scenario:**
   The user enters a keyword that does not match any maps in the app.
   In this case, the app displays a message to the user indicating that no maps were found.
