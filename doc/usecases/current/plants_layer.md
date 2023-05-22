@@ -6,15 +6,14 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete plant elements in their map in the plants layer.
-- **Status:** In Progress
-- **Assignee:** Moritz
+- **Assignee:** Moritz (Frontend), Gabriel (Backend)
 
 ## Scenarios
 
 - **Precondition:**
   The user has opened the app and has selected the plants layer.
 - **Main success scenario:**
-  - The user is able to add plants and is presented with a list of seasonal plants (for the selected time of the year), in following groups:
+  - The user is presented with a list of seasonal plants (for the selected time of the year), in following groups:
     - available seeds with early expiration days first
     - diversity constraints: suggestions which not-yet-used plants fit next to the plant just added, or at a place selected (spatial and temporal)
     - which were recently planted
@@ -23,7 +22,7 @@
     - The user gets a visual indication which parts of the map are ideally, okay and not suited for the plant to be placed
       (based on e.g. previous plants, zones, pH value, moisture, animals or shadows).
     - The user is able to view the relationships between the plants by looking at the lines connecting them (companion or antagonist).
-    - The user positions the plant element in the appropriate location in the map.
+  - The user positions the plant element in the appropriate location in the map.
   - When drawing an area of plants, the size of the arena and the number of plants is shown next to the mouse.
   - The user is able to move, edit (e.g. when planted, when harvested) and delete (either that it never existed or that it was removed from the garden) selected plants.
   - The user adjusts the plant elements and their relationships as needed.
