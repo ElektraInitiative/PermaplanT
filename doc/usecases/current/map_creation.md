@@ -7,7 +7,7 @@
 - **Actors:** App User
 - **Brief:** The user creates or duplicates a map.
 - **Status:** Done
-- **Assignee:** Thorben
+- **Assignee:** Thorben, Samuel (Photos)
 
 ## Scenarios
 
