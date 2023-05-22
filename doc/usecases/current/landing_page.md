@@ -11,13 +11,14 @@
 ## Scenarios
 
 - **Precondition:**
-
-  - The user has navigated to the application
-
+  - The user has navigated to [permaplant.net](https://permaplant.net).
 - **Main success scenario:**
   - The user can interact with the displayed GeoMap
   - The user can apply for a membership
-  - The user can read about the project
+  - The user can read imprint (Impressum)
+  - The user can read about privacy (Datenschutz)
+  - The user can read about copyright
+  - The user can read latest news and get an RSS/Atom feed of it
   - The user can login
 - **Alternative scenario:**
 - **Error scenario:**
