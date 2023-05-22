@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete wind orientation and areas in their map using the wind layer.
-- **Status:** Draft
+- **Assignee:** Moritz
 
 ## Scenarios
 

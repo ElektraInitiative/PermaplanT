@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete terrain levels in the terrain layer.
-- **Status:** Draft
+- **Assignee:** Moritz
 
 ## Scenarios
 

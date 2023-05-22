@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete moisture or dry areas in their map in the moisture layer.
-- **Status:** Draft
+- **Assignee:** Moritz
 
 ## Scenarios
 

@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete infrastructure elements in their plan.
-- **Status:** Draft
+- **Assignee:** Moritz
 
 ## Scenarios
 

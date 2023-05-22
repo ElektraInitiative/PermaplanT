@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete shadow areas in their map in the shadow layer and adjust the intensity.
-- **Status:** Draft
+- **Assignee:** Moritz
 
 ## Scenarios
 

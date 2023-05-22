@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, move, delete and edit areas of pH values and soil weight class in their map using the soil layer
-- **Status:** Draft
+- **Assignee:** Moritz
 
 ## Scenarios
 

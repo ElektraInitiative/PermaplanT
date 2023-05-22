@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user adds todos to their map to remember what to do at certain locations
-- **Status:** Ready to be Assigned
+- **Assignee:** Samuel
 
 ## Scenarios
 

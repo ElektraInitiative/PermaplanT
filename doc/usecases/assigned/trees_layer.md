@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and delete forests, trees and, hedge bushes in their map.
-- **Status:** Draft
+- **Assignee:** Moritz
 
 ## Scenarios
 
