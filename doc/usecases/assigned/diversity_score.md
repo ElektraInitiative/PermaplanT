@@ -16,7 +16,7 @@
 - **Main success scenario:**
   - The user drags and drops various plants onto his map.
   - The system calculates a diversity score after each plant operation based on how diverse the map is.
-  - Plants beneficial to the ecosystem (e.g. they are not problematic or provide food and shelter for wild life) or having many different plants increase the score, 
+  - Plants beneficial to the ecosystem (e.g. they are not problematic or provide food and shelter for wild life) or having many different plants increase the score,
     while overusing a small set of plants (in relation to size of map) negatively affects the scoring.
   - The user will be motivated to increase the diversity score and therefore optimizes the diversity and usage of polycultures on the map.
 - **Alternative scenario:**

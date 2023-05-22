@@ -15,7 +15,6 @@
   - The user has opened the app and uses it.
 - **Main success scenario:**
   - The user can see a list of incompleted milestones and their respective requirements. An user can reach a certain milestone by e.g.:
-    - becoming a member.
     - starting their first map.
     - planting their first plant.
     - planting their first full group of companions.
