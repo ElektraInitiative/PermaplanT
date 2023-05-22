@@ -4,7 +4,7 @@
 
 - **Scope:** Notifications
 - **Level:** User Goal
-- **Actors:** 
+- **Actors:**
   - Host: App User that hosts the event
   - Nearby user: App User that is nearby the host
   - User without location: App User that has no location
@@ -24,6 +24,6 @@
   which informs them that the location is required for sending invitations.
 - **Postcondition:**
   - Nearby user gets a notification which informs them about the event (e.g. invitation to visit the map virtually).
-  - The user without location gets a notification which informs them about the event (e.g. invitation to visit the map virtually) 
-  with the additional text that they get the invitation because they don't have a location set.
+  - The user without location gets a notification which informs them about the event (e.g. invitation to visit the map virtually)
+    with the additional text that they get the invitation because they don't have a location set.
 - **Non-functional Constraints:**

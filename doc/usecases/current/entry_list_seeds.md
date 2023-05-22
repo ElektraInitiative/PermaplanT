@@ -5,17 +5,17 @@
 - **Scope:** Seed Management
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The users can manage their seeds by adding, viewing, and deleting them in the app.
-- **Status:** In Progress (login/users)
-- **Assignee:** Moritz
+- **Brief:** The users manage their seeds by adding, viewing, and deleting them in the app.
+- **Assignee:** Moritz (login/users), Giancarlo ([seed overview](https://github.com/ElektraInitiative/PermaplanT/issues/210))
 
 ## Scenarios
 
 - **Precondition:**
   The user has opened the seed management feature in the app.
 - **Main success scenario:**
-  The user is able to add new seeds to their list by specifying the name, amount, and expiration date.
-  They can also view and delete seeds from their list.
+  - The user is able to add new seeds to their list.
+  - The user is able to view a list of seeds where plant name, additional name, amount, expiration date is visible.
+  - The user is able to edit or delete seeds of their list.
 - **Alternative scenario:**
   The user accidentally deletes a seed from their list and uses the undo feature to correct it.
 - **Error scenario:**
