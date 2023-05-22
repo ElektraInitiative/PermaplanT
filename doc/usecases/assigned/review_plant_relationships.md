@@ -18,7 +18,7 @@
   - The reviewing user comments on the relationship to note something that seems relevant to her.
   - The reviewing user approves the relationship because she agrees with it.
 - **Alternative scenario:**
-  - The reviewing user only comments on the relationship but doesn't approve it and might suggest a different relationship (e.g. neutral). 
+  - The reviewing user only comments on the relationship but doesn't approve it and might suggest a different relationship (e.g. neutral).
   - No changes are made to the relationships confidence score.
   - One administrator decides on the outcome.
 - **Error scenario:**

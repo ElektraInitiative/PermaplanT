@@ -1,4 +1,4 @@
-# Use Case: Suggest alternatives
+# Use Case: Suggest Alternatives
 
 ## Summary
 

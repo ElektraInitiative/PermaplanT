@@ -7,7 +7,7 @@
 - **Actors:** App User
 - **Brief:** The user changes a set of favorite plant groups per map.
 - **Status:** Assigned
-- **Assignee:** Benjamin
+- **Assignee:** Thorben
 
 ## Scenarios
 

@@ -1,4 +1,4 @@
-# Use Case: Suggest plants
+# Use Case: Suggest Plants
 
 ## Summary
 
