@@ -1,11 +1,49 @@
-import { LayerSettings } from './LayerSettings';
+import { LayerList } from './LayerList';
 import IconButton from '@/components/Button/IconButton';
+import useMapStore, { LayerName } from '@/features/undo_redo';
 import { ReactComponent as AddIcon } from '@/icons/add.svg';
 import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
 import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
 
 /** Layer controls including visibility, layer selection, opacity and alternatives */
 export const Layers = () => {
+  const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
+  const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
+
+  const layerNames: Array<LayerName> = [
+    'Base',
+    'Plant',
+    'Drawing',
+    'Dimension',
+    'Fertilization',
+    'Habitats',
+    'Hydrology',
+    'Infrastructure',
+    'Labels',
+    'Landscape',
+    'Paths',
+    'Shade',
+    'Soil',
+    'Terrain',
+    'Trees',
+    'Warnings',
+    'Winds',
+    'Zones',
+  ];
+  const layerSettingsList = layerNames.map((name) => {
+    return (
+      <LayerList
+        key={'layer_settings_' + name}
+        name={name}
+        setSelectedLayer={(name) => {
+          updateSelectedLayer(name);
+        }}
+        setLayerOpacity={(name, value) => {
+          updateLayerOpacity(name, value);
+        }}
+      />
+    );
+  });
   return (
     <div className="flex flex-col p-2">
       <section className="flex justify-between">
@@ -24,24 +62,7 @@ export const Layers = () => {
       </section>
       <section className="mt-6">
         <div className="grid-cols grid grid-cols-[1.5rem_1.5rem_minmax(0,_1fr)] gap-2">
-          <LayerSettings name="Base" />
-          <LayerSettings name="Plant" />
-          <LayerSettings name="Drawing" />
-          <LayerSettings name="Dimension" />
-          <LayerSettings name="Fertilization" />
-          <LayerSettings name="Habitats" />
-          <LayerSettings name="Hydrology" />
-          <LayerSettings name="Infrastructure" />
-          <LayerSettings name="Labels" />
-          <LayerSettings name="Landscape" />
-          <LayerSettings name="Paths" />
-          <LayerSettings name="Shade" />
-          <LayerSettings name="Soil" />
-          <LayerSettings name="Terrain" />
-          <LayerSettings name="Trees" />
-          <LayerSettings name="Warnings" />
-          <LayerSettings name="Winds" />
-          <LayerSettings name="Zones" />
+          {layerSettingsList}
         </div>
       </section>
     </div>

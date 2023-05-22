@@ -1,10 +1,20 @@
-import { ReactNode, useState, MouseEventHandler, useRef, KeyboardEventHandler } from 'react';
+import {
+  ReactNode,
+  useState,
+  MouseEventHandler,
+  useRef,
+  KeyboardEventHandler,
+  useEffect,
+} from 'react';
 
 interface SliderProps {
   /** children passed to the slider appear in the Slider */
   children: Array<ReactNode> | ReactNode;
   /** onChange event is triggered whenever the current percentage value of the slider changes */
   onChange: (percentage: number) => void;
+  /** value can be used to set the value of the Slider */
+  /** must be between 0 and 1 */
+  value?: number;
   /** sets the title attribute for the outer div */
   title: string;
 }
@@ -18,6 +28,15 @@ export const NamedSlider = (props: SliderProps) => {
 
   const minWidth = 0;
   const maxWidth = sliderDivRef.current ? sliderDivRef.current.clientWidth : 100;
+
+  // bind value to slider fill width
+  useEffect(() => {
+    if (props.value) {
+      const w = props.value * maxWidth;
+      const newWidth = w > minWidth ? (w < maxWidth ? w : maxWidth) : minWidth;
+      setWidth(newWidth);
+    }
+  }, [props.value, maxWidth]);
 
   /** keybinding for changing the value */
   const keybindings = {
