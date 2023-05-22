@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can copy and paste a selection of elements, including succeeding crops, in their map
-- **Status:** Merge Pending
+- **Status:** In Progress (Merge Pending)
 - **Assignee:** Giancarlo
 
 ## Scenarios

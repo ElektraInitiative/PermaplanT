@@ -141,15 +141,13 @@ export const PlantSearch = () => {
       <AnimatePresence>
         {searchVisible && (
           <motion.div
-            initial={{ opacity: 0, translateY: '-20%' }}
+            initial={{ opacity: 0 }}
             animate={{
               opacity: 100,
-              translateY: 0,
               transition: { delay: 0, duration: 0.2 },
             }}
             exit={{
               opacity: 0,
-              translateY: '-20%',
               transition: { delay: 0, duration: 0.2 },
             }}
           >
