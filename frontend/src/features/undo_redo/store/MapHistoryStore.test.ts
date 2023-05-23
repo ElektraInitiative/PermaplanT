@@ -18,7 +18,7 @@ describe('MapHistoryStore', () => {
     }
   });
 
-  it('adds an object to the plant layer on ObjectAddAction', () => {
+  it('adds an object to the plants layer on ObjectAddAction', () => {
     const { dispatch } = useMapStore.getState();
 
     dispatch({
