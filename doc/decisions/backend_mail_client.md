@@ -13,14 +13,14 @@ The typical communication when sending a mail is as follows:
 
 ### Example use case
 
-A user enters a question into the contract form on the frontend.  
+A user enters a question into the contact form on the frontend.  
 The frontend should now send a request to the backend.  
-The backend then send a request to somebody who can answer this question.
+The backend then send a mail to somebody who can answer this question.
 
 ## Constraints
 
-- Currently there doesn't seem to exist a crate to send emails without requiring a mail-server.  
-  All crates I have found require a mail-server (and then we should also use username and password).
+- Currently there doesn't seem to exist a crate to send emails without requiring a mail-server.
+  We should therefore also use username and password as credentials in the backend.
 
 ## Solutions
 
