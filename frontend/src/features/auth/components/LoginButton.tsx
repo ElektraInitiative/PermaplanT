@@ -1,7 +1,7 @@
 import SimpleButton from '@/components/Button/SimpleButton';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from 'react-oidc-context';
 
 const ConditionalLoadingSpinner = ({ show }: { show: boolean }) => {
   return <div className="h-6 w-6">{show ? <LoadingSpinner /> : null}</div>;
@@ -13,7 +13,7 @@ const ConditionalLoadingSpinner = ({ show }: { show: boolean }) => {
  */
 export const LoginButton = () => {
   const { t } = useTranslation(['auth']);
-  const auth = useAuth();
+  const auth = useSafeAuth();
 
   if (auth.isAuthenticated) {
     return (
