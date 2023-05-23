@@ -1,11 +1,11 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::sql_types::Text;
+use diesel::sql_types::{Integer, Text};
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::db::function::array_to_string;
-use crate::db::pagination::Paginate;
+use crate::db::pagination::{Paginate, DEFAULT_PER_PAGE, MIN_PAGE};
 use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
     model::dto::PlantsSummaryDto,
@@ -15,7 +15,7 @@ use crate::{
 use super::Plants;
 
 impl Plants {
-    /// Get the top 10 plants matching the search query.
+    /// Get the top plants matching the search query.
     ///
     /// Uses `pg_trgm` to find matches in `unique_name`, `common_name_de`, `common_name_en` and `edible_uses_en`.
     /// Ranks them using the `PostgreSQL` function `similarity()`.
@@ -24,9 +24,12 @@ impl Plants {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn search(
         search_query: &str,
+        page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantsSummaryDto>> {
         let query = format!("%{search_query}%");
+        let limit = page_parameters.per_page.unwrap_or(DEFAULT_PER_PAGE);
+        let offset = page_parameters.page.unwrap_or(MIN_PAGE) * limit;
 
         // This has to be a raw query as similarity() is a function provided by pg_trgm which diesel doesn't support
         // This is not SQL injectable as the query param is bound using diesel.
@@ -44,11 +47,13 @@ impl Plants {
             OR ARRAY_TO_STRING(common_name_en, ' ') ILIKE $1
             OR edible_uses_en ILIKE $1
             ORDER BY rank DESC
-            LIMIT 10
+            LIMIT $2 OFFSET $3
         "#;
 
         let query_result = diesel::sql_query(query_sql)
             .bind::<Text, _>(&query)
+            .bind::<Integer, _>(limit)
+            .bind::<Integer, _>(offset)
             .load::<Self>(conn)
             .await;
         query_result.map(|plants| plants.into_iter().map(Into::into).collect())

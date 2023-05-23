@@ -17,7 +17,8 @@ use actix_web::{
 #[utoipa::path(
     context_path = "/api/plants",
     params(
-        PlantsFullTextSearchParameters
+        PlantsFullTextSearchParameters,
+        PageParameters
     ),
     responses(
         (status = 200, description = "Search plants using the provided query", body = Vec<PlantsSummaryDto>),
@@ -26,9 +27,15 @@ use actix_web::{
 #[get("/search")]
 pub async fn search(
     search_query: Query<PlantsFullTextSearchParameters>,
+    page_query: Query<PageParameters>,
     pool: Data<Pool>,
 ) -> Result<HttpResponse> {
-    let payload = service::plants::search(&search_query.into_inner().search_query, &pool).await?;
+    let payload = service::plants::search(
+        &search_query.into_inner().search_query,
+        page_query.into_inner(),
+        &pool,
+    )
+    .await?;
     Ok(HttpResponse::Ok().json(payload))
 }
 
