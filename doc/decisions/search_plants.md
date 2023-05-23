@@ -109,7 +109,11 @@ Something like elasticsearch could cover the usecase better, however it adds a l
 The following points are difficult if not impossible to implement using PostgreSQL.  
 Before trying them it should be evaluated if a different database like elasticsearch might be a better fit for this usecase.
 
-- Other columns can be matched with extra syntax (e.g. environmental fit or ecological value)
+- Other columns can be matched with extra syntax (e.g. environmental fit or ecological value).
+  - This can be quite difficult when parsing the query yourself as you would have to 'invent' a query language.
+  - As an example: `amarena cherry water_requirement = dry` might work as you know that `water_requirement = dry` those belong together.
+  - However: `amarena cherry alternate_name = Pacific silver fir` doesn't work as it isn't clear which parts of `Pacific silver fir` belong to `alternate_name` an which parts don't. This is a somewhat cherry picked example, but there might be other problem like that we have to consider.
+  - Apart from that it isn't simple to add new where clauses to a query as we would have to parse the users input and at the same time prevent SQL injections (which isn't trivial).
 - Search in hierarchy is difficult
 - Search accuracy (stop words, stemming, etc.)
 
