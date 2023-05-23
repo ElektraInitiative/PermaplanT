@@ -1,3 +1,4 @@
+import i18next from '@/config/i18n';
 import { User, UserManagerEvents } from 'oidc-client-ts';
 import { useContext } from 'react';
 import { AuthContext, AuthContextProps } from 'react-oidc-context';
@@ -15,7 +16,7 @@ const MockAuthContext: AuthContextProps = {
   signinPopup: () => Promise.resolve(null as unknown as User),
   signinSilent: () => Promise.resolve(null),
   signinRedirect: () => {
-    toast.error('The server is not available. Please try again later.');
+    toast.error(i18next.t('auth:error_no_backend'));
     return Promise.resolve(void 0);
   },
   signoutRedirect: () => Promise.resolve(void 0),
