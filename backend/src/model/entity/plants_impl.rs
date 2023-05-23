@@ -27,6 +27,9 @@ impl Plants {
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantsSummaryDto>> {
         let query = format!("%{search_query}%");
+
+        // This has to be a raw query as similarity() is a function provided by pg_trgm which diesel doesn't support
+        // This is not SQL injectable as the query param is bound using diesel.
         let query_sql = r#"
             SELECT *,
                 greatest(
