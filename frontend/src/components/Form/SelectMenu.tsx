@@ -3,11 +3,7 @@ import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import Select, { ActionMeta, GroupBase, MultiValue, SingleValue, StylesConfig } from 'react-select';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
-
-export interface SelectOption {
-  value: string | number;
-  label: string;
-}
+import { SelectOption } from './SelectMenuTypes';
 
 export interface SelectMenuProps<
   T extends FieldValues,

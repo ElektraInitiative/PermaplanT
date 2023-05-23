@@ -3,7 +3,7 @@ import PaginatedSelectMenu, {
   PageAdditionalInfo,
   Page,
 } from '../../../components/Form/PaginatedSelectMenu';
-import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
+import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
@@ -12,6 +12,7 @@ import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-
 import { Suspense } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { SelectOption } from '@/components/Form/SelectMenuTypes';
 
 interface CreateSeedFormProps {
   isUploadingSeed: boolean;
@@ -47,17 +48,18 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
     onSubmit(data);
   };
 
+  /** calls searchPlants and creates options for the select input */
   const loadPlants = async (
     search: string,
-    options: unknown,
+    options: SelectOption,
     additional: PageAdditionalInfo | undefined,
   ): Promise<Page> => {
-    const pageNumber = additional != undefined ? additional.pageNumber : 1;
+    const pageNumber = additional ? additional.pageNumber : 1;
     const page = await searchPlants(search, pageNumber);
 
     const plant_options: SelectOption[] = page.results.map((plant) => {
       const common_name_en =
-        plant.common_name_en != null ? ' (' + plant.common_name_en[0] + ')' : '';
+        plant.common_name_en ? ' (' + plant.common_name_en[0] + ')' : '';
 
       return {
         value: plant.id,
