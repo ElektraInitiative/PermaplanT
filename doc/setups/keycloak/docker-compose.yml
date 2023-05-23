@@ -7,6 +7,8 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
       - POSTGRESQL_USERNAME=bn_keycloak
       - POSTGRESQL_DATABASE=bitnami_keycloak
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KEYCLOAK_ADMIN_USER=admin
     volumes:
       - "postgresql_data:/bitnami/postgresql"
 
