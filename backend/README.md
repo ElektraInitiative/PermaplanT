@@ -52,7 +52,18 @@ cargo install typeshare-cli
 
 6. Start Keycloak
 
+via docker run:
+
 `docker run -p 8081:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:21.1.1 start-dev`
+
+or navigate to [/doc/setups/keycloak/](/doc/setups/keycloak/)
+and start keycloak with persistent storage via docker compose
+
+```
+docker compose up
+```
+
+more about the docker compose setup can be found in [/doc/setups/README.md]()
 
 7. Setup Keycloak:
 
