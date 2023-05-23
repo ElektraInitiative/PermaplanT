@@ -50,4 +50,3 @@ The usage also seems easier than with other mail clients.
 
 - We have to create a user in our mail-server `lettre` can use to send emails.
 - Our mail-server's configuration has to be provided to the backend (URI, username, password, ...)
--
