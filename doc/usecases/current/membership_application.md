@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can apply for a membership (account)
-- **Assignee:** Thorben (Frontend), Gabriel&Lukas (Keycloak)
+- **Assignee:** Thorben (Frontend), Lukas (Keycloak Installation)
 
 ## Scenarios
 
