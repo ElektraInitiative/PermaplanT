@@ -5,25 +5,12 @@ import type {
   ObjectUpdateTransformAction,
   TrackedAction,
 } from './action-types';
-import type { LayerName, Layers, LayerState, MapState, ObjectState } from './state-types';
+import type { LayerName, ObjectState } from './MapStoreTypes';
 import i18next from '@/config/i18n';
 import Konva from 'konva';
 import { createRef } from 'react';
 import { toast } from 'react-toastify';
-import { create } from 'zustand';
-
-type MapStore = {
-  history: TrackedAction[];
-  step: number;
-  state: MapState;
-  transformer: React.RefObject<Konva.Transformer>;
-  dispatch: (action: MapAction) => void;
-  canUndo: boolean;
-  canRedo: boolean;
-  updateSelectedLayer: (selectedLayer: LayerName) => void;
-  updateLayerVisible: (layerName: LayerName, visible: LayerState['visible']) => void;
-  updateLayerOpacity: (layerName: LayerName, opacity: LayerState['opacity']) => void;
-};
+import { create, StateCreator } from 'zustand';
 
 export const DEFAULT_STATE: MapState = {
   selectedLayer: 'Base',
@@ -138,6 +125,51 @@ export const DEFAULT_STATE: MapState = {
     },
   },
 };
+
+
+// part of store which is effected by the History
+interface TrackedMapSlice {
+  history: TrackedAction[];
+  step: number;
+  state: MapState;
+  transformer: React.RefObject<Konva.Transformer>;
+  dispatch: (action: MapAction) => void;
+  canUndo: boolean;
+  canRedo: boolean;
+  updateSelectedLayer: (selectedLayer: LayerName) => void;
+  updateLayerVisible: (layerName: LayerName, visible: LayerState['visible']) => void;
+  updateLayerOpacity: (layerName: LayerName, opacity: LayerState['opacity']) => void;
+}
+const createTrackedMapSlice: StateCreator<
+  TrackedMapSlice & UntrackedMapSlice,
+  [],
+  [],
+  TrackedMapSlice
+> = (set) => ({
+  bears: 0,
+  addBear: () => set((state) => ({ bears: state.bears + 1 })),
+  eatFish: () => set((state) => ({ fishes: state.fishes - 1 })),
+})
+
+// part of store which is not effected by the History
+interface UntrackedMapSlice {
+  fishes: number
+  addFish: () => void
+}
+const createUntrackedMapSlice: StateCreator<
+  TrackedMapSlice & UntrackedMapSlice,
+  [],
+  [],
+  UntrackedMapSlice
+> = (set) => ({
+  fishes: 0,
+  addFish: () => set((state) => ({ fishes: state.fishes + 1 })),
+})
+
+const useBoundStore = create<TrackedMapSlice & UntrackedMapSlice>()((...a) => ({
+  ...createTrackedMapSlice(...a),
+  ...createUntrackedMapSlice(...a),
+}))
 
 const useMapStore = create<MapStore>((set) => ({
   history: [],
