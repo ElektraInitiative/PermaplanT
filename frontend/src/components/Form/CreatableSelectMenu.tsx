@@ -17,22 +17,45 @@ export interface CreatableSelectMenuProps<
   Option = SelectOption,
   IsMulti extends boolean = false,
 > {
+  /** When this boolean flag is set to true, the user may select multiple options at once (default false).                                                                          */
   isMulti?: IsMulti;
+  /** Unique name of this component.                                                                                                                                                */
   id: Path<T>;
+  /** Short description that will be displayed above the input field if set.                                                                                                        */
   labelText?: string;
+  /** React hook form control (See https://www.react-hook-form.com/api/useform/control/ for further information).                                                                   */
   control?: Control<T, unknown>;
+  /** Options that can be selected by the user. I.e. the contents of this component.                                                                                                */
   options: Option[];
+  /** If set to true, the user has to select an option before the form can be completed (default false).                                                                            */
   required?: boolean;
+  /** Text that is displayed instead of the input if it has not been selected yet.                                                                                                  */
   placeholder?: string;
+  /** Callback that is invoked every time the user selects a new option. The single argument represents the selected option.                                                        */
   handleOptionsChange?: (
     option: SingleValue<Option> | MultiValue<Option>,
     actionMeta: ActionMeta<Option>,
   ) => void;
+  /** Gets called if a new item was created with the users input as the only argument. If not set, the component will automatically add all created items to the available options. */
   handleCreate?: (inputValue: string) => void;
+  /** Callback that is invoked if the user performs ANY input. This includes type and click events among others.                                                                    */
   onChange?: () => void;
   onInputChange?: (inputValue: string) => void;
 }
 
+/**
+ * Similar to SelectMenu, but allows the user to create new menu entries.
+ * @param props.isMulti: When this boolean flag is set to true, the user may select multiple options at once (default false).
+ * @param props.id: Unique name of this component.
+ * @param props.labelText: Short description that will be displayed above the input field if set.
+ * @param props.control: React hook form control (See https://www.react-hook-form.com/api/useform/control/ for further information).
+ * @param props.options: Options that can be selected by the user. I.e. the contents of this component.
+ * @param props.required: If set to true, the user has to select an option before the form can be completed (default false).
+ * @param props.placeholder: Text that is displayed instead of the input if it has not been selected yet.
+ * @param props.handleOptionsChange: Callback that is invoked every time the user selects a new option. The single argument represents the selected option.
+ * @param props.handleCreate: Gets called if a new item was created with the users input as the only argument. If not set, the component will automatically add all created items to the available options.
+ * @param props.onChange: Callback that is invoked if the user performs ANY input. This includes type and click events among others.
+ */
 export default function CreatableSelectMenu<
   T extends FieldValues,
   Option = SelectOption,
