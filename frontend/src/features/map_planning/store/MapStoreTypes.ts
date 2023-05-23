@@ -1,4 +1,4 @@
-import Konva from "konva";
+import Konva from 'konva';
 
 export type MapStore = {
   history: TrackedAction[];
@@ -14,29 +14,53 @@ export type MapStore = {
   updateLayerOpacity: (layerName: LayerName, opacity: UntrackedLayerState['opacity']) => void;
 };
 
+// part of store which is effected by the History
+export interface TrackedMapSlice {
+  trackedState: TrackedMapState;
+  step: number;
+  history: TrackedAction[];
+  canUndo: boolean;
+  canRedo: boolean;
+  dispatch: (action: MapAction) => void;
+}
+
+// part of store which is not effected by the History
+export interface UntrackedMapSlice {
+  untrackedState: UntrackedMapState;
+  transformer: React.RefObject<Konva.Transformer>;
+  updateSelectedLayer: (selectedLayer: LayerName) => void;
+  updateLayerVisible: (layerName: LayerName, visible: UntrackedLayerState['visible']) => void;
+  updateLayerOpacity: (layerName: LayerName, opacity: UntrackedLayerState['opacity']) => void;
+}
+
+/**
+ * Utility array of the map layer's names.
+ */
+export const LAYER_NAMES = [
+  'Base',
+  'Plant',
+  'Drawing',
+  'Dimension',
+  'Fertilization',
+  'Habitats',
+  'Hydrology',
+  'Infrastructure',
+  'Labels',
+  'Landscape',
+  'Paths',
+  'Shade',
+  'Soil',
+  'Terrain',
+  'Trees',
+  'Warnings',
+  'Winds',
+  'Zones',
+] as const;
 
 /**
  * A union type of the map layer's names.
  */
-export type LayerName =
-  | 'Base'
-  | 'Plant'
-  | 'Drawing'
-  | 'Dimension'
-  | 'Fertilization'
-  | 'Habitats'
-  | 'Hydrology'
-  | 'Infrastructure'
-  | 'Labels'
-  | 'Landscape'
-  | 'Paths'
-  | 'Shade'
-  | 'Soil'
-  | 'Terrain'
-  | 'Trees'
-  | 'Warnings'
-  | 'Winds'
-  | 'Zones';
+export type LayerName = (typeof LAYER_NAMES)[number];
 
 /**
  * The state of a layer's object.
@@ -81,7 +105,6 @@ export type TrackedLayers = {
   [key in LayerName]: TrackedLayerState;
 };
 
-
 /**
  * The state of the layers of the map.
  */
@@ -102,7 +125,6 @@ export type UntrackedMapState = {
   selectedLayer: LayerName;
   layers: UntrackedLayers;
 };
-
 
 /**
  * An action for adding an object to the map.

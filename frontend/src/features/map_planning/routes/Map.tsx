@@ -3,10 +3,11 @@ import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
 import PlantsLayer from '../layers/PlantsLayer';
+import useMapStore from '../store/MapStore';
+import { LayerName } from '../store/MapStoreTypes';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import useMapStore, { LayerName } from '@/features/undo_redo';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
@@ -23,7 +24,8 @@ import { Rect } from 'react-konva';
  * Otherwise they cannot be moved.
  */
 export const Map = () => {
-  const state = useMapStore((map) => map.state);
+  const trackedState = useMapStore((map) => map.trackedState);
+  const untrackedState = useMapStore((map) => map.untrackedState);
   const dispatch = useMapStore((map) => map.dispatch);
 
   // Event listener responsible for adding a single shape to the transformer
@@ -164,13 +166,16 @@ export const Map = () => {
               </IconButton>
             </div>
           }
-          contentBottom={getToolbarContent(state.selectedLayer).left}
+          contentBottom={getToolbarContent(untrackedState.selectedLayer).left}
           position="left"
         ></Toolbar>
       </section>
       <BaseStage>
-        <PlantsLayer visible={state.layers.Plant.visible} opacity={state.layers.Plant.opacity}>
-          {state.layers['Plant'].objects.map((o) => (
+        <PlantsLayer
+          visible={untrackedState.layers.Plant.visible}
+          opacity={untrackedState.layers.Plant.opacity}
+        >
+          {trackedState.layers['Plant'].objects.map((o) => (
             <Rect
               {...o}
               key={o.id}
@@ -191,7 +196,7 @@ export const Map = () => {
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
           contentTop={<Layers />}
-          contentBottom={getToolbarContent(state.selectedLayer).right}
+          contentBottom={getToolbarContent(untrackedState.selectedLayer).right}
           position="right"
           minWidth={200}
         ></Toolbar>
