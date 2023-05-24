@@ -3,5 +3,6 @@
   "successful_redo": "Successfully reapplied '{{action}}'",
   "OBJECT_ADD": "Add {{name}}",
   "OBJECT_UPDATE_POSITION": "Move {{name}}",
-  "OBJECT_UPDATE_TRANSFORM": "Transform {{name}}"
+  "OBJECT_UPDATE_TRANSFORM": "Transform {{name}}",
+  "ATTRIBUTE_UPDATE": "Edit {{name}}"
 }

@@ -1,3 +1,5 @@
+import baseLayerConfigurator from './baseLayerConfigurator.json';
+import baseLayerForm from './baseLayerForm.json';
 import auth from './auth.json';
 import blog from './blog.json';
 import common from './common.json';
@@ -14,11 +16,11 @@ import plantSearch from './plantSearch.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
-import baseLayerConfigurator from './baseLayerConfigurator.json';
 import undoRedo from './undoRedo.json';
 
 const en = {
   baseLayerConfigurator,
+  baseLayerForm,
   blog,
   common,
   contact,

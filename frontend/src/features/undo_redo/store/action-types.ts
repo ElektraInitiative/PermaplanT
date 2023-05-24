@@ -2,7 +2,7 @@
  * @module features/undo_redo/store/action-types
  * This module contains the types for the actions that can be dispatched to the map history store.
  */
-import {LayerAttributes, LayerName, ObjectState} from './state-types';
+import { LayerAttributes, LayerName, ObjectState } from './state-types';
 
 /**
  * An action that changes the attributes of a specific layer.
@@ -13,7 +13,7 @@ export type AttributeUpdateAction = {
   // Typescript can't verify that this type always has an attribute 'layer'.
   // @ts-ignore
   payload: LayerAttributes<typeof this.layer>;
-}
+};
 
 /**
  * An action for adding an object to the map.
