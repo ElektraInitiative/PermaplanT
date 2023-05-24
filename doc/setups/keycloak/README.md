@@ -8,7 +8,7 @@ Via docker run:
 
 or use the `docker-compose.yml` to start keycloak with persistent storage via
 
-```
+```bash
 docker compose up
 ```
 
