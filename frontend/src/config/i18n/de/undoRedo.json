@@ -3,5 +3,6 @@
   "successful_redo": "'{{action}}' erfolgreich wiederholt",
   "OBJECT_ADD": "{{name}} hinzufügen",
   "OBJECT_UPDATE_POSITION": "{{name}} bewegen",
-  "OBJECT_UPDATE_TRANSFORM": "{{name}} transformieren"
+  "OBJECT_UPDATE_TRANSFORM": "{{name}} transformieren",
+  "ATTRIBUTE_UPDATE": "{{name}} editiern"
 }

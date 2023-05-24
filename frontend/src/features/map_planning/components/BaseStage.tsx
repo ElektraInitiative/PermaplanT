@@ -21,10 +21,10 @@ interface BaseStageProps {
   draggable?: boolean;
   onWheel?: (event: KonvaEventObject<WheelEvent>) => void;
   onDragStart?: (event: KonvaEventObject<DragEvent>) => void;
-  onMouseMove?: (event: KonvaEventObject<MouseEvent>) => void;  
-  onMouseDown?: (event: KonvaEventObject<MouseEvent>) => void;  
-  onMouseUp?: (event: KonvaEventObject<MouseEvent>) => void;  
-  onClick?: (event: KonvaEventObject<MouseEvent>) => void;  
+  onMouseMove?: (event: KonvaEventObject<MouseEvent>) => void;
+  onMouseDown?: (event: KonvaEventObject<MouseEvent>) => void;
+  onMouseUp?: (event: KonvaEventObject<MouseEvent>) => void;
+  onClick?: (event: KonvaEventObject<MouseEvent>) => void;
   children: React.ReactNode;
 }
 
@@ -115,7 +115,7 @@ export const BaseStage = ({
     e.evt.preventDefault();
 
     if (onDragStart != undefined) onDragStart(e);
-    
+
     const stage = e.target.getStage();
     if (stage === null) return;
 
@@ -137,7 +137,7 @@ export const BaseStage = ({
     e.evt.preventDefault();
 
     if (onMouseMove != undefined) onMouseMove(e);
-    
+
     if (e.evt.buttons === 4) return;
 
     if (e.evt.buttons !== 4) {
@@ -157,7 +157,7 @@ export const BaseStage = ({
     e.evt.preventDefault();
 
     if (onMouseDown != undefined) onMouseDown(e);
-    
+
     if (e.evt.buttons === 4) {
       document.body.style.cursor = 'grabbing';
     }
@@ -167,15 +167,14 @@ export const BaseStage = ({
     if (stage == null || !layerListening || !selectable) return;
 
     startSelection(stage, setSelectionRectAttrs);
-
   };
 
   // Event listener responsible for ending the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
-    
+
     if (onMouseUp != undefined) onMouseUp(e);
-    
+
     if (!selectable) return;
     endSelection(setSelectionRectAttrs, selectionRectAttrs);
   };

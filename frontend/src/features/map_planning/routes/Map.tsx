@@ -1,7 +1,9 @@
+import BaseLayerForm from '../components/BaseLayerForm';
 import { BaseStage } from '../components/BaseStage';
 import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
+import BaseLayer from '../layers/BaseLayer';
 import PlantsLayer from '../layers/PlantsLayer';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
@@ -14,8 +16,6 @@ import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Rect } from 'react-konva';
-import BaseLayer from '../layers/BaseLayer';
-import { Input } from 'postcss';
 
 /**
  * This component is responsible for rendering the map that the user is going to draw on.
@@ -44,27 +44,27 @@ export const Map = () => {
       <SimpleFormInput
         id="input1"
         labelText="Some attribute"
-        placeHolder="some input"
+        placeholder="some input"
       ></SimpleFormInput>
       <SimpleFormInput
         id="input1"
         labelText="Some attribute"
-        placeHolder="some input"
+        placeholder="some input"
       ></SimpleFormInput>
       <SimpleFormInput
         id="input1"
         labelText="Some attribute"
-        placeHolder="some input"
+        placeholder="some input"
       ></SimpleFormInput>
       <SimpleFormInput
         id="input1"
         labelText="Some attribute"
-        placeHolder="some input"
+        placeholder="some input"
       ></SimpleFormInput>
       <SimpleFormInput
         id="input1"
         labelText="Some attribute"
-        placeHolder="some input"
+        placeholder="some input"
       ></SimpleFormInput>
       <SimpleButton>Submit data</SimpleButton>
     </div>
@@ -72,7 +72,35 @@ export const Map = () => {
 
   const getToolbarContent = (layerName: LayerName) => {
     const content = {
-      Base: { right: <div></div>, left: <div></div> },
+      Base: {
+        right: <div></div>,
+        left: (
+          <BaseLayerForm
+            rotation={state.layers.Base.attributes.rotation}
+            imageURL={state.layers.Base.attributes.imageURL}
+            onRotationChange={(event) =>
+              dispatch({
+                type: 'ATTRIBUTE_UPDATE',
+                layer: 'Base',
+                payload: {
+                  ...state.layers.Base.attributes,
+                  rotation: parseInt(event.target.value),
+                },
+              })
+            }
+            onImageURLChange={(event) =>
+              dispatch({
+                type: 'ATTRIBUTE_UPDATE',
+                layer: 'Base',
+                payload: {
+                  ...state.layers.Base.attributes,
+                  imageURL: event.target.value,
+                },
+              })
+            }
+          />
+        ),
+      },
       Plant: { right: <PlantSearch />, left: formPlaceholder },
       Drawing: { right: <div></div>, left: <div></div> },
       Dimension: { right: <div></div>, left: <div></div> },
@@ -171,6 +199,11 @@ export const Map = () => {
         ></Toolbar>
       </section>
       <BaseStage>
+        <BaseLayer
+          imageUrl={state.layers.Base.attributes.imageURL}
+          pixels_per_meter={10}
+          rotation={state.layers.Base.attributes.rotation}
+        />
         <PlantsLayer visible={state.layers.Plant.visible} opacity={state.layers.Plant.opacity}>
           {state.layers['Plant'].objects.map((o) => (
             <Rect

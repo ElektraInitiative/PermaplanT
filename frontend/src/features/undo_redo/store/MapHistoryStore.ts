@@ -22,8 +22,14 @@ type MapStore = {
   canUndo: boolean;
   canRedo: boolean;
   updateSelectedLayer: (selectedLayer: LayerName) => void;
-  updateLayerVisible: (layerName: LayerName, visible: LayerState<typeof layerName>['visible']) => void;
-  updateLayerOpacity: (layerName: LayerName, opacity: LayerState<typeof layerName>['opacity']) => void;
+  updateLayerVisible: (
+    layerName: LayerName,
+    visible: LayerState<typeof layerName>['visible'],
+  ) => void;
+  updateLayerOpacity: (
+    layerName: LayerName,
+    opacity: LayerState<typeof layerName>['opacity'],
+  ) => void;
 };
 
 export const DEFAULT_STATE: MapState = {
@@ -41,7 +47,7 @@ export const DEFAULT_STATE: MapState = {
       visible: true,
       opacity: 1,
       objects: [],
-      attributes: {imageURL: '', scale: 0, rotation: 0},
+      attributes: { imageURL: '', scale: 0, rotation: 0 },
     },
     Drawing: {
       index: 'Drawing',
@@ -288,9 +294,9 @@ function handleUpdateAttributeAction(state: MapState, action: AttributeUpdateAct
       [action.layer]: {
         ...state.layers[action.layer],
         attributes: action.payload,
-      }
-    }
-  }
+      },
+    },
+  };
 }
 
 function handleAddObjectAction(state: MapState, action: ObjectAddAction): MapState {
@@ -340,8 +346,11 @@ function reduceObjectUpdatesToLayers(layers: Layers, objectUpdate: ObjectState):
  * given a history of actions, reduce it into a single state, that is the sum of all actions
  */
 function reduceHistory(history: TrackedAction[]): MapState {
-  const state = history.reduce((state, action) => {
+  return history.reduce((state, action) => {
     switch (action.type) {
+      case 'ATTRIBUTE_UPDATE':
+        return handleUpdateAttributeAction(state, action);
+
       case 'OBJECT_ADD':
         return handleAddObjectAction(state, action);
 
@@ -353,8 +362,6 @@ function reduceHistory(history: TrackedAction[]): MapState {
         return state;
     }
   }, DEFAULT_STATE);
-
-  return state;
 }
 
 export default useMapStore;
