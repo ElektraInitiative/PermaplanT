@@ -21,8 +21,8 @@ type MapStore = {
   canUndo: boolean;
   canRedo: boolean;
   updateSelectedLayer: (selectedLayer: LayerName) => void;
-  updateLayerVisible: (layerName: LayerName, visible: LayerState['visible']) => void;
-  updateLayerOpacity: (layerName: LayerName, opacity: LayerState['opacity']) => void;
+  updateLayerVisible: (layerName: LayerName, visible: LayerState<typeof layerName>['visible']) => void;
+  updateLayerOpacity: (layerName: LayerName, opacity: LayerState<typeof layerName>['opacity']) => void;
 };
 
 export const DEFAULT_STATE: MapState = {
@@ -33,108 +33,126 @@ export const DEFAULT_STATE: MapState = {
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Base: {
       index: 'Base',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: {scale: 0, rotation: 0},
     },
     Drawing: {
       index: 'Drawing',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Dimension: {
       index: 'Dimension',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Fertilization: {
       index: 'Fertilization',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Habitats: {
       index: 'Habitats',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Hydrology: {
       index: 'Hydrology',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Infrastructure: {
       index: 'Infrastructure',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Labels: {
       index: 'Labels',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Landscape: {
       index: 'Landscape',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Paths: {
       index: 'Paths',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Shade: {
       index: 'Shade',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Soil: {
       index: 'Soil',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Terrain: {
       index: 'Terrain',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Trees: {
       index: 'Trees',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Warnings: {
       index: 'Warnings',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Winds: {
       index: 'Winds',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
     Zones: {
       index: 'Zones',
       visible: true,
       opacity: 1,
       objects: [],
+      attributes: undefined,
     },
   },
 };
@@ -155,7 +173,7 @@ const useMapStore = create<MapStore>((set) => ({
         selectedLayer: selectedLayer,
       },
     })),
-  updateLayerVisible: (layerName: LayerName, visible: LayerState['visible']) =>
+  updateLayerVisible: (layerName: LayerName, visible: LayerState<typeof layerName>['visible']) =>
     set((state) => ({
       ...state,
       state: {
@@ -169,7 +187,7 @@ const useMapStore = create<MapStore>((set) => ({
         },
       },
     })),
-  updateLayerOpacity: (layerName: LayerName, opacity: LayerState['opacity']) =>
+  updateLayerOpacity: (layerName: LayerName, opacity: LayerState<typeof layerName>['opacity']) =>
     set((state) => ({
       ...state,
       state: {
