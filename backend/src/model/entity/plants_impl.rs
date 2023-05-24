@@ -4,6 +4,8 @@ use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResu
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::db::function::array_to_string;
+use crate::db::function::greatest;
+use crate::db::function::similarity;
 use crate::db::pagination::{Paginate, DEFAULT_PER_PAGE, MIN_PAGE};
 use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
@@ -51,20 +53,30 @@ impl Plants {
             LIMIT $2 OFFSET $3
         "#;
 
-        let sql_query = plants::table.select(plants::all_columns).filter(
-            unique_name
-                .ilike(&query)
-                .or(array_to_string(common_name_de, " ").ilike(&query))
-                .or(array_to_string(common_name_en, " ").ilike(&query))
-                .or(edible_uses_en.ilike(&query)),
-        );
+        let sql_query = plants::table
+            .select((
+                plants::all_columns,
+                greatest(
+                    similarity(unique_name, &query),
+                    similarity(array_to_string(common_name_de, " "), &query),
+                    similarity(array_to_string(common_name_en, " "), &query),
+                    similarity("edible_uses_en", &query),
+                ),
+            ))
+            .filter(
+                unique_name
+                    .ilike(&query)
+                    .or(array_to_string(common_name_de, " ").ilike(&query))
+                    .or(array_to_string(common_name_en, " ").ilike(&query))
+                    .or(edible_uses_en.ilike(&query)),
+            );
 
         let query_page = sql_query
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page)
-            .load_page::<Self>(conn)
+            .load_page::<(Self, f32)>(conn)
             .await;
-        query_page.map(Page::from_entity)
+        query_page.map(Page::from_entity_tuple)
     }
 
     /// Get a page of plants.

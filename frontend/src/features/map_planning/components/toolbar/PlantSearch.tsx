@@ -55,7 +55,7 @@ export const PlantSearch = () => {
                   baseApiUrl + '/api/plants/search?search_query=' + event.target.value,
                 );
                 const json = await response.json();
-                setPlants(json.map((plant: { unique_name: string }) => plant.unique_name));
+                setPlants(json.results.map((plant: { unique_name: string }) => plant.unique_name));
               }}
               ref={searchInputRef}
               onBlur={() => setSearchVisible(false)}
