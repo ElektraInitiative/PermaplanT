@@ -1,6 +1,9 @@
 import { createNextcloudAPI } from '@/config/axios';
 
+// NOTE: Leaving this for now as it could be useful as an exmample
+// when fetching ressources from other parts of Nextcloud
 /**
+ * @deprecated This is done by the webdav lib now
  * get list of available images at the given path from Nextcloud
  * @param path: Nextcloud path to target directory e.g. (Photos)
  */
@@ -23,7 +26,10 @@ export const getImageList = async (path: string): Promise<Array<string>> => {
   }
 };
 
+// NOTE: Leaving this for now as it could be useful as an exmample
+// when fetching ressources from other parts of Nextcloud
 /**
+ * @deprecated This is done by the webdav lib now
  * get an Image as a blob from Nextcloud
  */
 export const getImage = async (imageUrl: string): Promise<Blob> => {
