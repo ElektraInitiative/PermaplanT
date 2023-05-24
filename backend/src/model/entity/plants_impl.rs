@@ -1,17 +1,21 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::dsl::sql;
-use diesel::sql_types::{Bool, Float, Text};
-use diesel::ExpressionMethods;
-use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
+use diesel::{
+    dsl::sql,
+    sql_types::{Float, Text},
+    BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult,
+};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
-use crate::db::function::array_to_string;
-use crate::db::pagination::Paginate;
-use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
-    model::dto::PlantsSummaryDto,
-    schema::plants::{self, all_columns, common_name_en, unique_name},
+    db::{
+        function::{array_to_string, fuzzy},
+        pagination::Paginate,
+    },
+    model::dto::{Page, PageParameters, PlantsSearchParameters, PlantsSummaryDto},
+    schema::plants::{
+        self, all_columns, common_name_de, common_name_en, edible_uses_en, unique_name,
+    },
 };
 
 use super::Plants;
@@ -44,13 +48,10 @@ impl Plants {
         let sql_query = plants::table
             .select((plants::all_columns, rank_sql))
             .filter(
-                sql::<Bool>("unique_name % ")
-                    .bind::<Text, _>(&query)
-                    .or(sql::<Bool>("ARRAY_TO_STRING(common_name_de, ' ') % ")
-                        .bind::<Text, _>(&query))
-                    .or(sql::<Bool>("ARRAY_TO_STRING(common_name_en, ' ') % ")
-                        .bind::<Text, _>(&query))
-                    .or(sql::<Bool>("edible_uses_en % ").bind::<Text, _>(&query)),
+                fuzzy(unique_name, &query)
+                    .or(fuzzy(array_to_string(common_name_de, " "), &query))
+                    .or(fuzzy(array_to_string(common_name_en, " "), &query))
+                    .or(fuzzy(edible_uses_en, &query)),
             )
             .order(sql::<Float>("rank").desc());
 
