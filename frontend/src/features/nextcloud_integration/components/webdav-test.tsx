@@ -21,6 +21,9 @@ export const WebdavTest = () => {
     getFiles()
   }, [])
 
+  /**
+   * upload image to Nextcloud
+  */
   async function uploadImage() {
     webdav.putFileContents(path + fileName, fileBuffer)
   }
@@ -50,7 +53,7 @@ export const WebdavTest = () => {
   };
 
   /**
-   * load files from path
+   * load list of available files from Nextcloud at path
   */
   async function getFiles() {
     const files = await webdav.getDirectoryContents(path)
@@ -61,7 +64,7 @@ export const WebdavTest = () => {
   }
 
   /**
-   * load filecontents from path
+   * load filecontents from Nextcloud at path
   */
   async function getImage(filename: string) {
     const imageBuffer = await webdav.getFileContents(filename)
