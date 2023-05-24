@@ -34,30 +34,15 @@ impl Plants {
         let query = format!("%{search_query}%");
 
         // needs to be raw SQL as 'AS rank' cannot be represented by diesel, other functions could be created via the macro sql_function!
-        let rank_sql = sql::<Float>(
-            r#"greatest(
-            similarity(unique_name, "#,
-        )
-        .bind::<Text, _>(&query)
-        .sql(
-            r#"),
-            similarity(ARRAY_TO_STRING(common_name_de, ' '), "#,
-        )
-        .bind::<Text, _>(&query)
-        .sql(
-            r#"),
-            similarity(ARRAY_TO_STRING(common_name_en, ' '), "#,
-        )
-        .bind::<Text, _>(&query)
-        .sql(
-            r#"),
-            similarity(edible_uses_en, "#,
-        )
-        .bind::<Text, _>(&query)
-        .sql(
-            r#")
-        ) AS rank"#,
-        );
+        let rank_sql = sql::<Float>("greatest(similarity(unique_name, ")
+            .bind::<Text, _>(&query)
+            .sql("), similarity(ARRAY_TO_STRING(common_name_de, ' '), ")
+            .bind::<Text, _>(&query)
+            .sql("), similarity(ARRAY_TO_STRING(common_name_en, ' '), ")
+            .bind::<Text, _>(&query)
+            .sql("), similarity(edible_uses_en, ")
+            .bind::<Text, _>(&query)
+            .sql(")) AS rank");
         let sql_query = plants::table
             .select((plants::all_columns, rank_sql))
             .filter(
