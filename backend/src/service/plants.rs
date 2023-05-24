@@ -21,7 +21,7 @@ pub async fn search(
     search_query: &str,
     page_parameters: PageParameters,
     pool: &Data<Pool>,
-) -> Result<Vec<PlantsSummaryDto>, ServiceError> {
+) -> Result<Page<PlantsSummaryDto>, ServiceError> {
     let mut conn = pool.get().await?;
     let result = Plants::search(search_query, page_parameters, &mut conn).await?;
     Ok(result)

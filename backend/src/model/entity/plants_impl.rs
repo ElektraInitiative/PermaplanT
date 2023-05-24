@@ -26,7 +26,7 @@ impl Plants {
         search_query: &str,
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Vec<PlantsSummaryDto>> {
+    ) -> QueryResult<Page<PlantsSummaryDto>> {
         let query = format!("%{search_query}%");
         let limit = page_parameters.per_page.unwrap_or(DEFAULT_PER_PAGE);
         let offset = page_parameters.page.unwrap_or(MIN_PAGE) * limit;
@@ -34,7 +34,7 @@ impl Plants {
         // This has to be a raw query as similarity() is a function provided by pg_trgm which diesel doesn't support
         // This is not SQL injectable as the query param is bound using diesel.
         let query_sql = r#"
-            SELECT *,
+            SELECT *, COUNT(*),
                 greatest(
                     similarity(unique_name, $1),
                     similarity(ARRAY_TO_STRING(common_name_de, ' '), $1),
@@ -54,9 +54,10 @@ impl Plants {
             .bind::<Text, _>(&query)
             .bind::<Integer, _>(limit)
             .bind::<Integer, _>(offset)
-            .load::<Self>(conn)
-            .await;
-        query_result.map(|plants| plants.into_iter().map(Into::into).collect())
+            .load::<(Self, i64)>(conn)
+            .await?;
+        let page = Page::from_query_result(query_result, limit, offset);
+        Ok(page.into())
     }
 
     /// Get a page of plants.
