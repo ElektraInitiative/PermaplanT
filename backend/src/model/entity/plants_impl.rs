@@ -9,7 +9,7 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use crate::{
     db::{
         function::{
-            array_to_string, greatest, similarity, similarity_nullable, AliasT,
+            array_to_string, greatest, similarity, similarity_nullable, AliasExpressionMethod,
             PgTrgmExpressionMethods,
         },
         pagination::Paginate,
@@ -35,34 +35,29 @@ impl Plants {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
-        let query = format!("{search_query}");
-
         let sql_query = plants::table
             .select((
                 plants::all_columns,
                 greatest(
-                    similarity(unique_name, &query),
-                    similarity(array_to_string(common_name_de, " "), &query),
-                    similarity(array_to_string(common_name_en, " "), &query),
-                    similarity_nullable(edible_uses_en, &query),
+                    similarity(unique_name, search_query),
+                    similarity(array_to_string(common_name_de, " "), search_query),
+                    similarity(array_to_string(common_name_en, " "), search_query),
+                    similarity_nullable(edible_uses_en, search_query),
                 )
                 .alias("rank"),
             ))
             .filter(
                 unique_name
-                    .fuzzy(&query)
-                    .or(array_to_string(common_name_de, " ").fuzzy(&query))
-                    .or(array_to_string(common_name_en, " ").fuzzy(&query))
-                    .or(edible_uses_en.fuzzy(&query)),
+                    .fuzzy(search_query)
+                    .or(array_to_string(common_name_de, " ").fuzzy(search_query))
+                    .or(array_to_string(common_name_en, " ").fuzzy(search_query))
+                    .or(edible_uses_en.fuzzy(search_query)),
             )
-            .order(sql::<Float>("rank").desc());
-
-        println!("{:?}", diesel::debug_query::<diesel::pg::Pg, _>(&sql_query));
-        let query_page = sql_query
+            .order(sql::<Float>("rank").desc())
             .paginate(page_parameters.page)
-            .per_page(page_parameters.per_page)
-            .load_page::<(Self, f32)>(conn)
-            .await;
+            .per_page(page_parameters.per_page);
+
+        let query_page = sql_query.load_page::<(Self, f32)>(conn).await;
         query_page.map(Page::from_entity)
     }
 
