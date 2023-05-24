@@ -1,14 +1,15 @@
 import { createNextcloudAPI } from '@/config/axios';
 
 /**
- * get list of available images int the directory 'Photos' from Nextcloud
+ * get list of available images at the given path from Nextcloud
+ * @param path: Nextcloud path to target directory e.g. (Photos)
  */
-export const getPhotos = async (): Promise<Array<string>> => {
+export const getImageList = async (path: string): Promise<Array<string>> => {
   const http = createNextcloudAPI();
   try {
     const response = await http({
       method: 'PROPFIND',
-      url: '/remote.php/webdav/Photos',
+      url: '/remote.php/webdav/' + path,
     });
     const parser = new DOMParser();
     const doc = parser.parseFromString(response.data, 'application/xml');
