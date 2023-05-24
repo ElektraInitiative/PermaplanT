@@ -1,6 +1,5 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::sql_types::{Integer, Text};
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
@@ -9,7 +8,9 @@ use crate::db::pagination::{Paginate, DEFAULT_PER_PAGE, MIN_PAGE};
 use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
     model::dto::PlantsSummaryDto,
-    schema::plants::{self, all_columns, common_name_en, unique_name},
+    schema::plants::{
+        self, all_columns, common_name_de, common_name_en, edible_uses_en, unique_name,
+    },
 };
 
 use super::Plants;
@@ -28,12 +29,12 @@ impl Plants {
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
         let query = format!("%{search_query}%");
-        let limit = page_parameters.per_page.unwrap_or(DEFAULT_PER_PAGE);
-        let offset = page_parameters.page.unwrap_or(MIN_PAGE) * limit;
+        let _limit = page_parameters.per_page.unwrap_or(DEFAULT_PER_PAGE);
+        let _offset = page_parameters.page.unwrap_or(MIN_PAGE) * _limit;
 
         // This has to be a raw query as similarity() is a function provided by pg_trgm which diesel doesn't support
         // This is not SQL injectable as the query param is bound using diesel.
-        let query_sql = r#"
+        let _query_sql = r#"
             SELECT *, COUNT(*),
                 greatest(
                     similarity(unique_name, $1),
@@ -50,14 +51,20 @@ impl Plants {
             LIMIT $2 OFFSET $3
         "#;
 
-        let query_result = diesel::sql_query(query_sql)
-            .bind::<Text, _>(&query)
-            .bind::<Integer, _>(limit)
-            .bind::<Integer, _>(offset)
-            .load::<(Self, i64)>(conn)
-            .await?;
-        let page = Page::from_query_result(query_result, limit, offset);
-        Ok(page.into())
+        let sql_query = plants::table.select(plants::all_columns).filter(
+            unique_name
+                .ilike(&query)
+                .or(array_to_string(common_name_de, " ").ilike(&query))
+                .or(array_to_string(common_name_en, " ").ilike(&query))
+                .or(edible_uses_en.ilike(&query)),
+        );
+
+        let query_page = sql_query
+            .paginate(page_parameters.page)
+            .per_page(page_parameters.per_page)
+            .load_page::<Self>(conn)
+            .await;
+        query_page.map(Page::from_entity)
     }
 
     /// Get a page of plants.
