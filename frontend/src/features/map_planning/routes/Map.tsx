@@ -6,7 +6,7 @@ import PlantsLayer from '../layers/PlantsLayer';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import useMapStore from '@/features/undo_redo';
+import useMapStore, { LayerName } from '@/features/undo_redo';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
@@ -34,6 +34,62 @@ export const Map = () => {
     if (!nodes.includes(node)) {
       transformer?.nodes([node]);
     }
+  };
+
+  const formPlaceholder = (
+    <div className="flex flex-col gap-2 p-2">
+      <h2>Edit attributes</h2>
+      <SimpleFormInput
+        id="input1"
+        labelText="Some attribute"
+        placeHolder="some input"
+      ></SimpleFormInput>
+      <SimpleFormInput
+        id="input1"
+        labelText="Some attribute"
+        placeHolder="some input"
+      ></SimpleFormInput>
+      <SimpleFormInput
+        id="input1"
+        labelText="Some attribute"
+        placeHolder="some input"
+      ></SimpleFormInput>
+      <SimpleFormInput
+        id="input1"
+        labelText="Some attribute"
+        placeHolder="some input"
+      ></SimpleFormInput>
+      <SimpleFormInput
+        id="input1"
+        labelText="Some attribute"
+        placeHolder="some input"
+      ></SimpleFormInput>
+      <SimpleButton>Submit data</SimpleButton>
+    </div>
+  );
+
+  const getToolbarContent = (layerName: LayerName) => {
+    const content = {
+      Base: { right: <div></div>, left: <div></div> },
+      Plant: { right: <PlantSearch />, left: formPlaceholder },
+      Drawing: { right: <div></div>, left: <div></div> },
+      Dimension: { right: <div></div>, left: <div></div> },
+      Fertilization: { right: <div></div>, left: <div></div> },
+      Habitats: { right: <div></div>, left: <div></div> },
+      Hydrology: { right: <div></div>, left: <div></div> },
+      Infrastructure: { right: <div></div>, left: <div></div> },
+      Labels: { right: <div></div>, left: <div></div> },
+      Landscape: { right: <div></div>, left: <div></div> },
+      Paths: { right: <div></div>, left: <div></div> },
+      Shade: { right: <div></div>, left: <div></div> },
+      Soil: { right: <div></div>, left: <div></div> },
+      Terrain: { right: <div></div>, left: <div></div> },
+      Trees: { right: <div></div>, left: <div></div> },
+      Warnings: { right: <div></div>, left: <div></div> },
+      Winds: { right: <div></div>, left: <div></div> },
+      Zones: { right: <div></div>, left: <div></div> },
+    };
+    return content[layerName];
   };
 
   return (
@@ -108,43 +164,13 @@ export const Map = () => {
               </IconButton>
             </div>
           }
-          contentBottom={
-            <div className="flex flex-col gap-2 p-2">
-              <h2>Edit attributes</h2>
-              <SimpleFormInput
-                id="input1"
-                labelText="Some attribute"
-                placeHolder="some input"
-              ></SimpleFormInput>
-              <SimpleFormInput
-                id="input1"
-                labelText="Some attribute"
-                placeHolder="some input"
-              ></SimpleFormInput>
-              <SimpleFormInput
-                id="input1"
-                labelText="Some attribute"
-                placeHolder="some input"
-              ></SimpleFormInput>
-              <SimpleFormInput
-                id="input1"
-                labelText="Some attribute"
-                placeHolder="some input"
-              ></SimpleFormInput>
-              <SimpleFormInput
-                id="input1"
-                labelText="Some attribute"
-                placeHolder="some input"
-              ></SimpleFormInput>
-              <SimpleButton>Submit data</SimpleButton>
-            </div>
-          }
+          contentBottom={getToolbarContent(state.selectedLayer).left}
           position="left"
         ></Toolbar>
       </section>
       <BaseStage>
-        <PlantsLayer>
-          {state.layers['plant'].objects.map((o) => (
+        <PlantsLayer visible={state.layers.Plant.visible} opacity={state.layers.Plant.opacity}>
+          {state.layers['Plant'].objects.map((o) => (
             <Rect
               {...o}
               key={o.id}
@@ -165,7 +191,7 @@ export const Map = () => {
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
           contentTop={<Layers />}
-          contentBottom={<PlantSearch />}
+          contentBottom={getToolbarContent(state.selectedLayer).right}
           position="right"
           minWidth={200}
         ></Toolbar>
