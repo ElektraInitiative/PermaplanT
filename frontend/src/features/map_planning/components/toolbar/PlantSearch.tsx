@@ -51,9 +51,7 @@ export const PlantSearch = () => {
               placeholder={t('plantSearch:placeholder')}
               handleSearch={async (event) => {
                 // TODO: debounce + other refactor
-                const response = await fetch(
-                  baseApiUrl + '/api/plants/search?search_query=' + event.target.value,
-                );
+                const response = await fetch(baseApiUrl + '/api/plants?name=' + event.target.value);
                 const json = await response.json();
                 setPlants(json.results.map((plant: { unique_name: string }) => plant.unique_name));
               }}

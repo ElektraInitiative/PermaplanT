@@ -13,20 +13,6 @@ use crate::{
     },
 };
 
-/// Full-text search plants from in the database.
-///
-/// # Errors
-/// If the connection to the database could not be established.
-pub async fn search(
-    search_query: &str,
-    page_parameters: PageParameters,
-    pool: &Data<Pool>,
-) -> Result<Page<PlantsSummaryDto>, ServiceError> {
-    let mut conn = pool.get().await?;
-    let result = Plants::search(search_query, page_parameters, &mut conn).await?;
-    Ok(result)
-}
-
 /// Search plants from in the database.
 ///
 /// # Errors
@@ -37,7 +23,10 @@ pub async fn find(
     pool: &Data<Pool>,
 ) -> Result<Page<PlantsSummaryDto>, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Plants::find(search_parameters, page_parameters, &mut conn).await?;
+    let result = match search_parameters.name {
+        Some(search_query) => Plants::search(&search_query, page_parameters, &mut conn).await?,
+        None => Plants::find_any(page_parameters, &mut conn).await?,
+    };
     Ok(result)
 }
 

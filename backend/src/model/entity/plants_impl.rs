@@ -1,8 +1,7 @@
 //! Contains the implementation of [`Plants`].
 
 use diesel::{
-    dsl::sql, sql_types::Float, BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods,
-    QueryDsl, QueryResult,
+    dsl::sql, sql_types::Float, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
@@ -14,7 +13,7 @@ use crate::{
         },
         pagination::Paginate,
     },
-    model::dto::{Page, PageParameters, PlantsSearchParameters, PlantsSummaryDto},
+    model::dto::{Page, PageParameters, PlantsSummaryDto},
     schema::plants::{
         self, all_columns, common_name_de, common_name_en, edible_uses_en, unique_name,
     },
@@ -61,29 +60,17 @@ impl Plants {
         query_page.map(Page::from_entity)
     }
 
-    /// Get a page of plants.
-    /// Can be filtered by name if one is provided in `search_parameters`.
+    /// Get a page of some plants.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find(
-        search_parameters: PlantsSearchParameters,
+    pub async fn find_any(
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
-        let mut query = plants::table.select(all_columns).into_boxed();
-
-        if let Some(term) = search_parameters.name {
-            query = query
-                .filter(
-                    unique_name
-                        .ilike(format!("%{term}%"))
-                        .or(array_to_string(common_name_en, " ").ilike(format!("%{term}%"))),
-                )
-                .order((unique_name, common_name_en));
-        }
-
-        let query_page = query
+        let query_page = plants::table
+            .select(all_columns)
+            .into_boxed()
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page)
             .load_page::<Self>(conn)

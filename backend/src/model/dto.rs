@@ -132,14 +132,6 @@ pub struct PlantingSearchParameters {
     pub plants_layer_id: Option<i32>,
 }
 
-/// Query parameters for searching plants in full-text search.
-#[typeshare]
-#[derive(Debug, Deserialize, IntoParams)]
-pub struct PlantsFullTextSearchParameters {
-    /// The search query for plants full-text search.
-    pub search_query: String,
-}
-
 /// Query parameters for searching plants.
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
