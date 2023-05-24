@@ -78,7 +78,20 @@ impl<T> PaginatedQuery<T> {
         let page = self.page;
         let per_page = self.per_page;
         let query_result = self.load::<(U, i64)>(conn).await?;
-        Ok(Page::from_query_result(query_result, per_page, page))
+        let total = query_result.get(0).map_or(0, |x| x.1);
+        let results = query_result.into_iter().map(|x| x.0).collect();
+        let extra_page = match total % i64::from(per_page) {
+            0 => 0,
+            _ => 1,
+        };
+        #[allow(clippy::cast_possible_truncation, clippy::integer_division)]
+        let total_pages = (total / i64::from(per_page) + extra_page) as i32;
+        Ok(Page {
+            results,
+            page,
+            per_page,
+            total_pages,
+        })
     }
 }
 

@@ -7,7 +7,7 @@ use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResu
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::db::function::array_to_string;
-use crate::db::pagination::{Paginate, DEFAULT_PER_PAGE, MIN_PAGE};
+use crate::db::pagination::Paginate;
 use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
     model::dto::PlantsSummaryDto,
@@ -22,7 +22,7 @@ impl Plants {
     /// Get the top plants matching the search query.
     ///
     /// Uses `pg_trgm` to find matches in `unique_name`, `common_name_de`, `common_name_en` and `edible_uses_en`.
-    /// Ranks them using the `PostgreSQL` function `similarity()`.
+    /// Ranks them using the `pg_trgm` function `similarity()`.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -32,29 +32,9 @@ impl Plants {
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
         let query = format!("%{search_query}%");
-        let _limit = page_parameters.per_page.unwrap_or(DEFAULT_PER_PAGE);
-        let _offset = page_parameters.page.unwrap_or(MIN_PAGE) * _limit;
 
-        // This has to be a raw query as similarity() is a function provided by pg_trgm which diesel doesn't support
-        // This is not SQL injectable as the query param is bound using diesel.
-        let _query_sql = r#"
-            SELECT *, COUNT(*),
-                greatest(
-                    similarity(unique_name, $1),
-                    similarity(ARRAY_TO_STRING(common_name_de, ' '), $1),
-                    similarity(ARRAY_TO_STRING(common_name_en, ' '), $1),
-                    similarity(edible_uses_en, $1)
-                ) AS rank
-            FROM plants
-            WHERE unique_name ILIKE $1
-            OR ARRAY_TO_STRING(common_name_de, ' ') ILIKE $1
-            OR ARRAY_TO_STRING(common_name_en, ' ') ILIKE $1
-            OR edible_uses_en ILIKE $1
-            ORDER BY rank DESC
-            LIMIT $2 OFFSET $3
-        "#;
-
-        // needs to be raw SQL as 'AS rank' cannot be represented by diesel, other functions could be created via sql_function!
+        // needs to be raw SQL as 'AS rank' cannot be represented by diesel, other functions could be created via the macro sql_function!
+        // TODO: this is SQL injectable
         let rank = &format!(
             r#"greatest(
                 similarity(unique_name, '{}'),
