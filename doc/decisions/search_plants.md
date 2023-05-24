@@ -97,7 +97,8 @@ Given the constrains and assumptions Partial Match with String Similarity (pg_tr
 
 ## Rationale
 
-As there is a relatively small number of rows and search terms performance isn't that much of an issue.
+As there is a relatively small number of rows and search terms performance isn't that much of an issue.  
+As of writing this pg_trgm executes almost instantly in a 'search as you type' fashion.
 
 The ability to handle spelling mistakes and loose matches is also great for us as plant names can be somewhat complicated to spell.
 
