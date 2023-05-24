@@ -15,7 +15,31 @@ sql_function! {
     ) -> Text
 }
 
+sql_function! {
+    fn similarity(
+        t1: Text,
+        t2: Text
+    ) -> Text
+}
+
+sql_function! {
+    fn similarity_nullable(
+        t1: Nullable<Text>,
+        t2: Text
+    ) -> Text
+}
+
+sql_function! {
+    fn greatest(
+        t1: Text,
+        t2: Text,
+        t3: Text,
+        t4: Text
+    ) -> Text
+}
+
 diesel::infix_operator!(PgTrgmFuzzy, " % ", backend: Pg);
+diesel::infix_operator!(Alias, " AS ");
 
 pub trait PgTrgmExpressionMethods
 where
@@ -27,6 +51,14 @@ where
         U: AsExpression<Self::SqlType>,
     {
         PgTrgmFuzzy::new(self, right.as_expression())
+    }
+
+    fn alias<U>(self, right: U) -> Alias<Self, U::Expression>
+    where
+        Self::SqlType: SqlType,
+        U: AsExpression<Self::SqlType>,
+    {
+        Alias::new(self, right.as_expression())
     }
 }
 

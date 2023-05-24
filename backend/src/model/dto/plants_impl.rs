@@ -14,8 +14,8 @@ impl From<Plants> for PlantsSummaryDto {
     }
 }
 
-impl From<(Plants, f32)> for PlantsSummaryDto {
-    fn from((plants, _): (Plants, f32)) -> Self {
+impl<T> From<(Plants, T)> for PlantsSummaryDto {
+    fn from((plants, _): (Plants, T)) -> Self {
         Self {
             id: plants.id,
             unique_name: plants.unique_name,

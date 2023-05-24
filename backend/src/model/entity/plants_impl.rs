@@ -9,7 +9,9 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::{
     db::{
-        function::{array_to_string, PgTrgmExpressionMethods},
+        function::{
+            array_to_string, greatest, similarity, similarity_nullable, PgTrgmExpressionMethods,
+        },
         pagination::Paginate,
     },
     model::dto::{Page, PageParameters, PlantsSearchParameters, PlantsSummaryDto},
@@ -35,18 +37,17 @@ impl Plants {
     ) -> QueryResult<Page<PlantsSummaryDto>> {
         let query = format!("{search_query}");
 
-        // needs to be raw SQL as 'AS rank' cannot be represented by diesel, other functions could be created via the macro sql_function!
-        let rank_sql = sql::<Float>("greatest(similarity(unique_name, ")
-            .bind::<Text, _>(&query)
-            .sql("), similarity(ARRAY_TO_STRING(common_name_de, ' '), ")
-            .bind::<Text, _>(&query)
-            .sql("), similarity(ARRAY_TO_STRING(common_name_en, ' '), ")
-            .bind::<Text, _>(&query)
-            .sql("), similarity(edible_uses_en, ")
-            .bind::<Text, _>(&query)
-            .sql(")) AS rank");
         let sql_query = plants::table
-            .select((plants::all_columns, rank_sql))
+            .select((
+                plants::all_columns,
+                greatest(
+                    similarity(unique_name, &query),
+                    similarity(array_to_string(common_name_de, " "), &query),
+                    similarity(array_to_string(common_name_en, " "), &query),
+                    similarity_nullable(edible_uses_en, &query),
+                )
+                .alias("rank"),
+            ))
             .filter(
                 unique_name
                     .fuzzy(&query)
@@ -59,7 +60,7 @@ impl Plants {
         let query_page = sql_query
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page)
-            .load_page::<(Self, f32)>(conn)
+            .load_page::<(Self, bool)>(conn) // not idea why diesel thinks this should be a bool, but it works
             .await;
         query_page.map(Page::from_entity)
     }
