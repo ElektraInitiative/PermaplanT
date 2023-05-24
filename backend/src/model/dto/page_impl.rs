@@ -19,22 +19,6 @@ impl<T> Page<T> {
         }
     }
 
-    /// Used to convert from a page of entities to a page of dto.
-    //
-    // Implementing the [`From`] trait with the types used here leads to a conflicting implementation.
-    // See. https://stackoverflow.com/a/37347504
-    pub fn from_entity_tuple<U, B>(value: Page<(U, B)>) -> Self
-    where
-        T: From<U>,
-    {
-        Self {
-            results: value.results.into_iter().map(|(u, _)| u.into()).collect(),
-            page: value.page,
-            per_page: value.per_page,
-            total_pages: value.total_pages,
-        }
-    }
-
     /// Used to convert the result of a pagination query to a page.
     pub fn from_query_result(query_result: Vec<(T, i64)>, per_page: i32, page: i32) -> Self {
         let total = query_result.get(0).map_or(0, |x| x.1);

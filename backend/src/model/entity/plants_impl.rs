@@ -1,11 +1,12 @@
 //! Contains the implementation of [`Plants`].
 
+use diesel::dsl::sql;
+use diesel::sql_types::Float;
+use diesel::ExpressionMethods;
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::db::function::array_to_string;
-use crate::db::function::greatest;
-use crate::db::function::similarity;
 use crate::db::pagination::{Paginate, DEFAULT_PER_PAGE, MIN_PAGE};
 use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
@@ -53,30 +54,33 @@ impl Plants {
             LIMIT $2 OFFSET $3
         "#;
 
+        // needs to be raw SQL as 'AS rank' cannot be represented by diesel, other functions could be created via sql_function!
+        let rank = &format!(
+            r#"greatest(
+                similarity(unique_name, '{}'),
+                similarity(ARRAY_TO_STRING(common_name_de, ' '), '{}'),
+                similarity(ARRAY_TO_STRING(common_name_en, ' '), '{}'),
+                similarity(edible_uses_en, '{}')
+            ) AS rank"#,
+            &query, &query, &query, &query
+        );
         let sql_query = plants::table
-            .select((
-                plants::all_columns,
-                greatest(
-                    similarity(unique_name, &query),
-                    similarity(array_to_string(common_name_de, " "), &query),
-                    similarity(array_to_string(common_name_en, " "), &query),
-                    similarity("edible_uses_en", &query),
-                ),
-            ))
+            .select((plants::all_columns, sql::<Float>(rank)))
             .filter(
                 unique_name
                     .ilike(&query)
                     .or(array_to_string(common_name_de, " ").ilike(&query))
                     .or(array_to_string(common_name_en, " ").ilike(&query))
                     .or(edible_uses_en.ilike(&query)),
-            );
+            )
+            .order(sql::<Float>("rank").desc());
 
         let query_page = sql_query
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page)
             .load_page::<(Self, f32)>(conn)
             .await;
-        query_page.map(Page::from_entity_tuple)
+        query_page.map(Page::from_entity)
     }
 
     /// Get a page of plants.
