@@ -1,7 +1,7 @@
 //! Contains the implementation of [`Plants`].
 
 use diesel::dsl::sql;
-use diesel::sql_types::{Float, Text};
+use diesel::sql_types::{Bool, Float, Text};
 use diesel::ExpressionMethods;
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
@@ -11,9 +11,7 @@ use crate::db::pagination::Paginate;
 use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
     model::dto::PlantsSummaryDto,
-    schema::plants::{
-        self, all_columns, common_name_de, common_name_en, edible_uses_en, unique_name,
-    },
+    schema::plants::{self, all_columns, common_name_en, unique_name},
 };
 
 use super::Plants;
@@ -31,7 +29,7 @@ impl Plants {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
-        let query = format!("%{search_query}%");
+        let query = format!("{search_query}");
 
         // needs to be raw SQL as 'AS rank' cannot be represented by diesel, other functions could be created via the macro sql_function!
         let rank_sql = sql::<Float>("greatest(similarity(unique_name, ")
@@ -46,11 +44,13 @@ impl Plants {
         let sql_query = plants::table
             .select((plants::all_columns, rank_sql))
             .filter(
-                unique_name
-                    .ilike(&query)
-                    .or(array_to_string(common_name_de, " ").ilike(&query))
-                    .or(array_to_string(common_name_en, " ").ilike(&query))
-                    .or(edible_uses_en.ilike(&query)),
+                sql::<Bool>("unique_name % ")
+                    .bind::<Text, _>(&query)
+                    .or(sql::<Bool>("ARRAY_TO_STRING(common_name_de, ' ') % ")
+                        .bind::<Text, _>(&query))
+                    .or(sql::<Bool>("ARRAY_TO_STRING(common_name_en, ' ') % ")
+                        .bind::<Text, _>(&query))
+                    .or(sql::<Bool>("edible_uses_en % ").bind::<Text, _>(&query)),
             )
             .order(sql::<Float>("rank").desc());
 
