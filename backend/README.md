@@ -52,38 +52,15 @@ cargo install typeshare-cli
 
 6. Start Keycloak
 
-via docker run:
+You can do one of the following two steps, the first one being the simpler one, but with less configuration options.
 
-`docker run -p 8081:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:21.1.1 start-dev`
+- To use the preconfigured Keycloak instance simply copy the newest version of `.env.sample` to `.env`
+- To use the local Keycloak variant follow the steps in [/doc/setups/keycloak/](/doc/setups/keycloak/README.md)  
+  You then also have to change following two env variables in `.env`
+  - `AUTH_DISCOVERY_URI=http://localhost:8081/realms/PermaplanT/.well-known/openid-configuration`
+  - `AUTH_CLIENT_ID=PermaplanT`
 
-or navigate to [/doc/setups/keycloak/](/doc/setups/keycloak/)
-and start keycloak with persistent storage via docker compose
-
-```
-docker compose up
-```
-
-more about the docker compose setup can be found in [/doc/setups/README.md]()
-
-7. Setup Keycloak:
-
-Open <http://localhost:8081/admin>.  
-Sign in with user `admin` and password `admin`.  
-Click on `master` -> `Create Realm`.  
-Name the realm `PermaplanT` and click `Create`.
-
-Click on `Clients` -> `Create client`.  
-Set the `Client ID` to `PermaplanT`.
-Click `Next` two times.  
-Set values: `Root URL = http://localhost:5173`, `Valid redirect URIs = /*`, `Web origins = +`.  
-Click `Save`.
-
-Create a second client `swagger-ui` with `Root URL = http://localhost:8080/doc/api/swagger/ui` (everything else the same as above).
-
-Go to `Users` and create a user `test`.  
-Click `Credentials` and set password to `test`.
-
-8. Run the backend
+7. Run the backend
 
 ```bash
 cargo run
