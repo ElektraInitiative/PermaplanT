@@ -1,7 +1,7 @@
 //! Contains the implementation of [`Plants`].
 
 use diesel::dsl::sql;
-use diesel::sql_types::Float;
+use diesel::sql_types::{Float, Text};
 use diesel::ExpressionMethods;
 use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
@@ -34,18 +34,32 @@ impl Plants {
         let query = format!("%{search_query}%");
 
         // needs to be raw SQL as 'AS rank' cannot be represented by diesel, other functions could be created via the macro sql_function!
-        // TODO: this is SQL injectable
-        let rank = &format!(
+        let rank_sql = sql::<Float>(
             r#"greatest(
-                similarity(unique_name, '{}'),
-                similarity(ARRAY_TO_STRING(common_name_de, ' '), '{}'),
-                similarity(ARRAY_TO_STRING(common_name_en, ' '), '{}'),
-                similarity(edible_uses_en, '{}')
-            ) AS rank"#,
-            &query, &query, &query, &query
+            similarity(unique_name, "#,
+        )
+        .bind::<Text, _>(&query)
+        .sql(
+            r#"),
+            similarity(ARRAY_TO_STRING(common_name_de, ' '), "#,
+        )
+        .bind::<Text, _>(&query)
+        .sql(
+            r#"),
+            similarity(ARRAY_TO_STRING(common_name_en, ' '), "#,
+        )
+        .bind::<Text, _>(&query)
+        .sql(
+            r#"),
+            similarity(edible_uses_en, "#,
+        )
+        .bind::<Text, _>(&query)
+        .sql(
+            r#")
+        ) AS rank"#,
         );
         let sql_query = plants::table
-            .select((plants::all_columns, sql::<Float>(rank)))
+            .select((plants::all_columns, rank_sql))
             .filter(
                 unique_name
                     .ilike(&query)
