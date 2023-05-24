@@ -4,7 +4,11 @@ import { useContext } from 'react';
 import { AuthContext, AuthContextProps } from 'react-oidc-context';
 import { toast } from 'react-toastify';
 
-const MockAuthContext: AuthContextProps = {
+/**
+ * A fallback for the AuthContext from 'react-oidc-context'.
+ * Each operation is a no-op, optionally displaying an error message.
+ */
+const AuthContextFallback: AuthContextProps = {
   settings: {
     authority: 'https://localhost:5001',
     client_id: 'test',
@@ -30,11 +34,15 @@ const MockAuthContext: AuthContextProps = {
   isAuthenticated: false,
 };
 
+/**
+ * Safe version of the useAuth() hook from 'react-oidc-context'.
+ * If the AuthContext is not yet initialized, a AuthContextFallback is returned.
+ */
 export function useSafeAuth() {
   const context = useContext(AuthContext);
 
   if (!context) {
-    return MockAuthContext;
+    return AuthContextFallback;
   }
 
   return context;
