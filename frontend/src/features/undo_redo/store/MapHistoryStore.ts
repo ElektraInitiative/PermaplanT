@@ -1,4 +1,5 @@
 import type {
+  AttributeUpdateAction,
   MapAction,
   ObjectAddAction,
   ObjectUpdatePositionAction,
@@ -40,7 +41,7 @@ export const DEFAULT_STATE: MapState = {
       visible: true,
       opacity: 1,
       objects: [],
-      attributes: {scale: 0, rotation: 0},
+      attributes: {imageURL: '', scale: 0, rotation: 0},
     },
     Drawing: {
       index: 'Drawing',
@@ -208,6 +209,15 @@ const useMapStore = create<MapStore>((set) => ({
  */
 function applyActionToState(action: MapAction, state: MapStore): MapStore {
   switch (action.type) {
+    case 'ATTRIBUTE_UPDATE':
+      return {
+        ...state,
+        history: [...state.history.slice(0, state.step), action],
+        step: state.step + 1,
+        state: handleUpdateAttributeAction(state.state, action),
+        canUndo: true,
+      };
+
     case 'OBJECT_ADD':
       return {
         ...state,
@@ -267,6 +277,19 @@ function applyActionToState(action: MapAction, state: MapStore): MapStore {
 
     default:
       return state;
+  }
+}
+
+function handleUpdateAttributeAction(state: MapState, action: AttributeUpdateAction): MapState {
+  return {
+    ...state,
+    layers: {
+      ...state.layers,
+      [action.layer]: {
+        ...state.layers[action.layer],
+        attributes: action.payload,
+      }
+    }
   }
 }
 
