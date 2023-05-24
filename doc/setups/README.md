@@ -48,7 +48,8 @@ Click `Credentials` and set password to `test`.
 Docker compose setup for nextcloud with mariadb:
 
 Start the Nextcloud instance with:
-```
+
+```bash
 docker compose up
 ```
 
