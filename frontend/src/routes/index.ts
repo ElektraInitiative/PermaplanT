@@ -49,6 +49,12 @@ const routes: Routes = {
     path: '/maps',
     title: 'Map Overview',
   },
+  [Pages.CreateMap]: {
+    component: CreateMap,
+    // path needs to change later to something like /user/:id/map/create
+    path: '/map/create',
+    title: 'Create new Map',
+  },
 };
 
 export default routes;
