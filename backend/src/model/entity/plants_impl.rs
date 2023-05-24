@@ -1,16 +1,16 @@
 //! Contains the implementation of [`Plants`].
 
 use diesel::{
-    dsl::sql,
-    sql_types::{Float, Text},
-    BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult,
+    dsl::sql, sql_types::Float, BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods,
+    QueryDsl, QueryResult,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::{
     db::{
         function::{
-            array_to_string, greatest, similarity, similarity_nullable, PgTrgmExpressionMethods,
+            array_to_string, greatest, similarity, similarity_nullable, AliasT,
+            PgTrgmExpressionMethods,
         },
         pagination::Paginate,
     },
@@ -57,10 +57,11 @@ impl Plants {
             )
             .order(sql::<Float>("rank").desc());
 
+        println!("{:?}", diesel::debug_query::<diesel::pg::Pg, _>(&sql_query));
         let query_page = sql_query
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page)
-            .load_page::<(Self, bool)>(conn) // not idea why diesel thinks this should be a bool, but it works
+            .load_page::<(Self, f32)>(conn)
             .await;
         query_page.map(Page::from_entity)
     }

@@ -1,11 +1,12 @@
 //! Database functions for diesel query-builder.
 
 use diesel::{
-    expression::AsExpression,
+    expression::{AsExpression, ValidGrouping},
     pg::Pg,
+    query_builder::{AstPass, QueryFragment},
     sql_function,
-    sql_types::{Array, Nullable, SqlType, Text},
-    Expression,
+    sql_types::{Array, Float, Nullable, SqlType, Text},
+    AppearsOnTable, Expression, QueryId, QueryResult, SelectableExpression,
 };
 
 sql_function! {
@@ -23,6 +24,7 @@ sql_function! {
 }
 
 sql_function! {
+    #[sql_name = "similarity"]
     fn similarity_nullable(
         t1: Nullable<Text>,
         t2: Text
@@ -39,7 +41,6 @@ sql_function! {
 }
 
 diesel::infix_operator!(PgTrgmFuzzy, " % ", backend: Pg);
-diesel::infix_operator!(Alias, " AS ");
 
 pub trait PgTrgmExpressionMethods
 where
@@ -52,14 +53,39 @@ where
     {
         PgTrgmFuzzy::new(self, right.as_expression())
     }
-
-    fn alias<U>(self, right: U) -> Alias<Self, U::Expression>
-    where
-        Self::SqlType: SqlType,
-        U: AsExpression<Self::SqlType>,
-    {
-        Alias::new(self, right.as_expression())
-    }
 }
 
 impl<T: Expression> PgTrgmExpressionMethods for T {}
+
+#[derive(Debug, Clone, Copy, QueryId, ValidGrouping)]
+pub struct Alias<T> {
+    query: T,
+    alias: &'static str,
+}
+
+impl<T> Expression for Alias<T> {
+    type SqlType = Float; // has to be a fixed value as GAT's are not yet stable
+}
+
+impl<T, QS> SelectableExpression<QS> for Alias<T> where Self: AppearsOnTable<QS> {}
+
+impl<T, QS> AppearsOnTable<QS> for Alias<T> where Self: Expression {}
+
+pub trait AliasT: Expression + Sized {
+    fn alias(self, alias: &'static str) -> Alias<Self> {
+        Alias { query: self, alias }
+    }
+}
+
+impl<T: Expression> AliasT for T {}
+
+impl<T> QueryFragment<Pg> for Alias<T>
+where
+    T: QueryFragment<Pg>,
+{
+    fn walk_ast<'b>(&'b self, mut out: AstPass<'_, 'b, Pg>) -> QueryResult<()> {
+        self.query.walk_ast(out.reborrow())?;
+        out.push_sql(&format!(" AS {}", self.alias));
+        Ok(())
+    }
+}
