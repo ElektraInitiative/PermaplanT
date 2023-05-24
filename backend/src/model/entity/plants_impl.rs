@@ -9,7 +9,7 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 
 use crate::{
     db::{
-        function::{array_to_string, fuzzy},
+        function::{array_to_string, PgTrgmExpressionMethods},
         pagination::Paginate,
     },
     model::dto::{Page, PageParameters, PlantsSearchParameters, PlantsSummaryDto},
@@ -48,10 +48,11 @@ impl Plants {
         let sql_query = plants::table
             .select((plants::all_columns, rank_sql))
             .filter(
-                fuzzy(unique_name, &query)
-                    .or(fuzzy(array_to_string(common_name_de, " "), &query))
-                    .or(fuzzy(array_to_string(common_name_en, " "), &query))
-                    .or(fuzzy(edible_uses_en, &query)),
+                unique_name
+                    .fuzzy(&query)
+                    .or(array_to_string(common_name_de, " ").fuzzy(&query))
+                    .or(array_to_string(common_name_en, " ").fuzzy(&query))
+                    .or(edible_uses_en.fuzzy(&query)),
             )
             .order(sql::<Float>("rank").desc());
 

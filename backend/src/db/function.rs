@@ -1,7 +1,7 @@
 //! Database functions for diesel query-builder.
 
 use diesel::{
-    expression::{AsExpression, TypedExpressionType},
+    expression::AsExpression,
     pg::Pg,
     sql_function,
     sql_types::{Array, Nullable, SqlType, Text},
@@ -17,11 +17,17 @@ sql_function! {
 
 diesel::infix_operator!(PgTrgmFuzzy, " % ", backend: Pg);
 
-pub fn fuzzy<T, U, ST>(left: T, right: U) -> PgTrgmFuzzy<T, U::Expression>
+pub trait PgTrgmExpressionMethods
 where
-    T: Expression<SqlType = ST>,
-    U: AsExpression<ST>,
-    ST: SqlType + TypedExpressionType,
+    Self: Expression + Sized,
 {
-    PgTrgmFuzzy::new(left, right.as_expression())
+    fn fuzzy<U>(self, right: U) -> PgTrgmFuzzy<Self, U::Expression>
+    where
+        Self::SqlType: SqlType,
+        U: AsExpression<Self::SqlType>,
+    {
+        PgTrgmFuzzy::new(self, right.as_expression())
+    }
 }
+
+impl<T: Expression> PgTrgmExpressionMethods for T {}
