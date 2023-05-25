@@ -5,14 +5,17 @@ import { AuthContext, AuthContextProps } from 'react-oidc-context';
 import { toast } from 'react-toastify';
 
 /**
- * A fallback for the AuthContext from 'react-oidc-context'.
+ * A fallback for the `AuthContext` from 'react-oidc-context'.
  * Each operation is a no-op, optionally displaying an error message.
+ *
+ * This fallback is not used by the `AuthProvider` from 'react-oidc-context'.
+ * It is only used by the `useSafeAuth` hook to prevent an undefined context error.
  */
 const AuthContextFallback: AuthContextProps = {
   settings: {
-    authority: 'https://localhost:5001',
-    client_id: 'test',
-    redirect_uri: 'https://localhost:3000',
+    authority: '',
+    client_id: '',
+    redirect_uri: '',
   },
   events: null as unknown as UserManagerEvents,
   clearStaleState: () => Promise.resolve(void 0),
