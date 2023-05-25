@@ -12,6 +12,9 @@ import type {
 } from './MapStoreTypes';
 import { LAYER_NAMES } from './MapStoreTypes';
 import i18next from '@/config/i18n';
+import Konva from 'konva';
+import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { createRef } from 'react';
 import { toast } from 'react-toastify';
 import type { StateCreator } from 'zustand';
 
@@ -36,12 +39,25 @@ export const createTrackedMapSlice: StateCreator<
   [],
   TrackedMapSlice
 > = (set) => ({
+  transformer: createRef<Konva.Transformer>(),
   trackedState: TRACKED_DEFAULT_STATE,
   history: [],
   step: 0,
   canUndo: false,
   canRedo: false,
   dispatch: (action) => set((state) => ({ ...state, ...applyActionToState(action, state) })),
+  addShapeToTransformer: (node: Shape<ShapeConfig>) => {
+    set((state) => {
+      const transformer = state.transformer.current;
+
+      const nodes = transformer?.getNodes() || [];
+      if (!nodes.includes(node)) {
+        transformer?.nodes([node]);
+      }
+
+      return state;
+    });
+  },
 });
 
 /**
@@ -78,6 +94,9 @@ function applyActionToState(action: MapAction, state: TrackedMapSlice): TrackedM
       const action = i18next.t(`undoRedo:${lastAction.type}`, { name: 'Placeholder' });
       toast(i18next.t('undoRedo:successful_undo', { action }));
 
+      // reset the transformer
+      state.transformer.current?.nodes([]);
+
       return {
         ...state,
         trackedState: reduceHistory(state.history.slice(0, state.step - 1)),
@@ -96,6 +115,9 @@ function applyActionToState(action: MapAction, state: TrackedMapSlice): TrackedM
       // TODO: read 'Placeholder' from the lastAction/nextAction
       const action = i18next.t(`undoRedo:${nextAction.type}`, { name: 'Placeholder' });
       toast(i18next.t('undoRedo:successful_redo', { action }));
+
+      // reset the transformer
+      state.transformer.current?.nodes([]);
 
       return {
         ...state,

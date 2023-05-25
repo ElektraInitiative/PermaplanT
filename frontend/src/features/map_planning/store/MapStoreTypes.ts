@@ -1,33 +1,31 @@
 import Konva from 'konva';
+import { Shape, ShapeConfig } from 'konva/lib/Shape';
 
-export type MapStore = {
-  history: TrackedAction[];
-  step: number;
-  trackedState: TrackedMapState;
-  untrackedState: UntrackedMapState;
-  transformer: React.RefObject<Konva.Transformer>;
-  dispatch: (action: MapAction) => void;
-  canUndo: boolean;
-  canRedo: boolean;
-  updateSelectedLayer: (selectedLayer: LayerName) => void;
-  updateLayerVisible: (layerName: LayerName, visible: UntrackedLayerState['visible']) => void;
-  updateLayerOpacity: (layerName: LayerName, opacity: UntrackedLayerState['opacity']) => void;
-};
-
-// part of store which is effected by the History
+/**
+ * Part of store which is affected by the History
+ */
 export interface TrackedMapSlice {
   trackedState: TrackedMapState;
   step: number;
   history: TrackedAction[];
   canUndo: boolean;
   canRedo: boolean;
+  /**
+   * The transformer is a reference to the Konva Transformer.
+   * It is used to transform selected objects.
+   * The transformer is coupled with the selected objects in the trackedState, so it should be here.
+   */
+  transformer: React.RefObject<Konva.Transformer>;
   dispatch: (action: MapAction) => void;
+  /** Event listener responsible for adding a single shape to the transformer */
+  addShapeToTransformer: (shape: Shape<ShapeConfig>) => void;
 }
 
-// part of store which is not effected by the History
+/**
+ * Part of store which is unaffected by the History
+ */
 export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
-  transformer: React.RefObject<Konva.Transformer>;
   updateSelectedLayer: (selectedLayer: LayerName) => void;
   updateLayerVisible: (layerName: LayerName, visible: UntrackedLayerState['visible']) => void;
   updateLayerOpacity: (layerName: LayerName, opacity: UntrackedLayerState['opacity']) => void;

@@ -7,8 +7,6 @@ import type {
   UntrackedMapState,
 } from './MapStoreTypes';
 import { LAYER_NAMES } from './MapStoreTypes';
-import Konva from 'konva';
-import { createRef } from 'react';
 import { StateCreator } from 'zustand';
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
@@ -33,7 +31,6 @@ export const createUntrackedMapSlice: StateCreator<
   [],
   UntrackedMapSlice
 > = (set) => ({
-  transformer: createRef<Konva.Transformer>(),
   untrackedState: UNTRACKED_DEFAULT_STATE,
   updateSelectedLayer: (selectedLayer: LayerName) =>
     set((state) => ({

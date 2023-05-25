@@ -27,16 +27,7 @@ export const Map = () => {
   const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);
   const dispatch = useMapStore((map) => map.dispatch);
-
-  // Event listener responsible for adding a single shape to the transformer
-  const addToTransformer = (node: Shape<ShapeConfig>) => {
-    const transformer = useMapStore.getState().transformer.current;
-
-    const nodes = transformer?.getNodes() || [];
-    if (!nodes.includes(node)) {
-      transformer?.nodes([node]);
-    }
-  };
+  const addShapeToTransformer = useMapStore((map) => map.addShapeToTransformer);
 
   const formPlaceholder = (
     <div className="flex flex-col gap-2 p-2">
@@ -183,11 +174,11 @@ export const Map = () => {
               draggable={true}
               shadowBlur={5}
               onClick={(e) => {
-                addToTransformer(e.target as Shape<ShapeConfig>);
+                addShapeToTransformer(e.target as Shape<ShapeConfig>);
               }}
               onDragStart={(e) => {
                 // sometimes the click event is not fired, so we have to add the object to the transformer here
-                addToTransformer(e.target as Shape<ShapeConfig>);
+                addShapeToTransformer(e.target as Shape<ShapeConfig>);
               }}
             />
           ))}
