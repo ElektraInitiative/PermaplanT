@@ -199,6 +199,8 @@ export const Map = () => {
       </section>
       <BaseStage>
         <BaseLayer
+          visible={state.layers.Base.visible}
+          opacity={state.layers.Base.opacity}
           imageUrl={state.layers.Base.attributes.imageURL}
           pixels_per_meter={10}
           rotation={state.layers.Base.attributes.rotation}
