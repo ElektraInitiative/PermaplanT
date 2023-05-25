@@ -1,6 +1,7 @@
 import useMapStore from './MapStore';
 import { ObjectState, TrackedLayers } from './MapStoreTypes';
 import { TRACKED_DEFAULT_STATE } from './TrackedMapStore';
+import { UNTRACKED_DEFAULT_STATE } from './UntrackedMapStore';
 
 describe('MapHistoryStore', () => {
   it('creates empty layers for each LayerName', () => {
@@ -365,10 +366,57 @@ describe('MapHistoryStore', () => {
       y: 123,
     });
   });
+
+  it('updates the selectedLayer on updateSelectedLayer', () => {
+    useMapStore.setState({
+      untrackedState: {
+        ...UNTRACKED_DEFAULT_STATE,
+      },
+      trackedState: {
+        ...TRACKED_DEFAULT_STATE,
+      },
+    });
+
+    useMapStore.getState().updateSelectedLayer('Soil');
+
+    const { untrackedState: newState } = useMapStore.getState();
+    expect(newState.selectedLayer).toEqual('Soil');
+  });
+
+  // regression
+  it('does not change the selectedLayer after an ObjectUndoAction', () => {
+    useMapStore.setState({
+      untrackedState: {
+        ...UNTRACKED_DEFAULT_STATE,
+      },
+      trackedState: {
+        ...TRACKED_DEFAULT_STATE,
+      },
+    });
+
+    useMapStore.getState().updateSelectedLayer('Soil');
+
+    const { dispatch } = useMapStore.getState();
+
+    dispatch({
+      type: 'OBJECT_ADD',
+      payload: createPlantTestObject(1),
+    });
+
+    dispatch({
+      type: 'UNDO',
+    });
+
+    const { untrackedState: newState } = useMapStore.getState();
+    expect(newState.selectedLayer).toEqual('Soil');
+  });
 });
 
 function initPlantLayerInStore(objects: ObjectState[] = []) {
   useMapStore.setState({
+    untrackedState: {
+      ...UNTRACKED_DEFAULT_STATE,
+    },
     trackedState: {
       ...TRACKED_DEFAULT_STATE,
       layers: {
