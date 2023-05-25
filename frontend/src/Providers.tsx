@@ -24,7 +24,7 @@ const getOidcConfig = async () => {
 };
 
 const onSigninCallback = (): void => {
-  // window.history.replaceState({}, document.title, window.location.pathname);
+  window.history.replaceState({}, document.title, window.location.pathname);
 };
 
 function AuthProviderWrapper({ children }: ProviderProps) {
