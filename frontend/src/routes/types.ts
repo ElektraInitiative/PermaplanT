@@ -13,6 +13,7 @@ enum Pages {
   Maps,
   Webdav,
   Overview,
+  Chat
 }
 
 type PathRouteCustomProps = {

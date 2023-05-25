@@ -8,6 +8,7 @@ import MapOverview from '@/features/maps/routes/MapOverview';
 import { WebdavTest } from '@/features/nextcloud_integration/components/webdav-test';
 import { Overview } from '@/features/overview/routes/Overview';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
+import { ChatTest } from '@/features/nextcloud_integration/components/chat-test';
 
 const routes: Routes = {
   [Pages.ImprintPage]: {
@@ -66,7 +67,6 @@ const routes: Routes = {
   },
   [Pages.Webdav]: {
     component: WebdavTest,
-    // path needs to change later to something like /user/:id/maps
     path: '/webdav',
     title: 'webdav',
     restricted: false,
@@ -76,6 +76,11 @@ const routes: Routes = {
     path: '/overview',
     title: 'overview',
     restricted: false,
+  },
+  [Pages.Chat]: {
+    component: ChatTest,
+    path: '/chat',
+    title: 'chat',
   },
 };
 
