@@ -2,9 +2,13 @@
 
 use crate::{
     model::dto::{Page, PlantsSummaryDto},
-    test::test_utils::{init_test_app, init_test_database},
+    test::util::{init_test_app, init_test_database},
 };
-use actix_web::{http::header::CONTENT_TYPE, http::StatusCode, test};
+use actix_web::{
+    http::header::{self, CONTENT_TYPE},
+    http::StatusCode,
+    test,
+};
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
@@ -26,10 +30,11 @@ async fn test_get_all_plants_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/plants")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -72,10 +77,11 @@ async fn test_get_one_plant_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/plants/-1")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -118,10 +124,11 @@ async fn test_search_plants_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/plants?name=Testplant&per_page=10")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 

@@ -23,6 +23,9 @@ use crate::{db::connection::Pool, model::dto::NewSeedDto, service};
     ),
     responses(
         (status = 200, description = "Fetch all seeds", body = PageSeedDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[get("")]
@@ -41,9 +44,12 @@ pub async fn find(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/seeds/{id}",
+    context_path = "/api/seeds",
     responses(
         (status = 200, description = "Fetch seed by id", body = SeedDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[get("/{id}")]
@@ -61,6 +67,9 @@ pub async fn find_by_id(id: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse>
     request_body = NewSeedDto,
     responses(
         (status = 201, description = "Create a seed", body = SeedDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[post("")]
@@ -77,6 +86,9 @@ pub async fn create(new_seed_json: Json<NewSeedDto>, pool: Data<Pool>) -> Result
     context_path = "/api/seeds",
     responses(
         (status = 200, description = "Delete a seed", body = String)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[delete("/{id}")]

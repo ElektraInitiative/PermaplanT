@@ -1,3 +1,4 @@
+import auth from './auth.json';
 import blog from './blog.json';
 import common from './common.json';
 import contact from './contact.json';
@@ -30,6 +31,7 @@ const en = {
   layerSettings,
   maps,
   undoRedo,
+  auth,
 };
 
 export default en;

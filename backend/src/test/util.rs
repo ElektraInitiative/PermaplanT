@@ -18,6 +18,11 @@ use dotenvy::dotenv;
 use crate::config::{app, routes};
 use crate::error::ServiceError;
 
+use self::token::generate_token;
+
+pub mod jwks;
+pub mod token;
+
 /// Initializes a test database with the given initializer function.
 ///
 /// All transactions are run inside [`AsyncConnection::begin_test_transaction`].
@@ -57,13 +62,26 @@ where
 }
 
 /// Create the test service out of the connection pool.
+///
+/// Returns a token in bearer format ("Bearer <token>") and the app to send the request to.
 pub async fn init_test_app(
     pool: Pool<AsyncPgConnection>,
-) -> impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error> {
-    test::init_service(
+) -> (
+    String,
+    impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error>,
+) {
+    let token = setup_auth();
+
+    let app = test::init_service(
         App::new()
             .app_data(Data::new(pool))
             .configure(routes::config),
     )
-    .await
+    .await;
+    (format!("Bearer {token}"), app)
+}
+
+fn setup_auth() -> String {
+    let jwk = jwks::init_auth();
+    generate_token(jwk, 300)
 }
