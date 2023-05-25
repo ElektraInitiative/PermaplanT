@@ -11,8 +11,7 @@ export type AttributeUpdateAction = {
   type: 'ATTRIBUTE_UPDATE';
   layer: LayerName;
   // Typescript can't verify that this type always has an attribute 'layer'.
-  // @ts-ignore
-  payload: LayerAttributes<typeof this.layer>;
+  payload: LayerAttributes<AttributeUpdateAction['layer']>;
 };
 
 /**

@@ -10,7 +10,6 @@ enum Pages {
   Map,
   CreateMap,
   Maps,
-  CreateMap,
 }
 
 type PathRouteCustomProps = {
