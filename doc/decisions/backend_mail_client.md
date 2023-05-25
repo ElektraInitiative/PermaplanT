@@ -41,7 +41,7 @@ We should use the crate `lettre` for sending mails.
 
 ## Rationale
 
-`lettre` is as of writing this the most widely use crate I have found with 1,343,736 total downloads.  
+`lettre` is as of writing this the most widely used crate I have found with 1,343,736 total downloads.  
 The usage also seems easier than with other mail clients.
 
 `mail_smtp` has only 3,457 downloads which can't compare to `lettre`.
