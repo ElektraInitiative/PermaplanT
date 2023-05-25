@@ -113,7 +113,7 @@ const allPlants = [
   'Zelkova',
 ];
 
-/** UI component intended for searching plants that can be drag and dropped to the plant layer */
+/** UI component intended for searching plants that can be drag and dropped to the plants layer */
 export const PlantSearch = () => {
   const [plants, setPlants] = useState(allPlants);
   const [searchVisible, setSearchVisible] = useState(false);

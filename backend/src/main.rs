@@ -51,7 +51,7 @@
 
 use actix_cors::Cors;
 use actix_web::{http, web::Data, App, HttpServer};
-use config::{api_doc, routes};
+use config::{api_doc, auth::Config, routes};
 use db::connection;
 
 pub mod config;
@@ -64,7 +64,7 @@ pub mod model;
 pub mod schema;
 pub mod service;
 #[cfg(test)]
-mod test;
+pub mod test;
 
 /// Main function.
 #[actix_web::main]
@@ -73,6 +73,8 @@ async fn main() -> std::io::Result<()> {
         Ok(config) => config,
         Err(e) => panic!("Error reading configuration: {e}"),
     };
+
+    Config::init(&config).await;
 
     HttpServer::new(move || {
         let pool = connection::init_pool(&config.database_url);
@@ -92,11 +94,13 @@ async fn main() -> std::io::Result<()> {
 
 /// Create a CORS configuration for the server.
 fn cors_configuration() -> Cors {
-    Cors::default() // allowed_origin return access-control-allow-origin: * by default
-        .allowed_origin("http://127.0.0.1:5173")
+    Cors::default()
         .allowed_origin("http://localhost:5173")
-        .send_wildcard()
         .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
-        .allowed_header(http::header::CONTENT_TYPE)
+        .allowed_headers(vec![
+            http::header::AUTHORIZATION,
+            http::header::ACCEPT,
+            http::header::CONTENT_TYPE,
+        ])
         .max_age(3600)
 }

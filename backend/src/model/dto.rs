@@ -17,6 +17,16 @@ pub mod page_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
+/// Contains configuration the frontend needs to run.
+#[typeshare]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
+pub struct ConfigDto {
+    /// The base URL of the authorization server
+    pub issuer_uri: String,
+    /// The client_id the frontend should use to log in
+    pub client_id: String,
+}
+
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
@@ -77,7 +87,7 @@ pub struct PlantingDto {
     pub id: i32,
     /// The plant that is planted.
     pub plant_id: i32,
-    /// The plant layer of the map the plant is placed on.
+    /// The plants layer of the map the plant is placed on.
     /// NOTE:
     ///     could be replaced by a `map_id` as the relation between `maps` and
     ///     `plants_layers` should be non-nullable and one to one.
@@ -94,7 +104,7 @@ pub struct PlantingDto {
 pub struct NewPlantingDto {
     /// The plant that is planted.
     pub plant_id: i32,
-    /// The plant layer of the map the plant is placed on.
+    /// The plants layer of the map the plant is placed on.
     /// NOTE:
     ///     could be replaced by a `map_id` as the relation between `maps` and
     ///     `plants_layers` should be non-nullable and one to one.
@@ -111,7 +121,7 @@ pub struct NewPlantingDto {
 pub struct UpdatePlantingDto {
     /// The plant that is planted.
     pub plant_id: Option<i32>,
-    /// The plant layer of the map the plant is placed on.
+    /// The plants layer of the map the plant is placed on.
     /// NOTE:
     ///     could be replaced by a `map_id` as the relation between `maps` and
     ///     `plants_layers` should be non-nullable and one to one.
@@ -169,6 +179,7 @@ pub struct PageParameters {
     PageSeedDto = Page<SeedDto>,
     PageMapDto = Page<MapDto>,
     PagePlantingDto = Page<PlantingDto>,
+    PageMapVersionDto = Page<MapVersionDto>
 )]
 pub struct Page<T> {
     /// Resulting records.

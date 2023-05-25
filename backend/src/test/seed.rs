@@ -5,10 +5,15 @@ use crate::{
         dto::{NewSeedDto, Page, SeedDto},
         r#enum::quantity::Quantity,
     },
-    test::test_utils::{init_test_app, init_test_database},
+    test::util::{init_test_app, init_test_database},
 };
-use actix_http::header::CONTENT_TYPE;
-use actix_web::{http::StatusCode, test};
+use actix_web::{
+    http::{
+        header::{self, CONTENT_TYPE},
+        StatusCode,
+    },
+    test,
+};
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
@@ -38,10 +43,11 @@ async fn test_find_two_seeds_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/seeds")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -95,10 +101,11 @@ async fn test_search_seeds_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/seeds?name=Testia%20testia&per_page=10")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -147,10 +154,11 @@ async fn test_find_by_id_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/seeds/-1")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -196,10 +204,11 @@ async fn test_find_by_non_existing_id_fails() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/seeds/-3")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -209,10 +218,11 @@ async fn test_find_by_non_existing_id_fails() {
 #[actix_rt::test]
 async fn test_create_seed_fails_with_invalid_quantity() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::post()
         .uri("/api/seeds")
+        .insert_header((header::AUTHORIZATION, token))
         .set_json(
             r#"{
                 "name": "Tomate",
@@ -230,10 +240,11 @@ async fn test_create_seed_fails_with_invalid_quantity() {
 #[actix_rt::test]
 async fn test_create_seed_fails_with_invalid_tags() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::post()
         .uri("/api/seeds")
+        .insert_header((header::AUTHORIZATION, token))
         .set_json(
             r#"{
                 "name": "Tomate",
@@ -251,10 +262,11 @@ async fn test_create_seed_fails_with_invalid_tags() {
 #[actix_rt::test]
 async fn test_create_seed_fails_with_invalid_quality() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::post()
         .uri("/api/seeds")
+        .insert_header((header::AUTHORIZATION, token))
         .set_json(
             r#"{
                 "name": "Tomate",
@@ -288,7 +300,7 @@ async fn test_create_seed_ok() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let new_seed = NewSeedDto {
         name: "tomato test".to_string(),
@@ -308,6 +320,7 @@ async fn test_create_seed_ok() {
 
     let resp = test::TestRequest::post()
         .uri("/api/seeds")
+        .append_header((header::AUTHORIZATION, token.clone()))
         .set_json(new_seed)
         .send_request(&app)
         .await;
@@ -316,6 +329,7 @@ async fn test_create_seed_ok() {
     let seed: SeedDto = test::read_body_json(resp).await;
     let resp = test::TestRequest::delete()
         .uri(&format!("/api/seeds/{}", seed.id))
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -340,10 +354,11 @@ async fn test_delete_by_id_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool).await;
 
     let resp = test::TestRequest::delete()
         .uri("/api/seeds/-1")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -368,10 +383,11 @@ async fn test_delete_by_non_existing_id_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool).await;
 
     let resp = test::TestRequest::delete()
         .uri("/api/seeds/-2")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 

@@ -5,9 +5,12 @@ use crate::{
         dto::{Page, SeedDto},
         r#enum::quantity::Quantity,
     },
-    test::test_utils::{init_test_app, init_test_database},
+    test::util::{init_test_app, init_test_database},
 };
-use actix_web::{http::StatusCode, test};
+use actix_web::{
+    http::{header, StatusCode},
+    test,
+};
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
@@ -36,11 +39,12 @@ async fn test_seeds_pagination_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool).await;
 
     // Test default page length
     let resp = test::TestRequest::get()
         .uri("/api/seeds")
+        .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);
@@ -52,6 +56,7 @@ async fn test_seeds_pagination_succeeds() {
     // Test second page
     let resp = test::TestRequest::get()
         .uri("/api/seeds?page=2")
+        .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);
@@ -63,6 +68,7 @@ async fn test_seeds_pagination_succeeds() {
     // Test number of results per page
     let resp = test::TestRequest::get()
         .uri("/api/seeds?per_page=2")
+        .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);
@@ -74,6 +80,7 @@ async fn test_seeds_pagination_succeeds() {
     // Test page to large for number of records in db
     let resp = test::TestRequest::get()
         .uri("/api/seeds?page=100")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);

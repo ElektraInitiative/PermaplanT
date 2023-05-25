@@ -2,9 +2,12 @@
 
 use crate::{
     model::dto::{MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, Page},
-    test::test_utils::{init_test_app, init_test_database},
+    test::util::{init_test_app, init_test_database},
 };
-use actix_web::{http::StatusCode, test};
+use actix_web::{
+    http::{header, StatusCode},
+    test,
+};
 use chrono::NaiveDate;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
@@ -33,10 +36,11 @@ async fn test_can_find_map() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/maps/-1")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -67,10 +71,11 @@ async fn test_can_search_maps() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/maps?is_inactive=false&per_page=10")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -86,7 +91,7 @@ async fn test_can_search_maps() {
 #[actix_rt::test]
 async fn test_can_create_map() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let new_map = NewMapDto {
         name: "My Map".to_string(),
@@ -103,6 +108,7 @@ async fn test_can_create_map() {
 
     let resp = test::TestRequest::post()
         .uri("/api/maps")
+        .insert_header((header::AUTHORIZATION, token.clone()))
         .set_json(new_map)
         .send_request(&app)
         .await;
@@ -112,6 +118,7 @@ async fn test_can_create_map() {
     let map: MapDto = test::read_body_json(resp).await;
     let resp = test::TestRequest::get()
         .uri(&format!("/api/maps/{}", map.id))
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -142,7 +149,7 @@ async fn test_can_save_snapshot() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let new_version = NewMapVersionDto {
         map_id: -1,
@@ -152,6 +159,7 @@ async fn test_can_save_snapshot() {
 
     let resp = test::TestRequest::post()
         .uri("/api/maps/-1/versions")
+        .insert_header((header::AUTHORIZATION, token))
         .set_json(new_version)
         .send_request(&app)
         .await;
@@ -193,10 +201,11 @@ async fn test_can_show_versions() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/maps/-1/versions?map_id=-1&per_page=10")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
