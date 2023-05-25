@@ -5,6 +5,7 @@
 mod auth;
 mod config;
 mod map;
+mod pagination;
 mod plant;
 mod seed;
 pub mod util;
