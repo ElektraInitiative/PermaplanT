@@ -10,7 +10,6 @@ import { LayerAttributes, LayerName, ObjectState } from './state-types';
 export type AttributeUpdateAction = {
   type: 'ATTRIBUTE_UPDATE';
   layer: LayerName;
-  // Typescript can't verify that this type always has an attribute 'layer'.
   payload: LayerAttributes<AttributeUpdateAction['layer']>;
 };
 
