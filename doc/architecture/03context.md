@@ -24,7 +24,7 @@ Later features that are out of scope for first version:
 - hints&tips about pest control, fertilizer, care, etc.
 - automatic shadow and moisture calculation
 - 3D modes (forest garden), contour lines etc.
-- timelaps of historic garden development, simulate growth
+- time-lapse of historic garden development, simulate growth
 - positions and distances relate to the real world, for example, you can use GPS coordinates
 - GIS import/export
 
@@ -61,7 +61,7 @@ Global value and local values in the Soil layer:
   first version: use data from Ostösterreich
 - (soil depth, BM: Bodenmächtigkeit: Mächtigkeit des durchwurzelbaren Mineralbodens [cm])
   first version: assume "sehr tiefgründig" `> 100cm`
-- (SkelG: Skelettgehalt: Anteil der Anteil der Korngrößenfraktion > 2 mm (Grobanteil) am Mineralboden [%])
+- (SkelG: Skelettgehalt: Anteil der Korngrößenfraktion > 2 mm (Grobanteil) am Mineralboden [%])
   first version we assume geringer Grobanteil `<= 10%`
 - Available water capacity
 - Field capacity

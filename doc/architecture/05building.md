@@ -115,5 +115,5 @@ Most of the application's code lives here.
 Every folder created here represents a given feature and contains its domain specific code.
 For example, if a feature interacts with the backend via network requests, it would have a sub module `api` that encapsulates this.
 
-Features are allowed to import another features public API which is exported from its `index.ts` file.
+Features are allowed to import another feature's public API which is exported from its `index.ts` file.
 Features are also allowed to import all other previously mentioned modules if needed.
