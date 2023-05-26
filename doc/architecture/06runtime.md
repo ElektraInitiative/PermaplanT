@@ -1,4 +1,4 @@
-# Sequence
+# Runtime View
 
 Example of a typical sequence in one season:
 
