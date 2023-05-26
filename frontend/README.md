@@ -99,3 +99,14 @@ npm run preview
 
 In order to ensure type safety between the TypeScript frontend and Rust backend, we use [typeshare](https://github.com/1Password/typeshare) to synchronize our Rust type definitions with TypeScript.
 These types are auto-generated and we can find our rust-typescript bindings under `/src/bindings` and use them directly in our TypeScript codebase.
+
+## Developing and testing Nextcloud features
+
+In order to avoid CORS issues disable your browsers CORS checks.
+In chromium they can be disabled by starting it with:
+```
+chromium-browser --disable-web-security --user-data-dir="[some directory here]"
+```
+
+This is necessary because Nextcloud has a strict CORS policy and there is no way to allow certain origins.
+This limitations means that the PermaplanT app and the used Nextcloud instance have to run on the some domain.
