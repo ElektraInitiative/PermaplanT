@@ -1,6 +1,6 @@
 import { baseApiUrl, nextcloudUri } from '../env';
-import axios from 'axios';
 import { getUser } from '@/utils/getUser';
+import axios from 'axios';
 
 /**
  * create an instance of axios configured for PermaplanT
