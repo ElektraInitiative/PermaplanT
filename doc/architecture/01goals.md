@@ -59,18 +59,6 @@ While editing any layer other layers are (transparently) displayed or hidden.
 
 ¹ Essential (most used) layers: are more prominently shown than others.
 
-## Later Versions
-
-Later features, i.e., out of scope for first version:
-
-- weather data (automatically add rain to watering layer, warnings on frost etc.)
-- hints&tips about pest control, fertilizer, care, etc.
-- automatic shadow and moisture calculation
-- 3D modes (forest garden), contour lines etc.
-- timelaps of historic garden development, simulate growth
-- positions and distances relate to the real world, for example, you can use GPS coordinates
-- GIS import/export
-
 ## Non-functional Goals
 
 1. aesthetic UI, fun to use

@@ -1,3 +1,33 @@
+# Context & Scope
+
+## Context
+
+Users see PermaplanT as mere tool to replace books and their notes.
+PermplanT envisions designing maps:
+
+- collaboratively
+- for agricultural purposes
+- enabling fully documenting all plants:
+  - for garden tours
+  - for tracking harvesting
+- reminding about what you don't see:
+  - watering
+  - fertilization
+- with mulching
+- but no dig
+
+## Out of Scope
+
+Later features that are out of scope for first version:
+
+- weather data (automatically add rain to watering layer, warnings on frost etc.)
+- hints&tips about pest control, fertilizer, care, etc.
+- automatic shadow and moisture calculation
+- 3D modes (forest garden), contour lines etc.
+- timelaps of historic garden development, simulate growth
+- positions and distances relate to the real world, for example, you can use GPS coordinates
+- GIS import/export
+
 # Input Parameters
 
 ## Soil
