@@ -12,9 +12,10 @@ use crate::{
     controller::{base_layers, config, map, plantings, plants, seed},
     model::{
         dto::{
-            BaseLayerDto, NewBaseLayerDto, ConfigDto, MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, NewPlantingDto,
-            NewSeedDto, PageMapDto, PageMapVersionDto, PagePlantingDto, PagePlantsSummaryDto,
-            PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
+            BaseLayerDto, ConfigDto, MapDto, MapVersionDto, NewBaseLayerDto, NewMapDto,
+            NewMapVersionDto, NewPlantingDto, NewSeedDto, PageMapDto, PageMapVersionDto,
+            PagePlantingDto, PagePlantsSummaryDto, PageSeedDto, PlantingDto, PlantsSummaryDto,
+            SeedDto, UpdatePlantingDto,
         },
         r#enum::{quality::Quality, quantity::Quantity},
     },
@@ -112,8 +113,6 @@ struct PlantingsApiDoc;
     )
 )]
 struct BaseLayersApiDoc;
-
-
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all map endpoints.
 #[derive(OpenApi)]

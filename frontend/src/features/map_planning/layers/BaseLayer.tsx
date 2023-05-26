@@ -18,11 +18,7 @@ const BaseLayer = ({ visible, opacity, imageUrl, pixels_per_meter, rotation }: B
   const height = image?.height ?? 0;
 
   return (
-    <Layer
-        listening={false}
-        visible={visible}
-        opacity={opacity}
-        offset={{x: -width, y: -height}}>
+    <Layer listening={false} visible={visible} opacity={opacity} offset={{ x: -width, y: -height }}>
       <Image
         image={image}
         rotation={rotation}
