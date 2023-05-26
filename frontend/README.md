@@ -106,7 +106,7 @@ In order to avoid CORS issues disable your browsers CORS checks.
 In chromium they can be disabled by starting it with:
 
 ```
-chromium-browser --disable-web-security --user-data-dir="[some directory here]"
+chromium --disable-web-security --user-data-dir="[some directory here]"
 ```
 
 This is necessary because Nextcloud has a strict CORS policy and there is no way to allow certain origins.

@@ -18,7 +18,7 @@ export const getImageList = async (path: string): Promise<Array<string>> => {
     const doc = parser.parseFromString(response.data, 'application/xml');
     const imageUrls: Array<string> = [];
     doc.documentElement.childNodes.forEach((value) => {
-      imageUrls.push(value.childNodes[0].childNodes[0].data);
+      imageUrls.push(value.childNodes[0].childNodes[0].nodeValue ?? '');
     });
     return imageUrls;
   } catch (error) {

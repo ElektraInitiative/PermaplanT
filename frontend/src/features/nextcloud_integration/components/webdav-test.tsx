@@ -1,10 +1,11 @@
 import { ImageBlob } from './ImageBlob';
 import SimpleButton from '@/components/Button/SimpleButton';
 import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { ChangeEventHandler } from 'react';
 import { Readable } from 'stream';
-import { BufferLike, ResponseDataDetailed, FileStat } from 'webdav';
+import { BufferLike } from 'webdav';
 
 /**
  * component used for testing different webdav api call
@@ -13,25 +14,15 @@ import { BufferLike, ResponseDataDetailed, FileStat } from 'webdav';
    for the website the component and the corresponding route can be removed.
  */
 export const WebdavTest = () => {
-  const [files, setFiles] = useState<FileStat[]>();
-  const [image, setImage] = useState<
-    string | BufferLike | ResponseDataDetailed<string | BufferLike>
-  >('');
   const [fileBuffer, setFileBuffer] = useState<string | BufferLike | Readable>('');
   const [fileName, setFileName] = useState('');
-  const webdav = createNextcloudWebDavClient();
+  const [imageName, setImageName] = useState('');
   const path = '/remote.php/webdav/Photos/';
 
-  useEffect(() => {
-    getFiles();
-  });
+  const webdav = createNextcloudWebDavClient();
 
-  /**
-   * upload image to Nextcloud
-   */
-  async function uploadImage() {
-    webdav.putFileContents(path + fileName, fileBuffer);
-  }
+  const files = useQuery(['files', path], () => webdav.getDirectoryContents(path));
+  const image = useQuery(['files', imageName], () => webdav.getFileContents(imageName));
 
   /**
    * load image from device
@@ -58,42 +49,34 @@ export const WebdavTest = () => {
   };
 
   /**
-   * load list of available files from Nextcloud at path
+   * upload image to Nextcloud
    */
-  async function getFiles() {
-    const files = await webdav.getDirectoryContents(path);
-    if (Array.isArray(files)) {
-      setFiles(files);
-    }
-    if (!files) return;
-  }
-
-  /**
-   * load filecontents from Nextcloud at path
-   */
-  async function getImage(filename: string) {
-    const imageBuffer = await webdav.getFileContents(filename);
-    setImage(imageBuffer);
+  async function uploadImage() {
+    webdav.putFileContents(path + fileName, fileBuffer);
   }
 
   return (
     <div className="mt-8 flex flex-col items-center justify-center gap-4">
       {/* display a list of all files available at path */}
       <ul>
-        {files?.map((file) => (
-          <li
-            className="cursor-pointer hover:text-primary-400"
-            key={file.filename}
-            onClick={() => getImage(file.filename)}
-          >
-            {file.filename}
-          </li>
-        ))}
+        {Array.isArray(files?.data)
+          ? files.data.map((file) => (
+              <li
+                className="cursor-pointer hover:text-primary-400"
+                key={file.filename}
+                onClick={() => setImageName(file.filename)}
+              >
+                {file.filename}
+              </li>
+            ))
+          : []}
       </ul>
-      <SimpleButton onClick={getFiles}>reload</SimpleButton>
+      <SimpleButton onClick={() => files.refetch()} className="w-auto">
+        reload
+      </SimpleButton>
       {/* display selected image */}
       <div className="w-64">
-        <ImageBlob image={new Blob([image as BlobPart])} />
+        <ImageBlob image={new Blob([image?.data as BlobPart])} />
       </div>
       {/* upload an image to path */}
       <div className="w-32">
