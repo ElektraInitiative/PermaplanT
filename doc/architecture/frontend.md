@@ -72,48 +72,69 @@ Features are allowed to import another features public API which is exported fro
 Features are also allowed to import all other previously mentioned modules if needed.
 
 #### `map_planning`
-  **store**:
- 
- The store is composed of two sub-stores:
- - `TrackedMapStore`: stores the state of the map that is tracked by the history.
+
+**store**:
+
+The store is composed of two sub-stores:
+
+- `TrackedMapStore`: stores the state of the map that is tracked by the history.
   This state is used to undo/redo actions.
- 
- - `UntrackedMapStore`: stores the state of the map that is not tracked by the history
- (e.g. the selected layer and the layer opacities).
 
- For each layer there is a `TrackedLayerState` and an `UntrackedLayerState`.
- If the layer introduces new properties the new types (e.g. `TrackedPlantLayerState` and `UntrackedPlantLayerState`) should be extended from these.
- The same applies for the corresponding `ObjectState` types.
- 
- - add new types
- ```ts
-    /**
-     * The state of an image object.
-     */
-    export type ImageObjectState = ObjectState & {
-      imageUri: string
-    };
+- `UntrackedMapStore`: stores the state of the map that is not tracked by the history
+  (e.g. the selected layer and the layer opacities).
 
-    /**
-     * The state of a map's photo layer.
-     */
-    export type TrackedPhotoLayerState = {
-      index: LayerName;
-      /**
-       * The state of the objects on the layer.
-       */
-      objects: ImageObjectState[];
-    };
- ```
- - modify layer type
- ```
+For each layer there is a `TrackedLayerState` and an `UntrackedLayerState`.
+If the layer introduces new properties the new types (e.g. `TrackedPlantLayerState` and `UntrackedPlantLayerState`) should be extended from these.
+The same applies for the corresponding `ObjectState` types.
+
+- add new types
+
+```ts
+/**
+ * The state of an image object.
+ */
+export type ImageObjectState = ObjectState & {
+  imageUri: string;
+};
+
+/**
+ * The state of a map's photo layer.
+ */
+export type TrackedPhotoLayerState = {
+  index: LayerName;
   /**
-   * The state of the layers of the map.
+   * The state of the objects on the layer.
    */
-  export type TrackedLayers = {
-    [key in LayerName]: TrackedLayerState | TrackedPhotoLayerState;
-  };
- ```
+  objects: ImageObjectState[];
+};
+```
+
+- modify layer type
+
+```ts
+/**
+ * The state of the layers of the map.
+ */
+export type TrackedLayers = {
+  [key in Exclude<LayerName, "Photo">]: TrackedLayerState;
+} & {
+  Photo: TrackedPhotoLayerState;
+};
+```
+
+the above construct may eventually be refactored into the below as more specific types get added to the layer state.
+
+```ts
+export type TrackedLayers = {
+  Base: TrackedBaseLayerState;
+} & {
+  Plant: TrackedPlantLayerState;
+} & {
+  Photo: TrackedPhotoLayerState;
+} & {
+  ...
+}
+```
 
 ### Code Documentation
 
