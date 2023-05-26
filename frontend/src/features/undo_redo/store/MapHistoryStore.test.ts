@@ -14,7 +14,7 @@ describe('MapHistoryStore', () => {
         visible: true,
         opacity: 1,
         objects: [],
-        attributes:  layerName === 'Base' ? {imageURL: '', rotation: 0, scale: 0} : undefined,
+        attributes: layerName === 'Base' ? { imageURL: '', rotation: 0, scale: 0 } : undefined,
       });
     }
   });

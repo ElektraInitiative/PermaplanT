@@ -40,10 +40,13 @@ export type ObjectState = {
 /**
  * Stores state that is specific to a layer.
  */
-export type LayerAttributes<T extends LayerName> =
-    T extends 'Base' ? { imageURL: string; rotation: number; scale: number } : never
-  | T extends 'Plant' ? undefined : never // add more attribute types like this
-  | undefined;
+export type LayerAttributes<T extends LayerName> = T extends 'Base'
+  ? { imageURL: string; rotation: number; scale: number }
+  : never | T extends 'Plant'
+  ? undefined
+  :
+      | never // add more attribute types like this
+      | undefined;
 
 /**
  * The state of a map's layer.
