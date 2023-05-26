@@ -109,4 +109,4 @@ chromium-browser --disable-web-security --user-data-dir="[some directory here]"
 ```
 
 This is necessary because Nextcloud has a strict CORS policy and there is no way to allow certain origins.
-This limitations means that the PermaplanT app and the used Nextcloud instance have to run on the some domain.
+This limitation means that the PermaplanT app and the used Nextcloud instance have to run on the some domain.
