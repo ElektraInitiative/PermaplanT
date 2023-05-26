@@ -1,5 +1,5 @@
 import useMapStore, { DEFAULT_STATE } from './MapHistoryStore';
-import { Layers, LayerAttributes, ObjectState } from './state-types';
+import { Layers, ObjectState } from './state-types';
 
 describe('MapHistoryStore', () => {
   it('creates empty layers for each LayerName', () => {
