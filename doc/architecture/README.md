@@ -9,4 +9,6 @@ Following chapters are available:
 - [4 Solution Strategy](./04solution.md)
 - [5 Building Block View](./05building.md)
 - [6 Runtime View](./06runtime.md)
+- [9 Architectural Decisions](../decisions)
+- [10 Quality Requirements](./10quality.md)
 - [12 Glossary](./12glossary.md)
