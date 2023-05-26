@@ -24,7 +24,7 @@ export const WebdavTest = () => {
 
   useEffect(() => {
     getFiles();
-  }, []);
+  })
 
   /**
    * upload image to Nextcloud
@@ -83,12 +83,14 @@ export const WebdavTest = () => {
         {files?.map((file) => (
           <li
             className="cursor-pointer hover:text-primary-400"
+            key={file.filename}
             onClick={() => getImage(file.filename)}
           >
             {file.filename}
           </li>
         ))}
       </ul>
+      <SimpleButton onClick={getFiles}>reload</SimpleButton>
       {/* display selected image */}
       <div className="w-64">
         <ImageBlob image={new Blob([image as BlobPart])} />
