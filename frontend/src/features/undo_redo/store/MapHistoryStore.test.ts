@@ -1,5 +1,5 @@
 import useMapStore, { DEFAULT_STATE } from './MapHistoryStore';
-import { Layers, ObjectState } from './state-types';
+import { Layers, LayerAttributes, ObjectState } from './state-types';
 
 describe('MapHistoryStore', () => {
   it('creates empty layers for each LayerName', () => {
@@ -14,6 +14,7 @@ describe('MapHistoryStore', () => {
         visible: true,
         opacity: 1,
         objects: [],
+        attributes:  layerName === 'Base' ? {imageURL: '', rotation: 0, scale: 0} : undefined,
       });
     }
   });
