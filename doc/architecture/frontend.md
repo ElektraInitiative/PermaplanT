@@ -71,6 +71,50 @@ For example, if a feature interacts with the backend via network requests, it wo
 Features are allowed to import another features public API which is exported from its `index.ts` file.
 Features are also allowed to import all other previously mentioned modules if needed.
 
+#### `map_planning`
+  **store**:
+ 
+ The store is composed of two sub-stores:
+ - `TrackedMapStore`: stores the state of the map that is tracked by the history.
+  This state is used to undo/redo actions.
+ 
+ - `UntrackedMapStore`: stores the state of the map that is not tracked by the history
+ (e.g. the selected layer and the layer opacities).
+
+ For each layer there is a `TrackedLayerState` and an `UntrackedLayerState`.
+ If the layer introduces new properties the new types (e.g. `TrackedPlantLayerState` and `UntrackedPlantLayerState`) should be extended from these.
+ The same applies for the corresponding `ObjectState` types.
+ 
+ - add new types
+ ```ts
+    /**
+     * The state of an image object.
+     */
+    export type ImageObjectState = ObjectState & {
+      imageUri: string
+    };
+
+    /**
+     * The state of a map's photo layer.
+     */
+    export type TrackedPhotoLayerState = {
+      index: LayerName;
+      /**
+       * The state of the objects on the layer.
+       */
+      objects: ImageObjectState[];
+    };
+ ```
+ - modify layer type
+ ```
+  /**
+   * The state of the layers of the map.
+   */
+  export type TrackedLayers = {
+    [key in LayerName]: TrackedLayerState | TrackedPhotoLayerState;
+  };
+ ```
+
 ### Code Documentation
 
 The code in the frontend is documented by two different mechanisms.
