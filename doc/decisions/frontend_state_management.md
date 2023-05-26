@@ -3,13 +3,11 @@
 ## Problem
 
 PermaplanT is a web application built with React that requires efficient and flexible state management.
-Inside a React application we can usually distinguish between three types of state.
+Inside a React application we can usually distinguish between three types of state:
 
-- Local Component State: Is the dropdown open or not, is the link active or not, and so on.
-
-- Global Application State (Synchronous): Local user preferences, Sidenav is open, UI state in a visual design app.
-
-- Server State (Asynchronous): A network request is needed before any state can be derived.
+1. Local Component State: Is the dropdown open or not, is the link active or not, and so on.
+2. Global Application State (Synchronous): Local user preferences, Sidenav is open, UI state in a visual design app.
+3. Server State (Asynchronous): A network request is needed before any state can be derived.
 
 ## Constraints
 
@@ -55,11 +53,11 @@ Its simplicity also reduces the amount of boilerplate code and the need for comp
 
 ### Server State
 
-[React Query](https://react-query-v3.tanstack.com/) will be used for managing asynchronous state
+[React Query](https://react-query-v3.tanstack.com/) will be used for managing asynchronous state.
 
 #### Rationale
 
-React Query is a feature rich, up to date library for managing asynchronous data.
+React Query is a feature rich, up-to-date library for managing asynchronous data.
 
 ## Implications
 
