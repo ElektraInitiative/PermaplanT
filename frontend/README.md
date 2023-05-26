@@ -104,6 +104,7 @@ These types are auto-generated and we can find our rust-typescript bindings unde
 
 In order to avoid CORS issues disable your browsers CORS checks.
 In chromium they can be disabled by starting it with:
+
 ```
 chromium-browser --disable-web-security --user-data-dir="[some directory here]"
 ```

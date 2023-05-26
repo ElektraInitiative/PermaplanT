@@ -24,7 +24,7 @@ export const WebdavTest = () => {
 
   useEffect(() => {
     getFiles();
-  })
+  });
 
   /**
    * upload image to Nextcloud
