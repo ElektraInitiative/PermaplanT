@@ -30,7 +30,7 @@ For inspiration you can read more at [this liveblocks.io blog post](https://live
 
 ### Offline Changes
 
-If a user loses the connection, the application goes into an read only state (first version).
+If a user loses the connection, the application goes into a read-only state (first version).
 
 In a later version a user requests a lock for doing changes in an offline environment.
 This means the user explicitly decides to do work offline.
