@@ -214,6 +214,10 @@ React:
 - [The new React documentation (as of 16.03.2023)](https://react.dev/learn)
 - [Advanced and detailed blog](https://kentcdodds.com/blog?q=react)
 
+Frontend Architecture:
+
+- https://martinfowler.com/articles/modularizing-react-apps.html
+
 Zustand (Global State Management):
 
 - [Tutorial](https://blog.logrocket.com/managing-react-state-zustand/)
