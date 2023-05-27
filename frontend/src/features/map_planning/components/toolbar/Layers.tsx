@@ -1,6 +1,7 @@
+import useMapStore from '../../store/MapStore';
+import { LayerName } from '../../store/MapStoreTypes';
 import { LayerList } from './LayerList';
 import IconButton from '@/components/Button/IconButton';
-import useMapStore, { LayerName } from '@/features/undo_redo';
 import { ReactComponent as AddIcon } from '@/icons/add.svg';
 import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
 import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
