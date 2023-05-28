@@ -1,8 +1,8 @@
 import NavContainer from './components/Layout/NavContainer';
+import { useSafeAuth } from './hooks/useSafeAuth';
 import Pages from './routes/Pages';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from 'react-oidc-context';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,7 +20,7 @@ const useInitDarkMode = () => {
 
 const useAuthEffect = () => {
   const { t } = useTranslation(['auth']);
-  const auth = useAuth();
+  const auth = useSafeAuth();
   useEffect(() => {
     if (auth.error) {
       toast(`Oops... ${auth.error.message}`);

@@ -1,18 +1,18 @@
-import useMapStore, { DEFAULT_STATE } from './MapHistoryStore';
-import { Layers, ObjectState } from './state-types';
+import useMapStore from './MapStore';
+import { ObjectState, TrackedLayers } from './MapStoreTypes';
+import { TRACKED_DEFAULT_STATE } from './TrackedMapStore';
+import { UNTRACKED_DEFAULT_STATE } from './UntrackedMapStore';
 
 describe('MapHistoryStore', () => {
   it('creates empty layers for each LayerName', () => {
     initPlantLayerInStore();
-    const { state } = useMapStore.getState();
+    const { trackedState } = useMapStore.getState();
 
-    expect(state).toBeDefined();
+    expect(trackedState).toBeDefined();
 
-    for (const layerName of Object.keys(state.layers)) {
-      expect(state.layers[layerName as keyof Layers]).toEqual({
+    for (const layerName of Object.keys(trackedState.layers)) {
+      expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
         index: layerName,
-        visible: true,
-        opacity: 1,
         objects: [],
         attributes: layerName === 'Base' ? { imageURL: '', rotation: 0, scale: 0 } : undefined,
       });
@@ -32,7 +32,7 @@ describe('MapHistoryStore', () => {
       payload: createPlantTestObject(2),
     });
 
-    const { state: newState } = useMapStore.getState();
+    const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(2);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
@@ -70,7 +70,7 @@ describe('MapHistoryStore', () => {
       ],
     });
 
-    const { state: newState } = useMapStore.getState();
+    const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(1);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
@@ -105,7 +105,7 @@ describe('MapHistoryStore', () => {
       ],
     });
 
-    const { state: newState } = useMapStore.getState();
+    const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(1);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
@@ -161,7 +161,7 @@ describe('MapHistoryStore', () => {
       ],
     });
 
-    const { state: newState } = useMapStore.getState();
+    const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(2);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
@@ -217,7 +217,7 @@ describe('MapHistoryStore', () => {
       ],
     });
 
-    const { state: newState } = useMapStore.getState();
+    const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(2);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
@@ -261,7 +261,7 @@ describe('MapHistoryStore', () => {
       type: 'UNDO',
     });
 
-    const { state: newState } = useMapStore.getState();
+    const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(1);
     expect(newState.layers.Plant.objects[0]).toEqual(createPlantTestObject(1));
 
@@ -269,7 +269,7 @@ describe('MapHistoryStore', () => {
       type: 'UNDO',
     });
 
-    const { state: newState2 } = useMapStore.getState();
+    const { trackedState: newState2 } = useMapStore.getState();
     expect(newState2.layers.Plant.objects).toHaveLength(0);
   });
 
@@ -319,7 +319,7 @@ describe('MapHistoryStore', () => {
       type: 'UNDO',
     });
 
-    const { state: newState } = useMapStore.getState();
+    const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(2);
     expect(newState.layers.Plant.objects[0]).toEqual(createPlantTestObject(1));
     expect(newState.layers.Plant.objects[1]).toEqual(createPlantTestObject(2));
@@ -359,7 +359,7 @@ describe('MapHistoryStore', () => {
       type: 'REDO',
     });
 
-    const { state: newState } = useMapStore.getState();
+    const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(1);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
@@ -367,16 +367,63 @@ describe('MapHistoryStore', () => {
       y: 123,
     });
   });
+
+  it('updates the selectedLayer on updateSelectedLayer', () => {
+    useMapStore.setState({
+      untrackedState: {
+        ...UNTRACKED_DEFAULT_STATE,
+      },
+      trackedState: {
+        ...TRACKED_DEFAULT_STATE,
+      },
+    });
+
+    useMapStore.getState().updateSelectedLayer('Soil');
+
+    const { untrackedState: newState } = useMapStore.getState();
+    expect(newState.selectedLayer).toEqual('Soil');
+  });
+
+  // regression
+  it('does not change the selectedLayer after an ObjectUndoAction', () => {
+    useMapStore.setState({
+      untrackedState: {
+        ...UNTRACKED_DEFAULT_STATE,
+      },
+      trackedState: {
+        ...TRACKED_DEFAULT_STATE,
+      },
+    });
+
+    useMapStore.getState().updateSelectedLayer('Soil');
+
+    const { dispatch } = useMapStore.getState();
+
+    dispatch({
+      type: 'OBJECT_ADD',
+      payload: createPlantTestObject(1),
+    });
+
+    dispatch({
+      type: 'UNDO',
+    });
+
+    const { untrackedState: newState } = useMapStore.getState();
+    expect(newState.selectedLayer).toEqual('Soil');
+  });
 });
 
 function initPlantLayerInStore(objects: ObjectState[] = []) {
   useMapStore.setState({
-    state: {
-      ...DEFAULT_STATE,
+    untrackedState: {
+      ...UNTRACKED_DEFAULT_STATE,
+    },
+    trackedState: {
+      ...TRACKED_DEFAULT_STATE,
       layers: {
-        ...DEFAULT_STATE.layers,
+        ...TRACKED_DEFAULT_STATE.layers,
         Plant: {
-          ...DEFAULT_STATE.layers.Plant,
+          ...TRACKED_DEFAULT_STATE.layers.Plant,
           objects,
         },
       },

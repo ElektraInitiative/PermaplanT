@@ -1,5 +1,6 @@
 import baseLayerConfigurator from './baseLayerConfigurator.json';
 import baseLayerForm from './baseLayerForm.json';
+import auth from './auth.json';
 import blog from './blog.json';
 import common from './common.json';
 import contact from './contact.json';
@@ -36,6 +37,7 @@ const de = {
   layerSettings,
   maps,
   undoRedo,
+  auth,
 };
 
 export default de;

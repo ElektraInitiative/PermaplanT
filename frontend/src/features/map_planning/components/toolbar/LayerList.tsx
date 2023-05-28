@@ -1,7 +1,7 @@
+import useMapStore from '../../store/MapStore';
+import { LayerName } from '../../store/MapStoreTypes';
 import IconButton from '@/components/Button/IconButton';
 import { NamedSlider } from '@/components/Slider/NamedSlider';
-import { LayerName } from '@/features/undo_redo';
-import useMapStore from '@/features/undo_redo';
 import { ReactComponent as CaretDownIcon } from '@/icons/caret-down.svg';
 import { ReactComponent as CaretRightIcon } from '@/icons/caret-right.svg';
 import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
@@ -32,8 +32,8 @@ export const LayerList = ({
   setLayerAlternative,
   alternatives,
 }: LayerListProps) => {
-  const layerVisible = useMapStore((map) => map.state.layers[name].visible);
-  const selectedLayer = useMapStore((map) => map.state.selectedLayer);
+  const layerVisible = useMapStore((map) => map.untrackedState.layers[name].visible);
+  const selectedLayer = useMapStore((map) => map.untrackedState.selectedLayer);
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
   const [alternativesVisible, setAlternativesVisible] = useState(false);
   const { t } = useTranslation(['layerSettings']);
