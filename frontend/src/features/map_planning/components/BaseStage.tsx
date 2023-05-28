@@ -1,3 +1,4 @@
+import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
   deselectShapes,
@@ -8,7 +9,6 @@ import {
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import SimpleButton from '@/components/Button/SimpleButton';
-import useMapStore from '@/features/undo_redo';
 import Konva from 'konva';
 import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
