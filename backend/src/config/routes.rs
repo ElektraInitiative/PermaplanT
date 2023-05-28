@@ -40,9 +40,11 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(plantings::update)
                 .service(plantings::delete),
         )
-        .service(web::scope("/sse").service(sse::sse_client))
         .wrap(NormalizePath::trim())
         .wrap(auth);
+
+    let sse_route = web::scope("/api/sse").service(sse::sse_client);
+    cfg.service(sse_route);
 
     let config_route = web::scope("/api/config").service(config::get);
     cfg.service(config_route).service(routes);
