@@ -12,10 +12,10 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::db::connection::Pool;
 use crate::model::dto::{
     NewPlantingDto, Page, PageParameters, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
 };
+use crate::AppDataInner;
 
 /// Endpoint for listing and filtering `Planting`.
 /// If no page parameters are provided, the first page is returned.
@@ -41,7 +41,7 @@ use crate::model::dto::{
 pub async fn find(
     search_query: Query<PlantingSearchParameters>,
     page_query: Query<PageParameters>,
-    pool: Data<Pool>,
+    app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and filters for records.
     let page = Page {
@@ -76,7 +76,10 @@ pub async fn find(
     )
 )]
 #[post("")]
-pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn create(
+    new_seed_json: Json<NewPlantingDto>,
+    app_data: Data<AppDataInner>,
+) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and creates the record.
     let dto = PlantingDto {
         id: 1,
@@ -108,7 +111,7 @@ pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Re
 pub async fn update(
     id: Path<i32>,
     update_seed_json: Json<UpdatePlantingDto>,
-    pool: Data<Pool>,
+    app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and updates the record.
     let dto = PlantingDto {
@@ -137,7 +140,7 @@ pub async fn update(
     )
 )]
 #[delete("/{id}")]
-pub async fn delete(path: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn delete(path: Path<i32>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
     // TODO: implement a service that validates (permissions) and deletes the planting
     Ok(HttpResponse::Ok().json(""))
 }

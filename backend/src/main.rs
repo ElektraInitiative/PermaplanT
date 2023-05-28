@@ -49,11 +49,14 @@
 // Cannot fix some errors because dependecies import them.
 #![allow(clippy::multiple_crate_versions)]
 
+use std::sync::Arc;
+
 use actix_cors::Cors;
 use actix_web::{http, middleware::Logger, web::Data, App, HttpServer};
 use config::{api_doc, auth::Config, routes};
 use db::connection;
 use log::info;
+use sse::broadcaster::Broadcaster;
 
 pub mod config;
 pub mod controller;
@@ -64,8 +67,14 @@ pub mod model;
 #[allow(clippy::missing_docs_in_private_items)]
 pub mod schema;
 pub mod service;
+pub mod sse;
 #[cfg(test)]
 pub mod test;
+
+pub struct AppDataInner {
+    pub pool: connection::Pool,
+    pub broadcaster: Arc<Broadcaster>,
+}
 
 /// Main function.
 #[actix_web::main]
@@ -76,6 +85,7 @@ async fn main() -> std::io::Result<()> {
     };
 
     env_logger::init();
+    let broadcaster = Broadcaster::create();
 
     Config::init(&config).await;
 
@@ -86,7 +96,10 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         let pool = connection::init_pool(&config.database_url);
-        let data = Data::new(pool);
+        let data = Data::new(AppDataInner {
+            pool,
+            broadcaster: Arc::clone(&broadcaster),
+        });
 
         App::new()
             .wrap(cors_configuration())

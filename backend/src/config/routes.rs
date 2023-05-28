@@ -4,7 +4,7 @@ use actix_utils::future::ready;
 use actix_web::{middleware::NormalizePath, web};
 use actix_web_httpauth::middleware::HttpAuthentication;
 
-use crate::controller::{config, map, plantings, plants, seed};
+use crate::controller::{config, map, plantings, plants, seed, sse};
 
 use super::auth::middleware::validator;
 
@@ -40,6 +40,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(plantings::update)
                 .service(plantings::delete),
         )
+        .service(web::scope("/sse").service(sse::sse_client))
         .wrap(NormalizePath::trim())
         .wrap(auth);
 

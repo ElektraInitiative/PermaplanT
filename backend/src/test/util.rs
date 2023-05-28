@@ -15,8 +15,11 @@ use diesel_async::{
 };
 use dotenvy::dotenv;
 
-use crate::config::{app, routes};
 use crate::error::ServiceError;
+use crate::{
+    config::{app, routes},
+    AppDataInner,
+};
 
 use self::token::generate_token;
 
@@ -74,7 +77,10 @@ pub async fn init_test_app(
 
     let app = test::init_service(
         App::new()
-            .app_data(Data::new(pool))
+            .app_data(Data::new(AppDataInner {
+                pool,
+                broadcaster: sse::Broadcaster::create(),
+            }))
             .configure(routes::config),
     )
     .await;

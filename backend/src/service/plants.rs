@@ -4,6 +4,7 @@ use actix_web::web::Data;
 
 use crate::model::dto::Page;
 use crate::model::dto::PageParameters;
+use crate::AppDataInner;
 use crate::{
     db::connection::Pool,
     error::ServiceError,
@@ -20,9 +21,9 @@ use crate::{
 pub async fn find(
     search_parameters: PlantsSearchParameters,
     page_parameters: PageParameters,
-    pool: &Data<Pool>,
+    app_data: &Data<AppDataInner>,
 ) -> Result<Page<PlantsSummaryDto>, ServiceError> {
-    let mut conn = pool.get().await?;
+    let mut conn = app_data.pool.get().await?;
     let result = match &search_parameters.name {
         // Empty search queries should be treated like nonexistent queries.
         Some(query) if !query.is_empty() => {
@@ -38,8 +39,11 @@ pub async fn find(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<PlantsSummaryDto, ServiceError> {
-    let mut conn = pool.get().await?;
+pub async fn find_by_id(
+    id: i32,
+    app_data: &Data<AppDataInner>,
+) -> Result<PlantsSummaryDto, ServiceError> {
+    let mut conn = app_data.pool.get().await?;
     let result = Plants::find_by_id(id, &mut conn).await?;
     Ok(result)
 }
