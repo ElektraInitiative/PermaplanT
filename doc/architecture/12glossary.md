@@ -13,13 +13,6 @@
   A Nextcloud app which is used as overview where which garden is, see [here](https://apps.nextcloud.com/apps/maps).
 - GeoMap:
   The geographical map which is found in Nextcloud under the "Maps" tab.
-- version (of a map):
-  A version (of a map) is a named snapshot of a map at a certain point in time while working on that map.
-  It is possible to switch to a different version of a layer.
-  It is similar to the undo-redo feature with the difference that the snapshots:
-  - are persistent
-  - have a name and
-  - any specific snapshot can be selected.
 - offline:
   Means the ability to use a feature without Internet connection, i.e., without calling REST APIs.
 - canvas:

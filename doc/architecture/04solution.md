@@ -11,6 +11,7 @@ The user should also be able to access some features of the application while be
 
 The data is kept in sync between the client and the server through a websocket connection.
 This means the backend is always kept in sync with the users actions and users can see what others are doing.
+No timestamps are needed for data consistency.
 
 ### Undo & Redo
 
@@ -32,6 +33,8 @@ type MovementAction {
 ```
 
 For inspiration you can read more at [this liveblocks.io blog post](https://liveblocks.io/blog/how-to-build-undo-redo-in-a-multiplayer-environment).
+
+Undo/redo gets lost if other users concurrently move or edit elements.
 
 ### Offline Changes
 
