@@ -2,6 +2,11 @@
 
 PermaplanT has a classical frontend/backend architecture.
 
+## Concurrent Use
+
+The user wants to view changes that other users have made on the map, therefore the data needs to be kept in sync.
+The user should also be able to access some features of the application while being offline and later synchronize her changes to the server.
+
 ## Data Consistency
 
 The data is kept in sync between the client and the server through a websocket connection.
@@ -30,9 +35,9 @@ For inspiration you can read more at [this liveblocks.io blog post](https://live
 
 ### Offline Changes
 
-If a user loses the connection, the application goes into a read-only state (first version).
+If a user loses the connection, the application goes into a read-only state.
 
-In a later version a user requests a lock for doing changes in an offline environment.
-This means the user explicitly decides to do work offline.
-Other users are unable to make changes while the lock is active.
-Upon coming back online the changes made by the lock keeping user, are synchronized and the lock is released.
+If a user requests to work offline, the layers will be locked for that user in the backend.
+While the lock is active, other users see these layers read-only.
+
+Upon coming back online the changes made are synchronized and the lock is released.

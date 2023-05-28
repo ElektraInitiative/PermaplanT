@@ -6,6 +6,9 @@
   the planning app implemented in this repository
 - map:
   The main planning utility for PermaplanT, which contains _elements_ in several _layers_.
+- garden:
+  The physical place which is represented by the map.
+  Can also be balcony or similar.
 - Nextcloud map:
   A Nextcloud app which is used as overview where which garden is, see [here](https://apps.nextcloud.com/apps/maps).
 - GeoMap:
