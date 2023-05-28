@@ -56,9 +56,19 @@ export const LAYER_NAMES = [
 ] as const;
 
 /**
+ * Utility array of all map layers without any speical attributes.
+ */
+export const GENERIC_LAYER_NAMES = LAYER_NAMES.filter(name => name === 'Base');
+
+/**
  * A union type of the map layer's names.
  */
 export type LayerName = (typeof LAYER_NAMES)[number];
+
+/**
+ * A union type of all map layers without any special attributes.
+ */
+export type GenericLayerName = (typeof GENERIC_LAYER_NAMES)[number];
 
 /**
  * The state of a layer's object.
@@ -77,14 +87,34 @@ export type ObjectState = {
 };
 
 /**
- * The state of a map's layer.
+ * The state of every map layer.
  */
-export type TrackedLayerState = {
+export type TrackedGenericLayerState = {
   index: LayerName;
   /**
    * The state of the objects on the layer.
    */
   objects: ObjectState[];
+};
+
+
+/**
+ * Extended state type for base layer.
+ * Adds a background image as well as its attributes.
+ */
+export type TrackedBaseLayerState = TrackedGenericLayerState & {
+  /**
+   * Rotation of the background image.
+   */
+  rotation: number;
+  /**
+   * Scale of the background image.
+   */
+  scale: number;
+  /**
+   * Temporary, will be removed after base layer is integrated with Nextcloud.
+   */
+  imageURL: string,
 };
 
 /**
@@ -100,14 +130,18 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in LayerName]: TrackedLayerState;
+  [key in GenericLayerName]: TrackedGenericLayerState;
+} & {
+  Base: TrackedBaseLayerState,
 };
 
 /**
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in LayerName]: UntrackedLayerState;
+  [key in GenericLayerName]: UntrackedLayerState;
+} & {
+  Base: UntrackedLayerState,
 };
 
 /**
@@ -148,6 +182,15 @@ export type ObjectUpdateTransformAction = {
   payload: ObjectState[];
 };
 
+export type BaseLayerUpdateAction = {
+  type: 'BASE_LAYER_UPDATE_ACTION';
+  payload: {
+    rotation: number;
+    scale: number;
+    imageURL: string;
+  };
+}
+
 /**
  * An action for undoing the previous action in the history.
  */
@@ -169,6 +212,7 @@ export type MapAction =
   | ObjectAddAction
   | ObjectUpdatePositionAction
   | ObjectUpdateTransformAction
+  | BaseLayerUpdateAction
   | UndoAction
   | RedoAction;
 

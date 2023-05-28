@@ -69,27 +69,29 @@ export const Map = () => {
         right: <div></div>,
         left: (
           <BaseLayerForm
-            rotation={state.layers.Base.attributes.rotation}
-            imageURL={state.layers.Base.attributes.imageURL}
+            rotation={trackedState.layers.Base.rotation}
+            imageURL={trackedState.layers.Base.imageURL}
             onRotationChange={(event) =>
               dispatch({
-                type: 'ATTRIBUTE_UPDATE',
-                layer: 'Base',
+                type: 'BASE_LAYER_UPDATE_ACTION',
                 payload: {
-                  ...state.layers.Base.attributes,
-                  rotation: parseInt(event.target.value),
+                  rotation: parseInt(event.target.value) ?? 0,
+                  scale: trackedState.layers.Base.scale,
+                  imageURL: trackedState.layers.Base.imageURL,
                 },
               })
             }
-            onImageURLChange={(event) =>
-              dispatch({
-                type: 'ATTRIBUTE_UPDATE',
-                layer: 'Base',
-                payload: {
-                  ...state.layers.Base.attributes,
-                  imageURL: event.target.value,
-                },
-              })
+            onImageURLChange={(event) => {
+                    console.log(event.target.value);
+                    dispatch({
+                        type: 'BASE_LAYER_UPDATE_ACTION',
+                        payload: {
+                            rotation: trackedState.layers.Base.rotation,
+                            scale: trackedState.layers.Base.scale,
+                            imageURL: event.target.value,
+                        },
+                    })
+                }
             }
           />
         ),
@@ -192,6 +194,11 @@ export const Map = () => {
         ></Toolbar>
       </section>
       <BaseStage>
+        <BaseLayer opacity={untrackedState.layers.Base.opacity}
+                   visible={untrackedState.layers.Base.visible}
+                   imageURL={trackedState.layers.Base.imageURL}
+                   pixels_per_meter={trackedState.layers.Base.scale}
+                   rotation={trackedState.layers.Base.rotation} />
         <PlantsLayer
           visible={untrackedState.layers.Plant.visible}
           opacity={untrackedState.layers.Plant.opacity}
@@ -217,7 +224,7 @@ export const Map = () => {
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
           contentTop={<Layers />}
-          contentBottom={getToolbarContent(state.selectedLayer).right}
+          contentBottom={getToolbarContent(untrackedState.selectedLayer).right}
           position="right"
           minWidth={200}
         ></Toolbar>
