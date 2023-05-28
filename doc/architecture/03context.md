@@ -51,7 +51,7 @@ Global value and local values in the Soil layer:
   - D hoch
   - E sehr hoch
 
-### Later Versions
+### Out of Scope
 
 - (Temperatursumme/Jahresmitteltemperatur)
   first version: use data from Ostösterreich
@@ -79,40 +79,12 @@ Global value and local values in the Soil layer:
 - permaculture zones, see [glossary](glossary.md)
 - events: e.g. elements in the garden get added/removed accurate to the day
 
-### Later Versions
+### Out of Scope
 
 - soil amendments
 - mulching (Mulchen)
 - influences of street (German: Einflüsse durch Straßennähe, wie Salz und Staub)
 - automatic overshadowing (German: Baumkronenüberschattung)
-
-## Plant Database
-
-- hierarchy: family, subfamily, genus, species, variety
-- if it is abstract/concrete (MISSING: we assume all plants of Practical Plants to be concrete)
-- common English name
-- common German name
-- icon (MISSING)
-- dates (MISSING):
-  - begin/end raising
-  - begin/end planting
-  - begin/end seeding
-  - begin/end harvest
-- size (height, width)
-- constraints where they want to be:
-  - companions and antagonists to other specific plants of any hierarchy (MISSING)
-  - recommended distances to any other plant, needed for area calculations (MISSING)
-  - sun
-  - soil weight
-  - pH value of topsoil
-  - nutrition demand (MISSING, start with "Nutritionally poor soil" in "Environmental Tolerances")
-  - freeze resistance (hardiness zone)
-  - wet/dry
-  - preferable permaculture zone
-- is a tree/bush
-- notes German (MISSING)
-
-All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes precedence.
 
 # Output Parameters
 
@@ -120,6 +92,6 @@ All of this information can be present and overwritten on any level of the hiera
 - coordinates of plants to plant
 - warnings (violation of natural constraints etc.)
 
-### Later Versions
+### Out of Scope
 
 - weather alerts
