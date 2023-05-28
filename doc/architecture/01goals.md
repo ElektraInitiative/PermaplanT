@@ -16,6 +16,12 @@ To achieve these goals the app provides, e.g.:
   - what is seasonal
   - increasing diversity
 
+## Non-functional Goals
+
+1. aesthetic UI that is fun to use
+2. low barriers for collaboration
+3. low memory consumption and good performance
+
 ## Main Features
 
 - users have any number of maps
@@ -58,9 +64,3 @@ While editing any layer other layers are (transparently) displayed or hidden.
 - Drawing (for anything else)
 
 ¹ Essential (most used) layers: are more prominently shown than others.
-
-## Non-functional Goals
-
-1. aesthetic UI, fun to use
-2. collaborative use
-3. memory consumption and performance
