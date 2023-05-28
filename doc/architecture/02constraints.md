@@ -1,19 +1,32 @@
 # Constraints
 
-- Code should be as simple as possible.
-- UI should be hard to use it wrong.
+## UI
+
+- UI should be hard to use wrong.
 - User experience should only be disturbed when necessary.
-- Collaboration is more important than the feature being available in an offline environment.
+- UI must be consistent:
+  - Colors
+  - Use toolbars
+  - Reuse components (in storybook)
+  - Keybindings
+  - personified error messages
+  - etc.
+
+Rationale: to support main goal
 
 ## Data Consistency
 
-- Users cannot concurrently add changes to the same layer (removes complexity).
-- After conflicts are resolved all users should have a consistent state.
-- If any conflicts arise that cannot automatically be resolved, the user should have choice over how to resolve such changes (keep local/keep remote).
+- Users always see the latest data.
+- The data from the backend is the single source of truth.
+  I.e., in conflicting scenarios always the backend takes preference.
+- In offline scenarios either the backend gets locked or the frontend gets read-only.
+
+Rationale: we prefer collaboration over offline use.
 
 ## Backend
 
-- API calls should be for interactive use and as such terminate within parts of a second, five seconds maximum.
+- We use REST with JSON
+- API calls should be for interactive use and as such terminate within parts of a second, five seconds maximum, see Graceful Shutdown for more information.
 
 ### Graceful Shutdown
 
