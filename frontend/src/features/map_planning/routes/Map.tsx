@@ -82,16 +82,16 @@ export const Map = () => {
               })
             }
             onImageURLChange={(event) => {
-                    console.log(event.target.value);
-                    dispatch({
-                        type: 'BASE_LAYER_UPDATE_ACTION',
-                        payload: {
-                            rotation: trackedState.layers.Base.rotation,
-                            scale: trackedState.layers.Base.scale,
-                            imageURL: event.target.value,
-                        },
-                    })
-                }
+                console.log(event.target.value);
+                dispatch({
+                  type: 'BASE_LAYER_UPDATE_ACTION',
+                  payload: {
+                    rotation: trackedState.layers.Base.rotation,
+                    scale: trackedState.layers.Base.scale,
+                    imageURL: event.target.value,
+                  },
+                })
+              }
             }
           />
         ),

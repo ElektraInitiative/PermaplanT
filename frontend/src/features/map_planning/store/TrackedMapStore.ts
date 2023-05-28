@@ -209,7 +209,6 @@ function handleUpdateBaseLayerAction(
         ...state.layers.Base,
         rotation: action.payload.rotation,
         scale: action.payload.scale,
-        image: action.payload.image,
         imageURL: action.payload.imageURL,
       }
     }
@@ -228,6 +227,9 @@ function reduceHistory(history: TrackedAction[]): TrackedMapState {
       case 'OBJECT_UPDATE_POSITION':
       case 'OBJECT_UPDATE_TRANSFORM':
         return handleUpdateObjectAction(state, action);
+
+      case 'BASE_LAYER_UPDATE_ACTION':
+        return handleUpdateBaseLayerAction(state, action);
 
       default:
         return state;
