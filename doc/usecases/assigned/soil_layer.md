@@ -5,7 +5,7 @@
 - **Scope:** pH Values Layer
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can add, move, delete and edit areas of pH values and soil weight class in their map using the soil layer
+- **Brief:** The user can add, move, remove, delete and edit areas of pH values and soil weight class in their map using the soil layer
 - **Assignee:** Moritz
 
 ## Scenarios
@@ -14,7 +14,7 @@
   The user has opened the app and has selected the soil layer.
 - **Main success scenario:**
   1. First the user globally tells a pH topsoil value, soil weight and yield grade.
-  2. Then the user successfully adds, moves, deletes and edits:
+  2. Then the user successfully adds, moves, removes, deletes and edits:
      - pH value areas for topsoil
      - pH value areas for subsoil
      - soil weight class
@@ -24,7 +24,8 @@
        A big brush is used to draw on the soil layer.
   3. The user can check the values at individual spots by clicking on it.
 - **Alternative scenario:**
-  The user accidentally adds or moves a pH values or soil weight classes in the wrong location and uses the app's undo function to correct the mistake.
+  - The user accidentally edits, moves or removes an element and uses undo to correct the mistake.
+  - The user accidentally adds an element and deletes it with the "delete" or "undo" functionality.
 - **Error scenario:**
   The user attempts to edit a soil weight class or pH value in a area that is not within the acceptable range and the app displays an error message.
   The previous values stay unmodified.

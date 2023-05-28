@@ -29,13 +29,18 @@
 - map context
   - layers and their attributes e.g. warning layer and its visibility
 - event: a day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
+- deletion vs. removal of elements
+  - deletion: basically means that the plant never existed.
+    Such elements actually get removed from the database and can only restored within the session using undo.
+  - removal: removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing)
+    The database must keep removed elements, they never can be deleted.
 - reversible deletion vs undo-redo functionality
-  - reversible deletion: a database entity i.e. map and plant is deleted and can be restored within a certain time
-  - undo-redo functionality: a user can undo and redo changes in the map, but the changes are local to the frontend and not stored in the database
+  - reversible deletion: a database entity i.e. a whole map and plant is deleted and can be restored within a certain time
+  - undo-redo functionality: a user can undo and redo changes in the map, but the history is local to the frontend and not stored in the database
 - lazy loading
   - Lazy loading refers to the process of loading data on-demand, rather than loading everything upfront during the initial load of the app.
 - offloading of the frontend state
-  - the process of cleaning up the frontend state by removing data that has already been synchronized with the backend and is no longer needed. This can help to reduce the amount of unnecessary data in the frontend, which can improve the performance and efficiency of the application.
+  - the process of cleaning up the frontend state by deleting data that has already been synchronized with the backend and is no longer needed. This can help to reduce the amount of unnecessary data in the frontend, which can improve the performance and efficiency of the application.
 - first contentful paint (FCP)
   - the time it takes for the browser to render the first bit of content on the page.
 - time to interactive (TTI)
