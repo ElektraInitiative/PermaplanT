@@ -1,5 +1,7 @@
 # Constraints
 
+- [Guidelines](/doc/guidelines.md) must be either followed or a rationale for breaking the guideline must be given in a comment nearby
+
 ## UI
 
 - UI should be hard to use wrong.
