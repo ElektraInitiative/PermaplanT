@@ -76,7 +76,7 @@ Global value and local values in the Soil layer:
 - shadows
 - surface water, i.e., wet/dry places (German: Oberflächenwasser)
 - habitats
-- permaculture zones, see [glossary](glossary.md)
+- permaculture zones, see [glossary](12glossary.md)
 - events: e.g. elements in the garden get added/removed accurate to the day
 
 ### Out of Scope

@@ -1,6 +1,6 @@
 # Solution Strategy
 
-PermaplanT has a server-side component with a database for plants.
+PermaplanT has a classical frontend/backend architecture.
 
 ## Data Consistency
 
