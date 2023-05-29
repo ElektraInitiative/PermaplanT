@@ -1,7 +1,9 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::{BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
+use diesel::pg::Pg;
+use diesel::{debug_query, BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
+use log::debug;
 
 use crate::db::function::array_to_string;
 use crate::db::pagination::Paginate;
@@ -36,12 +38,11 @@ impl Plants {
                 .order((unique_name, common_name_en));
         }
 
-        let query_page = query
+        let query = query
             .paginate(page_parameters.page)
-            .per_page(page_parameters.per_page)
-            .load_page::<Self>(conn)
-            .await;
-        query_page.map(Page::from_entity)
+            .per_page(page_parameters.per_page);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.load_page::<Self>(conn).await.map(Page::from_entity)
     }
 
     /// Fetch plant by id from the database.
@@ -52,7 +53,8 @@ impl Plants {
         id: i32,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<PlantsSummaryDto> {
-        let query_result = plants::table.find(id).first::<Self>(conn).await;
-        query_result.map(Into::into)
+        let query = plants::table.find(id);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.first::<Self>(conn).await.map(Into::into)
     }
 }

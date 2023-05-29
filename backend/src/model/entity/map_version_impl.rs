@@ -1,7 +1,9 @@
 //! Contains the implementation of [`MapVersion`].
 
-use diesel::{ExpressionMethods, QueryDsl, QueryResult};
+use diesel::pg::Pg;
+use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
+use log::debug;
 
 use crate::db::pagination::Paginate;
 use crate::model::dto::{MapVersionSearchParameters, Page, PageParameters};
@@ -29,12 +31,11 @@ impl MapVersion {
             query = query.filter(map_id.eq(map_id_search));
         }
 
-        let query_page = query
+        let query = query
             .paginate(page_parameters.page)
-            .per_page(page_parameters.per_page)
-            .load_page::<Self>(conn)
-            .await;
-        query_page.map(Page::from_entity)
+            .per_page(page_parameters.per_page);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.load_page::<Self>(conn).await.map(Page::from_entity)
     }
 
     /// Fetch map version by id from the database.
@@ -42,8 +43,9 @@ impl MapVersion {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find_by_id(id: i32, conn: &mut AsyncPgConnection) -> QueryResult<MapVersionDto> {
-        let query_result = map_versions::table.find(id).first::<Self>(conn).await;
-        query_result.map(Into::into)
+        let query = map_versions::table.find(id);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.first::<Self>(conn).await.map(Into::into)
     }
 
     /// Create a new map version in the database.
@@ -55,10 +57,8 @@ impl MapVersion {
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<MapVersionDto> {
         let new_map_version = NewMapVersion::from(new_map_version);
-        let query_result = diesel::insert_into(map_versions::table)
-            .values(&new_map_version)
-            .get_result::<Self>(conn)
-            .await;
-        query_result.map(Into::into)
+        let query = diesel::insert_into(map_versions::table).values(&new_map_version);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.get_result::<Self>(conn).await.map(Into::into)
     }
 }

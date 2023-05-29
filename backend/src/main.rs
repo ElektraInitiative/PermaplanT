@@ -53,6 +53,7 @@ use actix_cors::Cors;
 use actix_web::{http, middleware::Logger, web::Data, App, HttpServer};
 use config::{api_doc, auth::Config, routes};
 use db::connection;
+use log::info;
 
 pub mod config;
 pub mod controller;
@@ -77,6 +78,11 @@ async fn main() -> std::io::Result<()> {
     env_logger::init();
 
     Config::init(&config).await;
+
+    info!(
+        "Starting server on {}:{}",
+        config.bind_address.0, config.bind_address.1
+    );
 
     HttpServer::new(move || {
         let pool = connection::init_pool(&config.database_url);

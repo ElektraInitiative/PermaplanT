@@ -1,6 +1,7 @@
 //! Manages the [`JwkSet`] the server uses to validate tokens.
 
 use jsonwebtoken::jwk::{Jwk, JwkSet};
+use log::debug;
 use serde::Deserialize;
 
 /// In between struct for [`JwkSet`].
@@ -21,6 +22,7 @@ struct JwkSetHelper {
 /// * If the keys cannot be deserialized to [`JwkSetHelper`].
 #[allow(clippy::expect_used)]
 pub async fn fetch_keys(url: &str) -> JwkSet {
+    debug!("Fetching jwks from auth server...");
     let keys = reqwest::get(url)
         .await
         .expect("Error fetching from auth server!")

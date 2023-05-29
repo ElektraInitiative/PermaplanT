@@ -6,6 +6,7 @@ pub mod middleware;
 pub mod user_info;
 
 use jsonwebtoken::jwk::JwkSet;
+use log::debug;
 use serde::Deserialize;
 use tokio::sync::OnceCell;
 
@@ -42,6 +43,7 @@ impl Config {
     /// * If the auth server is unreachable or is set up incorrectly.
     #[allow(clippy::expect_used)]
     pub async fn init(app_config: &crate::config::app::Config) {
+        debug!("Fetching endpoints from discovery endpoint...");
         let openid_config =
             OpenIDEndpointConfiguration::fetch(&app_config.auth_discovery_uri).await;
 
