@@ -63,9 +63,9 @@ The decision is to implement undo/redo functionality by storing history of the c
 Synchronisation happens:
 
 1. Any change of the frontend immediately gets synced to the backend via API calls.
-2. Any change in the backend immediately gets synced to the frontend via a web socket.
+2. Any change in the backend immediately gets synced to the frontend via a server-sent events (SSE).
 
-In the backend, we use the observer pattern to implement the notification via web sockets.
+In the backend, we use the observer pattern to implement the notification via SSE.
 
 ## Rationale
 

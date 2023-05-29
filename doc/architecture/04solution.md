@@ -9,7 +9,7 @@ The user should also be able to access some features of the application while be
 
 ## Data Consistency
 
-The data is kept in sync between the client and the server through a websocket connection.
+The data is kept in sync between the client and the server through API calls and server-sent events (SSE).
 This means the backend is always kept in sync with the users actions and users can see what others are doing.
 No timestamps are needed for data consistency.
 
