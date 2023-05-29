@@ -8,6 +8,7 @@ The user wants to see changes that other users are making on the map, therefore 
 The data is kept in sync between the client and the server through API calls and server-sent events (SSE).
 This means the backend is always up to date with the users actions and users can see what others are doing.
 
+- Data must be immediately send asynchronously to the backend on any user action.
 - Calculations in the backend can always assume that database is up-to-date.
 - No timestamps are needed for data consistency.
 - No conflict handling in the frontend.
@@ -46,6 +47,21 @@ As the planning tools are also used for longer sessions, e.g. a whole working da
 - we do offloading of layers that are not used for some time, see [offloading](../decisions/frontend_offloading.md)
 
 To keep the backend with low memory consumption we try to avoid duplicating data from the database to memory other than when sending it to the client.
+
+## Layers
+
+Layers are kept independent, they have their own:
+
+- state hierarchy
+- API calls to the backend
+
+I.e. each layer is responsible to handle:
+
+- the time functionality (which elements are loaded and which are shown)
+- add, edit, move, remove and delete functionality
+- offload data
+
+The implementation, however, should be shared.
 
 ## Offline Changes
 

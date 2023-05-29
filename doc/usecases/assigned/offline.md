@@ -5,8 +5,10 @@
 - **Scope:** Notifications
 - **Level:** User Goal
 - **Actors:**
-  - User: A user who wants to work offline
+  - User: A user who wants to work offline.
+    Must have the permissions to lock.
   - Other user: Other users who have write access to the same layers in the map
+  - Owner of the map.
 - **Brief:** The user has some features offline while being in the garden without Internet access.
 - **Assignee:** Paul
 
@@ -23,6 +25,8 @@
   - After the work, the browser gets online. (3)
   - The user presses the "offline" button again. (4)
 - **Alternative scenario:**
+  - After a 8h timeout or if the owner of the map decides, the lock can be removed.
+    In this case, all data from the offline work is lost.
 - **Error scenario:**
   Could not go offline or online: An error message is displayed.
 - **Postcondition:**
