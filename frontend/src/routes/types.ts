@@ -9,6 +9,7 @@ enum Pages {
   LandingPage,
   Map,
   Maps,
+  Webdav,
 }
 
 type PathRouteCustomProps = {
