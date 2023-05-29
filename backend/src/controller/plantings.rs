@@ -11,6 +11,7 @@ use actix_web::{
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
+use uuid::Uuid;
 
 use crate::config::auth::user_info::{self, UserInfo};
 use crate::model::dto::actions::{CreatePlantAction, DeletePlantAction};
@@ -85,7 +86,7 @@ pub async fn create(
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and creates the record.
     let dto = PlantingDto {
-        id: "uuid".to_string(),
+        id: Uuid::new_v4().to_string(),
         plant_id: new_plant_json.plant_id,
         plants_layer_id: new_plant_json.plants_layer_id,
         x: new_plant_json.x,
