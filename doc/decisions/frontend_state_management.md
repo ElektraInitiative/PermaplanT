@@ -1,4 +1,4 @@
-# Frontend State Management Library
+# Frontend State Management
 
 ## Problem
 
@@ -38,15 +38,11 @@ Inside a React application we can usually distinguish between three types of sta
 
 No library is needed.
 
-#### Rationale
-
 Managing component state can be accomplished with React features (useState, Context + useReducer).
 
 ### Global Application State
 
 [Zustand](https://github.com/pmndrs/zustand) will be used as the global state management library for PermaplanT.
-
-#### Rationale
 
 Zustand is a lightweight and easy-to-use library that uses hooks, which makes it easy to integrate with React.
 Its simplicity also reduces the amount of boilerplate code and the need for complex setup and configuration.
@@ -54,8 +50,6 @@ Its simplicity also reduces the amount of boilerplate code and the need for comp
 ### Server State
 
 [React Query](https://react-query-v3.tanstack.com/) will be used for managing asynchronous state.
-
-#### Rationale
 
 React Query is a feature rich, up-to-date library for managing asynchronous data.
 
