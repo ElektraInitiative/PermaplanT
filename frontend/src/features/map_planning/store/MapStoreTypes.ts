@@ -7,7 +7,7 @@ import { Shape, ShapeConfig } from 'konva/lib/Shape';
 export interface TrackedMapSlice {
   trackedState: TrackedMapState;
   step: number;
-  history: TrackedAction[];
+  history: History;
   canUndo: boolean;
   canRedo: boolean;
   /**
@@ -20,6 +20,14 @@ export interface TrackedMapSlice {
   /** Event listener responsible for adding a single shape to the transformer */
   addShapeToTransformer: (shape: Shape<ShapeConfig>) => void;
 }
+
+/**
+ * The type of the history.
+ */
+export type History = Array<{
+  redo: TrackedAction;
+  undo: TrackedAction;
+}>;
 
 /**
  * Part of store which is unaffected by the History
@@ -116,6 +124,7 @@ export type UntrackedLayers = {
 export type TrackedMapState = {
   layers: TrackedLayers;
 };
+
 /**
  * The state of the map untracked by the history.
  */
@@ -127,9 +136,21 @@ export type UntrackedMapState = {
 /**
  * An action for adding an object to the map.
  */
-export type ObjectAddAction = {
-  type: 'OBJECT_ADD';
+export type CreatePlantAction = {
+  type: 'CREATE_PLANT';
+  // TODO: should be a PlantState when we have it
   payload: ObjectState;
+};
+
+/**
+ * An action for deleting an object from the map.
+ */
+export type DeletePlantAction = {
+  type: 'DELETE_PLANT';
+  payload: {
+    index: 'Plant';
+    id: string;
+  };
 };
 
 /**
@@ -166,7 +187,8 @@ export type RedoAction = {
  * A union type for all actions.
  */
 export type MapAction =
-  | ObjectAddAction
+  | CreatePlantAction
+  | DeletePlantAction
   | ObjectUpdatePositionAction
   | ObjectUpdateTransformAction
   | UndoAction

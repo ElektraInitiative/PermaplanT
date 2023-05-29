@@ -1,3 +1,4 @@
+import { createPlanting } from '../api/createPlanting';
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
@@ -191,14 +192,21 @@ export const BaseStage = ({
         {/* TODO: This is example code that shows how to interact with the store, the final code handling object creation is TBD */}
         <SimpleButton
           className="w-32"
-          onClick={() =>
+          onClick={async () => {
+            const planting = await createPlanting({
+              plant_id: 1,
+              plants_layer_id: 1,
+              x: 100,
+              y: 100,
+            });
+
             dispatch({
-              type: 'OBJECT_ADD',
+              type: 'CREATE_PLANT',
               payload: {
                 index: 'Plant',
-                id: Math.random().toString(36).slice(2, 9),
-                x: 300,
-                y: 300,
+                id: planting.id,
+                x: planting.x,
+                y: planting.y,
                 width: 100,
                 height: 100,
                 type: 'rect',
@@ -206,8 +214,8 @@ export const BaseStage = ({
                 scaleX: 1,
                 scaleY: 1,
               },
-            })
-          }
+            });
+          }}
         >
           CREATE OBJECT
         </SimpleButton>

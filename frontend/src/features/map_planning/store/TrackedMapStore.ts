@@ -1,6 +1,9 @@
+import { createPlanting } from '../api/createPlanting';
+import { deletePlanting } from '../api/deletePlanting';
 import type {
   MapAction,
-  ObjectAddAction,
+  CreatePlantAction,
+  DeletePlantAction,
   ObjectState,
   ObjectUpdatePositionAction,
   ObjectUpdateTransformAction,
@@ -11,7 +14,10 @@ import type {
   UntrackedMapSlice,
 } from './MapStoreTypes';
 import { LAYER_NAMES } from './MapStoreTypes';
+import { RemoteActionSchema } from './RemoteActions';
+import { baseApiUrl } from '@/config';
 import i18next from '@/config/i18n';
+import { getUser } from '@/utils/getUser';
 import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { createRef } from 'react';
@@ -38,39 +44,64 @@ export const createTrackedMapSlice: StateCreator<
   [],
   [],
   TrackedMapSlice
-> = (set) => ({
-  transformer: createRef<Konva.Transformer>(),
-  trackedState: TRACKED_DEFAULT_STATE,
-  history: [],
-  step: 0,
-  canUndo: false,
-  canRedo: false,
-  dispatch: (action) => set((state) => ({ ...state, ...applyActionToState(action, state) })),
-  addShapeToTransformer: (node: Shape<ShapeConfig>) => {
-    set((state) => {
-      const transformer = state.transformer.current;
+> = (set) => {
+  const user = getUser();
+  if (!user) {
+    // TODO: implement protected routes.
+    toast.error("You're not logged in.");
+  }
 
-      const nodes = transformer?.getNodes() || [];
-      if (!nodes.includes(node)) {
-        transformer?.nodes([node]);
-      }
+  if (user) {
+    const mapUpdateSource = new EventSource(`${baseApiUrl}/api/map_updates/${user?.profile.sub}`);
+    mapUpdateSource.onmessage = handleRemoteAction(set);
+  }
 
-      return state;
-    });
-  },
-});
+  return {
+    transformer: createRef<Konva.Transformer>(),
+    trackedState: TRACKED_DEFAULT_STATE,
+    history: [],
+    step: 0,
+    canUndo: false,
+    canRedo: false,
+    dispatch: (action) => set((state) => ({ ...state, ...applyActionToState(action, state) })),
+    addShapeToTransformer: (node: Shape<ShapeConfig>) => {
+      set((state) => {
+        const transformer = state.transformer.current;
+
+        const nodes = transformer?.getNodes() || [];
+        if (!nodes.includes(node)) {
+          transformer?.nodes([node]);
+        }
+
+        return state;
+      });
+    },
+  };
+};
 
 /**
  * given an action and the current state, return the new state
  */
 function applyActionToState(action: MapAction, state: TrackedMapSlice): TrackedMapSlice {
   switch (action.type) {
-    case 'OBJECT_ADD':
+    case 'CREATE_PLANT':
       return {
         ...state,
-        history: [...state.history.slice(0, state.step), action],
+        history: [
+          ...state.history.slice(0, state.step),
+          {
+            redo: action,
+            undo: {
+              type: 'DELETE_PLANT',
+              payload: {
+                index: 'Plant',
+                id: action.payload.id,
+              },
+            },
+          },
+        ],
         step: state.step + 1,
-        trackedState: handleAddObjectAction(state.trackedState, action),
+        trackedState: handleCreatePlantAction(state.trackedState, action),
         canUndo: true,
       };
 
@@ -78,62 +109,34 @@ function applyActionToState(action: MapAction, state: TrackedMapSlice): TrackedM
     case 'OBJECT_UPDATE_TRANSFORM':
       return {
         ...state,
-        history: [...state.history.slice(0, state.step), action],
+        history: [
+          ...state.history.slice(0, state.step),
+          {
+            redo: action,
+            // TODO: fix this
+            undo: action,
+          },
+        ],
         step: state.step + 1,
         trackedState: handleUpdateObjectAction(state.trackedState, action),
         canUndo: true,
       };
 
-    case 'UNDO': {
-      if (state.step <= 0) {
-        return state;
-      }
+    case 'UNDO':
+      return handleUndo(state);
 
-      const lastAction = state.history[state.step - 1];
-      // TODO: read 'Placeholder' from the lastAction/nextAction
-      const action = i18next.t(`undoRedo:${lastAction.type}`, { name: 'Placeholder' });
-      toast(i18next.t('undoRedo:successful_undo', { action }));
-
-      // reset the transformer
-      state.transformer.current?.nodes([]);
-
-      return {
-        ...state,
-        trackedState: reduceHistory(state.history.slice(0, state.step - 1)),
-        step: state.step - 1,
-        canUndo: state.step - 1 > 0,
-        canRedo: state.step - 1 < state.history.length,
-      };
-    }
-
-    case 'REDO': {
-      if (state.step >= state.history.length) {
-        return state;
-      }
-
-      const nextAction = state.history[state.step];
-      // TODO: read 'Placeholder' from the lastAction/nextAction
-      const action = i18next.t(`undoRedo:${nextAction.type}`, { name: 'Placeholder' });
-      toast(i18next.t('undoRedo:successful_redo', { action }));
-
-      // reset the transformer
-      state.transformer.current?.nodes([]);
-
-      return {
-        ...state,
-        trackedState: reduceHistory(state.history.slice(0, state.step + 1)),
-        step: state.step + 1,
-        canRedo: state.step + 1 < state.history.length,
-        canUndo: state.step + 1 > 0,
-      };
-    }
+    case 'REDO':
+      return handleRedo(state);
 
     default:
       return state;
   }
 }
 
-function handleAddObjectAction(state: TrackedMapState, action: ObjectAddAction): TrackedMapState {
+function handleCreatePlantAction(
+  state: TrackedMapState,
+  action: CreatePlantAction,
+): TrackedMapState {
   return {
     ...state,
     layers: {
@@ -141,6 +144,24 @@ function handleAddObjectAction(state: TrackedMapState, action: ObjectAddAction):
       [action.payload.index]: {
         ...state.layers[action.payload.index],
         objects: [...state.layers[action.payload.index].objects, action.payload],
+      },
+    },
+  };
+}
+
+function handleDeletePlantAction(
+  state: TrackedMapState,
+  action: DeletePlantAction,
+): TrackedMapState {
+  return {
+    ...state,
+    layers: {
+      ...state.layers,
+      [action.payload.index]: {
+        ...state.layers[action.payload.index],
+        objects: state.layers[action.payload.index].objects.filter(
+          (obj) => obj.id !== action.payload.id,
+        ),
       },
     },
   };
@@ -179,23 +200,134 @@ function reduceObjectUpdatesToLayers(
   };
 }
 
-/**
- * given a history of actions, reduce it into a single state, that is the sum of all actions
- */
-function reduceHistory(history: TrackedAction[]): TrackedMapState {
-  const state = history.reduce((state, action) => {
-    switch (action.type) {
-      case 'OBJECT_ADD':
-        return handleAddObjectAction(state, action);
+type SetFn = Parameters<typeof createTrackedMapSlice>[0];
 
-      case 'OBJECT_UPDATE_POSITION':
-      case 'OBJECT_UPDATE_TRANSFORM':
-        return handleUpdateObjectAction(state, action);
+export function handleRemoteAction(set: SetFn) {
+  return (event: MessageEvent<unknown>) => {
+    const action = validateRemoteAction(event);
+
+    console.log('remote action', action);
+
+    switch (action?.type) {
+      case 'CREATE_PLANT':
+        set((state) => ({
+          ...state,
+          trackedState: handleCreatePlantAction(state.trackedState, {
+            type: 'CREATE_PLANT',
+            payload: {
+              id: action.payload.id,
+              index: 'Plant',
+              x: action.payload.x,
+              y: action.payload.y,
+              width: 100,
+              height: 100,
+              rotation: 0,
+              scaleX: 1,
+              scaleY: 1,
+              type: 'plant',
+            },
+          }),
+        }));
+        break;
+
+      case 'DELETE_PLANT':
+        set((state) => ({
+          ...state,
+          trackedState: handleDeletePlantAction(state.trackedState, {
+            type: 'DELETE_PLANT',
+            payload: {
+              id: action.payload.id,
+              index: 'Plant',
+            },
+          }),
+        }));
+        break;
 
       default:
-        return state;
+        break;
     }
-  }, TRACKED_DEFAULT_STATE);
+  };
+}
 
-  return state;
+function handleUndo(state: TrackedMapSlice): TrackedMapSlice {
+  if (state.step <= 0) {
+    return state;
+  }
+
+  // TODO: read 'Placeholder' from the lastAction/nextAction
+  const action = i18next.t(`undoRedo:${state.history[state.step - 1].redo.type}`, {
+    name: 'Placeholder',
+  });
+  toast(i18next.t('undoRedo:successful_undo', { action }));
+
+  // reset the transformer
+  state.transformer.current?.nodes([]);
+
+  const previousAction = state.history[state.step - 1].undo;
+
+  return {
+    ...state,
+    trackedState: handleUndoAction(state.trackedState, previousAction),
+    step: state.step - 1,
+    canUndo: state.step - 1 > 0,
+    canRedo: state.step - 1 < state.history.length,
+  };
+}
+
+function handleUndoAction(state: TrackedMapState, action: TrackedAction): TrackedMapState {
+  switch (action.type) {
+    case 'CREATE_PLANT':
+      createPlanting({
+        plant_id: Number(action.payload.id),
+        plants_layer_id: 1,
+        x: action.payload.x,
+        y: action.payload.y,
+      });
+
+      return handleCreatePlantAction(state, action);
+
+    case 'DELETE_PLANT':
+      deletePlanting(action.payload.id);
+
+      return handleDeletePlantAction(state, action);
+
+    default:
+      return state;
+  }
+}
+
+function handleRedo(state: TrackedMapSlice): TrackedMapSlice {
+  if (state.step >= state.history.length) {
+    return state;
+  }
+
+  const nextAction = state.history[state.step];
+  // TODO: read 'Placeholder' from the lastAction/nextAction
+  const action = i18next.t(`undoRedo:${nextAction.redo.type}`, { name: 'Placeholder' });
+  toast(i18next.t('undoRedo:successful_redo', { action }));
+
+  // reset the transformer
+  state.transformer.current?.nodes([]);
+
+  return {
+    ...state,
+    // TODO: fix this
+    trackedState: state.trackedState,
+    step: state.step + 1,
+    canRedo: state.step + 1 < state.history.length,
+    canUndo: state.step + 1 > 0,
+  };
+}
+
+function validateRemoteAction(event: MessageEvent<unknown>) {
+  if (typeof event.data !== 'string') {
+    return null;
+  }
+
+  try {
+    const action = JSON.parse(event.data);
+    return RemoteActionSchema.parse(action);
+  } catch (e) {
+    return null;
+  }
 }
