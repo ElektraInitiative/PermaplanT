@@ -17,6 +17,8 @@ impl From<NewMapDto> for NewMap {
             visits: new_map.visits,
             harvested: new_map.harvested,
             owner_id: new_map.owner_id,
+            is_private: new_map.is_private,
+            description: new_map.description,
         }
     }
 }
