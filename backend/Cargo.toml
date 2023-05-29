@@ -21,7 +21,6 @@ actix-service = "2.0.2"
 
 # SSE
 actix-web-lab = "0.19.1"
-parking_lot = "0.12.1"
 futures-util = { version = "0.3.28", default-features = false, features = ["std"] }
 
 # API doc

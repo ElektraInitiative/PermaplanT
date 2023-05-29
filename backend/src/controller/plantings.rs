@@ -12,6 +12,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
+use crate::config::auth::user_info::{self, UserInfo};
 use crate::model::dto::actions::{CreatePlantAction, DeletePlantAction};
 use crate::model::dto::{
     NewPlantingDto, Page, PageParameters, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
@@ -80,6 +81,7 @@ pub async fn find(
 pub async fn create(
     new_plant_json: Json<NewPlantingDto>,
     app_data: Data<AppDataInner>,
+    user_info: UserInfo,
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and creates the record.
     let dto = PlantingDto {
@@ -92,7 +94,10 @@ pub async fn create(
 
     app_data
         .broadcaster
-        .broadcast(&CreatePlantAction::new(dto.clone()).to_string())
+        .broadcast(
+            &user_info.id.to_string(),
+            &CreatePlantAction::new(dto.clone()).to_string(),
+        )
         .await;
 
     Ok(HttpResponse::Created().json(dto))
@@ -147,11 +152,18 @@ pub async fn update(
     )
 )]
 #[delete("/{id}")]
-pub async fn delete(path: Path<String>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
+pub async fn delete(
+    path: Path<String>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
+) -> Result<HttpResponse> {
     // TODO: implement a service that validates (permissions) and deletes the planting
     app_data
         .broadcaster
-        .broadcast(&DeletePlantAction::new(path.to_string()).to_string())
+        .broadcast(
+            &user_info.id.to_string(),
+            &DeletePlantAction::new(path.to_string()).to_string(),
+        )
         .await;
 
     Ok(HttpResponse::Ok().json(""))

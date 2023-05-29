@@ -392,7 +392,6 @@ dependencies = [
  "jsonwebkey",
  "jsonwebtoken",
  "log",
- "parking_lot",
  "reqwest",
  "serde",
  "serde_json",
