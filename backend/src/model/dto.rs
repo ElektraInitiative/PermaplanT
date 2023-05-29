@@ -250,6 +250,10 @@ pub struct MapDto {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub is_private: Option<bool>,
+    /// The description of the map.
+    pub description: Option<String>,
 }
 
 /// The information of a map neccessary for its creation.
@@ -276,6 +280,10 @@ pub struct NewMapDto {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub is_private: Option<bool>,
+    /// The description of the map.
+    pub description: Option<String>,
 }
 
 /// Query parameters for searching maps.
@@ -286,6 +294,8 @@ pub struct MapSearchParameters {
     pub is_inactive: Option<bool>,
     /// The owner of the map.
     pub owner_id: Option<i32>,
+    /// Wheter or not the map is private.
+    pub is_private: Option<bool>,
 }
 
 /// The whole information of a layer.

@@ -18,6 +18,8 @@ impl From<Map> for MapDto {
             visits: map.visits,
             harvested: map.harvested,
             owner_id: map.owner_id,
+            is_private: map.is_private,
+            description: map.description,
         }
     }
 }
