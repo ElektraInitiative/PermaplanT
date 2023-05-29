@@ -50,7 +50,7 @@
 #![allow(clippy::multiple_crate_versions)]
 
 use actix_cors::Cors;
-use actix_web::{http, web::Data, App, HttpServer};
+use actix_web::{http, middleware::Logger, web::Data, App, HttpServer};
 use config::{api_doc, auth::Config, routes};
 use db::connection;
 
@@ -74,6 +74,8 @@ async fn main() -> std::io::Result<()> {
         Err(e) => panic!("Error reading configuration: {e}"),
     };
 
+    env_logger::init();
+
     Config::init(&config).await;
 
     HttpServer::new(move || {
@@ -85,6 +87,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(data)
             .configure(routes::config)
             .configure(api_doc::config)
+            .wrap(Logger::default())
     })
     .shutdown_timeout(5)
     .bind(config.bind_address)?
