@@ -1,3 +1,4 @@
+use actix_web::web::Json;
 use actix_web_lab::sse::{self, ChannelStream, Sse};
 use futures_util::future;
 use parking_lot::Mutex;
@@ -39,11 +40,8 @@ impl Broadcaster {
     /// Removes all non-responsive clients from broadcast list.
     async fn remove_stale_clients(&self) {
         let clients = self.inner.lock().clients.clone();
-        println!("active client {:?}", clients);
 
         let mut ok_clients = Vec::new();
-
-        println!("okay active client {:?}", ok_clients);
 
         for client in clients {
             if client

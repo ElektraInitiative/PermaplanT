@@ -8,6 +8,7 @@ use utoipa::{IntoParams, ToSchema};
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
+pub mod actions;
 pub mod map_impl;
 pub mod map_version_impl;
 pub mod new_map_impl;
@@ -83,10 +84,10 @@ pub struct PlantsSummaryDto {
 /// Represents plant planted on a map.
 /// E.g. a user drags a plant from the search results and drops it on the map.
 #[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, ToSchema, Clone)]
 pub struct PlantingDto {
     /// The database id of the record.
-    pub id: i32,
+    pub id: String,
     /// The plant that is planted.
     pub plant_id: i32,
     /// The plants layer of the map the plant is placed on.
