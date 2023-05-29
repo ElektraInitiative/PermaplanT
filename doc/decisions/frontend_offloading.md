@@ -1,4 +1,4 @@
-# Frontend State Offloading
+# Frontend Offloading
 
 ## Problem
 

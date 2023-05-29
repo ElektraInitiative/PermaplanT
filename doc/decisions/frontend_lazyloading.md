@@ -1,4 +1,4 @@
-# Map Lazyloading
+# Frontend Lazyloading
 
 ## Problem
 

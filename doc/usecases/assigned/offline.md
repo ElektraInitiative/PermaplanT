@@ -7,7 +7,7 @@
 - **Actors:**
   - User: A user who wants to work offline
   - Other user: Other users who have write access to the same layers in the map
-- **Brief:** The user works offline while being in the garden without Internet access.
+- **Brief:** The user has some features offline while being in the garden without Internet access.
 - **Assignee:** Paul
 
 ## Scenarios
