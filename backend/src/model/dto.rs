@@ -9,9 +9,7 @@ use utoipa::{IntoParams, ToSchema};
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
 pub mod map_impl;
-pub mod map_version_impl;
 pub mod new_map_impl;
-pub mod new_map_version_impl;
 pub mod new_seed_impl;
 pub mod page_impl;
 pub mod plants_impl;
@@ -179,7 +177,6 @@ pub struct PageParameters {
     PageSeedDto = Page<SeedDto>,
     PageMapDto = Page<MapDto>,
     PagePlantingDto = Page<PlantingDto>,
-    PageMapVersionDto = Page<MapVersionDto>
 )]
 pub struct Page<T> {
     /// Resulting records.
@@ -254,38 +251,4 @@ pub struct MapSearchParameters {
     pub is_inactive: Option<bool>,
     /// The owner of the map.
     pub owner_id: Option<i32>,
-}
-
-/// The whole information of a map version.
-#[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
-pub struct MapVersionDto {
-    /// The id of the map version.
-    pub id: i32,
-    /// The id of the parent map.
-    pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
-}
-
-/// The information of a map version neccessary for its creation.
-#[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
-pub struct NewMapVersionDto {
-    /// The id of the parent map.
-    pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
-}
-
-/// Query parameters for searching map versions.
-#[typeshare]
-#[derive(Debug, Deserialize, IntoParams)]
-pub struct MapVersionSearchParameters {
-    /// Whether or not the map is active.
-    pub map_id: Option<i32>,
 }

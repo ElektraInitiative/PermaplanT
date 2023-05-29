@@ -2,11 +2,8 @@
 
 use actix_web::web::Data;
 
+use crate::model::dto::PageParameters;
 use crate::model::dto::{MapSearchParameters, Page};
-use crate::model::dto::{
-    MapVersionDto, MapVersionSearchParameters, NewMapVersionDto, PageParameters,
-};
-use crate::model::entity::MapVersion;
 use crate::{
     db::connection::Pool,
     error::ServiceError,
@@ -47,33 +44,5 @@ pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<MapDto, ServiceErr
 pub async fn create(new_map: NewMapDto, pool: &Data<Pool>) -> Result<MapDto, ServiceError> {
     let mut conn = pool.get().await?;
     let result = Map::create(new_map, &mut conn).await?;
-    Ok(result)
-}
-
-/// Show all versions of a map.
-///
-/// # Errors
-/// If the connection to the database could not be established.
-pub async fn show_versions(
-    search_parameters: MapVersionSearchParameters,
-    page_parameters: PageParameters,
-    pool: &Data<Pool>,
-) -> Result<Page<MapVersionDto>, ServiceError> {
-    let mut conn = pool.get().await?;
-    let result = MapVersion::find(search_parameters, page_parameters, &mut conn).await?;
-    Ok(result)
-}
-
-/// Save a snapshot of the map as a new version.
-///
-/// # Errors
-/// If the connection to the database could not be established.
-pub async fn save_snapshot(
-    new_map_version: NewMapVersionDto,
-    pool: &Data<Pool>,
-) -> Result<MapVersionDto, ServiceError> {
-    // TODO: create element entries for all layers with reference to this version - see issue #341.
-    let mut conn = pool.get().await?;
-    let result = MapVersion::create(new_map_version, &mut conn).await?;
     Ok(result)
 }

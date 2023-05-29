@@ -1,7 +1,6 @@
 //! Contains all entities used in `PermaplanT`.
 
 pub mod map_impl;
-pub mod map_version_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
@@ -10,7 +9,7 @@ use chrono::NaiveDateTime;
 
 use diesel::{Identifiable, Insertable, Queryable};
 
-use crate::schema::{map_versions, maps, plants, seeds};
+use crate::schema::{maps, plants, seeds};
 
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
@@ -739,30 +738,4 @@ pub struct NewMap {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
-}
-
-/// The `MapVersion` entity.
-#[derive(Identifiable, Queryable)]
-#[diesel(table_name = map_versions)]
-pub struct MapVersion {
-    /// The id of the map version.
-    pub id: i32,
-    /// The id of the parent map.
-    pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
-}
-
-/// The `NewMapVersion` entity.
-#[derive(Insertable)]
-#[diesel(table_name = map_versions)]
-pub struct NewMapVersion {
-    /// The id of the parent map.
-    pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
 }
