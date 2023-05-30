@@ -19,7 +19,7 @@ To log you can simply call the macros in the `log` crate.
 
 For example to log using the debug level:
 
-```rust
+```rust,ignore
 log::debug!("This is my variable: {}", some_variable);
 ```
 
@@ -42,7 +42,7 @@ Available logging levels are:
 
 SQL queries can be converted to something that can be logged using [debug_query](https://docs.rs/diesel/latest/diesel/fn.debug_query.html).
 
-```rust
+```rust,ignore
 let query = diesel::delete(seeds::table.find(id));
 debug!("{}", debug_query::<Pg, _>(&query));
 query.execute(conn).await

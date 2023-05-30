@@ -54,12 +54,11 @@ impl From<PoolError> for ServiceError {
 
 impl From<DieselError> for ServiceError {
     fn from(value: DieselError) -> Self {
-        let status_code = match value {
-            DieselError::NotFound => StatusCode::NOT_FOUND,
-            _ => {
-                log::error!("Error executing diesel SQL query: {}", value.to_string());
-                StatusCode::INTERNAL_SERVER_ERROR
-            }
+        let status_code = if let DieselError::NotFound = value {
+            StatusCode::NOT_FOUND
+        } else {
+            log::error!("Error executing diesel SQL query: {}", value.to_string());
+            StatusCode::INTERNAL_SERVER_ERROR
         };
 
         Self::new(status_code, value.to_string())
