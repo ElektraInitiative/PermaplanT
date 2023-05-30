@@ -1,9 +1,11 @@
 //! Contains the implementation of [`Plants`].
 
 use diesel::{
-    dsl::sql, sql_types::Float, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult,
+    debug_query, dsl::sql, pg::Pg, sql_types::Float, BoolExpressionMethods, ExpressionMethods,
+    QueryDsl, QueryResult,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
+use log::debug;
 
 use crate::{
     db::{
@@ -34,7 +36,7 @@ impl Plants {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
-        let sql_query = plants::table
+        let query = plants::table
             .select((
                 plants::all_columns,
                 greatest(
@@ -55,9 +57,11 @@ impl Plants {
             .order(sql::<Float>("rank").desc())
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page);
-
-        let query_page = sql_query.load_page::<(Self, f32)>(conn).await;
-        query_page.map(Page::from_entity)
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query
+            .load_page::<(Self, f32)>(conn)
+            .await
+            .map(Page::from_entity)
     }
 
     /// Get a page of some plants.
@@ -68,14 +72,13 @@ impl Plants {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
-        let query_page = plants::table
+        let query = plants::table
             .select(all_columns)
             .into_boxed()
             .paginate(page_parameters.page)
-            .per_page(page_parameters.per_page)
-            .load_page::<Self>(conn)
-            .await;
-        query_page.map(Page::from_entity)
+            .per_page(page_parameters.per_page);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.load_page::<Self>(conn).await.map(Page::from_entity)
     }
 
     /// Fetch plant by id from the database.
@@ -86,7 +89,8 @@ impl Plants {
         id: i32,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<PlantsSummaryDto> {
-        let query_result = plants::table.find(id).first::<Self>(conn).await;
-        query_result.map(Into::into)
+        let query = plants::table.find(id);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.first::<Self>(conn).await.map(Into::into)
     }
 }

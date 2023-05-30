@@ -4,7 +4,10 @@
 
 - Rust 1.67.1 or later ([Installation guide](../doc/development_setup.md))
 - [PostgreSQL](https://www.postgresql.org/download/) version 13 or later
+- [Keycloak](https://www.keycloak.org/getting-started/getting-started-docker) (run the container, but change the port to 8081)
 - libpq-dev
+- libssl-dev
+- pkg-config
 
 ## Installation
 
@@ -13,6 +16,9 @@
 - `DATABASE_URL` is the Connection [URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) to your PostgreSQL database
 - `BIND_ADDRESS_HOST` defines the host on which the server will run on
 - `BIND_ADDRESS_PORT` defines the port on which the server will run on
+- `AUTH_DISCOVERY_URI` the .well-known endpoint of the auth server (see [RFC 8414](https://www.rfc-editor.org/rfc/rfc8414.html#section-2) for more detail)
+- `AUTH_CLIENT_ID` the client id the frontend should use to log in
+- `RUST_LOG` used to set the logging config for [env_logger](https://docs.rs/env_logger/latest/env_logger/)
 
 Ensure that you grant the necessary permissions for the user to use Postgres. One way to do this is by using the following command:
 
@@ -45,19 +51,32 @@ LC_ALL=C diesel migration run
 cargo install typeshare-cli
 ```
 
-6. Start the server:
+6. Start Keycloak
 
-```shell
+You can do one of the following two steps, the first one being the simpler one, but with less configuration options.
+
+- To use the preconfigured Keycloak instance simply copy the newest version of `.env.sample` to `.env`
+- To use the local Keycloak variant follow the steps in [/doc/setups/keycloak/](/doc/setups/keycloak/README.md)  
+  You then also have to change following two env variables in `.env`
+  - `AUTH_DISCOVERY_URI=http://localhost:8081/realms/PermaplanT/.well-known/openid-configuration`
+  - `AUTH_CLIENT_ID=PermaplanT`
+
+7. Run the backend
+
+```bash
 cargo run
 ```
 
-## Usage
+### Test server using Swagger
 
-Now the server is running and will start listening at <http://localhost:8080/> (or whichever port you specified in `.env`).
+- Go to <http://localhost:8080/doc/api/swagger/ui/>.  
+  If you try to execute a request now it should return error 401.
+- Click `Authorize`.
 
-Example requests:
-
-- `curl localhost:8080/api/plants`
+- Use the `authorizationCode` auth flow.
+- Enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.
+- Enter user credentials (username: `test`, password: `test`).
+- You should now be able to execute a request in Swagger.
 
 ## Documentation
 
@@ -69,15 +88,3 @@ To view code documentation run
 ```shell
 cargo doc --open
 ```
-
-## Tools
-
-I would suggest using [cargo-watch](https://github.com/watchexec/cargo-watch) to check for errors.
-
-After install via `cargo install cargo-watch --locked` run
-
-```shell
-cargo watch -x clippy -x check -x doc
-```
-
-to check for warnings/errors automatically on every code change.

@@ -23,6 +23,9 @@ use actix_web::{
     ),
     responses(
         (status = 200, description = "Fetch or search for all plants", body = PagePlantsSummaryDto),
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[get("")]
@@ -41,9 +44,12 @@ pub async fn find(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/plants/{id}",
+    context_path = "/api/plants",
     responses(
         (status = 200, description = "Fetch plant by id", body = PlantsSummaryDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[get("/{id}")]

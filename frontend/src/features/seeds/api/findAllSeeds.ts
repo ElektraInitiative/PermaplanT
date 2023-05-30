@@ -1,8 +1,8 @@
 import { Page, SeedDto } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { createAPI } from '@/config/axios';
 
 export const findAllSeeds = async (page: number, name?: string): Promise<Page<SeedDto>> => {
+  const http = createAPI();
   try {
     const pageString: string = page != undefined ? page.toString() : '1';
 
@@ -14,7 +14,7 @@ export const findAllSeeds = async (page: number, name?: string): Promise<Page<Se
       searchParams.append('name', name);
     }
 
-    const response = await axios.get<Page<SeedDto>>(`${baseApiUrl}/api/seeds?${searchParams}`);
+    const response = await http.get<Page<SeedDto>>(`/api/seeds?${searchParams}`);
 
     return response.data;
   } catch (error) {
