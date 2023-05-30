@@ -104,6 +104,8 @@ async fn test_can_create_map() {
         visits: 0,
         harvested: 0,
         owner_id: -1,
+        is_private: None,
+        description: None,
     };
 
     let resp = test::TestRequest::post()
