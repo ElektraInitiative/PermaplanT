@@ -15,7 +15,7 @@ Partial matches of the following fields should be returned.
 2. Exact matches should be ranked high.
 3. The users language preference should be taken into account when ranking.
 4. Matches in names should have a higher rank than those in edible uses.
-5. We don't want to add additional databases like Elasticsearch.
+5. We don't want to add additional databases like Elasticsearch or [Meilisearch](https://www.meilisearch.com/).
 
 ## Assumptions
 
