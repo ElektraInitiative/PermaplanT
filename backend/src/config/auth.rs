@@ -6,7 +6,7 @@ pub mod middleware;
 pub mod user_info;
 
 use jsonwebtoken::jwk::JwkSet;
-use log::debug;
+use log::trace;
 use serde::Deserialize;
 use tokio::sync::OnceCell;
 
@@ -43,7 +43,7 @@ impl Config {
     /// * If the auth server is unreachable or is set up incorrectly.
     #[allow(clippy::expect_used)]
     pub async fn init(app_config: &crate::config::app::Config) {
-        debug!("Fetching endpoints from discovery endpoint...");
+        trace!("Initializing auth...");
         let openid_config =
             OpenIDEndpointConfiguration::fetch(&app_config.auth_discovery_uri).await;
 
@@ -88,6 +88,7 @@ impl OpenIDEndpointConfiguration {
     /// * If the auth server is set up incorrectly. This would always lead to irrecoverable errors.
     #[allow(clippy::expect_used)]
     async fn fetch(issuer_uri: &str) -> Self {
+        trace!("Fetching endpoints from discovery endpoint...");
         reqwest::get(issuer_uri)
             .await
             .expect("Error fetching from auth server!")
