@@ -1,4 +1,21 @@
-# Sequence
+# Runtime View
+
+## Plants
+
+```mermaid
+sequenceDiagram
+    actor User
+    User->>+Frontend: search for plant
+    Frontend->>+Backend: search (text, language)
+    Backend->>-Frontend: list of plants
+    User->>Frontend: selects plant
+    Frontend->>+Backend: plant_info ()
+    Backend->>-Frontend: info, list plant_ID of relations, array of 1m raster, maybe picture/heat map
+    User->>Frontend: place plant
+    Frontend->>Backend: place_plant (plant_ID, pos, date)
+```
+
+## Season
 
 Example of a typical sequence in one season:
 
