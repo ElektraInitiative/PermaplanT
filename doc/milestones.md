@@ -1,9 +1,3 @@
-## May
-
-KW20: submit any short text
-
-KW21: introduction
-
 ## June
 
 KW22:
@@ -49,3 +43,9 @@ KW16: Hypothesis written
 KW17: related work written
 
 - M2 release
+
+## May (past)
+
+KW20: submit any short text
+
+KW21: introduction
