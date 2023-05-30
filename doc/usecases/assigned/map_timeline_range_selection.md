@@ -19,7 +19,7 @@
   - Dragging over the scroll bar hints which day/month/year represents the start and which the end of the selected date range.
   - Finalizing the date selection updates the map to show the state of the garden over a range of points in time.
   - Elements on the map that do not exist over the whole range of dates, appear grey.
-  - Elements on the map can be edited/moved, but not be added/deleted.
+  - Elements on the map can be edited/moved/deleted, but not be added or removed.
 - **Alternative scenario:**
 - **Error scenario:**
   - There is an error in the timeline display or navigation functionality.

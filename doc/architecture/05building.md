@@ -1,6 +1,53 @@
-# Frontend Architecture
+# Building Block View
 
-## Structure
+## Backend Structure
+
+- `config/`: Contains the servers configuration.
+- `controller/`: Contains all endpoints of the application.
+- `db/`: Contains utility functions for the database.
+- `model/`: Contains the data PermaplanT is acting upon and their implementation.
+- `service/`: Contains business logic and maps between entities and DTOs.
+- `test/`: Contains integration tests.
+
+```mermaid
+graph LR;
+    config -->|Configures routes<br>Uses endpoints for OpenAPI doc| controller
+    config -->|Uses DTOs for OpenAPI doc| model
+    controller -->|Calls functions| service
+    controller -->|Uses DTOs| model
+    controller -->|Uses data pool| db
+    db -->|Uses `Page` struct| model
+    model -->|Uses helper functions| db
+    service -->|Calls database| model
+    service -->|Uses DTOs and Entities| db
+```
+
+### Controller
+
+The controller layer contains all endpoints of the application.  
+The actual routes are defined in [config/routes.rs](/backend/src/config/routes.rs) while the controller layer only contains the actual implementation of the endpoints.
+
+When an endpoint gets called Actix clones an internally stored pool of connections to the database and passes it to the endpoint to be used.  
+We then 'forward' the pool to the service layer where a connection is retrieved from the pool.  
+The persistence layer then uses that connection to make calls to the database.
+
+The endpoints are automatically documented using [utoipa](https://github.com/juhaku/utoipa) which can generate OpenAPI documentation from code.
+
+### Service
+
+The service layer is responsible for handling our business logic as well as mapping entities and DTOs.
+
+### Model
+
+The [model/](/backend/src/model/) folder contains the data PermaplanT is acting upon.  
+Entities are shared with the database using the ORM [diesel](https://github.com/diesel-rs/diesel).  
+DTOs are shared with the frontend using [typeshare](https://github.com/1Password/typeshare).
+
+The files [entity.rs](/backend/src/model/entity.rs) and [dto.rs](/backend/src/model/dto.rs) contain the actual structs.
+That way you have a quick overview of what the data looks like without having to navigate multiple files.  
+The actual implementation of the structs is in separate files to reduce the line length of the files.
+
+## Frontend Structure
 
 - `__mocks__/`: Contains mocked modules for tests.
 - `assets/`: Contains small asset files like SVGs.
@@ -68,7 +115,7 @@ Most of the application's code lives here.
 Every folder created here represents a given feature and contains its domain specific code.
 For example, if a feature interacts with the backend via network requests, it would have a sub module `api` that encapsulates this.
 
-Features are allowed to import another features public API which is exported from its `index.ts` file.
+Features are allowed to import another feature's public API which is exported from its `index.ts` file.
 Features are also allowed to import all other previously mentioned modules if needed.
 
 #### `map_planning`
@@ -135,17 +182,3 @@ export type TrackedLayers = {
   ...
 }
 ```
-
-### Code Documentation
-
-The code in the frontend is documented by two different mechanisms.
-On the one hand components are documented via storybook, on the other hand the public API of a feature, shared hook or utility, etc. should be documented by doc comments.
-We use TypeDoc to extract the documentation from code comments.
-More details about supported tags and syntax can be found in the [TypeDoc documentation](https://typedoc.org/guides/doccomments/).
-
-The code documentation of the frontend can be generated via the command `npm run doc`.
-Under the hood, this command executes TypeDoc that generates `.mdx` files to be viewed in storybook.
-
-Afterwards it can be opened in storybook via the command `npm run storybook`.
-
-More details about documentation can be found in the [contribution docs](/doc/contrib/frontend.md#documentation)
