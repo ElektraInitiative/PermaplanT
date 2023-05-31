@@ -8,8 +8,9 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-/// Endpoint for fetching or searching all [`PlantsSummaryDto`](crate::model::dto::PlantsSummaryDto).
-/// Search parameters are taken from the URLs query string (e.g. .../api/plants/search?name=example&per_page=5).
+/// Endpoint for fetching or searching [`PlantsSummaryDto`](crate::model::dto::PlantsSummaryDto).
+/// Search parameters are taken from the URLs query string (e.g. .../api/plants?name=example&per_page=5).
+/// If no page parameters are provided, the first page is returned.
 /// If no page parameters are provided, the first page is returned.
 ///
 /// # Errors

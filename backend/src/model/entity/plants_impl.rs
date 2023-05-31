@@ -1,44 +1,80 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::pg::Pg;
-use diesel::{debug_query, BoolExpressionMethods, PgTextExpressionMethods, QueryDsl, QueryResult};
+use diesel::{
+    debug_query, dsl::sql, pg::Pg, sql_types::Float, BoolExpressionMethods, ExpressionMethods,
+    QueryDsl, QueryResult,
+};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 
-use crate::db::function::array_to_string;
-use crate::db::pagination::Paginate;
-use crate::model::dto::{Page, PageParameters, PlantsSearchParameters};
 use crate::{
-    model::dto::PlantsSummaryDto,
-    schema::plants::{self, all_columns, common_name_en, unique_name},
+    db::{
+        function::{
+            array_to_string, greatest, similarity, similarity_nullable, AliasExpressionMethod,
+            PgTrgmExpressionMethods,
+        },
+        pagination::Paginate,
+    },
+    model::dto::{Page, PageParameters, PlantsSummaryDto},
+    schema::plants::{
+        self, all_columns, common_name_de, common_name_en, edible_uses_en, unique_name,
+    },
 };
 
 use super::Plants;
 
 impl Plants {
-    /// Get a page of plants.
-    /// Can be filtered by name if one is provided in `search_parameters`.
+    /// Get the top plants matching the search query.
+    ///
+    /// Uses `pg_trgm` to find matches in `unique_name`, `common_name_de`, `common_name_en` and `edible_uses_en`.
+    /// Ranks them using the `pg_trgm` function `similarity()`.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find(
-        search_parameters: PlantsSearchParameters,
+    pub async fn search(
+        search_query: &str,
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
-        let mut query = plants::table.select(all_columns).into_boxed();
-
-        if let Some(term) = search_parameters.name {
-            query = query
-                .filter(
-                    unique_name
-                        .ilike(format!("%{term}%"))
-                        .or(array_to_string(common_name_en, " ").ilike(format!("%{term}%"))),
+        let query = plants::table
+            .select((
+                plants::all_columns,
+                greatest(
+                    similarity(unique_name, search_query),
+                    similarity(array_to_string(common_name_de, " "), search_query),
+                    similarity(array_to_string(common_name_en, " "), search_query),
+                    similarity_nullable(edible_uses_en, search_query),
                 )
-                .order((unique_name, common_name_en));
-        }
+                .alias("rank"),
+            ))
+            .filter(
+                unique_name
+                    .fuzzy(search_query)
+                    .or(array_to_string(common_name_de, " ").fuzzy(search_query))
+                    .or(array_to_string(common_name_en, " ").fuzzy(search_query))
+                    .or(edible_uses_en.fuzzy(search_query)),
+            )
+            .order(sql::<Float>("rank").desc())
+            .paginate(page_parameters.page)
+            .per_page(page_parameters.per_page);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query
+            .load_page::<(Self, f32)>(conn)
+            .await
+            .map(Page::from_entity)
+    }
 
-        let query = query
+    /// Get a page of some plants.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn find_any(
+        page_parameters: PageParameters,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<Page<PlantsSummaryDto>> {
+        let query = plants::table
+            .select(all_columns)
+            .into_boxed()
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));

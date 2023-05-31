@@ -13,3 +13,13 @@ impl From<Plants> for PlantsSummaryDto {
         }
     }
 }
+
+impl<T> From<(Plants, T)> for PlantsSummaryDto {
+    fn from((plants, _): (Plants, T)) -> Self {
+        Self {
+            id: plants.id,
+            unique_name: plants.unique_name,
+            common_name_en: plants.common_name_en,
+        }
+    }
+}

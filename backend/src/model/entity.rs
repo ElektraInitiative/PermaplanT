@@ -8,6 +8,7 @@ pub mod seed_impl;
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
 
+use diesel::QueryableByName;
 use diesel::{Identifiable, Insertable, Queryable};
 
 use crate::schema::{map_versions, maps, plants, seeds};
@@ -26,7 +27,7 @@ use super::r#enum::{
 ///
 #[doc = include_str!("../../../doc/database/hierarchy.md")]
 ///
-#[derive(Identifiable, Queryable)]
+#[derive(Debug, Identifiable, Queryable, QueryableByName)]
 #[diesel(table_name = plants)]
 pub struct Plants {
     /// - The internal id of the plant.
