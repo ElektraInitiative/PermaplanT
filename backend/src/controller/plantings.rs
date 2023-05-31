@@ -5,21 +5,27 @@
 // FIXME:
 //  Remove these clippy allows when these endpoints are full implemented.
 
+use std::sync::{PoisonError, RwLock};
+
 use actix_web::web::Query;
 use actix_web::{
     delete, get, patch, post,
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
+use actix_web::{error, ResponseError};
 use uuid::Uuid;
 
 use crate::config::auth::user_info::{self, UserInfo};
-use crate::model::dto::actions::{CreatePlantActionDto, DeletePlantActionDto};
+use crate::model::dto::actions::{CreatePlantActionDto, DeletePlantActionDto, MovePlantActionDto};
 use crate::model::dto::{
     NewPlantingDto, Page, PageParameters, PlantLayerObjectDto, PlantingSearchParameters,
     UpdatePlantingDto,
 };
 use crate::AppDataInner;
+
+/// TODO: REMOVE THIS HACK ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗
+static PLANTINGS: RwLock<Vec<PlantLayerObjectDto>> = RwLock::new(vec![]);
 
 /// Endpoint for listing and filtering `Planting`.
 /// If no page parameters are provided, the first page is returned.
@@ -90,23 +96,44 @@ pub async fn create(
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and creates the record.
-    let dto = PlantLayerObjectDto {
-        id: new_plant_json.id.to_string(),
-        plant_id: new_plant_json.plant_id,
-        x: new_plant_json.x,
-        y: new_plant_json.y,
-        height: new_plant_json.height,
-        width: new_plant_json.width,
-        rotation: new_plant_json.rotation,
-        scale_x: new_plant_json.scale_x,
-        scale_y: new_plant_json.scale_y,
-    };
+    {
+        PLANTINGS.write().unwrap().push(PlantLayerObjectDto {
+            id: new_plant_json.id.to_string(),
+            plant_id: new_plant_json.plant_id,
+            x: new_plant_json.x,
+            y: new_plant_json.y,
+            height: new_plant_json.height,
+            width: new_plant_json.width,
+            rotation: new_plant_json.rotation,
+            scale_x: new_plant_json.scale_x,
+            scale_y: new_plant_json.scale_y,
+        });
+    }
 
-    app_data
-        .broadcaster
-        .broadcast(&CreatePlantActionDto::new(dto.clone(), user_info.id.to_string()).to_string())
-        .await;
+    let plantings = PLANTINGS.read().unwrap();
+    let dto = plantings
+        .iter()
+        .find(|planting| planting.id == new_plant_json.id)
+        .map(|planting| PlantLayerObjectDto {
+            id: planting.id.to_string(),
+            plant_id: planting.plant_id,
+            x: planting.x,
+            y: planting.y,
+            height: planting.height,
+            width: planting.width,
+            rotation: planting.rotation,
+            scale_x: planting.scale_x,
+            scale_y: planting.scale_y,
+        });
 
+    if let Some(dto) = dto.clone() {
+        app_data
+            .broadcaster
+            .broadcast(
+                &CreatePlantActionDto::new(dto.clone(), user_info.id.to_string()).to_string(),
+            )
+            .await;
+    }
     Ok(HttpResponse::Created().json(dto))
 }
 
@@ -129,22 +156,35 @@ pub async fn create(
 #[patch("/{id}")]
 pub async fn update(
     id: Path<String>,
-    update_seed_json: Json<UpdatePlantingDto>,
+    new_plant_json: Json<UpdatePlantingDto>,
     app_data: Data<AppDataInner>,
+    user_info: UserInfo,
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and updates the record.
-    let dto = PlantLayerObjectDto {
-        id: "uuid".to_string(),
-        plant_id: 1,
-        x: 0,
-        y: 0,
-        height: 100,
-        width: 100,
-        rotation: 0,
-        scale_x: 1,
-        scale_y: 1,
-    };
-    Ok(HttpResponse::Ok().json(dto))
+    {
+        let mut plantings = PLANTINGS.write().unwrap();
+        if let Some(planting) = plantings.iter_mut().find(|planting| planting.id == *id) {
+            match (new_plant_json.x, new_plant_json.y) {
+                (Some(x), Some(y)) => {
+                    planting.x = x;
+                    planting.y = y;
+
+                    app_data
+                        .broadcaster
+                        .broadcast(
+                            &MovePlantActionDto::new(planting.clone(), user_info.id.to_string())
+                                .to_string(),
+                        )
+                        .await;
+
+                    return Ok(HttpResponse::Created().json(planting));
+                }
+                _ => {}
+            }
+        }
+    }
+
+    Err(error::ErrorNotFound("Planting not found"))
 }
 
 /// Endpoint for deleting a `Planting`.
@@ -169,6 +209,11 @@ pub async fn delete(
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     // TODO: implement a service that validates (permissions) and deletes the planting
+    {
+        let mut plantings = PLANTINGS.write().unwrap();
+        plantings.retain(|planting| planting.id != *path);
+    }
+
     app_data
         .broadcaster
         .broadcast(
@@ -176,5 +221,5 @@ pub async fn delete(
         )
         .await;
 
-    Ok(HttpResponse::Ok().json(""))
+    Ok(HttpResponse::Ok().finish())
 }

@@ -150,6 +150,18 @@ pub struct UpdatePlantingDto {
     pub x: Option<i32>,
     /// The y coordinate of the position on the map.
     pub y: Option<i32>,
+    /// The width of the plant on the map.
+    pub width: Option<i32>,
+    /// The height of the plant on the map.
+    pub height: Option<i32>,
+    /// The rotation of the plant on the map.
+    pub rotation: Option<i32>,
+    /// The x scale of the plant on the map.
+    #[serde(rename = "scaleX")]
+    pub scale_x: Option<i32>,
+    /// The y scale of the plant on the map.
+    #[serde(rename = "scaleY")]
+    pub scale_y: Option<i32>,
 }
 
 /// Query parameters for searching plantings.
