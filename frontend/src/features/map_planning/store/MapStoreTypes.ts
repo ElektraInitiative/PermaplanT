@@ -2,6 +2,12 @@ import { PlantLayerObjectDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 
+/**
+ * An action is a change to the map state, initiated by the user.
+ * It knows how to apply itself to the map state, how to reverse itself, and how to execute itself.
+ * @template T The type of the return value of the execute method.
+ * @template U The type of the return value of the execute method for the reversed action.
+ */
 export type Action<T, U> = {
   /**
    * Get the reverse action for this action.
@@ -24,24 +30,44 @@ export type Action<T, U> = {
 };
 
 /**
- * Part of store which is affected by the History
+ * This part of the state contains the layers of the map and the objects on them.
+ * User initiated changes to this part of the state are tracked in the history.
+ * The history is used to undo and redo actions.
  */
 export interface TrackedMapSlice {
+  /**
+   * The state of the map layers and objects.
+   */
   trackedState: TrackedMapState;
+  /**
+   * An index pointing into the history.
+   */
   step: number;
+  /**
+   * Contains a history of user initiated actions.
+   */
   history: History;
   canUndo: boolean;
   canRedo: boolean;
   /**
-   * The transformer is a reference to the Konva Transformer.
+   * A reference to the Konva Transformer.
    * It is used to transform selected objects.
-   * The transformer is coupled with the selected objects in the trackedState, so it should be here.
+   * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
    */
   transformer: React.RefObject<Konva.Transformer>;
   /** Event listener responsible for adding a single shape to the transformer */
   addShapeToTransformer: (shape: Shape<ShapeConfig>) => void;
+  /**
+   * Execute a user initiated action.
+   */
   executeAction: <T, U>(action: Action<T, U>) => void;
+  /**
+   * Undo the last user initiated action.
+   */
   undo: () => void;
+  /**
+   * Redo the last user initiated action.
+   */
   redo: () => void;
 }
 

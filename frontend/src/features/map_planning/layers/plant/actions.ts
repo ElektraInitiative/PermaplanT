@@ -1,6 +1,9 @@
-import { createPlanting } from '../api/createPlanting';
-import { deletePlanting } from '../api/deletePlanting';
-import { Action, TrackedMapState } from './MapStoreTypes';
+/**
+ * @module this module contains actions for the plant layer.
+ */
+import { createPlanting } from '../../api/createPlanting';
+import { deletePlanting } from '../../api/deletePlanting';
+import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { PlantLayerObjectDto } from '@/bindings/definitions';
 import * as uuid from 'uuid';
 
@@ -11,8 +14,7 @@ export class CreatePlantAction
 
   constructor(private readonly _data: Omit<PlantLayerObjectDto, 'id'>) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  reverse(state: TrackedMapState) {
+  reverse() {
     return new DeletePlantAction(this._id);
   }
 
