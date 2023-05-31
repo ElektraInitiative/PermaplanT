@@ -59,13 +59,6 @@ impl Broadcaster {
             }
         }
 
-        let client_ids = ok_clients
-            .clone()
-            .iter()
-            .map(|client| client.id.clone())
-            .collect::<Vec<_>>();
-        println!("clients: {:?}", client_ids);
-
         self.inner.lock().await.clients = ok_clients;
     }
 
@@ -76,23 +69,21 @@ impl Broadcaster {
     ) -> Result<Sse<ChannelStream>, Box<dyn std::error::Error>> {
         let (tx, rx) = sse::channel(10);
 
-        let has_client = self
-            .inner
-            .lock()
-            .await
-            .clients
-            .iter()
-            .any(|client| client.id == user_id);
+        let mut new_clients = Vec::new();
 
-        if has_client {
-            return Err("client already exists".into());
+        for client in self.inner.lock().await.clients.clone() {
+            if client.id != user_id {
+                new_clients.push(client);
+            }
         }
 
         tx.send(sse::Data::new("connected")).await.unwrap();
-        self.inner.lock().await.clients.push(Client {
+        new_clients.push(Client {
             id: user_id,
             sender: tx,
         });
+
+        self.inner.lock().await.clients = new_clients;
 
         Ok(rx)
     }

@@ -1,4 +1,4 @@
-import { CreatePlantAction } from '../layers/plant/actions';
+import { CreatePlantAction, MovePlantAction } from '../layers/plant/actions';
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
@@ -241,7 +241,15 @@ export const BaseStage = ({
               dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_TRANSFORM');
             }}
             onDragEnd={() => {
-              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_POSITION');
+              const updates = (trRef.current?.getNodes() || []).map((node) => {
+                return {
+                  id: node.id(),
+                  x: node.x(),
+                  y: node.y(),
+                };
+              });
+
+              executeAction(new MovePlantAction(updates));
             }}
             onMouseDown={() => {
               selectable = false;

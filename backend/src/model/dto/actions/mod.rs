@@ -86,7 +86,7 @@ pub struct MovePlantActionPayload {
 impl MovePlantActionDto {
     pub fn new(payload: PlantLayerObjectDto, user_id: String) -> Self {
         Self {
-            _type: "CREATE_PLANT".to_string(),
+            _type: "MOVE_PLANT".to_string(),
             user_id,
             payload: MovePlantActionPayload {
                 id: payload.id,

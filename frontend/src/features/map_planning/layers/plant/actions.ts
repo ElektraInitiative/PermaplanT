@@ -3,6 +3,7 @@
  */
 import { createPlanting } from '../../api/createPlanting';
 import { deletePlanting } from '../../api/deletePlanting';
+import { movePlanting } from '../../api/movePlanting';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { PlantLayerObjectDto } from '@/bindings/definitions';
 
@@ -79,5 +80,62 @@ export class DeletePlantAction
         },
       },
     };
+  }
+}
+
+export class MovePlantAction
+  implements
+    Action<Awaited<ReturnType<typeof movePlanting>>[], Awaited<ReturnType<typeof movePlanting>>[]>
+{
+  private readonly _ids: Array<string>;
+
+  constructor(private readonly _data: Array<Pick<PlantLayerObjectDto, 'x' | 'y' | 'id'>>) {
+    this._ids = _data.map((d) => d.id);
+  }
+
+  reverse(state: TrackedMapState): MovePlantAction | null {
+    const plants = state.layers.Plant.objects.filter((obj) => this._ids.includes(obj.id));
+
+    if (!plants.length) {
+      return null;
+    }
+
+    return new MovePlantAction(plants.map((p) => ({ id: p.id, x: p.x, y: p.y })));
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        Plant: {
+          ...state.layers.Plant,
+          objects: state.layers.Plant.objects.map((p) => {
+            if (this._ids.includes(p.id)) {
+              return {
+                ...p,
+                x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
+                y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
+              };
+            }
+
+            return p;
+          }),
+        },
+      },
+    };
+  }
+
+  execute(): Promise<PlantLayerObjectDto[]> {
+    const tasks = this._data.map((d) =>
+      movePlanting(d.id, {
+        map_id: 1,
+        plant_id: 1,
+        x: d.x,
+        y: d.y,
+      }),
+    );
+
+    return Promise.all(tasks);
   }
 }
