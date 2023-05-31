@@ -14,7 +14,7 @@ use actix_web::{
 use uuid::Uuid;
 
 use crate::config::auth::user_info::{self, UserInfo};
-use crate::model::dto::actions::{CreatePlantAction, DeletePlantAction};
+use crate::model::dto::actions::{CreatePlantActionDto, DeletePlantActionDto};
 use crate::model::dto::{
     NewPlantingDto, Page, PageParameters, PlantLayerObjectDto, PlantingSearchParameters,
     UpdatePlantingDto,
@@ -104,7 +104,7 @@ pub async fn create(
 
     app_data
         .broadcaster
-        .broadcast(&CreatePlantAction::new(dto.clone(), user_info.id.to_string()).to_string())
+        .broadcast(&CreatePlantActionDto::new(dto.clone(), user_info.id.to_string()).to_string())
         .await;
 
     Ok(HttpResponse::Created().json(dto))
@@ -171,7 +171,9 @@ pub async fn delete(
     // TODO: implement a service that validates (permissions) and deletes the planting
     app_data
         .broadcaster
-        .broadcast(&DeletePlantAction::new(path.to_string(), user_info.id.to_string()).to_string())
+        .broadcast(
+            &DeletePlantActionDto::new(path.to_string(), user_info.id.to_string()).to_string(),
+        )
         .await;
 
     Ok(HttpResponse::Ok().json(""))

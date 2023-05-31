@@ -7,13 +7,9 @@ import type {
 } from './MapStoreTypes';
 import { LAYER_NAMES } from './MapStoreTypes';
 // import { RemoteActionSchema } from './RemoteActions';
-import { baseApiUrl } from '@/config';
-import i18next from '@/config/i18n';
-import { getUser } from '@/utils/getUser';
 import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { createRef } from 'react';
-import { toast } from 'react-toastify';
 import type { StateCreator } from 'zustand';
 
 export const TRACKED_DEFAULT_STATE: TrackedMapState = {
@@ -40,21 +36,6 @@ export const createTrackedMapSlice: StateCreator<
   [],
   TrackedMapSlice
 > = (set, get) => {
-  try {
-    const user = getUser();
-    if (!user) {
-      // TODO: implement protected routes.
-      toast.error("You're not logged in.");
-    }
-
-    if (user) {
-      const mapUpdateSource = new EventSource(`${baseApiUrl}/api/map_updates/${user?.profile.sub}`);
-      mapUpdateSource.onmessage = handleRemoteAction(set);
-    }
-  } catch {
-    toast.error("You're not logged in.");
-  }
-
   return {
     transformer: createRef<Konva.Transformer>(),
     trackedState: TRACKED_DEFAULT_STATE,
@@ -65,6 +46,7 @@ export const createTrackedMapSlice: StateCreator<
     executeAction: (action: Action<unknown, unknown>) => executeAction(action, set, get),
     undo: () => undo(set, get),
     redo: () => redo(set, get),
+    __applyRemoteAction: (action: Action<unknown, unknown>) => applyActionToStore(action, set, get),
     addShapeToTransformer: (node: Shape<ShapeConfig>) => {
       set((state) => {
         const transformer = state.transformer.current;
@@ -97,14 +79,6 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
     canUndo: true,
     history: state.history.slice(0, state.step + 1),
   }));
-}
-
-/**
- * This function is used to handle remote actions.
- */
-function handleRemoteAction(set: SetFn): (this: EventSource, ev: MessageEvent) => void {
-  console.log(set);
-  throw new Error('Function not implemented.');
 }
 
 function applyActionToStore(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {

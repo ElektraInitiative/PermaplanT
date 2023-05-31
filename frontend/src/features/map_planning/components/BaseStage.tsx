@@ -1,5 +1,5 @@
+import { CreatePlantAction } from '../layers/plant/actions';
 import useMapStore from '../store/MapStore';
-import { CreatePlantAction } from '../store/actions';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
   deselectShapes,
@@ -14,6 +14,7 @@ import Konva from 'konva';
 import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import * as uuid from 'uuid';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -182,6 +183,7 @@ export const BaseStage = ({
           onClick={() =>
             executeAction(
               new CreatePlantAction({
+                id: uuid.v4(), // The frontend must generate the id for all objects
                 plantId: 1,
                 x: 100,
                 y: 100,

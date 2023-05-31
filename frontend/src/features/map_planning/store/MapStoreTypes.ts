@@ -7,6 +7,8 @@ import { Shape, ShapeConfig } from 'konva/lib/Shape';
  * It knows how to apply itself to the map state, how to reverse itself, and how to execute itself.
  * @template T The type of the return value of the execute method.
  * @template U The type of the return value of the execute method for the reversed action.
+ *
+ * Each concrete action should also expose a static method to convert itself from a remote action.
  */
 export type Action<T, U> = {
   /**
@@ -69,6 +71,15 @@ export interface TrackedMapSlice {
    * Redo the last user initiated action.
    */
   redo: () => void;
+
+  /**
+   * Apply a remote action to the map state.
+   * @param action The action to apply.
+   *
+   * @internal This method is only used by the EventSource to handle remote actions from other users.
+   * It is not meant to be used by the user, on called in event handlers.
+   */
+  __applyRemoteAction: (action: Action<unknown, unknown>) => void;
 }
 
 /**

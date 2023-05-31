@@ -6,7 +6,7 @@ use typeshare::typeshare;
 
 #[typeshare]
 #[derive(Serialize, Deserialize)]
-pub struct CreatePlantAction {
+pub struct CreatePlantActionDto {
     #[serde(rename = "type")]
     _type: String,
     #[serde(rename = "userId")]
@@ -17,7 +17,7 @@ pub struct CreatePlantAction {
 #[typeshare]
 pub type CreatePlantActionPayload = PlantLayerObjectDto;
 
-impl CreatePlantAction {
+impl CreatePlantActionDto {
     pub fn new(payload: PlantLayerObjectDto, user_id: String) -> Self {
         Self {
             _type: "CREATE_PLANT".to_string(),
@@ -27,7 +27,7 @@ impl CreatePlantAction {
     }
 }
 
-impl ToString for CreatePlantAction {
+impl ToString for CreatePlantActionDto {
     fn to_string(&self) -> String {
         serde_json::to_string(&self).expect("Failed to serialize CreatePlantAction")
     }
@@ -35,7 +35,7 @@ impl ToString for CreatePlantAction {
 
 #[typeshare]
 #[derive(Serialize, Deserialize)]
-pub struct DeletePlantAction {
+pub struct DeletePlantActionDto {
     #[serde(rename = "type")]
     _type: String,
     #[serde(rename = "userId")]
@@ -49,7 +49,7 @@ pub struct DeletePlantActionPayload {
     id: String,
 }
 
-impl DeletePlantAction {
+impl DeletePlantActionDto {
     pub fn new(id: String, user_id: String) -> Self {
         Self {
             _type: "DELETE_PLANT".to_string(),
@@ -59,7 +59,7 @@ impl DeletePlantAction {
     }
 }
 
-impl ToString for DeletePlantAction {
+impl ToString for DeletePlantActionDto {
     fn to_string(&self) -> String {
         serde_json::to_string(&self).expect("Failed to serialize DeletePlantAction")
     }

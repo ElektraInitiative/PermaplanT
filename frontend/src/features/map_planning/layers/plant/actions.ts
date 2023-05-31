@@ -5,14 +5,15 @@ import { createPlanting } from '../../api/createPlanting';
 import { deletePlanting } from '../../api/deletePlanting';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { PlantLayerObjectDto } from '@/bindings/definitions';
-import * as uuid from 'uuid';
 
 export class CreatePlantAction
   implements Action<Awaited<ReturnType<typeof createPlanting>>, boolean>
 {
-  private readonly _id: string = uuid.v4();
+  private readonly _id: string;
 
-  constructor(private readonly _data: Omit<PlantLayerObjectDto, 'id'>) {}
+  constructor(private readonly _data: PlantLayerObjectDto) {
+    this._id = _data.id;
+  }
 
   reverse() {
     return new DeletePlantAction(this._id);
@@ -64,12 +65,7 @@ export class DeletePlantAction
       return null;
     }
 
-    const data = {
-      ...plant,
-      id: undefined, // the create actions should generate a new id.
-    };
-
-    return new CreatePlantAction(data);
+    return new CreatePlantAction(plant);
   }
 
   apply(state: TrackedMapState): TrackedMapState {
