@@ -2,7 +2,7 @@ import { BaseStage } from '../components/BaseStage';
 import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
-import PlantsLayer from '../layers/PlantsLayer';
+import PlantsLayer from '../layers/plant/PlantsLayer';
 import useMapStore from '../store/MapStore';
 import { LayerName } from '../store/MapStoreTypes';
 import IconButton from '@/components/Button/IconButton';
@@ -26,7 +26,8 @@ import { Rect } from 'react-konva';
 export const Map = () => {
   const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);
-  const dispatch = useMapStore((map) => map.dispatch);
+  const undo = useMapStore((map) => map.undo);
+  const redo = useMapStore((map) => map.redo);
   const addShapeToTransformer = useMapStore((map) => map.addShapeToTransformer);
 
   const formPlaceholder = (
@@ -100,13 +101,13 @@ export const Map = () => {
               </IconButton>
               <IconButton
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => dispatch({ type: 'UNDO' })}
+                onClick={() => undo()}
               >
                 <UndoIcon></UndoIcon>
               </IconButton>
               <IconButton
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => dispatch({ type: 'REDO' })}
+                onClick={() => redo()}
               >
                 <RedoIcon></RedoIcon>
               </IconButton>

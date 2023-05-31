@@ -1,5 +1,5 @@
-import { createPlanting } from '../api/createPlanting';
 import useMapStore from '../store/MapStore';
+import { CreatePlantAction } from '../store/actions';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
   deselectShapes,
@@ -71,7 +71,7 @@ export const BaseStage = ({
   // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
 
-  const dispatch = useMapStore((map) => map.dispatch);
+  const executeAction = useMapStore((map) => map.executeAction);
   const step = useMapStore((map) => map.step);
   const historyLength = useMapStore((map) => map.history.length);
 
@@ -169,21 +169,8 @@ export const BaseStage = ({
     nodes: Node<NodeConfig>[],
     type: 'OBJECT_UPDATE_POSITION' | 'OBJECT_UPDATE_TRANSFORM',
   ) => {
-    dispatch({
-      type,
-      payload: nodes.map((o) => ({
-        id: o.id(),
-        type: o.attrs.type,
-        index: o.attrs.index,
-        height: o.height(),
-        width: o.width(),
-        x: o.x(),
-        y: o.y(),
-        rotation: o.rotation(),
-        scaleX: o.scaleX(),
-        scaleY: o.scaleY(),
-      })),
-    });
+    // TODO
+    console.log(nodes, type);
   };
 
   return (
@@ -192,30 +179,20 @@ export const BaseStage = ({
         {/* TODO: This is example code that shows how to interact with the store, the final code handling object creation is TBD */}
         <SimpleButton
           className="w-32"
-          onClick={async () => {
-            const planting = await createPlanting({
-              plant_id: 1,
-              plants_layer_id: 1,
-              x: 100,
-              y: 100,
-            });
-
-            dispatch({
-              type: 'CREATE_PLANT',
-              payload: {
-                index: 'Plant',
-                id: planting.id,
-                x: planting.x,
-                y: planting.y,
+          onClick={() =>
+            executeAction(
+              new CreatePlantAction({
+                plantId: 1,
+                x: 100,
+                y: 100,
                 width: 100,
                 height: 100,
-                type: 'rect',
                 rotation: 0,
                 scaleX: 1,
                 scaleY: 1,
-              },
-            });
-          }}
+              }),
+            )
+          }
         >
           CREATE OBJECT
         </SimpleButton>

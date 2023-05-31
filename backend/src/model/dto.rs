@@ -85,37 +85,56 @@ pub struct PlantsSummaryDto {
 /// E.g. a user drags a plant from the search results and drops it on the map.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema, Clone)]
-pub struct PlantingDto {
-    /// The database id of the record.
+pub struct PlantLayerObjectDto {
+    /// The database id of the record. This is a UUID.
     pub id: String,
     /// The plant that is planted.
+    #[serde(rename = "plantId")]
     pub plant_id: i32,
-    /// The plants layer of the map the plant is placed on.
-    /// NOTE:
-    ///     could be replaced by a `map_id` as the relation between `maps` and
-    ///     `plants_layers` should be non-nullable and one to one.
-    pub plants_layer_id: i32,
     /// The x coordinate of the position on the map.
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
+    /// The width of the plant on the map.
+    pub width: i32,
+    /// The height of the plant on the map.
+    pub height: i32,
+    /// The rotation of the plant on the map.
+    pub rotation: i32,
+    /// The x scale of the plant on the map.
+    #[serde(rename = "scaleX")]
+    pub scale_x: i32,
+    /// The y scale of the plant on the map.
+    #[serde(rename = "scaleY")]
+    pub scale_y: i32,
 }
 
 /// Used to create a new planting.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewPlantingDto {
+    /// The database id of the record. This is a UUID.
+    pub id: String,
     /// The plant that is planted.
     pub plant_id: i32,
-    /// The plants layer of the map the plant is placed on.
-    /// NOTE:
-    ///     could be replaced by a `map_id` as the relation between `maps` and
-    ///     `plants_layers` should be non-nullable and one to one.
-    pub plants_layer_id: i32,
+    /// The the map the plant is placed on.
+    pub map_id: i32,
     /// The x coordinate of the position on the map.
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
+    /// The width of the plant on the map.
+    pub width: i32,
+    /// The height of the plant on the map.
+    pub height: i32,
+    /// The rotation of the plant on the map.
+    pub rotation: i32,
+    /// The x scale of the plant on the map.
+    #[serde(rename = "scaleX")]
+    pub scale_x: i32,
+    /// The y scale of the plant on the map.
+    #[serde(rename = "scaleY")]
+    pub scale_y: i32,
 }
 
 /// Used to update an existing planting.
@@ -124,11 +143,9 @@ pub struct NewPlantingDto {
 pub struct UpdatePlantingDto {
     /// The plant that is planted.
     pub plant_id: Option<i32>,
-    /// The plants layer of the map the plant is placed on.
-    /// NOTE:
-    ///     could be replaced by a `map_id` as the relation between `maps` and
-    ///     `plants_layers` should be non-nullable and one to one.
-    pub plants_layer_id: Option<i32>,
+    /// The map the plant is placed on.
+    /// Note: This field is not updated by this endpoint.
+    pub map_id: Option<i32>,
     /// The x coordinate of the position on the map.
     pub x: Option<i32>,
     /// The y coordinate of the position on the map.
@@ -181,7 +198,7 @@ pub struct PageParameters {
     PagePlantsSummaryDto = Page<PlantsSummaryDto>,
     PageSeedDto = Page<SeedDto>,
     PageMapDto = Page<MapDto>,
-    PagePlantingDto = Page<PlantingDto>,
+    PagePlantingDto = Page<PlantLayerObjectDto>,
     PageMapVersionDto = Page<MapVersionDto>
 )]
 pub struct Page<T> {

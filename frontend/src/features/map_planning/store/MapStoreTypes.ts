@@ -1,5 +1,27 @@
+import { PlantLayerObjectDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
+
+export type Action<T, U> = {
+  /**
+   * Get the reverse action for this action.
+   * The reverse action is populated with the current state of the object on the map.
+   * @param state The current state of the map.
+   * @returns The reverse action or null if the action cannot be reversed.
+   */
+  reverse(state: TrackedMapState): Action<U, T> | null;
+
+  /**
+   * Apply the action to the map state.
+   * @param state The current state of the map.
+   */
+  apply(state: TrackedMapState): TrackedMapState;
+
+  /**
+   * Execute the action by informing the backend.
+   */
+  execute(): Promise<T>;
+};
 
 /**
  * Part of store which is affected by the History
@@ -16,18 +38,17 @@ export interface TrackedMapSlice {
    * The transformer is coupled with the selected objects in the trackedState, so it should be here.
    */
   transformer: React.RefObject<Konva.Transformer>;
-  dispatch: (action: MapAction) => void;
   /** Event listener responsible for adding a single shape to the transformer */
   addShapeToTransformer: (shape: Shape<ShapeConfig>) => void;
+  executeAction: <T, U>(action: Action<T, U>) => void;
+  undo: () => void;
+  redo: () => void;
 }
 
 /**
  * The type of the history.
  */
-export type History = Array<{
-  redo: TrackedAction;
-  undo: TrackedAction;
-}>;
+export type History = Array<Action<unknown, unknown>>;
 
 /**
  * Part of store which is unaffected by the History
@@ -108,7 +129,15 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in LayerName]: TrackedLayerState;
+  [key in Exclude<LayerName, 'Plant'>]: TrackedLayerState;
+} & {
+  Plant: TrackedPlantLayerState;
+};
+
+export type TrackedPlantLayerState = {
+  index: 'Plant';
+
+  objects: PlantLayerObjectDto[];
 };
 
 /**
@@ -132,69 +161,3 @@ export type UntrackedMapState = {
   selectedLayer: LayerName;
   layers: UntrackedLayers;
 };
-
-/**
- * An action for adding an object to the map.
- */
-export type CreatePlantAction = {
-  type: 'CREATE_PLANT';
-  // TODO: should be a PlantState when we have it
-  payload: ObjectState;
-};
-
-/**
- * An action for deleting an object from the map.
- */
-export type DeletePlantAction = {
-  type: 'DELETE_PLANT';
-  payload: {
-    index: 'Plant';
-    id: string;
-  };
-};
-
-/**
- * An action for updating an object on the map.
- */
-export type ObjectUpdatePositionAction = {
-  type: 'OBJECT_UPDATE_POSITION';
-  payload: ObjectState[];
-};
-
-/**
- * An action for updating an object on the map.
- */
-export type ObjectUpdateTransformAction = {
-  type: 'OBJECT_UPDATE_TRANSFORM';
-  payload: ObjectState[];
-};
-
-/**
- * An action for undoing the previous action in the history.
- */
-export type UndoAction = {
-  type: 'UNDO';
-};
-
-/**
- * An action for redoing the next action in the history.
- */
-export type RedoAction = {
-  type: 'REDO';
-};
-
-/**
- * A union type for all actions.
- */
-export type MapAction =
-  | CreatePlantAction
-  | DeletePlantAction
-  | ObjectUpdatePositionAction
-  | ObjectUpdateTransformAction
-  | UndoAction
-  | RedoAction;
-
-/**
- * A union type for all actions that are tracked in the history.
- */
-export type TrackedAction = Exclude<MapAction, UndoAction | RedoAction>;

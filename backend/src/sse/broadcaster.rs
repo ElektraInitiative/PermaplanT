@@ -98,16 +98,8 @@ impl Broadcaster {
     }
 
     /// Broadcasts `msg` to all clients.
-    pub async fn broadcast(&self, from: &str, msg: &str) {
-        let clients = self
-            .inner
-            .lock()
-            .await
-            .clients
-            .clone()
-            .into_iter()
-            .filter(|client| client.id != from)
-            .collect::<Vec<_>>();
+    pub async fn broadcast(&self, msg: &str) {
+        let clients = self.inner.lock().await.clients.clone();
 
         let send_futures = clients
             .iter()

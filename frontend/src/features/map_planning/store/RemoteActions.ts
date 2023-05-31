@@ -8,6 +8,11 @@ export const RemoteActionSchema = z.discriminatedUnion('type', [
       plant_id: z.number(),
       x: z.number(),
       y: z.number(),
+      width: z.number(),
+      height: z.number(),
+      rotation: z.number(),
+      scaleX: z.number(),
+      scaleY: z.number(),
     }),
   }),
   z.object({
