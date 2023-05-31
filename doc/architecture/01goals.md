@@ -21,6 +21,7 @@ To achieve these goals the app provides, e.g.:
 1. aesthetic UI that is fun to use
 2. low barriers for collaboration
 3. low memory consumption and good performance
+4. privacy: data should remain within Verein
 
 ## Main Features
 

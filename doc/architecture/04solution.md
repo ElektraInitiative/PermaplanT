@@ -1,6 +1,21 @@
 # Solution Strategy
 
-PermaplanT has a classical frontend/backend architecture.
+PermaplanT has a classical frontend/backend architecture:
+
+- the frontend is structured according features
+- the backend has a 3-layer architecture with a database
+
+## Type Safety
+
+Types are shared whenever possible:
+
+- `Diesel` is used to share types between the database and backend code
+- `typeshare` is used to share types between Rust, API and Typescript
+
+## State
+
+- The backend is state-less, all state is in the database or in the token.
+- The frontend has structured state per layer.
 
 ## Concurrent Use
 
