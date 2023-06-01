@@ -22,8 +22,8 @@ impl From<Map> for MapDto {
             description: map.description,
             location: match map.location {
                 Some(latlng) => Some(LatLng {
-                    lat: latlng.x,
-                    lng: latlng.y,
+                    lat: latlng.y,
+                    lng: latlng.x,
                 }),
                 None => None,
             },
