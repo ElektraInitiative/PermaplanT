@@ -21,7 +21,6 @@
     - German common names
     - English common names
     - Attributes that describe the plant, especially `edible_uses`, so that people can search for `popcorn`.
-    - Furthermore, other columns can be matched with extra syntax (e.g. environmental fit or ecological value)
   - Results then get extended by the whole hierarchy below, e.g., a search for `Tomato` should include all cultivars.
   - The results are ranked by:
     1. Exact matches, without additional letters before or after, e.g. the user wrote "fir", "fir" should be first hit
@@ -42,4 +41,3 @@
 - **Non-functional Constraints:**
   - Performance
   - If there is a possible match in the database, it should be included (regardless of language settings etc.)
-  - Search accuracy (stop words, stemming, etc.)

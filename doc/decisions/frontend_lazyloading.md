@@ -1,10 +1,10 @@
-# Map Lazyloading
+# Frontend Lazyloading
 
 ## Problem
 
-The application's main component is the map, which consists of multiple layers and even more objects.
-One more thing to consider is that the map consists not only of the data for the current date, but also for the past and future dates e.g. harvest time, planting history.
-However, not all layers are visible simultaneously, nor are they required during the initial loading of the application.
+The application's main component is the map, which consists of multiple layers and even more elements.
+The map does not only consist of elements for the current date, but also for the past and future dates.
+Not all layers or elements are visible simultaneously, however, nor are they required during the initial loading of the application.
 
 Loading all the data at once during the initial load may result in slower performance, therefore a strategy must be developed to lazyload data on the map to optimize its performance.
 In other words, the data which is not required for the user to start working with the map should not be loaded during the startup.
@@ -17,7 +17,7 @@ In other words, the data which is not required for the user to start working wit
 ## Assumptions
 
 1. The majority of layers are only modified once a year
-2. The loading of all the data at once during the initial load will result in slower performance
+2. The loading of all the data at once during the initial load would result in unacceptable performance
 
 ## Solutions
 
@@ -38,12 +38,16 @@ However, since the canvas data is structured in a nested manner, we cannot imple
 
 To avoid fetching unnecessary data during the initial load, an SQL view could be created on the database side i.e. return only visible layers for the current date.
 
-However, implementing this solution would require writing additional SQL queries, which may not be the most efficient approach since the same outcome can be achieved through the parameterized backend(which is using the rust query builder anyway) endpoints described below in the final solution.
+Implementing this solution, however, would require writing additional SQL queries.
+This may not be the most efficient approach since the same outcome can be achieved through the parameterized backend (which is using the rust query builder anyway) endpoints described below in the final solution.
 
 ## Decision
 
 In order to improve the performance of the application's initial load, it is advisable to load only the necessary data and load the rest on demand.
-The most effective way to achieve this is through the backend, which can define endpoints with additional parameters that allow the frontend to request only the required data for the initial load.
+The most effective way to achieve this is through the backend, which can define endpoints with additional parameters that allow the frontend to request only the required data for the initial load:
+
+- separate endpoints for different layers
+- have date as paramter to these endpoints so that only the current relevant elements (already added, not yet removed) can be retrieved
 
 ## Rationale
 

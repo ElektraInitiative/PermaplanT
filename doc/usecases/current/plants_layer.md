@@ -5,7 +5,7 @@
 - **Scope:** Plants Layer
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user can add, edit, move and delete plant elements in their map in the plants layer.
+- **Brief:** The user can add, edit, move, remove, and delete plant elements in their map in the plants layer.
 - **Assignee:** Paul (Frontend), Gabriel (Backend)
 
 ## Scenarios
@@ -24,17 +24,19 @@
     - The user is able to view the relationships between the plants by looking at the lines connecting them (companion or antagonist).
   - The user positions the plant element in the appropriate location in the map.
   - When drawing an area of plants, the size of the arena and the number of plants is shown next to the mouse.
-  - The user is able to move, edit (e.g. when planted, when harvested) and delete (either that it never existed or that it was removed from the garden) selected plants.
+  - The user is able to move, edit (e.g. when planted, when harvested), remove (that it was removed from the garden) and delete (that it never existed) selected plants.
   - The user adjusts the plant elements and their relationships as needed.
 - **Alternative scenario:**
-  - The user accidentally adds or moves a plant element in the wrong location and uses the app's undo function to correct the mistake.
+  - The user accidentally edits, moves or removes an element and uses undo to correct the mistake.
+  - The user accidentally adds an element and deletes it with the "delete" or "undo" functionality.
 - **Error scenario:**
   - The user attempts to add, move or edit a plant element but the app is experiencing technical difficulties and is unable to complete the request, displaying an error message.
   - There is an error in the app's plant relationship indication and the lines connecting the plants are not displayed correctly. In this case, the app displays an error message.
 - **Postcondition:**
-  - The user's map includes the added, edited, moved or deleted plant element as desired.
+  - The user's map includes the added, edited, moved, removed or deleted plant element as desired.
   - If constraints are violated for the place where a plant was added or moved, warnings get added (or removed) to (from) the [warnings layer](warnings_layer.md).
 - **Non-functional Constraints:**
   - Partial offline availability: editing attributes, especially for planting and harvesting
   - Supports alternatives
   - Performance: more than 10000 elements per year and per alternative should be usable without noticeable delays and acceptable memory overhead
+  - Annual plants automatically get removed after one year.

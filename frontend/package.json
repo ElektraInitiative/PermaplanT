@@ -42,6 +42,7 @@
     "typewriter-effect": "^2.19.0",
     "use-image": "^1.1.0",
     "vite-plugin-svgr": "^2.4.0",
+    "webdav": "^5.0.0",
     "zustand": "^4.3.2"
   },
   "devDependencies": {

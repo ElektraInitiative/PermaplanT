@@ -43,7 +43,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(plantings::update)
                 .service(plantings::delete),
         )
-        .wrap(NormalizePath::default())
+        .wrap(NormalizePath::trim())
         .wrap(auth);
 
     let config_route = web::scope("/api/config").service(config::get);

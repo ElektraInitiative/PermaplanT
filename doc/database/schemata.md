@@ -208,59 +208,59 @@ blossoms_gained }o--|| users : ""
 
 ## `Maps`
 
-| **_Column name_**                | **_Example_**                    | **_Description_**                  |
-| :------------------------------- | :------------------------------- | :----------------------------------|
-| **id**                           | 1                                |
-| **owner_id**                     | 1                                |
-| **name**                         | My Map                           | only alphanumerical values
-| **is_inactive**                  | false                            |
-| **last_visit**                   | 2023-04-04                       |
-| **honors**                       | 0                                | 0 to infinity
-| **visits**                       | 0                                | 0 to infinity
-| **harvested**                    | 0                                | 0 to infinity, amount of plants harvested on this map
-| **version_date**                 | 2023-04-04                       | the date the snapshot for this version was taken
-| **creation_date**                | 2023-04-04                       |
-| **deletion_date**                | 2023-04-04                       |
-| **inactivity_date**              | 2023-04-04                       |
-| **zoom_factor**                  | 100                              | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000
-| **geo_data**                     | NULL                             | PostGis Geodata, location of the map
+| **_Column name_**   | **_Example_** | **_Description_**                                                                              |
+| :------------------ | :------------ | :--------------------------------------------------------------------------------------------- |
+| **id**              | 1             |
+| **owner_id**        | 1             |
+| **name**            | My Map        | only alphanumerical values                                                                     |
+| **is_inactive**     | false         |
+| **last_visit**      | 2023-04-04    |
+| **honors**          | 0             | 0 to infinity                                                                                  |
+| **visits**          | 0             | 0 to infinity                                                                                  |
+| **harvested**       | 0             | 0 to infinity, amount of plants harvested on this map                                          |
+| **version_date**    | 2023-04-04    | the date the snapshot for this version was taken                                               |
+| **creation_date**   | 2023-04-04    |
+| **deletion_date**   | 2023-04-04    |
+| **inactivity_date** | 2023-04-04    |
+| **zoom_factor**     | 100           | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000 |
+| **geo_data**        | NULL          | PostGis Geodata, location of the map                                                           |
 
 ## `Users`
 
-| **_Column name_**                | **_Example_**                    | **_Description_**                  |
-| :------------------------------- | :------------------------------- | :----------------------------------|
-| **id**                           | 1                                |
-| **nc_uid**                       | 1                                | Nextcloud ID
-| **contributor_until**            | 2023-04-04                       | has contributing membership until the given date
-| **app_language**                 | English                          |
-| **member_since**                 | 2023-04-04                       |
-| **member_years**                 | {2023}                           | Array of years
-| **experience**                   | beginner                         |
-| **preferences**                  | raised vegetable beds            |
-| **location**                     | Vienna, Austria                  |
-| **permacoins**                   | {0}                              | 0 to infinity, one entry for every year since account creation
+| **_Column name_**     | **_Example_**         | **_Description_**                                              |
+| :-------------------- | :-------------------- | :------------------------------------------------------------- |
+| **id**                | 1                     |
+| **nc_uid**            | 1                     | Nextcloud ID                                                   |
+| **contributor_until** | 2023-04-04            | has contributing membership until the given date               |
+| **app_language**      | English               |
+| **member_since**      | 2023-04-04            |
+| **member_years**      | {2023}                | Array of years                                                 |
+| **experience**        | beginner              |
+| **preferences**       | raised vegetable beds |
+| **location**          | Vienna, Austria       |
+| **permacoins**        | {0}                   | 0 to infinity, one entry for every year since account creation |
 
 ## `Blossoms`
 
-| **_Column name_**                | **_Example_**                    | **_Description_**                  |
-| :------------------------------- | :------------------------------- | :----------------------------------|
-| **id**                           | 1                                |
-| **title**                        | Novice Gardener                  |
-| **description**                  | Plant your first plant           |
-| **condition**                    | plants.count() >= 1              | condition used to check if milestone is reached
-| **track**                        | Beginners Track                  | the track (category) this blossom belongs to
-| **icon**                         | NULL                             |
-| **is_seasonal**                  | false                            | resets and repeats every year
+| **_Column name_** | **_Example_**          | **_Description_**                               |
+| :---------------- | :--------------------- | :---------------------------------------------- |
+| **id**            | 1                      |
+| **title**         | Novice Gardener        |
+| **description**   | Plant your first plant |
+| **condition**     | plants.count() >= 1    | condition used to check if milestone is reached |
+| **track**         | Beginners Track        | the track (category) this blossom belongs to    |
+| **icon**          | NULL                   |
+| **is_seasonal**   | false                  | resets and repeats every year                   |
 
 ## `Blossoms Gained`
 
-| **_Column name_**                | **_Example_**                    | **_Description_**                  |
-| :------------------------------- | :------------------------------- | :----------------------------------|
-| **id**                           | 1                                |
-| **user_id**                      | 1                                |
-| **blossom_id**                   | 1                                |
-| **times_gained**                 | 1                                | 0 to infinity
-| **gained_date**                  | {2023-04-10}                     | one entry for every time gained
+| **_Column name_** | **_Example_** | **_Description_**               |
+| :---------------- | :------------ | :------------------------------ |
+| **id**            | 1             |
+| **user_id**       | 1             |
+| **blossom_id**    | 1             |
+| **times_gained**  | 1             | 0 to infinity                   |
+| **gained_date**   | {2023-04-10}  | one entry for every time gained |
 
 ## `Relation`
 
