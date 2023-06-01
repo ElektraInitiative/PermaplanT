@@ -7,7 +7,7 @@
 
 use actix_web::web::Query;
 use actix_web::{
-    delete, get, patch, post,
+    delete, get, post, put,
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
@@ -104,7 +104,7 @@ pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Re
         ("oauth2" = [])
     )
 )]
-#[patch("/{id}")]
+#[put("/{id}")]
 pub async fn update(
     id: Path<i32>,
     update_seed_json: Json<UpdatePlantingDto>,

@@ -25,6 +25,8 @@ pub struct ConfigDto {
     pub issuer_uri: String,
     /// The client_id the frontend should use to log in
     pub client_id: String,
+    /// The version must be an exact match between frontend and backend.
+    pub version: i32,
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
