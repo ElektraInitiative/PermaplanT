@@ -10,6 +10,7 @@ use chrono::NaiveDateTime;
 
 use diesel::QueryableByName;
 use diesel::{Identifiable, Insertable, Queryable};
+use postgis_diesel::types::Point;
 
 use crate::schema::{layers, maps, plants, seeds};
 
@@ -718,6 +719,8 @@ pub struct Map {
     pub is_private: Option<bool>,
     /// The description of the map.
     pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Point>,
 }
 
 /// The `NewMap` entity.
@@ -748,6 +751,8 @@ pub struct NewMap {
     pub is_private: Option<bool>,
     /// The description of the map.
     pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Point>,
 }
 
 /// The `Layer` entity.
