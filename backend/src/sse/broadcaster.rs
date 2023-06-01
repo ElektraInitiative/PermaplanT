@@ -1,32 +1,41 @@
-use actix_web::{web::Json, HttpResponse, Responder};
+//! SSE broadcaster.
+
 use actix_web_lab::sse::{self, ChannelStream, Sse};
 use futures_util::future;
 use std::{sync::Arc, time::Duration};
 use tokio::{sync::Mutex, time::interval};
 
+/// Inner state of SSE broadcaster.
 #[derive(Debug, Clone, Default)]
 struct BroadcasterInner {
+    /// List of connected clients.
     clients: Vec<Client>,
 }
 
+/// Connected client.
 #[derive(Debug, Clone)]
 pub struct Client {
+    /// Client ID.
     id: String,
+    /// SSE sender for writing messages to the client.
     sender: sse::Sender,
 }
 
+/// SSE broadcaster.
 pub struct Broadcaster {
+    /// Inner state of SSE broadcaster, guarded by a mutex.
     inner: Mutex<BroadcasterInner>,
 }
 
 impl Broadcaster {
     /// Constructs new broadcaster and spawns ping loop.
+    #[must_use]
     pub fn create() -> Arc<Self> {
         let this = Arc::new(Self {
             inner: Mutex::new(BroadcasterInner::default()),
         });
 
-        Broadcaster::spawn_ping(Arc::clone(&this));
+        Self::spawn_ping(Arc::clone(&this));
         this
     }
 
@@ -63,6 +72,9 @@ impl Broadcaster {
     }
 
     /// Registers client with broadcaster, returning an SSE response body.
+    ///
+    /// # Errors
+    /// * If tx.send() fails for the new client.
     pub async fn new_client(
         &self,
         user_id: String,
@@ -70,19 +82,20 @@ impl Broadcaster {
         let (tx, rx) = sse::channel(10);
 
         let mut new_clients = Vec::new();
+        let old_clients = self.inner.lock().await.clients.clone();
 
-        for client in self.inner.lock().await.clients.clone() {
-            if client.id != user_id {
-                new_clients.push(client);
+        for old_client in old_clients {
+            if old_client.id != user_id {
+                new_clients.push(old_client);
             }
         }
 
-        tx.send(sse::Data::new("connected")).await.unwrap();
+        tx.send(sse::Data::new("connected")).await?;
+
         new_clients.push(Client {
             id: user_id,
             sender: tx,
         });
-
         self.inner.lock().await.clients = new_clients;
 
         Ok(rx)

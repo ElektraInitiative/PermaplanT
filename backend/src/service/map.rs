@@ -8,7 +8,6 @@ use crate::model::dto::{
 };
 use crate::model::entity::MapVersion;
 use crate::{
-    db::connection::Pool,
     error::ServiceError,
     model::{
         dto::{MapDto, NewMapDto},

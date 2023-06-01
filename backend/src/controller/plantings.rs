@@ -5,18 +5,15 @@
 // FIXME:
 //  Remove these clippy allows when these endpoints are full implemented.
 
-use std::sync::{PoisonError, RwLock};
+use std::sync::RwLock;
 
-use actix_web::web::Query;
 use actix_web::{
-    delete, get, patch, post,
-    web::{Data, Json, Path},
+    delete, error, get, patch, post,
+    web::{Data, Json, Path, Query},
     HttpResponse, Result,
 };
-use actix_web::{error, ResponseError};
-use uuid::Uuid;
 
-use crate::config::auth::user_info::{self, UserInfo};
+use crate::config::auth::user_info::UserInfo;
 use crate::model::dto::actions::{
     CreatePlantActionDto, DeletePlantActionDto, MovePlantActionDto, TransformPlantActionDto,
 };
@@ -28,6 +25,26 @@ use crate::AppDataInner;
 
 /// TODO: REMOVE THIS HACK ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗
 static PLANTINGS: RwLock<Vec<PlantLayerObjectDto>> = RwLock::new(vec![]);
+
+/// TODO: REMOVE
+#[allow(clippy::expect_used)]
+fn find_planting_by_id(id: &str) -> Option<PlantLayerObjectDto> {
+    PLANTINGS
+        .read()
+        .expect("acquiring read lock failed")
+        .iter()
+        .find(|planting| planting.id == id)
+        .cloned()
+}
+
+/// TODO: REMOVE
+#[allow(clippy::expect_used)]
+fn replace_planting(planting: PlantLayerObjectDto) {
+    let mut plantings = PLANTINGS.write().expect("acquiring write lock failed");
+    if let Some(p) = plantings.iter_mut().find(|p| p.id == planting.id) {
+        *p = planting;
+    }
+}
 
 /// Endpoint for listing and filtering `Planting`.
 /// If no page parameters are provided, the first page is returned.
@@ -58,7 +75,7 @@ pub async fn find(
     // TODO: implement service that validates (permission, integrity) and filters for records.
     let page = Page {
         results: vec![PlantLayerObjectDto {
-            id: "uuid".to_string(),
+            id: "uuid".to_owned(),
             plant_id: 1,
             x: 0.0,
             y: 0.0,
@@ -81,6 +98,7 @@ pub async fn find(
 /// * If the connection to the database could not be established.
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
+#[allow(clippy::expect_used)]
 #[utoipa::path(
     context_path = "/api/plantings",
     request_body = NewPlantingDto,
@@ -99,44 +117,34 @@ pub async fn create(
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and creates the record.
     {
-        PLANTINGS.write().unwrap().push(PlantLayerObjectDto {
-            id: new_plant_json.id.to_string(),
-            plant_id: new_plant_json.plant_id,
-            x: new_plant_json.x,
-            y: new_plant_json.y,
-            height: new_plant_json.height,
-            width: new_plant_json.width,
-            rotation: new_plant_json.rotation,
-            scale_x: new_plant_json.scale_x,
-            scale_y: new_plant_json.scale_y,
-        });
+        PLANTINGS
+            .write()
+            .expect("acquiring write lock failed")
+            .push(PlantLayerObjectDto {
+                id: new_plant_json.id.clone(),
+                plant_id: new_plant_json.plant_id,
+                x: new_plant_json.x,
+                y: new_plant_json.y,
+                height: new_plant_json.height,
+                width: new_plant_json.width,
+                rotation: new_plant_json.rotation,
+                scale_x: new_plant_json.scale_x,
+                scale_y: new_plant_json.scale_y,
+            });
     }
 
-    let plantings = PLANTINGS.read().unwrap();
-    let dto = plantings
-        .iter()
-        .find(|planting| planting.id == new_plant_json.id)
-        .map(|planting| PlantLayerObjectDto {
-            id: planting.id.to_string(),
-            plant_id: planting.plant_id,
-            x: planting.x,
-            y: planting.y,
-            height: planting.height,
-            width: planting.width,
-            rotation: planting.rotation,
-            scale_x: planting.scale_x,
-            scale_y: planting.scale_y,
-        });
-
-    if let Some(dto) = dto.clone() {
+    if let Some(dto) = find_planting_by_id(&new_plant_json.id) {
         app_data
             .broadcaster
             .broadcast(
                 &CreatePlantActionDto::new(dto.clone(), user_info.id.to_string()).to_string(),
             )
             .await;
+
+        return Ok(HttpResponse::Created().json(dto));
     }
-    Ok(HttpResponse::Created().json(dto))
+
+    Err(error::ErrorInternalServerError("Could not create planting"))
 }
 
 /// Endpoint for updating a `Planting`.
@@ -145,6 +153,7 @@ pub async fn create(
 /// * If the connection to the database could not be established.
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
+#[allow(clippy::expect_used)]
 #[utoipa::path(
     context_path = "/api/plantings",
     request_body = UpdatePlantingDto,
@@ -164,21 +173,25 @@ pub async fn update(
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and updates the record.
     {
-        let mut plantings = PLANTINGS.write().unwrap();
-        if let Some(planting) = plantings.iter_mut().find(|planting| planting.id == *id) {
+        if let Some(planting) = find_planting_by_id(&id) {
+            let mut planting = planting.clone();
+
             match (
                 new_plant_json.x,
                 new_plant_json.y,
+                new_plant_json.width,
+                new_plant_json.height,
                 new_plant_json.rotation,
                 new_plant_json.scale_x,
                 new_plant_json.scale_y,
             ) {
-                (Some(x), Some(y), Some(rotation), Some(scale_x), Some(scale_y)) => {
+                (Some(x), Some(y), None, None, Some(rotation), Some(scale_x), Some(scale_y)) => {
                     planting.x = x;
                     planting.y = y;
                     planting.rotation = rotation;
                     planting.scale_x = scale_x;
                     planting.scale_y = scale_y;
+                    replace_planting(planting.clone());
 
                     app_data
                         .broadcaster
@@ -193,13 +206,10 @@ pub async fn update(
 
                     return Ok(HttpResponse::Ok().json(planting));
                 }
-                _ => {}
-            }
-
-            match (new_plant_json.x, new_plant_json.y) {
-                (Some(x), Some(y)) => {
+                (Some(x), Some(y), None, None, None, None, None) => {
                     planting.x = x;
                     planting.y = y;
+                    replace_planting(planting.clone());
 
                     app_data
                         .broadcaster
@@ -225,6 +235,7 @@ pub async fn update(
 /// * If the connection to the database could not be established.
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
+#[allow(clippy::expect_used)]
 #[utoipa::path(
     context_path = "/api/plantings",
     responses(
@@ -242,7 +253,7 @@ pub async fn delete(
 ) -> Result<HttpResponse> {
     // TODO: implement a service that validates (permissions) and deletes the planting
     {
-        let mut plantings = PLANTINGS.write().unwrap();
+        let mut plantings = PLANTINGS.write().expect("acquiring write lock failed");
         plantings.retain(|planting| planting.id != *path);
     }
 

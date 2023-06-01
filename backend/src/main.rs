@@ -71,8 +71,11 @@ pub mod sse;
 #[cfg(test)]
 pub mod test;
 
+/// Data shared between all controllers.
 pub struct AppDataInner {
+    /// Connection pool to the database.
     pub pool: connection::Pool,
+    /// Server-Sent Events broadcaster.
     pub broadcaster: Arc<Broadcaster>,
 }
 

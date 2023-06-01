@@ -6,7 +6,6 @@ use crate::model::dto::Page;
 use crate::model::dto::PageParameters;
 use crate::AppDataInner;
 use crate::{
-    db::connection::Pool,
     error::ServiceError,
     model::{
         dto::{PlantsSearchParameters, PlantsSummaryDto},

@@ -1,7 +1,5 @@
-use std::fmt::Display;
-
 use super::PlantLayerObjectDto;
-use serde::{ser, Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
 #[typeshare]

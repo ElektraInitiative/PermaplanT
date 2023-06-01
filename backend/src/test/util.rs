@@ -16,6 +16,7 @@ use diesel_async::{
 use dotenvy::dotenv;
 
 use crate::error::ServiceError;
+use crate::sse::broadcaster::Broadcaster;
 use crate::{
     config::{app, routes},
     AppDataInner,
@@ -79,7 +80,7 @@ pub async fn init_test_app(
         App::new()
             .app_data(Data::new(AppDataInner {
                 pool,
-                broadcaster: sse::Broadcaster::create(),
+                broadcaster: Broadcaster::create(),
             }))
             .configure(routes::config),
     )

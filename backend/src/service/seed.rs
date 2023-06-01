@@ -6,7 +6,6 @@ use crate::model::dto::PageParameters;
 use crate::model::dto::{Page, SeedSearchParameters};
 use crate::AppDataInner;
 use crate::{
-    db::connection::Pool,
     error::ServiceError,
     model::{
         dto::{NewSeedDto, SeedDto},
