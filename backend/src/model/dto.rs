@@ -255,6 +255,8 @@ pub struct MapDto {
     pub is_private: Option<bool>,
     /// The description of the map.
     pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<(f64, f64)>,
 }
 
 /// The information of a map neccessary for its creation.
@@ -285,6 +287,8 @@ pub struct NewMapDto {
     pub is_private: Option<bool>,
     /// The description of the map.
     pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<(f64, f64)>,
 }
 
 /// Query parameters for searching maps.

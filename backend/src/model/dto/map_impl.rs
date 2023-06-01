@@ -20,6 +20,10 @@ impl From<Map> for MapDto {
             owner_id: map.owner_id,
             is_private: map.is_private,
             description: map.description,
+            location: match map.location {
+                Some(latlng) => Some((latlng.x, latlng.y)),
+                None => None,
+            },
         }
     }
 }
