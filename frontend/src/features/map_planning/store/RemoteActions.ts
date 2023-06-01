@@ -1,10 +1,16 @@
-import { CreatePlantAction, DeletePlantAction, MovePlantAction } from '../layers/plant/actions';
+import {
+  CreatePlantAction,
+  DeletePlantAction,
+  MovePlantAction,
+  TransformPlantAction,
+} from '../layers/plant/actions';
 import useMapStore from './MapStore';
 import { Action } from './MapStoreTypes';
 import {
   CreatePlantActionDto,
   DeletePlantActionDto,
   MovePlantActionDto,
+  TransformPlantActionDto,
 } from '@/bindings/definitions';
 import { User } from 'oidc-client-ts';
 import z from 'zod';
@@ -43,13 +49,13 @@ export function handleRemoteAction(ev: MessageEvent<unknown>, user: User) {
 function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
   switch (remoteAction.type) {
     case 'CREATE_PLANT':
-      return new CreatePlantAction({
-        ...remoteAction.payload,
-      });
+      return new CreatePlantAction({ ...remoteAction.payload });
     case 'DELETE_PLANT':
       return new DeletePlantAction(remoteAction.payload.id);
     case 'MOVE_PLANT':
       return new MovePlantAction([{ ...remoteAction.payload }]);
+    case 'TRANSFORM_PLANT':
+      return new TransformPlantAction([{ ...remoteAction.payload }]);
     default:
       throw new Error(`Unknown remote action`) as never;
   }
@@ -89,10 +95,24 @@ const RemoteMovePlantActionSchema = z.object({
   }),
 }) satisfies z.ZodType<MovePlantActionDto>;
 
+const RemoteTransformPlantActionSchema = z.object({
+  type: z.literal('TRANSFORM_PLANT'),
+  userId: z.string(),
+  payload: z.object({
+    id: z.string(),
+    x: z.number(),
+    y: z.number(),
+    rotation: z.number(),
+    scaleX: z.number(),
+    scaleY: z.number(),
+  }),
+}) satisfies z.ZodType<TransformPlantActionDto>;
+
 const RemoteActionSchema = z.discriminatedUnion('type', [
   RemoteCreatePlantActionSchema,
   RemoteDeletePlantActionSchema,
   RemoteMovePlantActionSchema,
+  RemoteTransformPlantActionSchema,
 ]);
 
 type RemoteAction = z.infer<typeof RemoteActionSchema>;

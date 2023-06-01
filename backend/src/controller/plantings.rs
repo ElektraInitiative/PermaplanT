@@ -17,7 +17,9 @@ use actix_web::{error, ResponseError};
 use uuid::Uuid;
 
 use crate::config::auth::user_info::{self, UserInfo};
-use crate::model::dto::actions::{CreatePlantActionDto, DeletePlantActionDto, MovePlantActionDto};
+use crate::model::dto::actions::{
+    CreatePlantActionDto, DeletePlantActionDto, MovePlantActionDto, TransformPlantActionDto,
+};
 use crate::model::dto::{
     NewPlantingDto, Page, PageParameters, PlantLayerObjectDto, PlantingSearchParameters,
     UpdatePlantingDto,
@@ -58,13 +60,13 @@ pub async fn find(
         results: vec![PlantLayerObjectDto {
             id: "uuid".to_string(),
             plant_id: 1,
-            x: 0,
-            y: 0,
+            x: 0.0,
+            y: 0.0,
             height: 100,
             width: 100,
-            rotation: 0,
-            scale_x: 1,
-            scale_y: 1,
+            rotation: 0.0,
+            scale_x: 1.0,
+            scale_y: 1.0,
         }],
         page: 1,
         per_page: 10,
@@ -164,6 +166,36 @@ pub async fn update(
     {
         let mut plantings = PLANTINGS.write().unwrap();
         if let Some(planting) = plantings.iter_mut().find(|planting| planting.id == *id) {
+            match (
+                new_plant_json.x,
+                new_plant_json.y,
+                new_plant_json.rotation,
+                new_plant_json.scale_x,
+                new_plant_json.scale_y,
+            ) {
+                (Some(x), Some(y), Some(rotation), Some(scale_x), Some(scale_y)) => {
+                    planting.x = x;
+                    planting.y = y;
+                    planting.rotation = rotation;
+                    planting.scale_x = scale_x;
+                    planting.scale_y = scale_y;
+
+                    app_data
+                        .broadcaster
+                        .broadcast(
+                            &TransformPlantActionDto::new(
+                                planting.clone(),
+                                user_info.id.to_string(),
+                            )
+                            .to_string(),
+                        )
+                        .await;
+
+                    return Ok(HttpResponse::Ok().json(planting));
+                }
+                _ => {}
+            }
+
             match (new_plant_json.x, new_plant_json.y) {
                 (Some(x), Some(y)) => {
                     planting.x = x;

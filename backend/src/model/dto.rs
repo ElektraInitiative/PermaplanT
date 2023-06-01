@@ -92,21 +92,21 @@ pub struct PlantLayerObjectDto {
     #[serde(rename = "plantId")]
     pub plant_id: i32,
     /// The x coordinate of the position on the map.
-    pub x: i32,
+    pub x: f32,
     /// The y coordinate of the position on the map.
-    pub y: i32,
+    pub y: f32,
     /// The width of the plant on the map.
     pub width: i32,
     /// The height of the plant on the map.
     pub height: i32,
     /// The rotation of the plant on the map.
-    pub rotation: i32,
+    pub rotation: f32,
     /// The x scale of the plant on the map.
     #[serde(rename = "scaleX")]
-    pub scale_x: i32,
+    pub scale_x: f32,
     /// The y scale of the plant on the map.
     #[serde(rename = "scaleY")]
-    pub scale_y: i32,
+    pub scale_y: f32,
 }
 
 /// Used to create a new planting.
@@ -120,21 +120,21 @@ pub struct NewPlantingDto {
     /// The the map the plant is placed on.
     pub map_id: i32,
     /// The x coordinate of the position on the map.
-    pub x: i32,
+    pub x: f32,
     /// The y coordinate of the position on the map.
-    pub y: i32,
+    pub y: f32,
     /// The width of the plant on the map.
     pub width: i32,
     /// The height of the plant on the map.
     pub height: i32,
     /// The rotation of the plant on the map.
-    pub rotation: i32,
+    pub rotation: f32,
     /// The x scale of the plant on the map.
     #[serde(rename = "scaleX")]
-    pub scale_x: i32,
+    pub scale_x: f32,
     /// The y scale of the plant on the map.
     #[serde(rename = "scaleY")]
-    pub scale_y: i32,
+    pub scale_y: f32,
 }
 
 /// Used to update an existing planting.
@@ -147,21 +147,21 @@ pub struct UpdatePlantingDto {
     /// Note: This field is not updated by this endpoint.
     pub map_id: Option<i32>,
     /// The x coordinate of the position on the map.
-    pub x: Option<i32>,
+    pub x: Option<f32>,
     /// The y coordinate of the position on the map.
-    pub y: Option<i32>,
+    pub y: Option<f32>,
     /// The width of the plant on the map.
     pub width: Option<i32>,
     /// The height of the plant on the map.
     pub height: Option<i32>,
     /// The rotation of the plant on the map.
-    pub rotation: Option<i32>,
+    pub rotation: Option<f32>,
     /// The x scale of the plant on the map.
     #[serde(rename = "scaleX")]
-    pub scale_x: Option<i32>,
+    pub scale_x: Option<f32>,
     /// The y scale of the plant on the map.
     #[serde(rename = "scaleY")]
-    pub scale_y: Option<i32>,
+    pub scale_y: Option<f32>,
 }
 
 /// Query parameters for searching plantings.
