@@ -23,6 +23,40 @@ describe('MapHistoryStore', () => {
     }
   });
 
+  it('adds a history entry for each call to executeAction', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+
+    executeAction(createAction);
+
+    const { trackedState, history } = useMapStore.getState();
+    expect(history).toHaveLength(1);
+    expect(trackedState.layers.Plant.objects).toHaveLength(1);
+  });
+
+  it('it adds an entry to the history that is the inverse of the action', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+
+    executeAction(createAction);
+
+    const { history } = useMapStore.getState();
+    expect(history).toHaveLength(1);
+    expect(history[0]).toBeDefined();
+    expect(history[0]).toEqual(createAction.reverse());
+  });
+
+  it('does not add a history entry for a remote action', () => {
+    const { __applyRemoteAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+
+    __applyRemoteAction(createAction);
+
+    const { trackedState, history } = useMapStore.getState();
+    expect(history).toHaveLength(0);
+    expect(trackedState.layers.Plant.objects).toHaveLength(1);
+  });
+
   it('adds plant objects to the plants layer on CreatePlantAction', () => {
     const { executeAction } = useMapStore.getState();
     const createAction1 = new CreatePlantAction(createPlantTestObject(1));
@@ -296,7 +330,7 @@ describe('MapHistoryStore', () => {
   });
 
   // regression
-  it('does not change the selectedLayer after an ObjectUndoAction', () => {
+  it('does not change the selectedLayer after an undo()', () => {
     useMapStore.setState({
       untrackedState: {
         ...UNTRACKED_DEFAULT_STATE,
