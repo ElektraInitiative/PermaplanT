@@ -6,7 +6,6 @@ import type {
   UntrackedMapSlice,
 } from './MapStoreTypes';
 import { LAYER_NAMES } from './MapStoreTypes';
-// import { RemoteActionSchema } from './RemoteActions';
 import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { createRef } from 'react';
@@ -69,8 +68,8 @@ export const createTrackedMapSlice: StateCreator<
  */
 function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
   action.execute();
-  applyActionToStore(action, set, get);
   trackReverseActionInHistory(action, get().step, set, get);
+  applyActionToStore(action, set, get);
 
   set((state) => ({
     ...state,
@@ -131,7 +130,7 @@ function undo(set: SetFn, get: GetFn): void {
   set((state) => ({
     ...state,
     step: state.step - 1,
-    canUndo: state.step - 1 > 1,
+    canUndo: state.step - 1 > 0,
     canRedo: true,
   }));
 }
