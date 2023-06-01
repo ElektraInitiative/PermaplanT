@@ -1,4 +1,4 @@
-import { CreatePlantAction, MovePlantAction } from '../layers/plant/actions';
+import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../layers/plant/actions';
 import useMapStore from './MapStore';
 import { TrackedLayers } from './MapStoreTypes';
 import { TRACKED_DEFAULT_STATE } from './TrackedMapStore';
@@ -102,45 +102,34 @@ describe('MapHistoryStore', () => {
     });
   });
 
-  // it("updates a single object's transform on ObjectUpdateTransformAction", () => {
-  //   const { dispatch } = useMapStore.getState();
+  it("updates a single plants's transform on TransformPlantAction", () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const transformAction = new TransformPlantAction([
+      {
+        id: '1',
+        x: 123,
+        y: 123,
+        rotation: 123,
+        scaleX: 1.23,
+        scaleY: 1.23,
+      },
+    ]);
 
-  //   dispatch({
-  //     type: 'OBJECT_ADD',
-  //     payload: createPlantTestObject(1),
-  //   });
+    executeAction(createAction);
+    executeAction(transformAction);
 
-  //   dispatch({
-  //     type: 'OBJECT_UPDATE_POSITION',
-  //     payload: [
-  //       {
-  //         id: '1',
-  //         index: 'Plant',
-  //         type: 'plant',
-  //         x: 100,
-  //         y: 100,
-  //         height: 200,
-  //         width: 200,
-  //         rotation: 300,
-  //         scaleX: 1,
-  //         scaleY: 1,
-  //       },
-  //     ],
-  //   });
-
-  //   const { trackedState: newState } = useMapStore.getState();
-  //   expect(newState.layers.Plant.objects).toHaveLength(1);
-  //   expect(newState.layers.Plant.objects[0]).toMatchObject({
-  //     id: '1',
-  //     x: 100,
-  //     y: 100,
-  //     height: 200,
-  //     width: 200,
-  //     rotation: 300,
-  //     scaleX: 1,
-  //     scaleY: 1,
-  //   });
-  // });
+    const { trackedState: newState } = useMapStore.getState();
+    expect(newState.layers.Plant.objects).toHaveLength(1);
+    expect(newState.layers.Plant.objects[0]).toMatchObject({
+      id: '1',
+      x: 123,
+      y: 123,
+      rotation: 123,
+      scaleX: 1.23,
+      scaleY: 1.23,
+    });
+  });
 
   it('updates multiple plants on MovePlantAction', () => {
     const { executeAction } = useMapStore.getState();
@@ -177,61 +166,52 @@ describe('MapHistoryStore', () => {
     });
   });
 
-  // it('updates multiple objects on ObjectUpdateTransformAction', () => {
-  //   const { dispatch } = useMapStore.getState();
+  it('updates multiple objects on TransformPlatAction', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction1 = new CreatePlantAction(createPlantTestObject(1));
+    const createAction2 = new CreatePlantAction(createPlantTestObject(2));
+    const transformAction = new TransformPlantAction([
+      {
+        id: '1',
+        x: 111,
+        y: 111,
+        rotation: 111,
+        scaleX: 1.11,
+        scaleY: 1.11,
+      },
+      {
+        id: '2',
+        x: 222,
+        y: 222,
+        rotation: 222,
+        scaleX: 2.22,
+        scaleY: 2.22,
+      },
+    ]);
 
-  //   dispatch({
-  //     type: 'OBJECT_ADD',
-  //     payload: createPlantTestObject(1),
-  //   });
-  //   dispatch({
-  //     type: 'OBJECT_ADD',
-  //     payload: createPlantTestObject(2),
-  //   });
+    executeAction(createAction1);
+    executeAction(createAction2);
+    executeAction(transformAction);
 
-  //   dispatch({
-  //     type: 'OBJECT_UPDATE_TRANSFORM',
-  //     payload: [
-  //       {
-  //         id: '1',
-  //         index: 'Plant',
-  //         type: 'plant',
-  //         x: 123,
-  //         y: 123,
-  //         height: 345,
-  //         width: 345,
-  //         rotation: 345,
-  //         scaleX: 345,
-  //         scaleY: 345,
-  //       },
-  //       {
-  //         id: '2',
-  //         index: 'Plant',
-  //         type: 'plant',
-  //         x: 123,
-  //         y: 123,
-  //         height: 345,
-  //         width: 345,
-  //         rotation: 345,
-  //         scaleX: 345,
-  //         scaleY: 345,
-  //       },
-  //     ],
-  //   });
-
-  //   const { trackedState: newState } = useMapStore.getState();
-  //   expect(newState.layers.Plant.objects).toHaveLength(2);
-  //   expect(newState.layers.Plant.objects[0]).toMatchObject({
-  //     id: '1',
-  //     x: 123,
-  //     y: 123,
-  //   });
-  //   expect(newState.layers.Plant.objects[1]).toMatchObject({
-  //     id: '2',
-  //     x: 123,
-  //     y: 123,
-  //   });
-  // });
+    const { trackedState: newState } = useMapStore.getState();
+    expect(newState.layers.Plant.objects).toHaveLength(2);
+    expect(newState.layers.Plant.objects[0]).toMatchObject({
+      id: '1',
+      x: 111,
+      y: 111,
+      rotation: 111,
+      scaleX: 1.11,
+      scaleY: 1.11,
+    });
+    expect(newState.layers.Plant.objects[1]).toMatchObject({
+      id: '2',
+      x: 222,
+      y: 222,
+      rotation: 222,
+      scaleX: 2.22,
+      scaleY: 2.22,
+    });
+  });
 
   it('reverts one action on undo()', () => {
     const { executeAction } = useMapStore.getState();
