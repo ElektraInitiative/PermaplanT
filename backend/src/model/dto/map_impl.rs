@@ -2,7 +2,7 @@
 
 use crate::model::entity::Map;
 
-use super::MapDto;
+use super::{LatLng, MapDto};
 
 impl From<Map> for MapDto {
     fn from(map: Map) -> Self {
@@ -21,7 +21,10 @@ impl From<Map> for MapDto {
             is_private: map.is_private,
             description: map.description,
             location: match map.location {
-                Some(latlng) => Some((latlng.x, latlng.y)),
+                Some(latlng) => Some(LatLng {
+                    lat: latlng.x,
+                    lng: latlng.y,
+                }),
                 None => None,
             },
         }

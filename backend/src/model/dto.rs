@@ -255,7 +255,7 @@ pub struct MapDto {
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
-    pub location: Option<(f64, f64)>,
+    pub location: Option<LatLng>,
 }
 
 /// The information of a map neccessary for its creation.
@@ -287,7 +287,7 @@ pub struct NewMapDto {
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
-    pub location: Option<(f64, f64)>,
+    pub location: Option<LatLng>,
 }
 
 /// Query parameters for searching maps.
