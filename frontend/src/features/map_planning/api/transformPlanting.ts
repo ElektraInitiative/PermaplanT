@@ -1,9 +1,9 @@
 import { PlantLayerObjectDto, UpdatePlantingDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 
-export const movePlanting = async (
+export const transformPlanting = async (
   id: string,
-  planting: Pick<Required<UpdatePlantingDto>, 'x' | 'y'>,
+  planting: Pick<Required<UpdatePlantingDto>, 'x' | 'y' | 'scaleX' | 'scaleY' | 'rotation'>,
 ): Promise<PlantLayerObjectDto> => {
   const http = createAPI();
 

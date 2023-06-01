@@ -1,4 +1,4 @@
-import { CreatePlantAction, MovePlantAction } from '../layers/plant/actions';
+import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../layers/plant/actions';
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
@@ -11,7 +11,7 @@ import {
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import SimpleButton from '@/components/Button/SimpleButton';
 import Konva from 'konva';
-import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
 import * as uuid from 'uuid';
@@ -166,14 +166,6 @@ export const BaseStage = ({
     }
   };
 
-  const dispatchUpdate = (
-    nodes: Node<NodeConfig>[],
-    type: 'OBJECT_UPDATE_POSITION' | 'OBJECT_UPDATE_TRANSFORM',
-  ) => {
-    // TODO
-    console.log(nodes, type);
-  };
-
   return (
     <div className="h-full w-full overflow-hidden">
       <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
@@ -238,7 +230,18 @@ export const BaseStage = ({
             }}
             onTransformEnd={() => {
               selectable = true;
-              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_TRANSFORM');
+              const updates = (trRef.current?.getNodes() || []).map((node) => {
+                return {
+                  id: node.id(),
+                  x: node.x(),
+                  y: node.y(),
+                  rotation: node.rotation(),
+                  scaleX: node.scaleX(),
+                  scaleY: node.scaleY(),
+                };
+              });
+
+              executeAction(new TransformPlantAction(updates));
             }}
             onDragEnd={() => {
               const updates = (trRef.current?.getNodes() || []).map((node) => {

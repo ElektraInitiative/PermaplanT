@@ -4,6 +4,7 @@
 import { createPlanting } from '../../api/createPlanting';
 import { deletePlanting } from '../../api/deletePlanting';
 import { movePlanting } from '../../api/movePlanting';
+import { transformPlanting } from '../../api/transformPlanting';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { PlantLayerObjectDto } from '@/bindings/definitions';
 
@@ -93,7 +94,7 @@ export class MovePlantAction
     this._ids = _data.map((d) => d.id);
   }
 
-  reverse(state: TrackedMapState): MovePlantAction | null {
+  reverse(state: TrackedMapState) {
     const plants = state.layers.Plant.objects.filter((obj) => this._ids.includes(obj.id));
 
     if (!plants.length) {
@@ -129,10 +130,82 @@ export class MovePlantAction
   execute(): Promise<PlantLayerObjectDto[]> {
     const tasks = this._data.map((d) =>
       movePlanting(d.id, {
-        map_id: 1,
-        plant_id: 1,
         x: d.x,
         y: d.y,
+      }),
+    );
+
+    return Promise.all(tasks);
+  }
+}
+
+export class TransformPlantAction
+  implements
+    Action<Awaited<ReturnType<typeof movePlanting>>[], Awaited<ReturnType<typeof movePlanting>>[]>
+{
+  private readonly _ids: Array<string>;
+
+  constructor(
+    private readonly _data: Array<
+      Pick<PlantLayerObjectDto, 'x' | 'y' | 'id' | 'scaleX' | 'scaleY' | 'rotation'>
+    >,
+  ) {
+    this._ids = _data.map((d) => d.id);
+  }
+
+  reverse(state: TrackedMapState) {
+    const plants = state.layers.Plant.objects.filter((obj) => this._ids.includes(obj.id));
+
+    if (!plants.length) {
+      return null;
+    }
+
+    return new TransformPlantAction(
+      plants.map((p) => ({
+        id: p.id,
+        x: p.x,
+        y: p.y,
+        scaleX: p.scaleX,
+        scaleY: p.scaleY,
+        rotation: p.rotation,
+      })),
+    );
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        Plant: {
+          ...state.layers.Plant,
+          objects: state.layers.Plant.objects.map((p) => {
+            if (this._ids.includes(p.id)) {
+              return {
+                ...p,
+                x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
+                y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
+                scaleX: this._data.find((d) => d.id === p.id)?.scaleX ?? p.scaleX,
+                scaleY: this._data.find((d) => d.id === p.id)?.scaleY ?? p.scaleY,
+                rotation: this._data.find((d) => d.id === p.id)?.rotation ?? p.rotation,
+              };
+            }
+
+            return p;
+          }),
+        },
+      },
+    };
+  }
+
+  execute(): Promise<PlantLayerObjectDto[]> {
+    const tasks = this._data.map((d) =>
+      transformPlanting(d.id, {
+        x: d.x,
+        y: d.y,
+        scaleX: d.scaleX,
+        scaleY: d.scaleY,
+        rotation: d.rotation,
       }),
     );
 
