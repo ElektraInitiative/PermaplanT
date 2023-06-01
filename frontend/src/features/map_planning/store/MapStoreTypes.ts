@@ -150,12 +150,47 @@ export type UntrackedLayers = {
 export type TrackedMapState = {
   layers: TrackedLayers;
 };
+
+/**
+ *
+ */
+export type MeasurementState = {
+  /**
+   * If any step besides inactive is set, all controls on the map will be disabled.
+   *
+   * Inactive:          No measurement is currently being made, display the map normally.
+   * NoPointSelected:   The user has to click on the map to select the first point for measurement.
+   * OnePointSelected:  A line is drawn continually from the first point to the location of the users mouse.
+   * TwoPointsSelected: The second point of the line is fixed.
+   *                    This state will remain active until the system is manually reset to inactive.
+   */
+  step: 'Inactive' | 'NoPointSelected' | 'OnePointSelected' | 'TwoPointsSelected';
+  /**
+   * The distance resulting from the last measurement.
+   */
+  lastDistance: number,
+  /**
+   * Is set when the user clicks in step NoPointSelected.
+   */
+  firstPoint:  [number, number],
+  /**
+   * Is set if the user clicks in step OnePointSelected.
+   */
+  secondPoint: [number, number],
+  /**
+   * Will be called once the measurement has completed.
+   * @param distance the measured distance.
+   */
+  callback: (distance: number) => void;
+}
+
 /**
  * The state of the map untracked by the history.
  */
 export type UntrackedMapState = {
   selectedLayer: LayerName;
   layers: UntrackedLayers;
+  measurement: MeasurementState;
 };
 
 /**

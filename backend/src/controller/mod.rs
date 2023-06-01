@@ -1,6 +1,5 @@
 //! Endpoints of `PermaplanT`.
 
-pub mod base_layers;
 pub mod config;
 pub mod map;
 pub mod plantings;
