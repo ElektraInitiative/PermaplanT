@@ -43,9 +43,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .wrap(NormalizePath::trim())
         .wrap(auth);
 
-    let sse_route = web::scope("/api/map_updates").service(sse::create_sse_client);
-    cfg.service(sse_route);
-
+    let sse_route = web::scope("/api/updates/maps").service(sse::create_sse_client);
     let config_route = web::scope("/api/config").service(config::get);
-    cfg.service(config_route).service(routes);
+
+    cfg.service(sse_route).service(config_route).service(routes);
 }

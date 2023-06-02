@@ -27,7 +27,7 @@ function useMapUpdates() {
   useEffect(() => {
     if (user) {
       // TODO: implement protected routes and authentication
-      evRef.current = new EventSource(`${baseApiUrl}/api/map_updates/${user.profile.sub}`);
+      evRef.current = new EventSource(`${baseApiUrl}/api/updates/maps/${user.profile.sub}`);
       evRef.current.onmessage = (ev) => handleRemoteAction(ev, user);
     }
 
