@@ -1,6 +1,9 @@
 //! Contains the implementation of [`Plants`].
 
-use diesel::{debug_query, dsl::sql, pg::Pg, sql_types::Float, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult};
+use diesel::{
+    debug_query, dsl::sql, pg::Pg, sql_types::Float, BoolExpressionMethods, ExpressionMethods,
+    QueryDsl, QueryResult,
+};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 
@@ -35,7 +38,8 @@ impl Plants {
     ) -> QueryResult<Page<PlantsSummaryDto>> {
         // Set higher search sensitivity so that the user gets more search results than with default
         // settings (0.3).
-        let set_similarity_threshold = diesel::sql_query("SET LOCAL pg_trgm.similarity_threshold=0.1");
+        let set_similarity_threshold =
+            diesel::sql_query("SET LOCAL pg_trgm.similarity_threshold=0.1");
         debug!("{}", debug_query::<Pg, _>(&set_similarity_threshold));
         let _ = set_similarity_threshold.execute(conn).await;
 
