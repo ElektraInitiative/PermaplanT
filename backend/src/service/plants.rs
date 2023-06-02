@@ -22,11 +22,15 @@ pub async fn find(
     page_parameters: PageParameters,
     pool: &Data<Pool>,
 ) -> Result<Page<PlantsSummaryDto>, ServiceError> {
-    let empty = String::from("");
+    // Empty search queries should be treated like nonexistant queries.
+    let mut search_query: Option<String> = search_parameters.name;
+    if search_query == Some("".to_string()) {
+        search_query = None;
+    }
+
     let mut conn = pool.get().await?;
-    let result = match search_parameters.name {
-        Some(search_query) => Plants::search(&search_query, page_parameters, &mut conn).await?,
-        Some("") => Plants::find_any(page_parameters, &mut conn).await?,
+    let result = match search_query {
+        Some(query) => Plants::search(&query, page_parameters, &mut conn).await?,
         None => Plants::find_any(page_parameters, &mut conn).await?,
     };
     Ok(result)
