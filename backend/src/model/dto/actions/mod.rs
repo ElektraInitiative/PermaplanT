@@ -25,12 +25,6 @@ impl CreatePlantActionDto {
     }
 }
 
-impl ToString for CreatePlantActionDto {
-    fn to_string(&self) -> String {
-        serde_json::to_string(&self).expect("Failed to serialize CreatePlantAction")
-    }
-}
-
 #[typeshare]
 #[derive(Serialize, Deserialize)]
 pub struct DeletePlantActionDto {
@@ -54,12 +48,6 @@ impl DeletePlantActionDto {
             user_id,
             payload: DeletePlantActionPayload { id },
         }
-    }
-}
-
-impl ToString for DeletePlantActionDto {
-    fn to_string(&self) -> String {
-        serde_json::to_string(&self).expect("Failed to serialize DeletePlantAction")
     }
 }
 
@@ -92,12 +80,6 @@ impl MovePlantActionDto {
                 y: payload.y,
             },
         }
-    }
-}
-
-impl ToString for MovePlantActionDto {
-    fn to_string(&self) -> String {
-        serde_json::to_string(&self).expect("Failed to serialize MovePlantActionDto")
     }
 }
 
@@ -138,11 +120,5 @@ impl TransformPlantActionDto {
                 scale_y: payload.scale_y,
             },
         }
-    }
-}
-
-impl ToString for TransformPlantActionDto {
-    fn to_string(&self) -> String {
-        serde_json::to_string(&self).expect("Failed to serialize TransformPlantActionPayload")
     }
 }

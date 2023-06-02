@@ -74,12 +74,12 @@ impl Broadcaster {
     /// Registers client with broadcaster, returning an SSE response body.
     ///
     /// # Errors
-    /// * If tx.send() fails for the new client.
+    /// * If sender.send() fails for the new client.
     pub async fn new_client(
         &self,
         user_id: String,
     ) -> Result<Sse<ChannelStream>, Box<dyn std::error::Error>> {
-        let (tx, rx) = sse::channel(10);
+        let (sender, channel_stream) = sse::channel(10);
 
         let mut new_clients = Vec::new();
         let old_clients = self.inner.lock().await.clients.clone();
@@ -90,27 +90,36 @@ impl Broadcaster {
             }
         }
 
-        tx.send(sse::Data::new("connected")).await?;
+        sender.send(sse::Data::new("connected")).await?;
 
         new_clients.push(Client {
             id: user_id,
-            sender: tx,
+            sender,
         });
         self.inner.lock().await.clients = new_clients;
 
-        Ok(rx)
+        Ok(channel_stream)
     }
 
     /// Broadcasts `msg` to all clients.
-    pub async fn broadcast(&self, msg: &str) {
-        let clients = self.inner.lock().await.clients.clone();
+    ///
+    /// # Errors
+    /// * If serialization of `msg` fails.
+    pub async fn broadcast<T: serde::Serialize + Send>(
+        &self,
+        msg: T,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let serialized_data = sse::Data::new_json(msg)?;
 
+        let clients = self.inner.lock().await.clients.clone();
         let send_futures = clients
             .iter()
-            .map(|client| client.sender.send(sse::Data::new(msg)));
+            .map(|client| client.sender.send(serialized_data.clone()));
 
         // try to send to all clients, ignoring failures
         // disconnected clients will get swept up by `remove_stale_clients`
         let _ = future::join_all(send_futures).await;
+
+        Ok(())
     }
 }

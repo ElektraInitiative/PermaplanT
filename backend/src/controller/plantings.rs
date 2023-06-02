@@ -18,8 +18,7 @@ use crate::model::dto::actions::{
     CreatePlantActionDto, DeletePlantActionDto, MovePlantActionDto, TransformPlantActionDto,
 };
 use crate::model::dto::{
-    NewPlantingDto, PageParameters, PlantLayerObjectDto, PlantingSearchParameters,
-    UpdatePlantingDto,
+    NewPlantingDto, PlantLayerObjectDto, PlantingSearchParameters, UpdatePlantingDto,
 };
 use crate::AppDataInner;
 
@@ -53,11 +52,11 @@ fn replace_planting(planting: PlantLayerObjectDto) {
 /// * If the connection to the database could not be established.
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
+#[allow(clippy::expect_used)]
 #[utoipa::path(
     context_path = "/api/plantings",
     params(
         PlantingSearchParameters,
-        PageParameters
     ),
     responses(
         (status = 200, description = "Find plantings", body = Vec<PlantLayerObjectDto>)
@@ -121,14 +120,17 @@ pub async fn create(
     }
 
     if let Some(dto) = find_planting_by_id(&new_plant_json.id) {
-        app_data
+        let notified = app_data
             .broadcaster
-            .broadcast(
-                &CreatePlantActionDto::new(dto.clone(), user_info.id.to_string()).to_string(),
-            )
+            .broadcast(&CreatePlantActionDto::new(
+                dto.clone(),
+                user_info.id.to_string(),
+            ))
             .await;
 
-        return Ok(HttpResponse::Created().json(dto));
+        if matches!(notified, Ok(())) {
+            return Ok(HttpResponse::Created().json(dto));
+        }
     }
 
     Err(error::ErrorInternalServerError("Could not create planting"))
@@ -180,33 +182,34 @@ pub async fn update(
                     planting.scale_y = scale_y;
                     replace_planting(planting.clone());
 
-                    app_data
+                    let notified = app_data
                         .broadcaster
-                        .broadcast(
-                            &TransformPlantActionDto::new(
-                                planting.clone(),
-                                user_info.id.to_string(),
-                            )
-                            .to_string(),
-                        )
+                        .broadcast(&TransformPlantActionDto::new(
+                            planting.clone(),
+                            user_info.id.to_string(),
+                        ))
                         .await;
 
-                    return Ok(HttpResponse::Ok().json(planting));
+                    if matches!(notified, Ok(())) {
+                        return Ok(HttpResponse::Ok().json(planting));
+                    }
                 }
                 (Some(x), Some(y), None, None, None, None, None) => {
                     planting.x = x;
                     planting.y = y;
                     replace_planting(planting.clone());
 
-                    app_data
+                    let notified = app_data
                         .broadcaster
-                        .broadcast(
-                            &MovePlantActionDto::new(planting.clone(), user_info.id.to_string())
-                                .to_string(),
-                        )
+                        .broadcast(&MovePlantActionDto::new(
+                            planting.clone(),
+                            user_info.id.to_string(),
+                        ))
                         .await;
 
-                    return Ok(HttpResponse::Ok().json(planting));
+                    if matches!(notified, Ok(())) {
+                        return Ok(HttpResponse::Ok().json(planting));
+                    }
                 }
                 _ => {}
             }
@@ -244,12 +247,16 @@ pub async fn delete(
         plantings.retain(|planting| planting.id != *path);
     }
 
-    app_data
+    let notified = app_data
         .broadcaster
-        .broadcast(
-            &DeletePlantActionDto::new(path.to_string(), user_info.id.to_string()).to_string(),
-        )
+        .broadcast(&DeletePlantActionDto::new(
+            path.to_string(),
+            user_info.id.to_string(),
+        ))
         .await;
 
-    Ok(HttpResponse::Ok().finish())
+    match notified {
+        Ok(_) => Ok(HttpResponse::Ok().finish()),
+        Err(_) => Err(error::ErrorNotFound("Planting not found")),
+    }
 }
