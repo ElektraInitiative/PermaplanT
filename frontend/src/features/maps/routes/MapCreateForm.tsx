@@ -71,12 +71,14 @@ export default function MapCreateForm() {
         <input
           id="mapNameInput"
           name="name"
-          onChange={(e) => setMapInput({ ...mapInput, name: e.target.value })}
+          onChange={(e) => {
+            setMapInput({ ...mapInput, name: e.target.value });
+            setMissingName(false);
+          }}
           className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
           style={{ colorScheme: 'dark' }}
-          placeholder="Name"
+          placeholder="Name *"
         />
-        {missingName && missingNameText}
         <label className="flex w-full items-center justify-center">
           <input
             id="mapPrivateCheckbox"
@@ -88,6 +90,7 @@ export default function MapCreateForm() {
           {t('maps:create.private_label')}
         </label>
       </section>
+      {missingName && missingNameText}
       <textarea
         id="mapDescriptionTextfield"
         name="description"
