@@ -45,7 +45,7 @@ For example to log using the debug level:
 log::debug!("This is my variable: {}", some_variable);
 ```
 
-As you can see the behavior is the same as it is for example for `println!()`.
+As you can see, it can be used in the same way as for example `println!()`.
 
 ## Log SQL queries
 
