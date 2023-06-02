@@ -18,6 +18,10 @@ pub mod sql_types {
     pub struct FlowerType;
 
     #[derive(diesel::sql_types::SqlType)]
+    #[diesel(postgres_type(name = "geography"))]
+    pub struct Geography;
+
+    #[derive(diesel::sql_types::SqlType)]
     #[diesel(postgres_type(name = "growth_rate"))]
     pub struct GrowthRate;
 
@@ -85,6 +89,7 @@ diesel::table! {
 diesel::table! {
     use postgis_diesel::sql_types::Geography;
     use diesel::sql_types::*;
+    use super::sql_types::Geography;
 
     maps (id) {
         id -> Int4,
