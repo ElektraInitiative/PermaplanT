@@ -6,6 +6,7 @@ pub mod fertility;
 pub mod flower_type;
 pub mod growth_rate;
 pub mod herbaceous_or_woody;
+pub mod layer_type;
 pub mod life_cycle;
 pub mod light_requirement;
 pub mod nutrition_demand;

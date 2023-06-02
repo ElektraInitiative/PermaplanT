@@ -6,9 +6,11 @@ use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 
-use super::r#enum::{quality::Quality, quantity::Quantity};
+use super::r#enum::{layer_type::LayerType, quality::Quality, quantity::Quantity};
 
+pub mod layer_impl;
 pub mod map_impl;
+pub mod new_layer_impl;
 pub mod new_map_impl;
 pub mod new_seed_impl;
 pub mod page_impl;
@@ -251,4 +253,46 @@ pub struct MapSearchParameters {
     pub is_inactive: Option<bool>,
     /// The owner of the map.
     pub owner_id: Option<i32>,
+}
+
+/// The whole information of a layer.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct LayerDto {
+    /// The id of the layer.
+    pub id: i32,
+    /// The id of the map this layer belongs to.
+    pub map_id: i32,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
+}
+
+/// The information of a layer neccessary for its creation.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct NewLayerDto {
+    /// The id of the map this layer belongs to.
+    pub map_id: i32,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
+}
+
+/// Query parameters for searching layers.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct LayerSearchParameters {
+    /// The parent map.
+    pub map_id: Option<i32>,
+    /// The type of layer.
+    pub type_: Option<LayerType>,
+    /// Wheter or not the layer is an alternative.
+    pub is_alternative: Option<bool>,
 }
