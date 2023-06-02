@@ -1,0 +1,35 @@
+diff --git a/backend/src/schema.rs b/backend/src/schema.rs
+index 0cd5c658..905a7b7e 100644
+--- a/backend/src/schema.rs
++++ b/backend/src/schema.rs
+@@ -14,16 +14,12 @@ pub mod sql_types {
+     pub struct Fertility;
+
+     #[derive(diesel::sql_types::SqlType)]
+     #[diesel(postgres_type(name = "flower_type"))]
+     pub struct FlowerType;
+
+-    #[derive(diesel::sql_types::SqlType)]
+-    #[diesel(postgres_type(name = "geography"))]
+-    pub struct Geography;
+-
+     #[derive(diesel::sql_types::SqlType)]
+     #[diesel(postgres_type(name = "growth_rate"))]
+     pub struct GrowthRate;
+
+     #[derive(diesel::sql_types::SqlType)]
+     #[diesel(postgres_type(name = "herbaceous_or_woody"))]
+@@ -86,13 +82,12 @@ diesel::table! {
+     }
+ }
+
+ diesel::table! {
+     use postgis_diesel::sql_types::Geography;
+     use diesel::sql_types::*;
+-    use super::sql_types::Geography;
+
+     maps (id) {
+         id -> Int4,
+         name -> Text,
+         creation_date -> Date,
+         deletion_date -> Nullable<Date>,
