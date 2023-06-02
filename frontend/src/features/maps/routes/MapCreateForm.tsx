@@ -2,7 +2,6 @@ import { createMap } from '../api/createMap';
 import { NewMapDto, LatLng } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import PageLayout from '@/components/Layout/PageLayout';
-import { useDarkModeStore } from '@/features/dark_mode';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 export default function MapCreateForm() {
   const { t } = useTranslation(['maps']);
   const [missingName, setMissingName] = useState(false);
-  const darkMode = useDarkModeStore((state) => state.darkMode);
   const navigate = useNavigate();
 
   const missingNameText = (
@@ -85,19 +83,12 @@ export default function MapCreateForm() {
         style={{ colorScheme: 'dark' }}
         placeholder={t('maps:create.description_placeholer')}
       />
-      <div className="mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-10">
+      <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
         <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
-          {darkMode ? (
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-          ) : (
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-          )}
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
           <MapClickEventListener mapLocation={location} />
         </MapContainer>
       </div>
