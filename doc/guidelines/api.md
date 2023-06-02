@@ -3,12 +3,14 @@
 We exclusively use:
 
 - JSON or images as content.
-- idempotent resources.
-  (doing the same API calls again is a NOP)
 - GET to retrieve resources.
 - POST to submit new resources to the server.
-- PUT to update an existing resource (fails if it does not exist).
+- PUT to fully update an existing resource (fails if it does not exist).
+- PATCH to update parts of an existing resource (fails if it does not exist).
 - DELETE to remove resources.
+
+Both PUT and PATCH should be implemented idempotent.
+Doing the same API calls again must be a NOP.
 
 ## Endpoints
 
