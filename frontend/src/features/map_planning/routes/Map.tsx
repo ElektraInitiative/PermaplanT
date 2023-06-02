@@ -1,3 +1,4 @@
+import { getPlantings } from '../api/getPlantings';
 import { BaseStage } from '../components/BaseStage';
 import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
@@ -16,9 +17,22 @@ import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
+import { useQuery } from '@tanstack/react-query';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { useEffect, useRef } from 'react';
 import { Rect } from 'react-konva';
+
+function useInitializeMap() {
+  useMapUpdates();
+  const initPlantLayer = useMapStore((state) => state.initPlantLayer);
+
+  useQuery(['layers/plants'], {
+    queryFn: getPlantings,
+    onSuccess(plants) {
+      initPlantLayer(plants);
+    },
+  });
+}
 
 function useMapUpdates() {
   const { user } = useSafeAuth();
@@ -45,7 +59,7 @@ function useMapUpdates() {
  * Otherwise they cannot be moved.
  */
 export const Map = () => {
-  useMapUpdates();
+  useInitializeMap();
 
   const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);

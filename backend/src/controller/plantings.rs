@@ -18,7 +18,7 @@ use crate::model::dto::actions::{
     CreatePlantActionDto, DeletePlantActionDto, MovePlantActionDto, TransformPlantActionDto,
 };
 use crate::model::dto::{
-    NewPlantingDto, Page, PageParameters, PlantLayerObjectDto, PlantingSearchParameters,
+    NewPlantingDto, PageParameters, PlantLayerObjectDto, PlantingSearchParameters,
     UpdatePlantingDto,
 };
 use crate::AppDataInner;
@@ -60,7 +60,7 @@ fn replace_planting(planting: PlantLayerObjectDto) {
         PageParameters
     ),
     responses(
-        (status = 200, description = "Find plantings", body = PagePlantingDto)
+        (status = 200, description = "Find plantings", body = Vec<PlantLayerObjectDto>)
     ),
     security(
         ("oauth2" = [])
@@ -69,27 +69,14 @@ fn replace_planting(planting: PlantLayerObjectDto) {
 #[get("")]
 pub async fn find(
     search_query: Query<PlantingSearchParameters>,
-    page_query: Query<PageParameters>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    // TODO: implement service that validates (permission, integrity) and filters for records.
-    let page = Page {
-        results: vec![PlantLayerObjectDto {
-            id: "uuid".to_owned(),
-            plant_id: 1,
-            x: 0.0,
-            y: 0.0,
-            height: 100,
-            width: 100,
-            rotation: 0.0,
-            scale_x: 1.0,
-            scale_y: 1.0,
-        }],
-        page: 1,
-        per_page: 10,
-        total_pages: 1,
-    };
-    Ok(HttpResponse::Ok().json(page))
+    let plantings = PLANTINGS
+        .read()
+        .expect("acquiring read lock failed")
+        .clone();
+
+    Ok(HttpResponse::Ok().json(plantings))
 }
 
 /// Endpoint for creating a new `Planting`.
@@ -103,7 +90,7 @@ pub async fn find(
     context_path = "/api/plantings",
     request_body = NewPlantingDto,
     responses(
-        (status = 201, description = "Create a planting", body = PlantingDto)
+        (status = 201, description = "Create a planting", body = PlantLayerObjectDto)
     ),
     security(
         ("oauth2" = [])
@@ -158,7 +145,7 @@ pub async fn create(
     context_path = "/api/plantings",
     request_body = UpdatePlantingDto,
     responses(
-        (status = 200, description = "Update a planting", body = PlantingDto)
+        (status = 200, description = "Update a planting", body = PlantLayerObjectDto)
     ),
     security(
         ("oauth2" = [])
@@ -219,7 +206,7 @@ pub async fn update(
                         )
                         .await;
 
-                    return Ok(HttpResponse::Created().json(planting));
+                    return Ok(HttpResponse::Ok().json(planting));
                 }
                 _ => {}
             }

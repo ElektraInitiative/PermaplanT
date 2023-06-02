@@ -80,6 +80,10 @@ export interface TrackedMapSlice {
    * It is not meant to be used by the user, on called in event handlers.
    */
   __applyRemoteAction: (action: Action<unknown, unknown>) => void;
+  /**
+   * Initializes the plant layer.
+   */
+  initPlantLayer: (plantLayer: PlantLayerObjectDto[]) => void;
 }
 
 /**
