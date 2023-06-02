@@ -1,42 +1,50 @@
 import { createMap } from '../api/createMap';
-import { NewMapDto, LatLng } from '@/bindings/definitions';
+import { NewMapDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import PageLayout from '@/components/Layout/PageLayout';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MapContainer, TileLayer, useMapEvent } from 'react-leaflet';
+import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 
+interface MapCreationAttributes {
+  name: string;
+  is_private: boolean;
+  description: string;
+  location: {
+    lat: number;
+    lng: number;
+  };
+}
+
 export default function MapCreateForm() {
+  const initialData: MapCreationAttributes = {
+    name: '',
+    is_private: false,
+    description: '',
+    location: {
+      lat: NaN,
+      lng: NaN,
+    },
+  };
+
   const { t } = useTranslation(['maps']);
   const [missingName, setMissingName] = useState(false);
+  const [mapInput, setMapInput] = useState(initialData);
   const navigate = useNavigate();
 
   const missingNameText = (
     <p className="mb-2 block text-sm font-medium text-red-500">{t('maps:overview.missing_name')}</p>
   );
 
-  const location: LatLng = {
-    lat: NaN,
-    lng: NaN,
-  };
-
   async function onSubmit() {
-    const mapNameInput = document.getElementById('mapNameInput') as HTMLInputElement;
-    const mapPrivateCheckbox = document.getElementById('mapPrivateCheckbox') as HTMLInputElement;
-    const mapDescriptionTextfield = document.getElementById(
-      'mapDescriptionTextfield',
-    ) as HTMLTextAreaElement;
-    const mapName = mapNameInput ? mapNameInput.value : '';
-    const mapIsPrivate = mapPrivateCheckbox ? mapPrivateCheckbox.checked : false;
-    const mapDescription = mapDescriptionTextfield ? mapDescriptionTextfield.value : '';
-    if (mapName === '') {
+    if (mapInput.name === '') {
       setMissingName(true);
       return;
     }
     const newMap: NewMapDto = {
-      name: mapName,
+      name: mapInput.name,
       creation_date: new Date().toISOString().split('T')[0],
       is_inactive: false,
       zoom_factor: 100,
@@ -44,9 +52,9 @@ export default function MapCreateForm() {
       visits: 0,
       harvested: 0,
       owner_id: 1,
-      is_private: mapIsPrivate,
-      description: mapDescription,
-      location: !Number.isNaN(location.lat) ? location : undefined,
+      is_private: mapInput.is_private,
+      description: mapInput.description,
+      location: !Number.isNaN(mapInput.location.lat) ? mapInput.location : undefined,
     };
     createMap(newMap);
     navigate('/maps');
@@ -62,7 +70,8 @@ export default function MapCreateForm() {
       <section className="my-2 flex items-center">
         <input
           id="mapNameInput"
-          onChange={() => setMissingName(false)}
+          name="name"
+          onChange={(e) => setMapInput({ ...mapInput, name: e.target.value })}
           className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
           style={{ colorScheme: 'dark' }}
           placeholder="Name"
@@ -71,6 +80,8 @@ export default function MapCreateForm() {
         <label className="flex w-full items-center justify-center">
           <input
             id="mapPrivateCheckbox"
+            name="is_private"
+            onChange={(e) => setMapInput({ ...mapInput, is_private: e.target.checked })}
             type="checkbox"
             className="mr-3 h-4 w-4 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
           />
@@ -79,6 +90,8 @@ export default function MapCreateForm() {
       </section>
       <textarea
         id="mapDescriptionTextfield"
+        name="description"
+        onChange={(e) => setMapInput({ ...mapInput, description: e.target.value })}
         className="mb-4 block h-24 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
         style={{ colorScheme: 'dark' }}
         placeholder={t('maps:create.description_placeholer')}
@@ -89,7 +102,7 @@ export default function MapCreateForm() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <MapClickEventListener mapLocation={location} />
+          <MapEventListener mapState={mapInput} setMapState={setMapInput} />
         </MapContainer>
       </div>
       <div className="space-between flex flex-row justify-center space-x-8">
@@ -112,17 +125,38 @@ export default function MapCreateForm() {
   );
 }
 
-interface MapClickEventListenerProps {
-  mapLocation: LatLng;
+interface MapEventListenerProps {
+  mapState: MapCreationAttributes;
+  setMapState: (mapState: MapCreationAttributes) => void;
 }
 
-function MapClickEventListener({ mapLocation }: MapClickEventListenerProps) {
+function MapEventListener({ mapState, setMapState }: MapEventListenerProps) {
   const { t } = useTranslation(['maps']);
 
-  const map = useMapEvent('click', (e) => {
-    map.openPopup(t('maps:create.location_selected'), e.latlng);
-    mapLocation.lat = e.latlng.lat;
-    mapLocation.lng = e.latlng.lng;
+  const map = useMapEvents({
+    click: (e) => {
+      map.openPopup(t('maps:create.location_selected'), e.latlng);
+      setMapState({
+        name: mapState.name,
+        is_private: mapState.is_private,
+        description: mapState.description,
+        location: {
+          lat: e.latlng.lat,
+          lng: e.latlng.lng,
+        },
+      });
+    },
+    popupclose: () => {
+      setMapState({
+        name: mapState.name,
+        is_private: mapState.is_private,
+        description: mapState.description,
+        location: {
+          lat: NaN,
+          lng: NaN,
+        },
+      });
+    },
   });
   return null;
 }
