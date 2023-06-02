@@ -1,8 +1,5 @@
-import { createMap } from '../api/createMap';
 import { findAllMaps } from '../api/findAllMaps';
 import MapCard from '../components/MapCard';
-import MapCreateModal from '../components/MapCreateModal';
-import { NewMapDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import InfoMessage, { InfoMessageType } from '@/components/Card/InfoMessage';
 import PageTitle from '@/components/Header/PageTitle';
@@ -11,6 +8,7 @@ import PageLayout from '@/components/Layout/PageLayout';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export default function MapOverview() {
   const initialMessage = {
@@ -18,8 +16,8 @@ export default function MapOverview() {
     message: '',
   };
 
+  const navigate = useNavigate();
   const { t } = useTranslation(['maps']);
-  const [show, setShow] = useState(false);
   const [infoMessage, setInfoMessage] = useState(initialMessage);
 
   const { data } = useInfiniteQuery({
@@ -30,19 +28,6 @@ export default function MapOverview() {
 
   const maps = data?.pages.flatMap((page) => page.results) ?? [];
   const mapList = maps.map((map) => <MapCard key={map.id} map={map} />);
-
-  function createNewMap(map: NewMapDto) {
-    createMap(map).then(
-      (newMap) => {
-        mapList.push(<MapCard key={newMap.id} map={newMap} />);
-        setInfoMessage({ isSuccess: true, message: t('maps:create.success') });
-      },
-      (error) => {
-        console.error(error);
-        setInfoMessage({ isSuccess: false, message: t('maps:create.failure') });
-      },
-    );
-  }
 
   const infoMessageContainer = (
     <InfoMessage
@@ -58,7 +43,7 @@ export default function MapOverview() {
         {infoMessage.message !== '' && infoMessageContainer}
         <PageTitle title={t('maps:overview.page_title')} />
         <SimpleButton
-          onClick={() => setShow(true)}
+          onClick={() => navigate('/maps/create')}
           className="mb-8 max-w-[240px] grow"
           title={t('maps:overview.create_button_title')}
         >
@@ -66,7 +51,6 @@ export default function MapOverview() {
         </SimpleButton>
         <section className="mb-12">{mapList}</section>
         <Footer />
-        <MapCreateModal show={show} setShow={setShow} successCallback={createNewMap} />
       </PageLayout>
     </Suspense>
   );

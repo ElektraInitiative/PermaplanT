@@ -21,7 +21,13 @@ export default function MapCreateModal({ show, setShow, successCallback }: MapCr
 
   async function onSubmit() {
     const mapNameInput = document.getElementById('mapNameInput') as HTMLInputElement;
+    const mapPrivateCheckbox = document.getElementById('mapPrivateCheckbox') as HTMLInputElement;
+    const mapDescriptionTextfield = document.getElementById(
+      'mapDescriptionTextfield',
+    ) as HTMLTextAreaElement;
     const mapName = mapNameInput ? mapNameInput.value : '';
+    const mapIsPrivate = mapPrivateCheckbox ? mapPrivateCheckbox.checked : false;
+    const mapDescription = mapDescriptionTextfield ? mapDescriptionTextfield.value : '';
     if (mapName === '') {
       setMissingName(true);
       return;
@@ -35,6 +41,8 @@ export default function MapCreateModal({ show, setShow, successCallback }: MapCr
       visits: 0,
       harvested: 0,
       owner_id: 1,
+      is_private: mapIsPrivate,
+      description: mapDescription,
     };
     setShow(false);
     successCallback(newMap);
@@ -51,14 +59,30 @@ export default function MapCreateModal({ show, setShow, successCallback }: MapCr
       <ModalContainer show={show}>
         <div className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h2>{t('maps:create.modal_title')}</h2>
-          <input
-            id="mapNameInput"
-            onChange={() => setMissingName(false)}
-            className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          <section className="my-2 flex items-center">
+            <input
+              id="mapNameInput"
+              onChange={() => setMissingName(false)}
+              className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+              style={{ colorScheme: 'dark' }}
+              placeholder="Name"
+            />
+            {missingName && missingNameText}
+            <label className="flex w-full items-center justify-center">
+              <input
+                id="mapPrivateCheckbox"
+                type="checkbox"
+                className="mr-3 h-4 w-4 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+              />
+              {t('maps:create.private_label')}
+            </label>
+          </section>
+          <textarea
+            id="mapDescriptionTextfield"
+            className="mb-4 block h-24 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
             style={{ colorScheme: 'dark' }}
-            placeholder="Name"
+            placeholder={t('maps:create.description_placeholer')}
           />
-          {missingName && missingNameText}
           <div className="space-between flex flex-row justify-center space-x-8">
             <SimpleButton
               onClick={onCancel}
