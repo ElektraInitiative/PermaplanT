@@ -130,6 +130,8 @@ export class MovePlantAction
   execute(): Promise<PlantLayerObjectDto[]> {
     const tasks = this._data.map((d) =>
       movePlanting(d.id, {
+        // TODO - get these values from the store.
+        map_id: 1,
         x: d.x,
         y: d.y,
       }),
@@ -201,6 +203,8 @@ export class TransformPlantAction
   execute(): Promise<PlantLayerObjectDto[]> {
     const tasks = this._data.map((d) =>
       transformPlanting(d.id, {
+        // TODO - get these values from the store.
+        map_id: 1,
         x: d.x,
         y: d.y,
         scaleX: d.scaleX,

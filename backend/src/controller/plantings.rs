@@ -122,10 +122,10 @@ pub async fn create(
     if let Some(dto) = find_planting_by_id(&new_plant_json.id) {
         let notified = app_data
             .broadcaster
-            .broadcast(&CreatePlantActionDto::new(
-                dto.clone(),
-                user_info.id.to_string(),
-            ))
+            .broadcast(
+                new_plant_json.map_id,
+                &CreatePlantActionDto::new(dto.clone(), user_info.id.to_string()),
+            )
             .await;
 
         if matches!(notified, Ok(())) {
@@ -184,10 +184,13 @@ pub async fn update(
 
                     let notified = app_data
                         .broadcaster
-                        .broadcast(&TransformPlantActionDto::new(
-                            planting.clone(),
-                            user_info.id.to_string(),
-                        ))
+                        .broadcast(
+                            new_plant_json.map_id,
+                            &TransformPlantActionDto::new(
+                                planting.clone(),
+                                user_info.id.to_string(),
+                            ),
+                        )
                         .await;
 
                     if matches!(notified, Ok(())) {
@@ -201,10 +204,10 @@ pub async fn update(
 
                     let notified = app_data
                         .broadcaster
-                        .broadcast(&MovePlantActionDto::new(
-                            planting.clone(),
-                            user_info.id.to_string(),
-                        ))
+                        .broadcast(
+                            new_plant_json.map_id,
+                            &MovePlantActionDto::new(planting.clone(), user_info.id.to_string()),
+                        )
                         .await;
 
                     if matches!(notified, Ok(())) {
@@ -249,10 +252,11 @@ pub async fn delete(
 
     let notified = app_data
         .broadcaster
-        .broadcast(&DeletePlantActionDto::new(
-            path.to_string(),
-            user_info.id.to_string(),
-        ))
+        .broadcast(
+            // TODO: get map_id from request or from path?
+            1,
+            &DeletePlantActionDto::new(path.to_string(), user_info.id.to_string()),
+        )
         .await;
 
     match notified {

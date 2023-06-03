@@ -3,7 +3,7 @@ import { createAPI } from '@/config/axios';
 
 export const movePlanting = async (
   id: string,
-  planting: Pick<Required<UpdatePlantingDto>, 'x' | 'y'>,
+  planting: Required<Pick<UpdatePlantingDto, 'map_id' | 'x' | 'y'>>,
 ): Promise<PlantLayerObjectDto> => {
   const http = createAPI();
 

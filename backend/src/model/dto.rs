@@ -141,11 +141,11 @@ pub struct NewPlantingDto {
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct UpdatePlantingDto {
-    /// The plant that is planted.
-    pub plant_id: Option<i32>,
     /// The map the plant is placed on.
     /// Note: This field is not updated by this endpoint.
-    pub map_id: Option<i32>,
+    pub map_id: i32,
+    /// The plant that is planted.
+    pub plant_id: Option<i32>,
     /// The x coordinate of the position on the map.
     pub x: Option<f32>,
     /// The y coordinate of the position on the map.
@@ -320,4 +320,14 @@ pub struct NewMapVersionDto {
 pub struct MapVersionSearchParameters {
     /// Whether or not the map is active.
     pub map_id: Option<i32>,
+}
+
+/// Query parameters for connecting to a map.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct ConnectToMapQueryParams {
+    /// The id of the map to connect to.
+    pub map_id: i32,
+    /// The id of the user connecting to the map.
+    pub user_id: String,
 }

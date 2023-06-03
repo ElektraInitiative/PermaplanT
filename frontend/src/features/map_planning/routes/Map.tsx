@@ -7,6 +7,7 @@ import PlantsLayer from '../layers/plant/PlantsLayer';
 import useMapStore from '../store/MapStore';
 import { LayerName } from '../store/MapStoreTypes';
 import { handleRemoteAction } from '../store/RemoteActions';
+import { ConnectToMapQueryParams } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
@@ -40,8 +41,19 @@ function useMapUpdates() {
 
   useEffect(() => {
     if (user) {
+      const connectionQuery: ConnectToMapQueryParams = {
+        map_id: 1,
+        user_id: user.profile.sub,
+      };
+
+      const connectionParams = new URLSearchParams();
+      connectionParams.append('map_id', `${connectionQuery.map_id}`);
+      connectionParams.append('user_id', connectionQuery.user_id);
+
       // TODO: implement protected routes and authentication
-      evRef.current = new EventSource(`${baseApiUrl}/api/updates/maps/${user.profile.sub}`);
+      evRef.current = new EventSource(
+        `${baseApiUrl}/api/updates/maps?${connectionParams.toString()}`,
+      );
       evRef.current.onmessage = (ev) => handleRemoteAction(ev, user);
     }
 

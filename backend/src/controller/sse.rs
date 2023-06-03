@@ -2,14 +2,21 @@
 
 use actix_web::{
     get,
-    web::{Data, Path},
+    web::{Data, Query},
     Responder,
 };
 
-use crate::AppDataInner;
+use crate::{model::dto::ConnectToMapQueryParams, AppDataInner};
 
 /// Create a new SSE client.
-#[get("/{user_id}")]
-pub async fn create_sse_client(path: Path<String>, state: Data<AppDataInner>) -> impl Responder {
-    state.broadcaster.new_client(path.to_string()).await
+#[get("")]
+pub async fn connect_to_map(
+    query: Query<ConnectToMapQueryParams>,
+    state: Data<AppDataInner>,
+) -> impl Responder {
+    let query = query.into_inner();
+    state
+        .broadcaster
+        .new_client(query.map_id, query.user_id)
+        .await
 }
