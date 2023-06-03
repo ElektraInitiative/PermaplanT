@@ -24,7 +24,7 @@ pub async fn find(
 ) -> Result<Page<PlantsSummaryDto>, ServiceError> {
     // Empty search queries should be treated like nonexistent queries.
     let mut search_query: Option<String> = search_parameters.name;
-    if search_query == Some("".to_string()) {
+    if search_query == Some(String::new()) {
         search_query = None;
     }
 
