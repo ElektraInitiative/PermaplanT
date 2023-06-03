@@ -37,7 +37,7 @@ repos:
           - scss
           - markdown
         additional_dependencies:
-          - prettier@2.8.7
+          - prettier@2.8.8
           - prettier-plugin-tailwindcss@0.2.1
           - "@trivago/prettier-plugin-sort-imports"
   - repo: https://github.com/pre-commit/mirrors-eslint
