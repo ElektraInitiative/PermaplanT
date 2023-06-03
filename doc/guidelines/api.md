@@ -10,25 +10,66 @@ We exclusively use:
 - DELETE to remove resources.
 
 Both PUT and PATCH should be implemented idempotent.
-Doing the same API calls again must be a NOP.
+I.e., doing the same API calls again must be a NOP.
 
 ## Endpoints
 
 The endpoint paths use:
 
 - hierarchical structure
-- paths below /api
 - nouns instead of verbs
 - only plural (exception: config)
-- all endpoints expect config need authorization
+- all endpoints need authorization (exception: config)
+- all paths below `/api`
+- layer-specific paths below `/layers/<name of layer>/` e.g. `/layers/plants/plantings`
 
 ## Parameters
 
-- We use the parameter `page` (type integer) for pagination.
 - Search should have its own endpoint (no parameter needed)
+- We use the parameter `page` and `per_page` (type integer) for pagination.
 - Currently we don't use filtering or sorting.
+- If in doubt, leave it out: keep parameters minimal.
 
 ## Versioning
 
 The frontend is the only user, so we only need minimal API versioning.
 The frontend only need to know if a reload is needed.
+
+## Documentation
+
+Documentation of APIs is done via `utopia`:
+
+- [utoipa::path](https://docs.rs/utoipa/latest/utoipa/attr.path.html#actix_extras-support-for-actix-web) must be present for every endpoint e.g. `#[get(...)]`
+- all possible responses should be documented
+  - specific [2xx codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#successful_responses), e.g., we use `201 Created` for successful `POST` requests
+  - all ways client could behave wrongly¹ using [4xx error codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses)
+
+¹ i.e., how the API could be wrongly used (preconditions not met etc.)
+
+Example:
+
+```rust
+#[utoipa::path(
+    context_path = "/api/maps",
+    responses(
+        (status = 200, description = "Fetch a map by id", body = MapDto)
+    ),
+)]
+```
+
+## Security
+
+All endpoints except of `/api/config` must use Keycloak's jsonwebtoken and indicate so using:
+
+```rust
+#[utoipa::path(
+    security(
+        ("oauth2" = [])
+    )
+)]
+```
+
+## Notes
+
+- [Swagger Best Practices](https://swagger.io/resources/articles/best-practices-in-api-design/)
+- [RFC](https://datatracker.ietf.org/doc/html/rfc7231)
