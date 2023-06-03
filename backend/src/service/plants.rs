@@ -26,7 +26,7 @@ pub async fn find(
     let result = match &search_parameters.name {
         // Empty search queries should be treated like nonexistent queries.
         Some(query) if !query.is_empty() => {
-            Plants::search(&query, page_parameters, &mut conn).await?
+            Plants::search(query, page_parameters, &mut conn).await?
         }
         _ => Plants::find_any(page_parameters, &mut conn).await?,
     };
