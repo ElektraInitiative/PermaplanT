@@ -40,7 +40,7 @@ impl Plants {
         // settings (0.3).
         let set_similarity_threshold = diesel::sql_query("SET pg_trgm.similarity_threshold=0.1");
         debug!("{}", debug_query::<Pg, _>(&set_similarity_threshold));
-        let _ = set_similarity_threshold.execute(conn).await;
+        let _ = set_similarity_threshold.execute(conn).await?;
 
         let query = plants::table
             .select((
