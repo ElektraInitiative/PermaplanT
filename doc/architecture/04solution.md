@@ -35,14 +35,13 @@ Undo/redo is client-specific so a user can only undo their own changes.
 The undo/redo functionality is implemented by means of an inverse (opposite) action.
 For this to work the actions have to exactly encompass the state they are mutating.
 
-E.g. a movement action should only have the new coordinates, and an identifier as payload.
-TODO @Bushuo: what is the identifier for?
+E.g. a movement action should only have the new coordinates, and an uuid as payload.
 
 ```ts
 type MovementAction {
   type: 'MOVEMENT_ACTION';
   payload: {
-    id: string;
+    uuid: string;
     x: number;
     y: number;
   };
