@@ -35,6 +35,10 @@ The endpoint paths use:
 The frontend is the only user, so we only need minimal API versioning.
 The frontend only need to know if a reload is needed.
 
+## Files
+
+We use utility functions to access files in Nextcloud.
+
 ## Documentation
 
 Documentation of APIs is done via `utopia`:
@@ -69,7 +73,9 @@ All endpoints except of `/api/config` must use Keycloak's jsonwebtoken and indic
 )]
 ```
 
-## Notes
+## Further Readings
 
-- [Swagger Best Practices](https://swagger.io/resources/articles/best-practices-in-api-design/)
 - [RFC](https://datatracker.ietf.org/doc/html/rfc7231)
+- [Swagger Best Practices](https://swagger.io/resources/articles/best-practices-in-api-design/)
+- [Microsoft Best Practices](https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design)
+- [OpenAPI](https://spec.openapis.org/oas/latest.html)
