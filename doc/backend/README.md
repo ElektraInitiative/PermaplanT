@@ -3,7 +3,7 @@
 ## Requirements
 
 - Rust 1.67.1 or later ([Installation guide](../development_setup.md))
-- [PostgreSQL](https://www.postgresql.org/download/) version 13 or later
+- [PostgreSQL](https://www.postgresql.org/download/) version 13 with PostGIS 3.1.1
 - libpq-dev
 - libssl-dev
 - pkg-config

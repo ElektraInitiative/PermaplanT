@@ -30,10 +30,10 @@ A more in depth explanation about Postman and `OAuth 2.0` can be found in the [P
 ## Using Curl
 
 The following request should work without problems:  
-`curl 'http://localhost:8080/api/config'`
+`curl 'http://localhost:8080/api/config' -f`
 
 The following request should fail:  
-`curl 'http://localhost:8080/api/seeds'`
+`curl 'http://localhost:8080/api/seeds' -f`
 
 We need to obtain an access token before we are able to make requests to secured endpoints via curl.  
 We can do this using the [Resouce Owner Password Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow):
@@ -53,7 +53,7 @@ Copy the access token.
 You can now make the request like the following:  
 `curl 'http://localhost:8080/api/seeds' -H "authorization: Bearer {access_token}"`
 
-Note that the token is only valid for 5 minutes after which you have to refresh it.
+Note that the token is only valid for 5 minutes after which you have to refresh it with the same curl command again.
 
 ## Other ways
 
