@@ -11,14 +11,17 @@ Nextcloud is used to connect users, groups and gardens.
 
 The most important chapters to read are:
 
-- [1 Goals](./01goals.md)
-- [2 Constraints](./02constraints.md)
-- [3 Context](./03context.md)
-- [4 Solution Strategy](./04solution.md)
-- [5 Building Block View](./05building.md)
-- [6 Runtime View](./06runtime.md)
-- [9 Architectural Decisions](../decisions)
-- [10 Quality Requirements](./10quality.md)
-- [12 Glossary](./12glossary.md)
+1.  [Goals](./01goals.md) and [Use Cases (Chapter)](../usecases)
+2.  [Constraints](./02constraints.md)
+3.  [Context](./03context.md)
+4.  [Solution Strategy](./04solution.md)
+5.  [Building Block View](./05building.md)
+6.  [Runtime View](./06runtime.md)
+7.  [Deployment](./07deployment.md)
+8.  [Crosscutting Concepts Guidelines (Chapter)](../guidelines)
+9.  [Architectural Decisions (Chapter](../decisions)
+10. [Quality](./10quality.md)
+11. [Risks and technical debt](./11risks.md)
+12. [Glossary](./12glossary.md)
 
 These markdown files document the architecture of PermaplanT according to arc42.
