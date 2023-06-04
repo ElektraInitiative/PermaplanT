@@ -26,5 +26,5 @@
 
 ## Legal Risks
 
-- copyright on plant data
+- copyright on plant data  
   _Mitigation:_ asked for permissions
