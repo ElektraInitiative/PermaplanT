@@ -10,10 +10,7 @@
 
 ## Additional Documentation
 
-To view an interactive API documentation go to <https://www.permaplant.net/doc/api/swagger/ui/>.  
-If you have the backend running locally you can also visit <http://localhost:8080/doc/api/swagger/ui/>.
-
-Alternatively there is a [OpenAPI specification](https://spec.openapis.org/oas/latest.html) in json format at <https://www.permaplant.net/doc/api/openapi.json>.
+Details about the API documentation can be found [here](03api_documentation.md).
 
 To view code documentation run the following in the `backend/` folder:
 

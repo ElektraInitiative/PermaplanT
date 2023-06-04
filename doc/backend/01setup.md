@@ -62,13 +62,7 @@ cargo run
 
 ## Test server using Swagger
 
-- Go to <http://localhost:8080/doc/api/swagger/ui/>.  
-  If you try to execute a request (apart from the config endpoint) it should return error 401.
-- Click `Authorize`.
-
-- Use the `authorizationCode` auth flow.
-- Enter client_id `swagger-ui` (client_secret is empty) and click `Authorize`.
-- Enter your user credentials.
-- You should now be able to execute a request in Swagger.
+Go to <http://localhost:8080/doc/api/swagger/ui/>.  
+Now follow the steps described in the [API documentation page](03api_documentation.md#executing-requests).
 
 You can find other ways to make requests by following [How to obtain access tokens](./02obtain_access_tokens.md).
