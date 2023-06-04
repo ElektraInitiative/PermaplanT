@@ -23,7 +23,10 @@ pub async fn find(
     pool: &Data<Pool>,
 ) -> Result<Page<PlantsSummaryDto>, ServiceError> {
     let mut conn = pool.get().await?;
-    let result = Plants::find(search_parameters, page_parameters, &mut conn).await?;
+    let result = match search_parameters.name {
+        Some(search_query) => Plants::search(&search_query, page_parameters, &mut conn).await?,
+        None => Plants::find_any(page_parameters, &mut conn).await?,
+    };
     Ok(result)
 }
 

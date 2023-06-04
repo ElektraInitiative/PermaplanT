@@ -270,7 +270,7 @@ const BaseLayerConfigurator = ({ onSubmit }: BaseLayerConfiguratorProps) => {
       </div>
       <div className="absolute left-0 mt-2">
         <BaseStage onMouseMove={onBaseStageMouseMove} onClick={onBaseStageClick}>
-          <BaseLayer imageUrl={imageUrl} rotation={rotation} pixels_per_meter={scale}></BaseLayer>
+          <BaseLayer opacity={1} visible={true} imageURL={imageUrl} rotation={rotation} pixels_per_meter={scale}></BaseLayer>
           <Layer listening={false}>
             <Line points={measureLinePoints} stroke={'#ff0000'} lineWidth={10} lineCap="square" />
           </Layer>

@@ -1,4 +1,5 @@
 import type {
+  BaseLayerUpdateAction,
   MapAction,
   ObjectAddAction,
   ObjectState,
@@ -30,6 +31,13 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
       }),
       {} as TrackedLayers,
     ),
+    Base: {
+      index: "Base",
+      objects: [],
+      scale: 10,
+      rotation: 0,
+      imageURL: ''
+    }
   },
 };
 
@@ -81,6 +89,15 @@ function applyActionToState(action: MapAction, state: TrackedMapSlice): TrackedM
         history: [...state.history.slice(0, state.step), action],
         step: state.step + 1,
         trackedState: handleUpdateObjectAction(state.trackedState, action),
+        canUndo: true,
+      };
+
+    case 'BASE_LAYER_UPDATE_ACTION':
+      return {
+        ...state,
+        history: [...state.history.slice(0, state.step), action],
+        step: state.step + 1,
+        trackedState: handleUpdateBaseLayerAction(state.trackedState, action),
         canUndo: true,
       };
 
@@ -158,6 +175,7 @@ function handleUpdateObjectAction(
     },
   };
 }
+
 function reduceObjectUpdatesToLayers(
   layers: TrackedLayers,
   objectUpdate: ObjectState,
@@ -179,6 +197,24 @@ function reduceObjectUpdatesToLayers(
   };
 }
 
+function handleUpdateBaseLayerAction(
+    state: TrackedMapState,
+    action: BaseLayerUpdateAction,
+): TrackedMapState {
+  return {
+    ...state,
+    layers: {
+      ...state.layers,
+      'Base': {
+        ...state.layers.Base,
+        rotation: action.payload.rotation,
+        scale: action.payload.scale,
+        imageURL: action.payload.imageURL,
+      }
+    }
+  }
+}
+
 /**
  * given a history of actions, reduce it into a single state, that is the sum of all actions
  */
@@ -191,6 +227,9 @@ function reduceHistory(history: TrackedAction[]): TrackedMapState {
       case 'OBJECT_UPDATE_POSITION':
       case 'OBJECT_UPDATE_TRANSFORM':
         return handleUpdateObjectAction(state, action);
+
+      case 'BASE_LAYER_UPDATE_ACTION':
+        return handleUpdateBaseLayerAction(state, action);
 
       default:
         return state;

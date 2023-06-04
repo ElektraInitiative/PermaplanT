@@ -8,10 +8,8 @@ use utoipa::{IntoParams, ToSchema};
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
-pub mod base_layers_impl;
 pub mod map_impl;
 pub mod map_version_impl;
-pub mod new_base_layers_impl;
 pub mod new_map_impl;
 pub mod new_map_version_impl;
 pub mod new_seed_impl;
@@ -194,31 +192,6 @@ pub struct Page<T> {
     pub total_pages: i32,
 }
 
-/// Contains all data that is necessary to display a maps base layer.
-#[typeshare]
-#[derive(Debug, Serialize, PartialEq, Deserialize, ToSchema)]
-pub struct BaseLayerDto {
-    /// Primary key, is incremented for each new layer.
-    pub id: i32,
-    /// Indicates where the image is stored in Nextcloud.
-    pub base_image_url: String,
-    /// Conversion factor from image pixels to real world distances.
-    pub pixels_per_meter: f64,
-    /// the amount of rotation required to align the base image with geographical north.
-    pub north_orientation_degrees: f64,
-}
-
-/// Information for storing a new base layer
-#[typeshare]
-#[derive(Debug, Serialize, PartialEq, Deserialize, ToSchema)]
-pub struct NewBaseLayerDto {
-    /// Indicates where the image is stored in Nextcloud.
-    pub base_image_url: String,
-    /// Conversion factor from image pixels to real world distances.
-    pub pixels_per_meter: f64,
-    /// the amount of rotation required to align the base image with geographical north.
-    pub north_orientation_degrees: f64,
-}
 /// The whole information of a map.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]

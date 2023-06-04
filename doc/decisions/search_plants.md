@@ -15,11 +15,14 @@ Partial matches of the following fields should be returned.
 2. Exact matches should be ranked high.
 3. The users language preference should be taken into account when ranking.
 4. Matches in names should have a higher rank than those in edible uses.
+5. We don't want to add additional databases like Elasticsearch or [Meilisearch](https://www.meilisearch.com/).
 
 ## Assumptions
 
 1. Postgres will perform reasonable with these search queries.
 2. Using postgres or even extension specific functions with diesel is possible and maintainable.
+3. The plants table stays relatively small (it won't reach millions of rows).
+4. The query entered in the search typically has 1-2 words with no more than 4 words.
 
 ## Solutions
 
@@ -90,11 +93,30 @@ Cons:
 
 ## Decision
 
+Given the constrains and assumptions Partial Match with String Similarity (pg_trgm) seems to be the best option for us.
+
 ## Rationale
+
+As there is a relatively small number of rows and search terms performance isn't that much of an issue.  
+As of writing this pg_trgm executes almost instantly in a 'search as you type' fashion.
+
+The ability to handle spelling mistakes and loose matches is also great for us as plant names can be somewhat complicated to spell.
+
+Generally it is seems to fit best for our usecase.
+Something like elasticsearch could cover the usecase better, however it adds a lot of complexity.
 
 ## Implications
 
--
+The following points are difficult if not impossible to implement using PostgreSQL.  
+Before trying them it should be evaluated if a different database like elasticsearch might be a better fit for this usecase.
+
+- Other columns can be matched with extra syntax (e.g. environmental fit or ecological value).
+  - This can be quite difficult when parsing the query yourself as you would have to 'invent' a query language.
+  - As an example: `amarena cherry water_requirement = dry` might work as you know that `water_requirement = dry` those belong together.
+  - However: `amarena cherry alternate_name = Pacific silver fir` doesn't work as it isn't clear which parts of `Pacific silver fir` belong to `alternate_name` an which parts don't. This is a somewhat cherry picked example, but there might be other problem like that we have to consider.
+  - Apart from that it isn't simple to add new where clauses to a query as we would have to parse the users input and at the same time prevent SQL injections (which isn't trivial).
+- Search in hierarchy is difficult
+- Search accuracy (stop words, stemming, etc.)
 
 ## Related Decisions
 
