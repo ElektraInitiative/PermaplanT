@@ -194,16 +194,12 @@ export const Map = () => {
         ></Toolbar>
       </section>
       <BaseStage>
-<<<<<<< HEAD
-       <PlantsLayer
-=======
         <BaseLayer opacity={untrackedState.layers.Base.opacity}
                    visible={untrackedState.layers.Base.visible}
                    imageURL={trackedState.layers.Base.imageURL}
                    pixels_per_meter={trackedState.layers.Base.scale}
                    rotation={trackedState.layers.Base.rotation} />
         <PlantsLayer
->>>>>>> 50aa271afdf29d53ac89334242b9b198e4915e4d
           visible={untrackedState.layers.Plant.visible}
           opacity={untrackedState.layers.Plant.opacity}
         >
