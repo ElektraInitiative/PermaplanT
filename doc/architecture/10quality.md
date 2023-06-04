@@ -1,4 +1,4 @@
-# Quality Requirements
+# Quality
 
 ## Backend Tests
 

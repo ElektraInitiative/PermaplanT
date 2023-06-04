@@ -42,13 +42,13 @@ Documentation of APIs is done via `utopia`:
 - [utoipa::path](https://docs.rs/utoipa/latest/utoipa/attr.path.html#actix_extras-support-for-actix-web) must be present for every endpoint e.g. `#[get(...)]`
 - all possible responses should be documented
   - specific [2xx codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#successful_responses), e.g., we use `201 Created` for successful `POST` requests
-  - all ways client could behave wrongly¹ using [4xx error codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses)
+  - all ways client could behave wrongly[^note] using [4xx error codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses)
 
-¹ i.e., how the API could be wrongly used (preconditions not met etc.)
+[^note] i.e., how the API could be wrongly used (preconditions not met etc.)
 
 Example:
 
-```rust
+```rust,ignore
 #[utoipa::path(
     context_path = "/api/maps",
     responses(
@@ -61,7 +61,7 @@ Example:
 
 All endpoints except of `/api/config` must use Keycloak's jsonwebtoken and indicate so using:
 
-```rust
+```rust,ignore
 #[utoipa::path(
     security(
         ("oauth2" = [])

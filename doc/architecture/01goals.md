@@ -43,9 +43,9 @@ To achieve these goals the app provides, e.g.:
 In all layers --- except for base --- past, current or future entities might be intermixed.
 While editing any layer other layers are (transparently) displayed or hidden.
 
-- Base¹ (import photo or site plan as base image, define borders, scale, orientation)
+- Base[^note] (import photo or site plan as base image, define borders, scale, orientation)
 - Terrain
-- Landscape¹ (height&sketch of permanent structures like walls, ponds, constructions, beds)
+- Landscape[^note] (height&sketch of permanent structures like walls, ponds, constructions, beds)
 - Labels (allows to put text labels, e.g. names for beds)
 - Trees (taxa, stem position&height&sketch&type of forest, trees, hedge, bushes etc.)
 - Wind (more or less windy places, wind orientation)
@@ -56,12 +56,16 @@ While editing any layer other layers are (transparently) displayed or hidden.
 - Paths (ways, fences, stepping stones)
 - Habitats (taxa, areas for (wild)life, nesting aids, heaps of stones or leaves, perches)
 - Zones (of different visitation frequency)
-- Plants¹ (taxa, individual and fields of plants)
-- Warnings¹
+- Plants[^note] (taxa, individual and fields of plants)
+- Warnings[^note]
 - Photos (sharing of photo with GPS coordinates and a Nextcloud chats per photo)
 - Fertilization
 - Watering
 - Todos (creates Deck cards in Nextcloud)
 - Drawing (for anything else)
 
-¹ Essential (most used) layers: are more prominently shown than others.
+[^note] Essential (most used) layers: are more prominently shown than others.
+
+## Use Cases
+
+For more details about each requirement, continue reading [Use Cases (Chapter)](../usecases).
