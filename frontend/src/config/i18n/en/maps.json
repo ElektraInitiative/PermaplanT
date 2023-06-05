@@ -15,6 +15,6 @@
         "failure": "Something went wrong, please try again later!",
         "private_label": "private",
         "description_placeholer": "Description",
-        "location_selected": "Your selected location"
+        "location_selected": "Your selected location."
     }
 }

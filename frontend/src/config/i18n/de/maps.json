@@ -15,6 +15,6 @@
         "failure": "Etwas ist schief gelaufen, bitte versuchen Sie es später erneut!",
         "private_label": "privat",
         "description_placeholer": "Beschreibung",
-        "location_selected": "Dein gewählter Standort!"
+        "location_selected": "Dein gewählter Standort."
     }
 }
