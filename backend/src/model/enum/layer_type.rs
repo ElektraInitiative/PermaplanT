@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::ToSchema;
 
+/// Enum for all possible layer types.
 #[typeshare]
 #[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
 #[ExistingTypePath = "crate::schema::sql_types::LayerType"]

@@ -49,13 +49,13 @@ pub async fn create(new_map: NewMapDto, pool: &Data<Pool>) -> Result<MapDto, Ser
     let mut conn = pool.get().await?;
     let layer_types: [String; 2] = ["Base".to_owned(), "Plants".to_owned()]; // Add new standard layers here
     let result = Map::create(new_map, &mut conn).await?;
-    for layer in layer_types.iter() {
-        let mut name = layer.to_owned();
+    for layer in &layer_types {
+        let mut name = layer.clone();
         name.push_str(" Layer");
         Layer::create(
             NewLayerDto {
                 map_id: result.id,
-                type_: LayerType::from_str(&layer).unwrap(),
+                type_: LayerType::from_str(&layer).expect("Incorrect layer type!"),
                 name,
                 is_alternative: false,
             },
