@@ -13,8 +13,8 @@ interface MapCreationAttributes {
   is_private: boolean;
   description: string;
   location: {
-    lat: number;
-    lng: number;
+    latitude: number;
+    longitude: number;
   };
 }
 
@@ -24,8 +24,8 @@ export default function MapCreateForm() {
     is_private: false,
     description: '',
     location: {
-      lat: NaN,
-      lng: NaN,
+      latitude: NaN,
+      longitude: NaN,
     },
   };
 
@@ -54,7 +54,7 @@ export default function MapCreateForm() {
       owner_id: 1,
       is_private: mapInput.is_private,
       description: mapInput.description,
-      location: !Number.isNaN(mapInput.location.lat) ? mapInput.location : undefined,
+      location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
     };
     createMap(newMap);
     navigate('/maps');
@@ -144,8 +144,8 @@ function MapEventListener({ mapState, setMapState }: MapEventListenerProps) {
         is_private: mapState.is_private,
         description: mapState.description,
         location: {
-          lat: e.latlng.lat,
-          lng: e.latlng.lng,
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
         },
       });
     },
@@ -155,8 +155,8 @@ function MapEventListener({ mapState, setMapState }: MapEventListenerProps) {
         is_private: mapState.is_private,
         description: mapState.description,
         location: {
-          lat: NaN,
-          lng: NaN,
+          latitude: NaN,
+          longitude: NaN,
         },
       });
     },
