@@ -99,7 +99,7 @@ pub struct PlantLayerObjectDto {
     pub width: i32,
     /// The height of the plant on the map.
     pub height: i32,
-    /// The rotation of the plant on the map.
+    /// The rotation in degrees (0-360) of the plant on the map.
     pub rotation: f32,
     /// The x scale of the plant on the map.
     #[serde(rename = "scaleX")]
