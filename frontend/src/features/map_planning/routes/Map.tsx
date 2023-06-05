@@ -10,6 +10,7 @@ import { LayerName } from '../store/MapStoreTypes';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
@@ -26,6 +27,8 @@ import { Rect } from 'react-konva';
  * Otherwise they cannot be moved.
  */
 export const Map = () => {
+  const nextcloudClient = createNextcloudWebDavClient();
+
   const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);
   const dispatch = useMapStore((map) => map.dispatch);
@@ -82,17 +85,16 @@ export const Map = () => {
               })
             }
             onImageURLChange={(event) => {
-                console.log(event.target.value);
-                dispatch({
-                  type: 'BASE_LAYER_UPDATE_ACTION',
-                  payload: {
-                    rotation: trackedState.layers.Base.rotation,
-                    scale: trackedState.layers.Base.scale,
-                    imageURL: event.target.value,
-                  },
-                })
-              }
-            }
+              console.log(event.target.value);
+              dispatch({
+                type: 'BASE_LAYER_UPDATE_ACTION',
+                payload: {
+                  rotation: trackedState.layers.Base.rotation,
+                  scale: trackedState.layers.Base.scale,
+                  imageURL: event.target.value,
+                },
+              });
+            }}
           />
         ),
       },
@@ -194,11 +196,14 @@ export const Map = () => {
         ></Toolbar>
       </section>
       <BaseStage>
-        <BaseLayer opacity={untrackedState.layers.Base.opacity}
-                   visible={untrackedState.layers.Base.visible}
-                   imageURL={trackedState.layers.Base.imageURL}
-                   pixels_per_meter={trackedState.layers.Base.scale}
-                   rotation={trackedState.layers.Base.rotation} />
+        <BaseLayer
+          nextcloudClient={nextcloudClient}
+          opacity={untrackedState.layers.Base.opacity}
+          visible={untrackedState.layers.Base.visible}
+          nextcloudImagePath={trackedState.layers.Base.imageURL}
+          pixels_per_meter={trackedState.layers.Base.scale}
+          rotation={trackedState.layers.Base.rotation}
+        />
         <PlantsLayer
           visible={untrackedState.layers.Plant.visible}
           opacity={untrackedState.layers.Plant.opacity}
