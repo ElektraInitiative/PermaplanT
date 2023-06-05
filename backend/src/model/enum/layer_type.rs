@@ -1,6 +1,6 @@
 //! [`LayerType`] enum.
 
-use std::str::FromStr;
+use core::fmt;
 
 use diesel_derive_enum::DbEnum;
 use serde::{Deserialize, Serialize};
@@ -9,7 +9,7 @@ use utoipa::ToSchema;
 
 /// Enum for all possible layer types.
 #[typeshare]
-#[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
+#[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema, Clone, Copy)]
 #[ExistingTypePath = "crate::schema::sql_types::LayerType"]
 pub enum LayerType {
     /// Identifier for Base Layer.
@@ -94,32 +94,29 @@ pub enum LayerType {
     Infrastructure,
 }
 
-impl FromStr for LayerType {
-    type Err = ();
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "Base" => Ok(Self::Base),
-            "Drawing" => Ok(Self::Drawing),
-            "Fertilization" => Ok(Self::Fertilization),
-            "Habitats" => Ok(Self::Habitats),
-            "Hydrology" => Ok(Self::Hydrology),
-            "Infrastructure" => Ok(Self::Infrastructure),
-            "Label" => Ok(Self::Label),
-            "Landscape" => Ok(Self::Landscape),
-            "Paths" => Ok(Self::Paths),
-            "Photo" => Ok(Self::Photo),
-            "Plants" => Ok(Self::Plants),
-            "Shade" => Ok(Self::Shade),
-            "Soil" => Ok(Self::Soil),
-            "Terrain" => Ok(Self::Terrain),
-            "Todo" => Ok(Self::Todo),
-            "Trees" => Ok(Self::Trees),
-            "Warnings" => Ok(Self::Warnings),
-            "Watering" => Ok(Self::Watering),
-            "Winds" => Ok(Self::Winds),
-            "Zones" => Ok(Self::Zones),
-            _ => Err(()),
+impl fmt::Display for LayerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Base => write!(f, "Base"),
+            Self::Soil => write!(f, "Soil"),
+            Self::Todo => write!(f, "Todo"),
+            Self::Label => write!(f, "Label"),
+            Self::Paths => write!(f, "Paths"),
+            Self::Photo => write!(f, "Photo"),
+            Self::Shade => write!(f, "Shade"),
+            Self::Trees => write!(f, "Trees"),
+            Self::Winds => write!(f, "Winds"),
+            Self::Zones => write!(f, "Zones"),
+            Self::Plants => write!(f, "Plants"),
+            Self::Drawing => write!(f, "Drawing"),
+            Self::Terrain => write!(f, "Terrain"),
+            Self::Habitats => write!(f, "Habitats"),
+            Self::Warnings => write!(f, "Warnings"),
+            Self::Watering => write!(f, "Watering"),
+            Self::Landscape => write!(f, "Landscape"),
+            Self::Hydrology => write!(f, "Hydrology"),
+            Self::Fertilization => write!(f, "Fertilization"),
+            Self::Infrastructure => write!(f, "Infrastructure"),
         }
     }
 }

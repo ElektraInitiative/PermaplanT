@@ -1,12 +1,9 @@
 //! Service layer for maps.
 
-use std::str::FromStr;
-
 use actix_web::web::Data;
 
 use crate::model::dto::{MapSearchParameters, Page};
 use crate::model::dto::{NewLayerDto, PageParameters};
-use crate::model::entity::Layer;
 use crate::model::r#enum::layer_type::LayerType;
 use crate::{
     db::connection::Pool,
@@ -16,6 +13,8 @@ use crate::{
         entity::Map,
     },
 };
+
+use super::layer::create as layer_create;
 
 /// Search maps from the database.
 ///
@@ -47,21 +46,16 @@ pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<MapDto, ServiceErr
 /// If the connection to the database could not be established.
 pub async fn create(new_map: NewMapDto, pool: &Data<Pool>) -> Result<MapDto, ServiceError> {
     let mut conn = pool.get().await?;
-    let layer_types: [String; 2] = ["Base".to_owned(), "Plants".to_owned()]; // Add new standard layers here
+    let layer_types: [LayerType; 2] = [LayerType::Base, LayerType::Plants]; // Add new standard layers here
     let result = Map::create(new_map, &mut conn).await?;
     for layer in &layer_types {
-        let mut name = layer.clone();
-        name.push_str(" Layer");
-        Layer::create(
-            NewLayerDto {
-                map_id: result.id,
-                type_: LayerType::from_str(&layer).expect("Incorrect layer type!"),
-                name,
-                is_alternative: false,
-            },
-            &mut conn,
-        )
-        .await?;
+        let new_layer = NewLayerDto {
+            map_id: result.id,
+            type_: *layer,
+            name: format!("{layer} Layer"),
+            is_alternative: false,
+        };
+        layer_create(new_layer, pool).await?;
     }
     Ok(result)
 }
