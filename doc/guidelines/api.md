@@ -21,7 +21,7 @@ The endpoint paths use:
 - only plural (exception: config)
 - all endpoints need authorization (exception: config)
 - all paths below `/api`
-- layer-specific paths below `/layers/<name of layer>/` e.g. `/layers/plants/plantings`
+- layer-specific paths below `/maps/<map_id>/layers/<name of layer>/` e.g. `/maps/<map_id>/layers/plants/plantings`
 
 ## Parameters
 
