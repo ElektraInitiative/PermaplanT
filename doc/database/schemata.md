@@ -157,8 +157,7 @@ ingredientLists {
 }
 
 ingredients {
-  INT needed "NOT NULL"
-  INT gathered
+  BOOLEAN is_fulfilled "NOT NULL"
 }
 
 ingredientLists }o--|| users : ""
@@ -176,10 +175,10 @@ events {
 
 events }o--|| maps : ""
 
-favourites {}
+favorites {}
 
-favourites }o--|| maps : ""
-favourites }o--|| plant_detail : ""
+favorites }o--|| maps : ""
+favorites }o--|| plant_detail : ""
 
 ```
 
@@ -315,12 +314,11 @@ favourites }o--|| plant_detail : ""
 
 Many-to-many table to store relations between plants and ingredient lists.
 
-| **_Column name_** | **_Example_** | **_Description_**                                    |
-| :---------------- | :------------ | :--------------------------------------------------- |
-| **list_id**       | 1             | id of the ingredient list                            |
-| **plant_id**      | 1             | id of the plant used as an ingredient                |
-| **needed**        | 1             | the amount of this plant that is needed for the list |
-| **gathered**      | 0             | the amount of this plant that was already gathered   |
+| **_Column name_** | **_Example_** | **_Description_**                             |
+| :---------------- | :------------ | :-------------------------------------------- |
+| **list_id**       | 1             | id of the ingredient list                     |
+| **plant_id**      | 1             | id of the plant used as an ingredient         |
+| **is_fulfilled**  | true          | if enough of this ingredient can be harvested |
 
 ## `Events`
 
@@ -333,7 +331,7 @@ Many-to-many table to store relations between plants and ingredient lists.
 | **description**   | NULL                 | description of the event details                                   |
 | **event_date**    | 2023-04-15           | the date the event is taking place on                              |
 
-## `Favourites`
+## `Favorites`
 
 Many-to-many table to store map-specific favourites.
 
