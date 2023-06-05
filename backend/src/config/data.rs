@@ -22,7 +22,7 @@ pub struct AppDataInner {
 #[must_use]
 pub fn init(database_url: &str) -> Data<AppDataInner> {
     let pool = connection::init_pool(database_url);
-    let broadcaster = Broadcaster::create();
+    let broadcaster = Broadcaster::new();
 
     Data::new(AppDataInner { pool, broadcaster })
 }

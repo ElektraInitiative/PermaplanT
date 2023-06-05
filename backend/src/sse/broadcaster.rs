@@ -1,7 +1,7 @@
 //! SSE broadcaster.
 
 use actix_web_lab::sse::{self, ChannelStream, Sse};
-use futures_util::future;
+use futures_util::{future::ready, stream, StreamExt};
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tokio::{sync::Mutex, time::interval};
 
@@ -30,34 +30,27 @@ pub struct ConnectedClient {
     sender: sse::Sender,
 }
 
+#[derive(Debug, Clone)]
 /// SSE broadcaster.
-pub struct Broadcaster {
-    /// Inner state of SSE broadcaster, guarded by a mutex.
-    inner: Mutex<BroadcasterInner>,
-}
-
+pub struct Broadcaster(Arc<Mutex<BroadcasterInner>>);
 impl Broadcaster {
     /// Constructs new broadcaster and spawns ping loop.
     #[must_use]
-    pub fn create() -> Arc<Self> {
-        let this = Arc::new(Self {
-            inner: Mutex::new(BroadcasterInner {
-                maps: HashMap::new(), // TODO: how can we choose a better initial capacity?
-            }),
-        });
-
-        Self::spawn_ping(Arc::clone(&this));
-        this
+    pub fn new() -> Self {
+        let broadcaster = Broadcaster(Arc::new(Mutex::new(BroadcasterInner {
+            maps: HashMap::new(), // TODO: how can we choose a better initial capacity?
+        })));
+        Self::spawn_ping(broadcaster.clone());
+        broadcaster
     }
 
     /// Pings clients every 10 seconds to see if they are alive and remove them from the broadcast list if not.
-    fn spawn_ping(this: Arc<Self>) {
+    fn spawn_ping(self) {
         actix_web::rt::spawn(async move {
             let mut interval = interval(Duration::from_secs(10));
-
             loop {
                 interval.tick().await;
-                this.remove_stale_clients().await;
+                self.clone().remove_stale_clients().await;
             }
         });
     }
@@ -67,25 +60,25 @@ impl Broadcaster {
     ///       Things to consider:
     ///        - how can we do this without having to iterate over all clients?
     async fn remove_stale_clients(&self) {
-        let mut guard = self.inner.lock().await;
+        let mut guard = self.0.lock().await;
 
         let mut ok_maps = HashMap::with_capacity(guard.maps.capacity());
 
         let old_maps = guard.maps.values();
 
         for map in old_maps {
-            let mut ok_clients = Vec::with_capacity(map.clients.capacity());
-
-            for client in &map.clients {
-                if client
-                    .sender
-                    .send(sse::Event::Comment("ping".into()))
-                    .await
-                    .is_ok()
-                {
-                    ok_clients.push(client.clone());
-                }
-            }
+            let ok_clients = stream::iter(&map.clients)
+                .filter(|client| async {
+                    client
+                        .sender
+                        .send(sse::Event::Comment("ping".into()))
+                        .await
+                        .is_ok()
+                })
+                .map(|client| ready(client.clone()))
+                .buffer_unordered(15)
+                .collect::<Vec<_>>()
+                .await;
 
             if !ok_clients.is_empty() {
                 ok_maps.insert(
@@ -111,7 +104,7 @@ impl Broadcaster {
         user_id: String,
     ) -> Result<Sse<ChannelStream>, Box<dyn std::error::Error>> {
         let (sender, channel_stream) = sse::channel(10);
-        let mut guard = self.inner.lock().await;
+        let mut guard = self.0.lock().await;
 
         let map = guard.maps.entry(map_id).or_insert_with(|| ConnectedMap {
             map_id,
@@ -128,7 +121,7 @@ impl Broadcaster {
         Ok(channel_stream)
     }
 
-    /// Broadcasts `msg` to all clients.
+    /// Broadcasts `msg` to all clients on the same map.
     ///
     /// # Errors
     /// * If serialization of `msg` fails.
@@ -138,17 +131,16 @@ impl Broadcaster {
         msg: T,
     ) -> Result<(), Box<dyn std::error::Error>> {
         let serialized_data = sse::Data::new_json(msg)?;
-        let guard = self.inner.lock().await;
+        let guard = self.0.lock().await;
 
         if let Some(map) = guard.maps.get(&map_id) {
-            let send_futures = map
-                .clients
-                .iter()
-                .map(|client| client.sender.send(serialized_data.clone()));
-
             // try to send to all clients, ignoring failures
             // disconnected clients will get swept up by `remove_stale_clients`
-            let _ = future::join_all(send_futures).await;
+            let _ = stream::iter(&map.clients)
+                .map(|client| client.sender.send(serialized_data.clone()))
+                .buffer_unordered(15)
+                .collect::<Vec<_>>()
+                .await;
         }
 
         Ok(())
