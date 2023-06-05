@@ -117,7 +117,7 @@ pub struct NewPlantingDto {
     pub id: String,
     /// The plant that is planted.
     pub plant_id: i32,
-    /// The the map the plant is placed on.
+    /// The map the plant is placed on.
     pub map_id: i32,
     /// The x coordinate of the position on the map.
     pub x: f32,
