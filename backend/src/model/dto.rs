@@ -84,7 +84,7 @@ pub struct PlantsSummaryDto {
 /// Represents plant planted on a map.
 /// E.g. a user drags a plant from the search results and drops it on the map.
 #[typeshare]
-#[derive(Serialize, Deserialize, ToSchema, Clone)]
+#[derive(Debug, Serialize, Deserialize, ToSchema, Clone)]
 pub struct PlantLayerObjectDto {
     /// The database id of the record. This is a UUID.
     pub id: String,
