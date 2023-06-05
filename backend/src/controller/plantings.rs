@@ -128,7 +128,7 @@ pub async fn create(
             )
             .await;
 
-        if matches!(notified, Ok(())) {
+        if notified.is_ok() {
             return Ok(HttpResponse::Created().json(dto));
         }
     }
@@ -193,7 +193,7 @@ pub async fn update(
                         )
                         .await;
 
-                    if matches!(notified, Ok(())) {
+                    if notified.is_ok() {
                         return Ok(HttpResponse::Ok().json(planting));
                     }
                 }
@@ -210,7 +210,7 @@ pub async fn update(
                         )
                         .await;
 
-                    if matches!(notified, Ok(())) {
+                    if notified.is_ok() {
                         return Ok(HttpResponse::Ok().json(planting));
                     }
                 }
