@@ -22,10 +22,10 @@ use crate::model::dto::{
 };
 use crate::AppDataInner;
 
-/// TODO: REMOVE THIS HACK ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗
+/// FIXME: REMOVE THIS HACK ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗
 static PLANTINGS: RwLock<Vec<PlantLayerObjectDto>> = RwLock::new(vec![]);
 
-/// TODO: REMOVE
+/// FIXME: REMOVE
 #[allow(clippy::expect_used)]
 fn find_planting_by_id(id: &str) -> Option<PlantLayerObjectDto> {
     PLANTINGS
@@ -36,7 +36,7 @@ fn find_planting_by_id(id: &str) -> Option<PlantLayerObjectDto> {
         .cloned()
 }
 
-/// TODO: REMOVE
+/// FIXME: REMOVE
 #[allow(clippy::expect_used)]
 fn replace_planting(planting: PlantLayerObjectDto) {
     let mut plantings = PLANTINGS.write().expect("acquiring write lock failed");
@@ -161,65 +161,64 @@ pub async fn update(
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and updates the record.
-    {
-        if let Some(planting) = find_planting_by_id(&id) {
-            let mut planting = planting.clone();
+    let mut planting =
+        find_planting_by_id(&id).ok_or_else(|| error::ErrorNotFound("Planting not found"))?;
 
-            match (
-                new_plant_json.x,
-                new_plant_json.y,
-                new_plant_json.width,
-                new_plant_json.height,
-                new_plant_json.rotation,
-                new_plant_json.scale_x,
-                new_plant_json.scale_y,
-            ) {
-                (Some(x), Some(y), None, None, Some(rotation), Some(scale_x), Some(scale_y)) => {
-                    planting.x = x;
-                    planting.y = y;
-                    planting.rotation = rotation;
-                    planting.scale_x = scale_x;
-                    planting.scale_y = scale_y;
-                    replace_planting(planting.clone());
+    match *new_plant_json {
+        UpdatePlantingDto {
+            x: Some(x),
+            y: Some(y),
+            rotation: Some(rotation),
+            scale_x: Some(scale_x),
+            scale_y: Some(scale_y),
+            ..
+        } => {
+            planting.x = x;
+            planting.y = y;
+            planting.rotation = rotation;
+            planting.scale_x = scale_x;
+            planting.scale_y = scale_y;
+            replace_planting(planting.clone());
 
-                    let notified = app_data
-                        .broadcaster
-                        .broadcast(
-                            new_plant_json.map_id,
-                            &TransformPlantActionDto::new(
-                                planting.clone(),
-                                user_info.id.to_string(),
-                            ),
-                        )
-                        .await;
+            let notified = app_data
+                .broadcaster
+                .broadcast(
+                    new_plant_json.map_id,
+                    &TransformPlantActionDto::new(planting.clone(), user_info.id.to_string()),
+                )
+                .await;
 
-                    if notified.is_ok() {
-                        return Ok(HttpResponse::Ok().json(planting));
-                    }
-                }
-                (Some(x), Some(y), None, None, None, None, None) => {
-                    planting.x = x;
-                    planting.y = y;
-                    replace_planting(planting.clone());
-
-                    let notified = app_data
-                        .broadcaster
-                        .broadcast(
-                            new_plant_json.map_id,
-                            &MovePlantActionDto::new(planting.clone(), user_info.id.to_string()),
-                        )
-                        .await;
-
-                    if notified.is_ok() {
-                        return Ok(HttpResponse::Ok().json(planting));
-                    }
-                }
-                _ => {}
+            if notified.is_ok() {
+                return Ok(HttpResponse::Ok().json(planting));
             }
         }
+        UpdatePlantingDto {
+            x: Some(x),
+            y: Some(y),
+            ..
+        } => {
+            planting.x = x;
+            planting.y = y;
+            replace_planting(planting.clone());
+
+            let notified = app_data
+                .broadcaster
+                .broadcast(
+                    new_plant_json.map_id,
+                    &MovePlantActionDto::new(planting.clone(), user_info.id.to_string()),
+                )
+                .await;
+
+            if notified.is_ok() {
+                return Ok(HttpResponse::Ok().json(planting));
+            }
+        }
+        _ => {}
     }
 
-    Err(error::ErrorNotFound("Planting not found"))
+    Err(error::ErrorBadRequest(
+        "Invalid arguments passed for update planting",
+    ))
 }
 
 /// Endpoint for deleting a `Planting`.
