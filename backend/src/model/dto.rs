@@ -255,7 +255,7 @@ pub struct MapDto {
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
-    pub location: Option<LatLng>,
+    pub location: Option<Coordinates>,
 }
 
 /// The information of a map neccessary for its creation.
@@ -287,7 +287,7 @@ pub struct NewMapDto {
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
-    pub location: Option<LatLng>,
+    pub location: Option<Coordinates>,
 }
 
 /// Query parameters for searching maps.
@@ -298,11 +298,21 @@ pub struct MapSearchParameters {
     pub is_inactive: Option<bool>,
     /// The owner of the map.
     pub owner_id: Option<i32>,
-    /// Wheter or not the map is private.
+    /// Whether or not the map is private.
     pub is_private: Option<bool>,
 }
 
-/// The whole information of a layer.
+/// Support struct for transmitting latitude/longitude coordinates.
+#[typeshare]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Coordinates {
+    /// Latitude of the point.
+    pub latitude: f64,
+    /// Longitude of the point.
+    pub longitude: f64,
+}
+
+/// The whole information of a map version.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct LayerDto {

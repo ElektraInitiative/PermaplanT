@@ -23,8 +23,8 @@ impl From<NewMapDto> for NewMap {
             description: new_map.description,
             location: match new_map.location {
                 Some(latlng) => Some(Point {
-                    x: latlng.lng,
-                    y: latlng.lat,
+                    x: latlng.longitude,
+                    y: latlng.latitude,
                     srid: Some(4326),
                 }),
                 None => None,
