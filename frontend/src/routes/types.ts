@@ -8,7 +8,6 @@ enum Pages {
   SeedDetails,
   LandingPage,
   Map,
-  CreateMap,
   Maps,
   Webdav,
 }

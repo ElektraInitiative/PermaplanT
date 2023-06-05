@@ -58,7 +58,7 @@ export const LAYER_NAMES = [
 /**
  * Utility array of all map layers without any speical attributes.
  */
-export const GENERIC_LAYER_NAMES = LAYER_NAMES.filter(name => name === 'Base');
+export const GENERIC_LAYER_NAMES = LAYER_NAMES.filter((name) => name === 'Base');
 
 /**
  * A union type of the map layer's names.
@@ -97,7 +97,6 @@ export type TrackedGenericLayerState = {
   objects: ObjectState[];
 };
 
-
 /**
  * Extended state type for base layer.
  * Adds a background image as well as its attributes.
@@ -114,7 +113,7 @@ export type TrackedBaseLayerState = TrackedGenericLayerState & {
   /**
    * Temporary, will be removed after base layer is integrated with Nextcloud.
    */
-  imageURL: string,
+  imageURL: string;
 };
 
 /**
@@ -132,7 +131,7 @@ export type UntrackedLayerState = {
 export type TrackedLayers = {
   [key in GenericLayerName]: TrackedGenericLayerState;
 } & {
-  Base: TrackedBaseLayerState,
+  Base: TrackedBaseLayerState;
 };
 
 /**
@@ -141,7 +140,7 @@ export type TrackedLayers = {
 export type UntrackedLayers = {
   [key in GenericLayerName]: UntrackedLayerState;
 } & {
-  Base: UntrackedLayerState,
+  Base: UntrackedLayerState;
 };
 
 /**
@@ -168,21 +167,21 @@ export type MeasurementState = {
   /**
    * The distance resulting from the last measurement.
    */
-  lastDistance: number,
+  lastDistance: number;
   /**
    * Is set when the user clicks in step NoPointSelected.
    */
-  firstPoint:  [number, number],
+  firstPoint: [number, number];
   /**
    * Is set if the user clicks in step OnePointSelected.
    */
-  secondPoint: [number, number],
+  secondPoint: [number, number];
   /**
    * Will be called once the measurement has completed.
    * @param distance the measured distance.
    */
   callback: (distance: number) => void;
-}
+};
 
 /**
  * The state of the map untracked by the history.
@@ -224,7 +223,7 @@ export type BaseLayerUpdateAction = {
     scale: number;
     imageURL: string;
   };
-}
+};
 
 /**
  * An action for undoing the previous action in the history.

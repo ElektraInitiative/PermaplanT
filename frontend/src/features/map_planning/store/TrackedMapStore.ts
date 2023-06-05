@@ -32,12 +32,12 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
       {} as TrackedLayers,
     ),
     Base: {
-      index: "Base",
+      index: 'Base',
       objects: [],
       scale: 10,
       rotation: 0,
-      imageURL: ''
-    }
+      imageURL: '',
+    },
   },
 };
 
@@ -198,21 +198,21 @@ function reduceObjectUpdatesToLayers(
 }
 
 function handleUpdateBaseLayerAction(
-    state: TrackedMapState,
-    action: BaseLayerUpdateAction,
+  state: TrackedMapState,
+  action: BaseLayerUpdateAction,
 ): TrackedMapState {
   return {
     ...state,
     layers: {
       ...state.layers,
-      'Base': {
+      Base: {
         ...state.layers.Base,
         rotation: action.payload.rotation,
         scale: action.payload.scale,
         imageURL: action.payload.imageURL,
-      }
-    }
-  }
+      },
+    },
+  };
 }
 
 /**
