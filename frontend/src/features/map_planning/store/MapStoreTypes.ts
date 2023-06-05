@@ -7,13 +7,12 @@ import { Shape, ShapeConfig } from 'konva/lib/Shape';
  * It knows how to apply itself to the map state, how to reverse itself, and how to execute itself.
  * @template T The type of the return value of the execute method.
  * @template U The type of the return value of the execute method for the reversed action.
- *
- * Each concrete action should also expose a static method to convert itself from a remote action.
  */
 export type Action<T, U> = {
   /**
    * Get the reverse action for this action.
    * The reverse action is populated with the current state of the object on the map.
+   * This method should be called before `apply` has been called, if tracking the action in the history is desired.
    * @param state The current state of the map.
    * @returns The reverse action or null if the action cannot be reversed.
    */
@@ -21,6 +20,7 @@ export type Action<T, U> = {
 
   /**
    * Apply the action to the map state.
+   * This method should only be called after `reverse` has been called, if tracking the action in the history is desired.
    * @param state The current state of the map.
    */
   apply(state: TrackedMapState): TrackedMapState;

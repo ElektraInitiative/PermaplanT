@@ -77,8 +77,8 @@ export const createTrackedMapSlice: StateCreator<
 };
 
 /**
- * This function is used to execute an action and should be used instead of directly calling action.execute().
- * It will also update the store and the history.
+ * Execute an action, use it instead of directly calling action.execute().
+ * It will also update the history and applies the changes to the store.
  * After execution, the ability to redo any undone action is lost.
  */
 function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
@@ -95,6 +95,11 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
   }));
 }
 
+/**
+ * Apply the action to the store.
+ *
+ * Do not call this function before `trackReverseActionInHistory`.
+ */
 function applyActionToStore(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
   const newTrackedState = action.apply(get().trackedState);
 
@@ -104,6 +109,12 @@ function applyActionToStore(action: Action<unknown, unknown>, set: SetFn, get: G
   }));
 }
 
+/**
+ * Track the reverse action in the history.
+ *
+ * Always call this function before `applyActionToStore` to track the reverse action in the history.
+ * Otherwise, the reverse action will be wrong, or might cause an exception.
+ */
 function trackReverseActionInHistory(
   action: Action<unknown, unknown>,
   atIndex: number,
@@ -151,7 +162,7 @@ function undo(set: SetFn, get: GetFn): void {
 }
 
 /**
- * Undo the action at the current step.
+ * Redo the action at the current step.
  */
 function redo(set: SetFn, get: GetFn): void {
   if (!get().canRedo) {
