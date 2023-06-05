@@ -47,8 +47,7 @@ pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<MapDto, ServiceErr
 /// If the connection to the database could not be established.
 pub async fn create(new_map: NewMapDto, pool: &Data<Pool>) -> Result<MapDto, ServiceError> {
     let mut conn = pool.get().await?;
-    /// Add new standard layers here:
-    let layer_types: [String; 2] = ["Base".to_owned(), "Plants".to_owned()];
+    let layer_types: [String; 2] = ["Base".to_owned(), "Plants".to_owned()]; // Add new standard layers here
     let result = Map::create(new_map, &mut conn).await?;
     for layer in layer_types.iter() {
         Layer::create(
