@@ -1,6 +1,5 @@
 [print_schema]
 file = "src/schema.rs"
-patch_file = "src/schema.patch"
 
 filter = { except_tables = ["spatial_ref_sys"] }
 import_types = ["postgis_diesel::sql_types::Geography", "diesel::sql_types::*"]
