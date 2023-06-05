@@ -1,5 +1,5 @@
 -- Your SQL goes here
 CREATE EXTENSION IF NOT EXISTS postgis;
-ALTER TABLE maps ADD COLUMN is_private BOOLEAN;
+ALTER TABLE maps ADD COLUMN is_private BOOLEAN NOT NULL;
 ALTER TABLE maps ADD COLUMN description TEXT;
 ALTER TABLE maps ADD COLUMN location GEOGRAPHY(Point);

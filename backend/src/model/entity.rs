@@ -716,7 +716,7 @@ pub struct Map {
     /// The id of the owner of the map.
     pub owner_id: i32,
     /// A flag indicating if this map is private or not.
-    pub is_private: Option<bool>,
+    pub is_private: bool,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -748,7 +748,7 @@ pub struct NewMap {
     /// The id of the owner of the map.
     pub owner_id: i32,
     /// A flag indicating if this map is private or not.
-    pub is_private: Option<bool>,
+    pub is_private: bool,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
