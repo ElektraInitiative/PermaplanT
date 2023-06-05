@@ -1,8 +1,8 @@
 //! `Plants` endpoints.
 
+use crate::config::data::AppDataInner;
 use crate::model::dto::{PageParameters, PlantsSearchParameters};
 use crate::service;
-use crate::AppDataInner;
 use actix_web::{
     get,
     web::{Data, Path, Query},

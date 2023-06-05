@@ -2,9 +2,9 @@
 
 use actix_web::web::Data;
 
+use crate::config::data::AppDataInner;
 use crate::model::dto::Page;
 use crate::model::dto::PageParameters;
-use crate::AppDataInner;
 use crate::{
     error::ServiceError,
     model::{

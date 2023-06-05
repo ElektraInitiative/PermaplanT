@@ -8,10 +8,10 @@ use actix_web::{
 };
 
 use crate::config::auth::user_info::UserInfo;
+use crate::config::data::AppDataInner;
 use crate::model::dto::{
     MapSearchParameters, MapVersionSearchParameters, NewMapVersionDto, PageParameters,
 };
-use crate::AppDataInner;
 use crate::{model::dto::NewMapDto, service};
 
 /// Endpoint for fetching or searching all [`Map`](crate::model::entity::Map).

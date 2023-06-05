@@ -15,12 +15,9 @@ use diesel_async::{
 };
 use dotenvy::dotenv;
 
+use crate::config::{app, data::AppDataInner, routes};
 use crate::error::ServiceError;
 use crate::sse::broadcaster::Broadcaster;
-use crate::{
-    config::{app, routes},
-    AppDataInner,
-};
 
 use self::token::generate_token;
 

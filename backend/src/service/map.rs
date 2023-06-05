@@ -2,6 +2,7 @@
 
 use actix_web::web::Data;
 
+use crate::config::data::AppDataInner;
 use crate::model::dto::{MapSearchParameters, Page};
 use crate::model::dto::{
     MapVersionDto, MapVersionSearchParameters, NewMapVersionDto, PageParameters,
@@ -13,7 +14,6 @@ use crate::{
         dto::{MapDto, NewMapDto},
         entity::Map,
     },
-    AppDataInner,
 };
 
 /// Search maps from the database.

@@ -49,14 +49,10 @@
 // Cannot fix some errors because dependecies import them.
 #![allow(clippy::multiple_crate_versions)]
 
-use std::sync::Arc;
-
 use actix_cors::Cors;
-use actix_web::{http, middleware::Logger, web::Data, App, HttpServer};
+use actix_web::{http, middleware::Logger, App, HttpServer};
 use config::{api_doc, auth::Config, routes};
-use db::connection;
 use log::info;
-use sse::broadcaster::Broadcaster;
 
 pub mod config;
 pub mod controller;
@@ -71,14 +67,6 @@ pub mod sse;
 #[cfg(test)]
 pub mod test;
 
-/// Data shared between all controllers.
-pub struct AppDataInner {
-    /// Connection pool to the database.
-    pub pool: connection::Pool,
-    /// Server-Sent Events broadcaster.
-    pub broadcaster: Arc<Broadcaster>,
-}
-
 /// Main function.
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -88,7 +76,6 @@ async fn main() -> std::io::Result<()> {
     };
 
     env_logger::init();
-    let broadcaster = Broadcaster::create();
 
     Config::init(&config).await;
 
@@ -98,11 +85,7 @@ async fn main() -> std::io::Result<()> {
     );
 
     HttpServer::new(move || {
-        let pool = connection::init_pool(&config.database_url);
-        let data = Data::new(AppDataInner {
-            pool,
-            broadcaster: Arc::clone(&broadcaster),
-        });
+        let data = config::data::init(&config.database_url);
 
         App::new()
             .wrap(cors_configuration())

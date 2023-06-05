@@ -7,8 +7,8 @@ use actix_web::{
     HttpResponse, Result,
 };
 
+use crate::config::data::AppDataInner;
 use crate::model::dto::{PageParameters, SeedSearchParameters};
-use crate::AppDataInner;
 use crate::{model::dto::NewSeedDto, service};
 
 /// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
