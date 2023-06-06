@@ -3,7 +3,7 @@ import SimpleFormInput from "@/components/Form/SimpleFormInput"
 import SimpleButton from "@/components/Button/SimpleButton"
 import { getChatMessages, getConversations, LookIntoFuture, sendMessage, TalkConversation } from "../api/chat"
 import { toast } from "react-toastify"
-import ConversationForm from "../api/ConversationForm"
+import ConversationForm from "./ConversationForm"
 import { useSafeAuth } from "@/hooks/useSafeAuth"
 
 /**
@@ -45,7 +45,11 @@ export const ChatTest = () => {
     }
   }
 
-  function alignOwnMessageRight(message){
+
+  /**
+    * generate classes to align the logged in users messages right
+  */
+  function alignOwnMessageRight(message: string){
     const classes = message.actorDisplayName === auth.user?.profile.name ? " justify-end items-end" : ""
     console.log(classes)
     return classes
