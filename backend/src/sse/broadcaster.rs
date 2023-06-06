@@ -9,14 +9,7 @@ use tokio::{sync::Mutex, time::interval};
 #[derive(Debug, Clone)]
 struct ConnectedMap {
     map_id: i32,
-    clients: Vec<ConnectedClient>,
-}
-
-/// Client listening to updates on a map.
-#[derive(Debug, Clone)]
-pub struct ConnectedClient {
-    /// SSE sender for writing messages to the client.
-    sender: sse::Sender,
+    clients: Vec<sse::Sender>,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -63,7 +56,6 @@ impl Broadcaster {
             let ok_clients = stream::iter(&map.clients)
                 .filter(|client| async {
                     client
-                        .sender
                         .send(sse::Event::Comment("ping".into()))
                         .await
                         .is_ok()
@@ -105,7 +97,7 @@ impl Broadcaster {
 
         sender.send(sse::Data::new("connected")).await?;
 
-        map.clients.push(ConnectedClient { sender });
+        map.clients.push(sender);
 
         Ok(channel_stream)
     }
@@ -126,7 +118,7 @@ impl Broadcaster {
             // try to send to all clients, ignoring failures
             // disconnected clients will get swept up by `remove_stale_clients`
             let _ = stream::iter(&map.clients)
-                .map(|client| client.sender.send(serialized_data.clone()))
+                .map(|client| client.send(serialized_data.clone()))
                 .buffer_unordered(15)
                 .collect::<Vec<_>>()
                 .await;
