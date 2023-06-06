@@ -30,10 +30,10 @@ impl Broadcaster {
         broadcaster
     }
 
-    /// Pings clients every 10 seconds to see if they are alive and remove them from the broadcast list if not.
+    /// Pings clients every 10 minutes to see if they are alive and remove them from the broadcast list if not.
     fn spawn_ping(self) {
         actix_web::rt::spawn(async move {
-            let mut interval = interval(Duration::from_secs(10));
+            let mut interval = interval(Duration::from_secs(600));
             loop {
                 interval.tick().await;
                 self.clone().remove_stale_clients().await;
