@@ -7,10 +7,9 @@ use log::debug;
 
 use crate::db::pagination::Paginate;
 use crate::model::dto::{MapSearchParameters, Page, PageParameters};
-use crate::schema::maps::is_private;
 use crate::{
     model::dto::{MapDto, NewMapDto},
-    schema::maps::{self, all_columns, is_inactive, owner_id},
+    schema::maps::{self, all_columns, is_inactive, owner_id, privacy},
 };
 
 use super::{Map, NewMap};
@@ -34,8 +33,8 @@ impl Map {
         if let Some(owner_id_search) = search_parameters.owner_id {
             query = query.filter(owner_id.eq(owner_id_search));
         }
-        if let Some(is_private_search) = search_parameters.is_private {
-            query = query.filter(is_private.eq(is_private_search));
+        if let Some(privacy_search) = search_parameters.privacy {
+            query = query.filter(privacy.eq(privacy_search));
         }
 
         let query = query

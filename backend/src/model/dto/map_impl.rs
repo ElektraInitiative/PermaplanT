@@ -18,7 +18,7 @@ impl From<Map> for MapDto {
             visits: map.visits,
             harvested: map.harvested,
             owner_id: map.owner_id,
-            is_private: map.is_private,
+            privacy: map.privacy,
             description: map.description,
             location: map.location.map(|latlng| Coordinates {
                 latitude: latlng.y,
