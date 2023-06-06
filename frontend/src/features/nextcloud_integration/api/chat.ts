@@ -3,7 +3,7 @@
 import { createNextcloudAPI } from "@/config/axios";
 
 export const sendMessage = (chatToken: string, message: string) => {
-  let http = createNextcloudAPI()
+  const http = createNextcloudAPI()
   http.defaults.headers['OCS-APIRequest'] = true
   http.defaults.headers['Accept'] = 'application/json'
   http.defaults.headers['format'] = 'json'
@@ -74,7 +74,7 @@ export type TalkConversation = {
     messageExpiration: number;
 };
 export const getConversations = async (): Promise<Array<TalkConversation>> => {
-  let http = createNextcloudAPI()
+  const http = createNextcloudAPI()
   http.defaults.headers['OCS-APIRequest'] = true
 
   const data = await http.get("/ocs/v2.php/apps/spreed/api/v4/room")
@@ -103,7 +103,7 @@ export type CreateConversationOptions = {
   objectId?: string;
 }
 export const createConversation = async (options: CreateConversationOptions) => {
-  let http = createNextcloudAPI()
+  const http = createNextcloudAPI()
   http.defaults.headers['OCS-APIRequest'] = true
   return http.post("/ocs/v2.php/apps/spreed/api/v4/room", {...options, roomType: options.roomType + 1 })
 }
@@ -174,7 +174,7 @@ export type ChatMessage = {
   reactionsSelf?: string[];
 };
 export const getChatMessages = async (token: string, params: GetChatMessagesParams): Promise<Array<ChatMessage>> => {
-  let http = createNextcloudAPI()
+  const http = createNextcloudAPI()
   http.defaults.headers['OCS-APIRequest'] = true
   http.defaults.headers['Accept'] ="application/json"
   const result = await http.get("/ocs/v2.php/apps/spreed/api/v1/chat/" + token, { params })

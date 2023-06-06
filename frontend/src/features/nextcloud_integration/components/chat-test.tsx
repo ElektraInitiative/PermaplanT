@@ -18,7 +18,6 @@ import { useQuery } from "@tanstack/react-query"
 export const ChatTest = () => {
   const [message, setMessage] = useState<string>("")
   const [messages, setMessages] = useState<Array<ChatMessage>>([])
-  // const [conversations, setConversations] = useState<Array<TalkConversation>>([])
   const [selectedConversation, setSelectedConversation] = useState<TalkConversation>()
   const [showConversationForm, setShowConversationForm] = useState<boolean>(false)
 
@@ -37,8 +36,6 @@ export const ChatTest = () => {
       })
       messageHistory.reverse()
       setMessages(messageHistory)
-    } else {
-      toast("no convo selected", { type: 'error' })
     }
   }
 
@@ -49,7 +46,6 @@ export const ChatTest = () => {
         lastKnownMessageId: messages[messages.length-1].id
       })
     } else {
-      toast("no convo selected", { type: 'error' })
       return null
     }
   }
