@@ -92,7 +92,7 @@ impl Broadcaster {
         &self,
         map_id: i32,
     ) -> Result<Sse<ChannelStream>, Box<dyn std::error::Error>> {
-        let (sender, channel_stream) = sse::channel(10);
+        let (sender, channel_stream) = sse::channel(100);
         let mut guard = self.0.lock().await;
 
         let map = guard.entry(map_id).or_insert_with(|| ConnectedMap {
