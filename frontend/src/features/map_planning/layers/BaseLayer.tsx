@@ -2,6 +2,7 @@ import { MAP_PIXELS_PER_METER } from '../utils/Constants';
 import { useQuery } from '@tanstack/react-query';
 import { Layer, Image } from 'react-konva';
 import { FileStat, WebDAVClient } from 'webdav';
+import {createRef, useRef} from "react";
 
 interface BaseLayerProps {
   nextcloudClient: WebDAVClient;
@@ -30,15 +31,21 @@ const BaseLayer = ({
 }: BaseLayerProps) => {
   const imagepath = `/remote.php/webdav/${nextcloudImagePath ?? ''}`;
 
+  const width = useRef(0);
+  const height = useRef(0);
+
   const { data } = useQuery(['files', imagepath], () => nextcloudClient.getFileContents(imagepath));
-  if (!checkFileIsImage(imagepath, nextcloudClient)) return <Layer></Layer>;
+  if (!checkFileIsImage(imagepath, nextcloudClient) || data == undefined) return <Layer></Layer>;
 
   const image = new window.Image();
   image.src = URL.createObjectURL(new Blob([data as BlobPart]));
+  image.onload = () => {
+    console.log('loaded image');
+    width.current = image.naturalWidth;
+    height.current = image.naturalHeight;
+  };
 
   const scale = pixels_per_meter / MAP_PIXELS_PER_METER;
-  const width = image?.width ?? 0;
-  const height = image?.height ?? 0;
 
   return (
     <Layer listening={false} visible={visible} opacity={opacity} offset={{ x: -width, y: -height }}>
@@ -47,7 +54,7 @@ const BaseLayer = ({
         rotation={rotation}
         scaleX={scale}
         scaleY={scale}
-        offset={{ x: width / 2, y: height / 2 }}
+        offset={{ x: width.current / 2, y: height.current / 2 }}
       />
     </Layer>
   );
