@@ -69,8 +69,8 @@ export const Map = () => {
   const getToolbarContent = (layerName: LayerName) => {
     const content = {
       Base: {
-        right: <div></div>,
-        left: (
+        left: <div></div>,
+        right: (
           <BaseLayerForm
             rotation={trackedState.layers.Base.rotation}
             nextcloudImagePath={trackedState.layers.Base.nextcloudImagePath}
