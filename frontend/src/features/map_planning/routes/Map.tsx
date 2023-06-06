@@ -201,7 +201,7 @@ export const Map = () => {
           opacity={untrackedState.layers.Base.opacity}
           visible={untrackedState.layers.Base.visible}
           nextcloudImagePath={trackedState.layers.Base.imageURL}
-          pixels_per_meter={trackedState.layers.Base.scale}
+          pixelsPerMeter={trackedState.layers.Base.scale}
           rotation={trackedState.layers.Base.rotation}
         />
         <PlantsLayer
