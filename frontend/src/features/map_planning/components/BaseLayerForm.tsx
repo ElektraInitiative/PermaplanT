@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next';
 
 interface BaseLayerFormProps {
   rotation: number;
-  imageURL: string;
+  nextcloudImagePath: string;
   onRotationChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onImageURLChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const BaseLayerForm = ({
   rotation,
-  imageURL,
+  nextcloudImagePath,
   onRotationChange,
   onImageURLChange,
 }: BaseLayerFormProps) => {
@@ -23,7 +23,7 @@ const BaseLayerForm = ({
         id="file"
         labelText={t('image_url_field')}
         onChange={onImageURLChange}
-        value={imageURL}
+        value={nextcloudImagePath}
       />
       <SimpleFormInput
         id="rotation"

@@ -36,7 +36,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
       objects: [],
       scale: 10,
       rotation: 0,
-      imageURL: '',
+      nextcloudImagePath: '',
     },
   },
 };
@@ -209,7 +209,7 @@ function handleUpdateBaseLayerAction(
         ...state.layers.Base,
         rotation: action.payload.rotation,
         scale: action.payload.scale,
-        imageURL: action.payload.imageURL,
+        nextcloudImagePath: action.payload.nextcloudImagePath,
       },
     },
   };

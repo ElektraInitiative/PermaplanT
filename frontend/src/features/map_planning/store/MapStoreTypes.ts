@@ -111,9 +111,9 @@ export type TrackedBaseLayerState = TrackedGenericLayerState & {
    */
   scale: number;
   /**
-   * Temporary, will be removed after base layer is integrated with Nextcloud.
+   * Path to the background image in Nextcloud.
    */
-  imageURL: string;
+  nextcloudImagePath: string;
 };
 
 /**
@@ -221,7 +221,7 @@ export type BaseLayerUpdateAction = {
   payload: {
     rotation: number;
     scale: number;
-    imageURL: string;
+    nextcloudImagePath: string;
   };
 };
 

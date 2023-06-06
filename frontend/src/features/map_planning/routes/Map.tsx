@@ -73,14 +73,14 @@ export const Map = () => {
         left: (
           <BaseLayerForm
             rotation={trackedState.layers.Base.rotation}
-            imageURL={trackedState.layers.Base.imageURL}
+            nextcloudImagePath={trackedState.layers.Base.nextcloudImagePath}
             onRotationChange={(event) =>
               dispatch({
                 type: 'BASE_LAYER_UPDATE_ACTION',
                 payload: {
                   rotation: parseInt(event.target.value) ?? 0,
                   scale: trackedState.layers.Base.scale,
-                  imageURL: trackedState.layers.Base.imageURL,
+                  nextcloudImagePath: trackedState.layers.Base.nextcloudImagePath,
                 },
               })
             }
@@ -91,7 +91,7 @@ export const Map = () => {
                 payload: {
                   rotation: trackedState.layers.Base.rotation,
                   scale: trackedState.layers.Base.scale,
-                  imageURL: event.target.value,
+                  nextcloudImagePath: event.target.value,
                 },
               });
             }}
@@ -200,7 +200,7 @@ export const Map = () => {
           nextcloudClient={nextcloudClient}
           opacity={untrackedState.layers.Base.opacity}
           visible={untrackedState.layers.Base.visible}
-          nextcloudImagePath={trackedState.layers.Base.imageURL}
+          nextcloudImagePath={trackedState.layers.Base.nextcloudImagePath}
           pixelsPerMeter={trackedState.layers.Base.scale}
           rotation={trackedState.layers.Base.rotation}
         />
