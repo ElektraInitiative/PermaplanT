@@ -50,22 +50,26 @@ impl Broadcaster {
 
         let mut ok_maps = HashMap::with_capacity(guard.capacity());
 
-        let old_maps = guard.values();
-
-        for map in old_maps {
-            let ok_clients = stream::iter(&map.clients)
-                .filter(|client| async {
-                    client
-                        .send(sse::Event::Comment("ping".into()))
-                        .await
-                        .is_ok()
-                })
-                .map(|client| ready(client.clone()))
-                .buffer_unordered(15)
-                .collect::<Vec<_>>()
-                .await;
-
-            if !ok_clients.is_empty() {
+        stream::iter(guard.values())
+            .map(|map| async move {
+                (
+                    map,
+                    stream::iter(&map.clients)
+                        .filter(|client| async {
+                            client
+                                .send(sse::Event::Comment("ping".into()))
+                                .await
+                                .is_ok()
+                        })
+                        .map(|client| ready(client.clone()))
+                        .buffer_unordered(15)
+                        .collect::<Vec<_>>()
+                        .await,
+                )
+            })
+            .buffer_unordered(100)
+            .filter(|(_, ok_clients)| ready(!ok_clients.is_empty()))
+            .for_each(|(map, ok_clients)| {
                 ok_maps.insert(
                     map.map_id,
                     ConnectedMap {
@@ -73,8 +77,9 @@ impl Broadcaster {
                         clients: ok_clients,
                     },
                 );
-            }
-        }
+                ready(())
+            })
+            .await;
 
         *guard = ok_maps;
     }
