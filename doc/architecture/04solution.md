@@ -14,6 +14,7 @@ Types are shared whenever possible:
 
 ## State
 
+- Both frontend and database contain the latest and complete state.
 - The backend is state-less, all state is in the database or in the token.
 - The frontend has structured state per layer.
 
@@ -28,6 +29,29 @@ This means the backend is always up to date with the users actions and users can
 - No timestamps are needed for data consistency.
 - No conflict handling in the frontend.
 - If a user loses the connection, the frontend must go into a read-only state.
+
+### Actions
+
+Actions are minimal, encapsulated state changes from elements elements on the layer of a map.
+Such actions are used to:
+
+1. describe user actions in the frontend (undo/redo, see later)
+2. describe transport of 1. to the backend (via PATCH API calls)
+3. describe transport of 1. back to other frontends (via SSE)
+
+### SEE
+
+For SSE, browsers first request an event-source via the endpoint /api/updates/maps.
+Then the backend sends all updates of a map to all users connected to the maps.
+To do so, all API calls in the backend must notify the broadcaster.
+
+The broadcaster lives in AppDataInner, which is available in request handler via dependency injection in the request context.
+So every controller related to map endpoints must must use AppDataInner.
+At the end of every request handler, you need to have a statement like:
+
+`app_data.broadcaster.broadcast(map_id, action)`
+
+> Note that login data is implemented differently.
 
 ### Undo & Redo
 
