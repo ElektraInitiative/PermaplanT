@@ -110,16 +110,16 @@ export const createConversation = async (options: CreateConversationOptions) => 
 }
 
 
-enum LookIntoFuture {
+export enum LookIntoFuture {
   Poll = 1, // Poll and wait for new message
   GetHistory = 0, // Get history of a conversation
 }
-enum SetReadMarker {
+export enum SetReadMarker {
   Auto = 1, // Automatically set the read timer after fetching the messages
   Manual = 0, // use Manual when your client calls 'Mark chat as read manually'. (Default: Auto)
 }
-type GetChatMessagesOptions = {
-  lookIntoFuture?: LookIntoFuture;
+type GetChatMessagesParams = {
+  lookIntoFuture: LookIntoFuture;
   // Number of chat messages to receive (100 by default, 200 at most)
   limit?: number;
   // Serves as an offset for the query. The lastKnownMessageId for the next page is available in the X-Chat-Last-Given header.
@@ -139,8 +139,10 @@ type GetChatMessagesOptions = {
   // 0 to not mark notifications as read (Default: 1, only available with chat-keep-notifications capability)
   markNotificationsAsRead?: number;
 };
-export const getChatMessages = async (token: string, options: GetChatMessagesOptions) => {
+export const getChatMessages = async (token: string, params: GetChatMessagesParams) => {
   let http = createNextcloudAPI()
   http.defaults.headers['OCS-APIRequest'] = true
-  return http.get("/ocs/v2.php/apps/spreed/api/v1/chat/" + token, options)
+  http.defaults.headers['Accept'] ="application/json"
+  console.log(token, params)
+  return http.get("/ocs/v2.php/apps/spreed/api/v1/chat/" + token, { params })
 }
