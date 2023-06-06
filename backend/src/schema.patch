@@ -19,13 +19,14 @@ index 16c1826d..d33481b0 100644
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "herbaceous_or_woody"))]
-@@ -86,13 +82,12 @@ diesel::table! {
+@@ -86,14 +82,13 @@ diesel::table! {
      }
  }
 
  diesel::table! {
      use postgis_diesel::sql_types::Geography;
      use diesel::sql_types::*;
+     use super::sql_types::PrivacyOptions;
 -    use super::sql_types::Geography;
 
      maps (id) {

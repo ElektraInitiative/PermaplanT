@@ -7,7 +7,7 @@ use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
-use super::r#enum::{layer_type::LayerType, quality::Quality, quantity::Quantity};
+use super::r#enum::{privacy_options::PrivacyOptions, layer_type::LayerType, quality::Quality, quantity::Quantity};
 
 pub mod actions;
 pub mod layer_impl;
@@ -251,7 +251,7 @@ pub struct MapDto {
     /// The id of the owner of the map.
     pub owner_id: i32,
     /// A flag indicating if this map is private or not.
-    pub is_private: bool,
+    pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -283,7 +283,7 @@ pub struct NewMapDto {
     /// The id of the owner of the map.
     pub owner_id: i32,
     /// A flag indicating if this map is private or not.
-    pub is_private: bool,
+    pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -299,7 +299,7 @@ pub struct MapSearchParameters {
     /// The owner of the map.
     pub owner_id: Option<i32>,
     /// Whether or not the map is private.
-    pub is_private: Option<bool>,
+    pub privacy: Option<PrivacyOptions>,
 }
 
 /// Support struct for transmitting latitude/longitude coordinates.

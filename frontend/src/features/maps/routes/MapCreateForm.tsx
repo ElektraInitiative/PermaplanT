@@ -1,5 +1,5 @@
 import { createMap } from '../api/createMap';
-import { NewMapDto } from '@/bindings/definitions';
+import { NewMapDto, PrivacyOptions } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import PageLayout from '@/components/Layout/PageLayout';
 import 'leaflet/dist/leaflet.css';
@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface MapCreationAttributes {
   name: string;
-  is_private: boolean;
+  privacy: PrivacyOptions;
   description: string;
   location: {
     latitude: number;
@@ -21,7 +21,7 @@ interface MapCreationAttributes {
 export default function MapCreateForm() {
   const initialData: MapCreationAttributes = {
     name: '',
-    is_private: false,
+    privacy: PrivacyOptions.Public,
     description: '',
     location: {
       latitude: NaN,
@@ -35,11 +35,29 @@ export default function MapCreateForm() {
   const navigate = useNavigate();
 
   const missingNameText = (
-    <p className="mb-2 block text-sm font-medium text-red-500">{t('maps:overview.missing_name')}</p>
+    <p className="mb-2 ml-2 block text-sm font-medium text-red-500">
+      {t('maps:overview.missing_name')}
+    </p>
+  );
+
+  const privacyOptions = [
+    PrivacyOptions.Private,
+    PrivacyOptions.Protected,
+    PrivacyOptions.Public,
+  ].map((option) => (
+    <option key={option} value={option}>
+      {t(`maps:create.${option}`)}
+    </option>
+  ));
+
+  const privacyDetailText = (
+    <p className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-center text-sm font-medium dark:border-neutral-400-dark dark:bg-neutral-50-dark">
+      {t(`maps:create.${mapInput.privacy}_info`)}
+    </p>
   );
 
   async function onSubmit() {
-    if (mapInput.name === '') {
+    if (mapInput.name.trim() === '') {
       setMissingName(true);
       return;
     }
@@ -52,7 +70,7 @@ export default function MapCreateForm() {
       visits: 0,
       harvested: 0,
       owner_id: 1,
-      is_private: mapInput.is_private,
+      privacy: mapInput.privacy,
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
     };
@@ -67,30 +85,35 @@ export default function MapCreateForm() {
   return (
     <PageLayout>
       <h2>{t('maps:create.modal_title')}</h2>
-      <section className="my-2 flex items-center">
-        <input
-          id="mapNameInput"
-          name="name"
-          onChange={(e) => {
-            setMapInput({ ...mapInput, name: e.target.value });
-            setMissingName(false);
-          }}
-          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-          style={{ colorScheme: 'dark' }}
-          placeholder="Name *"
-        />
-        <label className="flex w-full items-center justify-center">
-          <input
-            id="mapPrivateCheckbox"
-            name="is_private"
-            onChange={(e) => setMapInput({ ...mapInput, is_private: e.target.checked })}
-            type="checkbox"
-            className="mr-3 h-4 w-4 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-          />
-          {t('maps:create.private_label')}
-        </label>
-      </section>
+      <input
+        id="mapNameInput"
+        name="name"
+        onChange={(e) => {
+          setMapInput({ ...mapInput, name: e.target.value });
+          setMissingName(false);
+        }}
+        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+        style={{ colorScheme: 'dark' }}
+        placeholder="Name *"
+      />
       {missingName && missingNameText}
+      <section className="my-2 flex items-center">
+        <select
+          className="mr-4 block h-11 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          onChange={(e) => {
+            const value = e.target.value;
+            const option = value.charAt(0).toUpperCase() + value.slice(1);
+            setMapInput({
+              ...mapInput,
+              privacy: PrivacyOptions[option as keyof typeof PrivacyOptions],
+            });
+          }}
+          defaultValue={PrivacyOptions.Public}
+        >
+          {privacyOptions}
+        </select>
+        {privacyDetailText}
+      </section>
       <textarea
         id="mapDescriptionTextfield"
         name="description"
@@ -141,7 +164,7 @@ function MapEventListener({ mapState, setMapState }: MapEventListenerProps) {
       map.openPopup(t('maps:create.location_selected'), e.latlng);
       setMapState({
         name: mapState.name,
-        is_private: mapState.is_private,
+        privacy: mapState.privacy,
         description: mapState.description,
         location: {
           latitude: e.latlng.lat,
@@ -152,7 +175,7 @@ function MapEventListener({ mapState, setMapState }: MapEventListenerProps) {
     popupclose: () => {
       setMapState({
         name: mapState.name,
-        is_private: mapState.is_private,
+        privacy: mapState.privacy,
         description: mapState.description,
         location: {
           latitude: NaN,

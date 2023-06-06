@@ -13,8 +13,13 @@
         "submit_button": "Erstellen",
         "success": "Karte wurde erfolgreich erstellt!",
         "failure": "Etwas ist schief gelaufen, bitte versuchen Sie es später erneut!",
-        "private_label": "privat",
         "description_placeholer": "Beschreibung",
-        "location_selected": "Dein gewählter Standort."
+        "location_selected": "Dein gewählter Standort.",
+        "private": "privat",
+        "private_info": "Die Karte ist privat und nur für dich sichtbar",
+        "protected": "geschützt",
+        "protected_info": "Die Karte ist geschützt und nur für dich und andere PermaplanT Mitglieder sichtbar",
+        "public": "öffentlich",
+        "public_info": "Die Karte ist öffentlich und für jeden sichtbar"
     }
 }

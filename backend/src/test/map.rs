@@ -1,7 +1,7 @@
 //! Tests for [`crate::controller::map`].
 
 use crate::{
-    model::dto::{MapDto, NewMapDto, Page},
+    model::dto::{MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, Page},
     test::util::{init_test_app, init_test_database},
 };
 use actix_web::{
@@ -104,7 +104,7 @@ async fn test_can_create_map() {
         visits: 0,
         harvested: 0,
         owner_id: -1,
-        is_private: None,
+        privacy: PrivacyOptions::Public,
         description: None,
         location: None,
     };
