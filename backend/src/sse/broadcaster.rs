@@ -1,4 +1,5 @@
-//! SSE broadcaster.
+//! This module contains the Server-Sent Events broadcaster, which is responsible for keeping track of connected clients and broadcasting messages to them.
+//! For broadcasting, the broadcaster takes a `map_id` and an `Action` and broadcasts the action to all clients connected to that map.
 
 use actix_web_lab::sse::{self, ChannelStream, Sse};
 use futures::{future::ready, stream, StreamExt};
