@@ -73,12 +73,12 @@ export const ChatTest = () => {
 
   useEffect(() => {
     const data = newMessages.data
+    console.log("new messages changed")
     if(data){
-      console.log("update messages")
-      console.log(data)
+      console.log([...messages, ...data])
       setMessages([...messages, ...data])
     }
-  }, [newMessages])
+  }, [newMessages.data])
 
   useEffect(() => {
     fetchConversations()
