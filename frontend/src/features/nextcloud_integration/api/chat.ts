@@ -8,7 +8,7 @@ export const sendMessage = (chatToken: string, message: string) => {
   http.defaults.headers['Accept'] = 'application/json'
   http.defaults.headers['format'] = 'json'
 
-  http.post("/ocs/v2.php/apps/spreed/api/v1/chat/" + chatToken, {
+  return http.post("/ocs/v2.php/apps/spreed/api/v1/chat/" + chatToken, {
     message
   })
 }
