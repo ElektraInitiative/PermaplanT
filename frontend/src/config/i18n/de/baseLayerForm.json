@@ -1,5 +1,5 @@
 {
   "title": "Baselayer bearbeiten",
-  "image_url_field": "URL des Hintergrundbildes",
+  "image_path_field": "Hintergrund-Dateipfad",
   "rotation_field": "Rotation (Grad)"
 }

@@ -1,5 +1,5 @@
 {
   "title": "Edit Base Layer",
-  "image_url_field": "Background image URL",
+  "image_path_field": "Background Image File Path",
   "rotation_field": "Rotation (Degrees)"
 }

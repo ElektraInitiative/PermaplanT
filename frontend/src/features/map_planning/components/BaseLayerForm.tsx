@@ -21,7 +21,7 @@ const BaseLayerForm = ({
       <h2>{t('title')}</h2>
       <SimpleFormInput
         id="file"
-        labelText={t('image_url_field')}
+        labelText={t('image_path_field')}
         onChange={onImageURLChange}
         value={nextcloudImagePath}
       />
