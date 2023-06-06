@@ -1,8 +1,8 @@
 import { MAP_PIXELS_PER_METER } from '../utils/Constants';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useRef } from 'react';
 import { Layer, Image } from 'react-konva';
-import { FileStat, WebDAVClient } from 'webdav';
-import {createRef, useRef} from "react";
+import { FileStat, ResponseDataDetailed, WebDAVClient } from 'webdav';
 
 interface BaseLayerProps {
   /**
@@ -35,14 +35,14 @@ interface BaseLayerProps {
 /**
  * Check if a file from Nextcloud is actually an image to avoid Konva crashes.
  *
- * @param path   Nextcloud path to the file that should be checked.
- * @param client WebDAV client connected to Nextcloud.
+ * @param imageStat file stats returned by nextcloud.
  */
-const checkFileIsImage = (path: string, client: WebDAVClient): boolean => {
-  const { data, isError } = useQuery(['stat', path], () => client.stat(path, { details: false }));
-  if (data == undefined || isError) return false;
+const checkFileIsImage = (
+  imageStat: UseQueryResult<FileStat | ResponseDataDetailed<FileStat>, unknown>,
+): boolean => {
+  if (imageStat.data == undefined || imageStat.isError) return false;
 
-  const stat = data as FileStat;
+  const stat = imageStat.data as FileStat;
   return stat.type === 'file' && (stat.mime?.startsWith('image') ?? false);
 };
 
@@ -63,12 +63,16 @@ const BaseLayer = ({
 
   // Hooks have to be called an equal number of times on each render.
   // We therefore have to check whether a file is a valid image after loading it.
-  const { data } = useQuery(['files', imagepath], () => nextcloudClient.getFileContents(imagepath));
-  if (!checkFileIsImage(imagepath, nextcloudClient) || data == undefined)
-    return <Layer></Layer>;
+  const fileStat = useQuery(['stat', imagepath], () =>
+    nextcloudClient.stat(imagepath, { details: false }),
+  );
+  const imageData = useQuery(['files', imagepath], () =>
+    nextcloudClient.getFileContents(imagepath),
+  );
+  if (!checkFileIsImage(fileStat) || imageData.data == undefined) return <Layer></Layer>;
 
   const image = new window.Image();
-  image.src = URL.createObjectURL(new Blob([data as BlobPart]));
+  image.src = URL.createObjectURL(new Blob([imageData.data as BlobPart]));
   // Set width and height after the browser has finished loading the image.
   image.onload = () => {
     width.current = image.naturalWidth;
