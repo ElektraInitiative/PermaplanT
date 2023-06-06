@@ -77,7 +77,7 @@ pub async fn init_test_app(
         App::new()
             .app_data(Data::new(AppDataInner {
                 pool,
-                broadcaster: Broadcaster::create(),
+                broadcaster: Broadcaster::new(),
             }))
             .configure(routes::config),
     )

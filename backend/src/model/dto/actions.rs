@@ -11,6 +11,15 @@ use typeshare::typeshare;
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
+pub enum Action {
+    CreatePlanting(CreatePlantActionDto),
+    MovePlanting(MovePlantActionDto),
+    TransformPlanting(TransformPlantActionDto),
+    DeletePlanting(DeletePlantActionDto),
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
 /// The meta data of an action.
 pub struct ActionMeta {
     /// The type of the action.

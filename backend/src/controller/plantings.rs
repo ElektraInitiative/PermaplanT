@@ -13,7 +13,6 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
 use crate::model::dto::actions::{
     CreatePlantActionDto, DeletePlantActionDto, MovePlantActionDto, TransformPlantActionDto,
@@ -21,6 +20,7 @@ use crate::model::dto::actions::{
 use crate::model::dto::{
     NewPlantingDto, PlantLayerObjectDto, PlantingSearchParameters, UpdatePlantingDto,
 };
+use crate::{config::auth::user_info::UserInfo, model::dto::actions::Action};
 
 /// FIXME: REMOVE THIS HACK ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗
 static PLANTINGS: RwLock<Vec<PlantLayerObjectDto>> = RwLock::new(vec![]);
@@ -124,7 +124,10 @@ pub async fn create(
             .broadcaster
             .broadcast(
                 new_plant_json.map_id,
-                &CreatePlantActionDto::new(dto.clone(), user_info.id.to_string()),
+                Action::CreatePlanting(CreatePlantActionDto::new(
+                    dto.clone(),
+                    user_info.id.to_string(),
+                )),
             )
             .await;
 
@@ -164,7 +167,7 @@ pub async fn update(
     let mut planting =
         find_planting_by_id(&id).ok_or_else(|| error::ErrorNotFound("Planting not found"))?;
 
-    match *new_plant_json {
+    let action = match *new_plant_json {
         UpdatePlantingDto {
             x: Some(x),
             y: Some(y),
@@ -180,17 +183,10 @@ pub async fn update(
             planting.scale_y = scale_y;
             replace_planting(planting.clone());
 
-            let notified = app_data
-                .broadcaster
-                .broadcast(
-                    new_plant_json.map_id,
-                    &TransformPlantActionDto::new(planting.clone(), user_info.id.to_string()),
-                )
-                .await;
-
-            if notified.is_ok() {
-                return Ok(HttpResponse::Ok().json(planting));
-            }
+            Action::TransformPlanting(TransformPlantActionDto::new(
+                planting.clone(),
+                user_info.id.to_string(),
+            ))
         }
         UpdatePlantingDto {
             x: Some(x),
@@ -201,24 +197,27 @@ pub async fn update(
             planting.y = y;
             replace_planting(planting.clone());
 
-            let notified = app_data
-                .broadcaster
-                .broadcast(
-                    new_plant_json.map_id,
-                    &MovePlantActionDto::new(planting.clone(), user_info.id.to_string()),
-                )
-                .await;
-
-            if notified.is_ok() {
-                return Ok(HttpResponse::Ok().json(planting));
-            }
+            Action::MovePlanting(MovePlantActionDto::new(
+                planting.clone(),
+                user_info.id.to_string(),
+            ))
         }
-        _ => {}
+        _ => {
+            return Err(error::ErrorBadRequest(
+                "Invalid arguments passed for update planting",
+            ))
+        }
+    };
+
+    if let Err(err) = app_data
+        .broadcaster
+        .broadcast(new_plant_json.map_id, action)
+        .await
+    {
+        log::error!("{}", err.to_string())
     }
 
-    Err(error::ErrorBadRequest(
-        "Invalid arguments passed for update planting",
-    ))
+    return Ok(HttpResponse::Ok().json(planting));
 }
 
 /// Endpoint for deleting a `Planting`.
@@ -254,7 +253,10 @@ pub async fn delete(
         .broadcast(
             // TODO: get map_id from request or from path?
             1,
-            &DeletePlantActionDto::new(path.to_string(), user_info.id.to_string()),
+            Action::DeletePlanting(DeletePlantActionDto::new(
+                path.to_string(),
+                user_info.id.to_string(),
+            )),
         )
         .await;
 

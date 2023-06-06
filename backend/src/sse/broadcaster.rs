@@ -5,6 +5,8 @@ use futures_util::{future::ready, stream, StreamExt};
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tokio::{sync::Mutex, time::interval};
 
+use crate::model::dto::actions::Action;
+
 /// Map that clients are connected to.
 #[derive(Debug, Clone)]
 struct ConnectedMap {
@@ -111,12 +113,15 @@ impl Broadcaster {
     ///
     /// # Errors
     /// * If serialization of `msg` fails.
-    pub async fn broadcast<T: serde::Serialize + Send>(
+    pub async fn broadcast(
         &self,
         map_id: i32,
-        msg: T,
+        action: Action,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        let serialized_data = sse::Data::new_json(msg)?;
+        let serialized_data = sse::Data::new_json(action).map_err(|err| {
+            log::error!("{}", err.to_string());
+            err
+        })?;
         let guard = self.0.lock().await;
 
         if let Some(map) = guard.get(&map_id) {
