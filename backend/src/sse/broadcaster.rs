@@ -10,17 +10,19 @@ use crate::model::dto::actions::Action;
 /// Map that clients are connected to.
 #[derive(Debug, Clone)]
 struct ConnectedMap {
+    /// Id of the map that the clients are connected to.
     map_id: i32,
+    /// List of clients connected to the map.
     clients: Vec<sse::Sender>,
 }
 
 #[derive(Debug, Clone, Default)]
 /// SSE broadcaster.
 ///
-/// Inner HashMap:
-/// * Map of map_id to a connected map.
-/// * The map_id is the id of the map that the client connected to.
-/// * The connected map contains the map_id and a list of clients connected to that map.
+/// Inner `HashMap`:
+/// * Map of `map_id` to a list of connected clients.
+/// * The `map_id` is the id of the map that the client connected to.
+/// * The connected map contains the `map_id` and a list of clients connected to that map.
 pub struct Broadcaster(Arc<Mutex<HashMap<i32, ConnectedMap>>>);
 
 impl Broadcaster {
@@ -110,30 +112,26 @@ impl Broadcaster {
     }
 
     /// Broadcasts `msg` to all clients on the same map.
-    ///
-    /// # Errors
-    /// * If serialization of `msg` fails.
-    pub async fn broadcast(
-        &self,
-        map_id: i32,
-        action: Action,
-    ) -> Result<(), Box<dyn std::error::Error>> {
-        let serialized_data = sse::Data::new_json(action).map_err(|err| {
-            log::error!("{}", err.to_string());
-            err
-        })?;
-        let guard = self.0.lock().await;
+    pub async fn broadcast(&self, map_id: i32, action: Action) {
+        match sse::Data::new_json(action) {
+            Ok(serialized_action) => {
+                let guard = self.0.lock().await;
 
-        if let Some(map) = guard.get(&map_id) {
-            // try to send to all clients, ignoring failures
-            // disconnected clients will get swept up by `remove_stale_clients`
-            let _ = stream::iter(&map.clients)
-                .map(|client| client.send(serialized_data.clone()))
-                .buffer_unordered(15)
-                .collect::<Vec<_>>()
-                .await;
-        }
-
-        Ok(())
+                if let Some(map) = guard.get(&map_id) {
+                    // try to send to all clients, ignoring failures
+                    // disconnected clients will get swept up by `remove_stale_clients`
+                    let _ = stream::iter(&map.clients)
+                        .map(|client| client.send(serialized_action.clone()))
+                        .buffer_unordered(15)
+                        .collect::<Vec<_>>()
+                        .await;
+                }
+            }
+            Err(err) => {
+                // log the error and continue
+                // serialization errors are also highly unlikely to happen
+                log::error!("{}", err.to_string());
+            }
+        };
     }
 }

@@ -119,24 +119,21 @@ pub async fn create(
             });
     }
 
-    if let Some(dto) = find_planting_by_id(&new_plant_json.id) {
-        let notified = app_data
-            .broadcaster
-            .broadcast(
-                new_plant_json.map_id,
-                Action::CreatePlanting(CreatePlantActionDto::new(
-                    dto.clone(),
-                    user_info.id.to_string(),
-                )),
-            )
-            .await;
+    let dto = find_planting_by_id(&new_plant_json.id)
+        .ok_or_else(|| error::ErrorInternalServerError("Could not create planting"))?;
 
-        if notified.is_ok() {
-            return Ok(HttpResponse::Created().json(dto));
-        }
-    }
+    app_data
+        .broadcaster
+        .broadcast(
+            new_plant_json.map_id,
+            Action::CreatePlanting(CreatePlantActionDto::new(
+                dto.clone(),
+                user_info.id.to_string(),
+            )),
+        )
+        .await;
 
-    Err(error::ErrorInternalServerError("Could not create planting"))
+    Ok(HttpResponse::Created().json(dto))
 }
 
 /// Endpoint for updating a `Planting`.
@@ -209,15 +206,12 @@ pub async fn update(
         }
     };
 
-    if let Err(err) = app_data
+    app_data
         .broadcaster
         .broadcast(new_plant_json.map_id, action)
-        .await
-    {
-        log::error!("{}", err.to_string())
-    }
+        .await;
 
-    return Ok(HttpResponse::Ok().json(planting));
+    Ok(HttpResponse::Ok().json(planting))
 }
 
 /// Endpoint for deleting a `Planting`.
@@ -248,7 +242,7 @@ pub async fn delete(
         plantings.retain(|planting| planting.id != *path);
     }
 
-    let notified = app_data
+    app_data
         .broadcaster
         .broadcast(
             // TODO: get map_id from request or from path?
@@ -260,8 +254,5 @@ pub async fn delete(
         )
         .await;
 
-    match notified {
-        Ok(_) => Ok(HttpResponse::Ok().finish()),
-        Err(_) => Err(error::ErrorNotFound("Planting not found")),
-    }
+    Ok(HttpResponse::Ok().finish())
 }
