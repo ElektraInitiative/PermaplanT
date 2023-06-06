@@ -152,16 +152,18 @@ pub async fn create(
         ("oauth2" = [])
     )
 )]
-#[patch("/{id}")]
+#[patch("/{planting_id}")]
 pub async fn update(
-    id: Path<Uuid>,
+    path: Path<(i32, Uuid)>,
     new_plant_json: Json<UpdatePlantingDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
+    let (map_id, planting_id) = path.into_inner();
+
     // TODO: implement service that validates (permission, integrity) and updates the record.
-    let mut planting =
-        find_planting_by_id(*id).ok_or_else(|| error::ErrorNotFound("Planting not found"))?;
+    let mut planting = find_planting_by_id(planting_id)
+        .ok_or_else(|| error::ErrorNotFound("Planting not found"))?;
 
     let action = match *new_plant_json {
         UpdatePlantingDto {
@@ -223,16 +225,18 @@ pub async fn update(
         ("oauth2" = [])
     )
 )]
-#[delete("/{id}")]
+#[delete("/{planting_id}")]
 pub async fn delete(
-    path: Path<Uuid>,
+    path: Path<(i32, Uuid)>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     // TODO: implement a service that validates (permissions) and deletes the planting
+    let (map_id, planting_id) = path.into_inner();
+
     {
         let mut plantings = PLANTINGS.write().expect("acquiring write lock failed");
-        plantings.retain(|planting| planting.id != *path);
+        plantings.retain(|planting| planting.id != planting_id);
     }
 
     app_data
@@ -240,7 +244,7 @@ pub async fn delete(
         .broadcast(
             // TODO: get map_id from request or from path?
             1,
-            Action::DeletePlanting(DeletePlantActionPayload::new(*path, user_info.id)),
+            Action::DeletePlanting(DeletePlantActionPayload::new(planting_id, user_info.id)),
         )
         .await;
 

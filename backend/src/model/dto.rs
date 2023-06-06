@@ -87,7 +87,7 @@ pub struct PlantsSummaryDto {
 #[typeshare]
 #[derive(Debug, Serialize, Deserialize, ToSchema, Clone, Copy)]
 pub struct PlantingDto {
-    /// The database id of the record. This is a UUID.
+    /// The database id of the record.
     pub id: Uuid,
     /// The plant that is planted.
     #[serde(rename = "plantId")]

@@ -1,4 +1,4 @@
-//! Contains all the actions that can be broadcasted via [`Broadcaster`].
+//! Contains all the actions that can be broadcasted via [`crate::sse::broadcaster::Broadcaster`].
 
 // The properties of the actions are not documented because they are
 // self-explanatory and should be already documented in the respective
@@ -15,6 +15,7 @@ use uuid::Uuid;
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
 // Use the name of the enum variant as the type field looking like { "type": "CreatePlanting", ... }.
+/// An enum representing all the actions that can be broadcasted via [`crate::sse::broadcaster::Broadcaster`].
 #[serde(tag = "type", content = "payload")]
 pub enum Action {
     /// An action used to broadcast creation of a plant.
@@ -29,7 +30,7 @@ pub enum Action {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`CreatePlantActionDto`].
+/// The payload of the [`Action::CreatePlanting`].
 /// This struct should always match [`PlantingDto`].
 #[serde(rename_all = "camelCase")]
 pub struct CreatePlantActionPayload {
@@ -65,7 +66,7 @@ impl CreatePlantActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`DeletePlantActionDto`].
+/// The payload of the [`Action::DeletePlanting`].
 #[serde(rename_all = "camelCase")]
 pub struct DeletePlantActionPayload {
     user_id: Uuid,
@@ -81,7 +82,7 @@ impl DeletePlantActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`MovePlantActionDto`].
+/// The payload of the [`Action::MovePlanting`].
 #[serde(rename_all = "camelCase")]
 pub struct MovePlantActionPayload {
     user_id: Uuid,
@@ -104,7 +105,7 @@ impl MovePlantActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`TransformPlantActionDto`].
+/// The payload of the [`Action::TransformPlanting`].
 #[serde(rename_all = "camelCase")]
 pub struct TransformPlantActionPayload {
     user_id: Uuid,

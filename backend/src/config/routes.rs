@@ -31,14 +31,14 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(map::find_by_id)
                 .service(map::create)
                 .service(map::show_versions)
-                .service(map::save_snapshot),
-        )
-        .service(
-            web::scope("/plantings")
-                .service(plantings::find)
-                .service(plantings::create)
-                .service(plantings::update)
-                .service(plantings::delete),
+                .service(map::save_snapshot)
+                .service(
+                    web::scope("/{map_id}/layers/plants/plantings")
+                        .service(plantings::find)
+                        .service(plantings::create)
+                        .service(plantings::update)
+                        .service(plantings::delete),
+                ),
         )
         .wrap(NormalizePath::trim())
         .wrap(auth);

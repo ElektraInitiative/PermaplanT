@@ -41,7 +41,7 @@ export class CreatePlantAction
   }
 
   async execute(): Promise<Awaited<ReturnType<typeof createPlanting>>> {
-    return createPlanting({
+    return createPlanting(1, {
       ...this._data,
       // TODO - get these values from the store.
       map_id: 1,
@@ -57,7 +57,7 @@ export class DeletePlantAction
   constructor(private readonly _id: string) {}
 
   async execute(): Promise<boolean> {
-    return deletePlanting(this._id);
+    return deletePlanting(1, this._id);
   }
 
   reverse(state: TrackedMapState) {
@@ -129,7 +129,7 @@ export class MovePlantAction
 
   execute(): Promise<PlantingDto[]> {
     const tasks = this._data.map((d) =>
-      movePlanting(d.id, {
+      movePlanting(1, d.id, {
         // TODO - get these values from the store.
         map_id: 1,
         x: d.x,
@@ -202,7 +202,7 @@ export class TransformPlantAction
 
   execute(): Promise<PlantingDto[]> {
     const tasks = this._data.map((d) =>
-      transformPlanting(d.id, {
+      transformPlanting(1, d.id, {
         // TODO - get these values from the store.
         map_id: 1,
         x: d.x,

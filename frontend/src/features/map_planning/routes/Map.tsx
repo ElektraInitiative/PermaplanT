@@ -26,11 +26,12 @@ import { Rect } from 'react-konva';
 function useInitializeMap() {
   useMapUpdates();
   const initPlantLayer = useMapStore((state) => state.initPlantLayer);
+  const mapId = '1';
 
-  useQuery(['layers/plants'], {
-    queryFn: getPlantings,
-    onSuccess(plants) {
-      initPlantLayer(plants);
+  useQuery(['plants/plantings', mapId], {
+    queryFn: (context) => getPlantings(context.queryKey[1]),
+    onSuccess: (data) => {
+      initPlantLayer(data);
     },
   });
 }
