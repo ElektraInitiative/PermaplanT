@@ -6,14 +6,14 @@ import { deletePlanting } from '../../api/deletePlanting';
 import { movePlanting } from '../../api/movePlanting';
 import { transformPlanting } from '../../api/transformPlanting';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
-import { PlantLayerObjectDto } from '@/bindings/definitions';
+import { PlantingDto } from '@/bindings/definitions';
 
 export class CreatePlantAction
   implements Action<Awaited<ReturnType<typeof createPlanting>>, boolean>
 {
   private readonly _id: string;
 
-  constructor(private readonly _data: PlantLayerObjectDto) {
+  constructor(private readonly _data: PlantingDto) {
     this._id = _data.id;
   }
 
@@ -90,7 +90,7 @@ export class MovePlantAction
 {
   private readonly _ids: Array<string>;
 
-  constructor(private readonly _data: Array<Pick<PlantLayerObjectDto, 'x' | 'y' | 'id'>>) {
+  constructor(private readonly _data: Array<Pick<PlantingDto, 'x' | 'y' | 'id'>>) {
     this._ids = _data.map((d) => d.id);
   }
 
@@ -127,7 +127,7 @@ export class MovePlantAction
     };
   }
 
-  execute(): Promise<PlantLayerObjectDto[]> {
+  execute(): Promise<PlantingDto[]> {
     const tasks = this._data.map((d) =>
       movePlanting(d.id, {
         // TODO - get these values from the store.
@@ -149,7 +149,7 @@ export class TransformPlantAction
 
   constructor(
     private readonly _data: Array<
-      Pick<PlantLayerObjectDto, 'x' | 'y' | 'id' | 'scaleX' | 'scaleY' | 'rotation'>
+      Pick<PlantingDto, 'x' | 'y' | 'id' | 'scaleX' | 'scaleY' | 'rotation'>
     >,
   ) {
     this._ids = _data.map((d) => d.id);
@@ -200,7 +200,7 @@ export class TransformPlantAction
     };
   }
 
-  execute(): Promise<PlantLayerObjectDto[]> {
+  execute(): Promise<PlantingDto[]> {
     const tasks = this._data.map((d) =>
       transformPlanting(d.id, {
         // TODO - get these values from the store.

@@ -6,7 +6,7 @@ import type {
   UntrackedMapSlice,
 } from './MapStoreTypes';
 import { LAYER_NAMES } from './MapStoreTypes';
-import { PlantLayerObjectDto } from '@/bindings/definitions';
+import { PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { createRef } from 'react';
@@ -59,7 +59,7 @@ export const createTrackedMapSlice: StateCreator<
         return state;
       });
     },
-    initPlantLayer: (plants: PlantLayerObjectDto[]) =>
+    initPlantLayer: (plants: PlantingDto[]) =>
       set((state) => ({
         ...state,
         trackedState: {

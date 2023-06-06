@@ -14,12 +14,15 @@ use actix_web::{
 };
 use uuid::Uuid;
 
-use crate::config::data::AppDataInner;
-use crate::model::dto::actions::{
-    CreatePlantActionDto, DeletePlantActionDto, MovePlantActionDto, TransformPlantActionDto,
-};
 use crate::model::dto::{NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto};
 use crate::{config::auth::user_info::UserInfo, model::dto::actions::Action};
+use crate::{
+    config::data::AppDataInner,
+    model::dto::actions::{
+        CreatePlantActionPayload, DeletePlantActionPayload, MovePlantActionPayload,
+        TransformPlantActionPayload,
+    },
+};
 
 /// FIXME: REMOVE THIS HACK ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗
 static PLANTINGS: RwLock<Vec<PlantingDto>> = RwLock::new(vec![]);
@@ -125,7 +128,7 @@ pub async fn create(
         .broadcaster
         .broadcast(
             new_plant_json.map_id,
-            Action::CreatePlanting(CreatePlantActionDto::new(dto, user_info.id)),
+            Action::CreatePlanting(CreatePlantActionPayload::new(dto, user_info.id)),
         )
         .await;
 
@@ -176,7 +179,7 @@ pub async fn update(
             planting.scale_y = scale_y;
             replace_planting(planting);
 
-            Action::TransformPlanting(TransformPlantActionDto::new(planting, user_info.id))
+            Action::TransformPlanting(TransformPlantActionPayload::new(planting, user_info.id))
         }
         UpdatePlantingDto {
             x: Some(x),
@@ -187,7 +190,7 @@ pub async fn update(
             planting.y = y;
             replace_planting(planting);
 
-            Action::MovePlanting(MovePlantActionDto::new(planting, user_info.id))
+            Action::MovePlanting(MovePlantActionPayload::new(planting, user_info.id))
         }
         _ => {
             return Err(error::ErrorBadRequest(
@@ -237,7 +240,7 @@ pub async fn delete(
         .broadcast(
             // TODO: get map_id from request or from path?
             1,
-            Action::DeletePlanting(DeletePlantActionDto::new(*path, user_info.id)),
+            Action::DeletePlanting(DeletePlantActionPayload::new(*path, user_info.id)),
         )
         .await;
 

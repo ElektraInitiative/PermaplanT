@@ -1,4 +1,4 @@
-import { PlantLayerObjectDto } from '@/bindings/definitions';
+import { PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 
@@ -83,7 +83,7 @@ export interface TrackedMapSlice {
   /**
    * Initializes the plant layer.
    */
-  initPlantLayer: (plantLayer: PlantLayerObjectDto[]) => void;
+  initPlantLayer: (plantLayer: PlantingDto[]) => void;
 }
 
 /**
@@ -178,7 +178,7 @@ export type TrackedLayers = {
 export type TrackedPlantLayerState = {
   index: 'Plant';
 
-  objects: PlantLayerObjectDto[];
+  objects: PlantingDto[];
 };
 
 /**

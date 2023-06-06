@@ -3,7 +3,7 @@ import useMapStore from './MapStore';
 import { TrackedLayers } from './MapStoreTypes';
 import { TRACKED_DEFAULT_STATE } from './TrackedMapStore';
 import { UNTRACKED_DEFAULT_STATE } from './UntrackedMapStore';
-import { PlantLayerObjectDto } from '@/bindings/definitions';
+import { PlantingDto } from '@/bindings/definitions';
 
 // mock the axios api configuration, so that we don't actually send requests to the backend
 jest.mock('@/config/axios');
@@ -331,7 +331,7 @@ describe('MapHistoryStore', () => {
   });
 });
 
-function initPlantLayerInStore(objects: PlantLayerObjectDto[] = []) {
+function initPlantLayerInStore(objects: PlantingDto[] = []) {
   useMapStore.setState({
     untrackedState: {
       ...UNTRACKED_DEFAULT_STATE,
@@ -349,7 +349,7 @@ function initPlantLayerInStore(objects: PlantLayerObjectDto[] = []) {
   });
 }
 
-function createPlantTestObject(testValue: number): PlantLayerObjectDto {
+function createPlantTestObject(testValue: number): PlantingDto {
   return {
     id: testValue.toString(),
     plantId: 1,

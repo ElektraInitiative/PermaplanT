@@ -6,14 +6,8 @@ import {
 } from '../layers/plant/actions';
 import useMapStore from './MapStore';
 import { Action } from './MapStoreTypes';
-import {
-  CreatePlantActionDto,
-  DeletePlantActionDto,
-  MovePlantActionDto,
-  TransformPlantActionDto,
-} from '@/bindings/definitions';
+import { Action as RemoteAction } from '@/bindings/definitions';
 import { User } from 'oidc-client-ts';
-import z from 'zod';
 
 export function handleRemoteAction(ev: MessageEvent<unknown>, user: User) {
   if (typeof ev.data !== 'string') {
@@ -28,14 +22,13 @@ export function handleRemoteAction(ev: MessageEvent<unknown>, user: User) {
 
   let remoteAction: RemoteAction;
   try {
-    const remoteActionJson = JSON.parse(ev.data);
-    remoteAction = RemoteActionSchema.parse(remoteActionJson);
+    remoteAction = JSON.parse(ev.data);
   } catch (e) {
     console.error(e);
     return;
   }
 
-  if (remoteAction.userId === user.profile.sub) {
+  if (remoteAction.payload.userId === user.profile.sub) {
     // Ignore actions from self, later this can be used to handle conflicts.
     // see https://www.figma.com/blog/how-figmas-multiplayer-technology-works/#syncing-object-properties
     return;
@@ -48,71 +41,15 @@ export function handleRemoteAction(ev: MessageEvent<unknown>, user: User) {
 
 function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
   switch (remoteAction.type) {
-    case 'CREATE_PLANT':
+    case 'CreatePlanting':
       return new CreatePlantAction({ ...remoteAction.payload });
-    case 'DELETE_PLANT':
+    case 'DeletePlanting':
       return new DeletePlantAction(remoteAction.payload.id);
-    case 'MOVE_PLANT':
+    case 'MovePlanting':
       return new MovePlantAction([{ ...remoteAction.payload }]);
-    case 'TRANSFORM_PLANT':
+    case 'TransformPlanting':
       return new TransformPlantAction([{ ...remoteAction.payload }]);
     default:
       throw new Error(`Unknown remote action`) as never;
   }
 }
-
-const RemoteCreatePlantActionSchema = z.object({
-  type: z.literal('CREATE_PLANT'),
-  userId: z.string(),
-  payload: z.object({
-    id: z.string(),
-    plantId: z.number(),
-    x: z.number(),
-    y: z.number(),
-    width: z.number(),
-    height: z.number(),
-    rotation: z.number(),
-    scaleX: z.number(),
-    scaleY: z.number(),
-  }),
-}) satisfies z.ZodType<CreatePlantActionDto>;
-
-const RemoteDeletePlantActionSchema = z.object({
-  type: z.literal('DELETE_PLANT'),
-  userId: z.string(),
-  payload: z.object({
-    id: z.string(),
-  }),
-}) satisfies z.ZodType<DeletePlantActionDto>;
-
-const RemoteMovePlantActionSchema = z.object({
-  type: z.literal('MOVE_PLANT'),
-  userId: z.string(),
-  payload: z.object({
-    id: z.string(),
-    x: z.number(),
-    y: z.number(),
-  }),
-}) satisfies z.ZodType<MovePlantActionDto>;
-
-const RemoteTransformPlantActionSchema = z.object({
-  type: z.literal('TRANSFORM_PLANT'),
-  userId: z.string(),
-  payload: z.object({
-    id: z.string(),
-    x: z.number(),
-    y: z.number(),
-    rotation: z.number(),
-    scaleX: z.number(),
-    scaleY: z.number(),
-  }),
-}) satisfies z.ZodType<TransformPlantActionDto>;
-
-const RemoteActionSchema = z.discriminatedUnion('type', [
-  RemoteCreatePlantActionSchema,
-  RemoteDeletePlantActionSchema,
-  RemoteMovePlantActionSchema,
-  RemoteTransformPlantActionSchema,
-]);
-
-type RemoteAction = z.infer<typeof RemoteActionSchema>;

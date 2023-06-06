@@ -4,6 +4,8 @@
 // self-explanatory and should be already documented in the respective
 // entity DTOs.
 #![allow(clippy::missing_docs_in_private_items)]
+// Don't make the `new` functions const, there might come more fields in the future.
+#![allow(clippy::missing_const_for_fn)]
 
 use super::PlantingDto;
 use serde::Serialize;
@@ -12,154 +14,119 @@ use uuid::Uuid;
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
+// Use the name of the enum variant as the type field looking like { "type": "CreatePlanting", ... }.
+#[serde(tag = "type", content = "payload")]
 pub enum Action {
-    CreatePlanting(CreatePlantActionDto),
-    MovePlanting(MovePlantActionDto),
-    TransformPlanting(TransformPlantActionDto),
-    DeletePlanting(DeletePlantActionDto),
+    /// An action used to broadcast creation of a plant.
+    CreatePlanting(CreatePlantActionPayload),
+    /// An action used to broadcast deletion of a plant.
+    DeletePlanting(DeletePlantActionPayload),
+    /// An action used to broadcast movement of a plant.
+    MovePlanting(MovePlantActionPayload),
+    /// An action used to broadcast transformation of a plant.
+    TransformPlanting(TransformPlantActionPayload),
 }
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The meta data of an action.
-pub struct ActionMeta {
-    /// The type of the action.
-    #[serde(rename = "type")]
-    _type: String,
-    /// The id of the user that triggered the action.
-    #[serde(rename = "userId")]
-    user_id: Uuid,
-}
-
-#[typeshare]
-#[derive(Debug, Serialize, Clone)]
-/// An action used to broadcast creation of a plant.
-pub struct CreatePlantActionDto {
-    #[serde(flatten)]
-    meta: ActionMeta,
-    payload: CreatePlantActionPayload,
-}
-
-#[typeshare]
 /// The payload of the [`CreatePlantActionDto`].
-pub type CreatePlantActionPayload = PlantingDto;
+/// This struct should always match [`PlantingDto`].
+#[serde(rename_all = "camelCase")]
+pub struct CreatePlantActionPayload {
+    user_id: Uuid,
+    id: Uuid,
+    plant_id: i32,
+    x: f32,
+    y: f32,
+    width: i32,
+    height: i32,
+    rotation: f32,
+    scale_x: f32,
+    scale_y: f32,
+}
 
-impl CreatePlantActionDto {
+impl CreatePlantActionPayload {
     #[must_use]
     pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
         Self {
-            meta: ActionMeta {
-                _type: "CREATE_PLANT".to_owned(),
-                user_id,
-            },
-            payload,
+            user_id,
+            id: payload.id,
+            plant_id: payload.plant_id,
+            x: payload.x,
+            y: payload.y,
+            width: payload.width,
+            height: payload.height,
+            rotation: payload.rotation,
+            scale_x: payload.scale_x,
+            scale_y: payload.scale_y,
         }
     }
-}
-
-#[typeshare]
-#[derive(Debug, Serialize, Clone)]
-/// An action used to broadcast deletion of a plant.
-pub struct DeletePlantActionDto {
-    #[serde(flatten)]
-    meta: ActionMeta,
-    payload: DeletePlantActionPayload,
 }
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
 /// The payload of the [`DeletePlantActionDto`].
+#[serde(rename_all = "camelCase")]
 pub struct DeletePlantActionPayload {
+    user_id: Uuid,
     id: Uuid,
 }
 
-impl DeletePlantActionDto {
+impl DeletePlantActionPayload {
     #[must_use]
     pub fn new(id: Uuid, user_id: Uuid) -> Self {
-        Self {
-            meta: ActionMeta {
-                _type: "DELETE_PLANT".to_owned(),
-                user_id,
-            },
-            payload: DeletePlantActionPayload { id },
-        }
+        Self { user_id, id }
     }
-}
-
-#[typeshare]
-#[derive(Debug, Serialize, Clone)]
-/// An action used to broadcast movement of a plant.
-pub struct MovePlantActionDto {
-    #[serde(flatten)]
-    meta: ActionMeta,
-    payload: MovePlantActionPayload,
 }
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
 /// The payload of the [`MovePlantActionDto`].
+#[serde(rename_all = "camelCase")]
 pub struct MovePlantActionPayload {
+    user_id: Uuid,
     id: Uuid,
     x: f32,
     y: f32,
 }
 
-impl MovePlantActionDto {
+impl MovePlantActionPayload {
     #[must_use]
     pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
         Self {
-            meta: ActionMeta {
-                _type: "MOVE_PLANT".to_owned(),
-                user_id,
-            },
-            payload: MovePlantActionPayload {
-                id: payload.id,
-                x: payload.x,
-                y: payload.y,
-            },
+            user_id,
+            id: payload.id,
+            x: payload.x,
+            y: payload.y,
         }
     }
 }
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// An action used to broadcast transformation of a plant.
-pub struct TransformPlantActionDto {
-    #[serde(flatten)]
-    meta: ActionMeta,
-    payload: TransformPlantActionPayload,
-}
-
-#[typeshare]
-#[derive(Debug, Serialize, Clone)]
 /// The payload of the [`TransformPlantActionDto`].
+#[serde(rename_all = "camelCase")]
 pub struct TransformPlantActionPayload {
+    user_id: Uuid,
     id: Uuid,
     x: f32,
     y: f32,
     rotation: f32,
-    #[serde(rename = "scaleX")]
     scale_x: f32,
-    #[serde(rename = "scaleY")]
     scale_y: f32,
 }
 
-impl TransformPlantActionDto {
+impl TransformPlantActionPayload {
     #[must_use]
     pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
         Self {
-            meta: ActionMeta {
-                _type: "TRANSFORM_PLANT".to_owned(),
-                user_id,
-            },
-            payload: TransformPlantActionPayload {
-                id: payload.id,
-                x: payload.x,
-                y: payload.y,
-                rotation: payload.rotation,
-                scale_x: payload.scale_x,
-                scale_y: payload.scale_y,
-            },
+            user_id,
+            id: payload.id,
+            x: payload.x,
+            y: payload.y,
+            rotation: payload.rotation,
+            scale_x: payload.scale_x,
+            scale_y: payload.scale_y,
         }
     }
 }
