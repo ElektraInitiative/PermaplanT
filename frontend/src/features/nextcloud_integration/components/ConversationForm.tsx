@@ -1,6 +1,6 @@
 import SimpleButton from '@/components/Button/SimpleButton';
 import React, { useState } from 'react';
-import { ConversationType, createConversation, CreateConversationOptions } from './chat';
+import { ConversationType, createConversation, CreateConversationOptions } from '../api/chat';
 
 
 const ConversationForm = () => {
