@@ -13,7 +13,6 @@ export const sendMessage = (chatToken: string, message: string) => {
   })
 }
 
-
 export type TalkConversation = {
     id: number;
     token: string;
@@ -178,7 +177,6 @@ export const getChatMessages = async (token: string, params: GetChatMessagesPara
   let http = createNextcloudAPI()
   http.defaults.headers['OCS-APIRequest'] = true
   http.defaults.headers['Accept'] ="application/json"
-  console.log(token, params)
   const result = await http.get("/ocs/v2.php/apps/spreed/api/v1/chat/" + token, { params })
   return result.data.ocs.data
 }

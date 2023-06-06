@@ -18,7 +18,7 @@ import { useQuery } from "@tanstack/react-query"
 export const ChatTest = () => {
   const [message, setMessage] = useState<string>("")
   const [messages, setMessages] = useState<Array<ChatMessage>>([])
-  const [conversations, setConversations] = useState<Array<TalkConversation>>([])
+  // const [conversations, setConversations] = useState<Array<TalkConversation>>([])
   const [selectedConversation, setSelectedConversation] = useState<TalkConversation>()
   const [showConversationForm, setShowConversationForm] = useState<boolean>(false)
 
@@ -26,11 +26,9 @@ export const ChatTest = () => {
     refetchInterval: 5000, // Polling interval in milliseconds (e.g., 5000 = 5 seconds)
   });
 
-  async function fetchConversations() {
-    const conversations = await getConversations()
-    console.log(conversations)
-    setConversations(conversations)
-  }
+  const conversations = useQuery(['conversations'], getConversations, {
+    refetchInterval: 5000, // Polling interval in milliseconds (e.g., 5000 = 5 seconds)
+  });
 
   async function fetchMessageHistory() {
     if (selectedConversation) {
@@ -59,7 +57,7 @@ export const ChatTest = () => {
   async function send() {
     if (selectedConversation) {
       await sendMessage(selectedConversation.token, message)
-      fetchNewMessages()
+      newMessages.refetch()
       toast(("message: '" + message + "' sent"), { type: 'success' })
     } else {
       toast("no convo selected", { type: 'error' })
@@ -68,21 +66,14 @@ export const ChatTest = () => {
 
   useEffect(() => {
     fetchMessageHistory()
-    fetchNewMessages()
   }, [selectedConversation])
 
   useEffect(() => {
     const data = newMessages.data
-    console.log("new messages changed")
     if(data){
-      console.log([...messages, ...data])
       setMessages([...messages, ...data])
     }
   }, [newMessages.data])
-
-  useEffect(() => {
-    fetchConversations()
-  }, [])
 
   return <div className="flex flex-col justify-center items-center gap-4 mt-8">
     <TransparentBackground
@@ -102,7 +93,7 @@ export const ChatTest = () => {
         <h2>conversations</h2>
         <IconButton title="create new conversation" onClick={() => setShowConversationForm(true)}><AddIcon /></IconButton>
         <ul>
-          {conversations.map(item => {
+          {conversations.data?.map(item => {
             return <li className="cursor-pointer hover:text-primary-400" key={item.id} onClick={() => setSelectedConversation(item)}>{item.displayName}</li>
           })}
         </ul>
