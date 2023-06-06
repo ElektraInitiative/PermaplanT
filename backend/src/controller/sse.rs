@@ -16,8 +16,5 @@ pub async fn connect_to_map(
     state: Data<AppDataInner>,
 ) -> impl Responder {
     let query = query.into_inner();
-    state
-        .broadcaster
-        .new_client(query.map_id, query.user_id)
-        .await
+    state.broadcaster.new_client(query.map_id).await
 }

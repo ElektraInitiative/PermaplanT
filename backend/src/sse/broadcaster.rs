@@ -5,15 +5,6 @@ use futures_util::{future::ready, stream, StreamExt};
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tokio::{sync::Mutex, time::interval};
 
-/// Inner state of SSE broadcaster.
-#[derive(Debug, Clone)]
-struct BroadcasterInner {
-    /// Map of map_id to a connected map.
-    /// The map_id is the id of the map that the client connected to.
-    /// The connected map contains the map_id and a list of clients connected to that map.
-    maps: HashMap<i32, ConnectedMap>,
-}
-
 /// Map that clients are connected to.
 #[derive(Debug, Clone)]
 struct ConnectedMap {
@@ -24,15 +15,18 @@ struct ConnectedMap {
 /// Client listening to updates on a map.
 #[derive(Debug, Clone)]
 pub struct ConnectedClient {
-    /// Client ID.
-    id: String,
     /// SSE sender for writing messages to the client.
     sender: sse::Sender,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 /// SSE broadcaster.
-pub struct Broadcaster(Arc<Mutex<BroadcasterInner>>);
+///
+/// Inner HashMap:
+/// * Map of map_id to a connected map.
+/// * The map_id is the id of the map that the client connected to.
+/// * The connected map contains the map_id and a list of clients connected to that map.
+pub struct Broadcaster(Arc<Mutex<HashMap<i32, ConnectedMap>>>);
 
 impl Broadcaster {
     /// Constructs new broadcaster and spawns ping loop.
@@ -61,9 +55,9 @@ impl Broadcaster {
     async fn remove_stale_clients(&self) {
         let mut guard = self.0.lock().await;
 
-        let mut ok_maps = HashMap::with_capacity(guard.maps.capacity());
+        let mut ok_maps = HashMap::with_capacity(guard.capacity());
 
-        let old_maps = guard.maps.values();
+        let old_maps = guard.values();
 
         for map in old_maps {
             let ok_clients = stream::iter(&map.clients)
@@ -90,7 +84,7 @@ impl Broadcaster {
             }
         }
 
-        guard.maps = ok_maps;
+        *guard = ok_maps;
     }
 
     /// Registers client with broadcaster, returning an SSE response body.
@@ -100,22 +94,18 @@ impl Broadcaster {
     pub async fn new_client(
         &self,
         map_id: i32,
-        user_id: String,
     ) -> Result<Sse<ChannelStream>, Box<dyn std::error::Error>> {
         let (sender, channel_stream) = sse::channel(10);
         let mut guard = self.0.lock().await;
 
-        let map = guard.maps.entry(map_id).or_insert_with(|| ConnectedMap {
+        let map = guard.entry(map_id).or_insert_with(|| ConnectedMap {
             map_id,
             clients: Vec::new(),
         });
 
         sender.send(sse::Data::new("connected")).await?;
 
-        map.clients.push(ConnectedClient {
-            id: user_id.clone(),
-            sender,
-        });
+        map.clients.push(ConnectedClient { sender });
 
         Ok(channel_stream)
     }
@@ -132,7 +122,7 @@ impl Broadcaster {
         let serialized_data = sse::Data::new_json(msg)?;
         let guard = self.0.lock().await;
 
-        if let Some(map) = guard.maps.get(&map_id) {
+        if let Some(map) = guard.get(&map_id) {
             // try to send to all clients, ignoring failures
             // disconnected clients will get swept up by `remove_stale_clients`
             let _ = stream::iter(&map.clients)
@@ -143,13 +133,5 @@ impl Broadcaster {
         }
 
         Ok(())
-    }
-}
-
-impl Default for Broadcaster {
-    fn default() -> Self {
-        Self(Arc::new(Mutex::new(BroadcasterInner {
-            maps: HashMap::new(), // TODO: how can we choose a better initial capacity?
-        })))
     }
 }
