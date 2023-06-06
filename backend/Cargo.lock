@@ -388,7 +388,7 @@ dependencies = [
  "diesel-derive-enum",
  "dotenvy",
  "env_logger",
- "futures-util",
+ "futures",
  "jsonwebkey",
  "jsonwebtoken",
  "log",

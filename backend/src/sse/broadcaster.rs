@@ -1,7 +1,7 @@
 //! SSE broadcaster.
 
 use actix_web_lab::sse::{self, ChannelStream, Sse};
-use futures_util::{future::ready, stream, StreamExt};
+use futures::{future::ready, stream, StreamExt};
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tokio::{sync::Mutex, time::interval};
 
