@@ -14,7 +14,7 @@ use crate::{
         dto::{
             ConfigDto, MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, NewPlantingDto,
             NewSeedDto, PageMapDto, PageMapVersionDto, PagePlantingDto, PagePlantsSummaryDto,
-            PageSeedDto, PlantLayerObjectDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
+            PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
         },
         r#enum::{quality::Quality, quantity::Quantity},
     },
@@ -88,7 +88,7 @@ struct PlantsApiDoc;
     components(
         schemas(
             NewPlantingDto,
-            PlantLayerObjectDto,
+            PlantingDto,
             UpdatePlantingDto,
             PagePlantingDto
         )

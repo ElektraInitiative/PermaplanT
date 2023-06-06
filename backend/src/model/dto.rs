@@ -5,6 +5,7 @@ use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
+use uuid::Uuid;
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
@@ -84,10 +85,10 @@ pub struct PlantsSummaryDto {
 /// Represents plant planted on a map.
 /// E.g. a user drags a plant from the search results and drops it on the map.
 #[typeshare]
-#[derive(Debug, Serialize, Deserialize, ToSchema, Clone)]
-pub struct PlantLayerObjectDto {
+#[derive(Debug, Serialize, Deserialize, ToSchema, Clone, Copy)]
+pub struct PlantingDto {
     /// The database id of the record. This is a UUID.
-    pub id: String,
+    pub id: Uuid,
     /// The plant that is planted.
     #[serde(rename = "plantId")]
     pub plant_id: i32,
@@ -114,7 +115,7 @@ pub struct PlantLayerObjectDto {
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewPlantingDto {
     /// The database id of the record. This is a UUID.
-    pub id: String,
+    pub id: Uuid,
     /// The plant that is planted.
     pub plant_id: i32,
     /// The map the plant is placed on.
@@ -210,7 +211,7 @@ pub struct PageParameters {
     PagePlantsSummaryDto = Page<PlantsSummaryDto>,
     PageSeedDto = Page<SeedDto>,
     PageMapDto = Page<MapDto>,
-    PagePlantingDto = Page<PlantLayerObjectDto>,
+    PagePlantingDto = Page<PlantingDto>,
     PageMapVersionDto = Page<MapVersionDto>
 )]
 pub struct Page<T> {

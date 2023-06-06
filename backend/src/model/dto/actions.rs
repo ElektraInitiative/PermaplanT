@@ -5,9 +5,10 @@
 // entity DTOs.
 #![allow(clippy::missing_docs_in_private_items)]
 
-use super::PlantLayerObjectDto;
+use super::PlantingDto;
 use serde::Serialize;
 use typeshare::typeshare;
+use uuid::Uuid;
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
@@ -27,7 +28,7 @@ pub struct ActionMeta {
     _type: String,
     /// The id of the user that triggered the action.
     #[serde(rename = "userId")]
-    user_id: String,
+    user_id: Uuid,
 }
 
 #[typeshare]
@@ -41,11 +42,11 @@ pub struct CreatePlantActionDto {
 
 #[typeshare]
 /// The payload of the [`CreatePlantActionDto`].
-pub type CreatePlantActionPayload = PlantLayerObjectDto;
+pub type CreatePlantActionPayload = PlantingDto;
 
 impl CreatePlantActionDto {
     #[must_use]
-    pub fn new(payload: CreatePlantActionPayload, user_id: String) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
         Self {
             meta: ActionMeta {
                 _type: "CREATE_PLANT".to_owned(),
@@ -69,12 +70,12 @@ pub struct DeletePlantActionDto {
 #[derive(Debug, Serialize, Clone)]
 /// The payload of the [`DeletePlantActionDto`].
 pub struct DeletePlantActionPayload {
-    id: String,
+    id: Uuid,
 }
 
 impl DeletePlantActionDto {
     #[must_use]
-    pub fn new(id: String, user_id: String) -> Self {
+    pub fn new(id: Uuid, user_id: Uuid) -> Self {
         Self {
             meta: ActionMeta {
                 _type: "DELETE_PLANT".to_owned(),
@@ -98,14 +99,14 @@ pub struct MovePlantActionDto {
 #[derive(Debug, Serialize, Clone)]
 /// The payload of the [`MovePlantActionDto`].
 pub struct MovePlantActionPayload {
-    id: String,
+    id: Uuid,
     x: f32,
     y: f32,
 }
 
 impl MovePlantActionDto {
     #[must_use]
-    pub fn new(payload: PlantLayerObjectDto, user_id: String) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
         Self {
             meta: ActionMeta {
                 _type: "MOVE_PLANT".to_owned(),
@@ -133,7 +134,7 @@ pub struct TransformPlantActionDto {
 #[derive(Debug, Serialize, Clone)]
 /// The payload of the [`TransformPlantActionDto`].
 pub struct TransformPlantActionPayload {
-    id: String,
+    id: Uuid,
     x: f32,
     y: f32,
     rotation: f32,
@@ -145,7 +146,7 @@ pub struct TransformPlantActionPayload {
 
 impl TransformPlantActionDto {
     #[must_use]
-    pub fn new(payload: PlantLayerObjectDto, user_id: String) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
         Self {
             meta: ActionMeta {
                 _type: "TRANSFORM_PLANT".to_owned(),

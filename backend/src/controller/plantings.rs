@@ -12,33 +12,32 @@ use actix_web::{
     web::{Data, Json, Path, Query},
     HttpResponse, Result,
 };
+use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
 use crate::model::dto::actions::{
     CreatePlantActionDto, DeletePlantActionDto, MovePlantActionDto, TransformPlantActionDto,
 };
-use crate::model::dto::{
-    NewPlantingDto, PlantLayerObjectDto, PlantingSearchParameters, UpdatePlantingDto,
-};
+use crate::model::dto::{NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto};
 use crate::{config::auth::user_info::UserInfo, model::dto::actions::Action};
 
 /// FIXME: REMOVE THIS HACK ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗
-static PLANTINGS: RwLock<Vec<PlantLayerObjectDto>> = RwLock::new(vec![]);
+static PLANTINGS: RwLock<Vec<PlantingDto>> = RwLock::new(vec![]);
 
 /// FIXME: REMOVE
 #[allow(clippy::expect_used)]
-fn find_planting_by_id(id: &str) -> Option<PlantLayerObjectDto> {
+fn find_planting_by_id(id: Uuid) -> Option<PlantingDto> {
     PLANTINGS
         .read()
         .expect("acquiring read lock failed")
         .iter()
         .find(|planting| planting.id == id)
-        .cloned()
+        .copied()
 }
 
 /// FIXME: REMOVE
 #[allow(clippy::expect_used)]
-fn replace_planting(planting: PlantLayerObjectDto) {
+fn replace_planting(planting: PlantingDto) {
     let mut plantings = PLANTINGS.write().expect("acquiring write lock failed");
     if let Some(p) = plantings.iter_mut().find(|p| p.id == planting.id) {
         *p = planting;
@@ -59,7 +58,7 @@ fn replace_planting(planting: PlantLayerObjectDto) {
         PlantingSearchParameters,
     ),
     responses(
-        (status = 200, description = "Find plantings", body = Vec<PlantLayerObjectDto>)
+        (status = 200, description = "Find plantings", body = Vec<PlantingDto>)
     ),
     security(
         ("oauth2" = [])
@@ -89,7 +88,7 @@ pub async fn find(
     context_path = "/api/plantings",
     request_body = NewPlantingDto,
     responses(
-        (status = 201, description = "Create a planting", body = PlantLayerObjectDto)
+        (status = 201, description = "Create a planting", body = PlantingDto)
     ),
     security(
         ("oauth2" = [])
@@ -106,8 +105,8 @@ pub async fn create(
         PLANTINGS
             .write()
             .expect("acquiring write lock failed")
-            .push(PlantLayerObjectDto {
-                id: new_plant_json.id.clone(),
+            .push(PlantingDto {
+                id: new_plant_json.id,
                 plant_id: new_plant_json.plant_id,
                 x: new_plant_json.x,
                 y: new_plant_json.y,
@@ -119,17 +118,14 @@ pub async fn create(
             });
     }
 
-    let dto = find_planting_by_id(&new_plant_json.id)
+    let dto = find_planting_by_id(new_plant_json.id)
         .ok_or_else(|| error::ErrorInternalServerError("Could not create planting"))?;
 
     app_data
         .broadcaster
         .broadcast(
             new_plant_json.map_id,
-            Action::CreatePlanting(CreatePlantActionDto::new(
-                dto.clone(),
-                user_info.id.to_string(),
-            )),
+            Action::CreatePlanting(CreatePlantActionDto::new(dto, user_info.id)),
         )
         .await;
 
@@ -147,7 +143,7 @@ pub async fn create(
     context_path = "/api/plantings",
     request_body = UpdatePlantingDto,
     responses(
-        (status = 200, description = "Update a planting", body = PlantLayerObjectDto)
+        (status = 200, description = "Update a planting", body = PlantingDto)
     ),
     security(
         ("oauth2" = [])
@@ -155,14 +151,14 @@ pub async fn create(
 )]
 #[patch("/{id}")]
 pub async fn update(
-    id: Path<String>,
+    id: Path<Uuid>,
     new_plant_json: Json<UpdatePlantingDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and updates the record.
     let mut planting =
-        find_planting_by_id(&id).ok_or_else(|| error::ErrorNotFound("Planting not found"))?;
+        find_planting_by_id(*id).ok_or_else(|| error::ErrorNotFound("Planting not found"))?;
 
     let action = match *new_plant_json {
         UpdatePlantingDto {
@@ -178,12 +174,9 @@ pub async fn update(
             planting.rotation = rotation;
             planting.scale_x = scale_x;
             planting.scale_y = scale_y;
-            replace_planting(planting.clone());
+            replace_planting(planting);
 
-            Action::TransformPlanting(TransformPlantActionDto::new(
-                planting.clone(),
-                user_info.id.to_string(),
-            ))
+            Action::TransformPlanting(TransformPlantActionDto::new(planting, user_info.id))
         }
         UpdatePlantingDto {
             x: Some(x),
@@ -192,12 +185,9 @@ pub async fn update(
         } => {
             planting.x = x;
             planting.y = y;
-            replace_planting(planting.clone());
+            replace_planting(planting);
 
-            Action::MovePlanting(MovePlantActionDto::new(
-                planting.clone(),
-                user_info.id.to_string(),
-            ))
+            Action::MovePlanting(MovePlantActionDto::new(planting, user_info.id))
         }
         _ => {
             return Err(error::ErrorBadRequest(
@@ -232,7 +222,7 @@ pub async fn update(
 )]
 #[delete("/{id}")]
 pub async fn delete(
-    path: Path<String>,
+    path: Path<Uuid>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
@@ -247,10 +237,7 @@ pub async fn delete(
         .broadcast(
             // TODO: get map_id from request or from path?
             1,
-            Action::DeletePlanting(DeletePlantActionDto::new(
-                path.to_string(),
-                user_info.id.to_string(),
-            )),
+            Action::DeletePlanting(DeletePlantActionDto::new(*path, user_info.id)),
         )
         .await;
 
