@@ -1,7 +1,5 @@
 //! Configurations for the app data that is available to all controllers.
 
-use std::sync::Arc;
-
 use crate::sse::broadcaster::Broadcaster;
 use actix_web::web::Data;
 
@@ -12,7 +10,7 @@ pub struct AppDataInner {
     /// Connection pool to the database.
     pub pool: connection::Pool,
     /// Server-Sent Events broadcaster.
-    pub broadcaster: Arc<Broadcaster>,
+    pub broadcaster: Broadcaster,
 }
 
 /// Initializes the app data that is available to all controllers.

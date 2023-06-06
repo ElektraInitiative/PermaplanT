@@ -33,13 +33,12 @@ pub struct ConnectedClient {
 #[derive(Debug, Clone)]
 /// SSE broadcaster.
 pub struct Broadcaster(Arc<Mutex<BroadcasterInner>>);
+
 impl Broadcaster {
     /// Constructs new broadcaster and spawns ping loop.
     #[must_use]
     pub fn new() -> Self {
-        let broadcaster = Broadcaster(Arc::new(Mutex::new(BroadcasterInner {
-            maps: HashMap::new(), // TODO: how can we choose a better initial capacity?
-        })));
+        let broadcaster = Self::default();
         Self::spawn_ping(broadcaster.clone());
         broadcaster
     }
@@ -144,5 +143,13 @@ impl Broadcaster {
         }
 
         Ok(())
+    }
+}
+
+impl Default for Broadcaster {
+    fn default() -> Self {
+        Self(Arc::new(Mutex::new(BroadcasterInner {
+            maps: HashMap::new(), // TODO: how can we choose a better initial capacity?
+        })))
     }
 }

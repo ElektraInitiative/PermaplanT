@@ -84,12 +84,12 @@ async fn main() -> std::io::Result<()> {
         config.bind_address.0, config.bind_address.1
     );
 
-    HttpServer::new(move || {
-        let data = config::data::init(&config.database_url);
+    let data = config::data::init(&config.database_url);
 
+    HttpServer::new(move || {
         App::new()
             .wrap(cors_configuration())
-            .app_data(data)
+            .app_data(data.clone())
             .configure(routes::config)
             .configure(api_doc::config)
             .wrap(Logger::default())
