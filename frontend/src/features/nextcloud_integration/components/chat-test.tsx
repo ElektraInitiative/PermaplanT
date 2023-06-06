@@ -10,6 +10,7 @@ import TransparentBackground from "@/components/TransparentBackground"
 import IconButton from "@/components/Button/IconButton"
 import { ReactComponent as AddIcon } from '@/icons/add.svg';
 import { AnimatePresence, motion } from "framer-motion"
+import { useQuery } from "@tanstack/react-query"
 
 /**
  * component used for testing different chat api calls
@@ -21,38 +22,63 @@ export const ChatTest = () => {
   const [selectedConversation, setSelectedConversation] = useState<TalkConversation>()
   const [showConversationForm, setShowConversationForm] = useState<boolean>(false)
 
+  const newMessages = useQuery(['newMessages', selectedConversation], fetchNewMessages, {
+    refetchInterval: 5000, // Polling interval in milliseconds (e.g., 5000 = 5 seconds)
+  });
+
   async function fetchConversations() {
     const conversations = await getConversations()
     console.log(conversations)
     setConversations(conversations)
   }
 
-  async function fetchMessages() {
+  async function fetchMessageHistory() {
     if (selectedConversation) {
-      const messages = await getChatMessages(selectedConversation?.token, {
+      const messageHistory = await getChatMessages(selectedConversation?.token, {
         lookIntoFuture: LookIntoFuture.GetHistory
       })
-      messages.reverse()
-      setMessages(messages)
+      messageHistory.reverse()
+      setMessages(messageHistory)
     } else {
       toast("no convo selected", { type: 'error' })
+    }
+  }
+
+  async function fetchNewMessages() {
+    if (selectedConversation) {
+      return getChatMessages(selectedConversation?.token, {
+        lookIntoFuture: LookIntoFuture.Poll,
+        lastKnownMessageId: messages[messages.length-1].id
+      })
+    } else {
+      toast("no convo selected", { type: 'error' })
+      return null
     }
   }
 
   async function send() {
     if (selectedConversation) {
       await sendMessage(selectedConversation.token, message)
-      fetchMessages()
+      fetchNewMessages()
       toast(("message: '" + message + "' sent"), { type: 'success' })
     } else {
       toast("no convo selected", { type: 'error' })
     }
   }
 
+  useEffect(() => {
+    fetchMessageHistory()
+    fetchNewMessages()
+  }, [selectedConversation])
 
   useEffect(() => {
-    fetchMessages()
-  }, [selectedConversation])
+    const data = newMessages.data
+    if(data){
+      console.log("update messages")
+      console.log(data)
+      setMessages([...messages, ...data])
+    }
+  }, [newMessages])
 
   useEffect(() => {
     fetchConversations()
