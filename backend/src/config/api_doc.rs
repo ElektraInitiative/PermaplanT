@@ -12,10 +12,9 @@ use crate::{
     controller::{config, map, plantings, plants, seed},
     model::{
         dto::{
-            ConfigDto, MapDto, MapVersionDto, NewMapDto,
-            NewMapVersionDto, NewPlantingDto, NewSeedDto, PageMapDto, PageMapVersionDto,
-            PagePlantingDto, PagePlantsSummaryDto, PageSeedDto, PlantingDto, PlantsSummaryDto,
-            SeedDto, UpdatePlantingDto,
+            ConfigDto, MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, NewPlantingDto,
+            NewSeedDto, PageMapDto, PageMapVersionDto, PagePlantingDto, PagePlantsSummaryDto,
+            PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
         },
         r#enum::{quality::Quality, quantity::Quantity},
     },
