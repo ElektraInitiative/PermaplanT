@@ -24,18 +24,6 @@ impl From<Map> for MapDto {
 
 impl<T> From<(Map, T)> for MapDto {
     fn from((map, _): (Map, T)) -> Self {
-        Self {
-            id: map.id,
-            name: map.name,
-            creation_date: map.creation_date,
-            deletion_date: map.deletion_date,
-            last_visit: map.last_visit,
-            is_inactive: map.is_inactive,
-            zoom_factor: map.zoom_factor,
-            honors: map.honors,
-            visits: map.visits,
-            harvested: map.harvested,
-            owner_id: map.owner_id,
-        }
+        Self::from(map)
     }
 }

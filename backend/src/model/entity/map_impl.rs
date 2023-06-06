@@ -19,9 +19,10 @@ use crate::{
 use super::{Map, NewMap};
 
 impl Map {
-    /// Get the top plants matching the search query.
+    /// Get the top maps matching the search query.
     ///
-    /// Can be filtered by active status and owner id if provided in `search_parameters`.
+    /// Can be filtered by `is_inactive` and `owner_id` if provided in `search_parameters`.
+    /// This will be done with equals and is additional functionality for maps (when compared to plant search).
     ///
     /// Uses `pg_trgm` to find matches in `name`.
     /// Ranks using the `pg_trgm` function `similarity()`.
