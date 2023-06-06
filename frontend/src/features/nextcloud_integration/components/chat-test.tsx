@@ -9,6 +9,7 @@ import ModalContainer from "@/components/Modals/ModalContainer"
 import TransparentBackground from "@/components/TransparentBackground"
 import IconButton from "@/components/Button/IconButton"
 import { ReactComponent as AddIcon } from '@/icons/add.svg';
+import { AnimatePresence, motion } from "framer-motion"
 
 /**
  * component used for testing different chat api calls
@@ -80,23 +81,51 @@ export const ChatTest = () => {
           })}
         </ul>
       </div>
-        {selectedConversation &&
-      <div className="flex flex-col gap-4 w-[50%]" >
-        <h2>Chat messages</h2>
-        {messages.length > 0 &&
-          <MessageList messages={messages} />
-        }
-        <SimpleFormInput
-          id="message"
-          labelText={"write a message to " + (selectedConversation ? selectedConversation.displayName : "")}
-          placeHolder="message..."
-          onChange={(e) => setMessage(e.target.value)}
-          isArea={true}
-        ></SimpleFormInput>
-        <SimpleButton onClick={send}>send</SimpleButton>
-        {/* <SimpleButton onClick={fetchMessages}>fetch messages</SimpleButton> */}
-      </div>
-      }
+      <AnimatePresence>
+        {selectedConversation && (
+          <motion.div
+            className="w-[50%]"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 100,
+              transition: { delay: 0, duration: 0.3 },
+            }}
+            exit={{
+              opacity: 0,
+              transition: { delay: 0, duration: 0.3 },
+            }}
+          >
+            <div className="flex flex-col gap-4" >
+              <h2>Chat messages</h2>
+              {messages.length > 0 &&
+                <motion.div
+                  className="h-80 overflow-y-scroll"
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: 100,
+                    transition: { delay: 0, duration: 0.3 },
+                  }}
+                  exit={{
+                    opacity: 0,
+                    transition: { delay: 0, duration: 0.3 },
+                  }}
+                >
+                  <MessageList messages={messages} />
+                </motion.div>
+              }
+              <SimpleFormInput
+                id="message"
+                labelText={"write a message to " + (selectedConversation ? selectedConversation.displayName : "")}
+                placeHolder="message..."
+                onChange={(e) => setMessage(e.target.value)}
+                isArea={true}
+              ></SimpleFormInput>
+              <SimpleButton onClick={send}>send</SimpleButton>
+              {/* <SimpleButton onClick={fetchMessages}>fetch messages</SimpleButton> */}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   </div>
 
