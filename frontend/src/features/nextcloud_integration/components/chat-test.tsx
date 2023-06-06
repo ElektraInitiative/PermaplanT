@@ -7,7 +7,7 @@ import ConversationForm from "./ConversationForm"
 import { useSafeAuth } from "@/hooks/useSafeAuth"
 
 /**
- * component used for testing different webdav api call
+ * component used for testing different chat api calls
  */
 export const ChatTest = () => {
   const [message, setMessage] = useState<string>("")
@@ -16,7 +16,6 @@ export const ChatTest = () => {
   const [selectedConversation, setSelectedConversation] = useState<TalkConversation>()
   const auth = useSafeAuth()
   console.log(auth)
-
 
   async function fetchConversations() {
     const conversations = await getConversations()

@@ -139,10 +139,46 @@ type GetChatMessagesParams = {
   // 0 to not mark notifications as read (Default: 1, only available with chat-keep-notifications capability)
   markNotificationsAsRead?: number;
 };
-export const getChatMessages = async (token: string, params: GetChatMessagesParams) => {
+
+export type ChatMessage = {
+  // ID of the comment
+  id: number;
+  // Conversation token
+  token: string;
+  // See Constants - Actor types of chat messages
+  actorType: string;
+  // Actor id of the message author
+  actorId: string;
+  // Display name of the message author
+  actorDisplayName: string;
+  // Timestamp in seconds and UTC time zone
+  timestamp: number;
+  // Empty for normal chat message or the type of the system message (untranslated)
+  systemMessage: string;
+  // Currently known types are comment, comment_deleted, system, and command
+  messageType: string;
+  // True if the user can post a reply to this message (only available with chat-replies capability)
+  isReplyable: boolean;
+  // A reference string that was given while posting the message to be able to identify a sent message again (only available with chat-reference-id capability)
+  referenceId: string;
+  // Message string with placeholders (see Rich Object String)
+  message: string;
+  // Message parameters for the message (see Rich Object String)
+  messageParameters: any[];
+  // Unix timestamp when the message expires and should be removed from the client's UI without further note or warning (only available with message-expiration capability)
+  expirationTimestamp: number;
+  // Optional: See Parent data below
+  parent?: any[];
+  // Optional: An array map with the relation between reaction emoji and the total count of reactions with this emoji
+  reactions?: number[];
+  // Optional: When the user reacted, this is the list of emojis the user reacted with
+  reactionsSelf?: string[];
+};
+export const getChatMessages = async (token: string, params: GetChatMessagesParams): Promise<Array<ChatMessage>> => {
   let http = createNextcloudAPI()
   http.defaults.headers['OCS-APIRequest'] = true
   http.defaults.headers['Accept'] ="application/json"
   console.log(token, params)
-  return http.get("/ocs/v2.php/apps/spreed/api/v1/chat/" + token, { params })
+  const result = await http.get("/ocs/v2.php/apps/spreed/api/v1/chat/" + token, { params })
+  return result.data.ocs.data
 }
