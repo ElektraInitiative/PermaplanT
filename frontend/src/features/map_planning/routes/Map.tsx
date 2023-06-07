@@ -79,7 +79,7 @@ export const Map = () => {
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
   const addShapeToTransformer = useMapStore((map) => map.addShapeToTransformer);
-  const selectedLayer = useMapStore(state => state.untrackedState.selectedLayer)
+  const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
 
   const formPlaceholder = (
     <div className="flex flex-col gap-2 p-2">

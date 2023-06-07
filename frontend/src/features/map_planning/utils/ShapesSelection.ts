@@ -23,7 +23,7 @@ export const selectIntersectingShapes = (
   // we dont always have to look for them, we can store them
   const allShapes = stageRef.current.children
     //filter out layers which are not selected
-    ?.filter(layer => layer.attrs.listening)
+    ?.filter((layer) => layer.attrs.listening)
     .flatMap((layer) => layer.children)
     .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'));
 
