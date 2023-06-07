@@ -108,7 +108,10 @@ function applyActionToState(action: MapAction, state: TrackedMapSlice): TrackedM
 
       const lastAction = state.history[state.step - 1];
       // TODO: read 'Placeholder' from the lastAction/nextAction
-      const action = i18next.t(`undoRedo:${lastAction.type}`, { name: 'Placeholder' });
+      const action = i18next.t(`undoRedo:${lastAction.type}`, {
+        name: 'Placeholder',
+        defaultValue: 'Placeholder',
+      });
       toast(i18next.t('undoRedo:successful_undo', { action }));
 
       // reset the transformer
@@ -130,7 +133,10 @@ function applyActionToState(action: MapAction, state: TrackedMapSlice): TrackedM
 
       const nextAction = state.history[state.step];
       // TODO: read 'Placeholder' from the lastAction/nextAction
-      const action = i18next.t(`undoRedo:${nextAction.type}`, { name: 'Placeholder' });
+      const action = i18next.t(`undoRedo:${nextAction.type}`, {
+        name: 'Placeholder',
+        defaultValue: 'Placeholder',
+      });
       toast(i18next.t('undoRedo:successful_redo', { action }));
 
       // reset the transformer
