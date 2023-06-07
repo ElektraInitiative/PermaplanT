@@ -6,13 +6,13 @@ import PaginatedSelectMenu, {
 import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
 import { Suspense } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { SelectOption } from '@/components/Form/SelectMenuTypes';
 
 interface CreateSeedFormProps {
   isUploadingSeed: boolean;
@@ -58,8 +58,7 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
     const page = await searchPlants(search, pageNumber);
 
     const plant_options: SelectOption[] = page.results.map((plant) => {
-      const common_name_en =
-        plant.common_name_en ? ' (' + plant.common_name_en[0] + ')' : '';
+      const common_name_en = plant.common_name_en ? ' (' + plant.common_name_en[0] + ')' : '';
 
       return {
         value: plant.id,

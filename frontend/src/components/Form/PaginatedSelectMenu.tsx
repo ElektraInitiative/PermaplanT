@@ -1,10 +1,10 @@
 import filterObject from '../../utils/filterObject';
+import { SelectOption } from './SelectMenuTypes';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { GroupBase, StylesConfig } from 'react-select';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
-import { SelectOption } from './SelectMenuTypes';
 
 /**
  * Contains the information needed by react-select-async-paginate for loading a single page.
@@ -24,7 +24,11 @@ export interface PageAdditionalInfo {
   pageNumber: number;
 }
 
-export interface PaginatedSelectMenuProps<T extends FieldValues, Option = SelectOption, IsMulti extends boolean = false> {
+export interface PaginatedSelectMenuProps<
+  T extends FieldValues,
+  Option = SelectOption,
+  IsMulti extends boolean = false,
+> {
   /** When this boolean flag is set to true, the user may select multiple options at once (default false).*/
   isMulti?: IsMulti;
   /** Unique name of this component.*/
@@ -38,7 +42,7 @@ export interface PaginatedSelectMenuProps<T extends FieldValues, Option = Select
   /** Text that is displayed instead of the input if it has not been selected yet.*/
   placeholder?: string;
   debounceTimeout?: number;
-  loadOptions:  LoadOptions<Option, GroupBase<Option>, PageAdditionalInfo>
+  loadOptions: LoadOptions<Option, GroupBase<Option>, PageAdditionalInfo>;
   handleOptionsChange?: (option: unknown) => void;
   /** Callback that is invoked every time the user selects a new option. The single argument represents the selected option.*/
   onChange?: () => void;
@@ -47,7 +51,7 @@ export interface PaginatedSelectMenuProps<T extends FieldValues, Option = Select
 export default function PaginatedSelectMenu<
   T extends FieldValues,
   Option = SelectOption,
-  IsMulti extends boolean = false
+  IsMulti extends boolean = false,
 >({
   isMulti = false as IsMulti,
   id,
@@ -58,7 +62,7 @@ export default function PaginatedSelectMenu<
   loadOptions,
   handleOptionsChange,
   onChange,
-  debounceTimeout
+  debounceTimeout,
 }: PaginatedSelectMenuProps<T, Option, IsMulti>) {
   const customClassNames: ClassNamesConfig<Option, IsMulti, GroupBase<Option>> = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',

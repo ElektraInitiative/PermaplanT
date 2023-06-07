@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import WidePageLayout from './WidePageLayout';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof WidePageLayout> = {
   title: 'Components/Layout/WidePageLayout',
@@ -12,7 +12,7 @@ type Story = StoryObj<typeof WidePageLayout>;
 
 export const WidePageLayoutStory: Story = {
   args: {
-    styleNames: "bg-neutral-200",
-    children: <div className='bg-neutral-300 w-full h-32'>test</div>
+    styleNames: 'bg-neutral-200',
+    children: <div className="h-32 w-full bg-neutral-300">test</div>,
   },
 };

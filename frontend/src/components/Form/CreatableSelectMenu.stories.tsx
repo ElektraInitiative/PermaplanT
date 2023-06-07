@@ -1,6 +1,6 @@
 import CreatableSelectMenu from './CreatableSelectMenu';
-import type { Meta, StoryObj } from '@storybook/react';
 import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof CreatableSelectMenu> = {
   title: 'Components/SelectMenu/CreatableSelectMenu',

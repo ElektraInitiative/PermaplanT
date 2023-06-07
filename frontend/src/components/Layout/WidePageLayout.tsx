@@ -1,4 +1,4 @@
-import { PageLayoutProps } from "./PageLayout";
+import { PageLayoutProps } from './PageLayout';
 
 /** Page layout for pages which should be wider than the default PageLayout */
 const WidePageLayout = ({ children, styleNames }: PageLayoutProps) => {

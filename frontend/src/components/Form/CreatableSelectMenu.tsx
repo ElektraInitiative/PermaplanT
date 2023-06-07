@@ -1,4 +1,5 @@
 import filterObject from '../../utils/filterObject';
+import { SelectOption } from './SelectMenuTypes';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import {
@@ -10,7 +11,6 @@ import {
   StylesConfig,
 } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { SelectOption } from './SelectMenuTypes';
 
 export interface CreatableSelectMenuProps<
   T extends FieldValues,
