@@ -16,7 +16,7 @@ describe('MapHistoryStore', () => {
         objects: [],
         rotation: layerName === 'Base' ? 0 : undefined,
         scale: layerName === 'Base' ? 10 : undefined,
-        nextcloudImagePath: layerName === 'Base' ? "" : undefined,
+        nextcloudImagePath: layerName === 'Base' ? '' : undefined,
       });
     }
   });
