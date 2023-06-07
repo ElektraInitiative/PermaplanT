@@ -5,6 +5,7 @@ interface TransparentBackgroundProps {
   show: boolean;
 }
 
+/** Animated background used for Modals */
 const TransparentBackground = ({ onClick, show }: TransparentBackgroundProps) => {
   return (
     <>

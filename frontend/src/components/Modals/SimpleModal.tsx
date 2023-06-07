@@ -3,16 +3,25 @@ import TransparentBackground from '../TransparentBackground';
 import ModalContainer from './ModalContainer';
 
 interface SimpleModalProps {
+  /** Modal headline displayed on top.*/
   title: string;
+  /** The text of the modal.*/
   body: string;
+  /** Callback that informs the parent when the modal should be hidden/displayed (e.g. when the user pressed the close button).*/
   setShow: (show: boolean) => void;
+  /** Decides whether the modal should be shown.*/
   show: boolean;
+  /** Click callback for cancel/close button.*/
+  onCancel: () => void;
+  /** label of the cancel/abort button. */
   cancelBtnTitle?: string;
+  /** label of the submit/ok button. */
   submitBtnTitle: string;
-  onCancel?: () => void;
+  /** submit button onClick event handler. */
   onSubmit: () => void;
 }
 
+/** Simple Modal used for prompts */
 export default function SimpleModal({
   title,
   body,
