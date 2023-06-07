@@ -7,10 +7,16 @@ PermaplanT has a classical frontend/backend architecture:
 
 ## Type Safety
 
-Types are shared whenever possible:
+We use specific types (prefer enum over int over string etc.) and share types whenever possible:
 
-- `Diesel` is used to share types between the database and backend code
-- `typeshare` is used to share types between Rust, API and Typescript
+- [Diesel](https://diesel.rs/) is used to share types between the database and backend code.
+  We use type-safe queries (and not raw queries), whenever possible.
+- [typeshare](https://crates.io/crates/typeshare) is used to share types between Rust, API and Typescript.
+
+## Validation
+
+- The frontend should validate data as early as possible, usually during input using [React Hook Form](https://react-hook-form.com/).
+- We don't need to validate data in the backend.
 
 ## State
 
@@ -18,10 +24,12 @@ Types are shared whenever possible:
 - The backend is state-less, all state is in the database or in the token.
 - The frontend has structured state per layer.
 
+[See also frontend state management](../decisions/frontend_state_management.md) for which libraries are being used.
+
 ## Concurrent Use
 
 The user wants to see changes that other users are making on the map, therefore the data needs to be kept in sync.
-The data is kept in sync between the client and the server through API calls and server-sent events (SSE).
+The data is kept in sync between the client and the server through [API calls with axios](https://www.npmjs.com/package/axios) and server-sent events (SSE).
 This means the backend is always up to date with the users actions and users can see what others are doing.
 
 - Data must be immediately send asynchronously to the backend on any user action.

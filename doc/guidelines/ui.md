@@ -4,6 +4,12 @@
 
 Data should be always submitted on-the-fly but with debouncing.
 
+## Raster
+
+We raster per pixel, which should represent 1cm in reality.
+Geometric operations that produce results not in that raster, should be rounded.
+In the state or in the backend only integer values should be used.
+
 ## Key bindings
 
 A JSON file is responsible for global key bindings.
