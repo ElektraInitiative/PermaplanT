@@ -1,18 +1,41 @@
+import { PlantListElement } from './PlantListElement';
+import { PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput from '@/components/Form/SearchInput';
-import { baseApiUrl } from '@/config/env';
-import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
+import { searchPlants } from '@/features/seeds/api/searchPlants';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg';
+import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /** UI component intended for searching plants that can be drag and dropped to the plants layer */
 export const PlantSearch = () => {
-  const [plants, setPlants] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  // used to prevent the search result from flickering
+  const [plants, setPlants] = useState<PlantsSummaryDto[]>([]);
+
+  const { data } = useQuery(['plants/search', searchTerm] as const, {
+    queryFn: ({ queryKey: [, search] }) => searchPlants(search, 0),
+    // prevent the query from being fetched again for the
+    // same search term. plants are not expected to change
+    staleTime: Infinity,
+  });
+
+  useEffect(() => {
+    if (data?.results) {
+      setPlants(data.results);
+    }
+  }, [data]);
+
   const [searchVisible, setSearchVisible] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation(['plantSearch']);
+
+  const clearSearch = () => {
+    setSearchTerm('');
+    setSearchVisible(false);
+  };
 
   useEffect(() => {
     searchInputRef.current?.focus();
@@ -47,27 +70,16 @@ export const PlantSearch = () => {
           >
             <SearchInput
               placeholder={t('plantSearch:placeholder')}
-              handleSearch={async (event) => {
-                // TODO: debounce + other refactor
-                const response = await fetch(baseApiUrl + '/api/plants?name=' + event.target.value);
-                const json = await response.json();
-                setPlants(json.results.map((plant: { unique_name: string }) => plant.unique_name));
-              }}
+              handleSearch={(event) => setSearchTerm(event.target.value)}
               ref={searchInputRef}
-              onBlur={() => setSearchVisible(false)}
+              onBlur={clearSearch}
               onKeyDown={(e) => {
-                if (e.key === 'Escape') setSearchVisible(false);
+                if (e.key === 'Escape') clearSearch();
               }}
             ></SearchInput>
             <ul>
               {plants.map((plant) => (
-                <li
-                  className="flex items-center gap-4 stroke-neutral-700 hover:stroke-primary-500 hover:text-primary-500 dark:stroke-neutral-700-dark"
-                  key={plant}
-                >
-                  <PlantIcon />
-                  {plant}
-                </li>
+                <PlantListElement plant={plant} key={plant.unique_name} />
               ))}
             </ul>
           </motion.div>

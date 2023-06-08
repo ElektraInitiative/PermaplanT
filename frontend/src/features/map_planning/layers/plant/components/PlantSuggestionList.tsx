@@ -7,7 +7,7 @@ export function PlantSuggestionList({ header, children }: PlantSuggestionListPro
   return (
     <>
       <h3>{header}</h3>
-      <div className="ml-1 border-l border-l-neutral-500 pl-4">{children}</div>
+      <ul className="ml-1 border-l border-l-neutral-500 pl-4">{children}</ul>
     </>
   );
 }

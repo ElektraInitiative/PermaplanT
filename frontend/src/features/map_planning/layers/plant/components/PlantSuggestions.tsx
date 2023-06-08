@@ -12,28 +12,28 @@ type Suggestions = {
 const MOCK_PLANTS: PlantsSummaryDto[] = [
   {
     id: 1,
-    unique_name: 'Black Cherry (Tomato)',
-    common_name_en: ['Black Cherry'],
+    unique_name: 'Black Cherry',
+    common_name_en: ['Tomato'],
   },
   {
     id: 2,
-    unique_name: 'Habanero (Chili)',
-    common_name_en: ['Habanero'],
+    unique_name: 'Habanero',
+    common_name_en: ['Chili'],
   },
   {
     id: 3,
-    unique_name: 'Flynn (Paprika)',
-    common_name_en: ['Flynn'],
+    unique_name: 'Flynn',
+    common_name_en: ['Paprika'],
   },
   {
     id: 4,
-    unique_name: 'San Marzano (Tomato)',
-    common_name_en: ['San Marzano Tomato'],
+    unique_name: 'San Marzano',
+    common_name_en: ['Tomato'],
   },
   {
     id: 5,
-    unique_name: 'Sweet Chocolate (Pepper)',
-    common_name_en: ['Sweet Chocolate Pepper'],
+    unique_name: 'Sweet Chocolate',
+    common_name_en: ['Paprika'],
   },
 ];
 
