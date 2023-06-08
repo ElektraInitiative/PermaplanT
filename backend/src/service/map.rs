@@ -5,6 +5,7 @@ use actix_web::web::Data;
 use crate::config::data::AppDataInner;
 use crate::model::dto::{MapSearchParameters, Page};
 use crate::model::dto::{NewLayerDto, PageParameters};
+use crate::model::entity::Layer;
 use crate::model::r#enum::layer_type::LayerType;
 use crate::{
     error::ServiceError,
@@ -13,8 +14,6 @@ use crate::{
         entity::Map,
     },
 };
-
-use super::layer::create as layer_create;
 
 /// Search maps from the database.
 ///
@@ -58,7 +57,7 @@ pub async fn create(
             name: format!("{layer} Layer"),
             is_alternative: false,
         };
-        layer_create(new_layer, app_data).await?;
+        Layer::create(new_layer, &mut conn).await?;
     }
     Ok(result)
 }

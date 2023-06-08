@@ -7,7 +7,6 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
 use crate::model::dto::{MapSearchParameters, PageParameters};
 use crate::{model::dto::NewMapDto, service};
@@ -35,12 +34,8 @@ use crate::{model::dto::NewMapDto, service};
 pub async fn find(
     search_query: Query<MapSearchParameters>,
     page_query: Query<PageParameters>,
-
-    _user_info: UserInfo,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    // TODO: #360 validate owner
-    // println!("User is: {}", user_info.id);
     let response = service::map::find(
         search_query.into_inner(),
         page_query.into_inner(),
@@ -64,12 +59,7 @@ pub async fn find(
     )
 )]
 #[get("/{map_id}")]
-pub async fn find_by_id(
-    map_id: Path<i32>,
-
-    _user_info: UserInfo,
-    app_data: Data<AppDataInner>,
-) -> Result<HttpResponse> {
+pub async fn find_by_id(map_id: Path<i32>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
     let response = service::map::find_by_id(*map_id, &app_data).await?;
     Ok(HttpResponse::Ok().json(response))
 }
@@ -91,8 +81,6 @@ pub async fn find_by_id(
 #[post("")]
 pub async fn create(
     new_map_json: Json<NewMapDto>,
-
-    _user_info: UserInfo,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     let response = service::map::create(new_map_json.0, &app_data).await?;

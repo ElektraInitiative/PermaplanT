@@ -1,7 +1,9 @@
 //! Contains the implementation of [`Layer`].
 
-use diesel::{ExpressionMethods, QueryDsl, QueryResult};
+use diesel::pg::Pg;
+use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
+use log::debug;
 
 use crate::db::pagination::Paginate;
 use crate::model::dto::{LayerSearchParameters, Page, PageParameters};
@@ -35,12 +37,11 @@ impl Layer {
             query = query.filter(is_alternative.eq(is_alternative_search));
         }
 
-        let query_page = query
+        let query = query
             .paginate(page_parameters.page)
-            .per_page(page_parameters.per_page)
-            .load_page::<Self>(conn)
-            .await;
-        query_page.map(Page::from_entity)
+            .per_page(page_parameters.per_page);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.load_page::<Self>(conn).await.map(Page::from_entity)
     }
 
     /// Fetch layer by id from the database.
@@ -48,8 +49,9 @@ impl Layer {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find_by_id(id: i32, conn: &mut AsyncPgConnection) -> QueryResult<LayerDto> {
-        let query_result = layers::table.find(id).first::<Self>(conn).await;
-        query_result.map(Into::into)
+        let query = layers::table.find(id);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.first::<Self>(conn).await.map(Into::into)
     }
 
     /// Create a new layer in the database.
@@ -61,10 +63,8 @@ impl Layer {
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<LayerDto> {
         let new_layer = NewLayer::from(new_layer);
-        let query_result = diesel::insert_into(layers::table)
-            .values(&new_layer)
-            .get_result::<Self>(conn)
-            .await;
-        query_result.map(Into::into)
+        let query = diesel::insert_into(layers::table).values(&new_layer);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.get_result::<Self>(conn).await.map(Into::into)
     }
 }
