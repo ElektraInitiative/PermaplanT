@@ -28,20 +28,19 @@ export const getImageList = async (path: string): Promise<Array<string>> => {
   }
 };
 
-
 /**
  * get list of available images at the public share path from Nextcloud
  */
 export const getPublicFileList = async (publicShareToken: string): Promise<Array<string>> => {
-  const username = publicShareToken
-  const password = publicShareToken
+  const username = publicShareToken;
+  const password = publicShareToken;
   try {
     const response = await axios({
       method: 'PROPFIND',
       url: 'https://cloud.permaplant.net/public.php/webdav',
       headers: {
-       'Authorization': 'Basic ' + btoa(username + ':' + password),
-      }
+        Authorization: 'Basic ' + btoa(username + ':' + password),
+      },
     });
     const parser = new DOMParser();
     const doc = parser.parseFromString(response.data, 'application/xml');
@@ -55,19 +54,18 @@ export const getPublicFileList = async (publicShareToken: string): Promise<Array
   }
 };
 
-
 /**
  * get an Image as a blob from public Nextcloud share
  */
 export const getPublicImage = async (imageUrl: string, publicShareToken: string): Promise<Blob> => {
-  const username = publicShareToken
-  const password = publicShareToken
+  const username = publicShareToken;
+  const password = publicShareToken;
   try {
     const response = await axios({
       method: 'GET',
       url: nextcloudUri + imageUrl,
       headers: {
-       'Authorization': 'Basic ' + btoa(username + ':' + password),
+        Authorization: 'Basic ' + btoa(username + ':' + password),
       },
       responseType: 'blob',
     });

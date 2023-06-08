@@ -1,36 +1,38 @@
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import '@/components/Modals/ImageModal';
 import ImageModal from '@/components/Modals/ImageModal';
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { getPublicFileList, getPublicImage } from '@/features/nextcloud_integration/api/getImages';
 import { ImageBlob } from '@/features/nextcloud_integration/components/ImageBlob';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
-async function getPublicImages(imagePaths: Array<string>, publicShareToken: string){
-  return Promise.all(imagePaths.map(path => getPublicImage(path, publicShareToken)))
+async function getPublicImages(imagePaths: Array<string>, publicShareToken: string) {
+  return Promise.all(imagePaths.map((path) => getPublicImage(path, publicShareToken)));
 }
 
-function getImagesFromFileList(files: Array<string>){
-  return files.filter(file => {
+function getImagesFromFileList(files: Array<string>) {
+  return files.filter((file) => {
     // check file extension
-    const parts = file.split('.')
-    const extension = parts[parts.length - 1]
-    return ["png", "jpg", "jpeg", "svg"].includes(extension)
-  })
+    const parts = file.split('.');
+    const extension = parts[parts.length - 1];
+    return ['png', 'jpg', 'jpeg', 'svg'].includes(extension);
+  });
 }
 
 export const PhotoGallery = () => {
-  const publicShareToken = "qo6mZwPg6kFTmmj"
-  const { data: files } = useQuery(['files', publicShareToken], () => getPublicFileList(publicShareToken))
+  const publicShareToken = 'qo6mZwPg6kFTmmj';
+  const { data: files } = useQuery(['files', publicShareToken], () =>
+    getPublicFileList(publicShareToken),
+  );
 
   // filter images from all files
-  const imagePaths = files ? getImagesFromFileList(files) : []
+  const imagePaths = files ? getImagesFromFileList(files) : [];
 
   const { data: images, isLoading: imagesLoading } = useQuery({
-    queryKey: ["images", imagePaths],
+    queryKey: ['images', imagePaths],
     queryFn: () => getPublicImages(imagePaths as Array<string>, publicShareToken),
-    enabled: !!imagePaths
-  })
+    enabled: !!imagePaths,
+  });
 
   const [selectedImage, setSelectedImage] = useState(NaN);
   const [imageSize, setImageSize] = useState('small');
@@ -85,7 +87,13 @@ export const PhotoGallery = () => {
       <ImageModal
         title="Image"
         // body={<img src={imageUrls[selectedImage]} />}
-        body={imagesLoading ? <div>Loading...</div> : images && <ImageBlob image={images[selectedImage]} />}
+        body={
+          imagesLoading ? (
+            <div>Loading...</div>
+          ) : (
+            images && <ImageBlob image={images[selectedImage]} />
+          )
+        }
         setShow={setShowModal}
         show={showModal}
         onCancel={() => {
@@ -138,7 +146,10 @@ export const PhotoGallery = () => {
                 setShowModal(true);
               }}
             >
-              <ImageBlob className="h-full w-full rounded bg-neutral-100 object-cover dark:bg-neutral-300-dark" image={image}></ImageBlob>
+              <ImageBlob
+                className="h-full w-full rounded bg-neutral-100 object-cover dark:bg-neutral-300-dark"
+                image={image}
+              ></ImageBlob>
             </div>
           );
         })}
