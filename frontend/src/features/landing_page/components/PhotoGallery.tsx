@@ -2,36 +2,36 @@ import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import '@/components/Modals/ImageModal';
 import ImageModal from '@/components/Modals/ImageModal';
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getPublicFileList, getPublicImage } from '@/features/nextcloud_integration/api/getImages';
+import { ImageBlob } from '@/features/nextcloud_integration/components/ImageBlob';
+
+async function getPublicImages(imagePaths: Array<string>, publicShareToken: string){
+  return Promise.all(imagePaths.map(path => getPublicImage(path, publicShareToken)))
+}
+
+function getImagesFromFileList(files: Array<string>){
+  return files.filter(file => {
+    // check file extension
+    const parts = file.split('.')
+    const extension = parts[parts.length - 1]
+    return ["png", "jpg", "jpeg", "svg"].includes(extension)
+  })
+}
 
 export const PhotoGallery = () => {
-  const imageUrls = [
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl02.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl08.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl04.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl05.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl06.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl07.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl03.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl09.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl10.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl11.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl12.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl13.jpg',
-    'https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FPictures&files=YvonneMarkl14.jpg',
-    '/gallery_images/permaplant_illustration_01.svg',
-    '/gallery_images/permaplant_illustration_02.svg',
-    '/gallery_images/permaplant_illustration_03.svg',
-    '/gallery_images/permaplant_illustration_04.svg',
-    '/gallery_images/permaplant_illustration_05.svg',
-    '/gallery_images/permaplant_illustration_06.svg',
-    '/gallery_images/permaplant_illustration_07.svg',
-    '/gallery_images/permaplant_illustration_08.svg',
-    '/gallery_images/permaplant_illustration_09.svg',
-    '/gallery_images/permaplant_illustration_10.svg',
-    '/gallery_images/permaplant_illustration_11.svg',
-    '/gallery_images/permaplant_illustration_12.svg',
-    '/permaplant_drawing.jpeg',
-  ];
+  const publicShareToken = "qo6mZwPg6kFTmmj"
+  const { data: files } = useQuery(['files', publicShareToken], () => getPublicFileList(publicShareToken))
+
+  // filter images from all files
+  const imagePaths = files ? getImagesFromFileList(files) : []
+
+  const { data: images, isLoading: imagesLoading } = useQuery({
+    queryKey: ["images", imagePaths],
+    queryFn: () => getPublicImages(imagePaths as Array<string>, publicShareToken),
+    enabled: !!imagePaths
+  })
+
   const [selectedImage, setSelectedImage] = useState(NaN);
   const [imageSize, setImageSize] = useState('small');
   const [showModal, setShowModal] = useState(false);
@@ -84,7 +84,8 @@ export const PhotoGallery = () => {
     <div>
       <ImageModal
         title="Image"
-        body={<img src={imageUrls[selectedImage]} />}
+        // body={<img src={imageUrls[selectedImage]} />}
+        body={imagesLoading ? <div>Loading...</div> : images && <ImageBlob image={images[selectedImage]} />}
         setShow={setShowModal}
         show={showModal}
         onCancel={() => {
@@ -124,23 +125,20 @@ export const PhotoGallery = () => {
         className={gridClasses}
         style={{ ...getAutoRows(imageSize), ...getGridCols(imageSize) }}
       >
-        {imageUrls.map((image, index) => {
+        {images?.map((image, index) => {
           const className =
             'w-full h-full bg-neutral-100 dark:bg-neutral-200-dark hover:bg-neutral-300 dark:hover:bg-neutral-400-dark hover:cursor-pointer rounded' +
             getItemSize(index);
           return (
             <div
-              key={image + '_container'}
+              key={'image_container_' + index}
               className={className}
               onClick={() => {
                 setSelectedImage(index);
                 setShowModal(true);
               }}
             >
-              <img
-                src={image}
-                className="h-full w-full rounded bg-neutral-100 object-contain dark:bg-neutral-300-dark"
-              ></img>
+              <ImageBlob className="h-full w-full rounded bg-neutral-100 object-cover dark:bg-neutral-300-dark" image={image}></ImageBlob>
             </div>
           );
         })}
