@@ -15,6 +15,44 @@ sequenceDiagram
     Frontend->>Backend: place_plant (plant_ID, pos, date)
 ```
 
+## Onboarding
+
+```mermaid
+sequenceDiagram
+    actor User
+
+    User->>Permaplant: visit landing page
+
+    User->>Keycloak: self-registration
+    activate Keycloak
+
+
+    User->>Permaplant: visit public maps
+    activate Permaplant
+
+    Permaplant->>Nextcloud: use images etc.
+    activate Nextcloud
+    actor Admin
+
+    User->>Permaplant: membership application
+    Permaplant->>Admin: notification
+
+    alt accept
+        Admin->>Keycloak: change role to member
+    else accept
+        Admin->>Keycloak: remove user
+    end
+
+    activate Keycloak
+    Admin->>Permaplant: remove sensitive data
+    Admin->>Nextcloud: change quota
+    Admin->>User: notification via email
+    deactivate Keycloak
+    deactivate Keycloak
+    deactivate Permaplant
+    deactivate Nextcloud
+```
+
 ## Season
 
 Example of a typical sequence in one season:
