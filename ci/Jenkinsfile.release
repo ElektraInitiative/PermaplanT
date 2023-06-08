@@ -1,6 +1,18 @@
+def node_info() {
+    echo "Running stage on ${env.NODE_NAME}"
+}
+
+def wait_for_db() {
+    retry(6) {
+        sleep(time: 5, unit: 'SECONDS')
+        sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
+    }
+}
 
 stage('Build Schema'){
     node('docker') {
+        node_info()
+
         checkout scm
         def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
@@ -8,7 +20,7 @@ stage('Build Schema'){
             rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 checkout scm
 
-                sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
+                wait_for_db()
 
                 sh './ci/build-scripts/build-schema.sh'
 
@@ -24,6 +36,8 @@ stage('Build in Docker'){
 
     parallel_build['build-backend'] = {
         node('docker') {
+            node_info()
+
             checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
@@ -31,7 +45,7 @@ stage('Build in Docker'){
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
 
-                    sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
+                    wait_for_db()
 
                     sh './ci/build-scripts/build-backend.sh'
 
@@ -43,6 +57,8 @@ stage('Build in Docker'){
 
     parallel_build['build-frontend'] = {
         node('docker') {
+            node_info()
+
             checkout scm
             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
 
