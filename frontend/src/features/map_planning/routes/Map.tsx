@@ -1,9 +1,9 @@
 import { getPlantings } from '../api/getPlantings';
 import { BaseStage } from '../components/BaseStage';
 import { Layers } from '../components/toolbar/Layers';
-import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
+import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
 import useMapStore from '../store/MapStore';
 import { LayerName } from '../store/MapStoreTypes';
 import { handleRemoteAction } from '../store/RemoteActions';
@@ -116,7 +116,7 @@ export const Map = () => {
   const getToolbarContent = (layerName: LayerName) => {
     const content = {
       Base: { right: <div></div>, left: <div></div> },
-      Plant: { right: <PlantSearch />, left: formPlaceholder },
+      Plant: { right: <PlantLayerRightToolbar />, left: formPlaceholder },
       Drawing: { right: <div></div>, left: <div></div> },
       Dimension: { right: <div></div>, left: <div></div> },
       Fertilization: { right: <div></div>, left: <div></div> },
