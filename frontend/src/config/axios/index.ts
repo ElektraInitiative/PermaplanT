@@ -1,20 +1,8 @@
 import { baseApiUrl, nextcloudUri } from '../env';
+import { getUser } from '@/utils/getUser';
+import mapErrorToString from '@/utils/map-error-to-string';
 import axios from 'axios';
-import { User } from 'oidc-client-ts';
 
-function getUser() {
-  const authority = sessionStorage.getItem('authority');
-  const client_id = sessionStorage.getItem('client_id');
-  if (!authority || !client_id) {
-    throw Error('invalid api config in session storage');
-  }
-  const oidcStorage = sessionStorage.getItem(`oidc.user:${authority}:${client_id}`);
-  if (!oidcStorage) {
-    return null;
-  }
-
-  return User.fromStorageString(oidcStorage);
-}
 /**
  * create an instance of axios configured for PermaplanT
  * the configuration includes the baseUrl and authorization token if available
@@ -42,3 +30,15 @@ export function createNextcloudAPI() {
   });
   return http;
 }
+
+// Intercept the axios response to map errors messages to more sensible messages.
+axios.interceptors.response.use(
+  (r) => r,
+  (error: Error) => {
+    console.error(error);
+
+    error.message = mapErrorToString(error);
+
+    return Promise.reject(error);
+  },
+);

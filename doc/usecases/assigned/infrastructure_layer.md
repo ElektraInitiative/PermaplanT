@@ -25,7 +25,8 @@
   - adjusting their properties
     as needed.
 - **Alternative scenario:**
-  The user accidentally adds or edits an infrastructure element in the wrong location and uses the app's undo function to correct the mistake.
+  - The user accidentally edits, moves or removes an element and uses undo to correct the mistake.
+  - The user accidentally adds an element and deletes it with the "delete" or "undo" functionality.
 - **Error scenario:**
   The user attempts to add, move or edit an infrastructure element but the app is experiencing technical difficulties and is unable to complete the request, displaying an error message.
 - **Postcondition:**

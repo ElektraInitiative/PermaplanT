@@ -10,12 +10,12 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use std::cmp::max;
 
 /// The default number of rows returned from a paginated query.
-const DEFAULT_PER_PAGE: i32 = 10;
+pub const DEFAULT_PER_PAGE: i32 = 10;
 /// The minimum value for page number in a paginated query.
 /// Pages start at 1. Using a lower value would lead to nonsensical queries.
-const MIN_PAGE: i32 = 1;
+pub const MIN_PAGE: i32 = 1;
 /// The minimum number of rows returned from a paginated query.
-const MIN_PER_PAGE: i32 = 1;
+pub const MIN_PER_PAGE: i32 = 1;
 
 /// An executable paginated query.
 #[derive(Debug, Clone, Copy, QueryId)]

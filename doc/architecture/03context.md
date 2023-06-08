@@ -1,3 +1,33 @@
+# Context & Scope
+
+## Context
+
+Users see PermaplanT as mere tool to replace books and their notes.
+PermplanT envisions designing maps:
+
+- collaboratively
+- for agricultural purposes
+- enabling fully documenting all plants:
+  - for garden tours
+  - for tracking harvesting
+- reminding about what you don't see:
+  - watering
+  - fertilization
+- with mulching
+- but no dig
+
+## Out of Scope
+
+Later features that are out of scope for first version:
+
+- weather data (automatically add rain to watering layer, warnings on frost etc.)
+- hints&tips about pest control, fertilizer, care, etc.
+- automatic shadow and moisture calculation
+- 3D modes (forest garden), contour lines etc.
+- time-lapse of historic garden development, simulate growth
+- positions and distances relate to the real world, for example, you can use GPS coordinates
+- GIS import/export
+
 # Input Parameters
 
 ## Soil
@@ -21,7 +51,7 @@ Global value and local values in the Soil layer:
   - D hoch
   - E sehr hoch
 
-### Later Versions
+### Out of Scope
 
 - (Temperatursumme/Jahresmitteltemperatur)
   first version: use data from Ostösterreich
@@ -31,7 +61,7 @@ Global value and local values in the Soil layer:
   first version: use data from Ostösterreich
 - (soil depth, BM: Bodenmächtigkeit: Mächtigkeit des durchwurzelbaren Mineralbodens [cm])
   first version: assume "sehr tiefgründig" `> 100cm`
-- (SkelG: Skelettgehalt: Anteil der Anteil der Korngrößenfraktion > 2 mm (Grobanteil) am Mineralboden [%])
+- (SkelG: Skelettgehalt: Anteil der Korngrößenfraktion > 2 mm (Grobanteil) am Mineralboden [%])
   first version we assume geringer Grobanteil `<= 10%`
 - Available water capacity
 - Field capacity
@@ -46,43 +76,15 @@ Global value and local values in the Soil layer:
 - shadows
 - surface water, i.e., wet/dry places (German: Oberflächenwasser)
 - habitats
-- permaculture zones, see [glossary](glossary.md)
+- permaculture zones, see [glossary](12glossary.md)
 - events: e.g. elements in the garden get added/removed accurate to the day
 
-### Later Versions
+### Out of Scope
 
 - soil amendments
 - mulching (Mulchen)
 - influences of street (German: Einflüsse durch Straßennähe, wie Salz und Staub)
 - automatic overshadowing (German: Baumkronenüberschattung)
-
-## Plant Database
-
-- hierarchy: family, subfamily, genus, species, variety
-- if it is abstract/concrete (MISSING: we assume all plants of Practical Plants to be concrete)
-- common English name
-- common German name
-- icon (MISSING)
-- dates (MISSING):
-  - begin/end raising
-  - begin/end planting
-  - begin/end seeding
-  - begin/end harvest
-- size (height, width)
-- constraints where they want to be:
-  - companions and antagonists to other specific plants of any hierarchy (MISSING)
-  - recommended distances to any other plant, needed for area calculations (MISSING)
-  - sun
-  - soil weight
-  - pH value of topsoil
-  - nutrition demand (MISSING, start with "Nutritionally poor soil" in "Environmental Tolerances")
-  - freeze resistance (hardiness zone)
-  - wet/dry
-  - preferable permaculture zone
-- is a tree/bush
-- notes German (MISSING)
-
-All of this information can be present and overwritten on any level of the hierarchy, the most concrete information takes precedence.
 
 # Output Parameters
 
@@ -90,6 +92,6 @@ All of this information can be present and overwritten on any level of the hiera
 - coordinates of plants to plant
 - warnings (violation of natural constraints etc.)
 
-### Later Versions
+### Out of Scope
 
 - weather alerts

@@ -1,20 +1,68 @@
+import { getPlantings } from '../api/getPlantings';
 import { BaseStage } from '../components/BaseStage';
 import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
-import PlantsLayer from '../layers/PlantsLayer';
+import PlantsLayer from '../layers/plant/PlantsLayer';
 import useMapStore from '../store/MapStore';
 import { LayerName } from '../store/MapStoreTypes';
+import { handleRemoteAction } from '../store/RemoteActions';
+import { ConnectToMapQueryParams } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { baseApiUrl } from '@/config';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
+import { useQuery } from '@tanstack/react-query';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { useEffect, useRef } from 'react';
 import { Rect } from 'react-konva';
+
+function useInitializeMap() {
+  useMapUpdates();
+  const initPlantLayer = useMapStore((state) => state.initPlantLayer);
+  const mapId = '1';
+
+  useQuery(['plants/plantings', mapId], {
+    queryFn: (context) => getPlantings(context.queryKey[1]),
+    onSuccess: (data) => {
+      initPlantLayer(data);
+    },
+  });
+}
+
+function useMapUpdates() {
+  const { user } = useSafeAuth();
+  const evRef = useRef<EventSource>();
+
+  useEffect(() => {
+    if (user) {
+      const connectionQuery: ConnectToMapQueryParams = {
+        map_id: 1,
+        user_id: user.profile.sub,
+      };
+
+      const connectionParams = new URLSearchParams();
+      connectionParams.append('map_id', `${connectionQuery.map_id}`);
+      connectionParams.append('user_id', connectionQuery.user_id);
+
+      // TODO: implement protected routes and authentication
+      evRef.current = new EventSource(
+        `${baseApiUrl}/api/updates/maps?${connectionParams.toString()}`,
+      );
+      evRef.current.onmessage = (ev) => handleRemoteAction(ev, user);
+    }
+
+    return () => {
+      evRef.current?.close();
+    };
+  }, [user]);
+}
 
 /**
  * This component is responsible for rendering the map that the user is going to draw on.
@@ -24,9 +72,12 @@ import { Rect } from 'react-konva';
  * Otherwise they cannot be moved.
  */
 export const Map = () => {
+  useInitializeMap();
+
   const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);
-  const dispatch = useMapStore((map) => map.dispatch);
+  const undo = useMapStore((map) => map.undo);
+  const redo = useMapStore((map) => map.redo);
   const addShapeToTransformer = useMapStore((map) => map.addShapeToTransformer);
 
   const formPlaceholder = (
@@ -100,13 +151,13 @@ export const Map = () => {
               </IconButton>
               <IconButton
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => dispatch({ type: 'UNDO' })}
+                onClick={() => undo()}
               >
                 <UndoIcon></UndoIcon>
               </IconButton>
               <IconButton
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => dispatch({ type: 'REDO' })}
+                onClick={() => redo()}
               >
                 <RedoIcon></RedoIcon>
               </IconButton>

@@ -1,121 +1,15 @@
 import IconButton from '@/components/Button/IconButton';
 import SearchInput from '@/components/Form/SearchInput';
+import { baseApiUrl } from '@/config/env';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-/** plants list mock */
-/** TODO: fetch plant data from backend */
-const allPlants = [
-  'Aloe vera',
-  'Bamboo',
-  'Cactus',
-  'Daisy',
-  'Eucalyptus',
-  'Fern',
-  'Gardenia',
-  'Hibiscus',
-  'Iris',
-  'Jasmine',
-  'Kangaroo paw',
-  'Lavender',
-  'Mimosa',
-  'Narcissus',
-  'Orchid',
-  'Peony',
-  'Quince',
-  'Rose',
-  'Sunflower',
-  'Tulip',
-  'Umbrella plant',
-  'Violet',
-  'Wisteria',
-  'Xeranthemum',
-  'Yarrow',
-  'Zinnia',
-  'Amaryllis',
-  'Begonia',
-  'Chrysanthemum',
-  'Dahlia',
-  'Echinacea',
-  'Fuchsia',
-  'Geranium',
-  'Hollyhock',
-  'Impatiens',
-  'Jade plant',
-  'Kalanchoe',
-  'Lilac',
-  'Morning glory',
-  'Nasturtium',
-  'Oleander',
-  'Pansy',
-  "Queen Anne's lace",
-  'Ranunculus',
-  'Snapdragon',
-  'Tiger lily',
-  'Uva ursi',
-  'Verbena',
-  'Wax begonia',
-  'Xanthe',
-  'Yellowwood',
-  'Zantedeschia',
-  'Anemone',
-  'Bittersweet',
-  'Carnation',
-  'Daffodil',
-  'English ivy',
-  'Forsythia',
-  'Gloxinia',
-  'Honeysuckle',
-  'Ivy geranium',
-  'Jonquil',
-  'Kerria',
-  'Lantana',
-  'Marigold',
-  'Nigella',
-  'Oxalis',
-  'Petunia',
-  'Rhubarb',
-  'Sedum',
-  'Thyme',
-  'Upright juniper',
-  'Vinca',
-  'Wild rose',
-  'Xerophyllum',
-  'Yucca',
-  'Zephyranthes',
-  'Angelonia',
-  'Bacopa',
-  'Clematis',
-  'Dianthus',
-  'Eryngium',
-  'Forget-me-not',
-  'Goldenrod',
-  'Heather',
-  'Iris germanica',
-  'Jovellana',
-  'Kaffir lily',
-  'Lily of the valley',
-  'Monkshood',
-  'Nemesia',
-  'Oregano',
-  'Primrose',
-  'Ranunculus asiaticus',
-  'Salvia',
-  'Thistle',
-  'Umbrella tree',
-  'Verbascum',
-  'Winter jasmine',
-  'Xylosma',
-  'Yerba buena',
-  'Zelkova',
-];
-
 /** UI component intended for searching plants that can be drag and dropped to the plants layer */
 export const PlantSearch = () => {
-  const [plants, setPlants] = useState(allPlants);
+  const [plants, setPlants] = useState([]);
   const [searchVisible, setSearchVisible] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation(['plantSearch']);
@@ -153,9 +47,11 @@ export const PlantSearch = () => {
           >
             <SearchInput
               placeholder={t('plantSearch:placeholder')}
-              handleSearch={(event) => {
-                const exp = new RegExp('.*' + event.target.value + '.*');
-                setPlants(allPlants.filter((plant) => exp.test(plant)));
+              handleSearch={async (event) => {
+                // TODO: debounce + other refactor
+                const response = await fetch(baseApiUrl + '/api/plants?name=' + event.target.value);
+                const json = await response.json();
+                setPlants(json.results.map((plant: { unique_name: string }) => plant.unique_name));
               }}
               ref={searchInputRef}
               onBlur={() => setSearchVisible(false)}

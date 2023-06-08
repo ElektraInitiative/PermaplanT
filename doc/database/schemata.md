@@ -100,15 +100,6 @@ maps {
   GEOGRAPHY geo_data
 }
 
-layers {
-  INT id PK
-  LAYER_TYPES type "NOT NULL"
-  VARCHAR name "NOT NULL"
-  BOOLEAN is_alternative "NOT NULL"
-}
-
-layers }|--|| maps : ""
-
 users {
   INT id PK
   VARCHAR nc_uid
@@ -154,6 +145,40 @@ blossoms_gained {
 maps }o--|| users : "owned by"
 blossoms ||--o{ blossoms_gained : ""
 blossoms_gained }o--|| users : ""
+
+ingredientLists {
+  INT id PK
+  VARCHAR name "NOT NULL"
+  VARCHAR description
+  BYTEA image
+  BOOLEAN is_recurring "NOT NULL"
+  DATE end_date "NOT NULL"
+  INT accomplished
+}
+
+ingredients {
+  BOOLEAN is_fulfilled "NOT NULL"
+}
+
+ingredientLists }o--|| users : ""
+ingredientLists }o--|| maps : ""
+ingredients }|--|| ingredientLists : ""
+ingredients }|--|| plant_detail : ""
+
+events {
+  INT id PK
+  BOOLEAN system_event "NOT NULL"
+  VARCHAR name "NOT NULL"
+  VARCHAR description
+  DATE event_date "NOT NULL"
+}
+
+events }o--|| maps : ""
+
+favorites {}
+
+favorites }o--|| maps : ""
+favorites }o--|| plant_detail : ""
 
 ```
 
@@ -234,16 +259,6 @@ blossoms_gained }o--|| users : ""
 | **zoom_factor**     | 100           | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000 |
 | **geo_data**        | NULL          | PostGis Geodata, location of the map                                                           |
 
-## `Layers`
-
-| **_Column name_**  | **_Example_**        | **_Description_**                                      |
-| :----------------- | :------------------- | :----------------------------------------------------- |
-| **id**             | 1                    |
-| **map_id**         | 1                    | the id of the map                                      |
-| **type**           | {base, plants, etc.} | the type of layer                                      |
-| **name**           | Base Layer           | the display name of the layer                          |
-| **is_alternative** | false                | true if the layer is an user-created alternative layer |
-
 ## `Users`
 
 | **_Column name_**     | **_Example_**         | **_Description_**                                              |
@@ -280,6 +295,50 @@ blossoms_gained }o--|| users : ""
 | **blossom_id**    | 1             |
 | **times_gained**  | 1             | 0 to infinity                   |
 | **gained_date**   | {2023-04-10}  | one entry for every time gained |
+
+## `IngredientLists`
+
+| **_Column name_** | **_Example_**                          | **_Description_**                                                              |
+| :---------------- | :------------------------------------- | :----------------------------------------------------------------------------- |
+| **id**            | 1                                      | list id                                                                        |
+| **owner_id**      | 1                                      | user id                                                                        |
+| **map_id**        | 1                                      | id of the map this list is for                                                 |
+| **name**          | Smoothie Ingredients                   | name of the list                                                               |
+| **description**   | Ingredients for my strawberry smoothie | description of the list                                                        |
+| **image**         | NULL                                   | an image for further customizing the list                                      |
+| **is_recurring**  | true                                   | a flag representing whether the objectives repeat themselves or not            |
+| **end_date**      | 2023-04-15                             | an optional date at which point the owner wants the objectives to be fulfilled |
+| **accomplished**  | 0                                      | the number of times the list was fulfilled; only relevant for recurring lists  |
+
+## `Ingredients`
+
+Many-to-many table to store relations between plants and ingredient lists.
+
+| **_Column name_** | **_Example_** | **_Description_**                             |
+| :---------------- | :------------ | :-------------------------------------------- |
+| **list_id**       | 1             | id of the ingredient list                     |
+| **plant_id**      | 1             | id of the plant used as an ingredient         |
+| **is_fulfilled**  | true          | if enough of this ingredient can be harvested |
+
+## `Events`
+
+| **_Column name_** | **_Example_**        | **_Description_**                                                  |
+| :---------------- | :------------------- | :----------------------------------------------------------------- |
+| **id**            | 1                    | event id                                                           |
+| **map_id**        | 1                    | id of the map the event is taking place on                         |
+| **system_event**  | true                 | a flag representing whether this event is system or user generated |
+| **name**          | Harvest strawberries | name of the event                                                  |
+| **description**   | NULL                 | description of the event details                                   |
+| **event_date**    | 2023-04-15           | the date the event is taking place on                              |
+
+## `Favorites`
+
+Many-to-many table to store map-specific favourites.
+
+| **_Column name_** | **_Example_** | **_Description_** |
+| :---------------- | :------------ | :---------------- |
+| **map_id**        | 1             | id of the map     |
+| **plant_id**      | 1             | id of the plant   |
 
 ## `Relation`
 
