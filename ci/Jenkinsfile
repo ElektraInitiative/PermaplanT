@@ -14,6 +14,9 @@ stage('Build Schema'){
         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
             rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 checkout scm
+
+                sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
+
                 sh './ci/build-scripts/build-schema.sh'
 
                 stash includes: 'backend/src/schema.rs', name: 'schema.rs'
@@ -50,6 +53,8 @@ stage('Checks') {
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
+
+                    sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
 
                     withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
                         // Workaround: we can't stop rustfmt from linting the generated schema.rs
@@ -116,6 +121,9 @@ stage('Build in Docker'){
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
+
+                    sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
+
                     sh './ci/build-scripts/build-backend.sh'
 
                     stash includes: 'backend/target/release/backend', name: 'backend'
