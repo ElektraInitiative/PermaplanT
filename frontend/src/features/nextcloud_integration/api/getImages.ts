@@ -1,4 +1,6 @@
+import { nextcloudUri } from '@/config';
 import { createNextcloudAPI } from '@/config/axios';
+import axios from 'axios';
 
 // NOTE: Leaving this for now as it could be useful as an exmample
 // when fetching ressources from other parts of Nextcloud
@@ -21,6 +23,55 @@ export const getImageList = async (path: string): Promise<Array<string>> => {
       imageUrls.push(value.childNodes[0].childNodes[0].nodeValue ?? '');
     });
     return imageUrls;
+  } catch (error) {
+    throw error as Error;
+  }
+};
+
+
+/**
+ * get list of available images at the public share path from Nextcloud
+ */
+export const getPublicFileList = async (publicShareToken: string): Promise<Array<string>> => {
+  const username = publicShareToken
+  const password = publicShareToken
+  try {
+    const response = await axios({
+      method: 'PROPFIND',
+      url: 'https://cloud.permaplant.net/public.php/webdav',
+      headers: {
+       'Authorization': 'Basic ' + btoa(username + ':' + password),
+      }
+    });
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(response.data, 'application/xml');
+    const imageUrls: Array<string> = [];
+    doc.documentElement.childNodes.forEach((value) => {
+      imageUrls.push(value.childNodes[0].childNodes[0].nodeValue ?? '');
+    });
+    return imageUrls;
+  } catch (error) {
+    throw error as Error;
+  }
+};
+
+
+/**
+ * get an Image as a blob from public Nextcloud share
+ */
+export const getPublicImage = async (imageUrl: string, publicShareToken: string): Promise<Blob> => {
+  const username = publicShareToken
+  const password = publicShareToken
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: nextcloudUri + imageUrl,
+      headers: {
+       'Authorization': 'Basic ' + btoa(username + ':' + password),
+      },
+      responseType: 'blob',
+    });
+    return response.data;
   } catch (error) {
     throw error as Error;
   }
