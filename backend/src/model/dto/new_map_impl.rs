@@ -1,7 +1,5 @@
 //! Contains the implementation of [`NewMapDto`].
 
-use postgis_diesel::types::Point;
-
 use crate::model::entity::NewMap;
 
 use super::NewMapDto;
@@ -21,14 +19,7 @@ impl From<NewMapDto> for NewMap {
             owner_id: new_map.owner_id,
             privacy: new_map.privacy,
             description: new_map.description,
-            location: match new_map.location {
-                Some(latlng) => Some(Point {
-                    x: latlng.longitude,
-                    y: latlng.latitude,
-                    srid: Some(4326),
-                }),
-                None => None,
-            },
+            location: new_map.location.map(From::from),
         }
     }
 }
