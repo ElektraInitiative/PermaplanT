@@ -1,1 +1,1 @@
-export const MAP_PIXELS_PER_METER = 10;
+export const MAP_PIXELS_PER_METER = 100;
