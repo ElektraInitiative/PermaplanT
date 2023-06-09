@@ -84,10 +84,6 @@ export interface TrackedMapSlice {
    * Initializes the plant layer.
    */
   initPlantLayer: (plantLayer: PlantingDto[]) => void;
-  /**
-   * Updates state specific to the base layer.
-   */
-  updateBaseLayer: (newState: TrackedBaseLayerState) => void;
 }
 
 /**
@@ -190,7 +186,7 @@ export type TrackedBaseLayerState = {
   rotation: number;
   scale: number;
   nextcloudImagePath: string;
-}
+};
 
 /**
  * The state of the layers of the map.

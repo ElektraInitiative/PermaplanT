@@ -1,5 +1,5 @@
 import type {
-  Action, TrackedBaseLayerState,
+  Action,
   TrackedLayers,
   TrackedMapSlice,
   TrackedMapState,
@@ -80,22 +80,6 @@ export const createTrackedMapSlice: StateCreator<
           },
         },
       })),
-    updateBaseLayer: (newState: TrackedBaseLayerState) => {
-      set((state) => ({
-        ...state,
-        trackedState: {
-          ...state.trackedState,
-          layers: {
-            ...state.trackedState.layers,
-            Base: {
-              ...newState,
-              objects: state.trackedState.layers.Base.objects,
-              index: state.trackedState.layers.Base.index,
-            },
-          },
-        },
-      }));
-    },
   };
 };
 

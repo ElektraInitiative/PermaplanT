@@ -27,7 +27,7 @@ export const selectIntersectingShapes = (
     .flatMap((layer) => layer.children)
     .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'))
     // ignore shapes from non editable layers
-    .filter((shape) => shape?.getLayer()?.isListening());;
+    .filter((shape) => shape?.getLayer()?.isListening());
 
   if (!allShapes) return;
 

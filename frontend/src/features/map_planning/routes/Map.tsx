@@ -1,5 +1,5 @@
-import BaseLayerForm from '../components/BaseLayerForm';
 import { getPlantings } from '../api/getPlantings';
+import BaseLayerForm from '../components/BaseLayerForm';
 import { BaseStage } from '../components/BaseStage';
 import { Layers } from '../components/toolbar/Layers';
 import { PlantSearch } from '../components/toolbar/PlantSearch';
@@ -14,8 +14,9 @@ import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { baseApiUrl } from '@/config';
-import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
+import { UpdateBaseLayerAction } from '@/features/map_planning/layers/plant/actions';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
@@ -25,7 +26,6 @@ import { useQuery } from '@tanstack/react-query';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { useEffect, useRef } from 'react';
 import { Rect } from 'react-konva';
-import {UpdateBaseLayerAction} from "@/features/map_planning/layers/plant/actions";
 
 function useInitializeMap() {
   useMapUpdates();
@@ -86,7 +86,6 @@ export const Map = () => {
   const redo = useMapStore((map) => map.redo);
   const executeAction = useMapStore((map) => map.executeAction);
   const addShapeToTransformer = useMapStore((map) => map.addShapeToTransformer);
-  const updateBaseLayer = useMapStore((map) => map.updateBaseLayer);
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
 
   const formPlaceholder = (
@@ -130,18 +129,22 @@ export const Map = () => {
             rotation={trackedState.layers.Base.rotation}
             nextcloudImagePath={trackedState.layers.Base.nextcloudImagePath}
             onRotationChange={(event) =>
-              executeAction(new UpdateBaseLayerAction(
-                parseInt(event.target.value) ?? 0,
-                trackedState.layers.Base.scale,
-                trackedState.layers.Base.nextcloudImagePath,
-              ))
+              executeAction(
+                new UpdateBaseLayerAction(
+                  parseInt(event.target.value) ?? 0,
+                  trackedState.layers.Base.scale,
+                  trackedState.layers.Base.nextcloudImagePath,
+                ),
+              )
             }
             onImageURLChange={(event) => {
-              executeAction(new UpdateBaseLayerAction(
-                trackedState.layers.Base.rotation,
-                trackedState.layers.Base.scale,
-                event.target.value,
-              ));
+              executeAction(
+                new UpdateBaseLayerAction(
+                  trackedState.layers.Base.rotation,
+                  trackedState.layers.Base.scale,
+                  event.target.value,
+                ),
+              );
             }}
           />
         ),

@@ -7,8 +7,6 @@ import { movePlanting } from '../../api/movePlanting';
 import { transformPlanting } from '../../api/transformPlanting';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { PlantingDto } from '@/bindings/definitions';
-import {Update} from "vite";
-import {startSelection} from "@/features/map_planning/utils/ShapesSelection";
 
 export class CreatePlantAction
   implements Action<Awaited<ReturnType<typeof createPlanting>>, boolean>
@@ -219,22 +217,18 @@ export class TransformPlantAction
   }
 }
 
-
 export class UpdateBaseLayerAction implements Action<void, void> {
-
   constructor(
-      private rotation: number,
-      private scale: number,
-      private nextcloudImagePath: string,
-  ) {
-  }
+    private rotation: number,
+    private scale: number,
+    private nextcloudImagePath: string,
+  ) {}
 
   reverse(state: TrackedMapState) {
-
     return new UpdateBaseLayerAction(
-        state.layers.Base.rotation,
-        state.layers.Base.scale,
-        state.layers.Base.nextcloudImagePath,
+      state.layers.Base.rotation,
+      state.layers.Base.scale,
+      state.layers.Base.nextcloudImagePath,
     );
   }
 
@@ -247,7 +241,7 @@ export class UpdateBaseLayerAction implements Action<void, void> {
           ...state.layers.Base,
           rotation: this.rotation,
           scale: this.scale,
-          nextcloudImagePath: this.nextcloudImagePath
+          nextcloudImagePath: this.nextcloudImagePath,
         },
       },
     };
@@ -255,6 +249,6 @@ export class UpdateBaseLayerAction implements Action<void, void> {
 
   execute(): Promise<void> {
     // TODO: implement when backend exists
-    return new Promise(() => {});
+    return new Promise((resolve) => resolve());
   }
 }
