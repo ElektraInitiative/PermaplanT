@@ -3,8 +3,9 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { Layer, Image } from 'react-konva';
 import { FileStat, ResponseDataDetailed, WebDAVClient } from 'webdav';
+import Konva from "konva";
 
-interface BaseLayerProps {
+interface BaseLayerProps extends Konva.LayerConfig {
   /**
    * Connection to Nextcloud.
    * Used to load the background image.
@@ -14,14 +15,6 @@ interface BaseLayerProps {
    * Filepath to the background image in Nextcloud.
    */
   nextcloudImagePath: string;
-  /**
-   * Layer opacity.
-   */
-  opacity: number;
-  /**
-   * The layer is only displayed if this prop is true.
-   */
-  visible: boolean;
   /**
    * Used to align the size of the background image with the real world.
    */
