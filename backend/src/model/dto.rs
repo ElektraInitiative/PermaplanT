@@ -10,6 +10,7 @@ use uuid::Uuid;
 use super::r#enum::{privacy_options::PrivacyOptions, layer_type::LayerType, quality::Quality, quantity::Quantity};
 
 pub mod actions;
+pub mod coordinates_impl;
 pub mod layer_impl;
 pub mod map_impl;
 pub mod new_layer_impl;
