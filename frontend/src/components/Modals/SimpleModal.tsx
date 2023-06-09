@@ -12,7 +12,7 @@ interface SimpleModalProps {
   /** Decides whether the modal should be shown.*/
   show: boolean;
   /** Click callback for cancel/close button.*/
-  onCancel: () => void;
+  onCancel?: () => void;
   /** label of the cancel/abort button. */
   cancelBtnTitle?: string;
   /** label of the submit/ok button. */
