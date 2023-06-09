@@ -9,9 +9,7 @@ use log::debug;
 
 use crate::{
     db::{
-        function::{
-            array_to_string, greatest, similarity, similarity_nullable, AliasExpressionMethod,
-        },
+        function::{array_to_string, greatest, similarity, similarity_nullable},
         pagination::Paginate,
     },
     model::dto::{Page, PageParameters, PlantsSummaryDto},
@@ -37,14 +35,13 @@ impl Plants {
     ) -> QueryResult<Page<PlantsSummaryDto>> {
         let query = plants::table
             .select((
-                plants::all_columns,
                 greatest(
                     similarity(unique_name, search_query),
                     similarity(array_to_string(common_name_de, " "), search_query),
                     similarity(array_to_string(common_name_en, " "), search_query),
                     similarity_nullable(edible_uses_en, search_query),
-                )
-                .alias("rank"),
+                ),
+                plants::all_columns,
             ))
             .filter(
                 similarity(unique_name, search_query)
@@ -53,12 +50,12 @@ impl Plants {
                     .or(similarity(array_to_string(common_name_en, " "), search_query).gt(0.1))
                     .or(similarity_nullable(edible_uses_en, search_query).gt(0.1)),
             )
-            .order(sql::<Float>("rank").desc())
+            .order(sql::<Float>("1").desc())
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));
         query
-            .load_page::<(Self, f32)>(conn)
+            .load_page::<(f32, Self)>(conn)
             .await
             .map(Page::from_entity)
     }

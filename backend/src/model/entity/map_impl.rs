@@ -10,7 +10,7 @@ use diesel::{
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 
-use crate::db::function::{similarity, AliasExpressionMethod};
+use crate::db::function::{similarity, PgTrgmExpressionMethods};
 use crate::db::pagination::Paginate;
 use crate::model::dto::{MapSearchParameters, Page, PageParameters};
 use crate::schema::maps::name;
@@ -39,15 +39,15 @@ impl Map {
     ) -> QueryResult<Page<MapDto>> {
         let mut query = maps::table
             .select((
+                similarity(name, search_parameters.name.clone().unwrap_or_default()),
                 all_columns,
-                similarity(name, search_parameters.name.clone().unwrap_or_default()).alias("rank"),
             ))
             .into_boxed();
+
         if let Some(search_query) = &search_parameters.name {
             if !search_query.is_empty() {
                 query = query.filter(
-                    similarity(name, search_query)
-                        .gt(0.3)
+                    name.fuzzy(search_query)
                         .or(name.ilike(format!("%{search_query}%"))),
                 );
             }
@@ -60,12 +60,12 @@ impl Map {
         }
 
         let query = query
-            .order(sql::<Float>("rank").desc())
+            .order(sql::<Float>("1").desc())
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));
         query
-            .load_page::<(Self, f32)>(conn)
+            .load_page::<(f32, Self)>(conn)
             .await
             .map(Page::from_entity)
     }
