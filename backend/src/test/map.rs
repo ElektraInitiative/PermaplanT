@@ -22,7 +22,7 @@ async fn test_can_find_map() {
             diesel::insert_into(crate::schema::maps::table)
                 .values((
                     &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("My Map"),
+                    &crate::schema::maps::name.eq("Test Map: can find map"),
                     &crate::schema::maps::creation_date
                         .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
                     &crate::schema::maps::is_inactive.eq(false),
@@ -31,6 +31,7 @@ async fn test_can_find_map() {
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::owner_id.eq(-1),
+                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                 ))
                 .execute(conn)
                 .await?;
@@ -57,7 +58,7 @@ async fn test_can_search_maps() {
             diesel::insert_into(crate::schema::maps::table)
                 .values((
                     &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("My Map"),
+                    &crate::schema::maps::name.eq("Test Map: can search map"),
                     &crate::schema::maps::creation_date
                         .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
                     &crate::schema::maps::is_inactive.eq(false),
@@ -66,6 +67,7 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::owner_id.eq(-1),
+                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                 ))
                 .execute(conn)
                 .await?;
@@ -97,7 +99,7 @@ async fn test_can_create_map() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let new_map = NewMapDto {
-        name: "My Map".to_string(),
+        name: "Test Map: can create map".to_string(),
         creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
         deletion_date: None,
         last_visit: None,
