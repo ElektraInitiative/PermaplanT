@@ -1,7 +1,8 @@
 {
   "successful_undo": "Successfully reverted '{{action}}'",
   "successful_redo": "Successfully reapplied '{{action}}'",
-  "OBJECT_ADD": "Add {{name}}",
+  "CREATE_PLANT": "Add {{name}}",
+  "DELETE_PLANT": "Delete {{name}}",
   "OBJECT_UPDATE_POSITION": "Move {{name}}",
   "OBJECT_UPDATE_TRANSFORM": "Transform {{name}}",
   "ATTRIBUTE_UPDATE": "Edit {{name}}"

@@ -26,6 +26,6 @@ Branch names:
 - feature/<issue_nr>
 - bug_fix/<issue_nr>
 - documentation/<name>
-- meeting/<date>
+- meeting_notes/<date>
 
 If requested, and in any case before you start making fundamental changes, create a [decision](/doc/decisions/) before creating a code PR.

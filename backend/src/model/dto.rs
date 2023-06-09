@@ -5,9 +5,11 @@ use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
+use uuid::Uuid;
 
 use super::r#enum::{quality::Quality, quantity::Quantity};
 
+pub mod actions;
 pub mod map_impl;
 pub mod map_version_impl;
 pub mod new_map_impl;
@@ -25,6 +27,8 @@ pub struct ConfigDto {
     pub issuer_uri: String,
     /// The client_id the frontend should use to log in
     pub client_id: String,
+    /// The version must be an exact match between frontend and backend.
+    pub version: i32,
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
@@ -81,55 +85,84 @@ pub struct PlantsSummaryDto {
 /// Represents plant planted on a map.
 /// E.g. a user drags a plant from the search results and drops it on the map.
 #[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Serialize, Deserialize, ToSchema, Clone, Copy)]
 pub struct PlantingDto {
     /// The database id of the record.
-    pub id: i32,
+    pub id: Uuid,
     /// The plant that is planted.
+    #[serde(rename = "plantId")]
     pub plant_id: i32,
-    /// The plants layer of the map the plant is placed on.
-    /// NOTE:
-    ///     could be replaced by a `map_id` as the relation between `maps` and
-    ///     `plants_layers` should be non-nullable and one to one.
-    pub plants_layer_id: i32,
     /// The x coordinate of the position on the map.
-    pub x: i32,
+    pub x: f32,
     /// The y coordinate of the position on the map.
-    pub y: i32,
+    pub y: f32,
+    /// The width of the plant on the map.
+    pub width: i32,
+    /// The height of the plant on the map.
+    pub height: i32,
+    /// The rotation in degrees (0-360) of the plant on the map.
+    pub rotation: f32,
+    /// The x scale of the plant on the map.
+    #[serde(rename = "scaleX")]
+    pub scale_x: f32,
+    /// The y scale of the plant on the map.
+    #[serde(rename = "scaleY")]
+    pub scale_y: f32,
 }
 
 /// Used to create a new planting.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewPlantingDto {
+    /// The database id of the record. This is a UUID.
+    pub id: Uuid,
     /// The plant that is planted.
     pub plant_id: i32,
-    /// The plants layer of the map the plant is placed on.
-    /// NOTE:
-    ///     could be replaced by a `map_id` as the relation between `maps` and
-    ///     `plants_layers` should be non-nullable and one to one.
-    pub plants_layer_id: i32,
+    /// The map the plant is placed on.
+    pub map_id: i32,
     /// The x coordinate of the position on the map.
-    pub x: i32,
+    pub x: f32,
     /// The y coordinate of the position on the map.
-    pub y: i32,
+    pub y: f32,
+    /// The width of the plant on the map.
+    pub width: i32,
+    /// The height of the plant on the map.
+    pub height: i32,
+    /// The rotation of the plant on the map.
+    pub rotation: f32,
+    /// The x scale of the plant on the map.
+    #[serde(rename = "scaleX")]
+    pub scale_x: f32,
+    /// The y scale of the plant on the map.
+    #[serde(rename = "scaleY")]
+    pub scale_y: f32,
 }
 
 /// Used to update an existing planting.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct UpdatePlantingDto {
+    /// The map the plant is placed on.
+    /// Note: This field is not updated by this endpoint.
+    pub map_id: i32,
     /// The plant that is planted.
     pub plant_id: Option<i32>,
-    /// The plants layer of the map the plant is placed on.
-    /// NOTE:
-    ///     could be replaced by a `map_id` as the relation between `maps` and
-    ///     `plants_layers` should be non-nullable and one to one.
-    pub plants_layer_id: Option<i32>,
     /// The x coordinate of the position on the map.
-    pub x: Option<i32>,
+    pub x: Option<f32>,
     /// The y coordinate of the position on the map.
-    pub y: Option<i32>,
+    pub y: Option<f32>,
+    /// The width of the plant on the map.
+    pub width: Option<i32>,
+    /// The height of the plant on the map.
+    pub height: Option<i32>,
+    /// The rotation of the plant on the map.
+    pub rotation: Option<f32>,
+    /// The x scale of the plant on the map.
+    #[serde(rename = "scaleX")]
+    pub scale_x: Option<f32>,
+    /// The y scale of the plant on the map.
+    #[serde(rename = "scaleY")]
+    pub scale_y: Option<f32>,
 }
 
 /// Query parameters for searching plantings.
@@ -288,4 +321,14 @@ pub struct NewMapVersionDto {
 pub struct MapVersionSearchParameters {
     /// Whether or not the map is active.
     pub map_id: Option<i32>,
+}
+
+/// Query parameters for connecting to a map.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct ConnectToMapQueryParams {
+    /// The id of the map to connect to.
+    pub map_id: i32,
+    /// The id of the user connecting to the map.
+    pub user_id: String,
 }

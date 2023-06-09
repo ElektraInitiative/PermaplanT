@@ -22,10 +22,12 @@ export const selectIntersectingShapes = (
 
   // we dont always have to look for them, we can store them
   const allShapes = stageRef.current.children
-    ?.flatMap((layer) => layer.children)
+    //filter out layers which are not selected
+    ?.filter((layer) => layer.attrs.listening)
+    .flatMap((layer) => layer.children)
     .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'))
     // ignore shapes from non editable layers
-    .filter((shape) => shape?.getLayer()?.isListening());
+    .filter((shape) => shape?.getLayer()?.isListening());;
 
   if (!allShapes) return;
 

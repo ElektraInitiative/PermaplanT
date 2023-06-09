@@ -1,2 +1,3 @@
 [print_schema]
 file = "src/schema.rs"
+filter = { except_tables = ["spatial_ref_sys"] }

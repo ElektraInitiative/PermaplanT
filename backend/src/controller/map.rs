@@ -8,10 +8,11 @@ use actix_web::{
 };
 
 use crate::config::auth::user_info::UserInfo;
+use crate::config::data::AppDataInner;
 use crate::model::dto::{
     MapSearchParameters, MapVersionSearchParameters, NewMapVersionDto, PageParameters,
 };
-use crate::{db::connection::Pool, model::dto::NewMapDto, service};
+use crate::{model::dto::NewMapDto, service};
 
 /// Endpoint for fetching or searching all [`Map`](crate::model::entity::Map).
 /// Search parameters are taken from the URLs query string (e.g. .../api/maps?is_inactive=false&per_page=5).
@@ -38,12 +39,16 @@ pub async fn find(
     page_query: Query<PageParameters>,
 
     _user_info: UserInfo,
-    pool: Data<Pool>,
+    app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     // TODO: #360 validate owner
     // println!("User is: {}", user_info.id);
-    let response =
-        service::map::find(search_query.into_inner(), page_query.into_inner(), &pool).await?;
+    let response = service::map::find(
+        search_query.into_inner(),
+        page_query.into_inner(),
+        &app_data,
+    )
+    .await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -65,9 +70,9 @@ pub async fn find_by_id(
     map_id: Path<i32>,
 
     _user_info: UserInfo,
-    pool: Data<Pool>,
+    app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let response = service::map::find_by_id(*map_id, &pool).await?;
+    let response = service::map::find_by_id(*map_id, &app_data).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -90,9 +95,9 @@ pub async fn create(
     new_map_json: Json<NewMapDto>,
 
     _user_info: UserInfo,
-    pool: Data<Pool>,
+    app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let response = service::map::create(new_map_json.0, &pool).await?;
+    let response = service::map::create(new_map_json.0, &app_data).await?;
     Ok(HttpResponse::Created().json(response))
 }
 
@@ -122,11 +127,14 @@ pub async fn show_versions(
     page_query: Query<PageParameters>,
 
     _user_info: UserInfo,
-    pool: Data<Pool>,
+    app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let response =
-        service::map::show_versions(search_query.into_inner(), page_query.into_inner(), &pool)
-            .await?;
+    let response = service::map::show_versions(
+        search_query.into_inner(),
+        page_query.into_inner(),
+        &app_data,
+    )
+    .await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -150,8 +158,8 @@ pub async fn save_snapshot(
     new_map_version_json: Json<NewMapVersionDto>,
 
     _user_info: UserInfo,
-    pool: Data<Pool>,
+    app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let response = service::map::save_snapshot(new_map_version_json.0, &pool).await?;
+    let response = service::map::save_snapshot(new_map_version_json.0, &app_data).await?;
     Ok(HttpResponse::Created().json(response))
 }

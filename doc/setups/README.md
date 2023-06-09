@@ -1,6 +1,6 @@
 # Setup scripts for PermaplanT
 
-The setup guide for the whole backend can be found in [/backend/README.md](/backend/README.md)
+The setup guide for the whole backend can be found in [backend](../backend)
 
 ## keycloak
 
