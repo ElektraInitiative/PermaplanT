@@ -1,25 +1,32 @@
-import { useEffect, useState } from "react"
-import SimpleFormInput from "@/components/Form/SimpleFormInput"
-import SimpleButton from "@/components/Button/SimpleButton"
-import { ChatMessage, getChatMessages, getConversations, LookIntoFuture, sendMessage, TalkConversation } from "../api/chat"
-import { toast } from "react-toastify"
-import ConversationForm from "./ConversationForm"
-import { MessageList } from "./MessageList"
-import ModalContainer from "@/components/Modals/ModalContainer"
-import TransparentBackground from "@/components/TransparentBackground"
-import IconButton from "@/components/Button/IconButton"
+import {
+  ChatMessage,
+  getChatMessages,
+  getConversations,
+  LookIntoFuture,
+  sendMessage,
+  TalkConversation,
+} from '../api/chat';
+import ConversationForm from './ConversationForm';
+import { MessageList } from './MessageList';
+import IconButton from '@/components/Button/IconButton';
+import SimpleButton from '@/components/Button/SimpleButton';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import ModalContainer from '@/components/Modals/ModalContainer';
+import TransparentBackground from '@/components/TransparentBackground';
 import { ReactComponent as AddIcon } from '@/icons/add.svg';
-import { AnimatePresence, motion } from "framer-motion"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from '@tanstack/react-query';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 /**
  * component used for testing different chat api calls
  */
 export const ChatTest = () => {
-  const [message, setMessage] = useState<string>("")
-  const [messages, setMessages] = useState<Array<ChatMessage>>([])
-  const [selectedConversation, setSelectedConversation] = useState<TalkConversation>()
-  const [showConversationForm, setShowConversationForm] = useState<boolean>(false)
+  const [message, setMessage] = useState<string>('');
+  const [messages, setMessages] = useState<Array<ChatMessage>>([]);
+  const [selectedConversation, setSelectedConversation] = useState<TalkConversation>();
+  const [showConversationForm, setShowConversationForm] = useState<boolean>(false);
 
   const newMessages = useQuery(['newMessages', selectedConversation], fetchNewMessages, {
     refetchInterval: 5000, // Polling interval in milliseconds (e.g., 5000 = 5 seconds)
@@ -32,10 +39,10 @@ export const ChatTest = () => {
   async function fetchMessageHistory() {
     if (selectedConversation) {
       const messageHistory = await getChatMessages(selectedConversation?.token, {
-        lookIntoFuture: LookIntoFuture.GetHistory
-      })
-      messageHistory.reverse()
-      setMessages(messageHistory)
+        lookIntoFuture: LookIntoFuture.GetHistory,
+      });
+      messageHistory.reverse();
+      setMessages(messageHistory);
     }
   }
 
@@ -43,103 +50,117 @@ export const ChatTest = () => {
     if (selectedConversation) {
       return getChatMessages(selectedConversation?.token, {
         lookIntoFuture: LookIntoFuture.Poll,
-        lastKnownMessageId: messages[messages.length-1].id
-      })
+        lastKnownMessageId: messages[messages.length - 1].id,
+      });
     } else {
-      return null
+      return null;
     }
   }
 
   async function send() {
     if (selectedConversation) {
-      await sendMessage(selectedConversation.token, message)
-      newMessages.refetch()
-      toast(("message: '" + message + "' sent"), { type: 'success' })
+      await sendMessage(selectedConversation.token, message);
+      newMessages.refetch();
+      toast("message: '" + message + "' sent", { type: 'success' });
     } else {
-      toast("no convo selected", { type: 'error' })
+      toast('no convo selected', { type: 'error' });
     }
   }
 
   useEffect(() => {
-    fetchMessageHistory()
-  }, [selectedConversation])
+    fetchMessageHistory();
+  }, [selectedConversation]);
 
   useEffect(() => {
-    const data = newMessages.data
-    if(data){
-      setMessages([...messages, ...data])
+    const data = newMessages.data;
+    if (data) {
+      setMessages([...messages, ...data]);
     }
-  }, [newMessages.data])
+  }, [newMessages.data]);
 
-  return <div className="flex flex-col justify-center items-center gap-4 mt-8">
-    <TransparentBackground
-      onClick={() => {
-        setShowConversationForm(false);
-      }}
-      show={showConversationForm}
-    />
-    <ModalContainer show={showConversationForm}>
-      <div className="bg-neutral-700 p-4">
-        <h2 className="mb-2">Create conversation</h2>
-        <ConversationForm></ConversationForm>
-      </div>
-    </ModalContainer>
-    <div className="flex w-full gap-4 m-5 justify-center">
-      <div className="border-r border-neutral-500 p-4">
-        <h2>conversations</h2>
-        <IconButton title="create new conversation" onClick={() => setShowConversationForm(true)}><AddIcon /></IconButton>
-        <ul>
-          {conversations.data?.map(item => {
-            return <li className="cursor-pointer hover:text-primary-400" key={item.id} onClick={() => setSelectedConversation(item)}>{item.displayName}</li>
-          })}
-        </ul>
-      </div>
-      <AnimatePresence>
-        {selectedConversation && (
-          <motion.div
-            className="w-[50%]"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: 100,
-              transition: { delay: 0, duration: 0.3 },
-            }}
-            exit={{
-              opacity: 0,
-              transition: { delay: 0, duration: 0.3 },
-            }}
-          >
-            <div className="flex flex-col gap-4" >
-              <h2>Chat messages</h2>
-              {messages.length > 0 &&
-                <motion.div
-                  className="h-80 overflow-y-scroll"
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: 100,
-                    transition: { delay: 0, duration: 0.3 },
-                  }}
-                  exit={{
-                    opacity: 0,
-                    transition: { delay: 0, duration: 0.3 },
-                  }}
+  return (
+    <div className="mt-8 flex flex-col items-center justify-center gap-4">
+      <TransparentBackground
+        onClick={() => {
+          setShowConversationForm(false);
+        }}
+        show={showConversationForm}
+      />
+      <ModalContainer show={showConversationForm}>
+        <div className="bg-neutral-700 p-4">
+          <h2 className="mb-2">Create conversation</h2>
+          <ConversationForm></ConversationForm>
+        </div>
+      </ModalContainer>
+      <div className="m-5 flex w-full justify-center gap-4">
+        <div className="border-r border-neutral-500 p-4">
+          <h2>conversations</h2>
+          <IconButton title="create new conversation" onClick={() => setShowConversationForm(true)}>
+            <AddIcon />
+          </IconButton>
+          <ul>
+            {conversations.data?.map((item) => {
+              return (
+                <li
+                  className="cursor-pointer hover:text-primary-400"
+                  key={item.id}
+                  onClick={() => setSelectedConversation(item)}
                 >
-                  <MessageList messages={messages} />
-                </motion.div>
-              }
-              <SimpleFormInput
-                id="message"
-                labelText={"write a message to " + (selectedConversation ? selectedConversation.displayName : "")}
-                placeHolder="message..."
-                onChange={(e) => setMessage(e.target.value)}
-                isArea={true}
-              ></SimpleFormInput>
-              <SimpleButton onClick={send}>send</SimpleButton>
-              {/* <SimpleButton onClick={fetchMessages}>fetch messages</SimpleButton> */}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  {item.displayName}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <AnimatePresence>
+          {selectedConversation && (
+            <motion.div
+              className="w-[50%]"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 100,
+                transition: { delay: 0, duration: 0.3 },
+              }}
+              exit={{
+                opacity: 0,
+                transition: { delay: 0, duration: 0.3 },
+              }}
+            >
+              <div className="flex flex-col gap-4">
+                <h2>Chat messages</h2>
+                {messages.length > 0 && (
+                  <motion.div
+                    className="h-80 overflow-y-scroll"
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: 100,
+                      transition: { delay: 0, duration: 0.3 },
+                    }}
+                    exit={{
+                      opacity: 0,
+                      transition: { delay: 0, duration: 0.3 },
+                    }}
+                  >
+                    <MessageList messages={messages} />
+                  </motion.div>
+                )}
+                <SimpleFormInput
+                  id="message"
+                  labelText={
+                    'write a message to ' +
+                    (selectedConversation ? selectedConversation.displayName : '')
+                  }
+                  placeHolder="message..."
+                  onChange={(e) => setMessage(e.target.value)}
+                  isArea={true}
+                ></SimpleFormInput>
+                <SimpleButton onClick={send}>send</SimpleButton>
+                {/* <SimpleButton onClick={fetchMessages}>fetch messages</SimpleButton> */}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
-  </div>
-
-}
+  );
+};

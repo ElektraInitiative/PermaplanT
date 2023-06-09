@@ -1,85 +1,84 @@
 // Documentation is from https://nextcloud-talk.readthedocs.io/en/latest/chat/
-
-import { createNextcloudAPI } from "@/config/axios";
+import { createNextcloudAPI } from '@/config/axios';
 
 export const sendMessage = (chatToken: string, message: string) => {
-  const http = createNextcloudAPI()
-  http.defaults.headers['OCS-APIRequest'] = true
-  http.defaults.headers['Accept'] = 'application/json'
-  http.defaults.headers['format'] = 'json'
+  const http = createNextcloudAPI();
+  http.defaults.headers['OCS-APIRequest'] = true;
+  http.defaults.headers['Accept'] = 'application/json';
+  http.defaults.headers['format'] = 'json';
 
-  return http.post("/ocs/v2.php/apps/spreed/api/v1/chat/" + chatToken, {
-    message
-  })
-}
+  return http.post('/ocs/v2.php/apps/spreed/api/v1/chat/' + chatToken, {
+    message,
+  });
+};
 
 export type TalkConversation = {
+  id: number;
+  token: string;
+  type: number;
+  name: string;
+  displayName: string;
+  objectType: string;
+  objectId: string;
+  participantType: number;
+  participantFlags: number;
+  readOnly: number;
+  hasPassword: boolean;
+  hasCall: boolean;
+  canStartCall: boolean;
+  lastActivity: number;
+  lastReadMessage: number;
+  unreadMessages: number;
+  unreadMention: boolean;
+  unreadMentionDirect: boolean;
+  isFavorite: boolean;
+  canLeaveConversation: boolean;
+  canDeleteConversation: boolean;
+  notificationLevel: number;
+  notificationCalls: number;
+  lobbyState: number;
+  lobbyTimer: number;
+  lastPing: number;
+  sessionId: string;
+  lastMessage: {
     id: number;
     token: string;
-    type: number;
-    name: string;
-    displayName: string;
-    objectType: string;
-    objectId: string;
-    participantType: number;
-    participantFlags: number;
-    readOnly: number;
-    hasPassword: boolean;
-    hasCall: boolean;
-    canStartCall: boolean;
-    lastActivity: number;
-    lastReadMessage: number;
-    unreadMessages: number;
-    unreadMention: boolean;
-    unreadMentionDirect: boolean;
-    isFavorite: boolean;
-    canLeaveConversation: boolean;
-    canDeleteConversation: boolean;
-    notificationLevel: number;
-    notificationCalls: number;
-    lobbyState: number;
-    lobbyTimer: number;
-    lastPing: number;
-    sessionId: string;
-    lastMessage: {
-        id: number;
-        token: string;
-        actorType: string;
-        actorId: string;
-        actorDisplayName: string;
-        timestamp: number;
-        message: string;
-        messageParameters: any[];
-        systemMessage: string;
-        messageType: string;
-        isReplyable: boolean;
-        referenceId: string;
-        reactions: Record<string, unknown>;
-        expirationTimestamp: number;
-    };
-    sipEnabled: number;
     actorType: string;
     actorId: string;
-    attendeeId: number;
-    permissions: number;
-    attendeePermissions: number;
-    callPermissions: number;
-    defaultPermissions: number;
-    canEnableSIP: boolean;
-    attendeePin: string;
-    description: string;
-    lastCommonReadMessage: number;
-    listable: number;
-    callFlag: number;
-    messageExpiration: number;
+    actorDisplayName: string;
+    timestamp: number;
+    message: string;
+    messageParameters: any[];
+    systemMessage: string;
+    messageType: string;
+    isReplyable: boolean;
+    referenceId: string;
+    reactions: Record<string, unknown>;
+    expirationTimestamp: number;
+  };
+  sipEnabled: number;
+  actorType: string;
+  actorId: string;
+  attendeeId: number;
+  permissions: number;
+  attendeePermissions: number;
+  callPermissions: number;
+  defaultPermissions: number;
+  canEnableSIP: boolean;
+  attendeePin: string;
+  description: string;
+  lastCommonReadMessage: number;
+  listable: number;
+  callFlag: number;
+  messageExpiration: number;
 };
 export const getConversations = async (): Promise<Array<TalkConversation>> => {
-  const http = createNextcloudAPI()
-  http.defaults.headers['OCS-APIRequest'] = true
+  const http = createNextcloudAPI();
+  http.defaults.headers['OCS-APIRequest'] = true;
 
-  const data = await http.get("/ocs/v2.php/apps/spreed/api/v4/room")
-  return data.data.ocs.data
-}
+  const data = await http.get('/ocs/v2.php/apps/spreed/api/v4/room');
+  return data.data.ocs.data;
+};
 
 export enum ConversationType {
   OneToOne,
@@ -101,13 +100,15 @@ export type CreateConversationOptions = {
   objectType?: string;
   // ID of an object this room references, room token is used for the parent of a breakout room
   objectId?: string;
-}
+};
 export const createConversation = async (options: CreateConversationOptions) => {
-  const http = createNextcloudAPI()
-  http.defaults.headers['OCS-APIRequest'] = true
-  return http.post("/ocs/v2.php/apps/spreed/api/v4/room", {...options, roomType: options.roomType + 1 })
-}
-
+  const http = createNextcloudAPI();
+  http.defaults.headers['OCS-APIRequest'] = true;
+  return http.post('/ocs/v2.php/apps/spreed/api/v4/room', {
+    ...options,
+    roomType: options.roomType + 1,
+  });
+};
 
 export enum LookIntoFuture {
   Poll = 1, // Poll and wait for new message
@@ -173,10 +174,13 @@ export type ChatMessage = {
   // Optional: When the user reacted, this is the list of emojis the user reacted with
   reactionsSelf?: string[];
 };
-export const getChatMessages = async (token: string, params: GetChatMessagesParams): Promise<Array<ChatMessage>> => {
-  const http = createNextcloudAPI()
-  http.defaults.headers['OCS-APIRequest'] = true
-  http.defaults.headers['Accept'] ="application/json"
-  const result = await http.get("/ocs/v2.php/apps/spreed/api/v1/chat/" + token, { params })
-  return result.data.ocs.data
-}
+export const getChatMessages = async (
+  token: string,
+  params: GetChatMessagesParams,
+): Promise<Array<ChatMessage>> => {
+  const http = createNextcloudAPI();
+  http.defaults.headers['OCS-APIRequest'] = true;
+  http.defaults.headers['Accept'] = 'application/json';
+  const result = await http.get('/ocs/v2.php/apps/spreed/api/v1/chat/' + token, { params });
+  return result.data.ocs.data;
+};
