@@ -7,13 +7,13 @@ use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
-use super::r#enum::{quality::Quality, quantity::Quantity};
+use super::r#enum::{layer_type::LayerType, quality::Quality, quantity::Quantity};
 
 pub mod actions;
+pub mod layer_impl;
 pub mod map_impl;
-pub mod map_version_impl;
+pub mod new_layer_impl;
 pub mod new_map_impl;
-pub mod new_map_version_impl;
 pub mod new_seed_impl;
 pub mod page_impl;
 pub mod plants_impl;
@@ -212,7 +212,6 @@ pub struct PageParameters {
     PageSeedDto = Page<SeedDto>,
     PageMapDto = Page<MapDto>,
     PagePlantingDto = Page<PlantingDto>,
-    PageMapVersionDto = Page<MapVersionDto>
 )]
 pub struct Page<T> {
     /// Resulting records.
@@ -255,7 +254,7 @@ pub struct MapDto {
 
 /// The information of a map neccessary for its creation.
 #[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct NewMapDto {
     /// The name of the map.
     pub name: String,
@@ -289,38 +288,46 @@ pub struct MapSearchParameters {
     pub owner_id: Option<i32>,
 }
 
-/// The whole information of a map version.
+/// The whole information of a layer.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
-pub struct MapVersionDto {
-    /// The id of the map version.
+pub struct LayerDto {
+    /// The id of the layer.
     pub id: i32,
-    /// The id of the parent map.
+    /// The id of the map this layer belongs to.
     pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
 }
 
-/// The information of a map version neccessary for its creation.
+/// The information of a layer neccessary for its creation.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
-pub struct NewMapVersionDto {
-    /// The id of the parent map.
+pub struct NewLayerDto {
+    /// The id of the map this layer belongs to.
     pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
 }
 
-/// Query parameters for searching map versions.
+/// Query parameters for searching layers.
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
-pub struct MapVersionSearchParameters {
-    /// Whether or not the map is active.
+pub struct LayerSearchParameters {
+    /// The parent map.
     pub map_id: Option<i32>,
+    /// The type of layer.
+    pub type_: Option<LayerType>,
+    /// Wheter or not the layer is an alternative.
+    pub is_alternative: Option<bool>,
 }
 
 /// Query parameters for connecting to a map.

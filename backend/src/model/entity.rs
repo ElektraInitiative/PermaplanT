@@ -1,7 +1,7 @@
 //! Contains all entities used in `PermaplanT`.
 
+pub mod layer_impl;
 pub mod map_impl;
-pub mod map_version_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
@@ -11,12 +11,12 @@ use chrono::NaiveDateTime;
 use diesel::QueryableByName;
 use diesel::{Identifiable, Insertable, Queryable};
 
-use crate::schema::{map_versions, maps, plants, seeds};
+use crate::schema::{layers, maps, plants, seeds};
 
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
     fertility::Fertility, flower_type::FlowerType, growth_rate::GrowthRate,
-    herbaceous_or_woody::HerbaceousOrWoody, life_cycle::LifeCycle,
+    herbaceous_or_woody::HerbaceousOrWoody, layer_type::LayerType, life_cycle::LifeCycle,
     light_requirement::LightRequirement, nutrition_demand::NutritionDemand,
     propagation_method::PropagationMethod, quality::Quality, quantity::Quantity, shade::Shade,
     soil_ph::SoilPh, soil_texture::SoilTexture, soil_water_retention::SoilWaterRetention,
@@ -742,28 +742,32 @@ pub struct NewMap {
     pub owner_id: i32,
 }
 
-/// The `MapVersion` entity.
+/// The `Layer` entity.
 #[derive(Identifiable, Queryable)]
-#[diesel(table_name = map_versions)]
-pub struct MapVersion {
-    /// The id of the map version.
+#[diesel(table_name = layers)]
+pub struct Layer {
+    /// The id of the layer.
     pub id: i32,
-    /// The id of the parent map.
+    /// The id of the map this layer belongs to.
     pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
 }
 
-/// The `NewMapVersion` entity.
+/// The `NewLayer` entity.
 #[derive(Insertable)]
-#[diesel(table_name = map_versions)]
-pub struct NewMapVersion {
-    /// The id of the parent map.
+#[diesel(table_name = layers)]
+pub struct NewLayer {
+    /// The id of the map this layer belongs to.
     pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
 }
