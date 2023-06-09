@@ -36,6 +36,12 @@ impl Plants {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
+        // Set higher search sensitivity so that the user gets more search results than with default
+        // settings (0.3).
+        let set_similarity_threshold = diesel::sql_query("SET pg_trgm.similarity_threshold=0.1");
+        debug!("{}", debug_query::<Pg, _>(&set_similarity_threshold));
+        let _ = set_similarity_threshold.execute(conn).await?;
+
         let query = plants::table
             .select((
                 plants::all_columns,

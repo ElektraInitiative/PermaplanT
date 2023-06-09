@@ -5,15 +5,15 @@
 - **Scope:** Authentication
 - **Level:** User Goal
 - **Actors:** App User, App System
-- **Brief:** The user authenticates against the app to gain access to their account.
+- **Brief:** The user authenticates against Keycloak to gain access to their account.
 - **Status:** Done
 - **Assignee:** Gabriel, Samuel
 
 ## Scenarios
 
-- **Precondition:** The user has not yet authenticated against the app.
+- **Precondition:** The user has not yet authenticated against Keycloak.
 - **Main success scenario:**
-  - The user enters their Nextcloud login credentials and the app successfully authenticates them.
+  - The user enters their login credentials and Keycloak successfully authenticates them.
   - Alternatively, they go to a permalink for their user or map, where no login is needed.
 - **Alternative scenario:**
   The user enters incorrect login credentials.

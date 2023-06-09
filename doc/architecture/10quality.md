@@ -1,4 +1,47 @@
-# Quality Requirements
+# Quality
+
+## efficient
+
+- At least 3000 users should be able to connect to the backend.
+- Keyboard shortcuts should be consistent.
+- Startup time should be less than one second.
+- Near instant search results.
+- Should work with 500MB RAM.
+- Good carbon emission efficiency: code burning more than 10% CPU should be optimized.
+
+## usable
+
+- Compliance with UI styleguide.
+- Keyboard shortcuts should be consistent.
+- Easily understandable acceptance test cases.
+- Usability tests with gardeners.
+- Avoidance of errors and understandable error messages.
+- Usable despite color blindness.
+- Usable with gloves.
+
+## secure
+
+- Avoid common vulnerabilities
+- Use reliable software for security concerns
+- Everything encrypted (https)
+- Only encrypted or local storage
+- Only authenticated users can access non-public data
+
+## operable
+
+- 99% uptime
+- Only a few configuration options to keep it simple and everything configurable via `.env`
+- Everything should build and run on Linux and the CI
+- System can run for more than a month without a reboot needed
+
+## flexible
+
+One of our least important goals.
+Users or programmers do not need simple ways to extend PermaplanT or to change features.
+The only quality requirement we have are:
+
+- usage in different browsers, including tablets
+- localized to German and English
 
 ## Backend Tests
 

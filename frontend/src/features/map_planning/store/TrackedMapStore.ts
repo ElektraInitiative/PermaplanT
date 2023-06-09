@@ -1,21 +1,15 @@
 import type {
-  MapAction,
-  ObjectAddAction,
-  ObjectState,
-  ObjectUpdatePositionAction,
-  ObjectUpdateTransformAction,
-  TrackedAction,
+  Action,
   TrackedLayers,
   TrackedMapSlice,
   TrackedMapState,
   UntrackedMapSlice,
 } from './MapStoreTypes';
 import { LAYER_NAMES } from './MapStoreTypes';
-import i18next from '@/config/i18n';
+import { PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { createRef } from 'react';
-import { toast } from 'react-toastify';
 import type { StateCreator } from 'zustand';
 
 export const TRACKED_DEFAULT_STATE: TrackedMapState = {
@@ -33,169 +27,161 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
   },
 };
 
+type SetFn = Parameters<typeof createTrackedMapSlice>[0];
+type GetFn = Parameters<typeof createTrackedMapSlice>[1];
+
 export const createTrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
   [],
   [],
   TrackedMapSlice
-> = (set) => ({
-  transformer: createRef<Konva.Transformer>(),
-  trackedState: TRACKED_DEFAULT_STATE,
-  history: [],
-  step: 0,
-  canUndo: false,
-  canRedo: false,
-  dispatch: (action) => set((state) => ({ ...state, ...applyActionToState(action, state) })),
-  addShapeToTransformer: (node: Shape<ShapeConfig>) => {
-    set((state) => {
-      const transformer = state.transformer.current;
-
-      const nodes = transformer?.getNodes() || [];
-      if (!nodes.includes(node)) {
-        transformer?.nodes([node]);
-      }
-
-      return state;
-    });
-  },
-});
-
-/**
- * given an action and the current state, return the new state
- */
-function applyActionToState(action: MapAction, state: TrackedMapSlice): TrackedMapSlice {
-  switch (action.type) {
-    case 'OBJECT_ADD':
-      return {
-        ...state,
-        history: [...state.history.slice(0, state.step), action],
-        step: state.step + 1,
-        trackedState: handleAddObjectAction(state.trackedState, action),
-        canUndo: true,
-      };
-
-    case 'OBJECT_UPDATE_POSITION':
-    case 'OBJECT_UPDATE_TRANSFORM':
-      return {
-        ...state,
-        history: [...state.history.slice(0, state.step), action],
-        step: state.step + 1,
-        trackedState: handleUpdateObjectAction(state.trackedState, action),
-        canUndo: true,
-      };
-
-    case 'UNDO': {
-      if (state.step <= 0) {
-        return state;
-      }
-
-      const lastAction = state.history[state.step - 1];
-      // TODO: read 'Placeholder' from the lastAction/nextAction
-      const action = i18next.t(`undoRedo:${lastAction.type}`, { name: 'Placeholder' });
-      toast(i18next.t('undoRedo:successful_undo', { action }));
-
-      // reset the transformer
-      state.transformer.current?.nodes([]);
-
-      return {
-        ...state,
-        trackedState: reduceHistory(state.history.slice(0, state.step - 1)),
-        step: state.step - 1,
-        canUndo: state.step - 1 > 0,
-        canRedo: state.step - 1 < state.history.length,
-      };
-    }
-
-    case 'REDO': {
-      if (state.step >= state.history.length) {
-        return state;
-      }
-
-      const nextAction = state.history[state.step];
-      // TODO: read 'Placeholder' from the lastAction/nextAction
-      const action = i18next.t(`undoRedo:${nextAction.type}`, { name: 'Placeholder' });
-      toast(i18next.t('undoRedo:successful_redo', { action }));
-
-      // reset the transformer
-      state.transformer.current?.nodes([]);
-
-      return {
-        ...state,
-        trackedState: reduceHistory(state.history.slice(0, state.step + 1)),
-        step: state.step + 1,
-        canRedo: state.step + 1 < state.history.length,
-        canUndo: state.step + 1 > 0,
-      };
-    }
-
-    default:
-      return state;
-  }
-}
-
-function handleAddObjectAction(state: TrackedMapState, action: ObjectAddAction): TrackedMapState {
+> = (set, get) => {
   return {
-    ...state,
-    layers: {
-      ...state.layers,
-      [action.payload.index]: {
-        ...state.layers[action.payload.index],
-        objects: [...state.layers[action.payload.index].objects, action.payload],
-      },
-    },
-  };
-}
+    transformer: createRef<Konva.Transformer>(),
+    trackedState: TRACKED_DEFAULT_STATE,
+    history: [],
+    step: 0,
+    canUndo: false,
+    canRedo: false,
+    executeAction: (action: Action<unknown, unknown>) => executeAction(action, set, get),
+    undo: () => undo(set, get),
+    redo: () => redo(set, get),
+    __applyRemoteAction: (action: Action<unknown, unknown>) => applyActionToStore(action, set, get),
+    addShapeToTransformer: (node: Shape<ShapeConfig>) => {
+      set((state) => {
+        const transformer = state.transformer.current;
 
-function handleUpdateObjectAction(
-  state: TrackedMapState,
-  action: ObjectUpdatePositionAction | ObjectUpdateTransformAction,
-): TrackedMapState {
-  return {
-    ...state,
-    layers: {
-      ...state.layers,
-      ...action.payload.reduce(reduceObjectUpdatesToLayers, state.layers),
-    },
-  };
-}
-function reduceObjectUpdatesToLayers(
-  layers: TrackedLayers,
-  objectUpdate: ObjectState,
-): TrackedLayers {
-  const layerIndex = objectUpdate.index;
-
-  return {
-    ...layers,
-    [layerIndex]: {
-      ...layers[layerIndex],
-      objects: layers[layerIndex].objects.map((obj) => {
-        if (obj.id === objectUpdate.id) {
-          return objectUpdate;
+        const nodes = transformer?.getNodes() || [];
+        if (!nodes.includes(node)) {
+          transformer?.nodes([node]);
         }
 
-        return obj;
-      }),
+        return state;
+      });
     },
+    initPlantLayer: (plants: PlantingDto[]) =>
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            Plant: {
+              ...state.trackedState.layers.Plant,
+              objects: plants,
+            },
+          },
+        },
+      })),
   };
+};
+
+/**
+ * Execute an action, use it instead of directly calling action.execute().
+ * It will also update the history and applies the changes to the store.
+ * After execution, the ability to redo any undone action is lost.
+ */
+function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
+  action.execute();
+  trackReverseActionInHistory(action, get().step, set, get);
+  applyActionToStore(action, set, get);
+
+  set((state) => ({
+    ...state,
+    step: state.step + 1,
+    canRedo: false,
+    canUndo: true,
+    history: state.history.slice(0, state.step + 1),
+  }));
 }
 
 /**
- * given a history of actions, reduce it into a single state, that is the sum of all actions
+ * Apply the action to the store.
+ *
+ * Do not call this function before `trackReverseActionInHistory`.
  */
-function reduceHistory(history: TrackedAction[]): TrackedMapState {
-  const state = history.reduce((state, action) => {
-    switch (action.type) {
-      case 'OBJECT_ADD':
-        return handleAddObjectAction(state, action);
+function applyActionToStore(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
+  const newTrackedState = action.apply(get().trackedState);
 
-      case 'OBJECT_UPDATE_POSITION':
-      case 'OBJECT_UPDATE_TRANSFORM':
-        return handleUpdateObjectAction(state, action);
+  set((state) => ({
+    ...state,
+    trackedState: newTrackedState,
+  }));
+}
 
-      default:
-        return state;
-    }
-  }, TRACKED_DEFAULT_STATE);
+/**
+ * Track the reverse action in the history.
+ *
+ * Always call this function before `applyActionToStore` to track the reverse action in the history.
+ * Otherwise, the reverse action will be wrong, or might cause an exception.
+ */
+function trackReverseActionInHistory(
+  action: Action<unknown, unknown>,
+  atIndex: number,
+  set: SetFn,
+  get: GetFn,
+): void {
+  const reverseAction = action.reverse(get().trackedState);
+  if (!reverseAction) {
+    throw new Error('Cannot reverse action');
+  }
 
-  return state;
+  const history = get().history;
+  // replace the action at index `atIndex` with the reverse action
+  const newHistory = [...history.slice(0, atIndex), reverseAction, ...history.slice(atIndex + 1)];
+
+  set((state) => ({
+    ...state,
+    history: newHistory,
+  }));
+}
+
+/**
+ * Undo the action at step - 1.
+ */
+function undo(set: SetFn, get: GetFn): void {
+  if (!get().canUndo) {
+    return;
+  }
+
+  const actionToUndo = get().history[get().step - 1];
+  if (!actionToUndo) {
+    throw new Error('Cannot undo action');
+  }
+
+  actionToUndo.execute();
+  trackReverseActionInHistory(actionToUndo, get().step - 1, set, get);
+  applyActionToStore(actionToUndo, set, get);
+
+  set((state) => ({
+    ...state,
+    step: state.step - 1,
+    canUndo: state.step - 1 > 0,
+    canRedo: true,
+  }));
+}
+
+/**
+ * Redo the action at the current step.
+ */
+function redo(set: SetFn, get: GetFn): void {
+  if (!get().canRedo) {
+    return;
+  }
+
+  const actionToRedo = get().history[get().step];
+  if (!actionToRedo) {
+    throw new Error('Cannot redo action');
+  }
+
+  actionToRedo.execute();
+  trackReverseActionInHistory(actionToRedo, get().step, set, get);
+  applyActionToStore(actionToRedo, set, get);
+
+  set((state) => ({
+    ...state,
+    step: state.step + 1,
+    canUndo: true,
+    canRedo: state.step + 1 < state.history.length,
+  }));
 }
