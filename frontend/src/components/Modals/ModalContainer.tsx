@@ -1,10 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
 interface ModalContainerProps {
+  /** usually the Modal content */
   children: React.ReactNode;
+  /** controls the visibility */
   show: boolean;
 }
 
+/** animated container for Modals */
 export default function ModalContainer({ children, show }: ModalContainerProps) {
   return (
     <AnimatePresence>

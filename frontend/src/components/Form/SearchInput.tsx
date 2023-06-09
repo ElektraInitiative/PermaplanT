@@ -2,6 +2,7 @@ import { ReactComponent as SearchIcon } from '@/icons/search.svg';
 import { forwardRef, Ref } from 'react';
 
 interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  /** input event handler */
   handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
