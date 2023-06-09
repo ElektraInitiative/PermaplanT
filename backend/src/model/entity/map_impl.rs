@@ -1,12 +1,19 @@
 //! Contains the implementation of [`Map`].
 
+use diesel::dsl::sql;
 use diesel::pg::Pg;
-use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
+use diesel::sql_types::Float;
+use diesel::{
+    debug_query, BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods, QueryDsl,
+    QueryResult,
+};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 
+use crate::db::function::{similarity, PgTrgmExpressionMethods};
 use crate::db::pagination::Paginate;
 use crate::model::dto::{MapSearchParameters, Page, PageParameters};
+use crate::schema::maps::name;
 use crate::{
     model::dto::{MapDto, NewMapDto},
     schema::maps::{self, all_columns, is_inactive, owner_id},
@@ -15,8 +22,13 @@ use crate::{
 use super::{Map, NewMap};
 
 impl Map {
-    /// Get a page of maps.
-    /// Can be filtered by its active status if one is provided in `search_parameters`.
+    /// Get the top maps matching the search query.
+    ///
+    /// Can be filtered by `is_inactive` and `owner_id` if provided in `search_parameters`.
+    /// This will be done with equals and is additional functionality for maps (when compared to plant search).
+    ///
+    /// Uses `pg_trgm` to find matches in `name`.
+    /// Ranks using the `pg_trgm` function `similarity()`.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -25,8 +37,21 @@ impl Map {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<MapDto>> {
-        let mut query = maps::table.select(all_columns).into_boxed();
+        let mut query = maps::table
+            .select((
+                similarity(name, search_parameters.name.clone().unwrap_or_default()),
+                all_columns,
+            ))
+            .into_boxed();
 
+        if let Some(search_query) = &search_parameters.name {
+            if !search_query.is_empty() {
+                query = query.filter(
+                    name.fuzzy(search_query)
+                        .or(name.ilike(format!("%{search_query}%"))),
+                );
+            }
+        }
         if let Some(is_inactive_search) = search_parameters.is_inactive {
             query = query.filter(is_inactive.eq(is_inactive_search));
         }
@@ -35,10 +60,14 @@ impl Map {
         }
 
         let query = query
+            .order(sql::<Float>("1").desc())
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));
-        query.load_page::<Self>(conn).await.map(Page::from_entity)
+        query
+            .load_page::<(f32, Self)>(conn)
+            .await
+            .map(Page::from_entity)
     }
 
     /// Fetch map by id from the database.
