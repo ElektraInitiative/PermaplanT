@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 async function getPublicImages(imagePaths: Array<string>, publicShareToken: string) {
-  return Promise.all(imagePaths.map((path) => getPublicImage(path, publicShareToken)));
+  return imagePaths.map((path) => getPublicImage(path, publicShareToken))
 }
 
 function getImagesFromFileList(files: Array<string>) {
@@ -20,17 +20,17 @@ function getImagesFromFileList(files: Array<string>) {
 }
 
 export const PhotoGallery = () => {
-  const publicShareToken = 'qo6mZwPg6kFTmmj';
-  const { data: files } = useQuery(['files', publicShareToken], () =>
-    getPublicFileList(publicShareToken),
+  const galleryShareToken = 'qo6mZwPg6kFTmmj';
+  const { data: files } = useQuery(['files', galleryShareToken], () =>
+    getPublicFileList(galleryShareToken),
   );
 
   // filter images from all files
   const imagePaths = files ? getImagesFromFileList(files) : [];
 
   const { data: images, isLoading: imagesLoading } = useQuery({
-    queryKey: ['images', imagePaths],
-    queryFn: () => getPublicImages(imagePaths as Array<string>, publicShareToken),
+    queryKey: ['images', imagePaths, galleryShareToken] as const,
+    queryFn: ({ queryKey: [_images, imagePaths, token]  }) => getPublicImages(imagePaths, token),
     enabled: !!imagePaths,
   });
 
