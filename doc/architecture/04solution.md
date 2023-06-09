@@ -127,3 +127,12 @@ We use [Keycloak](https://www.keycloak.org/) for Identity and Access Management 
 1. default-roles-permaplant (only [public maps and the membership application](../usecases/current/membership_application.md) can be visited)
 2. member (can do everything but administration tasks)
 3. admin (possibility to change data from other users, as needed for onboarding or offboarding)
+
+## Privacy
+
+In general all data must to stay within the organisation (Verein) and can only be seen by members or even only admins.
+Data which makes a person identifiable should be in Keycloak.
+The only exceptions are:
+
+- bank account and billing address, which gets completely removed from the server (for security reasons)
+- public maps are visible to non-members but most meta-data won't be shown and the location gets obfuscated

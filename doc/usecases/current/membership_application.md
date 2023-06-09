@@ -17,10 +17,13 @@
      - username
      - first+last name
      - email address
+     - birthday
+     - biography
   2. The user can look at public maps (read-only and without seeing addresses!)
-  3. The user can visit a 3-step form to apply for membership, with:
-     1. which kind of membership (directly on landing page)
-     2. form 1
+  3. The user apply for membership, with several steps:
+     1. Which kind of membership is selected on landing page and "Apply for membership" clicked.
+        Can also be clicked without being registered before, then Step 1. of Main success scenario needs to be done.
+     2. form page 1
         - salutation (Anrede)
         - title (Titel) [optional]
         - billing address (Rechnungsadresse)
@@ -30,12 +33,13 @@
         - website [optional]
         - organisation [optional]
         - permaculture experience [optional]
-        - user photo (uploaded in Nextcloud)
-     3. form 2
+        - user photo (uploaded and also used in Nextcloud)
+     3. form page 2
         - if billing address or someone else's address should be used
         - one or several photos of the site
+        - description of the site
         - location of map(s) (not shown to default-roles-permaplant users)
-     4. form 3
+     4. form page 3
         - owner (KontoinhaberIn)
         - IBAN
         - BIC

@@ -38,9 +38,9 @@ sequenceDiagram
     Permaplant->>Admin: notification
 
     alt accept
-        Admin->>Keycloak: change role to member
+        Admin->>Keycloak: change role to member and ask for email verification
     else accept
-        Admin->>Keycloak: remove user
+        Admin->>Keycloak: ask for new membership application
     end
 
     activate Keycloak
