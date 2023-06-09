@@ -12,8 +12,8 @@ import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-
 import { Suspense } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { LoadOptions } from 'react-select-async-paginate';
 import { GroupBase, OptionsOrGroups } from 'react-select';
+import { LoadOptions } from 'react-select-async-paginate';
 
 interface CreateSeedFormProps {
   isUploadingSeed: boolean;
