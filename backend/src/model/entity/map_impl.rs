@@ -43,10 +43,10 @@ impl Map {
                 similarity(name, search_parameters.name.clone().unwrap_or_default()).alias("rank"),
             ))
             .into_boxed();
-        if let Some(search_query) = search_parameters.name {
+        if let Some(search_query) = &search_parameters.name {
             if !search_query.is_empty() {
                 query = query.filter(
-                    similarity(name, search_query.clone())
+                    similarity(name, search_query)
                         .gt(0.3)
                         .or(name.ilike(format!("%{search_query}%"))),
                 );

@@ -11,7 +11,6 @@ use crate::{
     db::{
         function::{
             array_to_string, greatest, similarity, similarity_nullable, AliasExpressionMethod,
-            PgTrgmExpressionMethods,
         },
         pagination::Paginate,
     },
@@ -36,12 +35,6 @@ impl Plants {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<PlantsSummaryDto>> {
-        // Set higher search sensitivity so that the user gets more search results than with default
-        // settings (0.3).
-        let set_similarity_threshold = diesel::sql_query("SET pg_trgm.similarity_threshold=0.1");
-        debug!("{}", debug_query::<Pg, _>(&set_similarity_threshold));
-        let _ = set_similarity_threshold.execute(conn).await?;
-
         let query = plants::table
             .select((
                 plants::all_columns,
@@ -54,11 +47,11 @@ impl Plants {
                 .alias("rank"),
             ))
             .filter(
-                unique_name
-                    .fuzzy(search_query)
-                    .or(array_to_string(common_name_de, " ").fuzzy(search_query))
-                    .or(array_to_string(common_name_en, " ").fuzzy(search_query))
-                    .or(edible_uses_en.fuzzy(search_query)),
+                similarity(unique_name, search_query)
+                    .gt(0.1)
+                    .or(similarity(array_to_string(common_name_de, " "), search_query).gt(0.1))
+                    .or(similarity(array_to_string(common_name_en, " "), search_query).gt(0.1))
+                    .or(similarity_nullable(edible_uses_en, search_query).gt(0.1)),
             )
             .order(sql::<Float>("rank").desc())
             .paginate(page_parameters.page)
