@@ -20,7 +20,7 @@ sql_function! {
     fn similarity(
         t1: Text,
         t2: Text
-    ) -> Text
+    ) -> Float
 }
 
 sql_function! {
@@ -28,16 +28,16 @@ sql_function! {
     fn similarity_nullable(
         t1: Nullable<Text>,
         t2: Text
-    ) -> Text
+    ) -> Float
 }
 
 sql_function! {
     fn greatest(
-        t1: Text,
-        t2: Text,
-        t3: Text,
-        t4: Text
-    ) -> Text
+        t1: Float,
+        t2: Float,
+        t3: Float,
+        t4: Float
+    ) -> Float
 }
 
 diesel::infix_operator!(PgTrgmFuzzy, " % ", backend: Pg);

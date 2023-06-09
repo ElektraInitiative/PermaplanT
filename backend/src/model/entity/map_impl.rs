@@ -3,11 +3,14 @@
 use diesel::dsl::sql;
 use diesel::pg::Pg;
 use diesel::sql_types::Float;
-use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
+use diesel::{
+    debug_query, BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods, QueryDsl,
+    QueryResult,
+};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 
-use crate::db::function::{similarity, AliasExpressionMethod, PgTrgmExpressionMethods};
+use crate::db::function::{similarity, AliasExpressionMethod};
 use crate::db::pagination::Paginate;
 use crate::model::dto::{MapSearchParameters, Page, PageParameters};
 use crate::schema::maps::name;
@@ -34,12 +37,6 @@ impl Map {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<MapDto>> {
-        // Set higher search sensitivity so that the user gets more search results than with default
-        // settings (0.3).
-        let set_similarity_threshold = diesel::sql_query("SET pg_trgm.similarity_threshold=0.1");
-        debug!("{}", debug_query::<Pg, _>(&set_similarity_threshold));
-        let _ = set_similarity_threshold.execute(conn).await?;
-
         let mut query = maps::table
             .select((
                 all_columns,
@@ -47,7 +44,13 @@ impl Map {
             ))
             .into_boxed();
         if let Some(search_query) = search_parameters.name {
-            query = query.filter(name.fuzzy(search_query));
+            if !search_query.is_empty() {
+                query = query.filter(
+                    similarity(name, search_query.clone())
+                        .gt(0.3)
+                        .or(name.ilike(format!("%{search_query}%"))),
+                );
+            }
         }
         if let Some(is_inactive_search) = search_parameters.is_inactive {
             query = query.filter(is_inactive.eq(is_inactive_search));
