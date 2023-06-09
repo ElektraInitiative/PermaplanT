@@ -4,6 +4,8 @@ use postgis_diesel::types::Point;
 
 use super::Coordinates;
 
+const COORDINATE_SYSTEM: u32 = 4326;
+
 impl From<Point> for Coordinates {
     fn from(point: Point) -> Self {
         Self {
@@ -18,7 +20,7 @@ impl From<Coordinates> for Point {
         Self {
             x: coordinates.longitude,
             y: coordinates.latitude,
-            srid: Some(4326),
+            srid: Some(COORDINATE_SYSTEM),
         }
     }
 }
