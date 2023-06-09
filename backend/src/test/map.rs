@@ -16,11 +16,11 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
 #[actix_rt::test]
-async fn test_can_find_map() {
+async fn test_can_search_maps() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values((
+                .values(vec![(
                     &crate::schema::maps::id.eq(-1),
                     &crate::schema::maps::name.eq("Test Map: can find map"),
                     &crate::schema::maps::creation_date
@@ -32,7 +32,19 @@ async fn test_can_find_map() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::owner_id.eq(-1),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
-                ))
+                ),(
+                    &crate::schema::maps::id.eq(-2),
+                    &crate::schema::maps::name.eq("Other"),
+                    &crate::schema::maps::creation_date
+                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
+                    &crate::schema::maps::is_inactive.eq(false),
+                    &crate::schema::maps::zoom_factor.eq(100),
+                    &crate::schema::maps::honors.eq(0),
+                    &crate::schema::maps::visits.eq(0),
+                    &crate::schema::maps::harvested.eq(0),
+                    &crate::schema::maps::owner_id.eq(-1),
+                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                )])
                 .execute(conn)
                 .await?;
             Ok(())
@@ -43,16 +55,36 @@ async fn test_can_find_map() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1")
+        .uri("/api/maps")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+
+    let result = test::read_body(resp).await;
+    let result_string = std::str::from_utf8(&result).unwrap();
+    let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
+
+    assert!(page.results.len() == 2);
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps?name=Other")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
     assert_eq!(resp.status(), StatusCode::OK);
+
+    let result = test::read_body(resp).await;
+    let result_string = std::str::from_utf8(&result).unwrap();
+    let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
+
+    assert!(page.results.len() == 1);
 }
 
 #[actix_rt::test]
-async fn test_can_search_maps() {
+async fn test_can_find_map_by_id() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
@@ -79,18 +111,12 @@ async fn test_can_search_maps() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps?is_inactive=false&per_page=10")
+        .uri("/api/maps/-1")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
     assert_eq!(resp.status(), StatusCode::OK);
-
-    let result = test::read_body(resp).await;
-    let result_string = std::str::from_utf8(&result).unwrap();
-    let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
-
-    assert!(page.results.len() > 0);
 }
 
 #[actix_rt::test]

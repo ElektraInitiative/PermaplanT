@@ -297,6 +297,8 @@ pub struct NewMapDto {
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct MapSearchParameters {
+    /// Name of the map to search for.
+    pub name: Option<String>,
     /// Whether or not the map is active.
     pub is_inactive: Option<bool>,
     /// The owner of the map.

@@ -24,3 +24,9 @@ impl From<Map> for MapDto {
         }
     }
 }
+
+impl<T> From<(T, Map)> for MapDto {
+    fn from((_, map): (T, Map)) -> Self {
+        Self::from(map)
+    }
+}
