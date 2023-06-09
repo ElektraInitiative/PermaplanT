@@ -7,7 +7,9 @@ use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
-use super::r#enum::{privacy_options::PrivacyOptions, layer_type::LayerType, quality::Quality, quantity::Quantity};
+use super::r#enum::{
+    layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+};
 
 pub mod actions;
 pub mod coordinates_impl;
@@ -261,7 +263,7 @@ pub struct MapDto {
 
 /// The information of a map neccessary for its creation.
 #[typeshare]
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewMapDto {
     /// The name of the map.
     pub name: String,

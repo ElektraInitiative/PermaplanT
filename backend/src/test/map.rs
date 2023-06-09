@@ -1,7 +1,10 @@
 //! Tests for [`crate::controller::map`].
 
 use crate::{
-    model::dto::{MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, Page},
+    model::{
+        dto::{MapDto, NewMapDto, Page},
+        r#enum::privacy_options::PrivacyOptions,
+    },
     test::util::{init_test_app, init_test_database},
 };
 use actix_web::{
