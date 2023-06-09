@@ -4,7 +4,7 @@ use postgis_diesel::types::Point;
 
 use super::Coordinates;
 
-/// PostGIS identifier for latitude/longitude coordinate system.
+/// `PostGIS` identifier for latitude/longitude coordinate system.
 const COORDINATE_SYSTEM: u32 = 4326;
 
 impl From<Point> for Coordinates {
