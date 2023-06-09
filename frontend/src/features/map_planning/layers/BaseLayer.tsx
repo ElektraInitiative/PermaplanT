@@ -1,9 +1,9 @@
 import { MAP_PIXELS_PER_METER } from '../utils/Constants';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import Konva from 'konva';
 import { useRef } from 'react';
 import { Layer, Image } from 'react-konva';
 import { FileStat, ResponseDataDetailed, WebDAVClient } from 'webdav';
-import Konva from "konva";
 
 interface BaseLayerProps extends Konva.LayerConfig {
   /**
@@ -47,7 +47,7 @@ const BaseLayer = ({
   pixelsPerMeter,
   rotation,
 }: BaseLayerProps) => {
-  const imagepath = `/remote.php/webdav/${nextcloudImagePath ?? ''}`;
+  const imagePath = `/remote.php/webdav/${nextcloudImagePath ?? ''}`;
 
   // Width and height of the background image are only set after the image is
   // rendered in the browser.
@@ -56,11 +56,11 @@ const BaseLayer = ({
 
   // Hooks have to be called an equal number of times on each render.
   // We therefore have to check whether a file is a valid image after loading it.
-  const fileStat = useQuery(['stat', imagepath], () =>
-    nextcloudClient.stat(imagepath, { details: false }),
+  const fileStat = useQuery(['stat', imagePath], () =>
+    nextcloudClient.stat(imagePath, { details: false }),
   );
-  const imageData = useQuery(['files', imagepath], () =>
-    nextcloudClient.getFileContents(imagepath),
+  const imageData = useQuery(['files', imagePath], () =>
+    nextcloudClient.getFileContents(imagePath),
   );
   if (!checkFileIsImage(fileStat) || imageData.data == undefined) return <Layer></Layer>;
 
