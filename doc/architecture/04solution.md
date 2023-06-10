@@ -40,7 +40,7 @@ This means the backend is always up to date with the users actions and users can
 
 ### Actions
 
-Actions are minimal, encapsulated state changes from elements elements on the layer of a map.
+Actions are minimal, encapsulated state changes from elements on the layer of a map.
 Such actions are used to:
 
 1. describe user actions in the frontend (undo/redo, see later)
