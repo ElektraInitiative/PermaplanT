@@ -28,7 +28,7 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      const position = e.target.getPointerPosition();
+      const position = e.target.getRelativePointerPosition();
       if (!position) {
         return;
       }
@@ -38,8 +38,8 @@ function usePlantLayerListeners(listening: boolean) {
           id: uuid.v4(),
           plantId: selectedPlant.id,
           // consider the offset of the stage and size of the element
-          x: position.x - e.target.x() - 50,
-          y: position.y - e.target.y() - 50,
+          x: position.x - 50,
+          y: position.y - 50,
           height: 100,
           width: 100,
           rotation: 0,
