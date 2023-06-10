@@ -4,6 +4,14 @@
 
 Data should be always submitted on-the-fly but with debouncing.
 
+## Okay Buttons
+
+If needed, the confirming button should be on the left.
+
+## Gender
+
+Use plural to avoid gender, avoid he/she.
+
 ## Raster
 
 We raster per pixel, which should represent 1cm in reality.
