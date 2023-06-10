@@ -10,9 +10,11 @@ use chrono::NaiveDateTime;
 
 use diesel::QueryableByName;
 use diesel::{Identifiable, Insertable, Queryable};
+use postgis_diesel::types::Point;
 
 use crate::schema::{layers, maps, plants, seeds};
 
+use super::r#enum::privacy_options::PrivacyOptions;
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
     fertility::Fertility, flower_type::FlowerType, growth_rate::GrowthRate,
@@ -714,6 +716,12 @@ pub struct Map {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Point>,
 }
 
 /// The `NewMap` entity.
@@ -740,6 +748,12 @@ pub struct NewMap {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Point>,
 }
 
 /// The `Layer` entity.

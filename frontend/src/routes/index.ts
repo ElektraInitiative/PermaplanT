@@ -2,6 +2,7 @@ import { Pages, Routes } from './types';
 import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { Map } from '@/features/map_planning';
+import MapCreateForm from '@/features/maps/routes/MapCreateForm';
 import MapOverview from '@/features/maps/routes/MapOverview';
 import { WebdavTest } from '@/features/nextcloud_integration/components/webdav-test';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
@@ -43,6 +44,11 @@ const routes: Routes = {
     // path needs to change later to something like /user/:id/maps
     path: '/maps',
     title: 'Map Overview',
+  },
+  [Pages.MapCreation]: {
+    component: MapCreateForm,
+    path: '/maps/create',
+    title: 'Map Creation',
   },
   [Pages.Webdav]: {
     component: WebdavTest,

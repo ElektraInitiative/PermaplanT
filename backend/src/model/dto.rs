@@ -7,9 +7,12 @@ use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
-use super::r#enum::{layer_type::LayerType, quality::Quality, quantity::Quantity};
+use super::r#enum::{
+    layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+};
 
 pub mod actions;
+pub mod coordinates_impl;
 pub mod layer_impl;
 pub mod map_impl;
 pub mod new_layer_impl;
@@ -250,11 +253,17 @@ pub struct MapDto {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Coordinates>,
 }
 
 /// The information of a map neccessary for its creation.
 #[typeshare]
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewMapDto {
     /// The name of the map.
     pub name: String,
@@ -276,6 +285,12 @@ pub struct NewMapDto {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Coordinates>,
 }
 
 /// Query parameters for searching maps.
@@ -288,9 +303,21 @@ pub struct MapSearchParameters {
     pub is_inactive: Option<bool>,
     /// The owner of the map.
     pub owner_id: Option<i32>,
+    /// Whether or not the map is private.
+    pub privacy: Option<PrivacyOptions>,
 }
 
-/// The whole information of a layer.
+/// Support struct for transmitting latitude/longitude coordinates.
+#[typeshare]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Coordinates {
+    /// Latitude of the point.
+    pub latitude: f64,
+    /// Longitude of the point.
+    pub longitude: f64,
+}
+
+/// The whole information of a map version.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct LayerDto {

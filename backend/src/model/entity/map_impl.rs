@@ -16,7 +16,7 @@ use crate::model::dto::{MapSearchParameters, Page, PageParameters};
 use crate::schema::maps::name;
 use crate::{
     model::dto::{MapDto, NewMapDto},
-    schema::maps::{self, all_columns, is_inactive, owner_id},
+    schema::maps::{self, all_columns, is_inactive, owner_id, privacy},
 };
 
 use super::{Map, NewMap};
@@ -57,6 +57,9 @@ impl Map {
         }
         if let Some(owner_id_search) = search_parameters.owner_id {
             query = query.filter(owner_id.eq(owner_id_search));
+        }
+        if let Some(privacy_search) = search_parameters.privacy {
+            query = query.filter(privacy.eq(privacy_search));
         }
 
         let query = query

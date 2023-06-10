@@ -18,3 +18,5 @@ pub mod soil_ph;
 pub mod soil_texture;
 pub mod soil_water_retention;
 pub mod water_requirement;
+
+pub mod privacy_options;
