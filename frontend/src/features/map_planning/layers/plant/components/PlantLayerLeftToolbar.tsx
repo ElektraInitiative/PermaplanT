@@ -1,4 +1,4 @@
-import SimpleButton from '@/components/Button/SimpleButton';
+import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
@@ -27,22 +27,8 @@ export function PlantLayerLeftToolbar() {
         labelText="Some attribute"
         placeHolder="some input"
       ></SimpleFormInput>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeHolder="some input"
-      ></SimpleFormInput>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeHolder="some input"
-      ></SimpleFormInput>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeHolder="some input"
-      ></SimpleFormInput>
-      <SimpleButton>Submit data</SimpleButton>
+      <SimpleButton>Submit Changes</SimpleButton>
+      <SimpleButton variant={ButtonVariant.dangerBase}>Delete Planting</SimpleButton>
     </div>
   ) : null;
 }
