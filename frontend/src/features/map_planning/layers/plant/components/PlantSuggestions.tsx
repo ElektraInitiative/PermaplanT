@@ -56,7 +56,7 @@ export function PlantSuggestions({ onPlantListItemClick: onClick }: PlantSuggest
           <PlantListItem key={plant.id} plant={plant} onClick={onClick} />
         ))}
       </PlantSuggestionList>
-      <PlantSuggestionList header={'Diversity'}>
+      {/* <PlantSuggestionList header={'Diversity'}>
         {MOCK_SUGGESTIONS.diversity.map((plant) => (
           <PlantListItem key={plant.id} plant={plant} onClick={onClick} />
         ))}
@@ -70,7 +70,7 @@ export function PlantSuggestions({ onPlantListItemClick: onClick }: PlantSuggest
         {MOCK_SUGGESTIONS.recent.map((plant) => (
           <PlantListItem key={plant.id} plant={plant} onClick={onClick} />
         ))}
-      </PlantSuggestionList>
+      </PlantSuggestionList> */}
     </div>
   );
 }

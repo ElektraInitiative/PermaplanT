@@ -9,8 +9,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+type PlantSearchProps = {
+  onPlantListItemClick: (plant: PlantsSummaryDto) => void;
+};
+
 /** UI component intended for searching plants that can be drag and dropped to the plants layer */
-export const PlantSearch = () => {
+export const PlantSearch = ({ onPlantListItemClick }: PlantSearchProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   // used to prevent the search result from flickering
   const [plants, setPlants] = useState<PlantsSummaryDto[]>([]);
@@ -79,7 +83,7 @@ export const PlantSearch = () => {
             ></SearchInput>
             <ul>
               {plants.map((plant) => (
-                <PlantListItem plant={plant} key={plant.unique_name} />
+                <PlantListItem plant={plant} key={plant.id} onClick={onPlantListItemClick} />
               ))}
             </ul>
           </motion.div>

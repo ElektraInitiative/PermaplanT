@@ -7,7 +7,7 @@ export function PlantLayerRightToolbar() {
 
   return (
     <>
-      <PlantSearch />
+      <PlantSearch onPlantListItemClick={(plant) => selectPlantForPlanting(plant)} />
       <PlantSuggestions onPlantListItemClick={(plant) => selectPlantForPlanting(plant)} />
     </>
   );
