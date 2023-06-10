@@ -101,6 +101,7 @@ export interface UntrackedMapSlice {
   updateLayerVisible: (layerName: LayerName, visible: UntrackedLayerState['visible']) => void;
   updateLayerOpacity: (layerName: LayerName, opacity: UntrackedLayerState['opacity']) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
+  selectPlanting: (planting: PlantingDto | null) => void;
 }
 
 /**
@@ -194,6 +195,7 @@ export type UntrackedLayers = {
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantsSummaryDto | null;
+  selectedPlanting: PlantingDto | null;
 };
 
 /**

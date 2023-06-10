@@ -1,4 +1,4 @@
-import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../layers/plant/actions';
+import { CreatePlantAction } from '../layers/plant/actions';
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
@@ -234,29 +234,6 @@ export const BaseStage = ({
             }}
             onTransformEnd={() => {
               selectable = true;
-              const updates = (trRef.current?.getNodes() || []).map((node) => {
-                return {
-                  id: node.id(),
-                  x: node.x(),
-                  y: node.y(),
-                  rotation: node.rotation(),
-                  scaleX: node.scaleX(),
-                  scaleY: node.scaleY(),
-                };
-              });
-
-              executeAction(new TransformPlantAction(updates));
-            }}
-            onDragEnd={() => {
-              const updates = (trRef.current?.getNodes() || []).map((node) => {
-                return {
-                  id: node.id(),
-                  x: node.x(),
-                  y: node.y(),
-                };
-              });
-
-              executeAction(new MovePlantAction(updates));
             }}
             onMouseDown={() => {
               selectable = false;

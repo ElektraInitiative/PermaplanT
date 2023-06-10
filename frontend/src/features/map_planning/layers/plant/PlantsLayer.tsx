@@ -1,5 +1,6 @@
 import useMapStore from '../../store/MapStore';
-import { CreatePlantAction } from './actions';
+import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
+import { PlantingElement } from './components/PlantingElement';
 import { PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
@@ -10,22 +11,18 @@ import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Layer } from 'react-konva';
 import { Html } from 'react-konva-utils';
-import { v4 as uuidv4 } from 'uuid';
+import * as uuid from 'uuid';
 
-interface PlantsLayerProps extends Konva.LayerConfig {
-  children: JSX.Element[];
-}
-
-const PlantsLayer = ({ children, ...props }: PlantsLayerProps) => {
+function usePlantLayerListeners(listening: boolean) {
+  const executeAction = useMapStore((state) => state.executeAction);
   const selectedPlant = useMapStore(
     (state) => state.untrackedState.layers.Plant.selectedPlantForPlanting,
   );
-  const executeAction = useMapStore((state) => state.executeAction);
-  const portalRef = useRef<HTMLDivElement>(
-    document.getElementById('bottom-portal') as HTMLDivElement,
-  );
 
-  const handlePlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(
+  /**
+   * Event handler for planting plants
+   */
+  const handleCreatePlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(
     (e) => {
       if (e.target instanceof Konva.Shape || !selectedPlant) {
         return;
@@ -38,10 +35,11 @@ const PlantsLayer = ({ children, ...props }: PlantsLayerProps) => {
 
       executeAction(
         new CreatePlantAction({
-          id: uuidv4(),
+          id: uuid.v4(),
           plantId: selectedPlant.id,
-          x: position.x,
-          y: position.y,
+          // consider the offset of the stage and size of the element
+          x: position.x - e.target.x() - 50,
+          y: position.y - e.target.y() - 50,
           height: 100,
           width: 100,
           rotation: 0,
@@ -53,21 +51,104 @@ const PlantsLayer = ({ children, ...props }: PlantsLayerProps) => {
     [executeAction, selectedPlant],
   );
 
-  useEffect(() => {
-    if (!props.listening) {
+  /**
+   * Event handler for unselecting plants
+   */
+  const handleUnselectPlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback((e) => {
+    if (e.target instanceof Konva.Shape) {
       return;
     }
 
-    useMapStore.getState().stageRef.current?.on('click.placePlant', handlePlanting);
+    useMapStore.getState().selectPlanting(null);
+  }, []);
+
+  /**
+   * Event handler for transforming plants
+   */
+  const handleTransformPlanting: KonvaEventListener<Konva.Transformer, unknown> =
+    useCallback(() => {
+      const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
+        return {
+          id: node.id(),
+          x: node.x(),
+          y: node.y(),
+          rotation: node.rotation(),
+          scaleX: node.scaleX(),
+          scaleY: node.scaleY(),
+        };
+      });
+
+      executeAction(new TransformPlantAction(updates));
+    }, [executeAction]);
+
+  /**
+   * Event handler for moving plants
+   */
+  const handleMovePlanting: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
+    const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
+      return {
+        id: node.id(),
+        x: node.x(),
+        y: node.y(),
+      };
+    });
+
+    executeAction(new MovePlantAction(updates));
+  }, [executeAction]);
+
+  useEffect(() => {
+    if (!listening) {
+      return;
+    }
+
+    useMapStore.getState().stageRef.current?.on('click.placePlant', handleCreatePlanting);
+    useMapStore.getState().stageRef.current?.on('click.unselectPlanting', handleUnselectPlanting);
+    useMapStore.getState().transformer.current?.on('transformend.plants', handleTransformPlanting);
+    useMapStore.getState().transformer.current?.on('dragend.plants', handleMovePlanting);
 
     return () => {
       useMapStore.getState().stageRef.current?.off('click.placePlant');
+      useMapStore.getState().stageRef.current?.off('click.unselectPlanting');
+      useMapStore.getState().transformer.current?.off('transformend.plants');
+      useMapStore.getState().transformer.current?.off('dragend.plants');
     };
-  }, [props.listening, handlePlanting]);
+  }, [
+    listening,
+    handleCreatePlanting,
+    handleTransformPlanting,
+    handleMovePlanting,
+    handleUnselectPlanting,
+  ]);
+
+  useEffect(() => {
+    if (!listening) {
+      useMapStore.getState().selectPlanting(null);
+      useMapStore.getState().selectPlantForPlanting(null);
+      useMapStore.getState().transformer.current?.nodes([]);
+    }
+  }, [listening]);
+}
+
+type PlantsLayerProps = Konva.LayerConfig;
+
+function PlantsLayer(props: PlantsLayerProps) {
+  usePlantLayerListeners(props.listening || false);
+  const layerRef = useRef<Konva.Layer>(null);
+
+  const trackedState = useMapStore((map) => map.trackedState);
+  const selectedPlant = useMapStore(
+    (state) => state.untrackedState.layers.Plant.selectedPlantForPlanting,
+  );
+  const portalRef = useRef<HTMLDivElement>(
+    document.getElementById('bottom-portal') as HTMLDivElement,
+  );
 
   return (
-    <Layer {...props}>
-      {children}
+    <Layer {...props} ref={layerRef}>
+      {trackedState.layers.Plant.objects.map((o) => (
+        <PlantingElement planting={o} key={o.id} />
+      ))}
+
       <Html>
         {createPortal(
           <AnimatePresence mode="wait">
@@ -78,9 +159,9 @@ const PlantsLayer = ({ children, ...props }: PlantsLayerProps) => {
       </Html>
     </Layer>
   );
-};
+}
 
-const SelectedPlantInfo = ({ plant }: { plant: PlantsSummaryDto }) => {
+function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
   const selectPlant = useMapStore((state) => state.selectPlantForPlanting);
 
   return (
@@ -111,6 +192,6 @@ const SelectedPlantInfo = ({ plant }: { plant: PlantsSummaryDto }) => {
       </div>
     </motion.div>
   );
-};
+}
 
 export default PlantsLayer;

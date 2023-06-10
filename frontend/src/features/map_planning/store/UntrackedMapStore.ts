@@ -87,4 +87,19 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+  selectPlanting(planting) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          Plant: {
+            ...state.untrackedState.layers.Plant,
+            selectedPlanting: planting,
+          },
+        },
+      },
+    }));
+  },
 });
