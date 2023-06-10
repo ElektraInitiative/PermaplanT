@@ -9,22 +9,37 @@ import { useTranslation } from 'react-i18next';
 
 /** UI component intended for searching plants that can be drag and dropped to the plants layer */
 export const PlantSearch = () => {
+  const { t } = useTranslation(['plantSearch']);
+
   const [plants, setPlants] = useState<string[]>([]);
   const [searchTerm, setSearchTerm]   = useState('');
+  // Keep track of which search page should be requested next.
+  // NOTE: pages start at index 1.
   const [nextPage, setNextPage]       = useState(1);
-
+  // How far the user has scrolled in the search result list.
+  // 0 -> all the way to the bottom.
+  // 1 -> all the way to the top.
   const [searchScrollPos, setSearchScrollPos]   = useState(1);
   const [searchVisible, setSearchVisible] = useState(false);
+  
+  const searchResultsRef = useRef<HTMLUListElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const { t } = useTranslation(['plantSearch']);
 
   useEffect(() => {
     searchInputRef.current?.focus();
+    
+    // Load plants even if the user didn't make any inputs.
+    const loadInitalPage = setTimeout(() => {
+      loadPage(1);
+      setNextPage(2);
+    }, 300);
+
+    return () => clearTimeout(loadInitalPage);
   }, [searchVisible]);
   
 
   useEffect(() => {
-    // debounce plant search
+    // Debounce plant search.
     const loadInitalPage = setTimeout(() => {
       loadPage(1);
       setNextPage(2);
@@ -34,21 +49,26 @@ export const PlantSearch = () => {
   }, [searchTerm]);
 
   useEffect(() => {
+    console.assert(searchScrollPos >= 0 && searchScrollPos <= 1);
+    console.assert(nextPage > 1);
+
     if (searchScrollPos > 0.1)
       return;
 
-    // debounce page update
+    // Debounce page update
     const loadInitalPage = setTimeout(() => {
       loadPage(nextPage + 1);
     }, 300);
 
     return () => {
       clearTimeout(loadInitalPage);
+      // Only load the next page if the current page has been loaded successfully.
       setNextPage(nextPage + 1);
     };
   }, [searchScrollPos]);
   
-  const searchResultsRef = useRef<HTMLUListElement>(null);
+  // Callback that recalculates the scroll position after the 
+  // user made a scroll input.
   const onSearchResultsScroll = () => {
     const height = searchResultsRef.current?.getBoundingClientRect().height;
     const scrollOffset = searchResultsRef.current?.scrollTop;
@@ -60,7 +80,7 @@ export const PlantSearch = () => {
     const scrollPosition = (height - scrollOffset) / height;
     setSearchScrollPos(scrollPosition);   
   };
-  
+   
   const loadPage = async (pageNum: number) => {
     console.log(plants);
     const page = await searchPlants(searchTerm, nextPage);
@@ -75,7 +95,10 @@ export const PlantSearch = () => {
 
       return plant.unique_name + common_name_en;
     });
-  
+    
+    // Loading the first page of a search query indicates, that the entire
+    // results array has to be overwritten.
+    // All other pages should just be appended.
     setPlants(pageNum == 1 ? newPlants : [...plants, ...newPlants]);
   }
   
