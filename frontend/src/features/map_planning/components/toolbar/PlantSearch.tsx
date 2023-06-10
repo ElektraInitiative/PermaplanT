@@ -13,6 +13,7 @@ export const PlantSearch = () => {
   const [searchTerm, setSearchTerm]   = useState('');
   const [nextPage, setNextPage]       = useState(1);
 
+  const [searchScrollPos, setSearchScrollPos]   = useState(1);
   const [searchVisible, setSearchVisible] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation(['plantSearch']);
@@ -23,6 +24,7 @@ export const PlantSearch = () => {
   
 
   useEffect(() => {
+    // debounce plant search
     const loadInitalPage = setTimeout(() => {
       loadPage(1);
       setNextPage(2);
@@ -31,17 +33,32 @@ export const PlantSearch = () => {
     return () => clearTimeout(loadInitalPage);
   }, [searchTerm]);
 
+  useEffect(() => {
+    if (searchScrollPos > 0.1)
+      return;
+
+    // debounce page update
+    const loadInitalPage = setTimeout(() => {
+      loadPage(nextPage + 1);
+    }, 300);
+
+    return () => {
+      clearTimeout(loadInitalPage);
+      setNextPage(nextPage + 1);
+    };
+  }, [searchScrollPos]);
+  
   const searchResultsRef = useRef<HTMLUListElement>(null);
   const onSearchResultsScroll = () => {
     const height = searchResultsRef.current?.getBoundingClientRect().height;
-    const scrollOffset = searchResultsRef.current?.offsetTop;
+    const scrollOffset = searchResultsRef.current?.scrollTop;
     
     if (height === undefined || scrollOffset === undefined) {
-      throw new Error('Undefined object properties.'); 
+      throw new Error('Undefined search result list properties.'); 
     }
 
     const scrollPosition = (height - scrollOffset) / height;
-    console.log(scrollPosition);
+    setSearchScrollPos(scrollPosition);   
   };
   
   const loadPage = async (pageNum: number) => {
@@ -63,7 +80,7 @@ export const PlantSearch = () => {
   }
   
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <div className="flex flex-col gap-4 p-2 h-full overflow-clip fixed">
       <div className="flex items-center justify-between">
         <h2>{t('plantSearch:dnd')}</h2>
         {!searchVisible && (
@@ -102,6 +119,7 @@ export const PlantSearch = () => {
             ></SearchInput>
             <ul onScroll={onSearchResultsScroll}
                 ref={searchResultsRef}
+                className="overflow-y-scroll h-full absolute"
             >
               {plants.map((plant) => (
                 <li
