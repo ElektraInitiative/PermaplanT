@@ -71,6 +71,9 @@ export const BaseStage = ({
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
   // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
+  useEffect(() => {
+    useMapStore.setState({ stageRef: stageRef });
+  }, [stageRef]);
 
   const executeAction = useMapStore((map) => map.executeAction);
   const step = useMapStore((map) => map.step);
@@ -270,6 +273,10 @@ export const BaseStage = ({
           />
         </Layer>
       </Stage>
+      {/** Portal to display something from different layers */}
+      <div className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
+        <div id="bottom-portal" />
+      </div>
     </div>
   );
 };

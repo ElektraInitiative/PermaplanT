@@ -1,4 +1,4 @@
-import { PlantListElement } from './PlantListElement';
+import { PlantListItem } from './PlantListItem';
 import { PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput from '@/components/Form/SearchInput';
@@ -79,7 +79,7 @@ export const PlantSearch = () => {
             ></SearchInput>
             <ul>
               {plants.map((plant) => (
-                <PlantListElement plant={plant} key={plant.unique_name} />
+                <PlantListItem plant={plant} key={plant.unique_name} />
               ))}
             </ul>
           </motion.div>

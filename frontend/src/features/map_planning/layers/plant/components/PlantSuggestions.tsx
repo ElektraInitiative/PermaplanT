@@ -1,4 +1,4 @@
-import { PlantListElement } from './PlantListElement';
+import { PlantListItem } from './PlantListItem';
 import { PlantSuggestionList } from './PlantSuggestionList';
 import { PlantsSummaryDto } from '@/bindings/definitions';
 
@@ -44,27 +44,31 @@ const MOCK_SUGGESTIONS: Suggestions = {
   recent: MOCK_PLANTS,
 };
 
-export function PlantSuggestions() {
+type PlantSuggestionsProps = {
+  onPlantListItemClick: (plant: PlantsSummaryDto) => void;
+};
+
+export function PlantSuggestions({ onPlantListItemClick: onClick }: PlantSuggestionsProps) {
   return (
     <div className="flex flex-col gap-4 p-2">
       <PlantSuggestionList header={'Available Seeds'}>
         {MOCK_SUGGESTIONS.available.map((plant) => (
-          <PlantListElement key={plant.id} plant={plant} />
+          <PlantListItem key={plant.id} plant={plant} onClick={onClick} />
         ))}
       </PlantSuggestionList>
       <PlantSuggestionList header={'Diversity'}>
         {MOCK_SUGGESTIONS.diversity.map((plant) => (
-          <PlantListElement key={plant.id} plant={plant} />
+          <PlantListItem key={plant.id} plant={plant} onClick={onClick} />
         ))}
       </PlantSuggestionList>
       <PlantSuggestionList header={'Favorites'}>
         {MOCK_SUGGESTIONS.favorites.map((plant) => (
-          <PlantListElement key={plant.id} plant={plant} />
+          <PlantListItem key={plant.id} plant={plant} onClick={onClick} />
         ))}
       </PlantSuggestionList>
       <PlantSuggestionList header={'Recently Used'}>
         {MOCK_SUGGESTIONS.recent.map((plant) => (
-          <PlantListElement key={plant.id} plant={plant} />
+          <PlantListItem key={plant.id} plant={plant} onClick={onClick} />
         ))}
       </PlantSuggestionList>
     </div>
