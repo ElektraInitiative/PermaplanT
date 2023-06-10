@@ -5,8 +5,11 @@ export enum InfoMessageType {
 }
 
 interface InfoMessageProps {
+  /** displayed message */
   message: string;
+  /** type of the message: success, failure, neutral */
   type: InfoMessageType;
+  /** Gets called when the message is clicked */
   onClose: () => void;
 }
 
