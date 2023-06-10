@@ -16,7 +16,9 @@ We use specific types (prefer enum over int over string etc.) and share types wh
 ## Validation
 
 - The frontend should validate data as early as possible, usually during input using [React Hook Form](https://react-hook-form.com/).
-- We don't need to validate data in the backend.
+- Important data should be also validated in the backend.
+  Type validation is done by actix web, but some constraints could be bypassed by just validating in the frontend.
+  For example, payment data or data associated with gamification achievements.
 
 ## State
 
