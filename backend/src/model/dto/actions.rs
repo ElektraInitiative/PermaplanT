@@ -35,10 +35,10 @@ pub enum Action {
 #[serde(rename_all = "camelCase")]
 pub struct CreatePlantActionPayload {
     user_id: Uuid,
-    id: Uuid,
+    id: i32,
     plant_id: i32,
-    x: f32,
-    y: f32,
+    x: i32,
+    y: i32,
     width: i32,
     height: i32,
     rotation: f32,
@@ -70,12 +70,12 @@ impl CreatePlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct DeletePlantActionPayload {
     user_id: Uuid,
-    id: Uuid,
+    id: i32,
 }
 
 impl DeletePlantActionPayload {
     #[must_use]
-    pub fn new(id: Uuid, user_id: Uuid) -> Self {
+    pub fn new(id: i32, user_id: Uuid) -> Self {
         Self { user_id, id }
     }
 }
@@ -86,9 +86,9 @@ impl DeletePlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct MovePlantActionPayload {
     user_id: Uuid,
-    id: Uuid,
-    x: f32,
-    y: f32,
+    id: i32,
+    x: i32,
+    y: i32,
 }
 
 impl MovePlantActionPayload {
@@ -109,9 +109,9 @@ impl MovePlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct TransformPlantActionPayload {
     user_id: Uuid,
-    id: Uuid,
-    x: f32,
-    y: f32,
+    id: i32,
+    x: i32,
+    y: i32,
     rotation: f32,
     scale_x: f32,
     scale_y: f32,
