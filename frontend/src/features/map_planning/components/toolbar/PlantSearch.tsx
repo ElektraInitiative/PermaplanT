@@ -17,8 +17,6 @@ export const PlantSearch = () => {
   // NOTE: pages start at index 1.
   const [nextPage, setNextPage]       = useState(1);
   // How far the user has scrolled in the search result list.
-  // 0 -> all the way to the bottom.
-  // 1 -> all the way to the top.
   const [searchScrollPos, setSearchScrollPos]   = useState(1);
   const [searchVisible, setSearchVisible] = useState(false);
   
@@ -37,7 +35,7 @@ export const PlantSearch = () => {
     return () => clearTimeout(loadInitalPage);
   }, [searchVisible]);
   
-
+  // If the user inputs a new search term, the frontend should display the first page of the search request.
   useEffect(() => {
     // Debounce plant search.
     const loadInitalPage = setTimeout(() => {
@@ -48,14 +46,22 @@ export const PlantSearch = () => {
     return () => clearTimeout(loadInitalPage);
   }, [searchTerm]);
 
+  // When the user scrolls past a certain threshold with a new page is supposed to be loaded.
   useEffect(() => {
-    console.assert(searchScrollPos >= 0 && searchScrollPos <= 1);
-    console.assert(nextPage > 1);
+    const scrollHeight = searchResultsRef.current?.scrollHeight;
+    const offsetHeight = searchResultsRef.current?.offsetHeight;
 
-    if (searchScrollPos > 0.1)
+    // Values may be undefined before the user clicked the search button.
+    if (scrollHeight === undefined || offsetHeight === undefined)
       return;
 
-    // Debounce page update
+    // Start loading the next page 100 pixels before the actual bottom of the page
+    // to allow for smoother page transitions.
+    const pageLoadThreshold = scrollHeight - offsetHeight - 100;
+    if (searchScrollPos < pageLoadThreshold)
+      return;
+
+    // Debounce page fetching
     const loadInitalPage = setTimeout(() => {
       loadPage(nextPage + 1);
     }, 300);
@@ -70,25 +76,22 @@ export const PlantSearch = () => {
   // Callback that recalculates the scroll position after the 
   // user made a scroll input.
   const onSearchResultsScroll = () => {
-    const height = searchResultsRef.current?.getBoundingClientRect().height;
     const scrollOffset = searchResultsRef.current?.scrollTop;
-    
-    if (height === undefined || scrollOffset === undefined) {
+    if (scrollOffset === undefined)
       throw new Error('Undefined search result list properties.'); 
-    }
 
-    const scrollPosition = (height - scrollOffset) / height;
-    setSearchScrollPos(scrollPosition);   
+    setSearchScrollPos(scrollOffset);
   };
    
   const loadPage = async (pageNum: number) => {
-    console.log(plants);
     const page = await searchPlants(searchTerm, nextPage);
     
     if (nextPage > page.total_pages) {
         return;
     }
 
+    // Display plants using the following format:
+    // <unique name> (<common name>)
     const newPlants: string[] = page.results.map((plant) => {
       const common_name_en =
         plant.common_name_en != null ? ' (' + plant.common_name_en[0] + ')' : '';
