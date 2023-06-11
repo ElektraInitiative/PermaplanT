@@ -1,4 +1,4 @@
-//! Contains the implementation of [`SeedDto`].
+//! Contains the implementations related to [`PlantingDto`].
 
 use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
 

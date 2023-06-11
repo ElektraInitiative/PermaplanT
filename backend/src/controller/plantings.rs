@@ -20,7 +20,6 @@ use crate::{
 };
 
 /// Endpoint for listing and filtering `Planting`.
-/// If no page parameters are provided, the first page is returned.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

@@ -1,4 +1,4 @@
-//! Service layer for seeds.
+//! Service layer for plantings.
 
 use actix_web::web::Data;
 
@@ -9,7 +9,7 @@ use crate::model::dto::plantings::{
 };
 use crate::model::entity::plantings::Planting;
 
-/// Search seeds from the database.
+/// Search plantings from the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
@@ -22,7 +22,7 @@ pub async fn find(
     Ok(result)
 }
 
-/// Create a new seed in the database.
+/// Create a new planting in the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
@@ -35,7 +35,7 @@ pub async fn create(
     Ok(result)
 }
 
-/// Delete the seed from the database.
+/// Update the planting in the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
@@ -49,7 +49,7 @@ pub async fn update(
     Ok(result)
 }
 
-/// Delete the seed from the database.
+/// Delete the planting from the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.

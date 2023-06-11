@@ -1,3 +1,5 @@
+//! All DTOs associated with [`PlantingDto`].
+
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
@@ -9,7 +11,7 @@ use utoipa::{IntoParams, ToSchema};
 pub struct PlantingDto {
     /// The database id of the record.
     pub id: i32,
-    /// The plant that is planted.
+    /// The plant layer the plantings is on.
     #[serde(rename = "layerId")]
     pub layer_id: i32,
     /// The plant that is planted.
@@ -37,7 +39,7 @@ pub struct PlantingDto {
 #[typeshare]
 #[derive(Debug, Clone, Default, Serialize, Deserialize, ToSchema)]
 pub struct NewPlantingDto {
-    /// The map the plant is placed on.
+    /// The plant layer the plantings is on.
     pub layer_id: i32,
     /// The plant that is planted.
     pub plant_id: i32,

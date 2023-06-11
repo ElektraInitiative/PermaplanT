@@ -1,4 +1,4 @@
-//! Contains the implementation of [`Layer`].
+//! Contains the implementation of [`Planting`].
 
 use diesel::pg::Pg;
 use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
@@ -12,8 +12,7 @@ use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
 use crate::schema::plantings::{self, all_columns, layer_id, plant_id};
 
 impl Planting {
-    /// Get a page of layers.
-    /// Can be filtered by its active status if one is provided in `search_parameters`.
+    /// Get all plantings associated with the query.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -39,9 +38,10 @@ impl Planting {
             .collect())
     }
 
-    /// Create a new layer in the database.
+    /// Create a new planting in the database.
     ///
     /// # Errors
+    /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn create(
         new_layer: NewPlantingDto,
@@ -53,7 +53,7 @@ impl Planting {
         query.get_result::<Self>(conn).await.map(Into::into)
     }
 
-    /// Create a new layer in the database.
+    /// Partially update a planting in the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -68,7 +68,7 @@ impl Planting {
         query.get_result::<Self>(conn).await.map(Into::into)
     }
 
-    /// Delete the seed from the database.
+    /// Delete the planting from the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
