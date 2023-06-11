@@ -2,19 +2,21 @@
 
 use actix_web::web::Data;
 
+use crate::config::data::AppDataInner;
 use crate::model::dto::{MapSearchParameters, Page};
-use crate::model::dto::{
-    MapVersionDto, MapVersionSearchParameters, NewMapVersionDto, PageParameters,
-};
-use crate::model::entity::MapVersion;
+use crate::model::dto::{NewLayerDto, PageParameters};
+use crate::model::entity::Layer;
+use crate::model::r#enum::layer_type::LayerType;
 use crate::{
-    db::connection::Pool,
     error::ServiceError,
     model::{
         dto::{MapDto, NewMapDto},
         entity::Map,
     },
 };
+
+/// Defines which layers should be created when a new map is created.
+const LAYER_TYPES: [LayerType; 2] = [LayerType::Base, LayerType::Plants];
 
 /// Search maps from the database.
 ///
@@ -23,9 +25,9 @@ use crate::{
 pub async fn find(
     search_parameters: MapSearchParameters,
     page_parameters: PageParameters,
-    pool: &Data<Pool>,
+    app_data: &Data<AppDataInner>,
 ) -> Result<Page<MapDto>, ServiceError> {
-    let mut conn = pool.get().await?;
+    let mut conn = app_data.pool.get().await?;
     let result = Map::find(search_parameters, page_parameters, &mut conn).await?;
     Ok(result)
 }
@@ -34,8 +36,8 @@ pub async fn find(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<MapDto, ServiceError> {
-    let mut conn = pool.get().await?;
+pub async fn find_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<MapDto, ServiceError> {
+    let mut conn = app_data.pool.get().await?;
     let result = Map::find_by_id(id, &mut conn).await?;
     Ok(result)
 }
@@ -44,36 +46,20 @@ pub async fn find_by_id(id: i32, pool: &Data<Pool>) -> Result<MapDto, ServiceErr
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn create(new_map: NewMapDto, pool: &Data<Pool>) -> Result<MapDto, ServiceError> {
-    let mut conn = pool.get().await?;
+pub async fn create(
+    new_map: NewMapDto,
+    app_data: &Data<AppDataInner>,
+) -> Result<MapDto, ServiceError> {
+    let mut conn = app_data.pool.get().await?;
     let result = Map::create(new_map, &mut conn).await?;
-    Ok(result)
-}
-
-/// Show all versions of a map.
-///
-/// # Errors
-/// If the connection to the database could not be established.
-pub async fn show_versions(
-    search_parameters: MapVersionSearchParameters,
-    page_parameters: PageParameters,
-    pool: &Data<Pool>,
-) -> Result<Page<MapVersionDto>, ServiceError> {
-    let mut conn = pool.get().await?;
-    let result = MapVersion::find(search_parameters, page_parameters, &mut conn).await?;
-    Ok(result)
-}
-
-/// Save a snapshot of the map as a new version.
-///
-/// # Errors
-/// If the connection to the database could not be established.
-pub async fn save_snapshot(
-    new_map_version: NewMapVersionDto,
-    pool: &Data<Pool>,
-) -> Result<MapVersionDto, ServiceError> {
-    // TODO: create element entries for all layers with reference to this version - see issue #341.
-    let mut conn = pool.get().await?;
-    let result = MapVersion::create(new_map_version, &mut conn).await?;
+    for layer in &LAYER_TYPES {
+        let new_layer = NewLayerDto {
+            map_id: result.id,
+            type_: *layer,
+            name: format!("{layer} Layer"),
+            is_alternative: false,
+        };
+        Layer::create(new_layer, &mut conn).await?;
+    }
     Ok(result)
 }

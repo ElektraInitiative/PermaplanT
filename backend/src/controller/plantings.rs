@@ -5,17 +5,47 @@
 // FIXME:
 //  Remove these clippy allows when these endpoints are full implemented.
 
-use actix_web::web::Query;
+use std::sync::RwLock;
+
 use actix_web::{
-    delete, get, patch, post,
-    web::{Data, Json, Path},
+    delete, error, get, patch, post,
+    web::{Data, Json, Path, Query},
     HttpResponse, Result,
 };
+use uuid::Uuid;
 
-use crate::db::connection::Pool;
-use crate::model::dto::{
-    NewPlantingDto, Page, PageParameters, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+use crate::model::dto::{NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto};
+use crate::{config::auth::user_info::UserInfo, model::dto::actions::Action};
+use crate::{
+    config::data::AppDataInner,
+    model::dto::actions::{
+        CreatePlantActionPayload, DeletePlantActionPayload, MovePlantActionPayload,
+        TransformPlantActionPayload,
+    },
 };
+
+/// FIXME: REMOVE THIS HACK ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗
+static PLANTINGS: RwLock<Vec<PlantingDto>> = RwLock::new(vec![]);
+
+/// FIXME: REMOVE
+#[allow(clippy::expect_used)]
+fn find_planting_by_id(id: Uuid) -> Option<PlantingDto> {
+    PLANTINGS
+        .read()
+        .expect("acquiring read lock failed")
+        .iter()
+        .find(|planting| planting.id == id)
+        .copied()
+}
+
+/// FIXME: REMOVE
+#[allow(clippy::expect_used)]
+fn replace_planting(planting: PlantingDto) {
+    let mut plantings = PLANTINGS.write().expect("acquiring write lock failed");
+    if let Some(p) = plantings.iter_mut().find(|p| p.id == planting.id) {
+        *p = planting;
+    }
+}
 
 /// Endpoint for listing and filtering `Planting`.
 /// If no page parameters are provided, the first page is returned.
@@ -24,14 +54,14 @@ use crate::model::dto::{
 /// * If the connection to the database could not be established.
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
+#[allow(clippy::expect_used)]
 #[utoipa::path(
     context_path = "/api/plantings",
     params(
         PlantingSearchParameters,
-        PageParameters
     ),
     responses(
-        (status = 200, description = "Find plantings", body = PagePlantingDto)
+        (status = 200, description = "Find plantings", body = Vec<PlantingDto>)
     ),
     security(
         ("oauth2" = [])
@@ -40,23 +70,14 @@ use crate::model::dto::{
 #[get("")]
 pub async fn find(
     search_query: Query<PlantingSearchParameters>,
-    page_query: Query<PageParameters>,
-    pool: Data<Pool>,
+    app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    // TODO: implement service that validates (permission, integrity) and filters for records.
-    let page = Page {
-        results: vec![PlantingDto {
-            id: 1,
-            plant_id: 1,
-            plants_layer_id: 1,
-            x: 0,
-            y: 0,
-        }],
-        page: 1,
-        per_page: 10,
-        total_pages: 1,
-    };
-    Ok(HttpResponse::Ok().json(page))
+    let plantings = PLANTINGS
+        .read()
+        .expect("acquiring read lock failed")
+        .clone();
+
+    Ok(HttpResponse::Ok().json(plantings))
 }
 
 /// Endpoint for creating a new `Planting`.
@@ -65,6 +86,7 @@ pub async fn find(
 /// * If the connection to the database could not be established.
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
+#[allow(clippy::expect_used)]
 #[utoipa::path(
     context_path = "/api/plantings",
     request_body = NewPlantingDto,
@@ -76,15 +98,40 @@ pub async fn find(
     )
 )]
 #[post("")]
-pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Result<HttpResponse> {
+pub async fn create(
+    new_plant_json: Json<NewPlantingDto>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
+) -> Result<HttpResponse> {
     // TODO: implement service that validates (permission, integrity) and creates the record.
-    let dto = PlantingDto {
-        id: 1,
-        plant_id: 1,
-        plants_layer_id: 1,
-        x: 0,
-        y: 0,
-    };
+    {
+        PLANTINGS
+            .write()
+            .expect("acquiring write lock failed")
+            .push(PlantingDto {
+                id: new_plant_json.id,
+                plant_id: new_plant_json.plant_id,
+                x: new_plant_json.x,
+                y: new_plant_json.y,
+                height: new_plant_json.height,
+                width: new_plant_json.width,
+                rotation: new_plant_json.rotation,
+                scale_x: new_plant_json.scale_x,
+                scale_y: new_plant_json.scale_y,
+            });
+    }
+
+    let dto = find_planting_by_id(new_plant_json.id)
+        .ok_or_else(|| error::ErrorInternalServerError("Could not create planting"))?;
+
+    app_data
+        .broadcaster
+        .broadcast(
+            new_plant_json.map_id,
+            Action::CreatePlanting(CreatePlantActionPayload::new(dto, user_info.id)),
+        )
+        .await;
+
     Ok(HttpResponse::Created().json(dto))
 }
 
@@ -94,6 +141,7 @@ pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Re
 /// * If the connection to the database could not be established.
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
+#[allow(clippy::expect_used)]
 #[utoipa::path(
     context_path = "/api/plantings",
     request_body = UpdatePlantingDto,
@@ -104,21 +152,61 @@ pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Re
         ("oauth2" = [])
     )
 )]
-#[patch("/{id}")]
+#[patch("/{planting_id}")]
 pub async fn update(
-    id: Path<i32>,
-    update_seed_json: Json<UpdatePlantingDto>,
-    pool: Data<Pool>,
+    path: Path<(i32, Uuid)>,
+    new_plant_json: Json<UpdatePlantingDto>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
 ) -> Result<HttpResponse> {
+    let (map_id, planting_id) = path.into_inner();
+
     // TODO: implement service that validates (permission, integrity) and updates the record.
-    let dto = PlantingDto {
-        id: 1,
-        plant_id: 1,
-        plants_layer_id: 1,
-        x: 0,
-        y: 0,
+    let mut planting = find_planting_by_id(planting_id)
+        .ok_or_else(|| error::ErrorNotFound("Planting not found"))?;
+
+    let action = match *new_plant_json {
+        UpdatePlantingDto {
+            x: Some(x),
+            y: Some(y),
+            rotation: Some(rotation),
+            scale_x: Some(scale_x),
+            scale_y: Some(scale_y),
+            ..
+        } => {
+            planting.x = x;
+            planting.y = y;
+            planting.rotation = rotation;
+            planting.scale_x = scale_x;
+            planting.scale_y = scale_y;
+            replace_planting(planting);
+
+            Action::TransformPlanting(TransformPlantActionPayload::new(planting, user_info.id))
+        }
+        UpdatePlantingDto {
+            x: Some(x),
+            y: Some(y),
+            ..
+        } => {
+            planting.x = x;
+            planting.y = y;
+            replace_planting(planting);
+
+            Action::MovePlanting(MovePlantActionPayload::new(planting, user_info.id))
+        }
+        _ => {
+            return Err(error::ErrorBadRequest(
+                "Invalid arguments passed for update planting",
+            ))
+        }
     };
-    Ok(HttpResponse::Ok().json(dto))
+
+    app_data
+        .broadcaster
+        .broadcast(new_plant_json.map_id, action)
+        .await;
+
+    Ok(HttpResponse::Ok().json(planting))
 }
 
 /// Endpoint for deleting a `Planting`.
@@ -127,6 +215,7 @@ pub async fn update(
 /// * If the connection to the database could not be established.
 #[allow(unused_variables)]
 #[allow(clippy::unused_async)]
+#[allow(clippy::expect_used)]
 #[utoipa::path(
     context_path = "/api/plantings",
     responses(
@@ -136,8 +225,28 @@ pub async fn update(
         ("oauth2" = [])
     )
 )]
-#[delete("/{id}")]
-pub async fn delete(path: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
+#[delete("/{planting_id}")]
+pub async fn delete(
+    path: Path<(i32, Uuid)>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
+) -> Result<HttpResponse> {
     // TODO: implement a service that validates (permissions) and deletes the planting
-    Ok(HttpResponse::Ok().json(""))
+    let (map_id, planting_id) = path.into_inner();
+
+    {
+        let mut plantings = PLANTINGS.write().expect("acquiring write lock failed");
+        plantings.retain(|planting| planting.id != planting_id);
+    }
+
+    app_data
+        .broadcaster
+        .broadcast(
+            // TODO: get map_id from request or from path?
+            1,
+            Action::DeletePlanting(DeletePlantActionPayload::new(planting_id, user_info.id)),
+        )
+        .await;
+
+    Ok(HttpResponse::Ok().finish())
 }

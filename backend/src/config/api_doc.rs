@@ -12,9 +12,9 @@ use crate::{
     controller::{config, map, plantings, plants, seed},
     model::{
         dto::{
-            ConfigDto, MapDto, MapVersionDto, NewMapDto, NewMapVersionDto, NewPlantingDto,
-            NewSeedDto, PageMapDto, PageMapVersionDto, PagePlantingDto, PagePlantsSummaryDto,
-            PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto, UpdatePlantingDto,
+            ConfigDto, MapDto, NewMapDto, NewPlantingDto, NewSeedDto, PageMapDto, PagePlantingDto,
+            PagePlantsSummaryDto, PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto,
+            UpdatePlantingDto,
         },
         r#enum::{quality::Quality, quantity::Quantity},
     },
@@ -104,18 +104,13 @@ struct PlantingsApiDoc;
     paths(
         map::find,
         map::find_by_id,
-        map::create,
-        map::show_versions,
-        map::save_snapshot
+        map::create
     ),
     components(
         schemas(
             PageMapDto,
             MapDto,
-            PageMapVersionDto,
-            MapVersionDto,
             NewMapDto,
-            NewMapVersionDto
         )
     ),
     tags((name = "map")),
