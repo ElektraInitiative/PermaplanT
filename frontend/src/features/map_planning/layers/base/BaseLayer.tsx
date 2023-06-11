@@ -1,4 +1,4 @@
-import { MAP_PIXELS_PER_METER } from '../utils/Constants';
+import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import Konva from 'konva';
 import { useRef } from 'react';
