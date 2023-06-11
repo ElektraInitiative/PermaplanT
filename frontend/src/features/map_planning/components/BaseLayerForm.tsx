@@ -1,30 +1,26 @@
+import { UpdateBaseLayerAction } from '../layers/base/actions';
+import { Action, TrackedBaseLayerState } from '../store/MapStoreTypes';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { Action, TrackedBaseLayerState } from '../store/MapStoreTypes';
-import { UpdateBaseLayerAction } from '../layers/base/actions';
-
+import { useTranslation } from 'react-i18next';
 
 interface BaseLayerFormProps {
-  state: TrackedBaseLayerState,
-  executeAction: (action: Action<unknown, unknown>) => void; 
+  state: TrackedBaseLayerState;
+  executeAction: (action: Action<unknown, unknown>) => void;
 }
 
-const BaseLayerForm = ({
-  state, 
-  executeAction
-}: BaseLayerFormProps) => {
+const BaseLayerForm = ({ state, executeAction }: BaseLayerFormProps) => {
   const { t } = useTranslation(['common', 'baseLayerForm']);
-  
+
   const [rotationInput, setRotationInput] = useState(state.rotation);
   const [pathInput, setPathInput] = useState(state.nextcloudImagePath);
-  
+
   useEffect(() => {
     setRotationInput(state.rotation);
     setPathInput(state.nextcloudImagePath);
-  }, [state.nextcloudImagePath, state.rotation])
-  
+  }, [state.nextcloudImagePath, state.rotation]);
+
   return (
     <div className="flex flex-col gap-2 p-2">
       <h2>{t('baseLayerForm:title')}</h2>
@@ -43,7 +39,11 @@ const BaseLayerForm = ({
         min="0"
         max="359"
       />
-      <SimpleButton onClick={() => executeAction(new UpdateBaseLayerAction(rotationInput, state.scale, pathInput))}>
+      <SimpleButton
+        onClick={() =>
+          executeAction(new UpdateBaseLayerAction(rotationInput, state.scale, pathInput))
+        }
+      >
         {t('common:ok')}
       </SimpleButton>
     </div>

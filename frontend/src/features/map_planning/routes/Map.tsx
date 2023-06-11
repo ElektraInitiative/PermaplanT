@@ -15,7 +15,6 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { baseApiUrl } from '@/config';
 import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
-import { UpdateBaseLayerAction } from '@/features/map_planning/layers/base/actions';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
@@ -124,12 +123,7 @@ export const Map = () => {
     const content = {
       Base: {
         left: <div></div>,
-        right: (
-          <BaseLayerForm
-            state={trackedState.layers.Base}
-            executeAction={executeAction}
-          />
-        ),
+        right: <BaseLayerForm state={trackedState.layers.Base} executeAction={executeAction} />,
       },
       Plant: { right: <PlantSearch />, left: formPlaceholder },
       Drawing: { right: <div></div>, left: <div></div> },
