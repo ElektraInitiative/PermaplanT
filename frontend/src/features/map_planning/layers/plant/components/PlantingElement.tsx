@@ -1,8 +1,7 @@
+import { useFindPlantById } from '../hooks/useFindPlantById';
 import { PlantingDto } from '@/bindings/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { findPlantById } from '@/features/seeds/api/findPlantById';
 import PlantIcon from '@/icons/plant.svg';
-import { useQuery } from '@tanstack/react-query';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Rect, Image } from 'react-konva';
 import useImage from 'use-image';
@@ -12,12 +11,9 @@ export type PlantingElementProps = {
 };
 
 export function PlantingElement({ planting }: PlantingElementProps) {
-  const [imgData] = useImage(PlantIcon);
-  const { data: _ } = useQuery(['plants/plant', planting.plantId] as const, {
-    queryFn: (context) => findPlantById(context.queryKey[1]),
-    staleTime: Infinity,
-  });
+  useFindPlantById(planting.plantId);
 
+  const [imgData] = useImage(PlantIcon);
   const addShapeToTransformer = useMapStore((state) => state.addShapeToTransformer);
   const selectPlanting = useMapStore((state) => state.selectPlanting);
 

@@ -1,3 +1,4 @@
+import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
 import { PlantListItem } from './PlantListItem';
 import { PlantSuggestionList } from './PlantSuggestionList';
 import { PlantsSummaryDto } from '@/bindings/definitions';
@@ -44,16 +45,20 @@ const MOCK_SUGGESTIONS: Suggestions = {
   recent: MOCK_PLANTS,
 };
 
-type PlantSuggestionsProps = {
-  onPlantListItemClick: (plant: PlantsSummaryDto) => void;
-};
+export function PlantSuggestions() {
+  const { actions } = useSelectPlantForPlanting();
 
-export function PlantSuggestions({ onPlantListItemClick: onClick }: PlantSuggestionsProps) {
   return (
     <div className="flex flex-col gap-4 p-2">
       <PlantSuggestionList header={'Available Seeds'}>
         {MOCK_SUGGESTIONS.available.map((plant) => (
-          <PlantListItem key={plant.id} plant={plant} onClick={onClick} />
+          <PlantListItem
+            key={plant.id}
+            plant={plant}
+            onClick={() => {
+              actions.selectPlantForPlanting(plant);
+            }}
+          />
         ))}
       </PlantSuggestionList>
       {/* <PlantSuggestionList header={'Diversity'}>

@@ -1,43 +1,25 @@
+import { usePlantSearch } from '../hooks/usePlantSearch';
+import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
 import { PlantListItem } from './PlantListItem';
-import { PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput from '@/components/Form/SearchInput';
-import { searchPlants } from '@/features/seeds/api/searchPlants';
+import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg';
-import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-type PlantSearchProps = {
-  onPlantListItemClick: (plant: PlantsSummaryDto) => void;
-};
-
-/** UI component intended for searching plants that can be drag and dropped to the plants layer */
-export const PlantSearch = ({ onPlantListItemClick }: PlantSearchProps) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  // used to prevent the search result from flickering
-  const [plants, setPlants] = useState<PlantsSummaryDto[]>([]);
-
-  const { data } = useQuery(['plants/search', searchTerm] as const, {
-    queryFn: ({ queryKey: [, search] }) => searchPlants(search, 0),
-    // prevent the query from being fetched again for the
-    // same search term. plants are not expected to change
-    staleTime: Infinity,
-  });
-
-  useEffect(() => {
-    if (data?.results) {
-      setPlants(data.results);
-    }
-  }, [data]);
+/** UI component intended for searching plants that can planted on the plants layer */
+export const PlantSearch = () => {
+  const { plants, actions: plantSearchActions } = usePlantSearch();
+  const { actions } = useSelectPlantForPlanting();
 
   const [searchVisible, setSearchVisible] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation(['plantSearch']);
 
   const clearSearch = () => {
-    setSearchTerm('');
+    plantSearchActions.clearSearchTerm();
     setSearchVisible(false);
   };
 
@@ -49,7 +31,11 @@ export const PlantSearch = ({ onPlantListItemClick }: PlantSearchProps) => {
     <div className="flex flex-col gap-4 p-2">
       <div className="flex items-center justify-between">
         <h2>{t('plantSearch:dnd')}</h2>
-        {!searchVisible && (
+        {searchVisible ? (
+          <IconButton onClick={clearSearch}>
+            <CloseIcon />
+          </IconButton>
+        ) : (
           <IconButton
             onClick={() => {
               setSearchVisible(true);
@@ -74,16 +60,22 @@ export const PlantSearch = ({ onPlantListItemClick }: PlantSearchProps) => {
           >
             <SearchInput
               placeholder={t('plantSearch:placeholder')}
-              handleSearch={(event) => setSearchTerm(event.target.value)}
+              handleSearch={(event) => plantSearchActions.searchPlants(event.target.value)}
               ref={searchInputRef}
-              onBlur={clearSearch}
               onKeyDown={(e) => {
                 if (e.key === 'Escape') clearSearch();
               }}
             ></SearchInput>
             <ul>
               {plants.map((plant) => (
-                <PlantListItem plant={plant} key={plant.id} onClick={onPlantListItemClick} />
+                <PlantListItem
+                  plant={plant}
+                  key={plant.id}
+                  onClick={() => {
+                    actions.selectPlantForPlanting(plant);
+                    clearSearch();
+                  }}
+                />
               ))}
             </ul>
           </motion.div>

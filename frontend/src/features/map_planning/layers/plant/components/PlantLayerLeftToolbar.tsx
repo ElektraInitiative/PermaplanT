@@ -1,9 +1,8 @@
 import { DeletePlantAction } from '../actions';
+import { useFindPlantById } from '../hooks/useFindPlantById';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { findPlantById } from '@/features/seeds/api/findPlantById';
-import { useQuery } from '@tanstack/react-query';
 
 export function PlantLayerLeftToolbar() {
   const selectedPlanting = useMapStore(
@@ -13,11 +12,7 @@ export function PlantLayerLeftToolbar() {
   const selectPlanting = useMapStore((state) => state.selectPlanting);
   const transformerRef = useMapStore((state) => state.transformer);
 
-  const { data: plant } = useQuery(['plants/plant', selectedPlanting?.plantId ?? NaN] as const, {
-    queryFn: (context) => findPlantById(context.queryKey[1]),
-    enabled: Boolean(selectedPlanting),
-    staleTime: Infinity,
-  });
+  const { plant } = useFindPlantById(selectedPlanting?.plantId ?? NaN, Boolean(selectedPlanting));
 
   return selectedPlanting ? (
     <div className="flex flex-col gap-2 p-2">
