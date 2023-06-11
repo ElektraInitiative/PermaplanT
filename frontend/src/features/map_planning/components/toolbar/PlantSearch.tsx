@@ -24,7 +24,7 @@ export const PlantSearch = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const loadPage = useCallback(
-    async (pageNum: number) => {
+    async (pageNum: number, searchTerm: string) => {
       const page = await searchPlants(searchTerm, pageNum);
 
       if (pageNum > page.total_pages) {
@@ -43,9 +43,8 @@ export const PlantSearch = () => {
       // Loading the first page of a search query indicates, that the entire
       // results array has to be overwritten.
       // All other pages should just be appended.
-      setPlants((currPlants) => (pageNum == 1 ? newPlants : [...currPlants, ...newPlants]));
-    },
-    [searchTerm],
+      setPlants(currPlants => (pageNum == 1 ? newPlants : [...currPlants, ...newPlants]));
+    }, []
   );
 
   useEffect(() => {
@@ -56,10 +55,6 @@ export const PlantSearch = () => {
     setNextPage(1);
   }, [searchVisible, loadPage]);
 
-  // If the user inputs a new search term, the frontend should display the first page of the search request.
-  useEffect(() => {
-    setNextPage(1);
-  }, [searchTerm]);
 
   // When the user scrolls past a certain threshold with a new page is supposed to be loaded.
   useEffect(() => {
@@ -80,11 +75,11 @@ export const PlantSearch = () => {
   useEffect(() => {
     // Debounce page fetching
     const loadInitialPage = setTimeout(() => {
-      loadPage(nextPage);
+      loadPage(nextPage, searchTerm);
     }, 300);
 
     return () => clearTimeout(loadInitialPage);
-  }, [nextPage, loadPage]);
+  }, [nextPage, searchTerm, loadPage]);
 
   // Callback that recalculates the scroll position after the
   // user made a scroll input.
@@ -125,7 +120,9 @@ export const PlantSearch = () => {
             <SearchInput
               placeholder={t('plantSearch:placeholder')}
               handleSearch={async (event) => {
+                // If the user inputs a new search term, the frontend should display the first page of the search request.
                 setSearchTerm(event.target.value);
+                setNextPage(1);
               }}
               ref={searchInputRef}
               onBlur={() => setSearchVisible(false)}
