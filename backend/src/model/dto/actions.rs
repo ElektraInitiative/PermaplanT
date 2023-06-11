@@ -7,7 +7,7 @@
 // Don't make the `new` functions const, there might come more fields in the future.
 #![allow(clippy::missing_const_for_fn)]
 
-use super::PlantingDto;
+use crate::model::dto::plantings::PlantingDto;
 use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;

@@ -6,9 +6,10 @@ use crate::config::data::AppDataInner;
 use crate::error::ServiceError;
 use crate::model::dto::Page;
 use crate::model::dto::{
-    NewPlantingDto, PageParameters, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+    plantings::{NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto},
+    PageParameters,
 };
-use crate::model::entity::Planting;
+use crate::model::entity::plantings::Planting;
 
 /// Search seeds from the database.
 ///

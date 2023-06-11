@@ -1,8 +1,8 @@
 //! Contains the implementation of [`SeedDto`].
 
-use crate::model::entity::{NewPlanting, Planting, UpdatePlanting};
+use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
 
-use super::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
+use super::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
 
 impl From<Planting> for PlantingDto {
     fn from(entity: Planting) -> Self {

@@ -15,7 +15,10 @@ use crate::{
     },
 };
 use crate::{
-    model::dto::{NewPlantingDto, PageParameters, PlantingSearchParameters, UpdatePlantingDto},
+    model::dto::{
+        plantings::{NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto},
+        PageParameters,
+    },
     service::plantings,
 };
 

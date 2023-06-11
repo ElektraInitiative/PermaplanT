@@ -7,12 +7,11 @@ use log::debug;
 
 use crate::db::pagination::Paginate;
 use crate::model::dto::{
-    NewPlantingDto, Page, PageParameters, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+    plantings::{NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto},
+    Page, PageParameters,
 };
-use crate::model::entity::UpdatePlanting;
+use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
 use crate::schema::plantings::{self, all_columns, layer_id, plant_id};
-
-use super::{NewPlanting, Planting};
 
 impl Planting {
     /// Get a page of layers.
