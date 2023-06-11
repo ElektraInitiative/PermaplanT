@@ -69,7 +69,9 @@ pub struct NewPlantingDto {
 #[derive(Debug, Clone, Copy, Deserialize, ToSchema)]
 #[serde(tag = "type", content = "content")]
 pub enum UpdatePlantingDto {
+    /// Transform a plantings.
     Transform(TransformPlantingDto),
+    /// Move a plantings an the map.
     Move(MovePlantingDto),
 }
 

@@ -9,7 +9,7 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{config, layer, map, plantings, plants, seed},
+    controller::{config, layers, map, plantings, plants, seed},
     model::{
         dto::{
             plantings::{
@@ -25,17 +25,7 @@ use crate::{
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all config endpoints.
 #[derive(OpenApi)]
-#[openapi(
-    paths(
-        config::get
-    ),
-    components(
-        schemas(
-            ConfigDto
-        )
-    ),
-    tags((name = "config"))
-)]
+#[openapi(paths(config::get), components(schemas(ConfigDto)))]
 struct ConfigApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
@@ -56,7 +46,6 @@ struct ConfigApiDoc;
             Quantity
         )
     ),
-    tags((name = "seed")),
     modifiers(&SecurityAddon)
 )]
 struct SeedApiDoc;
@@ -74,7 +63,6 @@ struct SeedApiDoc;
             PlantsSummaryDto
         )
     ),
-    tags((name = "plants")),
     modifiers(&SecurityAddon)
 )]
 struct PlantsApiDoc;
@@ -94,7 +82,6 @@ struct PlantsApiDoc;
             NewMapDto,
         )
     ),
-    tags((name = "map")),
     modifiers(&SecurityAddon)
 )]
 struct MapApiDoc;
@@ -103,10 +90,10 @@ struct MapApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        layer::find,
-        layer::find_by_id,
-        layer::create,
-        layer::delete
+        layers::find,
+        layers::find_by_id,
+        layers::create,
+        layers::delete
     ),
     components(
         schemas(
@@ -115,7 +102,6 @@ struct MapApiDoc;
             PageLayerDto
         )
     ),
-    tags((name = "layers")),
     modifiers(&SecurityAddon)
 )]
 struct LayerApiDoc;
@@ -138,7 +124,6 @@ struct LayerApiDoc;
             MovePlantingDto
         )
     ),
-    tags((name = "plantings")),
     modifiers(&SecurityAddon)
 )]
 struct PlantingsApiDoc;
