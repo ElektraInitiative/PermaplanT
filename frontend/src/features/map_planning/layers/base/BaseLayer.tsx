@@ -47,7 +47,7 @@ const BaseLayer = ({
   pixelsPerMeter,
   rotation,
 }: BaseLayerProps) => {
-  // It shouldn't matter whether the image path starts with a slash or not. 
+  // It shouldn't matter whether the image path starts with a slash or not.
   let cleanImagePath = nextcloudImagePath;
   if (cleanImagePath.startsWith('/')) {
     cleanImagePath = cleanImagePath.substring(1);
