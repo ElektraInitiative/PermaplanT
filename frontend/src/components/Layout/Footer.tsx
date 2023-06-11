@@ -1,6 +1,7 @@
 import ButtonLink from '../Button/ButtonLink';
 import { useTranslation } from 'react-i18next';
 
+/** PermaplanT Footer component */
 export const Footer = () => {
   const { t } = useTranslation(['imprint']);
 
