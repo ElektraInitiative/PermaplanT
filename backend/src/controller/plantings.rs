@@ -1,7 +1,7 @@
 //! `Planting` endpoints.
 
 use actix_web::{
-    delete, error, get, patch, post,
+    delete, get, patch, post,
     web::{Data, Json, Path, Query},
     HttpResponse, Result,
 };
@@ -100,52 +100,16 @@ pub async fn update(
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let (map_id, planting_id) = path.into_inner();
+    let update_planting = new_plant_json.0;
 
-    let (planting, action) = match *new_plant_json {
-        UpdatePlantingDto {
-            x: Some(x),
-            y: Some(y),
-            rotation: Some(rotation),
-            scale_x: Some(scale_x),
-            scale_y: Some(scale_y),
-            ..
-        } => {
-            let new_planting = UpdatePlantingDto {
-                x: Some(x),
-                y: Some(y),
-                rotation: Some(rotation),
-                scale_x: Some(scale_x),
-                scale_y: Some(scale_y),
-                ..Default::default()
-            };
-            let planting = plantings::update(planting_id, new_planting, &app_data).await?;
+    let planting = plantings::update(planting_id, update_planting, &app_data).await?;
 
-            (
-                planting,
-                Action::TransformPlanting(TransformPlantActionPayload::new(planting, user_info.id)),
-            )
+    let action = match update_planting {
+        UpdatePlantingDto::Transform(_) => {
+            Action::TransformPlanting(TransformPlantActionPayload::new(planting, user_info.id))
         }
-        UpdatePlantingDto {
-            x: Some(x),
-            y: Some(y),
-            ..
-        } => {
-            let new_planting = UpdatePlantingDto {
-                x: Some(x),
-                y: Some(y),
-                ..Default::default()
-            };
-            let planting = plantings::update(planting_id, new_planting, &app_data).await?;
-
-            (
-                planting,
-                Action::MovePlanting(MovePlantActionPayload::new(planting, user_info.id)),
-            )
-        }
-        _ => {
-            return Err(error::ErrorBadRequest(
-                "Invalid arguments passed for update planting",
-            ))
+        UpdatePlantingDto::Move(_) => {
+            Action::MovePlanting(MovePlantActionPayload::new(planting, user_info.id))
         }
     };
 

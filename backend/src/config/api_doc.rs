@@ -12,7 +12,10 @@ use crate::{
     controller::{config, map, plantings, plants, seed},
     model::{
         dto::{
-            plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto},
+            plantings::{
+                MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
+                UpdatePlantingDto,
+            },
             ConfigDto, MapDto, NewMapDto, NewSeedDto, PageMapDto, PagePlantsSummaryDto,
             PageSeedDto, PlantsSummaryDto, SeedDto,
         },
@@ -89,7 +92,9 @@ struct PlantsApiDoc;
         schemas(
             PlantingDto,
             NewPlantingDto,
-            UpdatePlantingDto
+            UpdatePlantingDto,
+            TransformPlantingDto,
+            MovePlantingDto
         )
     ),
     tags((name = "plantings")),

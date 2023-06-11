@@ -39,14 +39,20 @@ impl From<NewPlantingDto> for NewPlanting {
 
 impl From<UpdatePlantingDto> for UpdatePlanting {
     fn from(dto: UpdatePlantingDto) -> Self {
-        Self {
-            x: dto.x,
-            y: dto.y,
-            width: dto.width,
-            height: dto.height,
-            rotation: dto.rotation,
-            scale_x: dto.scale_x,
-            scale_y: dto.scale_y,
+        match dto {
+            UpdatePlantingDto::Transform(dto) => Self {
+                x: Some(dto.x),
+                y: Some(dto.y),
+                rotation: Some(dto.rotation),
+                scale_x: Some(dto.scale_x),
+                scale_y: Some(dto.scale_y),
+                ..Default::default()
+            },
+            UpdatePlantingDto::Move(dto) => Self {
+                x: Some(dto.x),
+                y: Some(dto.y),
+                ..Default::default()
+            },
         }
     }
 }

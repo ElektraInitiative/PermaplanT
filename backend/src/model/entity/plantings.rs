@@ -55,7 +55,7 @@ pub struct NewPlanting {
 }
 
 /// The `UpdatePlanting` entity.
-#[derive(Debug, Clone, AsChangeset)]
+#[derive(Debug, Clone, Default, AsChangeset)]
 #[diesel(table_name = plantings)]
 pub struct UpdatePlanting {
     /// The x coordinate of the position on the map.

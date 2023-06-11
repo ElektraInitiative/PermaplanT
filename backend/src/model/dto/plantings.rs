@@ -37,7 +37,7 @@ pub struct PlantingDto {
 
 /// Used to create a new planting.
 #[typeshare]
-#[derive(Debug, Clone, Default, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Default, Deserialize, ToSchema)]
 pub struct NewPlantingDto {
     /// The plant layer the plantings is on.
     pub layer_id: i32,
@@ -61,26 +61,44 @@ pub struct NewPlantingDto {
     pub scale_y: f32,
 }
 
-/// Used to update an existing planting.
+/// Used to differentiate between different update operations on plantings.
+///
+/// Ordering of enum variants is important.
+/// Serde will try to deserialize starting from the top.
 #[typeshare]
-#[derive(Debug, Clone, Default, Serialize, Deserialize, ToSchema)]
-pub struct UpdatePlantingDto {
+#[derive(Debug, Clone, Copy, Deserialize, ToSchema)]
+#[serde(untagged)]
+pub enum UpdatePlantingDto {
+    Transform(TransformPlantingDto),
+    Move(MovePlantingDto),
+}
+
+/// Used to transform an existing planting.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Deserialize, ToSchema)]
+pub struct TransformPlantingDto {
     /// The x coordinate of the position on the map.
-    pub x: Option<i32>,
+    pub x: i32,
     /// The y coordinate of the position on the map.
-    pub y: Option<i32>,
-    /// The width of the plant on the map.
-    pub width: Option<i32>,
-    /// The height of the plant on the map.
-    pub height: Option<i32>,
+    pub y: i32,
     /// The rotation of the plant on the map.
-    pub rotation: Option<f32>,
+    pub rotation: f32,
     /// The x scale of the plant on the map.
     #[serde(rename = "scaleX")]
-    pub scale_x: Option<f32>,
+    pub scale_x: f32,
     /// The y scale of the plant on the map.
     #[serde(rename = "scaleY")]
-    pub scale_y: Option<f32>,
+    pub scale_y: f32,
+}
+
+/// Used to move an existing planting.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Deserialize, ToSchema)]
+pub struct MovePlantingDto {
+    /// The x coordinate of the position on the map.
+    pub x: i32,
+    /// The y coordinate of the position on the map.
+    pub y: i32,
 }
 
 /// Query parameters for searching plantings.
