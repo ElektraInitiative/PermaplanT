@@ -1,39 +1,51 @@
+import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import { Action, TrackedBaseLayerState } from '../store/MapStoreTypes';
+import { UpdateBaseLayerAction } from '../layers/base/actions';
+
 
 interface BaseLayerFormProps {
-  rotation: number;
-  nextcloudImagePath: string;
-  onRotationChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onImageURLChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  state: TrackedBaseLayerState,
+  executeAction: (action: Action<unknown, unknown>) => void; 
 }
 
 const BaseLayerForm = ({
-  rotation,
-  nextcloudImagePath,
-  onRotationChange,
-  onImageURLChange,
+  state, 
+  executeAction
 }: BaseLayerFormProps) => {
-  const { t } = useTranslation('baseLayerForm');
+  const { t } = useTranslation(['common', 'baseLayerForm']);
+  
+  const [rotationInput, setRotationInput] = useState(state.rotation);
+  const [pathInput, setPathInput] = useState(state.nextcloudImagePath);
+  
+  useEffect(() => {
+    setRotationInput(state.rotation);
+    setPathInput(state.nextcloudImagePath);
+  }, [state.nextcloudImagePath, state.rotation])
+  
   return (
     <div className="flex flex-col gap-2 p-2">
-      <h2>{t('title')}</h2>
+      <h2>{t('baseLayerForm:title')}</h2>
       <SimpleFormInput
         id="file"
-        labelText={t('image_path_field')}
-        onChange={onImageURLChange}
-        value={nextcloudImagePath}
+        labelText={t('baseLayerForm:image_path_field')}
+        onChange={(e) => setPathInput(e.target.value)}
+        value={pathInput}
       />
       <SimpleFormInput
         id="rotation"
-        labelText={t('rotation_field')}
-        onChange={onRotationChange}
+        labelText={t('baseLayerForm:rotation_field')}
+        onChange={(e) => setRotationInput(parseInt(e.target.value))}
         type="number"
-        value={rotation}
+        value={rotationInput}
         min="0"
         max="359"
       />
+      <SimpleButton onClick={() => executeAction(new UpdateBaseLayerAction(rotationInput, state.scale, pathInput))}>
+        {t('common:ok')}
+      </SimpleButton>
     </div>
   );
 };

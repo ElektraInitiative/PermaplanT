@@ -126,26 +126,8 @@ export const Map = () => {
         left: <div></div>,
         right: (
           <BaseLayerForm
-            rotation={trackedState.layers.Base.rotation}
-            nextcloudImagePath={trackedState.layers.Base.nextcloudImagePath}
-            onRotationChange={(event) =>
-              executeAction(
-                new UpdateBaseLayerAction(
-                  parseInt(event.target.value) ?? 0,
-                  trackedState.layers.Base.scale,
-                  trackedState.layers.Base.nextcloudImagePath,
-                ),
-              )
-            }
-            onImageURLChange={(event) => {
-              executeAction(
-                new UpdateBaseLayerAction(
-                  trackedState.layers.Base.rotation,
-                  trackedState.layers.Base.scale,
-                  event.target.value,
-                ),
-              );
-            }}
+            state={trackedState.layers.Base}
+            executeAction={executeAction}
           />
         ),
       },
