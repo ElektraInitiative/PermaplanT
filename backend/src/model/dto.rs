@@ -7,13 +7,16 @@ use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
-use super::r#enum::{quality::Quality, quantity::Quantity};
+use super::r#enum::{
+    layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+};
 
 pub mod actions;
+pub mod coordinates_impl;
+pub mod layer_impl;
 pub mod map_impl;
-pub mod map_version_impl;
+pub mod new_layer_impl;
 pub mod new_map_impl;
-pub mod new_map_version_impl;
 pub mod new_seed_impl;
 pub mod page_impl;
 pub mod plants_impl;
@@ -212,7 +215,6 @@ pub struct PageParameters {
     PageSeedDto = Page<SeedDto>,
     PageMapDto = Page<MapDto>,
     PagePlantingDto = Page<PlantingDto>,
-    PageMapVersionDto = Page<MapVersionDto>
 )]
 pub struct Page<T> {
     /// Resulting records.
@@ -251,6 +253,12 @@ pub struct MapDto {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Coordinates>,
 }
 
 /// The information of a map neccessary for its creation.
@@ -277,50 +285,78 @@ pub struct NewMapDto {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Coordinates>,
 }
 
 /// Query parameters for searching maps.
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct MapSearchParameters {
+    /// Name of the map to search for.
+    pub name: Option<String>,
     /// Whether or not the map is active.
     pub is_inactive: Option<bool>,
     /// The owner of the map.
     pub owner_id: Option<i32>,
+    /// Whether or not the map is private.
+    pub privacy: Option<PrivacyOptions>,
+}
+
+/// Support struct for transmitting latitude/longitude coordinates.
+#[typeshare]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Coordinates {
+    /// Latitude of the point.
+    pub latitude: f64,
+    /// Longitude of the point.
+    pub longitude: f64,
 }
 
 /// The whole information of a map version.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
-pub struct MapVersionDto {
-    /// The id of the map version.
+pub struct LayerDto {
+    /// The id of the layer.
     pub id: i32,
-    /// The id of the parent map.
+    /// The id of the map this layer belongs to.
     pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
 }
 
-/// The information of a map version neccessary for its creation.
+/// The information of a layer neccessary for its creation.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
-pub struct NewMapVersionDto {
-    /// The id of the parent map.
+pub struct NewLayerDto {
+    /// The id of the map this layer belongs to.
     pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
 }
 
-/// Query parameters for searching map versions.
+/// Query parameters for searching layers.
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
-pub struct MapVersionSearchParameters {
-    /// Whether or not the map is active.
+pub struct LayerSearchParameters {
+    /// The parent map.
     pub map_id: Option<i32>,
+    /// The type of layer.
+    pub type_: Option<LayerType>,
+    /// Wheter or not the layer is an alternative.
+    pub is_alternative: Option<bool>,
 }
 
 /// Query parameters for connecting to a map.

@@ -1,7 +1,7 @@
 //! Contains all entities used in `PermaplanT`.
 
+pub mod layer_impl;
 pub mod map_impl;
-pub mod map_version_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
@@ -10,13 +10,15 @@ use chrono::NaiveDateTime;
 
 use diesel::QueryableByName;
 use diesel::{Identifiable, Insertable, Queryable};
+use postgis_diesel::types::Point;
 
-use crate::schema::{map_versions, maps, plants, seeds};
+use crate::schema::{layers, maps, plants, seeds};
 
+use super::r#enum::privacy_options::PrivacyOptions;
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
     fertility::Fertility, flower_type::FlowerType, growth_rate::GrowthRate,
-    herbaceous_or_woody::HerbaceousOrWoody, life_cycle::LifeCycle,
+    herbaceous_or_woody::HerbaceousOrWoody, layer_type::LayerType, life_cycle::LifeCycle,
     light_requirement::LightRequirement, nutrition_demand::NutritionDemand,
     propagation_method::PropagationMethod, quality::Quality, quantity::Quantity, shade::Shade,
     soil_ph::SoilPh, soil_texture::SoilTexture, soil_water_retention::SoilWaterRetention,
@@ -711,6 +713,12 @@ pub struct Map {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Point>,
 }
 
 /// The `NewMap` entity.
@@ -737,30 +745,40 @@ pub struct NewMap {
     pub harvested: i16,
     /// The id of the owner of the map.
     pub owner_id: i32,
+    /// A flag indicating if this map is private or not.
+    pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Point>,
 }
 
-/// The `MapVersion` entity.
+/// The `Layer` entity.
 #[derive(Identifiable, Queryable)]
-#[diesel(table_name = map_versions)]
-pub struct MapVersion {
-    /// The id of the map version.
+#[diesel(table_name = layers)]
+pub struct Layer {
+    /// The id of the layer.
     pub id: i32,
-    /// The id of the parent map.
+    /// The id of the map this layer belongs to.
     pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
 }
 
-/// The `NewMapVersion` entity.
+/// The `NewLayer` entity.
 #[derive(Insertable)]
-#[diesel(table_name = map_versions)]
-pub struct NewMapVersion {
-    /// The id of the parent map.
+#[diesel(table_name = layers)]
+pub struct NewLayer {
+    /// The id of the map this layer belongs to.
     pub map_id: i32,
-    /// The name of this version.
-    pub version_name: String,
-    /// The date this snapshot was taken.
-    pub snapshot_date: NaiveDate,
+    /// The type of layer.
+    pub type_: LayerType,
+    /// The name of the layer.
+    pub name: String,
+    /// A flag indicating if this layer is an user created alternative.
+    pub is_alternative: bool,
 }
