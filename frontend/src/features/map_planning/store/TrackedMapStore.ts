@@ -48,16 +48,11 @@ export const createTrackedMapSlice: StateCreator<
     redo: () => redo(set, get),
     __applyRemoteAction: (action: Action<unknown, unknown>) => applyActionToStore(action, set, get),
     addShapeToTransformer: (node: Shape<ShapeConfig>) => {
-      set((state) => {
-        const transformer = state.transformer.current;
-
-        const nodes = transformer?.getNodes() || [];
-        if (!nodes.includes(node)) {
-          transformer?.nodes([node]);
-        }
-
-        return state;
-      });
+      const transformer = get().transformer.current;
+      const nodes = transformer?.getNodes() || [];
+      if (!nodes.includes(node)) {
+        transformer?.nodes([node]);
+      }
     },
     initPlantLayer: (plants: PlantingDto[]) =>
       set((state) => ({

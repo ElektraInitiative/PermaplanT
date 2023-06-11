@@ -27,14 +27,12 @@ export function PlantingElement({ planting }: PlantingElementProps) {
       image={imgData}
       fill="green"
       onClick={(e) => {
+        selectPlanting(planting);
         addShapeToTransformer(e.target as Shape<ShapeConfig>);
       }}
       onDragStart={(e) => {
         // sometimes the click event is not fired, so we have to add the object to the transformer here
         addShapeToTransformer(e.target as Shape<ShapeConfig>);
-      }}
-      onPointerClick={() => {
-        selectPlanting(planting);
       }}
     />
   ) : (

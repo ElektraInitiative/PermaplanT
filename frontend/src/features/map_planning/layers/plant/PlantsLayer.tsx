@@ -55,10 +55,12 @@ function usePlantLayerListeners(listening: boolean) {
    * Event handler for unselecting plants
    */
   const handleUnselectPlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback((e) => {
+    // only unselect if we are clicking on the background, e.g. not on a plant
     if (e.target instanceof Konva.Shape) {
       return;
     }
 
+    // only unselect if we are not planting a new plant
     const selectedPlantForPlanting =
       useMapStore.getState().untrackedState.layers.Plant.selectedPlantForPlanting;
     if (selectedPlantForPlanting) {
