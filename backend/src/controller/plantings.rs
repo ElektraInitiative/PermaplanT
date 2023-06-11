@@ -15,10 +15,7 @@ use crate::{
     },
 };
 use crate::{
-    model::dto::{
-        plantings::{NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto},
-        PageParameters,
-    },
+    model::dto::plantings::{NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto},
     service::plantings,
 };
 
@@ -28,10 +25,9 @@ use crate::{
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/plantings",
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
     params(
-        PlantingSearchParameters,
-        PageParameters
+        PlantingSearchParameters
     ),
     responses(
         (status = 200, description = "Find plantings", body = Vec<PlantingDto>)
@@ -43,15 +39,9 @@ use crate::{
 #[get("")]
 pub async fn find(
     search_params: Query<PlantingSearchParameters>,
-    page_parameters: Query<PageParameters>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let response = plantings::find(
-        search_params.into_inner(),
-        page_parameters.into_inner(),
-        &app_data,
-    )
-    .await?;
+    let response = plantings::find(search_params.into_inner(), &app_data).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -60,7 +50,7 @@ pub async fn find(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/plantings",
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
     request_body = NewPlantingDto,
     responses(
         (status = 201, description = "Create a planting", body = PlantingDto)
@@ -94,7 +84,7 @@ pub async fn create(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/plantings",
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
     request_body = UpdatePlantingDto,
     responses(
         (status = 200, description = "Update a planting", body = PlantingDto)
@@ -170,9 +160,9 @@ pub async fn update(
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/plantings",
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
     responses(
-        (status = 200, description = "Delete a planting", body = String)
+        (status = 200, description = "Delete a planting")
     ),
     security(
         ("oauth2" = [])

@@ -6,8 +6,6 @@ use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 
-use self::plantings::PlantingDto;
-
 use super::r#enum::{
     layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
 };
@@ -124,7 +122,6 @@ pub struct PageParameters {
     PagePlantsSummaryDto = Page<PlantsSummaryDto>,
     PageSeedDto = Page<SeedDto>,
     PageMapDto = Page<MapDto>,
-    PagePlantingDto = Page<PlantingDto>,
 )]
 pub struct Page<T> {
     /// Resulting records.

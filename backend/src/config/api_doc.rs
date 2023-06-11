@@ -13,8 +13,8 @@ use crate::{
     model::{
         dto::{
             plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto},
-            ConfigDto, MapDto, NewMapDto, NewSeedDto, PageMapDto, PagePlantingDto,
-            PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, SeedDto,
+            ConfigDto, MapDto, NewMapDto, NewSeedDto, PageMapDto, PagePlantsSummaryDto,
+            PageSeedDto, PlantsSummaryDto, SeedDto,
         },
         r#enum::{quality::Quality, quantity::Quantity},
     },
@@ -87,10 +87,9 @@ struct PlantsApiDoc;
     ),
     components(
         schemas(
-            NewPlantingDto,
             PlantingDto,
-            UpdatePlantingDto,
-            PagePlantingDto
+            NewPlantingDto,
+            UpdatePlantingDto
         )
     ),
     tags((name = "plantings")),

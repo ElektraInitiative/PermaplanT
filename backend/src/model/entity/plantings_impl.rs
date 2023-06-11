@@ -5,10 +5,8 @@ use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 
-use crate::db::pagination::Paginate;
-use crate::model::dto::{
-    plantings::{NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto},
-    Page, PageParameters,
+use crate::model::dto::plantings::{
+    NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
 };
 use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
 use crate::schema::plantings::{self, all_columns, layer_id, plant_id};
@@ -21,9 +19,8 @@ impl Planting {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find(
         search_parameters: PlantingSearchParameters,
-        page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Page<PlantingDto>> {
+    ) -> QueryResult<Vec<PlantingDto>> {
         let mut query = plantings::table.select(all_columns).into_boxed();
 
         if let Some(id) = search_parameters.plant_id {
@@ -33,21 +30,13 @@ impl Planting {
             query = query.filter(layer_id.eq(id));
         }
 
-        let query = query
-            .paginate(page_parameters.page)
-            .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));
-        query.load_page::<Self>(conn).await.map(Page::from_entity)
-    }
-
-    /// Fetch layer by id from the database.
-    ///
-    /// # Errors
-    /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find_by_id(id: i32, conn: &mut AsyncPgConnection) -> QueryResult<PlantingDto> {
-        let query = plantings::table.find(id);
-        debug!("{}", debug_query::<Pg, _>(&query));
-        query.first::<Self>(conn).await.map(Into::into)
+        Ok(query
+            .load::<Self>(conn)
+            .await?
+            .into_iter()
+            .map(Into::into)
+            .collect())
     }
 
     /// Create a new layer in the database.

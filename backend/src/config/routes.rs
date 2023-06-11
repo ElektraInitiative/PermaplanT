@@ -31,6 +31,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(map::find_by_id)
                 .service(map::create)
                 .service(
+                    // TODO: add create/delete for plant layers
                     web::scope("/{map_id}/layers/plants/plantings")
                         .service(plantings::find)
                         .service(plantings::create)
