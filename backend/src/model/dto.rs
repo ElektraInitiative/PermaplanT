@@ -122,6 +122,7 @@ pub struct PageParameters {
     PagePlantsSummaryDto = Page<PlantsSummaryDto>,
     PageSeedDto = Page<SeedDto>,
     PageMapDto = Page<MapDto>,
+    PageLayerDto = Page<LayerDto>
 )]
 pub struct Page<T> {
     /// Resulting records.

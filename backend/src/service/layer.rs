@@ -49,3 +49,13 @@ pub async fn create(
     let result = Layer::create(new_layer, &mut conn).await?;
     Ok(result)
 }
+
+/// Delete the layer in the database.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub async fn delete_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<(), ServiceError> {
+    let mut conn = app_data.pool.get().await?;
+    let _ = Layer::delete_by_id(id, &mut conn).await?;
+    Ok(())
+}
