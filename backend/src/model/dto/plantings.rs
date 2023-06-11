@@ -67,7 +67,7 @@ pub struct NewPlantingDto {
 /// Serde will try to deserialize starting from the top.
 #[typeshare]
 #[derive(Debug, Clone, Copy, Deserialize, ToSchema)]
-#[serde(untagged)]
+#[serde(tag = "type", content = "content")]
 pub enum UpdatePlantingDto {
     Transform(TransformPlantingDto),
     Move(MovePlantingDto),
