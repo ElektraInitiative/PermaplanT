@@ -59,6 +59,12 @@ function usePlantLayerListeners(listening: boolean) {
       return;
     }
 
+    const selectedPlantForPlanting =
+      useMapStore.getState().untrackedState.layers.Plant.selectedPlantForPlanting;
+    if (selectedPlantForPlanting) {
+      return;
+    }
+
     useMapStore.getState().selectPlanting(null);
   }, []);
 
@@ -119,14 +125,6 @@ function usePlantLayerListeners(listening: boolean) {
     handleMovePlanting,
     handleUnselectPlanting,
   ]);
-
-  useEffect(() => {
-    if (!listening) {
-      useMapStore.getState().selectPlanting(null);
-      useMapStore.getState().selectPlantForPlanting(null);
-      useMapStore.getState().transformer.current?.nodes([]);
-    }
-  }, [listening]);
 }
 
 type PlantsLayerProps = Konva.LayerConfig;

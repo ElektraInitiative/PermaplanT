@@ -30,15 +30,26 @@ export const createUntrackedMapSlice: StateCreator<
   [],
   [],
   UntrackedMapSlice
-> = (set) => ({
+> = (set, get) => ({
   untrackedState: UNTRACKED_DEFAULT_STATE,
   stageRef: createRef<Konva.Stage>(),
   updateSelectedLayer(selectedLayer) {
+    // Clear the transformer's nodes.
+    get().transformer.current?.nodes([]);
+
     set((state) => ({
       ...state,
       untrackedState: {
         ...state.untrackedState,
         selectedLayer: selectedLayer,
+        layers: {
+          ...state.untrackedState.layers,
+          Plant: {
+            ...state.untrackedState.layers.Plant,
+            selectedPlanting: null,
+            selectedPlantForPlanting: null,
+          },
+        },
       },
     }));
   },
@@ -81,6 +92,7 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           Plant: {
             ...state.untrackedState.layers.Plant,
+            selectedPlanting: null,
             selectedPlantForPlanting: plant,
           },
         },
@@ -96,6 +108,7 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           Plant: {
             ...state.untrackedState.layers.Plant,
+            selectedPlantForPlanting: null,
             selectedPlanting: planting,
           },
         },

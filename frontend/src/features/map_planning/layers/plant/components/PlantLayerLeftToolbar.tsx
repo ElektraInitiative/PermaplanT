@@ -1,3 +1,4 @@
+import { DeletePlantAction } from '../actions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -8,6 +9,10 @@ export function PlantLayerLeftToolbar() {
   const selectedPlanting = useMapStore(
     (state) => state.untrackedState.layers.Plant.selectedPlanting,
   );
+  const executeAction = useMapStore((state) => state.executeAction);
+  const selectPlanting = useMapStore((state) => state.selectPlanting);
+  const transformerRef = useMapStore((state) => state.transformer);
+
   const { data: plant } = useQuery(['plants/plant', selectedPlanting?.plantId ?? NaN] as const, {
     queryFn: (context) => findPlantById(context.queryKey[1]),
     enabled: Boolean(selectedPlanting),
@@ -27,8 +32,19 @@ export function PlantLayerLeftToolbar() {
         labelText="Some attribute"
         placeHolder="some input"
       ></SimpleFormInput>
+
       <SimpleButton>Submit Changes</SimpleButton>
-      <SimpleButton variant={ButtonVariant.dangerBase}>Delete Planting</SimpleButton>
+
+      <SimpleButton
+        variant={ButtonVariant.dangerBase}
+        onClick={() => {
+          executeAction(new DeletePlantAction(selectedPlanting.id));
+          selectPlanting(null);
+          transformerRef.current?.nodes([]);
+        }}
+      >
+        Delete Planting
+      </SimpleButton>
     </div>
   ) : null;
 }
