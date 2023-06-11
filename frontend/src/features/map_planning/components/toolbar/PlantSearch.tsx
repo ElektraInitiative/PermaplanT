@@ -23,29 +23,27 @@ export const PlantSearch = () => {
   const searchResultsRef = useRef<HTMLUListElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const loadPage = useCallback(
-    async (pageNum: number, searchTerm: string) => {
-      const page = await searchPlants(searchTerm, pageNum);
+  const loadPage = useCallback(async (pageNum: number, searchTerm: string) => {
+    const page = await searchPlants(searchTerm, pageNum);
 
-      if (pageNum > page.total_pages) {
-        return;
-      }
+    if (pageNum > page.total_pages) {
+      return;
+    }
 
-      // Display plants using the following format:
-      // <unique name> (<common name>)
-      const newPlants: string[] = page.results.map((plant) => {
-        const common_name_en =
-          plant.common_name_en != null ? ' (' + plant.common_name_en[0] + ')' : '';
+    // Display plants using the following format:
+    // <unique name> (<common name>)
+    const newPlants: string[] = page.results.map((plant) => {
+      const common_name_en =
+        plant.common_name_en != null ? ' (' + plant.common_name_en[0] + ')' : '';
 
-        return plant.unique_name + common_name_en;
-      });
+      return plant.unique_name + common_name_en;
+    });
 
-      // Loading the first page of a search query indicates, that the entire
-      // results array has to be overwritten.
-      // All other pages should just be appended.
-      setPlants(currPlants => (pageNum == 1 ? newPlants : [...currPlants, ...newPlants]));
-    }, []
-  );
+    // Loading the first page of a search query indicates, that the entire
+    // results array has to be overwritten.
+    // All other pages should just be appended.
+    setPlants((currPlants) => (pageNum == 1 ? newPlants : [...currPlants, ...newPlants]));
+  }, []);
 
   useEffect(() => {
     searchInputRef.current?.focus();
@@ -54,7 +52,6 @@ export const PlantSearch = () => {
     setSearchTerm('');
     setNextPage(1);
   }, [searchVisible, loadPage]);
-
 
   // When the user scrolls past a certain threshold with a new page is supposed to be loaded.
   useEffect(() => {
@@ -91,7 +88,7 @@ export const PlantSearch = () => {
   };
 
   return (
-    <div className="fixed flex h-full flex-col gap-4 relative p-2">
+    <div className="fixed relative flex h-full flex-col gap-4 p-2">
       <div className="flex items-center justify-between">
         <h2>{t('plantSearch:dnd')}</h2>
         {!searchVisible && (
