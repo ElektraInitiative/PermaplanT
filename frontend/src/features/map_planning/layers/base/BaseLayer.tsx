@@ -47,7 +47,13 @@ const BaseLayer = ({
   pixelsPerMeter,
   rotation,
 }: BaseLayerProps) => {
-  const imagePath = `/remote.php/webdav/${nextcloudImagePath ?? ''}`;
+  // It shouldn't matter whether the image path starts with a slash or not. 
+  let cleanImagePath = nextcloudImagePath;
+  if (cleanImagePath.startsWith('/')) {
+    cleanImagePath = cleanImagePath.substring(1);
+  }
+
+  const imageURLPath = `/remote.php/webdav/${cleanImagePath ?? ''}`;
 
   // Width and height of the background image are only set after the image is
   // rendered in the browser.
@@ -56,11 +62,11 @@ const BaseLayer = ({
 
   // Hooks have to be called an equal number of times on each render.
   // We therefore have to check whether a file is a valid image after loading it.
-  const fileStat = useQuery(['stat', imagePath], () =>
-    nextcloudClient.stat(imagePath, { details: false }),
+  const fileStat = useQuery(['stat', imageURLPath], () =>
+    nextcloudClient.stat(imageURLPath, { details: false }),
   );
-  const imageData = useQuery(['files', imagePath], () =>
-    nextcloudClient.getFileContents(imagePath),
+  const imageData = useQuery(['files', imageURLPath], () =>
+    nextcloudClient.getFileContents(imageURLPath),
   );
   if (!checkFileIsImage(fileStat) || imageData.data == undefined) return <Layer></Layer>;
 
