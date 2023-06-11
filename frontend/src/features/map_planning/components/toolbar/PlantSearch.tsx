@@ -91,7 +91,7 @@ export const PlantSearch = () => {
   };
 
   return (
-    <div className="fixed flex h-full flex-col gap-4 overflow-clip p-2">
+    <div className="fixed flex h-full flex-col gap-4 relative p-2">
       <div className="flex items-center justify-between">
         <h2>{t('plantSearch:dnd')}</h2>
         {!searchVisible && (
@@ -133,7 +133,7 @@ export const PlantSearch = () => {
             <ul
               onScroll={onSearchResultsScroll}
               ref={searchResultsRef}
-              className="absolute h-full overflow-y-scroll"
+              className="fixed h-full w-full overflow-y-scroll"
             >
               {plants.map((plant) => (
                 <li
