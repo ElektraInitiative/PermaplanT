@@ -1,19 +1,23 @@
 # Runtime View
 
-## Plants
+## Plantings
 
 ```mermaid
 sequenceDiagram
     actor User
     User->>+Frontend: search for plant
-    Frontend->>+Backend: search (text, language)
+    Frontend->>+Backend: search
     Backend->>-Frontend: list of plants
     User->>Frontend: selects plant
-    Frontend->>+Backend: plant_info ()
-    Backend->>-Frontend: info, list plant_ID of relations, array of 1m raster, maybe picture/heat map
+    Frontend->>+Backend: placements
+    Backend->>-Frontend: list plant_ID of relations, heat map
     User->>Frontend: place plant
-    Frontend->>Backend: place_plant (plant_ID, pos, date)
+    Frontend->>Backend: place plant
 ```
+
+- search via GET on /api/plants
+- placements via GET on /api/maps/{map_id}/layers/plants/placements
+- place plant via POST on /api/maps/{map_id}/layers/plants/plantings (plant_ID, pos, date)
 
 ## Onboarding
 
