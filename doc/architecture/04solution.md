@@ -23,8 +23,8 @@ We use specific types (prefer enum over int over string etc.) and share types wh
 ## State
 
 - Both frontend and database contain the latest and complete state.
-- The backend is state-less, all state is in the database or in the token.
-- The frontend has structured state per layer.
+- The backend is state-less, all state is in the database or in the auth token.
+- The frontends map editor has structured state per layer.
 
 [See also frontend state management](../decisions/frontend_state_management.md) for which libraries are being used.
 
@@ -34,10 +34,10 @@ The user wants to see changes that other users are making on the map, therefore 
 The data is kept in sync between the client and the server through [API calls with axios](https://www.npmjs.com/package/axios) and server-sent events (SSE).
 This means the backend is always up to date with the users actions and users can see what others are doing.
 
-- Data must be immediately send asynchronously to the backend on any user action.
+- Data must be sent immediately and asynchronously to the backend after any user action.
 - Calculations in the backend can always assume that database is up-to-date.
 - No timestamps are needed for data consistency.
-- No conflict handling in the frontend.
+- There is no conflict handling in the frontend.
 - If a user loses the connection, the frontend must go into a read-only state.
 - We use uuid to identify elements on the map.
 
@@ -133,8 +133,8 @@ We use [Keycloak](https://www.keycloak.org/) for Identity and Access Management 
 
 ## Privacy
 
-In general all data must to stay within the organisation (Verein) and can only be seen by members or even only admins.
-Data which makes a person identifiable should be in Keycloak.
+In general all data must stay within the organisation (Verein) and can only be accessed by members or admins.
+Personally identifiable information should be stored in Keycloak.
 The only exceptions are:
 
 - bank account and billing address, which gets completely removed from the server (for security reasons)

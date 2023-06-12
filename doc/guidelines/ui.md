@@ -2,7 +2,7 @@
 
 ## Submitting Data
 
-Data should be always submitted on-the-fly but with debouncing.
+Data should always be submitted on-the-fly with debouncing.
 
 ## Okay Buttons
 
@@ -10,13 +10,13 @@ If needed, the confirming button should be on the left.
 
 ## Gender
 
-Use plural to avoid gender, avoid he/she.
+Use plural to avoid gendered nouns, avoid he/she.
 
 ## Raster
 
 We raster per pixel, which should represent 1cm in reality.
-Geometric operations that produce results not in that raster, should be rounded.
-In the state or in the backend only integer values should be used.
+Geometric operations that produce results not in that raster, should be rounded to the nearest whole value.
+Only integer values should be used to store distances in frontend-state or in the backend.
 
 ## Key bindings
 
@@ -24,7 +24,7 @@ A JSON file is responsible for global key bindings.
 
 ## Colors
 
-We use an uniform color theme for everything related to the UI.
+We use a uniform color theme for everything related to the UI.
 The colors are stored within the Tailwind CSS color definitions `primary`, `secondary` and `neutral`.
 As stated in [Googles Material Design Guidelines](https://m3.material.io/styles/color/the-color-system/key-colors-tones), `primary` is to be used for key UI components, `secondary` for additional color expression and `neutral` for backgrounds and surfaces.
 They can be accessed like any other defined color in Tailwind CSS and can be appended with a number denoting the shade to be used.
