@@ -10,7 +10,7 @@ If needed, the confirming button should be on the left.
 
 ## Gender
 
-Use plural to avoid gendered nouns, avoid he/she.
+Use plural to avoid gender, i.e. use "we" or "they", avoid "he"/"she".
 
 ## Raster
 
@@ -30,9 +30,9 @@ As stated in [Googles Material Design Guidelines](https://m3.material.io/styles/
 They can be accessed like any other defined color in Tailwind CSS and can be appended with a number denoting the shade to be used.
 
 Following shade suggestions should be used as a starting point for coloring new UI components:
-| **location**        | **light mode** | **dark mode** |
+| **location** | **light mode** | **dark mode** |
 | :------------------ | :------------- | :------------ |
-| main color          | 500            | 300           |
-| text on main        | 50             | 700           |
-| alternative color   | 200            | 600           |
-| text on alternative | 800            | 200           |
+| main color | 500 | 300 |
+| text on main | 50 | 700 |
+| alternative color | 200 | 600 |
+| text on alternative | 800 | 200 |
