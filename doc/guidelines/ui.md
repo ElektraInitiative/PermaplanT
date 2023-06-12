@@ -24,4 +24,14 @@ A JSON file is responsible for global key bindings.
 
 ## Colors
 
-Currently written about in [#194](https://github.com/ElektraInitiative/PermaplanT/issues/194).
+We use an uniform color theme for everything related to the UI.
+The colors are stored within the Tailwind CSS color definitions `primary`, `secondary` and `neutral`.
+They can be accessed like any other defined color in Tailwind CSS and can be appended with a number denoting the shade to be used.
+
+Following shade suggestions should be used as a starting point for coloring new UI components:
+| **location**        | **light mode** | **dark mode** |
+| :------------------ | :------------- | :------------ |
+| main color          | 500            | 300           |
+| text on main        | 50             | 700           |
+| alternative color   | 200            | 600           |
+| text on alternative | 800            | 200           |
