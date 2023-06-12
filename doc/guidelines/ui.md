@@ -12,6 +12,21 @@ If needed, the confirming button should be on the left.
 
 Use plural to avoid gender, i.e. use "we" or "they", avoid "he"/"she".
 
+## Error Handling
+
+- All errors should be shown via toastify on the top right.
+- Say "Sorry," in the beginning of an error.
+- They should be personified, i.e., start with "I"
+- Only give suggestions how to solve the problem if you are relatively sure what the problem is,
+  and even they say "probably".
+- give context
+- avoid technical terms
+- use no colors/formatting etc. to highlight passages
+
+E.g.:
+
+"Sorry, I cannot communicate with my server, there is probably some network problem or the server is down. Please retry later."
+
 ## Raster
 
 We raster per pixel, which should represent 1cm in reality.
