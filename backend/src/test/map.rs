@@ -14,6 +14,7 @@ use actix_web::{
 use chrono::NaiveDate;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
+use uuid::Uuid;
 
 #[actix_rt::test]
 async fn test_can_search_maps() {
@@ -30,8 +31,8 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::honors.eq(0),
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::owner_id.eq(-1),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4().to_string()),
                 ),(
                     &crate::schema::maps::id.eq(-2),
                     &crate::schema::maps::name.eq("Other"),
@@ -42,8 +43,8 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::honors.eq(0),
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::owner_id.eq(-1),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4().to_string()),
                 )])
                 .execute(conn)
                 .await?;
@@ -98,8 +99,8 @@ async fn test_can_find_map_by_id() {
                     &crate::schema::maps::honors.eq(0),
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::owner_id.eq(-1),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4().to_string()),
                 ))
                 .execute(conn)
                 .await?;
@@ -134,7 +135,6 @@ async fn test_can_create_map() {
         honors: 0,
         visits: 0,
         harvested: 0,
-        owner_id: -1,
         privacy: PrivacyOptions::Public,
         description: None,
         location: None,

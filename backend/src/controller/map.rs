@@ -7,6 +7,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
+use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
 use crate::model::dto::{MapSearchParameters, PageParameters};
 use crate::{model::dto::NewMapDto, service};
@@ -81,8 +82,9 @@ pub async fn find_by_id(map_id: Path<i32>, app_data: Data<AppDataInner>) -> Resu
 #[post("")]
 pub async fn create(
     new_map_json: Json<NewMapDto>,
+    user_info: UserInfo,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let response = service::map::create(new_map_json.0, &app_data).await?;
+    let response = service::map::create(new_map_json.0, user_info.id, &app_data).await?;
     Ok(HttpResponse::Created().json(response))
 }

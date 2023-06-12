@@ -714,14 +714,14 @@ pub struct Map {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// The id of the owner of the map.
-    pub owner_id: i32,
     /// A flag indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Point>,
+    /// The id of the owner of the map.
+    pub owner_id: String,
 }
 
 /// The `NewMap` entity.
@@ -746,14 +746,14 @@ pub struct NewMap {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// The id of the owner of the map.
-    pub owner_id: i32,
     /// A flag indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Point>,
+    /// The id of the owner of the map.
+    pub owner_id: String,
 }
 
 /// The `Layer` entity.
