@@ -2,18 +2,28 @@ def node_info() {
     echo "Running stage on ${env.NODE_NAME}"
 }
 
+def wait_for_db() {
+    retry(6) {
+        sleep(time: 5, unit: 'SECONDS')
+        sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
+    }
+}
+
 // REQUIRED for Deployment
 // see Jenkinsfile.release
-stage('Build Schema') {
+stage('Build Schema'){
     node('docker') {
         node_info()
 
         checkout scm
-        def rust_image = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
+        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
-        docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
             rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 checkout scm
+
+                wait_for_db()
+
                 sh './ci/build-scripts/build-schema.sh'
 
                 stash includes: 'backend/src/schema.rs', name: 'schema.rs'
@@ -23,52 +33,55 @@ stage('Build Schema') {
     }
 }
 
-stage('Checks and Build') {
+// NOT REQUIRED for Deployment
+stage('Checks & Build') {
     def parallel_checks = [:]
 
-    parallel_checks['check-mdbook'] = {
+    parallel_checks["check-mdbook"] = {
         node('docker') {
             checkout scm
-            def mdbook_image = docker.build('permaplant-mdbook', './ci/container-images/permaplant-mdbook')
+            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
 
             mdbook_image.inside {
                 checkout scm
 
-                sh 'mdbook test'
+                sh "mdbook test"
             }
         }
     }
 
-    parallel_checks['check-backend'] = {
+    parallel_checks["check-backend"] = {
         node('docker') {
             node_info()
 
             checkout scm
-            def rust_image = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
+            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
-            stage('check-backend') {
-                docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            stage('check-backend'){
+                docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                     rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                         checkout scm
 
+                        wait_for_db()
+
                         withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
                             // Workaround: we can't stop rustfmt from linting the generated schema.rs
-                            dir('backend') {
+                            dir("backend") {
                                 sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
-                                sh 'cargo fmt --check'
+                                sh "cargo fmt --check"
                             }
                             // End of Workaround
 
                             // generate schema (overwriting src/schema.rs)
                             sh './ci/build-scripts/build-schema.sh'
 
-                            dir('backend') {
+                            dir("backend") {
+                                // continue checking
                                 withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']) {
-                                    // continue checking
-                                    sh 'cargo check'
-                                    sh 'cargo clippy'
-                                    sh 'cargo doc'
-                                    sh 'cargo test'
+                                sh "cargo check"
+                                sh "cargo clippy"
+                                sh "cargo doc"
+                                sh "cargo test"
                                 }
                             }
                         }
@@ -76,10 +89,13 @@ stage('Checks and Build') {
                 }
             }
 
-            stage('build-backend') {
-                docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            stage('build-backend'){
+                docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                     rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                         checkout scm
+
+                        wait_for_db()
+
                         sh './ci/build-scripts/build-backend.sh'
 
                         stash includes: 'backend/target/release/backend', name: 'backend'
@@ -89,48 +105,86 @@ stage('Checks and Build') {
         }
     }
 
-    parallel_checks['check-frontend'] = {
-        stage('check-frontend') {
-            node('docker') {
-                node_info()
+    parallel_checks["check-frontend"] = {
+        node('docker') {
+            node_info()
 
-                checkout scm
-                def node_image = docker.build('permaplant-node', './ci/container-images/permaplant-node')
-
+            checkout scm
+            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+            stage('check-frontend'){
                 node_image.inside {
                     checkout scm
                     unstash 'definitions.ts'
 
-                    dir('frontend') {
-                        sh 'npm ci'
-                        sh 'npm run format:check'
-                        sh 'npm run lint'
-                        sh 'npm run test'
+                    dir("frontend") {
+                        sh "npm ci"
+                        sh "npm run format:check"
+                        sh "npm run lint"
+                        sh "npm run test"
                     }
                 }
             }
-        }
 
-        stage('build-frontend') {
-            node('docker') {
-                node_info()
-
-                checkout scm
-                def node_image = docker.build('permaplant-node', './ci/container-images/permaplant-node')
-
+            stage('build-frontend'){
                 node_image.inside {
-                    checkout scm
-                    unstash 'definitions.ts'
+                checkout scm
+                unstash 'definitions.ts'
 
-                    sh './ci/build-scripts/build-frontend.sh'
-                    stash includes: 'frontend/dist/**/*', name: 'frontend'
-                }
+                sh './ci/build-scripts/build-frontend.sh'
+                stash includes: 'frontend/dist/**/*', name: 'frontend'
+            }                
             }
         }
     }
 
     parallel(parallel_checks)
 }
+
+// REQUIRED for Deployment
+// see Jenkinsfile.release
+/*stage('Build in Docker'){
+    def parallel_build = [:]
+
+    parallel_build['build-backend'] = {
+        node('docker') {
+            node_info()
+
+            checkout scm
+            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+
+            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                    checkout scm
+
+                    wait_for_db()
+
+                    sh './ci/build-scripts/build-backend.sh'
+
+                    stash includes: 'backend/target/release/backend', name: 'backend'
+                }
+            }
+        }
+    }
+
+    parallel_build['build-frontend'] = {
+        node('docker') {
+            node_info()
+
+            checkout scm
+            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+
+            node_image.inside {
+                checkout scm
+                unstash 'definitions.ts'
+
+                sh './ci/build-scripts/build-frontend.sh'
+                stash includes: 'frontend/dist/**//**', name: 'frontend'
+            }
+        }
+    }
+
+    parallel(parallel_build)
+}*/
 
 stage('Deploy PR') {
     node('permaplant && pr') {
@@ -146,7 +200,7 @@ stage('Deploy PR') {
             echo 'Resetting the CI DB ...'
             sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
-            echo 'Unstash Artifacts'
+            echo "Unstash Artifacts"
             unstash 'schema.rs'
             unstash 'frontend'
             unstash 'backend'
@@ -175,7 +229,7 @@ if (env.BRANCH_NAME == 'master') {
 
             checkout scm
 
-            echo 'Unstash Artifacts'
+            echo "Unstash Artifacts"
             unstash 'schema.rs'
             unstash 'frontend'
             unstash 'backend'
