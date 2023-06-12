@@ -50,7 +50,7 @@ stage('Checks & Build') {
         }
     }
 
-    parallel_checks["check-backend"] = {
+    parallel_checks["check-and-build-backend"] = {
         node('docker') {
             node_info()
 
@@ -58,13 +58,14 @@ stage('Checks & Build') {
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
 
-            stage('check-backend'){
-                docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                    rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                        checkout scm
+            
+            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                checkout scm
 
-                        wait_for_db()
+                    wait_for_db()
 
+                    stage('check-backend'){
                         withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
                             // Workaround: we can't stop rustfmt from linting the generated schema.rs
                             dir("backend") {
@@ -87,10 +88,17 @@ stage('Checks & Build') {
                             }
                         }
                     }
+
+                    stage('build-backend'){
+                        sh './ci/build-scripts/build-backend.sh'
+
+                        stash includes: 'backend/target/release/backend', name: 'backend'
+                    } 
+
                 }
             }
 
-            stage('build-backend'){
+            /*stage('build-backend'){
                 docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                     rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                         checkout scm
@@ -102,21 +110,22 @@ stage('Checks & Build') {
                         stash includes: 'backend/target/release/backend', name: 'backend'
                     }
                 }
-            }
+            }*/
         }
     }
 
-    parallel_checks["check-frontend"] = {
+    parallel_checks["check-and-build-frontend"] = {
         node('docker') {
             node_info()
 
             checkout scm
             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
-            stage('check-frontend'){
-                node_image.inside {
-                    checkout scm
-                    unstash 'definitions.ts'
-
+            
+            node_image.inside {
+                checkout scm
+                unstash 'definitions.ts'
+        
+                stage('check-frontend'){
                     dir("frontend") {
                         sh "npm ci"
                         sh "npm run format:check"
@@ -124,17 +133,22 @@ stage('Checks & Build') {
                         sh "npm run test"
                     }
                 }
+
+                stage('build-frontend'){
+                    sh './ci/build-scripts/build-frontend.sh'
+                    stash includes: 'frontend/dist/**/*', name: 'frontend'
+                }
             }
 
-            stage('build-frontend'){
+            /*stage('build-frontend'){
                 node_image.inside {
                 checkout scm
                 unstash 'definitions.ts'
 
                 sh './ci/build-scripts/build-frontend.sh'
-                stash includes: 'frontend/dist/**/*', name: 'frontend'
+                stash includes: 'frontend/dist/**//**', name: 'frontend'
             }                
-            }
+            }*/
         }
     }
 
