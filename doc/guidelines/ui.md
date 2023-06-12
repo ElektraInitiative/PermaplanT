@@ -26,6 +26,7 @@ A JSON file is responsible for global key bindings.
 
 We use an uniform color theme for everything related to the UI.
 The colors are stored within the Tailwind CSS color definitions `primary`, `secondary` and `neutral`.
+As stated in [Googles Material Design Guidelines](https://m3.material.io/styles/color/the-color-system/key-colors-tones), `primary` is to be used for key UI components, `secondary` for additional color expression and `neutral` for backgrounds and surfaces.
 They can be accessed like any other defined color in Tailwind CSS and can be appended with a number denoting the shade to be used.
 
 Following shade suggestions should be used as a starting point for coloring new UI components:
