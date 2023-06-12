@@ -1,6 +1,6 @@
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
-import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { Node } from 'konva/lib/Node';
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -58,7 +58,7 @@ export interface TrackedMapSlice {
    */
   transformer: React.RefObject<Konva.Transformer>;
   /** Event listener responsible for adding a single shape to the transformer */
-  addShapeToTransformer: (shape: Shape<ShapeConfig>) => void;
+  addShapeToTransformer: (shape: Node) => void;
   /**
    * Execute a user initiated action.
    */

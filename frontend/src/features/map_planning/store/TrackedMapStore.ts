@@ -8,7 +8,7 @@ import type {
 import { LAYER_NAMES } from './MapStoreTypes';
 import { PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
-import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
 
@@ -47,7 +47,7 @@ export const createTrackedMapSlice: StateCreator<
     undo: () => undo(set, get),
     redo: () => redo(set, get),
     __applyRemoteAction: (action: Action<unknown, unknown>) => applyActionToStore(action, set, get),
-    addShapeToTransformer: (node: Shape<ShapeConfig>) => {
+    addShapeToTransformer: (node: Node) => {
       const transformer = get().transformer.current;
       const nodes = transformer?.getNodes() || [];
       if (!nodes.includes(node)) {
