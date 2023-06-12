@@ -15,6 +15,9 @@ fi
 # Download Cargo Modules
 cargo fetch
 
+# Show Diesel Version
+diesel --version
+
 # Migrate DB
 LC_ALL=C diesel migration run
 

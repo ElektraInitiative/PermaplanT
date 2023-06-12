@@ -12,6 +12,9 @@ then
     source /opt/rust.env
 fi
 
+# Show Diesel Version
+diesel --version
+
 # Migrate DB and create schema.rs
 LC_ALL=C diesel migration run
 

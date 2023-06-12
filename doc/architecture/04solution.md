@@ -1,6 +1,21 @@
 # Solution Strategy
 
-PermaplanT has a classical frontend/backend architecture.
+PermaplanT has a classical frontend/backend architecture:
+
+- the frontend is structured according features
+- the backend has a 3-layer architecture with a database
+
+## Type Safety
+
+Types are shared whenever possible:
+
+- `Diesel` is used to share types between the database and backend code
+- `typeshare` is used to share types between Rust, API and Typescript
+
+## State
+
+- The backend is state-less, all state is in the database or in the token.
+- The frontend has structured state per layer.
 
 ## Concurrent Use
 
@@ -20,14 +35,13 @@ Undo/redo is client-specific so a user can only undo their own changes.
 The undo/redo functionality is implemented by means of an inverse (opposite) action.
 For this to work the actions have to exactly encompass the state they are mutating.
 
-E.g. a movement action should only have the new coordinates, and an identifier as payload.
-TODO @Bushuo: what is the identifier for?
+E.g. a movement action should only have the new coordinates, and an uuid as payload.
 
 ```ts
 type MovementAction {
   type: 'MOVEMENT_ACTION';
   payload: {
-    id: string;
+    uuid: string;
     x: number;
     y: number;
   };

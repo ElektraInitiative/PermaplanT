@@ -1,3 +1,4 @@
+import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../layers/plant/actions';
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
@@ -10,9 +11,10 @@ import {
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import SimpleButton from '@/components/Button/SimpleButton';
 import Konva from 'konva';
-import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import * as uuid from 'uuid';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -70,7 +72,7 @@ export const BaseStage = ({
   // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
 
-  const dispatch = useMapStore((map) => map.dispatch);
+  const executeAction = useMapStore((map) => map.executeAction);
   const step = useMapStore((map) => map.step);
   const historyLength = useMapStore((map) => map.history.length);
 
@@ -164,27 +166,6 @@ export const BaseStage = ({
     }
   };
 
-  const dispatchUpdate = (
-    nodes: Node<NodeConfig>[],
-    type: 'OBJECT_UPDATE_POSITION' | 'OBJECT_UPDATE_TRANSFORM',
-  ) => {
-    dispatch({
-      type,
-      payload: nodes.map((o) => ({
-        id: o.id(),
-        type: o.attrs.type,
-        index: o.attrs.index,
-        height: o.height(),
-        width: o.width(),
-        x: o.x(),
-        y: o.y(),
-        rotation: o.rotation(),
-        scaleX: o.scaleX(),
-        scaleY: o.scaleY(),
-      })),
-    });
-  };
-
   return (
     <div className="h-full w-full overflow-hidden">
       <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
@@ -192,21 +173,19 @@ export const BaseStage = ({
         <SimpleButton
           className="w-32"
           onClick={() =>
-            dispatch({
-              type: 'OBJECT_ADD',
-              payload: {
-                index: 'Plant',
-                id: Math.random().toString(36).slice(2, 9),
-                x: 300,
-                y: 300,
+            executeAction(
+              new CreatePlantAction({
+                id: uuid.v4(), // The frontend must generate the id for all objects
+                plantId: 1,
+                x: 100,
+                y: 100,
                 width: 100,
                 height: 100,
-                type: 'rect',
                 rotation: 0,
                 scaleX: 1,
                 scaleY: 1,
-              },
-            })
+              }),
+            )
           }
         >
           CREATE OBJECT
@@ -251,10 +230,29 @@ export const BaseStage = ({
             }}
             onTransformEnd={() => {
               selectable = true;
-              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_TRANSFORM');
+              const updates = (trRef.current?.getNodes() || []).map((node) => {
+                return {
+                  id: node.id(),
+                  x: node.x(),
+                  y: node.y(),
+                  rotation: node.rotation(),
+                  scaleX: node.scaleX(),
+                  scaleY: node.scaleY(),
+                };
+              });
+
+              executeAction(new TransformPlantAction(updates));
             }}
             onDragEnd={() => {
-              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_POSITION');
+              const updates = (trRef.current?.getNodes() || []).map((node) => {
+                return {
+                  id: node.id(),
+                  x: node.x(),
+                  y: node.y(),
+                };
+              });
+
+              executeAction(new MovePlantAction(updates));
             }}
             onMouseDown={() => {
               selectable = false;

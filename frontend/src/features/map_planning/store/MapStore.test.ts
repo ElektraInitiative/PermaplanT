@@ -1,7 +1,12 @@
+import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../layers/plant/actions';
 import useMapStore from './MapStore';
-import { ObjectState, TrackedLayers } from './MapStoreTypes';
+import { TrackedLayers } from './MapStoreTypes';
 import { TRACKED_DEFAULT_STATE } from './TrackedMapStore';
 import { UNTRACKED_DEFAULT_STATE } from './UntrackedMapStore';
+import { PlantingDto } from '@/bindings/definitions';
+
+// mock the axios api configuration, so that we don't actually send requests to the backend
+jest.mock('@/config/axios');
 
 describe('MapHistoryStore', () => {
   it('creates empty layers for each LayerName', () => {
@@ -18,23 +23,54 @@ describe('MapHistoryStore', () => {
     }
   });
 
-  it('adds an object to the plants layer on ObjectAddAction', () => {
-    const { dispatch } = useMapStore.getState();
+  it('adds a history entry for each call to executeAction', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
 
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(1),
-    });
+    executeAction(createAction);
 
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(2),
-    });
+    const { trackedState, history } = useMapStore.getState();
+    expect(history).toHaveLength(1);
+    expect(trackedState.layers.Plant.objects).toHaveLength(1);
+  });
+
+  it('it adds an entry to the history that is the inverse of the action', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+
+    executeAction(createAction);
+
+    const { history } = useMapStore.getState();
+    expect(history).toHaveLength(1);
+    expect(history[0]).toBeDefined();
+    expect(history[0]).toEqual(createAction.reverse());
+  });
+
+  it('does not add a history entry for a remote action', () => {
+    const { __applyRemoteAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+
+    __applyRemoteAction(createAction);
+
+    const { trackedState, history } = useMapStore.getState();
+    expect(history).toHaveLength(0);
+    expect(trackedState.layers.Plant.objects).toHaveLength(1);
+  });
+
+  it('adds plant objects to the plants layer on CreatePlantAction', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction1 = new CreatePlantAction(createPlantTestObject(1));
+    const createAction2 = new CreatePlantAction(createPlantTestObject(2));
+
+    executeAction(createAction1);
+    executeAction(createAction2);
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(2);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
+      x: 1,
+      y: 1,
     });
     expect(newState.layers.Plant.objects[1]).toMatchObject({
       id: '2',
@@ -43,31 +79,19 @@ describe('MapHistoryStore', () => {
     });
   });
 
-  it("updates a single object's position on ObjectUpdatePositionAction", () => {
-    const { dispatch } = useMapStore.getState();
+  it("updates a single plants's position on MovePlantAction", () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const moveAction = new MovePlantAction([
+      {
+        id: '1',
+        x: 123,
+        y: 123,
+      },
+    ]);
 
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(1),
-    });
-
-    dispatch({
-      type: 'OBJECT_UPDATE_POSITION',
-      payload: [
-        {
-          id: '1',
-          index: 'Plant',
-          type: 'plant',
-          x: 123,
-          y: 123,
-          height: 345,
-          width: 345,
-          rotation: 345,
-          scaleX: 345,
-          scaleY: 345,
-        },
-      ],
-    });
+    executeAction(createAction);
+    executeAction(moveAction);
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(1);
@@ -78,245 +102,164 @@ describe('MapHistoryStore', () => {
     });
   });
 
-  it("updates a single object's transform on ObjectUpdateTransformAction", () => {
-    const { dispatch } = useMapStore.getState();
+  it("updates a single plants's transform on TransformPlantAction", () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const transformAction = new TransformPlantAction([
+      {
+        id: '1',
+        x: 123,
+        y: 123,
+        rotation: 123,
+        scaleX: 1.23,
+        scaleY: 1.23,
+      },
+    ]);
 
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(1),
-    });
-
-    dispatch({
-      type: 'OBJECT_UPDATE_POSITION',
-      payload: [
-        {
-          id: '1',
-          index: 'Plant',
-          type: 'plant',
-          x: 100,
-          y: 100,
-          height: 200,
-          width: 200,
-          rotation: 300,
-          scaleX: 1,
-          scaleY: 1,
-        },
-      ],
-    });
+    executeAction(createAction);
+    executeAction(transformAction);
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(1);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
-      x: 100,
-      y: 100,
-      height: 200,
-      width: 200,
-      rotation: 300,
-      scaleX: 1,
-      scaleY: 1,
+      x: 123,
+      y: 123,
+      rotation: 123,
+      scaleX: 1.23,
+      scaleY: 1.23,
     });
   });
 
-  it('updates multiple objects on ObjectUpdatePositionAction', () => {
-    const { dispatch } = useMapStore.getState();
+  it('updates multiple plants on MovePlantAction', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction1 = new CreatePlantAction(createPlantTestObject(1));
+    const createAction2 = new CreatePlantAction(createPlantTestObject(2));
+    const moveAction = new MovePlantAction([
+      {
+        id: '1',
+        x: 111,
+        y: 111,
+      },
+      {
+        id: '2',
+        x: 222,
+        y: 222,
+      },
+    ]);
 
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(1),
-    });
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(2),
-    });
-
-    dispatch({
-      type: 'OBJECT_UPDATE_POSITION',
-      payload: [
-        {
-          id: '1',
-          index: 'Plant',
-          type: 'plant',
-          x: 123,
-          y: 123,
-          height: 345,
-          width: 345,
-          rotation: 345,
-          scaleX: 345,
-          scaleY: 345,
-        },
-        {
-          id: '2',
-          index: 'Plant',
-          type: 'plant',
-          x: 123,
-          y: 123,
-          height: 345,
-          width: 345,
-          rotation: 345,
-          scaleX: 345,
-          scaleY: 345,
-        },
-      ],
-    });
+    executeAction(createAction1);
+    executeAction(createAction2);
+    executeAction(moveAction);
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(2);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
-      x: 123,
-      y: 123,
+      x: 111,
+      y: 111,
     });
     expect(newState.layers.Plant.objects[1]).toMatchObject({
       id: '2',
-      x: 123,
-      y: 123,
+      x: 222,
+      y: 222,
     });
   });
 
-  it('updates multiple objects on ObjectUpdateTransformAction', () => {
-    const { dispatch } = useMapStore.getState();
+  it('updates multiple objects on TransformPlatAction', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction1 = new CreatePlantAction(createPlantTestObject(1));
+    const createAction2 = new CreatePlantAction(createPlantTestObject(2));
+    const transformAction = new TransformPlantAction([
+      {
+        id: '1',
+        x: 111,
+        y: 111,
+        rotation: 111,
+        scaleX: 1.11,
+        scaleY: 1.11,
+      },
+      {
+        id: '2',
+        x: 222,
+        y: 222,
+        rotation: 222,
+        scaleX: 2.22,
+        scaleY: 2.22,
+      },
+    ]);
 
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(1),
-    });
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(2),
-    });
-
-    dispatch({
-      type: 'OBJECT_UPDATE_TRANSFORM',
-      payload: [
-        {
-          id: '1',
-          index: 'Plant',
-          type: 'plant',
-          x: 123,
-          y: 123,
-          height: 345,
-          width: 345,
-          rotation: 345,
-          scaleX: 345,
-          scaleY: 345,
-        },
-        {
-          id: '2',
-          index: 'Plant',
-          type: 'plant',
-          x: 123,
-          y: 123,
-          height: 345,
-          width: 345,
-          rotation: 345,
-          scaleX: 345,
-          scaleY: 345,
-        },
-      ],
-    });
+    executeAction(createAction1);
+    executeAction(createAction2);
+    executeAction(transformAction);
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(2);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
-      x: 123,
-      y: 123,
+      x: 111,
+      y: 111,
+      rotation: 111,
+      scaleX: 1.11,
+      scaleY: 1.11,
     });
     expect(newState.layers.Plant.objects[1]).toMatchObject({
       id: '2',
-      x: 123,
-      y: 123,
+      x: 222,
+      y: 222,
+      rotation: 222,
+      scaleX: 2.22,
+      scaleY: 2.22,
     });
   });
 
-  it('reverts one action per ObjectUndoAction', () => {
-    const { dispatch } = useMapStore.getState();
+  it('reverts one action on undo()', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const moveAction = new MovePlantAction([
+      {
+        id: '1',
+        x: 111,
+        y: 111,
+      },
+    ]);
 
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(1),
-    });
-
-    dispatch({
-      type: 'OBJECT_UPDATE_POSITION',
-      payload: [
-        {
-          id: '1',
-          index: 'Plant',
-          type: 'plant',
-          x: 123,
-          y: 123,
-          height: 345,
-          width: 345,
-          rotation: 345,
-          scaleX: 345,
-          scaleY: 345,
-        },
-      ],
-    });
-
-    dispatch({
-      type: 'UNDO',
-    });
+    executeAction(createAction);
+    executeAction(moveAction);
+    useMapStore.getState().undo();
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(1);
     expect(newState.layers.Plant.objects[0]).toEqual(createPlantTestObject(1));
 
-    dispatch({
-      type: 'UNDO',
-    });
+    useMapStore.getState().undo();
 
     const { trackedState: newState2 } = useMapStore.getState();
     expect(newState2.layers.Plant.objects).toHaveLength(0);
   });
 
-  it('reverts multiple objects to their original state on ObjectUndoAction', () => {
-    const { dispatch } = useMapStore.getState();
+  it('reverts multiple plants to their original position on undo()', () => {
+    const { executeAction } = useMapStore.getState();
+    const createAction1 = new CreatePlantAction(createPlantTestObject(1));
+    const createAction2 = new CreatePlantAction(createPlantTestObject(2));
+    const moveAction = new MovePlantAction([
+      {
+        id: '1',
+        x: 111,
+        y: 111,
+      },
+      {
+        id: '2',
+        x: 222,
+        y: 222,
+      },
+    ]);
 
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(1),
-    });
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(2),
-    });
+    executeAction(createAction1);
+    executeAction(createAction2);
+    executeAction(moveAction);
 
-    dispatch({
-      type: 'OBJECT_UPDATE_POSITION',
-      payload: [
-        {
-          id: '1',
-          index: 'Plant',
-          type: 'plant',
-          x: 123,
-          y: 123,
-          height: 345,
-          width: 345,
-          rotation: 345,
-          scaleX: 345,
-          scaleY: 345,
-        },
-        {
-          id: '2',
-          index: 'Plant',
-          type: 'plant',
-          x: 123,
-          y: 123,
-          height: 345,
-          width: 345,
-          rotation: 345,
-          scaleX: 345,
-          scaleY: 345,
-        },
-      ],
-    });
-
-    dispatch({
-      type: 'UNDO',
-    });
+    useMapStore.getState().undo();
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(2);
@@ -324,46 +267,29 @@ describe('MapHistoryStore', () => {
     expect(newState.layers.Plant.objects[1]).toEqual(createPlantTestObject(2));
   });
 
-  it('repeats one action per ObjectRedoAction after ObjectUndoAction', () => {
-    const { dispatch } = useMapStore.getState();
+  it('repeats one action per redo() after undo()', () => {
+    const { executeAction } = useMapStore.getState();
 
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(1),
-    });
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const moveAction = new MovePlantAction([
+      {
+        id: '1',
+        x: 111,
+        y: 111,
+      },
+    ]);
 
-    dispatch({
-      type: 'OBJECT_UPDATE_POSITION',
-      payload: [
-        {
-          id: '1',
-          index: 'Plant',
-          type: 'plant',
-          x: 123,
-          y: 123,
-          height: 345,
-          width: 345,
-          rotation: 345,
-          scaleX: 345,
-          scaleY: 345,
-        },
-      ],
-    });
-
-    dispatch({
-      type: 'UNDO',
-    });
-
-    dispatch({
-      type: 'REDO',
-    });
+    executeAction(createAction);
+    executeAction(moveAction);
+    useMapStore.getState().undo();
+    useMapStore.getState().redo();
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.Plant.objects).toHaveLength(1);
     expect(newState.layers.Plant.objects[0]).toMatchObject({
       id: '1',
-      x: 123,
-      y: 123,
+      x: 111,
+      y: 111,
     });
   });
 
@@ -384,7 +310,7 @@ describe('MapHistoryStore', () => {
   });
 
   // regression
-  it('does not change the selectedLayer after an ObjectUndoAction', () => {
+  it('does not change the selectedLayer after an undo()', () => {
     useMapStore.setState({
       untrackedState: {
         ...UNTRACKED_DEFAULT_STATE,
@@ -393,26 +319,19 @@ describe('MapHistoryStore', () => {
         ...TRACKED_DEFAULT_STATE,
       },
     });
-
     useMapStore.getState().updateSelectedLayer('Soil');
+    const { executeAction } = useMapStore.getState();
+    const createAction = new CreatePlantAction(createPlantTestObject(1));
 
-    const { dispatch } = useMapStore.getState();
-
-    dispatch({
-      type: 'OBJECT_ADD',
-      payload: createPlantTestObject(1),
-    });
-
-    dispatch({
-      type: 'UNDO',
-    });
+    executeAction(createAction);
+    useMapStore.getState().undo();
 
     const { untrackedState: newState } = useMapStore.getState();
     expect(newState.selectedLayer).toEqual('Soil');
   });
 });
 
-function initPlantLayerInStore(objects: ObjectState[] = []) {
+function initPlantLayerInStore(objects: PlantingDto[] = []) {
   useMapStore.setState({
     untrackedState: {
       ...UNTRACKED_DEFAULT_STATE,
@@ -430,11 +349,10 @@ function initPlantLayerInStore(objects: ObjectState[] = []) {
   });
 }
 
-function createPlantTestObject(testValue: number): ObjectState {
+function createPlantTestObject(testValue: number): PlantingDto {
   return {
     id: testValue.toString(),
-    type: 'plant',
-    index: 'Plant',
+    plantId: 1,
     height: testValue,
     width: testValue,
     x: testValue,

@@ -12,6 +12,7 @@ export enum ButtonVariant {
 
 /**
  * A styled HTML button.
+ * @param props All React props for buttons can be applied.
  */
 export default function SimpleButton({
   variant = ButtonVariant.primaryBase,

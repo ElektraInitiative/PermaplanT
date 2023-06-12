@@ -50,9 +50,8 @@
 #![allow(clippy::multiple_crate_versions)]
 
 use actix_cors::Cors;
-use actix_web::{http, middleware::Logger, web::Data, App, HttpServer};
+use actix_web::{http, middleware::Logger, App, HttpServer};
 use config::{api_doc, auth::Config, routes};
-use db::connection;
 use log::info;
 
 pub mod config;
@@ -64,6 +63,7 @@ pub mod model;
 #[allow(clippy::missing_docs_in_private_items)]
 pub mod schema;
 pub mod service;
+pub mod sse;
 #[cfg(test)]
 pub mod test;
 
@@ -84,13 +84,12 @@ async fn main() -> std::io::Result<()> {
         config.bind_address.0, config.bind_address.1
     );
 
-    HttpServer::new(move || {
-        let pool = connection::init_pool(&config.database_url);
-        let data = Data::new(pool);
+    let data = config::data::init(&config.database_url);
 
+    HttpServer::new(move || {
         App::new()
             .wrap(cors_configuration())
-            .app_data(data)
+            .app_data(data.clone())
             .configure(routes::config)
             .configure(api_doc::config)
             .wrap(Logger::default())
@@ -105,7 +104,7 @@ async fn main() -> std::io::Result<()> {
 fn cors_configuration() -> Cors {
     Cors::default()
         .allowed_origin("http://localhost:5173")
-        .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+        .allowed_methods(vec!["GET", "POST", "PUT", "PATCH", "DELETE"])
         .allowed_headers(vec![
             http::header::AUTHORIZATION,
             http::header::ACCEPT,
