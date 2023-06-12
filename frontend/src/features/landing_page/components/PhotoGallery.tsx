@@ -20,6 +20,8 @@ function getImagesFromFileList(files: Array<string>) {
 }
 
 export const PhotoGallery = () => {
+  // Nextcloud public share token for the gallery
+  // used to fetch ressources from 'https://cloud.permaplant.net/s/qo6mZwPg6kFTmmj'
   const galleryShareToken = 'qo6mZwPg6kFTmmj';
   const { data: files } = useQuery(['files', galleryShareToken], () =>
     getPublicFileList(galleryShareToken),
