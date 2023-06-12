@@ -133,8 +133,9 @@ We use [Keycloak](https://www.keycloak.org/) for Identity and Access Management 
 
 ## Privacy
 
-In general all data must stay within the organisation (Verein) and can only be accessed by members or admins.
-Personally identifiable information should be stored in Keycloak.
+In general all data must stay within the organisation (Verein).
+Members see other members' data only if they allowed it.
+Data which makes a person identifiable should be in Keycloak.
 The only exceptions are:
 
 - bank account and billing address, which gets completely removed from the server (for security reasons)
