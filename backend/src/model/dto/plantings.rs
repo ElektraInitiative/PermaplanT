@@ -38,7 +38,7 @@ pub struct PlantingDto {
 
 /// Used to create a new planting.
 #[typeshare]
-#[derive(Debug, Clone, Default, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize, ToSchema)]
 pub struct NewPlantingDto {
     /// The id of the planting.
     pub id: Option<Uuid>,
@@ -69,7 +69,7 @@ pub struct NewPlantingDto {
 /// Ordering of enum variants is important.
 /// Serde will try to deserialize starting from the top.
 #[typeshare]
-#[derive(Debug, Clone, Copy, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 #[serde(tag = "type", content = "content")]
 pub enum UpdatePlantingDto {
     /// Transform a plantings.
@@ -80,7 +80,7 @@ pub enum UpdatePlantingDto {
 
 /// Used to transform an existing planting.
 #[typeshare]
-#[derive(Debug, Clone, Copy, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 pub struct TransformPlantingDto {
     /// The x coordinate of the position on the map.
     pub x: i32,
@@ -98,7 +98,7 @@ pub struct TransformPlantingDto {
 
 /// Used to move an existing planting.
 #[typeshare]
-#[derive(Debug, Clone, Copy, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 pub struct MovePlantingDto {
     /// The x coordinate of the position on the map.
     pub x: i32,
