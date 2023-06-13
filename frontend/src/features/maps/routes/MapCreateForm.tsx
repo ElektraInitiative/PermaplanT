@@ -69,7 +69,6 @@ export default function MapCreateForm() {
       honors: 0,
       visits: 0,
       harvested: 0,
-      owner_id: 1,
       privacy: mapInput.privacy,
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
