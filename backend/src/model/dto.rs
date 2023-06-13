@@ -292,3 +292,10 @@ pub struct ConnectToMapQueryParams {
     /// The id of the user connecting to the map.
     pub user_id: String,
 }
+
+/// Search parameters for plant suggestions.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct PlantSuggestionsSearchParameters {
+    pub relative_to_date: NaiveDate,
+}
