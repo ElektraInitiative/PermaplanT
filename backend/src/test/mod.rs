@@ -4,6 +4,7 @@
 
 mod auth;
 mod config;
+mod layers;
 mod map;
 mod pagination;
 mod plant;
