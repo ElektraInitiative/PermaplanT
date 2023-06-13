@@ -69,7 +69,7 @@ sequenceDiagram
     User->>App: planning of landscape
     User->>App: planning of plants
     App->>-User: list of needed seeds
-    User->World: get missing seeds
+    World->>User: get missing seeds
     User->>World: raise plants indoor (vorziehen)
     User->>App: set batch as raised
 
@@ -83,7 +83,7 @@ sequenceDiagram
 
     end
 
-    User->World: harvest and remove plants
+    World->>User: harvest and remove plants
     deactivate World
     User->>App: set plants as harvested or removed
     World->>User: seeds for next year
