@@ -352,6 +352,7 @@ function initPlantLayerInStore(objects: PlantingDto[] = []) {
 function createPlantTestObject(testValue: number): PlantingDto {
   return {
     id: testValue.toString(),
+    layerId: 1,
     plantId: 1,
     height: testValue,
     width: testValue,
