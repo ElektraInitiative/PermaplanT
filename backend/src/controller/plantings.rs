@@ -27,6 +27,7 @@ use crate::{
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/layers/plants/plantings",
     params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
         PlantingSearchParameters
     ),
     responses(
@@ -51,6 +52,9 @@ pub async fn find(
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/layers/plants/plantings",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
     request_body = NewPlantingDto,
     responses(
         (status = 201, description = "Create a planting", body = PlantingDto)
@@ -85,6 +89,9 @@ pub async fn create(
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/layers/plants/plantings",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
     request_body = UpdatePlantingDto,
     responses(
         (status = 200, description = "Update a planting", body = PlantingDto)
@@ -125,6 +132,9 @@ pub async fn update(
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/layers/plants/plantings",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
     responses(
         (status = 200, description = "Delete a planting")
     ),

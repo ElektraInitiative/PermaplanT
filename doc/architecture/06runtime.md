@@ -1,18 +1,60 @@
 # Runtime View
 
-## Plants
+## Plantings
 
 ```mermaid
 sequenceDiagram
     actor User
     User->>+Frontend: search for plant
-    Frontend->>+Backend: search (text, language)
+    Frontend->>+Backend: search
     Backend->>-Frontend: list of plants
     User->>Frontend: selects plant
-    Frontend->>+Backend: plant_info ()
-    Backend->>-Frontend: info, list plant_ID of relations, array of 1m raster, maybe picture/heat map
+    Frontend->>+Backend: placements
+    Backend->>-Frontend: list plant_ID of relations, heat map
     User->>Frontend: place plant
-    Frontend->>Backend: place_plant (plant_ID, pos, date)
+    Frontend->>Backend: place plant
+```
+
+- search via GET on /api/plants
+- placements via GET on /api/maps/{map_id}/layers/plants/placements
+- place plant via POST on /api/maps/{map_id}/layers/plants/plantings (plant_ID, pos, date)
+
+## Onboarding
+
+```mermaid
+sequenceDiagram
+    actor User
+
+    User->>Permaplant: visit landing page
+
+    User->>Keycloak: self-registration
+    activate Keycloak
+
+
+    User->>Permaplant: visit public maps
+    activate Permaplant
+
+    Permaplant->>Nextcloud: use images etc.
+    activate Nextcloud
+    actor Admin
+
+    User->>Permaplant: membership application
+    Permaplant->>Admin: notification
+
+    alt accept
+        Admin->>Keycloak: change role to member and ask for email verification
+    else accept
+        Admin->>Keycloak: ask for new membership application
+    end
+
+    activate Keycloak
+    Admin->>Permaplant: remove sensitive data
+    Admin->>Nextcloud: change quota
+    Admin->>User: notification via email
+    deactivate Keycloak
+    deactivate Keycloak
+    deactivate Permaplant
+    deactivate Nextcloud
 ```
 
 ## Season
@@ -27,7 +69,7 @@ sequenceDiagram
     User->>App: planning of landscape
     User->>App: planning of plants
     App->>-User: list of needed seeds
-    User->World: get missing seeds
+    World->>User: get missing seeds
     User->>World: raise plants indoor (vorziehen)
     User->>App: set batch as raised
 
@@ -41,7 +83,7 @@ sequenceDiagram
 
     end
 
-    User->World: harvest and remove plants
+    World->>User: harvest and remove plants
     deactivate World
     User->>App: set plants as harvested or removed
     World->>User: seeds for next year

@@ -263,7 +263,7 @@ pub struct LayerSearchParameters {
     pub map_id: Option<i32>,
     /// The type of layer.
     pub type_: Option<LayerType>,
-    /// Wheter or not the layer is an alternative.
+    /// Whether or not the layer is an alternative.
     pub is_alternative: Option<bool>,
 }
 

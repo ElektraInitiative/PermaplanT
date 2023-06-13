@@ -20,6 +20,7 @@ use crate::{model::dto::NewLayerDto, service::layer};
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/layers",
     params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
         LayerSearchParameters,
         PageParameters
     ),
@@ -51,6 +52,9 @@ pub async fn find(
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/layers",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
     responses(
         (status = 200, description = "Fetch layer by id", body = LayerDto)
     ),
@@ -74,6 +78,9 @@ pub async fn find_by_id(
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/layers",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
     request_body = NewLayerDto,
     responses(
         (status = 201, description = "Create a plant layer", body = LayerDto)
@@ -97,6 +104,9 @@ pub async fn create(
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/layers",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
     responses(
         (status = 200, description = "Delete a layer")
     ),
