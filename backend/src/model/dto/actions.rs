@@ -36,6 +36,7 @@ pub enum Action {
 pub struct CreatePlantActionPayload {
     user_id: Uuid,
     id: Uuid,
+    layer_id: i32,
     plant_id: i32,
     x: i32,
     y: i32,
@@ -52,6 +53,7 @@ impl CreatePlantActionPayload {
         Self {
             user_id,
             id: payload.id,
+            layer_id: payload.layer_id,
             plant_id: payload.plant_id,
             x: payload.x,
             y: payload.y,

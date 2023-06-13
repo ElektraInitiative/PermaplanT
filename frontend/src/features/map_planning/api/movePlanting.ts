@@ -1,10 +1,10 @@
-import { PlantingDto, UpdatePlantingDto } from '@/bindings/definitions';
+import { MovePlantingDto, PlantingDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 
 export const movePlanting = async (
   mapId: number,
   id: string,
-  planting: Required<Pick<UpdatePlantingDto, 'map_id' | 'x' | 'y'>>,
+  planting: Required<Pick<MovePlantingDto, 'x' | 'y'>>,
 ): Promise<PlantingDto> => {
   const http = createAPI();
 

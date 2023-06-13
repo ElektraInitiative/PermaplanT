@@ -43,8 +43,10 @@ pub struct NewPlantingDto {
     /// The id of the planting.
     pub id: Option<Uuid>,
     /// The plant layer the plantings is on.
+    #[serde(rename = "layerId")]
     pub layer_id: i32,
     /// The plant that is planted.
+    #[serde(rename = "plantId")]
     pub plant_id: i32,
     /// The x coordinate of the position on the map.
     pub x: i32,
