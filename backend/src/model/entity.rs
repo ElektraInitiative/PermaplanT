@@ -11,6 +11,7 @@ use chrono::NaiveDateTime;
 use diesel::QueryableByName;
 use diesel::{Identifiable, Insertable, Queryable};
 use postgis_diesel::types::Point;
+use uuid::Uuid;
 
 use crate::schema::{layers, maps, plants, seeds};
 
@@ -721,7 +722,7 @@ pub struct Map {
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Point>,
     /// The id of the owner of the map.
-    pub owner_id: String,
+    pub owner_id: Uuid,
 }
 
 /// The `NewMap` entity.
@@ -753,7 +754,7 @@ pub struct NewMap {
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Point>,
     /// The id of the owner of the map.
-    pub owner_id: String,
+    pub owner_id: Uuid,
 }
 
 /// The `Layer` entity.

@@ -32,7 +32,7 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::new_v4().to_string()),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
                 ),(
                     &crate::schema::maps::id.eq(-2),
                     &crate::schema::maps::name.eq("Other"),
@@ -44,7 +44,7 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::new_v4().to_string()),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
                 )])
                 .execute(conn)
                 .await?;
@@ -100,7 +100,7 @@ async fn test_can_find_map_by_id() {
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::new_v4().to_string()),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
                 ))
                 .execute(conn)
                 .await?;

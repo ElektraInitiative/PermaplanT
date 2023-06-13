@@ -60,7 +60,7 @@ impl Map {
             query = query.filter(privacy.eq(privacy_search));
         }
         if let Some(owner_id_search) = search_parameters.owner_id {
-            query = query.filter(owner_id.eq(owner_id_search.to_string()));
+            query = query.filter(owner_id.eq(owner_id_search));
         }
 
         let query = query

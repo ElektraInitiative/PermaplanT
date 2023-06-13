@@ -1,7 +1,5 @@
 //! Contains the implementation of [`MapDto`].
 
-use uuid::Uuid;
-
 use crate::model::entity::Map;
 
 use super::MapDto;
@@ -22,7 +20,7 @@ impl From<Map> for MapDto {
             privacy: map.privacy,
             description: map.description,
             location: map.location.map(From::from),
-            owner_id: Uuid::try_parse(&map.owner_id).expect("Could not parse owner id"),
+            owner_id: map.owner_id,
         }
     }
 }

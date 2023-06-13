@@ -37,6 +37,7 @@ diesel = { version = "2.0.2", features = [
     "postgres",
     "chrono",
     "128-column-tables",
+    "uuid",
 ] }
 diesel-async = { version = "0.2.2", features = ["deadpool", "postgres"] }
 diesel-derive-enum = { version = "2.0.0-rc.0", features = ["postgres"] }
