@@ -9,7 +9,7 @@ use uuid::Uuid;
 use crate::model::dto::plantings::{
     NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
 };
-use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
+use crate::model::entity::plantings::{Planting, UpdatePlanting};
 use crate::schema::plantings::{self, all_columns, layer_id, plant_id};
 
 impl Planting {
@@ -45,10 +45,10 @@ impl Planting {
     /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn create(
-        new_layer: NewPlantingDto,
+        dto: NewPlantingDto,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<PlantingDto> {
-        let new_layer = NewPlanting::from(new_layer);
+        let new_layer = Planting::from(dto);
         let query = diesel::insert_into(plantings::table).values(&new_layer);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
@@ -60,10 +60,10 @@ impl Planting {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn update(
         planting_id: Uuid,
-        new_layer: UpdatePlantingDto,
+        dto: UpdatePlantingDto,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<PlantingDto> {
-        let new_layer = UpdatePlanting::from(new_layer);
+        let new_layer = UpdatePlanting::from(dto);
         let query = diesel::update(plantings::table.find(planting_id)).set(&new_layer);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)

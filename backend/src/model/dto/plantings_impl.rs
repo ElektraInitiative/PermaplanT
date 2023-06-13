@@ -2,7 +2,7 @@
 
 use uuid::Uuid;
 
-use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
+use crate::model::entity::plantings::{Planting, UpdatePlanting};
 
 use super::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
 
@@ -23,10 +23,10 @@ impl From<Planting> for PlantingDto {
     }
 }
 
-impl From<NewPlantingDto> for NewPlanting {
+impl From<NewPlantingDto> for Planting {
     fn from(dto: NewPlantingDto) -> Self {
         Self {
-            id: dto.id.unwrap_or_else(|| Uuid::new_v4()),
+            id: dto.id.unwrap_or_else(Uuid::new_v4),
             plant_id: dto.plant_id,
             layer_id: dto.layer_id,
             x: dto.x,

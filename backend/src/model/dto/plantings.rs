@@ -10,7 +10,7 @@ use uuid::Uuid;
 #[typeshare]
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 pub struct PlantingDto {
-    /// The database id of the record.
+    /// The id of the planting.
     pub id: Uuid,
     /// The plant layer the plantings is on.
     #[serde(rename = "layerId")]

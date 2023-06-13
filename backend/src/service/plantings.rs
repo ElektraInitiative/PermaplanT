@@ -28,11 +28,11 @@ pub async fn find(
 /// # Errors
 /// If the connection to the database could not be established.
 pub async fn create(
-    new_seed: NewPlantingDto,
+    dto: NewPlantingDto,
     app_data: &Data<AppDataInner>,
 ) -> Result<PlantingDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Planting::create(new_seed, &mut conn).await?;
+    let result = Planting::create(dto, &mut conn).await?;
     Ok(result)
 }
 
@@ -42,11 +42,11 @@ pub async fn create(
 /// If the connection to the database could not be established.
 pub async fn update(
     id: Uuid,
-    new_seed: UpdatePlantingDto,
+    dto: UpdatePlantingDto,
     app_data: &Data<AppDataInner>,
 ) -> Result<PlantingDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Planting::update(id, new_seed, &mut conn).await?;
+    let result = Planting::update(id, dto, &mut conn).await?;
     Ok(result)
 }
 
