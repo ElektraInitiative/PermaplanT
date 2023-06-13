@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User imports a picture to use as a background.
-- **Status:** Merge Pending
+- **Status:** In Progress
 - **Assignee:** Moritz
 
 ## Scenarios
@@ -15,9 +15,11 @@
   - User has opened the app and selected the base layer.
   - The user has an orthophoto or site plan and knows the real length of a flat part of the orthophoto (e.g. length of house's roof).
 - **Main success scenario:**
-  - User successfully imports an orthophoto or site plan to be used as a background by selecting the option to import a picture or by providing an image URL.
-  - The user draws a polygon telling the app where the borders of this image are.
-  - Georeferencing: The user tells real lengths of lines (on flat land) so that we know how big this image in reality is (see use case "measuring distance").
+  - User successfully imports an orthophoto or site plan to be used as a background by selecting the option to
+    - import a picture to Nextcloud or
+    - by choosing an image from Nextcloud.
+  - The user draws a polygon telling the app where the borders of this image are (these boarders are stored in the map and not subjective to "alternatives").
+  - Georeferencing (of polygon): The user tells real lengths of lines (on flat land) so that we know how big this image in reality is (see use case "measuring distance").
   - The user chooses an orientation of the picture, i.e., rotate the image to where north is.
   - The user chooses where north related to the screen is by rotating an north arrow (this rotates the image and the polygon together).
 - **Alternative scenarios:**
@@ -39,5 +41,5 @@
 - **Postcondition:** The user's selected background image and borders are used for further planning.
 - **Non-functional Constraints:**
   - Support for multiple image formats
-  - Supports alternatives, see Alternative scenario 1 (but alternatives is **not supported** for Alternative scenario 3.)
+  - Supports alternatives, see Alternative scenario 1 (but alternatives is **not supported** for border polygon/georeferencing and Alternative scenario 3.)
   - Support for undo for most changes but not for Alternative scenario 3.

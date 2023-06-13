@@ -25,7 +25,7 @@ The endpoint paths use:
 
 ## Parameters
 
-- Search should have its own endpoint (no parameter needed)
+- Search should have its own endpoint and parameter should be `name`
 - We use the parameter `page` and `per_page` (type integer) for pagination.
 - Currently we don't use filtering or sorting.
 - If in doubt, leave it out: keep parameters minimal.
