@@ -19,7 +19,7 @@
   - The user can read imprint (Impressum)
   - The user can read about privacy (Datenschutz)
   - The user can read about copyright
-  - The user can read latest news and get an RSS/Atom feed of it
+  - The user can read latest [news and get an RSS/Atom feed of it](landing_page_news.md)
   - The user can login
 - **Alternative scenario:**
 - **Error scenario:**
