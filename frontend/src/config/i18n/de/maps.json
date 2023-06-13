@@ -20,6 +20,8 @@
         "protected": "geschützt",
         "protected_info": "Die Karte ist geschützt und nur für dich und andere PermaplanT Mitglieder sichtbar",
         "public": "öffentlich",
-        "public_info": "Die Karte ist öffentlich und für jeden sichtbar"
+        "public_info": "Die Karte ist öffentlich und für jeden sichtbar",
+        "location_button": "Wähle Standort",
+        "location_button_hint": "Durch Klick wird die externe Ressource openstreetmap.org geladen."
     }
 }

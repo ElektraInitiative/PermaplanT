@@ -31,6 +31,7 @@ export default function MapCreateForm() {
 
   const { t } = useTranslation(['maps']);
   const [missingName, setMissingName] = useState(false);
+  const [mapVisible, setMapVisible] = useState(false);
   const [mapInput, setMapInput] = useState(initialData);
   const navigate = useNavigate();
 
@@ -54,6 +55,30 @@ export default function MapCreateForm() {
     <p className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-center text-sm font-medium dark:border-neutral-400-dark dark:bg-neutral-50-dark">
       {t(`maps:create.${mapInput.privacy}_info`)}
     </p>
+  );
+
+  const locationPicker = (
+    <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
+      <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MapEventListener mapState={mapInput} setMapState={setMapInput} />
+      </MapContainer>
+    </div>
+  );
+
+  const locactionPickerPlaceholder = (
+    <div className="mb-12 flex justify-center">
+      <SimpleButton
+        title={t('maps:create.location_button_hint')}
+        onClick={() => setMapVisible(true)}
+        className="w-1/4"
+      >
+        {t('maps:create.location_button')}
+      </SimpleButton>
+    </div>
   );
 
   async function onSubmit() {
@@ -121,15 +146,8 @@ export default function MapCreateForm() {
         style={{ colorScheme: 'dark' }}
         placeholder={t('maps:create.description_placeholer')}
       />
-      <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
-        <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <MapEventListener mapState={mapInput} setMapState={setMapInput} />
-        </MapContainer>
-      </div>
+      {mapVisible && locationPicker}
+      {!mapVisible && locactionPickerPlaceholder}
       <div className="space-between flex flex-row justify-center space-x-8">
         <SimpleButton
           onClick={onCancel}
