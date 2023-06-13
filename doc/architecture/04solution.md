@@ -7,27 +7,62 @@ PermaplanT has a classical frontend/backend architecture:
 
 ## Type Safety
 
-Types are shared whenever possible:
+We use specific types (prefer enum over int over string etc.) and share types whenever possible:
 
-- `Diesel` is used to share types between the database and backend code
-- `typeshare` is used to share types between Rust, API and Typescript
+- [Diesel](https://diesel.rs/) is used to share types between the database and backend code.
+  We use type-safe queries (and not raw queries), whenever possible.
+- [typeshare](https://crates.io/crates/typeshare) is used to share types between Rust, API and Typescript.
+
+## Validation
+
+- The frontend should validate data as early as possible, usually during input using [React Hook Form](https://react-hook-form.com/).
+- Important data should be also validated in the backend.
+  Type validation is done by actix web, but some constraints could be bypassed by just validating in the frontend.
+  For example, payment data or data associated with gamification achievements.
 
 ## State
 
-- The backend is state-less, all state is in the database or in the token.
-- The frontend has structured state per layer.
+- Both frontend and database contain the latest and complete state.
+- The backend is state-less, all state is in the database or in the auth token.
+- The frontends map editor has structured state per layer.
+
+[See also frontend state management](../decisions/frontend_state_management.md) for which libraries are being used.
 
 ## Concurrent Use
 
 The user wants to see changes that other users are making on the map, therefore the data needs to be kept in sync.
-The data is kept in sync between the client and the server through API calls and server-sent events (SSE).
+The data is kept in sync between the client and the server through [API calls with axios](https://www.npmjs.com/package/axios) and server-sent events (SSE).
 This means the backend is always up to date with the users actions and users can see what others are doing.
 
-- Data must be immediately send asynchronously to the backend on any user action.
+- Data must be sent immediately and asynchronously to the backend after any user action.
 - Calculations in the backend can always assume that database is up-to-date.
 - No timestamps are needed for data consistency.
-- No conflict handling in the frontend.
+- There is no conflict handling in the frontend.
 - If a user loses the connection, the frontend must go into a read-only state.
+- We use uuid to identify elements on the map.
+
+### Actions
+
+Actions are minimal, encapsulated state changes from elements on the layer of a map.
+Such actions are used to:
+
+1. describe user actions in the frontend (undo/redo, see later)
+2. describe transport of 1. to the backend (via PATCH API calls)
+3. describe transport of 1. back to other frontends (via SSE)
+
+### SSE
+
+For SSE, browsers first request an event-source via the endpoint /api/updates/maps.
+Then the backend sends all updates of a map to all users connected to the maps.
+To do so, all API calls in the backend must notify the broadcaster.
+
+The broadcaster lives in AppDataInner, which is available in request handler via dependency injection in the request context.
+So every controller related to map endpoints must must use AppDataInner.
+At the end of every request handler, you need to have a statement like:
+
+`app_data.broadcaster.broadcast(map_id, action)`
+
+> Note that login data is implemented differently.
 
 ### Undo & Redo
 
@@ -86,3 +121,22 @@ While the lock is active, other users see these layers read-only.
 Upon coming back online the changes made are synchronized and the lock is released.
 
 See also [offline use case](../usecases/assigned/offline.md).
+
+## Identity and Access Management
+
+Only the landing page can be seen without registration.
+We use [Keycloak](https://www.keycloak.org/) for Identity and Access Management with 3 roles:
+
+1. default-roles-permaplant (only [public maps and the membership application](../usecases/current/membership_application.md) can be visited)
+2. member (can do everything but administration tasks)
+3. admin (possibility to change data from other users, as needed for onboarding or offboarding)
+
+## Privacy
+
+In general all data must stay within the organisation (Verein).
+Members see other members' data only if they allowed it.
+Data which makes a person identifiable should be in Keycloak.
+The only exceptions are:
+
+- bank account and billing address, which gets completely removed from the server (for security reasons)
+- public maps are visible to non-members but most meta-data won't be shown and the location gets obfuscated
