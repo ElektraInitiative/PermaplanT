@@ -50,7 +50,7 @@ Such actions are used to:
 2. describe transport of 1. to the backend (via PATCH API calls)
 3. describe transport of 1. back to other frontends (via SSE)
 
-### SEE
+### SSE
 
 For SSE, browsers first request an event-source via the endpoint /api/updates/maps.
 Then the backend sends all updates of a map to all users connected to the maps.
