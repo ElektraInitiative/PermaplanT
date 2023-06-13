@@ -1,6 +1,7 @@
 //! All entities associated with [`Planting`].
 
 use diesel::{AsChangeset, Identifiable, Insertable, Queryable};
+use uuid::Uuid;
 
 use crate::schema::plantings;
 
@@ -9,7 +10,7 @@ use crate::schema::plantings;
 #[diesel(table_name = plantings)]
 pub struct Planting {
     /// The database id of the record.
-    pub id: i32,
+    pub id: Uuid,
     /// The plant layer the plantings is on.
     pub layer_id: i32,
     /// The plant that is planted.
@@ -34,6 +35,8 @@ pub struct Planting {
 #[derive(Debug, Clone, Insertable)]
 #[diesel(table_name = plantings)]
 pub struct NewPlanting {
+    /// The id of the planting.
+    pub id: Uuid,
     /// The plant layer the plantings is on.
     pub layer_id: i32,
     /// The plant that is planted.

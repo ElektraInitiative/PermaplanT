@@ -5,6 +5,7 @@ use actix_web::{
     web::{Data, Json, Path, Query},
     HttpResponse, Result,
 };
+use uuid::Uuid;
 
 use crate::{config::auth::user_info::UserInfo, model::dto::actions::Action};
 use crate::{
@@ -94,7 +95,7 @@ pub async fn create(
 )]
 #[patch("/{planting_id}")]
 pub async fn update(
-    path: Path<(i32, i32)>,
+    path: Path<(i32, Uuid)>,
     new_plant_json: Json<UpdatePlantingDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
@@ -133,7 +134,7 @@ pub async fn update(
 )]
 #[delete("/{planting_id}")]
 pub async fn delete(
-    path: Path<(i32, i32)>,
+    path: Path<(i32, Uuid)>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {

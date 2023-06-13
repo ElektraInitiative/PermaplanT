@@ -1,6 +1,7 @@
 //! Service layer for plantings.
 
 use actix_web::web::Data;
+use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
 use crate::error::ServiceError;
@@ -40,7 +41,7 @@ pub async fn create(
 /// # Errors
 /// If the connection to the database could not be established.
 pub async fn update(
-    id: i32,
+    id: Uuid,
     new_seed: UpdatePlantingDto,
     app_data: &Data<AppDataInner>,
 ) -> Result<PlantingDto, ServiceError> {
@@ -53,7 +54,7 @@ pub async fn update(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn delete_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<(), ServiceError> {
+pub async fn delete_by_id(id: Uuid, app_data: &Data<AppDataInner>) -> Result<(), ServiceError> {
     let mut conn = app_data.pool.get().await?;
     let _ = Planting::delete_by_id(id, &mut conn).await?;
     Ok(())

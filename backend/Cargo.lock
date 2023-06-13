@@ -744,6 +744,7 @@ dependencies = [
  "diesel_derives",
  "itoa",
  "pq-sys",
+ "uuid",
 ]
 
 [[package]]
@@ -2646,6 +2647,7 @@ dependencies = [
  "quote",
  "regex",
  "syn 2.0.13",
+ "uuid",
 ]
 
 [[package]]

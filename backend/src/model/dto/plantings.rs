@@ -3,6 +3,7 @@
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
+use uuid::Uuid;
 
 /// Represents plant planted on a map.
 /// E.g. a user drags a plant from the search results and drops it on the map.
@@ -10,7 +11,7 @@ use utoipa::{IntoParams, ToSchema};
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 pub struct PlantingDto {
     /// The database id of the record.
-    pub id: i32,
+    pub id: Uuid,
     /// The plant layer the plantings is on.
     #[serde(rename = "layerId")]
     pub layer_id: i32,
@@ -39,6 +40,8 @@ pub struct PlantingDto {
 #[typeshare]
 #[derive(Debug, Clone, Default, Deserialize, ToSchema)]
 pub struct NewPlantingDto {
+    /// The id of the planting.
+    pub id: Option<Uuid>,
     /// The plant layer the plantings is on.
     pub layer_id: i32,
     /// The plant that is planted.

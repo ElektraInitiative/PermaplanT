@@ -1,5 +1,7 @@
 //! Contains the implementations related to [`PlantingDto`].
 
+use uuid::Uuid;
+
 use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
 
 use super::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
@@ -24,6 +26,7 @@ impl From<Planting> for PlantingDto {
 impl From<NewPlantingDto> for NewPlanting {
     fn from(dto: NewPlantingDto) -> Self {
         Self {
+            id: dto.id.unwrap_or_else(|| Uuid::new_v4()),
             plant_id: dto.plant_id,
             layer_id: dto.layer_id,
             x: dto.x,

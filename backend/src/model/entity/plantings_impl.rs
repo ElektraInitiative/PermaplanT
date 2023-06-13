@@ -4,6 +4,7 @@ use diesel::pg::Pg;
 use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
+use uuid::Uuid;
 
 use crate::model::dto::plantings::{
     NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
@@ -58,7 +59,7 @@ impl Planting {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn update(
-        planting_id: i32,
+        planting_id: Uuid,
         new_layer: UpdatePlantingDto,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<PlantingDto> {
@@ -72,7 +73,7 @@ impl Planting {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn delete_by_id(id: i32, conn: &mut AsyncPgConnection) -> QueryResult<usize> {
+    pub async fn delete_by_id(id: Uuid, conn: &mut AsyncPgConnection) -> QueryResult<usize> {
         let query = diesel::delete(plantings::table.find(id));
         debug!("{}", debug_query::<Pg, _>(&query));
         query.execute(conn).await

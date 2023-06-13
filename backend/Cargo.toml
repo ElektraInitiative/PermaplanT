@@ -23,7 +23,7 @@ actix-service = "2.0.2"
 actix-web-lab = "0.19.1"
 
 # API doc
-utoipa = { version = "3.1.1", features = ["actix_extras", "chrono"] }
+utoipa = { version = "3.1.1", features = ["actix_extras", "chrono", "uuid"] }
 utoipa-swagger-ui = { version = "3.1.1", features = ["actix-web"] }
 
 # Auth
@@ -37,6 +37,7 @@ diesel = { version = "2.0.2", features = [
     "postgres",
     "chrono",
     "128-column-tables",
+    "uuid",
 ] }
 diesel-async = { version = "0.2.2", features = ["deadpool", "postgres"] }
 diesel-derive-enum = { version = "2.0.0-rc.0", features = ["postgres"] }

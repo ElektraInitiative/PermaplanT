@@ -1,6 +1,6 @@
 -- Your SQL goes here
 CREATE TABLE plantings (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     layer_id INTEGER NOT NULL,
     plant_id INTEGER NOT NULL,
     x INTEGER NOT NULL,
