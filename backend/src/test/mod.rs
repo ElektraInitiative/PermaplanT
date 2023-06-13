@@ -7,5 +7,6 @@ mod config;
 mod map;
 mod pagination;
 mod plant;
+mod plantings;
 mod seed;
 pub mod util;
