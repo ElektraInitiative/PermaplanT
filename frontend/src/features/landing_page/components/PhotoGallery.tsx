@@ -5,9 +5,9 @@ import ImageModal from '@/components/Modals/ImageModal';
 import { getPublicImageList } from '@/features/nextcloud_integration/api/getImages';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { PublicNextcloudImage } from './PublicNextcloudImage';
 import { ReactComponent as ChevronRightIcon } from '@/icons/chevron-right.svg';
 import { ReactComponent as ChevronLeftIcon } from '@/icons/chevron-left.svg';
+import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 
 
 export const PhotoGallery = () => {
