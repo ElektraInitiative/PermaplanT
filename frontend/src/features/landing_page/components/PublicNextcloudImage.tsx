@@ -3,17 +3,22 @@ import { getPublicImage } from "@/features/nextcloud_integration/api/getImages";
 import { ImageBlob } from "@/features/nextcloud_integration/components/ImageBlob";
 import { useQuery } from "@tanstack/react-query";
 import { DetailedHTMLProps, ImgHTMLAttributes } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
-interface NextcloudImageProps extends DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
+interface PublicNextcloudImageProps extends DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
   // relative path starting at the public share directory to the image in Nextcloud
   path: string,
   // token which identifies the public share directory
   shareToken: string
 }
 
-export const NextcloudImage = (props: NextcloudImageProps) => {
+/**
+ * Component used for fetching and displaying images from Nextcloud public share directories
+*/
+export const PublicNextcloudImage = (props: PublicNextcloudImageProps) => {
   const { path, shareToken, ...imageProps } = props
+  const { t } = useTranslation(['nextcloudIntegration']);
 
   const { data: image, isLoading, isError } = useQuery({
     queryKey: ['image', path, shareToken] as const,
@@ -25,9 +30,9 @@ export const NextcloudImage = (props: NextcloudImageProps) => {
   }
 
   if( isError ){
-    //TODO: translation
-    toast.error("Sorry! Couldn't load image from Nextcloud. Please try again later")
-    return <div>Failed to load image.</div>
+    toast.error(t("nextcloudIntegration:load_image_failed"))
+    //TODO: return broken image icon
+    return <div></div>
   }
 
   return <ImageBlob
