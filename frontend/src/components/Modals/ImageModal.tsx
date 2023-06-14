@@ -43,9 +43,7 @@ export default function ImageModal({ title, body, setShow, show, onCancel }: Ima
               x
             </button>
           </div>
-          <div className="flex justify-center w-full h-full max-h-[60vh] p-4">
-            {body}
-          </div>
+          <div className="flex h-full max-h-[60vh] w-full justify-center p-4">{body}</div>
         </div>
       </ModalContainer>
     </>

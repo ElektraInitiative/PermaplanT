@@ -1,3 +1,4 @@
+import { NextcloudImage } from './NextcloudImage';
 import SimpleButton from '@/components/Button/SimpleButton';
 import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { useQuery } from '@tanstack/react-query';
@@ -5,7 +6,6 @@ import { useState } from 'react';
 import { ChangeEventHandler } from 'react';
 import { Readable } from 'stream';
 import { BufferLike } from 'webdav';
-import { NextcloudImage } from './NextcloudImage';
 
 /**
  * component used for testing different webdav api call
@@ -65,7 +65,7 @@ export const WebdavTest = () => {
                 className="cursor-pointer hover:text-primary-400"
                 key={file.filename}
                 // onClick={() => setImageName(file.filename.split('/').reverse()[0])}
-                onClick={() => setImageName("test.png")}
+                onClick={() => setImageName('test.png')}
               >
                 {file.filename}
               </li>
@@ -77,7 +77,7 @@ export const WebdavTest = () => {
       </SimpleButton>
       {/* display selected image */}
       <div className="w-64">
-        <NextcloudImage path={"/Photos/" + imageName}/>
+        <NextcloudImage path={'/Photos/' + imageName} />
       </div>
       {/* upload an image to path */}
       <div className="w-32">

@@ -9,12 +9,12 @@ import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import maps from './maps.json';
+import nextcloudIntegration from './nextcloudIntegration.json';
 import plantSearch from './plantSearch.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
-import nextcloudIntegration from './nextcloudIntegration.json'
 
 const en = {
   blog,
@@ -33,7 +33,7 @@ const en = {
   maps,
   undoRedo,
   auth,
-  nextcloudIntegration
+  nextcloudIntegration,
 };
 
 export default en;
