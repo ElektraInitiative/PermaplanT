@@ -4,6 +4,8 @@ import Konva from 'konva';
 import { useRef } from 'react';
 import { Layer, Image } from 'react-konva';
 import { FileStat, ResponseDataDetailed, WebDAVClient } from 'webdav';
+import {toast} from "react-toastify";
+import {useTranslation} from "react-i18next";
 
 interface BaseLayerProps extends Konva.LayerConfig {
   /**
@@ -47,6 +49,8 @@ const BaseLayer = ({
   pixelsPerMeter,
   rotation,
 }: BaseLayerProps) => {
+  const { t } = useTranslation(['baseLayer']);
+
   // It shouldn't matter whether the image path starts with a slash or not.
   let cleanImagePath = nextcloudImagePath;
   if (cleanImagePath.startsWith('/')) {
@@ -68,7 +72,26 @@ const BaseLayer = ({
   const imageData = useQuery(['files', imageURLPath], () =>
     nextcloudClient.getFileContents(imageURLPath),
   );
-  if (!checkFileIsImage(fileStat) || imageData.data == undefined) return <Layer></Layer>;
+
+  if (imageData.isLoading) {
+    return <Layer></Layer>;
+  }
+
+  if (imageData.isError) {
+    console.log('Data undefined.', nextcloudImagePath);
+    if (nextcloudImagePath != '')
+      toast.error(t('baseLayer:loadingFailed'));
+    return <Layer></Layer>;
+  }
+
+  if (!checkFileIsImage(fileStat)) {
+    console.log('Not an image', nextcloudImagePath);
+    if (nextcloudImagePath != '')
+      toast.error(t('baseLayer:notAnImage'));
+    return <Layer></Layer>;
+  }
+
+
 
   const image = new window.Image();
   image.src = URL.createObjectURL(new Blob([imageData.data as BlobPart]));

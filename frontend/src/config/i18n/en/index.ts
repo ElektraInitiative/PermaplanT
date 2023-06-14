@@ -1,4 +1,5 @@
 import auth from './auth.json';
+import baseLayer from "./baseLayer.json";
 import baseLayerForm from './baseLayerForm.json';
 import blog from './blog.json';
 import common from './common.json';
@@ -19,6 +20,7 @@ import team from './team.json';
 import undoRedo from './undoRedo.json';
 
 const en = {
+  baseLayer,
   baseLayerForm,
   blog,
   common,
