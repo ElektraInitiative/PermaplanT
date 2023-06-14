@@ -1,6 +1,6 @@
 import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 
-interface ImageBlobProps {
+interface ImageBlobProps extends DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
   /** The blob that will be rendered as an image */
   image: Blob;
 }
@@ -9,7 +9,7 @@ interface ImageBlobProps {
  * render an image from a data Blob
  */
 export const ImageBlob = (
-  props: ImageBlobProps & DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
+  props: ImageBlobProps,
 ) => {
   const { image, ...imageProps } = props;
   const url = URL.createObjectURL(image);
