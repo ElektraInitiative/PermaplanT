@@ -6,6 +6,8 @@ import { getPublicImageList } from '@/features/nextcloud_integration/api/getImag
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { NextcloudImage } from './NextcloudImage';
+import { ReactComponent as ChevronRightIcon } from '@/icons/chevron-right.svg';
+import { ReactComponent as ChevronLeftIcon } from '@/icons/chevron-left.svg';
 
 
 export const PhotoGallery = () => {
@@ -69,12 +71,20 @@ export const PhotoGallery = () => {
       <ImageModal
         title="Image"
         body={
-          <div>
+          <div className="w-full flex justify-between items-center">
+            <IconButton className='m-4' onClick={() => setSelectedImage((selectedImage - 1) % (imagePaths?.length ? imagePaths?.length : 1))}>
+              <ChevronLeftIcon />
+            </IconButton>
             {
               imagePaths ?
-                <NextcloudImage path={imagePaths[selectedImage]} shareToken={galleryShareToken} className="object-contain" />
+                <div className='h-full w-full'>
+                  <NextcloudImage path={imagePaths[selectedImage]} shareToken={galleryShareToken} className="h-full w-full object-contain" />
+                </div>
                 : <div>Could not load image.</div>
             }
+            <IconButton className='m-4' onClick={() => setSelectedImage((selectedImage + 1) % (imagePaths?.length ? imagePaths?.length : 1))}>
+              <ChevronRightIcon />
+            </IconButton>
           </div>
         }
         setShow={setShowModal}
