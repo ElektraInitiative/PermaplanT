@@ -1,8 +1,6 @@
 //! Service layer for plants.
 
 use actix_web::web::Data;
-use chrono::Datelike;
-use uuid::uuid;
 use uuid::Uuid;
 
 use super::util::HalfMonthBucket;
