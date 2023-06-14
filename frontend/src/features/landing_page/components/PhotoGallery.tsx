@@ -1,40 +1,20 @@
+import IconButton from '@/components/Button/IconButton';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import '@/components/Modals/ImageModal';
 import ImageModal from '@/components/Modals/ImageModal';
-import { getPublicFileList, getPublicImage } from '@/features/nextcloud_integration/api/getImages';
-import { ImageBlob } from '@/features/nextcloud_integration/components/ImageBlob';
+import { getPublicImageList } from '@/features/nextcloud_integration/api/getImages';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { NextcloudImage } from './NextcloudImage';
 
-async function getPublicImages(imagePaths: Array<string>, publicShareToken: string) {
-  return imagePaths.map((path) => getPublicImage(path, publicShareToken))
-}
-
-function getImagesFromFileList(files: Array<string>) {
-  return files.filter((file) => {
-    // check file extension
-    const parts = file.split('.');
-    const extension = parts[parts.length - 1];
-    return ['png', 'jpg', 'jpeg', 'svg'].includes(extension);
-  });
-}
 
 export const PhotoGallery = () => {
   // Nextcloud public share token for the gallery
   // used to fetch ressources from 'https://cloud.permaplant.net/s/qo6mZwPg6kFTmmj'
   const galleryShareToken = 'qo6mZwPg6kFTmmj';
-  const { data: files } = useQuery(['files', galleryShareToken], () =>
-    getPublicFileList(galleryShareToken),
+  const { data: imagePaths } = useQuery(['imagePaths', galleryShareToken], () =>
+    getPublicImageList(galleryShareToken),
   );
-
-  // filter images from all files
-  const imagePaths = files ? getImagesFromFileList(files) : [];
-
-  const { data: images, isLoading: imagesLoading } = useQuery({
-    queryKey: ['images', imagePaths, galleryShareToken] as const,
-    queryFn: ({ queryKey: [_images, imagePaths, token]  }) => getPublicImages(imagePaths, token),
-    enabled: !!imagePaths,
-  });
 
   const [selectedImage, setSelectedImage] = useState(NaN);
   const [imageSize, setImageSize] = useState('small');
@@ -88,13 +68,14 @@ export const PhotoGallery = () => {
     <div>
       <ImageModal
         title="Image"
-        // body={<img src={imageUrls[selectedImage]} />}
         body={
-          imagesLoading ? (
-            <div>Loading...</div>
-          ) : (
-            images && <ImageBlob image={images[selectedImage]} />
-          )
+          <div>
+            {
+              imagePaths ?
+                <NextcloudImage path={imagePaths[selectedImage]} shareToken={galleryShareToken} className="object-contain" />
+                : <div>Could not load image.</div>
+            }
+          </div>
         }
         setShow={setShowModal}
         show={showModal}
@@ -135,7 +116,7 @@ export const PhotoGallery = () => {
         className={gridClasses}
         style={{ ...getAutoRows(imageSize), ...getGridCols(imageSize) }}
       >
-        {images?.map((image, index) => {
+        {imagePaths?.map((imagePath, index) => {
           const className =
             'w-full h-full bg-neutral-100 dark:bg-neutral-200-dark hover:bg-neutral-300 dark:hover:bg-neutral-400-dark hover:cursor-pointer rounded' +
             getItemSize(index);
@@ -148,10 +129,9 @@ export const PhotoGallery = () => {
                 setShowModal(true);
               }}
             >
-              <ImageBlob
+              <NextcloudImage path={imagePath} shareToken={galleryShareToken}
                 className="h-full w-full rounded bg-neutral-100 object-cover dark:bg-neutral-300-dark"
-                image={image}
-              ></ImageBlob>
+              />
             </div>
           );
         })}

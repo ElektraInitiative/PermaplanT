@@ -33,7 +33,7 @@ export default function ImageModal({ title, body, setShow, show, onCancel }: Ima
         show={show}
       />
       <ModalContainer show={show}>
-        <div className="flex h-full min-h-[40vh] w-full min-w-[40vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+        <div className="flex h-[70vh] w-[80vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <div className="flex justify-between">
             <h2>{title}</h2>
             <button
@@ -43,7 +43,9 @@ export default function ImageModal({ title, body, setShow, show, onCancel }: Ima
               x
             </button>
           </div>
-          <div className="flex justify-center">{body}</div>
+          <div className="flex justify-center w-full h-full max-h-[60vh] p-4">
+            {body}
+          </div>
         </div>
       </ModalContainer>
     </>

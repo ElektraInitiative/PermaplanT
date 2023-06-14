@@ -31,7 +31,7 @@ export const getImageList = async (path: string): Promise<Array<string>> => {
 /**
  * get list of available images at the public share path from Nextcloud
  */
-export const getPublicFileList = async (publicShareToken: string): Promise<Array<string>> => {
+export const getPublicImageList = async (publicShareToken: string): Promise<Array<string>> => {
   const username = publicShareToken;
   const password = publicShareToken;
   try {
@@ -44,11 +44,21 @@ export const getPublicFileList = async (publicShareToken: string): Promise<Array
     });
     const parser = new DOMParser();
     const doc = parser.parseFromString(response.data, 'application/xml');
-    const imageUrls: Array<string> = [];
-    doc.documentElement.childNodes.forEach((value) => {
-      imageUrls.push(value.childNodes[0].childNodes[0].nodeValue ?? '');
-    });
-    return imageUrls;
+
+
+    const nsResolver = doc.createNSResolver(doc.documentElement);
+
+    const result = doc.evaluate('//d:response[d:propstat/d:prop/d:getcontenttype[contains(text(), "image")]]/d:href/text()', doc, nsResolver, XPathResult.ANY_TYPE, null);
+
+    const urls = [];
+    let node = null;
+    while ((node = result.iterateNext())) {
+      urls.push(node.data);
+    }
+
+    console.log(urls)
+
+    return urls
   } catch (error) {
     throw error as Error;
   }
@@ -75,7 +85,7 @@ export const getPublicImage = async (imageUrl: string, publicShareToken: string)
   }
 };
 
-// NOTE: Leaving this for now as it could be useful as an exmample
+// NOTE: Leaving this for now as it could be useful as an example
 // when fetching ressources from other parts of Nextcloud
 /**
  * @deprecated This is done by the webdav lib now
