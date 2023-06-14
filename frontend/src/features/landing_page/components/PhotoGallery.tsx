@@ -5,7 +5,7 @@ import ImageModal from '@/components/Modals/ImageModal';
 import { getPublicImageList } from '@/features/nextcloud_integration/api/getImages';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { NextcloudImage } from './NextcloudImage';
+import { PublicNextcloudImage } from './PublicNextcloudImage';
 import { ReactComponent as ChevronRightIcon } from '@/icons/chevron-right.svg';
 import { ReactComponent as ChevronLeftIcon } from '@/icons/chevron-left.svg';
 
@@ -78,7 +78,7 @@ export const PhotoGallery = () => {
             {
               imagePaths ?
                 <div className='h-full w-full'>
-                  <NextcloudImage path={imagePaths[selectedImage]} shareToken={galleryShareToken} className="h-full w-full object-contain" />
+                  <PublicNextcloudImage path={imagePaths[selectedImage]} shareToken={galleryShareToken} className="h-full w-full object-contain" />
                 </div>
                 : <div>Could not load image.</div>
             }
@@ -139,7 +139,7 @@ export const PhotoGallery = () => {
                 setShowModal(true);
               }}
             >
-              <NextcloudImage path={imagePath} shareToken={galleryShareToken}
+              <PublicNextcloudImage path={imagePath} shareToken={galleryShareToken}
                 className="h-full w-full rounded bg-neutral-100 object-cover dark:bg-neutral-300-dark"
               />
             </div>
