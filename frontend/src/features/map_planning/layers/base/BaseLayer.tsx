@@ -2,10 +2,10 @@ import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import Konva from 'konva';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Layer, Image } from 'react-konva';
+import { toast } from 'react-toastify';
 import { FileStat, ResponseDataDetailed, WebDAVClient } from 'webdav';
-import {toast} from "react-toastify";
-import {useTranslation} from "react-i18next";
 
 interface BaseLayerProps extends Konva.LayerConfig {
   /**
@@ -79,19 +79,15 @@ const BaseLayer = ({
 
   if (imageData.isError) {
     console.log('Data undefined.', nextcloudImagePath);
-    if (nextcloudImagePath != '')
-      toast.error(t('baseLayer:loadingFailed'));
+    if (nextcloudImagePath != '') toast.error(t('baseLayer:loadingFailed'));
     return <Layer></Layer>;
   }
 
   if (!checkFileIsImage(fileStat)) {
     console.log('Not an image', nextcloudImagePath);
-    if (nextcloudImagePath != '')
-      toast.error(t('baseLayer:notAnImage'));
+    if (nextcloudImagePath != '') toast.error(t('baseLayer:notAnImage'));
     return <Layer></Layer>;
   }
-
-
 
   const image = new window.Image();
   image.src = URL.createObjectURL(new Blob([imageData.data as BlobPart]));

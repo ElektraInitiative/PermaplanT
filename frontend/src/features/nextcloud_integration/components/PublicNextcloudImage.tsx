@@ -27,7 +27,7 @@ export const PublicNextcloudImage = (props: PublicNextcloudImageProps) => {
     isError,
   } = useQuery({
     queryKey: ['image', path, shareToken] as const,
-    queryFn: ({ queryKey: [_image, path, token] }) => getPublicImage(path, token),
+    queryFn: ({ queryKey: [path, token] }) => getPublicImage(path, token),
   });
 
   if (isLoading) {
