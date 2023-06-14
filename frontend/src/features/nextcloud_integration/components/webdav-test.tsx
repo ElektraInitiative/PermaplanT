@@ -1,4 +1,4 @@
-import { ImageBlob } from './ImageBlob';
+import { NextcloudImage } from './NextcloudImage';
 import SimpleButton from '@/components/Button/SimpleButton';
 import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { useQuery } from '@tanstack/react-query';
@@ -22,7 +22,7 @@ export const WebdavTest = () => {
   const webdav = createNextcloudWebDavClient();
 
   const files = useQuery(['files', path], () => webdav.getDirectoryContents(path));
-  const image = useQuery(['files', imageName], () => webdav.getFileContents(imageName));
+  // const files = {data: ["test.png"]}
 
   /**
    * load image from device
@@ -64,7 +64,8 @@ export const WebdavTest = () => {
               <li
                 className="cursor-pointer hover:text-primary-400"
                 key={file.filename}
-                onClick={() => setImageName(file.filename)}
+                // onClick={() => setImageName(file.filename.split('/').reverse()[0])}
+                onClick={() => setImageName('test.png')}
               >
                 {file.filename}
               </li>
@@ -76,7 +77,7 @@ export const WebdavTest = () => {
       </SimpleButton>
       {/* display selected image */}
       <div className="w-64">
-        <ImageBlob image={new Blob([image?.data as BlobPart])} />
+        <NextcloudImage path={'/Photos/' + imageName} />
       </div>
       {/* upload an image to path */}
       <div className="w-32">

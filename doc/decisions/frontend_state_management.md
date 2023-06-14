@@ -49,7 +49,7 @@ Its simplicity also reduces the amount of boilerplate code and the need for comp
 
 ### Server State
 
-[React Query](https://react-query-v3.tanstack.com/) will be used for managing asynchronous state.
+[TanStack React Query v4](https://www.npmjs.com/package/@tanstack/react-query) will be used for managing asynchronous state.
 
 React Query is a feature rich, up-to-date library for managing asynchronous data.
 
