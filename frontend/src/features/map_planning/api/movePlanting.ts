@@ -1,4 +1,4 @@
-import { MovePlantingDto, PlantingDto } from '@/bindings/definitions';
+import { MovePlantingDto, PlantingDto, UpdatePlantingDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 
 export const movePlanting = async (
@@ -8,8 +8,13 @@ export const movePlanting = async (
 ): Promise<PlantingDto> => {
   const http = createAPI();
 
+  const dto: UpdatePlantingDto = {
+    type: 'Move',
+    content: planting,
+  };
+
   try {
-    const response = await http.patch(`api/maps/${mapId}/layers/plants/plantings/${id}`, planting);
+    const response = await http.patch(`api/maps/${mapId}/layers/plants/plantings/${id}`, dto);
     return response.data;
   } catch (error) {
     throw error as Error;

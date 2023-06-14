@@ -48,8 +48,8 @@ impl Planting {
         dto: NewPlantingDto,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<PlantingDto> {
-        let new_layer = Self::from(dto);
-        let query = diesel::insert_into(plantings::table).values(&new_layer);
+        let planting = Self::from(dto);
+        let query = diesel::insert_into(plantings::table).values(&planting);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
     }
@@ -63,8 +63,8 @@ impl Planting {
         dto: UpdatePlantingDto,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<PlantingDto> {
-        let new_layer = UpdatePlanting::from(dto);
-        let query = diesel::update(plantings::table.find(planting_id)).set(&new_layer);
+        let planting = UpdatePlanting::from(dto);
+        let query = diesel::update(plantings::table.find(planting_id)).set(&planting);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
     }
