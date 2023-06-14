@@ -75,7 +75,7 @@ async fn test_find_only_available_plants() {
     let (token, app) = init_test_app_for_user(pool, user_id).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/1/layers/plants/suggestions?relative_to_date=2023-01-01")
+        .uri("/api/maps/1/layers/plants/suggestions?suggestion_type=available&relative_to_date=2023-01-01")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -162,7 +162,7 @@ async fn test_find_only_available_seasonal_plants() {
     let (token, app) = init_test_app_for_user(pool, user_id).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/1/layers/plants/suggestions?relative_to_date=2023-04-01")
+        .uri("/api/maps/1/layers/plants/suggestions?suggestion_type=available&relative_to_date=2023-04-01")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
