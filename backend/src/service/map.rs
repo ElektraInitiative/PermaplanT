@@ -1,6 +1,7 @@
 //! Service layer for maps.
 
 use actix_web::web::Data;
+use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
 use crate::model::dto::{MapSearchParameters, Page};
@@ -48,10 +49,11 @@ pub async fn find_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<MapDto
 /// If the connection to the database could not be established.
 pub async fn create(
     new_map: NewMapDto,
+    user_id: Uuid,
     app_data: &Data<AppDataInner>,
 ) -> Result<MapDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Map::create(new_map, &mut conn).await?;
+    let result = Map::create(new_map, user_id, &mut conn).await?;
     for layer in &LAYER_TYPES {
         let new_layer = NewLayerDto {
             map_id: result.id,
