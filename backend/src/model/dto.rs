@@ -297,5 +297,7 @@ pub struct ConnectToMapQueryParams {
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct PlantSuggestionsSearchParameters {
+    /// Date representing the season to search for.
+    /// Only the month and day are used, nevertheless it must be an existing date.
     pub relative_to_date: NaiveDate,
 }
