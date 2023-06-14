@@ -131,6 +131,7 @@ async fn test_search_seeds_succeeds() {
 
 #[actix_rt::test]
 async fn test_find_by_id_succeeds() {
+    let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::seeds::table)
@@ -140,12 +141,14 @@ async fn test_find_by_id_succeeds() {
                         &crate::schema::seeds::name.eq("Testia testia"),
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
+                        &crate::schema::seeds::owner_id.eq(user_id),
                     ),
                     (
                         &crate::schema::seeds::id.eq(-2),
                         &crate::schema::seeds::name.eq("Testia testium"),
                         &crate::schema::seeds::harvest_year.eq(2023),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
+                        &crate::schema::seeds::owner_id.eq(user_id),
                     ),
                 ])
                 .execute(conn)
@@ -155,7 +158,7 @@ async fn test_find_by_id_succeeds() {
         .scope_boxed()
     })
     .await;
-    let (token, app) = init_test_app(pool).await;
+    let (token, app) = init_test_app_for_user(pool, user_id).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/seeds/-1")
