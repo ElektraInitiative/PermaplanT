@@ -3,12 +3,11 @@ import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import '@/components/Modals/ImageModal';
 import ImageModal from '@/components/Modals/ImageModal';
 import { getPublicImageList } from '@/features/nextcloud_integration/api/getImages';
+import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
+import { ReactComponent as ChevronLeftIcon } from '@/icons/chevron-left.svg';
+import { ReactComponent as ChevronRightIcon } from '@/icons/chevron-right.svg';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { ReactComponent as ChevronRightIcon } from '@/icons/chevron-right.svg';
-import { ReactComponent as ChevronLeftIcon } from '@/icons/chevron-left.svg';
-import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
-
 
 export const PhotoGallery = () => {
   // Nextcloud public share token for the gallery
@@ -71,18 +70,36 @@ export const PhotoGallery = () => {
       <ImageModal
         title="Image"
         body={
-          <div className="w-full flex justify-between items-center">
-            <IconButton className='m-4' onClick={() => setSelectedImage((selectedImage - 1) % (imagePaths?.length ? imagePaths?.length : 1))}>
+          <div className="flex w-full items-center justify-between">
+            <IconButton
+              className="m-4"
+              onClick={() =>
+                setSelectedImage(
+                  (selectedImage - 1) % (imagePaths?.length ? imagePaths?.length : 1),
+                )
+              }
+            >
               <ChevronLeftIcon />
             </IconButton>
-            {
-              imagePaths ?
-                <div className='h-full w-full'>
-                  <PublicNextcloudImage path={imagePaths[selectedImage]} shareToken={galleryShareToken} className="h-full w-full object-contain" />
-                </div>
-                : <div>Could not load image.</div>
-            }
-            <IconButton className='m-4' onClick={() => setSelectedImage((selectedImage + 1) % (imagePaths?.length ? imagePaths?.length : 1))}>
+            {imagePaths ? (
+              <div className="h-full w-full">
+                <PublicNextcloudImage
+                  path={imagePaths[selectedImage]}
+                  shareToken={galleryShareToken}
+                  className="h-full w-full object-contain"
+                />
+              </div>
+            ) : (
+              <div>Could not load image.</div>
+            )}
+            <IconButton
+              className="m-4"
+              onClick={() =>
+                setSelectedImage(
+                  (selectedImage + 1) % (imagePaths?.length ? imagePaths?.length : 1),
+                )
+              }
+            >
               <ChevronRightIcon />
             </IconButton>
           </div>
@@ -139,7 +156,9 @@ export const PhotoGallery = () => {
                 setShowModal(true);
               }}
             >
-              <PublicNextcloudImage path={imagePath} shareToken={galleryShareToken}
+              <PublicNextcloudImage
+                path={imagePath}
+                shareToken={galleryShareToken}
                 className="h-full w-full rounded bg-neutral-100 object-cover dark:bg-neutral-300-dark"
               />
             </div>

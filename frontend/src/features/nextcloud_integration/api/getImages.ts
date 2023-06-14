@@ -45,10 +45,15 @@ export const getPublicImageList = async (publicShareToken: string): Promise<Arra
     const parser = new DOMParser();
     const doc = parser.parseFromString(response.data, 'application/xml');
 
-
     const nsResolver = doc.createNSResolver(doc.documentElement);
 
-    const result = doc.evaluate('//d:response[d:propstat/d:prop/d:getcontenttype[contains(text(), "image")]]/d:href/text()', doc, nsResolver, XPathResult.ANY_TYPE, null);
+    const result = doc.evaluate(
+      '//d:response[d:propstat/d:prop/d:getcontenttype[contains(text(), "image")]]/d:href/text()',
+      doc,
+      nsResolver,
+      XPathResult.ANY_TYPE,
+      null,
+    );
 
     const urls = [];
     let node = null;
@@ -56,9 +61,9 @@ export const getPublicImageList = async (publicShareToken: string): Promise<Arra
       urls.push(node.data);
     }
 
-    console.log(urls)
+    console.log(urls);
 
-    return urls
+    return urls;
   } catch (error) {
     throw error as Error;
   }
