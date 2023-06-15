@@ -1,5 +1,6 @@
 import { useSeasonalAvailablePlants } from '../hooks/useSeasonalAvailablePlants';
 import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
+import { useSelectedPlantForPlanting } from '../hooks/useSelectedPlantForPlanting';
 import { EmptyAvailablePlants } from './EmptyList/EmptyAvailablePlants';
 import { PlantListItem } from './PlantListItem';
 import { PlantSuggestionList } from './PlantSuggestionList';
@@ -8,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 export function PlantSuggestions() {
   const { plants, isLoading } = useSeasonalAvailablePlants(1, new Date());
   const { actions } = useSelectPlantForPlanting();
+  const selectedPlantForPlanting = useSelectedPlantForPlanting();
   const { t } = useTranslation(['plantingSuggestions']);
 
   return (
@@ -22,8 +24,13 @@ export function PlantSuggestions() {
           <PlantListItem
             key={plant.id}
             plant={plant}
+            isHighlighted={selectedPlantForPlanting?.id === plant.id}
             onClick={() => {
-              actions.selectPlantForPlanting(plant);
+              if (selectedPlantForPlanting?.id === plant.id) {
+                actions.selectPlantForPlanting(null);
+              } else {
+                actions.selectPlantForPlanting(plant);
+              }
             }}
           />
         ))}

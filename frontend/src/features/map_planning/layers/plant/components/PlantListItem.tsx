@@ -4,14 +4,19 @@ import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 export type PlantListElementProps = {
   plant: PlantsSummaryDto;
   onClick: () => void;
+  isHighlighted?: boolean;
 };
 
-export function PlantListItem({ plant, onClick }: PlantListElementProps) {
+export function PlantListItem({ plant, onClick, isHighlighted }: PlantListElementProps) {
+  const highlightedClass = isHighlighted
+    ? 'text-primary-400 stroke-primary-400 ring-4 ring-primary-300 '
+    : undefined;
+
   return (
     <li className="flex">
       <button
         onClick={() => onClick()}
-        className="flex flex-1 items-center gap-2 rounded-md stroke-neutral-400 px-2 py-1 hover:bg-neutral-200 hover:stroke-primary-400 hover:text-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:hover:bg-neutral-300-dark"
+        className={`${highlightedClass} flex flex-1 items-center gap-2 rounded-md stroke-neutral-400 px-2 py-1 hover:bg-neutral-200 hover:stroke-primary-400 hover:text-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:hover:bg-neutral-300-dark`}
       >
         <PlantIcon className="shrink-0" />
         <div className="text-left">
