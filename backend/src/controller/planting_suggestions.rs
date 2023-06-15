@@ -17,6 +17,19 @@ use crate::{
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
+#[utoipa::path(
+    context_path = "/api/maps//{map_id}/layers/plant/suggestionss",
+    params(
+        PlantSuggestionsSearchParameters,
+        PageParameters,
+    ),
+    responses(
+        (status = 201, description = "", body = PagePlantsSummaryDto)
+    ),
+    security(
+        ("oauth2" = [])
+    )
+)]
 #[get("")]
 pub async fn find(
     search_query: Query<PlantSuggestionsSearchParameters>,
