@@ -37,7 +37,6 @@ pub struct ConfigDto {
 }
 
 /// Represents seeds of a user.
-#[allow(clippy::missing_docs_in_private_items)]
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct SeedDto {

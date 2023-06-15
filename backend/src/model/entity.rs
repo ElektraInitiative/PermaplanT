@@ -653,7 +653,6 @@ pub struct Plants {
     pub edible_uses_de: Option<String>,
 }
 /// The `Seed` entity.
-#[allow(clippy::missing_docs_in_private_items)]
 #[derive(Identifiable, Queryable)]
 #[diesel(table_name = seeds)]
 pub struct Seed {
