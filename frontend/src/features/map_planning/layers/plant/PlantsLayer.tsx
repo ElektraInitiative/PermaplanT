@@ -80,8 +80,8 @@ function usePlantLayerListeners(listening: boolean) {
       const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
         return {
           id: node.id(),
-          x: node.x(),
-          y: node.y(),
+          x: Math.round(node.x()),
+          y: Math.round(node.y()),
           rotation: node.rotation(),
           scaleX: node.scaleX(),
           scaleY: node.scaleY(),
