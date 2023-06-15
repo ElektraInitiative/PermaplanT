@@ -1,10 +1,11 @@
 import { useSeasonalAvailablePlants } from '../hooks/useSeasonalAvailablePlants';
 import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
+import { EmptyAvailablePlants } from './EmptyList/EmptyAvailablePlants';
 import { PlantListItem } from './PlantListItem';
 import { PlantSuggestionList } from './PlantSuggestionList';
 
 export function PlantSuggestions() {
-  const { plants } = useSeasonalAvailablePlants(1, new Date());
+  const { plants, isLoading } = useSeasonalAvailablePlants(1, new Date());
   const { actions } = useSelectPlantForPlanting();
 
   return (
@@ -12,7 +13,8 @@ export function PlantSuggestions() {
       <PlantSuggestionList
         header={'Available Seeds'}
         hasContent={plants.length > 0}
-        noContentElement="No plants available for this season."
+        isLoading={isLoading}
+        noContentElement={<EmptyAvailablePlants />}
       >
         {plants.map((plant) => (
           <PlantListItem
