@@ -37,6 +37,8 @@ function usePlantLayerListeners(listening: boolean) {
         new CreatePlantAction({
           id: uuid.v4(),
           plantId: selectedPlant.id,
+          // TODO: get the selectedLayerId from the store
+          layerId: 2,
           // consider the offset of the stage and size of the element
           x: position.x - 50,
           y: position.y - 50,
