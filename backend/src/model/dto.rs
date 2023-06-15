@@ -297,6 +297,7 @@ pub struct ConnectToMapQueryParams {
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct PlantSuggestionsSearchParameters {
     /// The kind of suggestion returned by the endpoint.
+    #[param(inline)]
     pub suggestion_type: SuggestionType,
     /// Date representing the season to search for.
     /// Only the month and day are used, nevertheless it must be an existing date.
@@ -305,7 +306,7 @@ pub struct PlantSuggestionsSearchParameters {
 
 /// Kind of suggestion.
 #[typeshare]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum SuggestionType {
     /// Suggests plants that are available for planting.

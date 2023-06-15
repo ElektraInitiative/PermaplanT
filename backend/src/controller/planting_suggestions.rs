@@ -24,7 +24,7 @@ use crate::{
         PageParameters,
     ),
     responses(
-        (status = 201, description = "", body = PagePlantsSummaryDto)
+        (status = 200, description = "Retrieve planting suggestions", body = PagePlantsSummaryDto)
     ),
     security(
         ("oauth2" = [])
