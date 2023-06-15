@@ -18,7 +18,7 @@ use crate::{
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/maps/{map_id}/layers/plant/suggestionss",
+    context_path = "/api/maps/{map_id}/layers/plants/suggestions",
     params(
         PlantSuggestionsSearchParameters,
         PageParameters,
