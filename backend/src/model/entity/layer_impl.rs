@@ -67,4 +67,14 @@ impl Layer {
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
     }
+
+    /// Delete the layer from the database.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn delete_by_id(id: i32, conn: &mut AsyncPgConnection) -> QueryResult<usize> {
+        let query = diesel::delete(layers::table.find(id));
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.execute(conn).await
+    }
 }

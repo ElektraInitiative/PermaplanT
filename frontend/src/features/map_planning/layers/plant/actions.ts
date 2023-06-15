@@ -44,8 +44,6 @@ export class CreatePlantAction
     return createPlanting(1, {
       ...this._data,
       // TODO - get these values from the store.
-      map_id: 1,
-      plant_id: this._data.plantId,
       id: this._id,
     });
   }
@@ -131,7 +129,6 @@ export class MovePlantAction
     const tasks = this._data.map((d) =>
       movePlanting(1, d.id, {
         // TODO - get these values from the store.
-        map_id: 1,
         x: d.x,
         y: d.y,
       }),
@@ -204,7 +201,6 @@ export class TransformPlantAction
     const tasks = this._data.map((d) =>
       transformPlanting(1, d.id, {
         // TODO - get these values from the store.
-        map_id: 1,
         x: d.x,
         y: d.y,
         scaleX: d.scaleX,

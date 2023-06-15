@@ -7,7 +7,7 @@
 // Don't make the `new` functions const, there might come more fields in the future.
 #![allow(clippy::missing_const_for_fn)]
 
-use super::PlantingDto;
+use crate::model::dto::plantings::PlantingDto;
 use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;
@@ -36,9 +36,10 @@ pub enum Action {
 pub struct CreatePlantActionPayload {
     user_id: Uuid,
     id: Uuid,
+    layer_id: i32,
     plant_id: i32,
-    x: f32,
-    y: f32,
+    x: i32,
+    y: i32,
     width: i32,
     height: i32,
     rotation: f32,
@@ -52,6 +53,7 @@ impl CreatePlantActionPayload {
         Self {
             user_id,
             id: payload.id,
+            layer_id: payload.layer_id,
             plant_id: payload.plant_id,
             x: payload.x,
             y: payload.y,
@@ -87,8 +89,8 @@ impl DeletePlantActionPayload {
 pub struct MovePlantActionPayload {
     user_id: Uuid,
     id: Uuid,
-    x: f32,
-    y: f32,
+    x: i32,
+    y: i32,
 }
 
 impl MovePlantActionPayload {
@@ -110,8 +112,8 @@ impl MovePlantActionPayload {
 pub struct TransformPlantActionPayload {
     user_id: Uuid,
     id: Uuid,
-    x: f32,
-    y: f32,
+    x: i32,
+    y: i32,
     rotation: f32,
     scale_x: f32,
     scale_y: f32,

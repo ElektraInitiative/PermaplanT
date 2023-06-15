@@ -23,7 +23,7 @@ actix-service = "2.0.2"
 actix-web-lab = "0.19.1"
 
 # API doc
-utoipa = { version = "3.1.1", features = ["actix_extras", "chrono"] }
+utoipa = { version = "3.1.1", features = ["actix_extras", "chrono", "uuid"] }
 utoipa-swagger-ui = { version = "3.1.1", features = ["actix-web"] }
 
 # Auth

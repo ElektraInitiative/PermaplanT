@@ -9,12 +9,15 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{config, map, plantings, plants, seed},
+    controller::{config, layers, map, plantings, plants, seed},
     model::{
         dto::{
-            ConfigDto, MapDto, NewMapDto, NewPlantingDto, NewSeedDto, PageMapDto, PagePlantingDto,
-            PagePlantsSummaryDto, PageSeedDto, PlantingDto, PlantsSummaryDto, SeedDto,
-            UpdatePlantingDto,
+            plantings::{
+                MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
+                UpdatePlantingDto,
+            },
+            ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto,
+            PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, SeedDto,
         },
         r#enum::{quality::Quality, quantity::Quantity},
     },
@@ -22,17 +25,7 @@ use crate::{
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all config endpoints.
 #[derive(OpenApi)]
-#[openapi(
-    paths(
-        config::get
-    ),
-    components(
-        schemas(
-            ConfigDto
-        )
-    ),
-    tags((name = "config"))
-)]
+#[openapi(paths(config::get), components(schemas(ConfigDto)))]
 struct ConfigApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
@@ -53,7 +46,6 @@ struct ConfigApiDoc;
             Quantity
         )
     ),
-    tags((name = "seed")),
     modifiers(&SecurityAddon)
 )]
 struct SeedApiDoc;
@@ -71,32 +63,9 @@ struct SeedApiDoc;
             PlantsSummaryDto
         )
     ),
-    tags((name = "plants")),
     modifiers(&SecurityAddon)
 )]
 struct PlantsApiDoc;
-
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plantings endpoints.
-#[derive(OpenApi)]
-#[openapi(
-    paths(
-        plantings::find,
-        plantings::create,
-        plantings::update,
-        plantings::delete
-    ),
-    components(
-        schemas(
-            NewPlantingDto,
-            PlantingDto,
-            UpdatePlantingDto,
-            PagePlantingDto
-        )
-    ),
-    tags((name = "plantings")),
-    modifiers(&SecurityAddon)
-)]
-struct PlantingsApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all map endpoints.
 #[derive(OpenApi)]
@@ -113,18 +82,60 @@ struct PlantingsApiDoc;
             NewMapDto,
         )
     ),
-    tags((name = "map")),
     modifiers(&SecurityAddon)
 )]
 struct MapApiDoc;
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all layer endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        layers::find,
+        layers::find_by_id,
+        layers::create,
+        layers::delete
+    ),
+    components(
+        schemas(
+            LayerDto,
+            NewLayerDto,
+            PageLayerDto
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct LayerApiDoc;
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plantings endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        plantings::find,
+        plantings::create,
+        plantings::update,
+        plantings::delete
+    ),
+    components(
+        schemas(
+            PlantingDto,
+            NewPlantingDto,
+            UpdatePlantingDto,
+            TransformPlantingDto,
+            MovePlantingDto
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct PlantingsApiDoc;
 
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = ConfigApiDoc::openapi();
     openapi.merge(SeedApiDoc::openapi());
     openapi.merge(PlantsApiDoc::openapi());
-    openapi.merge(PlantingsApiDoc::openapi());
     openapi.merge(MapApiDoc::openapi());
+    openapi.merge(LayerApiDoc::openapi());
+    openapi.merge(PlantingsApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }

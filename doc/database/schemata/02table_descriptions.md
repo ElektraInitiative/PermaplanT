@@ -1,187 +1,3 @@
-# Database Schemata
-
-Tag and Quality in this case are enum.
-Postgres supports [enums](https://www.postgresql.org/docs/current/datatype-enum.html) so it is easy to define a static set of values.
-Right now, Mermaid doesn't support enum types so a `_` character denotes white spaces in enums.
-
-# ER Diagram
-
-```mermaid
-erDiagram
-
-enum_tag {
-  VARCHAR Leaf_crops
-  VARCHAR Fruit_crops
-  VARCHAR Root_crops
-  VARCHAR Flowering_crops
-  VARCHAR Herbs
-  VARCHAR Other
-}
-
-enum_quantity {
-  VARCHAR Nothing
-  VARCHAR Not_enough
-  VARCHAR Enough
-  VARCHAR More_than_enough
-}
-
-enum_quality {
-  VARCHAR Organic
-  VARCHAR Not_organic
-  VARCHAR Unknown
-}
-
-seeds {
-  INT id PK
-  tags tag "NOT NULL"
-  INT plant_id "NOT NULL"
-  SMALLINT harvest_year "NOT NULL"
-  DATE use_by
-  VARCHAR origin
-  VARCHAR flavor
-  INT yield
-  INT quantity
-  quality quality
-  MONEY price
-  INT generation
-  VARCHAR notes
-}
-
-plants {
-  INT id PK
-  tags tag "NOT NULL"
-  VARCHAR type "NOT NULL"
-  VARCHAR synonym
-  SMALLINT sowing_from
-  SMALLINT sowing_to
-  INT sowing_depth
-  INT germination_temperature
-  BOOLEAN prick_out
-  DATE transplant
-  INT row_spacing
-  INT plant_density
-  INT germination_time
-  INT harvest_time
-  VARCHAR location
-  VARCHAR care
-  INT height
-}
-
-plant_detail{}
-
-plants }o--|| plant_detail: "type"
-
-plants ||--o{ seeds : ""
-
-species{}
-genus{}
-subfamily{}
-family{}
-
-relation{}
-
-plant_detail }|--|| species : ""
-plant_detail }|--|| genus : ""
-plant_detail }|--|| subfamily : ""
-plant_detail }|--|| family : ""
-
-maps {
-  INT id PK
-  VARCHAR name "NOT NULL"
-  BOOLEAN is_inactive "NOT NULL"
-  DATE last_visit
-  INT honors
-  INT visits
-  INT harvested
-  DATE creation_date
-  DATE deletion_date
-  DATE inactivity_date
-  INT zoom_factor
-  GEOGRAPHY geo_data
-}
-
-users {
-  INT id PK
-  VARCHAR nc_uid
-  DATE contributor_until
-  VARCHAR app_language
-  DATE member_since
-  INT[] member_years
-  EXPERIENCE experience
-  VARCHAR preferences
-  GEOGRAPHY location
-  INT[] permacoins
-}
-
-blossoms {
-  INT id PK
-  VARCHAR title
-  VARCHAR description
-  VARCHAR condition
-  TRACKS track
-  BYTEA icon
-  BOOLEAN is_seasonal
-}
-
-enum_tracks {
-  VARCHAR beginners_track
-  VARCHAR seasonal_track
-  VARCHAR completionist_track
-  VARCHAR expert_track
-}
-
-enum_experience {
-  VARCHAR beginner
-  VARCHAR advanced
-  VARCHAR expert
-}
-
-blossoms_gained {
-  INT id PK
-  INT times_gained
-  DATE[] gained_date
-}
-
-maps }o--|| users : "owned by"
-blossoms ||--o{ blossoms_gained : ""
-blossoms_gained }o--|| users : ""
-
-ingredientLists {
-  INT id PK
-  VARCHAR name "NOT NULL"
-  VARCHAR description
-  BYTEA image
-  BOOLEAN is_recurring "NOT NULL"
-  DATE end_date "NOT NULL"
-  INT accomplished
-}
-
-ingredients {
-  BOOLEAN is_fulfilled "NOT NULL"
-}
-
-ingredientLists }o--|| users : ""
-ingredientLists }o--|| maps : ""
-ingredients }|--|| ingredientLists : ""
-ingredients }|--|| plant_detail : ""
-
-events {
-  INT id PK
-  BOOLEAN system_event "NOT NULL"
-  VARCHAR name "NOT NULL"
-  VARCHAR description
-  DATE event_date "NOT NULL"
-}
-
-events }o--|| maps : ""
-
-favorites {}
-
-favorites }o--|| maps : ""
-favorites }o--|| plant_detail : ""
-
-```
-
 # Table descriptions
 
 ## `Plant_detail`
@@ -258,6 +74,31 @@ favorites }o--|| plant_detail : ""
 | **inactivity_date** | 2023-04-04    |
 | **zoom_factor**     | 100           | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000 |
 | **geo_data**        | NULL          | PostGis Geodata, location of the map                                                           |
+
+## `Layers`
+
+| **_Column name_**  | **_Example_**        | **_Description_**                                      |
+| :----------------- | :------------------- | :----------------------------------------------------- |
+| **id**             | 1                    |
+| **map_id**         | 1                    | the id of the map                                      |
+| **type**           | {base, plants, etc.} | the type of layer                                      |
+| **name**           | Base Layer           | the display name of the layer                          |
+| **is_alternative** | false                | true if the layer is an user-created alternative layer |
+
+## `Plantings`
+
+| **_Column name_** | **_Example_** | **_Description_**                            |
+| :---------------- | :------------ | :------------------------------------------- |
+| **id**            | 1             |                                              |
+| **layer_id**      | 1             | the id of the layer                          |
+| **plant_id**      | 1             | the plant that is planted                    |
+| **x**             | 1             | the x coordinate of the position on the map. |
+| **y**             | 1             | the y coordinate of the position on the map. |
+| **width**         | 1             | the width of the plant on the map.           |
+| **height**        | 1             | the height of the plant on the map.          |
+| **rotation**      | 0             | the rotation of the plant on the map.        |
+| **scale_x**       | 1             | the x scale of the plant on the map.         |
+| **scale_y**       | 1             | the y scale of the plant on the map.         |
 
 ## `Users`
 
@@ -355,51 +196,3 @@ Many-to-many table to store relations between plants, genus, subfamily and famil
 | **relation_strength** | 2                          | strength of the relation, can be 0 to 3                                       |
 | **created_at**        | 2023-02-09 14:06:01.451028 | creation timestamp                                                            |
 | **updated_at**        | 2023-02-09 14:06:01.451028 | update timestamp                                                              |
-
-# Example queries
-
-## Get all plants with their hierarchy information
-
-```sql
-SELECT *
-  FROM plant_detail
-  LEFT JOIN genus
-            ON plant_detail.genus = genus.name
-  LEFT JOIN subfamily
-            ON plant_detail.subfamily = subfamily.name
-  LEFT JOIN family
-            ON plant_detail.family = family.name;
-```
-
-## Insert a relation between a plant with a specific genus and a specific family
-
-```sql
-INSERT INTO relations (from_id, from_type, to_id, to_type, relation_type, relation_strength)
-VALUES (1, 'genus', 156, 'family', 'companion', 3);
-```
-
-## Get all plants that are companions to a specific family
-
-```sql
-SELECT p.id,
-       p.binomial_name,
-       p.genus,
-       p.family,
-       p.subfamily,
-       r.*
-  FROM plant_detail p
-  LEFT JOIN genus
-            ON p.genus = genus.name
-  LEFT JOIN subfamily
-            ON p.subfamily = subfamily.name
-  LEFT JOIN family
-            ON p.family = family.name
-  JOIN relations r
-       ON r.relation_type = 'companion' AND r.to_type = 'family' AND r.to_id = 156 AND
-          CASE
-              WHEN r.from_type = 'plant' THEN r.id = p.id
-              WHEN r.from_type = 'genus' THEN r.id = genus.id
-              WHEN r.from_type = 'subfamily' THEN r.id = subfamily.id
-              WHEN r.from_type = 'family' THEN r.id = family.id
-              END;
-```

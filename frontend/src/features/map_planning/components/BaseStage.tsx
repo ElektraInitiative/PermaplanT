@@ -176,6 +176,7 @@ export const BaseStage = ({
             executeAction(
               new CreatePlantAction({
                 id: uuid.v4(), // The frontend must generate the id for all objects
+                layerId: 2,
                 plantId: 1,
                 x: 100,
                 y: 100,

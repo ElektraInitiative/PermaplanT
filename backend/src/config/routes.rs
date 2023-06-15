@@ -4,7 +4,7 @@ use actix_utils::future::ready;
 use actix_web::{middleware::NormalizePath, web};
 use actix_web_httpauth::middleware::HttpAuthentication;
 
-use crate::controller::{config, map, plantings, plants, seed, sse};
+use crate::controller::{config, layers, map, plantings, plants, seed, sse};
 
 use super::auth::middleware::validator;
 
@@ -31,11 +31,18 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(map::find_by_id)
                 .service(map::create)
                 .service(
-                    web::scope("/{map_id}/layers/plants/plantings")
-                        .service(plantings::find)
-                        .service(plantings::create)
-                        .service(plantings::update)
-                        .service(plantings::delete),
+                    web::scope("/{map_id}/layers")
+                        .service(layers::find)
+                        .service(layers::find_by_id)
+                        .service(layers::create)
+                        .service(layers::delete)
+                        .service(
+                            web::scope("plants/plantings")
+                                .service(plantings::find)
+                                .service(plantings::create)
+                                .service(plantings::update)
+                                .service(plantings::delete),
+                        ),
                 ),
         )
         .wrap(NormalizePath::trim())

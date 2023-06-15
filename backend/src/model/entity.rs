@@ -2,6 +2,8 @@
 
 pub mod layer_impl;
 pub mod map_impl;
+pub mod plantings;
+pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 
