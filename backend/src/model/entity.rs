@@ -13,6 +13,7 @@ use chrono::NaiveDateTime;
 use diesel::QueryableByName;
 use diesel::{Identifiable, Insertable, Queryable};
 use postgis_diesel::types::Point;
+use uuid::Uuid;
 
 use crate::schema::{layers, maps, plants, seeds};
 
@@ -716,14 +717,14 @@ pub struct Map {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// The id of the owner of the map.
-    pub owner_id: i32,
     /// A flag indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Point>,
+    /// The id of the owner of the map.
+    pub owner_id: Uuid,
 }
 
 /// The `NewMap` entity.
@@ -748,14 +749,14 @@ pub struct NewMap {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// The id of the owner of the map.
-    pub owner_id: i32,
     /// A flag indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Point>,
+    /// The id of the owner of the map.
+    pub owner_id: Uuid,
 }
 
 /// The `Layer` entity.

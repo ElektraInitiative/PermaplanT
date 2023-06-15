@@ -1,10 +1,12 @@
 import { findAllMaps } from '../api/findAllMaps';
 import MapCard from '../components/MapCard';
+import { MapSearchParameters } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import InfoMessage, { InfoMessageType } from '@/components/Card/InfoMessage';
 import PageTitle from '@/components/Header/PageTitle';
 import Footer from '@/components/Layout/Footer';
 import PageLayout from '@/components/Layout/PageLayout';
+import { getUser } from '@/utils/getUser';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,9 +22,12 @@ export default function MapOverview() {
   const { t } = useTranslation(['maps']);
   const [infoMessage, setInfoMessage] = useState(initialMessage);
 
+  const searchParams: MapSearchParameters = {
+    owner_id: getUser()?.profile.sub,
+  };
   const { data } = useInfiniteQuery({
     queryKey: ['maps'],
-    queryFn: ({ pageParam = 1 }) => findAllMaps(pageParam),
+    queryFn: ({ pageParam = 1 }) => findAllMaps(pageParam, searchParams),
     getNextPageParam: (lastPage) => lastPage.page + 1,
   });
 

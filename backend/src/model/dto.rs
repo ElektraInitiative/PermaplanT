@@ -159,14 +159,14 @@ pub struct MapDto {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// The id of the owner of the map.
-    pub owner_id: i32,
     /// A flag indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Coordinates>,
+    /// The id of the owner of the map.
+    pub owner_id: Uuid,
 }
 
 /// The information of a map neccessary for its creation.
@@ -191,8 +191,6 @@ pub struct NewMapDto {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// The id of the owner of the map.
-    pub owner_id: i32,
     /// A flag indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
@@ -210,7 +208,7 @@ pub struct MapSearchParameters {
     /// Whether or not the map is active.
     pub is_inactive: Option<bool>,
     /// The owner of the map.
-    pub owner_id: Option<i32>,
+    pub owner_id: Option<Uuid>,
     /// Whether or not the map is private.
     pub privacy: Option<PrivacyOptions>,
 }

@@ -9,6 +9,7 @@ use diesel::{
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
+use uuid::Uuid;
 
 use crate::db::function::{similarity, PgTrgmExpressionMethods};
 use crate::db::pagination::Paginate;
@@ -55,11 +56,11 @@ impl Map {
         if let Some(is_inactive_search) = search_parameters.is_inactive {
             query = query.filter(is_inactive.eq(is_inactive_search));
         }
-        if let Some(owner_id_search) = search_parameters.owner_id {
-            query = query.filter(owner_id.eq(owner_id_search));
-        }
         if let Some(privacy_search) = search_parameters.privacy {
             query = query.filter(privacy.eq(privacy_search));
+        }
+        if let Some(owner_id_search) = search_parameters.owner_id {
+            query = query.filter(owner_id.eq(owner_id_search));
         }
 
         let query = query
@@ -87,8 +88,12 @@ impl Map {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn create(new_map: NewMapDto, conn: &mut AsyncPgConnection) -> QueryResult<MapDto> {
-        let new_map = NewMap::from(new_map);
+    pub async fn create(
+        new_map: NewMapDto,
+        user_id: Uuid,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<MapDto> {
+        let new_map = NewMap::from((new_map, user_id));
         let query = diesel::insert_into(maps::table).values(&new_map);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
