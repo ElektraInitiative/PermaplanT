@@ -7,6 +7,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
+use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
 use crate::model::dto::{PageParameters, SeedSearchParameters};
 use crate::{model::dto::NewSeedDto, service};
@@ -34,10 +35,12 @@ pub async fn find(
     search_query: Query<SeedSearchParameters>,
     page_query: Query<PageParameters>,
     app_data: Data<AppDataInner>,
+    user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let response = service::seed::find(
         search_query.into_inner(),
         page_query.into_inner(),
+        user_info.id,
         &app_data,
     )
     .await?;
@@ -58,8 +61,12 @@ pub async fn find(
     )
 )]
 #[get("/{id}")]
-pub async fn find_by_id(id: Path<i32>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let response = service::seed::find_by_id(*id, &app_data).await?;
+pub async fn find_by_id(
+    id: Path<i32>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
+) -> Result<HttpResponse> {
+    let response = service::seed::find_by_id(*id, user_info.id, &app_data).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -81,8 +88,9 @@ pub async fn find_by_id(id: Path<i32>, app_data: Data<AppDataInner>) -> Result<H
 pub async fn create(
     new_seed_json: Json<NewSeedDto>,
     app_data: Data<AppDataInner>,
+    user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let response = service::seed::create(new_seed_json.0, &app_data).await?;
+    let response = service::seed::create(new_seed_json.0, user_info.id, &app_data).await?;
     Ok(HttpResponse::Created().json(response))
 }
 
@@ -100,7 +108,11 @@ pub async fn create(
     )
 )]
 #[delete("/{id}")]
-pub async fn delete_by_id(path: Path<i32>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    service::seed::delete_by_id(*path, &app_data).await?;
+pub async fn delete_by_id(
+    path: Path<i32>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
+) -> Result<HttpResponse> {
+    service::seed::delete_by_id(*path, user_info.id, &app_data).await?;
     Ok(HttpResponse::Ok().json(""))
 }

@@ -8,6 +8,7 @@ mod layers;
 mod map;
 mod pagination;
 mod plant;
+mod planting_suggestions;
 mod plantings;
 mod seed;
 pub mod util;

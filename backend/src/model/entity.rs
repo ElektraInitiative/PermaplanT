@@ -653,24 +653,39 @@ pub struct Plants {
     pub edible_uses_de: Option<String>,
 }
 /// The `Seed` entity.
-#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[derive(Identifiable, Queryable)]
 #[diesel(table_name = seeds)]
 pub struct Seed {
+    /// The record id of the seed.
     pub id: i32,
+    /// An additional name for the seed.
     pub name: String,
+    /// When the seeds were harvested.
     pub harvest_year: i16,
+    /// When the seeds should be used by.
     pub use_by: Option<NaiveDate>,
+    /// Where the seeds came from.
     pub origin: Option<String>,
+    /// What the seeds taste like.
     pub taste: Option<String>,
+    /// The yield of the seeds.
     pub yield_: Option<String>,
+    /// How many seeds there are.
     pub quantity: Quantity,
+    /// The quality of the seeds.
     pub quality: Option<Quality>,
+    /// How much the seeds cost.
     pub price: Option<i16>,
+    /// How many generations the seeds have been grown.
     pub generation: Option<i16>,
+    /// Notes about the seeds.
     pub notes: Option<String>,
+    /// The variety of the seed. Currently unused.
     pub variety: Option<String>,
+    /// The id of the plant this seed belongs to.
     pub plant_id: Option<i32>,
+    /// The id of the owner of the seed.
+    pub owner_id: Uuid,
 }
 
 /// The `NewSeed` entity.
@@ -691,6 +706,7 @@ pub struct NewSeed {
     pub generation: Option<i16>,
     pub notes: Option<String>,
     pub variety: Option<String>,
+    pub owner_id: Uuid,
 }
 
 /// The `Map` entity.
