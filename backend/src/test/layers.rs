@@ -18,6 +18,7 @@ use actix_web::{
 use chrono::Utc;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
+use uuid::Uuid;
 
 async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceError> {
     diesel::insert_into(crate::schema::maps::table)
@@ -30,7 +31,7 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
             &crate::schema::maps::honors.eq(0),
             &crate::schema::maps::visits.eq(0),
             &crate::schema::maps::harvested.eq(0),
-            &crate::schema::maps::owner_id.eq(0),
+            &crate::schema::maps::owner_id.eq(Uuid::default()),
             &crate::schema::maps::privacy.eq(PrivacyOptions::Private),
         )])
         .execute(conn)
