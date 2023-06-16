@@ -1,82 +1,37 @@
-import { HTMLInputTypeAttribute } from 'react';
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
-interface SimpleFormInputProps<T extends FieldValues> {
+interface SimpleFormInputProps<T extends FieldValues>
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   id: Path<T>;
   labelText: string;
-  placeHolder?: string;
-  isArea?: boolean;
-  required?: boolean;
-  type?: HTMLInputTypeAttribute;
-  defaultValue?: string | number | readonly string[];
-  min?: number;
-  max?: number;
   register?: UseFormRegister<T>;
-  onChange?: () => void;
   valueAsNumber?: boolean;
   errorTitle?: string;
-  disabled?: boolean;
-  value?: string;
 }
 
 export default function SimpleFormInput<T extends FieldValues>({
-  labelText,
-  placeHolder = '',
-  required = false,
-  isArea = false,
-  type = 'text',
-  defaultValue,
-  min,
-  max,
   id,
+  labelText = '',
   register,
-  onChange,
   valueAsNumber = false,
   errorTitle,
-  disabled = false,
-  value,
+  ...props
 }: SimpleFormInputProps<T>) {
   return (
     <div className="dark:text-white">
       <label htmlFor={id} className="mb-2 block text-sm font-medium">
         {labelText}
-        {required ? <span className="text-red-800"> *</span> : <></>}
+        {props.required ? <span className="text-red-800"> *</span> : <></>}
       </label>
-      {isArea ? (
-        <textarea
-          disabled={disabled}
-          onKeyUp={onChange}
-          onChange={onChange}
-          rows={6}
-          name={id}
-          id={id}
-          className="dark:bg-primary-textfield-dark block w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:bg-neutral-100-dark dark:focus:border-primary-300"
-          placeholder={placeHolder}
-          required={required}
-          {...register?.(id)}
-        />
-      ) : (
-        <input
-          disabled={disabled}
-          onKeyUp={onChange}
-          onChange={onChange}
-          type={type}
-          min={min}
-          max={max}
-          id={id}
-          defaultValue={defaultValue}
-          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-          placeholder={placeHolder}
-          required={required}
-          style={{ colorScheme: 'dark' }}
-          pattern={valueAsNumber ? '^[0-9]+([,][0-9]{1,2})?$' : undefined}
-          title={errorTitle}
-          value={value?.toString()}
-          {...register?.(id, {
-            valueAsNumber: type === 'number' || valueAsNumber,
-          })}
-        />
-      )}
+      <input
+        id={id}
+        title={errorTitle}
+        {...props}
+        {...register?.(id, {
+          valueAsNumber: props.type === 'number' || valueAsNumber,
+        })}
+        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+      />
     </div>
   );
 }

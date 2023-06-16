@@ -11,6 +11,9 @@ import { handleRemoteAction } from '../store/RemoteActions';
 import { ConnectToMapQueryParams } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { baseApiUrl } from '@/config';
+import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
+import BaseLayer from '@/features/map_planning/layers/base/BaseLayer';
+import BaseLayerRightToolbar from '@/features/map_planning/layers/base/components/BaseLayerRightToolbar';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
@@ -71,14 +74,23 @@ function useMapUpdates() {
 export const Map = () => {
   useInitializeMap();
 
+  const nextcloudClient = createNextcloudWebDavClient();
+
+  const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
+  const executeAction = useMapStore((map) => map.executeAction);
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
 
   const getToolbarContent = (layerName: LayerName) => {
     const content = {
-      Base: { right: <div></div>, left: <div></div> },
+      Base: {
+        left: <div></div>,
+        right: (
+          <BaseLayerRightToolbar state={trackedState.layers.Base} executeAction={executeAction} />
+        ),
+      },
       Plant: { right: <PlantLayerRightToolbar />, left: <PlantLayerLeftToolbar /> },
       Drawing: { right: <div></div>, left: <div></div> },
       Dimension: { right: <div></div>, left: <div></div> },
@@ -177,6 +189,14 @@ export const Map = () => {
         ></Toolbar>
       </section>
       <BaseStage>
+        <BaseLayer
+          nextcloudClient={nextcloudClient}
+          opacity={untrackedState.layers.Base.opacity}
+          visible={untrackedState.layers.Base.visible}
+          nextcloudImagePath={trackedState.layers.Base.nextcloudImagePath}
+          pixelsPerMeter={trackedState.layers.Base.scale}
+          rotation={trackedState.layers.Base.rotation}
+        />
         <PlantsLayer
           visible={untrackedState.layers.Plant.visible}
           opacity={untrackedState.layers.Plant.opacity}

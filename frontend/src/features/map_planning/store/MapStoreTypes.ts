@@ -176,12 +176,19 @@ export type TrackedLayers = {
   [key in Exclude<LayerName, 'Plant'>]: TrackedLayerState;
 } & {
   Plant: TrackedPlantLayerState;
+  Base: TrackedBaseLayerState;
 };
 
 export type TrackedPlantLayerState = {
   index: 'Plant';
 
   objects: PlantingDto[];
+};
+
+export type TrackedBaseLayerState = {
+  rotation: number;
+  scale: number;
+  nextcloudImagePath: string;
 };
 
 /**

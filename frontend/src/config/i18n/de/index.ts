@@ -1,4 +1,6 @@
 import auth from './auth.json';
+import baseLayer from './baseLayer.json';
+import baseLayerForm from './baseLayerForm.json';
 import blog from './blog.json';
 import common from './common.json';
 import contact from './contact.json';
@@ -18,6 +20,8 @@ import undoRedo from './undoRedo.json';
 
 const de = {
   blog,
+  baseLayer,
+  baseLayerForm,
   common,
   contact,
   enums,
