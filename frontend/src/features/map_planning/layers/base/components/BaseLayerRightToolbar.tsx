@@ -44,7 +44,7 @@ const BaseLayerRightToolbar = ({ state, executeAction }: BaseLayerFormProps) => 
           executeAction(new UpdateBaseLayerAction(rotationInput, state.scale, pathInput))
         }
       >
-        {t('common:ok')}
+        {t('common:apply')}
       </SimpleButton>
     </div>
   );
