@@ -27,7 +27,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
     Base: {
       index: 'Base',
       objects: [],
-      scale: 10,
+      scale: 100,
       rotation: 0,
       nextcloudImagePath: '',
     },
