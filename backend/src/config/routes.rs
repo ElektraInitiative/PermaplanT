@@ -1,5 +1,4 @@
 ///! Routes in the backend.
-
 use actix_utils::future::ready;
 use actix_web::{middleware::NormalizePath, web};
 use actix_web_httpauth::middleware::HttpAuthentication;
