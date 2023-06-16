@@ -1,4 +1,3 @@
-import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../layers/plant/actions';
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
@@ -9,12 +8,10 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
-import SimpleButton from '@/components/Button/SimpleButton';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
-import * as uuid from 'uuid';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -71,8 +68,10 @@ export const BaseStage = ({
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
   // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
+  useEffect(() => {
+    useMapStore.setState({ stageRef: stageRef });
+  }, [stageRef]);
 
-  const executeAction = useMapStore((map) => map.executeAction);
   const step = useMapStore((map) => map.step);
   const historyLength = useMapStore((map) => map.history.length);
 
@@ -169,28 +168,7 @@ export const BaseStage = ({
   return (
     <div className="h-full w-full overflow-hidden">
       <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
-        {/* TODO: This is example code that shows how to interact with the store, the final code handling object creation is TBD */}
-        <SimpleButton
-          className="w-32"
-          onClick={() =>
-            executeAction(
-              new CreatePlantAction({
-                id: uuid.v4(), // The frontend must generate the id for all objects
-                layerId: 2,
-                plantId: 1,
-                x: 100,
-                y: 100,
-                width: 100,
-                height: 100,
-                rotation: 0,
-                scaleX: 1,
-                scaleY: 1,
-              }),
-            )
-          }
-        >
-          CREATE OBJECT
-        </SimpleButton>
+        {/* TODO: Should we display the history somewhere else? */}
         <div>
           <div className="whitespace-nowrap text-sm">Step: {step}</div>
           <div className="whitespace-nowrap text-sm">History length: {historyLength}</div>
@@ -231,29 +209,6 @@ export const BaseStage = ({
             }}
             onTransformEnd={() => {
               selectable = true;
-              const updates = (trRef.current?.getNodes() || []).map((node) => {
-                return {
-                  id: node.id(),
-                  x: node.x(),
-                  y: node.y(),
-                  rotation: node.rotation(),
-                  scaleX: node.scaleX(),
-                  scaleY: node.scaleY(),
-                };
-              });
-
-              executeAction(new TransformPlantAction(updates));
-            }}
-            onDragEnd={() => {
-              const updates = (trRef.current?.getNodes() || []).map((node) => {
-                return {
-                  id: node.id(),
-                  x: node.x(),
-                  y: node.y(),
-                };
-              });
-
-              executeAction(new MovePlantAction(updates));
             }}
             onMouseDown={() => {
               selectable = false;
@@ -270,6 +225,10 @@ export const BaseStage = ({
           />
         </Layer>
       </Stage>
+      {/** Portal to display something from different layers */}
+      <div className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
+        <div id="bottom-portal" />
+      </div>
     </div>
   );
 };

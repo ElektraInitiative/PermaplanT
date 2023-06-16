@@ -1,18 +1,27 @@
+import { usePlantSearch } from '../hooks/usePlantSearch';
+import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
+import { PlantListItem } from './PlantListItem';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput from '@/components/Form/SearchInput';
-import { baseApiUrl } from '@/config/env';
-import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
+import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-/** UI component intended for searching plants that can be drag and dropped to the plants layer */
+/** UI component intended for searching plants that can planted on the plants layer */
 export const PlantSearch = () => {
-  const [plants, setPlants] = useState([]);
+  const { plants, actions: plantSearchActions } = usePlantSearch();
+  const { actions } = useSelectPlantForPlanting();
+
   const [searchVisible, setSearchVisible] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation(['plantSearch']);
+
+  const clearSearch = () => {
+    plantSearchActions.clearSearchTerm();
+    setSearchVisible(false);
+  };
 
   useEffect(() => {
     searchInputRef.current?.focus();
@@ -22,7 +31,11 @@ export const PlantSearch = () => {
     <div className="flex flex-col gap-4 p-2">
       <div className="flex items-center justify-between">
         <h2>{t('plantSearch:dnd')}</h2>
-        {!searchVisible && (
+        {searchVisible ? (
+          <IconButton onClick={clearSearch}>
+            <CloseIcon />
+          </IconButton>
+        ) : (
           <IconButton
             onClick={() => {
               setSearchVisible(true);
@@ -47,27 +60,22 @@ export const PlantSearch = () => {
           >
             <SearchInput
               placeholder={t('plantSearch:placeholder')}
-              handleSearch={async (event) => {
-                // TODO: debounce + other refactor
-                const response = await fetch(baseApiUrl + '/api/plants?name=' + event.target.value);
-                const json = await response.json();
-                setPlants(json.results.map((plant: { unique_name: string }) => plant.unique_name));
-              }}
+              handleSearch={(event) => plantSearchActions.searchPlants(event.target.value)}
               ref={searchInputRef}
-              onBlur={() => setSearchVisible(false)}
               onKeyDown={(e) => {
-                if (e.key === 'Escape') setSearchVisible(false);
+                if (e.key === 'Escape') clearSearch();
               }}
             ></SearchInput>
             <ul>
               {plants.map((plant) => (
-                <li
-                  className="flex items-center gap-4 stroke-neutral-700 hover:stroke-primary-500 hover:text-primary-500 dark:stroke-neutral-700-dark"
-                  key={plant}
-                >
-                  <PlantIcon />
-                  {plant}
-                </li>
+                <PlantListItem
+                  plant={plant}
+                  key={plant.id}
+                  onClick={() => {
+                    actions.selectPlantForPlanting(plant);
+                    clearSearch();
+                  }}
+                />
               ))}
             </ul>
           </motion.div>

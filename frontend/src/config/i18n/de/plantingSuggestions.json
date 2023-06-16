@@ -1,0 +1,8 @@
+{
+  "available_seeds": {
+    "list_title": "Verfügbare Samen",
+    "empty_list_title": "Fang an, indem du Samen hinzufügst",
+    "empty_list_message": "Wir konnten keine saisonalen Pflanzen finden, für die du die zugehörigen Samen besitzt.",
+    "empty_list_action": "Deine Samen anzeigen"
+  }
+}

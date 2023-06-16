@@ -29,7 +29,7 @@ If the same component renders differently in the future, e.g. because a subcompo
 To fix the issue, the programmer has to decide if the changes are intentional and then either fix the issue, or regenerate the affected snapshots using:
 
 ```bash
-npm run -- --updateSnapshot
+npm run test -- --updateSnapshot
 ```
 
 ## DOM tests

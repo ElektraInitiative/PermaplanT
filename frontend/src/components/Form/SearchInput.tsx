@@ -11,7 +11,7 @@ const SearchInput = forwardRef(
     return (
       <div className="relative grow">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <SearchIcon />
+          <SearchIcon stroke="currentColor" />
         </div>
         <input
           onChange={handleSearch}

@@ -1,6 +1,6 @@
-import { PlantingDto } from '@/bindings/definitions';
+import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
-import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { Node } from 'konva/lib/Node';
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -58,7 +58,7 @@ export interface TrackedMapSlice {
    */
   transformer: React.RefObject<Konva.Transformer>;
   /** Event listener responsible for adding a single shape to the transformer */
-  addShapeToTransformer: (shape: Shape<ShapeConfig>) => void;
+  addShapeToTransformer: (shape: Node) => void;
   /**
    * Execute a user initiated action.
    */
@@ -96,9 +96,12 @@ export type History = Array<Action<unknown, unknown>>;
  */
 export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
+  stageRef: React.RefObject<Konva.Stage>;
   updateSelectedLayer: (selectedLayer: LayerName) => void;
   updateLayerVisible: (layerName: LayerName, visible: UntrackedLayerState['visible']) => void;
   updateLayerOpacity: (layerName: LayerName, opacity: UntrackedLayerState['opacity']) => void;
+  selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
+  selectPlanting: (planting: PlantingDto | null) => void;
 }
 
 /**
@@ -185,7 +188,14 @@ export type TrackedPlantLayerState = {
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in LayerName]: UntrackedLayerState;
+  [key in Exclude<LayerName, 'Plant'>]: UntrackedLayerState;
+} & {
+  Plant: UntrackedPlantLayerState;
+};
+
+export type UntrackedPlantLayerState = UntrackedLayerState & {
+  selectedPlantForPlanting: PlantsSummaryDto | null;
+  selectedPlanting: PlantingDto | null;
 };
 
 /**

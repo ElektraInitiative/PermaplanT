@@ -1,12 +1,12 @@
 import type {
-  LayerName,
   TrackedMapSlice,
-  UntrackedLayerState,
   UntrackedLayers,
   UntrackedMapSlice,
   UntrackedMapState,
 } from './MapStoreTypes';
 import { LAYER_NAMES } from './MapStoreTypes';
+import Konva from 'konva';
+import { createRef } from 'react';
 import { StateCreator } from 'zustand';
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
@@ -30,17 +30,30 @@ export const createUntrackedMapSlice: StateCreator<
   [],
   [],
   UntrackedMapSlice
-> = (set) => ({
+> = (set, get) => ({
   untrackedState: UNTRACKED_DEFAULT_STATE,
-  updateSelectedLayer: (selectedLayer: LayerName) =>
+  stageRef: createRef<Konva.Stage>(),
+  updateSelectedLayer(selectedLayer) {
+    // Clear the transformer's nodes.
+    get().transformer.current?.nodes([]);
+
     set((state) => ({
       ...state,
       untrackedState: {
         ...state.untrackedState,
         selectedLayer: selectedLayer,
+        layers: {
+          ...state.untrackedState.layers,
+          Plant: {
+            ...state.untrackedState.layers.Plant,
+            selectedPlanting: null,
+            selectedPlantForPlanting: null,
+          },
+        },
       },
-    })),
-  updateLayerVisible: (layerName: LayerName, visible: UntrackedLayerState['visible']) =>
+    }));
+  },
+  updateLayerVisible(layerName, visible) {
     set((state) => ({
       ...state,
       untrackedState: {
@@ -53,8 +66,9 @@ export const createUntrackedMapSlice: StateCreator<
           },
         },
       },
-    })),
-  updateLayerOpacity: (layerName: LayerName, opacity: UntrackedLayerState['opacity']) =>
+    }));
+  },
+  updateLayerOpacity(layerName, opacity) {
     set((state) => ({
       ...state,
       untrackedState: {
@@ -67,5 +81,38 @@ export const createUntrackedMapSlice: StateCreator<
           },
         },
       },
-    })),
+    }));
+  },
+  selectPlantForPlanting(plant) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          Plant: {
+            ...state.untrackedState.layers.Plant,
+            selectedPlanting: null,
+            selectedPlantForPlanting: plant,
+          },
+        },
+      },
+    }));
+  },
+  selectPlanting(planting) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          Plant: {
+            ...state.untrackedState.layers.Plant,
+            selectedPlantForPlanting: null,
+            selectedPlanting: planting,
+          },
+        },
+      },
+    }));
+  },
 });

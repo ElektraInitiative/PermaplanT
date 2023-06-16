@@ -1,16 +1,15 @@
 import { getPlantings } from '../api/getPlantings';
 import { BaseStage } from '../components/BaseStage';
 import { Layers } from '../components/toolbar/Layers';
-import { PlantSearch } from '../components/toolbar/PlantSearch';
 import { Toolbar } from '../components/toolbar/Toolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
+import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
+import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
 import useMapStore from '../store/MapStore';
 import { LayerName } from '../store/MapStoreTypes';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { ConnectToMapQueryParams } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
-import SimpleButton from '@/components/Button/SimpleButton';
-import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { baseApiUrl } from '@/config';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
@@ -19,9 +18,7 @@ import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import { useQuery } from '@tanstack/react-query';
-import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { useEffect, useRef } from 'react';
-import { Rect } from 'react-konva';
 
 function useInitializeMap() {
   useMapUpdates();
@@ -74,49 +71,15 @@ function useMapUpdates() {
 export const Map = () => {
   useInitializeMap();
 
-  const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
-  const addShapeToTransformer = useMapStore((map) => map.addShapeToTransformer);
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
-
-  const formPlaceholder = (
-    <div className="flex flex-col gap-2 p-2">
-      <h2>Edit attributes</h2>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeHolder="some input"
-      ></SimpleFormInput>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeHolder="some input"
-      ></SimpleFormInput>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeHolder="some input"
-      ></SimpleFormInput>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeHolder="some input"
-      ></SimpleFormInput>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeHolder="some input"
-      ></SimpleFormInput>
-      <SimpleButton>Submit data</SimpleButton>
-    </div>
-  );
 
   const getToolbarContent = (layerName: LayerName) => {
     const content = {
       Base: { right: <div></div>, left: <div></div> },
-      Plant: { right: <PlantSearch />, left: formPlaceholder },
+      Plant: { right: <PlantLayerRightToolbar />, left: <PlantLayerLeftToolbar /> },
       Drawing: { right: <div></div>, left: <div></div> },
       Dimension: { right: <div></div>, left: <div></div> },
       Fertilization: { right: <div></div>, left: <div></div> },
@@ -218,24 +181,7 @@ export const Map = () => {
           visible={untrackedState.layers.Plant.visible}
           opacity={untrackedState.layers.Plant.opacity}
           listening={selectedLayer === 'Plant'}
-        >
-          {trackedState.layers['Plant'].objects.map((o) => (
-            <Rect
-              {...o}
-              key={o.id}
-              fill="blue"
-              draggable={true}
-              shadowBlur={5}
-              onClick={(e) => {
-                addShapeToTransformer(e.target as Shape<ShapeConfig>);
-              }}
-              onDragStart={(e) => {
-                // sometimes the click event is not fired, so we have to add the object to the transformer here
-                addShapeToTransformer(e.target as Shape<ShapeConfig>);
-              }}
-            />
-          ))}
-        </PlantsLayer>
+        ></PlantsLayer>
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
