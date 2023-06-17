@@ -1,4 +1,4 @@
 {
-  "loadingFailed": "Error loading base layer!",
+  "loadingFailed": "Error loading base layer: ",
   "notAnImage": "The selected base layer background is not an image!"
 }

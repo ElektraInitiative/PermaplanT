@@ -79,7 +79,7 @@ const BaseLayer = ({
 
   if (imageData.isError) {
     console.log('Data undefined.', nextcloudImagePath);
-    if (nextcloudImagePath != '') toast.error(t('baseLayer:loadingFailed'));
+    if (nextcloudImagePath != '') toast.error(t('baseLayer:loadingFailed') + imageData.error);
     return <Layer></Layer>;
   }
 
