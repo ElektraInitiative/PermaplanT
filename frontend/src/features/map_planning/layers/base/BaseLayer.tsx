@@ -59,6 +59,9 @@ const BaseLayer = ({
 
   const imageURLPath = `/remote.php/webdav/${cleanImagePath ?? ''}`;
 
+  // TODO: remove after debugging Nextcloud issues
+  console.log('Nextcloud URI: ', imageURLPath);
+
   // Width and height of the background image are only set after the image is
   // rendered in the browser.
   const width = useRef(0);
