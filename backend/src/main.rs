@@ -104,6 +104,10 @@ async fn main() -> std::io::Result<()> {
 fn cors_configuration() -> Cors {
     Cors::default()
         .allowed_origin("http://localhost:5173")
+        .allowed_origin("https://pr.permaplant.net")
+        .allowed_origin("https://dev.permaplant.net")
+        .allowed_origin("https://www.permaplant.net")
+        .allowed_origin("https://cloud.permaplant.net")
         .allowed_methods(vec!["GET", "POST", "PUT", "PATCH", "DELETE"])
         .allowed_headers(vec![
             http::header::AUTHORIZATION,
