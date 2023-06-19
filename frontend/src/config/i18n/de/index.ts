@@ -12,6 +12,7 @@ import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import maps from './maps.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
+import navbar from './navbar.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import pricing from './pricing.json';
@@ -40,6 +41,7 @@ const de = {
   auth,
   plantingSuggestions,
   nextcloudIntegration,
+  navbar,
 };
 
 export default de;
