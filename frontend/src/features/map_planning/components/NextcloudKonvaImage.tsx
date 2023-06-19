@@ -21,7 +21,8 @@ interface NextcloudKonvaImageProps extends ShapeConfig {
 const WEBDAV_PATH = '/remote.php/webdav/';
 
 
-/** loads an image from Nextcloud and returns a KonvaImage shape on success
+/** loads an image from Nextcloud and returns a KonvaImage shape on success.
+  * When no path is given a default image is returned.
   * @param props.path relative path starting at the users Nextcloud root directory
   * @param props.crop crop the image with given rectangle
   * @param props.cornerRadius corner radius of the image
