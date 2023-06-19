@@ -35,13 +35,11 @@ const routes: Routes = {
   },
   [Pages.Map]: {
     component: Map,
-    // path needs to change later to something like /user/:id/map/:id
-    path: '/map',
+    path: '/maps/:mapId',
     title: 'Map',
   },
   [Pages.Maps]: {
     component: MapOverview,
-    // path needs to change later to something like /user/:id/maps
     path: '/maps',
     title: 'Map Overview',
   },
