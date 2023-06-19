@@ -9,6 +9,17 @@ interface SimpleFormInputProps<T extends FieldValues>
   errorTitle?: string;
 }
 
+/**
+ * Wrapper around the default input component with a label and custom styling.
+ *
+ * @param id
+ * @param labelText Text that should be displayed in the accompanying label component.
+ * @param register UseFormRegister hook of the surrounding form.
+ * @param valueAsNumber Will return the input value as a number if this param is set to true.
+ * @param errorTitle Text that will be displayed if an error is encountered.
+ * @param props Any prop that is available for the default input element, is also accepted.
+ * @constructor
+ */
 export default function SimpleFormInput<T extends FieldValues>({
   id,
   labelText = '',
