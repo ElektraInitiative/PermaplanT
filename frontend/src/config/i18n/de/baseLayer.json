@@ -1,4 +1,4 @@
 {
-  "loadingFailed": "Fehler beim laden des Baselayers: ",
-  "notAnImage": "Der gewählte Baselayer Hintergrund ist keine Bilddatei!"
+  "loadingFailed": "Fehler beim Laden des Baselayers: ",
+  "notAnImage": "Der gewählte Baselayer Hintergrund ist leider keine Bilddatei."
 }
