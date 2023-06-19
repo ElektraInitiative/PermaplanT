@@ -9,13 +9,13 @@ import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import maps from './maps.json';
+import nextcloudIntegration from './nextcloudIntegration.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
-import nextcloudIntegration from './nextcloudIntegration.json';
 
 const de = {
   blog,
@@ -35,7 +35,7 @@ const de = {
   undoRedo,
   auth,
   plantingSuggestions,
-  nextcloudIntegration
+  nextcloudIntegration,
 };
 
 export default de;

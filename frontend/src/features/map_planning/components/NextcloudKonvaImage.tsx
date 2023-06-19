@@ -1,72 +1,72 @@
-import { Image } from 'react-konva';
-import { useTranslation } from 'react-i18next';
+import defaultImageUrl from '@/assets/plant.svg';
 import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { useQuery } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
-import loadingImageUrl from '@/assets/loading_image.jpg'
-import errorImageUrl from '@/assets/broken_image.png'
 import { ShapeConfig } from 'konva/lib/Shape';
 import { IRect } from 'konva/lib/types';
+import { useTranslation } from 'react-i18next';
+import { Image, Rect } from 'react-konva';
+import { toast } from 'react-toastify';
+import { WebDAVClient } from 'webdav';
 
 interface NextcloudKonvaImageProps extends ShapeConfig {
-  // relative path starting at the users Nextcloud root directory
-  path: string
+  /** relative path starting at the users Nextcloud root directory */
+  path?: string;
+  /** crop the image with given rectangle */
   crop?: IRect;
+  /** corner radius of the image */
   cornerRadius?: number | number[];
-  onWidthChange?: (width: number) => void
-  onHeightChange?: (height: number) => void
+  /** Fires immediately after the browser loads the image object. */
   onload?: (ncImage: HTMLImageElement) => void;
 }
 
 const WEBDAV_PATH = '/remote.php/webdav/';
+
+/** loads an image from Nextcloud and returns a KonvaImage shape on success.
+ * When no path is given a default image is returned.
+ * @param props.path relative path starting at the users Nextcloud root directory
+ * @param props.crop crop the image with given rectangle
+ * @param props.cornerRadius corner radius of the image
+ * @param props.onload Fires immediately after the browser loads the image object.
+ * @returns a KonvaNodeComponent which is either the requested image or a rectangle of size 0 in case an error occurs
+ **/
 export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
   const { t } = useTranslation(['nextcloudIntegration']);
-  const { path, onWidthChange, onHeightChange, ...imageProps } = props;
-  const webdav = createNextcloudWebDavClient();
-
-  const imagePath = WEBDAV_PATH + path;
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useQuery(['image', WEBDAV_PATH + path], () => webdav.getFileContents(imagePath));
-
-  // if (isLoading) {
-  //   const loadingImage = new window.Image();
-  //   loadingImage.src = loadingImageUrl
-  //   console.log("background loading image")
-  //   console.log(loadingImage)
-  //   return <Image image={loadingImage} />
-  // }
-
-  if (isError) {
-    toast.error(t('nextcloudIntegration:load_image_failed'));
-    // const errorImage = new window.Image();
-    // errorImage.src = errorImageUrl
-    // image.addEventListener('load', this.handleLoad);
-    // //TODO: return broken image icon
-    // console.log("background error image")
-    // return <Image image={errorImage} />;
+  const { path, ...imageProps } = props;
+  let webdav: WebDAVClient | undefined;
+  try {
+    webdav = createNextcloudWebDavClient();
+  } catch (error) {
+    console.error(error);
   }
 
-  const ncImage = new window.Image();
-  ncImage.src = URL.createObjectURL(new Blob([data as BlobPart]));
+  const imagePath = WEBDAV_PATH + path;
+  const { data, isLoading, isError } = useQuery(['image', WEBDAV_PATH + path], () =>
+    webdav ? webdav.getFileContents(imagePath) : '',
+  );
 
-  ncImage.onload = () => {
-    if (onWidthChange) {
-      console.log(ncImage.naturalWidth)
-      onWidthChange(ncImage.naturalWidth)
-    }
-    if (onHeightChange) {
-      console.log(ncImage.naturalHeight)
-      onHeightChange(ncImage.naturalHeight)
+  if (path) {
+    if (isLoading) {
+      return <Rect width={0} height={0} />;
     }
 
-    if (props.onload !== undefined) props.onload(ncImage);
-  };
+    if (isError) {
+      toast.error(t('nextcloudIntegration:load_image_failed'));
+      // When the image cannot be retrieved the component returns a Rectangle shape with a width and height of 0
+      // The rationale is that the konva layer always gets a shape and doesn't produce errors
+      return <Rect width={0} height={0} />;
+    }
 
-  return <Image
-    {...imageProps}
-    image={ncImage}
-  />
-}
+    const ncImage = new window.Image();
+    ncImage.src = URL.createObjectURL(new Blob([data as BlobPart]));
+
+    ncImage.onload = () => {
+      if (props.onload) props.onload(ncImage);
+    };
+
+    return <Image {...imageProps} image={ncImage} />;
+  } else {
+    const defaultImage = new window.Image();
+    defaultImage.src = defaultImageUrl;
+    return <Image {...imageProps} image={defaultImage} />;
+  }
+};
