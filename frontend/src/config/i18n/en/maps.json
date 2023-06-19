@@ -22,6 +22,7 @@
         "public": "public",
         "public_info": "The map is public and visible for everyone",
         "location_button": "Select location",
-        "location_button_hint": "On click the external resource openstreetmap.org will be loaded."
+        "location_button_hint": "On click the external resource openstreetmap.org will be loaded.",
+        "or": "Or"
     }
 }

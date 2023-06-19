@@ -70,11 +70,40 @@ export default function MapCreateForm() {
   );
 
   const locactionPickerPlaceholder = (
-    <div className="mb-12 flex justify-center">
+    <div className="mb-12 flex flex-col items-center">
+      <div className="mb-4 flex">
+        <input
+          id="mapLatInput"
+          name="latitude"
+          onChange={(e) =>
+            setMapInput({
+              ...mapInput,
+              location: { ...mapInput.location, latitude: +e.target.value.replace(',', '.') },
+            })
+          }
+          className="mr-2 block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          style={{ colorScheme: 'dark' }}
+          placeholder="Latitude"
+        />
+        <input
+          id="mapLngInput"
+          name="longitude"
+          onChange={(e) =>
+            setMapInput({
+              ...mapInput,
+              location: { ...mapInput.location, longitude: +e.target.value.replace(',', '.') },
+            })
+          }
+          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          style={{ colorScheme: 'dark' }}
+          placeholder="Longitude"
+        />
+      </div>
+      <span className="text-lg font-medium">{t('maps:create.or')}</span>
       <SimpleButton
         title={t('maps:create.location_button_hint')}
         onClick={() => setMapVisible(true)}
-        className="w-1/4"
+        className="mt-4 max-w-[240px]"
       >
         {t('maps:create.location_button')}
       </SimpleButton>
