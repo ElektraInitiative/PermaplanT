@@ -5,15 +5,16 @@ import { IRect } from 'konva/lib/types';
 import { useTranslation } from 'react-i18next';
 import { Image, Rect } from 'react-konva';
 import { toast } from 'react-toastify';
+import defaultImageUrl from '@/assets/plant.svg'
 
 interface NextcloudKonvaImageProps extends ShapeConfig {
-  // relative path starting at the users Nextcloud root directory
-  path: string;
-  // crop the image with given rectangle
+  /** relative path starting at the users Nextcloud root directory */
+  path?: string;
+  /** crop the image with given rectangle */
   crop?: IRect;
-  // corner radius of the image
+  /** corner radius of the image */
   cornerRadius?: number | number[];
-  // Fires immediately after the browser loads the image object.
+  /** Fires immediately after the browser loads the image object. */
   onload?: (ncImage: HTMLImageElement) => void;
 }
 
@@ -30,30 +31,38 @@ const WEBDAV_PATH = '/remote.php/webdav/';
 export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
   const { t } = useTranslation(['nextcloudIntegration']);
   const { path, ...imageProps } = props;
-  const webdav = createNextcloudWebDavClient();
 
-  const imagePath = WEBDAV_PATH + path;
-  const { data, isLoading, isError } = useQuery(['image', WEBDAV_PATH + path], () =>
-    webdav.getFileContents(imagePath),
-  );
+  if(path){
+    const webdav = createNextcloudWebDavClient();
 
-  if (isLoading) {
-    return <Rect width={0} height={0} />;
+    const imagePath = WEBDAV_PATH + path;
+    const { data, isLoading, isError } = useQuery(['image', WEBDAV_PATH + path], () =>
+      webdav.getFileContents(imagePath),
+    );
+
+    if (isLoading) {
+      return <Rect width={0} height={0} />;
+    }
+
+    if (isError) {
+      toast.error(t('nextcloudIntegration:load_image_failed'));
+      // When the image cannot be retrieved the component returns a Rectangle shape with a width and height of 0
+      // The rationale is that the konva layer always gets a shape and doesn't produce errors
+      return <Rect width={0} height={0} />;
+    }
+
+    const ncImage = new window.Image();
+    ncImage.src = URL.createObjectURL(new Blob([data as BlobPart]));
+
+    ncImage.onload = () => {
+      if (props.onload) props.onload(ncImage);
+    };
+
+    return <Image {...imageProps} image={ncImage} />;
   }
-
-  if (isError) {
-    toast.error(t('nextcloudIntegration:load_image_failed'));
-    // When the image cannot be retrieved the component returns a Rectangle shape with a width and height of 0
-    // The rationale is that the konva layer always gets a shape and doesn't produce errors
-    return <Rect width={0} height={0} />;
+  else {
+    const defaultImage = new window.Image();
+    defaultImage.src=defaultImageUrl
+    return <Image {...imageProps} image={defaultImage} />;
   }
-
-  const ncImage = new window.Image();
-  ncImage.src = URL.createObjectURL(new Blob([data as BlobPart]));
-
-  ncImage.onload = () => {
-    if (props.onload) props.onload(ncImage);
-  };
-
-  return <Image {...imageProps} image={ncImage} />;
 };
