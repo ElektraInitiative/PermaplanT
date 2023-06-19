@@ -7,9 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { Image, Rect } from 'react-konva';
 import { toast } from 'react-toastify';
 import { FileStat, ResponseDataDetailed } from 'webdav';
-import { useTranslation } from 'react-i18next';
-import { Image, Rect } from 'react-konva';
-import { toast } from 'react-toastify';
 import { WebDAVClient } from 'webdav';
 
 interface NextcloudKonvaImageProps extends ShapeConfig {
@@ -63,14 +60,17 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
   // Hooks have to be called an equal number of times on each render.
   // We therefore have to check whether a file is a valid image after loading it.
   const fileIsImage = useQuery(['stat', imagePath], () =>
-    webdav.stat(imagePath, { details: false }).then((stat) => checkFileIsImage(stat)),
+    webdav
+      ? webdav.stat(imagePath, { details: false }).then((stat) => checkFileIsImage(stat))
+      : false,
   );
+
   if (path) {
     if (isLoading) {
       return <Rect width={0} height={0} />;
     }
 
-    if (isError) {
+    if (isError || !fileIsImage) {
       toast.error(t('nextcloudIntegration:load_image_failed'));
       // When the image cannot be retrieved the component returns a Rectangle shape with a width and height of 0
       // The rationale is that the konva layer always gets a shape and doesn't produce errors
