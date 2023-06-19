@@ -17,6 +17,7 @@ import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
+import nextcloudIntegration from './nextcloudIntegration.json';
 
 const de = {
   blog,
@@ -38,6 +39,7 @@ const de = {
   undoRedo,
   auth,
   plantingSuggestions,
+  nextcloudIntegration
 };
 
 export default de;
