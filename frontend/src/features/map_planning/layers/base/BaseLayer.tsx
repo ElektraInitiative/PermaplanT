@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Layer, Image } from 'react-konva';
 import { toast } from 'react-toastify';
 import { FileStat, ResponseDataDetailed, WebDAVClient } from 'webdav';
+import Vector2d = Konva.Vector2d;
 
 interface BaseLayerProps extends Konva.LayerConfig {
   /**
@@ -62,10 +63,9 @@ const BaseLayer = ({
   // TODO: remove after debugging Nextcloud issues
   console.log('Nextcloud URI: ', imageURLPath);
 
-  // Width and height of the background image are only set after the image is
-  // rendered in the browser.
-  const width = useRef(0);
-  const height = useRef(0);
+  // Make sure that the image is centered on, and rotates around, the origin.
+  const imageOffset = useRef<Vector2d>({x: 0, y: 0});
+  const layerOffset = useRef<Vector2d>({x: 0, y: 0});
 
   // Hooks have to be called an equal number of times on each render.
   // We therefore have to check whether a file is a valid image after loading it.
@@ -94,22 +94,22 @@ const BaseLayer = ({
 
   const image = new window.Image();
   image.src = URL.createObjectURL(new Blob([imageData.data as BlobPart]));
-  // Set width and height after the browser has finished loading the image.
+  // Width and height are only defined after the browser has finished loading the image.
   image.onload = () => {
-    width.current = image.naturalWidth;
-    height.current = image.naturalHeight;
+    imageOffset.current = {x: image.width / 2, y: image.height / 2};
+    layerOffset.current = {x: -image.width / 2, y: -image.height / 2};
   };
 
   const scale = pixelsPerMeter / MAP_PIXELS_PER_METER;
 
   return (
-    <Layer listening={false} visible={visible} opacity={opacity} offset={{ x: -width, y: -height }}>
+    <Layer listening={false} visible={visible} opacity={opacity} offset={layerOffset.current}>
       <Image
         image={image}
         rotation={rotation}
         scaleX={scale}
         scaleY={scale}
-        offset={{ x: width.current / 2, y: height.current / 2 }}
+        offset={imageOffset.current}
       />
     </Layer>
   );
