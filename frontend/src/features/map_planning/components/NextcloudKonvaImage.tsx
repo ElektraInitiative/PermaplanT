@@ -5,6 +5,7 @@ import { IRect } from 'konva/lib/types';
 import { useTranslation } from 'react-i18next';
 import { Image, Rect } from 'react-konva';
 import { toast } from 'react-toastify';
+import { FileStat, ResponseDataDetailed } from 'webdav';
 
 interface NextcloudKonvaImageProps extends ShapeConfig {
   // relative path starting at the users Nextcloud root directory
@@ -13,6 +14,18 @@ interface NextcloudKonvaImageProps extends ShapeConfig {
   cornerRadius?: number | number[];
   onload?: (ncImage: HTMLImageElement) => void;
 }
+
+/**
+ * Check if a file from Nextcloud is actually an image to avoid Konva crashes.
+ *
+ * @param imageStat file stats returned by nextcloud.
+ */
+const checkFileIsImage = (imageStat: FileStat | ResponseDataDetailed<FileStat>): boolean => {
+  if (imageStat == undefined) return false;
+
+  const stat = imageStat as FileStat;
+  return stat.type === 'file' && (stat.mime?.startsWith('image') ?? false);
+};
 
 const WEBDAV_PATH = '/remote.php/webdav/';
 export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
@@ -25,17 +38,18 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
     webdav.getFileContents(imagePath),
   );
 
+  // Hooks have to be called an equal number of times on each render.
+  // We therefore have to check whether a file is a valid image after loading it.
+  const fileIsImage = useQuery(['stat', imagePath], () =>
+    webdav.stat(imagePath, { details: false }).then((stat) => checkFileIsImage(stat)),
+  );
+
   if (isLoading) {
     return <Rect width={0} height={0} />;
   }
 
-  if (isError) {
+  if (isError || !fileIsImage) {
     toast.error(t('nextcloudIntegration:load_image_failed'));
-    // const errorImage = new window.Image();
-    // errorImage.src = errorImageUrl
-    // image.addEventListener('load', this.handleLoad);
-    // //TODO: return broken image icon
-    // console.log("background error image")
     return <Rect width={0} height={0} />;
   }
 

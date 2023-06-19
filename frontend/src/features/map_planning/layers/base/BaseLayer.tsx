@@ -25,22 +25,6 @@ interface BaseLayerProps extends Konva.LayerConfig {
   rotation: number;
 }
 
-/**
- * Check if a file from Nextcloud is actually an image to avoid Konva crashes.
- *
- * @param imageStat file stats returned by nextcloud.
- */
-/*
-const checkFileIsImage = (
-  imageStat: UseQueryResult<FileStat | ResponseDataDetailed<FileStat>, unknown>,
-): boolean => {
-  if (imageStat.data == undefined || imageStat.isError) return false;
-
-  const stat = imageStat.data as FileStat;
-  return stat.type === 'file' && (stat.mime?.startsWith('image') ?? false);
-};
-*/
-
 const BaseLayer = ({
   visible,
   opacity,
