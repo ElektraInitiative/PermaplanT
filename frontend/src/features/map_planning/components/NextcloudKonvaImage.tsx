@@ -15,6 +15,7 @@ interface NextcloudKonvaImageProps extends ShapeConfig {
   cornerRadius?: number | number[];
   onWidthChange?: (width: number) => void
   onHeightChange?: (height: number) => void
+  onload?: (ncImage: HTMLImageElement) => void;
 }
 
 const WEBDAV_PATH = '/remote.php/webdav/';
@@ -60,6 +61,8 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
       console.log(ncImage.naturalHeight)
       onHeightChange(ncImage.naturalHeight)
     }
+
+    if (props.onload !== undefined) props.onload(ncImage);
   };
 
   return <Image
