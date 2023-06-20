@@ -32,13 +32,13 @@ export const Layers = ({ layers }: LayersProps) => {
       <section className="flex justify-between">
         <h2>Layers</h2>
         <div className="flex gap-2">
-          <IconButton>
+          <IconButton disabled={true}>
             <AddIcon className="h-6 w-6" />
           </IconButton>
-          <IconButton>
+          <IconButton disabled={true}>
             <CopyIcon className="h-6 w-6" />
           </IconButton>
-          <IconButton>
+          <IconButton disabled={true}>
             <TrashIcon className="h-6 w-6" />
           </IconButton>
         </div>
