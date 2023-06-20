@@ -14,9 +14,9 @@
 - **Precondition:**
   - The user has opened the app and uses it.
 - **Main success scenario:**
-  - The user can see a list of incompleted milestones and their respective requirements. An user can reach a certain milestone by e.g.:
-    - creating their first map (already during onboarding).
+  - The user can see a list of incomplete milestones and their respective requirements. An user can reach a certain milestone by e.g.:
     - change layers (visibility etc.)
+    - base layer: set base image
     - change the date.
     - planting their first plant.
     - using an element from a new layer for the first time.
