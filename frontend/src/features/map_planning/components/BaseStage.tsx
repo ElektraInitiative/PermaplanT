@@ -11,7 +11,7 @@ import { handleScroll, handleZoom } from '../utils/StageTransform';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { Layer, Rect, Stage, Transformer, Text, Group, Label, Tag } from 'react-konva';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -71,6 +71,10 @@ export const BaseStage = ({
   useEffect(() => {
     useMapStore.setState({ stageRef: stageRef });
   }, [stageRef]);
+  const tooltipRef = useRef<Konva.Label>(null);
+  useEffect(() => {
+    useMapStore.setState({ tooltipRef: tooltipRef });
+  }, [tooltipRef]);
 
   const step = useMapStore((map) => map.step);
   const historyLength = useMapStore((map) => map.history.length);
@@ -192,6 +196,12 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
+          <Label visible={false} ref={tooltipRef}>
+            <Tag fill="blue" />
+            <Text
+              fill='white'
+              />
+          </Label>
           <Rect
             x={selectionRectAttrs.x}
             y={selectionRectAttrs.y}
