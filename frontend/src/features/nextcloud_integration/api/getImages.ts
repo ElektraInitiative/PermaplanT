@@ -29,7 +29,7 @@ export const getImageList = async (path: string): Promise<Array<string>> => {
 };
 
 /**
- * get list of available images at the public share path from Nextcloud
+ * get list of available images at the public share path from our Nextcloud
  */
 export const getPublicImageList = async (publicShareToken: string): Promise<Array<string>> => {
   const username = publicShareToken;
@@ -56,13 +56,16 @@ export const getPublicImageList = async (publicShareToken: string): Promise<Arra
     );
 
     const urls = [];
-    let node = null;
+    let node: Node | null;
     while ((node = result.iterateNext())) {
-      urls.push(node.data);
+      if (node && node.nodeValue) {
+        //remove prefix '/public.php/webdav/'
+        let url = node.nodeValue.replace("/public.php/webdav/", "")
+        urls.push(url)
+      }
     }
 
-    console.log(urls);
-
+    console.log(urls)
     return urls;
   } catch (error) {
     throw error as Error;
