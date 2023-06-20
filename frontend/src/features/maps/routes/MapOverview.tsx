@@ -6,7 +6,7 @@ import InfoMessage, { InfoMessageType } from '@/components/Card/InfoMessage';
 import PageTitle from '@/components/Header/PageTitle';
 import Footer from '@/components/Layout/Footer';
 import PageLayout from '@/components/Layout/PageLayout';
-import { getUser } from '@/utils/getUser';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,17 +18,20 @@ export default function MapOverview() {
     message: '',
   };
 
+  const { user } = useSafeAuth();
   const navigate = useNavigate();
   const { t } = useTranslation(['maps']);
   const [infoMessage, setInfoMessage] = useState(initialMessage);
 
   const searchParams: MapSearchParameters = {
-    owner_id: getUser()?.profile.sub,
+    owner_id: user?.profile.sub,
   };
+
   const { data } = useInfiniteQuery({
-    queryKey: ['maps'],
-    queryFn: ({ pageParam = 1 }) => findAllMaps(pageParam, searchParams),
+    queryKey: ['maps', searchParams] as const,
+    queryFn: ({ pageParam = 1, queryKey: [, params] }) => findAllMaps(pageParam, params),
     getNextPageParam: (lastPage) => lastPage.page + 1,
+    staleTime: 0,
   });
 
   const maps = data?.pages.flatMap((page) => page.results) ?? [];
