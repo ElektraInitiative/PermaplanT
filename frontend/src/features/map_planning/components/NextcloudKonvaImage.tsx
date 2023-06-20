@@ -53,7 +53,7 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
   }
 
   const imagePath = WEBDAV_PATH + path;
-  const { data, isLoading, isError } = useQuery(['image', WEBDAV_PATH + path], () =>
+  const { data, isLoading, isError, error } = useQuery(['image', WEBDAV_PATH + path], () =>
     webdav ? webdav.getFileContents(imagePath) : '',
   );
 
@@ -71,7 +71,7 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
     }
 
     if (isError || !fileIsImage) {
-      toast.error(t('nextcloudIntegration:load_image_failed'));
+      toast.error(t('nextcloudIntegration:load_image_failed') + error);
       // When the image cannot be retrieved the component returns a Rectangle shape with a width and height of 0
       // The rationale is that the konva layer always gets a shape and doesn't produce errors
       return <Rect width={0} height={0} />;
