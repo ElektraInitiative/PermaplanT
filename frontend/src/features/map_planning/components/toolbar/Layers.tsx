@@ -1,18 +1,19 @@
-import { useGetLayers } from '../../hooks/useGetLayers';
 import useMapStore from '../../store/MapStore';
 import { LayerList } from './LayerList';
+import { LayerDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as AddIcon } from '@/icons/add.svg';
 import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
 import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
 
+export type LayersProps = {
+  layers: LayerDto[];
+};
+
 /** Layer controls including visibility, layer selection, opacity and alternatives */
-export const Layers = () => {
+export const Layers = ({ layers }: LayersProps) => {
   const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
   const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
-  const mapId = useMapStore((map) => map.untrackedState.mapId);
-
-  const { data: layers } = useGetLayers(mapId);
 
   const layerSettingsList = layers
     ?.filter((l) => !l.is_alternative)

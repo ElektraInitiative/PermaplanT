@@ -80,6 +80,8 @@ export interface TrackedMapSlice {
    * It is not meant to be used by the user, on called in event handlers.
    */
   __applyRemoteAction: (action: Action<unknown, unknown>) => void;
+  /** Only called as part of the map initialization, do not call anywhere else */
+  __resetStore: () => void;
   /**
    * Initializes the plant layer.
    */
@@ -103,6 +105,46 @@ export interface UntrackedMapSlice {
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
 }
+
+const LAYER_TYPES = Object.values(LayerType);
+
+export const TRACKED_DEFAULT_STATE: TrackedMapState = {
+  layers: {
+    ...LAYER_TYPES.reduce(
+      (acc, layerName) => ({
+        ...acc,
+        [layerName]: {
+          index: layerName,
+          objects: [],
+        },
+      }),
+      {} as TrackedLayers,
+    ),
+  },
+};
+
+export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
+  mapId: -1,
+  selectedLayer: {
+    id: -1,
+    is_alternative: false,
+    name: 'none',
+    type_: LayerType.Base,
+    map_id: -1,
+  },
+  layers: {
+    ...LAYER_TYPES.reduce(
+      (acc, layerName) => ({
+        ...acc,
+        [layerName]: {
+          visible: true,
+          opacity: 1,
+        },
+      }),
+      {} as UntrackedLayers,
+    ),
+  },
+};
 
 /**
  * The state of a layer's object.

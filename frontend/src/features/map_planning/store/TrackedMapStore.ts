@@ -1,39 +1,15 @@
-import type {
+import {
   Action,
-  TrackedLayers,
+  TRACKED_DEFAULT_STATE,
   TrackedMapSlice,
-  TrackedMapState,
+  UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
-import { LayerType, PlantingDto } from '@/bindings/definitions';
+import { PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
-
-const LAYER_TYPES = Object.values(LayerType);
-
-export const TRACKED_DEFAULT_STATE: TrackedMapState = {
-  layers: {
-    ...LAYER_TYPES.reduce(
-      (acc, layerName) => ({
-        ...acc,
-        [layerName]: {
-          index: layerName,
-          objects: [],
-        },
-      }),
-      {} as TrackedLayers,
-    ),
-    Base: {
-      index: 'Base',
-      objects: [],
-      scale: 100,
-      rotation: 0,
-      nextcloudImagePath: '',
-    },
-  },
-};
 
 type SetFn = Parameters<typeof createTrackedMapSlice>[0];
 type GetFn = Parameters<typeof createTrackedMapSlice>[1];
@@ -76,6 +52,17 @@ export const createTrackedMapSlice: StateCreator<
           },
         },
       })),
+    __resetStore() {
+      set((state) => ({
+        ...state,
+        trackedState: TRACKED_DEFAULT_STATE,
+        untrackedState: UNTRACKED_DEFAULT_STATE,
+        history: [],
+        step: 0,
+        canUndo: false,
+        canRedo: false,
+      }));
+    },
   };
 };
 

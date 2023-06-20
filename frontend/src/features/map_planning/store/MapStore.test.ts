@@ -1,8 +1,7 @@
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../layers/plant/actions';
 import useMapStore from './MapStore';
 import { TrackedLayers } from './MapStoreTypes';
-import { TRACKED_DEFAULT_STATE } from './TrackedMapStore';
-import { UNTRACKED_DEFAULT_STATE } from './UntrackedMapStore';
+import { TRACKED_DEFAULT_STATE, UNTRACKED_DEFAULT_STATE } from './MapStoreTypes';
 import { LayerDto, LayerType, PlantingDto } from '@/bindings/definitions';
 
 // mock the axios api configuration, so that we don't actually send requests to the backend
