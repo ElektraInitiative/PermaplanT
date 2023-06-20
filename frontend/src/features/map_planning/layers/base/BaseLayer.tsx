@@ -3,14 +3,8 @@ import { NextcloudKonvaImage } from '@/features/map_planning/components/Nextclou
 import Konva from 'konva';
 import { useState } from 'react';
 import { Layer } from 'react-konva';
-import { WebDAVClient } from 'webdav';
 
 interface BaseLayerProps extends Konva.LayerConfig {
-  /**
-   * Connection to Nextcloud.
-   * Used to load the background image.
-   */
-  nextcloudClient: WebDAVClient;
   /**
    * Filepath to the background image in Nextcloud.
    */

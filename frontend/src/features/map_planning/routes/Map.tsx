@@ -11,7 +11,6 @@ import { handleRemoteAction } from '../store/RemoteActions';
 import { ConnectToMapQueryParams } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { baseApiUrl } from '@/config';
-import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
 import BaseLayer from '@/features/map_planning/layers/base/BaseLayer';
 import BaseLayerRightToolbar from '@/features/map_planning/layers/base/components/BaseLayerRightToolbar';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
@@ -73,8 +72,6 @@ function useMapUpdates() {
  */
 export const Map = () => {
   useInitializeMap();
-
-  const nextcloudClient = createNextcloudWebDavClient();
 
   const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);
@@ -190,7 +187,6 @@ export const Map = () => {
       </section>
       <BaseStage>
         <BaseLayer
-          nextcloudClient={nextcloudClient}
           opacity={untrackedState.layers.Base.opacity}
           visible={untrackedState.layers.Base.visible}
           nextcloudImagePath={trackedState.layers.Base.nextcloudImagePath}
