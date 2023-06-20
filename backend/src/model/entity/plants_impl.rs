@@ -5,7 +5,7 @@ use diesel::{
     dsl::sql,
     pg::Pg,
     sql_types::{Bool, Float, Integer},
-    BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult,
+    BoolExpressionMethods, CombineDsl, ExpressionMethods, JoinOnDsl, QueryDsl, QueryResult,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
@@ -17,15 +17,15 @@ use crate::{
         pagination::Paginate,
     },
     model::{
-        dto::{Page, PageParameters, PlantsSummaryDto},
-        r#enum::quantity::Quantity,
+        dto::{plantings::RelationSearchParameters, Page, PageParameters, PlantsSummaryDto},
+        r#enum::{quantity::Quantity, relations_type::RelationsType},
     },
     schema::{
         plants::{
             self, all_columns, common_name_de, common_name_en, edible_uses_en, sowing_outdoors,
             unique_name,
         },
-        seeds,
+        relations, seeds,
     },
 };
 
@@ -86,6 +86,28 @@ impl Plants {
             .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.load_page::<Self>(conn).await.map(Page::from_entity)
+    }
+
+    /// Get all relations of a certain plant.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn find_relations(
+        search_query: RelationSearchParameters,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<Vec<(i32, RelationsType)>> {
+        let query = relations::table
+            .inner_join(plants::table.on(relations::plant2.eq(plants::unique_name)))
+            .select((plants::id, relations::relation))
+            .filter(relations::plant1.eq(&search_query.plant_unique_name))
+            .union(
+                relations::table
+                    .inner_join(plants::table.on(relations::plant1.eq(plants::unique_name)))
+                    .select((plants::id, relations::relation))
+                    .filter(relations::plant2.eq(&search_query.plant_unique_name)),
+            );
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.load::<(i32, RelationsType)>(conn).await
     }
 
     /// Fetch plant by id from the database.

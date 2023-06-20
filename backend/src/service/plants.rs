@@ -5,9 +5,11 @@ use uuid::Uuid;
 
 use super::util::HalfMonthBucket;
 use crate::config::data::AppDataInner;
+use crate::model::dto::plantings::RelationSearchParameters;
 use crate::model::dto::Page;
 use crate::model::dto::PageParameters;
 use crate::model::dto::PlantSuggestionsSearchParameters;
+use crate::model::r#enum::relations_type::RelationsType;
 use crate::{
     error::ServiceError,
     model::{
@@ -34,6 +36,19 @@ pub async fn find(
         _ => Plants::find_any(page_parameters, &mut conn).await?,
     };
 
+    Ok(result)
+}
+
+/// Get all relations of a certain plant.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub async fn find_relations(
+    search_query: RelationSearchParameters,
+    app_data: &Data<AppDataInner>,
+) -> Result<Vec<(i32, RelationsType)>, ServiceError> {
+    let mut conn = app_data.pool.get().await?;
+    let result = Plants::find_relations(search_query, &mut conn).await?;
     Ok(result)
 }
 

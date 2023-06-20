@@ -1,8 +1,10 @@
 //! `Plants` endpoints.
 
 use crate::config::data::AppDataInner;
+use crate::model::dto::plantings::RelationSearchParameters;
 use crate::model::dto::{PageParameters, PlantsSearchParameters};
-use crate::service;
+use crate::service::plants;
+
 use actix_web::{
     get,
     web::{Data, Path, Query},
@@ -35,13 +37,38 @@ pub async fn find(
     page_query: Query<PageParameters>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let payload = service::plants::find(
+    let payload = plants::find(
         search_query.into_inner(),
         page_query.into_inner(),
         &app_data,
     )
     .await?;
     Ok(HttpResponse::Ok().json(payload))
+}
+
+/// Endpoint for finding all relations of a certain plant.
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+#[utoipa::path(
+    context_path = "/api/plants",
+    params(
+        RelationSearchParameters
+    ),
+    responses(
+        (status = 200, description = "Find relations", body = Vec<(i32, RelationsType)>)
+    ),
+    security(
+        ("oauth2" = [])
+    )
+)]
+#[get("/relations")]
+pub async fn find_relations(
+    search_query: Query<RelationSearchParameters>,
+    app_data: Data<AppDataInner>,
+) -> Result<HttpResponse> {
+    let response = plants::find_relations(search_query.into_inner(), &app_data).await?;
+    Ok(HttpResponse::Ok().json(response))
 }
 
 /// Endpoint for fetching a [`Plant`](crate::model::entity::Plants).
@@ -59,6 +86,6 @@ pub async fn find(
 )]
 #[get("/{id}")]
 pub async fn find_by_id(id: Path<i32>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let response = service::plants::find_by_id(*id, &app_data).await?;
+    let response = plants::find_by_id(*id, &app_data).await?;
     Ok(HttpResponse::Ok().json(response))
 }

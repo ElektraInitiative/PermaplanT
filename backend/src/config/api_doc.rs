@@ -19,7 +19,7 @@ use crate::{
             ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto,
             PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, SeedDto,
         },
-        r#enum::{quality::Quality, quantity::Quantity},
+        r#enum::{quality::Quality, quantity::Quantity, relations_type::RelationsType},
     },
 };
 
@@ -55,12 +55,14 @@ struct SeedApiDoc;
 #[openapi(
     paths(
         plants::find,
+        plants::find_relations,
         plants::find_by_id
     ),
     components(
         schemas(
             PagePlantsSummaryDto,
-            PlantsSummaryDto
+            PlantsSummaryDto,
+            RelationsType
         )
     ),
     modifiers(&SecurityAddon)
