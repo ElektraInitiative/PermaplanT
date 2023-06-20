@@ -28,7 +28,7 @@ export type Action<T, U> = {
   /**
    * Execute the action by informing the backend.
    */
-  execute(): Promise<T>;
+  execute(mapId: number): Promise<T>;
 };
 
 /**
@@ -187,6 +187,7 @@ export type TrackedMapState = {
  * The state of the map untracked by the history.
  */
 export type UntrackedMapState = {
+  mapId: number;
   selectedLayer: LayerDto;
   layers: UntrackedLayers;
 };

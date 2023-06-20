@@ -26,7 +26,6 @@ import { useEffect, useRef } from 'react';
 function useInitializeMap() {
   useMapUpdates();
   const initPlantLayer = useMapStore((state) => state.initPlantLayer);
-  const updateSelectedLayer = useMapStore((state) => state.updateSelectedLayer);
   const mapId = useMapId();
   const plantLayer = useDefaultLayer(mapId, LayerType.Plants);
   const baseLayer = useDefaultLayer(mapId, LayerType.Base);
@@ -36,7 +35,15 @@ function useInitializeMap() {
     onSuccess: (data) => {
       if (!baseLayer) return;
 
-      updateSelectedLayer(baseLayer);
+      useMapStore.setState((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          selectedLayer: baseLayer,
+          mapId,
+        },
+      }));
+
       initPlantLayer(data);
     },
   });

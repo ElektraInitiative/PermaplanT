@@ -1,5 +1,4 @@
 import { useGetLayers } from '../../hooks/useGetLayers';
-import { useMapId } from '../../hooks/useMapId';
 import useMapStore from '../../store/MapStore';
 import { LayerList } from './LayerList';
 import IconButton from '@/components/Button/IconButton';
@@ -11,7 +10,7 @@ import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
 export const Layers = () => {
   const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
   const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
-  const mapId = useMapId();
+  const mapId = useMapStore((map) => map.untrackedState.mapId);
 
   const { data: layers } = useGetLayers(mapId);
 

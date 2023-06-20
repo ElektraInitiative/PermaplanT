@@ -1,7 +1,7 @@
 import { LayerDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 
-export async function getLayers(mapId: string) {
+export async function getLayers(mapId: number) {
   const http = createAPI();
 
   try {

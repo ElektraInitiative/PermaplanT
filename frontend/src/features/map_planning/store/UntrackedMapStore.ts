@@ -12,6 +12,7 @@ import { StateCreator } from 'zustand';
 const LAYER_TYPES = Object.values(LayerType);
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
+  mapId: -1,
   selectedLayer: {
     id: -1,
     is_alternative: false,

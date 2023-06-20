@@ -4,5 +4,5 @@ export function useMapId() {
   const params = useParams();
   const mapId = params.mapId as string;
 
-  return mapId;
+  return Number(mapId);
 }

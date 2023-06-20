@@ -85,7 +85,7 @@ export const createTrackedMapSlice: StateCreator<
  * After execution, the ability to redo any undone action is lost.
  */
 function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
-  action.execute();
+  action.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(action, get().step, set, get);
   applyActionToStore(action, set, get);
 
@@ -152,7 +152,7 @@ function undo(set: SetFn, get: GetFn): void {
     throw new Error('Cannot undo action');
   }
 
-  actionToUndo.execute();
+  actionToUndo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToUndo, get().step - 1, set, get);
   applyActionToStore(actionToUndo, set, get);
 
@@ -177,7 +177,7 @@ function redo(set: SetFn, get: GetFn): void {
     throw new Error('Cannot redo action');
   }
 
-  actionToRedo.execute();
+  actionToRedo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToRedo, get().step, set, get);
   applyActionToStore(actionToRedo, set, get);
 
