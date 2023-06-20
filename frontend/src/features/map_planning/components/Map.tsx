@@ -74,9 +74,6 @@ export const Map = ({ layers }: MapProps) => {
           contentTop={
             <div>
               <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
                 <ArrowIcon></ArrowIcon>
               </IconButton>
               <IconButton
@@ -93,48 +90,6 @@ export const Map = ({ layers }: MapProps) => {
               </IconButton>
               <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
                 <MoveIcon></MoveIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <PlantIcon></PlantIcon>
               </IconButton>
             </div>
           }
