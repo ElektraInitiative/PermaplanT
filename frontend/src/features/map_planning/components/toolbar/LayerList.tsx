@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface LayerListProps {
-  /** layer that this list element is responsible for */
+  /** layer which is controlled by this list element */
   layer: LayerDto;
   /** function that gets triggered when the layer is selected */
   setSelectedLayer?: (layer: LayerDto) => void;
