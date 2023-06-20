@@ -109,18 +109,16 @@ export interface UntrackedMapSlice {
 const LAYER_TYPES = Object.values(LayerType);
 
 export const TRACKED_DEFAULT_STATE: TrackedMapState = {
-  layers: {
-    ...LAYER_TYPES.reduce(
-      (acc, layerName) => ({
-        ...acc,
-        [layerName]: {
-          index: layerName,
-          objects: [],
-        },
-      }),
-      {} as TrackedLayers,
-    ),
-  },
+  layers: LAYER_TYPES.reduce(
+    (acc, layerName) => ({
+      ...acc,
+      [layerName]: {
+        index: layerName,
+        objects: [],
+      },
+    }),
+    {} as TrackedLayers,
+  ),
 };
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
@@ -132,18 +130,16 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     type_: LayerType.Base,
     map_id: -1,
   },
-  layers: {
-    ...LAYER_TYPES.reduce(
-      (acc, layerName) => ({
-        ...acc,
-        [layerName]: {
-          visible: true,
-          opacity: 1,
-        },
-      }),
-      {} as UntrackedLayers,
-    ),
-  },
+  layers: LAYER_TYPES.reduce(
+    (acc, layerName) => ({
+      ...acc,
+      [layerName]: {
+        visible: true,
+        opacity: 1,
+      },
+    }),
+    {} as UntrackedLayers,
+  ),
 };
 
 /**
