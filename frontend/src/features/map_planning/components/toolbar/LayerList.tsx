@@ -1,5 +1,5 @@
 import useMapStore from '../../store/MapStore';
-import { LayerName } from '../../store/MapStoreTypes';
+import { LayerDto, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { NamedSlider } from '@/components/Slider/NamedSlider';
 import { ReactComponent as CaretDownIcon } from '@/icons/caret-down.svg';
@@ -10,14 +10,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface LayerListProps {
-  /** name of the layer - this is displayed on top of the slider */
-  name: LayerName;
+  /** layer that this list element is responsible for */
+  layer: LayerDto;
   /** function that gets triggered when the layer is selected */
-  setSelectedLayer?: (name: LayerName) => void;
+  setSelectedLayer?: (layer: LayerDto) => void;
   /** function that gets triggered when slider value is changed */
-  setLayerOpacity?: (name: LayerName, value: number) => void;
+  setLayerOpacity?: (name: LayerType, value: number) => void;
   /** function that gets triggered when an alternative is selected */
-  setLayerAlternative?: (name: LayerName, value: string) => void;
+  setLayerAlternative?: (name: LayerType, value: string) => void;
   /** list of names of the possible alternatives for this layer
    * if alternatives are given they can be selected in a menu
    **/
@@ -26,13 +26,13 @@ interface LayerListProps {
 
 /** Layer setting UI to control visibility, layer selection, opacity and alternatives */
 export const LayerList = ({
-  name,
+  layer,
   setSelectedLayer,
   setLayerOpacity,
   setLayerAlternative,
   alternatives,
 }: LayerListProps) => {
-  const layerVisible = useMapStore((map) => map.untrackedState.layers[name].visible);
+  const layerVisible = useMapStore((map) => map.untrackedState.layers[layer.type_].visible);
   const selectedLayer = useMapStore((map) => map.untrackedState.selectedLayer);
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
   const [alternativesVisible, setAlternativesVisible] = useState(false);
@@ -43,7 +43,7 @@ export const LayerList = ({
       <div className="flex items-center justify-center">
         <IconButton
           title={t('layerSettings:show_hide_layer')}
-          onClick={() => updateLayerVisible(name, !layerVisible)}
+          onClick={() => updateLayerVisible(layer.type_, !layerVisible)}
         >
           {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
         </IconButton>
@@ -53,10 +53,10 @@ export const LayerList = ({
           title="select layer"
           className="h-4 w-4"
           type="radio"
-          value={name}
-          defaultChecked={selectedLayer === name}
-          onClick={() => {
-            if (setSelectedLayer) setSelectedLayer(name);
+          value={layer.name}
+          checked={selectedLayer.id === layer.id}
+          onChange={() => {
+            if (setSelectedLayer) setSelectedLayer(layer);
           }}
           name="layer_enable"
         ></input>
@@ -72,12 +72,12 @@ export const LayerList = ({
         )}
         <NamedSlider
           onChange={(percentage) => {
-            if (setLayerOpacity) setLayerOpacity(name, percentage);
+            if (setLayerOpacity) setLayerOpacity(layer.type_, percentage);
           }}
           title={t('layerSettings:sliderTooltip')}
           value={1}
         >
-          {name}
+          {layer.name}
         </NamedSlider>
       </div>
       {alternativesVisible &&
@@ -91,7 +91,7 @@ export const LayerList = ({
                 name={'alternative_layer_' + name}
                 className="h-4 w-4"
                 onClick={() => {
-                  if (setLayerAlternative) setLayerAlternative(name, a);
+                  if (setLayerAlternative) setLayerAlternative(layer.type_, a);
                 }}
               ></input>
               <div className="flex flex-col">{a}</div>

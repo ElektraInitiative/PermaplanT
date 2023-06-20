@@ -8,7 +8,6 @@ import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
 import useMapStore from '../store/MapStore';
-import { LayerName } from '../store/MapStoreTypes';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { ConnectToMapQueryParams, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
@@ -27,12 +26,17 @@ import { useEffect, useRef } from 'react';
 function useInitializeMap() {
   useMapUpdates();
   const initPlantLayer = useMapStore((state) => state.initPlantLayer);
+  const updateSelectedLayer = useMapStore((state) => state.updateSelectedLayer);
   const mapId = useMapId();
   const plantLayer = useDefaultLayer(mapId, LayerType.Plants);
+  const baseLayer = useDefaultLayer(mapId, LayerType.Base);
 
   useQuery(['plants/plantings', mapId, plantLayer?.id] as const, {
     queryFn: ({ queryKey: [, mapId, plantLayerId] }) => getPlantings(mapId, plantLayerId),
     onSuccess: (data) => {
+      if (!baseLayer) return;
+
+      updateSelectedLayer(baseLayer);
       initPlantLayer(data);
     },
   });
@@ -83,33 +87,36 @@ export const Map = () => {
   const executeAction = useMapStore((map) => map.executeAction);
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
 
-  const getToolbarContent = (layerName: LayerName) => {
+  const getToolbarContent = (layerType: LayerType) => {
     const content = {
-      Base: {
+      [LayerType.Base]: {
         left: <div></div>,
         right: (
           <BaseLayerRightToolbar state={trackedState.layers.Base} executeAction={executeAction} />
         ),
       },
-      Plant: { right: <PlantLayerRightToolbar />, left: <PlantLayerLeftToolbar /> },
-      Drawing: { right: <div></div>, left: <div></div> },
-      Dimension: { right: <div></div>, left: <div></div> },
-      Fertilization: { right: <div></div>, left: <div></div> },
-      Habitats: { right: <div></div>, left: <div></div> },
-      Hydrology: { right: <div></div>, left: <div></div> },
-      Infrastructure: { right: <div></div>, left: <div></div> },
-      Labels: { right: <div></div>, left: <div></div> },
-      Landscape: { right: <div></div>, left: <div></div> },
-      Paths: { right: <div></div>, left: <div></div> },
-      Shade: { right: <div></div>, left: <div></div> },
-      Soil: { right: <div></div>, left: <div></div> },
-      Terrain: { right: <div></div>, left: <div></div> },
-      Trees: { right: <div></div>, left: <div></div> },
-      Warnings: { right: <div></div>, left: <div></div> },
-      Winds: { right: <div></div>, left: <div></div> },
-      Zones: { right: <div></div>, left: <div></div> },
+      [LayerType.Plants]: { right: <PlantLayerRightToolbar />, left: <PlantLayerLeftToolbar /> },
+      [LayerType.Drawing]: { right: <div></div>, left: <div></div> },
+      [LayerType.Fertilization]: { right: <div></div>, left: <div></div> },
+      [LayerType.Habitats]: { right: <div></div>, left: <div></div> },
+      [LayerType.Hydrology]: { right: <div></div>, left: <div></div> },
+      [LayerType.Infrastructure]: { right: <div></div>, left: <div></div> },
+      [LayerType.Label]: { right: <div></div>, left: <div></div> },
+      [LayerType.Landscape]: { right: <div></div>, left: <div></div> },
+      [LayerType.Paths]: { right: <div></div>, left: <div></div> },
+      [LayerType.Shade]: { right: <div></div>, left: <div></div> },
+      [LayerType.Soil]: { right: <div></div>, left: <div></div> },
+      [LayerType.Terrain]: { right: <div></div>, left: <div></div> },
+      [LayerType.Trees]: { right: <div></div>, left: <div></div> },
+      [LayerType.Warnings]: { right: <div></div>, left: <div></div> },
+      [LayerType.Winds]: { right: <div></div>, left: <div></div> },
+      [LayerType.Zones]: { right: <div></div>, left: <div></div> },
+      [LayerType.Todo]: { right: <div></div>, left: <div></div> },
+      [LayerType.Photo]: { right: <div></div>, left: <div></div> },
+      [LayerType.Watering]: { right: <div></div>, left: <div></div> },
     };
-    return content[layerName];
+
+    return content[layerType];
   };
 
   return (
@@ -184,7 +191,7 @@ export const Map = () => {
               </IconButton>
             </div>
           }
-          contentBottom={getToolbarContent(untrackedState.selectedLayer).left}
+          contentBottom={getToolbarContent(untrackedState.selectedLayer.type_).left}
           position="left"
         ></Toolbar>
       </section>
@@ -197,15 +204,15 @@ export const Map = () => {
           rotation={trackedState.layers.Base.rotation}
         />
         <PlantsLayer
-          visible={untrackedState.layers.Plant.visible}
-          opacity={untrackedState.layers.Plant.opacity}
-          listening={selectedLayer === 'Plant'}
+          visible={untrackedState.layers.plants.visible}
+          opacity={untrackedState.layers.plants.opacity}
+          listening={selectedLayer.type_ === LayerType.Plants}
         ></PlantsLayer>
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
           contentTop={<Layers />}
-          contentBottom={getToolbarContent(untrackedState.selectedLayer).right}
+          contentBottom={getToolbarContent(untrackedState.selectedLayer.type_).right}
           position="right"
           minWidth={200}
         ></Toolbar>

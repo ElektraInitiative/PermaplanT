@@ -5,16 +5,17 @@ import type {
   TrackedMapState,
   UntrackedMapSlice,
 } from './MapStoreTypes';
-import { LAYER_NAMES } from './MapStoreTypes';
-import { PlantingDto } from '@/bindings/definitions';
+import { LayerType, PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
 
+const LAYER_TYPES = Object.values(LayerType);
+
 export const TRACKED_DEFAULT_STATE: TrackedMapState = {
   layers: {
-    ...LAYER_NAMES.reduce(
+    ...LAYER_TYPES.reduce(
       (acc, layerName) => ({
         ...acc,
         [layerName]: {
@@ -68,8 +69,8 @@ export const createTrackedMapSlice: StateCreator<
           ...state.trackedState,
           layers: {
             ...state.trackedState.layers,
-            Plant: {
-              ...state.trackedState.layers.Plant,
+            plants: {
+              ...state.trackedState.layers.plants,
               objects: plants,
             },
           },

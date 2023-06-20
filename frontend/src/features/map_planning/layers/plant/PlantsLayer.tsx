@@ -16,7 +16,7 @@ import * as uuid from 'uuid';
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
   const selectedPlant = useMapStore(
-    (state) => state.untrackedState.layers.Plant.selectedPlantForPlanting,
+    (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
 
   /**
@@ -64,7 +64,7 @@ function usePlantLayerListeners(listening: boolean) {
 
     // only unselect if we are not planting a new plant
     const selectedPlantForPlanting =
-      useMapStore.getState().untrackedState.layers.Plant.selectedPlantForPlanting;
+      useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;
     if (selectedPlantForPlanting) {
       return;
     }
@@ -139,7 +139,7 @@ function PlantsLayer(props: PlantsLayerProps) {
 
   const trackedState = useMapStore((map) => map.trackedState);
   const selectedPlant = useMapStore(
-    (state) => state.untrackedState.layers.Plant.selectedPlantForPlanting,
+    (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
   const portalRef = useRef<HTMLDivElement>(
     document.getElementById('bottom-portal') as HTMLDivElement,
@@ -147,7 +147,7 @@ function PlantsLayer(props: PlantsLayerProps) {
 
   return (
     <Layer {...props} ref={layerRef}>
-      {trackedState.layers.Plant.objects.map((o) => (
+      {trackedState.layers.plants.objects.map((o) => (
         <PlantingElement planting={o} key={o.id} />
       ))}
 

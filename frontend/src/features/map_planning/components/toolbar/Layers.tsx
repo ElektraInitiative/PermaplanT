@@ -1,5 +1,6 @@
+import { useGetLayers } from '../../hooks/useGetLayers';
+import { useMapId } from '../../hooks/useMapId';
 import useMapStore from '../../store/MapStore';
-import { LayerName } from '../../store/MapStoreTypes';
 import { LayerList } from './LayerList';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as AddIcon } from '@/icons/add.svg';
@@ -10,41 +11,22 @@ import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
 export const Layers = () => {
   const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
   const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
+  const mapId = useMapId();
 
-  const layerNames: Array<LayerName> = [
-    'Base',
-    'Plant',
-    'Drawing',
-    'Dimension',
-    'Fertilization',
-    'Habitats',
-    'Hydrology',
-    'Infrastructure',
-    'Labels',
-    'Landscape',
-    'Paths',
-    'Shade',
-    'Soil',
-    'Terrain',
-    'Trees',
-    'Warnings',
-    'Winds',
-    'Zones',
-  ];
-  const layerSettingsList = layerNames.map((name) => {
-    return (
-      <LayerList
-        key={'layer_settings_' + name}
-        name={name}
-        setSelectedLayer={(name) => {
-          updateSelectedLayer(name);
-        }}
-        setLayerOpacity={(name, value) => {
-          updateLayerOpacity(name, value);
-        }}
-      />
-    );
-  });
+  const { data: layers } = useGetLayers(mapId);
+
+  const layerSettingsList = layers
+    ?.filter((l) => !l.is_alternative)
+    .map((l) => {
+      return (
+        <LayerList
+          key={'layer_settings_' + l.id}
+          layer={l}
+          setSelectedLayer={updateSelectedLayer}
+          setLayerOpacity={updateLayerOpacity}
+        />
+      );
+    });
   return (
     <div className="flex flex-col p-2">
       <section className="flex justify-between">

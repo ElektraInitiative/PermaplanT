@@ -4,15 +4,23 @@ import type {
   UntrackedMapSlice,
   UntrackedMapState,
 } from './MapStoreTypes';
-import { LAYER_NAMES } from './MapStoreTypes';
+import { LayerType } from '@/bindings/definitions';
 import Konva from 'konva';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
 
+const LAYER_TYPES = Object.values(LayerType);
+
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
-  selectedLayer: 'Base',
+  selectedLayer: {
+    id: -1,
+    is_alternative: false,
+    name: 'none',
+    type_: LayerType.Base,
+    map_id: -1,
+  },
   layers: {
-    ...LAYER_NAMES.reduce(
+    ...LAYER_TYPES.reduce(
       (acc, layerName) => ({
         ...acc,
         [layerName]: {
@@ -41,11 +49,13 @@ export const createUntrackedMapSlice: StateCreator<
       ...state,
       untrackedState: {
         ...state.untrackedState,
-        selectedLayer: selectedLayer,
+        selectedLayer: {
+          ...selectedLayer,
+        },
         layers: {
           ...state.untrackedState.layers,
-          Plant: {
-            ...state.untrackedState.layers.Plant,
+          plants: {
+            ...state.untrackedState.layers.plants,
             selectedPlanting: null,
             selectedPlantForPlanting: null,
           },
@@ -90,8 +100,8 @@ export const createUntrackedMapSlice: StateCreator<
         ...state.untrackedState,
         layers: {
           ...state.untrackedState.layers,
-          Plant: {
-            ...state.untrackedState.layers.Plant,
+          plants: {
+            ...state.untrackedState.layers.plants,
             selectedPlanting: null,
             selectedPlantForPlanting: plant,
           },
@@ -106,8 +116,8 @@ export const createUntrackedMapSlice: StateCreator<
         ...state.untrackedState,
         layers: {
           ...state.untrackedState.layers,
-          Plant: {
-            ...state.untrackedState.layers.Plant,
+          plants: {
+            ...state.untrackedState.layers.plants,
             selectedPlantForPlanting: null,
             selectedPlanting: planting,
           },
