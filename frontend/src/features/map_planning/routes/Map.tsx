@@ -2,13 +2,15 @@ import { getPlantings } from '../api/getPlantings';
 import { BaseStage } from '../components/BaseStage';
 import { Layers } from '../components/toolbar/Layers';
 import { Toolbar } from '../components/toolbar/Toolbar';
+import { useDefaultLayer } from '../hooks/useDefaultLayer';
+import { useMapId } from '../hooks/useMapId';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
 import useMapStore from '../store/MapStore';
 import { LayerName } from '../store/MapStoreTypes';
 import { handleRemoteAction } from '../store/RemoteActions';
-import { ConnectToMapQueryParams } from '@/bindings/definitions';
+import { ConnectToMapQueryParams, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { baseApiUrl } from '@/config';
 import BaseLayer from '@/features/map_planning/layers/base/BaseLayer';
@@ -25,10 +27,11 @@ import { useEffect, useRef } from 'react';
 function useInitializeMap() {
   useMapUpdates();
   const initPlantLayer = useMapStore((state) => state.initPlantLayer);
-  const mapId = '1';
+  const mapId = useMapId();
+  const plantLayer = useDefaultLayer(mapId, LayerType.Plants);
 
-  useQuery(['plants/plantings', mapId], {
-    queryFn: (context) => getPlantings(context.queryKey[1]),
+  useQuery(['plants/plantings', mapId, plantLayer?.id] as const, {
+    queryFn: ({ queryKey: [, mapId, plantLayerId] }) => getPlantings(mapId, plantLayerId),
     onSuccess: (data) => {
       initPlantLayer(data);
     },
