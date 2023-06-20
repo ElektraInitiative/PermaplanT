@@ -2,17 +2,22 @@ import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
 interface SimpleFormInputProps<T extends FieldValues>
   extends React.InputHTMLAttributes<HTMLInputElement> {
+  /** The elements unique id. */
   id: Path<T>;
+  /** Text that should be displayed in the accompanying label component. */
   labelText: string;
+  /** UseFormRegister hook of the surrounding form. */
   register?: UseFormRegister<T>;
+  /** Will return the input value as a number if this param is set to true. */
   valueAsNumber?: boolean;
+  /** Text that will be displayed if an error is encountered. */
   errorTitle?: string;
 }
 
 /**
  * Wrapper around the default input component with a label and custom styling.
  *
- * @param id
+ * @param id The elements unique id.
  * @param labelText Text that should be displayed in the accompanying label component.
  * @param register UseFormRegister hook of the surrounding form.
  * @param valueAsNumber Will return the input value as a number if this param is set to true.
