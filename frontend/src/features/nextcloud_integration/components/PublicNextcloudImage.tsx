@@ -6,6 +6,8 @@ import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
+const WEBDAV_PATH = '/public.php/webdav/';
+
 interface PublicNextcloudImageProps
   extends DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
   // relative path starting at the public share directory to the image in Nextcloud
@@ -23,13 +25,14 @@ export const PublicNextcloudImage = (props: PublicNextcloudImageProps) => {
   const { path, shareToken, ...imageProps } = props;
   const { t } = useTranslation(['nextcloudIntegration']);
 
+  const imagePath = WEBDAV_PATH + path;
   const {
     data: image,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['image', path, shareToken] as const,
-    queryFn: ({ queryKey: [_image, path, token] }) => getPublicImage(path, token),
+    queryKey: ['image', imagePath, shareToken] as const,
+    queryFn: ({ queryKey: [_image, imagePath, token] }) => getPublicImage(imagePath, token),
   });
 
   if (isLoading) {

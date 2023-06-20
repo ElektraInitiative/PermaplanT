@@ -13,7 +13,7 @@ const WEBDAV_PATH = '/remote.php/webdav/';
  */
 interface NextcloudImageProps
   extends DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
-  // relative path starting at the users Nextcloud root directory
+  /** relative path starting at the users Nextcloud root directory */
   path: string;
 }
 
