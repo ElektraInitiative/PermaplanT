@@ -1,8 +1,7 @@
 //! `Plants` endpoints.
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::plantings::RelationSearchParameters;
-use crate::model::dto::{PageParameters, PlantsSearchParameters};
+use crate::model::dto::{PageParameters, PlantsSearchParameters, RelationSearchParameters};
 use crate::service::plants;
 
 use actix_web::{
@@ -56,7 +55,7 @@ pub async fn find(
         RelationSearchParameters
     ),
     responses(
-        (status = 200, description = "Find relations", body = Vec<(i32, RelationsType)>)
+        (status = 200, description = "Find relations", body = RelationDto)
     ),
     security(
         ("oauth2" = [])

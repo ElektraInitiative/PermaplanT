@@ -17,7 +17,10 @@ use crate::{
         pagination::Paginate,
     },
     model::{
-        dto::{plantings::RelationSearchParameters, Page, PageParameters, PlantsSummaryDto},
+        dto::{
+            InnerRelationDto, Page, PageParameters, PlantsSummaryDto, RelationDto,
+            RelationSearchParameters,
+        },
         r#enum::{quantity::Quantity, relations_type::RelationsType},
     },
     schema::{
@@ -95,19 +98,28 @@ impl Plants {
     pub async fn find_relations(
         search_query: RelationSearchParameters,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Vec<(i32, RelationsType)>> {
+    ) -> QueryResult<RelationDto> {
         let query = relations::table
-            .inner_join(plants::table.on(relations::plant2.eq(plants::unique_name)))
+            .inner_join(plants::table.on(relations::plant1.eq(plants::unique_name)))
             .select((plants::id, relations::relation))
-            .filter(relations::plant1.eq(&search_query.plant_unique_name))
+            .filter(plants::id.eq(&search_query.plant_id))
             .union(
                 relations::table
-                    .inner_join(plants::table.on(relations::plant1.eq(plants::unique_name)))
+                    .inner_join(plants::table.on(relations::plant2.eq(plants::unique_name)))
                     .select((plants::id, relations::relation))
-                    .filter(relations::plant2.eq(&search_query.plant_unique_name)),
+                    .filter(plants::id.eq(&search_query.plant_id)),
             );
         debug!("{}", debug_query::<Pg, _>(&query));
-        query.load::<(i32, RelationsType)>(conn).await
+        let relations = query
+            .load::<(i32, RelationsType)>(conn)
+            .await?
+            .into_iter()
+            .map(|(id, relation)| InnerRelationDto { id, relation })
+            .collect();
+        Ok(RelationDto {
+            id: search_query.plant_id,
+            relations,
+        })
     }
 
     /// Fetch plant by id from the database.

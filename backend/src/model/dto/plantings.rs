@@ -117,11 +117,3 @@ pub struct PlantingSearchParameters {
     /// The id of the plants layer the planting is placed on.
     pub plants_layer_id: Option<i32>,
 }
-
-/// Query parameters for searching plants relations.
-#[typeshare]
-#[derive(Debug, Deserialize, IntoParams)]
-pub struct RelationSearchParameters {
-    /// The unique name of the plant to find relations for.
-    pub plant_unique_name: String,
-}

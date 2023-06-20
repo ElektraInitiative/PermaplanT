@@ -1,13 +1,13 @@
 //! [`RelationsType`] enum.
 
 use diesel_derive_enum::DbEnum;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::ToSchema;
 
 /// Specifies the type of relation between two plants.
 #[typeshare]
-#[derive(Serialize, DbEnum, Debug, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, DbEnum, ToSchema)]
 #[ExistingTypePath = "crate::schema::sql_types::RelationsType"]
 pub enum RelationsType {
     /// If a plant works well with another plant.
