@@ -6,8 +6,5 @@
 - Enums names should be singular.
 - Table names should be plural.
 - prefer `TEXT` over `VARCHAR(n)`, don't use other variants
-- We generally prefer `UUID` as primary keys, only tables that are:
-  - very limited in number (in the thousands),
-  - not subject to concurrent use, and
-  - the primary key not part of the URL
-    (like layers per map) may use `SERIAL`.
+- prefer `UUID` as primary keys, except for tables that are not subject to concurrent use (backend creates new items)
+- prefer `BIGSEQUENCE` over `SEQUENCE` except for users/maps where 2 billion is obviously enough

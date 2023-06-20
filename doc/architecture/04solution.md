@@ -47,7 +47,7 @@ This means the backend is always up to date with the users actions and users can
 - No timestamps are needed for data consistency.
 - There is no conflict handling in the frontend.
 - If a user loses the connection, the frontend must go into a read-only state.
-- We use uuid to identify user-created database entries, like maps and elements.
+- We use uuid to identify frontend-created database entries, like elements on the map.
 
 ### Actions
 
