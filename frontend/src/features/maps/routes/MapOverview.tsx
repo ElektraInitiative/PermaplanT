@@ -31,7 +31,6 @@ export default function MapOverview() {
     queryKey: ['maps', searchParams] as const,
     queryFn: ({ pageParam = 1, queryKey: [, params] }) => findAllMaps(pageParam, params),
     getNextPageParam: (lastPage) => lastPage.page + 1,
-    staleTime: 0,
   });
 
   const maps = data?.pages.flatMap((page) => page.results) ?? [];
