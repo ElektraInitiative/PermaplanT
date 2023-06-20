@@ -6,25 +6,23 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can view the map at different points in time by using the timeline feature.
-- **Status:** In Progress (Workaround with date selector)
 - **Assignee:** Paul
 
 ## Scenarios
 
 - **Precondition:**
-  The user has opened the app and selected a map.
+  - The user has opened the app and selected a map.
+  - The date field shows the current date.
 - **Main success scenario:**
-  - The user selects the timeline view and uses the scroll bar with a day granularity or date field.
+  - The user selects a different date in the date field.
   - This allows navigation to a different point in the past, present and future.
   - The map updates to show the state of the garden at the selected point in time (removing or adding elements accordingly).
-  - The scroll bar visually indicates in which points there are changes and at which points the map is empty (without plants).
-  - Hovering over the scroll bar hints which day would be selected on a click.
+  - Adding or removing elements is done on the selected date.
 - **Alternative scenario:**
+  - The user corrects the dates in the attributes of elements or presses undo to undo changes in the dates.
 - **Error scenario:**
-  There is an error in the timeline display or navigation functionality.
-  In this case, the app displays an error message and allows the user to try again.
 - **Postcondition:**
-  The user has successfully navigated to the desired date on the timeline.
+  The user has successfully changed to the desired date.
 - **Non-functional Constraints:**
   - Performance: data in up to 100 years should be fast to use
 - **Note:**
