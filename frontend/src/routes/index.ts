@@ -1,7 +1,7 @@
 import { Pages, Routes } from './types';
 import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
-import { Map } from '@/features/map_planning';
+import { MapWrapper } from '@/features/map_planning';
 import MapCreateForm from '@/features/maps/routes/MapCreateForm';
 import MapOverview from '@/features/maps/routes/MapOverview';
 import { WebdavTest } from '@/features/nextcloud_integration/components/webdav-test';
@@ -34,14 +34,12 @@ const routes: Routes = {
     title: 'PermaplanT',
   },
   [Pages.Map]: {
-    component: Map,
-    // path needs to change later to something like /user/:id/map/:id
-    path: '/map',
+    component: MapWrapper,
+    path: '/maps/:mapId',
     title: 'Map',
   },
   [Pages.Maps]: {
     component: MapOverview,
-    // path needs to change later to something like /user/:id/maps
     path: '/maps',
     title: 'Map Overview',
   },

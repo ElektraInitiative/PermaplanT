@@ -28,18 +28,26 @@ We use specific types (prefer enum over int over string etc.) and share types wh
 
 [See also frontend state management](../decisions/frontend_state_management.md) for which libraries are being used.
 
+## API
+
+The API is implemented in the backend.
+It serves no other purpose as being used by the frontend, so:
+
+- it can be tailored to the needs of the frontend
+- the frontend ideally only needs to do a single API call to get what it needs
+
 ## Concurrent Use
 
 The user wants to see changes that other users are making on the map, therefore the data needs to be kept in sync.
 The data is kept in sync between the client and the server through [API calls with axios](https://www.npmjs.com/package/axios) and server-sent events (SSE).
 This means the backend is always up to date with the users actions and users can see what others are doing.
 
-- Data must be sent immediately and asynchronously to the backend after any user action.
+- Data must be sent immediately and asynchronously to the backend after any user action (via API).
 - Calculations in the backend can always assume that database is up-to-date.
 - No timestamps are needed for data consistency.
 - There is no conflict handling in the frontend.
 - If a user loses the connection, the frontend must go into a read-only state.
-- We use uuid to identify elements on the map.
+- We use uuid to identify frontend-created database entries, like elements on the map.
 
 ### Actions
 

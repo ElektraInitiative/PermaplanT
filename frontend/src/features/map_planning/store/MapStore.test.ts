@@ -1,9 +1,8 @@
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../layers/plant/actions';
 import useMapStore from './MapStore';
 import { TrackedLayers } from './MapStoreTypes';
-import { TRACKED_DEFAULT_STATE } from './TrackedMapStore';
-import { UNTRACKED_DEFAULT_STATE } from './UntrackedMapStore';
-import { PlantingDto } from '@/bindings/definitions';
+import { TRACKED_DEFAULT_STATE, UNTRACKED_DEFAULT_STATE } from './MapStoreTypes';
+import { LayerDto, LayerType, PlantingDto } from '@/bindings/definitions';
 
 // mock the axios api configuration, so that we don't actually send requests to the backend
 jest.mock('@/config/axios');
@@ -19,6 +18,9 @@ describe('MapHistoryStore', () => {
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
         index: layerName,
         objects: [],
+        rotation: layerName === LayerType.Base ? 0 : undefined,
+        scale: layerName === LayerType.Base ? 100 : undefined,
+        nextcloudImagePath: layerName === LayerType.Base ? '' : undefined,
       });
     }
   });
@@ -31,7 +33,7 @@ describe('MapHistoryStore', () => {
 
     const { trackedState, history } = useMapStore.getState();
     expect(history).toHaveLength(1);
-    expect(trackedState.layers.Plant.objects).toHaveLength(1);
+    expect(trackedState.layers.plants.objects).toHaveLength(1);
   });
 
   it('it adds an entry to the history that is the inverse of the action', () => {
@@ -54,7 +56,7 @@ describe('MapHistoryStore', () => {
 
     const { trackedState, history } = useMapStore.getState();
     expect(history).toHaveLength(0);
-    expect(trackedState.layers.Plant.objects).toHaveLength(1);
+    expect(trackedState.layers.plants.objects).toHaveLength(1);
   });
 
   it('adds plant objects to the plants layer on CreatePlantAction', () => {
@@ -66,13 +68,13 @@ describe('MapHistoryStore', () => {
     executeAction(createAction2);
 
     const { trackedState: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(2);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plants.objects).toHaveLength(2);
+    expect(newState.layers.plants.objects[0]).toMatchObject({
       id: '1',
       x: 1,
       y: 1,
     });
-    expect(newState.layers.Plant.objects[1]).toMatchObject({
+    expect(newState.layers.plants.objects[1]).toMatchObject({
       id: '2',
       x: 2,
       y: 2,
@@ -94,8 +96,8 @@ describe('MapHistoryStore', () => {
     executeAction(moveAction);
 
     const { trackedState: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(1);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plants.objects).toHaveLength(1);
+    expect(newState.layers.plants.objects[0]).toMatchObject({
       id: '1',
       x: 123,
       y: 123,
@@ -120,8 +122,8 @@ describe('MapHistoryStore', () => {
     executeAction(transformAction);
 
     const { trackedState: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(1);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plants.objects).toHaveLength(1);
+    expect(newState.layers.plants.objects[0]).toMatchObject({
       id: '1',
       x: 123,
       y: 123,
@@ -153,13 +155,13 @@ describe('MapHistoryStore', () => {
     executeAction(moveAction);
 
     const { trackedState: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(2);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plants.objects).toHaveLength(2);
+    expect(newState.layers.plants.objects[0]).toMatchObject({
       id: '1',
       x: 111,
       y: 111,
     });
-    expect(newState.layers.Plant.objects[1]).toMatchObject({
+    expect(newState.layers.plants.objects[1]).toMatchObject({
       id: '2',
       x: 222,
       y: 222,
@@ -194,8 +196,8 @@ describe('MapHistoryStore', () => {
     executeAction(transformAction);
 
     const { trackedState: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(2);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plants.objects).toHaveLength(2);
+    expect(newState.layers.plants.objects[0]).toMatchObject({
       id: '1',
       x: 111,
       y: 111,
@@ -203,7 +205,7 @@ describe('MapHistoryStore', () => {
       scaleX: 1.11,
       scaleY: 1.11,
     });
-    expect(newState.layers.Plant.objects[1]).toMatchObject({
+    expect(newState.layers.plants.objects[1]).toMatchObject({
       id: '2',
       x: 222,
       y: 222,
@@ -229,13 +231,13 @@ describe('MapHistoryStore', () => {
     useMapStore.getState().undo();
 
     const { trackedState: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(1);
-    expect(newState.layers.Plant.objects[0]).toEqual(createPlantTestObject(1));
+    expect(newState.layers.plants.objects).toHaveLength(1);
+    expect(newState.layers.plants.objects[0]).toEqual(createPlantTestObject(1));
 
     useMapStore.getState().undo();
 
     const { trackedState: newState2 } = useMapStore.getState();
-    expect(newState2.layers.Plant.objects).toHaveLength(0);
+    expect(newState2.layers.plants.objects).toHaveLength(0);
   });
 
   it('reverts multiple plants to their original position on undo()', () => {
@@ -262,9 +264,9 @@ describe('MapHistoryStore', () => {
     useMapStore.getState().undo();
 
     const { trackedState: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(2);
-    expect(newState.layers.Plant.objects[0]).toEqual(createPlantTestObject(1));
-    expect(newState.layers.Plant.objects[1]).toEqual(createPlantTestObject(2));
+    expect(newState.layers.plants.objects).toHaveLength(2);
+    expect(newState.layers.plants.objects[0]).toEqual(createPlantTestObject(1));
+    expect(newState.layers.plants.objects[1]).toEqual(createPlantTestObject(2));
   });
 
   it('repeats one action per redo() after undo()', () => {
@@ -285,8 +287,8 @@ describe('MapHistoryStore', () => {
     useMapStore.getState().redo();
 
     const { trackedState: newState } = useMapStore.getState();
-    expect(newState.layers.Plant.objects).toHaveLength(1);
-    expect(newState.layers.Plant.objects[0]).toMatchObject({
+    expect(newState.layers.plants.objects).toHaveLength(1);
+    expect(newState.layers.plants.objects[0]).toMatchObject({
       id: '1',
       x: 111,
       y: 111,
@@ -303,10 +305,10 @@ describe('MapHistoryStore', () => {
       },
     });
 
-    useMapStore.getState().updateSelectedLayer('Soil');
+    useMapStore.getState().updateSelectedLayer(createTestLayerObject());
 
     const { untrackedState: newState } = useMapStore.getState();
-    expect(newState.selectedLayer).toEqual('Soil');
+    expect(newState.selectedLayer.type_).toEqual(LayerType.Soil);
   });
 
   // regression
@@ -319,7 +321,9 @@ describe('MapHistoryStore', () => {
         ...TRACKED_DEFAULT_STATE,
       },
     });
-    useMapStore.getState().updateSelectedLayer('Soil');
+
+    useMapStore.getState().updateSelectedLayer(createTestLayerObject());
+
     const { executeAction } = useMapStore.getState();
     const createAction = new CreatePlantAction(createPlantTestObject(1));
 
@@ -327,7 +331,7 @@ describe('MapHistoryStore', () => {
     useMapStore.getState().undo();
 
     const { untrackedState: newState } = useMapStore.getState();
-    expect(newState.selectedLayer).toEqual('Soil');
+    expect(newState.selectedLayer.type_).toEqual(LayerType.Soil);
   });
 });
 
@@ -340,13 +344,17 @@ function initPlantLayerInStore(objects: PlantingDto[] = []) {
       ...TRACKED_DEFAULT_STATE,
       layers: {
         ...TRACKED_DEFAULT_STATE.layers,
-        Plant: {
-          ...TRACKED_DEFAULT_STATE.layers.Plant,
+        plants: {
+          ...TRACKED_DEFAULT_STATE.layers.plants,
           objects,
         },
       },
     },
   });
+}
+
+function createTestLayerObject(): LayerDto {
+  return { id: -1, map_id: -1, type_: LayerType.Soil, name: 'Test Layer', is_alternative: false };
 }
 
 function createPlantTestObject(testValue: number): PlantingDto {

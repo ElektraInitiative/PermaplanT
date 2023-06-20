@@ -3,7 +3,10 @@ import { ReactComponent as LogoSmallSVG } from '../../assets/permaplant-logo.svg
 import { DarkModeSwitcher } from '../../features/dark_mode';
 import { useDarkModeStore } from '../../features/dark_mode';
 import LanguageSwitcher from '../../features/landing_page/components/LanguageSwitcher';
+import ButtonLink from '../Button/ButtonLink';
 import { LoginButton } from '@/features/auth/components/LoginButton';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
+import { useTranslation } from 'react-i18next';
 
 /**
  * The navigation component that is fixed on the top.
@@ -11,6 +14,19 @@ import { LoginButton } from '@/features/auth/components/LoginButton';
  */
 const Navbar = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
+  const { t } = useTranslation(['navbar']);
+  const auth = useSafeAuth();
+
+  const navbarItems = (
+    <div className="flex items-center">
+      <ul className="pt-1">
+        <li>
+          <ButtonLink title={t('navbar:maps')} to="/maps" className="text-lg font-medium" />
+        </li>
+      </ul>
+    </div>
+  );
+
   return (
     // z-index 1001 is needed because of leaflet GeoMap
     <nav className="fixed left-0 top-0 z-[1001] h-16 w-full items-center border-b-[0.5px] border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-100-dark">
@@ -28,6 +44,7 @@ const Navbar = () => {
               </span>
             </a>
           </div>
+          {auth.isAuthenticated && navbarItems}
         </div>
         <div className="flex md:order-2">
           <div className="flex items-center space-x-4">

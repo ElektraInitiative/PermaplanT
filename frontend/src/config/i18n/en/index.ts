@@ -1,4 +1,6 @@
 import auth from './auth.json';
+import baseLayer from './baseLayer.json';
+import baseLayerForm from './baseLayerForm.json';
 import blog from './blog.json';
 import common from './common.json';
 import contact from './contact.json';
@@ -9,14 +11,18 @@ import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import maps from './maps.json';
+import navbar from './navbar.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
 import plantSearch from './plantSearch.json';
+import plantingSuggestions from './plantingSuggestions.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
 
 const en = {
+  baseLayer,
+  baseLayerForm,
   blog,
   common,
   contact,
@@ -33,7 +39,9 @@ const en = {
   maps,
   undoRedo,
   auth,
+  plantingSuggestions,
   nextcloudIntegration,
+  navbar,
 };
 
 export default en;

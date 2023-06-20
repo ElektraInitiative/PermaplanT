@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user creates or duplicates a map.
-- **Status:** Done
 - **Assignee:** Thorben
 
 ## Scenarios

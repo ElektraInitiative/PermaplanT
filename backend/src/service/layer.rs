@@ -3,8 +3,7 @@
 use actix_web::web::Data;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::PageParameters;
-use crate::model::dto::{LayerSearchParameters, Page};
+use crate::model::dto::LayerSearchParameters;
 use crate::{
     error::ServiceError,
     model::{
@@ -19,11 +18,10 @@ use crate::{
 /// If the connection to the database could not be established.
 pub async fn find(
     search_parameters: LayerSearchParameters,
-    page_parameters: PageParameters,
     app_data: &Data<AppDataInner>,
-) -> Result<Page<LayerDto>, ServiceError> {
+) -> Result<Vec<LayerDto>, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Layer::find(search_parameters, page_parameters, &mut conn).await?;
+    let result = Layer::find(search_parameters, &mut conn).await?;
     Ok(result)
 }
 

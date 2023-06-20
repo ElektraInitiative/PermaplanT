@@ -1,1 +1,1 @@
-export * from './routes/Map';
+export * from './routes/MapWrapper';

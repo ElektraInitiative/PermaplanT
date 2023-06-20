@@ -1,31 +1,15 @@
-import type {
+import {
   Action,
-  TrackedLayers,
+  TRACKED_DEFAULT_STATE,
   TrackedMapSlice,
-  TrackedMapState,
+  UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
-import { LAYER_NAMES } from './MapStoreTypes';
 import { PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
-import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
-
-export const TRACKED_DEFAULT_STATE: TrackedMapState = {
-  layers: {
-    ...LAYER_NAMES.reduce(
-      (acc, layerName) => ({
-        ...acc,
-        [layerName]: {
-          index: layerName,
-          objects: [],
-        },
-      }),
-      {} as TrackedLayers,
-    ),
-  },
-};
 
 type SetFn = Parameters<typeof createTrackedMapSlice>[0];
 type GetFn = Parameters<typeof createTrackedMapSlice>[1];
@@ -47,17 +31,12 @@ export const createTrackedMapSlice: StateCreator<
     undo: () => undo(set, get),
     redo: () => redo(set, get),
     __applyRemoteAction: (action: Action<unknown, unknown>) => applyActionToStore(action, set, get),
-    addShapeToTransformer: (node: Shape<ShapeConfig>) => {
-      set((state) => {
-        const transformer = state.transformer.current;
-
-        const nodes = transformer?.getNodes() || [];
-        if (!nodes.includes(node)) {
-          transformer?.nodes([node]);
-        }
-
-        return state;
-      });
+    addShapeToTransformer: (node: Node) => {
+      const transformer = get().transformer.current;
+      const nodes = transformer?.getNodes() || [];
+      if (!nodes.includes(node)) {
+        transformer?.nodes([node]);
+      }
     },
     initPlantLayer: (plants: PlantingDto[]) =>
       set((state) => ({
@@ -66,13 +45,24 @@ export const createTrackedMapSlice: StateCreator<
           ...state.trackedState,
           layers: {
             ...state.trackedState.layers,
-            Plant: {
-              ...state.trackedState.layers.Plant,
+            plants: {
+              ...state.trackedState.layers.plants,
               objects: plants,
             },
           },
         },
       })),
+    __resetStore() {
+      set((state) => ({
+        ...state,
+        trackedState: TRACKED_DEFAULT_STATE,
+        untrackedState: UNTRACKED_DEFAULT_STATE,
+        history: [],
+        step: 0,
+        canUndo: false,
+        canRedo: false,
+      }));
+    },
   };
 };
 
@@ -82,7 +72,7 @@ export const createTrackedMapSlice: StateCreator<
  * After execution, the ability to redo any undone action is lost.
  */
 function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
-  action.execute();
+  action.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(action, get().step, set, get);
   applyActionToStore(action, set, get);
 
@@ -149,7 +139,7 @@ function undo(set: SetFn, get: GetFn): void {
     throw new Error('Cannot undo action');
   }
 
-  actionToUndo.execute();
+  actionToUndo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToUndo, get().step - 1, set, get);
   applyActionToStore(actionToUndo, set, get);
 
@@ -174,7 +164,7 @@ function redo(set: SetFn, get: GetFn): void {
     throw new Error('Cannot redo action');
   }
 
-  actionToRedo.execute();
+  actionToRedo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToRedo, get().step, set, get);
   applyActionToStore(actionToRedo, set, get);
 
