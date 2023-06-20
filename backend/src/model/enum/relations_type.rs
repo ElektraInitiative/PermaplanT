@@ -5,6 +5,7 @@ use serde::Serialize;
 use typeshare::typeshare;
 use utoipa::ToSchema;
 
+/// Specifies the type of relation between two plants.
 #[typeshare]
 #[derive(Serialize, DbEnum, Debug, ToSchema)]
 #[ExistingTypePath = "crate::schema::sql_types::RelationsType"]
