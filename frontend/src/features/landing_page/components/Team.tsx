@@ -14,67 +14,67 @@ const Team = () => {
           <Teammember
             name="Dr. Markus Raab"
             role="Project Lead, Software Engineer"
-            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/2arzyJZYj2oNnHX/download?path=%2FAvatars&files=Markus_Raab.jpg"
+            path="/Avatars/Markus_Raab.jpg"
           />
           <Teammember
             name="Yvonne Markl, MSc."
             role="Project Lead, Permaculture Expert"
-            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/Zg3qpiECGdLYLfc/download/Yvonne_Markl.jpg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Samuel Daurer"
             role="Software Engineer"
-            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/EbkxrCDLrHdeNFm/download/Samuel_Daurer_profile.jpg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Gabriel Kitzberger"
             role="Software Engineer"
-            imageUri="/gallery_images/permaplant_illustration_12.svg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Moritz Schalk"
             role="Software Engineer"
-            imageUri="/gallery_images/permaplant_illustration_12.svg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Giancarlo Buenaflor"
             role="Software Engineer"
-            imageUri="/gallery_images/permaplant_illustration_12.svg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Nursultan Imanov"
             role="Software Engineer"
-            imageUri="/gallery_images/permaplant_illustration_12.svg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Lukas Hartl"
             role="DevOps"
-            imageUri="/gallery_images/permaplant_illustration_12.svg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Ramzan Magomadow"
             role="Software Engineer"
-            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/3s8jxENdt5Mz543/download/Ramzan_Magomadow.jpg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Thorben Staufer"
             role="Software Engineer"
-            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/eLNAYdKw73Kn6df/download/Thorben_Staufer.jpg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Benjamin Zinschitz"
             role="Software Engineer"
-            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/BTQBYPbaSFsrt3f/download/Benjamin_Zinschitz.jpg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Paul Buschmann"
             role="Software Engineer"
-            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/azpBktirRTNmtaN/download/Paul_Buschmann.jpg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
             name="Dr. Pavlo Ardanov"
             role="Permaculture Expert"
-            imageUri="https://cloud.permaplant.net/nextcloud/index.php/s/SdzHJyAsRDQGyaW/download/Pavlo_Ardanov.jpg"
+            path="/Avatars/Yvonne_Markl.jpg"
           />
         </div>
       </div>
