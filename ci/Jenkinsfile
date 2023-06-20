@@ -61,7 +61,7 @@ stage('Checks & Build') {
             
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                checkout scm
+                    checkout scm
 
                     wait_for_db()
 
@@ -97,20 +97,6 @@ stage('Checks & Build') {
 
                 }
             }
-
-            /*stage('build-backend'){
-                docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                    rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                        checkout scm
-
-                        wait_for_db()
-
-                        sh './ci/build-scripts/build-backend.sh'
-
-                        stash includes: 'backend/target/release/backend', name: 'backend'
-                    }
-                }
-            }*/
         }
     }
 
@@ -139,67 +125,11 @@ stage('Checks & Build') {
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
             }
-
-            /*stage('build-frontend'){
-                node_image.inside {
-                checkout scm
-                unstash 'definitions.ts'
-
-                sh './ci/build-scripts/build-frontend.sh'
-                stash includes: 'frontend/dist/**//**', name: 'frontend'
-            }                
-            }*/
         }
     }
 
     parallel(parallel_checks)
 }
-
-// REQUIRED for Deployment
-// see Jenkinsfile.release
-/*stage('Build in Docker'){
-    def parallel_build = [:]
-
-    parallel_build['build-backend'] = {
-        node('docker') {
-            node_info()
-
-            checkout scm
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
-
-            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                    checkout scm
-
-                    wait_for_db()
-
-                    sh './ci/build-scripts/build-backend.sh'
-
-                    stash includes: 'backend/target/release/backend', name: 'backend'
-                }
-            }
-        }
-    }
-
-    parallel_build['build-frontend'] = {
-        node('docker') {
-            node_info()
-
-            checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
-
-            node_image.inside {
-                checkout scm
-                unstash 'definitions.ts'
-
-                sh './ci/build-scripts/build-frontend.sh'
-                stash includes: 'frontend/dist/**//**', name: 'frontend'
-            }
-        }
-    }
-
-    parallel(parallel_build)
-}*/
 
 stage('Deploy PR') {
     node('permaplant && pr') {
