@@ -73,7 +73,7 @@ export default function MapCreateForm() {
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
     };
-    createMap(newMap);
+    await createMap(newMap);
     navigate('/maps');
   }
 
