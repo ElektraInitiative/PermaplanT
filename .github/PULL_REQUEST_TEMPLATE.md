@@ -8,10 +8,10 @@ Check relevant points but **please do not remove entries**.
 These points need to be fulfilled for every PR.
 -->
 
+- [ ] The PR is rebased with current master.
 - [ ] Details of what you changed are in commit messages.
 - [ ] References to issues, e.g. `close #X`, are in the commit messages.
 - [ ] The buildserver is happy.
-- [ ] The PR is rebased with current master.
 
 <!--
 If you have any troubles fulfilling these criteria, please write about the trouble as comment in the PR.
