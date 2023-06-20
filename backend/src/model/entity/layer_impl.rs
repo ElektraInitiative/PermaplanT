@@ -5,8 +5,7 @@ use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 
-use crate::db::pagination::Paginate;
-use crate::model::dto::{LayerSearchParameters, Page, PageParameters};
+use crate::model::dto::LayerSearchParameters;
 use crate::{
     model::dto::{LayerDto, NewLayerDto},
     schema::layers::{self, all_columns, is_alternative, map_id, type_},
@@ -22,9 +21,8 @@ impl Layer {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find(
         search_parameters: LayerSearchParameters,
-        page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Page<LayerDto>> {
+    ) -> QueryResult<Vec<LayerDto>> {
         let mut query = layers::table.select(all_columns).into_boxed();
 
         if let Some(map_id_search) = search_parameters.map_id {
@@ -37,11 +35,13 @@ impl Layer {
             query = query.filter(is_alternative.eq(is_alternative_search));
         }
 
-        let query = query
-            .paginate(page_parameters.page)
-            .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));
-        query.load_page::<Self>(conn).await.map(Page::from_entity)
+        Ok(query
+            .load::<Self>(conn)
+            .await?
+            .into_iter()
+            .map(Into::into)
+            .collect())
     }
 
     /// Fetch layer by id from the database.

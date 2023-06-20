@@ -6,10 +6,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::{
-    config::data::AppDataInner,
-    model::dto::{LayerSearchParameters, PageParameters},
-};
+use crate::{config::data::AppDataInner, model::dto::LayerSearchParameters};
 use crate::{model::dto::NewLayerDto, service::layer};
 
 /// Endpoint for searching layers.
@@ -22,10 +19,9 @@ use crate::{model::dto::NewLayerDto, service::layer};
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
         LayerSearchParameters,
-        PageParameters
     ),
     responses(
-        (status = 200, description = "Search layers", body = PageLayerDto)
+        (status = 200, description = "Search layers", body = VecLayerDto)
     ),
     security(
         ("oauth2" = [])
@@ -34,15 +30,13 @@ use crate::{model::dto::NewLayerDto, service::layer};
 #[get("")]
 pub async fn find(
     search_query: Query<LayerSearchParameters>,
-    page_query: Query<PageParameters>,
+    map_id: Path<i32>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let response = layer::find(
-        search_query.into_inner(),
-        page_query.into_inner(),
-        &app_data,
-    )
-    .await?;
+    let mut search_params = search_query.into_inner();
+    search_params.map_id = Some(map_id.into_inner());
+
+    let response = layer::find(search_params, &app_data).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
