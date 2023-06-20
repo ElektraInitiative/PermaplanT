@@ -1,9 +1,9 @@
-import { NewSeedDto, Quality, Quantity } from '../../../bindings/definitions';
 import PaginatedSelectMenu, {
   PageAdditionalInfo,
 } from '../../../components/Form/PaginatedSelectMenu';
 import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
+import { NewSeedDto, Quality, Quantity } from '@/bindings/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
@@ -101,7 +101,7 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
             />
             <SimpleFormInput
               labelText={t('seeds:additional_name')}
-              placeHolder=""
+              placeholder=""
               required={true}
               id="name"
               register={register}
@@ -111,7 +111,7 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
               type="number"
               labelText={t('seeds:harvest_year')}
               defaultValue={currentYear}
-              placeHolder={currentYear.toString()}
+              placeholder={currentYear.toString()}
               required={true}
               id="harvest_year"
               register={register}
@@ -133,14 +133,14 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
             <SimpleFormInput
               type="date"
               labelText={t('seeds:use_by')}
-              placeHolder=""
+              placeholder=""
               id="use_by"
               register={register}
               onChange={onChange}
             />
             <SimpleFormInput
               labelText={t('seeds:origin')}
-              placeHolder={t('seeds:create_seed_form.placeholder_origin')}
+              placeholder={t('seeds:create_seed_form.placeholder_origin')}
               id="origin"
               register={register}
               onChange={onChange}
@@ -159,21 +159,21 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
             />
             <SimpleFormInput
               labelText={t('seeds:taste')}
-              placeHolder={t('seeds:create_seed_form.placeholder_taste')}
+              placeholder={t('seeds:create_seed_form.placeholder_taste')}
               id="taste"
               register={register}
               onChange={onChange}
             />
             <SimpleFormInput
               labelText={t('seeds:yield')}
-              placeHolder={t('seeds:create_seed_form.placeholder_yield')}
+              placeholder={t('seeds:create_seed_form.placeholder_yield')}
               id="yield_"
               register={register}
               onChange={onChange}
             />
             <SimpleFormInput
               labelText={t('seeds:price')}
-              placeHolder={t('seeds:create_seed_form.placeholder_price')}
+              placeholder={t('seeds:create_seed_form.placeholder_price')}
               id="price"
               register={register}
               valueAsNumber={true}
@@ -184,7 +184,7 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
               type="number"
               min={0}
               labelText={t('seeds:generation')}
-              placeHolder={t('seeds:create_seed_form.placeholder_generation')}
+              placeholder={t('seeds:create_seed_form.placeholder_generation')}
               id="generation"
               register={register}
               onChange={onChange}
@@ -192,9 +192,9 @@ const CreateSeedForm = ({ isUploadingSeed, onCancel, onChange, onSubmit }: Creat
           </div>
           <div className="mb-6">
             <SimpleFormInput
-              isArea={true}
+              type="textarea"
               labelText={t('seeds:notes')}
-              placeHolder="..."
+              placeholder="..."
               id="notes"
               register={register}
               onChange={onChange}

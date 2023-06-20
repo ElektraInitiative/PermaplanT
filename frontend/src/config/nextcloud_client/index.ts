@@ -11,6 +11,7 @@ export function createNextcloudWebDavClient() {
   if (!user) {
     throw new Error('User could not be found. Not authenticated.');
   }
+
   const webdav = createClient(nextcloudUri, {
     authType: AuthType.Token,
     token: {
