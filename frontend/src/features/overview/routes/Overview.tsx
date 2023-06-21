@@ -3,7 +3,7 @@ import PageLayout from '@/components/Layout/PageLayout';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useTranslation } from 'react-i18next';
 
-/** In case the user is authenticated all the available pages are listed otherwise they are prompted to log in. */
+/** In case the user is authenticated all of the available pages are listed otherwise they are prompted to log in. */
 export const Overview = () => {
   const auth = useSafeAuth();
   const { t } = useTranslation(['overview']);
