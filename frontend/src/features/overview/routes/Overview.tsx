@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 /** In case the user is authenticated all the available pages are listed otherwise they are prompted to log in. */
 export const Overview = () => {
   const auth = useSafeAuth();
-  const { t } = useTranslation(["overview"])
+  const { t } = useTranslation(['overview']);
   return (
     <PageLayout>
       {auth.isAuthenticated ? (

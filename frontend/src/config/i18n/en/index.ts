@@ -13,13 +13,13 @@ import layerSettings from './layerSettings.json';
 import maps from './maps.json';
 import navbar from './navbar.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
+import overview from './overview.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
-import overview from './overview.json';
 
 const en = {
   baseLayer,
