@@ -1,14 +1,6 @@
-import { PublicNextcloudImage } from "@/features/nextcloud_integration/components/PublicNextcloudImage";
+import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 
-export const Teammember = ({
-  name,
-  path,
-  role,
-}: {
-  name: string;
-  path: string;
-  role: string;
-}) => {
+export const Teammember = ({ name, path, role }: { name: string; path: string; role: string }) => {
   return (
     <div className="w-full p-2 md:w-1/2 xl:w-1/3">
       <div className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700">

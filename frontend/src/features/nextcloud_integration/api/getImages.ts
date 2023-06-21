@@ -60,12 +60,12 @@ export const getPublicImageList = async (publicShareToken: string): Promise<Arra
     while ((node = result.iterateNext())) {
       if (node && node.nodeValue) {
         //remove prefix '/public.php/webdav/'
-        let url = node.nodeValue.replace("/public.php/webdav/", "")
-        urls.push(url)
+        let url = node.nodeValue.replace('/public.php/webdav/', '');
+        urls.push(url);
       }
     }
 
-    console.log(urls)
+    console.log(urls);
     return urls;
   } catch (error) {
     throw error as Error;

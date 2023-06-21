@@ -9,7 +9,6 @@ import { ReactComponent as ChevronRightIcon } from '@/icons/chevron-right.svg';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-
 /** Component used for the landing page to show photos from the PermaplanT public Nextcloud directory */
 export const PhotoGallery = () => {
   // Nextcloud public share token for the gallery
