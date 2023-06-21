@@ -1,13 +1,18 @@
 import CountingButton from './CountingButton';
 import { MapDto } from '@/bindings/definitions';
+import IconButton from '@/components/Button/IconButton';
+import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface MapCardProps {
+  /** The map represented by this list item. */
   map: MapDto;
+  /** The function called to duplicate this map. */
+  onDuplicate: (target: MapDto) => void;
 }
 
-export default function MapCard({ map }: MapCardProps) {
+export default function MapCard({ map, onDuplicate }: MapCardProps) {
   const { t } = useTranslation(['maps']);
   const navigate = useNavigate();
 
@@ -29,6 +34,16 @@ export default function MapCard({ map }: MapCardProps) {
       <section className="ml-auto flex items-center">
         <CountingButton iconType={0} count={map.honors} />
         <CountingButton iconType={1} count={map.visits} />
+      </section>
+      <section className="ml-2 flex flex-col justify-center">
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onDuplicate(map);
+          }}
+        >
+          <CopyIcon className="h-5 w-5" />
+        </IconButton>
       </section>
     </div>
   );
