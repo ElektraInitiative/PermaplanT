@@ -19,6 +19,7 @@ import pricing from './pricing.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
+import overview from './overview.json';
 
 const en = {
   baseLayer,
@@ -42,6 +43,7 @@ const en = {
   plantingSuggestions,
   nextcloudIntegration,
   navbar,
+  overview
 };
 
 export default en;
