@@ -11,9 +11,9 @@ import { LayerDto, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
-import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
+import { useTranslation } from 'react-i18next';
 
 export type MapProps = {
   layers: LayerDto[];
@@ -33,6 +33,8 @@ export const Map = ({ layers }: MapProps) => {
   const redo = useMapStore((map) => map.redo);
   const executeAction = useMapStore((map) => map.executeAction);
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
+
+  const { t } = useTranslation(['undoRedo']);
 
   const getToolbarContent = (layerType: LayerType) => {
     const content = {
@@ -79,12 +81,14 @@ export const Map = ({ layers }: MapProps) => {
               <IconButton
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
                 onClick={() => undo()}
+                title={t('undoRedo:undo_tooltip')}
               >
                 <UndoIcon></UndoIcon>
               </IconButton>
               <IconButton
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
                 onClick={() => redo()}
+                title={t('undoRedo:redo_tooltip')}
               >
                 <RedoIcon></RedoIcon>
               </IconButton>
@@ -97,6 +101,7 @@ export const Map = ({ layers }: MapProps) => {
           position="left"
         ></Toolbar>
       </section>
+
       <BaseStage>
         <BaseLayer
           opacity={untrackedState.layers.base.opacity}
