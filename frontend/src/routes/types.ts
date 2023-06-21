@@ -11,7 +11,7 @@ enum Pages {
   MapCreation,
   Maps,
   Webdav,
-  Overview
+  Overview,
 }
 
 type PathRouteCustomProps = {

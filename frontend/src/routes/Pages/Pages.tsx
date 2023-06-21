@@ -1,15 +1,21 @@
 import routes from '..';
-import { Route, Routes, Navigate } from 'react-router-dom';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 function Pages() {
-  const auth = useSafeAuth()
+  const auth = useSafeAuth();
 
   return (
     <Routes>
-      {Object.values(routes).map(({ path, component: Component, restricted}) => {
-        if(restricted){
-          return  <Route key={path} path={path} element={auth.isAuthenticated ? <Component /> : <Navigate to="/overview" />} />
+      {Object.values(routes).map(({ path, component: Component, restricted }) => {
+        if (restricted) {
+          return (
+            <Route
+              key={path}
+              path={path}
+              element={auth.isAuthenticated ? <Component /> : <Navigate to="/overview" />}
+            />
+          );
         }
         return <Route key={path} path={path} element={<Component />} />;
       })}
