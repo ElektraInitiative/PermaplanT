@@ -235,7 +235,7 @@ export const BaseStage = ({
       </Stage>
       {/** Portal to display something from different layers */}
       <div className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
-        <div id="bottom-portal" />
+        <div id="bottom-portal" className='ring ring-secondary-500 rounded' />
       </div>
     </div>
   );
