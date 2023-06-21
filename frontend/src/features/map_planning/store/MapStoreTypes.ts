@@ -1,6 +1,7 @@
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
+import Vector2d = Konva.Vector2d;
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -198,11 +199,18 @@ export type UntrackedLayers = {
   [key in Exclude<LayerName, 'Plant'>]: UntrackedLayerState;
 } & {
   Plant: UntrackedPlantLayerState;
+  Base: UntrackedBaseLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantsSummaryDto | null;
   selectedPlanting: PlantingDto | null;
+};
+
+export type UntrackedBaseLayerState = UntrackedLayerState & {
+  measurePoint1: Vector2d | null;
+  measurePoint2: Vector2d | null;
+  measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
 };
 
 /**
