@@ -13,7 +13,7 @@
 
 ## Additional Documentation
 
-Instead of setting up psql server on your local machine, you could use a 'postgis' Docker container. Details about the setup can be found [here](/doc/setups/postgis/README.md)
+Instead of setting up psql server on your local machine, you could use a 'postgis' Docker container. Details about the setup can be found [here](/setups/postgis/)
 
 
 Details about the API documentation can be found [here](03api_documentation.md).
