@@ -24,57 +24,57 @@ const Team = () => {
           <Teammember
             name="Samuel Daurer"
             role="Software Engineer"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/Samuel_Daurer_profile.jpg"
           />
           <Teammember
             name="Gabriel Kitzberger"
             role="Software Engineer"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/Gabriel_Kitzberger.jpg"
           />
           <Teammember
             name="Moritz Schalk"
             role="Software Engineer"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/person_placeholder.png"
           />
           <Teammember
             name="Giancarlo Buenaflor"
             role="Software Engineer"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/person_placeholder.png"
           />
           <Teammember
             name="Nursultan Imanov"
             role="Software Engineer"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/person_placeholder.png"
           />
           <Teammember
             name="Lukas Hartl"
             role="DevOps"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/person_placeholder.png"
           />
           <Teammember
             name="Ramzan Magomadow"
             role="Software Engineer"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/Ramzan_Magomadow.jpg"
           />
           <Teammember
             name="Thorben Staufer"
             role="Software Engineer"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/Thorben_Staufer.jpg"
           />
           <Teammember
             name="Benjamin Zinschitz"
             role="Software Engineer"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/Benjamin_Zinschitz.jpg"
           />
           <Teammember
             name="Paul Buschmann"
             role="Software Engineer"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/Paul_Buschmann.jpg"
           />
           <Teammember
             name="Dr. Pavlo Ardanov"
             role="Permaculture Expert"
-            path="/Avatars/Yvonne_Markl.jpg"
+            path="/Avatars/Pavlo_Ardanov.jpg"
           />
         </div>
       </div>
