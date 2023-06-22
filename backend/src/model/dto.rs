@@ -101,6 +101,7 @@ pub struct PlantsSummaryDto {
     pub unique_name: String,
     /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
     pub common_name_en: Option<Vec<Option<String>>>,
+    //TODO: add icon_path: String
 }
 
 /// Query parameters for searching plants.
