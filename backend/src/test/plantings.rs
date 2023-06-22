@@ -99,7 +99,7 @@ async fn test_can_search_plantings() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/plantings?plants_layer_id=-1")
+        .uri("/api/maps/-1/layers/plants/plantings?layer_id=-1")
         .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
