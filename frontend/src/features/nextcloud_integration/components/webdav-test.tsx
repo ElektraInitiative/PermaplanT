@@ -1,6 +1,6 @@
 import { NextcloudImage } from './NextcloudImage';
 import SimpleButton from '@/components/Button/SimpleButton';
-import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
+import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ChangeEventHandler } from 'react';
@@ -19,10 +19,24 @@ export const WebdavTest = () => {
   const [imageName, setImageName] = useState('');
   const path = '/remote.php/webdav/Photos/';
 
-  const webdav = createNextcloudWebDavClient();
+  const webdav = useNextcloudWebDavClient();
+  console.log('rerender');
 
-  const files = useQuery(['files', path], () => webdav.getDirectoryContents(path));
-  // const files = {data: ["test.png"]}
+  const { data: files, refetch: refetchFiles } = useQuery(
+    ['files', path, !!webdav] as const,
+    ({ queryKey: [, path] }) => {
+      if (!webdav) return null;
+      console.log('webdav defined');
+      return webdav.getDirectoryContents(path);
+    },
+  );
+  const { data: imageData } = useQuery(
+    ['files', imageName, webdav] as const,
+    ({ queryKey: [, imageName, webdav] }) => {
+      if (!webdav) return null;
+      return webdav.getFileContents(imageName);
+    },
+  );
 
   /**
    * load image from device
@@ -52,6 +66,7 @@ export const WebdavTest = () => {
    * upload image to Nextcloud
    */
   async function uploadImage() {
+    if (!webdav) return;
     webdav.putFileContents(path + fileName, fileBuffer);
   }
 
@@ -59,8 +74,8 @@ export const WebdavTest = () => {
     <div className="mt-8 flex flex-col items-center justify-center gap-4">
       {/* display a list of all files available at path */}
       <ul>
-        {Array.isArray(files?.data)
-          ? files.data.map((file) => (
+        {files && Array.isArray(files)
+          ? files.map((file) => (
               <li
                 className="cursor-pointer hover:text-primary-400"
                 key={file.filename}
@@ -72,7 +87,7 @@ export const WebdavTest = () => {
             ))
           : []}
       </ul>
-      <SimpleButton onClick={() => files.refetch()} className="w-auto">
+      <SimpleButton onClick={() => refetchFiles()} className="w-auto">
         reload
       </SimpleButton>
       {/* display selected image */}

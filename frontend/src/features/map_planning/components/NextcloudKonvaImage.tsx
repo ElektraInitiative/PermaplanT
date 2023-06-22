@@ -1,5 +1,5 @@
 import defaultImageUrl from '@/assets/plant.svg';
-import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
+import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { useQuery } from '@tanstack/react-query';
 import { ShapeConfig } from 'konva/lib/Shape';
 import { IRect } from 'konva/lib/types';
@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { Image, Rect } from 'react-konva';
 import { toast } from 'react-toastify';
 import { FileStat, ResponseDataDetailed } from 'webdav';
-import { WebDAVClient } from 'webdav';
 
 interface NextcloudKonvaImageProps extends ShapeConfig {
   /** relative path starting at the users Nextcloud root directory */
@@ -45,16 +44,12 @@ const WEBDAV_PATH = '/remote.php/webdav/';
 export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
   const { t } = useTranslation(['nextcloudIntegration']);
   const { path, ...imageProps } = props;
-  let webdav: WebDAVClient | undefined;
-  try {
-    webdav = createNextcloudWebDavClient();
-  } catch (error) {
-    console.error(error);
-  }
+
+  const webdav = useNextcloudWebDavClient();
 
   const imagePath = WEBDAV_PATH + path;
-  const { data, isLoading, isError, error } = useQuery(['image', WEBDAV_PATH + path], () =>
-    webdav ? webdav.getFileContents(imagePath) : '',
+  const { data, isLoading, isError, error } = useQuery(['image', imagePath, path, webdav] as const, ({ queryKey: [, imagePath, path, webdav ] }) =>
+    webdav && path ? webdav.getFileContents(imagePath) : '',
   );
 
   // Hooks have to be called an equal number of times on each render.
