@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { MAP_PIXELS_PER_METER } from '@/features/map_planning/utils/Constants';
 
 const calculateScale = (measuredDistancePixels: number, actualDistanceCentimeters: number): number => {
-  return measuredDistancePixels / actualDistanceCentimeters * MAP_PIXELS_PER_METER;
+  return Math.floor(measuredDistancePixels / actualDistanceCentimeters * MAP_PIXELS_PER_METER);
 };
 
 const calculateMeasredDistance = (point1: Vector2d, point2: Vector2d) => {
@@ -61,11 +61,12 @@ const BaseLayerRightToolbar = () => {
   return (
     <div className="flex flex-col gap-2 p-2">
       <ModalContainer show={untrackedState.measureStep === 'both selected'}>
-        <div className="flex flex-col gap-2 p-2">
+        <div className="flex h-full gap-2 min-h-[20vh] w-ful flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h3>{t('baseLayerForm:distance_modal_title')}</h3>
-          <div className="flex items-end flex-row gap-2">
+          <div className="flex flex-row gap-2">
             <SimpleFormInput
               id="dist_meters"
+              className="w-min"
               labelText={t('common:meters')}
               onChange={(e) => setDistMeters(parseInt(e.target.value))}
               type="number"
@@ -74,7 +75,8 @@ const BaseLayerRightToolbar = () => {
             />
             <SimpleFormInput
               id="dist_centimeters"
-              labelText={t('common:meters')}
+              className="w-min"
+              labelText={t('common:centimeters')}
               onChange={(e) => setDistCentimeters(parseInt(e.target.value))}
               type="number"
               value={distCentimeters}
