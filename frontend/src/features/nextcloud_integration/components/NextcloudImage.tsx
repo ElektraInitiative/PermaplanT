@@ -1,9 +1,10 @@
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
-import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
+import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { ImageBlob } from '@/features/nextcloud_integration/components/ImageBlob';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { ReactComponent as PhotoOffIcon } from '@/icons/photo-off.svg';
 
 const WEBDAV_PATH = '/remote.php/webdav/';
 
@@ -18,14 +19,20 @@ interface NextcloudImageProps extends React.ComponentPropsWithoutRef<'img'> {
 export const NextcloudImage = (props: NextcloudImageProps) => {
   const { t } = useTranslation(['nextcloudIntegration']);
   const { path, ...imageProps } = props;
-  const webdav = createNextcloudWebDavClient();
+  const webdav = useNextcloudWebDavClient();
 
   const imagePath = WEBDAV_PATH + path;
   const {
     data: image,
     isLoading,
     isError,
-  } = useQuery(['image', WEBDAV_PATH + path], () => webdav.getFileContents(imagePath));
+  } = useQuery(['image', WEBDAV_PATH + path], {
+    queryFn: () => {
+      if (!webdav) return null;
+      return webdav.getFileContents(imagePath)
+    },
+    enabled: !!webdav
+  });
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -33,9 +40,8 @@ export const NextcloudImage = (props: NextcloudImageProps) => {
 
   if (isError) {
     toast.error(t('nextcloudIntegration:load_image_failed'));
-    //TODO: return broken image icon
-    return <div></div>;
+    return <PhotoOffIcon />;
   }
-
-  return <ImageBlob image={new Blob([image as BlobPart])} {...imageProps}></ImageBlob>;
+  console.log(image)
+  return image ? <ImageBlob image={new Blob([image as BlobPart])} {...imageProps}></ImageBlob> : <PhotoOffIcon />
 };

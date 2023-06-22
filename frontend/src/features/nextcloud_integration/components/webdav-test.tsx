@@ -17,17 +17,13 @@ export const WebdavTest = () => {
   const [fileBuffer, setFileBuffer] = useState<string | BufferLike | Readable>('');
   const [fileName, setFileName] = useState('');
   const [imageName, setImageName] = useState('');
-  const path = '/remote.php/webdav/Photos/';
+  const path = '/Photos/';
 
   const webdav = useNextcloudWebDavClient();
 
   const { data: files, refetch: refetchFiles } = useQuery(['files', path, webdav], () => {
     if (!webdav) return null;
-    return webdav.getDirectoryContents(path);
-  });
-  const { data: imageData } = useQuery(['files', imageName, webdav], () => {
-    if (!webdav) return null;
-    return webdav.getFileContents(imageName);
+    return webdav.getDirectoryContents('/remote.php/webdav/' + path);
   });
 
   /**
@@ -71,8 +67,7 @@ export const WebdavTest = () => {
               <li
                 className="cursor-pointer hover:text-primary-400"
                 key={file.filename}
-                // onClick={() => setImageName(file.filename.split('/').reverse()[0])}
-                onClick={() => setImageName('test.png')}
+                onClick={() => setImageName(file.filename)}
               >
                 {file.filename}
               </li>
@@ -84,7 +79,8 @@ export const WebdavTest = () => {
       </SimpleButton>
       {/* display selected image */}
       <div className="w-64">
-        <NextcloudImage path={'/Photos/' + imageName} />
+        {/* TODO: fix path */}
+        <NextcloudImage path={imageName} />
       </div>
       {/* upload an image to path */}
       <div className="w-32">
