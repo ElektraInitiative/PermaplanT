@@ -52,16 +52,22 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
     console.error(error);
   }
 
-  const imagePath = WEBDAV_PATH + path;
+  // It shouldn't matter whether the image path starts with a slash or not.
+  let cleanImagePath = path;
+  if (cleanImagePath !== undefined && cleanImagePath.startsWith('/')) {
+    cleanImagePath = cleanImagePath.substring(1);
+  }
+
+  const imageURLPath = WEBDAV_PATH + cleanImagePath;
   const { data, isLoading, isError, error } = useQuery(['image', WEBDAV_PATH + path], () =>
-    webdav ? webdav.getFileContents(imagePath) : '',
+    webdav ? webdav.getFileContents(imageURLPath) : '',
   );
 
   // Hooks have to be called an equal number of times on each render.
   // We therefore have to check whether a file is a valid image after loading it.
-  const fileIsImage = useQuery(['stat', imagePath], () =>
+  const fileIsImage = useQuery(['stat', imageURLPath], () =>
     webdav
-      ? webdav.stat(imagePath, { details: false }).then((stat) => checkFileIsImage(stat))
+      ? webdav.stat(imageURLPath, { details: false }).then((stat) => checkFileIsImage(stat))
       : false,
   );
 
