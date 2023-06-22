@@ -6,7 +6,11 @@ import { useParams } from 'react-router-dom';
  */
 export function useMapId() {
   const params = useParams();
-  const mapId = params.mapId as string;
+  const mapId = Number(params.mapId as string);
 
-  return Number(mapId);
+  if (!mapId || isNaN(mapId)) {
+    throw new Error('No map id found on path');
+  }
+
+  return mapId;
 }
