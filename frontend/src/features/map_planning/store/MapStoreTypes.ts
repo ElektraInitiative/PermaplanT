@@ -119,6 +119,13 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         index: layerName,
         objects: [],
       },
+      [LayerType.Base]: {
+        index: LayerType.Base,
+        objects: [],
+        scale: 100,
+        rotation: 0,
+        nextcloudImagePath: '',
+      },
     }),
     {} as TrackedLayers,
   ),
