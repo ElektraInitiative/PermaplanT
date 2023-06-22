@@ -20,23 +20,15 @@ export const WebdavTest = () => {
   const path = '/remote.php/webdav/Photos/';
 
   const webdav = useNextcloudWebDavClient();
-  console.log('rerender');
 
-  const { data: files, refetch: refetchFiles } = useQuery(
-    ['files', path, !!webdav] as const,
-    ({ queryKey: [, path] }) => {
-      if (!webdav) return null;
-      console.log('webdav defined');
-      return webdav.getDirectoryContents(path);
-    },
-  );
-  const { data: imageData } = useQuery(
-    ['files', imageName, webdav] as const,
-    ({ queryKey: [, imageName, webdav] }) => {
-      if (!webdav) return null;
-      return webdav.getFileContents(imageName);
-    },
-  );
+  const { data: files, refetch: refetchFiles } = useQuery(['files', path, webdav], () => {
+    if (!webdav) return null;
+    return webdav.getDirectoryContents(path);
+  });
+  const { data: imageData } = useQuery(['files', imageName, webdav], () => {
+    if (!webdav) return null;
+    return webdav.getFileContents(imageName);
+  });
 
   /**
    * load image from device
