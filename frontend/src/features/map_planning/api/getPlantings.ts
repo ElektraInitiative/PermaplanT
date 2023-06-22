@@ -10,7 +10,7 @@ export async function getPlantings(mapId: number, layerId?: number) {
 
   try {
     const response = await http.get<PlantingDto[]>(
-      `api/maps/${mapId}/layers/plants/plantings?plants_layer_id=${layerId}`,
+      `api/maps/${mapId}/layers/plants/plantings?layer_id=${layerId}`,
     );
     return response.data;
   } catch (error) {
