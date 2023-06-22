@@ -10,7 +10,6 @@ use crate::{config::data::AppDataInner, model::dto::LayerSearchParameters};
 use crate::{model::dto::NewLayerDto, service::layer};
 
 /// Endpoint for searching layers.
-/// If no page parameters are provided, the first page is returned.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

@@ -80,7 +80,10 @@ export interface TrackedMapSlice {
    * It is not meant to be used by the user, on called in event handlers.
    */
   __applyRemoteAction: (action: Action<unknown, unknown>) => void;
-  /** Only called as part of the map initialization, do not call anywhere else */
+  /**
+   * Only called as part of the map initialization, do not call anywhere else.
+   * Resets store to default values before fetching new data, to avoid temporarily displaying wrong map data.
+   */
   __resetStore: () => void;
   /**
    * Initializes the plant layer.
