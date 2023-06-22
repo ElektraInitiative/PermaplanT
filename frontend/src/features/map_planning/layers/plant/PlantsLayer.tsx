@@ -73,6 +73,18 @@ function usePlantLayerListeners(listening: boolean) {
     useMapStore.getState().selectPlanting(null);
   }, []);
 
+
+  /**
+   * Event handler for selecting plants
+   */
+  const handleSelectPlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback((e) => {
+    const transformer = useMapStore.getState().transformer.current
+    const element = transformer?.getNodes().find(element => element.getAttr('planting'))
+    if(element){
+      useMapStore.getState().selectPlanting(element.getAttr('planting'));
+    }
+  }, []);
+
   /**
    * Event handler for transforming plants
    */
@@ -114,6 +126,7 @@ function usePlantLayerListeners(listening: boolean) {
 
     useMapStore.getState().stageRef.current?.on('click.placePlant', handleCreatePlanting);
     useMapStore.getState().stageRef.current?.on('click.unselectPlanting', handleUnselectPlanting);
+    useMapStore.getState().stageRef.current?.on('mouseup.selectPlanting', handleSelectPlanting);
     useMapStore.getState().transformer.current?.on('transformend.plants', handleTransformPlanting);
     useMapStore.getState().transformer.current?.on('dragend.plants', handleMovePlanting);
 
@@ -122,6 +135,7 @@ function usePlantLayerListeners(listening: boolean) {
       useMapStore.getState().stageRef.current?.off('click.unselectPlanting');
       useMapStore.getState().transformer.current?.off('transformend.plants');
       useMapStore.getState().transformer.current?.off('dragend.plants');
+      useMapStore.getState().stageRef.current?.off('mouseup.selectPlanting');
     };
   }, [
     listening,
@@ -129,6 +143,7 @@ function usePlantLayerListeners(listening: boolean) {
     handleTransformPlanting,
     handleMovePlanting,
     handleUnselectPlanting,
+    handleSelectPlanting
   ]);
 }
 

@@ -2,8 +2,7 @@ import { useFindPlantById } from '../hooks/useFindPlantById';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { Text } from 'konva/lib/shapes/Text';
-import { Rect, Image, Group, Circle } from 'react-konva';
-import { Html } from 'react-konva-utils';
+import { Group, Circle } from 'react-konva';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/NextcloudKonvaImage';
 
 export type PlantingElementProps = {
@@ -39,9 +38,14 @@ export function PlantingElement({ planting }: PlantingElementProps) {
   const addShapeToTransformer = useMapStore((state) => state.addShapeToTransformer);
   const selectPlanting = useMapStore((state) => state.selectPlanting);
 
+  const selectedPlanting = useMapStore(
+    (state) => state.untrackedState.layers.Plant.selectedPlanting,
+  );
+
   return (
     <Group
       {...planting}
+      planting={planting}
       draggable
       onClick={(e) => {
         addShapeToTransformer(e.currentTarget);
@@ -59,7 +63,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
         height={planting.height}
         x={0}
         y={0}
-        fill="#6f9e48"
+        fill={ selectedPlanting?.id === planting.id ? "#0084ad" : "#6f9e48"}
       />
       <NextcloudKonvaImage
         width={planting.width * 0.9}
