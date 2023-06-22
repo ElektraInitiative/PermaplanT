@@ -2,7 +2,7 @@
 
 use crate::{
     model::{
-        dto::{Page, PlantsSummaryDto, RelationDto},
+        dto::{Page, PlantsSummaryDto, RelationsDto},
         r#enum::relations_type::RelationsType,
     },
     test::util::{init_test_app, init_test_database},
@@ -227,7 +227,7 @@ async fn test_find_plants_relations_succeeds() {
     assert_eq!(resp.status(), StatusCode::OK);
     let result = test::read_body(resp).await;
     let result_string = std::str::from_utf8(&result).unwrap();
-    let dto: RelationDto = serde_json::from_str(result_string).unwrap();
+    let dto: RelationsDto = serde_json::from_str(result_string).unwrap();
     assert!(dto.id == -3);
     assert!(dto.relations.len() == 2);
 
@@ -239,7 +239,7 @@ async fn test_find_plants_relations_succeeds() {
     assert_eq!(resp.status(), StatusCode::OK);
     let result = test::read_body(resp).await;
     let result_string = std::str::from_utf8(&result).unwrap();
-    let dto: RelationDto = serde_json::from_str(result_string).unwrap();
+    let dto: RelationsDto = serde_json::from_str(result_string).unwrap();
     assert!(dto.id == -2);
     assert!(dto.relations.len() == 3);
 }

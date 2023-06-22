@@ -8,8 +8,8 @@ use crate::config::data::AppDataInner;
 use crate::model::dto::Page;
 use crate::model::dto::PageParameters;
 use crate::model::dto::PlantSuggestionsSearchParameters;
-use crate::model::dto::RelationDto;
 use crate::model::dto::RelationSearchParameters;
+use crate::model::dto::RelationsDto;
 use crate::{
     error::ServiceError,
     model::{
@@ -46,7 +46,7 @@ pub async fn find(
 pub async fn find_relations(
     search_query: RelationSearchParameters,
     app_data: &Data<AppDataInner>,
-) -> Result<RelationDto, ServiceError> {
+) -> Result<RelationsDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
     let result = Plants::find_relations(search_query, &mut conn).await?;
     Ok(result)

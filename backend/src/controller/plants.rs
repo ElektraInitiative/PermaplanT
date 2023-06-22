@@ -55,7 +55,7 @@ pub async fn find(
         RelationSearchParameters
     ),
     responses(
-        (status = 200, description = "Find relations", body = RelationDto)
+        (status = 200, description = "Find relations to given plant", body = RelationDto)
     ),
     security(
         ("oauth2" = [])

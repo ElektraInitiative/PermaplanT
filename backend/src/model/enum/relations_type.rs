@@ -15,7 +15,7 @@ pub enum RelationsType {
     #[db_rename = "companion"]
     Companion,
 
-    /// If there is nothing particular to say about the plants relation.
+    /// If a plant is known to be neutral with another plant.
     #[serde(rename = "neutral")]
     #[db_rename = "neutral"]
     Neutral,

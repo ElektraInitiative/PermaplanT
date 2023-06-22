@@ -112,7 +112,7 @@ pub struct PlantsSearchParameters {
     pub name: Option<String>,
 }
 
-/// Query parameters for searching plants relations.
+/// Query parameters for searching plant relations.
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct RelationSearchParameters {
@@ -123,17 +123,17 @@ pub struct RelationSearchParameters {
 /// Use to return all relations for the plant.
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
-pub struct RelationDto {
+pub struct RelationsDto {
     /// The id of the plant in the relation.
     pub id: i32,
     /// The type of relation.
-    pub relations: Vec<InnerRelationDto>,
+    pub relations: Vec<RelationDto>,
 }
 
 /// Use to return a relation.
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
-pub struct InnerRelationDto {
+pub struct RelationDto {
     /// The id of the plant in the relation.
     pub id: i32,
     /// The type of relation.

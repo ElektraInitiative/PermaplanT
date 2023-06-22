@@ -18,8 +18,8 @@ use crate::{
     },
     model::{
         dto::{
-            InnerRelationDto, Page, PageParameters, PlantsSummaryDto, RelationDto,
-            RelationSearchParameters,
+            Page, PageParameters, PlantsSummaryDto, RelationDto, RelationSearchParameters,
+            RelationsDto,
         },
         r#enum::{quantity::Quantity, relations_type::RelationsType},
     },
@@ -98,7 +98,7 @@ impl Plants {
     pub async fn find_relations(
         search_query: RelationSearchParameters,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<RelationDto> {
+    ) -> QueryResult<RelationsDto> {
         let query = relations::table
             .inner_join(plants::table.on(relations::plant1.eq(plants::unique_name)))
             .select((plants::id, relations::relation))
@@ -114,9 +114,9 @@ impl Plants {
             .load::<(i32, RelationsType)>(conn)
             .await?
             .into_iter()
-            .map(|(id, relation)| InnerRelationDto { id, relation })
+            .map(|(id, relation)| RelationDto { id, relation })
             .collect();
-        Ok(RelationDto {
+        Ok(RelationsDto {
             id: search_query.plant_id,
             relations,
         })

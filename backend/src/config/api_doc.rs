@@ -16,9 +16,9 @@ use crate::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            ConfigDto, InnerRelationDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto,
-            PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto,
-            RelationDto, SeedDto,
+            ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto,
+            PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto,
+            RelationsDto, SeedDto,
         },
         r#enum::{quality::Quality, quantity::Quantity, relations_type::RelationsType},
     },
@@ -63,8 +63,8 @@ struct SeedApiDoc;
         schemas(
             PagePlantsSummaryDto,
             PlantsSummaryDto,
+            RelationsDto,
             RelationDto,
-            InnerRelationDto,
             RelationsType
         )
     ),
