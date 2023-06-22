@@ -20,12 +20,12 @@ export function PlantLayerLeftToolbar() {
       <SimpleFormInput
         id="input1"
         labelText="Some attribute"
-        placeHolder="some input"
+        placeholder="some input"
       ></SimpleFormInput>
       <SimpleFormInput
         id="input1"
         labelText="Some attribute"
-        placeHolder="some input"
+        placeholder="some input"
       ></SimpleFormInput>
 
       <SimpleButton>Submit Changes</SimpleButton>

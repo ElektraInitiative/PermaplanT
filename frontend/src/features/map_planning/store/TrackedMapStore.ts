@@ -24,6 +24,13 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
       }),
       {} as TrackedLayers,
     ),
+    Base: {
+      index: 'Base',
+      objects: [],
+      scale: 100,
+      rotation: 0,
+      nextcloudImagePath: '',
+    },
   },
 };
 
