@@ -1,4 +1,5 @@
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
+import { LayerType } from '@/bindings/definitions';
 
 export class UpdateBaseLayerAction implements Action<void, void> {
   constructor(
@@ -9,9 +10,9 @@ export class UpdateBaseLayerAction implements Action<void, void> {
 
   reverse(state: TrackedMapState) {
     return new UpdateBaseLayerAction(
-      state.layers.Base.rotation,
-      state.layers.Base.scale,
-      state.layers.Base.nextcloudImagePath,
+      state.layers.base.rotation,
+      state.layers.base.scale,
+      state.layers.base.nextcloudImagePath,
     );
   }
 
@@ -20,8 +21,8 @@ export class UpdateBaseLayerAction implements Action<void, void> {
       ...state,
       layers: {
         ...state.layers,
-        Base: {
-          ...state.layers.Base,
+        [LayerType.Base]: {
+          ...state.layers.base,
           rotation: this.rotation,
           scale: this.scale,
           nextcloudImagePath: this.nextcloudImagePath,
