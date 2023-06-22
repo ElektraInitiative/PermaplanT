@@ -1,25 +1,26 @@
 import { UpdateBaseLayerAction } from '../../../layers/base/actions';
-import { Action, TrackedBaseLayerState } from '../../../store/MapStoreTypes';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import useMapStore from '@/features/map_planning/store/MapStore';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface BaseLayerFormProps {
-  state: TrackedBaseLayerState;
-  executeAction: (action: Action<unknown, unknown>) => void;
-}
+const BaseLayerRightToolbar = () => {
+  const trackedState = useMapStore((state) => state.trackedState.layers.Base);
+  const untrackedState = useMapStore((state) => state.untrackedState.layers.Base);
+  const executeAction = useMapStore((state) => state.executeAction);
+  const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
+  const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
 
-const BaseLayerRightToolbar = ({ state, executeAction }: BaseLayerFormProps) => {
   const { t } = useTranslation(['common', 'baseLayerForm']);
 
-  const [rotationInput, setRotationInput] = useState(state.rotation);
-  const [pathInput, setPathInput] = useState(state.nextcloudImagePath);
+  const [rotationInput, setRotationInput] = useState(trackedState.rotation);
+  const [pathInput, setPathInput] = useState(trackedState.nextcloudImagePath);
 
   useEffect(() => {
-    setRotationInput(state.rotation);
-    setPathInput(state.nextcloudImagePath);
-  }, [state.nextcloudImagePath, state.rotation]);
+    setRotationInput(trackedState.rotation);
+    setPathInput(trackedState.nextcloudImagePath);
+  }, [trackedState.nextcloudImagePath, trackedState.rotation]);
 
   return (
     <div className="flex flex-col gap-2 p-2">
@@ -41,7 +42,18 @@ const BaseLayerRightToolbar = ({ state, executeAction }: BaseLayerFormProps) => 
       />
       <SimpleButton
         onClick={() =>
-          executeAction(new UpdateBaseLayerAction(rotationInput, state.scale, pathInput))
+          untrackedState.measureStep === 'inactive'
+            ? activateMeasurement()
+            : deactivateMeasurement()
+        }
+      >
+        {untrackedState.measureStep === 'inactive'
+          ? t('baseLayerForm:set_scale')
+          : t('common:cancel')}
+      </SimpleButton>
+      <SimpleButton
+        onClick={() =>
+          executeAction(new UpdateBaseLayerAction(rotationInput, trackedState.scale, pathInput))
         }
       >
         {t('common:apply')}

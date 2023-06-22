@@ -1,33 +1,19 @@
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/NextcloudKonvaImage';
+import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva';
 import { useState } from 'react';
-import { Layer } from 'react-konva';
+import { Layer, Line } from 'react-konva';
 
-interface BaseLayerProps extends Konva.LayerConfig {
-  /**
-   * Filepath to the background image in Nextcloud.
-   */
-  nextcloudImagePath: string;
-  /**
-   * Used to align the size of the background image with the real world.
-   */
-  pixelsPerMeter: number;
-  /**
-   * The amount of rotation required to align the base layer with geographic north.
-   */
-  rotation: number;
-}
+import KonvaEventObject = Konva.KonvaEventObject;
 
-const BaseLayer = ({
-  visible,
-  opacity,
-  nextcloudImagePath,
-  pixelsPerMeter,
-  rotation,
-}: BaseLayerProps) => {
+const BaseLayer = ({ visible, opacity, listening }: Konva.LayerConfig) => {
+  const trackedState = useMapStore((state) => state.trackedState.layers.Base);
+  const untrackedState = useMapStore((state) => state.untrackedState.layers.Base);
+  const setMeasurePoint = useMapStore((state) => state.baseLayerSetMeasurePoint);
+
   // It shouldn't matter whether the image path starts with a slash or not.
-  let cleanImagePath = nextcloudImagePath;
+  let cleanImagePath = trackedState.nextcloudImagePath;
   if (cleanImagePath.startsWith('/')) {
     cleanImagePath = cleanImagePath.substring(1);
   }
@@ -40,20 +26,68 @@ const BaseLayer = ({
       setImageOffset({ x: image.width / 2, y: image.height / 2 });
   };
 
-  const scale = pixelsPerMeter / MAP_PIXELS_PER_METER;
+  const measurementOnClick = (e: KonvaEventObject<MouseEvent>) => {
+    const position = e.currentTarget.getRelativePointerPosition();
+    setMeasurePoint(position);
+  };
+
+  const [hoverPoint, setHoverPoint] = useState({ x: 0, y: 0 });
+  const measurementOnMouseMove = (e: KonvaEventObject<MouseEvent>) => {
+    const position = e.currentTarget.getRelativePointerPosition();
+    setHoverPoint(position);
+  };
+
+  const measurementLinePoints = () => {
+    switch (untrackedState.measureStep) {
+      case 'inactive':
+      case 'none selected':
+        return [];
+
+      case 'one selected':
+        console.assert(untrackedState.measurePoint1 !== null);
+        return [
+          untrackedState.measurePoint1?.x ?? Number.NaN,
+          untrackedState.measurePoint1?.y ?? Number.NaN,
+          hoverPoint.x,
+          hoverPoint.y,
+        ];
+
+      case 'both selected':
+        console.assert(untrackedState.measurePoint1 !== null);
+        console.assert(untrackedState.measurePoint2 !== null);
+        return [
+          untrackedState.measurePoint1?.x ?? Number.NaN,
+          untrackedState.measurePoint1?.y ?? Number.NaN,
+          untrackedState.measurePoint2?.x ?? Number.NaN,
+          untrackedState.measurePoint2?.y ?? Number.NaN,
+        ];
+    }
+  };
+
+  const scale = trackedState.scale / MAP_PIXELS_PER_METER;
 
   return (
-    <Layer listening={false} visible={visible} opacity={opacity}>
+    <Layer
+      listening={listening}
+      visible={visible}
+      opacity={opacity}
+      draggable={false}
+      onClick={measurementOnClick}
+      onMouseMove={measurementOnMouseMove}
+    >
+      {/* Virtual ruler used to set the correct scale of the base layer. */}
       {cleanImagePath && (
         <NextcloudKonvaImage
           path={cleanImagePath}
           onload={onload}
-          rotation={rotation ?? 0}
+          rotation={trackedState.rotation ?? 0}
           scaleX={scale}
           scaleY={scale}
           offset={imageOffset}
+          draggable={false}
         />
       )}
+      <Line points={measurementLinePoints()} strokeWidth={10} stroke="red" lineCap={'round'} />
     </Layer>
   );
 };

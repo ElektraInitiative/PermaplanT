@@ -73,20 +73,16 @@ function useMapUpdates() {
 export const Map = () => {
   useInitializeMap();
 
-  const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
-  const executeAction = useMapStore((map) => map.executeAction);
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
 
   const getToolbarContent = (layerName: LayerName) => {
     const content = {
       Base: {
         left: <div></div>,
-        right: (
-          <BaseLayerRightToolbar state={trackedState.layers.Base} executeAction={executeAction} />
-        ),
+        right: <BaseLayerRightToolbar />,
       },
       Plant: { right: <PlantLayerRightToolbar />, left: <PlantLayerLeftToolbar /> },
       Drawing: { right: <div></div>, left: <div></div> },
@@ -189,9 +185,7 @@ export const Map = () => {
         <BaseLayer
           opacity={untrackedState.layers.Base.opacity}
           visible={untrackedState.layers.Base.visible}
-          nextcloudImagePath={trackedState.layers.Base.nextcloudImagePath}
-          pixelsPerMeter={trackedState.layers.Base.scale}
-          rotation={trackedState.layers.Base.rotation}
+          listening={selectedLayer === 'Base'}
         />
         <PlantsLayer
           visible={untrackedState.layers.Plant.visible}

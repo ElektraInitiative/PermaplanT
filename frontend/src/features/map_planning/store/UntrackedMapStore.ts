@@ -1,8 +1,14 @@
-import type {TrackedMapSlice, UntrackedLayers, UntrackedMapSlice, UntrackedMapState,} from './MapStoreTypes';
-import {LAYER_NAMES} from './MapStoreTypes';
-import {createRef} from 'react';
-import {StateCreator} from 'zustand';
-import Konva from "konva/cmj";
+import type {
+  TrackedMapSlice,
+  UntrackedLayers,
+  UntrackedMapSlice,
+  UntrackedMapState,
+} from './MapStoreTypes';
+import { LAYER_NAMES } from './MapStoreTypes';
+import Konva from 'konva/cmj';
+import { createRef } from 'react';
+import { StateCreator } from 'zustand';
+
 import Vector2d = Konva.Vector2d;
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
@@ -14,6 +20,9 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         [layerName]: {
           visible: true,
           opacity: 1,
+          measureStep: layerName === 'Base' ? 'inactive' : undefined,
+          measurePoint1: layerName === 'Base' ? null : undefined,
+          measurePoint2: layerName === 'Base' ? null : undefined,
         },
       }),
       {} as UntrackedLayers,
@@ -49,7 +58,7 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers.Base,
             measurePoint1: null,
             measurePoint2: null,
-            measureStep: "inactive",
+            measureStep: 'inactive',
           },
         },
       },
@@ -119,8 +128,6 @@ export const createUntrackedMapSlice: StateCreator<
   },
   /**
    * Allow the user to make measurement inputs on the base layer.
-   * Pre-condition: None
-   * Post-condition: Base.measureStep is set to "none selected".
    */
   baseLayerActivateMeasurement() {
     set((state) => ({
@@ -133,7 +140,7 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers.Base,
             measurePoint1: null,
             measurePoint2: null,
-            measureStep: "none selected",
+            measureStep: 'none selected',
           },
         },
       },
@@ -141,8 +148,6 @@ export const createUntrackedMapSlice: StateCreator<
   },
   /**
    * Prevent the user from making measurement inputs on the base layer.
-   * Pre-condition: None
-   * Post-condition: Base.measureStep is set to "inactive".
    */
   baseLayerDeactivateMeasurement() {
     set((state) => ({
@@ -155,7 +160,7 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers.Base,
             measurePoint1: null,
             measurePoint2: null,
-            measureStep: "inactive",
+            measureStep: 'inactive',
           },
         },
       },
@@ -163,23 +168,27 @@ export const createUntrackedMapSlice: StateCreator<
   },
   /**
    * Set one measurement point on the base layer.
-   * Pre-condition: Base.measureStep has to be either 'none selected' or 'one selected'.
-   * Post-condition: Either measurePoint1 or MeasurePoint2 will be set depending on the measurement state.
    */
   baseLayerSetMeasurePoint(point: Vector2d) {
     set((state) => {
       // This function should only be called if one of these two states is active.
-      console.assert(state.untrackedState.layers.Base.measureStep === 'none selected'
-          || state.untrackedState.layers.Base.measureStep === 'one selected');
+      if (
+        state.untrackedState.layers.Base.measureStep !== 'none selected' &&
+        state.untrackedState.layers.Base.measureStep !== 'one selected'
+      )
+        return state;
+
       // Measurement step 'one selected' being active implies that measurePoint1 must not be null.
-      console.assert(state.untrackedState.layers.Base.measureStep !== 'one selected'
-          || state.untrackedState.layers.Base.measurePoint1 !== null);
+      console.assert(
+        state.untrackedState.layers.Base.measureStep !== 'one selected' ||
+          state.untrackedState.layers.Base.measurePoint1 !== null,
+      );
 
       const measureStep = state.untrackedState.layers.Base.measureStep;
       const measurePoint1 = state.untrackedState.layers.Base.measurePoint1;
       const measurePoint2 = state.untrackedState.layers.Base.measurePoint2;
 
-      return ({
+      return {
         ...state,
         untrackedState: {
           ...state.untrackedState,
@@ -187,13 +196,13 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers,
             Base: {
               ...state.untrackedState.layers.Base,
-              measurePoint1: measureStep === "none selected" ? point : measurePoint1,
-              measurePoint2: measureStep === "none selected" ? measurePoint2 : point,
-              measureStep:   measureStep === "none selected" ? "one selected" : "both selected",
+              measurePoint1: measureStep === 'none selected' ? point : measurePoint1,
+              measurePoint2: measureStep === 'none selected' ? measurePoint2 : point,
+              measureStep: measureStep === 'none selected' ? 'one selected' : 'both selected',
             },
           },
         },
-      })
+      };
     });
   },
 });

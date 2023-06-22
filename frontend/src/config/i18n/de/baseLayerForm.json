@@ -1,5 +1,6 @@
 {
   "title": "Baselayer bearbeiten",
   "image_path_field": "Hintergrund-Dateipfad",
-  "rotation_field": "Rotation (Grad)"
+  "rotation_field": "Rotation (Grad)",
+  "set_scale": "Auto-Skalierung"
 }

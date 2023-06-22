@@ -1,6 +1,7 @@
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
+
 import Vector2d = Konva.Vector2d;
 
 /**
@@ -103,6 +104,9 @@ export interface UntrackedMapSlice {
   updateLayerOpacity: (layerName: LayerName, opacity: UntrackedLayerState['opacity']) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
+  baseLayerActivateMeasurement: () => void;
+  baseLayerDeactivateMeasurement: () => void;
+  baseLayerSetMeasurePoint: (point: Vector2d) => void;
 }
 
 /**

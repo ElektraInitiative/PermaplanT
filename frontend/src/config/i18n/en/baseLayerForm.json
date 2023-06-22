@@ -1,5 +1,6 @@
 {
   "title": "Edit Base Layer",
   "image_path_field": "Background Image File Path",
-  "rotation_field": "Rotation (Degrees)"
+  "rotation_field": "Rotation (Degrees)",
+  "set_scale": "Auto-Scale"
 }
