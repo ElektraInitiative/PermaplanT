@@ -55,14 +55,16 @@ export function PlantingElement({ planting }: PlantingElementProps) {
       onMouseMove={() => mouseMoveHandler(plant)}
     >
       <Circle
-        radius={Math.max(planting.width, planting.height)}
-        x={0}
-        y={0}
-        fill="green"
-      />
-      <NextcloudKonvaImage
         width={planting.width}
         height={planting.height}
+        x={0}
+        y={0}
+        fill="#6f9e48"
+      />
+      <NextcloudKonvaImage
+        width={planting.width * 0.9}
+        height={planting.height * 0.9}
+        offset={{x: (planting.width * 0.9)/2, y: (planting.height * 0.9)/2}}
       />
     </Group>
   )
