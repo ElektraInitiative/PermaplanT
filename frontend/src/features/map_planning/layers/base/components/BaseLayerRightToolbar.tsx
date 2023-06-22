@@ -1,21 +1,24 @@
 import { UpdateBaseLayerAction } from '../../../layers/base/actions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import ModalContainer from '@/components/Modals/ModalContainer';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { MAP_PIXELS_PER_METER } from '@/features/map_planning/utils/Constants';
+import { Vector2d } from 'konva/lib/types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ModalContainer from '@/components/Modals/ModalContainer';
-import { Vector2d } from 'konva/lib/types';
 import { toast } from 'react-toastify';
-import { MAP_PIXELS_PER_METER } from '@/features/map_planning/utils/Constants';
 
-const calculateScale = (measuredDistancePixels: number, actualDistanceCentimeters: number): number => {
-  return Math.floor(measuredDistancePixels / actualDistanceCentimeters * MAP_PIXELS_PER_METER);
+const calculateScale = (
+  measuredDistancePixels: number,
+  actualDistanceCentimeters: number,
+): number => {
+  return Math.floor((measuredDistancePixels / actualDistanceCentimeters) * MAP_PIXELS_PER_METER);
 };
 
 const calculateMeasredDistance = (point1: Vector2d, point2: Vector2d) => {
-  const lengthX = Math.abs(point2.x - point1.x); 
-  const lengthY = Math.abs(point2.y - point1.y); 
+  const lengthX = Math.abs(point2.x - point1.x);
+  const lengthY = Math.abs(point2.y - point1.y);
   return Math.sqrt(lengthX * lengthX + lengthY * lengthY);
 };
 
@@ -44,24 +47,24 @@ const BaseLayerRightToolbar = () => {
   const onDistModalSubmit = () => {
     console.assert(untrackedState.measurePoint1 !== null);
     console.assert(untrackedState.measurePoint2 !== null);
-    
-    const point1 = untrackedState.measurePoint1 ?? {x: 0, y: 0};
-    const point2 = untrackedState.measurePoint2 ?? {x: 0, y: 0};
-     
+
+    const point1 = untrackedState.measurePoint1 ?? { x: 0, y: 0 };
+    const point2 = untrackedState.measurePoint2 ?? { x: 0, y: 0 };
+
     const measuredDistance = calculateMeasredDistance(point1, point2);
     const actualDistance = distMeters * 100 + distCentimeters;
     if (actualDistance === 0) {
       toast.error(t('baseLayerForm:error_actual_distance_zero'));
       return;
-    } 
+    }
     setScaleInput(calculateScale(measuredDistance, actualDistance));
     deactivateMeasurement();
-  } 
+  };
 
   return (
     <div className="flex flex-col gap-2 p-2">
       <ModalContainer show={untrackedState.measureStep === 'both selected'}>
-        <div className="flex h-full gap-2 min-h-[20vh] w-ful flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+        <div className="w-ful flex h-full min-h-[20vh] flex-col gap-2 rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h3>{t('baseLayerForm:distance_modal_title')}</h3>
           <div className="flex flex-row gap-2">
             <SimpleFormInput
@@ -84,19 +87,13 @@ const BaseLayerRightToolbar = () => {
               max="99"
             />
           </div>
-          <div className="flex items-end flex-row gap-2">
-            <SimpleButton
-              onClick={() => deactivateMeasurement()}
-            >
+          <div className="flex flex-row items-end gap-2">
+            <SimpleButton onClick={() => deactivateMeasurement()}>
               {t('common:cancel')}
             </SimpleButton>
-            <SimpleButton
-              onClick={() => onDistModalSubmit()}
-            >
-              {t('common:ok')}
-            </SimpleButton>
+            <SimpleButton onClick={() => onDistModalSubmit()}>{t('common:ok')}</SimpleButton>
           </div>
-        </div> 
+        </div>
       </ModalContainer>
       <h2>{t('baseLayerForm:title')}</h2>
       <SimpleFormInput
@@ -114,7 +111,7 @@ const BaseLayerRightToolbar = () => {
         min="0"
         max="359"
       />
-      <div className="flex items-end flex-row gap-2">
+      <div className="flex flex-row items-end gap-2">
         <SimpleFormInput
           id="scale"
           labelText={t('baseLayerForm:scale')}
