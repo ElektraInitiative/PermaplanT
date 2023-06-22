@@ -63,6 +63,8 @@ Such actions are used to:
 For SSE, browsers first request an event-source via the endpoint /api/updates/maps.
 Then the backend sends all updates of a map to all users connected to the maps.
 To do so, all API calls in the backend must notify the broadcaster.
+This includes all changes of elements but also changes to layers, map metadata, chat etc.
+Any polling should be avoided.
 
 The broadcaster lives in AppDataInner, which is available in request handler via dependency injection in the request context.
 So every controller related to map endpoints must must use AppDataInner.
@@ -94,6 +96,11 @@ type MovementAction {
 - The same actions are also used for communication to the backend.
 - Undo/redo gets lost if other users concurrently move or edit elements.
   For inspiration you can read more at [this liveblocks.io blog post](https://liveblocks.io/blog/how-to-build-undo-redo-in-a-multiplayer-environment).
+
+## Performance
+
+- per user action only a minimal number of API calls should be used (ideally one)
+- relations are only calculated to plants within bounding box
 
 ## Low Memory Consumption
 
