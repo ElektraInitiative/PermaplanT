@@ -48,16 +48,26 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
   const webdav = useNextcloudWebDavClient();
 
   const imagePath = WEBDAV_PATH + path;
-  const { data, isLoading, isError, error } = useQuery(['image', imagePath, path, webdav] as const, ({ queryKey: [, imagePath, path, webdav ] }) =>
-    webdav && path ? webdav.getFileContents(imagePath) : '',
+  const { data, isLoading, isError, error } = useQuery(['image', imagePath, path, webdav],
+    {
+      queryFn: () => { return webdav && path ? webdav.getFileContents(imagePath) : null },
+      enabled: !!webdav && !!path
+    }
   );
 
   // Hooks have to be called an equal number of times on each render.
   // We therefore have to check whether a file is a valid image after loading it.
-  const fileIsImage = useQuery(['stat', imagePath], () =>
-    webdav
-      ? webdav.stat(imagePath, { details: false }).then((stat) => checkFileIsImage(stat))
-      : false,
+  const fileIsImage = useQuery(
+    ['stat', imagePath],
+    {
+      queryFn: async () => {
+        if(!webdav) return null
+        const stat = await webdav?.stat(imagePath, { details: false })
+        if(!stat) return null
+        return checkFileIsImage(stat)
+      },
+      enabled: !!webdav && !!path
+    }
   );
 
   if (path) {

@@ -12,10 +12,8 @@ export function useNextcloudWebDavClient() {
   const [webdav, setWebdav] = useState<WebDAVClient | null>(null)
   useEffect(() => {
     if(!auth || !auth.user){
-      console.error("Could not create webdav client")
       return
     }
-    console.log("create webdav client")
     setWebdav(createClient(nextcloudUri, {
       authType: AuthType.Token,
       token: {
@@ -24,7 +22,6 @@ export function useNextcloudWebDavClient() {
         refresh_token: auth.user?.refresh_token,
       },
     }));
-    console.log(webdav)
   }, [auth.user])
   return webdav
 }
