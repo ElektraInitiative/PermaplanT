@@ -18,9 +18,9 @@ describe('MapHistoryStore', () => {
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
         index: layerName,
         objects: [],
-        rotation: layerName === 'Base' ? 0 : undefined,
-        scale: layerName === 'Base' ? 100 : undefined,
-        nextcloudImagePath: layerName === 'Base' ? '' : undefined,
+        rotation: layerName === LayerType.Base ? 0 : undefined,
+        scale: layerName === LayerType.Base ? 100 : undefined,
+        nextcloudImagePath: layerName === LayerType.Base ? '' : undefined,
       });
     }
   });
