@@ -37,7 +37,6 @@ const BaseLayer = ({ visible, opacity, listening }: Konva.LayerConfig) => {
       opacity={opacity}
       onClick={measurementOnClick}
     >
-      {/* Virtual ruler used to set the correct scale of the base layer. */}
       {trackedState.nextcloudImagePath && (
         <NextcloudKonvaImage
           path={trackedState.nextcloudImagePath}
