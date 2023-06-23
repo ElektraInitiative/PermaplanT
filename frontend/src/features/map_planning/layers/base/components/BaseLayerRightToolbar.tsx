@@ -9,20 +9,20 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-const calculateScale = (
+export const calculateScale = (
   measuredDistancePixels: number,
   actualDistanceCentimeters: number,
 ): number => {
   return Math.floor((measuredDistancePixels / actualDistanceCentimeters) * MAP_PIXELS_PER_METER);
 };
 
-const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
+export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
   const lengthX = Math.abs(point2.x - point1.x);
   const lengthY = Math.abs(point2.y - point1.y);
   return Math.sqrt(lengthX * lengthX + lengthY * lengthY);
 };
 
-const BaseLayerRightToolbar = () => {
+export const BaseLayerRightToolbar = () => {
   const trackedState = useMapStore((state) => state.trackedState.layers.Base);
   const untrackedState = useMapStore((state) => state.untrackedState.layers.Base);
   const executeAction = useMapStore((state) => state.executeAction);
