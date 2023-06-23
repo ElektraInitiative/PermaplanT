@@ -16,7 +16,7 @@ const calculateScale = (
   return Math.floor((measuredDistancePixels / actualDistanceCentimeters) * MAP_PIXELS_PER_METER);
 };
 
-const calculateMeasredDistance = (point1: Vector2d, point2: Vector2d) => {
+const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
   const lengthX = Math.abs(point2.x - point1.x);
   const lengthY = Math.abs(point2.y - point1.y);
   return Math.sqrt(lengthX * lengthX + lengthY * lengthY);
@@ -51,7 +51,7 @@ const BaseLayerRightToolbar = () => {
     const point1 = untrackedState.measurePoint1 ?? { x: 0, y: 0 };
     const point2 = untrackedState.measurePoint2 ?? { x: 0, y: 0 };
 
-    const measuredDistance = calculateMeasredDistance(point1, point2);
+    const measuredDistance = calculateDistance(point1, point2);
     const actualDistance = distMeters * 100 + distCentimeters;
     if (actualDistance === 0) {
       toast.error(t('baseLayerForm:error_actual_distance_zero'));
