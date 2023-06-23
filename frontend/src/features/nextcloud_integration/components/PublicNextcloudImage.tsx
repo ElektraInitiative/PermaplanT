@@ -8,8 +8,7 @@ import { toast } from 'react-toastify';
 
 const WEBDAV_PATH = '/public.php/webdav/';
 
-interface PublicNextcloudImageProps
-  extends React.ComponentPropsWithoutRef<'img'> {
+interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'> {
   // relative path starting at the public share directory to the image in Nextcloud
   path: string;
   // token which identifies the public share directory

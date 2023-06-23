@@ -11,8 +11,7 @@ const WEBDAV_PATH = '/remote.php/webdav/';
 /**
  * Component used for fetching and displaying images from private Nextcloud directories
  */
-interface NextcloudImageProps
-  extends React.ComponentPropsWithoutRef<'img'> {
+interface NextcloudImageProps extends React.ComponentPropsWithoutRef<'img'> {
   /** relative path starting at the users Nextcloud root directory */
   path: string;
 }
