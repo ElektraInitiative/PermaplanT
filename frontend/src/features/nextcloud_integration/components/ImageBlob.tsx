@@ -1,7 +1,7 @@
 import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 
 interface ImageBlobProps
-  extends DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
+  extends React.ComponentPropsWithoutRef<'img'> {
   /** The blob that will be rendered as an image */
   image: Blob;
 }
