@@ -3,7 +3,7 @@
 use crate::{
     error::ServiceError,
     model::{
-        dto::{LayerDto, NewLayerDto, Page},
+        dto::{LayerDto, NewLayerDto},
         r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
     },
     test::util::{init_test_app, init_test_database},
@@ -75,11 +75,8 @@ async fn test_find_layers_succeeds() {
         "application/json"
     );
 
-    let result = test::read_body(resp).await;
-    let result_string = std::str::from_utf8(&result).unwrap();
-
-    let page: Page<LayerDto> = serde_json::from_str(result_string).unwrap();
-    assert_eq!(page.results.len(), 2);
+    let results: Vec<LayerDto> = test::read_body_json(resp).await;
+    assert_eq!(results.len(), 2);
 }
 
 #[actix_rt::test]

@@ -6,7 +6,7 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 
 export function PlantLayerLeftToolbar() {
   const selectedPlanting = useMapStore(
-    (state) => state.untrackedState.layers.Plant.selectedPlanting,
+    (state) => state.untrackedState.layers.plants.selectedPlanting,
   );
   const executeAction = useMapStore((state) => state.executeAction);
   const selectPlanting = useMapStore((state) => state.selectPlanting);
