@@ -2,6 +2,7 @@ import CountingButton from './CountingButton';
 import { MapDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
+import { ReactComponent as EditIcon } from '@/icons/edit.svg';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,7 +36,7 @@ export default function MapCard({ map, onDuplicate }: MapCardProps) {
         <CountingButton iconType={0} count={map.honors} />
         <CountingButton iconType={1} count={map.visits} />
       </section>
-      <section className="ml-2 flex flex-col justify-center">
+      <section className="ml-4 flex flex-col justify-center">
         <IconButton
           onClick={(e) => {
             e.stopPropagation();
@@ -43,6 +44,9 @@ export default function MapCard({ map, onDuplicate }: MapCardProps) {
           }}
         >
           <CopyIcon className="h-5 w-5" />
+        </IconButton>
+        <IconButton onClick={() => navigate(`${map.id}/edit`)}>
+          <EditIcon className="h-5 w-5" />
         </IconButton>
       </section>
     </div>
