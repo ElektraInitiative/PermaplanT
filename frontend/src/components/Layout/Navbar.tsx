@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
  */
 const Navbar = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
-  const { t } = useTranslation(['navbar']);
+  const { t } = useTranslation(['routes']);
   const auth = useSafeAuth();
 
   const navbarItems = (

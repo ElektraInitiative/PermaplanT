@@ -11,7 +11,7 @@ import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import maps from './maps.json';
-import navbar from './navbar.json';
+import routes from './routes.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
 import overview from './overview.json';
 import plantSearch from './plantSearch.json';
@@ -42,8 +42,8 @@ const de = {
   auth,
   plantingSuggestions,
   nextcloudIntegration,
-  navbar,
-  overview
+  routes,
+  overview,
 };
 
 export default de;
