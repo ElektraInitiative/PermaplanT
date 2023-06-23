@@ -11,6 +11,7 @@ pub mod seed_impl;
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
 
+use diesel::AsChangeset;
 use diesel::QueryableByName;
 use diesel::{Identifiable, Insertable, Queryable};
 use postgis_diesel::types::Point;
@@ -774,6 +775,20 @@ pub struct NewMap {
     pub location: Option<Point>,
     /// The id of the owner of the map.
     pub owner_id: Uuid,
+}
+
+/// The `UpdateMap` entity.
+#[derive(AsChangeset)]
+#[diesel(table_name = maps)]
+pub struct UpdateMap {
+    /// The name of the map.
+    pub name: Option<String>,
+    /// A flag indicating if this map is private or not.
+    pub privacy: Option<PrivacyOptions>,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Point>,
 }
 
 /// The `Layer` entity.

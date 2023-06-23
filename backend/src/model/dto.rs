@@ -24,6 +24,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod update_map_impl;
 
 /// Contains configuration the frontend needs to run.
 #[typeshare]
@@ -240,6 +241,20 @@ pub struct NewMapDto {
     pub harvested: i16,
     /// A flag indicating if this map is private or not.
     pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Coordinates>,
+}
+
+/// The information for updating a map.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct UpdateMapDto {
+    /// The name of the map.
+    pub name: Option<String>,
+    /// A flag indicating if this map is private or not.
+    pub privacy: Option<PrivacyOptions>,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
