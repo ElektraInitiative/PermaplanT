@@ -11,6 +11,6 @@ describe('BaseLayerRightToolbar', () => {
   });
 
   it('calculates correct scale', () => {
-    expect(calculateScale(100, 100)).toEqual(100);
+    expect(calculateScale(50, 100, 100)).toEqual(50);
   });
 });

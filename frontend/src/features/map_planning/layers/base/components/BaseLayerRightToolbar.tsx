@@ -3,7 +3,6 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { MAP_PIXELS_PER_METER } from '@/features/map_planning/utils/Constants';
 import { Vector2d } from 'konva/lib/types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,9 +10,12 @@ import { toast } from 'react-toastify';
 
 export const calculateScale = (
   measuredDistancePixels: number,
+  oldScale: number,
   actualDistanceCentimeters: number,
 ): number => {
-  return Math.floor((measuredDistancePixels / actualDistanceCentimeters) * MAP_PIXELS_PER_METER);
+  console.log(measuredDistancePixels, oldScale, actualDistanceCentimeters);
+  if (oldScale === 0 || actualDistanceCentimeters === 0) return 0;
+  return Math.floor((measuredDistancePixels / oldScale) * actualDistanceCentimeters);
 };
 
 export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
@@ -57,7 +59,7 @@ export const BaseLayerRightToolbar = () => {
       toast.error(t('baseLayerForm:error_actual_distance_zero'));
       return;
     }
-    setScaleInput(calculateScale(measuredDistance, actualDistance));
+    setScaleInput(calculateScale(measuredDistance, trackedState.scale, actualDistance));
     deactivateMeasurement();
   };
 
