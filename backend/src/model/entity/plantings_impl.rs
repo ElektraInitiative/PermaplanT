@@ -1,7 +1,8 @@
 //! Contains the implementation of [`Planting`].
 
+use chrono::Days;
 use diesel::pg::Pg;
-use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
+use diesel::{debug_query, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 use uuid::Uuid;
@@ -30,7 +31,24 @@ impl Planting {
             query = query.filter(layer_id.eq(id));
         }
 
+        if let Some(relative_to_date) = search_parameters.relative_to_date {
+            let plus_offset_days = relative_to_date.checked_add_days(Days::new(356));
+            let minus_offset_days = relative_to_date.checked_sub_days(Days::new(356));
+
+            query = query.filter(
+                plantings::add_date
+                    .is_null()
+                    .or(plantings::add_date.lt(plus_offset_days))
+                    .and(
+                        plantings::remove_date
+                            .is_null()
+                            .or(plantings::remove_date.gt(minus_offset_days)),
+                    ),
+            );
+        }
+
         debug!("{}", debug_query::<Pg, _>(&query));
+
         Ok(query
             .load::<Self>(conn)
             .await?

@@ -1,3 +1,4 @@
+import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import {
   Action,
   TRACKED_DEFAULT_STATE,
@@ -47,7 +48,8 @@ export const createTrackedMapSlice: StateCreator<
             ...state.trackedState.layers,
             plants: {
               ...state.trackedState.layers.plants,
-              objects: plants,
+              objects: filterVisibleObjects(plants, new Date().toJSON().split('T')[0]),
+              loadedObjects: plants,
             },
           },
         },

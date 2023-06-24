@@ -6,6 +6,7 @@ import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { LayerType, LayerDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
+import { QUERY_KEYS } from '@/config/react_query';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
@@ -34,9 +35,11 @@ type UseLayerParams = {
  */
 function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
   const { t } = useTranslation(['plantSearch']);
+  const relativeToDate = new Date().toJSON().split('T')[0];
+
   const query = useQuery({
-    queryKey: ['plants/plantings', mapId, layerId],
-    queryFn: () => getPlantings(mapId, layerId),
+    queryKey: [QUERY_KEYS.PLANTINGS, mapId, { layerId, relativeToDate }],
+    queryFn: () => getPlantings(mapId, { layer_id: layerId, relative_to_date: relativeToDate }),
     enabled,
   });
 
@@ -112,6 +115,7 @@ function useCleanMapStore() {
 }
 
 function useMapUpdates() {
+  const mapId = useMapId();
   const { user } = useSafeAuth();
   const evRef = useRef<EventSource>();
 
@@ -121,7 +125,7 @@ function useMapUpdates() {
     }
 
     const connectionQuery = {
-      map_id: 1,
+      map_id: mapId,
       user_id: user.profile.sub,
     };
 
@@ -138,7 +142,7 @@ function useMapUpdates() {
     return () => {
       evRef.current?.close();
     };
-  }, [user]);
+  }, [user, mapId]);
 }
 
 /**

@@ -220,7 +220,15 @@ export type TrackedLayers = {
 export type TrackedPlantLayerState = {
   index: LayerType.Plants;
 
+  /**
+   * The objects visible relative to the current selected date.
+   * This is a subset of `loadedObjects`.
+   */
   objects: PlantingDto[];
+  /**
+   * The objects that have been loaded from the backend.
+   */
+  loadedObjects: PlantingDto[];
 };
 
 export type TrackedBaseLayerState = {

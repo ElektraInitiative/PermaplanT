@@ -1,5 +1,6 @@
 //! All entities associated with [`Planting`].
 
+use chrono::NaiveDate;
 use diesel::{AsChangeset, Identifiable, Insertable, Queryable};
 use uuid::Uuid;
 
@@ -29,6 +30,12 @@ pub struct Planting {
     pub scale_x: f32,
     /// The y scale of the plant on the map.
     pub scale_y: f32,
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
+    /// The date the planting was removed from the map.
+    /// If None, the planting is still on the map.
+    pub remove_date: Option<NaiveDate>,
 }
 
 /// The `UpdatePlanting` entity.
