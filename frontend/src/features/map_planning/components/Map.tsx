@@ -6,6 +6,7 @@ import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeft
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
 import useMapStore from '../store/MapStore';
 import { BaseStage } from './BaseStage';
+import { Timeline } from './timeline/Timeline';
 import { Layers } from './toolbar/Layers';
 import { Toolbar } from './toolbar/Toolbar';
 import { LayerDto, LayerType } from '@/bindings/definitions';
@@ -90,20 +91,28 @@ export const Map = ({ layers }: MapProps) => {
           position="left"
         ></Toolbar>
       </section>
-
-      <BaseStage>
-        <BaseLayer
-          opacity={untrackedState.layers.base.opacity}
-          visible={untrackedState.layers.base.visible}
-          listening={selectedLayer.type_ === LayerType.Base}
-        />
-        <PlantsLayer
-          visible={untrackedState.layers.plants.visible}
-          opacity={untrackedState.layers.plants.opacity}
-          listening={selectedLayer.type_ === LayerType.Plants}
-        ></PlantsLayer>
-        <BaseMeasurementLayer />
-      </BaseStage>
+      <section className="flex h-full w-full flex-col overflow-hidden">
+        <BaseStage>
+          <BaseLayer
+            opacity={untrackedState.layers.base.opacity}
+            visible={untrackedState.layers.base.visible}
+            listening={selectedLayer.type_ === LayerType.Base}
+          />
+          <PlantsLayer
+            visible={untrackedState.layers.plants.visible}
+            opacity={untrackedState.layers.plants.opacity}
+            listening={selectedLayer.type_ === LayerType.Plants}
+          ></PlantsLayer>
+          <BaseMeasurementLayer />
+        </BaseStage>
+        <div className="py-2">
+          <Timeline
+            onSelectDate={(date) => {
+              console.log(date);
+            }}
+          />
+        </div>
+      </section>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
           contentTop={<Layers layers={layers} />}

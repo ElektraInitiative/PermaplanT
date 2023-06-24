@@ -12,7 +12,11 @@ type TimelineFormData = {
 };
 
 export function Timeline({ onSelectDate }: TimelineProps) {
-  const { register, handleSubmit } = useForm<TimelineFormData>();
+  const { register, handleSubmit } = useForm<TimelineFormData>({
+    defaultValues: {
+      date: new Date(),
+    },
+  });
 
   const onFormSubmit = ({ date }: TimelineFormData) => {
     onSelectDate(date);
