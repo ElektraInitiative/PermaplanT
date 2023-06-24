@@ -14,7 +14,13 @@ see https://www.cybertec-postgresql.com/en/unexpected-downsides-of-uuid-keys-in-
 
 ## Solutions
 
-Use UUIDv7
+### Use UUIDv7
+
+https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-04.html
+
+### Use ULIDs
+
+https://github.com/ulid/spec
 
 ## Decision
 
