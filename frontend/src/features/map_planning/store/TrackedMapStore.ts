@@ -51,7 +51,8 @@ export const createTrackedMapSlice: StateCreator<
     canUndo: false,
     canRedo: false,
     executeAction: (action: Action<unknown, unknown>) => executeAction(action, set, get),
-    executeActionDebounced: (action: Action<unknown, unknown>, key: string, timeout: number) => executeActionDebounced(action, key, timeout, set, get),
+    executeActionDebounced: (action: Action<unknown, unknown>, key: string, timeout: number) =>
+      executeActionDebounced(action, key, timeout, set, get),
     __executeActionDebounceTimeouts: new Map<string, number | undefined>(),
     undo: () => undo(set, get),
     redo: () => redo(set, get),
@@ -96,24 +97,6 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
     canRedo: false,
     canUndo: true,
     history: state.history.slice(0, state.step + 1),
-  }));
-}
-
-/**
- * Debounces calls to executeAction.
- * This may be used to avoid unnecessary entries in the undo redo history, e.g. when
- * the user changes a number input incrementally.
- */
-function executeActionDebounced(action: Action<unknown, unknown>, key: string, timeout: number = 300, set: SetFn, get: GetFn) {
-  const timeoutMap = new Map(get().__executeActionDebounceTimeouts);
-  
-  clearTimeout(timeoutMap.get(key));
-
-  timeoutMap.set(key, setTimeout(executeAction, timeout, action, set, get));
-
-  set((state) => ({
-    ...state,
-    __executeActionDebounceTimeouts: timeoutMap,
   }));
 }
 

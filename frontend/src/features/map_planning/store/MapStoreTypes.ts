@@ -3,7 +3,6 @@ import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 
 import Vector2d = Konva.Vector2d;
-import useMapStore from "@/features/map_planning/store/MapStore";
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -65,7 +64,6 @@ export interface TrackedMapSlice {
    *
    * @internal This reference should never be modified by any other function than executeActionDebounced.
    */
-  __executeActionDebounceTimeouts: Map<string, ReturnType<typeof setTimeout>>;
   /** Event listener responsible for adding a single shape to the transformer */
   addShapeToTransformer: (shape: Node) => void;
   /**
@@ -73,14 +71,6 @@ export interface TrackedMapSlice {
    * @param action the action to be executed
    */
   executeAction: <T, U>(action: Action<T, U>) => void;
-  /**
-   * Execute a user initiated action, but debounced by a set interval.
-   * @param action the action to be executed
-   * @param key if two actions A and B with the same key are submitted within the interval defined by timeout, A
-   *            will be canceled and B will be executed instead.
-   * @param interval debounce interval in milliseconds
-   */
-  executeActionDebounced: <T, U>(action: Action<T, U>, key: string, timeout: number) => void;
   /**
    * Undo the last user initiated action.
    */

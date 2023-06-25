@@ -28,7 +28,6 @@ export const BaseLayerRightToolbar = () => {
   const trackedState = useMapStore((state) => state.trackedState.layers.Base);
   const untrackedState = useMapStore((state) => state.untrackedState.layers.Base);
   const executeAction = useMapStore((state) => state.executeAction);
-  const executeActionDebounced = useMapStore((state) => state.executeActionDebounced);
   const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
 
@@ -39,8 +38,12 @@ export const BaseLayerRightToolbar = () => {
   // Therefore, this seems to be the only way to keep track of external state changes to the file path while
   // using the onFocusEvent handler to update the state from this component.
   const [pathInput, setPathInput] = useState(trackedState.nextcloudImagePath);
+  const [rotationInput, setRotationInput] = useState(trackedState.rotation);
+  const [scaleInput, setScaleInput] = useState(trackedState.rotation);
   useEffect(() => {
     setPathInput(trackedState.nextcloudImagePath);
+    setScaleInput(trackedState.scale);
+    setRotationInput(trackedState.rotation);
   }, [trackedState.nextcloudImagePath, trackedState.scale, trackedState.rotation]);
 
   const [distMeters, setDistMeters] = useState(0);
@@ -63,7 +66,7 @@ export const BaseLayerRightToolbar = () => {
     const scale = calculateScale(measuredDistance, trackedState.scale, actualDistance);
     const path = trackedState.nextcloudImagePath;
     const rotation = trackedState.rotation;
-    executeActionDebounced(new UpdateBaseLayerAction(rotation, scale, path), 'baseLayer_changeScale', 300);
+    executeAction(new UpdateBaseLayerAction(rotation, scale, path), 'baseLayer_changeScale', 300);
 
     deactivateMeasurement();
   };
@@ -106,27 +109,27 @@ export const BaseLayerRightToolbar = () => {
       <SimpleFormInput
         id="file"
         labelText={t('baseLayerForm:image_path_field')}
-        onFocus={(e) => {
-            const scale = trackedState.scale;
-            const path = e.target.value;
-            const rotation = trackedState.rotation;
-            executeAction(new UpdateBaseLayerAction(rotation, scale, path));
-          }
-        }
+        onBlur={(e) => {
+          const scale = trackedState.scale;
+          const path = e.target.value;
+          const rotation = trackedState.rotation;
+          executeAction(new UpdateBaseLayerAction(rotation, scale, path));
+        }}
         onChange={(e) => setPathInput(e.target.value)}
         value={pathInput}
       />
       <SimpleFormInput
         id="rotation"
         labelText={t('baseLayerForm:rotation_field')}
-        onChange={(e) => {
+        onBlur={(e) => {
           const scale = trackedState.scale;
           const path = trackedState.nextcloudImagePath;
           const rotation = parseInt(e.target.value);
-          executeActionDebounced(new UpdateBaseLayerAction(rotation, scale, path), 'baseLayer_changeRotation', 300);
+          executeAction(new UpdateBaseLayerAction(rotation, scale, path));
         }}
+        onChange={(e) => setRotationInput(parseInt(e.target.value))}
         type="number"
-        value={trackedState.rotation}
+        value={rotationInput}
         min="0"
         max="359"
       />
@@ -134,14 +137,15 @@ export const BaseLayerRightToolbar = () => {
         <SimpleFormInput
           id="scale"
           labelText={t('baseLayerForm:scale')}
-          onChange={(e) => {
+          onBlur={(e) => {
             const scale = parseInt(e.target.value);
             const path = trackedState.nextcloudImagePath;
             const rotation = trackedState.rotation;
-            executeActionDebounced(new UpdateBaseLayerAction(rotation, scale, path), 'baseLayer_changeScale', 300);
+            executeAction(new UpdateBaseLayerAction(rotation, scale, path));
           }}
+          onChange={(e) => setScaleInput(parseInt(e.target.value))}
           type="number"
-          value={trackedState.scale}
+          value={scaleInput}
           min="0"
         />
         <SimpleButton
