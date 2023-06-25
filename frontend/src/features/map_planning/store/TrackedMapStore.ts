@@ -105,8 +105,16 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
  * the user changes a number input incrementally.
  */
 function executeActionDebounced(action: Action<unknown, unknown>, key: string, timeout: number = 300, set: SetFn, get: GetFn) {
-  clearTimeout(get().__executeActionDebounceTimeouts.get(key));
-  get().__executeActionDebounceTimeouts.set(key, setTimeout(executeAction, timeout, action, get, set));
+  const timeoutMap = new Map(get().__executeActionDebounceTimeouts);
+  
+  clearTimeout(timeoutMap.get(key));
+
+  timeoutMap.set(key, setTimeout(executeAction, timeout, action, set, get));
+
+  set((state) => ({
+    ...state,
+    __executeActionDebounceTimeouts: timeoutMap,
+  }));
 }
 
 /**

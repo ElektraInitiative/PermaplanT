@@ -65,7 +65,7 @@ export interface TrackedMapSlice {
    *
    * @internal This reference should never be modified by any other function than executeActionDebounced.
    */
-  __executeActionDebounceTimeouts: Map<string, (number | undefined)>;
+  __executeActionDebounceTimeouts: Map<string, ReturnType<typeof setTimeout>>;
   /** Event listener responsible for adding a single shape to the transformer */
   addShapeToTransformer: (shape: Node) => void;
   /**
