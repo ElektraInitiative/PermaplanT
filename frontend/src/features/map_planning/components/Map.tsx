@@ -31,6 +31,7 @@ export const Map = ({ layers }: MapProps) => {
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
+  const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
 
   const { t } = useTranslation(['undoRedo']);
 
@@ -110,6 +111,7 @@ export const Map = ({ layers }: MapProps) => {
             onSelectDate={(date) => {
               console.log(date);
             }}
+            defaultDate={timelineDate}
           />
         </div>
       </section>

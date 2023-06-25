@@ -1,3 +1,4 @@
+import { convertToDateString } from '../utils/date-utils';
 import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
@@ -145,6 +146,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
+  timelineDate: convertToDateString(new Date()),
   selectedLayer: {
     id: -1,
     is_alternative: false,
@@ -270,6 +272,7 @@ export type TrackedMapState = {
  */
 export type UntrackedMapState = {
   mapId: number;
+  timelineDate: string;
   selectedLayer: LayerDto;
   layers: UntrackedLayers;
 };

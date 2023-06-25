@@ -7,16 +7,21 @@ type TimelineProps = {
    * The date is passed as a string in the format 'YYYY-MM-DD'
    */
   onSelectDate: (date: string) => void;
+
+  /**
+   * The default date to be selected on the timeline.
+   */
+  defaultDate: string;
 };
 
 type TimelineFormData = {
   date: string;
 };
 
-export function Timeline({ onSelectDate }: TimelineProps) {
+export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
   const { register, handleSubmit } = useForm<TimelineFormData>({
     defaultValues: {
-      date: new Date().toJSON().split('T')[0],
+      date: defaultDate,
     },
   });
 

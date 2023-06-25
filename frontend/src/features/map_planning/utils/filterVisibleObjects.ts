@@ -1,10 +1,4 @@
-/**
- * Takes a string in the format of "YYYY-MM-DD" and converts it to a Date object.
- */
-function convertToDate(date: string) {
-  const [year, month, day] = date.split('-');
-  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-}
+import { convertToDate } from './date-utils';
 
 export function isVisible(date: Date, addDate?: Date, removeDate?: Date) {
   return (!addDate || addDate <= date) && (!removeDate || removeDate > date);

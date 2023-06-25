@@ -4,6 +4,7 @@ import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
+import { convertToDateString } from '../utils/date-utils';
 import { LayerType, LayerDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
@@ -35,7 +36,10 @@ type UseLayerParams = {
  */
 function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
   const { t } = useTranslation(['plantSearch']);
-  const relativeToDate = new Date().toJSON().split('T')[0];
+
+  // Do not use the store value `timelineDate` here.
+  // We want to manually fetch the plantings for the current date.
+  const relativeToDate = convertToDateString(new Date());
 
   const query = useQuery({
     queryKey: [QUERY_KEYS.PLANTINGS, mapId, { layerId, relativeToDate }],
