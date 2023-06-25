@@ -39,7 +39,7 @@ export const createTrackedMapSlice: StateCreator<
         transformer?.nodes([node]);
       }
     },
-    initPlantLayer: (plants: PlantingDto[]) =>
+    initPlantLayer: (plants: PlantingDto[]) => {
       set((state) => ({
         ...state,
         trackedState: {
@@ -48,12 +48,14 @@ export const createTrackedMapSlice: StateCreator<
             ...state.trackedState.layers,
             plants: {
               ...state.trackedState.layers.plants,
-              objects: filterVisibleObjects(plants, new Date().toJSON().split('T')[0]),
+              objects: filterVisibleObjects(plants, state.untrackedState.timelineDate),
               loadedObjects: plants,
             },
           },
         },
-      })),
+      }));
+    },
+
     __resetStore() {
       set((state) => ({
         ...state,

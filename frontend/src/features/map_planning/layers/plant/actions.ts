@@ -22,19 +22,19 @@ export class CreatePlantAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    const newPlant = {
+      ...this._data,
+      id: this._id,
+    };
+
     return {
       ...state,
       layers: {
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: [
-            ...state.layers.plants.objects,
-            {
-              ...this._data,
-              id: this._id,
-            },
-          ],
+          objects: [...state.layers.plants.objects, { ...newPlant }],
+          loadedObjects: [...state.layers.plants.loadedObjects, { ...newPlant }],
         },
       },
     };
@@ -75,6 +75,7 @@ export class DeletePlantAction
         plants: {
           ...state.layers.plants,
           objects: state.layers.plants.objects.filter((p) => p.id !== this._id),
+          loadedObjects: state.layers.plants.loadedObjects.filter((p) => p.id !== this._id),
         },
       },
     };

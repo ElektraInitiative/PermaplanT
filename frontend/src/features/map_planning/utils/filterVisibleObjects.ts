@@ -1,9 +1,5 @@
 import { convertToDate } from './date-utils';
 
-export function isVisible(date: Date, addDate?: Date, removeDate?: Date) {
-  return (!addDate || addDate <= date) && (!removeDate || removeDate > date);
-}
-
 interface ObjectWithDates {
   add_date?: string;
   remove_date?: string;
@@ -13,9 +9,9 @@ interface ObjectWithDates {
  * Filters out objects that are not visible on the map at the given date.
  */
 export function filterVisibleObjects<T extends ObjectWithDates>(
-  objects: T[],
+  objects: Array<T>,
   dateStr: string,
-): T[] {
+) {
   const date = convertToDate(dateStr);
 
   return objects.filter((o) => {
@@ -28,4 +24,8 @@ export function filterVisibleObjects<T extends ObjectWithDates>(
 
     return false;
   });
+}
+
+export function isVisible(date: Date, addDate?: Date, removeDate?: Date) {
+  return (!addDate || addDate <= date) && (!removeDate || removeDate > date);
 }

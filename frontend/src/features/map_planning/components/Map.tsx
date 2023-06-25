@@ -32,6 +32,7 @@ export const Map = ({ layers }: MapProps) => {
   const redo = useMapStore((map) => map.redo);
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
+  const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
 
   const { t } = useTranslation(['undoRedo']);
 
@@ -107,12 +108,7 @@ export const Map = ({ layers }: MapProps) => {
           <BaseMeasurementLayer />
         </BaseStage>
         <div className="py-2">
-          <Timeline
-            onSelectDate={(date) => {
-              console.log(date);
-            }}
-            defaultDate={timelineDate}
-          />
+          <Timeline onSelectDate={updateTimelineDate} defaultDate={timelineDate} />
         </div>
       </section>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">

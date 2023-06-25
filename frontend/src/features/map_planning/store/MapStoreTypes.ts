@@ -120,6 +120,7 @@ export interface UntrackedMapSlice {
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
+  updateTimelineDate: (date: string) => void;
 }
 
 const LAYER_TYPES = Object.values(LayerType);

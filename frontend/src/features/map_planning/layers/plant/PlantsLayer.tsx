@@ -19,6 +19,7 @@ function usePlantLayerListeners(listening: boolean) {
     (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
+  const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
 
   /**
    * Event handler for planting plants
@@ -38,7 +39,6 @@ function usePlantLayerListeners(listening: boolean) {
         new CreatePlantAction({
           id: uuid.v4(),
           plantId: selectedPlant.id,
-          // TODO: get the selectedLayerId from the store
           layerId: selectedLayer.id,
           // consider the offset of the stage and size of the element
           x: Math.round(position.x),
@@ -48,10 +48,11 @@ function usePlantLayerListeners(listening: boolean) {
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
+          add_date: timelineDate,
         }),
       );
     },
-    [executeAction, selectedPlant, selectedLayer],
+    [executeAction, selectedPlant, selectedLayer, timelineDate],
   );
 
   /**

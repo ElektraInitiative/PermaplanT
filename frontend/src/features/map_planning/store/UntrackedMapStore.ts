@@ -1,3 +1,4 @@
+import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import { TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from './MapStoreTypes';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
@@ -98,6 +99,32 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers.plants,
             selectedPlantForPlanting: null,
             selectedPlanting: planting,
+          },
+        },
+      },
+    }));
+  },
+  updateTimelineDate(date) {
+    const plantsVisibleRelativeToTimelineDate = filterVisibleObjects(
+      get().trackedState.layers.plants.loadedObjects,
+      date,
+    );
+
+    // TODO: check if outside a range, to determine if re-fetching is necessary.
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        timelineDate: date,
+      },
+      trackedState: {
+        ...state.trackedState,
+        layers: {
+          ...state.trackedState.layers,
+          plants: {
+            ...state.trackedState.layers.plants,
+            objects: plantsVisibleRelativeToTimelineDate,
           },
         },
       },
