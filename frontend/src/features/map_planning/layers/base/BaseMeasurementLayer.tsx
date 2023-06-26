@@ -13,7 +13,7 @@ import KonvaEventObject = Konva.KonvaEventObject;
 export const BaseMeasurementLayer = (config: Konva.LayerConfig) => {
   const untrackedState = useMapStore((state) => state.untrackedState.layers.base);
   const setMeasurePoint = useMapStore((state) => state.baseLayerSetMeasurePoint);
-  
+
   const measurementLinePoints = () => {
     if (untrackedState.measureStep !== 'both selected') return [];
 
@@ -26,7 +26,7 @@ export const BaseMeasurementLayer = (config: Konva.LayerConfig) => {
       untrackedState.measurePoint2?.y ?? Number.NaN,
     ];
   };
- 
+
   const measurementOnClick = (e: KonvaEventObject<MouseEvent>) => {
     const position = e.currentTarget.getRelativePointerPosition();
     setMeasurePoint(position);
@@ -34,17 +34,14 @@ export const BaseMeasurementLayer = (config: Konva.LayerConfig) => {
 
   return (
     <Layer
-      listening={untrackedState.measureStep !== 'inactive' && untrackedState.measureStep !== 'both selected' } 
+      listening={
+        untrackedState.measureStep !== 'inactive' && untrackedState.measureStep !== 'both selected'
+      }
       width={config.width}
       height={config.height}
       onClick={measurementOnClick}
     >
-      <Rect 
-        width={9999999}
-        height={9999999}
-        x={0}
-        y={0}
-        color="red" />
+      <Rect width={9999999} height={9999999} x={0} y={0} color="red" />
       <Line points={measurementLinePoints()} strokeWidth={10} stroke="red" lineCap={'round'} />
       {untrackedState.measurePoint1 && (
         <Circle

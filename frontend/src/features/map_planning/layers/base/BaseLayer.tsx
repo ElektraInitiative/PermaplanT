@@ -5,7 +5,6 @@ import Konva from 'konva';
 import { useState } from 'react';
 import { Layer } from 'react-konva';
 
-
 const BaseLayer = ({ visible, opacity }: Konva.LayerConfig) => {
   const trackedState = useMapStore((state) => state.trackedState.layers.base);
 
@@ -18,11 +17,7 @@ const BaseLayer = ({ visible, opacity }: Konva.LayerConfig) => {
   };
 
   return (
-    <Layer
-      listening={false} 
-      visible={visible}
-      opacity={opacity}
-    >
+    <Layer listening={false} visible={visible} opacity={opacity}>
       {trackedState.nextcloudImagePath && (
         <NextcloudKonvaImage
           path={trackedState.nextcloudImagePath}

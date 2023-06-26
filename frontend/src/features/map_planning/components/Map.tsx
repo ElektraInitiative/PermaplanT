@@ -1,4 +1,5 @@
 import BaseLayer from '../layers/base/BaseLayer';
+import { BaseMeasurementLayer } from '../layers/base/BaseMeasurementLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
@@ -14,7 +15,6 @@ import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
-import { BaseMeasurementLayer } from '../layers/base/BaseMeasurementLayer';
 
 export type MapProps = {
   layers: LayerDto[];
