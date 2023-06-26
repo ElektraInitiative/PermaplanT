@@ -15,7 +15,7 @@ export const calculateScale = (
 ): number => {
   console.log(measuredDistancePixels, oldScale, actualDistanceCentimeters);
   if (oldScale === 0 || actualDistanceCentimeters === 0) return 0;
-  return Math.floor((measuredDistancePixels / oldScale) * actualDistanceCentimeters);
+  return Math.floor((measuredDistancePixels) / (actualDistanceCentimeters / oldScale));
 };
 
 export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
