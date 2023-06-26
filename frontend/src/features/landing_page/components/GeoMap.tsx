@@ -1,4 +1,5 @@
 import { useDarkModeStore } from '@/features/dark_mode';
+import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import { LatLngExpression, Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
@@ -52,8 +53,9 @@ export const GeoMap = () => {
   );
   const placeholder = (
     <div className="flex h-full w-full flex-col text-center" id="placeholder">
-      <img
-        src="https://cloud.permaplant.net/nextcloud/index.php/s/6GNcCSQigdBXXd9/download/permaplant-map-placeholder.png"
+      <PublicNextcloudImage
+        path="Maps/permaplant-map-placeholder.png"
+        shareToken="2arzyJZYj2oNnHX"
         alt="PermaplanT Map"
         className="h-full w-full object-cover hover:cursor-pointer"
         onClick={() => setIsVisible(true)}

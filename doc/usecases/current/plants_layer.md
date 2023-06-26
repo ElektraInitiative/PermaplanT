@@ -19,12 +19,12 @@
     - which were recently planted
     - and lastly favourites of users
   - While the user adds a plant, constraints are shown:
-    - The user gets a visual indication which parts of the map are ideally, okay and not suited for the plant to be placed
+    - The user gets a visual indication which parts of the map are ideal, okay and not suited for the plant to be placed
       (based on e.g. previous plants, zones, pH value, moisture, animals or shadows).
     - The user is able to view the relationships between the plants.
       She does so by looking at the lines connecting the existing plants with a symbol around the mouse cursor indicating companion or antagonist.
   - The user positions the plant element in the appropriate location in the map.
-  - When drawing an area of plants, the size of the arena and the number of plants is shown next to the mouse.
+  - When drawing an area of plants, the size of the area and the number of plants is shown next to the mouse.
   - The user is able to move, edit (e.g. when planted, when harvested), remove (that it was removed from the garden) and delete (that it never existed) selected plants.
   - The user adjusts the plant elements and their relationships as needed.
 - **Alternative scenario:**
