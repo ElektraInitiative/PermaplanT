@@ -2,7 +2,6 @@ import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { getPublicImage } from '@/features/nextcloud_integration/api/getImages';
 import { ImageBlob } from '@/features/nextcloud_integration/components/ImageBlob';
 import { useQuery } from '@tanstack/react-query';
-import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 

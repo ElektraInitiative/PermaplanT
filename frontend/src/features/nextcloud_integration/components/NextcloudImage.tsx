@@ -2,7 +2,6 @@ import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { ImageBlob } from '@/features/nextcloud_integration/components/ImageBlob';
 import { useQuery } from '@tanstack/react-query';
-import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
