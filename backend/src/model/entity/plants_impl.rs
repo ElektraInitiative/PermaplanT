@@ -5,7 +5,7 @@ use diesel::{
     dsl::sql,
     pg::Pg,
     sql_types::{Bool, Float, Integer},
-    BoolExpressionMethods, CombineDsl, ExpressionMethods, JoinOnDsl, QueryDsl, QueryResult,
+    BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
@@ -17,18 +17,15 @@ use crate::{
         pagination::Paginate,
     },
     model::{
-        dto::{
-            Page, PageParameters, PlantsSummaryDto, RelationDto, RelationSearchParameters,
-            RelationsDto,
-        },
-        r#enum::{quantity::Quantity, relations_type::RelationsType},
+        dto::{Page, PageParameters, PlantsSummaryDto},
+        r#enum::quantity::Quantity,
     },
     schema::{
         plants::{
             self, all_columns, common_name_de, common_name_en, edible_uses_en, sowing_outdoors,
             unique_name,
         },
-        relations, seeds,
+        seeds,
     },
 };
 
@@ -89,37 +86,6 @@ impl Plants {
             .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.load_page::<Self>(conn).await.map(Page::from_entity)
-    }
-
-    /// Get all relations of a certain plant.
-    ///
-    /// # Errors
-    /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find_relations(
-        search_query: RelationSearchParameters,
-        conn: &mut AsyncPgConnection,
-    ) -> QueryResult<RelationsDto> {
-        let query = relations::table
-            .inner_join(plants::table.on(relations::plant1.eq(plants::unique_name)))
-            .select((plants::id, relations::relation))
-            .filter(plants::id.eq(&search_query.plant_id))
-            .union(
-                relations::table
-                    .inner_join(plants::table.on(relations::plant2.eq(plants::unique_name)))
-                    .select((plants::id, relations::relation))
-                    .filter(plants::id.eq(&search_query.plant_id)),
-            );
-        debug!("{}", debug_query::<Pg, _>(&query));
-        let relations = query
-            .load::<(i32, RelationsType)>(conn)
-            .await?
-            .into_iter()
-            .map(|(id, relation)| RelationDto { id, relation })
-            .collect();
-        Ok(RelationsDto {
-            id: search_query.plant_id,
-            relations,
-        })
     }
 
     /// Fetch plant by id from the database.

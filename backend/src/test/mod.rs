@@ -8,6 +8,7 @@ mod layers;
 mod map;
 mod pagination;
 mod plant;
+mod plant_layer;
 mod planting_suggestions;
 mod plantings;
 mod seed;

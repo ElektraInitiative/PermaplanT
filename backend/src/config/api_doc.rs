@@ -9,7 +9,7 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{config, layers, map, planting_suggestions, plantings, plants, seed},
+    controller::{config, layers, map, plant_layer, planting_suggestions, plantings, plants, seed},
     model::{
         dto::{
             plantings::{
@@ -56,16 +56,12 @@ struct SeedApiDoc;
 #[openapi(
     paths(
         plants::find,
-        plants::find_relations,
         plants::find_by_id
     ),
     components(
         schemas(
             PagePlantsSummaryDto,
-            PlantsSummaryDto,
-            RelationsDto,
-            RelationDto,
-            RelationsType
+            PlantsSummaryDto
         )
     ),
     modifiers(&SecurityAddon)
@@ -110,6 +106,23 @@ struct MapApiDoc;
     modifiers(&SecurityAddon)
 )]
 struct LayerApiDoc;
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plant layer endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        plant_layer::find_relations
+    ),
+    components(
+        schemas(
+            RelationsDto,
+            RelationDto,
+            RelationsType
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct PlantLayerApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plantings endpoints.
 #[derive(OpenApi)]
@@ -157,6 +170,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(PlantingSuggestionsApiDoc::openapi());
     openapi.merge(MapApiDoc::openapi());
     openapi.merge(LayerApiDoc::openapi());
+    openapi.merge(PlantLayerApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
