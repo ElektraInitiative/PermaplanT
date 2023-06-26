@@ -1,6 +1,8 @@
 import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva';
-import { Circle, Group, Line } from 'react-konva';
+import { Circle, Layer, Rect, Line } from 'react-konva';
+
+import KonvaEventObject = Konva.KonvaEventObject;
 
 /**
  * A virtual ruler that is used to measure distances on the base layer.
@@ -8,9 +10,10 @@ import { Circle, Group, Line } from 'react-konva';
  * @param config propagates layer settings from the map view
  * @constructor
  */
-export const MeasurementGroup = (config: Konva.LayerConfig) => {
+export const BaseMeasurementLayer = (config: Konva.LayerConfig) => {
   const untrackedState = useMapStore((state) => state.untrackedState.layers.base);
-
+  const setMeasurePoint = useMapStore((state) => state.baseLayerSetMeasurePoint);
+  
   const measurementLinePoints = () => {
     if (untrackedState.measureStep !== 'both selected') return [];
 
@@ -23,9 +26,25 @@ export const MeasurementGroup = (config: Konva.LayerConfig) => {
       untrackedState.measurePoint2?.y ?? Number.NaN,
     ];
   };
+ 
+  const measurementOnClick = (e: KonvaEventObject<MouseEvent>) => {
+    const position = e.currentTarget.getRelativePointerPosition();
+    setMeasurePoint(position);
+  };
 
   return (
-    <Group width={config.width} height={config.height}>
+    <Layer
+      listening={untrackedState.measureStep !== 'inactive' && untrackedState.measureStep !== 'both selected' } 
+      width={config.width}
+      height={config.height}
+      onClick={measurementOnClick}
+    >
+      <Rect 
+        width={9999999}
+        height={9999999}
+        x={0}
+        y={0}
+        color="red" />
       <Line points={measurementLinePoints()} strokeWidth={10} stroke="red" lineCap={'round'} />
       {untrackedState.measurePoint1 && (
         <Circle
@@ -43,6 +62,6 @@ export const MeasurementGroup = (config: Konva.LayerConfig) => {
           y={untrackedState.measurePoint2?.y}
         />
       )}
-    </Group>
+    </Layer>
   );
 };

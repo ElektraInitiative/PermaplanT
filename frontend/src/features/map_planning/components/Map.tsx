@@ -14,6 +14,7 @@ import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
+import { BaseMeasurementLayer } from '../layers/base/BaseMeasurementLayer';
 
 export type MapProps = {
   layers: LayerDto[];
@@ -149,6 +150,7 @@ export const Map = ({ layers }: MapProps) => {
           opacity={untrackedState.layers.plants.opacity}
           listening={selectedLayer.type_ === LayerType.Plants}
         ></PlantsLayer>
+        <BaseMeasurementLayer />
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar

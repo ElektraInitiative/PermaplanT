@@ -1,17 +1,13 @@
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/NextcloudKonvaImage';
-import { MeasurementGroup } from '@/features/map_planning/layers/base/groups/MeasurementGroup';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva';
 import { useState } from 'react';
 import { Layer } from 'react-konva';
 
-import KonvaEventObject = Konva.KonvaEventObject;
 
-const BaseLayer = ({ visible, opacity, listening }: Konva.LayerConfig) => {
+const BaseLayer = ({ visible, opacity }: Konva.LayerConfig) => {
   const trackedState = useMapStore((state) => state.trackedState.layers.base);
-  const untrackedState = useMapStore((state) => state.untrackedState.layers.base);
-  const setMeasurePoint = useMapStore((state) => state.baseLayerSetMeasurePoint);
 
   // Make sure that the image is centered on, and rotates around, the origin.
   const [imageOffset, setImageOffset] = useState({ x: 0, y: 0 });
@@ -21,21 +17,11 @@ const BaseLayer = ({ visible, opacity, listening }: Konva.LayerConfig) => {
       setImageOffset({ x: image.width / 2, y: image.height / 2 });
   };
 
-  const measurementOnClick = (e: KonvaEventObject<MouseEvent>) => {
-    const position = e.currentTarget.getRelativePointerPosition();
-    setMeasurePoint(position);
-  };
-
   return (
     <Layer
-      listening={
-        listening &&
-        untrackedState.measureStep !== 'inactive' &&
-        untrackedState.measureStep !== 'both selected'
-      }
+      listening={false} 
       visible={visible}
       opacity={opacity}
-      onClick={measurementOnClick}
     >
       {trackedState.nextcloudImagePath && (
         <NextcloudKonvaImage
@@ -48,7 +34,6 @@ const BaseLayer = ({ visible, opacity, listening }: Konva.LayerConfig) => {
           draggable={false}
         />
       )}
-      <MeasurementGroup />
     </Layer>
   );
 };
