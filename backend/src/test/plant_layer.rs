@@ -11,7 +11,7 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
 use crate::{
-    model::{dto::RelationsDto, r#enum::relations_type::RelationsType},
+    model::{dto::RelationsDto, r#enum::relation_type::RelationType},
     test::util::{init_test_app, init_test_database},
 };
 
@@ -45,28 +45,28 @@ async fn test_find_plants_relations_succeeds() {
                     (
                         &crate::schema::relations::plant1.eq("Testia testia"),
                         &crate::schema::relations::plant2.eq("Test"),
-                        &crate::schema::relations::relation.eq(RelationsType::Companion),
+                        &crate::schema::relations::relation.eq(RelationType::Companion),
                     ),
                     (
                         &crate::schema::relations::plant1.eq("Testia 2"),
                         &crate::schema::relations::plant2.eq("Testia 2"),
-                        &crate::schema::relations::relation.eq(RelationsType::Antagonist),
+                        &crate::schema::relations::relation.eq(RelationType::Antagonist),
                     ),
                     (
                         &crate::schema::relations::plant1.eq("Testia testum"),
                         &crate::schema::relations::plant2.eq("Testia 2"),
-                        &crate::schema::relations::relation.eq(RelationsType::Companion),
+                        &crate::schema::relations::relation.eq(RelationType::Companion),
                     ),
                     (
                         &crate::schema::relations::plant1.eq("Test"),
                         &crate::schema::relations::plant2.eq("Testia 2"),
-                        &crate::schema::relations::relation.eq(RelationsType::Neutral),
+                        &crate::schema::relations::relation.eq(RelationType::Neutral),
                     ),
                     (
                         // Same as the one above but switched (to test if return value is distinct)
                         &crate::schema::relations::plant1.eq("Testia 2"),
                         &crate::schema::relations::plant2.eq("Test"),
-                        &crate::schema::relations::relation.eq(RelationsType::Neutral),
+                        &crate::schema::relations::relation.eq(RelationType::Neutral),
                     ),
                 ])
                 .execute(conn)

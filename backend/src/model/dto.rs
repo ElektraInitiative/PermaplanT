@@ -9,7 +9,7 @@ use uuid::Uuid;
 
 use super::r#enum::{
     layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
-    relations_type::RelationsType,
+    relation_type::RelationType,
 };
 
 pub mod actions;
@@ -137,7 +137,7 @@ pub struct RelationDto {
     /// The id of the plant in the relation.
     pub id: i32,
     /// The type of relation.
-    pub relation: RelationsType,
+    pub relation: RelationType,
 }
 
 /// Query parameters for searching seeds.

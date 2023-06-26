@@ -9,7 +9,7 @@ use log::debug;
 use crate::{
     model::{
         dto::{RelationDto, RelationSearchParameters, RelationsDto},
-        r#enum::relations_type::RelationsType,
+        r#enum::relation_type::RelationType,
     },
     schema::{plants, relations},
 };
@@ -34,7 +34,7 @@ pub async fn find_relations(
         );
     debug!("{}", debug_query::<Pg, _>(&query));
     let relations = query
-        .load::<(i32, RelationsType)>(conn)
+        .load::<(i32, RelationType)>(conn)
         .await?
         .into_iter()
         .map(|(id, relation)| RelationDto { id, relation })

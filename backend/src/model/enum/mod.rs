@@ -14,7 +14,7 @@ pub mod privacy_options;
 pub mod propagation_method;
 pub mod quality;
 pub mod quantity;
-pub mod relations_type;
+pub mod relation_type;
 pub mod shade;
 pub mod soil_ph;
 pub mod soil_texture;

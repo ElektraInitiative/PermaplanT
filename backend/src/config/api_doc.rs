@@ -20,7 +20,7 @@ use crate::{
             PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto,
             RelationsDto, SeedDto,
         },
-        r#enum::{quality::Quality, quantity::Quantity, relations_type::RelationsType},
+        r#enum::{quality::Quality, quantity::Quantity, relation_type::RelationType},
     },
 };
 
@@ -117,7 +117,7 @@ struct LayerApiDoc;
         schemas(
             RelationsDto,
             RelationDto,
-            RelationsType
+            RelationType
         )
     ),
     modifiers(&SecurityAddon)
