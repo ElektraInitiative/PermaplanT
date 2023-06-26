@@ -153,7 +153,7 @@ function PlantsLayer(props: PlantsLayerProps) {
   usePlantLayerListeners(props.listening || false);
   const layerRef = useRef<Konva.Layer>(null);
 
-  const trackedState = useMapStore((map) => map.trackedState);
+  const plants = useMapStore((map) => map.trackedState.layers.plants.objects);
   const selectedPlant = useMapStore(
     (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
@@ -163,7 +163,7 @@ function PlantsLayer(props: PlantsLayerProps) {
 
   return (
     <Layer {...props} ref={layerRef}>
-      {trackedState.layers.plants.objects.map((o) => (
+      {plants.map((o) => (
         <PlantingElement planting={o} key={o.id} />
       ))}
 
