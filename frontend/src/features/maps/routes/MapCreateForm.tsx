@@ -31,6 +31,7 @@ export default function MapCreateForm() {
 
   const { t } = useTranslation(['maps']);
   const [missingName, setMissingName] = useState(false);
+  const [mapVisible, setMapVisible] = useState(false);
   const [mapInput, setMapInput] = useState(initialData);
   const navigate = useNavigate();
 
@@ -56,6 +57,59 @@ export default function MapCreateForm() {
     </p>
   );
 
+  const locationPicker = (
+    <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
+      <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MapEventListener mapState={mapInput} setMapState={setMapInput} />
+      </MapContainer>
+    </div>
+  );
+
+  const locactionPickerPlaceholder = (
+    <div className="mb-12 flex flex-col items-center">
+      <div className="mb-4 flex">
+        <input
+          id="mapLatInput"
+          name="latitude"
+          onChange={(e) =>
+            setMapInput({
+              ...mapInput,
+              location: { ...mapInput.location, latitude: +e.target.value.replace(',', '.') },
+            })
+          }
+          className="mr-2 block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          style={{ colorScheme: 'dark' }}
+          placeholder="Latitude"
+        />
+        <input
+          id="mapLngInput"
+          name="longitude"
+          onChange={(e) =>
+            setMapInput({
+              ...mapInput,
+              location: { ...mapInput.location, longitude: +e.target.value.replace(',', '.') },
+            })
+          }
+          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          style={{ colorScheme: 'dark' }}
+          placeholder="Longitude"
+        />
+      </div>
+      <span className="text-lg font-medium">{t('maps:create.or')}</span>
+      <SimpleButton
+        title={t('maps:create.location_button_hint')}
+        onClick={() => setMapVisible(true)}
+        className="mt-4 max-w-[240px]"
+      >
+        {t('maps:create.location_button')}
+      </SimpleButton>
+    </div>
+  );
+
   async function onSubmit() {
     if (mapInput.name.trim() === '') {
       setMissingName(true);
@@ -73,7 +127,7 @@ export default function MapCreateForm() {
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
     };
-    createMap(newMap);
+    await createMap(newMap);
     navigate('/maps');
   }
 
@@ -121,15 +175,8 @@ export default function MapCreateForm() {
         style={{ colorScheme: 'dark' }}
         placeholder={t('maps:create.description_placeholer')}
       />
-      <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
-        <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <MapEventListener mapState={mapInput} setMapState={setMapInput} />
-        </MapContainer>
-      </div>
+      {mapVisible && locationPicker}
+      {!mapVisible && locactionPickerPlaceholder}
       <div className="space-between flex flex-row justify-center space-x-8">
         <SimpleButton
           onClick={onCancel}

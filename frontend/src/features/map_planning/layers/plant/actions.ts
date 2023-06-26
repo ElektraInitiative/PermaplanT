@@ -26,10 +26,10 @@ export class CreatePlantAction
       ...state,
       layers: {
         ...state.layers,
-        Plant: {
-          ...state.layers.Plant,
+        plants: {
+          ...state.layers.plants,
           objects: [
-            ...state.layers.Plant.objects,
+            ...state.layers.plants.objects,
             {
               ...this._data,
               id: this._id,
@@ -40,10 +40,9 @@ export class CreatePlantAction
     };
   }
 
-  async execute(): Promise<Awaited<ReturnType<typeof createPlanting>>> {
-    return createPlanting(1, {
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof createPlanting>>> {
+    return createPlanting(mapId, {
       ...this._data,
-      // TODO - get these values from the store.
       id: this._id,
     });
   }
@@ -54,12 +53,12 @@ export class DeletePlantAction
 {
   constructor(private readonly _id: string) {}
 
-  async execute(): Promise<boolean> {
-    return deletePlanting(1, this._id);
+  async execute(mapId: number): Promise<boolean> {
+    return deletePlanting(mapId, this._id);
   }
 
   reverse(state: TrackedMapState) {
-    const plant = state.layers.Plant.objects.find((obj) => obj.id === this._id);
+    const plant = state.layers.plants.objects.find((obj) => obj.id === this._id);
 
     if (!plant) {
       return null;
@@ -73,9 +72,9 @@ export class DeletePlantAction
       ...state,
       layers: {
         ...state.layers,
-        Plant: {
-          ...state.layers.Plant,
-          objects: state.layers.Plant.objects.filter((p) => p.id !== this._id),
+        plants: {
+          ...state.layers.plants,
+          objects: state.layers.plants.objects.filter((p) => p.id !== this._id),
         },
       },
     };
@@ -93,7 +92,7 @@ export class MovePlantAction
   }
 
   reverse(state: TrackedMapState) {
-    const plants = state.layers.Plant.objects.filter((obj) => this._ids.includes(obj.id));
+    const plants = state.layers.plants.objects.filter((obj) => this._ids.includes(obj.id));
 
     if (!plants.length) {
       return null;
@@ -107,9 +106,9 @@ export class MovePlantAction
       ...state,
       layers: {
         ...state.layers,
-        Plant: {
-          ...state.layers.Plant,
-          objects: state.layers.Plant.objects.map((p) => {
+        plants: {
+          ...state.layers.plants,
+          objects: state.layers.plants.objects.map((p) => {
             if (this._ids.includes(p.id)) {
               return {
                 ...p,
@@ -125,10 +124,9 @@ export class MovePlantAction
     };
   }
 
-  execute(): Promise<PlantingDto[]> {
+  execute(mapId: number): Promise<PlantingDto[]> {
     const tasks = this._data.map((d) =>
-      movePlanting(1, d.id, {
-        // TODO - get these values from the store.
+      movePlanting(mapId, d.id, {
         x: d.x,
         y: d.y,
       }),
@@ -153,7 +151,7 @@ export class TransformPlantAction
   }
 
   reverse(state: TrackedMapState) {
-    const plants = state.layers.Plant.objects.filter((obj) => this._ids.includes(obj.id));
+    const plants = state.layers.plants.objects.filter((obj) => this._ids.includes(obj.id));
 
     if (!plants.length) {
       return null;
@@ -176,9 +174,9 @@ export class TransformPlantAction
       ...state,
       layers: {
         ...state.layers,
-        Plant: {
-          ...state.layers.Plant,
-          objects: state.layers.Plant.objects.map((p) => {
+        plants: {
+          ...state.layers.plants,
+          objects: state.layers.plants.objects.map((p) => {
             if (this._ids.includes(p.id)) {
               return {
                 ...p,
@@ -197,10 +195,9 @@ export class TransformPlantAction
     };
   }
 
-  execute(): Promise<PlantingDto[]> {
+  execute(mapId: number): Promise<PlantingDto[]> {
     const tasks = this._data.map((d) =>
-      transformPlanting(1, d.id, {
-        // TODO - get these values from the store.
+      transformPlanting(mapId, d.id, {
         x: d.x,
         y: d.y,
         scaleX: d.scaleX,

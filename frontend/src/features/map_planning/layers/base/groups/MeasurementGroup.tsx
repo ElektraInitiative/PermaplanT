@@ -9,7 +9,7 @@ import { Circle, Group, Line } from 'react-konva';
  * @constructor
  */
 export const MeasurementGroup = (config: Konva.LayerConfig) => {
-  const untrackedState = useMapStore((state) => state.untrackedState.layers.Base);
+  const untrackedState = useMapStore((state) => state.untrackedState.layers.base);
 
   const measurementLinePoints = () => {
     if (untrackedState.measureStep !== 'both selected') return [];

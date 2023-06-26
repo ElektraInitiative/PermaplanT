@@ -26,7 +26,7 @@ impl Planting {
         if let Some(id) = search_parameters.plant_id {
             query = query.filter(plant_id.eq(id));
         }
-        if let Some(id) = search_parameters.plants_layer_id {
+        if let Some(id) = search_parameters.layer_id {
             query = query.filter(layer_id.eq(id));
         }
 

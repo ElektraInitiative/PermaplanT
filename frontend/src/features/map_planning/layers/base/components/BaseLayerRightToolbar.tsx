@@ -25,11 +25,13 @@ export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
 };
 
 export const BaseLayerRightToolbar = () => {
-  const trackedState = useMapStore((state) => state.trackedState.layers.Base);
-  const untrackedState = useMapStore((state) => state.untrackedState.layers.Base);
+  const trackedState = useMapStore((state) => state.trackedState.layers.base);
+  const untrackedState = useMapStore((state) => state.untrackedState.layers.base);
   const executeAction = useMapStore((state) => state.executeAction);
   const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
+
+  console.log(untrackedState.measureStep);
 
   const { t } = useTranslation(['common', 'baseLayerForm']);
 
@@ -66,7 +68,7 @@ export const BaseLayerRightToolbar = () => {
     const scale = calculateScale(measuredDistance, trackedState.scale, actualDistance);
     const path = trackedState.nextcloudImagePath;
     const rotation = trackedState.rotation;
-    executeAction(new UpdateBaseLayerAction(rotation, scale, path), 'baseLayer_changeScale', 300);
+    executeAction(new UpdateBaseLayerAction(rotation, scale, path));
 
     deactivateMeasurement();
   };

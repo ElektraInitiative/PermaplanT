@@ -1,34 +1,7 @@
-import type {
-  TrackedMapSlice,
-  UntrackedLayers,
-  UntrackedMapSlice,
-  UntrackedMapState,
-} from './MapStoreTypes';
-import { LAYER_NAMES } from './MapStoreTypes';
-import Konva from 'konva/cmj';
+import { TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from './MapStoreTypes';
+import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
-
-import Vector2d = Konva.Vector2d;
-
-export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
-  selectedLayer: 'Base',
-  layers: {
-    ...LAYER_NAMES.reduce(
-      (acc, layerName) => ({
-        ...acc,
-        [layerName]: {
-          visible: true,
-          opacity: 1,
-          measureStep: layerName === 'Base' ? 'inactive' : undefined,
-          measurePoint1: layerName === 'Base' ? null : undefined,
-          measurePoint2: layerName === 'Base' ? null : undefined,
-        },
-      }),
-      {} as UntrackedLayers,
-    ),
-  },
-};
 
 export const createUntrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -46,16 +19,18 @@ export const createUntrackedMapSlice: StateCreator<
       ...state,
       untrackedState: {
         ...state.untrackedState,
-        selectedLayer: selectedLayer,
+        selectedLayer: {
+          ...selectedLayer,
+        },
         layers: {
           ...state.untrackedState.layers,
-          Plant: {
-            ...state.untrackedState.layers.Plant,
+          plants: {
+            ...state.untrackedState.layers.plants,
             selectedPlanting: null,
             selectedPlantForPlanting: null,
           },
-          Base: {
-            ...state.untrackedState.layers.Base,
+          base: {
+            ...state.untrackedState.layers.base,
             measurePoint1: null,
             measurePoint2: null,
             measureStep: 'inactive',
@@ -101,8 +76,8 @@ export const createUntrackedMapSlice: StateCreator<
         ...state.untrackedState,
         layers: {
           ...state.untrackedState.layers,
-          Plant: {
-            ...state.untrackedState.layers.Plant,
+          plants: {
+            ...state.untrackedState.layers.plants,
             selectedPlanting: null,
             selectedPlantForPlanting: plant,
           },
@@ -117,8 +92,8 @@ export const createUntrackedMapSlice: StateCreator<
         ...state.untrackedState,
         layers: {
           ...state.untrackedState.layers,
-          Plant: {
-            ...state.untrackedState.layers.Plant,
+          plants: {
+            ...state.untrackedState.layers.plants,
             selectedPlantForPlanting: null,
             selectedPlanting: planting,
           },
@@ -136,8 +111,8 @@ export const createUntrackedMapSlice: StateCreator<
         ...state.untrackedState,
         layers: {
           ...state.untrackedState.layers,
-          Base: {
-            ...state.untrackedState.layers.Base,
+          base: {
+            ...state.untrackedState.layers.base,
             measurePoint1: null,
             measurePoint2: null,
             measureStep: 'none selected',
@@ -156,8 +131,8 @@ export const createUntrackedMapSlice: StateCreator<
         ...state.untrackedState,
         layers: {
           ...state.untrackedState.layers,
-          Base: {
-            ...state.untrackedState.layers.Base,
+          base: {
+            ...state.untrackedState.layers.base,
             measurePoint1: null,
             measurePoint2: null,
             measureStep: 'inactive',
@@ -173,20 +148,20 @@ export const createUntrackedMapSlice: StateCreator<
     set((state) => {
       // This function should only be called if one of these two states is active.
       if (
-        state.untrackedState.layers.Base.measureStep !== 'none selected' &&
-        state.untrackedState.layers.Base.measureStep !== 'one selected'
+        state.untrackedState.layers.base.measureStep !== 'none selected' &&
+        state.untrackedState.layers.base.measureStep !== 'one selected'
       )
         return state;
 
       // Measurement step 'one selected' being active implies that measurePoint1 must not be null.
       console.assert(
-        state.untrackedState.layers.Base.measureStep !== 'one selected' ||
-          state.untrackedState.layers.Base.measurePoint1 !== null,
+        state.untrackedState.layers.base.measureStep !== 'one selected' ||
+          state.untrackedState.layers.base.measurePoint1 !== null,
       );
 
-      const measureStep = state.untrackedState.layers.Base.measureStep;
-      const measurePoint1 = state.untrackedState.layers.Base.measurePoint1;
-      const measurePoint2 = state.untrackedState.layers.Base.measurePoint2;
+      const measureStep = state.untrackedState.layers.base.measureStep;
+      const measurePoint1 = state.untrackedState.layers.base.measurePoint1;
+      const measurePoint2 = state.untrackedState.layers.base.measurePoint2;
 
       return {
         ...state,
@@ -194,8 +169,8 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState,
           layers: {
             ...state.untrackedState.layers,
-            Base: {
-              ...state.untrackedState.layers.Base,
+            base: {
+              ...state.untrackedState.layers.base,
               measurePoint1: measureStep === 'none selected' ? point : measurePoint1,
               measurePoint2: measureStep === 'none selected' ? measurePoint2 : point,
               measureStep: measureStep === 'none selected' ? 'one selected' : 'both selected',

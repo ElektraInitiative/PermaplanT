@@ -9,8 +9,8 @@ import { Layer } from 'react-konva';
 import KonvaEventObject = Konva.KonvaEventObject;
 
 const BaseLayer = ({ visible, opacity, listening }: Konva.LayerConfig) => {
-  const trackedState = useMapStore((state) => state.trackedState.layers.Base);
-  const untrackedState = useMapStore((state) => state.untrackedState.layers.Base);
+  const trackedState = useMapStore((state) => state.trackedState.layers.base);
+  const untrackedState = useMapStore((state) => state.untrackedState.layers.base);
   const setMeasurePoint = useMapStore((state) => state.baseLayerSetMeasurePoint);
 
   // Make sure that the image is centered on, and rotates around, the origin.

@@ -115,5 +115,5 @@ pub struct PlantingSearchParameters {
     /// The id of the plant the planting references.
     pub plant_id: Option<i32>,
     /// The id of the plants layer the planting is placed on.
-    pub plants_layer_id: Option<i32>,
+    pub layer_id: Option<i32>,
 }
