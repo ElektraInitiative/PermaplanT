@@ -1,29 +1,7 @@
-import type {
-  TrackedMapSlice,
-  UntrackedLayers,
-  UntrackedMapSlice,
-  UntrackedMapState,
-} from './MapStoreTypes';
-import { LAYER_NAMES } from './MapStoreTypes';
+import { TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from './MapStoreTypes';
 import Konva from 'konva';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
-
-export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
-  selectedLayer: 'Base',
-  layers: {
-    ...LAYER_NAMES.reduce(
-      (acc, layerName) => ({
-        ...acc,
-        [layerName]: {
-          visible: true,
-          opacity: 1,
-        },
-      }),
-      {} as UntrackedLayers,
-    ),
-  },
-};
 
 export const createUntrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -41,11 +19,13 @@ export const createUntrackedMapSlice: StateCreator<
       ...state,
       untrackedState: {
         ...state.untrackedState,
-        selectedLayer: selectedLayer,
+        selectedLayer: {
+          ...selectedLayer,
+        },
         layers: {
           ...state.untrackedState.layers,
-          Plant: {
-            ...state.untrackedState.layers.Plant,
+          plants: {
+            ...state.untrackedState.layers.plants,
             selectedPlanting: null,
             selectedPlantForPlanting: null,
           },
@@ -90,8 +70,8 @@ export const createUntrackedMapSlice: StateCreator<
         ...state.untrackedState,
         layers: {
           ...state.untrackedState.layers,
-          Plant: {
-            ...state.untrackedState.layers.Plant,
+          plants: {
+            ...state.untrackedState.layers.plants,
             selectedPlanting: null,
             selectedPlantForPlanting: plant,
           },
@@ -106,8 +86,8 @@ export const createUntrackedMapSlice: StateCreator<
         ...state.untrackedState,
         layers: {
           ...state.untrackedState.layers,
-          Plant: {
-            ...state.untrackedState.layers.Plant,
+          plants: {
+            ...state.untrackedState.layers.plants,
             selectedPlantForPlanting: null,
             selectedPlanting: planting,
           },

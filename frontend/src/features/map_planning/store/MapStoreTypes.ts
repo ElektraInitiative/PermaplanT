@@ -1,4 +1,4 @@
-import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 
@@ -28,7 +28,7 @@ export type Action<T, U> = {
   /**
    * Execute the action by informing the backend.
    */
-  execute(): Promise<T>;
+  execute(mapId: number): Promise<T>;
 };
 
 /**
@@ -81,6 +81,11 @@ export interface TrackedMapSlice {
    */
   __applyRemoteAction: (action: Action<unknown, unknown>) => void;
   /**
+   * Only called as part of the map initialization, do not call anywhere else.
+   * Resets store to default values before fetching new data, to avoid temporarily displaying wrong map data.
+   */
+  __resetStore: () => void;
+  /**
    * Initializes the plant layer.
    */
   initPlantLayer: (plantLayer: PlantingDto[]) => void;
@@ -97,47 +102,61 @@ export type History = Array<Action<unknown, unknown>>;
 export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
-  updateSelectedLayer: (selectedLayer: LayerName) => void;
-  updateLayerVisible: (layerName: LayerName, visible: UntrackedLayerState['visible']) => void;
-  updateLayerOpacity: (layerName: LayerName, opacity: UntrackedLayerState['opacity']) => void;
+  updateSelectedLayer: (selectedLayer: LayerDto) => void;
+  updateLayerVisible: (layerName: LayerType, visible: UntrackedLayerState['visible']) => void;
+  updateLayerOpacity: (layerName: LayerType, opacity: UntrackedLayerState['opacity']) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
 }
 
-/**
- * Utility array of the map layer's names.
- */
-export const LAYER_NAMES = [
-  'Base',
-  'Plant',
-  'Drawing',
-  'Dimension',
-  'Fertilization',
-  'Habitats',
-  'Hydrology',
-  'Infrastructure',
-  'Labels',
-  'Landscape',
-  'Paths',
-  'Shade',
-  'Soil',
-  'Terrain',
-  'Trees',
-  'Warnings',
-  'Winds',
-  'Zones',
-] as const;
+const LAYER_TYPES = Object.values(LayerType);
 
-/**
- * A union type of the map layer's names.
- */
-export type LayerName = (typeof LAYER_NAMES)[number];
+export const TRACKED_DEFAULT_STATE: TrackedMapState = {
+  layers: LAYER_TYPES.reduce(
+    (acc, layerName) => ({
+      ...acc,
+      [layerName]: {
+        index: layerName,
+        objects: [],
+      },
+      [LayerType.Base]: {
+        index: LayerType.Base,
+        objects: [],
+        scale: 100,
+        rotation: 0,
+        nextcloudImagePath: '',
+      },
+    }),
+    {} as TrackedLayers,
+  ),
+};
+
+export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
+  mapId: -1,
+  selectedLayer: {
+    id: -1,
+    is_alternative: false,
+    name: 'none',
+    type_: LayerType.Base,
+    map_id: -1,
+  },
+  layers: LAYER_TYPES.reduce(
+    (acc, layerName) => ({
+      ...acc,
+      [layerName]: {
+        visible: true,
+        opacity: 1,
+      },
+    }),
+    {} as UntrackedLayers,
+  ),
+};
 
 /**
  * The state of a layer's object.
  */
 export type ObjectState = {
-  index: LayerName;
+  index: LayerType;
   id: string;
   type: string;
   x: number;
@@ -153,7 +172,7 @@ export type ObjectState = {
  * The state of a map's layer.
  */
 export type TrackedLayerState = {
-  index: LayerName;
+  index: LayerType;
   /**
    * The state of the objects on the layer.
    */
@@ -164,7 +183,7 @@ export type TrackedLayerState = {
  * The state of a map's layer.
  */
 export type UntrackedLayerState = {
-  index: LayerName;
+  index: LayerType;
   visible: boolean;
   opacity: number;
 };
@@ -173,14 +192,14 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerName, 'Plant'>]: TrackedLayerState;
+  [key in Exclude<LayerType, LayerType.Plants>]: TrackedLayerState;
 } & {
-  Plant: TrackedPlantLayerState;
-  Base: TrackedBaseLayerState;
+  [LayerType.Plants]: TrackedPlantLayerState;
+  [LayerType.Base]: TrackedBaseLayerState;
 };
 
 export type TrackedPlantLayerState = {
-  index: 'Plant';
+  index: LayerType.Plants;
 
   objects: PlantingDto[];
 };
@@ -195,9 +214,9 @@ export type TrackedBaseLayerState = {
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<LayerName, 'Plant'>]: UntrackedLayerState;
+  [key in Exclude<LayerType, LayerType.Plants>]: UntrackedLayerState;
 } & {
-  Plant: UntrackedPlantLayerState;
+  [LayerType.Plants]: UntrackedPlantLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
@@ -216,6 +235,7 @@ export type TrackedMapState = {
  * The state of the map untracked by the history.
  */
 export type UntrackedMapState = {
-  selectedLayer: LayerName;
+  mapId: number;
+  selectedLayer: LayerDto;
   layers: UntrackedLayers;
 };
