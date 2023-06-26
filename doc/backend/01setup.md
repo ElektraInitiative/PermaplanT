@@ -17,7 +17,9 @@ The user 'permaplant' doesn't have the required permissions to create the 'postg
 
 Set it up using the postgres user.
 
-Ensure that you grant the necessary permissions for the user to use Postgres. One way to do this is by using the following command:
+Ensure that you grant the necessary permissions for the user to use Postgres. 
+
+One way to do this is by using the following command:
 
 ```shell
 sudo -u postgres psql
