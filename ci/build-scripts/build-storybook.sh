@@ -9,4 +9,4 @@ cd ./frontend/
 
 # build node project
 npm run doc
-npm run storybook
+npm run build-storybook
