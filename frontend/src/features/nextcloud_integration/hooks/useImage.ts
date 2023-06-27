@@ -6,11 +6,17 @@ import { useQuery } from '@tanstack/react-query';
 import { WebDAVClient } from 'webdav';
 
 type UseImageOptions = {
+  /** relative path starting at the user's Nextcloud root directory */
   path: string;
+  /** The onload callback to call when the image successfully loaded. */
   onload?: (image: HTMLImageElement) => void;
+  /** The fallback image source to use if the image is not loaded yet, or if there was an error. */
   fallbackImageSource?: string;
 };
 
+/**
+ * A hook for fetching images from the user's Nextcloud root directory.
+ */
 export function useImage({
   path,
   fallbackImageSource = errorImageSource,

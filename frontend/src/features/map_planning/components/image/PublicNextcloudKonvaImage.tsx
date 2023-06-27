@@ -12,6 +12,12 @@ interface PublicNextcloudKonvaImageProps extends Omit<ImageConfig, 'image'> {
   onload?: (ncImage: HTMLImageElement) => void;
 }
 
+/**
+ * Loads an image from a public Nextcloud share directory and renders a Konva.Image shape on success.
+ * renders a default image on failure or while loading.
+ * @param props.path relative path starting at the users Nextcloud root directory
+ * @param props.onload Fires immediately after the browser loads the image object.
+ **/
 export function PublicNextcloudKonvaImage({
   path,
   shareToken,

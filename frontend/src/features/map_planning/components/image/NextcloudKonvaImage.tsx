@@ -10,13 +10,11 @@ interface NextcloudKonvaImageProps extends Omit<ImageConfig, 'image'> {
   onload?: (ncImage: HTMLImageElement) => void;
 }
 
-/** loads an image from Nextcloud and returns a KonvaImage shape on success.
- * When no path is given a default image is returned.
+/**
+ * Loads an image from Nextcloud and renders a Konva.Image shape on success.
+ * renders a default image on failure or while loading.
  * @param props.path relative path starting at the users Nextcloud root directory
- * @param props.crop crop the image with given rectangle
- * @param props.cornerRadius corner radius of the image
  * @param props.onload Fires immediately after the browser loads the image object.
- * @returns a KonvaNodeComponent which is either the requested image or a rectangle of size 0 in case an error occurs
  **/
 export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
   const { path, ...imageProps } = props;
