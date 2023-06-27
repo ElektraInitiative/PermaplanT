@@ -196,9 +196,9 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
-          <Label visible={false} ref={tooltipRef}>
-            <Tag fill="blue" />
-            <Text fill="white" />
+          <Label visible={false} ref={tooltipRef} scaleX={1 / stage.scale} scaleY={1 / stage.scale}>
+            <Tag fill="black" />
+            <Text fill="white" fontSize={24} padding={6} />
           </Label>
           <Rect
             x={selectionRectAttrs.x}
