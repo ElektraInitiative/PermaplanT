@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Layer } from 'react-konva';
 
 const BaseLayer = ({ visible, opacity }: Konva.LayerConfig) => {
-  const trackedState = useMapStore((state) => state.trackedState.layers.base);
+  const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
 
   // Make sure that the image is centered on, and rotates around, the origin.
   const [imageOffset, setImageOffset] = useState({ x: 0, y: 0 });
@@ -18,13 +18,13 @@ const BaseLayer = ({ visible, opacity }: Konva.LayerConfig) => {
 
   return (
     <Layer listening={false} visible={visible} opacity={opacity}>
-      {trackedState.nextcloudImagePath && (
+      {baseLayerState.nextcloudImagePath && (
         <NextcloudKonvaImage
-          path={trackedState.nextcloudImagePath}
+          path={baseLayerState.nextcloudImagePath}
           onload={onload}
-          rotation={trackedState.rotation ?? 0}
-          scaleX={trackedState.scale / MAP_PIXELS_PER_METER}
-          scaleY={trackedState.scale / MAP_PIXELS_PER_METER}
+          rotation={baseLayerState.rotation ?? 0}
+          scaleX={baseLayerState.scale / MAP_PIXELS_PER_METER}
+          scaleY={baseLayerState.scale / MAP_PIXELS_PER_METER}
           offset={imageOffset}
           draggable={false}
         />

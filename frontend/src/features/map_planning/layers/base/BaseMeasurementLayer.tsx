@@ -11,19 +11,19 @@ import KonvaEventObject = Konva.KonvaEventObject;
  * @constructor
  */
 export const BaseMeasurementLayer = (config: Konva.LayerConfig) => {
-  const untrackedState = useMapStore((state) => state.untrackedState.layers.base);
+  const {measurePoint1, measurePoint2, measureStep} = useMapStore((state) => state.untrackedState.layers.base);
   const setMeasurePoint = useMapStore((state) => state.baseLayerSetMeasurePoint);
 
   const measurementLinePoints = () => {
-    if (untrackedState.measureStep !== 'both selected') return [];
+    if (measureStep !== 'both selected') return [];
 
-    console.assert(untrackedState.measurePoint1 !== null);
-    console.assert(untrackedState.measurePoint2 !== null);
+    console.assert(measurePoint1 !== null);
+    console.assert(measurePoint2 !== null);
     return [
-      untrackedState.measurePoint1?.x ?? Number.NaN,
-      untrackedState.measurePoint1?.y ?? Number.NaN,
-      untrackedState.measurePoint2?.x ?? Number.NaN,
-      untrackedState.measurePoint2?.y ?? Number.NaN,
+      measurePoint1?.x ?? Number.NaN,
+      measurePoint1?.y ?? Number.NaN,
+      measurePoint2?.x ?? Number.NaN,
+      measurePoint2?.y ?? Number.NaN,
     ];
   };
 
@@ -35,7 +35,7 @@ export const BaseMeasurementLayer = (config: Konva.LayerConfig) => {
   return (
     <Layer
       listening={
-        untrackedState.measureStep !== 'inactive' && untrackedState.measureStep !== 'both selected'
+        measureStep !== 'inactive' && measureStep !== 'both selected'
       }
       width={config.width}
       height={config.height}
@@ -43,20 +43,20 @@ export const BaseMeasurementLayer = (config: Konva.LayerConfig) => {
     >
       <Rect width={9999999} height={9999999} x={0} y={0} color="red" />
       <Line points={measurementLinePoints()} strokeWidth={10} stroke="red" lineCap={'round'} />
-      {untrackedState.measurePoint1 && (
+      {measurePoint1 && (
         <Circle
           fill="red"
           radius={10}
-          x={untrackedState.measurePoint1?.x}
-          y={untrackedState.measurePoint1?.y}
+          x={measurePoint1?.x}
+          y={measurePoint1?.y}
         />
       )}
-      {untrackedState.measurePoint2 && (
+      {measurePoint2 && (
         <Circle
           fill="red"
           radius={10}
-          x={untrackedState.measurePoint2?.x}
-          y={untrackedState.measurePoint2?.y}
+          x={measurePoint2?.x}
+          y={measurePoint2?.y}
         />
       )}
     </Layer>
