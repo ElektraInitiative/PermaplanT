@@ -9,6 +9,7 @@ def wait_for_db() {
     }
 }
 
+checkout scm
 def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
 def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
@@ -18,7 +19,6 @@ def node_image = docker.build("permaplant-node", "./ci/container-images/permapla
 stage('Build Schema'){
     node('docker') {
         node_info()
-
         checkout scm
 
         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
