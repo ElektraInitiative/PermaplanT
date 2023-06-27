@@ -41,7 +41,7 @@ stage('Tests') {
         node('docker') {
            checkout scm
             def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
-            docker.image('mysql:8-oracle').inside {
+            mdbook_image.inside {
                 checkout scm
                 sh "make test-mdbook"
             }
