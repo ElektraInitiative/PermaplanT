@@ -13,7 +13,6 @@ export const calculateScale = (
   oldScale: number,
   actualDistanceCentimeters: number,
 ): number => {
-  console.log(measuredDistancePixels, oldScale, actualDistanceCentimeters);
   if (oldScale === 0 || actualDistanceCentimeters === 0) return 0;
   return Math.floor(measuredDistancePixels / (actualDistanceCentimeters / oldScale));
 };
