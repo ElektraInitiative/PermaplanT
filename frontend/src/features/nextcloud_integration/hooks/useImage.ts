@@ -2,7 +2,7 @@ import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
 import errorImageSource from '@/icons/photo-off.svg';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { FileStat, ResponseDataDetailed } from 'webdav';
+import { FileStat, ResponseDataDetailed, WebDAVClient } from 'webdav';
 
 const WEBDAV_PATH = '/remote.php/webdav/';
 
@@ -32,6 +32,23 @@ type UseImageOptions = {
   fallbackImageSource?: string;
 };
 
+async function getImage(path: string, webdavClient: WebDAVClient) {
+  const imagePath = WEBDAV_PATH + path;
+
+  const tasks = [
+    webdavClient.getFileContents(imagePath),
+    webdavClient.stat(imagePath, { details: false }),
+  ] as const;
+
+  const [contents, stats] = await Promise.all(tasks);
+
+  if (!checkFileIsImage(stats)) {
+    throw new Error('File is not an image');
+  }
+
+  return new Blob([contents as BlobPart]);
+}
+
 export function useImage({
   path,
   fallbackImageSource = errorImageSource,
@@ -41,36 +58,18 @@ export function useImage({
   const webdav = useNextcloudWebDavClient();
 
   const imagePath = WEBDAV_PATH + path;
-  const query = useQuery(['image', imagePath], {
-    queryFn: () => {
-      return webdav?.getFileContents(imagePath) ?? null;
-    },
+  const { isError, isLoading, data } = useQuery(['image', imagePath], {
+    queryFn: () => getImage(path, webdav as WebDAVClient),
     refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,
   });
-
-  const fileStatQuery = useQuery(['stat', imagePath], {
-    queryFn: async () => {
-      return webdav?.stat(imagePath, { details: false }) ?? null;
-    },
-    refetchOnWindowFocus: false,
-    enabled: !!webdav && !!path,
-  });
-
-  const isLoading = query.isLoading || fileStatQuery.isLoading;
-  const isError =
-    query.isError ||
-    fileStatQuery.isError ||
-    (fileStatQuery.data && !checkFileIsImage(fileStatQuery.data));
-
-  const { data: imageData } = query;
 
   useEffect(() => {
     if (isLoading || isError) {
       return;
     }
 
-    const blob = new Blob([imageData as BlobPart]);
+    const blob = new Blob([data as BlobPart]);
     const objectUrl = URL.createObjectURL(blob);
 
     const newImage = new window.Image();
@@ -83,7 +82,7 @@ export function useImage({
     return () => {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [imageData, onload, fallbackImageSource, isLoading, isError]);
+  }, [data, onload, fallbackImageSource, isLoading, isError]);
 
   console.log('image', image);
 
