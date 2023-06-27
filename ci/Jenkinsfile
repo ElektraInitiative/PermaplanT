@@ -45,10 +45,12 @@ stage('Tests & Build') {
             mdbook_image.inside {
                 checkout scm
 
-                stage('test-mdbook'){
-                    sh "make test-mdbook"
+            stage('test-and-build-mdbook'){
+                when { anyOf {
+                        changeset "book.toml"
+                        changeset "doc/"
                 }
-                stage('build-mdbook'){
+                    sh "make test-mdbook"
                     sh 'make build-mdbook'
                     stash includes: 'book/', name: 'mdbook'
                 }
@@ -67,7 +69,7 @@ stage('Tests & Build') {
 
                     wait_for_db()
 
-                    stage('check-backend'){
+                    stage('test-backend'){
                         withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
                             // Workaround: we can't stop rustfmt from linting the generated schema.rs
                             dir("backend") {
