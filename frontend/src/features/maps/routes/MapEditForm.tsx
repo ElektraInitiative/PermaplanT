@@ -1,25 +1,46 @@
 import { findMapById } from '../api/findMapById';
-import { MapDto, PrivacyOptions, UpdateMapDto } from '@/bindings/definitions';
+import { updateMap } from '../api/updateMap';
+import { Coordinates, MapDto, PrivacyOptions, UpdateMapDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
-import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
 
+interface MapUpdateData {
+  name: string;
+  privacy: PrivacyOptions;
+  description?: string;
+  location?: Coordinates;
+}
+
 export default function MapEditForm() {
+  const initialValue: MapUpdateData = {
+    name: '',
+    privacy: PrivacyOptions.Public,
+    description: '',
+    location: {
+      latitude: NaN,
+      longitude: NaN,
+    },
+  };
+
+  const [updateObject, setUpdateObject] = useState<MapUpdateData>(initialValue);
+  const [loadMap, setLoadMap] = useState(false);
+  const [missingName, setMissingName] = useState(false);
+  const oldValues = useRef<MapDto>();
   const { mapId } = useParams();
   const { t } = useTranslation(['maps']);
-  const [map, setMap] = useState<MapDto | null>(null);
-  const [updateObject, setUpdateObject] = useState<UpdateMapDto>({});
   const navigate = useNavigate();
 
   useEffect(() => {
     const _findOneMap = async () => {
       try {
         const map = await findMapById(Number(mapId));
-        setMap(map);
+        oldValues.current = map;
 
         setUpdateObject({
           name: map.name,
@@ -34,107 +55,172 @@ export default function MapEditForm() {
     _findOneMap();
   }, [mapId]);
 
-  const privacyOptions = [
-    PrivacyOptions.Private,
-    PrivacyOptions.Protected,
-    PrivacyOptions.Public,
-  ].map((option) => (
-    <option key={option} value={option}>
-      {t(`maps:create.${option}`)}
-    </option>
-  ));
-
-  const privacyDetailText = (
-    <p className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-center text-sm font-medium dark:border-neutral-400-dark dark:bg-neutral-50-dark">
-      {t(`maps:create.${updateObject.privacy}_info`)}
+  const missingNameText = (
+    <p className="mb-2 ml-2 block text-sm font-medium text-red-500">
+      {t('maps:overview.missing_name')}
     </p>
   );
 
+  const options = Object.values(PrivacyOptions);
+
+  const privacyDetailText = (
+    <p className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-center text-sm font-medium dark:border-neutral-400-dark dark:bg-neutral-50-dark">
+      Test
+    </p>
+  );
+
+  const locationPicker = (
+    <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
+      <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MapEventListener mapState={updateObject} setMapState={setUpdateObject} />
+      </MapContainer>
+    </div>
+  );
+
+  const locationPickerPlaceholder = (
+    <section className="my-2 flex items-center">
+      <SimpleFormInput
+        id="latitudeInput"
+        labelText="Latitude"
+        defaultValue={updateObject.location?.latitude}
+        onChange={(e) =>
+          setUpdateObject({
+            ...updateObject,
+            location: {
+              latitude: +e.target.value.replace(',', '.'),
+              longitude: updateObject.location?.longitude ? updateObject.location.longitude : NaN,
+            },
+          })
+        }
+      />
+      <SimpleFormInput
+        id="longitudeeInput"
+        labelText="Longitude"
+        defaultValue={updateObject.location?.longitude}
+        onChange={(e) =>
+          setUpdateObject({
+            ...updateObject,
+            location: {
+              latitude: updateObject.location?.latitude ? updateObject.location.latitude : NaN,
+              longitude: +e.target.value.replace(',', '.'),
+            },
+          })
+        }
+      />
+      <SimpleButton
+        title="Pick Location"
+        onClick={() => {
+          setUpdateObject({ ...updateObject, location: undefined });
+          setLoadMap(true);
+        }}
+      >
+        Pick Location
+      </SimpleButton>
+    </section>
+  );
+
   async function onSubmit() {
+    if (updateObject.name.trim() === '') {
+      setMissingName(true);
+      return;
+    }
+    const updatedMap: UpdateMapDto = {
+      name: updateObject.name,
+      privacy: updateObject.privacy,
+      description: updateObject.description,
+      location: updateObject.location,
+    };
+    if (updateObject.location && isNaN(updateObject.location?.latitude)) {
+      updatedMap.location = undefined;
+    }
+    if (updateObject.location === oldValues.current?.location) {
+      updatedMap.location = undefined;
+    }
+    if (updateObject.description === oldValues.current?.description) {
+      updatedMap.description = undefined;
+    }
+    if (updateObject.privacy === oldValues.current?.privacy) {
+      console.log(`Old: ${oldValues.current.privacy}\nNew: ${updateObject.privacy}`);
+      updatedMap.privacy = undefined;
+    }
+    if (updateObject.name === oldValues.current?.name) {
+      updatedMap.name = undefined;
+    }
+    await updateMap(updatedMap, Number(mapId));
     navigate('/maps');
   }
-
-  function onCancel() {
-    navigate('/maps');
-  }
-  console.log(map);
-
-  //const mapPosition: LatLngExpression = map?.location
-  //  ? [map.location.latitude, map.location.longitude]
-  //  : [0, 0];
 
   return (
-    <PageLayout>
-      <h2>{t('maps:edit.title')}</h2>
-      <input
-        id="mapNameInput"
-        name="name"
-        onChange={(e) => {
-          setUpdateObject({ ...updateObject, name: e.target.value });
-        }}
-        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-        style={{ colorScheme: 'dark' }}
-        placeholder="Name"
-        defaultValue={updateObject.name}
-      />
-      <section className="my-2 flex items-center">
-        <select
-          className="mr-4 block h-11 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-          onChange={(e) => {
-            const value = e.target.value;
-            const option = value.charAt(0).toUpperCase() + value.slice(1);
-            setUpdateObject({
-              ...updateObject,
-              privacy: PrivacyOptions[option as keyof typeof PrivacyOptions],
-            });
-          }}
-          value={updateObject.privacy}
-        >
-          {privacyOptions}
-        </select>
-        {privacyDetailText}
-      </section>
-      <textarea
-        id="mapDescriptionTextfield"
-        name="description"
-        onChange={(e) => setUpdateObject({ ...updateObject, description: e.target.value })}
-        className="mb-4 block h-24 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-        style={{ colorScheme: 'dark' }}
-        placeholder={t('maps:create.description_placeholer')}
-        defaultValue={updateObject.description}
-      />
-      <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
-        <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <MapEventListener mapState={updateObject} setMapState={setUpdateObject} />
-        </MapContainer>
-      </div>
-      <div className="space-between flex flex-row justify-center space-x-8">
-        <SimpleButton
-          onClick={onCancel}
-          className="max-w-[240px] grow"
-          title={t('maps:create.cancel_button')}
-        >
-          {t('maps:create.cancel_button')}
-        </SimpleButton>
-        <SimpleButton
-          onClick={onSubmit}
-          className="max-w-[240px] grow"
-          title={t('maps:create.submit_button')}
-        >
-          {t('maps:edit.save')}
-        </SimpleButton>
-      </div>
-    </PageLayout>
+    <Suspense>
+      <PageLayout>
+        {oldValues.current && (
+          <div>
+            <PageTitle title={t('maps:edit.title')} />
+            <SimpleFormInput
+              id="nameInput"
+              labelText="Name"
+              required
+              defaultValue={updateObject.name}
+              onChange={(e) => {
+                setMissingName(false);
+                setUpdateObject({ ...updateObject, name: e.target.value });
+              }}
+            />
+            {missingName && missingNameText}
+            <label htmlFor="privacySelect" className="mb-2 block text-sm font-medium">
+              Privacy
+            </label>
+            <section className="my-2 flex items-center">
+              <select
+                id="privacySelect"
+                className="mr-4 block h-11 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+                defaultValue={updateObject.privacy as PrivacyOptions}
+                onChange={(e) =>
+                  setUpdateObject({ ...updateObject, privacy: e.target.value as PrivacyOptions })
+                }
+              >
+                {options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              {privacyDetailText}
+            </section>
+            <label htmlFor="descriptionArea" className="mb-2 block text-sm font-medium">
+              Description
+            </label>
+            <textarea
+              id="descriptionArea"
+              className="mb-4 block h-24 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+              defaultValue={updateObject.description}
+              onChange={(e) => setUpdateObject({ ...updateObject, description: e.target.value })}
+            />
+            <span className="mb-2 block text-sm font-medium">Location</span>
+            {loadMap && locationPicker}
+            {!loadMap && locationPickerPlaceholder}
+            <div className="space-between flex flex-row justify-center space-x-8">
+              <SimpleButton title="Cancel" onClick={() => navigate(-1)}>
+                Cancel
+              </SimpleButton>
+              <SimpleButton title="Save" onClick={onSubmit}>
+                Save
+              </SimpleButton>
+            </div>
+          </div>
+        )}
+      </PageLayout>
+    </Suspense>
   );
 }
 
 interface MapEventListenerProps {
-  mapState: UpdateMapDto;
-  setMapState: (mapState: UpdateMapDto) => void;
+  mapState: MapUpdateData;
+  setMapState: (mapState: MapUpdateData) => void;
 }
 
 function MapEventListener({ mapState, setMapState }: MapEventListenerProps) {
@@ -154,10 +240,7 @@ function MapEventListener({ mapState, setMapState }: MapEventListenerProps) {
     popupclose: () => {
       setMapState({
         ...mapState,
-        location: {
-          latitude: NaN,
-          longitude: NaN,
-        },
+        location: undefined,
       });
     },
   });
