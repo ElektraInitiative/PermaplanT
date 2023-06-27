@@ -9,6 +9,9 @@ function Pages() {
     <Routes>
       {Object.values(routes).map(({ path, component: Component, restricted }) => {
         if (restricted) {
+          if (auth.isLoading) {
+            return null;
+          }
           return (
             <Route
               key={path}
