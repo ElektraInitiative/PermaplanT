@@ -1,23 +1,22 @@
 import { useFindPlantById } from '../hooks/useFindPlantById';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { NextcloudKonvaImage } from '@/features/map_planning/components/NextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { Text } from 'konva/lib/shapes/Text';
 import { Group, Circle } from 'react-konva';
-import { NextcloudKonvaImage } from '@/features/map_planning/components/NextcloudKonvaImage';
 
 export type PlantingElementProps = {
   planting: PlantingDto;
 };
 
 const mouseMoveHandler = (plant: PlantsSummaryDto | undefined) => {
-  console.log('mouse move');
-  let stageRef = useMapStore.getState().stageRef.current;
-  let tooltipRef = useMapStore.getState().tooltipRef.current;
+  const stageRef = useMapStore.getState().stageRef.current;
+  const tooltipRef = useMapStore.getState().tooltipRef.current;
   if (!stageRef) return;
   if (!tooltipRef) return;
   if (!plant) return;
   // let mousePos = stageRef.getPointerPosition();
-  let mousePos = stageRef.getRelativePointerPosition();
+  const mousePos = stageRef.getRelativePointerPosition();
   if (!mousePos) return;
   tooltipRef.position({
     x: mousePos.x + 5,
@@ -28,7 +27,7 @@ const mouseMoveHandler = (plant: PlantsSummaryDto | undefined) => {
 };
 
 const mouseOutHandler = () => {
-  let tooltipRef = useMapStore.getState().tooltipRef.current;
+  const tooltipRef = useMapStore.getState().tooltipRef.current;
   tooltipRef?.hide();
 };
 
@@ -39,7 +38,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
   const selectPlanting = useMapStore((state) => state.selectPlanting);
 
   const selectedPlanting = useMapStore(
-    (state) => state.untrackedState.layers.Plant.selectedPlanting,
+    (state) => state.untrackedState.layers.plants.selectedPlanting,
   );
 
   return (
@@ -63,13 +62,14 @@ export function PlantingElement({ planting }: PlantingElementProps) {
         height={planting.height}
         x={0}
         y={0}
-        fill={ selectedPlanting?.id === planting.id ? "#0084ad" : "#6f9e48"}
+        fill={selectedPlanting?.id === planting.id ? '#0084ad' : '#6f9e48'}
       />
       <NextcloudKonvaImage
+        path={plant?.unique_name ? `PermaplanT/Icons/${plant?.unique_name}.png` : undefined}
         width={planting.width * 0.9}
         height={planting.height * 0.9}
-        offset={{x: (planting.width * 0.9)/2, y: (planting.height * 0.9)/2}}
+        offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
       />
     </Group>
-  )
+  );
 }
