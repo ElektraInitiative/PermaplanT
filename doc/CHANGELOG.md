@@ -2,9 +2,27 @@
 
 All notable changes for developers or end users will be documented in this file.
 
+Use a not-yet-used-in-any-PR random line in the UNRELEASED version.
+
 Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.2.1 - UNRELEASED
+
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
 
 ## 0.2.0 - 27.06.2023
 
