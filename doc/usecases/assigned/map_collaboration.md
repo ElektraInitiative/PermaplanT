@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** Map Creator, Collaborator
 - **Brief:** Collaborators plan on the map of a map creator.
-- **Status:** Draft
+- **Status:** Ready to be Assigned
 
 ## Scenarios
 

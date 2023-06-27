@@ -9,6 +9,7 @@ use uuid::Uuid;
 
 use super::r#enum::{
     layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+    relation_type::RelationType,
 };
 
 pub mod actions;
@@ -109,6 +110,34 @@ pub struct PlantsSummaryDto {
 pub struct PlantsSearchParameters {
     /// The system will check if this string occurs in the plants common name or unique name.
     pub name: Option<String>,
+}
+
+/// Query parameters for searching plant relations.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct RelationSearchParameters {
+    /// The id of the plant to find relations for.
+    pub plant_id: i32,
+}
+
+/// Use to return all relations for the plant.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct RelationsDto {
+    /// The id of the plant in the relation.
+    pub id: i32,
+    /// The type of relation.
+    pub relations: Vec<RelationDto>,
+}
+
+/// Use to return a relation.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct RelationDto {
+    /// The id of the plant in the relation.
+    pub id: i32,
+    /// The type of relation.
+    pub relation: RelationType,
 }
 
 /// Query parameters for searching seeds.

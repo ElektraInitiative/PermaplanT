@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user sees addition/removal of elements as events using the timeline feature.
-- **Assignee:** Paul
+- **Assignee:** Ready to be assigned
 
 ## Scenarios
 
