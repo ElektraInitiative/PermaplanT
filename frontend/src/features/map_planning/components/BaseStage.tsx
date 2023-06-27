@@ -11,7 +11,7 @@ import { handleScroll, handleZoom } from '../utils/StageTransform';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer, Text, Group, Label, Tag } from 'react-konva';
+import { Layer, Rect, Stage, Transformer, Text, Label, Tag } from 'react-konva';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -235,7 +235,7 @@ export const BaseStage = ({
       </Stage>
       {/** Portal to display something from different layers */}
       <div className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
-        <div id="bottom-portal" className='ring ring-secondary-500 rounded' />
+        <div id="bottom-portal" className="rounded ring ring-secondary-500" />
       </div>
     </div>
   );

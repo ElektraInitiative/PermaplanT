@@ -73,14 +73,13 @@ function usePlantLayerListeners(listening: boolean) {
     useMapStore.getState().selectPlanting(null);
   }, []);
 
-
   /**
    * Event handler for selecting plants
    */
-  const handleSelectPlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback((e) => {
-    const transformer = useMapStore.getState().transformer.current
-    const element = transformer?.getNodes().find(element => element.getAttr('planting'))
-    if(element){
+  const handleSelectPlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(() => {
+    const transformer = useMapStore.getState().transformer.current;
+    const element = transformer?.getNodes().find((element) => element.getAttr('planting'));
+    if (element) {
       useMapStore.getState().selectPlanting(element.getAttr('planting'));
     }
   }, []);
@@ -143,7 +142,7 @@ function usePlantLayerListeners(listening: boolean) {
     handleTransformPlanting,
     handleMovePlanting,
     handleUnselectPlanting,
-    handleSelectPlanting
+    handleSelectPlanting,
   ]);
 }
 

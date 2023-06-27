@@ -1,10 +1,10 @@
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { ImageBlob } from '@/features/nextcloud_integration/components/ImageBlob';
+import { ReactComponent as PhotoOffIcon } from '@/icons/photo-off.svg';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { ReactComponent as PhotoOffIcon } from '@/icons/photo-off.svg';
 
 const WEBDAV_PATH = '/remote.php/webdav/';
 
@@ -29,9 +29,9 @@ export const NextcloudImage = (props: NextcloudImageProps) => {
   } = useQuery(['image', WEBDAV_PATH + path], {
     queryFn: () => {
       if (!webdav) return null;
-      return webdav.getFileContents(imagePath)
+      return webdav.getFileContents(imagePath);
     },
-    enabled: !!webdav
+    enabled: !!webdav,
   });
 
   if (isLoading) {
@@ -42,6 +42,10 @@ export const NextcloudImage = (props: NextcloudImageProps) => {
     toast.error(t('nextcloudIntegration:load_image_failed'));
     return <PhotoOffIcon />;
   }
-  console.log(image)
-  return image ? <ImageBlob image={new Blob([image as BlobPart])} {...imageProps}></ImageBlob> : <PhotoOffIcon />
+  console.log(image);
+  return image ? (
+    <ImageBlob image={new Blob([image as BlobPart])} {...imageProps}></ImageBlob>
+  ) : (
+    <PhotoOffIcon />
+  );
 };
