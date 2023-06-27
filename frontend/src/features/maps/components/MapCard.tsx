@@ -45,7 +45,12 @@ export default function MapCard({ map, onDuplicate }: MapCardProps) {
         >
           <CopyIcon className="h-5 w-5" />
         </IconButton>
-        <IconButton onClick={() => navigate(`${map.id}/edit`)}>
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`${map.id}/edit`);
+          }}
+        >
           <EditIcon className="h-5 w-5" />
         </IconButton>
       </section>
