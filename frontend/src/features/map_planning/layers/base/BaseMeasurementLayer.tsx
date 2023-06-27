@@ -3,6 +3,7 @@ import Konva from 'konva';
 import { Circle, Layer, Rect, Line } from 'react-konva';
 
 import KonvaEventObject = Konva.KonvaEventObject;
+import {BASE_LAYER_MEASUREMENT_RECT_WIDTH} from "@/features/map_planning/utils/Constants";
 
 /**
  * A virtual ruler that is used to measure distances on the base layer.
@@ -10,7 +11,7 @@ import KonvaEventObject = Konva.KonvaEventObject;
  * @param config propagates layer settings from the map view
  * @constructor
  */
-export const BaseMeasurementLayer = (config: Konva.LayerConfig) => {
+export const BaseMeasurementLayer = () => {
   const { measurePoint1, measurePoint2, measureStep } = useMapStore(
     (state) => state.untrackedState.layers.base,
   );
@@ -37,11 +38,14 @@ export const BaseMeasurementLayer = (config: Konva.LayerConfig) => {
   return (
     <Layer
       listening={measureStep !== 'inactive' && measureStep !== 'both selected'}
-      width={config.width}
-      height={config.height}
       onClick={measurementOnClick}
     >
-      <Rect width={9999999} height={9999999} x={0} y={0} color="red" />
+      <Rect
+          width={BASE_LAYER_MEASUREMENT_RECT_WIDTH}
+          height={BASE_LAYER_MEASUREMENT_RECT_WIDTH}
+          x={-BASE_LAYER_MEASUREMENT_RECT_WIDTH / 2}
+          y={-BASE_LAYER_MEASUREMENT_RECT_WIDTH / 2}
+      />
       <Line points={measurementLinePoints()} strokeWidth={10} stroke="red" lineCap={'round'} />
       {measurePoint1 && <Circle fill="red" radius={10} x={measurePoint1?.x} y={measurePoint1?.y} />}
       {measurePoint2 && <Circle fill="red" radius={10} x={measurePoint2?.x} y={measurePoint2?.y} />}
