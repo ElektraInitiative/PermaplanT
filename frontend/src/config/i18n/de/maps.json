@@ -15,16 +15,9 @@
         "failure": "Etwas ist schief gelaufen, bitte versuchen Sie es später erneut!",
         "description_placeholer": "Beschreibung",
         "location_selected": "Dein gewählter Standort.",
-        "private": "privat",
-        "private_info": "Die Karte ist privat und nur für dich sichtbar",
-        "protected": "geschützt",
-        "protected_info": "Die Karte ist geschützt und nur für dich und andere PermaplanT Mitglieder sichtbar",
-        "public": "öffentlich",
-        "public_info": "Die Karte ist öffentlich und für jeden sichtbar",
         "location_button": "Wähle Standort",
         "location_button_hint": "Durch Klick wird die externe Ressource openstreetmap.org geladen.",
         "or": "Oder",
-        "undefined_info": "Ich konnte ihre Karte leider nicht laden"
     },
     "edit": {
         "title": "Karte bearbeiten",

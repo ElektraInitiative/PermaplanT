@@ -14,7 +14,7 @@ interface MapCardProps {
 }
 
 export default function MapCard({ map, onDuplicate }: MapCardProps) {
-  const { t } = useTranslation(['maps']);
+  const { t } = useTranslation(['privacyOptions']);
   const navigate = useNavigate();
 
   return (
@@ -31,7 +31,7 @@ export default function MapCard({ map, onDuplicate }: MapCardProps) {
         </span>
         <span className="text-sm italic">{map.creation_date}</span>
       </section>
-      <span className="ml-1 text-sm">({t(`maps:create.${map.privacy}`)})</span>
+      <span className="ml-1 text-sm">({t(`privacyOptions:${map.privacy}`)})</span>
       <section className="ml-auto flex items-center">
         <CountingButton iconType={0} count={map.honors} />
         <CountingButton iconType={1} count={map.visits} />

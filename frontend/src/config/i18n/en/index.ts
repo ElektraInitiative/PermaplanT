@@ -17,6 +17,7 @@ import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import pricing from './pricing.json';
 import routes from './routes.json';
+import privacyOptions from './privacyOptions.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
@@ -44,6 +45,7 @@ const en = {
   nextcloudIntegration,
   routes,
   overview,
+  privacyOptions,
 };
 
 export default en;
