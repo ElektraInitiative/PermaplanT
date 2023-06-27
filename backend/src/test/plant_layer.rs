@@ -43,29 +43,29 @@ async fn test_find_plants_relations_succeeds() {
             diesel::insert_into(crate::schema::relations::table)
                 .values(vec![
                     (
-                        &crate::schema::relations::plant1.eq("Testia testia"),
-                        &crate::schema::relations::plant2.eq("Test"),
+                        &crate::schema::relations::plant1.eq(-1),
+                        &crate::schema::relations::plant2.eq(-3),
                         &crate::schema::relations::relation.eq(RelationType::Companion),
                     ),
                     (
-                        &crate::schema::relations::plant1.eq("Testia 2"),
-                        &crate::schema::relations::plant2.eq("Testia 2"),
+                        &crate::schema::relations::plant1.eq(-2),
+                        &crate::schema::relations::plant2.eq(-2),
                         &crate::schema::relations::relation.eq(RelationType::Antagonist),
                     ),
                     (
-                        &crate::schema::relations::plant1.eq("Testia testum"),
-                        &crate::schema::relations::plant2.eq("Testia 2"),
+                        &crate::schema::relations::plant1.eq(-4),
+                        &crate::schema::relations::plant2.eq(-2),
                         &crate::schema::relations::relation.eq(RelationType::Companion),
                     ),
                     (
-                        &crate::schema::relations::plant1.eq("Test"),
-                        &crate::schema::relations::plant2.eq("Testia 2"),
+                        &crate::schema::relations::plant1.eq(-3),
+                        &crate::schema::relations::plant2.eq(-2),
                         &crate::schema::relations::relation.eq(RelationType::Neutral),
                     ),
                     (
                         // Same as the one above but switched (to test if return value is distinct)
-                        &crate::schema::relations::plant1.eq("Testia 2"),
-                        &crate::schema::relations::plant2.eq("Test"),
+                        &crate::schema::relations::plant1.eq(-2),
+                        &crate::schema::relations::plant2.eq(-3),
                         &crate::schema::relations::relation.eq(RelationType::Neutral),
                     ),
                 ])
