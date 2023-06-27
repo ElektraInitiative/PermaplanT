@@ -49,11 +49,11 @@ export const BaseLayerRightToolbar = () => {
   }, [baseLayerState.nextcloudImagePath]);
 
   useEffect(() => {
-      setScaleInput(baseLayerState.scale);
+    setScaleInput(baseLayerState.scale);
   }, [baseLayerState.scale]);
 
   useEffect(() => {
-      setRotationInput(baseLayerState.rotation);
+    setRotationInput(baseLayerState.rotation);
   }, [baseLayerState.rotation]);
 
   const [distMeters, setDistMeters] = useState(0);
