@@ -7,9 +7,6 @@ set -ex
 
 cd ./frontend/
 
-echo "Node.js version is $required_version. Proceeding with the script..."
-
 # build node project
-npm ci
 npm run doc
-npm run build-stroybook
+npm run storybook

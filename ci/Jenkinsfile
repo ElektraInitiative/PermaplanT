@@ -94,7 +94,6 @@ stage('Checks & Build') {
 
                         stash includes: 'backend/target/release/backend', name: 'backend'
                     } 
-
                 }
             }
         }
@@ -120,15 +119,13 @@ stage('Checks & Build') {
                     }
                 }
 
-                stage('check-storybook'){
-                    sh "node -v"
-                    sh './ci/build-scripts/build-storybook.sh'
-                    stash includes: 'frontend/dist/**/*', name: 'frontend'
-                }
-
                 stage('build-frontend'){
                     sh './ci/build-scripts/build-frontend.sh'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
+                }
+                
+                stage('check-storybook'){
+                    sh './ci/build-scripts/build-storybook.sh'
                 }
             }
         }
