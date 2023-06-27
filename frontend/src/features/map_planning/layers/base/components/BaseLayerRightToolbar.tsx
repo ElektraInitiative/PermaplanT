@@ -25,7 +25,9 @@ export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
 
 export const BaseLayerRightToolbar = () => {
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
-  const {measureStep, measurePoint1, measurePoint2} = useMapStore((state) => state.untrackedState.layers.base);
+  const { measureStep, measurePoint1, measurePoint2 } = useMapStore(
+    (state) => state.untrackedState.layers.base,
+  );
   const executeAction = useMapStore((state) => state.executeAction);
   const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
@@ -149,17 +151,13 @@ export const BaseLayerRightToolbar = () => {
           value={scaleInput}
           min="0"
         />
-        <SimpleButton
-          onClick={() =>
-            measureStep === 'inactive'
-              ? activateMeasurement()
-              : deactivateMeasurement()
-          }
-        >
-          {measureStep === 'inactive'
-            ? t('baseLayerForm:set_scale')
-            : t('common:cancel')}
-        </SimpleButton>
+        {measureStep === 'inactive' ? (
+          <SimpleButton onClick={() => activateMeasurement()}>
+            {t('baseLayerForm:set_scale')}
+          </SimpleButton>
+        ) : (
+          <SimpleButton onClick={() => deactivateMeasurement()}>{t('common:cancel')}</SimpleButton>
+        )}
       </div>
     </div>
   );
