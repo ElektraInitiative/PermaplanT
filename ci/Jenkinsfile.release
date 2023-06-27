@@ -66,7 +66,7 @@ stage('Build in Docker'){
                 checkout scm
                 unstash 'definitions.ts'
 
-                sh './ci/build-scripts/build-frontend.sh'
+                sh 'make build-frontend'
                 stash includes: 'frontend/dist/**/*', name: 'frontend'
             }
         }
@@ -83,6 +83,8 @@ stage('Deploy Prod') {
         unstash 'schema.rs'
         unstash 'frontend'
         unstash 'backend'
+        unstash 'mdbook'
+        unstash 'storybook'
 
         echo 'Deploying to Prod ...'
         sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
