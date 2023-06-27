@@ -59,7 +59,7 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
   }
 
   const imageURLPath = WEBDAV_PATH + cleanImagePath;
-  const { data, isLoading, isError, error } = useQuery(['image', WEBDAV_PATH + path], () =>
+  const { data, isLoading, isError, error } = useQuery(['image', cleanImagePath], () =>
     webdav ? webdav.getFileContents(imageURLPath) : '',
   );
 
