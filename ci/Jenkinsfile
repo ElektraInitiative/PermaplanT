@@ -13,7 +13,7 @@ def wait_for_db() {
 // see Jenkinsfile.release
 stage('Build Schema'){
     node('docker') {
-         node_info()
+        node_info()
 
         checkout scm
         def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
@@ -34,21 +34,23 @@ stage('Build Schema'){
 }
 
 // NOT REQUIRED for Deployment
-stage('Tests') {
+stage('Tests & Build') {
     def parallel_checks = [:]
 
     parallel_checks["test-mdbook"] = {
         node('docker') {
-           checkout scm
+            checkout scm
             def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+
             mdbook_image.inside {
                 checkout scm
+
                 sh "make test-mdbook"
             }
         }
     }
 
-    parallel_checks["test-backend"] = {
+    parallel_checks["test-and-build-backend"] = {
         node('docker') {
             node_info()
             checkout scm
@@ -59,7 +61,7 @@ stage('Tests') {
 
                     wait_for_db()
 
-                    stage('test-backend'){
+                    stage('check-backend'){
                         withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
                             // Workaround: we can't stop rustfmt from linting the generated schema.rs
                             dir("backend") {
@@ -82,12 +84,19 @@ stage('Tests') {
                             }
                         }
                     }
+
+                    stage('build-backend'){
+                        sh './ci/build-scripts/build-backend.sh'
+
+                        stash includes: 'backend/target/release/backend', name: 'backend'
+                    }
+
                 }
             }
         }
     }
 
-    parallel_checks["test-frontend"] = {
+    parallel_checks["test-and-build-frontend"] = {
         node('docker') {
             node_info()
             checkout scm
@@ -99,54 +108,6 @@ stage('Tests') {
                 stage('test-frontend'){
                     sh 'make test-frontend'
                 }
-            }
-        }
-    }
-
-    parallel(parallel_checks)
-}
-
-stage('Build') {
-    def parallel_checks = [:]
-
-    parallel_checks["build-mdbook"] = {
-        node('docker') {
-            checkout scm
-            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
-            mdbook_image.inside {
-                checkout scm
-                sh "make build-mdbook"
-                stash includes: 'book/', name: 'mdbook'
-            }
-        }
-    }
-
-    parallel_checks["build-backend"] = {
-        node('docker') {
-            node_info()
-            checkout scm
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
-            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                    checkout scm
-
-                    stage('build-backend'){
-                        sh './ci/build-scripts/build-backend.sh'
-                        stash includes: 'backend/target/release/backend', name: 'backend'
-                    }
-                }
-            }
-        }
-    }
-
-    parallel_checks["build-frontend"] = {
-        node('docker') {
-            node_info()
-            checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
-            node_image.inside {
-                checkout scm
-                unstash 'definitions.ts'
 
                 stage('build-frontend'){
                     sh 'make build-frontend'
@@ -155,11 +116,12 @@ stage('Build') {
 
                 stage('build-storybook'){
                     sh 'make build-storybook'
-                    stash includes: 'frontend/storybook-static', name: 'storybook'
+                    stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
             }
         }
     }
+
     parallel(parallel_checks)
 }
 
