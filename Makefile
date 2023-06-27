@@ -15,9 +15,11 @@ test-frontend:
 	cd frontend && npm run lint
 	cd frontend && npm run test
 
+.PHONY: test-mdbook
 test-mdbook:
 	mdbook test
 
+.PHONY: test-storybook
 test-storybook:
 	cd frontend && dev-storybook --smoke-test
 
@@ -26,13 +28,11 @@ docs: build-storybook build-mdbook
 
 .PHONY: build-storybook
 build-storybook:
-	cd frontend && npm install
+	cd frontend && npm ci
 	cd frontend && npm run build-storybook
 
 .PHONY: build-mdbook
 build-mdbook:
-	cargo install mdbook mdbook-mermaid
-	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary
 	mdbook build
 
 .PHONY: pre-commit
