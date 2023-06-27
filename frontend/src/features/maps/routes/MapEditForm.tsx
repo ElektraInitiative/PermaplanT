@@ -33,7 +33,7 @@ export default function MapEditForm() {
   const [missingName, setMissingName] = useState(false);
   const oldValues = useRef<MapDto>();
   const { mapId } = useParams();
-  const { t } = useTranslation(['maps']);
+  const { t } = useTranslation(['maps', 'privacyOptions', 'common']);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function MapEditForm() {
 
   const privacyDetailText = (
     <p className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-center text-sm font-medium dark:border-neutral-400-dark dark:bg-neutral-50-dark">
-      Test
+      {t(`privacyOptions:${updateObject.privacy}_info`)}
     </p>
   );
 
@@ -85,7 +85,7 @@ export default function MapEditForm() {
     <section className="my-2 flex items-center">
       <SimpleFormInput
         id="latitudeInput"
-        labelText="Latitude"
+        labelText={t('maps:edit.latitude_label')}
         defaultValue={updateObject.location?.latitude}
         onChange={(e) =>
           setUpdateObject({
@@ -98,8 +98,8 @@ export default function MapEditForm() {
         }
       />
       <SimpleFormInput
-        id="longitudeeInput"
-        labelText="Longitude"
+        id="longitudeInput"
+        labelText={t('maps:edit.longitude_label')}
         defaultValue={updateObject.location?.longitude}
         onChange={(e) =>
           setUpdateObject({
@@ -112,13 +112,13 @@ export default function MapEditForm() {
         }
       />
       <SimpleButton
-        title="Pick Location"
+        title={t('maps:edit.location_button_hint')}
         onClick={() => {
           setUpdateObject({ ...updateObject, location: undefined });
           setLoadMap(true);
         }}
       >
-        Pick Location
+        {t('maps:edit.location_button')}
       </SimpleButton>
     </section>
   );
@@ -172,7 +172,7 @@ export default function MapEditForm() {
             />
             {missingName && missingNameText}
             <label htmlFor="privacySelect" className="mb-2 block text-sm font-medium">
-              Privacy
+              {t('maps:edit.privacy_label')}
             </label>
             <section className="my-2 flex items-center">
               <select
@@ -185,14 +185,14 @@ export default function MapEditForm() {
               >
                 {options.map((option) => (
                   <option key={option} value={option}>
-                    {option}
+                    {t(`privacyOptions:${option}`)}
                   </option>
                 ))}
               </select>
               {privacyDetailText}
             </section>
             <label htmlFor="descriptionArea" className="mb-2 block text-sm font-medium">
-              Description
+              {t('maps:edit.description_label')}
             </label>
             <textarea
               id="descriptionArea"
@@ -200,15 +200,15 @@ export default function MapEditForm() {
               defaultValue={updateObject.description}
               onChange={(e) => setUpdateObject({ ...updateObject, description: e.target.value })}
             />
-            <span className="mb-2 block text-sm font-medium">Location</span>
+            <span className="mb-2 block text-sm font-medium">{t('maps:edit.location_label')}</span>
             {loadMap && locationPicker}
             {!loadMap && locationPickerPlaceholder}
             <div className="space-between flex flex-row justify-center space-x-8">
               <SimpleButton title="Cancel" onClick={() => navigate(-1)}>
-                Cancel
+                {t('common:cancel')}
               </SimpleButton>
               <SimpleButton title="Save" onClick={onSubmit}>
-                Save
+                {t('common:save')}
               </SimpleButton>
             </div>
           </div>
@@ -228,7 +228,7 @@ function MapEventListener({ mapState, setMapState }: MapEventListenerProps) {
 
   const map = useMapEvents({
     click: (e) => {
-      map.openPopup(t('maps:create.location_selected'), e.latlng);
+      map.openPopup(t('maps:edit.location_selected'), e.latlng);
       setMapState({
         ...mapState,
         location: {

@@ -21,6 +21,13 @@
     },
     "edit": {
         "title": "Edit Map",
-        "save": "Save"
+        "privacy_label": "Privacy",
+        "description_label": "Description",
+        "location_label": "Location",
+        "location_selected": "Your selected location.",
+        "latitude_label": "Latitude",
+        "longitude_label": "Longitude",
+        "location_button": "Select Location",
+        "location_button_hint": "On click the external resource openstreetmap.org will be loaded."
     }
 }

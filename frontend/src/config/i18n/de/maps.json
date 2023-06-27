@@ -21,6 +21,13 @@
     },
     "edit": {
         "title": "Karte bearbeiten",
-        "save": "Speichern"
+        "privacy_label": "Privatsphäre",
+        "description_label": "Beschreibung",
+        "location_label": "Standort",
+        "location_selected": "Dein gewählter Standort.",
+        "latitude_label": "Längengrad",
+        "longitude_label": "Breitegrad",
+        "location_button": "Wähle Standort",
+        "location_button_hint": "Durch Klick wird die externe Ressource openstreetmap.org geladen."
     }
 }
