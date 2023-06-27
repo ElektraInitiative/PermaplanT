@@ -62,6 +62,7 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
     queryFn: () => {
       return webdav && path ? webdav.getFileContents(imagePath) : null;
     },
+    refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,
   });
 
@@ -72,6 +73,7 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
       if (!webdav) return null;
       return webdav?.stat(imagePath, { details: false });
     },
+    refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,
   });
 
