@@ -67,6 +67,15 @@ plants }o--|| plant_detail: "type"
 
 plants ||--o{ seeds : ""
 
+relations {
+  INT plant1 PK
+  INT plant2 PK
+  RELATION_TYPE relation "NOT NULL"
+  VARCHAR note
+}
+relations }o--|| plants : "plant1"
+relations }o--|| plants : "plant2"
+
 species{}
 genus{}
 subfamily{}
