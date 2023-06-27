@@ -17,7 +17,7 @@
         "location_selected": "Your selected location.",
         "location_button": "Select location",
         "location_button_hint": "On click the external resource openstreetmap.org will be loaded.",
-        "or": "Or",
+        "or": "Or"
     },
     "edit": {
         "title": "Edit Map",

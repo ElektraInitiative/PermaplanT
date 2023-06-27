@@ -17,7 +17,7 @@
         "location_selected": "Dein gewählter Standort.",
         "location_button": "Wähle Standort",
         "location_button_hint": "Durch Klick wird die externe Ressource openstreetmap.org geladen.",
-        "or": "Oder",
+        "or": "Oder"
     },
     "edit": {
         "title": "Karte bearbeiten",
