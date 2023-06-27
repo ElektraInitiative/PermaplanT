@@ -33,7 +33,7 @@ pub struct ConfigDto {
     /// The client_id the frontend should use to log in
     pub client_id: String,
     /// The version must be an exact match between frontend and backend.
-    pub version: i32,
+    pub version: String,
 }
 
 /// Represents seeds of a user.
