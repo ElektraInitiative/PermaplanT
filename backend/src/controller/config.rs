@@ -19,7 +19,7 @@ pub async fn get() -> HttpResponse {
     let response = ConfigDto {
         issuer_uri: config.openid_configuration.issuer.clone(),
         client_id: config.client_id.clone(),
-        version: 0,
+        version: env!("CARGO_PKG_VERSION").to_owned(),
     };
     HttpResponse::Ok().json(response)
 }
