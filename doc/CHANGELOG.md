@@ -4,7 +4,7 @@ All notable changes for developers or end users will be documented in this file.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.2.0
+## 0.2.0 (UNRELEASED)
 
 ## 0.1.0
 
