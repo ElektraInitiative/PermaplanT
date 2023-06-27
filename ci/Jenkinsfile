@@ -46,10 +46,7 @@ stage('Tests & Build') {
                 checkout scm
 
                 stage('test-and-build-mdbook'){
-                    when { anyOf {
-                            changeset "book.toml"
-                            changeset "doc/"
-                    }
+                    if (hasChanges("book.toml") || hasChanges("doc/")) {
                         sh "make test-mdbook"
                         sh 'make build-mdbook'
                         stash includes: 'book/', name: 'mdbook'
