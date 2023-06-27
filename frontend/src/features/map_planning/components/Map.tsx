@@ -9,8 +9,6 @@ import { Layers } from './toolbar/Layers';
 import { Toolbar } from './toolbar/Toolbar';
 import { LayerDto, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
-import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
-import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import { useTranslation } from 'react-i18next';
@@ -75,9 +73,6 @@ export const Map = ({ layers }: MapProps) => {
           minWidth={160}
           contentTop={
             <div>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <ArrowIcon></ArrowIcon>
-              </IconButton>
               <IconButton
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
                 onClick={() => undo()}
@@ -91,9 +86,6 @@ export const Map = ({ layers }: MapProps) => {
                 title={t('undoRedo:redo_tooltip')}
               >
                 <RedoIcon></RedoIcon>
-              </IconButton>
-              <IconButton className="m-2 h-8 w-8 border border-neutral-500 p-1">
-                <MoveIcon></MoveIcon>
               </IconButton>
             </div>
           }
