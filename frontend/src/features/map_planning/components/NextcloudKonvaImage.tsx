@@ -1,12 +1,11 @@
 import defaultImageUrl from '@/assets/plant.svg';
 import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
+import errorImageUrl from '@/icons/photo-off.svg';
 import { useQuery } from '@tanstack/react-query';
 import { ShapeConfig } from 'konva/lib/Shape';
 import { IRect } from 'konva/lib/types';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Image, Rect } from 'react-konva';
-import { toast } from 'react-toastify';
 import { FileStat, ResponseDataDetailed } from 'webdav';
 
 interface NextcloudKonvaImageProps extends Omit<ShapeConfig, 'src'> {
@@ -36,11 +35,11 @@ const checkFileIsImage = (
 
 const WEBDAV_PATH = '/remote.php/webdav/';
 
-function createDefaultImage() {
-  const defaultImage = new window.Image();
-  defaultImage.src = defaultImageUrl;
-  return defaultImage;
-}
+const defaultImage = new window.Image();
+defaultImage.src = defaultImageUrl;
+
+const errorImage = new window.Image();
+errorImage.src = errorImageUrl;
 
 /** loads an image from Nextcloud and returns a KonvaImage shape on success.
  * When no path is given a default image is returned.
@@ -51,16 +50,15 @@ function createDefaultImage() {
  * @returns a KonvaNodeComponent which is either the requested image or a rectangle of size 0 in case an error occurs
  **/
 export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
-  const { t } = useTranslation(['nextcloudIntegration']);
   const { path, ...imageProps } = props;
   const { onload } = props;
 
-  const [image, setImage] = useState(createDefaultImage);
+  const [image, setImage] = useState(defaultImage);
 
   const webdav = useNextcloudWebDavClient();
 
   const imagePath = WEBDAV_PATH + path;
-  const { data, isLoading, isError, error } = useQuery(['image', imagePath, path, webdav], {
+  const { data, isLoading, isError } = useQuery(['image', imagePath, path, webdav], {
     queryFn: () => {
       return webdav && path ? webdav.getFileContents(imagePath) : null;
     },
@@ -80,9 +78,17 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
   const imageLoadedSuccessfully =
     Boolean(data) && !isError && !isLoading && !isFileStatLoading && checkFileIsImage(fileStat);
 
+  const imageHasError =
+    isError || (Boolean(data) && Boolean(fileStat) && !checkFileIsImage(fileStat));
+
   useEffect(() => {
     if (!imageLoadedSuccessfully) {
-      setImage(createDefaultImage);
+      if (imageHasError) {
+        setImage(errorImage);
+        return;
+      }
+
+      setImage(defaultImage);
       return;
     }
 
@@ -99,18 +105,15 @@ export const NextcloudKonvaImage = (props: NextcloudKonvaImageProps) => {
     return () => {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [data, onload, imageLoadedSuccessfully]);
+  }, [data, onload, imageLoadedSuccessfully, imageHasError]);
 
   if (path) {
     if (isLoading) {
       return <Rect width={0} height={0} />;
     }
 
-    if (isError || (Boolean(data) && Boolean(fileStat) && !checkFileIsImage(fileStat))) {
-      toast.error(t('nextcloudIntegration:load_image_failed') + error);
-      // When the image cannot be retrieved the component returns a Rectangle shape with a width and height of 0
-      // The rationale is that the konva layer always gets a shape and doesn't produce errors
-      return <Rect width={0} height={0} />;
+    if (imageHasError) {
+      return <Image {...imageProps} image={image} />;
     }
   }
 
