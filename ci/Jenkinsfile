@@ -45,14 +45,15 @@ stage('Tests & Build') {
             mdbook_image.inside {
                 checkout scm
 
-            stage('test-and-build-mdbook'){
-                when { anyOf {
-                        changeset "book.toml"
-                        changeset "doc/"
-                }
-                    sh "make test-mdbook"
-                    sh 'make build-mdbook'
-                    stash includes: 'book/', name: 'mdbook'
+                stage('test-and-build-mdbook'){
+                    when { anyOf {
+                            changeset "book.toml"
+                            changeset "doc/"
+                    }
+                        sh "make test-mdbook"
+                        sh 'make build-mdbook'
+                        stash includes: 'book/', name: 'mdbook'
+                    }
                 }
             }
         }
