@@ -70,49 +70,59 @@ export default function MapEditForm() {
   );
 
   const locationPicker = (
-    <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
-      <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <MapEventListener mapState={updateObject} setMapState={setUpdateObject} />
-      </MapContainer>
-    </div>
+    <>
+      <span className="mb-2 block text-lg font-semibold">{t('maps:edit.location_label')}</span>
+      <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
+        <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <MapEventListener mapState={updateObject} setMapState={setUpdateObject} />
+        </MapContainer>
+      </div>
+    </>
   );
 
   const locationPickerPlaceholder = (
-    <section className="my-2 flex items-center">
-      <SimpleFormInput
-        id="latitudeInput"
-        labelText={t('maps:edit.latitude_label')}
-        defaultValue={updateObject.location?.latitude}
-        onChange={(e) =>
-          setUpdateObject({
-            ...updateObject,
-            location: {
-              latitude: +e.target.value.replace(',', '.'),
-              longitude: updateObject.location?.longitude ? updateObject.location.longitude : NaN,
-            },
-          })
-        }
-      />
-      <SimpleFormInput
-        id="longitudeInput"
-        labelText={t('maps:edit.longitude_label')}
-        defaultValue={updateObject.location?.longitude}
-        onChange={(e) =>
-          setUpdateObject({
-            ...updateObject,
-            location: {
-              latitude: updateObject.location?.latitude ? updateObject.location.latitude : NaN,
-              longitude: +e.target.value.replace(',', '.'),
-            },
-          })
-        }
-      />
+    <section className="mb-12 flex flex-col items-center">
+      <div className="mb-4 flex">
+        <div className="mr-2">
+          <SimpleFormInput
+            id="latitudeInput"
+            labelText={t('maps:edit.latitude_label')}
+            defaultValue={updateObject.location?.latitude}
+            onChange={(e) =>
+              setUpdateObject({
+                ...updateObject,
+                location: {
+                  latitude: +e.target.value.replace(',', '.'),
+                  longitude: updateObject.location?.longitude
+                    ? updateObject.location.longitude
+                    : NaN,
+                },
+              })
+            }
+          />
+        </div>
+        <SimpleFormInput
+          id="longitudeInput"
+          labelText={t('maps:edit.longitude_label')}
+          defaultValue={updateObject.location?.longitude}
+          onChange={(e) =>
+            setUpdateObject({
+              ...updateObject,
+              location: {
+                latitude: updateObject.location?.latitude ? updateObject.location.latitude : NaN,
+                longitude: +e.target.value.replace(',', '.'),
+              },
+            })
+          }
+        />
+      </div>
       <SimpleButton
         title={t('maps:edit.location_button_hint')}
+        className="mt-4 max-w-[240px]"
         onClick={() => {
           setUpdateObject({ ...updateObject, location: undefined });
           setLoadMap(true);
@@ -171,7 +181,7 @@ export default function MapEditForm() {
               }}
             />
             {missingName && missingNameText}
-            <label htmlFor="privacySelect" className="mb-2 block text-sm font-medium">
+            <label htmlFor="privacySelect" className="mb-2 mt-4 block text-sm font-medium">
               {t('maps:edit.privacy_label')}
             </label>
             <section className="my-2 flex items-center">
@@ -191,7 +201,7 @@ export default function MapEditForm() {
               </select>
               {privacyDetailText}
             </section>
-            <label htmlFor="descriptionArea" className="mb-2 block text-sm font-medium">
+            <label htmlFor="descriptionArea" className="mb-2 mt-4 block text-sm font-medium">
               {t('maps:edit.description_label')}
             </label>
             <textarea
@@ -200,14 +210,13 @@ export default function MapEditForm() {
               defaultValue={updateObject.description}
               onChange={(e) => setUpdateObject({ ...updateObject, description: e.target.value })}
             />
-            <span className="mb-2 block text-sm font-medium">{t('maps:edit.location_label')}</span>
             {loadMap && locationPicker}
             {!loadMap && locationPickerPlaceholder}
-            <div className="space-between flex flex-row justify-center space-x-8">
-              <SimpleButton title="Cancel" onClick={() => navigate(-1)}>
+            <div className="space-between mt-8 flex flex-row justify-center space-x-8">
+              <SimpleButton title={t('common:cancel')} onClick={() => navigate(-1)}>
                 {t('common:cancel')}
               </SimpleButton>
-              <SimpleButton title="Save" onClick={onSubmit}>
+              <SimpleButton title={t('common:save')} onClick={onSubmit}>
                 {t('common:save')}
               </SimpleButton>
             </div>
