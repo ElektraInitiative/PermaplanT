@@ -24,13 +24,13 @@ export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
 };
 
 export const BaseLayerRightToolbar = () => {
-  const trackedState = useMapStore((state) => state.trackedState.layers.base);
-  const untrackedState = useMapStore((state) => state.untrackedState.layers.base);
+  const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
+  const {measureStep, measurePoint1, measurePoint2} = useMapStore((state) => state.untrackedState.layers.base);
   const executeAction = useMapStore((state) => state.executeAction);
   const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
 
-  console.log(untrackedState.measureStep);
+  console.log(measureStep);
 
   const { t } = useTranslation(['common', 'baseLayerForm']);
 
@@ -38,24 +38,24 @@ export const BaseLayerRightToolbar = () => {
   //
   // Therefore, this seems to be the only way to keep track of external state changes to the file path while
   // using the onFocusEvent handler to update the state from this component.
-  const [pathInput, setPathInput] = useState(trackedState.nextcloudImagePath);
-  const [rotationInput, setRotationInput] = useState(trackedState.rotation);
-  const [scaleInput, setScaleInput] = useState(trackedState.rotation);
+  const [pathInput, setPathInput] = useState(baseLayerState.nextcloudImagePath);
+  const [rotationInput, setRotationInput] = useState(baseLayerState.rotation);
+  const [scaleInput, setScaleInput] = useState(baseLayerState.rotation);
   useEffect(() => {
-    setPathInput(trackedState.nextcloudImagePath);
-    setScaleInput(trackedState.scale);
-    setRotationInput(trackedState.rotation);
-  }, [trackedState.nextcloudImagePath, trackedState.scale, trackedState.rotation]);
+    setPathInput(baseLayerState.nextcloudImagePath);
+    setScaleInput(baseLayerState.scale);
+    setRotationInput(baseLayerState.rotation);
+  }, [baseLayerState.nextcloudImagePath, baseLayerState.scale, baseLayerState.rotation]);
 
   const [distMeters, setDistMeters] = useState(0);
   const [distCentimeters, setDistCentimeters] = useState(0);
 
   const onDistModalSubmit = () => {
-    console.assert(untrackedState.measurePoint1 !== null);
-    console.assert(untrackedState.measurePoint2 !== null);
+    console.assert(measurePoint1 !== null);
+    console.assert(measurePoint2 !== null);
 
-    const point1 = untrackedState.measurePoint1 ?? { x: 0, y: 0 };
-    const point2 = untrackedState.measurePoint2 ?? { x: 0, y: 0 };
+    const point1 = measurePoint1 ?? { x: 0, y: 0 };
+    const point2 = measurePoint2 ?? { x: 0, y: 0 };
 
     const measuredDistance = calculateDistance(point1, point2);
     const actualDistance = distMeters * 100 + distCentimeters;
@@ -64,9 +64,9 @@ export const BaseLayerRightToolbar = () => {
       return;
     }
 
-    const scale = calculateScale(measuredDistance, trackedState.scale, actualDistance);
-    const path = trackedState.nextcloudImagePath;
-    const rotation = trackedState.rotation;
+    const scale = calculateScale(measuredDistance, baseLayerState.scale, actualDistance);
+    const path = baseLayerState.nextcloudImagePath;
+    const rotation = baseLayerState.rotation;
     executeAction(new UpdateBaseLayerAction(rotation, scale, path));
 
     deactivateMeasurement();
@@ -74,7 +74,7 @@ export const BaseLayerRightToolbar = () => {
 
   return (
     <div className="flex flex-col gap-2 p-2">
-      <ModalContainer show={untrackedState.measureStep === 'both selected'}>
+      <ModalContainer show={measureStep === 'both selected'}>
         <div className="w-ful flex h-full min-h-[20vh] flex-col gap-2 rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h3>{t('baseLayerForm:distance_modal_title')}</h3>
           <div className="flex flex-row gap-2">
@@ -111,9 +111,9 @@ export const BaseLayerRightToolbar = () => {
         id="file"
         labelText={t('baseLayerForm:image_path_field')}
         onBlur={(e) => {
-          const scale = trackedState.scale;
+          const scale = baseLayerState.scale;
           const path = e.target.value;
-          const rotation = trackedState.rotation;
+          const rotation = baseLayerState.rotation;
           executeAction(new UpdateBaseLayerAction(rotation, scale, path));
         }}
         onChange={(e) => setPathInput(e.target.value)}
@@ -123,8 +123,8 @@ export const BaseLayerRightToolbar = () => {
         id="rotation"
         labelText={t('baseLayerForm:rotation_field')}
         onBlur={(e) => {
-          const scale = trackedState.scale;
-          const path = trackedState.nextcloudImagePath;
+          const scale = baseLayerState.scale;
+          const path = baseLayerState.nextcloudImagePath;
           const rotation = parseInt(e.target.value);
           executeAction(new UpdateBaseLayerAction(rotation, scale, path));
         }}
@@ -140,8 +140,8 @@ export const BaseLayerRightToolbar = () => {
           labelText={t('baseLayerForm:scale')}
           onBlur={(e) => {
             const scale = parseInt(e.target.value);
-            const path = trackedState.nextcloudImagePath;
-            const rotation = trackedState.rotation;
+            const path = baseLayerState.nextcloudImagePath;
+            const rotation = baseLayerState.rotation;
             executeAction(new UpdateBaseLayerAction(rotation, scale, path));
           }}
           onChange={(e) => setScaleInput(parseInt(e.target.value))}
@@ -151,12 +151,12 @@ export const BaseLayerRightToolbar = () => {
         />
         <SimpleButton
           onClick={() =>
-            untrackedState.measureStep === 'inactive'
+            measureStep === 'inactive'
               ? activateMeasurement()
               : deactivateMeasurement()
           }
         >
-          {untrackedState.measureStep === 'inactive'
+          {measureStep === 'inactive'
             ? t('baseLayerForm:set_scale')
             : t('common:cancel')}
         </SimpleButton>
