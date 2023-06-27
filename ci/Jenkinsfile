@@ -37,7 +37,7 @@ stage('Build Schema'){
 stage('Tests & Build') {
     def parallel_checks = [:]
 
-    parallel_checks["test-mdbook"] = {
+    parallel_checks["test-and-build-mdbook"] = {
         node('docker') {
             checkout scm
             def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
@@ -45,7 +45,13 @@ stage('Tests & Build') {
             mdbook_image.inside {
                 checkout scm
 
-                sh "make test-mdbook"
+                stage('test-mdbook'){
+                    sh "make test-mdbook"
+                }
+                stage('build-mdbook'){
+                    sh 'make build-mdbook'
+                    stash includes: 'book/', name: 'mdbook'
+                }
             }
         }
     }
