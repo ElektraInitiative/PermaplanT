@@ -1,9 +1,9 @@
 import { useFindPlantById } from '../hooks/useFindPlantById';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
-import { NextcloudKonvaImage } from '@/features/map_planning/components/NextcloudKonvaImage';
+import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { Text } from 'konva/lib/shapes/Text';
-import { Group, Circle } from 'react-konva';
+import { Group, Circle, Rect } from 'react-konva';
 
 export type PlantingElementProps = {
   planting: PlantingDto;
@@ -64,12 +64,16 @@ export function PlantingElement({ planting }: PlantingElementProps) {
         y={0}
         fill={selectedPlanting?.id === planting.id ? '#0084ad' : '#6f9e48'}
       />
-      <NextcloudKonvaImage
-        path={plant?.unique_name ? `PermaplanT/Icons/${plant?.unique_name}.png` : undefined}
-        width={planting.width * 0.9}
-        height={planting.height * 0.9}
-        offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
-      />
+      {plant ? (
+        <NextcloudKonvaImage
+          path={`PermaplanT/Icons/${plant?.unique_name}.png`}
+          width={planting.width * 0.9}
+          height={planting.height * 0.9}
+          offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
+        />
+      ) : (
+        <Rect width={0} height={0} />
+      )}
     </Group>
   );
 }

@@ -1,5 +1,5 @@
+import { NextcloudKonvaImage } from '../../components/image/NextcloudKonvaImage';
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
-import { NextcloudKonvaImage } from '@/features/map_planning/components/NextcloudKonvaImage';
 import Konva from 'konva';
 import { useCallback, useState } from 'react';
 import { Layer } from 'react-konva';

@@ -67,7 +67,7 @@ export const WebdavTest = () => {
               <li
                 className="cursor-pointer hover:text-primary-400"
                 key={file.filename}
-                onClick={() => setImageName(file.filename)}
+                onClick={() => setImageName('Photos/' + file.filename.split('/').pop() || '')}
               >
                 {file.filename}
               </li>
