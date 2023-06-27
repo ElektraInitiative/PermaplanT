@@ -62,8 +62,8 @@ Store relations between plants.
 
 | **_Column name_** | **_Example_**                         | **_Description_**               |
 | :---------------- | :------------------------------------ | :------------------------------ |
-| **plant1**        | prunus pensylvanica                   | unique name of one plant        |
-| **plant2**        | prunus serotina                       | unique name of second plant     |
+| **plant1**        | 1                                     | id of first plant               |
+| **plant2**        | 2                                     | id of second plant              |
 | **relation**      | neutral                               | type of relation                |
 | **note**          | why put two cherries together anyways | some comment about the relation |
 

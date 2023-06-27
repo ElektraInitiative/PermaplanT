@@ -68,9 +68,9 @@ plants }o--|| plant_detail: "type"
 plants ||--o{ seeds : ""
 
 relations {
-  VARCHAR plant1 PK
-  VARCHAR plant2 PK
-  RELATIONS_TYPE relation "NOT NULL"
+  INT plant1 PK
+  INT plant2 PK
+  RELATION_TYPE relation "NOT NULL"
   VARCHAR note
 }
 relations }o--|| plants : "plant1"
