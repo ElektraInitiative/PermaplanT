@@ -6,12 +6,7 @@ build-frontend: test-frontend
 	cd frontend && npm run build
 
 .PHONY: test
-test: test-backend test-frontend
-
-.PHONY: test-backend
-test-backend:
-	cd backend && make build
-	cd backend && cargo test
+test: test-frontend
 
 .PHONY: test-frontend
 test-frontend:
@@ -46,6 +41,5 @@ pre-commit:
 
 .PHONY: clean
 clean:
-	cd backend && cargo clean
 	cd frontend && rm -rf node_modules
 	mdbook clean
