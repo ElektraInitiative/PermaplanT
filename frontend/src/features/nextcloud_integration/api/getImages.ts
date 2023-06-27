@@ -1,6 +1,7 @@
 import { nextcloudUri } from '@/config';
 import { createNextcloudAPI } from '@/config/axios';
 import axios from 'axios';
+import { FileStat, ResponseDataDetailed, WebDAVClient } from 'webdav';
 
 // NOTE: Leaving this for now as it could be useful as an exmample
 // when fetching ressources from other parts of Nextcloud
@@ -72,16 +73,18 @@ export const getPublicImageList = async (publicShareToken: string): Promise<Arra
   }
 };
 
+const PUBLIC_WEBDAV_PATH = '/public.php/webdav/';
+
 /**
  * get an Image as a blob from public Nextcloud share
  */
-export const getPublicImage = async (imageUrl: string, publicShareToken: string): Promise<Blob> => {
+export const getPublicImage = async (path: string, publicShareToken: string): Promise<Blob> => {
   const username = publicShareToken;
   const password = publicShareToken;
   try {
     const response = await axios({
       method: 'GET',
-      url: nextcloudUri + imageUrl,
+      url: nextcloudUri + PUBLIC_WEBDAV_PATH + path,
       headers: {
         Authorization: 'Basic ' + btoa(username + ':' + password),
       },
@@ -93,22 +96,35 @@ export const getPublicImage = async (imageUrl: string, publicShareToken: string)
   }
 };
 
-// NOTE: Leaving this for now as it could be useful as an example
-// when fetching ressources from other parts of Nextcloud
-/**
- * @deprecated This is done by the webdav lib now
- * get an Image as a blob from Nextcloud
- */
-export const getImage = async (imageUrl: string): Promise<Blob> => {
-  const http = createNextcloudAPI();
-  try {
-    const response = await http({
-      method: 'GET',
-      url: imageUrl,
-      responseType: 'blob',
-    });
-    return response.data;
-  } catch (error) {
-    throw error as Error;
+const WEBDAV_PATH = '/remote.php/webdav/';
+
+export async function getImage(path: string, webdavClient: WebDAVClient) {
+  const imagePath = WEBDAV_PATH + path;
+
+  const tasks = [
+    webdavClient.getFileContents(imagePath),
+    webdavClient.stat(imagePath, { details: false }),
+  ] as const;
+
+  const [contents, stats] = await Promise.all(tasks);
+
+  if (!checkFileIsImage(stats)) {
+    throw new Error('File is not an image');
   }
+
+  return new Blob([contents as BlobPart]);
+}
+
+/**
+ * Check if a file from Nextcloud is actually an image to avoid Konva crashes.
+ *
+ * @param imageStat file stats returned by nextcloud.
+ */
+const checkFileIsImage = (
+  imageStat: FileStat | ResponseDataDetailed<FileStat> | undefined | null,
+): boolean => {
+  if (!imageStat) return false;
+
+  const stat = imageStat as FileStat;
+  return stat.type === 'file' && Boolean(stat.mime?.startsWith('image'));
 };

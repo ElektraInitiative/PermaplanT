@@ -1,6 +1,6 @@
 import { useFindPlantById } from '../hooks/useFindPlantById';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
-import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
+import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { Text } from 'konva/lib/shapes/Text';
 import { Group, Circle, Rect } from 'react-konva';
@@ -65,8 +65,9 @@ export function PlantingElement({ planting }: PlantingElementProps) {
         fill={selectedPlanting?.id === planting.id ? '#0084ad' : '#6f9e48'}
       />
       {plant ? (
-        <NextcloudKonvaImage
-          path={`PermaplanT/Icons/${plant?.unique_name}.png`}
+        <PublicNextcloudKonvaImage
+          shareToken="2arzyJZYj2oNnHX"
+          path={`Icons/${plant?.unique_name}.png`}
           width={planting.width * 0.9}
           height={planting.height * 0.9}
           offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
