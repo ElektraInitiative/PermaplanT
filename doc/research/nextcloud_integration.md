@@ -5,7 +5,56 @@
 Nextcloud implements the webDAV protocol. This means that we can access files in Nextcloud with any webdav client.
 There are popular file managers like 'Konqueror' from the KDE team and 'GNOME Files' from the GNOME team which implement the webDAV protocol.
 However webDAV is not exclusive to file managers. 
-In PermaplanT we use a javascript library to access files in Nextcloud. In some instances we send the requests directly.
+In PermaplanT we use a javascript library named [webdav](https://github.com/perry-mitchell/webdav-client) to access files in Nextcloud. 
+For files available on public shares we send the requests directly with axios.
+
+Public shares are directories where a public link is created.
+The last part of the link is the share token. E.g. For the URL 'https://cloud.permaplant.net/s/2arzyJZYj2oNnHX' the share token is '2arzyJZYj2oNnHX'.
+This share token can be used as username and password to access files from the directory.
+Files at the top level as well as files in subdirectories can be accessed using the share token.
+E.g. when following directory structure is given:
+```bash
+nextcloud_root_dir
+├── Documents
+│   └── secret-doc.txt
+├── Photos
+└── Public
+    ├── Icons
+    │   ├── add.svg
+    │   └── delete.svg
+    ├── Maps
+    │   └── map.json
+    └── Pictures
+        └── tree.png
+```
+and the directory 'Public' is accessed with the share token. 
+All files ('add.svg', 'delete.svg', 'map.json', 'tree.png') in all subdirectories ('Icons', 'Maps', 'Pictures') of 'Public' can be accessed.
+The path for fetching a file starts at the shared directory, in this case 'Public'.
+To access the file 'add.svg' following URI is used: 'https://cloud.permaplant.net/public.php/webdav/Icons/add.svg'.
+The first part: 'https://cloud.permaplant.net/' is the scheme and host for our Nextcloud instance.
+The next part '/public.php/webdav/' is the endpoint used to access files from the public share directory specified by the share token.
+The share token is given as username and password in the request.
+The last part 'Icons/add.svg' is the path to the requested file starting from the public share directory.
+
+When we want to fetch 'add.svg' following request is used:
+```bash
+curl -X GET -O -u 2arzyJZYj2oNnHX:2arzyJZYj2oNnHX https://cloud.permapl
+ant.net/public.php/webdav/Icons/add.svg
+```
+
+In PermaplanT we use the public shares for data which should be accessible by unauthenticated users.
+E.g. images on the landing page or icons for plants.
+
+To fetch resources from directories which are not available for the public some form of authentication has to be used.
+The easiest way to authenticate with the Nextcloud instance is to use the username and password in the request. This is called basic authentication.
+However, this is not secure when the requests are sent from the browser as this information can be easily sniffed.
+So we decided to use 'OpenID Connect' for authentication. Details on why we decided to use 'OpenID Connect' can be found in the [decision document]('https://github.com/ElektraInitiative/PermaplanT/blob/master/doc/decisions/auth.md').
+
+All we need to know here is that requests from authenticated users are populated with the access token in the Authorization header.
+
+Now we can make requests against the '/remote.php/webdav' endpoint.
+This endpoint enables us to fetch files starting from the root directory of the logged in user.
+Given the previously defined directory structure we can now access the file 'secret-doc.txt' with the following URI: 'https://cloud.permaplant.net/remote.php/webdav/Documents/secret-doc.txt'
 
 ## webDAV
 
