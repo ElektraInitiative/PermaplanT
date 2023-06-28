@@ -145,18 +145,35 @@ filename: "/ocs/v2.php/apps/files_sharing/api/v1"
 - https://docs.nextcloud.com/server/25/user_manual/en/files/access_webdav.html#
 - http://www.webdav.org/specs/rfc4918.html
 
-### Research about other Nextcloud Features
+## Limitations
 
-#### calendar
+### CORS (Cross-Origin Resource Sharing)
+> "CORS is an HTTP-header based mechanism that allows a server to indicate any origins (domain, scheme, or port) other than its own from which a browser should permit loading resources."
+- [Mozilla MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+
+Nextcloud offers no options to change the CORS configuration. This means that all requests coming from a different origin then the one Nextcloud is hosted on are blocked.
+The PermaplanT production environment has following structure:
+```
+Frontend: "https://www.permaplant.net".
+Backend: "https://www.permaplant.net/api"
+Nextcloud: "https://cloud.permaplant.net"
+Keycloak: "https://auth.permaplant.net/realms/PermaplanT"
+```
+This means the origin for Nextcloud differs from the origin of the PermaplanT frontend. Consequently CORS has to be configured to allow requests from the frontend origin otherwise the requests to Nextcloud are blocked by the browser.
+To circumvent the restrictions or the lack of configuration options by Nextcloud we implemented a proxy in front of the Nextcloud instance which sets the needed headers for the OPTIONS preflight which is performed by the browser.
+
+## Research about other Nextcloud Features
+
+### calendar
 
 Nextcloud Calendar App is a frontend for the Nextcloud CalDAV backend.
 
-##### resources
+#### resources
 
 - [CalDavBackend](https://github.com/nextcloud/server/blob/master/apps/dav/lib/CalDAV/CalDavBackend.php) implementation
 - [CalDAV](https://www.rfc-editor.org/rfc/rfc4791.html)
 
-#### Contacts
+### Contacts
 
 Contacts are stored in vCards and can be managed with CardDAV.
 nextcloud/contacts is based on [sabredav](https://github.com/sabre-io/dav)(most popular WebDAV framework for PHP)
@@ -173,7 +190,7 @@ nextcloud/contacts implements CardDAV:
 - [CardDAV clients](https://devguide.calconnect.org/CardDAV/Client-Implementations/)
 - [CardDAV libraries](https://devguide.calconnect.org/CardDAV/libraries/)
 
-#### Groups
+### Groups
 
 Groups are part of the user management and not to be confused with circles.
 While circles offer similar functionality, they are more versatile and can be created by all users while groups can only be created by admins.
@@ -237,7 +254,7 @@ The GET endpoint /favorite was tested with curl and basic authentication:
 curl -u USERNAME:PSWD -X GET 'https://BASE_URL/nextcloud/index.php/apps/maps/api/1.0/favorites'
 ```
 
-## Chat
+### Chat
 
 sending a message:
 
