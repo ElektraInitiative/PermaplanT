@@ -2,6 +2,8 @@
 
 ## Files
 
+### How to access files
+
 Nextcloud implements the webDAV protocol. This means that we can access files in Nextcloud with any webdav client.
 There are popular file managers like 'Konqueror' from the KDE team and 'GNOME Files' from the GNOME team which implement the webDAV protocol.
 However webDAV is not exclusive to file managers. 
@@ -38,8 +40,7 @@ The last part 'Icons/add.svg' is the path to the requested file starting from th
 
 When we want to fetch 'add.svg' following request is used:
 ```bash
-curl -X GET -O -u 2arzyJZYj2oNnHX:2arzyJZYj2oNnHX https://cloud.permapl
-ant.net/public.php/webdav/Icons/add.svg
+curl -X GET -O -u 2arzyJZYj2oNnHX:2arzyJZYj2oNnHX https://cloud.permaplant.net/public.php/webdav/Icons/add.svg
 ```
 
 In PermaplanT we use the public shares for data which should be accessible by unauthenticated users.
@@ -56,7 +57,32 @@ Now we can make requests against the '/remote.php/webdav' endpoint.
 This endpoint enables us to fetch files starting from the root directory of the logged in user.
 Given the previously defined directory structure we can now access the file 'secret-doc.txt' with the following URI: 'https://cloud.permaplant.net/remote.php/webdav/Documents/secret-doc.txt'
 
-## webDAV
+### Directory structure
+
+In the PermaplanT Nextcloud instance we have following directory structure for each user:
+```bash
+PermaplanT/
+└── Maps
+    ├── map_01
+    │   ├── BaseLayer
+    │   │   └── base_layer_image.png
+    │   └── PhotoLayer
+    │       ├── photo1.jpg
+    │       └── photo2.jpg
+    └── map_02
+        ├── BaseLayer
+        │   └── base_layer_image.png
+        └── PhotoLayer
+            ├── photo1.jpg
+            └── photo2.jpg
+```
+
+When a map is shared between different users the directory also has to be shared and placed within this structure.
+Therefore the map directories must have a globally unique name.
+
+All public directories can be placed anywhere as it is identified by the public share token.
+
+### webDAV protocol
 
 > "WebDAV (Web Distributed Authoring and Versioning) is a set of extensions to the
 > Hypertext Transfer Protocol (HTTP), which allows user agents to collaboratively
