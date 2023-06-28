@@ -138,6 +138,25 @@ host: "cloud.permaplant.net",
 filename: "/ocs/v2.php/apps/files_sharing/api/v1"
 ```
 
+### Components
+
+There are a number of components which help with interacting with Nextcloud Files
+
+#### Image Components
+
+There are four components that handle fetching and displaying images from Nextcloud.
+
+- NextcloudImage: This component fetches an image from the user directory in Nextcloud and renders it.
+- PublicNextcloudImage: This component fetches and renders an image which is available on a public share.
+- NextcloudKonvaImage: This component fetches an image from the user directory in Nextcloud and creates a shape for Konva (Canvas library used in PermplanT).
+- PublicNextcloudKonvaImage: This component fetches an image from the Nextcloud public share and creates a shape for Konva.
+
+#### File Selection
+
+Component which shows the content of a Nextcloud directory and lets the user choose a file.
+
+Will be implemented in #475.
+
 ### Further Related Resources
 
 - https://docs.nextcloud.com/server/latest/developer_manual/client_apis/WebDAV/comments.html
@@ -242,7 +261,6 @@ curl -u USERNAME:PSWD -X GET 'https://BASE_URL/nextcloud/ocs/v2.php/apps/circles
 - https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/occ_command.html#http-user-label
 - https://github.com/nextcloud/circles
 - [Circle routes](https://github.com/nextcloud/circles/blob/22238597fb9045e748119247fceaac7321f0a31e/appinfo/routes.php)
-
 
 ### Maps
 
