@@ -32,10 +32,16 @@ const useAuthEffect = () => {
       case 'signoutRedirect':
         toast(t('auth:signing_out'));
     }
-    if (auth.isAuthenticated) {
-      toast(`${t('auth:hello')} ${auth.user?.profile.preferred_username}`);
-    }
   }, [auth, t]);
+
+  const isAuth = auth.isAuthenticated;
+  const preferredUsername = auth.user?.profile.preferred_username;
+
+  useEffect(() => {
+    if (isAuth) {
+      toast(`${t('auth:hello')} ${preferredUsername}`);
+    }
+  }, [isAuth, t, preferredUsername]);
 };
 
 function App() {
