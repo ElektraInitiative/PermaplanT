@@ -73,7 +73,7 @@ stage('Build in Docker'){
 
                 stage('build-storybook'){
                     sh './ci/build-scripts/build-storybook.sh'
-                    stash includes: '/storybook-static', name: 'storybook'
+                    stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
             }
         }
