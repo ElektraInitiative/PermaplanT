@@ -125,7 +125,7 @@ stage('Checks & Build') {
 
                 stage('build-storybook'){
                     sh './ci/build-scripts/build-storybook.sh'
-                    stash includes: 'frontend/storybook-static', name: 'storybook'
+                    stash includes: '/storybook-static', name: 'storybook'
                 }
             }
         }
