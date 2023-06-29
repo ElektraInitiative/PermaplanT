@@ -1,15 +1,24 @@
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as CaretDown } from '@/icons/caret-down.svg';
+import { motion } from 'framer-motion';
 import React from 'react';
 
 export type PlantSuggestionListProps = {
+  /** A title to display above the list */
   header: string;
+  /** The elements to display */
   children: React.ReactNode[];
+  /** Whether the list is loading */
   isLoading: boolean;
+  /** Whether the list has content */
   hasContent: boolean;
+  /** The element to display when there is no content */
   noContentElement: React.ReactNode;
 };
 
+/**
+ * A list of plant suggestions
+ */
 export function PlantSuggestionList({
   header,
   hasContent,
@@ -28,7 +37,13 @@ export function PlantSuggestionList({
       <div className="flex items-center justify-between">
         <h3>{header}</h3>
         <IconButton onClick={toggleExpand}>
-          {isExpanded ? <CaretDown /> : <CaretDown rotate={180} />}
+          <motion.div
+            animate={{
+              rotate: isExpanded ? 0 : 180,
+            }}
+          >
+            <CaretDown className="h-6 w-6" />
+          </motion.div>
         </IconButton>
       </div>
       {isExpanded &&
