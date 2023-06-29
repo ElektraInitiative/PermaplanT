@@ -90,30 +90,28 @@ When a map is shared between different users the directory also has to be shared
 Therefore the map directories must have a globally unique name.
 The name of each map directory is the same as the name of the map in the PermaplanT database. This is possible because the name in the database is unique.
 
-All public directories can be placed anywhere as it is identified by the public share token.
-They are not visible to the user in Nextcloud.
+All public directories can be placed anywhere as they are identified by the public share token.
+They are not visible to all of the users in Nextcloud, so they are not included in the directory structure above.
 
 ### Sharing a Map
 
 When we want to add additional members to our PermaplanT map we also have to share the Nextcloud resources with them.
 First we need to create a circle.
 This can be achieved by following API call:
-```
-Method: POST
-headers: [
+```json
+"method": "POST",
+"headers": [
   "OCS-APIRequest": true,
   "Content-Type": "application/json"
 ],
-body: {
-  {
-    "name":"map_01",
-    "personal":false,
-    "local":false
-  }
+"body": {
+  "name": "map_01",
+  "personal": false,
+  "local": false
 },
-Scheme:	"https",
-host: "cloud.permaplant.net",
-filename: "/ocs/v2.php/apps/circles/circles"
+"scheme":	"https",
+"host": "cloud.permaplant.net",
+"filename": "/ocs/v2.php/apps/circles/circles"
 ```
 The name of the circle is the same as the name of the map.
 Unfortunately the circle API is not documented. The implementation of the API can be found on the corresponding [github repository](https://github.com/nextcloud/circles/blob/22238597fb9045e748119247fceaac7321f0a31e/appinfo/routes.php).
@@ -122,25 +120,23 @@ Now the circle has to be added to the shares for the map directory.
 This can be done with the share API which is documented [here](https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/ocs-share-api.html).
 Following API call can be used:
 ```
-Method: POST
-headers: [
-  "OCS-APIRequest": true
+"method": "post",
+"headers": [
+  "ocs-apirequest": true
 ],
-body: {
-  {
-    "path": "PermaplanT/Maps/map_01",
-    "shareType": 7,
-    "shareWith": "<circleId>"
-  }
+"body": {
+  "path": "PermaplanT/Maps/map_01",
+  "shareType": 7,
+  "shareWith": "<circleId>"
 },
-Scheme:	"https",
-host: "cloud.permaplant.net",
-filename: "/ocs/v2.php/apps/files_sharing/api/v1"
+"scheme":	"https",
+"host": "cloud.permaplant.net",
+"filename": "/ocs/v2.php/apps/files_sharing/api/v1"
 ```
 
 ### Components
 
-There are a number of components which help with interacting with Nextcloud Files
+There are a number of components which help with interacting with Nextcloud files.
 
 #### Image Components
 
@@ -168,16 +164,16 @@ Will be implemented in #475.
 
 ### CORS (Cross-Origin Resource Sharing)
 > "CORS is an HTTP-header based mechanism that allows a server to indicate any origins (domain, scheme, or port) other than its own from which a browser should permit loading resources."
-- [Mozilla MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+-- [Mozilla MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 
-Nextcloud offers no options to change the CORS configuration. This means that all requests coming from a different origin then the one Nextcloud is hosted on are blocked.
+Nextcloud offers no options to change the CORS configuration. This means that all requests coming from a different origin than the one Nextcloud is hosted on are blocked.
+
 The PermaplanT production environment has following structure:
-```
-Frontend: "https://www.permaplant.net".
-Backend: "https://www.permaplant.net/api"
-Nextcloud: "https://cloud.permaplant.net"
-Keycloak: "https://auth.permaplant.net/realms/PermaplanT"
-```
+- Frontend: "https://www.permaplant.net".
+- Backend: "https://www.permaplant.net/api"
+- Nextcloud: "https://cloud.permaplant.net"
+- Keycloak: "https://auth.permaplant.net/realms/PermaplanT"
+
 This means the origin for Nextcloud differs from the origin of the PermaplanT frontend. Consequently CORS has to be configured to allow requests from the frontend origin otherwise the requests to Nextcloud are blocked by the browser.
 To circumvent the restrictions or the lack of configuration options by Nextcloud we implemented a proxy in front of the Nextcloud instance which sets the needed headers for the OPTIONS preflight which is performed by the browser.
 
