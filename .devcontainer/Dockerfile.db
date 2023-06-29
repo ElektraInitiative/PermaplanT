@@ -1,0 +1,20 @@
+FROM postgres:14.1
+RUN apt-get update \
+    && apt-get -y install wget curl gnupg2 software-properties-common apt-transport-httpsclang lld libpq-dev libssl-dev pkg-config \
+    && apt-get autoremove -y && apt-get clean -y
+
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+# RUN sudo apt update && sudo apt install postgis postgresql-14-postgis-3
+
+# FROM rust:1.67.1-slim
+# COPY ./backend ./backend
+# RUN cd ./backend
+# RUN curl https://sh.rustup.rs -sSf | sh
+# RUN rustup component add clippy rustfmt
+# RUN cargo install diesel_cli@2.0.1 --no-default-features --features postgres
+# RUN cargo install typeshare-cli
+# RUN LC_ALL=C diesel setup
+# RUN LC_ALL=C diesel migration run
+
+# FROM postgres:14.1
