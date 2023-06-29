@@ -1,25 +1,31 @@
 import { nextcloudUri } from '../env';
-import { getUser } from '@/utils/getUser';
-import { AuthType, createClient } from 'webdav';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
+import { useEffect, useState } from 'react';
+import { AuthType, createClient, WebDAVClient } from 'webdav';
 
 /**
  * create a webdav client configured for the PermaplanT Nextcloud instance
  * the configuration includes the baseUrl and authorization token if available
  */
-export function createNextcloudWebDavClient() {
-  const user = getUser();
-  if (!user) {
-    throw new Error('User could not be found. Not authenticated.');
-  }
+export function useNextcloudWebDavClient() {
+  const auth = useSafeAuth();
+  const [webdav, setWebdav] = useState<WebDAVClient | null>(null);
 
-  const webdav = createClient(nextcloudUri, {
-    authType: AuthType.Token,
-    token: {
-      access_token: user?.access_token,
-      token_type: user?.token_type,
-      refresh_token: user?.refresh_token,
-    },
-  });
+  useEffect(() => {
+    if (!auth || !auth.user) {
+      return;
+    }
 
+    setWebdav(
+      createClient(nextcloudUri, {
+        authType: AuthType.Token,
+        token: {
+          access_token: auth.user?.access_token,
+          token_type: auth.user?.token_type,
+          refresh_token: auth.user?.refresh_token,
+        },
+      }),
+    );
+  }, [auth, auth.user]);
   return webdav;
 }

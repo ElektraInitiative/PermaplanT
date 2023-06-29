@@ -1,6 +1,6 @@
 import { NextcloudImage } from './NextcloudImage';
 import SimpleButton from '@/components/Button/SimpleButton';
-import { createNextcloudWebDavClient } from '@/config/nextcloud_client';
+import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ChangeEventHandler } from 'react';
@@ -17,12 +17,14 @@ export const WebdavTest = () => {
   const [fileBuffer, setFileBuffer] = useState<string | BufferLike | Readable>('');
   const [fileName, setFileName] = useState('');
   const [imageName, setImageName] = useState('');
-  const path = '/remote.php/webdav/Photos/';
+  const path = '/Photos/';
 
-  const webdav = createNextcloudWebDavClient();
+  const webdav = useNextcloudWebDavClient();
 
-  const files = useQuery(['files', path], () => webdav.getDirectoryContents(path));
-  // const files = {data: ["test.png"]}
+  const { data: files, refetch: refetchFiles } = useQuery(['files', path, webdav], () => {
+    if (!webdav) return null;
+    return webdav.getDirectoryContents('/remote.php/webdav/' + path);
+  });
 
   /**
    * load image from device
@@ -52,6 +54,7 @@ export const WebdavTest = () => {
    * upload image to Nextcloud
    */
   async function uploadImage() {
+    if (!webdav) return;
     webdav.putFileContents(path + fileName, fileBuffer);
   }
 
@@ -59,25 +62,25 @@ export const WebdavTest = () => {
     <div className="mt-8 flex flex-col items-center justify-center gap-4">
       {/* display a list of all files available at path */}
       <ul>
-        {Array.isArray(files?.data)
-          ? files.data.map((file) => (
+        {files && Array.isArray(files)
+          ? files.map((file) => (
               <li
                 className="cursor-pointer hover:text-primary-400"
                 key={file.filename}
-                // onClick={() => setImageName(file.filename.split('/').reverse()[0])}
-                onClick={() => setImageName('test.png')}
+                onClick={() => setImageName('Photos/' + file.filename.split('/').pop() || '')}
               >
                 {file.filename}
               </li>
             ))
           : []}
       </ul>
-      <SimpleButton onClick={() => files.refetch()} className="w-auto">
+      <SimpleButton onClick={() => refetchFiles()} className="w-auto">
         reload
       </SimpleButton>
       {/* display selected image */}
       <div className="w-64">
-        <NextcloudImage path={'/Photos/' + imageName} />
+        {/* TODO: fix path */}
+        <NextcloudImage path={imageName} />
       </div>
       {/* upload an image to path */}
       <div className="w-32">

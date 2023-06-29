@@ -1,11 +1,4 @@
-import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
-import { getPublicImage } from '@/features/nextcloud_integration/api/getImages';
-import { ImageBlob } from '@/features/nextcloud_integration/components/ImageBlob';
-import { useQuery } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-
-const WEBDAV_PATH = '/public.php/webdav/';
+import { usePublicImage } from '../hooks/usePublicImage';
 
 interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'> {
   // relative path starting at the public share directory to the image in Nextcloud
@@ -21,27 +14,8 @@ interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'
  */
 export const PublicNextcloudImage = (props: PublicNextcloudImageProps) => {
   const { path, shareToken, ...imageProps } = props;
-  const { t } = useTranslation(['nextcloudIntegration']);
 
-  const imagePath = WEBDAV_PATH + path;
-  const {
-    data: image,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['image', imagePath, shareToken] as const,
-    queryFn: ({ queryKey: [, imagePath, token] }) => getPublicImage(imagePath, token),
-  });
+  const image = usePublicImage({ path, publicShareToken: shareToken });
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
-  if (isError) {
-    toast.error(t('nextcloudIntegration:load_image_failed'));
-    //TODO: return broken image icon
-    return <div></div>;
-  }
-
-  return <ImageBlob image={image} {...imageProps}></ImageBlob>;
+  return <img src={image.src} {...imageProps} />;
 };
