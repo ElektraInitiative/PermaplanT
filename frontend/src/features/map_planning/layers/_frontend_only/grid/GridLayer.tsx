@@ -1,4 +1,4 @@
-import {Layer, Group, Line, Circle} from "react-konva";
+import {Layer, Group, Line, Text} from "react-konva";
 import Konva from "konva/cmj";
 import useMapStore from "@/features/map_planning/store/MapStore";
 
@@ -8,6 +8,12 @@ export const GridLayer = (props: Konva.LayerConfig) => {
     return (
         <Layer listening={false} visible={props.visible} opacity={props.opacity}>
           <Grid
+              x={mapBounds.x}
+              y={mapBounds.y}
+              width={mapBounds.width}
+              height={mapBounds.height}
+          />
+          <YardStick
               x={mapBounds.x}
               y={mapBounds.y}
               width={mapBounds.width}
@@ -58,4 +64,20 @@ const Grid = (rect: GridProps) => {
             {verticalLines}
         </Group>
     )
+}
+
+const YardStick = (rect: GridProps) => {
+   const dynamicStrokeWidth = rect.width / 1000;
+
+   const startX = -rect.x + (rect.width / 15);
+   const endX   = -rect.x + (rect.width / 15) + 100;
+
+   const y = -rect.y + (rect.width / 15);
+
+   return (
+       <Group>
+           <Line strokeWidth={dynamicStrokeWidth} stroke={"white"} points={[startX, y, endX, y]}/>
+            <Text x={startX} y={y} fill={"white"} text={"1m"} fontSize={dynamicStrokeWidth * 10}/>
+       </Group>
+   )
 }
