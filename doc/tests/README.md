@@ -92,7 +92,6 @@ The whole module is annotated with `#[cfg(test)]` and will therefore only be com
 System testing will include end-to-end testing of the application to ensure overall functionality and user experience.
 This will include testing of all features, navigation, and error handling.
 
-- System tests must be protocolled and errors must be categorized by level and priority.
 - Test scenarios must be derived from functional requirements and use cases.
 - Testers must perform End-to-End testing of the software, including all user workflows and system integrations.
 - Exploratory testing techniques must be utilized to uncover potential issues and edge cases.
@@ -130,8 +129,8 @@ This will include testing of all features, navigation, and error handling.
 - All automated tests must be executed by CI.
 - Integration tests must be executed by the CI pipeline on every push to PR and every merge to master.
 - Test metrics, such as test coverage and test execution time, must be tracked in the pipeline.
-- System and User acceptance tests must be performed before every release.
-- Manual tests will be documented under `doc/tests/protocols`.
+- System tests and User acceptance tests must be performed before every release.
+- Manual tests will be documented under `doc/tests/protocols` and errors must be categorized by level and priority.
 
 ## Test Automation
 
