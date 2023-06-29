@@ -44,22 +44,26 @@ This is important because it allows us to validate that each unit is working as 
 - Unit tests must be created by every developer during the development process, following the Arrange-Act-Assert (AAA) pattern.
 
 Short example:
-Care this code was not tested.
 
 ```rust
 struct Plants;
 
-#[test]
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
     fn test_abs_for_a_negative_number() {
-        // Arrange
-        let negative = -5;
+    // Arrange
+    let negative = -5;
 
-        // Act
-        let answer = abs(negative);
+    // Act
+    let answer = abs(negative);
 
-        // Assert
-        assert_eq!(answer, 5);
+    // Assert
+    assert_eq!(answer, 5);
     }
+}
 ```
 
 ### 2. Integration Testing
