@@ -37,7 +37,7 @@ export const BaseStage = ({
   selectable = true,
   draggable = true,
 }: BaseStageProps) => {
-  const updateMapBounds = useMapStore(store => store.updateMapBounds);
+  const updateMapBounds = useMapStore((store) => store.updateMapBounds);
 
   // Represents the state of the stage
   const [stage, setStage] = useState({

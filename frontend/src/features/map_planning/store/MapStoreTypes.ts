@@ -1,7 +1,7 @@
 import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
-import {FrontendOnlyLayerType} from "@/features/map_planning/layers/_frontend_only";
 
 /**
  * This type combines layers that are only available in the frontend
@@ -111,8 +111,14 @@ export interface UntrackedMapSlice {
   stageRef: React.RefObject<Konva.Stage>;
   updateMapBounds: (bounds: BoundsRect) => void;
   updateSelectedLayer: (selectedLayer: LayerDto) => void;
-  updateLayerVisible: (layerName: CombinedLayerType, visible: UntrackedLayerState['visible']) => void;
-  updateLayerOpacity: (layerName: CombinedLayerType, opacity: UntrackedLayerState['opacity']) => void;
+  updateLayerVisible: (
+    layerName: CombinedLayerType,
+    visible: UntrackedLayerState['visible'],
+  ) => void;
+  updateLayerOpacity: (
+    layerName: CombinedLayerType,
+    opacity: UntrackedLayerState['opacity'],
+  ) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
 }
@@ -142,7 +148,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
-  editorBounds: {x: 0, y: 0, width: 0, height: 0},
+  editorBounds: { x: 0, y: 0, width: 0, height: 0 },
   selectedLayer: {
     id: -1,
     is_alternative: false,
@@ -246,7 +252,7 @@ export type TrackedMapState = {
  */
 export type UntrackedMapState = {
   mapId: number;
-  editorBounds: BoundsRect,
+  editorBounds: BoundsRect;
   selectedLayer: LayerDto;
   layers: UntrackedLayers;
 };
@@ -255,8 +261,8 @@ export type UntrackedMapState = {
  * Represents a simple rectangle with width, height and position.
  */
 export type BoundsRect = {
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-}
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};

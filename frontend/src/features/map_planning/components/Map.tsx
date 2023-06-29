@@ -9,12 +9,12 @@ import { Layers } from './toolbar/Layers';
 import { Toolbar } from './toolbar/Toolbar';
 import { LayerDto, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
+import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { ReactComponent as ArrowIcon } from '@/icons/arrow.svg';
 import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
-import {GridLayer} from "@/features/map_planning/layers/_frontend_only/grid/GridLayer";
 
 export type MapProps = {
   layers: LayerDto[];

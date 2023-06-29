@@ -1,3 +1,3 @@
 export enum FrontendOnlyLayerType {
-    Grid = "grid",
+  Grid = 'grid',
 }
