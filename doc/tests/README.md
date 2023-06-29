@@ -25,14 +25,14 @@ Manual testing will be conducted for end-to-end functionality and overall user e
 
 ## In Scope:
 
-- End-to-End testing of critical workflows
+- End-to-End testing of important [use cases](../usecases)
 - Integration testing of various modules and components
 - System tests
 - Performance tests
 - Security tests
 - Regression testing
 - User acceptance testing
-- Compatibility testing on different platforms, browsers, and devices?
+- Compatibility testing on different platforms, browsers, and devices
 
 ## Testing Types and Levels
 
@@ -87,7 +87,6 @@ The whole module is annotated with `#[cfg(test)]` and will therefore only be com
 
 System testing will include end-to-end testing of the application to ensure overall functionality and user experience.
 This will include testing of all features, navigation, and error handling.
-Manual tests will be documented under `doc/tests/protocols`.
 
 - System tests must be protocolled and errors must be categorized by level and priority.
 - Test scenarios must be derived from functional requirements and use cases.
@@ -96,11 +95,11 @@ Manual tests will be documented under `doc/tests/protocols`.
 
 ### 4. Performance Testing
 
-- ?
+- TBD by @badnames
 
 ### 5. Security Testing
 
-- ?
+- TBD by @temmey
 
 ## Test Environment and Infrastructure
 
@@ -117,17 +116,18 @@ Manual tests will be documented under `doc/tests/protocols`.
 
 ## Test Data Management
 
-- Test data must be synthetic. Only in rare cases, and if the expected outcome can be calculated, random data is allowed.
+- Test data must be synthetic.
 - Test data must cover a variety of scenarios, including at least valid and invalid cases.
 - Equivalence partitioning and boundary value analysis tests should be done when it makes sense.
 
 ## Test Execution and Reporting
 
-- Test cases must be executed manually or via automation scripts, as appropriate for each testing type.
-- Unit tests must be executed before commiting to the VCS to speed up the detection of bugs and simple code breaks.
-- Integration tests must be executed by the CI pipeline after committing to the VCS or when opening a new PR.
-- Test metrics, such as test coverage and test execution time, must be tracked locally or in the automated pipeline.
+- Test cases must be executed manually or automated, as appropriate for each testing type.
+- All automated tests must be executed by CI.
+- Integration tests must be executed by the CI pipeline on every push to PR and every merge to master.
+- Test metrics, such as test coverage and test execution time, must be tracked in the pipeline.
 - System and User acceptance tests must be performed before every release.
+- Manual tests will be documented under `doc/tests/protocols`.
 
 ## Test Automation
 
@@ -152,7 +152,7 @@ For the frontend unit tests will be used to test the following areas:
 - Async actions, such as API calls or event handling
 - Form validation and submission
 
-## Backend
+## End-to-End testing of important [use cases](../usecases)
 
 For the backend, unit tests will be used to test the following areas:
 

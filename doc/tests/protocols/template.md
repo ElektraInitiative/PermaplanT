@@ -1,6 +1,6 @@
 # Test Protocol Template
 
-This is the raw template idea for executing a manual test.
+This is the raw template for executing a manual test.
 
 Information:
 
