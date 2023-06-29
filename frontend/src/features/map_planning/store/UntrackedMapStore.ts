@@ -1,7 +1,9 @@
-import { TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from './MapStoreTypes';
+import {BoundsRect, TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice} from './MapStoreTypes';
 import Konva from 'konva';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
+import {Simulate} from "react-dom/test-utils";
+import select = Simulate.select;
 
 export const createUntrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -11,6 +13,15 @@ export const createUntrackedMapSlice: StateCreator<
 > = (set, get) => ({
   untrackedState: UNTRACKED_DEFAULT_STATE,
   stageRef: createRef<Konva.Stage>(),
+  updateMapBounds(bounds: BoundsRect) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        editorBounds: bounds,
+      }
+    }));
+  },
   updateSelectedLayer(selectedLayer) {
     // Clear the transformer's nodes.
     get().transformer.current?.nodes([]);

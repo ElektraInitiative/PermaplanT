@@ -1,6 +1,13 @@
 import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
+import {FrontendOnlyLayerType} from "@/features/map_planning/layers/_frontend_only";
+
+/**
+ * This type combines layers that are only available in the frontend
+ * with layers that are also reflected in the backend.
+ */
+export type CombinedLayerType = LayerType | FrontendOnlyLayerType;
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -102,14 +109,16 @@ export type History = Array<Action<unknown, unknown>>;
 export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
+  updateMapBounds: (bounds: BoundsRect) => void;
   updateSelectedLayer: (selectedLayer: LayerDto) => void;
-  updateLayerVisible: (layerName: LayerType, visible: UntrackedLayerState['visible']) => void;
-  updateLayerOpacity: (layerName: LayerType, opacity: UntrackedLayerState['opacity']) => void;
+  updateLayerVisible: (layerName: CombinedLayerType, visible: UntrackedLayerState['visible']) => void;
+  updateLayerOpacity: (layerName: CombinedLayerType, opacity: UntrackedLayerState['opacity']) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
+const COMBINED_LAYER_TYPES = [...Object.values(LayerType), ...Object.values(FrontendOnlyLayerType)];
 
 export const TRACKED_DEFAULT_STATE: TrackedMapState = {
   layers: LAYER_TYPES.reduce(
@@ -133,6 +142,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
+  editorBounds: {x: 0, y: 0, width: 0, height: 0},
   selectedLayer: {
     id: -1,
     is_alternative: false,
@@ -140,7 +150,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     type_: LayerType.Base,
     map_id: -1,
   },
-  layers: LAYER_TYPES.reduce(
+  layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
       [layerName]: {
@@ -214,7 +224,7 @@ export type TrackedBaseLayerState = {
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants>]: UntrackedLayerState;
+  [key in Exclude<CombinedLayerType, LayerType.Plants>]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
 };
@@ -236,6 +246,17 @@ export type TrackedMapState = {
  */
 export type UntrackedMapState = {
   mapId: number;
+  editorBounds: BoundsRect,
   selectedLayer: LayerDto;
   layers: UntrackedLayers;
 };
+
+/**
+ * Represents a simple rectangle with width, height and position.
+ */
+export type BoundsRect = {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+}

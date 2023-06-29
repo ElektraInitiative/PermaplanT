@@ -37,6 +37,8 @@ export const BaseStage = ({
   selectable = true,
   draggable = true,
 }: BaseStageProps) => {
+  const updateMapBounds = useMapStore(store => store.updateMapBounds);
+
   // Represents the state of the stage
   const [stage, setStage] = useState({
     scale: 1,
@@ -79,21 +81,30 @@ export const BaseStage = ({
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
 
-    const stage = e.target.getStage();
-    if (stage === null) return;
+    const targetStage = e.target.getStage();
+    if (targetStage === null) return;
 
-    const pointerVector = stage.getPointerPosition();
+    const pointerVector = targetStage.getPointerPosition();
     if (pointerVector === null) return;
 
     if (e.evt.ctrlKey) {
       if (zoomable) {
-        handleZoom(pointerVector, e.evt.deltaY, stage, setStage);
+        handleZoom(pointerVector, e.evt.deltaY, targetStage, setStage);
       }
     } else {
       if (scrollable) {
-        handleScroll(e.evt.deltaX, e.evt.deltaY, stage);
+        handleScroll(e.evt.deltaX, e.evt.deltaY, targetStage);
       }
     }
+
+    if (stageRef.current === null) return;
+
+    updateMapBounds({
+      x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
+      y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
+      width: Math.floor(window.innerWidth / stage.scale),
+      height: Math.floor(window.innerHeight / stage.scale),
+    });
   };
 
   // Event listener responsible for allowing dragging of the stage only with the wheel mouse button
@@ -115,6 +126,20 @@ export const BaseStage = ({
         stage.stopDrag();
       }
     }
+  };
+
+  const onStageDragEnd = (e: KonvaEventObject<DragEvent>) => {
+    if (e.evt === null || e.evt === undefined) return;
+    e.evt.preventDefault();
+
+    if (stageRef.current === null) return;
+
+    updateMapBounds({
+      x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
+      y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
+      width: Math.floor(window.innerWidth / stage.scale),
+      height: Math.floor(window.innerHeight / stage.scale),
+    });
   };
 
   // Event listener responsible for updating the selection rectangle
@@ -180,6 +205,7 @@ export const BaseStage = ({
         width={window.innerWidth}
         height={window.innerHeight}
         onWheel={onStageWheel}
+        onDragEnd={onStageDragEnd}
         onDragStart={onStageDragStart}
         onMouseDown={onStageMouseDown}
         onMouseMove={onMouseMove}

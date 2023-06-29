@@ -14,6 +14,7 @@ import { ReactComponent as MoveIcon } from '@/icons/move.svg';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
+import {GridLayer} from "@/features/map_planning/layers/_frontend_only/grid/GridLayer";
 
 export type MapProps = {
   layers: LayerDto[];
@@ -155,6 +156,7 @@ export const Map = ({ layers }: MapProps) => {
           opacity={untrackedState.layers.plants.opacity}
           listening={selectedLayer.type_ === LayerType.Plants}
         ></PlantsLayer>
+        <GridLayer opacity={1} visible={true}></GridLayer>
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
