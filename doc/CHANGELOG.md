@@ -8,7 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.2.1 - UNRELEASED
 
-- _()_
+- Finish plant search usecase.
 - _()_
 - _()_
 - _()_
