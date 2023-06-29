@@ -125,6 +125,7 @@ stage('Checks & Build') {
 
                 stage('build-storybook'){
                     sh './ci/build-scripts/build-storybook.sh'
+                    stash includes: 'frontend/storybook-static', name: 'storybook'
                 }
             }
         }
@@ -151,6 +152,7 @@ stage('Deploy PR') {
             unstash 'schema.rs'
             unstash 'frontend'
             unstash 'backend'
+            unstash 'storybook'
 
             echo 'Deploying to PR'
             sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
@@ -180,6 +182,7 @@ if (env.BRANCH_NAME == 'master') {
             unstash 'schema.rs'
             unstash 'frontend'
             unstash 'backend'
+            unstash 'storybook'
 
             echo 'Deploying to Dev ...'
             sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
