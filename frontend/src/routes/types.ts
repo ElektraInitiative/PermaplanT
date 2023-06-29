@@ -11,11 +11,13 @@ enum Pages {
   MapCreation,
   Maps,
   Webdav,
+  Overview,
 }
 
 type PathRouteCustomProps = {
   title?: string;
   component: FC;
+  restricted: boolean;
 };
 
 type Routes = Record<Pages, PathRouteProps & PathRouteCustomProps>;
