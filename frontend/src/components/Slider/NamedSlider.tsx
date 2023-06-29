@@ -102,7 +102,7 @@ export const NamedSlider = (props: SliderProps) => {
       onKeyDown={keyDownHandler}
       title={props.title}
     >
-      <div className="h-full bg-secondary-400 dark:bg-secondary-600" style={{ width: width }}></div>
+      <div className="h-full bg-secondary-100 dark:bg-secondary-600" style={{ width: width }}></div>
       <div
         className="h-full w-[4px] bg-secondary-500 hover:cursor-col-resize"
         onPointerDown={dragHandler}
