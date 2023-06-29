@@ -47,6 +47,7 @@ const Team = () => {
             path="/Avatars/person_placeholder.png"
           />
           <Teammember name="Lukas Hartl" role="DevOps" path="/Avatars/person_placeholder.png" />
+          <Teammember name="Aydan Namdar Ghazani" role="DevOps" path="/Avatars/person_placeholder.png" />
           <Teammember
             name="Ramzan Magomadow"
             role="Software Engineer"
