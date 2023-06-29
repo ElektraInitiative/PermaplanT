@@ -2,7 +2,8 @@
 
 ## Testing Approach
 
-The software testing strategy aims to ensure the delivery of high-quality software by employing a comprehensive testing approach throughout the development lifecycle. This strategy combines various testing types and levels to validate the functionality, performance, and security of the software.
+The software testing strategy aims to ensure the delivery of high-quality software by employing a comprehensive testing approach throughout the development lifecycle.
+This strategy combines various testing types and levels to validate the functionality, performance, and security of the software.
 
 The testing approach for PermaplanT will follow a mix of unit testing, integration testing, and manual testing.
 Unit testing will be conducted for individual components and functions to ensure that they are working as expected.
@@ -37,7 +38,8 @@ Manual testing will be conducted for end-to-end functionality and overall user e
 
 ### 1. Unit Testing
 
-Unit tests are used to test individual units of code in isolation from the rest of the system. This is important because it allows us to validate that each unit is working as intended, without interference from other parts of the system.
+Unit tests are used to test individual units of code in isolation from the rest of the system.
+This is important because it allows us to validate that each unit is working as intended, without interference from other parts of the system.
 
 - Unit tests must be created by every developer during the development process, following the Arrange-Act-Assert (AAA) pattern.
 
@@ -62,7 +64,8 @@ struct Plants;
 
 ### 2. Integration Testing
 
-Integration tests are used to test the integration between different parts of the system. This is important because it allows us to validate that the different parts of the system are working together correctly.
+Integration tests are used to test the integration between different parts of the system.
+This is important because it allows us to validate that the different parts of the system are working together correctly.
 
 In the application the integration tests will be used to test the following areas:
 
@@ -82,7 +85,7 @@ The whole module is annotated with `#[cfg(test)]` and will therefore only be com
 
 ### 3. System Testing
 
-System testing will include performing an end-to-end testing of the application to ensure overall functionality and user experience.
+System testing will include end-to-end testing of the application to ensure overall functionality and user experience.
 This will include testing of all features, navigation, and error handling.
 Manual tests will be documented under `doc/tests/protocols`.
 
@@ -159,6 +162,5 @@ For the backend, unit tests will be used to test the following areas:
 - Error handling
 
 In the backend unit tests can be found in the `src/` directory.
-They are to be put in the same file as the functions or modules they are supposed to test.
-Create separate modules called test in that file annotated with `#[cfg(test)]` (that way they are only compiled when actually running tests).  
-See the [rust doc](https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html) for reference.
+Unit tests are used to test individual units of code in isolation from the rest of the system.
+This is important because it allows us to validate that each unit is working as intended, without interference from other parts of the system.
