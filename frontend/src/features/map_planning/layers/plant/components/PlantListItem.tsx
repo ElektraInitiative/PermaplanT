@@ -2,12 +2,18 @@ import { PlantsSummaryDto } from '@/bindings/definitions';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 
 export type PlantListElementProps = {
+  /** The plant that is displayed as element of a list */
   plant: PlantsSummaryDto;
+  /** Callback when the element is clicked */
   onClick: () => void;
+  /** Whether the element is highlighted */
   isHighlighted?: boolean;
 };
 
-export function PlantListItem({ plant, onClick, isHighlighted }: PlantListElementProps) {
+/**
+ * A list element for a list of plants
+ */
+export function PlantListItem({ plant, onClick, isHighlighted = false }: PlantListElementProps) {
   const highlightedClass = isHighlighted
     ? 'text-primary-400 stroke-primary-400 ring-4 ring-primary-300 '
     : undefined;
