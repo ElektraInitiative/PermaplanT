@@ -33,7 +33,7 @@ const AuthContextFallback: AuthContextProps = {
   revokeTokens: () => Promise.resolve(void 0),
   startSilentRenew: () => Promise.resolve(void 0),
   stopSilentRenew: () => Promise.resolve(void 0),
-  isLoading: false,
+  isLoading: true,
   isAuthenticated: false,
 };
 

@@ -14,14 +14,14 @@ import { useTranslation } from 'react-i18next';
  */
 const Navbar = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
-  const { t } = useTranslation(['navbar']);
+  const { t } = useTranslation(['routes']);
   const auth = useSafeAuth();
 
   const navbarItems = (
     <div className="flex items-center">
       <ul className="pt-1">
         <li>
-          <ButtonLink title={t('navbar:maps')} to="/maps" className="text-lg font-medium" />
+          <ButtonLink title={t('routes:maps')} to="/maps" className="text-lg font-medium" />
         </li>
       </ul>
     </div>
