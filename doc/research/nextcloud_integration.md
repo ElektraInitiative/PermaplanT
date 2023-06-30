@@ -117,7 +117,8 @@ This can be achieved by following API call:
 "filename": "/ocs/v2.php/apps/circles/circles"
 ```
 The name of the circle is the same as the name of the map.
-Unfortunately the circle API is not documented. The implementation of the API can be found on the corresponding [github repository](https://github.com/nextcloud/circles/blob/22238597fb9045e748119247fceaac7321f0a31e/appinfo/routes.php).
+Unfortunately the circle API is not documented.
+The implementation of the API can be found on the corresponding [github repository](https://github.com/nextcloud/circles/blob/22238597fb9045e748119247fceaac7321f0a31e/appinfo/routes.php).
 
 Now the circle has to be added to the shares for the map directory.
 This can be done with the share API which is documented [here](https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/ocs-share-api.html).
