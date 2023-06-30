@@ -1,5 +1,5 @@
 name: Bug report
-description: For issues PermaplanT
+description: For PermaplanT issues
 labels: ["bug"]
 body:
   - type: markdown
@@ -11,8 +11,8 @@ body:
 
   - type: textarea
     attributes:
-      label: Describe the bug
-      description: in some short sentences.
+      label: Describe the Bug
+      description: Some short sentences.
     validations:
       required: true
 
@@ -26,14 +26,7 @@ body:
   - type: textarea
     attributes:
       label: Expected Result
-      description: What you would except to happen.
-    validations:
-      required: true
-
-  - type: textarea
-    attributes:
-      label: Expected Result
-      description: What you would except to happen.
+      description: What you would expect to happen.
     validations:
       required: true
 
@@ -45,41 +38,39 @@ body:
       required: true
 
   - type: input
-    id: version
     attributes:
       label: PermaplanT version
       description: If you're not on release, provide the commit hash
-      placeholder: 0.8.10
+      placeholder: 0.2.1
     validations:
       required: true
 
   - type: input
-    id: version
     attributes:
       label: Operating System
       description: Which OS with which version was used?
-      placeholder: 0.2.0
+      placeholder: Windows 11
     validations:
       required: true
 
   - type: input
-    id: version
     attributes:
       label: Browser
       description: Which browser in which version was used?
-      placeholder: Chrome
+      placeholder: Chrome 114.0.5735.199
     validations:
       required: true
 
   - type: input
-    id: version
     attributes:
       label: Versions of other relevant software/extensions
-      description: If necessary
-      placeholder: Chrome
+      description: Any extensions that are active and might have an impact on the page.
+      placeholder: HoverZoom/Adblock/etc..
     validations:
-      required: true
+      required: false
 
   - type: textarea
     attributes:
       label: Additional info/logs
+    validations:
+      required: true
