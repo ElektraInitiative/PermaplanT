@@ -179,7 +179,8 @@ The PermaplanT production environment has following structure:
 - Nextcloud: "https://cloud.permaplant.net"
 - Keycloak: "https://auth.permaplant.net/realms/PermaplanT"
 
-This means the origin for Nextcloud differs from the origin of the PermaplanT frontend. Consequently CORS has to be configured to allow requests from the frontend origin otherwise the requests to Nextcloud are blocked by the browser.
+This means the origin for Nextcloud differs from the origin of the PermaplanT frontend.
+Consequently CORS has to be configured to allow requests from the frontend origin otherwise the requests to Nextcloud are blocked by the browser.
 To circumvent the restrictions or the lack of configuration options by Nextcloud we implemented a proxy in front of the Nextcloud instance which sets the needed headers for the OPTIONS preflight which is performed by the browser.
 
 ## Research about other Nextcloud Features
