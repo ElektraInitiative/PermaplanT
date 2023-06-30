@@ -8,7 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.2.1 - UNRELEASED
 
-- _()_
+- Test strategy written _(4ydan)_
 - _()_
 - _()_
 - _()_
@@ -24,7 +24,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 
-## 0.2.0 - 27.06.2023
+## 0.2.0 - 29.06.2023
 
 - Nextcloud Konva image component: can be used to create image items on a layer _(Samuel)_
 - Nextcloud image gallery including Nextcloud image components for unauthenticated and authenticated use, Nextcloud utilites for fetching data from Nextcloud public share _(Samuel)_
