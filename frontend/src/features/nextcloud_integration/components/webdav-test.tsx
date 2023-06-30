@@ -1,7 +1,6 @@
 import { NextcloudImage } from './NextcloudImage';
 import { useState } from 'react';
 import { FileSelector } from './FileSelector';
-import { UploadFile } from './UploadFile';
 
 /**
  * component used for testing different webdav api call
@@ -16,7 +15,6 @@ export const WebdavTest = () => {
   return (
     <div className="mt-8 flex flex-col items-center justify-center gap-4">
       <FileSelector path={path} onSelect={item => setImageName("/Photos/" + item.basename)}/>
-      <UploadFile path={path} />
       {/* display selected image */}
       <div className="w-64">
         {/* TODO: fix path */}

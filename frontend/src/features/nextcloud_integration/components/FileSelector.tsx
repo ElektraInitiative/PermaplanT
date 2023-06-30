@@ -1,4 +1,5 @@
 import SimpleFormInput from "@/components/Form/SimpleFormInput";
+import { LoadingSpinner } from "@/components/LoadingSpinner/LoadingSpinner";
 import { useNextcloudWebDavClient } from "@/config/nextcloud_client";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -67,11 +68,15 @@ export const FileSelector = (props: FileSelectorProps) => {
 
   const { t } = useTranslation(["fileSelector"])
 
-  const { data, refetch } = useQuery(['files', path], {
+  const { data, refetch, isLoading } = useQuery(['files', path], {
     queryFn: () => (webdav as WebDAVClient).getDirectoryContents('/remote.php/webdav/' + path),
     refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,
   });
+
+  if(isLoading){
+    return <LoadingSpinner />
+  }
 
   return <div className="w-full p-8">
     <div className="flex items-end gap-4">

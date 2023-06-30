@@ -4,6 +4,9 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FileSelector } from '@/features/nextcloud_integration/components/FileSelector';
+import { FileStat } from 'webdav';
+import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 
 interface BaseLayerFormProps {
   state: TrackedBaseLayerState;
@@ -15,6 +18,7 @@ const BaseLayerRightToolbar = ({ state, executeAction }: BaseLayerFormProps) => 
 
   const [rotationInput, setRotationInput] = useState(state.rotation);
   const [pathInput, setPathInput] = useState(state.nextcloudImagePath);
+  const [showFileSelector, setShowFileSelector] = useState(false);
 
   useEffect(() => {
     setRotationInput(state.rotation);
@@ -30,6 +34,21 @@ const BaseLayerRightToolbar = ({ state, executeAction }: BaseLayerFormProps) => 
         onChange={(e) => setPathInput(e.target.value)}
         value={pathInput}
       />
+      <FileSelectorModal
+        setShow={function(show: boolean): void {
+          setShowFileSelector(show)
+        }}
+        show={showFileSelector} onCancel={function(): void {
+          setShowFileSelector(false)
+        }}
+        path={'/Photos/'}
+        onSelect={function(item: FileStat): void {
+          setPathInput('/Photos/' + item.basename)
+          setShowFileSelector(false)
+        }}
+      />
+
+      <SimpleButton onClick={() => setShowFileSelector(true)}>{t("baseLayerForm:selectImage")}</SimpleButton>
       <SimpleFormInput
         id="rotation"
         labelText={t('baseLayerForm:rotation_field')}
