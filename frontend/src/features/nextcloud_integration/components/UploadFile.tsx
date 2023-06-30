@@ -1,3 +1,4 @@
+import SimpleButton from '@/components/Button/SimpleButton';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { useMutation } from '@tanstack/react-query';
@@ -65,7 +66,9 @@ export const UploadFile = (props: UploadFileProps) => {
 
   if (addFile.isLoading) return <div className='w-8'><LoadingSpinner /></div>
 
-  return <div className="w-32">
-    <input type="file" onChange={handleFileUpload} />
-  </div>
+  return <SimpleButton>
+      <label className='cursor-pointer' htmlFor="file-upload">{t("uploadFile:upload_file")}</label>
+      <input id="file-upload" type="file" onChange={handleFileUpload} className="hidden" />
+    </SimpleButton>
+
 }

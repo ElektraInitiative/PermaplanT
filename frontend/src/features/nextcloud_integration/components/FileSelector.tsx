@@ -2,6 +2,7 @@ import SimpleFormInput from "@/components/Form/SimpleFormInput";
 import { useNextcloudWebDavClient } from "@/config/nextcloud_client";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FileStat, WebDAVClient } from "webdav";
 import { UploadFile } from "./UploadFile";
 
@@ -64,6 +65,8 @@ export const FileSelector = (props: FileSelectorProps) => {
   const [sortAttribute, setSortAttribute] = useState<"name" | "date">("name")
   const [sortOrder, setSortOrder] = useState<"asc" | "dsc">("asc")
 
+  const { t } = useTranslation(["fileSelector"])
+
   const { data, refetch } = useQuery(['files', path], {
     queryFn: () => (webdav as WebDAVClient).getDirectoryContents('/remote.php/webdav/' + path),
     refetchOnWindowFocus: false,
@@ -71,10 +74,16 @@ export const FileSelector = (props: FileSelectorProps) => {
   });
 
   return <div className="w-full p-8">
-    <SimpleFormInput id="FileInput" labelText="search for a file in this directory" onChange={(e) => setSearchTerm(e.target.value)} />
-    <UploadFile path={path} onSuccess={() => {
-      refetch()
-    }}/>
+    <div className="flex items-end gap-4">
+      <div className="flex-1">
+        <SimpleFormInput id="FileInput" labelText={t("fileSelector:search")} onChange={(e) => setSearchTerm(e.target.value)} />
+      </div>
+      <div className='w-32'>
+        <UploadFile path={path} onSuccess={() => {
+          refetch()
+        }} />
+      </div>
+    </div>
     <ul className="mt-2">
       <li
         className="cursor-pointer flex items-center justify-between gap-4 font-bold mb-2"
