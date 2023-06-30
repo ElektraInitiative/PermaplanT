@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "checking storybook"
+echo "building storybook"
 
 # Echo on and fail fast
 set -ex

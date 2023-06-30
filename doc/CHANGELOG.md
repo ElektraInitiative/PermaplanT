@@ -8,16 +8,16 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.2.1 - UNRELEASED
 
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
 - CI: Story-book build and stashed in Jenkins pipeline PR/Master/Release #438 _(4ydan)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
 - _()_
 - _()_
 - _()_
