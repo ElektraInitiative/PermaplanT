@@ -1,8 +1,10 @@
+import SimpleButton from "@/components/Button/SimpleButton";
 import SimpleFormInput from "@/components/Form/SimpleFormInput";
 import { useNextcloudWebDavClient } from "@/config/nextcloud_client";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { FileStat, ResponseDataDetailed, WebDAVClient } from "webdav";
+import { Readable } from "stream";
+import { BufferLike, FileStat, ResponseDataDetailed, WebDAVClient } from "webdav";
 
 type FileSelectorProps = {
   /** path to the directory starting from the users root */
@@ -33,7 +35,7 @@ const sortByDateAsc = (a: FileStat, b: FileStat) => {
 }
 
 interface SortMethods {
-    [key: string]: (a: FileStat, b: FileStat) => number;
+  [key: string]: (a: FileStat, b: FileStat) => number;
 }
 const sortMethods: SortMethods = {
   "name_asc": sortByNameAsc,
@@ -61,7 +63,6 @@ export const FileSelector = (props: FileSelectorProps) => {
     enabled: !!webdav && !!path,
   });
 
-  console.log(data)
   return <div className="w-full p-8">
     <SimpleFormInput id="FileInput" labelText="search for a file in this directory" onChange={(e) => setSearchTerm(e.target.value)} />
     <ul className="mt-2">
@@ -69,17 +70,17 @@ export const FileSelector = (props: FileSelectorProps) => {
         className="cursor-pointer flex items-center justify-between gap-4 font-bold mb-2"
       >
         <p onClick={() => {
-          if(sortAttribute === "name"){
-            if(sortOrder === "asc") setSortOrder("dsc")
+          if (sortAttribute === "name") {
+            if (sortOrder === "asc") setSortOrder("dsc")
             else setSortOrder("asc")
           }
           setSortAttribute("name")
         }}
-        className="hover:text-primary-400"
+          className="hover:text-primary-400"
         >Filename</p>
         <p onClick={() => {
-          if(sortAttribute === "date"){
-            if(sortOrder === "asc") setSortOrder("dsc")
+          if (sortAttribute === "date") {
+            if (sortOrder === "asc") setSortOrder("dsc")
             else setSortOrder("asc")
           }
           setSortAttribute("date")
