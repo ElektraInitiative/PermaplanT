@@ -62,6 +62,7 @@ const routes: Routes = {
     component: MapEditForm,
     path: '/maps/:mapId/edit',
     title: 'Edit Map',
+    restricted: true,
   },
   [Pages.Webdav]: {
     component: WebdavTest,
