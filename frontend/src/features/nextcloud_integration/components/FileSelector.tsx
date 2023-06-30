@@ -70,6 +70,9 @@ export const FileSelector = (props: FileSelectorProps) => {
 
   const { data, refetch, isLoading } = useQuery(['files', path], {
     queryFn: () => (webdav as WebDAVClient).getDirectoryContents('/remote.php/webdav/' + path),
+    meta: {
+      errorMessage: t('fileSelector:error'),
+    },
     refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,
   });

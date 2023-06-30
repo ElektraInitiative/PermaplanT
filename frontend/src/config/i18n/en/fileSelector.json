@@ -1,3 +1,4 @@
 {
-  "search": "Search for a file."
+  "search": "Search for a file.",
+  "error": "Failed to fetch directory content. Please try again later."
 }
