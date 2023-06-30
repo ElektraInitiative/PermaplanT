@@ -73,6 +73,7 @@ export const FileSelector = (props: FileSelectorProps) => {
     meta: {
       errorMessage: t('fileSelector:error'),
     },
+    staleTime: 10000,
     refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,
   });
