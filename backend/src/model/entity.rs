@@ -735,7 +735,7 @@ pub struct Map {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// A flag indicating if this map is private or not.
+    /// An enum indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
@@ -767,7 +767,7 @@ pub struct NewMap {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// A flag indicating if this map is private or not.
+    /// An enum indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
@@ -783,7 +783,7 @@ pub struct NewMap {
 pub struct UpdateMap {
     /// The name of the map.
     pub name: Option<String>,
-    /// A flag indicating if this map is private or not.
+    /// An enum indicating if this map is private or not.
     pub privacy: Option<PrivacyOptions>,
     /// The description of the map.
     pub description: Option<String>,
