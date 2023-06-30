@@ -151,3 +151,16 @@
 - end to end test (e2e test):  
   Used to test the whole application from end to end.  
   Example: Simulate a user clicking a button (e.g. with [Selenium](https://www.selenium.dev/)) resulting in an HTTP request to the backend. Wait for the response and validate the resulting change in the frontend.
+- acceptance tests:
+  Black box system tests of a user story.
+  Usually performed as regressions tests prior to a release.
+  They are performed by engineers during the development phase.
+- system tests:
+  Tests the whole system towards the requirements definition and specification documents.
+  This can invole functional and non-functional tests (performance, security, etc.).
+  They are super set of end-to-end tests which can be done manually and/or automatically.
+- user acceptance tests:
+  Black box system tests towards customer requirements.
+  Usually (subset of) system level tests conducted by the customer/user/domain expert.
+  These tests makes sure that the solution provided by the system is accepted by the user.
+  Similar to "Beta testing".
