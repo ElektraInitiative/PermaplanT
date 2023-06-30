@@ -55,6 +55,13 @@ including their responsibilities, skills, etc.
 - main responsibility: CI
 - positioning: CI
 
+## Aydan
+
+- GitHub: 4ydan
+- devel/test on: Debian Oldstable/Stable
+- main responsibility: Software Testing and CI/CD
+- positioning: Front End Testing and Jenkins Pipeline
+
 ## Ramzan
 
 - main responsibility: PostGIS
