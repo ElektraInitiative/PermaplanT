@@ -173,6 +173,7 @@ Nextcloud offers no options to change the CORS configuration.
 This means that all requests coming from a different origin than the one Nextcloud is hosted on are blocked.
 
 The PermaplanT production environment has following structure:
+
 - Frontend: "https://www.permaplant.net".
 - Backend: "https://www.permaplant.net/api"
 - Nextcloud: "https://cloud.permaplant.net"
