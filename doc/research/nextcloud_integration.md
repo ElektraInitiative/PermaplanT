@@ -138,7 +138,7 @@ Following API call can be used:
 "filename": "/ocs/v2.php/apps/files_sharing/api/v1"
 ```
 
-### Components
+### React Components
 
 There are a number of components which help with interacting with Nextcloud files.
 
