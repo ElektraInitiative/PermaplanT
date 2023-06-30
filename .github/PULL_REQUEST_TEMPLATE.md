@@ -23,8 +23,10 @@ We will help you, but we cannot accept PRs that do not fulfill the basics.
 
 <!--
 For documentation fixes, spell checking, and similar none of these points below need to be checked.
+Otherwise please check these points when getting a PR done:
 -->
 
+- [ ] I have installed and I am using [pre-commit hooks](../doc/contrib/README.md#Hooks)
 - [ ] I fully described what my PR does in the documentation
       (not in the PR description)
 - [ ] I fixed all affected documentation
@@ -44,6 +46,7 @@ For documentation fixes, spell checking, and similar none of these points below 
 <!--
 Reviewers can copy&check the following to their review.
 Also the checklist above can be used.
+But also the PR creator should check these points when getting a PR done:
 -->
 
 - [ ] I've tested the code
