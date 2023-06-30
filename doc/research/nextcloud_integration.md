@@ -123,10 +123,10 @@ The implementation of the API can be found on the corresponding [github reposito
 Now the circle has to be added to the shares for the map directory.
 This can be done with the share API which is documented [here](https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/ocs-share-api.html).
 Following API call can be used:
-```
-"method": "post",
+```json
+"method": "POST",
 "headers": [
-  "ocs-apirequest": true
+  "OCS-APIRequest": true
 ],
 "body": {
   "path": "PermaplanT/Maps/map_01",
