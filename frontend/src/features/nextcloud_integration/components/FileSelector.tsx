@@ -18,23 +18,27 @@ const matchesSearchTerm = (searchTerm: String) => (file: FileStat) => {
 }
 
 const sortByNameAsc = (a: FileStat, b: FileStat) => {
-  return a.basename < b.basename ? -1 : b.basename < a.basename ? 1 : 0
+  const nameA = a.basename.toLowerCase()
+  const nameB = b.basename.toLowerCase()
+  return nameA < nameB ? -1 : nameB < nameA ? 1 : 0
 }
 
 const sortByNameDsc = (a: FileStat, b: FileStat) => {
-  return a.basename > b.basename ? -1 : b.basename > a.basename ? 1 : 0
+  const nameA = a.basename.toLowerCase()
+  const nameB = b.basename.toLowerCase()
+  return nameA > nameB ? -1 : nameB > nameA ? 1 : 0
 }
 
 const sortByDateDsc = (a: FileStat, b: FileStat) => {
-  const aDate = new Date(a.lastmod)
-  const bDate = new Date(b.lastmod)
-  return aDate < bDate ? -1 : bDate < aDate ? 1 : 0
+  const dateA = new Date(a.lastmod)
+  const dateB = new Date(b.lastmod)
+  return dateA < dateB ? -1 : dateA < dateB ? 1 : 0
 }
 
 const sortByDateAsc = (a: FileStat, b: FileStat) => {
-  const aDate = new Date(a.lastmod)
-  const bDate = new Date(b.lastmod)
-  return aDate > bDate ? -1 : bDate > aDate ? 1 : 0
+  const dateA = new Date(a.lastmod)
+  const dateB = new Date(b.lastmod)
+  return dateA > dateB ? -1 : dateA > dateB ? 1 : 0
 }
 
 interface SortMethods {
