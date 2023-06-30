@@ -145,7 +145,7 @@ There are a number of components which help with interacting with Nextcloud file
 There are four components that handle fetching and displaying images from Nextcloud.
 
 - NextcloudImage: This component fetches an image from the user directory in Nextcloud and renders it.
-- PublicNextcloudImage: This component fetches and renders an image which is available on a public share.
+- PublicNextcloudImage: This component fetches and renders an image from a public share.
 - NextcloudKonvaImage: This component fetches an image from the user directory in Nextcloud and creates a shape for Konva (Canvas library used in PermplanT).
 - PublicNextcloudKonvaImage: This component fetches an image from the Nextcloud public share and creates a shape for Konva.
 
