@@ -2,7 +2,6 @@ import { UpdateBaseLayerAction } from '../../../layers/base/actions';
 import { Action, TrackedBaseLayerState } from '../../../store/MapStoreTypes';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import { FileSelector } from '@/features/nextcloud_integration/components/FileSelector';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

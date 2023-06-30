@@ -14,7 +14,7 @@ type FileSelectorProps = {
   onSelect: (item: FileStat) => void;
 };
 
-const matchesSearchTerm = (searchTerm: String) => (file: FileStat) => {
+const matchesSearchTerm = (searchTerm: string) => (file: FileStat) => {
   const regex = new RegExp(searchTerm.toLowerCase());
   return regex.test(file.basename.toLowerCase());
 };
@@ -62,7 +62,7 @@ const sortFiles = (attribute: 'name' | 'date', order: 'asc' | 'dsc') => {
 export const FileSelector = (props: FileSelectorProps) => {
   const { path, onSelect } = props;
   const webdav = useNextcloudWebDavClient();
-  const [searchTerm, setSearchTerm] = useState<String>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortAttribute, setSortAttribute] = useState<'name' | 'date'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'dsc'>('asc');
 
