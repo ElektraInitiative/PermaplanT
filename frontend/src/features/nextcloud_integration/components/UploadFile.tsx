@@ -8,38 +8,39 @@ import { toast } from 'react-toastify';
 import { Readable } from 'stream';
 import { BufferLike, WebDAVClient } from 'webdav';
 
-const WEBDAV_PATH = "/remote.php/webdav/"
+const WEBDAV_PATH = '/remote.php/webdav/';
 
 type FileOptions = {
-  name: string,
-  buffer: string | BufferLike | Readable,
-  path: string
-}
+  name: string;
+  buffer: string | BufferLike | Readable;
+  path: string;
+};
 type UploadFileProps = {
-  path: string,
-  onSuccess?: (data: boolean, variables: FileOptions, context: unknown) => unknown
-}
+  path: string;
+  onSuccess?: (data: boolean, variables: FileOptions, context: unknown) => unknown;
+};
 export const UploadFile = (props: UploadFileProps) => {
-  const { path, onSuccess } = props
+  const { path, onSuccess } = props;
   const webdav = useNextcloudWebDavClient();
-  const { t } = useTranslation(["uploadFile"])
+  const { t } = useTranslation(['uploadFile']);
 
   const addFile = useMutation({
     mutationFn: (file: FileOptions) => {
       return (webdav as WebDAVClient).putFileContents(
-        WEBDAV_PATH + file.path + "/" + file.name, file.buffer
+        WEBDAV_PATH + file.path + '/' + file.name,
+        file.buffer,
       );
     },
     onError: () => {
-      toast.error(t('uploadFile:upload_error'))
+      toast.error(t('uploadFile:upload_error'));
     },
     onSuccess: (data, variables, context) => {
-      toast.success(variables.name + " successfully uploaded!")
+      toast.success(variables.name + ' successfully uploaded!');
       if (onSuccess) {
-        onSuccess(data, variables, context)
+        onSuccess(data, variables, context);
       }
-    }
-  })
+    },
+  });
 
   /**
    * load image from device
@@ -59,16 +60,24 @@ export const UploadFile = (props: UploadFileProps) => {
         console.error('no file selected');
         return;
       }
-      addFile.mutate({ path, name: file.name, buffer })
+      addFile.mutate({ path, name: file.name, buffer });
     };
     reader.readAsArrayBuffer(file);
   };
 
-  if (addFile.isLoading) return <div className='w-8'><LoadingSpinner /></div>
+  if (addFile.isLoading)
+    return (
+      <div className="w-8">
+        <LoadingSpinner />
+      </div>
+    );
 
-  return <SimpleButton>
-      <label className='cursor-pointer' htmlFor="file-upload">{t("uploadFile:upload_file")}</label>
+  return (
+    <SimpleButton>
+      <label className="cursor-pointer" htmlFor="file-upload">
+        {t('uploadFile:upload_file')}
+      </label>
       <input id="file-upload" type="file" onChange={handleFileUpload} className="hidden" />
     </SimpleButton>
-
-}
+  );
+};

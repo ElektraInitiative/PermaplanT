@@ -2,11 +2,11 @@ import { UpdateBaseLayerAction } from '../../../layers/base/actions';
 import { Action, TrackedBaseLayerState } from '../../../store/MapStoreTypes';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { FileSelector } from '@/features/nextcloud_integration/components/FileSelector';
+import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FileSelector } from '@/features/nextcloud_integration/components/FileSelector';
 import { FileStat } from 'webdav';
-import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 
 interface BaseLayerFormProps {
   state: TrackedBaseLayerState;
@@ -35,20 +35,23 @@ const BaseLayerRightToolbar = ({ state, executeAction }: BaseLayerFormProps) => 
         value={pathInput}
       />
       <FileSelectorModal
-        setShow={function(show: boolean): void {
-          setShowFileSelector(show)
+        setShow={function (show: boolean): void {
+          setShowFileSelector(show);
         }}
-        show={showFileSelector} onCancel={function(): void {
-          setShowFileSelector(false)
+        show={showFileSelector}
+        onCancel={function (): void {
+          setShowFileSelector(false);
         }}
         path={'/Photos/'}
-        onSelect={function(item: FileStat): void {
-          setPathInput('/Photos/' + item.basename)
-          setShowFileSelector(false)
+        onSelect={function (item: FileStat): void {
+          setPathInput('/Photos/' + item.basename);
+          setShowFileSelector(false);
         }}
       />
 
-      <SimpleButton onClick={() => setShowFileSelector(true)}>{t("baseLayerForm:selectImage")}</SimpleButton>
+      <SimpleButton onClick={() => setShowFileSelector(true)}>
+        {t('baseLayerForm:selectImage')}
+      </SimpleButton>
       <SimpleFormInput
         id="rotation"
         labelText={t('baseLayerForm:rotation_field')}

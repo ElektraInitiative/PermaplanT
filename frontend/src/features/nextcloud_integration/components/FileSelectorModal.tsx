@@ -1,7 +1,7 @@
 import { FileSelector } from './FileSelector';
-import { FileStat } from 'webdav';
-import TransparentBackground from '@/components/TransparentBackground';
 import ModalContainer from '@/components/Modals/ModalContainer';
+import TransparentBackground from '@/components/TransparentBackground';
+import { FileStat } from 'webdav';
 
 interface FileSelectorModalProps {
   /** Callback that informs the parent when the modal should be hidden/displayed (e.g. when the user pressed the close button).*/
@@ -11,15 +11,21 @@ interface FileSelectorModalProps {
   /** Click callback for cancel/close button.*/
   onCancel: () => void;
   /** path to the directory which files are displayed */
-  path: string
+  path: string;
   /** fires when an image was selected */
-  onSelect: (item: FileStat) => void
+  onSelect: (item: FileStat) => void;
 }
 
 /**
  * A modal component used to pick a file from a Nextcloud directory.
  */
-export default function FileSelectorModal({ setShow, show, onCancel, path, onSelect }: FileSelectorModalProps) {
+export default function FileSelectorModal({
+  setShow,
+  show,
+  onCancel,
+  path,
+  onSelect,
+}: FileSelectorModalProps) {
   return (
     <>
       <TransparentBackground

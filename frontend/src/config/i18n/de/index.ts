@@ -6,6 +6,7 @@ import common from './common.json';
 import contact from './contact.json';
 import enums from './enums.json';
 import featureDescriptions from './featureDescriptions.json';
+import fileSelector from './fileSelector.json';
 import geomap from './geomap.json';
 import imprint from './imprint.json';
 import landingPage from './landingPage.json';
@@ -20,8 +21,7 @@ import routes from './routes.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
-import uploadFile from './uploadFile.json'
-import fileSelector from './fileSelector.json'
+import uploadFile from './uploadFile.json';
 
 const de = {
   blog,
@@ -47,7 +47,7 @@ const de = {
   routes,
   overview,
   uploadFile,
-  fileSelector
+  fileSelector,
 };
 
 export default de;

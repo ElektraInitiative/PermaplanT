@@ -12,12 +12,12 @@ interface ProviderProps {
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error, query) => {
-      if (query.meta?.errorMessage && typeof query.meta.errorMessage === "string") {
-        toast.error(query.meta.errorMessage)
+      if (query.meta?.errorMessage && typeof query.meta.errorMessage === 'string') {
+        toast.error(query.meta.errorMessage);
       }
     },
   }),
-})
+});
 
 const getOidcConfig = async () => {
   const config = await getAuthInfo();
