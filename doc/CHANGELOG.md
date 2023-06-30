@@ -9,7 +9,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 ## 0.2.1 - UNRELEASED
 
 - Test strategy written _(4ydan)_
-- Finish plant search usecase _(badnames)_
+- Finish [plant search](doc/usecases/done/search_plants.md) usecase _(badnames)_ 
 - _()_
 - _()_
 - _()_
