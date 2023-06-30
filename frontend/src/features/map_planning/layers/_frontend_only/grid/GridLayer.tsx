@@ -27,13 +27,12 @@ interface GridProps {
 
 const Grid = (rect: GridProps) => {
   let step = 10;
-  if (rect.width > 5000) {
+  let dynamicStrokeWidth = rect.width / 1000;
+  if (rect.width > 10000) {
     step = 1000;
-  } else if (rect.width > 2000) {
+  } else if (rect.width > 1000) {
     step = 100;
   }
-
-  const dynamicStrokeWidth = rect.width / 3000;
 
   const startX = -rect.x - rect.width - ((-rect.x - rect.width) % step);
   const startY = -rect.y - rect.height - ((-rect.y - rect.height) % step);
@@ -41,26 +40,19 @@ const Grid = (rect: GridProps) => {
   const endX = -rect.x + rect.width;
   const endY = -rect.y + rect.height;
 
-  const horizontalLines = [];
-  for (let x = startX; x < endX; x += step) {
-    const width = x % 100 === 0 ? dynamicStrokeWidth * 2 : dynamicStrokeWidth;
-    horizontalLines.push(
-      <Line strokeWidth={width} stroke={'red'} points={[x, startY, x, endY]}></Line>,
-    );
-  }
-
-  const verticalLines = [];
+  const lines = [];
   for (let y = startY; y < endY; y += step) {
-    const width = y % 100 === 0 ? dynamicStrokeWidth * 2 : dynamicStrokeWidth;
-    verticalLines.push(
-      <Line strokeWidth={width} stroke={'red'} points={[startX, y, endX, y]}></Line>,
+    lines.push(
+      <Line strokeWidth={dynamicStrokeWidth}
+            stroke={'red'}
+            points={[startX, y, endX, y]}
+            dash={[dynamicStrokeWidth, step - dynamicStrokeWidth]}></Line>,
     );
   }
 
   return (
     <Group>
-      {horizontalLines}
-      {verticalLines}
+      {lines}
     </Group>
   );
 };
