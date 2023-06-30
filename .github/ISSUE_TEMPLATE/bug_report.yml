@@ -1,0 +1,85 @@
+name: Bug report
+description: For issues PermaplanT
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Before creating a **bug report**, please check the following:
+          * Ensure you're running the latest PermaplanT release.
+          * Ensure there isn't an existing issue for your bug. If there is, leave a comment on the existing issue.
+
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: in some short sentences.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce the Problem
+      description: Please provide a step by step guide on how to reproduce the problem here.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected Result
+      description: What you would except to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected Result
+      description: What you would except to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Actual Result
+      description: What actually happened.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: PermaplanT version
+      description: If you're not on release, provide the commit hash
+      placeholder: 0.8.10
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Operating System
+      description: Which OS with which version was used?
+      placeholder: 0.2.0
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Browser
+      description: Which browser in which version was used?
+      placeholder: Chrome
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Versions of other relevant software/extensions
+      description: If necessary
+      placeholder: Chrome
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional info/logs
