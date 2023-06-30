@@ -59,7 +59,8 @@ E.g. images on the landing page or icons for plants.
 To fetch resources from directories which are not available for the public some form of authentication has to be used.
 The easiest way to authenticate with the Nextcloud instance is to use the username and password in the request. This is called basic authentication.
 However, this is not secure when the requests are sent from the browser as this information can be easily sniffed.
-So we decided to use 'OpenID Connect' for authentication. Details on why we decided to use 'OpenID Connect' can be found in the [decision document]('https://github.com/ElektraInitiative/PermaplanT/blob/master/doc/decisions/auth.md').
+So we decided to use 'OpenID Connect' for authentication.
+Details on why we decided to use 'OpenID Connect' can be found in the [decision document]('https://github.com/ElektraInitiative/PermaplanT/blob/master/doc/decisions/auth.md').
 
 All we need to know here is that requests from authenticated users are populated with the access token in the Authorization header.
 
