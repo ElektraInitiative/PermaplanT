@@ -40,7 +40,7 @@ including their responsibilities, skills, etc.
 - special skills: SQL, TypeScript
 - focus groups: DB, Frontend
 - positioning: full-stack
-- worked on: seeds use case, db, frontend, backend
+- worked on: seeds use case, base layer use case, db, frontend, backend
 
 ## Giancarlo
 
@@ -54,6 +54,13 @@ including their responsibilities, skills, etc.
 - GitHub: lukashartl
 - main responsibility: CI
 - positioning: CI
+
+## Aydan
+
+- GitHub: 4ydan
+- devel/test on: Debian Oldstable/Stable
+- main responsibility: Software Testing and CI/CD
+- positioning: Front End Testing and Jenkins Pipeline
 
 ## Ramzan
 

@@ -8,7 +8,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.2.1 - UNRELEASED
 
-- Finish plant search usecase.
+- Test strategy written _(4ydan)_
+- Finish plant search usecase _(badnames)_
 - _()_
 - _()_
 - _()_
