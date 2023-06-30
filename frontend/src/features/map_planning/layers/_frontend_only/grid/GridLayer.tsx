@@ -60,15 +60,15 @@ const Grid = (rect: GridProps) => {
 const YardStick = (rect: GridProps) => {
   const dynamicStrokeWidth = rect.width / 1000;
 
-  const startX = -rect.x + rect.width / 15;
-  const endX = -rect.x + rect.width / 15 + 100;
+  const startX = -rect.x + rect.width / 20;
+  const endX = -rect.x + rect.width / 20 + 100;
 
-  const y = -rect.y + rect.width / 15;
+  const y = -rect.y + rect.width / 30;
 
   return (
     <Group>
-      <Line strokeWidth={dynamicStrokeWidth} stroke={'white'} points={[startX, y, endX, y]} />
-      <Text x={startX} y={y} fill={'white'} text={'1m'} fontSize={dynamicStrokeWidth * 10} />
+      <Line strokeWidth={dynamicStrokeWidth} stroke={'#D0D0D0'} points={[startX, y, endX, y]} />
+      <Text x={startX} y={y * 0.995} fill={'#D0D0D0'} text={'1m'} fontSize={dynamicStrokeWidth * 10} />
     </Group>
   );
 };
