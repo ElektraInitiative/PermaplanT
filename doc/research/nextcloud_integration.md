@@ -44,7 +44,7 @@ All files ('add.svg', 'delete.svg', 'map.json', 'tree.png') in all subdirectorie
 The path for fetching a file starts at the shared directory, in this case 'Public'.
 To access the file 'add.svg' following URI is used: 'https://cloud.permaplant.net/public.php/webdav/Icons/add.svg'.
 The first part: 'https://cloud.permaplant.net/' is the scheme and host for our Nextcloud instance.
-The next part '/public.php/webdav/' is the endpoint used to access files from the public share directory specified by the share token.
+The next part `/public.php/webdav/` is the endpoint used to access files from the public share directory specified by the share token.
 The share token is given as username and password in the request.
 The last part 'Icons/add.svg' is the path to the requested file starting from the public share directory.
 
