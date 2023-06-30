@@ -83,7 +83,7 @@ export const FileSelector = (props: FileSelectorProps) => {
   }
 
   return (
-    <div className="w-full p-8">
+    <div className="w-full p-8 max-w-2xl overflow-y-auto">
       <div className="flex items-end gap-4">
         <div className="flex-1">
           <SimpleFormInput
