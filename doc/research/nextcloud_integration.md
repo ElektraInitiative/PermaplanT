@@ -16,7 +16,7 @@
 Nextcloud implements the webDAV protocol. This means that we can access files in Nextcloud with any webdav client.
 There are popular file managers like 'Konqueror' from the KDE team and 'GNOME Files' from the GNOME team which implement the webDAV protocol.
 However webDAV is not exclusive to file managers. 
-In PermaplanT we use a javascript library named [webdav](https://github.com/perry-mitchell/webdav-client) to access files in Nextcloud. 
+In PermaplanT we use a Javascript library named [webdav](https://github.com/perry-mitchell/webdav-client) to access files in Nextcloud. 
 For files available on public shares we send the requests directly with axios.
 
 Public shares are directories where a public link is created.
