@@ -48,7 +48,7 @@ The next part `/public.php/webdav/` is the endpoint used to access files from th
 The share token is given as username and password in the request.
 The last part 'Icons/add.svg' is the path to the requested file starting from the public share directory.
 
-When we want to fetch 'add.svg' following request is used:
+When we want to fetch `add.svg`, we use the following request:
 ```bash
 curl -X GET -O -u 2arzyJZYj2oNnHX:2arzyJZYj2oNnHX https://cloud.permaplant.net/public.php/webdav/Icons/add.svg
 ```
