@@ -22,7 +22,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- DEV: Add PR templates.
 
 ## 0.2.0 - 29.06.2023
 
