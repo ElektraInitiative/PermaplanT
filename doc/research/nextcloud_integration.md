@@ -90,7 +90,8 @@ PermaplanT/
 
 When a map is shared between different users the directory also has to be shared and placed within this structure.
 Therefore the map directories must have a globally unique name.
-The name of each map directory is the same as the name of the map in the PermaplanT database. This is possible because the name in the database is unique.
+The name of each map directory is the same as the name of the map in the PermaplanT database.
+This is possible because the name in the database is unique.
 
 All public directories can be placed anywhere as they are identified by the public share token.
 They are not visible to all of the users in Nextcloud, so they are not included in the directory structure above.
