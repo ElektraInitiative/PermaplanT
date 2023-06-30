@@ -169,7 +169,8 @@ Will be implemented in #475.
 > "CORS is an HTTP-header based mechanism that allows a server to indicate any origins (domain, scheme, or port) other than its own from which a browser should permit loading resources."
 -- [Mozilla MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 
-Nextcloud offers no options to change the CORS configuration. This means that all requests coming from a different origin than the one Nextcloud is hosted on are blocked.
+Nextcloud offers no options to change the CORS configuration.
+This means that all requests coming from a different origin than the one Nextcloud is hosted on are blocked.
 
 The PermaplanT production environment has following structure:
 - Frontend: "https://www.permaplant.net".
