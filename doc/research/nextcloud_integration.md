@@ -20,7 +20,8 @@ In PermaplanT we use a Javascript library named [webdav](https://github.com/perr
 For files available on public shares we send the requests directly with axios.
 
 Public shares are directories where a public link is created.
-The last part of the link is the share token. E.g. For the URL 'https://cloud.permaplant.net/s/2arzyJZYj2oNnHX' the share token is '2arzyJZYj2oNnHX'.
+The last part of the link is the share token.
+E.g. for the URL 'https://cloud.permaplant.net/s/2arzyJZYj2oNnHX' the share token is '2arzyJZYj2oNnHX'.
 This share token can be used as username and password to access files from the directory.
 Files at the top level as well as files in subdirectories can be accessed using the share token.
 E.g. when following directory structure is given:
