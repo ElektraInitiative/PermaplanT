@@ -9,7 +9,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 ## 0.2.1 - UNRELEASED
 
 - Test strategy written _(4ydan)_
-- _()_
+- integrated FileSelector in BaseLayer _(Samuel)_
+- introduced file selection components to select and upload Nextcloud files _(Samuel)_
 - _()_
 - _()_
 - _()_
