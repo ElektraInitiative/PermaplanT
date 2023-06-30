@@ -1,10 +1,9 @@
-import SimpleButton from "@/components/Button/SimpleButton";
 import SimpleFormInput from "@/components/Form/SimpleFormInput";
 import { useNextcloudWebDavClient } from "@/config/nextcloud_client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Readable } from "stream";
-import { BufferLike, FileStat, ResponseDataDetailed, WebDAVClient } from "webdav";
+import { FileStat, WebDAVClient } from "webdav";
+import { UploadFile } from "./UploadFile";
 
 type FileSelectorProps = {
   /** path to the directory starting from the users root */
@@ -27,11 +26,15 @@ const sortByNameDsc = (a: FileStat, b: FileStat) => {
 }
 
 const sortByDateDsc = (a: FileStat, b: FileStat) => {
-  return a.lastmod < b.lastmod ? -1 : b.lastmod < a.lastmod ? 1 : 0
+  const aDate = new Date(a.lastmod)
+  const bDate = new Date(b.lastmod)
+  return aDate < bDate ? -1 : bDate < aDate ? 1 : 0
 }
 
 const sortByDateAsc = (a: FileStat, b: FileStat) => {
-  return a.lastmod > b.lastmod ? -1 : b.lastmod > a.lastmod ? 1 : 0
+  const aDate = new Date(a.lastmod)
+  const bDate = new Date(b.lastmod)
+  return aDate > bDate ? -1 : bDate > aDate ? 1 : 0
 }
 
 interface SortMethods {
@@ -57,7 +60,7 @@ export const FileSelector = (props: FileSelectorProps) => {
   const [sortAttribute, setSortAttribute] = useState<"name" | "date">("name")
   const [sortOrder, setSortOrder] = useState<"asc" | "dsc">("asc")
 
-  const { data } = useQuery(['files', path], {
+  const { data, refetch } = useQuery(['files', path], {
     queryFn: () => (webdav as WebDAVClient).getDirectoryContents('/remote.php/webdav/' + path),
     refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,
@@ -65,6 +68,9 @@ export const FileSelector = (props: FileSelectorProps) => {
 
   return <div className="w-full p-8">
     <SimpleFormInput id="FileInput" labelText="search for a file in this directory" onChange={(e) => setSearchTerm(e.target.value)} />
+    <UploadFile path={path} onSuccess={() => {
+      refetch()
+    }}/>
     <ul className="mt-2">
       <li
         className="cursor-pointer flex items-center justify-between gap-4 font-bold mb-2"

@@ -1,14 +1,23 @@
 import { getAuthInfo } from './features/auth';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { QueryCache, QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { AuthProvider } from 'react-oidc-context';
 import { BrowserRouter } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface ProviderProps {
   children: ReactNode;
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error, query) => {
+      if (query.meta?.errorMessage && typeof query.meta.errorMessage === "string") {
+        toast.error(query.meta.errorMessage)
+      }
+    },
+  }),
+})
 
 const getOidcConfig = async () => {
   const config = await getAuthInfo();

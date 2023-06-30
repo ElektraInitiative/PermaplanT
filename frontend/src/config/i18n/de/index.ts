@@ -20,6 +20,7 @@ import routes from './routes.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
+import uploadFile from './uploadFile.json'
 
 const de = {
   blog,
@@ -44,6 +45,7 @@ const de = {
   nextcloudIntegration,
   routes,
   overview,
+  uploadFile
 };
 
 export default de;
