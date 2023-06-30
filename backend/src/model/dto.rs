@@ -249,7 +249,7 @@ pub struct NewMapDto {
 
 /// The information for updating a map.
 #[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct UpdateMapDto {
     /// The name of the map.
     pub name: Option<String>,
@@ -277,7 +277,7 @@ pub struct MapSearchParameters {
 
 /// Support struct for transmitting latitude/longitude coordinates.
 #[typeshare]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Coordinates {
     /// Latitude of the point.
     pub latitude: f64,

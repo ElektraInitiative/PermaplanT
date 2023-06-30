@@ -100,7 +100,7 @@ impl Map {
         query.get_result::<Self>(conn).await.map(Into::into)
     }
 
-    /// Updated a map in the database.
+    /// Update a map in the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.

@@ -199,7 +199,7 @@ async fn test_update_fails_for_not_owner() {
         .set_json(map_update)
         .send_request(&app)
         .await;
-    assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
+    assert_eq!(resp.status(), StatusCode::FORBIDDEN);
 }
 
 #[actix_rt::test]

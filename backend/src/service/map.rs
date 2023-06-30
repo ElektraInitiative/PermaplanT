@@ -83,7 +83,7 @@ pub async fn update(
     let map = Map::find_by_id(id, &mut conn).await?;
     if map.owner_id != user_id {
         return Err(ServiceError {
-            status_code: StatusCode::BAD_REQUEST,
+            status_code: StatusCode::FORBIDDEN,
             reason: "No permission to update data".to_owned(),
         });
     }
