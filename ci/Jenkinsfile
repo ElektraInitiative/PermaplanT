@@ -46,11 +46,9 @@ stage('Tests & Build') {
                 checkout scm
 
                 stage('test-and-build-mdbook'){
-                    if (changeset("book.toml") || changeset("doc/")) {
-                        sh "mdbook test"
-                        sh 'mdbook build'
-                        stash includes: 'book/', name: 'mdbook'
-                    }
+                    sh "mdbook test"
+                    sh 'mdbook build'
+                    stash includes: 'book/', name: 'mdbook'
                 }
             }
         }
