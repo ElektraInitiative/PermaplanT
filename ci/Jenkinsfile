@@ -47,8 +47,8 @@ stage('Tests & Build') {
 
                 stage('test-and-build-mdbook'){
                     if (changeset("book.toml") || changeset("doc/")) {
-                        sh "make test-mdbook"
-                        sh 'make build-mdbook'
+                        sh "mdbook test"
+                        sh 'mdbook build'
                         stash includes: 'book/', name: 'mdbook'
                     }
                 }
@@ -112,16 +112,21 @@ stage('Tests & Build') {
                 unstash 'definitions.ts'
 
                 stage('test-frontend'){
-                    sh 'make test-frontend'
+                    dir("frontend") {
+                        sh "npm ci"
+                        sh "npm run format:check"
+                        sh "npm run lint"
+                        sh "npm run test"
+                    }
                 }
 
                 stage('build-frontend'){
-                    sh 'make build-frontend'
+                    sh './ci/build-scripts/build-frontend.sh'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
 
                 stage('build-storybook'){
-                    sh 'make build-storybook'
+                    sh 'cd frontend && npm install && npm run build-storybook'
                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
             }

@@ -66,8 +66,15 @@ stage('Build in Docker'){
                 checkout scm
                 unstash 'definitions.ts'
 
-                sh 'make build-frontend'
-                stash includes: 'frontend/dist/**/*', name: 'frontend'
+                stage('build-frontend'){
+                    sh './ci/build-scripts/build-frontend.sh'
+                    stash includes: 'frontend/dist/**/*', name: 'frontend'
+                }
+
+                stage('build-storybook'){
+                    sh 'cd frontend && npm install && npm run build-storybook'
+                    stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
+                }
             }
         }
     }
