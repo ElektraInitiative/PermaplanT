@@ -122,11 +122,6 @@ stage('Tests & Build') {
                     sh './ci/build-scripts/build-frontend.sh'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
-
-                stage('build-storybook'){
-                    sh 'cd frontend && npm install && npm run build-storybook'
-                    stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
-                }
             }
         }
     }
@@ -153,7 +148,6 @@ stage('Deploy PR') {
             unstash 'frontend'
             unstash 'backend'
             unstash 'mdbook'
-            unstash 'storybook'
 
             echo 'Deploying to PR'
             sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
@@ -184,7 +178,6 @@ if (env.BRANCH_NAME == 'master') {
             unstash 'frontend'
             unstash 'backend'
             unstash 'mdbook'
-            unstash 'storybook'
 
             echo 'Deploying to Dev ...'
             sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
