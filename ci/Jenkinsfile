@@ -123,6 +123,11 @@ stage('Checks & Build') {
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
 
+                stage('build-typedoc'){
+                    sh 'cd frontend && npm generate-api-types && npm run doc'
+                    stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
+                }
+
                 stage('build-storybook'){
                     sh './ci/build-scripts/build-storybook.sh'
                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
@@ -153,6 +158,7 @@ stage('Deploy PR') {
             unstash 'frontend'
             unstash 'backend'
             unstash 'storybook'
+            unstash 'typedoc'
 
             echo 'Deploying to PR'
             sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
@@ -183,6 +189,7 @@ if (env.BRANCH_NAME == 'master') {
             unstash 'frontend'
             unstash 'backend'
             unstash 'storybook'
+            unstash 'typedoc'
 
             echo 'Deploying to Dev ...'
             sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
