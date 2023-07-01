@@ -184,7 +184,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
 
   return (
     <motion.div
-      className="mb-4 flex gap-4 rounded-md bg-neutral-200 py-2 pl-6 pr-4 dark:bg-neutral-200-dark"
+      className="mb-2 flex gap-4 rounded-md bg-neutral-200 py-2 pl-6 pr-4 ring ring-secondary-500 dark:bg-neutral-200-dark"
       initial={{ opacity: 0 }}
       animate={{
         opacity: 100,

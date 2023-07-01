@@ -6,6 +6,13 @@ use uuid::Uuid;
 
 use crate::schema::plantings;
 
+pub struct FindPlantingsParameters {
+    pub plant_id: Option<i32>,
+    pub layer_id: Option<i32>,
+    pub from: NaiveDate,
+    pub to: NaiveDate,
+}
+
 /// The `Planting` entity.
 #[derive(Debug, Clone, Identifiable, Queryable, Insertable)]
 #[diesel(table_name = plantings)]

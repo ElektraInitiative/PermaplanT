@@ -1,6 +1,8 @@
 //! Service layer for plantings.
 
+use actix_http::StatusCode;
 use actix_web::web::Data;
+use chrono::Days;
 use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
@@ -8,7 +10,10 @@ use crate::error::ServiceError;
 use crate::model::dto::plantings::{
     NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
 };
-use crate::model::entity::plantings::Planting;
+use crate::model::dto::TimelinePage;
+use crate::model::entity::plantings::{FindPlantingsParameters, Planting};
+
+const TIME_LINE_LOADING_OFFSET: u64 = 356;
 
 /// Search plantings from the database.
 ///
@@ -17,10 +22,38 @@ use crate::model::entity::plantings::Planting;
 pub async fn find(
     search_parameters: PlantingSearchParameters,
     app_data: &Data<AppDataInner>,
-) -> Result<Vec<PlantingDto>, ServiceError> {
+) -> Result<TimelinePage<PlantingDto>, ServiceError> {
     let mut conn = app_data.pool.get().await?;
+
+    let from = search_parameters
+        .relative_to_date
+        .checked_sub_days(Days::new(TIME_LINE_LOADING_OFFSET))
+        .ok_or(ServiceError::new(
+            StatusCode::BAD_REQUEST,
+            "Could not add days to relative_to_date".into(),
+        ))?;
+
+    let to = search_parameters
+        .relative_to_date
+        .checked_add_days(Days::new(TIME_LINE_LOADING_OFFSET))
+        .ok_or(ServiceError::new(
+            StatusCode::BAD_REQUEST,
+            "Could not add days to relative_to_date".into(),
+        ))?;
+
+    let search_parameters = FindPlantingsParameters {
+        layer_id: search_parameters.layer_id,
+        plant_id: search_parameters.plant_id,
+        from,
+        to,
+    };
     let result = Planting::find(search_parameters, &mut conn).await?;
-    Ok(result)
+
+    Ok(TimelinePage {
+        results: result,
+        from,
+        to,
+    })
 }
 
 /// Create a new planting in the database.

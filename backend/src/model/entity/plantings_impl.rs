@@ -1,17 +1,16 @@
 //! Contains the implementation of [`Planting`].
 
-use chrono::Days;
 use diesel::pg::Pg;
 use diesel::{debug_query, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 use uuid::Uuid;
 
-use crate::model::dto::plantings::{
-    NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
-};
+use crate::model::dto::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
 use crate::model::entity::plantings::{Planting, UpdatePlanting};
 use crate::schema::plantings::{self, all_columns, layer_id, plant_id};
+
+use super::plantings::FindPlantingsParameters;
 
 impl Planting {
     /// Get all plantings associated with the query.
@@ -19,7 +18,7 @@ impl Planting {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find(
-        search_parameters: PlantingSearchParameters,
+        search_parameters: FindPlantingsParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantingDto>> {
         let mut query = plantings::table.select(all_columns).into_boxed();
@@ -31,21 +30,19 @@ impl Planting {
             query = query.filter(layer_id.eq(id));
         }
 
-        if let Some(relative_to_date) = search_parameters.relative_to_date {
-            let plus_offset_days = relative_to_date.checked_add_days(Days::new(356));
-            let minus_offset_days = relative_to_date.checked_sub_days(Days::new(356));
+        let from = search_parameters.from;
+        let to = search_parameters.to;
 
-            query = query.filter(
-                plantings::add_date
-                    .is_null()
-                    .or(plantings::add_date.lt(plus_offset_days))
-                    .and(
-                        plantings::remove_date
-                            .is_null()
-                            .or(plantings::remove_date.gt(minus_offset_days)),
-                    ),
-            );
-        }
+        query = query.filter(
+            plantings::add_date
+                .is_null()
+                .or(plantings::add_date.lt(to))
+                .and(
+                    plantings::remove_date
+                        .is_null()
+                        .or(plantings::remove_date.gt(from)),
+                ),
+        );
 
         debug!("{}", debug_query::<Pg, _>(&query));
 

@@ -4,4 +4,5 @@
 
 export const QUERY_KEYS = {
   PLANTINGS: 'plantings',
+  LAYERS: 'layers',
 };

@@ -98,6 +98,7 @@ export interface TrackedMapSlice {
    * Initializes the plant layer.
    */
   initPlantLayer: (plantLayer: PlantingDto[]) => void;
+  initLayerId: (layer: LayerType, layerId: number) => void;
 }
 
 /**
@@ -121,6 +122,7 @@ export interface UntrackedMapSlice {
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
   updateTimelineDate: (date: string) => void;
+  setTimelineBounds: (from: string, to: string) => void;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
@@ -130,10 +132,12 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
     (acc, layerName) => ({
       ...acc,
       [layerName]: {
+        id: -1,
         index: layerName,
         objects: [],
       },
       [LayerType.Base]: {
+        id: -1,
         index: LayerType.Base,
         objects: [],
         scale: 100,
@@ -148,6 +152,10 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
   timelineDate: convertToDateString(new Date()),
+  timelineBounds: {
+    from: convertToDateString(new Date()),
+    to: convertToDateString(new Date()),
+  },
   selectedLayer: {
     id: -1,
     is_alternative: false,
@@ -195,6 +203,7 @@ export type ObjectState = {
  */
 export type TrackedLayerState = {
   index: LayerType;
+  id: number;
   /**
    * The state of the objects on the layer.
    */
@@ -222,6 +231,7 @@ export type TrackedLayers = {
 
 export type TrackedPlantLayerState = {
   index: LayerType.Plants;
+  id: number;
 
   /**
    * The objects visible relative to the current selected date.
@@ -235,6 +245,7 @@ export type TrackedPlantLayerState = {
 };
 
 export type TrackedBaseLayerState = {
+  id: number;
   rotation: number;
   scale: number;
   nextcloudImagePath: string;
@@ -274,6 +285,10 @@ export type TrackedMapState = {
 export type UntrackedMapState = {
   mapId: number;
   timelineDate: string;
+  timelineBounds: {
+    from: string;
+    to: string;
+  };
   selectedLayer: LayerDto;
   layers: UntrackedLayers;
 };

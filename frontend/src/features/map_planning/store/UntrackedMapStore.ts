@@ -1,3 +1,5 @@
+import { getPlantings } from '../api/getPlantings';
+import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import { TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from './MapStoreTypes';
 import Konva from 'konva';
@@ -104,13 +106,56 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-  updateTimelineDate(date) {
+  setTimelineBounds(from: string, to: string) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        timelineBounds: {
+          from: from,
+          to: to,
+        },
+      },
+    }));
+  },
+  async updateTimelineDate(date) {
+    const bounds = get().untrackedState.timelineBounds;
+    const from = convertToDate(bounds.from);
+    const to = convertToDate(bounds.to);
+    const dateAsDate = convertToDate(date);
+
+    if (dateAsDate < from || dateAsDate > to) {
+      const plantings = await getPlantings(get().untrackedState.mapId, {
+        layer_id: get().trackedState.layers.plants.id,
+        relative_to_date: date,
+      });
+
+      set((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          timelineBounds: {
+            from: plantings.from,
+            to: plantings.to,
+          },
+        },
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            plants: {
+              ...state.trackedState.layers.plants,
+              loadedObjects: plantings.results,
+            },
+          },
+        },
+      }));
+    }
+
     const plantsVisibleRelativeToTimelineDate = filterVisibleObjects(
       get().trackedState.layers.plants.loadedObjects,
       date,
     );
-
-    // TODO: check if outside a range, to determine if re-fetching is necessary.
 
     set((state) => ({
       ...state,

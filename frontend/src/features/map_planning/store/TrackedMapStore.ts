@@ -56,6 +56,22 @@ export const createTrackedMapSlice: StateCreator<
       }));
     },
 
+    initLayerId(layer, layerId) {
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            [layer]: {
+              ...state.trackedState.layers[layer],
+              id: layerId,
+            },
+          },
+        },
+      }));
+    },
+
     __resetStore() {
       set((state) => ({
         ...state,

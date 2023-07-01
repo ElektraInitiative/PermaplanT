@@ -26,7 +26,7 @@ function getDefaultLayer(layers: LayerDto[], layerType: LayerType) {
  */
 type UseLayerParams = {
   mapId: number;
-  layerId: number | undefined;
+  layerId: number;
   enabled: boolean;
 };
 
@@ -55,7 +55,8 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
   useEffect(() => {
     if (!query?.data) return;
 
-    useMapStore.getState().initPlantLayer(query.data);
+    useMapStore.getState().setTimelineBounds(query.data.from, query.data.to);
+    useMapStore.getState().initPlantLayer(query.data.results);
   }, [mapId, query?.data]);
 
   return query;
@@ -74,13 +75,24 @@ function useInitializeMap() {
     toast.error(t('layers:error_fetching_layers'), { autoClose: false });
   }
 
+  useEffect(() => {
+    if (!layers) return;
+
+    const defaultLayers = layers.filter((l) => !l.is_alternative);
+    for (const layer of defaultLayers) {
+      useMapStore.getState().initLayerId(layer.type_, layer.id);
+    }
+  }, [layers]);
+
   const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
   const baseLayer = getDefaultLayer(layers ?? [], LayerType.Base);
 
   const { isLoading: arePlantingsLoading } = usePlantLayer({
     mapId,
-    layerId: plantLayer?.id,
-    enabled: !!plantLayer?.id,
+    // The enabled flag prevents the query from being executed with an invalid layer id.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+    layerId: plantLayer?.id!,
+    enabled: Boolean(plantLayer),
   });
 
   useEffect(() => {
