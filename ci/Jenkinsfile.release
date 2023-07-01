@@ -72,7 +72,7 @@ stage('Build in Docker'){
                 }
 
                 stage('build-typedoc'){
-                    sh 'cd frontend && npm generate-api-types && npm run doc'
+                    sh 'cd frontend && npm run generate-api-types && npm run doc'
                     stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
                 }
 
