@@ -23,6 +23,11 @@ try {
                         println("  - ${entry.author} made the following change:")
                         println("    - ${entry.msg}")
                     }
+                    for (entry in changeSet) {
+                        def filePath = entry.path
+                        def changedDirectory = filePath.substring(0, filePath.lastIndexOf('/'))
+                        println("Changed directory: $changedDirectory")
+                    }
                 }
             }
             throw new Exception('TEST EMAIL SENDING')
