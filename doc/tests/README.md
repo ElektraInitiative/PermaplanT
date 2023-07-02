@@ -33,6 +33,7 @@ Manual testing will be conducted for end-to-end functionality and overall user e
 - Regression testing
 - User acceptance testing
 - Compatibility testing on different platforms, browsers, and devices
+- Static Analysis
 
 ## Testing Types and Levels
 
@@ -103,6 +104,10 @@ This will include testing of all features, navigation, and error handling.
 ### 5. Security Testing
 
 - TBD by @temmey
+
+### 6. Static Analysis
+
+- The mdbooks links are checked with every push to PR.
 
 ## Test Environment and Infrastructure
 
