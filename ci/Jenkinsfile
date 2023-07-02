@@ -9,7 +9,7 @@ def wait_for_db() {
     }
 }
 
-timeout(time: 1, unit: 'MINUTES') {
+timeout(time: 2, unit: 'HOURS') {
     disableConcurrentBuilds(abortPrevious: true)
     // REQUIRED for Deployment
     // see Jenkinsfile.release
