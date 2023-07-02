@@ -23,6 +23,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: Added mdbook build to pipeline _(4ydan)_
 - _()_
 - DEV: Issue forms added. #537 _(4ydan)_
+- CI: Add two hour timeout ##553 _(4ydan)_
 
 ## 0.2.0 - 29.06.2023
 
