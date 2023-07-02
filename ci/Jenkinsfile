@@ -1,6 +1,5 @@
-options {
-    timeout(time: 2, unit: 'HOURS')
-    disableConcurrentBuilds(abortPrevious: env.BRANCH_NAME != 'master')
+if (env.BRANCH_NAME != 'master') {
+    disableConcurrentBuilds()
 }
 
 def node_info() {
