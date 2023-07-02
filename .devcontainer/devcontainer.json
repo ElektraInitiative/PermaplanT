@@ -14,10 +14,7 @@
       "package": "typedoc"
     },
     "ghcr.io/devcontainers-contrib/features/typescript:2": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/rust:1": {
-      "version": "1.67.1"
-    }
+    "ghcr.io/devcontainers/features/github-cli:1": {}
   },
   "customizations": {
     "vscode": {

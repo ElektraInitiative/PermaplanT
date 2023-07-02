@@ -1,9 +1,6 @@
-# This Dockerfile is used inside the docker-compose.yml as development environment
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-# Include lld linker to improve build times either by using environment variable
-# RUSTFLAGS="-C link-arg=-fuse-ld=lld" or with Cargo's configuration file (i.e see .cargo/config.toml).
 ENV RUSTFLAGS="-C link-arg=-fuse-ld=lld"
 
 RUN apt-get update && \
@@ -17,6 +14,8 @@ ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update \
     && apt-get -y install --no-install-recommends \
+    sudo \
+    curl \
     git \
     make \
     strace \
@@ -26,8 +25,16 @@ RUN apt-get update \
     libpq-dev \
     libssl-dev \
     pkg-config \
-    postgresql-client \
-    && apt-get autoremove -y \
+    postgresql-client
+
+RUN curl --proto '=https' --tlsv1.2 -sSf -y https://sh.rustup.rs | sh
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN cargo install diesel_cli@2.0.1 --no-default-features --features postgres && cargo install typeshare-cli
+
+RUN apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
