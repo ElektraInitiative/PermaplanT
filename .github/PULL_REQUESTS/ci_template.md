@@ -8,11 +8,6 @@ Check relevant points but **please do not remove entries**.
 
 ## Checklist
 
-<!--
-For documentation fixes, spell checking, and similar none of these points below need to be checked.
-Otherwise please check these points when getting a PR done:
--->
-
 - [ ] References to issues, e.g. `close #X`, are in the commit messages.
 - [ ] I fully described what my PR does in the documentation
       (not in the PR description)

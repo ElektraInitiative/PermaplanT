@@ -8,11 +8,6 @@ Check relevant points but **please do not remove entries**.
 
 ## Checklist
 
-<!--
-For documentation fixes, spell checking, and similar none of these points below need to be checked.
-Otherwise please check these points when getting a PR done:
--->
-
 - [ ] The documentation is conforming to [our Guidelines](/doc/guidelines/documentation)
 - [ ] I fixed all affected documentation
 
