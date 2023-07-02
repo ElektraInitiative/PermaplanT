@@ -15,7 +15,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- CI: Add mdbook link checker to pipeline # _(4ydan)_
+- CI: Add mdbook link checker to pipeline #555 _(4ydan)_
 - _()_
 - _()_
 - _()_

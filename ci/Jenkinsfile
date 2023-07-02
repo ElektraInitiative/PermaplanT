@@ -36,17 +36,8 @@ stage('Build Schema'){
 // NOT REQUIRED for Deployment
 stage('Tests & Build') {
     def parallel_checks = [:]
-    def changes = checkout([$class: 'GitSCM']).pollingBaseline()
-    def docFolderChanged = false
 
-    for (change in changes) {
-        echo "Change: ${change.path}"
-        if (change.path.startsWith('/doc')) {
-            docFolderChanged = true
-            break
-        }
-    }
-    if (docFolderChanged) {
+    parallel_checks["test-and-build-mdbook"] = {
         node('docker') {
             checkout scm
             def mdbook_image = docker.build("michaelfbryan/mdbook-docker-image:latest")
