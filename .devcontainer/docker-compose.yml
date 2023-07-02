@@ -1,38 +1,51 @@
-version: '3.8'
-
-volumes:
-  postgres-data:
-
+version: "3.8"
 
 services:
   app:
     build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
+      context: .
+      dockerfile: Dockerfile
     env_file:
-      # Ensure that the variables in .env match the same variables in devcontainer.json
       - .env
-
     volumes:
       - ../..:/workspaces:cached
-
-    # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
-
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    ports:
+      - "8080:8080"
+    networks:
+      - permaplant-dev
 
   db:
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile.db
+    image: postgis/postgis:13-3.1
     restart: unless-stopped
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgis-data-dev:/var/lib/postgresql/data
     env_file:
-      # Ensure that the variables in .env match the same variables in devcontainer.json
-      - .env
-    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+      - .env.backend
+    networks:
+      - permaplant-dev
+
+  pgadmin:
+    build:
+      context: .
+      dockerfile: Dockerfile.pg
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    volumes:
+      - pgadmin-data-dev:/var/lib/pgadmin
+    env_file:
+      - .env.backend
+    networks:
+      - permaplant-dev
+    ports:
+      - "5050:80"
+
+volumes:
+  pgadmin-data-dev:
+    external: false
+  postgis-data-dev:
+    external: false
+
+networks:
+  permaplant-dev:
+    external: false
