@@ -52,18 +52,6 @@ and one docker network:
 
 - permaplant-dev
 
-Afterwards you can start the backend on http://localhost:8080 with
-
-```
-make run-backend
-```
-
-and the frontend on http://localhost:8080 with
-
-```
-make run-frontend
-```
-
 ## A note on filesystem performance
 
 Due to limitations in how Docker shares files between the Docker host and a container, it's also recommended that developers [clone PermaplanT source code into a container volume](https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-clone-repository-in-container-volume).
