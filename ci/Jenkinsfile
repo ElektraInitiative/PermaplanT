@@ -124,7 +124,7 @@ stage('Tests & Build') {
                 }
 
                 stage('build-typedoc'){
-                    sh 'cd frontend && npm run generate-api-types && npm run doc'
+                    sh 'cd frontend && npm run doc'
                     stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
                 }
 
