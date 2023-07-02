@@ -3,3 +3,5 @@
 **/dist
 **/*.css
 src/bindings/definitions.ts
+src/generated/docs
+storybook-static/
