@@ -9,9 +9,9 @@ import { createPortal } from 'react-dom';
 import { Layer } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
-import { ImageInfo } from '../../store/MapStoreTypes';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { PhotoElement } from './components/PhotoElement';
+import { FileStat } from 'webdav';
 
 function usePhotoLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
@@ -38,7 +38,7 @@ function usePhotoLayerListeners(listening: boolean) {
       executeAction(
         new CreatePhotoAction({
           id: uuid.v4(),
-          path: selectedImageInfo.path,
+          path: selectedImageInfo.filename,
           layerId: selectedLayer.id,
           // consider the offset of the stage and size of the element
           x: position.x - 50,
@@ -171,7 +171,7 @@ function PhotoLayer(props: PhotoLayerProps) {
   );
 }
 
-function SelectedImageInfo({ imageInfo }: { imageInfo: ImageInfo }) {
+function SelectedImageInfo({ imageInfo }: { imageInfo: FileStat }) {
   const selectImageInfo = useMapStore((state) => state.selectImageInfo);
 
   return (
@@ -189,7 +189,7 @@ function SelectedImageInfo({ imageInfo }: { imageInfo: ImageInfo }) {
     >
       <div className="flex flex-col items-center justify-center">
         <span>
-          adding photo {imageInfo.path}
+          adding photo {imageInfo.basename}
         </span>
       </div>
       <div className="flex items-center justify-center">

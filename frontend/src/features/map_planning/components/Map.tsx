@@ -12,6 +12,7 @@ import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import { useTranslation } from 'react-i18next';
+import { PhotoLayerRightToolbar } from '../layers/photo/components/PhotoLayerRightToolbar';
 
 export type MapProps = {
   layers: LayerDto[];
@@ -33,6 +34,8 @@ export const Map = ({ layers }: MapProps) => {
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
 
   const { t } = useTranslation(['undoRedo']);
+
+  console.log(layers)
 
   const getToolbarContent = (layerType: LayerType) => {
     const content = {
@@ -59,7 +62,7 @@ export const Map = ({ layers }: MapProps) => {
       [LayerType.Winds]: { right: <div></div>, left: <div></div> },
       [LayerType.Zones]: { right: <div></div>, left: <div></div> },
       [LayerType.Todo]: { right: <div></div>, left: <div></div> },
-      [LayerType.Photo]: { right: <div></div>, left: <div></div> },
+      [LayerType.Photo]: { right: <PhotoLayerRightToolbar />, left: <div></div> },
       [LayerType.Watering]: { right: <div></div>, left: <div></div> },
     };
 

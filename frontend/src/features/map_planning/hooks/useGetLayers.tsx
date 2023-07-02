@@ -12,6 +12,6 @@ export function useGetLayers(mapId: number) {
     queryFn: () => getLayers(mapId),
     staleTime: TEN_MINUTES,
   });
-
+  console.log(data)
   return data;
 }

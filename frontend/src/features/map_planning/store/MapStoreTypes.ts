@@ -1,6 +1,7 @@
 import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
+import { FileStat } from 'webdav';
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -113,7 +114,7 @@ export interface UntrackedMapSlice {
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
   selectPhoto: (photo: PhotoDto | null) => void;
-  selectImageInfo: (imageInfo: ImageInfo | null) => void;
+  selectImageInfo: (imageInfo: FileStat | null) => void;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
@@ -242,12 +243,8 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
 
 export type UntrackedPhotoLayerState = UntrackedLayerState & {
   selectedPhoto: PhotoDto | null;
-  selectedImageInfo: ImageInfo | null;
+  selectedImageInfo: FileStat | null;
 };
-
-export type ImageInfo = {
-  path: string
-}
 
 //TODO: create the dtos in the backend
 /**
