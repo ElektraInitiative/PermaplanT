@@ -1,7 +1,7 @@
-import { getPlantings } from '../api/getPlantings';
 import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import { TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from './MapStoreTypes';
+import { QUERY_KEYS } from '@/config/react_query';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
@@ -118,38 +118,23 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-  async updateTimelineDate(date) {
+  async updateTimelineDate(date, client) {
     const bounds = get().untrackedState.timelineBounds;
     const from = convertToDate(bounds.from);
     const to = convertToDate(bounds.to);
     const dateAsDate = convertToDate(date);
 
-    if (dateAsDate < from || dateAsDate > to) {
-      const plantings = await getPlantings(get().untrackedState.mapId, {
-        layer_id: get().trackedState.layers.plants.id,
-        relative_to_date: date,
-      });
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        timelineDate: date,
+      },
+    }));
 
-      set((state) => ({
-        ...state,
-        untrackedState: {
-          ...state.untrackedState,
-          timelineBounds: {
-            from: plantings.from,
-            to: plantings.to,
-          },
-        },
-        trackedState: {
-          ...state.trackedState,
-          layers: {
-            ...state.trackedState.layers,
-            plants: {
-              ...state.trackedState.layers.plants,
-              loadedObjects: plantings.results,
-            },
-          },
-        },
-      }));
+    if (dateAsDate < from || dateAsDate > to) {
+      client.invalidateQueries([QUERY_KEYS.PLANTINGS]);
+      return;
     }
 
     const plantsVisibleRelativeToTimelineDate = filterVisibleObjects(
@@ -159,10 +144,6 @@ export const createUntrackedMapSlice: StateCreator<
 
     set((state) => ({
       ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        timelineDate: date,
-      },
       trackedState: {
         ...state.trackedState,
         layers: {

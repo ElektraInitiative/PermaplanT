@@ -4,7 +4,6 @@ import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
-import { convertToDateString } from '../utils/date-utils';
 import { LayerType, LayerDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
@@ -39,11 +38,11 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
 
   // Do not use the store value `timelineDate` here.
   // We want to manually fetch the plantings for the current date.
-  const relativeToDate = convertToDateString(new Date());
+  const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
 
   const query = useQuery({
-    queryKey: [QUERY_KEYS.PLANTINGS, mapId, { layerId, relativeToDate }],
-    queryFn: () => getPlantings(mapId, { layer_id: layerId, relative_to_date: relativeToDate }),
+    queryKey: [QUERY_KEYS.PLANTINGS, mapId, { layerId, timelineDate }],
+    queryFn: () => getPlantings(mapId, { layer_id: layerId, relative_to_date: timelineDate }),
     enabled,
   });
 
@@ -135,14 +134,16 @@ function useMapUpdates() {
   const { user } = useSafeAuth();
   const evRef = useRef<EventSource>();
 
+  const userId = user?.profile.sub;
+
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       return;
     }
 
     const connectionQuery = {
       map_id: mapId,
-      user_id: user.profile.sub,
+      user_id: userId,
     };
 
     const http = createAPI();
@@ -153,12 +154,12 @@ function useMapUpdates() {
 
     // TODO: implement authentication
     evRef.current = new EventSource(uri);
-    evRef.current.onmessage = (ev) => handleRemoteAction(ev, user);
+    evRef.current.onmessage = (ev) => handleRemoteAction(ev, userId);
 
     return () => {
       evRef.current?.close();
     };
-  }, [user, mapId]);
+  }, [userId, mapId]);
 }
 
 /**
