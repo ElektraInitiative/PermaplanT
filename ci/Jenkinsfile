@@ -13,181 +13,182 @@ def wait_for_db() {
     }
 }
 
-// REQUIRED for Deployment
-// see Jenkinsfile.release
-stage('Build Schema'){
-    node('docker') {
-        node_info()
-
-        checkout scm
-        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
-
-        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                checkout scm
-
-                wait_for_db()
-
-                sh './ci/build-scripts/build-schema.sh'
-
-                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
-            }
-        }
-    }
-}
-
-// NOT REQUIRED for Deployment
-stage('Tests & Build') {
-    def parallel_checks = [:]
-
-    parallel_checks["test-and-build-mdbook"] = {
-        node('docker') {
-            checkout scm
-            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
-
-            mdbook_image.inside {
-                checkout scm
-
-                stage('test-and-build-mdbook'){
-                    sh "mdbook test"
-                    sh 'mdbook build'
-                    stash includes: 'book/', name: 'mdbook'
-                }
-            }
-        }
-    }
-
-    parallel_checks["test-and-build-backend"] = {
+timeout(time: 2, unit: 'HOURS') {
+    // REQUIRED for Deployment
+    // see Jenkinsfile.release
+    stage('Build Schema'){
         node('docker') {
             node_info()
+
             checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
 
                     wait_for_db()
 
-                    stage('test-backend'){
-                        withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-                            // Workaround: we can't stop rustfmt from linting the generated schema.rs
-                            dir("backend") {
-                                sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
-                                sh "cargo fmt --check"
-                            }
-                            // End of Workaround
+                    sh './ci/build-scripts/build-schema.sh'
 
-                            // generate schema (overwriting src/schema.rs)
-                            sh './ci/build-scripts/build-schema.sh'
+                    stash includes: 'backend/src/schema.rs', name: 'schema.rs'
+                    stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
+                }
+            }
+        }
+    }
 
-                            dir("backend") {
-                                // continue checking
-                                withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']) {
-                                sh "cargo check"
-                                sh "cargo clippy"
-                                sh "cargo doc"
-                                sh "cargo test"
+    // NOT REQUIRED for Deployment
+    stage('Tests & Build') {
+        def parallel_checks = [:]
+
+        parallel_checks["test-and-build-mdbook"] = {
+            node('docker') {
+                checkout scm
+                def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+
+                mdbook_image.inside {
+                    checkout scm
+
+                    stage('test-and-build-mdbook'){
+                        sh "mdbook test"
+                        sh 'mdbook build'
+                        stash includes: 'book/', name: 'mdbook'
+                    }
+                }
+            }
+        }
+
+        parallel_checks["test-and-build-backend"] = {
+            node('docker') {
+                node_info()
+                checkout scm
+                def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+                docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                    rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                        checkout scm
+
+                        wait_for_db()
+
+                        stage('test-backend'){
+                            withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
+                                // Workaround: we can't stop rustfmt from linting the generated schema.rs
+                                dir("backend") {
+                                    sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
+                                    sh "cargo fmt --check"
+                                }
+                                // End of Workaround
+
+                                // generate schema (overwriting src/schema.rs)
+                                sh './ci/build-scripts/build-schema.sh'
+
+                                dir("backend") {
+                                    // continue checking
+                                    withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']) {
+                                    sh "cargo check"
+                                    sh "cargo clippy"
+                                    sh "cargo doc"
+                                    sh "cargo test"
+                                    }
                                 }
                             }
                         }
+
+                        stage('build-backend'){
+                            sh './ci/build-scripts/build-backend.sh'
+
+                            stash includes: 'backend/target/release/backend', name: 'backend'
+                        }
+
                     }
-
-                    stage('build-backend'){
-                        sh './ci/build-scripts/build-backend.sh'
-
-                        stash includes: 'backend/target/release/backend', name: 'backend'
-                    }
-
                 }
             }
         }
-    }
 
-    parallel_checks["test-and-build-frontend"] = {
-        node('docker') {
-            node_info()
-            checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
-            node_image.inside {
+        parallel_checks["test-and-build-frontend"] = {
+            node('docker') {
+                node_info()
                 checkout scm
-                unstash 'definitions.ts'
+                def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+                node_image.inside {
+                    checkout scm
+                    unstash 'definitions.ts'
 
-                stage('test-frontend'){
-                    dir("frontend") {
-                        sh "npm ci"
-                        sh "npm run format:check"
-                        sh "npm run lint"
-                        sh "npm run test"
+                    stage('test-frontend'){
+                        dir("frontend") {
+                            sh "npm ci"
+                            sh "npm run format:check"
+                            sh "npm run lint"
+                            sh "npm run test"
+                        }
+                    }
+
+                    stage('build-frontend'){
+                        sh './ci/build-scripts/build-frontend.sh'
+                        stash includes: 'frontend/dist/**/*', name: 'frontend'
                     }
                 }
-
-                stage('build-frontend'){
-                    sh './ci/build-scripts/build-frontend.sh'
-                    stash includes: 'frontend/dist/**/*', name: 'frontend'
-                }
             }
         }
+
+        parallel(parallel_checks)
     }
 
-    parallel(parallel_checks)
-}
-
-stage('Deploy PR') {
-    node('permaplant && pr') {
-        node_info()
-
-        checkout scm
-
-        echo "Workspace is '${WORKSPACE}'"
-        echo 'Ensure pr service is stopped'
-        sh 'sudo /usr/sbin/service permaplant-pr stop'
-
-        withEnv(['DATABASE_URL=postgres://cidb:cidb@127.0.0.1/cidb']) {
-            echo 'Resetting the CI DB ...'
-            sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
-
-            echo "Unstash Artifacts"
-            unstash 'schema.rs'
-            unstash 'frontend'
-            unstash 'backend'
-            unstash 'mdbook'
-
-            echo 'Deploying to PR'
-            sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
-
-            echo 'Loading Data to PR'
-            dir('scraper') {
-                sh 'npm ci'
-                sh 'mkdir ./data/'
-                sh 'cp /nextcloud/mergedDatasets.csv ./data/'
-                sh 'npm run insert'
-                sh 'rm -rf ./data/'
-                sh 'rm -rf ./node_modules/'
-            }
-        }
-    }
-}
-
-// Deploying to Dev only happens on branch "master"
-if (env.BRANCH_NAME == 'master') {
-    stage('Deploy Dev') {
-        node('permaplant && dev') {
+    stage('Deploy PR') {
+        node('permaplant && pr') {
             node_info()
 
             checkout scm
 
-            echo "Unstash Artifacts"
-            unstash 'schema.rs'
-            unstash 'frontend'
-            unstash 'backend'
-            unstash 'mdbook'
+            echo "Workspace is '${WORKSPACE}'"
+            echo 'Ensure pr service is stopped'
+            sh 'sudo /usr/sbin/service permaplant-pr stop'
 
-            echo 'Deploying to Dev ...'
-            sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+            withEnv(['DATABASE_URL=postgres://cidb:cidb@127.0.0.1/cidb']) {
+                echo 'Resetting the CI DB ...'
+                sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
+
+                echo "Unstash Artifacts"
+                unstash 'schema.rs'
+                unstash 'frontend'
+                unstash 'backend'
+                unstash 'mdbook'
+
+                echo 'Deploying to PR'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
+
+                echo 'Loading Data to PR'
+                dir('scraper') {
+                    sh 'npm ci'
+                    sh 'mkdir ./data/'
+                    sh 'cp /nextcloud/mergedDatasets.csv ./data/'
+                    sh 'npm run insert'
+                    sh 'rm -rf ./data/'
+                    sh 'rm -rf ./node_modules/'
+                }
+            }
+        }
+    }
+
+    // Deploying to Dev only happens on branch "master"
+    if (env.BRANCH_NAME == 'master') {
+        stage('Deploy Dev') {
+            node('permaplant && dev') {
+                node_info()
+
+                checkout scm
+
+                echo "Unstash Artifacts"
+                unstash 'schema.rs'
+                unstash 'frontend'
+                unstash 'backend'
+                unstash 'mdbook'
+
+                echo 'Deploying to Dev ...'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+            }
         }
     }
 }
-
 // PRODUCTION DEPLOYMENT
 // see Jenkinsfile.release
