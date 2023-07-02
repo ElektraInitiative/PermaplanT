@@ -1,5 +1,7 @@
 # PermaplanT
 
+[![Build Status](https://build.libelektra.org/job/PermaPlanT-Folder/job/PermaplanT/job/master/lastBuild/badge/icon)](https://build.libelektra.org/job/PermaPlanT-Folder/job/PermaplanT/job/master/lastBuild/)
+
 [PermaplanT](https://www.permaplant.net) is an app for
 
 - Web: Firefox, Chromium

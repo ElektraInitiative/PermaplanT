@@ -20,9 +20,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- CI: Added mdbook build to pipeline _(4ydan)_
 - _()_
 - _()_
-- DEV: Add PR templates.
+- Doc: PR and Issue templates added. #537 #538 _(4ydan)_
 
 ## 0.2.0 - 29.06.2023
 
