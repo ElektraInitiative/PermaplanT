@@ -6,7 +6,7 @@ import { FileStat } from 'webdav';
 interface FileSelectorModalProps {
   /** Callback that informs the parent when the modal should be hidden/displayed (e.g. when the user pressed the close button).*/
   setShow: (show: boolean) => void;
-  /** Decides whether the modal should be shown.*/
+  /** Decides whether the modal should be shown. */
   show: boolean;
   /** Click callback for cancel/close button.*/
   onCancel: () => void;
