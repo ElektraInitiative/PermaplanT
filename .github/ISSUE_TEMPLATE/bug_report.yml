@@ -1,5 +1,5 @@
 name: Bug report
-description: For PermaplanT issues
+description: For PermaplanT bugs
 labels: ["bug"]
 body:
   - type: markdown
@@ -12,14 +12,13 @@ body:
   - type: textarea
     attributes:
       label: Describe the Bug
-      description: Some short sentences.
     validations:
-      required: true
+      required: false
 
   - type: textarea
     attributes:
       label: Steps to Reproduce the Problem
-      description: Please provide a step by step guide on how to reproduce the problem here.
+      description: Please provide a step by step guide on how to reproduce the problem.
     validations:
       required: true
 
@@ -40,8 +39,8 @@ body:
   - type: input
     attributes:
       label: PermaplanT version
-      description: If you're not on release, provide the commit hash
-      placeholder: 0.2.1
+      description: If you're not on a tag or master, provide the commit hash
+      placeholder: master
     validations:
       required: true
 
@@ -49,7 +48,7 @@ body:
     attributes:
       label: Operating System
       description: Which OS with which version was used?
-      placeholder: Windows 11
+      placeholder: Linux
     validations:
       required: true
 
@@ -73,4 +72,4 @@ body:
     attributes:
       label: Additional info/logs
     validations:
-      required: true
+      required: false
