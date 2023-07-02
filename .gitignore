@@ -335,6 +335,10 @@ tags
 !.vscode/*.code-snippets
 .devcontainer
 
+### VSCODE Jenkins Jack extension ###
+ci/.Jenkinsfile.config.json
+ci/.test.config.json
+
 # Local History for Visual Studio Code
 .history/
 
