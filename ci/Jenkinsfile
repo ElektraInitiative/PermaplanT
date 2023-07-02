@@ -15,6 +15,16 @@ try {
     stage('Build Schema'){
         node('docker') {
             node_info()
+            def changes = currentBuild.changeSets.collect() {
+                for (changeSet in changes) {
+                    println("Changes in ${changeSet.commitId}")
+
+                    for (entry in changeSet) {
+                        println("  - ${entry.author} made the following change:")
+                        println("    - ${entry.msg}")
+                    }
+                }
+            }
             throw new Exception('TEST EMAIL SENDING')
             checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
@@ -33,7 +43,7 @@ try {
             }
         }
     }
-}catch(Exception e) {
+} catch(Exception e) {
         // If master is failing we want to know ASAP so send a mail.
         // collect changes since last build
         def changes = currentBuild.changeSets.collect() {
@@ -59,7 +69,7 @@ Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
         body: message,
         replyTo: "noreply@libelektra.org",
         to: "ghazani.aydan@gmail.com"
-    }
+}
 
 
 // NOT REQUIRED for Deployment
