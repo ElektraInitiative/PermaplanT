@@ -15,12 +15,15 @@ pipeline {
         timeout(time: 2, unit: 'HOURS')
         disableConcurrentBuilds(abortPrevious: env.BRANCH_NAME != 'master')
     }
-
     stages {
-        stage ('Build images') {
-            sh 'docker build ./ci/container-images/permaplant-rust -t permaplant-mdbook'
-            sh 'docker build ./ci/container-images/permaplant-node -t permaplant-mdbook'
-            sh 'docker build ./ci/container-images/permaplant-mdbook -t permaplant-mdbook'
+        stage('Build docker images') {
+            steps {
+                script {
+                    def permaplant-rust = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+                    def permaplant-mdbook = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+                    def permaplant-node = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+                }
+            }
         }
         stage('Build Schema') {
             agent {
