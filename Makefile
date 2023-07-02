@@ -1,6 +1,9 @@
 include frontend/.env
 include backend/.env
 
+.PHONY: all
+all: test build
+
 .PHONY: run-frontend
 run-frontend: build-frontend
 	cd frontend && npm run dev
@@ -20,7 +23,7 @@ run-storybook:
 # TEST
 
 .PHONY: test
-test: test-frontend test-backend test-mdbook
+test: pre-commit-all test-frontend test-backend test-mdbook
 
 .PHONY: test-frontend
 test-frontend:
@@ -64,9 +67,9 @@ build-storybook:
 
 # MISC
 
-.PHONY: bindings
-bindings:
-	typeshare ./backend --lang=typescript --output-file=./frontend/src/bindings/definitions.ts
+.PHONY: generate-api-types
+generate-api-types:
+	cd frontend && npm run generate-api-types
 
 .PHONY: psql-r
 psql-r:
@@ -77,7 +80,7 @@ pre-commit-all:
 	pre-commit run --all-files
 
 .PHONY: clean
-clean: clean-frontend clean-backend
+clean: clean-frontend clean-backend clean-mdbook clean-storybook
 
 .PHONY: clean-frontend
 clean-frontend:
@@ -87,10 +90,10 @@ clean-frontend:
 clean-backend:
 	cd backend && cargo clean
 
-.PHONY: build-mdbook
+.PHONY: clean-mdbook
 clean-mdbook:
 	mdbook clean
 
-.PHONY: build-mdbook
+.PHONY: clean-storybook
 clean-storybook:
 	cd frontend && rm -rf storybook-static
