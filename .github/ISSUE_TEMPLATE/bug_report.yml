@@ -1,0 +1,76 @@
+name: 🐞 Bug report
+description: For PermaplanT bug reporting
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## First of all
+        Before creating a **bug report**, please check the following:
+        1. Ensure you're running the latest PermaplanT release.
+        2. Ensure there isn't an [existing issues](https://github.com/ElektraInitiative/PermaplanT/issues?q=is%3Aissue) for your bug. If there is, leave a comment on the existing issue.
+
+  - type: textarea
+    attributes:
+      label: Describe the Bug
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce the Problem
+      description: Please provide a step by step guide on how to reproduce the problem.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected Result
+      description: What you would expect to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Actual Result
+      description: What actually happened.
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: PermaplanT version
+      description: If you're not on a tag or master, provide the commit hash
+      placeholder: master
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Operating System
+      description: Which OS with which version was used?
+      placeholder: Linux
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Browser
+      description: Which browser in which version was used?
+      placeholder: Chrome 114.0.5735.199
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Versions of other relevant software/extensions
+      description: Any extensions that are active and might have an impact on the page.
+      placeholder: HoverZoom/Adblock/etc..
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Additional info/logs
+    validations:
+      required: false
