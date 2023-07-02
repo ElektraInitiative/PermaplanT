@@ -11,69 +11,26 @@ def wait_for_db() {
 
 // REQUIRED for Deployment
 // see Jenkinsfile.release
-try {
-    stage('Build Schema'){
-        node('docker') {
-            node_info()
-            checkout scm
-            def changes = currentBuild.changeSets.collect() {
-                for (changeSet in changes) {
-                    println("Changes in ${changeSet.commitId}")
+stage('Build Schema'){
+    node('docker') {
+        node_info()
+        checkout scm
 
-                    for (entry in changeSet) {
-                        println("  - ${entry.author} made the following change:")
-                        println("    - ${entry.msg}")
-                    }
-                    for (entry in changeSet) {
-                        def filePath = entry.path
-                        def changedDirectory = filePath.substring(0, filePath.lastIndexOf('/'))
-                        println("Changed directory: $changedDirectory")
-                    }
-                }
-            }
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
-            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                    checkout scm
+        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                checkout scm
 
-                    throw new Exception('TEST EMAIL SENDING')
-                    wait_for_db()
+                wait_for_db()
 
-                    sh './ci/build-scripts/build-schema.sh'
+                sh './ci/build-scripts/build-schema.sh'
 
-                    stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                    stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
-                }
+                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
+                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
             }
         }
     }
-} catch(Exception e) {
-        // If master is failing we want to know ASAP so send a mail.
-        // collect changes since last build
-        def changes = currentBuild.changeSets.collect() {
-        it.collect() {
-            "* ${it.getCommitId().take(7)} - ${it.getAuthor()} - ${it.getMsg().take(40)}"
-        }.join('\n')
-        }.join('\n')
-        if (!changes) {
-        changes = "* No new changes since last build"
-        }
-
-        def message = """\
-Build ${JOB_NAME}:${BUILD_NUMBER} failed.
-Url: ${RUN_DISPLAY_URL}
-Reason: ${e}
-
-Changes: ${RUN_CHANGES_DISPLAY_URL}
-${changes}
-
-Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
-"""
-    mail subject: "Build ${JOB_NAME} failed",
-        body: message,
-        replyTo: "noreply@libelektra.org",
-        to: "ghazani.aydan@gmail.com"
 }
 
 
