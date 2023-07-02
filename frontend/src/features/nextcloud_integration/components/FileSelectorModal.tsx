@@ -10,7 +10,7 @@ interface FileSelectorModalProps {
   show: boolean;
   /** Click callback for cancel/close button.*/
   onCancel: () => void;
-  /** path to the directory which files are displayed */
+  /** Path to the directory of which files are displayed */
   path: string;
   /** Fires when an image was selected */
   onSelect: (item: FileStat) => void;
