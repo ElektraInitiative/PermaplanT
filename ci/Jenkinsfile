@@ -12,8 +12,12 @@ def wait_for_db() {
 pipeline {
     agent any
     options {
+        timeout(time: 2, unit: 'HOURS')
         disableConcurrentBuilds(abortPrevious: env.BRANCH_NAME != 'master')
     }
+    def permaplant-rust = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+    def permaplant-rust = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+    def permaplant-rust = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
 
     stages {
         stage('Build Schema') {
