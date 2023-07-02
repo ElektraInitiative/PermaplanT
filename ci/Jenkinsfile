@@ -15,6 +15,7 @@ try {
     stage('Build Schema'){
         node('docker') {
             node_info()
+            checkout scm
             def changes = currentBuild.changeSets.collect() {
                 for (changeSet in changes) {
                     println("Changes in ${changeSet.commitId}")
@@ -30,7 +31,6 @@ try {
                     }
                 }
             }
-            checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
