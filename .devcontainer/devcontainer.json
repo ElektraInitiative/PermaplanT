@@ -28,6 +28,6 @@
       ]
     }
   },
-  "postCreateCommand": "./.devcontainer/setup.sh",
-  "remoteUser": "vscode"
+  "postCreateCommand": "./.devcontainer/setup.sh"
+  // "remoteUser": "vscode"
 }

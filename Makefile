@@ -49,6 +49,8 @@ build-storybook:
 
 .PHONY: build-mdbook
 build-mdbook:
+	cargo install mdbook mdbook-mermaid
+	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary
 	mdbook build
 
 # MISC
