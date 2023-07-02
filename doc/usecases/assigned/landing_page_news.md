@@ -33,4 +33,4 @@
 - **Postcondition:**
 - **Non-functional Constraints:**
 - **Extends Use Case:**
-  - [Landing Page](../landing_page.md)
+  - [Landing Page](../current/landing_page.md)
