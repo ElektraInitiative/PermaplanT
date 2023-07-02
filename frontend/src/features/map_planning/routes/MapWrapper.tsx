@@ -9,6 +9,7 @@ import { baseApiUrl } from '@/config';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
+import { getPhotos } from '../api/getPhotos';
 
 /**
  * Extracts the default layer from the list of layers.
@@ -47,6 +48,26 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
 }
 
 /**
+ * Hook that initializes the photo layer by fetching all photo elements
+ * and adding them to the store.
+ */
+function usePhotoLayer({ mapId, layerId, enabled }: UseLayerParams) {
+  const query = useQuery({
+    queryKey: ['photos', mapId, layerId],
+    queryFn: () => getPhotos(mapId, layerId),
+    enabled,
+  });
+
+  useEffect(() => {
+    if (!query?.data) return;
+
+    useMapStore.getState().initPhotoLayer(query.data);
+  }, [mapId, query?.data]);
+
+  return query;
+}
+
+/**
  * Hook that initializes the map by fetching all layers and layer elements.
  */
 function useInitializeMap() {
@@ -55,11 +76,18 @@ function useInitializeMap() {
 
   const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
   const baseLayer = getDefaultLayer(layers ?? [], LayerType.Base);
+  const photoLayer = getDefaultLayer(layers ?? [], LayerType.Photo);
 
   const { isLoading: arePlantingsLoading } = usePlantLayer({
     mapId,
     layerId: plantLayer?.id,
     enabled: !!plantLayer?.id,
+  });
+
+  const { isLoading: arePhotosLoading } = usePhotoLayer({
+    mapId,
+    layerId: photoLayer?.id,
+    enabled: !!photoLayer?.id,
   });
 
   useEffect(() => {
@@ -75,7 +103,7 @@ function useInitializeMap() {
     }));
   }, [mapId, baseLayer]);
 
-  const isLoading = !layers || arePlantingsLoading;
+  const isLoading = !layers || arePlantingsLoading || arePhotosLoading;
 
   if (isLoading) {
     return null;

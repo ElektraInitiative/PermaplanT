@@ -89,6 +89,10 @@ export interface TrackedMapSlice {
    * Initializes the plant layer.
    */
   initPlantLayer: (plantLayer: PlantingDto[]) => void;
+  /**
+   * Initializes the photo layer.
+   */
+  initPhotoLayer: (photoLayer: PhotoDto[]) => void;
 }
 
 /**
@@ -108,6 +112,8 @@ export interface UntrackedMapSlice {
   updateLayerOpacity: (layerName: LayerType, opacity: UntrackedLayerState['opacity']) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
+  selectPhoto: (photo: PhotoDto | null) => void;
+  selectImageInfo: (imageInfo: ImageInfo | null) => void;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
@@ -193,16 +199,24 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants>]: TrackedLayerState;
+  [key in Exclude<LayerType, LayerType.Plants | LayerType.Photo>]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
+  [LayerType.Photo]: TrackedPhotoLayerState;
 };
 
 export type TrackedPlantLayerState = {
   index: LayerType.Plants;
 
   objects: PlantingDto[];
+};
+
+
+export type TrackedPhotoLayerState = {
+  index: LayerType.Photo;
+
+  objects: PhotoDto[];
 };
 
 export type TrackedBaseLayerState = {
@@ -215,15 +229,80 @@ export type TrackedBaseLayerState = {
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants>]: UntrackedLayerState;
+  [key in Exclude<LayerType, LayerType.Plants | LayerType.Photo>]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
+  [LayerType.Photo]: UntrackedPhotoLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantsSummaryDto | null;
   selectedPlanting: PlantingDto | null;
 };
+
+export type UntrackedPhotoLayerState = UntrackedLayerState & {
+  selectedPhoto: PhotoDto | null;
+  selectedImageInfo: ImageInfo | null;
+};
+
+export type ImageInfo = {
+  path: string
+}
+
+//TODO: create the dtos in the backend
+/**
+ * Represents a photo element on a map.
+ */
+export interface PhotoDto {
+	/** The id of the photo. */
+	id: string;
+	/** The photo layer the photo is on. */
+	layerId: number;
+	/** The path to the image in Nextcloud. */
+	path: string;
+	/** The x coordinate of the position on the map. */
+	x: number;
+	/** The y coordinate of the position on the map. */
+	y: number;
+	/** The width of the photo on the map. */
+	width: number;
+	/** The height of the photo on the map. */
+	height: number;
+	/** The rotation in degrees (0-360) of the photo on the map. */
+	rotation: number;
+	/** The x scale of the photo on the map. */
+	scaleX: number;
+	/** The y scale of the photo on the map. */
+	scaleY: number;
+}
+
+export type UpdatePhotoDto =
+	| { type: "Transform", content: TransformPhotoDto }
+	| { type: "Move", content: MovePhotoDto };
+
+//TODO: refactor to more generic Dto: TransformElementDto
+/** Used to transform an existing planting. */
+export interface TransformPhotoDto {
+	/** The x coordinate of the position on the map. */
+	x: number;
+	/** The y coordinate of the position on the map. */
+	y: number;
+	/** The rotation of the plant on the map. */
+	rotation: number;
+	/** The x scale of the plant on the map. */
+	scaleX: number;
+	/** The y scale of the plant on the map. */
+	scaleY: number;
+}
+
+//TODO: refactor to more generic Dto: MoveElementDto
+/** Used to move an existing planting. */
+export interface MovePhotoDto {
+	/** The x coordinate of the position on the map. */
+	x: number;
+	/** The y coordinate of the position on the map. */
+	y: number;
+}
 
 /**
  * The state of the map tracked by the history.

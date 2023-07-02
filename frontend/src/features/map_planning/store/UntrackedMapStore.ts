@@ -96,4 +96,34 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+  selectPhoto(photo) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          photo: {
+            ...state.untrackedState.layers.photo,
+            selectedPhoto: photo,
+          },
+        },
+      },
+    }));
+  },
+  selectImageInfo(imageInfo) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          photo: {
+            ...state.untrackedState.layers.photo,
+            selectedImageToAdd: imageInfo,
+          },
+        },
+      },
+    }));
+  }
 });

@@ -4,6 +4,7 @@ import {
   TrackedMapSlice,
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
+  PhotoDto,
 } from './MapStoreTypes';
 import { PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
@@ -63,6 +64,20 @@ export const createTrackedMapSlice: StateCreator<
         canRedo: false,
       }));
     },
+    initPhotoLayer: (photos: PhotoDto[]) =>
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            photo: {
+              ...state.trackedState.layers.photo,
+              objects: photos,
+            },
+          },
+        },
+      })),
   };
 };
 
