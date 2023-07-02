@@ -15,7 +15,7 @@ try {
     stage('Build Schema'){
         node('docker') {
             node_info()
-
+            throw new Exception('TEST EMAIL SENDING')
             checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
@@ -25,7 +25,7 @@ try {
 
                     wait_for_db()
 
-                    sh './ci/build-scripts/build-schemas.sh'
+                    sh './ci/build-scripts/build-schema.sh'
 
                     stash includes: 'backend/src/schema.rs', name: 'schema.rs'
                     stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
