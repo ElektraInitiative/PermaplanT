@@ -43,7 +43,6 @@ const sortByDateDsc = (a: FileStat, b: FileStat) => {
   return dateA > dateB ? -1 : dateB > dateA ? 1 : 0;
 };
 
-
 interface SortMethods {
   [key: string]: (a: FileStat, b: FileStat) => number;
 }
@@ -84,7 +83,7 @@ export const FileSelector = (props: FileSelectorProps) => {
   }
 
   return (
-    <div className="w-full p-8 max-w-2xl overflow-y-auto">
+    <div className="w-full max-w-2xl overflow-y-auto p-8">
       <div className="flex items-end gap-4">
         <div className="flex-1">
           <SimpleFormInput
