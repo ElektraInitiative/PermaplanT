@@ -1,13 +1,14 @@
-name: Bug report
-description: For PermaplanT bugs
+name: 🐞 Bug report
+description: For PermaplanT bug reporting
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
-      value: >
+      value: |
+        ## First of all
         Before creating a **bug report**, please check the following:
-          * Ensure you're running the latest PermaplanT release.
-          * Ensure there isn't an existing issue for your bug. If there is, leave a comment on the existing issue.
+        1. Ensure you're running the latest PermaplanT release.
+        2. Ensure there isn't an [existing issues](https://github.com/ElektraInitiative/PermaplanT/issues?q=is%3Aissue) for your bug. If there is, leave a comment on the existing issue.
 
   - type: textarea
     attributes:
