@@ -4,7 +4,11 @@ Check relevant points but **please do not remove entries**.
 
 ## Description
 
-<!-- A description of what was done. Link the issue. -->
+<!-- A description of the bug and the fix. Link the issue. -->
+
+## Verification
+
+<!-- Explain how you tested this bug fix. -->
 
 ## Checklist
 
@@ -13,7 +17,7 @@ For documentation fixes, spell checking, and similar none of these points below 
 Otherwise please check these points when getting a PR done:
 -->
 
-- [ ] References to issues, e.g. `close #X`, are in the commit messages
+- [ ] References to issues, e.g. `close #X`, are in the commit messages.
 - [ ] I fully described what my PR does in the documentation
       (not in the PR description)
 - [ ] I fixed all affected documentation
@@ -23,6 +27,12 @@ Otherwise please check these points when getting a PR done:
 - [ ] I translated all strings visible to the user
 - [ ] I mentioned [every code or binary](/.reuse/dep5) not directly written or done by me in [reuse syntax](https://reuse.software/)
 - [ ] I created left-over issues for things that are still to be done
+
+### Optional
+
+- I added unit tests for my code
+- I fixed all affected documentation
+- I fixed all affected decisions
 
 ## Review
 

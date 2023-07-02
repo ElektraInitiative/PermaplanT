@@ -1,7 +1,3 @@
----
-name: Release
-about: For PermaplanT releases
-title: ''
-labels: 'release'
-assignees: ''
----
+## Changelog
+
+<!-- Changes introduced in this release -->

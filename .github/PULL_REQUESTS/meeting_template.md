@@ -1,7 +1,3 @@
----
-name: Meeting
-about: For PermaplanT meetings
-title: ''
-labels: 'meeting'
-assignees: ''
----
+## Closing Remarks
+
+<!-- Closing remarks of this meeting -->
