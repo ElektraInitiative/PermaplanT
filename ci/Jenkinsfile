@@ -19,16 +19,16 @@ pipeline {
         stage('Build docker images') {
             steps {
                 script {
-                    def permaplant-rust = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
-                    def permaplant-mdbook = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
-                    def permaplant-node = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+                    def permaplant_rust = docker.build("permaplant_rust", "./ci/container-images/permaplant-rust")
+                    def permaplant_mdbook = docker.build("permaplant_mdbook", "./ci/container-images/permaplant-mdbook")
+                    def permaplant_node = docker.build("permaplant_node", "./ci/container-images/permaplant-node")
                 }
             }
         }
         stage('Build Schema') {
             agent {
                 docker {
-                    image 'permaplant-rust'
+                    image 'permaplant_rust'
                 }
             }
             steps {
@@ -55,7 +55,7 @@ pipeline {
                 stage('test-and-build-mdbook') {
                     agent {
                         docker {
-                            image 'permaplant-mdbook'
+                            image 'permaplant_mdbook'
                         }
                     }
                     steps {
@@ -74,7 +74,7 @@ pipeline {
                 stage('test-and-build-backend') {
                     agent {
                         docker {
-                            image 'permaplant-rust'
+                            image 'permaplant_rust'
                         }
                     }
                     steps {
@@ -113,7 +113,7 @@ pipeline {
                 stage('test-and-build-frontend') {
                     agent {
                         docker {
-                            image 'permaplant-node'
+                            image 'permaplant_node'
                         }
                     }
                     steps {
