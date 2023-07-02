@@ -20,7 +20,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: Storybook/Typedoc build and stashed in Jenkins pipeline PR/Master/Release #438 _(4ydan)_
 - _()_
 - _()_
-- _()_
+- CI: Added mdbook build to pipeline _(4ydan)_
 - _()_
 - _()_
 
