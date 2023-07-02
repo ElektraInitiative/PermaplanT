@@ -30,7 +30,6 @@ try {
                     }
                 }
             }
-            throw new Exception('TEST EMAIL SENDING')
             checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
@@ -38,6 +37,7 @@ try {
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
 
+                    throw new Exception('TEST EMAIL SENDING')
                     wait_for_db()
 
                     sh './ci/build-scripts/build-schema.sh'
