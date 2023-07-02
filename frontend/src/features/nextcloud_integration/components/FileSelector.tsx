@@ -31,17 +31,18 @@ const sortByNameDsc = (a: FileStat, b: FileStat) => {
   return nameA > nameB ? -1 : nameB > nameA ? 1 : 0;
 };
 
-const sortByDateDsc = (a: FileStat, b: FileStat) => {
-  const dateA = new Date(a.lastmod);
-  const dateB = new Date(b.lastmod);
-  return dateA < dateB ? -1 : dateA < dateB ? 1 : 0;
-};
-
 const sortByDateAsc = (a: FileStat, b: FileStat) => {
   const dateA = new Date(a.lastmod);
   const dateB = new Date(b.lastmod);
-  return dateA > dateB ? -1 : dateA > dateB ? 1 : 0;
+  return dateA < dateB ? -1 : dateB < dateA ? 1 : 0;
 };
+
+const sortByDateDsc = (a: FileStat, b: FileStat) => {
+  const dateA = new Date(a.lastmod);
+  const dateB = new Date(b.lastmod);
+  return dateA > dateB ? -1 : dateB > dateA ? 1 : 0;
+};
+
 
 interface SortMethods {
   [key: string]: (a: FileStat, b: FileStat) => number;
