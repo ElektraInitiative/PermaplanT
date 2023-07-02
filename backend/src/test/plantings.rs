@@ -8,7 +8,10 @@ use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::Uuid;
 
 use crate::model::{
-    dto::plantings::{MovePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto},
+    dto::{
+        plantings::{MovePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto},
+        TimelinePage,
+    },
     r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
 };
 
@@ -99,24 +102,24 @@ async fn test_can_search_plantings() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/plantings?layer_id=-1")
+        .uri("/api/maps/-1/layers/plants/plantings?layer_id=-1&relative_to_date=2023-05-08")
         .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);
 
-    let results: Vec<PlantingDto> = test::read_body_json(resp).await;
-    assert_eq!(results.len(), 1);
+    let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
+    assert_eq!(page.results.len(), 1);
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/plantings")
+        .uri("/api/maps/-1/layers/plants/plantings?relative_to_date=2023-05-08")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);
 
-    let results: Vec<PlantingDto> = test::read_body_json(resp).await;
-    assert_eq!(results.len(), 2);
+    let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
+    assert_eq!(page.results.len(), 2);
 }
 
 #[actix_rt::test]
@@ -411,12 +414,12 @@ async fn test_can_delete_planting() {
     assert_eq!(resp.status(), StatusCode::OK);
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/plantings")
+        .uri("/api/maps/-1/layers/plants/plantings?relative_to_date=2023-05-08")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);
 
-    let results: Vec<PlantingDto> = test::read_body_json(resp).await;
-    assert_eq!(results.len(), 0);
+    let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
+    assert_eq!(page.results.len(), 0);
 }
