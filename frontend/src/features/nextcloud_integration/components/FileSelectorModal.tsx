@@ -12,7 +12,7 @@ interface FileSelectorModalProps {
   onCancel: () => void;
   /** path to the directory which files are displayed */
   path: string;
-  /** fires when an image was selected */
+  /** Fires when an image was selected */
   onSelect: (item: FileStat) => void;
 }
 
