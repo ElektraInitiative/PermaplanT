@@ -17,10 +17,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- DOC: Fix broken links #554 _(4ydan)_
 - _()_
 - _()_
-- _()_
-- _()_
+- CI: Added mdbook build to pipeline _(4ydan)_
 - _()_
 - DEV: Issue forms added. #537 _(4ydan)_
 

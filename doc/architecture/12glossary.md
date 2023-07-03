@@ -45,13 +45,13 @@
   - the data representation of the objects that comprise the structure and content of a document on the web.
 - endpoints
   - The API endpoints that can be called in the backend.  
-    Their documentation can be viewed using swagger-ui (see [here](/doc/architecture/backend.md#api-documentation) for reference).
+    Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
 
 ## Biology
 
 - Taxonomy:
   A scientific classification of plants into a hierarchy.
-  The hierarchy we use is described [here](/doc/database/hierarchy.md).
+  The hierarchy we use is described [here](../database/hierarchy.md).
   As first introduction read:
   - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/) or
   - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy).

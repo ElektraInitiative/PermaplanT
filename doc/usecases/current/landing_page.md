@@ -19,13 +19,13 @@
   - The user can read imprint (Impressum)
   - The user can read about privacy (Datenschutz)
   - The user can read about copyright
-  - The user can read latest [news and get an RSS/Atom feed of it](landing_page_news.md)
+  - The user can read latest [news and get an RSS/Atom feed of it](../assigned/landing_page_news.md)
   - The user can login
 - **Alternative scenario:**
 - **Error scenario:**
 - **Postcondition:**
 - **Non-functional Constraints:**
 - **Linked Use Cases:**
-  - [Membership Application](../current/membership_application.md)
+  - [Membership Application](../assigned/membership_application.md)
   - [GeoMap](../assigned/geo_map.md)
-  - [Login](../current/login.md)
+  - [Login](../done/login.md)
