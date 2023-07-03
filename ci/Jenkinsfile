@@ -28,6 +28,7 @@ def wait_for_db() {
 }
 
 def folderWasModified(String folderPath) {
+    def changeSets = currentBuild.changeSets.collect()
     for (changeSet in changeSets) {
         for (entry in changeSet) {
             def filePath = entry.path
