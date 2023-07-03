@@ -6,10 +6,20 @@ use crate::{
     config::data::AppDataInner,
     error::ServiceError,
     model::{
-        dto::{RelationSearchParameters, RelationsDto},
+        dto::{HeatMapQueryParams, RelationSearchParameters, RelationsDto},
         entity::plant_layer,
     },
 };
+
+pub async fn heatmap(
+    map_id: i32,
+    query_params: HeatMapQueryParams,
+    app_data: &Data<AppDataInner>,
+) -> Result<Vec<Vec<f64>>, ServiceError> {
+    let mut conn = app_data.pool.get().await?;
+    let result = plant_layer::heatmap(map_id, query_params.plant_id, &mut conn).await?;
+    Ok(result)
+}
 
 /// Get all relations of a certain plant.
 ///

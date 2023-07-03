@@ -9,30 +9,8 @@ use actix_web::{
 
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
-use crate::model::dto::{HeatMapQueryParams, MapSearchParameters, PageParameters};
+use crate::model::dto::{MapSearchParameters, PageParameters};
 use crate::{model::dto::NewMapDto, service};
-
-#[utoipa::path(
-    context_path = "/api/maps",
-    params(
-        HeatMapQueryParams
-    ),
-    responses(
-        (status = 200, description = "Generate a heatmap to find ideal locations to plant the plant", body = Vec<Vec<f64>>)
-    ),
-    security(
-        ("oauth2" = [])
-    )
-)]
-#[get("/heatmap")]
-pub async fn heatmap(
-    query_params: Query<HeatMapQueryParams>,
-    app_data: Data<AppDataInner>,
-) -> Result<HttpResponse> {
-    // TODO: figure out where to put endpoint
-    let response = service::map::heatmap(query_params.into_inner(), &app_data).await?;
-    Ok(HttpResponse::Ok().json(response))
-}
 
 /// Endpoint for fetching or searching all [`Map`](crate::model::entity::Map).
 /// Search parameters are taken from the URLs query string (e.g. .../api/maps?is_inactive=false&per_page=5).

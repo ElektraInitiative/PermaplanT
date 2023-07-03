@@ -348,6 +348,5 @@ pub enum SuggestionType {
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct HeatMapQueryParams {
-    pub map_id: i32,
     pub plant_id: i32,
 }

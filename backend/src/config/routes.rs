@@ -29,7 +29,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         )
         .service(
             web::scope("/maps")
-                .service(map::heatmap)
                 .service(map::find)
                 .service(map::find_by_id)
                 .service(map::create)
@@ -41,6 +40,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                         .service(layers::delete)
                         .service(
                             web::scope("/plants")
+                                .service(plant_layer::heatmap)
                                 .service(plant_layer::find_relations)
                                 .service(
                                     web::scope("/suggestions").service(planting_suggestions::find),

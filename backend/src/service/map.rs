@@ -4,7 +4,7 @@ use actix_web::web::Data;
 use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::{HeatMapQueryParams, MapSearchParameters, Page};
+use crate::model::dto::{MapSearchParameters, Page};
 use crate::model::dto::{NewLayerDto, PageParameters};
 use crate::model::entity::Layer;
 use crate::model::r#enum::layer_type::LayerType;
@@ -18,15 +18,6 @@ use crate::{
 
 /// Defines which layers should be created when a new map is created.
 const LAYER_TYPES: [LayerType; 2] = [LayerType::Base, LayerType::Plants];
-
-pub async fn heatmap(
-    query_params: HeatMapQueryParams,
-    app_data: &Data<AppDataInner>,
-) -> Result<Vec<Vec<f64>>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
-    let result = Map::heatmap(query_params.map_id, query_params.plant_id, &mut conn).await?;
-    Ok(result)
-}
 
 /// Search maps from the database.
 ///

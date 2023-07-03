@@ -72,7 +72,6 @@ struct PlantsApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        map::heatmap,
         map::find,
         map::find_by_id,
         map::create
@@ -112,6 +111,7 @@ struct LayerApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
+        plant_layer::heatmap,
         plant_layer::find_relations
     ),
     components(
