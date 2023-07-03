@@ -21,7 +21,7 @@ Derived from VS Code's instructions for usage of development containers, documen
 4. Make sure you are on the top level of the project. [`/PermaplanT`](https://github.com/ElektraInitiative/PermaplanT).
 5. [Open your workspace in the provided devcontainer](https://code.visualstudio.com/docs/remote/containers#_open-an-existing-workspace-in-a-container): Open this repository in VS Code and run **Remote-Containers: Reopen in Container...** from the Command Palette (<kbd>F1</kbd>).
 
-## Philosophy of the folder structure
+## Philosophy of the directory structure
 
 | File                             | Description                                                                                                                       |
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
