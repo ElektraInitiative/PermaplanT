@@ -28,15 +28,17 @@ def wait_for_db() {
 }
 
 def folderWasModified(String folderPath) {
-    def changeSets = currentBuild.changeSets.collect()
-    for (changeSet in changeSets) {
-        for (entry in changeSet) {
-            def filePath = entry.path
-            if (filePath.startsWith(folderPath) && fileContains(filePath, ".*")) {
-                changedDocs = true
-                break
-            }
+    def changeSets = currentBuild.changeSets.collect(
+        it.items.collect {
+        it.affectedFiles.find { file ->
+            file.path == folderPath
         }
+    })
+
+    if( !file.size().asBoolean()) {
+        return false
+    } else {
+        return true
     }
 }
 
