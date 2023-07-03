@@ -17,6 +17,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- CI: Storybook/Typedoc build and stashed in Jenkins pipeline PR/Master/Release #438 _(4ydan)_
 - DOC: Fix broken links #554 _(4ydan)_
 - _()_
 - CI: Devcontainer support #552 _(4ydan)_
