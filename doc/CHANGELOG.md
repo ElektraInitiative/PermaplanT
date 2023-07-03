@@ -18,11 +18,12 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - CI: Storybook/Typedoc build and stashed in Jenkins pipeline PR/Master/Release #438 _(4ydan)_
+- DOC: Fix broken links #554 _(4ydan)_
 - _()_
 - _()_
 - CI: Added mdbook build to pipeline _(4ydan)_
 - _()_
-- _()_
+- DEV: Issue forms added. #537 _(4ydan)_
 
 ## 0.2.0 - 29.06.2023
 
