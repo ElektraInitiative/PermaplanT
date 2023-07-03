@@ -70,8 +70,8 @@ stage('Build Schema'){
 
 // NOT REQUIRED for Deployment
 stage('Tests & Build') {
+    checkout scm
     def parallel_checks = [:]
-
     parallel_checks["test-and-build-mdbook"] = {
         node('docker') {
             checkout scm
@@ -138,36 +138,38 @@ stage('Tests & Build') {
 
                     }
                 }
+            } else {
+                echo "No changes in the 'backend' folder. Skipping stage."
             }
         }
     }
-
-    parallel_checks["test-and-build-frontend"] = {
-        node('docker') {
-            node_info()
-            checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
-            node_image.inside {
+    if (folderWasModified("frontend/")) {
+        parallel_checks["test-and-build-frontend"] = {
+            node('docker') {
+                node_info()
                 checkout scm
-                unstash 'definitions.ts'
+                def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+                node_image.inside {
+                    checkout scm
+                    unstash 'definitions.ts'
 
-                stage('test-frontend'){
-                    dir("frontend") {
-                        sh "npm ci"
-                        sh "npm run format:check"
-                        sh "npm run lint"
-                        sh "npm run test"
+                    stage('test-frontend'){
+                        dir("frontend") {
+                            sh "npm ci"
+                            sh "npm run format:check"
+                            sh "npm run lint"
+                            sh "npm run test"
+                        }
+                    }
+
+                    stage('build-frontend'){
+                        sh './ci/build-scripts/build-frontend.sh'
+                        stash includes: 'frontend/dist/**/*', name: 'frontend'
                     }
                 }
-
-                stage('build-frontend'){
-                    sh './ci/build-scripts/build-frontend.sh'
-                    stash includes: 'frontend/dist/**/*', name: 'frontend'
-                }
             }
         }
     }
-
     parallel(parallel_checks)
 }
 
