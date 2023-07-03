@@ -38,11 +38,15 @@ def folderWasModified(String folderPath) {
     if (!changeSets.flatten().isEmpty()) {
         echo "Changes detected in the '${folderPath}' folder. Continuing with the stage."
         changeSets.flatten().each { file ->
-            echo "Modified file: ${file.path}"
+            if (file) {
+                echo "Found one modified file: ${file.path}"
+                return true
+            }
         }
-        return true
+        echo "No modified file: ${file.path}"
+        return false
     } else {
-        echo "No changes in the '${folderPath}' folder. Skipping stage."
+        echo "No files in '${folderPath}' folder. Skipping stage."
         return false
     }
 }
