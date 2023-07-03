@@ -44,14 +44,14 @@ test-storybook:
 # BUILD
 
 .PHONY: build
-build: bindings build-frontend build-backend build-storybook build-mdbook
+build: generate-api-types build-frontend build-backend build-storybook build-mdbook
 
 .PHONY: build-frontend
-build-frontend: bindings
+build-frontend: generate-api-types
 	cd frontend && npm install && npm run generate-api-types && npm run build
 
 .PHONY: build-backend
-build-backend: bindings
+build-backend: generate-api-types
 	cargo install diesel_cli@2.0.1 --no-default-features --features postgres && cargo install typeshare-cli
 	cd backend && LC_ALL=C diesel setup && LC_ALL=C diesel migration run && cargo build
 
