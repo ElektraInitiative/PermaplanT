@@ -9,6 +9,10 @@ def wait_for_db() {
     }
 }
 
+environment {
+    PROFILE = "release" // enables cargo build --release
+}
+
 // REQUIRED for Deployment
 // see Jenkinsfile.release
 stage('Build Schema'){
@@ -24,7 +28,7 @@ stage('Build Schema'){
 
                 wait_for_db()
 
-                sh './ci/build-scripts/build-schema.sh'
+                sh 'make generate-api-types'
 
                 stash includes: 'backend/src/schema.rs', name: 'schema.rs'
                 stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
@@ -46,8 +50,8 @@ stage('Tests & Build') {
                 checkout scm
 
                 stage('test-and-build-mdbook'){
-                    sh "mdbook test"
-                    sh 'mdbook build'
+                    sh "test-mdbook"
+                    sh 'build-backend'
                     stash includes: 'book/', name: 'mdbook'
                 }
             }
@@ -76,22 +80,19 @@ stage('Tests & Build') {
                             // End of Workaround
 
                             // generate schema (overwriting src/schema.rs)
-                            sh './ci/build-scripts/build-schema.sh'
+                            sh 'make generate-api-types'
 
                             dir("backend") {
                                 // continue checking
                                 withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']) {
-                                sh "cargo check"
-                                sh "cargo clippy"
-                                sh "cargo doc"
-                                sh "cargo test"
+                                sh "make test-backend"
                                 }
                             }
                         }
                     }
 
                     stage('build-backend'){
-                        sh './ci/build-scripts/build-backend.sh'
+                        sh 'make build-backend'
 
                         stash includes: 'backend/target/release/backend', name: 'backend'
                     }
@@ -119,7 +120,7 @@ stage('Tests & Build') {
                 }
 
                 stage('build-frontend'){
-                    sh './ci/build-scripts/build-frontend.sh'
+                    sh 'make build-frontend'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
 
@@ -129,7 +130,7 @@ stage('Tests & Build') {
                 }
 
                 stage('build-storybook'){
-                    sh './ci/build-scripts/build-storybook.sh'
+                    sh 'make build-storybook'
                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
             }
@@ -144,7 +145,7 @@ stage('Deploy PR') {
         node_info()
 
         checkout scm
-
+        echo "ENV VAR is '${PROFILE}'"
         echo "Workspace is '${WORKSPACE}'"
         echo 'Ensure pr service is stopped'
         sh 'sudo /usr/sbin/service permaplant-pr stop'
