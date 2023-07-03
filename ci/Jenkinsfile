@@ -40,7 +40,7 @@ stage('Tests & Build') {
     parallel_checks["test-and-build-mdbook"] = {
         node('docker') {
             checkout scm
-            def base_image = docker.build("permaplant-mdbook", "./ci/")
+            def base_image = docker.build("permaplant-base", "./ci/")
 
             base_image.inside {
                 checkout scm
