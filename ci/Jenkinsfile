@@ -35,12 +35,15 @@ def folderWasModified(String folderPath) {
             }
         }
     })
-    if( !changeSets.size().asBoolean()) {
+    if (!changeSets.flatten().isEmpty()) {
+        echo "Changes detected in the '${folderPath}' folder. Continuing with the stage."
+        changeSets.flatten().each { file ->
+            echo "Modified file: ${file.path}"
+        }
+        return true
+    } else {
         echo "No changes in the '${folderPath}' folder. Skipping stage."
         return false
-    } else {
-        echo "Changes detected in the '${folderPath}' folder. Continuing with the stage."
-        return true
     }
 }
 
