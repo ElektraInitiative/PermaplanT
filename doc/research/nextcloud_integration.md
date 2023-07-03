@@ -88,13 +88,16 @@ PermaplanT/
             └── photo2.jpg
 ```
 
-When a map is shared between different users the directory also has to be shared and placed within this structure.
-Therefore the map directories must have a globally unique name.
-The name of each map directory is the same as the name of the map in the PermaplanT database.
-This is possible because the name in the database is unique.
+When a PermaplanT map is shared between different users the corresponding Nextcloud directory has to be shared as well.
+When a directory is shared in Nextcloud it gets added to users root directory (if not configured otherwise). 
+We have to move the newly added directory to the correct place in the hierarchy after it was added.
 
-All public directories can be placed anywhere as they are identified by the public share token.
-They are not visible to all of the users in Nextcloud, so they are not included in the directory structure above.
+Each map directory must have a globally unique name to avoid conflicts with shared maps.
+The name of each map directory is the same as the name of the map in the PermaplanT database.
+This insures that the name is unique because the name in the database is unique.
+
+The location of public directories does not matter as they are identified by the public share token.
+They are not visible to all of the users in Nextcloud, so they are not included in the directory hierarchy above.
 
 ### Shares and Permissions
 
