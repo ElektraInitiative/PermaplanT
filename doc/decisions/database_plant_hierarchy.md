@@ -87,7 +87,7 @@ Cons:
 
 ## Decision
 
-- We go with the last option "All ranks in one table" as described [in our documentation](/doc/database/hierarchy.md).
+- We go with the last option "All ranks in one table" as described [in our documentation](../database/hierarchy.md).
 - We rename "binomial name" to "unique name" and guarantee that it is unique.
 - We add "cultivar" as lowest rank.
 - We remove the rank "subfamily".

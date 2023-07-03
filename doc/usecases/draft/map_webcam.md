@@ -23,4 +23,4 @@
 - **Postcondition:**
 - **Non-functional Constraints:**
 - **Linked Use Cases:**
-  - [Photo Layer](./photo_layer.md)
+  - [Photo Layer](../current/photo_layer.md)

@@ -142,7 +142,7 @@ See also [offline use case](../usecases/assigned/offline.md).
 Only the landing page can be seen without registration.
 We use [Keycloak](https://www.keycloak.org/) for Identity and Access Management with 3 roles:
 
-1. default-roles-permaplant (only [public maps and the membership application](../usecases/current/membership_application.md) can be visited)
+1. default-roles-permaplant (only [public maps and the membership application](../usecases/assigned/membership_application.md) can be visited)
 2. member (can do everything but administration tasks)
 3. admin (possibility to change data from other users, as needed for onboarding or offboarding)
 
