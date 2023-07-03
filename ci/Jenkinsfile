@@ -70,12 +70,11 @@ stage('Build Schema'){
 
 // NOT REQUIRED for Deployment
 stage('Tests & Build') {
-    checkout scm
     def parallel_checks = [:]
     parallel_checks["test-and-build-mdbook"] = {
         node('docker') {
+            node_info()
             checkout scm
-
             if (folderWasModified("doc/")) {
                 def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
                 echo "Changes detected in doc/'"
@@ -143,11 +142,12 @@ stage('Tests & Build') {
             }
         }
     }
-    if (folderWasModified("frontend/")) {
-        parallel_checks["test-and-build-frontend"] = {
-            node('docker') {
-                node_info()
-                checkout scm
+
+    parallel_checks["test-and-build-frontend"] = {
+        node('docker') {
+            node_info()
+            checkout scm
+            if (folderWasModified("frontend/")) {
                 def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
                 node_image.inside {
                     checkout scm
@@ -167,6 +167,8 @@ stage('Tests & Build') {
                         stash includes: 'frontend/dist/**/*', name: 'frontend'
                     }
                 }
+            } else {
+                echo "No changes in the 'frontend/' folder. Skipping stage."
             }
         }
     }
