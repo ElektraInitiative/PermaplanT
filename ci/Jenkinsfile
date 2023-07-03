@@ -1,6 +1,6 @@
 def abortPreviousRunUnlessMaster() {
   // We never want to abort builds of the master branch
-  if (isMaster()) return;
+  if (env.BRANCH_NAME=="master") return;
   def exec = currentBuild
              ?.rawBuild
              ?.getPreviousBuildInProgress()
