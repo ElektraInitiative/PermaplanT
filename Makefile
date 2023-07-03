@@ -31,7 +31,7 @@ test-frontend:
 
 .PHONY: test-backend
 test-backend:
-	cd backend && cargo check && cargo clippy && cargo doc && cargo test
+	cd backend && cargo test && cargo check && cargo clippy && cargo doc && cargo
 
 .PHONY: test-mdbook
 test-mdbook:
