@@ -15,14 +15,19 @@
         "failure": "Something went wrong, please try again later!",
         "description_placeholer": "Description",
         "location_selected": "Your selected location.",
-        "private": "private",
-        "private_info": "The map is private and only visible for you",
-        "protected": "protected",
-        "protected_info": "The map is protected and only visible for you and other members of PermaplanT",
-        "public": "public",
-        "public_info": "The map is public and visible for everyone",
         "location_button": "Select location",
         "location_button_hint": "On click the external resource openstreetmap.org will be loaded.",
         "or": "Or"
+    },
+    "edit": {
+        "title": "Edit Map",
+        "privacy_label": "Privacy",
+        "description_label": "Description",
+        "location_label": "Location",
+        "location_selected": "Your selected location.",
+        "latitude_label": "Latitude",
+        "longitude_label": "Longitude",
+        "location_button": "Select Location",
+        "location_button_hint": "On click the external resource openstreetmap.org will be loaded."
     }
 }
