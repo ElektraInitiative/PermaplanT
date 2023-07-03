@@ -28,26 +28,19 @@ def wait_for_db() {
 }
 
 def folderWasModified(String folderPath) {
-    def changeSets = currentBuild.changeSets.collect({
+    def file = currentBuild.changeSets.collect({
         it.items.collect {
             it.affectedFiles.find { file ->
-                file.path == folderPath
+                file.path.contains(folderPath)
             }
         }
     })
-    if (!changeSets.flatten().isEmpty()) {
-        echo "Changes detected in the '${folderPath}' folder. Continuing with the stage."
-        changeSets.flatten().each { file ->
-            if (file) {
-                echo "Found one modified file: ${file.path}"
-                return true
-            }
-        }
-        echo "No modified file: ${file.path}"
-        return false
-    } else {
+
+    if(!file.size().asBoolean()) {
         echo "No files in '${folderPath}' folder. Skipping stage."
         return false
+    } else {
+        return (file[0][0].asBoolean())
     }
 }
 
@@ -85,7 +78,7 @@ stage('Tests & Build') {
 
             if (folderWasModified("doc/")) {
                 def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
-
+                echo "Changes detected in doc/'"
                 mdbook_image.inside {
                     checkout scm
 
