@@ -345,8 +345,10 @@ pub enum SuggestionType {
     Diversity,
 }
 
+/// Query parameters to configure the generation of the heatmap.
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct HeatMapQueryParams {
+    /// The id of the plant you want to plant.
     pub plant_id: i32,
 }

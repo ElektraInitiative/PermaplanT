@@ -2,10 +2,9 @@
 
 use actix_web::{
     get,
-    web::{Data, Path},
+    web::{Data, Path, Query},
     HttpResponse, Result,
 };
-use actix_web_lab::extract::Query;
 
 use crate::{
     config::data::AppDataInner,
@@ -13,6 +12,13 @@ use crate::{
     service::plant_layer,
 };
 
+/// Endpoint for generating a heatmap signaling ideal locations for planting the plant.
+///
+/// Returns a matrix with scores from 0-1 indicating ideal locations for planting the plant.
+/// 0 means that the plant shouldn't/can't be place there; 1 signal an optimal location.
+///
+/// # Errors
+/// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/layers/plants",
     params(
@@ -20,7 +26,7 @@ use crate::{
         HeatMapQueryParams
     ),
     responses(
-        (status = 200, description = "Generate a heatmap to find ideal locations to plant the plant", body = Vec<Vec<f64>>)
+        (status = 200, description = "Returns the heatmap.", body = Vec<Vec<f64>>)
     ),
     security(
         ("oauth2" = [])

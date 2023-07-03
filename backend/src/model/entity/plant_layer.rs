@@ -27,6 +27,11 @@ pub struct HeatMapElement {
     pub y: i32,
 }
 
+/// Generates a heatmap signaling ideal locations for planting the plant.
+///
+/// # Errors
+/// * If the SQL query failed.
+#[allow(clippy::cast_sign_loss, clippy::indexing_slicing)]
 pub async fn heatmap(
     map_id: i32,
     plant_id: i32,
@@ -55,7 +60,7 @@ pub async fn heatmap(
 /// Get all relations of a certain plant.
 ///
 /// # Errors
-/// * Unknown, diesel doesn't say why it might error.
+/// * If the SQL query failed.
 pub async fn find_relations(
     search_query: RelationSearchParameters,
     conn: &mut AsyncPgConnection,

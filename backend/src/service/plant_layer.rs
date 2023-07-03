@@ -11,6 +11,11 @@ use crate::{
     },
 };
 
+/// Generates a heatmap signaling ideal locations for planting the plant.
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+/// * If the SQL query failed.
 pub async fn heatmap(
     map_id: i32,
     query_params: HeatMapQueryParams,
@@ -24,7 +29,8 @@ pub async fn heatmap(
 /// Get all relations of a certain plant.
 ///
 /// # Errors
-/// If the connection to the database could not be established.
+/// * If the connection to the database could not be established.
+/// * If the SQL query failed.
 pub async fn find_relations(
     search_query: RelationSearchParameters,
     app_data: &Data<AppDataInner>,
