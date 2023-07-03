@@ -49,7 +49,7 @@ cargo install typeshare-cli
 You can do one of the following two steps, the first one being the simpler one, but with less configuration options.
 
 - To use the preconfigured Keycloak instance simply copy the newest version of `.env.sample` to `.env`
-- To use the local Keycloak variant follow the steps in [Keycloak Setup](../setups/keycloak/index.html)  
+- To use the local Keycloak variant follow the steps in [Keycloak Setup](../setups/keycloak/README.md)  
   You then also have to change following two env variables in `.env`
   - `AUTH_DISCOVERY_URI=http://localhost:8081/realms/PermaplanT/.well-known/openid-configuration`
   - `AUTH_CLIENT_ID=PermaplanT`
