@@ -96,10 +96,16 @@ This is possible because the name in the database is unique.
 All public directories can be placed anywhere as they are identified by the public share token.
 They are not visible to all of the users in Nextcloud, so they are not included in the directory structure above.
 
-### Sharing a Map
+### Shares and Permissions
 
 When we want to add additional members to our PermaplanT map we also have to share the Nextcloud resources with them.
-First we need to create a circle.
+To share and manage permissions on Nextcloud directories we generally use [Nextcloud Circles](https://github.com/nextcloud/circles).
+The major difference to groups is that Circles can be created by normal users while groups need higher privileges to manage.
+
+Unfortunately the Circles API is not well documented.
+The implementation of the API can be found on the corresponding [github repository](https://github.com/nextcloud/circles/blob/22238597fb9045e748119247fceaac7321f0a31e/appinfo/routes.php).
+
+First we need to create a Circle.
 This can be achieved by following API call:
 ```json
 "method": "POST",
@@ -116,12 +122,9 @@ This can be achieved by following API call:
 "host": "cloud.permaplant.net",
 "filename": "/ocs/v2.php/apps/circles/circles"
 ```
-The name of the circle is the same as the name of the map.
-Unfortunately the circle API is not documented.
-The implementation of the API can be found on the corresponding [github repository](https://github.com/nextcloud/circles/blob/22238597fb9045e748119247fceaac7321f0a31e/appinfo/routes.php).
-
-Now the circle has to be added to the shares for the map directory.
-This can be done with the share API which is documented [here](https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/ocs-share-api.html).
+The name of the Circle is the same as the name of the map.
+Now the Circle has to be added to the shares for the map directory.
+This can be done with the OCS Share API which is documented [here](https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/ocs-share-api.html).
 Following API call can be used:
 ```json
 "method": "POST",
@@ -131,12 +134,64 @@ Following API call can be used:
 "body": {
   "path": "PermaplanT/Maps/map_01",
   "shareType": 7,
+  "permissions": 31,
   "shareWith": "<circleId>"
 },
 "scheme":	"https",
 "host": "cloud.permaplant.net",
-"filename": "/ocs/v2.php/apps/files_sharing/api/v1"
+"filename": "/ocs/v2.php/apps/files_sharing/api/v1/shares"
 ```
+
+The argument `shareType` specifies what kind of share we want to create.
+The options are: 
+- 0 = user
+- 1 = group
+- 3 = public link
+- 4 = email
+- 6 = federated cloud share
+- 7 = circle
+- 10 = Talk conversation
+
+We chose 7 to share the directory with the newly created Circle.
+
+If not specified the permissions for the share are set to 31 which means all.
+If we want to have more granular control of the permission we can set the `permissions` parameter to one of these values:
+- 1 = read
+- 2 = update
+- 4 = create
+- 8 = delete
+- 16 = share
+- 31 = all
+
+If we want even more granular permission control we can set the permissions for each layer directory individually.
+
+To remove a share we use following request:
+```json
+"method": "DELETE",
+"headers": [
+  "OCS-APIRequest": true
+],
+"scheme":	"https",
+"host": "cloud.permaplant.net",
+"filename": "/ocs/v2.php/apps/files_sharing/api/v1/shares/<share_id>"
+```
+
+And to update a share we use:
+```json
+"method": "PUT",
+"headers": [
+  "OCS-APIRequest": true
+],
+"body": {
+  "permissions": 1
+},
+"scheme":	"https",
+"host": "cloud.permaplant.net",
+"filename": "/ocs/v2.php/apps/files_sharing/api/v1/shares/<share_id>"
+```
+
+Note that we can only update one value at a time with the PUT request.
+
 
 ### React Components
 
