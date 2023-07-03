@@ -35,10 +35,11 @@ def folderWasModified(String folderPath) {
             }
         }
     })
-
     if( !changeSets.size().asBoolean()) {
+        echo "No changes in the '${folderPath}' folder. Skipping stage."
         return false
     } else {
+        echo "Changes detected in the '${folderPath}' folder. Continuing with the stage."
         return true
     }
 }
@@ -75,7 +76,7 @@ stage('Tests & Build') {
         node('docker') {
             checkout scm
 
-            if (folderWasModified("doc")) {
+            if (folderWasModified("doc/")) {
                 def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
 
                 mdbook_image.inside {
