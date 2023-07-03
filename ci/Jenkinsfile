@@ -31,7 +31,7 @@ def folderWasModified(String folderPath) {
     def changeSets = currentBuild.changeSets.collect({
         it.items.collect {
             it.affectedFiles.find { file ->
-                file.path == filePath
+                file.path == folderPath
             }
         }
     })
