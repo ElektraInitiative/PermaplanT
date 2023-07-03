@@ -2,10 +2,10 @@
 
 use diesel::dsl::sql;
 use diesel::pg::Pg;
-use diesel::sql_types::Float;
+use diesel::sql_types::{Double, Float, Integer};
 use diesel::{
     debug_query, BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods, QueryDsl,
-    QueryResult,
+    QueryResult, QueryableByName,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
@@ -22,7 +22,38 @@ use crate::{
 
 use super::{Map, NewMap};
 
+#[derive(Debug, Clone, QueryableByName)]
+pub struct HeatMapElement {
+    #[diesel(sql_type = Double)]
+    pub score: f64,
+    #[diesel(sql_type = Integer)]
+    pub x: i32,
+    #[diesel(sql_type = Integer)]
+    pub y: i32,
+}
+
 impl Map {
+    pub async fn heatmap(conn: &mut AsyncPgConnection) -> QueryResult<Vec<Vec<f64>>> {
+        let num_rows = 10; // TODO: Calculate number of rows
+        let num_cols = 10; // TODO: Calculate number of columns
+
+        let query = diesel::sql_query("SELECT * FROM calculate_score($1, $2, $3)")
+            .bind::<Integer, _>(1) // map_id
+            .bind::<Integer, _>(num_rows)
+            .bind::<Integer, _>(num_cols);
+
+        debug!("{}", debug_query::<Pg, _>(&query));
+        let result = query.load::<HeatMapElement>(conn).await?;
+
+        debug!("{result:#?}");
+
+        let mut heatmap = vec![vec![0.0; num_cols as usize]; num_rows as usize];
+        for HeatMapElement { score, x, y } in result {
+            heatmap[x as usize][y as usize] = score;
+        }
+        Ok(heatmap)
+    }
+
     /// Get the top maps matching the search query.
     ///
     /// Can be filtered by `is_inactive` and `owner_id` if provided in `search_parameters`.

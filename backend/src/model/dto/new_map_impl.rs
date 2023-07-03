@@ -1,5 +1,6 @@
 //! Contains the implementation of [`NewMapDto`].
 
+use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
 
 use crate::model::entity::NewMap;
@@ -8,8 +9,38 @@ use super::NewMapDto;
 
 impl From<(NewMapDto, Uuid)> for NewMap {
     fn from((new_map, owner_id): (NewMapDto, Uuid)) -> Self {
+        let mut map_geom = Polygon::new(Some(4326));
+        map_geom.add_points(vec![
+            Point {
+                x: 0.0,
+                y: 0.0,
+                srid: None,
+            },
+            Point {
+                x: 10.0,
+                y: 0.0,
+                srid: None,
+            },
+            Point {
+                x: 10.0,
+                y: 10.0,
+                srid: None,
+            },
+            Point {
+                x: 0.0,
+                y: 10.0,
+                srid: None,
+            },
+            Point {
+                x: 0.0,
+                y: 0.0,
+                srid: None,
+            },
+        ]);
+
         Self {
             name: new_map.name,
+            map_geom,
             creation_date: new_map.creation_date,
             deletion_date: new_map.deletion_date,
             last_visit: new_map.last_visit,

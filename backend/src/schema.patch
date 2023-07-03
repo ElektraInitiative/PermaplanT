@@ -1,33 +1,38 @@
-diff --git a/backend/src/schema.rs b/backend/src/schema.rs
-index 16c1826d..d33481b0 100644
---- a/backend/src/schema.rs
-+++ b/backend/src/schema.rs
-@@ -14,16 +14,12 @@ pub mod sql_types {
-     pub struct Fertility;
+--- src/schema.rs	2023-07-03 18:30:12.781088814 +0200
++++ "src/schema copy.rs"	2023-07-03 18:31:06.642898879 +0200
+@@ -15,20 +15,12 @@
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "flower_type"))]
      pub struct FlowerType;
 
--    #[derive(diesel::sql_types::SqlType)]
+     #[derive(diesel::sql_types::SqlType)]
 -    #[diesel(postgres_type(name = "geography"))]
 -    pub struct Geography;
 -
-     #[derive(diesel::sql_types::SqlType)]
+-    #[derive(diesel::sql_types::SqlType)]
+-    #[diesel(postgres_type(name = "geometry"))]
+-    pub struct Geometry;
+-
+-    #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "growth_rate"))]
      pub struct GrowthRate;
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "herbaceous_or_woody"))]
-@@ -86,14 +82,13 @@ diesel::table! {
+     pub struct HerbaceousOrWoody;
+@@ -104,16 +96,15 @@
+         is_alternative -> Bool,
      }
  }
 
  diesel::table! {
      use postgis_diesel::sql_types::Geography;
++    use postgis_diesel::sql_types::Geometry;
      use diesel::sql_types::*;
      use super::sql_types::PrivacyOptions;
 -    use super::sql_types::Geography;
+-    use super::sql_types::Geometry;
 
      maps (id) {
          id -> Int4,

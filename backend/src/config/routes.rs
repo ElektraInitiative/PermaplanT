@@ -29,6 +29,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         )
         .service(
             web::scope("/maps")
+                .service(map::heatmap)
                 .service(map::find)
                 .service(map::find_by_id)
                 .service(map::create)

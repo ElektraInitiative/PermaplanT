@@ -12,6 +12,21 @@ use crate::config::data::AppDataInner;
 use crate::model::dto::{MapSearchParameters, PageParameters};
 use crate::{model::dto::NewMapDto, service};
 
+#[utoipa::path(
+    context_path = "/api/maps",
+    responses(
+        (status = 200, description = "Fetch or search all maps", body = PageMapDto)
+    ),
+    security(
+        ("oauth2" = [])
+    )
+)]
+#[get("/heatmap")]
+pub async fn heatmap(app_data: Data<AppDataInner>) -> Result<HttpResponse> {
+    let response = service::map::heatmap(&app_data).await?;
+    Ok(HttpResponse::Ok().json(response))
+}
+
 /// Endpoint for fetching or searching all [`Map`](crate::model::entity::Map).
 /// Search parameters are taken from the URLs query string (e.g. .../api/maps?is_inactive=false&per_page=5).
 /// If no page parameters are provided, the first page is returned.

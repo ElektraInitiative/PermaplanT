@@ -2,7 +2,7 @@
 
 use actix_web::web;
 use utoipa::{
-    openapi::security::{AuthorizationCode, Flow, OAuth2, Password, Scopes, SecurityScheme},
+    openapi::security::{AuthorizationCode, Flow, OAuth2, Scopes, SecurityScheme},
     Modify, OpenApi,
 };
 use utoipa_swagger_ui::SwaggerUi;
@@ -72,6 +72,7 @@ struct PlantsApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
+        map::heatmap,
         map::find,
         map::find_by_id,
         map::create
@@ -186,14 +187,11 @@ impl Modify for SecurityAddon {
         let components = openapi.components.as_mut().unwrap();
 
         let config = &Config::get().openid_configuration;
-        let oauth2 = OAuth2::new([
-            Flow::AuthorizationCode(AuthorizationCode::new(
-                config.authorization_endpoint.clone(),
-                config.token_endpoint.clone(),
-                Scopes::new(),
-            )),
-            Flow::Password(Password::new(config.token_endpoint.clone(), Scopes::new())),
-        ]);
+        let oauth2 = OAuth2::new([Flow::AuthorizationCode(AuthorizationCode::new(
+            config.authorization_endpoint.clone(),
+            config.token_endpoint.clone(),
+            Scopes::new(),
+        ))]);
         components.add_security_scheme("oauth2", SecurityScheme::OAuth2(oauth2));
     }
 }
