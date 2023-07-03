@@ -28,14 +28,15 @@ def wait_for_db() {
 }
 
 def folderWasModified(String folderPath) {
-    def changeSets = currentBuild.changeSets.collect(
+    def changeSets = currentBuild.changeSets.collect({
         it.items.collect {
-        it.affectedFiles.find { file ->
-            file.path == folderPath
+            it.affectedFiles.find { file ->
+                file.path == filePath
+            }
         }
     })
 
-    if( !file.size().asBoolean()) {
+    if( !changeSets.size().asBoolean()) {
         return false
     } else {
         return true
@@ -73,8 +74,6 @@ stage('Tests & Build') {
     parallel_checks["test-and-build-mdbook"] = {
         node('docker') {
             checkout scm
-                // Collect the change sets
-            def changeSets = currentBuild.changeSets.collect()
 
             if (folderWasModified("doc")) {
                 def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
