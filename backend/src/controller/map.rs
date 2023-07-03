@@ -23,7 +23,11 @@ use crate::{model::dto::NewMapDto, service};
 )]
 #[get("/heatmap")]
 pub async fn heatmap(app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let response = service::map::heatmap(&app_data).await?;
+    // TODO: figure out where to put endpoints
+    // TODO: get params from request
+    let map_id = 1;
+    let plant_id = 1;
+    let response = service::map::heatmap(map_id, plant_id, &app_data).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 

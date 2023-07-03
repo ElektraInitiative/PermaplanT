@@ -33,20 +33,24 @@ pub struct HeatMapElement {
 }
 
 impl Map {
-    pub async fn heatmap(conn: &mut AsyncPgConnection) -> QueryResult<Vec<Vec<f64>>> {
+    pub async fn heatmap(
+        map_id: i32,
+        plant_id: i32,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<Vec<Vec<f64>>> {
+        // TODO: Compute from the maps geometry
         let num_rows = 10; // TODO: Calculate number of rows
         let num_cols = 10; // TODO: Calculate number of columns
 
-        let query = diesel::sql_query("SELECT * FROM calculate_score($1, $2, $3)")
-            .bind::<Integer, _>(1) // map_id
+        let query = diesel::sql_query("SELECT * FROM calculate_score($1, $2, $3, $4)")
+            .bind::<Integer, _>(map_id)
+            .bind::<Integer, _>(plant_id)
             .bind::<Integer, _>(num_rows)
             .bind::<Integer, _>(num_cols);
 
-        debug!("{}", debug_query::<Pg, _>(&query));
         let result = query.load::<HeatMapElement>(conn).await?;
 
-        debug!("{result:#?}");
-
+        // TODO: figure out how to handle actual values (return matrix to frontend, create image, return matrix as binary?)
         let mut heatmap = vec![vec![0.0; num_cols as usize]; num_rows as usize];
         for HeatMapElement { score, x, y } in result {
             heatmap[x as usize][y as usize] = score;

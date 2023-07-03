@@ -17,18 +17,18 @@ impl From<(NewMapDto, Uuid)> for NewMap {
                 srid: None,
             },
             Point {
-                x: 10.0,
+                x: 5.0,
                 y: 0.0,
                 srid: None,
             },
             Point {
-                x: 10.0,
-                y: 10.0,
+                x: 5.0,
+                y: 5.0,
                 srid: None,
             },
             Point {
                 x: 0.0,
-                y: 10.0,
+                y: 5.0,
                 srid: None,
             },
             Point {

@@ -19,9 +19,13 @@ use crate::{
 /// Defines which layers should be created when a new map is created.
 const LAYER_TYPES: [LayerType; 2] = [LayerType::Base, LayerType::Plants];
 
-pub async fn heatmap(app_data: &Data<AppDataInner>) -> Result<Vec<Vec<f64>>, ServiceError> {
+pub async fn heatmap(
+    map_id: i32,
+    plant_id: i32,
+    app_data: &Data<AppDataInner>,
+) -> Result<Vec<Vec<f64>>, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Map::heatmap(&mut conn).await?;
+    let result = Map::heatmap(map_id, plant_id, &mut conn).await?;
     Ok(result)
 }
 
