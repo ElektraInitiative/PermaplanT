@@ -1,14 +1,20 @@
 import CountingButton from './CountingButton';
 import { MapDto } from '@/bindings/definitions';
+import IconButton from '@/components/Button/IconButton';
+import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
+import { ReactComponent as EditIcon } from '@/icons/edit.svg';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface MapCardProps {
+  /** The map represented by this list item. */
   map: MapDto;
+  /** The function called to duplicate this map. */
+  onDuplicate: (target: MapDto) => void;
 }
 
-export default function MapCard({ map }: MapCardProps) {
-  const { t } = useTranslation(['maps']);
+export default function MapCard({ map, onDuplicate }: MapCardProps) {
+  const { t } = useTranslation(['privacyOptions']);
   const navigate = useNavigate();
 
   return (
@@ -25,10 +31,28 @@ export default function MapCard({ map }: MapCardProps) {
         </span>
         <span className="text-sm italic">{map.creation_date}</span>
       </section>
-      <span className="ml-1 text-sm">({t(`maps:create.${map.privacy}`)})</span>
+      <span className="ml-1 text-sm">({t(`privacyOptions:${map.privacy}`)})</span>
       <section className="ml-auto flex items-center">
         <CountingButton iconType={0} count={map.honors} />
         <CountingButton iconType={1} count={map.visits} />
+      </section>
+      <section className="ml-4 flex flex-col justify-center">
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onDuplicate(map);
+          }}
+        >
+          <CopyIcon className="h-5 w-5" />
+        </IconButton>
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`${map.id}/edit`);
+          }}
+        >
+          <EditIcon className="h-5 w-5" />
+        </IconButton>
       </section>
     </div>
   );

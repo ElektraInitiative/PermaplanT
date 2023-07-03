@@ -75,7 +75,7 @@ Therefore, keeping the state as structured as possible in it can help optimize a
 
 ## Related Decisions
 
-- [Map undo redo implementation](/doc/decisions/map_undo_redo_implementation.md)
+- [Map undo redo implementation](../decisions/map_undo_redo_implementation.md)
 
 ## Notes
 
