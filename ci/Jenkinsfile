@@ -16,10 +16,10 @@ stage('Build Schema'){
         node_info()
 
         checkout scm
-        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+        def base_image = docker.build("permaplant-base", "./ci/")
 
         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+            base_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 checkout scm
 
                 wait_for_db()
@@ -40,9 +40,9 @@ stage('Tests & Build') {
     parallel_checks["test-and-build-mdbook"] = {
         node('docker') {
             checkout scm
-            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+            def base_image = docker.build("permaplant-mdbook", "./ci/")
 
-            mdbook_image.inside {
+            base_image.inside {
                 checkout scm
 
                 stage('test-and-build-mdbook'){
@@ -58,10 +58,10 @@ stage('Tests & Build') {
         node('docker') {
             node_info()
             checkout scm
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+            def base_image = docker.build("permaplant-base", "./ci/")
 
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                base_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
 
                     wait_for_db()
@@ -104,9 +104,9 @@ stage('Tests & Build') {
         node('docker') {
             node_info()
             checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+            def base_image = docker.build("permaplant-base", "./ci/")
 
-            node_image.inside {
+            base_image.inside {
                 checkout scm
                 unstash 'definitions.ts'
                 stage('test-frontend'){
