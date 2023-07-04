@@ -9,16 +9,19 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{config, layers, map, plant_layer, planting_suggestions, plantings, plants, seed},
+    controller::{
+        base_layer_images, config, layers, map, plant_layer, planting_suggestions, plantings,
+        plants, seed,
+    },
     model::{
         dto::{
             plantings::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto,
-            PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto,
-            RelationsDto, SeedDto,
+            BaseLayerImagesDto, ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto,
+            PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto,
+            RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImagesDto,
         },
         r#enum::{quality::Quality, quantity::Quantity, relation_type::RelationType},
     },
@@ -128,6 +131,25 @@ struct PlantLayerApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
+        base_layer_images::find,
+        base_layer_images::create,
+        base_layer_images::update,
+        base_layer_images::delete
+    ),
+    components(
+        schemas(
+            BaseLayerImagesDto,
+            UpdateBaseLayerImagesDto,
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct BaseLayerImagesApiDoc;
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plantings endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
         plantings::find,
         plantings::create,
         plantings::update,
@@ -171,6 +193,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(MapApiDoc::openapi());
     openapi.merge(LayerApiDoc::openapi());
     openapi.merge(PlantLayerApiDoc::openapi());
+    openapi.merge(BaseLayerImagesApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
