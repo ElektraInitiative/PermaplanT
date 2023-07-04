@@ -1,5 +1,6 @@
 //! Contains all entities used in `PermaplanT`.
 
+pub mod base_layer_images_impl;
 pub mod layer_impl;
 pub mod map_impl;
 pub mod plant_layer;
@@ -17,7 +18,7 @@ use diesel::{Identifiable, Insertable, Queryable};
 use postgis_diesel::types::Point;
 use uuid::Uuid;
 
-use crate::schema::{layers, maps, plants, seeds};
+use crate::schema::{base_layer_images, layers, maps, plants, seeds};
 
 use super::r#enum::privacy_options::PrivacyOptions;
 use super::r#enum::{
@@ -819,4 +820,19 @@ pub struct NewLayer {
     pub name: String,
     /// A flag indicating if this layer is an user created alternative.
     pub is_alternative: bool,
+}
+
+#[derive(Identifiable, Queryable, Insertable)]
+#[diesel(table_name = base_layer_images)]
+pub struct BaseLayerImages {
+    /// The id of the image.
+    pub id: Uuid,
+    /// The layer the image is on.
+    pub layer_id: i32,
+    /// The path to the image on Nextcloud.
+    pub path: String,
+    /// The rotation in degrees (0-360) of the image on the map.
+    pub rotation: f32,
+    /// The scale of the image on the map.
+    pub scale: f32,
 }
