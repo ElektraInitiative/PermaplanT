@@ -6,8 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** A users map gets a diversity score depending on his usage of diversity and polyculture.
-- **Status:** Assigned
-- **Assignee** Thorben
+- **Assignee** Ready to be assigned
 
 ## Scenarios
 
