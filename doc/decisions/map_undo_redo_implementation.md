@@ -8,7 +8,7 @@ The user should be able to undo/redo the actions taken within the canvas.
 ## Constraints
 
 1. The implementation of undo/redo should not have a significant impact on the performance of the app.
-2. The implementation of undo/redo should correspond to the related [use case](/doc/usecases/map_undo_redo.md)
+2. The implementation of undo/redo should correspond to the related [use case](../usecases/done/map_undo_redo.md)
 
 ## Assumptions
 
@@ -79,7 +79,7 @@ In the backend, we use the observer pattern to implement the notification via SS
 
 ## Related Decisions
 
-- [Frontend State Management](/doc/decisions/frontend_state_management.md)
+- [Frontend State Management](../decisions/frontend_state_management.md)
 
 ## Notes
 

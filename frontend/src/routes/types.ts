@@ -9,6 +9,7 @@ enum Pages {
   LandingPage,
   Map,
   MapCreation,
+  MapEdit,
   Maps,
   Webdav,
   Overview,
