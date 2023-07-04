@@ -59,6 +59,7 @@ stage('Tests & Build') {
             node_info()
             checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
@@ -94,7 +95,6 @@ stage('Tests & Build') {
 
                         stash includes: 'backend/target/release/backend', name: 'backend'
                     }
-
                 }
             }
         }
@@ -105,10 +105,10 @@ stage('Tests & Build') {
             node_info()
             checkout scm
             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+
             node_image.inside {
                 checkout scm
                 unstash 'definitions.ts'
-
                 stage('test-frontend'){
                     dir("frontend") {
                         sh "npm ci"
@@ -121,6 +121,16 @@ stage('Tests & Build') {
                 stage('build-frontend'){
                     sh './ci/build-scripts/build-frontend.sh'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
+                }
+
+                stage('build-typedoc'){
+                    sh 'cd frontend && npm run doc'
+                    stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
+                }
+
+                stage('build-storybook'){
+                    sh './ci/build-scripts/build-storybook.sh'
+                    stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
             }
         }
@@ -147,6 +157,8 @@ stage('Deploy PR') {
             unstash 'schema.rs'
             unstash 'frontend'
             unstash 'backend'
+            unstash 'storybook'
+            unstash 'typedoc'
             unstash 'mdbook'
 
             echo 'Deploying to PR'
@@ -177,6 +189,8 @@ if (env.BRANCH_NAME == 'master') {
             unstash 'schema.rs'
             unstash 'frontend'
             unstash 'backend'
+            unstash 'storybook'
+            unstash 'typedoc'
             unstash 'mdbook'
 
             echo 'Deploying to Dev ...'
