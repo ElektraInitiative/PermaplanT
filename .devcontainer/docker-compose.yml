@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    ports:
+      - "8080:8080"
+    networks:
+      - permaplant-dev
+
+  db:
+    image: postgis/postgis:13-3.1
+    restart: unless-stopped
+    volumes:
+      - postgis-data-dev:/var/lib/postgresql/data
+    env_file:
+      - .env.backend
+    networks:
+      - permaplant-dev
+
+  pgadmin:
+    build:
+      context: .
+      dockerfile: Dockerfile.pg
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    volumes:
+      - pgadmin-data-dev:/var/lib/pgadmin
+    env_file:
+      - .env.backend
+    networks:
+      - permaplant-dev
+    ports:
+      - "5050:80"
+
+volumes:
+  pgadmin-data-dev:
+    external: false
+  postgis-data-dev:
+    external: false
+
+networks:
+  permaplant-dev:
+    external: false
