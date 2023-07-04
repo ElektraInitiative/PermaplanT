@@ -6,7 +6,7 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 use uuid::Uuid;
 
-use crate::model::dto::{BaseLayerImagesDto, UpdateBaseLayerImagesDto};
+use crate::model::dto::{BaseLayerImageDto, UpdateBaseLayerImageDto};
 use crate::schema::base_layer_images::{self, all_columns};
 
 use super::BaseLayerImages;
@@ -16,7 +16,7 @@ impl BaseLayerImages {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find(conn: &mut AsyncPgConnection) -> QueryResult<Vec<BaseLayerImagesDto>> {
+    pub async fn find(conn: &mut AsyncPgConnection) -> QueryResult<Vec<BaseLayerImageDto>> {
         let query = base_layer_images::table.select(all_columns);
 
         debug!("{}", debug_query::<Pg, _>(&query));
@@ -34,9 +34,9 @@ impl BaseLayerImages {
     /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn create(
-        dto: BaseLayerImagesDto,
+        dto: BaseLayerImageDto,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<BaseLayerImagesDto> {
+    ) -> QueryResult<BaseLayerImageDto> {
         let query = diesel::insert_into(base_layer_images::table).values(&dto.into());
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
@@ -48,9 +48,9 @@ impl BaseLayerImages {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn update(
         id: Uuid,
-        dto: UpdateBaseLayerImagesDto,
+        dto: UpdateBaseLayerImageDto,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<BaseLayerImagesDto> {
+    ) -> QueryResult<BaseLayerImageDto> {
         let update = Self::from((id, dto));
         let query = diesel::update(base_layer_images::table.find(id)).set(&update);
         debug!("{}", debug_query::<Pg, _>(&query));

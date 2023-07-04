@@ -363,7 +363,7 @@ pub enum SuggestionType {
 
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
-pub struct BaseLayerImagesDto {
+pub struct BaseLayerImageDto {
     /// The id of the image.
     pub id: Uuid,
     /// The layer the image is on.
@@ -378,7 +378,7 @@ pub struct BaseLayerImagesDto {
 
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
-pub struct UpdateBaseLayerImagesDto {
+pub struct UpdateBaseLayerImageDto {
     /// The layer the image is on.
     pub layer_id: i32,
     /// The path to the image on Nextcloud.

@@ -4,9 +4,9 @@ use uuid::Uuid;
 
 use crate::model::entity::BaseLayerImages;
 
-use super::{BaseLayerImagesDto, UpdateBaseLayerImagesDto};
+use super::{BaseLayerImageDto, UpdateBaseLayerImageDto};
 
-impl From<BaseLayerImages> for BaseLayerImagesDto {
+impl From<BaseLayerImages> for BaseLayerImageDto {
     fn from(entity: BaseLayerImages) -> Self {
         Self {
             id: entity.id,
@@ -18,8 +18,8 @@ impl From<BaseLayerImages> for BaseLayerImagesDto {
     }
 }
 
-impl From<(Uuid, UpdateBaseLayerImagesDto)> for BaseLayerImages {
-    fn from((id, dto): (Uuid, UpdateBaseLayerImagesDto)) -> Self {
+impl From<(Uuid, UpdateBaseLayerImageDto)> for BaseLayerImages {
+    fn from((id, dto): (Uuid, UpdateBaseLayerImageDto)) -> Self {
         Self {
             id,
             layer_id: dto.layer_id,

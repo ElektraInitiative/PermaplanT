@@ -12,6 +12,8 @@ use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;
 
+use super::BaseLayerImageDto;
+
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
 // Use the name of the enum variant as the type field looking like { "type": "CreatePlanting", ... }.
@@ -26,6 +28,12 @@ pub enum Action {
     MovePlanting(MovePlantActionPayload),
     /// An action used to broadcast transformation of a plant.
     TransformPlanting(TransformPlantActionPayload),
+    /// An action used to broadcast creation of a baseLayerImage.
+    CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
+    /// An action used to broadcast deletion of a baseLayerImage.
+    DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
+    /// An action used to broadcast update of a baseLayerImage.
+    UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
 }
 
 #[typeshare]
@@ -130,6 +138,77 @@ impl TransformPlantActionPayload {
             rotation: payload.rotation,
             scale_x: payload.scale_x,
             scale_y: payload.scale_y,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::CreateBaseLayerImage`].
+/// This struct should always match [`BaseLayerImageDto`].
+#[serde(rename_all = "camelCase")]
+pub struct CreateBaseLayerImageActionPayload {
+    user_id: Uuid,
+    id: Uuid,
+    layer_id: i32,
+    rotation: f32,
+    scale: f32,
+    path: String
+}
+
+impl CreateBaseLayerImageActionPayload {
+    #[must_use]
+    pub fn new(payload: BaseLayerImageDto, user_id: Uuid) -> Self {
+        Self {
+            user_id,
+            id: payload.id,
+            layer_id: payload.layer_id,
+            rotation: payload.rotation,
+            scale: payload.scale,
+            path: payload.path
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::DeletePlanting`].
+#[serde(rename_all = "camelCase")]
+pub struct DeleteBaseLayerImageActionPayload {
+    user_id: Uuid,
+    id: Uuid,
+}
+
+impl DeleteBaseLayerImageActionPayload {
+    #[must_use]
+    pub fn new(id: Uuid, user_id: Uuid) -> Self {
+        Self { user_id, id }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::MovePlanting`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdateBaseLayerImageActionPayload {
+    user_id: Uuid,
+    id: Uuid,
+    layer_id: i32,
+    rotation: f32,
+    scale: f32,
+    path: String
+}
+
+impl UpdateBaseLayerImageActionPayload {
+    #[must_use]
+    pub fn new(payload: BaseLayerImageDto, user_id: Uuid) -> Self {
+        Self {
+            user_id,
+            id: payload.id,
+            layer_id: payload.layer_id,
+            rotation: payload.rotation,
+            scale: payload.scale,
+            path: payload.path
         }
     }
 }

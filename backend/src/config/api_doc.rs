@@ -19,9 +19,9 @@ use crate::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            BaseLayerImagesDto, ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto,
+            BaseLayerImageDto, ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto,
             PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto,
-            RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImagesDto,
+            RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImageDto,
         },
         r#enum::{quality::Quality, quantity::Quantity, relation_type::RelationType},
     },
@@ -138,8 +138,8 @@ struct PlantLayerApiDoc;
     ),
     components(
         schemas(
-            BaseLayerImagesDto,
-            UpdateBaseLayerImagesDto,
+            BaseLayerImageDto,
+            UpdateBaseLayerImageDto,
         )
     ),
     modifiers(&SecurityAddon)

@@ -7,11 +7,11 @@ use actix_web::{
 };
 use uuid::Uuid;
 
-use crate::config::auth::user_info::UserInfo;
-use crate::{config::data::AppDataInner, model::dto::BaseLayerImagesDto};
-use crate::{model::dto::UpdateBaseLayerImagesDto, service::base_layer_images};
+use crate::{config::auth::user_info::UserInfo, model::dto::actions::{CreateBaseLayerImageActionPayload, UpdateBaseLayerImageActionPayload, DeleteBaseLayerImageActionPayload, Action}};
+use crate::{config::data::AppDataInner, model::dto::BaseLayerImageDto};
+use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
 
-/// Endpoint for listing and filtering `Planting`.
+/// Endpoint for listing and filtering `Base Layer Images`.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -21,7 +21,7 @@ use crate::{model::dto::UpdateBaseLayerImagesDto, service::base_layer_images};
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
     ),
     responses(
-        (status = 200, description = "Find plantings", body = Vec<BaseLayerImagesDto>)
+        (status = 200, description = "Find base layer images", body = Vec<BaseLayerImagesDto>)
     ),
     security(
         ("oauth2" = [])
@@ -33,7 +33,7 @@ pub async fn find(app_data: Data<AppDataInner>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Endpoint for creating a new `Planting`.
+/// Endpoint for creating a new `Base Layer Image`.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -53,17 +53,17 @@ pub async fn find(app_data: Data<AppDataInner>) -> Result<HttpResponse> {
 #[post("")]
 pub async fn create(
     path: Path<i32>,
-    new_plant_json: Json<BaseLayerImagesDto>,
+    new_base_layer_image_json: Json<BaseLayerImageDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let dto = base_layer_images::create(new_plant_json.0, &app_data).await?;
+    let dto = base_layer_images::create(new_base_layer_image_json.0, &app_data).await?;
 
     app_data
         .broadcaster
         .broadcast(
             path.into_inner(),
-            unimplemented!(), // TODO
+            Action::CreateBaseLayerImage(CreateBaseLayerImageActionPayload::new(dto.clone(), user_info.id)),
         )
         .await;
 
@@ -87,28 +87,30 @@ pub async fn create(
         ("oauth2" = [])
     )
 )]
-#[patch("/{planting_id}")]
+#[patch("/{base_layer_image_id}")]
 pub async fn update(
     path: Path<(i32, Uuid)>,
-    new_plant_json: Json<UpdateBaseLayerImagesDto>,
+    update_base_layer_image_json: Json<UpdateBaseLayerImageDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let (map_id, planting_id) = path.into_inner();
-    let update_planting = new_plant_json.0;
+    let (map_id, base_layer_image_id) = path.into_inner();
+    let update_base_layer_image = update_base_layer_image_json.0;
 
-    let planting = base_layer_images::update(planting_id, update_planting, &app_data).await?;
+    let dto = base_layer_images::update(base_layer_image_id, update_base_layer_image, &app_data).await?;
 
-    // TODO
     app_data
         .broadcaster
-        .broadcast(map_id, unimplemented!())
+        .broadcast(
+            map_id,
+            Action::UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload::new(dto, user_info.id)),
+        )
         .await;
 
-    Ok(HttpResponse::Ok().json(planting))
+    Ok(HttpResponse::Ok().json(dto))
 }
 
-/// Endpoint for deleting a `Planting`.
+/// Endpoint for deleting a `BaseLayerImage`.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -124,22 +126,21 @@ pub async fn update(
         ("oauth2" = [])
     )
 )]
-#[delete("/{planting_id}")]
+#[delete("/{base_layer_image_id}")]
 pub async fn delete(
     path: Path<(i32, Uuid)>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let (map_id, planting_id) = path.into_inner();
+    let (map_id, base_layer_image_id) = path.into_inner();
 
-    base_layer_images::delete_by_id(planting_id, &app_data).await?;
+    base_layer_images::delete_by_id(base_layer_image_id, &app_data).await?;
 
     app_data
         .broadcaster
         .broadcast(
             map_id,
-            // TODO
-            unimplemented!(),
+            Action::DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload::new(base_layer_image_id, user_info.id)),
         )
         .await;
 
