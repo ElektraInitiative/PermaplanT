@@ -153,7 +153,7 @@ pub struct CreateBaseLayerImageActionPayload {
     layer_id: i32,
     rotation: f32,
     scale: f32,
-    path: String
+    path: String,
 }
 
 impl CreateBaseLayerImageActionPayload {
@@ -165,14 +165,14 @@ impl CreateBaseLayerImageActionPayload {
             layer_id: payload.layer_id,
             rotation: payload.rotation,
             scale: payload.scale,
-            path: payload.path
+            path: payload.path,
         }
     }
 }
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::DeletePlanting`].
+/// The payload of the [`Action::DeleteBaseLayer`].
 #[serde(rename_all = "camelCase")]
 pub struct DeleteBaseLayerImageActionPayload {
     user_id: Uuid,
@@ -188,7 +188,7 @@ impl DeleteBaseLayerImageActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::MovePlanting`].
+/// The payload of the [`Action::UpdateBaseLayer`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateBaseLayerImageActionPayload {
     user_id: Uuid,
@@ -196,7 +196,7 @@ pub struct UpdateBaseLayerImageActionPayload {
     layer_id: i32,
     rotation: f32,
     scale: f32,
-    path: String
+    path: String,
 }
 
 impl UpdateBaseLayerImageActionPayload {
@@ -208,7 +208,7 @@ impl UpdateBaseLayerImageActionPayload {
             layer_id: payload.layer_id,
             rotation: payload.rotation,
             scale: payload.scale,
-            path: payload.path
+            path: payload.path,
         }
     }
 }

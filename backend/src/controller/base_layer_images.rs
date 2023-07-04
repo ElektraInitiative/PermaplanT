@@ -7,7 +7,13 @@ use actix_web::{
 };
 use uuid::Uuid;
 
-use crate::{config::auth::user_info::UserInfo, model::dto::actions::{CreateBaseLayerImageActionPayload, UpdateBaseLayerImageActionPayload, DeleteBaseLayerImageActionPayload, Action}};
+use crate::{
+    config::auth::user_info::UserInfo,
+    model::dto::actions::{
+        Action, CreateBaseLayerImageActionPayload, DeleteBaseLayerImageActionPayload,
+        UpdateBaseLayerImageActionPayload,
+    },
+};
 use crate::{config::data::AppDataInner, model::dto::BaseLayerImageDto};
 use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
 
@@ -21,7 +27,7 @@ use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
     ),
     responses(
-        (status = 200, description = "Find base layer images", body = Vec<BaseLayerImagesDto>)
+        (status = 200, description = "Find base layer images", body = Vec<BaseLayerImageDto>)
     ),
     security(
         ("oauth2" = [])
@@ -42,9 +48,9 @@ pub async fn find(app_data: Data<AppDataInner>) -> Result<HttpResponse> {
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
     ),
-    request_body = BaseLayerImagesDto,
+    request_body = BaseLayerImageDto,
     responses(
-        (status = 201, description = "Create a planting", body = BaseLayerImagesDto)
+        (status = 201, description = "Create a planting", body = BaseLayerImageDto)
     ),
     security(
         ("oauth2" = [])
@@ -63,7 +69,10 @@ pub async fn create(
         .broadcaster
         .broadcast(
             path.into_inner(),
-            Action::CreateBaseLayerImage(CreateBaseLayerImageActionPayload::new(dto.clone(), user_info.id)),
+            Action::CreateBaseLayerImage(CreateBaseLayerImageActionPayload::new(
+                dto.clone(),
+                user_info.id,
+            )),
         )
         .await;
 
@@ -79,9 +88,9 @@ pub async fn create(
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
     ),
-    request_body = UpdateBaseLayerImagesDto,
+    request_body = UpdateBaseLayerImageDto,
     responses(
-        (status = 200, description = "Update a planting", body = BaseLayerImagesDto)
+        (status = 200, description = "Update a planting", body = BaseLayerImageDto)
     ),
     security(
         ("oauth2" = [])
@@ -97,13 +106,17 @@ pub async fn update(
     let (map_id, base_layer_image_id) = path.into_inner();
     let update_base_layer_image = update_base_layer_image_json.0;
 
-    let dto = base_layer_images::update(base_layer_image_id, update_base_layer_image, &app_data).await?;
+    let dto =
+        base_layer_images::update(base_layer_image_id, update_base_layer_image, &app_data).await?;
 
     app_data
         .broadcaster
         .broadcast(
             map_id,
-            Action::UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload::new(dto, user_info.id)),
+            Action::UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload::new(
+                dto.clone(),
+                user_info.id,
+            )),
         )
         .await;
 
@@ -140,7 +153,10 @@ pub async fn delete(
         .broadcaster
         .broadcast(
             map_id,
-            Action::DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload::new(base_layer_image_id, user_info.id)),
+            Action::DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload::new(
+                base_layer_image_id,
+                user_info.id,
+            )),
         )
         .await;
 
