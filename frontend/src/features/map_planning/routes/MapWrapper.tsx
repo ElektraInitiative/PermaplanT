@@ -9,6 +9,7 @@ import { baseApiUrl } from '@/config';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
+import { getBaseLayer } from '../layers/base/api/getBaseLayer';
 
 /**
  * Extracts the default layer from the list of layers.
@@ -47,6 +48,25 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
 }
 
 /**
+ * Hook that initializes the base layer by fetching it and adding it to the store.
+ */
+function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
+  const query = useQuery({
+    queryKey: ['baselayer', mapId, layerId],
+    queryFn: () => getBaseLayer(mapId, layerId),
+    enabled,
+  });
+
+  useEffect(() => {
+    if (!query?.data) return;
+
+    useMapStore.getState().initBaseLayer(query.data);
+  }, [mapId, layerId, query?.data]);
+
+  return query;
+}
+
+/**
  * Hook that initializes the map by fetching all layers and layer elements.
  */
 function useInitializeMap() {
@@ -62,6 +82,12 @@ function useInitializeMap() {
     enabled: !!plantLayer?.id,
   });
 
+  const { isLoading: isBaseLayerLoading } = useBaseLayer({
+    mapId,
+    layerId: baseLayer?.id,
+    enabled: !!baseLayer?.id,
+  });
+
   useEffect(() => {
     if (!baseLayer) return;
 
@@ -75,7 +101,7 @@ function useInitializeMap() {
     }));
   }, [mapId, baseLayer]);
 
-  const isLoading = !layers || arePlantingsLoading;
+  const isLoading = !layers || arePlantingsLoading || isBaseLayerLoading;
 
   if (isLoading) {
     return null;

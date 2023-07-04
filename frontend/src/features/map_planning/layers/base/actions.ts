@@ -1,19 +1,23 @@
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { LayerType } from '@/bindings/definitions';
+import { updateBaseLayer } from './api/updateBaseLayer';
 
-export class UpdateBaseLayerAction implements Action<void, void> {
-  constructor(
-    private rotation: number,
-    private scale: number,
-    private nextcloudImagePath: string,
-  ) {}
+//TODO: remove when implemented in backend
+export type UpdateBaseLayerDto = {
+    rotation: number,
+    scale: number,
+    nextcloudImagePath: string,
+}
+
+export class UpdateBaseLayerAction implements
+    Action<Awaited<ReturnType<typeof updateBaseLayer>>, Awaited<ReturnType<typeof updateBaseLayer>>>
+ {
+  constructor(private readonly _data: UpdateBaseLayerDto) {}
 
   reverse(state: TrackedMapState) {
-    return new UpdateBaseLayerAction(
-      state.layers.base.rotation,
-      state.layers.base.scale,
-      state.layers.base.nextcloudImagePath,
-    );
+    return new UpdateBaseLayerAction({
+      ...state.layers.base
+    });
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -23,16 +27,13 @@ export class UpdateBaseLayerAction implements Action<void, void> {
         ...state.layers,
         [LayerType.Base]: {
           ...state.layers.base,
-          rotation: this.rotation,
-          scale: this.scale,
-          nextcloudImagePath: this.nextcloudImagePath,
+          ...this._data
         },
       },
     };
   }
 
-  execute(): Promise<void> {
-    // TODO: implement when backend exists
-    return new Promise((resolve) => resolve());
+  execute(mapId: number): Promise<UpdateBaseLayerDto> {
+    return updateBaseLayer(mapId, this._data)
   }
 }

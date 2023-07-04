@@ -10,6 +10,7 @@ import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
+import { BaseLayerDto } from '../layers/base/api/getBaseLayer';
 
 type SetFn = Parameters<typeof createTrackedMapSlice>[0];
 type GetFn = Parameters<typeof createTrackedMapSlice>[1];
@@ -48,6 +49,20 @@ export const createTrackedMapSlice: StateCreator<
             plants: {
               ...state.trackedState.layers.plants,
               objects: plants,
+            },
+          },
+        },
+      })),
+    initBaseLayer: (dto: BaseLayerDto[]) =>
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            base: {
+              ...state.trackedState.layers.base,
+              ...dto
             },
           },
         },

@@ -98,9 +98,7 @@ export const Map = ({ layers }: MapProps) => {
         <BaseLayer
           opacity={untrackedState.layers.base.opacity}
           visible={untrackedState.layers.base.visible}
-          nextcloudImagePath={trackedState.layers.base.nextcloudImagePath}
-          pixelsPerMeter={trackedState.layers.base.scale}
-          rotation={trackedState.layers.base.rotation}
+          listening={selectedLayer.type_ === LayerType.Base}
         />
         <PlantsLayer
           visible={untrackedState.layers.plants.visible}

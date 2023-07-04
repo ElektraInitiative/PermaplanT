@@ -3,30 +3,23 @@ import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import Konva from 'konva';
 import { useCallback, useState } from 'react';
 import { Layer } from 'react-konva';
+import useMapStore from '../../store/MapStore';
 
-interface BaseLayerProps extends Konva.LayerConfig {
-  /**
-   * Filepath to the background image in Nextcloud.
-   */
-  nextcloudImagePath: string;
-  /**
-   * Used to align the size of the background image with the real world.
-   */
-  pixelsPerMeter: number;
-  /**
-   * The amount of rotation required to align the base layer with geographic north.
-   */
-  rotation: number;
-}
+type BaseLayerProps = Konva.LayerConfig;
 
-const BaseLayer = ({
-  visible,
-  opacity,
-  nextcloudImagePath,
-  pixelsPerMeter,
-  rotation,
-}: BaseLayerProps) => {
+const BaseLayer = (props: BaseLayerProps) => {
+  const { listening, ...layerProps } = props
+  const trackedState = useMapStore((map) => map.trackedState);
+
+  /** Filepath to the background image in Nextcloud. */
+  const nextcloudImagePath = trackedState.layers.base.nextcloudImagePath
+  /** Used to align the size of the background image with the real world. */
+  const pixelsPerMeter = trackedState.layers.base.scale
+  /** The amount of rotation required to align the base layer with geographic north. */
+  const rotation = trackedState.layers.base.rotation
+
   // It shouldn't matter whether the image path starts with a slash or not.
+  // TODO: not sure if needed: double slash in a path is OK
   let cleanImagePath = nextcloudImagePath;
   if (cleanImagePath.startsWith('/')) {
     cleanImagePath = cleanImagePath.substring(1);
@@ -42,7 +35,7 @@ const BaseLayer = ({
   const scale = pixelsPerMeter / MAP_PIXELS_PER_METER;
 
   return (
-    <Layer listening={false} visible={visible} opacity={opacity}>
+    <Layer {...layerProps} >
       {cleanImagePath && (
         <NextcloudKonvaImage
           path={cleanImagePath}

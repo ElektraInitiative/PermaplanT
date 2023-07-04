@@ -1,6 +1,7 @@
 import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
+import { BaseLayerDto } from '../layers/base/api/getBaseLayer';
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -89,6 +90,10 @@ export interface TrackedMapSlice {
    * Initializes the plant layer.
    */
   initPlantLayer: (plantLayer: PlantingDto[]) => void;
+  /**
+   * Initializes the base layer.
+   */
+  initBaseLayer: (plantLayer: BaseLayerDto) => void;
 }
 
 /**
