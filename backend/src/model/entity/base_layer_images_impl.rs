@@ -37,7 +37,8 @@ impl BaseLayerImages {
         dto: BaseLayerImageDto,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<BaseLayerImageDto> {
-        let query = diesel::insert_into(base_layer_images::table).values(&dto.into());
+        let insert = Self::from(dto);
+        let query = diesel::insert_into(base_layer_images::table).values(&insert);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
     }

@@ -1,6 +1,6 @@
 //! The backend of `PermaplanT`.
 
-#![recursion_limit = "2048"]
+#![recursion_limit = "1024"]
 // Enable all lints apart from clippy::restriction by default.
 // See https://rust-lang.github.io/rust-clippy/master/index.html#blanket_clippy_restriction_lints for as to why restriction is not enabled.
 #![warn(clippy::pedantic)]

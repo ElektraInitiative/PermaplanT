@@ -29,3 +29,15 @@ impl From<(Uuid, UpdateBaseLayerImageDto)> for BaseLayerImages {
         }
     }
 }
+
+impl From<BaseLayerImageDto> for BaseLayerImages {
+    fn from(dto: BaseLayerImageDto) -> Self {
+        Self {
+            id: dto.id,
+            layer_id: dto.layer_id,
+            path: dto.path,
+            rotation: dto.rotation,
+            scale: dto.scale,
+        }
+    }
+}

@@ -822,7 +822,7 @@ pub struct NewLayer {
     pub is_alternative: bool,
 }
 
-#[derive(Identifiable, Queryable, Insertable)]
+#[derive(Identifiable, Queryable, Insertable, AsChangeset)]
 #[diesel(table_name = base_layer_images)]
 pub struct BaseLayerImages {
     /// The id of the image.
