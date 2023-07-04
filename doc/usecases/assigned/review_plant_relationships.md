@@ -24,6 +24,6 @@
 - **Error scenario:**
 - **Postcondition:**
   - The number of approvals are counted for the administrator to decide on the confidence score.
-    Relationships with higher confidence score will have a higher weight when [suggesting plants](suggest_plants.md) or [suggesting alternatives](suggest_alternatives.md).
+    Relationships with higher confidence score will have a higher weight when [suggesting plants](../assigned/suggest_plants.md) or suggesting alternatives.
   - On changes of the confidence score, the reviewed user gets notified about the updated score.
 - **Non-functional Constraints:**

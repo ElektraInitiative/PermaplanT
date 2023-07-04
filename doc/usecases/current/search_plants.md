@@ -30,7 +30,7 @@
   - The resulting list is constructed (e.g., Tomatillo _Physalis philadelphica_):
     - common names according to language settings (German or English), if available, then
     - a hyphen `-` (if there was a common name), then
-    - unique name rendered as described in [hierarchy description](doc/database/hierarchy.md)
+    - unique name rendered as described in [hierarchy description](../../database/hierarchy.md)
   - The matched part of the text should be bold.
 - **Alternative scenario:**
 - **Error scenario:**

@@ -34,10 +34,10 @@ stage('Build Schema'){
 }
 
 // NOT REQUIRED for Deployment
-stage('Checks & Build') {
+stage('Tests & Build') {
     def parallel_checks = [:]
 
-    parallel_checks["check-mdbook"] = {
+    parallel_checks["test-and-build-mdbook"] = {
         node('docker') {
             checkout scm
             def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
@@ -45,27 +45,28 @@ stage('Checks & Build') {
             mdbook_image.inside {
                 checkout scm
 
-                sh "mdbook test"
+                stage('test-and-build-mdbook'){
+                    sh "mdbook test"
+                    sh 'mdbook build'
+                    stash includes: 'book/', name: 'mdbook'
+                }
             }
         }
     }
 
-    parallel_checks["check-and-build-backend"] = {
+    parallel_checks["test-and-build-backend"] = {
         node('docker') {
             node_info()
-
             checkout scm
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
-
-            
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
 
                     wait_for_db()
 
-                    stage('check-backend'){
+                    stage('test-backend'){
                         withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
                             // Workaround: we can't stop rustfmt from linting the generated schema.rs
                             dir("backend") {
@@ -93,25 +94,22 @@ stage('Checks & Build') {
                         sh './ci/build-scripts/build-backend.sh'
 
                         stash includes: 'backend/target/release/backend', name: 'backend'
-                    } 
-
+                    }
                 }
             }
         }
     }
 
-    parallel_checks["check-and-build-frontend"] = {
+    parallel_checks["test-and-build-frontend"] = {
         node('docker') {
             node_info()
-
             checkout scm
             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
-            
+
             node_image.inside {
                 checkout scm
                 unstash 'definitions.ts'
-        
-                stage('check-frontend'){
+                stage('test-frontend'){
                     dir("frontend") {
                         sh "npm ci"
                         sh "npm run format:check"
@@ -123,6 +121,16 @@ stage('Checks & Build') {
                 stage('build-frontend'){
                     sh './ci/build-scripts/build-frontend.sh'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
+                }
+
+                stage('build-typedoc'){
+                    sh 'cd frontend && npm run doc'
+                    stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
+                }
+
+                stage('build-storybook'){
+                    sh './ci/build-scripts/build-storybook.sh'
+                    stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
             }
         }
@@ -149,6 +157,9 @@ stage('Deploy PR') {
             unstash 'schema.rs'
             unstash 'frontend'
             unstash 'backend'
+            unstash 'storybook'
+            unstash 'typedoc'
+            unstash 'mdbook'
 
             echo 'Deploying to PR'
             sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
@@ -178,6 +189,9 @@ if (env.BRANCH_NAME == 'master') {
             unstash 'schema.rs'
             unstash 'frontend'
             unstash 'backend'
+            unstash 'storybook'
+            unstash 'typedoc'
+            unstash 'mdbook'
 
             echo 'Deploying to Dev ...'
             sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"

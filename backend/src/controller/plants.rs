@@ -2,7 +2,8 @@
 
 use crate::config::data::AppDataInner;
 use crate::model::dto::{PageParameters, PlantsSearchParameters};
-use crate::service;
+use crate::service::plants;
+
 use actix_web::{
     get,
     web::{Data, Path, Query},
@@ -35,7 +36,7 @@ pub async fn find(
     page_query: Query<PageParameters>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let payload = service::plants::find(
+    let payload = plants::find(
         search_query.into_inner(),
         page_query.into_inner(),
         &app_data,
@@ -59,6 +60,6 @@ pub async fn find(
 )]
 #[get("/{id}")]
 pub async fn find_by_id(id: Path<i32>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let response = service::plants::find_by_id(*id, &app_data).await?;
+    let response = plants::find_by_id(*id, &app_data).await?;
     Ok(HttpResponse::Ok().json(response))
 }

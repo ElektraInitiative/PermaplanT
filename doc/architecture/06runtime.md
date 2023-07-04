@@ -10,7 +10,8 @@ sequenceDiagram
     Backend->>-Frontend: list of plants
     User->>Frontend: selects plant
     Frontend->>+Backend: placements
-    Backend->>-Frontend: list plant_ID of relations, heat map
+    Backend->>-Frontend: list plant_ID of relations
+    Backend->>-Frontend: heatmap
     User->>Frontend: place plant
     Frontend->>Backend: place plant
 ```

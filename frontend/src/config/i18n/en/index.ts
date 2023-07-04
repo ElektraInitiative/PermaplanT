@@ -11,11 +11,13 @@ import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import maps from './maps.json';
-import navbar from './navbar.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
+import overview from './overview.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import pricing from './pricing.json';
+import privacyOptions from './privacyOptions.json';
+import routes from './routes.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
@@ -41,7 +43,9 @@ const en = {
   auth,
   plantingSuggestions,
   nextcloudIntegration,
-  navbar,
+  routes,
+  overview,
+  privacyOptions,
 };
 
 export default en;

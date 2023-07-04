@@ -7,7 +7,7 @@
 - **Actors:** App User
 - **Brief:** User selects and modifies alternatives of a layer
 - **Status:** Assigned
-- **Assignee:** Paul
+- **Assignee:** Christoph (Database)
 
 ## Scenarios
 
