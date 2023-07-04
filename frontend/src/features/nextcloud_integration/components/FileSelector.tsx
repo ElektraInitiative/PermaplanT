@@ -2,7 +2,7 @@ import { UploadFile } from './UploadFile';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat, WebDAVClient } from 'webdav';
@@ -67,8 +67,9 @@ export const FileSelector = (props: FileSelectorProps) => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'dsc'>('asc');
 
   const { t } = useTranslation(['fileSelector']);
+  const queryClient = useQueryClient();
 
-  const { data, refetch, isLoading } = useQuery(['files', path], {
+  const { data, isLoading } = useQuery(['files', path], {
     queryFn: () => (webdav as WebDAVClient).getDirectoryContents('/remote.php/webdav/' + path),
     meta: {
       errorMessage: t('fileSelector:error'),
@@ -96,7 +97,7 @@ export const FileSelector = (props: FileSelectorProps) => {
           <UploadFile
             path={path}
             onSuccess={() => {
-              refetch();
+              queryClient.invalidateQueries({ queryKey: ['files', path]})
             }}
           />
         </div>
