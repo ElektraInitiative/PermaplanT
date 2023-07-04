@@ -1,0 +1,23 @@
+{
+    "header": "Ebenen",
+    "base": "Basis Ebene",
+    "plants": "Pflanzen Ebene",
+    "soil": "",
+    "todo": "",
+    "label": "",
+    "paths": "",
+    "photo": "",
+    "shade": "",
+	"trees": "",
+	"winds": "",
+	"zones": "",
+	"drawing": "",
+	"terrain": "",
+	"habitats": "",
+	"warnings": "",
+	"watering": "",
+	"landscape": "",
+	"hydrology": "",
+	"fertilization": "",
+	"infrastructure": ""
+}

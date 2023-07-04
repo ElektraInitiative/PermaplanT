@@ -1,0 +1,23 @@
+{
+    "header": "Layers",
+    "base": "Base Layer",
+    "plants": "Plants Layer",
+    "soil": "",
+    "todo": "",
+    "label": "",
+    "paths": "",
+    "photo": "",
+    "shade": "",
+	"trees": "",
+	"winds": "",
+	"zones": "",
+	"drawing": "",
+	"terrain": "",
+	"habitats": "",
+	"warnings": "",
+	"watering": "",
+	"landscape": "",
+	"hydrology": "",
+	"fertilization": "",
+	"infrastructure": ""
+}
