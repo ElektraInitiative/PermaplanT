@@ -14,7 +14,7 @@ interface MapCardProps {
 }
 
 export default function MapCard({ map, onDuplicate }: MapCardProps) {
-  const { t } = useTranslation(['privacyOptions']);
+  const { t } = useTranslation(['privacyOptions', 'maps']);
   const navigate = useNavigate();
 
   return (
@@ -38,6 +38,7 @@ export default function MapCard({ map, onDuplicate }: MapCardProps) {
       </section>
       <section className="ml-4 flex flex-col justify-center">
         <IconButton
+          title={t('maps:overview.duplicate_title')}
           onClick={(e) => {
             e.stopPropagation();
             onDuplicate(map);
@@ -46,6 +47,7 @@ export default function MapCard({ map, onDuplicate }: MapCardProps) {
           <CopyIcon className="h-5 w-5" />
         </IconButton>
         <IconButton
+          title={t('maps:overview.edit_title')}
           onClick={(e) => {
             e.stopPropagation();
             navigate(`${map.id}/edit`);

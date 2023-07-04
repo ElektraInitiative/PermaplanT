@@ -5,7 +5,9 @@
         "create_button_title": "Neue Karte erstellen",
         "missing_name": "Bitte geben Sie einen Namen ein",
         "honors_title": "Anzahl der Ehrungen",
-        "visits_title": "Anzahl der Besucher"
+        "visits_title": "Anzahl der Besucher",
+        "edit_title": "Karte bearbeiten",
+        "duplicate_title": "Karte duplizieren"
     },
     "create": {
         "modal_title": "Neue Karte",
