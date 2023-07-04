@@ -6,8 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** A user can see a preview of future rewards for his efforts.
-- **Status:** Assigned
-- **Assignee** Thorben
+- **Assignee** Ready to be assigned
 
 ## Scenarios
 
