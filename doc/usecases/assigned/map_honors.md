@@ -6,8 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The users can give an honor to the whole map of another user they visit.
-- **Status:** Assigned
-- **Assignee** Thorben
+- **Assignee** Ready to be assigned
 
 ## Scenarios
 
@@ -26,5 +25,5 @@
   In this case, a warning message stating the error should be displayed and the user is prompted to try again.
 - **Postcondition:**
   Users can find the honor count next to the map in every instance of map selection as well as in the details screen of the map.
-  The amount of honors affects the order of the results in the [map search](map_search.md).
+  The amount of honors affects the order of the results in the [map search](../current/map_search.md).
 - **Non-functional Constraints:**

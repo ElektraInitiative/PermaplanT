@@ -6,25 +6,45 @@ Use a not-yet-used-in-any-PR random line in the UNRELEASED version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
+## 0.2.2 - UNRELEASED
+
+- Test strategy written _(4ydan)_
+- Added Nextcloud integration documentation in `/doc/research/nextcloud_integration.md`_(Samuel)_
+- Finish implementation of seed search _(Moritz)_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- UI: Added hover tooltip to edit map button _(Thorben)_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- Remove anchors to prevent nonuniform scaling of elements _(Paul)_
+- _()_
+- CI: Cancel previous builds #557 _(4ydan)_
+- _()_
+- _()_
+- _()_
+- _()_
+- 
+
 ## 0.2.1 - UNRELEASED
 
-- Finish plant search usecase.
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Test strategy written _(4ydan)_
+- CI: Storybook/Typedoc build and stashed in Jenkins pipeline PR/Master/Release #438 _(4ydan)_
+- DOC: Fix broken links #554 _(4ydan)_
+- CI: Devcontainer support #552 _(4ydan)_
+- CI: Added mdbook build to pipeline _(4ydan)_
+- DEV: Issue forms added. #537 _(4ydan)_
 
-## 0.2.0 - 27.06.2023
+## 0.2.0 - 29.06.2023
 
 - Nextcloud Konva image component: can be used to create image items on a layer _(Samuel)_
 - Nextcloud image gallery including Nextcloud image components for unauthenticated and authenticated use, Nextcloud utilites for fetching data from Nextcloud public share _(Samuel)_
