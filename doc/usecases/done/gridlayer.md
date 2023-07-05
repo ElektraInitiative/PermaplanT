@@ -18,4 +18,4 @@
     - Lines that are a whole number of meters away from the origin are drawn boldly.
 - **Non-functional Constraints:**
     - Support for changing viewport (zoom, position, etc.)
-    - The grid layer is only available in the frontend.
+    - The functionality is only available in the frontend.
