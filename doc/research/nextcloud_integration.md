@@ -1,5 +1,21 @@
 # Nextcloud Integration
 
+## Authentication Setup
+
+Keycloak and Nextcloud run as separate services.
+Users are created in Keycloak instead of in Nextcloud/PermaplanT and users can then log in via Keycloak.
+In the PermaplanT frontend the user is redirected to the Keycloak login screen.
+They are prompted for their credentials and then they get redirected back to the PermaplanT web application.
+From then on all requests are authorized via JWT.
+We use the recommended variant which is Authorization Code Flow with PKCE.
+This and other variants are described in detail in the OAuth2.0 specification.
+The backend then validates the tokens and extract roles/user information.
+The same token is used to fetch resources from Nextcloud.
+
+To enable the OIDC functionality on Nextcloud we installed a plugin called [user_oicd](https://github.com/nextcloud/user_oidc) developed by Nextcloud.
+With this plugin OIDC providers can be configured in Nextcloud.
+After successful configuration the provider appears on the login screen and the user can log in with their credentials from the provider.
+
 ## Files
 
 ### WebDAV Protocol
