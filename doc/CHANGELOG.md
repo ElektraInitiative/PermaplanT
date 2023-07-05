@@ -31,6 +31,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- A timeline date can be set and changed by a date picker. Plantings exist relative to a date. _(Paul)_
 - _()_
 - _()_
 - _()_
@@ -93,7 +94,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Use the correct layer ID for create and fetch actions (for plantings) in the map editor, enabling the possibility for multiple independent maps _(Paul and Thorben)_
 - Location picker map in map creation form only loads after actively pressing a button _(Thorben)_
 - Maps can be duplicated from the map overview (in PR #515) _(Thorben)_
-- A timeline date can be set and changed by a date picker. Plantings exist relative to a date. _(Paul)_
 
 ## 0.1.0 - 19.04.2023
 
