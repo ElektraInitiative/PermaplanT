@@ -30,8 +30,6 @@ export function PlantLayerLeftToolbar() {
         placeholder="some input"
       ></SimpleFormInput>
 
-      <SimpleButton>{t('plantEdit:submit')}</SimpleButton>
-
       <SimpleButton
         variant={ButtonVariant.dangerBase}
         onClick={() => {

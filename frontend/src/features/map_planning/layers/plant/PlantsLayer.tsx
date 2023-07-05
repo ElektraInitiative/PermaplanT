@@ -196,7 +196,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
     >
       <div className="flex flex-col items-center justify-center">
         <span>
-          planting {plant.unique_name} ({plant.common_name_en})
+          {plant.unique_name} ({plant.common_name_en})
         </span>
       </div>
       <div className="flex items-center justify-center">
