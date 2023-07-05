@@ -19,7 +19,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- UI: Added hover tooltip to edit map button _(Thorben)_
 - _()_
 - _()_
 - _()_
