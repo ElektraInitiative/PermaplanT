@@ -126,6 +126,6 @@ pub struct PlantingSearchParameters {
     pub plant_id: Option<i32>,
     /// The id of the plants layer the planting is placed on.
     pub layer_id: Option<i32>,
-    /// A date where the plantings should exists relative to.
+    /// Plantings that exist around this date are returned.
     pub relative_to_date: NaiveDate,
 }

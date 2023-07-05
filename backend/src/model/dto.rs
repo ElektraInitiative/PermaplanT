@@ -185,7 +185,7 @@ pub struct Page<T> {
     pub total_pages: i32,
 }
 
-/// A page of loaded results in a timeline.
+/// A page of results bounded by time.
 #[typeshare]
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[aliases(

@@ -13,8 +13,8 @@ use crate::model::dto::plantings::{
 use crate::model::dto::TimelinePage;
 use crate::model::entity::plantings::{FindPlantingsParameters, Planting};
 
-/// Time offset for loading plantings in the timeline.
-const TIME_LINE_LOADING_OFFSET: u64 = 356;
+/// Time offset in days for loading plantings in the timeline.
+const TIME_LINE_LOADING_OFFSET_DAYS: u64 = 356;
 
 /// Search plantings from the database.
 ///
@@ -28,7 +28,7 @@ pub async fn find(
 
     let from = search_parameters
         .relative_to_date
-        .checked_sub_days(Days::new(TIME_LINE_LOADING_OFFSET))
+        .checked_sub_days(Days::new(TIME_LINE_LOADING_OFFSET_DAYS))
         .ok_or_else(|| {
             ServiceError::new(
                 StatusCode::BAD_REQUEST,
@@ -38,7 +38,7 @@ pub async fn find(
 
     let to = search_parameters
         .relative_to_date
-        .checked_add_days(Days::new(TIME_LINE_LOADING_OFFSET))
+        .checked_add_days(Days::new(TIME_LINE_LOADING_OFFSET_DAYS))
         .ok_or_else(|| {
             ServiceError::new(
                 StatusCode::BAD_REQUEST,

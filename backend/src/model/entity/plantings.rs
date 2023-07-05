@@ -48,6 +48,11 @@ pub struct Planting {
     /// The date the planting was removed from the map.
     /// If None, the planting is still on the map.
     pub remove_date: Option<NaiveDate>,
+    /// The date the planting was created.
+    pub create_date: NaiveDate,
+    /// The date the planting was 'soft' deleted
+    /// and is still able to be restored.
+    pub delete_date: Option<NaiveDate>,
 }
 
 /// The `UpdatePlanting` entity.
