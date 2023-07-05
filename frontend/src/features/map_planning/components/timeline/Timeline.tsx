@@ -1,6 +1,7 @@
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 type TimelineProps = {
   /** Is called if the user selects a date from the timeline.
@@ -19,6 +20,8 @@ type TimelineFormData = {
 };
 
 export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
+  const { t } = useTranslation(['timeline']);
+
   const { register, handleSubmit } = useForm<TimelineFormData>({
     defaultValues: {
       date: defaultDate,
@@ -33,7 +36,9 @@ export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
     <form className="flex items-end justify-center gap-2" onSubmit={handleSubmit(onFormSubmit)}>
       <SimpleFormInput type="date" id="date" labelText="" register={register} />
       <div className="w-52">
-        <SimpleButton type="submit">Change map date</SimpleButton>
+        <SimpleButton title={t('timeline:change_date_hint')} type="submit">
+          {t('timeline:change_date')}
+        </SimpleButton>
       </div>
     </form>
   );
