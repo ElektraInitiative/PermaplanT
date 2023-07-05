@@ -14,7 +14,7 @@
 - **Precondition:**
     - User has opened the map.
 - **Main success scenario:**
-    - The user sees a fixed scale coordinate grid with 10 centimeter spacing.
+    - The user sees a fixed scale coordinate grid with 1 meter spacing.
     - Lines that are a whole number of meters away from the origin are drawn boldly.
 - **Non-functional Constraints:**
     - Support for changing viewport (zoom, position, etc.)
