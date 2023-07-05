@@ -33,16 +33,13 @@ impl Planting {
         let from = search_parameters.from;
         let to = search_parameters.to;
 
-        query = query.filter(
-            plantings::add_date
-                .is_null()
-                .or(plantings::add_date.lt(to))
-                .and(
-                    plantings::remove_date
-                        .is_null()
-                        .or(plantings::remove_date.gt(from)),
-                ),
-        );
+        let plantings_added_before_date =
+            plantings::add_date.is_null().or(plantings::add_date.lt(to));
+        let plantings_removed_after_date = plantings::remove_date
+            .is_null()
+            .or(plantings::remove_date.gt(from));
+
+        query = query.filter(plantings_added_before_date.and(plantings_removed_after_date));
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
