@@ -11,6 +11,10 @@ If problems persist, please create a new issue with the failing build log.
 For users with login credentials for Jenkins, you can manually execute the pipeline for a branch or pull request via the [Jenkins UI](https://build.libelektra.org).
 Please ask if you want to have login data.
 
+## Cancel concurrent Builds
+
+Previous builds on the same branch will get aborted to save computing time on the nodes. The master branch is excluded from this rule.
+
 ## Stages
 
 ### Prerequisites (Schema)
@@ -19,12 +23,12 @@ Before we can actually execute checks or build the binaries, we need `schema.rs`
 
 These can be automatically created with `./ci/build-scripts/build-schema.sh`.
 
-### Checks
+### Tests
 
-Checks will run against the codebase in parallel according to the definition inside `./ci/Jenkinsfile` (scripted pipeline).
-
+Tests will run against the codebase in parallel according to the definition inside `./ci/Jenkinsfile` (scripted pipeline).
 These tasks will be run inside docker containers.
 Backend will be checked against a sidecar-container running PostgreSQL.
+For more information about automated integration tests look [here](./tests/README.md).
 
 ### Build
 

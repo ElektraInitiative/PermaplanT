@@ -1,3 +1,21 @@
+def abortPreviousRunUnlessMaster() {
+  // We never want to abort builds of the master branch
+  if (env.BRANCH_NAME=="master") return;
+  def exec = currentBuild
+             ?.rawBuild
+             ?.getPreviousBuildInProgress()
+             ?.getExecutor()
+  if(exec) {
+    exec.interrupt(
+      Result.ABORTED,
+      new CauseOfInterruption.UserInterruption(
+        "Aborted by Build#${currentBuild.number}"
+      )
+    )
+  }
+}
+abortPreviousRunUnlessMaster()
+
 def node_info() {
     echo "Running stage on ${env.NODE_NAME}"
 }
