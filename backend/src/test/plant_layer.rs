@@ -7,13 +7,59 @@ use actix_web::{
     },
     test,
 };
+use chrono::NaiveDate;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
+use uuid::Uuid;
 
 use crate::{
-    model::{dto::RelationsDto, r#enum::relation_type::RelationType},
-    test::util::{init_test_app, init_test_database},
+    model::{
+        dto::RelationsDto,
+        r#enum::{privacy_options::PrivacyOptions, relation_type::RelationType},
+    },
+    test::util::{dummy_map_geometry, init_test_app, init_test_database},
 };
+
+#[actix_rt::test]
+async fn test_generate_heatmap_succeeds() {
+    let pool = init_test_database(|conn| {
+        async {
+            diesel::insert_into(crate::schema::maps::table)
+                .values((
+                    &crate::schema::maps::id.eq(-1),
+                    &crate::schema::maps::name.eq("Test Map: can search map"),
+                    &crate::schema::maps::creation_date
+                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
+                    &crate::schema::maps::is_inactive.eq(false),
+                    &crate::schema::maps::zoom_factor.eq(100),
+                    &crate::schema::maps::honors.eq(0),
+                    &crate::schema::maps::visits.eq(0),
+                    &crate::schema::maps::harvested.eq(0),
+                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(dummy_map_geometry()),
+                ))
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(header::CONTENT_TYPE),
+        Some(&header::HeaderValue::from_static("image/png"))
+    );
+}
 
 #[actix_rt::test]
 async fn test_find_plants_relations_succeeds() {
