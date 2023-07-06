@@ -24,7 +24,7 @@ run-storybook: build-storybook  ## Starts the storybook server.
 # TEST
 
 .PHONY: test
-test: test-frontend test-backend test-mdbook  ## Runs all tests + pre-commit
+test: test-frontend test-backend test-mdbook  ## Tests everything + pre-commit
 	pre-commit
 
 .PHONY: test-frontend
@@ -79,14 +79,14 @@ psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
 	psql -h db -p 5432 -U $(POSTGRES_USER) $(POSTGRES_DB)
 
 .PHONY: pre-commit-all
-pre-commit-all:  ## pre-commit on all files.
+pre-commit-all:  ## Check all files with pre-commit.
 	pre-commit run --all-files
 
 .PHONY: distclean
-distclean: clean uninstall ## Cleans everything and uninstalls dependencies.
+distclean: clean uninstall ## Cleans everything and uninstalls.
 
 .PHONY: clean
-clean: clean-frontend clean-backend clean-mdbook clean-storybook  ## Cleans fronted, backend, mdbook and storybook.
+clean: clean-frontend clean-backend clean-mdbook clean-storybook  ## Cleans everything.
 
 .PHONY: clean-frontend
 clean-frontend:  ## Removes node modules.
@@ -109,7 +109,6 @@ install:  ## Install necessary packages within the source repo.
 	cd backend && make install
 	cargo install mdbook mdbook-mermaid
 	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary
-	npm install @typescript-eslint/eslint-plugin@latest --save-dev
 
 .PHONY: uninstall
 uninstall:  ## Uninstalls dependencies within the source repo.
