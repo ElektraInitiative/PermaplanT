@@ -64,6 +64,7 @@ export default function MapOverview() {
       privacy: targetMap.privacy,
       description: targetMap.description,
       location: targetMap.location,
+      geometry: targetMap.geometry,
     };
 
     await createMap(mapCopy);
