@@ -31,17 +31,7 @@ Following entities exist:
 
 You can construct your commands now, e.g `run-backend`, `test-mdbook`, `build-storybook` or `clean-backend`
 
-Additional commands:
-
-| Command              | Description                                                                                   |
-| -------------------- | --------------------------------------------------------------------------------------------- |
-| `all`                | Run all tests and build everything                                                            |
-| `generate-api-types` | Generates TypeScript bindings                                                                 |
-| `psql-r`             | Connects to the PostgreSQL on port 5432 as db_user permaplant and db_name permaplant remotely |
-| `pre-commit-all`     | Runs pre-commit hooks on all files                                                            |
-| `install`            | Install necessary packages                                                                    |
-| `uninstall`          | Uninstall the packages installed with install                                                 |
-| `distclean`          | Clean and uninstall                                                                           |
+Type `make help` to see all commands`
 
 **SOME OF THESE COMMANDS REQUIRE ENV VARIABLES TO WORK, LOOK AT [backend env variables](./doc/backend/01setup.md) or [frontend env variables](./frontend/README.md)**
 
