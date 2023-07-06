@@ -1,0 +1,23 @@
+{
+    "header": "Ebenen",
+    "base": "Basis",
+    "plants": "Pflanzen",
+    "soil": "Boden",
+    "todo": "Todo",
+    "label": "Beschriftungen",
+    "paths": "Wege",
+    "photo": "Photos",
+    "shade": "Schatten",
+	"trees": "Bäume",
+	"winds": "Wind",
+	"zones": "Zonen",
+	"drawing": "Zeichnen",
+	"terrain": "Gelände",
+	"habitats": "Habitate",
+	"warnings": "Warnungen",
+	"watering": "Bewässerung",
+	"landscape": "Landschaft",
+	"hydrology": "Hydrologie",
+	"fertilization": "Düngung",
+	"infrastructure": "Infrastruktur"
+}
