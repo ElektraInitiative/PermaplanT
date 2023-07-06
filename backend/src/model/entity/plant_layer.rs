@@ -17,12 +17,16 @@ use crate::{
     schema::relations,
 };
 
+/// Stores the score of a x,y coordinate on the heatmap.
 #[derive(Debug, Clone, QueryableByName)]
 struct HeatMapElement {
+    /// The score on the heatmap.
     #[diesel(sql_type = Float)]
     score: f32,
+    /// The x values of the score
     #[diesel(sql_type = Integer)]
     x: i32,
+    /// The y values of the score.
     #[diesel(sql_type = Integer)]
     y: i32,
 }

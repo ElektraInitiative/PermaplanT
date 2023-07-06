@@ -30,17 +30,23 @@ pub async fn heatmap(
     let mut conn = app_data.pool.get().await?;
     let result = plant_layer::heatmap(map_id, query_params.plant_id, &mut conn).await?;
 
-    let buffer = matrix_to_image(result)?;
+    let buffer = matrix_to_image(&result)?;
 
     Ok(buffer)
 }
 
 /// Parses the matrix of scores with values 0-1 to raw bytes of a PNG image.
-fn matrix_to_image(matrix: Vec<Vec<f32>>) -> Result<Vec<u8>, ServiceError> {
+#[allow(
+    clippy::cast_possible_truncation,   // ok, because size of matrix shouldn't ever be larger than u32 and casting to u8 in image should remove floating point values
+    clippy::indexing_slicing,           // ok, because size of image is generated using matrix width and height
+    clippy::cast_sign_loss              // ok, because we only care about positive values
+)]
+fn matrix_to_image(matrix: &Vec<Vec<f32>>) -> Result<Vec<u8>, ServiceError> {
     let (width, height) = (matrix[0].len(), matrix.len());
     let mut imgbuf = ImageBuffer::new(width as u32, height as u32);
     for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
         let data = matrix[y as usize][x as usize];
+        // TODO: color
         // Normalize the data to 0-255 as required by the image::Luma
         *pixel = Luma([(data * 255.0) as u8]);
     }
