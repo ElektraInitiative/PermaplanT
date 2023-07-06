@@ -127,7 +127,7 @@ export default function MapCreateForm() {
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
       // TODO: implement selector
-      map_geom: {
+      geometry: {
         rings: [
           [
             { x: 0.0, y: 0.0 },

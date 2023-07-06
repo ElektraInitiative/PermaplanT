@@ -1,5 +1,5 @@
 -- Your SQL goes here
-ALTER TABLE maps ADD COLUMN map_geom GEOMETRY(POLYGON, 4326) NOT NULL;
+ALTER TABLE maps ADD COLUMN geometry GEOMETRY(POLYGON, 4326) NOT NULL;
 
 -- Scales the input to values 0-1.
 CREATE OR REPLACE FUNCTION scale_input(input REAL)
@@ -23,7 +23,7 @@ DECLARE
     map_geometry GEOMETRY(POLYGON, 4326);
     cell GEOMETRY;
 BEGIN
-    SELECT map_geom FROM maps WHERE id = map_id INTO STRICT map_geometry;
+    SELECT geometry FROM maps WHERE id = map_id INTO STRICT map_geometry;
 
     -- TODO: include plant in calculation (e.g. for shade)
     FOR i IN 0..num_rows-1 LOOP

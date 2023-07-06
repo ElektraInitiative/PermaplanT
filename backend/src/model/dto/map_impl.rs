@@ -21,7 +21,7 @@ impl From<Map> for MapDto {
             description: map.description,
             location: map.location.map(From::from),
             owner_id: map.owner_id,
-            map_geom: map.map_geom,
+            geometry: map.geometry,
         }
     }
 }

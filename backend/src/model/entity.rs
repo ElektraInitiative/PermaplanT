@@ -744,7 +744,7 @@ pub struct Map {
     /// The id of the owner of the map.
     pub owner_id: Uuid,
     /// The geometry of the map.
-    pub map_geom: Polygon<Point>,
+    pub geometry: Polygon<Point>,
 }
 
 /// The `NewMap` entity.
@@ -778,7 +778,7 @@ pub struct NewMap {
     /// The id of the owner of the map.
     pub owner_id: Uuid,
     /// The geometry of the map.
-    pub map_geom: Polygon<Point>,
+    pub geometry: Polygon<Point>,
 }
 
 /// The `Layer` entity.

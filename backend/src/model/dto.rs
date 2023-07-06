@@ -220,7 +220,7 @@ pub struct MapDto {
     /// E.g. {"rings":[[{"x":0.0,"y":0.0},{"x":5.0,"y":0.0},{"x":5.0,"y":5.0},{"x":0.0,"y":5.0},{"x":0.0,"y":0.0}]],"srid":4326}
     #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
-    pub map_geom: Polygon<Point>,
+    pub geometry: Polygon<Point>,
 }
 
 /// The information of a map necessary for its creation.
@@ -256,7 +256,7 @@ pub struct NewMapDto {
     /// E.g. {"rings":[[{"x":0.0,"y":0.0},{"x":5.0,"y":0.0},{"x":5.0,"y":5.0},{"x":0.0,"y":5.0},{"x":0.0,"y":0.0}]],"srid":4326}
     #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
-    pub map_geom: Polygon<Point>,
+    pub geometry: Polygon<Point>,
 }
 
 /// Query parameters for searching maps.

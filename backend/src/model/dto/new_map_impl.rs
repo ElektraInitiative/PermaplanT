@@ -22,7 +22,7 @@ impl From<(NewMapDto, Uuid)> for NewMap {
             description: new_map.description,
             location: new_map.location.map(From::from),
             owner_id,
-            map_geom: new_map.map_geom,
+            geometry: new_map.geometry,
         }
     }
 }
