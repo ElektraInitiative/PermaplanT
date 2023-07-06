@@ -41,7 +41,13 @@ const BaseLayerRightToolbar = ({ state, executeAction }: BaseLayerFormProps) => 
       />
       <SimpleButton
         onClick={() =>
-          executeAction(new UpdateBaseLayerAction(rotationInput, state.scale, pathInput))
+          executeAction(new UpdateBaseLayerAction({
+            id: state.imageId,
+            layer_id: state.layerId,
+            rotation: rotationInput,
+            scale: state.scale,
+            path: pathInput
+          }))
         }
       >
         {t('common:apply')}

@@ -1,12 +1,7 @@
+import { BaseLayerImageDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 
-//TODO: remove when implemented in backend
-export type BaseLayerDto = {
-  rotation: number,
-  scale: number,
-  nextcloudImagePath: string
-}
-export async function getBaseLayer(mapId: number, layerId?: number) {
+export async function getBaseLayerImage(mapId: number, layerId?: number) {
   if (!layerId) {
     return null;
   }
@@ -14,10 +9,10 @@ export async function getBaseLayer(mapId: number, layerId?: number) {
   const http = createAPI();
 
   try {
-    const response = await http.get<BaseLayerDto>(
-      `api/maps/${mapId}/layers/base?layer_id=${layerId}`,
+    const response = await http.get<BaseLayerImageDto[]>(
+      `api/maps/${mapId}/layers/base/${layerId}/images/`,
     );
-    return response.data;
+    return response.data.length > 0 ? response.data[0] : null
   } catch (error) {
     throw error as Error;
   }

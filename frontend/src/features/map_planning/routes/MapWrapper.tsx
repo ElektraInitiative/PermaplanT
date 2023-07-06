@@ -9,7 +9,7 @@ import { baseApiUrl } from '@/config';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
-import { getBaseLayer } from '../layers/base/api/getBaseLayer';
+import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 
 /**
  * Extracts the default layer from the list of layers.
@@ -53,7 +53,7 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
 function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
   const query = useQuery({
     queryKey: ['baselayer', mapId, layerId],
-    queryFn: () => getBaseLayer(mapId, layerId),
+    queryFn: () => getBaseLayerImage(mapId, layerId),
     enabled,
   });
 

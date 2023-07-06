@@ -1,7 +1,7 @@
-import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { BaseLayerImageDto, LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
-import { BaseLayerDto } from '../layers/base/api/getBaseLayer';
+import * as uuid from 'uuid';
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -93,7 +93,7 @@ export interface TrackedMapSlice {
   /**
    * Initializes the base layer.
    */
-  initBaseLayer: (plantLayer: BaseLayerDto) => void;
+  initBaseLayer: (baseLayer: BaseLayerImageDto) => void;
 }
 
 /**
@@ -126,8 +126,9 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         objects: [],
       },
       [LayerType.Base]: {
+        layerId: 0,
         index: LayerType.Base,
-        objects: [],
+        imageId: uuid.v4(),
         scale: 100,
         rotation: 0,
         nextcloudImagePath: '',
@@ -198,7 +199,7 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants>]: TrackedLayerState;
+  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
@@ -211,6 +212,8 @@ export type TrackedPlantLayerState = {
 };
 
 export type TrackedBaseLayerState = {
+  layerId: number;
+  imageId: string;
   rotation: number;
   scale: number;
   nextcloudImagePath: string;
