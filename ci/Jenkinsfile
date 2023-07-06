@@ -32,8 +32,8 @@ def wait_for_db() {
 stage('Build Schema'){
     node('docker') {
         node_info()
-
         checkout scm
+
         def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
@@ -50,6 +50,7 @@ stage('Build Schema'){
         }
     }
 }
+
 
 // NOT REQUIRED for Deployment
 stage('Tests & Build') {
@@ -197,23 +198,51 @@ stage('Deploy PR') {
 
 // Deploying to Dev only happens on branch "master"
 if (env.BRANCH_NAME == 'master') {
-    stage('Deploy Dev') {
-        node('permaplant && dev') {
-            node_info()
+    try {
+        stage('Deploy Dev') {
+            node('permaplant && dev') {
+                node_info()
 
-            checkout scm
+                checkout scm
 
-            echo "Unstash Artifacts"
-            unstash 'schema.rs'
-            unstash 'frontend'
-            unstash 'backend'
-            unstash 'storybook'
-            unstash 'typedoc'
-            unstash 'mdbook'
+                echo "Unstash Artifacts"
+                unstash 'schema.rs'
+                unstash 'frontend'
+                unstash 'backend'
+                unstash 'storybook'
+                unstash 'typedoc'
+                unstash 'mdbook'
 
-            echo 'Deploying to Dev ...'
-            sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+                echo 'Deploying to Dev ...'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+            }
         }
+    } catch(Exception e) {
+        // If master is failing we want to know ASAP so send a mail.
+        // collect changes since last build
+        def changes = currentBuild.changeSets.collect() {
+        it.collect() {
+            "* ${it.getCommitId().take(7)} - ${it.getAuthor()} - ${it.getMsg().take(40)}"
+        }.join('\n')
+        }.join('\n')
+        if (!changes) {
+        changes = "* No new changes since last build"
+        }
+
+        def message = """\
+Build ${JOB_NAME}:${BUILD_NUMBER} failed.
+Url: ${RUN_DISPLAY_URL}
+Reason: ${e}
+
+Changes: ${RUN_CHANGES_DISPLAY_URL}
+${changes}
+
+Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
+"""
+    mail subject: "Build ${JOB_NAME} failed",
+        body: message,
+        replyTo: "noreply@libelektra.org",
+        to: "build@libelektra.org"
     }
 }
 
