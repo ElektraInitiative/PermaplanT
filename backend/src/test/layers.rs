@@ -20,6 +20,8 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
 use uuid::Uuid;
 
+use super::util::dummy_map_geometry;
+
 async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceError> {
     diesel::insert_into(crate::schema::maps::table)
         .values(vec![(
@@ -31,8 +33,9 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
             &crate::schema::maps::honors.eq(0),
             &crate::schema::maps::visits.eq(0),
             &crate::schema::maps::harvested.eq(0),
-            &crate::schema::maps::owner_id.eq(Uuid::default()),
             &crate::schema::maps::privacy.eq(PrivacyOptions::Private),
+            &crate::schema::maps::owner_id.eq(Uuid::default()),
+            &crate::schema::maps::geometry.eq(dummy_map_geometry()),
         )])
         .execute(conn)
         .await?;

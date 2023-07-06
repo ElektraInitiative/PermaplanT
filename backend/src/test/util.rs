@@ -14,6 +14,7 @@ use diesel_async::{
     AsyncConnection, AsyncPgConnection,
 };
 use dotenvy::dotenv;
+use postgis_diesel::types::{Point, Polygon};
 
 use crate::config::{app, data::AppDataInner, routes};
 use crate::error::ServiceError;
@@ -112,4 +113,36 @@ fn setup_auth() -> String {
 fn setup_auth_for_user(user_id: uuid::Uuid) -> String {
     let jwk = jwks::init_auth();
     generate_token_for_user(jwk, 300, user_id)
+}
+
+pub fn dummy_map_geometry() -> Polygon<Point> {
+    let mut map_geom = Polygon::new(Some(4326));
+    map_geom.add_points(vec![
+        Point {
+            x: 0.0,
+            y: 0.0,
+            srid: None,
+        },
+        Point {
+            x: 5.0,
+            y: 0.0,
+            srid: None,
+        },
+        Point {
+            x: 5.0,
+            y: 5.0,
+            srid: None,
+        },
+        Point {
+            x: 0.0,
+            y: 5.0,
+            srid: None,
+        },
+        Point {
+            x: 0.0,
+            y: 0.0,
+            srid: None,
+        },
+    ]);
+    map_geom
 }
