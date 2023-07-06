@@ -8,16 +8,32 @@
 - Web: Firefox, Chromium
 - Larger mobile devices like tablets: Progressive Web App (PWA) Android 9+
 
+## Documentation
+
 Start reading in [/doc/architecture/README.md](/doc/architecture/README.md).
 The documentation is best viewed by running the following commands in the projects root folder:
 
 ```sh
-cargo install mdbook mdbook-mermaid
-cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary
-mdbook serve --open
+make run-mdbook
 ```
 
 Which will open [/doc/architecture/README.md](/doc/architecture/README.md) as first page.
+
+## Makefile commands
+
+Following commands exists:
+
+`run, test, build, clean`
+
+Following entities exist:
+
+`frontend, backend, mdbook, storybook`
+
+You can construct your commands now, e.g `run-backend`, `test-mdbook`, `build-storybook` or `clean-backend`
+
+Type `make help` to see all commands`
+
+**SOME OF THESE COMMANDS REQUIRE ENV VARIABLES TO WORK, LOOK AT [backend env variables](./doc/backend/01setup.md) or [frontend env variables](./frontend/README.md)**
 
 Important links:
 

@@ -33,7 +33,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Improved user visible texts in map editor _(Thorben)_
-- _()_
+- DEV: Makefile added #549 _(4ydan)_
 
 ## 0.2.1 - UNRELEASED
 
