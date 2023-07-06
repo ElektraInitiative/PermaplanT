@@ -33,7 +33,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Improved user visible texts in map editor _(Thorben)_
-- _()_
+- DEV: Makefile added #549 _(4ydan)_
 
 ## 0.2.1 - UNRELEASED
 
@@ -42,7 +42,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 - DOC: Fix broken links #554 _(4ydan)_
 - CI: Devcontainer support #552 _(4ydan)_
 - CI: Added mdbook build to pipeline _(4ydan)_
-- CI: Makefile added # _(4ydan)_
 - DEV: Issue forms added. #537 _(4ydan)_
 
 ## 0.2.0 - 29.06.2023
