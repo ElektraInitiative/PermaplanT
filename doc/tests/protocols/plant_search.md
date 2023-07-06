@@ -40,4 +40,4 @@ N/A
 
 ## Closing remarks
 Some requirements from the use case have not yet been implemented in preparation for a future university course.
-Followup issues were recorded and a note has been left in the use case document.
+Follow-up issues were recorded and a note has been left in the use case document.
