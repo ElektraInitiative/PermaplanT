@@ -1,6 +1,4 @@
-# Test Protocol Template
-
-This is the raw template for executing a manual test.
+# Plant Search Test Protocol
 
 Information:
 
@@ -40,4 +38,4 @@ N/A
 
 ## Closing remarks
 Some requirements from the use case have not yet been implemented in preparation for a future university course.
-Follow-up issues were recorded and a note has been left in the use case document.
+Follow-up issues were recorded and a note has been left in the use case document (#379, #433).

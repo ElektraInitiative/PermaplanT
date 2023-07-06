@@ -8,7 +8,7 @@
 - **Brief:** The user can search for plants.
 - **Status:** In Progress
 - **Assignee:** Moritz (Frontend), Gabriel (Backend)
-
+- **Test Protocol:** doc/tests/protocols/plant_search.md
 ## Scenarios
 
 - **Precondition:**
@@ -45,4 +45,4 @@
 # Follow-up
 
 Some parts of this use cases have not been implemented in preperation for a future university course.
-Followup issues have been created in GitHub, outlining what work still needs to be done.
+Follow-up issues were recorded and a note has been left in the use case document (#379, #433).
