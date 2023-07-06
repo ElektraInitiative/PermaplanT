@@ -33,7 +33,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- 
+- _()_
 
 ## 0.2.1 - UNRELEASED
 
