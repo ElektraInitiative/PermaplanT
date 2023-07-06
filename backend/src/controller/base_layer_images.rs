@@ -22,7 +22,7 @@ use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/maps/{map_id}/layers/base/images",
+    context_path = "/api/maps/{map_id}/layers/base/{layer_id}/images",
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
     ),
@@ -34,8 +34,9 @@ use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
     )
 )]
 #[get("")]
-pub async fn find(app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let response = base_layer_images::find(&app_data).await?;
+pub async fn find(path: Path<(i32, i32)>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
+    let (map_id, layer_id) = path.into_inner();
+    let response = base_layer_images::find(&app_data, layer_id).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 

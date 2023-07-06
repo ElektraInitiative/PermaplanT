@@ -5,9 +5,9 @@ use actix_web::web::Data;
 use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::{MapSearchParameters, Page, UpdateMapDto};
+use crate::model::dto::{MapSearchParameters, Page, UpdateMapDto, BaseLayerImageDto};
 use crate::model::dto::{NewLayerDto, PageParameters};
-use crate::model::entity::Layer;
+use crate::model::entity::{Layer, BaseLayerImages};
 use crate::model::r#enum::layer_type::LayerType;
 use crate::{
     error::ServiceError,
@@ -62,8 +62,22 @@ pub async fn create(
             name: format!("{layer} Layer"),
             is_alternative: false,
         };
-        Layer::create(new_layer, &mut conn).await?;
+        let new_layer = Layer::create(new_layer, &mut conn).await?;
+        if *layer == LayerType::Base {
+            let new_base_layer_image = BaseLayerImageDto {
+                id: Uuid::new_v4(),
+                layer_id: new_layer.id,
+                /// The path to the image on Nextcloud.
+                path: String::from(""),
+                /// The rotation in degrees (0-360) of the image on the map.
+                rotation: 0.0,
+                /// The scale of the image on the map.
+                scale: 100.0,
+            };
+            BaseLayerImages::create(new_base_layer_image, &mut conn).await?;
+        }
     }
+
     Ok(result)
 }
 

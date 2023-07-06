@@ -7,7 +7,7 @@ use log::debug;
 use uuid::Uuid;
 
 use crate::model::dto::{BaseLayerImageDto, UpdateBaseLayerImageDto};
-use crate::schema::base_layer_images::{self, all_columns};
+use crate::schema::base_layer_images::{self, all_columns, layer_id};
 
 use super::BaseLayerImages;
 
@@ -16,8 +16,11 @@ impl BaseLayerImages {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find(conn: &mut AsyncPgConnection) -> QueryResult<Vec<BaseLayerImageDto>> {
+    pub async fn find(conn: &mut AsyncPgConnection, layer_id_param: i32) -> QueryResult<Vec<BaseLayerImageDto>> {
         let query = base_layer_images::table.select(all_columns);
+            //TODO: filter for correct layer_id
+            // .filter(layer_id.eq(layer_id_param));
+
 
         debug!("{}", debug_query::<Pg, _>(&query));
         Ok(query
@@ -28,10 +31,10 @@ impl BaseLayerImages {
             .collect())
     }
 
-    /// Create a new planting in the database.
+    /// Create a new  BaseLayerImage in the database.
     ///
     /// # Errors
-    /// * If the `layer_id` references a layer that is not of type `plant`.
+    /// * If the `layer_id` references a layer that is not of type `base`.
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn create(
         dto: BaseLayerImageDto,
@@ -43,7 +46,7 @@ impl BaseLayerImages {
         query.get_result::<Self>(conn).await.map(Into::into)
     }
 
-    /// Partially update a planting in the database.
+    /// Update a BaseLayerImage in the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -58,7 +61,7 @@ impl BaseLayerImages {
         query.get_result::<Self>(conn).await.map(Into::into)
     }
 
-    /// Delete the planting from the database.
+    /// Delete the BaseLayerImage from the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
