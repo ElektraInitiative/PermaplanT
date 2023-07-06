@@ -2,6 +2,7 @@
 #![allow(clippy::module_name_repetitions)] // There needs to be a difference between DTOs and entities otherwise imports will be messy.
 
 use chrono::NaiveDate;
+use postgis_diesel::types::{Point, Polygon};
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
@@ -214,9 +215,15 @@ pub struct MapDto {
     pub location: Option<Coordinates>,
     /// The id of the owner of the map.
     pub owner_id: Uuid,
+    /// The geometry of the map.
+    ///
+    /// E.g. {"rings":[[{"x":0.0,"y":0.0},{"x":5.0,"y":0.0},{"x":5.0,"y":5.0},{"x":0.0,"y":5.0},{"x":0.0,"y":0.0}]],"srid":4326}
+    #[typeshare(serialized_as = "object")]
+    #[schema(value_type = Object)]
+    pub map_geom: Polygon<Point>,
 }
 
-/// The information of a map neccessary for its creation.
+/// The information of a map necessary for its creation.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewMapDto {
@@ -244,6 +251,12 @@ pub struct NewMapDto {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Coordinates>,
+    /// The geometry of the map.
+    ///
+    /// E.g. {"rings":[[{"x":0.0,"y":0.0},{"x":5.0,"y":0.0},{"x":5.0,"y":5.0},{"x":0.0,"y":5.0},{"x":0.0,"y":0.0}]],"srid":4326}
+    #[typeshare(serialized_as = "object")]
+    #[schema(value_type = Object)]
+    pub map_geom: Polygon<Point>,
 }
 
 /// Query parameters for searching maps.
@@ -262,7 +275,7 @@ pub struct MapSearchParameters {
 
 /// Support struct for transmitting latitude/longitude coordinates.
 #[typeshare]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct Coordinates {
     /// Latitude of the point.
     pub latitude: f64,

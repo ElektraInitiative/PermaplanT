@@ -16,11 +16,14 @@ use crate::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto,
-            PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto,
-            RelationsDto, SeedDto,
+            ConfigDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto,
+            PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto,
+            RelationDto, RelationsDto, SeedDto,
         },
-        r#enum::{quality::Quality, quantity::Quantity, relation_type::RelationType},
+        r#enum::{
+            privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+            relation_type::RelationType,
+        },
     },
 };
 
@@ -81,6 +84,8 @@ struct PlantsApiDoc;
             PageMapDto,
             MapDto,
             NewMapDto,
+            PrivacyOptions,
+            Coordinates
         )
     ),
     modifiers(&SecurityAddon)

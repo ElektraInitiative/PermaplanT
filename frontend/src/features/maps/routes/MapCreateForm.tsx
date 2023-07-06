@@ -126,6 +126,19 @@ export default function MapCreateForm() {
       privacy: mapInput.privacy,
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
+      // TODO: implement selector
+      map_geom: {
+        rings: [
+          [
+            { x: 0.0, y: 0.0 },
+            { x: 5.0, y: 0.0 },
+            { x: 5.0, y: 5.0 },
+            { x: 0.0, y: 5.0 },
+            { x: 0.0, y: 0.0 },
+          ],
+        ],
+        srid: 4326,
+      },
     };
     await createMap(newMap);
     navigate('/maps');

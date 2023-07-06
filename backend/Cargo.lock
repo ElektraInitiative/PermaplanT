@@ -1814,6 +1814,7 @@ checksum = "6db7bc162f8e7a4da3dfeb760ae767045b75028f3db81c4f53ad8abec841419c"
 dependencies = [
  "byteorder",
  "diesel",
+ "serde",
 ]
 
 [[package]]
