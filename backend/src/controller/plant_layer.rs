@@ -26,7 +26,7 @@ use crate::{
         HeatMapQueryParams
     ),
     responses(
-        (status = 200, description = "Returns the heatmap.", body = Vec<Vec<f64>>)
+        (status = 200, description = "Returns the heatmap.", body = Vec<u8>, content_type = "image/png")
     ),
     security(
         ("oauth2" = [])
@@ -40,7 +40,7 @@ pub async fn heatmap(
 ) -> Result<HttpResponse> {
     let response =
         plant_layer::heatmap(map_id.into_inner(), query_params.into_inner(), &app_data).await?;
-    Ok(HttpResponse::Ok().json(response))
+    Ok(HttpResponse::Ok().content_type("image/png").body(response))
 }
 
 /// Endpoint for finding all relations of a certain plant.

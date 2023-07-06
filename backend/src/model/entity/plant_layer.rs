@@ -3,7 +3,7 @@
 use diesel::{
     debug_query,
     pg::Pg,
-    sql_types::{Double, Integer},
+    sql_types::{Float, Integer},
     CombineDsl, ExpressionMethods, QueryDsl, QueryResult, QueryableByName,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
@@ -18,13 +18,13 @@ use crate::{
 };
 
 #[derive(Debug, Clone, QueryableByName)]
-pub struct HeatMapElement {
-    #[diesel(sql_type = Double)]
-    pub score: f64,
+struct HeatMapElement {
+    #[diesel(sql_type = Float)]
+    score: f32,
     #[diesel(sql_type = Integer)]
-    pub x: i32,
+    x: i32,
     #[diesel(sql_type = Integer)]
-    pub y: i32,
+    y: i32,
 }
 
 /// Generates a heatmap signaling ideal locations for planting the plant.
@@ -36,7 +36,7 @@ pub async fn heatmap(
     map_id: i32,
     plant_id: i32,
     conn: &mut AsyncPgConnection,
-) -> QueryResult<Vec<Vec<f64>>> {
+) -> QueryResult<Vec<Vec<f32>>> {
     // TODO: Compute from the maps geometry
     let num_rows = 10; // TODO: Calculate number of rows
     let num_cols = 10; // TODO: Calculate number of columns
@@ -49,7 +49,6 @@ pub async fn heatmap(
 
     let result = query.load::<HeatMapElement>(conn).await?;
 
-    // TODO: figure out how to handle actual values (return matrix to frontend, create image, return matrix as binary?)
     let mut heatmap = vec![vec![0.0; num_cols as usize]; num_rows as usize];
     for HeatMapElement { score, x, y } in result {
         heatmap[x as usize][y as usize] = score;
