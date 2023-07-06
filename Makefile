@@ -106,8 +106,12 @@ clean-storybook:
 .PHONY: install
 install:
 	cd backend && make install
+	cargo install mdbook mdbook-mermaid
+	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary
 	npm install @typescript-eslint/eslint-plugin@latest --save-dev
 
 .PHONY: uninstall
 uninstall:
 	cd backend && make uninstall
+	cargo uninstall mdbook mdbook-mermaid
+	cargo uninstall mdbook-generate-summary
