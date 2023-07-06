@@ -5,7 +5,9 @@
         "create_button_title": "Create new map",
         "missing_name": "Please enter a name",
         "honors_title": "Number of honors",
-        "visits_title": "Number of visits"
+        "visits_title": "Number of visits",
+        "edit_title": "Edit map",
+        "duplicate_title": "Duplicate map"
     },
     "create": {
         "modal_title": "New Map",

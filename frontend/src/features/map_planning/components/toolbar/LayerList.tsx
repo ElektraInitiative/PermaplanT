@@ -36,7 +36,7 @@ export const LayerList = ({
   const selectedLayer = useMapStore((map) => map.untrackedState.selectedLayer);
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
   const [alternativesVisible, setAlternativesVisible] = useState(false);
-  const { t } = useTranslation(['layerSettings']);
+  const { t } = useTranslation(['layerSettings', 'layers']);
 
   return (
     <>
@@ -50,7 +50,7 @@ export const LayerList = ({
       </div>
       <div className="flex items-center justify-center">
         <input
-          title="select layer"
+          title={t('layerSettings:select_layer')}
           className="h-4 w-4"
           type="radio"
           value={layer.name}
@@ -77,7 +77,7 @@ export const LayerList = ({
           title={t('layerSettings:sliderTooltip')}
           value={1}
         >
-          {layer.name}
+          {t(`layers:${layer.type_}`)}
         </NamedSlider>
       </div>
       {alternativesVisible &&
