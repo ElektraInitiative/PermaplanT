@@ -11,6 +11,7 @@ pub mod seed_impl;
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
 
+use diesel::AsChangeset;
 use diesel::QueryableByName;
 use diesel::{Identifiable, Insertable, Queryable};
 use postgis_diesel::types::Point;
@@ -735,7 +736,7 @@ pub struct Map {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// A flag indicating if this map is private or not.
+    /// An enum indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
@@ -769,7 +770,7 @@ pub struct NewMap {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// A flag indicating if this map is private or not.
+    /// An enum indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
@@ -779,6 +780,20 @@ pub struct NewMap {
     pub owner_id: Uuid,
     /// The geometry of the map.
     pub geometry: Polygon<Point>,
+}
+
+/// The `UpdateMap` entity.
+#[derive(AsChangeset)]
+#[diesel(table_name = maps)]
+pub struct UpdateMap {
+    /// The name of the map.
+    pub name: Option<String>,
+    /// An enum indicating if this map is private or not.
+    pub privacy: Option<PrivacyOptions>,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Point>,
 }
 
 /// The `Layer` entity.

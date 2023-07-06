@@ -2,7 +2,7 @@
 
 use crate::{
     model::{
-        dto::{MapDto, NewMapDto, Page},
+        dto::{MapDto, NewMapDto, Page, UpdateMapDto},
         r#enum::privacy_options::PrivacyOptions,
     },
     test::util::{dummy_map_geometry, init_test_app, init_test_database},
@@ -161,4 +161,95 @@ async fn test_can_create_map() {
         .await;
 
     assert_eq!(resp.status(), StatusCode::OK);
+}
+
+#[actix_rt::test]
+async fn test_update_fails_for_not_owner() {
+    let pool = init_test_database(|conn| {
+        async {
+            diesel::insert_into(crate::schema::maps::table)
+                .values((
+                    &crate::schema::maps::id.eq(-1),
+                    &crate::schema::maps::name.eq("Test Map: no update permission"),
+                    &crate::schema::maps::creation_date
+                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
+                    &crate::schema::maps::is_inactive.eq(false),
+                    &crate::schema::maps::zoom_factor.eq(100),
+                    &crate::schema::maps::honors.eq(0),
+                    &crate::schema::maps::visits.eq(0),
+                    &crate::schema::maps::harvested.eq(0),
+                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(dummy_map_geometry()),
+                ))
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let map_update = UpdateMapDto {
+        name: Some("This will fail".to_string()),
+        privacy: None,
+        description: None,
+        location: None,
+    };
+
+    let resp = test::TestRequest::patch()
+        .uri("/api/maps/-1")
+        .insert_header((header::AUTHORIZATION, token))
+        .set_json(map_update)
+        .send_request(&app)
+        .await;
+    assert_eq!(resp.status(), StatusCode::FORBIDDEN);
+}
+
+#[actix_rt::test]
+async fn test_can_update_map() {
+    let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let new_map = NewMapDto {
+        name: "Test Map: can update map".to_string(),
+        creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        deletion_date: None,
+        last_visit: None,
+        is_inactive: false,
+        zoom_factor: 100,
+        honors: 0,
+        visits: 0,
+        harvested: 0,
+        privacy: PrivacyOptions::Public,
+        description: None,
+        location: None,
+        geometry: dummy_map_geometry(),
+    };
+
+    let resp = test::TestRequest::post()
+        .uri("/api/maps")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .set_json(new_map)
+        .send_request(&app)
+        .await;
+    let map: MapDto = test::read_body_json(resp).await;
+
+    let map_update = UpdateMapDto {
+        name: Some("This will succeed".to_string()),
+        privacy: None,
+        description: None,
+        location: None,
+    };
+
+    let resp = test::TestRequest::patch()
+        .uri(&format!("/api/maps/{}", map.id))
+        .insert_header((header::AUTHORIZATION, token))
+        .set_json(map_update)
+        .send_request(&app)
+        .await;
+
+    let updated_map: MapDto = test::read_body_json(resp).await;
+    assert_ne!(updated_map.name, map.name)
 }

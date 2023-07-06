@@ -3,6 +3,7 @@ import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { MapWrapper } from '@/features/map_planning';
 import MapCreateForm from '@/features/maps/routes/MapCreateForm';
+import MapEditForm from '@/features/maps/routes/MapEditForm';
 import MapOverview from '@/features/maps/routes/MapOverview';
 import { WebdavTest } from '@/features/nextcloud_integration/components/webdav-test';
 import { Overview } from '@/features/overview/routes/Overview';
@@ -55,6 +56,12 @@ const routes: Routes = {
     component: MapCreateForm,
     path: '/maps/create',
     title: 'Map Creation',
+    restricted: true,
+  },
+  [Pages.MapEdit]: {
+    component: MapEditForm,
+    path: '/maps/:mapId/edit',
+    title: 'Edit Map',
     restricted: true,
   },
   [Pages.Webdav]: {

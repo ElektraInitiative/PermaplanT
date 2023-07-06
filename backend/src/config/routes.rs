@@ -32,6 +32,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(map::find)
                 .service(map::find_by_id)
                 .service(map::create)
+                .service(map::update)
                 .service(
                     web::scope("/{map_id}/layers")
                         .service(layers::find)
