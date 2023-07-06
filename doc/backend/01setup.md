@@ -20,31 +20,29 @@ sudo -u postgres psql
 CREATE USER permaplant WITH CREATEDB PASSWORD 'permaplant';
 ```
 
-2. Install Diesel CLI:
+1. Install
 
-```shell
-cargo install diesel_cli --no-default-features --features postgres
+To install dependencies.
+
+```sh
+make install
 ```
 
-3. Run the diesel setup, this makes sure that diesel will create the database if it doesn't exist yet and will run all migrations.
+2. migrate
 
-```shell
-LC_ALL=C diesel setup
+To update the database.
+
+```sh
+make migrate
 ```
 
-4. Run diesel migrations, to bring the database up to date with the current schema.
+3. build
 
-```shell
-LC_ALL=C diesel migration run
+```sh
+make build
 ```
 
-5. Install the typeshare cli to enable type safety between Rust and TypeScript:
-
-```shell
-cargo install typeshare-cli
-```
-
-6. Start Keycloak
+4. Start Keycloak
 
 You can do one of the following two steps, the first one being the simpler one, but with less configuration options.
 
@@ -54,10 +52,12 @@ You can do one of the following two steps, the first one being the simpler one, 
   - `AUTH_DISCOVERY_URI=http://localhost:8081/realms/PermaplanT/.well-known/openid-configuration`
   - `AUTH_CLIENT_ID=PermaplanT`
 
-7. Run the backend
+5. run
 
-```bash
-cargo run
+To start the server
+
+```sh
+make run
 ```
 
 ## Test server using Swagger
