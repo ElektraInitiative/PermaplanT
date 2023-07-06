@@ -20,7 +20,7 @@ sudo -u postgres psql
 CREATE USER permaplant WITH CREATEDB PASSWORD 'permaplant';
 ```
 
-1. Install
+2. Install
 
 To install dependencies.
 
@@ -28,7 +28,7 @@ To install dependencies.
 make install
 ```
 
-2. migrate
+3. migrate
 
 To update the database.
 
@@ -36,13 +36,13 @@ To update the database.
 make migrate
 ```
 
-3. build
+4. build
 
 ```sh
 make build
 ```
 
-4. Start Keycloak
+5. Start Keycloak
 
 You can do one of the following two steps, the first one being the simpler one, but with less configuration options.
 
@@ -52,7 +52,7 @@ You can do one of the following two steps, the first one being the simpler one, 
   - `AUTH_DISCOVERY_URI=http://localhost:8081/realms/PermaplanT/.well-known/openid-configuration`
   - `AUTH_CLIENT_ID=PermaplanT`
 
-5. run
+6. run
 
 To start the server
 
