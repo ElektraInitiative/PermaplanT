@@ -5,12 +5,12 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
-import SimpleModal from '@/components/Modals/SimpleModal';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export const ViewSeeds = () => {
   const navigate = useNavigate();
@@ -33,7 +33,10 @@ export const ViewSeeds = () => {
     },
     getPreviousPageParam: () => undefined,
   });
-  const [showErrorModal, setShowErrorModal] = useState(false);
+  if (error) {
+    console.error(error.message);
+    toast.error(t('seeds:view_seeds.fetching_error'));
+  }
   const seeds = data?.pages.flatMap((page) => page.results) ?? [];
 
   const handleCreateSeedClick = () => {
@@ -65,16 +68,6 @@ export const ViewSeeds = () => {
           </SimpleButton>
         </div>
         <SeedsOverviewList seeds={seeds} pageFetcher={pageFetcher} />
-        <SimpleModal
-          title={t('seeds:error_modal_title')}
-          body={error?.message || t('common:unknown_error')} // Error should always have a message
-          show={showErrorModal}
-          setShow={setShowErrorModal}
-          submitBtnTitle={t('common:ok')}
-          onSubmit={() => {
-            setShowErrorModal(false);
-          }}
-        ></SimpleModal>
       </PageLayout>
     </Suspense>
   );
