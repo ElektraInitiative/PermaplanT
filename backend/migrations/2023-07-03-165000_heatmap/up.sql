@@ -40,7 +40,7 @@ DECLARE
 BEGIN
     -- Makes sure the plant layer exists and fits to the map
     IF NOT EXISTS (SELECT 1 FROM layers WHERE id = p_layer_id AND type = 'plants' AND map_id = p_map_id) THEN
-        RAISE EXCEPTION 'Plant Layer with id % not found', p_layer_id;
+        RAISE EXCEPTION 'Layer with id % not found', p_layer_id;
     END IF;
     -- Makes sure the plant exists
     IF NOT EXISTS (SELECT 1 FROM plants WHERE id = p_plant_id) THEN
@@ -67,6 +67,7 @@ BEGIN
             -- If the square is on the map calculate a score; otherwise set score to 0.
             IF ST_Intersects(cell, map_geometry) THEN
                 score := 0.5 + calculate_score_from_relations(p_layer_id, p_plant_id, x_pos, y_pos);
+                -- TODO: add additional checks like shade
                 score := scale_score(score);  -- scale the score to be between 0 and 1
             ELSE
                 score := 0.0;

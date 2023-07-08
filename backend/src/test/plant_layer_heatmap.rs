@@ -15,7 +15,7 @@ use uuid::Uuid;
 
 use crate::{
     error::ServiceError,
-    model::r#enum::privacy_options::PrivacyOptions,
+    model::r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
     test::util::{
         dummy_map_polygons::{
             rectangle_with_missing_top_left_corner, small_rectangle,
@@ -45,6 +45,24 @@ async fn initial_db_values(
         ))
         .execute(conn)
         .await?;
+    diesel::insert_into(crate::schema::layers::table)
+        .values((
+            &crate::schema::layers::id.eq(-1),
+            &crate::schema::layers::map_id.eq(-1),
+            &crate::schema::layers::type_.eq(LayerType::Plants),
+            &crate::schema::layers::name.eq("Some name"),
+            &crate::schema::layers::is_alternative.eq(false),
+        ))
+        .execute(conn)
+        .await?;
+    diesel::insert_into(crate::schema::plants::table)
+        .values((
+            &crate::schema::plants::id.eq(-1),
+            &crate::schema::plants::unique_name.eq("Testia testia"),
+            &crate::schema::plants::common_name_en.eq(Some(vec![Some("T".to_owned())])),
+        ))
+        .execute(conn)
+        .await?;
     Ok(())
 }
 
@@ -55,7 +73,7 @@ async fn test_generate_heatmap_succeeds() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-1")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -74,7 +92,7 @@ async fn test_check_heatmap_dimensionality_succeeds() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-1")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -100,7 +118,7 @@ async fn test_check_heatmap_non_0_xmin_succeeds() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-1")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -126,7 +144,7 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-1")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -151,4 +169,37 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     assert_eq!([50, 167, 20], lower_right_pixel.0);
     assert_eq!([100, 80, 40], upper_left_pixel.0);
     assert_eq!([50, 167, 20], upper_right_pixel.0);
+}
+
+#[actix_rt::test]
+async fn test_missing_entities_fails() {
+    let pool = init_test_database(|conn| {
+        initial_db_values(conn, rectangle_with_missing_top_left_corner()).scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    // Invalid map id
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-2/layers/plants/heatmap?plant_id=-1&layer_id=-1")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .send_request(&app)
+        .await;
+    assert_eq!(resp.status(), StatusCode::NOT_FOUND);
+
+    // Invalid layer id
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&layer_id=-1")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .send_request(&app)
+        .await;
+    assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
+
+    // Invalid plant id
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-2")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+    assert_eq!(resp.status(), StatusCode::NOT_FOUND);
 }
