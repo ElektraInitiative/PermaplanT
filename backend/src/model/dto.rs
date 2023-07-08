@@ -218,7 +218,7 @@ pub struct MapDto {
     pub owner_id: Uuid,
     /// The geometry of the map.
     ///
-    /// E.g. {"rings":[[{"x":0.0,"y":0.0},{"x":5.0,"y":0.0},{"x":5.0,"y":5.0},{"x":0.0,"y":5.0},{"x":0.0,"y":0.0}]],"srid":4326}
+    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
     #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
     pub geometry: Polygon<Point>,
@@ -254,7 +254,7 @@ pub struct NewMapDto {
     pub location: Option<Coordinates>,
     /// The geometry of the map.
     ///
-    /// E.g. {"rings":[[{"x":0.0,"y":0.0},{"x":5.0,"y":0.0},{"x":5.0,"y":5.0},{"x":0.0,"y":5.0},{"x":0.0,"y":0.0}]],"srid":4326}
+    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
     #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
     pub geometry: Polygon<Point>,

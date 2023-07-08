@@ -119,28 +119,33 @@ pub fn dummy_map_geometry() -> Polygon<Point> {
     let mut map_geom = Polygon::new(Some(4326));
     map_geom.add_points(vec![
         Point {
-            x: 0.0,
-            y: 0.0,
+            x: 10.0,
+            y: 10.0,
             srid: None,
         },
         Point {
-            x: 5.0,
-            y: 0.0,
+            x: 12.0,
+            y: 15.0,
             srid: None,
         },
         Point {
-            x: 5.0,
-            y: 5.0,
+            x: 15.0,
+            y: 18.0,
             srid: None,
         },
         Point {
-            x: 0.0,
-            y: 5.0,
+            x: 20.0,
+            y: 20.0,
             srid: None,
         },
         Point {
-            x: 0.0,
-            y: 0.0,
+            x: 10.0,
+            y: 20.0,
+            srid: None,
+        },
+        Point {
+            x: 10.0,
+            y: 10.0,
             srid: None,
         },
     ]);

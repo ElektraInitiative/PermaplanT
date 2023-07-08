@@ -14,8 +14,13 @@ use crate::{
 
 /// Endpoint for generating a heatmap signaling ideal locations for planting the plant.
 ///
-/// Returns a matrix with scores from 0-1 indicating ideal locations for planting the plant.
-/// 0 means that the plant shouldn't/can't be place there; 1 signal an optimal location.
+/// The heatmap will be an exact fit on the maps geometry.
+/// This means if the maps y_min is 100 the generated heatmap will need to be moved to start at y=100.
+///
+/// x=0,y=0     ... top left
+/// x=0,y=100   ... top right
+/// x=100,y=100 ... bottom right
+/// x=100,y=0   ... bottom left
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

@@ -17,6 +17,21 @@ use crate::{
     schema::relations,
 };
 
+/// The resolution of the generated heatmap in cm.
+const GRANULARITY: f32 = 10.0;
+
+#[derive(Debug, Clone, QueryableByName)]
+struct BoundingBox {
+    #[diesel(sql_type = Float)]
+    x_min: f32,
+    #[diesel(sql_type = Float)]
+    y_min: f32,
+    #[diesel(sql_type = Float)]
+    x_max: f32,
+    #[diesel(sql_type = Float)]
+    y_max: f32,
+}
+
 /// Stores the score of a x,y coordinate on the heatmap.
 #[derive(Debug, Clone, QueryableByName)]
 struct HeatMapElement {
@@ -41,19 +56,30 @@ pub async fn heatmap(
     plant_id: i32,
     conn: &mut AsyncPgConnection,
 ) -> QueryResult<Vec<Vec<f32>>> {
-    // TODO: Compute from the maps geometry
-    let num_rows = 10; // TODO: Calculate number of rows
-    let num_cols = 10; // TODO: Calculate number of columns
+    // Fetch the bounding box x and y values of the maps coordinates
+    let query = diesel::sql_query("SELECT * FROM calculate_bbox($1)").bind::<Integer, _>(map_id);
+    debug!("{}", debug_query::<Pg, _>(&query));
+    let bounding_box = query.get_result::<BoundingBox>(conn).await?;
 
-    let query = diesel::sql_query("SELECT * FROM calculate_score($1, $2, $3, $4)")
+    // Fetch the heatmap
+    let query = diesel::sql_query("SELECT * FROM calculate_score($1, $2, $3, $4, $5, $6, $7)")
         .bind::<Integer, _>(map_id)
         .bind::<Integer, _>(plant_id)
-        .bind::<Integer, _>(num_rows)
-        .bind::<Integer, _>(num_cols);
-
+        .bind::<Float, _>(GRANULARITY)
+        .bind::<Float, _>(bounding_box.x_min)
+        .bind::<Float, _>(bounding_box.y_min)
+        .bind::<Float, _>(bounding_box.x_max)
+        .bind::<Float, _>(bounding_box.y_max);
+    debug!("{}", debug_query::<Pg, _>(&query));
     let result = query.load::<HeatMapElement>(conn).await?;
 
-    let mut heatmap = vec![vec![0.0; num_cols as usize]; num_rows as usize];
+    // Convert the result to a matrix.
+    // Matrix will be from 0..0 to ((x_max - x_min) / granularity)..((y_max - y_min) / granularity).
+    let mut heatmap =
+        vec![
+            vec![0.0; ((bounding_box.x_max - bounding_box.x_min) / GRANULARITY) as usize];
+            ((bounding_box.y_max - bounding_box.y_min) / GRANULARITY) as usize
+        ];
     for HeatMapElement { score, x, y } in result {
         heatmap[x as usize][y as usize] = score;
     }
