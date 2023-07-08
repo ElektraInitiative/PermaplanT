@@ -77,11 +77,11 @@ pub async fn heatmap(
     // Matrix will be from 0..0 to ((x_max - x_min) / granularity)..((y_max - y_min) / granularity).
     let mut heatmap =
         vec![
-            vec![0.0; ((bounding_box.x_max - bounding_box.x_min) / GRANULARITY) as usize];
-            ((bounding_box.y_max - bounding_box.y_min) / GRANULARITY) as usize
+            vec![0.0; ((bounding_box.x_max - bounding_box.x_min) / GRANULARITY).ceil() as usize];
+            ((bounding_box.y_max - bounding_box.y_min) / GRANULARITY).ceil() as usize
         ];
     for HeatMapElement { score, x, y } in result {
-        heatmap[x as usize][y as usize] = score;
+        heatmap[y as usize][x as usize] = score;
     }
     Ok(heatmap)
 }

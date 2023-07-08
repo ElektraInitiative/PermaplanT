@@ -20,7 +20,7 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
 use uuid::Uuid;
 
-use super::util::dummy_map_geometry;
+use super::util::dummy_map_polygons::tall_rectangle;
 
 async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceError> {
     diesel::insert_into(crate::schema::maps::table)
@@ -35,7 +35,7 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
             &crate::schema::maps::harvested.eq(0),
             &crate::schema::maps::privacy.eq(PrivacyOptions::Private),
             &crate::schema::maps::owner_id.eq(Uuid::default()),
-            &crate::schema::maps::geometry.eq(dummy_map_geometry()),
+            &crate::schema::maps::geometry.eq(tall_rectangle()),
         )])
         .execute(conn)
         .await?;

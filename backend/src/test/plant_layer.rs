@@ -17,7 +17,7 @@ use crate::{
         dto::RelationsDto,
         r#enum::{privacy_options::PrivacyOptions, relation_type::RelationType},
     },
-    test::util::{dummy_map_geometry, init_test_app, init_test_database},
+    test::util::{dummy_map_polygons::tall_rectangle, init_test_app, init_test_database},
 };
 
 #[actix_rt::test]
@@ -37,7 +37,7 @@ async fn test_generate_heatmap_succeeds() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
-                    &crate::schema::maps::geometry.eq(dummy_map_geometry()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 ))
                 .execute(conn)
                 .await?;

@@ -12,7 +12,7 @@ use crate::{
         dto::plantings::{MovePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto},
         r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
     },
-    test::util::dummy_map_geometry,
+    test::util::dummy_map_polygons::tall_rectangle,
 };
 
 use crate::test::util::{init_test_app, init_test_database};
@@ -34,7 +34,7 @@ async fn test_can_search_plantings() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::default()),
-                    &crate::schema::maps::geometry.eq(dummy_map_geometry()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 )])
                 .execute(conn)
                 .await?;
@@ -140,7 +140,7 @@ async fn test_create_fails_with_invalid_layer() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::default()),
-                    &crate::schema::maps::geometry.eq(dummy_map_geometry()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 )])
                 .execute(conn)
                 .await?;
@@ -209,7 +209,7 @@ async fn test_can_create_plantings() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::default()),
-                    &crate::schema::maps::geometry.eq(dummy_map_geometry()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 )])
                 .execute(conn)
                 .await?;
@@ -279,7 +279,7 @@ async fn test_can_update_plantings() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::default()),
-                    &crate::schema::maps::geometry.eq(dummy_map_geometry()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 )])
                 .execute(conn)
                 .await?;
@@ -361,7 +361,7 @@ async fn test_can_delete_planting() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::default()),
-                    &crate::schema::maps::geometry.eq(dummy_map_geometry()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 )])
                 .execute(conn)
                 .await?;

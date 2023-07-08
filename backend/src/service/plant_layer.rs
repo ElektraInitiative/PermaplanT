@@ -4,7 +4,7 @@ use std::io::Cursor;
 
 use actix_http::StatusCode;
 use actix_web::web::Data;
-use image::{ImageBuffer, Luma};
+use image::{ImageBuffer, Rgb};
 
 use crate::{
     config::data::AppDataInner,
@@ -44,12 +44,18 @@ pub async fn heatmap(
 fn matrix_to_image(matrix: &Vec<Vec<f32>>) -> Result<Vec<u8>, ServiceError> {
     let (width, height) = (matrix[0].len(), matrix.len());
     let mut imgbuf = ImageBuffer::new(width as u32, height as u32);
+
     for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
-        let data = matrix[y as usize][x as usize];
-        // TODO: color
-        // Normalize the data to 0-255 as required by the image::Luma
-        *pixel = Luma([(data * 255.0) as u8]);
+        let data = matrix[height - (y as usize) - 1][x as usize];
+
+        // The closer data is to 1 the green it gets.
+        let red = 100.0 - data * 100.0;
+        let green = 80.0 + data * (255.0 - 80.0);
+        let blue = 40.0 - data * 40.0;
+
+        *pixel = Rgb([red as u8, green as u8, blue as u8]);
     }
+
     let mut buffer: Vec<u8> = Vec::new();
     imgbuf
         .write_to(&mut Cursor::new(&mut buffer), image::ImageOutputFormat::Png)
