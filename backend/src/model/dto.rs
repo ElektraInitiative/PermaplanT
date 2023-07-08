@@ -377,6 +377,8 @@ pub enum SuggestionType {
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct HeatMapQueryParams {
+    /// The id of the plant layer the planting will be planted on.
+    pub layer_id: i32,
     /// The id of the plant you want to plant.
     pub plant_id: i32,
 }

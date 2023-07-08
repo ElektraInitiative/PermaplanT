@@ -28,7 +28,13 @@ pub async fn heatmap(
     app_data: &Data<AppDataInner>,
 ) -> Result<Vec<u8>, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = plant_layer::heatmap(map_id, query_params.plant_id, &mut conn).await?;
+    let result = plant_layer::heatmap(
+        map_id,
+        query_params.layer_id,
+        query_params.plant_id,
+        &mut conn,
+    )
+    .await?;
 
     let buffer = matrix_to_image(&result)?;
 
