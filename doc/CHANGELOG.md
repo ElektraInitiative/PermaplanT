@@ -22,7 +22,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - UI: Added hover tooltip to edit map button _(Thorben)_
 - _()_
 - _()_
-- _()_
+- backend: add endpoint to generate the heatmap _(Gabriel)_
 - _()_
 - _()_
 - _()_
