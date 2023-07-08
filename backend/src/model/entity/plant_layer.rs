@@ -20,14 +20,19 @@ use crate::{
 /// The resolution of the generated heatmap in cm.
 const GRANULARITY: f32 = 10.0;
 
+/// A bounding box around the maps geometry.
 #[derive(Debug, Clone, QueryableByName)]
 struct BoundingBox {
+    /// The lowest x value in the geometry.
     #[diesel(sql_type = Float)]
     x_min: f32,
+    /// The lowest y value in the geometry.
     #[diesel(sql_type = Float)]
     y_min: f32,
+    /// The highest x value in the geometry.
     #[diesel(sql_type = Float)]
     x_max: f32,
+    /// The highest y value in the geometry.
     #[diesel(sql_type = Float)]
     y_max: f32,
 }
@@ -50,16 +55,21 @@ struct HeatMapElement {
 ///
 /// # Errors
 /// * If the SQL query failed.
-#[allow(clippy::cast_sign_loss, clippy::indexing_slicing)]
+#[allow(
+    clippy::cast_sign_loss,
+    clippy::indexing_slicing,
+    clippy::cast_possible_truncation    // ok, because ceil prevents invalid truncation
+)]
 pub async fn heatmap(
     map_id: i32,
     plant_id: i32,
     conn: &mut AsyncPgConnection,
 ) -> QueryResult<Vec<Vec<f32>>> {
     // Fetch the bounding box x and y values of the maps coordinates
-    let query = diesel::sql_query("SELECT * FROM calculate_bbox($1)").bind::<Integer, _>(map_id);
-    debug!("{}", debug_query::<Pg, _>(&query));
-    let bounding_box = query.get_result::<BoundingBox>(conn).await?;
+    let bounding_box_query =
+        diesel::sql_query("SELECT * FROM calculate_bbox($1)").bind::<Integer, _>(map_id);
+    debug!("{}", debug_query::<Pg, _>(&bounding_box_query));
+    let bounding_box = bounding_box_query.get_result::<BoundingBox>(conn).await?;
 
     // Fetch the heatmap
     let query = diesel::sql_query("SELECT * FROM calculate_score($1, $2, $3, $4, $5, $6, $7)")
