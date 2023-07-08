@@ -6,18 +6,6 @@ use uuid::Uuid;
 
 use crate::schema::plantings;
 
-/// Arguments for the database layer find plantings function.
-pub struct FindPlantingsParameters {
-    /// The id of the plant to find plantings for.
-    pub plant_id: Option<i32>,
-    /// The id of the layer to find plantings for.
-    pub layer_id: Option<i32>,
-    /// First date in the time frame plantings are searched for.
-    pub from: NaiveDate,
-    /// Last date in the time frame plantings are searched for.
-    pub to: NaiveDate,
-}
-
 /// The `Planting` entity.
 #[derive(Debug, Clone, Identifiable, Queryable, Insertable)]
 #[diesel(table_name = plantings)]

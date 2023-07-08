@@ -1,5 +1,6 @@
 //! Contains the implementation of [`Planting`].
 
+use chrono::NaiveDate;
 use diesel::pg::Pg;
 use diesel::{debug_query, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
@@ -10,7 +11,17 @@ use crate::model::dto::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDt
 use crate::model::entity::plantings::{Planting, UpdatePlanting};
 use crate::schema::plantings::{self, all_columns, layer_id, plant_id};
 
-use super::plantings::FindPlantingsParameters;
+/// Arguments for the database layer find plantings function.
+pub struct FindPlantingsParameters {
+    /// The id of the plant to find plantings for.
+    pub plant_id: Option<i32>,
+    /// The id of the layer to find plantings for.
+    pub layer_id: Option<i32>,
+    /// First date in the time frame plantings are searched for.
+    pub from: NaiveDate,
+    /// Last date in the time frame plantings are searched for.
+    pub to: NaiveDate,
+}
 
 impl Planting {
     /// Get all plantings associated with the query.
