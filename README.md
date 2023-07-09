@@ -8,6 +8,8 @@
 - Web: Firefox, Chromium
 - Larger mobile devices like tablets: Progressive Web App (PWA) Android 9+
 
+## Documentation
+
 Start reading in [/doc/architecture/README.md](/doc/architecture/README.md).
 The documentation is best viewed by running the following commands in the projects root folder:
 
@@ -22,3 +24,10 @@ Which will open [/doc/architecture/README.md](/doc/architecture/README.md) as fi
 Important links:
 
 - [Web API Documentation](https://www.permaplant.net/doc/api/swagger/ui/)
+
+## Community and Contributing
+
+PermaplanT is developed by [us](./doc/authors.md) and by users like you. We welcome both pull requests and issues on GitHub.
+Check out the [contributing docs](.github/CONTRIBUTING.md).
+
+Information about developing can be found under [our development setup](./doc/development_setup.md).
