@@ -29,23 +29,21 @@ def wait_for_db() {
 
 // REQUIRED for Deployment
 // see Jenkinsfile.release
-stage('Build Schema'){
+stage('Create Schema'){
     node('docker') {
         node_info()
         checkout scm
 
-        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+        def base_image = docker.build("permaplant-base")
 
         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+            base_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci' --privileged") {
                 checkout scm
 
                 wait_for_db()
-
-                sh './ci/build-scripts/build-schema.sh'
-
+                sh 'make migrate'
+                sh 'make generate-api-types'
                 stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
             }
         }
     }
@@ -59,16 +57,19 @@ stage('Tests & Build') {
     parallel_checks["test-and-build-mdbook"] = {
         node('docker') {
             checkout scm
-            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+            def base_image = docker.build("permaplant-base")
 
-            mdbook_image.inside {
+            base_image.inside {
                 checkout scm
 
-                stage('test-and-build-mdbook'){
-                    sh "mdbook test"
-                    sh 'mdbook build'
-                    stash includes: 'book/', name: 'mdbook'
+                stage('build-mdbook'){
+                    sh 'make build-mdbook'
                 }
+
+                stage('test-mdbook'){
+                    sh "make test-mdbook"
+                }
+                stash includes: 'book/', name: 'mdbook'
             }
         }
     }
@@ -77,42 +78,33 @@ stage('Tests & Build') {
         node('docker') {
             node_info()
             checkout scm
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+            def base_image = docker.build("permaplant-base")
 
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                base_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
 
                     wait_for_db()
 
                     stage('test-backend'){
                         withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-                            // Workaround: we can't stop rustfmt from linting the generated schema.rs
                             dir("backend") {
-                                sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
-                                sh "cargo fmt --check"
+                                sh "cd backend && make fmt"
                             }
-                            // End of Workaround
-
-                            // generate schema (overwriting src/schema.rs)
-                            sh './ci/build-scripts/build-schema.sh'
 
                             dir("backend") {
-                                // continue checking
                                 withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']) {
-                                sh "cargo check"
-                                sh "cargo clippy"
-                                sh "cargo doc"
-                                sh "cargo test"
+                                sh "cd backend && make test"
                                 }
                             }
                         }
                     }
 
                     stage('build-backend'){
-                        sh './ci/build-scripts/build-backend.sh'
-
-                        stash includes: 'backend/target/release/backend', name: 'backend'
+                        withEnv(['MAKE_RELEASE=1']) {
+                            sh 'make build-backend'
+                            stash includes: 'backend/target/release/backend', name: 'backend'
+                        }
                     }
                 }
             }
@@ -123,32 +115,26 @@ stage('Tests & Build') {
         node('docker') {
             node_info()
             checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+            def base_image = docker.build("permaplant-base")
 
-            node_image.inside {
+            base_image.inside {
                 checkout scm
-                unstash 'definitions.ts'
                 stage('test-frontend'){
-                    dir("frontend") {
-                        sh "npm ci"
-                        sh "npm run format:check"
-                        sh "npm run lint"
-                        sh "npm run test"
-                    }
+                    sh 'make test-frontend'
                 }
 
                 stage('build-frontend'){
-                    sh './ci/build-scripts/build-frontend.sh'
+                    sh 'make build-frontend'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
 
                 stage('build-typedoc'){
-                    sh 'cd frontend && npm run doc'
+                    sh 'make generate-type-doc'
                     stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
                 }
 
                 stage('build-storybook'){
-                    sh './ci/build-scripts/build-storybook.sh'
+                    sh 'make build-storybook'
                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
             }
