@@ -4,8 +4,8 @@ import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
-import { LayerType, ConnectToMapQueryParams, LayerDto } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
+import { LayerType, LayerDto } from '@/bindings/definitions';
+import { createAPI } from '@/config/axios';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
@@ -106,19 +106,19 @@ function useMapUpdates() {
       return;
     }
 
-    const connectionQuery: ConnectToMapQueryParams = {
+    const connectionQuery = {
       map_id: 1,
       user_id: user.profile.sub,
     };
 
-    const connectionParams = new URLSearchParams();
-    connectionParams.append('map_id', `${connectionQuery.map_id}`);
-    connectionParams.append('user_id', connectionQuery.user_id);
+    const http = createAPI();
+    const uri = http.getUri({
+      url: 'api/updates/maps',
+      params: connectionQuery,
+    });
 
     // TODO: implement authentication
-    evRef.current = new EventSource(
-      `${baseApiUrl}/api/updates/maps?${connectionParams.toString()}`,
-    );
+    evRef.current = new EventSource(uri);
     evRef.current.onmessage = (ev) => handleRemoteAction(ev, user);
 
     return () => {

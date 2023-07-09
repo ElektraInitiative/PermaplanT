@@ -1,10 +1,10 @@
 import { ConfigDto } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { createUnauthorizedAPI } from '@/config/axios';
 
 export const getAuthInfo = async (): Promise<ConfigDto> => {
   try {
-    const response = await axios.get<ConfigDto>(`${baseApiUrl}/api/config`);
+    const http = createUnauthorizedAPI();
+    const response = await http.get<ConfigDto>('api/config');
     return response.data;
   } catch (error) {
     throw error as Error;
