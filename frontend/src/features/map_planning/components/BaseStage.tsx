@@ -230,6 +230,7 @@ export const BaseStage = ({
             // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
             // It's an experimental property so we should keep an eye out for possible issues
             shouldOverdrawWholeArea={true}
+            enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
           />
         </Layer>
       </Stage>

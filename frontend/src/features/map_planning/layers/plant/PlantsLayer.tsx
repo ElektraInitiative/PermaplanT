@@ -41,8 +41,8 @@ function usePlantLayerListeners(listening: boolean) {
           // TODO: get the selectedLayerId from the store
           layerId: selectedLayer.id,
           // consider the offset of the stage and size of the element
-          x: position.x - 50,
-          y: position.y - 50,
+          x: Math.round(position.x),
+          y: Math.round(position.y),
           height: 100,
           width: 100,
           rotation: 0,
@@ -196,7 +196,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
     >
       <div className="flex flex-col items-center justify-center">
         <span>
-          planting {plant.unique_name} ({plant.common_name_en})
+          {plant.unique_name} ({plant.common_name_en})
         </span>
       </div>
       <div className="flex items-center justify-center">
