@@ -2,17 +2,18 @@
 
 use actix_http::StatusCode;
 use actix_web::{http::header, test};
-use chrono::NaiveDate;
-use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::Uuid;
 
-use crate::model::{
-    dto::{
-        plantings::{MovePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto},
-        TimelinePage,
+use crate::{
+    model::{
+        dto::{
+            plantings::{MovePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto},
+            TimelinePage,
+        },
+        r#enum::layer_type::LayerType,
     },
-    r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
+    test::util::data,
 };
 
 use crate::test::util::{init_test_app, init_test_database};
@@ -22,75 +23,39 @@ async fn test_can_search_plantings() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values(vec![(
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("Test Map: Search Plantings"),
-                    &crate::schema::maps::creation_date
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::default()),
-                )])
+                .values(data::TestInsertableMap::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
                 .values(vec![
-                    (
-                        &crate::schema::layers::id.eq(-1),
-                        &crate::schema::layers::map_id.eq(-1),
-                        &crate::schema::layers::type_.eq(LayerType::Plants),
-                        &crate::schema::layers::name.eq("Test Layer 1"),
-                        &crate::schema::layers::is_alternative.eq(false),
-                    ),
-                    (
-                        &crate::schema::layers::id.eq(-2),
-                        &crate::schema::layers::map_id.eq(-1),
-                        &crate::schema::layers::type_.eq(LayerType::Plants),
-                        &crate::schema::layers::name.eq("Test Layer 2"),
-                        &crate::schema::layers::is_alternative.eq(true),
-                    ),
+                    data::TestInsertableLayer::default(),
+                    data::TestInsertableLayer {
+                        id: -2,
+                        name: "Test Layer 2".to_owned(),
+                        is_alternative: true,
+                        ..Default::default()
+                    },
                 ])
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
-                .values(vec![(
-                    &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::unique_name.eq("Test Plant: Search Plantings"),
-                    &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                )])
+                .values(data::TestInsertablePlant::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plantings::table)
                 .values(vec![
-                    (
-                        &crate::schema::plantings::id.eq(Uuid::new_v4()),
-                        &crate::schema::plantings::layer_id.eq(-1),
-                        &crate::schema::plantings::plant_id.eq(-1),
-                        &crate::schema::plantings::x.eq(0),
-                        &crate::schema::plantings::y.eq(0),
-                        &crate::schema::plantings::width.eq(0),
-                        &crate::schema::plantings::height.eq(0),
-                        &crate::schema::plantings::rotation.eq(0.0),
-                        &crate::schema::plantings::scale_x.eq(0.0),
-                        &crate::schema::plantings::scale_y.eq(0.0),
-                    ),
-                    (
-                        &crate::schema::plantings::id.eq(Uuid::new_v4()),
-                        &crate::schema::plantings::layer_id.eq(-2),
-                        &crate::schema::plantings::plant_id.eq(-1),
-                        &crate::schema::plantings::x.eq(0),
-                        &crate::schema::plantings::y.eq(0),
-                        &crate::schema::plantings::width.eq(0),
-                        &crate::schema::plantings::height.eq(0),
-                        &crate::schema::plantings::rotation.eq(0.0),
-                        &crate::schema::plantings::scale_x.eq(0.0),
-                        &crate::schema::plantings::scale_y.eq(0.0),
-                    ),
+                    data::TestInsertablePlanting {
+                        id: Uuid::new_v4(),
+                        layer_id: -1,
+                        plant_id: -1,
+                        ..Default::default()
+                    },
+                    data::TestInsertablePlanting {
+                        id: Uuid::new_v4(),
+                        layer_id: -2,
+                        plant_id: -1,
+                        ..Default::default()
+                    },
                 ])
                 .execute(conn)
                 .await?;
@@ -127,38 +92,18 @@ async fn test_create_fails_with_invalid_layer() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values(vec![(
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("Test Map: Invalid Create"),
-                    &crate::schema::maps::creation_date
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::default()),
-                )])
+                .values(data::TestInsertableMap::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(vec![(
-                    &crate::schema::layers::id.eq(-1),
-                    &crate::schema::layers::map_id.eq(-1),
-                    &crate::schema::layers::type_.eq(LayerType::Base),
-                    &crate::schema::layers::name.eq("Test Layer 1"),
-                    &crate::schema::layers::is_alternative.eq(false),
-                )])
+                .values(data::TestInsertableLayer {
+                    type_: LayerType::Base,
+                    ..Default::default()
+                })
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
-                .values(vec![(
-                    &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::unique_name.eq("Test Plant: Invalid Create"),
-                    &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                )])
+                .values(data::TestInsertablePlant::default())
                 .execute(conn)
                 .await?;
             Ok(())
@@ -196,38 +141,15 @@ async fn test_can_create_plantings() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values(vec![(
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("Test Map: Create Success"),
-                    &crate::schema::maps::creation_date
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::default()),
-                )])
+                .values(data::TestInsertableMap::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(vec![(
-                    &crate::schema::layers::id.eq(-1),
-                    &crate::schema::layers::map_id.eq(-1),
-                    &crate::schema::layers::type_.eq(LayerType::Plants),
-                    &crate::schema::layers::name.eq("Test Layer 1"),
-                    &crate::schema::layers::is_alternative.eq(false),
-                )])
+                .values(data::TestInsertableLayer::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
-                .values(vec![(
-                    &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::unique_name.eq("Test Plant: Create Success"),
-                    &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                )])
+                .values(data::TestInsertablePlant::default())
                 .execute(conn)
                 .await?;
             Ok(())
@@ -266,53 +188,22 @@ async fn test_can_update_plantings() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values(vec![(
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("Test Map: Search Plantings"),
-                    &crate::schema::maps::creation_date
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::default()),
-                )])
+                .values(data::TestInsertableMap::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(vec![(
-                    &crate::schema::layers::id.eq(-1),
-                    &crate::schema::layers::map_id.eq(-1),
-                    &crate::schema::layers::type_.eq(LayerType::Plants),
-                    &crate::schema::layers::name.eq("Test Layer 1"),
-                    &crate::schema::layers::is_alternative.eq(false),
-                )])
+                .values(data::TestInsertableLayer::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
-                .values(vec![(
-                    &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::unique_name.eq("Test Plant: Search Plantings"),
-                    &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                )])
+                .values(data::TestInsertablePlant::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plantings::table)
-                .values(vec![(
-                    &crate::schema::plantings::id.eq(planting_id),
-                    &crate::schema::plantings::layer_id.eq(-1),
-                    &crate::schema::plantings::plant_id.eq(-1),
-                    &crate::schema::plantings::x.eq(0),
-                    &crate::schema::plantings::y.eq(0),
-                    &crate::schema::plantings::width.eq(0),
-                    &crate::schema::plantings::height.eq(0),
-                    &crate::schema::plantings::rotation.eq(0.0),
-                    &crate::schema::plantings::scale_x.eq(0.0),
-                    &crate::schema::plantings::scale_y.eq(0.0),
-                )])
+                .values(data::TestInsertablePlanting {
+                    id: planting_id,
+                    ..Default::default()
+                })
                 .execute(conn)
                 .await?;
             Ok(())
@@ -347,53 +238,22 @@ async fn test_can_delete_planting() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values(vec![(
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("Test Map: Search Plantings"),
-                    &crate::schema::maps::creation_date
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::default()),
-                )])
+                .values(data::TestInsertableMap::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(vec![(
-                    &crate::schema::layers::id.eq(-1),
-                    &crate::schema::layers::map_id.eq(-1),
-                    &crate::schema::layers::type_.eq(LayerType::Plants),
-                    &crate::schema::layers::name.eq("Test Layer 1"),
-                    &crate::schema::layers::is_alternative.eq(false),
-                )])
+                .values(data::TestInsertableLayer::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
-                .values(vec![(
-                    &crate::schema::plants::id.eq(-1),
-                    &crate::schema::plants::unique_name.eq("Test Plant: Search Plantings"),
-                    &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                )])
+                .values(data::TestInsertablePlant::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plantings::table)
-                .values(vec![(
-                    &crate::schema::plantings::id.eq(planting_id),
-                    &crate::schema::plantings::layer_id.eq(-1),
-                    &crate::schema::plantings::plant_id.eq(-1),
-                    &crate::schema::plantings::x.eq(0),
-                    &crate::schema::plantings::y.eq(0),
-                    &crate::schema::plantings::width.eq(0),
-                    &crate::schema::plantings::height.eq(0),
-                    &crate::schema::plantings::rotation.eq(0.0),
-                    &crate::schema::plantings::scale_x.eq(0.0),
-                    &crate::schema::plantings::scale_y.eq(0.0),
-                )])
+                .values(data::TestInsertablePlanting {
+                    id: planting_id,
+                    ..Default::default()
+                })
                 .execute(conn)
                 .await?;
             Ok(())
