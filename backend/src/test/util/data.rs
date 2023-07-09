@@ -91,6 +91,8 @@ pub struct TestInsertablePlanting {
     pub rotation: f32,
     pub scale_x: f32,
     pub scale_y: f32,
+    pub add_date: Option<NaiveDate>,
+    pub remove_date: Option<NaiveDate>,
 }
 
 impl Default for TestInsertablePlanting {
@@ -106,6 +108,8 @@ impl Default for TestInsertablePlanting {
             rotation: 0.0,
             scale_x: 0.0,
             scale_y: 0.0,
+            add_date: None,
+            remove_date: None,
         }
     }
 }

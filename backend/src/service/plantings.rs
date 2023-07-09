@@ -15,7 +15,7 @@ use crate::model::entity::plantings::Planting;
 use crate::model::entity::plantings_impl::FindPlantingsParameters;
 
 /// Time offset in days for loading plantings in the timeline.
-const TIME_LINE_LOADING_OFFSET_DAYS: u64 = 356;
+pub const TIME_LINE_LOADING_OFFSET_DAYS: u64 = 356;
 
 /// Search plantings from the database.
 ///

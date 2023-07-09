@@ -1,7 +1,10 @@
 //! Tests for [`crate::controller::plantings`].
 
+use std::ops::Add;
+
 use actix_http::StatusCode;
 use actix_web::{http::header, test};
+use chrono::{Days, NaiveDate};
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::Uuid;
 
@@ -13,6 +16,7 @@ use crate::{
         },
         r#enum::layer_type::LayerType,
     },
+    service::plantings::TIME_LINE_LOADING_OFFSET_DAYS,
     test::util::data,
 };
 
@@ -218,8 +222,7 @@ async fn test_can_update_plantings() {
 
     let resp = test::TestRequest::patch()
         .uri(&format!(
-            "/api/maps/-1/layers/plants/plantings/{}",
-            planting_id
+            "/api/maps/-1/layers/plants/plantings/{planting_id}"
         ))
         .insert_header((header::AUTHORIZATION, token))
         .set_json(update_object)
@@ -265,8 +268,7 @@ async fn test_can_delete_planting() {
 
     let resp = test::TestRequest::delete()
         .uri(&format!(
-            "/api/maps/-1/layers/plants/plantings/{}",
-            planting_id
+            "/api/maps/-1/layers/plants/plantings/{planting_id}",
         ))
         .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
@@ -275,6 +277,153 @@ async fn test_can_delete_planting() {
 
     let resp = test::TestRequest::get()
         .uri("/api/maps/-1/layers/plants/plantings?relative_to_date=2023-05-08")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+    assert_eq!(resp.status(), StatusCode::OK);
+
+    let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
+    assert_eq!(page.results.len(), 0);
+}
+
+#[actix_rt::test]
+async fn test_removed_planting_outside_loading_offset_is_not_in_timeline() {
+    let planting_id = Uuid::new_v4();
+    let remove_date = NaiveDate::from_ymd_opt(2022, 1, 1).expect("date is valid");
+
+    let pool = init_test_database(|conn| {
+        async {
+            diesel::insert_into(crate::schema::maps::table)
+                .values(data::TestInsertableMap::default())
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::layers::table)
+                .values(data::TestInsertableLayer::default())
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::plants::table)
+                .values(data::TestInsertablePlant::default())
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::plantings::table)
+                .values(data::TestInsertablePlanting {
+                    id: planting_id,
+                    remove_date: Some(remove_date),
+                    ..Default::default()
+                })
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri(&format!(
+            "/api/maps/-1/layers/plants/plantings?relative_to_date={}",
+            remove_date
+                .add(Days::new(TIME_LINE_LOADING_OFFSET_DAYS))
+                .format("%Y-%m-%d"),
+        ))
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+    assert_eq!(resp.status(), StatusCode::OK);
+
+    let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
+    assert_eq!(page.results.len(), 0);
+}
+
+#[actix_rt::test]
+async fn test_removed_planting_inside_loading_offset_is_in_timeline() {
+    let planting_id = Uuid::new_v4();
+    let remove_date = NaiveDate::from_ymd_opt(2022, 1, 1).expect("date is valid");
+
+    let pool = init_test_database(|conn| {
+        async {
+            diesel::insert_into(crate::schema::maps::table)
+                .values(data::TestInsertableMap::default())
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::layers::table)
+                .values(data::TestInsertableLayer::default())
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::plants::table)
+                .values(data::TestInsertablePlant::default())
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::plantings::table)
+                .values(data::TestInsertablePlanting {
+                    id: planting_id,
+                    remove_date: Some(remove_date),
+                    ..Default::default()
+                })
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri(&format!(
+            "/api/maps/-1/layers/plants/plantings?relative_to_date={}",
+            remove_date.add(Days::new(1)).format("%Y-%m-%d"),
+        ))
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+    assert_eq!(resp.status(), StatusCode::OK);
+
+    let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
+    assert_eq!(page.results.len(), 1);
+}
+
+#[actix_rt::test]
+async fn test_added_planting_outside_loading_offset_is_not_in_timeline() {
+    let planting_id = Uuid::new_v4();
+    let current_date = NaiveDate::from_ymd_opt(2022, 1, 1).expect("date is valid");
+    let add_date = current_date.add(Days::new(TIME_LINE_LOADING_OFFSET_DAYS));
+
+    let pool = init_test_database(|conn| {
+        async {
+            diesel::insert_into(crate::schema::maps::table)
+                .values(data::TestInsertableMap::default())
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::layers::table)
+                .values(data::TestInsertableLayer::default())
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::plants::table)
+                .values(data::TestInsertablePlant::default())
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::plantings::table)
+                .values(data::TestInsertablePlanting {
+                    id: planting_id,
+                    add_date: Some(add_date),
+                    ..Default::default()
+                })
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri(&format!(
+            "/api/maps/-1/layers/plants/plantings?relative_to_date={}",
+            current_date.format("%Y-%m-%d"),
+        ))
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
