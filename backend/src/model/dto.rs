@@ -24,6 +24,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod update_map_impl;
 
 /// Contains configuration the frontend needs to run.
 #[typeshare]
@@ -34,7 +35,7 @@ pub struct ConfigDto {
     /// The client_id the frontend should use to log in
     pub client_id: String,
     /// The version must be an exact match between frontend and backend.
-    pub version: i32,
+    pub version: String,
 }
 
 /// Represents seeds of a user.
@@ -206,7 +207,7 @@ pub struct MapDto {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// A flag indicating if this map is private or not.
+    /// An enum indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
@@ -238,8 +239,22 @@ pub struct NewMapDto {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// A flag indicating if this map is private or not.
+    /// An enum indicating if this map is private or not.
     pub privacy: PrivacyOptions,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Coordinates>,
+}
+
+/// The information for updating a map.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct UpdateMapDto {
+    /// The name of the map.
+    pub name: Option<String>,
+    /// An enum indicating if this map is private or not.
+    pub privacy: Option<PrivacyOptions>,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -256,13 +271,13 @@ pub struct MapSearchParameters {
     pub is_inactive: Option<bool>,
     /// The owner of the map.
     pub owner_id: Option<Uuid>,
-    /// Whether or not the map is private.
+    /// The selected privacy of the map.
     pub privacy: Option<PrivacyOptions>,
 }
 
 /// Support struct for transmitting latitude/longitude coordinates.
 #[typeshare]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Coordinates {
     /// Latitude of the point.
     pub latitude: f64,
