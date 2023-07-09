@@ -52,6 +52,7 @@
 use actix_cors::Cors;
 use actix_web::{http, middleware::Logger, App, HttpServer};
 use config::{api_doc, auth::Config, routes};
+use db::{connection::Pool, cronjobs::cleanup_maps};
 use log::info;
 
 pub mod config;
@@ -85,6 +86,7 @@ async fn main() -> std::io::Result<()> {
     );
 
     let data = config::data::init(&config.database_url);
+    start_cronjobs(data.pool.clone());
 
     HttpServer::new(move || {
         App::new()
@@ -115,4 +117,11 @@ fn cors_configuration() -> Cors {
             http::header::CONTENT_TYPE,
         ])
         .max_age(3600)
+}
+
+/// Start all scheduled jobs that get run in the backend.
+fn start_cronjobs(pool: Pool) {
+    tokio::spawn(async move {
+        cleanup_maps(pool).await;
+    });
 }
