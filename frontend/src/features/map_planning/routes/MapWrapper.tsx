@@ -111,8 +111,8 @@ function useMapUpdates() {
       user_id: user.profile.sub,
     };
 
-    let http = createAPI();
-    let uri = http.getUri({
+    const http = createAPI();
+    const uri = http.getUri({
       url: 'api/updates/maps',
       params: connectionQuery,
     });
