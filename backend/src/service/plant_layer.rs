@@ -52,7 +52,7 @@ fn matrix_to_image(matrix: &Vec<Vec<f32>>) -> Result<Vec<u8>, ServiceError> {
     let mut imgbuf = ImageBuffer::new(width as u32, height as u32);
 
     for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
-        let data = matrix[height - (y as usize) - 1][x as usize];
+        let data = matrix[y as usize][x as usize];
 
         // The closer data is to 1 the green it gets.
         let red = data.mul_add(-100.0, 100.0);

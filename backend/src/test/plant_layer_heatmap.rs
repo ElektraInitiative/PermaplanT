@@ -18,7 +18,7 @@ use crate::{
     model::r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
     test::util::{
         dummy_map_polygons::{
-            rectangle_with_missing_top_left_corner, small_rectangle,
+            rectangle_with_missing_bottom_left_corner, small_rectangle,
             small_rectangle_with_non_0_xmin, tall_rectangle,
         },
         init_test_app, init_test_database,
@@ -138,7 +138,7 @@ async fn test_check_heatmap_non_0_xmin_succeeds() {
 #[actix_rt::test]
 async fn test_heatmap_with_missing_corner_succeeds() {
     let pool = init_test_database(|conn| {
-        initial_db_values(conn, rectangle_with_missing_top_left_corner()).scope_boxed()
+        initial_db_values(conn, rectangle_with_missing_bottom_left_corner()).scope_boxed()
     })
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -160,21 +160,21 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     let image = image.as_rgb8().unwrap();
     assert_eq!((10, 10), image.dimensions());
 
-    // Note that in images y-values are swapped, so (0,0) would be upper left.
-    let lower_left_pixel = image.get_pixel(2, 8);
-    let lower_right_pixel = image.get_pixel(8, 8);
-    let upper_left_pixel = image.get_pixel(2, 2);
-    let upper_right_pixel = image.get_pixel(8, 2);
-    assert_eq!([50, 167, 20], lower_left_pixel.0);
-    assert_eq!([50, 167, 20], lower_right_pixel.0);
-    assert_eq!([100, 80, 40], upper_left_pixel.0);
-    assert_eq!([50, 167, 20], upper_right_pixel.0);
+    // (0,0) is be top left.
+    let top_left_pixel = image.get_pixel(2, 2);
+    let top_right_pixel = image.get_pixel(8, 2);
+    let bottom_left_pixel = image.get_pixel(2, 8);
+    let bottom_right_pixel = image.get_pixel(8, 8);
+    assert_eq!([50, 167, 20], top_left_pixel.0);
+    assert_eq!([50, 167, 20], top_right_pixel.0);
+    assert_eq!([100, 80, 40], bottom_left_pixel.0);
+    assert_eq!([50, 167, 20], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
 async fn test_missing_entities_fails() {
     let pool = init_test_database(|conn| {
-        initial_db_values(conn, rectangle_with_missing_top_left_corner()).scope_boxed()
+        initial_db_values(conn, rectangle_with_missing_bottom_left_corner()).scope_boxed()
     })
     .await;
     let (token, app) = init_test_app(pool.clone()).await;

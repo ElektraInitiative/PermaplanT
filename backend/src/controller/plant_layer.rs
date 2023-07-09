@@ -17,10 +17,10 @@ use crate::{
 /// The heatmap will be an exact fit on the maps geometry.
 /// This means if the maps y_min is 100 the generated heatmap will need to be moved to start at y=100.
 ///
-/// x=0,y=0     ... bottom left
-/// x=0,y=100   ... top left
-/// x=100,y=100 ... top right
-/// x=100,y=0   ... bottom right
+/// x=0,y=0     ... top left
+/// x=0,y=100   ... bottom left
+/// x=100,y=100 ... bottom right
+/// x=100,y=0   ... top right
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
