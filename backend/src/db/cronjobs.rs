@@ -1,8 +1,8 @@
 //! Scheduled tasks for the database.
 
 use chrono::{Days, Utc};
-use diesel::ExpressionMethods;
 use diesel::{debug_query, pg::Pg, QueryDsl};
+use diesel::{BoolExpressionMethods, ExpressionMethods};
 use diesel_async::RunQueryDsl;
 use log::debug;
 use std::time::Duration;
@@ -21,12 +21,17 @@ pub async fn cleanup_maps(pool: Pool) -> ! {
 
         log::info!("Running maps cleanup...");
 
-        // Handle the case when checked_sub_days returns None
         let Some(one_month_ago) = Utc::now().date_naive().checked_sub_days(Days::new(30)) else {
             log::error!("Failed to calculate date one month ago");
-            continue; // Skip the rest of this iteration and continue with the next one
+            continue;
         };
-        let query = diesel::delete(maps::table.filter(maps::deletion_date.lt(one_month_ago)));
+        let query = diesel::delete(
+            maps::table.filter(
+                maps::deletion_date
+                    .is_not_null()
+                    .and(maps::deletion_date.lt(one_month_ago)),
+            ),
+        );
         debug!("{}", debug_query::<Pg, _>(&query));
 
         match pool.get().await {

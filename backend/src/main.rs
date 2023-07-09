@@ -121,7 +121,5 @@ fn cors_configuration() -> Cors {
 
 /// Start all scheduled jobs that get run in the backend.
 fn start_cronjobs(pool: Pool) {
-    tokio::spawn(async move {
-        cleanup_maps(pool).await;
-    });
+    tokio::spawn(cleanup_maps(pool));
 }
