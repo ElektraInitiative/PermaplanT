@@ -11,7 +11,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Test strategy written _(4ydan)_
 - Added Nextcloud integration documentation in `/doc/research/nextcloud_integration.md`_(Samuel)_
 - _()_
-- _()_
+- Fix wrong placement of plantings _(Paul)_
 - _()_
 - CI: Send email when master fails #109 _(4ydan)_
 - _()_
