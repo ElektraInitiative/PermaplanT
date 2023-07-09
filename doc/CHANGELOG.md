@@ -28,12 +28,12 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Remove anchors to prevent nonuniform scaling of elements _(Paul)_
 - _()_
-- CI: Cancel previous builds #557 _(4ydan)_
-- _()_
+- CI: Cancel previous builds / New Docker ci image #557 / #585 _(4ydan)_
+- CI: Replace build scripts with make #588 _(4ydan)_
 - _()_
 - _()_
 - Improved user visible texts in map editor _(Thorben)_
-- DEV: Makefile added #549 _(4ydan)_
+- DEV: Makefiles added #549 _(4ydan)_
 
 ## 0.2.1 - UNRELEASED
 

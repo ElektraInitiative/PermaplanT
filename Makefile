@@ -66,6 +66,10 @@ build-storybook: install generate-api-types  ## Builds the storybook.
 
 # MISC
 
+.PHONE: migrate
+migrate: ## Migrate database
+	cd backend && make migrate
+
 .PHONY: generate-type-doc
 generate-type-doc:  ## Generates typedoc.
 	cd frontend && npm install && npm run doc
@@ -75,7 +79,7 @@ generate-api-types:  ## Generates typescript types.
 	cd frontend && npm run generate-api-types
 
 .PHONY: psql-r
-psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
+psql-   r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
 	psql -h db -p 5432 -U $(POSTGRES_USER) $(POSTGRES_DB)
 
 .PHONY: pre-commit-all
