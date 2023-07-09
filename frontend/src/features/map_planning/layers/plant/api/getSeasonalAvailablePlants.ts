@@ -19,7 +19,7 @@ export const getSeasonalAvailablePlants = async (
 
   try {
     const response = await http.get<Page<PlantsSummaryDto>>(
-      `/api/maps/${mapId}/layers/plants/suggestions?${searchParams.toString()}`,
+      `api/maps/${mapId}/layers/plants/suggestions?${searchParams.toString()}`,
     );
     return response.data;
   } catch (error) {
