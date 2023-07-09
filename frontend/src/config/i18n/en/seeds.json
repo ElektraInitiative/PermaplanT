@@ -3,8 +3,8 @@
     "title": "My Seeds",
     "btn_new_entry": "New Entry",
     "search_placeholder": "Search seeds...",
-    "fetching_error": "I'm currently not able to fetch seeds from my server. Please try again later.",
-    "fetching_single_error": "I could not load the seed from my server. It is possible it doesn't exist."
+    "fetching_error": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
+    "fetching_single_error": "Sorry, I could not load the seed from my server. It is possible it doesn't exist."
   },
   "create_seed": {
     "title": "New Seed Entry",
@@ -20,9 +20,9 @@
     "placeholder_generation": "0",
     "error_price_must_be_number": "Price must be a number",
     "btn_create_seed": "Create Seed",
-    "error_create_seed": "",
-    "error_fetching_seeds": "",
-    "error_fetching_plants": ""
+    "error_create_seed": "Sorry, I'm experiencing trouble storing the seed on my server. Please try again later.",
+    "error_fetching_seeds": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
+    "error_fetching_plants": "Sorry, I'm experiencing trouble fetching plants from my server. Please try again later."
   },
   "harvest_year": "Harvest Year",
   "additional_name": "Additional Name",
