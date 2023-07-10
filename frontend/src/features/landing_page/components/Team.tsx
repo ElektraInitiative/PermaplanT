@@ -73,6 +73,11 @@ const Team = () => {
             path="/Avatars/Paul_Buschmann.jpg"
           />
           <Teammember
+            name="Christoph Kraus"
+            role="Software Engineer"
+            path="/Avatars/person_placeholder.png"
+          />
+          <Teammember
             name="Dr. Pavlo Ardanov"
             role="Permaculture Expert"
             path="/Avatars/Pavlo_Ardanov.jpg"
