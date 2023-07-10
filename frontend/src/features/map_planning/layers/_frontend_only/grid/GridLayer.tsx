@@ -1,6 +1,7 @@
 import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva/cmj';
 import { Layer, Group, Line, Text } from 'react-konva';
+import {useTranslation} from "react-i18next";
 
 const TEN_CENTIMETERS = 10;
 const ONE_METER = 100;
@@ -69,15 +70,17 @@ const Grid = (rect: GridProps) => {
 };
 
 const YardStick = (rect: GridProps) => {
+  const {t} = useTranslation('common');
+
   let yardStickLength = TEN_CENTIMETERS;
-  let yardStickLengthLabel = '10cm';
+  let yardStickLengthLabel = '10' + t('centimeter_shorthand');
 
   if (rect.width > 100 * ONE_METER) {
     yardStickLength = 10 * ONE_METER;
-    yardStickLengthLabel = '10m';
+    yardStickLengthLabel = '10' + t('meter_shorthand');
   } else if (rect.width > 1000) {
     yardStickLength = ONE_METER;
-    yardStickLengthLabel = '1m';
+    yardStickLengthLabel = '1' + t('meter_shorthand');
   }
 
   const strokeWidth = rect.width * RELATIVE_DOT_SIZE;

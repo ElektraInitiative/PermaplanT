@@ -5,5 +5,7 @@
   "no": "Nein",
   "cancel": "Abbrechen",
   "unknown_error": "Ein unbekannter Fehler ist aufgetreten.",
-  "save": "Speichern"
+  "save": "Speichern",
+  "meter_shorthand": "m",
+  "centimeter_shorthand": "cm"
 }
