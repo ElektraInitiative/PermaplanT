@@ -23,7 +23,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- UX: Revised existing error notifications and added new ones for other API calls _(Thorben)_
 - _()_
 - _()_
 - Remove anchors to prevent nonuniform scaling of elements _(Paul)_
