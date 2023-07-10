@@ -1,4 +1,4 @@
-# Use Case: Grid Layer
+# Use Case: Grid
 
 ## Summary
 
