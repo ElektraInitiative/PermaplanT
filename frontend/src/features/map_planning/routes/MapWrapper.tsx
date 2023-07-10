@@ -9,6 +9,7 @@ import { createAPI } from '@/config/axios';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 /**
  * Extracts the default layer from the list of layers.
@@ -37,6 +38,11 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
     enabled,
   });
 
+  if (query.error) {
+    console.error(query.error);
+    toast.error('', { autoClose: false });
+  }
+
   useEffect(() => {
     if (!query?.data) return;
 
@@ -51,7 +57,12 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
  */
 function useInitializeMap() {
   const mapId = useMapId();
-  const { data: layers } = useGetLayers(mapId);
+  const { data: layers, error } = useGetLayers(mapId);
+
+  if (error) {
+    console.log(error);
+    toast.error('');
+  }
 
   const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
   const baseLayer = getDefaultLayer(layers ?? [], LayerType.Base);
