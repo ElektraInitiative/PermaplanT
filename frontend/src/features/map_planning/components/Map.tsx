@@ -9,10 +9,10 @@ import { Layers } from './toolbar/Layers';
 import { Toolbar } from './toolbar/Toolbar';
 import { LayerDto, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
+import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import { useTranslation } from 'react-i18next';
-import {GridLayer} from "@/features/map_planning/layers/_frontend_only/grid/GridLayer";
 
 export type MapProps = {
   layers: LayerDto[];

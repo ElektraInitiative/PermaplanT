@@ -1,7 +1,7 @@
 import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva/cmj';
+import { useTranslation } from 'react-i18next';
 import { Layer, Group, Line, Text } from 'react-konva';
-import {useTranslation} from "react-i18next";
 
 const TEN_CENTIMETERS = 10;
 const ONE_METER = 100;
@@ -44,7 +44,7 @@ const Grid = (rect: GridProps) => {
     gridStep = ONE_METER;
   }
 
-  let gridDotSize = rect.width * RELATIVE_DOT_SIZE;
+  const gridDotSize = rect.width * RELATIVE_DOT_SIZE;
 
   const startX = -rect.x - rect.width - ((-rect.x - rect.width) % gridStep);
   const startY = -rect.y - rect.height - ((-rect.y - rect.height) % gridStep);
@@ -55,22 +55,20 @@ const Grid = (rect: GridProps) => {
   const lines = [];
   for (let y = startY; y < endY; y += gridStep) {
     lines.push(
-      <Line strokeWidth={gridDotSize}
-            stroke={'red'}
-            points={[startX, y, endX, y]}
-            dash={[gridDotSize, gridStep - gridDotSize]}></Line>,
+      <Line
+        strokeWidth={gridDotSize}
+        stroke={'red'}
+        points={[startX, y, endX, y]}
+        dash={[gridDotSize, gridStep - gridDotSize]}
+      ></Line>,
     );
   }
 
-  return (
-    <Group>
-      {lines}
-    </Group>
-  );
+  return <Group>{lines}</Group>;
 };
 
 const YardStick = (rect: GridProps) => {
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
 
   let yardStickLength = TEN_CENTIMETERS;
   let yardStickLengthLabel = '10' + t('centimeter_shorthand');
@@ -91,12 +89,22 @@ const YardStick = (rect: GridProps) => {
   const lineY = -rect.y + rect.width * RELATIVE_YARD_STICK_OFFSET_Y;
 
   const textX = lineStartX;
-  const textY = lineY + (rect.width * RELATIVE_YARD_STICK_LABEL_OFFSET_Y);
+  const textY = lineY + rect.width * RELATIVE_YARD_STICK_LABEL_OFFSET_Y;
 
   return (
     <Group>
-      <Line strokeWidth={strokeWidth} stroke={'#D0D0D0'} points={[lineStartX, lineY, lineEndX, lineY]} />
-      <Text x={textX} y={textY} fill={'#D0D0D0'} text={yardStickLengthLabel} fontSize={strokeWidth * 10} />
+      <Line
+        strokeWidth={strokeWidth}
+        stroke={'#D0D0D0'}
+        points={[lineStartX, lineY, lineEndX, lineY]}
+      />
+      <Text
+        x={textX}
+        y={textY}
+        fill={'#D0D0D0'}
+        text={yardStickLengthLabel}
+        fontSize={strokeWidth * 10}
+      />
     </Group>
   );
 };
