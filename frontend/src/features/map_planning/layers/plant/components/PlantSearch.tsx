@@ -30,7 +30,7 @@ export const PlantSearch = () => {
   return (
     <div className="flex flex-col gap-4 p-2">
       <div className="flex items-center justify-between">
-        <h2>{t('plantSearch:dnd')}</h2>
+        <h2>{t('plantSearch:planting')}</h2>
         {searchVisible ? (
           <IconButton onClick={clearSearch}>
             <CloseIcon />

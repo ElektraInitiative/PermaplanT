@@ -16,6 +16,7 @@ export const createUntrackedMapSlice: StateCreator<
 > = (set, get) => ({
   untrackedState: UNTRACKED_DEFAULT_STATE,
   stageRef: createRef<Konva.Stage>(),
+  tooltipRef: createRef(),
   updateMapBounds(bounds: BoundsRect) {
     set((state) => ({
       ...state,

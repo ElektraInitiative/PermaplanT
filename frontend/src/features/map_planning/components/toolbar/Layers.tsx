@@ -5,6 +5,7 @@ import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as AddIcon } from '@/icons/add.svg';
 import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
 import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
+import { useTranslation } from 'react-i18next';
 
 export type LayersProps = {
   layers: LayerDto[];
@@ -14,6 +15,7 @@ export type LayersProps = {
 export const Layers = ({ layers }: LayersProps) => {
   const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
   const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
+  const { t } = useTranslation(['layers']);
 
   const layerSettingsList = layers
     ?.filter((l) => !l.is_alternative)
@@ -30,15 +32,15 @@ export const Layers = ({ layers }: LayersProps) => {
   return (
     <div className="flex flex-col p-2">
       <section className="flex justify-between">
-        <h2>Layers</h2>
+        <h2>{t('layers:header')}</h2>
         <div className="flex gap-2">
-          <IconButton>
+          <IconButton disabled={true}>
             <AddIcon className="h-6 w-6" />
           </IconButton>
-          <IconButton>
+          <IconButton disabled={true}>
             <CopyIcon className="h-6 w-6" />
           </IconButton>
-          <IconButton>
+          <IconButton disabled={true}>
             <TrashIcon className="h-6 w-6" />
           </IconButton>
         </div>

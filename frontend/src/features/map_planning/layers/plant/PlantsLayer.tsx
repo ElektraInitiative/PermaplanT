@@ -41,8 +41,8 @@ function usePlantLayerListeners(listening: boolean) {
           // TODO: get the selectedLayerId from the store
           layerId: selectedLayer.id,
           // consider the offset of the stage and size of the element
-          x: position.x - 50,
-          y: position.y - 50,
+          x: Math.round(position.x),
+          y: Math.round(position.y),
           height: 100,
           width: 100,
           rotation: 0,
@@ -71,6 +71,17 @@ function usePlantLayerListeners(listening: boolean) {
     }
 
     useMapStore.getState().selectPlanting(null);
+  }, []);
+
+  /**
+   * Event handler for selecting plants
+   */
+  const handleSelectPlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(() => {
+    const transformer = useMapStore.getState().transformer.current;
+    const element = transformer?.getNodes().find((element) => element.getAttr('planting'));
+    if (element) {
+      useMapStore.getState().selectPlanting(element.getAttr('planting'));
+    }
   }, []);
 
   /**
@@ -114,6 +125,7 @@ function usePlantLayerListeners(listening: boolean) {
 
     useMapStore.getState().stageRef.current?.on('click.placePlant', handleCreatePlanting);
     useMapStore.getState().stageRef.current?.on('click.unselectPlanting', handleUnselectPlanting);
+    useMapStore.getState().stageRef.current?.on('mouseup.selectPlanting', handleSelectPlanting);
     useMapStore.getState().transformer.current?.on('transformend.plants', handleTransformPlanting);
     useMapStore.getState().transformer.current?.on('dragend.plants', handleMovePlanting);
 
@@ -122,6 +134,7 @@ function usePlantLayerListeners(listening: boolean) {
       useMapStore.getState().stageRef.current?.off('click.unselectPlanting');
       useMapStore.getState().transformer.current?.off('transformend.plants');
       useMapStore.getState().transformer.current?.off('dragend.plants');
+      useMapStore.getState().stageRef.current?.off('mouseup.selectPlanting');
     };
   }, [
     listening,
@@ -129,6 +142,7 @@ function usePlantLayerListeners(listening: boolean) {
     handleTransformPlanting,
     handleMovePlanting,
     handleUnselectPlanting,
+    handleSelectPlanting,
   ]);
 }
 
@@ -182,7 +196,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
     >
       <div className="flex flex-col items-center justify-center">
         <span>
-          planting {plant.unique_name} ({plant.common_name_en})
+          {plant.unique_name} ({plant.common_name_en})
         </span>
       </div>
       <div className="flex items-center justify-center">

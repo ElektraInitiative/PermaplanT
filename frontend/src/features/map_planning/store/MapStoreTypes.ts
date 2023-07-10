@@ -109,6 +109,7 @@ export type History = Array<Action<unknown, unknown>>;
 export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
+  tooltipRef: React.RefObject<Konva.Label>;
   updateMapBounds: (bounds: BoundsRect) => void;
   updateSelectedLayer: (selectedLayer: LayerDto) => void;
   updateLayerVisible: (

@@ -45,13 +45,13 @@
   - the data representation of the objects that comprise the structure and content of a document on the web.
 - endpoints
   - The API endpoints that can be called in the backend.  
-    Their documentation can be viewed using swagger-ui (see [here](/doc/architecture/backend.md#api-documentation) for reference).
+    Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
 
 ## Biology
 
 - Taxonomy:
   A scientific classification of plants into a hierarchy.
-  The hierarchy we use is described [here](/doc/database/hierarchy.md).
+  The hierarchy we use is described [here](../database/hierarchy.md).
   As first introduction read:
   - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/) or
   - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy).
@@ -151,3 +151,16 @@
 - end to end test (e2e test):  
   Used to test the whole application from end to end.  
   Example: Simulate a user clicking a button (e.g. with [Selenium](https://www.selenium.dev/)) resulting in an HTTP request to the backend. Wait for the response and validate the resulting change in the frontend.
+- acceptance tests:
+  Black box system tests of a user story.
+  Usually performed as regressions tests prior to a release.
+  They are performed by engineers during the development phase.
+- system tests:
+  Tests the whole system towards the requirements definition and specification documents.
+  This can invole functional and non-functional tests (performance, security, etc.).
+  They are super set of end-to-end tests which can be done manually and/or automatically.
+- user acceptance tests:
+  Black box system tests towards customer requirements.
+  Usually (subset of) system level tests conducted by the customer/user/domain expert.
+  These tests makes sure that the solution provided by the system is accepted by the user.
+  Similar to "Beta testing".
