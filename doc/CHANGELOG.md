@@ -34,6 +34,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Improved user visible texts in map editor _(Thorben)_
 - DEV: Makefile added #549 _(4ydan)_
+- added plant relations import script to scraper _(temmey)_   
 
 ## 0.2.1 - UNRELEASED
 
