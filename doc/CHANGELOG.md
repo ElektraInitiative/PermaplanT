@@ -11,13 +11,15 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Test strategy written _(4ydan)_
 - Added Nextcloud integration documentation in `/doc/research/nextcloud_integration.md`_(Samuel)_
 - _()_
-- _()_
+- Fix wrong placement of plantings _(Paul)_
 - _()_
 - CI: Send email when master fails #109 _(4ydan)_
 - _()_
 - _()_
 - _()_
 - CI: Add mdbook link checker to pipeline #555 _(4ydan)_
+- Fix bug in relations _(Paul)_
+- _()_
 - _()_
 - UI: Added hover tooltip to edit map button _(Thorben)_
 - _()_
