@@ -79,7 +79,7 @@ Nevertheless, there are a few must-haves:
 - A `README.md` must be available for every module.
 - A man page (`help/kdb-`) must be available for every command (including external commands).
 - A tutorial must be present for every important concept.
-- Everything copied must be properly licensed in [reuse](/.reuse/dep5).
+- Everything copied must be properly [licensed](https://github.com/ElektraInitiative/PermaplanT/blob/master/.reuse/dep5).
 
 ## Links
 
