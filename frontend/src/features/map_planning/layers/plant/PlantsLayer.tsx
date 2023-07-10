@@ -1,7 +1,8 @@
 import useMapStore from '../../store/MapStore';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
+import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { PlantsSummaryDto } from '@/bindings/definitions';
+import { LayerType, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -162,20 +163,23 @@ function PlantsLayer(props: PlantsLayerProps) {
   );
 
   return (
-    <Layer {...props} ref={layerRef}>
-      {plants.map((o) => (
-        <PlantingElement planting={o} key={o.id} />
-      ))}
+    <>
+      <Layer {...props} ref={layerRef} name={`${LayerType.Plants}`}>
+        {plants.map((o) => (
+          <PlantingElement planting={o} key={o.id} />
+        ))}
 
-      <Html>
-        {createPortal(
-          <AnimatePresence mode="wait">
-            {selectedPlant && <SelectedPlantInfo plant={selectedPlant} />}
-          </AnimatePresence>,
-          portalRef.current,
-        )}
-      </Html>
-    </Layer>
+        <Html>
+          {createPortal(
+            <AnimatePresence mode="wait">
+              {selectedPlant && <SelectedPlantInfo plant={selectedPlant} />}
+            </AnimatePresence>,
+            portalRef.current,
+          )}
+        </Html>
+      </Layer>
+      <PlantLayerRelationsOverlay />
+    </>
   );
 }
 
