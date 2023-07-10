@@ -9,6 +9,7 @@ import { createAPI } from '@/config/axios';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 /**
@@ -32,6 +33,7 @@ type UseLayerParams = {
  * and adding them to the store.
  */
 function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
+  const { t } = useTranslation(['plantSearch']);
   const query = useQuery({
     queryKey: ['plants/plantings', mapId, layerId],
     queryFn: () => getPlantings(mapId, layerId),
@@ -40,7 +42,7 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
 
   if (query.error) {
     console.error(query.error);
-    toast.error('', { autoClose: false });
+    toast.error(t('plantSearch:error_initializing_layer'), { autoClose: false });
   }
 
   useEffect(() => {
@@ -58,10 +60,11 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
 function useInitializeMap() {
   const mapId = useMapId();
   const { data: layers, error } = useGetLayers(mapId);
+  const { t } = useTranslation(['layers']);
 
   if (error) {
     console.log(error);
-    toast.error('');
+    toast.error(t('layers:error_fetching_layers'), { autoClose: false });
   }
 
   const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
