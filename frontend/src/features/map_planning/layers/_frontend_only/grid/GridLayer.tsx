@@ -2,6 +2,16 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva/cmj';
 import { Layer, Group, Line, Text } from 'react-konva';
 
+const TEN_CENTIMETERS = 10;
+const ONE_METER = 100;
+
+const RELATIVE_DOT_SIZE = 1 / 1000;
+
+const RELATIVE_YARD_STICK_OFFSET_X = 1 / 20;
+const RELATIVE_YARD_STICK_OFFSET_Y = 1 / 30;
+
+const RELATIVE_YARD_STICK_LABEL_OFFSET_Y = 1 / 120;
+
 export const GridLayer = (props: Konva.LayerConfig) => {
   const mapBounds = useMapStore((state) => state.untrackedState.editorBounds);
 
@@ -26,27 +36,28 @@ interface GridProps {
 }
 
 const Grid = (rect: GridProps) => {
-  let step = 10;
-  let dynamicStrokeWidth = rect.width / 1000;
-  if (rect.width > 10000) {
-    step = 1000;
+  let gridStep = TEN_CENTIMETERS;
+  if (rect.width > 100 * ONE_METER) {
+    gridStep = 10 * ONE_METER;
   } else if (rect.width > 1000) {
-    step = 100;
+    gridStep = ONE_METER;
   }
 
-  const startX = -rect.x - rect.width - ((-rect.x - rect.width) % step);
-  const startY = -rect.y - rect.height - ((-rect.y - rect.height) % step);
+  let gridDotSize = rect.width * RELATIVE_DOT_SIZE;
+
+  const startX = -rect.x - rect.width - ((-rect.x - rect.width) % gridStep);
+  const startY = -rect.y - rect.height - ((-rect.y - rect.height) % gridStep);
 
   const endX = -rect.x + rect.width;
   const endY = -rect.y + rect.height;
 
   const lines = [];
-  for (let y = startY; y < endY; y += step) {
+  for (let y = startY; y < endY; y += gridStep) {
     lines.push(
-      <Line strokeWidth={dynamicStrokeWidth}
+      <Line strokeWidth={gridDotSize}
             stroke={'red'}
             points={[startX, y, endX, y]}
-            dash={[dynamicStrokeWidth, step - dynamicStrokeWidth]}></Line>,
+            dash={[gridDotSize, gridStep - gridDotSize]}></Line>,
     );
   }
 
@@ -58,17 +69,31 @@ const Grid = (rect: GridProps) => {
 };
 
 const YardStick = (rect: GridProps) => {
-  const dynamicStrokeWidth = rect.width / 1000;
+  let yardStickLength = TEN_CENTIMETERS;
+  let yardStickLengthLabel = '10cm';
 
-  const startX = -rect.x + rect.width / 20;
-  const endX = -rect.x + rect.width / 20 + 100;
+  if (rect.width > 100 * ONE_METER) {
+    yardStickLength = 10 * ONE_METER;
+    yardStickLengthLabel = '10m';
+  } else if (rect.width > 1000) {
+    yardStickLength = ONE_METER;
+    yardStickLengthLabel = '1m';
+  }
 
-  const y = -rect.y + rect.width / 30;
+  const strokeWidth = rect.width * RELATIVE_DOT_SIZE;
+
+  const lineStartX = -rect.x + rect.width * RELATIVE_YARD_STICK_OFFSET_X;
+  const lineEndX = -rect.x + rect.width * RELATIVE_YARD_STICK_OFFSET_X + yardStickLength;
+
+  const lineY = -rect.y + rect.width * RELATIVE_YARD_STICK_OFFSET_Y;
+
+  const textX = lineStartX;
+  const textY = lineY + (rect.width * RELATIVE_YARD_STICK_LABEL_OFFSET_Y);
 
   return (
     <Group>
-      <Line strokeWidth={dynamicStrokeWidth} stroke={'#D0D0D0'} points={[startX, y, endX, y]} />
-      <Text x={startX} y={y * 0.995} fill={'#D0D0D0'} text={'1m'} fontSize={dynamicStrokeWidth * 10} />
+      <Line strokeWidth={strokeWidth} stroke={'#D0D0D0'} points={[lineStartX, lineY, lineEndX, lineY]} />
+      <Text x={textX} y={textY} fill={'#D0D0D0'} text={yardStickLengthLabel} fontSize={strokeWidth * 10} />
     </Group>
   );
 };
