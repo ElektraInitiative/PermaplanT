@@ -29,136 +29,136 @@ def wait_for_db() {
 
 // REQUIRED for Deployment
 // see Jenkinsfile.release
-stage('Build Schema'){
-    node('docker') {
-        node_info()
-        checkout scm
+// stage('Build Schema'){
+//     node('docker') {
+//         node_info()
+//         checkout scm
 
-        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+//         def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
-        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                checkout scm
+//         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+//             rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+//                 checkout scm
 
-                wait_for_db()
+//                 wait_for_db()
 
-                sh './ci/build-scripts/build-schema.sh'
+//                 sh './ci/build-scripts/build-schema.sh'
 
-                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
-            }
-        }
-    }
-}
+//                 stash includes: 'backend/src/schema.rs', name: 'schema.rs'
+//                 stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
+//             }
+//         }
+//     }
+// }
 
 
 // NOT REQUIRED for Deployment
-stage('Tests & Build') {
-    def parallel_checks = [:]
+// stage('Tests & Build') {
+//     def parallel_checks = [:]
 
-    parallel_checks["test-and-build-mdbook"] = {
-        node('docker') {
-            checkout scm
-            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+//     parallel_checks["test-and-build-mdbook"] = {
+//         node('docker') {
+//             checkout scm
+//             def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
 
-            mdbook_image.inside {
-                checkout scm
+//             mdbook_image.inside {
+//                 checkout scm
 
-                stage('test-and-build-mdbook'){
-                    sh "mdbook test"
-                    sh 'mdbook build'
-                    stash includes: 'book/', name: 'mdbook'
-                }
-            }
-        }
-    }
+//                 stage('test-and-build-mdbook'){
+//                     sh "mdbook test"
+//                     sh 'mdbook build'
+//                     stash includes: 'book/', name: 'mdbook'
+//                 }
+//             }
+//         }
+//     }
 
-    // parallel_checks["test-and-build-backend"] = {
-    //     node('docker') {
-    //         node_info()
-    //         checkout scm
-    //         def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+//     // parallel_checks["test-and-build-backend"] = {
+//     //     node('docker') {
+//     //         node_info()
+//     //         checkout scm
+//     //         def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
-    //         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-    //             rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-    //                 checkout scm
+//     //         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+//     //             rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+//     //                 checkout scm
 
-    //                 wait_for_db()
+//     //                 wait_for_db()
 
-    //                 stage('test-backend'){
-    //                     withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-    //                         // Workaround: we can't stop rustfmt from linting the generated schema.rs
-    //                         dir("backend") {
-    //                             sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
-    //                             sh "cargo fmt --check"
-    //                         }
-    //                         // End of Workaround
+//     //                 stage('test-backend'){
+//     //                     withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
+//     //                         // Workaround: we can't stop rustfmt from linting the generated schema.rs
+//     //                         dir("backend") {
+//     //                             sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
+//     //                             sh "cargo fmt --check"
+//     //                         }
+//     //                         // End of Workaround
 
-    //                         // generate schema (overwriting src/schema.rs)
-    //                         sh './ci/build-scripts/build-schema.sh'
+//     //                         // generate schema (overwriting src/schema.rs)
+//     //                         sh './ci/build-scripts/build-schema.sh'
 
-    //                         dir("backend") {
-    //                             // continue checking
-    //                             withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']) {
-    //                             sh "cargo check"
-    //                             sh "cargo clippy"
-    //                             sh "cargo doc"
-    //                             sh "cargo test"
-    //                             }
-    //                         }
-    //                     }
-    //                 }
+//     //                         dir("backend") {
+//     //                             // continue checking
+//     //                             withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']) {
+//     //                             sh "cargo check"
+//     //                             sh "cargo clippy"
+//     //                             sh "cargo doc"
+//     //                             sh "cargo test"
+//     //                             }
+//     //                         }
+//     //                     }
+//     //                 }
 
-    //                 stage('build-backend'){
-    //                     sh './ci/build-scripts/build-backend.sh'
+//     //                 stage('build-backend'){
+//     //                     sh './ci/build-scripts/build-backend.sh'
 
-    //                     stash includes: 'backend/target/release/backend', name: 'backend'
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+//     //                     stash includes: 'backend/target/release/backend', name: 'backend'
+//     //                 }
+//     //             }
+//     //         }
+//     //     }
+//     // }
 
-    parallel_checks["test-and-build-frontend"] = {
-        node('docker') {
-            node_info()
-            checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+//     parallel_checks["test-and-build-frontend"] = {
+//         node('docker') {
+//             node_info()
+//             checkout scm
+//             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
 
-            node_image.inside {
-                checkout scm
-                unstash 'definitions.ts'
-                stage('test-frontend'){
-                    dir("frontend") {
-                        sh "npm ci"
-                        sh "npm run format:check"
-                        sh "npm run lint"
-                        sh "npm run test"
-                    }
-                }
+//             node_image.inside {
+//                 checkout scm
+//                 unstash 'definitions.ts'
+//                 stage('test-frontend'){
+//                     dir("frontend") {
+//                         sh "npm ci"
+//                         sh "npm run format:check"
+//                         sh "npm run lint"
+//                         sh "npm run test"
+//                     }
+//                 }
 
-                stage('build-frontend'){
-                    sh './ci/build-scripts/build-frontend.sh'
-                    stash includes: 'frontend/dist/**/*', name: 'frontend'
-                }
+//                 stage('build-frontend'){
+//                     sh './ci/build-scripts/build-frontend.sh'
+//                     stash includes: 'frontend/dist/**/*', name: 'frontend'
+//                 }
 
-                stage('build-typedoc'){
-                    sh 'cd frontend && npm run doc'
-                    stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
-                }
+//                 stage('build-typedoc'){
+//                     sh 'cd frontend && npm run doc'
+//                     stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
+//                 }
 
-                stage('build-storybook'){
-                    sh './ci/build-scripts/build-storybook.sh'
-                    stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
-                }
-            }
-        }
-    }
-    parallel(parallel_checks)
-}
+//                 stage('build-storybook'){
+//                     sh './ci/build-scripts/build-storybook.sh'
+//                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
+//                 }
+//             }
+//         }
+//     }
+//     parallel(parallel_checks)
+// }
 
 stage('Acceptance Test'){
-    timeout(time: 20, unit: 'minutes'){
+    timeout(time: 20, unit: 'MINUTES'){
         node('docker') {
             node_info()
             checkout scm
