@@ -1,7 +1,7 @@
 //! Contains the implementation of [`BaseLayerImages`].
 
 use diesel::pg::Pg;
-use diesel::{debug_query, QueryDsl, QueryResult};
+use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 use uuid::Uuid;
@@ -20,9 +20,9 @@ impl BaseLayerImages {
         conn: &mut AsyncPgConnection,
         layer_id_param: i32,
     ) -> QueryResult<Vec<BaseLayerImageDto>> {
-        let query = base_layer_images::table.select(all_columns);
-        //TODO: filter for correct layer_id
-        // .filter(layer_id.eq(layer_id_param));
+        let query = base_layer_images::table
+            .select(all_columns)
+            .filter(layer_id.eq(layer_id_param));
 
         debug!("{}", debug_query::<Pg, _>(&query));
         Ok(query
