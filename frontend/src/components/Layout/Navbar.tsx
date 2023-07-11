@@ -16,7 +16,7 @@ const Navbar = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const { t } = useTranslation(['routes']);
   const auth = useSafeAuth();
-
+  const backendVersion = sessionStorage.getItem('backend_version');
   const navbarItems = (
     <div className="flex items-center">
       <ul className="pt-1">
@@ -39,16 +39,21 @@ const Navbar = () => {
               ) : (
                 <LogoSmallGraySVG className="h-12 w-12 pr-2" />
               )}
-              <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
-                PermaplanT
-              </span>
+              <div className="flex flex-col">
+                <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
+                  PermaplanT
+                </span>
+                <span className="mt-auto text-xs text-gray-500 dark:text-gray-400">
+                  {' '}
+                  {backendVersion}
+                </span>
+              </div>
             </a>
           </div>
           {auth.isAuthenticated && navbarItems}
         </div>
         <div className="flex md:order-2">
           <div className="flex items-center space-x-4">
-            <a href="https://github.com/ElektraInitiative/PermaplanT">GitHub</a>
             <DarkModeSwitcher />
             <LanguageSwitcher />
             <button

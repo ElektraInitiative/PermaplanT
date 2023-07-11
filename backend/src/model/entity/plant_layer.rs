@@ -107,11 +107,11 @@ pub async fn find_relations(
     conn: &mut AsyncPgConnection,
 ) -> QueryResult<RelationsDto> {
     let query = relations::table
-        .select((relations::plant1, relations::relation))
+        .select((relations::plant2, relations::relation))
         .filter(relations::plant1.eq(&search_query.plant_id))
         .union(
             relations::table
-                .select((relations::plant2, relations::relation))
+                .select((relations::plant1, relations::relation))
                 .filter(relations::plant2.eq(&search_query.plant_id)),
         );
     debug!("{}", debug_query::<Pg, _>(&query));

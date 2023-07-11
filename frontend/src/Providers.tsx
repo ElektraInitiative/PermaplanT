@@ -14,6 +14,7 @@ const getOidcConfig = async () => {
   const config = await getAuthInfo();
   sessionStorage.setItem('authority', config.issuer_uri);
   sessionStorage.setItem('client_id', config.client_id);
+  sessionStorage.setItem('backend_version', config.version);
   const redirect_uri = window.location.href.split('?')[0];
   return {
     authority: config.issuer_uri,

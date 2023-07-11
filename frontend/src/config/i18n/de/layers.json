@@ -19,5 +19,6 @@
 	"landscape": "Landschaft",
 	"hydrology": "Hydrologie",
 	"fertilization": "Düngung",
-	"infrastructure": "Infrastruktur"
+	"infrastructure": "Infrastruktur",
+	"error_fetching_layers": "Sorry, ich habe Schwierigkeiten Daten der Karte von meinem Server zu empfangen. Möglicherweise existiert die Karte nicht."
 }
