@@ -6,12 +6,20 @@ import { Layer, Group, Line, Text } from 'react-konva';
 const TEN_CENTIMETERS = 10;
 const ONE_METER = 100;
 
-const RELATIVE_DOT_SIZE = 1 / 1000;
+const RELATIVE_DOT_SIZE = 1 / 500;
+
+const RELATIVE_YARD_STICK_STROKE_WIDTH = 1 / 1000;
 
 const RELATIVE_YARD_STICK_OFFSET_X = 1 / 20;
 const RELATIVE_YARD_STICK_OFFSET_Y = 1 / 30;
 
 const RELATIVE_YARD_STICK_LABEL_OFFSET_Y = 1 / 120;
+
+// This color should ideally be imported from tailwind.config.js
+//
+// However, the official guide (https://tailwindcss.com/docs/configuration#referencing-in-java-script)
+// does not seem to work with our current setup.
+const SEA_BLUE_500 = '#007499';
 
 export const GridLayer = (props: Konva.LayerConfig) => {
   const mapBounds = useMapStore((state) => state.untrackedState.editorBounds);
@@ -57,7 +65,7 @@ const Grid = (rect: GridProps) => {
     lines.push(
       <Line
         strokeWidth={gridDotSize}
-        stroke={'red'}
+        stroke={SEA_BLUE_500}
         points={[startX, y, endX, y]}
         dash={[gridDotSize, gridStep - gridDotSize]}
       ></Line>,
@@ -81,7 +89,7 @@ const YardStick = (rect: GridProps) => {
     yardStickLengthLabel = '1' + t('meter_shorthand');
   }
 
-  const strokeWidth = rect.width * RELATIVE_DOT_SIZE;
+  const strokeWidth = rect.width * RELATIVE_YARD_STICK_STROKE_WIDTH;
 
   const lineStartX = -rect.x + rect.width * RELATIVE_YARD_STICK_OFFSET_X;
   const lineEndX = -rect.x + rect.width * RELATIVE_YARD_STICK_OFFSET_X + yardStickLength;
