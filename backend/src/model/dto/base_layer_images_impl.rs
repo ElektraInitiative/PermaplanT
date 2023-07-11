@@ -1,4 +1,4 @@
-//! Contains the implementations related to [`PlantingDto`].
+//! Contains the implementations related to [`BaseLayerImageDto`].
 
 use uuid::Uuid;
 

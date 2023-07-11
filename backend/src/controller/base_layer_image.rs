@@ -1,4 +1,4 @@
-//! `Images` endpoints.
+//! `BaseLayerImage` endpoints.
 
 use actix_web::{
     delete, get, patch, post,
@@ -17,7 +17,7 @@ use crate::{
 use crate::{config::data::AppDataInner, model::dto::BaseLayerImageDto};
 use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
 
-/// Endpoint for listing and filtering `BaseLayerImages`.
+/// Endpoint for listing and filtering `BaseLayerImage`.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

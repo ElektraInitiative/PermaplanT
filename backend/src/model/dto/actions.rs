@@ -30,10 +30,10 @@ pub enum Action {
     TransformPlanting(TransformPlantActionPayload),
     /// An action used to broadcast creation of a baseLayerImage.
     CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
-    /// An action used to broadcast deletion of a baseLayerImage.
-    DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
     /// An action used to broadcast update of a baseLayerImage.
     UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
+    /// An action used to broadcast deletion of a baseLayerImage.
+    DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
 }
 
 #[typeshare]
@@ -172,7 +172,7 @@ impl CreateBaseLayerImageActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::DeleteBaseLayer`].
+/// The payload of the [`Action::DeleteBaseLayerImage`].
 #[serde(rename_all = "camelCase")]
 pub struct DeleteBaseLayerImageActionPayload {
     user_id: Uuid,
@@ -188,7 +188,7 @@ impl DeleteBaseLayerImageActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdateBaseLayer`].
+/// The payload of the [`Action::UpdateBaseLayerImage`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateBaseLayerImageActionPayload {
     user_id: Uuid,

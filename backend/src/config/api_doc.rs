@@ -10,7 +10,7 @@ use utoipa_swagger_ui::SwaggerUi;
 use super::auth::Config;
 use crate::{
     controller::{
-        base_layer_images, config, layers, map, plant_layer, planting_suggestions, plantings,
+        base_layer_image, config, layers, map, plant_layer, planting_suggestions, plantings,
         plants, seed,
     },
     model::{
@@ -131,10 +131,10 @@ struct PlantLayerApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        base_layer_images::find,
-        base_layer_images::create,
-        base_layer_images::update,
-        base_layer_images::delete
+        base_layer_image::find,
+        base_layer_image::create,
+        base_layer_image::update,
+        base_layer_image::delete
     ),
     components(
         schemas(

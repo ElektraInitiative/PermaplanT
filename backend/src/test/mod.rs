@@ -3,6 +3,7 @@
 #![allow(clippy::expect_used, clippy::unwrap_used)]
 
 mod auth;
+mod base_layer_image;
 mod config;
 mod layers;
 mod map;
