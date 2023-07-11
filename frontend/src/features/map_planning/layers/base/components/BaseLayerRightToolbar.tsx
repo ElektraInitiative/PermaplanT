@@ -22,9 +22,7 @@ export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
 
 export const BaseLayerRightToolbar = () => {
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
-  const { measureStep } = useMapStore(
-    (state) => state.untrackedState.layers.base,
-  );
+  const { measureStep } = useMapStore((state) => state.untrackedState.layers.base);
   const executeAction = useMapStore((state) => state.executeAction);
   // const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
   // const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);

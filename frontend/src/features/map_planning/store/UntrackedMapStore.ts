@@ -1,8 +1,8 @@
 import { TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from './MapStoreTypes';
+import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
-import Konva from "konva";
 
 export const createUntrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
