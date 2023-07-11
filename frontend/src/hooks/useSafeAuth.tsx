@@ -23,7 +23,7 @@ const AuthContextFallback: AuthContextProps = {
   signinPopup: () => Promise.resolve(null as unknown as User),
   signinSilent: () => Promise.resolve(null),
   signinRedirect: () => {
-    toast.error(i18next.t('auth:error_no_backend'));
+    toast.error(i18next.t('auth:error_no_backend'), { autoClose: false });
     return Promise.resolve(void 0);
   },
   signoutRedirect: () => Promise.resolve(void 0),

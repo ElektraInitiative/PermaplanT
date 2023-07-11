@@ -2,14 +2,16 @@ import { getPlantings } from '../api/getPlantings';
 import { Map } from '../components/Map';
 import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
+import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
-import { LayerType, ConnectToMapQueryParams, LayerDto } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
+import { LayerType, LayerDto } from '@/bindings/definitions';
+import { createAPI } from '@/config/axios';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
-import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 /**
  * Extracts the default layer from the list of layers.
@@ -32,11 +34,17 @@ type UseLayerParams = {
  * and adding them to the store.
  */
 function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
+  const { t } = useTranslation(['plantSearch']);
   const query = useQuery({
     queryKey: ['plants/plantings', mapId, layerId],
     queryFn: () => getPlantings(mapId, layerId),
     enabled,
   });
+
+  if (query.error) {
+    console.error(query.error);
+    toast.error(t('plantSearch:error_initializing_layer'), { autoClose: false });
+  }
 
   useEffect(() => {
     if (!query?.data) return;
@@ -71,7 +79,13 @@ function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
  */
 function useInitializeMap() {
   const mapId = useMapId();
-  const { data: layers } = useGetLayers(mapId);
+  const { data: layers, error } = useGetLayers(mapId);
+  const { t } = useTranslation(['layers']);
+
+  if (error) {
+    console.log(error);
+    toast.error(t('layers:error_fetching_layers'), { autoClose: false });
+  }
 
   const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
   const baseLayer = getDefaultLayer(layers ?? [], LayerType.Base);
@@ -132,19 +146,19 @@ function useMapUpdates() {
       return;
     }
 
-    const connectionQuery: ConnectToMapQueryParams = {
+    const connectionQuery = {
       map_id: 1,
       user_id: user.profile.sub,
     };
 
-    const connectionParams = new URLSearchParams();
-    connectionParams.append('map_id', `${connectionQuery.map_id}`);
-    connectionParams.append('user_id', connectionQuery.user_id);
+    const http = createAPI();
+    const uri = http.getUri({
+      url: 'api/updates/maps',
+      params: connectionQuery,
+    });
 
     // TODO: implement authentication
-    evRef.current = new EventSource(
-      `${baseApiUrl}/api/updates/maps?${connectionParams.toString()}`,
-    );
+    evRef.current = new EventSource(uri);
     evRef.current.onmessage = (ev) => handleRemoteAction(ev, user);
 
     return () => {

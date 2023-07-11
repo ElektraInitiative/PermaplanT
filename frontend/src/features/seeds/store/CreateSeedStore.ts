@@ -3,28 +3,27 @@ import { createSeed } from '../api/createSeed';
 import { findAllPlants } from '../api/findAllPlants';
 import { searchPlants } from '../api/searchPlants';
 import { PlantsSummaryDto } from '@/bindings/definitions';
+import { toast } from 'react-toastify';
 import { create } from 'zustand';
 
 interface CreateSeedState {
   isUploadingSeed: boolean;
   isFetchingPlants: boolean;
   plants: PlantsSummaryDto[];
-  error: Error | null | undefined;
-  showErrorModal: boolean;
-  setShowErrorModal: (showErrorModal: boolean) => void;
-  findAllPlants: () => Promise<void>;
-  searchPlants: (searchTerm: string, pageNumber: number) => Promise<void>;
-  createSeed: (seed: NewSeedDto, successCallback?: () => void) => Promise<void>;
+  findAllPlants: (errorMessage: string) => Promise<void>;
+  searchPlants: (searchTerm: string, pageNumber: number, errorMessage: string) => Promise<void>;
+  createSeed: (
+    seed: NewSeedDto,
+    errorMessage: string,
+    successCallback?: () => void,
+  ) => Promise<void>;
 }
 
 const useCreateSeedStore = create<CreateSeedState>((set) => ({
   isUploadingSeed: false,
   isFetchingPlants: false,
   plants: [],
-  error: null,
-  showErrorModal: false,
-  setShowErrorModal: (showErrorModal) => set((state) => ({ ...state, showErrorModal })),
-  createSeed: async (seed, successCallback) => {
+  createSeed: async (seed, errorMessage, successCallback) => {
     try {
       set((state) => ({ ...state, isUploadingSeed: true }));
       await createSeed(seed);
@@ -32,32 +31,30 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
       successCallback?.();
     } catch (error) {
       console.log(error);
+      toast.error(errorMessage);
 
       set((state) => ({
         ...state,
-        error: error as Error,
-        showErrorModal: true,
         isUploadingSeed: false,
       }));
     }
   },
-  findAllPlants: async () => {
+  findAllPlants: async (errorMessage) => {
     try {
       set((state) => ({ ...state, isFetchingPlants: true }));
       const plants = await findAllPlants();
       set((state) => ({ ...state, plants, isFetchingPlants: false }));
     } catch (error) {
       console.log(error);
+      toast.error(errorMessage);
 
       set((state) => ({
         ...state,
-        error: error as Error,
-        showErrorModal: true,
         isFetchingPlants: false,
       }));
     }
   },
-  searchPlants: async (searchTerm: string, pageNumber: number) => {
+  searchPlants: async (searchTerm: string, pageNumber: number, errorMessage) => {
     try {
       set((state) => ({ ...state, isFetchingPlants: true }));
       const page = await searchPlants(searchTerm, pageNumber);
@@ -66,10 +63,10 @@ const useCreateSeedStore = create<CreateSeedState>((set) => ({
       set((state) => ({ ...state, plants, hasMore, isFetchingPlants: false }));
     } catch (error) {
       console.log(error);
+      toast.error(errorMessage);
+
       set((state) => ({
         ...state,
-        error: error as Error,
-        showErrorModal: true,
         isFetchingPlants: false,
       }));
     }

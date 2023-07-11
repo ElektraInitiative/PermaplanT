@@ -5,7 +5,10 @@
         "create_button_title": "Create new map",
         "missing_name": "Please enter a name",
         "honors_title": "Number of honors",
-        "visits_title": "Number of visits"
+        "visits_title": "Number of visits",
+        "edit_title": "Edit map",
+        "duplicate_title": "Duplicate map",
+        "error_map_fetch": "Sorry, I'm experiencing trouble fetching maps from my server. Please try again later."
     },
     "create": {
         "modal_title": "New Map",
@@ -17,7 +20,8 @@
         "location_selected": "Your selected location.",
         "location_button": "Select location",
         "location_button_hint": "On click the external resource openstreetmap.org will be loaded.",
-        "or": "Or"
+        "or": "Or",
+        "error_map_create": "Sorry, I couldn't store the map on my server. It is possible there already exists a map with the same name."
     },
     "edit": {
         "title": "Edit Map",
@@ -28,6 +32,8 @@
         "latitude_label": "Latitude",
         "longitude_label": "Longitude",
         "location_button": "Select Location",
-        "location_button_hint": "On click the external resource openstreetmap.org will be loaded."
+        "location_button_hint": "On click the external resource openstreetmap.org will be loaded.",
+        "error_map_edit": "Sorry, I couldn't update the map on my server. It is possible there already exists a map with the same name.",
+        "error_map_single_fetch": "Sorry, I could not load the map from my server. It is possible it doesn't exist."
     }
 }

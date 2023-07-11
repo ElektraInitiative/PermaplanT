@@ -11,29 +11,29 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Test strategy written _(4ydan)_
 - Added Nextcloud integration documentation in `/doc/research/nextcloud_integration.md`_(Samuel)_
 - _()_
+- Fix wrong placement of plantings _(Paul)_
+- _()_
+- CI: Send email when master fails #109 _(4ydan)_
+- _()_
+- _()_
+- Fix bug in relations _(Paul)_
+- _()_
+- _()_
+- UI: Added hover tooltip to edit map button _(Thorben)_
 - _()_
 - _()_
 - _()_
+- UX: Revised existing error notifications and added new ones for other API calls _(Thorben)_
+- _()_
+- _()_
+- Remove anchors to prevent nonuniform scaling of elements _(Paul)_
+- _()_
+- CI: Cancel previous builds #557 _(4ydan)_
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Improved user visible texts in map editor _(Thorben)_
+- DEV: Makefile added #549 _(4ydan)_
 
 ## 0.2.1 - UNRELEASED
 
