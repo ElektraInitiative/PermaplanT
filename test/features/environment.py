@@ -9,6 +9,3 @@ from seleniumbase.behave.behave_sb import after_step  # noqa
 from seleniumbase.behave.behave_sb import after_scenario  # noqa
 from seleniumbase.behave.behave_sb import after_feature  # noqa
 from seleniumbase.behave.behave_sb import after_all  # noqa
-from seleniumbase import get_driver
-
-driver = get_driver("chrome", headless=True)
