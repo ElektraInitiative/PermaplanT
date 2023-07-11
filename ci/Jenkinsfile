@@ -27,6 +27,13 @@ def wait_for_db() {
     }
 }
 
+def wait_for_backend() {
+    retry(6) {
+        sleep(time: 30, unit: 'SECONDS')
+        sh ''
+    }
+}
+
 // REQUIRED for Deployment
 // see Jenkinsfile.release
 // stage('Build Schema'){
@@ -167,7 +174,7 @@ stage('Acceptance Test'){
             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
-            selenium_image.image.withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { s ->
+            selenium_image.withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { s ->
                 docker.image('myhub.hub/selenium-dev').inside("--link ${s.id}:se") {
                     checkout scm
                     sh 'pwd'
