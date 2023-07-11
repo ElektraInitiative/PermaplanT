@@ -12,7 +12,10 @@ use crate::model::entity::BaseLayerImages;
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn find(app_data: &Data<AppDataInner>, layer_id: i32) -> Result<Vec<BaseLayerImageDto>, ServiceError> {
+pub async fn find(
+    app_data: &Data<AppDataInner>,
+    layer_id: i32,
+) -> Result<Vec<BaseLayerImageDto>, ServiceError> {
     let mut conn = app_data.pool.get().await?;
     let result = BaseLayerImages::find(&mut conn, layer_id).await?;
     Ok(result)

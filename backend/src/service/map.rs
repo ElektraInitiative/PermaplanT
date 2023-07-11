@@ -5,9 +5,9 @@ use actix_web::web::Data;
 use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::{MapSearchParameters, Page, UpdateMapDto, BaseLayerImageDto};
+use crate::model::dto::{BaseLayerImageDto, MapSearchParameters, Page, UpdateMapDto};
 use crate::model::dto::{NewLayerDto, PageParameters};
-use crate::model::entity::{Layer, BaseLayerImages};
+use crate::model::entity::{BaseLayerImages, Layer};
 use crate::model::r#enum::layer_type::LayerType;
 use crate::{
     error::ServiceError,

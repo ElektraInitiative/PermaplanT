@@ -16,11 +16,13 @@ impl BaseLayerImages {
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find(conn: &mut AsyncPgConnection, layer_id_param: i32) -> QueryResult<Vec<BaseLayerImageDto>> {
+    pub async fn find(
+        conn: &mut AsyncPgConnection,
+        layer_id_param: i32,
+    ) -> QueryResult<Vec<BaseLayerImageDto>> {
         let query = base_layer_images::table.select(all_columns);
-            //TODO: filter for correct layer_id
-            // .filter(layer_id.eq(layer_id_param));
-
+        //TODO: filter for correct layer_id
+        // .filter(layer_id.eq(layer_id_param));
 
         debug!("{}", debug_query::<Pg, _>(&query));
         Ok(query

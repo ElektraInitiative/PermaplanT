@@ -47,8 +47,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                 .service(base_layer_images::delete),
                         )
                         .service(
-                            web::scope("/base/{layer_id}/images")
-                                .service(base_layer_images::find)
+                            web::scope("/base/{layer_id}/images").service(base_layer_images::find),
                         )
                         .service(
                             web::scope("/plants")
