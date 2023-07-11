@@ -361,6 +361,7 @@ pub enum SuggestionType {
     Diversity,
 }
 
+/// Contains information about an image displayed on the base layer.
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct BaseLayerImageDto {
@@ -376,6 +377,7 @@ pub struct BaseLayerImageDto {
     pub scale: f32,
 }
 
+/// Contains information for updating the `BaseLayerImage`.
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct UpdateBaseLayerImageDto {

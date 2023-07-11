@@ -17,7 +17,7 @@ use crate::{
 use crate::{config::data::AppDataInner, model::dto::BaseLayerImageDto};
 use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
 
-/// Endpoint for listing and filtering `Base Layer Images`.
+/// Endpoint for listing and filtering `BaseLayerImages`.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -25,6 +25,7 @@ use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
     context_path = "/api/maps/{map_id}/layers/base/{layer_id}/images",
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+        ("layer_id" = i32, Path, description = "The id of the layer"),
     ),
     responses(
         (status = 200, description = "Find base layer images", body = Vec<BaseLayerImageDto>)
@@ -35,12 +36,12 @@ use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
 )]
 #[get("")]
 pub async fn find(path: Path<(i32, i32)>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let (map_id, layer_id) = path.into_inner();
+    let (_map_id, layer_id) = path.into_inner();
     let response = base_layer_images::find(&app_data, layer_id).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Endpoint for creating a new `Base Layer Image`.
+/// Endpoint for creating a new `BaseLayerImage`.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -80,7 +81,7 @@ pub async fn create(
     Ok(HttpResponse::Created().json(dto))
 }
 
-/// Endpoint for updating a `Planting`.
+/// Endpoint for updating a `BaseLayerImage`.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -88,6 +89,7 @@ pub async fn create(
     context_path = "/api/maps/{map_id}/layers/base/images",
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+        ("base_layer_image_id" = Uuid, Path, description = "The id of the BaseLayerImage to update"),
     ),
     request_body = UpdateBaseLayerImageDto,
     responses(
@@ -132,6 +134,7 @@ pub async fn update(
     context_path = "/api/maps/{map_id}/layers/base/images",
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+        ("base_layer_image_id" = Uuid, Path, description = "The id of the BaseLayerImage to delete"),
     ),
     responses(
         (status = 200, description = "Delete a planting")

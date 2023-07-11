@@ -68,7 +68,7 @@ pub async fn create(
                 id: Uuid::new_v4(),
                 layer_id: new_layer.id,
                 /// The path to the image on Nextcloud.
-                path: String::from(""),
+                path: String::new(),
                 /// The rotation in degrees (0-360) of the image on the map.
                 rotation: 0.0,
                 /// The scale of the image on the map.

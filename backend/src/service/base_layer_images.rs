@@ -1,4 +1,4 @@
-//! Service layer for plantings.
+//! Service layer for images on the base layer.
 
 use actix_web::web::Data;
 use uuid::Uuid;
@@ -8,7 +8,7 @@ use crate::error::ServiceError;
 use crate::model::dto::{BaseLayerImageDto, UpdateBaseLayerImageDto};
 use crate::model::entity::BaseLayerImages;
 
-/// Search plantings from the database.
+/// Fetch all base layer images for the layer from the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
@@ -21,7 +21,7 @@ pub async fn find(
     Ok(result)
 }
 
-/// Create a new planting in the database.
+/// Create a base layer image in the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
@@ -34,7 +34,7 @@ pub async fn create(
     Ok(result)
 }
 
-/// Update the planting in the database.
+/// Update the base layer image in the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
@@ -48,7 +48,7 @@ pub async fn update(
     Ok(result)
 }
 
-/// Delete the planting from the database.
+/// Delete the base layer image from the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.

@@ -1,4 +1,4 @@
-//! Contains the implementation of [`Planting`].
+//! Contains the implementation of [`BaseLayerImages`].
 
 use diesel::pg::Pg;
 use diesel::{debug_query, QueryDsl, QueryResult};
@@ -12,7 +12,7 @@ use crate::schema::base_layer_images::{self, all_columns, layer_id};
 use super::BaseLayerImages;
 
 impl BaseLayerImages {
-    /// Get all plantings associated with the query.
+    /// Get all `BaseLayerImages` for the layer.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -33,7 +33,7 @@ impl BaseLayerImages {
             .collect())
     }
 
-    /// Create a new  BaseLayerImage in the database.
+    /// Create a new `BaseLayerImages` in the database.
     ///
     /// # Errors
     /// * If the `layer_id` references a layer that is not of type `base`.
@@ -48,7 +48,7 @@ impl BaseLayerImages {
         query.get_result::<Self>(conn).await.map(Into::into)
     }
 
-    /// Update a BaseLayerImage in the database.
+    /// Update a `BaseLayerImages` in the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -63,7 +63,7 @@ impl BaseLayerImages {
         query.get_result::<Self>(conn).await.map(Into::into)
     }
 
-    /// Delete the BaseLayerImage from the database.
+    /// Delete the `BaseLayerImages` from the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
