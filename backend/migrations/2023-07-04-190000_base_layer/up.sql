@@ -5,5 +5,5 @@ CREATE TABLE base_layer_images (
     path TEXT NOT NULL,
     rotation REAL NOT NULL,
     scale REAL NOT NULL,
-    FOREIGN KEY (layer_id) REFERENCES layers(id)
+    FOREIGN KEY (layer_id) REFERENCES layers(id) ON DELETE CASCADE
 );
