@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface MapCreationAttributes {
   name: string;
@@ -127,7 +128,11 @@ export default function MapCreateForm() {
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
     };
-    await createMap(newMap);
+    try {
+      await createMap(newMap);
+    } catch (error) {
+      toast.error(t('maps:create.error_map_create'), { autoClose: false });
+    }
     navigate('/maps');
   }
 
