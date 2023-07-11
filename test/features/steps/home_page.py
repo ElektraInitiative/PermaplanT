@@ -4,7 +4,7 @@ from behave import step
 @step("Open PermaplanT Homepage")
 def go_to_swag_labs(context):
     sb = context.sb
-    sb.open("http://localhost:5173")
+    sb.open("se:5173")
     sb.clear_local_storage()
     sb.assert_element("#home")
 
@@ -22,17 +22,17 @@ def login_to_swag_labs(context, user, password):
 def verify_logged_in(context):
     sb = context.sb
     sb.assert_element("#home")
-    sb.assert_element("#logoutButton")
+    sb.assert_element("#logout-button")
 
 
 @step("Logout from PermaplanT")
 def logout_from_swag_labs(context):
     sb = context.sb
-    sb.js_click("#logoutButton")
+    sb.js_click("#logout-button")
 
 
 @step("Verify on Homepage and logged out")
 def verify_on_login_page(context):
     sb = context.sb
     sb.assert_element("#home")
-    sb.assert_element("#loginButton")
+    sb.assert_element("#login-button")
