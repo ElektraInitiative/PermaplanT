@@ -174,15 +174,20 @@ stage('Acceptance Test'){
             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
-            selenium_image.withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { s ->
-                node_image.inside("--link ${s.id}:se") {
+            selenium_image.withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
+                    wait_for_db()
                     sh 'pwd'
                 }
-                node_image.inside("--link ${s.id}:se") {
+                node_image.inside("--link ${c.id}:db") {
                     checkout scm
+                    wait_for_db()
                     sh 'pwd'
                 }
+                    checkout scm
+                    wait_for_db()
+                    sh 'pwd'
             }
         }
     }

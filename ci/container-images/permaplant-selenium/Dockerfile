@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM postgis/postgis:13-3.1
 
 RUN apt-get update
 RUN apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
