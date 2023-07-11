@@ -18,7 +18,11 @@ export const LoginButton = () => {
   if (auth.isAuthenticated) {
     return (
       <div>
-        <SimpleButton className="pl-6 pr-0" onClick={() => void auth.removeUser()}>
+        <SimpleButton
+          id="logout-button"
+          className="pl-6 pr-0"
+          onClick={() => void auth.removeUser()}
+        >
           {t('auth:log_out')}
           <ConditionalLoadingSpinner show={auth.isLoading} />
         </SimpleButton>
@@ -27,7 +31,11 @@ export const LoginButton = () => {
   }
 
   return (
-    <SimpleButton className="pl-6 pr-0" onClick={() => void auth.signinRedirect()}>
+    <SimpleButton
+      id="login-button"
+      className="pl-6 pr-0"
+      onClick={() => void auth.signinRedirect()}
+    >
       {t('auth:log_in')}
       <ConditionalLoadingSpinner show={auth.isLoading} />
     </SimpleButton>
