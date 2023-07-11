@@ -30,7 +30,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - CI: Cancel previous builds #557 _(4ydan)_
 - _()_
-- _()_
+- Display version number on the navbar and move github link #574 _(4ydan)_
 - _()_
 - Improved user visible texts in map editor _(Thorben)_
 - DEV: Makefile added #549 _(4ydan)_
