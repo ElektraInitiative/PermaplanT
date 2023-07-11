@@ -28,8 +28,9 @@ def wait_for_db() {
 }
 
 def wait_for_backend() {
-    retry(6) {
-        sleep(time: 30, unit: 'SECONDS')
+    sleep(time: 600, unit: 'SECONDS')
+    retry(10) {
+        sleep(time: 20, unit: 'SECONDS')
         sh 'curl -f db:8080/api/config'
     }
 }
@@ -165,7 +166,7 @@ def wait_for_backend() {
 // }
 
 stage('Acceptance Test'){
-    timeout(time: 20, unit: 'MINUTES'){
+    timeout(time: 30, unit: 'MINUTES'){
         node('docker') {
             node_info()
             checkout scm
@@ -182,7 +183,7 @@ stage('Acceptance Test'){
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
                     wait_for_db()
-                    sh 'make run-backend > /dev/null 2>&1 &'
+                    sh 'make run-backend &'
                 }
                 selenium_image.inside("--link ${c.id}:db") {
                     checkout scm
