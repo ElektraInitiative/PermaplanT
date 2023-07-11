@@ -6,6 +6,8 @@ import { Layer, Group, Line, Text } from 'react-konva';
 const TEN_CENTIMETERS = 10;
 const ONE_METER = 100;
 
+// Sizes are relative to the viewport width.
+// E.g.: 1 / 500 would result in a width of 2px with a 1000px viewport.
 const RELATIVE_DOT_SIZE = 1 / 500;
 
 const RELATIVE_YARD_STICK_STROKE_WIDTH = 1 / 1000;
@@ -15,10 +17,14 @@ const RELATIVE_YARD_STICK_OFFSET_Y = 1 / 30;
 
 const RELATIVE_YARD_STICK_LABEL_OFFSET_Y = 1 / 120;
 
-// This color should ideally be imported from tailwind.config.js
+// These colors should ideally be imported from tailwind.config.js
 //
 // However, the official guide (https://tailwindcss.com/docs/configuration#referencing-in-java-script)
 // does not seem to work with our current setup.
+//
+// Reason: tailwind.config.js is a commonjs module.
+// Importing it with our current build setup - as suggested in the guide above -
+// will result in browser errors.
 const SEA_BLUE_500 = '#007499';
 
 export const GridLayer = (props: Konva.LayerConfig) => {
@@ -54,11 +60,12 @@ const Grid = (rect: GridProps) => {
 
   const gridDotSize = rect.width * RELATIVE_DOT_SIZE;
 
+  // Draw the grid larger than necessary to avoid artifacts while panning the viewport.
   const startX = -rect.x - rect.width - ((-rect.x - rect.width) % gridStep);
   const startY = -rect.y - rect.height - ((-rect.y - rect.height) % gridStep);
 
-  const endX = -rect.x + rect.width;
-  const endY = -rect.y + rect.height;
+  const endX = -rect.x + (rect.width * 2);
+  const endY = -rect.y + (rect.height * 2);
 
   const lines = [];
   for (let y = startY; y < endY; y += gridStep) {
