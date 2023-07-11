@@ -175,11 +175,6 @@ stage('Acceptance Test'){
             def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
 
             selenium_image.withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { s ->
-                docker.image('myhub.hub/selenium-dev').inside("--link ${s.id}:se") {
-                    checkout scm
-                    sh 'pwd'
-                }
-
                 docker.image('postgis/postgis:13-3.1').inside("--link ${s.id}:se").withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                     rust_image.inside("--link ${c.id}:db --link ${s.id}:se -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                         checkout scm
