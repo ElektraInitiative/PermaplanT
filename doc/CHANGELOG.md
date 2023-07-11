@@ -42,6 +42,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - DOC: Fix broken links #554 _(4ydan)_
 - CI: Devcontainer support #552 _(4ydan)_
 - CI: Added mdbook build to pipeline _(4ydan)_
+- DEV: Small devcontainer improvements #563 _(4ydan)_
 - DEV: Issue forms added. #537 _(4ydan)_
 
 ## 0.2.0 - 29.06.2023

@@ -83,3 +83,11 @@ In case you don't prefer any of the previously mentioned installations methods, 
 
 - Chrome 108.0.5359
 - Firefox 108.0.2
+
+## Containers
+
+We are also supporting a containerized setup(docker/podman). For more information checkout the README inside [.devcontainer](../.devcontainer/README.md).
+
+## Github Codespaces
+
+PermaplanT supports Github codespaces. If you are interested in developing inside Github Codespaces you can learn more about [here](https://docs.github.com/de/codespaces).
