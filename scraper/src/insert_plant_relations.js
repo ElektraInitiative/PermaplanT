@@ -14,7 +14,6 @@ const antagonistFilePath = process.argv[3] || "data/Antagonist.csv";
  *
  * @param {*} map - a map with all unique plantnames
  *
- * todo for later: user promise.all to requests all ids at the same time, and not wait for them
  */
 async function getIdsFromPlantnames(map) {
   const query = "SELECT id FROM plants WHERE unique_name = $1";
