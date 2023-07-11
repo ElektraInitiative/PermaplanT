@@ -40,12 +40,12 @@ const Navbar = () => {
                 <LogoSmallGraySVG className="h-12 w-12 pr-2" />
               )}
               <div className="flex flex-col">
-                <span className="mt-auto text-xs text-gray-500 dark:text-gray-400">
-                  {' '}
-                  Version: {backendVersion}
-                </span>
                 <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
                   PermaplanT
+                </span>
+                <span className="mt-auto text-xs text-gray-500 dark:text-gray-400">
+                  {' '}
+                  {backendVersion}
                 </span>
               </div>
             </a>
