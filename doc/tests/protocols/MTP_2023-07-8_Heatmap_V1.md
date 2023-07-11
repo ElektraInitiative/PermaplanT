@@ -1,7 +1,5 @@
 # Test Protocol Heatmap
 
-This is the raw template for executing a manual test.
-
 Information:
 
 - Tester: Gabriel
@@ -20,10 +18,10 @@ Information:
 
 ### Test Steps
 
-1. Create the database.
+1. Create the database and run migrations.
 2. Insert the plants using the scraper (`cd scraper && npm run insert`)
-3. Start the backend.
-4. Create a map (can be done in the frontend as well).
+3. Start the backend (`cd backend && cargo run`).
+4. Create a map (via Postman, equivalent cURL below - remember to insert the token).
 
 ```bash
 curl --location 'http://localhost:8080/api/maps' \
@@ -94,7 +92,7 @@ VALUES ('00000000-0000-0000-0000-000000000000', 2, 1, 10, 10, 0, 0, 0, 0, 0),
        ('00000000-0000-0000-0000-000000000005', 2, 3, 10, 20, 0, 0, 0, 0, 0);
 ```
 
-6. Execute the request (Probably better to use Swagger or Postman otherwise you can't see the image).
+6. Execute the request (via Postman, equivalent cURL below - cURL won't display the image).
 
 ```bash
 curl --location 'http://localhost:8080/api/maps/1/layers/plants/heatmap?plant_id=1&layer_id=2' \
