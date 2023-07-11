@@ -5,7 +5,7 @@ def node_info() {
 def wait_for_db() {
     retry(6) {
         sleep(time: 5, unit: 'SECONDS')
-        sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
+        sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=60'
     }
 }
 
