@@ -19,5 +19,6 @@
 	"landscape": "Landscape",
 	"hydrology": "Hydrology",
 	"fertilization": "Fertilization",
-	"infrastructure": "Infrastructure"
+	"infrastructure": "Infrastructure",
+	"error_fetching_layers": "Sorry, I'm experiencing trouble fetching map data from my server. It is possible it doesn't exist."
 }
