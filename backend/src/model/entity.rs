@@ -822,6 +822,7 @@ pub struct NewLayer {
     pub is_alternative: bool,
 }
 
+/// The `BaseLayerImages` entity.
 #[derive(Identifiable, Queryable, Insertable, AsChangeset)]
 #[diesel(table_name = base_layer_images)]
 pub struct BaseLayerImages {
