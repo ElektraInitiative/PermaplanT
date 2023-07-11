@@ -24,8 +24,12 @@ run-storybook: build-storybook  ## Starts the storybook server.
 # TEST
 
 .PHONY: test
-test: test-frontend test-backend test-mdbook  ## Tests everything + pre-commit
+test: test-frontend test-backend test-mdbook  ## Tests everything + pre-commit.
 	pre-commit
+
+.PHONY: test-acceptance
+test-acceptance: ## End-to-End acceptance tests. Needs backend and frontend running.
+	cd test && behave -D rs -D crumbs -D xvfb -T -k
 
 .PHONY: test-frontend
 test-frontend: build-frontend ## Tests the frontend.
@@ -75,7 +79,7 @@ generate-api-types:  ## Generates typescript types.
 	cd frontend && npm run generate-api-types
 
 .PHONY: psql-r
-psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
+psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB.
 	psql -h db -p 5432 -U $(POSTGRES_USER) $(POSTGRES_DB)
 
 .PHONY: pre-commit-all

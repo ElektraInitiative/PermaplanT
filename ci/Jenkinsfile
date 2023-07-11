@@ -154,8 +154,38 @@ stage('Tests & Build') {
             }
         }
     }
-
     parallel(parallel_checks)
+}
+
+stage('Acceptance Test'){
+    timeout(time: 20, unit: 'minutes'){
+        node('docker') {
+            node_info()
+            checkout scm
+
+            def selenium_image = docker.build("permaplant-selenium", "./ci/container-images/permaplant-selenium")
+            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+
+            selenium_image.image.withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { s ->
+                docker.image('myhub.hub/selenium-dev').inside("--link ${s.id}:se") {
+                    checkout scm
+                    sh 'pwd'
+                }
+
+                docker.image('postgis/postgis:13-3.1').inside("--link ${s.id}:se").withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                    rust_image.inside("--link ${c.id}:db --link ${s.id}:se -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                        checkout scm
+                        sh 'pwd'
+                    }
+                }
+                node_image.inside("--link ${s.id}:se") {
+                    checkout scm
+                    sh 'pwd'
+                }
+            }
+        }
+    }
 }
 
 stage('Deploy PR') {
