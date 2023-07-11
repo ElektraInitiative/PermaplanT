@@ -1,12 +1,9 @@
 import { UpdateBaseLayerAction } from '../../../layers/base/actions';
-import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import ModalContainer from '@/components/Modals/ModalContainer';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { Vector2d } from 'konva/lib/types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 export const calculateScale = (
   measuredDistancePixels: number,
@@ -25,12 +22,12 @@ export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
 
 export const BaseLayerRightToolbar = () => {
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
-  const { measureStep, measurePoint1, measurePoint2 } = useMapStore(
+  const { measureStep } = useMapStore(
     (state) => state.untrackedState.layers.base,
   );
   const executeAction = useMapStore((state) => state.executeAction);
-  const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
-  const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
+  // const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
+  // const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
 
   console.log(measureStep);
 
@@ -56,9 +53,12 @@ export const BaseLayerRightToolbar = () => {
     setRotationInput(baseLayerState.rotation);
   }, [baseLayerState.rotation]);
 
+  /*
   const [distMeters, setDistMeters] = useState(0);
   const [distCentimeters, setDistCentimeters] = useState(0);
+  */
 
+  /*
   const onDistModalSubmit = () => {
     console.assert(measurePoint1 !== null);
     console.assert(measurePoint2 !== null);
@@ -80,9 +80,12 @@ export const BaseLayerRightToolbar = () => {
 
     deactivateMeasurement();
   };
+  */
 
   return (
     <div className="flex flex-col gap-2 p-2">
+      {/* Automatic scaling is disabled for now due to a bug related to mouse-drag selection. */}
+      {/*
       <ModalContainer show={measureStep === 'both selected'}>
         <div className="w-ful flex h-full min-h-[20vh] flex-col gap-2 rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h3>{t('baseLayerForm:distance_modal_title')}</h3>
@@ -115,6 +118,7 @@ export const BaseLayerRightToolbar = () => {
           </div>
         </div>
       </ModalContainer>
+      */}
       <h2>{t('baseLayerForm:title')}</h2>
       <SimpleFormInput
         id="file"
@@ -143,21 +147,22 @@ export const BaseLayerRightToolbar = () => {
         min="0"
         max="359"
       />
-      <div className="flex flex-row items-end gap-2">
-        <SimpleFormInput
-          id="scale"
-          labelText={t('baseLayerForm:scale')}
-          onBlur={(e) => {
-            const scale = parseInt(e.target.value);
-            const path = baseLayerState.nextcloudImagePath;
-            const rotation = baseLayerState.rotation;
-            executeAction(new UpdateBaseLayerAction(rotation, scale, path));
-          }}
-          onChange={(e) => setScaleInput(parseInt(e.target.value))}
-          type="number"
-          value={scaleInput}
-          min="0"
-        />
+      {/* <div className="flex flex-row items-end gap-2"> */}
+      <SimpleFormInput
+        id="scale"
+        labelText={t('baseLayerForm:scale')}
+        onBlur={(e) => {
+          const scale = parseInt(e.target.value);
+          const path = baseLayerState.nextcloudImagePath;
+          const rotation = baseLayerState.rotation;
+          executeAction(new UpdateBaseLayerAction(rotation, scale, path));
+        }}
+        onChange={(e) => setScaleInput(parseInt(e.target.value))}
+        type="number"
+        value={scaleInput}
+        min="0"
+      />
+      {/*
         {measureStep === 'inactive' ? (
           <SimpleButton onClick={() => activateMeasurement()}>
             {t('baseLayerForm:set_scale')}
@@ -165,7 +170,8 @@ export const BaseLayerRightToolbar = () => {
         ) : (
           <SimpleButton onClick={() => deactivateMeasurement()}>{t('common:cancel')}</SimpleButton>
         )}
-      </div>
+      */}
+      {/* </div> */}
     </div>
   );
 };
