@@ -8,6 +8,8 @@ import KonvaEventObject = Konva.KonvaEventObject;
 /**
  * A virtual ruler that is used to measure distances on the base layer.
  *
+ * This measures two points in the editor.
+ * The selected points as well as the distance is then visualized on the screen.
  */
 export const BaseMeasurementLayer = () => {
   const { measurePoint1, measurePoint2, measureStep } = useMapStore(
