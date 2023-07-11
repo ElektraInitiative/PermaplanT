@@ -177,7 +177,6 @@ stage('Acceptance Test'){
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 node_image.inside("--link ${c.id}:db") {
                     checkout scm
-                    wait_for_db()
                     sh 'make run frontend &'
                 }
                 rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
@@ -187,7 +186,6 @@ stage('Acceptance Test'){
                 }
                 selenium_image.inside("--link ${c.id}:db") {
                     checkout scm
-                    wait_for_db()
                     sh 'make test-acceptance'
                 }
             }
