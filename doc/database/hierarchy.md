@@ -116,7 +116,7 @@ We know about names (abstract and concrete, including hybrid):
 
 ## Attributes
 
-Columns are documented in their [respective structs](../../backend/src/model/entity.rs).
+Columns are documented in their [respective structs](https://github.com/ElektraInitiative/PermaplanT/blob/master/backend/src/model/entity.rs).
 
 We prefer strongly-typed data, e.g.:
 
