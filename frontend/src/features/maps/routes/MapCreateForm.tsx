@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface MapCreationAttributes {
   name: string;
@@ -29,7 +30,7 @@ export default function MapCreateForm() {
     },
   };
 
-  const { t } = useTranslation(['maps']);
+  const { t } = useTranslation(['maps', 'privacyOptions']);
   const [missingName, setMissingName] = useState(false);
   const [mapVisible, setMapVisible] = useState(false);
   const [mapInput, setMapInput] = useState(initialData);
@@ -47,13 +48,13 @@ export default function MapCreateForm() {
     PrivacyOptions.Public,
   ].map((option) => (
     <option key={option} value={option}>
-      {t(`maps:create.${option}`)}
+      {t(`privacyOptions:${option}`)}
     </option>
   ));
 
   const privacyDetailText = (
     <p className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-center text-sm font-medium dark:border-neutral-400-dark dark:bg-neutral-50-dark">
-      {t(`maps:create.${mapInput.privacy}_info`)}
+      {t(`privacyOptions:${mapInput.privacy}_info`)}
     </p>
   );
 
@@ -127,7 +128,11 @@ export default function MapCreateForm() {
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
     };
-    await createMap(newMap);
+    try {
+      await createMap(newMap);
+    } catch (error) {
+      toast.error(t('maps:create.error_map_create'), { autoClose: false });
+    }
     navigate('/maps');
   }
 

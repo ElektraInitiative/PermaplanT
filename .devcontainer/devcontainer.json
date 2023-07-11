@@ -1,0 +1,30 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/rust-postgres
+{
+  "name": "PermaplanT-Devcontainer",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "${NODE_VERSION}"
+    },
+    "ghcr.io/devcontainers-contrib/features/jest:2": {},
+    "ghcr.io/devcontainers-contrib/features/npm-package:1": {
+      "package": "typedoc"
+    },
+    "ghcr.io/devcontainers-contrib/features/typescript:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode-remote.vscode-remote-extensionpack",
+        "ms-azuretools.vscode-docker",
+        "EditorConfig.EditorConfig"
+      ]
+    }
+  },
+  "postCreateCommand": "./.devcontainer/setup.sh"
+  // "remoteUser": "vscode"
+}

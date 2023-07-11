@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The users can find other gardening enthusiasts to establish a gardening partnership.
-- **Assignee:** Thorben
+- **Assignee:** Ready to be assigned
 
 ## Scenarios
 

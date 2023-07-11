@@ -1,4 +1,4 @@
-# Logging
+# Backend Logging
 
 The backend uses [env_logger](https://docs.rs/env_logger/latest/env_logger/) together with [log](https://docs.rs/log/latest/log/) as a logging framework.
 

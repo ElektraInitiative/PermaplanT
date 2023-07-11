@@ -9,7 +9,7 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{config, layers, map, planting_suggestions, plantings, plants, seed},
+    controller::{config, layers, map, plant_layer, planting_suggestions, plantings, plants, seed},
     model::{
         dto::{
             plantings::{
@@ -17,9 +17,10 @@ use crate::{
                 UpdatePlantingDto,
             },
             ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto,
-            PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, SeedDto,
+            PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto,
+            RelationsDto, SeedDto,
         },
-        r#enum::{quality::Quality, quantity::Quantity},
+        r#enum::{quality::Quality, quantity::Quantity, relation_type::RelationType},
     },
 };
 
@@ -106,6 +107,23 @@ struct MapApiDoc;
 )]
 struct LayerApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plant layer endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        plant_layer::find_relations
+    ),
+    components(
+        schemas(
+            RelationsDto,
+            RelationDto,
+            RelationType
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct PlantLayerApiDoc;
+
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plantings endpoints.
 #[derive(OpenApi)]
 #[openapi(
@@ -152,6 +170,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(PlantingSuggestionsApiDoc::openapi());
     openapi.merge(MapApiDoc::openapi());
     openapi.merge(LayerApiDoc::openapi());
+    openapi.merge(PlantLayerApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));

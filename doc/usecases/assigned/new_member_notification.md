@@ -8,7 +8,7 @@
   - App User which is newly registered: "new user"
   - App User which existed beforehand: "existing user"
 - **Brief:** The user gets a notfication when a new user joined.
-- **Assignee:** Thorben
+- **Assignee:** Ready to be assigned
 
 ## Scenarios
 

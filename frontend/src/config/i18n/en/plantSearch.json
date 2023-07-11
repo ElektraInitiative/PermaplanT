@@ -1,4 +1,6 @@
 {
-  "dnd": "Drag and drop plants",
-  "placeholder": "Search plants..."
+  "planting": "Planting",
+  "placeholder": "Search plants...",
+  "error_initializing_layer": "Sorry, I'm experiencing trouble fetching planted plants from my server. Please try again later.",
+  "error_searching_plants": "Sorry, I'm experiencing trouble fetching plants from my server. Please try again later."
 }

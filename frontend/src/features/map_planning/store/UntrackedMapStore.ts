@@ -10,7 +10,8 @@ export const createUntrackedMapSlice: StateCreator<
   UntrackedMapSlice
 > = (set, get) => ({
   untrackedState: UNTRACKED_DEFAULT_STATE,
-  stageRef: createRef(),
+  stageRef: createRef<Konva.Stage>(),
+  tooltipRef: createRef(),
   updateSelectedLayer(selectedLayer) {
     // Clear the transformer's nodes.
     get().transformer.current?.nodes([]);

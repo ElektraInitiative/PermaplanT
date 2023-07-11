@@ -56,6 +56,17 @@
 | **nutrition_demand**             | NULL                             | If "Nutritionally poor soil" in `environmental_tolerances` is given `light feeder` should be set. |
 | **preferable_permaculture_zone** | NULL                             |                                                                                                   | -1..6 (-1 should be printed as 00) |
 
+## `Relations`
+
+Store relations between plants.
+
+| **_Column name_** | **_Example_**                         | **_Description_**               |
+| :---------------- | :------------------------------------ | :------------------------------ |
+| **plant1**        | 1                                     | id of first plant               |
+| **plant2**        | 2                                     | id of second plant              |
+| **relation**      | neutral                               | type of relation                |
+| **note**          | why put two cherries together anyways | some comment about the relation |
+
 ## `Maps`
 
 | **_Column name_**   | **_Example_** | **_Description_**                                                                              |
