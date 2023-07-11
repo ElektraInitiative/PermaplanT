@@ -1,10 +1,14 @@
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
-import { BaseLayerImageDto, LayerType, UpdateBaseLayerImageDto } from '@/bindings/definitions';
 import { updateBaseLayer } from './api/updateBaseLayer';
+import { BaseLayerImageDto, LayerType, UpdateBaseLayerImageDto } from '@/bindings/definitions';
 
-export class UpdateBaseLayerAction implements
-    Action<Awaited<ReturnType<typeof updateBaseLayer>>, Awaited<ReturnType<typeof updateBaseLayer>>>
- {
+export class UpdateBaseLayerAction
+  implements
+    Action<
+      Awaited<ReturnType<typeof updateBaseLayer>>,
+      Awaited<ReturnType<typeof updateBaseLayer>>
+    >
+{
   constructor(private readonly _data: BaseLayerImageDto) {}
 
   reverse(state: TrackedMapState) {
@@ -13,7 +17,7 @@ export class UpdateBaseLayerAction implements
       path: state.layers.base.nextcloudImagePath,
       layer_id: state.layers.base.layerId,
       rotation: state.layers.base.rotation,
-      scale: state.layers.base.scale
+      scale: state.layers.base.scale,
     });
   }
 
@@ -24,14 +28,14 @@ export class UpdateBaseLayerAction implements
         ...state.layers,
         [LayerType.Base]: {
           ...state.layers.base,
-          ...this._data
+          ...this._data,
         },
       },
     };
   }
 
   execute(mapId: number): Promise<UpdateBaseLayerImageDto> {
-    console.log(this._data)
-    return updateBaseLayer(this._data.id, mapId, this._data)
+    console.log(this._data);
+    return updateBaseLayer(this._data.id, mapId, this._data);
   }
 }

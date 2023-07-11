@@ -8,9 +8,9 @@ export const updateBaseLayer = async (
 ): Promise<UpdateBaseLayerImageDto> => {
   const http = createAPI();
 
-  const dto: UpdateBaseLayerImageDto = data
-  console.log(id)
-  console.log(dto)
+  const dto: UpdateBaseLayerImageDto = data;
+  console.log(id);
+  console.log(dto);
 
   try {
     const response = await http.patch(`api/maps/${mapId}/layers/base/images/${id}`, dto);

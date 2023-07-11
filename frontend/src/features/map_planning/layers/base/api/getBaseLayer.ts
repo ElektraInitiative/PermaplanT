@@ -12,7 +12,7 @@ export async function getBaseLayerImage(mapId: number, layerId?: number) {
     const response = await http.get<BaseLayerImageDto[]>(
       `api/maps/${mapId}/layers/base/${layerId}/images/`,
     );
-    return response.data.length > 0 ? response.data[0] : null
+    return response.data.length > 0 ? response.data[0] : null;
   } catch (error) {
     throw error as Error;
   }

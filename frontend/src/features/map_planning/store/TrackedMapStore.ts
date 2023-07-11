@@ -64,7 +64,7 @@ export const createTrackedMapSlice: StateCreator<
               layerId: dto.layer_id,
               rotation: dto.rotation,
               scale: dto.scale,
-              nextcloudImagePath: dto.path
+              nextcloudImagePath: dto.path,
             },
           },
         },
