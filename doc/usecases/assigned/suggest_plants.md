@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user gets plant suggestions that she would not have thought of herself.
-- **Assignee:** Moritz
 
 ## Scenarios
 
