@@ -113,7 +113,7 @@ Because you can do the same in python with less lines of code.
 
 Same as java.
 
-## Decision libraries:
+## Decision libraries
 
 - [Playwright for Python](https://playwright.dev/python/docs/intro)
 - [Pytest](https://docs.pytest.org/en/7.4.x/)
@@ -121,7 +121,7 @@ Same as java.
 - [Pytest-bdd](https://pypi.org/project/pytest-bdd/)
 - [mypy](https://mypy-lang.org)
 
-### About the libraries:
+### About the libraries
 
 Most libraries offer more than we need.
 Some offer a bit less but it's mostly about:
@@ -140,7 +140,7 @@ What we need:
 
 - BDD support
 - Python binding
-- headless browser (which I think everyone has?)
+- Headless browser
 
 What is nice to have:
 
@@ -148,8 +148,9 @@ What is nice to have:
 - Screenshots
 - Diagrams
 
-All of them would fit our constraints, so at the end it was between the two giants Selenium and Playwright.
-We chose Playwright because it allows us to get elements by text instead of css selectors.
+Most of them would fit our constraints, so at the end it was between Selenium and Playwright, which had the biggest communities and overall great features.
+We chose Playwright because it allows us to get elements also by text and not only css selectors.
+Playwright has a very smooth installation and a superior documentation in comparison to selenium.
 We need headless browser support, so we can run the tests in our pipeline.
 
 ### Considered Alternatives
