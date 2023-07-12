@@ -37,7 +37,6 @@ export const BaseStage = ({
   selectable = true,
   draggable = true,
 }: BaseStageProps) => {
-  const updateMapBounds = useMapStore((store) => store.updateMapBounds);
 
   // Represents the state of the stage
   const [stage, setStage] = useState({
@@ -80,6 +79,18 @@ export const BaseStage = ({
 
   const step = useMapStore((map) => map.step);
   const historyLength = useMapStore((map) => map.history.length);
+
+  const updateMapBounds = useMapStore((store) => store.updateMapBounds);
+  const mapBounds = useMapStore((store) => store.untrackedState.editorBounds);
+  useEffect(() => {
+    if (mapBounds.width !== 0 || mapBounds.height !== 0) return;
+    updateMapBounds({
+      x: 0,
+      y: 0,
+      width: Math.floor(window.innerWidth / stage.scale),
+      height: Math.floor(window.innerHeight / stage.scale),
+    });
+  });
 
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
