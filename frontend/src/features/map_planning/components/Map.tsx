@@ -5,6 +5,7 @@ import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
 import useMapStore from '../store/MapStore';
+import { convertToDate } from '../utils/date-utils';
 import { BaseStage } from './BaseStage';
 import { Timeline } from './timeline/Timeline';
 import { Layers } from './toolbar/Layers';
@@ -14,6 +15,7 @@ import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import { useQueryClient } from '@tanstack/react-query';
+import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 export type MapProps = {
@@ -36,7 +38,7 @@ export const Map = ({ layers }: MapProps) => {
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
   const queryClient = useQueryClient();
 
-  const { t } = useTranslation(['undoRedo']);
+  const { t } = useTranslation(['undoRedo', 'timeline']);
 
   const getToolbarContent = (layerType: LayerType) => {
     const content = {
@@ -109,7 +111,7 @@ export const Map = ({ layers }: MapProps) => {
           ></PlantsLayer>
           <BaseMeasurementLayer />
         </BaseStage>
-        <div className="py-2">
+        <div>
           <Timeline
             onSelectDate={(date) => updateTimelineDate(date, queryClient)}
             defaultDate={timelineDate}
@@ -122,6 +124,17 @@ export const Map = ({ layers }: MapProps) => {
           contentBottom={getToolbarContent(untrackedState.selectedLayer.type_).right}
           position="right"
           minWidth={200}
+          fixedContentBottom={
+            <div className="mb-0 mt-auto border-t-2 border-neutral-700 p-2 tracking-wide">
+              {t('timeline:map_date')}
+              {convertToDate(timelineDate).toLocaleDateString(i18next.resolvedLanguage, {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+              })}
+            </div>
+          }
         ></Toolbar>
       </section>
     </div>

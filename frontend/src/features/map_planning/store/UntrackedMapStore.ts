@@ -133,7 +133,16 @@ export const createUntrackedMapSlice: StateCreator<
     }));
 
     if (dateAsDate < from || dateAsDate > to) {
-      client.invalidateQueries([QUERY_KEYS.PLANTINGS]);
+      console.log('Date is out of bounds. REFETCHING PLANTINGS.');
+
+      client.setQueryData([QUERY_KEYS.PLANTINGS], []);
+      set((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          fetchDate: date,
+        },
+      }));
       return;
     }
 

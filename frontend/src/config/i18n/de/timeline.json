@@ -1,4 +1,6 @@
 {
+  "map_date": "Kartendatum: ",
   "change_date": "Kartendatum ändern",
-  "change_date_hint": "Ändere das Datum um um Elemente an diesem Tag zu sehen/hinzuzufügen/zu entfernen."
+  "change_date_hint": "Ändere das Datum um um Elemente an diesem Tag zu sehen/hinzuzufügen/zu entfernen.",
+  "date_error": "Ungültiges Datum."
 }

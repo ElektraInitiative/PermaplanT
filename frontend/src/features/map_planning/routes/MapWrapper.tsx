@@ -26,24 +26,24 @@ function getDefaultLayer(layers: LayerDto[], layerType: LayerType) {
 type UseLayerParams = {
   mapId: number;
   layerId: number;
-  enabled: boolean;
+  enabled?: boolean;
 };
 
 /**
  * Hook that initializes the plant layer by fetching all plantings
  * and adding them to the store.
  */
-function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
+function usePlantLayer({ mapId, layerId }: UseLayerParams) {
+  const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
   const { t } = useTranslation(['plantSearch']);
 
-  // Do not use the store value `timelineDate` here.
-  // We want to manually fetch the plantings for the current date.
-  const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
-
   const query = useQuery({
-    queryKey: [QUERY_KEYS.PLANTINGS, mapId, { layerId, timelineDate }],
-    queryFn: () => getPlantings(mapId, { layer_id: layerId, relative_to_date: timelineDate }),
-    enabled,
+    queryKey: [QUERY_KEYS.PLANTINGS, mapId, { layerId, fetchDate }],
+    queryFn: () => getPlantings(mapId, { layer_id: layerId, relative_to_date: fetchDate }),
+    // We want to refetch manually.
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    enabled: Boolean(layerId),
   });
 
   if (query.error) {
@@ -51,12 +51,13 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
     toast.error(t('plantSearch:error_initializing_layer'), { autoClose: false });
   }
 
+  const data = query.data;
   useEffect(() => {
-    if (!query?.data) return;
+    if (!data) return;
 
-    useMapStore.getState().setTimelineBounds(query.data.from, query.data.to);
-    useMapStore.getState().initPlantLayer(query.data.results);
-  }, [mapId, query?.data]);
+    useMapStore.getState().setTimelineBounds(data.from, data.to);
+    useMapStore.getState().initPlantLayer(data.results);
+  }, [mapId, data]);
 
   return query;
 }
@@ -86,12 +87,11 @@ function useInitializeMap() {
   const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
   const baseLayer = getDefaultLayer(layers ?? [], LayerType.Base);
 
-  const { isLoading: arePlantingsLoading } = usePlantLayer({
+  usePlantLayer({
     mapId,
     // The enabled flag prevents the query from being executed with an invalid layer id.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
     layerId: plantLayer?.id!,
-    enabled: Boolean(plantLayer),
   });
 
   useEffect(() => {
@@ -107,7 +107,7 @@ function useInitializeMap() {
     }));
   }, [mapId, baseLayer]);
 
-  const isLoading = !layers || arePlantingsLoading;
+  const isLoading = !layers;
 
   if (isLoading) {
     return null;

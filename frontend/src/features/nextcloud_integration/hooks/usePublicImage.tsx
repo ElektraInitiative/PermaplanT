@@ -26,6 +26,8 @@ export function usePublicImage({
   const { isError, isLoading, data } = useQuery(['image', path], {
     queryFn: () => getPublicImage(path, publicShareToken),
     refetchOnWindowFocus: false,
+    // We don't want to refetch the image, because the path is not changing.
+    staleTime: Infinity,
   });
 
   const image = useImageFromBlob({

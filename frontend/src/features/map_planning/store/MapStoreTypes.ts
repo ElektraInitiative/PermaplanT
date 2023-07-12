@@ -159,6 +159,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
   timelineDate: convertToDateString(new Date()),
+  fetchDate: convertToDateString(new Date()),
   timelineBounds: {
     from: convertToDateString(new Date()),
     to: convertToDateString(new Date()),
@@ -291,7 +292,10 @@ export type TrackedMapState = {
  */
 export type UntrackedMapState = {
   mapId: number;
+  /** used for the bounds calculation */
   timelineDate: string;
+  /** used for fetching */
+  fetchDate: string;
   timelineBounds: {
     from: string;
     to: string;

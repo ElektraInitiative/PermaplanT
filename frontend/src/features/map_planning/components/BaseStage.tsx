@@ -162,6 +162,8 @@ export const BaseStage = ({
 
   // Event listener responsible for unselecting shapes when clicking on the stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+
     const isStage = e.target instanceof Konva.Stage;
     const nodeSize = trRef.current?.getNodes().length || 0;
     if (nodeSize > 0 && isStage) {
@@ -235,7 +237,7 @@ export const BaseStage = ({
         </Layer>
       </Stage>
       {/** Portal to display something from different layers */}
-      <div className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
+      <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
         <div id="bottom-portal" />
       </div>
     </div>
