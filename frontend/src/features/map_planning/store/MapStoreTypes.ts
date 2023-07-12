@@ -2,6 +2,8 @@ import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/d
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 
+import Vector2d = Konva.Vector2d;
+
 /**
  * An action is a change to the map state, initiated by the user.
  * It knows how to apply itself to the map state, how to reverse itself, and how to execute itself.
@@ -57,10 +59,16 @@ export interface TrackedMapSlice {
    * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
    */
   transformer: React.RefObject<Konva.Transformer>;
+  /**
+   * References to timeouts used by executeActionDebounced.
+   *
+   * @internal This reference should never be modified by any other function than executeActionDebounced.
+   */
   /** Event listener responsible for adding a single shape to the transformer */
   addShapeToTransformer: (shape: Node) => void;
   /**
    * Execute a user initiated action.
+   * @param action the action to be executed
    */
   executeAction: <T, U>(action: Action<T, U>) => void;
   /**
@@ -108,6 +116,9 @@ export interface UntrackedMapSlice {
   updateLayerOpacity: (layerName: LayerType, opacity: UntrackedLayerState['opacity']) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
+  baseLayerActivateMeasurement: () => void;
+  baseLayerDeactivateMeasurement: () => void;
+  baseLayerSetMeasurePoint: (point: Vector2d) => void;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
@@ -148,6 +159,13 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         visible: true,
         opacity: 1,
       },
+      [LayerType.Base]: {
+        visible: true,
+        opacity: 1,
+        measureStep: 'inactive',
+        measurePoint1: null,
+        measurePoint2: null,
+      } as UntrackedBaseLayerState,
     }),
     {} as UntrackedLayers,
   ),
@@ -193,7 +211,7 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants>]: TrackedLayerState;
+  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
@@ -215,14 +233,21 @@ export type TrackedBaseLayerState = {
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants>]: UntrackedLayerState;
+  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
+  [LayerType.Base]: UntrackedBaseLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantsSummaryDto | null;
   selectedPlanting: PlantingDto | null;
+};
+
+export type UntrackedBaseLayerState = UntrackedLayerState & {
+  measurePoint1: Vector2d | null;
+  measurePoint2: Vector2d | null;
+  measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
 };
 
 /**

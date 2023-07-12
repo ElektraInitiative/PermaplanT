@@ -1,4 +1,5 @@
 import BaseLayer from '../layers/base/BaseLayer';
+import { BaseMeasurementLayer } from '../layers/base/BaseMeasurementLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
@@ -25,11 +26,9 @@ export type MapProps = {
  * Otherwise they cannot be moved.
  */
 export const Map = ({ layers }: MapProps) => {
-  const trackedState = useMapStore((map) => map.trackedState);
   const untrackedState = useMapStore((map) => map.untrackedState);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
-  const executeAction = useMapStore((map) => map.executeAction);
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
 
   const { t } = useTranslation(['undoRedo']);
@@ -38,9 +37,7 @@ export const Map = ({ layers }: MapProps) => {
     const content = {
       [LayerType.Base]: {
         left: <div></div>,
-        right: (
-          <BaseLayerRightToolbar state={trackedState.layers.base} executeAction={executeAction} />
-        ),
+        right: <BaseLayerRightToolbar />,
       },
       [LayerType.Plants]: { right: <PlantLayerRightToolbar />, left: <PlantLayerLeftToolbar /> },
       [LayerType.Drawing]: { right: <div></div>, left: <div></div> },
@@ -98,15 +95,14 @@ export const Map = ({ layers }: MapProps) => {
         <BaseLayer
           opacity={untrackedState.layers.base.opacity}
           visible={untrackedState.layers.base.visible}
-          nextcloudImagePath={trackedState.layers.base.nextcloudImagePath}
-          pixelsPerMeter={trackedState.layers.base.scale}
-          rotation={trackedState.layers.base.rotation}
+          listening={selectedLayer.type_ === LayerType.Base}
         />
         <PlantsLayer
           visible={untrackedState.layers.plants.visible}
           opacity={untrackedState.layers.plants.opacity}
           listening={selectedLayer.type_ === LayerType.Plants}
         ></PlantsLayer>
+        <BaseMeasurementLayer />
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar

@@ -25,10 +25,13 @@
 - map context
   - layers and their attributes e.g. warning layer and its visibility
 - event: a day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
-- deletion vs. removal of elements
-  - deletion: basically means that the plant never existed.
-    Such elements actually get removed from the database and can only restored within the session using undo.
-  - removal: removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing)
+- deletion/creation vs. removal/adding of elements
+  - deletion/creation (German: löschen/erzeugen):
+    The plant never existed.
+    Such elements actually get deleted from the database and can only be restored within the session using undo.
+    I.e. there are often columns named `created_date` but there usually is not a deletion date (with exception of maps which do not immediately get deleted).
+  - removal/adding (German: entfernen/hinzufügen):
+    Removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing).
     The database must keep removed elements, they never can be deleted.
 - reversible deletion vs undo-redo functionality
   - reversible deletion: a database entity i.e. a whole map and plant is deleted and can be restored within a certain time
