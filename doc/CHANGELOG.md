@@ -57,7 +57,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 
-## 0.2.2 - UNRELEASED
+## 0.2.2 - 12.07.2023 (281 commits)
 
 - Test strategy written _(4ydan)_
 - Added Nextcloud integration documentation in `/doc/research/nextcloud_integration.md`_(Samuel)_
@@ -74,7 +74,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Improved user visible texts in map editor _(Thorben)_
 - DEV: Makefile added #549 _(4ydan)_
 
-## 0.2.1 - UNRELEASED
+## 0.2.1 - UNRELEASED (1024 commits)
 
 - Test strategy written _(4ydan)_
 - CI: Storybook/Typedoc build and stashed in Jenkins pipeline PR/Master/Release #438 _(4ydan)_
