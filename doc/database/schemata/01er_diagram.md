@@ -127,16 +127,19 @@ plantings }o--|| layers : ""
 plantings }o--|| plants : ""
 
 users {
-  INT id PK
-  VARCHAR nc_uid
-  DATE contributor_until
-  VARCHAR app_language
-  DATE member_since
-  INT[] member_years
+  UUID id PK
+  SALUTATION salutation "NOT NULL"
+  VARCHAR title
+  VARCHAR country "NOT NULL"
+  VARCHAR phone
+  VARCHAR website
+  VARCHAR organization
   EXPERIENCE experience
-  VARCHAR preferences
-  GEOGRAPHY location
+  MEMBERSHIP membership
+  INT[] member_years
+  DATE member_since
   INT[] permacoins
+  BOOLEAN editor_introduction "NOT NULL"
 }
 
 blossoms {
@@ -156,10 +159,22 @@ enum_tracks {
   VARCHAR expert_track
 }
 
+enum_salutation {
+  VARCHAR ms
+  VARCHAR mrs
+  VARCHAR mr
+}
+
 enum_experience {
   VARCHAR beginner
   VARCHAR advanced
   VARCHAR expert
+}
+
+enum_membership {
+  VARCHAR supporting_membership
+  VARCHAR regular_membership
+  VARCHAR contributing_membership
 }
 
 blossoms_gained {

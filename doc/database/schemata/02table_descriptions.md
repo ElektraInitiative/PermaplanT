@@ -113,18 +113,21 @@ Store relations between plants.
 
 ## `Users`
 
-| **_Column name_**     | **_Example_**         | **_Description_**                                              |
-| :-------------------- | :-------------------- | :------------------------------------------------------------- |
-| **id**                | 1                     |
-| **nc_uid**            | 1                     | Nextcloud ID                                                   |
-| **contributor_until** | 2023-04-04            | has contributing membership until the given date               |
-| **app_language**      | English               |
-| **member_since**      | 2023-04-04            |
-| **member_years**      | {2023}                | Array of years                                                 |
-| **experience**        | beginner              |
-| **preferences**       | raised vegetable beds |
-| **location**          | Vienna, Austria       |
-| **permacoins**        | {0}                   | 0 to infinity, one entry for every year since account creation |
+| **_Column name_**       | **_Example_**                        | **_Description_**                       |
+| :---------------------- | :----------------------------------- | :-------------------------------------- |
+| **id**                  | 00000000-0000-0000-0000-000000000000 | the UUID from Keycloak                  |
+| **salutation**          | Mr                                   | the preferred salutation of the user    |
+| **title**               | NULL                                 | the title of the user                   |
+| **country**             | Austria                              | the country of the user                 |
+| **phone**               | NULL                                 | the phone number of the user            |
+| **website**             | NULL                                 | the website of the user                 |
+| **organization**        | NULL                                 | the organization of the user            |
+| **experience**          | beginner                             | the experience level of the user        |
+| **membership**          | Regular Membership                   | the membership type of the user         |
+| **member_years**        | {2023}                               | array of years                          |
+| **member_since**        | 2023-07-12                           | since when the user is a member         |
+| **permacoins**          | {0}                                  | array of positive integers              |
+| **editor_introduction** | false                                | map editor introduction tour completed? |
 
 ## `Blossoms`
 
