@@ -29,6 +29,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Remove anchors to prevent nonuniform scaling of elements _(Paul)_
 - _()_
 - CI: Cancel previous builds #557 _(4ydan)_
+- CI: Parallel stage: fail fast & timeout & deleteDir #591 _(4ydan)_
+- _()_
 - _()_
 - Display version number on the navbar and move github link #574 _(4ydan)_
 - _()_
