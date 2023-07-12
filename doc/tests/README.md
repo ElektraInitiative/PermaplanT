@@ -66,6 +66,23 @@ mod tests {
 }
 ```
 
+#### Frontend Unit Tests
+
+- State management logic: Since the frontend relies heavily on state management, it is important to ensure that the state is being properly managed and updated.
+- Functions that handle data manipulation, such as sorting or filtering
+- Components that render UI elements
+- Async actions, such as API calls or event handling
+- Form validation and submission
+
+#### Backend Unit Tests
+
+In the backend unit tests can be found in the `src/` directory.
+
+- Database queries and operations
+- Business logic and data manipulation, e.g. code that performs calculations, manipulates data, or makes decisions based on input
+- Authentication and authorization
+- Error handling
+
 ### 2. Integration Testing
 
 Integration tests are used to test the integration between different parts of the system.
@@ -75,17 +92,17 @@ In the application the integration tests will be used to test the following area
 
 - Continuous Integration (CI) pipelines must run integration tests for different modules and components.
 
-### Frontend
+#### Frontend Integration Tests
 
 - API calls using a mock API
 
-### Backend
-
-- API endpoints
-- Database queries
+#### Backend Intergation Tests
 
 In the backend integration tests can be found in the `src/test/` directory.
 The whole module is annotated with `#[cfg(test)]` and will therefore only be compiled for tests.
+
+- API endpoints
+- Database queries
 
 ### 3. System Testing
 
@@ -114,7 +131,7 @@ This will include testing of all features, navigation, and error handling.
 ## Testing Tools
 
 - Rust built-in tests by cargo
-- Selenium/Cucumber
+- Playwright
 - Jest
 
 ## Test Data Management
@@ -132,39 +149,16 @@ This will include testing of all features, navigation, and error handling.
 - System tests and User acceptance tests must be performed before every release.
 - Manual tests will be documented under `doc/tests/protocols` and errors must be categorized by level and priority.
 - An Email is send whenever master fails, with a small report containing information since last build.
+- E2E tests will produce a diagram that can be investigated for test completion.
+- E2E tests will take screenshots on failing tests.
 
 ## Test Automation
 
 - Unit and Integration tests must be fully automated.
+- E2E tests are fully automated and test the important [use cases](../usecases).
 - Security and Performance tests may be manual.
-- Some End-to-End tests must be automated by utilizing Capture/Replay techniques.
-- Selenium, Cypress and Jest must be used for UI automation testing.
-- API testing must be automated using tools like Postman?
 
 ## Other Considerations
 
 - Tests should be run before committing via pre-commit hooks
 - Tests should be run on different configurations (e.g. production, staging)
-
-## Frontend
-
-For the frontend unit tests will be used to test the following areas:
-
-- State management logic: Since the frontend relies heavily on state management, it is important to ensure that the state is being properly managed and updated.
-- Functions that handle data manipulation, such as sorting or filtering
-- Components that render UI elements
-- Async actions, such as API calls or event handling
-- Form validation and submission
-
-## End-to-End testing of important [use cases](../usecases)
-
-For the backend, unit tests will be used to test the following areas:
-
-- Database queries and operations
-- Business logic and data manipulation, e.g. code that performs calculations, manipulates data, or makes decisions based on input
-- Authentication and authorization
-- Error handling
-
-In the backend unit tests can be found in the `src/` directory.
-Unit tests are used to test individual units of code in isolation from the rest of the system.
-This is important because it allows us to validate that each unit is working as intended, without interference from other parts of the system.
