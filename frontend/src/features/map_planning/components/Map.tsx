@@ -12,6 +12,7 @@ import IconButton from '@/components/Button/IconButton';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
+import { ReactComponent as GridIcon } from '@/icons/grid.svg';
 import { useTranslation } from 'react-i18next';
 
 export type MapProps = {
@@ -87,6 +88,13 @@ export const Map = ({ layers }: MapProps) => {
                 title={t('undoRedo:redo_tooltip')}
               >
                 <RedoIcon></RedoIcon>
+              </IconButton>
+              <IconButton
+                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  onClick={() => redo()}
+                  title={t('undoRedo:redo_tooltip')}
+              >
+                <GridIcon></GridIcon>
               </IconButton>
             </div>
           }
