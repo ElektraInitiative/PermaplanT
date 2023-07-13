@@ -38,3 +38,10 @@ Type `make help` to see all commands`
 Important links:
 
 - [Web API Documentation](https://www.permaplant.net/doc/api/swagger/ui/)
+
+## Community and Contributing
+
+PermaplanT is developed by [us](./doc/authors.md) and by users like you. We welcome both pull requests and issues on GitHub.
+Check out the [contributing docs](.github/CONTRIBUTING.md).
+
+Information about developing can be found under [our development setup](./doc/development_setup.md).

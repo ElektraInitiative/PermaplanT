@@ -26,6 +26,10 @@ E.g.:
 
 "Sorry, I **cannot communicate** with my server, there is probably some network problem or the server is down. _Please retry later._"
 
+## Accessibility
+
+- don't use title attribute, see https://inclusive-components.design/tooltips-toggletips/
+
 ## Raster
 
 We raster per pixel, which should represent 1cm in reality.

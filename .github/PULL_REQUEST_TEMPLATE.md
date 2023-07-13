@@ -34,7 +34,7 @@ Otherwise please check these points when getting a PR done:
 - [ ] I added unit tests for my code
 - [ ] I added code comments, logging, and assertions as appropriate
 - [ ] I translated all strings visible to the user
-- [ ] I mentioned [every code or binary](/.reuse/dep5) not directly written or done by me in [reuse syntax](https://reuse.software/)
+- [ ] I mentioned [every code or binary](https://github.com/ElektraInitiative/PermaplanT/blob/master/.reuse/dep5) not directly written or done by me in [reuse syntax](https://reuse.software/)
 - [ ] I created left-over issues for things that are still to be done
 - [ ] Code is conforming to [our Architecture](/doc/architecture)
 - [ ] Code is conforming to [our Guidelines](/doc/guidelines)

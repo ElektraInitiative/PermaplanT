@@ -47,7 +47,7 @@ The only quality requirement we have are:
 
 Tests are split into unit and integration tests (see [here](../tests/) for reference).
 
-Integration tests can be found in [test/](../../backend/src/test/).  
+Integration tests can be found [here](https://github.com/ElektraInitiative/PermaplanT/tree/master/backend/src/test).  
 Unit tests can be found in the modules they are supposed to test.
 
 ## Code documentation
