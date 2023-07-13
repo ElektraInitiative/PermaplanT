@@ -27,8 +27,11 @@ export class UpdateBaseLayerAction
       layers: {
         ...state.layers,
         [LayerType.Base]: {
-          ...state.layers.base,
-          ...this._data,
+          imageId: this._data.id,
+          layerId: this._data.layer_id,
+          rotation: this._data.rotation,
+          scale: this._data.scale,
+          nextcloudImagePath: this._data.path,
         },
       },
     };
