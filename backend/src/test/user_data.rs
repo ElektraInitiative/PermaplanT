@@ -64,7 +64,7 @@ async fn test_can_get_tour_status() {
     let (token, app) = init_test_app_for_user(pool.clone(), user_id.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri(&format!("/api/users/{user_id}/tours"))
+        .uri("/api/users/tours")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;

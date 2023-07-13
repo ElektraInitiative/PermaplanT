@@ -10,8 +10,9 @@ use utoipa_swagger_ui::SwaggerUi;
 use super::auth::Config;
 use crate::{
     controller::{
-        base_layer_image, config, layers, map, plant_layer, planting_suggestions, plantings,
-        plants, seed,
+        base_layer_image, 
+        config, layers, map, plant_layer, planting_suggestions, plantings,
+        plants, seed, user_data,
     },
     model::{
         dto::{
@@ -19,10 +20,10 @@ use crate::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            BaseLayerImageDto, ConfigDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto,
+            BaseLayerImageDto, ConfigDto, GuidedToursDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto,
             NewSeedDto, PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto,
             PlantsSummaryDto, RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImageDto,
-            UpdateMapDto,
+            UpdateMapDto, UserDataDto,
         },
         r#enum::{
             privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
@@ -193,6 +194,23 @@ struct PlantingsApiDoc;
 )]
 struct PlantingSuggestionsApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all user data endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        user_data::guided_tours,
+        user_data::create
+    ),
+    components(
+        schemas(
+            GuidedToursDto,
+            UserDataDto
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct UserDataApiDoc;
+
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = ConfigApiDoc::openapi();
@@ -204,6 +222,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(PlantLayerApiDoc::openapi());
     openapi.merge(BaseLayerImagesApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
+    openapi.merge(UserDataApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }

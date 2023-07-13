@@ -10,3 +10,4 @@ pub mod plantings;
 pub mod plants;
 pub mod seed;
 pub mod sse;
+pub mod user_data;
