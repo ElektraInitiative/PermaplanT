@@ -44,5 +44,4 @@
 
 # Follow-up
 
-Some parts of this use cases have not been implemented in preperation for a future university course.
 Follow-up issues were recorded and a note has been left in the use case document (#379, #433).
