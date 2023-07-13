@@ -11,8 +11,9 @@ use uuid::Uuid;
 use self::plantings::PlantingDto;
 
 use super::r#enum::{
-    layer_type::LayerType, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
-    relation_type::RelationType,
+    experience::Experience, layer_type::LayerType, membership::Membership,
+    privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
+    relation_type::RelationType, salutation::Salutation,
 };
 
 pub mod actions;
@@ -29,6 +30,7 @@ pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 pub mod update_map_impl;
+pub mod user_data_impl;
 
 /// Contains configuration the frontend needs to run.
 #[typeshare]
@@ -449,4 +451,42 @@ pub struct HeatMapQueryParams {
     pub layer_id: i32,
     /// The id of the plant you want to plant.
     pub plant_id: i32,
+}
+
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+/// All of the application managed user data.
+pub struct UserDataDto {
+    /// The preferred salutation of the user.
+    pub salutation: Salutation,
+    /// The title(s) of the user.
+    pub title: Option<String>,
+    /// The current country of the user.
+    pub country: String,
+    /// The phone number of the user.
+    pub phone: Option<String>,
+    /// The website of the user.
+    pub website: Option<String>,
+    /// The organization the user belongs to.
+    pub organization: Option<String>,
+    /// The experience level in permaculture of the user.
+    pub experience: Option<Experience>,
+    /// The membership type of the user.
+    pub membership: Option<Membership>,
+    /// A collection of years in which the user was a member.
+    pub member_years: Option<Vec<Option<i32>>>,
+    /// The date since when the user is a member.
+    pub member_since: Option<NaiveDate>,
+    /// The amount of permacoins the user earned in each year as a member.
+    pub permacoins: Option<Vec<Option<i32>>>,
+    /// A flag indicating if the user has completed the Map Editor Guided Tour.
+    pub editor_introduction: bool,
+}
+
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+/// Completion status of all Guided Tours.
+pub struct GuidedToursDto {
+    /// Whether or not the Map Editor Guided Tour was completed.
+    pub editor_introduction: bool,
 }
