@@ -37,7 +37,6 @@ export const BaseStage = ({
   selectable = true,
   draggable = true,
 }: BaseStageProps) => {
-
   // Represents the state of the stage
   const [stage, setStage] = useState({
     scale: 1,

@@ -64,8 +64,8 @@ const Grid = (rect: GridProps) => {
   const startX = -rect.x - rect.width - ((-rect.x - rect.width) % gridStep);
   const startY = -rect.y - rect.height - ((-rect.y - rect.height) % gridStep);
 
-  const endX = -rect.x + (rect.width * 2);
-  const endY = -rect.y + (rect.height * 2);
+  const endX = -rect.x + rect.width * 2;
+  const endY = -rect.y + rect.height * 2;
 
   const lines = [];
   for (let y = startY; y < endY; y += gridStep) {
