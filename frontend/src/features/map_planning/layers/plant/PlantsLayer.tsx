@@ -164,6 +164,7 @@ function PlantsLayer(props: PlantsLayerProps) {
 
   return (
     <>
+      <PlantLayerRelationsOverlay />
       <Layer {...props} ref={layerRef} name={`${LayerType.Plants}`}>
         {plants.map((o) => (
           <PlantingElement planting={o} key={o.id} />
@@ -178,7 +179,6 @@ function PlantsLayer(props: PlantsLayerProps) {
           )}
         </Html>
       </Layer>
-      <PlantLayerRelationsOverlay />
     </>
   );
 }
