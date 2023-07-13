@@ -7,6 +7,7 @@ import contact from './contact.json';
 import enums from './enums.json';
 import featureDescriptions from './featureDescriptions.json';
 import geomap from './geomap.json';
+import grid from './grid.json';
 import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
@@ -24,7 +25,7 @@ import seeds from './seeds.json';
 import team from './team.json';
 import undoRedo from './undoRedo.json';
 
-const en = {
+const de = {
   blog,
   baseLayer,
   baseLayerForm,
@@ -33,6 +34,7 @@ const en = {
   enums,
   featureDescriptions,
   geomap,
+  grid,
   imprint,
   landingPage,
   pricing,
@@ -52,4 +54,4 @@ const en = {
   plantEdit,
 };
 
-export default en;
+export default de;

@@ -9,10 +9,13 @@ import { Layers } from './toolbar/Layers';
 import { Toolbar } from './toolbar/Toolbar';
 import { LayerDto, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
+import { GridLayerLeftToolbar } from '@/features/map_planning/layers/_frontend_only/grid/components/GridLayerLeftToolbar';
+import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
+import { ReactComponent as GridIcon } from '@/icons/grid.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
-import { ReactComponent as GridIcon } from '@/icons/grid.svg';
 import { useTranslation } from 'react-i18next';
 
 export type MapProps = {
@@ -32,11 +35,12 @@ export const Map = ({ layers }: MapProps) => {
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
   const executeAction = useMapStore((map) => map.executeAction);
-  const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
+  const selectLayer = useMapStore((map) => map.updateSelectedLayer);
+  const getSelectedLayerType = useMapStore((map) => map.getSelectedLayerType);
 
-  const { t } = useTranslation(['undoRedo']);
+  const { t } = useTranslation(['undoRedo', 'grid']);
 
-  const getToolbarContent = (layerType: LayerType) => {
+  const getToolbarContent = (layerType: CombinedLayerType) => {
     const content = {
       [LayerType.Base]: {
         left: <div></div>,
@@ -63,6 +67,7 @@ export const Map = ({ layers }: MapProps) => {
       [LayerType.Todo]: { right: <div></div>, left: <div></div> },
       [LayerType.Photo]: { right: <div></div>, left: <div></div> },
       [LayerType.Watering]: { right: <div></div>, left: <div></div> },
+      [FrontendOnlyLayerType.Grid]: { right: <div></div>, left: <GridLayerLeftToolbar /> },
     };
 
     return content[layerType];
@@ -90,15 +95,15 @@ export const Map = ({ layers }: MapProps) => {
                 <RedoIcon></RedoIcon>
               </IconButton>
               <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                  onClick={() => redo()}
-                  title={t('undoRedo:redo_tooltip')}
+                className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                onClick={() => selectLayer(FrontendOnlyLayerType.Grid)}
+                title={t('grid:tooltip')}
               >
                 <GridIcon></GridIcon>
               </IconButton>
             </div>
           }
-          contentBottom={getToolbarContent(untrackedState.selectedLayer.type_).left}
+          contentBottom={getToolbarContent(getSelectedLayerType()).left}
           position="left"
         ></Toolbar>
       </section>
@@ -114,14 +119,17 @@ export const Map = ({ layers }: MapProps) => {
         <PlantsLayer
           visible={untrackedState.layers.plants.visible}
           opacity={untrackedState.layers.plants.opacity}
-          listening={selectedLayer.type_ === LayerType.Plants}
+          listening={getSelectedLayerType() === LayerType.Plants}
         ></PlantsLayer>
-        <GridLayer opacity={1} visible={true}></GridLayer>
+        <GridLayer
+          visible={untrackedState.layers.grid.visible}
+          opacity={untrackedState.layers.grid.opacity}
+        ></GridLayer>
       </BaseStage>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
           contentTop={<Layers layers={layers} />}
-          contentBottom={getToolbarContent(untrackedState.selectedLayer.type_).right}
+          contentBottom={getToolbarContent(getSelectedLayerType()).right}
           position="right"
           minWidth={200}
         ></Toolbar>

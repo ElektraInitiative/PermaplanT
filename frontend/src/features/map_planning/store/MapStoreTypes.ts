@@ -111,7 +111,8 @@ export interface UntrackedMapSlice {
   stageRef: React.RefObject<Konva.Stage>;
   tooltipRef: React.RefObject<Konva.Label>;
   updateMapBounds: (bounds: BoundsRect) => void;
-  updateSelectedLayer: (selectedLayer: LayerDto) => void;
+  // The backend does not know about frontend only layers, hence they are not part of LayerDto.
+  updateSelectedLayer: (selectedLayer: LayerDto | FrontendOnlyLayerType) => void;
   updateLayerVisible: (
     layerName: CombinedLayerType,
     visible: UntrackedLayerState['visible'],
@@ -122,10 +123,12 @@ export interface UntrackedMapSlice {
   ) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
+  getSelectedLayerType: () => CombinedLayerType;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
-const COMBINED_LAYER_TYPES = [...Object.values(LayerType), ...Object.values(FrontendOnlyLayerType)];
+const FRONTEND_ONLY_LAYER_TYPES = Object.values(FrontendOnlyLayerType);
+const COMBINED_LAYER_TYPES = [...LAYER_TYPES, ...FRONTEND_ONLY_LAYER_TYPES];
 
 export const TRACKED_DEFAULT_STATE: TrackedMapState = {
   layers: LAYER_TYPES.reduce(
@@ -254,7 +257,8 @@ export type TrackedMapState = {
 export type UntrackedMapState = {
   mapId: number;
   editorBounds: BoundsRect;
-  selectedLayer: LayerDto;
+  // The backend does not know about frontend only layers, hence they are not part of LayerDto.
+  selectedLayer: LayerDto | FrontendOnlyLayerType;
   layers: UntrackedLayers;
 };
 
