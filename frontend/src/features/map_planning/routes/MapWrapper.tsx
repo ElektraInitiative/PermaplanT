@@ -43,6 +43,7 @@ function usePlantLayer({ mapId, layerId }: UseLayerParams) {
     // We want to refetch manually.
     refetchOnWindowFocus: false,
     staleTime: Infinity,
+    cacheTime: 0,
     enabled: Boolean(layerId),
   });
 

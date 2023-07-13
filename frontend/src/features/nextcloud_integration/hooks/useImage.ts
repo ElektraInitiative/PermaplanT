@@ -29,6 +29,7 @@ export function useImage({
     refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,
     // We don't want to refetch the image, because the path is not changing.
+    cacheTime: Infinity,
     staleTime: Infinity,
   });
 

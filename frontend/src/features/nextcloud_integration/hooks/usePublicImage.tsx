@@ -27,6 +27,7 @@ export function usePublicImage({
     queryFn: () => getPublicImage(path, publicShareToken),
     refetchOnWindowFocus: false,
     // We don't want to refetch the image, because the path is not changing.
+    cacheTime: Infinity,
     staleTime: Infinity,
   });
 

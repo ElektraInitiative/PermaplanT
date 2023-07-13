@@ -1,6 +1,5 @@
 import { convertToDateString } from '../utils/date-utils';
 import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
-import { QueryClient } from '@tanstack/react-query';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 
@@ -122,7 +121,7 @@ export interface UntrackedMapSlice {
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
-  updateTimelineDate: (date: string, queryClient: QueryClient) => void;
+  updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
 }
 

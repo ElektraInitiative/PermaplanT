@@ -14,7 +14,6 @@ import { LayerDto, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
-import { useQueryClient } from '@tanstack/react-query';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -36,7 +35,6 @@ export const Map = ({ layers }: MapProps) => {
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
-  const queryClient = useQueryClient();
 
   const { t } = useTranslation(['undoRedo', 'timeline']);
 
@@ -112,10 +110,7 @@ export const Map = ({ layers }: MapProps) => {
           <BaseMeasurementLayer />
         </BaseStage>
         <div>
-          <Timeline
-            onSelectDate={(date) => updateTimelineDate(date, queryClient)}
-            defaultDate={timelineDate}
-          />
+          <Timeline onSelectDate={(date) => updateTimelineDate(date)} defaultDate={timelineDate} />
         </div>
       </section>
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
