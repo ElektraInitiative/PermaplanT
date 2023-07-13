@@ -66,6 +66,26 @@ build-storybook: install generate-api-types  ## Builds the storybook.
 
 # MISC
 
+.PHONY: scraper
+scraper: ## Inserts the scrapers scraped data into the database.
+	cd scraper && npm install && mkdir -p data && npm run start:full
+
+.PHONY: migration
+migration: ## Database migration.
+	cd backend && make migration
+
+.PHONY: migration-redo
+migration-redo: ## Runs the down.sql and then the up.sql for the most recent migration.
+	cd backend && make migration-redo
+
+.PHONY: migration-redo-a
+migration-redo-a: ## Runs the down.sql and then the up.sql for all migration.
+	cd backend && make migration-redo-a
+
+.PHONY: migration-reset
+migration-reset:  ## Reset diesel database.
+	cd backend && make reset
+
 .PHONY: generate-type-doc
 generate-type-doc:  ## Generates typedoc.
 	cd frontend && npm install && npm run doc
@@ -78,18 +98,18 @@ generate-api-types:  ## Generates typescript types.
 psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
 	psql -h db -p 5432 -U $(POSTGRES_USER) $(POSTGRES_DB)
 
-.PHONY: pre-commit-all
-pre-commit-all:  ## Check all files with pre-commit.
+.PHONY: pre-commit-a
+pre-commit-a:  ## Check all files with pre-commit.
 	pre-commit run --all-files
 
 .PHONY: distclean
 distclean: clean uninstall ## Cleans everything and uninstalls.
 
 .PHONY: clean
-clean: clean-frontend clean-backend clean-mdbook clean-storybook  ## Cleans everything.
+clean: clean-frontend clean-backend clean-mdbook clean-storybook clean-scraper  ## Cleans everything.
 
 .PHONY: clean-frontend
-clean-frontend:  ## Removes node modules.
+clean-frontend:  ## Removes frontends node modules.
 	cd frontend && rm -rf node_modules
 
 .PHONY: clean-backend
@@ -99,6 +119,10 @@ clean-backend:  ## Cleans the backend.
 .PHONY: clean-mdbook
 clean-mdbook:  ## Removes the mdbook folder.
 	mdbook clean
+
+.PHONY: clean-scraper
+clean-scraper:  ## Removes scrapers node modules.
+	cd scraper && rm -rf node_modules
 
 .PHONY: clean-storybook
 clean-storybook:  ## Removes the storybook static folder.
