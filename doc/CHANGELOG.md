@@ -8,7 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.2.3 - UNRELEASED
 
-- _()_
+- Finish implementation of seed search _(Moritz)_
 - _()_
 - _()_
 - _()_
