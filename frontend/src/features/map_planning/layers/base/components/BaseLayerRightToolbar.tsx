@@ -123,7 +123,13 @@ export const BaseLayerRightToolbar = () => {
           const scale = baseLayerState.scale;
           const path = e.target.value;
           const rotation = baseLayerState.rotation;
-          executeAction(new UpdateBaseLayerAction(rotation, scale, path));
+          executeAction(new UpdateBaseLayerAction({
+              id: baseLayerState.imageId,
+              layer_id: baseLayerState.layerId,
+              path: path,
+              rotation: rotation,
+              scale: scale,
+          }));
         }}
         onChange={(e) => setPathInput(e.target.value)}
         value={pathInput}
@@ -135,7 +141,13 @@ export const BaseLayerRightToolbar = () => {
           const scale = baseLayerState.scale;
           const path = baseLayerState.nextcloudImagePath;
           const rotation = parseInt(e.target.value);
-          executeAction(new UpdateBaseLayerAction(rotation, scale, path));
+          executeAction(new UpdateBaseLayerAction({
+              id: baseLayerState.imageId,
+              layer_id: baseLayerState.layerId,
+              path: path,
+              rotation: rotation,
+              scale: scale,
+          }));
         }}
         onChange={(e) => setRotationInput(parseInt(e.target.value))}
         type="number"
@@ -151,7 +163,13 @@ export const BaseLayerRightToolbar = () => {
           const scale = parseInt(e.target.value);
           const path = baseLayerState.nextcloudImagePath;
           const rotation = baseLayerState.rotation;
-          executeAction(new UpdateBaseLayerAction(rotation, scale, path));
+            executeAction(new UpdateBaseLayerAction({
+                id: baseLayerState.imageId,
+                layer_id: baseLayerState.layerId,
+                path: path,
+                rotation: rotation,
+                scale: scale,
+            }));
         }}
         onChange={(e) => setScaleInput(parseInt(e.target.value))}
         type="number"
