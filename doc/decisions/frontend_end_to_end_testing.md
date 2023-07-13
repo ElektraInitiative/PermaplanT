@@ -1,175 +1,105 @@
 # E2E Testing
 
-as of 12.07.2023
-
 ## Problem
 
 There is currently no existing e2e tests locally and in the pipeline.
-It lacks profound decision making which framework to pick and the frontend team needs to be d'accord with it.
+This allows for increased frontend bugs and regression.
+It lacks profound decision making which framework to pick.
 
 ## Constraints
 
-1. [Behaviour-driven development](https://www.selenium.dev/documentation/test_practices/testing_types/#behavior-driven-development-bdd)
+1. [Behavior-driven development](https://www.selenium.dev/documentation/test_practices/testing_types/#behavior-driven-development-bdd)
+   - a) We want to have .feature files and stick to the Gherkin syntax.
 2. [Page Object Design Pattern](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/)
-3. Fast and easy prototyping of the tests
+   - a) A programming language that supports classes
+3. The library must be free software.
+4. Should be in Python due to simplicity and personal preference.
+5. The framework must have an active community.
+6. Simple is better than complex.
+7. Headless browser support so we can run the tests in our automated pipeline.
 
 ## Assumptions
 
-- Understanding about BDD practices.
-- Understanding about the Page Objects Design Pattern.
-- Understanding about end-to-end tests.
+1. Understanding of BDD practices and principles, including writing feature files using the Gherkin syntax.
+2. Familiarity with the Page Object Design Pattern and its implementation for creating modular and maintainable test code.
+3. Knowledge of end-to-end testing concepts and best practices.
+4. Basic understanding of Python programming language and its syntax.
+5. Having heard of pytest and its usage for test execution and assertions.
 
-## Decision Constraints/Design
+## Solutions
 
-### BDD
+### Alternative [Java](https://www.java.com/de/) + [Selenium](https://www.selenium.dev)
 
-Behaviour Driven development (BDD) is an Agile software development methodology which reflects the behaviour a user expects to see in an application into the design process of the software.
-It also encourages collaboration between developers and non-technical participants.
-The behaviour is documented in separated files, typically with the ending .features.
+Java with Selenium is a popular and well-established choice for web test automation.
+While it remains a reliable option, there are personal preferences and concerns about Oracle's licensing changes, and there are other languages that can do the same with less boilerplate.
 
-E.g
+### Alternative [Javascript](https://www.javascript.com) + [Playwright](https://playwright.dev)
 
-login_logout.feature
+JavaScript with Playwright is a powerful combination for web test automation.
+However, concerns regarding potential code complexity and the temptation to write complicated workarounds influenced the decision to avoid JavaScript as the testing language.
 
-```
-Feature: Login
+### Alternative [Javascript](https://www.javascript.com) + [Cypress](https://www.cypress.io)
 
-    I want to login on PermaplanT
+Similar to Playwright, Cypress is another JavaScript-based test automation framework.
+However, it was not chosen due to the same concerns about JavaScript mentioned earlier.
 
-    Background:
-      Given I am on the PermaplanT homepage
-      And the login button is visible
+### Alternative [Robot Framework](https://robotframework.org)
 
-    Scenario: Wrong password
-        When I press the login button
-        Then I get navigated to the login page
-        When I type in wrong credentials
-        Then I should see 'E-mail or password is incorrect'
+The Robot Framework, while supporting Python and following BDD principles, has its own syntax and separate resource file management, which contradicts the first constraint of the project.
+Additionally, it has a steeper learning curve, which conflicts with the desire for an easy-to-learn solution.
 
-    Scenario: I can successfully login
-        When I press the login button
-        Then I get navigated to the login page
-        When I type in my username and password
-        Then I get redirected to the homepage
-        And I see a Hello message
-```
+### Alternative [Puppeteer](https://pptr.dev)
 
-This approach decouples domain from testing and it fits perfectly to the current development workflow of PermaplanT.
-With dependency injection you can then write tests for each statement.
+Puppeteer is a viable alternative to Playwright, as it also provides automation capabilities for Chrome and Chromium-based browsers.
+However, the decision to use Python as the programming language led to the preference for Playwright for Python, which integrates well with Python's ecosystem.
 
-### POM
+### Alternative [Python](https://www.python.org) + [Selenium](https://www.selenium.dev) + [Behave](https://behave.readthedocs.io/en/latest/)
 
-Page Object Models (POM's) are very useful when it comes to making code more readable, maintanable and extendable.
-Each Page object captures the functionalities of one single page.
+Python with the Behave framework is capable of fulfilling the requirements.
+However, pytest-bdd was preferred over Behave due to its integration with pytest and the added feature of parallel test execution, which should give the low performance stack a slight boost.
 
-```
-class Searchpage:
-    def __init__(self, page):
-        self.page = page
-        self.search_term_input = page.locator('[aria-label="Enter your search term"]')
+## Decision
 
-    def navigate(self):
-        self.page.goto("https://bing.com")
+After careful consideration, the decision has been made to use [Python](https://www.python.org) as the programming language and [Playwright for Python](https://playwright.dev/python/docs/intro) as the test automation framework.
+Python's readability, ease of use, and extensive ecosystem make it a solid choice for test automation.
+Playwright for Python offers comprehensive browser automation capabilities, aligns well with Python's syntax and ecosystem, and satisfies the project's constraints and requirements.
+Additionally, Playwright for Python provides a very clear documentation, which makes it easier for developers who are not so experienced with frontend testing, to get started quickly.
 
-    def search(self, text):
-        self.search_term_input.fill(text)
-        self.search_term_input.press("Enter")
-```
+By leveraging Python and Playwright for Python, the project aims to achieve efficient and reliable web test automation with the support of an extensive and mature ecosystem.
 
-### Fast and easy prototyping of the tests
+Additionally we will need the following libraries:
 
-Frontend tests can cost a lot of time and effort to develop.
-Python is a good fit to keep them simple and not overengineered, whilest creating them fast with every iteration.
-Given BDD and POM, it is allowing us to not only be simple but also readable, maintanable, explicit, etc.. ().
-Python fits perfectly with the above mentioned design decision and contributes to their philosphy (As long as we don't have performance issues or constraints).
-
-### Considered Alternatives
-
-#### Capture/Replay
-
-Because they are easily broken by changing elements on a webpage.
-
-#### Assert page by screenshots
-
-Too much effort and could be flaky. Also bad for testing user interaction.
-
-## Decision Language
-
-[Python](https://www.python.org) as programming language.
-
-### About the language:
-
-One would typically chose Java with Selenium for this testing approach but we went with python.
-[Why?](#fast-and-easy-prototyping-of-the-tests)
-It is also very newcomer friendly, easy and has a big and still growing community.
-
-### Considered Alternatives
-
-#### [Java](https://www.java.com/de/)
-
-Because you can do the same in python with less lines of code.
-
-#### [Javascript](https://www.javascript.com)
-
-Same as java.
-
-## Decision libraries
-
-- [Playwright for Python](https://playwright.dev/python/docs/intro)
 - [Pytest](https://docs.pytest.org/en/7.4.x/)
 - [Pytest-playwright](https://pypi.org/project/pytest-playwright/)
 - [Pytest-bdd](https://pypi.org/project/pytest-bdd/)
-- [mypy](https://mypy-lang.org)
 
-### About the libraries
+## Rationale
 
-Most libraries offer more than we need.
-Some offer a bit less but it's mostly about:
+### BDD
 
-- Cross-browser
-- Cross-platform
-- Cross-language
-- Auto-wait
-- Tracing
-- Screenshots
-- Diagrams
-- Codegen/Recording
-- etc...
+Behavior Driven development (BDD) is an agile software development methodology that aims to align the development process with the desired behavior of the software.
+By using BDD, tests can be written in a format that is easily understood by domain experts, enabling the collaboration and effective communication between them and developers.
+Given PermaplanT's close collaboration with permaculture domain experts, the adoption of BDD is beneficial for the project, as it enables clear communication and alignment between the development team and domain experts.
+Additionally, BDD fits seamlessly with the already established agile development practices of the development team.
 
-What we need:
+### POM
 
-- BDD support
-- Python binding
-- Headless browser
+Page Object Models (POMs) are a valuable concept when it comes to improving code complexity in test automation.
+POMs help to separate concerns and encapsulate the functionalities of individual pages or components.
+This approach encourages developers to write more modular and maintainable code, as each page object represents a specific page or component and contains the associated actions and assertions.
+By utilizing POMs, the codebase becomes more organized, easier to read, and simpler to maintain, ultimately enhancing the overall quality of the test automation framework.
 
-What is nice to have:
+## Implications
 
-- Auto-wait
-- Screenshots
-- Diagrams
+- Write Guidelines for writing these Tests (BDD/POM, TDD, etc.).
+- Write Guidelines on how to write a testable frontend.
 
-Most of them would fit our constraints, so at the end it was between Selenium and Playwright, which had the biggest communities and overall great features.
-We chose Playwright because it allows us to get elements also by text and not only css selectors.
-Playwright has a very smooth installation and a superior documentation in comparison to selenium.
-We need headless browser support, so we can run the tests in our pipeline.
+## Notes
 
-### Considered Alternatives
+This solution has probably a steep learning curve, but once getting the hang of it, implementing tests becomes very easy and it pays off.
 
-#### [Selenium](https://github.com/SeleniumHQ/selenium)
-
-Selenium is the older framework with the bigger community, but we decided against it, because we are already in the ecosystem of playwright, with our performance tests, and playwright is trending.
-
-#### [SeleniumBase](https://github.com/seleniumbase/SeleniumBase)
-
-SeleniumBase is a handy extension of the python bindings for selenium.
-It has very high code coverage and simplifies the selenium python bindings by alot but because of the decision for playwright and that it is only maintained by one guy, we decided against it.
-
-#### [Cypress](https://github.com/cypress-io/cypress)
-
-Pure javascript.
-
-#### [Puppeteer](https://github.com/cypress-io/cypress)
-
-No official python bindings.
+#619
+#611
+#607
 
 [@4ydan](https://github.com/4ydan)
