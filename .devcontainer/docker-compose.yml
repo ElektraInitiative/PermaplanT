@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .env
+      - .env.db
     volumes:
       - ../..:/workspaces:cached
     command: sleep infinity
@@ -21,7 +22,7 @@ services:
     volumes:
       - postgis-data-dev:/var/lib/postgresql/data
     env_file:
-      - .env.backend
+      - .env.db
     networks:
       - permaplant-dev
 
@@ -33,8 +34,9 @@ services:
     restart: unless-stopped
     volumes:
       - pgadmin-data-dev:/var/lib/pgadmin
-    env_file:
-      - .env.backend
+    environment:
+      PGADMIN_DEFAULT_EMAIL: name@example.com
+      PGADMIN_DEFAULT_PASSWORD: permaplant
     networks:
       - permaplant-dev
     ports:

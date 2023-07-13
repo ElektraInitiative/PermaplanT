@@ -16,6 +16,6 @@ A use case is done iff:
 - documentation: clear for others how changes/extensions should be done
 - issues closed or written about left-overs in notes of use case
 - write in Changelog about finished UC and add a link to it
-- write a [test protocol](doc/tests/protocols/README.md)
+- write a [test protocol](../tests/protocols/README.md)
 - add links from use case to implementation/documentation/test protocol
 - move use case to folder "done"

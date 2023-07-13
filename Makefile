@@ -107,11 +107,11 @@ clean-storybook:  ## Removes the storybook static folder.
 .PHONY: install
 install:  ## Install necessary packages within the source repo.
 	cd backend && make install
-	cargo install mdbook mdbook-mermaid
+	cargo install mdbook mdbook-mermaid mdbook-linkcheck
 	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary
 
 .PHONY: uninstall
 uninstall:  ## Uninstalls dependencies within the source repo.
 	cd backend && make uninstall
-	cargo uninstall mdbook mdbook-mermaid
+	cargo uninstall mdbook mdbook-mermaid mdbook-linkcheck
 	cargo uninstall mdbook-generate-summary

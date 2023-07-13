@@ -3,6 +3,7 @@
     "list_title": "Verfügbare Samen",
     "empty_list_title": "Fang an, indem du Samen hinzufügst",
     "empty_list_message": "Wir konnten keine saisonalen Pflanzen finden, für die du die zugehörigen Samen besitzt.",
-    "empty_list_action": "Deine Samen anzeigen"
+    "empty_list_action": "Deine Samen anzeigen",
+    "error_fetching_seasonal_suggestions": "Sorry, ich habe Schwierigkeiten saisonale Vorschläge von meinem Server zu erhalten. Bitte versuche es später erneut."
   }
 }
