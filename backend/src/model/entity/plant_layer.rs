@@ -54,7 +54,9 @@ struct HeatMapElement {
 /// Generates a heatmap signaling ideal locations for planting the plant.
 ///
 /// # Errors
-/// * If the SQL query failed.
+/// * If no map with id map_id exists.
+/// * If no layer with id layer_id exists, if the layer is not a plant layer or if the layer is not part of the map.
+/// * If no plant with id plant_id exists.
 #[allow(
     clippy::cast_sign_loss,             // ok, because we will never reach number high enough where this will matter
     clippy::indexing_slicing,           // ok, because we know the size of the matrix using the maps bounding box
@@ -101,7 +103,7 @@ pub async fn heatmap(
 /// Get all relations of a certain plant.
 ///
 /// # Errors
-/// * If the SQL query failed.
+/// * If the SQL query fails.
 pub async fn find_relations(
     search_query: RelationSearchParameters,
     conn: &mut AsyncPgConnection,
