@@ -1,5 +1,6 @@
 //! All DTOs associated with [`PlantingDto`].
 
+use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
@@ -34,6 +35,12 @@ pub struct PlantingDto {
     /// The y scale of the plant on the map.
     #[serde(rename = "scaleY")]
     pub scale_y: f32,
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
+    /// The date the planting was removed from the map.
+    /// If None, the planting is still on the map.
+    pub remove_date: Option<NaiveDate>,
 }
 
 /// Used to create a new planting.
@@ -64,6 +71,9 @@ pub struct NewPlantingDto {
     /// The y scale of the plant on the map.
     #[serde(rename = "scaleY")]
     pub scale_y: f32,
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
 }
 
 /// Used to differentiate between different update operations on plantings.
@@ -116,4 +126,6 @@ pub struct PlantingSearchParameters {
     pub plant_id: Option<i32>,
     /// The id of the plants layer the planting is placed on.
     pub layer_id: Option<i32>,
+    /// Plantings that exist around this date are returned.
+    pub relative_to_date: NaiveDate,
 }

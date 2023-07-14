@@ -9,6 +9,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface MapUpdateData {
   name: string;
@@ -49,11 +50,15 @@ export default function MapEditForm() {
           location: map.location,
         });
       } catch (error) {
-        throw error as Error;
+        console.error(error);
+        toast.error(t('maps:edit.error_map_single_fetch'), {
+          autoClose: false,
+          toastId: 'fetchError',
+        });
       }
     };
     _findOneMap();
-  }, [mapId]);
+  }, [mapId, t]);
 
   const missingNameText = (
     <p className="mb-2 ml-2 block text-sm font-medium text-red-500">
@@ -160,7 +165,11 @@ export default function MapEditForm() {
     if (updateObject.name === oldValues.current?.name) {
       updatedMap.name = undefined;
     }
-    await updateMap(updatedMap, Number(mapId));
+    try {
+      await updateMap(updatedMap, Number(mapId));
+    } catch (error) {
+      toast.error(t('maps:edit.error_map_edit'), { autoClose: false });
+    }
     navigate('/maps');
   }
 

@@ -97,7 +97,6 @@ stage('Deploy Prod') {
         unstash 'backend'
         unstash 'storybook'
         unstash 'typedoc'
-        unstash 'mdbook'
 
         echo 'Deploying to Prod ...'
         sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"

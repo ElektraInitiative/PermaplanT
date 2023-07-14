@@ -1,6 +1,9 @@
+import { convertToDateString } from '../utils/date-utils';
 import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
+
+import Vector2d = Konva.Vector2d;
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -57,10 +60,16 @@ export interface TrackedMapSlice {
    * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
    */
   transformer: React.RefObject<Konva.Transformer>;
+  /**
+   * References to timeouts used by executeActionDebounced.
+   *
+   * @internal This reference should never be modified by any other function than executeActionDebounced.
+   */
   /** Event listener responsible for adding a single shape to the transformer */
   addShapeToTransformer: (shape: Node) => void;
   /**
    * Execute a user initiated action.
+   * @param action the action to be executed
    */
   executeAction: <T, U>(action: Action<T, U>) => void;
   /**
@@ -89,6 +98,7 @@ export interface TrackedMapSlice {
    * Initializes the plant layer.
    */
   initPlantLayer: (plantLayer: PlantingDto[]) => void;
+  initLayerId: (layer: LayerType, layerId: number) => void;
 }
 
 /**
@@ -108,6 +118,11 @@ export interface UntrackedMapSlice {
   updateLayerOpacity: (layerName: LayerType, opacity: UntrackedLayerState['opacity']) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
+  baseLayerActivateMeasurement: () => void;
+  baseLayerDeactivateMeasurement: () => void;
+  baseLayerSetMeasurePoint: (point: Vector2d) => void;
+  updateTimelineDate: (date: string) => void;
+  setTimelineBounds: (from: string, to: string) => void;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
@@ -117,15 +132,23 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
     (acc, layerName) => ({
       ...acc,
       [layerName]: {
+        id: -1,
         index: layerName,
         objects: [],
       },
       [LayerType.Base]: {
+        id: -1,
         index: LayerType.Base,
         objects: [],
         scale: 100,
         rotation: 0,
         nextcloudImagePath: '',
+      },
+      [LayerType.Plants]: {
+        id: -1,
+        index: LayerType.Plants,
+        objects: [],
+        loadedObjects: [],
       },
     }),
     {} as TrackedLayers,
@@ -134,6 +157,12 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
+  timelineDate: convertToDateString(new Date()),
+  fetchDate: convertToDateString(new Date()),
+  timelineBounds: {
+    from: convertToDateString(new Date()),
+    to: convertToDateString(new Date()),
+  },
   selectedLayer: {
     id: -1,
     is_alternative: false,
@@ -148,6 +177,13 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         visible: true,
         opacity: 1,
       },
+      [LayerType.Base]: {
+        visible: true,
+        opacity: 1,
+        measureStep: 'inactive',
+        measurePoint1: null,
+        measurePoint2: null,
+      } as UntrackedBaseLayerState,
     }),
     {} as UntrackedLayers,
   ),
@@ -174,6 +210,7 @@ export type ObjectState = {
  */
 export type TrackedLayerState = {
   index: LayerType;
+  id: number;
   /**
    * The state of the objects on the layer.
    */
@@ -193,7 +230,7 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants>]: TrackedLayerState;
+  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
@@ -201,11 +238,21 @@ export type TrackedLayers = {
 
 export type TrackedPlantLayerState = {
   index: LayerType.Plants;
+  id: number;
 
+  /**
+   * The objects visible relative to the current selected date.
+   * This is a subset of `loadedObjects`.
+   */
   objects: PlantingDto[];
+  /**
+   * The objects that have been loaded from the backend.
+   */
+  loadedObjects: PlantingDto[];
 };
 
 export type TrackedBaseLayerState = {
+  id: number;
   rotation: number;
   scale: number;
   nextcloudImagePath: string;
@@ -215,14 +262,21 @@ export type TrackedBaseLayerState = {
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants>]: UntrackedLayerState;
+  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
+  [LayerType.Base]: UntrackedBaseLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantsSummaryDto | null;
   selectedPlanting: PlantingDto | null;
+};
+
+export type UntrackedBaseLayerState = UntrackedLayerState & {
+  measurePoint1: Vector2d | null;
+  measurePoint2: Vector2d | null;
+  measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
 };
 
 /**
@@ -237,6 +291,14 @@ export type TrackedMapState = {
  */
 export type UntrackedMapState = {
   mapId: number;
+  /** used for the bounds calculation */
+  timelineDate: string;
+  /** used for fetching */
+  fetchDate: string;
+  timelineBounds: {
+    from: string;
+    to: string;
+  };
   selectedLayer: LayerDto;
   layers: UntrackedLayers;
 };

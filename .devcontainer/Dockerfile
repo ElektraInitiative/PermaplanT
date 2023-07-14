@@ -1,7 +1,10 @@
-FROM ubuntu:20.04
+FROM rust:1.67.1-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUSTFLAGS="-C link-arg=-fuse-ld=lld"
+ENV NODE_VERSION 19.4
+ENV NVM_DIR /usr/local/nvm
+RUN mkdir -p $NVM_DIR
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends sudo tzdata locales ssh && \
@@ -15,11 +18,11 @@ ENV LC_ALL en_US.UTF-8
 RUN apt-get update \
     && apt-get -y install --no-install-recommends \
     sudo \
+    wget \
     curl \
     git \
     make \
     strace \
-    python3-pip \
     clang \
     lld \
     libpq-dev \
@@ -27,12 +30,11 @@ RUN apt-get update \
     pkg-config \
     postgresql-client
 
-RUN curl --proto '=https' --tlsv1.2 -sSf -y https://sh.rustup.rs | sh
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-
-ENV PATH="/root/.cargo/bin:${PATH}"
-
 RUN cargo install diesel_cli@2.0.1 --no-default-features --features postgres && cargo install typeshare-cli
+
+# Install nvm with node and npm
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+RUN /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
 
 RUN apt-get autoremove -y \
     && apt-get clean -y \
