@@ -31,6 +31,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- A timeline date can be set and changed by a date picker. Plantings exist relative to a date. _(Paul)_
 - _()_
 - _()_
 - _()_
