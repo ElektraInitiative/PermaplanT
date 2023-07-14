@@ -22,10 +22,19 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- Returns scores from 0-1 for each pixel of the map. It should never return values greater than 1.
+-- Returns scores from 0-1 for each pixel of the map.
 -- Values where the plant should not be placed are close to 0.
 -- Values where the plant should be placed are close to 1.
--- The score at position x=0,y=0 is at the position x=x_min,y=y_min.
+--
+-- The resulting matrix does not contain valid (x,y) coordinates, instead (x,y) are simply the indices in the matrix.
+-- The (x,y) coordinate of the computed heatmap always starts at (0,0) no matter the boundaries of the map.
+-- To get valid coordinates the user would therefore need to move and scale the calculated heatmap by taking into account the boundaries of the map.
+--
+-- p_map_id                     ... the maps id
+-- p_layer_id                   ... the id of the plant layer
+-- p_plant_id                   ... the id of the plant for which to consider relations
+-- granularity                  ... the resolution of the map (float greater than 0)
+-- x_min, y_min, x_max, y_max   ... the boundaries of the map
 CREATE OR REPLACE FUNCTION calculate_score(p_map_id INTEGER, p_layer_id INTEGER, p_plant_id INTEGER, granularity REAL, x_min REAL, y_min REAL, x_max REAL, y_max REAL)
 RETURNS TABLE(score REAL, x INTEGER, y INTEGER) AS $$
 DECLARE
