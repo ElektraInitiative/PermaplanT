@@ -4,7 +4,7 @@ Information:
 
 - Tester: Moritz Schalk (badnames)
 - Date/Time: 2023-06-30 19:00 
-- Duration: [Duration]
+- Duration: 2h
 - Commit/Tag: [9184e9b](https://github.com/ElektraInitiative/PermaplanT/commit/9184e9b4eaab0ddb633b72051adf97e2be5f4fa7)
 - Planned tests: 3
 - Executed tests: **3**
