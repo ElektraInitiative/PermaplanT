@@ -14,13 +14,11 @@ use crate::{
 
 /// Endpoint for generating a heatmap signaling ideal locations for planting the plant.
 ///
-/// The heatmap will be an exact fit on the maps geometry.
-/// This means if the maps y_min is 100 the generated heatmap will need to be moved to start at y=100.
+/// Brown pixels signal areas where the plant shouldn't be planted, while green areas signal ideal locations.
 ///
-/// x=0,y=0     ... top left
-/// x=0,y=100   ... bottom left
-/// x=100,y=100 ... bottom right
-/// x=100,y=0   ... top right
+/// The resulting heatmap does represent actual coordinates, meaning the pixel at (0,0) is not necessarily at coordinates (0,0).
+/// Instead the image has to be moved and scaled to fit inside the maps boundaries.
+/// This means the lower left corner of the heatmap has to be moved/scaled to the (x_min,y_min) coordinate, while the upper right corner has to be moved/scaled to (x_max,y_max).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
