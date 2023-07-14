@@ -27,6 +27,7 @@ export class UpdateBaseLayerAction
       layers: {
         ...state.layers,
         [LayerType.Base]: {
+          ...state.layers.base,
           imageId: this._data.id,
           layerId: this._data.layer_id,
           rotation: this._data.rotation,
