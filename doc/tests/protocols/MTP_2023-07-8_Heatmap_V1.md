@@ -18,7 +18,7 @@ Information:
 
 ### Test Steps
 
-1. Create the database and run migrations.
+1. Get a clean database with all migrations: `cd backend && diesel database reset`.
 2. Insert the plants using the scraper (`cd scraper && npm run insert`)
 3. Start the backend (`cd backend && cargo run`).
 4. Create a map (via Postman, equivalent cURL below - remember to insert the token).
@@ -75,6 +75,69 @@ curl --location 'http://localhost:8080/api/maps' \
 }'
 ```
 
+The result should be:
+
+```json
+{
+  "id": 1,
+  "name": "Test1",
+  "creation_date": "2023-07-06",
+  "deletion_date": null,
+  "last_visit": null,
+  "is_inactive": false,
+  "zoom_factor": 100,
+  "honors": 0,
+  "visits": 0,
+  "harvested": 0,
+  "privacy": "public",
+  "description": "",
+  "location": null,
+  "owner_id": "361c7c28-020f-4b31-84ea-cc629cc43180",
+  "geometry": {
+    "rings": [
+      [
+        {
+          "x": 0.0,
+          "y": 0.0,
+          "srid": 4326
+        },
+        {
+          "x": 100.0,
+          "y": 0.0,
+          "srid": 4326
+        },
+        {
+          "x": 100.0,
+          "y": 100.0,
+          "srid": 4326
+        },
+        {
+          "x": 50.0,
+          "y": 100.0,
+          "srid": 4326
+        },
+        {
+          "x": 50.0,
+          "y": 50.0,
+          "srid": 4326
+        },
+        {
+          "x": 0.0,
+          "y": 50.0,
+          "srid": 4326
+        },
+        {
+          "x": 0.0,
+          "y": 0.0,
+          "srid": 4326
+        }
+      ]
+    ],
+    "srid": 4326
+  }
+}
+```
+
 5. Insert some dummy relations and plantings (via JetBrains' DataGrip)
 
 ```SQL
@@ -92,10 +155,12 @@ VALUES ('00000000-0000-0000-0000-000000000000', 2, 1, 10, 10, 0, 0, 0, 0, 0),
        ('00000000-0000-0000-0000-000000000005', 2, 3, 10, 20, 0, 0, 0, 0, 0);
 ```
 
-6. Execute the request (via Postman, equivalent cURL below - cURL won't display the image).
+When using DataGrip the output should be `3 rows affected in 10 ms` for the first statement and `6 rows affected in 8 ms` for the second one.
+
+6. Execute the request.
 
 ```bash
-curl --location 'http://localhost:8080/api/maps/1/layers/plants/heatmap?plant_id=1&layer_id=2' \
+curl -o file.png --location 'http://localhost:8080/api/maps/1/layers/plants/heatmap?plant_id=1&layer_id=2' \
 --header 'Authorization: Bearer <token>'
 ```
 
