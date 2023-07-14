@@ -55,10 +55,10 @@ pub async fn create(
 ) -> Result<MapDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
     let result = Map::create(new_map, user_id, &mut conn).await?;
-    for layer in &LAYER_TYPES {
+    for layer_type in &LAYER_TYPES {
         let new_layer = NewLayerDto {
             map_id: result.id,
-            type_: *layer,
+            type_: *layer_type,
             name: format!("{layer} Layer"),
             is_alternative: false,
         };
