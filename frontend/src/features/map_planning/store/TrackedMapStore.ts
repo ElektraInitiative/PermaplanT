@@ -53,28 +53,28 @@ export const createTrackedMapSlice: StateCreator<
             },
           },
         },
-      }))
+      }));
     },
-    initBaseLayer (dto: BaseLayerImageDto) {
-        set((state) => ({
-          ...state,
-          trackedState: {
-            ...state.trackedState,
-            layers: {
-              ...state.trackedState.layers,
-              base: {
-                ...state.trackedState.layers.base,
-                imageId: dto.id,
-                layerId: dto.layer_id,
-                rotation: dto.rotation,
-                scale: dto.scale,
-                nextcloudImagePath: dto.path,
-              },
+    initBaseLayer(dto: BaseLayerImageDto) {
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            base: {
+              ...state.trackedState.layers.base,
+              imageId: dto.id,
+              layerId: dto.layer_id,
+              rotation: dto.rotation,
+              scale: dto.scale,
+              nextcloudImagePath: dto.path,
             },
           },
-        }))
+        },
+      }));
     },
-    initLayerId (layer, layerId) {
+    initLayerId(layer, layerId) {
       set((state) => ({
         ...state,
         trackedState: {
