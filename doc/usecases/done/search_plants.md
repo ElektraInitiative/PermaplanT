@@ -8,7 +8,7 @@
 - **Brief:** The user can search for plants.
 - **Status:** In Progress
 - **Assignee:** Moritz (Frontend), Gabriel (Backend)
-
+- **Test Protocol:** doc/tests/protocols/plant_search.md
 ## Scenarios
 
 - **Precondition:**
@@ -41,3 +41,7 @@
 - **Non-functional Constraints:**
   - Performance
   - If there is a possible match in the database, it should be included (regardless of language settings etc.)
+
+# Follow-up
+
+Follow-up issues were recorded and a note has been left in the use case document (#379, #433).

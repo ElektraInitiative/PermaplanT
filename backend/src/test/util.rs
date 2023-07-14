@@ -21,6 +21,7 @@ use crate::sse::broadcaster::Broadcaster;
 
 use self::token::{generate_token, generate_token_for_user};
 
+pub mod data;
 pub mod jwks;
 pub mod token;
 

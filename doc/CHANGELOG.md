@@ -8,6 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.2.3 - UNRELEASED
 
+- Finish implementation of seed search _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -30,7 +31,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- A timeline date can be set and changed by a date picker. Plantings exist relative to a date. _(Paul)_
 - _()_
 - _()_
 - _()_

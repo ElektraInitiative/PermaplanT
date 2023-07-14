@@ -44,7 +44,7 @@ cache-timeout = 43200
 # - "error" treats all warnings as errors, failing the linkcheck
 # - "ignore" will ignore warnings, suppressing diagnostic messages and allowing
 #   the linkcheck to continuing
-warning-policy = "ignore"
+warning-policy = "error"
 
 # Extra HTTP headers that must be send to certain web sites
 # in order to link check to succeed.

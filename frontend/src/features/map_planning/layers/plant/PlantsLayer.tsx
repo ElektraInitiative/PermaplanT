@@ -19,6 +19,7 @@ function usePlantLayerListeners(listening: boolean) {
     (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
+  const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
 
   /**
    * Event handler for planting plants
@@ -38,7 +39,6 @@ function usePlantLayerListeners(listening: boolean) {
         new CreatePlantAction({
           id: uuid.v4(),
           plantId: selectedPlant.id,
-          // TODO: get the selectedLayerId from the store
           layerId: selectedLayer.id,
           // consider the offset of the stage and size of the element
           x: Math.round(position.x),
@@ -48,10 +48,11 @@ function usePlantLayerListeners(listening: boolean) {
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
+          add_date: timelineDate,
         }),
       );
     },
-    [executeAction, selectedPlant, selectedLayer],
+    [executeAction, selectedPlant, selectedLayer, timelineDate],
   );
 
   /**
@@ -152,7 +153,7 @@ function PlantsLayer(props: PlantsLayerProps) {
   usePlantLayerListeners(props.listening || false);
   const layerRef = useRef<Konva.Layer>(null);
 
-  const trackedState = useMapStore((map) => map.trackedState);
+  const plants = useMapStore((map) => map.trackedState.layers.plants.objects);
   const selectedPlant = useMapStore(
     (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
@@ -162,7 +163,7 @@ function PlantsLayer(props: PlantsLayerProps) {
 
   return (
     <Layer {...props} ref={layerRef}>
-      {trackedState.layers.plants.objects.map((o) => (
+      {plants.map((o) => (
         <PlantingElement planting={o} key={o.id} />
       ))}
 
@@ -183,7 +184,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
 
   return (
     <motion.div
-      className="mb-4 flex gap-4 rounded-md bg-neutral-200 py-2 pl-6 pr-4 dark:bg-neutral-200-dark"
+      className="flex gap-4 rounded-md bg-neutral-200 py-3 pl-6 pr-4 ring ring-secondary-500 dark:bg-neutral-200-dark"
       initial={{ opacity: 0 }}
       animate={{
         opacity: 100,

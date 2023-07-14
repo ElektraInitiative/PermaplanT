@@ -1,3 +1,5 @@
+import { convertToDate } from '../utils/date-utils';
+import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import { TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from './MapStoreTypes';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
@@ -98,6 +100,65 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers.plants,
             selectedPlantForPlanting: null,
             selectedPlanting: planting,
+          },
+        },
+      },
+    }));
+  },
+  setTimelineBounds(from: string, to: string) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        timelineBounds: {
+          from: from,
+          to: to,
+        },
+      },
+    }));
+  },
+  async updateTimelineDate(date) {
+    const bounds = get().untrackedState.timelineBounds;
+    const from = convertToDate(bounds.from);
+    const to = convertToDate(bounds.to);
+    const dateAsDate = convertToDate(date);
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        timelineDate: date,
+      },
+    }));
+
+    if (dateAsDate < from || dateAsDate > to) {
+      set((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          fetchDate: date,
+        },
+      }));
+      return;
+    }
+
+    console.log('LOADED OBJECTS:');
+    console.log(get().trackedState.layers.plants.loadedObjects);
+
+    const plantsVisibleRelativeToTimelineDate = filterVisibleObjects(
+      get().trackedState.layers.plants.loadedObjects,
+      date,
+    );
+
+    set((state) => ({
+      ...state,
+      trackedState: {
+        ...state.trackedState,
+        layers: {
+          ...state.trackedState.layers,
+          plants: {
+            ...state.trackedState.layers.plants,
+            objects: plantsVisibleRelativeToTimelineDate,
           },
         },
       },
