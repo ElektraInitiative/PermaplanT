@@ -7,6 +7,8 @@ use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
+use self::plantings::PlantingDto;
+
 use super::r#enum::{
     layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
     relation_type::RelationType,
@@ -182,6 +184,21 @@ pub struct Page<T> {
     pub per_page: i32,
     /// Number of pages in total.
     pub total_pages: i32,
+}
+
+/// A page of results bounded by time.
+#[typeshare]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[aliases(
+    TimelinePagePlantingsDto = TimelinePage<PlantingDto>,
+)]
+pub struct TimelinePage<T> {
+    /// Resulting records.
+    pub results: Vec<T>,
+    /// The time frame start date.
+    pub from: NaiveDate,
+    /// The time frame end date.
+    pub to: NaiveDate,
 }
 
 /// The whole information of a map.

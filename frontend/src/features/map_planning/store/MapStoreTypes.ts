@@ -1,3 +1,4 @@
+import { convertToDateString } from '../utils/date-utils';
 import {
   BaseLayerImageDto,
   LayerDto,
@@ -108,6 +109,7 @@ export interface TrackedMapSlice {
    * Initializes the base layer.
    */
   initBaseLayer: (baseLayer: BaseLayerImageDto) => void;
+  initLayerId: (layer: LayerType, layerId: number) => void;
 }
 
 /**
@@ -130,6 +132,8 @@ export interface UntrackedMapSlice {
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
+  updateTimelineDate: (date: string) => void;
+  setTimelineBounds: (from: string, to: string) => void;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
@@ -139,16 +143,24 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
     (acc, layerName) => ({
       ...acc,
       [layerName]: {
+        id: -1,
         index: layerName,
         objects: [],
       },
       [LayerType.Base]: {
         layerId: 0,
+        id: -1,
         index: LayerType.Base,
         imageId: uuid.v4(),
         scale: 100,
         rotation: 0,
         nextcloudImagePath: '',
+      },
+      [LayerType.Plants]: {
+        id: -1,
+        index: LayerType.Plants,
+        objects: [],
+        loadedObjects: [],
       },
     }),
     {} as TrackedLayers,
@@ -157,6 +169,12 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
+  timelineDate: convertToDateString(new Date()),
+  fetchDate: convertToDateString(new Date()),
+  timelineBounds: {
+    from: convertToDateString(new Date()),
+    to: convertToDateString(new Date()),
+  },
   selectedLayer: {
     id: -1,
     is_alternative: false,
@@ -204,6 +222,7 @@ export type ObjectState = {
  */
 export type TrackedLayerState = {
   index: LayerType;
+  id: number;
   /**
    * The state of the objects on the layer.
    */
@@ -231,11 +250,21 @@ export type TrackedLayers = {
 
 export type TrackedPlantLayerState = {
   index: LayerType.Plants;
+  id: number;
 
+  /**
+   * The objects visible relative to the current selected date.
+   * This is a subset of `loadedObjects`.
+   */
   objects: PlantingDto[];
+  /**
+   * The objects that have been loaded from the backend.
+   */
+  loadedObjects: PlantingDto[];
 };
 
 export type TrackedBaseLayerState = {
+  id: number;
   layerId: number;
   imageId: string;
   rotation: number;
@@ -276,6 +305,14 @@ export type TrackedMapState = {
  */
 export type UntrackedMapState = {
   mapId: number;
+  /** used for the bounds calculation */
+  timelineDate: string;
+  /** used for fetching */
+  fetchDate: string;
+  timelineBounds: {
+    from: string;
+    to: string;
+  };
   selectedLayer: LayerDto;
   layers: UntrackedLayers;
 };

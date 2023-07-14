@@ -288,7 +288,7 @@ nextcloud/contacts implements CardDAV:
 
 > "vCard Extensions to WebDAV (CardDAV) is an address book client/server
 > protocol designed to allow users to access and share contact data on a server.
-> CardDAV is based on WebDAV, which is based on HTTP, and it uses vCard for contact data.[2]"
+> CardDAV is based on WebDAV, which is based on HTTP, and it uses vCard for contact data.(2)"
 > [wikipedia](https://de.wikipedia.org/wiki/CardDAV)
 
 - https://apps.nextcloud.com/apps/contacts

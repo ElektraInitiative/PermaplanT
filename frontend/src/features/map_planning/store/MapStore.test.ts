@@ -16,14 +16,24 @@ describe('MapHistoryStore', () => {
 
     for (const layerName of Object.keys(trackedState.layers)) {
       if (layerName === LayerType.Base) continue;
+      if (layerName === LayerType.Plants) continue;
 
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
+        id: -1,
         index: layerName,
         objects: [],
       });
     }
 
+    expect(trackedState.layers[LayerType.Plants]).toEqual({
+      id: -1,
+      index: 'plants',
+      objects: [],
+      loadedObjects: [],
+    });
+
     expect(trackedState.layers[LayerType.Base]).toMatchObject({
+      id: -1,
       index: 'base',
       layerId: 0,
       rotation: 0,

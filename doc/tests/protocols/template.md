@@ -4,10 +4,10 @@ This is the raw template for executing a manual test.
 
 Information:
 
-- Tester: [Name]
-- Date/Time: [Date] [Time]
-- Duration: [Duration]
-- Commit/Tag: [bfe07b7](https://github.com/ElektraInitiative/PermaplanT/tree/bfe07b78b81fa062a1861cc144c230652d4d24a8)
+- Tester: (Name)
+- Date/Time: (Date) (Time)
+- Duration: (Duration)
+- Commit/Tag: (bfe07b7)(https://github.com/ElektraInitiative/PermaplanT/tree/bfe07b78b81fa062a1861cc144c230652d4d24a8)
 - Planned tests: -1
 - Executed tests: -**1**
 - Passed tests: -1
@@ -15,16 +15,16 @@ Information:
 
 | Test Case | Description   | Preconditions   | Test Steps              | Expected Result | Actual Result | Test Result | Notes  |
 | --------- | ------------- | --------------- | ----------------------- | --------------- | ------------- | ----------- | ------ |
-| TC-001    | [Description] | [Preconditions] | 1. [Step 1 description] | [Expected]      | [Actual]      | ✔️          | [Note] |
-|           |               |                 | 2. [Step 2 description] |                 |               |             |        |
+| TC-001    | (Description) | (Preconditions) | 1. (Step 1 description) | (Expected)      | (Actual)      | ✔️          | (Note) |
+|           |               |                 | 2. (Step 2 description) |                 |               |             |        |
 |           |               |                 | ...                     |                 |               |             |        |
 |           |               |                 |                         |                 |               |             |        |
-| TC-002    | [Description] | [Preconditions] | 1. [Step 1 description] | [Expected]      | [Actual]      | ❌          | [Note] |
-|           |               |                 | 2. [Step 2 description] |                 |               |             |        |
+| TC-002    | (Description) | (Preconditions) | 1. (Step 1 description) | (Expected)      | (Actual)      | ❌          | (Note) |
+|           |               |                 | 2. (Step 2 description) |                 |               |             |        |
 |           |               |                 | ...                     |                 |               |             |        |
 |           |               |                 |                         |                 |               |             |        |
-| TC-003    | [Description] | [Preconditions] | 1. [Step 1 description] | [Expected]      | [Actual]      | ⚠️          | [Note] |
-|           |               |                 | 2. [Step 2 description] |                 |               |             |        |
+| TC-003    | (Description) | (Preconditions) | 1. (Step 1 description) | (Expected)      | (Actual)      | ⚠️          | (Note) |
+|           |               |                 | 2. (Step 2 description) |                 |               |             |        |
 |           |               |                 | ...                     |                 |               |             |        |
 
 ## Error Analysis

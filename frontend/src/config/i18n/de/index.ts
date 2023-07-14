@@ -22,6 +22,7 @@ import privacyOptions from './privacyOptions.json';
 import routes from './routes.json';
 import seeds from './seeds.json';
 import team from './team.json';
+import timeline from './timeline.json';
 import undoRedo from './undoRedo.json';
 
 const de = {
@@ -50,6 +51,7 @@ const de = {
   privacyOptions,
   layers,
   plantEdit,
+  timeline,
 };
 
 export default de;

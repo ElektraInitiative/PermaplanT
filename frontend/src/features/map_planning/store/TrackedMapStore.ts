@@ -1,3 +1,4 @@
+import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import {
   Action,
   TRACKED_DEFAULT_STATE,
@@ -38,7 +39,7 @@ export const createTrackedMapSlice: StateCreator<
         transformer?.nodes([node]);
       }
     },
-    initPlantLayer: (plants: PlantingDto[]) =>
+    initPlantLayer: (plants: PlantingDto[]) => {
       set((state) => ({
         ...state,
         trackedState: {
@@ -47,28 +48,44 @@ export const createTrackedMapSlice: StateCreator<
             ...state.trackedState.layers,
             plants: {
               ...state.trackedState.layers.plants,
-              objects: plants,
+              objects: filterVisibleObjects(plants, state.untrackedState.timelineDate),
+              loadedObjects: plants,
             },
           },
         },
       })),
     initBaseLayer: (dto: BaseLayerImageDto) =>
+        set((state) => ({
+          ...state,
+          trackedState: {
+            ...state.trackedState,
+            layers: {
+              ...state.trackedState.layers,
+              base: {
+                imageId: dto.id,
+                layerId: dto.layer_id,
+                rotation: dto.rotation,
+                scale: dto.scale,
+                nextcloudImagePath: dto.path,
+              },
+            },
+          },
+        })),
+    initLayerId(layer, layerId) {
       set((state) => ({
         ...state,
         trackedState: {
           ...state.trackedState,
           layers: {
             ...state.trackedState.layers,
-            base: {
-              imageId: dto.id,
-              layerId: dto.layer_id,
-              rotation: dto.rotation,
-              scale: dto.scale,
-              nextcloudImagePath: dto.path,
+            [layer]: {
+              ...state.trackedState.layers[layer],
+              id: layerId,
             },
           },
         },
-      })),
+      }));
+    },
     __resetStore() {
       set((state) => ({
         ...state,

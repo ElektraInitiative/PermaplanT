@@ -14,7 +14,11 @@
     @apply hover:text-neutral-300 dark:text-neutral-300-dark;
   }
   body {
-    @apply bg-neutral-200 dark:bg-neutral-100-dark text-neutral-700 dark:text-white
+    @apply bg-neutral-200 text-neutral-700 dark:bg-neutral-100-dark dark:text-white;
+  }
+
+  input {
+    @apply dark:[color-scheme:dark];
   }
 }
 

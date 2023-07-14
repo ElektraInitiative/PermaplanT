@@ -1,5 +1,6 @@
 import { getAuthInfo } from './features/auth';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactNode } from 'react';
 import { AuthProvider } from 'react-oidc-context';
 import { BrowserRouter } from 'react-router-dom';
@@ -45,7 +46,10 @@ export function Providers({ children }: ProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProviderWrapper>
-        <BrowserRouter>{children}</BrowserRouter>
+        <BrowserRouter>
+          {children}
+          <ReactQueryDevtools position="top-left" panelPosition="left" />
+        </BrowserRouter>
       </AuthProviderWrapper>
     </QueryClientProvider>
   );

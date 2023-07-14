@@ -2,7 +2,7 @@
 
 ## Protocol file naming convention:
 
-[MTP_DATE_ID_V]
+(MTP_DATE_ID_V)
 
 - MTP: Manual test protocol
 - ID: A brief descriptive name or id of a major feature/functionality that was added/improved.
