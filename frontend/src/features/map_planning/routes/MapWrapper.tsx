@@ -117,7 +117,7 @@ function useInitializeMap() {
 
   useBaseLayer({
     mapId,
-    layerId: baseLayer?.id,
+    layerId: baseLayer?.id!,
     enabled: !!baseLayer?.id,
   });
 

@@ -53,8 +53,9 @@ export const createTrackedMapSlice: StateCreator<
             },
           },
         },
-      })),
-    initBaseLayer: (dto: BaseLayerImageDto) =>
+      }))
+    },
+    initBaseLayer (dto: BaseLayerImageDto) {
         set((state) => ({
           ...state,
           trackedState: {
@@ -62,6 +63,7 @@ export const createTrackedMapSlice: StateCreator<
             layers: {
               ...state.trackedState.layers,
               base: {
+                ...state.trackedState.layers.base,
                 imageId: dto.id,
                 layerId: dto.layer_id,
                 rotation: dto.rotation,
@@ -70,8 +72,9 @@ export const createTrackedMapSlice: StateCreator<
               },
             },
           },
-        })),
-    initLayerId(layer, layerId) {
+        }))
+    },
+    initLayerId (layer, layerId) {
       set((state) => ({
         ...state,
         trackedState: {
