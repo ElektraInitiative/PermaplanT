@@ -73,7 +73,7 @@ pub async fn create(
                layer_id: layer.id,
                path: String::new(),
                rotation: 0.0,
-               scale: 0.0,
+               scale: 100.0,
             }, &mut conn).await?;
         }
     }
