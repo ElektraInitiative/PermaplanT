@@ -5,9 +5,9 @@ use actix_web::web::Data;
 use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::{MapSearchParameters, Page, UpdateMapDto};
+use crate::model::dto::{BaseLayerImageDto, MapSearchParameters, Page, UpdateMapDto};
 use crate::model::dto::{NewLayerDto, PageParameters};
-use crate::model::entity::Layer;
+use crate::model::entity::{BaseLayerImages, Layer};
 use crate::model::r#enum::layer_type::LayerType;
 use crate::{
     error::ServiceError,
@@ -62,8 +62,22 @@ pub async fn create(
             name: format!("{layer} Layer"),
             is_alternative: false,
         };
-        let _ = Layer::create(new_layer, &mut conn).await?;
+        let layer = Layer::create(new_layer, &mut conn).await?;
+
+        // Immediately initialize a base layer image,
+        // because the frontend would always have to create one
+        // anyway.
+        if layer.type_ == LayerType::Base {
+            BaseLayerImages::create(BaseLayerImageDto {
+               id: Uuid::new_v4(),
+               layer_id: layer.id,
+               path: String::new(),
+               rotation: 0.0,
+               scale: 0.0,
+            }, &mut conn).await?;
+        }
     }
+
 
     Ok(result)
 }
