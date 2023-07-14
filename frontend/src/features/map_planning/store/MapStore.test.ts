@@ -15,14 +15,21 @@ describe('MapHistoryStore', () => {
     expect(trackedState).toBeDefined();
 
     for (const layerName of Object.keys(trackedState.layers)) {
+      if (layerName === LayerType.Base) continue;
+
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
         index: layerName,
         objects: [],
-        rotation: layerName === LayerType.Base ? 0 : undefined,
-        scale: layerName === LayerType.Base ? 100 : undefined,
-        nextcloudImagePath: layerName === LayerType.Base ? '' : undefined,
       });
     }
+
+    expect(trackedState.layers[LayerType.Base]).toMatchObject({
+      index: 'base',
+      layerId: 0,
+      rotation: 0,
+      scale: 100,
+      nextcloudImagePath: '',
+    });
   });
 
   it('adds a history entry for each call to executeAction', () => {
