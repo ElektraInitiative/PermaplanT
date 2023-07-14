@@ -59,7 +59,7 @@ pub async fn create(
         let new_layer = NewLayerDto {
             map_id: result.id,
             type_: *layer_type,
-            name: format!("{layer} Layer"),
+            name: format!("{layer_type} Layer"),
             is_alternative: false,
         };
         let layer = Layer::create(new_layer, &mut conn).await?;
