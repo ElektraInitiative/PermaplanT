@@ -68,16 +68,19 @@ pub async fn create(
         // because the frontend would always have to create one
         // anyway.
         if layer.type_ == LayerType::Base {
-            BaseLayerImages::create(BaseLayerImageDto {
-               id: Uuid::new_v4(),
-               layer_id: layer.id,
-               path: String::new(),
-               rotation: 0.0,
-               scale: 100.0,
-            }, &mut conn).await?;
+            BaseLayerImages::create(
+                BaseLayerImageDto {
+                    id: Uuid::new_v4(),
+                    layer_id: layer.id,
+                    path: String::new(),
+                    rotation: 0.0,
+                    scale: 100.0,
+                },
+                &mut conn,
+            )
+            .await?;
         }
     }
-
 
     Ok(result)
 }
