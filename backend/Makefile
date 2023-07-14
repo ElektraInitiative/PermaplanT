@@ -1,13 +1,13 @@
 .PHONY: run
-run:
+run: ## Run backend.
 	cargo run
 
 .PHONY: test
-test: build
+test: build ## Build & Test backend.
 	cargo test && cargo check && cargo clippy && cargo doc
 
 .PHONY: build
-build: install migration
+build: install migration ## Build backend.
 	cargo build
 
 # Diesel setup, this makes sure that diesel will create the database if it doesn't exist yet and will run all migrations.
@@ -17,27 +17,28 @@ migration: install
 	LC_ALL=C diesel setup && LC_ALL=C diesel migration run
 
 .PHONY: migration-redo
-migration-redo: ## Runs the down.sql and then the up.sql for the most recent migration.
+migration-redo: ## Runs down.sql and then up.sql for most recent migrations.
 	LC_ALL=C diesel migration redo
 
 .PHONY: migration-redo-a
-migration-redo-a: ## Runs the down.sql and then the up.sql for all migration.
+migration-redo-a: ## Runs down.sql and then up.sql for all migration.
 	LC_ALL=C diesel migration redo -a
 
-.PHONY: migration-reset
-migration-reset:  ## Reset diesel database.
+.PHONY: database-reset
+database-reset:  ## Reset diesel database.
 	diesel database reset
 
 .PHONY: clean
-clean:
+clean: ## Removes /target .
 	cargo clean
+	rm -rf target/*
 
 .PHONY: install
-install:
+install: ## Install deps and tools.
 	rustup component add rustfmt clippy
 	cargo install diesel_cli@2.0.1 --no-default-features --features postgres && cargo install typeshare-cli
 
 .PHONY: uninstall
-uninstall:
+uninstall: ## Uninstall deps and tools.
 	rustup component remove rustfmt clippy
-	cargo uninstall diesel_cli@2.0.1 --no-default-features --features postgres && cargo install typeshare-cli
+	cargo uninstall diesel_cli@2.0.1 && cargo install typeshare-cli
