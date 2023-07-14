@@ -31,8 +31,8 @@ After successful configuration the provider appears on the login screen and the 
 
 Nextcloud implements the webDAV protocol. This means that we can access files in Nextcloud with any webdav client.
 There are popular file managers like 'Konqueror' from the KDE team and 'GNOME Files' from the GNOME team which implement the webDAV protocol.
-However webDAV is not exclusive to file managers. 
-In PermaplanT we use a Javascript library named [webdav](https://github.com/perry-mitchell/webdav-client) to access files in Nextcloud. 
+However webDAV is not exclusive to file managers.
+In PermaplanT we use a Javascript library named [webdav](https://github.com/perry-mitchell/webdav-client) to access files in Nextcloud.
 For files available on public shares we send the requests directly with axios.
 
 Public shares are directories where a public link is created.
@@ -41,6 +41,7 @@ E.g. for the URL 'https://cloud.permaplant.net/s/2arzyJZYj2oNnHX' the share toke
 This share token can be used as username and password to access files from the directory.
 Files at the top level as well as files in subdirectories can be accessed using the share token.
 E.g. when following directory structure is given:
+
 ```bash
 nextcloud_root_dir
 ├── Documents
@@ -55,7 +56,8 @@ nextcloud_root_dir
     └── Pictures
         └── tree.png
 ```
-and the directory 'Public' is accessed with the share token. 
+
+and the directory 'Public' is accessed with the share token.
 All files ('add.svg', 'delete.svg', 'map.json', 'tree.png') in all subdirectories ('Icons', 'Maps', 'Pictures') of 'Public' can be accessed.
 The path for fetching a file starts at the shared directory, in this case 'Public'.
 To access the file 'add.svg' following URI is used: 'https://cloud.permaplant.net/public.php/webdav/Icons/add.svg'.
@@ -65,6 +67,7 @@ The share token is given as username and password in the request.
 The last part 'Icons/add.svg' is the path to the requested file starting from the public share directory.
 
 When we want to fetch `add.svg`, we use the following request:
+
 ```bash
 curl -X GET -O -u 2arzyJZYj2oNnHX:2arzyJZYj2oNnHX https://cloud.permaplant.net/public.php/webdav/Icons/add.svg
 ```
@@ -76,7 +79,7 @@ To fetch resources from directories which are not available for the public some 
 The easiest way to authenticate with the Nextcloud instance is to use the username and password in the request. This is called basic authentication.
 However, this is not secure when the requests are sent from the browser as this information can be easily sniffed.
 So we decided to use 'OpenID Connect' for authentication.
-Details on why we decided to use 'OpenID Connect' can be found in the [decision document]('https://github.com/ElektraInitiative/PermaplanT/blob/master/doc/decisions/auth.md').
+Details on why we decided to use 'OpenID Connect' can be found in the [decision document](https://github.com/ElektraInitiative/PermaplanT/blob/master/doc/decisions/auth.md).
 
 All we need to know here is that requests from authenticated users are populated with the access token in the Authorization header.
 
@@ -87,6 +90,7 @@ Given the previously defined directory structure we can now access the file 'sec
 ### Directory Structure
 
 In the PermaplanT Nextcloud instance we have following directory structure for each user:
+
 ```bash
 PermaplanT/
 └── Maps
@@ -105,7 +109,7 @@ PermaplanT/
 ```
 
 When a PermaplanT map is shared between different users the corresponding Nextcloud directory has to be shared as well.
-When a directory is shared in Nextcloud it gets added to users root directory (if not configured otherwise). 
+When a directory is shared in Nextcloud it gets added to users root directory (if not configured otherwise).
 We have to move the newly added directory to the correct place in the hierarchy after it was added.
 
 Each map directory must have a globally unique name to avoid conflicts with shared maps.
@@ -126,6 +130,7 @@ The implementation of the API can be found on the corresponding [github reposito
 
 First we need to create a Circle.
 This can be achieved by following API call:
+
 ```json
 "method": "POST",
 "headers": [
@@ -141,10 +146,12 @@ This can be achieved by following API call:
 "host": "cloud.permaplant.net",
 "filename": "/ocs/v2.php/apps/circles/circles"
 ```
+
 The name of the Circle is the same as the name of the map.
 Now the Circle has to be added to the shares for the map directory.
 This can be done with the OCS Share API which is documented [here](https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/ocs-share-api.html).
 Following API call can be used:
+
 ```json
 "method": "POST",
 "headers": [
@@ -162,7 +169,8 @@ Following API call can be used:
 ```
 
 The argument `shareType` specifies what kind of share we want to create.
-The options are: 
+The options are:
+
 - 0 = user
 - 1 = group
 - 3 = public link
@@ -175,6 +183,7 @@ We chose 7 to share the directory with the newly created Circle.
 
 If not specified the permissions for the share are set to 31 which means all.
 If we want to have more granular control of the permission we can set the `permissions` parameter to one of these values:
+
 - 1 = read
 - 2 = update
 - 4 = create
@@ -185,6 +194,7 @@ If we want to have more granular control of the permission we can set the `permi
 If we want even more granular permission control we can set the permissions for each layer directory individually.
 
 To remove a share we use following request:
+
 ```json
 "method": "DELETE",
 "headers": [
@@ -196,6 +206,7 @@ To remove a share we use following request:
 ```
 
 And to update a share we use:
+
 ```json
 "method": "PUT",
 "headers": [
@@ -210,7 +221,6 @@ And to update a share we use:
 ```
 
 Note that we can only update one value at a time with the PUT request.
-
 
 ### React Components
 
@@ -243,7 +253,7 @@ Will be implemented in #475.
 ### CORS (Cross-Origin Resource Sharing)
 
 > "CORS is an HTTP-header based mechanism that allows a server to indicate any origins (domain, scheme, or port) other than its own from which a browser should permit loading resources."
--- [Mozilla MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+> -- [Mozilla MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 
 Nextcloud offers no options to change the CORS configuration.
 This means that all requests coming from a different origin than the one Nextcloud is hosted on are blocked.
@@ -278,7 +288,7 @@ nextcloud/contacts implements CardDAV:
 
 > "vCard Extensions to WebDAV (CardDAV) is an address book client/server
 > protocol designed to allow users to access and share contact data on a server.
-> CardDAV is based on WebDAV, which is based on HTTP, and it uses vCard for contact data.[2]"
+> CardDAV is based on WebDAV, which is based on HTTP, and it uses vCard for contact data.(2)"
 > [wikipedia](https://de.wikipedia.org/wiki/CardDAV)
 
 - https://apps.nextcloud.com/apps/contacts

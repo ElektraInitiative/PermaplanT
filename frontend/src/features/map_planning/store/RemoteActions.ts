@@ -7,9 +7,8 @@ import {
 import useMapStore from './MapStore';
 import { Action } from './MapStoreTypes';
 import { Action as RemoteAction } from '@/bindings/definitions';
-import { User } from 'oidc-client-ts';
 
-export function handleRemoteAction(ev: MessageEvent<unknown>, user: User) {
+export function handleRemoteAction(ev: MessageEvent<unknown>, userId: string) {
   if (typeof ev.data !== 'string') {
     console.error('Received non-string message from server');
     return;
@@ -28,7 +27,7 @@ export function handleRemoteAction(ev: MessageEvent<unknown>, user: User) {
     return;
   }
 
-  if (remoteAction.payload.userId === user.profile.sub) {
+  if (remoteAction.payload.userId === userId) {
     // Ignore actions from self, later this can be used to handle conflicts.
     // see https://www.figma.com/blog/how-figmas-multiplayer-technology-works/#syncing-object-properties
     return;
