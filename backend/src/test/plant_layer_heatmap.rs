@@ -15,7 +15,10 @@ use uuid::Uuid;
 
 use crate::{
     error::ServiceError,
-    model::r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
+    model::{
+        entity::plant_layer::GRANULARITY,
+        r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
+    },
     test::util::{
         dummy_map_polygons::{
             rectangle_with_missing_bottom_left_corner, small_rectangle,
@@ -106,7 +109,10 @@ async fn test_check_heatmap_dimensionality_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgb8().unwrap();
-    assert_eq!((1, 10), image.dimensions()); // smaller by factor of 10 because of granularity
+    assert_eq!(
+        ((10 / GRANULARITY) as u32, (100 / GRANULARITY) as u32),
+        image.dimensions()
+    ); // smaller by factor of 10 because of granularity
 }
 
 #[actix_rt::test]
@@ -132,9 +138,14 @@ async fn test_check_heatmap_non_0_xmin_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgb8().unwrap();
-    assert_eq!((9, 10), image.dimensions());
+    assert_eq!(
+        ((90 / GRANULARITY) as u32, (100 / GRANULARITY) as u32),
+        image.dimensions()
+    );
 }
 
+/// Test with a map geometry that excludes a corner.
+/// The missing corner should be colored entirely in brown, as you cannot put plants there.
 #[actix_rt::test]
 async fn test_heatmap_with_missing_corner_succeeds() {
     let pool = init_test_database(|conn| {
@@ -158,7 +169,10 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgb8().unwrap();
-    assert_eq!((10, 10), image.dimensions());
+    assert_eq!(
+        ((100 / GRANULARITY) as u32, (100 / GRANULARITY) as u32),
+        image.dimensions()
+    );
 
     // (0,0) is be top left.
     let top_left_pixel = image.get_pixel(2, 2);

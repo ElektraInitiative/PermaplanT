@@ -18,23 +18,23 @@ use crate::{
 };
 
 /// The resolution of the generated heatmap in cm.
-const GRANULARITY: f32 = 10.0;
+pub const GRANULARITY: i32 = 10;
 
 /// A bounding box around the maps geometry.
 #[derive(Debug, Clone, QueryableByName)]
 struct BoundingBox {
     /// The lowest x value in the geometry.
-    #[diesel(sql_type = Float)]
-    x_min: f32,
+    #[diesel(sql_type = Integer)]
+    x_min: i32,
     /// The lowest y value in the geometry.
-    #[diesel(sql_type = Float)]
-    y_min: f32,
+    #[diesel(sql_type = Integer)]
+    y_min: i32,
     /// The highest x value in the geometry.
-    #[diesel(sql_type = Float)]
-    x_max: f32,
+    #[diesel(sql_type = Integer)]
+    x_max: i32,
     /// The highest y value in the geometry.
-    #[diesel(sql_type = Float)]
-    y_max: f32,
+    #[diesel(sql_type = Integer)]
+    y_max: i32,
 }
 
 /// Stores the score of a x,y coordinate on the heatmap.
@@ -56,8 +56,8 @@ struct HeatMapElement {
 /// # Errors
 /// * If the SQL query failed.
 #[allow(
-    clippy::cast_sign_loss,
-    clippy::indexing_slicing,
+    clippy::cast_sign_loss,             // ok, because we will never reach number high enough where this will matter
+    clippy::indexing_slicing,           // ok, because we know the size of the matrix using the maps bounding box
     clippy::cast_possible_truncation    // ok, because ceil prevents invalid truncation
 )]
 pub async fn heatmap(
@@ -77,11 +77,11 @@ pub async fn heatmap(
         .bind::<Integer, _>(map_id)
         .bind::<Integer, _>(layer_id)
         .bind::<Integer, _>(plant_id)
-        .bind::<Float, _>(GRANULARITY)
-        .bind::<Float, _>(bounding_box.x_min)
-        .bind::<Float, _>(bounding_box.y_min)
-        .bind::<Float, _>(bounding_box.x_max)
-        .bind::<Float, _>(bounding_box.y_max);
+        .bind::<Integer, _>(GRANULARITY)
+        .bind::<Integer, _>(bounding_box.x_min)
+        .bind::<Integer, _>(bounding_box.y_min)
+        .bind::<Integer, _>(bounding_box.x_max)
+        .bind::<Integer, _>(bounding_box.y_max);
     debug!("{}", debug_query::<Pg, _>(&query));
     let result = query.load::<HeatMapElement>(conn).await?;
 
@@ -89,8 +89,8 @@ pub async fn heatmap(
     // Matrix will be from 0..0 to ((x_max - x_min) / granularity)..((y_max - y_min) / granularity).
     let mut heatmap =
         vec![
-            vec![0.0; ((bounding_box.x_max - bounding_box.x_min) / GRANULARITY).ceil() as usize];
-            ((bounding_box.y_max - bounding_box.y_min) / GRANULARITY).ceil() as usize
+            vec![0.0; ((bounding_box.x_max - bounding_box.x_min) / GRANULARITY) as usize];
+            ((bounding_box.y_max - bounding_box.y_min) / GRANULARITY) as usize
         ];
     for HeatMapElement { score, x, y } in result {
         heatmap[y as usize][x as usize] = score;

@@ -4,14 +4,14 @@ ALTER TABLE maps ADD COLUMN geometry GEOMETRY(POLYGON, 4326) NOT NULL;
 
 -- Calculate the bounding box of the map geometry.
 CREATE OR REPLACE FUNCTION calculate_bbox(map_id INTEGER)
-RETURNS TABLE(x_min REAL, y_min REAL, x_max REAL, y_max REAL) AS $$
+RETURNS TABLE(x_min INTEGER, y_min INTEGER, x_max INTEGER, y_max INTEGER) AS $$
 BEGIN
     RETURN QUERY
     SELECT
-        CAST(ST_XMin(bbox) AS REAL) AS x_min,
-        CAST(ST_YMin(bbox) AS REAL) AS y_min,
-        CAST(ST_XMax(bbox) AS REAL) AS x_max,
-        CAST(ST_YMax(bbox) AS REAL) AS y_max
+        CAST(floor(ST_XMin(bbox)) AS INTEGER) AS x_min,
+        CAST(floor(ST_YMin(bbox)) AS INTEGER) AS y_min,
+        CAST(ceil(ST_XMax(bbox)) AS INTEGER) AS x_max,
+        CAST(ceil(ST_YMax(bbox)) AS INTEGER) AS y_max
     FROM (
         SELECT
             ST_Envelope(geometry) AS bbox
@@ -35,7 +35,7 @@ $$ LANGUAGE plpgsql;
 -- p_plant_id                   ... the id of the plant for which to consider relations
 -- granularity                  ... the resolution of the map (float greater than 0)
 -- x_min, y_min, x_max, y_max   ... the boundaries of the map
-CREATE OR REPLACE FUNCTION calculate_score(p_map_id INTEGER, p_layer_id INTEGER, p_plant_id INTEGER, granularity REAL, x_min REAL, y_min REAL, x_max REAL, y_max REAL)
+CREATE OR REPLACE FUNCTION calculate_score(p_map_id INTEGER, p_layer_id INTEGER, p_plant_id INTEGER, granularity INTEGER, x_min INTEGER, y_min INTEGER, x_max INTEGER, y_max INTEGER)
 RETURNS TABLE(score REAL, x INTEGER, y INTEGER) AS $$
 DECLARE
     map_geometry GEOMETRY(POLYGON, 4326);
