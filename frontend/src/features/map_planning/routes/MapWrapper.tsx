@@ -5,6 +5,7 @@ import { useMapId } from '../hooks/useMapId';
 import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
+import { steps } from '../utils/EditorTour';
 import { LayerType, LayerDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
@@ -12,6 +13,7 @@ import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ShepherdTour } from 'react-shepherd';
 import { toast } from 'react-toastify';
 
 /**
@@ -205,5 +207,18 @@ export function MapWrapper() {
     return null;
   }
 
-  return <Map layers={mapData.layers} />;
+  const tourOptions = {
+    defaultStepOptions: {
+      cancelIcon: {
+        enabled: true,
+      },
+    },
+    useModalOverlay: true,
+  };
+
+  return (
+    <ShepherdTour steps={steps} tourOptions={tourOptions}>
+      <Map layers={mapData.layers} />
+    </ShepherdTour>
+  );
 }

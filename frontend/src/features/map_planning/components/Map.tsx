@@ -19,7 +19,9 @@ import { ReactComponent as GridIcon } from '@/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import i18next from 'i18next';
+import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ShepherdTourContext } from 'react-shepherd';
 
 export type MapProps = {
   layers: LayerDto[];
@@ -40,6 +42,13 @@ export const Map = ({ layers }: MapProps) => {
   const getSelectedLayerType = useMapStore((map) => map.getSelectedLayerType);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
+  const tour = useContext(ShepherdTourContext);
+
+  useEffect(() => {
+    console.log('starting tour');
+    tour?.start();
+    return () => tour?.cancel();
+  }, [tour]);
 
   const { t } = useTranslation(['undoRedo', 'grid', 'timeline']);
 
