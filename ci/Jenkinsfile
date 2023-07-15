@@ -1,3 +1,14 @@
+def node_info() {
+    echo "Running stage on ${env.NODE_NAME}"
+}
+
+def wait_for_db() {
+    retry(6) {
+        sleep(time: 5, unit: 'SECONDS')
+        sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=60'
+    }
+}
+
 def abortPreviousRunUnlessMaster() {
   // We never want to abort builds of the master branch
   if (env.BRANCH_NAME=="master") return;
@@ -16,47 +27,8 @@ def abortPreviousRunUnlessMaster() {
 }
 abortPreviousRunUnlessMaster()
 
-def node_info() {
-    echo "Running stage on ${env.NODE_NAME}"
-}
-
-def wait_for_db() {
-    retry(6) {
-        sleep(time: 5, unit: 'SECONDS')
-        sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
-    }
-}
-
-// REQUIRED for Deployment
-// see Jenkinsfile.release
-stage('Build Schema'){
-    node('docker') {
-        node_info()
-        checkout scm
-
-        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
-
-        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                checkout scm
-
-                wait_for_db()
-
-                sh './ci/build-scripts/build-schema.sh'
-
-                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
-            }
-        }
-    }
-}
-
-
-// NOT REQUIRED for Deployment
-stage('Tests & Build') {
-    def parallel_checks = [:]
-
-    parallel_checks["test-and-build-mdbook"] = {
+def testAndBuildMdbook() {
+    return {
         node('docker') {
             checkout scm
             def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
@@ -72,8 +44,10 @@ stage('Tests & Build') {
             }
         }
     }
+}
 
-    parallel_checks["test-and-build-backend"] = {
+def testAndBuildBackend() {
+    return {
         node('docker') {
             node_info()
             checkout scm
@@ -118,8 +92,10 @@ stage('Tests & Build') {
             }
         }
     }
+}
 
-    parallel_checks["test-and-build-frontend"] = {
+def testAndBuildFrontend() {
+    return {
         node('docker') {
             node_info()
             checkout scm
@@ -154,8 +130,46 @@ stage('Tests & Build') {
             }
         }
     }
+}
 
-    parallel(parallel_checks)
+// REQUIRED for Deployment
+// see Jenkinsfile.release
+stage('Build Schema'){
+    node('docker') {
+        node_info()
+        checkout scm
+
+        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+
+        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                checkout scm
+
+                wait_for_db()
+
+                sh './ci/build-scripts/build-schema.sh'
+
+                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
+                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
+            }
+        }
+    }
+}
+
+stage('Parallel Stage') {
+    timeout(time: 2, unit: 'HOURS'){
+        try {
+            parallel(
+                    "test and build mdbook": testAndBuildMdbook(),
+                    "test and build backend": testAndBuildBackend(),
+                    "test and build frontend": testAndBuildFrontend(),
+                    failFast: true
+            )
+        } catch(err) {
+            deleteDir();
+            throw err;
+        }
+    }
 }
 
 stage('Deploy PR') {

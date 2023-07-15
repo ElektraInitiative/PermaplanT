@@ -6,9 +6,12 @@ import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { LayerType, LayerDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
+import { QUERY_KEYS } from '@/config/react_query';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 /**
  * Extracts the default layer from the list of layers.
@@ -22,26 +25,40 @@ function getDefaultLayer(layers: LayerDto[], layerType: LayerType) {
  */
 type UseLayerParams = {
   mapId: number;
-  layerId: number | undefined;
-  enabled: boolean;
+  layerId: number;
+  enabled?: boolean;
 };
 
 /**
  * Hook that initializes the plant layer by fetching all plantings
  * and adding them to the store.
  */
-function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
+function usePlantLayer({ mapId, layerId }: UseLayerParams) {
+  const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
+  const { t } = useTranslation(['plantSearch']);
+
   const query = useQuery({
-    queryKey: ['plants/plantings', mapId, layerId],
-    queryFn: () => getPlantings(mapId, layerId),
-    enabled,
+    queryKey: [QUERY_KEYS.PLANTINGS, mapId, { layerId, fetchDate }],
+    queryFn: () => getPlantings(mapId, { layer_id: layerId, relative_to_date: fetchDate }),
+    // We want to refetch manually.
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    cacheTime: 0,
+    enabled: Boolean(layerId),
   });
 
-  useEffect(() => {
-    if (!query?.data) return;
+  if (query.error) {
+    console.error(query.error);
+    toast.error(t('plantSearch:error_initializing_layer'), { autoClose: false });
+  }
 
-    useMapStore.getState().initPlantLayer(query.data);
-  }, [mapId, query?.data]);
+  const data = query.data;
+  useEffect(() => {
+    if (!data) return;
+
+    useMapStore.getState().setTimelineBounds(data.from, data.to);
+    useMapStore.getState().initPlantLayer(data.results);
+  }, [mapId, data]);
 
   return query;
 }
@@ -51,15 +68,31 @@ function usePlantLayer({ mapId, layerId, enabled }: UseLayerParams) {
  */
 function useInitializeMap() {
   const mapId = useMapId();
-  const { data: layers } = useGetLayers(mapId);
+  const { data: layers, error } = useGetLayers(mapId);
+  const { t } = useTranslation(['layers']);
+
+  if (error) {
+    console.log(error);
+    toast.error(t('layers:error_fetching_layers'), { autoClose: false });
+  }
+
+  useEffect(() => {
+    if (!layers) return;
+
+    const defaultLayers = layers.filter((l) => !l.is_alternative);
+    for (const layer of defaultLayers) {
+      useMapStore.getState().initLayerId(layer.type_, layer.id);
+    }
+  }, [layers]);
 
   const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
   const baseLayer = getDefaultLayer(layers ?? [], LayerType.Base);
 
-  const { isLoading: arePlantingsLoading } = usePlantLayer({
+  usePlantLayer({
     mapId,
-    layerId: plantLayer?.id,
-    enabled: !!plantLayer?.id,
+    // The enabled flag prevents the query from being executed with an invalid layer id.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+    layerId: plantLayer?.id!,
   });
 
   useEffect(() => {
@@ -75,7 +108,7 @@ function useInitializeMap() {
     }));
   }, [mapId, baseLayer]);
 
-  const isLoading = !layers || arePlantingsLoading;
+  const isLoading = !layers;
 
   if (isLoading) {
     return null;
@@ -98,17 +131,20 @@ function useCleanMapStore() {
 }
 
 function useMapUpdates() {
+  const mapId = useMapId();
   const { user } = useSafeAuth();
   const evRef = useRef<EventSource>();
 
+  const userId = user?.profile.sub;
+
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       return;
     }
 
     const connectionQuery = {
-      map_id: 1,
-      user_id: user.profile.sub,
+      map_id: mapId,
+      user_id: userId,
     };
 
     const http = createAPI();
@@ -119,12 +155,12 @@ function useMapUpdates() {
 
     // TODO: implement authentication
     evRef.current = new EventSource(uri);
-    evRef.current.onmessage = (ev) => handleRemoteAction(ev, user);
+    evRef.current.onmessage = (ev) => handleRemoteAction(ev, userId);
 
     return () => {
       evRef.current?.close();
     };
-  }, [user]);
+  }, [userId, mapId]);
 }
 
 /**

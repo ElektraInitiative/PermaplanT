@@ -25,14 +25,14 @@
         Can also be clicked without being registered before, then Step 1. of Main success scenario needs to be done.
      2. form page 1
         - salutation (Anrede)
-        - title (Titel) [optional]
+        - title (Titel) (optional)
         - billing address (Rechnungsadresse)
         - country (Land)
-        - additional emails (E-Mails) [optional]
-        - telephone number [optional]
-        - website [optional]
-        - organisation [optional]
-        - permaculture experience [optional]
+        - additional emails (E-Mails) (optional)
+        - telephone number (optional)
+        - website (optional)
+        - organisation (optional)
+        - permaculture experience (optional)
         - user photo (uploaded and also used in Nextcloud)
      3. form page 2
         - if billing address or someone else's address should be used
@@ -43,8 +43,8 @@
         - owner (KontoinhaberIn)
         - IBAN
         - BIC
-        - how did you get to know about PermaplanT [optional text]
-        - username for who recruited (angeworben) [optional]
+        - how did you get to know about PermaplanT (optional text)
+        - username for who recruited (angeworben) (optional)
         - privacy
   4. An admin:
      - removes the bank account data

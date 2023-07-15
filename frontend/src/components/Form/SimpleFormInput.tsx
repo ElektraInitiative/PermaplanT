@@ -35,10 +35,12 @@ export default function SimpleFormInput<T extends FieldValues>({
 }: SimpleFormInputProps<T>) {
   return (
     <div className="dark:text-white">
-      <label htmlFor={id} className="mb-2 block text-sm font-medium">
-        {labelText}
-        {props.required ? <span className="text-red-800"> *</span> : <></>}
-      </label>
+      {labelText && (
+        <label htmlFor={id} className="mb-2 block text-sm font-medium">
+          {labelText}
+          {props.required ? <span className="text-red-800"> *</span> : <></>}
+        </label>
+      )}
       <input
         id={id}
         title={errorTitle}
@@ -46,7 +48,7 @@ export default function SimpleFormInput<T extends FieldValues>({
         {...register?.(id, {
           valueAsNumber: props.type === 'number' || valueAsNumber,
         })}
-        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 aria-[invalid=true]:dark:border-red-400"
       />
     </div>
   );

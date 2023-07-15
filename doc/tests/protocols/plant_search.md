@@ -1,0 +1,45 @@
+# Plant Search Test Protocol
+
+Information:
+
+- Tester: Moritz Schalk (badnames)
+- Date/Time: 2023-06-30 19:00
+- Duration: (Duration)
+- Commit/Tag: [9184e9b](https://github.com/ElektraInitiative/PermaplanT/commit/9184e9b4eaab0ddb633b72051adf97e2be5f4fa7)
+- Planned tests: 3
+- Executed tests: **3**
+- Passed tests: 3
+- Failed tests: 0
+
+| Test Case | Description                                                            | Preconditions                                                    | Test Steps                                         | Expected Result                                                                                                | Actual Result   | Test Result   | Notes                                                                                                  |
+| --------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------- | ------------- | ------------------------------------------------------------------------------------------------------ |
+| --------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------- | ------------- | ------------------------------------------------------------------------------------------------------ |
+| TC-001    | Show a selection of plants if the search input is empty.               | No search input has been provided in the plant search.           | 1. Naviagate to the map page.                      | A selection of plants is shown to the user.                                                                    | As expected.    | ✔️            |                                                                                                        |
+|           |                                                                        |                                                                  | 2. Select a map.                                   |                                                                                                                |                 |               |                                                                                                        |
+|           |                                                                        |                                                                  | 3. Select the plant layer in the right map menu.   |                                                                                                                |                 |               |                                                                                                        |
+|           |                                                                        |                                                                  | 4. Push the search icon in the lower right menu.   |                                                                                                                |                 |               |                                                                                                        |
+|           |                                                                        |                                                                  |                                                    |                                                                                                                |                 |               |                                                                                                        |
+|           |                                                                        |                                                                  |                                                    |                                                                                                                |                 |               |                                                                                                        |
+| TC-002    | Return expected results for a given search in the selected language.   | The search term "tomato" has been typed into the search field.   | 1. Navigate to the map page.                       | The plants shown contain the string "tomato" in part of the datacolumns as outlined in the usecase document.   | As expected     | ✔️            | The test was repeated with german language settings and the search term "tomate" instead of "tomato"   |
+|           |                                                                        |                                                                  | 2. Select a map.                                   |                                                                                                                |                 |               |                                                                                                        |
+|           |                                                                        |                                                                  | 3. Select the plant layer in the right map menu.   |                                                                                                                |                 |               |                                                                                                        |
+|           |                                                                        |                                                                  | 4. Push the search icon in the lower right menu.   |                                                                                                                |                 |               |                                                                                                        |
+|           |                                                                        |                                                                  | 5. Write "tomato" into the search field.           |                                                                                                                |                 |               |                                                                                                        |
+|           |                                                                        |                                                                  |                                                    |                                                                                                                |                 |               |                                                                                                        |
+|           |                                                                        |                                                                  |                                                    |                                                                                                                |                 |               |                                                                                                        |
+|           |
+| TC-003    | Returns results for searches in the language that was not selected.    | The search term "fichte" has been typed into the search field.   | 1. Navigate to the map page.                       | Firs (german "Fichten") are part of the search results in addition to english matches.                         | As expected.    | ✔️            | The test was repeated with german language settings and the search term "fir" instead of "fichte".     |
+
+| | | | 2. Select a map. | Matches on english data fields are ranked above english matches. | | | |
+| | | | 3. Select the plant layer in the right map menu. | | | | |
+| | | | 4. Push the search icon in the lower right menu. | | | | |
+| | | | 5. Write "fichte" into the search field. | | | | |
+
+# Errors
+
+N/A
+
+## Closing remarks
+
+Some requirements from the use case have not yet been implemented in preparation for a future university course.
+Follow-up issues were recorded and a note has been left in the use case document (#379, #433).
