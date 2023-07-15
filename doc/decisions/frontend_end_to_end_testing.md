@@ -57,6 +57,7 @@ However, the decision to use Python as the programming language led to the prefe
 
 Python with the Behave framework is capable of fulfilling the requirements.
 However, pytest-bdd was preferred over Behave due to its integration with pytest and the added feature of parallel test execution, which should give the low performance stack a slight boost.
+Playwright was preferred over Selenium because it was easier to install and the browser integration into python was way smoother.
 
 ## Decision
 
