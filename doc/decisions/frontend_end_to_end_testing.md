@@ -51,7 +51,7 @@ According to @4ydan it has a steeper learning curve, because not only does it in
 ### Alternative [Puppeteer](https://pptr.dev)
 
 Puppeteer is a viable alternative to Playwright, as it also provides automation capabilities for Chrome and Chromium-based browsers.
-However, the decision to use Python as the programming language led to the preference for Playwright for Python, which integrates well with Python's ecosystem.
+However, the decision to use Python as the programming language led to the preference for Playwright for Python.
 
 ### Alternative [Python](https://www.python.org) + [Selenium](https://www.selenium.dev) + [Behave](https://behave.readthedocs.io/en/latest/)
 
@@ -62,8 +62,6 @@ However, pytest-bdd was preferred over Behave due to its integration with pytest
 
 We use [Playwright for Python](https://playwright.dev/python/docs/intro) as the test automation framework.
 Python's readability, ease of use, and extensive ecosystem make it a solid choice for test automation.
-
-By leveraging Python and Playwright for Python, the project aims to achieve efficient and reliable web test automation with the support of an extensive and mature ecosystem.
 
 Additionally we will need the following libraries:
 
@@ -76,7 +74,7 @@ Additionally we will need the following libraries:
 ### Python
 
 Introducing a new language and gherkin to the team might at first sound challenging and not make much sense, but the decision to pick this stack was not only personal.
-Yes, I prefer Python over Typescript but I also believe that Python is easier to maintain in the long run.
+Yes, I prefer Python over Typescript but I also believe that Python is easier to maintain and read in the long run.
 Anyone who could work with Playwright for Typescript should also be able to do the same in Playwright for Python.
 The differences are very minor in the syntax and the possibilities are the same.
 Python is the second most popular coding language which is already included into many distros.
@@ -90,7 +88,7 @@ Furthermore the projects performance tests utilize playwright, which makes it fi
 ### Gherkin
 
 Chosing to have the Gherin syntax is adding an extra step to writing tests but with a clear benefit which I will mention later.
-Furthermore the Gherkin syntax can later be used with whichever other framework if Playwright and Python want to be replaced.
+Furthermore the Gherkin syntax can be reusued with other frameworks if Playwright and Python want to be replaced.
 
 ### BDD
 
