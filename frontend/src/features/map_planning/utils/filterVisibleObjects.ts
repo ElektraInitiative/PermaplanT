@@ -1,8 +1,8 @@
 import { convertToDate } from './date-utils';
 
 interface ObjectWithDates {
-  add_date?: string;
-  remove_date?: string;
+  addDate?: string;
+  removeDate?: string;
 }
 
 /**
@@ -15,8 +15,8 @@ export function filterVisibleObjects<T extends ObjectWithDates>(
   const date = convertToDate(dateStr);
 
   return objects.filter((o) => {
-    const addDate = o.add_date ? convertToDate(o.add_date) : undefined;
-    const removeDate = o.remove_date ? convertToDate(o.remove_date) : undefined;
+    const addDate = o.addDate ? convertToDate(o.addDate) : undefined;
+    const removeDate = o.removeDate ? convertToDate(o.removeDate) : undefined;
 
     if (isVisible(date, addDate, removeDate)) {
       return true;
