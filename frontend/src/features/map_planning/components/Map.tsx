@@ -31,16 +31,14 @@ export type MapProps = {
  * In order to add a new layer you can add another layer file under the "layers" folder.
  * Features such as zooming and panning are handled by the BaseStage component.
  * You only have to make sure that every shape has the property "draggable" set to true.
- * Otherwise they cannot be moved.
+ * Otherwise, they cannot be moved.
  */
 export const Map = ({ layers }: MapProps) => {
   const untrackedState = useMapStore((map) => map.untrackedState);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
-  const executeAction = useMapStore((map) => map.executeAction);
   const selectLayer = useMapStore((map) => map.updateSelectedLayer);
   const getSelectedLayerType = useMapStore((map) => map.getSelectedLayerType);
-  const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
 
@@ -116,12 +114,12 @@ export const Map = ({ layers }: MapProps) => {
           <BaseLayer
             opacity={untrackedState.layers.base.opacity}
             visible={untrackedState.layers.base.visible}
-            listening={selectedLayer.type_ === LayerType.Base}
+            listening={getSelectedLayerType() === LayerType.Base}
           />
           <PlantsLayer
             visible={untrackedState.layers.plants.visible}
             opacity={untrackedState.layers.plants.opacity}
-            listening={selectedLayer.type_ === LayerType.Plants}
+            listening={getSelectedLayerType() === LayerType.Plants}
           ></PlantsLayer>
           <BaseMeasurementLayer />
           <GridLayer
