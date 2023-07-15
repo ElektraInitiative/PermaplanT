@@ -1,4 +1,4 @@
-# Manuel Test Protocol
+# Manual Test Protocol
 
 ## TC-001 - Login
 
