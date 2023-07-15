@@ -8,6 +8,7 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
+import { setTooltipPosition } from '../utils/Tooltip';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
@@ -97,6 +98,10 @@ export const BaseStage = ({
 
     const targetStage = e.target.getStage();
     if (targetStage === null) return;
+
+    if (tooltipRef.current) {
+      setTooltipPosition(tooltipRef.current, stage);
+    }
 
     const pointerVector = targetStage.getPointerPosition();
     if (pointerVector === null) return;
