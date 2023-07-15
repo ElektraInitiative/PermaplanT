@@ -32,10 +32,10 @@ The report should have the current day as suffix.
 ```md
 ## General
 
-- Tester: [Name]
-- Date/Time: [Date] [Time]
-- Duration: [Duration]
-- Commit/Tag: [bfe07b7](https://github.com/ElektraInitiative/PermaplanT/tree/bfe07b78b81fa062a1861cc144c230652d4d24a8)
+- Tester:
+- Date/Time:
+- Duration:
+- Commit/Tag:
 - Planned tests: -1
 - Executed tests: -**1**
 - Passed tests: -1
