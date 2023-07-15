@@ -90,6 +90,7 @@ including their responsibilities, skills, etc.
 - GitHub: @temmey
 - main responsibility: Database & Security Analysis
 - focus group: Security Analysis
+- positioning: DB
 
 # Previous Authors
 
