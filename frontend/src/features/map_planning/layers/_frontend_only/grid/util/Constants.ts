@@ -1,4 +1,3 @@
-
 // Sizes are relative to the viewport width.
 // E.g.: 1 / 500 would result in a width of 2px with a 1000px viewport.
 export const RELATIVE_DOT_SIZE = 1 / 500;

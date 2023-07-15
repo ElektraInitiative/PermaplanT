@@ -123,8 +123,8 @@ export const Map = ({ layers }: MapProps) => {
           ></PlantsLayer>
           <BaseMeasurementLayer />
           <GridLayer
-              visible={untrackedState.layers.grid.visible}
-              opacity={untrackedState.layers.grid.opacity}
+            visible={untrackedState.layers.grid.visible}
+            opacity={untrackedState.layers.grid.opacity}
           ></GridLayer>
         </BaseStage>
         <div>

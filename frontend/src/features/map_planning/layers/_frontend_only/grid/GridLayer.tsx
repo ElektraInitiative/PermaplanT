@@ -1,8 +1,8 @@
+import { Grid } from '@/features/map_planning/layers/_frontend_only/grid/groups/Grid';
+import { YardStick } from '@/features/map_planning/layers/_frontend_only/grid/groups/YardStick';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva/cmj';
 import { Layer } from 'react-konva';
-import {Grid} from "@/features/map_planning/layers/_frontend_only/grid/groups/Grid";
-import {YardStick} from "@/features/map_planning/layers/_frontend_only/grid/groups/YardStick";
 
 export const GridLayer = (props: Konva.LayerConfig) => {
   const mapBounds = useMapStore((state) => state.untrackedState.editorBounds);
