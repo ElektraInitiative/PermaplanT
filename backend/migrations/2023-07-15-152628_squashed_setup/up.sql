@@ -2,7 +2,6 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
 
 CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
 
-
 CREATE TYPE deciduous_or_evergreen AS ENUM (
     'deciduous',
     'evergreen'
@@ -225,13 +224,13 @@ CREATE SEQUENCE maps_id_seq
     CACHE 1;
 
 
-CREATE TABLE persons (
+/*CREATE TABLE persons (
     personid uuid NOT NULL,
     lastname character varying(255),
     firstname character varying(255),
     address character varying(255),
     city character varying(255)
-);
+);*/
 
 CREATE TABLE plants (
     id integer NOT NULL,
@@ -288,53 +287,54 @@ CREATE TABLE plants (
     plants_of_the_world_online_link text,
     plants_of_the_world_online_link_synonym text,
     pollination text,
-    --propagation_transplanting_en text,
+    propagation_transplanting_en text,
     resistance text,
     root_type text,
-    --seed_planting_depth_en text,
+    seed_planting_depth_en text,
     seed_viability text,
     slug text,
     utility text,
     warning text,
-    --when_to_plant_cuttings_en text,
-    --when_to_plant_division_en text,
-    --when_to_plant_transplant_en text,
-    --when_to_sow_indoors_en text,
-    --sowing_outdoors_en text,
+    when_to_plant_cuttings_en text,
+    when_to_plant_division_en text,
+    when_to_plant_transplant_en text,
+    when_to_sow_indoors_en text,
+    sowing_outdoors_en text,
     when_to_start_indoors_weeks text,
     when_to_start_outdoors_weeks text,
     cold_stratification_temperature text,
     cold_stratification_time text,
     days_to_harvest text,
     habitat text,
-    --spacing_en text,
-    --wikipedia_url text,
-    --days_to_maturity text,
-    --pests text,
+    spacing_en text,
+    wikipedia_url text,
+    days_to_maturity text,
+    pests text,
     version smallint,
-    --germination_time text,
+    germination_time text,
     description text,
-    --parent_id text,
+    parent_id text,
     external_source external_source,
-    --external_id text,
-    --external_url text,
-    --root_depth text,
-    --external_article_number text,
-    --external_portion_content text,
-    --sowing_outdoors_de text,
-    --sowing_outdoors smallint[],
-    --harvest_time smallint[],
-    --spacing_de text,
-    --required_quantity_of_seeds_de text,
-    --required_quantity_of_seeds_en text,
-    --seed_planting_depth_de text,
-    --seed_weight_1000_de text,
-    --seed_weight_1000_en text,
+    external_id text,
+    external_url text,
+    root_depth text,
+    external_article_number text,
+    external_portion_content text,
+    sowing_outdoors_de text,
+    sowing_outdoors smallint[],
+    harvest_time smallint[],
+    spacing_de text,
+    required_quantity_of_seeds_de text,
+    required_quantity_of_seeds_en text,
+    seed_planting_depth_de text,
+    seed_weight_1000_de text,
+    seed_weight_1000_en text,
     seed_weight_1000 double precision,
     machine_cultivation_possible boolean,
-    --edible_uses_de text,
+    edible_uses_de text,
     spread plant_spread,
     height plant_height,
+    --width text,
     CONSTRAINT plant_detail_heat_zone_check CHECK (((heat_zone IS NULL) OR ((heat_zone >= 0) AND (heat_zone <= 13)))),
     CONSTRAINT plant_detail_preferable_permaculture_zone_check CHECK (((preferable_permaculture_zone IS NULL) OR ((preferable_permaculture_zone >= '-1'::integer) AND (preferable_permaculture_zone <= 6))))
 );

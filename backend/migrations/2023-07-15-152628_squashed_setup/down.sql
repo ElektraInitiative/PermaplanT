@@ -60,12 +60,6 @@ DROP TYPE IF EXISTS water_requirement;
 
 -- Drop all extensions
 
-DROP EXTENSION IF EXISTS postgis_topology;
-
-DROP EXTENSION IF EXISTS postgis_tiger_geocoder;
-
-DROP EXTENSION IF EXISTS fuzzystrmatch;
-
 DROP EXTENSION IF EXISTS pg_trgm;
 
 DROP EXTENSION IF EXISTS postgis;
