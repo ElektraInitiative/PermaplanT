@@ -25,9 +25,9 @@ use super::r#enum::{
     fertility::Fertility, flower_type::FlowerType, growth_rate::GrowthRate,
     herbaceous_or_woody::HerbaceousOrWoody, layer_type::LayerType, life_cycle::LifeCycle,
     light_requirement::LightRequirement, nutrition_demand::NutritionDemand,
-    propagation_method::PropagationMethod, quality::Quality, quantity::Quantity, shade::Shade,
-    soil_ph::SoilPh, soil_texture::SoilTexture, soil_water_retention::SoilWaterRetention,
-    water_requirement::WaterRequirement,
+    plant_height::PlantHeight, plant_spread::PlantSpread, propagation_method::PropagationMethod,
+    quality::Quality, quantity::Quantity, shade::Shade, soil_ph::SoilPh, soil_texture::SoilTexture,
+    soil_water_retention::SoilWaterRetention, water_requirement::WaterRequirement,
 };
 
 /// The `Plants` entity builds up an hierarchical structure, see `/doc/database/hierarchy.md`:
@@ -201,14 +201,14 @@ pub struct Plants {
     /// - *Fetched from* PracticalPlants as `mature_size_height` and merged with Permapeople.
     /// - informs about the maximum height that the plant gains
     /// - *Fill ratio:* 80%
-    pub height: Option<String>,
+    pub height: Option<PlantHeight>,
 
     /// - Determines how large the plant can grow in diameter.
     /// - Other plants should get a warning if planted within this area.
     /// - *TODO:* should be number and then be used for map.
     /// - *Fetched from* PracticalPlants as `mature_size_width` and merged with Permapeople.
     /// - *Fill ratio:* 22%
-    pub width: Option<String>,
+    //pub width: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
@@ -415,7 +415,7 @@ pub struct Plants {
     /// - *TODO:* overlap with `width`.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.1%
-    pub spread: Option<String>,
+    pub spread: Option<PlantSpread>,
 
     /// - Not used.
     /// - *TODO:* ovlerap with `functions`.

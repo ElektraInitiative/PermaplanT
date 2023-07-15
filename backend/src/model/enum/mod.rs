@@ -10,6 +10,8 @@ pub mod layer_type;
 pub mod life_cycle;
 pub mod light_requirement;
 pub mod nutrition_demand;
+pub mod plant_height;
+pub mod plant_spread;
 pub mod privacy_options;
 pub mod propagation_method;
 pub mod quality;
