@@ -74,7 +74,7 @@ const Team = () => {
           />
           <Teammember
             name="Christoph Kraus"
-            role="Software Engineer"
+            role="Security Analyst"
             path="/Avatars/person_placeholder.png"
           />
           <Teammember
