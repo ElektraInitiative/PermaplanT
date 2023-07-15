@@ -289,4 +289,10 @@ export const createUntrackedMapSlice: StateCreator<
 
     return get().untrackedState.selectedLayer as FrontendOnlyLayerType;
   },
+  getSelectedLayerId() {
+    const selectedLayer = get().untrackedState.selectedLayer;
+    if (typeof selectedLayer === 'object' && 'id' in selectedLayer) return selectedLayer.id;
+
+    return null;
+  },
 });

@@ -139,6 +139,7 @@ export interface UntrackedMapSlice {
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
+  getSelectedLayerId: () => number | null;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
