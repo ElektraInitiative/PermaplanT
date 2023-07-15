@@ -71,6 +71,7 @@ function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
   const query = useQuery({
     queryKey: ['baselayer', mapId, layerId],
     queryFn: () => getBaseLayerImage(mapId, layerId),
+    refetchOnWindowFocus: false,
     enabled,
   });
 
