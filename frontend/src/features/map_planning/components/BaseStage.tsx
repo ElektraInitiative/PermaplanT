@@ -100,7 +100,7 @@ export const BaseStage = ({
     if (targetStage === null) return;
 
     if (tooltipRef.current) {
-      setTooltipPosition(tooltipRef.current, stage);
+      setTooltipPosition(tooltipRef.current, targetStage);
     }
 
     const pointerVector = targetStage.getPointerPosition();
