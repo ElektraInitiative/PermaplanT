@@ -321,7 +321,6 @@ export type UntrackedMapState = {
     from: string;
     to: string;
   };
-  selectedLayer: LayerDto;
   layers: UntrackedLayers;
 };
 
