@@ -18,7 +18,7 @@ use crate::{
             },
             ConfigDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto,
             PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto,
-            RelationDto, RelationsDto, SeedDto,
+            RelationDto, RelationsDto, SeedDto, UpdateMapDto,
         },
         r#enum::{
             privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
@@ -77,13 +77,15 @@ struct PlantsApiDoc;
     paths(
         map::find,
         map::find_by_id,
-        map::create
+        map::create,
+        map::update
     ),
     components(
         schemas(
             PageMapDto,
             MapDto,
             NewMapDto,
+            UpdateMapDto,
             PrivacyOptions,
             Coordinates
         )

@@ -196,6 +196,7 @@ async fn test_update_fails_for_not_owner() {
         privacy: None,
         description: None,
         location: None,
+        geometry: None,
     };
 
     let resp = test::TestRequest::patch()
@@ -241,6 +242,7 @@ async fn test_can_update_map() {
         privacy: None,
         description: None,
         location: None,
+        geometry: None,
     };
 
     let resp = test::TestRequest::patch()
