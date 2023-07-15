@@ -49,7 +49,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- DOC: Improve manual test case docu _(4ydan)_
 - _()_
 - CI: mdbook linkchecker policy set to warning #628 _(4ydan)_
 - Up webdav to 5.2.2 and vite to 3.2.7 due to security issues #629 _(4ydan)_
