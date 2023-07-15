@@ -223,15 +223,6 @@ CREATE SEQUENCE maps_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
-/*CREATE TABLE persons (
-    personid uuid NOT NULL,
-    lastname character varying(255),
-    firstname character varying(255),
-    address character varying(255),
-    city character varying(255)
-);*/
-
 CREATE TABLE plants (
     id integer NOT NULL,
     unique_name text NOT NULL,
@@ -258,6 +249,7 @@ CREATE TABLE plants (
     herbaceous_or_woody herbaceous_or_woody,
     life_cycle life_cycle[],
     growth_rate growth_rate[],
+    height plant_height,
     fertility fertility[],
     flower_colour text,
     flower_type flower_type,
@@ -293,6 +285,7 @@ CREATE TABLE plants (
     seed_planting_depth_en text,
     seed_viability text,
     slug text,
+    spread plant_spread,
     utility text,
     warning text,
     when_to_plant_cuttings_en text,
@@ -332,8 +325,6 @@ CREATE TABLE plants (
     seed_weight_1000 double precision,
     machine_cultivation_possible boolean,
     edible_uses_de text,
-    spread plant_spread,
-    height plant_height,
     --width text,
     CONSTRAINT plant_detail_heat_zone_check CHECK (((heat_zone IS NULL) OR ((heat_zone >= 0) AND (heat_zone <= 13)))),
     CONSTRAINT plant_detail_preferable_permaculture_zone_check CHECK (((preferable_permaculture_zone IS NULL) OR ((preferable_permaculture_zone >= '-1'::integer) AND (preferable_permaculture_zone <= 6))))
