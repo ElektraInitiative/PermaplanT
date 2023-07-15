@@ -43,8 +43,8 @@ DECLARE
     bbox GEOMETRY;
     num_cols INTEGER;
     num_rows INTEGER;
-    x_pos REAL;
-    y_pos REAL;
+    x_pos INTEGER;
+    y_pos INTEGER;
     plant_relation RECORD;
 BEGIN
     -- Makes sure the plant layer exists and fits to the map
@@ -100,7 +100,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Calculate a score using the plants relations and their distances.
-CREATE OR REPLACE FUNCTION calculate_score_from_relations(p_layer_id INTEGER, p_plant_id INTEGER, x_pos REAL, y_pos REAL)
+CREATE OR REPLACE FUNCTION calculate_score_from_relations(p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER)
 RETURNS FLOAT AS $$
 DECLARE
     plant_relation RECORD;
