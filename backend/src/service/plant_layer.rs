@@ -20,9 +20,9 @@ use crate::{
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-/// * If no map with id map_id exists.
-/// * If no layer with id layer_id exists, if the layer is not a plant layer or if the layer is not part of the map.
-/// * If no plant with id plant_id exists.
+/// * If no map with id `map_id` exists.
+/// * If no layer with id `layer_id` exists, if the layer is not a plant layer or if the layer is not part of the map.
+/// * If no plant with id `plant_id` exists.
 /// * If the image could not be parsed to bytes.
 pub async fn heatmap(
     map_id: i32,
