@@ -19,3 +19,5 @@ export const RELATIVE_YARD_STICK_LABEL_OFFSET_Y = 1 / 120;
 // Importing it with our current build setup - as suggested in the guide above -
 // will result in browser errors.
 export const SEA_BLUE_500 = '#007499';
+export const GRAY_700_LIGHT = '#474747';
+export const GRAY_700_DARK = '#9e9e9e';
