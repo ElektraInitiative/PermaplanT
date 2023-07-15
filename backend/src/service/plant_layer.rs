@@ -57,9 +57,9 @@ fn matrix_to_image(matrix: &Vec<Vec<f32>>) -> Result<Vec<u8>, ServiceError> {
         let data = matrix[y as usize][x as usize];
 
         // The closer data is to 1 the green it gets.
-        let red = data.mul_add(-100.0, 100.0);
-        let green = data.mul_add(255.0 - 80.0, 80.0);
-        let blue = data.mul_add(-40.0, 40.0);
+        let red = data.mul_add(-128.0, 128.0);
+        let green = data.mul_add(255.0 - 128.0, 128.0);
+        let blue = data.mul_add(-128.0, 128.0);
 
         *pixel = Rgb([red as u8, green as u8, blue as u8]);
     }

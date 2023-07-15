@@ -145,7 +145,7 @@ async fn test_check_heatmap_non_0_xmin_succeeds() {
 }
 
 /// Test with a map geometry that excludes a corner.
-/// The missing corner should be colored entirely in brown, as you cannot put plants there.
+/// The missing corner should be colored entirely in grey, as you cannot put plants there.
 #[actix_rt::test]
 async fn test_heatmap_with_missing_corner_succeeds() {
     let pool = init_test_database(|conn| {
@@ -179,10 +179,10 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     let top_right_pixel = image.get_pixel(8, 2);
     let bottom_left_pixel = image.get_pixel(2, 8);
     let bottom_right_pixel = image.get_pixel(8, 8);
-    assert_eq!([50, 167, 20], top_left_pixel.0);
-    assert_eq!([50, 167, 20], top_right_pixel.0);
-    assert_eq!([100, 80, 40], bottom_left_pixel.0);
-    assert_eq!([50, 167, 20], bottom_right_pixel.0);
+    assert_eq!([64, 191, 64], top_left_pixel.0);
+    assert_eq!([64, 191, 64], top_right_pixel.0);
+    assert_eq!([128, 128, 128], bottom_left_pixel.0);
+    assert_eq!([64, 191, 64], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]

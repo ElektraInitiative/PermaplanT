@@ -14,7 +14,7 @@ use crate::{
 
 /// Endpoint for generating a heatmap signaling ideal locations for planting the plant.
 ///
-/// Brown pixels signal areas where the plant shouldn't be planted, while green areas signal ideal locations.
+/// Grey pixels signal areas where the plant shouldn't be planted, while green areas signal ideal locations.
 ///
 /// The resulting heatmap does represent actual coordinates, meaning the pixel at (0,0) is not necessarily at coordinates (0,0).
 /// Instead the image has to be moved and scaled to fit inside the maps boundaries.
