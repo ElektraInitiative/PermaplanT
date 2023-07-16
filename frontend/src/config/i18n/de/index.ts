@@ -17,6 +17,7 @@ import overview from './overview.json';
 import plantEdit from './plantEdit.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
+import plantings from './plantings.json';
 import pricing from './pricing.json';
 import privacyOptions from './privacyOptions.json';
 import routes from './routes.json';
@@ -52,6 +53,7 @@ const de = {
   layers,
   plantEdit,
   timeline,
+  plantings,
 };
 
 export default de;

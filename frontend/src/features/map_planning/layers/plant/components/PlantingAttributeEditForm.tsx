@@ -31,7 +31,7 @@ export function PlantingAttributeEditForm({
   onAddDateChange,
   onRemoveDateChange,
 }: PlantingAttributeEditFormProps) {
-  const { t } = useTranslation(['plantEdit']);
+  const { t } = useTranslation(['plantEdit', 'plantings']);
 
   const { register, handleSubmit, watch } = useForm<PlantingAttributeEditFormData>({
     defaultValues: {
@@ -60,7 +60,12 @@ export function PlantingAttributeEditForm({
       <h2>{plant?.unique_name}</h2>
 
       <div className="flex gap-2">
-        <SimpleFormInput type="date" id="addDate" labelText="Add date" register={register} />
+        <SimpleFormInput
+          type="date"
+          id="addDate"
+          labelText={t('plantings:add_date')}
+          register={register}
+        />
         {addDateSubmitState === 'loading' && (
           <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
         )}
@@ -70,7 +75,12 @@ export function PlantingAttributeEditForm({
       </div>
 
       <div className="flex gap-2">
-        <SimpleFormInput type="date" id="removeDate" labelText="Remove date" register={register} />
+        <SimpleFormInput
+          type="date"
+          id="removeDate"
+          labelText={t('plantings:remove_date')}
+          register={register}
+        />
         {removeDateSubmitState === 'loading' && (
           <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
         )}
