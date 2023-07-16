@@ -85,6 +85,13 @@ including their responsibilities, skills, etc.
 - special skills: React, TypeScript, Tailwind CSS
 - positioning: full-stack
 
+## Christoph
+
+- GitHub: @temmey
+- main responsibility: Database & Security Analysis
+- focus group: Security Analysis
+- positioning: DB
+
 # Previous Authors
 
 ## Nursultan

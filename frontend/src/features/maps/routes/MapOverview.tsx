@@ -12,6 +12,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function MapOverview() {
   const initialMessage = {
@@ -28,11 +29,16 @@ export default function MapOverview() {
     owner_id: user?.profile.sub,
   };
 
-  const { data } = useInfiniteQuery({
+  const { data, error } = useInfiniteQuery({
     queryKey: ['maps', searchParams] as const,
     queryFn: ({ pageParam = 1, queryKey: [, params] }) => findAllMaps(pageParam, params),
     getNextPageParam: (lastPage) => lastPage.page + 1,
   });
+
+  if (error) {
+    console.error(error);
+    toast.error(t('maps:overview.error_map_fetch'), { autoClose: false });
+  }
 
   const maps = data?.pages.flatMap((page) => page.results) ?? [];
   const mapList = maps.map((map) => <MapCard key={map.id} map={map} onDuplicate={duplicateMap} />);
@@ -64,6 +70,7 @@ export default function MapOverview() {
       privacy: targetMap.privacy,
       description: targetMap.description,
       location: targetMap.location,
+      geometry: targetMap.geometry,
     };
 
     await createMap(mapCopy);

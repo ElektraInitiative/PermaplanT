@@ -2,10 +2,13 @@
 #![allow(clippy::module_name_repetitions)] // There needs to be a difference between DTOs and entities otherwise imports will be messy.
 
 use chrono::NaiveDate;
+use postgis_diesel::types::{Point, Polygon};
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
+
+use self::plantings::PlantingDto;
 
 use super::r#enum::{
     layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
@@ -183,6 +186,21 @@ pub struct Page<T> {
     pub total_pages: i32,
 }
 
+/// A page of results bounded by time.
+#[typeshare]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[aliases(
+    TimelinePagePlantingsDto = TimelinePage<PlantingDto>,
+)]
+pub struct TimelinePage<T> {
+    /// Resulting records.
+    pub results: Vec<T>,
+    /// The time frame start date.
+    pub from: NaiveDate,
+    /// The time frame end date.
+    pub to: NaiveDate,
+}
+
 /// The whole information of a map.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
@@ -215,9 +233,15 @@ pub struct MapDto {
     pub location: Option<Coordinates>,
     /// The id of the owner of the map.
     pub owner_id: Uuid,
+    /// The geometry of the map.
+    ///
+    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "object")]
+    #[schema(value_type = Object)]
+    pub geometry: Polygon<Point>,
 }
 
-/// The information of a map neccessary for its creation.
+/// The information of a map necessary for its creation.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewMapDto {
@@ -245,6 +269,12 @@ pub struct NewMapDto {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Coordinates>,
+    /// The geometry of the map.
+    ///
+    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "object")]
+    #[schema(value_type = Object)]
+    pub geometry: Polygon<Point>,
 }
 
 /// The information for updating a map.
@@ -259,6 +289,12 @@ pub struct UpdateMapDto {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Coordinates>,
+    /// The geometry of the map.
+    ///
+    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "Option<object>")]
+    #[schema(value_type = Option<Object>)]
+    pub geometry: Option<Polygon<Point>>,
 }
 
 /// Query parameters for searching maps.
@@ -277,7 +313,7 @@ pub struct MapSearchParameters {
 
 /// Support struct for transmitting latitude/longitude coordinates.
 #[typeshare]
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct Coordinates {
     /// Latitude of the point.
     pub latitude: f64,
@@ -358,4 +394,14 @@ pub enum SuggestionType {
     Available,
     /// Suggests plants based on diversity criteria.
     Diversity,
+}
+
+/// Query parameters to configure the generation of the heatmap.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct HeatMapQueryParams {
+    /// The id of the plant layer the planting will be planted on.
+    pub layer_id: i32,
+    /// The id of the plant you want to plant.
+    pub plant_id: i32,
 }

@@ -21,6 +21,8 @@ use crate::sse::broadcaster::Broadcaster;
 
 use self::token::{generate_token, generate_token_for_user};
 
+pub mod data;
+pub mod dummy_map_polygons;
 pub mod jwks;
 pub mod token;
 

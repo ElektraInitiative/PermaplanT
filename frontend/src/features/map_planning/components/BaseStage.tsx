@@ -8,6 +8,7 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
+import { setTooltipPosition } from '../utils/Tooltip';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
@@ -86,6 +87,10 @@ export const BaseStage = ({
     const stage = e.target.getStage();
     if (stage === null) return;
 
+    if (tooltipRef.current) {
+      setTooltipPosition(tooltipRef.current, stage);
+    }
+
     const pointerVector = stage.getPointerPosition();
     if (pointerVector === null) return;
 
@@ -162,6 +167,8 @@ export const BaseStage = ({
 
   // Event listener responsible for unselecting shapes when clicking on the stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+
     const isStage = e.target instanceof Konva.Stage;
     const nodeSize = trRef.current?.getNodes().length || 0;
     if (nodeSize > 0 && isStage) {
@@ -235,8 +242,8 @@ export const BaseStage = ({
         </Layer>
       </Stage>
       {/** Portal to display something from different layers */}
-      <div className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
-        <div id="bottom-portal" className="rounded ring ring-secondary-500" />
+      <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
+        <div id="bottom-portal" />
       </div>
     </div>
   );

@@ -5,7 +5,9 @@ import { createPlanting } from '../../api/createPlanting';
 import { deletePlanting } from '../../api/deletePlanting';
 import { movePlanting } from '../../api/movePlanting';
 import { transformPlanting } from '../../api/transformPlanting';
+import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
+import { convertToDate } from '../../utils/date-utils';
 import { PlantingDto } from '@/bindings/definitions';
 
 export class CreatePlantAction
@@ -22,19 +24,26 @@ export class CreatePlantAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    const newPlant = {
+      ...this._data,
+      id: this._id,
+    };
+
+    const timelineDate = convertToDate(useMapStore.getState().untrackedState.timelineDate);
+    const addDate = this._data.addDate ? convertToDate(this._data.addDate) : null;
+
+    const shouldBeVisible = addDate === null || addDate <= timelineDate;
+
     return {
       ...state,
       layers: {
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: [
-            ...state.layers.plants.objects,
-            {
-              ...this._data,
-              id: this._id,
-            },
-          ],
+          objects: shouldBeVisible
+            ? [...state.layers.plants.objects, { ...newPlant }]
+            : state.layers.plants.objects,
+          loadedObjects: [...state.layers.plants.loadedObjects, { ...newPlant }],
         },
       },
     };
@@ -58,7 +67,7 @@ export class DeletePlantAction
   }
 
   reverse(state: TrackedMapState) {
-    const plant = state.layers.plants.objects.find((obj) => obj.id === this._id);
+    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._id);
 
     if (!plant) {
       return null;
@@ -75,6 +84,7 @@ export class DeletePlantAction
         plants: {
           ...state.layers.plants,
           objects: state.layers.plants.objects.filter((p) => p.id !== this._id),
+          loadedObjects: state.layers.plants.loadedObjects.filter((p) => p.id !== this._id),
         },
       },
     };
@@ -92,7 +102,7 @@ export class MovePlantAction
   }
 
   reverse(state: TrackedMapState) {
-    const plants = state.layers.plants.objects.filter((obj) => this._ids.includes(obj.id));
+    const plants = state.layers.plants.loadedObjects.filter((obj) => this._ids.includes(obj.id));
 
     if (!plants.length) {
       return null;
@@ -102,23 +112,28 @@ export class MovePlantAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    const updatePlants = (plants: Array<PlantingDto>) => {
+      return plants.map((p) => {
+        if (this._ids.includes(p.id)) {
+          return {
+            ...p,
+            x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
+            y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
+          };
+        }
+
+        return p;
+      });
+    };
+
     return {
       ...state,
       layers: {
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: state.layers.plants.objects.map((p) => {
-            if (this._ids.includes(p.id)) {
-              return {
-                ...p,
-                x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
-                y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
-              };
-            }
-
-            return p;
-          }),
+          objects: updatePlants(state.layers.plants.objects),
+          loadedObjects: updatePlants(state.layers.plants.loadedObjects),
         },
       },
     };
@@ -151,7 +166,7 @@ export class TransformPlantAction
   }
 
   reverse(state: TrackedMapState) {
-    const plants = state.layers.plants.objects.filter((obj) => this._ids.includes(obj.id));
+    const plants = state.layers.plants.loadedObjects.filter((obj) => this._ids.includes(obj.id));
 
     if (!plants.length) {
       return null;
@@ -170,26 +185,31 @@ export class TransformPlantAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    const updatePlants = (plants: Array<PlantingDto>) => {
+      return plants.map((p) => {
+        if (this._ids.includes(p.id)) {
+          return {
+            ...p,
+            x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
+            y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
+            scaleX: this._data.find((d) => d.id === p.id)?.scaleX ?? p.scaleX,
+            scaleY: this._data.find((d) => d.id === p.id)?.scaleY ?? p.scaleY,
+            rotation: this._data.find((d) => d.id === p.id)?.rotation ?? p.rotation,
+          };
+        }
+
+        return p;
+      });
+    };
+
     return {
       ...state,
       layers: {
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: state.layers.plants.objects.map((p) => {
-            if (this._ids.includes(p.id)) {
-              return {
-                ...p,
-                x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
-                y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
-                scaleX: this._data.find((d) => d.id === p.id)?.scaleX ?? p.scaleX,
-                scaleY: this._data.find((d) => d.id === p.id)?.scaleY ?? p.scaleY,
-                rotation: this._data.find((d) => d.id === p.id)?.rotation ?? p.rotation,
-              };
-            }
-
-            return p;
-          }),
+          objects: updatePlants(state.layers.plants.objects),
+          loadedObjects: updatePlants(state.layers.plants.loadedObjects),
         },
       },
     };

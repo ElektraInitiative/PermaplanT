@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, removed and delete habitats of animals to support their plants and ecosystem in their map in the habitats layer.
-- **Assignee:** Moritz
 
 ## Scenarios
 

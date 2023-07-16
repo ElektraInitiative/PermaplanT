@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface MapCreationAttributes {
   name: string;
@@ -126,8 +127,25 @@ export default function MapCreateForm() {
       privacy: mapInput.privacy,
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
+      // TODO #349: implement selector to specify the maps borders
+      geometry: {
+        rings: [
+          [
+            { x: 0.0, y: 0.0 },
+            { x: 0.0, y: 10_000.0 },
+            { x: 10_000.0, y: 10_000.0 },
+            { x: 10_000.0, y: 0.0 },
+            { x: 0.0, y: 0.0 },
+          ],
+        ],
+        srid: 4326,
+      },
     };
-    await createMap(newMap);
+    try {
+      await createMap(newMap);
+    } catch (error) {
+      toast.error(t('maps:create.error_map_create'), { autoClose: false });
+    }
     navigate('/maps');
   }
 

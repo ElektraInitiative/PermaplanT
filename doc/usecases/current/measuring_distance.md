@@ -7,7 +7,8 @@
 - **Actors:** App User
 - **Brief:** The user can measure the distance between different elements in their map.
 - **Status:** Assigned
-- **Assignee:** Ramzan
+- **Simplification:** Measuring only of pixels (not via backend as described below)
+- **Assignee:** Moritz
 
 ## Scenarios
 
