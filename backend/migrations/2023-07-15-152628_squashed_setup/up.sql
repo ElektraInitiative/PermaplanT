@@ -339,8 +339,8 @@ CREATE TABLE plantings (
     scale_y real NOT NULL,
     add_date date,
     remove_date date,
-    create_date date DEFAULT CURRENT_DATE NOT NULL,
-    delete_date date
+    --create_date date DEFAULT CURRENT_DATE NOT NULL,
+    --delete_date date
 );
 
 CREATE TABLE relations (
