@@ -79,11 +79,12 @@ pub struct Plants {
     /// - *Fill ratio:* 6%
     pub edible_uses_en: Option<String>,
 
+    /*
     /// - Not used.
     /// - *Fetched from* PracticalPlants as `medicinal_uses` and merged with Permapeople.
     /// - *Fill ratio:* 1%
-    pub medicinal_uses: Option<String>,
-
+    //pub medicinal_uses: Option<String>,
+     */
     /// - Only for references.
     /// - *Fetched from* PracticalPlants)
     /// - *Fill ratio:* 34%
@@ -94,12 +95,13 @@ pub struct Plants {
     /// - *Fill ratio:* 63%
     pub botanic: Option<String>,
 
+    /*
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
     /// - Plants are not only used for food but also for other uses, e.g. fiber to produce paper.
     /// - *Fill ratio:* 1%
-    pub material_uses: Option<String>,
-
+    //pub material_uses: Option<String>,
+     */
     /// - *Used* for search ranking (diversity).
     /// - ecological and environmental function of the plant, especially nitrogen fixer is relevant for PermaplanT.
     /// - *Fetched from* PracticalPlants)
@@ -149,22 +151,23 @@ pub struct Plants {
     /// - *Fill ratio:* 37%
     pub soil_water_retention: Option<Vec<Option<SoilWaterRetention>>>,
 
+    /*
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
     /// - gives information about environmental conditions, such as drought or wind tolerance
     /// - *Fill ratio:* 15%
-    pub environmental_tolerances: Option<Vec<Option<String>>>,
+    //pub environmental_tolerances: Option<Vec<Option<String>>>,
 
     /// - Not used.
     /// - *Fetched from* PracticalPlants
     /// - *Fill ratio:* 0.2%
-    pub native_geographical_range: Option<String>,
+    //pub native_geographical_range: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* PracticalPlants
     /// - *Fill ratio:* 0.1%
-    pub native_environment: Option<String>,
-
+    //pub native_environment: Option<String>,
+    */
     /// - Interesting for search functionality.
     /// - *Fetched from* PracticalPlants
     /// - informs about the (vertical) layer, that the plant usually inhabits, e.g. soil surface or canopy
@@ -203,23 +206,25 @@ pub struct Plants {
     /// - *Fill ratio:* 80%
     pub height: Option<PlantHeight>,
 
+    /*
     /// - Determines how large the plant can grow in diameter.
     /// - Other plants should get a warning if planted within this area.
-    /// - *TODO:* should be number and then be used for map.
+    /// - *TODO:* replaced with spread, will keep this for now for information
     /// - *Fetched from* PracticalPlants as `mature_size_width` and merged with Permapeople.
     /// - *Fill ratio:* 22%
     //pub width: Option<String>,
-
+     */
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
     /// - *Fill ratio:* 18%
     pub fertility: Option<Vec<Option<Fertility>>>,
 
+    /*
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
     /// - *Fill ratio:* 0.5%
-    pub flower_colour: Option<String>,
-
+    //pub flower_colour: Option<String>,
+     */
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
     /// - a plant can contain flowers of two different sexes, male or female (monoecious), a plant can contain only flowers of one specific sex and therefore needs at least another plant of the other sex to reproduce (dioecious) or can contain flowers that have both the sexes within the same flower (hermaphrodite).
@@ -309,11 +314,12 @@ pub struct Plants {
     /// - *Fill ratio:* 35%
     pub alternate_name: Option<String>,
 
+    /*
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.02%
-    pub diseases: Option<String>,
-
+    //pub diseases: Option<String>,
+     */
     /// - Important information.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 62%
@@ -325,198 +331,199 @@ pub struct Plants {
     /// - *Fill ratio:* 61%
     pub edible_parts: Option<Vec<Option<String>>>,
 
+    /*
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - Reinsaat: `Keimtemperatur` should be copied to `germination_temperature`
     /// - Germination means that all conditions are right for a seed to start growing. Temperature is one essential factor.
     /// - *Fill ratio:* 2%
-    pub germination_temperature: Option<String>,
+    //pub germination_temperature: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 36%
-    pub introduced_into: Option<String>,
+    //pub introduced_into: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople as \`layer\` and renamed.
     /// - Habitus describes the shape of a plant.
     /// - *Fill ratio:* 48%
-    pub habitus: Option<String>,
+    //pub habitus: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.1%
-    pub medicinal_parts: Option<String>,
+    //pub medicinal_parts: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 80%
-    pub native_to: Option<String>,
+    //pub native_to: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 86%
-    pub plants_for_a_future: Option<String>,
+    //pub plants_for_a_future: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 86%
-    pub plants_of_the_world_online_link: Option<String>,
+    //pub plants_of_the_world_online_link: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 15%
-    pub plants_of_the_world_online_link_synonym: Option<String>,
+    //pub plants_of_the_world_online_link_synonym: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants as `pollinators` and merged with `pollination` of Permapeople.
     /// - Pollination is the process that the pollen (male part) gets united with the pistil (female part), e.g. via bees, wind.
     /// - *Fill ratio:* 48%
-    pub pollination: Option<String>,
+    //pub pollination: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.1%
-    pub propagation_transplanting_en: Option<String>,
+    //pub propagation_transplanting_en: Option<String>,
 
     /// - Not used.
     /// - Nearly empty.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.01%
-    pub resistance: Option<String>,
+    //pub resistance: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - Root type describes the shape of the roots.
     /// - *Fill ratio:* 0.24%
-    pub root_type: Option<String>,
+    //pub root_type: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople as `seed_planting_depth` and renamed.
     /// - Reinsaat: `Sowing depth` should be copied to `seed_planting_depth_en`
     /// - When sowing each plant has a specific value how deep the seeds should be covered with soil.
     /// - *Fill ratio:* 0.07%
-    pub seed_planting_depth_en: Option<String>,
+    //pub seed_planting_depth_en: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - expected average life span (in years) of a seed of a certain specie.
     /// - *Fill ratio:* 0.6%
-    pub seed_viability: Option<String>,
+    //pub seed_viability: Option<String>,
 
     /// - Not used.
     /// - The final part of the URL of the plant on the Permapeople website.
     /// - This field can be potentially used to construct the `external_url` field traversing through all the parents given by `parent_id`.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 90%
-    pub slug: Option<String>,
-
-    /// - Not used.
-    /// - *TODO:* overlap with `width`.
+    //pub slug: Option<String>,
+    */
+    /// - To be used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.1%
     pub spread: Option<PlantSpread>,
 
+    /*
     /// - Not used.
     /// - *TODO:* ovlerap with `functions`.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 2%
-    pub utility: Option<String>,
-
+    //pub utility: Option<String>,
+     */
     /// - Important information.
     /// - *Fetched from* Permapeople.
     /// - specific warnings for eather human, animal or environmental well-being, e.g. toxic, invasive.
     /// - *Fill ratio:* 8%
     pub warning: Option<String>,
 
+    /*
     /// - Not used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.06%
-    pub when_to_plant_cuttings_en: Option<String>,
+    //pub when_to_plant_cuttings_en: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.07%
-    pub when_to_plant_division_en: Option<String>,
+    //pub when_to_plant_division_en: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.2%
-    pub when_to_plant_transplant_en: Option<String>,
+    //pub when_to_plant_transplant_en: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.23%
-    pub when_to_sow_indoors_en: Option<String>,
+    //pub when_to_sow_indoors_en: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople as `when_to_sow_outdoors` and renamed.
     /// - Reinsaat: `Sowing` or `Direct Sowing` or `Sowing outdoors` or `Sowing Direct Outdoors` should be copied to `sowing_outdoors_en`
     /// - *Fill ratio:* 0.36%
-    pub sowing_outdoors_en: Option<String>,
+    //pub sowing_outdoors_en: Option<String>,
 
     /// - Only informational.
     /// - *TODO:* ask how to interpret.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.56%
-    pub when_to_start_indoors_weeks: Option<String>,
+    //pub when_to_start_indoors_weeks: Option<String>,
 
     /// - Only informational.
     /// - *TODO:* ask how to interpret.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.12%
-    pub when_to_start_outdoors_weeks: Option<String>,
+    //pub when_to_start_outdoors_weeks: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - Stratification is the process that a seed must go through to get triggered for germination, e.g. by a certain threshold of minus degrees.
     /// - *Fill ratio:* 0.03%
-    pub cold_stratification_temperature: Option<String>,
+    //pub cold_stratification_temperature: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - Suggested change
     /// - *Fetched from* Permapeople.
     /// - Stratification is the process that a seed must go through to get triggered for germination, e.g. by a certain amount of time under cold temperatures.
-
     /// - *Fill ratio:* 0.05%
-    pub cold_stratification_time: Option<String>,
+    //pub cold_stratification_time: Option<String>,
 
     /// - Only informational.
     /// - *TODO:* should be number and then be used for calender
     /// - *Fetched from* Permapeople.
     /// - Reinsaat: `1st harvest` should be copied to `days_to_harvest`
     /// - *Fill ratio:* 0.1%
-    pub days_to_harvest: Option<String>,
+    //pub days_to_harvest: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.2%
-    pub habitat: Option<String>,
+    //pub habitat: Option<String>,
 
     /// - One number means it is spacing between plants and rows. Two numbers means first is spacing between plants, second between rows.
     /// - Only informational.
     /// - *Fetched from* Permapeople as `spacing` and from Reinsaat as `Distances` and renamed.
     /// - Reinsaat: `Distances` or `Spacing` should be copied to `spacing_en`
     /// - *Fill ratio:* 0.7%
-    pub spacing_en: Option<String>,
+    //pub spacing_en: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* Permapeople as `wikipedia` and renamed.
     /// - *Fill ratio:* 47%
-    pub wikipedia_url: Option<String>,
+    //pub wikipedia_url: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.3%
-    pub days_to_maturity: Option<String>,
+    //pub days_to_maturity: Option<String>,
 
     /// - Not used.
     /// - Nearly empty.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.03%
-    pub pests: Option<String>,
-
+    //pub pests: Option<String>,
+    */
     /// - Only for administration.
     /// - The version of the entry.
     /// - To be incremented after every relevant change.
@@ -524,62 +531,64 @@ pub struct Plants {
     /// - *Fill ratio:* 90%
     pub version: Option<i16>,
 
+    /*
     /// - Only informational.
     /// - *Fetched from* Permapeople.
     /// - Germination time describes the time (days, weeks, months) that a seed needs to germinate given the right conditions.
     /// - *Fill ratio:* 0.5%
-    pub germination_time: Option<String>,
+    //pub germination_time: Option<String>,
 
     /// - Not used.
     /// - *TODO:* must be renamed to `description_en` and translation needed.
     /// - The description of the entry.
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 5%
-    pub description: Option<String>,
+    //pub description: Option<String>,
 
     /// - Not used.
     /// - *Fetched from* permapeople id of the parent entry pointing to the `external_id` column.
     /// - *Fill ratio:* 2%
-    pub parent_id: Option<String>,
-
+    //pub parent_id: Option<String>,
+    */
     /// - Not used.
     /// - Enum value indicating the source of the entry.
     /// - *Fill ratio:* 100%
     pub external_source: Option<ExternalSource>,
 
+    /*
     /// - Not used.
     /// - The external id of the entry used in combination with the `external_source` column.
     /// - *Fill ratio:* 90%
-    pub external_id: Option<String>,
+    //pub external_id: Option<String>,
 
     /// - Not used.
     /// - The external URL provided by the origin source.
     /// - *Fill ratio:* 9%
-    pub external_url: Option<String>,
+    //pub external_url: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants as `root_zone_tendency` and merged with root_depth of Permapeople.
     /// - Root depth can be considered when planning polycultures, e.g. combining shallow roots with deep roots.
     /// - *Fill ratio:* 0.2%
-    pub root_depth: Option<String>,
+    //pub root_depth: Option<String>,
 
     /// - Not used.
     /// - The article number `Artikelnummer` of the plant in the Reinsaat database.
     /// - *Fill ratio:* 7%
-    pub external_article_number: Option<String>,
+    //pub external_article_number: Option<String>,
 
     /// - Not used.
     /// - `Portionsinhalt` should be called `external_portion_content`
     /// - *Fetched from* Reinsaat.
     /// - *Fill ratio:* 7%
-    pub external_portion_content: Option<String>,
+    //pub external_portion_content: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Reinsaat as \`Direktsaat\` and renamed.
     /// - `Direktsaat` or `Aussaat` should be called `sowing_outdoors_de`
     /// - *Fill ratio:* 3%
-    pub sowing_outdoors_de: Option<String>,
-
+    //pub sowing_outdoors_de: Option<String>,
+    */
     /// - String array of numbers representing a time period.
     /// - The year is divided into 24 periods of half a month each.
     /// - *For example* "\[8,9,10\]" means from the 2nd half of April to the 2nd half of May incl.
@@ -596,63 +605,65 @@ pub struct Plants {
     /// - *Fill ratio:* 6%
     pub harvest_time: Option<Vec<Option<i16>>>,
 
+    /*
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - `Abstände` should be called `spacing_de`
     /// - *Fill ratio:* 4%
-    pub spacing_de: Option<String>,
+    //pub spacing_de: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - *Fill ratio:* 4%
     /// - `Saatgutbedarf` should be called `required_quantity_of_seeds_de`
-    pub required_quantity_of_seeds_de: Option<String>,
+    //pub required_quantity_of_seeds_de: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - `Required quantity of seeds` should be called `required_quantity_of_seeds_en`
     /// - *Fill ratio:* 3%
-    pub required_quantity_of_seeds_en: Option<String>,
+    //pub required_quantity_of_seeds_en: Option<String>,
 
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - `Saattiefe` should be called `seed_planting_depth_de`
     /// - When sowing, each plant has a specific value how deep the seeds should be covered with soil.
     /// - *Fill ratio:* 5%
-    pub seed_planting_depth_de: Option<String>,
+    //pub seed_planting_depth_de: Option<String>,
 
     /// - German version of thousand grain weight (German: Tausendkornmasse)
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - Called `Tausendkornmasse` in Reinsaat
     /// - *Fill ratio:* 4%
-    pub seed_weight_1000_de: Option<String>,
+    //pub seed_weight_1000_de: Option<String>,
 
     /// - English version of thousand grain weight (German: Tausendkornmasse)
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - Called `Thousand seeds mass` in Reinsaat
     /// - *Fill ratio:* 3%
-    pub seed_weight_1000_en: Option<String>,
-
+    //pub seed_weight_1000_en: Option<String>,
+    */
     /// - Number for thousand grain weight (German: Tausendkornmasse)
     /// - *Used* in `doc/usecases/buy_seeds.md` to calculate seed weight based on number of plants.
     /// - *Fetched from* Permapeople as \`1000_seed_weight_g\` and renamed.
     /// - *TODO:* merge with data from reinsaat: `Tausendkorngewicht (TKG)` should be copied to `seed_weight` (remove ` g`)
     /// - *Fill ratio:* 4%
     pub seed_weight_1000: Option<f64>,
-
+    /*
     /// - Only informational.
     /// - *Fetched from* Reinsaat.
     /// - `Suitable for professional cultivation` should be called `machine_cultivation_possible`
     /// - *Fill ratio:* 9%
-    pub machine_cultivation_possible: Option<bool>,
+    //pub machine_cultivation_possible: Option<bool>,
 
     /// - *Fetched from* Reinsaat.
     /// - *Used* for plant search and informational.
     /// - `subcategory` from Reinsaat should be copied to `edible_uses_de` and `edible_uses_en` respectively (DE and EN version)
     /// - *Fill ratio:* 6%
-    pub edible_uses_de: Option<String>,
+    //pub edible_uses_de: Option<String>,
+    */
 }
 /// The `Seed` entity.
 #[derive(Identifiable, Queryable)]
