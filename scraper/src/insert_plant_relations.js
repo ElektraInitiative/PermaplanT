@@ -33,7 +33,6 @@ async function getIdsFromPlantnames(map) {
  * @param {*} relation - the relation we are adding atm. can be companion, neutral or antagonist. Its a ENUM in our database
  *
  */
-
 async function insertPlantRelations(jsonArray, map, relation) {
   const cs = new pgp.helpers.ColumnSet(
     ["plant1", "plant2", "relation", "note"],
