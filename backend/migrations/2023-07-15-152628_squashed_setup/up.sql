@@ -7,7 +7,6 @@ CREATE TYPE deciduous_or_evergreen AS ENUM (
     'evergreen'
 );
 
-
 CREATE TYPE external_source AS ENUM (
     'practicalplants',
     'permapeople',
@@ -19,13 +18,11 @@ CREATE TYPE fertility AS ENUM (
     'self sterile'
 );
 
-
 CREATE TYPE flower_type AS ENUM (
     'dioecious',
     'monoecious',
     'hermaphrodite'
 );
-
 
 CREATE TYPE growth_rate AS ENUM (
     'slow',
@@ -33,12 +30,10 @@ CREATE TYPE growth_rate AS ENUM (
     'vigorous'
 );
 
-
 CREATE TYPE herbaceous_or_woody AS ENUM (
     'herbaceous',
     'woody'
 );
-
 
 CREATE TYPE layer_type AS ENUM (
     'base',
@@ -62,7 +57,6 @@ CREATE TYPE layer_type AS ENUM (
     'fertilization',
     'infrastructure'
 );
-
 
 CREATE TYPE life_cycle AS ENUM (
     'annual',
@@ -177,7 +171,6 @@ BEGIN
 END;
 $$;
 
-
 CREATE TABLE layers (
     id integer NOT NULL,
     map_id integer NOT NULL,
@@ -186,7 +179,6 @@ CREATE TABLE layers (
     is_alternative boolean NOT NULL
 );
 
-
 CREATE SEQUENCE layers_id_seq
     AS integer
     START WITH 1
@@ -194,7 +186,6 @@ CREATE SEQUENCE layers_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
 
 CREATE TABLE maps (
     id integer NOT NULL,
@@ -352,15 +343,12 @@ CREATE TABLE plantings (
     delete_date date
 );
 
-
-
 CREATE TABLE relations (
     plant1 integer NOT NULL,
     plant2 integer NOT NULL,
     relation relation_type NOT NULL,
     note text
 );
-
 
 CREATE TABLE seeds (
     id integer NOT NULL,
@@ -380,7 +368,6 @@ CREATE TABLE seeds (
     owner_id uuid NOT NULL
 );
 
-
 CREATE SEQUENCE seeds_id_seq
     AS integer
     START WITH 1
@@ -389,30 +376,22 @@ CREATE SEQUENCE seeds_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
 ALTER TABLE ONLY layers ALTER COLUMN id SET DEFAULT nextval('layers_id_seq'::regclass);
-
 
 ALTER TABLE ONLY maps ALTER COLUMN id SET DEFAULT nextval('maps_id_seq'::regclass);
 
-
 ALTER TABLE ONLY plants ALTER COLUMN id SET DEFAULT nextval('plant_detail_id_seq'::regclass);
 
-
 ALTER TABLE ONLY seeds ALTER COLUMN id SET DEFAULT nextval('seeds_id_seq'::regclass);
-
 
 ALTER TABLE ONLY layers
     ADD CONSTRAINT layers_pkey PRIMARY KEY (id);
 
-
 ALTER TABLE ONLY maps
     ADD CONSTRAINT map_unique_name UNIQUE (name);
 
-
 ALTER TABLE ONLY maps
     ADD CONSTRAINT maps_pkey PRIMARY KEY (id);
-
 
 ALTER TABLE ONLY plants
     ADD CONSTRAINT plant_detail_pkey PRIMARY KEY (id);
@@ -420,40 +399,31 @@ ALTER TABLE ONLY plants
 ALTER TABLE ONLY plants
     ADD CONSTRAINT plant_unique_name_key UNIQUE (unique_name);
 
-
 ALTER TABLE ONLY plantings
     ADD CONSTRAINT plantings_pkey PRIMARY KEY (id);
-
 
 ALTER TABLE ONLY relations
     ADD CONSTRAINT relations_pkey PRIMARY KEY (plant1, plant2);
 
-
 ALTER TABLE ONLY seeds
     ADD CONSTRAINT seeds_pkey PRIMARY KEY (id);
-
-
-CREATE TRIGGER check_layer_type_before_insert_or_update BEFORE INSERT OR UPDATE ON plantings FOR EACH ROW EXECUTE FUNCTION check_layer_type();
-
 
 ALTER TABLE ONLY layers
     ADD CONSTRAINT layers_map_id_fkey FOREIGN KEY (map_id) REFERENCES maps(id);
 
-
 ALTER TABLE ONLY plantings
     ADD CONSTRAINT plantings_layer_id_fkey FOREIGN KEY (layer_id) REFERENCES layers(id);
-
 
 ALTER TABLE ONLY plantings
     ADD CONSTRAINT plantings_plant_id_fkey FOREIGN KEY (plant_id) REFERENCES plants(id);
 
-
 ALTER TABLE ONLY relations
     ADD CONSTRAINT relations_plant1_fkey FOREIGN KEY (plant1) REFERENCES plants(id);
-
 
 ALTER TABLE ONLY relations
     ADD CONSTRAINT relations_plant2_fkey FOREIGN KEY (plant2) REFERENCES plants(id);
 
 ALTER TABLE ONLY seeds
     ADD CONSTRAINT seeds_plant_id_fkey FOREIGN KEY (plant_id) REFERENCES plants(id);
+
+CREATE TRIGGER check_layer_type_before_insert_or_update BEFORE INSERT OR UPDATE ON plantings FOR EACH ROW EXECUTE FUNCTION check_layer_type();
