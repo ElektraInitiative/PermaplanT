@@ -42,7 +42,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- squashed migrations and commented out properties for now to improve build time. Also set all enums to lowercases _(temmey)_
 - _()_
 - _()_
 - _()_
