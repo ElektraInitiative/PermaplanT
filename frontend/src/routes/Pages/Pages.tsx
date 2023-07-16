@@ -10,7 +10,8 @@ function Pages() {
       {Object.values(routes).map(({ path, component: Component, restricted }) => {
         if (restricted) {
           if (auth.isLoading) {
-            return null;
+            // return a route, else react router will print a warning
+            return <Route key={path} path={path} element={null} />;
           }
           return (
             <Route
