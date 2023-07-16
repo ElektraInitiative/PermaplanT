@@ -114,9 +114,12 @@
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Preconditions:
+  - [ ] Be on the map managment page.
   - [ ] TODO! @kitzbergerg
 - Test Steps:
-  1. TODO! @kitzbergerg
+  1. Create a map
+  2. Plant some plants with relations.
+  3. TODO! @kitzbergerg
 - Expected Result:
   - [ ] Heatmap considers map polygon and plant relations.
 - Actual Result:
