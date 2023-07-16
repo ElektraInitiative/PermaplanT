@@ -63,7 +63,7 @@
 
 - Description: Show a selection of plants if the search input is empty.
 - Preconditions:
-  - [ ] No search input has been provided in the plant search.
+  - No search input has been provided in the plant search.
 - Test Steps:
   1. Naviagate to the map page.
   2. Select a map.
@@ -79,15 +79,13 @@
 
 - Description: Return expected results for a given search in the selected language.
 - Preconditions:
-  - [ ] The search term "tomato" has been typed into the search field.
+  - The search term "tomato" has been typed into the search field.
 - Test Steps:
-
   1. Naviagate to the map page.
   2. Select a map.
   3. Select the plant layer in the right map menu.
   4. Push the search icon in the lower right menu.
   5. Write "tomato" into the search field.
-
 - Expected Result:
   - [ ] The plants shown contain the string "tomato" in part of the datacolumns as outlined in the usecase document.
 - Actual Result:
@@ -98,18 +96,32 @@
 
 - Description: Returns results for searches in the language that was not selected.
 - Preconditions:
-  - [ ] The search term "fichte" has been typed into the search field.
+  - The search term "fichte" has been typed into the search field.
 - Test Steps:
-
   1. Navigate to the map page.
   2. Select a map.
   3. Select the plant layer in the right map menu.
   4. Push the search icon in the lower right menu.
   5. Write "fichte" into the search field.
-
 - Expected Result:
   - [ ] Firs (german "Fichten") are part of the search results in addition to english matches.
   - [ ] Matches on english data fields are ranked above english matches.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-007 - Heatmap
+
+- Description: Test whether the heatmap endpoints generates the image correctly.
+- Preconditions:
+  - Be on the map managment page.
+  - TODO! @kitzbergerg
+- Test Steps:
+  1. Create a map
+  2. Plant some plants with relations.
+  3. TODO! @kitzbergerg
+- Expected Result:
+  - [ ] Heatmap considers map polygon and plant relations.
 - Actual Result:
 - Test Result:
 - Notes:
