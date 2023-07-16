@@ -38,11 +38,11 @@ pub struct Planting {
     pub remove_date: Option<NaiveDate>,
     /*
     /// The date the planting was created.
-    pub create_date: NaiveDate,
+    //pub create_date: NaiveDate,
 
     /// The date the planting was 'soft' deleted
     /// and is still able to be restored.
-    pub delete_date: Option<NaiveDate>,
+    //pub delete_date: Option<NaiveDate>,
     */
 }
 

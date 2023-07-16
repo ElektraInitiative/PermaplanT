@@ -24,7 +24,7 @@ use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
     fertility::Fertility, flower_type::FlowerType, growth_rate::GrowthRate,
     herbaceous_or_woody::HerbaceousOrWoody, layer_type::LayerType, life_cycle::LifeCycle,
-    light_requirement::LightRequirement, nutrition_demand::NutritionDemand,
+    light_requirement::LightRequirement, /*nutrition_demand::NutritionDemand,*/
     plant_height::PlantHeight, plant_spread::PlantSpread, propagation_method::PropagationMethod,
     quality::Quality, quantity::Quantity, shade::Shade, soil_ph::SoilPh, soil_texture::SoilTexture,
     soil_water_retention::SoilWaterRetention, water_requirement::WaterRequirement,
@@ -257,6 +257,7 @@ pub struct Plants {
     /// - *Fill ratio:* 58%
     pub plant_references: Option<Vec<Option<String>>>,
 
+    /*
     /// - Boolean value indicating whether the plant is a tree.
     /// - Plants with `is_tree == true` can be used in the tree layer.
     /// - In plants layer all plants can be used.
@@ -268,18 +269,18 @@ pub struct Plants {
     /// - *Initial value* is to `light feeder` if "Nutritionally poor soil" in `environmental_tolerances` is present.
     /// - *Fill ratio:* 0.04%
     pub nutrition_demand: Option<NutritionDemand>,
-
+    */
     /// - Not used.
     /// - Number value between -1..6 (-1 should be printed as 00)
     /// - *Fill ratio:* 0%
     pub preferable_permaculture_zone: Option<i16>,
-
+    /*
     /// - When article was modified last time.
     /// - Only for administration.
     /// - Date value fetched from PracticalPlants page showing the last modification date of the plant.
     /// - *Fill ratio:* 63%
     pub article_last_modified_at: Option<NaiveDateTime>,
-
+    */
     /// - USDA Hardiness Zone (without subranges).
     /// - Important information.
     /// - Fetched from PracticalPlants and Permapeople (merged with usda_hardiness_zone of Permapeople).

@@ -9,7 +9,7 @@ pub mod herbaceous_or_woody;
 pub mod layer_type;
 pub mod life_cycle;
 pub mod light_requirement;
-pub mod nutrition_demand;
+//pub mod nutrition_demand;
 pub mod plant_height;
 pub mod plant_spread;
 pub mod privacy_options;

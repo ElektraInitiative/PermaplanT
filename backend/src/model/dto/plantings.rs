@@ -35,12 +35,13 @@ pub struct PlantingDto {
     /// The y scale of the plant on the map.
     #[serde(rename = "scaleY")]
     pub scale_y: f32,
-    /// The date the planting was added to the map.
+    /*/// The date the planting was added to the map.
     /// If None, the planting always existed.
     pub add_date: Option<NaiveDate>,
     /// The date the planting was removed from the map.
     /// If None, the planting is still on the map.
     pub remove_date: Option<NaiveDate>,
+    */
 }
 
 /// Used to create a new planting.
