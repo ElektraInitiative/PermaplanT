@@ -63,7 +63,7 @@
 
 - Description: Show a selection of plants if the search input is empty.
 - Preconditions:
-  - [ ] No search input has been provided in the plant search.
+  - No search input has been provided in the plant search.
 - Test Steps:
   1. Naviagate to the map page.
   2. Select a map.
@@ -79,7 +79,7 @@
 
 - Description: Return expected results for a given search in the selected language.
 - Preconditions:
-  - [ ] The search term "tomato" has been typed into the search field.
+  - The search term "tomato" has been typed into the search field.
 - Test Steps:
   1. Naviagate to the map page.
   2. Select a map.
@@ -96,7 +96,7 @@
 
 - Description: Returns results for searches in the language that was not selected.
 - Preconditions:
-  - [ ] The search term "fichte" has been typed into the search field.
+  - The search term "fichte" has been typed into the search field.
 - Test Steps:
   1. Navigate to the map page.
   2. Select a map.
@@ -114,8 +114,8 @@
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Preconditions:
-  - [ ] Be on the map managment page.
-  - [ ] TODO! @kitzbergerg
+  - Be on the map managment page.
+  - TODO! @kitzbergerg
 - Test Steps:
   1. Create a map
   2. Plant some plants with relations.
