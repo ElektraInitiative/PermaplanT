@@ -41,6 +41,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                         .service(layers::delete)
                         .service(
                             web::scope("/plants")
+                                .service(plant_layer::heatmap)
                                 .service(plant_layer::find_relations)
                                 .service(
                                     web::scope("/suggestions").service(planting_suggestions::find),
