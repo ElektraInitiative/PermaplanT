@@ -56,8 +56,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - backend: add endpoint to generate the heatmap _(Gabriel)_
 - UX: Revised existing error notifications and added new ones for other API calls _(Thorben)_
-- _()_
-- _()_
+- CI: Cancel previous builds #557 _(4ydan)_
+- backend: add scheduled task to remove maps #90 _(GabrielThorben)_
 
 ## 0.2.2 - 12.07.2023 (281 commits)
 
