@@ -12,24 +12,25 @@ const SUBMIT_DELAY = 1000;
 
 export function useDebouncedSubmit<T extends FieldValues>(
   value: T[keyof T],
-  defaultValue: T[keyof T],
   handleSubmit: UseFormHandleSubmit<T>,
   onValid: SubmitHandler<T>,
   onInvalid?: SubmitErrorHandler<T> | undefined,
 ) {
   const [submitState, setSubmitState] = useState<'loading' | 'idle' | 'error'>('idle');
+  const [lastValue, setLastValue] = useState<T[keyof T] | null>(null);
 
   useEffect(() => {
-    if (value === defaultValue) {
+    if (value === lastValue) {
       return;
     }
 
+    setLastValue(value);
     setSubmitState('loading');
-  }, [value, defaultValue]);
+  }, [value, lastValue]);
 
   useDebounceEffect(
     () => {
-      if (submitState === 'idle' || submitState === 'error') {
+      if (submitState === 'idle') {
         return;
       }
 

@@ -33,7 +33,7 @@ export function PlantingAttributeEditForm({
 }: PlantingAttributeEditFormProps) {
   const { t } = useTranslation(['plantEdit']);
 
-  const { register, handleSubmit, watch, formState } = useForm<PlantingAttributeEditFormData>({
+  const { register, handleSubmit, watch } = useForm<PlantingAttributeEditFormData>({
     defaultValues: {
       addDate: planting.addDate,
       removeDate: planting.removeDate,
@@ -43,7 +43,6 @@ export function PlantingAttributeEditForm({
 
   const addDateSubmitState = useDebouncedSubmit<PlantingAttributeEditFormData>(
     watch('addDate'),
-    planting.addDate,
     handleSubmit,
     onAddDateChange,
     (e) => console.error(e),
@@ -51,7 +50,6 @@ export function PlantingAttributeEditForm({
 
   const removeDateSubmitState = useDebouncedSubmit<PlantingAttributeEditFormData>(
     watch('removeDate'),
-    planting.removeDate,
     handleSubmit,
     onRemoveDateChange,
     (e) => console.error(e),
@@ -69,11 +67,6 @@ export function PlantingAttributeEditForm({
         {addDateSubmitState === 'idle' && (
           <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
         )}
-        {addDateSubmitState === 'error' && (
-          <span className="mb-3 mt-auto text-sm text-red-400">
-            {formState.errors?.addDate?.message}
-          </span>
-        )}
       </div>
 
       <div className="flex gap-2">
@@ -83,11 +76,6 @@ export function PlantingAttributeEditForm({
         )}
         {removeDateSubmitState === 'idle' && (
           <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
-        )}
-        {removeDateSubmitState === 'error' && (
-          <span className="mb-3 mt-auto text-sm text-red-400">
-            {formState.errors?.removeDate?.message}
-          </span>
         )}
       </div>
 
