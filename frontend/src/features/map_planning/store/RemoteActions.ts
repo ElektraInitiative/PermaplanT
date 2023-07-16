@@ -3,6 +3,8 @@ import {
   DeletePlantAction,
   MovePlantAction,
   TransformPlantAction,
+  UpdateAddDatePlantAction,
+  UpdateRemoveDatePlantAction,
 } from '../layers/plant/actions';
 import useMapStore from './MapStore';
 import { Action } from './MapStoreTypes';
@@ -48,6 +50,10 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
       return new MovePlantAction([{ ...remoteAction.payload }]);
     case 'TransformPlanting':
       return new TransformPlantAction([{ ...remoteAction.payload }]);
+    case 'UpdatePlantingAddDate':
+      return new UpdateAddDatePlantAction({ ...remoteAction.payload });
+    case 'UpdatePlantingRemoveDate':
+      return new UpdateRemoveDatePlantAction({ ...remoteAction.payload });
     default:
       throw new Error(`Unknown remote action`) as never;
   }
