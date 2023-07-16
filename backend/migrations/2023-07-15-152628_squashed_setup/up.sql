@@ -85,15 +85,13 @@ CREATE TYPE nutrition_demand AS ENUM (
 CREATE TYPE plant_height AS ENUM (
     'low',
     'medium',
-    'high',
-    'na'
+    'high'
 );
 
 CREATE TYPE plant_spread AS ENUM (
     'narrow',
     'medium',
-    'wide',
-    'na'
+    'wide'
 );
 
 CREATE TYPE privacy_options AS ENUM (
