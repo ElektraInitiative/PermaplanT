@@ -4,13 +4,6 @@ This directory contains all manual test protocol and reports.
 While developing the protocol gets extended with new testcases.
 Shortly before a major release the protocol gets executed and becomes a report.
 
-## Folder naming convention
-
-(VERSION_NOTE)
-
-- VERSION: The version number (e.g 0.4)
-- NOTE: An optional note (e.g stable)
-
 ## Protocol
 
 The blueprint of all manual test cases.
