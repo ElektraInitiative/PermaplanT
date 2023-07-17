@@ -4,10 +4,10 @@ import { PlantsSummaryDto, SeedDto } from '@/bindings/definitions';
 import SimpleCard from '@/components/Card/SimpleCard';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
-import SimpleModal from '@/components/Modals/SimpleModal';
 import { Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export function SeedDetails() {
   const { t } = useTranslation(['seeds', 'common']);
@@ -15,8 +15,6 @@ export function SeedDetails() {
 
   const [seed, setSeed] = useState<SeedDto | null>(null);
   const [plant, setPlant] = useState<PlantsSummaryDto | null>(null);
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  const [error, setError] = useState<Error>();
 
   useEffect(() => {
     // fetch seed
@@ -29,13 +27,13 @@ export function SeedDetails() {
         setPlant(plant);
       } catch (error) {
         if (error instanceof Error) {
-          setError(error);
-          setShowErrorModal(true);
+          console.error(error.message);
+          toast.error(t('seeds:view_seeds.fetching_single_error'));
         }
       }
     };
     _findOneSeed();
-  }, [id]);
+  }, [id, t]);
 
   return (
     <Suspense>
@@ -88,16 +86,6 @@ export function SeedDetails() {
             </div>
           </div>
         )}
-        <SimpleModal
-          title={t('seeds:error_modal_title')}
-          body={error?.message || t('common:unknown_error')} // Error should always have a message
-          show={showErrorModal}
-          setShow={setShowErrorModal}
-          submitBtnTitle={t('common:ok')}
-          onSubmit={() => {
-            setShowErrorModal(false);
-          }}
-        ></SimpleModal>
       </PageLayout>
     </Suspense>
   );

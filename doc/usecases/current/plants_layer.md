@@ -19,12 +19,12 @@
     - which were recently planted
     - and lastly favourites of users
   - While the user adds a plant, constraints are shown:
-    - The user gets a visual indication which parts of the map are ideally, okay and not suited for the plant to be placed
+    - The user gets a visual indication which parts of the map are ideal, okay and not suited for the plant to be placed
       (based on e.g. previous plants, zones, pH value, moisture, animals or shadows).
     - The user is able to view the relationships between the plants.
       She does so by looking at the lines connecting the existing plants with a symbol around the mouse cursor indicating companion or antagonist.
   - The user positions the plant element in the appropriate location in the map.
-  - When drawing an area of plants, the size of the arena and the number of plants is shown next to the mouse.
+  - When drawing an area of plants, the size of the area and the number of plants is shown next to the mouse.
   - The user is able to move, edit (e.g. when planted, when harvested), remove (that it was removed from the garden) and delete (that it never existed) selected plants.
   - The user adjusts the plant elements and their relationships as needed.
 - **Alternative scenario:**
@@ -35,7 +35,7 @@
   - There is an error in the app's plant relationship indication and the lines connecting the plants are not displayed correctly. In this case, the app displays an error message.
 - **Postcondition:**
   - The user's map includes the added, edited, moved, removed or deleted plant element as desired.
-  - If constraints are violated for the place where a plant was added or moved, warnings get added (or removed) to (from) the [warnings layer](warnings_layer.md).
+  - If constraints are violated for the place where a plant was added or moved, warnings get added (or removed) to (from) the [warnings layer](../assigned/warnings_layer.md).
 - **Non-functional Constraints:**
   - Partial offline availability: editing attributes, especially for planting and harvesting
   - Supports alternatives

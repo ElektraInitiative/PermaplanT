@@ -1,7 +1,8 @@
 import useMapStore from '../../store/MapStore';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
+import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { PlantsSummaryDto } from '@/bindings/definitions';
+import { LayerType, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -16,8 +17,10 @@ import * as uuid from 'uuid';
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
   const selectedPlant = useMapStore(
-    (state) => state.untrackedState.layers.Plant.selectedPlantForPlanting,
+    (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
+  const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
+  const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
 
   /**
    * Event handler for planting plants
@@ -37,20 +40,20 @@ function usePlantLayerListeners(listening: boolean) {
         new CreatePlantAction({
           id: uuid.v4(),
           plantId: selectedPlant.id,
-          // TODO: get the selectedLayerId from the store
-          layerId: 2,
+          layerId: selectedLayer.id,
           // consider the offset of the stage and size of the element
-          x: position.x - 50,
-          y: position.y - 50,
+          x: Math.round(position.x),
+          y: Math.round(position.y),
           height: 100,
           width: 100,
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
+          addDate: timelineDate,
         }),
       );
     },
-    [executeAction, selectedPlant],
+    [executeAction, selectedPlant, selectedLayer, timelineDate],
   );
 
   /**
@@ -64,12 +67,23 @@ function usePlantLayerListeners(listening: boolean) {
 
     // only unselect if we are not planting a new plant
     const selectedPlantForPlanting =
-      useMapStore.getState().untrackedState.layers.Plant.selectedPlantForPlanting;
+      useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;
     if (selectedPlantForPlanting) {
       return;
     }
 
     useMapStore.getState().selectPlanting(null);
+  }, []);
+
+  /**
+   * Event handler for selecting plants
+   */
+  const handleSelectPlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(() => {
+    const transformer = useMapStore.getState().transformer.current;
+    const element = transformer?.getNodes().find((element) => element.getAttr('planting'));
+    if (element) {
+      useMapStore.getState().selectPlanting(element.getAttr('planting'));
+    }
   }, []);
 
   /**
@@ -113,6 +127,7 @@ function usePlantLayerListeners(listening: boolean) {
 
     useMapStore.getState().stageRef.current?.on('click.placePlant', handleCreatePlanting);
     useMapStore.getState().stageRef.current?.on('click.unselectPlanting', handleUnselectPlanting);
+    useMapStore.getState().stageRef.current?.on('mouseup.selectPlanting', handleSelectPlanting);
     useMapStore.getState().transformer.current?.on('transformend.plants', handleTransformPlanting);
     useMapStore.getState().transformer.current?.on('dragend.plants', handleMovePlanting);
 
@@ -121,6 +136,7 @@ function usePlantLayerListeners(listening: boolean) {
       useMapStore.getState().stageRef.current?.off('click.unselectPlanting');
       useMapStore.getState().transformer.current?.off('transformend.plants');
       useMapStore.getState().transformer.current?.off('dragend.plants');
+      useMapStore.getState().stageRef.current?.off('mouseup.selectPlanting');
     };
   }, [
     listening,
@@ -128,6 +144,7 @@ function usePlantLayerListeners(listening: boolean) {
     handleTransformPlanting,
     handleMovePlanting,
     handleUnselectPlanting,
+    handleSelectPlanting,
   ]);
 }
 
@@ -137,29 +154,32 @@ function PlantsLayer(props: PlantsLayerProps) {
   usePlantLayerListeners(props.listening || false);
   const layerRef = useRef<Konva.Layer>(null);
 
-  const trackedState = useMapStore((map) => map.trackedState);
+  const plants = useMapStore((map) => map.trackedState.layers.plants.objects);
   const selectedPlant = useMapStore(
-    (state) => state.untrackedState.layers.Plant.selectedPlantForPlanting,
+    (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
   const portalRef = useRef<HTMLDivElement>(
     document.getElementById('bottom-portal') as HTMLDivElement,
   );
 
   return (
-    <Layer {...props} ref={layerRef}>
-      {trackedState.layers.Plant.objects.map((o) => (
-        <PlantingElement planting={o} key={o.id} />
-      ))}
+    <>
+      <PlantLayerRelationsOverlay />
+      <Layer {...props} ref={layerRef} name={`${LayerType.Plants}`}>
+        {plants.map((o) => (
+          <PlantingElement planting={o} key={o.id} />
+        ))}
 
-      <Html>
-        {createPortal(
-          <AnimatePresence mode="wait">
-            {selectedPlant && <SelectedPlantInfo plant={selectedPlant} />}
-          </AnimatePresence>,
-          portalRef.current,
-        )}
-      </Html>
-    </Layer>
+        <Html>
+          {createPortal(
+            <AnimatePresence mode="wait">
+              {selectedPlant && <SelectedPlantInfo plant={selectedPlant} />}
+            </AnimatePresence>,
+            portalRef.current,
+          )}
+        </Html>
+      </Layer>
+    </>
   );
 }
 
@@ -168,7 +188,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
 
   return (
     <motion.div
-      className="mb-4 flex gap-4 rounded-md bg-neutral-200 py-2 pl-6 pr-4 dark:bg-neutral-200-dark"
+      className="flex gap-4 rounded-md bg-neutral-200 py-3 pl-6 pr-4 ring ring-secondary-500 dark:bg-neutral-200-dark"
       initial={{ opacity: 0 }}
       animate={{
         opacity: 100,
@@ -181,7 +201,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
     >
       <div className="flex flex-col items-center justify-center">
         <span>
-          planting {plant.unique_name} ({plant.common_name_en})
+          {plant.unique_name} ({plant.common_name_en})
         </span>
       </div>
       <div className="flex items-center justify-center">

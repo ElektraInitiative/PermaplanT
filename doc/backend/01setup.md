@@ -25,44 +25,44 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE USER permaplant WITH CREATEDB PASSWORD 'permaplant';
 ```
 
-2. Install Diesel CLI:
+2. Install
 
-```shell
-cargo install diesel_cli --no-default-features --features postgres
+To install dependencies.
+
+```sh
+make install
 ```
 
-3. Run the diesel setup, this makes sure that diesel will create the database if it doesn't exist yet and will run all migrations.
+3. migrate
 
-```shell
-LC_ALL=C diesel setup
+To update the database.
+
+```sh
+make migrate
 ```
 
-4. Run diesel migrations, to bring the database up to date with the current schema.
+4. build
 
-```shell
-LC_ALL=C diesel migration run
+```sh
+make build
 ```
 
-5. Install the typeshare cli to enable type safety between Rust and TypeScript:
-
-```shell
-cargo install typeshare-cli
-```
-
-6. Start Keycloak
+5. Start Keycloak
 
 You can do one of the following two steps, the first one being the simpler one, but with less configuration options.
 
 - To use the preconfigured Keycloak instance simply copy the newest version of `.env.sample` to `.env`
-- To use the local Keycloak variant follow the steps in [Keycloak Setup](../setups/keycloak/index.html)  
+- To use the local Keycloak variant follow the steps in [Keycloak Setup](../setups/keycloak/README.md)  
   You then also have to change following two env variables in `.env`
   - `AUTH_DISCOVERY_URI=http://localhost:8081/realms/PermaplanT/.well-known/openid-configuration`
   - `AUTH_CLIENT_ID=PermaplanT`
 
-7. Run the backend
+6. run
 
-```bash
-cargo run
+To start the server
+
+```sh
+make run
 ```
 
 ## Test server using Swagger

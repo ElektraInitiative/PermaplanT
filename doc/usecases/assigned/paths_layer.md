@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, remove and delete a connected network of paths and fences in their map in the paths layer.
-- **Assignee:** Moritz
 
 ## Scenarios
 

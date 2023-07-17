@@ -25,8 +25,10 @@ The endpoint paths use:
 
 ## Parameters
 
+- Use singular if there is only one item, plural for collections.
 - Search should have its own endpoint and parameter should be `name`
-- We use the parameter `page` and `per_page` (type integer) for pagination.
+- Return values are called `Page*` if they support paging.
+  We use the parameter `page` and `per_page` (type integer) for pagination.
 - Currently we don't use filtering or sorting.
 - If in doubt, leave it out: keep parameters minimal.
 

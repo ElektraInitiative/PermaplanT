@@ -1,16 +1,27 @@
 //! Contains the implementation of [`Planting`].
 
+use chrono::NaiveDate;
 use diesel::pg::Pg;
-use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
+use diesel::{debug_query, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 use uuid::Uuid;
 
-use crate::model::dto::plantings::{
-    NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
-};
+use crate::model::dto::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
 use crate::model::entity::plantings::{Planting, UpdatePlanting};
 use crate::schema::plantings::{self, all_columns, layer_id, plant_id};
+
+/// Arguments for the database layer find plantings function.
+pub struct FindPlantingsParameters {
+    /// The id of the plant to find plantings for.
+    pub plant_id: Option<i32>,
+    /// The id of the layer to find plantings for.
+    pub layer_id: Option<i32>,
+    /// First date in the time frame plantings are searched for.
+    pub from: NaiveDate,
+    /// Last date in the time frame plantings are searched for.
+    pub to: NaiveDate,
+}
 
 impl Planting {
     /// Get all plantings associated with the query.
@@ -18,7 +29,7 @@ impl Planting {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find(
-        search_parameters: PlantingSearchParameters,
+        search_parameters: FindPlantingsParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantingDto>> {
         let mut query = plantings::table.select(all_columns).into_boxed();
@@ -26,11 +37,23 @@ impl Planting {
         if let Some(id) = search_parameters.plant_id {
             query = query.filter(plant_id.eq(id));
         }
-        if let Some(id) = search_parameters.plants_layer_id {
+        if let Some(id) = search_parameters.layer_id {
             query = query.filter(layer_id.eq(id));
         }
 
+        let from = search_parameters.from;
+        let to = search_parameters.to;
+
+        let plantings_added_before_date =
+            plantings::add_date.is_null().or(plantings::add_date.lt(to));
+        let plantings_removed_after_date = plantings::remove_date
+            .is_null()
+            .or(plantings::remove_date.gt(from));
+
+        query = query.filter(plantings_added_before_date.and(plantings_removed_after_date));
+
         debug!("{}", debug_query::<Pg, _>(&query));
+
         Ok(query
             .load::<Self>(conn)
             .await?

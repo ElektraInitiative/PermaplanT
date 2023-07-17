@@ -25,10 +25,13 @@
 - map context
   - layers and their attributes e.g. warning layer and its visibility
 - event: a day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
-- deletion vs. removal of elements
-  - deletion: basically means that the plant never existed.
-    Such elements actually get removed from the database and can only restored within the session using undo.
-  - removal: removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing)
+- deletion/creation vs. removal/adding of elements
+  - deletion/creation (German: löschen/erzeugen):
+    The plant never existed.
+    Such elements actually get deleted from the database and can only be restored within the session using undo.
+    I.e. there are often columns named `created_date` but there usually is not a deletion date (with exception of maps which do not immediately get deleted).
+  - removal/adding (German: entfernen/hinzufügen):
+    Removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing).
     The database must keep removed elements, they never can be deleted.
 - reversible deletion vs undo-redo functionality
   - reversible deletion: a database entity i.e. a whole map and plant is deleted and can be restored within a certain time
@@ -45,13 +48,13 @@
   - the data representation of the objects that comprise the structure and content of a document on the web.
 - endpoints
   - The API endpoints that can be called in the backend.  
-    Their documentation can be viewed using swagger-ui (see [here](/doc/architecture/backend.md#api-documentation) for reference).
+    Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
 
 ## Biology
 
 - Taxonomy:
   A scientific classification of plants into a hierarchy.
-  The hierarchy we use is described [here](/doc/database/hierarchy.md).
+  The hierarchy we use is described [here](../database/hierarchy.md).
   As first introduction read:
   - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/) or
   - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy).
@@ -151,3 +154,16 @@
 - end to end test (e2e test):  
   Used to test the whole application from end to end.  
   Example: Simulate a user clicking a button (e.g. with [Selenium](https://www.selenium.dev/)) resulting in an HTTP request to the backend. Wait for the response and validate the resulting change in the frontend.
+- acceptance tests:
+  Black box system tests of a user story.
+  Usually performed as regressions tests prior to a release.
+  They are performed by engineers during the development phase.
+- system tests:
+  Tests the whole system towards the requirements definition and specification documents.
+  This can invole functional and non-functional tests (performance, security, etc.).
+  They are super set of end-to-end tests which can be done manually and/or automatically.
+- user acceptance tests:
+  Black box system tests towards customer requirements.
+  Usually (subset of) system level tests conducted by the customer/user/domain expert.
+  These tests makes sure that the solution provided by the system is accepted by the user.
+  Similar to "Beta testing".

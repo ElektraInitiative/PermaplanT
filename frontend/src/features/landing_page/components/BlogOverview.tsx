@@ -1,3 +1,4 @@
+import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import { useTranslation } from 'react-i18next';
 
 const BlogOverview = () => {
@@ -18,9 +19,10 @@ const BlogOverview = () => {
                 </span>
               </div>
               <a className="inline-flex items-center">
-                <img
-                  alt="blog"
-                  src={entry.picture}
+                <PublicNextcloudImage
+                  path={entry.picture}
+                  shareToken="2arzyJZYj2oNnHX"
+                  alt="picture of the author"
                   className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
                 />
                 <span className="flex flex-grow flex-col pl-4">

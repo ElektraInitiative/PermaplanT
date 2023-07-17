@@ -6,8 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can give a feedback of the actual results for a map in a measuring cycle.
-- **Status:** Assigned
-- **Assignee** Thorben
+- **Assignee** Ready to be assigned
 
 ## Scenarios
 

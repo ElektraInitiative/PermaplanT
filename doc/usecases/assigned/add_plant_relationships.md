@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** A new plant relationship is added to the system.
-- **Assignee:** Gabriel (Backend)
+- **Assignee:** Ready to be assigned
 
 ## Scenarios
 
@@ -21,8 +21,7 @@
       - Companion
       - Antagonist
       - Neutral
-    - Confidence
-    - A description providing information on the why's and how's.
+    - Notes providing information on the why's and how's.
 - **Alternative scenario:**
   - The user creates a relationship which is only effective for one or more of her selected maps.  
     In this case there is no review process.

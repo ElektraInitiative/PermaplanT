@@ -5,7 +5,9 @@ import { createPlanting } from '../../api/createPlanting';
 import { deletePlanting } from '../../api/deletePlanting';
 import { movePlanting } from '../../api/movePlanting';
 import { transformPlanting } from '../../api/transformPlanting';
+import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
+import { convertToDate } from '../../utils/date-utils';
 import { PlantingDto } from '@/bindings/definitions';
 
 export class CreatePlantAction
@@ -22,28 +24,34 @@ export class CreatePlantAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    const newPlant = {
+      ...this._data,
+      id: this._id,
+    };
+
+    const timelineDate = convertToDate(useMapStore.getState().untrackedState.timelineDate);
+    const addDate = this._data.addDate ? convertToDate(this._data.addDate) : null;
+
+    const shouldBeVisible = addDate === null || addDate <= timelineDate;
+
     return {
       ...state,
       layers: {
         ...state.layers,
-        Plant: {
-          ...state.layers.Plant,
-          objects: [
-            ...state.layers.Plant.objects,
-            {
-              ...this._data,
-              id: this._id,
-            },
-          ],
+        plants: {
+          ...state.layers.plants,
+          objects: shouldBeVisible
+            ? [...state.layers.plants.objects, { ...newPlant }]
+            : state.layers.plants.objects,
+          loadedObjects: [...state.layers.plants.loadedObjects, { ...newPlant }],
         },
       },
     };
   }
 
-  async execute(): Promise<Awaited<ReturnType<typeof createPlanting>>> {
-    return createPlanting(1, {
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof createPlanting>>> {
+    return createPlanting(mapId, {
       ...this._data,
-      // TODO - get these values from the store.
       id: this._id,
     });
   }
@@ -54,12 +62,12 @@ export class DeletePlantAction
 {
   constructor(private readonly _id: string) {}
 
-  async execute(): Promise<boolean> {
-    return deletePlanting(1, this._id);
+  async execute(mapId: number): Promise<boolean> {
+    return deletePlanting(mapId, this._id);
   }
 
   reverse(state: TrackedMapState) {
-    const plant = state.layers.Plant.objects.find((obj) => obj.id === this._id);
+    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._id);
 
     if (!plant) {
       return null;
@@ -73,9 +81,10 @@ export class DeletePlantAction
       ...state,
       layers: {
         ...state.layers,
-        Plant: {
-          ...state.layers.Plant,
-          objects: state.layers.Plant.objects.filter((p) => p.id !== this._id),
+        plants: {
+          ...state.layers.plants,
+          objects: state.layers.plants.objects.filter((p) => p.id !== this._id),
+          loadedObjects: state.layers.plants.loadedObjects.filter((p) => p.id !== this._id),
         },
       },
     };
@@ -93,7 +102,7 @@ export class MovePlantAction
   }
 
   reverse(state: TrackedMapState) {
-    const plants = state.layers.Plant.objects.filter((obj) => this._ids.includes(obj.id));
+    const plants = state.layers.plants.loadedObjects.filter((obj) => this._ids.includes(obj.id));
 
     if (!plants.length) {
       return null;
@@ -103,32 +112,36 @@ export class MovePlantAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    const updatePlants = (plants: Array<PlantingDto>) => {
+      return plants.map((p) => {
+        if (this._ids.includes(p.id)) {
+          return {
+            ...p,
+            x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
+            y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
+          };
+        }
+
+        return p;
+      });
+    };
+
     return {
       ...state,
       layers: {
         ...state.layers,
-        Plant: {
-          ...state.layers.Plant,
-          objects: state.layers.Plant.objects.map((p) => {
-            if (this._ids.includes(p.id)) {
-              return {
-                ...p,
-                x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
-                y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
-              };
-            }
-
-            return p;
-          }),
+        plants: {
+          ...state.layers.plants,
+          objects: updatePlants(state.layers.plants.objects),
+          loadedObjects: updatePlants(state.layers.plants.loadedObjects),
         },
       },
     };
   }
 
-  execute(): Promise<PlantingDto[]> {
+  execute(mapId: number): Promise<PlantingDto[]> {
     const tasks = this._data.map((d) =>
-      movePlanting(1, d.id, {
-        // TODO - get these values from the store.
+      movePlanting(mapId, d.id, {
         x: d.x,
         y: d.y,
       }),
@@ -153,7 +166,7 @@ export class TransformPlantAction
   }
 
   reverse(state: TrackedMapState) {
-    const plants = state.layers.Plant.objects.filter((obj) => this._ids.includes(obj.id));
+    const plants = state.layers.plants.loadedObjects.filter((obj) => this._ids.includes(obj.id));
 
     if (!plants.length) {
       return null;
@@ -172,35 +185,39 @@ export class TransformPlantAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    const updatePlants = (plants: Array<PlantingDto>) => {
+      return plants.map((p) => {
+        if (this._ids.includes(p.id)) {
+          return {
+            ...p,
+            x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
+            y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
+            scaleX: this._data.find((d) => d.id === p.id)?.scaleX ?? p.scaleX,
+            scaleY: this._data.find((d) => d.id === p.id)?.scaleY ?? p.scaleY,
+            rotation: this._data.find((d) => d.id === p.id)?.rotation ?? p.rotation,
+          };
+        }
+
+        return p;
+      });
+    };
+
     return {
       ...state,
       layers: {
         ...state.layers,
-        Plant: {
-          ...state.layers.Plant,
-          objects: state.layers.Plant.objects.map((p) => {
-            if (this._ids.includes(p.id)) {
-              return {
-                ...p,
-                x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
-                y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
-                scaleX: this._data.find((d) => d.id === p.id)?.scaleX ?? p.scaleX,
-                scaleY: this._data.find((d) => d.id === p.id)?.scaleY ?? p.scaleY,
-                rotation: this._data.find((d) => d.id === p.id)?.rotation ?? p.rotation,
-              };
-            }
-
-            return p;
-          }),
+        plants: {
+          ...state.layers.plants,
+          objects: updatePlants(state.layers.plants.objects),
+          loadedObjects: updatePlants(state.layers.plants.loadedObjects),
         },
       },
     };
   }
 
-  execute(): Promise<PlantingDto[]> {
+  execute(mapId: number): Promise<PlantingDto[]> {
     const tasks = this._data.map((d) =>
-      transformPlanting(1, d.id, {
-        // TODO - get these values from the store.
+      transformPlanting(mapId, d.id, {
         x: d.x,
         y: d.y,
         scaleX: d.scaleX,

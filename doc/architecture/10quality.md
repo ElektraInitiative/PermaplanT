@@ -45,9 +45,9 @@ The only quality requirement we have are:
 
 ## Backend Tests
 
-Tests are split into unit and integration tests (see [here](/doc/tests/) for reference).
+Tests are split into unit and integration tests (see [here](../tests/) for reference).
 
-Integration tests can be found in [test/](/backend/src/test/).  
+Integration tests can be found [here](https://github.com/ElektraInitiative/PermaplanT/tree/master/backend/src/test).  
 Unit tests can be found in the modules they are supposed to test.
 
 ## Code documentation
@@ -73,4 +73,4 @@ Under the hood, this command executes TypeDoc that generates `.mdx` files to be 
 
 Afterwards it can be opened in storybook via the command `npm run storybook`.
 
-More details about documentation can be found in the [contribution docs](/doc/contrib/frontend.md#documentation)
+More details about documentation can be found in the [contribution docs](../contrib/frontend.md#documentation)

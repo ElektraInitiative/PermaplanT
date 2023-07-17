@@ -20,7 +20,7 @@
     - change the date.
     - planting their first plant.
     - using an element from a new layer for the first time.
-    - uploading their first photo in the [photo layer](../layers/photo_layer.md).
+    - uploading their first photo in the [photo layer](../current/photo_layer.md).
     - harvesting a plant for the first time.
     - opening their first map for collaboration.
     - collaborating on a map from another user for the first time.
@@ -34,7 +34,7 @@
     - planting their first recommended diversity plant.
     - submitting updated plant data.
     - updating their plant relations with data from the harvest for the first time.
-    - reaching a specific [diversity score](diversity_score.md) goal.
+    - reaching a specific [diversity score](../assigned/diversity_score.md) goal.
     - gathering all ingredients for an ingredient list for the first time.
     - buying their first batch of seeds.
     - creating their first event.
@@ -43,7 +43,7 @@
     - writing their first review of a map from another user.
     - receiving their first honor from another user.
     - receiving their first review from another user.
-    - having their first conversation with another user through [matchmaking](../matchmaking.md).
+    - having their first conversation with another user through [matchmaking](../assigned/matchmaking.md).
     - adding their first new plant in the apps database.
     - adding their first new seed in the apps database.
   - Progress of the individual milestones is tracked independently and they can be accomplished in any order.

@@ -3,7 +3,7 @@
 use crate::{
     error::ServiceError,
     model::{
-        dto::{LayerDto, NewLayerDto, Page},
+        dto::{LayerDto, NewLayerDto},
         r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
     },
     test::util::{init_test_app, init_test_database},
@@ -20,6 +20,8 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
 use uuid::Uuid;
 
+use super::util::dummy_map_polygons::tall_rectangle;
+
 async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceError> {
     diesel::insert_into(crate::schema::maps::table)
         .values(vec![(
@@ -31,8 +33,9 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
             &crate::schema::maps::honors.eq(0),
             &crate::schema::maps::visits.eq(0),
             &crate::schema::maps::harvested.eq(0),
-            &crate::schema::maps::owner_id.eq(Uuid::default()),
             &crate::schema::maps::privacy.eq(PrivacyOptions::Private),
+            &crate::schema::maps::owner_id.eq(Uuid::default()),
+            &crate::schema::maps::geometry.eq(tall_rectangle()),
         )])
         .execute(conn)
         .await?;
@@ -75,11 +78,8 @@ async fn test_find_layers_succeeds() {
         "application/json"
     );
 
-    let result = test::read_body(resp).await;
-    let result_string = std::str::from_utf8(&result).unwrap();
-
-    let page: Page<LayerDto> = serde_json::from_str(result_string).unwrap();
-    assert_eq!(page.results.len(), 2);
+    let results: Vec<LayerDto> = test::read_body_json(resp).await;
+    assert_eq!(results.len(), 2);
 }
 
 #[actix_rt::test]

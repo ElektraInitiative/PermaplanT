@@ -8,10 +8,11 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
+import { setTooltipPosition } from '../utils/Tooltip';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { Layer, Rect, Stage, Transformer, Text, Label, Tag } from 'react-konva';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -71,6 +72,10 @@ export const BaseStage = ({
   useEffect(() => {
     useMapStore.setState({ stageRef: stageRef });
   }, [stageRef]);
+  const tooltipRef = useRef<Konva.Label>(null);
+  useEffect(() => {
+    useMapStore.setState({ tooltipRef: tooltipRef });
+  }, [tooltipRef]);
 
   const step = useMapStore((map) => map.step);
   const historyLength = useMapStore((map) => map.history.length);
@@ -81,6 +86,10 @@ export const BaseStage = ({
 
     const stage = e.target.getStage();
     if (stage === null) return;
+
+    if (tooltipRef.current) {
+      setTooltipPosition(tooltipRef.current, stage);
+    }
 
     const pointerVector = stage.getPointerPosition();
     if (pointerVector === null) return;
@@ -158,6 +167,8 @@ export const BaseStage = ({
 
   // Event listener responsible for unselecting shapes when clicking on the stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+
     const isStage = e.target instanceof Konva.Stage;
     const nodeSize = trRef.current?.getNodes().length || 0;
     if (nodeSize > 0 && isStage) {
@@ -192,6 +203,10 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
+          <Label visible={false} ref={tooltipRef} scaleX={1 / stage.scale} scaleY={1 / stage.scale}>
+            <Tag fill="black" />
+            <Text fill="white" fontSize={24} padding={6} />
+          </Label>
           <Rect
             x={selectionRectAttrs.x}
             y={selectionRectAttrs.y}
@@ -222,11 +237,12 @@ export const BaseStage = ({
             // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
             // It's an experimental property so we should keep an eye out for possible issues
             shouldOverdrawWholeArea={true}
+            enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
           />
         </Layer>
       </Stage>
       {/** Portal to display something from different layers */}
-      <div className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2">
+      <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
         <div id="bottom-portal" />
       </div>
     </div>

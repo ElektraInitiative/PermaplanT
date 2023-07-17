@@ -4,5 +4,8 @@
   "yes": "Yes",
   "no": "No",
   "cancel": "Cancel",
-  "unknown_error": "An unknown error occurred."
+  "save": "Save",
+  "unknown_error": "An unknown error occurred.",
+  "meters": "Meters",
+  "centimeters": "Centimeters"
 }

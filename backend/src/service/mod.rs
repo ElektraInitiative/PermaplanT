@@ -2,6 +2,7 @@
 
 pub mod layer;
 pub mod map;
+pub mod plant_layer;
 pub mod plantings;
 pub mod plants;
 pub mod seed;

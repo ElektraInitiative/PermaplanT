@@ -2,24 +2,28 @@
 
 use actix_web::web;
 use utoipa::{
-    openapi::security::{AuthorizationCode, Flow, OAuth2, Password, Scopes, SecurityScheme},
+    openapi::security::{AuthorizationCode, Flow, OAuth2, Scopes, SecurityScheme},
     Modify, OpenApi,
 };
 use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{config, layers, map, planting_suggestions, plantings, plants, seed},
+    controller::{config, layers, map, plant_layer, planting_suggestions, plantings, plants, seed},
     model::{
         dto::{
             plantings::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto,
-            PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, SeedDto,
+            ConfigDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto,
+            PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto,
+            RelationDto, RelationsDto, SeedDto, UpdateMapDto,
         },
-        r#enum::{quality::Quality, quantity::Quantity},
+        r#enum::{
+            privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+            relation_type::RelationType,
+        },
     },
 };
 
@@ -73,13 +77,17 @@ struct PlantsApiDoc;
     paths(
         map::find,
         map::find_by_id,
-        map::create
+        map::create,
+        map::update
     ),
     components(
         schemas(
             PageMapDto,
             MapDto,
             NewMapDto,
+            UpdateMapDto,
+            PrivacyOptions,
+            Coordinates
         )
     ),
     modifiers(&SecurityAddon)
@@ -105,6 +113,24 @@ struct MapApiDoc;
     modifiers(&SecurityAddon)
 )]
 struct LayerApiDoc;
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plant layer endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        plant_layer::heatmap,
+        plant_layer::find_relations
+    ),
+    components(
+        schemas(
+            RelationsDto,
+            RelationDto,
+            RelationType
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct PlantLayerApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plantings endpoints.
 #[derive(OpenApi)]
@@ -152,6 +178,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(PlantingSuggestionsApiDoc::openapi());
     openapi.merge(MapApiDoc::openapi());
     openapi.merge(LayerApiDoc::openapi());
+    openapi.merge(PlantLayerApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
@@ -167,14 +194,11 @@ impl Modify for SecurityAddon {
         let components = openapi.components.as_mut().unwrap();
 
         let config = &Config::get().openid_configuration;
-        let oauth2 = OAuth2::new([
-            Flow::AuthorizationCode(AuthorizationCode::new(
-                config.authorization_endpoint.clone(),
-                config.token_endpoint.clone(),
-                Scopes::new(),
-            )),
-            Flow::Password(Password::new(config.token_endpoint.clone(), Scopes::new())),
-        ]);
+        let oauth2 = OAuth2::new([Flow::AuthorizationCode(AuthorizationCode::new(
+            config.authorization_endpoint.clone(),
+            config.token_endpoint.clone(),
+            Scopes::new(),
+        ))]);
         components.add_security_scheme("oauth2", SecurityScheme::OAuth2(oauth2));
     }
 }
