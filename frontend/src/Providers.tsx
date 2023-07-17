@@ -1,6 +1,5 @@
 import { getAuthInfo } from './features/auth';
 import { QueryCache, QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactNode } from 'react';
 import { AuthProvider } from 'react-oidc-context';

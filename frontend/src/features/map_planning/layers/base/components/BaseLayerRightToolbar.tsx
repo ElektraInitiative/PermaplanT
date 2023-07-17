@@ -6,6 +6,7 @@ import FileSelectorModal from '@/features/nextcloud_integration/components/FileS
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
+import SimpleButton from "@/components/Button/SimpleButton";
 
 export const calculateScale = (
   measuredDistancePixels: number,
@@ -38,6 +39,7 @@ export const BaseLayerRightToolbar = () => {
   const [pathInput, setPathInput] = useState(baseLayerState.nextcloudImagePath);
   const [rotationInput, setRotationInput] = useState(baseLayerState.rotation);
   const [scaleInput, setScaleInput] = useState(baseLayerState.rotation);
+  const [showFileSelector, setShowFileSelector] = useState(false);
 
   useEffect(() => {
     setPathInput(baseLayerState.nextcloudImagePath);
