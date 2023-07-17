@@ -31,7 +31,7 @@ export function PlantingAttributeEditForm({
   onAddDateChange,
   onRemoveDateChange,
 }: PlantingAttributeEditFormProps) {
-  const { t } = useTranslation(['plantEdit', 'plantings']);
+  const { t } = useTranslation(['plantings']);
 
   const { register, handleSubmit, watch } = useForm<PlantingAttributeEditFormData>({
     defaultValues: {
@@ -90,7 +90,7 @@ export function PlantingAttributeEditForm({
       </div>
 
       <SimpleButton variant={ButtonVariant.dangerBase} onClick={onDeleteClick}>
-        {t('plantEdit:delete')}
+        {t('plantings:delete')}
       </SimpleButton>
     </div>
   );

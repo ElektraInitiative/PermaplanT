@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 export function useFindPlantById(plantId: number, enabled = true) {
-  const { t } = useTranslation(['plantEdit']);
+  const { t } = useTranslation(['plantings']);
   const { data, error } = useQuery(['plants/plant', plantId] as const, {
     queryFn: (context) => findPlantById(context.queryKey[1]),
     enabled,
@@ -12,7 +12,7 @@ export function useFindPlantById(plantId: number, enabled = true) {
   });
 
   if (error) {
-    toast.error(t('plantEdit:error_fetching_plant'), { autoClose: false });
+    toast.error(t('plantings:error_fetching_plant'), { autoClose: false });
   }
 
   return {
