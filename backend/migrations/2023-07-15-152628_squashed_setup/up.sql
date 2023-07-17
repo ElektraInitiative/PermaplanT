@@ -161,8 +161,8 @@ CREATE TYPE water_requirement AS ENUM (
 );
 
 CREATE FUNCTION check_layer_type() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
+LANGUAGE plpgsql
+AS $$
 BEGIN
     IF (SELECT type FROM layers WHERE id = NEW.layer_id) != 'plants' THEN
         RAISE EXCEPTION 'Layer type must be "plants"';
@@ -180,12 +180,12 @@ CREATE TABLE layers (
 );
 
 CREATE SEQUENCE layers_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+AS integer
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 CREATE TABLE maps (
     id integer NOT NULL,
@@ -200,23 +200,23 @@ CREATE TABLE maps (
     harvested smallint NOT NULL,
     privacy privacy_option NOT NULL,
     description text,
-    location geography(Point,4326),
+    location GEOGRAPHY (POINT, 4326),
     owner_id uuid NOT NULL
 );
 
 CREATE SEQUENCE maps_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+AS integer
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 CREATE TABLE plants (
     id integer NOT NULL,
     unique_name text NOT NULL,
-    common_name_en text[],
-    common_name_de text[],
+    common_name_en text [],
+    common_name_de text [],
     family text,
     --genus text,
     edible_uses_en text,
@@ -227,8 +227,8 @@ CREATE TABLE plants (
     functions text,
     heat_zone smallint,
     shade shade,
-    soil_ph soil_ph[],
-    soil_texture soil_texture[],
+    soil_ph soil_ph [],
+    soil_texture soil_texture [],
     --soil_water_retention soil_water_retention[],
     --environmental_tolerances text[],
     --native_geographical_range text,
@@ -236,10 +236,10 @@ CREATE TABLE plants (
     ecosystem_niche text,
     deciduous_or_evergreen deciduous_or_evergreen,
     herbaceous_or_woody herbaceous_or_woody,
-    life_cycle life_cycle[],
-    growth_rate growth_rate[],
+    life_cycle life_cycle [],
+    growth_rate growth_rate [],
     height plant_height,
-    fertility fertility[],
+    fertility fertility [],
     --flower_colour text,
     flower_type flower_type,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
@@ -252,13 +252,13 @@ CREATE TABLE plants (
     preferable_permaculture_zone smallint,
     --article_last_modified_at timestamp without time zone,
     hardiness_zone text,
-    light_requirement light_requirement[],
-    water_requirement water_requirement[],
-    propagation_method propagation_method[],
+    light_requirement light_requirement [],
+    water_requirement water_requirement [],
+    propagation_method propagation_method [],
     alternate_name text,
     --diseases text,
     edible boolean,
-    edible_parts text[],
+    edible_parts text [],
     --germination_temperature text,
     --introduced_into text,
     --habitus text,
@@ -303,8 +303,8 @@ CREATE TABLE plants (
     --external_article_number text,
     --external_portion_content text,
     --sowing_outdoors_de text,
-    sowing_outdoors smallint[],
-    harvest_time smallint[],
+    sowing_outdoors smallint [],
+    harvest_time smallint [],
     --spacing_de text,
     --required_quantity_of_seeds_de text,
     --required_quantity_of_seeds_en text,
@@ -314,17 +314,27 @@ CREATE TABLE plants (
     seed_weight_1000 double precision,
     --machine_cultivation_possible boolean,
     --edible_uses_de text,
-    CONSTRAINT plant_detail_heat_zone_check CHECK (((heat_zone IS NULL) OR ((heat_zone >= 0) AND (heat_zone <= 13)))),
-    CONSTRAINT plant_detail_preferable_permaculture_zone_check CHECK (((preferable_permaculture_zone IS NULL) OR ((preferable_permaculture_zone >= '-1'::integer) AND (preferable_permaculture_zone <= 6))))
+    CONSTRAINT plant_detail_heat_zone_check CHECK (
+        ((heat_zone IS NULL) OR ((heat_zone >= 0) AND (heat_zone <= 13)))
+    ),
+    CONSTRAINT plant_detail_preferable_permaculture_zone_check CHECK (
+        (
+            (preferable_permaculture_zone IS NULL)
+            OR (
+                (preferable_permaculture_zone >= '-1'::integer)
+                AND (preferable_permaculture_zone <= 6)
+            )
+        )
+    )
 );
 
 CREATE SEQUENCE plant_detail_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+AS integer
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 CREATE TABLE plantings (
     id uuid NOT NULL,
@@ -339,8 +349,8 @@ CREATE TABLE plantings (
     scale_y real NOT NULL,
     add_date date,
     remove_date date
-    --create_date date DEFAULT CURRENT_DATE NOT NULL,
-    --delete_date date
+--create_date date DEFAULT CURRENT_DATE NOT NULL,
+--delete_date date
 );
 
 CREATE TABLE relations (
@@ -369,61 +379,81 @@ CREATE TABLE seeds (
 );
 
 CREATE SEQUENCE seeds_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+AS integer
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
-ALTER TABLE ONLY layers ALTER COLUMN id SET DEFAULT nextval('layers_id_seq'::regclass);
+ALTER TABLE ONLY layers ALTER COLUMN id SET DEFAULT nextval(
+    'layers_id_seq'::regclass
+);
 
-ALTER TABLE ONLY maps ALTER COLUMN id SET DEFAULT nextval('maps_id_seq'::regclass);
+ALTER TABLE ONLY maps ALTER COLUMN id SET DEFAULT nextval(
+    'maps_id_seq'::regclass
+);
 
-ALTER TABLE ONLY plants ALTER COLUMN id SET DEFAULT nextval('plant_detail_id_seq'::regclass);
+ALTER TABLE ONLY plants ALTER COLUMN id SET DEFAULT nextval(
+    'plant_detail_id_seq'::regclass
+);
 
-ALTER TABLE ONLY seeds ALTER COLUMN id SET DEFAULT nextval('seeds_id_seq'::regclass);
-
-ALTER TABLE ONLY layers
-    ADD CONSTRAINT layers_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY maps
-    ADD CONSTRAINT map_unique_name UNIQUE (name);
-
-ALTER TABLE ONLY maps
-    ADD CONSTRAINT maps_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY plants
-    ADD CONSTRAINT plant_detail_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY plants
-    ADD CONSTRAINT plant_unique_name_key UNIQUE (unique_name);
-
-ALTER TABLE ONLY plantings
-    ADD CONSTRAINT plantings_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY relations
-    ADD CONSTRAINT relations_pkey PRIMARY KEY (plant1, plant2);
-
-ALTER TABLE ONLY seeds
-    ADD CONSTRAINT seeds_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY seeds ALTER COLUMN id SET DEFAULT nextval(
+    'seeds_id_seq'::regclass
+);
 
 ALTER TABLE ONLY layers
-    ADD CONSTRAINT layers_map_id_fkey FOREIGN KEY (map_id) REFERENCES maps(id);
+ADD CONSTRAINT layers_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY maps
+ADD CONSTRAINT map_unique_name UNIQUE (name);
+
+ALTER TABLE ONLY maps
+ADD CONSTRAINT maps_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY plants
+ADD CONSTRAINT plant_detail_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY plants
+ADD CONSTRAINT plant_unique_name_key UNIQUE (unique_name);
 
 ALTER TABLE ONLY plantings
-    ADD CONSTRAINT plantings_layer_id_fkey FOREIGN KEY (layer_id) REFERENCES layers(id);
-
-ALTER TABLE ONLY plantings
-    ADD CONSTRAINT plantings_plant_id_fkey FOREIGN KEY (plant_id) REFERENCES plants(id);
+ADD CONSTRAINT plantings_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY relations
-    ADD CONSTRAINT relations_plant1_fkey FOREIGN KEY (plant1) REFERENCES plants(id);
-
-ALTER TABLE ONLY relations
-    ADD CONSTRAINT relations_plant2_fkey FOREIGN KEY (plant2) REFERENCES plants(id);
+ADD CONSTRAINT relations_pkey PRIMARY KEY (plant1, plant2);
 
 ALTER TABLE ONLY seeds
-    ADD CONSTRAINT seeds_plant_id_fkey FOREIGN KEY (plant_id) REFERENCES plants(id);
+ADD CONSTRAINT seeds_pkey PRIMARY KEY (id);
 
-CREATE TRIGGER check_layer_type_before_insert_or_update BEFORE INSERT OR UPDATE ON plantings FOR EACH ROW EXECUTE FUNCTION check_layer_type();
+ALTER TABLE ONLY layers
+ADD CONSTRAINT layers_map_id_fkey FOREIGN KEY (map_id) REFERENCES maps (id);
+
+ALTER TABLE ONLY plantings
+ADD CONSTRAINT plantings_layer_id_fkey FOREIGN KEY (
+    layer_id
+) REFERENCES layers (id);
+
+ALTER TABLE ONLY plantings
+ADD CONSTRAINT plantings_plant_id_fkey FOREIGN KEY (
+    plant_id
+) REFERENCES plants (id);
+
+ALTER TABLE ONLY relations
+ADD CONSTRAINT relations_plant1_fkey FOREIGN KEY (plant1) REFERENCES plants (
+    id
+);
+
+ALTER TABLE ONLY relations
+ADD CONSTRAINT relations_plant2_fkey FOREIGN KEY (plant2) REFERENCES plants (
+    id
+);
+
+ALTER TABLE ONLY seeds
+ADD CONSTRAINT seeds_plant_id_fkey FOREIGN KEY (plant_id) REFERENCES plants (
+    id
+);
+
+CREATE TRIGGER check_layer_type_before_insert_or_update
+BEFORE INSERT OR UPDATE ON plantings
+FOR EACH ROW EXECUTE FUNCTION check_layer_type();
