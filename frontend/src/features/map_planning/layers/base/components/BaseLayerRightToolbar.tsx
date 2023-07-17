@@ -1,12 +1,12 @@
 import { UpdateBaseLayerAction } from '../../../layers/base/actions';
+import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { Vector2d } from 'konva/lib/types';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
+import { Vector2d } from 'konva/lib/types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
-import SimpleButton from "@/components/Button/SimpleButton";
 
 export const calculateScale = (
   measuredDistancePixels: number,

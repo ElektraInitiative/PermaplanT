@@ -97,7 +97,7 @@ export const FileSelector = (props: FileSelectorProps) => {
           <UploadFile
             path={path}
             onSuccess={() => {
-              queryClient.invalidateQueries({ queryKey: ['files', path]})
+              queryClient.invalidateQueries({ queryKey: ['files', path] });
             }}
           />
         </div>
