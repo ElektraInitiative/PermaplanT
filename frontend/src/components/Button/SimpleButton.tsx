@@ -33,7 +33,7 @@ export default function SimpleButton({
   ...props
 }: SimpleButtonProps) {
   const className =
-    'inline-flex h-10 w-full items-center justify-center rounded-lg text-white px-4 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300 border ' +
+    'button focus:outline-none focus:ring-4 focus:ring-blue-300 border ' +
     variantToClassName[variant];
 
   return (

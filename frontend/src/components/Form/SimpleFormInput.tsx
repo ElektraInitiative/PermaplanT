@@ -48,7 +48,7 @@ export default function SimpleFormInput<T extends FieldValues>({
         {...register?.(id, {
           valueAsNumber: props.type === 'number' || valueAsNumber,
         })}
-        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 aria-[invalid=true]:dark:border-red-400"
+        className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 aria-[invalid=true]:dark:border-red-400"
       />
     </div>
   );
