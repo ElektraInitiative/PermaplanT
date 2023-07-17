@@ -84,7 +84,7 @@ pub struct Plants {
     /// - *Fetched from* PracticalPlants as `medicinal_uses` and merged with Permapeople.
     /// - *Fill ratio:* 1%
     //pub medicinal_uses: Option<String>,
-     */
+
     /// - Only for references.
     /// - *Fetched from* PracticalPlants)
     /// - *Fill ratio:* 34%
@@ -94,6 +94,7 @@ pub struct Plants {
     /// - *Fetched from* PracticalPlants)
     /// - *Fill ratio:* 63%
     pub botanic: Option<String>,
+    */
 
     /*
     /// - Only informational.
@@ -251,11 +252,13 @@ pub struct Plants {
     /// - *Fill ratio:* 10%
     pub tolerates_wind: Option<bool>,
 
+    /*
     /// - The list of the references of the plant.
     /// - `references` items link to these items.
     /// - Only informational.
     /// - *Fill ratio:* 58%
     pub plant_references: Option<Vec<Option<String>>>,
+    */
 
     /*
     /// - Boolean value indicating whether the plant is a tree.
