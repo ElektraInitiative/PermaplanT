@@ -10,7 +10,7 @@ use uuid::Uuid;
 use self::plantings::PlantingDto;
 
 use super::r#enum::{
-    layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+    layer_type::LayerType, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
     relation_type::RelationType,
 };
 
@@ -225,7 +225,7 @@ pub struct MapDto {
     /// The amount of plants harvested on the map.
     pub harvested: i16,
     /// An enum indicating if this map is private or not.
-    pub privacy: PrivacyOptions,
+    pub privacy: PrivacyOption,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -257,7 +257,7 @@ pub struct NewMapDto {
     /// The amount of plants harvested on the map.
     pub harvested: i16,
     /// An enum indicating if this map is private or not.
-    pub privacy: PrivacyOptions,
+    pub privacy: PrivacyOption,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -271,7 +271,7 @@ pub struct UpdateMapDto {
     /// The name of the map.
     pub name: Option<String>,
     /// An enum indicating if this map is private or not.
-    pub privacy: Option<PrivacyOptions>,
+    pub privacy: Option<PrivacyOption>,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -289,7 +289,7 @@ pub struct MapSearchParameters {
     /// The owner of the map.
     pub owner_id: Option<Uuid>,
     /// The selected privacy of the map.
-    pub privacy: Option<PrivacyOptions>,
+    pub privacy: Option<PrivacyOption>,
 }
 
 /// Support struct for transmitting latitude/longitude coordinates.

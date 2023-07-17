@@ -4,7 +4,7 @@ use crate::{
     error::ServiceError,
     model::{
         dto::{LayerDto, NewLayerDto},
-        r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
+        r#enum::{layer_type::LayerType, privacy_option::PrivacyOption},
     },
     test::util::{init_test_app, init_test_database},
 };
@@ -32,7 +32,7 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
             &crate::schema::maps::visits.eq(0),
             &crate::schema::maps::harvested.eq(0),
             &crate::schema::maps::owner_id.eq(Uuid::default()),
-            &crate::schema::maps::privacy.eq(PrivacyOptions::Private),
+            &crate::schema::maps::privacy.eq(PrivacyOption::Private),
         )])
         .execute(conn)
         .await?;

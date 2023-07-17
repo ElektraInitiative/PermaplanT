@@ -26,7 +26,7 @@ index 16c1826d..d33481b0 100644
  diesel::table! {
      use postgis_diesel::sql_types::Geography;
      use diesel::sql_types::*;
-     use super::sql_types::PrivacyOptions;
+     use super::sql_types::PrivacyOption;
 -    use super::sql_types::Geography;
 
      maps (id) {

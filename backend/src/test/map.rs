@@ -3,7 +3,7 @@
 use crate::{
     model::{
         dto::{MapDto, NewMapDto, Page, UpdateMapDto},
-        r#enum::privacy_options::PrivacyOptions,
+        r#enum::privacy_option::PrivacyOption,
     },
     test::util::{init_test_app, init_test_database},
 };
@@ -31,7 +31,7 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::honors.eq(0),
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
                 ),(
                     &crate::schema::maps::id.eq(-2),
@@ -43,7 +43,7 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::honors.eq(0),
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
                 )])
                 .execute(conn)
@@ -99,7 +99,7 @@ async fn test_can_find_map_by_id() {
                     &crate::schema::maps::honors.eq(0),
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
                 ))
                 .execute(conn)
@@ -135,7 +135,7 @@ async fn test_can_create_map() {
         honors: 0,
         visits: 0,
         harvested: 0,
-        privacy: PrivacyOptions::Public,
+        privacy: PrivacyOption::Public,
         description: None,
         location: None,
     };
@@ -174,7 +174,7 @@ async fn test_update_fails_for_not_owner() {
                     &crate::schema::maps::honors.eq(0),
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
                 ))
                 .execute(conn)
@@ -217,7 +217,7 @@ async fn test_can_update_map() {
         honors: 0,
         visits: 0,
         harvested: 0,
-        privacy: PrivacyOptions::Public,
+        privacy: PrivacyOption::Public,
         description: None,
         location: None,
     };

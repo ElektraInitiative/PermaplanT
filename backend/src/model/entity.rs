@@ -19,7 +19,7 @@ use uuid::Uuid;
 
 use crate::schema::{layers, maps, plants, seeds};
 
-use super::r#enum::privacy_options::PrivacyOptions;
+use super::r#enum::privacy_option::PrivacyOption;
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
     fertility::Fertility, flower_type::FlowerType, growth_rate::GrowthRate,
@@ -753,7 +753,7 @@ pub struct Map {
     /// The amount of plants harvested on the map.
     pub harvested: i16,
     /// An enum indicating if this map is private or not.
-    pub privacy: PrivacyOptions,
+    pub privacy: PrivacyOption,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -785,7 +785,7 @@ pub struct NewMap {
     /// The amount of plants harvested on the map.
     pub harvested: i16,
     /// An enum indicating if this map is private or not.
-    pub privacy: PrivacyOptions,
+    pub privacy: PrivacyOption,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -801,7 +801,7 @@ pub struct UpdateMap {
     /// The name of the map.
     pub name: Option<String>,
     /// An enum indicating if this map is private or not.
-    pub privacy: Option<PrivacyOptions>,
+    pub privacy: Option<PrivacyOption>,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.

@@ -39,7 +39,7 @@ DROP FUNCTION check_layer_type();
 
 -- Drop types
 DROP TYPE water_requirement;
-DROP TYPE soil_water_retention;
+--DROP TYPE soil_water_retention;
 DROP TYPE soil_texture;
 DROP TYPE soil_ph;
 DROP TYPE shade;
@@ -47,7 +47,7 @@ DROP TYPE relation_type;
 DROP TYPE quantity;
 DROP TYPE quality;
 DROP TYPE propagation_method;
-DROP TYPE privacy_options;
+DROP TYPE privacy_option;
 DROP TYPE plant_spread;
 DROP TYPE plant_height;
 DROP TYPE nutrition_demand;

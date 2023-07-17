@@ -88,7 +88,7 @@ CREATE TYPE plant_spread AS ENUM (
     'wide'
 );
 
-CREATE TYPE privacy_options AS ENUM (
+CREATE TYPE privacy_option AS ENUM (
     'private',
     'protected',
     'public'
@@ -198,7 +198,7 @@ CREATE TABLE maps (
     honors smallint NOT NULL,
     visits smallint NOT NULL,
     harvested smallint NOT NULL,
-    privacy privacy_options NOT NULL,
+    privacy privacy_option NOT NULL,
     description text,
     location geography(Point,4326),
     owner_id uuid NOT NULL
