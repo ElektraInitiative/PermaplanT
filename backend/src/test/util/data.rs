@@ -2,9 +2,12 @@
 
 use chrono::NaiveDate;
 use diesel::Insertable;
+use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
 
 use crate::model::r#enum::{layer_type::LayerType, privacy_option::PrivacyOption};
+
+use super::dummy_map_polygons::tall_rectangle;
 
 #[derive(Insertable)]
 #[diesel(table_name = crate::schema::maps)]
@@ -19,6 +22,7 @@ pub struct TestInsertableMap {
     pub harvested: i16,
     pub privacy: PrivacyOption,
     pub owner_id: Uuid,
+    pub geometry: Polygon<Point>,
 }
 
 impl Default for TestInsertableMap {
@@ -34,6 +38,7 @@ impl Default for TestInsertableMap {
             harvested: 0,
             privacy: PrivacyOption::Public,
             owner_id: Uuid::default(),
+            geometry: tall_rectangle(),
         }
     }
 }

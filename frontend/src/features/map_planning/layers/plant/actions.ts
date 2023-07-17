@@ -5,7 +5,9 @@ import { createPlanting } from '../../api/createPlanting';
 import { deletePlanting } from '../../api/deletePlanting';
 import { movePlanting } from '../../api/movePlanting';
 import { transformPlanting } from '../../api/transformPlanting';
+import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
+import { convertToDate } from '../../utils/date-utils';
 import { PlantingDto } from '@/bindings/definitions';
 
 export class CreatePlantAction
@@ -27,13 +29,20 @@ export class CreatePlantAction
       id: this._id,
     };
 
+    const timelineDate = convertToDate(useMapStore.getState().untrackedState.timelineDate);
+    const addDate = this._data.addDate ? convertToDate(this._data.addDate) : null;
+
+    const shouldBeVisible = addDate === null || addDate <= timelineDate;
+
     return {
       ...state,
       layers: {
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: [...state.layers.plants.objects, { ...newPlant }],
+          objects: shouldBeVisible
+            ? [...state.layers.plants.objects, { ...newPlant }]
+            : state.layers.plants.objects,
           loadedObjects: [...state.layers.plants.loadedObjects, { ...newPlant }],
         },
       },

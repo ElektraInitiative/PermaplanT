@@ -2,6 +2,7 @@ import type { TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
 import { createTrackedMapSlice } from './TrackedMapStore';
 import { createUntrackedMapSlice } from './UntrackedMapStore';
 import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 /**
  * This is the main store for the map planning feature.
@@ -12,9 +13,14 @@ import { create } from 'zustand';
  * - `UntrackedMapStore`: stores the state of the map that is not tracked by the history
  * (e.g. the selected layer and the layer opacities).
  */
-const useMapStore = create<TrackedMapSlice & UntrackedMapSlice>()((...a) => ({
-  ...createUntrackedMapSlice(...a),
-  ...createTrackedMapSlice(...a),
-}));
+const useMapStore = create<TrackedMapSlice & UntrackedMapSlice>()(
+  devtools(
+    (...a) => ({
+      ...createUntrackedMapSlice(...a),
+      ...createTrackedMapSlice(...a),
+    }),
+    { name: 'MapStore' },
+  ),
+);
 
 export default useMapStore;
