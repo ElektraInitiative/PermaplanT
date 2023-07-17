@@ -2,10 +2,13 @@
 #![allow(clippy::module_name_repetitions)] // There needs to be a difference between DTOs and entities otherwise imports will be messy.
 
 use chrono::NaiveDate;
+use postgis_diesel::types::{Point, Polygon};
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
+
+use self::plantings::PlantingDto;
 
 use super::r#enum::{
     layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
@@ -24,6 +27,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod update_map_impl;
 
 /// Contains configuration the frontend needs to run.
 #[typeshare]
@@ -34,7 +38,7 @@ pub struct ConfigDto {
     /// The client_id the frontend should use to log in
     pub client_id: String,
     /// The version must be an exact match between frontend and backend.
-    pub version: i32,
+    pub version: String,
 }
 
 /// Represents seeds of a user.
@@ -182,6 +186,21 @@ pub struct Page<T> {
     pub total_pages: i32,
 }
 
+/// A page of results bounded by time.
+#[typeshare]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[aliases(
+    TimelinePagePlantingsDto = TimelinePage<PlantingDto>,
+)]
+pub struct TimelinePage<T> {
+    /// Resulting records.
+    pub results: Vec<T>,
+    /// The time frame start date.
+    pub from: NaiveDate,
+    /// The time frame end date.
+    pub to: NaiveDate,
+}
+
 /// The whole information of a map.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
@@ -206,7 +225,7 @@ pub struct MapDto {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// A flag indicating if this map is private or not.
+    /// An enum indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
@@ -214,9 +233,15 @@ pub struct MapDto {
     pub location: Option<Coordinates>,
     /// The id of the owner of the map.
     pub owner_id: Uuid,
+    /// The geometry of the map.
+    ///
+    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "object")]
+    #[schema(value_type = Object)]
+    pub geometry: Polygon<Point>,
 }
 
-/// The information of a map neccessary for its creation.
+/// The information of a map necessary for its creation.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewMapDto {
@@ -238,12 +263,38 @@ pub struct NewMapDto {
     pub visits: i16,
     /// The amount of plants harvested on the map.
     pub harvested: i16,
-    /// A flag indicating if this map is private or not.
+    /// An enum indicating if this map is private or not.
     pub privacy: PrivacyOptions,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Coordinates>,
+    /// The geometry of the map.
+    ///
+    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "object")]
+    #[schema(value_type = Object)]
+    pub geometry: Polygon<Point>,
+}
+
+/// The information for updating a map.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct UpdateMapDto {
+    /// The name of the map.
+    pub name: Option<String>,
+    /// An enum indicating if this map is private or not.
+    pub privacy: Option<PrivacyOptions>,
+    /// The description of the map.
+    pub description: Option<String>,
+    /// The location of the map as a latitude/longitude point.
+    pub location: Option<Coordinates>,
+    /// The geometry of the map.
+    ///
+    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "Option<object>")]
+    #[schema(value_type = Option<Object>)]
+    pub geometry: Option<Polygon<Point>>,
 }
 
 /// Query parameters for searching maps.
@@ -256,13 +307,13 @@ pub struct MapSearchParameters {
     pub is_inactive: Option<bool>,
     /// The owner of the map.
     pub owner_id: Option<Uuid>,
-    /// Whether or not the map is private.
+    /// The selected privacy of the map.
     pub privacy: Option<PrivacyOptions>,
 }
 
 /// Support struct for transmitting latitude/longitude coordinates.
 #[typeshare]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct Coordinates {
     /// Latitude of the point.
     pub latitude: f64,
@@ -343,4 +394,14 @@ pub enum SuggestionType {
     Available,
     /// Suggests plants based on diversity criteria.
     Diversity,
+}
+
+/// Query parameters to configure the generation of the heatmap.
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+pub struct HeatMapQueryParams {
+    /// The id of the plant layer the planting will be planted on.
+    pub layer_id: i32,
+    /// The id of the plant you want to plant.
+    pub plant_id: i32,
 }

@@ -24,7 +24,7 @@ Each documentation should clearly be oriented to one of these three directions:
 2. **information-oriented:**
    E.g. API docs are the _references_.
 3. **understanding-oriented:**
-   The [doc/decisions](/doc/decisions) explain the "Why?" something is done as it is done, i.e., the _rationale_.
+   The [doc/decisions](../decisions) explain the "Why?" something is done as it is done, i.e., the _rationale_.
 
 Literature mentions also goal-oriented concepts, but we prefer _learning-oriented_ approaches.
 E.g. of course you might have the goal to write a new plugin.
@@ -64,22 +64,22 @@ PermaplanT's documentation must fulfill:
 - Use headings and lists to keep a clear structure in the text.
 - Use examples and images to emphasize important points, don't overuse emphasis in text (bold, etc.).
 - Spelling is American English.
-- It is consistent with our [glossary](/doc/architecture/glossary.md).
+- It is consistent with our [glossary](../architecture/12glossary.md).
 
 > **Note:**
-> Please extend [glossary](/doc/architecture/glossary.md) as needed.
+> Please extend [glossary](../architecture/12glossary.md) as needed.
 
 ## Completeness
 
 In general the documentation does not need to be complete.
 In particular, we do not want repetition of implementation details as documentation.
-[Prefer to write self-documenting code](/doc/CODING.md).
+[Prefer to write self-documenting code](./code.md).
 Nevertheless, there are a few must-haves:
 
 - A `README.md` must be available for every module.
 - A man page (`help/kdb-`) must be available for every command (including external commands).
 - A tutorial must be present for every important concept.
-- Everything copied must be properly licensed in [reuse](/.reuse/dep5).
+- Everything copied must be properly [licensed](https://github.com/ElektraInitiative/PermaplanT/blob/master/.reuse/dep5).
 
 ## Links
 
@@ -102,4 +102,4 @@ Generously use links but be very careful to create a coherent documentation (Ger
 
 In general we use [arc42.org](https://arc42.org/) but we use specialized templates for:
 
-- [decisions](/doc/decisions/TEMPLATE.md)
+- [decisions](../decisions/TEMPLATE.md)

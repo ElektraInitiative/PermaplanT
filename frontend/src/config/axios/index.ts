@@ -5,6 +5,18 @@ import axios from 'axios';
 
 /**
  * create an instance of axios configured for PermaplanT
+ * the configuration includes the baseUrl
+ */
+export function createUnauthorizedAPI() {
+  const http = axios.create({
+    baseURL: baseApiUrl,
+    timeout: 3000,
+  });
+  return http;
+}
+
+/**
+ * create an instance of axios configured for PermaplanT
  * the configuration includes the baseUrl and authorization token if available
  */
 export function createAPI() {

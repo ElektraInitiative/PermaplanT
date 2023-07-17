@@ -34,7 +34,7 @@ Later features that are out of scope for first version:
 
 Global value and local values in the Soil layer:
 
-- soil texture (German: orientiert an Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) [Klassen])
+- soil texture (German: orientiert an Bodenschwereklasse nach ÖNORM L 1050 auf Basis des österreichischen Texturdreiecks bzw. Bodenartendiagramms (ÖNORM L 1061) (Klassen))
 - pH base value for topsoil from 0-14
   (German: Bodenreaktion, e.g. Kohl basisch, ph3 Heidelbeeren), dynamic value using one decimal digit after the comma:
   - 1 very acid (pH 5.0 and below)
@@ -59,9 +59,9 @@ Global value and local values in the Soil layer:
   first version: use data from Ostösterreich
 - (sun background: Sonnentage, Sonnenscheindauer h, from https://www.data.gv.at/katalog/dataset/1d9754ae-9e7b-4772-97c9-a030285d75bb)
   first version: use data from Ostösterreich
-- (soil depth, BM: Bodenmächtigkeit: Mächtigkeit des durchwurzelbaren Mineralbodens [cm])
+- (soil depth, BM: Bodenmächtigkeit: Mächtigkeit des durchwurzelbaren Mineralbodens (cm))
   first version: assume "sehr tiefgründig" `> 100cm`
-- (SkelG: Skelettgehalt: Anteil der Korngrößenfraktion > 2 mm (Grobanteil) am Mineralboden [%])
+- (SkelG: Skelettgehalt: Anteil der Korngrößenfraktion > 2 mm (Grobanteil) am Mineralboden (%))
   first version we assume geringer Grobanteil `<= 10%`
 - Available water capacity
 - Field capacity

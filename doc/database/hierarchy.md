@@ -1,7 +1,7 @@
 # Hierarchy
 
 This document explains the hierarchy of the plants table.
-Please make sure that you already read the [biology section of the glossary](/doc/architecture/glossary.md).
+Please make sure that you already read the [biology section of the glossary](../architecture/12glossary.md).
 
 ## Introduction
 
@@ -116,7 +116,7 @@ We know about names (abstract and concrete, including hybrid):
 
 ## Attributes
 
-Columns are documented in their [respective structs](/backend/src/model/entity.rs).
+Columns are documented in their [respective structs](https://github.com/ElektraInitiative/PermaplanT/blob/master/backend/src/model/entity.rs).
 
 We prefer strongly-typed data, e.g.:
 
@@ -198,4 +198,4 @@ Individual problems:
 
 ## Further Readings
 
-- Rationale is explained [in this decision](doc/decisions/database_plant_hierarchy.md).
+- Rationale is explained [in this decision](../decisions/database_plant_hierarchy.md).

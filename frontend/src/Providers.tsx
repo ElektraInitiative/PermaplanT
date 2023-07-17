@@ -1,5 +1,7 @@
 import { getAuthInfo } from './features/auth';
 import { QueryCache, QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactNode } from 'react';
 import { AuthProvider } from 'react-oidc-context';
 import { BrowserRouter } from 'react-router-dom';
@@ -23,6 +25,7 @@ const getOidcConfig = async () => {
   const config = await getAuthInfo();
   sessionStorage.setItem('authority', config.issuer_uri);
   sessionStorage.setItem('client_id', config.client_id);
+  sessionStorage.setItem('backend_version', config.version);
   const redirect_uri = window.location.href.split('?')[0];
   return {
     authority: config.issuer_uri,
@@ -53,7 +56,10 @@ export function Providers({ children }: ProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProviderWrapper>
-        <BrowserRouter>{children}</BrowserRouter>
+        <BrowserRouter>
+          {children}
+          <ReactQueryDevtools position="top-left" panelPosition="left" />
+        </BrowserRouter>
       </AuthProviderWrapper>
     </QueryClientProvider>
   );

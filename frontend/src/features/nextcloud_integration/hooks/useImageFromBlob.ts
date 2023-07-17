@@ -4,6 +4,8 @@
  * @module @ignore
  */
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 type UseImageFromBlobOptions = {
   /**
@@ -42,9 +44,14 @@ export function useImageFromBlob({
   onload,
 }: UseImageFromBlobOptions) {
   const [image, setImage] = useState(createImage(fallbackImageSource));
+  const { t } = useTranslation(['nextcloudIntegration']);
 
   useEffect(() => {
     if (isLoading || isError) {
+      toast.error(t('nextcloudIntegration:load_image_failed'), {
+        autoClose: false,
+        toastId: 'ncError',
+      });
       return;
     }
 
@@ -61,7 +68,7 @@ export function useImageFromBlob({
     return () => {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [data, onload, isLoading, isError]);
+  }, [data, onload, isLoading, isError, t]);
 
   return image;
 }

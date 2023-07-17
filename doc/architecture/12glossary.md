@@ -25,10 +25,13 @@
 - map context
   - layers and their attributes e.g. warning layer and its visibility
 - event: a day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
-- deletion vs. removal of elements
-  - deletion: basically means that the plant never existed.
-    Such elements actually get removed from the database and can only restored within the session using undo.
-  - removal: removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing)
+- deletion/creation vs. removal/adding of elements
+  - deletion/creation (German: löschen/erzeugen):
+    The plant never existed.
+    Such elements actually get deleted from the database and can only be restored within the session using undo.
+    I.e. there are often columns named `created_date` but there usually is not a deletion date (with exception of maps which do not immediately get deleted).
+  - removal/adding (German: entfernen/hinzufügen):
+    Removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing).
     The database must keep removed elements, they never can be deleted.
 - reversible deletion vs undo-redo functionality
   - reversible deletion: a database entity i.e. a whole map and plant is deleted and can be restored within a certain time
@@ -45,13 +48,13 @@
   - the data representation of the objects that comprise the structure and content of a document on the web.
 - endpoints
   - The API endpoints that can be called in the backend.  
-    Their documentation can be viewed using swagger-ui (see [here](/doc/architecture/backend.md#api-documentation) for reference).
+    Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
 
 ## Biology
 
 - Taxonomy:
   A scientific classification of plants into a hierarchy.
-  The hierarchy we use is described [here](/doc/database/hierarchy.md).
+  The hierarchy we use is described [here](../database/hierarchy.md).
   As first introduction read:
   - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/) or
   - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy).

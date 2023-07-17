@@ -16,8 +16,10 @@ describe('MapHistoryStore', () => {
 
     for (const layerName of Object.keys(trackedState.layers)) {
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
+        id: -1,
         index: layerName,
         objects: [],
+        loadedObjects: layerName === LayerType.Plants ? [] : undefined,
         rotation: layerName === LayerType.Base ? 0 : undefined,
         scale: layerName === LayerType.Base ? 100 : undefined,
         nextcloudImagePath: layerName === LayerType.Base ? '' : undefined,
