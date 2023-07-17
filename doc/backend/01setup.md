@@ -13,18 +13,18 @@ All steps mentioned here have to be executed in the `backend/` folder.
 - `AUTH_CLIENT_ID` the client id the frontend should use to log in
 - `RUST_LOG` used to set the logging config for [env_logger](https://docs.rs/env_logger/latest/env_logger/)
 
-The user 'permaplant' doesn't have the required permissions to create the 'postgis' extension. 
+The user 'permaplant' doesn't have the required permissions to create the 'postgis' extension.
 
 Set it up using the postgres user.
 
-Ensure that you grant the necessary permissions for the user to use Postgres. 
+Ensure that you grant the necessary permissions for the user to use Postgres.
 
 One way to do this is by using the following command:
 
 ```shell
 sudo -u postgres psql
-CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE USER permaplant WITH CREATEDB PASSWORD 'permaplant';
+ALTER USER permaplant WITH SUPERUSER;
 ```
 
 2. Install
