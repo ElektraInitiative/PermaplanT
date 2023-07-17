@@ -11,10 +11,18 @@ import { z } from 'zod';
 
 export type PlantingAttributeEditFormData = Pick<PlantingDto, 'addDate' | 'removeDate'>;
 
-const PlantingAttributeEditFormSchema = z.object({
-  addDate: z.nullable(z.string()).transform((value) => value || null),
-  removeDate: z.nullable(z.string()).transform((value) => value || null),
-});
+const PlantingAttributeEditFormSchema = z
+  .object({
+    addDate: z.nullable(z.string()).transform((value) => value || null),
+    removeDate: z.nullable(z.string()).transform((value) => value || null),
+  })
+  .refine(
+    (schema) =>
+      schema.removeDate === null || schema.addDate === null || schema.addDate < schema.removeDate,
+    {
+      path: ['dateRelation'],
+    },
+  );
 
 export type PlantingAttributeEditFormProps = {
   planting: PlantingDto;
@@ -33,7 +41,7 @@ export function PlantingAttributeEditForm({
 }: PlantingAttributeEditFormProps) {
   const { t } = useTranslation(['plantings']);
 
-  const { register, handleSubmit, watch } = useForm<PlantingAttributeEditFormData>({
+  const { register, handleSubmit, watch, formState } = useForm<PlantingAttributeEditFormData>({
     defaultValues: {
       addDate: planting.addDate,
       removeDate: planting.removeDate,
@@ -61,10 +69,12 @@ export function PlantingAttributeEditForm({
 
       <div className="flex gap-2">
         <SimpleFormInput
+          aria-invalid={addDateSubmitState === 'error'}
           type="date"
           id="addDate"
           labelText={t('plantings:add_date')}
           register={register}
+          className="w-36"
         />
         {addDateSubmitState === 'loading' && (
           <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
@@ -73,13 +83,16 @@ export function PlantingAttributeEditForm({
           <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
         )}
       </div>
+      <p className="pb-4 text-[0.8rem] text-neutral-400">{t('plantings:add_date_description')}</p>
 
       <div className="flex gap-2">
         <SimpleFormInput
+          aria-invalid={removeDateSubmitState === 'error'}
           type="date"
           id="removeDate"
           labelText={t('plantings:remove_date')}
           register={register}
+          className="w-36"
         />
         {removeDateSubmitState === 'loading' && (
           <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
@@ -89,7 +102,20 @@ export function PlantingAttributeEditForm({
         )}
       </div>
 
-      <SimpleButton variant={ButtonVariant.dangerBase} onClick={onDeleteClick}>
+      <p className="text-[0.8rem] text-neutral-400">{t('plantings:remove_date_description')}</p>
+
+      {/**
+       * See https://github.com/orgs/react-hook-form/discussions/7111
+       * @ts-expect-error this error path was added by zod refine(). hook form is unaware, which is a shortcoming.*/}
+      {formState.errors.dateRelation && (
+        <span className="mb-3 mt-auto text-sm text-red-400">
+          {t('plantings:error_invalid_add_remove_date')}
+        </span>
+      )}
+
+      <hr className="my-4 border-neutral-700" />
+
+      <SimpleButton variant={ButtonVariant.dangerBase} onClick={onDeleteClick} className="w-36">
         {t('plantings:delete')}
       </SimpleButton>
     </div>

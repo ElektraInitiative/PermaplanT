@@ -17,7 +17,7 @@ export function useDebouncedSubmit<T extends FieldValues>(
   onInvalid?: SubmitErrorHandler<T> | undefined,
 ) {
   const [submitState, setSubmitState] = useState<'loading' | 'idle' | 'error'>('idle');
-  const [lastValue, setLastValue] = useState<T[keyof T] | null>(null);
+  const [lastValue, setLastValue] = useState<T[keyof T]>(value);
 
   useEffect(() => {
     if (value === lastValue) {
@@ -30,7 +30,7 @@ export function useDebouncedSubmit<T extends FieldValues>(
 
   useDebounceEffect(
     () => {
-      if (submitState === 'idle') {
+      if (submitState === 'idle' || submitState === 'error') {
         return;
       }
 
