@@ -27,7 +27,7 @@ use super::r#enum::{
     light_requirement::LightRequirement, /*nutrition_demand::NutritionDemand,*/
     plant_height::PlantHeight, plant_spread::PlantSpread, propagation_method::PropagationMethod,
     quality::Quality, quantity::Quantity, shade::Shade, soil_ph::SoilPh, soil_texture::SoilTexture,
-    soil_water_retention::SoilWaterRetention, water_requirement::WaterRequirement,
+    /*soil_water_retention::SoilWaterRetention, */ water_requirement::WaterRequirement,
 };
 
 /// The `Plants` entity builds up an hierarchical structure, see `/doc/database/hierarchy.md`:
@@ -63,6 +63,7 @@ pub struct Plants {
     /// - *Fill ratio:* 88%
     pub family: Option<String>,
 
+    /*
     /// - Genus of the plant.
     /// - Is also first word of unique_name, see above (`/doc/database/hierarchy.md`)
     /// - *See also* `/doc/architecture/glossary.md`.
@@ -72,7 +73,7 @@ pub struct Plants {
     /// - *TODO:* copy from first word of unique name.
     /// - *Fill ratio:* 63%
     pub genus: Option<String>,
-
+    */
     /// - The edible use of the plant, answering: Which food type can be produced from this plant, e.g. oil?
     /// - Interesting for search functionality.
     /// - *Fetched from* Permapeople as `edible_uses` and merged with Reinsaat.
@@ -144,6 +145,7 @@ pub struct Plants {
     /// - *Fill ratio:* 88%
     pub soil_texture: Option<Vec<Option<SoilTexture>>>,
 
+    /*
     /// - *Used* in hydrology layer.
     /// - *Fetched from* PracticalPlants
     /// - wet = drowned, (often) flooded or in general very moist, e.g. swamp
@@ -151,7 +153,7 @@ pub struct Plants {
     /// - well drained = dry, low capacity to hold water, e.g. sandhill.
     /// - *Fill ratio:* 37%
     pub soil_water_retention: Option<Vec<Option<SoilWaterRetention>>>,
-
+    */
     /*
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
@@ -246,12 +248,12 @@ pub struct Plants {
     /// - Fetched from PracticalPlants and merged with \`has_drought_tolerance\` of Permapeople.
     /// - *Fill ratio:* 57%
     pub has_drought_tolerance: Option<bool>,
-
+    /*
     /// - *Used* in wind layer.
     /// - *Fetched from* PracticalPlants.
     /// - *Fill ratio:* 10%
     pub tolerates_wind: Option<bool>,
-
+    */
     /*
     /// - The list of the references of the plant.
     /// - `references` items link to these items.

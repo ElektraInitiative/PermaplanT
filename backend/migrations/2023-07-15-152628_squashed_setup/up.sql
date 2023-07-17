@@ -147,11 +147,11 @@ CREATE TYPE soil_texture AS ENUM (
     'heavy clay'
 );
 
-CREATE TYPE soil_water_retention AS ENUM (
+/*CREATE TYPE soil_water_retention AS ENUM (
     'well drained',
     'moist',
     'wet'
-);
+);*/
 
 CREATE TYPE water_requirement AS ENUM (
     'dry',
@@ -218,7 +218,7 @@ CREATE TABLE plants (
     common_name_en text[],
     common_name_de text[],
     family text,
-    genus text,
+    --genus text,
     edible_uses_en text,
     --medicinal_uses text,
     --material_uses_and_functions text,
@@ -229,7 +229,7 @@ CREATE TABLE plants (
     shade shade,
     soil_ph soil_ph[],
     soil_texture soil_texture[],
-    soil_water_retention soil_water_retention[],
+    --soil_water_retention soil_water_retention[],
     --environmental_tolerances text[],
     --native_geographical_range text,
     --native_environment text,
@@ -245,7 +245,7 @@ CREATE TABLE plants (
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
     has_drought_tolerance boolean,
-    tolerates_wind boolean,
+    --tolerates_wind boolean,
     --plant_references text[],
     --is_tree boolean,
     --nutrition_demand nutrition_demand,
