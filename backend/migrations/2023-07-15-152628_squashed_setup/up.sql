@@ -245,7 +245,7 @@ CREATE TABLE plants (
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
     has_drought_tolerance boolean,
-    --tolerates_wind boolean,
+    tolerates_wind boolean,
     --plant_references text[],
     --is_tree boolean,
     --nutrition_demand nutrition_demand,

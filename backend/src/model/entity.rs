@@ -249,12 +249,12 @@ pub struct Plants {
     /// - Fetched from PracticalPlants and merged with \`has_drought_tolerance\` of Permapeople.
     /// - *Fill ratio:* 57%
     pub has_drought_tolerance: Option<bool>,
-    /*
+
     /// - *Used* in wind layer.
     /// - *Fetched from* PracticalPlants.
     /// - *Fill ratio:* 10%
     pub tolerates_wind: Option<bool>,
-    */
+
     /*
     /// - The list of the references of the plant.
     /// - `references` items link to these items.
