@@ -8,26 +8,11 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.2.3 - UNRELEASED
 
+- Test strategy written _(4ydan)_
+- integrated FileSelector in BaseLayer _(Samuel)_
+- introduced file selection components to select and upload Nextcloud files _(Samuel)_
+- _()_
 - Finish implementation of seed search _(Moritz)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
 - _()_
 - _()_
 - _()_
@@ -35,6 +20,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Finish implementation of seed search _(Moritz)_
 - _()_
 - _()_
 - _()_
