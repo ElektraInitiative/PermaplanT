@@ -3,25 +3,10 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
-import { Vector2d } from 'konva/lib/types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
 
-export const calculateScale = (
-  measuredDistancePixels: number,
-  oldScale: number,
-  actualDistanceCentimeters: number,
-): number => {
-  if (oldScale === 0 || actualDistanceCentimeters === 0) return 0;
-  return Math.floor(measuredDistancePixels / (actualDistanceCentimeters / oldScale));
-};
-
-export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
-  const lengthX = Math.abs(point2.x - point1.x);
-  const lengthY = Math.abs(point2.y - point1.y);
-  return Math.sqrt(lengthX * lengthX + lengthY * lengthY);
-};
 
 export const BaseLayerRightToolbar = () => {
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
