@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
 
-
 export const BaseLayerRightToolbar = () => {
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
   // const { measureStep } = useMapStore((state) => state.untrackedState.layers.base);
