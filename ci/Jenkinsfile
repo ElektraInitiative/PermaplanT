@@ -262,6 +262,7 @@ Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
         body: message,
         replyTo: "noreply@libelektra.org",
         to: "build@libelektra.org"
+        throw err;
     }
 }
 
