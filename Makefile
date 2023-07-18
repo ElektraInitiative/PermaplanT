@@ -18,25 +18,25 @@ run-mdbook: build-mdbook ## Build & Run mdbook.
 	mdbook serve --open
 
 .PHONY: run-storybook
-run-storybook: build-storybook  ## Starts storybook server.
+run-storybook: build-storybook  ## Build & Run storybook.
 	cd frontend && npm run storybook
 
 # TEST
 
 .PHONY: test
-test: test-frontend test-backend test-mdbook  ## Tests everything + pre-commit
+test: test-frontend test-backend test-mdbook  ## Build & Test everything.
 	pre-commit
 
 .PHONY: test-frontend
-test-frontend: build-frontend ## Build & Tests Frontend.
+test-frontend: build-frontend ## Build & Test Frontend.
 	cd frontend && npm install && npm run format:check && npm run lint && npm run test
 
 .PHONY: test-backend
-test-backend: build-backend  ## Build & Tests Backend.
+test-backend: build-backend  ## Build & Test Backend.
 	cd backend && make test
 
 .PHONY: test-mdbook
-test-mdbook: build-mdbook  ## Build & Tests Mdbook.
+test-mdbook: build-mdbook  ## Build & Test Mdbook.
 	mdbook test
 
 .PHONY: test-storybook
@@ -46,28 +46,28 @@ test-storybook:
 # BUILD
 
 .PHONY: build
-build: install generate-api-types build-frontend build-backend build-storybook build-mdbook  # Builds everything.
+build: install generate-api-types build-frontend build-backend build-storybook build-mdbook  # Build everything.
 
 .PHONY: build-frontend
-build-frontend: install generate-api-types  ## Builds frontend.
+build-frontend: install generate-api-types  ## Build frontend.
 	cd frontend && npm install && npm run generate-api-types && npm run build
 
 .PHONY: build-backend
-build-backend: install generate-api-types  ## Builds backend.
+build-backend: install generate-api-types  ## Build backend.
 	cd backend && make build
 
 .PHONY: build-mdbook
-build-mdbook: install  ## Builds mdbook.
+build-mdbook: install  ## Build mdbook.
 	mdbook build
 
 .PHONY: build-storybook
-build-storybook: install generate-api-types  ## Builds storybook.
+build-storybook: install generate-api-types  ## Build storybook.
 	cd frontend && npm install && npm run build-storybook
 
 # MISC
 
 .PHONY: scraper-start-full
-scraper-start-full: ## Scrapes and inserts scraped data into the database.
+scraper-start-full: ## Scrape and then insert scraped data into the database.
 	cd scraper && npm install && mkdir -p data && npm run start:full
 
 .PHONY: scraper-insert
@@ -79,11 +79,11 @@ migration: ## Database migration.
 	cd backend && make migration
 
 .PHONY: migration-redo
-migration-redo: ## Runs down.sql and then up.sql for most recent migrations.
+migration-redo: ## Run down.sql and then up.sql for most recent migrations.
 	cd backend && make migration-redo
 
 .PHONY: migration-redo-a
-migration-redo-a: ## Runs down.sql and then up.sql for all migrations.
+migration-redo-a: ## Run down.sql and then up.sql for all migrations.
 	cd backend && make migration-redo-a
 
 .PHONY: database-reset
@@ -91,15 +91,15 @@ database-reset:  ## Reset diesel database.
 	cd backend && make database-reset
 
 .PHONY: generate-type-doc
-generate-type-doc:  ## Generates typedoc.
+generate-type-doc:  ## Generate typedoc.
 	cd frontend && npm install && npm run doc
 
 .PHONY: generate-api-types
-generate-api-types:  ## Generates api-types.
+generate-api-types:  ## Generate api-types.
 	cd frontend && npm run generate-api-types
 
 .PHONY: psql-r
-psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
+psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB.
 	psql -h db -p 5432 -U $(POSTGRES_USER) $(POSTGRES_DB)
 
 .PHONY: pre-commit-a
@@ -107,39 +107,39 @@ pre-commit-a:  ## Check all files with pre-commit.
 	pre-commit run --all-files
 
 .PHONY: distclean
-distclean: clean uninstall ## Cleans everything and uninstalls.
+distclean: clean uninstall ## Clean everything and uninstalls.
 
 .PHONY: clean
-clean: clean-frontend clean-backend clean-mdbook clean-storybook clean-scraper  ## Cleans everything.
+clean: clean-frontend clean-backend clean-mdbook clean-storybook clean-scraper  ## Clean everything.
 
 .PHONY: clean-frontend
-clean-frontend:  ## Removes /frontend node_modules.
+clean-frontend:  ## Remove /frontend node_modules .
 	cd frontend && rm -rf node_modules
 
 .PHONY: clean-backend
-clean-backend:  ## Cleans backend.
+clean-backend:  ## Remove /backend/target .
 	cd backend && make clean
 
 .PHONY: clean-mdbook
-clean-mdbook:  ## Removes /mdbook.
+clean-mdbook:  ## Remove /mdbook .
 	mdbook clean
 
 .PHONY: clean-scraper
-clean-scraper:  ## Removes /scrapers node_modules.
+clean-scraper:  ## Remove /scraper/node_modules .
 	cd scraper && rm -rf node_modules
 
 .PHONY: clean-storybook
-clean-storybook:  ## Removes storybook static folder.
+clean-storybook:  ## Remove storybook static folder.
 	cd frontend && rm -rf storybook-static
 
 .PHONY: install
-install:  ## Install necessary packages within the source repo.
+install:  ## Install dependencies within the source repo.
 	cd backend && make install
 	cargo install mdbook mdbook-mermaid mdbook-linkcheck
 	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary --locked
 
 .PHONY: uninstall
-uninstall:  ## Uninstalls dependencies within the source repo.
+uninstall:  ## Uninstall dependencies within the source repo.
 	-cd backend && make uninstall
 	-cargo uninstall mdbook mdbook-mermaid mdbook-linkcheck
 	-cargo uninstall mdbook-generate-summary

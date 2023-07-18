@@ -17,11 +17,11 @@ migration: install
 	LC_ALL=C diesel setup && LC_ALL=C diesel migration run
 
 .PHONY: migration-redo
-migration-redo: ## Runs down.sql and then up.sql for most recent migrations.
+migration-redo: ## Run down.sql and then up.sql for most recent migrations.
 	LC_ALL=C diesel migration redo
 
 .PHONY: migration-redo-a
-migration-redo-a: ## Runs down.sql and then up.sql for all migration.
+migration-redo-a: ## Run down.sql and then up.sql for all migration.
 	LC_ALL=C diesel migration redo -a
 
 .PHONY: database-reset
@@ -34,11 +34,11 @@ clean: ## Removes /target .
 	rm -rf target/*
 
 .PHONY: install
-install: ## Install deps and tools.
+install: ## Install dependencies within the source repo.
 	rustup component add rustfmt clippy
 	cargo install diesel_cli@2.0.1 --no-default-features --features postgres && cargo install typeshare-cli
 
 .PHONY: uninstall
-uninstall: ## Uninstall deps and tools.
+uninstall: ## Uninstall dependencies within the source repo.
 	-rustup component remove rustfmt clippy
 	-cargo uninstall diesel_cli@2.0.1 && cargo install typeshare-cli

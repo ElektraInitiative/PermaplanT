@@ -31,9 +31,9 @@ Following entities exist:
 
 You can construct your commands now, e.g `run-backend`, `test-mdbook`, `build-storybook` or `clean-backend`
 
-Type `make help` to see all commands`
+Type `make help` to see all commands
 
-**SOME OF THESE COMMANDS REQUIRE ENV VARIABLES TO WORK, LOOK AT [backend env variables](./doc/backend/01setup.md) or [frontend env variables](./frontend/README.md)**
+**SOME OF THESE COMMANDS REQUIRE ENV VARIABLES, LOOK AT [backend env variables](./doc/backend/01setup.md) or [frontend env variables](./frontend/README.md)**
 
 Important links:
 
