@@ -37,12 +37,12 @@ To install dependencies.
 make install
 ```
 
-3. migrate
+3. migration
 
 To update the database.
 
 ```sh
-make migrate
+make migration
 ```
 
 4. build

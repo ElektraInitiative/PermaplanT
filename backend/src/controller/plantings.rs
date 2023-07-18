@@ -7,7 +7,12 @@ use actix_web::{
 };
 use uuid::Uuid;
 
-use crate::{config::auth::user_info::UserInfo, model::dto::actions::Action};
+use crate::{
+    config::auth::user_info::UserInfo,
+    model::dto::actions::{
+        Action, UpdatePlantingAddDateActionPayload, UpdatePlantingRemoveDateActionPayload,
+    },
+};
 use crate::{
     config::data::AppDataInner,
     model::dto::actions::{
@@ -119,6 +124,12 @@ pub async fn update(
         UpdatePlantingDto::Move(_) => {
             Action::MovePlanting(MovePlantActionPayload::new(planting, user_info.id))
         }
+        UpdatePlantingDto::UpdateAddDate(_) => Action::UpdatePlantingAddDate(
+            UpdatePlantingAddDateActionPayload::new(planting, user_info.id),
+        ),
+        UpdatePlantingDto::UpdateRemoveDate(_) => Action::UpdatePlantingRemoveDate(
+            UpdatePlantingRemoveDateActionPayload::new(planting, user_info.id),
+        ),
     };
 
     app_data.broadcaster.broadcast(map_id, action).await;

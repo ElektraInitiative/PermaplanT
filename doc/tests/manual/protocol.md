@@ -126,7 +126,104 @@
 - Test Result:
 - Notes:
 
-## TC-008 - Base Layer
+## TC-008 - Timeline
+
+- Description: Change the date of the map to 'hide' plantings.
+- Preconditions:
+  - [ ] User must be on the map planning screen.
+- Test Steps:
+  1. Add a planting to the map.
+  2. Click on the date selection on the bottom of the screen.
+  3. Navigate to a date in the past.
+  4. Wait 1 second.
+- Expected Result:
+  - [ ] The indicator was briefly blue, indicating a loading state.
+  - [ ] The indicator beside the input is green.
+  - [ ] The Date on the bottom/right corner of the screen shows a date in the past.
+  - [ ] The planting previously planted is gone.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-009 - Timeline
+
+- Description: Change the date of the map to 'unhide' plantings.
+- Preconditions:
+  - [ ] User must be on the map planning screen.
+- Test Steps:
+  1. Add a planting to the map.
+  2. Click on the date selection on the bottom of the screen.
+  3. Navigate to a date in the past.
+  4. Wait 1 second.
+  5. Navigate to today.
+- Expected Result:
+  - [ ] The indicator was briefly blue, indicating a loading state.
+  - [ ] The indicator beside the input is green.
+  - [ ] The Date on the bottom/right corner of the screen shows the current day.
+  - [ ] The planting previously planted was gone while being in the past.
+  - [ ] The planting is visible again.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-010 - Timeline
+
+- Description: Change the `add_date` of a planting to 'hide' it.
+- Preconditions:
+  - [ ] User must be on the map planning screen.
+- Test Steps:
+  1. Add a planting to the map.
+  2. Click on the planting.
+  3. Click on the `Add Date` date selector in the left lower toolbar.
+  4. Change the date to a date in the future.
+- Expected Result:
+  - [ ] The indicator was briefly blue, indicating a loading state.
+  - [ ] The indicator beside the input is green.
+  - [ ] The planting previously planted is gone.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-011 - Timeline
+
+- Description: Change the `remove_date` of a planting to 'hide' it.
+- Preconditions:
+  - [ ] User must be on the map planning screen.
+- Test Steps:
+  1. Add a planting to the map.
+  2. Click on the planting.
+  3. Click on the `Remove Date` date selector in the left lower toolbar.
+  4. Change the date to today.
+- Expected Result:
+  - [ ] The indicator was briefly blue, indicating a loading state.
+  - [ ] The indicator beside the input is green.
+  - [ ] The planting previously planted is gone.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-012 - Timeline
+
+- Description: Change the `add_date` of a planting to 'unhide' it.
+- Preconditions:
+  - [ ] User must be on the map planning screen.
+- Test Steps:
+  1. Add a planting to the map.
+  2. Click on the planting.
+  3. Click on the `Add Date` date selector in the left lower toolbar.
+  4. Change the date to a date in the future.
+  5. Wait one second
+  6. Remove the date
+- Expected Result:
+  - [ ] The indicator was briefly blue, indicating a loading state.
+  - [ ] The indicator beside the input is green.
+  - [ ] The planting previously planted was gone while its `add_date` was in the future.
+  - [ ] The planting is visible now with its `add_date` unset.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-013 - Base Layer
 - Description: Check whether the maps background image is displayed correctly.
 - Preconditions:
   - [ ] A map has been created.

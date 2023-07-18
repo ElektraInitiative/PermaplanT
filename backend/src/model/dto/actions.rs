@@ -35,6 +35,10 @@ pub enum Action {
     UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
     /// An action used to broadcast deletion of a baseLayerImage.
     DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
+    /// An action used to update the `add_date` of a plant.
+    UpdatePlantingAddDate(UpdatePlantingAddDateActionPayload),
+    /// An action used to update the `remove_date` of a plant.
+    UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload),
 }
 
 #[typeshare]
@@ -214,6 +218,48 @@ impl UpdateBaseLayerImageActionPayload {
             rotation: payload.rotation,
             scale: payload.scale,
             path: payload.path,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlantingAddDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingAddDateActionPayload {
+    user_id: Uuid,
+    id: Uuid,
+    add_date: Option<NaiveDate>,
+}
+
+impl UpdatePlantingAddDateActionPayload {
+    #[must_use]
+    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+        Self {
+            user_id,
+            id: payload.id,
+            add_date: payload.add_date,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlantingRemoveDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingRemoveDateActionPayload {
+    user_id: Uuid,
+    id: Uuid,
+    remove_date: Option<NaiveDate>,
+}
+
+impl UpdatePlantingRemoveDateActionPayload {
+    #[must_use]
+    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+        Self {
+            user_id,
+            id: payload.id,
+            remove_date: payload.remove_date,
         }
     }
 }

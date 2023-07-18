@@ -142,9 +142,6 @@ export const createUntrackedMapSlice: StateCreator<
       return;
     }
 
-    console.log('LOADED OBJECTS:');
-    console.log(get().trackedState.layers.plants.loadedObjects);
-
     const plantsVisibleRelativeToTimelineDate = filterVisibleObjects(
       get().trackedState.layers.plants.loadedObjects,
       date,

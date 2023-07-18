@@ -1,24 +1,11 @@
 import { UpdateBaseLayerAction } from '../../../layers/base/actions';
+import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { Vector2d } from 'konva/lib/types';
+import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-export const calculateScale = (
-  measuredDistancePixels: number,
-  oldScale: number,
-  actualDistanceCentimeters: number,
-): number => {
-  if (oldScale === 0 || actualDistanceCentimeters === 0) return 0;
-  return Math.floor(measuredDistancePixels / (actualDistanceCentimeters / oldScale));
-};
-
-export const calculateDistance = (point1: Vector2d, point2: Vector2d) => {
-  const lengthX = Math.abs(point2.x - point1.x);
-  const lengthY = Math.abs(point2.y - point1.y);
-  return Math.sqrt(lengthX * lengthX + lengthY * lengthY);
-};
+import { FileStat } from 'webdav';
 
 export const BaseLayerRightToolbar = () => {
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
@@ -36,6 +23,7 @@ export const BaseLayerRightToolbar = () => {
   const [pathInput, setPathInput] = useState(baseLayerState.nextcloudImagePath);
   const [rotationInput, setRotationInput] = useState(baseLayerState.rotation);
   const [scaleInput, setScaleInput] = useState(baseLayerState.rotation);
+  const [showFileSelector, setShowFileSelector] = useState(false);
 
   useEffect(() => {
     setPathInput(baseLayerState.nextcloudImagePath);
@@ -136,6 +124,24 @@ export const BaseLayerRightToolbar = () => {
         onChange={(e) => setPathInput(e.target.value)}
         value={pathInput}
       />
+      <FileSelectorModal
+        setShow={function (show: boolean): void {
+          setShowFileSelector(show);
+        }}
+        show={showFileSelector}
+        onCancel={function (): void {
+          setShowFileSelector(false);
+        }}
+        path={'/Photos/'}
+        onSelect={function (item: FileStat): void {
+          setPathInput('/Photos/' + item.basename);
+          setShowFileSelector(false);
+        }}
+      />
+
+      <SimpleButton onClick={() => setShowFileSelector(true)}>
+        {t('baseLayerForm:selectImage')}
+      </SimpleButton>
       <SimpleFormInput
         id="rotation"
         labelText={t('baseLayerForm:rotation_field')}

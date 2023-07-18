@@ -16,7 +16,6 @@ export async function getPlantings(
   });
 
   try {
-    console.log('FETCHING PLANTINGS');
     const response = await http.get<TimelinePage<PlantingDto>>(
       `api/maps/${mapId}/layers/plants/plantings?${params}`,
     );
