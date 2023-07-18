@@ -82,6 +82,10 @@ pub enum UpdatePlantingDto {
     Transform(TransformPlantingDto),
     /// Move a plantings an the map.
     Move(MovePlantingDto),
+    /// Change the `add_date` of a planting.
+    UpdateAddDate(UpdateAddDatePlantingDto),
+    /// Change the `remove_date` of a planting.
+    UpdateRemoveDate(UpdateRemoveDatePlantingDto),
 }
 
 /// Used to transform an existing planting.
@@ -110,6 +114,26 @@ pub struct MovePlantingDto {
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
+}
+
+/// Used to change the `add_date` of a planting.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateAddDatePlantingDto {
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
+}
+
+/// Used to change the `remove_date` of a planting.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateRemoveDatePlantingDto {
+    /// The date the planting was removed from the map.
+    /// If None, the planting is still on the map.
+    pub remove_date: Option<NaiveDate>,
 }
 
 /// Query parameters for searching plantings.

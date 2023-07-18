@@ -17,8 +17,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - A timeline date can be set and changed by a date picker. Plantings exist relative to a date. _(Paul)_
-- _()_
-- _()_
+- The add/remove date of plants can be changed in the toolbar. _(Paul)_
+- Added `zod` as form validation library. _(Paul)_
 - _()_
 - Finish implementation of seed search _(Moritz)_
 - _()_

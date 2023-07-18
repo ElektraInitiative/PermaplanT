@@ -42,13 +42,13 @@ exports[`renders correctly 1`] = `
         className="space-between flex flex-row justify-center space-x-8"
       >
         <button
-          className="inline-flex h-10 w-full items-center justify-center rounded-lg text-white px-4 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 max-w-[240px] grow"
+          className="button focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 max-w-[240px] grow"
           type="button"
         >
           Cancel
         </button>
         <button
-          className="inline-flex h-10 w-full items-center justify-center rounded-lg text-white px-4 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 max-w-[240px] grow"
+          className="button focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 max-w-[240px] grow"
           onClick={[MockFunction]}
           type="button"
         >
