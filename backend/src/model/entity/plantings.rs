@@ -64,4 +64,8 @@ pub struct UpdatePlanting {
     pub scale_x: Option<f32>,
     /// The y scale of the plant on the map.
     pub scale_y: Option<f32>,
+    /// The date the planting was added to the map.
+    pub add_date: Option<Option<NaiveDate>>,
+    /// The date the planting was removed from the map.
+    pub remove_date: Option<Option<NaiveDate>>,
 }

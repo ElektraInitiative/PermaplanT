@@ -9,7 +9,7 @@ export function EmptyAvailablePlants() {
       <span className="text-md mb-4 text-center font-medium">
         {t('plantingSuggestions:available_seeds.empty_list_title')}
       </span>
-      <p className="mb-4 max-w-xs text-center text-sm text-neutral-500">
+      <p className="mb-4 max-w-xs text-center text-[0.8rem] text-neutral-400">
         {t('plantingSuggestions:available_seeds.empty_list_message')}
       </p>
       <ButtonLink to="/seeds" title={t('plantingSuggestions:available_seeds.empty_list_action')} />

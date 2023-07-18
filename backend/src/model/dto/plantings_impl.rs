@@ -63,6 +63,14 @@ impl From<UpdatePlantingDto> for UpdatePlanting {
                 y: Some(dto.y),
                 ..Default::default()
             },
+            UpdatePlantingDto::UpdateAddDate(dto) => Self {
+                add_date: Some(dto.add_date),
+                ..Default::default()
+            },
+            UpdatePlantingDto::UpdateRemoveDate(dto) => Self {
+                remove_date: Some(dto.remove_date),
+                ..Default::default()
+            },
         }
     }
 }
