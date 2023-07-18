@@ -2,28 +2,28 @@
 
 use actix_web::web;
 use utoipa::{
-    openapi::security::{AuthorizationCode, Flow, OAuth2, Password, Scopes, SecurityScheme},
+    openapi::security::{AuthorizationCode, Flow, OAuth2, Scopes, SecurityScheme},
     Modify, OpenApi,
 };
 use utoipa_swagger_ui::SwaggerUi;
 
 use super::auth::Config;
 use crate::{
-    controller::{
-        base_layer_image, config, layers, map, plant_layer, planting_suggestions, plantings,
-        plants, seed,
-    },
+    controller::{base_layer_image, config, layers, map, plant_layer, planting_suggestions, plantings, plants, seed},
     model::{
         dto::{
             plantings::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            BaseLayerImageDto, ConfigDto, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto,
+            BaseLayerImageDto, ConfigDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto, NewSeedDto,
             PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto,
-            RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImageDto,
+            RelationDto, RelationsDto, SeedDto, UpdateMapDto, UpdateBaseLayerImageDto,
         },
-        r#enum::{quality::Quality, quantity::Quantity, relation_type::RelationType},
+        r#enum::{
+            privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+            relation_type::RelationType,
+        },
     },
 };
 
@@ -77,13 +77,17 @@ struct PlantsApiDoc;
     paths(
         map::find,
         map::find_by_id,
-        map::create
+        map::create,
+        map::update
     ),
     components(
         schemas(
             PageMapDto,
             MapDto,
             NewMapDto,
+            UpdateMapDto,
+            PrivacyOptions,
+            Coordinates
         )
     ),
     modifiers(&SecurityAddon)
@@ -114,6 +118,7 @@ struct LayerApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
+        plant_layer::heatmap,
         plant_layer::find_relations
     ),
     components(
@@ -209,14 +214,11 @@ impl Modify for SecurityAddon {
         let components = openapi.components.as_mut().unwrap();
 
         let config = &Config::get().openid_configuration;
-        let oauth2 = OAuth2::new([
-            Flow::AuthorizationCode(AuthorizationCode::new(
-                config.authorization_endpoint.clone(),
-                config.token_endpoint.clone(),
-                Scopes::new(),
-            )),
-            Flow::Password(Password::new(config.token_endpoint.clone(), Scopes::new())),
-        ]);
+        let oauth2 = OAuth2::new([Flow::AuthorizationCode(AuthorizationCode::new(
+            config.authorization_endpoint.clone(),
+            config.token_endpoint.clone(),
+            Scopes::new(),
+        ))]);
         components.add_security_scheme("oauth2", SecurityScheme::OAuth2(oauth2));
     }
 }

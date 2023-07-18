@@ -1,10 +1,7 @@
 //! Tests for [`crate::controller::plant_layer`].
 
 use actix_web::{
-    http::{
-        header::{self},
-        StatusCode,
-    },
+    http::{header, StatusCode},
     test,
 };
 use diesel::ExpressionMethods;

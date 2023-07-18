@@ -49,14 +49,15 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- DOC: Improve manual test case docu _(4ydan)_
 - _()_
 - CI: mdbook linkchecker policy set to warning #628 _(4ydan)_
 - Up webdav to 5.2.2 and vite to 3.2.7 due to security issues #629 _(4ydan)_
 - _()_
-- _()_
-- _()_
-- _()_
+- backend: add endpoint to generate the heatmap _(Gabriel)_
+- UX: Revised existing error notifications and added new ones for other API calls _(Thorben)_
+- CI: Cancel previous builds #557 _(4ydan)_
+- backend: add scheduled task to remove maps #90 _(GabrielThorben)_
 
 ## 0.2.2 - 12.07.2023 (281 commits)
 
@@ -74,6 +75,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Display version number on the navbar and move github link #574 _(4ydan)_
 - Improved user visible texts in map editor _(Thorben)_
 - DEV: Makefile added #549 _(4ydan)_
+- added Christoph Kraus as Teammember _(temmey)_
 
 ## 0.2.1 - UNRELEASED (1024 commits)
 

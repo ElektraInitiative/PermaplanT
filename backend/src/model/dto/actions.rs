@@ -8,6 +8,7 @@
 #![allow(clippy::missing_const_for_fn)]
 
 use crate::model::dto::plantings::PlantingDto;
+use chrono::NaiveDate;
 use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;
@@ -53,6 +54,8 @@ pub struct CreatePlantActionPayload {
     rotation: f32,
     scale_x: f32,
     scale_y: f32,
+    add_date: Option<NaiveDate>,
+    remove_date: Option<NaiveDate>,
 }
 
 impl CreatePlantActionPayload {
@@ -70,6 +73,8 @@ impl CreatePlantActionPayload {
             rotation: payload.rotation,
             scale_x: payload.scale_x,
             scale_y: payload.scale_y,
+            add_date: payload.add_date,
+            remove_date: payload.remove_date,
         }
     }
 }
