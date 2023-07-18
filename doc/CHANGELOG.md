@@ -33,7 +33,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- CI: Check package-lock.json #597 _(4ydan)_
 - Further Makefile targets #630 _(4ydan)_
 - DOC: Improve manual test case docu _(4ydan)_
 - _()_
