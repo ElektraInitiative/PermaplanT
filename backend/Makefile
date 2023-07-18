@@ -40,5 +40,5 @@ install: ## Install deps and tools.
 
 .PHONY: uninstall
 uninstall: ## Uninstall deps and tools.
-	rustup component remove rustfmt clippy
-	cargo uninstall diesel_cli@2.0.1 && cargo install typeshare-cli
+	-rustup component remove rustfmt clippy
+	-cargo uninstall diesel_cli@2.0.1 && cargo install typeshare-cli
