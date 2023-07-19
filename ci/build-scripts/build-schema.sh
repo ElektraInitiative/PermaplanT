@@ -12,6 +12,9 @@ then
     source /opt/rust.env
 fi
 
+# Download Cargo Modules
+cargo fetch
+
 # Show Diesel Version
 diesel --version
 

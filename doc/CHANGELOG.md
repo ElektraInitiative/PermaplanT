@@ -41,7 +41,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- CI: Improve pipeleine parallelization #577 _(4ydan)_
 - _()_
 - _()_
 - _()_
@@ -55,7 +55,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.2.3 - 18.07.2023 (165 commits)
 
-- Test strategy written _(4ydan)_
 - integrated FileSelector in BaseLayer _(Samuel)_
 - introduced file selection components to select and upload Nextcloud files _(Samuel)_
 - Finish implementation of seed search _(Moritz)_
@@ -70,12 +69,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Up webdav to 5.2.2 and vite to 3.2.7 due to security issues #629 _(4ydan)_
 - backend: add endpoint to generate the heatmap _(Gabriel)_
 - UX: Revised existing error notifications and added new ones for other API calls _(Thorben)_
-- CI: Cancel previous builds #557 _(4ydan)_
 - backend: add scheduled task to remove maps #90 _(GabrielThorben)_
 
 ## 0.2.2 - 12.07.2023 (282 commits)
 
-- Test strategy written _(4ydan)_
 - Added Nextcloud integration documentation in `/doc/research/nextcloud_integration.md`_(Samuel)_
 - Fix wrong placement of plantings _(Paul)_
 - CI: Send email when master fails #109 _(4ydan)_
