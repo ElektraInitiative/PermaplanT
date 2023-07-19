@@ -134,7 +134,19 @@ export const BaseLayerRightToolbar = () => {
         }}
         path={'/Photos/'}
         onSelect={function (item: FileStat): void {
-          setPathInput('/Photos/' + item.basename);
+           const scale = baseLayerState.scale;
+           const path = '/Photos/' + item.basename;
+           const rotation = baseLayerState.rotation;
+           executeAction(
+               new UpdateBaseLayerAction({
+                   id: baseLayerState.imageId,
+                   layer_id: baseLayerState.layerId,
+                   path: path,
+                   rotation: rotation,
+                   scale: scale,
+               }),
+           );
+          setPathInput(path);
           setShowFileSelector(false);
         }}
       />
