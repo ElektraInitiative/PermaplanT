@@ -35,7 +35,6 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
             &crate::schema::maps::harvested.eq(0),
             &crate::schema::maps::owner_id.eq(Uuid::default()),
             &crate::schema::maps::privacy.eq(PrivacyOption::Private),
-            &crate::schema::maps::owner_id.eq(Uuid::default()),
             &crate::schema::maps::geometry.eq(tall_rectangle()),
         )])
         .execute(conn)
