@@ -6,60 +6,74 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.2.3 - UNRELEASED
+## 0.3.0 - UNRELEASED
 
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+
+## 0.2.3 - 18.07.2023 (165 commits)
+
+- Test strategy written _(4ydan)_
+- integrated FileSelector in BaseLayer _(Samuel)_
+- introduced file selection components to select and upload Nextcloud files _(Samuel)_
 - Finish implementation of seed search _(Moritz)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
 - A timeline date can be set and changed by a date picker. Plantings exist relative to a date. _(Paul)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- The add/remove date of plants can be changed in the toolbar. _(Paul)_
+- Added `zod` as form validation library. _(Paul)_
+- Finish implementation of seed search _(Moritz)_
+- CI: Check package-lock.json #597 _(4ydan)_
+- Further Makefile targets #630 _(4ydan)_
 - DOC: Improve manual test case docu _(4ydan)_
-- _()_
-- CI: mdbook linkchecker policy set to warning #628 _(4ydan)_
+- CI: mdbook linkchecker policy set to error #628 _(4ydan)_
 - Up webdav to 5.2.2 and vite to 3.2.7 due to security issues #629 _(4ydan)_
-- _()_
 - backend: add endpoint to generate the heatmap _(Gabriel)_
 - UX: Revised existing error notifications and added new ones for other API calls _(Thorben)_
 - CI: Cancel previous builds #557 _(4ydan)_
 - backend: add scheduled task to remove maps #90 _(GabrielThorben)_
 
-## 0.2.2 - 12.07.2023 (281 commits)
+## 0.2.2 - 12.07.2023 (282 commits)
 
 - Test strategy written _(4ydan)_
 - Added Nextcloud integration documentation in `/doc/research/nextcloud_integration.md`_(Samuel)_

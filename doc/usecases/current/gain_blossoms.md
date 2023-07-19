@@ -20,7 +20,7 @@
     - change the date.
     - planting their first plant.
     - using an element from a new layer for the first time.
-    - uploading their first photo in the [photo layer](../current/photo_layer.md).
+    - uploading their first photo in the [photo layer](../assigned/photo_layer.md).
     - harvesting a plant for the first time.
     - opening their first map for collaboration.
     - collaborating on a map from another user for the first time.

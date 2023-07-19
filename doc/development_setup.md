@@ -45,8 +45,8 @@ to manage your node environment:
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-nvm install --lts
-nvm use --lts
+nvm install 19.4.0
+nvm use 19.4.0
 ```
 
 Or if you use the default macOS starting with Catalina shell `zsh`, try:

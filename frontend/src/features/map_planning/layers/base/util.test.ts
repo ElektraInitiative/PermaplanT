@@ -1,7 +1,4 @@
-import {
-  calculateDistance,
-  calculateScale,
-} from '@/features/map_planning/layers/base/components/BaseLayerRightToolbar';
+import { calculateDistance, calculateScale } from '@/features/map_planning/layers/base/util';
 
 describe('BaseLayerRightToolbar', () => {
   it('calculates correct distance given two points', () => {

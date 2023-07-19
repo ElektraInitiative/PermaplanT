@@ -2,6 +2,8 @@
   "title": "Basis Ebene bearbeiten",
   "image_path_field": "Hintergrund-Dateipfad",
   "rotation_field": "Rotation (Grad)",
+  "selectImage": "Wähle ein Bild",
+  "rotation_field": "Rotation (Grad)",
   "scale": "Skalierung (pixel/meter)",
   "set_scale": "Auto-Skalierung",
   "distance_modal_title": "Wie groß ist diese Distanz in der Wirklichkeit?",
