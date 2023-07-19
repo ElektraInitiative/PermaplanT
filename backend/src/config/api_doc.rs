@@ -21,7 +21,7 @@ use crate::{
             RelationDto, RelationsDto, SeedDto, UpdateMapDto,
         },
         r#enum::{
-            privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+            privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
             relation_type::RelationType,
         },
     },
@@ -86,7 +86,7 @@ struct PlantsApiDoc;
             MapDto,
             NewMapDto,
             UpdateMapDto,
-            PrivacyOptions,
+            PrivacyOption,
             Coordinates
         )
     ),
