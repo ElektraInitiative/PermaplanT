@@ -17,10 +17,14 @@ use actix_web::{
 };
 use chrono::Utc;
 use diesel::ExpressionMethods;
-use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
 use uuid::Uuid;
+use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
+use postgis_diesel::types::{Point, Polygon};
+use crate::test::util::dummy_map_polygons::small_rectangle_with_non_0_xmin;
 
-async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceError> {
+async fn initial_db_values(
+    conn: &mut AsyncPgConnection,
+    polygon: Polygon<Point>) -> Result<(), ServiceError> {
     diesel::insert_into(crate::schema::maps::table)
         .values(vec![(
             &crate::schema::maps::id.eq(-1),
@@ -33,6 +37,7 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
             &crate::schema::maps::harvested.eq(0),
             &crate::schema::maps::owner_id.eq(Uuid::default()),
             &crate::schema::maps::privacy.eq(PrivacyOptions::Private),
+            &crate::schema::maps::geometry.eq(polygon),
         )])
         .execute(conn)
         .await?;
@@ -70,7 +75,7 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
 
 #[actix_rt::test]
 async fn test_find_succeeds() {
-    let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
+    let pool = init_test_database(|conn| initial_db_values(conn, small_rectangle_with_non_0_xmin()).scope_boxed()).await;
     let (token, app) = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
@@ -91,7 +96,7 @@ async fn test_find_succeeds() {
 
 #[actix_rt::test]
 async fn test_create_succeeds() {
-    let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
+    let pool = init_test_database(|conn| initial_db_values(conn, small_rectangle_with_non_0_xmin()).scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::post()
@@ -112,7 +117,7 @@ async fn test_create_succeeds() {
 
 #[actix_rt::test]
 async fn test_update_succeeds() {
-    let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
+    let pool = init_test_database(|conn| initial_db_values(conn, small_rectangle_with_non_0_xmin()).scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::post()
@@ -135,7 +140,7 @@ async fn test_update_succeeds() {
 
 #[actix_rt::test]
 async fn test_delete_by_id_succeeds() {
-    let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
+    let pool = init_test_database(|conn| initial_db_values(conn, small_rectangle_with_non_0_xmin()).scope_boxed()).await;
     let (token, app) = init_test_app(pool).await;
 
     let resp = test::TestRequest::delete()
