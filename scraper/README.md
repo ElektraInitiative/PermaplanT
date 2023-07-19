@@ -100,5 +100,16 @@ The corrected data in the new file should be stored in the same format as the ge
 The scraper also inserts the scraped data into the database:
 
 ```shell
-npm run insert
+npm run insert:plants
+```
+
+5. Insert relations into the database 
+
+The scraper inserts the relation data into the database.
+
+First you need to download the `Companions.csv` and `Antigonist.csv` file from the nextcloud server or export them yourself from the current `Plant_Relations.ods`.  
+Copy them into the /data directory and run:
+
+```shell
+npm run insert:relations
 ```
