@@ -79,11 +79,17 @@ export const Toolbar = ({
               <div
                 className="shrink-0 overflow-x-hidden overflow-y-scroll"
                 style={{ height: sizeState.height + 'px' }}
+                data-testid={position === 'left' ? 'toolbox' : 'layers'}
               >
                 {contentTop}
               </div>
               <HorizontalHandle />
-              <div className="flex-shrink overflow-x-hidden overflow-y-scroll">{contentBottom}</div>
+              <div
+                className="flex-shrink overflow-x-hidden overflow-y-scroll"
+                data-testid={position === 'left' ? 'bottomLeftToolbar' : 'bottomRightToolbar'}
+              >
+                {contentBottom}
+              </div>
               {fixedContentBottom}
             </div>
           </DraggableCore>

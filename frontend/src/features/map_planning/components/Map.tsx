@@ -45,7 +45,6 @@ export const Map = ({ layers }: MapProps) => {
   const tour = useContext(ShepherdTourContext);
 
   useEffect(() => {
-    console.log('starting tour');
     tour?.start();
     return () => tour?.cancel();
   }, [tour]);

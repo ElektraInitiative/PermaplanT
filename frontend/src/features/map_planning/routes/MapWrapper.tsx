@@ -5,7 +5,7 @@ import { useMapId } from '../hooks/useMapId';
 import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
-import { steps } from '../utils/EditorTour';
+import { getSteps, tourOptions } from '../utils/EditorTour';
 import { LayerType, LayerDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
@@ -199,6 +199,8 @@ function useMapUpdates() {
  * the store when the map is unmounted.
  */
 export function MapWrapper() {
+  const { t } = useTranslation(['common']);
+
   useCleanMapStore();
   const mapData = useInitializeMap();
   useMapUpdates();
@@ -207,17 +209,8 @@ export function MapWrapper() {
     return null;
   }
 
-  const tourOptions = {
-    defaultStepOptions: {
-      cancelIcon: {
-        enabled: true,
-      },
-    },
-    useModalOverlay: true,
-  };
-
   return (
-    <ShepherdTour steps={steps} tourOptions={tourOptions}>
+    <ShepherdTour steps={getSteps(t)} tourOptions={tourOptions}>
       <Map layers={mapData.layers} />
     </ShepherdTour>
   );

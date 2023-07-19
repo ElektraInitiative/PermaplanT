@@ -30,7 +30,7 @@ export const Layers = ({ layers }: LayersProps) => {
       );
     });
   return (
-    <div className="layers_div flex flex-col p-2">
+    <div className="flex flex-col p-2">
       <section className="flex justify-between">
         <h2>{t('layers:header')}</h2>
         <div className="flex gap-2">

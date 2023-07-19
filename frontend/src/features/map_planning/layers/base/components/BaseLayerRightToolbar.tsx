@@ -67,7 +67,7 @@ export const BaseLayerRightToolbar = () => {
   */
 
   return (
-    <div className="flex flex-col gap-2 p-2">
+    <div className="flex flex-col gap-2 p-2" data-testid="baseRightToolbar">
       {/* Automatic scaling is disabled for now due to a bug related to mouse-drag selection. */}
       {/*
       <ModalContainer show={measureStep === 'both selected'}>
@@ -123,6 +123,7 @@ export const BaseLayerRightToolbar = () => {
         }}
         onChange={(e) => setPathInput(e.target.value)}
         value={pathInput}
+        data-testid="baseBackgroundSelect"
       />
       <FileSelectorModal
         setShow={function (show: boolean): void {

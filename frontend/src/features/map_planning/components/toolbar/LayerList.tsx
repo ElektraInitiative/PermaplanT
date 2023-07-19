@@ -62,6 +62,7 @@ export const LayerList = ({
             if (setSelectedLayer) setSelectedLayer(layer);
           }}
           name="layer_enable"
+          data-testid={`${layer.type_}Select`}
         ></input>
       </div>
       <div className="flex items-center">

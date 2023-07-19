@@ -1,0 +1,23 @@
+.shepherd-content {
+    @apply bg-neutral-200-light dark:bg-neutral-200-dark;
+}
+
+.shepherd-has-title .shepherd-content .shepherd-header {
+    @apply bg-neutral-100-light dark:bg-neutral-100-dark;
+}
+
+.shepherd-text, .shepherd-title {
+    @apply dark:text-white;
+}
+
+.shepherd-button {
+    @apply bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 active:bg-primary-900 text-primary-50 dark:text-primary-700 rounded-lg text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300 border;
+}
+
+.shepherd-button {
+    transition: none;
+}
+
+.shepherd-button:not(:disabled):hover {
+    @apply text-primary-50 dark:text-primary-700 hover:bg-primary-600 dark:bg-primary-200;
+}
