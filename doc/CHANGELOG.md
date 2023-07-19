@@ -34,7 +34,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix a bug in loading images _(Paul)_
 - _()_
 - _()_
 - _()_
@@ -86,9 +86,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Display version number on the navbar and move github link #574 _(4ydan)_
 - Improved user visible texts in map editor _(Thorben)_
 - DEV: Makefile added #549 _(4ydan)_
-- added plant relations import script to scraper _(temmey)_   
+- added plant relations import script to scraper _(temmey)_
 - added Christoph Kraus as Teammember _(temmey)_
-
 
 ## 0.2.1 - UNRELEASED (1024 commits)
 
