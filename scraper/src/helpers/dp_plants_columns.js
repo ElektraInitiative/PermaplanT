@@ -31,7 +31,7 @@ export default [
   //{ name: 'width' },
   { name: "fertility", cast: "fertility[]" },
   //{ name: 'flower_colour' },
-  { name: "flower_type", cast: "flower_type" },
+  //{ name: "flower_type", cast: "flower_type" },
   { name: "has_drought_tolerance", cast: "boolean" },
   //{ name: "tolerates_wind" },
   //{ name: "plant_references", cast: "text[]" },
