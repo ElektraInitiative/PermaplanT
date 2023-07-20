@@ -35,7 +35,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Handle events of same user, discard events in same tab _(Paul)_
 - _()_
 - _()_
 - _()_
