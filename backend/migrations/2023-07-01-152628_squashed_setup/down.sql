@@ -56,7 +56,7 @@ DROP TYPE life_cycle;
 DROP TYPE layer_type;
 DROP TYPE herbaceous_or_woody;
 DROP TYPE growth_rate;
-DROP TYPE flower_type;
+--DROP TYPE flower_type;
 DROP TYPE fertility;
 DROP TYPE external_source;
 DROP TYPE deciduous_or_evergreen;
