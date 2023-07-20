@@ -31,12 +31,10 @@ def runDockerWithPostgresSidecar(String command, String stashsrc='', String stas
         node('docker') {
             node_info()
             checkout scm
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci' -e 'BIND_ADDRESS_HOST=127.0.0.1' -e 'BIND_ADDRESS_PORT=8080' -e 'AUTH_DISCOVERY_URI=unused' -e 'AUTH_CLIENT_ID=unused' -e 'RUSTFLAGS=-D warnings' -e 'RUSTDOCFLAGS=-D warnings'") {
-                    checkout scm
+                docker.build("permaplant-backend:build", "./backend").inside("--link ${c.id}:db") {
                     wait_for_db()
-                    sh './ci/build-scripts/build-schema.sh'
+                    sh '../ci/build-scripts/build-schema.sh'
                     // Because in Deploy the path for /target is a env in permaplant-deploy.sh, we can only solve it with prepending cd backend
                     sh "cd backend && ${command}"
                     if (stashsrc != null && stashdir != '') {
@@ -116,22 +114,16 @@ stage('FMT check  Build Schema'){
     node('docker') {
         node_info()
         checkout scm
-        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                checkout scm
+            docker.build("permaplant-backend", "./backend").inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 wait_for_db()
-                withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-                    // Workaround: we can't stop rustfmt from linting the generated schema.rs
-                    dir("backend") {
-                        sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
-                        sh "cargo fmt --check"
-                    // End of Workaround
-                    }
-                    sh './ci/build-scripts/build-schema.sh'
-                }
-                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
+                // Workaround: we can't stop rustfmt from linting the generated schema.rs
+                sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
+                sh "cargo fmt --check"
+                // End of Workaround
+                sh '../ci/build-scripts/build-schema.sh'
+                stash includes: 'src/schema.rs', name: 'schema.rs'
+                stash includes: 'src/bindings/definitions.ts', name: 'definitions.ts'
             }
         }
     }
