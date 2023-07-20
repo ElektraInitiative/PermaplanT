@@ -25,69 +25,40 @@ def abortPreviousRunUnlessMaster() {
     )
   }
 }
-abortPreviousRunUnlessMaster()
 
-def testAndBuildMdbook() {
+def runDockerWithPostgresSidecar(String command, String stashsrc='', String stashdir='') {
     return {
         node('docker') {
+            node_info()
             checkout scm
-            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
-
-            mdbook_image.inside {
-                checkout scm
-
-                stage('test-and-build-mdbook'){
-                    sh "mdbook test"
-                    sh 'mdbook build'
-                    stash includes: 'book/', name: 'mdbook'
+            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci' -e 'BIND_ADDRESS_HOST=127.0.0.1' -e 'BIND_ADDRESS_PORT=8080' -e 'AUTH_DISCOVERY_URI=unused' -e 'AUTH_CLIENT_ID=unused' -e 'RUSTFLAGS=-D warnings' -e 'RUSTDOCFLAGS=-D warnings'") {
+                    checkout scm
+                    wait_for_db()
+                    sh './ci/build-scripts/build-schema.sh'
+                    // Because in Deploy the path for /target is a env in permaplant-deploy.sh, we can only solve it with prepending cd backend
+                    sh "cd backend && ${command}"
+                    if (stashsrc != null && stashdir != '') {
+                        stash includes: stashsrc, name: stashdir
+                    }
                 }
             }
         }
     }
 }
 
-def testAndBuildBackend() {
+def testAndBuildMdbook() {
     return {
         node('docker') {
-            node_info()
             checkout scm
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
-
-            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                    checkout scm
-
-                    wait_for_db()
-
-                    stage('test-backend'){
-                        withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-                            // Workaround: we can't stop rustfmt from linting the generated schema.rs
-                            dir("backend") {
-                                sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
-                                sh "cargo fmt --check"
-                            }
-                            // End of Workaround
-
-                            // generate schema (overwriting src/schema.rs)
-                            sh './ci/build-scripts/build-schema.sh'
-
-                            dir("backend") {
-                                // continue checking
-                                withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']) {
-                                sh "cargo check"
-                                sh "cargo clippy"
-                                sh "cargo doc"
-                                sh "cargo test"
-                                }
-                            }
-                        }
-                    }
-
-                    stage('build-backend'){
-                        sh './ci/build-scripts/build-backend.sh'
-
-                        stash includes: 'backend/target/release/backend', name: 'backend'
-                    }
+            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+            mdbook_image.inside {
+                checkout scm
+                stage('test-and-build'){
+                    sh "mdbook test"
+                    sh 'mdbook build'
+                    stash includes: 'book/', name: 'mdbook'
                 }
             }
         }
@@ -100,11 +71,10 @@ def testAndBuildFrontend() {
             node_info()
             checkout scm
             def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
-
             node_image.inside {
                 checkout scm
                 unstash 'definitions.ts'
-                stage('test-frontend'){
+                stage('test'){
                     dir("frontend") {
                         def checksum_before = sh(returnStdout: true, script: 'checksum package-lock.json').trim()
                         sh "npm i"
@@ -118,17 +88,17 @@ def testAndBuildFrontend() {
                     }
                 }
 
-                stage('build-frontend'){
+                stage('build'){
                     sh './ci/build-scripts/build-frontend.sh'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
 
-                stage('build-typedoc'){
+                stage('typedoc'){
                     sh 'cd frontend && npm run doc'
                     stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
                 }
 
-                stage('build-storybook'){
+                stage('storybook'){
                     sh './ci/build-scripts/build-storybook.sh'
                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
@@ -137,23 +107,29 @@ def testAndBuildFrontend() {
     }
 }
 
+// PIPELINE BEGIN
+abortPreviousRunUnlessMaster()
+
 // REQUIRED for Deployment
 // see Jenkinsfile.release
-stage('Build Schema'){
+stage('FMT check  Build Schema'){
     node('docker') {
         node_info()
         checkout scm
-
         def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
-
         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
             rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 checkout scm
-
                 wait_for_db()
-
-                sh './ci/build-scripts/build-schema.sh'
-
+                withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
+                    // Workaround: we can't stop rustfmt from linting the generated schema.rs
+                    dir("backend") {
+                        sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
+                        sh "cargo fmt --check"
+                    // End of Workaround
+                    }
+                    sh './ci/build-scripts/build-schema.sh'
+                }
                 stash includes: 'backend/src/schema.rs', name: 'schema.rs'
                 stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
             }
@@ -165,9 +141,11 @@ stage('Parallel Stage') {
     timeout(time: 2, unit: 'HOURS'){
         try {
             parallel(
-                    "test and build mdbook": testAndBuildMdbook(),
-                    "test and build backend": testAndBuildBackend(),
-                    "test and build frontend": testAndBuildFrontend(),
+                    "cargo-build": runDockerWithPostgresSidecar('cargo build --release && cargo clippy', 'backend/target/release/backend', 'backend'),
+                    "cargo-check": runDockerWithPostgresSidecar('cargo check && cargo doc'),
+                    "cargo-test": runDockerWithPostgresSidecar('cargo test'),
+                    "frontend": testAndBuildFrontend(),
+                    "mdbook": testAndBuildMdbook(),
                     failFast: true
             )
         } catch(err) {
@@ -207,6 +185,9 @@ stage('Deploy PR') {
                 sh 'npm ci'
                 sh 'mkdir ./data/'
                 sh 'cp /nextcloud/mergedDatasets.csv ./data/'
+                sh 'cp /nextcloud/Companions.csv ./data/'
+                sh 'cp /nextcloud/Antagonist.csv ./data/'
+                sh 'cp /nextcloud/Sizes.csv ./data/'
                 sh 'npm run insert'
                 sh 'rm -rf ./data/'
                 sh 'rm -rf ./node_modules/'
@@ -262,6 +243,7 @@ Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
         body: message,
         replyTo: "noreply@libelektra.org",
         to: "build@libelektra.org"
+        throw err;
     }
 }
 
