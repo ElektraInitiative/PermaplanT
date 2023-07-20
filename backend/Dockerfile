@@ -56,5 +56,6 @@ RUN rustup --version \
     cargo --version \
     rustc --version
 
-WORKDIR /home/batman
-COPY . $WORKDIR
+ENV PERMAPLANT_PATH /home/batman/permaplant
+WORKDIR $PERMAPLANT_PATH
+COPY . $PERMAPLANT_PATH

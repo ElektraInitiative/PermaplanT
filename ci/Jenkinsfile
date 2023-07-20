@@ -34,7 +34,7 @@ def runDockerWithPostgresSidecar(String command, String stashsrc='', String stas
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 docker.build("permaplant-backend:build", "./backend").inside("--link ${c.id}:db") {
                     wait_for_db()
-                    sh '../ci/build-scripts/build-schema.sh'
+                    build_schema()
                     // Because in Deploy the path for /target is a env in permaplant-deploy.sh, we can only solve it with prepending cd backend
                     sh "cd backend && ${command}"
                     if (stashsrc != null && stashdir != '') {
@@ -105,6 +105,13 @@ def testAndBuildFrontend() {
     }
 }
 
+// Temporary will be replaced with makefile in /backend
+def build_schema() {
+    sh "cargo fetch"
+    sh "LC_ALL=C diesel migration run"
+    sh "typeshare ./ --lang=typescript --output-file=definitions.ts"
+}
+
 // PIPELINE BEGIN
 abortPreviousRunUnlessMaster()
 
@@ -115,13 +122,13 @@ stage('FMT check  Build Schema'){
         node_info()
         checkout scm
         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            docker.build("permaplant-backend", "./backend").inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+            docker.build("permaplant-backend", "./backend").inside("--link ${c.id}:db") {
                 wait_for_db()
                 // Workaround: we can't stop rustfmt from linting the generated schema.rs
                 sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
                 sh "cargo fmt --check"
                 // End of Workaround
-                sh '../ci/build-scripts/build-schema.sh'
+                def build_schema()
                 stash includes: 'src/schema.rs', name: 'schema.rs'
                 stash includes: 'src/bindings/definitions.ts', name: 'definitions.ts'
             }
