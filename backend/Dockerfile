@@ -57,4 +57,4 @@ RUN rustup --version \
     rustc --version
 
 WORKDIR /home/batman
-COPY . $WORKDIR/backend
+COPY . $WORKDIR
