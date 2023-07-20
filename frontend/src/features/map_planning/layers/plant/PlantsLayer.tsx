@@ -19,7 +19,6 @@ function usePlantLayerListeners(listening: boolean) {
   const selectedPlant = useMapStore(
     (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
-  const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
 
@@ -54,7 +53,7 @@ function usePlantLayerListeners(listening: boolean) {
         }),
       );
     },
-    [executeAction, selectedPlant, selectedLayer, timelineDate],
+    [executeAction, selectedPlant, timelineDate],
   );
 
   /**

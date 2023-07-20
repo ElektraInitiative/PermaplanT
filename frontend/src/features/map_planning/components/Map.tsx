@@ -97,7 +97,12 @@ export const Map = ({ layers }: MapProps) => {
               </IconButton>
               <IconButton
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => updateLayerVisible(FrontendOnlyLayerType.Grid, !untrackedState.layers.grid.visible)}
+                onClick={() =>
+                  updateLayerVisible(
+                    FrontendOnlyLayerType.Grid,
+                    !untrackedState.layers.grid.visible,
+                  )
+                }
                 title={t('grid:tooltip')}
               >
                 <GridIcon></GridIcon>
