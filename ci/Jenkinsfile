@@ -55,7 +55,6 @@ def testAndBuildMdbook() {
             checkout scm
             docker.build("permaplant-doc:build", "./doc").inside {
                 stage('test'){
-                    sh "ls"
                     sh "make test-mdbook"
                 }
 
