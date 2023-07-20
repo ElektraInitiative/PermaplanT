@@ -53,7 +53,7 @@ function usePlantLayerListeners(listening: boolean) {
         }),
       );
     },
-    [executeAction, selectedPlant, timelineDate],
+    [getSelectedLayerId, executeAction, selectedPlant, timelineDate],
   );
 
   /**
