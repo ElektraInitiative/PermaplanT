@@ -50,7 +50,7 @@ function usePlantLayerListeners(listening: boolean) {
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
-          add_date: timelineDate,
+          addDate: timelineDate,
         }),
       );
     },

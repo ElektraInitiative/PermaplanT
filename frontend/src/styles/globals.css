@@ -1,4 +1,6 @@
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   h1 {
@@ -22,5 +24,12 @@
   }
 }
 
-@tailwind components;
-@tailwind utilities;
+@layer components {
+  .button {
+    @apply inline-flex items-center justify-center h-10 w-full rounded-lg px-4 py-2.5 text-sm font-medium text-white text-center;
+  }
+
+  .input {
+    @apply block h-11 w-full rounded-lg p-2.5 text-sm;
+  }
+}

@@ -5,7 +5,7 @@ use crate::{
         dto::{MapDto, NewMapDto, Page, UpdateMapDto},
         r#enum::privacy_options::PrivacyOptions,
     },
-    test::util::{init_test_app, init_test_database},
+    test::util::{dummy_map_polygons::tall_rectangle, init_test_app, init_test_database},
 };
 use actix_web::{
     http::{header, StatusCode},
@@ -33,6 +33,7 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 ),(
                     &crate::schema::maps::id.eq(-2),
                     &crate::schema::maps::name.eq("Other"),
@@ -45,6 +46,7 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 )])
                 .execute(conn)
                 .await?;
@@ -101,6 +103,7 @@ async fn test_can_find_map_by_id() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 ))
                 .execute(conn)
                 .await?;
@@ -138,6 +141,7 @@ async fn test_can_create_map() {
         privacy: PrivacyOptions::Public,
         description: None,
         location: None,
+        geometry: tall_rectangle(),
     };
 
     let resp = test::TestRequest::post()
@@ -176,6 +180,7 @@ async fn test_update_fails_for_not_owner() {
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
                     &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::geometry.eq(tall_rectangle()),
                 ))
                 .execute(conn)
                 .await?;
@@ -191,6 +196,7 @@ async fn test_update_fails_for_not_owner() {
         privacy: None,
         description: None,
         location: None,
+        geometry: None,
     };
 
     let resp = test::TestRequest::patch()
@@ -220,6 +226,7 @@ async fn test_can_update_map() {
         privacy: PrivacyOptions::Public,
         description: None,
         location: None,
+        geometry: tall_rectangle(),
     };
 
     let resp = test::TestRequest::post()
@@ -235,6 +242,7 @@ async fn test_can_update_map() {
         privacy: None,
         description: None,
         location: None,
+        geometry: None,
     };
 
     let resp = test::TestRequest::patch()

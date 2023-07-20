@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  postgis:
+    container_name: postgis
+    image: postgis/postgis:13-3.3
+    restart: always
+    environment:
+      - POSTGRES_USER=permaplant
+      - POSTGRES_PASSWORD=permaplant
+      - POSTGRES_DB=permaplant
+      - ALLOW_IP_RANGE=0.0.0.0/0
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql
+
+volumes:
+  pg_data:

@@ -10,14 +10,13 @@ use uuid::Uuid;
 /// E.g. a user drags a plant from the search results and drops it on the map.
 #[typeshare]
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct PlantingDto {
     /// The id of the planting.
     pub id: Uuid,
     /// The plant layer the plantings is on.
-    #[serde(rename = "layerId")]
     pub layer_id: i32,
     /// The plant that is planted.
-    #[serde(rename = "plantId")]
     pub plant_id: i32,
     /// The x coordinate of the position on the map.
     pub x: i32,
@@ -30,10 +29,8 @@ pub struct PlantingDto {
     /// The rotation in degrees (0-360) of the plant on the map.
     pub rotation: f32,
     /// The x scale of the plant on the map.
-    #[serde(rename = "scaleX")]
     pub scale_x: f32,
     /// The y scale of the plant on the map.
-    #[serde(rename = "scaleY")]
     pub scale_y: f32,
     /// The date the planting was added to the map.
     /// If None, the planting always existed.
@@ -46,14 +43,13 @@ pub struct PlantingDto {
 /// Used to create a new planting.
 #[typeshare]
 #[derive(Debug, Clone, Default, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct NewPlantingDto {
     /// The id of the planting.
     pub id: Option<Uuid>,
     /// The plant layer the plantings is on.
-    #[serde(rename = "layerId")]
     pub layer_id: i32,
     /// The plant that is planted.
-    #[serde(rename = "plantId")]
     pub plant_id: i32,
     /// The x coordinate of the position on the map.
     pub x: i32,
@@ -66,10 +62,8 @@ pub struct NewPlantingDto {
     /// The rotation of the plant on the map.
     pub rotation: f32,
     /// The x scale of the plant on the map.
-    #[serde(rename = "scaleX")]
     pub scale_x: f32,
     /// The y scale of the plant on the map.
-    #[serde(rename = "scaleY")]
     pub scale_y: f32,
     /// The date the planting was added to the map.
     /// If None, the planting always existed.
@@ -88,11 +82,16 @@ pub enum UpdatePlantingDto {
     Transform(TransformPlantingDto),
     /// Move a plantings an the map.
     Move(MovePlantingDto),
+    /// Change the `add_date` of a planting.
+    UpdateAddDate(UpdateAddDatePlantingDto),
+    /// Change the `remove_date` of a planting.
+    UpdateRemoveDate(UpdateRemoveDatePlantingDto),
 }
 
 /// Used to transform an existing planting.
 #[typeshare]
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct TransformPlantingDto {
     /// The x coordinate of the position on the map.
     pub x: i32,
@@ -101,21 +100,40 @@ pub struct TransformPlantingDto {
     /// The rotation of the plant on the map.
     pub rotation: f32,
     /// The x scale of the plant on the map.
-    #[serde(rename = "scaleX")]
     pub scale_x: f32,
     /// The y scale of the plant on the map.
-    #[serde(rename = "scaleY")]
     pub scale_y: f32,
 }
 
 /// Used to move an existing planting.
 #[typeshare]
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct MovePlantingDto {
     /// The x coordinate of the position on the map.
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
+}
+
+/// Used to change the `add_date` of a planting.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateAddDatePlantingDto {
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
+}
+
+/// Used to change the `remove_date` of a planting.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateRemoveDatePlantingDto {
+    /// The date the planting was removed from the map.
+    /// If None, the planting is still on the map.
+    pub remove_date: Option<NaiveDate>,
 }
 
 /// Query parameters for searching plantings.

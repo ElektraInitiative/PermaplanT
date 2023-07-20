@@ -9,6 +9,7 @@ mod map;
 mod pagination;
 mod plant;
 mod plant_layer;
+pub mod plant_layer_heatmap;
 mod planting_suggestions;
 mod plantings;
 mod seed;

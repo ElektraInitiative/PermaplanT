@@ -10,9 +10,11 @@
     "merge:datasets": "node src/merge_datasets.js",
     "merge:reinsaat": "node src/merge_reinsaat.js",
     "merge:csvfiles": "node src/helpers/merge_csv_files.js",
-    "insert": "node src/insert_plants.js",
-    "start:full": "npm run fetch:permapeople && npm run fetch:practicalplants && npm run fetch:reinsaat && npm run merge:reinsaat && npm run merge:datasets && npm run insert",
-    "start": "npm run merge:datasets && npm run insert"
+    "insert:plants": "node src/insert_plants.js",
+    "insert:relations": "node src/insert_plant_relations.js",
+    "insert": "npm run insert:plants && npm run insert:relations",
+    "start:full": "npm run fetch:permapeople && npm run fetch:practicalplants && npm run fetch:reinsaat && npm run merge:reinsaat && npm run merge:datasets && npm run insert:plants",
+    "start": "npm run merge:datasets && npm run insert:plants"
   },
   "keywords": [],
   "author": "",
