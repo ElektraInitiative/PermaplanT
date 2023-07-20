@@ -32,133 +32,75 @@ function sanitizeColumnNames(jsonArray, external_source = null) {
 }
 
 /**
- * Returns the soil pH category based on the pH value
+ * Returns the average number from a string that may include range or single number.
  *
- * @param {*} pH String containing the pH value
- * @returns
+ * @param {string} value
+ * @returns {number}
  */
-function getSoilPH(pH) {
-  // If pH is a range, split it into two numbers and calculate the average
-  if (pH.includes("-")) {
-    const [min, max] = pH.split("-").map(Number);
-    pH = (min + max) / 2;
-  } else if (pH.includes("–")) {
-    // Handle em dash character
-    const [min, max] = pH.split("–").map(Number);
-    pH = (min + max) / 2;
-  } else if (pH.includes("<")) {
-    // Handle less than symbol
-    pH = Number(pH.slice(1)) - 0.1;
-  } else if (pH.includes(">")) {
-    // Handle greater than symbol
-    pH = Number(pH.slice(1)) + 0.1;
+function processValue(value) {
+  let processedValue;
+  if (value == null) return null;
+
+  if (value.includes("-") || value.includes("–")) {
+    const delimiter = value.includes("-") ? "-" : "–";
+    const [min, max] = value.split(delimiter).map(Number);
+    processedValue = (min + max) / 2;
+  } else if (value.includes("<")) {
+    processedValue = Number(value.slice(1)) - 0.1;
+  } else if (value.includes(">")) {
+    processedValue = Number(value.slice(1)) + 0.1;
   } else {
-    pH = Number(pH);
+    processedValue = Number(value);
   }
 
-  if (isNaN(pH) || pH < 0 || pH > 14) {
-    // Handle invalid pH values
-    return null;
-  } else if (pH <= 5.0) {
-    return "very acid";
-  } else if (pH >= 5.1 && pH <= 6.5) {
-    return "acid";
-  } else if (pH >= 6.6 && pH <= 7.3) {
-    return "neutral";
-  } else if (pH >= 7.4 && pH <= 7.8) {
-    return "alkaline";
-  } else if (pH >= 7.9) {
-    return "very alkaline";
-  } else {
-    return null;
-  }
+  return isNaN(processedValue) || processedValue < 0 ? null : processedValue;
+}
+
+/**
+ * Returns the soil pH category based on the pH value
+ *
+ * @param {string} pH String containing the pH value
+ * @returns {string}
+ */
+function getSoilPH(pH) {
+  const value = processValue(pH);
+  if (value === null || value > 14) return null;
+
+  return value <= 5
+    ? "very acid"
+    : value <= 6.5
+    ? "acid"
+    : value <= 7.3
+    ? "neutral"
+    : value <= 7.8
+    ? "alkaline"
+    : "very alkaline";
 }
 
 /**
  * Returns the height enum typ based on the height
  *
- * @param {*} height String containing the height value in meter
- * @returns
+ * @param {string} height String containing the height value in meter
+ * @returns {string}
  */
 function getHeightEnumTyp(height) {
-  if (height == null) {
-    return "na";
-  }
-  // If Height is a range, split it into two numbers and calculate the average
-  if (height.includes("-")) {
-    const [min, max] = height.split("-").map(Number);
-    height = (min + max) / 2;
-  } else if (height.includes("–")) {
-    // Handle em dash character
-    const [min, max] = height.split("–").map(Number);
-    height = (min + max) / 2;
-  } else if (height.includes("<")) {
-    // Handle less than symbol
-    height = Number(height.slice(1)) - 0.1;
-  } else if (height.includes(">")) {
-    // Handle greater than symbol
-    height = Number(height.slice(1)) + 0.1;
-  } else {
-    height = Number(height);
-  }
+  const value = processValue(height);
+  if (value === null) return null;
 
-  if (isNaN(height) || height < 0) {
-    // Handle invalid height values
-    return "na";
-  } else if (height <= 0.25) {
-    return "low";
-  } else if (height > 0.25 && height <= 0.61) {
-    return "medium";
-  } else if (height > 0.61) {
-    return "high";
-  } else {
-    return "na";
-  }
+  return value <= 0.25 ? "low" : value <= 0.61 ? "medium" : "high";
 }
 
 /**
  * Returns the spread enum typ based on the spread/width
  *
- * @param {*} spread String containing the spread/width value in meter
- * @returns
+ * @param {string} spread String containing the spread/width value in meter
+ * @returns {string}
  */
 function getSpreadEnumTyp(spread) {
-  if (spread == null) {
-    return "na";
-  }
-  // If Height is a range, split it into two numbers and calculate the average
-  if (spread.includes("-")) {
-    const [min, max] = spread.split("-").map(Number);
-    spread = (min + max) / 2;
-  } else if (spread.includes("–")) {
-    // Handle em dash character
-    const [min, max] = spread.split("–").map(Number);
-    spread = (min + max) / 2;
-  } else if (spread.includes("<")) {
-    // Handle less than symbol
-    spread = Number(spread.slice(1)) - 0.1;
-  } else if (spread.includes(">")) {
-    // Handle greater than symbol
-    spread = Number(spread.slice(1)) + 0.1;
-  } else if (spread.includes("m")) {
-    // Handle m for meter
-    spread = Number(spread.slice(0, -1));
-  } else {
-    spread = Number(spread);
-  }
+  const value = processValue(spread);
+  if (value === null) return null;
 
-  if (isNaN(spread) || spread < 0) {
-    // Handle invalid spread values
-    return "na";
-  } else if (spread <= 0.15) {
-    return "narrow";
-  } else if (spread > 0.15 && spread <= 0.61) {
-    return "medium";
-  } else if (spread > 0.61) {
-    return "wide";
-  } else {
-    return "na";
-  }
+  return value <= 0.15 ? "narrow" : value <= 0.61 ? "medium" : "wide";
 }
 
 /**
