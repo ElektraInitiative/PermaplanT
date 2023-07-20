@@ -11,6 +11,10 @@ export class UpdateBaseLayerAction
 {
   constructor(private readonly _data: BaseLayerImageDto) {}
 
+  get entityIds() {
+    return ['baseLayerImage'];
+  }
+
   reverse(state: TrackedMapState) {
     return new UpdateBaseLayerAction({
       id: state.layers.base.imageId,
