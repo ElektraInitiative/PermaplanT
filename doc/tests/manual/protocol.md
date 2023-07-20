@@ -223,6 +223,23 @@
 - Test Result:
 - Notes:
 
+## TC-013 - Grid
+- Description: Display a point grid on the screen.
+- Preconditions:
+  - [ ] User must be on the map screen.
+- Test Steps:
+  1. Press the grid button in the left upper menu bar.
+  2. Zoom all the way in.
+  3. Zoom all the way out.
+- Expected Result:
+  - [ ] The grid is displayed.
+  - [ ] Each press on the grid button toggles the grid of/on.
+  - [ ] Zooming in, grid spacing should switch from one meter to ten centimeters.
+  - [ ] Zooming out, grid spacing should switch ten centimeters to one meter to ten centimeters.
+- Actual Result:
+- Test Result:
+- Notes:
+
 <!--
 DONT DELETE THIS.
 USE THIS TO CREATE A NEW TESTCASE.
