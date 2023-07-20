@@ -23,7 +23,7 @@ use crate::schema::{layers, maps, plants, seeds};
 use super::r#enum::privacy_option::PrivacyOption;
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
-    fertility::Fertility, flower_type::FlowerType, growth_rate::GrowthRate,
+    fertility::Fertility, /*flower_type::FlowerType, */ growth_rate::GrowthRate,
     herbaceous_or_woody::HerbaceousOrWoody, layer_type::LayerType, life_cycle::LifeCycle,
     light_requirement::LightRequirement, /*nutrition_demand::NutritionDemand,*/
     plant_height::PlantHeight, plant_spread::PlantSpread, propagation_method::PropagationMethod,
@@ -228,13 +228,13 @@ pub struct Plants {
     /// - *Fetched from* PracticalPlants
     /// - *Fill ratio:* 0.5%
     //pub flower_colour: Option<String>,
-     */
+
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
     /// - a plant can contain flowers of two different sexes, male or female (monoecious), a plant can contain only flowers of one specific sex and therefore needs at least another plant of the other sex to reproduce (dioecious) or can contain flowers that have both the sexes within the same flower (hermaphrodite).
     /// - *Fill ratio:* 62%
     pub flower_type: Option<FlowerType>,
-
+    */
     /// - The creation date of the entry.
     /// - Only for administration.
     /// - *Fill ratio:* 100%

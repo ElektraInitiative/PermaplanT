@@ -18,11 +18,11 @@ CREATE TYPE fertility AS ENUM (
     'self sterile'
 );
 
-CREATE TYPE flower_type AS ENUM (
+/*CREATE TYPE flower_type AS ENUM (
     'dioecious',
     'monoecious',
     'hermaphrodite'
-);
+);*/
 
 CREATE TYPE growth_rate AS ENUM (
     'slow',
@@ -241,7 +241,7 @@ CREATE TABLE plants (
     height plant_height,
     fertility fertility [],
     --flower_colour text,
-    flower_type flower_type,
+    --flower_type flower_type,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
     has_drought_tolerance boolean,
