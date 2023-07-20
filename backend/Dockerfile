@@ -58,4 +58,4 @@ RUN rustup --version \
 
 ENV PERMAPLANT_PATH /home/batman/permaplant
 WORKDIR $PERMAPLANT_PATH
-COPY . $PERMAPLANT_PATH
+COPY ./backend $PERMAPLANT_PATH
