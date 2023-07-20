@@ -14,7 +14,6 @@ import { LayerDto, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
-import { GridLayerLeftToolbar } from '@/features/map_planning/layers/_frontend_only/grid/components/GridLayerLeftToolbar';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { ReactComponent as GridIcon } from '@/icons/grid.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
@@ -37,7 +36,7 @@ export const Map = ({ layers }: MapProps) => {
   const untrackedState = useMapStore((map) => map.untrackedState);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
-  const selectLayer = useMapStore((map) => map.updateSelectedLayer);
+  const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
   const getSelectedLayerType = useMapStore((map) => map.getSelectedLayerType);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
@@ -69,7 +68,7 @@ export const Map = ({ layers }: MapProps) => {
       [LayerType.Todo]: { right: <div></div>, left: <div></div> },
       [LayerType.Photo]: { right: <div></div>, left: <div></div> },
       [LayerType.Watering]: { right: <div></div>, left: <div></div> },
-      [FrontendOnlyLayerType.Grid]: { right: <div></div>, left: <GridLayerLeftToolbar /> },
+      [FrontendOnlyLayerType.Grid]: { right: <div></div>, left: <div></div> },
     };
 
     return content[layerType];
@@ -98,7 +97,7 @@ export const Map = ({ layers }: MapProps) => {
               </IconButton>
               <IconButton
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => selectLayer(FrontendOnlyLayerType.Grid)}
+                onClick={() => updateLayerVisible(FrontendOnlyLayerType.Grid, !untrackedState.layers.grid.visible)}
                 title={t('grid:tooltip')}
               >
                 <GridIcon></GridIcon>
