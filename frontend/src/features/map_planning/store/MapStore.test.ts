@@ -310,6 +310,12 @@ describe('MapHistoryStore', () => {
     useMapStore.getState().updateSelectedLayer(createTestLayerObject());
 
     const { untrackedState: newState } = useMapStore.getState();
+
+    if (typeof newState.selectedLayer !== 'object') {
+      expect(true).toEqual(false);
+      return;
+    }
+
     expect(newState.selectedLayer.type_).toEqual(LayerType.Soil);
   });
 
@@ -333,6 +339,12 @@ describe('MapHistoryStore', () => {
     useMapStore.getState().undo();
 
     const { untrackedState: newState } = useMapStore.getState();
+
+    if (typeof newState.selectedLayer !== 'object') {
+      expect(true).toEqual(false);
+      return;
+    }
+
     expect(newState.selectedLayer.type_).toEqual(LayerType.Soil);
   });
 });

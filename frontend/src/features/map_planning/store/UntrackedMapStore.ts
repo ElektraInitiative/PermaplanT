@@ -1,6 +1,12 @@
 import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
-import { TrackedMapSlice, UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from './MapStoreTypes';
+import {
+  BoundsRect,
+  TrackedMapSlice,
+  UNTRACKED_DEFAULT_STATE,
+  UntrackedMapSlice,
+} from './MapStoreTypes';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
@@ -15,17 +21,51 @@ export const createUntrackedMapSlice: StateCreator<
   untrackedState: UNTRACKED_DEFAULT_STATE,
   stageRef: createRef<Konva.Stage>(),
   tooltipRef: createRef(),
+  updateMapBounds(bounds: BoundsRect) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        editorBounds: bounds,
+      },
+    }));
+  },
   updateSelectedLayer(selectedLayer) {
     // Clear the transformer's nodes.
     get().transformer.current?.nodes([]);
+
+    if (typeof selectedLayer === 'object' && 'is_alternative' in selectedLayer) {
+      // selectedLayer is a LayerDto
+      set((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          selectedLayer: {
+            ...selectedLayer,
+          },
+          layers: {
+            ...state.untrackedState.layers,
+            plants: {
+              ...state.untrackedState.layers.plants,
+              selectedPlanting: null,
+              selectedPlantForPlanting: null,
+            },
+          },
+          base: {
+            ...state.untrackedState.layers.base,
+            measurePoint1: null,
+            measurePoint2: null,
+            measureStep: 'inactive',
+          },
+        },
+      }));
+    }
 
     set((state) => ({
       ...state,
       untrackedState: {
         ...state.untrackedState,
-        selectedLayer: {
-          ...selectedLayer,
-        },
+        selectedLayer: selectedLayer,
         layers: {
           ...state.untrackedState.layers,
           plants: {
@@ -239,5 +279,17 @@ export const createUntrackedMapSlice: StateCreator<
         },
       };
     });
+  },
+  getSelectedLayerType() {
+    const selectedLayer = get().untrackedState.selectedLayer;
+    if (typeof selectedLayer === 'object' && 'type_' in selectedLayer) return selectedLayer.type_;
+
+    return get().untrackedState.selectedLayer as FrontendOnlyLayerType;
+  },
+  getSelectedLayerId() {
+    const selectedLayer = get().untrackedState.selectedLayer;
+    if (typeof selectedLayer === 'object' && 'id' in selectedLayer) return selectedLayer.id;
+
+    return null;
   },
 });
