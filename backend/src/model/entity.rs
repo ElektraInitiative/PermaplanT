@@ -1,6 +1,7 @@
 //! Contains all entities used in `PermaplanT`.
 
 pub mod base_layer_images_impl;
+pub mod blossoms_impl;
 pub mod guided_tours_impl;
 pub mod layer_impl;
 pub mod map_impl;

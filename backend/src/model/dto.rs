@@ -18,6 +18,7 @@ use super::r#enum::{
 
 pub mod actions;
 pub mod base_layer_images_impl;
+pub mod blossoms_impl;
 pub mod coordinates_impl;
 pub mod guided_tours_impl;
 pub mod layer_impl;

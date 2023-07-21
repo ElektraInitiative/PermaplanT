@@ -22,7 +22,7 @@ CREATE TABLE blossoms (
 CREATE TABLE blossoms_gained (
     user_id UUID NOT NULL,
     blossom TEXT NOT NULL REFERENCES blossoms(title),
-    times_gained INTEGER,
-    gained_date DATE,
+    times_gained INTEGER NOT NULL,
+    gained_date DATE NOT NULL,
     PRIMARY KEY (user_id, blossom)
 );
