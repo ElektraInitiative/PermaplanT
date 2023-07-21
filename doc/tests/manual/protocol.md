@@ -235,7 +235,7 @@
   - [ ] The grid is displayed.
   - [ ] Each press on the grid button toggles the grid of/on.
   - [ ] Zooming in, grid spacing should switch from one meter to ten centimeters.
-  - [ ] Zooming out, grid spacing should switch ten centimeters to one meter to ten centimeters.
+  - [ ] Zooming out, grid spacing should switch ten centimeters to one meter to ten meter.
 - Actual Result:
 - Test Result:
 - Notes:
