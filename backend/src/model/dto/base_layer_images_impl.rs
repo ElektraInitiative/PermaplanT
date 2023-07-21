@@ -14,6 +14,7 @@ impl From<BaseLayerImages> for BaseLayerImageDto {
             path: entity.path,
             rotation: entity.rotation,
             scale: entity.scale,
+            action_id: Uuid::nil(),
         }
     }
 }

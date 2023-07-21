@@ -1,3 +1,4 @@
+import { UpdateBaseLayerAction } from '../layers/base/actions';
 import {
   CreatePlantAction,
   DeletePlantAction,
@@ -66,6 +67,11 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
     case 'UpdatePlantingRemoveDate':
       return new UpdateRemoveDatePlantAction(
         { ...remoteAction.payload },
+        remoteAction.payload.actionId,
+      );
+    case 'UpdateBaseLayerImage':
+      return new UpdateBaseLayerAction(
+        { ...remoteAction.payload, layer_id: remoteAction.payload.layerId },
         remoteAction.payload.actionId,
       );
     default:

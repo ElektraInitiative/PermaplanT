@@ -169,6 +169,7 @@ impl TransformPlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct CreateBaseLayerImageActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     rotation: f32,
@@ -178,9 +179,10 @@ pub struct CreateBaseLayerImageActionPayload {
 
 impl CreateBaseLayerImageActionPayload {
     #[must_use]
-    pub fn new(payload: BaseLayerImageDto, user_id: Uuid) -> Self {
+    pub fn new(payload: BaseLayerImageDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             layer_id: payload.layer_id,
             rotation: payload.rotation,
@@ -196,13 +198,18 @@ impl CreateBaseLayerImageActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct DeleteBaseLayerImageActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
 }
 
 impl DeleteBaseLayerImageActionPayload {
     #[must_use]
-    pub fn new(id: Uuid, user_id: Uuid) -> Self {
-        Self { user_id, id }
+    pub fn new(id: Uuid, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id,
+        }
     }
 }
 
@@ -212,6 +219,7 @@ impl DeleteBaseLayerImageActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct UpdateBaseLayerImageActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     rotation: f32,
@@ -221,9 +229,10 @@ pub struct UpdateBaseLayerImageActionPayload {
 
 impl UpdateBaseLayerImageActionPayload {
     #[must_use]
-    pub fn new(payload: BaseLayerImageDto, user_id: Uuid) -> Self {
+    pub fn new(payload: BaseLayerImageDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             layer_id: payload.layer_id,
             rotation: payload.rotation,

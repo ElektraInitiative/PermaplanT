@@ -75,6 +75,7 @@ pub async fn create(
                     path: String::new(),
                     rotation: 0.0,
                     scale: 100.0,
+                    action_id: Uuid::nil(),
                 },
                 &mut conn,
             )

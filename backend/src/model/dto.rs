@@ -411,6 +411,8 @@ pub struct BaseLayerImageDto {
     pub rotation: f32,
     /// The scale of the image on the map.
     pub scale: f32,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
 }
 
 /// Contains information for updating the `BaseLayerImage`.
@@ -425,6 +427,18 @@ pub struct UpdateBaseLayerImageDto {
     pub rotation: f32,
     /// The scale of the image on the map.
     pub scale: f32,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
+}
+
+/// Used to delete a base layer image.
+/// The id of the base layer image is passed in the path.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct DeleteBaseLayerImageDto {
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
 }
 
 /// Query parameters to configure the generation of the heatmap.

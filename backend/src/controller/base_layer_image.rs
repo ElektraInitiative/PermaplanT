@@ -9,9 +9,12 @@ use uuid::Uuid;
 
 use crate::{
     config::auth::user_info::UserInfo,
-    model::dto::actions::{
-        Action, CreateBaseLayerImageActionPayload, DeleteBaseLayerImageActionPayload,
-        UpdateBaseLayerImageActionPayload,
+    model::dto::{
+        actions::{
+            Action, CreateBaseLayerImageActionPayload, DeleteBaseLayerImageActionPayload,
+            UpdateBaseLayerImageActionPayload,
+        },
+        DeleteBaseLayerImageDto,
     },
 };
 use crate::{config::data::AppDataInner, model::dto::BaseLayerImageDto};
@@ -61,11 +64,12 @@ pub async fn find(path: Path<(i32, i32)>, app_data: Data<AppDataInner>) -> Resul
 #[post("")]
 pub async fn create(
     path: Path<i32>,
-    new_base_layer_image_json: Json<BaseLayerImageDto>,
+    json: Json<BaseLayerImageDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let dto = base_layer_images::create(new_base_layer_image_json.0, &app_data).await?;
+    let create_dto = json.0;
+    let dto = base_layer_images::create(create_dto.clone(), &app_data).await?;
 
     app_data
         .broadcaster
@@ -74,6 +78,7 @@ pub async fn create(
             Action::CreateBaseLayerImage(CreateBaseLayerImageActionPayload::new(
                 dto.clone(),
                 user_info.id,
+                create_dto.action_id,
             )),
         )
         .await;
@@ -102,15 +107,19 @@ pub async fn create(
 #[patch("/{base_layer_image_id}")]
 pub async fn update(
     path: Path<(i32, Uuid)>,
-    update_base_layer_image_json: Json<UpdateBaseLayerImageDto>,
+    json: Json<UpdateBaseLayerImageDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let (map_id, base_layer_image_id) = path.into_inner();
-    let update_base_layer_image = update_base_layer_image_json.0;
+    let update_base_layer_image = json.0;
 
-    let dto =
-        base_layer_images::update(base_layer_image_id, update_base_layer_image, &app_data).await?;
+    let dto = base_layer_images::update(
+        base_layer_image_id,
+        update_base_layer_image.clone(),
+        &app_data,
+    )
+    .await?;
 
     app_data
         .broadcaster
@@ -119,6 +128,7 @@ pub async fn update(
             Action::UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload::new(
                 dto.clone(),
                 user_info.id,
+                update_base_layer_image.action_id,
             )),
         )
         .await;
@@ -146,10 +156,12 @@ pub async fn update(
 #[delete("/{base_layer_image_id}")]
 pub async fn delete(
     path: Path<(i32, Uuid)>,
+    json: Json<DeleteBaseLayerImageDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let (map_id, base_layer_image_id) = path.into_inner();
+    let delete_dto = json.0;
 
     base_layer_images::delete_by_id(base_layer_image_id, &app_data).await?;
 
@@ -160,6 +172,7 @@ pub async fn delete(
             Action::DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload::new(
                 base_layer_image_id,
                 user_info.id,
+                delete_dto.action_id,
             )),
         )
         .await;
