@@ -11,7 +11,9 @@ use uuid::Uuid;
 use crate::{
     model::{
         dto::{
-            plantings::{MovePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto},
+            plantings::{
+                DeletePlantingDto, MovePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto,
+            },
             TimelinePage,
         },
         r#enum::layer_type::LayerType,
@@ -119,6 +121,7 @@ async fn test_create_fails_with_invalid_layer() {
 
     let new_planting = NewPlantingDto {
         id: Some(Uuid::new_v4()),
+        action_id: Uuid::new_v4(),
         layer_id: -1,
         plant_id: -1,
         x: 0,
@@ -165,6 +168,7 @@ async fn test_can_create_plantings() {
 
     let new_planting = NewPlantingDto {
         id: Some(Uuid::new_v4()),
+        action_id: Uuid::new_v4(),
         layer_id: -1,
         plant_id: -1,
         x: 0,
@@ -217,7 +221,11 @@ async fn test_can_update_plantings() {
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let update_data = MovePlantingDto { x: 1, y: 1 };
+    let update_data = MovePlantingDto {
+        x: 1,
+        y: 1,
+        action_id: Uuid::new_v4(),
+    };
     let update_object = UpdatePlantingDto::Move(update_data);
 
     let resp = test::TestRequest::patch()
@@ -271,6 +279,9 @@ async fn test_can_delete_planting() {
             "/api/maps/-1/layers/plants/plantings/{planting_id}",
         ))
         .insert_header((header::AUTHORIZATION, token.clone()))
+        .set_json(DeletePlantingDto {
+            action_id: Uuid::new_v4(),
+        })
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);

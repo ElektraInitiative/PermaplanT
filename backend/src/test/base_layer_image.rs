@@ -1,5 +1,6 @@
 //! Tests for [`crate::controller::base_layer_image`].
 
+use crate::model::dto::DeleteBaseLayerImageDto;
 use crate::test::util::dummy_map_polygons::small_rectangle_with_non_0_xmin;
 use crate::{
     error::ServiceError,
@@ -111,6 +112,7 @@ async fn test_create_succeeds() {
         .insert_header((header::AUTHORIZATION, token))
         .set_json(BaseLayerImageDto {
             id: Uuid::new_v4(),
+            action_id: Uuid::new_v4(),
             layer_id: -1,
             path: "/path".to_owned(),
             rotation: 0.0,
@@ -137,6 +139,7 @@ async fn test_update_succeeds() {
         ))
         .insert_header((header::AUTHORIZATION, token))
         .set_json(UpdateBaseLayerImageDto {
+            action_id: Uuid::new_v4(),
             layer_id: -2,
             path: "/path".to_owned(),
             rotation: 0.0,
@@ -159,6 +162,9 @@ async fn test_delete_by_id_succeeds() {
     let resp = test::TestRequest::delete()
         .uri(&format!("/api/maps/-1/layers/base/images/{}", Uuid::nil()))
         .insert_header((header::AUTHORIZATION, token))
+        .set_json(DeleteBaseLayerImageDto {
+            action_id: Uuid::new_v4(),
+        })
         .send_request(&app)
         .await;
 
