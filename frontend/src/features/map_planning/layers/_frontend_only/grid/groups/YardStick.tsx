@@ -1,5 +1,9 @@
 import { useDarkModeStore } from '@/features/dark_mode';
 import {
+  calculateGridStep,
+  yardStickLabel,
+} from '@/features/map_planning/layers/_frontend_only/grid/util/Calculations';
+import {
   GRAY_700_DARK,
   GRAY_700_LIGHT,
   RELATIVE_YARD_STICK_LABEL_OFFSET_Y,
@@ -10,17 +14,17 @@ import {
 import { BoundsRect } from '@/features/map_planning/store/MapStoreTypes';
 import { useTranslation } from 'react-i18next';
 import { Group, Line, Text } from 'react-konva';
-import {
-  calculateGridStep,
-  yardStickLabel
-} from "@/features/map_planning/layers/_frontend_only/grid/util/Calculations";
 
 export const YardStick = (rect: BoundsRect) => {
   const { t } = useTranslation('common');
   const { darkMode } = useDarkModeStore();
 
-  let yardStickLength = calculateGridStep(rect.width);
-  let yardStickLengthLabel = yardStickLabel(rect.width, t('meter_shorthand'), t('centimeter_shorthand'));
+  const yardStickLength = calculateGridStep(rect.width);
+  const yardStickLengthLabel = yardStickLabel(
+    rect.width,
+    t('meter_shorthand'),
+    t('centimeter_shorthand'),
+  );
 
   const strokeWidth = rect.width * RELATIVE_YARD_STICK_STROKE_WIDTH;
 
