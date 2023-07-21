@@ -20,7 +20,7 @@ impl BlossomsGained {
         gained_blossom: BlossomsGainedDto,
         user_id: Uuid,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<BlossomsGained> {
+    ) -> QueryResult<BlossomsGainedDto> {
         let gained_blossom = BlossomsGained::from((gained_blossom, user_id));
         let query = diesel::insert_into(blossoms_gained::table).values(&gained_blossom);
         debug!("{}", debug_query::<Pg, _>(&query));

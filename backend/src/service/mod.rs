@@ -1,6 +1,7 @@
 //! The service layer of `PermaplanT`.
 
 pub mod base_layer_images;
+pub mod blossoms;
 pub mod guided_tours;
 pub mod layer;
 pub mod map;

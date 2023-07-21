@@ -1,3 +1,5 @@
+//! Service layer for guided tours.
+
 use actix_web::web::Data;
 use uuid::Uuid;
 
