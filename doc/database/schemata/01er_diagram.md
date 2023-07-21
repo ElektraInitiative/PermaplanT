@@ -142,13 +142,12 @@ users {
 }
 
 guided_tours {
-  INT id PK,
+  UUID user_id PK
   BOOLEAN editor_tour "NOT NULL"
 }
 
 blossoms {
-  INT id PK
-  VARCHAR title "NOT NULL"
+  VARCHAR title PK
   VARCHAR description
   TRACKS track
   VARCHAR icon
@@ -181,13 +180,13 @@ enum_membership {
 }
 
 blossoms_gained {
+  UUID user_id PK
   INT times_gained
   DATE[] gained_date
 }
 
 maps }o--|| users : "owned by"
 blossoms ||--o{ blossoms_gained : ""
-blossoms_gained }o--|| users : ""
 
 ingredientLists {
   INT id PK

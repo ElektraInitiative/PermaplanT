@@ -1,7 +1,6 @@
 -- Your SQL goes here
 CREATE TABLE guided_tours (
-    id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL,
+    user_id UUID PRIMARY KEY,
     editor_tour BOOLEAN NOT NULL DEFAULT false
 );
 
@@ -13,8 +12,7 @@ CREATE TYPE track AS ENUM (
 );
 
 CREATE TABLE blossoms (
-    id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
+    title TEXT PRIMARY KEY,
     description TEXT,
     track TRACK,
     icon TEXT,
@@ -23,8 +21,8 @@ CREATE TABLE blossoms (
 
 CREATE TABLE blossoms_gained (
     user_id UUID NOT NULL,
-    blossom_id INTEGER NOT NULL REFERENCES blossoms(id),
+    blossom TEXT NOT NULL REFERENCES blossoms(title),
     times_gained INTEGER,
     gained_date DATE,
-    PRIMARY KEY (user_id, blossom_id)
+    PRIMARY KEY (user_id, blossom)
 );

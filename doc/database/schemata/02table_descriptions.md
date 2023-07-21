@@ -132,7 +132,6 @@ Store relations between plants.
 
 | **_Column name_** | **_Example_**                        | **_Description_**            |
 | :---------------- | :----------------------------------- | :--------------------------- |
-| **id**            | 1                                    | the id of the tours object   |
 | **user**          | 00000000-0000-0000-0000-000000000000 | the id of the user           |
 | **editor_tour**   | false                                | flag for the Map Editor Tour |
 
@@ -140,7 +139,6 @@ Store relations between plants.
 
 | **_Column name_** | **_Example_**          | **_Description_**                            |
 | :---------------- | :--------------------- | :------------------------------------------- |
-| **id**            | 1                      |
 | **title**         | Novice Gardener        |
 | **description**   | Plant your first plant |
 | **track**         | Beginners Track        | the track (category) this blossom belongs to |

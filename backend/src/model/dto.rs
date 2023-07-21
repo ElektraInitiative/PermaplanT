@@ -19,6 +19,7 @@ use super::r#enum::{
 pub mod actions;
 pub mod base_layer_images_impl;
 pub mod coordinates_impl;
+pub mod guided_tours_impl;
 pub mod layer_impl;
 pub mod map_impl;
 pub mod new_layer_impl;
@@ -486,5 +487,25 @@ pub struct UserDataDto {
 /// Completion status of all Guided Tours.
 pub struct GuidedToursDto {
     /// Whether or not the Map Editor Guided Tour was completed.
-    pub editor_introduction: bool,
+    pub editor_tour: bool,
+}
+
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+/// The information for updating an users Guided Tour status.
+pub struct UpdateGuidedToursDto {
+    /// Whether or not the Map Editor Guided Tour was completed.
+    pub editor_tour: Option<bool>,
+}
+
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+/// Information on a specific Blossom gained by a user.
+pub struct BlossomsGainedDto {
+    /// The title of the Blossom.
+    pub blossom: String,
+    /// The number of times this Blossom was gained by this user.
+    pub times_gained: i32,
+    /// The date on which the user gained this Blossom.
+    pub gained_date: NaiveDate,
 }
