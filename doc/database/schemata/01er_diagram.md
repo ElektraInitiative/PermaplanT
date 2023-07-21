@@ -139,17 +139,20 @@ users {
   INT[] member_years
   DATE member_since
   INT[] permacoins
-  BOOLEAN editor_introduction "NOT NULL"
+}
+
+guided_tours {
+  INT id PK,
+  BOOLEAN editor_tour "NOT NULL"
 }
 
 blossoms {
   INT id PK
-  VARCHAR title
+  VARCHAR title "NOT NULL"
   VARCHAR description
-  VARCHAR condition
   TRACKS track
-  BYTEA icon
-  BOOLEAN is_seasonal
+  VARCHAR icon
+  BOOLEAN is_seasonal "NOT NULL"
 }
 
 enum_tracks {
@@ -178,7 +181,6 @@ enum_membership {
 }
 
 blossoms_gained {
-  INT id PK
   INT times_gained
   DATE[] gained_date
 }
