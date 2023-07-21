@@ -21,19 +21,9 @@ Which will open [/doc/architecture/README.md](/doc/architecture/README.md) as fi
 
 ## Makefile commands
 
-Following commands exists:
+Type `make help` to see all commands.
 
-`run, test, build, clean`
-
-Following entities exist:
-
-`frontend, backend, mdbook, storybook`
-
-You can construct your commands now, e.g `run-backend`, `test-mdbook`, `build-storybook` or `clean-backend`
-
-Type `make help` to see all commands
-
-**SOME OF THESE COMMANDS REQUIRE ENV VARIABLES, LOOK AT [backend env variables](./doc/backend/01setup.md) or [frontend env variables](./frontend/README.md)**
+**Some of the commands require env variables to be set. Have a look at [backend env variables](./doc/backend/01setup.md) and [frontend env variables](./frontend/README.md)**
 
 Important links:
 

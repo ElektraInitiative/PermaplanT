@@ -28,17 +28,14 @@ migration-redo-a: ## Run down.sql and then up.sql for all migration.
 reset-database:  ## Reset diesel database.
 	diesel database reset
 
-.PHONY: clean
-clean: ## Removes /target .
-	cargo clean
-	rm -rf target/*
-
 .PHONY: install
 install: ## Install dependencies within the source repo.
 	rustup component add rustfmt clippy
 	cargo install diesel_cli@2.0.1 --no-default-features --features postgres && cargo install typeshare-cli
 
-.PHONY: uninstall
-uninstall: ## Uninstall dependencies within the source repo.
+.PHONY: clean
+clean: ## Clean up within the source repo.
+	-cargo clean
 	-rustup component remove rustfmt clippy
 	-cargo uninstall diesel_cli@2.0.1 && cargo install typeshare-cli
+	-rm -rf target/*
