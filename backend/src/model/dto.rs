@@ -16,6 +16,7 @@ use super::r#enum::{
 };
 
 pub mod actions;
+pub mod base_layer_images_impl;
 pub mod coordinates_impl;
 pub mod layer_impl;
 pub mod map_impl;
@@ -394,6 +395,36 @@ pub enum SuggestionType {
     Available,
     /// Suggests plants based on diversity criteria.
     Diversity,
+}
+
+/// Contains information about an image displayed on the base layer.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct BaseLayerImageDto {
+    /// The id of the image.
+    pub id: Uuid,
+    /// The layer the image is on.
+    pub layer_id: i32,
+    /// The path to the image on Nextcloud.
+    pub path: String,
+    /// The rotation in degrees (0-360) of the image on the map.
+    pub rotation: f32,
+    /// The scale of the image on the map.
+    pub scale: f32,
+}
+
+/// Contains information for updating the `BaseLayerImage`.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct UpdateBaseLayerImageDto {
+    /// The layer the image is on.
+    pub layer_id: i32,
+    /// The path to the image on Nextcloud.
+    pub path: String,
+    /// The rotation in degrees (0-360) of the image on the map.
+    pub rotation: f32,
+    /// The scale of the image on the map.
+    pub scale: f32,
 }
 
 /// Query parameters to configure the generation of the heatmap.

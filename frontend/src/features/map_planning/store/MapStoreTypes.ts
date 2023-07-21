@@ -1,8 +1,15 @@
 import { convertToDateString } from '../utils/date-utils';
-import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import {
+  BaseLayerImageDto,
+  LayerDto,
+  LayerType,
+  PlantingDto,
+  PlantsSummaryDto,
+} from '@/bindings/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
+import * as uuid from 'uuid';
 
 import Vector2d = Konva.Vector2d;
 
@@ -105,6 +112,10 @@ export interface TrackedMapSlice {
    * Initializes the plant layer.
    */
   initPlantLayer: (plantLayer: PlantingDto[]) => void;
+  /**
+   * Initializes the base layer.
+   */
+  initBaseLayer: (baseLayer: BaseLayerImageDto) => void;
   initLayerId: (layer: LayerType, layerId: number) => void;
 }
 
@@ -156,9 +167,10 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         objects: [],
       },
       [LayerType.Base]: {
+        layerId: 0,
         id: -1,
         index: LayerType.Base,
-        objects: [],
+        imageId: uuid.v4(),
         scale: 100,
         rotation: 0,
         nextcloudImagePath: '',
@@ -273,6 +285,8 @@ export type TrackedPlantLayerState = {
 
 export type TrackedBaseLayerState = {
   id: number;
+  layerId: number;
+  imageId: string;
   rotation: number;
   scale: number;
   nextcloudImagePath: string;

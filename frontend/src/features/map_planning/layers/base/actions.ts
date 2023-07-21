@@ -1,19 +1,24 @@
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
-import { LayerType } from '@/bindings/definitions';
+import { updateBaseLayer } from './api/updateBaseLayer';
+import { BaseLayerImageDto, LayerType, UpdateBaseLayerImageDto } from '@/bindings/definitions';
 
-export class UpdateBaseLayerAction implements Action<void, void> {
-  constructor(
-    private rotation: number,
-    private scale: number,
-    private nextcloudImagePath: string,
-  ) {}
+export class UpdateBaseLayerAction
+  implements
+    Action<
+      Awaited<ReturnType<typeof updateBaseLayer>>,
+      Awaited<ReturnType<typeof updateBaseLayer>>
+    >
+{
+  constructor(private readonly _data: BaseLayerImageDto) {}
 
   reverse(state: TrackedMapState) {
-    return new UpdateBaseLayerAction(
-      state.layers.base.rotation,
-      state.layers.base.scale,
-      state.layers.base.nextcloudImagePath,
-    );
+    return new UpdateBaseLayerAction({
+      id: state.layers.base.imageId,
+      path: state.layers.base.nextcloudImagePath,
+      layer_id: state.layers.base.layerId,
+      rotation: state.layers.base.rotation,
+      scale: state.layers.base.scale,
+    });
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -23,16 +28,18 @@ export class UpdateBaseLayerAction implements Action<void, void> {
         ...state.layers,
         [LayerType.Base]: {
           ...state.layers.base,
-          rotation: this.rotation,
-          scale: this.scale,
-          nextcloudImagePath: this.nextcloudImagePath,
+          imageId: this._data.id,
+          layerId: this._data.layer_id,
+          rotation: this._data.rotation,
+          scale: this._data.scale,
+          nextcloudImagePath: this._data.path,
         },
       },
     };
   }
 
-  execute(): Promise<void> {
-    // TODO: implement when backend exists
-    return new Promise((resolve) => resolve());
+  execute(mapId: number): Promise<UpdateBaseLayerImageDto> {
+    console.log(this._data);
+    return updateBaseLayer(this._data.id, mapId, this._data);
   }
 }

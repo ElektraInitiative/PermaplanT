@@ -6,7 +6,7 @@ import {
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
-import { PlantingDto } from '@/bindings/definitions';
+import { BaseLayerImageDto, PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
@@ -55,7 +55,25 @@ export const createTrackedMapSlice: StateCreator<
         },
       }));
     },
-
+    initBaseLayer(dto: BaseLayerImageDto) {
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            base: {
+              ...state.trackedState.layers.base,
+              imageId: dto.id,
+              layerId: dto.layer_id,
+              rotation: dto.rotation,
+              scale: dto.scale,
+              nextcloudImagePath: dto.path,
+            },
+          },
+        },
+      }));
+    },
     initLayerId(layer, layerId) {
       set((state) => ({
         ...state,
@@ -71,7 +89,6 @@ export const createTrackedMapSlice: StateCreator<
         },
       }));
     },
-
     __resetStore() {
       set((state) => ({
         ...state,

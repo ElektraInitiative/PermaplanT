@@ -15,16 +15,31 @@ describe('MapHistoryStore', () => {
     expect(trackedState).toBeDefined();
 
     for (const layerName of Object.keys(trackedState.layers)) {
+      if (layerName === LayerType.Base) continue;
+      if (layerName === LayerType.Plants) continue;
+
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
         id: -1,
         index: layerName,
         objects: [],
-        loadedObjects: layerName === LayerType.Plants ? [] : undefined,
-        rotation: layerName === LayerType.Base ? 0 : undefined,
-        scale: layerName === LayerType.Base ? 100 : undefined,
-        nextcloudImagePath: layerName === LayerType.Base ? '' : undefined,
       });
     }
+
+    expect(trackedState.layers[LayerType.Plants]).toEqual({
+      id: -1,
+      index: 'plants',
+      objects: [],
+      loadedObjects: [],
+    });
+
+    expect(trackedState.layers[LayerType.Base]).toMatchObject({
+      id: -1,
+      index: 'base',
+      layerId: 0,
+      rotation: 0,
+      scale: 100,
+      nextcloudImagePath: '',
+    });
   });
 
   it('adds a history entry for each call to executeAction', () => {

@@ -223,7 +223,27 @@
 - Test Result:
 - Notes:
 
-## TC-013 - Grid
+## TC-013 - Base Layer
+- Description: Check whether the maps background image is displayed correctly.
+- Preconditions:
+  - [ ] A map has been created.
+  - [ ] The user has navigated to the map.
+  - [ ] The base layer has to be selected as the active layer.
+- Test Steps:
+  1. Select a base layer image.
+  2. Set the base layer rotation to 45 degrees.
+  3. Scale the base layer image to 50 px per meter.
+  4. Close and reopen the current map.
+- Expected Result:
+  - [ ] The selected base layer image is displayed after it has been selected.
+  - [ ] Applying rotation was successful (the image is rotated by 45 degrees).
+  - [ ] Applying scale was successful (the image is twice as large).
+  - [ ] The state of the base layer does not change when closing and reopening the map.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-014 - Grid
 - Description: Display a point grid on the screen.
 - Preconditions:
   - [ ] User must be on the map screen.
