@@ -1,3 +1,5 @@
+//! `GuidedTours` endpoints.
+
 use actix_web::{
     get, patch, post,
     web::{Data, Json},

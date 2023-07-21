@@ -5,6 +5,7 @@
 mod auth;
 mod base_layer_image;
 mod config;
+mod guided_tours;
 mod layers;
 mod map;
 mod pagination;
