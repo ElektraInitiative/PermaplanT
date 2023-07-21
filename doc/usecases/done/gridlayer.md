@@ -2,7 +2,7 @@
 
 ## Summary
 
-- **Scope:** Grid Layer
+- **Scope:** Grid
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The app will display a fixed scale coordinate grid.
