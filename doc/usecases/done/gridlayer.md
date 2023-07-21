@@ -15,7 +15,6 @@
     - User has opened the map.
 - **Main success scenario:**
     - The user sees a fixed scale coordinate grid with 1 meter spacing.
-    - Dots that indicate 10 m are bigger.
 - **Non-functional Constraints:**
     - Support for changing viewport (zoom, position, etc.)
     - The functionality is only available in the frontend.
