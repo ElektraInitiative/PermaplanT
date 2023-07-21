@@ -11,8 +11,9 @@ use super::auth::Config;
 use crate::{
     controller::{
         base_layer_image, 
-        config, layers, map, plant_layer, planting_suggestions, plantings,
-        plants, seed, user_data,
+        config, guided_tours, layers, map, plant_layer, planting_suggestions, plantings,
+        plants,
+        seed, user_data,
     },
     model::{
         dto::{
@@ -20,9 +21,9 @@ use crate::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            BaseLayerImageDto, ConfigDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto,
+            BaseLayerImageDto, ConfigDto, Coordinates, GuidedToursDto, LayerDto, MapDto, NewLayerDto, NewMapDto,
             NewSeedDto, PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto,
-            PlantsSummaryDto, RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImageDto,
+            PlantsSummaryDto, RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImageDto, UpdateGuidedToursDto,
             UpdateMapDto, UserDataDto,
         },
         r#enum::{
@@ -208,6 +209,24 @@ struct PlantingSuggestionsApiDoc;
     modifiers(&SecurityAddon)
 )]
 struct UserDataApiDoc;
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all guided tours endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        guided_tours::setup,
+        guided_tours::find_by_user,
+        guided_tours::update
+    ),
+    components(
+        schemas(
+            GuidedToursDto,
+            UpdateGuidedToursDto
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct GuidedToursApiDoc;
 
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
