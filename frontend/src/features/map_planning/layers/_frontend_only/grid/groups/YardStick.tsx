@@ -8,24 +8,19 @@ import {
   RELATIVE_YARD_STICK_STROKE_WIDTH,
 } from '@/features/map_planning/layers/_frontend_only/grid/util/Constants';
 import { BoundsRect } from '@/features/map_planning/store/MapStoreTypes';
-import { ONE_METER, TEN_CENTIMETERS } from '@/features/map_planning/utils/Constants';
 import { useTranslation } from 'react-i18next';
 import { Group, Line, Text } from 'react-konva';
+import {
+  calculateGridStep,
+  yardStickLabel
+} from "@/features/map_planning/layers/_frontend_only/grid/util/Calculations";
 
 export const YardStick = (rect: BoundsRect) => {
   const { t } = useTranslation('common');
   const { darkMode } = useDarkModeStore();
 
-  let yardStickLength = TEN_CENTIMETERS;
-  let yardStickLengthLabel = '10' + t('centimeter_shorthand');
-
-  if (rect.width > 100 * ONE_METER) {
-    yardStickLength = 10 * ONE_METER;
-    yardStickLengthLabel = '10' + t('meter_shorthand');
-  } else if (rect.width > 1000) {
-    yardStickLength = ONE_METER;
-    yardStickLengthLabel = '1' + t('meter_shorthand');
-  }
+  let yardStickLength = calculateGridStep(rect.width);
+  let yardStickLengthLabel = yardStickLabel(rect.width, t('meter_shorthand'), t('centimeter_shorthand'));
 
   const strokeWidth = rect.width * RELATIVE_YARD_STICK_STROKE_WIDTH;
 

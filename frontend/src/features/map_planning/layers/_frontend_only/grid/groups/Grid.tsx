@@ -3,16 +3,11 @@ import {
   SEA_BLUE_500,
 } from '@/features/map_planning/layers/_frontend_only/grid/util/Constants';
 import { BoundsRect } from '@/features/map_planning/store/MapStoreTypes';
-import { ONE_METER, TEN_CENTIMETERS } from '@/features/map_planning/utils/Constants';
 import { Group, Line } from 'react-konva';
+import {calculateGridStep} from "@/features/map_planning/layers/_frontend_only/grid/util/Calculations";
 
 export const Grid = (rect: BoundsRect) => {
-  let gridStep = TEN_CENTIMETERS;
-  if (rect.width > 100 * ONE_METER) {
-    gridStep = 10 * ONE_METER;
-  } else if (rect.width > 1000) {
-    gridStep = ONE_METER;
-  }
+  const gridStep = calculateGridStep(rect.width);
 
   const gridDotSize = rect.width * RELATIVE_DOT_SIZE;
 
