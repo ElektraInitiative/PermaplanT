@@ -1,6 +1,0 @@
--- Your SQL goes here
-CREATE TYPE PRIVACY_OPTIONS AS ENUM ('private', 'protected', 'public');
-CREATE EXTENSION IF NOT EXISTS postgis;
-ALTER TABLE maps ADD COLUMN privacy PRIVACY_OPTIONS NOT NULL;
-ALTER TABLE maps ADD COLUMN description TEXT;
-ALTER TABLE maps ADD COLUMN location GEOGRAPHY(Point);

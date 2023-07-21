@@ -1,1 +1,0 @@
-ALTER TABLE seeds DROP COLUMN variety;

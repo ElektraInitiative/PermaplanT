@@ -47,6 +47,10 @@ export function useImageFromBlob({
   const { t } = useTranslation(['nextcloudIntegration']);
 
   useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
     if (isError) {
       toast.error(t('nextcloudIntegration:load_image_failed'), {
         autoClose: false,

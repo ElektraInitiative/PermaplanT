@@ -5,7 +5,7 @@ use diesel::Insertable;
 use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
 
-use crate::model::r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions};
+use crate::model::r#enum::{layer_type::LayerType, privacy_option::PrivacyOption};
 
 use super::dummy_map_polygons::tall_rectangle;
 
@@ -20,7 +20,7 @@ pub struct TestInsertableMap {
     pub honors: i16,
     pub visits: i16,
     pub harvested: i16,
-    pub privacy: PrivacyOptions,
+    pub privacy: PrivacyOption,
     pub owner_id: Uuid,
     pub geometry: Polygon<Point>,
 }
@@ -36,7 +36,7 @@ impl Default for TestInsertableMap {
             honors: 0,
             visits: 0,
             harvested: 0,
-            privacy: PrivacyOptions::Public,
+            privacy: PrivacyOption::Public,
             owner_id: Uuid::default(),
             geometry: tall_rectangle(),
         }

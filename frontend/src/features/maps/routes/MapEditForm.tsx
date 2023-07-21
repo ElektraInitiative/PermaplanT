@@ -1,6 +1,6 @@
 import { findMapById } from '../api/findMapById';
 import { updateMap } from '../api/updateMap';
-import { Coordinates, MapDto, PrivacyOptions, UpdateMapDto } from '@/bindings/definitions';
+import { Coordinates, MapDto, PrivacyOption, UpdateMapDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import PageTitle from '@/components/Header/PageTitle';
@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 
 interface MapUpdateData {
   name: string;
-  privacy: PrivacyOptions;
+  privacy: PrivacyOption;
   description?: string;
   location?: Coordinates;
 }
@@ -21,7 +21,7 @@ interface MapUpdateData {
 export default function MapEditForm() {
   const initialValue: MapUpdateData = {
     name: '',
-    privacy: PrivacyOptions.Public,
+    privacy: PrivacyOption.Public,
     description: '',
     location: {
       latitude: NaN,
@@ -66,7 +66,7 @@ export default function MapEditForm() {
     </p>
   );
 
-  const options = Object.values(PrivacyOptions);
+  const options = Object.values(PrivacyOption);
 
   const privacyDetailText = (
     <p className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-center text-sm font-medium dark:border-neutral-400-dark dark:bg-neutral-50-dark">
@@ -197,9 +197,9 @@ export default function MapEditForm() {
               <select
                 id="privacySelect"
                 className="mr-4 block h-11 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-                defaultValue={updateObject.privacy as PrivacyOptions}
+                defaultValue={updateObject.privacy as PrivacyOption}
                 onChange={(e) =>
-                  setUpdateObject({ ...updateObject, privacy: e.target.value as PrivacyOptions })
+                  setUpdateObject({ ...updateObject, privacy: e.target.value as PrivacyOption })
                 }
               >
                 {options.map((option) => (

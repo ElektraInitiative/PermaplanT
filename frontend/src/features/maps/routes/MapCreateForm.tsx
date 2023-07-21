@@ -1,5 +1,5 @@
 import { createMap } from '../api/createMap';
-import { NewMapDto, PrivacyOptions } from '@/bindings/definitions';
+import { NewMapDto, PrivacyOption } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import PageLayout from '@/components/Layout/PageLayout';
 import 'leaflet/dist/leaflet.css';
@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 
 interface MapCreationAttributes {
   name: string;
-  privacy: PrivacyOptions;
+  privacy: PrivacyOption;
   description: string;
   location: {
     latitude: number;
@@ -22,7 +22,7 @@ interface MapCreationAttributes {
 export default function MapCreateForm() {
   const initialData: MapCreationAttributes = {
     name: '',
-    privacy: PrivacyOptions.Public,
+    privacy: PrivacyOption.Public,
     description: '',
     location: {
       latitude: NaN,
@@ -42,15 +42,13 @@ export default function MapCreateForm() {
     </p>
   );
 
-  const privacyOptions = [
-    PrivacyOptions.Private,
-    PrivacyOptions.Protected,
-    PrivacyOptions.Public,
-  ].map((option) => (
-    <option key={option} value={option}>
-      {t(`privacyOptions:${option}`)}
-    </option>
-  ));
+  const privacyOptions = [PrivacyOption.Private, PrivacyOption.Protected, PrivacyOption.Public].map(
+    (option) => (
+      <option key={option} value={option}>
+        {t(`privacyOptions:${option}`)}
+      </option>
+    ),
+  );
 
   const privacyDetailText = (
     <p className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-center text-sm font-medium dark:border-neutral-400-dark dark:bg-neutral-50-dark">
@@ -176,10 +174,10 @@ export default function MapCreateForm() {
             const option = value.charAt(0).toUpperCase() + value.slice(1);
             setMapInput({
               ...mapInput,
-              privacy: PrivacyOptions[option as keyof typeof PrivacyOptions],
+              privacy: PrivacyOption[option as keyof typeof PrivacyOption],
             });
           }}
-          defaultValue={PrivacyOptions.Public}
+          defaultValue={PrivacyOption.Public}
         >
           {privacyOptions}
         </select>

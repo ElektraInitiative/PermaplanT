@@ -17,7 +17,7 @@ use crate::{
     error::ServiceError,
     model::{
         entity::plant_layer::GRANULARITY,
-        r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
+        r#enum::{layer_type::LayerType, privacy_option::PrivacyOption},
     },
     test::util::{
         dummy_map_polygons::{
@@ -42,7 +42,7 @@ async fn initial_db_values(
             &crate::schema::maps::honors.eq(0),
             &crate::schema::maps::visits.eq(0),
             &crate::schema::maps::harvested.eq(0),
-            &crate::schema::maps::privacy.eq(PrivacyOptions::Public),
+            &crate::schema::maps::privacy.eq(PrivacyOption::Public),
             &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
             &crate::schema::maps::geometry.eq(polygon),
         ))

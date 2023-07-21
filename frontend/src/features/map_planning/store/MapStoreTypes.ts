@@ -6,11 +6,19 @@ import {
   PlantingDto,
   PlantsSummaryDto,
 } from '@/bindings/definitions';
+import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import * as uuid from 'uuid';
 
 import Vector2d = Konva.Vector2d;
+
+/**
+ * This type combines layers that are only available in the frontend
+ * with layers that are also reflected in the backend.
+ */
+export type CombinedLayerType = LayerType | FrontendOnlyLayerType;
 
 /**
  * An action is a change to the map state, initiated by the user.
@@ -124,9 +132,17 @@ export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
   tooltipRef: React.RefObject<Konva.Label>;
-  updateSelectedLayer: (selectedLayer: LayerDto) => void;
-  updateLayerVisible: (layerName: LayerType, visible: UntrackedLayerState['visible']) => void;
-  updateLayerOpacity: (layerName: LayerType, opacity: UntrackedLayerState['opacity']) => void;
+  updateMapBounds: (bounds: BoundsRect) => void;
+  // The backend does not know about frontend only layers, hence they are not part of LayerDto.
+  updateSelectedLayer: (selectedLayer: LayerDto | FrontendOnlyLayerType) => void;
+  updateLayerVisible: (
+    layerName: CombinedLayerType,
+    visible: UntrackedLayerState['visible'],
+  ) => void;
+  updateLayerOpacity: (
+    layerName: CombinedLayerType,
+    opacity: UntrackedLayerState['opacity'],
+  ) => void;
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
   baseLayerActivateMeasurement: () => void;
@@ -134,9 +150,13 @@ export interface UntrackedMapSlice {
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
+  getSelectedLayerType: () => CombinedLayerType;
+  getSelectedLayerId: () => number | null;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
+const FRONTEND_ONLY_LAYER_TYPES = Object.values(FrontendOnlyLayerType);
+const COMBINED_LAYER_TYPES = [...LAYER_TYPES, ...FRONTEND_ONLY_LAYER_TYPES];
 
 export const TRACKED_DEFAULT_STATE: TrackedMapState = {
   layers: LAYER_TYPES.reduce(
@@ -169,6 +189,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
+  editorBounds: { x: 0, y: 0, width: 0, height: 0 },
   timelineDate: convertToDateString(new Date()),
   fetchDate: convertToDateString(new Date()),
   timelineBounds: {
@@ -182,7 +203,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     type_: LayerType.Base,
     map_id: -1,
   },
-  layers: LAYER_TYPES.reduce(
+  layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
       [layerName]: {
@@ -276,7 +297,7 @@ export type TrackedBaseLayerState = {
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: UntrackedLayerState;
+  [key in Exclude<CombinedLayerType, LayerType.Plants | LayerType.Base>]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
   [LayerType.Base]: UntrackedBaseLayerState;
@@ -305,6 +326,9 @@ export type TrackedMapState = {
  */
 export type UntrackedMapState = {
   mapId: number;
+  editorBounds: BoundsRect;
+  // The backend does not know about frontend only layers, hence they are not part of LayerDto.
+  selectedLayer: LayerDto | FrontendOnlyLayerType;
   /** used for the bounds calculation */
   timelineDate: string;
   /** used for fetching */
@@ -313,6 +337,15 @@ export type UntrackedMapState = {
     from: string;
     to: string;
   };
-  selectedLayer: LayerDto;
   layers: UntrackedLayers;
+};
+
+/**
+ * Represents a simple rectangle with width, height and position.
+ */
+export type BoundsRect = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 };

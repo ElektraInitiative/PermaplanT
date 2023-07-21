@@ -12,6 +12,10 @@ import { Layers } from './toolbar/Layers';
 import { Toolbar } from './toolbar/Toolbar';
 import { LayerDto, LayerType } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
+import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
+import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
+import { ReactComponent as GridIcon } from '@/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import i18next from 'i18next';
@@ -26,19 +30,20 @@ export type MapProps = {
  * In order to add a new layer you can add another layer file under the "layers" folder.
  * Features such as zooming and panning are handled by the BaseStage component.
  * You only have to make sure that every shape has the property "draggable" set to true.
- * Otherwise they cannot be moved.
+ * Otherwise, they cannot be moved.
  */
 export const Map = ({ layers }: MapProps) => {
   const untrackedState = useMapStore((map) => map.untrackedState);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
-  const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
+  const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
+  const getSelectedLayerType = useMapStore((map) => map.getSelectedLayerType);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
 
-  const { t } = useTranslation(['undoRedo', 'timeline']);
+  const { t } = useTranslation(['undoRedo', 'grid', 'timeline']);
 
-  const getToolbarContent = (layerType: LayerType) => {
+  const getToolbarContent = (layerType: CombinedLayerType) => {
     const content = {
       [LayerType.Base]: {
         left: <div></div>,
@@ -63,6 +68,7 @@ export const Map = ({ layers }: MapProps) => {
       [LayerType.Todo]: { right: <div></div>, left: <div></div> },
       [LayerType.Photo]: { right: <div></div>, left: <div></div> },
       [LayerType.Watering]: { right: <div></div>, left: <div></div> },
+      [FrontendOnlyLayerType.Grid]: { right: <div></div>, left: <div></div> },
     };
 
     return content[layerType];
@@ -89,9 +95,21 @@ export const Map = ({ layers }: MapProps) => {
               >
                 <RedoIcon></RedoIcon>
               </IconButton>
+              <IconButton
+                className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                onClick={() =>
+                  updateLayerVisible(
+                    FrontendOnlyLayerType.Grid,
+                    !untrackedState.layers.grid.visible,
+                  )
+                }
+                title={t('grid:tooltip')}
+              >
+                <GridIcon></GridIcon>
+              </IconButton>
             </div>
           }
-          contentBottom={getToolbarContent(untrackedState.selectedLayer.type_).left}
+          contentBottom={getToolbarContent(getSelectedLayerType()).left}
           position="left"
         ></Toolbar>
       </section>
@@ -100,14 +118,18 @@ export const Map = ({ layers }: MapProps) => {
           <BaseLayer
             opacity={untrackedState.layers.base.opacity}
             visible={untrackedState.layers.base.visible}
-            listening={selectedLayer.type_ === LayerType.Base}
+            listening={getSelectedLayerType() === LayerType.Base}
           />
           <PlantsLayer
             visible={untrackedState.layers.plants.visible}
             opacity={untrackedState.layers.plants.opacity}
-            listening={selectedLayer.type_ === LayerType.Plants}
+            listening={getSelectedLayerType() === LayerType.Plants}
           ></PlantsLayer>
           <BaseMeasurementLayer />
+          <GridLayer
+            visible={untrackedState.layers.grid.visible}
+            opacity={untrackedState.layers.grid.opacity}
+          ></GridLayer>
         </BaseStage>
         <div>
           <Timeline onSelectDate={(date) => updateTimelineDate(date)} defaultDate={timelineDate} />
@@ -116,7 +138,7 @@ export const Map = ({ layers }: MapProps) => {
       <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
         <Toolbar
           contentTop={<Layers layers={layers} />}
-          contentBottom={getToolbarContent(untrackedState.selectedLayer.type_).right}
+          contentBottom={getToolbarContent(getSelectedLayerType()).right}
           position="right"
           minWidth={200}
           fixedContentBottom={

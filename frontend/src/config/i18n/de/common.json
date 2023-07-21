@@ -7,5 +7,7 @@
   "unknown_error": "Ein unbekannter Fehler ist aufgetreten.",
   "meters": "Meter",
   "centimeters": "Zentimeter",
+  "meter_shorthand": "m",
+  "centimeter_shorthand": "cm",
   "save": "Speichern"
 }
