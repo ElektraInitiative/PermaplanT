@@ -45,7 +45,6 @@ export function PlantLayerLeftToolbar() {
       onDeleteClick={onDeleteClick}
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
-      data-testid="plantsLeftToolbar"
     />
   ) : null;
 }

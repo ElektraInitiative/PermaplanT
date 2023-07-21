@@ -1,0 +1,28 @@
+{
+    "next": "Next",
+    "finish": "Finish",
+    "back": "Back",
+    "mapEditor": {
+        "welcome_title": "Welcome to the Map Editor",
+        "toolboxIntro_title": "Toolbox",
+        "layersIntro_title": "Layers",
+        "timelineIntro_title": "Timeline",
+        "baseLayer_title": "Base Layer",
+        "plantsLayer_title": "Plants Layer",
+        "congratulations_title": "Congratulations",
+        "welcome_text": "Welcome to your first map, PermaplanTer. This is the Map Editor, where you will design and manage your map.",
+        "toolboxIntro_text": "The toolbox provides you with a variety of handy tools for your work on your map. For example, you will find the undo and redo buttons here.",
+        "layersIntro_text": "The layers panel in the top right corner of the Map Editor lets you select your active layer, hide a specific layer or change its opacity with the blue slider.",
+        "timelineIntro_text": "Use the timeline to change the current map date. It allows you to plan actions, that will take place in your gardens future or already happened in the past.",
+        "baseLayerIntro_text": "The base layer is the basis of your map. It provides you with all the tools you need to set the spatial anchor points of your garden.",
+        "baseLayerToolbar_text": "You can make a few settings on the base layer. You can select a background image that will be the basis of your map, adjust the rotation and set the scale of the map.",
+        "plantsLayerIntro_text": "The core of your planning will take place on the plants layer. It allows you to place and manage plants on your map and supports you with remembering the overall wellbeing of your garden.",
+        "plantsLayerSelect_text": "Use the layers panel to switch to the plants layer and get access to its features.",
+        "plantsLayerRightToolbar_text": "After switching the active layer, the sidebars will automatically update to show its features. The sidebar of the plants layer lets you select a plant from your available seeds or through the search bar.",
+        "plantsLayerPlantingSearch": "Use this icon to show the search bar to search for any plant in our extensive database.",
+        "plantsLayerPlantingSelect": "Choose any plant from the list of available options to switch to placing mode, so you can add it to your map. Don't worry, you can revert this any time after this introduction.",
+        "plantsLayerPlantingPlace": "Now you can place your first plant on the map by simply clicking on the desired location. While in placing mode, you may notice colorful lines between already placed plants and your mouse cursor. Those show you, if that plant and your selected one are good (green) or bad (red) neighbours.",
+        "plantsLayerLeftToolbar_text": "The left sidebar will show you the attributes of a plant that you just placed or selected from the ones already present on your map. You can use this overview to edit these attributes or delete the plant from your map.",
+        "congratulations_text": "Congratulations! Now you know the most important features of the Map Editor and can use it, to place your first plants on the map. Happy planting!"
+    }
+}

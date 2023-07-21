@@ -63,7 +63,10 @@ export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
   );
 
   return (
-    <form className="flex justify-center gap-2 border-t-2 border-neutral-700 py-1">
+    <form
+      className="flex justify-center gap-2 border-t-2 border-neutral-700 py-1"
+      data-testid="timeline"
+    >
       <SimpleFormInput
         aria-invalid={submitState === 'error'}
         type="date"

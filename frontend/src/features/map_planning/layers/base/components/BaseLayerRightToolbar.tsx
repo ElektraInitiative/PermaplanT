@@ -67,7 +67,7 @@ export const BaseLayerRightToolbar = () => {
   */
 
   return (
-    <div className="flex flex-col gap-2 p-2" data-testid="baseRightToolbar">
+    <div className="flex flex-col gap-2 p-2">
       {/* Automatic scaling is disabled for now due to a bug related to mouse-drag selection. */}
       {/*
       <ModalContainer show={measureStep === 'both selected'}>

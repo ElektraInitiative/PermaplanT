@@ -1,0 +1,28 @@
+{
+    "next": "Weiter",
+    "finish": "Abschließen",
+    "back": "Zurück",
+    "mapEditor": {
+        "welcome_title": "Willkommen im Map Editor",
+        "toolboxIntro_title": "Toolbox",
+        "layersIntro_title": "Ebenen",
+        "timelineIntro_title": "Zeitleiste",
+        "baseLayer_title": "Basis Ebene",
+        "plantsLayer_title": "Pflanzen Ebene",
+        "congratulations_title": "Herzlichen Glückwunsch",
+        "welcome_text": "Herzlich Willkommen zu deiner ersten Karte, PermaplanTer. Das hier ist der Map Editor, wo du deine Karte planen und verwalten wirst.",
+        "toolboxIntro_text": "Die Toolbox bietet dir eine Reihe von nützlichen Werkzeugen für die Arbeit an deiner Karte. Hier findest du die Funktionen zum rückgängig machen und wiederherstellen von deinen Aktionen.",
+        "layersIntro_text": "Mit dem Ebenen Panel rechts oben im Map Editor kannst du deine aktive Ebene wechseln, eine Ebene verstecken oder ihre Transparenz mit dem blauen Schieberegler bearbeiten.",
+        "timelineIntro_text": "Nutze die Zeitleiste, um das aktuelle Datum der Karte zu wechseln. Damit kannst du Aktionen planen, die erst in der Zukunft in deinem Garten stattfinden werden oder bereits in der Vergangenheit passiert sind.",
+        "baseLayerIntro_text": "Die Basis Ebene ist die Grundlage für deine Karte. Sie bietet dir alle Werkzeuge die du brauchst, um die räumlichen Ankerpunkte deines Gartens festzulegen.",
+        "baseLayerToolbar_text": "Auf der Basis Ebene kannst du eine Reihe von Einstellungen vornehmen. Du kannst ein Bild auswählen, das als Grundlage für deine Karte fungiert, die Rotation einstellen und den Maßstab festlegen.",
+        "plantsLayerIntro_text": "Das Herzstück deiner Planung läuft auf der Pflanzen Ebene ab. Sie erlaubt es dir Pflanzen auf deiner Karte zu setzen und zu verwalten und unterstützt dich das Gesamtwohl deines Garten dabei zu bedenken.",
+        "plantsLayerSelect_text": "Nutze das Ebenen Panel, um zur Pflanzen Ebene zu wechseln und Zugriff auf dessen Funktionen zu bekommen.",
+        "plantsLayerRightToolbar_text": "Nach dem Wechsel der aktiven Ebene werden automatisch deren Funktionen in den Seitenleisten angezeigt. Die Seitenleiste der Pflanzen Ebene lässt dich eine Pflanze entweder aus deinen verfügbaren Samen oder durch die Suche auswählen.",
+        "plantsLayerPlantingSearch": "Mit diesem Icon kannst du das Suchfeld einblenden lassen, um nach einer beliebigen Pflanze in unserer umfangreichen Datenbank zu suchen.",
+        "plantsLayerPlantingSelect": "Wähle eine beliebige Pflanze aus der Liste an verfügbaren Optionen aus, um in den Platzierungsmodus zu wechseln, damit du sie deiner Karte hinzufügen kannst. Keine Sorge, du kannst deine Aktionen jederzeit nach Abschluss dieser Einführung rückgängig machen.",
+        "plantsLayerPlantingPlace": "Nun kannst du deine erste Pflanze auf der Karte platzieren, indem du einfach auf die gewünschte Stelle klickst. Während des Platzierungsmodus werden dir eventuell bunte Linien zwischen deinem Mouse Cursor und bereits gesetzten Pflanzen angezeigt. Diese zeigen dir, ob diese Pflanze und die von dir selektierte gute (grün) oder schlechte (rot) Nachbarn sind.",
+        "plantsLayerLeftToolbar_text": "Wenn du eine neue Pflanze platzierst oder eine bestehende Pflanze auf deiner Karte auswählst, werden ihre Daten in der linken Seitenleiste angezeigt. Du kannst diese Übersicht nutzen, um Daten nachträglich zu bearbeiten oder die Pflanze von deiner Karte zu löschen.",
+        "congratulations_text": "Herzlichen Glückwunsch! Nun kennst du die wichtigsten Funktionen des Map Editors und kannst ihn verwenden, um deine ersten Pflanzen auf der Karte zu setzen. Frohes Pflanzen!"
+    }
+}

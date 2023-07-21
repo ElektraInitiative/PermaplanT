@@ -21,3 +21,11 @@
 .shepherd-button:not(:disabled):hover {
     @apply text-primary-50 dark:text-primary-700 hover:bg-primary-600 dark:bg-primary-200;
 }
+
+.shepherd-element.shepherd-element-attached-right {
+    left: -30px !important;
+}
+
+.shepherd-element.shepherd-element-attached-left {
+    left: 30px !important;
+}

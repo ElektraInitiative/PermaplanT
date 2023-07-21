@@ -121,7 +121,7 @@ export const Map = ({ layers }: MapProps) => {
           position="left"
         ></Toolbar>
       </section>
-      <section className="flex h-full w-full flex-col overflow-hidden">
+      <section className="flex h-full w-full flex-col overflow-hidden" data-testid="canvas">
         <BaseStage>
           <BaseLayer
             opacity={untrackedState.layers.base.opacity}
