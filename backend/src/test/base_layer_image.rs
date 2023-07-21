@@ -1,12 +1,11 @@
 //! Tests for [`crate::controller::base_layer_image`].
 
-use crate::schema::sql_types::PrivacyOptions;
 use crate::test::util::dummy_map_polygons::small_rectangle_with_non_0_xmin;
 use crate::{
     error::ServiceError,
     model::{
         dto::{BaseLayerImageDto, UpdateBaseLayerImageDto},
-        r#enum::{layer_type::LayerType, privacy_options::PrivacyOptions},
+        r#enum::{layer_type::LayerType, privacy_option::PrivacyOption},
     },
     test::util::{init_test_app, init_test_database},
 };
@@ -38,7 +37,7 @@ async fn initial_db_values(
             &crate::schema::maps::visits.eq(0),
             &crate::schema::maps::harvested.eq(0),
             &crate::schema::maps::owner_id.eq(Uuid::default()),
-            &crate::schema::maps::privacy.eq(PrivacyOptions::Private),
+            &crate::schema::maps::privacy.eq(PrivacyOption::Private),
             &crate::schema::maps::geometry.eq(polygon),
         )])
         .execute(conn)
