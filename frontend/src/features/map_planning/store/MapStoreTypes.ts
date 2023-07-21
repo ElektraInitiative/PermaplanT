@@ -6,7 +6,6 @@ import {
   PlantingDto,
   PlantsSummaryDto,
 } from '@/bindings/definitions';
-import { LayerDto, LayerType, PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';

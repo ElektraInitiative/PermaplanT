@@ -21,6 +21,7 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
 use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
+use crate::schema::sql_types::PrivacyOptions;
 
 async fn initial_db_values(
     conn: &mut AsyncPgConnection,
