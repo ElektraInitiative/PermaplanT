@@ -1,5 +1,6 @@
 //! Tests for [`crate::controller::base_layer_image`].
 
+use crate::schema::sql_types::PrivacyOptions;
 use crate::test::util::dummy_map_polygons::small_rectangle_with_non_0_xmin;
 use crate::{
     error::ServiceError,
@@ -21,7 +22,6 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
 use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
-use crate::schema::sql_types::PrivacyOptions;
 
 async fn initial_db_values(
     conn: &mut AsyncPgConnection,
