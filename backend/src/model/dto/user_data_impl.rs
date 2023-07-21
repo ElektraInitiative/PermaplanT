@@ -4,15 +4,7 @@ use uuid::Uuid;
 
 use crate::model::entity::UserData;
 
-use super::{GuidedToursDto, UserDataDto};
-
-impl From<UserData> for GuidedToursDto {
-    fn from(user_data: UserData) -> Self {
-        Self {
-            editor_introduction: user_data.editor_introduction,
-        }
-    }
-}
+use super::UserDataDto;
 
 impl From<(UserDataDto, Uuid)> for UserData {
     fn from((user_data, user_id): (UserDataDto, Uuid)) -> Self {
@@ -29,7 +21,6 @@ impl From<(UserDataDto, Uuid)> for UserData {
             member_years: user_data.member_years,
             member_since: user_data.member_since,
             permacoins: user_data.permacoins,
-            editor_introduction: user_data.editor_introduction,
         }
     }
 }
@@ -48,7 +39,6 @@ impl From<UserData> for UserDataDto {
             member_years: user_data.member_years,
             member_since: user_data.member_since,
             permacoins: user_data.permacoins,
-            editor_introduction: user_data.editor_introduction,
         }
     }
 }

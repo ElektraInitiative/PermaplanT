@@ -66,11 +66,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                         ),
                 ),
         )
-        .service(
-            web::scope("/users")
-                .service(user_data::guided_tours)
-                .service(user_data::create),
-        )
+        .service(web::scope("/users").service(user_data::create))
         .wrap(NormalizePath::trim())
         .wrap(auth);
 

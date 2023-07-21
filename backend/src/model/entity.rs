@@ -892,6 +892,4 @@ pub struct UserData {
     pub member_since: Option<NaiveDate>,
     /// The amount of permacoins the user earned in each year as a member.
     pub permacoins: Option<Vec<Option<i32>>>,
-    /// A flag indicating if the user has completed the Map Editor Guided Tour.
-    pub editor_introduction: bool,
 }

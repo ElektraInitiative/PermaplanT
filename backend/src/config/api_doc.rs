@@ -20,7 +20,7 @@ use crate::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            BaseLayerImageDto, ConfigDto, GuidedToursDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto,
+            BaseLayerImageDto, ConfigDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto,
             NewSeedDto, PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto,
             PlantsSummaryDto, RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImageDto,
             UpdateMapDto, UserDataDto,
@@ -198,12 +198,10 @@ struct PlantingSuggestionsApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        user_data::guided_tours,
         user_data::create
     ),
     components(
         schemas(
-            GuidedToursDto,
             UserDataDto
         )
     ),

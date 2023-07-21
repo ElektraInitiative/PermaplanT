@@ -6,24 +6,8 @@ use uuid::Uuid;
 use crate::{
     config::data::AppDataInner,
     error::ServiceError,
-    model::{
-        dto::{GuidedToursDto, UserDataDto},
-        entity::UserData,
-    },
+    model::{dto::UserDataDto, entity::UserData},
 };
-
-/// Fetch status of Guided Tours from the database.
-///
-/// # Errors
-/// If the connection to the database could not be established.
-pub async fn guided_tours(
-    user_id: Uuid,
-    app_data: &Data<AppDataInner>,
-) -> Result<GuidedToursDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
-    let result = UserData::guided_tours(user_id, &mut conn).await?;
-    Ok(result)
-}
 
 /// Create an user data entry for a new user.
 ///

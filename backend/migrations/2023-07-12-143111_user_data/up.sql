@@ -29,6 +29,5 @@ CREATE TABLE user_data (
     membership MEMBERSHIP,
     member_years INTEGER ARRAY,
     member_since DATE,
-    permacoins INTEGER ARRAY,
-    editor_introduction BOOLEAN NOT NULL
+    permacoins INTEGER ARRAY
 );

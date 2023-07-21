@@ -1,7 +1,7 @@
 //! `UserData` endpoints.
 
 use actix_web::{
-    get, post,
+    post,
     web::{Data, Json},
     HttpResponse, Result,
 };
@@ -11,28 +11,6 @@ use crate::{
     model::dto::UserDataDto,
     service,
 };
-
-/// Endpoint for fetching a [`GuidedToursDto`](crate::model::dto::GuidedToursDto).
-///
-/// # Errors
-/// * If the connection to the database could not be established.
-#[utoipa::path(
-    context_path = "/api/users",
-    responses(
-        (status = 200, description = "Fetch guided tours status by user", body = GuidedToursDto)
-    ),
-    security(
-        ("oauth2" = [])
-    )
-)]
-#[get("/tours")]
-pub async fn guided_tours(
-    user_info: UserInfo,
-    app_data: Data<AppDataInner>,
-) -> Result<HttpResponse> {
-    let response = service::user_data::guided_tours(user_info.id, &app_data).await?;
-    Ok(HttpResponse::Ok().json(response))
-}
 
 /// Endpoint for creating an [`UserData`](crate::model::entity::UserData) entry.
 ///
