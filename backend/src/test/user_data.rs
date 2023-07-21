@@ -2,13 +2,11 @@
 
 use actix_http::StatusCode;
 use actix_web::{http::header, test};
-use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
-use uuid::Uuid;
+use diesel_async::scoped_futures::ScopedFutureExt;
 
 use crate::model::{dto::UserDataDto, r#enum::salutation::Salutation};
-use diesel::ExpressionMethods;
 
-use super::util::{init_test_app, init_test_app_for_user, init_test_database};
+use super::util::{init_test_app, init_test_database};
 
 #[actix_rt::test]
 async fn test_can_create_user_data() {
