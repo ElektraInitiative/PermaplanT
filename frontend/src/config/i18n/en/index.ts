@@ -28,7 +28,7 @@ import timeline from './timeline.json';
 import undoRedo from './undoRedo.json';
 import uploadFile from './uploadFile.json';
 
-const de = {
+const en = {
   blog,
   baseLayer,
   baseLayerForm,
@@ -60,4 +60,4 @@ const de = {
   plantings,
 };
 
-export default de;
+export default en;
