@@ -10,13 +10,13 @@ use utoipa::ToSchema;
 #[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
 #[ExistingTypePath = "crate::schema::sql_types::Quality"]
 pub enum Quality {
-    #[serde(rename = "Organic")]
-    #[db_rename = "Organic"]
+    #[serde(rename = "organic")]
+    #[db_rename = "organic"]
     Organic,
-    #[serde(rename = "Not organic")]
-    #[db_rename = "Not organic"]
+    #[serde(rename = "not organic")]
+    #[db_rename = "not organic"]
     NotOrganic,
-    #[db_rename = "Unknown"]
-    #[serde(rename = "Unknown")]
+    #[db_rename = "unknown"]
+    #[serde(rename = "unknown")]
     Unknown,
 }

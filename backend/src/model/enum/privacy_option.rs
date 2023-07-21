@@ -1,4 +1,4 @@
-//! [`PrivacyOptions`] enum.
+//! [`PrivacyOption`] enum.
 
 use diesel_derive_enum::DbEnum;
 use serde::{Deserialize, Serialize};
@@ -8,8 +8,8 @@ use utoipa::ToSchema;
 /// Enum for map privacy setting options.
 #[typeshare]
 #[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema, Clone)]
-#[ExistingTypePath = "crate::schema::sql_types::PrivacyOptions"]
-pub enum PrivacyOptions {
+#[ExistingTypePath = "crate::schema::sql_types::PrivacyOption"]
+pub enum PrivacyOption {
     /// Data is private and only visible for owner or members, the data was explicitly shared with.
     #[serde(rename = "private")]
     #[db_rename = "private"]

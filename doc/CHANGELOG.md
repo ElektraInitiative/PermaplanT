@@ -22,6 +22,13 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- squashed migrations _(temmey)_
+- commented out properties in table plants for now to improve build time. _(temmey)_
+- set all enums in DB to lowercase _(temmey)_
+- _()_
+- _()_
+- _()_
+- _()_
 - _()_
 - _()_
 - _()_

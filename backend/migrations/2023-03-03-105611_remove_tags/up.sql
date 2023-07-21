@@ -1,3 +1,0 @@
--- Your SQL goes here
-ALTER TABLE seeds DROP COLUMN IF EXISTS tags;
-DROP TYPE IF EXISTS tag;
