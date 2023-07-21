@@ -15,7 +15,7 @@ import IconButton from '@/components/Button/IconButton';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
-import { ReactComponent as GridIcon } from '@/icons/grid.svg';
+import { ReactComponent as GridIcon } from '@/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import i18next from 'i18next';

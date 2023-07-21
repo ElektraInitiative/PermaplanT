@@ -8,6 +8,7 @@
 - **Brief:** The app will display a fixed scale coordinate grid.
 - **Status:** Done
 - **Assignee:** Moritz
+- **Protocol:** 
 
 ## Scenarios
 
