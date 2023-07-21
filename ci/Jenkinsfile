@@ -51,13 +51,15 @@ def runDockerWithPostgresSidecar(String command, String stashsrc='', String stas
 def testAndBuildMdbook() {
     return {
         node('docker') {
+            node_info()
             checkout scm
-            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
-            mdbook_image.inside {
-                checkout scm
-                stage('test-and-build'){
-                    sh "mdbook test"
-                    sh 'mdbook build'
+            docker.build("permaplant-doc:build", "./doc").inside {
+                stage('test'){
+                    sh "make test-mdbook"
+                }
+
+                stage('build'){
+                    sh 'make build-mdbook'
                     stash includes: 'book/', name: 'mdbook'
                 }
             }

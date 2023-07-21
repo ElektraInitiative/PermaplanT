@@ -49,7 +49,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - CI: Improve pipeleine parallelization #577 _(4ydan)_
-- _()_
+- CI: Optimized mdbook docker image #585 _(4ydan)_
 - _()_
 - _()_
 - _()_
