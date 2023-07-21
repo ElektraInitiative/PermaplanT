@@ -11,8 +11,8 @@ describe('grid calculations', () => {
   });
 
   it('finds the correct yard stick label given the screen size', () => {
-    expect(yardStickLabel(136, 'm', 'cm')).toEqual('10cm');
-    expect(yardStickLabel(6362, 'm', 'cm')).toEqual('1m');
-    expect(yardStickLabel(199462, 'm', 'cm')).toEqual('10m');
+    expect(yardStickLabel(136, 'm', 'cm')).toBe('10cm');
+    expect(yardStickLabel(4362, 'm', 'cm')).toBe('1m');
+    expect(yardStickLabel(199462, 'm', 'cm')).toBe('10m');
   });
 });
