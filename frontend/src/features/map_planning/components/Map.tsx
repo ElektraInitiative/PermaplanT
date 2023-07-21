@@ -46,6 +46,8 @@ export const Map = ({ layers }: MapProps) => {
 
   useEffect(() => {
     tour?.start();
+    //tour?.on('cancel', () => {console.log('cancel')});
+    //tour?.on('complete', () => {console.log('completion')});
     return () => tour?.cancel();
   }, [tour]);
 
