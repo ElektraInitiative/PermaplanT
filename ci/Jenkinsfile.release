@@ -9,15 +9,15 @@ def wait_for_db() {
     }
 }
 
-stage('Build Schema'){
+stage('Build Schema') {
     node('docker') {
         node_info()
 
         checkout scm
-        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+        def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
 
         docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+            rustImage.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 checkout scm
 
                 wait_for_db()
@@ -31,18 +31,18 @@ stage('Build Schema'){
     }
 }
 
-stage('Build in Docker'){
-    def parallel_build = [:]
+stage('Build in Docker') {
+    def parallelBuild = [:]
 
-    parallel_build['build-backend'] = {
+    parallelBuild['build-backend'] = {
         node('docker') {
             node_info()
 
             checkout scm
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+            def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
 
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                rustImage.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
 
                     wait_for_db()
@@ -60,23 +60,23 @@ stage('Build in Docker'){
             node_info()
 
             checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+            def nodeImage = docker.build('permaplant-node', './ci/container-images/permaplant-node')
 
-            node_image.inside {
+            nodeImage.inside {
                 checkout scm
                 unstash 'definitions.ts'
 
-                stage('build-frontend'){
+                stage('build-frontend') {
                     sh './ci/build-scripts/build-frontend.sh'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
 
-                stage('build-typedoc'){
+                stage('build-typedoc') {
                     sh 'cd frontend && npm run doc'
                     stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
                 }
 
-                stage('build-storybook'){
+                stage('build-storybook') {
                     sh './ci/build-scripts/build-storybook.sh'
                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
@@ -91,7 +91,7 @@ stage('Deploy Prod') {
     node('permaplant && prod') {
         checkout scm
 
-        echo "Unstash Artifacts"
+        echo 'Unstash Artifacts'
         unstash 'schema.rs'
         unstash 'frontend'
         unstash 'backend'

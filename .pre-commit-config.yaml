@@ -79,3 +79,10 @@ repos:
       - id: sqlfluff-fix
         name: sql format
         args: [--config=backend/.sqlfluff]
+  - repo: https://github.com/nvuillam/npm-groovy-lint
+    rev: v11.1.1
+    hooks:
+      - id: fix-npm-groovy-lint
+        name: Fix Lint groovy findings
+        description: Groovy & Jenkinsfile Auto-fixer
+        entry: npm-groovy-lint --fix ci/Jenkinsfile ci/Jenkinsfile.release --failon warning --loglevel warning --noserver
