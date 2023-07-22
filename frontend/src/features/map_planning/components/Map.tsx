@@ -7,6 +7,7 @@ import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
 import useMapStore from '../store/MapStore';
+import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import { convertToDate } from '../utils/date-utils';
 import { BaseStage } from './BaseStage';
 import { Timeline } from './timeline/Timeline';
@@ -60,6 +61,7 @@ export const Map = ({ layers }: MapProps) => {
     'common',
     'guidedTour',
   ]);
+  const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
 
   const reenableTour = async () => {
@@ -138,6 +140,7 @@ export const Map = ({ layers }: MapProps) => {
               <div>
                 <IconButton
                   className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  disabled={isReadOnlyMode}
                   onClick={() => undo()}
                   title={t('undoRedo:undo_tooltip')}
                   data-tourid="undo"
@@ -146,6 +149,7 @@ export const Map = ({ layers }: MapProps) => {
                 </IconButton>
                 <IconButton
                   className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  disabled={isReadOnlyMode}
                   onClick={() => redo()}
                   title={t('undoRedo:redo_tooltip')}
                 >
