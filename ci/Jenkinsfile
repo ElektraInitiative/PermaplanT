@@ -9,8 +9,11 @@ def wait_for_db() {
     }
 }
 
+/**
+ * Aborts the previous build in progress if it exists and the current build is not on the "master" branch.
+ * This method is used to prevent multiple concurrent builds for non-master branches.
+ */
 def abortPreviousRunUnlessMaster() {
-    // We never want to abort builds of the master branch
     if (env.BRANCH_NAME == 'master') { return }
     def exec = currentBuild
              ?.rawBuild
@@ -26,7 +29,17 @@ def abortPreviousRunUnlessMaster() {
     }
 }
 
-def runDockerWithPostgresSidecar(String command, String stashsrc='', String stashdir='') {
+/**
+ * This method runs a Docker container with a Postgres sidecar and executes the specified command inside the container.
+ *
+ * @param commands The list of commands to be executed inside the Docker container.
+ * @param stashsrcList The list of file paths to be stashed (optional).
+ * @param stashdirList The list of stash directory names for stashing files (optional).
+ * @return A closure representing the defined Jenkins pipeline steps.
+ * @throws UnequalStashException If the stashed files are not equal in count between stashsrcList and
+ * stashdirList.
+ */
+def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], List<String> stashdir = []) {
     return {
         node('docker') {
             node_info()
@@ -48,8 +61,13 @@ def runDockerWithPostgresSidecar(String command, String stashsrc='', String stas
                     // Because in Deploy the path for /target is a
                     //env in permaplant-deploy.sh, we can only solve it with prepending cd backend
                     sh "cd backend && ${command}"
-                    if (stashsrc != null && stashdir != '') {
-                        stash includes: stashsrc, name: stashdir
+                    if (stashsrc && stashdir) {
+                        if (stashsrc.size() != stashdir.size()) {
+                            throw new UnequalStashException()
+                        }
+                        for (int i = 0; i < stashsrc.size(); i++) {
+                            stash includes: stashsrc[i], name: stashdir[i]
+                        }
                     }
                 }
             }
@@ -130,45 +148,43 @@ def testAndBuildFrontend() {
     }
 }
 
-// PIPELINE BEGIN
-abortPreviousRunUnlessMaster()
-
-// REQUIRED for Deployment
-// see Jenkinsfile.release
-stage('FMT check  Build Schema') {
-    node('docker') {
-        node_info()
-        checkout scm
-        def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
-        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rustImage.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                checkout scm
-                wait_for_db()
-                withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-                    // Workaround: we can't stop rustfmt from linting the generated schema.rs
-                    // groovylint-disable-next-line
-                    dir('backend') {
-                        sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
-                        sh 'cargo fmt --check'
-                    // End of Workaround
-                    }
-                    sh './ci/build-scripts/build-schema.sh'
-                }
-                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
-            }
-        }
+def testMigrations() {
+    if (env.BRANCH_NAME!="master") {
+        return "make migration && make migration-redo && make migration-redo-a"
+    } else {
+        return "make migration && make migration-redo"
     }
 }
 
-stage('Parallel Stage') {
-    timeout(time: 2, unit: 'HOURS') {
-        try {
+// PIPELINE BEGIN
+abortPreviousRunUnlessMaster()
+
+timeout(time: 2, unit: 'HOURS') {
+    try {
+        stage('Sanity') {
+            List<String> schemaStashsrc = [
+                'backend/src/schema.rs','frontend/src/bindings/definitions.ts'
+            ]
+            List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
+            parallel(
+                    // Workaround: we can't stop rustfmt from linting the generated schema.rs so we empty the file before.
+                    "cargo-fmt": runDockerWithPostgresSidecar(
+                        "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
+                        ),
+                    "schema": runDockerWithPostgresSidecar(
+                        'echo schema test', schemaStashsrc, schemaStashdir
+                        ),
+                    "migration": runDockerWithPostgresSidecar(testMigrations()),
+                    failFast: true
+            )
+        }
+
+        stage('Test and Build') {
             parallel(
                     'cargo-build': runDockerWithPostgresSidecar(
                         'cargo build --release && cargo clippy',
-                        'backend/target/release/backend',
-                        'backend'
+                        ['backend/target/release/backend'],
+                        ['backend']
                     ),
                     'cargo-check': runDockerWithPostgresSidecar('cargo check && cargo doc'),
                     'cargo-test': runDockerWithPostgresSidecar('cargo test'),
@@ -176,10 +192,10 @@ stage('Parallel Stage') {
                     'mdbook': testAndBuildMdbook(),
                     failFast: true
             )
-        } catch (err) {
-            deleteDir()
-            throw err
         }
+    } catch(err) {
+        deleteDir();
+        throw err;
     }
 }
 
@@ -279,9 +295,13 @@ Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
 // see Jenkinsfile.release
 
 class PackageLockJsonModifiedException extends Exception {
-
     PackageLockJsonModifiedException() {
         super('package-lock.json was modified by npm install. Did you maybe use a wrong node version?')
     }
+}
 
+class UnequalStashException extends Exception {
+    UnequalStashException() {
+        super("The stashed files count in stashsrc and stashdir lists must be equal.")
+    }
 }
