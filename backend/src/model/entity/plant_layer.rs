@@ -3,7 +3,7 @@
 use diesel::{
     debug_query,
     pg::Pg,
-    sql_types::{Float, Integer},
+    sql_types::{Array, Float, Integer},
     CombineDsl, ExpressionMethods, QueryDsl, QueryResult, QueryableByName,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
@@ -78,7 +78,7 @@ pub async fn heatmap(
     let query =
         diesel::sql_query("SELECT * FROM calculate_heatmap($1, $2, $3, $4, $5, $6, $7, $8)")
             .bind::<Integer, _>(map_id)
-            .bind::<Integer, _>(layer_id)
+            .bind::<Array<Integer>, _>(vec![layer_id])
             .bind::<Integer, _>(plant_id)
             .bind::<Integer, _>(GRANULARITY)
             .bind::<Integer, _>(bounding_box.x_min)
