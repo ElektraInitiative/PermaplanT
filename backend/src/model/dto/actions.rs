@@ -39,7 +39,7 @@ pub enum Action {
     CreateShading(CreateShadingActionPayload),
     /// An action used to broadcast deletion of a shading.
     DeleteShading(DeleteShadingActionPayload),
-    /// An action used to broadcast movement of a shading.
+    /// An action used to broadcast change of a shading.
     UpdateShading(UpdateShadingActionPayload),
     /// An action used to update the `add_date` of a shading.
     UpdateShadingAddDate(UpdateShadingAddDateActionPayload),
