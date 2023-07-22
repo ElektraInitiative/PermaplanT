@@ -182,11 +182,11 @@ timeout(time: 2, unit: 'HOURS') {
         stage('Test and Build') {
             parallel(
                     'cargo-build': runDockerWithPostgresSidecar(
-                        'cargo build --release && cargo clippy',
+                        'cargo build --release',
                         ['backend/target/release/backend'],
                         ['backend']
                     ),
-                    'cargo-check': runDockerWithPostgresSidecar('cargo check && cargo doc'),
+                    'cargo-clippy/doc': runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
                     'cargo-test': runDockerWithPostgresSidecar('cargo test'),
                     'frontend': testAndBuildFrontend(),
                     'mdbook': testAndBuildMdbook(),
