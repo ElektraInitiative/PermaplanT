@@ -1,10 +1,10 @@
 -- Your SQL goes here
-ALTER TABLE maps ADD COLUMN geometry GEOMETRY(POLYGON, 4326) NOT NULL;
+ALTER TABLE maps ADD COLUMN geometry GEOMETRY (POLYGON, 4326) NOT NULL;
 
 
 -- Calculate the bounding box of the map geometry.
 CREATE OR REPLACE FUNCTION calculate_bbox(map_id INTEGER)
-RETURNS TABLE(x_min INTEGER, y_min INTEGER, x_max INTEGER, y_max INTEGER) AS $$
+RETURNS TABLE (x_min INTEGER, y_min INTEGER, x_max INTEGER, y_max INTEGER) AS $$
 BEGIN
     RETURN QUERY
     SELECT
@@ -26,17 +26,29 @@ $$ LANGUAGE plpgsql;
 -- Values where the plant should not be placed are close to 0.
 -- Values where the plant should be placed are close to 1.
 --
--- The resulting matrix does not contain valid (x,y) coordinates, instead (x,y) are simply the indices in the matrix.
--- The (x,y) coordinate of the computed heatmap always starts at (0,0) no matter the boundaries of the map.
--- To get valid coordinates the user would therefore need to move and scale the calculated heatmap by taking into account the boundaries of the map.
+-- The resulting matrix does not contain valid (x,y) coordinates,
+-- instead (x,y) are simply the indices in the matrix.
+-- The (x,y) coordinate of the computed heatmap always starts at
+-- (0,0) no matter the boundaries of the map.
+-- To get valid coordinates the user would therefore need to move and scale the
+-- calculated heatmap by taking into account the boundaries of the map.
 --
--- p_map_id                     ... the maps id
--- p_layer_id                   ... the id of the plant layer
--- p_plant_id                   ... the id of the plant for which to consider relations
--- granularity                  ... the resolution of the map (float greater than 0)
--- x_min, y_min, x_max, y_max   ... the boundaries of the map
-CREATE OR REPLACE FUNCTION calculate_score(p_map_id INTEGER, p_layer_id INTEGER, p_plant_id INTEGER, granularity INTEGER, x_min INTEGER, y_min INTEGER, x_max INTEGER, y_max INTEGER)
-RETURNS TABLE(score REAL, x INTEGER, y INTEGER) AS $$
+-- p_map_id                ... map id
+-- p_layer_id              ... id of the plant layer
+-- p_plant_id              ... id of the plant for which to consider relations
+-- granularity             ... resolution of the map (float greater than 0)
+-- x_min,y_min,x_max,y_max ... boundaries of the map
+CREATE OR REPLACE FUNCTION calculate_heatmap(
+    p_map_id INTEGER,
+    p_layer_id INTEGER,
+    p_plant_id INTEGER,
+    granularity INTEGER,
+    x_min INTEGER,
+    y_min INTEGER,
+    x_max INTEGER,
+    y_max INTEGER
+)
+RETURNS TABLE (score REAL, x INTEGER, y INTEGER) AS $$
 DECLARE
     map_geometry GEOMETRY(POLYGON, 4326);
     cell GEOMETRY;
@@ -75,8 +87,7 @@ BEGIN
 
             -- If the square is on the map calculate a score; otherwise set score to 0.
             IF ST_Intersects(cell, map_geometry) THEN
-                score := 0.5 + calculate_score_from_relations(p_layer_id, p_plant_id, x_pos, y_pos);
-                -- TODO: add additional checks like shade
+                score := calculate_score(p_map_id, p_layer_id, p_plant_id, x_pos, y_pos);
                 score := scale_score(score);  -- scale the score to be between 0 and 1
             ELSE
                 score := 0.0;
@@ -99,8 +110,31 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Calculate a score for a certain position.
+CREATE OR REPLACE FUNCTION calculate_score(
+    p_map_id INTEGER,
+    p_layer_id INTEGER,
+    p_plant_id INTEGER,
+    x_pos INTEGER,
+    y_pos INTEGER
+)
+RETURNS FLOAT AS $$
+DECLARE
+    plant_relation RECORD;
+    distance REAL;
+    weight REAL;
+    score REAL := 0;
+BEGIN
+    score := 0.5 + calculate_score_from_relations(p_layer_id, p_plant_id, x_pos, y_pos);
+
+    RETURN score;
+END;
+$$ LANGUAGE plpgsql;
+
 -- Calculate a score using the plants relations and their distances.
-CREATE OR REPLACE FUNCTION calculate_score_from_relations(p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER)
+CREATE OR REPLACE FUNCTION calculate_score_from_relations(
+    p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER
+)
 RETURNS FLOAT AS $$
 DECLARE
     plant_relation RECORD;
@@ -128,8 +162,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Get all relations for the plant on the specified layer.
-CREATE OR REPLACE FUNCTION get_plant_relations(p_layer_id INTEGER, p_plant_id INTEGER)
-RETURNS TABLE(x INTEGER, y INTEGER, relation relation_type) AS $$
+CREATE OR REPLACE FUNCTION get_plant_relations(
+    p_layer_id INTEGER, p_plant_id INTEGER
+)
+RETURNS TABLE (x INTEGER, y INTEGER, relation RELATION_TYPE) AS $$
 BEGIN
     RETURN QUERY
         -- We only need x,y and type of relation to calculate a score.

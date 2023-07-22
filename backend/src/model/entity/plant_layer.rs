@@ -75,15 +75,16 @@ pub async fn heatmap(
     let bounding_box = bounding_box_query.get_result::<BoundingBox>(conn).await?;
 
     // Fetch the heatmap
-    let query = diesel::sql_query("SELECT * FROM calculate_score($1, $2, $3, $4, $5, $6, $7, $8)")
-        .bind::<Integer, _>(map_id)
-        .bind::<Integer, _>(layer_id)
-        .bind::<Integer, _>(plant_id)
-        .bind::<Integer, _>(GRANULARITY)
-        .bind::<Integer, _>(bounding_box.x_min)
-        .bind::<Integer, _>(bounding_box.y_min)
-        .bind::<Integer, _>(bounding_box.x_max)
-        .bind::<Integer, _>(bounding_box.y_max);
+    let query =
+        diesel::sql_query("SELECT * FROM calculate_heatmap($1, $2, $3, $4, $5, $6, $7, $8)")
+            .bind::<Integer, _>(map_id)
+            .bind::<Integer, _>(layer_id)
+            .bind::<Integer, _>(plant_id)
+            .bind::<Integer, _>(GRANULARITY)
+            .bind::<Integer, _>(bounding_box.x_min)
+            .bind::<Integer, _>(bounding_box.y_min)
+            .bind::<Integer, _>(bounding_box.x_max)
+            .bind::<Integer, _>(bounding_box.y_max);
     debug!("{}", debug_query::<Pg, _>(&query));
     let result = query.load::<HeatMapElement>(conn).await?;
 
