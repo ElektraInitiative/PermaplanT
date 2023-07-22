@@ -101,16 +101,11 @@ export function PlantingElement({ planting }: PlantingElementProps) {
     <Group
       {...planting}
       planting={planting}
-      draggable
       onClick={(e) => {
         const placeEvent = new Event('selectPlant');
         document.getElementById('canvas')?.dispatchEvent(placeEvent);
         addShapeToTransformer(e.currentTarget);
         selectPlanting(planting);
-      }}
-      onDragStart={(e) => {
-        // sometimes the click event is not fired, so we have to add the object to the transformer here
-        addShapeToTransformer(e.currentTarget);
       }}
       onMouseOut={hideTooltip}
       onMouseMove={() => placeTooltip(plant)}
