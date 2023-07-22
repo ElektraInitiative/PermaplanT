@@ -1,4 +1,6 @@
 -- This file should undo anything in `up.sql`
+DROP FUNCTION calculate_score_from_shadings;
+
 CREATE OR REPLACE FUNCTION calculate_score(
     p_map_id INTEGER,
     p_layer_ids INTEGER [],
@@ -19,6 +21,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER check_shade_layer_type_before_insert_or_update ON plantings;
+DROP TRIGGER check_shade_layer_type_before_insert_or_update ON shadings;
 DROP FUNCTION check_shade_layer_type;
 DROP TABLE shadings;
