@@ -19,7 +19,7 @@ pub struct ShadingDto {
     /// The layer the shadings is on.
     pub layer_id: i32,
     /// The type/strength of shade.
-    pub shade_type: Shade,
+    pub shade: Shade,
     /// The position of the shade on the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
@@ -44,7 +44,7 @@ pub struct NewShadingDto {
     /// The plant layer the shadings is on.
     pub layer_id: i32,
     /// The type/strength of shade.
-    pub shade_type: Shade,
+    pub shade: Shade,
     /// The position of the shade on the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
@@ -79,7 +79,7 @@ pub enum UpdateShadingDto {
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct UpdateValuesShadingDto {
     /// The type/strength of shade.
-    pub shade_type: Option<Shade>,
+    pub shade: Option<Shade>,
     /// The position of the shade on the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`

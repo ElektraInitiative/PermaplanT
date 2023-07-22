@@ -16,7 +16,7 @@ pub struct Shading {
     /// The plant layer the shadings is on.
     pub layer_id: i32,
     /// The type/strength of shade.
-    pub shade_type: Shade,
+    pub shade: Shade,
     /// The position of the shade on the map.
     pub geometry: Polygon<Point>,
     /// The date the shading was added to the map.
@@ -32,7 +32,7 @@ pub struct Shading {
 #[diesel(table_name = shadings)]
 pub struct UpdateShading {
     /// The type/strength of shade.
-    pub shade_type: Option<Shade>,
+    pub shade: Option<Shade>,
     /// The position of the shade on the map.
     pub geometry: Option<Polygon<Point>>,
     /// The date the shading was added to the map.

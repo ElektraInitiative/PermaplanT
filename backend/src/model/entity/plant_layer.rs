@@ -64,7 +64,8 @@ struct HeatMapElement {
 )]
 pub async fn heatmap(
     map_id: i32,
-    layer_id: i32,
+    plant_layer_id: i32,
+    shade_layer_id: i32,
     plant_id: i32,
     conn: &mut AsyncPgConnection,
 ) -> QueryResult<Vec<Vec<f32>>> {
@@ -78,7 +79,7 @@ pub async fn heatmap(
     let query =
         diesel::sql_query("SELECT * FROM calculate_heatmap($1, $2, $3, $4, $5, $6, $7, $8)")
             .bind::<Integer, _>(map_id)
-            .bind::<Array<Integer>, _>(vec![layer_id])
+            .bind::<Array<Integer>, _>(vec![plant_layer_id, shade_layer_id])
             .bind::<Integer, _>(plant_id)
             .bind::<Integer, _>(GRANULARITY)
             .bind::<Integer, _>(bounding_box.x_min)
@@ -98,6 +99,7 @@ pub async fn heatmap(
     for HeatMapElement { score, x, y } in result {
         heatmap[y as usize][x as usize] = score;
     }
+    debug!("{heatmap:#?}");
     Ok(heatmap)
 }
 

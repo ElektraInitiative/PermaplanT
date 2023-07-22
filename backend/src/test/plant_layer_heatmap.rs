@@ -17,12 +17,12 @@ use crate::{
     error::ServiceError,
     model::{
         entity::plant_layer::GRANULARITY,
-        r#enum::{layer_type::LayerType, privacy_option::PrivacyOption},
+        r#enum::{layer_type::LayerType, privacy_option::PrivacyOption, shade::Shade},
     },
     test::util::{
         dummy_map_polygons::{
             rectangle_with_missing_bottom_left_corner, small_rectangle,
-            small_rectangle_with_non_0_xmin, tall_rectangle,
+            small_rectangle_with_non_0_xmin, small_square, tall_rectangle,
         },
         init_test_app, init_test_database,
     },
@@ -49,13 +49,22 @@ async fn initial_db_values(
         .execute(conn)
         .await?;
     diesel::insert_into(crate::schema::layers::table)
-        .values((
-            &crate::schema::layers::id.eq(-1),
-            &crate::schema::layers::map_id.eq(-1),
-            &crate::schema::layers::type_.eq(LayerType::Plants),
-            &crate::schema::layers::name.eq("Some name"),
-            &crate::schema::layers::is_alternative.eq(false),
-        ))
+        .values(vec![
+            (
+                &crate::schema::layers::id.eq(-1),
+                &crate::schema::layers::map_id.eq(-1),
+                &crate::schema::layers::type_.eq(LayerType::Plants),
+                &crate::schema::layers::name.eq("Some name"),
+                &crate::schema::layers::is_alternative.eq(false),
+            ),
+            (
+                &crate::schema::layers::id.eq(-2),
+                &crate::schema::layers::map_id.eq(-1),
+                &crate::schema::layers::type_.eq(LayerType::Shade),
+                &crate::schema::layers::name.eq("Some name"),
+                &crate::schema::layers::is_alternative.eq(false),
+            ),
+        ])
         .execute(conn)
         .await?;
     diesel::insert_into(crate::schema::plants::table)
@@ -63,6 +72,7 @@ async fn initial_db_values(
             &crate::schema::plants::id.eq(-1),
             &crate::schema::plants::unique_name.eq("Testia testia"),
             &crate::schema::plants::common_name_en.eq(Some(vec![Some("T".to_owned())])),
+            &crate::schema::plants::shade.eq(Some(Shade::NoShade)),
         ))
         .execute(conn)
         .await?;
@@ -76,7 +86,7 @@ async fn test_generate_heatmap_succeeds() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-1")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&plant_layer_id=-1&shade_layer_id=-2")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -95,7 +105,7 @@ async fn test_check_heatmap_dimensionality_succeeds() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-1")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&plant_layer_id=-1&shade_layer_id=-2")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -124,7 +134,7 @@ async fn test_check_heatmap_non_0_xmin_succeeds() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-1")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&plant_layer_id=-1&shade_layer_id=-2")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -155,7 +165,7 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-1")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&plant_layer_id=-1&shade_layer_id=-2")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -186,6 +196,56 @@ async fn test_heatmap_with_missing_corner_succeeds() {
 }
 
 #[actix_rt::test]
+async fn test_heatmap_with_shadings_succeeds() {
+    let pool = init_test_database(|conn| {
+        async {
+            initial_db_values(conn, tall_rectangle()).await?;
+            diesel::insert_into(crate::schema::shadings::table)
+                .values((
+                    &crate::schema::shadings::id.eq(Uuid::new_v4()),
+                    &crate::schema::shadings::layer_id.eq(-2),
+                    &crate::schema::shadings::shade.eq(Shade::PermanentDeepShade),
+                    &crate::schema::shadings::geometry.eq(small_square()),
+                ))
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&plant_layer_id=-1&shade_layer_id=-2")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(header::CONTENT_TYPE),
+        Some(&header::HeaderValue::from_static("image/png"))
+    );
+    let result = test::read_body(resp).await;
+    let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
+    let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
+    let image = image.as_rgb8().unwrap();
+    assert_eq!(
+        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
+        image.dimensions()
+    );
+
+    // (0,0) is be top left.
+    let top_left_pixel = image.get_pixel(1, 1);
+    let bottom_right_pixel = image.get_pixel(40, 80);
+    // The shading is the exact opposite of the plants preference, therefore the map will be grey.
+    assert_eq!([128, 128, 128], top_left_pixel.0);
+    // Green everywhere else.
+    assert_eq!([64, 191, 64], bottom_right_pixel.0);
+}
+
+#[actix_rt::test]
 async fn test_missing_entities_fails() {
     let pool = init_test_database(|conn| {
         initial_db_values(conn, rectangle_with_missing_bottom_left_corner()).scope_boxed()
@@ -195,23 +255,31 @@ async fn test_missing_entities_fails() {
 
     // Invalid map id
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-2/layers/plants/heatmap?plant_id=-1&layer_id=-1")
+        .uri("/api/maps/-2/layers/plants/heatmap?plant_id=-1&plant_layer_id=-1&shade_layer_id=-2")
         .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::NOT_FOUND);
 
-    // Invalid layer id
+    // Invalid plant id
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&layer_id=-1")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&plant_layer_id=-1&shade_layer_id=-2")
         .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
 
-    // Invalid plant id
+    // Invalid plant layer id
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&layer_id=-2")
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&plant_layer_id=-5&shade_layer_id=-2")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .send_request(&app)
+        .await;
+    assert_eq!(resp.status(), StatusCode::NOT_FOUND);
+
+    // Invalid shade layer id
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-1&plant_layer_id=-1&shade_layer_id=-5")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;

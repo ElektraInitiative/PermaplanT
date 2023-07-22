@@ -231,7 +231,8 @@ pub struct CreateShadingActionPayload {
     action_id: Uuid,
     id: Uuid,
     layer_id: i32,
-    shade_type: Shade,
+    shade: Shade,
+    #[typeshare(serialized_as = "object")]
     geometry: Polygon<Point>,
     add_date: Option<NaiveDate>,
     remove_date: Option<NaiveDate>,
@@ -245,7 +246,7 @@ impl CreateShadingActionPayload {
             action_id,
             id: payload.id,
             layer_id: payload.layer_id,
-            shade_type: payload.shade_type,
+            shade: payload.shade,
             geometry: payload.geometry,
             add_date: payload.add_date,
             remove_date: payload.remove_date,
@@ -261,7 +262,8 @@ pub struct UpdateShadingActionPayload {
     user_id: Uuid,
     action_id: Uuid,
     id: Uuid,
-    shade_type: Shade,
+    shade: Shade,
+    #[typeshare(serialized_as = "object")]
     geometry: Polygon<Point>,
 }
 
@@ -272,7 +274,7 @@ impl UpdateShadingActionPayload {
             user_id,
             action_id,
             id: payload.id,
-            shade_type: payload.shade_type,
+            shade: payload.shade,
             geometry: payload.geometry,
         }
     }

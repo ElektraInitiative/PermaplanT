@@ -55,5 +55,5 @@
      shadings (id) {
          id -> Uuid,
          layer_id -> Int4,
-         shade_type -> Shade,
+         shade -> Shade,
          geometry -> Geometry,

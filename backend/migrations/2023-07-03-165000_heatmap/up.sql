@@ -51,7 +51,7 @@ CREATE OR REPLACE FUNCTION calculate_heatmap(
 RETURNS TABLE (score REAL, x INTEGER, y INTEGER) AS $$
 DECLARE
     map_geometry GEOMETRY(POLYGON, 4326);
-    cell GEOMETRY;
+    point GEOMETRY;
     bbox GEOMETRY;
     num_cols INTEGER;
     num_rows INTEGER;
@@ -81,14 +81,14 @@ BEGIN
     FOR i IN 0..num_cols-1 LOOP
         FOR j IN 0..num_rows-1 LOOP
             -- i and j do not represent coordinates. We need to adjust them to actual coordinates.
-            x_pos := x_min + (i * granularity);
-            y_pos := y_min + (j * granularity);
+            x_pos := x_min + (i * granularity) + (granularity / 2);
+            y_pos := y_min + (j * granularity) + (granularity / 2);
 
-            -- Make a square the same size as the granularity
-            cell := ST_Translate(ST_GeomFromEWKT('SRID=4326;POLYGON((0 0, ' || granularity || ' 0, ' || granularity || ' ' || granularity || ', 0 ' || granularity || ', 0 0))'), x_pos, y_pos);
+            -- Create a point from x_pos and y_pos
+            point := ST_SetSRID(ST_MakePoint(x_pos, y_pos), 4326);
 
             -- If the square is on the map calculate a score; otherwise set score to 0.
-            IF ST_Intersects(cell, map_geometry) THEN
+            IF ST_Intersects(point, map_geometry) THEN
                 score := calculate_score(p_map_id, p_layer_ids, p_plant_id, x_pos, y_pos);
                 score := scale_score(score);  -- scale the score to be between 0 and 1
             ELSE
@@ -113,6 +113,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Calculate a score for a certain position.
+-- p_layer_ids[1] ... plant layer
 CREATE OR REPLACE FUNCTION calculate_score(
     p_map_id INTEGER,
     p_layer_ids INTEGER [],
@@ -120,7 +121,7 @@ CREATE OR REPLACE FUNCTION calculate_score(
     x_pos INTEGER,
     y_pos INTEGER
 )
-RETURNS FLOAT AS $$
+RETURNS REAL AS $$
 DECLARE
     plant_relation RECORD;
     distance REAL;
@@ -137,7 +138,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION calculate_score_from_relations(
     p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER
 )
-RETURNS FLOAT AS $$
+RETURNS REAL AS $$
 DECLARE
     plant_relation RECORD;
     distance REAL;

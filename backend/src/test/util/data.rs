@@ -146,7 +146,7 @@ impl Default for TestInsertablePlanting {
 pub struct TestInsertableShading {
     pub id: Uuid,
     pub layer_id: i32,
-    pub shade_type: Shade,
+    pub shade: Shade,
     pub geometry: Polygon<Point>,
     pub add_date: Option<NaiveDate>,
     pub remove_date: Option<NaiveDate>,
@@ -157,7 +157,7 @@ impl Default for TestInsertableShading {
         Self {
             id: Uuid::default(),
             layer_id: -1,
-            shade_type: Shade::NoShade,
+            shade: Shade::NoShade,
             geometry: small_rectangle(),
             add_date: None,
             remove_date: None,

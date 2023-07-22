@@ -113,7 +113,7 @@ async fn test_create_fails_with_invalid_layer() {
     let new_shading = NewShadingDto {
         id: Some(Uuid::new_v4()),
         action_id: Uuid::new_v4(),
-        shade_type: Shade::LightShade,
+        shade: Shade::LightShade,
         geometry: small_rectangle(),
         layer_id: -1,
         add_date: None,
@@ -151,7 +151,7 @@ async fn test_can_create_shadings() {
         id: Some(Uuid::new_v4()),
         action_id: Uuid::new_v4(),
         layer_id: -1,
-        shade_type: Shade::LightShade,
+        shade: Shade::LightShade,
         geometry: small_rectangle(),
         add_date: None,
     };
@@ -193,7 +193,7 @@ async fn test_can_update_shadings() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let update_data = UpdateValuesShadingDto {
-        shade_type: Some(Shade::PermanentDeepShade),
+        shade: Some(Shade::PermanentDeepShade),
         geometry: None,
         action_id: Uuid::new_v4(),
     };
@@ -208,7 +208,7 @@ async fn test_can_update_shadings() {
     assert_eq!(resp.status(), StatusCode::OK);
 
     let shading: ShadingDto = test::read_body_json(resp).await;
-    assert_eq!(shading.shade_type, Shade::PermanentDeepShade);
+    assert_eq!(shading.shade, Shade::PermanentDeepShade);
 }
 
 #[actix_rt::test]

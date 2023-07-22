@@ -11,7 +11,7 @@ impl From<Shading> for ShadingDto {
         Self {
             id: entity.id,
             layer_id: entity.layer_id,
-            shade_type: entity.shade_type,
+            shade: entity.shade,
             geometry: entity.geometry,
             add_date: entity.add_date,
             remove_date: entity.remove_date,
@@ -24,7 +24,7 @@ impl From<NewShadingDto> for Shading {
         Self {
             id: dto.id.unwrap_or_else(Uuid::new_v4),
             layer_id: dto.layer_id,
-            shade_type: dto.shade_type,
+            shade: dto.shade,
             geometry: dto.geometry,
             add_date: dto.add_date,
             remove_date: None,
@@ -36,7 +36,7 @@ impl From<UpdateShadingDto> for UpdateShading {
     fn from(dto: UpdateShadingDto) -> Self {
         match dto {
             UpdateShadingDto::Update(dto) => Self {
-                shade_type: dto.shade_type,
+                shade: dto.shade,
                 geometry: dto.geometry,
                 ..Default::default()
             },

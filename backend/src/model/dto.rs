@@ -448,7 +448,9 @@ pub struct DeleteBaseLayerImageDto {
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct HeatMapQueryParams {
     /// The id of the plant layer the planting will be planted on.
-    pub layer_id: i32,
+    pub plant_layer_id: i32,
+    /// The id of the shade layer the planting will be planted on.
+    pub shade_layer_id: i32,
     /// The id of the plant you want to plant.
     pub plant_id: i32,
 }

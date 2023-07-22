@@ -32,7 +32,8 @@ pub async fn heatmap(
     let mut conn = app_data.pool.get().await?;
     let result = plant_layer::heatmap(
         map_id,
-        query_params.layer_id,
+        query_params.plant_layer_id,
+        query_params.shade_layer_id,
         query_params.plant_id,
         &mut conn,
     )
