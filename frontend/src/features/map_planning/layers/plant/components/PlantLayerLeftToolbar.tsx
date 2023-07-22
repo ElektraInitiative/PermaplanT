@@ -1,3 +1,4 @@
+import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import {
   DeletePlantAction,
   UpdateAddDatePlantAction,
@@ -17,6 +18,8 @@ export function PlantLayerLeftToolbar() {
   const executeAction = useMapStore((state) => state.executeAction);
   const selectPlanting = useMapStore((state) => state.selectPlanting);
   const transformerRef = useMapStore((state) => state.transformer);
+
+  const isReadOnlyMode = useIsReadOnlyMode();
 
   const { plant } = useFindPlantById(selectedPlanting?.plantId ?? NaN, Boolean(selectedPlanting));
 
@@ -39,6 +42,7 @@ export function PlantLayerLeftToolbar() {
 
   return selectedPlanting && plant ? (
     <PlantingAttributeEditForm
+      disabled={isReadOnlyMode}
       key={selectedPlanting.id}
       plant={plant}
       planting={selectedPlanting}

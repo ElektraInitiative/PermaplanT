@@ -33,7 +33,7 @@ export default function SimpleButton({
   ...props
 }: SimpleButtonProps) {
   const className =
-    'button focus:outline-none focus:ring-4 focus:ring-blue-300 border ' +
+    'disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed button focus:outline-none focus:ring-4 focus:ring-blue-300 border ' +
     variantToClassName[variant];
 
   return (
