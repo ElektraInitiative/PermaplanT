@@ -48,9 +48,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- CI: Improve pipeleine parallelization #577 _(4ydan)_
+- CI: Improve pipeline parallelization #577 _(4ydan)_
 - CI: Add groovy pre-commit hook #685 _(4ydan)_
 - CI: Optimized mdbook docker image #585 _(4ydan)_
+- CI: Test `diesel` migrations in PR and master #134 _(4ydan)_
 - _()_
 - _()_
 - _()_
