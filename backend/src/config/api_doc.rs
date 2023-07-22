@@ -11,13 +11,18 @@ use super::auth::Config;
 use crate::{
     controller::{
         base_layer_image, config, layers, map, plant_layer, planting_suggestions, plantings,
-        plants, seed,
+        plants, seed, shadings,
     },
     model::{
         dto::{
             plantings::{
-                MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
-                UpdatePlantingDto,
+                DeletePlantingDto, MovePlantingDto, NewPlantingDto, PlantingDto,
+                TransformPlantingDto, UpdateAddDatePlantingDto, UpdatePlantingDto,
+                UpdateRemoveDatePlantingDto,
+            },
+            shadings::{
+                DeleteShadingDto, NewShadingDto, ShadingDto, UpdateAddDateShadingDto,
+                UpdateRemoveDateShadingDto, UpdateShadingDto, UpdateValuesShadingDto,
             },
             BaseLayerImageDto, ConfigDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto,
             NewSeedDto, PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto,
@@ -26,7 +31,7 @@ use crate::{
         },
         r#enum::{
             privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
-            relation_type::RelationType,
+            relation_type::RelationType, shade::Shade,
         },
     },
 };
@@ -169,13 +174,42 @@ struct BaseLayerImagesApiDoc;
             PlantingDto,
             NewPlantingDto,
             UpdatePlantingDto,
+            DeletePlantingDto,
             TransformPlantingDto,
-            MovePlantingDto
+            MovePlantingDto,
+            UpdateAddDatePlantingDto,
+            UpdateRemoveDatePlantingDto
         )
     ),
     modifiers(&SecurityAddon)
 )]
 struct PlantingsApiDoc;
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all shadings endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        shadings::find,
+        shadings::create,
+        shadings::update,
+        shadings::delete
+    ),
+    components(
+        schemas(
+            ShadingDto,
+            NewShadingDto,
+            UpdateShadingDto,
+            DeleteShadingDto,
+            UpdateValuesShadingDto,
+            UpdateAddDateShadingDto,
+            UpdateRemoveDateShadingDto,
+            Shade
+
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct ShadingsApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all suggestions endpoints.
 #[derive(OpenApi)]
@@ -204,6 +238,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(PlantLayerApiDoc::openapi());
     openapi.merge(BaseLayerImagesApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
+    openapi.merge(ShadingsApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }
