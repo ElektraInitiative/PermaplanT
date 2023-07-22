@@ -18,7 +18,7 @@ We use specific types (prefer enum over int over string etc.) and share types wh
 - The frontend should validate data as early as possible, usually during input using [React Hook Form](https://react-hook-form.com/).
 - For more complex validation logic, we use [Zod](https://zod.dev/) in conjunction with [React Hook Form Schema Validation](https://react-hook-form.com/get-started#SchemaValidation).
   For example Zod should be used over default React Hook Form validation when there are inter-dependent form values that need to be validated together, such as validating that a start date is before an end date.
-- Important data should be validated in the backend, even if type validation is already done by actix web.
+- All constraints that go beyond the types, e.g. automated validation while [extracting via serde](https://docs.rs/actix-web/latest/actix_web/web/struct.Json.html#extractor), should be explicitly validated by the backend as well as the frontend.
   This is because some constraints could be bypassed by just validating in the frontend.
   For example, payment data or data associated with gamification achievements should be validated in the backend to ensure data consistency and prevent security vulnerabilities.
 
