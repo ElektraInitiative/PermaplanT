@@ -62,5 +62,5 @@ DROP TYPE external_source;
 DROP TYPE deciduous_or_evergreen;
 
 -- Drop extensions
-DROP EXTENSION postgis;
+DROP EXTENSION postgis CASCADE;
 DROP EXTENSION pg_trgm;
