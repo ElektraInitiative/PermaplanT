@@ -22,7 +22,7 @@ export function PlantLayerLeftToolbar() {
 
   const onDeleteClick = () => {
     if (!selectedPlanting) return;
-    executeAction(new DeletePlantAction(selectedPlanting?.id));
+    executeAction(new DeletePlantAction({ id: selectedPlanting?.id }));
     selectPlanting(null);
     transformerRef.current?.nodes([]);
   };

@@ -109,6 +109,7 @@ export const createTrackedMapSlice: StateCreator<
  * After execution, the ability to redo any undone action is lost.
  */
 function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
+  trackUserAction(action, set);
   action.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(action, get().step, set, get);
   applyActionToStore(action, set, get);
@@ -133,6 +134,19 @@ function applyActionToStore(action: Action<unknown, unknown>, set: SetFn, get: G
   set((state) => ({
     ...state,
     trackedState: newTrackedState,
+  }));
+}
+
+/**
+ * Tracks the user action such that RemoteActions can be filtered.
+ */
+function trackUserAction(action: Action<unknown, unknown>, set: SetFn) {
+  set((state) => ({
+    ...state,
+    lastActions: [
+      ...state.lastActions,
+      ...action.entityIds.map((id) => ({ actionId: action.actionId, entityId: id })),
+    ],
   }));
 }
 
@@ -176,6 +190,7 @@ function undo(set: SetFn, get: GetFn): void {
     throw new Error('Cannot undo action');
   }
 
+  trackUserAction(actionToUndo, set);
   actionToUndo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToUndo, get().step - 1, set, get);
   applyActionToStore(actionToUndo, set, get);
@@ -201,6 +216,7 @@ function redo(set: SetFn, get: GetFn): void {
     throw new Error('Cannot redo action');
   }
 
+  trackUserAction(actionToRedo, set);
   actionToRedo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToRedo, get().step, set, get);
   applyActionToStore(actionToRedo, set, get);

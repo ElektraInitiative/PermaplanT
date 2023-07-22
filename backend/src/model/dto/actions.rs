@@ -48,6 +48,7 @@ pub enum Action {
 #[serde(rename_all = "camelCase")]
 pub struct CreatePlantActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     plant_id: i32,
@@ -64,9 +65,10 @@ pub struct CreatePlantActionPayload {
 
 impl CreatePlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             layer_id: payload.layer_id,
             plant_id: payload.plant_id,
@@ -89,13 +91,18 @@ impl CreatePlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct DeletePlantActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
 }
 
 impl DeletePlantActionPayload {
     #[must_use]
-    pub fn new(id: Uuid, user_id: Uuid) -> Self {
-        Self { user_id, id }
+    pub fn new(id: Uuid, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id,
+        }
     }
 }
 
@@ -105,6 +112,7 @@ impl DeletePlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct MovePlantActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     x: i32,
     y: i32,
@@ -112,9 +120,10 @@ pub struct MovePlantActionPayload {
 
 impl MovePlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             x: payload.x,
             y: payload.y,
@@ -128,6 +137,7 @@ impl MovePlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct TransformPlantActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     x: i32,
     y: i32,
@@ -138,9 +148,10 @@ pub struct TransformPlantActionPayload {
 
 impl TransformPlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             x: payload.x,
             y: payload.y,
@@ -158,6 +169,7 @@ impl TransformPlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct CreateBaseLayerImageActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     rotation: f32,
@@ -167,9 +179,10 @@ pub struct CreateBaseLayerImageActionPayload {
 
 impl CreateBaseLayerImageActionPayload {
     #[must_use]
-    pub fn new(payload: BaseLayerImageDto, user_id: Uuid) -> Self {
+    pub fn new(payload: BaseLayerImageDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             layer_id: payload.layer_id,
             rotation: payload.rotation,
@@ -185,13 +198,18 @@ impl CreateBaseLayerImageActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct DeleteBaseLayerImageActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
 }
 
 impl DeleteBaseLayerImageActionPayload {
     #[must_use]
-    pub fn new(id: Uuid, user_id: Uuid) -> Self {
-        Self { user_id, id }
+    pub fn new(id: Uuid, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id,
+        }
     }
 }
 
@@ -201,6 +219,7 @@ impl DeleteBaseLayerImageActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct UpdateBaseLayerImageActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     rotation: f32,
@@ -210,9 +229,10 @@ pub struct UpdateBaseLayerImageActionPayload {
 
 impl UpdateBaseLayerImageActionPayload {
     #[must_use]
-    pub fn new(payload: BaseLayerImageDto, user_id: Uuid) -> Self {
+    pub fn new(payload: BaseLayerImageDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             layer_id: payload.layer_id,
             rotation: payload.rotation,
@@ -228,15 +248,17 @@ impl UpdateBaseLayerImageActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct UpdatePlantingAddDateActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     add_date: Option<NaiveDate>,
 }
 
 impl UpdatePlantingAddDateActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             add_date: payload.add_date,
         }
@@ -249,15 +271,17 @@ impl UpdatePlantingAddDateActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct UpdatePlantingRemoveDateActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     remove_date: Option<NaiveDate>,
 }
 
 impl UpdatePlantingRemoveDateActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             remove_date: payload.remove_date,
         }

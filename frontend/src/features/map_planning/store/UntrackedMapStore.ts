@@ -30,6 +30,7 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+  lastActions: [],
   updateSelectedLayer(selectedLayer) {
     // Clear the transformer's nodes.
     get().transformer.current?.nodes([]);
@@ -291,5 +292,15 @@ export const createUntrackedMapSlice: StateCreator<
     if (typeof selectedLayer === 'object' && 'id' in selectedLayer) return selectedLayer.id;
 
     return null;
+  },
+  __removeLastAction({ actionId, entityId }) {
+    console.log('Removing action', actionId, entityId);
+
+    set((state) => ({
+      ...state,
+      lastActions: state.lastActions.filter(
+        (a) => !(a.actionId === actionId && a.entityId === entityId),
+      ),
+    }));
   },
 });

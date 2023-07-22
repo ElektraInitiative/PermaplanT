@@ -27,6 +27,16 @@ export type CombinedLayerType = LayerType | FrontendOnlyLayerType;
  */
 export type Action<T, U> = {
   /**
+   * Id of the action so that RemoteActions can be filtered out.
+   */
+  actionId: string;
+
+  /**
+   * Entity ids that are affected by this action.
+   */
+  entityIds: string[];
+
+  /**
    * Get the reverse action for this action.
    * The reverse action is populated with the current state of the object on the map.
    * This method should be called before `apply` has been called, if tracking the action in the history is desired.
@@ -46,6 +56,14 @@ export type Action<T, U> = {
    * Execute the action by informing the backend.
    */
   execute(mapId: number): Promise<T>;
+};
+
+/**
+ * Type to keep track of the last actions of a user.
+ */
+type LastAction = {
+  actionId: string;
+  entityId: string;
 };
 
 /**
@@ -142,6 +160,7 @@ export interface UntrackedMapSlice {
     layerName: CombinedLayerType,
     opacity: UntrackedLayerState['opacity'],
   ) => void;
+  lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
   baseLayerActivateMeasurement: () => void;
@@ -151,6 +170,11 @@ export interface UntrackedMapSlice {
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
   getSelectedLayerId: () => number | null;
+  /**
+   * Only used by the EventSource to remove actions from the list of last actions.
+   * Removes the last action from the list of last actions.
+   */
+  __removeLastAction: (lastAction: LastAction) => void;
 }
 
 const LAYER_TYPES = Object.values(LayerType);
