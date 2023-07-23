@@ -38,7 +38,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Handle events of same user, discard events in same tab _(Paul)_
 - _()_
 - _()_
-- _()_
+- updated scraper to translate spread&height into new enum types _(temmey)_
 - _()_
 - _()_
 - Fix a bug in loading images _(Paul)_
