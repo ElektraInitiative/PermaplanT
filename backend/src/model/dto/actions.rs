@@ -13,6 +13,8 @@ use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;
 
+use super::BaseLayerImageDto;
+
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
 // Use the name of the enum variant as the type field looking like { "type": "CreatePlanting", ... }.
@@ -27,6 +29,16 @@ pub enum Action {
     MovePlanting(MovePlantActionPayload),
     /// An action used to broadcast transformation of a plant.
     TransformPlanting(TransformPlantActionPayload),
+    /// An action used to broadcast creation of a baseLayerImage.
+    CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
+    /// An action used to broadcast update of a baseLayerImage.
+    UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
+    /// An action used to broadcast deletion of a baseLayerImage.
+    DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
+    /// An action used to update the `add_date` of a plant.
+    UpdatePlantingAddDate(UpdatePlantingAddDateActionPayload),
+    /// An action used to update the `remove_date` of a plant.
+    UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload),
 }
 
 #[typeshare]
@@ -36,6 +48,7 @@ pub enum Action {
 #[serde(rename_all = "camelCase")]
 pub struct CreatePlantActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     plant_id: i32,
@@ -52,9 +65,10 @@ pub struct CreatePlantActionPayload {
 
 impl CreatePlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             layer_id: payload.layer_id,
             plant_id: payload.plant_id,
@@ -77,13 +91,18 @@ impl CreatePlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct DeletePlantActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
 }
 
 impl DeletePlantActionPayload {
     #[must_use]
-    pub fn new(id: Uuid, user_id: Uuid) -> Self {
-        Self { user_id, id }
+    pub fn new(id: Uuid, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id,
+        }
     }
 }
 
@@ -93,6 +112,7 @@ impl DeletePlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct MovePlantActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     x: i32,
     y: i32,
@@ -100,9 +120,10 @@ pub struct MovePlantActionPayload {
 
 impl MovePlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             x: payload.x,
             y: payload.y,
@@ -116,6 +137,7 @@ impl MovePlantActionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct TransformPlantActionPayload {
     user_id: Uuid,
+    action_id: Uuid,
     id: Uuid,
     x: i32,
     y: i32,
@@ -126,15 +148,142 @@ pub struct TransformPlantActionPayload {
 
 impl TransformPlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid) -> Self {
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
+            action_id,
             id: payload.id,
             x: payload.x,
             y: payload.y,
             rotation: payload.rotation,
             scale_x: payload.scale_x,
             scale_y: payload.scale_y,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::CreateBaseLayerImage`].
+/// This struct should always match [`BaseLayerImageDto`].
+#[serde(rename_all = "camelCase")]
+pub struct CreateBaseLayerImageActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    layer_id: i32,
+    rotation: f32,
+    scale: f32,
+    path: String,
+}
+
+impl CreateBaseLayerImageActionPayload {
+    #[must_use]
+    pub fn new(payload: BaseLayerImageDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            layer_id: payload.layer_id,
+            rotation: payload.rotation,
+            scale: payload.scale,
+            path: payload.path,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::DeleteBaseLayerImage`].
+#[serde(rename_all = "camelCase")]
+pub struct DeleteBaseLayerImageActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+}
+
+impl DeleteBaseLayerImageActionPayload {
+    #[must_use]
+    pub fn new(id: Uuid, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdateBaseLayerImage`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdateBaseLayerImageActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    layer_id: i32,
+    rotation: f32,
+    scale: f32,
+    path: String,
+}
+
+impl UpdateBaseLayerImageActionPayload {
+    #[must_use]
+    pub fn new(payload: BaseLayerImageDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            layer_id: payload.layer_id,
+            rotation: payload.rotation,
+            scale: payload.scale,
+            path: payload.path,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlantingAddDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingAddDateActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    add_date: Option<NaiveDate>,
+}
+
+impl UpdatePlantingAddDateActionPayload {
+    #[must_use]
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            add_date: payload.add_date,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlantingRemoveDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingRemoveDateActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    remove_date: Option<NaiveDate>,
+}
+
+impl UpdatePlantingRemoveDateActionPayload {
+    #[must_use]
+    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            remove_date: payload.remove_date,
         }
     }
 }

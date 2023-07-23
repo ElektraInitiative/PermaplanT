@@ -1,12 +1,11 @@
-import { convertToDate } from '../../utils/date-utils';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import useDebounceEffect from '@/hooks/useDebounceEffect';
+import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import { ReactComponent as CheckIcon } from '@/icons/check.svg';
 import { ReactComponent as CircleDottedIcon } from '@/icons/circle-dotted.svg';
-import i18next from 'i18next';
-import { useEffect, useState } from 'react';
-import { FieldErrors, Resolver, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 type TimelineProps = {
   /** Is called if the user selects a date from the timeline.
@@ -24,68 +23,49 @@ type TimelineFormData = {
   date: string;
 };
 
-const timelineResolver: Resolver<TimelineFormData> = (values) => {
-  const parsedDate = convertToDate(values.date);
+const TimelineFormSchema = z.object({
+  date: z.string().nonempty(),
+});
 
-  const errors: FieldErrors<TimelineFormData> = {};
+// const timelineResolver: Resolver<TimelineFormData> = (values) => {
+//   const parsedDate = convertToDate(values.date);
 
-  if (isNaN(parsedDate.getTime())) {
-    errors.date = { message: i18next.t('timeline:date_error'), type: 'validate' };
-  }
+//   const errors: FieldErrors<TimelineFormData> = {};
 
-  return {
-    errors,
-    values,
-  };
-};
+//   if (isNaN(parsedDate.getTime())) {
+//     errors.date = { message: , type: 'validate' };
+//   }
 
-const SUBMIT_DELAY = 1000;
+//   return {
+//     errors,
+//     values,
+//   };
+// };
 
 export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
   const { t } = useTranslation(['timeline']);
-  const [timelineState, setTimelineState] = useState<'submitting' | 'set' | 'error'>('set');
 
-  const { register, handleSubmit, watch, formState } = useForm<TimelineFormData>({
+  const { register, handleSubmit, watch } = useForm<TimelineFormData>({
     defaultValues: {
       date: defaultDate,
     },
-    resolver: timelineResolver,
+    resolver: zodResolver(TimelineFormSchema),
   });
-
-  const date = watch('date');
-  useEffect(() => {
-    if (date === defaultDate) {
-      return;
-    }
-
-    setTimelineState('submitting');
-  }, [date, defaultDate]);
-
-  useDebounceEffect(
-    () => {
-      if (timelineState === 'set' || timelineState === 'error') {
-        return;
-      }
-
-      handleSubmit(onFormSubmit, onFormError)();
-    },
-    SUBMIT_DELAY,
-    [date],
-  );
 
   const onFormSubmit = ({ date }: TimelineFormData) => {
     onSelectDate(date);
-    setTimelineState('set');
   };
 
-  const onFormError = () => {
-    setTimelineState('error');
-  };
+  const submitState = useDebouncedSubmit<TimelineFormData>(
+    watch('date'),
+    handleSubmit,
+    onFormSubmit,
+  );
 
   return (
     <form className="flex justify-center gap-2 border-t-2 border-neutral-700 py-1">
       <SimpleFormInput
-        aria-invalid={timelineState === 'error'}
+        aria-invalid={submitState === 'error'}
         type="date"
         id="date"
         labelText={t('timeline:change_date')}
@@ -93,12 +73,12 @@ export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
         title={t('timeline:change_date_hint')}
       />
 
-      {timelineState === 'submitting' && (
+      {submitState === 'loading' && (
         <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
       )}
-      {timelineState === 'set' && <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />}
-      {timelineState === 'error' && (
-        <span className="mb-3 mt-auto text-sm text-red-400">{formState.errors?.date?.message}</span>
+      {submitState === 'idle' && <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />}
+      {submitState === 'error' && (
+        <span className="mb-3 mt-auto text-sm text-red-400">{t('timeline:date_error')}</span>
       )}
     </form>
   );

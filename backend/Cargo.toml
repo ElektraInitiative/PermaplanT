@@ -1,6 +1,6 @@
 [package]
 name = "backend"
-version = "0.2.3"
+version = "0.3.0"
 description = "The backend of PermaplanT"
 repository = "https://github.com/ElektraInitiative/PermaplanT"
 license = "BSD 3-Clause"
@@ -36,7 +36,7 @@ jsonwebtoken = "8.3.0"
 diesel = { version = "2.0.2", features = [
     "postgres",
     "chrono",
-    "128-column-tables",
+    "64-column-tables",
     "uuid",
 ] }
 diesel-async = { version = "0.2.2", features = ["deadpool", "postgres"] }

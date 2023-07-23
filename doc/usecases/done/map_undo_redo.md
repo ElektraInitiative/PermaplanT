@@ -30,3 +30,7 @@
   - The app must clearly communicate which undo/redo action was done.
   - Offline availability
   - All operations changing the map or elements must support undo/redo, unless specified differently in **non-functional constraint**.
+
+## Left-Overs
+
+- usability improvements[#657](https://github.com/ElektraInitiative/PermaplanT/issues/657)

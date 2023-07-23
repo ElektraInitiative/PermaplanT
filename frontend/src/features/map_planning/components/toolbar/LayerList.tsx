@@ -38,6 +38,9 @@ export const LayerList = ({
   const [alternativesVisible, setAlternativesVisible] = useState(false);
   const { t } = useTranslation(['layerSettings', 'layers']);
 
+  // If a frontend only layer is active, no other layer should be selected.
+  const selectedLayerId = typeof selectedLayer === 'object' ? selectedLayer.id : null;
+
   return (
     <>
       <div className="flex items-center justify-center">
@@ -54,7 +57,7 @@ export const LayerList = ({
           className="h-4 w-4"
           type="radio"
           value={layer.name}
-          checked={selectedLayer.id === layer.id}
+          checked={selectedLayerId === layer.id}
           onChange={() => {
             if (setSelectedLayer) setSelectedLayer(layer);
           }}

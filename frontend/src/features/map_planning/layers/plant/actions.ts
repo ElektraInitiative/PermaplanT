@@ -5,22 +5,45 @@ import { createPlanting } from '../../api/createPlanting';
 import { deletePlanting } from '../../api/deletePlanting';
 import { movePlanting } from '../../api/movePlanting';
 import { transformPlanting } from '../../api/transformPlanting';
+import { updateAddDatePlanting } from '../../api/updateAddDatePlanting';
+import { updateRemoveDatePlanting } from '../../api/updateRemoveDatePlanting';
 import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
-import { convertToDate } from '../../utils/date-utils';
-import { PlantingDto } from '@/bindings/definitions';
+import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
+import {
+  CreatePlantActionPayload,
+  DeletePlantActionPayload,
+  MovePlantActionPayload,
+  PlantingDto,
+  TransformPlantActionPayload,
+  UpdatePlantingAddDateActionPayload,
+  UpdatePlantingRemoveDateActionPayload,
+} from '@/bindings/definitions';
+import { v4 } from 'uuid';
 
 export class CreatePlantAction
   implements Action<Awaited<ReturnType<typeof createPlanting>>, boolean>
 {
   private readonly _id: string;
 
-  constructor(private readonly _data: PlantingDto) {
+  get entityIds() {
+    return [this._id];
+  }
+
+  constructor(
+    private readonly _data: Omit<CreatePlantActionPayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {
     this._id = _data.id;
   }
 
   reverse() {
-    return new DeletePlantAction(this._id);
+    return new DeletePlantAction(
+      {
+        id: this._id,
+      },
+      this.actionId,
+    );
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -29,10 +52,7 @@ export class CreatePlantAction
       id: this._id,
     };
 
-    const timelineDate = convertToDate(useMapStore.getState().untrackedState.timelineDate);
-    const addDate = this._data.addDate ? convertToDate(this._data.addDate) : null;
-
-    const shouldBeVisible = addDate === null || addDate <= timelineDate;
+    const timelineDate = useMapStore.getState().untrackedState.timelineDate;
 
     return {
       ...state,
@@ -40,9 +60,10 @@ export class CreatePlantAction
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: shouldBeVisible
-            ? [...state.layers.plants.objects, { ...newPlant }]
-            : state.layers.plants.objects,
+          objects: filterVisibleObjects(
+            [...state.layers.plants.objects, { ...newPlant }],
+            timelineDate,
+          ),
           loadedObjects: [...state.layers.plants.loadedObjects, { ...newPlant }],
         },
       },
@@ -53,6 +74,7 @@ export class CreatePlantAction
     return createPlanting(mapId, {
       ...this._data,
       id: this._id,
+      actionId: this.actionId,
     });
   }
 }
@@ -60,20 +82,29 @@ export class CreatePlantAction
 export class DeletePlantAction
   implements Action<boolean, Awaited<ReturnType<typeof createPlanting>>>
 {
-  constructor(private readonly _id: string) {}
+  constructor(
+    private readonly _data: Omit<DeletePlantActionPayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {}
+
+  get entityIds() {
+    return [this._data.id];
+  }
 
   async execute(mapId: number): Promise<boolean> {
-    return deletePlanting(mapId, this._id);
+    return deletePlanting(mapId, this._data.id, {
+      actionId: this.actionId,
+    });
   }
 
   reverse(state: TrackedMapState) {
-    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._id);
+    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._data.id);
 
     if (!plant) {
       return null;
     }
 
-    return new CreatePlantAction(plant);
+    return new CreatePlantAction(plant, this.actionId);
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -83,8 +114,8 @@ export class DeletePlantAction
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: state.layers.plants.objects.filter((p) => p.id !== this._id),
-          loadedObjects: state.layers.plants.loadedObjects.filter((p) => p.id !== this._id),
+          objects: state.layers.plants.objects.filter((p) => p.id !== this._data.id),
+          loadedObjects: state.layers.plants.loadedObjects.filter((p) => p.id !== this._data.id),
         },
       },
     };
@@ -97,7 +128,14 @@ export class MovePlantAction
 {
   private readonly _ids: Array<string>;
 
-  constructor(private readonly _data: Array<Pick<PlantingDto, 'x' | 'y' | 'id'>>) {
+  get entityIds() {
+    return this._ids;
+  }
+
+  constructor(
+    private readonly _data: Omit<MovePlantActionPayload, 'userId' | 'actionId'>[],
+    public actionId = v4(),
+  ) {
     this._ids = _data.map((d) => d.id);
   }
 
@@ -108,7 +146,10 @@ export class MovePlantAction
       return null;
     }
 
-    return new MovePlantAction(plants.map((p) => ({ id: p.id, x: p.x, y: p.y })));
+    return new MovePlantAction(
+      plants.map((p) => ({ id: p.id, x: p.x, y: p.y })),
+      this.actionId,
+    );
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -144,6 +185,7 @@ export class MovePlantAction
       movePlanting(mapId, d.id, {
         x: d.x,
         y: d.y,
+        actionId: this.actionId,
       }),
     );
 
@@ -157,10 +199,13 @@ export class TransformPlantAction
 {
   private readonly _ids: Array<string>;
 
+  get entityIds() {
+    return this._ids;
+  }
+
   constructor(
-    private readonly _data: Array<
-      Pick<PlantingDto, 'x' | 'y' | 'id' | 'scaleX' | 'scaleY' | 'rotation'>
-    >,
+    private readonly _data: Omit<TransformPlantActionPayload, 'userId' | 'actionId'>[],
+    public actionId = v4(),
   ) {
     this._ids = _data.map((d) => d.id);
   }
@@ -181,6 +226,7 @@ export class TransformPlantAction
         scaleY: p.scaleY,
         rotation: p.rotation,
       })),
+      this.actionId,
     );
   }
 
@@ -223,9 +269,148 @@ export class TransformPlantAction
         scaleX: d.scaleX,
         scaleY: d.scaleY,
         rotation: d.rotation,
+        actionId: this.actionId,
       }),
     );
 
     return Promise.all(tasks);
+  }
+}
+
+export class UpdateAddDatePlantAction
+  implements
+    Action<
+      Awaited<ReturnType<typeof updateAddDatePlanting>>,
+      Awaited<ReturnType<typeof updateAddDatePlanting>>
+    >
+{
+  constructor(
+    private readonly _data: Omit<UpdatePlantingAddDateActionPayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {}
+
+  get entityIds() {
+    return [this._data.id];
+  }
+
+  reverse(state: TrackedMapState) {
+    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._data.id);
+
+    if (!plant) {
+      return null;
+    }
+
+    return new UpdateAddDatePlantAction(
+      {
+        id: plant.id,
+        addDate: plant.addDate,
+      },
+      this.actionId,
+    );
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    const updatePlants = (plants: Array<PlantingDto>) => {
+      return plants.map((p) => {
+        if (p.id === this._data.id) {
+          return {
+            ...p,
+            addDate: this._data.addDate,
+          };
+        }
+
+        return p;
+      });
+    };
+
+    const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        plants: {
+          ...state.layers.plants,
+          objects: filterVisibleObjects(updatePlants(state.layers.plants.objects), timelineDate),
+          loadedObjects: updatePlants(state.layers.plants.loadedObjects),
+        },
+      },
+    };
+  }
+
+  execute(mapId: number): Promise<PlantingDto> {
+    return updateAddDatePlanting(mapId, this._data.id, {
+      addDate: this._data.addDate,
+      actionId: this.actionId,
+    });
+  }
+}
+
+export class UpdateRemoveDatePlantAction
+  implements
+    Action<
+      Awaited<ReturnType<typeof updateRemoveDatePlanting>>,
+      Awaited<ReturnType<typeof updateRemoveDatePlanting>>
+    >
+{
+  constructor(
+    private readonly _data: Omit<UpdatePlantingRemoveDateActionPayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {}
+
+  get entityIds() {
+    return [this._data.id];
+  }
+
+  reverse(state: TrackedMapState) {
+    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._data.id);
+
+    if (!plant) {
+      return null;
+    }
+
+    return new UpdateRemoveDatePlantAction(
+      {
+        id: plant.id,
+        removeDate: plant.addDate,
+      },
+      this.actionId,
+    );
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    const updatePlants = (plants: Array<PlantingDto>) => {
+      return plants.map((p) => {
+        if (p.id === this._data.id) {
+          return {
+            ...p,
+            removeDate: this._data.removeDate,
+          };
+        }
+
+        return p;
+      });
+    };
+
+    const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        plants: {
+          ...state.layers.plants,
+          objects: filterVisibleObjects(updatePlants(state.layers.plants.objects), timelineDate),
+          loadedObjects: updatePlants(state.layers.plants.loadedObjects),
+        },
+      },
+    };
+  }
+
+  execute(mapId: number): Promise<PlantingDto> {
+    return updateRemoveDatePlanting(mapId, this._data.id, {
+      removeDate: this._data.removeDate,
+      actionId: this.actionId,
+    });
   }
 }

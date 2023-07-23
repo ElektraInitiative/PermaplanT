@@ -11,11 +11,12 @@ use uuid::Uuid;
 use self::plantings::PlantingDto;
 
 use super::r#enum::{
-    layer_type::LayerType, privacy_options::PrivacyOptions, quality::Quality, quantity::Quantity,
+    layer_type::LayerType, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
     relation_type::RelationType,
 };
 
 pub mod actions;
+pub mod base_layer_images_impl;
 pub mod coordinates_impl;
 pub mod layer_impl;
 pub mod map_impl;
@@ -226,7 +227,7 @@ pub struct MapDto {
     /// The amount of plants harvested on the map.
     pub harvested: i16,
     /// An enum indicating if this map is private or not.
-    pub privacy: PrivacyOptions,
+    pub privacy: PrivacyOption,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -264,7 +265,7 @@ pub struct NewMapDto {
     /// The amount of plants harvested on the map.
     pub harvested: i16,
     /// An enum indicating if this map is private or not.
-    pub privacy: PrivacyOptions,
+    pub privacy: PrivacyOption,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -284,7 +285,7 @@ pub struct UpdateMapDto {
     /// The name of the map.
     pub name: Option<String>,
     /// An enum indicating if this map is private or not.
-    pub privacy: Option<PrivacyOptions>,
+    pub privacy: Option<PrivacyOption>,
     /// The description of the map.
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
@@ -308,7 +309,7 @@ pub struct MapSearchParameters {
     /// The owner of the map.
     pub owner_id: Option<Uuid>,
     /// The selected privacy of the map.
-    pub privacy: Option<PrivacyOptions>,
+    pub privacy: Option<PrivacyOption>,
 }
 
 /// Support struct for transmitting latitude/longitude coordinates.
@@ -394,6 +395,50 @@ pub enum SuggestionType {
     Available,
     /// Suggests plants based on diversity criteria.
     Diversity,
+}
+
+/// Contains information about an image displayed on the base layer.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct BaseLayerImageDto {
+    /// The id of the image.
+    pub id: Uuid,
+    /// The layer the image is on.
+    pub layer_id: i32,
+    /// The path to the image on Nextcloud.
+    pub path: String,
+    /// The rotation in degrees (0-360) of the image on the map.
+    pub rotation: f32,
+    /// The scale of the image on the map.
+    pub scale: f32,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
+}
+
+/// Contains information for updating the `BaseLayerImage`.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct UpdateBaseLayerImageDto {
+    /// The layer the image is on.
+    pub layer_id: i32,
+    /// The path to the image on Nextcloud.
+    pub path: String,
+    /// The rotation in degrees (0-360) of the image on the map.
+    pub rotation: f32,
+    /// The scale of the image on the map.
+    pub scale: f32,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
+}
+
+/// Used to delete a base layer image.
+/// The id of the base layer image is passed in the path.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct DeleteBaseLayerImageDto {
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
 }
 
 /// Query parameters to configure the generation of the heatmap.

@@ -6,62 +6,82 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.2.3 - UNRELEASED
+## 0.3.0 - UNRELEASED
 
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- squashed migrations _(temmey)_
+- commented out properties in table plants for now to improve build time. _(temmey)_
+- set all enums in DB to lowercase _(temmey)_
+- _()_
+- _()_
+- _()_
+- _()_
+- Add grid functionality. _(Moritz)_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- Handle events of same user, discard events in same tab _(Paul)_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- Fix a bug in loading images _(Paul)_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- CI: Improve pipeline parallelization #577 _(4ydan)_
+- CI: Add groovy pre-commit hook #685 _(4ydan)_
+- CI: Optimized mdbook docker image #585 _(4ydan)_
+- CI: Test `diesel` migrations in PR and master #134 _(4ydan)_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+
+## 0.2.3 - 18.07.2023 (165 commits)
+
+- integrated FileSelector in BaseLayer _(Samuel)_
+- introduced file selection components to select and upload Nextcloud files _(Samuel)_
 - Finish implementation of seed search _(Moritz)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
 - A timeline date can be set and changed by a date picker. Plantings exist relative to a date. _(Paul)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- The add/remove date of plants can be changed in the toolbar. _(Paul)_
+- Added `zod` as form validation library. _(Paul)_
+- Finish implementation of seed search _(Moritz)_
+- CI: Check package-lock.json #597 _(4ydan)_
+- Further Makefile targets #630 _(4ydan)_
 - DOC: Improve manual test case docu _(4ydan)_
-- _()_
-- CI: mdbook linkchecker policy set to warning #628 _(4ydan)_
+- CI: mdbook linkchecker policy set to error #628 _(4ydan)_
 - Up webdav to 5.2.2 and vite to 3.2.7 due to security issues #629 _(4ydan)_
-- _()_
 - backend: add endpoint to generate the heatmap _(Gabriel)_
 - UX: Revised existing error notifications and added new ones for other API calls _(Thorben)_
-- CI: Cancel previous builds #557 _(4ydan)_
 - backend: add scheduled task to remove maps #90 _(GabrielThorben)_
 
-## 0.2.2 - 12.07.2023 (281 commits)
+## 0.2.2 - 12.07.2023 (282 commits)
 
-- Test strategy written _(4ydan)_
 - Added Nextcloud integration documentation in `/doc/research/nextcloud_integration.md`_(Samuel)_
 - Fix wrong placement of plantings _(Paul)_
 - CI: Send email when master fails #109 _(4ydan)_
@@ -75,6 +95,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Display version number on the navbar and move github link #574 _(4ydan)_
 - Improved user visible texts in map editor _(Thorben)_
 - DEV: Makefile added #549 _(4ydan)_
+- added plant relations import script to scraper _(temmey)_
 - added Christoph Kraus as Teammember _(temmey)_
 
 ## 0.2.1 - UNRELEASED (1024 commits)

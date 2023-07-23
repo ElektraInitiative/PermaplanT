@@ -36,11 +36,14 @@ pub struct Planting {
     /// The date the planting was removed from the map.
     /// If None, the planting is still on the map.
     pub remove_date: Option<NaiveDate>,
+    /*
     /// The date the planting was created.
-    pub create_date: NaiveDate,
+    //pub create_date: NaiveDate,
+
     /// The date the planting was 'soft' deleted
     /// and is still able to be restored.
-    pub delete_date: Option<NaiveDate>,
+    //pub delete_date: Option<NaiveDate>,
+    */
 }
 
 /// The `UpdatePlanting` entity.
@@ -61,4 +64,8 @@ pub struct UpdatePlanting {
     pub scale_x: Option<f32>,
     /// The y scale of the plant on the map.
     pub scale_y: Option<f32>,
+    /// The date the planting was added to the map.
+    pub add_date: Option<Option<NaiveDate>>,
+    /// The date the planting was removed from the map.
+    pub remove_date: Option<Option<NaiveDate>>,
 }

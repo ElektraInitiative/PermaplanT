@@ -1,6 +1,6 @@
 //! Contains the implementations related to [`PlantingDto`].
 
-use chrono::Utc;
+//use chrono::Utc;
 use uuid::Uuid;
 
 use crate::model::entity::plantings::{Planting, UpdatePlanting};
@@ -41,8 +41,8 @@ impl From<NewPlantingDto> for Planting {
             scale_y: dto.scale_y,
             add_date: dto.add_date,
             remove_date: None,
-            create_date: Utc::now().date_naive(),
-            delete_date: None,
+            //create_date: Utc::now().date_naive(),
+            //delete_date: None,
         }
     }
 }
@@ -61,6 +61,14 @@ impl From<UpdatePlantingDto> for UpdatePlanting {
             UpdatePlantingDto::Move(dto) => Self {
                 x: Some(dto.x),
                 y: Some(dto.y),
+                ..Default::default()
+            },
+            UpdatePlantingDto::UpdateAddDate(dto) => Self {
+                add_date: Some(dto.add_date),
+                ..Default::default()
+            },
+            UpdatePlantingDto::UpdateRemoveDate(dto) => Self {
+                remove_date: Some(dto.remove_date),
                 ..Default::default()
             },
         }

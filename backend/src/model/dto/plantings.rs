@@ -68,6 +68,8 @@ pub struct NewPlantingDto {
     /// The date the planting was added to the map.
     /// If None, the planting always existed.
     pub add_date: Option<NaiveDate>,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
 }
 
 /// Used to differentiate between different update operations on plantings.
@@ -82,6 +84,10 @@ pub enum UpdatePlantingDto {
     Transform(TransformPlantingDto),
     /// Move a plantings an the map.
     Move(MovePlantingDto),
+    /// Change the `add_date` of a planting.
+    UpdateAddDate(UpdateAddDatePlantingDto),
+    /// Change the `remove_date` of a planting.
+    UpdateRemoveDate(UpdateRemoveDatePlantingDto),
 }
 
 /// Used to transform an existing planting.
@@ -99,6 +105,8 @@ pub struct TransformPlantingDto {
     pub scale_x: f32,
     /// The y scale of the plant on the map.
     pub scale_y: f32,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
 }
 
 /// Used to move an existing planting.
@@ -110,6 +118,42 @@ pub struct MovePlantingDto {
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
+}
+
+/// Used to change the `add_date` of a planting.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateAddDatePlantingDto {
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
+}
+
+/// Used to change the `remove_date` of a planting.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateRemoveDatePlantingDto {
+    /// The date the planting was removed from the map.
+    /// If None, the planting is still on the map.
+    pub remove_date: Option<NaiveDate>,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
+}
+
+/// Used to delete a planting.
+/// The id of the planting is passed in the path.
+#[typeshare]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct DeletePlantingDto {
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
 }
 
 /// Query parameters for searching plantings.

@@ -6,7 +6,9 @@ import common from './common.json';
 import contact from './contact.json';
 import enums from './enums.json';
 import featureDescriptions from './featureDescriptions.json';
+import fileSelector from './fileSelector.json';
 import geomap from './geomap.json';
+import grid from './grid.json';
 import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
@@ -14,9 +16,9 @@ import layers from './layers.json';
 import maps from './maps.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
 import overview from './overview.json';
-import plantEdit from './plantEdit.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
+import plantings from './plantings.json';
 import pricing from './pricing.json';
 import privacyOptions from './privacyOptions.json';
 import routes from './routes.json';
@@ -24,6 +26,7 @@ import seeds from './seeds.json';
 import team from './team.json';
 import timeline from './timeline.json';
 import undoRedo from './undoRedo.json';
+import uploadFile from './uploadFile.json';
 
 const en = {
   blog,
@@ -34,6 +37,7 @@ const en = {
   enums,
   featureDescriptions,
   geomap,
+  grid,
   imprint,
   landingPage,
   pricing,
@@ -48,10 +52,12 @@ const en = {
   nextcloudIntegration,
   routes,
   overview,
+  uploadFile,
+  fileSelector,
   privacyOptions,
   layers,
-  plantEdit,
   timeline,
+  plantings,
 };
 
 export default en;

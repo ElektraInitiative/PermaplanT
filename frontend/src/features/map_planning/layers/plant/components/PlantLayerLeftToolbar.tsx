@@ -1,9 +1,14 @@
-import { DeletePlantAction } from '../actions';
+import {
+  DeletePlantAction,
+  UpdateAddDatePlantAction,
+  UpdateRemoveDatePlantAction,
+} from '../actions';
 import { useFindPlantById } from '../hooks/useFindPlantById';
-import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
-import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import {
+  PlantingAttributeEditForm,
+  PlantingAttributeEditFormData,
+} from './PlantingAttributeEditForm';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { useTranslation } from 'react-i18next';
 
 export function PlantLayerLeftToolbar() {
   const selectedPlanting = useMapStore(
@@ -12,34 +17,34 @@ export function PlantLayerLeftToolbar() {
   const executeAction = useMapStore((state) => state.executeAction);
   const selectPlanting = useMapStore((state) => state.selectPlanting);
   const transformerRef = useMapStore((state) => state.transformer);
-  const { t } = useTranslation(['plantEdit']);
 
   const { plant } = useFindPlantById(selectedPlanting?.plantId ?? NaN, Boolean(selectedPlanting));
 
-  return selectedPlanting ? (
-    <div className="flex flex-col gap-2 p-2">
-      <h2>{plant?.unique_name}</h2>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeholder="some input"
-      ></SimpleFormInput>
-      <SimpleFormInput
-        id="input1"
-        labelText="Some attribute"
-        placeholder="some input"
-      ></SimpleFormInput>
+  const onDeleteClick = () => {
+    if (!selectedPlanting) return;
+    executeAction(new DeletePlantAction({ id: selectedPlanting?.id }));
+    selectPlanting(null);
+    transformerRef.current?.nodes([]);
+  };
 
-      <SimpleButton
-        variant={ButtonVariant.dangerBase}
-        onClick={() => {
-          executeAction(new DeletePlantAction(selectedPlanting.id));
-          selectPlanting(null);
-          transformerRef.current?.nodes([]);
-        }}
-      >
-        {t('plantEdit:delete')}
-      </SimpleButton>
-    </div>
+  const onAddDateChange = ({ addDate }: PlantingAttributeEditFormData) => {
+    if (!selectedPlanting) return;
+    executeAction(new UpdateAddDatePlantAction({ id: selectedPlanting.id, addDate }));
+  };
+
+  const onRemoveDateChange = ({ removeDate }: PlantingAttributeEditFormData) => {
+    if (!selectedPlanting) return;
+    executeAction(new UpdateRemoveDatePlantAction({ id: selectedPlanting.id, removeDate }));
+  };
+
+  return selectedPlanting && plant ? (
+    <PlantingAttributeEditForm
+      key={selectedPlanting.id}
+      plant={plant}
+      planting={selectedPlanting}
+      onDeleteClick={onDeleteClick}
+      onAddDateChange={onAddDateChange}
+      onRemoveDateChange={onRemoveDateChange}
+    />
   ) : null;
 }

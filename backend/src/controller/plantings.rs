@@ -7,7 +7,12 @@ use actix_web::{
 };
 use uuid::Uuid;
 
-use crate::{config::auth::user_info::UserInfo, model::dto::actions::Action};
+use crate::{
+    config::auth::user_info::UserInfo,
+    model::dto::actions::{
+        Action, UpdatePlantingAddDateActionPayload, UpdatePlantingRemoveDateActionPayload,
+    },
+};
 use crate::{
     config::data::AppDataInner,
     model::dto::actions::{
@@ -16,7 +21,9 @@ use crate::{
     },
 };
 use crate::{
-    model::dto::plantings::{NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto},
+    model::dto::plantings::{
+        DeletePlantingDto, NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+    },
     service::plantings,
 };
 
@@ -66,17 +73,22 @@ pub async fn find(
 #[post("")]
 pub async fn create(
     path: Path<i32>,
-    new_plant_json: Json<NewPlantingDto>,
+    json: Json<NewPlantingDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let dto = plantings::create(new_plant_json.0, &app_data).await?;
+    let new_planting = json.0;
+    let dto = plantings::create(new_planting.clone(), &app_data).await?;
 
     app_data
         .broadcaster
         .broadcast(
             path.into_inner(),
-            Action::CreatePlanting(CreatePlantActionPayload::new(dto, user_info.id)),
+            Action::CreatePlanting(CreatePlantActionPayload::new(
+                dto,
+                user_info.id,
+                new_planting.action_id,
+            )),
         )
         .await;
 
@@ -103,21 +115,33 @@ pub async fn create(
 #[patch("/{planting_id}")]
 pub async fn update(
     path: Path<(i32, Uuid)>,
-    new_plant_json: Json<UpdatePlantingDto>,
+    json: Json<UpdatePlantingDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let (map_id, planting_id) = path.into_inner();
-    let update_planting = new_plant_json.0;
+    let update_planting = json.0;
 
     let planting = plantings::update(planting_id, update_planting, &app_data).await?;
 
     let action = match update_planting {
-        UpdatePlantingDto::Transform(_) => {
-            Action::TransformPlanting(TransformPlantActionPayload::new(planting, user_info.id))
-        }
-        UpdatePlantingDto::Move(_) => {
-            Action::MovePlanting(MovePlantActionPayload::new(planting, user_info.id))
+        UpdatePlantingDto::Transform(action_dto) => Action::TransformPlanting(
+            TransformPlantActionPayload::new(planting, user_info.id, action_dto.action_id),
+        ),
+        UpdatePlantingDto::Move(action_dto) => Action::MovePlanting(MovePlantActionPayload::new(
+            planting,
+            user_info.id,
+            action_dto.action_id,
+        )),
+        UpdatePlantingDto::UpdateAddDate(action_dto) => Action::UpdatePlantingAddDate(
+            UpdatePlantingAddDateActionPayload::new(planting, user_info.id, action_dto.action_id),
+        ),
+        UpdatePlantingDto::UpdateRemoveDate(action_dto) => {
+            Action::UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload::new(
+                planting,
+                user_info.id,
+                action_dto.action_id,
+            ))
         }
     };
 
@@ -135,6 +159,7 @@ pub async fn update(
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
     ),
+    request_body = DeletePlantingDto,
     responses(
         (status = 200, description = "Delete a planting")
     ),
@@ -145,10 +170,12 @@ pub async fn update(
 #[delete("/{planting_id}")]
 pub async fn delete(
     path: Path<(i32, Uuid)>,
+    json: Json<DeletePlantingDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let (map_id, planting_id) = path.into_inner();
+    let delete_planting = json.0;
 
     plantings::delete_by_id(planting_id, &app_data).await?;
 
@@ -156,7 +183,11 @@ pub async fn delete(
         .broadcaster
         .broadcast(
             map_id,
-            Action::DeletePlanting(DeletePlantActionPayload::new(planting_id, user_info.id)),
+            Action::DeletePlanting(DeletePlantActionPayload::new(
+                planting_id,
+                user_info.id,
+                delete_planting.action_id,
+            )),
         )
         .await;
 
