@@ -55,7 +55,7 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
                 -e 'RUSTFLAGS=-D warnings' \
                 -e 'RUSTDOCFLAGS=-D warnings' \
                 -v ${WORKSPACE}/cargo/registry:/usr/local/cargo/registry \
-                -v ${WORKSPACE}/cargo/git:/usr/local/cargo/git
+                -v ${WORKSPACE}/cargo/git:/usr/local/cargo/git \
                 "
                 ) {
                     checkout scm
