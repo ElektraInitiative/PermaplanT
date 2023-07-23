@@ -46,7 +46,7 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
             checkout scm
             def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rustImage.inside("--privileged --link ${c.id}:db \
+                rustImage.inside("--link ${c.id}:db \
                 -e 'DATABASE_URL=postgres://ci:ci@db/ci' \
                 -e 'BIND_ADDRESS_HOST=127.0.0.1' \
                 -e 'BIND_ADDRESS_PORT=8080' \
@@ -55,7 +55,7 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
                 -e 'RUSTFLAGS=-D warnings' \
                 -e 'RUSTDOCFLAGS=-D warnings' \
                 -v ${WORKSPACE}/cargo/registry:/usr/local/cargo/registry \
-                -v ${WORKSPACE}/cargo/git:/usr/local/cargo/git \
+                -v ${WORKSPACE}/cargo/git:/usr/local/cargo/git
                 "
                 ) {
                     checkout scm
