@@ -18,7 +18,7 @@ This document explains how to update the `schema.patch` file used by diesel.
 
 3. Copy the `schema.rs` file e.g. to `schema_tmp.rs`.
 
-Now manually make changes in `schema.rs`, use the current `schema.patch` to apply important changes
+Now manually modify the `schema.rs` and utilize the existing `schema.patch` to incorporate previous modifications.
 
 4. Run `` diff src/schema.rs `src/schema_tmp.rs` -U6 > src/schema.patch `` in the backend folder to save the result as `src/schema.patch`.
 
