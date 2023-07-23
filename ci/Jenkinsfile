@@ -161,10 +161,12 @@ def testMigrations() {
 
 // PIPELINE BEGIN
 abortPreviousRunUnlessMaster()
-preBuildCleanup {
-    excludePattern('/cargo/*')
-    excludePattern('/cargo/registry')
-    excludePattern('/cargo/git')
+wrappers {
+    preBuildCleanup {
+        excludePattern('/cargo/*')
+        excludePattern('/cargo/registry')
+        excludePattern('/cargo/git')
+    }
 }
 
 timeout(time: 2, unit: 'HOURS') {
