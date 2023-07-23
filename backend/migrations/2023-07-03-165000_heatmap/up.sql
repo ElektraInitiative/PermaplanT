@@ -113,7 +113,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Calculate a score for a certain position.
+-- Values where the plant should not be placed are close to or smaller than 0.
+-- Values where the plant should be placed are close to or larger than 1.
+--
+-- p_map_id       ... map id
 -- p_layer_ids[1] ... plant layer
+-- p_plant_id     ... id of the plant for which to consider relations
+-- x_pos,y_pos    ... coordinates on the map where to calculate the score
 CREATE OR REPLACE FUNCTION calculate_score(
     p_map_id INTEGER,
     p_layer_ids INTEGER [],
