@@ -4,7 +4,7 @@ use std::io::Cursor;
 
 use actix_http::StatusCode;
 use actix_web::web::Data;
-use image::{ImageBuffer, Rgb};
+use image::{ImageBuffer, Rgba};
 
 use crate::{
     config::data::AppDataInner,
@@ -50,19 +50,20 @@ pub async fn heatmap(
     clippy::indexing_slicing,           // ok, because size of image is generated using matrix width and height
     clippy::cast_sign_loss              // ok, because we only care about positive values
 )]
-fn matrix_to_image(matrix: &Vec<Vec<f32>>) -> Result<Vec<u8>, ServiceError> {
+fn matrix_to_image(matrix: &Vec<Vec<(f32, f32)>>) -> Result<Vec<u8>, ServiceError> {
     let (width, height) = (matrix[0].len(), matrix.len());
     let mut imgbuf = ImageBuffer::new(width as u32, height as u32);
 
     for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
-        let data = matrix[y as usize][x as usize];
+        let (data, alpha) = matrix[y as usize][x as usize];
 
         // The closer data is to 1 the green it gets.
         let red = data.mul_add(-128.0, 128.0);
         let green = data.mul_add(255.0 - 128.0, 128.0);
         let blue = data.mul_add(-128.0, 128.0);
+        let alpha = alpha * 255.0;
 
-        *pixel = Rgb([red as u8, green as u8, blue as u8]);
+        *pixel = Rgba([red as u8, green as u8, blue as u8, alpha as u8]);
     }
 
     let mut buffer: Vec<u8> = Vec::new();

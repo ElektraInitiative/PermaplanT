@@ -43,6 +43,9 @@ struct HeatMapElement {
     /// The score on the heatmap.
     #[diesel(sql_type = Float)]
     score: f32,
+    /// The alpha on the heatmap.
+    #[diesel(sql_type = Float)]
+    alpha: f32,
     /// The x values of the score
     #[diesel(sql_type = Integer)]
     x: i32,
@@ -68,7 +71,7 @@ pub async fn heatmap(
     shade_layer_id: i32,
     plant_id: i32,
     conn: &mut AsyncPgConnection,
-) -> QueryResult<Vec<Vec<f32>>> {
+) -> QueryResult<Vec<Vec<(f32, f32)>>> {
     // Fetch the bounding box x and y values of the maps coordinates
     let bounding_box_query =
         diesel::sql_query("SELECT * FROM calculate_bbox($1)").bind::<Integer, _>(map_id);
@@ -95,9 +98,9 @@ pub async fn heatmap(
         (f64::from(bounding_box.x_max - bounding_box.x_min) / f64::from(GRANULARITY)).ceil();
     let num_rows =
         (f64::from(bounding_box.y_max - bounding_box.y_min) / f64::from(GRANULARITY)).ceil();
-    let mut heatmap = vec![vec![0.0; num_cols as usize]; num_rows as usize];
-    for HeatMapElement { score, x, y } in result {
-        heatmap[y as usize][x as usize] = score;
+    let mut heatmap = vec![vec![(0.0, 0.0); num_cols as usize]; num_rows as usize];
+    for HeatMapElement { score, alpha, x, y } in result {
+        heatmap[y as usize][x as usize] = (score, alpha);
     }
     debug!("{heatmap:#?}");
     Ok(heatmap)
