@@ -114,14 +114,15 @@
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Preconditions:
-  - Be on the map managment page.
-  - TODO! @kitzbergerg
+  - Be on the map management page.
+  - Data is inserted via the scraper (plants and plant relations)
 - Test Steps:
   1. Create a map
   2. Plant some plants with relations.
-  3. TODO! @kitzbergerg
+  3. Add other constraints such as shade or soil ph.
+  4. Generate the heatmap.
 - Expected Result:
-  - [ ] Heatmap considers map polygon and plant relations.
+  - [ ] Heatmap considers map polygon and environmental constraints.
 - Actual Result:
 - Test Result:
 - Notes:
@@ -224,6 +225,7 @@
 - Notes:
 
 ## TC-013 - Base Layer
+
 - Description: Check whether the maps background image is displayed correctly.
 - Preconditions:
   - [ ] A map has been created.
@@ -244,6 +246,7 @@
 - Notes:
 
 ## TC-014 - Grid
+
 - Description: Display a point grid on the screen.
 - Preconditions:
   - [ ] User must be on the map screen.
