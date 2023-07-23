@@ -42,10 +42,10 @@ struct BoundingBox {
 struct HeatMapElement {
     /// The score on the heatmap.
     #[diesel(sql_type = Float)]
-    score: f32,
+    preference: f32,
     /// The alpha on the heatmap.
     #[diesel(sql_type = Float)]
-    alpha: f32,
+    relevance: f32,
     /// The x values of the score
     #[diesel(sql_type = Integer)]
     x: i32,
@@ -99,8 +99,14 @@ pub async fn heatmap(
     let num_rows =
         (f64::from(bounding_box.y_max - bounding_box.y_min) / f64::from(GRANULARITY)).ceil();
     let mut heatmap = vec![vec![(0.0, 0.0); num_cols as usize]; num_rows as usize];
-    for HeatMapElement { score, alpha, x, y } in result {
-        heatmap[y as usize][x as usize] = (score, alpha);
+    for HeatMapElement {
+        preference,
+        relevance,
+        x,
+        y,
+    } in result
+    {
+        heatmap[y as usize][x as usize] = (preference, relevance);
     }
     debug!("{heatmap:#?}");
     Ok(heatmap)

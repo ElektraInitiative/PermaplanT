@@ -21,18 +21,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TYPE score_w_alpha AS (
-    score REAL,
-    alpha REAL
+-- The score is defined as the preference and the relevance.
+CREATE TYPE score AS (
+    preference REAL,
+    relevance REAL
 );
 
 -- Returns scores from 0-1 for each pixel of the map.
--- Values where the plant should not be placed are close to 0.
--- Values where the plant should be placed are close to 1.
 --
--- Returns alpha from 0-1 for each pixel of the map.
--- Values where there is no relevant data are close to 0.
--- Values where there is relevant data are close to 1.
+-- Positions where the plant should not be placed have preference close to 0.
+-- Positions where the plant should be placed have preference close to 1.
+--
+-- Positions where there is no relevant data have relevance close to 0.
+-- Positions where there is relevant data have relevance close to 1.
 --
 -- The resulting matrix does not contain valid (x,y) coordinates,
 -- instead (x,y) are simply the indices in the matrix.
@@ -56,9 +57,9 @@ CREATE OR REPLACE FUNCTION calculate_heatmap(
     x_max INTEGER,
     y_max INTEGER
 )
-RETURNS TABLE (score REAL, alpha REAL, x INTEGER, y INTEGER) AS $$
+RETURNS TABLE (preference REAL, relevance REAL, x INTEGER, y INTEGER) AS $$
 DECLARE
-    score_w_alpha score_w_alpha;
+    score SCORE;
     map_geometry GEOMETRY(POLYGON, 4326);
     point GEOMETRY;
     bbox GEOMETRY;
@@ -98,13 +99,13 @@ BEGIN
 
             -- If the point is on the map calculate a score; otherwise set score to 0.
             IF ST_Intersects(point, map_geometry) THEN
-                score_w_alpha := calculate_score(p_map_id, p_layer_ids, p_plant_id, x_pos, y_pos);
-                score_w_alpha := scale_score(score_w_alpha);  -- scale to be between 0 and 1
-                score := score_w_alpha.score;
-                alpha := score_w_alpha.alpha;
+                score := calculate_score(p_map_id, p_layer_ids, p_plant_id, x_pos, y_pos);
+                score := scale_score(score);  -- scale to be between 0 and 1
+                preference := score.preference;
+                relevance := score.relevance;
             ELSE
-                score := 0.0;
-                alpha := 0.0;
+                preference := 0.0;
+                relevance := 0.0;
             END IF;
 
             x := i;
@@ -117,20 +118,18 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Scales to values between 0 and 1.
-CREATE OR REPLACE FUNCTION scale_score(input SCORE_W_ALPHA)
-RETURNS SCORE_W_ALPHA AS $$
+CREATE OR REPLACE FUNCTION scale_score(input SCORE)
+RETURNS SCORE AS $$
 DECLARE
-    score_w_alpha score_w_alpha;
+    score SCORE;
 BEGIN
-    score_w_alpha.score := LEAST(GREATEST(input.score, 0), 1);
-    score_w_alpha.alpha := LEAST(GREATEST(input.alpha, 0), 1);
-    RETURN score_w_alpha;
+    score.preference := LEAST(GREATEST(input.preference, 0), 1);
+    score.relevance := LEAST(GREATEST(input.relevance, 0), 1);
+    RETURN score;
 END;
 $$ LANGUAGE plpgsql;
 
--- Calculate a score and alpha for a certain position.
--- Values where the plant should not be placed are close to or smaller than 0.
--- Values where the plant should be placed are close to or larger than 1.
+-- Calculate score for a certain position.
 --
 -- p_map_id       ... map id
 -- p_layer_ids[1] ... plant layer
@@ -143,33 +142,33 @@ CREATE OR REPLACE FUNCTION calculate_score(
     x_pos INTEGER,
     y_pos INTEGER
 )
-RETURNS SCORE_W_ALPHA AS $$
+RETURNS SCORE AS $$
 DECLARE
-    score_w_alpha score_w_alpha;
-    plants score_w_alpha;
+    score SCORE;
+    plants SCORE;
 BEGIN
     plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
 
-    score_w_alpha.score := 0.5 + plants.score;
-    score_w_alpha.alpha := 0.2 + plants.alpha;
+    score.preference := 0.5 + plants.preference;
+    score.relevance := 0.2 + plants.relevance;
 
-    RETURN score_w_alpha;
+    RETURN score;
 END;
 $$ LANGUAGE plpgsql;
 
--- Calculate score and alpha using the plants relations and their distances.
+-- Calculate score using the plants relations and their distances.
 CREATE OR REPLACE FUNCTION calculate_score_from_relations(
     p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER
 )
-RETURNS SCORE_W_ALPHA AS $$
+RETURNS SCORE AS $$
 DECLARE
     plant_relation RECORD;
     distance REAL;
     weight REAL;
-    score_w_alpha score_w_alpha;
+    score SCORE;
 BEGIN
-    score_w_alpha.score := 0.0;
-    score_w_alpha.alpha := 0.0;
+    score.preference := 0.0;
+    score.relevance := 0.0;
 
     FOR plant_relation IN (SELECT * FROM get_plant_relations(p_layer_id, p_plant_id)) LOOP
         -- calculate distance
@@ -180,15 +179,15 @@ BEGIN
 
         -- update score based on relation
         IF plant_relation.relation = 'companion' THEN
-            score_w_alpha.score := score_w_alpha.score + 0.5 * weight;
-            score_w_alpha.alpha := score_w_alpha.alpha + 0.5 * weight;
+            score.preference := score.preference + 0.5 * weight;
+            score.relevance := score.relevance + 0.5 * weight;
         ELSE
-            score_w_alpha.score := score_w_alpha.score - 0.5 * weight;
-            score_w_alpha.alpha := score_w_alpha.alpha + 0.5 * weight;
+            score.preference := score.preference - 0.5 * weight;
+            score.relevance := score.relevance + 0.5 * weight;
         END IF;
     END LOOP;
 
-    RETURN score_w_alpha;
+    RETURN score;
 END;
 $$ LANGUAGE plpgsql;
 

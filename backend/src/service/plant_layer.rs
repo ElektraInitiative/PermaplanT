@@ -55,13 +55,13 @@ fn matrix_to_image(matrix: &Vec<Vec<(f32, f32)>>) -> Result<Vec<u8>, ServiceErro
     let mut imgbuf = ImageBuffer::new(width as u32, height as u32);
 
     for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
-        let (data, alpha) = matrix[y as usize][x as usize];
+        let (preference, relevance) = matrix[y as usize][x as usize];
 
         // The closer data is to 1 the green it gets.
-        let red = data.mul_add(-128.0, 128.0);
-        let green = data.mul_add(255.0 - 128.0, 128.0);
-        let blue = data.mul_add(-128.0, 128.0);
-        let alpha = alpha * 255.0;
+        let red = preference.mul_add(-128.0, 128.0);
+        let green = preference.mul_add(255.0 - 128.0, 128.0);
+        let blue = preference.mul_add(-128.0, 128.0);
+        let alpha = relevance * 255.0;
 
         *pixel = Rgba([red as u8, green as u8, blue as u8, alpha as u8]);
     }

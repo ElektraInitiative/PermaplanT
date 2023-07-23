@@ -24,9 +24,7 @@ CREATE TRIGGER check_shade_layer_type_before_insert_or_update
 BEFORE INSERT OR UPDATE ON shadings
 FOR EACH ROW EXECUTE FUNCTION check_shade_layer_type();
 
--- Calculate a score and alpha for a certain position.
--- Values where the plant should not be placed are close to or smaller than 0.
--- Values where the plant should be placed are close to or larger than 1.
+-- Calculate score and relevance for a certain position.
 --
 -- p_map_id       ... map id
 -- p_layer_ids[1] ... plant layer
@@ -40,28 +38,28 @@ CREATE OR REPLACE FUNCTION calculate_score(
     x_pos integer,
     y_pos integer
 )
-RETURNS score_w_alpha AS $$
+RETURNS score AS $$
 DECLARE
-    score_w_alpha score_w_alpha;
-    plants score_w_alpha;
-    shades score_w_alpha;
+    score SCORE;
+    plants SCORE;
+    shades SCORE;
 BEGIN
     plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
     shades := calculate_score_from_shadings(p_layer_ids[2], p_plant_id, x_pos, y_pos);
 
-    score_w_alpha.score := 0.5 + plants.score + shades.score;
-    score_w_alpha.alpha := 0.2 + plants.alpha + shades.alpha;
+    score.preference := 0.5 + plants.preference + shades.preference;
+    score.relevance := 0.2 + plants.relevance + shades.relevance;
 
-    RETURN score_w_alpha;
+    RETURN score;
 END;
 $$ LANGUAGE plpgsql;
 
--- Calculate score: Between -0.5 and 0.5 depending on shadings.
--- Calculate alpha: If there is shading set to 0.5; otherwise 0.0.
+-- Calculate preference: Between -0.5 and 0.5 depending on shadings.
+-- Calculate relevance: 0.5 if there is shading; otherwise 0.0.
 CREATE FUNCTION calculate_score_from_shadings(
     p_layer_id integer, p_plant_id integer, x_pos integer, y_pos integer
 )
-RETURNS score_w_alpha AS $$
+RETURNS score AS $$
 DECLARE
     point GEOMETRY;
     plant_shade shade;
@@ -69,7 +67,7 @@ DECLARE
     all_values shade[];
     pos1 INTEGER;
     pos2 INTEGER;
-    score_w_alpha score_w_alpha;
+    score SCORE;
 BEGIN
     -- Get the preferred shade of the plant
     SELECT shade INTO plant_shade
@@ -87,9 +85,9 @@ BEGIN
 
     -- If there's no shading, return 0 (meaning shadings do not affect the score)
     IF NOT FOUND OR plant_shade IS NULL THEN
-        score_w_alpha.score := 0.0;
-        score_w_alpha.alpha := 0.0;
-        RETURN score_w_alpha;
+        score.preference := 0.0;
+        score.relevance := 0.0;
+        RETURN score;
     END IF;
 
 
@@ -101,9 +99,9 @@ BEGIN
     SELECT array_position(all_values, shading_shade) INTO pos2;
 
     -- Calculate the 'distance' to the preferred shade as a values between -0.5 and 0.5
-    score_w_alpha.score := 0.5 - (abs(pos1 - pos2) / (ARRAY_LENGTH(all_values, 1) - 1)::REAL);
-    score_w_alpha.alpha := 0.5;
+    score.preference := 0.5 - (abs(pos1 - pos2) / (ARRAY_LENGTH(all_values, 1) - 1)::REAL);
+    score.relevance := 0.5;
 
-    RETURN score_w_alpha;
+    RETURN score;
 END;
 $$ LANGUAGE plpgsql;
