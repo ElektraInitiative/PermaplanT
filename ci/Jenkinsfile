@@ -43,7 +43,7 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
     return {
         node('docker') {
             node_info()
-            checkout scm: [clean: false]
+            checkout scm
             def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rustImage.inside("--link ${c.id}:db \
@@ -58,7 +58,7 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
                 // -v ${WORKSPACE}/cargo/registry:/usr/local/cargo/registry \
                 // -v ${WORKSPACE}/cargo/git:/usr/local/cargo/git \
                 ) {
-                    checkout scm: [clean: false]
+                    checkout scm
                     wait_for_db()
                     sh './ci/build-scripts/build-schema.sh'
                     // Because in Deploy the path for /target is a
@@ -82,7 +82,7 @@ def testAndBuildMdbook() {
     return {
         node('docker') {
             node_info()
-            checkout scm: [clean: false]
+            checkout scm
             docker.build('permaplant-doc:build', './doc').inside {
                 stage('test') {
                     sh 'make test-mdbook'
@@ -111,10 +111,10 @@ def testAndBuildFrontend() {
     return {
         node('docker') {
             node_info()
-            checkout scm: [clean: false]
+            checkout scm
             def nodeImage = docker.build('permaplant-node', './ci/container-images/permaplant-node')
             nodeImage.inside {
-                checkout scm: [clean: false]
+                checkout scm
                 unstash 'definitions.ts'
                 stage('test') {
                     // groovylint-disable-next-line
@@ -205,7 +205,7 @@ stage('Deploy PR') {
     node('permaplant && pr') {
         node_info()
 
-        checkout scm: [clean: false]
+        checkout scm
 
         echo "Workspace is '${WORKSPACE}'"
         echo 'Ensure pr service is stopped'
@@ -249,7 +249,7 @@ if (env.BRANCH_NAME == 'master') {
             node('permaplant && dev') {
                 node_info()
 
-                checkout scm: [clean: false]
+                checkout scm
 
                 echo 'Unstash Artifacts'
                 unstash 'schema.rs'
