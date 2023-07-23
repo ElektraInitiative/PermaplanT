@@ -49,7 +49,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Calculate a score using the shadings.
+-- Calculate a score between -0.5 and 0.5 using the shadings.
 CREATE FUNCTION calculate_score_from_shadings(
     p_layer_id integer, p_plant_id integer, x_pos integer, y_pos integer
 )
@@ -76,7 +76,7 @@ BEGIN
     ORDER BY shade DESC
     LIMIT 1;
 
-    -- If there's no shading, return 0
+    -- If there's no shading, return 0 (meaning shadings do not affect the score)
     IF NOT FOUND OR plant_shade IS NULL THEN
         RETURN 0;
     END IF;
@@ -88,7 +88,7 @@ BEGIN
     SELECT array_position(all_values, plant_shade) INTO pos1;
     SELECT array_position(all_values, shading_shade) INTO pos2;
 
-    -- Calculate the 'distance' to the preferred shade as a values between 0.5 and -0.5
+    -- Calculate the 'distance' to the preferred shade as a values between -0.5 and 0.5
     RETURN 0.5 - (abs(pos1 - pos2) / (ARRAY_LENGTH(all_values, 1) - 1)::REAL);
 END;
 $$ LANGUAGE plpgsql;
