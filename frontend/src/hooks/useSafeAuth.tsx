@@ -1,3 +1,4 @@
+import { useIsOnline } from './useIsOnline';
 import i18next from '@/config/i18n';
 import { User, UserManagerEvents } from 'oidc-client-ts';
 import { useContext } from 'react';
@@ -43,6 +44,16 @@ const AuthContextFallback: AuthContextProps = {
  */
 export function useSafeAuth() {
   const context = useContext(AuthContext);
+
+  useIsOnline({
+    onOffline() {
+      context?.stopSilentRenew();
+    },
+    onOnline() {
+      context?.startSilentRenew();
+      context?.signinSilent();
+    },
+  });
 
   if (!context) {
     return AuthContextFallback;
