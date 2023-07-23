@@ -7,7 +7,7 @@ use diesel::{
     CombineDsl, ExpressionMethods, QueryDsl, QueryResult, QueryableByName,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
-use log::debug;
+use log::{debug, trace};
 
 use crate::{
     model::{
@@ -108,7 +108,8 @@ pub async fn heatmap(
     {
         heatmap[y as usize][x as usize] = (preference, relevance);
     }
-    debug!("{heatmap:#?}");
+
+    trace!("{heatmap:#?}");
     Ok(heatmap)
 }
 
