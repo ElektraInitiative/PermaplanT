@@ -8,14 +8,15 @@ CREATE OR REPLACE FUNCTION calculate_score(
     x_pos INTEGER,
     y_pos INTEGER
 )
-RETURNS REAL AS $$
+RETURNS SCORE AS $$
 DECLARE
-    plant_relation RECORD;
-    distance REAL;
-    weight REAL;
-    score REAL := 0;
+    score SCORE;
+    plants SCORE;
 BEGIN
-    score := 0.5 + calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
+    plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
+
+    score.preference := 0.5 + plants.preference;
+    score.relevance := 0.2 + plants.relevance;
 
     RETURN score;
 END;
