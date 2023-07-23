@@ -53,7 +53,10 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
                 -e 'AUTH_DISCOVERY_URI=unused' \
                 -e 'AUTH_CLIENT_ID=unused' \
                 -e 'RUSTFLAGS=-D warnings' \
-                -e 'RUSTDOCFLAGS=-D warnings'"
+                -e 'RUSTDOCFLAGS=-D warnings' \
+                -v /var/cache/rust/cargo/registry:/usr/local/cargo/registry \
+                -v /var/cache/rust/cargo/registry:/usr/local/cargo/git \
+                "
                 ) {
                     checkout scm
                     wait_for_db()
