@@ -5,9 +5,9 @@ use actix_web::web::Data;
 use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::{MapSearchParameters, Page, UpdateMapDto};
+use crate::model::dto::{BaseLayerImageDto, MapSearchParameters, Page, UpdateMapDto};
 use crate::model::dto::{NewLayerDto, PageParameters};
-use crate::model::entity::Layer;
+use crate::model::entity::{BaseLayerImages, Layer};
 use crate::model::r#enum::layer_type::LayerType;
 use crate::{
     error::ServiceError,
@@ -55,15 +55,34 @@ pub async fn create(
 ) -> Result<MapDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
     let result = Map::create(new_map, user_id, &mut conn).await?;
-    for layer in &LAYER_TYPES {
+    for layer_type in &LAYER_TYPES {
         let new_layer = NewLayerDto {
             map_id: result.id,
-            type_: *layer,
-            name: format!("{layer} Layer"),
+            type_: *layer_type,
+            name: format!("{layer_type} Layer"),
             is_alternative: false,
         };
-        Layer::create(new_layer, &mut conn).await?;
+        let layer = Layer::create(new_layer, &mut conn).await?;
+
+        // Immediately initialize a base layer image,
+        // because the frontend would always have to create one
+        // anyway.
+        if layer.type_ == LayerType::Base {
+            BaseLayerImages::create(
+                BaseLayerImageDto {
+                    id: Uuid::new_v4(),
+                    layer_id: layer.id,
+                    path: String::new(),
+                    rotation: 0.0,
+                    scale: 100.0,
+                    action_id: Uuid::nil(),
+                },
+                &mut conn,
+            )
+            .await?;
+        }
     }
+
     Ok(result)
 }
 

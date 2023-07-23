@@ -8,6 +8,7 @@ import enums from './enums.json';
 import featureDescriptions from './featureDescriptions.json';
 import fileSelector from './fileSelector.json';
 import geomap from './geomap.json';
+import grid from './grid.json';
 import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
@@ -36,6 +37,7 @@ const de = {
   enums,
   featureDescriptions,
   geomap,
+  grid,
   imprint,
   landingPage,
   pricing,

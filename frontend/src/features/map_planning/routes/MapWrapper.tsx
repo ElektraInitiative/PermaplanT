@@ -2,6 +2,7 @@ import { getPlantings } from '../api/getPlantings';
 import { Map } from '../components/Map';
 import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
+import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { LayerType, LayerDto } from '@/bindings/definitions';
@@ -64,6 +65,26 @@ function usePlantLayer({ mapId, layerId }: UseLayerParams) {
 }
 
 /**
+ * Hook that initializes the base layer by fetching it and adding it to the store.
+ */
+function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
+  const query = useQuery({
+    queryKey: ['baselayer', mapId, layerId],
+    queryFn: () => getBaseLayerImage(mapId, layerId),
+    refetchOnWindowFocus: false,
+    enabled,
+  });
+
+  useEffect(() => {
+    if (!query?.data) return;
+
+    useMapStore.getState().initBaseLayer(query.data);
+  }, [mapId, layerId, query?.data]);
+
+  return query;
+}
+
+/**
  * Hook that initializes the map by fetching all layers and layer elements.
  */
 function useInitializeMap() {
@@ -93,6 +114,13 @@ function useInitializeMap() {
     // The enabled flag prevents the query from being executed with an invalid layer id.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
     layerId: plantLayer?.id!,
+  });
+
+  useBaseLayer({
+    mapId,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+    layerId: baseLayer?.id!,
+    enabled: !!baseLayer?.id,
   });
 
   useEffect(() => {

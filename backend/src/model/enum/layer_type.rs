@@ -9,7 +9,7 @@ use utoipa::ToSchema;
 
 /// Enum for all possible layer types.
 #[typeshare]
-#[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema, Clone, Copy)]
+#[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema, Clone, Copy, PartialEq, Eq)]
 #[ExistingTypePath = "crate::schema::sql_types::LayerType"]
 pub enum LayerType {
     /// Identifier for Base Layer.

@@ -5,7 +5,8 @@ use actix_web::{middleware::NormalizePath, web};
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::controller::{
-    config, layers, map, plant_layer, planting_suggestions, plantings, plants, seed, sse,
+    base_layer_image, config, layers, map, plant_layer, planting_suggestions, plantings, plants,
+    seed, sse,
 };
 
 use super::auth::middleware::validator;
@@ -39,6 +40,15 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                         .service(layers::find_by_id)
                         .service(layers::create)
                         .service(layers::delete)
+                        .service(
+                            web::scope("/base/images")
+                                .service(base_layer_image::create)
+                                .service(base_layer_image::update)
+                                .service(base_layer_image::delete),
+                        )
+                        .service(
+                            web::scope("/base/{layer_id}/images").service(base_layer_image::find),
+                        )
                         .service(
                             web::scope("/plants")
                                 .service(plant_layer::heatmap)

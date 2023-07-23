@@ -4,7 +4,7 @@ import { createAPI } from '@/config/axios';
 export async function updateRemoveDatePlanting(
   mapId: number,
   id: string,
-  planting: Pick<UpdateRemoveDatePlantingDto, 'removeDate'>,
+  planting: Pick<UpdateRemoveDatePlantingDto, 'removeDate' | 'actionId'>,
 ) {
   const http = createAPI();
 

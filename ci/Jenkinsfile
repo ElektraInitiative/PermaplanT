@@ -9,38 +9,65 @@ def wait_for_db() {
     }
 }
 
+/**
+ * Aborts the previous build in progress if it exists and the current build is not on the "master" branch.
+ * This method is used to prevent multiple concurrent builds for non-master branches.
+ */
 def abortPreviousRunUnlessMaster() {
-  // We never want to abort builds of the master branch
-  if (env.BRANCH_NAME=="master") return;
-  def exec = currentBuild
+    if (env.BRANCH_NAME == 'master') { return }
+    def exec = currentBuild
              ?.rawBuild
              ?.getPreviousBuildInProgress()
              ?.getExecutor()
-  if(exec) {
-    exec.interrupt(
+    if (exec) {
+        exec.interrupt(
       Result.ABORTED,
       new CauseOfInterruption.UserInterruption(
         "Aborted by Build#${currentBuild.number}"
       )
     )
-  }
+    }
 }
 
-def runDockerWithPostgresSidecar(String command, String stashsrc='', String stashdir='') {
+/**
+ * This method runs a Docker container with a Postgres sidecar and executes the specified command inside the container.
+ *
+ * @param commands The list of commands to be executed inside the Docker container.
+ * @param stashsrcList The list of file paths to be stashed (optional).
+ * @param stashdirList The list of stash directory names for stashing files (optional).
+ * @return A closure representing the defined Jenkins pipeline steps.
+ * @throws UnequalStashException If the stashed files are not equal in count between stashsrcList and
+ * stashdirList.
+ */
+def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], List<String> stashdir = []) {
     return {
         node('docker') {
             node_info()
             checkout scm
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+            def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci' -e 'BIND_ADDRESS_HOST=127.0.0.1' -e 'BIND_ADDRESS_PORT=8080' -e 'AUTH_DISCOVERY_URI=unused' -e 'AUTH_CLIENT_ID=unused' -e 'RUSTFLAGS=-D warnings' -e 'RUSTDOCFLAGS=-D warnings'") {
+                rustImage.inside("--link ${c.id}:db \
+                -e 'DATABASE_URL=postgres://ci:ci@db/ci' \
+                -e 'BIND_ADDRESS_HOST=127.0.0.1' \
+                -e 'BIND_ADDRESS_PORT=8080' \
+                -e 'AUTH_DISCOVERY_URI=unused' \
+                -e 'AUTH_CLIENT_ID=unused' \
+                -e 'RUSTFLAGS=-D warnings' \
+                -e 'RUSTDOCFLAGS=-D warnings'"
+                ) {
                     checkout scm
                     wait_for_db()
                     sh './ci/build-scripts/build-schema.sh'
-                    // Because in Deploy the path for /target is a env in permaplant-deploy.sh, we can only solve it with prepending cd backend
+                    // Because in Deploy the path for /target is a
+                    //env in permaplant-deploy.sh, we can only solve it with prepending cd backend
                     sh "cd backend && ${command}"
-                    if (stashsrc != null && stashdir != '') {
-                        stash includes: stashsrc, name: stashdir
+                    if (stashsrc && stashdir) {
+                        if (stashsrc.size() != stashdir.size()) {
+                            throw new UnequalStashException()
+                        }
+                        for (int i = 0; i < stashsrc.size(); i++) {
+                            stash includes: stashsrc[i], name: stashdir[i]
+                        }
                     }
                 }
             }
@@ -51,13 +78,15 @@ def runDockerWithPostgresSidecar(String command, String stashsrc='', String stas
 def testAndBuildMdbook() {
     return {
         node('docker') {
+            node_info()
             checkout scm
-            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
-            mdbook_image.inside {
-                checkout scm
-                stage('test-and-build'){
-                    sh "mdbook test"
-                    sh 'mdbook build'
+            docker.build('permaplant-doc:build', './doc').inside {
+                stage('test') {
+                    sh 'make test-mdbook'
+                }
+
+                stage('build') {
+                    sh 'make build-mdbook'
                     stash includes: 'book/', name: 'mdbook'
                 }
             }
@@ -65,40 +94,52 @@ def testAndBuildMdbook() {
     }
 }
 
+/**
+ * Calculates the checksum of a given file.
+ *
+ * @param file The name of the file for which the checksum should be calculated.
+ * @return The checksum of the file as a trimmed string.
+ */
+def checksum(String file) {
+    return sh(returnStdout: true, script: "checksum $file").trim()
+}
+
 def testAndBuildFrontend() {
     return {
         node('docker') {
             node_info()
             checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
-            node_image.inside {
+            def nodeImage = docker.build('permaplant-node', './ci/container-images/permaplant-node')
+            nodeImage.inside {
                 checkout scm
                 unstash 'definitions.ts'
-                stage('test'){
-                    dir("frontend") {
-                        def checksum_before = sh(returnStdout: true, script: 'checksum package-lock.json').trim()
-                        sh "npm i"
-                        def checksum_after = sh(returnStdout: true, script: 'checksum package-lock.json').trim()
-                        echo "Checking if package-lock.json is modified by npm install"
-                        if (checksum_before != checksum_after) throw new PackageLockJsonModifiedException();
-                        sh "npm ci"
-                        sh "npm run format:check"
-                        sh "npm run lint"
-                        sh "npm run test"
+                stage('test') {
+                    // groovylint-disable-next-line
+                    dir('frontend') {
+                        def checksumBefore = checksum('package-lock.json')
+                        sh 'npm i'
+                        def checksumAfter = checksum('package-lock.json')
+                        echo 'Checking if package-lock.json is modified by npm install'
+                        // groovylint-disable-next-line
+                        if (checksumBefore != checksumAfter) { throw new PackageLockJsonModifiedException() }
+                        sh 'npm ci'
+                        sh 'npm run format:check'
+                        sh 'npm run lint'
+                        sh 'npm run test'
                     }
                 }
 
-                stage('build'){
+                stage('build') {
                     sh './ci/build-scripts/build-frontend.sh'
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
 
-                stage('typedoc'){
+                stage('typedoc') {
                     sh 'cd frontend && npm run doc'
                     stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
                 }
 
-                stage('storybook'){
+                stage('storybook') {
                     sh './ci/build-scripts/build-storybook.sh'
                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
@@ -107,51 +148,54 @@ def testAndBuildFrontend() {
     }
 }
 
-// PIPELINE BEGIN
-abortPreviousRunUnlessMaster()
-
-// REQUIRED for Deployment
-// see Jenkinsfile.release
-stage('FMT check  Build Schema'){
-    node('docker') {
-        node_info()
-        checkout scm
-        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
-        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                checkout scm
-                wait_for_db()
-                withEnv(['RUSTFLAGS=-D warnings', 'RUSTDOCFLAGS=-D warnings']) {
-                    // Workaround: we can't stop rustfmt from linting the generated schema.rs
-                    dir("backend") {
-                        sh "/bin/bash -c 'echo \"\" > src/schema.rs'"
-                        sh "cargo fmt --check"
-                    // End of Workaround
-                    }
-                    sh './ci/build-scripts/build-schema.sh'
-                }
-                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
-            }
-        }
+def testMigrations() {
+    if (env.BRANCH_NAME!="master") {
+        return "make migration && make migration-redo && make migration-redo-a"
+    } else {
+        return "make migration && make migration-redo"
     }
 }
 
-stage('Parallel Stage') {
-    timeout(time: 2, unit: 'HOURS'){
-        try {
+// PIPELINE BEGIN
+abortPreviousRunUnlessMaster()
+
+timeout(time: 2, unit: 'HOURS') {
+    try {
+        stage('Sanity') {
+            List<String> schemaStashsrc = [
+                'backend/src/schema.rs','frontend/src/bindings/definitions.ts'
+            ]
+            List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
             parallel(
-                    "cargo-build": runDockerWithPostgresSidecar('cargo build --release && cargo clippy', 'backend/target/release/backend', 'backend'),
-                    "cargo-check": runDockerWithPostgresSidecar('cargo check && cargo doc'),
-                    "cargo-test": runDockerWithPostgresSidecar('cargo test'),
-                    "frontend": testAndBuildFrontend(),
-                    "mdbook": testAndBuildMdbook(),
+                    // Workaround: we can't stop rustfmt from linting the generated schema.rs so we empty the file before.
+                    "cargo-fmt": runDockerWithPostgresSidecar(
+                        "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
+                        ),
+                    "schema": runDockerWithPostgresSidecar(
+                        'echo schema test', schemaStashsrc, schemaStashdir
+                        ),
+                    "migration": runDockerWithPostgresSidecar(testMigrations()),
                     failFast: true
             )
-        } catch(err) {
-            deleteDir();
-            throw err;
         }
+
+        stage('Test and Build') {
+            parallel(
+                    'cargo-build': runDockerWithPostgresSidecar(
+                        'cargo build --release && cargo clippy',
+                        ['backend/target/release/backend'],
+                        ['backend']
+                    ),
+                    'cargo-check': runDockerWithPostgresSidecar('cargo check && cargo doc'),
+                    'cargo-test': runDockerWithPostgresSidecar('cargo test'),
+                    'frontend': testAndBuildFrontend(),
+                    'mdbook': testAndBuildMdbook(),
+                    failFast: true
+            )
+        }
+    } catch(err) {
+        deleteDir();
+        throw err;
     }
 }
 
@@ -169,7 +213,7 @@ stage('Deploy PR') {
             echo 'Resetting the CI DB ...'
             sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
-            echo "Unstash Artifacts"
+            echo 'Unstash Artifacts'
             unstash 'schema.rs'
             unstash 'frontend'
             unstash 'backend'
@@ -205,7 +249,7 @@ if (env.BRANCH_NAME == 'master') {
 
                 checkout scm
 
-                echo "Unstash Artifacts"
+                echo 'Unstash Artifacts'
                 unstash 'schema.rs'
                 unstash 'frontend'
                 unstash 'backend'
@@ -217,16 +261,16 @@ if (env.BRANCH_NAME == 'master') {
                 sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
             }
         }
-    } catch(Exception e) {
+    } catch (Exception e) { // groovylint-disable-line
         // If master is failing we want to know ASAP so send a mail.
         // collect changes since last build
-        def changes = currentBuild.changeSets.collect() {
-        it.collect() {
-            "* ${it.getCommitId().take(7)} - ${it.getAuthor()} - ${it.getMsg().take(40)}"
+        def changes = currentBuild.changeSets.collect {
+            it.collect {
+                "* ${it.getCommitId().take(7)} - ${it.getAuthor()} - ${it.getMsg().take(40)}"
         }.join('\n')
         }.join('\n')
         if (!changes) {
-        changes = "* No new changes since last build"
+            changes = '* No new changes since last build'
         }
 
         def message = """\
@@ -239,11 +283,11 @@ ${changes}
 
 Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
 """
-    mail subject: "Build ${JOB_NAME} failed",
+        mail subject: "Build ${JOB_NAME} failed",
         body: message,
-        replyTo: "noreply@libelektra.org",
-        to: "build@libelektra.org"
-        throw err;
+        replyTo: 'noreply@libelektra.org',
+        to: 'build@libelektra.org'
+        throw err
     }
 }
 
@@ -252,6 +296,12 @@ Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
 
 class PackageLockJsonModifiedException extends Exception {
     PackageLockJsonModifiedException() {
-        super("package-lock.json was modified by npm install. Did you maybe use a wrong node version?")
+        super('package-lock.json was modified by npm install. Did you maybe use a wrong node version?')
+    }
+}
+
+class UnequalStashException extends Exception {
+    UnequalStashException() {
+        super("The stashed files count in stashsrc and stashdir lists must be equal.")
     }
 }

@@ -22,20 +22,26 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- squashed migrations _(temmey)_
+- commented out properties in table plants for now to improve build time. _(temmey)_
+- set all enums in DB to lowercase _(temmey)_
+- _()_
+- _()_
+- _()_
+- _()_
+- Add grid functionality. _(Moritz)_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
+- Handle events of same user, discard events in same tab _(Paul)_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Fix a bug in loading images _(Paul)_
 - _()_
 - _()_
 - _()_
@@ -43,6 +49,11 @@ Syntax: `- short text describing the change _(Your Name)_`
 - updated schema.patch documentation _(temmey)_
 - CI: Improve pipeleine parallelization #577 _(4ydan)_
 - _()_
+- _()_
+- CI: Improve pipeline parallelization #577 _(4ydan)_
+- CI: Add groovy pre-commit hook #685 _(4ydan)_
+- CI: Optimized mdbook docker image #585 _(4ydan)_
+- CI: Test `diesel` migrations in PR and master #134 _(4ydan)_
 - _()_
 - _()_
 - _()_
