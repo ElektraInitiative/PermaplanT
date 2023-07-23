@@ -161,9 +161,6 @@ def testMigrations() {
 
 // PIPELINE BEGIN
 abortPreviousRunUnlessMaster()
-dir('cargo') {
-    deleteDir();
-}
 timeout(time: 2, unit: 'HOURS') {
     try {
         stage('Sanity') {
