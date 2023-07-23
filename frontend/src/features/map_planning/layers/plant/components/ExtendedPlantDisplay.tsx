@@ -12,6 +12,14 @@ class ExtendedPlantsSummary implements PlantsSummaryDto {
   }
 
   get displayName() {
+    if (this.unique_name.includes("'")) {
+      const splitString = this.unique_name.split("'");
+      return {
+        common_name: this.common_name_en ? this.common_name_en.join(', ') : '',
+        unique_name: splitString[0].trim(),
+        culitvar: splitString[1].trim(),
+      };
+    }
     return {
       common_name: this.common_name_en ? this.common_name_en.join(', ') : '',
       unique_name: this.unique_name,
@@ -24,7 +32,8 @@ const ExtendedPlantsSummaryDisplayName = ({ plant }: { plant: PlantsSummaryDto }
 
   return (
     <span>
-      {transformedPlant.displayName.common_name}(<i>{transformedPlant.displayName.unique_name}</i>)
+      {transformedPlant.displayName.common_name}(<i>{transformedPlant.displayName.unique_name}</i>
+      {transformedPlant.displayName.culitvar ? ` '${transformedPlant.displayName.culitvar}'` : ''})
     </span>
   );
 };
