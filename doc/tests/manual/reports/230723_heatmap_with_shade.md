@@ -234,5 +234,5 @@ curl -o file.png --location 'http://localhost:8080/api/maps/1/layers/plants/heat
 
 7. Verify:
 
-- The bottom left corner should be grey, everything else should be green.
-- The top left corner should be greener than the rest as there is shade there and plant with id 1 likes shade.
+- The bottom left corner should be transparent, everything else should be green.
+- The top left corner should be green (as there is shade there and plant with id 1 likes shade); the rest should be yellow.

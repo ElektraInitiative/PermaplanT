@@ -58,9 +58,9 @@ fn matrix_to_image(matrix: &Vec<Vec<(f32, f32)>>) -> Result<Vec<u8>, ServiceErro
         let (preference, relevance) = matrix[y as usize][x as usize];
 
         // The closer data is to 1 the green it gets.
-        let red = preference.mul_add(-128.0, 128.0);
-        let green = preference.mul_add(255.0 - 128.0, 128.0);
-        let blue = preference.mul_add(-128.0, 128.0);
+        let red = preference.mul_add(-255.0, 255.0);
+        let green = preference * 255.0;
+        let blue = 0.0_f32;
         let alpha = relevance * 255.0;
 
         *pixel = Rgba([red as u8, green as u8, blue as u8, alpha as u8]);

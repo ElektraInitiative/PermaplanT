@@ -122,7 +122,7 @@ async fn test_check_heatmap_dimensionality_succeeds() {
     assert_eq!(
         ((10 / GRANULARITY) as u32, (100 / GRANULARITY) as u32),
         image.dimensions()
-    ); // smaller by factor of 10 because of granularity
+    );
 }
 
 #[actix_rt::test]
@@ -155,7 +155,7 @@ async fn test_check_heatmap_non_0_xmin_succeeds() {
 }
 
 /// Test with a map geometry that excludes a corner.
-/// The missing corner should be colored entirely in grey, as you cannot put plants there.
+/// The missing corner should be transparent, as you cannot put plants there.
 #[actix_rt::test]
 async fn test_heatmap_with_missing_corner_succeeds() {
     let pool = init_test_database(|conn| {
@@ -189,10 +189,10 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     let top_right_pixel = image.get_pixel(8, 2);
     let bottom_left_pixel = image.get_pixel(2, 8);
     let bottom_right_pixel = image.get_pixel(8, 8);
-    assert_eq!([64, 191, 64, 51], top_left_pixel.0);
-    assert_eq!([64, 191, 64, 51], top_right_pixel.0);
-    assert_eq!([128, 128, 128, 0], bottom_left_pixel.0);
-    assert_eq!([64, 191, 64, 51], bottom_right_pixel.0);
+    assert_eq!([127, 127, 0, 51], top_left_pixel.0);
+    assert_eq!([127, 127, 0, 51], top_right_pixel.0);
+    assert_eq!([255, 0, 0, 0], bottom_left_pixel.0);
+    assert_eq!([127, 127, 0, 51], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
@@ -239,10 +239,10 @@ async fn test_heatmap_with_shadings_succeeds() {
     // (0,0) is be top left.
     let top_left_pixel = image.get_pixel(1, 1);
     let bottom_right_pixel = image.get_pixel(40, 80);
-    // The shading is the exact opposite of the plants preference, therefore the map will be grey.
-    assert_eq!([128, 128, 128, 178], top_left_pixel.0);
-    // Green everywhere else.
-    assert_eq!([64, 191, 64, 51], bottom_right_pixel.0);
+    // The shading is the exact opposite of the plants preference, therefore the map will be red.
+    assert_eq!([255, 0, 0, 178], top_left_pixel.0);
+    // Yellow everywhere else.
+    assert_eq!([127, 127, 0, 51], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
