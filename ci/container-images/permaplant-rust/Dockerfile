@@ -5,3 +5,4 @@ RUN rustup component add clippy rustfmt
 RUN cargo install diesel_cli@2.0.1 --no-default-features --features postgres
 RUN cargo install typeshare-cli
 RUN chown 47110:47110 -R /usr/local/cargo
+COPY ../../../backend ./backend

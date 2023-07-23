@@ -58,7 +58,6 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
                 -v ${WORKSPACE}/cargo/git:/usr/local/cargo/git \
                 "
                 ) {
-                    checkout scm
                     wait_for_db()
                     sh './ci/build-scripts/build-schema.sh'
                     // Because in Deploy the path for /target is a
@@ -161,13 +160,6 @@ def testMigrations() {
 
 // PIPELINE BEGIN
 abortPreviousRunUnlessMaster()
-wrappers {
-    preBuildCleanup {
-        excludePattern('/cargo/*')
-        excludePattern('/cargo/registry')
-        excludePattern('/cargo/git')
-    }
-}
 
 timeout(time: 2, unit: 'HOURS') {
     try {
