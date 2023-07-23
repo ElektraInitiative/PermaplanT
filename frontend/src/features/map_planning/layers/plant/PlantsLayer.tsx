@@ -1,8 +1,8 @@
 import useMapStore from '../../store/MapStore';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
+import ExtendedPlantsSummaryDisplayName from './components/ExtendedPlantDisplay';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { useExtendedPlantSummaryTransformed } from './hooks/useExtendedPlantsSummary';
 import { LayerType, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
@@ -186,7 +186,6 @@ function PlantsLayer(props: PlantsLayerProps) {
 
 function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
   const selectPlant = useMapStore((state) => state.selectPlantForPlanting);
-  const transformendPlant = useExtendedPlantSummaryTransformed(plant);
 
   return (
     <motion.div
@@ -202,7 +201,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
       }}
     >
       <div className="flex flex-col items-center justify-center">
-        <span>{transformendPlant.displayName}</span>
+        <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
       </div>
       <div className="flex items-center justify-center">
         <IconButton

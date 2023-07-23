@@ -1,3 +1,4 @@
+import ExtendedPlantsSummaryDisplayName from './ExtendedPlantDisplay';
 import { PlantsSummaryDto } from '@/bindings/definitions';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 
@@ -26,10 +27,7 @@ export function PlantListItem({ plant, onClick, isHighlighted = false }: PlantLi
       >
         <PlantIcon className="shrink-0" />
         <div className="text-left">
-          <span className="mr-1 inline-block text-sm">{plant.unique_name}</span>
-          {plant.common_name_en && (
-            <span className="inline-block text-sm">({plant.common_name_en})</span>
-          )}
+          <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
         </div>
       </button>
     </li>
