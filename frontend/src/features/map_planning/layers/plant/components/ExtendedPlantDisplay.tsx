@@ -15,9 +15,9 @@ class ExtendedPlantsSummary implements PlantsSummaryDto {
     this.common_name_en = plant.common_name_en;
   }
 
-  get displayName() {
+  public get displayName() {
     const common_name = this.common_name_en ? this.common_name_en.map(capitalizeFirstLetter) : null;
-    const common_name_joined = common_name ? common_name.join(', ') : null;
+    const common_name_joined = common_name ? common_name.join(', ') : '';
     if (this.unique_name.includes("'")) {
       const splitString = this.unique_name.split("'");
 
@@ -59,4 +59,4 @@ const ExtendedPlantsSummaryDisplayName = ({ plant }: { plant: PlantsSummaryDto }
     </span>
   );
 };
-export default ExtendedPlantsSummaryDisplayName;
+export { ExtendedPlantsSummaryDisplayName, ExtendedPlantsSummary };
