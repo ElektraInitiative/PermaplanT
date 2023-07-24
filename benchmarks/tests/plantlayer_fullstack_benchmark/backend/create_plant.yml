@@ -1,17 +1,17 @@
 concurrency: 8   # number of cores used for the benchmark
 base: 'http://localhost:8080'
-iterations: 1000
+iterations: 8
 rampup: 2
 
 plan:
   - name: Add plant
     request:
-      url: http://localhost:8080/api/maps/1/layers/plants/plantings
+      url: /api/maps/4/layers/plants/plantings
       method: POST
       body: '{{ item.plants }}'
       headers:
-        Authorization: {{ BEARER_TOKEN }}
+        Authorization: '{{ BEARER_TOKEN }}'
         Content-Type: application/json
-      with_items_from_csv:
-        file_name: ./new_plants.csv
-        quote_char: "\'"
+    with_items_from_csv:
+      file_name: ./new_plants.csv
+      quote_char: "\'"
