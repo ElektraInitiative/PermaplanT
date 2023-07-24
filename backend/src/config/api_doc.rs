@@ -10,9 +10,8 @@ use utoipa_swagger_ui::SwaggerUi;
 use super::auth::Config;
 use crate::{
     controller::{
-        base_layer_image, 
-        blossoms, config, guided_tours, layers, map, plant_layer, planting_suggestions, plantings,
-        plants, seed, user_data,
+        base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer,
+        planting_suggestions, plantings, plants, seed, user_data,
     },
     model::{
         dto::{
@@ -20,10 +19,10 @@ use crate::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            BaseLayerImageDto, BlossomsGainedDto, ConfigDto, Coordinates, GuidedToursDto, LayerDto, MapDto,
-            NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto, PagePlantsSummaryDto,
-            PageSeedDto, PlantsSummaryDto, RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImageDto,
-            UpdateGuidedToursDto, UpdateMapDto, UserDataDto,
+            BaseLayerImageDto, BlossomsGainedDto, ConfigDto, Coordinates, GuidedToursDto, LayerDto,
+            MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto,
+            PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto, RelationsDto,
+            SeedDto, UpdateBaseLayerImageDto, UpdateGuidedToursDto, UpdateMapDto, UserDataDto,
         },
         r#enum::{
             privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,

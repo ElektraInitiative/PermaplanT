@@ -22,8 +22,9 @@ use postgis_diesel::types::Point;
 use postgis_diesel::types::Polygon;
 use uuid::Uuid;
 
-use crate::schema::{base_layer_images, 
-    blossoms, blossoms_gained, guided_tours, layers, maps, plants, seeds, user_data,
+use crate::schema::{
+    base_layer_images, blossoms, blossoms_gained, guided_tours, layers, maps, plants, seeds,
+    user_data,
 };
 
 use super::r#enum::experience::Experience;
