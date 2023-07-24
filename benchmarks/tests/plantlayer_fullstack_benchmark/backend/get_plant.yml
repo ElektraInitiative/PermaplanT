@@ -1,0 +1,12 @@
+concurrency: 10   # number of cores used for the benchmark
+base: 'http://localhost:8080'
+iterations: 20000
+rampup: 2
+
+plan:
+  - name: Add plant
+    request:
+      url: /api/maps/5/layers/plants/plantings?layer_id=10&relative_to_date=2023-07-24
+      method: GET
+      headers:
+        Authorization: '{{ BEARER_TOKEN }}'
