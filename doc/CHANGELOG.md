@@ -32,7 +32,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add grid functionality. _(Moritz)_
 - _()_
 - _()_
-- _()_
+- update sqlfluff config to force upper&lowercase _(temmey)_
 - _()_
 - _()_
 - Handle events of same user, discard events in same tab _(Paul)_
