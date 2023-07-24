@@ -1,10 +1,10 @@
-//! Tests for [`crate::controller::user_data`].
+//! Tests for [`crate::controller::users`].
 
 use actix_http::StatusCode;
 use actix_web::{http::header, test};
 use diesel_async::scoped_futures::ScopedFutureExt;
 
-use crate::model::{dto::UserDataDto, r#enum::salutation::Salutation};
+use crate::model::{dto::UsersDto, r#enum::salutation::Salutation};
 
 use super::util::{init_test_app, init_test_database};
 
@@ -13,7 +13,7 @@ async fn test_can_create_user_data() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let user_data = UserDataDto {
+    let user_data = UsersDto {
         salutation: Salutation::Mr,
         title: None,
         country: "Austria".to_string(),

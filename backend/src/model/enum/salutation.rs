@@ -22,4 +22,8 @@ pub enum Salutation {
     #[serde(rename = "Mr")]
     #[db_rename = "Mr"]
     Mr,
+    /// gender neutral salutation.
+    #[serde(rename = "Mx")]
+    #[db_rename = "Mx"]
+    Mx,
 }

@@ -31,7 +31,7 @@ async fn test_can_find_status_object() {
             diesel::insert_into(crate::schema::guided_tours::table)
                 .values((
                     &crate::schema::guided_tours::user_id.eq(user_id.clone()),
-                    &crate::schema::guided_tours::editor_tour.eq(false),
+                    &crate::schema::guided_tours::editor_tour_completed.eq(false),
                 ))
                 .execute(conn)
                 .await?;
@@ -58,7 +58,7 @@ async fn test_can_update_status_object() {
             diesel::insert_into(crate::schema::guided_tours::table)
                 .values((
                     &crate::schema::guided_tours::user_id.eq(user_id.clone()),
-                    &crate::schema::guided_tours::editor_tour.eq(false),
+                    &crate::schema::guided_tours::editor_tour_completed.eq(false),
                 ))
                 .execute(conn)
                 .await?;
@@ -70,7 +70,7 @@ async fn test_can_update_status_object() {
     let (token, app) = init_test_app_for_user(pool.clone(), user_id).await;
 
     let status_update = UpdateGuidedToursDto {
-        editor_tour: Some(true),
+        editor_tour_completed: Some(true),
     };
 
     let resp = test::TestRequest::patch()
@@ -82,5 +82,5 @@ async fn test_can_update_status_object() {
     assert_eq!(resp.status(), StatusCode::OK);
 
     let updated_object: GuidedToursDto = test::read_body_json(resp).await;
-    assert_ne!(updated_object.editor_tour, false);
+    assert_ne!(updated_object.editor_tour_completed, false);
 }

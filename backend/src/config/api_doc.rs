@@ -11,7 +11,7 @@ use super::auth::Config;
 use crate::{
     controller::{
         base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer,
-        planting_suggestions, plantings, plants, seed, user_data,
+        planting_suggestions, plantings, plants, seed, users,
     },
     model::{
         dto::{
@@ -19,10 +19,10 @@ use crate::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdatePlantingDto,
             },
-            BaseLayerImageDto, BlossomsGainedDto, ConfigDto, Coordinates, GuidedToursDto, LayerDto,
+            BaseLayerImageDto, ConfigDto, Coordinates, GainedBlossomsDto, GuidedToursDto, LayerDto,
             MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto,
             PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto, RelationsDto,
-            SeedDto, UpdateBaseLayerImageDto, UpdateGuidedToursDto, UpdateMapDto, UserDataDto,
+            SeedDto, UpdateBaseLayerImageDto, UpdateGuidedToursDto, UpdateMapDto, UsersDto,
         },
         r#enum::{
             privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
@@ -197,16 +197,16 @@ struct PlantingSuggestionsApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        user_data::create
+        users::create
     ),
     components(
         schemas(
-            UserDataDto
+            UsersDto
         )
     ),
     modifiers(&SecurityAddon)
 )]
-struct UserDataApiDoc;
+struct UsersApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all guided tours endpoints.
 #[derive(OpenApi)]
@@ -234,7 +234,7 @@ struct GuidedToursApiDoc;
     ),
     components(
         schemas(
-            BlossomsGainedDto
+            GainedBlossomsDto
         )
     ),
     modifiers(&SecurityAddon)
@@ -252,7 +252,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(PlantLayerApiDoc::openapi());
     openapi.merge(BaseLayerImagesApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
-    openapi.merge(UserDataApiDoc::openapi());
+    openapi.merge(UsersApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }

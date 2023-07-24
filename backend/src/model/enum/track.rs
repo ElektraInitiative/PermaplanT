@@ -10,19 +10,19 @@ use utoipa::ToSchema;
 #[ExistingTypePath = "crate::schema::sql_types::Track"]
 pub enum Track {
     /// Track for Blossoms aimed at new users.
-    #[serde(rename = "Beginners Track")]
-    #[db_rename = "Beginners Track"]
-    BeginnersTrack,
+    #[serde(rename = "beginner")]
+    #[db_rename = "beginner"]
+    Beginner,
     /// Track for Blossoms aimed to be repeated every season.
-    #[serde(rename = "Seasonal Track")]
-    #[db_rename = "Seasonal Track"]
-    SeasonalTrack,
+    #[serde(rename = "seasonal")]
+    #[db_rename = "seasonal"]
+    Seasonal,
     /// Track for Blossoms aimed at users that want to do everything PermaplanT has to offer.
-    #[serde(rename = "Completionist Track")]
-    #[db_rename = "Completionist Track"]
-    CompletionistTrack,
+    #[serde(rename = "completionist")]
+    #[db_rename = "completionist"]
+    Completionist,
     /// Track for Blossoms aimed at user that want to prove their expertise by helping others.
-    #[serde(rename = "Expert Track")]
-    #[db_rename = "Expert Track"]
-    ExpertTrack,
+    #[serde(rename = "expert")]
+    #[db_rename = "expert"]
+    Expert,
 }

@@ -1,13 +1,13 @@
-//! Contains DTO implementations for [`UserData`].
+//! Contains DTO implementations for [`Users`].
 
 use uuid::Uuid;
 
-use crate::model::entity::UserData;
+use crate::model::entity::Users;
 
-use super::UserDataDto;
+use super::UsersDto;
 
-impl From<(UserDataDto, Uuid)> for UserData {
-    fn from((user_data, user_id): (UserDataDto, Uuid)) -> Self {
+impl From<(UsersDto, Uuid)> for Users {
+    fn from((user_data, user_id): (UsersDto, Uuid)) -> Self {
         Self {
             id: user_id,
             salutation: user_data.salutation,
@@ -25,8 +25,8 @@ impl From<(UserDataDto, Uuid)> for UserData {
     }
 }
 
-impl From<UserData> for UserDataDto {
-    fn from(user_data: UserData) -> Self {
+impl From<Users> for UsersDto {
+    fn from(user_data: Users) -> Self {
         Self {
             salutation: user_data.salutation,
             title: user_data.title,
@@ -43,8 +43,8 @@ impl From<UserData> for UserDataDto {
     }
 }
 
-impl<T> From<(T, UserData)> for UserDataDto {
-    fn from((_, user_data): (T, UserData)) -> Self {
+impl<T> From<(T, Users)> for UsersDto {
+    fn from((_, user_data): (T, Users)) -> Self {
         Self::from(user_data)
     }
 }

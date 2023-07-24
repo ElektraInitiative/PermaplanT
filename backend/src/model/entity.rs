@@ -10,7 +10,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
-pub mod user_data_impl;
+pub mod users_impl;
 
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
@@ -23,8 +23,7 @@ use postgis_diesel::types::Polygon;
 use uuid::Uuid;
 
 use crate::schema::{
-    base_layer_images, blossoms, blossoms_gained, guided_tours, layers, maps, plants, seeds,
-    user_data,
+    base_layer_images, blossoms, gained_blossoms, guided_tours, layers, maps, plants, seeds, users,
 };
 
 use super::r#enum::experience::Experience;
@@ -871,9 +870,9 @@ pub struct BaseLayerImages {
 }
 
 #[derive(Insertable, Identifiable, Queryable)]
-#[diesel(table_name = user_data)]
-/// The `UserData` entity.
-pub struct UserData {
+#[diesel(table_name = users)]
+/// The `Users` entity.
+pub struct Users {
     /// The id of the user from Keycloak.
     pub id: Uuid,
     /// The preferred salutation of the user.
@@ -907,14 +906,14 @@ pub struct GuidedTours {
     /// The id of the user from Keycloak.
     pub user_id: Uuid,
     /// A flag indicating if the Map Editor Guided Tour was completed.
-    pub editor_tour: bool,
+    pub editor_tour_completed: bool,
 }
 
 #[derive(AsChangeset)]
 #[diesel(table_name = guided_tours)]
 pub struct UpdateGuidedTours {
     /// A flag indicating if the Map Editor Guided Tour was completed.
-    pub editor_tour: Option<bool>,
+    pub editor_tour_completed: Option<bool>,
 }
 
 #[derive(Identifiable, Queryable)]
@@ -934,9 +933,9 @@ pub struct Blossom {
 }
 
 #[derive(Insertable, Identifiable, Queryable)]
-#[diesel(primary_key(user_id, blossom), table_name = blossoms_gained)]
-/// The `BlossomsGained` entity.
-pub struct BlossomsGained {
+#[diesel(primary_key(user_id, blossom), table_name = gained_blossoms)]
+/// The `GainedBlossoms` entity.
+pub struct GainedBlossoms {
     /// The id of the user from Keycloak.
     pub user_id: Uuid,
     /// The title of the Blossom.

@@ -1,11 +1,11 @@
-import { BlossomsGainedDto } from '@/bindings/definitions';
+import { GainedBlossomsDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 
-export async function gainBlossom(gained_blossom: BlossomsGainedDto) {
+export async function gainBlossom(gained_blossom: GainedBlossomsDto) {
   const http = createAPI();
 
   try {
-    const response = await http.post<BlossomsGainedDto>('api/blossoms', gained_blossom);
+    const response = await http.post<GainedBlossomsDto>('api/blossoms', gained_blossom);
     return response.data;
   } catch (error) {
     throw error as Error;

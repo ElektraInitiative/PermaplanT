@@ -10,15 +10,15 @@ use utoipa::ToSchema;
 #[ExistingTypePath = "crate::schema::sql_types::Membership"]
 pub enum Membership {
     /// Membership type for supporting PermaplanT financially.
-    #[serde(rename = "Supporting Member")]
-    #[db_rename = "Supporting Member"]
-    SupportingMember,
+    #[serde(rename = "supporting")]
+    #[db_rename = "supporting"]
+    Supporting,
     /// Membership type for regular PermaplanT membership.
-    #[serde(rename = "Regular Member")]
-    #[db_rename = "Regular Member"]
-    RegularMember,
+    #[serde(rename = "regular")]
+    #[db_rename = "regular"]
+    Regular,
     /// Membership type for enjoying PermaplanT by helping others.
-    #[serde(rename = "Contributing Member")]
-    #[db_rename = "Contributing Member"]
-    ContributingMember,
+    #[serde(rename = "contributing")]
+    #[db_rename = "contributing"]
+    Contributing,
 }

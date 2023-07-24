@@ -32,7 +32,7 @@ pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
 pub mod update_map_impl;
-pub mod user_data_impl;
+pub mod users_impl;
 
 /// Contains configuration the frontend needs to run.
 #[typeshare]
@@ -458,7 +458,7 @@ pub struct HeatMapQueryParams {
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 /// All of the application managed user data.
-pub struct UserDataDto {
+pub struct UsersDto {
     /// The preferred salutation of the user.
     pub salutation: Salutation,
     /// The title(s) of the user.
@@ -488,7 +488,7 @@ pub struct UserDataDto {
 /// Completion status of all Guided Tours.
 pub struct GuidedToursDto {
     /// Whether or not the Map Editor Guided Tour was completed.
-    pub editor_tour: bool,
+    pub editor_tour_completed: bool,
 }
 
 #[typeshare]
@@ -496,13 +496,13 @@ pub struct GuidedToursDto {
 /// The information for updating an users Guided Tour status.
 pub struct UpdateGuidedToursDto {
     /// Whether or not the Map Editor Guided Tour was completed.
-    pub editor_tour: Option<bool>,
+    pub editor_tour_completed: Option<bool>,
 }
 
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 /// Information on a specific Blossom gained by a user.
-pub struct BlossomsGainedDto {
+pub struct GainedBlossomsDto {
     /// The title of the Blossom.
     pub blossom: String,
     /// The number of times this Blossom was gained by this user.

@@ -8,7 +8,7 @@ use actix_web::{
 
 use crate::{
     config::{auth::user_info::UserInfo, data::AppDataInner},
-    model::dto::BlossomsGainedDto,
+    model::dto::GainedBlossomsDto,
     service,
 };
 
@@ -28,7 +28,7 @@ use crate::{
 )]
 #[post("")]
 pub async fn gain(
-    gained_blossom_json: Json<BlossomsGainedDto>,
+    gained_blossom_json: Json<GainedBlossomsDto>,
     user_info: UserInfo,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {

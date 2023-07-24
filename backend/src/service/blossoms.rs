@@ -6,7 +6,7 @@ use uuid::Uuid;
 use crate::{
     config::data::AppDataInner,
     error::ServiceError,
-    model::{dto::BlossomsGainedDto, entity::BlossomsGained},
+    model::{dto::GainedBlossomsDto, entity::GainedBlossoms},
 };
 
 /// The user gains the specified Blossom.
@@ -14,11 +14,11 @@ use crate::{
 /// # Errors
 /// If the connection to the database could not be established.
 pub async fn gain(
-    gained_blossom: BlossomsGainedDto,
+    gained_blossom: GainedBlossomsDto,
     user_id: Uuid,
     app_data: &Data<AppDataInner>,
-) -> Result<BlossomsGainedDto, ServiceError> {
+) -> Result<GainedBlossomsDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = BlossomsGained::create(gained_blossom, user_id, &mut conn).await?;
+    let result = GainedBlossoms::create(gained_blossom, user_id, &mut conn).await?;
     Ok(result)
 }

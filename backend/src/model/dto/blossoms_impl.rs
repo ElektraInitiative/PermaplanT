@@ -1,13 +1,13 @@
-//! Contains the implementation of [`BlossomsGained`].
+//! Contains the implementation of [`GainedBlossoms`].
 
 use uuid::Uuid;
 
-use crate::model::entity::BlossomsGained;
+use crate::model::entity::GainedBlossoms;
 
-use super::BlossomsGainedDto;
+use super::GainedBlossomsDto;
 
-impl From<(BlossomsGainedDto, Uuid)> for BlossomsGained {
-    fn from((gained_blossom, user_id): (BlossomsGainedDto, Uuid)) -> Self {
+impl From<(GainedBlossomsDto, Uuid)> for GainedBlossoms {
+    fn from((gained_blossom, user_id): (GainedBlossomsDto, Uuid)) -> Self {
         Self {
             user_id,
             blossom: gained_blossom.blossom,
@@ -17,8 +17,8 @@ impl From<(BlossomsGainedDto, Uuid)> for BlossomsGained {
     }
 }
 
-impl From<BlossomsGained> for BlossomsGainedDto {
-    fn from(gained_blossom: BlossomsGained) -> Self {
+impl From<GainedBlossoms> for GainedBlossomsDto {
+    fn from(gained_blossom: GainedBlossoms) -> Self {
         Self {
             blossom: gained_blossom.blossom,
             times_gained: gained_blossom.times_gained,

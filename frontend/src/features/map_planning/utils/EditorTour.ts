@@ -202,7 +202,7 @@ export const tourOptions: Tour.TourOptions = {
 async function editorTourStatus() {
   try {
     const tourStatus = await getTourStatus();
-    return tourStatus.editor_tour;
+    return tourStatus.editor_tour_completed;
   } catch (error) {
     await createTourStatus();
     return false;

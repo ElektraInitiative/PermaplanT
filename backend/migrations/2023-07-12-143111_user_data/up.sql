@@ -2,7 +2,8 @@
 CREATE TYPE salutation AS ENUM (
     'Ms',
     'Mrs',
-    'Mr'
+    'Mr',
+    'Mx'
 );
 
 CREATE TYPE experience AS ENUM (
@@ -12,12 +13,12 @@ CREATE TYPE experience AS ENUM (
 );
 
 CREATE TYPE membership AS ENUM (
-    'Supporting Member',
-    'Regular Member',
-    'Contributing Member'
+    'supporting',
+    'regular',
+    'contributing'
 );
 
-CREATE TABLE user_data (
+CREATE TABLE users (
     id UUID PRIMARY KEY,
     salutation SALUTATION NOT NULL,
     title TEXT,

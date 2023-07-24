@@ -1,4 +1,4 @@
-//! `UserData` endpoints.
+//! `Users` endpoints.
 
 use actix_web::{
     post,
@@ -8,18 +8,18 @@ use actix_web::{
 
 use crate::{
     config::{auth::user_info::UserInfo, data::AppDataInner},
-    model::dto::UserDataDto,
+    model::dto::UsersDto,
     service,
 };
 
-/// Endpoint for creating an [`UserData`](crate::model::entity::UserData) entry.
+/// Endpoint for creating an [`Users`](crate::model::entity::Users) entry.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/users",
     responses(
-        (status = 201, description = "Create user data entry for new user", body = UserDataDto)
+        (status = 201, description = "Create user data entry for new user", body = UsersDto)
     ),
     security(
         ("oauth2" = [])
@@ -28,9 +28,9 @@ use crate::{
 #[post("")]
 pub async fn create(
     user_info: UserInfo,
-    user_data_json: Json<UserDataDto>,
+    user_data_json: Json<UsersDto>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let response = service::user_data::create(user_info.id, user_data_json.0, &app_data).await?;
+    let response = service::users::create(user_info.id, user_data_json.0, &app_data).await?;
     Ok(HttpResponse::Created().json(response))
 }

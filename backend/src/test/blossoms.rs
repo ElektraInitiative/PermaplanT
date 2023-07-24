@@ -1,10 +1,12 @@
+//! Tests for [`crate::controller::blossoms`].
+
 use actix_http::StatusCode;
 use actix_web::{http::header, test};
 use chrono::NaiveDate;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
-use crate::model::dto::BlossomsGainedDto;
+use crate::model::dto::GainedBlossomsDto;
 
 use super::util::{init_test_app, init_test_database};
 
@@ -26,7 +28,7 @@ async fn test_can_gain_blossom() {
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let gained_blossom = BlossomsGainedDto {
+    let gained_blossom = GainedBlossomsDto {
         blossom: "Brave Tester".to_string(),
         times_gained: 1,
         gained_date: NaiveDate::from_ymd_opt(2023, 7, 18).expect("Could not parse date!"),
