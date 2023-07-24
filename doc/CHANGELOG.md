@@ -27,7 +27,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - set all enums in DB to lowercase _(temmey)_
 - _()_
 - added component to display plant names correctly formated _(temmey)_
-- _()_
+- fixed issues with correctly displaying plant names _(temmey)_
 - _()_
 - Add grid functionality. _(Moritz)_
 - _()_
