@@ -13,6 +13,7 @@ export type PlantingElementProps = {
 const placeTooltip = (plant: PlantsSummaryDto | undefined) => {
   const stage = useMapStore.getState().stageRef.current;
   const tooltip = useMapStore.getState().tooltipRef.current;
+
   if (!stage || !tooltip || !plant) return;
 
   setTooltipPosition(tooltip, stage);
