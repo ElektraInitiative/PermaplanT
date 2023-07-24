@@ -1,9 +1,10 @@
 import { useFindPlantById } from '../hooks/useFindPlantById';
+import { ExtendedPlantsSummary } from './ExtendedPlantDisplay';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { setTooltipPosition } from '@/features/map_planning/utils/Tooltip';
-import { Text } from 'konva/lib/shapes/Text';
+import Konva from 'konva';
 import { Group, Circle, Rect } from 'react-konva';
 
 export type PlantingElementProps = {
@@ -18,7 +19,66 @@ const placeTooltip = (plant: PlantsSummaryDto | undefined) => {
 
   setTooltipPosition(tooltip, stage);
 
-  tooltip.findOne<Text>('Text').text(plant.unique_name);
+  const extendedPlant = new ExtendedPlantsSummary(plant);
+  const displayValues = extendedPlant.displayName;
+
+  tooltip.destroyChildren();
+
+  let sumWidth = 0;
+  const PADDING = 6;
+  const FONTSIZE = 24;
+
+  const group = new Konva.Group();
+
+  if (displayValues.common_name) {
+    const common_name_text = new Konva.Text({
+      text: displayValues.common_name + ' ',
+      fontSize: FONTSIZE,
+      padding: PADDING,
+      fill: 'white',
+    });
+
+    sumWidth += common_name_text.width();
+    group.add(common_name_text);
+  }
+
+  const unique_name_text_prefix = displayValues.common_name ? '(' : '';
+  const unique_name_text_postfix = displayValues.cultivar ? '' : ')';
+  const unique_name_text = new Konva.Text({
+    text: unique_name_text_prefix + displayValues.unique_name + unique_name_text_postfix,
+    fontStyle: 'italic',
+    fontSize: FONTSIZE,
+    padding: PADDING,
+    fill: 'white',
+    x: sumWidth - PADDING,
+  });
+
+  sumWidth += unique_name_text.width();
+  group.add(unique_name_text);
+
+  if (displayValues.cultivar) {
+    const cultivar_text_postfix = displayValues.common_name ? ')' : '';
+    const cultivar_text = new Konva.Text({
+      text: "'" + displayValues.cultivar + "'" + cultivar_text_postfix,
+      fontSize: FONTSIZE,
+      padding: PADDING,
+      fill: 'white',
+      x: sumWidth - PADDING,
+    });
+
+    sumWidth += cultivar_text.width();
+    group.add(cultivar_text);
+  }
+
+  const rect = new Konva.Rect({
+    x: -PADDING,
+    width: sumWidth,
+    height: FONTSIZE + 2 * PADDING,
+    fill: 'black',
+  });
+
+  tooltip.add(rect);
+  tooltip.add(group);
   tooltip.show();
 };
 
