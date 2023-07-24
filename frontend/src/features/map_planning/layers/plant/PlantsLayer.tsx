@@ -207,6 +207,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
         <IconButton
           className="m-2 h-8 w-8 border border-neutral-500 p-1"
           onClick={() => selectPlant(null)}
+          data-tourid="placement_cancel"
         >
           <CloseIcon></CloseIcon>
         </IconButton>

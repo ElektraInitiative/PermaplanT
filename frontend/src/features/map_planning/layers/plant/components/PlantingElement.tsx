@@ -103,6 +103,8 @@ export function PlantingElement({ planting }: PlantingElementProps) {
       planting={planting}
       draggable
       onClick={(e) => {
+        const placeEvent = new Event('selectPlant');
+        document.getElementById('canvas')?.dispatchEvent(placeEvent);
         addShapeToTransformer(e.currentTarget);
         selectPlanting(planting);
       }}

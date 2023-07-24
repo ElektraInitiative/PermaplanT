@@ -95,6 +95,7 @@ export const Map = ({ layers }: MapProps) => {
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
                 onClick={() => undo()}
                 title={t('undoRedo:undo_tooltip')}
+                data-tourid="undo"
               >
                 <UndoIcon></UndoIcon>
               </IconButton>
@@ -123,7 +124,11 @@ export const Map = ({ layers }: MapProps) => {
           position="left"
         ></Toolbar>
       </section>
-      <section className="flex h-full w-full flex-col overflow-hidden" data-testid="canvas">
+      <section
+        className="flex h-full w-full flex-col overflow-hidden"
+        data-tourid="canvas"
+        id="canvas"
+      >
         <BaseStage>
           <BaseLayer
             opacity={untrackedState.layers.base.opacity}

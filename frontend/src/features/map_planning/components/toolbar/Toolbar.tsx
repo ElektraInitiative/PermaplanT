@@ -79,14 +79,14 @@ export const Toolbar = ({
               <div
                 className="shrink-0 overflow-x-hidden overflow-y-scroll"
                 style={{ height: sizeState.height + 'px' }}
-                data-testid={position === 'left' ? 'toolbox' : 'layers'}
+                data-tourid={position === 'left' ? 'toolbox' : 'layers'}
               >
                 {contentTop}
               </div>
               <HorizontalHandle />
               <div
                 className="flex-shrink overflow-x-hidden overflow-y-scroll"
-                data-testid={position === 'left' ? 'bottomLeftToolbar' : 'bottomRightToolbar'}
+                data-tourid={position === 'left' ? 'bottom_left_toolbar' : 'bottom_right_toolbar'}
               >
                 {contentBottom}
               </div>

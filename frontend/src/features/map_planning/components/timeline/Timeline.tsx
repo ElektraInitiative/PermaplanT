@@ -65,7 +65,7 @@ export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
   return (
     <form
       className="flex justify-center gap-2 border-t-2 border-neutral-700 py-1"
-      data-testid="timeline"
+      data-tourid="timeline"
     >
       <SimpleFormInput
         aria-invalid={submitState === 'error'}
@@ -74,6 +74,7 @@ export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
         labelText={t('timeline:change_date')}
         register={register}
         title={t('timeline:change_date_hint')}
+        data-tourid="date_picker"
       />
 
       {submitState === 'loading' && (

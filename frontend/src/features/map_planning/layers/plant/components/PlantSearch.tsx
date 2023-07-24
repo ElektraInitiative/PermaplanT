@@ -40,7 +40,7 @@ export const PlantSearch = () => {
             onClick={() => {
               setSearchVisible(true);
             }}
-            data-testid="searchButton"
+            data-tourid="search_button"
           >
             <SearchIcon />
           </IconButton>
@@ -67,7 +67,7 @@ export const PlantSearch = () => {
                 if (e.key === 'Escape') clearSearch();
               }}
             ></SearchInput>
-            <ul data-testid="plantList">
+            <ul data-tourid="plant_list">
               {plants.map((plant) => (
                 <PlantListItem
                   plant={plant}
