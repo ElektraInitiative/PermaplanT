@@ -37,8 +37,8 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'toolboxIntro',
-        title: t('guidedTour:mapEditor.toolboxIntro_title'),
-        text: t('guidedTour:mapEditor.toolboxIntro_text'),
+        title: t('guidedTour:mapEditor.toolbox_intro_title'),
+        text: t('guidedTour:mapEditor.toolbox_intro_text'),
         buttons: standardButtons,
         attachTo: {
           element: '[data-testid="toolbox"]',
@@ -47,8 +47,8 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'layersIntro',
-        title: t('guidedTour:mapEditor.layersIntro_title'),
-        text: t('guidedTour:mapEditor.layersIntro_text'),
+        title: t('guidedTour:mapEditor.layers_intro_title'),
+        text: t('guidedTour:mapEditor.layers_intro_text'),
         buttons: standardButtons,
         attachTo: {
           element: '[data-testid="layers"]',
@@ -57,8 +57,8 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'timelineIntro',
-        title: t('guidedTour:mapEditor.timelineIntro_title'),
-        text: t('guidedTour:mapEditor.timelineIntro_text'),
+        title: t('guidedTour:mapEditor.timeline_intro_title'),
+        text: t('guidedTour:mapEditor.timeline_intro_text'),
         buttons: standardButtons,
         attachTo: {
           element: '[data-testid="timeline"]',
@@ -67,14 +67,14 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'baseLayerIntro',
-        title: `${t('guidedTour:mapEditor.baseLayer_title')} (1/2)`,
-        text: t('guidedTour:mapEditor.baseLayerIntro_text'),
+        title: `${t('guidedTour:mapEditor.base_layer_title')} (1/2)`,
+        text: t('guidedTour:mapEditor.base_layer_intro_text'),
         buttons: standardButtons,
       },
       {
         id: 'baseLayerToolbar',
-        title: `${t('guidedTour:mapEditor.baseLayer_title')} (2/2)`,
-        text: t('guidedTour:mapEditor.baseLayerToolbar_text'),
+        title: `${t('guidedTour:mapEditor.base_layer_title')} (2/2)`,
+        text: t('guidedTour:mapEditor.base_layer_toolbar_text'),
         buttons: standardButtons,
         attachTo: {
           element: '[data-testid="bottomRightToolbar"]',
@@ -83,14 +83,14 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'plantsLayerIntro',
-        title: `${t('guidedTour:mapEditor.plantsLayer_title')} (1/7)`,
-        text: t('guidedTour:mapEditor.plantsLayerIntro_text'),
+        title: `${t('guidedTour:mapEditor.plants_layer_title')} (1/7)`,
+        text: t('guidedTour:mapEditor.plants_layer_intro_text'),
         buttons: standardButtons,
       },
       {
         id: 'plantsLayerSelect',
-        title: `${t('guidedTour:mapEditor.plantsLayer_title')} (2/7)`,
-        text: t('guidedTour:mapEditor.plantsLayerSelect_text'),
+        title: `${t('guidedTour:mapEditor.plants_layer_title')} (2/7)`,
+        text: t('guidedTour:mapEditor.plants_layer_select_text'),
         buttons: [
           {
             text: t('guidedTour:back'),
@@ -109,8 +109,8 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'plantsLayerRightToolbar',
-        title: `${t('guidedTour:mapEditor.plantsLayer_title')} (3/7)`,
-        text: t('guidedTour:mapEditor.plantsLayerRightToolbar_text'),
+        title: `${t('guidedTour:mapEditor.plants_layer_title')} (3/7)`,
+        text: t('guidedTour:mapEditor.plants_layer_right_toolbar_text'),
         buttons: standardButtons,
         attachTo: {
           element: '[data-testid="bottomRightToolbar"]',
@@ -119,8 +119,8 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'plantsLayerPlantingSearch',
-        title: `${t('guidedTour:mapEditor.plantsLayer_title')} (4/7)`,
-        text: t('guidedTour:mapEditor.plantsLayerPlantingSearch'),
+        title: `${t('guidedTour:mapEditor.plants_layer_title')} (4/7)`,
+        text: t('guidedTour:mapEditor.plants_layer_planting_search'),
         attachTo: {
           element: '[data-testid="searchButton"]',
           on: 'left',
@@ -133,8 +133,8 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'plantsLayerPlantingSelect',
-        title: `${t('guidedTour:mapEditor.plantsLayer_title')} (5/7)`,
-        text: t('guidedTour:mapEditor.plantsLayerPlantingSelect'),
+        title: `${t('guidedTour:mapEditor.plants_layer_title')} (5/7)`,
+        text: t('guidedTour:mapEditor.plants_layer_planting_select'),
         attachTo: {
           element: '[data-testid="bottomRightToolbar"]',
           on: 'left',
@@ -152,8 +152,8 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'plantsLayerPlantingPlace',
-        title: `${t('guidedTour:mapEditor.plantsLayer_title')} (6/7)`,
-        text: t('guidedTour:mapEditor.plantsLayerPlantingPlace'),
+        title: `${t('guidedTour:mapEditor.plants_layer_title')} (6/7)`,
+        text: t('guidedTour:mapEditor.plants_layer_planting_place'),
         attachTo: {
           element: '[data-testid="canvas"]',
           on: 'top',
@@ -166,8 +166,8 @@ export const steps: ShepherdOptionsWithType[] = (await showTour())
       },
       {
         id: 'plantsLayerLeftToolbar',
-        title: `${t('guidedTour:mapEditor.plantsLayer_title')} (7/7)`,
-        text: t('guidedTour:mapEditor.plantsLayerLeftToolbar_text'),
+        title: `${t('guidedTour:mapEditor.plants_layer_title')} (7/7)`,
+        text: t('guidedTour:mapEditor.plants_layer_left_toolbar_text'),
         buttons: standardButtons,
         attachTo: {
           element: '[data-testid="bottomLeftToolbar"]',
