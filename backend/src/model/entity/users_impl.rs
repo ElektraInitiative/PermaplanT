@@ -19,7 +19,7 @@ impl Users {
         user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<UsersDto> {
-        let user_data = Users::from((user_data, user_id));
+        let user_data = Self::from((user_data, user_id));
         let query = diesel::insert_into(users::table).values(&user_data);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)

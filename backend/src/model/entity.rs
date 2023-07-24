@@ -869,9 +869,9 @@ pub struct BaseLayerImages {
     pub scale: f32,
 }
 
+/// The `Users` entity.
 #[derive(Insertable, Identifiable, Queryable)]
 #[diesel(table_name = users)]
-/// The `Users` entity.
 pub struct Users {
     /// The id of the user from Keycloak.
     pub id: Uuid,
@@ -899,9 +899,9 @@ pub struct Users {
     pub permacoins: Option<Vec<Option<i32>>>,
 }
 
+/// The `GuidedTours` entity.
 #[derive(Insertable, Identifiable, Queryable)]
 #[diesel(primary_key(user_id), table_name = guided_tours)]
-/// The `GuidedTours` entity.
 pub struct GuidedTours {
     /// The id of the user from Keycloak.
     pub user_id: Uuid,
@@ -909,6 +909,7 @@ pub struct GuidedTours {
     pub editor_tour_completed: bool,
 }
 
+/// The `UpdateGuidedTours` entity.
 #[derive(AsChangeset)]
 #[diesel(table_name = guided_tours)]
 pub struct UpdateGuidedTours {
@@ -916,9 +917,9 @@ pub struct UpdateGuidedTours {
     pub editor_tour_completed: Option<bool>,
 }
 
+/// The `Blossom` entity.
 #[derive(Identifiable, Queryable)]
 #[diesel(primary_key(title), table_name = blossoms)]
-/// The `Blossom` entity.
 pub struct Blossom {
     /// The title of the Blossom.
     pub title: String,
@@ -932,9 +933,9 @@ pub struct Blossom {
     pub is_seasonal: bool,
 }
 
+/// The `GainedBlossoms` entity.
 #[derive(Insertable, Identifiable, Queryable)]
 #[diesel(primary_key(user_id, blossom), table_name = gained_blossoms)]
-/// The `GainedBlossoms` entity.
 pub struct GainedBlossoms {
     /// The id of the user from Keycloak.
     pub user_id: Uuid,

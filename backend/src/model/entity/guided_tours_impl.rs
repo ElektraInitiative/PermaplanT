@@ -21,7 +21,7 @@ impl GuidedTours {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn setup(user_id: Uuid, conn: &mut AsyncPgConnection) -> QueryResult<GuidedToursDto> {
-        let new_guided_tours = GuidedTours::from(user_id);
+        let new_guided_tours = Self::from(user_id);
         let query = diesel::insert_into(guided_tours::table).values(new_guided_tours);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
