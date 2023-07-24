@@ -322,6 +322,7 @@ export const tourOptions: Tour.TourOptions = {
     },
     floatingUIOptions: arrowOptions,
     canClickTarget: false,
+    highlightClass: 'highlighted',
   },
   useModalOverlay: true,
 };

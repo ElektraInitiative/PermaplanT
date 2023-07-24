@@ -29,3 +29,11 @@
 .shepherd-element.shepherd-element-attached-left {
     left: 30px !important;
 }
+
+.highlighted {
+    @apply border border-2 border-secondary-500;
+}
+
+input[type=radio].highlighted, input[type=date].highlighted {
+    @apply outline outline-2 outline-secondary-200 outline-offset-1;
+}
