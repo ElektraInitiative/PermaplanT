@@ -127,7 +127,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
           width={planting.width * 0.9}
           height={planting.height * 0.9}
           offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
-          showErrorMessage={false} 
+          showErrorMessage={false}
         />
       ) : (
         <Rect width={0} height={0} />

@@ -46,7 +46,7 @@ export function useImageFromBlob({
   data,
   fallbackImageSource,
   onload,
-  showErrorMessage = true
+  showErrorMessage = true,
 }: UseImageFromBlobOptions) {
   const [image, setImage] = useState(createImage(fallbackImageSource));
   const { t } = useTranslation(['nextcloudIntegration']);
@@ -79,7 +79,7 @@ export function useImageFromBlob({
     return () => {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [data, onload, isLoading, isError, t]);
+  }, [data, onload, isLoading, isError, t, showErrorMessage]);
 
   return image;
 }

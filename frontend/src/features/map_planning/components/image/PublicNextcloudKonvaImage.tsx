@@ -32,7 +32,7 @@ export function PublicNextcloudKonvaImage({
     path,
     onload,
     fallbackImageSource: defaultImageUrl,
-    showErrorMessage
+    showErrorMessage,
   });
 
   return <Image {...imageProps} image={image} />;
