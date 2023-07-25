@@ -26,6 +26,7 @@ pub async fn setup(
 }
 
 /// Get the Guided Tour status for a user.
+/// A new Guided Tour status will be created if none for this user exist.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
@@ -34,8 +35,12 @@ pub async fn find_by_user(
     app_data: &Data<AppDataInner>,
 ) -> Result<GuidedToursDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = GuidedTours::find_by_user(user_id, &mut conn).await?;
-    Ok(result)
+    let result = GuidedTours::find_by_user(user_id, &mut conn).await;
+    match result {
+        Ok(result) => Ok(result),
+        Err(diesel::result::Error::NotFound) => Ok(GuidedTours::setup(user_id, &mut conn).await?),
+        Err(e) => Err(e.into()),
+    }
 }
 
 /// Update the Guided Tour status for a user.

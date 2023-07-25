@@ -2,18 +2,19 @@ import { getPlantings } from '../api/getPlantings';
 import { Map } from '../components/Map';
 import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
+import { useTourStatus } from '../hooks/useTourStatus';
 import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
-import { steps, tourOptions } from '../utils/EditorTour';
-import { LayerType, LayerDto } from '@/bindings/definitions';
+import { mapEditorSteps, tourOptions } from '../utils/EditorTour';
+import { LayerType, LayerDto, GuidedToursDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ShepherdTour } from 'react-shepherd';
+import { ShepherdOptionsWithType, ShepherdTour } from 'react-shepherd';
 import { toast } from 'react-toastify';
 
 /**
@@ -203,8 +204,16 @@ export function MapWrapper() {
   const mapData = useInitializeMap();
   useMapUpdates();
 
+  const [status, setStatus] = useState<GuidedToursDto>();
+  useTourStatus(setStatus);
+
   if (!mapData) {
     return null;
+  }
+
+  let steps: ShepherdOptionsWithType[] = [];
+  if (status && !status.editor_tour_completed) {
+    steps = mapEditorSteps;
   }
 
   return (

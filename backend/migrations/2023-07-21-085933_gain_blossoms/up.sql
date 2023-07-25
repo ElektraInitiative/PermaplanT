@@ -21,7 +21,7 @@ CREATE TABLE blossoms (
 
 CREATE TABLE gained_blossoms (
     user_id UUID NOT NULL,
-    blossom TEXT NOT NULL REFERENCES blossoms (title),
+    blossom TEXT NOT NULL,
     times_gained INTEGER NOT NULL,
     gained_date DATE NOT NULL,
     PRIMARY KEY (user_id, blossom)

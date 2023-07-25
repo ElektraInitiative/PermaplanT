@@ -2,6 +2,7 @@
     "next": "Next",
     "finish": "Finish",
     "back": "Back",
+    "fetch_status_error": "Sorry, I'm experiencing trouble fetching the status of your introduction to the Map Editor. I will try again on the next reload.",
     "mapEditor": {
         "welcome_title": "Welcome to the Map Editor",
         "toolbox_intro_title": "Toolbox",

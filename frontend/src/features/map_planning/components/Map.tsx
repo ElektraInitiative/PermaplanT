@@ -1,3 +1,5 @@
+import { gainBlossom } from '../api/gainBlossom';
+import { updateTourStatus } from '../api/updateTourStatus';
 import BaseLayer from '../layers/base/BaseLayer';
 import { BaseMeasurementLayer } from '../layers/base/BaseMeasurementLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
@@ -10,7 +12,12 @@ import { BaseStage } from './BaseStage';
 import { Timeline } from './timeline/Timeline';
 import { Layers } from './toolbar/Layers';
 import { Toolbar } from './toolbar/Toolbar';
-import { LayerDto, LayerType } from '@/bindings/definitions';
+import {
+  GainedBlossomsDto,
+  LayerDto,
+  LayerType,
+  UpdateGuidedToursDto,
+} from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
@@ -22,6 +29,7 @@ import i18next from 'i18next';
 import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
+import { toast } from 'react-toastify';
 
 export type MapProps = {
   layers: LayerDto[];
@@ -43,15 +51,34 @@ export const Map = ({ layers }: MapProps) => {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
   const tour = useContext(ShepherdTourContext);
+  const { t } = useTranslation(['undoRedo', 'grid', 'timeline', 'blossoms']);
 
   useEffect(() => {
+    const _completeTour = async () => {
+      const update: UpdateGuidedToursDto = { editor_tour_completed: true };
+      await updateTourStatus(update);
+    };
+    const _tourCompletionBlossom = async () => {
+      const blossom: GainedBlossomsDto = {
+        blossom: 'graduation_day',
+        times_gained: 1,
+        gained_date: new Date().toISOString().split('T')[0],
+      };
+      await gainBlossom(blossom);
+      toast.success(`${t('blossoms:blossom_gained')} ${t('blossoms:types.graduation_day')}`);
+    };
     tour?.start();
-    //tour?.on('cancel', () => {console.log('cancel')});
-    //tour?.on('complete', () => {console.log('completion')});
+    if (tour && tour.steps.length > 0) {
+      tour?.on('cancel', () => {
+        _completeTour();
+      });
+      tour?.on('complete', () => {
+        _tourCompletionBlossom();
+        _completeTour();
+      });
+    }
     return () => tour?.cancel();
-  }, [tour]);
-
-  const { t } = useTranslation(['undoRedo', 'grid', 'timeline']);
+  }, [tour, t]);
 
   const getToolbarContent = (layerType: CombinedLayerType) => {
     const content = {

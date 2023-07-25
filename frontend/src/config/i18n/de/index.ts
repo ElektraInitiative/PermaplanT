@@ -2,6 +2,7 @@ import auth from './auth.json';
 import baseLayer from './baseLayer.json';
 import baseLayerForm from './baseLayerForm.json';
 import blog from './blog.json';
+import blossoms from './blossoms.json';
 import common from './common.json';
 import contact from './contact.json';
 import enums from './enums.json';
@@ -60,6 +61,7 @@ const de = {
   timeline,
   plantings,
   guidedTour,
+  blossoms,
 };
 
 export default de;
