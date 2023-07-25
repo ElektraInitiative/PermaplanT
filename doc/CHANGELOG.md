@@ -14,7 +14,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- Remove error toast when adding a plant without an icon in Nextcloud.
+- Remove error toast when adding a plant without an icon in Nextcloud. _(Moritz)_
 - _()_
 - _()_
 - _()_
