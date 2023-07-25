@@ -11,19 +11,19 @@ use utoipa::ToSchema;
 #[ExistingTypePath = "crate::schema::sql_types::Salutation"]
 pub enum Salutation {
     /// female neutral salutation.
-    #[serde(rename = "Ms")]
-    #[db_rename = "Ms"]
+    #[serde(rename = "ms")]
+    #[db_rename = "ms"]
     Ms,
     /// female married salutation.
-    #[serde(rename = "Mrs")]
-    #[db_rename = "Mrs"]
+    #[serde(rename = "mrs")]
+    #[db_rename = "mrs"]
     Mrs,
     /// male salutation.
-    #[serde(rename = "Mr")]
-    #[db_rename = "Mr"]
+    #[serde(rename = "mr")]
+    #[db_rename = "mr"]
     Mr,
     /// gender neutral salutation.
-    #[serde(rename = "Mx")]
-    #[db_rename = "Mx"]
+    #[serde(rename = "mx")]
+    #[db_rename = "mx"]
     Mx,
 }

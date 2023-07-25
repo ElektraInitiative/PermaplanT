@@ -1,9 +1,9 @@
 -- Your SQL goes here
 CREATE TYPE salutation AS ENUM (
-    'Ms',
-    'Mrs',
-    'Mr',
-    'Mx'
+    'ms',
+    'mrs',
+    'mr',
+    'mx'
 );
 
 CREATE TYPE experience AS ENUM (
