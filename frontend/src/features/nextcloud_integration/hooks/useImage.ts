@@ -13,7 +13,7 @@ type UseImageOptions = {
   /** The fallback image source to use if the image is not loaded yet, or if there was an error. */
   fallbackImageSource?: string;
   /** Whether an error message should be displayed. */
-  displayErrorMessage?: boolean;
+  showErrorMessage?: boolean;
 };
 
 /**
@@ -23,7 +23,7 @@ export function useImage({
   path,
   fallbackImageSource = errorImageSource,
   onload,
-  displayErrorMessage = true,
+  showErrorMessage = true,
 }: UseImageOptions) {
   const webdav = useNextcloudWebDavClient();
 
@@ -42,7 +42,7 @@ export function useImage({
     data,
     fallbackImageSource,
     onload,
-    displayErrorMessage,
+    showErrorMessage,
   });
 
   return image;
