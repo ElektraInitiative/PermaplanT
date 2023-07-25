@@ -15,13 +15,10 @@ import IconButton from '@/components/Button/IconButton';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
-import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
-import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
 import { ReactComponent as GridIcon } from '@/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import i18next from 'i18next';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export type MapProps = {
@@ -42,10 +39,9 @@ export const Map = ({ layers }: MapProps) => {
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
   const getSelectedLayerType = useMapStore((map) => map.getSelectedLayerType);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
-  const [labelIconVisible, setLabelIconVisible] = useState(true);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
 
-  const { t } = useTranslation(['undoRedo', 'grid', 'timeline', 'labels']);
+  const { t } = useTranslation(['undoRedo', 'grid', 'timeline']);
 
   const getToolbarContent = (layerType: CombinedLayerType) => {
     const content = {
@@ -110,16 +106,6 @@ export const Map = ({ layers }: MapProps) => {
                 title={t('grid:tooltip')}
               >
                 <GridIcon></GridIcon>
-              </IconButton>
-              <IconButton
-                className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => {
-                  setLabelIconVisible(!labelIconVisible);
-                  console.log('not sure how to trigger all oneMouseOver for all Plantings');
-                }}
-                title={t('labels:tooltip')}
-              >
-                {labelIconVisible ? <EyeIcon /> : <EyeOffIcon />}
               </IconButton>
             </div>
           }
