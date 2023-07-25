@@ -28,6 +28,10 @@ type UseImageFromBlobOptions = {
    * The image blob.
    */
   data: Blob | undefined;
+  /**
+   * Whether an error message should be displayed.
+   */
+  displayErrorMessage?: boolean;
 };
 
 /**
@@ -42,6 +46,7 @@ export function useImageFromBlob({
   data,
   fallbackImageSource,
   onload,
+  displayErrorMessage = true
 }: UseImageFromBlobOptions) {
   const [image, setImage] = useState(createImage(fallbackImageSource));
   const { t } = useTranslation(['nextcloudIntegration']);
@@ -52,10 +57,12 @@ export function useImageFromBlob({
     }
 
     if (isError) {
-      toast.error(t('nextcloudIntegration:load_image_failed'), {
-        autoClose: false,
-        toastId: 'ncError',
-      });
+      if (displayErrorMessage) {
+        toast.error(t('nextcloudIntegration:load_image_failed'), {
+          autoClose: false,
+          toastId: 'ncError',
+        });
+      }
       return;
     }
 

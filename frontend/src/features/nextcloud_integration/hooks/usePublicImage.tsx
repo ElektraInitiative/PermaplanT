@@ -36,7 +36,7 @@ export function usePublicImage({
     isError,
     data,
     fallbackImageSource,
-    onload,
+    onload
   });
 
   return image;
