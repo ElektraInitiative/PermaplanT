@@ -4,6 +4,7 @@ from .abstract_page import AbstractPage
 
 
 class HomePage(AbstractPage):
+    """The homepage permaplant"""
     URL = os.getenv("TEST_URL", "localhost:5173")
     TITLE: str = 'PermaplanT'
     HELLO_MSG: str = 'Hello adi'
@@ -12,7 +13,8 @@ class HomePage(AbstractPage):
         self.page = page
         self.login_button = page.get_by_role("button", name="Log in")
         self.logout_button = page.get_by_role("button", name="Log out")
-        self.hello_msg = page.get_by_text(self.HELLO_MSG)
+        self.hello_msg = page.get_by_text(self.HELLO_MSG, exact=True)
+        self.map_management_button = page.get_by_role("button", name="Maps")
 
     def login_button_is_visible(self):
         expect(self.login_button).to_be_visible()
@@ -26,5 +28,5 @@ class HomePage(AbstractPage):
     def hello_message_is_visible(self):
         expect(self.hello_msg).to_be_visible()
 
-    def take_screenshot(self):
-        self.page.screenshot(path="home_page.png")
+    def to_map_management_page(self):
+        self.map_management_button.click()

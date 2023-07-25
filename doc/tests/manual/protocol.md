@@ -34,7 +34,7 @@
 - Preconditions:
   - Be logged in.
 - Test Steps:
-  1. Go to the map managment page.
+  1. Go to the map management page.
   2. Create a new map.
   3. Enter valid stuff.
 - Expected Result:
@@ -49,7 +49,7 @@
 - Preconditions:
   - Be logged in.
 - Test Steps:
-  1. Go to the map managment page.
+  1. Go to the map management page.
   2. Create a map with a name that already exists.
   3. Enter valid stuff.
 - Expected Result:
@@ -114,7 +114,7 @@
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Preconditions:
-  - Be on the map managment page.
+  - Be on the map management page.
   - TODO! @kitzbergerg
 - Test Steps:
   1. Create a map
@@ -224,6 +224,7 @@
 - Notes:
 
 ## TC-013 - Base Layer
+
 - Description: Check whether the maps background image is displayed correctly.
 - Preconditions:
   - [ ] A map has been created.
@@ -244,6 +245,7 @@
 - Notes:
 
 ## TC-014 - Grid
+
 - Description: Display a point grid on the screen.
 - Preconditions:
   - [ ] User must be on the map screen.
@@ -268,7 +270,7 @@ DONT DELETE ANY BULLETPOINT.
 ## TC-EXAMPLE - User story
 - Description: Show a selection of plants if the search input is empty.
 - Preconditions:
-  - [ ] User must be on the map managment screen.
+  - [ ] User must be on the map management screen.
   - [ ] XYZ must exist or be selected.
 - Test Steps:
   1. Do this

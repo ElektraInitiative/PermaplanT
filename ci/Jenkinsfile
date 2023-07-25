@@ -245,13 +245,21 @@ lock("${env.NODE_NAME}-exclusive") {
         node('docker') {
             node_info()
             checkout scm
-            def e2eImage = docker.build("permaplant-e2e", "./ci/container-images/permaplant-e2e")
-            e2eImage.inside {
-                checkout scm
-                withEnv(['TEST_URL=http://pr.permaplant.net']) {
+            def e2eImage = docker.build("permaplant-e2e", "./e2e")
+            try {
+                e2eImage.inside {
                     sh 'make test-e2e'
-                    archiveArtifacts artifacts: 'test-results/**', fingerprint: true,  allowEmptyArchive: true
                 }
+            } finally {
+                archiveArtifacts artifacts: 'test-results/**', fingerprint: true,  allowEmptyArchive: true
+                archiveArtifacts artifacts: 'report.html', fingerprint: true,  allowEmptyArchive: true
+                cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
+                fileIncludePattern: 'cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
+                sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
+                deleteDir();
+                // rethrow so build fails
+                // groovylint-disable-next-line
+                throw err;
             }
         }
     }

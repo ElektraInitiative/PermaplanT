@@ -3,6 +3,7 @@ from .abstract_page import AbstractPage
 
 
 class LoginPage(AbstractPage):
+    """The loginpage of permaplant"""
     TITLE: str = 'Sign in to PermaplanT'
 
     def __init__(self, page: Page):
@@ -10,6 +11,12 @@ class LoginPage(AbstractPage):
         self.sign_in_button = page.get_by_role("button", name="Sign In")
         self.password_field = page.get_by_label("Password")
         self.username_field = page.get_by_label("Username or email")
+
+    def login(self, username, password):
+        """Performs the whole login action on the login page"""
+        self.enter_username(username)
+        self.enter_password(password)
+        self.click_sign_in()
 
     def enter_username(self, username):
         self.username_field.fill(username)
