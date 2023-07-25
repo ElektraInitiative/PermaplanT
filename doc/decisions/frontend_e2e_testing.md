@@ -74,11 +74,10 @@ Additionally we will need the following libraries:
 
 ### Python
 
-Introducing a new language and gherkin to the team might at first sound challenging and not make much sense, but the decision to pick this stack was not only personal.
-Yes, I prefer Python over Typescript but I also believe that Python is easier to maintain and read in the long run.
-Anyone who could work with Playwright for Typescript should also be able to do the same in Playwright for Python.
-The differences are very minor in the syntax and the possibilities are the same.
-Python is the second most popular coding language which is already included into many distros.
+Introducing a new language and gherkin to the stack might at first sound challenging and not make much sense, but this decision has a reasoning.
+I prefer Python over Typescript because Python is easier to maintain and read in the long run.
+You can solve the same problems in any of the frameworks, so why not chose the simplest one?
+One could argue that simplicity and preference is relative, discussing that would go beyond the scope of this document.
 
 ### Playwright
 
