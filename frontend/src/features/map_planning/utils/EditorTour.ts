@@ -101,6 +101,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="plants_select"]',
       event: 'click',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -125,6 +126,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="search_button"]',
       event: 'click',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -144,6 +146,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
         setTimeout(() => resolve(null), 10);
       });
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -158,6 +161,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="canvas"]',
       event: 'click',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -172,6 +176,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="date_picker"]',
       event: 'change',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -186,6 +191,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="search_button"]',
       event: 'click',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -205,6 +211,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
         setTimeout(() => resolve(null), 10);
       });
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -219,6 +226,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="canvas"]',
       event: 'click',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -243,6 +251,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="placement_cancel"]',
       event: 'click',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -257,6 +266,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="undo"]',
       event: 'click',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -271,6 +281,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="canvas"]',
       event: 'selectPlant',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {
@@ -295,6 +306,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       selector: '[data-tourid="bottom_left_toolbar"]',
       event: 'click',
     },
+    classes: 'action-step',
     canClickTarget: true,
   },
   {

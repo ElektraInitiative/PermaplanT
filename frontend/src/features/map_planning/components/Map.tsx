@@ -65,7 +65,9 @@ export const Map = ({ layers }: MapProps) => {
         gained_date: new Date().toISOString().split('T')[0],
       };
       await gainBlossom(blossom);
-      toast.success(`${t('blossoms:blossom_gained')} ${t('blossoms:types.graduation_day')}`);
+      toast.success(`${t('blossoms:blossom_gained')} ${t('blossoms:types.graduation_day')}`, {
+        icon: '\u{1F338}',
+      });
     };
     tour?.start();
     if (tour && tour.steps.length > 0) {
