@@ -12,6 +12,8 @@ type UsePublicImageOptions = {
   onload?: (image: HTMLImageElement) => void;
   /** The fallback image source to use if the image is not loaded yet, or if there was an error. */
   fallbackImageSource?: string;
+  /** Whether an error modal should be displayed if the image can't be loaded. */
+  showErrorMessage?: boolean;
 };
 
 /**
@@ -22,6 +24,7 @@ export function usePublicImage({
   publicShareToken,
   fallbackImageSource = errorImageSource,
   onload,
+  showErrorMessage = true,
 }: UsePublicImageOptions) {
   const { isError, isLoading, data } = useQuery(['image', path], {
     queryFn: () => getPublicImage(path, publicShareToken),
@@ -36,7 +39,8 @@ export function usePublicImage({
     isError,
     data,
     fallbackImageSource,
-    onload
+    onload,
+    showErrorMessage,
   });
 
   return image;
