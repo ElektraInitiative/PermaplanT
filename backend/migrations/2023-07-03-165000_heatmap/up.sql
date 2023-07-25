@@ -118,14 +118,16 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Scales to values between 0 and 1.
--- TODO: Test different functions such as sigmoid and test performance
+--
+-- Preference input space: Any value.
+-- Relevance input space: >=0
 CREATE OR REPLACE FUNCTION scale_score(input SCORE)
 RETURNS SCORE AS $$
 DECLARE
     score SCORE;
 BEGIN
-    score.preference := LEAST(GREATEST(input.preference, 0), 1);
-    score.relevance := LEAST(GREATEST(input.relevance, 0), 1);
+    score.preference := 1 / (1 + exp(-input.preference));       -- standard sigmoid so f(0)=0.5
+    score.relevance := (2 / (1 + exp(-input.relevance))) - 1;   -- modified sigmoid so f(0)=0
     RETURN score;
 END;
 $$ LANGUAGE plpgsql;
@@ -150,7 +152,7 @@ DECLARE
 BEGIN
     plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
 
-    score.preference := 0.5 + plants.preference;
+    score.preference := plants.preference;
     score.relevance := plants.relevance;
 
     RETURN score;

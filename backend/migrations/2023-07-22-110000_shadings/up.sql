@@ -47,7 +47,7 @@ BEGIN
     plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
     shades := calculate_score_from_shadings(p_layer_ids[2], p_plant_id, x_pos, y_pos);
 
-    score.preference := 0.5 + plants.preference + shades.preference;
+    score.preference := plants.preference + shades.preference;
     score.relevance := plants.relevance + shades.relevance;
 
     RETURN score;
@@ -56,7 +56,8 @@ $$ LANGUAGE plpgsql;
 
 -- Calculate preference: Between -0.5 and 0.5 depending on shadings.
 -- Calculate relevance: 0.5 if there is shading; otherwise 0.0.
--- If the plant is guaranteed to die set preference to -100 and relevance to 1.
+--
+-- If the plant would die at the position set preference=-100 and relevance=100.
 CREATE FUNCTION calculate_score_from_shadings(
     p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER
 )
@@ -96,7 +97,7 @@ BEGIN
     END IF;
 
     -- Check if the plant can survive at the position.
-    -- If the plant can't survive set the score to -100 and relevance to 1.
+    -- If the plant can't survive set preference=-100 and relevance=100.
     IF plant_light_requirement IS NOT NULL
     THEN
         IF 'full sun' = ANY(plant_light_requirement)
@@ -115,7 +116,7 @@ BEGIN
         IF NOT (shading_shade = ANY(allowed_shades))
         THEN
             score.preference := -100;
-            score.relevance := 1;
+            score.relevance := 100;
             RETURN score;
         END IF;
     END IF;
