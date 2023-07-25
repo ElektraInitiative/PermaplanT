@@ -1,6 +1,4 @@
 -- Your SQL goes here
-ALTER TABLE maps ADD COLUMN geometry GEOMETRY (POLYGON, 4326) NOT NULL;
-
 
 -- Calculate the bounding box of the map geometry.
 CREATE OR REPLACE FUNCTION calculate_bbox(map_id INTEGER)

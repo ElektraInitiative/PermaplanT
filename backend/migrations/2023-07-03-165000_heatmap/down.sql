@@ -6,4 +6,3 @@ DROP FUNCTION scale_score;
 DROP FUNCTION calculate_heatmap;
 DROP TYPE SCORE;
 DROP FUNCTION calculate_bbox;
-ALTER TABLE maps DROP COLUMN geometry;
