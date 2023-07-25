@@ -14,6 +14,7 @@ command = "mdbook-mermaid"
 [output.html]
 additional-js = ["doc/mermaid.min.js", "doc/mermaid-init.js"]
 
+# mdbook-linkchecker begin
 [output.linkcheck]
 # Should we check links on the internet? Enabling this option adds a
 # non-negligible performance impact
@@ -30,7 +31,7 @@ traverse-parent-directories = false
 #
 # Hint: you can use TOML's raw strings (single quote) to avoid needing to
 # escape things twice.
-exclude = [ ]
+exclude = ["x"]
 
 # The User-Agent to use when sending web requests
 user-agent = "mdbook-linkcheck-0.4.0"
