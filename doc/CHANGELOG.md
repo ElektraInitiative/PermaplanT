@@ -53,7 +53,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: Optimized mdbook docker image #585 _(4ydan)_
 - CI: Test `diesel` migrations in PR and master #134 _(4ydan)_
 - CI: Remove cargo check, put clippy before doc #688 _(4ydan)_
-- _()_
+- CI: login/logout e2e test #625 _(4ydan)_
 - _()_
 - _()_
 - _()_
