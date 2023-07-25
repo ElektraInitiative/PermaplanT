@@ -172,11 +172,14 @@ BEGIN
     score.relevance := 0.0;
 
     FOR plant_relation IN (SELECT * FROM get_plant_relations(p_layer_id, p_plant_id)) LOOP
-        -- calculate distance
+        -- calculate euclidean distance
         distance := sqrt((plant_relation.x - x_pos)^2 + (plant_relation.y - y_pos)^2);
 
         -- calculate weight based on distance
-        weight := 1 / (distance + 1);
+        -- weight decreases between 1 and 0 based on distance
+        -- distance is squared so it decreases faster the further away
+        -- weight is halved at 50 cm away
+        weight := 1 / (1 + (distance / 50)^2);
 
         -- update score based on relation
         IF plant_relation.relation = 'companion' THEN

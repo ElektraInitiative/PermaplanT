@@ -19,10 +19,11 @@ use crate::{
         entity::plant_layer::GRANULARITY,
         r#enum::{
             layer_type::LayerType, light_requirement::LightRequirement,
-            privacy_option::PrivacyOption, shade::Shade,
+            privacy_option::PrivacyOption, relation_type::RelationType, shade::Shade,
         },
     },
     test::util::{
+        data,
         dummy_map_polygons::{
             rectangle_with_missing_bottom_left_corner, small_rectangle,
             small_rectangle_with_non_0_xmin, small_square, tall_rectangle,
@@ -307,6 +308,78 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
     assert_eq!([0, 255, 0, 127], top_left_pixel.0);
     // The plant can't grow in sun.
     assert_eq!([255, 0, 0, 255], bottom_right_pixel.0);
+}
+
+#[actix_rt::test]
+async fn test_heatmap_with_plantings_succeeds() {
+    let pool = init_test_database(|conn| {
+        async {
+            initial_db_values(conn, tall_rectangle()).await?;
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-2),
+                    &crate::schema::plants::unique_name.eq("Testia"),
+                    &crate::schema::plants::common_name_en.eq(Some(vec![Some("T".to_owned())])),
+                ))
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::relations::table)
+                .values(vec![(
+                    &crate::schema::relations::plant1.eq(-1),
+                    &crate::schema::relations::plant2.eq(-2),
+                    &crate::schema::relations::relation.eq(RelationType::Companion),
+                )])
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::plantings::table)
+                .values(vec![data::TestInsertablePlanting {
+                    id: Uuid::new_v4(),
+                    layer_id: -1,
+                    plant_id: -1,
+                    x: 15,
+                    y: 15,
+                    ..Default::default()
+                }])
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&plant_layer_id=-1&shade_layer_id=-2")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(header::CONTENT_TYPE),
+        Some(&header::HeaderValue::from_static("image/png"))
+    );
+    let result = test::read_body(resp).await;
+    let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
+    let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
+    let image = image.as_rgba8().unwrap();
+    assert_eq!(
+        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
+        image.dimensions()
+    );
+
+    // (0,0) is be top left.
+    let on_planting = image.get_pixel(1, 1);
+    let close_to_planting = image.get_pixel(2, 2);
+    let a_bit_away_from_planting = image.get_pixel(10, 10);
+    let far_away_from_planting = image.get_pixel(40, 80);
+    // The planting influences the map.
+    assert_eq!([0, 255, 0, 127], on_planting.0);
+    assert_eq!([9, 245, 0, 118], close_to_planting.0);
+    assert_eq!([110, 144, 0, 17], a_bit_away_from_planting.0);
+    // There is no influence on locations far away.
+    assert_eq!([127, 127, 0, 0], far_away_from_planting.0);
 }
 
 #[actix_rt::test]
