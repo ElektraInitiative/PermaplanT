@@ -16,7 +16,7 @@ BEGIN
     plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
 
     score.preference := 0.5 + plants.preference;
-    score.relevance := 0.2 + plants.relevance;
+    score.relevance := plants.relevance;
 
     RETURN score;
 END;

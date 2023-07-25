@@ -27,7 +27,7 @@ CREATE TYPE score AS (
     relevance REAL
 );
 
--- Returns scores from 0-1 for each pixel of the map.
+-- Returns preference from 0-1 and relevance from 0-1 for each pixel of the map.
 --
 -- Positions where the plant should not be placed have preference close to 0.
 -- Positions where the plant should be placed have preference close to 1.
@@ -35,7 +35,7 @@ CREATE TYPE score AS (
 -- Positions where there is no relevant data have relevance close to 0.
 -- Positions where there is relevant data have relevance close to 1.
 --
--- The resulting matrix does not contain valid (x,y) coordinates,
+-- The resulting matrix does not contain valid (x,y) map coordinates,
 -- instead (x,y) are simply the indices in the matrix.
 -- The (x,y) coordinate of the computed heatmap always starts at
 -- (0,0) no matter the boundaries of the map.
@@ -118,6 +118,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Scales to values between 0 and 1.
+-- TODO: Test different functions such as sigmoid and test performance
 CREATE OR REPLACE FUNCTION scale_score(input SCORE)
 RETURNS SCORE AS $$
 DECLARE
@@ -150,7 +151,7 @@ BEGIN
     plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
 
     score.preference := 0.5 + plants.preference;
-    score.relevance := 0.2 + plants.relevance;
+    score.relevance := plants.relevance;
 
     RETURN score;
 END;

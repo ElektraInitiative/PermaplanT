@@ -48,7 +48,7 @@ BEGIN
     shades := calculate_score_from_shadings(p_layer_ids[2], p_plant_id, x_pos, y_pos);
 
     score.preference := 0.5 + plants.preference + shades.preference;
-    score.relevance := 0.2 + plants.relevance + shades.relevance;
+    score.relevance := plants.relevance + shades.relevance;
 
     RETURN score;
 END;
@@ -56,6 +56,7 @@ $$ LANGUAGE plpgsql;
 
 -- Calculate preference: Between -0.5 and 0.5 depending on shadings.
 -- Calculate relevance: 0.5 if there is shading; otherwise 0.0.
+-- If the plant is guaranteed to die set preference to -100 and relevance to 1.
 CREATE FUNCTION calculate_score_from_shadings(
     p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER
 )
@@ -63,14 +64,15 @@ RETURNS SCORE AS $$
 DECLARE
     point GEOMETRY;
     plant_shade SHADE;
+    plant_light_requirement light_requirement;
     shading_shade SHADE;
     all_values SHADE[];
     pos1 INTEGER;
     pos2 INTEGER;
     score SCORE;
 BEGIN
-    -- Get the preferred shade of the plant
-    SELECT shade INTO plant_shade
+    -- Get the required light level and preferred shade level of the plant
+    SELECT light_requirement, shade INTO plant_light_requirement, plant_shade
     FROM plants
     WHERE id = p_plant_id;
 
@@ -83,16 +85,35 @@ BEGIN
     ORDER BY shade DESC
     LIMIT 1;
 
-    -- If there's no shading, return 0 (meaning shadings do not affect the score)
-    IF NOT FOUND OR plant_shade IS NULL THEN
+    -- If there's no shading, then there is sun.
+    IF NOT FOUND THEN
+        shading_shade := 'no shade';
+    END IF;
+
+    -- Check if the plant can survive at the position.
+    -- If the plant can't survive set the score to -100 and relevance to 1.
+    IF plant_light_requirement IS NOT NULL AND
+        (
+            (plant_light_requirement = 'full sun' AND shading_shade != 'no shade') OR
+            (
+                plant_light_requirement = 'partial sun/shade' AND
+                (shading_shade = 'permanent shade' OR shading_shade = 'permanent deep shade')
+            )
+        ) THEN
+        score.preference := -100;
+        score.relevance := 1;
+        RETURN score;
+    END IF;
+
+    -- If there's no shading, return 0.
+    IF plant_shade IS NULL THEN
         score.preference := 0.0;
         score.relevance := 0.0;
         RETURN score;
     END IF;
 
-
     -- Get all possible enum values
-    SELECT enum_range(NULL::shade) INTO all_values;
+    SELECT enum_range(NULL::SHADE) INTO all_values;
 
     -- Get the position of each enum value in the array
     SELECT array_position(all_values, plant_shade) INTO pos1;
