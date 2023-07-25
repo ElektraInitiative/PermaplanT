@@ -193,10 +193,10 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     let top_right_pixel = image.get_pixel(8, 2);
     let bottom_left_pixel = image.get_pixel(2, 8);
     let bottom_right_pixel = image.get_pixel(8, 8);
-    assert_eq!([0, 255, 0, 127], top_left_pixel.0);
-    assert_eq!([0, 255, 0, 127], top_right_pixel.0);
+    assert_eq!([63, 191, 0, 127], top_left_pixel.0);
+    assert_eq!([63, 191, 0, 127], top_right_pixel.0);
     assert_eq!([255, 0, 0, 0], bottom_left_pixel.0);
-    assert_eq!([0, 255, 0, 127], bottom_right_pixel.0);
+    assert_eq!([63, 191, 0, 127], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
@@ -244,9 +244,9 @@ async fn test_heatmap_with_shadings_succeeds() {
     let top_left_pixel = image.get_pixel(1, 1);
     let bottom_right_pixel = image.get_pixel(40, 80);
     // The shading is the exact opposite of the plants preference, therefore the map will be red.
-    assert_eq!([255, 0, 0, 127], top_left_pixel.0);
+    assert_eq!([191, 63, 0, 127], top_left_pixel.0);
     // Plant like other positions, therefore green.
-    assert_eq!([0, 255, 0, 127], bottom_right_pixel.0);
+    assert_eq!([63, 191, 0, 127], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
@@ -317,7 +317,7 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
     let top_left_pixel = image.get_pixel(1, 1);
     let bottom_right_pixel = image.get_pixel(40, 80);
     // The shading is deep shade with is ok for the plant.
-    assert_eq!([0, 255, 0, 127], top_left_pixel.0);
+    assert_eq!([63, 191, 0, 127], top_left_pixel.0);
     // The plant can't grow in sun.
     assert_eq!([255, 0, 0, 255], bottom_right_pixel.0);
 
@@ -347,7 +347,7 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
     // The plant can't grow in deep shade.
     assert_eq!([255, 0, 0, 255], top_left_pixel.0);
     // The plant can grow in sun.
-    assert_eq!([63, 191, 0, 127], bottom_right_pixel.0);
+    assert_eq!([95, 159, 0, 127], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]

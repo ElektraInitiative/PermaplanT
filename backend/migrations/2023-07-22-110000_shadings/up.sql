@@ -131,7 +131,7 @@ BEGIN
     SELECT array_position(all_values, shading_shade) INTO pos2;
 
     -- Calculate the 'distance' to the preferred shade as a values between -0.5 and 0.5
-    score.preference := 0.5 - (abs(pos1 - pos2) / (ARRAY_LENGTH(all_values, 1) - 1)::REAL);
+    score.preference := (0.5 - (abs(pos1 - pos2) / (ARRAY_LENGTH(all_values, 1) - 1)::REAL)) / 2;
     score.relevance := 0.5;
 
     RETURN score;
