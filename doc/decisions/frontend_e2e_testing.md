@@ -27,33 +27,35 @@ It lacks profound decision making which framework to pick.
 
 ## Solutions
 
-### Alternative [Java](https://www.java.com/de/) + [Selenium](https://www.selenium.dev)
+### [Java](https://www.java.com/de/) + [Selenium](https://www.selenium.dev)
 
 Java with Selenium is a popular and well-established choice for web test automation.
 While it remains a reliable option, there are personal preferences and concerns about Oracle's licensing changes, and there are other languages that can do the same with less boilerplate.
 
-### Alternative [Typescript](https://www.typescriptlang.org) + [Playwright](https://playwright.dev)
+### [Typescript](https://www.typescriptlang.org) + [Playwright](https://playwright.dev)
 
 Typescript with Playwright is a powerful combination for web test automation.
 However, concerns regarding potential code complexity and the temptation to write complicated workarounds influenced the decision to avoid Typescript as the testing language (see Constraint 4).
 
-### Alternative [Typescript](https://www.typescriptlang.org) + [Cypress](https://www.cypress.io)
+### [Typescript](https://www.typescriptlang.org) + [Cypress](https://www.cypress.io)
 
 Similar to Playwright, Cypress is another Typescript-based test automation framework.
 However, it was not chosen due to the same concerns about Typescript mentioned earlier.
 
-### Alternative [Robot Framework](https://robotframework.org)
+### [Robot Framework](https://robotframework.org)
 
-The Robot Framework, while supporting Python and following BDD principles, has its own syntax and separate resource file management, which contradicts the first constraint of the project. On top of that it is not really used in the fields of frontend testing, even though it has a separate [web testing library](https://robotframework.org/SeleniumLibrary/), which could cause problems when it comes to finding ressources on the internet.
+The Robot Framework, while supporting Python and following BDD principles, has its own syntax and separate resource file management, which contradicts the first constraint of the project.
+On top of that it is not really used in the fields of frontend testing, even though it has a separate [web testing library](https://robotframework.org/SeleniumLibrary/).
+The information regarding this library is scarce on the internet, and this might cause problems.
 According to @4ydan it has a steeper learning curve, because not only does it introduce a Gherkin similar syntax but also drives its tests with keywords, which conflicts with the desire for an easy-to-learn and minimal solution.
 @markus2330 didn't find it difficult to learn.
 
-### Alternative [Puppeteer](https://pptr.dev)
+### [Puppeteer](https://pptr.dev)
 
 Puppeteer is a viable alternative to Playwright, as it also provides automation capabilities for Chrome and Chromium-based browsers.
 However, the decision to use Python as the programming language led to the preference for Playwright for Python.
 
-### Alternative [Python](https://www.python.org) + [Selenium](https://www.selenium.dev) + [Behave](https://behave.readthedocs.io/en/latest/)
+### [Python](https://www.python.org) + [Selenium](https://www.selenium.dev) + [Behave](https://behave.readthedocs.io/en/latest/)
 
 Python with the Behave framework is capable of fulfilling the requirements.
 However, pytest-bdd was preferred over Behave due to its integration with pytest and the added feature of parallel test execution, which should give the low performance stack a slight boost.
