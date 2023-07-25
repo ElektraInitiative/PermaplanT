@@ -30,6 +30,8 @@ Otherwise please check these points when getting a PR done:
 - [ ] I fully described what my PR does in the documentation
       (not in the PR description)
 - [ ] I fixed all affected documentation
+- [ ] I fixed the introduction tour
+- [ ] I wrote migrations in a way that they are compatible with already present data
 - [ ] I fixed all affected decisions
 - [ ] I added unit tests for my code
 - [ ] I added code comments, logging, and assertions as appropriate
