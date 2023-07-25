@@ -32,3 +32,7 @@
 - **Postcondition:**
   The map is successfully created.
 - **Non-functional Constraints:**
+
+## Left-Overs
+
+- Duplication of map not yet done.
