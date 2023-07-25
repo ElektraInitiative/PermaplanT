@@ -64,7 +64,7 @@ RETURNS SCORE AS $$
 DECLARE
     point GEOMETRY;
     plant_shade SHADE;
-    plant_light_requirement light_requirement;
+    plant_light_requirement light_requirement [];
     shading_shade SHADE;
     all_values SHADE[];
     pos1 INTEGER;
@@ -92,14 +92,23 @@ BEGIN
 
     -- Check if the plant can survive at the position.
     -- If the plant can't survive set the score to -100 and relevance to 1.
-    IF plant_light_requirement IS NOT NULL AND
-        (
-            (plant_light_requirement = 'full sun' AND shading_shade != 'no shade') OR
+    IF plant_light_requirement IS NOT NULL AND (
             (
-                plant_light_requirement = 'partial sun/shade' AND
-                (shading_shade = 'permanent shade' OR shading_shade = 'permanent deep shade')
+                -- If the light_requirement contains 'full sun' the plant needs sun.
+                'full sun' = ANY(plant_light_requirement) AND shading_shade NOT IN ('no shade', 'light shade')
             )
-        ) THEN
+            OR
+            (
+                -- If the light_requirement contains 'partial sun/shade' the plant is ok with a bit of sun or shade.
+                'partial sun/shade' = ANY(plant_light_requirement) AND shading_shade NOT IN ('light shade', 'partial shade', 'permanent shade')
+            )
+            OR
+            (
+                -- If the light_requirement contains 'full shade' sun the plant needs shade.
+                'full shade' = ANY(plant_light_requirement) AND shading_shade NOT IN ('permanent shade', 'permanent deep shade')
+            )
+        )
+    THEN
         score.preference := -100;
         score.relevance := 1;
         RETURN score;

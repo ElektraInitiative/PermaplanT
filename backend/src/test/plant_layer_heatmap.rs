@@ -17,7 +17,10 @@ use crate::{
     error::ServiceError,
     model::{
         entity::plant_layer::GRANULARITY,
-        r#enum::{layer_type::LayerType, privacy_option::PrivacyOption, shade::Shade},
+        r#enum::{
+            layer_type::LayerType, light_requirement::LightRequirement,
+            privacy_option::PrivacyOption, shade::Shade,
+        },
     },
     test::util::{
         dummy_map_polygons::{
@@ -243,6 +246,67 @@ async fn test_heatmap_with_shadings_succeeds() {
     assert_eq!([255, 0, 0, 127], top_left_pixel.0);
     // Plant like other positions, therefore green.
     assert_eq!([0, 255, 0, 127], bottom_right_pixel.0);
+}
+
+#[actix_rt::test]
+async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
+    let pool = init_test_database(|conn| {
+        async {
+            initial_db_values(conn, tall_rectangle()).await?;
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-2),
+                    &crate::schema::plants::unique_name.eq("Testia"),
+                    &crate::schema::plants::common_name_en.eq(Some(vec![Some("T".to_owned())])),
+                    &crate::schema::plants::shade.eq(Some(Shade::PermanentDeepShade)),
+                    &crate::schema::plants::light_requirement
+                        .eq(Some(vec![Some(LightRequirement::FullShade)])),
+                ))
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::shadings::table)
+                .values((
+                    &crate::schema::shadings::id.eq(Uuid::new_v4()),
+                    &crate::schema::shadings::layer_id.eq(-2),
+                    &crate::schema::shadings::shade.eq(Shade::PermanentDeepShade),
+                    &crate::schema::shadings::geometry.eq(small_square()),
+                ))
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&plant_layer_id=-1&shade_layer_id=-2")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(header::CONTENT_TYPE),
+        Some(&header::HeaderValue::from_static("image/png"))
+    );
+    let result = test::read_body(resp).await;
+    let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
+    let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
+    let image = image.as_rgba8().unwrap();
+    assert_eq!(
+        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
+        image.dimensions()
+    );
+
+    // (0,0) is be top left.
+    let top_left_pixel = image.get_pixel(1, 1);
+    let bottom_right_pixel = image.get_pixel(40, 80);
+    // The shading is deep shade with is ok for the plant.
+    assert_eq!([0, 255, 0, 127], top_left_pixel.0);
+    // The plant can't grow in sun.
+    assert_eq!([255, 0, 0, 255], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
