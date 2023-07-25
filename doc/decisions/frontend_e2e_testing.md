@@ -83,7 +83,7 @@ One could argue that simplicity and preference is relative, discussing that woul
 
 Playwright for Python offers comprehensive browser automation capabilities, aligns well with Python's syntax and ecosystem, and satisfies the project's constraints and requirements.
 Additionally, Playwright for Python provides a very clear documentation, which makes it easier for developers who are not so experienced with frontend testing, to get started quickly.
-Furthermore the projects performance tests utilize playwright, which makes it fit even better.
+Furthermore the projects performance tests and scraper utilize playwright, which makes it fit good.
 
 ### Gherkin
 
