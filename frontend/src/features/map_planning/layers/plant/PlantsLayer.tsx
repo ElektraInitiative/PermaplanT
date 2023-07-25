@@ -1,6 +1,6 @@
 import useMapStore from '../../store/MapStore';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
-import ExtendedPlantsSummaryDisplayName from './components/ExtendedPlantDisplay';
+import { ExtendedPlantsSummaryDisplayName } from './components/ExtendedPlantDisplay';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantsSummaryDto } from '@/bindings/definitions';

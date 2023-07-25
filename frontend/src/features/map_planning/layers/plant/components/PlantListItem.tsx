@@ -1,4 +1,4 @@
-import ExtendedPlantsSummaryDisplayName from './ExtendedPlantDisplay';
+import { ExtendedPlantsSummaryDisplayName } from './ExtendedPlantDisplay';
 import { PlantsSummaryDto } from '@/bindings/definitions';
 import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
 
