@@ -23,7 +23,6 @@ pub struct ShadingDto {
     /// The position of the shade on the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
     pub geometry: Polygon<Point>,
     /// The date the shading was added to the map.
@@ -48,7 +47,6 @@ pub struct NewShadingDto {
     /// The position of the shade on the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
     pub geometry: Polygon<Point>,
     /// The date the shading was added to the map.
@@ -83,7 +81,6 @@ pub struct UpdateValuesShadingDto {
     /// The position of the shade on the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[typeshare(serialized_as = "Option<object>")]
     #[schema(value_type = Option<Object>)]
     pub geometry: Option<Polygon<Point>>,
     /// Id of the action (for identifying the action in the frontend).
