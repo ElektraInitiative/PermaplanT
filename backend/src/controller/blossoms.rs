@@ -1,4 +1,4 @@
-//! `Blossoms` endpoints.
+//! `Blossom` endpoints.
 
 use actix_web::{
     post,
