@@ -26,13 +26,13 @@ Syntax: `- short text describing the change _(Your Name)_`
 - commented out properties in table plants for now to improve build time. _(temmey)_
 - set all enums in DB to lowercase _(temmey)_
 - _()_
-- _()_
-- _()_
+- added component to display plant names correctly formated _(temmey)_
+- fixed issues with correctly displaying plant names _(temmey)_
 - _()_
 - Add grid functionality. _(Moritz)_
 - _()_
 - _()_
-- _()_
+- update sqlfluff config to force upper&lowercase _(temmey)_
 - _()_
 - _()_
 - Handle events of same user, discard events in same tab _(Paul)_
@@ -52,7 +52,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: Add groovy pre-commit hook #685 _(4ydan)_
 - CI: Optimized mdbook docker image #585 _(4ydan)_
 - CI: Test `diesel` migrations in PR and master #134 _(4ydan)_
-- _()_
+- CI: Remove cargo check, put clippy before doc #688 _(4ydan)_
 - _()_
 - _()_
 - _()_
