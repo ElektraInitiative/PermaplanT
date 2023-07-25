@@ -29,10 +29,12 @@ The report should have the current day as suffix.
 - Date/Time:
 - Duration:
 - Commit/Tag:
+- Setup: local or dev.permaplant
 - Planned tests: -1
 - Executed tests: -**1**
-- Passed tests: -1
-- Failed tests: -1
+- ✔️Passed tests: -1
+- ⚠️Problematic tests:
+- ❌Failed tests: -1
 
 ## Error Analysis
 

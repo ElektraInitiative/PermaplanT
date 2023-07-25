@@ -43,7 +43,7 @@
 - Test Result:
 - Notes:
 
-## TC-003 - Map Creation (Negative)
+## TC-004 - Map Creation (Negative)
 
 - Description: Can't create a map with a name that exists
 - Preconditions:
@@ -59,7 +59,7 @@
 - Test Result:
 - Notes:
 
-## TC-004 - Plant Search
+## TC-005 - Plant Search
 
 - Description: Show a selection of plants if the search input is empty.
 - Preconditions:
@@ -75,7 +75,7 @@
 - Test Result:
 - Notes:
 
-## TC-005 - Plant Search
+## TC-006 - Plant Search
 
 - Description: Return expected results for a given search in the selected language.
 - Preconditions:
@@ -92,7 +92,7 @@
 - Test Result:
 - Notes:
 
-## TC-006 - Plant Search
+## TC-007 - Plant Search
 
 - Description: Returns results for searches in the language that was not selected.
 - Preconditions:
@@ -110,7 +110,7 @@
 - Test Result:
 - Notes:
 
-## TC-007 - Heatmap
+## TC-008 - Heatmap
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Preconditions:
@@ -126,7 +126,7 @@
 - Test Result:
 - Notes:
 
-## TC-008 - Timeline
+## TC-009 - Timeline
 
 - Description: Change the date of the map to 'hide' plantings.
 - Preconditions:
@@ -145,7 +145,7 @@
 - Test Result:
 - Notes:
 
-## TC-009 - Timeline
+## TC-010 - Timeline
 
 - Description: Change the date of the map to 'unhide' plantings.
 - Preconditions:
@@ -166,7 +166,7 @@
 - Test Result:
 - Notes:
 
-## TC-010 - Timeline
+## TC-011 - Timeline
 
 - Description: Change the `add_date` of a planting to 'hide' it.
 - Preconditions:
@@ -184,11 +184,12 @@
 - Test Result:
 - Notes:
 
-## TC-011 - Timeline
+## TC-012 - Timeline
 
 - Description: Change the `remove_date` of a planting to 'hide' it.
 - Preconditions:
   - User must be on the map planning screen.
+  - The plants date has to be in the past.
 - Test Steps:
   1. Add a planting to the map.
   2. Click on the planting.
@@ -202,7 +203,7 @@
 - Test Result:
 - Notes:
 
-## TC-012 - Timeline
+## TC-013 - Timeline
 
 - Description: Change the `add_date` of a planting to 'unhide' it.
 - Preconditions:
@@ -223,7 +224,7 @@
 - Test Result:
 - Notes:
 
-## TC-013 - Base Layer
+## TC-014 - Base Layer
 
 - Description: Check whether the maps background image is displayed correctly.
 - Preconditions:
@@ -244,7 +245,7 @@
 - Test Result:
 - Notes:
 
-## TC-014 - Grid
+## TC-015 - Grid
 
 - Description: Display a point grid on the screen.
 - Preconditions:
