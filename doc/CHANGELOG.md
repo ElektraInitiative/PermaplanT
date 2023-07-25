@@ -19,7 +19,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- added db function to duplicate layers for UC: layers-alternatives _(temmey)_
 - _()_
 - _()_
 - squashed migrations _(temmey)_
