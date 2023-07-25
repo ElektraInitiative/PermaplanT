@@ -10,7 +10,6 @@ import fileSelector from './fileSelector.json';
 import geomap from './geomap.json';
 import grid from './grid.json';
 import imprint from './imprint.json';
-import labels from './label.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import layers from './layers.json';
@@ -59,7 +58,6 @@ const de = {
   layers,
   timeline,
   plantings,
-  labels,
 };
 
 export default de;
