@@ -168,6 +168,10 @@ DECLARE
     weight REAL;
     score SCORE;
 BEGIN
+    IF NOT EXISTS (SELECT 1 FROM layers WHERE id = p_layer_id AND type = 'plants') THEN
+        RAISE EXCEPTION 'Plant layer with id % not found', p_layer_id;
+    END IF;
+
     score.preference := 0.0;
     score.relevance := 0.0;
 

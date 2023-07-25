@@ -72,6 +72,10 @@ DECLARE
     pos2 INTEGER;
     score SCORE;
 BEGIN
+    IF NOT EXISTS (SELECT 1 FROM layers WHERE id = p_layer_id AND type = 'shade') THEN
+        RAISE EXCEPTION 'Shade layer with id % not found', p_layer_id;
+    END IF;
+
     -- Get the required light level and preferred shade level of the plant
     SELECT light_requirement, shade INTO plant_light_requirement, plant_shade
     FROM plants
