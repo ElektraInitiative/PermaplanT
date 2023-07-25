@@ -65,6 +65,7 @@ DECLARE
     point GEOMETRY;
     plant_shade SHADE;
     plant_light_requirement light_requirement [];
+    allowed_shades SHADE [] := '{}';
     shading_shade SHADE;
     all_values SHADE[];
     pos1 INTEGER;
@@ -92,26 +93,27 @@ BEGIN
 
     -- Check if the plant can survive at the position.
     -- If the plant can't survive set the score to -100 and relevance to 1.
-    IF plant_light_requirement IS NOT NULL AND (
-            (
-                -- If the light_requirement contains 'full sun' the plant needs sun.
-                'full sun' = ANY(plant_light_requirement) AND shading_shade NOT IN ('no shade', 'light shade')
-            )
-            OR
-            (
-                -- If the light_requirement contains 'partial sun/shade' the plant is ok with a bit of sun or shade.
-                'partial sun/shade' = ANY(plant_light_requirement) AND shading_shade NOT IN ('light shade', 'partial shade', 'permanent shade')
-            )
-            OR
-            (
-                -- If the light_requirement contains 'full shade' sun the plant needs shade.
-                'full shade' = ANY(plant_light_requirement) AND shading_shade NOT IN ('permanent shade', 'permanent deep shade')
-            )
-        )
+    IF plant_light_requirement IS NOT NULL
     THEN
-        score.preference := -100;
-        score.relevance := 1;
-        RETURN score;
+        IF 'full sun' = ANY(plant_light_requirement)
+        THEN
+            allowed_shades := allowed_shades || '{"no shade", "light shade"}';
+        END IF;
+        IF 'partial sun/shade' = ANY(plant_light_requirement)
+        THEN
+            allowed_shades := allowed_shades || '{"light shade", "partial shade", "permanent shade"}';
+        END IF;
+        IF 'full shade' = ANY(plant_light_requirement)
+        THEN
+            allowed_shades := allowed_shades || '{"permanent shade", "permanent deep shade"}';
+        END IF;
+
+        IF NOT (shading_shade = ANY(allowed_shades))
+        THEN
+            score.preference := -100;
+            score.relevance := 1;
+            RETURN score;
+        END IF;
     END IF;
 
     -- If there's no shading, return 0.

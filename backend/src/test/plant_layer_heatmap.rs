@@ -255,14 +255,26 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
         async {
             initial_db_values(conn, tall_rectangle()).await?;
             diesel::insert_into(crate::schema::plants::table)
-                .values((
-                    &crate::schema::plants::id.eq(-2),
-                    &crate::schema::plants::unique_name.eq("Testia"),
-                    &crate::schema::plants::common_name_en.eq(Some(vec![Some("T".to_owned())])),
-                    &crate::schema::plants::shade.eq(Some(Shade::PermanentDeepShade)),
-                    &crate::schema::plants::light_requirement
-                        .eq(Some(vec![Some(LightRequirement::FullShade)])),
-                ))
+                .values(vec![
+                    (
+                        &crate::schema::plants::id.eq(-2),
+                        &crate::schema::plants::unique_name.eq("Testia"),
+                        &crate::schema::plants::common_name_en.eq(Some(vec![Some("T".to_owned())])),
+                        &crate::schema::plants::shade.eq(Some(Shade::PermanentDeepShade)),
+                        &crate::schema::plants::light_requirement
+                            .eq(Some(vec![Some(LightRequirement::FullShade)])),
+                    ),
+                    (
+                        &crate::schema::plants::id.eq(-3),
+                        &crate::schema::plants::unique_name.eq("Testia testum"),
+                        &crate::schema::plants::common_name_en.eq(Some(vec![Some("T".to_owned())])),
+                        &crate::schema::plants::shade.eq(Some(Shade::LightShade)),
+                        &crate::schema::plants::light_requirement.eq(Some(vec![
+                            Some(LightRequirement::Full),
+                            Some(LightRequirement::Partial),
+                        ])),
+                    ),
+                ])
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::shadings::table)
@@ -283,7 +295,7 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
 
     let resp = test::TestRequest::get()
         .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&plant_layer_id=-1&shade_layer_id=-2")
-        .insert_header((header::AUTHORIZATION, token))
+        .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
 
@@ -308,6 +320,34 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
     assert_eq!([0, 255, 0, 127], top_left_pixel.0);
     // The plant can't grow in sun.
     assert_eq!([255, 0, 0, 255], bottom_right_pixel.0);
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-3&plant_layer_id=-1&shade_layer_id=-2")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(header::CONTENT_TYPE),
+        Some(&header::HeaderValue::from_static("image/png"))
+    );
+    let result = test::read_body(resp).await;
+    let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
+    let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
+    let image = image.as_rgba8().unwrap();
+    assert_eq!(
+        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
+        image.dimensions()
+    );
+
+    // (0,0) is be top left.
+    let top_left_pixel = image.get_pixel(1, 1);
+    let bottom_right_pixel = image.get_pixel(40, 80);
+    // The plant can't grow in deep shade.
+    assert_eq!([255, 0, 0, 255], top_left_pixel.0);
+    // The plant can grow in sun.
+    assert_eq!([63, 191, 0, 127], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
