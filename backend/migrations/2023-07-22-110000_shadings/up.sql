@@ -1,15 +1,15 @@
 -- Your SQL goes here
 CREATE TABLE shadings (
-    id uuid PRIMARY KEY,
-    layer_id integer NOT NULL,
-    shade shade NOT NULL,
+    id UUID PRIMARY KEY,
+    layer_id INTEGER NOT NULL,
+    shade SHADE NOT NULL,
     geometry GEOMETRY (POLYGON, 4326) NOT NULL,
-    add_date date,
-    remove_date date,
+    add_date DATE,
+    remove_date DATE,
     FOREIGN KEY (layer_id) REFERENCES layers (id) ON DELETE CASCADE
 );
 
-CREATE FUNCTION check_shade_layer_type() RETURNS trigger
+CREATE FUNCTION check_shade_layer_type() RETURNS TRIGGER
 LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -32,13 +32,13 @@ FOR EACH ROW EXECUTE FUNCTION check_shade_layer_type();
 -- p_plant_id     ... id of the plant for which to consider relations
 -- x_pos,y_pos    ... coordinates on the map where to calculate the score
 CREATE OR REPLACE FUNCTION calculate_score(
-    p_map_id integer,
-    p_layer_ids integer [],
-    p_plant_id integer,
-    x_pos integer,
-    y_pos integer
+    p_map_id INTEGER,
+    p_layer_ids INTEGER [],
+    p_plant_id INTEGER,
+    x_pos INTEGER,
+    y_pos INTEGER
 )
-RETURNS score AS $$
+RETURNS SCORE AS $$
 DECLARE
     score SCORE;
     plants SCORE;
@@ -57,14 +57,14 @@ $$ LANGUAGE plpgsql;
 -- Calculate preference: Between -0.5 and 0.5 depending on shadings.
 -- Calculate relevance: 0.5 if there is shading; otherwise 0.0.
 CREATE FUNCTION calculate_score_from_shadings(
-    p_layer_id integer, p_plant_id integer, x_pos integer, y_pos integer
+    p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER
 )
-RETURNS score AS $$
+RETURNS SCORE AS $$
 DECLARE
     point GEOMETRY;
-    plant_shade shade;
-    shading_shade shade;
-    all_values shade[];
+    plant_shade SHADE;
+    shading_shade SHADE;
+    all_values SHADE[];
     pos1 INTEGER;
     pos2 INTEGER;
     score SCORE;
