@@ -12,7 +12,7 @@ use crate::{
     service,
 };
 
-/// Endpoint for gaining a [`Blossoms`](crate::model::entity::Blossoms).
+/// Endpoint for gaining a [`Blossom`](crate::model::entity::Blossom).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
