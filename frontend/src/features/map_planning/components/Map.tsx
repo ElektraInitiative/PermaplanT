@@ -1,3 +1,5 @@
+import { gainBlossom } from '../api/gainBlossom';
+import { updateTourStatus } from '../api/updateTourStatus';
 import BaseLayer from '../layers/base/BaseLayer';
 import { BaseMeasurementLayer } from '../layers/base/BaseMeasurementLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
@@ -10,7 +12,12 @@ import { BaseStage } from './BaseStage';
 import { Timeline } from './timeline/Timeline';
 import { Layers } from './toolbar/Layers';
 import { Toolbar } from './toolbar/Toolbar';
-import { LayerDto, LayerType } from '@/bindings/definitions';
+import {
+  GainedBlossomsDto,
+  LayerDto,
+  LayerType,
+  UpdateGuidedToursDto,
+} from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
@@ -19,7 +26,10 @@ import { ReactComponent as GridIcon } from '@/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import i18next from 'i18next';
+import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ShepherdTourContext } from 'react-shepherd';
+import { toast } from 'react-toastify';
 
 export type MapProps = {
   layers: LayerDto[];
@@ -40,8 +50,37 @@ export const Map = ({ layers }: MapProps) => {
   const getSelectedLayerType = useMapStore((map) => map.getSelectedLayerType);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
+  const tour = useContext(ShepherdTourContext);
+  const { t } = useTranslation(['undoRedo', 'grid', 'timeline', 'blossoms']);
 
-  const { t } = useTranslation(['undoRedo', 'grid', 'timeline']);
+  useEffect(() => {
+    const _completeTour = async () => {
+      const update: UpdateGuidedToursDto = { editor_tour_completed: true };
+      await updateTourStatus(update);
+    };
+    const _tourCompletionBlossom = async () => {
+      const blossom: GainedBlossomsDto = {
+        blossom: 'graduation_day',
+        times_gained: 1,
+        gained_date: new Date().toISOString().split('T')[0],
+      };
+      await gainBlossom(blossom);
+      toast.success(`${t('blossoms:blossom_gained')} ${t('blossoms:types.graduation_day')}`, {
+        icon: '\u{1F338}',
+      });
+    };
+    tour?.start();
+    if (tour && tour.steps.length > 0) {
+      tour?.on('cancel', () => {
+        _completeTour();
+      });
+      tour?.on('complete', () => {
+        _tourCompletionBlossom();
+        _completeTour();
+      });
+    }
+    return () => tour?.cancel();
+  }, [tour, t]);
 
   const getToolbarContent = (layerType: CombinedLayerType) => {
     const content = {
@@ -85,6 +124,7 @@ export const Map = ({ layers }: MapProps) => {
                 className="m-2 h-8 w-8 border border-neutral-500 p-1"
                 onClick={() => undo()}
                 title={t('undoRedo:undo_tooltip')}
+                data-tourid="undo"
               >
                 <UndoIcon></UndoIcon>
               </IconButton>
@@ -113,7 +153,11 @@ export const Map = ({ layers }: MapProps) => {
           position="left"
         ></Toolbar>
       </section>
-      <section className="flex h-full w-full flex-col overflow-hidden">
+      <section
+        className="flex h-full w-full flex-col overflow-hidden"
+        data-tourid="canvas"
+        id="canvas"
+      >
         <BaseStage>
           <BaseLayer
             opacity={untrackedState.layers.base.opacity}

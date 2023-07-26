@@ -12,7 +12,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Added Guided Tour for the Map Editor _(Thorben)_
 - _()_
 - Remove error toast when adding a plant without an icon in Nextcloud. _(Moritz)_
 - _()_

@@ -123,6 +123,7 @@ export const BaseLayerRightToolbar = () => {
         }}
         onChange={(e) => setPathInput(e.target.value)}
         value={pathInput}
+        data-testid="baseBackgroundSelect"
       />
       <FileSelectorModal
         setShow={function (show: boolean): void {
