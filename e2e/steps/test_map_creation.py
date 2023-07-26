@@ -38,14 +38,15 @@ def create_map_successfully(mcp: MapCreatePage, name, mmp: MapManagementPage):
 
 
 @given("I create a new map")
-def the_map_I_want_to_edit_exists(mmp: MapManagementPage):
-    mmp.visible("SUTPrivateMap")
+def create_the_map_to_be_edited(mmp: MapManagementPage, mcp: MapCreatePage):
+    mmp.to_map_create_page()
+    mcp.create_a_map("SUTEditMe")
 
 
 @when("I edit the map")
 def can_edit_created_map(mmp: MapManagementPage, mep: MapEditPage):
-    mmp.to_map_edit_page("SUTPrivateMap")
-    mep.fill_name("SUTPrivateMapEdited")
+    mmp.to_map_edit_page("SUTEditMe")
+    mep.fill_name("SUTEdited")
     mep.fill_description("NewDescription")
     mep.fill_longitude("33")
     mep.fill_latitude("33")
@@ -55,7 +56,7 @@ def can_edit_created_map(mmp: MapManagementPage, mep: MapEditPage):
 def successfully_edit(mmp: MapManagementPage, mep: MapEditPage):
     mep.click_save()
     mmp.alert_is_hidden()
-    mmp.visible("SUTPrivateMapEdited")
+    mmp.visible("SUTEdited")
 
 
 # Scenario 3
