@@ -47,7 +47,7 @@ stage('Build in Docker') {
 
                     wait_for_db()
 
-                    sh './ci/build-scripts/build-backend.sh'
+                    sh 'cargo build --release'
 
                     stash includes: 'backend/target/release/backend', name: 'backend'
                 }
