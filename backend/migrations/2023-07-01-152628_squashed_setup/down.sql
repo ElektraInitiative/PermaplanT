@@ -1,3 +1,5 @@
+-- This file should undo anything in `up.sql`
+
 ---- Drop foreign keys
 ALTER TABLE seeds DROP CONSTRAINT seeds_plant_id_fkey;
 ALTER TABLE relations DROP CONSTRAINT relations_plant2_fkey;
