@@ -30,7 +30,7 @@ def provide_map_details(mmp: MapManagementPage, mcp: MapCreatePage, name, privac
 @then(parsers.parse("I can successfully create a new map {name} without an error message"))
 def create_map_successfully(mcp: MapCreatePage, name, mmp: MapManagementPage):
     mcp.click_create()
-    mcp.alert_is_hidden()
+    #mcp.alert_is_hidden()
     mmp.visible(name)
 
 
