@@ -44,7 +44,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix a bug in loading images _(Paul)_
 - _()_
 - _()_
-- _()_
+- Fix a bug where the wrong value is assigned to an input field _(Moritz)_
 - _()_
 - _()_
 - _()_
