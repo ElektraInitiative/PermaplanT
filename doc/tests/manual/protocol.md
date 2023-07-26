@@ -96,7 +96,7 @@
 
 - Description: Returns results for searches in the language that was not selected.
 - Preconditions:
-  - The search term "fichte" has been typed into the search field.
+  - Language English has been selected
 - Test Steps:
   1. Navigate to the map page.
   2. Select a map.
@@ -105,7 +105,7 @@
   5. Write "fichte" into the search field.
 - Expected Result:
   - Firs (Latin Picea, German "Fichten") are part of the search results in addition to English matches.
-  - Matches on english data fields are ranked above english matches.
+  - Matches on English data fields are ranked above English matches.
 - Actual Result:
 - Test Result:
 - Notes:
@@ -229,7 +229,7 @@
 - Description: Check whether the maps background image is displayed correctly.
 - Preconditions:
   - A map has been created.
-  - The user has navigated to the map.
+  - The user has navigated to the map editor.
   - The base layer has to be selected as the active layer.
 - Test Steps:
   1. Select a base layer image.
@@ -249,14 +249,14 @@
 
 - Description: Display a point grid on the screen.
 - Preconditions:
-  - User must be on the map screen.
+  - User must be in the map editor.
 - Test Steps:
   1. Press the grid button in the left upper menu bar.
   2. Zoom all the way in.
   3. Zoom all the way out.
 - Expected Result:
-  - The grid is displayed.
-  - Each press on the grid button toggles the grid of/on.
+  - The grid is not displayed anymore.
+  - Each press on the grid button toggles the grid off/on.
   - Zooming in, grid spacing should switch from one meter to ten centimeters.
   - Zooming out, grid spacing should switch ten centimeters to one meter to ten meter.
 - Actual Result:
