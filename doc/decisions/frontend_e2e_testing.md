@@ -89,8 +89,8 @@ Furthermore the projects performance tests and scraper utilize playwright, which
 
 ### Gherkin
 
-Chosing to have the Gherin syntax is adding an extra step to writing tests but with a clear benefit which I will mention later.
-Furthermore the Gherkin syntax can be reusued with other frameworks if Playwright and Python want to be replaced.
+Choosing to have the Gherkin syntax is adding an extra step to writing tests but with a clear benefit which I will mention later.
+Furthermore the Gherkin syntax can be reused with other frameworks if Playwright and Python want to be replaced.
 
 ### BDD
 

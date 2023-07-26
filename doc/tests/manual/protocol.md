@@ -65,7 +65,7 @@
 - Preconditions:
   - No search input has been provided in the plant search.
 - Test Steps:
-  1. Naviagate to the map page.
+  1. Navigate to the map page.
   2. Select a map.
   3. Select the plant layer in the right map menu.
   4. Push the search icon in the lower right menu.
@@ -81,7 +81,7 @@
 - Preconditions:
   - The search term "tomato" has been typed into the search field.
 - Test Steps:
-  1. Naviagate to the map page.
+  1. Navigate to the map page.
   2. Select a map.
   3. Select the plant layer in the right map menu.
   4. Push the search icon in the lower right menu.

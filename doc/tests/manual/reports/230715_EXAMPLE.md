@@ -15,7 +15,7 @@
 
 1. Identifying the error: Is it indeed a genuine software defect, or is it a faulty test case, incorrect test execution, etc.?
 2. Has the error already been identified in previous tests?
-3. Error specifictation
+3. Error specification
 
 - Class 1: Faulty specification
 - Class 2: System crash
