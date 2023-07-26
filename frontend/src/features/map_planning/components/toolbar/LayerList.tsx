@@ -62,6 +62,7 @@ export const LayerList = ({
             if (setSelectedLayer) setSelectedLayer(layer);
           }}
           name="layer_enable"
+          data-tourid={`${layer.type_}_select`}
         ></input>
       </div>
       <div className="flex items-center">

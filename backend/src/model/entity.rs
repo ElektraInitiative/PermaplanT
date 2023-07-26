@@ -1,6 +1,8 @@
 //! Contains all entities used in `PermaplanT`.
 
 pub mod base_layer_images_impl;
+pub mod blossoms_impl;
+pub mod guided_tours_impl;
 pub mod layer_impl;
 pub mod map_impl;
 pub mod plant_layer;
@@ -8,6 +10,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod users_impl;
 
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
@@ -19,9 +22,15 @@ use postgis_diesel::types::Point;
 use postgis_diesel::types::Polygon;
 use uuid::Uuid;
 
-use crate::schema::{base_layer_images, layers, maps, plants, seeds};
+use crate::schema::{
+    base_layer_images, blossoms, gained_blossoms, guided_tours, layers, maps, plants, seeds, users,
+};
 
+use super::r#enum::experience::Experience;
+use super::r#enum::membership::Membership;
 use super::r#enum::privacy_option::PrivacyOption;
+use super::r#enum::salutation::Salutation;
+use super::r#enum::track::Track;
 use super::r#enum::{
     deciduous_or_evergreen::DeciduousOrEvergreen, external_source::ExternalSource,
     fertility::Fertility, /*flower_type::FlowerType, */ growth_rate::GrowthRate,
@@ -858,4 +867,82 @@ pub struct BaseLayerImages {
     pub rotation: f32,
     /// The scale of the image on the map.
     pub scale: f32,
+}
+
+/// The `Users` entity.
+#[derive(Insertable, Identifiable, Queryable)]
+#[diesel(table_name = users)]
+pub struct Users {
+    /// The id of the user from Keycloak.
+    pub id: Uuid,
+    /// The preferred salutation of the user.
+    pub salutation: Salutation,
+    /// The title(s) of the user.
+    pub title: Option<String>,
+    /// The current country of the user.
+    pub country: String,
+    /// The phone number of the user.
+    pub phone: Option<String>,
+    /// The website of the user.
+    pub website: Option<String>,
+    /// The organization the user belongs to.
+    pub organization: Option<String>,
+    /// The experience level in permaculture of the user.
+    pub experience: Option<Experience>,
+    /// The membership type of the user.
+    pub membership: Option<Membership>,
+    /// A collection of years in which the user was a member.
+    pub member_years: Option<Vec<Option<i32>>>,
+    /// The date since when the user is a member.
+    pub member_since: Option<NaiveDate>,
+    /// The amount of permacoins the user earned in each year as a member.
+    pub permacoins: Option<Vec<Option<i32>>>,
+}
+
+/// The `GuidedTours` entity.
+#[derive(Insertable, Identifiable, Queryable)]
+#[diesel(primary_key(user_id), table_name = guided_tours)]
+pub struct GuidedTours {
+    /// The id of the user from Keycloak.
+    pub user_id: Uuid,
+    /// A flag indicating if the Map Editor Guided Tour was completed.
+    pub editor_tour_completed: bool,
+}
+
+/// The `UpdateGuidedTours` entity.
+#[derive(AsChangeset)]
+#[diesel(table_name = guided_tours)]
+pub struct UpdateGuidedTours {
+    /// A flag indicating if the Map Editor Guided Tour was completed.
+    pub editor_tour_completed: Option<bool>,
+}
+
+/// The `Blossom` entity.
+#[derive(Identifiable, Queryable)]
+#[diesel(primary_key(title), table_name = blossoms)]
+pub struct Blossom {
+    /// The title of the Blossom.
+    pub title: String,
+    /// The description of the Blossom.
+    pub description: Option<String>,
+    /// The track the Blossom is part of.
+    pub track: Track,
+    /// The path to the icon of the Blossom in Nextcloud.
+    pub icon: String,
+    /// A flag indicating if this Blossom is repeatable every season.
+    pub is_seasonal: bool,
+}
+
+/// The `GainedBlossoms` entity.
+#[derive(Insertable, Identifiable, Queryable)]
+#[diesel(primary_key(user_id, blossom), table_name = gained_blossoms)]
+pub struct GainedBlossoms {
+    /// The id of the user from Keycloak.
+    pub user_id: Uuid,
+    /// The title of the Blossom.
+    pub blossom: String,
+    /// The number of times this Blossom was gained by this user.
+    pub times_gained: i32,
+    /// The date on which the user gained this Blossom.
+    pub gained_date: NaiveDate,
 }

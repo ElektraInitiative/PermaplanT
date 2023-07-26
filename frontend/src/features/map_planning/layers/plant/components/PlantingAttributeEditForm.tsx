@@ -118,7 +118,12 @@ export function PlantingAttributeEditForm({
 
       <hr className="my-4 border-neutral-700" />
 
-      <SimpleButton variant={ButtonVariant.dangerBase} onClick={onDeleteClick} className="w-36">
+      <SimpleButton
+        variant={ButtonVariant.dangerBase}
+        onClick={onDeleteClick}
+        className="w-36"
+        data-tourid="planting_delete"
+      >
         {t('plantings:delete')}
       </SimpleButton>
     </div>

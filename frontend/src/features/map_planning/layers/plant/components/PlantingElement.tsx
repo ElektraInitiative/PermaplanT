@@ -103,6 +103,8 @@ export function PlantingElement({ planting }: PlantingElementProps) {
       planting={planting}
       draggable
       onClick={(e) => {
+        const placeEvent = new Event('selectPlant');
+        document.getElementById('canvas')?.dispatchEvent(placeEvent);
         addShapeToTransformer(e.currentTarget);
         selectPlanting(planting);
       }}
@@ -127,6 +129,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
           width={planting.width * 0.9}
           height={planting.height * 0.9}
           offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
+          showErrorMessage={false}
         />
       ) : (
         <Rect width={0} height={0} />
