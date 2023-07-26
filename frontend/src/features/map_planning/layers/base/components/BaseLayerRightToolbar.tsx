@@ -23,7 +23,7 @@ export const BaseLayerRightToolbar = () => {
   // using the onFocusEvent handler to update the state from this component.
   const [pathInput, setPathInput] = useState(baseLayerState.nextcloudImagePath);
   const [rotationInput, setRotationInput] = useState(baseLayerState.rotation);
-  const [scaleInput, setScaleInput] = useState(baseLayerState.rotation);
+  const [scaleInput, setScaleInput] = useState(baseLayerState.scale);
   const [showFileSelector, setShowFileSelector] = useState(false);
 
   useEffect(() => {
