@@ -250,6 +250,8 @@ lock("${env.NODE_NAME}-exclusive") {
                 e2eImage.inside {
                     sh 'make test-e2e'
                 }
+            } catch (err) {
+                echo "Error occurred during the e2eImage.inside block: ${err}"
             } finally {
                 archiveArtifacts artifacts: 'test-results/**', fingerprint: true,  allowEmptyArchive: true
                 archiveArtifacts artifacts: 'report.html', fingerprint: true,  allowEmptyArchive: true
