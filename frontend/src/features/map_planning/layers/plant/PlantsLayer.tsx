@@ -45,8 +45,8 @@ function usePlantLayerListeners(listening: boolean) {
           // consider the offset of the stage and size of the element
           x: Math.round(position.x),
           y: Math.round(position.y),
-          height: 100,
-          width: 100,
+          height: 50,
+          width: 50,
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
