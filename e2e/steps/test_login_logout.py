@@ -20,11 +20,13 @@ def login_button_is_visible(hp: HomePage):
 def login_to_permaplant(hp: HomePage):
     hp.click_login_button()
 
+
 @when(parsers.parse("I enter valid credentials {username} {password}"))
 def enter_credentials(lp: LoginPage, username, password):
     lp.verify()
     lp.enter_username(username)
     lp.enter_password(password)
+
 
 @when("I click the submit button")
 def click_submit(lp: LoginPage):
@@ -47,10 +49,9 @@ def verify_logged_in(hp: HomePage, lp: LoginPage):
     hp.verify()
     hp.login_button_is_visible()
     hp.click_login_button()
-    lp.enter_username("Adi")
-    lp.enter_password("1234")
-    lp.click_sign_in()
+    lp.login("Adi", "1234")
     hp.verify()
+
 
 @when("I click on the logout button")
 def logout_from_permaplant(hp: HomePage):

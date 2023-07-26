@@ -25,11 +25,12 @@ run-storybook: build-storybook  ## Build & Run storybook.
 
 .PHONY: test
 test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
+test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
 	pre-commit
 
 .PHONY: test-e2e
 test-e2e: ## End-to-End tests. Needs backend and frontend running.
-	python3 -m pytest --numprocesses auto e2e/ --video retain-on-failure
+	python3 -m pytest -n auto e2e/ --retries 2 --video retain-on-failure --html=report.html --self-contained-html --cucumberjson=cucumber.json
 
 .PHONY: test-frontend
 test-frontend:  ## Test Frontend.

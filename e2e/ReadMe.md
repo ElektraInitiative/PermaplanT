@@ -44,46 +44,59 @@ To run all tests with as many processes as your computer has CPU cores
 python3 -m pytest --numprocesses auto
 ```
 
+To run retries on your tests
+
+```sh
+python3 -m pytest --retries 3
+```
+
 To run specific tests
 
 ```sh
-python3 -m pytest --numprocesses auto steps/test_login_logout.py
+python3 -m pytest steps/test_login_logout.py
 ```
 
 To capture video when testing
 
 ```sh
-python3 -m pytest --numprocesses auto --video on
+python3 -m pytest --video on
 ```
 
 To capture video only on failure
 
 ```sh
-python3 -m pytest --numprocesses auto --video retain-on-failure
+python3 -m pytest --video retain-on-failure
+```
+
+If there is something suspicious going on.
+
+```sh
+set -e; for i in `seq 10`;do echo "Running iteration $i"; python -m pytest -n auto; done
 ```
 
 ## ENV Variables
 
 ### TEST_URL
 
-The url under wich the tests look for the website.
+The url under which the tests look for the website.
 Defaults to `localhost:5173`
 
 ## How to write tests
 
 ### Before we start
 
-- Be consistent.
-- Use the same vocabulary as playwright(click, visible, etc.)
-- Avoid using mutiple different verbs for the same actions, keep your vocabulary small and precise.
-- Be minimalistic.
+- Be consistent and minimalistic.
+- Every test should be independent from other tests (concurrency).
+- Name inputs on the page SUT (System under Test).
+- Use the same vocabulary as playwright (click, visible, etc.)
+- Avoid using multiple different verbs for the same actions, keep your vocabulary small and precise.
 
 ### A typical workflow
 
 The usual workflow consists of:
 
 - write a feature inside `/features` with one or multiple scenarios.
-- implement the page object if it doesnt exist yet in `/pages`.
+- implement the page object if it doesn't exist yet in `/pages`.
 - write the steps that are connected to the gherkin syntax with pytest-bdd inside `/steps`.
 
 Lets go over these steps one by one.
