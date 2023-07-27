@@ -46,7 +46,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Fix a bug where the wrong value is assigned to an input field _(Moritz)_
 - _()_
-- _()_
+- Give feedback when plant search is empty _(Moritz)_
 - _()_
 - CI: Improve pipeline parallelization #577 _(4ydan)_
 - CI: Add groovy pre-commit hook #685 _(4ydan)_
