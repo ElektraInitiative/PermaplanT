@@ -1,0 +1,2 @@
+-- Your SQL goes here
+ALTER TABLE maps ADD COLUMN geometry GEOMETRY(POLYGON, 4326) NOT NULL;

@@ -113,30 +113,37 @@ Store relations between plants.
 
 ## `Users`
 
-| **_Column name_**     | **_Example_**         | **_Description_**                                              |
-| :-------------------- | :-------------------- | :------------------------------------------------------------- |
-| **id**                | 1                     |
-| **nc_uid**            | 1                     | Nextcloud ID                                                   |
-| **contributor_until** | 2023-04-04            | has contributing membership until the given date               |
-| **app_language**      | English               |
-| **member_since**      | 2023-04-04            |
-| **member_years**      | {2023}                | Array of years                                                 |
-| **experience**        | beginner              |
-| **preferences**       | raised vegetable beds |
-| **location**          | Vienna, Austria       |
-| **permacoins**        | {0}                   | 0 to infinity, one entry for every year since account creation |
+| **_Column name_** | **_Example_**                        | **_Description_**                    |
+| :---------------- | :----------------------------------- | :----------------------------------- |
+| **id**            | 00000000-0000-0000-0000-000000000000 | the UUID from Keycloak               |
+| **salutation**    | Mr                                   | the preferred salutation of the user |
+| **title**         | NULL                                 | the title of the user                |
+| **country**       | Austria                              | the country of the user              |
+| **phone**         | NULL                                 | the phone number of the user         |
+| **website**       | NULL                                 | the website of the user              |
+| **organization**  | NULL                                 | the organization of the user         |
+| **experience**    | beginner                             | the experience level of the user     |
+| **membership**    | Regular Membership                   | the membership type of the user      |
+| **member_years**  | {2023}                               | array of years                       |
+| **member_since**  | 2023-07-12                           | since when the user is a member      |
+| **permacoins**    | {0}                                  | array of positive integers           |
+
+## `Guided Tours`
+
+| **_Column name_** | **_Example_**                        | **_Description_**            |
+| :---------------- | :----------------------------------- | :--------------------------- |
+| **user**          | 00000000-0000-0000-0000-000000000000 | the id of the user           |
+| **editor_tour**   | false                                | flag for the Map Editor Tour |
 
 ## `Blossoms`
 
-| **_Column name_** | **_Example_**          | **_Description_**                               |
-| :---------------- | :--------------------- | :---------------------------------------------- |
-| **id**            | 1                      |
+| **_Column name_** | **_Example_**          | **_Description_**                            |
+| :---------------- | :--------------------- | :------------------------------------------- |
 | **title**         | Novice Gardener        |
 | **description**   | Plant your first plant |
-| **condition**     | plants.count() >= 1    | condition used to check if milestone is reached |
-| **track**         | Beginners Track        | the track (category) this blossom belongs to    |
+| **track**         | Beginners Track        | the track (category) this blossom belongs to |
 | **icon**          | NULL                   |
-| **is_seasonal**   | false                  | resets and repeats every year                   |
+| **is_seasonal**   | false                  | resets and repeats every year                |
 
 ## `Blossoms Gained`
 

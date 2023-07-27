@@ -61,13 +61,11 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
                     // Because in Deploy the path for /target is a
                     //env in permaplant-deploy.sh, we can only solve it with prepending cd backend
                     sh "cd backend && ${command}"
-                    if (stashsrc && stashdir) {
-                        if (stashsrc.size() != stashdir.size()) {
-                            throw new UnequalStashException()
-                        }
-                        for (int i = 0; i < stashsrc.size(); i++) {
-                            stash includes: stashsrc[i], name: stashdir[i]
-                        }
+                    if (stashsrc.size() != stashdir.size()) {
+                        throw new UnequalStashException();
+                    }
+                    for (int i = 0; i < stashsrc.size(); i++) {
+                        stash includes: stashsrc[i], name: stashdir[i];
                     }
                 }
             }
@@ -167,10 +165,12 @@ timeout(time: 2, unit: 'HOURS') {
             ]
             List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
             parallel(
-                    // Workaround: we can't stop rustfmt from linting the generated schema.rs so we empty the file before.
+                    // Workaround: we can't stop rustfmt from linting the generated schema.rs
+                    // so we empty the file before.
                     "cargo-fmt": runDockerWithPostgresSidecar(
                         "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
                         ),
+                    // End of workaround
                     "schema": runDockerWithPostgresSidecar(
                         'echo schema test', schemaStashsrc, schemaStashdir
                         ),
@@ -182,11 +182,11 @@ timeout(time: 2, unit: 'HOURS') {
         stage('Test and Build') {
             parallel(
                     'cargo-build': runDockerWithPostgresSidecar(
-                        'cargo build --release && cargo clippy',
+                        'cargo build --release',
                         ['backend/target/release/backend'],
                         ['backend']
                     ),
-                    'cargo-check': runDockerWithPostgresSidecar('cargo check && cargo doc'),
+                    'cargo-clippy/doc': runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
                     'cargo-test': runDockerWithPostgresSidecar('cargo test'),
                     'frontend': testAndBuildFrontend(),
                     'mdbook': testAndBuildMdbook(),
@@ -199,42 +199,69 @@ timeout(time: 2, unit: 'HOURS') {
     }
 }
 
-stage('Deploy PR') {
-    node('permaplant && pr') {
-        node_info()
+lock("${env.NODE_NAME}-exclusive") {
+    stage('Deploy PR') {
+        node('permaplant && pr') {
+            node_info()
 
-        checkout scm
+            checkout scm
 
-        echo "Workspace is '${WORKSPACE}'"
-        echo 'Ensure pr service is stopped'
-        sh 'sudo /usr/sbin/service permaplant-pr stop'
+            echo "Workspace is '${WORKSPACE}'"
+            echo 'Ensure pr service is stopped'
+            sh 'sudo /usr/sbin/service permaplant-pr stop'
 
-        withEnv(['DATABASE_URL=postgres://cidb:cidb@127.0.0.1/cidb']) {
-            echo 'Resetting the CI DB ...'
-            sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
+            withEnv(['DATABASE_URL=postgres://cidb:cidb@127.0.0.1/cidb']) {
+                echo 'Resetting the CI DB ...'
+                sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
-            echo 'Unstash Artifacts'
-            unstash 'schema.rs'
-            unstash 'frontend'
-            unstash 'backend'
-            unstash 'storybook'
-            unstash 'typedoc'
-            unstash 'mdbook'
+                echo 'Unstash Artifacts'
+                unstash 'schema.rs'
+                unstash 'frontend'
+                unstash 'backend'
+                unstash 'storybook'
+                unstash 'typedoc'
+                unstash 'mdbook'
 
-            echo 'Deploying to PR'
-            sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
+                echo 'Deploying to PR'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
 
-            echo 'Loading Data to PR'
-            dir('scraper') {
-                sh 'npm ci'
-                sh 'mkdir ./data/'
-                sh 'cp /nextcloud/mergedDatasets.csv ./data/'
-                sh 'cp /nextcloud/Companions.csv ./data/'
-                sh 'cp /nextcloud/Antagonist.csv ./data/'
-                sh 'cp /nextcloud/Sizes.csv ./data/'
-                sh 'npm run insert'
-                sh 'rm -rf ./data/'
-                sh 'rm -rf ./node_modules/'
+                echo 'Loading Data to PR'
+                dir('scraper') {
+                    sh 'npm ci'
+                    sh 'mkdir ./data/'
+                    sh 'cp /nextcloud/mergedDatasets.csv ./data/'
+                    sh 'cp /nextcloud/Companions.csv ./data/'
+                    sh 'cp /nextcloud/Antagonist.csv ./data/'
+                    sh 'cp /nextcloud/Sizes.csv ./data/'
+                    sh 'npm run insert'
+                    sh 'rm -rf ./data/'
+                    sh 'rm -rf ./node_modules/'
+                }
+            }
+        }
+    }
+
+    stage('E2E Tests') {
+        node('docker') {
+            node_info()
+            checkout scm
+            def e2eImage = docker.build("permaplant-e2e", "./e2e")
+            try {
+                e2eImage.inside {
+                    sh 'make test-e2e'
+                }
+            } catch (err) {
+                echo "Error occurred during the e2eImage.inside block: ${err}"
+                // rethrow so build fails
+                // groovylint-disable-next-line
+                throw err;
+            } finally {
+                archiveArtifacts artifacts: 'test-results/**', fingerprint: true,  allowEmptyArchive: true
+                archiveArtifacts artifacts: 'report.html', fingerprint: true,  allowEmptyArchive: true
+                cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
+                fileIncludePattern: 'cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
+                sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
+                deleteDir();
             }
         }
     }

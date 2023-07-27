@@ -1,0 +1,9 @@
+/venv/
+/.playwright-screenshots/
+/tests/report.html
+archived_logs
+*cache*
+/test-results
+report.html
+assets
+cucumber.json

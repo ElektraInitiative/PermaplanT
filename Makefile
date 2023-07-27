@@ -24,8 +24,13 @@ run-storybook: build-storybook  ## Build & Run storybook.
 # TEST
 
 .PHONY: test
-test: test-frontend test-backend test-mdbook  ## Test everything.
+test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
+test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
 	pre-commit
+
+.PHONY: test-e2e
+test-e2e: ## End-to-End tests. Needs backend and frontend running.
+	python3 -m pytest -n auto e2e/ --retries 2 --video retain-on-failure --html=report.html --self-contained-html --cucumberjson=cucumber.json
 
 .PHONY: test-frontend
 test-frontend:  ## Test Frontend.
@@ -135,11 +140,13 @@ clean-storybook:  ## Remove storybook static folder.
 .PHONY: install
 install:  ## Install ALL dependencies within the source repo.
 	cd backend && make install
+	cd e2e && ./install.sh
 	cargo install mdbook mdbook-mermaid mdbook-linkcheck
 	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary --locked
 
 .PHONY: uninstall
 uninstall:  ## Uninstall ALL dependencies within the source repo.
 	-cd backend && make uninstall
+	-cd e2e && python3 -m pip uninstall -y -r requirements.txt
 	-cargo uninstall mdbook mdbook-mermaid mdbook-linkcheck
 	-cargo uninstall mdbook-generate-summary

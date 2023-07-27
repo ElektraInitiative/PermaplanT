@@ -4,14 +4,17 @@
 
 mod auth;
 mod base_layer_image;
+mod blossoms;
 mod config;
+mod guided_tours;
 mod layers;
 mod map;
 mod pagination;
 mod plant;
 mod plant_layer;
-pub mod plant_layer_heatmap;
+// mod plant_layer_heatmap;
 mod planting_suggestions;
 mod plantings;
 mod seed;
+mod users;
 pub mod util;

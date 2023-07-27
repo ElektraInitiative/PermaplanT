@@ -1,3 +1,4 @@
+import { ExtendedPlantsSummaryDisplayName } from './ExtendedPlantDisplay';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
@@ -65,7 +66,9 @@ export function PlantingAttributeEditForm({
 
   return (
     <div className="flex flex-col gap-2 p-2">
-      <h2>{plant?.unique_name}</h2>
+      <h2>
+        <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
+      </h2>
 
       <div className="flex gap-2">
         <SimpleFormInput
@@ -115,7 +118,12 @@ export function PlantingAttributeEditForm({
 
       <hr className="my-4 border-neutral-700" />
 
-      <SimpleButton variant={ButtonVariant.dangerBase} onClick={onDeleteClick} className="w-36">
+      <SimpleButton
+        variant={ButtonVariant.dangerBase}
+        onClick={onDeleteClick}
+        className="w-36"
+        data-tourid="planting_delete"
+      >
         {t('plantings:delete')}
       </SimpleButton>
     </div>

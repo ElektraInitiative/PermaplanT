@@ -1,5 +1,6 @@
 import useMapStore from '../../store/MapStore';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
+import { ExtendedPlantsSummaryDisplayName } from './components/ExtendedPlantDisplay';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantsSummaryDto } from '@/bindings/definitions';
@@ -44,8 +45,8 @@ function usePlantLayerListeners(listening: boolean) {
           // consider the offset of the stage and size of the element
           x: Math.round(position.x),
           y: Math.round(position.y),
-          height: 100,
-          width: 100,
+          height: 50,
+          width: 50,
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
@@ -200,14 +201,13 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
       }}
     >
       <div className="flex flex-col items-center justify-center">
-        <span>
-          {plant.unique_name} ({plant.common_name_en})
-        </span>
+        <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
       </div>
       <div className="flex items-center justify-center">
         <IconButton
           className="m-2 h-8 w-8 border border-neutral-500 p-1"
           onClick={() => selectPlant(null)}
+          data-tourid="placement_cancel"
         >
           <CloseIcon></CloseIcon>
         </IconButton>
