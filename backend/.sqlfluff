@@ -12,4 +12,4 @@ extended_capitalisation_policy = lower
 [sqlfluff:rules:capitalisation.literals]
 capitalisation_policy = lower
 [sqlfluff:rules:capitalisation.types]
-extended_capitalisation_policy = lower
+extended_capitalisation_policy = upper
