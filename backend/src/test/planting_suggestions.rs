@@ -3,7 +3,7 @@
 use crate::{
     model::{
         dto::{Page, PlantsSummaryDto},
-        r#enum::quantity::Quantity,
+        r#enum::{plant_spread::PlantSpread, quantity::Quantity},
     },
     test::util::{init_test_app_for_user, init_test_database},
 };
@@ -32,6 +32,7 @@ async fn test_find_only_available_plants() {
                         &crate::schema::plants::unique_name.eq("Testia testia"),
                         &crate::schema::plants::common_name_en
                             .eq(Some(vec![Some("Testplant1".to_string())])),
+                        &crate::schema::plants::spread.eq(PlantSpread::Wide),
                     ),
                     (
                         // No seasonal data: plant is seasonal
@@ -39,6 +40,7 @@ async fn test_find_only_available_plants() {
                         &crate::schema::plants::unique_name.eq("Testia testius"),
                         &crate::schema::plants::common_name_en
                             .eq(Some(vec![Some("Testplant2".to_string())])),
+                        &crate::schema::plants::spread.eq(PlantSpread::Wide),
                     ),
                 ])
                 .execute(conn)
@@ -96,6 +98,7 @@ async fn test_find_only_available_plants() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant1".to_string())]),
+        spread: Some(PlantSpread::Wide),
     };
 
     assert!(page.results.contains(&test_plant));
@@ -118,6 +121,7 @@ async fn test_find_only_available_seasonal_plants() {
                         &crate::schema::plants::common_name_en
                             .eq(Some(vec![Some("Testplant1".to_string())])),
                         &crate::schema::plants::sowing_outdoors.eq(Some(vec![Some(6), Some(7)])),
+                        &crate::schema::plants::spread.eq(PlantSpread::Wide),
                     ),
                     (
                         // plant is not seasonal in april
@@ -126,6 +130,7 @@ async fn test_find_only_available_seasonal_plants() {
                         &crate::schema::plants::common_name_en
                             .eq(Some(vec![Some("Testplant2".to_string())])),
                         &crate::schema::plants::sowing_outdoors.eq(Some(vec![Some(8), Some(9)])),
+                        &crate::schema::plants::spread.eq(PlantSpread::Wide),
                     ),
                 ])
                 .execute(conn)
@@ -183,6 +188,7 @@ async fn test_find_only_available_seasonal_plants() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant1".to_string())]),
+        spread: Some(PlantSpread::Wide),
     };
 
     assert!(page.results.contains(&test_plant));
