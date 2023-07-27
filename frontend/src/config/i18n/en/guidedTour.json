@@ -32,7 +32,8 @@
         "plants_layer_undo": "Should you have done an action unintentionally or you simply want to undo something you can use the undo button from the toolbox. Use it now to undo the placement of your second plant.",
         "plants_layer_placed_select": "Click now on the remaining plant to view additional information and available actions for it.",
         "plants_layer_left_toolbar": "The left sidebar will show you the attributes of a plant that you selected from the ones already present on your map. You can use this overview to edit these attributes or delete the plant from your map.",
-        "plants_layer_delete": "Now delete the plant by clicking on the intended button, to regain a blank map and complete this introduction. One last thing: Deleting has the effect as if the plant has never existed. Removal, however, means that the plant only got removed from the garden at a certain date. The plant will still be there earlier in the timeline. Don't forget to change the date back as needed.",
-        "congratulations_text": "Congratulations! Now you know the most important features of the Map Editor and can use it, to change the image of your base layer and place your first plants on the map. Happy planting!"
+        "plants_layer_delete": "Now delete the plant by clicking on the intended button, to regain a blank map.",
+        "plants_layer_revert_date": "Finally you have to revert the date of the map to the current day. Click now again the button of the timeline and either select the current date manually or use the specialised button.",
+        "congratulations_text": "Congratulations! Now you know the most important features of the Map Editor and can use it, to place your first plants on the map. Happy planting!"
     }
 }
