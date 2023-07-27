@@ -36,7 +36,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Handle events of same user, discard events in same tab _(Paul)_
-- _()_
+- Fix a bug in the date handling actions of plants _(Paul)_
 - _()_
 - Add debouncing to base layer toolbar _(Moritz)_
 - _()_
