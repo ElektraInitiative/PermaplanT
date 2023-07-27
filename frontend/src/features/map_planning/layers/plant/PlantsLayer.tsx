@@ -37,6 +37,23 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
+      let width;
+
+      switch (selectedPlant.spread) {
+        case 'narrow':
+          width = 10;
+          break;
+        case 'medium':
+          width = 50;
+          break;
+        case 'wide':
+          width = 100;
+          break;
+        default:
+          width = 50;
+          break;
+      }
+
       executeAction(
         new CreatePlantAction({
           id: uuid.v4(),
@@ -45,8 +62,8 @@ function usePlantLayerListeners(listening: boolean) {
           // consider the offset of the stage and size of the element
           x: Math.round(position.x),
           y: Math.round(position.y),
-          height: 50,
-          width: 50,
+          height: width,
+          width: width,
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
