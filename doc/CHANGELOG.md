@@ -38,6 +38,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Handle events of same user, discard events in same tab _(Paul)_
 - Fix a bug in the date handling actions of plants _(Paul)_
 - _()_
+- updated scraper to translate spread&height into new enum types _(temmey)_
+- _()_
+- _()_
 - Add debouncing to base layer toolbar _(Moritz)_
 - _()_
 - _()_

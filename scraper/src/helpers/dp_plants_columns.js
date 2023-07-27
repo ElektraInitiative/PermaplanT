@@ -26,8 +26,7 @@ export default [
   { name: "herbaceous_or_woody", cast: "herbaceous_or_woody" },
   { name: "life_cycle", cast: "life_cycle[]" },
   { name: "growth_rate", cast: "growth_rate[]" },
-  //todo: cast height into enum typ #479
-  //{ name: 'height' },
+  { name: "height", cast: "plant_height" },
   //{ name: 'width' },
   { name: "fertility", cast: "fertility[]" },
   //{ name: 'flower_colour' },
@@ -61,8 +60,7 @@ export default [
   { name: 'seed_planting_depth_en' },
   { name: 'seed_viability' },
   { name: 'slug' },*/
-  //todo: cast spread into enum typ #479
-  //{ name: 'spread' },
+  { name: "spread", cast: "plant_spread" },
   //{ name: 'utility' },
   { name: "warning" },
   /*{ name: 'when_to_plant_cuttings_en' },
