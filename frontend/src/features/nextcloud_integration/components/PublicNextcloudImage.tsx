@@ -5,6 +5,8 @@ interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'
   path: string;
   // token which identifies the public share directory
   shareToken: string;
+  // placeholder that will be displayed if the requested image was not found
+  defaultImageUrl: string;
 }
 
 /**
@@ -13,9 +15,13 @@ interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'
   @param props.shareToken: token which identifies the public share directory
  */
 export const PublicNextcloudImage = (props: PublicNextcloudImageProps) => {
-  const { path, shareToken, ...imageProps } = props;
+  const { path, shareToken, defaultImageUrl, ...imageProps } = props;
 
-  const image = usePublicImage({ path, publicShareToken: shareToken });
+  const image = usePublicImage({
+    path,
+    publicShareToken: shareToken,
+    fallbackImageSource: defaultImageUrl,
+  });
 
   return <img src={image.src} {...imageProps} />;
 };
