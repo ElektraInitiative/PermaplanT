@@ -12,7 +12,7 @@ use self::plantings::PlantingDto;
 
 use super::r#enum::{
     experience::Experience, layer_type::LayerType, membership::Membership,
-    privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
+    plant_spread::PlantSpread, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
     relation_type::RelationType, salutation::Salutation,
 };
 
@@ -112,6 +112,8 @@ pub struct PlantsSummaryDto {
     /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
     pub common_name_en: Option<Vec<Option<String>>>,
     //TODO: add icon_path: String
+    /// How far a plant spreads (The 'width' of a plant)
+    pub spread: Option<PlantSpread>,
 }
 
 /// Query parameters for searching plants.
