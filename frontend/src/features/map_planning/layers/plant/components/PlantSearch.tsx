@@ -79,6 +79,7 @@ export const PlantSearch = () => {
                 />
               ))}
             </ul>
+            {plants.length === 0 && <div className="m-4">{t('plantSearch:search_empty')}</div>}
           </motion.div>
         )}
       </AnimatePresence>
