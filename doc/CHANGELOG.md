@@ -30,7 +30,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - fixed issues with correctly displaying plant names _(temmey)_
 - _()_
 - Add grid functionality. _(Moritz)_
-- _()_
+- sizes of plant in map editor depend on their spread value _(temmey)_
 - _()_
 - update sqlfluff config to force upper&lowercase _(temmey)_
 - _()_
