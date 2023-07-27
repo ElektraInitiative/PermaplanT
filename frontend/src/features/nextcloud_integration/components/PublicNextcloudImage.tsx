@@ -6,7 +6,7 @@ interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'
   // token which identifies the public share directory
   shareToken: string;
   // placeholder that will be displayed if the requested image was not found
-  defaultImageUrl: string;
+  defaultImageUrl?: string;
 }
 
 /**
