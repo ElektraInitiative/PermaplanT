@@ -263,6 +263,41 @@
 - Test Result:
 - Notes:
 
+## TC-016 - Map Editor Guided Tour
+
+- Description: Check whether the Guided Tour leaves the Map Editor in its original state.
+- Preconditions:
+  - User must not have completed the Guided Tour prior.
+  - User must be on the map editor screen.
+- Test Steps:
+  1. Follow the Guided Tour until its end.
+  2. Do every step exactly as stated.
+- Expected Result:
+  - There are no plants on the map.
+  - The map date is set to the current date.
+  - Placement mode is not active.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-017 - Map Editor Guided Tour
+
+- Description: Guided Tour only shows when not completed or explicitely cancelled.
+- Preconditions:
+  - User must not have completed the Guided Tour prior.
+  - User must be on the map editor screen.
+- Test Steps:
+  1. Leave the page by entering a different URL or using the browsers navigate back button.
+  2. Return to the map editor screen.
+  3. Use the cancel button on the Tour step or press ESC.
+  4. Reload the page.
+- Expected Result:
+  - The Guided Tour will show again after returning to the map editor screen.
+  - After the page reload, the Guided Tour will not be displayed.
+- Actual Result:
+- Test Result:
+- Notes:
+
 <!--
 DONT DELETE THIS.
 USE THIS TO CREATE A NEW TESTCASE.

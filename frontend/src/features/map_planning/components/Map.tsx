@@ -79,7 +79,7 @@ export const Map = ({ layers }: MapProps) => {
         _completeTour();
       });
     }
-    return () => tour?.cancel();
+    return () => tour?.hide();
   }, [tour, t]);
 
   const getToolbarContent = (layerType: CombinedLayerType) => {

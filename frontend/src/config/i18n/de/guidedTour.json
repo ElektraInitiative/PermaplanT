@@ -32,7 +32,8 @@
         "plants_layer_undo": "Solltest du unbeabsichtigt eine Aktion durchgeführt haben oder sie einfach rückgängig machen wollen, kannst du den Rückgängig-Knopf in der Toolbox verwenden. Nutze ihn jetzt, um das Setzen deiner zweiten Pflanze rückgängig zu machen.",
         "plants_layer_placed_select": "Klicke nun auf die verbleibende Pflanze, um dir weitere Informationen und Aktionen zu ihr anzusehen.",
         "plants_layer_left_toolbar": "Wenn du eine bestehende Pflanze auf deiner Karte auswählst, werden ihre Daten in der linken Seitenleiste angezeigt. Du kannst diese Übersicht nutzen, um Daten nachträglich zu bearbeiten oder die Pflanze von deiner Karte zu löschen.",
-        "plants_layer_delete": "Lösche nun mit einem Klick auf den dafür vorgesehenen Knopf die Pflanze, um wieder eine leere Karte zu erhalten und diese Einführung abzuschließen. Löschen ist so, als wäre die Pflanze nie da gewesen. Wenn Sie hingegen nur entfernt wird, ist sie abhängig vom Datum der Zeitleiste nach wie vor vorhanden. Vergiss nicht, das Datum wieder richtig umzustellen.",
+        "plants_layer_delete": "Lösche nun mit einem Klick auf den dafür vorgesehenen Knopf die Pflanze, um wieder eine leere Karte zu erhalten. Löschen ist so, als wäre die Pflanze nie da gewesen. Wenn Sie hingegen nur entfernt wird, ist sie abhängig vom Datum der Zeitleiste nach wie vor vorhanden.",
+        "plants_layer_revert_date": "Zum Abschluss musst du noch das Datum deiner Karte auf den heutigen Tag zurücksetzen. Klicke jetzt erneut auf die Schaltfläche der Zeitleiste und wähle das heutige Datum entweder manuell oder mit dem dafür vorgesehenen Knopf.",
         "congratulations_text": "Herzlichen Glückwunsch! Nun kennst du die wichtigsten Funktionen des Map Editors und kannst ihn verwenden, um eine Basiskarte zu wählen und deine ersten Pflanzen auf der Karte zu setzen. Frohes Pflanzen!"
     }
 }
