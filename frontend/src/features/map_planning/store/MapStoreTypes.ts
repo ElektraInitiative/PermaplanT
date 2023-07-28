@@ -163,6 +163,7 @@ export interface UntrackedMapSlice {
   lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
+  toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
@@ -233,6 +234,11 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         visible: true,
         opacity: 1,
       },
+      [LayerType.Plants]: {
+        visible: true,
+        opacity: 1,
+        showLabels: true,
+      } as UntrackedPlantLayerState,
       [LayerType.Base]: {
         visible: true,
         opacity: 1,
@@ -329,6 +335,7 @@ export type UntrackedLayers = {
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantsSummaryDto | null;
   selectedPlanting: PlantingDto | null;
+  showLabels: boolean;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {

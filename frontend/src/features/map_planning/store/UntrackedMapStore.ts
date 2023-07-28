@@ -146,6 +146,21 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+  toggleShowPlantLabel() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          plants: {
+            ...state.untrackedState.layers.plants,
+            showLabels: !state.untrackedState.layers.plants.showLabels,
+          },
+        },
+      },
+    }));
+  },
   setTimelineBounds(from: string, to: string) {
     set((state) => ({
       ...state,

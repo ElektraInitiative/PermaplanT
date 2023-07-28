@@ -2,7 +2,7 @@
  * Capitalizes the first char of a string (E.g. "lorem ipsum" -> "Lorem ipsum").
  */
 export function capitalizeFirstLetter(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 /*+
@@ -12,8 +12,8 @@ export function capitalizeFirstLetter(str: string): string {
  *          and that every character sequence between whitespace is a word.
  */
 export function capitalize(str: string): string {
-    return str.split(" ")
-        .map(word => capitalizeFirstLetter(word))
-        .join(" ")
+  return str
+    .split(' ')
+    .map((word) => capitalizeFirstLetter(word))
+    .join(' ');
 }
-

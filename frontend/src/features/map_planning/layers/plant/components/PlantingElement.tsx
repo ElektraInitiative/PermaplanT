@@ -2,6 +2,7 @@ import { useFindPlantById } from '../hooks/useFindPlantById';
 import { ExtendedPlantsSummary } from './ExtendedPlantDisplay';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
+import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { setTooltipPosition } from '@/features/map_planning/utils/Tooltip';
 import Konva from 'konva';
@@ -92,6 +93,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
 
   const addShapeToTransformer = useMapStore((state) => state.addShapeToTransformer);
   const selectPlanting = useMapStore((state) => state.selectPlanting);
+  const showPlantLabels = useMapStore((state) => state.untrackedState.layers.plants.showLabels);
 
   const selectedPlanting = useMapStore(
     (state) => state.untrackedState.layers.plants.selectedPlanting,
@@ -123,14 +125,22 @@ export function PlantingElement({ planting }: PlantingElementProps) {
         fill={selectedPlanting?.id === planting.id ? '#0084ad' : '#6f9e48'}
       />
       {plant ? (
-        <PublicNextcloudKonvaImage
-          shareToken="2arzyJZYj2oNnHX"
-          path={`Icons/${plant?.unique_name}.png`}
-          width={planting.width * 0.9}
-          height={planting.height * 0.9}
-          offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
-          showErrorMessage={false}
-        />
+        <Group>
+          <PublicNextcloudKonvaImage
+            shareToken="2arzyJZYj2oNnHX"
+            path={`Icons/${plant?.unique_name}.png`}
+            width={planting.width * 0.9}
+            height={planting.height * 0.9}
+            offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
+            showErrorMessage={false}
+          />
+          {showPlantLabels && (
+            <PlantLabel
+              plant={plant}
+              offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
+            />
+          )}
+        </Group>
       ) : (
         <Rect width={0} height={0} />
       )}
