@@ -6,51 +6,83 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.3.0 - UNRELEASED
+## 0.3.1 - UNRELEASED
 
 - _()_
 - _()_
 - _()_
 - _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+
+## 0.3.0 - 28.07.2023 (273 commits)
+
 - Added Guided Tour for the Map Editor _(Thorben)_
-- _()_
 - Remove error toast when adding a plant without an icon in Nextcloud. _(Moritz)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- squashed migrations _(temmey)_
 - commented out properties in table plants for now to improve build time. _(temmey)_
 - set all enums in DB to lowercase _(temmey)_
-- _()_
 - added component to display plant names correctly formated _(temmey)_
 - fixed issues with correctly displaying plant names _(temmey)_
-- _()_
 - Add grid functionality. _(Moritz)_
 - sizes of plant in map editor depend on their spread value _(temmey)_
-- _()_
-- update sqlfluff config to force upper&lowercase _(temmey)_
-- _()_
-- _()_
 - Handle events of same user, discard events in same tab _(Paul)_
 - Fix a bug in the date handling actions of plants _(Paul)_
-- _()_
 - updated scraper to translate spread&height into new enum types _(temmey)_
-- _()_
-- _()_
 - Add debouncing to base layer toolbar _(Moritz)_
-- _()_
-- _()_
 - Fix a bug in loading images _(Paul)_
-- _()_
-- _()_
 - Fix a bug where the wrong value is assigned to an input field _(Moritz)_
-- _()_
 - Give feedback when plant search is empty _(Moritz)_
-- _()_
+- Display icon in plant search if available. _(Moritz)_
+- DEV: squashed migrations _(temmey)_
+- DEV: start using sqlfluff in pre-commit _(temmey)_ and Benjamin
 - CI: Improve pipeline parallelization #577 _(4ydan)_
 - CI: Add groovy pre-commit hook #685 _(4ydan)_
 - CI: Optimized mdbook docker image #585 _(4ydan)_
@@ -58,12 +90,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: Remove cargo check, put clippy before doc #688 _(4ydan)_
 - CI: login/logout e2e tests #625 _(4ydan)_
 - CI: map creation e2e tests #707 _(4ydan)_
-- _()_
-- _()_
-- _()_
-- Display icon in plant search if available. _(Moritz)_
-- _()_
-- _()_
 
 ## 0.2.3 - 18.07.2023 (165 commits)
 
