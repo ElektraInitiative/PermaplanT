@@ -1,6 +1,6 @@
 import { PlantsSummaryDto } from '@/bindings/definitions';
 import { capitalize } from '@/features/map_planning/utils/string-utils';
-import { Group, Text } from 'react-konva';
+import { Label, Tag, Text } from 'react-konva';
 
 export interface PlantLabelProps {
   /** Contains plant name that will be displayed on the label. */
@@ -13,14 +13,16 @@ export const PlantLabel = ({ plant }: PlantLabelProps) => {
   const commonName = plant.common_name_en === undefined ? '' : plant.common_name_en[0];
 
   return (
-    <Group listening={false}>
+    <Label listening={false} x={35} y={-5}>
+      {/* Colors are Gray 800 and Gray 50 from the DEFAULT tailwind theme.                             */}
+      {/* Unfortunately we can not directly import colors from tailwind.                               */}
+      {/* More details can be found in @/features/map_planning/layers/_frontend_only/util/Constants.ts */}
+      <Tag fill={'#2d2d2d'} />
       <Text
         text={`${capitalize(commonName)} (${capitalize(plant.unique_name)})`}
-        x={30}
-        y={-5}
         fillEnabled={true}
-        fill={'#ffffff'}
+        fill={'#fefefefe'}
       />
-    </Group>
+    </Label>
   );
 };
