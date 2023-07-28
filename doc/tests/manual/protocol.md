@@ -293,7 +293,7 @@
   4. Reload the page.
 - Expected Result:
   - The Guided Tour will show again after returning to the map editor screen.
-  - After the pag reload, the Tour will not be displayed.
+  - After the page reload, the Guided Tour will not be displayed.
 - Actual Result:
 - Test Result:
 - Notes:
