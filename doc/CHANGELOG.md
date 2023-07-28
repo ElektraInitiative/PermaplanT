@@ -61,7 +61,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Display icon in plant search if available. _(Moritz)_
 - _()_
 - _()_
 
