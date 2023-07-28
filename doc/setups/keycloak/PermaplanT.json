@@ -9,12 +9,8 @@
   "enabled": true,
   "alwaysDisplayInConsole": false,
   "clientAuthenticatorType": "client-secret",
-  "redirectUris": [
-    "http://localhost:5173/*"
-  ],
-  "webOrigins": [
-    "+"
-  ],
+  "redirectUris": ["http://localhost:5173/*"],
+  "webOrigins": ["+"],
   "notBefore": 0,
   "bearerOnly": false,
   "consentRequired": false,
@@ -34,13 +30,7 @@
   "authenticationFlowBindingOverrides": {},
   "fullScopeAllowed": true,
   "nodeReRegistrationTimeout": -1,
-  "defaultClientScopes": [
-    "web-origins",
-    "acr",
-    "profile",
-    "roles",
-    "email"
-  ],
+  "defaultClientScopes": ["web-origins", "acr", "profile", "roles", "email"],
   "optionalClientScopes": [
     "address",
     "phone",
