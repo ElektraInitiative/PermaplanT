@@ -103,7 +103,7 @@ The scraper also inserts the scraped data into the database:
 npm run insert:plants
 ```
 
-5. Insert relations into the database 
+5. Insert relations into the database
 
 The scraper inserts the relation data into the database.
 

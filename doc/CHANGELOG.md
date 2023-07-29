@@ -60,7 +60,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- CI: Add most of pre-commit hooks to sanity stage #736 _(4ydam)_
 - _()_
 
 ## 0.3.0 - 28.07.2023 (273 commits)

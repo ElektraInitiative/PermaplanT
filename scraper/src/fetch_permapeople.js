@@ -1,14 +1,14 @@
-import axios from 'axios';
-import fs from 'fs';
-import { parse as json2csv } from 'json2csv';
-import { config } from 'dotenv';
+import axios from "axios";
+import fs from "fs";
+import { parse as json2csv } from "json2csv";
+import { config } from "dotenv";
 
 config();
 
-const apiUrl = 'https://permapeople.org/api/plants/';
+const apiUrl = "https://permapeople.org/api/plants/";
 const headers = {
-  'x-permapeople-key-id': process.env.PERMAPEOPLE_KEY_ID,
-  'x-permapeople-key-secret': process.env.PERMAPEOPLE_KEY_SECRET,
+  "x-permapeople-key-id": process.env.PERMAPEOPLE_KEY_ID,
+  "x-permapeople-key-secret": process.env.PERMAPEOPLE_KEY_SECRET,
 };
 
 /**
@@ -62,11 +62,11 @@ async function fetchAllPlants() {
  * @param {*} plants Array of plants
  */
 function writePlantsToCsv(plants) {
-  if (!fs.existsSync('data')) {
-    fs.mkdirSync('data');
+  if (!fs.existsSync("data")) {
+    fs.mkdirSync("data");
   }
   const csv = json2csv(plants);
-  fs.writeFileSync('data/permapeopleRawData.csv', csv);
+  fs.writeFileSync("data/permapeopleRawData.csv", csv);
   return plants;
 }
 
