@@ -94,7 +94,7 @@
 
 ## TC-007 - Plant Search
 
-- Description: Returns results for searches in the language that was not selected.
+- Description: Returns results for searches in the language that was selected.
 - Preconditions:
   - Language English has been selected
 - Test Steps:
@@ -102,10 +102,9 @@
   2. Select a map.
   3. Select the plant layer in the right map menu.
   4. Push the search icon in the lower right menu.
-  5. Write "fichte" into the search field.
+  5. Write "Tomato" and "Potato" into the search field.
 - Expected Result:
-  - Firs (Latin Picea, German "Fichten") are part of the search results in addition to English matches.
-  - Matches on English data fields are ranked above English matches.
+  - "Tomato" and "Potato" should be the first match.
 - Actual Result:
 - Test Result:
 - Notes:
