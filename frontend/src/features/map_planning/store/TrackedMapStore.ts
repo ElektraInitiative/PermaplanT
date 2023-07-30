@@ -109,8 +109,13 @@ export const createTrackedMapSlice: StateCreator<
  * After execution, the ability to redo any undone action is lost.
  */
 function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
+  const snapshot = structuredClone(get());
+
   trackUserAction(action, set);
-  action.execute(get().untrackedState.mapId);
+  action.execute(get().untrackedState.mapId).catch(() => {
+    set(snapshot);
+  });
+
   trackReverseActionInHistory(action, get().step, set, get);
   applyActionToStore(action, set, get);
 
