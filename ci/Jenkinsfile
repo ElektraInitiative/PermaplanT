@@ -9,6 +9,13 @@ def wait_for_db() {
     }
 }
 
+def wait_for_pr_db() {
+    retry(6) {
+        sleep(time: 5, unit: 'SECONDS')
+        sh 'curl https://pr.permaplant.net/api/config'
+    }
+}
+
 /**
  * Aborts the previous build in progress if it exists and the current build is not on the "master" branch.
  * This method is used to prevent multiple concurrent builds for non-master branches.
@@ -270,6 +277,7 @@ lock("${env.NODE_NAME}-exclusive") {
             def e2eImage = docker.build("permaplant-e2e:build", "./e2e")
             try {
                 e2eImage.inside {
+                    wait_for_pr_db()
                     sh 'make test-e2e'
                 }
             } catch (err) {
