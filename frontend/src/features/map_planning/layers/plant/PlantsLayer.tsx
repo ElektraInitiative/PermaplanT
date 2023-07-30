@@ -1,4 +1,5 @@
 import useMapStore from '../../store/MapStore';
+import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 import { ExtendedPlantsSummaryDisplayName } from './components/ExtendedPlantDisplay';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
@@ -28,13 +29,14 @@ function usePlantLayerListeners(listening: boolean) {
   );
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
+  const isReadOnlyMode = useIsReadOnlyMode();
 
   /**
    * Event handler for planting plants
    */
   const handleCreatePlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(
     (e) => {
-      if (e.target instanceof Konva.Shape || !selectedPlant) {
+      if (e.target instanceof Konva.Shape || !selectedPlant || isReadOnlyMode) {
         return;
       }
 
@@ -62,7 +64,7 @@ function usePlantLayerListeners(listening: boolean) {
         }),
       );
     },
-    [getSelectedLayerId, executeAction, selectedPlant, timelineDate],
+    [getSelectedLayerId, executeAction, selectedPlant, timelineDate, isReadOnlyMode],
   );
 
   /**
