@@ -54,7 +54,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix a bug where texts in the editor tour were swapped _(Thorben)_
 - _()_
 - _()_
 - _()_
