@@ -3,7 +3,7 @@ import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './acti
 import { ExtendedPlantsSummaryDisplayName } from './components/ExtendedPlantDisplay';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { LayerType, PlantsSummaryDto } from '@/bindings/definitions';
+import { LayerType, PlantSpread, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -14,6 +14,12 @@ import { createPortal } from 'react-dom';
 import { Layer } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
+
+const PLANT_WIDTHS = new Map([
+  ['narrow', 10],
+  ['medium', 50],
+  ['wide', 100],
+]);
 
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
@@ -37,22 +43,7 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      let width;
-
-      switch (selectedPlant.spread) {
-        case 'narrow':
-          width = 10;
-          break;
-        case 'medium':
-          width = 50;
-          break;
-        case 'wide':
-          width = 100;
-          break;
-        default:
-          width = 50;
-          break;
-      }
+      const width = PLANT_WIDTHS.get(selectedPlant.spread ?? PlantSpread.Medium) ?? 50;
 
       executeAction(
         new CreatePlantAction({
