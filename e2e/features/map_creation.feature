@@ -4,8 +4,8 @@ Feature: PermaplanT Map Creation
 		Given I am logged in and I am on the map management page
 
   	Scenario Outline: Successful map creation
-		When I provides <name>, <privacy>, <description>, <latitude> and <longitude>
-		Then I can successfully create a new map <name> without an error message
+		When I provide <name>, <privacy>, <description>, <latitude> and <longitude>
+		Then I can successfully create <name> without an error message
 		Examples:
 			| name            | privacy   | description         | latitude | longitude |
 			| SUTPrivateMap   | private   | A private TestMap   | 25       | 25        |
@@ -13,9 +13,9 @@ Feature: PermaplanT Map Creation
 			| SUTPublicMap    | public    | A public TestMap    | 33       | 33        |
 
     Scenario: Edit existing Map
-        Given I create a new map
-        When I edit the map
-        Then I can successfully save it without an error message
+        Given I create a new map SUTEditMap
+        When I edit SUTEditMap to SUTEditedMap with the description EditedDescription
+        Then I can successfully save SUTEditedMap without an error message
 
 	Scenario: Map already exists
         Given I create a map SUTSameMap
