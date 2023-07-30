@@ -255,7 +255,7 @@ function cloneState(get: GetFn) {
       continue;
     }
 
-    clone[key] = structuredClone(value);
+    clone[key] = JSON.parse(JSON.stringify(value));
   }
 
   return clone;
