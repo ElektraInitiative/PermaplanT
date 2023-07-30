@@ -59,8 +59,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- CI: Add most of pre-commit hooks to sanity stage #736 _(4ydam)_
+- Map: Remove Step/History info #745 _(4ydan)_
+- CI: Add most of pre-commit hooks to sanity stage #736 _(4ydan)_
 - _()_
 
 ## 0.3.0 - 28.07.2023 (273 commits)
