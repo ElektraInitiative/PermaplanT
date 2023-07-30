@@ -12,7 +12,7 @@ def wait_for_db() {
 def wait_for_pr_db() {
     retry(6) {
         sleep(time: 5, unit: 'SECONDS')
-        sh 'curl https://pr.permaplant.net/api/config'
+        sh 'curl --fail https://pr.permaplant.net/api/config'
     }
 }
 
