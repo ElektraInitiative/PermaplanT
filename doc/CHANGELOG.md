@@ -16,7 +16,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Added a cancel confirmation to the editor tour _(Thorben)_
 - _()_
 - _()_
 - _()_
