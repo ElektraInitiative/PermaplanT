@@ -109,7 +109,7 @@ export const createTrackedMapSlice: StateCreator<
  * After execution, the ability to redo any undone action is lost.
  */
 function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
-  const snapshot = structuredClone(get());
+  const snapshot = cloneState(get);
 
   trackUserAction(action, set);
   action.execute(get().untrackedState.mapId).catch(() => {
@@ -232,4 +232,36 @@ function redo(set: SetFn, get: GetFn): void {
     canUndo: true,
     canRedo: state.step + 1 < state.history.length,
   }));
+}
+
+/**
+ * Clones the state without functions and refs.
+ */
+function cloneState(get: GetFn) {
+  const state = get();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const clone = {} as any;
+
+  for (const _key in state) {
+    const key = _key as keyof (TrackedMapSlice & UntrackedMapSlice);
+    const value = state[key];
+
+    if (typeof value === 'function') {
+      continue;
+    }
+
+    if (typeof value === 'object' && isRef(value)) {
+      continue;
+    }
+
+    clone[key] = structuredClone(value);
+  }
+
+  return clone;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isRef(value: any): value is { current: unknown } {
+  return value.current !== undefined;
 }
