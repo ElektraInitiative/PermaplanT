@@ -1,6 +1,5 @@
 Feature: PermaplanT Login and Logout Functionality
-    As a user
-    I want to be able to login and logout successfully
+    As a user I want to be able to login and logout successfully
 
     Scenario: Successful Login
         Given I am on the PermaplanT homepage
