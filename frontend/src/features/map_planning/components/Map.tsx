@@ -19,7 +19,7 @@ import {
   UpdateGuidedToursDto,
 } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
-import ExtendedModal from '@/components/Modals/ExtendedModal';
+import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
@@ -218,14 +218,15 @@ export const Map = ({ layers }: MapProps) => {
           ></Toolbar>
         </section>
       </div>
-      <ExtendedModal
+      <CancelConfirmationModal
         title={t('guidedTour:skip_title')}
         body={t('guidedTour:skip_text')}
         show={show}
-        setShow={setShow}
         cancelBtnTitle={t('common:cancel')}
         onCancel={() => {
-          tour?.show(tour.getCurrentStep()?.id);
+          const currentStep = tour?.getCurrentStep()?.id;
+          tour?.start();
+          tour?.show(currentStep);
           reenableTour();
           setShow(false);
         }}
