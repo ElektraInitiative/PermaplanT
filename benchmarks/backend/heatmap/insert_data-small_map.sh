@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-# Get the OAuth2 access token
 username=$1
 password=$2
+
+# Get the OAuth2 access token
 access_token=$(curl --request POST \
     --url 'https://auth.permaplant.net/realms/PermaplanT/protocol/openid-connect/token' \
     --header 'content-type: application/x-www-form-urlencoded' \

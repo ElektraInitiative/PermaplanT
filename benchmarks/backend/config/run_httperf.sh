@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 
+username=$1
+password=$2
+
 # Get the OAuth2 access token
 access_token=$(curl --request POST \
     --url 'https://auth.permaplant.net/realms/PermaplanT/protocol/openid-connect/token' \
     --header 'content-type: application/x-www-form-urlencoded' \
     --data grant_type=password \
-    --data 'username=$1' \
-    --data 'password=$2' \
+    --data "username=${username}" \
+    --data "password=${password}" \
     --data 'client_id=localhost' | jq -r .access_token)
 
 # Run httperf
