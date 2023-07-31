@@ -1,4 +1,5 @@
 import { UpdateBaseLayerAction } from '../../../layers/base/actions';
+import { BaseLayerImageDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -7,6 +8,16 @@ import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
+
+function validateBaseLayerOptions(baseLayerOptions: Omit<BaseLayerImageDto, 'action_id'>) {
+  const { id, layer_id, path, rotation, scale } = baseLayerOptions;
+
+  if (!id || !layer_id || !path || !rotation || !scale) {
+    console.log('BaseLayer validation error');
+    return false;
+  }
+  return true;
+}
 
 export const BaseLayerRightToolbar = () => {
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
@@ -43,15 +54,15 @@ export const BaseLayerRightToolbar = () => {
   const debouncedScale = useDebouncedValue(scaleInput, 200);
 
   useEffect(() => {
-    executeAction(
-      new UpdateBaseLayerAction({
-        id: baseLayerState.imageId,
-        layer_id: baseLayerState.layerId,
-        path: debouncedPath,
-        rotation: debouncedRotation,
-        scale: debouncedScale,
-      }),
-    );
+    const baseLayerOptions = {
+      id: baseLayerState.imageId,
+      layer_id: baseLayerState.layerId,
+      path: debouncedPath,
+      rotation: debouncedRotation,
+      scale: debouncedScale,
+    };
+    if (validateBaseLayerOptions(baseLayerOptions))
+      executeAction(new UpdateBaseLayerAction(baseLayerOptions));
   }, [
     baseLayerState.imageId,
     baseLayerState.layerId,
