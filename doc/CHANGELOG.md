@@ -47,7 +47,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- basic baseLayerConfig validation - fixed bugfix/734-base-layer-image-gets-lost _(Samuel)_
 - _()_
 - _()_
 - _()_
