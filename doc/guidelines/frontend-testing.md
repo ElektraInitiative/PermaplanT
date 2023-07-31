@@ -10,8 +10,8 @@ In order to find elements on the webpage, tests will need to use [locators](http
 
 The most popular locators are `getByRole()`, `getByLabel()` for user-centric and `getByTestId()` for more resilient tests.
 
-Nevertheless not all cases can be solved by these 3 locators, so there is also some alternatives.
-A quick overview of the most important.
+Nevertheless not all cases can be solved with these 3 locators, so you might use other locators too.
+A quick overview of the most important locators.
 
 ### [getByRole](https://playwright.dev/docs/locators#locate-by-role)
 
@@ -44,8 +44,8 @@ The most resilient attribute.
 > For interactive elements like button, a, input, etc. use [role locators](https://playwright.dev/docs/locators#locate-by-role).
 
 Allows locating elements that contain a given text.
-This alternative should be picked only if the other three are not possible.
-It is not very resilient and can frequently break the tests.
+This alternative should only be picked if the other three are not solving the case.
+It is not very resilient and can frequently break tests.
 
 ### Others
 
