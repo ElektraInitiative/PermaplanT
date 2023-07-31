@@ -20,6 +20,7 @@ def logged_in(hp: HomePage, lp: LoginPage, mmp: MapManagementPage, mcp: MapCreat
     mcp.create_a_map(name + worker_id())
     # Go to planting page and select plant layer
     mmp.to_map_planting_page(name + worker_id())
+    mpp.verify()
     mpp.close_tour()
     mpp.check_plant_layer()
 

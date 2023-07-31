@@ -37,8 +37,10 @@ class MapPlantingPage(AbstractPage):
         The timeout is also lowered to not slow down the tests by a lot.
         """
         try:
-            self.tour_close = self.page.get_by_label("Close Tour")
-            self.tour_close.click(timeout=3000)
+            tour_close = self.page.get_by_label("Close Tour")
+            tour_close_confirmation = self.page.get_by_role("button", name="End")
+            tour_close.click(timeout=3000)
+            tour_close_confirmation.click(timeout=3000)
         except PlaywrightTimeoutError:
             print("Tour was already closed")
 
