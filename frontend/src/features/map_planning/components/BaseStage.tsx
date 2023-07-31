@@ -77,9 +77,6 @@ export const BaseStage = ({
     useMapStore.setState({ tooltipRef: tooltipRef });
   }, [tooltipRef]);
 
-  const step = useMapStore((map) => map.step);
-  const historyLength = useMapStore((map) => map.history.length);
-
   const updateMapBounds = useMapStore((store) => store.updateMapBounds);
   const mapBounds = useMapStore((store) => store.untrackedState.editorBounds);
   useEffect(() => {
@@ -213,13 +210,6 @@ export const BaseStage = ({
 
   return (
     <div className="h-full w-full overflow-hidden">
-      <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
-        {/* TODO: Should we display the history somewhere else? */}
-        <div>
-          <div className="whitespace-nowrap text-sm">Step: {step}</div>
-          <div className="whitespace-nowrap text-sm">History length: {historyLength}</div>
-        </div>
-      </div>
       <Stage
         ref={stageRef}
         draggable={draggable}

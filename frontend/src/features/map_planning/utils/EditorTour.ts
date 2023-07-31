@@ -80,7 +80,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
   {
     id: 'plantsLayerIntro',
     title: `${t('guidedTour:mapEditor.plants_layer_title')} (1/17)`,
-    text: t('guidedTour:mapEditor.plants_layer_intro'),
+    text: t('guidedTour:mapEditor.plants_layer_select'),
     buttons: [
       {
         text: t('guidedTour:back'),
@@ -101,7 +101,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
   {
     id: 'plantsLayerSelect',
     title: `${t('guidedTour:mapEditor.plants_layer_title')} (2/17)`,
-    text: t('guidedTour:mapEditor.plants_layer_select'),
+    text: t('guidedTour:mapEditor.plants_layer_intro'),
     buttons: standardButtons,
   },
   {
