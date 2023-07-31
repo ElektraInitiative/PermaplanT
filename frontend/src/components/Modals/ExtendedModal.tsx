@@ -39,7 +39,7 @@ export default function CancelConfirmationModal({
     <>
       <TransparentBackground show={show} />
       <ModalContainer show={show}>
-        <div className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-neutral-100 p-4 dark:bg-neutral-100-dark">
+        <div className="flex min-h-[250px] w-[450px] flex-col justify-between rounded-lg bg-neutral-100 p-4 dark:bg-neutral-100-dark">
           <h2 className="mb-4">{title}</h2>
           <p className="mb-4">{body}</p>
           <div className="space-between flex flex-row justify-center space-x-2">
