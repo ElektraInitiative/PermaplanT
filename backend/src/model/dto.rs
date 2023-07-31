@@ -11,13 +11,16 @@ use uuid::Uuid;
 use self::plantings::PlantingDto;
 
 use super::r#enum::{
-    layer_type::LayerType, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
-    relation_type::RelationType,
+    experience::Experience, layer_type::LayerType, membership::Membership,
+    plant_spread::PlantSpread, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
+    relation_type::RelationType, salutation::Salutation,
 };
 
 pub mod actions;
 pub mod base_layer_images_impl;
+pub mod blossoms_impl;
 pub mod coordinates_impl;
+pub mod guided_tours_impl;
 pub mod layer_impl;
 pub mod map_impl;
 pub mod new_layer_impl;
@@ -31,6 +34,7 @@ pub mod seed_impl;
 pub mod shadings;
 pub mod shadings_impl;
 pub mod update_map_impl;
+pub mod users_impl;
 
 /// Contains configuration the frontend needs to run.
 #[typeshare]
@@ -110,6 +114,8 @@ pub struct PlantsSummaryDto {
     /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
     pub common_name_en: Option<Vec<Option<String>>>,
     //TODO: add icon_path: String
+    /// How far a plant spreads (The 'width' of a plant)
+    pub spread: Option<PlantSpread>,
 }
 
 /// Query parameters for searching plants.
@@ -450,4 +456,60 @@ pub struct HeatMapQueryParams {
     pub shade_layer_id: i32,
     /// The id of the plant you want to plant.
     pub plant_id: i32,
+}
+
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+/// All of the application managed user data.
+pub struct UsersDto {
+    /// The preferred salutation of the user.
+    pub salutation: Salutation,
+    /// The title(s) of the user.
+    pub title: Option<String>,
+    /// The current country of the user.
+    pub country: String,
+    /// The phone number of the user.
+    pub phone: Option<String>,
+    /// The website of the user.
+    pub website: Option<String>,
+    /// The organization the user belongs to.
+    pub organization: Option<String>,
+    /// The experience level in permaculture of the user.
+    pub experience: Option<Experience>,
+    /// The membership type of the user.
+    pub membership: Option<Membership>,
+    /// A collection of years in which the user was a member.
+    pub member_years: Option<Vec<Option<i32>>>,
+    /// The date since when the user is a member.
+    pub member_since: Option<NaiveDate>,
+    /// The amount of permacoins the user earned in each year as a member.
+    pub permacoins: Option<Vec<Option<i32>>>,
+}
+
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+/// Completion status of all Guided Tours.
+pub struct GuidedToursDto {
+    /// Whether or not the Map Editor Guided Tour was completed.
+    pub editor_tour_completed: bool,
+}
+
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+/// The information for updating an users Guided Tour status.
+pub struct UpdateGuidedToursDto {
+    /// Whether or not the Map Editor Guided Tour was completed.
+    pub editor_tour_completed: Option<bool>,
+}
+
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+/// Information on a specific Blossom gained by a user.
+pub struct GainedBlossomsDto {
+    /// The title of the Blossom.
+    pub blossom: String,
+    /// The number of times this Blossom was gained by this user.
+    pub times_gained: i32,
+    /// The date on which the user gained this Blossom.
+    pub gained_date: NaiveDate,
 }

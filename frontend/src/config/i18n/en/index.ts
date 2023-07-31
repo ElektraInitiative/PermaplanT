@@ -2,6 +2,7 @@ import auth from './auth.json';
 import baseLayer from './baseLayer.json';
 import baseLayerForm from './baseLayerForm.json';
 import blog from './blog.json';
+import blossoms from './blossoms.json';
 import common from './common.json';
 import contact from './contact.json';
 import enums from './enums.json';
@@ -9,6 +10,7 @@ import featureDescriptions from './featureDescriptions.json';
 import fileSelector from './fileSelector.json';
 import geomap from './geomap.json';
 import grid from './grid.json';
+import guidedTour from './guidedTour.json';
 import imprint from './imprint.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
@@ -58,6 +60,8 @@ const en = {
   layers,
   timeline,
   plantings,
+  guidedTour,
+  blossoms,
 };
 
 export default en;

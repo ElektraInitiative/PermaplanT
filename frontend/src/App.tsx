@@ -1,10 +1,12 @@
 import NavContainer from './components/Layout/NavContainer';
 import { useSafeAuth } from './hooks/useSafeAuth';
 import Pages from './routes/Pages';
+import './styles/guidedTour.css';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'shepherd.js/dist/css/shepherd.css';
 
 const useInitDarkMode = () => {
   const darkMode = localStorage.getItem('darkMode');

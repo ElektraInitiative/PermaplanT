@@ -40,6 +40,7 @@ export const PlantSearch = () => {
             onClick={() => {
               setSearchVisible(true);
             }}
+            data-tourid="search_button"
           >
             <SearchIcon />
           </IconButton>
@@ -66,7 +67,7 @@ export const PlantSearch = () => {
                 if (e.key === 'Escape') clearSearch();
               }}
             ></SearchInput>
-            <ul>
+            <ul data-tourid="plant_list">
               {plants.map((plant) => (
                 <PlantListItem
                   plant={plant}
@@ -78,6 +79,7 @@ export const PlantSearch = () => {
                 />
               ))}
             </ul>
+            {plants.length === 0 && <div className="m-4">{t('plantSearch:search_empty')}</div>}
           </motion.div>
         )}
       </AnimatePresence>

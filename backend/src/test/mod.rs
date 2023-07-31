@@ -4,7 +4,9 @@
 
 mod auth;
 mod base_layer_image;
+mod blossoms;
 mod config;
+mod guided_tours;
 mod layers;
 mod map;
 mod pagination;
@@ -15,4 +17,5 @@ mod planting_suggestions;
 mod plantings;
 mod seed;
 mod shadings;
+mod users;
 pub mod util;

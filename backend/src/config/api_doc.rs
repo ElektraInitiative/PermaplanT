@@ -10,8 +10,8 @@ use utoipa_swagger_ui::SwaggerUi;
 use super::auth::Config;
 use crate::{
     controller::{
-        base_layer_image, config, layers, map, plant_layer, planting_suggestions, plantings,
-        plants, seed, shadings,
+        base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer,
+        planting_suggestions, plantings, plants, seed, shadings, users,
     },
     model::{
         dto::{
@@ -24,10 +24,10 @@ use crate::{
                 DeleteShadingDto, NewShadingDto, ShadingDto, UpdateAddDateShadingDto,
                 UpdateRemoveDateShadingDto, UpdateShadingDto, UpdateValuesShadingDto,
             },
-            BaseLayerImageDto, ConfigDto, Coordinates, LayerDto, MapDto, NewLayerDto, NewMapDto,
-            NewSeedDto, PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto,
-            PlantsSummaryDto, RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImageDto,
-            UpdateMapDto,
+            BaseLayerImageDto, ConfigDto, Coordinates, GainedBlossomsDto, GuidedToursDto, LayerDto,
+            MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto,
+            PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto, RelationsDto,
+            SeedDto, UpdateBaseLayerImageDto, UpdateGuidedToursDto, UpdateMapDto, UsersDto,
         },
         r#enum::{
             privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
@@ -227,6 +227,54 @@ struct ShadingsApiDoc;
 )]
 struct PlantingSuggestionsApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all user data endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        users::create
+    ),
+    components(
+        schemas(
+            UsersDto
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct UsersApiDoc;
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all guided tours endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        guided_tours::setup,
+        guided_tours::find_by_user,
+        guided_tours::update
+    ),
+    components(
+        schemas(
+            GuidedToursDto,
+            UpdateGuidedToursDto
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct GuidedToursApiDoc;
+
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all blossom endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        blossoms::gain,
+    ),
+    components(
+        schemas(
+            GainedBlossomsDto
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct BlossomsApiDoc;
+
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = ConfigApiDoc::openapi();
@@ -239,6 +287,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(BaseLayerImagesApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
     openapi.merge(ShadingsApiDoc::openapi());
+    openapi.merge(UsersApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }

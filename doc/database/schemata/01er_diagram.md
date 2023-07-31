@@ -127,26 +127,31 @@ plantings }o--|| layers : ""
 plantings }o--|| plants : ""
 
 users {
-  INT id PK
-  VARCHAR nc_uid
-  DATE contributor_until
-  VARCHAR app_language
-  DATE member_since
-  INT[] member_years
+  UUID id PK
+  SALUTATION salutation "NOT NULL"
+  VARCHAR title
+  VARCHAR country "NOT NULL"
+  VARCHAR phone
+  VARCHAR website
+  VARCHAR organization
   EXPERIENCE experience
-  VARCHAR preferences
-  GEOGRAPHY location
+  MEMBERSHIP membership
+  INT[] member_years
+  DATE member_since
   INT[] permacoins
 }
 
+guided_tours {
+  UUID user_id PK
+  BOOLEAN editor_tour "NOT NULL"
+}
+
 blossoms {
-  INT id PK
-  VARCHAR title
+  VARCHAR title PK
   VARCHAR description
-  VARCHAR condition
   TRACKS track
-  BYTEA icon
-  BOOLEAN is_seasonal
+  VARCHAR icon
+  BOOLEAN is_seasonal "NOT NULL"
 }
 
 enum_tracks {
@@ -156,21 +161,32 @@ enum_tracks {
   VARCHAR expert_track
 }
 
+enum_salutation {
+  VARCHAR ms
+  VARCHAR mrs
+  VARCHAR mr
+}
+
 enum_experience {
   VARCHAR beginner
   VARCHAR advanced
   VARCHAR expert
 }
 
+enum_membership {
+  VARCHAR supporting_membership
+  VARCHAR regular_membership
+  VARCHAR contributing_membership
+}
+
 blossoms_gained {
-  INT id PK
+  UUID user_id PK
   INT times_gained
   DATE[] gained_date
 }
 
 maps }o--|| users : "owned by"
 blossoms ||--o{ blossoms_gained : ""
-blossoms_gained }o--|| users : ""
 
 ingredientLists {
   INT id PK

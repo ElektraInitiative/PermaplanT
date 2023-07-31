@@ -10,6 +10,8 @@ interface PublicNextcloudKonvaImageProps extends Omit<ImageConfig, 'image'> {
   shareToken: string;
   /** Fires immediately after the browser loads the image object. */
   onload?: (ncImage: HTMLImageElement) => void;
+  /** Whether an error modal should be displayed if the image can't be loaded. */
+  showErrorMessage?: boolean;
 }
 
 /**
@@ -22,6 +24,7 @@ export function PublicNextcloudKonvaImage({
   path,
   shareToken,
   onload,
+  showErrorMessage = true,
   ...imageProps
 }: PublicNextcloudKonvaImageProps) {
   const image = usePublicImage({
@@ -29,6 +32,7 @@ export function PublicNextcloudKonvaImage({
     path,
     onload,
     fallbackImageSource: defaultImageUrl,
+    showErrorMessage,
   });
 
   return <Image {...imageProps} image={image} />;

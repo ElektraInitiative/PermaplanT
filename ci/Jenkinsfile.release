@@ -47,7 +47,7 @@ stage('Build in Docker') {
 
                     wait_for_db()
 
-                    sh './ci/build-scripts/build-backend.sh'
+                    sh 'cd backend && cargo build --release'
 
                     stash includes: 'backend/target/release/backend', name: 'backend'
                 }
@@ -55,7 +55,7 @@ stage('Build in Docker') {
         }
     }
 
-    parallel_build['build-frontend'] = {
+    parallelBuild['build-frontend'] = {
         node('docker') {
             node_info()
 
@@ -84,7 +84,7 @@ stage('Build in Docker') {
         }
     }
 
-    parallel(parallel_build)
+    parallel(parallelBuild)
 }
 
 stage('Deploy Prod') {

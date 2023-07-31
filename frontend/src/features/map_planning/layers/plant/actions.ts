@@ -331,7 +331,10 @@ export class UpdateAddDatePlantAction
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: filterVisibleObjects(updatePlants(state.layers.plants.objects), timelineDate),
+          objects: filterVisibleObjects(
+            updatePlants(state.layers.plants.loadedObjects),
+            timelineDate,
+          ),
           loadedObjects: updatePlants(state.layers.plants.loadedObjects),
         },
       },
@@ -400,7 +403,10 @@ export class UpdateRemoveDatePlantAction
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: filterVisibleObjects(updatePlants(state.layers.plants.objects), timelineDate),
+          objects: filterVisibleObjects(
+            updatePlants(state.layers.plants.loadedObjects),
+            timelineDate,
+          ),
           loadedObjects: updatePlants(state.layers.plants.loadedObjects),
         },
       },

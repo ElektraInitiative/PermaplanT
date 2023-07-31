@@ -9,6 +9,7 @@
 - **Status:** In Progress
 - **Assignee:** Moritz (Frontend), Gabriel (Backend)
 - **Test Protocol:** doc/tests/protocols/plant_search.md
+
 ## Scenarios
 
 - **Precondition:**

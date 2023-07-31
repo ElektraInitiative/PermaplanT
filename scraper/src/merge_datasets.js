@@ -1,8 +1,14 @@
-import fs from 'fs';
-import { parse as json2csv } from 'json2csv';
-import csv from 'csvtojson';
-import permapeopleColumnMapping from './helpers/column_mapping_permapeople.js';
-import { sanitizeColumnNames, getSoilPH, fetchGermanName } from './helpers/helpers.js';
+import fs from "fs";
+import { parse as json2csv } from "json2csv";
+import csv from "csvtojson";
+import permapeopleColumnMapping from "./helpers/column_mapping_permapeople.js";
+import {
+  sanitizeColumnNames,
+  getSoilPH,
+  getHeightEnumTyp,
+  getSpreadEnumTyp,
+  fetchGermanName,
+} from "./helpers/helpers.js";
 
 /**
  * Fetches the German names for the plants from Wikidata API
@@ -10,13 +16,13 @@ import { sanitizeColumnNames, getSoilPH, fetchGermanName } from './helpers/helpe
 const fetchGermanNames = async (plants) => {
   return Promise.all(
     plants.map(async (plant) => {
-      if (plant['common_name_de']) {
+      if (plant["common_name_de"]) {
         return plant;
       }
-      const germanName = await fetchGermanName(plant['unique_name']);
-      plant['common_name_de'] = germanName;
+      const germanName = await fetchGermanName(plant["unique_name"]);
+      plant["common_name_de"] = germanName;
       return plant;
-    }),
+    })
   );
 };
 
@@ -27,59 +33,76 @@ const fetchGermanNames = async (plants) => {
  * @param {*} columnMapping - Column mapping
  */
 const unifyValueFormat = (plants, columnMapping) => {
-  const mappedColumns = Object.keys(columnMapping).filter((key) => columnMapping[key] !== null);
-
+  const mappedColumns = Object.keys(columnMapping).filter(
+    (key) => columnMapping[key] !== null
+  );
+  //console.log(mappedColumns)
   plants.forEach((plant) => {
+    //console.log(plant)
+
     mappedColumns.forEach((column) => {
       if (plant[column]) {
-        if (!!columnMapping[column]['valueMapping']) {
+        if (!!columnMapping[column]["valueMapping"]) {
           plant[column] = plant[column]
-            .split(',')
+            .split(",")
             .map((value) => {
               const updatedValue = value.trim().toLowerCase();
               if (
-                columnMapping[column]['valueMapping'][updatedValue] ||
-                columnMapping[column]['valueMapping'][updatedValue] === null
+                columnMapping[column]["valueMapping"][updatedValue] ||
+                columnMapping[column]["valueMapping"][updatedValue] === null
               ) {
-                return columnMapping[column]['valueMapping'][updatedValue];
+                return columnMapping[column]["valueMapping"][updatedValue];
               }
               return value.trim();
             })
             .filter((value) => value !== null)
-            .join(',');
+            .join(",");
         }
 
-        if (column === 'soil_ph') {
+        if (column === "soil_ph") {
           plant[column] = getSoilPH(plant[column]);
         }
       }
 
-      if (columnMapping[column]['newName']) {
-        plant[columnMapping[column]['newName']] = plant[column];
-        if (columnMapping[column]['newName'] !== column) {
+      if (columnMapping[column]["newName"]) {
+        plant[columnMapping[column]["newName"]] = plant[column];
+        if (columnMapping[column]["newName"] !== column) {
           delete plant[column];
         }
       }
     });
-    if (plant['unique_name'].startsWith('Papaver somnif. paeonifl.')) {
-      plant['unique_name'] = plant['unique_name'].replace(
-        'Papaver somnif. paeonifl.',
-        'Papaver somniferum paeoniflorum',
+
+    if ("height" in plant) {
+      plant["height"] = getHeightEnumTyp(plant["height"]);
+    }
+
+    if ("spread" in plant) {
+      plant["spread"] = getSpreadEnumTyp(plant["spread"]);
+    }
+
+    if ("width" in plant) {
+      plant["spread"] = getSpreadEnumTyp(plant["width"]);
+    }
+
+    if (plant["unique_name"].startsWith("Papaver somnif. paeonifl.")) {
+      plant["unique_name"] = plant["unique_name"].replace(
+        "Papaver somnif. paeonifl.",
+        "Papaver somniferum paeoniflorum"
       );
-    } else if (plant['unique_name'].startsWith('Alcea rosea fl. pl.')) {
-      plant['unique_name'] = plant['unique_name'].replace(
-        'Alcea rosea fl. pl.',
-        'Alcea rosea flore pleno',
+    } else if (plant["unique_name"].startsWith("Alcea rosea fl. pl.")) {
+      plant["unique_name"] = plant["unique_name"].replace(
+        "Alcea rosea fl. pl.",
+        "Alcea rosea flore pleno"
       );
-    } else if (plant['unique_name'].startsWith('Campanula lat. macr.')) {
-      plant['unique_name'] = plant['unique_name'].replace(
-        'Campanula lat. macr.',
-        'Campanula latifolia macrantha',
+    } else if (plant["unique_name"].startsWith("Campanula lat. macr.")) {
+      plant["unique_name"] = plant["unique_name"].replace(
+        "Campanula lat. macr.",
+        "Campanula latifolia macrantha"
       );
-    } else if (plant['unique_name'].startsWith('Malva sylvestris ssp. maur.')) {
-      plant['unique_name'] = plant['unique_name'].replace(
-        'Malva sylvestris ssp. maur.',
-        'Malva sylvestris mauritiana',
+    } else if (plant["unique_name"].startsWith("Malva sylvestris ssp. maur.")) {
+      plant["unique_name"] = plant["unique_name"].replace(
+        "Malva sylvestris ssp. maur.",
+        "Malva sylvestris mauritiana"
       );
     }
   });
@@ -96,13 +119,13 @@ const unifyValueFormat = (plants, columnMapping) => {
  */
 const renameColumns = async (plants, columnMapping) => {
   const mappedColumns = Object.fromEntries(
-    Object.entries(columnMapping).filter(([_, value]) => value !== null),
+    Object.entries(columnMapping).filter(([_, value]) => value !== null)
   );
   plants.forEach((plant) => {
     Object.keys(mappedColumns).forEach((column) => {
-      plant[column] = plant[columnMapping[column]['map']];
-      if (column !== columnMapping[column]['map']) {
-        delete plant[columnMapping[column]['map']];
+      plant[column] = plant[columnMapping[column]["map"]];
+      if (column !== columnMapping[column]["map"]) {
+        delete plant[columnMapping[column]["map"]];
       }
     });
   });
@@ -121,21 +144,23 @@ const sanitizeValues = async (plants) => {
 
   plants.forEach((plant) => {
     if (
-      plant['scientific_name'] === 'Citrullus lanatus' &&
-      plant['name'] === 'Blacktail' &&
-      plant['slug'] === 'blacktail'
+      plant["scientific_name"] === "Citrullus lanatus" &&
+      plant["name"] === "Blacktail" &&
+      plant["slug"] === "blacktail"
     ) {
       return;
     }
 
-    const scientificName = plant['scientific_name'];
+    const scientificName = plant["scientific_name"];
     if (uniqueScientificNames.has(scientificName)) {
       if (
-        plant['type'] === 'Variety' ||
-        (scientificName === 'Brassica oleracea acephala' && plant['name'] === 'Taunton Deane Kale')
+        plant["type"] === "Variety" ||
+        (scientificName === "Brassica oleracea acephala" &&
+          plant["name"] === "Taunton Deane Kale")
       ) {
-        plant['type'] = 'Variety';
-        plant['scientific_name'] = plant['scientific_name'] + " '" + plant['name'] + "'";
+        plant["type"] = "Variety";
+        plant["scientific_name"] =
+          plant["scientific_name"] + " '" + plant["name"] + "'";
 
         sanitizedPlants.push(plant);
       }
@@ -144,16 +169,16 @@ const sanitizeValues = async (plants) => {
       sanitizedPlants.push(plant);
     }
 
-    if (plant['edible'].split(',').length > 1) {
-      plant['edible'] = plant['edible'].split(',')[0];
+    if (plant["edible"].split(",").length > 1) {
+      plant["edible"] = plant["edible"].split(",")[0];
     }
 
-    if (plant['medicinal'] && plant['medicinal'].toLowerCase() === 'true') {
-      plant['medicinal'] = null;
+    if (plant["medicinal"] && plant["medicinal"].toLowerCase() === "true") {
+      plant["medicinal"] = null;
     }
 
-    if (plant['leaves']) {
-      plant['leaves'] = plant['leaves'].toLowerCase();
+    if (plant["leaves"]) {
+      plant["leaves"] = plant["leaves"].toLowerCase();
     }
   });
 
@@ -166,33 +191,38 @@ const sanitizeValues = async (plants) => {
  * @returns - Array of plants
  */
 async function mergeDatasets() {
-  console.log('[INFO] Merging datasets...');
+  console.log("[INFO] Merging datasets...");
 
   let allPlants = [];
 
-  let practicalPlants = await csv().fromFile('data/detail.csv'); // Practical plants dataset
-  let permapeople = await csv().fromFile('data/permapeopleRawData.csv'); // Permapeople dataset
-  let reinsaat = await csv().fromFile('data/reinsaatRawData.csv'); // Reinsaat dataset
+  let practicalPlants = await csv().fromFile("data/detail.csv"); // Practical plants dataset
+  let permapeople = await csv().fromFile("data/permapeopleRawData.csv"); // Permapeople dataset
+  let reinsaat = await csv().fromFile("data/reinsaatRawData.csv"); // Reinsaat dataset
 
-  sanitizeColumnNames(practicalPlants, 'practicalplants');
-  sanitizeColumnNames(permapeople, 'permapeople');
-  sanitizeColumnNames(reinsaat, 'reinsaat');
+  sanitizeColumnNames(practicalPlants, "practicalplants");
+  sanitizeColumnNames(permapeople, "permapeople");
+  sanitizeColumnNames(reinsaat, "reinsaat");
 
-  console.log('[INFO] practicalPlants: ', practicalPlants.length);
-  console.log('[INFO] permapeople: ', permapeople.length);
-  console.log('[INFO] reinsaat: ', reinsaat.length);
+  console.log("[INFO] practicalPlants: ", practicalPlants.length);
+  console.log("[INFO] permapeople: ", permapeople.length);
+  console.log("[INFO] reinsaat: ", reinsaat.length);
 
-  practicalPlants = await renameColumns(practicalPlants, permapeopleColumnMapping);
+  practicalPlants = await renameColumns(
+    practicalPlants,
+    permapeopleColumnMapping
+  );
   permapeople = await sanitizeValues(permapeople);
 
   const mappedColumns = Object.fromEntries(
-    Object.entries(permapeopleColumnMapping).filter(([_, value]) => value !== null),
+    Object.entries(permapeopleColumnMapping).filter(
+      ([_, value]) => value !== null
+    )
   );
 
   practicalPlants.forEach((plant) => {
-    const scientific_name = plant['scientific_name'];
+    const scientific_name = plant["scientific_name"];
     const plantInPermapeople = permapeople.find(
-      (plant) => plant['scientific_name'] === scientific_name,
+      (plant) => plant["scientific_name"] === scientific_name
     );
 
     if (plantInPermapeople) {
@@ -201,13 +231,13 @@ async function mergeDatasets() {
       Object.keys(plantInPermapeople).forEach((key) => {
         if (
           key in mappedColumns &&
-          mappedColumns[key]['priority'] === 'permapeople' &&
+          mappedColumns[key]["priority"] === "permapeople" &&
           !!plantInPermapeople[key]
         ) {
           mergedPlant[key] = plantInPermapeople[key];
         } else if (
           key in mappedColumns &&
-          mappedColumns[key]['priority'] === 'practicalplants' &&
+          mappedColumns[key]["priority"] === "practicalplants" &&
           !!plant[key]
         ) {
           mergedPlant[key] = plant[key];
@@ -224,9 +254,9 @@ async function mergeDatasets() {
   });
 
   permapeople.forEach((plant) => {
-    const scientific_name = plant['scientific_name'];
+    const scientific_name = plant["scientific_name"];
     const plantInPracticalPlants = practicalPlants.find(
-      (plant) => plant['scientific_name'] === scientific_name,
+      (plant) => plant["scientific_name"] === scientific_name
     );
     if (!plantInPracticalPlants) {
       allPlants.push({
@@ -235,11 +265,16 @@ async function mergeDatasets() {
     }
   });
 
-  console.log('[INFO] Merged practicalPlants and permapeople: ', allPlants.length);
+  console.log(
+    "[INFO] Merged practicalPlants and permapeople: ",
+    allPlants.length
+  );
 
   reinsaat.forEach((plant) => {
-    const scientific_name = plant['scientific_name'];
-    const plantInMerged = allPlants.find((plant) => plant['scientific_name'] === scientific_name);
+    const scientific_name = plant["scientific_name"];
+    const plantInMerged = allPlants.find(
+      (plant) => plant["scientific_name"] === scientific_name
+    );
     if (!plantInMerged) {
       allPlants.push({
         ...plant,
@@ -262,19 +297,19 @@ async function mergeDatasets() {
  * @param {*} plants - Array of plants
  */
 async function writePlantsToCsv(plants) {
-  if (!fs.existsSync('data')) {
-    fs.mkdirSync('data');
+  if (!fs.existsSync("data")) {
+    fs.mkdirSync("data");
   }
 
   let updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
 
   updatedPlants = await fetchGermanNames(updatedPlants);
 
-  console.log('[INFO] Writing merged dataset to CSV file...');
-  console.log('[INFO] Total number of plants: ', updatedPlants.length);
+  console.log("[INFO] Writing merged dataset to CSV file...");
+  console.log("[INFO] Total number of plants: ", updatedPlants.length);
 
   const csv = json2csv(updatedPlants);
-  fs.writeFileSync('data/mergedDatasets.csv', csv);
+  fs.writeFileSync("data/mergedDatasets.csv", csv);
 
   return updatedPlants;
 }

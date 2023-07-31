@@ -1,3 +1,7 @@
+-- This migration already ran on www.permaplant.net
+-- So it cannot be edited, except of comments or formatting.
+-- Please create a new migration instead.
+
 CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
 
 CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
