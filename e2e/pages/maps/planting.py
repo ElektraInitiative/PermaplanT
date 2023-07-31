@@ -10,8 +10,8 @@ class MapPlantingPage(AbstractPage):
         self.page = page
         self.base_layer_radio = self.page.get_by_test_id("base-layer-radio")
         self.plant_layer_radio = self.page.get_by_test_id("plants-layer-radio")
-        self.plant_search_icon = self.page.get_by_test_id("search-button")
-        self.plant_search_input = self.page.get_by_test_id("search-input")
+        self.plant_search_icon = self.page.get_by_test_id("plant-search-icon")
+        self.plant_search_input = self.page.get_by_test_id("plant-search-input")
         self.delete_plant_button = self.page.get_by_role("button", name="Delete Planting")
 
     def check_base_layer(self):
@@ -56,8 +56,8 @@ class MapPlantingPage(AbstractPage):
 
     def search_result_is_visible(self, result):
         """Confirms that a search result is visible"""
-        expect(self.page.get_by_role("button", name=result)).to_be_visible()
+        expect(self.page.get_by_test_id(result+"-plant-search-result")).to_be_visible()
 
     def no_plants_matching_query(self):
         """Confirms that `no plants are found` is present"""
-        self.page.get_by_test_id("search-empty")
+        self.page.get_by_test_id("plant-search-results-empty")

@@ -8,20 +8,20 @@ Feature: Searching for Plants
     Then the app should display <result> as first match
     Examples:
 			| plant   | result |
-			| tomato | Tomato (Solanum lycopersicum) |
-			| potato | Potato (Solanum tuberosum) |
-			| onion  | Onion (Allium cepa) |
-			| popcorn  | Corn poppy (Papaver rhoeas) |
+			| tomato | tomato Solanum lycopersicum |
+			| potato | potato Solanum tuberosum |
+			| onion  | onion Allium cepa |
+			| popcorn  | corn poppy Papaver rhoeas |
 
     Scenario Outline: Searching for plants with partial matches
     When I type <plant> into the search box
     Then the app should display <result> as first match
     Examples:
 			| plant   | result |
-			| toma | Tomato (Solanum lycopersicum) |
-			| pota | Potato (Solanum tuberosum) |
-			| onio  | Onion (Allium cepa) |
-			| popco  | Corn poppy (Papaver rhoeas) |
+			| toma | tomato Solanum lycopersicum |
+			| pota | potato Solanum tuberosum |
+			| onio  | onion Allium cepa |
+			| popco  | corn poppy Papaver rhoeas |
 
   Scenario: No match was found
     When No match can be found for xyxyz
