@@ -19,6 +19,7 @@ import {
   UpdateGuidedToursDto,
 } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
+import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
@@ -27,7 +28,7 @@ import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
 import { ReactComponent as TagsIcon } from '@/icons/tags.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import i18next from 'i18next';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
 import { toast } from 'react-toastify';
@@ -53,7 +54,21 @@ export const Map = ({ layers }: MapProps) => {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
   const tour = useContext(ShepherdTourContext);
-  const { t } = useTranslation(['undoRedo', 'grid', 'timeline', 'blossoms', 'plantings']);
+  const { t } = useTranslation([
+    'undoRedo',
+    'grid',
+    'timeline',
+    'blossoms',
+    'common',
+    'guidedTour',
+    'plantings',
+  ]);
+  const [show, setShow] = useState(false);
+
+  const reenableTour = async () => {
+    const update: UpdateGuidedToursDto = { editor_tour_completed: false };
+    await updateTourStatus(update);
+  };
 
   useEffect(() => {
     const _completeTour = async () => {
@@ -75,6 +90,7 @@ export const Map = ({ layers }: MapProps) => {
     if (tour && tour.steps.length > 0) {
       tour?.on('cancel', () => {
         _completeTour();
+        setShow(true);
       });
       tour?.on('complete', () => {
         _tourCompletionBlossom();
@@ -116,97 +132,122 @@ export const Map = ({ layers }: MapProps) => {
   };
 
   return (
-    <div className="flex h-full justify-between">
-      <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
-        <Toolbar
-          minWidth={160}
-          contentTop={
-            <div>
-              <IconButton
-                className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => undo()}
-                title={t('undoRedo:undo_tooltip')}
-                data-tourid="undo"
-              >
-                <UndoIcon></UndoIcon>
-              </IconButton>
-              <IconButton
-                className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => redo()}
-                title={t('undoRedo:redo_tooltip')}
-              >
-                <RedoIcon></RedoIcon>
-              </IconButton>
-              <IconButton
-                className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() =>
-                  updateLayerVisible(
-                    FrontendOnlyLayerType.Grid,
-                    !untrackedState.layers.grid.visible,
-                  )
-                }
-                title={t('grid:tooltip')}
-              >
-                <GridIcon></GridIcon>
-              </IconButton>
-              <IconButton
-                className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                onClick={() => toggleShowPlantLabel()}
-                title={t('plantings:show_labels_tooltip')}
-              >
-                <TagsIcon></TagsIcon>
-              </IconButton>
-            </div>
-          }
-          contentBottom={getToolbarContent(getSelectedLayerType()).left}
-          position="left"
-        ></Toolbar>
-      </section>
-      <section
-        className="flex h-full w-full flex-col overflow-hidden"
-        data-tourid="canvas"
-        id="canvas"
-      >
-        <BaseStage>
-          <BaseLayer
-            opacity={untrackedState.layers.base.opacity}
-            visible={untrackedState.layers.base.visible}
-            listening={getSelectedLayerType() === LayerType.Base}
-          />
-          <PlantsLayer
-            visible={untrackedState.layers.plants.visible}
-            opacity={untrackedState.layers.plants.opacity}
-            listening={getSelectedLayerType() === LayerType.Plants}
-          ></PlantsLayer>
-          <BaseMeasurementLayer />
-          <GridLayer
-            visible={untrackedState.layers.grid.visible}
-            opacity={untrackedState.layers.grid.opacity}
-          ></GridLayer>
-        </BaseStage>
-        <div>
-          <Timeline onSelectDate={(date) => updateTimelineDate(date)} defaultDate={timelineDate} />
-        </div>
-      </section>
-      <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
-        <Toolbar
-          contentTop={<Layers layers={layers} />}
-          contentBottom={getToolbarContent(getSelectedLayerType()).right}
-          position="right"
-          minWidth={200}
-          fixedContentBottom={
-            <div className="mb-0 mt-auto border-t-2 border-neutral-700 p-2 tracking-wide">
-              {t('timeline:map_date')}
-              {convertToDate(timelineDate).toLocaleDateString(i18next.resolvedLanguage, {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-              })}
-            </div>
-          }
-        ></Toolbar>
-      </section>
-    </div>
+    <>
+      <div className="flex h-full justify-between">
+        <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
+          <Toolbar
+            minWidth={160}
+            contentTop={
+              <div>
+                <IconButton
+                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  onClick={() => undo()}
+                  title={t('undoRedo:undo_tooltip')}
+                  data-tourid="undo"
+                >
+                  <UndoIcon></UndoIcon>
+                </IconButton>
+                <IconButton
+                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  onClick={() => redo()}
+                  title={t('undoRedo:redo_tooltip')}
+                >
+                  <RedoIcon></RedoIcon>
+                </IconButton>
+                <IconButton
+                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  onClick={() =>
+                    updateLayerVisible(
+                      FrontendOnlyLayerType.Grid,
+                      !untrackedState.layers.grid.visible,
+                    )
+                  }
+                  title={t('grid:tooltip')}
+                >
+                  <GridIcon></GridIcon>
+                </IconButton>
+                <IconButton
+                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  onClick={() => toggleShowPlantLabel()}
+                  title={t('plantings:show_labels_tooltip')}
+                >
+                  <TagsIcon></TagsIcon>
+                </IconButton>
+              </div>
+            }
+            contentBottom={getToolbarContent(getSelectedLayerType()).left}
+            position="left"
+          ></Toolbar>
+        </section>
+        <section
+          className="flex h-full w-full flex-col overflow-hidden"
+          data-tourid="canvas"
+          id="canvas"
+        >
+          <BaseStage>
+            <BaseLayer
+              opacity={untrackedState.layers.base.opacity}
+              visible={untrackedState.layers.base.visible}
+              listening={getSelectedLayerType() === LayerType.Base}
+            />
+            <PlantsLayer
+              visible={untrackedState.layers.plants.visible}
+              opacity={untrackedState.layers.plants.opacity}
+              listening={getSelectedLayerType() === LayerType.Plants}
+            ></PlantsLayer>
+            <BaseMeasurementLayer />
+            <GridLayer
+              visible={untrackedState.layers.grid.visible}
+              opacity={untrackedState.layers.grid.opacity}
+            ></GridLayer>
+          </BaseStage>
+          <div>
+            <Timeline
+              onSelectDate={(date) => updateTimelineDate(date)}
+              defaultDate={timelineDate}
+            />
+          </div>
+        </section>
+        <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
+          <Toolbar
+            contentTop={<Layers layers={layers} />}
+            contentBottom={getToolbarContent(getSelectedLayerType()).right}
+            position="right"
+            minWidth={200}
+            fixedContentBottom={
+              <div className="mb-0 mt-auto border-t-2 border-neutral-700 p-2 tracking-wide">
+                {t('timeline:map_date')}
+                {convertToDate(timelineDate).toLocaleDateString(i18next.resolvedLanguage, {
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                })}
+              </div>
+            }
+          ></Toolbar>
+        </section>
+      </div>
+      <CancelConfirmationModal
+        title={t('guidedTour:skip_title')}
+        body={t('guidedTour:skip_text')}
+        show={show}
+        cancelBtnTitle={t('common:cancel')}
+        onCancel={() => {
+          const currentStep = tour?.getCurrentStep()?.id;
+          tour?.start();
+          tour?.show(currentStep);
+          reenableTour();
+          setShow(false);
+        }}
+        firstActionBtnTitle={t('guidedTour:interrupt')}
+        onFirstAction={() => {
+          reenableTour();
+          setShow(false);
+        }}
+        secondActionBtnTitle={t('guidedTour:disable')}
+        onSecondAction={() => setShow(false)}
+      />
+    </>
   );
 };

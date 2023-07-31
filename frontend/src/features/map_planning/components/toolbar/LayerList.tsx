@@ -63,6 +63,7 @@ export const LayerList = ({
           }}
           name="layer_enable"
           data-tourid={`${layer.type_}_select`}
+          data-testid={`${layer.type_}-layer-radio`}
         ></input>
       </div>
       <div className="flex items-center">
