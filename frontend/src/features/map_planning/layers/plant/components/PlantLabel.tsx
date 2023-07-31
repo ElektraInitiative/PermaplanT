@@ -12,7 +12,7 @@ export interface PlantLabelProps {
 
 export const PlantLabel = ({ planting }: PlantLabelProps) => {
   const labelRef = useRef<Konva.Label>(null);
-  const [labelWidth, setLabelWidth] = useState<number | undefined>(undefined);
+  const [labelWidth, setLabelWidth] = useState<number>(0);
 
   useEffect(() => {
     if (labelRef.current === null || labelWidth) return;
@@ -27,7 +27,7 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
 
   const plantsSummary = new ExtendedPlantsSummary(plant);
 
-  const labelOffsetX = (labelWidth ?? 0) / 2;
+  const labelOffsetX = labelWidth / 2;
   const labelOffsetY = (planting.height / 2) * planting.scaleY * 1.1;
 
   return (
