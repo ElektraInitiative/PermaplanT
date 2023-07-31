@@ -123,16 +123,14 @@ export function PlantingElement({ planting }: PlantingElementProps) {
         fill={selectedPlanting?.id === planting.id ? '#0084ad' : '#6f9e48'}
       />
       {plant ? (
-        <Group>
-          <PublicNextcloudKonvaImage
-            shareToken="2arzyJZYj2oNnHX"
-            path={`Icons/${plant?.unique_name}.png`}
-            width={planting.width * 0.9}
-            height={planting.height * 0.9}
-            offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
-            showErrorMessage={false}
-          />
-        </Group>
+        <PublicNextcloudKonvaImage
+          shareToken="2arzyJZYj2oNnHX"
+          path={`Icons/${plant?.unique_name}.png`}
+          width={planting.width * 0.9}
+          height={planting.height * 0.9}
+          offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
+          showErrorMessage={false}
+        />
       ) : (
         <Rect width={0} height={0} />
       )}
