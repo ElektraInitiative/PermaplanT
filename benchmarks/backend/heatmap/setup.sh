@@ -11,7 +11,21 @@ LC_ALL=C diesel migration run
 cd ../scraper && npm run insert
 printf "\nNow run the backend in a second shell.\n"
 read -n 1 -p "Press any key to continue!"
-../benchmarks/backend/heatmap/insert_data-large_map.sh $1 $2
+read -n 1 -p "Do you want to benchmark a small, medium or large map? (s/m/l) " opt;
+case $opt in
+    s|S)
+        echo "small map"
+        ../benchmarks/backend/heatmap/insert_data-small_map.sh $1 $2
+        ;;
+    m|M)
+        echo "middle map"
+        ../benchmarks/backend/heatmap/insert_data-middle_map.sh $1 $2
+        ;;
+    l|L)
+        echo "large map"
+        ../benchmarks/backend/heatmap/insert_data-large_map.sh $1 $2
+        ;;
+esac
 printf "\n\nStop the backend.\n"
 read -n 1 -p "Press any key to continue!"
 
