@@ -45,14 +45,14 @@ CREATE TYPE score AS (
 -- p_map_id                ... map id
 -- p_layer_ids             ... ids of the layers
 -- p_plant_id              ... id of the plant for which to consider relations
--- p_date                  ... date at which to generate the heatmap
+-- date                    ... date at which to generate the heatmap
 -- granularity             ... resolution of the map (must be greater than 0)
 -- x_min,y_min,x_max,y_max ... boundaries of the map
 CREATE OR REPLACE FUNCTION calculate_heatmap(
     p_map_id INTEGER,
     p_layer_ids INTEGER [],
     p_plant_id INTEGER,
-    p_date DATE,
+    date DATE,
     granularity INTEGER,
     x_min INTEGER,
     y_min INTEGER,
@@ -101,7 +101,7 @@ BEGIN
 
             -- If the point is on the map calculate a score; otherwise set score to 0.
             IF ST_Intersects(point, map_geometry) THEN
-                score := calculate_score(p_map_id, p_layer_ids, p_plant_id, x_pos, y_pos);
+                score := calculate_score(p_map_id, p_layer_ids, p_plant_id, date, x_pos, y_pos);
                 score := scale_score(score);  -- scale to be between 0 and 1
                 preference := score.preference;
                 relevance := score.relevance;
@@ -139,11 +139,13 @@ $$ LANGUAGE plpgsql;
 -- p_map_id       ... map id
 -- p_layer_ids[1] ... plant layer
 -- p_plant_id     ... id of the plant for which to consider relations
+-- date           ... date at which to generate the heatmap
 -- x_pos,y_pos    ... coordinates on the map where to calculate the score
 CREATE OR REPLACE FUNCTION calculate_score(
     p_map_id INTEGER,
     p_layer_ids INTEGER [],
     p_plant_id INTEGER,
+    date DATE,
     x_pos INTEGER,
     y_pos INTEGER
 )
@@ -152,7 +154,7 @@ DECLARE
     score SCORE;
     plants SCORE;
 BEGIN
-    plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
+    plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, date, x_pos, y_pos);
 
     score.preference := plants.preference;
     score.relevance := plants.relevance;
@@ -163,7 +165,11 @@ $$ LANGUAGE plpgsql;
 
 -- Calculate score using the plants relations and their distances.
 CREATE OR REPLACE FUNCTION calculate_score_from_relations(
-    p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER
+    p_layer_id INTEGER,
+    p_plant_id INTEGER,
+    date DATE,
+    x_pos INTEGER,
+    y_pos INTEGER
 )
 RETURNS SCORE AS $$
 DECLARE
@@ -179,7 +185,7 @@ BEGIN
     score.preference := 0.0;
     score.relevance := 0.0;
 
-    FOR plant_relation IN (SELECT * FROM get_plant_relations(p_layer_id, p_plant_id)) LOOP
+    FOR plant_relation IN (SELECT * FROM get_plant_relations(p_layer_id, p_plant_id, date)) LOOP
         -- calculate euclidean distance
         distance := sqrt((plant_relation.x - x_pos)^2 + (plant_relation.y - y_pos)^2);
 
@@ -205,7 +211,9 @@ $$ LANGUAGE plpgsql;
 
 -- Get all relations for the plant on the specified layer.
 CREATE OR REPLACE FUNCTION get_plant_relations(
-    p_layer_id INTEGER, p_plant_id INTEGER
+    p_layer_id INTEGER,
+    p_plant_id INTEGER,
+    date DATE
 )
 RETURNS TABLE (x INTEGER, y INTEGER, relation RELATION_TYPE) AS $$
 BEGIN
@@ -226,6 +234,8 @@ BEGIN
             WHERE plant1 = p_plant_id
                 AND r2.relation != 'neutral'
         ) relations ON plants.id = relations.plant
-        WHERE plantings.layer_id = p_layer_id;
+        WHERE plantings.layer_id = p_layer_id
+            AND (plantings.add_date IS NULL OR plantings.add_date <= date)
+            AND (plantings.remove_date IS NULL OR plantings.remove_date > date);
 END;
 $$ LANGUAGE plpgsql;

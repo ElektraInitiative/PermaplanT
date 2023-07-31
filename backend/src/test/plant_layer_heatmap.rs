@@ -423,6 +423,105 @@ async fn test_heatmap_with_plantings_succeeds() {
 }
 
 #[actix_rt::test]
+async fn test_heatmap_with_deleted_planting_succeeds() {
+    let pool = init_test_database(|conn| {
+        async {
+            initial_db_values(conn, tall_rectangle()).await?;
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-2),
+                    &crate::schema::plants::unique_name.eq("Testia"),
+                    &crate::schema::plants::common_name_en.eq(Some(vec![Some("T".to_owned())])),
+                ))
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::relations::table)
+                .values(vec![(
+                    &crate::schema::relations::plant1.eq(-1),
+                    &crate::schema::relations::plant2.eq(-2),
+                    &crate::schema::relations::relation.eq(RelationType::Companion),
+                )])
+                .execute(conn)
+                .await?;
+            diesel::insert_into(crate::schema::plantings::table)
+                .values(vec![data::TestInsertablePlanting {
+                    id: Uuid::new_v4(),
+                    layer_id: -1,
+                    plant_id: -1,
+                    x: 15,
+                    y: 15,
+                    remove_date: Some(NaiveDate::from_ymd_opt(2023, 07, 30).unwrap()),
+                    ..Default::default()
+                }])
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&plant_layer_id=-1&shade_layer_id=-2")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(header::CONTENT_TYPE),
+        Some(&header::HeaderValue::from_static("image/png"))
+    );
+    let result = test::read_body(resp).await;
+    let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
+    let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
+    let image = image.as_rgba8().unwrap();
+    assert_eq!(
+        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
+        image.dimensions()
+    );
+
+    // (0,0) is be top left.
+    let on_planting = image.get_pixel(1, 1);
+    let close_to_planting = image.get_pixel(2, 2);
+    let a_bit_away_from_planting = image.get_pixel(10, 10);
+    // The planting doesn't influences the map as it is deleted.
+    assert_eq!([127, 127, 0, 0], on_planting.0);
+    assert_eq!([127, 127, 0, 0], close_to_planting.0);
+    assert_eq!([127, 127, 0, 0], a_bit_away_from_planting.0);
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&plant_layer_id=-1&shade_layer_id=-2&date=2023-07-21")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(header::CONTENT_TYPE),
+        Some(&header::HeaderValue::from_static("image/png"))
+    );
+    let result = test::read_body(resp).await;
+    let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
+    let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
+    let image = image.as_rgba8().unwrap();
+    assert_eq!(
+        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
+        image.dimensions()
+    );
+
+    // (0,0) is be top left.
+    let on_planting = image.get_pixel(1, 1);
+    let close_to_planting = image.get_pixel(2, 2);
+    let a_bit_away_from_planting = image.get_pixel(10, 10);
+    // The planting influences the map as we set the date back in the query.
+    assert_eq!([96, 158, 0, 62], on_planting.0);
+    assert_eq!([98, 156, 0, 57], close_to_planting.0);
+    assert_eq!([123, 131, 0, 8], a_bit_away_from_planting.0);
+}
+
+#[actix_rt::test]
 async fn test_missing_entities_fails() {
     let pool = init_test_database(|conn| {
         initial_db_values(conn, rectangle_with_missing_bottom_left_corner()).scope_boxed()

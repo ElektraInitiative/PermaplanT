@@ -30,11 +30,13 @@ FOR EACH ROW EXECUTE FUNCTION check_shade_layer_type();
 -- p_layer_ids[1] ... plant layer
 -- p_layer_ids[2] ... shade layer
 -- p_plant_id     ... id of the plant for which to consider relations
+-- date           ... date at which to generate the heatmap
 -- x_pos,y_pos    ... coordinates on the map where to calculate the score
 CREATE OR REPLACE FUNCTION calculate_score(
     p_map_id INTEGER,
     p_layer_ids INTEGER [],
     p_plant_id INTEGER,
+    date DATE,
     x_pos INTEGER,
     y_pos INTEGER
 )
@@ -44,8 +46,8 @@ DECLARE
     plants SCORE;
     shades SCORE;
 BEGIN
-    plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
-    shades := calculate_score_from_shadings(p_layer_ids[2], p_plant_id, x_pos, y_pos);
+    plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, date, x_pos, y_pos);
+    shades := calculate_score_from_shadings(p_layer_ids[2], p_plant_id, date, x_pos, y_pos);
 
     score.preference := plants.preference + shades.preference;
     score.relevance := plants.relevance + shades.relevance;
@@ -59,7 +61,11 @@ $$ LANGUAGE plpgsql;
 --
 -- If the plant would die at the position set preference=-100 and relevance=100.
 CREATE FUNCTION calculate_score_from_shadings(
-    p_layer_id INTEGER, p_plant_id INTEGER, x_pos INTEGER, y_pos INTEGER
+    p_layer_id INTEGER,
+    p_plant_id INTEGER,
+    date DATE,
+    x_pos INTEGER,
+    y_pos INTEGER
 )
 RETURNS SCORE AS $$
 DECLARE
@@ -87,7 +93,10 @@ BEGIN
     -- Select the shading with the darkest shade that intersects the point
     SELECT shade INTO shading_shade
     FROM shadings
-    WHERE layer_id = p_layer_id AND ST_Intersects(geometry, point)
+    WHERE layer_id = p_layer_id
+        AND (add_date IS NULL OR add_date <= date)
+        AND (remove_date IS NULL OR remove_date > date)
+        AND ST_Intersects(geometry, point)
     ORDER BY shade DESC
     LIMIT 1;
 

@@ -5,6 +5,7 @@ CREATE OR REPLACE FUNCTION calculate_score(
     p_map_id INTEGER,
     p_layer_ids INTEGER [],
     p_plant_id INTEGER,
+    date DATE,
     x_pos INTEGER,
     y_pos INTEGER
 )
@@ -13,9 +14,9 @@ DECLARE
     score SCORE;
     plants SCORE;
 BEGIN
-    plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, x_pos, y_pos);
+    plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, date, x_pos, y_pos);
 
-    score.preference := 0.5 + plants.preference;
+    score.preference := plants.preference;
     score.relevance := plants.relevance;
 
     RETURN score;
