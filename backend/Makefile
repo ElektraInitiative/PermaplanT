@@ -24,8 +24,8 @@ migration-redo: ## Run down.sql and then up.sql for most recent migrations.
 migration-redo-a: ## Run down.sql and then up.sql for all migration.
 	LC_ALL=C diesel migration redo -a
 
-.PHONY: database-reset
-database-reset:  ## Reset diesel database.
+.PHONY: reset-database
+reset-database:  ## Reset diesel database.
 	diesel database reset
 
 .PHONY: clean

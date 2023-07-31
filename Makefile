@@ -14,7 +14,7 @@ run-backend: build-backend  ## Build & Run backend.
 	cd backend && make run
 
 .PHONY: run-reset-backend
-run-reset-backend: build-backend database-reset scraper-insert  ## Build & Run backend with a database reset.
+run-reset-backend: build-backend reset-database  ## Build & Run backend with a database reset.
 	cd backend && make run
 
 .PHONY: run-mdbook
@@ -78,8 +78,8 @@ build-storybook: install generate-api-types  ## Build storybook.
 scraper-start-full:  ## Scrape and then insert scraped data into the database.
 	cd scraper && npm install && mkdir -p data && npm run start:full
 
-.PHONY: scraper-insert
-scraper-insert:  ## Insert scraped data into the database.
+.PHONY: insert-scraper
+insert-scraper:  ## Insert scraped data into the database.
 	cd scraper && npm install && mkdir -p data && npm run insert
 
 .PHONY: migration
@@ -94,9 +94,10 @@ migration-redo:  ## Run down.sql and then up.sql for most recent migrations.
 migration-redo-a:  ## Run down.sql and then up.sql for all migrations.
 	cd backend && make migration-redo-a
 
-.PHONY: database-reset
-database-reset:  ## Reset diesel database.
-	cd backend && make database-reset
+.PHONY: reset-database
+reset-database:  ## Reset diesel database AND insert data again.
+	cd backend && make reset-database
+	$(MAKE) insert-scraper
 
 .PHONY: generate-type-doc
 generate-type-doc:  ## Generate typedoc.
