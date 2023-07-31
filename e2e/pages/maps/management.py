@@ -11,14 +11,16 @@ class MapManagementPage(AbstractPage):
         self.create_button = page.get_by_role("button", name="New Map")
 
     def to_map_create_page(self):
+        """Navigates to `MapCreatePage`"""
         self.create_button.click()
 
     def to_map_edit_page(self, mapname: str):
+        """Navigates to `MapEditPage`"""
         self.page.get_by_title(mapname, exact=True).get_by_role("button", name="Edit map").click()
 
     def to_map_planting_page(self, mapname: str):
-        """Navigate to the planting page of a map"""
-        self.page.get_by_text(mapname).click()
+        """Navigates to `MapPlantingPage`"""
+        self.page.get_by_text(mapname, exact=True).click()
 
     def visible(self, mapname: str):
         """Checks if the given map exists on the map management screen"""

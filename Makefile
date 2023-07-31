@@ -13,6 +13,10 @@ run-frontend: build-frontend  ## Build & Run frontend.
 run-backend: build-backend  ## Build & Run backend.
 	cd backend && make run
 
+.PHONY: run-reset-backend
+run-reset-backend: build-backend database-reset scraper-insert  ## Build & Run backend with a database reset.
+	cd backend && make run
+
 .PHONY: run-mdbook
 run-mdbook: build-mdbook  ## Build & Run mdbook.
 	mdbook serve --open
@@ -24,7 +28,6 @@ run-storybook: build-storybook  ## Build & Run storybook.
 # TEST
 
 .PHONY: test
-test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
 test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
 	pre-commit
 

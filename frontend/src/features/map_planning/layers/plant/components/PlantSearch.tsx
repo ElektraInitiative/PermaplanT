@@ -41,6 +41,7 @@ export const PlantSearch = () => {
               setSearchVisible(true);
             }}
             data-tourid="search_button"
+            data-testid="search-button"
           >
             <SearchIcon />
           </IconButton>
@@ -66,6 +67,7 @@ export const PlantSearch = () => {
               onKeyDown={(e) => {
                 if (e.key === 'Escape') clearSearch();
               }}
+              data-testid="search-input"
             ></SearchInput>
             <ul data-tourid="plant_list">
               {plants.map((plant) => (
@@ -79,7 +81,11 @@ export const PlantSearch = () => {
                 />
               ))}
             </ul>
-            {plants.length === 0 && <div className="m-4">{t('plantSearch:search_empty')}</div>}
+            {plants.length === 0 && (
+              <div className="m-4" data-testid="search-empty">
+                {t('plantSearch:search_empty')}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

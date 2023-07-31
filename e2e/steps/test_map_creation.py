@@ -1,4 +1,4 @@
-from e2e.conftest import worker_id
+from e2e.conftest import login
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from e2e.pages.maps.create import MapCreatePage
@@ -11,17 +11,11 @@ scenarios("features/map_creation.feature")
 
 @given("I am logged in and I am on the map management page")
 def logged_in_and_on_map_management_page(hp: HomePage, lp: LoginPage):
-    hp.load()
-    hp.verify()
-    hp.login_button_is_visible()
-    hp.click_login_button()
-    lp.login("Adi", "1234")
-    hp.verify()
-    hp.close_alert()
+    login(hp, lp)
     hp.to_map_management_page()
 
 
-# Scenario 1
+# Scenario 1: Successful map creation
 
 
 @when(parsers.parse("I provide {name}, {privacy}, {description}, {latitude} and {longitude}"))
@@ -36,7 +30,7 @@ def create_map_successfully(mcp: MapCreatePage, name, mmp: MapManagementPage):
     mmp.visible(name)
 
 
-# Scenario 2
+# Scenario 2: Editing a map
 
 
 @given(parsers.parse("I create a new map {name}"))
@@ -59,7 +53,7 @@ def successfully_edit(mmp: MapManagementPage, mep: MapEditPage, name):
     mmp.visible(name)
 
 
-# Scenario 3
+# Scenario 3: Error case, create a map with an already existing name
 
 
 @given(parsers.parse("I create a map {name}"))
