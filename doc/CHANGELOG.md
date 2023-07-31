@@ -54,13 +54,13 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Fix a bug where texts in the editor tour were swapped _(Thorben)_
 - _()_
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
+- Map: Remove Step/History info #745 _(4ydan)_
+- CI: Add most of pre-commit hooks to sanity stage #736 _(4ydan)_
 - _()_
 
 ## 0.3.0 - 28.07.2023 (273 commits)

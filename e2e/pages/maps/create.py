@@ -5,7 +5,7 @@ from ..abstract_page import AbstractPage
 class MapCreatePage(AbstractPage):
     """The map create page of permaplant"""
     TITLE: str = 'PermaplanT'
-    #//*[@id="root"]/div[1]/main/div/section/select
+
     def __init__(self, page: Page):
         self.page = page
         self.name = page.get_by_placeholder("Name *")

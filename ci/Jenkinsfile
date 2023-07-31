@@ -9,6 +9,13 @@ def wait_for_db() {
     }
 }
 
+def wait_for_pr_db() {
+    retry(6) {
+        sleep(time: 5, unit: 'SECONDS')
+        sh 'curl --fail https://pr.permaplant.net/api/config'
+    }
+}
+
 /**
  * Aborts the previous build in progress if it exists and the current build is not on the "master" branch.
  * This method is used to prevent multiple concurrent builds for non-master branches.
@@ -73,6 +80,28 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
     }
 }
 
+/**
+ * Run make pre-commit-a inside permaplant-rust image.
+ *
+ * @return A closure representing the defined Jenkins pipeline steps.
+ */
+def runDockerPreCommit() {
+    return {
+        node('docker') {
+            node_info()
+            checkout scm
+            docker.build('permaplant-node', '-f ./ci/container-images/permaplant-node/Dockerfile .').inside() {
+                sh "git init"
+                sh "pre-commit run check-merge-conflict -a"
+                sh "pre-commit run end-of-file-fixer -a"
+                sh "pre-commit run mixed-line-ending -a"
+                sh "pre-commit run trailing-whitespace -a"
+                sh "pre-commit run prettier -a"
+            }
+        }
+    }
+}
+
 def testAndBuildMdbook() {
     return {
         node('docker') {
@@ -107,9 +136,8 @@ def testAndBuildFrontend() {
         node('docker') {
             node_info()
             checkout scm
-            def nodeImage = docker.build('permaplant-node', './ci/container-images/permaplant-node')
+            def nodeImage = docker.build('permaplant-node', '-f ./ci/container-images/permaplant-node/Dockerfile .')
             nodeImage.inside {
-                checkout scm
                 unstash 'definitions.ts'
                 stage('test') {
                     // groovylint-disable-next-line
@@ -165,6 +193,7 @@ timeout(time: 2, unit: 'HOURS') {
             ]
             List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
             parallel(
+                    "pre-commit": runDockerPreCommit(),
                     // Workaround: we can't stop rustfmt from linting the generated schema.rs
                     // so we empty the file before.
                     "cargo-fmt": runDockerWithPostgresSidecar(
@@ -245,9 +274,10 @@ lock("${env.NODE_NAME}-exclusive") {
         node('docker') {
             node_info()
             checkout scm
-            def e2eImage = docker.build("permaplant-e2e", "./e2e")
+            def e2eImage = docker.build("permaplant-e2e:build", "./e2e")
             try {
                 e2eImage.inside {
+                    wait_for_pr_db()
                     sh 'make test-e2e'
                 }
             } catch (err) {
