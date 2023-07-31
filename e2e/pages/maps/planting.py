@@ -56,10 +56,10 @@ class MapPlantingPage(AbstractPage):
         """Deletes a planting by clicks on the delete button"""
         self.delete_plant_button.click()
 
-    def search_result_is_visible(self, result):
+    def expect_search_result_is_visible(self, result):
         """Confirms that a search result is visible"""
         expect(self.page.get_by_test_id(result+"-plant-search-result")).to_be_visible()
 
-    def no_plants_matching_query(self):
+    def expect_no_plants_found_text_is_visible(self):
         """Confirms that `no plants are found` is present"""
-        self.page.get_by_test_id("plant-search-results-empty")
+        expect(self.page.get_by_test_id("plant-search-results-empty")).to_be_visible()

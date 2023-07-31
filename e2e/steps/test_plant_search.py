@@ -36,7 +36,7 @@ def search_a_plant(mpp: MapPlantingPage, plant):
 
 @then(parsers.parse("the app should display {result} as first match"))
 def results_should_be_shown(mpp: MapPlantingPage, result):
-    mpp.search_result_is_visible(result)
+    mpp.expect_search_result_is_visible(result)
 
 
 # Scenario 3: No match was found
@@ -50,4 +50,4 @@ def match_not_found(mpp: MapPlantingPage, input):
 
 @then(parsers.parse("A message will be displayed that nothing was found"))
 def info_nothing_found(mpp: MapPlantingPage):
-    mpp.no_plants_matching_query()
+    mpp.expect_no_plants_found_text_is_visible()

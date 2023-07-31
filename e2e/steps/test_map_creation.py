@@ -26,8 +26,8 @@ def provide_map_details(mmp: MapManagementPage, mcp: MapCreatePage, name, privac
 
 @then(parsers.parse("I can successfully create {name} without an error message"))
 def create_map_successfully(mcp: MapCreatePage, name, mmp: MapManagementPage):
-    mcp.alert_is_hidden()
-    mmp.visible(name)
+    mcp.expect_alert_is_hidden()
+    mmp.expect_mapname_is_visible(name)
 
 
 # Scenario 2: Editing a map
@@ -49,8 +49,8 @@ def can_edit_created_map(mmp: MapManagementPage, mep: MapEditPage, name, new_nam
 @then(parsers.parse("I can successfully save {name} without an error message"))
 def successfully_edit(mmp: MapManagementPage, mep: MapEditPage, name):
     mep.click_save()
-    mmp.alert_is_hidden()
-    mmp.visible(name)
+    mmp.expect_alert_is_hidden()
+    mmp.expect_mapname_is_visible(name)
 
 
 # Scenario 3: Error case, create a map with an already existing name
@@ -60,7 +60,7 @@ def successfully_edit(mmp: MapManagementPage, mep: MapEditPage, name):
 def create_same_map(mmp: MapManagementPage, mcp: MapCreatePage, name):
     mmp.to_map_create_page()
     mcp.create_a_map(name)
-    mmp.visible(name)
+    mmp.expect_mapname_is_visible(name)
 
 
 @when(parsers.parse("I try to create the same map {name}"))
@@ -71,9 +71,9 @@ def create_the_same_map_again(mmp: MapManagementPage, mcp: MapCreatePage, name):
 
 @then("the app displays an error message")
 def error_message_is_displayed(mmp: MapManagementPage):
-    mmp.alert_is_visible()
+    mmp.expect_alert_is_visible()
 
 
 @then(parsers.parse("my map {mapname} is not created"))
 def map_is_not_created(mmp: MapManagementPage, mapname):
-    mmp.visible(mapname)
+    mmp.expect_mapname_is_visible(mapname)

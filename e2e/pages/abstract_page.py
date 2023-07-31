@@ -16,11 +16,11 @@ class AbstractPage(ABC):
         """Verifies if the correct page is active by its page title."""
         expect(self.page).to_have_title(self.TITLE)
 
-    def alert_is_visible(self):
+    def expect_alert_is_visible(self):
         """Checks if an alert is visible."""
         expect(self.page.get_by_role("alert")).to_be_visible()
 
-    def alert_is_hidden(self):
+    def expect_alert_is_hidden(self):
         """Checks if an alert is not invisible."""
         expect(self.page.get_by_role("alert")).to_be_hidden()
 

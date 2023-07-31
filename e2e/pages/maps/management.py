@@ -22,10 +22,6 @@ class MapManagementPage(AbstractPage):
         """Navigates to `MapPlantingPage`"""
         self.page.get_by_text(mapname, exact=True).click()
 
-    def visible(self, mapname: str):
+    def expect_mapname_is_visible(self, mapname: str):
         """Checks if the given map exists on the map management screen"""
         expect(self.page.get_by_text(mapname, exact=True)).to_be_visible()
-
-    def not_visible(self, mapname: str):
-        """Checks if the given map exists on the map management screen"""
-        expect(self.page.get_by_text(mapname, exact=True)).not_to_be_visible()
