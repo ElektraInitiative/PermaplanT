@@ -7,8 +7,6 @@ interface ExtendedModalProps {
   title: string;
   /** The text of the modal.*/
   body: string;
-  /** Callback that informs the parent when the modal should be hidden/displayed (e.g. when the user pressed the close button).*/
-  setShow: (show: boolean) => void;
   /** Decides whether the modal should be shown.*/
   show: boolean;
   /** Click callback for cancel/close button.*/
@@ -26,11 +24,10 @@ interface ExtendedModalProps {
 }
 
 /** Simple Modal used for prompts */
-export default function ExtendedModal({
+export default function CancelConfirmationModal({
   title,
   body,
   show,
-  setShow,
   cancelBtnTitle,
   firstActionBtnTitle,
   secondActionBtnTitle,
@@ -40,12 +37,7 @@ export default function ExtendedModal({
 }: ExtendedModalProps) {
   return (
     <>
-      <TransparentBackground
-        onClick={() => {
-          setShow(false);
-        }}
-        show={show}
-      />
+      <TransparentBackground show={show} />
       <ModalContainer show={show}>
         <div className="flex min-h-[200px] w-[400px] flex-col justify-between rounded-lg bg-neutral-100 p-4 dark:bg-neutral-100-dark">
           <h2 className="mb-4">{title}</h2>
