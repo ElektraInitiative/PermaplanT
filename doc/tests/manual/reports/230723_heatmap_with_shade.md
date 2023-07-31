@@ -3,9 +3,9 @@
 ## General
 
 - Tester: Gabriel
-- Date/Time: 23.07.2023 20:00
+- Date/Time: 31.07.2023 21:50
 - Duration: 15 min
-- Commit/Tag: ee50d96ddf10a13ba0c7fe2566e7533139edba58
+- Commit/Tag: a8b0079cbdd638aea5600373434d8dddcca8e7e7
 - Planned tests: 1
 - Executed tests: **1**
 - Passed tests: 1
@@ -149,7 +149,7 @@ curl --location 'http://localhost:8080/api/maps/1/layers/shade/shadings' \
 --header 'Authorization: Bearer <token>' \
 --data '{
     "layerId": 3,
-    "shade": "no shade",
+    "shade": "light shade",
     "geometry": {
         "rings": [
             [
@@ -187,7 +187,7 @@ The result should be:
 {
   "id": "21c9ca45-5ff4-492a-a537-7eb64c134613",
   "layerId": 3,
-  "shade": "no shade",
+  "shade": "light shade",
   "geometry": {
     "rings": [
       [
@@ -228,7 +228,7 @@ The result should be:
 6. Execute the request.
 
 ```bash
-curl -o file.png --location 'http://localhost:8080/api/maps/1/layers/plants/heatmap?plant_id=1&plant_layer_id=1&shade_layer_id=3' \
+curl -o file.png --location 'http://localhost:8080/api/maps/1/layers/plants/heatmap?plant_id=1&plant_layer_id=2&shade_layer_id=3' \
 --header 'Authorization: Bearer <token>'
 ```
 
