@@ -40,15 +40,19 @@ CREATE TYPE score AS (
 -- To get valid coordinates the user would therefore need to move and scale the
 -- calculated heatmap by taking into account the boundaries of the map.
 --
+-- View the API documentation via Swagger for additional information.
+--
 -- p_map_id                ... map id
 -- p_layer_ids             ... ids of the layers
 -- p_plant_id              ... id of the plant for which to consider relations
+-- p_date                  ... date at which to generate the heatmap
 -- granularity             ... resolution of the map (must be greater than 0)
 -- x_min,y_min,x_max,y_max ... boundaries of the map
 CREATE OR REPLACE FUNCTION calculate_heatmap(
     p_map_id INTEGER,
     p_layer_ids INTEGER [],
     p_plant_id INTEGER,
+    p_date DATE,
     granularity INTEGER,
     x_min INTEGER,
     y_min INTEGER,

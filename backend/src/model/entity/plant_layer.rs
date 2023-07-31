@@ -1,9 +1,10 @@
 //! Contains the database implementation of the plant layer.
 
+use chrono::NaiveDate;
 use diesel::{
     debug_query,
     pg::Pg,
-    sql_types::{Array, Float, Integer},
+    sql_types::{Array, Date, Float, Integer},
     CombineDsl, ExpressionMethods, QueryDsl, QueryResult, QueryableByName,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
@@ -70,6 +71,7 @@ pub async fn heatmap(
     plant_layer_id: i32,
     shade_layer_id: i32,
     plant_id: i32,
+    date: NaiveDate,
     conn: &mut AsyncPgConnection,
 ) -> QueryResult<Vec<Vec<(f32, f32)>>> {
     // Fetch the bounding box x and y values of the maps coordinates
@@ -80,10 +82,11 @@ pub async fn heatmap(
 
     // Fetch the heatmap
     let query =
-        diesel::sql_query("SELECT * FROM calculate_heatmap($1, $2, $3, $4, $5, $6, $7, $8)")
+        diesel::sql_query("SELECT * FROM calculate_heatmap($1, $2, $3, $4, $5, $6, $7, $8, $9)")
             .bind::<Integer, _>(map_id)
             .bind::<Array<Integer>, _>(vec![plant_layer_id, shade_layer_id])
             .bind::<Integer, _>(plant_id)
+            .bind::<Date, _>(date)
             .bind::<Integer, _>(GRANULARITY)
             .bind::<Integer, _>(bounding_box.x_min)
             .bind::<Integer, _>(bounding_box.y_min)

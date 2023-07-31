@@ -4,6 +4,7 @@ use std::io::Cursor;
 
 use actix_http::StatusCode;
 use actix_web::web::Data;
+use chrono::Utc;
 use image::{ImageBuffer, Rgba};
 
 use crate::{
@@ -35,6 +36,7 @@ pub async fn heatmap(
         query_params.plant_layer_id,
         query_params.shade_layer_id,
         query_params.plant_id,
+        query_params.date.unwrap_or_else(|| Utc::now().date_naive()),
         &mut conn,
     )
     .await?;

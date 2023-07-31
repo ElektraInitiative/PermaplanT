@@ -456,6 +456,9 @@ pub struct HeatMapQueryParams {
     pub shade_layer_id: i32,
     /// The id of the plant you want to plant.
     pub plant_id: i32,
+    /// The date at which to generate the heatmap.
+    /// Will be set to the current date if `None`.
+    pub date: Option<NaiveDate>,
 }
 
 #[typeshare]
