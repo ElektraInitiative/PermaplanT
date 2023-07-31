@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
 
-function validatebaseLayerOptions(baseLayerOptions: Omit<BaseLayerImageDto, 'action_id'>) {
+function validateBaseLayerOptions(baseLayerOptions: Omit<BaseLayerImageDto, 'action_id'>) {
   const { id, layer_id, path, rotation, scale } = baseLayerOptions;
 
   if (!id || !layer_id || !path || !rotation || !scale) {
@@ -61,7 +61,7 @@ export const BaseLayerRightToolbar = () => {
       rotation: debouncedRotation,
       scale: debouncedScale,
     };
-    if (validatebaseLayerOptions(baseLayerOptions))
+    if (validateBaseLayerOptions(baseLayerOptions))
       executeAction(new UpdateBaseLayerAction(baseLayerOptions));
   }, [
     baseLayerState.imageId,
