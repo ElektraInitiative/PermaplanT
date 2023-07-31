@@ -20,6 +20,10 @@ class HomePage(AbstractPage):
         expect(self.login_button).to_be_visible()
 
     def click_login_button(self):
+        """
+        Clicks the login button which
+        navigates to the `LoginPage`.
+        """
         self.login_button.click()
 
     def click_logout_button(self):
@@ -29,4 +33,7 @@ class HomePage(AbstractPage):
         expect(self.hello_msg).to_be_visible()
 
     def to_map_management_page(self):
+        """
+        Navigates to `MapManagementPage`.
+        """
         self.map_management_button.click()

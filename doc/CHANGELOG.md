@@ -47,7 +47,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- basic baseLayerConfig validation - fixed bugfix/734-base-layer-image-gets-lost _(Samuel)_
 - _()_
 - _()_
 - _()_
@@ -58,7 +58,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- E2E: Add plant search to e2e tests _(4ydan)_
 - Map: Remove Step/History info #745 _(4ydan)_
 - CI: Add most of pre-commit hooks to sanity stage #736 _(4ydan)_
 - _()_
@@ -88,8 +88,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: Optimized mdbook docker image #585 _(4ydan)_
 - CI: Test `diesel` migrations in PR and master #134 _(4ydan)_
 - CI: Remove cargo check, put clippy before doc #688 _(4ydan)_
-- CI: login/logout e2e tests #625 _(4ydan)_
-- CI: map creation e2e tests #707 _(4ydan)_
+- E2E: login/logout e2e tests #625 _(4ydan)_
+- E2E: map creation e2e tests #707 _(4ydan)_
 
 ## 0.2.3 - 18.07.2023 (165 commits)
 
