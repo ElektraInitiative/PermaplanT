@@ -56,8 +56,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Calculate preference: Between -0.5 and 0.5 depending on shadings.
--- Calculate relevance: 0.5 if there is shading; otherwise 0.0.
+-- Calculate preference: Between -1 and 1 depending on shadings.
+-- Calculate relevance: 1 if there is shading; otherwise 0.0.
 --
 -- If the plant would die at the position set preference=-100 and relevance=100.
 CREATE FUNCTION calculate_score_from_shadings(
@@ -144,9 +144,9 @@ BEGIN
     SELECT array_position(all_values, plant_shade) INTO pos1;
     SELECT array_position(all_values, shading_shade) INTO pos2;
 
-    -- Calculate the 'distance' to the preferred shade as a values between -0.5 and 0.5
-    score.preference := (0.5 - (abs(pos1 - pos2) / (ARRAY_LENGTH(all_values, 1) - 1)::REAL)) / 2;
-    score.relevance := 0.5;
+    -- Calculate the 'distance' to the preferred shade as a values between -1 and 1
+    score.preference := (0.5 - (abs(pos1 - pos2) / (ARRAY_LENGTH(all_values, 1) - 1)::REAL)^0.5) * 2.0;
+    score.relevance := 1.0;
 
     RETURN score;
 END;
