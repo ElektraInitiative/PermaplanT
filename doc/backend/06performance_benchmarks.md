@@ -84,13 +84,14 @@ The following is a step by step guide on how to execute the benchmark for the he
 2. Execute: `./benchmarks/backend/heatmap/setup.sh <username> <password>`. Do the following once the script gives the instructions.
    - Start the backend in dev mode.
    - Press Enter.
+   - Select map size: press `s`.
    - Stop the backend.
    - Press Enter.
 3. Wait for the backend to start in release mode.
 4. Once its started execute in a second shell: `./benchmarks/backend/heatmap/run_httperf.sh <username> <password> 10000 100`
 5. Wait for httperf to finish.
 6. Press Ctrl+C in the `setup.sh` shell.
-7. Wait until `flamegraph.svg` was generated (this might take 20min or longer). Do not interrupt this step.
+7. Wait until `flamegraph.svg` was generated (this might take 20min or longer). If you interrupt this step you have to rerun the benchmark.
 8. Execute: `./benchmarks/backend/heatmap/get_statistics.sh`
 9. Collect results:
    - flamgraph.svg
