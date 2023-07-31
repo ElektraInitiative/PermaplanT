@@ -3,7 +3,7 @@ from ..abstract_page import AbstractPage
 
 
 class MapCreatePage(AbstractPage):
-    """The map create page of permaplant"""
+    """The map creation page of permaplant"""
     TITLE: str = 'PermaplanT'
 
     def __init__(self, page: Page):
@@ -15,7 +15,11 @@ class MapCreatePage(AbstractPage):
         self.create_button = page.get_by_role("button", name="Create")
 
     def create_a_map(self, mapname, privacy=None, description="SUTDescription", latitude="1", longitude="1"):
-        """Helper function to create a map"""
+        """
+        Helper function to create a map
+        Fills out fields and clicks create at the end
+        which navigate to the `MapManagementPage`
+        """
         self.fill_name(mapname)
         # mcp.select_privacy(privacy)
         self.fill_description(description)
@@ -39,4 +43,8 @@ class MapCreatePage(AbstractPage):
         self.latitude.fill(latitude)
 
     def click_create(self):
+        """
+        Clicks create at the end
+        which navigate to the `MapManagementPage`
+        """
         self.create_button.click()
