@@ -56,6 +56,7 @@ export interface CreatableSelectMenuProps<
  * @param props.handleOptionsChange: Callback that is invoked every time the user selects a new option. The single argument represents the selected option.
  * @param props.handleCreate: Gets called if a new item was created with the users input as the only argument. If not set, the component will automatically add all created items to the available options.
  * @param props.onChange: Callback that is invoked if the user performs ANY input. This includes type and click events among others.
+ * @param props.onInputChange: Callback that is invoked if the fields content changes.
  */
 export default function CreatableSelectMenu<
   T extends FieldValues,
