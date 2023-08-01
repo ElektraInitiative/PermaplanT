@@ -59,7 +59,3 @@ image = { version = "0.24.6", default-features = false, features = ["png"] }
 
 [dev-dependencies]
 jsonwebkey = { version = "0.3.5", features = ["generate", "jwt-convert"] }
-
-# TODO: remove before merge
-[profile.release]
-debug = true
