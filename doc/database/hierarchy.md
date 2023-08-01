@@ -92,14 +92,38 @@ Either two parent binomials, separated by a "x" or "×" or a given binomial, wit
 (see [Wikipedia](https://en.wikipedia.org/wiki/Hybrid_name)).
 So the name does not necessarily say if a plant is a hybrid.
 
-### Rendering
+### Rendering the Unique Name
 
-The unique name must be rendered:
+The unique name of a plant needs to be displayed in the following manner:
 
-- Latin name in _italics_.
-- Cultivar name normal font in single quotes (as in database).
+- Latin name should be displayed in _italics_.
+- The cultivar name should be in regular font, enclosed in single quotes (as stored in the database).
 
-E.g.: _Brassica oleracea italica_ 'Ramoso calabrese'
+For example: _Brassica oleracea italica_ 'Ramoso calabrese'
+
+### Rendering the Complete Name
+
+The complete name of a plant should be displayed as follows:
+
+- The common name, which appears first, should start with a capital letter (e.g., "tomato" becomes "Tomato").
+- This is followed by the unique name in italics, and finally the cultivar name in single quotes.
+
+The general format is:
+
+`Common_name (_unique\_name_ 'cultivar')`
+
+In cases where the common name is not available in the current language, it should be displayed as:
+
+`_unique\_name_ 'cultivar'`
+
+Currently, the cultivar is a part of the unique name.
+
+For example:
+
+- "Italian broccoli (_Brassica oleracea italica_ 'Ramoso calabrese')"
+- "Italian broccoli (_Brassica oleracea italica_)"
+- "_Brassica oleracea italica_ 'Ramoso calabrese'"
+- "_Brassica oleracea italica_"
 
 ### Rules
 
