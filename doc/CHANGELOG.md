@@ -15,7 +15,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Finish documentation of custom UI elements _(Moritz)_
 - _()_
 - _()_
 - _()_
