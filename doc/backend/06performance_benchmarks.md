@@ -21,6 +21,9 @@ This is necessary to ensure that perf can accurately track the function stack.
 debug = true
 ```
 
+The `setup.sh` scripts contain `PERF=/usr/lib/linux-tools/5.4.0-153-generic/perf` to set the location of perf.
+Modify the path to point to your `perf` installation.
+
 ## Scripts
 
 You can find the scripts in `benchmark/backend/`.
@@ -88,7 +91,7 @@ The following is a step by step guide on how to execute the benchmark for the he
    - Stop the backend.
    - Press Enter.
 3. Wait for the backend to start in release mode.
-4. Once its started execute in a second shell: `./benchmarks/backend/heatmap/run_httperf.sh <username> <password> 10000 100`
+4. Once its started execute in a second shell: `./benchmarks/backend/heatmap/run_httperf.sh <username> <password> 100 10`
 5. Wait for httperf to finish.
 6. Press Ctrl+C in the `setup.sh` shell.
 7. Wait until `flamegraph.svg` was generated (this might take 20min or longer). If you interrupt this step you have to rerun the benchmark.
