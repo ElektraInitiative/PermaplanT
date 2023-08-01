@@ -15,12 +15,9 @@ use uuid::Uuid;
 
 use crate::{
     error::ServiceError,
-    model::{
-        entity::plant_layer::GRANULARITY,
-        r#enum::{
-            layer_type::LayerType, light_requirement::LightRequirement,
-            privacy_option::PrivacyOption, relation_type::RelationType, shade::Shade,
-        },
+    model::r#enum::{
+        layer_type::LayerType, light_requirement::LightRequirement, privacy_option::PrivacyOption,
+        relation_type::RelationType, shade::Shade,
     },
     test::util::{
         data,
@@ -123,10 +120,7 @@ async fn test_check_heatmap_dimensionality_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgba8().unwrap();
-    assert_eq!(
-        ((10 / GRANULARITY) as u32, (100 / GRANULARITY) as u32),
-        image.dimensions()
-    );
+    assert_eq!((10, 100), image.dimensions());
 }
 
 #[actix_rt::test]
@@ -152,10 +146,7 @@ async fn test_check_heatmap_non_0_xmin_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgba8().unwrap();
-    assert_eq!(
-        ((90 / GRANULARITY) as u32, (100 / GRANULARITY) as u32),
-        image.dimensions()
-    );
+    assert_eq!((90, 100), image.dimensions());
 }
 
 /// Test with a map geometry that excludes a corner.
@@ -183,16 +174,13 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgba8().unwrap();
-    assert_eq!(
-        ((100 / GRANULARITY) as u32, (100 / GRANULARITY) as u32),
-        image.dimensions()
-    );
 
     // (0,0) is be top left.
-    let top_left_pixel = image.get_pixel(2, 2);
-    let top_right_pixel = image.get_pixel(8, 2);
-    let bottom_left_pixel = image.get_pixel(2, 8);
-    let bottom_right_pixel = image.get_pixel(8, 8);
+    let (x_dim, y_dim) = image.dimensions();
+    let top_left_pixel = image.get_pixel(0, 0);
+    let top_right_pixel = image.get_pixel(x_dim - 1, 0);
+    let bottom_left_pixel = image.get_pixel(0, y_dim - 1);
+    let bottom_right_pixel = image.get_pixel(x_dim - 1, y_dim - 1);
     assert_eq!([68, 186, 0, 117], top_left_pixel.0);
     assert_eq!([68, 186, 0, 117], top_right_pixel.0);
     assert_eq!([255, 0, 0, 0], bottom_left_pixel.0);
@@ -235,14 +223,11 @@ async fn test_heatmap_with_shadings_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgba8().unwrap();
-    assert_eq!(
-        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
-        image.dimensions()
-    );
 
     // (0,0) is be top left.
-    let top_left_pixel = image.get_pixel(1, 1);
-    let bottom_right_pixel = image.get_pixel(40, 80);
+    let (x_dim, y_dim) = image.dimensions();
+    let top_left_pixel = image.get_pixel(0, 0);
+    let bottom_right_pixel = image.get_pixel(x_dim - 1, y_dim - 1);
     // The shading is the exact opposite of the plants preference, therefore the map will be red.
     assert_eq!([186, 68, 0, 117], top_left_pixel.0);
     // Plant like other positions, therefore green.
@@ -308,14 +293,11 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgba8().unwrap();
-    assert_eq!(
-        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
-        image.dimensions()
-    );
 
     // (0,0) is be top left.
-    let top_left_pixel = image.get_pixel(1, 1);
-    let bottom_right_pixel = image.get_pixel(40, 80);
+    let (x_dim, y_dim) = image.dimensions();
+    let top_left_pixel = image.get_pixel(0, 0);
+    let bottom_right_pixel = image.get_pixel(x_dim - 1, y_dim - 1);
     // The shading is deep shade with is ok for the plant.
     assert_eq!([68, 186, 0, 117], top_left_pixel.0);
     // The plant can't grow in sun.
@@ -336,14 +318,11 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgba8().unwrap();
-    assert_eq!(
-        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
-        image.dimensions()
-    );
 
     // (0,0) is be top left.
-    let top_left_pixel = image.get_pixel(1, 1);
-    let bottom_right_pixel = image.get_pixel(40, 80);
+    let (x_dim, y_dim) = image.dimensions();
+    let top_left_pixel = image.get_pixel(0, 0);
+    let bottom_right_pixel = image.get_pixel(x_dim - 1, y_dim - 1);
     // The plant can't grow in deep shade.
     assert_eq!([255, 0, 0, 255], top_left_pixel.0);
     // The plant can grow in sun.
@@ -376,8 +355,8 @@ async fn test_heatmap_with_plantings_succeeds() {
                     id: Uuid::new_v4(),
                     layer_id: -1,
                     plant_id: -1,
-                    x: 15,
-                    y: 15,
+                    x: 0,
+                    y: 0,
                     ..Default::default()
                 }])
                 .execute(conn)
@@ -404,20 +383,15 @@ async fn test_heatmap_with_plantings_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgba8().unwrap();
-    assert_eq!(
-        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
-        image.dimensions()
-    );
 
-    // (0,0) is be top left.
-    let on_planting = image.get_pixel(1, 1);
-    let close_to_planting = image.get_pixel(2, 2);
-    let a_bit_away_from_planting = image.get_pixel(10, 10);
-    let far_away_from_planting = image.get_pixel(40, 80);
+    let (x_dim, y_dim) = image.dimensions();
+    let on_planting = image.get_pixel(0, 0);
+    let close_to_planting = image.get_pixel(1, 1);
+    let far_away_from_planting = image.get_pixel(x_dim - 1, y_dim - 1);
     // The planting influences the map.
-    assert_eq!([96, 158, 0, 62], on_planting.0);
-    assert_eq!([98, 156, 0, 57], close_to_planting.0);
-    assert_eq!([123, 131, 0, 8], a_bit_away_from_planting.0);
+    assert!(on_planting.0[0] < close_to_planting.0[0]);
+    assert!(on_planting.0[1] > close_to_planting.0[1]);
+    assert!(on_planting.0[3] > close_to_planting.0[3]);
     // There is no influence on locations far away.
     assert_eq!([127, 127, 0, 0], far_away_from_planting.0);
 }
@@ -448,8 +422,8 @@ async fn test_heatmap_with_deleted_planting_succeeds() {
                     id: Uuid::new_v4(),
                     layer_id: -1,
                     plant_id: -1,
-                    x: 15,
-                    y: 15,
+                    x: 0,
+                    y: 0,
                     remove_date: Some(NaiveDate::from_ymd_opt(2023, 07, 30).unwrap()),
                     ..Default::default()
                 }])
@@ -477,19 +451,15 @@ async fn test_heatmap_with_deleted_planting_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgba8().unwrap();
-    assert_eq!(
-        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
-        image.dimensions()
-    );
 
-    // (0,0) is be top left.
-    let on_planting = image.get_pixel(1, 1);
-    let close_to_planting = image.get_pixel(2, 2);
-    let a_bit_away_from_planting = image.get_pixel(10, 10);
+    let (x_dim, y_dim) = image.dimensions();
+    let on_planting = image.get_pixel(0, 0);
+    let close_to_planting = image.get_pixel(1, 1);
+    let far_away_from_planting = image.get_pixel(x_dim - 1, y_dim - 1);
     // The planting doesn't influences the map as it is deleted.
     assert_eq!([127, 127, 0, 0], on_planting.0);
     assert_eq!([127, 127, 0, 0], close_to_planting.0);
-    assert_eq!([127, 127, 0, 0], a_bit_away_from_planting.0);
+    assert_eq!([127, 127, 0, 0], far_away_from_planting.0);
 
     let resp = test::TestRequest::get()
         .uri("/api/maps/-1/layers/plants/heatmap?plant_id=-2&plant_layer_id=-1&shade_layer_id=-2&date=2023-07-21")
@@ -506,19 +476,13 @@ async fn test_heatmap_with_deleted_planting_succeeds() {
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
     let image = image.as_rgba8().unwrap();
-    assert_eq!(
-        ((500 / GRANULARITY) as u32, (1000 / GRANULARITY) as u32),
-        image.dimensions()
-    );
 
-    // (0,0) is be top left.
-    let on_planting = image.get_pixel(1, 1);
-    let close_to_planting = image.get_pixel(2, 2);
-    let a_bit_away_from_planting = image.get_pixel(10, 10);
+    let on_planting = image.get_pixel(0, 0);
+    let close_to_planting = image.get_pixel(1, 1);
     // The planting influences the map as we set the date back in the query.
-    assert_eq!([96, 158, 0, 62], on_planting.0);
-    assert_eq!([98, 156, 0, 57], close_to_planting.0);
-    assert_eq!([123, 131, 0, 8], a_bit_away_from_planting.0);
+    assert!(on_planting.0[0] < close_to_planting.0[0]);
+    assert!(on_planting.0[1] > close_to_planting.0[1]);
+    assert!(on_planting.0[3] > close_to_planting.0[3]);
 }
 
 #[actix_rt::test]

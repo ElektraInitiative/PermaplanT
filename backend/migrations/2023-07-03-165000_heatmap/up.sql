@@ -86,8 +86,8 @@ BEGIN
     SELECT geometry FROM maps WHERE id = p_map_id INTO STRICT map_geometry;
 
     -- Calculate the number of rows and columns based on the map's size and granularity
-    num_cols := CEIL((x_max - x_min) / granularity); -- Adjusted for granularity
-    num_rows := CEIL((y_max - y_min) / granularity); -- Adjusted for granularity
+    num_cols := FLOOR((x_max - x_min) / granularity); -- Adjusted for granularity
+    num_rows := FLOOR((y_max - y_min) / granularity); -- Adjusted for granularity
 
     -- Calculate the score for each pixel on the heatmap
     FOR i IN 0..num_cols-1 LOOP
