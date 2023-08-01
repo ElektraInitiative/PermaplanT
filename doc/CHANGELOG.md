@@ -34,7 +34,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- update doc/database/hierarchy.md to clearify how we render plant names _(temmey)_
 - _()_
 - _()_
 - _()_
