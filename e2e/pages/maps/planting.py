@@ -13,6 +13,7 @@ class MapPlantingPage(AbstractPage):
         self.plant_search_icon = self.page.get_by_test_id("plant-search-icon")
         self.plant_search_input = self.page.get_by_test_id("plant-search-input")
         self.delete_plant_button = self.page.get_by_role("button", name="Delete Planting")
+        self.map_management_button = self.page.get_by_role("button", name="Maps")
 
     def check_base_layer(self):
         """Checks the base layer radio button."""
@@ -25,10 +26,6 @@ class MapPlantingPage(AbstractPage):
     def fill_plant_search(self, plantname):
         """Clicks the search icon and types plantname into the plant search."""
         self.plant_search_input.fill(plantname)
-
-    def select_plant_from_search(self, plantname):
-        """Selects a plant by name from the search results."""
-        self.page.get_by_role("button", name=plantname).click()
 
     def close_tour(self):
         """
@@ -48,6 +45,10 @@ class MapPlantingPage(AbstractPage):
         """Click the search icon that enables the search box."""
         self.plant_search_icon.click()
 
+    def click_plant_from_search_results(self, plant_name):
+        """Selects a plant by name from the search results."""
+        self.page.get_by_test_id(plant_name + "-plant-search-result").click()
+
     def click_on_canvas(self, x=300, y=300):
         """Clicks on the canvas."""
         self.page.locator("canvas:nth-child(6)").click(position={"x": x, "y": y})
@@ -56,10 +57,24 @@ class MapPlantingPage(AbstractPage):
         """Deletes a planting by clicks on the delete button"""
         self.delete_plant_button.click()
 
+    def expect_plant_to_be_planted(self, plant_name, x=300, y=300):
+        """
+        Confirms that the plant is on the canvas,
+        by looking for its tooltip after hovering it.
+        """
+        expect(self.page.get_by_role("heading", name=plant_name)).to_be_visible()
+
     def expect_search_result_is_visible(self, result):
         """Confirms that a search result is visible"""
-        expect(self.page.get_by_test_id(result+"-plant-search-result")).to_be_visible()
+        expect(self.page.get_by_test_id(result + "-plant-search-result")).to_be_visible()
 
     def expect_no_plants_found_text_is_visible(self):
         """Confirms that `no plants are found` is present"""
         expect(self.page.get_by_test_id("plant-search-results-empty")).to_be_visible()
+
+    def to_map_management_page(self):
+        """
+        Clicks the button on the navbar which
+        navigates to the `MapManagementPage`.
+        """
+        self.map_management_button.click()
