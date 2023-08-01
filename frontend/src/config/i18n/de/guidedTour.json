@@ -2,6 +2,10 @@
     "next": "Weiter",
     "finish": "Abschließen",
     "back": "Zurück",
+    "skip_title": "Einführung beenden?",
+    "skip_text": "Möchtest du diese Einführungstour wirklich beenden? Alternativ kannst du sie auch nur unterbrechen und das nächste mal erneut angezeigt bekommen.",
+    "disable": "Beenden",
+    "interrupt": "Unterbrechen",
     "fetch_status_error": "Sorry, ich habe Schwierigkeiten den Status deiner Einführung in den Map Editor zu empfangen. Bitte lade die Seite neu, damit ich es noch einmal versuchen kann.",
     "mapEditor": {
         "welcome_title": "Willkommen im Map Editor",

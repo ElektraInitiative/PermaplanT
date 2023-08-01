@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
 interface TransparentBackgroundProps {
-  onClick: () => void;
+  onClick?: () => void;
   show: boolean;
 }
 

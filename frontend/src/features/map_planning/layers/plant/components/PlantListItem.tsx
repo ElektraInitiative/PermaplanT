@@ -21,7 +21,10 @@ export function PlantListItem({ plant, onClick, isHighlighted = false }: PlantLi
     : undefined;
 
   return (
-    <li className="flex">
+    <li
+      className="flex"
+      data-testid={`${plant.common_name_en} ${plant.unique_name}-plant-search-result`}
+    >
       <button
         onClick={() => onClick()}
         className={`${highlightedClass} flex flex-1 items-center gap-2 rounded-md stroke-neutral-400 px-2 py-1 hover:bg-neutral-200 hover:stroke-primary-400 hover:text-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:hover:bg-neutral-300-dark`}
