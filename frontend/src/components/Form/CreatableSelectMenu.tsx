@@ -40,6 +40,7 @@ export interface CreatableSelectMenuProps<
   handleCreate?: (inputValue: string) => void;
   /** Callback that is invoked if the user performs ANY input. This includes type and click events among others.                                                                    */
   onChange?: () => void;
+  /** Callback that is invoked if the fields content changes. */
   onInputChange?: (inputValue: string) => void;
 }
 
