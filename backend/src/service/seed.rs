@@ -6,7 +6,6 @@ use uuid::Uuid;
 use crate::config::data::AppDataInner;
 use crate::model::dto::PageParameters;
 use crate::model::dto::{Page, SeedSearchParameters};
-use crate::Pool;
 use crate::{
     error::ServiceError,
     model::{

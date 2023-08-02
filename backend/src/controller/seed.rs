@@ -10,7 +10,6 @@ use actix_web::{
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
 use crate::model::dto::{PageParameters, SeedSearchParameters};
-use crate::Pool;
 use crate::{model::dto::NewSeedDto, service};
 
 /// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
