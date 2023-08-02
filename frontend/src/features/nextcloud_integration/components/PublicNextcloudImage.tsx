@@ -26,7 +26,7 @@ export const PublicNextcloudImage = (props: PublicNextcloudImageProps) => {
     publicShareToken: shareToken,
     fallbackImageSource: defaultImageUrl,
     retry,
-    showErrorMessage
+    showErrorMessage,
   });
 
   return <img src={image.src} {...imageProps} />;
