@@ -37,7 +37,7 @@ repos:
           - scss
           - markdown
         additional_dependencies:
-          - prettier@2.8.7
+          - prettier@2.8.8
           - prettier-plugin-tailwindcss@0.2.1
           - "@trivago/prettier-plugin-sort-imports"
   - repo: https://github.com/pre-commit/mirrors-eslint
@@ -73,3 +73,16 @@ repos:
         args: [--manifest-path=backend/Cargo.toml]
         files: ^backend/
         pass_filenames: false
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 2.0.2
+    hooks:
+      - id: sqlfluff-fix
+        name: sql format
+        args: [--config=backend/.sqlfluff]
+  - repo: https://github.com/nvuillam/npm-groovy-lint
+    rev: v11.1.1
+    hooks:
+      - id: fix-npm-groovy-lint
+        name: Fix Lint groovy findings
+        description: Groovy & Jenkinsfile Auto-fixer
+        entry: npm-groovy-lint --fix ci/Jenkinsfile ci/Jenkinsfile.release --failon warning --loglevel warning --noserver

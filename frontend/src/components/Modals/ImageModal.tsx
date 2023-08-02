@@ -3,10 +3,15 @@ import ModalContainer from './ModalContainer';
 import { ReactNode } from 'react';
 
 interface ImageModalProps {
+  /** Modal headline displayed on top.*/
   title: string;
+  /** The main element of the modal, usually an image.*/
   body: ReactNode;
+  /** Callback that informs the parent when the modal should be hidden/displayed (e.g. when the user pressed the close button).*/
   setShow: (show: boolean) => void;
+  /** Decides whether the modal should be shown.*/
   show: boolean;
+  /** Click callback for cancel/close button.*/
   onCancel: () => void;
 }
 
@@ -28,7 +33,7 @@ export default function ImageModal({ title, body, setShow, show, onCancel }: Ima
         show={show}
       />
       <ModalContainer show={show}>
-        <div className="flex h-full min-h-[40vh] w-full min-w-[40vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+        <div className="flex h-[70vh] w-[80vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <div className="flex justify-between">
             <h2>{title}</h2>
             <button
@@ -38,7 +43,7 @@ export default function ImageModal({ title, body, setShow, show, onCancel }: Ima
               x
             </button>
           </div>
-          <div className="flex justify-center">{body}</div>
+          <div className="flex h-full max-h-[60vh] w-full justify-center p-4">{body}</div>
         </div>
       </ModalContainer>
     </>

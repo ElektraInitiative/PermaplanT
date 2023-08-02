@@ -1,10 +1,11 @@
 import { NewSeedDto, SeedDto } from '@/bindings/definitions';
 import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { createAPI } from '@/config/axios';
 
 export const editSeed = async (seed: NewSeedDto, id: number) => {
+  const http = createAPI();
   try {
-    await axios.put<SeedDto>(`${baseApiUrl}/api/seeds/${id}`, seed);
+    await http.put<SeedDto>(`${baseApiUrl}/api/seeds/${id}`, seed);
   } catch (error) {
     throw error as Error;
   }

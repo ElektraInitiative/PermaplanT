@@ -1,82 +1,58 @@
-import { HTMLInputTypeAttribute } from 'react';
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
-interface SimpleFormInputProps<T extends FieldValues> {
+interface SimpleFormInputProps<T extends FieldValues>
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  /** The elements unique id. */
   id: Path<T>;
+  /** Text that should be displayed in the accompanying label component. */
   labelText: string;
-  placeHolder?: string;
-  isArea?: boolean;
-  required?: boolean;
-  type?: HTMLInputTypeAttribute;
-  defaultValue?: string | number | readonly string[];
-  min?: number;
-  max?: number;
+  /** UseFormRegister hook of the surrounding form. */
   register?: UseFormRegister<T>;
-  onChange?: () => void;
+  /** Will return the input value as a number if this param is set to true. */
   valueAsNumber?: boolean;
+  /** Text that will be displayed if an error is encountered. */
   errorTitle?: string;
-  disabled?: boolean;
-  value?: string;
 }
 
+/**
+ * Wrapper around the default input component with a label and custom styling.
+ *
+ * @param id The elements unique id.
+ * @param labelText Text that should be displayed in the accompanying label component.
+ * @param register UseFormRegister hook of the surrounding form.
+ * @param valueAsNumber Will return the input value as a number if this param is set to true.
+ * @param errorTitle Text that will be displayed if an error is encountered.
+ * @param props Any prop that is available for the default input element, is also accepted.
+ * @constructor
+ */
 export default function SimpleFormInput<T extends FieldValues>({
-  labelText,
-  placeHolder = '',
-  required = false,
-  isArea = false,
-  type = 'text',
-  defaultValue,
-  min,
-  max,
   id,
+  labelText = '',
   register,
-  onChange,
   valueAsNumber = false,
   errorTitle,
-  disabled = false,
-  value,
+  className,
+  ...props
 }: SimpleFormInputProps<T>) {
   return (
     <div className="dark:text-white">
-      <label htmlFor={id} className="mb-2 block text-sm font-medium">
-        {labelText}
-        {required ? <span className="text-red-800"> *</span> : <></>}
-      </label>
-      {isArea ? (
-        <textarea
-          disabled={disabled}
-          onKeyUp={onChange}
-          onChange={onChange}
-          rows={6}
-          name={id}
-          id={id}
-          className="dark:bg-primary-textfield-dark block w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:bg-neutral-100-dark dark:focus:border-primary-300"
-          placeholder={placeHolder}
-          required={required}
-          {...register?.(id)}
-        />
-      ) : (
-        <input
-          disabled={disabled}
-          onKeyUp={onChange}
-          onChange={onChange}
-          type={type}
-          min={min}
-          max={max}
-          id={id}
-          defaultValue={defaultValue}
-          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-          placeholder={placeHolder}
-          required={required}
-          style={{ colorScheme: 'dark' }}
-          pattern={valueAsNumber ? '^[0-9]+([,][0-9]{1,2})?$' : undefined}
-          title={errorTitle}
-          value={value?.toString()}
-          {...register?.(id, {
-            valueAsNumber: type === 'number' || valueAsNumber,
-          })}
-        />
+      {labelText && (
+        <label htmlFor={id} className="mb-2 block text-sm font-medium">
+          {labelText}
+          {props.required ? <span className="text-red-800"> *</span> : <></>}
+        </label>
       )}
+      <input
+        id={id}
+        title={errorTitle}
+        {...props}
+        {...register?.(id, {
+          valueAsNumber: props.type === 'number' || valueAsNumber,
+        })}
+        className={`input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 aria-[invalid=true]:dark:border-red-400 ${
+          className ?? ''
+        }`}
+      />
     </div>
   );
 }

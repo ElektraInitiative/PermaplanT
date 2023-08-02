@@ -6,6 +6,7 @@ use actix_web::{
 };
 use derive_more::{Display, Error};
 use diesel::result::Error as DieselError;
+use diesel_async::pooled_connection::deadpool::PoolError;
 
 /// The default error used by the server.
 #[derive(Debug, Display, Error)]
@@ -19,7 +20,7 @@ pub struct ServiceError {
 }
 
 impl ServiceError {
-    /// Creates a new service errro containing an [`Http status code`][StatusCode] and a reason for the error.
+    /// Creates a new service error containing an [`Http status code`][StatusCode] and a reason for the error.
     #[must_use]
     pub const fn new(status_code: StatusCode, reason: String) -> Self {
         Self {
@@ -41,17 +42,23 @@ impl ResponseError for ServiceError {
     }
 }
 
-impl From<diesel_async::pooled_connection::deadpool::PoolError> for ServiceError {
-    fn from(value: diesel_async::pooled_connection::deadpool::PoolError) -> Self {
+impl From<PoolError> for ServiceError {
+    fn from(value: PoolError) -> Self {
+        log::error!(
+            "Unable to get connection to database: {}",
+            value.to_string()
+        );
         Self::new(StatusCode::INTERNAL_SERVER_ERROR, value.to_string())
     }
 }
 
 impl From<DieselError> for ServiceError {
     fn from(value: DieselError) -> Self {
-        let status_code = match value {
-            DieselError::NotFound => StatusCode::NOT_FOUND,
-            _ => StatusCode::INTERNAL_SERVER_ERROR,
+        let status_code = if value == DieselError::NotFound {
+            StatusCode::NOT_FOUND
+        } else {
+            log::error!("Error executing diesel SQL query: {}", value.to_string());
+            StatusCode::INTERNAL_SERVER_ERROR
         };
 
         Self::new(status_code, value.to_string())

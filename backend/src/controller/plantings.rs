@@ -1,84 +1,97 @@
 //! `Planting` endpoints.
 
-// As this is just an api draft at this stage there are several clippy errors that
-// need to be ignored for the CI to accept this.
-// FIXME:
-//  Remove these clippy allows when these endpoints are full implemented.
-
-use actix_web::web::Query;
 use actix_web::{
     delete, get, patch, post,
-    web::{Data, Json, Path},
+    web::{Data, Json, Path, Query},
     HttpResponse, Result,
 };
+use uuid::Uuid;
 
-use crate::db::connection::Pool;
-use crate::model::dto::{
-    NewPlantingDto, Page, PageParameters, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+use crate::{
+    config::auth::user_info::UserInfo,
+    model::dto::actions::{
+        Action, UpdatePlantingAddDateActionPayload, UpdatePlantingRemoveDateActionPayload,
+    },
+};
+use crate::{
+    config::data::AppDataInner,
+    model::dto::actions::{
+        CreatePlantActionPayload, DeletePlantActionPayload, MovePlantActionPayload,
+        TransformPlantActionPayload,
+    },
+};
+use crate::{
+    model::dto::plantings::{
+        DeletePlantingDto, NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+    },
+    service::plantings,
 };
 
 /// Endpoint for listing and filtering `Planting`.
-/// If no page parameters are provided, the first page is returned.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-#[allow(unused_variables)]
-#[allow(clippy::unused_async)]
 #[utoipa::path(
-    context_path = "/api/plantings",
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
     params(
-        PlantingSearchParameters,
-        PageParameters
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+        PlantingSearchParameters
     ),
     responses(
-        (status = 200, description = "Find plantings", body = PagePlantingDto)
+        (status = 200, description = "Find plantings", body = Vec<PlantingDto>)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[get("")]
 pub async fn find(
-    search_query: Query<PlantingSearchParameters>,
-    page_query: Query<PageParameters>,
-    pool: Data<Pool>,
+    search_params: Query<PlantingSearchParameters>,
+    app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    // TODO: implement service that validates (permission, integrity) and filters for records.
-    let page = Page {
-        results: vec![PlantingDto {
-            id: 1,
-            plant_id: 1,
-            plants_layer_id: 1,
-            x: 0,
-            y: 0,
-        }],
-        page: 1,
-        per_page: 10,
-        total_pages: 1,
-    };
-    Ok(HttpResponse::Ok().json(page))
+    let response = plantings::find(search_params.into_inner(), &app_data).await?;
+    Ok(HttpResponse::Ok().json(response))
 }
 
 /// Endpoint for creating a new `Planting`.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-#[allow(unused_variables)]
-#[allow(clippy::unused_async)]
 #[utoipa::path(
-    context_path = "/api/plantings",
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
     request_body = NewPlantingDto,
     responses(
         (status = 201, description = "Create a planting", body = PlantingDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
 #[post("")]
-pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Result<HttpResponse> {
-    // TODO: implement service that validates (permission, integrity) and creates the record.
-    let dto = PlantingDto {
-        id: 1,
-        plant_id: 1,
-        plants_layer_id: 1,
-        x: 0,
-        y: 0,
-    };
+pub async fn create(
+    path: Path<i32>,
+    json: Json<NewPlantingDto>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
+) -> Result<HttpResponse> {
+    let new_planting = json.0;
+    let dto = plantings::create(new_planting.clone(), &app_data).await?;
+
+    app_data
+        .broadcaster
+        .broadcast(
+            path.into_inner(),
+            Action::CreatePlanting(CreatePlantActionPayload::new(
+                dto,
+                user_info.id,
+                new_planting.action_id,
+            )),
+        )
+        .await;
+
     Ok(HttpResponse::Created().json(dto))
 }
 
@@ -86,46 +99,97 @@ pub async fn create(new_seed_json: Json<NewPlantingDto>, pool: Data<Pool>) -> Re
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-#[allow(unused_variables)]
-#[allow(clippy::unused_async)]
 #[utoipa::path(
-    context_path = "/api/plantings/{id}",
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
     request_body = UpdatePlantingDto,
     responses(
         (status = 200, description = "Update a planting", body = PlantingDto)
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
-#[patch("")]
+#[patch("/{planting_id}")]
 pub async fn update(
-    id: Path<i32>,
-    update_seed_json: Json<UpdatePlantingDto>,
-    pool: Data<Pool>,
+    path: Path<(i32, Uuid)>,
+    json: Json<UpdatePlantingDto>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    // TODO: implement service that validates (permission, integrity) and updates the record.
-    let dto = PlantingDto {
-        id: 1,
-        plant_id: 1,
-        plants_layer_id: 1,
-        x: 0,
-        y: 0,
+    let (map_id, planting_id) = path.into_inner();
+    let update_planting = json.0;
+
+    let planting = plantings::update(planting_id, update_planting, &app_data).await?;
+
+    let action = match update_planting {
+        UpdatePlantingDto::Transform(action_dto) => Action::TransformPlanting(
+            TransformPlantActionPayload::new(planting, user_info.id, action_dto.action_id),
+        ),
+        UpdatePlantingDto::Move(action_dto) => Action::MovePlanting(MovePlantActionPayload::new(
+            planting,
+            user_info.id,
+            action_dto.action_id,
+        )),
+        UpdatePlantingDto::UpdateAddDate(action_dto) => Action::UpdatePlantingAddDate(
+            UpdatePlantingAddDateActionPayload::new(planting, user_info.id, action_dto.action_id),
+        ),
+        UpdatePlantingDto::UpdateRemoveDate(action_dto) => {
+            Action::UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload::new(
+                planting,
+                user_info.id,
+                action_dto.action_id,
+            ))
+        }
     };
-    Ok(HttpResponse::Ok().json(dto))
+
+    app_data.broadcaster.broadcast(map_id, action).await;
+
+    Ok(HttpResponse::Ok().json(planting))
 }
 
 /// Endpoint for deleting a `Planting`.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
-#[allow(unused_variables)]
-#[allow(clippy::unused_async)]
 #[utoipa::path(
-context_path = "/api/plantings",
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
+    request_body = DeletePlantingDto,
     responses(
-        (status = 200, description = "Delete a planting", body = String)
+        (status = 200, description = "Delete a planting")
+    ),
+    security(
+        ("oauth2" = [])
     )
 )]
-#[delete("/{id}")]
-pub async fn delete(path: Path<i32>, pool: Data<Pool>) -> Result<HttpResponse> {
-    // TODO: implement a service that validates (permissions) and deletes the planting
-    Ok(HttpResponse::Ok().json(""))
+#[delete("/{planting_id}")]
+pub async fn delete(
+    path: Path<(i32, Uuid)>,
+    json: Json<DeletePlantingDto>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
+) -> Result<HttpResponse> {
+    let (map_id, planting_id) = path.into_inner();
+    let delete_planting = json.0;
+
+    plantings::delete_by_id(planting_id, &app_data).await?;
+
+    app_data
+        .broadcaster
+        .broadcast(
+            map_id,
+            Action::DeletePlanting(DeletePlantActionPayload::new(
+                planting_id,
+                user_info.id,
+                delete_planting.action_id,
+            )),
+        )
+        .await;
+
+    Ok(HttpResponse::Ok().finish())
 }

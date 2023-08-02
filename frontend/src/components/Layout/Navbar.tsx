@@ -3,6 +3,10 @@ import { ReactComponent as LogoSmallSVG } from '../../assets/permaplant-logo.svg
 import { DarkModeSwitcher } from '../../features/dark_mode';
 import { useDarkModeStore } from '../../features/dark_mode';
 import LanguageSwitcher from '../../features/landing_page/components/LanguageSwitcher';
+import ButtonLink from '../Button/ButtonLink';
+import { LoginButton } from '@/features/auth/components/LoginButton';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
+import { useTranslation } from 'react-i18next';
 
 /**
  * The navigation component that is fixed on the top.
@@ -10,6 +14,19 @@ import LanguageSwitcher from '../../features/landing_page/components/LanguageSwi
  */
 const Navbar = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
+  const { t } = useTranslation(['routes']);
+  const auth = useSafeAuth();
+  const backendVersion = sessionStorage.getItem('backend_version');
+  const navbarItems = (
+    <div className="flex items-center">
+      <ul className="pt-1">
+        <li>
+          <ButtonLink title={t('routes:maps')} to="/maps" className="text-lg font-medium" />
+        </li>
+      </ul>
+    </div>
+  );
+
   return (
     // z-index 1001 is needed because of leaflet GeoMap
     <nav className="fixed left-0 top-0 z-[1001] h-16 w-full items-center border-b-[0.5px] border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-100-dark">
@@ -22,15 +39,21 @@ const Navbar = () => {
               ) : (
                 <LogoSmallGraySVG className="h-12 w-12 pr-2" />
               )}
-              <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
-                PermaplanT
-              </span>
+              <div className="flex flex-col">
+                <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
+                  PermaplanT
+                </span>
+                <span className="mt-auto text-xs text-gray-500 dark:text-gray-400">
+                  {' '}
+                  {backendVersion}
+                </span>
+              </div>
             </a>
           </div>
+          {auth.isAuthenticated && navbarItems}
         </div>
         <div className="flex md:order-2">
           <div className="flex items-center space-x-4">
-            <a href="https://github.com/ElektraInitiative/PermaplanT">GitHub</a>
             <DarkModeSwitcher />
             <LanguageSwitcher />
             <button
@@ -55,6 +78,7 @@ const Navbar = () => {
                 ></path>
               </svg>
             </button>
+            <LoginButton></LoginButton>
           </div>
         </div>
       </div>

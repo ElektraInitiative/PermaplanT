@@ -16,9 +16,6 @@ export function CreateSeed() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
   const createSeed = useCreateSeedStore((state) => state.createSeed);
-  const showErrorModal = useCreateSeedStore((state) => state.showErrorModal);
-  const setShowErrorModal = useCreateSeedStore((state) => state.setShowErrorModal);
-  const error = useCreateSeedStore((state) => state.error);
   const isUploadingSeed = useCreateSeedStore((state) => state.isUploadingSeed);
 
   const onCancel = () => {
@@ -41,7 +38,9 @@ export function CreateSeed() {
     // an alternative would be to get a reference to the store and get the error from there
     // const store = useCreateSeedStore.getState();
     // if (!store.error) {...}
-    await createSeed(newSeed, () => navigate('/seeds'));
+    await createSeed(newSeed, t('seeds:create_seed_form.error_create_seed'), () =>
+      navigate('/seeds'),
+    );
   };
 
   const onChange = () => {
@@ -73,16 +72,6 @@ export function CreateSeed() {
             navigate('/seeds');
           }}
         />
-        <SimpleModal
-          title={t('seeds:error_modal_title')}
-          body={error?.message || t('common:unknown_error')} // Error should always have a message
-          show={showErrorModal}
-          setShow={setShowErrorModal}
-          submitBtnTitle={t('common:ok')}
-          onSubmit={() => {
-            setShowErrorModal(false);
-          }}
-        ></SimpleModal>
       </PageLayout>
     </Suspense>
   );

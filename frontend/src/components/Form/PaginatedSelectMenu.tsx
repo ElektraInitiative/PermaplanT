@@ -1,9 +1,9 @@
 import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenu';
+import { SelectOption } from './SelectMenuTypes';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { GroupBase, StylesConfig } from 'react-select';
-import { AsyncPaginate } from 'react-select-async-paginate';
+import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
 import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
 
 /**
@@ -24,25 +24,35 @@ export interface PageAdditionalInfo {
   pageNumber: number;
 }
 
-export interface PaginatedSelectMenuProps<T extends FieldValues, IsMulti extends boolean = false> {
+export interface PaginatedSelectMenuProps<
+  T extends FieldValues,
+  Option = SelectOption,
+  IsMulti extends boolean = false,
+> {
+  /** When this boolean flag is set to true, the user may select multiple options at once (default false).*/
   isMulti?: IsMulti;
+  /** Unique name of this component.*/
   id: Path<T>;
+  /** Short description that will be displayed above the input field if set.*/
   labelText?: string;
+  /** React hook form control (See https://www.react-hook-form.com/api/useform/control/ for further information).*/
   control?: Control<T, unknown>;
+  /** If set to true, the user has to select an option before the form can be completed (default false).*/
   required?: boolean;
+  /** Text that is displayed instead of the input if it has not been selected yet.*/
   placeholder?: string;
   debounceTimeout?: number;
-  loadOptions: (
-    search: string,
-    old_options: unknown,
-    additional: PageAdditionalInfo | undefined,
-  ) => Promise<Page>;
+  loadOptions: LoadOptions<Option, GroupBase<Option>, PageAdditionalInfo>;
   handleOptionsChange?: (option: unknown) => void;
+  /** Callback that is invoked every time the user selects a new option. The single argument represents the selected option.*/
   onChange?: () => void;
-  onInputChange?: (inputValue: string) => void;
 }
 
-export default function SelectMenu<T extends FieldValues, IsMulti extends boolean = false>({
+export default function PaginatedSelectMenu<
+  T extends FieldValues,
+  Option = SelectOption,
+  IsMulti extends boolean = false,
+>({
   isMulti = false as IsMulti,
   id,
   labelText,
@@ -52,9 +62,9 @@ export default function SelectMenu<T extends FieldValues, IsMulti extends boolea
   loadOptions,
   handleOptionsChange,
   onChange,
-  onInputChange,
-}: PaginatedSelectMenuProps<T, IsMulti>) {
-  const customClassNames: ClassNamesConfig = {
+  debounceTimeout,
+}: PaginatedSelectMenuProps<T, Option, IsMulti>) {
+  const customClassNames: ClassNamesConfig<Option, IsMulti, GroupBase<Option>> = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
     control: (state) => {
       return `
@@ -81,7 +91,7 @@ export default function SelectMenu<T extends FieldValues, IsMulti extends boolea
   };
 
   const [inputValue, setInputValue] = useState('');
-  const customStyles: StylesConfig<unknown, IsMulti, GroupBase<unknown>> = {
+  const customStyles: StylesConfig<Option, IsMulti, GroupBase<Option>> = {
     // remove css attributes from predefined styles
     // this needs to be done so the custom css classes take effect
     control: (styles) =>
@@ -113,7 +123,8 @@ export default function SelectMenu<T extends FieldValues, IsMulti extends boolea
         name={id}
         control={control}
         render={() => (
-          <AsyncPaginate
+          <AsyncPaginate<Option, GroupBase<Option>, PageAdditionalInfo, IsMulti>
+            debounceTimeout={debounceTimeout}
             name={id}
             loadOptions={loadOptions}
             isClearable
@@ -130,7 +141,6 @@ export default function SelectMenu<T extends FieldValues, IsMulti extends boolea
                 setInputValue(value);
               }
               onChange?.();
-              onInputChange?.(value);
             }}
           />
         )}

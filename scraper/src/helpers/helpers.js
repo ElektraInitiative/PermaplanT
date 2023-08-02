@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 /**
  * Sanitizes the column names of the json array
@@ -11,13 +11,13 @@ function sanitizeColumnNames(jsonArray, external_source = null) {
     const keys = Object.keys(obj);
     keys.forEach((key) => {
       let newKey = key
-        .replaceAll('&amp;', 'and')
-        .replaceAll('&', 'and')
-        .replaceAll(' ', '_')
-        .replaceAll('(', '')
-        .replaceAll(')', '')
-        .replaceAll('-', '_')
-        .replaceAll(/_+/g, '_')
+        .replaceAll("&amp;", "and")
+        .replaceAll("&", "and")
+        .replaceAll(" ", "_")
+        .replaceAll("(", "")
+        .replaceAll(")", "")
+        .replaceAll("-", "_")
+        .replaceAll(/_+/g, "_")
         .toLowerCase();
       if (newKey !== key) {
         obj[newKey] = obj[key];
@@ -25,53 +25,82 @@ function sanitizeColumnNames(jsonArray, external_source = null) {
       }
     });
     if (external_source) {
-      obj['external_source'] = external_source;
+      obj["external_source"] = external_source;
     }
     return obj;
   });
 }
 
 /**
- * Returns the soil pH category based on the pH value
+ * Returns the average number from a string that may include range or single number.
  *
- * @param {*} pH String containing the pH value
- * @returns
+ * @param {string} value
+ * @returns {number}
  */
-function getSoilPH(pH) {
-  // If pH is a range, split it into two numbers and calculate the average
-  if (pH.includes('-')) {
-    const [min, max] = pH.split('-').map(Number);
-    pH = (min + max) / 2;
-  } else if (pH.includes('–')) {
-    // Handle em dash character
-    const [min, max] = pH.split('–').map(Number);
-    pH = (min + max) / 2;
-  } else if (pH.includes('<')) {
-    // Handle less than symbol
-    pH = Number(pH.slice(1)) - 0.1;
-  } else if (pH.includes('>')) {
-    // Handle greater than symbol
-    pH = Number(pH.slice(1)) + 0.1;
+function processValue(value) {
+  let processedValue;
+  if (value == null) return null;
+
+  if (value.includes("-") || value.includes("–")) {
+    const delimiter = value.includes("-") ? "-" : "–";
+    const [min, max] = value.split(delimiter).map(Number);
+    processedValue = (min + max) / 2;
+  } else if (value.includes("<")) {
+    processedValue = Number(value.slice(1)) - 0.1;
+  } else if (value.includes(">")) {
+    processedValue = Number(value.slice(1)) + 0.1;
   } else {
-    pH = Number(pH);
+    processedValue = Number(value);
   }
 
-  if (isNaN(pH) || pH < 0 || pH > 14) {
-    // Handle invalid pH values
-    return null;
-  } else if (pH <= 5.0) {
-    return 'very acid';
-  } else if (pH >= 5.1 && pH <= 6.5) {
-    return 'acid';
-  } else if (pH >= 6.6 && pH <= 7.3) {
-    return 'neutral';
-  } else if (pH >= 7.4 && pH <= 7.8) {
-    return 'alkaline';
-  } else if (pH >= 7.9) {
-    return 'very alkaline';
-  } else {
-    return null;
-  }
+  return isNaN(processedValue) || processedValue < 0 ? null : processedValue;
+}
+
+/**
+ * Returns the soil pH category based on the pH value
+ *
+ * @param {string} pH String containing the pH value
+ * @returns {string}
+ */
+function getSoilPH(pH) {
+  const value = processValue(pH);
+  if (value === null || value > 14) return null;
+
+  return value <= 5
+    ? "very acid"
+    : value <= 6.5
+    ? "acid"
+    : value <= 7.3
+    ? "neutral"
+    : value <= 7.8
+    ? "alkaline"
+    : "very alkaline";
+}
+
+/**
+ * Returns the height enum typ based on the height
+ *
+ * @param {string} height String containing the height value in meter
+ * @returns {string}
+ */
+function getHeightEnumTyp(height) {
+  const value = processValue(height);
+  if (value === null) return null;
+
+  return value <= 0.25 ? "low" : value <= 0.61 ? "medium" : "high";
+}
+
+/**
+ * Returns the spread enum typ based on the spread/width
+ *
+ * @param {string} spread String containing the spread/width value in meter
+ * @returns {string}
+ */
+function getSpreadEnumTyp(spread) {
+  const value = processValue(spread);
+  if (value === null) return null;
+
+  return value <= 0.15 ? "narrow" : value <= 0.61 ? "medium" : "wide";
 }
 
 /**
@@ -96,7 +125,7 @@ async function fetchGermanName(binomialName) {
     const data2 = response2.data;
     const entities = data2.entities;
     const entity = entities[id];
-    const dewiki = await entity['sitelinks']['dewiki'];
+    const dewiki = await entity["sitelinks"]["dewiki"];
     if (dewiki) {
       return dewiki.title;
     }
@@ -104,4 +133,10 @@ async function fetchGermanName(binomialName) {
   return null;
 }
 
-export { sanitizeColumnNames, getSoilPH, fetchGermanName };
+export {
+  sanitizeColumnNames,
+  getSoilPH,
+  getHeightEnumTyp,
+  getSpreadEnumTyp,
+  fetchGermanName,
+};

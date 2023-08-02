@@ -40,6 +40,7 @@ PSQL has no built-in time-based job handling feature, therefore it should be han
 
 ## Notes
 
-- Related [use case](/doc/usecases/map_create_delete.md)
+- Related [mape create](../usecases/done/map_creation.md)
+- Related [map delete](../usecases/assigned/map_deletion.md)
 - Example of the deletion query:
   - `DELETE FROM plants WHERE deleted_at IS NOT NULL and deleted_at < NOW() - INTERVAL '1 month'`

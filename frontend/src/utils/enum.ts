@@ -1,4 +1,4 @@
-import { SelectOption } from '@/components/Form/SelectMenu';
+import { SelectOption } from '@/components/Form/SelectMenuTypes';
 
 export function enumFromStringValue<T>(enm: { [s: string]: T }, value: string): T | undefined {
   return (Object.values(enm) as unknown as string[]).includes(value)

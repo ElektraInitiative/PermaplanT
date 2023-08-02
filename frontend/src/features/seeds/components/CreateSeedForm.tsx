@@ -1,17 +1,19 @@
 import { NewSeedDto, Quality, Quantity, SeedDto } from '../../../bindings/definitions';
 import PaginatedSelectMenu, {
-  Page,
   PageAdditionalInfo,
 } from '../../../components/Form/PaginatedSelectMenu';
-import SelectMenu, { SelectOption } from '../../../components/Form/SelectMenu';
+import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
 import { Suspense, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { GroupBase, OptionsOrGroups } from 'react-select';
+import { LoadOptions } from 'react-select-async-paginate';
 
 interface CreateSeedFormProps {
   isUploadingSeed: boolean;
@@ -73,17 +75,17 @@ const CreateSeedForm = ({
     onSubmit(data);
   };
 
-  const loadPlants = async (
-    search: string,
-    options: unknown,
+  /** calls searchPlants and creates options for the select input */
+  const loadPlants: LoadOptions<SelectOption, GroupBase<SelectOption>, PageAdditionalInfo> = async (
+    inputValue: string,
+    options: OptionsOrGroups<SelectOption, GroupBase<SelectOption>>,
     additional: PageAdditionalInfo | undefined,
-  ): Promise<Page> => {
-    const pageNumber = additional != undefined ? additional.pageNumber : 1;
-    const page = await searchPlants(search, pageNumber);
+  ) => {
+    const pageNumber = additional ? additional.pageNumber : 1;
+    const page = await searchPlants(inputValue, pageNumber);
 
     const plant_options: SelectOption[] = page.results.map((plant) => {
-      const common_name_en =
-        plant.common_name_en != null ? ' (' + plant.common_name_en[0] + ')' : '';
+      const common_name_en = plant.common_name_en ? ' (' + plant.common_name_en[0] + ')' : '';
 
       return {
         value: plant.id,
@@ -105,7 +107,7 @@ const CreateSeedForm = ({
       <div>
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <div className="mb-6 grid gap-8 md:grid-cols-2">
-            <PaginatedSelectMenu
+            <PaginatedSelectMenu<NewSeedDto, SelectOption, false>
               id="plant_id"
               control={control}
               labelText={t('seeds:binomial_name')}
@@ -125,7 +127,7 @@ const CreateSeedForm = ({
             />
             <SimpleFormInput
               labelText={t('seeds:additional_name')}
-              placeHolder=""
+              placeholder=""
               required={true}
               id="name"
               register={register}
@@ -135,7 +137,7 @@ const CreateSeedForm = ({
               type="number"
               labelText={t('seeds:harvest_year')}
               defaultValue={currentYear}
-              placeHolder={currentYear.toString()}
+              placeholder={currentYear.toString()}
               required={true}
               id="harvest_year"
               register={register}
@@ -157,14 +159,14 @@ const CreateSeedForm = ({
             <SimpleFormInput
               type="date"
               labelText={t('seeds:use_by')}
-              placeHolder=""
+              placeholder=""
               id="use_by"
               register={register}
               onChange={onChange}
             />
             <SimpleFormInput
               labelText={t('seeds:origin')}
-              placeHolder={t('seeds:create_seed_form.placeholder_origin')}
+              placeholder={t('seeds:create_seed_form.placeholder_origin')}
               id="origin"
               register={register}
               onChange={onChange}
@@ -183,21 +185,21 @@ const CreateSeedForm = ({
             />
             <SimpleFormInput
               labelText={t('seeds:taste')}
-              placeHolder={t('seeds:create_seed_form.placeholder_taste')}
+              placeholder={t('seeds:create_seed_form.placeholder_taste')}
               id="taste"
               register={register}
               onChange={onChange}
             />
             <SimpleFormInput
               labelText={t('seeds:yield')}
-              placeHolder={t('seeds:create_seed_form.placeholder_yield')}
+              placeholder={t('seeds:create_seed_form.placeholder_yield')}
               id="yield_"
               register={register}
               onChange={onChange}
             />
             <SimpleFormInput
               labelText={t('seeds:price')}
-              placeHolder={t('seeds:create_seed_form.placeholder_price')}
+              placeholder={t('seeds:create_seed_form.placeholder_price')}
               id="price"
               register={register}
               valueAsNumber={true}
@@ -208,7 +210,7 @@ const CreateSeedForm = ({
               type="number"
               min={0}
               labelText={t('seeds:generation')}
-              placeHolder={t('seeds:create_seed_form.placeholder_generation')}
+              placeholder={t('seeds:create_seed_form.placeholder_generation')}
               id="generation"
               register={register}
               onChange={onChange}
@@ -216,9 +218,9 @@ const CreateSeedForm = ({
           </div>
           <div className="mb-6">
             <SimpleFormInput
-              isArea={true}
+              type="textarea"
               labelText={t('seeds:notes')}
-              placeHolder="..."
+              placeholder="..."
               id="notes"
               register={register}
               onChange={onChange}

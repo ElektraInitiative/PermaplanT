@@ -1,10 +1,17 @@
 //! Tests for [`crate::controller::plants`].
 
 use crate::{
-    model::dto::{Page, PlantsSummaryDto},
-    test::test_utils::{init_test_app, init_test_database},
+    model::{
+        dto::{Page, PlantsSummaryDto},
+        r#enum::plant_spread::PlantSpread,
+    },
+    test::util::{init_test_app, init_test_database},
 };
-use actix_web::{http::header::CONTENT_TYPE, http::StatusCode, test};
+use actix_web::{
+    http::header::{self, CONTENT_TYPE},
+    http::StatusCode,
+    test,
+};
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
@@ -18,6 +25,7 @@ async fn test_get_all_plants_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
+                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
                 ))
                 .execute(conn)
                 .await?;
@@ -26,10 +34,11 @@ async fn test_get_all_plants_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/plants")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -44,6 +53,7 @@ async fn test_get_all_plants_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
+        spread: Some(PlantSpread::Wide),
     };
 
     let result = test::read_body(resp).await;
@@ -64,6 +74,7 @@ async fn test_get_one_plant_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
+                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
                 ))
                 .execute(conn)
                 .await?;
@@ -72,10 +83,11 @@ async fn test_get_one_plant_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/plants/-1")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -90,6 +102,7 @@ async fn test_get_one_plant_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
+        spread: Some(PlantSpread::Wide),
     };
 
     let result = test::read_body(resp).await;
@@ -110,6 +123,7 @@ async fn test_search_plants_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
+                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
                 ))
                 .execute(conn)
                 .await?;
@@ -118,10 +132,11 @@ async fn test_search_plants_succeeds() {
         .scope_boxed()
     })
     .await;
-    let app = init_test_app(pool.clone()).await;
+    let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
         .uri("/api/plants?name=Testplant&per_page=10")
+        .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
@@ -136,6 +151,7 @@ async fn test_search_plants_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
+        spread: Some(PlantSpread::Wide),
     };
 
     let result = test::read_body(resp).await;

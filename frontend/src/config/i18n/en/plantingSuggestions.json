@@ -1,0 +1,9 @@
+{
+  "available_seeds": {
+    "list_title": "Available seeds",
+    "empty_list_title": "Start by adding some seeds",
+    "empty_list_message": "We were unable to find any seasonal plants for which you possess the corresponding seeds.",
+    "empty_list_action": "View your seeds",
+    "error_fetching_seasonal_suggestions": "Sorry, I'm experiencing trouble fetching seasonal suggestions from my server. Please try again later."
+  }
+}

@@ -1,12 +1,27 @@
+def node_info() {
+    echo "Running stage on ${env.NODE_NAME}"
+}
 
-stage('Build Schema'){
+def wait_for_db() {
+    retry(6) {
+        sleep(time: 5, unit: 'SECONDS')
+        sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=10'
+    }
+}
+
+stage('Build Schema') {
     node('docker') {
-        checkout scm
-        def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+        node_info()
 
-        docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+        checkout scm
+        def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
+
+        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            rustImage.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                 checkout scm
+
+                wait_for_db()
+
                 sh './ci/build-scripts/build-schema.sh'
 
                 stash includes: 'backend/src/schema.rs', name: 'schema.rs'
@@ -16,18 +31,23 @@ stage('Build Schema'){
     }
 }
 
-stage('Build in Docker'){
-    def parallel_build = [:]
+stage('Build in Docker') {
+    def parallelBuild = [:]
 
-    parallel_build['build-backend'] = {
+    parallelBuild['build-backend'] = {
         node('docker') {
-            checkout scm
-            def rust_image = docker.build("permaplant-rust", "./ci/container-images/permaplant-rust")
+            node_info()
 
-            docker.image('postgres:alpine').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rust_image.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+            checkout scm
+            def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
+
+            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                rustImage.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
-                    sh './ci/build-scripts/build-backend.sh'
+
+                    wait_for_db()
+
+                    sh 'cd backend && cargo build --release'
 
                     stash includes: 'backend/target/release/backend', name: 'backend'
                 }
@@ -35,32 +55,48 @@ stage('Build in Docker'){
         }
     }
 
-    parallel_build['build-frontend'] = {
+    parallelBuild['build-frontend'] = {
         node('docker') {
-            checkout scm
-            def node_image = docker.build("permaplant-node", "./ci/container-images/permaplant-node")
+            node_info()
 
-            node_image.inside {
+            checkout scm
+            def nodeImage = docker.build('permaplant-node', './ci/container-images/permaplant-node')
+
+            nodeImage.inside {
                 checkout scm
                 unstash 'definitions.ts'
 
-                sh './ci/build-scripts/build-frontend.sh'
-                stash includes: 'frontend/dist/**/*', name: 'frontend'
+                stage('build-frontend') {
+                    sh './ci/build-scripts/build-frontend.sh'
+                    stash includes: 'frontend/dist/**/*', name: 'frontend'
+                }
+
+                stage('build-typedoc') {
+                    sh 'cd frontend && npm run doc'
+                    stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
+                }
+
+                stage('build-storybook') {
+                    sh './ci/build-scripts/build-storybook.sh'
+                    stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
+                }
             }
         }
     }
 
-    parallel(parallel_build)
+    parallel(parallelBuild)
 }
 
 stage('Deploy Prod') {
     node('permaplant && prod') {
         checkout scm
 
-        echo "Unstash Artifacts"
+        echo 'Unstash Artifacts'
         unstash 'schema.rs'
         unstash 'frontend'
         unstash 'backend'
+        unstash 'storybook'
+        unstash 'typedoc'
 
         echo 'Deploying to Prod ...'
         sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"

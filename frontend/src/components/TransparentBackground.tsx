@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
 interface TransparentBackgroundProps {
-  onClick: () => void;
+  onClick?: () => void;
   show: boolean;
 }
 
+/** Animated background used for Modals */
 const TransparentBackground = ({ onClick, show }: TransparentBackgroundProps) => {
   return (
     <>

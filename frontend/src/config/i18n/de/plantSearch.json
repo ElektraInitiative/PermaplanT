@@ -1,4 +1,7 @@
 {
-  "dnd": "Drag and drop Pflanzen",
-  "placeholder": "Pflanzen suchen..."
+  "planting": "Pflanzen",
+  "placeholder": "Pflanzen suchen...",
+  "error_initializing_layer": "Sorry, ich habe Schwierigkeiten gepflanzte Pflanzen von meinem Server zu erhalten. Bitte versuche es später erneut.",
+  "error_searching_plants": "Sorry, ich habe Schwierigkeiten Pflanzen von meinem Server zu erhalten. Bitte versuche es später erneut.",
+  "search_empty": "Leider konnte ich unter diesem Suchbegriff nichts finden..."
 }

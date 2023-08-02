@@ -1,3 +1,4 @@
+import { Providers } from './Providers';
 import './styles/globals.css';
 import { ComponentType, StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -8,7 +9,9 @@ const root = createRoot(container);
 function render(App: ComponentType) {
   root.render(
     <StrictMode>
-      <App />
+      <Providers>
+        <App />
+      </Providers>
     </StrictMode>,
   );
 }

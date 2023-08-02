@@ -1,11 +1,11 @@
 import { Page, PlantsSummaryDto } from '@/bindings/definitions';
-import { baseApiUrl } from '@/config';
-import axios from 'axios';
+import { createAPI } from '@/config/axios';
 
 export const searchPlants = async (
   searchTerm: string,
   page: number,
 ): Promise<Page<PlantsSummaryDto>> => {
+  const http = createAPI();
   try {
     // A page must always be defined in order for the search to work.
     const pageString: string = page != undefined ? page.toString() : '1';
@@ -15,9 +15,7 @@ export const searchPlants = async (
     searchParams.append('per_page', '30');
     searchParams.append('page', pageString);
 
-    const response = await axios.get<Page<PlantsSummaryDto>>(
-      `${baseApiUrl}/api/plants?${searchParams}`,
-    );
+    const response = await http.get<Page<PlantsSummaryDto>>(`/api/plants?${searchParams}`);
 
     return response.data;
   } catch (error) {

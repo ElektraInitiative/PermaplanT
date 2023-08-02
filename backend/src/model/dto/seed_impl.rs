@@ -21,6 +21,7 @@ impl From<Seed> for SeedDto {
             quality: seed.quality,
             price: seed.price,
             notes: seed.notes,
+            owner_id: seed.owner_id,
         }
     }
 }

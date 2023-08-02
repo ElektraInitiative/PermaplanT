@@ -1,7 +1,13 @@
 {
+  "apply": "Apply",
   "ok": "Ok",
   "yes": "Yes",
   "no": "No",
   "cancel": "Cancel",
-  "unknown_error": "An unknown error occurred."
+  "unknown_error": "An unknown error occurred.",
+  "save": "Save",
+  "meters": "Meters",
+  "centimeters": "Centimeters",
+  "meter_shorthand": "m",
+  "centimeter_shorthand": "cm"
 }

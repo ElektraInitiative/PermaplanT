@@ -1,11 +1,13 @@
 //! Contains the implementation of [`NewMapDto`].
 
+use uuid::Uuid;
+
 use crate::model::entity::NewMap;
 
 use super::NewMapDto;
 
-impl From<NewMapDto> for NewMap {
-    fn from(new_map: NewMapDto) -> Self {
+impl From<(NewMapDto, Uuid)> for NewMap {
+    fn from((new_map, owner_id): (NewMapDto, Uuid)) -> Self {
         Self {
             name: new_map.name,
             creation_date: new_map.creation_date,
@@ -16,7 +18,11 @@ impl From<NewMapDto> for NewMap {
             honors: new_map.honors,
             visits: new_map.visits,
             harvested: new_map.harvested,
-            owner_id: new_map.owner_id,
+            privacy: new_map.privacy,
+            description: new_map.description,
+            location: new_map.location.map(From::from),
+            owner_id,
+            geometry: new_map.geometry,
         }
     }
 }

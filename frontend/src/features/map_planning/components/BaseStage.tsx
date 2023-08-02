@@ -1,3 +1,4 @@
+import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import {
   deselectShapes,
@@ -7,12 +8,11 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
-import SimpleButton from '@/components/Button/SimpleButton';
-import useMapStore from '@/features/undo_redo';
+import { setTooltipPosition } from '../utils/Tooltip';
 import Konva from 'konva';
-import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { Layer, Rect, Stage, Transformer, Text, Label, Tag } from 'react-konva';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -69,30 +69,58 @@ export const BaseStage = ({
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
   // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
+  useEffect(() => {
+    useMapStore.setState({ stageRef: stageRef });
+  }, [stageRef]);
+  const tooltipRef = useRef<Konva.Label>(null);
+  useEffect(() => {
+    useMapStore.setState({ tooltipRef: tooltipRef });
+  }, [tooltipRef]);
 
-  const dispatch = useMapStore((map) => map.dispatch);
-  const step = useMapStore((map) => map.step);
-  const historyLength = useMapStore((map) => map.history.length);
+  const updateMapBounds = useMapStore((store) => store.updateMapBounds);
+  const mapBounds = useMapStore((store) => store.untrackedState.editorBounds);
+  useEffect(() => {
+    if (mapBounds.width !== 0 || mapBounds.height !== 0) return;
+    updateMapBounds({
+      x: 0,
+      y: 0,
+      width: Math.floor(window.innerWidth / stage.scale),
+      height: Math.floor(window.innerHeight / stage.scale),
+    });
+  });
 
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
 
-    const stage = e.target.getStage();
-    if (stage === null) return;
+    const targetStage = e.target.getStage();
+    if (targetStage === null) return;
 
-    const pointerVector = stage.getPointerPosition();
+    if (tooltipRef.current) {
+      setTooltipPosition(tooltipRef.current, targetStage);
+    }
+
+    const pointerVector = targetStage.getPointerPosition();
     if (pointerVector === null) return;
 
     if (e.evt.ctrlKey) {
       if (zoomable) {
-        handleZoom(pointerVector, e.evt.deltaY, stage, setStage);
+        handleZoom(pointerVector, e.evt.deltaY, targetStage, setStage);
       }
     } else {
       if (scrollable) {
-        handleScroll(e.evt.deltaX, e.evt.deltaY, stage);
+        handleScroll(e.evt.deltaX, e.evt.deltaY, targetStage);
       }
     }
+
+    if (stageRef.current === null) return;
+
+    updateMapBounds({
+      x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
+      y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
+      width: Math.floor(window.innerWidth / stage.scale),
+      height: Math.floor(window.innerHeight / stage.scale),
+    });
   };
 
   // Event listener responsible for allowing dragging of the stage only with the wheel mouse button
@@ -114,6 +142,20 @@ export const BaseStage = ({
         stage.stopDrag();
       }
     }
+  };
+
+  const onStageDragEnd = (e: KonvaEventObject<DragEvent>) => {
+    if (e.evt === null || e.evt === undefined) return;
+    e.evt.preventDefault();
+
+    if (stageRef.current === null) return;
+
+    updateMapBounds({
+      x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
+      y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
+      width: Math.floor(window.innerWidth / stage.scale),
+      height: Math.floor(window.innerHeight / stage.scale),
+    });
   };
 
   // Event listener responsible for updating the selection rectangle
@@ -157,6 +199,8 @@ export const BaseStage = ({
 
   // Event listener responsible for unselecting shapes when clicking on the stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+
     const isStage = e.target instanceof Konva.Stage;
     const nodeSize = trRef.current?.getNodes().length || 0;
     if (nodeSize > 0 && isStage) {
@@ -164,64 +208,15 @@ export const BaseStage = ({
     }
   };
 
-  const dispatchUpdate = (
-    nodes: Node<NodeConfig>[],
-    type: 'OBJECT_UPDATE_POSITION' | 'OBJECT_UPDATE_TRANSFORM',
-  ) => {
-    dispatch({
-      type,
-      payload: nodes.map((o) => ({
-        id: o.id(),
-        type: o.attrs.type,
-        index: o.attrs.index,
-        height: o.height(),
-        width: o.width(),
-        x: o.x(),
-        y: o.y(),
-        rotation: o.rotation(),
-        scaleX: o.scaleX(),
-        scaleY: o.scaleY(),
-      })),
-    });
-  };
-
   return (
     <div className="h-full w-full overflow-hidden">
-      <div className="absolute z-10 flex h-10 items-center gap-2 pl-2 pt-12">
-        {/* TODO: This is example code that shows how to interact with the store, the final code handling object creation is TBD */}
-        <SimpleButton
-          className="w-32"
-          onClick={() =>
-            dispatch({
-              type: 'OBJECT_ADD',
-              payload: {
-                index: 'plant',
-                id: Math.random().toString(36).slice(2, 9),
-                x: 300,
-                y: 300,
-                width: 100,
-                height: 100,
-                type: 'rect',
-                rotation: 0,
-                scaleX: 1,
-                scaleY: 1,
-              },
-            })
-          }
-        >
-          CREATE OBJECT
-        </SimpleButton>
-        <div>
-          <div className="whitespace-nowrap text-sm">Step: {step}</div>
-          <div className="whitespace-nowrap text-sm">History length: {historyLength}</div>
-        </div>
-      </div>
       <Stage
         ref={stageRef}
         draggable={draggable}
         width={window.innerWidth}
         height={window.innerHeight}
         onWheel={onStageWheel}
+        onDragEnd={onStageDragEnd}
         onDragStart={onStageDragStart}
         onMouseDown={onStageMouseDown}
         onMouseMove={onMouseMove}
@@ -234,6 +229,10 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
+          <Label visible={false} ref={tooltipRef} scaleX={1 / stage.scale} scaleY={1 / stage.scale}>
+            <Tag fill="black" />
+            <Text fill="white" fontSize={24} padding={6} />
+          </Label>
           <Rect
             x={selectionRectAttrs.x}
             y={selectionRectAttrs.y}
@@ -251,10 +250,6 @@ export const BaseStage = ({
             }}
             onTransformEnd={() => {
               selectable = true;
-              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_TRANSFORM');
-            }}
-            onDragEnd={() => {
-              dispatchUpdate(trRef.current?.getNodes() || [], 'OBJECT_UPDATE_POSITION');
             }}
             onMouseDown={() => {
               selectable = false;
@@ -268,9 +263,14 @@ export const BaseStage = ({
             // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
             // It's an experimental property so we should keep an eye out for possible issues
             shouldOverdrawWholeArea={true}
+            enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
           />
         </Layer>
       </Stage>
+      {/** Portal to display something from different layers */}
+      <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
+        <div id="bottom-portal" />
+      </div>
     </div>
   );
 };
