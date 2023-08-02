@@ -14,7 +14,10 @@ type UsePublicImageOptions = {
   fallbackImageSource?: string;
   /** Whether an error modal should be displayed if the image can't be loaded. */
   showErrorMessage?: boolean;
+  // Whether fetching the image should be retried on fail.
+  retry: boolean
 };
+
 
 /**
  * A hook for fetching and displaying images from Nextcloud public share directories.
@@ -25,13 +28,19 @@ export function usePublicImage({
   fallbackImageSource = errorImageSource,
   onload,
   showErrorMessage = true,
+  retry
 }: UsePublicImageOptions) {
-  const { isError, isLoading, data } = useQuery(['image', path], {
-    queryFn: () => getPublicImage(path, publicShareToken),
-    refetchOnWindowFocus: false,
+
+  const queryFn = () => getPublicImage(path, publicShareToken)
+
+  const { isError, isLoading, data } = useQuery(
+    ['image', path, retry], {
     // We don't want to refetch the image, because the path is not changing.
+    queryFn,
     cacheTime: Infinity,
     staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    retry,
   });
 
   const image = useImageFromBlob({
