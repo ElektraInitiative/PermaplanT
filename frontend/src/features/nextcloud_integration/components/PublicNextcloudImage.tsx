@@ -9,6 +9,8 @@ interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'
   defaultImageUrl?: string;
   // Whether fetching the image should be retried on fail.
   retry: boolean;
+  /** Whether an error modal should be displayed if the image can't be loaded. */
+  showErrorMessage?: boolean;
 }
 
 /**
@@ -17,13 +19,14 @@ interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'
   @param props.shareToken: token which identifies the public share directory
  */
 export const PublicNextcloudImage = (props: PublicNextcloudImageProps) => {
-  const { path, shareToken, defaultImageUrl, retry, ...imageProps } = props;
+  const { path, shareToken, defaultImageUrl, retry, showErrorMessage, ...imageProps } = props;
 
   const image = usePublicImage({
     path,
     publicShareToken: shareToken,
     fallbackImageSource: defaultImageUrl,
-    retry
+    retry,
+    showErrorMessage
   });
 
   return <img src={image.src} {...imageProps} />;

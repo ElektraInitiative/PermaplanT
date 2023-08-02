@@ -35,6 +35,7 @@ export function PlantListItem({ plant, onClick, isHighlighted = false }: PlantLi
           path={`Icons/${plant?.unique_name}.png`}
           shareToken="2arzyJZYj2oNnHX"
           retry={false}
+          showErrorMessage={false}
         />
         <div className="text-left">
           <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
