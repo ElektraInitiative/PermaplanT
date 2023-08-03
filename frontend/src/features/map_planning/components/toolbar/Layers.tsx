@@ -33,6 +33,7 @@ export const Layers = ({ layers }: LayersProps) => {
     <div className="flex flex-col p-2">
       <section className="flex justify-between">
         <h2>{t('layers:header')}</h2>
+        {/* TODO: these buttons should be added again when the corresponding functionality is implemented */}
         {/* <div className="flex gap-2"> */}
         {/*   <IconButton disabled={true}> */}
         {/*     <AddIcon className="h-6 w-6" /> */}
