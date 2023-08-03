@@ -22,6 +22,7 @@ import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
+import { HeatMapLayer } from '@/features/map_planning/layers/heatmap/HeatMapLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { ReactComponent as GridIcon } from '@/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
@@ -185,6 +186,10 @@ export const Map = ({ layers }: MapProps) => {
               opacity={untrackedState.layers.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
+            <HeatMapLayer
+              visible={untrackedState.layers.plants.visible}
+              opacity={untrackedState.layers.plants.opacity}
+            />
             <BaseMeasurementLayer />
             <GridLayer
               visible={untrackedState.layers.grid.visible}
