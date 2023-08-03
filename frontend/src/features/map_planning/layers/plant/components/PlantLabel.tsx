@@ -15,10 +15,10 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
   const [labelWidth, setLabelWidth] = useState<number>(0);
 
   useEffect(() => {
-    if (labelRef.current === null || labelWidth) return;
+    if (labelRef.current === null) return;
 
     setLabelWidth(labelRef.current.width());
-  }, [labelRef, labelWidth]);
+  }, [labelRef]);
 
   const { plant } = useFindPlantById(planting.plantId);
   if (plant === undefined) {
