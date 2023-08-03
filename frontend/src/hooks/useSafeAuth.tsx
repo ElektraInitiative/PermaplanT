@@ -50,8 +50,17 @@ export function useSafeAuth() {
       context?.stopSilentRenew();
     },
     onOnline() {
-      context?.startSilentRenew();
-      context?.signinSilent();
+      loginAndReload();
+
+      async function loginAndReload() {
+        try {
+          await context?.signinSilent();
+
+          window.location.reload();
+        } catch (error) {
+          console.error(error);
+        }
+      }
     },
   });
 
