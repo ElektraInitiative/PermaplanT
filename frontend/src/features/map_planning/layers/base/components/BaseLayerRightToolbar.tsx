@@ -9,13 +9,37 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
 
+class ValidationError extends Error {
+  constructor(msg: string) {
+    super(msg);
+    // Set the prototype explicitly.
+    Object.setPrototypeOf(this, ValidationError.prototype);
+  }
+}
+
 function validateBaseLayerOptions(baseLayerOptions: Omit<BaseLayerImageDto, 'action_id'>) {
   const { id, layer_id, path, rotation, scale } = baseLayerOptions;
-
-  if (!id || !layer_id || !path || !rotation || !scale) {
-    console.log('BaseLayer validation error');
+  if (!id) {
+    console.error(new ValidationError('BaseLayer validation error: id is invalid'));
     return false;
   }
+  if (!layer_id) {
+    console.error(new ValidationError('BaseLayer validation error: layer_id is invalid'));
+    return false;
+  }
+  if (!path) {
+    console.error(new ValidationError('BaseLayer validation error: path is invalid'));
+    return false;
+  }
+  if (rotation === undefined || rotation === null) {
+    console.error(new ValidationError('BaseLayer validation error: rotation is invalid'));
+    return false;
+  }
+  if (scale === undefined || scale === null) {
+    console.error(new ValidationError('BaseLayer validation error: scale is invalid'));
+    return false;
+  }
+
   return true;
 }
 
