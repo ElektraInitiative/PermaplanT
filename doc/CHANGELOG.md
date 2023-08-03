@@ -57,8 +57,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix a bug where texts in the editor tour were swapped _(Thorben)_
 - _()_
 - _()_
-- _()_
-- E2E: Add plant search to e2e tests _(4ydan)_
+- E2E: Add planting e2e tests #766 _(4ydan)_
+- E2E: Add plant search e2e tests #751 _(4ydan)_
 - Map: Remove Step/History info #745 _(4ydan)_
 - CI: Add most of pre-commit hooks to sanity stage #736 _(4ydan)_
 - _()_
