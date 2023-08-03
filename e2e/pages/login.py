@@ -5,7 +5,8 @@ from .abstract_page import AbstractPage
 
 class LoginPage(AbstractPage):
     """The loginpage of permaplant"""
-    TITLE: str = 'Sign in to PermaplanT'
+
+    TITLE: str = "Sign in to PermaplanT"
 
     def __init__(self, page: Page):
         self.page = page

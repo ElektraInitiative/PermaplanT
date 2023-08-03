@@ -13,25 +13,30 @@ from e2e.pages.maps.planting import MapPlantingPage
 Commonly used workflows and util
 """
 
+"""The number of retries"""
 
-def worker_id():
+
+def suffix():
     """
-    When executing tests in parallel, for example with
-    `pytest -n auto`, each worker has an id that can be
-    used in tests. If executed with one core the id is
-    an empty string.
+    Returns a suffix consisting of "WORKERID-TIMESTAMP".
+    The workerid is given by pytest-xdist. Defaults to "" when not parallel.
     """
-    worker_id = ""
+    suffix = ""
+
     if "PYTEST_XDIST_WORKER" in os.environ:
         # Get the value of the environment variable
-        worker_id = os.environ["PYTEST_XDIST_WORKER"]
-    return worker_id
+        suffix += "-" + os.environ["PYTEST_XDIST_WORKER"]
+
+    return suffix
 
 
 def login(hp: HomePage, lp: LoginPage) -> HomePage:
     """
     Login to permaplant and close the login notification.
-    Returns a homepage object
+
+    Returns:
+    -------
+    `HomePage` object
     """
     hp.load()
     hp.login_button_is_visible()
@@ -42,6 +47,48 @@ def login(hp: HomePage, lp: LoginPage) -> HomePage:
     hp.verify()
     hp.close_alert()
     return hp
+
+
+def prepare_planting(
+    hp: HomePage,
+    lp: LoginPage,
+    mmp: MapManagementPage,
+    mcp: MapCreatePage,
+    mpp: MapPlantingPage,
+    mapname: str,
+) -> MapPlantingPage:
+    """
+    Login -> create a map -> enter the map -> close tour ->
+    enable plant layer.
+
+    Returns:
+    -------
+    `MapPlantingPage` object
+    """
+    login(hp, lp)
+    hp.to_map_management_page()
+    mmp.to_map_create_page()
+    mcp.create_a_map(mapname)
+    mmp.to_map_planting_page(mapname)
+    mpp.verify()
+    mpp.close_tour()
+    mpp.check_plant_layer()
+    return mpp
+
+
+def plant_a_tomato(mpp: MapPlantingPage) -> MapPlantingPage:
+    """
+    Plant a tomato on the `MapPlantingPage`
+    and verify it is planted.
+    """
+    mpp.click_search_icon()
+    mpp.fill_plant_search("tomato")
+    mpp.click_plant_from_search_results("tomato Solanum lycopersicum")
+    mpp.click_on_canvas()
+    # Click a second time to select the plant.
+    mpp.click_on_canvas()
+    mpp.expect_plant_to_be_planted("Tomato (Solanum lycopersicum)")
+    return mpp
 
 
 """

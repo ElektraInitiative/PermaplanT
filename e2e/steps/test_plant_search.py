@@ -1,5 +1,4 @@
-from e2e.conftest import login
-from e2e.conftest import worker_id
+from e2e.conftest import prepare_planting, suffix
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from e2e.pages.maps.create import MapCreatePage
@@ -11,18 +10,15 @@ scenarios("features/search_plants.feature")
 
 
 @given(parsers.parse("I am on the {name} map page and I have selected the plant layer"))
-def logged_in(hp: HomePage, lp: LoginPage, mmp: MapManagementPage, mcp: MapCreatePage, mpp: MapPlantingPage, name):
-    login(hp, lp)
-    # Create map
-    hp.to_map_management_page()
-    mmp.to_map_create_page()
-    # Use workerid here to create separate maps for each process
-    mcp.create_a_map(name + worker_id())
-    # Go to planting page and select plant layer
-    mmp.to_map_planting_page(name + worker_id())
-    mpp.verify()
-    mpp.close_tour()
-    mpp.check_plant_layer()
+def logged_in(
+    hp: HomePage,
+    lp: LoginPage,
+    mmp: MapManagementPage,
+    mcp: MapCreatePage,
+    mpp: MapPlantingPage,
+    name,
+):
+    prepare_planting(hp, lp, mmp, mcp, mpp, name + suffix())
 
 
 # Scenario 1 and 2: Searching for plants with exact and partial matches

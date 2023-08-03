@@ -1,11 +1,15 @@
 from abc import ABC
 from dotenv import load_dotenv
-from playwright.sync_api import expect
+from playwright.sync_api import Page, expect
 
 load_dotenv()
 
 
 class AbstractPage(ABC):
+    URL: str
+    page: Page
+    TITLE: str
+
     def load(self) -> None:
         """Loads the pages by its URL and verifies it."""
         self.page.goto(self.URL)

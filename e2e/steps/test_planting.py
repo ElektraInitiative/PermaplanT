@@ -1,4 +1,4 @@
-from e2e.conftest import login
+from e2e.conftest import prepare_planting, suffix
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from e2e.pages.maps.create import MapCreatePage
@@ -11,18 +11,15 @@ scenarios("features/planting.feature")
 
 
 @given(parsers.parse("I am on the {name} map page and I have selected the plant layer"))
-def on_planting_screen(hp: HomePage, lp: LoginPage, mmp: MapManagementPage, mcp: MapCreatePage, mpp: MapPlantingPage, name):
-    login(hp, lp)
-    # Create map
-    hp.to_map_management_page()
-    mmp.to_map_create_page()
-    # Use workerid here to create separate maps for each process
-    mcp.create_a_map(name)
-    # Go to planting page and select plant layer
-    mmp.to_map_planting_page(name)
-    mpp.verify()
-    mpp.close_tour()
-    mpp.check_plant_layer()
+def on_planting_screen(
+    hp: HomePage,
+    lp: LoginPage,
+    mmp: MapManagementPage,
+    mcp: MapCreatePage,
+    mpp: MapPlantingPage,
+    name,
+):
+    prepare_planting(hp, lp, mmp, mcp, mpp, name + suffix())
 
 
 # Scenario 1: Plant something on the map
@@ -39,10 +36,12 @@ def plant_something(mpp: MapPlantingPage):
     mpp.expect_plant_to_be_planted("Tomato (Solanum lycopersicum)")
 
 
-@then(parsers.parse("it stays on {name} even when I leave the page and come back later"))
+@then(
+    parsers.parse("it stays on {name} even when I leave the page and come back later")
+)
 def planting_persists(mmp: MapManagementPage, mpp: MapPlantingPage, name):
     mpp.to_map_management_page()
-    mmp.to_map_planting_page(name)
+    mmp.to_map_planting_page(name + suffix())
     mpp.check_plant_layer()
     mpp.click_on_canvas()
     mpp.expect_plant_to_be_planted("Tomato (Solanum lycopersicum)")

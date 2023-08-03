@@ -4,7 +4,8 @@ from ..abstract_page import AbstractPage
 
 class MapCreatePage(AbstractPage):
     """The map creation page of permaplant"""
-    TITLE: str = 'PermaplanT'
+
+    TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
         self.page = page
@@ -14,7 +15,14 @@ class MapCreatePage(AbstractPage):
         self.latitude = page.get_by_placeholder("Latitude")
         self.create_button = page.get_by_role("button", name="Create")
 
-    def create_a_map(self, mapname, privacy=None, description="SUTDescription", latitude="1", longitude="1"):
+    def create_a_map(
+        self,
+        mapname,
+        privacy=None,
+        description="SUTDescription",
+        latitude="1",
+        longitude="1",
+    ):
         """
         Helper function to create a map
         Fills out fields and clicks create at the end

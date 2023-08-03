@@ -30,7 +30,7 @@ class HomePage(AbstractPage):
         self.logout_button.click()
 
     def hello_message_is_visible(self):
-        expect(self.hello_msg).to_be_visible()
+        expect(self.hello_msg).to_be_visible(timeout=10000)
 
     def to_map_management_page(self):
         """

@@ -4,7 +4,8 @@ from ..abstract_page import AbstractPage
 
 class MapManagementPage(AbstractPage):
     """The map management page of permaplant"""
-    TITLE: str = 'PermaplanT'
+
+    TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
         self.page = page
@@ -16,7 +17,9 @@ class MapManagementPage(AbstractPage):
 
     def to_map_edit_page(self, mapname: str):
         """Navigates to `MapEditPage`"""
-        self.page.get_by_title(mapname, exact=True).get_by_role("button", name="Edit map").click()
+        self.page.get_by_title(mapname, exact=True).get_by_role(
+            "button", name="Edit map"
+        ).click()
 
     def to_map_planting_page(self, mapname: str):
         """Navigates to `MapPlantingPage`"""

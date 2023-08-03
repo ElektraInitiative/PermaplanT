@@ -18,10 +18,24 @@ def logged_in_and_on_map_management_page(hp: HomePage, lp: LoginPage):
 # Scenario 1: Successful map creation
 
 
-@when(parsers.parse("I provide {name}, {privacy}, {description}, {latitude} and {longitude}"))
-def provide_map_details(mmp: MapManagementPage, mcp: MapCreatePage, name, privacy, description, latitude, longitude):
+@when(
+    parsers.parse(
+        "I provide {name}, {privacy}, {description}, {latitude} and {longitude}"
+    )
+)
+def provide_map_details(
+    mmp: MapManagementPage,
+    mcp: MapCreatePage,
+    name,
+    privacy,
+    description,
+    latitude,
+    longitude,
+):
     mmp.to_map_create_page()
-    mcp.create_a_map(name, description=description, latitude=latitude, longitude=longitude)
+    mcp.create_a_map(
+        name, description=description, latitude=latitude, longitude=longitude
+    )
 
 
 @then(parsers.parse("I can successfully create {name} without an error message"))
@@ -39,8 +53,10 @@ def create_the_map_to_be_edited(mmp: MapManagementPage, mcp: MapCreatePage, name
     mcp.create_a_map(name)
 
 
-@when(parsers.parse("I edit {name} to {new_name} with the description {new_description}"))
-def can_edit_created_map(mmp: MapManagementPage, mep: MapEditPage, name, new_name, new_description):
+@when(parsers.parse("I edit {name} to {new_name} with {new_description}"))
+def can_edit_created_map(
+    mmp: MapManagementPage, mep: MapEditPage, name, new_name, new_description
+):
     mmp.to_map_edit_page(name)
     mep.fill_name(new_name)
     mep.fill_description(new_description)
