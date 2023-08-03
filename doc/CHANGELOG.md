@@ -8,7 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.3.1 - UNRELEASED
 
-- _()_
+- backend: add shadings endpoints + heatmap _(Gabriel)_
 - _()_
 - _()_
 - _()_

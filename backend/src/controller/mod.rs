@@ -11,5 +11,6 @@ pub mod planting_suggestions;
 pub mod plantings;
 pub mod plants;
 pub mod seed;
+pub mod shadings;
 pub mod sse;
 pub mod users;

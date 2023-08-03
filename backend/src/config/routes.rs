@@ -6,7 +6,7 @@ use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::controller::{
     base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer,
-    planting_suggestions, plantings, plants, seed, sse, users,
+    planting_suggestions, plantings, plants, seed, shadings, sse, users,
 };
 
 use super::auth::middleware::validator;
@@ -41,13 +41,17 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                         .service(layers::create)
                         .service(layers::delete)
                         .service(
-                            web::scope("/base/images")
-                                .service(base_layer_image::create)
-                                .service(base_layer_image::update)
-                                .service(base_layer_image::delete),
-                        )
-                        .service(
-                            web::scope("/base/{layer_id}/images").service(base_layer_image::find),
+                            web::scope("/base")
+                                .service(
+                                    web::scope("/{layer_id}/images")
+                                        .service(base_layer_image::find),
+                                )
+                                .service(
+                                    web::scope("/images")
+                                        .service(base_layer_image::create)
+                                        .service(base_layer_image::update)
+                                        .service(base_layer_image::delete),
+                                ),
                         )
                         .service(
                             web::scope("/plants")
@@ -63,6 +67,15 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                         .service(plantings::update)
                                         .service(plantings::delete),
                                 ),
+                        )
+                        .service(
+                            web::scope("/shade").service(
+                                web::scope("/shadings")
+                                    .service(shadings::find)
+                                    .service(shadings::create)
+                                    .service(shadings::update)
+                                    .service(shadings::delete),
+                            ),
                         ),
                 ),
         )

@@ -114,13 +114,14 @@
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Preconditions:
   - Be on the map editor page.
-  - TODO! @kitzbergerg
+  - Data is inserted via the scraper (plants and plant relations)
 - Test Steps:
   1. Create a map
   2. Plant some plants with relations.
-  3. TODO! @kitzbergerg
+  3. Add other constraints such as shade or soil ph.
+  4. Generate the heatmap.
 - Expected Result:
-  - Heatmap considers map polygon and plant relations.
+  - Heatmap considers map polygon and environmental constraints.
 - Actual Result:
 - Test Result:
 - Notes:

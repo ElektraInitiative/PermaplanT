@@ -31,6 +31,8 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod shadings;
+pub mod shadings_impl;
 pub mod update_map_impl;
 pub mod users_impl;
 
@@ -243,7 +245,6 @@ pub struct MapDto {
     /// The geometry of the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
     pub geometry: Polygon<Point>,
 }
@@ -279,7 +280,6 @@ pub struct NewMapDto {
     /// The geometry of the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
     pub geometry: Polygon<Point>,
 }
@@ -299,7 +299,6 @@ pub struct UpdateMapDto {
     /// The geometry of the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[typeshare(serialized_as = "Option<object>")]
     #[schema(value_type = Option<Object>)]
     pub geometry: Option<Polygon<Point>>,
 }
@@ -452,9 +451,14 @@ pub struct DeleteBaseLayerImageDto {
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct HeatMapQueryParams {
     /// The id of the plant layer the planting will be planted on.
-    pub layer_id: i32,
+    pub plant_layer_id: i32,
+    /// The id of the shade layer the planting will be planted on.
+    pub shade_layer_id: i32,
     /// The id of the plant you want to plant.
     pub plant_id: i32,
+    /// The date at which to generate the heatmap.
+    /// Will be set to the current date if `None`.
+    pub date: Option<NaiveDate>,
 }
 
 #[typeshare]
