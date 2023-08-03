@@ -39,7 +39,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- disabled retry on Nextcloud plant icons in PlantSearch _(Samuel)_
 - _()_
 - _()_
 - _()_
