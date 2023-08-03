@@ -1,5 +1,6 @@
 import { usePublicImage } from '../hooks/usePublicImage';
 import { RetryValue } from '@tanstack/query-core/build/lib/retryer';
+import { AxiosError } from 'axios';
 
 interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'> {
   // relative path starting at the public share directory to the image in Nextcloud
@@ -9,7 +10,7 @@ interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'
   // placeholder that will be displayed if the requested image was not found
   defaultImageUrl?: string;
   // Whether fetching the image should be retried on fail.
-  retry?: RetryValue<unknown>;
+  retry?: RetryValue<AxiosError>;
   /** Whether an error modal should be displayed if the image can't be loaded. */
   showErrorMessage?: boolean;
 }
