@@ -97,6 +97,9 @@ def runDockerPreCommit() {
                 sh "pre-commit run mixed-line-ending -a"
                 sh "pre-commit run trailing-whitespace -a"
                 sh "pre-commit run prettier -a"
+                sh "pre-commit run black -a"
+                sh "pre-commit run flake8 -a"
+                sh "pre-commit run mypy -a"
             }
         }
     }
