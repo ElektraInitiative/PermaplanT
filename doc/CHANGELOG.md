@@ -43,7 +43,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- commented out disabled buttons for user study _(Samuel)_
 - _()_
 - _()_
 - _()_
