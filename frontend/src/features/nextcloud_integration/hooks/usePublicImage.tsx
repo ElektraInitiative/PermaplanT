@@ -1,6 +1,7 @@
 import { getPublicImage } from '@/features/nextcloud_integration/api/getImages';
 import { useImageFromBlob } from '@/features/nextcloud_integration/hooks/useImageFromBlob';
 import errorImageSource from '@/icons/photo-off.svg';
+import { RetryValue } from '@tanstack/query-core/build/lib/retryer';
 import { useQuery } from '@tanstack/react-query';
 
 type UsePublicImageOptions = {
@@ -15,7 +16,7 @@ type UsePublicImageOptions = {
   /** Whether an error modal should be displayed if the image can't be loaded. */
   showErrorMessage?: boolean;
   // Whether fetching the image should be retried on fail.
-  retry: boolean;
+  retry?: RetryValue<unknown>;
 };
 
 /**
