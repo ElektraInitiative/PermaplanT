@@ -4,16 +4,21 @@ from ..abstract_page import AbstractPage
 
 class MapPlantingPage(AbstractPage):
     """The planting page of a map on permaplant"""
-    TITLE: str = 'PermaplanT'
+
+    TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
         self.page = page
+        self.screenshot = None
         self.base_layer_radio = self.page.get_by_test_id("base-layer-radio")
         self.plant_layer_radio = self.page.get_by_test_id("plants-layer-radio")
         self.plant_search_icon = self.page.get_by_test_id("plant-search-icon")
         self.plant_search_input = self.page.get_by_test_id("plant-search-input")
-        self.delete_plant_button = self.page.get_by_role("button", name="Delete Planting")
+        self.delete_plant_button = self.page.get_by_role(
+            "button", name="Delete Planting"
+        )
         self.map_management_button = self.page.get_by_role("button", name="Maps")
+        self.canvas = self.page.get_by_test_id("canvas")
 
     def check_base_layer(self):
         """Checks the base layer radio button."""
@@ -54,19 +59,37 @@ class MapPlantingPage(AbstractPage):
         self.page.locator("canvas:nth-child(6)").click(position={"x": x, "y": y})
 
     def click_delete(self):
-        """Deletes a planting by clicks on the delete button"""
+        """Deletes a planting by clicks on the delete button."""
         self.delete_plant_button.click()
 
-    def expect_plant_to_be_planted(self, plant_name, x=300, y=300):
+    def click_undo(self):
+        """Clicks the undo button."""
+        self.page.get_by_test_id("undo-button").click()
+
+    def click_redo(self):
+        """Clicks the redo button."""
+        self.page.wait_for_timeout(2000)
+        self.page.get_by_test_id("redo-button").click()
+
+    def expect_plant_to_be_planted(self, plant_name):
         """
         Confirms that the plant is on the canvas,
-        by looking for its tooltip after hovering it.
+        by looking at the left side bar.
         """
         expect(self.page.get_by_role("heading", name=plant_name)).to_be_visible()
 
+    def expect_plant_to_not_be_planted(self, plant_name):
+        """
+        Confirms that the plant is NOT on the canvas,
+        by looking at the left side bar.
+        """
+        expect(self.page.get_by_role("heading", name=plant_name)).not_to_be_visible()
+
     def expect_search_result_is_visible(self, result):
         """Confirms that a search result is visible"""
-        expect(self.page.get_by_test_id(result + "-plant-search-result")).to_be_visible()
+        expect(
+            self.page.get_by_test_id(result + "-plant-search-result")
+        ).to_be_visible()
 
     def expect_no_plants_found_text_is_visible(self):
         """Confirms that `no plants are found` is present"""
