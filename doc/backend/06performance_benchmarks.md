@@ -5,15 +5,17 @@
 The following tools are required to run the benchmarks:
 
 - docker
-- [nushell](https://github.com/nushell/nushell)
-- perf
-- [flamegraph](https://github.com/flamegraph-rs/flamegraph)
+- [nushell](https://github.com/nushell/nushell) (e.g. via `cargo install nu`)
+- perf (package might be called `linux-perf-5.10`)
+- [flamegraph](https://github.com/flamegraph-rs/flamegraph) (cargo install flamegraph)
 - [httperf](https://github.com/httperf/httperf)
-- standard linux tools like `grep`, `awk` or `psql`
+- `jq`
+- `psql` (part of PostgreSQL)
+- standard linux tools like `grep`, `awk` etc.
 
 ## Setup
 
-Add the following to the end of `Cargo.toml`.
+Add the following to the end of `backend/Cargo.toml`.
 This is necessary to ensure that perf can accurately track the function stack.
 
 ```toml
@@ -21,8 +23,10 @@ This is necessary to ensure that perf can accurately track the function stack.
 debug = true
 ```
 
-The `setup.sh` scripts contain `PERF=/usr/lib/linux-tools/5.4.0-153-generic/perf` to set the location of perf.
-Modify the path to point to your `perf` installation.
+The `benchmarks/backend/*/setup.sh` scripts contain `PERF=/usr/lib/linux-tools/5.4.0-153-generic/perf` to set the location of perf.
+Depending on your distribution it might or might not be needed to change this.
+On Debian no change is needed.
+Otherwise modify the path to point to your `perf` installation.
 
 ## Scripts
 
@@ -44,7 +48,7 @@ Follow these instructions to ensure the benchmark works correctly.
 
 Parameters:
 
-- username: Your PermaplanT username.
+- username: Your PermaplanT username for https://auth.permaplant.net.
 - password: Your PermaplanT password.
 
 ### `run_httperf.sh`
@@ -61,10 +65,10 @@ Do not press Ctrl+C again, otherwise the generated flamegraph will not include a
 
 Parameters:
 
-- username: Your PermaplanT username.
+- username: Your PermaplanT username for https://auth.permaplant.net.
 - password: Your PermaplanT password.
-- number_of_requests: The total number of requests httperf will execute.
-- request_rate: How many requests will be executed per second.
+- number_of_requests: The total number of requests httperf will execute (e.g. 10000).
+- request_rate: How many requests will be executed per second (e.g. 100).
 
 ### `get_statistics.sh`
 
@@ -94,7 +98,8 @@ The following is a step by step guide on how to execute the benchmark for the he
 4. Once its started execute in a second shell: `./benchmarks/backend/heatmap/run_httperf.sh <username> <password> 100 10`
 5. Wait for httperf to finish.
 6. Press Ctrl+C in the `setup.sh` shell.
-7. Wait until `flamegraph.svg` was generated (this might take 20min or longer). If you interrupt this step you have to rerun the benchmark.
+7. Wait until `flamegraph.svg` was generated (this might take 20min or longer).
+   If you interrupt this step you have to rerun the benchmark.
 8. Execute: `./benchmarks/backend/heatmap/get_statistics.sh`
 9. Collect results:
    - flamgraph.svg
