@@ -1,9 +1,9 @@
 import { GetFn } from './MapStoreTypes';
 
 /**
- * Handle the case where the selected nodes are not in the stage anymore.
+ * If any of the selected nodes can not be found on the map, clear the selection.
  */
-export function handleSelectedNodesChange(get: GetFn) {
+export function clearInvalidSelection(get: GetFn) {
   const stage = get().stageRef.current;
   const transformer = get().transformer.current;
   const selectedNodeIds = transformer?.getNodes().map((n) => n.id()) || [];
