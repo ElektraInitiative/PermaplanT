@@ -1,19 +1,19 @@
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import {
   Action,
+  GetFn,
+  SetFn,
   TRACKED_DEFAULT_STATE,
   TrackedMapSlice,
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
+import { handleSelectedNodesChange } from './utils';
 import { BaseLayerImageDto, PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
-
-type SetFn = Parameters<typeof createTrackedMapSlice>[0];
-type GetFn = Parameters<typeof createTrackedMapSlice>[1];
 
 export const createTrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -230,19 +230,4 @@ function redo(set: SetFn, get: GetFn): void {
     canUndo: true,
     canRedo: state.step + 1 < state.history.length,
   }));
-}
-/**
- * Handle the case where the selected nodes are not in the stage anymore.
- */
-function handleSelectedNodesChange(get: GetFn) {
-  const stage = get().stageRef.current;
-  const transformer = get().transformer.current;
-  const selectedNodeIds = transformer?.getNodes().map((n) => n.id()) || [];
-
-  const selectedNodesAreVisible = selectedNodeIds.every((id) => stage?.findOne(`#${id}`));
-
-  if (!selectedNodesAreVisible) {
-    transformer?.nodes([]);
-    get().selectPlanting(null);
-  }
 }
