@@ -5,7 +5,7 @@ from .abstract_page import AbstractPage
 
 class HomePage(AbstractPage):
     """The homepage permaplant"""
-    URL = os.getenv("TEST_URL", "localhost:5173")
+    URL = os.getenv("E2E_URL")
     TITLE: str = 'PermaplanT'
     HELLO_MSG: str = 'Hello adi'
 

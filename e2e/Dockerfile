@@ -1,12 +1,14 @@
+# docker build -t permaplant-e2e .
+# docker run permaplant-e2e
 FROM mcr.microsoft.com/playwright/python:v1.35.0-jammy
-
+RUN apt-get update && apt install -y git make
 USER root
 
-ENV TEST_URL=http://pr.permaplant.net
-ENV PERMAPLANT_PATH /home/batman/permaplante2e
+ENV PERMAPLANT_PATH /home/batman/permaplant/e2e
 WORKDIR $PERMAPLANT_PATH
 COPY . $PERMAPLANT_PATH
 
-RUN apt-get update && apt install -y git make
-RUN python -m pip install -r requirements.txt
-RUN python -m playwright install --with-deps
+RUN ./install.sh
+RUN chmod +x ./entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]

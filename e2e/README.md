@@ -1,26 +1,30 @@
-# PermaplanT E2E tests with Playwright for python and pytest-bdd
+# PermaplanT E2E tests
+
+The Jenkins pipeline executes exactly this `Dockerfile` with `entrypoint.sh`.
+It only skips the clean_db.py step, since its not needed in CI.
+So running this setup locally should give you fast feedback.
+
+All commands/scripts in this README are executed from this folder (/e2e).
 
 ## Directory structure
 
 ```sh
-├── features  Gherkin features
-├── pages     Page object models
-├── steps     The actual tests
+├── features      Gherkin features
+├── pages         Page object models
+├── steps         The actual tests
+├── test-reports  pie charts, tables, runtime, etc.
+├── test-results  screenshots, videos, etc.
 ```
 
 ## Installation
 
-### inside the devcontainer
-
-in /workspaces/PermaplanT/e2e $
+### Inside the [.devcontainer](../.devcontainer/README.md)
 
 ```sh
 ./install.sh
 ```
 
-### with python venv
-
-in /workspaces/PermaplanT/e2e $
+### Otherwise
 
 ```sh
 sudo apt update
@@ -28,41 +32,63 @@ sudo apt install python3
 sudo apt install python3-venv
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
-playwright install --with-deps
+./install.sh
 ```
 
 ## Quickstart
 
-To run all tests with as many processes as your computer has CPU cores
+## Inside the [.devcontainer](../.devcontainer/README.md)
 
 ```sh
-python3 -m pytest --numprocesses auto
+./entrypoint.sh
 ```
 
-To perform retries on your tests
+### Otherwise
+
+Assuming your database is not inside a network and everything is basically on localhost.
+
+Set env variables with `docker run -e` to change the settings of the container.
+
+```sh
+docker build -t permaplant-e2e .
+docker run permaplant-e2e
+```
+
+### Optional arguments
+
+Most of these are set inside `.entrypoint.sh`
+
+#### Parallelization
+
+```sh
+python3 -m pytest -n auto
+```
+
+#### Retries
 
 ```sh
 python3 -m pytest --retries 3
 ```
 
-To run specific tests
+#### Single test
 
 ```sh
 python3 -m pytest steps/test_login_logout.py
 ```
 
-To capture video when testing
+#### Video capturing
 
 ```sh
 python3 -m pytest --video on
 ```
 
-To capture video only on test failures
+only on test failures
 
 ```sh
 python3 -m pytest --video retain-on-failure
 ```
+
+#### Flaky tests
 
 If there is something suspicious going on
 
@@ -72,25 +98,12 @@ set -e; for i in `seq 10`;do echo "Running iteration $i"; python -m pytest -n au
 
 ### Cleanup
 
-Currently you need to reset your database after running the tests once, since the tests do not cleanup after execution
-and many maps can't be recreated.
+Currently you need to use the python cleanup script `clean_db.py` after or before your tests.
+If you dont, some tests will fail trying to create a map that already exists.
 
 ## ENV Variables
 
-### TEST_URL
-
-The url under which the tests look for the website.
-Defaults to `localhost:5173`
-
-### USERNAME
-
-The username for loging into the website
-Defaults to `Adi`
-
-### PASSWORD
-
-The password for loging into the website
-Defaults to `1234`
+Have a look at the defaults inside `.env`.
 
 ## How to write tests
 
@@ -105,8 +118,8 @@ Before developing E2E tests make sure you have read the [guidelines](https://git
   - Avoid using multiple different verbs for the same actions, keep your vocabulary small and precise.
     Use Playwrights vocabulary.
     This means to prefix methods with the actions from playwright (e.g when calling `xyz.click()` from playwright inside that method, name the method `click_xyz()` not a mix of press, click, push etc.)
-  - Dont indent more than one time.
-  - Dont make a complicated call stack higher than two from a page object.
+  - Don't indent more than one time.
+  - Don't make a complicated call stack higher than two from a page object.
 - Every test should be independent from other tests (concurrency).
 - Name inputs or objects you create SUT (System under Test) so they are clearly marked as test artifacts.
 
@@ -122,7 +135,7 @@ Lets go over these steps in more detail.
 
 ### Writing .feature files
 
-Make sure to have a solid understanding about the Gherkin syntax, so you dont fall into common pitfalls.
+Make sure to have a solid understanding about the Gherkin syntax, so you don't fall into common pitfalls.
 Usually the syntax is not very strict but poor Gherkin will cascade into the later processes of testing and make everything more complicated.
 
 Avoid the following:
@@ -172,7 +185,7 @@ This will ensure the tests are simple and don't perform too much magic all over 
 This is done to reduce the pipeline time, since many tests could make this stage take a long time at the end.
 When developing tests always keep in mind that each scenario is running on a separate core and should not depend on results of other scenarios.
 A scenario outlet will also start each scenario with one core.
-Try to avoid too complex parallelization and we also probably dont need to assign and manage worker groups with additional xdist syntax.
+Try to avoid too complex parallelization and we also probably don't need to assign and manage worker groups with additional xdist syntax.
 
 ### Helpful tools
 

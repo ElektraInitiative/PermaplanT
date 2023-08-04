@@ -33,7 +33,7 @@ test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
 
 .PHONY: test-e2e
 test-e2e: ## End-to-End tests. Needs backend and frontend running.
-	python3 -m pytest -n auto e2e/ --retries 2 --video retain-on-failure --html=report.html --self-contained-html --cucumberjson=cucumber.json
+	cd e2e && ./entrypoint.sh
 
 .PHONY: test-frontend
 test-frontend:  ## Test Frontend.
