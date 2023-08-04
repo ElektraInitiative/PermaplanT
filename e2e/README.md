@@ -12,6 +12,7 @@ All commands/scripts in this README are executed from this folder (/e2e).
 ├── features      Gherkin features
 ├── pages         Page object models
 ├── steps         The actual tests
+├── conftest.py   Global pytest fixtures, functions.
 ├── test-reports  pie charts, tables, runtime, etc.
 ├── test-results  screenshots, videos, etc.
 ```
@@ -40,14 +41,27 @@ source venv/bin/activate
 
 ### Inside Docker
 
-Assuming your database is not inside a network and everything is basically on localhost.
-
-Change [ENV](.env) variables with `docker run -e`.
+Assuming your app and database is on your localhost network.
 
 ```sh
 docker build -t permaplant-e2e .
-docker run permaplant-e2e
+docker run --network="host" permaplant-e2e
 ```
+
+If you have a more complicated network/database setup you might need to configure all env variables and use `docker run --network`.
+
+Lets say:
+
+- Your app/db are both inside a docker network called `plant`
+- The web apps container name is `rudolph`
+- The db is at postgres:5433 (for cleaning up after tests)
+
+```sh
+docker run --network="plant" -e TEST_URL=rudolph:5173 -e POSTGRES_HOST=postgres -e POSTGRES_PORT=5433 permaplant-e2e
+```
+
+There is probably plenty of other setups, we haven't tested all.
+Feel free to open an Issue/PR if something is not working.
 
 ### Optional arguments
 

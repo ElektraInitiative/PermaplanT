@@ -7,7 +7,7 @@ help:  ## Show help for each of the Makefile recipes.
 
 .PHONY: run-frontend
 run-frontend: build-frontend  ## Build & Run frontend.
-	cd frontend && npm run dev
+	cd frontend && npm run dev -- --host
 
 .PHONY: run-backend
 run-backend: build-backend  ## Build & Run backend.
@@ -144,13 +144,19 @@ clean-storybook:  ## Remove storybook static folder.
 .PHONY: install
 install:  ## Install ALL dependencies within the source repo.
 	cd backend && make install
-	cd e2e && ./install.sh
 	cargo install mdbook mdbook-mermaid mdbook-linkcheck
 	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary --locked
 
 .PHONY: uninstall
 uninstall:  ## Uninstall ALL dependencies within the source repo.
 	-cd backend && make uninstall
-	-cd e2e && python3 -m pip uninstall -y -r requirements.txt
 	-cargo uninstall mdbook mdbook-mermaid mdbook-linkcheck
 	-cargo uninstall mdbook-generate-summary
+
+.PHONY: install-e2e
+install-e2e:
+	cd e2e && ./install.sh
+
+-PHONY: uninstall-e2e
+uninstall-e2e:
+	cd e2e && ./uninstall.sh

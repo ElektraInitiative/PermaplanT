@@ -1,7 +1,5 @@
 #!/bin/bash
 
-grep -E '^(E2E|POSTGRES)_[A-Z_]+=' .env
-
 # Only run clean_db script
 # when env variable CI is set
 if [ -z "$CI" ]; then
