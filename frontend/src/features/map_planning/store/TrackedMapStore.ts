@@ -113,6 +113,7 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
   action.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(action, get().step, set, get);
   applyActionToStore(action, set, get);
+  handleSelectedNodesChange(get);
 
   set((state) => ({
     ...state,
@@ -194,6 +195,7 @@ function undo(set: SetFn, get: GetFn): void {
   actionToUndo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToUndo, get().step - 1, set, get);
   applyActionToStore(actionToUndo, set, get);
+  handleSelectedNodesChange(get);
 
   set((state) => ({
     ...state,
@@ -220,6 +222,7 @@ function redo(set: SetFn, get: GetFn): void {
   actionToRedo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToRedo, get().step, set, get);
   applyActionToStore(actionToRedo, set, get);
+  handleSelectedNodesChange(get);
 
   set((state) => ({
     ...state,
@@ -227,4 +230,19 @@ function redo(set: SetFn, get: GetFn): void {
     canUndo: true,
     canRedo: state.step + 1 < state.history.length,
   }));
+}
+/**
+ * Handle the case where the selected nodes are not in the stage anymore.
+ */
+function handleSelectedNodesChange(get: GetFn) {
+  const stage = get().stageRef.current;
+  const transformer = get().transformer.current;
+  const selectedNodeIds = transformer?.getNodes().map((n) => n.id()) || [];
+
+  const selectedNodesAreVisible = selectedNodeIds.every((id) => stage?.findOne(`#${id}`));
+
+  if (!selectedNodesAreVisible) {
+    transformer?.nodes([]);
+    get().selectPlanting(null);
+  }
 }
