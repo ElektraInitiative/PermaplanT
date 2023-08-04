@@ -33,7 +33,7 @@ test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
 
 .PHONY: test-e2e
 test-e2e: ## End-to-End tests. Needs backend and frontend running.
-	cd e2e && ./entrypoint.sh
+	cd e2e && ./e2e.sh
 
 .PHONY: test-frontend
 test-frontend:  ## Test Frontend.

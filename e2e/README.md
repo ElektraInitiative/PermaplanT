@@ -1,6 +1,6 @@
 # PermaplanT E2E tests
 
-The Jenkins pipeline executes exactly this `Dockerfile` with `entrypoint.sh`.
+The Jenkins pipeline executes exactly this [Dockerfile](Dockerfile) invoking [e2e.sh](e2e.sh).
 It only skips the clean_db.py step, since its not needed in CI.
 So running this setup locally should give you fast feedback.
 
@@ -13,8 +13,8 @@ All commands/scripts in this README are executed from this folder (/e2e).
 ├── pages         Page object models
 ├── steps         The actual tests
 ├── conftest.py   Global pytest fixtures, functions.
-├── test-reports  pie charts, tables, runtime, etc.
-├── test-results  screenshots, videos, etc.
+├── test-reports  Pie charts, tables, runtime, etc.
+├── test-results  Screenshots, videos, etc.
 ```
 
 ## Quickstart
@@ -24,7 +24,7 @@ This will install all dependencies and run e2e tests with these [ENV](.env) vari
 
 ```sh
 ./install.sh
-./entrypoint.sh
+./e2e.sh
 ```
 
 ### Creating a virtual env
@@ -36,7 +36,7 @@ sudo apt install python3-venv
 python3 -m venv venv
 source venv/bin/activate
 ./install.sh
-./entrypoint.sh
+./e2e.sh
 ```
 
 ### Inside Docker
@@ -45,7 +45,7 @@ Assuming your app and database is on your localhost network.
 
 ```sh
 docker build -t permaplant-e2e .
-docker run --network="host" permaplant-e2e
+docker run --network="host" permaplant-e2e ./e2e.sh
 ```
 
 If you have a more complicated network/database setup you might need to configure all env variables and use `docker run --network`.
@@ -65,9 +65,12 @@ Feel free to open an Issue/PR if something is not working.
 
 ### Optional arguments
 
-Most of these are set inside `.entrypoint.sh`
+Most of these are already set inside [e2e.sh](e2e.sh).
+Nevertheless, if you maybe want to build your own script, here are some pytest arguments.
 
 #### Parallelization
+
+Use as many processes as your computer has CPU cores.
 
 ```sh
 python3 -m pytest -n auto
@@ -91,7 +94,7 @@ python3 -m pytest steps/test_login_logout.py
 python3 -m pytest --video on
 ```
 
-only on test failures
+Only on test failures.
 
 ```sh
 python3 -m pytest --video retain-on-failure
@@ -99,7 +102,7 @@ python3 -m pytest --video retain-on-failure
 
 #### Flaky tests
 
-If there is something suspicious going on
+If there is something suspicious going on.
 
 ```sh
 set -e; for i in `seq 10`;do echo "Running iteration $i"; python -m pytest -n auto; done
@@ -107,9 +110,9 @@ set -e; for i in `seq 10`;do echo "Running iteration $i"; python -m pytest -n au
 
 ### Cleanup
 
-Currently we need to use the python cleanup script `clean_db.py` after or before the tests.
-If we dont, some tests will fail trying to create a map that already exists.
-This is automatically done with `entrypoint.sh` when the ENV varaible CI is not set.
+Currently we need to use [clean_db.py](clean_db.py) after/before tests to make all test maps are deleted.
+If we dont delete them, some tests will fail trying to create a map that already exists.
+This is automatically done inside [e2e.sh](e2e.sh)`.
 
 ## How to write tests
 
@@ -185,7 +188,7 @@ Following the [testing strategy](https://github.com/ElektraInitiative/PermaplanT
 
 This will ensure the tests are simple and don't perform too much magic all over the place.
 
-### Small note on pytest-xdist
+### A small note on pytest-xdist
 
 [Pytest-xdist](https://pytest-xdist.readthedocs.io/en/latest/distribution.html) is used to parallelize the tests.
 This is done to reduce the pipeline time, since many tests could make this stage take a long time at the end.
@@ -215,7 +218,7 @@ playwright codegen http://localhost:5173/
 
 - pytest-bdd generate features/login_logout.feature > steps/test_some_feature.py
 
-or only missing stuff
+Only missing stuff:
 
 - pytest --generate-missing --feature features steps/
 
@@ -225,6 +228,6 @@ or only missing stuff
 
 [https://playwright.dev/python/docs/intro](https://playwright.dev/python/docs/intro)
 
-### pytest-bdd Documentation
+### Pytest-bdd Documentation
 
 [https://pypi.org/project/pytest-bdd/](https://pypi.org/project/pytest-bdd/)

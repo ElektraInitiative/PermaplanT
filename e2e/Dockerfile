@@ -9,6 +9,3 @@ WORKDIR $PERMAPLANT_PATH
 COPY . $PERMAPLANT_PATH
 
 RUN ./install.sh
-RUN chmod +x ./entrypoint.sh
-
-ENTRYPOINT ["./entrypoint.sh"]
