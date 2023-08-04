@@ -16,15 +16,17 @@ All commands/scripts in this README are executed from this folder (/e2e).
 ├── test-results  screenshots, videos, etc.
 ```
 
-## Installation
+## Quickstart
 
-### Inside the [.devcontainer](../.devcontainer/README.md)
+Make sure you have a virtual environment or you are inside [.devcontainer](../.devcontainer/README.md).
+This will install all dependencies and run e2e tests with these [ENV](.env) variables.
 
 ```sh
 ./install.sh
+./entrypoint.sh
 ```
 
-### Otherwise
+### Creating a virtual env
 
 ```sh
 sudo apt update
@@ -33,21 +35,14 @@ sudo apt install python3-venv
 python3 -m venv venv
 source venv/bin/activate
 ./install.sh
-```
-
-## Quickstart
-
-## Inside the [.devcontainer](../.devcontainer/README.md)
-
-```sh
 ./entrypoint.sh
 ```
 
-### Otherwise
+### Inside Docker
 
 Assuming your database is not inside a network and everything is basically on localhost.
 
-Set env variables with `docker run -e` to change the settings of the container.
+Change [ENV](.env) variables with `docker run -e`.
 
 ```sh
 docker build -t permaplant-e2e .
@@ -98,12 +93,9 @@ set -e; for i in `seq 10`;do echo "Running iteration $i"; python -m pytest -n au
 
 ### Cleanup
 
-Currently you need to use the python cleanup script `clean_db.py` after or before your tests.
-If you dont, some tests will fail trying to create a map that already exists.
-
-## ENV Variables
-
-Have a look at the defaults inside `.env`.
+Currently we need to use the python cleanup script `clean_db.py` after or before the tests.
+If we dont, some tests will fail trying to create a map that already exists.
+This is automatically done with `entrypoint.sh` when the ENV varaible CI is not set.
 
 ## How to write tests
 

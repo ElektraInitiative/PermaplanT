@@ -1,5 +1,8 @@
 # Generated with chatgpt.
 # A helper script to remove all maps starting with the name "SUT" from the database.
+# Currently tests are not capable of cleaning up maps after they are done, so this is
+# only a workaround and should eventually be removed.
+# Also using a separate database should be considered at some point.
 
 import os
 import psycopg2
