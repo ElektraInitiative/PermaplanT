@@ -52,6 +52,7 @@ def accidental_undo(mpp: MapPlantingPage):
 @when("I press redo to get my plant back")
 def press_redo(mpp: MapPlantingPage):
     mpp.click_redo()
+    mpp.click_on_canvas()
 
 
 @then("I can see my plant on the canvas again")

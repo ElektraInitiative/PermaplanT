@@ -9,7 +9,6 @@ class MapPlantingPage(AbstractPage):
 
     def __init__(self, page: Page):
         self.page = page
-        self.screenshot = None
         self.base_layer_radio = self.page.get_by_test_id("base-layer-radio")
         self.plant_layer_radio = self.page.get_by_test_id("plants-layer-radio")
         self.plant_search_icon = self.page.get_by_test_id("plant-search-icon")
@@ -68,7 +67,6 @@ class MapPlantingPage(AbstractPage):
 
     def click_redo(self):
         """Clicks the redo button."""
-        self.page.wait_for_timeout(2000)
         self.page.get_by_test_id("redo-button").click()
 
     def expect_plant_to_be_planted(self, plant_name):
