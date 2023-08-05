@@ -7,12 +7,11 @@ const MOUSE_OFFSET_X = 16;
  */
 export function setTooltipPositionToMouseCursor() {
   const stage = useMapStore.getState().stageRef.current;
-  const tooltip = useMapStore.getState().tooltipRef.current;
 
-  if (!stage || !tooltip) return;
+  if (!stage) return;
 
   const pos = stage.getRelativePointerPosition();
-  tooltip.position({
+  useMapStore.getState().setTooltipPosition({
     x: pos.x + MOUSE_OFFSET_X / stage.scaleX(),
     y: pos.y,
   });

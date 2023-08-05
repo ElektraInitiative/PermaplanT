@@ -6,7 +6,7 @@ export interface MapLabelProps extends React.ComponentProps<typeof Label> {
 
 export const MapLabel = ({ content, ...labelProps }: MapLabelProps) => {
   return (
-    <Label listening={false} {...labelProps}>
+    <Label {...labelProps}>
       {/* Colors are Gray 800 and Gray 50 from the DEFAULT tailwind theme.                             */}
       {/* Unfortunately we can not directly import colors from tailwind.                               */}
       {/* More details can be found in @/features/map_planning/layers/_frontend_only/util/Constants.ts */}

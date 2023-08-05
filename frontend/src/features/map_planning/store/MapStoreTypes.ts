@@ -172,6 +172,7 @@ export interface UntrackedMapSlice {
   getSelectedLayerType: () => CombinedLayerType;
   getSelectedLayerId: () => number | null;
   setTooltipText: (content: string) => void;
+  setTooltipPosition: (position: { x: number; y: number }) => void;
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -229,6 +230,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     map_id: -1,
   },
   tooltipContent: '',
+  tooltipPosition: { x: 0, y: 0 },
   layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
@@ -371,6 +373,7 @@ export type UntrackedMapState = {
   };
   /** Storing the current content prevents constant rerenders of the tooltip component.  */
   tooltipContent: string;
+  tooltipPosition: { x: number; y: number };
   layers: UntrackedLayers;
 };
 

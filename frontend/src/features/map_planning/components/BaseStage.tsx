@@ -1,5 +1,6 @@
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
+import { MapLabel } from '../utils/MapLabel';
 import {
   deselectShapes,
   endSelection,
@@ -12,7 +13,7 @@ import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer, Text, Label, Tag } from 'react-konva';
+import { Layer, Stage, Transformer } from 'react-konva';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -90,6 +91,7 @@ export const BaseStage = ({
   });
 
   const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
+  const tooltipPosition = useMapStore((state) => state.untrackedState.tooltipPosition);
 
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
@@ -231,24 +233,14 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
-          <Label
+          {/* Tooltip */}
+          <MapLabel
+            content={tooltipContent}
             visible={tooltipContent !== ''}
-            ref={tooltipRef}
-            scaleX={1 / stage.scale}
-            scaleY={1 / stage.scale}
-          >
-            <Tag fill="black" />
-            <Text fill="white" fontSize={24} padding={6} text={tooltipContent} />
-          </Label>
-          <Rect
-            x={selectionRectAttrs.x}
-            y={selectionRectAttrs.y}
-            width={selectionRectAttrs.width}
-            height={selectionRectAttrs.height}
-            fill={'blue'}
-            visible={selectionRectAttrs.isVisible}
-            opacity={0.2}
-            name="selectionRect"
+            scaleX={3 / stage.scale}
+            scaleY={3 / stage.scale}
+            x={tooltipPosition.x}
+            y={tooltipPosition.y}
           />
           <Transformer
             // We need to manually disable selection when we are transforming
