@@ -114,7 +114,7 @@ Common name - additional name (_unique name_ 'cultivar name')
 
 In cases where the common name is not available in the current language, it should be displayed as:
 
-`_unique\_name_ 'cultivar'`
+_unique name_ 'cultivar name' - additional name
 
 Currently, the cultivar is a part of the unique name.
 
