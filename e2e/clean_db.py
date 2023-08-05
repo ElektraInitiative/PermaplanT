@@ -14,7 +14,9 @@ load_dotenv()
 dbname = str(os.getenv("POSTGRES_DB", "permaplant"))
 user = str(os.getenv("POSTGRES_USER", "permaplant"))
 password = str(os.getenv("POSTGRES_PASSWORD", "permaplant"))
-host = urlparse(os.environ.get("DATABASE_URL", "postgres://permaplant:permaplant@db/permaplant")).hostname
+host = urlparse(
+    os.environ.get("DATABASE_URL", "postgres://permaplant:permaplant@db/permaplant")
+).hostname
 port = str(os.getenv("DATABASE_PORT", "5432"))
 
 
