@@ -2,6 +2,8 @@
 
 ## `Plant_detail`
 
+<!-- Will be reworked with hirachy update soon.  -->
+
 | **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
 | :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
 | **id**                           | 1                                |
@@ -69,22 +71,26 @@ Store relations between plants.
 
 ## `Maps`
 
-| **_Column name_**   | **_Example_** | **_Description_**                                                                              |
-| :------------------ | :------------ | :--------------------------------------------------------------------------------------------- |
-| **id**              | 1             |
-| **owner_id**        | 1             |
-| **name**            | My Map        | only alphanumerical values                                                                     |
-| **is_inactive**     | false         |
-| **last_visit**      | 2023-04-04    |
-| **honors**          | 0             | 0 to infinity                                                                                  |
-| **visits**          | 0             | 0 to infinity                                                                                  |
-| **harvested**       | 0             | 0 to infinity, amount of plants harvested on this map                                          |
-| **version_date**    | 2023-04-04    | the date the snapshot for this version was taken                                               |
-| **creation_date**   | 2023-04-04    |
-| **deletion_date**   | 2023-04-04    |
-| **inactivity_date** | 2023-04-04    |
-| **zoom_factor**     | 100           | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000 |
-| **geo_data**        | NULL          | PostGis Geodata, location of the map                                                           |
+| **_Column name_** | **_Example_** | **_Description_**                                                                              |
+| :---------------- | :------------ | :--------------------------------------------------------------------------------------------- |
+| **id**            | 1             |
+| **owner_id**      | 1             |
+| **name**          | My Map        | only alphanumerical values                                                                     |
+| **is_inactive**   | false         |
+| **last_visit**    | 2023-04-04    |
+| **honors**        | 0             | 0 to infinity                                                                                  |
+| **visits**        | 0             | 0 to infinity                                                                                  |
+| **harvested**     | 0             | 0 to infinity, amount of plants harvested on this map                                          |
+| **privacy**       | protected     | privacy_option enum type                                                                       |
+| **description**   | Our first map |                                                                                                |
+| **creation_date** | 2023-04-04    |
+| **deletion_date** | 2023-04-04    |
+| **zoom_factor**   | 100           | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000 |
+| **location**      | NULL          | PostGis Geodata, location of the map                                                           |
+| **geometry**      | FILLME        | Layout of the map.                                                                             |
+
+ <!-- Not implemented | **version_date**    | 2023-04-04                                                                                     | the date the snapshot for this version was taken | -->
+ <!-- Not implemented | **inactivity_date** | 2023-04-04                                                                                     | -->
 
 ## `Layers`
 
@@ -110,6 +116,8 @@ Store relations between plants.
 | **rotation**      | 0             | the rotation of the plant on the map.        |
 | **scale_x**       | 1             | the x scale of the plant on the map.         |
 | **scale_y**       | 1             | the y scale of the plant on the map.         |
+| **add_date**      | 2023-04-04    | Date when the plant was planted              |
+| **remove_date**   | 2023-04-04    | Date when the plant was removed              |
 
 ## `Users`
 
@@ -155,6 +163,18 @@ Store relations between plants.
 | **times_gained**  | 1             | 0 to infinity                   |
 | **gained_date**   | {2023-04-10}  | one entry for every time gained |
 
+## `Base Layer Images`
+
+| **_Column name_** | **_Example_**                        | **_Description_** |
+| :---------------- | :----------------------------------- | :---------------- |
+| **id**            | 00000000-0000-0000-0000-000000000000 |                   |
+| **layer_id**      | 1                                    |
+| **path**          | background.jpg                       |
+| **rotation**      | 0                                    |                   |
+| **scale**         | 1                                    |                   |
+
+<!--
+Not implemnted yet, but want to keep for now for future issues.
 ## `IngredientLists`
 
 | **_Column name_** | **_Example_**                          | **_Description_**                                                              |
@@ -214,3 +234,6 @@ Many-to-many table to store relations between plants, genus, subfamily and famil
 | **relation_strength** | 2                          | strength of the relation, can be 0 to 3                                       |
 | **created_at**        | 2023-02-09 14:06:01.451028 | creation timestamp                                                            |
 | **updated_at**        | 2023-02-09 14:06:01.451028 | update timestamp                                                              |
+
+
+-->
