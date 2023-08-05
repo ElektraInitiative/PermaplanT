@@ -13,14 +13,14 @@ class LoginPage(AbstractPage):
         self.password_field = page.get_by_label("Password")
         self.username_field = page.get_by_label("Username or email")
 
-    def fill_username(self, username=os.getenv("E2E_USERNAME")):
+    def fill_username(self, username=os.getenv("E2E_USERNAME", "Adi")):
         """
         Fills the username field.
         Default to ENV variable.
         """
         self.username_field.fill(username)
 
-    def fill_password(self, password=os.getenv("E2E_PASSWORD")):
+    def fill_password(self, password=os.getenv("E2E_PASSWORD", "1234")):
         """
         Fills the password field.
         Default to ENV variable.

@@ -7,14 +7,15 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 
-load_dotenv(verbose=True)
+load_dotenv()
 
-dbname = str(os.getenv("POSTGRES_DB"))
-user = str(os.getenv("POSTGRES_USER"))
-password = str(os.getenv("POSTGRES_PASSWORD"))
-host = str(os.getenv("POSTGRES_HOST"))
-port = str(os.getenv("POSTGRES_PORT"))
+dbname = str(os.getenv("POSTGRES_DB", "permaplant"))
+user = str(os.getenv("POSTGRES_USER", "permaplant"))
+password = str(os.getenv("POSTGRES_PASSWORD", "permaplant"))
+host = urlparse(os.environ.get("DATABASE_URL", "postgres://permaplant:permaplant@db/permaplant")).hostname
+port = str(os.getenv("DATABASE_PORT", "5432"))
 
 
 def delete_maps_with_sut(dbname, user, password, host, port):

@@ -1,9 +1,5 @@
 # PermaplanT E2E tests
 
-The Jenkins pipeline executes exactly this [Dockerfile](Dockerfile) invoking [e2e.sh](e2e.sh).
-It only skips the clean_db.py step, since its not needed in CI.
-So running this setup locally should give you fast feedback.
-
 All commands/scripts in this README are executed from this folder (/e2e).
 
 ## Directory structure
@@ -17,10 +13,24 @@ All commands/scripts in this README are executed from this folder (/e2e).
 ├── test-results  Screenshots, videos, etc.
 ```
 
+## Environment Variables
+
+All environment variables are optional, since they have defaults.
+
+- `E2E_URL` (Default: localhost:5173)
+  The url where the app is running.
+
+- `E2E_USERNAME` (Default: Adi)
+  The username to login to permaplant.
+
+- `E2E_PASSWORD` (Default: 1234)
+  The password to login to permaplant.
+
 ## Quickstart
 
-Make sure you have a virtual environment or you are inside [.devcontainer](../.devcontainer/README.md).
-This will install all dependencies and run e2e tests with these [ENV](.env) variables.
+- Make sure your app is running.
+- Make sure the [ENV](#environment-variables) variables are set according to your desire.
+- Make sure you have a virtual environment as this will install all python dependencies.
 
 ```sh
 ./install.sh
@@ -48,20 +58,8 @@ docker build -t permaplant-e2e .
 docker run --network="host" permaplant-e2e ./e2e.sh
 ```
 
-If you have a more complicated network/database setup you might need to configure all env variables and use `docker run --network`.
-
-Lets say:
-
-- Your app/db are both inside a docker network called `plant`
-- The web apps container name is `rudolph`
-- The db is at postgres:5433 (for cleaning up after tests)
-
-```sh
-docker run --network="plant" -e TEST_URL=rudolph:5173 -e POSTGRES_HOST=postgres -e POSTGRES_PORT=5433 permaplant-e2e
-```
-
-There is probably plenty of other setups, we haven't tested all.
-Feel free to open an Issue/PR if something is not working.
+The Jenkins pipeline performs exactly these two steps.
+So running this dockerfile locally should mirror CI.
 
 ### Optional arguments
 

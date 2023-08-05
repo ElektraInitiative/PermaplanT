@@ -32,7 +32,7 @@ test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
 	pre-commit
 
 .PHONY: test-e2e
-test-e2e: ## End-to-End tests. Needs backend and frontend running.
+test-e2e: ## End-to-End tests. Needs install-e2e, backend and frontend running.
 	cd e2e && ./e2e.sh
 
 .PHONY: test-frontend

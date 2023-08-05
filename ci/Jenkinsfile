@@ -276,9 +276,9 @@ lock("${env.NODE_NAME}-exclusive") {
             checkout scm
             def e2eImage = docker.build("permaplant-e2e:build", "./e2e")
             try {
-                e2eImage.inside("-e CI=1 -e E2E_URL=http://pr.permaplant.net") {
+                e2eImage.inside("-e E2E_URL=http://pr.permaplant.net") {
                     wait_for_pr_db()
-                    sh "make test-e2e"
+                    sh 'make test-e2e'
                 }
             } catch (err) {
                 echo "Error occurred during the e2eImage.inside block: ${err}"
