@@ -107,7 +107,7 @@ The complete name of a plant should be displayed as follows:
 
 - If there is a common name, the common name appears first and should start with a capital letter (e.g., "tomato" becomes "Tomato").
 - If it is a plant name from the seed database, the name continues with hyphen `-` and the additional name.
-- This is followed by the unique name in italics, and finally the cultivar name in single quotes.
+- This is followed by the unique name in brackets, unique name as described above in `Rendering the Unique Name`.
 
 The general format is:
 
