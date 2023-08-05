@@ -120,10 +120,13 @@ Currently, the cultivar is a part of the unique name.
 
 For example:
 
-- "Italian broccoli (_Brassica oleracea italica_ 'Ramoso calabrese')"
-- "Italian broccoli (_Brassica oleracea italica_)"
-- "_Brassica oleracea italica_ 'Ramoso calabrese'"
-- "_Brassica oleracea italica_"
+- Italian broccoli - violett (_Brassica oleracea italica_ 'Ramoso calabrese')
+- Italian broccoli - violett (_Brassica oleracea italica_)
+- Italian broccoli (_Brassica oleracea italica_)
+- _Brassica oleracea italica_ 'Ramoso calabrese' - violett
+- _Brassica oleracea italica_ 'Ramoso calabrese'
+- _Brassica oleracea italica_ - violett
+- _Brassica oleracea italica_ 
 
 ### Rules
 
