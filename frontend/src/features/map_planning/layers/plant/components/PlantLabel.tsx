@@ -1,9 +1,10 @@
 import { PlantingDto } from '@/bindings/definitions';
 import { ExtendedPlantsSummary } from '@/features/map_planning/layers/plant/components/ExtendedPlantDisplay';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
+import { MapLabel } from '@/features/map_planning/utils/MapLabel';
 import Konva from 'konva';
 import { useEffect, useRef, useState } from 'react';
-import { Label, Tag, Text } from 'react-konva';
+import { Label } from 'react-konva';
 
 export interface PlantLabelProps {
   /** Contains plant name that will be displayed on the label. */
@@ -31,21 +32,12 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
   const labelOffsetY = (planting.height / 2) * planting.scaleY * 1.1;
 
   return (
-    <Label
+    <MapLabel
       listening={false}
       ref={labelRef}
       x={planting.x - labelOffsetX}
       y={planting.y + labelOffsetY}
-    >
-      {/* Colors are Gray 800 and Gray 50 from the DEFAULT tailwind theme.                             */}
-      {/* Unfortunately we can not directly import colors from tailwind.                               */}
-      {/* More details can be found in @/features/map_planning/layers/_frontend_only/util/Constants.ts */}
-      <Tag fill={'#2d2d2d'} />
-      <Text
-        text={`${plantsSummary.displayName.common_name}`}
-        fillEnabled={true}
-        fill={'#fefefefe'}
-      />
-    </Label>
+      content={`${plantsSummary.displayName.common_name}`}
+    />
   );
 };
