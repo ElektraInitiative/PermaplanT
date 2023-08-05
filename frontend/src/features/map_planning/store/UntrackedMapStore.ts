@@ -217,6 +217,15 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+  setTooltipText(content) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        tooltipContent: content,
+      },
+    }));
+  },
   /**
    * Allow the user to make measurement inputs on the base layer.
    */

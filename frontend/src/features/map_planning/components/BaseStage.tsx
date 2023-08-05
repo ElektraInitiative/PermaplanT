@@ -8,7 +8,7 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
-import { setTooltipPosition } from '../utils/Tooltip';
+import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
@@ -89,6 +89,8 @@ export const BaseStage = ({
     });
   });
 
+  const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
+
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
@@ -97,7 +99,7 @@ export const BaseStage = ({
     if (targetStage === null) return;
 
     if (tooltipRef.current) {
-      setTooltipPosition(tooltipRef.current, targetStage);
+      setTooltipPositionToMouseCursor();
     }
 
     const pointerVector = targetStage.getPointerPosition();
@@ -229,9 +231,14 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
-          <Label visible={false} ref={tooltipRef} scaleX={1 / stage.scale} scaleY={1 / stage.scale}>
+          <Label
+            visible={tooltipContent !== ''}
+            ref={tooltipRef}
+            scaleX={1 / stage.scale}
+            scaleY={1 / stage.scale}
+          >
             <Tag fill="black" />
-            <Text fill="white" fontSize={24} padding={6} />
+            <Text fill="white" fontSize={24} padding={6} text={tooltipContent} />
           </Label>
           <Rect
             x={selectionRectAttrs.x}

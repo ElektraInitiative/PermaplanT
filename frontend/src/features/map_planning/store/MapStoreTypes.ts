@@ -171,6 +171,7 @@ export interface UntrackedMapSlice {
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
   getSelectedLayerId: () => number | null;
+  setTooltipText: (content: string) => void;
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -227,6 +228,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     type_: LayerType.Base,
     map_id: -1,
   },
+  tooltipContent: '',
   layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
@@ -367,6 +369,8 @@ export type UntrackedMapState = {
     from: string;
     to: string;
   };
+  /** Storing the current content prevents constant rerenders of the tooltip component.  */
+  tooltipContent: string;
   layers: UntrackedLayers;
 };
 
