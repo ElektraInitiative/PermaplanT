@@ -31,13 +31,13 @@
 }
 
 .highlighted {
-    @apply border border-2 border-secondary-500;
+    @apply border border-4 border-secondary-200 dark:border-secondary-600;
 }
 
 input[type=radio].highlighted, input[type=date].highlighted {
-    @apply outline outline-2 outline-secondary-200 outline-offset-1;
+    @apply outline outline-2 outline-secondary-200 dark:outline-secondary-600 outline-offset-1;
 }
 
 .action-step {
-    @apply border border-2 border-secondary-500;
+    @apply border border-4 border-secondary-200 dark:border-secondary-600;
 }
