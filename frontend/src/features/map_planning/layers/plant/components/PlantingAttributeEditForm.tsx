@@ -13,17 +13,14 @@ import { z } from 'zod';
 export type PlantingAttributeEditFormData = Pick<PlantingDto, 'addDate' | 'removeDate'>;
 
 const PlantingAttributeEditFormSchema = z
+  // The 'empty' value for the API is undefined, so we need to transform the empty string to undefined
   .object({
-    addDate: z.nullable(z.string()).transform((value) => value || null),
-    removeDate: z.nullable(z.string()).transform((value) => value || null),
+    addDate: z.nullable(z.string()).transform((value) => value || undefined),
+    removeDate: z.nullable(z.string()).transform((value) => value || undefined),
   })
-  .refine(
-    (schema) =>
-      schema.removeDate === null || schema.addDate === null || schema.addDate < schema.removeDate,
-    {
-      path: ['dateRelation'],
-    },
-  );
+  .refine((schema) => !schema.removeDate || !schema.addDate || schema.addDate < schema.removeDate, {
+    path: ['dateRelation'],
+  });
 
 export type PlantingAttributeEditFormProps = {
   planting: PlantingDto;
@@ -43,9 +40,10 @@ export function PlantingAttributeEditForm({
   const { t } = useTranslation(['plantings']);
 
   const { register, handleSubmit, watch, formState } = useForm<PlantingAttributeEditFormData>({
+    // The 'empty' value for the native date input is an empty string, not null | undefined
     defaultValues: {
-      addDate: planting.addDate,
-      removeDate: planting.removeDate,
+      addDate: planting.addDate || '',
+      removeDate: planting.removeDate || '',
     },
     resolver: zodResolver(PlantingAttributeEditFormSchema),
   });
@@ -67,7 +65,7 @@ export function PlantingAttributeEditForm({
   return (
     <div className="flex flex-col gap-2 p-2">
       <h2>
-        <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
+        <ExtendedPlantsSummaryDisplayName plant={plant} />
       </h2>
 
       <div className="flex gap-2">

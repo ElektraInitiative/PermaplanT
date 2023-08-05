@@ -6,6 +6,7 @@ import {
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
+import { clearInvalidSelection } from './utils';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
@@ -195,6 +196,8 @@ export const createUntrackedMapSlice: StateCreator<
           fetchDate: date,
         },
       }));
+
+      clearInvalidSelection(get);
       return;
     }
 
@@ -216,6 +219,7 @@ export const createUntrackedMapSlice: StateCreator<
         },
       },
     }));
+    clearInvalidSelection(get);
   },
   setTooltipText(content) {
     set((state) => ({

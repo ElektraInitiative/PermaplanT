@@ -12,9 +12,9 @@ scenarios("features/search_plants.feature")
 
 @given(parsers.parse("I am on the {name} map page and I have selected the plant layer"))
 def logged_in(hp: HomePage, lp: LoginPage, mmp: MapManagementPage, mcp: MapCreatePage, mpp: MapPlantingPage, name):
-    page: HomePage = login(hp, lp)
+    login(hp, lp)
     # Create map
-    page = page.to_map_management_page()
+    hp.to_map_management_page()
     mmp.to_map_create_page()
     # Use workerid here to create separate maps for each process
     mcp.create_a_map(name + worker_id())

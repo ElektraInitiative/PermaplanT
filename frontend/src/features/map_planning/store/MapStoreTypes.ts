@@ -10,8 +10,13 @@ import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import * as uuid from 'uuid';
+import { StateCreator } from 'zustand';
 
 import Vector2d = Konva.Vector2d;
+
+export type MapCreator = StateCreator<TrackedMapSlice & UntrackedMapSlice, [], []>;
+export type SetFn = Parameters<MapCreator>[0];
+export type GetFn = Parameters<MapCreator>[1];
 
 /**
  * This type combines layers that are only available in the frontend
