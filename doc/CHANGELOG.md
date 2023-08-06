@@ -17,7 +17,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Improved the scraper: Fixed a bug and improved cleaning for German common names _(temmey)_
 - _()_
 - _()_
 - _()_
