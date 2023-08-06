@@ -1,10 +1,12 @@
 from playwright.sync_api import Page
+from e2e.pages.constants import E2E_URL
 from e2e.pages.abstract_page import AbstractPage
 
 
 class MapCreatePage(AbstractPage):
     """The map creation page of permaplant"""
 
+    URL: str = E2E_URL + "/create"
     TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
@@ -56,3 +58,4 @@ class MapCreatePage(AbstractPage):
         which navigate to the `MapManagementPage`
         """
         self.create_button.click()
+        self.page.wait_for_url("**/maps")

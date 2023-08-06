@@ -1,12 +1,12 @@
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
-
-from e2e.pages.constants import E2E_TIMEOUT
+from e2e.pages.constants import E2E_URL, E2E_TIMEOUT
 from e2e.pages.abstract_page import AbstractPage
 
 
 class MapPlantingPage(AbstractPage):
     """The planting page of a map on permaplant"""
 
+    URL: str = E2E_URL + "/maps/"
     TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
@@ -43,8 +43,8 @@ class MapPlantingPage(AbstractPage):
         try:
             tour_close = self.page.get_by_label("Close Tour")
             tour_close_confirmation = self.page.get_by_role("button", name="End")
-            tour_close.click(timeout=3000)
-            tour_close_confirmation.click(timeout=3000)
+            tour_close.click(timeout=1000)
+            tour_close_confirmation.click(timeout=1000)
         except PlaywrightTimeoutError:
             print("Tour was already closed")
 
@@ -56,9 +56,11 @@ class MapPlantingPage(AbstractPage):
         """Selects a plant by name from the search results."""
         self.page.get_by_test_id(plant_name + "-plant-search-result").click()
 
-    def click_on_canvas(self, x=300, y=300):
-        """Clicks on the canvas."""
-        self.page.locator("canvas:nth-child(6)").click(position={"x": x, "y": y})
+    def click_on_canvas_middle(self):
+        """Clicks in the middle of the canvas with a 300ms delay after."""
+        box = self.canvas.bounding_box()
+        self.page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+        self.page.wait_for_timeout(300)
 
     def click_delete(self):
         """Deletes a planting by clicks on the delete button."""
@@ -108,3 +110,4 @@ class MapPlantingPage(AbstractPage):
         navigates to the `MapManagementPage`.
         """
         self.map_management_button.click()
+        self.page.wait_for_url("**/maps")
