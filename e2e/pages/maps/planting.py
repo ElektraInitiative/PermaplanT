@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from datetime import datetime, timedelta
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
 from e2e.pages.abstract_page import AbstractPage
 from e2e.pages.constants import E2E_URL
@@ -48,6 +49,36 @@ class MapPlantingPage(AbstractPage):
     def check_plant_layer(self):
         """Ckecks the plant layer radio button."""
         self._plant_layer_radio.set_checked(True)
+
+    def change_map_date_by_days(self, delta_days: int):
+        """Changes the date by a given amount of days."""
+        day = datetime.today() + timedelta(days=delta_days)
+        self.map_date.fill(day.strftime("%Y-%d-%m"))
+
+    def change_plant_added_date_by_days(self, delta_days: int):
+        """Changes the date by a given amount of days."""
+        day = datetime.today() + timedelta(days=delta_days)
+        self.plant_added_date.fill(day.strftime("%Y-%m-%d"))
+
+    def change_plant_removed_date_by_days(self, delta_days: int):
+        """Changes the date by a given amount of days."""
+        day = datetime.today() + timedelta(days=delta_days)
+        self.plant_removed_date.fill(day.strftime("%Y-%m-%d"))
+
+    def change_map_date_by_days(self, delta_days: int):
+        """Changes the date by a given amount of days."""
+        day = datetime.today() + timedelta(days=delta_days)
+        self.map_date.fill(day.strftime("%Y-%d-%m"))
+
+    def change_plant_added_date_by_days(self, delta_days: int):
+        """Changes the date by a given amount of days."""
+        day = datetime.today() + timedelta(days=delta_days)
+        self.plant_added_date.fill(day.strftime("%Y-%m-%d"))
+
+    def change_plant_removed_date_by_days(self, delta_days: int):
+        """Changes the date by a given amount of days."""
+        day = datetime.today() + timedelta(days=delta_days)
+        self.plant_removed_date.fill(day.strftime("%Y-%m-%d"))
 
     def fill_plant_search(self, plantname):
         """Clicks the search icon and types plantname into the plant search."""
