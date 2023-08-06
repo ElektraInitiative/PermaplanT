@@ -1,3 +1,5 @@
+import cv2
+import numpy as np
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
 from e2e.pages.constants import E2E_URL
 from e2e.pages.abstract_page import AbstractPage
@@ -152,3 +154,73 @@ class MapPlantingPage(AbstractPage):
         """
         self.map_management_button.click()
         self.page.wait_for_url("**/maps")
+
+    def screenshot_canvas(self, timeout=500):
+        """
+        Takes a grayscale screenshot of the canvas.
+        Switches to the base layer for taking screenshots
+        and remembers the original set layer.
+        Has a 500ms delay before taking the screenshot, to ensure
+        everything is set and ready.
+
+        Parameters
+        ----------
+        timeout : int, optional, default=500
+        Timeout in ms before taking the screenshot.
+
+        Returns
+        -------
+        opencv2 image object of the screenshot
+        """
+        plant_layer_was_checked = False
+        if self.plant_layer_radio.is_checked():
+            plant_layer_was_checked = True
+        if not self.base_layer_radio.is_checked():
+            self.base_layer_radio.check()
+        self.page.wait_for_timeout(timeout)
+        buffer = self.canvas.screenshot()
+        self.screenshot = cv2.imdecode(
+            np.frombuffer(buffer, dtype=np.uint8), cv2.IMREAD_GRAYSCALE
+        )
+        if plant_layer_was_checked:
+            self.plant_layer_radio.check()
+        return self.screenshot
+
+    def assert_canvas_equals_last_screenshot(self, test_name, rtol=0, atol=5):
+        """
+        This method compares the last taken screenshot of the canvas
+        with a new one. You have to take a screenshot before invoking
+        this, otherwise unexpected will happen.
+        Use `mpp.canvas_screenshot()` before to take a screenshot.
+        If the comparison fails two .png images are saved.
+
+        Parameters
+        ----------
+        test_name : str
+        The name of the image files if the test fails.
+        Best to pass the test name from pytests fixture `request`.
+        atol : float, optional, default=5
+        Absolut tolerance.
+        rtol : float, optional, default=0
+        Relative tolerance.
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        `AssertionError` when the two screenshots are not equal.
+
+        Examples
+        --------
+        mpp.assert_canvas_equals_last_screenshot(request.node.name)
+        """
+        expected = self.screenshot
+        actual = self.screenshot_canvas()
+        try:
+            np.testing.assert_allclose(expected, actual, rtol=rtol, atol=atol)
+        except AssertionError as err:
+            cv2.imwrite(test_name + "-expected.png", expected)
+            cv2.imwrite(test_name + "-actual.png", actual)
+            raise err
