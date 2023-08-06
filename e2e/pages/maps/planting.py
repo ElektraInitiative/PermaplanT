@@ -11,6 +11,7 @@ class MapPlantingPage(AbstractPage):
 
     def __init__(self, page: Page):
         self.page = page
+        # Plant layer
         self.base_layer_radio = self.page.get_by_test_id("base-layer-radio")
         self.plant_layer_radio = self.page.get_by_test_id("plants-layer-radio")
         self.plant_search_icon = self.page.get_by_test_id("plant-search-icon")
@@ -22,6 +23,13 @@ class MapPlantingPage(AbstractPage):
         self.canvas = self.page.get_by_test_id("canvas")
         self.undo_button = self.page.get_by_test_id("undo-button")
         self.redo_button = self.page.get_by_test_id("redo-button")
+        # Base layer
+        self.background_select = self.page.get_by_test_id("baseBackgroundSelect")
+        self.background_button = page.get_by_role("button", name="Choose an image")
+        self.rotation_input = self.page.get_by_test_id("rotation-input")
+        self.scale_input = self.page.get_by_test_id("scale-input")
+
+    """ACTIONS"""
 
     def check_base_layer(self):
         """Checks the base layer radio button."""
@@ -33,8 +41,19 @@ class MapPlantingPage(AbstractPage):
 
     def fill_plant_search(self, plantname):
         """Clicks the search icon and types plantname into the plant search."""
-        self.plant_search_input.wait_for()
         self.plant_search_input.fill(plantname)
+
+    def fill_rotation(self, rotation):
+        """Fills the rotation input according to rotation."""
+        self.rotation_input.fill(rotation)
+        # Wait for input to be processed and saved
+        self.page.wait_for_timeout(2000)
+
+    def fill_scaling(self, scaling):
+        """Fills the scaling input according to scaling."""
+        self.scale_input.fill(scaling)
+        # Wait for input to be processed and saved
+        self.page.wait_for_timeout(2000)
 
     def close_tour(self):
         """
@@ -77,6 +96,18 @@ class MapPlantingPage(AbstractPage):
         """Clicks the redo button."""
         self.redo_button.click()
 
+    def click_background_image(self, name):
+        """
+        Selects the background image by name
+        and performs a short delay.
+        """
+        self.background_button.click()
+        self.page.get_by_text(name).click()
+        # Delay so image can be rendered on canvas
+        self.page.wait_for_timeout(2000)
+
+    """ASSERTIONS"""
+
     def expect_plant_to_be_planted(self, plant_name):
         """
         Confirms that the plant is on the canvas,
@@ -92,14 +123,27 @@ class MapPlantingPage(AbstractPage):
         expect(self.page.get_by_role("heading", name=plant_name)).not_to_be_visible()
 
     def expect_search_result_is_visible(self, result):
-        """Confirms that a search result is visible"""
+        """Confirms that a search result is visible."""
         expect(
             self.page.get_by_test_id(result + "-plant-search-result")
         ).to_be_visible()
 
     def expect_no_plants_found_text_is_visible(self):
-        """Confirms that `no plants are found` is present"""
+        """Confirms that `no plants are found` is present."""
         expect(self.page.get_by_test_id("plant-search-results-empty")).to_be_visible()
+
+    def expect_background_image(self, name):
+        expect(self.background_select).to_have_value(name)
+
+    def expect_rotation_to_have_value(self, val):
+        """Expects that the rotation is properly set."""
+        expect(self.rotation_input).to_have_value(val)
+
+    def expect_scaling_to_have_value(self, val):
+        """Expects that the scaling is properly set."""
+        expect(self.scale_input).to_have_value(val)
+
+    """NAVIGATION"""
 
     def to_map_management_page(self):
         """
