@@ -213,7 +213,7 @@ export const BaseStage = ({
   };
 
   return (
-    <div className="h-full w-full overflow-hidden" ref={containerRef}>
+    <div className="h-full w-full overflow-hidden" data-testid="canvas" ref={containerRef}>
       <Stage
         ref={stageRef}
         draggable={draggable}
