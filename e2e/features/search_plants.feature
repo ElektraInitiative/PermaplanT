@@ -14,5 +14,5 @@ Feature: Searching for Plants
 			| popco   | corn poppy Papaver rhoeas   |
 
   Scenario: No match was found
-    When No match can be found for xyxyz
-    Then A message will be displayed that nothing was found
+    When I type xyxyz into the search box
+    Then no match can be found and a text is displayed

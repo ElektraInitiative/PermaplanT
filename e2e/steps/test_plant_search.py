@@ -6,6 +6,7 @@ from e2e.pages.maps.planting import MapPlantingPage
 from e2e.pages.maps.management import MapManagementPage
 from pytest_bdd import scenarios, given, when, then, parsers
 
+
 scenarios("features/search_plants.feature")
 
 
@@ -38,12 +39,12 @@ def results_should_be_shown(mpp: MapPlantingPage, result):
 # Scenario 3: No match was found
 
 
-@when(parsers.parse("No match can be found for {input}"))
+@when(parsers.parse("I type {input} into the search box"))
 def match_not_found(mpp: MapPlantingPage, input):
     mpp.click_search_icon()
     mpp.fill_plant_search(input)
 
 
-@then(parsers.parse("A message will be displayed that nothing was found"))
+@then(parsers.parse("no match can be found and a text is displayed"))
 def info_nothing_found(mpp: MapPlantingPage):
     mpp.expect_no_plants_found_text_is_visible()
