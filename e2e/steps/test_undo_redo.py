@@ -29,28 +29,28 @@ def plant_something(mpp: MapPlantingPage):
     plant_a_tomato(mpp)
 
 
-@when("I press undo")
-def press_undo(mpp: MapPlantingPage):
+@when("I click undo")
+def click_undo(mpp: MapPlantingPage):
     mpp.click_undo()
-    mpp.click_on_canvas()
 
 
 @then("my plant is gone")
 def plant_is_gone(mpp: MapPlantingPage):
+    mpp.click_on_canvas()
     mpp.expect_plant_to_not_be_planted("Tomato (Solanum lycopersicum)")
 
 
 # Scenario 2: Successful redo
 
 
-@when("I accidentally pressed undo after planting one plant")
+@when("I accidentally clicked undo after planting one plant")
 def accidental_undo(mpp: MapPlantingPage):
     plant_a_tomato(mpp)
     mpp.click_undo()
 
 
-@when("I press redo to get my plant back")
-def press_redo(mpp: MapPlantingPage):
+@when("I click redo to get my plant back")
+def click_redo(mpp: MapPlantingPage):
     mpp.click_redo()
     mpp.click_on_canvas()
 
