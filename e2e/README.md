@@ -16,14 +16,15 @@ All commands/scripts in this README are executed from this folder (/e2e).
 ## Environment Variables
 
 All environment variables are optional, since they have defaults.
+For type details and defaults see [conftest.py](conftest.py)
 
-- `E2E_URL` (Default: localhost:5173)
+- `E2E_URL`
   The url where the app is running.
 
-- `E2E_USERNAME` (Default: Adi)
+- `E2E_USERNAME`
   The username to login to permaplant.
 
-- `E2E_PASSWORD` (Default: 1234)
+- `E2E_PASSWORD`
   The password to login to permaplant.
 
 ## Quickstart

@@ -1,5 +1,6 @@
 from playwright.sync_api import Page, expect
-from ..abstract_page import AbstractPage
+from e2e.pages.constants import E2E_TIMEOUT
+from e2e.pages.abstract_page import AbstractPage
 
 
 class MapManagementPage(AbstractPage):
@@ -27,4 +28,6 @@ class MapManagementPage(AbstractPage):
 
     def expect_mapname_is_visible(self, mapname: str):
         """Checks if the given map exists on the map management screen"""
-        expect(self.page.get_by_text(mapname, exact=True)).to_be_visible()
+        expect(self.page.get_by_text(mapname, exact=True)).to_be_visible(
+            timeout=E2E_TIMEOUT
+        )

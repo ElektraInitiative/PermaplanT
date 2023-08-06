@@ -1,6 +1,6 @@
 import os
 from playwright.sync_api import Page
-from .abstract_page import AbstractPage
+from e2e.pages.abstract_page import AbstractPage
 
 
 class LoginPage(AbstractPage):

@@ -1,5 +1,6 @@
 import os
 import pytest
+from dotenv import load_dotenv
 from playwright.sync_api import Page
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
@@ -7,6 +8,13 @@ from e2e.pages.maps.management import MapManagementPage
 from e2e.pages.maps.create import MapCreatePage
 from e2e.pages.maps.edit import MapEditPage
 from e2e.pages.maps.planting import MapPlantingPage
+
+load_dotenv()
+
+
+E2E_URL: str = os.getenv("E2E_URL", "localhost:5173")
+E2E_USERNAME: str = os.getenv("E2E_USERNAME", "Adi")
+E2E_PASSWORD: str = os.getenv("E2E_PASSWORD", "1234")
 
 
 """
