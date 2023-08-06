@@ -2,28 +2,96 @@ import fs from "fs";
 import { parse as json2csv } from "json2csv";
 import csv from "csvtojson";
 import permapeopleColumnMapping from "./helpers/column_mapping_permapeople.js";
+import axios from "axios";
+import axiosRetry from "axios-retry";
 import {
   sanitizeColumnNames,
   getSoilPH,
   getHeightEnumTyp,
   getSpreadEnumTyp,
-  fetchGermanName,
 } from "./helpers/helpers.js";
 
 /**
- * Fetches the German names for the plants from Wikidata API
+ * Defines the amount of retries we do, if axios encounters errors during a HTTP GET Request.
+ * Increse Delay if we encounter error to prevent 429 Errors.
  */
-const fetchGermanNames = async (plants) => {
-  return Promise.all(
-    plants.map(async (plant) => {
-      if (plant["common_name_de"]) {
-        return plant;
-      }
-      const germanName = await fetchGermanName(plant["unique_name"]);
-      plant["common_name_de"] = germanName;
-      return plant;
-    })
-  );
+axiosRetry(axios, {
+  retries: 5, // number of retries
+  retryDelay: (retryCount) => {
+    return retryCount * 1000; // time interval between retries
+  },
+});
+
+/**
+ * Fetches the German name of the plant from wikidata API.
+ * Sets the 'common_name_de of every plant in the array.
+ *
+ * @param {*} plants[]
+ */
+const fetchDataForPlantsArray = async (plants) => {
+  let GermanNamesFound = 0;
+  console.log("[INFO] Start fetching German common Names!");
+  for (const plant of plants) {
+    const unique_name = plant["unique_name"];
+    if (unique_name == "") {
+      continue;
+    }
+
+    try {
+      await axios
+        .get(
+          `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${unique_name}&language=en&format=json`
+        )
+        .then((response) => {
+          const data = response.data;
+          const results = data.search;
+
+          if (!results || results.length === 0) {
+            return null;
+          }
+
+          const result = results[0];
+          const id = result.id;
+
+          axios
+            .get(
+              `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${id}&languages=de&format=json`
+            )
+            .then((response) => {
+              const data = response.data;
+              const entities = data.entities;
+              const entity = entities[id];
+              const dewiki = entity["sitelinks"]["dewiki"];
+
+              if (dewiki) {
+                const title = dewiki.title;
+                let germanName = title.replace(/ \(.*\)/, "");
+                germanName = germanName.replace('"', "");
+
+                germanName = germanName.replace(unique_name, "");
+                germanName = germanName.trim();
+                if (!germanName || germanName === "true") {
+                  return null;
+                }
+                GermanNamesFound++;
+                //console.log(`${unique_name} is a ${germanName}`)
+                plant["common_name_de"] = germanName;
+              }
+            })
+            .catch((error) => {
+              // The second request fails
+              console.error("2. Request got an error " + error);
+            });
+        })
+        .catch((error) => {
+          // The first request fails
+          console.error("1. Request got an error " + error);
+        });
+    } catch (error) {
+      console.error("Error", error.message);
+    }
+  }
+  console.log(`[INFO] Done! Found ${GermanNamesFound} German Names!`);
 };
 
 /**
@@ -36,10 +104,7 @@ const unifyValueFormat = (plants, columnMapping) => {
   const mappedColumns = Object.keys(columnMapping).filter(
     (key) => columnMapping[key] !== null
   );
-  //console.log(mappedColumns)
   plants.forEach((plant) => {
-    //console.log(plant)
-
     mappedColumns.forEach((column) => {
       if (plant[column]) {
         if (!!columnMapping[column]["valueMapping"]) {
@@ -301,14 +366,18 @@ async function writePlantsToCsv(plants) {
     fs.mkdirSync("data");
   }
 
+  //const PlantsNew = plants.slice(0, 100);
+  //let updatedPlants = unifyValueFormat(PlantsNew, permapeopleColumnMapping);
+
   let updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
 
-  updatedPlants = await fetchGermanNames(updatedPlants);
+  await fetchDataForPlantsArray(updatedPlants);
 
   console.log("[INFO] Writing merged dataset to CSV file...");
   console.log("[INFO] Total number of plants: ", updatedPlants.length);
 
   const csv = json2csv(updatedPlants);
+  //fs.writeFileSync("data/mergedDatasets2.csv", csv);
   fs.writeFileSync("data/mergedDatasets.csv", csv);
 
   return updatedPlants;
