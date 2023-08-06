@@ -26,6 +26,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Fix a bug where an 'empty' but visible selection box would be left behind _(Paul)_
 - Fix a bug where seemingly random date change actions would be fired _(Paul)_
+- Fix dimensions of canvas _(Paul)_
 - _()_
 - _()_
 - _()_
@@ -53,8 +54,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- E2E: Improve documentation/usage #784 _(4ydan)_
 - _()_
 - _()_
 - _()_
