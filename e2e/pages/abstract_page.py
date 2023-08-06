@@ -22,6 +22,7 @@ class AbstractPage(ABC):
             }
         )
         self.dont_load_images()
+        self.page.set_default_timeout(timeout=E2E_TIMEOUT)
         response = self.page.goto(self.URL)
         assert response.status == 200
         self.page.wait_for_timeout(1000)
@@ -47,16 +48,16 @@ class AbstractPage(ABC):
     def verify(self):
         """Verifies if the correct page is active by its page title."""
         # Wait for navigation to complete
-        expect(self.page).to_have_title(self.TITLE, timeout=E2E_TIMEOUT)
-        expect(self.page).to_have_url(re.compile(".*" + self.URL), timeout=E2E_TIMEOUT)
+        expect(self.page).to_have_title(self.TITLE)
+        expect(self.page).to_have_url(re.compile(".*" + self.URL))
 
     def expect_alert_is_visible(self):
         """Checks if an alert is visible."""
-        expect(self.page.get_by_role("alert")).to_be_visible(timeout=E2E_TIMEOUT)
+        expect(self.page.get_by_role("alert")).to_be_visible()
 
     def expect_alert_is_hidden(self):
         """Checks if an alert is not invisible."""
-        expect(self.page.get_by_role("alert")).to_be_hidden(timeout=E2E_TIMEOUT)
+        expect(self.page.get_by_role("alert")).to_be_hidden()
 
     def close_alert(self):
         """Closes the alert."""
