@@ -1,4 +1,5 @@
-Feature: PermaplanT Timeline
+Feature: Planting Timeline
+    As a user I want to be able to track timelines of my plants
 
     Background:
         Given I am on the SUTTimeline map page and a planting is added to the map

@@ -1,4 +1,5 @@
-Feature: PermaplanT undo/redo
+Feature: Planting Undo/Redo
+    As a user I want to be able to undo and redo actions
 
     Background:
     Given I am on the SUTUndoRedo map page and I have selected the plant layer
