@@ -12,11 +12,6 @@ from e2e.pages.maps.planting import MapPlantingPage
 load_dotenv()
 
 
-E2E_URL: str = os.getenv("E2E_URL", "localhost:5173")
-E2E_USERNAME: str = os.getenv("E2E_USERNAME", "Adi")
-E2E_PASSWORD: str = os.getenv("E2E_PASSWORD", "1234")
-
-
 """
 Commonly used workflows and util
 """
@@ -49,6 +44,7 @@ def login(hp: HomePage, lp: LoginPage) -> HomePage:
     hp.load()
     hp.login_button_is_visible()
     hp.click_login_button()
+    lp.verify()
     lp.fill_username()
     lp.fill_password()
     lp.click_sign_in()
@@ -75,6 +71,7 @@ def prepare_planting(
     """
     login(hp, lp)
     hp.to_map_management_page()
+    mmp.verify()
     mmp.to_map_create_page()
     mcp.create_a_map(mapname)
     mmp.to_map_planting_page(mapname)
@@ -92,9 +89,9 @@ def plant_a_tomato(mpp: MapPlantingPage) -> MapPlantingPage:
     mpp.click_search_icon()
     mpp.fill_plant_search("tomato")
     mpp.click_plant_from_search_results("tomato Solanum lycopersicum")
-    mpp.click_on_canvas()
+    mpp.click_on_canvas_middle()
     # Click a second time to select the plant.
-    mpp.click_on_canvas()
+    mpp.click_on_canvas_middle()
     mpp.expect_plant_to_be_planted("Tomato (Solanum lycopersicum)")
     return mpp
 

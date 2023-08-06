@@ -6,6 +6,7 @@ from e2e.pages.maps.edit import MapEditPage
 from e2e.pages.maps.management import MapManagementPage
 from pytest_bdd import scenarios, given, when, then, parsers
 
+
 scenarios("features/map_creation.feature")
 
 

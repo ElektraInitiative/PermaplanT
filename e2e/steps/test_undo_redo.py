@@ -6,6 +6,7 @@ from e2e.pages.maps.planting import MapPlantingPage
 from e2e.pages.maps.management import MapManagementPage
 from pytest_bdd import scenarios, given, when, then, parsers
 
+
 scenarios("features/undo_redo.feature")
 
 
@@ -36,7 +37,7 @@ def click_undo(mpp: MapPlantingPage):
 
 @then("my plant is gone")
 def plant_is_gone(mpp: MapPlantingPage):
-    mpp.click_on_canvas()
+    mpp.click_on_canvas_middle()
     mpp.expect_plant_to_not_be_planted("Tomato (Solanum lycopersicum)")
 
 
@@ -52,7 +53,7 @@ def accidental_undo(mpp: MapPlantingPage):
 @when("I click redo to get my plant back")
 def click_redo(mpp: MapPlantingPage):
     mpp.click_redo()
-    mpp.click_on_canvas()
+    mpp.click_on_canvas_middle()
 
 
 @then("I can see my plant on the canvas again")

@@ -30,9 +30,9 @@ def plant_something(mpp: MapPlantingPage):
     mpp.click_search_icon()
     mpp.fill_plant_search("tomato")
     mpp.click_plant_from_search_results("tomato Solanum lycopersicum")
-    mpp.click_on_canvas()
+    mpp.click_on_canvas_middle()
     # Click a second time to leave the placing mode and select the plant.
-    mpp.click_on_canvas()
+    mpp.click_on_canvas_middle()
     mpp.expect_plant_to_be_planted("Tomato (Solanum lycopersicum)")
 
 
@@ -43,5 +43,5 @@ def planting_persists(mmp: MapManagementPage, mpp: MapPlantingPage, name):
     mpp.to_map_management_page()
     mmp.to_map_planting_page(name + worker_id())
     mpp.check_plant_layer()
-    mpp.click_on_canvas()
+    mpp.click_on_canvas_middle()
     mpp.expect_plant_to_be_planted("Tomato (Solanum lycopersicum)")
