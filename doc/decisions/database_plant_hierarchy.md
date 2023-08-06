@@ -96,10 +96,10 @@ It's similar to `One table for taxonomy ranks and one for concrete plants` We ar
 Pros:
 
 - Inserting new plants is easy. We only need to implement minor backend changes.
+- Properties overrides can be done on every level.
 
 Cons:
 
-- Attribute overrides can only be done on the variety or cultivar level.
 - More complex insert and update logic.
   When a species/variety is added or updated, the columns can't just be set.
   First, we need to make sure all higher levels are in the table.
