@@ -1,5 +1,5 @@
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
-from e2e.pages.constants import E2E_URL, E2E_TIMEOUT
+from e2e.pages.constants import E2E_URL
 from e2e.pages.abstract_page import AbstractPage
 
 
@@ -20,6 +20,8 @@ class MapPlantingPage(AbstractPage):
         )
         self.map_management_button = self.page.get_by_role("button", name="Maps")
         self.canvas = self.page.get_by_test_id("canvas")
+        self.undo_button = self.page.get_by_test_id("undo-button")
+        self.redo_button = self.page.get_by_test_id("redo-button")
 
     def check_base_layer(self):
         """Checks the base layer radio button."""
@@ -31,6 +33,7 @@ class MapPlantingPage(AbstractPage):
 
     def fill_plant_search(self, plantname):
         """Clicks the search icon and types plantname into the plant search."""
+        self.plant_search_input.wait_for()
         self.plant_search_input.fill(plantname)
 
     def close_tour(self):
@@ -42,9 +45,9 @@ class MapPlantingPage(AbstractPage):
         """
         try:
             tour_close = self.page.get_by_label("Close Tour")
+            tour_close.click(timeout=7000)
             tour_close_confirmation = self.page.get_by_role("button", name="End")
-            tour_close.click(timeout=1000)
-            tour_close_confirmation.click(timeout=1000)
+            tour_close_confirmation.click(timeout=7000)
         except PlaywrightTimeoutError:
             print("Tour was already closed")
 
@@ -57,7 +60,7 @@ class MapPlantingPage(AbstractPage):
         self.page.get_by_test_id(plant_name + "-plant-search-result").click()
 
     def click_on_canvas_middle(self):
-        """Clicks in the middle of the canvas with a 300ms delay after."""
+        """Clicks in the middle of the canvas with a 300ms delay."""
         box = self.canvas.bounding_box()
         self.page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
         self.page.wait_for_timeout(300)
@@ -68,29 +71,25 @@ class MapPlantingPage(AbstractPage):
 
     def click_undo(self):
         """Clicks the undo button."""
-        self.page.get_by_test_id("undo-button").click()
+        self.undo_button.click()
 
     def click_redo(self):
         """Clicks the redo button."""
-        self.page.get_by_test_id("redo-button").click()
+        self.redo_button.click()
 
     def expect_plant_to_be_planted(self, plant_name):
         """
         Confirms that the plant is on the canvas,
         by looking at the left side bar.
         """
-        expect(self.page.get_by_role("heading", name=plant_name)).to_be_visible(
-            timeout=E2E_TIMEOUT
-        )
+        expect(self.page.get_by_role("heading", name=plant_name)).to_be_visible()
 
     def expect_plant_to_not_be_planted(self, plant_name):
         """
         Confirms that the plant is NOT on the canvas,
         by looking at the left side bar.
         """
-        expect(self.page.get_by_role("heading", name=plant_name)).not_to_be_visible(
-            timeout=E2E_TIMEOUT
-        )
+        expect(self.page.get_by_role("heading", name=plant_name)).not_to_be_visible()
 
     def expect_search_result_is_visible(self, result):
         """Confirms that a search result is visible"""
@@ -100,9 +99,7 @@ class MapPlantingPage(AbstractPage):
 
     def expect_no_plants_found_text_is_visible(self):
         """Confirms that `no plants are found` is present"""
-        expect(self.page.get_by_test_id("plant-search-results-empty")).to_be_visible(
-            timeout=E2E_TIMEOUT
-        )
+        expect(self.page.get_by_test_id("plant-search-results-empty")).to_be_visible()
 
     def to_map_management_page(self):
         """

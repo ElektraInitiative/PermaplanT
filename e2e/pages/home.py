@@ -1,6 +1,6 @@
 from playwright.sync_api import Page, expect
 
-from e2e.pages.constants import E2E_URL, E2E_TIMEOUT
+from e2e.pages.constants import E2E_URL
 from e2e.pages.abstract_page import AbstractPage
 
 
@@ -19,7 +19,7 @@ class HomePage(AbstractPage):
         self.map_management_button = page.get_by_role("button", name="Maps")
 
     def login_button_is_visible(self):
-        expect(self.login_button).to_be_visible(timeout=E2E_TIMEOUT)
+        expect(self.login_button).to_be_visible()
 
     def click_login_button(self):
         """
@@ -33,7 +33,7 @@ class HomePage(AbstractPage):
         self.page.wait_for_url("**/")
 
     def hello_message_is_visible(self):
-        expect(self.hello_msg).to_be_visible(timeout=E2E_TIMEOUT)
+        expect(self.hello_msg).to_be_visible()
 
     def to_map_management_page(self):
         """

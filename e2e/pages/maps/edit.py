@@ -16,6 +16,7 @@ class MapEditPage(AbstractPage):
         self.longitude = page.get_by_label("Longitude")
         self.latitude = page.get_by_label("Latitude")
         self.save_button = page.get_by_role("button", name="Save")
+        self.privacy = self.page.locator("select")
 
     def fill_name(self, name):
         """Fills out the map name field."""
@@ -23,7 +24,7 @@ class MapEditPage(AbstractPage):
 
     def select_privacy(self, privacy: str):
         """Selects the maps privacy."""
-        self.page.locator("select").select_option(privacy)
+        self.privacy.select_option(privacy)
 
     def fill_description(self, description: str):
         """Fills out the map description field."""
