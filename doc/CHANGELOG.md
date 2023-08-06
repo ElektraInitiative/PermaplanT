@@ -50,7 +50,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- E2E: Add undo/redo e2e tests # _(4ydan)_
 - _()_
 - _()_
 - _()_

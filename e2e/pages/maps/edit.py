@@ -1,10 +1,13 @@
 from playwright.sync_api import Page
-from ..abstract_page import AbstractPage
+from e2e.pages.constants import E2E_URL
+from e2e.pages.abstract_page import AbstractPage
 
 
 class MapEditPage(AbstractPage):
     """The map editing page of permaplant"""
-    TITLE: str = 'PermaplanT'
+
+    URL: str = E2E_URL + "/edits"
+    TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
         self.page = page
@@ -13,6 +16,7 @@ class MapEditPage(AbstractPage):
         self.longitude = page.get_by_label("Longitude")
         self.latitude = page.get_by_label("Latitude")
         self.save_button = page.get_by_role("button", name="Save")
+        self.privacy = self.page.locator("select")
 
     def fill_name(self, name):
         """Fills out the map name field."""
@@ -20,7 +24,7 @@ class MapEditPage(AbstractPage):
 
     def select_privacy(self, privacy: str):
         """Selects the maps privacy."""
-        self.page.locator("select").select_option(privacy)
+        self.privacy.select_option(privacy)
 
     def fill_description(self, description: str):
         """Fills out the map description field."""
@@ -40,3 +44,4 @@ class MapEditPage(AbstractPage):
         navigates to the `MapManagementPage`.
         """
         self.save_button.click()
+        self.page.wait_for_url("**/maps")

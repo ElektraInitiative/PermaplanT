@@ -141,6 +141,7 @@ export const Map = ({ layers }: MapProps) => {
                   onClick={() => undo()}
                   title={t('undoRedo:undo_tooltip')}
                   data-tourid="undo"
+                  data-testid="undo-button"
                 >
                   <UndoIcon></UndoIcon>
                 </IconButton>
@@ -148,6 +149,7 @@ export const Map = ({ layers }: MapProps) => {
                   className="m-2 h-8 w-8 border border-neutral-500 p-1"
                   onClick={() => redo()}
                   title={t('undoRedo:redo_tooltip')}
+                  data-testid="redo-button"
                 >
                   <RedoIcon></RedoIcon>
                 </IconButton>

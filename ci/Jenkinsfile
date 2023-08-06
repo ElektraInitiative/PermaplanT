@@ -97,6 +97,9 @@ def runDockerPreCommit() {
                 sh "pre-commit run mixed-line-ending -a"
                 sh "pre-commit run trailing-whitespace -a"
                 sh "pre-commit run prettier -a"
+                sh "pre-commit run black -a"
+                sh "pre-commit run flake8 -a"
+                sh "pre-commit run mypy -a"
             }
         }
     }
@@ -276,7 +279,7 @@ lock("${env.NODE_NAME}-exclusive") {
             checkout scm
             def e2eImage = docker.build("permaplant-e2e:build", "./e2e")
             try {
-                e2eImage.inside("-e E2E_URL=http://pr.permaplant.net") {
+                e2eImage.inside("-e E2E_URL=https://pr.permaplant.net") {
                     wait_for_pr_db()
                     sh 'make test-e2e'
                 }

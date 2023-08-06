@@ -1,10 +1,13 @@
 from playwright.sync_api import Page
-from ..abstract_page import AbstractPage
+from e2e.pages.constants import E2E_URL
+from e2e.pages.abstract_page import AbstractPage
 
 
 class MapCreatePage(AbstractPage):
     """The map creation page of permaplant"""
-    TITLE: str = 'PermaplanT'
+
+    URL: str = E2E_URL + "/create"
+    TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
         self.page = page
@@ -14,7 +17,14 @@ class MapCreatePage(AbstractPage):
         self.latitude = page.get_by_placeholder("Latitude")
         self.create_button = page.get_by_role("button", name="Create")
 
-    def create_a_map(self, mapname, privacy=None, description="SUTDescription", latitude="1", longitude="1"):
+    def create_a_map(
+        self,
+        mapname,
+        privacy=None,
+        description="SUTDescription",
+        latitude="1",
+        longitude="1",
+    ):
         """
         Helper function to create a map
         Fills out fields and clicks create at the end
@@ -48,3 +58,4 @@ class MapCreatePage(AbstractPage):
         which navigate to the `MapManagementPage`
         """
         self.create_button.click()
+        self.page.wait_for_url("**/maps")
