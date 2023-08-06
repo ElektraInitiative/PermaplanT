@@ -16,18 +16,18 @@ Commonly used workflows and util
 """The number of retries"""
 
 
-def suffix():
+def worker_id():
     """
-    Returns a suffix consisting of "WORKERID-TIMESTAMP".
+    Returns the worker_id as string
     The workerid is given by pytest-xdist. Defaults to "" when not parallel.
     """
-    suffix = ""
+    worker_id = ""
 
     if "PYTEST_XDIST_WORKER" in os.environ:
         # Get the value of the environment variable
-        suffix += "-" + os.environ["PYTEST_XDIST_WORKER"]
+        worker_id += "-" + os.environ["PYTEST_XDIST_WORKER"]
 
-    return suffix
+    return worker_id
 
 
 def login(hp: HomePage, lp: LoginPage) -> HomePage:

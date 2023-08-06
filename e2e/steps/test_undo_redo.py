@@ -1,4 +1,4 @@
-from e2e.conftest import prepare_planting, plant_a_tomato, suffix
+from e2e.conftest import prepare_planting, plant_a_tomato, worker_id
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from e2e.pages.maps.create import MapCreatePage
@@ -18,7 +18,7 @@ def on_planting_screen(
     mpp: MapPlantingPage,
     name,
 ):
-    prepare_planting(hp, lp, mmp, mcp, mpp, name + suffix())
+    prepare_planting(hp, lp, mmp, mcp, mpp, name + worker_id())
 
 
 # Scenario 1: Successful undo

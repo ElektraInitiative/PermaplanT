@@ -1,4 +1,4 @@
-from e2e.conftest import prepare_planting, suffix
+from e2e.conftest import prepare_planting, worker_id
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from e2e.pages.maps.create import MapCreatePage
@@ -19,7 +19,7 @@ def on_planting_screen(
     mpp: MapPlantingPage,
     name,
 ):
-    prepare_planting(hp, lp, mmp, mcp, mpp, name + suffix())
+    prepare_planting(hp, lp, mmp, mcp, mpp, name + worker_id())
 
 
 # Scenario 1: Plant something on the map
@@ -41,7 +41,7 @@ def plant_something(mpp: MapPlantingPage):
 )
 def planting_persists(mmp: MapManagementPage, mpp: MapPlantingPage, name):
     mpp.to_map_management_page()
-    mmp.to_map_planting_page(name + suffix())
+    mmp.to_map_planting_page(name + worker_id())
     mpp.check_plant_layer()
     mpp.click_on_canvas()
     mpp.expect_plant_to_be_planted("Tomato (Solanum lycopersicum)")
