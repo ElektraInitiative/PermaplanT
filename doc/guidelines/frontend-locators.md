@@ -1,9 +1,9 @@
-# Frontend Locators Guidelines
+# Frontend Locators
 
 These guidelines will help you write resilient and user-centric locators that can be utilized robustly in E2E tests.
 They are mostly inspired by [Playwrights Documentation](https://playwright.dev/docs/locators).
 
-## 1. What are Locators
+## What are Locators
 
 Frontend [locators](https://playwright.dev/docs/locators) are essential elements in web development that enable developers and automated testing tools to identify and interact with specific elements on a web page.
 
@@ -115,7 +115,7 @@ It shows which locators actionable elements usually should have.
 - keys and shortcuts: **text or role**
 - upload files and focus elements: **label**
 
-## 2. User facing or resilience?
+## User facing or resilient?
 
 When chosing the right locator it is important to ask yourself one question.
 Do we want to test what the user perceives?
