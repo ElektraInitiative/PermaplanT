@@ -74,7 +74,6 @@ const fetchDataForPlantsArray = async (plants) => {
                   return null;
                 }
                 GermanNamesFound++;
-                //console.log(`${unique_name} is a ${germanName}`)
                 plant["common_name_de"] = germanName;
               }
             })
@@ -366,9 +365,6 @@ async function writePlantsToCsv(plants) {
     fs.mkdirSync("data");
   }
 
-  //const PlantsNew = plants.slice(0, 100);
-  //let updatedPlants = unifyValueFormat(PlantsNew, permapeopleColumnMapping);
-
   let updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
 
   await fetchDataForPlantsArray(updatedPlants);
@@ -377,7 +373,6 @@ async function writePlantsToCsv(plants) {
   console.log("[INFO] Total number of plants: ", updatedPlants.length);
 
   const csv = json2csv(updatedPlants);
-  //fs.writeFileSync("data/mergedDatasets2.csv", csv);
   fs.writeFileSync("data/mergedDatasets.csv", csv);
 
   return updatedPlants;
