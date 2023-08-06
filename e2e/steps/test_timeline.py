@@ -10,7 +10,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 scenarios("features/timeline.feature")
 
 
-@given(parsers.parse("I am on the {name} map page and a planting is added to the map"))
+@given(parsers.parse("I am on the {name} map page and a plant is added to the map"))
 def on_planting_screen(
     hp: HomePage,
     lp: LoginPage,
@@ -39,7 +39,7 @@ def on_planting_screen(
 
 
 @when("I change the map date to tomorrow")
-def change_map_to_tomorrow(mpp: MapPlantingPage):
+def change_map_date_to_tomorrow(mpp: MapPlantingPage):
     mpp.change_map_date_by_days(1)
 
 
