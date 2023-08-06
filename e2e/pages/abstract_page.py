@@ -23,6 +23,7 @@ class AbstractPage(ABC):
         )
         self.dont_load_images()
         self.page.set_default_timeout(timeout=E2E_TIMEOUT)
+        expect.set_options(timeout=E2E_TIMEOUT)
         response = self.page.goto(self.URL)
         assert response.status == 200
         self.page.wait_for_timeout(1000)
