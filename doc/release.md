@@ -2,11 +2,12 @@
 
 This document describes what needs to be done for a release.
 
-- [ ] manually test dev.permaplant.net according to protocols
-- [ ] run external link check (book.toml: follow-web-links)
-- [ ] npm audit, fix security problems
+- [ ] run external link check (change follow-web-links in book.toml and do `mdbook build`)
+- [ ] fix security problems: `npm audit fix`
 - [ ] check/improve reformatting
 - [ ] check if all release-critical issues are fixed
+- [ ] update mergedDatasets.csv
+- [ ] manually test dev.permaplant.net according to protocol
 - [ ] build <https://build.libelektra.org/job/PermaplanT-Release/>
 - [ ] git tag -s vX.X.X
 - [ ] git push --tags
