@@ -3,7 +3,7 @@
 This document describes what needs to be done for a release.
 
 - [ ] run external link check (change follow-web-links in book.toml and do `mdbook build`)
-- [ ] fix security problems: `npm audit fix`
+- [ ] fix _real_ security problems: `npm audit --omit=dev fix` (probably does too much)
 - [ ] check/improve reformatting
 - [ ] check if all release-critical issues are fixed
 - [ ] update mergedDatasets.csv
