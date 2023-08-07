@@ -60,7 +60,6 @@ def login(hp: HomePage, lp: LoginPage) -> HomePage:
     `HomePage` object
     """
     hp.load()
-    hp.login_button_is_visible()
     hp.click_login_button()
     lp.verify()
     lp.fill_username()
