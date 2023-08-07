@@ -21,7 +21,7 @@
         "timeline_intro_text": "Use the timeline to change the current map date. It allows you to see the map at a certain date. Actions will refer to this date.",
         "base_layer_intro": "You can select an image on the base layer, which will be the background of your map.",
         "base_layer_toolbar": "Additionally, you can scale the image to match it with the scale which is displayed in the top left.",
-        "plants_layer_intro": "The plants layer is the heart of your planning. It allows you to place plants on your map and supports you with remembering the overall wellbeing of your garden.",
+        "plants_layer_intro": "The plants layer is the heart of your planning. It allows you to place plants on your map.",
         "plants_layer_select_text": "Use the layers panel to switch to the plants layer and get access to its features.",
         "plants_layer_select_action": "Now click on the highlighted button.",
         "plants_layer_right_toolbar": "After switching the active layer, the sidebars will automatically update to show its features. The sidebar of the plants layer lets you select a plant from your available seeds or through the search bar.",
