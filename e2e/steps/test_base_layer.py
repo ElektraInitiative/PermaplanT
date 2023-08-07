@@ -1,44 +1,22 @@
-from e2e.conftest import to_planting_page, worker_id
-from e2e.pages.home import HomePage
-from e2e.pages.login import LoginPage
-from e2e.pages.maps.create import MapCreatePage
 from e2e.pages.maps.planting import MapPlantingPage
 from e2e.pages.maps.management import MapManagementPage
-from pytest_bdd import scenarios, given, when, then, parsers
+from pytest_bdd import scenarios, when, then, parsers
 
 scenarios("features/base_layer.feature")
 
 
-@given(parsers.parse("I am on the {name} map page and I have selected the base layer"))
-def on_planting_screen(
-    hp: HomePage,
-    lp: LoginPage,
-    mmp: MapManagementPage,
-    mcp: MapCreatePage,
-    mpp: MapPlantingPage,
-    name,
-):
-    to_planting_page(hp, lp, mmp, mcp, mpp, name + worker_id())
-    mpp.check_base_layer()
-
-
 # Scenario 1: Successfully select a background image
-
-
-@when(parsers.parse("I select the background image {name}"))
-def select_background_image(mpp: MapPlantingPage, name):
-    mpp.click_background_image(name)
 
 
 @then(
     parsers.parse("{image_name} stays even when I leave {map_name} and come back later")
 )
 def background_image_stays(
-    mpp: MapPlantingPage, mmp: MapManagementPage, image_name, map_name
+    mpp: MapPlantingPage, mmp: MapManagementPage, image_name, map_name, worker_id
 ):
     mpp.to_map_management_page()
     mmp.verify()
-    mmp.to_map_planting_page(map_name + worker_id())
+    mmp.to_map_planting_page(map_name + worker_id)
     mpp.expect_background_image(image_name)
 
 
@@ -55,10 +33,12 @@ def change_rotation(mpp: MapPlantingPage, val):
 
 
 @then(parsers.parse("{map_name} image rotation is set to {val} degrees"))
-def rotation_gets_changed(mpp: MapPlantingPage, mmp: MapManagementPage, map_name, val):
+def rotation_gets_changed(
+    mpp: MapPlantingPage, mmp: MapManagementPage, map_name, val, worker_id
+):
     mpp.to_map_management_page()
     mmp.verify()
-    mmp.to_map_planting_page(map_name + worker_id())
+    mmp.to_map_planting_page(map_name + worker_id)
     mpp.expect_rotation_to_have_value(val)
 
 
@@ -75,8 +55,10 @@ def change_scale(mpp: MapPlantingPage, val):
 
 
 @then(parsers.parse("{map_name} image scale is set to {val} percent"))
-def scale_gets_changed(mpp: MapPlantingPage, mmp: MapManagementPage, map_name, val):
+def scale_gets_changed(
+    mpp: MapPlantingPage, mmp: MapManagementPage, map_name, val, worker_id
+):
     mpp.to_map_management_page()
     mmp.verify()
-    mmp.to_map_planting_page(map_name + worker_id())
+    mmp.to_map_planting_page(map_name + worker_id)
     mpp.expect_scaling_to_have_value(val)

@@ -83,3 +83,8 @@ def plant_a_tomato(mpp: MapPlantingPage) -> MapPlantingPage:
     mpp.click_plant_from_search_results("tomato Solanum lycopersicum")
     mpp.click_on_canvas_middle()
     return mpp
+
+
+@when(parsers.parse("I select the background image {name}"))
+def select_background_image(mpp: MapPlantingPage, name):
+    mpp.click_background_image(name)

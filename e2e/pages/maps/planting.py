@@ -23,7 +23,7 @@ class MapPlantingPage(AbstractPage):
         self.canvas = self.page.get_by_test_id("canvas")
         self.undo_button = self.page.get_by_test_id("undo-button")
         self.redo_button = self.page.get_by_test_id("redo-button")
-        self.hide_plant_layer = self.page.get_by_test_id("plant-layer-visibility-icon")
+        self.hide_plant_layer = self.page.get_by_test_id("plants-layer-visibility-icon")
         # Base layer
         self.hide_base_layer = self.page.get_by_test_id("base-layer-visibility-icon")
         self.background_select = self.page.get_by_test_id("baseBackgroundSelect")

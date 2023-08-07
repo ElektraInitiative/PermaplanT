@@ -9,6 +9,6 @@ Feature: PermaplanT planting
 
     Scenario: Successfully change base layer visibility
         Given I am on the SUTLayerVisibility map page and I have selected the base layer
-        When I chose a background
+        When I select the background image Birdie.jpg
         And I turn the base layer visiblity off
         Then the base layer is invisible
