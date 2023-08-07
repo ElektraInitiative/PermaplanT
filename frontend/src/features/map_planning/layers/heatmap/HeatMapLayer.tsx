@@ -85,14 +85,7 @@ export const HeatMapLayer = (props: HeatMapLayerProps) => {
 
   return (
     <Layer {...layerProps} listening={false}>
-      <Image
-        image={image}
-        x={-width / 2}
-        y={-height / 2}
-        width={width}
-        height={height}
-        strokeWidth={1}
-      ></Image>
+      <Image image={image} x={minX} y={minY} width={width} height={height}></Image>
     </Layer>
   );
 };
