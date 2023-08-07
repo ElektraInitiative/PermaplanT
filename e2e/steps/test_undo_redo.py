@@ -1,34 +1,11 @@
-from e2e.conftest import to_planting_page, plant_a_tomato, worker_id
-from e2e.pages.home import HomePage
-from e2e.pages.login import LoginPage
-from e2e.pages.maps.create import MapCreatePage
 from e2e.pages.maps.planting import MapPlantingPage
-from e2e.pages.maps.management import MapManagementPage
-from pytest_bdd import scenarios, given, when, then, parsers
+from pytest_bdd import scenarios, when, then
 
 
 scenarios("features/undo_redo.feature")
 
 
-@given(parsers.parse("I am on the {name} map page and I have selected the plant layer"))
-def on_planting_screen(
-    hp: HomePage,
-    lp: LoginPage,
-    mmp: MapManagementPage,
-    mcp: MapCreatePage,
-    mpp: MapPlantingPage,
-    name,
-):
-    to_planting_page(hp, lp, mmp, mcp, mpp, name + worker_id())
-    mpp.check_plant_layer()
-
-
 # Scenario 1: Successful undo
-
-
-@when("I plant something")
-def plant_something(mpp: MapPlantingPage):
-    plant_a_tomato(mpp)
 
 
 @when("I click undo")
@@ -47,7 +24,6 @@ def plant_is_gone(mpp: MapPlantingPage):
 
 @when("I accidentally clicked undo after planting one plant")
 def accidental_undo(mpp: MapPlantingPage):
-    plant_a_tomato(mpp)
     mpp.click_undo()
 
 

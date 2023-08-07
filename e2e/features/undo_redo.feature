@@ -9,6 +9,7 @@ Feature: PermaplanT undo/redo
         Then my plant is gone
 
     Scenario: Successful redo after accidental undo
-        When I accidentally clicked undo after planting one plant
+        When I plant something
+        And I accidentally clicked undo after planting one plant
         And I click redo to get my plant back
         Then I can see my plant on the canvas again

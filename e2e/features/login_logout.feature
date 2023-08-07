@@ -9,6 +9,7 @@ Feature: PermaplanT Login and Logout Functionality
         Then I should be redirected back to the homepage
         And I should see a welcome message
 
+
     Scenario: Successful logout
         Given I am logged in
         When I click on the logout button

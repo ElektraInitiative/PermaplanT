@@ -1,4 +1,4 @@
-from e2e.conftest import login
+from e2e.steps.common_steps import login
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from e2e.pages.maps.create import MapCreatePage
@@ -10,7 +10,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 scenarios("features/map_creation.feature")
 
 
-@given("I am logged in and I am on the map management page")
+@given("I am on the map management page")
 def logged_in_and_on_map_management_page(hp: HomePage, lp: LoginPage):
     login(hp, lp)
     hp.to_map_management_page()
