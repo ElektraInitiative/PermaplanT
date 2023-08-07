@@ -15,11 +15,6 @@ def permaplant_hp(hp: HomePage):
     hp.load()
 
 
-@given("the login button is visible")
-def login_button_is_visible(hp: HomePage):
-    hp.login_button_is_visible()
-
-
 @when(("I click the login button"))
 def login_to_permaplant(hp: HomePage):
     hp.click_login_button()
