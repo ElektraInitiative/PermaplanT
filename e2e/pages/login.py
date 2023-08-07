@@ -1,11 +1,13 @@
-import os
+from e2e.pages.constants import E2E_USERNAME, E2E_PASSWORD
 from playwright.sync_api import Page
-from .abstract_page import AbstractPage
+from e2e.pages.abstract_page import AbstractPage
 
 
 class LoginPage(AbstractPage):
     """The loginpage of permaplant"""
-    TITLE: str = 'Sign in to PermaplanT'
+
+    URL: str = "auth"
+    TITLE: str = "Sign in to PermaplanT"
 
     def __init__(self, page: Page):
         self.page = page
@@ -13,17 +15,17 @@ class LoginPage(AbstractPage):
         self.password_field = page.get_by_label("Password")
         self.username_field = page.get_by_label("Username or email")
 
-    def fill_username(self, username=os.getenv("USERNAME", "Adi")):
+    def fill_username(self, username=E2E_USERNAME):
         """
         Fills the username field.
-        Can be passed by argument or ENV variable.
+        Default to ENV variable.
         """
         self.username_field.fill(username)
 
-    def fill_password(self, password=os.getenv("PASSWORD", "1234")):
+    def fill_password(self, password=E2E_PASSWORD):
         """
         Fills the password field.
-        Can be passed by argument or ENV variable.
+        Default to ENV variable.
         """
         self.password_field.fill(password)
 
@@ -33,3 +35,4 @@ class LoginPage(AbstractPage):
         navigates to the `HomePage`.
         """
         self.sign_in_button.click()
+        self.page.wait_for_url("**/")

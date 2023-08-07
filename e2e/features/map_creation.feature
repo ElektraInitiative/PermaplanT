@@ -14,7 +14,7 @@ Feature: PermaplanT Map Creation
 
     Scenario: Edit existing Map
         Given I create a new map SUTEditMap
-        When I edit SUTEditMap to SUTEditedMap with the description EditedDescription
+        When I edit SUTEditMap to SUTEditedMap with EditedDescription
         Then I can successfully save SUTEditedMap without an error message
 
 	Scenario: Map already exists

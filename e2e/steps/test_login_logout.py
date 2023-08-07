@@ -3,6 +3,7 @@ from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from pytest_bdd import scenarios, given, when, then, parsers
 
+
 scenarios("features/login_logout.feature")
 
 

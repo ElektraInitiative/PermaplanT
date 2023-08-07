@@ -97,6 +97,9 @@ def runDockerPreCommit() {
                 sh "pre-commit run mixed-line-ending -a"
                 sh "pre-commit run trailing-whitespace -a"
                 sh "pre-commit run prettier -a"
+                sh "pre-commit run black -a"
+                sh "pre-commit run flake8 -a"
+                sh "pre-commit run mypy -a"
             }
         }
     }
@@ -276,7 +279,7 @@ lock("${env.NODE_NAME}-exclusive") {
             checkout scm
             def e2eImage = docker.build("permaplant-e2e:build", "./e2e")
             try {
-                e2eImage.inside {
+                e2eImage.inside("-e E2E_URL=https://pr.permaplant.net") {
                     wait_for_pr_db()
                     sh 'make test-e2e'
                 }
@@ -286,10 +289,10 @@ lock("${env.NODE_NAME}-exclusive") {
                 // groovylint-disable-next-line
                 throw err;
             } finally {
-                archiveArtifacts artifacts: 'test-results/**', fingerprint: true,  allowEmptyArchive: true
-                archiveArtifacts artifacts: 'report.html', fingerprint: true,  allowEmptyArchive: true
+                archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
+                archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,  allowEmptyArchive: true
                 cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
-                fileIncludePattern: 'cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
+                fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
                 sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
                 deleteDir();
             }

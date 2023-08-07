@@ -10,6 +10,7 @@ import {
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
+import { useDimensions } from '@/hooks/useDimensions';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
@@ -77,6 +78,9 @@ export const BaseStage = ({
   useEffect(() => {
     useMapStore.setState({ tooltipRef: tooltipRef });
   }, [tooltipRef]);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dimensions = useDimensions(containerRef);
 
   const updateMapBounds = useMapStore((store) => store.updateMapBounds);
   const mapBounds = useMapStore((store) => store.untrackedState.editorBounds);
@@ -213,12 +217,12 @@ export const BaseStage = ({
   };
 
   return (
-    <div className="h-full w-full overflow-hidden">
+    <div className="h-full w-full overflow-hidden" data-testid="canvas" ref={containerRef}>
       <Stage
         ref={stageRef}
         draggable={draggable}
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={dimensions.width}
+        height={dimensions.height}
         onWheel={onStageWheel}
         onDragEnd={onStageDragEnd}
         onDragStart={onStageDragStart}
