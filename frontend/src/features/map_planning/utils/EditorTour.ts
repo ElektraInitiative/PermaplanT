@@ -101,7 +101,10 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
   {
     id: 'plantsLayerSelect',
     title: `${t('guidedTour:mapEditor.plants_layer_title')} (1/17)`,
-    text: actionText(t('guidedTour:mapEditor.plants_layer_select')),
+    text: actionText(
+      t('guidedTour:mapEditor.plants_layer_select_action'),
+      t('guidedTour:mapEditor.plants_layer_select_text'),
+    ),
     buttons: [
       {
         text: t('guidedTour:back'),
@@ -162,8 +165,17 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
     ),
     attachTo: {
       element: '[data-tourid="bottom_right_toolbar"]',
-      on: 'left',
+      on: 'left-start',
     },
+    floatingUIOptions: {
+      middleware: [
+        offset({
+          mainAxis: 15,
+          crossAxis: -50,
+        }),
+      ],
+    },
+    arrow: false,
     advanceOn: {
       selector: '[data-tourid="plant_list"]',
       event: 'click',
@@ -236,8 +248,17 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
     ),
     attachTo: {
       element: '[data-tourid="bottom_right_toolbar"]',
-      on: 'left',
+      on: 'left-start',
     },
+    floatingUIOptions: {
+      middleware: [
+        offset({
+          mainAxis: 15,
+          crossAxis: -10,
+        }),
+      ],
+    },
+    arrow: false,
     advanceOn: {
       selector: '[data-tourid="plant_list"]',
       event: 'click',
