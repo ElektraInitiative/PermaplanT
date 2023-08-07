@@ -4,6 +4,7 @@ use actix_http::StatusCode;
 use actix_web::web::Data;
 use uuid::Uuid;
 
+use crate::config::auth::user_token::UserToken;
 use crate::config::data::AppDataInner;
 use crate::model::dto::{BaseLayerImageDto, MapSearchParameters, Page, UpdateMapDto};
 use crate::model::dto::{NewLayerDto, PageParameters};
@@ -52,6 +53,7 @@ pub async fn create(
     new_map: NewMapDto,
     user_id: Uuid,
     app_data: &Data<AppDataInner>,
+    user_token: UserToken,
 ) -> Result<MapDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
     let result = Map::create(new_map, user_id, &mut conn).await?;
@@ -81,6 +83,16 @@ pub async fn create(
             )
             .await?;
         }
+
+        // Create a map directory in Nextcloud
+        println!("--------------------------------");
+        println!("user token: {}", user_token.token);
+        println!("--------------------------------");
+
+
+
+        // Create a Nextcloud circle with the same name as the map
+        // Share the map directory with the circle
     }
 
     Ok(result)

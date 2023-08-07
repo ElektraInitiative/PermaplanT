@@ -6,8 +6,10 @@ use actix_web::{
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
+use actix_web_httpauth::extractors::bearer::BearerAuth;
 
 use crate::config::auth::user_info::UserInfo;
+use crate::config::auth::user_token::UserToken;
 use crate::config::data::AppDataInner;
 use crate::model::dto::{MapSearchParameters, PageParameters, UpdateMapDto};
 use crate::{model::dto::NewMapDto, service};
@@ -84,8 +86,9 @@ pub async fn create(
     new_map_json: Json<NewMapDto>,
     user_info: UserInfo,
     app_data: Data<AppDataInner>,
+    user_token: UserToken
 ) -> Result<HttpResponse> {
-    let response = service::map::create(new_map_json.0, user_info.id, &app_data).await?;
+    let response = service::map::create(new_map_json.0, user_info.id, &app_data, user_token).await?;
     Ok(HttpResponse::Created().json(response))
 }
 

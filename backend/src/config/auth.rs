@@ -4,6 +4,7 @@ mod claims;
 pub mod jwks;
 pub mod middleware;
 pub mod user_info;
+pub mod user_token;
 
 use jsonwebtoken::jwk::JwkSet;
 use log::trace;
