@@ -37,7 +37,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Display heatmap in the frontend _(Moritz)_
 - _()_
 - _()_
 - _()_
