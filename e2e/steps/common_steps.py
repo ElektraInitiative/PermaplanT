@@ -86,6 +86,6 @@ def plant_a_tomato(mpp: MapPlantingPage) -> MapPlantingPage:
     return mpp
 
 
-@when(parsers.parse("I select the background image {name}"))
-def select_background_image(mpp: MapPlantingPage, name):
-    mpp.click_background_image(name)
+@when(parsers.parse("I select a background image"))
+def select_background_image(mpp: MapPlantingPage):
+    mpp.select_birdie_background()

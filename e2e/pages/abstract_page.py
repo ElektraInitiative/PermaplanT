@@ -21,7 +21,7 @@ class AbstractPage(ABC):
                 "height": self.PAGE_HEIGHT,
             }
         )
-        self.dont_load_images()
+        self.dont_load_images_except_birdie()
         self._page.set_default_timeout(timeout=E2E_TIMEOUT)
         expect.set_options(timeout=E2E_TIMEOUT)
         response = self._page.goto(self.URL)
@@ -30,12 +30,12 @@ class AbstractPage(ABC):
         self.verify()
         self.click_english_translation()
 
-    def dont_load_images(self):
+    def dont_load_images_except_birdie(self):
         """
-        Ignore all png/jpg images on all pages.
+        Ignore all png/jpg images on all pages except Birdie.jpg.
         """
         self._page.route(
-            re.compile(r"\.(jpg|png)$"),
+            re.compile(r"^(?!.*Birdie\.jpg$).*\.(jpg|png)$"),
             lambda route: route.fulfill(
                 status=404, content_type="text/plain", body="Not Found!"
             ),

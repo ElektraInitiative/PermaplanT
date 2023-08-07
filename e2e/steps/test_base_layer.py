@@ -27,7 +27,7 @@ def background_image_stays(
 
 @when(parsers.parse("I change the rotation of the image to {val} degrees"))
 def change_rotation(mpp: MapPlantingPage, val):
-    mpp.click_background_image("Birdie")
+    mpp.select_birdie_background()
     mpp.expect_background_image("/Photos/Birdie.jpg")
     mpp.fill_rotation(val)
 
@@ -49,8 +49,8 @@ def rotation_gets_changed(
 
 @when(parsers.parse("I change the scale of the image to {val} percent"))
 def change_scale(mpp: MapPlantingPage, val):
-    mpp.click_background_image("Frog")
-    mpp.expect_background_image("/Photos/Frog.jpg")
+    mpp.select_birdie_background()
+    mpp.expect_background_image("/Photos/Birdie.jpg")
     mpp.fill_scaling(val)
 
 

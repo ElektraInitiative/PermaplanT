@@ -112,13 +112,14 @@ class MapPlantingPage(AbstractPage):
         """Clicks the redo button."""
         self._redo_button.click()
 
-    def click_background_image(self, name):
+    def select_birdie_background(self):
         """
-        Selects the background image by name
-        and performs a short delay.
+        Selects the Birdie.jpg background image
+        since its the only image allowed to load (see `dont_load_images()`).
+        Performs a short delay.
         """
         self._background_button.click()
-        self._page.get_by_text(name).click()
+        self._page.get_by_text("Birdie.jpg").click()
         # Delay so image can be rendered on canvas
         self._page.wait_for_timeout(2000)
 
