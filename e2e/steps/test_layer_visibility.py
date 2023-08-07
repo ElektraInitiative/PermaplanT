@@ -22,14 +22,9 @@ def plants_are_invisible(mpp: MapPlantingPage):
 # Scenario 2: Successfully change base layer visibility
 
 
-@when("I chose a background")
-def chose_a_background():
-    pass
-
-
 @when("I turn the base layer visiblity off")
-def turn_base_layer_invisibility_off():
-    pass
+def turn_base_layer_invisibility_off(mpp: MapPlantingPage):
+    mpp.click_hide_base_layer()
 
 
 @then(("the base layer is invisible"))
