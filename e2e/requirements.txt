@@ -9,3 +9,5 @@ pytest-xdist
 mypy
 python-dotenv
 psycopg2-binary # only needed for development
+opencv-python
+numpy
