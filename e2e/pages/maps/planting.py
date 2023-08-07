@@ -113,22 +113,26 @@ class MapPlantingPage(AbstractPage):
 
     def click_hide_plant_layer(self):
         self.hide_plant_layer.click()
+        self.page.wait_for_timeout(5000)
 
-    """ASSERTIONS"""
-
-    def expect_plant_to_be_planted(self, plant_name):
+    def expect_plant_on_canvas(self, plant_name):
         """
         Confirms that the plant is on the canvas,
-        by looking at the left side bar.
+        by clicking in the middle of the canvas
+        and looking at the left side bar for a delete button.
         """
+        self.click_on_canvas_middle()
+        expect(self.delete_plant_button).to_be_visible()
         expect(self.page.get_by_role("heading", name=plant_name)).to_be_visible()
 
-    def expect_plant_to_not_be_planted(self, plant_name):
+    def expect_no_plant_on_canvas(self):
         """
-        Confirms that the plant is NOT on the canvas,
-        by looking at the left side bar.
+        Confirms there is no plant on the canvas,
+        by clicking in the middle of the canvas
+        and making sure the delete button is not visible.
         """
-        expect(self.page.get_by_role("heading", name=plant_name)).not_to_be_visible()
+        self.click_on_canvas_middle()
+        expect(self.delete_plant_button).not_to_be_visible()
 
     def expect_search_result_is_visible(self, result):
         """Confirms that a search result is visible."""

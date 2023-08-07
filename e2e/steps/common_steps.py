@@ -82,7 +82,4 @@ def plant_a_tomato(mpp: MapPlantingPage) -> MapPlantingPage:
     mpp.fill_plant_search("tomato")
     mpp.click_plant_from_search_results("tomato Solanum lycopersicum")
     mpp.click_on_canvas_middle()
-    # Click a second time to select the plant.
-    mpp.click_on_canvas_middle()
-    mpp.expect_plant_to_be_planted("Tomato (Solanum lycopersicum)")
     return mpp

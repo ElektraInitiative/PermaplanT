@@ -15,8 +15,7 @@ def click_undo(mpp: MapPlantingPage):
 
 @then("my plant is gone")
 def plant_is_gone(mpp: MapPlantingPage):
-    mpp.click_on_canvas_middle()
-    mpp.expect_plant_to_not_be_planted("Tomato (Solanum lycopersicum)")
+    mpp.expect_no_plant_on_canvas()
 
 
 # Scenario 2: Successful redo
@@ -35,4 +34,4 @@ def click_redo(mpp: MapPlantingPage):
 
 @then("I can see my plant on the canvas again")
 def plant_is_back(mpp: MapPlantingPage):
-    mpp.expect_plant_to_be_planted("Tomato (Solanum lycopersicum)")
+    mpp.expect_plant_on_canvas("Tomato (Solanum lycopersicum)")
