@@ -1,13 +1,15 @@
-import os
 from playwright.sync_api import Page, expect
-from .abstract_page import AbstractPage
+
+from e2e.pages.constants import E2E_URL
+from e2e.pages.abstract_page import AbstractPage
 
 
 class HomePage(AbstractPage):
     """The homepage permaplant"""
-    URL = os.getenv("TEST_URL", "localhost:5173")
-    TITLE: str = 'PermaplanT'
-    HELLO_MSG: str = 'Hello adi'
+
+    URL = E2E_URL
+    TITLE: str = "PermaplanT"
+    HELLO_MSG: str = "Hello adi"
 
     def __init__(self, page: Page) -> None:
         self.page = page
@@ -28,6 +30,7 @@ class HomePage(AbstractPage):
 
     def click_logout_button(self):
         self.logout_button.click()
+        self.page.wait_for_url("**/")
 
     def hello_message_is_visible(self):
         expect(self.hello_msg).to_be_visible()
@@ -37,3 +40,4 @@ class HomePage(AbstractPage):
         Navigates to `MapManagementPage`.
         """
         self.map_management_button.click()
+        self.page.wait_for_url("**/maps")
