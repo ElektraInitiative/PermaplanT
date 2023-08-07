@@ -52,7 +52,7 @@ export interface PaginatedSelectMenuProps<
 }
 
 /**
- * Like SelectMenu, but with added pagination using react-select-async-paginate.
+ * Like SelectMenu but with added pagination using react-select-async-paginate.
  */
 export default function PaginatedSelectMenu<
   T extends FieldValues,
