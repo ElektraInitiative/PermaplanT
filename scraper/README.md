@@ -89,7 +89,7 @@ This can be done with the following command:
 npm run merge:datasets
 ```
 
-It iteratively gets the German common names from https://www.wikidata.org, a third-party website, to prevent 429 errors by sending too many requests in a short time.
+It iteratively gets the German common names from https://www.wikidata.org to prevent 429 errors by sending too many requests in a short time.
 
 This may take quite a while, so don't stop the program while running.
 
