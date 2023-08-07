@@ -11,49 +11,60 @@ class MapPlantingPage(AbstractPage):
 
     def __init__(self, page: Page):
         self.page = page
-        # Plant layer
-        self.base_layer_radio = self.page.get_by_test_id("base-layer-radio")
-        self.plant_layer_radio = self.page.get_by_test_id("plants-layer-radio")
-        self.plant_search_icon = self.page.get_by_test_id("plant-search-icon")
-        self.plant_search_input = self.page.get_by_test_id("plant-search-input")
-        self.delete_plant_button = self.page.get_by_role(
+        """ Selectors """
+        # Navbar
+        self._map_management_button = self.page.get_by_role("button", name="Maps")
+        # Left side bar
+        self._delete_plant_button = self.page.get_by_role(
             "button", name="Delete Planting"
         )
-        self.map_management_button = self.page.get_by_role("button", name="Maps")
-        self.canvas = self.page.get_by_test_id("canvas")
-        self.undo_button = self.page.get_by_test_id("undo-button")
-        self.redo_button = self.page.get_by_test_id("redo-button")
-        self.hide_plant_layer = self.page.get_by_test_id("plants-layer-visibility-icon")
+        # Layer visibility
+        self._hide_plant_layer = self.page.get_by_test_id(
+            "plants-layer-visibility-icon"
+        )
+        self._hide_base_layer = self.page.get_by_test_id("base-layer-visibility-icon")
+        # Canvas
+        self._canvas = self.page.get_by_test_id("canvas")
+        self._close_selected_plant = self.page.get_by_test_id("canvas").get_by_role(
+            "button"
+        )
+        # Top left section
+        self._undo_button = self.page.get_by_test_id("undo-button")
+        self._redo_button = self.page.get_by_test_id("redo-button")
+        # Plant layer
+        self._base_layer_radio = self.page.get_by_test_id("base-layer-radio")
+        self._plant_layer_radio = self.page.get_by_test_id("plants-layer-radio")
+        self._plant_search_icon = self.page.get_by_test_id("plant-search-icon")
+        self._plant_search_input = self.page.get_by_test_id("plant-search-input")
         # Base layer
-        self.hide_base_layer = self.page.get_by_test_id("base-layer-visibility-icon")
-        self.background_select = self.page.get_by_test_id("baseBackgroundSelect")
-        self.background_button = page.get_by_role("button", name="Choose an image")
-        self.rotation_input = self.page.get_by_test_id("rotation-input")
-        self.scale_input = self.page.get_by_test_id("scale-input")
+        self._background_select = self.page.get_by_test_id("baseBackgroundSelect")
+        self._background_button = page.get_by_role("button", name="Choose an image")
+        self._rotation_input = self.page.get_by_test_id("rotation-input")
+        self._scale_input = self.page.get_by_test_id("scale-input")
 
     """ACTIONS"""
 
     def check_base_layer(self):
         """Checks the base layer radio button."""
-        self.base_layer_radio.set_checked(True)
+        self._base_layer_radio.set_checked(True)
 
     def check_plant_layer(self):
         """Ckecks the plant layer radio button."""
-        self.plant_layer_radio.set_checked(True)
+        self._plant_layer_radio.set_checked(True)
 
     def fill_plant_search(self, plantname):
         """Clicks the search icon and types plantname into the plant search."""
-        self.plant_search_input.fill(plantname)
+        self._plant_search_input.fill(plantname)
 
     def fill_rotation(self, rotation):
         """Fills the rotation input according to rotation."""
-        self.rotation_input.fill(rotation)
+        self._rotation_input.fill(rotation)
         # Wait for input to be processed and saved
         self.page.wait_for_timeout(2000)
 
     def fill_scaling(self, scaling):
         """Fills the scaling input according to scaling."""
-        self.scale_input.fill(scaling)
+        self._scale_input.fill(scaling)
         # Wait for input to be processed and saved
         self.page.wait_for_timeout(2000)
 
@@ -74,7 +85,7 @@ class MapPlantingPage(AbstractPage):
 
     def click_search_icon(self):
         """Click the search icon that enables the search box."""
-        self.plant_search_icon.click()
+        self._plant_search_icon.click()
 
     def click_plant_from_search_results(self, plant_name):
         """Selects a plant by name from the search results."""
@@ -82,37 +93,37 @@ class MapPlantingPage(AbstractPage):
 
     def click_on_canvas_middle(self):
         """Clicks in the middle of the canvas with a 300ms delay."""
-        box = self.canvas.bounding_box()
+        box = self._canvas.bounding_box()
         self.page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
         self.page.wait_for_timeout(300)
 
     def click_delete(self):
         """Deletes a planting by clicks on the delete button."""
-        self.delete_plant_button.click()
+        self._delete_plant_button.click()
 
     def click_undo(self):
         """Clicks the undo button."""
-        self.undo_button.click()
+        self._undo_button.click()
 
     def click_redo(self):
         """Clicks the redo button."""
-        self.redo_button.click()
+        self._redo_button.click()
 
     def click_background_image(self, name):
         """
         Selects the background image by name
         and performs a short delay.
         """
-        self.background_button.click()
+        self._background_button.click()
         self.page.get_by_text(name).click()
         # Delay so image can be rendered on canvas
         self.page.wait_for_timeout(2000)
 
     def click_hide_base_layer(self):
-        self.hide_base_layer.click()
+        self._hide_base_layer.click()
 
     def click_hide_plant_layer(self):
-        self.hide_plant_layer.click()
+        self._hide_plant_layer.click()
         self.page.wait_for_timeout(5000)
 
     def expect_plant_on_canvas(self, plant_name):
@@ -122,7 +133,7 @@ class MapPlantingPage(AbstractPage):
         and looking at the left side bar for a delete button.
         """
         self.click_on_canvas_middle()
-        expect(self.delete_plant_button).to_be_visible()
+        expect(self._delete_plant_button).to_be_visible()
         expect(self.page.get_by_role("heading", name=plant_name)).to_be_visible()
 
     def expect_no_plant_on_canvas(self):
@@ -132,7 +143,7 @@ class MapPlantingPage(AbstractPage):
         and making sure the delete button is not visible.
         """
         self.click_on_canvas_middle()
-        expect(self.delete_plant_button).not_to_be_visible()
+        expect(self._delete_plant_button).not_to_be_visible()
 
     def expect_search_result_is_visible(self, result):
         """Confirms that a search result is visible."""
@@ -145,15 +156,15 @@ class MapPlantingPage(AbstractPage):
         expect(self.page.get_by_test_id("plant-search-results-empty")).to_be_visible()
 
     def expect_background_image(self, name):
-        expect(self.background_select).to_have_value(name)
+        expect(self._background_select).to_have_value(name)
 
     def expect_rotation_to_have_value(self, val):
         """Expects that the rotation is properly set."""
-        expect(self.rotation_input).to_have_value(val)
+        expect(self._rotation_input).to_have_value(val)
 
     def expect_scaling_to_have_value(self, val):
         """Expects that the scaling is properly set."""
-        expect(self.scale_input).to_have_value(val)
+        expect(self._scale_input).to_have_value(val)
 
     """NAVIGATION"""
 
@@ -162,5 +173,5 @@ class MapPlantingPage(AbstractPage):
         Clicks the button on the navbar which
         navigates to the `MapManagementPage`.
         """
-        self.map_management_button.click()
+        self._map_management_button.click()
         self.page.wait_for_url("**/maps")
