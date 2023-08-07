@@ -37,7 +37,7 @@
         "plants_layer_second_planting_select_text": "Now you will search for a potato.",
         "plants_layer_second_planting_select_action": "Once you have found it, click on it to activate placement mode with this plant.",
         "plants_layer_second_planting_place": "Plant your second plant with a click on any point on the map.",
-        "plants_layer_relations": "You have potentially noticed that a colored line appeared between your first and second plant. It shows you if those are companions (green) or antagonists (red).",
+        "plants_layer_relations": "You have potentially noticed that a colored line appeared between your first and second plant. It shows you if these are companions (green) or antagonists (red).",
         "plants_layer_placement_cancel_text": "Once you are all done with placing plants you can cancel the placement mode through the info box at the bottom.",
         "plants_layer_placement_cancel_action": "Click on it so you can perform other actions on the map.",
         "plants_layer_undo_text": "Should you have done an action unintentionally or you simply want to undo something you can use the undo button from the toolbox.",
