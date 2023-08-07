@@ -241,8 +241,8 @@ export const BaseStage = ({
           <MapLabel
             content={tooltipContent}
             visible={tooltipContent !== ''}
-            scaleX={3 / stage.scale}
-            scaleY={3 / stage.scale}
+            scaleX={2 / stage.scale}
+            scaleY={2 / stage.scale}
             x={tooltipPosition.x}
             y={tooltipPosition.y}
           />
