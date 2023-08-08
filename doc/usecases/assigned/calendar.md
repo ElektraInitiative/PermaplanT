@@ -12,7 +12,7 @@
 ## Scenarios
 
 - **Precondition:**
-  The user has opened the app and is on the calender page.
+  The user has opened the app and is on the calendar page.
 - **Main success scenario:**
   - The user gets an overview when planned plants are to be raised or planted; and later to be harvested.
   - It is shown in bars, ordered by next steps to be done first.

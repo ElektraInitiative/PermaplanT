@@ -10,7 +10,7 @@ Available for [Android](https://play.google.com/store/apps/details?id=com.percul
 It includes detailed information about different plant varieties and provides helpful growing details, such as watering and temperature tolerance, for each plant.
 It also has a feature that indicates whether two plants can grow well together by displaying a red or green mark.
 In addition, Garden Planter allows users to customize the size of the grid cells based on the specific needs of each plant, and to set frost dates to help with planning.
-The app's user interface is clear and user-friendly, with custom icons and plant pictures to help users easily navigate the app.
+The app's user interfase is clear and user-friendly, with custom icons and plant pictures to help users easily navigate the app.
 
 Company: Percula LLC
 

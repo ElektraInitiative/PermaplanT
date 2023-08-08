@@ -25,7 +25,7 @@
         Can also be clicked without being registered before, then Step 1. of Main success scenario needs to be done.
      2. form page 1
         - salutation (Anrede)
-        - title (Titel) (optional)
+        - title (Title) (optional)
         - billing address (Rechnungsadresse)
         - country (Land)
         - additional emails (E-Mails) (optional)
