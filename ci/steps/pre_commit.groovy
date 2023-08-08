@@ -13,8 +13,8 @@ commands = [
     "pre-commit run --hook-stage manual codespell -a"
 ]
 
-def runInDocker() {
-    return utils.runInDocker(image, buildArgs, commands)
+def runPrecommit() {
+    return ["pre-commit": utils.runInDocker(image, buildArgs, commands)]
 }
 
 return this

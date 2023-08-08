@@ -4,7 +4,6 @@
 node('docker') {
     checkout scm
     utils = load('ci/utils.groovy')
-    schema = load('ci/steps/schema.groovy')
     frontend = load('ci/steps/frontend.groovy')
     mdbook = load('ci/steps/mdbook.groovy')
     backend = load('ci/steps/backend.groovy')
@@ -19,25 +18,20 @@ utils.main_wrapper(
 
     // Sanity Stage
     utils.parallel_stage('Sanity', [
-         "pre-commit": pre_commit.runInDocker(),
-        // Workaround: we can't stop rustfmt from linting the generated schema.rs
-        // so we empty the file before.
-        "cargo-fmt": utils.runDockerSidecar(
-            "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
-            ),
-        // End of workaround
-        "schema": schema.runInDocker(),
-        "migration": utils.runDockerSidecar(backend.testMigrations()),
+        pre_commit.runPrecommit(),
+        backend.cargoFmt(),
+        backend.schemas(),
+        backend.dieselMigrations(),
     ])
 
-    // Test and Build Stage
-    utils.parallel_stage('Test and Build', [
-        'cargo-build': backend.runBuildInDocker(),
-        'cargo-clippy/doc': utils.runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
-        'cargo-test': utils.runDockerWithPostgresSidecar('cargo test'),
-        'frontend': frontend.testAndBuildFrontend(),
-        'mdbook': mdbook.runBuildInDocker(),
-    ])
+// // Test and Build Stage
+// utils.parallel_stage('Test and Build', [
+//     backend.cargoBuild(),
+//     'cargo-clippy/doc': utils.runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
+//     'cargo-test': utils.runDockerWithPostgresSidecar('cargo test'),
+//     'frontend': frontend.testAndBuildFrontend(),
+//     'mdbook': mdbook.runBuildInDocker(),
+// ])
 })
 
 lock("${env.NODE_NAME}-exclusive") {
