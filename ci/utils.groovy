@@ -92,7 +92,7 @@ def runDockerSidecar(String command,  List<String> stashsrc = [], List<String> s
  * @param stashdirList The list of stash directory names for stashing files (optional).
  * @return A closure representing the defined Jenkins pipeline steps.
  */
-def runDocker(
+def runInDocker(
     String dockerImage,
     String dockerBuildArgs,
     List<String> commands,
