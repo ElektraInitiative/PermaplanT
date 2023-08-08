@@ -5,7 +5,7 @@ Feature: PermaplanT base layer
     Given I am on the SUTBaseLayer map page and I have selected the base layer
 
     Scenario: Successfully select a background image
-        When I select the background image Birdie.jpg
+        When I select a background image
         Then /Photos/Birdie.jpg stays even when I leave SUTBaseLayer and come back later
 
     Scenario: Successfully rotate a background image

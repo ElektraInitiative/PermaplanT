@@ -1,26 +1,8 @@
-from e2e.conftest import to_planting_page, worker_id
-from e2e.pages.home import HomePage
-from e2e.pages.login import LoginPage
-from e2e.pages.maps.create import MapCreatePage
 from e2e.pages.maps.planting import MapPlantingPage
-from e2e.pages.maps.management import MapManagementPage
-from pytest_bdd import scenarios, given, when, then, parsers
+from pytest_bdd import scenarios, when, then, parsers
 
 
 scenarios("features/search_plants.feature")
-
-
-@given(parsers.parse("I am on the {name} map page and I have selected the plant layer"))
-def logged_in(
-    hp: HomePage,
-    lp: LoginPage,
-    mmp: MapManagementPage,
-    mcp: MapCreatePage,
-    mpp: MapPlantingPage,
-    name,
-):
-    to_planting_page(hp, lp, mmp, mcp, mpp, name + worker_id())
-    mpp.check_plant_layer()
 
 
 # Scenario 1 and 2: Searching for plants with exact and partial matches
