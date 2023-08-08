@@ -32,7 +32,9 @@ axiosRetry(axios, {
  * @param {string} unique_name - A plant name to filter if it's in the German names.
  */
 const filterGermanNames = (germanNames, unique_name) => {
-  const unique_name_filter = unique_name.toLowerCase();
+  let unique_name_filter = unique_name.toLowerCase();
+  unique_name_filter = unique_name_filter.replace(/(?<!\S)[x×]/, " ");
+  unique_name_filter = unique_name_filter.replace(/\s+/g, " ");
 
   const cleanedGermanNames = [];
 
@@ -42,6 +44,10 @@ const filterGermanNames = (germanNames, unique_name) => {
     germanName = germanName.replace(/ \(.*\)/, "");
     //remove special characters
     germanName = germanName.replace(/['"`-]/, "");
+    //remove hybrid x or × symbol
+    germanName = germanName.replace(/(?<!\S)[x×]/, " ");
+    unique_name_filter = unique_name_filter.replace(/\s+/g, " ");
+
     germanName = germanName.trim();
     if (germanName.includes(unique_name_filter)) {
       continue;
@@ -73,11 +79,7 @@ const fetchGermanNamesForPlantsConcurrent = async (plants) => {
       const unique_name = plant["unique_name"];
       const germanNames = [];
 
-      if (
-        plant.common_name_de &&
-        plant.common_name_de != "" &&
-        plant.common_name_de !== "true"
-      ) {
+      if (plant.common_name_de && plant.common_name_de !== "true") {
         const existingGermanNames = plant.common_name_de.split(",");
         existingGermanNames.forEach((existingGermanName) => {
           germanNames.push(existingGermanName);
@@ -131,10 +133,7 @@ const fetchGermanNamesForPlantsConcurrent = async (plants) => {
             unique_name
           );
 
-          if (
-            cleanedGermanNames.length > 0 &&
-            Array.isArray(cleanedGermanNames)
-          ) {
+          if (cleanedGermanNames.length > 0) {
             GermanNamesFound++;
             plant["common_name_de"] = cleanedGermanNames;
           }
