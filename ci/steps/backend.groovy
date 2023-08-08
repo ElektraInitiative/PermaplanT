@@ -29,7 +29,7 @@ def cargoTest() {
 }
 
 def schemas() {
-    commands = ["echo building schemas"] // no command needed, runDockerSidecar always builds schemas.
+    commands = "echo building schemas" // no command needed, runDockerSidecar always builds schemas.
     stashSrc = ["backend/src/schema.rs", "frontend/src/bindings/definitions.ts"]
     stashDir = ["schema.rs", "definitions.ts"]
     return ["schema": utils.runDockerSidecar(commands, stashSrc, stashDir)]

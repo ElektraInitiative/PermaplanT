@@ -41,6 +41,15 @@ def testAndBuildFrontend() {
     }
 }
 
+def cargoBuild() {
+    image = "permplant-node"
+    buildArgs = "-f ./ci/container-images/permaplant-node/Dockerfile ."
+    commands = 'cargo build --release'
+    stashSrc = ['backend/target/release/backend']
+    stashDir = ['backend']
+    return ["cargo-build": utils.runDocker(commands, stashSrc, stashDir)]
+}
+
 class PackageLockJsonModifiedException extends Exception {
     PackageLockJsonModifiedException() {
         super('package-lock.json was modified by npm install. Did you maybe use a wrong node version?')

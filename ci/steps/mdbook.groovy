@@ -4,7 +4,7 @@ def testBuild() {
     commands = ["make test-mdbook", "make build-mdbook"]
     stashSrc = "book/"
     stashDir = "mdbook"
-    return ["mdbook": utils.runInDocker(image, buildArgs, commands, stashSrc, stashDir)]
+    return ["mdbook": utils.runDocker(image, buildArgs, commands, stashSrc, stashDir)]
 }
 
 

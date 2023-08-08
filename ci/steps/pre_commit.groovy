@@ -14,7 +14,7 @@ commands = [
 ]
 
 def runPrecommit() {
-    return ["pre-commit": utils.runInDocker(image, buildArgs, commands)]
+    return ["pre-commit": utils.runDocker(image, buildArgs, commands)]
 }
 
 return this
