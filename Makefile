@@ -76,7 +76,7 @@ build: generate-api-types build-frontend build-backend build-storybook build-mdb
 
 .PHONY: build-frontend
 build-frontend: install-frontend generate-api-types  ## Build frontend.
-	@cd frontend && npm install && npm run generate-api-types && npm run build
+	@cd frontend npm run generate-api-types && npm run build
 
 .PHONY: build-backend
 build-backend: install-backend generate-api-types  ## Build backend.
