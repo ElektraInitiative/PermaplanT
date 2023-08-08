@@ -1,4 +1,4 @@
-from e2e.conftest import prepare_planting, worker_id
+from e2e.conftest import to_planting_page, worker_id
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from e2e.pages.maps.create import MapCreatePage
@@ -19,7 +19,8 @@ def on_planting_screen(
     mpp: MapPlantingPage,
     name,
 ):
-    prepare_planting(hp, lp, mmp, mcp, mpp, name + worker_id())
+    to_planting_page(hp, lp, mmp, mcp, mpp, name + worker_id())
+    mpp.check_plant_layer()
 
 
 # Scenario 1: Plant something on the map

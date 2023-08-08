@@ -16,7 +16,7 @@ All commands/scripts in this README are executed from this folder (/e2e).
 ## Environment Variables
 
 All environment variables are optional, since they have defaults.
-For type details and defaults see [conftest.py](conftest.py)
+For type details and defaults see [constants.py](pages/constants.py)
 
 - `E2E_URL`
   The url where the app is running.
@@ -230,3 +230,7 @@ Only missing stuff:
 ### Pytest-bdd Documentation
 
 [https://pypi.org/project/pytest-bdd/](https://pypi.org/project/pytest-bdd/)
+
+If we ever need async functions they might be implemented in the future.
+[PR](https://github.com/pytest-dev/pytest-bdd/pull/629)
+[about asyncio with pytest-bdd](https://github.com/pytest-dev/pytest-bdd/issues/223)

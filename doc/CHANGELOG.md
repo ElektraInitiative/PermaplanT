@@ -64,6 +64,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- E2E: Add base layer tests #777 _(4ydan)_
 
 ## 0.3.2 - 07.08.2023 (42 commits)
 

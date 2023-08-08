@@ -53,7 +53,7 @@ def login(hp: HomePage, lp: LoginPage) -> HomePage:
     return hp
 
 
-def prepare_planting(
+def to_planting_page(
     hp: HomePage,
     lp: LoginPage,
     mmp: MapManagementPage,
