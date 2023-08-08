@@ -63,7 +63,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- CI: Add codespell pre-commit #811 _(4ydan)_
 - E2E: Add base layer tests #777 _(4ydan)_
 - E2E: Add timeline tests #796 _(4ydan)_
 - E2E: Add layer visibility tests #797 _(4ydan)_
