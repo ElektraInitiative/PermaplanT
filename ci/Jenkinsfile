@@ -32,7 +32,7 @@ utils.main_wrapper(
 
     // Test and Build Stage
     utils.parallel_stage('Test and Build', [
-        'cargo-build': backend.runBuildInDocker()
+        'cargo-build': backend.runBuildInDocker(),
         'cargo-clippy/doc': utils.runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
         'cargo-test': utils.runDockerWithPostgresSidecar('cargo test'),
         'frontend': frontend.testAndBuildFrontend(),
