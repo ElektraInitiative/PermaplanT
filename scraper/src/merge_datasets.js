@@ -9,6 +9,7 @@ import {
   getSoilPH,
   getHeightEnumTyp,
   getSpreadEnumTyp,
+  capitalizeWords,
 } from "./helpers/helpers.js";
 
 /**
@@ -18,79 +19,146 @@ import {
 axiosRetry(axios, {
   retries: 5, // number of retries
   retryDelay: (retryCount) => {
-    return retryCount * 1000; // time interval between retries
+    console.log(`retry attempt: ${retryCount}`);
+    return retryCount * 3000; // time interval between retries
   },
 });
 
 /**
- * Fetches the German name of the plant from wikidata API.
- * Sets the 'common_name_de of every plant in the array.
+ * Fetches the German name of the plant from the Wikidata API.
+ * Sets the 'common_name_de' property of every plant in the array.
  *
- * @param {*} plants[]
+ * @param {string[]} germanNames - An array with German plant names.
+ * @param {string} unique_name - A plant name to filter if it's in the German names.
  */
-const fetchDataForPlantsArray = async (plants) => {
-  let GermanNamesFound = 0;
-  console.log("[INFO] Start fetching German common Names!");
-  for (const plant of plants) {
-    const unique_name = plant["unique_name"];
-    if (unique_name == "") {
+const filterGermanNames = (germanNames, unique_name) => {
+  const unique_name_filter = unique_name.toLowerCase();
+
+  const cleanedGermanNames = [];
+
+  for (const singleGermanName of germanNames) {
+    let germanName = singleGermanName.toLowerCase();
+
+    germanName = germanName.replace(/ \(.*\)/, "");
+    //remove special characters
+    germanName = germanName.replace(/['"`-]/, "");
+    germanName = germanName.trim();
+    if (germanName.includes(unique_name_filter)) {
       continue;
     }
+    if (germanName.length !== 0 && germanName !== "true") {
+      cleanedGermanNames.push(capitalizeWords(germanName));
+    }
+  }
+  //remove duplicates
+  const uniqueNameSet = new Set(cleanedGermanNames);
 
-    try {
+  return Array.from(uniqueNameSet);
+};
+
+/**
+ * Fetches the German name of the plant from the Wikidata API.
+ * Sets the 'common_name_de' property of every plant in the array.
+ *
+ * @param {Array} plants - An array containing plant objects.
+ */
+const fetchGermanNamesForPlantsConcurrent = async (plants) => {
+  const MAX_CONCURRENT_REQUESTS = 25;
+  let GermanNamesFound = 0;
+
+  console.log("[INFO] Start fetching German common names!");
+
+  const processPlants = async (plants) => {
+    for (const plant of plants) {
+      const unique_name = plant["unique_name"];
+      const germanNames = [];
+
+      if (
+        plant.common_name_de &&
+        plant.common_name_de != "" &&
+        plant.common_name_de !== "true"
+      ) {
+        const existingGermanNames = plant.common_name_de.split(",");
+        existingGermanNames.forEach((existingGermanName) => {
+          germanNames.push(existingGermanName);
+        });
+      }
+
+      plant.common_name_de = null;
+
       await axios
         .get(
-          `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${unique_name}&language=en&format=json`
+          `https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=${unique_name}&normalize=&languages=de&format=json`
         )
         .then((response) => {
           const data = response.data;
-          const results = data.search;
+          const entities = data.entities;
 
-          if (!results || results.length === 0) {
-            return null;
+          if (entities[-1]) {
+            // If there is a -1, the site doesn't exist
+            // console.log(`Did not find ${unique_name}`)
+            return;
           }
 
-          const result = results[0];
-          const id = result.id;
+          const keys = Object.keys(entities);
+          const entity = entities[keys[0]];
 
-          axios
-            .get(
-              `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${id}&languages=de&format=json`
-            )
-            .then((response) => {
-              const data = response.data;
-              const entities = data.entities;
-              const entity = entities[id];
-              const dewiki = entity["sitelinks"]["dewiki"];
+          const label_entity = entity.labels;
+          if (label_entity && label_entity.de) {
+            germanNames.push(label_entity.de.value);
+          } else {
+            return;
+          }
 
-              if (dewiki) {
-                const title = dewiki.title;
-                let germanName = title.replace(/ \(.*\)/, "");
-                germanName = germanName.replace('"', "");
+          const dewiki_entity = entity.sitelinks.dewiki;
+          if (dewiki_entity) {
+            germanNames.push(dewiki_entity.title);
+          }
 
-                germanName = germanName.replace(unique_name, "");
-                germanName = germanName.trim();
-                if (!germanName || germanName === "true") {
-                  return null;
-                }
-                GermanNamesFound++;
-                plant["common_name_de"] = germanName;
-              }
-            })
-            .catch((error) => {
-              // The second request fails
-              console.error("2. Request got an error " + error);
+          const aliase_entities = entity.aliases.de;
+          if (aliase_entities) {
+            aliase_entities.forEach((alias) => {
+              germanNames.push(alias.value);
             });
+          }
+
+          if (germanNames.length === 0) {
+            return;
+          }
+
+          const cleanedGermanNames = filterGermanNames(
+            germanNames,
+            unique_name
+          );
+
+          if (
+            cleanedGermanNames.length > 0 &&
+            Array.isArray(cleanedGermanNames)
+          ) {
+            GermanNamesFound++;
+            plant["common_name_de"] = cleanedGermanNames;
+          }
         })
         .catch((error) => {
-          // The first request fails
-          console.error("1. Request got an error " + error);
+          console.error(
+            `[ERROR] Could not get German names from "${unique_name}": `,
+            error.message
+          );
         });
-    } catch (error) {
-      console.error("Error", error.message);
     }
+  };
+
+  // Chunk the plants into batches of MAX_CONCURRENT_REQUESTS
+  const chunks = [];
+  const chunk_size = plants.length / MAX_CONCURRENT_REQUESTS + 1;
+  for (let i = 0; i < plants.length; i += chunk_size) {
+    chunks.push(plants.slice(i, i + chunk_size));
   }
-  console.log(`[INFO] Done! Found ${GermanNamesFound} German Names!`);
+
+  // Process each chunk concurrently using Promise.all
+  await Promise.all(chunks.map((chunk) => processPlants(chunk)));
+
+  console.log(`[INFO] Done! Found ${GermanNamesFound} German names!`);
 };
 
 /**
@@ -367,7 +435,7 @@ async function writePlantsToCsv(plants) {
 
   let updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
 
-  await fetchDataForPlantsArray(updatedPlants);
+  await fetchGermanNamesForPlantsConcurrent(updatedPlants);
 
   console.log("[INFO] Writing merged dataset to CSV file...");
   console.log("[INFO] Total number of plants: ", updatedPlants.length);

@@ -1,4 +1,21 @@
 /**
+ * Capitalizes the first character of every word in a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The string with first characters of every word capitalized.
+ */
+function capitalizeWords(str) {
+  const wordsArray = str.split(" ");
+
+  for (let i = 0; i < wordsArray.length; i++) {
+    const word = wordsArray[i];
+    wordsArray[i] = word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  return wordsArray.join(" ");
+}
+
+/**
  * Sanitizes the column names of the json array
  *
  * @param {*} jsonArray
@@ -101,4 +118,10 @@ function getSpreadEnumTyp(spread) {
   return value <= 0.15 ? "narrow" : value <= 0.61 ? "medium" : "wide";
 }
 
-export { sanitizeColumnNames, getSoilPH, getHeightEnumTyp, getSpreadEnumTyp };
+export {
+  sanitizeColumnNames,
+  getSoilPH,
+  getHeightEnumTyp,
+  getSpreadEnumTyp,
+  capitalizeWords,
+};
