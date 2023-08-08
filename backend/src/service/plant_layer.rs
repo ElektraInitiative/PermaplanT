@@ -59,11 +59,17 @@ fn matrix_to_image(matrix: &Vec<Vec<(f32, f32)>>) -> Result<Vec<u8>, ServiceErro
     for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
         let (preference, relevance) = matrix[y as usize][x as usize];
 
-        // The closer data is to 1 the green it gets.
+        // The closer data is to 1 the greener it gets.
         let red = preference.mul_add(-255.0, 255.0);
         let green = preference * 255.0;
         let blue = 0.0_f32;
-        let alpha = relevance * 255.0;
+        // For some reason every relevance value returned by the database is between
+        // (about) 0.5 and 1 while it should be between 0 and 1.
+        //
+        // Unfortunately I could not figure out why this is the case and therefore just
+        // rescaled the relevance value accordingly.
+        // - Moritz (badnames)
+        let alpha = (relevance - 0.5) * 512.0;
 
         *pixel = Rgba([red as u8, green as u8, blue as u8, alpha as u8]);
     }
