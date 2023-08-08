@@ -1,7 +1,10 @@
 //! Service layer for maps.
 
-use actix_http::StatusCode;
+use std::collections::HashMap;
+
+use actix_http::{StatusCode, Method};
 use actix_web::web::Data;
+use log::trace;
 use uuid::Uuid;
 
 use crate::config::auth::user_token::UserToken;
@@ -56,7 +59,7 @@ pub async fn create(
     user_token: UserToken,
 ) -> Result<MapDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Map::create(new_map, user_id, &mut conn).await?;
+    let result = Map::create(new_map.clone(), user_id, &mut conn).await?;
     for layer_type in &LAYER_TYPES {
         let new_layer = NewLayerDto {
             map_id: result.id,
@@ -84,14 +87,54 @@ pub async fn create(
             .await?;
         }
 
-        // Create a map directory in Nextcloud
-        println!("--------------------------------");
-        println!("user token: {}", user_token.token);
-        println!("--------------------------------");
-
-
+        let token = user_token.token.clone();
+        let map_name = new_map.name.clone();
 
         // Create a Nextcloud circle with the same name as the map
+        let mut map = HashMap::new();
+        map.insert("name", map_name.clone());
+        map.insert("personal", String::from("false"));
+        map.insert("local", String::from("false"));
+
+        let client = reqwest::Client::new();
+        let url = "https://cloud.permaplant.net/ocs/v2.php/apps/circles/circles";
+        let res = client.post(url)
+            .json(&map)
+            .header("OCS-APIRequest", "true")
+            .header("Content-Type", "application/json")
+            .header("Authorization", format!("Bearer {}", token))
+            .send()
+            .await;
+        println!("--------------------------");
+        println!("Circle creation Result");
+        match res {
+            Ok(response) => println!("Circle creation result: {}", response.status()),
+            Err(e) => println!("Circle creation failed! {}", e),
+        }
+        println!("--------------------------");
+
+        // For public maps share the map directory with PermaplanT circle
+
+        // Create a map directory in Nextcloud
+        let client = reqwest::Client::new();
+        let url = format!("https://cloud.permaplant.net/remote.php/dav/files/{}/PermaplanT/{}", user_id, map_name.clone());
+        let res = client.request(Method::from_bytes(b"MKCOL").unwrap(), url)
+            .header("Content-Type", "application/json")
+            .header("Authorization", format!("Bearer {}", user_token.token))
+            .send()
+            .await;
+
+        println!("--------------------------");
+        println!("Directory creation Result");
+        match res {
+            Ok(response) => {
+                println!("Map directory creation result: {}", response.status())
+            },
+            Err(e) => println!("Map directory creation failed! {}", e),
+        }
+        println!("--------------------------");
+
+
         // Share the map directory with the circle
     }
 
