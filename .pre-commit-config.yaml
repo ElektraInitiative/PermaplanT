@@ -102,3 +102,9 @@ repos:
     rev: v1.4.1
     hooks:
       - id: mypy
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.4
+    hooks:
+      - id: codespell
+        files: ^(?!.*\/meetings\/).*\.md$
+        stages: [push]
