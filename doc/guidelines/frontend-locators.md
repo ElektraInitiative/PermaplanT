@@ -117,7 +117,7 @@ It shows which locators actionable elements usually should have.
 
 ## User facing or resilient?
 
-When chosing the right locator it is important to ask yourself one question.
+When choosing the right locator it is important to ask yourself one question.
 Do we want to test what the user perceives?
 If so, we can use `roles` and `labels`.
 If user-centricity is not so important on this element use `data-testid`.
