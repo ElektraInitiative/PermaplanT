@@ -150,7 +150,7 @@
 - integration test:  
   Used to test if different parts of the code work together correctly.  
   See [test doc](../tests) for further information.  
-  Example: Make an HTTP request to the backend and let it run through controller, service and persistance layer requiring a running database.
+  Example: Make an HTTP request to the backend and let it run through controller, service and persistence layer requiring a running database.
 - end to end test (e2e test):  
   Used to test the whole application from end to end.  
   Example: Simulate a user clicking a button (e.g. with [Selenium](https://www.selenium.dev/)) resulting in an HTTP request to the backend. Wait for the response and validate the resulting change in the frontend.
