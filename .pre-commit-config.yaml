@@ -106,5 +106,7 @@ repos:
     rev: v2.2.4
     hooks:
       - id: codespell
-        files: ^(?!.*\/meetings\/).*\.md$
-        stages: [push]
+        # Scan all .md files, exclude folders /meetings & /reports.
+        files: ^(?!.*\/(meetings|reports)\/).*\.md$
+        args: [-L crate]
+        stages: [pre-push]
