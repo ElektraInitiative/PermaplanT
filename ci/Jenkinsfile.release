@@ -1,7 +1,7 @@
 // Imports
 node('docker') {
     checkout scm
-    utils = load('ci/utils.groovy')
+    utils = load('ci/Jenkinsfile_utils.groovy')
 }
 
 stage('Build Schema') {
@@ -10,7 +10,7 @@ stage('Build Schema') {
 
 stage('Build') {
     parallel(
-        'buil-backend': utils.runDockerSidecar(
+        'build-backend': utils.runDockerSidecar(
             'cargo build --release',
             ['backend/target/release/backend'],
             ['backend']
