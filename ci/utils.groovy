@@ -36,6 +36,31 @@ def abortPreviousRun() {
     }
 }
 
+def sendEmail() {
+    def changes = currentBuild.changeSets.collect {
+        it.collect {
+            "* ${it.getCommitId().take(7)} - ${it.getAuthor()} - ${it.getMsg().take(40)}"
+        }.join('\n')
+    }.join('\n')
+    if (!changes) {
+        changes = '* No new changes since last build'
+    }
+    def message = """\
+Build ${JOB_NAME}:${BUILD_NUMBER} failed.
+Url: ${RUN_DISPLAY_URL}
+Reason: ${e}
+
+Changes: ${RUN_CHANGES_DISPLAY_URL}
+${changes}
+
+Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
+"""
+        mail subject: "Build ${JOB_NAME} failed",
+        body: message,
+        replyTo: 'noreply@libelektra.org',
+        to: 'build@libelektra.org'
+}
+
 /**
  * This method runs a Docker container with a Postgres sidecar and executes the specified command inside the container.
  *
@@ -46,8 +71,8 @@ def abortPreviousRun() {
  * @throws UnequalStashException If the stashed files are not equal in count between stashsrcList and
  * stashdirList.
  */
-def runDockerSidecar(String command,  List<String> stashsrc = [], List<String> stashdir = []) {
     return {
+def runDockerSidecar(String command,  List<String> stashsrc = [], List<String> stashdir = []) {
         node('docker') {
             node_info()
             checkout scm

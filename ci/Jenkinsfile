@@ -130,29 +130,7 @@ if (env.BRANCH_NAME == 'master') {
     } catch (Exception e) { // groovylint-disable-line
         // If master is failing we want to know ASAP so send a mail.
         // collect changes since last build
-        def changes = currentBuild.changeSets.collect {
-            it.collect {
-                "* ${it.getCommitId().take(7)} - ${it.getAuthor()} - ${it.getMsg().take(40)}"
-        }.join('\n')
-        }.join('\n')
-        if (!changes) {
-            changes = '* No new changes since last build'
-        }
-
-        def message = """\
-Build ${JOB_NAME}:${BUILD_NUMBER} failed.
-Url: ${RUN_DISPLAY_URL}
-Reason: ${e}
-
-Changes: ${RUN_CHANGES_DISPLAY_URL}
-${changes}
-
-Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
-"""
-        mail subject: "Build ${JOB_NAME} failed",
-        body: message,
-        replyTo: 'noreply@libelektra.org',
-        to: 'build@libelektra.org'
+        utils.sendEmail()
         throw err
     }
 }
