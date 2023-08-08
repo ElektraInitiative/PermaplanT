@@ -1,6 +1,22 @@
 # PermaplanT E2E tests
 
-All commands/scripts in this README are executed from this folder (/e2e).
+## Table of Contents
+
+- [Directory structure](#directory-structure)
+- [Coding Guidelines](#coding-guidelines)
+- [Quickstart](#quickstart)
+  - [Environment Variables](#environment-variables)
+  - [Creating a virtual env](#creating-a-virtual-env)
+  - [Docker](#docker)
+- [Test Results](#test-results)
+- [Test Reports](#test-reports)
+- [Cleanup](#cleanup)
+- [Optional arguments](#optional-arguments)
+- [Other Documentations](#other-documentations)
+  - [Playwright for Python](#playwright-for-python)
+  - [Pytest-playwright](#pytest-playwright)
+  - [Pytest-bdd](#pytest-bdd)
+  - [Pytest-xdist](#pytest-xdist)
 
 ## Directory structure
 
@@ -10,10 +26,24 @@ All commands/scripts in this README are executed from this folder (/e2e).
 ├── steps         The actual tests
 ├── conftest.py   Global pytest fixtures, functions.
 ├── test-reports  Pie charts, tables, runtime, etc.
-├── test-results  Screenshots, videos, etc.
+├── test-results  Screenshots, videos, etc. (generated on execution)
 ```
 
-## Environment Variables
+## [Coding Guidelines](../doc/guidelines/e2e.md)
+
+## Quickstart
+
+- All commands/scripts in this README are executed from this folder (`/e2e`).
+- Make sure your app is running.
+- Make sure the [ENV](#environment-variables) variables are set according to your desire.
+- Make sure you have a virtual environment as this will install all python dependencies.
+
+```sh
+./install.sh
+./e2e.sh
+```
+
+### Environment Variables
 
 All environment variables are optional, since they have defaults.
 For type details and defaults see [constants.py](pages/constants.py)
@@ -27,17 +57,6 @@ For type details and defaults see [constants.py](pages/constants.py)
 - `E2E_PASSWORD`
   The password to login to permaplant.
 
-## Quickstart
-
-- Make sure your app is running.
-- Make sure the [ENV](#environment-variables) variables are set according to your desire.
-- Make sure you have a virtual environment as this will install all python dependencies.
-
-```sh
-./install.sh
-./e2e.sh
-```
-
 ### Creating a virtual env
 
 ```sh
@@ -50,7 +69,7 @@ source venv/bin/activate
 ./e2e.sh
 ```
 
-### Inside Docker
+### Docker
 
 Assuming your app and database is on your localhost network.
 
@@ -62,12 +81,42 @@ docker run --network="host" permaplant-e2e ./e2e.sh
 The Jenkins pipeline performs exactly these two steps.
 So running this dockerfile locally should mirror CI.
 
-### Optional arguments
+## Cleanup
 
-Most of these are already set inside [e2e.sh](e2e.sh).
-Nevertheless, if you maybe want to build your own script, here are some pytest arguments.
+Currently we need to use [clean_db.py](clean_db.py) after or before tests to make sure all test maps are deleted.
+If we dont delete them, some tests will fail trying to create a map that already exists.
+This is automatically done with [e2e.sh](e2e.sh)`.
 
-#### Parallelization
+## Test Results
+
+Test results are created after running the tests in `test-results/`.
+This folder gets automatically created and deleted on test execution.
+It will contain screenshots and videos about failed tests.
+In Jenkins you can find the test results inside the pipeline Artifacts.
+
+## Test Reports
+
+Test reports are created at the end of tests in `test-reports/`
+In Jenkins you can find the html report inside the pipeline artifacts on the top right of Blue Ocean.
+The Cucumber report can not be found in Blue Ocean but on the standard Job page on the left side bar.
+
+### Cucumber Report
+
+Reports are locally inside `/test-reports`.
+In CI you can find the cucumber report in
+and the HTML report inside
+
+- python3 -m pytest --cucumberjson=./cucumber.json
+
+### Html Report
+
+- python3 -m pytest --html=test-reports/report.html --self-contained-html
+
+## Optional arguments
+
+If you dont like the default arguments in [e2e.sh](e2e.sh) you can execute the tests with pytest.
+
+### Parallelization
 
 Use as many processes as your computer has CPU cores.
 
@@ -75,19 +124,19 @@ Use as many processes as your computer has CPU cores.
 python3 -m pytest -n auto
 ```
 
-#### Retries
+### Retries
 
 ```sh
 python3 -m pytest --retries 3
 ```
 
-#### Single test
+### Single test
 
 ```sh
 python3 -m pytest steps/test_login_logout.py
 ```
 
-#### Video capturing
+### Video capturing
 
 ```sh
 python3 -m pytest --video on
@@ -99,47 +148,18 @@ Only on test failures.
 python3 -m pytest --video retain-on-failure
 ```
 
-#### Flaky tests
-
-If there is something suspicious going on.
-
-```sh
-set -e; for i in `seq 10`;do echo "Running iteration $i"; python -m pytest -n auto; done
-```
-
-### Cleanup
-
-Currently we need to use [clean_db.py](clean_db.py) after/before tests to make all test maps are deleted.
-If we dont delete them, some tests will fail trying to create a map that already exists.
-This is automatically done inside [e2e.sh](e2e.sh)`.
-
-## Coding Guidelines
-
-You can find the coding guidelines [here](../doc/guidelines/e2e.md).
-
-#### Reporting
-
-- python3 -m pytest --cucumberjson=./cucumber.json
-- python3 -m pytest --gherkin-terminal-reporter
-
-#### Pytest-bdd Test generator
-
-- pytest-bdd generate features/login_logout.feature > steps/test_some_feature.py
-
-Only missing stuff:
-
-- pytest --generate-missing --feature features steps/
-
 ## Other Documentations
 
-### Playwright for Python Documentation
+### [Playwright for Python](https://playwright.dev/python/docs/intro)
 
-[https://playwright.dev/python/docs/intro](https://playwright.dev/python/docs/intro)
+### [Pytest-playwright](https://playwright.dev/python/docs/test-runners)
 
-### Pytest-bdd Documentation
+### [Pytest-bdd](https://pypi.org/project/pytest-bdd/)
 
-[https://pypi.org/project/pytest-bdd/](https://pypi.org/project/pytest-bdd/)
+#### Async
 
-If we ever need async functions they might be implemented in the future.
+Async functions might be implemented in the future.
 [PR](https://github.com/pytest-dev/pytest-bdd/pull/629)
-[about asyncio with pytest-bdd](https://github.com/pytest-dev/pytest-bdd/issues/223)
+[About asyncio with pytest-bdd](https://github.com/pytest-dev/pytest-bdd/issues/223)
+
+### [Pytest-xdist](https://pytest-xdist.readthedocs.io/en/latest/index.html)

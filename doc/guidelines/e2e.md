@@ -92,3 +92,11 @@ Launch the playwright codegen from the terminal and create code that you can lat
 ```sh
 playwright codegen http://localhost:5173/
 ```
+
+#### Pytest-bdd Test generator
+
+- pytest-bdd generate features/login_logout.feature > steps/test_some_feature.py
+
+Only missing stuff:
+
+- pytest --generate-missing --feature features steps/
