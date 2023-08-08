@@ -24,14 +24,17 @@ utils.main_wrapper(
         backend.dieselMigrations(),
     ])
 
-// // Test and Build Stage
-// utils.parallel_stage('Test and Build', [
-//     backend.cargoBuild(),
-//     'cargo-clippy/doc': utils.runDockerSidecar('cargo clippy && cargo doc'),
-//     'cargo-test': utils.runDockerSidecar('cargo test'),
-//     'frontend': frontend.testAndBuildFrontend(),
-//     'mdbook': mdbook.runBuildInDocker(),
-// ])
+    // Test and Build Stage
+    utils.parallel_stage('Test and Build', [
+        backend.cargoBuild(),
+        backend.cargoClippy(),
+        backend.cargoDoc(),
+        backend.cargoTest(),
+        frontend.testAndBuildFrontend(),
+        mdbook.testBuild(),
+    ])
+
+
 })
 
 lock("${env.NODE_NAME}-exclusive") {

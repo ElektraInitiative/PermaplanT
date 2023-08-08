@@ -1,8 +1,7 @@
-commands = 'cargo build --release'
-stashSrc = ['backend/target/release/backend']
-stashDir = ['backend']
-
 def cargoBuild() {
+    commands = 'cargo build --release'
+    stashSrc = ['backend/target/release/backend']
+    stashDir = ['backend']
     return ["cargo-build": utils.runDockerSidecar(commands, stashSrc, stashDir)]
 }
 
@@ -14,13 +13,26 @@ def cargoFmt() {
     ]
 }
 
+def cargoClippy() {
+    commands = 'cargo clippy'
+    return ["cargo-clippy": utils.runDockerSidecar(commands)]
+}
+
+def cargoDoc() {
+    commands = 'cargo doc'
+    return ["cargo-doc": utils.runDockerSidecar(commands)]
+}
+
+def cargoTest() {
+    commands = 'cargo test'
+    return ["cargo-test": utils.runDockerSidecar(commands)]
+}
+
 def schemas() {
-    image = "permaplant-rust"
-    buildArgs = "./ci/container-images/permaplant-rust"
-    commands = ["./ci/build-scripts/build-schema.sh"]
+    commands = ["echo building schemas"] // no command needed, runDockerSidecar always builds schemas.
     stashSrc = ["backend/src/schema.rs", "frontend/src/bindings/definitions.ts"]
     stashDir = ["schema.rs", "definitions.ts"]
-    return ["schema": utils.runInDocker(image, buildArgs, commands, stashSrc, stashDir)]
+    return ["schema": utils.runDockerSidecar(commands, stashSrc, stashDir)]
 }
 
 def dieselMigrations() {
