@@ -423,6 +423,22 @@ async function mergeDatasets() {
 }
 
 /**
+ * Cleans up a JSON array for smoother CSV export.
+ *
+ * @param {Array} plants - Array of plants
+ */
+function cleanUpJsonForCsv(plants) {
+  const columns = Object.keys(plants[0]);
+  plants.forEach((plant) => {
+    columns.forEach((column) => {
+      if (plant[column] === "") {
+        plant[column] = null;
+      }
+    });
+  });
+}
+
+/**
  * The function writes the merged dataset to a CSV file.
  *
  * @param {*} plants - Array of plants
@@ -433,6 +449,7 @@ async function writePlantsToCsv(plants) {
   }
 
   let updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
+  cleanUpJsonForCsv(updatedPlants);
 
   await fetchGermanNamesForPlantsConcurrent(updatedPlants);
 
