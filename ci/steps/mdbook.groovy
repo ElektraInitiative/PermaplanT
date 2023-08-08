@@ -5,7 +5,7 @@ stashSrc = "book/"
 stashDir = "mdbook"
 
 def runBuildInDocker() {
-    return utils.runInDocker(image, buildArgs, cmds, stashSrc, stashDir)
+    return utils.runInDocker(image, buildArgs, commands, stashSrc, stashDir)
 }
 
 return this
