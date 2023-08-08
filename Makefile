@@ -16,7 +16,7 @@ all: build
 
 
 .PHONY: help
-help:  ## Show help for each of the Makefile recipes.
+help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9_-]+:.*?## / {gsub("\\\\n",sprintf("\n%22c",""), $$2);printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 
@@ -24,23 +24,23 @@ help:  ## Show help for each of the Makefile recipes.
 
 
 .PHONY: run-frontend
-run-frontend: build-frontend  ## Build & Run frontend.
+run-frontend: build-frontend  ## Build & Run frontend
 	@cd frontend && npm run dev -- --host
 
 .PHONY: run-backend
-run-backend: build-backend  ## Build & Run backend.
+run-backend: build-backend  ## Build & Run backend
 	@cd backend && make run
 
 .PHONY: run-reset-backend
-run-reset-backend: reset-database  ## Build & Run backend with a database reset.
+run-reset-backend: reset-database  ## Build & Run backend with a database reset
 	$(MAKE) run-backend
 
 .PHONY: run-mdbook
-run-mdbook: build-mdbook  ## Build & Run mdbook.
+run-mdbook: build-mdbook  ## Build & Run mdbook
 	@mdbook serve --open
 
 .PHONY: run-storybook
-run-storybook: build-storybook  ## Build & Run storybook.
+run-storybook: build-storybook  ## Build & Run storybook
 	@cd frontend && npm run storybook
 
 
@@ -48,23 +48,23 @@ run-storybook: build-storybook  ## Build & Run storybook.
 
 
 .PHONY: test
-test: test-frontend test-backend test-mdbook test-e2e  ## Test everything.
-	@pre-commit
+test: test-frontend test-backend test-mdbook test-e2e  ## Test everything
+	$(MAKE) pre-commit
 
 .PHONY: test-e2e
-test-e2e:  ## End-to-End tests. Needs install-e2e, backend and frontend running.
+test-e2e:  ## End-to-End tests. Needs install-e2e, backend and frontend running
 	@cd e2e && ./e2e.sh
 
 .PHONY: test-frontend
-test-frontend:  build-frontend  ## Build & Test Frontend.
+test-frontend:  build-frontend  ## Build & Test Frontend
 	@cd frontend && npm install && npm run format:check && npm run lint && npm run test
 
 .PHONY: test-backend
-test-backend:  build-backend  ## Build & Test Backend.
+test-backend:  build-backend  ## Build & Test Backend
 	@cd backend && make test
 
 .PHONY: test-mdbook
-test-mdbook:  build-mdbook  ## Build & Test Mdbook.
+test-mdbook:  build-mdbook  ## Build & Test Mdbook
 	@mdbook test
 
 
@@ -72,34 +72,34 @@ test-mdbook:  build-mdbook  ## Build & Test Mdbook.
 
 
 .PHONY: build
-build: generate-api-types build-frontend build-backend build-storybook build-mdbook  # Build everything.
+build: generate-api-types build-frontend build-backend build-storybook build-mdbook  # Build everything
 
 .PHONY: build-frontend
-build-frontend: install-frontend generate-api-types  ## Build frontend.
+build-frontend: install-frontend generate-api-types  ## Build Frontend
 	@cd frontend npm run generate-api-types && npm run build
 
 .PHONY: build-backend
-build-backend: install-backend generate-api-types  ## Build backend.
+build-backend: install-backend generate-api-types  ## Build Backend
 	@cd backend && make build
 
 .PHONY: build-mdbook
-build-mdbook: install-backend  ## Build mdbook.
+build-mdbook: install-backend  ## Build Mdbook
 	@mdbook build
 
 .PHONY: build-storybook
-build-storybook: generate-api-types  ## Build storybook.
+build-storybook: generate-api-types  ## Build Storybook
 	@cd frontend && npm install && npm run build-storybook
 
 
 # MISC
 
 
-.PHONY: scraper-start-full
-scraper-start-full:  ## Scrape and then insert scraped data into the database.
+.PHONY: full-scraper
+full-scraper:  ## Scrape and then insert scraped data into the database
 	@cd scraper && npm install && mkdir -p data && npm run start:full
 
 .PHONY: insert-scraper
-insert-scraper:  ## Insert scraped data into the database.
+insert-scraper:  ## Insert scraped data into the database
 	@cd scraper && npm install && mkdir -p data && npm run insert
 
 .PHONY: migration
@@ -107,32 +107,32 @@ migration:  ## Database migration.
 	@cd backend && make migration
 
 .PHONY: migration-redo
-migration-redo:  ## Run down.sql and then up.sql for most recent migrations.
+migration-redo:  ## Run down.sql and then up.sql for most recent migrations
 	@cd backend && make migration-redo
 
 .PHONY: migration-redo-a
-migration-redo-a:  ## Run down.sql and then up.sql for all migrations.
+migration-redo-a:  ## Run down.sql and then up.sql for all migrations
 	@cd backend && make migration-redo-a
 
 .PHONY: reset-database
-reset-database:  ## Reset diesel database AND insert data again.
+reset-database:  ## Reset diesel database AND insert data again
 	@cd backend && make reset-database
 	$(MAKE) insert-scraper
 
 .PHONY: generate-type-doc
-generate-type-doc:  ## Generate typedoc.
+generate-type-doc:  ## Generate typedoc
 	@cd frontend && npm install && npm run doc
 
 .PHONY: generate-api-types
-generate-api-types:  ## Generate api-types.
+generate-api-types:  ## Generate api-types
 	@cd frontend && npm run generate-api-types
 
 .PHONY: psql-r
-psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB.
+psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
 	@psql -h db -p 5432 -U $(POSTGRES_USER) $(POSTGRES_DB)
 
-.PHONY: pre-commit-a
-pre-commit-a:  ## Check all files with pre-commit.
+.PHONY: pre-commit
+pre-commit:  ## Check all files with pre-commit
 	@pre-commit run --all-files
 
 .PHONY: docker-up
@@ -144,7 +144,7 @@ docker-up:  ## Start a containerized dev environment
 
 
 .PHONY: install
-install: install-backend install-frontend  ## Install ALL dependencies within the source repo.
+install: install-backend install-frontend  ## Install ALL dependencies within the source repo
 	@echo "Installation completed."
 
 .PHONY: install-frontend
@@ -158,7 +158,7 @@ install-frontend:  ## Install frontend
 	fi
 
 .PHONY: install-backend
-install-backend:  $(FAKE_FILE)  ## Install backend and mdbook deps.
+install-backend:  $(FAKE_FILE)  ## Install backend and mdbook deps
 	@echo "Checking if backend dependencies install is required..."
 
 $(FAKE_FILE):  Makefile
@@ -168,7 +168,7 @@ $(FAKE_FILE):  Makefile
 	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary --locked
 
 .PHONY: install-e2e
-install-e2e:  ## Install e2e dependencies within this repo.
+install-e2e:  ## Install e2e dependencies within this repo
 	@cd e2e && ./install.sh
 
 
@@ -176,7 +176,7 @@ install-e2e:  ## Install e2e dependencies within this repo.
 
 
 .PHONY: uninstall
-uninstall:  uninstall-e2e ## Uninstall and clean everything up.
+uninstall:  uninstall-e2e ## Uninstall and clean everything up
 	-cd frontend && rm -rf node_modules
 	-cd frontend && rm -rf storybook-static
 	-cd scraper && rm -rf node_modules
