@@ -1,4 +1,5 @@
 image = "permaplant-node"
+buildArgs = "-f ./ci/container-images/permaplant-node/Dockerfile ."
 commands = [
     "git init",
     "pre-commit run check-merge-conflict -a",
@@ -11,10 +12,9 @@ commands = [
     "pre-commit run mypy -a",
     "pre-commit run --hook-stage manual codespell -a"
 ]
-buildArgs = "-f ./ci/container-images/permaplant-node/Dockerfile ."
 
 def runInDocker() {
-    return utils.runDocker(pre_commit.image, pre_commit.buildArgs, pre_commit.commands)
+    return utils.runDocker(image, buildArgs, commands)
 }
 
 return this

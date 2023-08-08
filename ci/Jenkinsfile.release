@@ -2,10 +2,10 @@
 
 node('docker') {
     checkout scm
-    utils = load('ci/Jenkinsfile_utils.groovy')
-    schema = load('ci/steps/Jenkinsfile_schema.groovy')
-    frontend = load('ci/steps/Jenkinsfile_frontend.groovy')
-    backend = load('ci/steps/Jenkinsfile_backend.groovy')
+    utils = load('ci/utils.groovy')
+    schema = load('ci/steps/schema.groovy')
+    frontend = load('ci/steps/frontend.groovy')
+    backend = load('ci/steps/backend.groovy')
 }
 
 utils.main_wrapper({

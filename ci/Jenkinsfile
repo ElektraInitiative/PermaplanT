@@ -1,15 +1,17 @@
 // This is the main pipeline that gets executed for PR's and master merges.
 
+// Imports
 node('docker') {
     checkout scm
-    utils = load('ci/Jenkinsfile_utils.groovy')
-    schema = load('ci/steps/Jenkinsfile_schema.groovy')
-    frontend = load('ci/steps/Jenkinsfile_frontend.groovy')
-    backend = load('ci/steps/Jenkinsfile_backend.groovy')
-    mdbook = load('ci/steps/Jenkinsfile_mdbook.groovy')
-    pre_commit = load('ci/steps/Jenkinsfile_pre_commit.groovy')
+    utils = load('ci/utils.groovy')
+    schema = load('ci/steps/schema.groovy')
+    frontend = load('ci/steps/frontend.groovy')
+    backend = load('ci/steps/backend.groovy')
+    mdbook = load('ci/steps/mdbook.groovy')
+    pre_commit = load('ci/steps/pre_commit.groovy')
 }
 
+// Main Pipeline
 utils.main_wrapper(
 {
     // Abort previous runs
