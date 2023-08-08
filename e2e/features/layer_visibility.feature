@@ -1,4 +1,4 @@
-Feature: PermaplanT planting
+Feature: Layer Visibility
     As a user I want to be able to change the layer visibilities
 
     Scenario: Successfully change plant layer visibility

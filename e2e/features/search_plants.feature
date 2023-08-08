@@ -1,4 +1,4 @@
-Feature: Planting Plant Search
+Feature: Plant Search
     As a user I want to able to search for plants
 
     Background:
