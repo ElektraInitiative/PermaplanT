@@ -282,7 +282,7 @@
 
 ## TC-017 - Map Editor Guided Tour
 
-- Description: Guided Tour only shows when not completed or explicitely cancelled.
+- Description: Guided Tour only shows when not completed or explicitly cancelled.
 - Preconditions:
   - User must not have completed the Guided Tour prior.
   - User must be on the map editor screen.

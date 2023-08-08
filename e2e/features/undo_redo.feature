@@ -1,11 +1,11 @@
-Feature: PermaplanT undo/redo
+Feature: Planting Undo/Redo
+    As a user I want to be able to undo and redo actions
 
     Background:
-    Given I am on the SUTUndoRedo map page and I have selected the plant layer
+        Given I am on the SUTUndoRedo map page and I have planted something
 
     Scenario: Successful undo
-        When I plant something
-        And I click undo
+        When I click undo
         Then my plant is gone
 
     Scenario: Successful redo after accidental undo
