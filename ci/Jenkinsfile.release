@@ -5,7 +5,6 @@ node('docker') {
     utils = load('ci/utils.groovy')
     schema = load('ci/steps/schema.groovy')
     frontend = load('ci/steps/frontend.groovy')
-    backend = load('ci/steps/backend.groovy')
 }
 
 utils.main_wrapper({
@@ -14,8 +13,8 @@ utils.main_wrapper({
     ])
 
     utils.parallel_stage('Test and Build', [
-        backend.buildBackend(),
-        frontend.testAndBuildFrontend(skipTest=true),
+        "build-backend": backend.runBuildInDocker()
+        "build-backend": frontend.testAndBuildFrontend(skipTest=true),
     ])
 })
 
