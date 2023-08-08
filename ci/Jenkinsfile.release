@@ -9,7 +9,7 @@ node('docker') {
 
 utils.main_wrapper({
     utils.parallel_stage('Prepare', [
-        schema.buildSchema()
+        backend.schemas()
     ])
 
     utils.parallel_stage('Test and Build', [

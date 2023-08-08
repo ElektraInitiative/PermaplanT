@@ -17,7 +17,7 @@ def cargoFmt() {
 def schemas() {
     image = "permaplant-rust"
     buildArgs = "./ci/container-images/permaplant-rust"
-    commands = ["echo schema test"] // No command needed, default runInDocker builds always schema.
+    commands = ["./ci/build-scripts/build-schema.sh"]
     stashSrc = ["backend/src/schema.rs", "frontend/src/bindings/definitions.ts"]
     stashDir = ["schema.rs", "definitions.ts"]
     return ["schema": utils.runInDocker(image, buildArgs, commands, stashSrc, stashDir)]
