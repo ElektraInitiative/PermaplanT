@@ -14,7 +14,7 @@ commands = [
 buildArgs = "-f ./ci/container-images/permaplant-node/Dockerfile ."
 
 def runInDocker() {
-    return util.runDocker(pre_commit.image, pre_commit.buildArgs, pre_commit.commands)
+    return utils.runDocker(pre_commit.image, pre_commit.buildArgs, pre_commit.commands)
 }
 
 return this
