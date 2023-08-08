@@ -1,4 +1,4 @@
-// This is the main pipeline that gets executed for PR's and master merges.
+// This is the pipeline that gets executed for PR's and master changes.
 
 // Imports
 node('docker') {

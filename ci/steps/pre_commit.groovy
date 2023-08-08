@@ -14,7 +14,7 @@ commands = [
 ]
 
 def runInDocker() {
-    return utils.runDocker(image, buildArgs, commands)
+    return utils.runInDocker(image, buildArgs, commands)
 }
 
 return this
