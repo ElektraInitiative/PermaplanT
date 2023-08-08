@@ -83,7 +83,7 @@ build-backend: install-backend generate-api-types  ## Build backend.
 	@cd backend && make build
 
 .PHONY: build-mdbook
-build-mdbook: install-mdbook ## Build mdbook.
+build-mdbook: install-backend  ## Build mdbook.
 	@mdbook build
 
 .PHONY: build-storybook
@@ -168,7 +168,7 @@ $(FAKE_FILE):  Makefile
 	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary --locked
 
 .PHONY: install-e2e
-install-e2e:
+install-e2e:  ## Install e2e dependencies within this repo.
 	@cd e2e && ./install.sh
 
 
