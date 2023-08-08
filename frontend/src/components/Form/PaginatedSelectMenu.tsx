@@ -43,7 +43,7 @@ export interface PaginatedSelectMenuProps<
   placeholder?: string;
   /** Maximum time interval between two inputs (in milliseconds) before they are considered separate inputs. */
   debounceTimeout?: number;
-  /** Options controlling how data is loaded by react-select. */
+  /** Function for loading a page of options. */
   loadOptions: LoadOptions<Option, GroupBase<Option>, PageAdditionalInfo>;
   /** Callback that is invoked every time the user selects a new option. The single argument represents the selected option.*/
   handleOptionsChange?: (option: unknown) => void;

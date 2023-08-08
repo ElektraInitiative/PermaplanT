@@ -40,7 +40,7 @@ export interface SelectMenuProps<
 
 /**
  * Allows the user to choose from a set of predetermined options.
- * Based on react-select.
+ * Based on react-select (https://react-select.com/home).
  */
 export default function SelectMenu<
   T extends FieldValues,
