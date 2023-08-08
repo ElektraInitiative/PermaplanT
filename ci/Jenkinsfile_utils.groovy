@@ -18,11 +18,10 @@ def wait_for_pr_db() {
 }
 
 /**
- * Aborts the previous build in progress if it exists and the current build is not on the "master" branch.
+ * Aborts the previous build in progress if it exists.
  * This method is used to prevent multiple concurrent builds for non-master branches.
  */
-def abortPreviousRunUnlessMaster() {
-    if (env.BRANCH_NAME == 'master') { return }
+def abortPreviousRun() {
     def exec = currentBuild
              ?.rawBuild
              ?.getPreviousBuildInProgress()
