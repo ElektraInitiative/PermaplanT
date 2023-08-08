@@ -24,7 +24,7 @@ def schemas() {
 }
 
 def dieselMigrations() {
-    return ["migrations": runDockerSidecar(testMigrations())]
+    return ["migrations": utils.runDockerSidecar(testMigrations())]
 }
 
 def testMigrations() {
