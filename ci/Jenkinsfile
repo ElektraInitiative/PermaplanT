@@ -132,7 +132,7 @@ def testAndBuildMdbook() {
  * @return The checksum of the file as a trimmed string.
  */
 def checksum(String file) {
-    return sh(returnStdout: true, script: "checksum $file").trim()
+    return sh(returnStdout: true, script: "sha256sum $file").trim()
 }
 
 def testAndBuildFrontend() {

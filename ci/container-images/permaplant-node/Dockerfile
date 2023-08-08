@@ -9,8 +9,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pre-commit && \
     rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g checksum
-
 ENV PERMAPLANT_PATH /home/batman/permaplant
 WORKDIR $PERMAPLANT_PATH
 COPY . $PERMAPLANT_PATH
