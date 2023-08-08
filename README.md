@@ -23,7 +23,7 @@ Which will open [/doc/architecture/README.md](/doc/architecture/README.md) as fi
 
 Type `make help` to see all commands.
 
-**Some of the commands require env variables to be set. Have a look at [backend env variables](./doc/backend/01setup.md) and [frontend env variables](./frontend/README.md)**
+**Some of the commands require env variables to be set. Have a look at [backend env variables](./doc/backend/01setup.md), [frontend env variables](./frontend/README.md) and [scraper env variables](./scraper/README.md)**
 
 Important links:
 
