@@ -73,6 +73,6 @@ def buildBackend() {
                 }
             }
         }
-    }
+    }]
 }
 return this
