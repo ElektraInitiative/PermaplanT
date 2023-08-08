@@ -1,4 +1,4 @@
-Feature: PermaplanT Login and Logout Functionality
+Feature: Login and Logout
     As a user I want to be able to login and logout successfully
 
     Scenario: Successful Login

@@ -1,5 +1,5 @@
-Feature: PermaplanT planting
-    As a user I want to be plant something on my map
+Feature: Planting
+    As a user I want to be able plant something on my map
 
     Background:
         Given I am on the SUTPlanting map page and I have selected the plant layer

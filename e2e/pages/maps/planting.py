@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from datetime import datetime, timedelta
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
 from e2e.pages.abstract_page import AbstractPage
 from e2e.pages.constants import E2E_URL
@@ -25,9 +26,13 @@ class MapPlantingPage(AbstractPage):
         # Canvas
         self._canvas = page.get_by_test_id("canvas")
         self._close_selected_plant = page.get_by_test_id("canvas").get_by_role("button")
+        self._map_date = page.get_by_label("Change map date")
         # Top left section
         self._undo_button = page.get_by_test_id("undo-button")
         self._redo_button = page.get_by_test_id("redo-button")
+        # Selected plant section
+        self._plant_added_date = page.get_by_label("Added on")
+        self._plant_removed_date = page.get_by_label("Removed on")
         # Plant layer
         self._base_layer_radio = page.get_by_test_id("base-layer-radio")
         self._plant_layer_radio = page.get_by_test_id("plants-layer-radio")
@@ -48,6 +53,21 @@ class MapPlantingPage(AbstractPage):
     def check_plant_layer(self):
         """Ckecks the plant layer radio button."""
         self._plant_layer_radio.set_checked(True)
+
+    def change_map_date_by_days(self, delta_days: int):
+        """Changes the date by a given amount of days."""
+        day = datetime.today() + timedelta(days=delta_days)
+        self._map_date.fill(day.strftime("%Y-%m-%d"))
+
+    def change_plant_added_date_by_days(self, delta_days: int):
+        """Changes the date by a given amount of days."""
+        day = datetime.today() + timedelta(days=delta_days)
+        self._plant_added_date.fill(day.strftime("%Y-%m-%d"))
+
+    def change_plant_removed_date_by_days(self, delta_days: int):
+        """Changes the date by a given amount of days."""
+        day = datetime.today() + timedelta(days=delta_days)
+        self._plant_removed_date.fill(day.strftime("%Y-%m-%d"))
 
     def fill_plant_search(self, plantname):
         """Clicks the search icon and types plantname into the plant search."""

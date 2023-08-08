@@ -51,6 +51,12 @@ def on_a_map_page_with_layer(
     return mpp
 
 
+@given(parsers.parse("I am on the {mapname} map page and I have planted something"))
+def given_on_map_page_and_planted(hp, lp, mmp, mcp, mpp, mapname, worker_id):
+    on_a_map_page_with_layer(hp, lp, mmp, mcp, mpp, mapname, "plant", worker_id)
+    plant_a_tomato(mpp)
+
+
 def login(hp: HomePage, lp: LoginPage) -> HomePage:
     """
     Login to permaplant and close the login notification.

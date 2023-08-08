@@ -1,4 +1,5 @@
-Feature: PermaplanT Map Creation
+Feature: Map Creation
+    As a user I want to be able to create maps
 
     Background:
         Given I am on the map management page

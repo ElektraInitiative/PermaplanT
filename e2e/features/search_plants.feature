@@ -1,4 +1,5 @@
-Feature: Searching for Plants
+Feature: Planting Plant Search
+    As a user I want to able to search for plants
 
     Background:
         Given I am on the SUTSearching map page and I have selected the plant layer
