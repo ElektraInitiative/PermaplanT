@@ -19,7 +19,7 @@ utils.main_wrapper(
          "pre-commit": pre_commit.runInDocker(),
         // Workaround: we can't stop rustfmt from linting the generated schema.rs
         // so we empty the file before.
-        "cargo-fmt": runDockerSidecar(
+        "cargo-fmt": util.runDockerSidecar(
             "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
             ),
         // End of workaround
@@ -30,14 +30,14 @@ utils.main_wrapper(
     ])
 
     utils.parallel_stage('Test and Build', [
-        'cargo-build': runDockerWithPostgresSidecar(
+        'cargo-build': util.runDockerWithPostgresSidecar(
             'cargo build --release',
             ['backend/target/release/backend'],
             ['backend']
         ),
-        'cargo-clippy/doc': runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
-        'cargo-test': runDockerWithPostgresSidecar('cargo test'),
-        'frontend': testAndBuildFrontend(),
+        'cargo-clippy/doc': util.runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
+        'cargo-test': util.runDockerWithPostgresSidecar('cargo test'),
+        'frontend': frontend.testAndBuildFrontend(),
         'mdbook': mdbook.runInDocker(),
     ])
 })
