@@ -27,8 +27,8 @@ utils.main_wrapper(
 // // Test and Build Stage
 // utils.parallel_stage('Test and Build', [
 //     backend.cargoBuild(),
-//     'cargo-clippy/doc': utils.runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
-//     'cargo-test': utils.runDockerWithPostgresSidecar('cargo test'),
+//     'cargo-clippy/doc': utils.runDockerSidecar('cargo clippy && cargo doc'),
+//     'cargo-test': utils.runDockerSidecar('cargo test'),
 //     'frontend': frontend.testAndBuildFrontend(),
 //     'mdbook': mdbook.runBuildInDocker(),
 // ])

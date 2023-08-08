@@ -3,14 +3,14 @@ stashSrc = ['backend/target/release/backend']
 stashDir = ['backend']
 
 def cargoBuild() {
-    return ["cargo-build": utils.runDockerWithPostgresSidecar(commands, stashSrc, stashDir)]
+    return ["cargo-build": utils.runDockerSidecar(commands, stashSrc, stashDir)]
 }
 
 def cargoFmt() {
     // Workaround: we can't stop rustfmt from linting the generated schema.rs
     // so we empty the file before.
     return ["cargo-fmt":
-    utils.runDockerWithPostgresSidecar("/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"),
+    utils.runDockerSidecar("/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"),
     ]
 }
 
@@ -24,7 +24,7 @@ def schemas() {
 }
 
 def dieselMigrations() {
-    return ["migrations": runDockerWithPostgresSidecar(testMigrations())]
+    return ["migrations": runDockerSidecar(testMigrations())]
 }
 
 def testMigrations() {

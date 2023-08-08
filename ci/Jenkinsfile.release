@@ -13,8 +13,8 @@ utils.main_wrapper({
     ])
 
     utils.parallel_stage('Test and Build', [
-        "build-backend": backend.runBuildInDocker()
-        "build-backend": frontend.testAndBuildFrontend(skipTest=true),
+        backend.cargoBuild()
+        frontend.testAndBuildFrontend(skipTest=true),
     ])
 })
 
