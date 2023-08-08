@@ -5,9 +5,8 @@ node('docker') {
 }
 
 // PIPELINE BEGIN
-utils.abortPreviousRunUnlessMaster()
-
 timeout(time: 2, unit: 'HOURS') {
+    utils.abortPreviousRunUnlessMaster()
     try {
         stage('Sanity') {
             schemaStashsrc = [
