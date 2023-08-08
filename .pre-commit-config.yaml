@@ -109,4 +109,4 @@ repos:
         # Scan all .md files, exclude folders /meetings & /reports.
         files: ^(?!.*\/(meetings|reports)\/).*\.md$
         args: [-L crate]
-        stages: [push]
+        stages: [manual]
