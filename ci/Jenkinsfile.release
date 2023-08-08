@@ -5,6 +5,7 @@ node('docker') {
     utils = load('ci/utils.groovy')
     schema = load('ci/steps/schema.groovy')
     frontend = load('ci/steps/frontend.groovy')
+    backend = load('ci/steps/backend.groovy')
 }
 
 utils.main_wrapper({

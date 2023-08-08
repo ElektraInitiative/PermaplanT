@@ -7,6 +7,7 @@ node('docker') {
     schema = load('ci/steps/schema.groovy')
     frontend = load('ci/steps/frontend.groovy')
     mdbook = load('ci/steps/mdbook.groovy')
+    backend = load('ci/steps/backend.groovy')
     pre_commit = load('ci/steps/pre_commit.groovy')
 }
 
