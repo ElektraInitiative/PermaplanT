@@ -27,7 +27,7 @@ utils.main_wrapper(
             ),
         // End of workaround
         "schema": schema.runInDocker(),
-        "migration": utils.runDockerSidecar(testMigrations()),
+        "migration": utils.runDockerSidecar(backend.testMigrations()),
     ])
 
     // Test and Build Stage
