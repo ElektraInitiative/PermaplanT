@@ -5,7 +5,7 @@ node('docker') {
 }
 
 // PIPELINE BEGIN
-abortPreviousRunUnlessMaster()
+utils.abortPreviousRunUnlessMaster()
 
 timeout(time: 2, unit: 'HOURS') {
     try {
@@ -25,7 +25,7 @@ timeout(time: 2, unit: 'HOURS') {
                     "schema": utils.runDockerSidecar(
                         'echo schema test', schemaStashsrc, schemaStashdir
                         ),
-                    "migration": utils.runDockerSidecar(testMigrations()),
+                    "migration": utils.runDockerSidecar(utils.testMigrations()),
                     failFast: true
             )
         }
@@ -54,7 +54,7 @@ timeout(time: 2, unit: 'HOURS') {
 lock("${env.NODE_NAME}-exclusive") {
     stage('Deploy PR') {
         node('permaplant && pr') {
-            node_info()
+            utils.node_info()
 
             checkout scm
 
@@ -95,12 +95,12 @@ lock("${env.NODE_NAME}-exclusive") {
 
     stage('E2E Tests') {
         node('docker') {
-            node_info()
+            utils.node_info()
             checkout scm
             def e2eImage = docker.build("permaplant-e2e:build", "./e2e")
             try {
                 e2eImage.inside("-e E2E_URL=https://pr.permaplant.net") {
-                    wait_for_pr_db()
+                    utils.wait_for_pr_db()
                     sh 'make test-e2e'
                 }
             } catch (err) {
@@ -125,7 +125,7 @@ if (env.BRANCH_NAME == 'master') {
     try {
         stage('Deploy Dev') {
             node('permaplant && dev') {
-                node_info()
+                utils.node_info()
 
                 checkout scm
 

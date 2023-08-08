@@ -5,12 +5,12 @@ node('docker') {
 }
 
 stage('Build Schema') {
-    runDockerSidecar('echo schema test', schemaStashsrc, schemaStashdir)
+    utils.runDockerSidecar('echo schema test', schemaStashsrc, schemaStashdir)
 }
 
 stage('Build') {
     parallel(
-        'buil-backend': runDockerSidecar(
+        'buil-backend': utils.runDockerSidecar(
             'cargo build --release',
             ['backend/target/release/backend'],
             ['backend']
