@@ -5,7 +5,7 @@ stashSrc = ["backend/src/schema.rs", "frontend/src/bindings/definitions.ts"]
 stashDir = ["schema.rs", "definitions.ts"]
 
 def runInDocker() {
-    return utils.runInDocker(image, buildArgs, cmds, stashSrc, stashDir)
+    return utils.runInDocker(image, buildArgs, commands, stashSrc, stashDir)
 }
 
 return this
