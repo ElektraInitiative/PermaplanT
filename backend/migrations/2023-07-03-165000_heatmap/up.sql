@@ -89,7 +89,7 @@ BEGIN
     num_cols := FLOOR((x_max - x_min) / granularity); -- Adjusted for granularity
     num_rows := FLOOR((y_max - y_min) / granularity); -- Adjusted for granularity
 
-    -- Calculate the score for each pixel on the heatmap
+    -- Calculate the score for each point on the heatmap
     FOR i IN 0..num_cols-1 LOOP
         FOR j IN 0..num_rows-1 LOOP
             -- i and j do not represent coordinates. We need to adjust them to actual coordinates.
@@ -128,8 +128,8 @@ RETURNS SCORE AS $$
 DECLARE
     score SCORE;
 BEGIN
-    score.preference := 1 / (1 + exp(-input.preference));       -- standard sigmoid so f(0)=0.5
-    score.relevance := (2 / (1 + exp(-input.relevance))) - 1;   -- modified sigmoid so f(0)=0
+    score.preference := 1 / (1 + exp(-input.preference));       -- standard sigmoid, so that f(0)=0.5
+    score.relevance := (2 / (1 + exp(-input.relevance))) - 1;   -- modified sigmoid, so that f(0)=0
     RETURN score;
 END;
 $$ LANGUAGE plpgsql;
