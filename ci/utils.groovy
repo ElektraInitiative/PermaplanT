@@ -144,13 +144,11 @@ def testFrontend() {
             nodeImage.inside {
                 unstash 'definitions.ts'
                 stage('test') {
-                    // groovylint-disable-next-line
                     dir('frontend') {
                         def checksumBefore = checksum('package-lock.json')
                         sh 'npm i'
                         def checksumAfter = checksum('package-lock.json')
                         echo 'Checking if package-lock.json is modified by npm install'
-                        // groovylint-disable-next-line
                         if (checksumBefore != checksumAfter) { throw new PackageLockJsonModifiedException() }
                         sh 'npm ci'
                         sh 'npm run format:check'
