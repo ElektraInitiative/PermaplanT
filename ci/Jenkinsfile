@@ -100,6 +100,7 @@ def runDockerPreCommit() {
                 sh "pre-commit run black -a"
                 sh "pre-commit run flake8 -a"
                 sh "pre-commit run mypy -a"
+                sh "pre-commit run codespell -a"
             }
         }
     }
