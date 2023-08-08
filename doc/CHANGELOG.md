@@ -6,7 +6,7 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.3.2 - UNRELEASED
+## 0.3.3 - UNRELEASED
 
 - _()_
 - _()_
@@ -24,46 +24,55 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+
+## 0.3.2 - 07.08.2023 (42 commits)
+
 - Fix a bug where an 'empty' but visible selection box would be left behind _(Paul)_
 - Fix a bug where seemingly random date change actions would be fired _(Paul)_
 - Fix dimensions of canvas _(Paul)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- npm audit fix + test protocol _(Markus)_
 - E2E: Add undo/redo e2e tests # _(4ydan)_
-- _()_
-- _()_
-- _()_
 - E2E: Improve documentation/usage #784 _(4ydan)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
 
 ## 0.3.1 - 03.08.2023 (54 commits)
 
