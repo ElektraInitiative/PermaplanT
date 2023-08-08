@@ -9,7 +9,7 @@ Feature: Layer Visibility
 
     Scenario: Successfully change base layer visibility
         Given I am on the SUT-LayerVisibility map page and I have selected the base layer
-        And I have an empty canvas before
+        And I capture a screenshot of the canvas
         When I select a background image
         And I turn the base layer visiblity off
-        Then the base layer is invisible
+        Then the canvas looks like the captured screenshot
