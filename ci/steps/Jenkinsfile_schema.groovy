@@ -1,3 +1,7 @@
+schemaStashSrc = ['backend/src/schema.rs','frontend/src/bindings/definitions.ts']
+schemaStashDir = ['schema.rs', 'definitions.ts']
+
+
 def buildSchema() {
     return ['Build Schema': {
         node('docker') {

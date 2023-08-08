@@ -13,9 +13,8 @@ utils.main_wrapper({
         schema.buildSchema()
     ])
 
-
     utils.parallel_stage('Test and Build', [
-        backend.testAndBuildBackend(skipTest=true),
+        backend.buildBackend(),
         frontend.testAndBuildFrontend(skipTest=true),
     ])
 })

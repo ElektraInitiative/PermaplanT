@@ -1,22 +1,11 @@
-def testAndBuildMdbook() {
-    return ['Mdbook': {
-        node('docker') {
-            checkout scm
-            utils = load('ci/Jenkinsfile_utils.groovy')
-            utils.node_info()
-            def mdbook_image = docker.build("permaplant-mdbook", "./ci/container-images/permaplant-mdbook")
+image = "permplant-mdbook"
+buildArgs = "./ci/container-images/permaplant-mdbook"
+commands = ["mdbook test", "mdbook build"]
+stashSrc = "book/"
+stashDir = "mdbook"
 
-            mdbook_image.inside {
-                checkout scm
-
-                stage('test-and-build-mdbook'){
-                    sh "mdbook test"
-                    sh 'mdbook build'
-                    stash includes: 'book/', name: 'mdbook'
-                }
-            }
-        }
-    }]
+def runInDocker() {
+    return util.runInDocker(mdbook.image, mdbook.buildArgs, mdbook.cmds, mdbook.stashSrc, mdbook.stashDir)
 }
 
 return this

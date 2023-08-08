@@ -7,6 +7,7 @@ node('docker') {
     frontend = load('ci/steps/Jenkinsfile_frontend.groovy')
     backend = load('ci/steps/Jenkinsfile_backend.groovy')
     mdbook = load('ci/steps/Jenkinsfile_mdbook.groovy')
+    pre_commit = load('ci/steps/Jenkinsfile_pre_commit.groovy')
 }
 
 utils.main_wrapper(
@@ -14,51 +15,97 @@ utils.main_wrapper(
     // Abort previous runs
     utils.abortPreviousRun()
 
-    // Have to put it in a parallel stage, otherwise doesnt work.
-    utils.parallel_stage('Prepare', [
-        schema.buildSchema()
+    utils.parallel_stage('Sanity', [
+         "pre-commit": pre_commit.runInDocker(),
+        // Workaround: we can't stop rustfmt from linting the generated schema.rs
+        // so we empty the file before.
+        "cargo-fmt": runDockerSidecar(
+            "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
+            ),
+        // End of workaround
+        "schema": util.runDockerSidecar(
+            'echo schema test', schemaStashsrc, schemaStashdir
+            ),
+        "migration": util.runDockerSidecar(testMigrations()),
     ])
 
     utils.parallel_stage('Test and Build', [
-        backend.testAndBuildBackend(),
-        frontend.testAndBuildFrontend(),
-        mdbook.testAndBuildMdbook(),
+        'cargo-build': runDockerWithPostgresSidecar(
+            'cargo build --release',
+            ['backend/target/release/backend'],
+            ['backend']
+        ),
+        'cargo-clippy/doc': runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
+        'cargo-test': runDockerWithPostgresSidecar('cargo test'),
+        'frontend': testAndBuildFrontend(),
+        'mdbook': mdbook.runInDocker(),
     ])
 })
 
-stage('Deploy PR') {
-    node('permaplant && pr') {
-        utils.node_info()
+lock("${env.NODE_NAME}-exclusive") {
+    stage('Deploy PR') {
+        node('permaplant && pr') {
+            node_info()
 
-        checkout scm
+            checkout scm
 
-        echo "Workspace is '${WORKSPACE}'"
-        echo 'Ensure pr service is stopped'
-        sh 'sudo /usr/sbin/service permaplant-pr stop'
+            echo "Workspace is '${WORKSPACE}'"
+            echo 'Ensure permaplant service is stopped'
+            sh 'sudo /usr/sbin/service permaplant stop'
 
-        withEnv(['DATABASE_URL=postgres://cidb:cidb@127.0.0.1/cidb']) {
-            echo 'Resetting the CI DB ...'
-            sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
+            withEnv(['DATABASE_URL=postgres://permaplant:permaplant@127.0.0.1/permaplant']) {
+                echo 'Resetting the CI DB ...'
+                sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
-            echo "Unstash Artifacts"
-            unstash 'schema.rs'
-            unstash 'frontend'
-            unstash 'backend'
-            unstash 'storybook'
-            unstash 'typedoc'
-            unstash 'mdbook'
+                echo 'Unstash Artifacts'
+                unstash 'schema.rs'
+                unstash 'frontend'
+                unstash 'backend'
+                unstash 'storybook'
+                unstash 'typedoc'
+                unstash 'mdbook'
 
-            echo 'Deploying to PR'
-            sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
+                echo 'Deploying to PR'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
 
-            echo 'Loading Data to PR'
-            dir('scraper') {
-                sh 'npm ci'
-                sh 'mkdir ./data/'
-                sh 'cp /nextcloud/mergedDatasets.csv ./data/'
-                sh 'npm run insert'
-                sh 'rm -rf ./data/'
-                sh 'rm -rf ./node_modules/'
+                echo 'Loading Data to PR'
+                dir('scraper') {
+                    sh 'npm ci'
+                    sh 'mkdir ./data/'
+                    sh 'cp /nextcloud/mergedDatasets.csv ./data/'
+                    sh 'cp /nextcloud/Companions.csv ./data/'
+                    sh 'cp /nextcloud/Antagonist.csv ./data/'
+                    sh 'cp /nextcloud/Sizes.csv ./data/'
+                    sh 'npm run insert'
+                    sh 'rm -rf ./data/'
+                    sh 'rm -rf ./node_modules/'
+                }
+            }
+        }
+    }
+
+    stage('E2E Tests') {
+        node('docker') {
+            node_info()
+            checkout scm
+            def e2eImage = docker.build("permaplant-e2e:build", "./e2e")
+            try {
+                e2eImage.inside("-e E2E_URL=https://pr.permaplant.net") {
+                    wait_for_pr_db()
+                    sh 'make test-e2e'
+                }
+            } catch (err) {
+                echo "Error occurred during the e2eImage.inside block: ${err}"
+                // rethrow so build fails
+                // groovylint-disable-next-line
+                throw err;
+            } finally {
+                archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
+                archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,  allowEmptyArchive: true
+                cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
+                fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
+                sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
+                deleteDir();
             }
         }
     }
@@ -69,11 +116,11 @@ if (env.BRANCH_NAME == 'master') {
     try {
         stage('Deploy Dev') {
             node('permaplant && dev') {
-                utils.node_info()
+                node_info()
 
                 checkout scm
 
-                echo "Unstash Artifacts"
+                echo 'Unstash Artifacts'
                 unstash 'schema.rs'
                 unstash 'frontend'
                 unstash 'backend'
@@ -85,16 +132,16 @@ if (env.BRANCH_NAME == 'master') {
                 sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
             }
         }
-    } catch(Exception e) {
+    } catch (Exception e) { // groovylint-disable-line
         // If master is failing we want to know ASAP so send a mail.
         // collect changes since last build
-        def changes = currentBuild.changeSets.collect() {
-        it.collect() {
-            "* ${it.getCommitId().take(7)} - ${it.getAuthor()} - ${it.getMsg().take(40)}"
+        def changes = currentBuild.changeSets.collect {
+            it.collect {
+                "* ${it.getCommitId().take(7)} - ${it.getAuthor()} - ${it.getMsg().take(40)}"
         }.join('\n')
         }.join('\n')
         if (!changes) {
-        changes = "* No new changes since last build"
+            changes = '* No new changes since last build'
         }
 
         def message = """\
@@ -107,9 +154,10 @@ ${changes}
 
 Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
 """
-    mail subject: "Build ${JOB_NAME} failed",
+        mail subject: "Build ${JOB_NAME} failed",
         body: message,
-        replyTo: "noreply@libelektra.org",
-        to: "build@libelektra.org"
+        replyTo: 'noreply@libelektra.org',
+        to: 'build@libelektra.org'
+        throw err
     }
 }

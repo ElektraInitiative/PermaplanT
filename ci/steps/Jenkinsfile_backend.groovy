@@ -27,7 +27,10 @@ def testAndBuildBackend(boolean skipTest=false) {
 
                                 dir("backend") {
                                     // continue checking
-                                    withEnv(['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080', 'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']) {
+                                    withEnv(
+                                        ['BIND_ADDRESS_HOST=127.0.0.1', 'BIND_ADDRESS_PORT=8080',
+                                        'AUTH_DISCOVERY_URI=unused', 'AUTH_CLIENT_ID=unused']
+                                    ) {
                                     sh "cargo check"
                                     sh "cargo clippy"
                                     sh "cargo doc"
@@ -49,4 +52,27 @@ def testAndBuildBackend(boolean skipTest=false) {
     }]
 }
 
+
+def buildBackend() {
+    return ['Backend': {
+        node('docker') {
+            node_info()
+
+            checkout scm
+            def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
+
+            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+                rustImage.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
+                    checkout scm
+
+                    utils.wait_for_db()
+
+                    sh 'cd backend && cargo build --release'
+
+                    stash includes: 'backend/target/release/backend', name: 'backend'
+                }
+            }
+        }
+    }
+}
 return this
