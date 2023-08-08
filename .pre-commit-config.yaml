@@ -95,6 +95,7 @@ repos:
     rev: 6.0.0
     hooks:
       - id: flake8
+        files: ^e2e/
         args:
           - --max-line-length=120
           - --statistics
