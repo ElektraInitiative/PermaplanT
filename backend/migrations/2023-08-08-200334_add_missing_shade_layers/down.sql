@@ -1,1 +1,3 @@
--- This migration can not be undone!
+DELETE
+FROM layers
+WHERE layers.name = 'Shade Layer ';
