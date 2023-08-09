@@ -5,5 +5,6 @@
   "remove_date": "Entfernt am",
   "error_invalid_add_remove_date": "Das Datum an dem die Pflanze hinzugefügt wurde muss vor dem Datum liegen, an dem sie entfernt wurde.",
   "add_date_description": "Das Datum an dem die Pflanze zur Karte hinzugefügt wurde. Vor diesem Datum gab es die Pflanze nicht auf der Karte.",
-  "remove_date_description": "Das Datum an dem die Pflanze von der Karte entfernt wurde. Vor diesem Datum gab es die Pflanze auf der Karte. Standardmäßig ist dieses Datum nicht gesetzt."
+  "remove_date_description": "Das Datum an dem die Pflanze von der Karte entfernt wurde. Vor diesem Datum gab es die Pflanze auf der Karte. Standardmäßig ist dieses Datum nicht gesetzt.",
+  "show_labels_tooltip": "Pflanzenlabels anzeigen"
 }
