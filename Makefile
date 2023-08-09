@@ -70,6 +70,15 @@ test-backend:  build-backend  ## Build & Test Backend
 test-mdbook:  build-mdbook  ## Build & Test Mdbook
 	@mdbook test
 
+# Test all makefile targets except the ones with "run-".
+.PHONY: test-makefile
+test-makefile: $(MAKEFILE_LIST)
+	@for target in `grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; !/^run-/ { printf "%s\n", $$1 }'`; do \
+		echo "$(RED)Testing target: $$target$(RESET)"; \
+		$(MAKE) $$target || (echo "$(RED)Test for target: $$target failed$(RESET)" && exit 1); \
+	done
+	@echo "$(RED)All non 'run-' targets passed the test$(RESET)"
+
 
 # BUILD (Implicit installs)
 
