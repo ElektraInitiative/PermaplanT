@@ -61,7 +61,7 @@ test-frontend:  build-frontend  ## Build & Test Frontend
 
 .PHONY: test-backend
 test-backend:  build-backend  ## Build & Test Backend
-	@cd backend && make test
+	@make test -C ./backend
 
 .PHONY: test-mdbook
 test-mdbook:  build-mdbook  ## Build & Test Mdbook
@@ -80,7 +80,7 @@ build-frontend: install-frontend generate-api-types  ## Build Frontend
 
 .PHONY: build-backend
 build-backend: install-backend generate-api-types  ## Build Backend
-	@cd backend && make build
+	@make build -C ./backend
 
 .PHONY: build-mdbook
 build-mdbook: install-backend  ## Build Mdbook
@@ -104,19 +104,19 @@ insert-scraper:  ## Insert scraped data into the database
 
 .PHONY: migration
 migration:  ## Database migration.
-	@cd backend && make migration
+	@make migration -C ./backend
 
 .PHONY: migration-redo
 migration-redo:  ## Run down.sql and then up.sql for most recent migrations
-	@cd backend && make migration-redo
+	@make migration-redo -C ./backend
 
 .PHONY: migration-redo-a
 migration-redo-a:  ## Run down.sql and then up.sql for all migrations
-	@cd backend && make migration-redo-a
+	@make migration-redo-a -C ./backend
 
 .PHONY: reset-database
 reset-database:  ## Reset diesel database AND insert data again
-	@cd backend && make reset-database
+	@make reset-database -C ./backend
 	$(MAKE) insert-scraper
 
 .PHONY: generate-type-doc
@@ -137,15 +137,25 @@ pre-commit:  ## Check all files with pre-commit
 
 .PHONY: docker-up
 docker-up:  ## Start a containerized dev environment
-	@cd .devcontainer && docker compose -p "permaplant_devcontainer" up
+	@docker compose -p "permaplant_devcontainer" -f .devcontainer/docker-compose.yml up
 
 
 # Install
 
 
 .PHONY: install
-install: install-backend install-frontend  ## Install ALL dependencies within the source repo
+install: install-pre-commit install-backend install-frontend  ## Install ALL dependencies within the source repo
+	$(MAKE) install-pre-commit
 	@echo "Installation completed."
+
+.PHONY: install-pre-commit
+install-pre-commit:  ## Install pre-commit
+	@if [ ! -f $$(which pre-commit) ]; then \
+        echo "pre-commit is not installed. Installing..."; \
+        pip install pre-commit; \
+    else \
+        echo "pre-commit is already installed."; \
+    fi
 
 .PHONY: install-frontend
 install-frontend:  ## Install frontend
@@ -177,9 +187,9 @@ install-e2e:  ## Install e2e dependencies within this repo
 
 .PHONY: uninstall
 uninstall:  uninstall-e2e ## Uninstall and clean everything up
-	-cd frontend && rm -rf node_modules
-	-cd frontend && rm -rf storybook-static
-	-cd scraper && rm -rf node_modules
+	-rm -rf frontend/node_modules
+	-rm -rf frontend/storybook-static
+	-rm -rf scraper/node_modules
 	-cargo uninstall mdbook mdbook-mermaid mdbook-linkcheck mdbook-generate-summary
 	@echo "Ignore errors here."
 
