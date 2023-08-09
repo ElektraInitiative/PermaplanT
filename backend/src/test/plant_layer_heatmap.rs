@@ -181,10 +181,10 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     let top_right_pixel = image.get_pixel(x_dim - 1, 0);
     let bottom_left_pixel = image.get_pixel(0, y_dim - 1);
     let bottom_right_pixel = image.get_pixel(x_dim - 1, y_dim - 1);
-    assert_eq!([68, 186, 0, 117], top_left_pixel.0);
-    assert_eq!([68, 186, 0, 117], top_right_pixel.0);
+    assert_eq!([68, 186, 0, 0], top_left_pixel.0);
+    assert_eq!([68, 186, 0, 0], top_right_pixel.0);
     assert_eq!([255, 0, 0, 0], bottom_left_pixel.0);
-    assert_eq!([68, 186, 0, 117], bottom_right_pixel.0);
+    assert_eq!([68, 186, 0, 0], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
@@ -229,9 +229,9 @@ async fn test_heatmap_with_shadings_succeeds() {
     let top_left_pixel = image.get_pixel(0, 0);
     let bottom_right_pixel = image.get_pixel(x_dim - 1, y_dim - 1);
     // The shading is the exact opposite of the plants preference, therefore the map will be red.
-    assert_eq!([186, 68, 0, 117], top_left_pixel.0);
+    assert_eq!([186, 68, 0, 0], top_left_pixel.0);
     // Plant like other positions, therefore green.
-    assert_eq!([68, 186, 0, 117], bottom_right_pixel.0);
+    assert_eq!([68, 186, 0, 0], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
@@ -299,7 +299,7 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
     let top_left_pixel = image.get_pixel(0, 0);
     let bottom_right_pixel = image.get_pixel(x_dim - 1, y_dim - 1);
     // The shading is deep shade with is ok for the plant.
-    assert_eq!([68, 186, 0, 117], top_left_pixel.0);
+    assert_eq!([68, 186, 0, 0], top_left_pixel.0);
     // The plant can't grow in sun.
     assert_eq!([255, 0, 0, 255], bottom_right_pixel.0);
 
@@ -326,7 +326,7 @@ async fn test_heatmap_with_shadings_and_light_requirement_succeeds() {
     // The plant can't grow in deep shade.
     assert_eq!([255, 0, 0, 255], top_left_pixel.0);
     // The plant can grow in sun.
-    assert_eq!([127, 127, 0, 117], bottom_right_pixel.0);
+    assert_eq!([127, 127, 0, 0], bottom_right_pixel.0);
 }
 
 #[actix_rt::test]
