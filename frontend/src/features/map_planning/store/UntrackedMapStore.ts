@@ -147,6 +147,21 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+  toggleShowPlantLabel() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          plants: {
+            ...state.untrackedState.layers.plants,
+            showLabels: !state.untrackedState.layers.plants.showLabels,
+          },
+        },
+      },
+    }));
+  },
   setTimelineBounds(from: string, to: string) {
     set((state) => ({
       ...state,
@@ -205,6 +220,24 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
     clearInvalidSelection(get);
+  },
+  setTooltipText(content) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        tooltipContent: content,
+      },
+    }));
+  },
+  setTooltipPosition(position) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        tooltipPosition: position,
+      },
+    }));
   },
   /**
    * Allow the user to make measurement inputs on the base layer.

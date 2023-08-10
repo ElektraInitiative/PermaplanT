@@ -36,7 +36,7 @@ The following request should fail:
 `curl 'http://localhost:8080/api/seeds' -f`
 
 We need to obtain an access token before we are able to make requests to secured endpoints via curl.  
-We can do this using the [Resouce Owner Password Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow):
+We can do this using the [Resource Owner Password Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow):
 
 ```bash
 curl --request POST \
@@ -57,4 +57,4 @@ Note that the token is only valid for 5 minutes after which you have to refresh 
 
 ## Other ways
 
-You can find other ways of obtaining tokens using the Resouce Owner Password Flow [here](https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-resource-owner-password-flow#example-post-to-token-url).
+You can find other ways of obtaining tokens using the Resource Owner Password Flow [here](https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-resource-owner-password-flow#example-post-to-token-url).
