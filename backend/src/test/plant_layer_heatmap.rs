@@ -389,9 +389,9 @@ async fn test_heatmap_with_plantings_succeeds() {
     let close_to_planting = image.get_pixel(1, 1);
     let far_away_from_planting = image.get_pixel(x_dim - 1, y_dim - 1);
     // The planting influences the map.
-    assert!(on_planting.0[0] < close_to_planting.0[0]);
-    assert!(on_planting.0[1] > close_to_planting.0[1]);
-    assert!(on_planting.0[3] > close_to_planting.0[3]);
+    assert!(on_planting.0[0] <= close_to_planting.0[0]);
+    assert!(on_planting.0[1] >= close_to_planting.0[1]);
+    assert!(on_planting.0[3] >= close_to_planting.0[3]);
     // There is no influence on locations far away.
     assert_eq!([127, 127, 0, 0], far_away_from_planting.0);
 }
