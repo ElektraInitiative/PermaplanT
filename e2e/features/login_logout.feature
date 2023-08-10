@@ -1,4 +1,4 @@
-Feature: PermaplanT Login and Logout Functionality
+Feature: Login and Logout
     As a user I want to be able to login and logout successfully
 
     Scenario: Successful Login
@@ -8,6 +8,7 @@ Feature: PermaplanT Login and Logout Functionality
         And I click the submit button
         Then I should be redirected back to the homepage
         And I should see a welcome message
+
 
     Scenario: Successful logout
         Given I am logged in

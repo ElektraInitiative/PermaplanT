@@ -1,5 +1,6 @@
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
+import { MapLabel } from '../utils/MapLabel';
 import {
   deselectShapes,
   endSelection,
@@ -8,11 +9,12 @@ import {
   updateSelection,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
-import { setTooltipPosition } from '../utils/Tooltip';
+import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
+import { useDimensions } from '@/hooks/useDimensions';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer, Text, Label, Tag } from 'react-konva';
+import { Layer, Stage, Transformer } from 'react-konva';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -77,6 +79,9 @@ export const BaseStage = ({
     useMapStore.setState({ tooltipRef: tooltipRef });
   }, [tooltipRef]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dimensions = useDimensions(containerRef);
+
   const updateMapBounds = useMapStore((store) => store.updateMapBounds);
   const mapBounds = useMapStore((store) => store.untrackedState.editorBounds);
   useEffect(() => {
@@ -89,6 +94,9 @@ export const BaseStage = ({
     });
   });
 
+  const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
+  const tooltipPosition = useMapStore((state) => state.untrackedState.tooltipPosition);
+
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
@@ -97,7 +105,7 @@ export const BaseStage = ({
     if (targetStage === null) return;
 
     if (tooltipRef.current) {
-      setTooltipPosition(tooltipRef.current, targetStage);
+      setTooltipPositionToMouseCursor();
     }
 
     const pointerVector = targetStage.getPointerPosition();
@@ -209,12 +217,12 @@ export const BaseStage = ({
   };
 
   return (
-    <div className="h-full w-full overflow-hidden">
+    <div className="h-full w-full overflow-hidden" data-testid="canvas" ref={containerRef}>
       <Stage
         ref={stageRef}
         draggable={draggable}
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={dimensions.width}
+        height={dimensions.height}
         onWheel={onStageWheel}
         onDragEnd={onStageDragEnd}
         onDragStart={onStageDragStart}
@@ -229,19 +237,14 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
-          <Label visible={false} ref={tooltipRef} scaleX={1 / stage.scale} scaleY={1 / stage.scale}>
-            <Tag fill="black" />
-            <Text fill="white" fontSize={24} padding={6} />
-          </Label>
-          <Rect
-            x={selectionRectAttrs.x}
-            y={selectionRectAttrs.y}
-            width={selectionRectAttrs.width}
-            height={selectionRectAttrs.height}
-            fill={'blue'}
-            visible={selectionRectAttrs.isVisible}
-            opacity={0.2}
-            name="selectionRect"
+          {/* Tooltip */}
+          <MapLabel
+            content={tooltipContent}
+            visible={tooltipContent !== ''}
+            scaleX={2 / stage.scale}
+            scaleY={2 / stage.scale}
+            x={tooltipPosition.x}
+            y={tooltipPosition.y}
           />
           <Transformer
             // We need to manually disable selection when we are transforming

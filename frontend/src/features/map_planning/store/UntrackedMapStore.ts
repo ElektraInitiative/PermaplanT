@@ -6,6 +6,7 @@ import {
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
+import { clearInvalidSelection } from './utils';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
@@ -146,6 +147,21 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+  toggleShowPlantLabel() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          plants: {
+            ...state.untrackedState.layers.plants,
+            showLabels: !state.untrackedState.layers.plants.showLabels,
+          },
+        },
+      },
+    }));
+  },
   setTimelineBounds(from: string, to: string) {
     set((state) => ({
       ...state,
@@ -180,6 +196,8 @@ export const createUntrackedMapSlice: StateCreator<
           fetchDate: date,
         },
       }));
+
+      clearInvalidSelection(get);
       return;
     }
 
@@ -199,6 +217,25 @@ export const createUntrackedMapSlice: StateCreator<
             objects: plantsVisibleRelativeToTimelineDate,
           },
         },
+      },
+    }));
+    clearInvalidSelection(get);
+  },
+  setTooltipText(content) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        tooltipContent: content,
+      },
+    }));
+  },
+  setTooltipPosition(position) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        tooltipPosition: position,
       },
     }));
   },

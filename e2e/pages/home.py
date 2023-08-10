@@ -1,39 +1,43 @@
-import os
 from playwright.sync_api import Page, expect
-from .abstract_page import AbstractPage
+
+from e2e.pages.constants import E2E_URL
+from e2e.pages.abstract_page import AbstractPage
 
 
 class HomePage(AbstractPage):
     """The homepage permaplant"""
-    URL = os.getenv("TEST_URL", "localhost:5173")
-    TITLE: str = 'PermaplanT'
-    HELLO_MSG: str = 'Hello adi'
+
+    URL = E2E_URL
+    TITLE: str = "PermaplanT"
+    HELLO_MSG: str = "Hello adi"
 
     def __init__(self, page: Page) -> None:
-        self.page = page
-        self.login_button = page.get_by_role("button", name="Log in")
-        self.logout_button = page.get_by_role("button", name="Log out")
-        self.hello_msg = page.get_by_text(self.HELLO_MSG, exact=True)
-        self.map_management_button = page.get_by_role("button", name="Maps")
+        self._page = page
+        self._login_button = page.get_by_role("button", name="Log in")
+        self._logout_button = page.get_by_role("button", name="Log out")
+        self._hello_message = page.get_by_text(self.HELLO_MSG, exact=True)
+        self._map_management_button = page.get_by_role("button", name="Maps")
 
     def login_button_is_visible(self):
-        expect(self.login_button).to_be_visible()
+        expect(self._login_button).to_be_visible()
 
     def click_login_button(self):
         """
         Clicks the login button which
         navigates to the `LoginPage`.
         """
-        self.login_button.click()
+        self._login_button.click()
 
     def click_logout_button(self):
-        self.logout_button.click()
+        self._logout_button.click()
+        self._page.wait_for_url("**/")
 
     def hello_message_is_visible(self):
-        expect(self.hello_msg).to_be_visible()
+        expect(self._hello_message).to_be_visible()
 
     def to_map_management_page(self):
         """
         Navigates to `MapManagementPage`.
         """
-        self.map_management_button.click()
+        self._map_management_button.click()
+        self._page.wait_for_url("**/maps")

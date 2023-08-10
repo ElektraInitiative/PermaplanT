@@ -62,9 +62,9 @@ A client can retrieve an app password for a user.
 Opposed to token authentication described before the app password
 is permanent and should not be stored anywhere in the frontend.
 This approach requires PermaplanT to have its own authentication server
-and therefore seperate accounts!
+and therefore separate accounts!
 
-### Seperate identity provider
+### Separate identity provider
 
 OpenID Connect authentication & authorization flow with:
 

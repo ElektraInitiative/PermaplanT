@@ -1,8 +1,5 @@
 import { PlantsSummaryDto } from '@/bindings/definitions';
-
-function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+import { capitalizeFirstLetter } from '@/features/map_planning/utils/string-utils';
 
 class ExtendedPlantsSummary implements PlantsSummaryDto {
   id: number;
