@@ -18,7 +18,7 @@
   - The user is able to have multiple of those ingredient lists.
   - The lists will display what ingredients are available on the map and which still need to be planted by the user.
   - While harvesting or after harvesting (if the user has conserved some of it, e.g., stored fresh fruits, dried herbs), (s)he can mark ingredients as available over a specific timespan and unmark it once the harvest is over or storage is exhausted.
-  - The user is awarded a Blossom for having all neccessary ingredients for any list in any month and additional ones for every subsequent month the list requirements are completely met.
+  - The user is awarded a Blossom for having all necessary ingredients for any list in any month and additional ones for every subsequent month the list requirements are completely met.
 - **Alternative scenario:**
 - **Error scenario:**
   The app does not mark a list item as (partially) harvested even though the user marked the relevant plant as harvested.

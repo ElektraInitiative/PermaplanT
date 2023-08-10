@@ -10,8 +10,13 @@ import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import * as uuid from 'uuid';
+import { StateCreator } from 'zustand';
 
 import Vector2d = Konva.Vector2d;
+
+export type MapCreator = StateCreator<TrackedMapSlice & UntrackedMapSlice, [], []>;
+export type SetFn = Parameters<MapCreator>[0];
+export type GetFn = Parameters<MapCreator>[1];
 
 /**
  * This type combines layers that are only available in the frontend
@@ -163,6 +168,7 @@ export interface UntrackedMapSlice {
   lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
+  toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
@@ -170,6 +176,8 @@ export interface UntrackedMapSlice {
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
   getSelectedLayerId: () => number | null;
+  setTooltipText: (content: string) => void;
+  setTooltipPosition: (position: { x: number; y: number }) => void;
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -226,6 +234,8 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     type_: LayerType.Base,
     map_id: -1,
   },
+  tooltipContent: '',
+  tooltipPosition: { x: 0, y: 0 },
   layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
@@ -233,6 +243,11 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         visible: true,
         opacity: 1,
       },
+      [LayerType.Plants]: {
+        visible: true,
+        opacity: 1,
+        showLabels: true,
+      } as UntrackedPlantLayerState,
       [LayerType.Base]: {
         visible: true,
         opacity: 1,
@@ -329,6 +344,7 @@ export type UntrackedLayers = {
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantsSummaryDto | null;
   selectedPlanting: PlantingDto | null;
+  showLabels: boolean;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {
@@ -360,6 +376,9 @@ export type UntrackedMapState = {
     from: string;
     to: string;
   };
+  /** Storing the current content prevents constant rerenders of the tooltip component.  */
+  tooltipContent: string;
+  tooltipPosition: { x: number; y: number };
   layers: UntrackedLayers;
 };
 

@@ -47,6 +47,7 @@ export const LayerList = ({
         <IconButton
           title={t('layerSettings:show_hide_layer')}
           onClick={() => updateLayerVisible(layer.type_, !layerVisible)}
+          data-testid={`${layer.type_}-layer-visibility-icon`}
         >
           {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
         </IconButton>

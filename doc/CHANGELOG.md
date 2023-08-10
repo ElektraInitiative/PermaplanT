@@ -6,9 +6,8 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.3.1 - UNRELEASED
+## 0.3.3 - UNRELEASED
 
-- _()_
 - _()_
 - _()_
 - _()_
@@ -27,6 +26,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Add toggleable plant labels _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -47,21 +47,49 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- basic baseLayerConfig validation - fixed bugfix/734-base-layer-image-gets-lost _(Samuel)_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- CI: Add codespell pre-commit #811 _(4ydan)_
+- E2E: Add base layer tests #777 _(4ydan)_
+- E2E: Add timeline tests #796 _(4ydan)_
+- E2E: Add layer visibility tests #797 _(4ydan)_
+
+## 0.3.2 - 07.08.2023 (42 commits)
+
+- Fix a bug where an 'empty' but visible selection box would be left behind _(Paul)_
+- Fix a bug where seemingly random date change actions would be fired _(Paul)_
+- Fix dimensions of canvas _(Paul)_
+- npm audit fix + test protocol _(Markus)_
+- E2E: Add undo/redo e2e tests # _(4ydan)_
+- E2E: Improve documentation/usage #784 _(4ydan)_
+
+## 0.3.1 - 03.08.2023 (54 commits)
+
+- Added a cancel confirmation to the editor tour _(Thorben)_
+- Disabled retry on Nextcloud plant icons in PlantSearch _(Samuel)_
+- Commented out disabled buttons for user study _(Samuel)_
+- Basic baseLayerConfig validation - fixed bugfix/734-base-layer-image-gets-lost _(Samuel)_
 - Fix a bug where texts in the editor tour were swapped _(Thorben)_
-- _()_
-- _()_
-- _()_
-- E2E: Add plant search to e2e tests _(4ydan)_
 - Map: Remove Step/History info #745 _(4ydan)_
+- E2E: Add planting e2e tests #766 _(4ydan)_
+- E2E: Add plant search e2e tests #751 _(4ydan)_
 - CI: Add most of pre-commit hooks to sanity stage #736 _(4ydan)_
-- _()_
 
 ## 0.3.0 - 28.07.2023 (273 commits)
 
@@ -69,7 +97,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Remove error toast when adding a plant without an icon in Nextcloud. _(Moritz)_
 - commented out properties in table plants for now to improve build time. _(temmey)_
 - set all enums in DB to lowercase _(temmey)_
-- added component to display plant names correctly formated _(temmey)_
+- added component to display plant names correctly formatted _(temmey)_
 - fixed issues with correctly displaying plant names _(temmey)_
 - Add grid functionality. _(Moritz)_
 - sizes of plant in map editor depend on their spread value _(temmey)_
@@ -140,7 +168,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 ## 0.2.0 - 29.06.2023
 
 - Nextcloud Konva image component: can be used to create image items on a layer _(Samuel)_
-- Nextcloud image gallery including Nextcloud image components for unauthenticated and authenticated use, Nextcloud utilites for fetching data from Nextcloud public share _(Samuel)_
+- Nextcloud image gallery including Nextcloud image components for unauthenticated and authenticated use, Nextcloud utilities for fetching data from Nextcloud public share _(Samuel)_
 - most of discussed UI/UX improvements done: disabled icons, tooltips for buttons in left bar, tooltips for plants, images for plants, notification border color, select one plant of selection for attribute editor (needs some polishing still) _(Paul and Samuel)_
 - Fetch corresponding layer IDs of a map during initialization of the map editor _(Paul and Thorben)_
 - Use the correct layer ID for create and fetch actions (for plantings) in the map editor, enabling the possibility for multiple independent maps _(Paul and Thorben)_

@@ -1,7 +1,8 @@
-from e2e.conftest import login
+from e2e.steps.common_steps import login
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from pytest_bdd import scenarios, given, when, then, parsers
+
 
 scenarios("features/login_logout.feature")
 
@@ -12,11 +13,6 @@ scenarios("features/login_logout.feature")
 @given("I am on the PermaplanT homepage")
 def permaplant_hp(hp: HomePage):
     hp.load()
-
-
-@given("the login button is visible")
-def login_button_is_visible(hp: HomePage):
-    hp.login_button_is_visible()
 
 
 @when(("I click the login button"))
