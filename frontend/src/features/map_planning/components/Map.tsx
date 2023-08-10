@@ -26,6 +26,7 @@ import { HeatMapLayer } from '@/features/map_planning/layers/heatmap/HeatMapLaye
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { ReactComponent as GridIcon } from '@/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
+import { ReactComponent as TagsIcon } from '@/icons/tags.svg';
 import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
 import i18next from 'i18next';
 import { useContext, useEffect, useState } from 'react';
@@ -49,6 +50,7 @@ export const Map = ({ layers }: MapProps) => {
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
+  const toggleShowPlantLabel = useMapStore((map) => map.toggleShowPlantLabel);
   const getSelectedLayerType = useMapStore((map) => map.getSelectedLayerType);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
@@ -60,6 +62,7 @@ export const Map = ({ layers }: MapProps) => {
     'blossoms',
     'common',
     'guidedTour',
+    'plantings',
   ]);
   const [show, setShow] = useState(false);
 
@@ -165,6 +168,13 @@ export const Map = ({ layers }: MapProps) => {
                   title={t('grid:tooltip')}
                 >
                   <GridIcon></GridIcon>
+                </IconButton>
+                <IconButton
+                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  onClick={() => toggleShowPlantLabel()}
+                  title={t('plantings:show_labels_tooltip')}
+                >
+                  <TagsIcon></TagsIcon>
                 </IconButton>
               </div>
             }

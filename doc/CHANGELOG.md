@@ -16,6 +16,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Added a cancel confirmation to the editor tour _(Thorben)_
 - _()_
 - _()_
 - _()_
@@ -26,6 +27,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Add toggleable plant labels _(Moritz)_
 - _()_
 - _()_
 - _()_
