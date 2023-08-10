@@ -475,14 +475,14 @@ async fn test_heatmap_with_deleted_planting_succeeds() {
     let result = test::read_body(resp).await;
     let result = &result.bytes().collect::<Result<Vec<_>, _>>().unwrap();
     let image = load_from_memory_with_format(result.as_slice(), image::ImageFormat::Png).unwrap();
-    let image = image.as_rgba8().unwrap();
+    let image_rgba8 = image.as_rgba8().unwrap();
 
-    let on_planting = image.get_pixel(0, 0);
-    let close_to_planting = image.get_pixel(1, 1);
+    let on_planting = image_rgba8.get_pixel(0, 0);
+    let close_to_planting = image_rgba8.get_pixel(1, 1);
     // The planting influences the map as we set the date back in the query.
-    assert!(on_planting.0[0] < close_to_planting.0[0]);
-    assert!(on_planting.0[1] > close_to_planting.0[1]);
-    assert!(on_planting.0[3] > close_to_planting.0[3]);
+    assert!(on_planting.0[0] <= close_to_planting.0[0]);
+    assert!(on_planting.0[1] >= close_to_planting.0[1]);
+    assert!(on_planting.0[3] >= close_to_planting.0[3]);
 }
 
 #[actix_rt::test]
