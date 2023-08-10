@@ -12,6 +12,6 @@ type Story = StoryObj<typeof PageTitle>;
 
 export const PageTitleStory: Story = {
   args: {
-    title: 'Praise Permaculture!',
+    title: 'I love Permaculture!',
   },
 };
