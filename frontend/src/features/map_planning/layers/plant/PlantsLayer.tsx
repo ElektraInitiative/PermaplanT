@@ -15,6 +15,8 @@ import { createPortal } from 'react-dom';
 import { Layer } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
+import {Polygon} from "@/features/map_planning/components/polygon/Polygon";
+import {PolygonGeometry} from "@/features/map_planning/components/polygon/PolygonTypes";
 
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
@@ -183,6 +185,18 @@ function PlantsLayer(props: PlantsLayerProps) {
     document.getElementById('bottom-portal') as HTMLDivElement,
   );
 
+  const testGeometry = {
+      srid: "1234",
+      rings: [[
+          {x: 0, y: 0},
+          {x: 100, y: 100},
+          {x: 80, y: -170},
+          {x: 50, y: -110},
+          {x: -100, y: -100},
+          {x: 0, y: -70},
+      ]],
+  } as PolygonGeometry;
+
   return (
     <>
       <PlantLayerRelationsOverlay />
@@ -191,6 +205,8 @@ function PlantsLayer(props: PlantsLayerProps) {
           <PlantingElement planting={o} key={o.id} />
         ))}
         {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
+
+        <Polygon geometry={testGeometry} onGeometryModified={() => {}}  />
 
         <Html>
           {createPortal(
