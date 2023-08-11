@@ -1,4 +1,4 @@
-import {Circle, Group} from "react-konva";
+import {Circle, Group, Line} from "react-konva";
 import {EdgeRing, PolygonGeometry} from "@/features/map_planning/components/polygon/PolygonTypes";
 
 export interface PolygonProps {
@@ -19,15 +19,37 @@ export const Polygon = (props: PolygonProps) => {
                 x={point.x}
                 y={point.y}
                 fill="red"
-                width={10}
-                height={10}
+                width={30}
+                height={30}
             />
         )
     );
 
+    const connectionLines = props.geometry.rings.map(
+        (ring) => <Line
+          points={flattenRing(ring)}
+          stroke="red"
+          strokeWidth={10}
+          lineCap="round"
+          closed={true}
+        />
+    );
+
     return (
-        <Group>
+        <Group listening={true}>
+            {connectionLines}
             {points}
         </Group>
     );
 };
+
+/**
+ * Extract the coordinates from an edge ring and put them in a flattened array.
+ *
+ * @param ring The ring to flatten.
+ */
+function flattenRing(ring: EdgeRing): number[] {
+    return ring
+        .map((point) => [point.x, point.y])
+        .reduce((accumulator, next) => accumulator.concat(next));
+}
