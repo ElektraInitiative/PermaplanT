@@ -1,5 +1,7 @@
 import {Circle, Group, Line} from "react-konva";
 import {EdgeRing, PolygonGeometry} from "@/features/map_planning/components/polygon/PolygonTypes";
+import useMapStore from "@/features/map_planning/store/MapStore";
+import {useState} from "react";
 
 export interface PolygonProps {
     /** Geometry data that should be displayed by this component. */
@@ -13,31 +15,52 @@ export interface PolygonProps {
 }
 
 export const Polygon = (props: PolygonProps) => {
-    const points = props.geometry.rings.map(
-        (ring) => ring.map((point) =>
-            <Circle
-                x={point.x}
-                y={point.y}
-                fill="red"
-                width={30}
-                height={30}
-            />
-        )
+    const addShapeToTransformer = useMapStore((state) => state.addShapeToTransformer);
+
+    const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
+
+    const points = props.geometry.rings[0].map((point, index) =>
+       <Group
+           onClick={(e) => {
+               addShapeToTransformer(e.currentTarget);
+               setSelectedPoint(index);
+           }}
+           onDragEnd={(e) => {
+               const modifiedPoints = props.geometry.rings[0];
+               if (selectedPoint === null) return;
+
+               modifiedPoints[selectedPoint] = {x: e.currentTarget.position.x, y: e.currentTarget.position.y};
+
+               props.onGeometryModified({
+                   srid: props.geometry.srid,
+                   rings: [modifiedPoints],
+               });
+
+               setSelectedPoint(null);
+           }}
+       >
+           <Circle
+               x={point.x}
+               y={point.y}
+               fill="red"
+               width={30}
+               height={30}
+           />
+       </Group>
     );
 
-    const connectionLines = props.geometry.rings.map(
-        (ring) => <Line
-          points={flattenRing(ring)}
-          stroke="red"
-          strokeWidth={10}
-          lineCap="round"
-          closed={true}
-        />
-    );
 
     return (
-        <Group listening={true}>
-            {connectionLines}
+        <Group
+        >
+            <Line
+                listening={true}
+                points={flattenRing(props.geometry.rings[0])}
+                stroke="red"
+                strokeWidth={10}
+                lineCap="round"
+                closed={true}
+            />
             {points}
         </Group>
     );
