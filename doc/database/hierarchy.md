@@ -129,6 +129,13 @@ For example:
 - _Brassica oleracea italica_ - violett
 - _Brassica oleracea italica_
 
+### Usage of plant names
+
+- The common name alone is enough for overview, e.g. when you see all labels in the map editor at once.
+  - If no common name exists, it's acceptable to display the unique name as shown in [Rendering the Complete Name](###rendering-the-complete-name).
+- The complete name should be always be given if the user wants to know precisely which plant, e.g. in search results or in plant details.
+- The additional name created when adding a new seed needs to be provided additionally if a plant is connected with a seed.
+
 ### Rules
 
 We know about names (abstract and concrete, including hybrid):
