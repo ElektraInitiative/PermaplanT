@@ -41,13 +41,19 @@ export interface PaginatedSelectMenuProps<
   required?: boolean;
   /** Text that is displayed instead of the input if it has not been selected yet.*/
   placeholder?: string;
+  /** Maximum time interval between two inputs (in milliseconds) before they are considered separate inputs. */
   debounceTimeout?: number;
+  /** Function for loading a page of options. */
   loadOptions: LoadOptions<Option, GroupBase<Option>, PageAdditionalInfo>;
-  handleOptionsChange?: (option: unknown) => void;
   /** Callback that is invoked every time the user selects a new option. The single argument represents the selected option.*/
+  handleOptionsChange?: (option: unknown) => void;
+  /** This callback gets executed if any input was made by the user */
   onChange?: () => void;
 }
 
+/**
+ * Like SelectMenu but with added pagination using react-select-async-paginate.
+ */
 export default function PaginatedSelectMenu<
   T extends FieldValues,
   Option = SelectOption,

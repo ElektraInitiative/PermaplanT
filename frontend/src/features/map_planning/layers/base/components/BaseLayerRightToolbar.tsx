@@ -208,6 +208,7 @@ export const BaseLayerRightToolbar = () => {
         value={rotationInput}
         min="0"
         max="359"
+        data-testid="rotation-input"
       />
       {/* <div className="flex flex-row items-end gap-2"> */}
       <SimpleFormInput
@@ -217,6 +218,7 @@ export const BaseLayerRightToolbar = () => {
         type="number"
         value={scaleInput}
         min="0"
+        data-testid="scale-input"
       />
       {/*
         {measureStep === 'inactive' ? (

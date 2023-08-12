@@ -34,7 +34,7 @@ To achieve these goals the app provides, e.g.:
 - zoom
 - internationalization: English, German
 - algorithms for polyculture, considerations of natural constraints and automatic suggestions
-- Nextcloud integrations (calender entries, Deck tasks)
+- Nextcloud integrations (calendar entries, Deck tasks)
 - social network features (e.g. notification that someone entered your garden)
 - privacy: no tracking, analytics, external JavaScript, fonts, etc.
 
