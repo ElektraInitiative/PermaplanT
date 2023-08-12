@@ -5,6 +5,8 @@ import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOver
 import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
+import { Polygon } from '@/features/map_planning/components/polygon/Polygon';
+import { PolygonGeometry } from '@/features/map_planning/components/polygon/PolygonTypes';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -15,8 +17,6 @@ import { createPortal } from 'react-dom';
 import { Layer } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
-import {Polygon} from "@/features/map_planning/components/polygon/Polygon";
-import {PolygonGeometry} from "@/features/map_planning/components/polygon/PolygonTypes";
 
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
@@ -186,15 +186,17 @@ function PlantsLayer(props: PlantsLayerProps) {
   );
 
   const testGeometry = {
-      srid: "1234",
-      rings: [[
-          {x: 0, y: 0},
-          {x: 100, y: 100},
-          {x: 80, y: -170},
-          {x: 50, y: -110},
-          {x: -100, y: -100},
-          {x: 0, y: -70},
-      ]],
+    srid: '1234',
+    rings: [
+      [
+        { x: 0, y: 0 },
+        { x: 100, y: 100 },
+        { x: 80, y: -170 },
+        { x: 50, y: -110 },
+        { x: -100, y: -100 },
+        { x: 0, y: -70 },
+      ],
+    ],
   } as PolygonGeometry;
 
   return (
@@ -206,7 +208,7 @@ function PlantsLayer(props: PlantsLayerProps) {
         ))}
         {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
 
-        <Polygon geometry={testGeometry} onGeometryModified={() => {}}  />
+        <Polygon geometry={testGeometry} />
 
         <Html>
           {createPortal(
