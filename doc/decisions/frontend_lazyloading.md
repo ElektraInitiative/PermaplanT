@@ -47,7 +47,7 @@ In order to improve the performance of the application's initial load, it is adv
 The most effective way to achieve this is through the backend, which can define endpoints with additional parameters that allow the frontend to request only the required data for the initial load:
 
 - separate endpoints for different layers
-- have date as paramter to these endpoints so that only the current relevant elements (already added, not yet removed) can be retrieved
+- have date as parameter to these endpoints so that only the current relevant elements (already added, not yet removed) can be retrieved
 
 ## Rationale
 

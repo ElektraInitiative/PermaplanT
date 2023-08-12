@@ -10,26 +10,26 @@ class MapManagementPage(AbstractPage):
     TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
-        self.page = page
-        self.create_button = page.get_by_role("button", name="New Map")
+        self._page = page
+        self._create_button = page.get_by_role("button", name="New Map")
 
     def to_map_create_page(self):
         """Navigates to `MapCreatePage`"""
-        self.create_button.click()
-        self.page.wait_for_url("**/create")
+        self._create_button.click()
+        self._page.wait_for_url("**/create")
 
     def to_map_edit_page(self, mapname: str):
         """Navigates to `MapEditPage`"""
-        self.page.get_by_title(mapname, exact=True).get_by_role(
+        self._page.get_by_title(mapname, exact=True).get_by_role(
             "button", name="Edit map"
         ).click()
-        self.page.wait_for_url("**/edit")
+        self._page.wait_for_url("**/edit")
 
     def to_map_planting_page(self, mapname: str):
         """Navigates to `MapPlantingPage`"""
-        self.page.get_by_text(mapname, exact=True).click()
-        self.page.wait_for_url("**/maps/*")
+        self._page.get_by_text(mapname, exact=True).click()
+        self._page.wait_for_url("**/maps/*")
 
     def expect_mapname_is_visible(self, mapname: str):
         """Checks if the given map exists on the map management screen"""
-        expect(self.page.get_by_text(mapname, exact=True)).to_be_visible()
+        expect(self._page.get_by_text(mapname, exact=True)).to_be_visible()

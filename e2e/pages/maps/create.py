@@ -10,12 +10,12 @@ class MapCreatePage(AbstractPage):
     TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
-        self.page = page
-        self.name = page.get_by_placeholder("Name *")
-        self.description = page.get_by_placeholder("Description")
-        self.longitude = page.get_by_placeholder("Longitude")
-        self.latitude = page.get_by_placeholder("Latitude")
-        self.create_button = page.get_by_role("button", name="Create")
+        self._page = page
+        self._name = page.get_by_placeholder("Name *")
+        self._description = page.get_by_placeholder("Description")
+        self._longitude = page.get_by_placeholder("Longitude")
+        self._latitude = page.get_by_placeholder("Latitude")
+        self._create_button = page.get_by_role("button", name="Create")
 
     def create_a_map(
         self,
@@ -38,24 +38,24 @@ class MapCreatePage(AbstractPage):
         self.click_create()
 
     def fill_name(self, name: str):
-        self.name.fill(name)
+        self._name.fill(name)
 
     def select_privacy(self, privacy: str):
-        self.page.locator("select").select_option(privacy)
+        self._page.locator("select").select_option(privacy)
 
     def fill_description(self, description: str):
-        self.description.fill(description)
+        self._description.fill(description)
 
     def fill_longitude(self, longitude: str):
-        self.longitude.fill(longitude)
+        self._longitude.fill(longitude)
 
     def fill_latitude(self, latitude: str):
-        self.latitude.fill(latitude)
+        self._latitude.fill(latitude)
 
     def click_create(self):
         """
         Clicks create at the end
         which navigate to the `MapManagementPage`
         """
-        self.create_button.click()
-        self.page.wait_for_url("**/maps")
+        self._create_button.click()
+        self._page.wait_for_url("**/maps")
