@@ -2,7 +2,7 @@
 
 ## `Plant_detail`
 
-<!-- Will be reworked with hirachy update soon.  -->
+<!-- Will be reworked with hierarchy update soon.  -->
 
 | **_Column name_**                | **_Example_**                    | **_Initial rule_**                                                                                | **_Description_**                  |
 | :------------------------------- | :------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------- |
