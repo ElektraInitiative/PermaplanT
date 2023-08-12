@@ -304,6 +304,20 @@ pub struct UpdateMapDto {
     pub geometry: Option<Polygon<Point>>,
 }
 
+/// Data for updating a maps geometry.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct UpdateMapGeometryDto {
+    /// The name of the map.
+    pub id: i32,
+    /// The geometry of the map.
+    ///
+    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "object")]
+    #[schema(value_type = Object)]
+    pub geometry: Polygon<Point>,
+}
+
 /// Query parameters for searching maps.
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]

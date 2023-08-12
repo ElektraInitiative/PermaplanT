@@ -9,11 +9,12 @@
 
 use crate::model::dto::plantings::PlantingDto;
 use chrono::NaiveDate;
+use postgis_diesel::types::{Point, Polygon};
 use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;
 
-use super::BaseLayerImageDto;
+use super::{BaseLayerImageDto, UpdateMapGeometryDto};
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
@@ -39,6 +40,8 @@ pub enum Action {
     UpdatePlantingAddDate(UpdatePlantingAddDateActionPayload),
     /// An action used to update the `remove_date` of a plant.
     UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload),
+    /// An action used to broadcast an update to the map gemetry.
+    UpdateMapGeometry(UpdateMapGeometryActionPayload),
 }
 
 #[typeshare]
@@ -284,6 +287,30 @@ impl UpdatePlantingRemoveDateActionPayload {
             action_id,
             id: payload.id,
             remove_date: payload.remove_date,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdateMapGeometry`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdateMapGeometryActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    map_id: i32,
+    // E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    geometry: Polygon<Point>,
+}
+
+impl UpdateMapGeometryActionPayload {
+    #[must_use]
+    pub fn new(payload: UpdateMapGeometryDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            map_id: payload.id,
+            geometry: payload.geometry,
         }
     }
 }
