@@ -1,3 +1,4 @@
+import { getMap } from '../api/getMap';
 import { getPlantings } from '../api/getPlantings';
 import { Map } from '../components/Map';
 import { useGetLayers } from '../hooks/useGetLayers';
@@ -88,7 +89,7 @@ function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
 }
 
 /**
- * Hook that initializes the map by fetching all layers and layer elements.
+ * Hook that initializes the map by fetching all map data, layers and layer elements.
  */
 function useInitializeMap() {
   const mapId = useMapId();
@@ -99,6 +100,12 @@ function useInitializeMap() {
     console.log(error);
     toast.error(t('layers:error_fetching_layers'), { autoClose: false });
   }
+
+  const mapQuery = useQuery({
+    queryKey: ['map', mapId],
+    queryFn: () => getMap(mapId),
+    refetchOnWindowFocus: false,
+  });
 
   useEffect(() => {
     if (!layers) return;
@@ -126,6 +133,8 @@ function useInitializeMap() {
     enabled: !!baseLayer?.id,
   });
 
+  console.log(mapQuery.data);
+
   useEffect(() => {
     if (!baseLayer) return;
 
@@ -136,8 +145,12 @@ function useInitializeMap() {
         selectedLayer: baseLayer,
         mapId,
       },
+      trackedState: {
+        ...state.trackedState,
+        mapBounds: mapQuery.data.geometry,
+      },
     }));
-  }, [mapId, baseLayer]);
+  }, [mapId, baseLayer, mapQuery?.data]);
 
   const isLoading = !layers;
 

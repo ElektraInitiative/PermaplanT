@@ -1,3 +1,4 @@
+import { PolygonGeometry } from '../components/polygon/PolygonTypes';
 import { convertToDateString } from '../utils/date-utils';
 import {
   BaseLayerImageDto,
@@ -358,6 +359,7 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
  */
 export type TrackedMapState = {
   layers: TrackedLayers;
+  mapBounds: PolygonGeometry;
 };
 
 /**

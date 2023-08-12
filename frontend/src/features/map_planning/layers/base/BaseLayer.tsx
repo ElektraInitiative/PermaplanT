@@ -1,5 +1,6 @@
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
+import { Polygon } from '@/features/map_planning/components/polygon/Polygon';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva';
 import { useCallback, useState } from 'react';
@@ -34,6 +35,8 @@ const BaseLayer = (props: BaseLayerProps) => {
 
   const scale = pixelsPerMeter / MAP_PIXELS_PER_METER;
 
+  console.log(trackedState.mapBounds);
+
   return (
     <Layer {...layerProps} listening={false}>
       {cleanImagePath && (
@@ -46,6 +49,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           offset={imageOffset}
         />
       )}
+      {trackedState.mapBounds && <Polygon geometry={trackedState.mapBounds} />}
     </Layer>
   );
 };

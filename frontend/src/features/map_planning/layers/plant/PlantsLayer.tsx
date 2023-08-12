@@ -5,8 +5,6 @@ import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOver
 import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
-import { Polygon } from '@/features/map_planning/components/polygon/Polygon';
-import { PolygonGeometry } from '@/features/map_planning/components/polygon/PolygonTypes';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -185,20 +183,6 @@ function PlantsLayer(props: PlantsLayerProps) {
     document.getElementById('bottom-portal') as HTMLDivElement,
   );
 
-  const testGeometry = {
-    srid: '1234',
-    rings: [
-      [
-        { x: 0, y: 0 },
-        { x: 100, y: 100 },
-        { x: 80, y: -170 },
-        { x: 50, y: -110 },
-        { x: -100, y: -100 },
-        { x: 0, y: -70 },
-      ],
-    ],
-  } as PolygonGeometry;
-
   return (
     <>
       <PlantLayerRelationsOverlay />
@@ -207,8 +191,6 @@ function PlantsLayer(props: PlantsLayerProps) {
           <PlantingElement planting={o} key={o.id} />
         ))}
         {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
-
-        <Polygon geometry={testGeometry} />
 
         <Html>
           {createPortal(
