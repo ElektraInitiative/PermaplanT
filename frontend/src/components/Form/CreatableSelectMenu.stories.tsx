@@ -4,7 +4,7 @@ import { ComponentProps } from 'react';
 import { useForm } from 'react-hook-form';
 
 const meta: Meta<typeof CreatableSelectMenu> = {
-  title: 'Components/SelectMenu/CreatableSelectMenu',
+  title: 'Components/Form/SelectMenu/CreatableSelectMenu',
   component: CreatableSelectMenu,
   argTypes: {
     handleCreate: { action: 'handleCreate' },
