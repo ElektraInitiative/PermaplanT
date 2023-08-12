@@ -185,7 +185,7 @@ blossoms ||--o{ blossoms_gained : ""
 
 ## Plants Table
 
-For performance reasons, we decided to disable certain columns for the plants table for now.
+For performance reasons, we decided to disable some unused columns in the plants table for now.
 
 For more information, see: [PR #644](https://github.com/ElektraInitiative/PermaplanT/pull/644)
 
@@ -258,8 +258,9 @@ The following columns are commented out for now:
 
 <!--
 
-These are leftovers from the old er diagram.
-I want to keep them for now, i will create new issues in the near feature for them.
+These are leftovers from the old ER diagram.
+We'll keep them for now. We will create new issues in the near future for them.
+These will be implemented, when we implement UC [Ingredient_list](./doc/usecases/assigned/ingredient_lists.md), UC [watering_layer](./doc/usecases/assigned/watering_layer.md) and UC [map_timeline_event_view](./doc/usecases/assigned/map_timeline_event_view.md)
 
 ingredientLists_WIP {
   INT id PK
@@ -275,8 +276,6 @@ ingredients_WIP {
   BOOLEAN is_fulfilled "NOT NULL"
 }
 
-
-
 events {
   INT id PK
   BOOLEAN system_event "NOT NULL"
@@ -285,30 +284,16 @@ events {
   DATE event_date "NOT NULL"
 }
 
-plant_detail{}
-
-
-species{}
-genus{}
-subfamily{}
-family{}
-
-
-
 favorites {}
 
-plants }o--|| plant_detail: "type"
-plant_detail }|--|| species : ""
-plant_detail }|--|| genus : ""
-plant_detail }|--|| subfamily : ""
-plant_detail }|--|| family : ""
+
 ingredientLists }o--|| users : ""
 ingredientLists }o--|| maps : ""
 ingredients }|--|| ingredientLists : ""
-ingredients }|--|| plant_detail : ""
+ingredients }|--|| plants : ""
 events }o--|| maps : ""
 favorites }o--|| maps : ""
-favorites }o--|| plant_detail : ""
+favorites }o--|| plants : ""
 
  -->
 
