@@ -11,15 +11,11 @@ CREATE OR REPLACE FUNCTION calculate_score(
 )
 RETURNS SCORE AS $$
 DECLARE
-    score SCORE;
     plants SCORE;
 BEGIN
     plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, date, x_pos, y_pos);
 
-    score.preference := plants.preference;
-    score.relevance := plants.relevance;
-
-    RETURN score;
+    RETURN plants;
 END;
 $$ LANGUAGE plpgsql;
 

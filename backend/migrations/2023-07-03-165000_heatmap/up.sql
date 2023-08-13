@@ -74,7 +74,7 @@ BEGIN
     -- Makes sure the layers exists and fits to the map
     FOR i IN 1..array_length(p_layer_ids, 1) LOOP
         IF NOT EXISTS (SELECT 1 FROM layers WHERE id = p_layer_ids[i] AND map_id = p_map_id) THEN
-            RAISE EXCEPTION 'Layer with id % not found on map', p_layer_ids[i];
+            RAISE EXCEPTION 'Layer with id % not found on map with id %', p_layer_ids[i], p_map_id;
         END IF;
     END LOOP;
     -- Makes sure the plant exists
@@ -137,7 +137,7 @@ $$ LANGUAGE plpgsql;
 -- Calculate score for a certain position.
 --
 -- p_map_id       ... map id
--- p_layer_ids[1] ... plant layer
+-- p_layer_ids[1] ... plant layer (only the first array-element is used by the function)
 -- p_plant_id     ... id of the plant for which to consider relations
 -- date           ... date at which to generate the heatmap
 -- x_pos,y_pos    ... coordinates on the map where to calculate the score
@@ -151,15 +151,11 @@ CREATE OR REPLACE FUNCTION calculate_score(
 )
 RETURNS SCORE AS $$
 DECLARE
-    score SCORE;
     plants SCORE;
 BEGIN
     plants := calculate_score_from_relations(p_layer_ids[1], p_plant_id, date, x_pos, y_pos);
 
-    score.preference := plants.preference;
-    score.relevance := plants.relevance;
-
-    RETURN score;
+    RETURN plants;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -198,11 +194,11 @@ BEGIN
         -- update score based on relation
         IF plant_relation.relation = 'companion' THEN
             score.preference := score.preference + 0.5 * weight;
-            score.relevance := score.relevance + 0.5 * weight;
         ELSE
             score.preference := score.preference - 0.5 * weight;
-            score.relevance := score.relevance + 0.5 * weight;
         END IF;
+
+        score.relevance := score.relevance + 0.5 * weight;
     END LOOP;
 
     RETURN score;
