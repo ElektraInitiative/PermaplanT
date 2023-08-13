@@ -39,6 +39,8 @@ export interface PaginatedSelectMenuProps<
   control?: Control<T, unknown>;
   /** If set to true, the user has to select an option before the form can be completed (default false).*/
   required?: boolean;
+  /** Force a selected option. */
+  value?: Option;
   /** Text that is displayed instead of the input if it has not been selected yet.*/
   placeholder?: string;
   /** Maximum time interval between two inputs (in milliseconds) before they are considered separate inputs. */
@@ -64,6 +66,7 @@ export default function PaginatedSelectMenu<
   labelText,
   control,
   required = false,
+  value,
   placeholder,
   loadOptions,
   handleOptionsChange,
@@ -140,6 +143,7 @@ export default function PaginatedSelectMenu<
             placeholder={placeholder}
             isMulti={isMulti}
             classNames={customClassNames}
+            value={value}
             required={required}
             onInputChange={(value, event) => {
               // prevent the text from disapearing when clicking inside the input field

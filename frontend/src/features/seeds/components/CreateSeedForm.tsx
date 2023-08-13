@@ -1,15 +1,16 @@
-import { NewSeedDto, Quality, Quantity, SeedDto } from '../../../bindings/definitions';
 import PaginatedSelectMenu, {
   PageAdditionalInfo,
 } from '../../../components/Form/PaginatedSelectMenu';
 import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
+import { NewSeedDto, Quality, Quantity, SeedDto } from '@/bindings/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { GroupBase, OptionsOrGroups } from 'react-select';
@@ -44,21 +45,37 @@ const CreateSeedForm = ({
 
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDto>();
 
-  useEffect(() => {
-    if (existingSeed) {
-      setValue('harvest_year', existingSeed?.harvest_year);
-      setValue('name', existingSeed?.name);
-      setValue('generation', existingSeed?.generation);
-      setValue('origin', existingSeed?.origin);
-      setValue('taste', existingSeed?.taste);
-      setValue('yield_', existingSeed?.yield_);
-      setValue('use_by', existingSeed?.use_by);
-      setValue('price', existingSeed?.price);
-      setValue('quality', existingSeed?.quality);
-      setValue('notes', existingSeed?.notes);
-      setValue('plant_id', 1);
-    }
-  }, [existingSeed, setValue]);
+  // SelectMenu components can't automatically convert from values to select options.
+  // We work around this by managing the necessary state ourselves.
+  const [plantOption, setPlantOption] = useState<SelectOption | undefined>(undefined);
+  const [quantityOption, setQuantityOption] = useState<SelectOption | undefined>(undefined);
+  const [qualityOption, setQualityOption] = useState<SelectOption | undefined>(undefined);
+
+  useEffect(
+    () => {
+      if (existingSeed) {
+        setValue('harvest_year', existingSeed?.harvest_year);
+        setValue('name', existingSeed?.name);
+        setValue('generation', existingSeed?.generation);
+        setValue('origin', existingSeed?.origin);
+        setValue('taste', existingSeed?.taste);
+        setValue('yield_', existingSeed?.yield_);
+        setValue('use_by', existingSeed?.use_by);
+        setValue('price', existingSeed?.price);
+        setValue('quality', existingSeed?.quality);
+        setValue('quantity', existingSeed?.quantity);
+        setValue('notes', existingSeed?.notes);
+        setValue('plant_id', 1);
+
+        // Convert existing values to select menu options.
+        loadInitialPlant(existingSeed.plant_id);
+        setQuantityOption(quantity.filter((x) => x.value === existingSeed?.quantity)[0]);
+        setQualityOption(quality.filter((x) => x.value === existingSeed?.quality)[0]);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [existingSeed, setValue],
+  );
 
   const onFormSubmit: SubmitHandler<NewSeedDto> = async (data) => {
     if (data.origin === '') delete data.origin;
@@ -102,6 +119,22 @@ const CreateSeedForm = ({
     };
   };
 
+  /**
+   *  Convert a plantId into an option for PaginatedSelectMenu.
+   *  @param plantId The id that will be converted.
+   */
+  const loadInitialPlant = async (plantId: number | undefined) => {
+    if (!plantId) return;
+
+    const plant = await findPlantById(plantId);
+    const common_name_en = plant.common_name_en ? ' (' + plant.common_name_en[0] + ')' : '';
+
+    setPlantOption({
+      value: plant.id,
+      label: plant.unique_name + common_name_en,
+    });
+  };
+
   return (
     <Suspense>
       <div>
@@ -114,6 +147,7 @@ const CreateSeedForm = ({
               placeholder={t('seeds:create_seed_form.placeholder_binomial_name')}
               required={true}
               loadOptions={loadPlants}
+              value={plantOption}
               handleOptionsChange={(option) => {
                 if (!option) {
                   setValue('plant_id', undefined);
@@ -122,6 +156,7 @@ const CreateSeedForm = ({
                   const mapped = temp.value as number;
                   setValue('plant_id', mapped);
                 }
+                setPlantOption(option as SelectOption);
               }}
               onChange={onChange}
             />
@@ -148,11 +183,13 @@ const CreateSeedForm = ({
               control={control}
               options={quantity}
               labelText={t('seeds:quantity')}
+              value={quantityOption}
               required={true}
               handleOptionsChange={(option) => {
                 const temp = option as SelectOption;
                 const mapped = temp.value as Quantity;
                 setValue('quantity', mapped);
+                setQuantityOption(option as SelectOption);
               }}
               onChange={onChange}
             />
@@ -176,10 +213,12 @@ const CreateSeedForm = ({
               control={control}
               options={quality}
               labelText={t('seeds:quality')}
+              value={qualityOption}
               handleOptionsChange={(option) => {
                 const temp = option as SelectOption;
                 const mapped = temp.value as Quality;
                 setValue('quality', mapped);
+                setQualityOption(option as SelectOption);
               }}
               onChange={onChange}
             />

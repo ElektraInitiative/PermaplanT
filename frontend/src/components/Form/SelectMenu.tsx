@@ -23,6 +23,8 @@ export interface SelectMenuProps<
   control?: Control<T, unknown>;
   /** Options content that may be selected by the user */
   options: Option[];
+  /** Force a selected option. */
+  value?: Option;
   /** Whether the user has to select something before they can submit the containing form. */
   required?: boolean;
   /** Text that is displayed in place of the content if no option has been selected. */
@@ -53,6 +55,7 @@ export default function SelectMenu<
   control,
   options,
   required = false,
+  value,
   placeholder,
   handleOptionsChange,
   onChange,
@@ -124,6 +127,7 @@ export default function SelectMenu<
             placeholder={placeholder}
             inputValue={inputValue}
             options={options}
+            value={value}
             isMulti={isMulti}
             styles={customStyles}
             classNames={customClassNames}
