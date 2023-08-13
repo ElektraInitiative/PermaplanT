@@ -107,7 +107,7 @@ The complete name of a plant should be displayed as follows:
 
 - If there is a common name, the common name appears first and should start with a capital letter (e.g., "tomato" becomes "Tomato").
 - If it is a plant name from the seed database, the name continues with hyphen `-` and the additional name.
-- This is followed by the unique name in brackets, unique name as described above in `Rendering the Unique Name`.
+- This is followed by the unique name in brackets, unique name as described above in [Rendering the Complete Name](###rendering-the-complete-name).
 
 The general format is:
 
@@ -115,7 +115,7 @@ Common name - additional name (_unique name_)
 
 In cases where the common name is not available in the current language, it should be displayed as:
 
-_unique name_ 'cultivar name' - additional name
+_unique name_ - additional name
 
 The cultivar is a part of the unique name.
 
@@ -133,8 +133,8 @@ For example:
 
 - The common name alone is enough for overview, e.g. when you see all labels in the map editor at once.
   - If no common name exists, it's acceptable to display the unique name as shown in [Rendering the Complete Name](###rendering-the-complete-name).
-- The complete name should be always be given if the user wants to know precisely which plant, e.g. in search results or in plant details.
-- The additional name created when adding a new seed needs to be provided additionally if a plant is connected with a seed.
+- The complete name should always be given if the user wants to know precisely which plant she is dealing with, e.g. in search results or in plant details.
+- The additional name created when adding a new seed needs to be provided as explained above if a plant is connected with a seed.
 
 ### Rules
 
