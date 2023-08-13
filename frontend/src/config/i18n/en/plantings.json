@@ -5,5 +5,6 @@
   "remove_date": "Removed on",
   "error_invalid_add_remove_date": "Remove date must be after add date",
   "add_date_description": "The date, the planting was added to the map. The planting was not on the map before this date.",
-  "remove_date_description": "The date, the planting was removed from the map. The planting was on the map before this date. Per default, this is date is not set."
+  "remove_date_description": "The date, the planting was removed from the map. The planting was on the map before this date. Per default, this is date is not set.",
+  "show_labels_tooltip": "Show plant labels"
 }

@@ -4,7 +4,7 @@
 
 We are currently using [diesel](https://github.com/diesel-rs/diesel) as our ORM in Rust.
 
-Since diesel doesn't support async out of the box we will look at other alteratives and see if a switch is reasonable.  
+Since diesel doesn't support async out of the box we will look at other alternatives and see if a switch is reasonable.  
 The reason why I believe pure async is better in our case is that it quite difficult (especially for Rust beginners) to mix async and blocking code.
 
 There might also be advantages of other ORM crates that as of writing this have not been considered.
@@ -64,7 +64,7 @@ For example if you forget `web::block` when executing a query using diesel you b
 We currently have a lint warning about async functions that do not use await, you will therefore notice this mistake.  
 However for inexperienced Rust developers it might be difficult to find out why this warning occurred as the code compiles and runs perfectly fine (especially with small loads).
 
-This has already happend in [our code](https://github.com/ElektraInitiative/PermaplanT/pull/68/commits/167466d2661f694d6fd55b19d6b750bcba6f6028).
+This has already happened in [our code](https://github.com/ElektraInitiative/PermaplanT/pull/68/commits/167466d2661f694d6fd55b19d6b750bcba6f6028).
 
 Furthermore it is really difficult to spot blocking functions without actually knowing the whole codebase (and therefore knowing which functions are blocking).  
 As an example as of writing this every call to any of the functions in the `service` directory would block the executor.  
