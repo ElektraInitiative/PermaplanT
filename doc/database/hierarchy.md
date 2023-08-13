@@ -111,7 +111,7 @@ The complete name of a plant should be displayed as follows:
 
 The general format is:
 
-Common name - additional name (_unique name_ 'cultivar name')
+Common name - additional name (_unique name_)
 
 In cases where the common name is not available in the current language, it should be displayed as:
 
