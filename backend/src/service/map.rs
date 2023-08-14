@@ -4,11 +4,7 @@ use std::collections::HashMap;
 
 use actix_http::{Method, StatusCode};
 use actix_web::web::Data;
-use futures::Future;
 use log::info;
-use reqwest::Client;
-use roxmltree::Document;
-use roxmltree::Node;
 use serde::Deserialize;
 use uuid::Uuid;
 
@@ -53,39 +49,28 @@ pub async fn find_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<MapDto
     Ok(result)
 }
 
+fn extract_id_from_doc(doc: &str) -> String {
+    let res: CreateCircleResponse = quick_xml::de::from_str(doc).unwrap();
+    res.data.id
+}
 
-fn extract_id_from_doc(doc_res: Result<Document, roxmltree::Error>) -> Option<String> {
-    match doc_res {
-        Ok(doc) => {
-            let data: Vec<Node> = doc
-                .root_element()
-                .children()
-                .filter(|n| n.has_tag_name("data"))
-                .collect();
+#[derive(Debug, Deserialize)]
+pub struct CircleData {
+   pub id: String,
+   pub name: String,
+}
 
-            if let Some(first_data_node) = data.first() {
-                let el: Vec<Node> = first_data_node
-                    .children()
-                    .filter(|n| n.has_tag_name("id"))
-                    .collect();
+#[derive(Debug, Deserialize)]
+pub struct CreateCircleResponse  {
+    pub meta: Meta,
+    pub data: CircleData,
+}
 
-                if let Some(first_id_node) = el.first() {
-                    let id = first_id_node.text().unwrap().to_string();
-                    Some(id)
-                } else {
-                    info!("No 'id' node found");
-                    None
-                }
-            } else {
-                info!("No 'data' node found");
-                None
-            }
-        }
-        Err(_) => {
-            info!("xml parse error");
-            None
-        }
-    }
+#[derive(Debug, Deserialize)]
+pub struct Meta {
+   pub status: String,
+   pub statuscode: i32,
+   pub message: String,
 }
 
 async fn share_directory(dir_name: String, token: String, circle_id: String) {
@@ -120,7 +105,7 @@ async fn share_directory(dir_name: String, token: String, circle_id: String) {
 }
 
 // creates nextlcoud circle and returns id
-async fn create_nextcloud_circle(map_name: String, token: String) -> Option<String> {
+async fn create_nextcloud_circle(map_name: String, token: String) -> Result<String, ServiceError> {
     // Create a Nextcloud circle with the same name as the map
     let mut map = HashMap::new();
     map.insert("name", map_name.clone());
@@ -145,17 +130,23 @@ async fn create_nextcloud_circle(map_name: String, token: String) -> Option<Stri
         Ok(response) => {
             log::info!("Circle creation result: {}", response.status());
             let data = response.text().await.unwrap();
-            let doc_res = Document::parse(&data);
-            extract_id_from_doc(doc_res)
+            Ok(extract_id_from_doc(&data))
         }
         Err(e) => {
             log::error!("Circle creation failed! {}", e);
-            None
+            return Err(ServiceError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                reason: "Circle creation failed!".to_string(),
+            })
         }
     }
 }
 
-async fn create_map_dir(user_id: Uuid, map_name: String, token: String) {
+async fn create_map_dir(
+    user_id: Uuid,
+    map_name: String,
+    token: String,
+) -> Result<(), ServiceError> {
     // Create a map directory in Nextcloud
     let url = format!(
         "https://cloud.permaplant.net/remote.php/dav/files/{}/PermaplanT/{}",
@@ -164,8 +155,18 @@ async fn create_map_dir(user_id: Uuid, map_name: String, token: String) {
     );
 
     let client = reqwest::Client::new();
+    let method = Method::from_bytes(b"MKCOL");
+    let method = match method {
+        Ok(method) => method,
+        Err(_) => {
+            return Err(ServiceError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                reason: "invalid method".to_string(),
+            })
+        }
+    };
     let res = client
-        .request(Method::from_bytes(b"MKCOL").unwrap(), url)
+        .request(method, url)
         .header("Content-Type", "application/json")
         .header("Authorization", format!("Bearer {}", token))
         .send()
@@ -177,9 +178,16 @@ async fn create_map_dir(user_id: Uuid, map_name: String, token: String) {
         Ok(response) => {
             log::info!("Map directory creation result: {}", response.status());
         }
-        Err(e) => log::info!("Map directory creation failed! {}", e),
+        Err(e) => {
+            log::info!("Map directory creation failed! {}", e);
+            return Err(ServiceError {
+                status_code: StatusCode::INTERNAL_SERVER_ERROR,
+                reason: "Map directory creation failed".to_string(),
+            });
+        }
     }
     log::info!("--------------------------");
+    Ok(())
 }
 
 /// Create a new map in the database.
@@ -224,9 +232,12 @@ pub async fn create(
         let token = user_token.token.clone();
         let map_name = new_map.name.clone();
 
+        // create Nextcloud circle with the map name
         let circle_id = create_nextcloud_circle(map_name.clone(), token.clone());
-        create_map_dir(user_id, map_name.clone(), token.clone()).await;
+        // create a directory with the map name
+        create_map_dir(user_id, map_name.clone(), token.clone()).await?;
         share_directory(map_name, token, circle_id.await.unwrap()).await;
+        //TODO: fetch id from public permaplant circle and share with it if public is checked
     }
 
     Ok(result)
