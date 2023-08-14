@@ -23,7 +23,8 @@ Which will open [/doc/architecture/README.md](/doc/architecture/README.md) as fi
 
 Type `make` to see all commands.
 
-**Some of the commands require env variables to be set. Have a look at [backend env variables](./doc/backend/01setup.md), [frontend env variables](./frontend/README.md) and [scraper env variables](./scraper/README.md)**
+**Some of the commands require env variables to be set.
+Have a look at [backend env variables](./doc/backend/01setup.md), [frontend env variables](./frontend/README.md) and [scraper env variables](./scraper/README.md)**
 
 Important links:
 
@@ -31,7 +32,8 @@ Important links:
 
 ## Community and Contributing
 
-PermaplanT is developed by [us](./doc/authors.md) and by users like you. We welcome both pull requests and issues on GitHub.
+PermaplanT is developed by [us](./doc/authors.md) and by users like you.
+We welcome both pull requests and issues on GitHub.
 Check out the [contributing docs](.github/CONTRIBUTING.md).
 
 Information about developing can be found under [our development setup](./doc/development_setup.md).
