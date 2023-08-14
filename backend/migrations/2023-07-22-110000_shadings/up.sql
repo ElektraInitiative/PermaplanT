@@ -4,7 +4,7 @@ CREATE TABLE shadings (
     layer_id INTEGER NOT NULL,
     shade SHADE NOT NULL,
     geometry GEOMETRY (POLYGON, 4326) NOT NULL,
-    add_date DATE,
+    add_date DATE DEFAULT now()::date,
     remove_date DATE,
     FOREIGN KEY (layer_id) REFERENCES layers (id) ON DELETE CASCADE
 );

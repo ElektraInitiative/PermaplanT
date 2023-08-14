@@ -91,9 +91,10 @@ BEGIN
 
     -- Calculate the score for each point on the heatmap
     FOR i IN 0..num_cols-1 LOOP
+        -- i and j do not represent coordinates. We need to adjust them to actual coordinates.
+        x_pos := x_min + (i * granularity) + (granularity / 2);
+
         FOR j IN 0..num_rows-1 LOOP
-            -- i and j do not represent coordinates. We need to adjust them to actual coordinates.
-            x_pos := x_min + (i * granularity) + (granularity / 2);
             y_pos := y_min + (j * granularity) + (granularity / 2);
 
             -- Create a point from x_pos and y_pos
