@@ -73,7 +73,7 @@ Cons:
   Then we need to check for each column value if there is a higher rank that already defines the same value.
   Only if we can't find a match the value should be written.
 
-### All ranks in one table.
+### All ranks in one table
 
 [Example](example_migrations/normalized-plants-and-ranks)
 
@@ -91,12 +91,30 @@ Cons:
 
 [Example](example_migrations/one-table-per-taxonomy-view-functions)
 
-It's similar to `One table for taxonomy ranks and one for concrete plants` We are extending it with a view and custom functions to reduce insert and update complexity in the backend.
+It's similar to `One table for taxonomy ranks and one for concrete plants` We are extending it with a view and custom functions to reduce insert and update complexity in the backend and scraper.
+
+#### compared to [All ranks in one table](#all-ranks-in-one-table)
+
+Could allow us to override properties of a plant, but only under certain conditions:
+
+- We still need to implement a view and custom insert/update events.
+  Without these, we wouldn't be able to distinguish between a custom overwrite and a standard value.
+  This limitation makes property overrides on every level not possible.
+
+- There are a couple of possible approaches for FKs:
+
+  - Each plant has multiple foreign keys representing family, genus, and species.
+    However, this would often lead to empty fields and potential confusion, especially when the genus of a plant and its own species are linked to a different genus.
+
+  - Alternatively, a plant could have a single foreign key representing a plant in a higher-order category, from which it would inherit properties. However, this approach could lead to:
+    a) Circular references, where plants inherit from each other indefinitely.
+    b) Extremely long inheritance chains, with a single plant inheriting properties from numerous others.
 
 Pros:
 
 - Inserting new plants is easy. We only need to implement minor backend changes.
 - Properties overrides can be done on every level.
+- It's the only proposed solution that allows us to override the properties of a plant without significantly increasing the complexity of the backend.
 
 Cons:
 
