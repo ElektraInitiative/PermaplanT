@@ -2,9 +2,14 @@
 
 use std::collections::HashMap;
 
-use actix_http::{StatusCode, Method};
+use actix_http::{Method, StatusCode};
 use actix_web::web::Data;
-use log::trace;
+use futures::Future;
+use log::info;
+use reqwest::Client;
+use roxmltree::Document;
+use roxmltree::Node;
+use serde::Deserialize;
 use uuid::Uuid;
 
 use crate::config::auth::user_token::UserToken;
@@ -46,6 +51,135 @@ pub async fn find_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<MapDto
     let mut conn = app_data.pool.get().await?;
     let result = Map::find_by_id(id, &mut conn).await?;
     Ok(result)
+}
+
+
+fn extract_id_from_doc(doc_res: Result<Document, roxmltree::Error>) -> Option<String> {
+    match doc_res {
+        Ok(doc) => {
+            let data: Vec<Node> = doc
+                .root_element()
+                .children()
+                .filter(|n| n.has_tag_name("data"))
+                .collect();
+
+            if let Some(first_data_node) = data.first() {
+                let el: Vec<Node> = first_data_node
+                    .children()
+                    .filter(|n| n.has_tag_name("id"))
+                    .collect();
+
+                if let Some(first_id_node) = el.first() {
+                    let id = first_id_node.text().unwrap().to_string();
+                    Some(id)
+                } else {
+                    info!("No 'id' node found");
+                    None
+                }
+            } else {
+                info!("No 'data' node found");
+                None
+            }
+        }
+        Err(_) => {
+            info!("xml parse error");
+            None
+        }
+    }
+}
+
+async fn share_directory(dir_name: String, token: String, circle_id: String) {
+    // Share the map directory with the circle
+    let mut share_options = HashMap::new();
+    share_options.insert("path", format!("/PermaplanT/{}", dir_name));
+    share_options.insert("shareType", String::from("7"));
+    share_options.insert("permissions", String::from("31"));
+    share_options.insert("shareWith", circle_id);
+
+    info!("{:?}", share_options);
+
+    // For public maps share the map directory with PermaplanT circle
+    let url = "https://cloud.permaplant.net/ocs/v2.php/apps/files_sharing/api/v1/shares";
+    let client = reqwest::Client::new();
+    let res = client
+        .post(url)
+        .json(&share_options)
+        .header("OCS-APIRequest", "true")
+        .header("Content-Type", "application/json")
+        .header("Authorization", format!("Bearer {}", token))
+        .send()
+        .await;
+    log::info!("Share directory with PermaplanT circle");
+    match res {
+        Ok(response) => {
+            log::info!("Share creation result: {}", response.status());
+        }
+        Err(e) => log::error!("Share creation failed! {}", e),
+    }
+    log::info!("--------------------------");
+}
+
+// creates nextlcoud circle and returns id
+async fn create_nextcloud_circle(map_name: String, token: String) -> Option<String> {
+    // Create a Nextcloud circle with the same name as the map
+    let mut map = HashMap::new();
+    map.insert("name", map_name.clone());
+    map.insert("personal", String::from("false"));
+    map.insert("local", String::from("false"));
+
+    let client = reqwest::Client::new();
+
+    let url = "https://cloud.permaplant.net/ocs/v2.php/apps/circles/circles";
+    let res = client
+        .post(url)
+        .json(&map)
+        .header("OCS-APIRequest", "true")
+        .header("Content-Type", "application/json")
+        .header("Authorization", format!("Bearer {}", token))
+        .send()
+        .await;
+    log::info!("Circle creation Result");
+    log::info!("Token");
+    log::info!("{}", token);
+    match res {
+        Ok(response) => {
+            log::info!("Circle creation result: {}", response.status());
+            let data = response.text().await.unwrap();
+            let doc_res = Document::parse(&data);
+            extract_id_from_doc(doc_res)
+        }
+        Err(e) => {
+            log::error!("Circle creation failed! {}", e);
+            None
+        }
+    }
+}
+
+async fn create_map_dir(user_id: Uuid, map_name: String, token: String) {
+    // Create a map directory in Nextcloud
+    let url = format!(
+        "https://cloud.permaplant.net/remote.php/dav/files/{}/PermaplanT/{}",
+        user_id,
+        map_name.clone()
+    );
+
+    let client = reqwest::Client::new();
+    let res = client
+        .request(Method::from_bytes(b"MKCOL").unwrap(), url)
+        .header("Content-Type", "application/json")
+        .header("Authorization", format!("Bearer {}", token))
+        .send()
+        .await;
+
+    log::info!("--------------------------");
+    log::info!("Directory creation Result");
+    match res {
+        Ok(response) => {
+            log::info!("Map directory creation result: {}", response.status());
+        }
+        Err(e) => log::info!("Map directory creation failed! {}", e),
+    }
+    log::info!("--------------------------");
 }
 
 /// Create a new map in the database.
@@ -90,52 +224,9 @@ pub async fn create(
         let token = user_token.token.clone();
         let map_name = new_map.name.clone();
 
-        // Create a Nextcloud circle with the same name as the map
-        let mut map = HashMap::new();
-        map.insert("name", map_name.clone());
-        map.insert("personal", String::from("false"));
-        map.insert("local", String::from("false"));
-
-        let client = reqwest::Client::new();
-        let url = "https://cloud.permaplant.net/ocs/v2.php/apps/circles/circles";
-        let res = client.post(url)
-            .json(&map)
-            .header("OCS-APIRequest", "true")
-            .header("Content-Type", "application/json")
-            .header("Authorization", format!("Bearer {}", token))
-            .send()
-            .await;
-        println!("--------------------------");
-        println!("Circle creation Result");
-        match res {
-            Ok(response) => println!("Circle creation result: {}", response.status()),
-            Err(e) => println!("Circle creation failed! {}", e),
-        }
-        println!("--------------------------");
-
-        // For public maps share the map directory with PermaplanT circle
-
-        // Create a map directory in Nextcloud
-        let client = reqwest::Client::new();
-        let url = format!("https://cloud.permaplant.net/remote.php/dav/files/{}/PermaplanT/{}", user_id, map_name.clone());
-        let res = client.request(Method::from_bytes(b"MKCOL").unwrap(), url)
-            .header("Content-Type", "application/json")
-            .header("Authorization", format!("Bearer {}", user_token.token))
-            .send()
-            .await;
-
-        println!("--------------------------");
-        println!("Directory creation Result");
-        match res {
-            Ok(response) => {
-                println!("Map directory creation result: {}", response.status())
-            },
-            Err(e) => println!("Map directory creation failed! {}", e),
-        }
-        println!("--------------------------");
-
-
-        // Share the map directory with the circle
+        let circle_id = create_nextcloud_circle(map_name.clone(), token.clone());
+        create_map_dir(user_id, map_name.clone(), token.clone()).await;
+        share_directory(map_name, token, circle_id.await.unwrap()).await;
     }
 
     Ok(result)
