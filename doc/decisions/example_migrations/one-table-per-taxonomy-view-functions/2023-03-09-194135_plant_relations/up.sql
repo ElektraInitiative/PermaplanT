@@ -1,94 +1,117 @@
+CREATE SEQUENCE plants_id_seq
+AS INTEGER
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
+
 -- Create the "family" table
-CREATE TABLE family (
-    id SERIAL PRIMARY KEY,
+CREATE TABLE families (
+    id INTEGER PRIMARY KEY,
     name VARCHAR NOT NULL,
     property1 TEXT,
     CONSTRAINT family_name_key UNIQUE (name)
 );
 
 -- Create the "genus" table
-CREATE TABLE genus (
-    id SERIAL PRIMARY KEY,
+CREATE TABLE genera (
+    id INTEGER PRIMARY KEY,
     name VARCHAR NOT NULL,
     property1 TEXT,
-    family_id INTEGER NOT NULL REFERENCES family (id),
+    family_id INTEGER REFERENCES families (id),
     CONSTRAINT genus_name_key UNIQUE (name)
 );
 
 -- Create the "species" table
 CREATE TABLE species (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     name VARCHAR NOT NULL,
     property1 TEXT,
-    genus_id INTEGER NOT NULL REFERENCES genus (id),
+    genus_id INTEGER REFERENCES genera (id),
     CONSTRAINT species_name_key UNIQUE (name)
 );
 
 -- Create the "variety" table
-CREATE TABLE variety (
-    id SERIAL PRIMARY KEY,
+CREATE TABLE varieties (
+    id INTEGER DEFAULT nextval('plants_id_seq') PRIMARY KEY,
     name VARCHAR NOT NULL,
-    property1 TEXT,
-    species_id INTEGER NOT NULL REFERENCES species (id),
-    CONSTRAINT variety_name_key UNIQUE (name)
-);
-
--- Create the "cultivar" table
-CREATE TABLE cultivar (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR NOT NULL,
-    property1 TEXT,
-    species_id INTEGER NOT NULL REFERENCES species (id),
-    variety_id INTEGER NOT NULL REFERENCES variety (id),
-    CONSTRAINT cultivar_name_key UNIQUE (name)
-);
-
--- Create the "plantsDetails" table
-CREATE TABLE plantsdetails (
-    id INTEGER NOT NULL,
     unique_name TEXT NOT NULL,
     common_name_en TEXT [],
     common_name_de TEXT [],
     property1 TEXT,
-    family_id INTEGER NOT NULL REFERENCES family (id),
-    genus_id INTEGER NOT NULL REFERENCES genus (id),
-    species_id INTEGER NOT NULL,
-    variety_id INTEGER,
-    cultivar_id INTEGER,
+    species_id INTEGER REFERENCES species (id),
+    CONSTRAINT variety_name_key UNIQUE (unique_name),
+    CONSTRAINT variety_name_key_rename UNIQUE (name)
+);
+
+-- Create the "cultivar" table
+CREATE TABLE cultivars (
+    id INTEGER DEFAULT nextval('plants_id_seq') PRIMARY KEY,
+    unique_name TEXT NOT NULL,
+    common_name_en TEXT [],
+    common_name_de TEXT [],
+    property1 TEXT,
+    species_id INTEGER REFERENCES species (id),
+    variety_id INTEGER REFERENCES varieties (id),
     CONSTRAINT unique_name_key UNIQUE (unique_name),
-    CONSTRAINT check_variety_or_cultivar CHECK (
-        variety_id IS NULL OR cultivar_id IS NULL
+    CONSTRAINT check_variety_or_species CHECK (
+        variety_id IS NULL OR species_id IS NULL
     )
 );
 
 -- Create a view joining the tables together
 -- COALESCE function accepts an unlimited number of arguments.
 -- It returns the first argument that is not null.
-CREATE OR REPLACE VIEW plants AS
+
+--todo
+-- test cases vorbereiten wie select, insert, update
+-- insert, update, delete schreiben.
+CREATE OR REPLACE VIEW plants_view AS
 SELECT
-    p.id AS plant_id,
+    p.id,
     p.unique_name,
     p.common_name_en,
     p.common_name_de,
+    v.name AS variety_name,
     f.name AS family_name,
     g.name AS genus_name,
     s.name AS species_name,
-    v.name AS variety_name,
-    c.name AS cultivar_name,
     coalesce(
         p.property1,
-        c.property1,
         v.property1,
         s.property1,
         g.property1,
         f.property1
     ) AS property1
-FROM plants AS p
-INNER JOIN family AS f ON p.family_id = f.id
-INNER JOIN genus AS g ON p.genus_id = g.id
-INNER JOIN species AS s ON p.species_id = s.id
-LEFT JOIN variety AS v ON p.variety_id = v.id
-LEFT JOIN cultivar AS c ON p.cultivar_id = c.id;
+FROM (
+    SELECT
+        id,
+        unique_name,
+        common_name_en,
+        common_name_de,
+        property1,
+        species_id,
+        id AS variety_id
+    FROM varieties
+    UNION
+    SELECT
+        id,
+        unique_name,
+        common_name_en,
+        common_name_de,
+        property1,
+        species_id,
+        variety_id
+    FROM cultivars
+) AS p
+LEFT JOIN varieties AS v ON p.variety_id = v.id
+LEFT JOIN species AS s ON p.species_id = s.id
+LEFT JOIN genera AS g ON s.genus_id = g.id
+LEFT JOIN families AS f ON g.family_id = f.id;
+
+
+
 
 
 CREATE OR REPLACE FUNCTION insert_plant_view_placeholder()
@@ -96,6 +119,8 @@ RETURNS TRIGGER AS $$
 BEGIN
     -- Placeholder function, no implementation provided.
     -- will insert a new item and only fill columns, if they differ from parent tables.
+
+    -- NEW contains ALL values i have selected in the view, so this should work perfectly :)
     RETURN NEW;
 END;
 $$
@@ -128,8 +153,8 @@ CREATE OR REPLACE FUNCTION delete_plant_view_placeholder()
 RETURNS TRIGGER AS $$
 BEGIN
     -- Placeholder function, no implementation provided.
-    -- Will simply delete from the plantsDetails table
-    RETURN OLD;
+    DELETE FROM cultivar WHERE id = OLD.id;
+    DELETE FROM variety WHERE id = OLD.id;
 END;
 $$
 LANGUAGE plpgsql;
