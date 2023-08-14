@@ -26,6 +26,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- update database documentation _(temmey)_
 - _()_
 - Add toggleable plant labels _(Moritz)_
 - _()_
