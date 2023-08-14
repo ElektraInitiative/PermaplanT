@@ -33,6 +33,7 @@ const routes: Routes = {
     component: EditSeed,
     path: '/seeds/:id/edit',
     title: 'Edit Seed',
+    restricted: true,
   },
   [Pages.SeedDetails]: {
     component: SeedDetails,
