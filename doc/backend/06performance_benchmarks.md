@@ -19,7 +19,7 @@ Add the following to the end of `backend/Cargo.toml`.
 This is necessary to ensure that perf can accurately track the function stack.
 
 ```toml
-[profile.release]
+[profile.bench]
 debug = true
 ```
 
@@ -31,16 +31,16 @@ Otherwise modify the path to point to your `perf` installation.
 ## Scripts
 
 You can find the scripts in `benchmark/backend/`.
-They are supposed to be run from the repositories root folder.
+They are supposed to be run from the repository's root folder.
 
 The subfolders contain scripts to run performance benchmarks in specific endpoints.
 
 ### `setup.sh`
 
-Execute like the following:  
+Execute it as follows:  
 `./benchmarks/backend/<endpoint>/setup.sh <username> <password>`.
 
-It will start the database and backend.
+The database and backend have to be started manually.
 Depending on the endpoint it might execute `insert_data.sh` scripts to insert additional data into the database.
 
 The script might output instructions while executing.
@@ -84,7 +84,7 @@ The following is a step by step guide on how to execute the benchmark for the he
 
 1. Insert
    ```toml
-    [profile.release]
+    [profile.bench]
     debug = true
    ```
    into `Cargo.toml`.
