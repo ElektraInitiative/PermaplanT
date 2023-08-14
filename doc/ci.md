@@ -51,6 +51,14 @@ Every pull request will be deployed on a publicly available instance on [pr.perm
 
 Since there is only one agent for PRs available, the last built PR wins.
 
+### E2E Tests
+
+After deploying to PR, we are performing E2E tests on `dev.permaplant.net`.
+To make sure the current deployment on PR does not change, Jenkins acquires a lock before deploying and releases it after finishing the tests.
+
+Test reports and results are generated after successful execution.
+This is a [Cucumber report](https://build.libelektra.org/job/PermaplanT/job/master/385/cucumber-html-reports/overview-features.html) and the html report can be found inside the [job artifacts](https://build.libelektra.org/blue/organizations/jenkins/PermaplanT/detail/master/385/artifacts).
+
 ### Deploy to Dev Environment
 
 The `master` branch will be automatically deployed to [dev.permaplant.net](https://dev.permaplant.net).

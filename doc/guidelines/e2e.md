@@ -2,15 +2,15 @@
 
 ### Locator Guidelines
 
-Before developing E2E tests make sure you have read the [locator guidelines](https://github.com/ElektraInitiative/PermaplanT/doc/guidelines/frontend-locators.md).
+Before developing E2E tests make sure you have read the [locator guidelines](./frontend-locators.md).
 
 ### General rules
 
 - Be consistent and minimalistic.
-  - Use the same vocabulary as playwright (click, visible, etc.)
+  - Use the same vocabulary as Playwright (click, visible, etc.)
   - Avoid using multiple different verbs for the same actions, keep your vocabulary small and precise.
     Use Playwrights vocabulary.
-    This means to prefix methods with the actions from playwright (e.g when calling `xyz.click()` from playwright inside that method, name the method `click_xyz()` not a mix of press, click, push etc.)
+    This means to prefix methods with the actions from Playwright (e.g when calling `xyz.click()` from Playwright inside that method, name the method `click_xyz()` not a mix of press, click, push etc.)
   - Don't indent more than one time.
   - Don't make a complicated call stack higher than two from a page object.
 - Every test should be independent from other tests (concurrency).
@@ -20,39 +20,31 @@ Before developing E2E tests make sure you have read the [locator guidelines](htt
 
 The usual workflow consists of three steps:
 
-1. (`/features`) write a feature inside with one or multiple scenarios.
-2. (`/pages`) implement the page object (if it doesn't already exist) in .
+1. (`/features`) write a feature with one or multiple scenarios.
+2. (`/pages`) implement the page objects.
 3. (`/steps`) create a function for each scenario step using the page objects.
 
-Lets go over these steps in more detail.
+Let us go over these steps in more detail.
 
 ### Writing .feature files
 
 Make sure to have a solid understanding about the Gherkin syntax, so you don't fall into common pitfalls.
 Usually the syntax is not very strict but poor Gherkin will cascade into the later processes of testing and make everything more complicated.
 
-Avoid the following:
+Here are some general guidelines for writing Gherkin.
 
-- Multiple Given, When or Thens in one scenario
-- Too verbose/detailed sentences
-- Describing the implementation (press, enter, type etc.)
+- [automationpanda.com](https://automationpanda.com/2017/01/30/bdd-101-writing-good-gherkin/)
 
-If you are using more than one "Given-When-Then" You should probably split up your scenario.
-Writing a feature file should not be underestimated.
-Take your time in defining the problem.
+- [cucumber.io](https://cucumber.io/docs/bdd/better-gherkin/)
 
-Here are some good guidelines.
-
-- https://automationpanda.com/2017/01/30/bdd-101-writing-good-gherkin/
-
-- https://cucumber.io/docs/bdd/better-gherkin/
+We have decided to use "I" instead of the third person.
 
 ### Implementing Page Objects
 
-ALL tests are performed exclusively with pageobjects, where the selectors and functions are defined inside a class.
-If you are not familiar with the page object model look [here](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/) if you are familiar with the page object model, still have a look : ).
-The pages are all instantiated globally inside `conftest.py` and injected into the step functions as arguments.
-When using Playwright for python we are interacting with Playwrights [page class](https://playwright.dev/docs/api/class-page), which is basically representing a tab.
+ALL tests are performed exclusively with page objects, where the selectors and functions are defined inside a class.
+If you are not familiar with the page object model look [here](https://playwright.dev/python/docs/pom) if you are familiar with the page object model, still have a look : ).
+The page objects are all instantiated globally inside `conftest.py` and injected into the step functions as arguments.
+When using Playwright for Python we are interacting with Playwrights [page class](https://playwright.dev/docs/api/class-page), which is basically representing a tab.
 This Playwright page class is then instantiated as a singleton and used globally across all OUR page objects to perform actions on the webapp.
 It is crucial to pay close attention what the side effects of OUR page object methods are as some methods will change the webpage and you will have to use a different page object after.
 
@@ -82,12 +74,12 @@ Try to avoid too complex parallelization and we also probably don't need to assi
 
 ### Helpful tools
 
-#### [Playwright Test generator](https://playwright.dev/python/docs/codegen)
+#### [Playwright Test Generator](https://playwright.dev/python/docs/codegen)
 
-This is the fastest way to get some locators and see how playwright would write the tests.
+This is the fastest way to get some locators and see how Playwright would write the tests.
 This should under no circumstances be copy pasted and put into a test but rather help you write the page objects.
 
-Launch the playwright codegen from the terminal and create code that you can later refactor into your pageobjects.
+Launch it from the terminal and create code that you can later refactor into your page objects.
 
 ```sh
 playwright codegen http://localhost:5173/

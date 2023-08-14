@@ -34,9 +34,9 @@
 ## Quickstart
 
 - All commands/scripts in this README are executed from this folder (`/e2e`).
-- Make sure your app is running.
+- Make sure PermaplanT's frontend and backend is running.
 - Make sure the [ENV](#environment-variables) variables are set according to your desire.
-- Make sure you have a virtual environment as this will install all python dependencies.
+- Make sure you have a virtual environment as this will install all Python dependencies.
 
 ```sh
 ./install.sh
@@ -83,7 +83,7 @@ So running this dockerfile locally should mirror CI.
 
 ## Cleanup
 
-Currently we need to use [clean_db.py](clean_db.py) after or before tests to make sure all test maps are deleted.
+Currently we use [clean_db.py](clean_db.py) after or before tests to make sure all test maps are deleted.
 If we dont delete them, some tests will fail trying to create a map that already exists.
 This is automatically done with [e2e.sh](e2e.sh)`.
 
@@ -92,13 +92,11 @@ This is automatically done with [e2e.sh](e2e.sh)`.
 Test results are created after running the tests in `test-results/`.
 This folder gets automatically created and deleted on test execution.
 It will contain screenshots and videos about failed tests.
-In Jenkins you can find the test results inside the pipeline Artifacts.
 
 ## Test Reports
 
-Test reports are created at the end of tests in `test-reports/`
-In Jenkins you can find the html report inside the pipeline artifacts on the top right of Blue Ocean.
-The Cucumber report can not be found in Blue Ocean but on the standard Job page on the left side bar.
+Test reports are created at the end of tests in `test-reports/`.
+There is a html and cucumber report.
 
 ### Cucumber Report
 
