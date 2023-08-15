@@ -27,3 +27,9 @@
 - **Non-functional Constraints:**
   - The login process must be secure to protect the user's personal information.
   - The app must clearly communicate to the user whether the login was successful or not.
+
+## Links
+
+[Authentication Setup](../../research/nextcloud_integration.md)
+[Authentication Decision](../../decisions/auth.md)
+
