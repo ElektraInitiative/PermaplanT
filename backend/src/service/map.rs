@@ -322,7 +322,8 @@ pub async fn create(
                 reason: "Failed to share with PermaplanT circle!".to_string(),
             });
         }
-    }.await;
+    }
+    .await;
 
     Ok(result)
 }

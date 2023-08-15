@@ -86,9 +86,10 @@ pub async fn create(
     new_map_json: Json<NewMapDto>,
     user_info: UserInfo,
     app_data: Data<AppDataInner>,
-    user_token: UserToken
+    user_token: UserToken,
 ) -> Result<HttpResponse> {
-    let response = service::map::create(new_map_json.0, user_info.id, &app_data, user_token).await?;
+    let response =
+        service::map::create(new_map_json.0, user_info.id, &app_data, user_token).await?;
     Ok(HttpResponse::Created().json(response))
 }
 
