@@ -175,10 +175,10 @@ async fn create_nextcloud_circle(map_name: String, token: String) -> Result<Stri
     }
 }
 
-// Create a directory for map data in Nextcloud
-async fn create_map_dir(
+// Create a directory in Nextcloud
+async fn create_directory(
     user_id: Uuid,
-    map_name: String,
+    path: String,
     token: String,
 ) -> Result<(), ServiceError> {
     // Create a map directory in Nextcloud
@@ -186,7 +186,7 @@ async fn create_map_dir(
         "{}/remote.php/dav/files/{}/PermaplanT/{}",
         BASE_URL.to_owned(),
         user_id,
-        map_name.clone()
+        path.clone()
     );
 
     let client = reqwest::Client::new();
@@ -309,7 +309,9 @@ pub async fn create(
     // create Nextcloud circle with the map name
     let circle_id = create_nextcloud_circle(map_name.clone(), token.clone());
     // create a directory with the map name
-    create_map_dir(user_id, map_name.clone(), token.clone()).await?;
+    create_directory(user_id, map_name.clone(), token.clone()).await?;
+    // create a directory for the base layer within
+    create_directory(user_id, map_name.clone() + "/Base/", token.clone()).await?;
     share_directory(map_name.clone(), token.clone(), circle_id.await.unwrap()).await;
     //TODO: fetch id from public permaplant circle and share with it if public is checked
     let circle_id = find_circle("PermaplanT".to_owned(), token.clone());
