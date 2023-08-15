@@ -1,4 +1,19 @@
-import axios from "axios";
+/**
+ * Capitalizes the first character of every word in a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The string with first characters of every word capitalized.
+ */
+function capitalizeWords(str) {
+  const wordsArray = str.split(" ");
+
+  for (let i = 0; i < wordsArray.length; i++) {
+    const word = wordsArray[i];
+    wordsArray[i] = word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  return wordsArray.join(" ");
+}
 
 /**
  * Sanitizes the column names of the json array
@@ -103,40 +118,10 @@ function getSpreadEnumTyp(spread) {
   return value <= 0.15 ? "narrow" : value <= 0.61 ? "medium" : "wide";
 }
 
-/**
- * Fetches the German name of the plant from wikidata API.
- *
- * @param {*} binomialName
- * @returns {Promise<string>} German name of the plant
- */
-async function fetchGermanName(binomialName) {
-  try {
-    const url = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${binomialName}&language=en&format=json`;
-    const response = await axios.get(url);
-    const data = response.data;
-    const results = data.search;
-    if (results.length === 0) {
-      return null;
-    }
-    const result = results[0];
-    const id = result.id;
-    const url2 = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${id}&languages=de&format=json`;
-    const response2 = await axios.get(url2);
-    const data2 = response2.data;
-    const entities = data2.entities;
-    const entity = entities[id];
-    const dewiki = await entity["sitelinks"]["dewiki"];
-    if (dewiki) {
-      return dewiki.title;
-    }
-  } catch (error) {}
-  return null;
-}
-
 export {
   sanitizeColumnNames,
   getSoilPH,
   getHeightEnumTyp,
   getSpreadEnumTyp,
-  fetchGermanName,
+  capitalizeWords,
 };

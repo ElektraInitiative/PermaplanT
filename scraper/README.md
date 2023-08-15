@@ -89,11 +89,16 @@ This can be done with the following command:
 npm run merge:datasets
 ```
 
+Iteratively gets the German common names from https://www.wikidata.org to prevent 429 errors by sending too many requests in a short time.
+
+This may take quite a while, so don't stop the program while running.
+
 3. Correct data manually before the insertion (optional)
 
 The scraped data can contain inconsistencies and errors.
 In order to correct these mistakes, we can manually correct the data i.e. change the values in the `mergedDatasets.csv` file.
 The corrected data in the new file should be stored in the same format as the generated data i.e. columns may not be changed.
+If it starts throwing 429 errors, reduce MAX_CONCURRENT_REQUESTS to a lower number, such as 10.
 
 4. Insert the data into the database
 
