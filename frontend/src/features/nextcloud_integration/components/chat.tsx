@@ -20,9 +20,9 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 /**
- * component used for testing different chat api calls
+ * Prototypical chat component implementation
  */
-export const ChatTest = () => {
+export const Chat = () => {
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Array<ChatMessage>>([]);
   const [selectedConversation, setSelectedConversation] = useState<TalkConversation>();
@@ -150,12 +150,9 @@ export const ChatTest = () => {
                     'write a message to ' +
                     (selectedConversation ? selectedConversation.displayName : '')
                   }
-                  placeHolder="message..."
                   onChange={(e) => setMessage(e.target.value)}
-                  isArea={true}
                 ></SimpleFormInput>
                 <SimpleButton onClick={send}>send</SimpleButton>
-                {/* <SimpleButton onClick={fetchMessages}>fetch messages</SimpleButton> */}
               </div>
             </motion.div>
           )}

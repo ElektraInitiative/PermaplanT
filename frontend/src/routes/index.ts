@@ -5,7 +5,7 @@ import { MapWrapper } from '@/features/map_planning';
 import MapCreateForm from '@/features/maps/routes/MapCreateForm';
 import MapEditForm from '@/features/maps/routes/MapEditForm';
 import MapOverview from '@/features/maps/routes/MapOverview';
-import { ChatTest } from '@/features/nextcloud_integration/components/chat-test';
+import { Chat } from '@/features/nextcloud_integration/components/chat';
 import { WebdavTest } from '@/features/nextcloud_integration/components/webdav-test';
 import { Overview } from '@/features/overview/routes/Overview';
 import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
@@ -78,9 +78,10 @@ const routes: Routes = {
     restricted: false,
   },
   [Pages.Chat]: {
-    component: ChatTest,
+    component: Chat,
     path: '/chat',
     title: 'chat',
+    restricted: false,
   },
 };
 
