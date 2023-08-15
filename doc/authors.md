@@ -26,13 +26,6 @@ including their responsibilities, skills, etc.
 - special skills: SQL, Tailwind CSS, TypeScript
 - positioning: frontend
 
-## Gabriel
-
-- GitHub: @kitzbergerg
-- main responsibility: Backend
-- special skills: Rust, Docker, OAuth2
-- positioning: backend
-
 ## Moritz
 
 - GitHub: @badnames
@@ -93,6 +86,13 @@ including their responsibilities, skills, etc.
 - positioning: DB
 
 # Previous Authors
+
+## Gabriel
+
+- GitHub: @kitzbergerg
+- main responsibility: Backend
+- special skills: Rust, Docker, OAuth2
+- positioning: backend
 
 ## Nursultan
 
