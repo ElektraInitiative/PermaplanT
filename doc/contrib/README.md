@@ -54,7 +54,7 @@ Branch names should be one of:
 - meeting_notes/<date>
 - release/<version>
 
-If requested, and in any case before you start making fundamental changes, create a [decision](/doc/decisions/) before creating a code PR.
+If requested, and in any case before you start making fundamental changes, create a [decision](../../doc/decisions/) before creating a code PR.
 
 ## Documentation
 
