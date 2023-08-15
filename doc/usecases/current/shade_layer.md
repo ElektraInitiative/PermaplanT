@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, remove and delete shade areas in their map in the shade layer and adjust the intensity.
-- **Assignee:** Moritz (Frontend), Gabriel (Backend)
+- **Assignee:** Moritz
 
 ## Scenarios
 
