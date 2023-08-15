@@ -250,7 +250,7 @@ pub struct MapDto {
 
 /// The information of a map necessary for its creation.
 #[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
+#[derive(Serialize, Deserialize, ToSchema, Clone)]
 pub struct NewMapDto {
     /// The name of the map.
     pub name: String,
