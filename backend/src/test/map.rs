@@ -1,5 +1,7 @@
 //! Tests for [`crate::controller::map`].
 
+use crate::model::dto::UpdateMapGeometryDto;
+use crate::test::util::dummy_map_polygons::small_rectangle;
 use crate::{
     model::{
         dto::{MapDto, NewMapDto, Page, UpdateMapDto},
@@ -15,9 +17,6 @@ use chrono::NaiveDate;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::Uuid;
-use crate::model::dto::UpdateMapGeometryDto;
-use crate::model::entity::UpdateMapGeometry;
-use crate::test::util::dummy_map_polygons::small_rectangle;
 
 #[actix_rt::test]
 async fn test_can_search_maps() {
