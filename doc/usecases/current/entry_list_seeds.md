@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The users manage their seeds by adding, editing, and deleting them in the app.
-- **Assignee:** Moritz (login/users), Giancarlo ([seed overview](https://github.com/ElektraInitiative/PermaplanT/issues/210))
+- **Assignee:** Moritz
 
 ## Scenarios
 

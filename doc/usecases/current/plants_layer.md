@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, remove, and delete plant elements in their map in the plants layer.
-- **Assignee:** Paul (Frontend), Gabriel (Backend)
+- **Assignee:** Paul
 
 ## Scenarios
 
