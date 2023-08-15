@@ -8,6 +8,10 @@ import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
+import { useMapId } from '@/features/map_planning/hooks/useMapId';
+import { baseApiUrl } from '@/config';
+import { useQuery } from '@tanstack/react-query';
+import { findMapById } from '@/features/maps/api/findMapById';
 
 class ValidationError extends Error {
   constructor(msg: string) {
@@ -49,6 +53,13 @@ export const BaseLayerRightToolbar = () => {
   const executeAction = useMapStore((state) => state.executeAction);
   // const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
   // const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
+
+  const mapId = useMapId();
+  const { data: mapData } = useQuery([mapId], {
+    queryFn: () => findMapById(mapId),
+  });
+  console.log("current map:", mapData)
+
 
   const { t } = useTranslation(['common', 'baseLayerForm']);
 
@@ -178,10 +189,10 @@ export const BaseLayerRightToolbar = () => {
         onCancel={function (): void {
           setShowFileSelector(false);
         }}
-        path={'/Photos/'}
+        path={"/PermaplanT/" + mapData?.name + "/Base/"}
         onSelect={function (item: FileStat): void {
           const scale = baseLayerState.scale;
-          const path = '/Photos/' + item.basename;
+          const path = "/PermaplanT/" + mapData?.name + "/Base/" + item.basename;
           const rotation = baseLayerState.rotation;
           executeAction(
             new UpdateBaseLayerAction({
