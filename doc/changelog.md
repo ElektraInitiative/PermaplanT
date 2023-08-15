@@ -37,7 +37,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Finish seed edit and delete PR _(Giancarlo & Moritz)_
 - _()_
 - _()_
 - _()_
