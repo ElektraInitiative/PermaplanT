@@ -226,6 +226,7 @@ async fn create_map_dir(
     Ok(())
 }
 
+// Find a Nextcloud circle by name
 pub async fn find_circle(name: String, token: String) -> Result<String, ServiceError> {
     let client = reqwest::Client::new();
     let url = format!(
