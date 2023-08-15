@@ -4,7 +4,7 @@
 
 Before you start anything, please make sure you:
 
-- skimmed the mdbook (`make run-mdbook`), especially the use cases
+- skimmed the mdbook (`make run-mdbook`), especially the chapters listed in "Architecture".
 - report all problems you found during getting started, as it is essential that entry barriers get reduced
 
 For any non-trival work, i.e., not only trivial fixes/updates in documentation or tests, there should be an underlying issue.
