@@ -298,9 +298,8 @@ impl UpdatePlantingRemoveDateActionPayload {
 pub struct UpdateMapGeometryActionPayload {
     user_id: Uuid,
     action_id: Uuid,
-    map_id: i32,
     // E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    geometry: Polygon<Point>,
+    geometry: Option<Polygon<Point>>,
 }
 
 impl UpdateMapGeometryActionPayload {
@@ -309,7 +308,6 @@ impl UpdateMapGeometryActionPayload {
         Self {
             user_id,
             action_id,
-            map_id: payload.id,
             geometry: payload.geometry,
         }
     }

@@ -31,6 +31,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+mod update_map_bounds_impl;
 pub mod update_map_impl;
 pub mod users_impl;
 
@@ -308,14 +309,12 @@ pub struct UpdateMapDto {
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct UpdateMapGeometryDto {
-    /// The name of the map.
-    pub id: i32,
     /// The geometry of the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
     #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
-    pub geometry: Polygon<Point>,
+    pub geometry: Option<Polygon<Point>>,
 }
 
 /// Query parameters for searching maps.

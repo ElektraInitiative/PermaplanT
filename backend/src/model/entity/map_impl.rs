@@ -13,8 +13,10 @@ use uuid::Uuid;
 
 use crate::db::function::{similarity, PgTrgmExpressionMethods};
 use crate::db::pagination::Paginate;
-use crate::model::dto::{MapSearchParameters, Page, PageParameters, UpdateMapDto};
-use crate::model::entity::UpdateMap;
+use crate::model::dto::{
+    MapSearchParameters, Page, PageParameters, UpdateMapDto, UpdateMapGeometryDto,
+};
+use crate::model::entity::{UpdateMap, UpdateMapGeometry};
 use crate::schema::maps::name;
 use crate::{
     model::dto::{MapDto, NewMapDto},
@@ -110,6 +112,21 @@ impl Map {
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<MapDto> {
         let map_update = UpdateMap::from(map_update);
+        let query = diesel::update(maps::table.find(id)).set(&map_update);
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.get_result::<Self>(conn).await.map(Into::into)
+    }
+
+    /// Update a maps bounds in the database.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn update_geometry(
+        map_update_bounds: UpdateMapGeometryDto,
+        id: i32,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<MapDto> {
+        let map_update = UpdateMapGeometry::from(map_update_bounds);
         let query = diesel::update(maps::table.find(id)).set(&map_update);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)

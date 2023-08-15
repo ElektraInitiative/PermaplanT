@@ -5,7 +5,9 @@ use actix_web::web::Data;
 use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::{BaseLayerImageDto, MapSearchParameters, Page, UpdateMapDto};
+use crate::model::dto::{
+    BaseLayerImageDto, MapSearchParameters, Page, UpdateMapDto, UpdateMapGeometryDto,
+};
 use crate::model::dto::{NewLayerDto, PageParameters};
 use crate::model::entity::{BaseLayerImages, Layer};
 use crate::model::r#enum::layer_type::LayerType;
@@ -107,5 +109,29 @@ pub async fn update(
         });
     }
     let result = Map::update(map_update, id, &mut conn).await?;
+    Ok(result)
+}
+
+/// Update a maps gemoetry in the database.
+/// Checks if the map is owned by the requesting user.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+/// If the requesting user is not the owner of the map.
+pub async fn update_geomtery(
+    map_update_geometry: UpdateMapGeometryDto,
+    id: i32,
+    user_id: Uuid,
+    app_data: &Data<AppDataInner>,
+) -> Result<MapDto, ServiceError> {
+    let mut conn = app_data.pool.get().await?;
+    let map = Map::find_by_id(id, &mut conn).await?;
+    if map.owner_id != user_id {
+        return Err(ServiceError {
+            status_code: StatusCode::FORBIDDEN,
+            reason: "No permission to update data".to_owned(),
+        });
+    }
+    let result = Map::update_geometry(map_update_geometry, id, &mut conn).await?;
     Ok(result)
 }

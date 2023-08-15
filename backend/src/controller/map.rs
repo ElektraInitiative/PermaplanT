@@ -9,7 +9,7 @@ use actix_web::{
 
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
-use crate::model::dto::{MapSearchParameters, PageParameters, UpdateMapDto};
+use crate::model::dto::{MapSearchParameters, PageParameters, UpdateMapDto, UpdateMapGeometryDto};
 use crate::{model::dto::NewMapDto, service};
 
 /// Endpoint for fetching or searching all [`Map`](crate::model::entity::Map).
@@ -112,6 +112,36 @@ pub async fn update(
 ) -> Result<HttpResponse> {
     let response = service::map::update(
         map_update_json.0,
+        map_id.into_inner(),
+        user_info.id,
+        &app_data,
+    )
+    .await?;
+    Ok(HttpResponse::Ok().json(response))
+}
+/// Endpoint for updating the [´Geometry`] of a [`Map`](crate::model::entity::Map).
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+#[utoipa::path(
+context_path = "/api/maps",
+request_body = UpdateMapDto,
+responses(
+(status = 200, description = "Update a map", body = MapDto)
+),
+security(
+("oauth2" = [])
+)
+)]
+#[patch("/{map_id}/geometry")]
+pub async fn update_geometry(
+    map_update_geometry_json: Json<UpdateMapGeometryDto>,
+    map_id: Path<i32>,
+    user_info: UserInfo,
+    app_data: Data<AppDataInner>,
+) -> Result<HttpResponse> {
+    let response = service::map::update_geomtery(
+        map_update_geometry_json.0,
         map_id.into_inner(),
         user_info.id,
         &app_data,
