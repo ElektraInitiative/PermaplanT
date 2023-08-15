@@ -6,7 +6,6 @@ use actix_web::{
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
-use actix_web_httpauth::extractors::bearer::BearerAuth;
 
 use crate::config::auth::user_info::UserInfo;
 use crate::config::auth::user_token::UserToken;
