@@ -21,7 +21,8 @@ const Navbar = () => {
     <div className="flex items-center">
       <ul className="pt-1">
         <li>
-          <ButtonLink title={t('routes:maps')} to="/maps" className="text-lg font-medium" />
+          <ButtonLink title={t('routes:maps')} to="/maps" className="pe-4 text-lg font-medium" />
+          <ButtonLink title={t('routes:seeds')} to="/seeds" className="text-lg font-medium" />
         </li>
       </ul>
     </div>
