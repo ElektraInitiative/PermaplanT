@@ -1,4 +1,8 @@
 import { SeedDto } from '@/bindings/definitions';
+import { ExtendedPlantsSummaryDisplayName } from '@/components/ExtendedPlantDisplay';
+import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { findPlantById } from '@/features/seeds/api/findPlantById';
+import { useQuery } from '@tanstack/react-query';
 import { Suspense, UIEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -48,13 +52,19 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
             <thead className="text-xs uppercase text-neutral-300">
               <tr>
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
-                  {t('seeds:additional_name')}
+                  {t('seeds:binomial_name')}
                 </th>
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
                   {t('seeds:quantity')}
                 </th>
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
+                  {t('seeds:quality')}
+                </th>
+                <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
                   {t('seeds:harvest_year')}
+                </th>
+                <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
+                  {t('seeds:origin')}
                 </th>
               </tr>
             </thead>
@@ -71,10 +81,16 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
                     scope="row"
                     className="whitespace-nowrap px-6 py-4 font-medium text-neutral-900 dark:text-white"
                   >
-                    {seed.name}
+                    {seed.plant_id ? (
+                      <ExtendedPlantsSummaryDisplayNameForSeeds plantId={seed.plant_id ?? 0} />
+                    ) : (
+                      <span>{t('common:error')}</span>
+                    )}
                   </th>
                   <td className="px-6 py-4">{seed.quantity}</td>
+                  <td className="px-6 py-4">{seed.quality}</td>
                   <td className="px-6 py-4">{seed.harvest_year}</td>
+                  <td className="px-6 py-4">{seed.origin}</td>
                 </tr>
               ))}
             </tbody>
@@ -83,6 +99,25 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
       </section>
     </Suspense>
   );
+};
+
+const ExtendedPlantsSummaryDisplayNameForSeeds = (props: { plantId: number }) => {
+  const { t } = useTranslation(['common']);
+
+  const { isLoading, isError, data } = useQuery(
+    ['plant', props.plantId],
+    () => findPlantById(props.plantId),
+    { cacheTime: Infinity, staleTime: Infinity },
+  );
+
+  if (isLoading)
+    return (
+      <div className="w-[20px]">
+        <LoadingSpinner />
+      </div>
+    );
+  else if (isError) return <span>{t('common:error')}</span>;
+  else return <ExtendedPlantsSummaryDisplayName plant={data} />;
 };
 
 export default SeedsOverviewList;
