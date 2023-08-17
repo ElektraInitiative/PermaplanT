@@ -298,6 +298,7 @@
 - Notes:
 
 ## TC-018 - Edit seed
+
 - Description: Edit seed.
 - Preconditions:
   - User is on the view seed page.
@@ -313,6 +314,7 @@
 - Notes:
 
 ## TC-019 - Delete seed
+
 - Description: Edit seed.
 - Preconditions:
   - User is on the view seed page.
@@ -323,7 +325,7 @@
 - Actual Result:
 - Test Result:
 - Notes:
-- 
+
 <!--
 DONT DELETE THIS.
 USE THIS TO CREATE A NEW TESTCASE.
