@@ -1,4 +1,4 @@
-import { ExtendedPlantsSummaryDisplayName } from './ExtendedPlantDisplay';
+import { ExtendedPlantsSummaryDisplayName } from '../../../../../components/ExtendedPlantDisplay';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
