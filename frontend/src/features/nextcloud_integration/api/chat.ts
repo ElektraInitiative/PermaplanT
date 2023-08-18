@@ -48,7 +48,7 @@ export type TalkConversation = {
     actorDisplayName: string;
     timestamp: number;
     message: string;
-    messageParameters: any[];
+    messageParameters: unknown[];
     systemMessage: string;
     messageType: string;
     isReplyable: boolean;
@@ -164,7 +164,7 @@ export type ChatMessage = {
   // Message string with placeholders (see [Rich Object String](https://github.com/nextcloud/server/issues/1706))
   message: string;
   // Message parameters for the message (see [Rich Object String](https://github.com/nextcloud/server/issues/1706))
-  messageParameters: any[];
+  messageParameters: unknown[];
   // Unix timestamp when the message expires and should be removed from the client's UI without further note or warning (only available with message-expiration capability)
   expirationTimestamp: number;
   // Optional
