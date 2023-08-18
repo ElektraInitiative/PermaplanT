@@ -94,7 +94,7 @@ export type CreateConversationOptions = {
   invite?: string;
   // The source for the invite, only supported on roomType = 2 for groups and circles (only available with circles-support capability)
   source?: string;
-  // Conversation name up to 255 characters (Not available for roomType = 1)
+  // Conversation name up to 255 characters (not available for roomType = OneToOne)
   roomName?: string;
   // Type of an object this room references, currently only allowed value is 'room' to indicate the parent of a breakout room (See Object types)
   objectType?: string;
