@@ -1,5 +1,6 @@
 import { useIsOnline } from '@/hooks/useIsOnline';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 const ReadOnlyModeContext = React.createContext(false);
@@ -9,9 +10,11 @@ type ReadOnlyContextProps = {
 };
 
 export function ReadOnlyModeContextProvider({ ...props }: ReadOnlyContextProps) {
+  const [t] = useTranslation(['readOnly']);
+
   const isOnline = useIsOnline({
     onOffline: () => {
-      toast.error('You are offline. The read-only mode was activated.', {
+      toast.error(t('readOnly:activated'), {
         toastId: 'offline',
         autoClose: false,
       });
