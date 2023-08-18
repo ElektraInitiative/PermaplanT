@@ -69,6 +69,7 @@ export const Chat = () => {
 
   useEffect(() => {
     fetchMessageHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConversation]);
 
   useEffect(() => {
@@ -76,6 +77,7 @@ export const Chat = () => {
     if (data) {
       setMessages([...messages, ...data]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newMessages.data]);
 
   return (
