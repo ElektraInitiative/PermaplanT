@@ -41,3 +41,19 @@
   - Supports alternatives
   - Performance: more than 10000 elements per year and per alternative should be usable without noticeable delays and acceptable memory overhead
   - Annual plants automatically get removed after one year.
+
+## Development Progress
+
+- The user is presented with a list of seasonal plants.
+  Currently only seeds with an early expiration date are shown.
+  The backend part is implemented [here](https://github.com/ElektraInitiative/PermaplanT/blob/9927a132de09377baad47237f3048939f84c568b/backend/src/test/planting_suggestions.rs)
+  The list is then shown in [this component](https://github.com/ElektraInitiative/PermaplanT/blob/9927a132de09377baad47237f3048939f84c568b/frontend/src/features/map_planning/layers/plant/components/PlantSuggestionList.tsx)
+- Planting relationships are shown.
+  The backend part is implemented [here](https://github.com/ElektraInitiative/PermaplanT/blob/9927a132de09377baad47237f3048939f84c568b/backend/src/controller/plant_layer.rs).
+  The overlay is displayed from [this component](https://github.com/ElektraInitiative/PermaplanT/blob/9927a132de09377baad47237f3048939f84c568b/frontend/src/features/map_planning/layers/plant/components/PlantLayerRelationsOverlay.tsx)
+- The heatmap is actively worked on.
+- The user can NOT adjust planting relationships.
+- Planting as an area is NOT implemented.
+- The warnings layer is NOT implemented.
+- Offline availability is NOT implemented.
+- Annual plants are NOT automatically removed after one year.
