@@ -9,7 +9,7 @@ import {
 import { BaseLayerImageDto, PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
-import { createRef } from 'react';
+import { ComponentState, createRef } from 'react';
 import type { StateCreator } from 'zustand';
 
 type SetFn = Parameters<typeof createTrackedMapSlice>[0];
@@ -240,8 +240,8 @@ function redo(set: SetFn, get: GetFn): void {
 function cloneState(get: GetFn) {
   const state = get();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const clone = {} as any;
+  // ComponentState is a type alias for `any`
+  const clone: ComponentState = {};
 
   for (const _key in state) {
     const key = _key as keyof (TrackedMapSlice & UntrackedMapSlice);
@@ -255,7 +255,11 @@ function cloneState(get: GetFn) {
       continue;
     }
 
-    clone[key] = JSON.parse(JSON.stringify(value));
+    try {
+      clone[key] = JSON.parse(JSON.stringify(value));
+    } catch (e) {
+      console.error(`Could not clone state for key ${key}`, value);
+    }
   }
 
   return clone;

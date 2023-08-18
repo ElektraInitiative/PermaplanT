@@ -16,11 +16,15 @@ import { Layer } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
 
-const PLANT_WIDTHS = new Map([
-  ['narrow', 10],
-  ['medium', 50],
-  ['wide', 100],
+const PLANT_WIDTHS = new Map<PlantSpread, number>([
+  [PlantSpread.Narrow, 10],
+  [PlantSpread.Medium, 50],
+  [PlantSpread.Wide, 100],
 ]);
+
+function getPlantWidth({ spread = PlantSpread.Medium }): number {
+  return PLANT_WIDTHS.get(spread) ?? (PLANT_WIDTHS.get(PlantSpread.Medium) as number);
+}
 
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
@@ -45,7 +49,7 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      const width = PLANT_WIDTHS.get(selectedPlant.spread ?? PlantSpread.Medium) ?? 50;
+      const width = getPlantWidth(selectedPlant);
 
       executeAction(
         new CreatePlantAction({
