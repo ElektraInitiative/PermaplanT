@@ -7,7 +7,7 @@ Before developing E2E tests make sure you have read the [locator guidelines](./f
 ### General rules
 
 - Be consistent and minimalistic.
-  - Use the same vocabulary as Playwright (click, visible, etc.)
+  - Don't use synonyms. Use the same vocabulary as Playwright (click, visible, etc.).
   - Avoid using multiple different verbs for the same actions, keep your vocabulary small and precise.
     Use Playwrights vocabulary.
     This means to prefix methods with the actions from Playwright (e.g when calling `xyz.click()` from Playwright inside that method, name the method `click_xyz()` not a mix of press, click, push etc.)
