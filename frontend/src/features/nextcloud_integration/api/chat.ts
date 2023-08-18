@@ -90,7 +90,7 @@ export enum ConversationType {
 }
 export type CreateConversationOptions = {
   roomType: ConversationType;
-  // User ID (roomType = 1), group ID (roomType = 2 - optional), circle ID (roomType = 2, source = 'circles'], only available with circles-support capability)
+  // User ID (roomType = 1), group ID (roomType = 2 - optional), circle ID (roomType = 2, source = 'circles'), only available with circles-support capability
   invite?: string;
   // The source for the invite, only supported on roomType = 2 for groups and circles (only available with circles-support capability)
   source?: string;
