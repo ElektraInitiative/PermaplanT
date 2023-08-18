@@ -32,7 +32,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Link seeds page in the navbar _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -54,7 +54,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Add Christoph Nemeth as Teammember _(tschawax)_
 - _()_
 - _()_
 - _()_
