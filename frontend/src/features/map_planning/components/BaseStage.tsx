@@ -1,7 +1,7 @@
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
-import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import { MapLabel } from '../utils/MapLabel';
+import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
   deselectShapes,
   endSelection,
