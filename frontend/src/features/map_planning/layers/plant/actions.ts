@@ -375,7 +375,7 @@ export class UpdateRemoveDatePlantAction
     return new UpdateRemoveDatePlantAction(
       {
         id: plant.id,
-        removeDate: plant.addDate,
+        removeDate: plant.removeDate,
       },
       this.actionId,
     );

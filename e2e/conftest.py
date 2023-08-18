@@ -1,5 +1,5 @@
-import os
 import pytest
+from dotenv import load_dotenv
 from playwright.sync_api import Page
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
@@ -8,45 +8,11 @@ from e2e.pages.maps.create import MapCreatePage
 from e2e.pages.maps.edit import MapEditPage
 from e2e.pages.maps.planting import MapPlantingPage
 
-
-"""
-Commonly used workflows and util
-"""
+# imported so they are interpreted before the tests
+from steps.common_steps import *  # noqa: F401 F403
 
 
-def worker_id():
-    """
-    When executing tests in parallel, for example with
-    `pytest -n auto`, each worker has an id that can be
-    used in tests. If executed with one core the id is
-    an empty string.
-    """
-    worker_id = ""
-    if "PYTEST_XDIST_WORKER" in os.environ:
-        # Get the value of the environment variable
-        worker_id = os.environ["PYTEST_XDIST_WORKER"]
-    return worker_id
-
-
-def login(hp: HomePage, lp: LoginPage) -> HomePage:
-    """
-    Login to permaplant and close the login notification.
-    Returns a homepage object
-    """
-    hp.load()
-    hp.login_button_is_visible()
-    hp.click_login_button()
-    lp.fill_username()
-    lp.fill_password()
-    lp.click_sign_in()
-    hp.verify()
-    hp.close_alert()
-    return hp
-
-
-"""
-Global page objects pytest fixtures
-"""
+load_dotenv()
 
 
 @pytest.fixture

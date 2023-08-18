@@ -10,22 +10,38 @@ export interface SelectMenuProps<
   Option = SelectOption,
   IsMulti extends boolean = false,
 > {
-  isMulti?: IsMulti;
+  /** Per page unique identifier of this UI element. */
   id: Path<T>;
+  /** More than one option may be selected if this flag is set to true. */
+  isMulti?: IsMulti;
+  /** This text will be displayed in a label above select menu. */
   labelText?: string;
-  // Caution: control can only be omitted in the context of a FormProvider.
+  /**
+   * Reference to a react-hook-form control.
+   * Caution: control can only be omitted in the context of a FormProvider.
+   */
   control?: Control<T, unknown>;
+  /** Options content that may be selected by the user */
   options: Option[];
+  /** Whether the user has to select something before they can submit the containing form. */
   required?: boolean;
+  /** Text that is displayed in place of the content if no option has been selected. */
   placeholder?: string;
+  /** Callback that is invoked every time a new option is selected. */
   handleOptionsChange?: (
     option: SingleValue<Option> | MultiValue<Option>,
     actionMeta: ActionMeta<Option>,
   ) => void;
+  /** Callback that is invoked if the user made any input. */
   onChange?: () => void;
+  /** Callback that is invoked every time the user changed the search query. */
   onInputChange?: (inputValue: string) => void;
 }
 
+/**
+ * Allows the user to choose from a set of predetermined options.
+ * Based on [react-select](https://react-select.com/home).
+ */
 export default function SelectMenu<
   T extends FieldValues,
   Option = SelectOption,

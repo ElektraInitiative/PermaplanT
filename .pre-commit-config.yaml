@@ -85,4 +85,28 @@ repos:
       - id: fix-npm-groovy-lint
         name: Fix Lint groovy findings
         description: Groovy & Jenkinsfile Auto-fixer
-        entry: npm-groovy-lint --fix ci/Jenkinsfile ci/Jenkinsfile.release --failon warning --loglevel warning --noserver
+        entry: npm-groovy-lint --fix ci/Jenkinsfile ci/Jenkinsfile.release --failon warning --loglevel warning
+  - repo: https://github.com/psf/black
+    rev: 23.7.0
+    hooks:
+      - id: black
+        language_version: python3
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args:
+          - --max-line-length=120
+          - --statistics
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.4.1
+    hooks:
+      - id: mypy
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.4
+    hooks:
+      - id: codespell
+        # Scan all .md files, exclude folders /meetings & /reports.
+        files: ^(?!.*\/(meetings|reports)\/).*\.md$
+        args: [-L crate]
+        stages: [manual]

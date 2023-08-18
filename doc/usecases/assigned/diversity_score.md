@@ -24,6 +24,6 @@
     In this case the app will re-calculate the score after the next operation the user makes while the score is visible.
 - **Postcondition:**
   - The user finds the diversity score in the map overview and the map planner.
-  - The diversity score affects the order of the results in the [map search](../current/map_search.md).
+  - The diversity score affects the order of the results in the [map search](../assigned/map_search.md).
 - **Non-functional Constraints:**-
   - Performance

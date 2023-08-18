@@ -1,19 +1,19 @@
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import {
   Action,
+  GetFn,
+  SetFn,
   TRACKED_DEFAULT_STATE,
   TrackedMapSlice,
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
+import { clearInvalidSelection } from './utils';
 import { BaseLayerImageDto, PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
-
-type SetFn = Parameters<typeof createTrackedMapSlice>[0];
-type GetFn = Parameters<typeof createTrackedMapSlice>[1];
 
 export const createTrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -122,6 +122,7 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
 
   trackReverseActionInHistory(action, get().step, set, get);
   applyActionToStore(action, set, get);
+  clearInvalidSelection(get);
 
   set((state) => ({
     ...state,
@@ -203,6 +204,7 @@ function undo(set: SetFn, get: GetFn): void {
   actionToUndo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToUndo, get().step - 1, set, get);
   applyActionToStore(actionToUndo, set, get);
+  clearInvalidSelection(get);
 
   set((state) => ({
     ...state,
@@ -229,6 +231,7 @@ function redo(set: SetFn, get: GetFn): void {
   actionToRedo.execute(get().untrackedState.mapId);
   trackReverseActionInHistory(actionToRedo, get().step, set, get);
   applyActionToStore(actionToRedo, set, get);
+  clearInvalidSelection(get);
 
   set((state) => ({
     ...state,

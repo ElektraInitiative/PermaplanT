@@ -6,6 +6,7 @@ import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOver
 import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantSpread, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
+import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
@@ -173,6 +174,8 @@ function PlantsLayer(props: PlantsLayerProps) {
   const selectedPlant = useMapStore(
     (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
+  const showPlantLabels = useMapStore((state) => state.untrackedState.layers.plants.showLabels);
+
   const portalRef = useRef<HTMLDivElement>(
     document.getElementById('bottom-portal') as HTMLDivElement,
   );
@@ -184,6 +187,7 @@ function PlantsLayer(props: PlantsLayerProps) {
         {plants.map((o) => (
           <PlantingElement planting={o} key={o.id} />
         ))}
+        {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
 
         <Html>
           {createPortal(

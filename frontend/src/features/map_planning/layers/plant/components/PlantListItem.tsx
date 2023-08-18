@@ -42,6 +42,8 @@ export function PlantListItem({
           defaultImageUrl={defaultImageUrl}
           path={`Icons/${plant?.unique_name}.png`}
           shareToken="2arzyJZYj2oNnHX"
+          retry={(failureCount, error) => error.response?.status !== 404}
+          showErrorMessage={false}
         />
         <div className="text-left">
           <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
