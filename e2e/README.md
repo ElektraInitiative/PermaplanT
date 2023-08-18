@@ -129,7 +129,26 @@ Before developing E2E tests make sure you have read the [guidelines](https://git
   - Don't indent more than one time.
   - Don't make a complicated call stack higher than two from a page object.
 - Every test should be independent from other tests (concurrency).
-- Name inputs or objects you create SUT (System under Test) so they are clearly marked as test artifacts.
+
+#### Map names
+
+##### SUT
+
+- Name maps or other nameable objects on the webapp with SUT (System under Test) so they are clearly marked as test artifacts.
+
+##### Worker ID's
+
+Pytest xdist has a fixture called `worker_id`, which allows us to get the worker_id in a test case.
+
+##### Worker uuid
+
+To not have map name collisions we append an uuid to the worker id.
+By utilizing this new fixture `worker_uuid` in your tests you can get a unique string for naming things.
+
+Example:
+In your feature file the mapname is `SUT-BaseLayer`, calling `worker_uuid` gives you `-gw16-be56f727-2abc-4470-83eb-61cedd0ac76e` so you can name your map
+`SUT-BaseLayer-gw16-be56f727-2abc-4470-83eb-61cedd0ac76e` in your tests.
+Other examples to be found in already written tests.
 
 ### A typical workflow
 
