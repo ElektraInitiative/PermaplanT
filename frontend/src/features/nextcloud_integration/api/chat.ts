@@ -181,7 +181,7 @@ type ChatParentData = {
 
   // True when the parent is deleted
   deleted: boolean;
-}
+};
 
 export const getChatMessages = async (
   token: string,
