@@ -31,4 +31,5 @@
 ## Links
 
 [Authentication Setup](../../research/nextcloud_integration.md)
+
 [Authentication Decision](../../decisions/auth.md)
