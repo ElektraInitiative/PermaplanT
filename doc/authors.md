@@ -85,6 +85,13 @@ including their responsibilities, skills, etc.
 - focus group: Security Analysis
 - positioning: DB
 
+## Christoph N
+
+- GitHub: @tschawax
+- main responsibility: Usability Improvements
+- focus groups: UX, frontend
+- positioning: frontend
+
 # Previous Authors
 
 ## Gabriel
