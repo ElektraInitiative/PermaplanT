@@ -35,3 +35,4 @@
 - CSS classes for the styling of the tour were added as a separate [CSS file](https://github.com/ElektraInitiative/PermaplanT/blob/e4931dc6b4e1bbfaa48a6094a7c289f3cd2de57c/frontend/src/styles/guidedTour.css).
 - Guided tour is added to the application as part of the [map wrapper](https://github.com/ElektraInitiative/PermaplanT/blob/e4931dc6b4e1bbfaa48a6094a7c289f3cd2de57c/frontend/src/features/map_planning/routes/MapWrapper.tsx).
 - The tour is started and event listeners are added in the [map component](https://github.com/ElektraInitiative/PermaplanT/blob/e4931dc6b4e1bbfaa48a6094a7c289f3cd2de57c/frontend/src/features/map_planning/components/Map.tsx).
+- Follow-up Issue(s): [#710](https://github.com/ElektraInitiative/PermaplanT/issues/710).
