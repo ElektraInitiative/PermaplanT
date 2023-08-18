@@ -85,7 +85,7 @@ export enum ConversationType {
   Group,
   Public,
   Changelog,
-  //When a user is deleted from the server or removed from all their conversations, 1 "One to one" rooms are converted to this type)
+  // When a user is deleted from the server or removed from all their conversations, former "one to one" rooms are converted to this type)
   FormerOneToOne,
 }
 export type CreateConversationOptions = {
