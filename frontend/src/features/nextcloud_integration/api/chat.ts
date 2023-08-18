@@ -161,19 +161,28 @@ export type ChatMessage = {
   isReplyable: boolean;
   // A reference string that was given while posting the message to be able to identify a sent message again (only available with chat-reference-id capability)
   referenceId: string;
-  // Message string with placeholders (see Rich Object String)
+  // Message string with placeholders (see [Rich Object String](https://github.com/nextcloud/server/issues/1706))
   message: string;
-  // Message parameters for the message (see Rich Object String)
+  // Message parameters for the message (see [Rich Object String](https://github.com/nextcloud/server/issues/1706))
   messageParameters: any[];
   // Unix timestamp when the message expires and should be removed from the client's UI without further note or warning (only available with message-expiration capability)
   expirationTimestamp: number;
-  // Optional: See Parent data below
-  parent?: any[];
+  // Optional
+  parent?: ChatParentData[];
   // Optional: An array map with the relation between reaction emoji and the total count of reactions with this emoji
   reactions?: number[];
   // Optional: When the user reacted, this is the list of emojis the user reacted with
   reactionsSelf?: string[];
 };
+
+type ChatParentData = {
+  // ID of the parent comment
+  id: number;
+
+  // True when the parent is deleted
+  deleted: boolean;
+}
+
 export const getChatMessages = async (
   token: string,
   params: GetChatMessagesParams,
