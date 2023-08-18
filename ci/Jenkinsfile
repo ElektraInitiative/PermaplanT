@@ -11,6 +11,7 @@ def wait_for_db() {
 
 def wait_for_pr_db() {
     retry(6) {
+        // groovylint-disable-next-line
         sleep(time: 5, unit: 'SECONDS')
         sh 'curl --fail https://pr.permaplant.net/api/config'
     }
