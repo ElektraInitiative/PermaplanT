@@ -9,7 +9,7 @@ import {
 import { BaseLayerImageDto, PlantingDto } from '@/bindings/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
-import { ComponentState, createRef } from 'react';
+import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
 
 type SetFn = Parameters<typeof createTrackedMapSlice>[0];
@@ -109,11 +109,15 @@ export const createTrackedMapSlice: StateCreator<
  * After execution, the ability to redo any undone action is lost.
  */
 function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
-  const snapshot = cloneState(get);
+  const reverseAction = action.reverse(get().trackedState);
 
   trackUserAction(action, set);
   action.execute(get().untrackedState.mapId).catch(() => {
-    set(snapshot);
+    if (!reverseAction) {
+      throw new Error('Cannot reverse action');
+    }
+
+    applyActionToStore(reverseAction, set, get);
   });
 
   trackReverseActionInHistory(action, get().step, set, get);
@@ -232,40 +236,4 @@ function redo(set: SetFn, get: GetFn): void {
     canUndo: true,
     canRedo: state.step + 1 < state.history.length,
   }));
-}
-
-/**
- * Clones the state without functions and refs.
- */
-function cloneState(get: GetFn) {
-  const state = get();
-
-  // ComponentState is a type alias for `any`
-  const clone: ComponentState = {};
-
-  for (const _key in state) {
-    const key = _key as keyof (TrackedMapSlice & UntrackedMapSlice);
-    const value = state[key];
-
-    if (typeof value === 'function') {
-      continue;
-    }
-
-    if (typeof value === 'object' && isRef(value)) {
-      continue;
-    }
-
-    try {
-      clone[key] = JSON.parse(JSON.stringify(value));
-    } catch (e) {
-      console.error(`Could not clone state for key ${key}`, value);
-    }
-  }
-
-  return clone;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isRef(value: any): value is { current: unknown } {
-  return value.current !== undefined;
 }
