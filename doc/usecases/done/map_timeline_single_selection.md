@@ -27,3 +27,11 @@
   - Performance: data in up to 100 years should be fast to use
 - **Note:**
   - Single Date Selection must always be an exact date so we have a well-known date (reference point) when elements got added to the map.
+
+## Development Progress
+
+- The dates are not updated inside the `selectedPlanting` on undoing/redoing a date change
+  What roughly needs to be done:
+  - check in the actions if they change the currently `selectedPlanting` and update the `selectedPlanting` accordingly.
+  - all actions need to be touched for this to work, as the actions currently only have access to a subtree of the state.
+    Thus can not read `selectedPlanting` Giving them access to the whole state via the `GetFn` is needed.
