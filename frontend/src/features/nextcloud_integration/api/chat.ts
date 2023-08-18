@@ -81,12 +81,12 @@ export const getConversations = async (): Promise<Array<TalkConversation>> => {
 };
 
 export enum ConversationType {
-  OneToOne,
-  Group,
-  Public,
-  Changelog,
+  OneToOne = 1,
+  Group = 2,
+  Public = 3,
+  Changelog = 4,
   // When a user is deleted from the server or removed from all their conversations, former "one to one" rooms are converted to this type)
-  FormerOneToOne,
+  FormerOneToOne = 5,
 }
 export type CreateConversationOptions = {
   roomType: ConversationType;
@@ -106,7 +106,7 @@ export const createConversation = async (options: CreateConversationOptions) => 
   http.defaults.headers['OCS-APIRequest'] = true;
   return http.post('/ocs/v2.php/apps/spreed/api/v4/room', {
     ...options,
-    roomType: options.roomType + 1,
+    roomType: options.roomType,
   });
 };
 
