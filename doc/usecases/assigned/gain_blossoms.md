@@ -57,3 +57,9 @@
 - **Postcondition:**
   The awarded Blossoms will be shown in the users profile with a number indicating the amount of times this blossom was earned in previous seasons.
 - **Non-functional Constraints:**
+
+## Development Progress
+
+- Backend API call for adding a Blossom to a user is implemented in [backend/src/controller/blossoms.rs](https://github.com/ElektraInitiative/PermaplanT/blob/766df8f6974ff42cd44113d6ff2d387bae091df8/backend/src/controller/blossoms.rs).
+- Current version does not reference pre-defined [Blossom entities](https://github.com/ElektraInitiative/PermaplanT/blob/766df8f6974ff42cd44113d6ff2d387bae091df8/backend/src/model/entity.rs#L923) as there is currently no way to add them.
+- Frontend awards Blossoms currently only for completing the [Guided Tour](https://github.com/ElektraInitiative/PermaplanT/blob/766df8f6974ff42cd44113d6ff2d387bae091df8/frontend/src/features/map_planning/components/Map.tsx#L78).

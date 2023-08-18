@@ -10,7 +10,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - _()_
 - _()_
-- _()_
+- Updated UC for guided tour and gaining blossoms _(Thorben)_
 - _()_
 - _()_
 - _()_
