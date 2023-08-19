@@ -12,8 +12,8 @@ scenarios("features/planting.feature")
 @then(
     parsers.parse("it stays on {name} even when I leave the page and come back later")
 )
-def planting_persists(mmp: MapManagementPage, mpp: MapPlantingPage, name, worker_id):
+def planting_persists(mmp: MapManagementPage, mpp: MapPlantingPage, name, worker_uuid):
     mpp.to_map_management_page()
-    mmp.to_map_planting_page(name + worker_id)
+    mmp.to_map_planting_page(name + worker_uuid)
     mpp.check_plant_layer()
     mpp.expect_plant_on_canvas("Tomato (Solanum lycopersicum)")
