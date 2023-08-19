@@ -7,6 +7,7 @@ import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
 import useMapStore from '../store/MapStore';
+import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import { convertToDate } from '../utils/date-utils';
 import { BaseStage } from './BaseStage';
 import { Timeline } from './timeline/Timeline';
@@ -63,6 +64,7 @@ export const Map = ({ layers }: MapProps) => {
     'guidedTour',
     'plantings',
   ]);
+  const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
 
   const reenableTour = async () => {
@@ -106,26 +108,26 @@ export const Map = ({ layers }: MapProps) => {
         left: <div></div>,
         right: <BaseLayerRightToolbar />,
       },
-      [LayerType.Plants]: { right: <PlantLayerRightToolbar />, left: <PlantLayerLeftToolbar /> },
-      [LayerType.Drawing]: { right: <div></div>, left: <div></div> },
-      [LayerType.Fertilization]: { right: <div></div>, left: <div></div> },
-      [LayerType.Habitats]: { right: <div></div>, left: <div></div> },
-      [LayerType.Hydrology]: { right: <div></div>, left: <div></div> },
-      [LayerType.Infrastructure]: { right: <div></div>, left: <div></div> },
-      [LayerType.Label]: { right: <div></div>, left: <div></div> },
-      [LayerType.Landscape]: { right: <div></div>, left: <div></div> },
-      [LayerType.Paths]: { right: <div></div>, left: <div></div> },
-      [LayerType.Shade]: { right: <div></div>, left: <div></div> },
-      [LayerType.Soil]: { right: <div></div>, left: <div></div> },
-      [LayerType.Terrain]: { right: <div></div>, left: <div></div> },
-      [LayerType.Trees]: { right: <div></div>, left: <div></div> },
-      [LayerType.Warnings]: { right: <div></div>, left: <div></div> },
-      [LayerType.Winds]: { right: <div></div>, left: <div></div> },
-      [LayerType.Zones]: { right: <div></div>, left: <div></div> },
-      [LayerType.Todo]: { right: <div></div>, left: <div></div> },
-      [LayerType.Photo]: { right: <div></div>, left: <div></div> },
-      [LayerType.Watering]: { right: <div></div>, left: <div></div> },
-      [FrontendOnlyLayerType.Grid]: { right: <div></div>, left: <div></div> },
+      [LayerType.Plants]: { left: <PlantLayerLeftToolbar />, right: <PlantLayerRightToolbar /> },
+      [LayerType.Drawing]: { left: <div></div>, right: <div></div> },
+      [LayerType.Fertilization]: { left: <div></div>, right: <div></div> },
+      [LayerType.Habitats]: { left: <div></div>, right: <div></div> },
+      [LayerType.Hydrology]: { left: <div></div>, right: <div></div> },
+      [LayerType.Infrastructure]: { left: <div></div>, right: <div></div> },
+      [LayerType.Label]: { left: <div></div>, right: <div></div> },
+      [LayerType.Landscape]: { left: <div></div>, right: <div></div> },
+      [LayerType.Paths]: { left: <div></div>, right: <div></div> },
+      [LayerType.Shade]: { left: <div></div>, right: <div></div> },
+      [LayerType.Soil]: { left: <div></div>, right: <div></div> },
+      [LayerType.Terrain]: { left: <div></div>, right: <div></div> },
+      [LayerType.Trees]: { left: <div></div>, right: <div></div> },
+      [LayerType.Warnings]: { left: <div></div>, right: <div></div> },
+      [LayerType.Winds]: { left: <div></div>, right: <div></div> },
+      [LayerType.Zones]: { left: <div></div>, right: <div></div> },
+      [LayerType.Todo]: { left: <div></div>, right: <div></div> },
+      [LayerType.Photo]: { left: <div></div>, right: <div></div> },
+      [LayerType.Watering]: { left: <div></div>, right: <div></div> },
+      [FrontendOnlyLayerType.Grid]: { left: <div></div>, right: <div></div> },
     };
 
     return content[layerType];
@@ -141,6 +143,7 @@ export const Map = ({ layers }: MapProps) => {
               <div>
                 <IconButton
                   className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  disabled={isReadOnlyMode}
                   onClick={() => undo()}
                   title={t('undoRedo:undo_tooltip')}
                   data-tourid="undo"
@@ -150,6 +153,7 @@ export const Map = ({ layers }: MapProps) => {
                 </IconButton>
                 <IconButton
                   className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  disabled={isReadOnlyMode}
                   onClick={() => redo()}
                   title={t('undoRedo:redo_tooltip')}
                   data-testid="redo-button"
