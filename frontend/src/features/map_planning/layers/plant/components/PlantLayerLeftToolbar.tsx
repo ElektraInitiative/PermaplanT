@@ -18,6 +18,7 @@ export function PlantLayerLeftToolbar() {
   const executeAction = useMapStore((state) => state.executeAction);
   const selectPlanting = useMapStore((state) => state.selectPlanting);
   const transformerRef = useMapStore((state) => state.transformer);
+  const step = useMapStore((state) => state.step);
 
   const isReadOnlyMode = useIsReadOnlyMode();
 
@@ -43,7 +44,8 @@ export function PlantLayerLeftToolbar() {
   return selectedPlanting && plant ? (
     <PlantingAttributeEditForm
       disabled={isReadOnlyMode}
-      key={selectedPlanting.id}
+      // remount the form when the selected planting or the step changes (on undo/redo)
+      key={`${selectedPlanting.id}-${step}`}
       plant={plant}
       planting={selectedPlanting}
       onDeleteClick={onDeleteClick}
