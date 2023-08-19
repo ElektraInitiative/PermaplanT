@@ -12,11 +12,11 @@ scenarios("features/base_layer.feature")
     parsers.parse("{image_name} stays even when I leave {map_name} and come back later")
 )
 def background_image_stays(
-    mpp: MapPlantingPage, mmp: MapManagementPage, image_name, map_name, worker_id
+    mpp: MapPlantingPage, mmp: MapManagementPage, image_name, map_name, worker_uuid
 ):
     mpp.to_map_management_page()
     mmp.verify()
-    mmp.to_map_planting_page(map_name + worker_id)
+    mmp.to_map_planting_page(map_name + worker_uuid)
     mpp.expect_background_image(image_name)
 
 
@@ -34,11 +34,11 @@ def change_rotation(mpp: MapPlantingPage, val):
 
 @then(parsers.parse("{map_name} image rotation is set to {val} degrees"))
 def rotation_gets_changed(
-    mpp: MapPlantingPage, mmp: MapManagementPage, map_name, val, worker_id
+    mpp: MapPlantingPage, mmp: MapManagementPage, map_name, val, worker_uuid
 ):
     mpp.to_map_management_page()
     mmp.verify()
-    mmp.to_map_planting_page(map_name + worker_id)
+    mmp.to_map_planting_page(map_name + worker_uuid)
     mpp.expect_rotation_to_have_value(val)
 
 
@@ -56,9 +56,9 @@ def change_scale(mpp: MapPlantingPage, val):
 
 @then(parsers.parse("{map_name} image scale is set to {val} percent"))
 def scale_gets_changed(
-    mpp: MapPlantingPage, mmp: MapManagementPage, map_name, val, worker_id
+    mpp: MapPlantingPage, mmp: MapManagementPage, map_name, val, worker_uuid
 ):
     mpp.to_map_management_page()
     mmp.verify()
-    mmp.to_map_planting_page(map_name + worker_id)
+    mmp.to_map_planting_page(map_name + worker_uuid)
     mpp.expect_scaling_to_have_value(val)

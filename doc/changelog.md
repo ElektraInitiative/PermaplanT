@@ -10,7 +10,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - _()_
 - _()_
-- _()_
+- Updated UC for guided tour and gaining blossoms _(Thorben)_
 - _()_
 - _()_
 - _()_
@@ -32,7 +32,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Link seeds page in the navbar _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -54,6 +54,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Add Christoph Nemeth as Teammember _(tschawax)_
 - _()_
 - _()_
 - _()_
@@ -63,8 +64,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- E2E: Worker uuids fixture #837 _(4ydan)_
 - MDB: Fold all chapters #818 _(4ydan)_
 - CI: Add codespell pre-commit #811 _(4ydan)_
 - E2E: Add base layer tests #777 _(4ydan)_
