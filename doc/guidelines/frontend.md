@@ -7,6 +7,10 @@
 
 ## Source Code Best Practices
 
+We use [Bulletproof React](https://github.com/alan2207/bulletproof-react) with following specialisations/exceptions:
+
+- We use `camelCase` in file names and identifiers.
+- We use absolute imports.
 - We use minimal number of packages: need to be noted in solutions or in a decision
 - Be thoughtful of memory consumption and runtime
 - Use debounce hook as in `PlantingAttributeEditForm.tsx`
