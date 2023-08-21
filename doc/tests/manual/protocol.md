@@ -1,65 +1,6 @@
 # Manual Test Protocol
 
-## TC-001 - Login
-
-- Description: Successfully login to PermaplanT
-- Preconditions:
-- Test Steps:
-  1. Press the login button on the navbar.
-  2. Enter credentials.
-  3. Press Login.
-- Expected Result:
-  - Get redirected to the homepage.
-  - Be logged in.
-  - See a Hello message pop up.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-002 - Translation
-
-- Description: Switch language on website
-- Preconditions:
-- Test Steps:
-  1. Change the language in the navbar
-- Expected Result:
-  - Language should be changed after selecting a new one.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-003 - Use Case: Map Creation
-
-- Description: Successfully create a new map.
-- Preconditions:
-  - Be logged in.
-- Test Steps:
-  1. Go to the map editor page.
-  2. Create a new map.
-  3. Enter valid stuff.
-- Expected Result:
-  - Map should be successfully created.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-004 - Map Creation (Negative)
-
-- Description: Can't create a map with a name that exists
-- Preconditions:
-  - Be logged in.
-- Test Steps:
-  1. Go to the map editor page.
-  2. Create a map with a name that already exists.
-  3. Enter valid stuff.
-- Expected Result:
-  - Map should not be created.
-  - Error message pops up on the top right.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-005 - Plant Search
+## TC-001 - Plant Search
 
 - Description: Show a selection of plants if the search input is empty.
 - Preconditions:
@@ -75,24 +16,7 @@
 - Test Result:
 - Notes:
 
-## TC-006 - Plant Search
-
-- Description: Return expected results for a given search in the selected language.
-- Preconditions:
-  - The search term "tomato" has been typed into the search field.
-- Test Steps:
-  1. Navigate to the map page.
-  2. Select a map.
-  3. Select the plant layer in the right map menu.
-  4. Push the search icon in the lower right menu.
-  5. Write "tomato" into the search field.
-- Expected Result:
-  - The plants shown contain the string "tomato" in part of the datacolumns as outlined in the usecase document.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-007 - Plant Search
+## TC-002 - Plant Search
 
 - Description: Returns results for searches in the language that was selected.
 - Preconditions:
@@ -109,7 +33,7 @@
 - Test Result:
 - Notes:
 
-## TC-008 - Heatmap
+## TC-003 - Heatmap
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Preconditions:
@@ -125,105 +49,7 @@
 - Test Result:
 - Notes:
 
-## TC-009 - Timeline
-
-- Description: Change the date of the map to 'hide' plantings.
-- Preconditions:
-  - User must be on the map planning screen.
-- Test Steps:
-  1. Add a planting to the map.
-  2. Click on the date selection on the bottom of the screen.
-  3. Navigate to a date in the past.
-  4. Wait 1 second.
-- Expected Result:
-  - The indicator was briefly blue, indicating a loading state.
-  - The indicator beside the input is green.
-  - The Date on the bottom/right corner of the screen shows a date in the past.
-  - The planting previously planted is gone.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-010 - Timeline
-
-- Description: Change the date of the map to 'unhide' plantings.
-- Preconditions:
-  - User must be on the map planning screen.
-- Test Steps:
-  1. Add a planting to the map.
-  2. Click on the date selection on the bottom of the screen.
-  3. Navigate to a date in the past.
-  4. Wait 1 second.
-  5. Navigate to today.
-- Expected Result:
-  - The indicator was briefly blue, indicating a loading state.
-  - The indicator beside the input is green.
-  - The Date on the bottom/right corner of the screen shows the current day.
-  - The planting previously planted was gone while being in the past.
-  - The planting is visible again.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-011 - Timeline
-
-- Description: Change the `add_date` of a planting to 'hide' it.
-- Preconditions:
-  - User must be on the map planning screen.
-- Test Steps:
-  1. Add a planting to the map.
-  2. Click on the planting.
-  3. Click on the `Add Date` date selector in the left lower toolbar.
-  4. Change the date to a date in the future.
-- Expected Result:
-  - The indicator was briefly blue, indicating a loading state.
-  - The indicator beside the input is green.
-  - The planting previously planted is gone.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-012 - Timeline
-
-- Description: Change the `remove_date` of a planting to 'hide' it.
-- Preconditions:
-  - User must be on the map planning screen.
-  - The plants date has to be in the past.
-- Test Steps:
-  1. Add a planting to the map.
-  2. Click on the planting.
-  3. Click on the `Remove Date` date selector in the left lower toolbar.
-  4. Change the date to today.
-- Expected Result:
-  - The indicator was briefly blue, indicating a loading state.
-  - The indicator beside the input is green.
-  - The planting previously planted is gone.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-013 - Timeline
-
-- Description: Change the `add_date` of a planting to 'unhide' it.
-- Preconditions:
-  - User must be on the map planning screen.
-- Test Steps:
-  1. Add a planting to the map.
-  2. Click on the planting.
-  3. Click on the `Add Date` date selector in the left lower toolbar.
-  4. Change the date to a date in the future.
-  5. Wait one second
-  6. Remove the date
-- Expected Result:
-  - The indicator was briefly blue, indicating a loading state.
-  - The indicator beside the input is green.
-  - The planting previously planted was gone while its `add_date` was in the future.
-  - The planting is visible now with its `add_date` unset.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-014 - Base Layer
+## TC-004 - Base Layer
 
 - Description: Check whether the maps background image is displayed correctly.
 - Preconditions:
@@ -244,7 +70,7 @@
 - Test Result:
 - Notes:
 
-## TC-015 - Grid
+## TC-005 - Grid
 
 - Description: Display a point grid on the screen.
 - Preconditions:
@@ -262,7 +88,7 @@
 - Test Result:
 - Notes:
 
-## TC-016 - Map Editor Guided Tour
+## TC-006 - Map Editor Guided Tour
 
 - Description: Check whether the Guided Tour leaves the Map Editor in its original state.
 - Preconditions:
@@ -279,7 +105,7 @@
 - Test Result:
 - Notes:
 
-## TC-017 - Map Editor Guided Tour
+## TC-007 - Map Editor Guided Tour
 
 - Description: Guided Tour only shows when not completed or explicitly cancelled.
 - Preconditions:
@@ -297,7 +123,7 @@
 - Test Result:
 - Notes:
 
-## TC-018 - Chat: Create conversation
+## TC-008 - Chat: Create conversation
 
 - Description: A conversation can be created at /chat
 - Preconditions:
@@ -314,7 +140,7 @@
 - Test Result:
 - Notes: Currently only works with CORS disabled.
 
-## TC-019 - Chat: Send message
+## TC-009 - Chat: Send message
 
 - Description: Send a message to a Nextcloud conversation.
 - Preconditions:
