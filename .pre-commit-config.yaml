@@ -102,6 +102,7 @@ repos:
     rev: v1.4.1
     hooks:
       - id: mypy
+        files: ^e2e/
   - repo: https://github.com/codespell-project/codespell
     rev: v2.2.4
     hooks:
