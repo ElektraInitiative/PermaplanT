@@ -76,7 +76,7 @@
 - Preconditions:
   - User must be in the map editor.
 - Test Steps:
-  1. Press the grid button in the left upper menu bar.
+  1. Click the grid button in the left upper menu bar.
   2. Zoom all the way in.
   3. Zoom all the way out.
 - Expected Result:
@@ -158,28 +158,15 @@
 - Test Result:
 - Notes: Currently only works with CORS disabled.
 
-<!--
-DONT DELETE THIS.
 USE THIS TO CREATE A NEW TESTCASE.
-DONT DELETE ANY BULLETPOINT.
+DONT DELETE EMPTY BULLETPOINTS.
+DONT FILL OUT ACTUAL/TEST RESULT.
 
-## TC-EXAMPLE - User story
+<!-- ## TC-EXAMPLE - User Story
 - Description: Show a selection of plants if the search input is empty.
-- Preconditions:
-  - User must be on the map editor screen.
-  - XYZ must exist or be selected.
-- Test Steps:
-  1. Do this
-  2. Do that
-  3. Enter this
-  4. Press this
-- Expected Result:
-  - Define a list of necessary results
-  - ____ was successfully created.
-  - Message was shown on the screen.
+- Given I create a new map SUT-EditMap
+- When I edit SUT-EditMap to SUT-EditedMap with EditedDescription
+- Then I can successfully save SUT-EditedMap without an error message
 - Actual Result:
 - Test Result:
-- Notes:
-
-LEAVE THE LAST 3 POINTS EMPTY.
--->
+- Notes: -->
