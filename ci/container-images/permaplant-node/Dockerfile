@@ -6,6 +6,7 @@ RUN chown 47110:47110 -R /.npm /.cache /.java-caller
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
+    make \
     pre-commit && \
     rm -rf /var/lib/apt/lists/*
 
