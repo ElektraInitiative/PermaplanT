@@ -5,6 +5,12 @@
 If you want to develop on the backend, make sure you have enough RAM.
 When performing cargo build, we have experienced (on wsl) a usage of ~12GB.
 
+- Python
+- Rust
+- Javascript
+  - nvm
+  - node
+
 ## Operating Systems
 
 - Windows 11

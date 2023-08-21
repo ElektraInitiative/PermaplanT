@@ -14,6 +14,10 @@ E2E_INSTALL := e2e/install_sh
 E2E_REQUIREMENTS := e2e/requirements.txt
 E2E_INSTALL_NEWER := $(shell [ ! -e "$(E2E_VENV)" ] || [ "$(E2E_VENV)" -ot "$(E2E_INSTALL)" ] || [ "$(E2E_VENV)" -ot "$(E2E_REQUIREMENTS)" ]; echo $$?)
 
+# Extract host from DATABASE_URL
+HOST := $(shell echo $(DATABASE_URL) | sed -n 's/.*@\(.*\)\/.*/\1/p')
+
+
 .PHONY: all
 all: build
 
@@ -71,7 +75,6 @@ test-mdbook:  build-mdbook  ## Build & Test Mdbook
 	@mdbook test
 
 # Test all makefile targets except the ones with "run-".
-.PHONY: test-makefile
 test-makefile: $(MAKEFILE_LIST)
 	@for target in `grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; !/^run-/ { printf "%s\n", $$1 }'`; do \
 		echo "$(RED)Testing target: $$target$(RESET)"; \
@@ -100,15 +103,11 @@ build-mdbook: install-backend  ## Build Mdbook
 
 .PHONY: build-storybook
 build-storybook: generate-api-types  ## Build Storybook
-	@cd frontend && npm install && npm run build-storybook
+	@cd frontend && npm install && npm run doc && npm run build-storybook
 
 
 # MISC
 
-
-.PHONY: full-scraper
-full-scraper:  ## Scrape and then insert scraped data into the database
-	@cd scraper && npm install && mkdir -p data && npm run start:full
 
 .PHONY: insert-scraper
 insert-scraper:  ## Insert scraped data into the database
@@ -141,7 +140,7 @@ generate-api-types:  ## Generate api-types
 
 .PHONY: psql-r
 psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
-	@psql -h db -p 5432 -U $(POSTGRES_USER) $(POSTGRES_DB)
+	@psql -h $(HOST) -p 5432 -U $(POSTGRES_USER) $(POSTGRES_DB)
 
 .PHONY: pre-commit
 pre-commit:  ## Check all files with pre-commit
@@ -157,7 +156,6 @@ docker-up:  ## Start a containerized dev environment
 
 .PHONY: install
 install: install-pre-commit install-backend install-frontend install-e2e  ## Install ALL dependencies within the source repo
-	$(MAKE) install-pre-commit
 	@echo "Installation completed."
 
 .PHONY: install-pre-commit
@@ -165,6 +163,7 @@ install-pre-commit:  ## Install pre-commit
 	@if [ ! -f $$(which pre-commit) ]; then \
 		echo "pre-commit is not installed. Installing..."; \
 		pip install pre-commit; \
+        pre-commit install; \
 	else \
 		echo "pre-commit is already installed."; \
 	fi

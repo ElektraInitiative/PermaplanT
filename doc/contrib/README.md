@@ -32,6 +32,8 @@ If you encounter a bug then please make sure to include the following informatio
 - A minimal, self-contained code sample that reproduces the problem (if possible).
 - Information about the environment in which the problem occurs (e.g. operating system, version of Rust, version of Diesel, etc.)
 
+## [Pre-requisites](../development_setup.md#prerequisites)
+
 ## Development
 
 The project uses [pre-commit](https://pre-commit.com/index.html#filtering-files-with-types) hooks to ensure a consistent style.
