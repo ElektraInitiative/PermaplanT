@@ -2,60 +2,65 @@
 
 ## Triggers
 
-The pipeline will be executed for every Pull Request and every push to the repository.
+The pipeline will be executed ONLY for pushes to Pull Requests.
 
-If you want the pipeline to be executed again on a Pull Request, you can add a comment saying `jenkins build please`.
-This will most likely be the case if you suspect that something is wrong with the build server infrastructure.
+If you want the pipeline to be executed, you can add a comment saying `jenkins build please`.
 If problems persist, please create a new issue with the failing build log.
 
-For users with login credentials for Jenkins, you can manually execute the pipeline for a branch or pull request via the [Jenkins UI](https://build.libelektra.org).
-Please ask if you want to have login data.
+For users with login credentials for Jenkins, you can manually execute the pipeline for a branch or pull request via the [Jenkins UI](https://build.libelektra.org/job/PermaplanT/).
+Please ask if you need login data.
 
-## Cancel Concurrent Builds
+## Concurrent Builds
 
-Previous builds on the same branch will get aborted to save computing time on the nodes.
+Concurrent builds on the same branch are disabled.
 The master branch is excluded from this rule.
 
 ## Stages
 
-### Prerequisites (Schema)
+### Sanity stage
 
-Before we can actually execute checks or build the binaries, we need `schema.rs` and `definitions.ts`.
+This stage performs rapid checks like pre-commit, migrations and schema building.
 
-These can be automatically created with `./ci/build-scripts/build-schema.sh`.
+- Markdown files are spellchecked only inside the pipeline.
 
-### Tests & Build
+### Tests and Build
 
-This is a parallel stage that has a 2 hour timeout and exits if one substage fails.
-It checkouts the current codebase and each stage runs inside a separate docker container.
+This is a parallel stage which fails fast (exits if one stage fails) or times out after 2 hours.
 
-Following substages exist:
+It can be subdivided in 3 categories:
 
-- Test and Build Mdbook
-- Test and Build Backend (With PostGIS sidecar container)
-- Test and Build Frontend
+- Parallel cargo stages
+- Sequential frontend stages
+- Sequential mdbook stages
 
-For more information about automated integration tests look [here](./tests/README.md).
+Following `hidden` checks are done:
 
-Every pipeline run has its own isolated database.
+- Package.json version is checked to be up to date.
+- Mdbook links are checked for their validity.
 
-Steps for all PRs are:
-
-- prepare an empty PostgreSQL database with the PostGIS extension installed
-- call `./ci/build-scripts/build-backend.sh`, which builds the rust binary as well as the bindings' definition via `typeshare`
-- call `./ci/build-scripts/build-frontend.sh`, which does a full release build of the frontend
-
-### Deploy to PR Environment
+### Deploy PR
 
 Every pull request will be deployed on a publicly available instance on [pr.permaplant.net](https://pr.permaplant.net).
+Jenkins will acquires a lock here and releases it after finishing the E2E tests.
 
 Since there is only one agent for PRs available, the last built PR wins.
 
-### Deploy to Dev Environment
+### E2E Tests
+
+E2E tests are run on [dev.permaplant.net](https://dev.permaplant.net).
+If a test timeouts it is retried.
+
+Test reports and results are generated after successful execution.
+
+- A [cucumber report](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/cucumber-html-reports/overview-features.html)
+- A [html report](https://build.libelektra.org/blue/organizations/jenkins/PermaplanT/detail/master/395/artifacts)
+- Videos and screenshots can on failed tests can also be found where the html report is
+
+### Deploy Dev
 
 The `master` branch will be automatically deployed to [dev.permaplant.net](https://dev.permaplant.net).
 
-### Deploy to Prod Environment
+### Deploy Prod
 
 There is a separate Jenkinsfile (`/ci/Jenkinsfile.release`) for production deployments.
 It can only be manually triggered inside Jenkins ([here](https://build.libelektra.org/job/PermaplanT-Release/)).
