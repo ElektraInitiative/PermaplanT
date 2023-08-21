@@ -21,7 +21,7 @@ The master branch is excluded from this rule.
 
 This stage performs rapid checks like pre-commit, migrations and schema building.
 
-- Markdown files are spellchecked only inside the pipeline.
+Local pre-commit currently does not perform the codespell hook, but it is performed in the pipeline.
 
 ### Tests and Build
 
