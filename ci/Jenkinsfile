@@ -171,13 +171,9 @@ def testAndBuildFrontend() {
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
 
-                stage('typedoc') {
-                    sh 'cd frontend && npm run doc'
-                    stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
-                }
-
                 stage('storybook') {
                     sh './ci/build-scripts/build-storybook.sh'
+                    stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
             }
