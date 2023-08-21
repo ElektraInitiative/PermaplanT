@@ -54,7 +54,7 @@
 
 - Description: Guided Tour shows when not completed.
 - Given I am on a map page
-- When I havent completed the Guided Tour
+- When I haven't completed the Guided Tour
 - Then I can do the Guided Tour
 - Actual Result:
 - Test Result:
@@ -64,7 +64,7 @@
 
 - Description: Guided Tour only shows when not completed or explicitly cancelled.
 - Given I am on a map page
-- When I havent completed the Guided Tour
+- When I haven't completed the Guided Tour
 - Then I can interrupt the Tour at any time and come back later
 - Actual Result:
 - Test Result:
