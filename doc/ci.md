@@ -22,6 +22,7 @@ The master branch is excluded from this rule.
 This stage performs rapid checks like pre-commit, migrations and schema building.
 
 Local pre-commit currently does not perform the codespell hook, but it is performed in the pipeline.
+Cargo fmt, eslint and groovy linting is not performed through pre-commit.
 
 ### Tests and Build
 
