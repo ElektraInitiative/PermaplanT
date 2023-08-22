@@ -2,7 +2,7 @@
 Frequently used steps in other tests
 """
 
-from pytest_bdd import given, when, parsers
+from pytest_bdd import given, when, then, parsers
 
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
@@ -57,6 +57,11 @@ def given_on_map_page_and_planted(hp, lp, mmp, mcp, mpp, mapname, worker_uuid):
     plant_a_tomato(mpp)
 
 
+@given("I capture a screenshot of the canvas")
+def canvas_first_screenshot(mpp: MapPlantingPage):
+    mpp.screenshot_canvas()
+
+
 def login(hp: HomePage, lp: LoginPage) -> HomePage:
     """
     Login to permaplant and close the login notification.
@@ -94,3 +99,8 @@ def plant_a_tomato(mpp: MapPlantingPage) -> MapPlantingPage:
 @when(parsers.parse("I select a background image"))
 def select_background_image(mpp: MapPlantingPage):
     mpp.select_birdie_background()
+
+
+@then("the canvas looks like the captured screenshot")
+def canvas_second_screenshot(mpp: MapPlantingPage, request):
+    mpp.expect_canvas_equals_last_screenshot(request.node.name)

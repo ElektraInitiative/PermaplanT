@@ -1,4 +1,4 @@
-Feature: Planting Undo/Redo
+Feature: Undo/Redo
     As a user I want to be able to undo and redo actions
 
     Background:

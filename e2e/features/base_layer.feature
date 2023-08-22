@@ -1,4 +1,4 @@
-Feature: PermaplanT base layer
+Feature: Base layer
     As a user I want to be able to have a base layer
 
   Background:
