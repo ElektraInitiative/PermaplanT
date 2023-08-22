@@ -25,7 +25,7 @@
 - Description: Check whether the maps background image is displayed correctly.
 - Given I am on a map page with the base layer active
 - When I select a base layer image
-- Then I can see the same base layer image
+- Then I can see the base layer image on the canvas
 - Actual Result:
 - Test Result:
 - Notes:
@@ -34,8 +34,8 @@
 
 - Description: Display a point grid on the screen.
 - Given I am on a map page
-- When I Zoom in and out
-- Then I the grid spacing is changing
+- When I Zoom in or out
+- Then the grid spacing is changing
 - Actual Result:
 - Test Result:
 - Notes:
@@ -45,7 +45,7 @@
 - Description: Check whether the Guided Tour leaves the Map Editor in its original state.
 - Given I am on a map page
 - When I do the Guided Tour
-- Then after I have done the Guided Tour the map is back to its original state
+- Then after I have done the Guided Tour the map is the same as before
 - Actual Result:
 - Test Result:
 - Notes:
@@ -54,8 +54,8 @@
 
 - Description: Guided Tour shows when not completed.
 - Given I am on a map page
-- When I haven't completed the Guided Tour
-- Then I can do the Guided Tour
+- When I have not completed the Guided Tour
+- Then I can do the Guided Tour at any time
 - Actual Result:
 - Test Result:
 - Notes:
@@ -64,7 +64,7 @@
 
 - Description: Guided Tour only shows when not completed or explicitly cancelled.
 - Given I am on a map page
-- When I haven't completed the Guided Tour
+- When I have not completed the Guided Tour
 - Then I can interrupt the Tour at any time and come back later
 - Actual Result:
 - Test Result:
