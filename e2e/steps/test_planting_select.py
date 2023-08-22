@@ -8,6 +8,11 @@ scenarios("features/planting_select.feature")
 
 # Scenario : Successfully selecting plants
 
+# There is currently no real way to confirm
+# how many plants you have selected with the
+# select box, so this test only confirms that
+# the plant name on the bottom left panel is visible
+
 
 @when("I drag a select box over the canvas")
 def drag_select_box(mpp: MapPlantingPage):
