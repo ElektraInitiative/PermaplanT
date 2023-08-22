@@ -87,6 +87,7 @@ stage('Build in Docker') {
     parallelBuild['build-mdbook'] = {
         node('docker') {
             node_info()
+
             checkout scm
             docker.build('permaplant-doc:build', './doc').inside {
                 stage('build') {
