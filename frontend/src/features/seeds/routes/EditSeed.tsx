@@ -1,23 +1,36 @@
-import { editSeed } from '../api/editSeeds';
 import { findSeedById } from '../api/findSeedById';
 import CreateSeedForm from '../components/CreateSeedForm';
-import { NewSeedDto, SeedDto } from '@/bindings/definitions';
+import { NewSeedDto } from '@/bindings/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import SimpleModal from '@/components/Modals/SimpleModal';
+import { editSeed } from '@/features/seeds/api/editSeeds';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
-import { t } from 'i18next';
-import { Suspense, useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Suspense, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export function EditSeed() {
+  const { t } = useTranslation(['seeds', 'common']);
   const { id } = useParams();
-  const [seed, setSeed] = useState<SeedDto | null>(null);
   const navigate = useNavigate();
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+
+  const { mutate: submitNewSeed } = useMutation(['edit Seed'], editSeed, {
+    onError: () => {
+      toast(t('seeds:create_seed_form.error_create_seed'));
+    },
+  });
+
+  const getSeed = () => findSeedById(parseInt(id ?? ''));
+
+  const { data: seed, isError: seedIsError } = useQuery(['seed', id], getSeed, {
+    cacheTime: 0,
+    staleTime: 0,
+  });
 
   const onCancel = () => {
     // There is no need to show the cancel warning modal if the user
@@ -36,41 +49,25 @@ export function EditSeed() {
     setFormTouched(true);
   };
 
-  useEffect(() => {
-    const _findOneSeed = async () => {
-      try {
-        const seed = await findSeedById(Number(id));
-        setSeed(seed);
-      } catch (error) {
-        setError(error as Error);
-        setShowErrorModal(true);
-      }
-    };
-    _findOneSeed();
-  }, [id]);
-
   const onSubmit = async (newSeed: NewSeedDto) => {
-    try {
-      await editSeed(newSeed, Number(id));
-      navigate(`/seeds/${id}`);
-    } catch (error) {
-      setError(error as Error);
-      setShowErrorModal(true);
-    }
+    submitNewSeed({ seed: newSeed, id: parseInt(id ?? '0') });
+    navigate(`/seeds/${id}`);
   };
 
   return (
     <Suspense>
       <PageLayout>
         <PageTitle title={t('seeds:create_seed.title')} />
+        (!seedIsLoading &&
         <CreateSeedForm
           isUploadingSeed={false}
           submitButtonTitle={t('seeds:edit_seed_form.btn_edit_seed')}
-          existingSeed={seed ? seed : undefined}
+          existingSeed={!seedIsError ? seed : undefined}
           onCancel={onCancel}
           onChange={onChange}
           onSubmit={onSubmit}
         />
+        )
       </PageLayout>
       <SimpleModal
         title={t('seeds:create_seed.changes_model_title')}
@@ -86,16 +83,6 @@ export function EditSeed() {
           navigate('/seeds');
         }}
       />
-      <SimpleModal
-        title={t('seeds:error_modal_title')}
-        body={error?.message || t('common:unknown_error')} // Error should always have a message
-        show={showErrorModal}
-        setShow={setShowErrorModal}
-        submitBtnTitle={t('common:ok')}
-        onSubmit={() => {
-          setShowErrorModal(false);
-        }}
-      ></SimpleModal>
     </Suspense>
   );
 }
