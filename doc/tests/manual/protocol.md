@@ -13,9 +13,9 @@
 ## TC-002 - Heatmap
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
-- Given TODO! @kitzbergerg
-- When TODO! @kitzbergerg
-- Then TODO! @kitzbergerg
+- Given I am on a map page with the plant layer active
+- When I start planting a plant
+- Then I see suitable places for that plant
 - Actual Result:
 - Test Result:
 - Notes:
