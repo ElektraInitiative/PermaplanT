@@ -7,8 +7,12 @@ Shortly before a major release the protocol gets executed and becomes a report.
 ## Protocol
 
 The blueprint of all manual test cases.
-The protocol should not contain any information about the results of a test.
-The protocol depicts the unperformed manual test.
+The protocol should not contain any information about the results of a test it rather depicts the unperformed manual test
+The protocol is written in GIVEN-WHEN-THEN Gherkin syntax:
+
+- [automationpanda.com](https://automationpanda.com/2017/01/30/bdd-101-writing-good-gherkin/)
+
+- [cucumber.io](https://cucumber.io/docs/bdd/better-gherkin/)
 
 ## Report
 
