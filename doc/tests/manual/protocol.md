@@ -1,6 +1,6 @@
 # Manual Test Protocol
 
-## TC-001 - Plant Search
+## Plant Search
 
 - Description: Show a selection of plants if the search input is empty.
 - Given I am on a map page with the plant layer active
@@ -10,7 +10,7 @@
 - Test Result:
 - Notes:
 
-## TC-002 - Heatmap
+## Heatmap
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Given I am on a map page with the plant layer active
@@ -20,7 +20,7 @@
 - Test Result:
 - Notes:
 
-## TC-003 - Base Layer
+## Base Layer
 
 - Description: Check whether the maps background image is displayed correctly.
 - Given I am on a map page with the base layer active
@@ -30,7 +30,7 @@
 - Test Result:
 - Notes:
 
-## TC-004 - Grid
+## Grid
 
 - Description: Display a point grid on the screen.
 - Given I am on a map page
@@ -40,7 +40,7 @@
 - Test Result:
 - Notes:
 
-## TC-005 - Map Editor Guided Tour
+## Map Editor Guided Tour
 
 - Description: Check whether the Guided Tour leaves the Map Editor in its original state.
 - Given I am on a map page
@@ -50,7 +50,7 @@
 - Test Result:
 - Notes:
 
-## TC-006 - Map Editor Guided Tour
+## Map Editor Guided Tour
 
 - Description: Guided Tour shows when not completed.
 - Given I am on a map page
@@ -60,7 +60,7 @@
 - Test Result:
 - Notes:
 
-## TC-007 - Map Editor Guided Tour
+## Map Editor Guided Tour
 
 - Description: Guided Tour only shows when not completed or explicitly cancelled.
 - Given I am on a map page
@@ -70,7 +70,7 @@
 - Test Result:
 - Notes:
 
-## TC-008 - Chat: Create conversation
+## Chat: Create conversation
 
 - Description: A conversation can be created
 - Given I am on the chat page
@@ -80,7 +80,7 @@
 - Test Result:
 - Notes: Currently only works with CORS disabled.
 
-## TC-009 - Chat: Send message
+## Chat: Send message
 
 - Description: Send a message to a Nextcloud conversation.
 - Given I am on the chat page
@@ -90,11 +90,12 @@
 - Test Result:
 - Notes: Currently only works with CORS disabled.
 
+<!--
 USE THIS TO CREATE A NEW TESTCASE.
 DONT DELETE EMPTY BULLETPOINTS.
 DONT FILL OUT ACTUAL/TEST RESULT.
 
-<!-- ## TC-EXAMPLE - User Story
+ ## TC-EXAMPLE - User Story
 - Description: Show a selection of plants if the search input is empty.
 - Given I create a new map SUT-EditMap
 - When I edit SUT-EditMap to SUT-EditedMap with EditedDescription
