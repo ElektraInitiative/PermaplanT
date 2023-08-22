@@ -1,9 +1,10 @@
 import useMapStore from '../../store/MapStore';
+import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 import { ExtendedPlantsSummaryDisplayName } from './components/ExtendedPlantDisplay';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { LayerType, PlantsSummaryDto } from '@/bindings/definitions';
+import { LayerType, PlantSpread, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
@@ -16,6 +17,16 @@ import { Layer } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
 
+const PLANT_WIDTHS = new Map<PlantSpread, number>([
+  [PlantSpread.Narrow, 10],
+  [PlantSpread.Medium, 50],
+  [PlantSpread.Wide, 100],
+]);
+
+function getPlantWidth({ spread = PlantSpread.Medium }): number {
+  return PLANT_WIDTHS.get(spread) ?? (PLANT_WIDTHS.get(PlantSpread.Medium) as number);
+}
+
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
   const selectedPlant = useMapStore(
@@ -23,13 +34,14 @@ function usePlantLayerListeners(listening: boolean) {
   );
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
+  const isReadOnlyMode = useIsReadOnlyMode();
 
   /**
    * Event handler for planting plants
    */
   const handleCreatePlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(
     (e) => {
-      if (e.target instanceof Konva.Shape || !selectedPlant) {
+      if (e.target instanceof Konva.Shape || !selectedPlant || isReadOnlyMode) {
         return;
       }
 
@@ -38,22 +50,7 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      let width;
-
-      switch (selectedPlant.spread) {
-        case 'narrow':
-          width = 10;
-          break;
-        case 'medium':
-          width = 50;
-          break;
-        case 'wide':
-          width = 100;
-          break;
-        default:
-          width = 50;
-          break;
-      }
+      const width = getPlantWidth(selectedPlant);
 
       executeAction(
         new CreatePlantAction({
@@ -72,7 +69,7 @@ function usePlantLayerListeners(listening: boolean) {
         }),
       );
     },
-    [getSelectedLayerId, executeAction, selectedPlant, timelineDate],
+    [getSelectedLayerId, executeAction, selectedPlant, timelineDate, isReadOnlyMode],
   );
 
   /**

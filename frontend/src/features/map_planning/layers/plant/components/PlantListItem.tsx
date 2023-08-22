@@ -10,24 +10,32 @@ export type PlantListElementProps = {
   onClick: () => void;
   /** Whether the element is highlighted */
   isHighlighted?: boolean;
+  /** Whether the element is disabled */
+  disabled?: boolean;
 };
 
 /**
  * A list element for a list of plants
  */
-export function PlantListItem({ plant, onClick, isHighlighted = false }: PlantListElementProps) {
+export function PlantListItem({
+  plant,
+  onClick,
+  isHighlighted = false,
+  disabled,
+}: PlantListElementProps) {
   const highlightedClass = isHighlighted
     ? 'text-primary-400 stroke-primary-400 ring-4 ring-primary-300 '
     : undefined;
 
   return (
     <li
-      className="flex"
+      className="my-1 flex"
       data-testid={`${plant.common_name_en} ${plant.unique_name}-plant-search-result`}
     >
       <button
+        disabled={disabled}
         onClick={() => onClick()}
-        className={`${highlightedClass} flex flex-1 items-center gap-2 rounded-md stroke-neutral-400 px-2 py-1 hover:bg-neutral-200 hover:stroke-primary-400 hover:text-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:hover:bg-neutral-300-dark`}
+        className={`${highlightedClass} flex flex-1 items-center gap-2 rounded-md stroke-neutral-400 px-2 py-1 hover:bg-neutral-200 hover:stroke-primary-400 hover:text-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-300 disabled:cursor-not-allowed disabled:border-neutral-300 disabled:bg-neutral-300 disabled:text-neutral-500 dark:hover:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:bg-neutral-300-dark dark:disabled:text-neutral-500-dark`}
       >
         <PublicNextcloudImage
           className="max-h-[44px] shrink-0"

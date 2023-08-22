@@ -7,6 +7,7 @@ import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { mapEditorSteps, tourOptions } from '../utils/EditorTour';
+import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
 import { LayerType, LayerDto, GuidedToursDto } from '@/bindings/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
@@ -217,8 +218,10 @@ export function MapWrapper() {
   }
 
   return (
-    <ShepherdTour steps={steps} tourOptions={tourOptions}>
-      <Map layers={mapData.layers} />
-    </ShepherdTour>
+    <ReadOnlyModeContextProvider>
+      <ShepherdTour steps={steps} tourOptions={tourOptions}>
+        <Map layers={mapData.layers} />
+      </ShepherdTour>
+    </ReadOnlyModeContextProvider>
   );
 }
