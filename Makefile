@@ -206,14 +206,30 @@ install-e2e:  ## Install e2e dependencies within this repo
 
 
 .PHONY: uninstall
-uninstall:  uninstall-e2e ## Uninstall and clean everything up
-	-rm -rf frontend/node_modules
+uninstall:  uninstall-e2e uninstall-pre-commit uninstall-frontend uninstall-backend uninstall-mdbook uninstall-scraper ## Uninstall and clean everything up
 	-rm -rf frontend/storybook-static
-	-rm -rf scraper/node_modules
-	-rm -rf e2e/venv
+
+.PHONY: uninstall-pre-commit
+uninstall-pre-commit:
+	pre-commit uninstall -t pre-commit -t pre-merge-commit -t pre-push -t prepare-commit-msg -t commit-msg -t post-commit -t post-checkout -t post-merge -t post-rewrite
+	pip uninstall pre-commit -y
+
+.PHONY: uninstall-frontend
+uninstall-frontend:
+	-rm -rf frontend/node_modules
+
+.PHONY: uninstall-backend
+uninstall-backend:
+	cd backend && make uninstall
+
+.PHONY: uninstall-mdbook
+uninstall-mdbook:
 	-cargo uninstall mdbook mdbook-mermaid mdbook-linkcheck mdbook-generate-summary
-	@echo "Ignore errors here."
 
 .PHONY: uninstall-e2e
 uninstall-e2e:
 	-cd e2e && ./uninstall.sh
+
+.PHONY: uninstall-scraper
+uninstall-scraper:
+	-rm -rf scraper/node_modules
