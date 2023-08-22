@@ -16,12 +16,18 @@ import { useTranslation } from 'react-i18next';
 import { GroupBase, OptionsOrGroups } from 'react-select';
 import { LoadOptions } from 'react-select-async-paginate';
 
+/** Options for CreateSeedForm */
 interface CreateSeedFormProps {
   isUploadingSeed: boolean;
+  /** If you want to modify a seed instead of creating a new one, you can submit it here. */
   existingSeed?: SeedDto;
+  /** Text displayed on the form submit button. */
   submitButtonTitle: string;
+  /** Callback for the cancel button. */
   onCancel: () => void;
+  /** Callback for any modification of form inputs. */
   onChange: () => void;
+  /** Callback for the submit button. */
   onSubmit: (newSeed: NewSeedDto) => void;
 }
 
