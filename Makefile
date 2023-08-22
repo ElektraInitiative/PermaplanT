@@ -63,15 +63,15 @@ test-e2e:  ## End-to-End tests. Needs install-e2e, backend and frontend running
 	@cd e2e && ./e2e.sh
 
 .PHONY: test-frontend
-test-frontend:  build-frontend  ## Build & Test Frontend
+test-frontend:  ## Build & Test Frontend
 	@cd frontend && npm install && npm run format:check && npm run lint && npm run test
 
 .PHONY: test-backend
-test-backend:  build-backend  ## Build & Test Backend
+test-backend:  ## Build & Test Backend
 	@make test -C ./backend
 
 .PHONY: test-mdbook
-test-mdbook:  build-mdbook  ## Build & Test Mdbook
+test-mdbook:  ## Build & Test Mdbook
 	@mdbook test
 
 # Test all makefile targets except the ones with "run-".
@@ -90,19 +90,19 @@ test-makefile: $(MAKEFILE_LIST)
 build: generate-api-types build-frontend build-backend build-storybook build-mdbook  # Build everything
 
 .PHONY: build-frontend
-build-frontend: install-frontend generate-api-types  ## Build Frontend
+build-frontend:  ## Build Frontend
 	@cd frontend npm run generate-api-types && npm run build
 
 .PHONY: build-backend
-build-backend: install-backend generate-api-types  ## Build Backend
+build-backend:  ## Build Backend
 	@make build -C ./backend
 
 .PHONY: build-mdbook
-build-mdbook: install-mdbook  ## Build Mdbook
+build-mdbook:  ## Build Mdbook
 	@mdbook build
 
 .PHONY: build-storybook
-build-storybook: generate-api-types  ## Build Storybook
+build-storybook:  ## Build Storybook
 	@cd frontend && npm install && npm run doc && npm run build-storybook
 
 
