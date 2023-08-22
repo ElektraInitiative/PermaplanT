@@ -98,7 +98,7 @@ build-backend: install-backend generate-api-types  ## Build Backend
 	@make build -C ./backend
 
 .PHONY: build-mdbook
-build-mdbook: install-backend  ## Build Mdbook
+build-mdbook: install-mdbook  ## Build Mdbook
 	@mdbook build
 
 .PHONY: build-storybook
@@ -155,7 +155,7 @@ docker-up:  ## Start a containerized dev environment
 
 
 .PHONY: install
-install: install-pre-commit install-backend install-frontend install-e2e  ## Install ALL dependencies within the source repo
+install: install-pre-commit install-backend install-mdbook install-frontend install-e2e  ## Install ALL dependencies within the source repo
 	@echo "Installation completed."
 
 .PHONY: install-pre-commit
@@ -163,7 +163,7 @@ install-pre-commit:  ## Install pre-commit
 	@if [ ! -f $$(which pre-commit) ]; then \
 		echo "pre-commit is not installed. Installing..."; \
 		pip install pre-commit; \
-        pre-commit install; \
+		pre-commit install; \
 	else \
 		echo "pre-commit is already installed."; \
 	fi
@@ -179,12 +179,15 @@ install-frontend:  ## Install frontend
 	fi
 
 .PHONY: install-backend
-install-backend:  $(FAKE_FILE)  ## Install backend and mdbook deps
+install-backend:  $(FAKE_FILE)  ## Install backend deps
 	@echo "Checking if backend dependencies install is required..."
 
 $(FAKE_FILE):  Makefile
 	@echo $(FAKE_CONTENT) > $(FAKE_FILE)
 	cd backend && make install
+
+.PHONY: install-backend
+install-mdbook:  ## Install mdbook deps
 	cargo install mdbook mdbook-mermaid mdbook-linkcheck
 	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary --locked
 
