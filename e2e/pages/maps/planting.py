@@ -120,6 +120,14 @@ class MapPlantingPage(AbstractPage):
         )
         self._page.wait_for_timeout(300)
 
+    def drag_select_box_over_canvas(self):
+        """Drags a select box over the canvas from top left to bottom right"""
+        box = self._canvas.bounding_box()
+        self._page.mouse.move(box["x"], box["y"])
+        self._page.mouse.down()
+        self._page.mouse.move(box["x"] + box["width"], box["y"] + box["height"])
+        self._page.mouse.up()
+
     def click_delete(self):
         """Deletes a planting by clicks on the delete button."""
         self._delete_plant_button.click()
@@ -212,13 +220,14 @@ class MapPlantingPage(AbstractPage):
             cv2.imwrite("test-results/screenshots" + test_name + "-actual.png", actual)
             raise err
 
+    """ASSERTIONS"""
+
     def expect_plant_on_canvas(self, plant_name):
         """
         Confirms that the plant is on the canvas,
         by clicking in the middle of the canvas
         and looking at the left side bar for a delete button.
         """
-        self.click_on_canvas_middle()
         expect(self._delete_plant_button).to_be_visible()
         expect(self._page.get_by_role("heading", name=plant_name)).to_be_visible()
 
