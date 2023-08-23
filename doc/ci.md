@@ -66,9 +66,9 @@ The `master` branch will be automatically deployed to [dev.permaplant.net](https
 
 ### Deploy Prod
 
-There is a separate Jenkinsfile (`/ci/Jenkinsfile.release`) for production deployments.
-It can only be manually triggered inside Jenkins ([here](https://build.libelektra.org/job/PermaplanT-Release/)).
+This stage is only manually executable through [Jenkins](https://build.libelektra.org/job/PermaplanT-Release/).
+There is a separate Jenkinsfile (`/ci/Jenkinsfile.release`)for this containing build and deploy stages only (no testing).
 
-This Jenkinsfile only executes the necessary build steps (no checks) and deploys to the production server.
+Production is deployed to [www.permaplant.net](https://www.permaplant.net).
 
-The production environment is available on [www.permaplant.net](https://www.permaplant.net).
+See [release.md](./release.md) for the manual release procedure.
