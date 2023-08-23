@@ -3,10 +3,10 @@
 -- Please create a new migration instead.
 
 CREATE TABLE base_layer_images (
-    id UUID PRIMARY KEY,
-    layer_id INTEGER NOT NULL,
-    path TEXT NOT NULL,
-    rotation REAL NOT NULL,
-    scale REAL NOT NULL,
+    id uuid PRIMARY KEY,
+    layer_id integer NOT NULL,
+    path text NOT NULL,
+    rotation real NOT NULL,
+    scale real NOT NULL,
     FOREIGN KEY (layer_id) REFERENCES layers (id) ON DELETE CASCADE
 );
