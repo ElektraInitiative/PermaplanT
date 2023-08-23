@@ -106,7 +106,7 @@ install-pre-commit:  ## Install pre-commit
 		pip install pre-commit; \
 		pre-commit install; \
 	else \
-		echo "pre-commit is already installed."; \
+		echo "Installation is up to date"; \
 	fi
 
 .PHONY: install-frontend
@@ -116,12 +116,13 @@ install-frontend:  ## Install frontend
 		echo "Running 'npm install'..."; \
 		npm install --prefix frontend; \
 	else \
-		echo "No need to run 'npm install'. node_modules is up to date."; \
+		echo "Installation is up to date"; \
 	fi
 
 .PHONY: install-backend
 install-backend:  $(FAKE_FILE)  ## Install backend deps
-	@echo "Checking if backend dependencies install is required..."
+	@echo "Checking if backend is installed..."
+	echo "Installation is up to date"; \
 
 $(FAKE_FILE):  Makefile
 	@echo $(FAKE_CONTENT) > $(FAKE_FILE)
@@ -129,17 +130,23 @@ $(FAKE_FILE):  Makefile
 
 .PHONY: install-backend
 install-mdbook:  ## Install mdbook deps
-	cargo install mdbook mdbook-mermaid mdbook-linkcheck
-	cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary --locked
+	@echo "Checking if mdbook + deps is installed..."
+	@if [ ! -f "/usr/local/cargo/bin/mdbook" ]; then \
+		echo "Installing mdbook"; \
+		cargo install mdbook mdbook-mermaid mdbook-linkcheck; \
+		cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary --locked; \
+	else \
+		echo "Installation is up to date"; \
+	fi
 
 .PHONY: install-e2e
 install-e2e:  ## Install e2e dependencies within this repo
-	@echo "Checking if e2e install is required..."
+	@echo "Checking if e2e is installed..."
 	@if [ $(E2E_INSTALL_NEWER) -eq 0 ]; then \
 		echo "Running 'e2e install'..."; \
 		cd e2e && ./install.sh; \
 	else \
-		echo "No need to run 'e2e install'. venv is up to date."; \
+		echo "Installation is up to date"; \
 	fi
 
 
