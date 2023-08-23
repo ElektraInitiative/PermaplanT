@@ -65,6 +65,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - E2E: New canvas select box test #852 _(4ydan)_g
 - E2E: Worker uuids fixture #837 _(4ydan)_
+- GIT: Add data analysis jupyter notebook #843 _(4ydan)_
 - MDB: Fold all chapters #818 _(4ydan)_
 - CI: Add codespell pre-commit #811 _(4ydan)_
 - E2E: Add base layer tests #777 _(4ydan)_
