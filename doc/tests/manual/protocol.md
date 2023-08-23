@@ -1,5 +1,26 @@
 # Manual Test Protocol
 
+<!--
+The blueprint of all test cases.
+The protocol depicts the unperformed manual test.
+The protocol is written in GIVEN-WHEN-THEN Gherkin syntax:
+- [automationpanda.com](https://automationpanda.com/2017/01/30/bdd-101-writing-good-gherkin/)
+- [cucumber.io](https://cucumber.io/docs/bdd/better-gherkin/)
+
+
+USE THIS TO CREATE A NEW TESTCASE.
+DONT DELETE EMPTY BULLETPOINTS.
+DONT FILL OUT ACTUAL/TEST RESULT.
+
+## Use Case
+- Description: Edit a map.
+- Given there is already a created map
+- When I change my maps name and description
+- Then I can successfully save my new map without an error message
+- Actual Result:
+- Test Result:
+- Notes: -->
+
 ## Plant Search
 
 - Description: Show a selection of plants if the search input is empty.
@@ -89,17 +110,3 @@
 - Actual Result:
 - Test Result:
 - Notes: Currently only works with CORS disabled.
-
-<!--
-USE THIS TO CREATE A NEW TESTCASE.
-DONT DELETE EMPTY BULLETPOINTS.
-DONT FILL OUT ACTUAL/TEST RESULT.
-
- ## TC-EXAMPLE - User Story
-- Description: Show a selection of plants if the search input is empty.
-- Given I create a new map SUT-EditMap
-- When I edit SUT-EditMap to SUT-EditedMap with EditedDescription
-- Then I can successfully save SUT-EditedMap without an error message
-- Actual Result:
-- Test Result:
-- Notes: -->
