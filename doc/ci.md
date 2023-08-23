@@ -2,9 +2,9 @@
 
 ## Triggers
 
-The pipeline will be executed ONLY for pushes to Pull Requests.
+The pipeline will be executed **only** for pushes to Pull Requests and for pushes to master.
 
-If you want the pipeline to be executed, you can add a comment saying `jenkins build please`.
+In PR's you can rexecute the pipeline when you type `jenkins build please` as a comment.
 If problems persist, please create a new issue with the failing build log.
 
 For users with login credentials for Jenkins, you can manually execute the pipeline for a branch or pull request via the [Jenkins UI](https://build.libelektra.org/job/PermaplanT/).
@@ -30,32 +30,35 @@ This is a parallel stage which fails fast (exits if one stage fails) or times ou
 
 It can be subdivided in 3 categories:
 
-- Parallel cargo stages
-- Sequential frontend stages
-- Sequential mdbook stages
+#### Multiple parallel cargo stages
 
-Following `hidden` checks are done:
+Standard cargo build, clippy, doc and test is performed here.
 
-- Package.json version is checked to be up to date.
-- Mdbook links are checked for their validity.
+#### One sequential frontend stages
+
+Frontend is built, tested, linted, format checked and additionally package.json version is verfied to be up to date.
+Storybook and typedocs are also generated here.
+
+#### One sequential mdbook stages
+
+Mdbook is built, tested and links are checked.
 
 ### Deploy PR
 
 Every pull request will be deployed on a publicly available instance on [pr.permaplant.net](https://pr.permaplant.net).
-Jenkins will acquires a lock here and releases it after finishing the E2E tests.
+Jenkins will acquires a lock before deploying to pr.permaplant.net and release it after finishing the E2E stage.
+This lock prevents other jobs to overwrite the deployment while we are performing E2E tests.
 
 Since there is only one agent for PRs available, the last built PR wins.
 
 ### E2E Tests
 
 E2E tests are run on [dev.permaplant.net](https://dev.permaplant.net).
-If a test timeouts it is retried.
+If a test times out, it is retried.
 
-Test reports and results are generated after successful execution.
-
-- A [cucumber report](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/cucumber-html-reports/overview-features.html)
-- A [html report](https://build.libelektra.org/blue/organizations/jenkins/PermaplanT/detail/master/395/artifacts)
-- Videos and screenshots can on failed tests can also be found where the html report is
+[Test reports and results](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/artifact/e2e/) are generated on successful execution.
+They contain videos, screenshots and a html report.
+There is also a [cucumber report](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/cucumber-html-reports/overview-features.html).
 
 ### Deploy Dev
 
