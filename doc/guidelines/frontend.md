@@ -20,7 +20,6 @@ We use [Bulletproof React](https://github.com/alan2207/bulletproof-react) with f
 - Be careful in writing hooks, especially when using `useEffect`
 - Error Handling <https://tkdodo.eu/blog/breaking-react-querys-api-on-purpose#a-bad-api>
 - Lists are called `*List` and items of such a list are called `*ListItem`, e.g., `LayerList` and `LayerListItem` for a list of layers
-- We reuse a global http client like this: `let server = HttpServer::new(move || { App::new() /*other initialization code*/ .app_data(http_client.clone()) })`
 
 ## Incorporate Accessibility Best Practices
 
