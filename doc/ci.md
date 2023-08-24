@@ -4,7 +4,7 @@
 
 The pipeline will be executed **only** for pushes to Pull Requests and for pushes to master.
 
-In PR's you can rexecute the pipeline when you type `jenkins build please` as a comment.
+If the pipeline fails and you think it is not the fault of your code, you can re-execute the pipeline by typing `jenkins build please` as a comment.
 If problems persist, please create a new issue with the failing build log.
 
 For users with login credentials for Jenkins, you can manually execute the pipeline for a branch or pull request via the [Jenkins UI](https://build.libelektra.org/job/PermaplanT/).
