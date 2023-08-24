@@ -40,7 +40,7 @@ def abortPreviousRunUnlessMaster() {
 /**
  * This method runs a Docker container with a Postgres sidecar and executes the specified command inside the container.
  *
- * @param commands The list of commands to be executed inside the Docker container.
+ * @param command The command to be executed inside the Docker container.
  * @param stashsrcList The list of file paths to be stashed (optional).
  * @param stashdirList The list of stash directory names for stashing files (optional).
  * @return A closure representing the defined Jenkins pipeline steps.
@@ -83,21 +83,29 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
 
 /**
  * Run a script inside a desired docker image with custom docker arguments.
+ * @param command The command to be executed inside the Docker container.
+ * @param dockerImage The docker image name
+ * @param dockerArgs The docker build args.
  *
  * @return A closure representing the defined Jenkins pipeline steps.
  */
-def runDocker(String command, String dockerImage, String dockerArgs) {
+def runDocker(String command, String dockerImage, String dockerBuildArgs) {
     return {
         node('docker') {
             node_info()
             checkout scm
-            docker.build(dockerImage, dockerArgs).inside() {
+            docker.build(dockerImage, dockerBuildArgs).inside() {
                 sh "${command}"
             }
         }
     }
 }
 
+/**
+ * Test, Build and stash Mdbook inside permaplants docker image.
+ *
+ * @return A closure representing the defined Jenkins pipeline steps.
+ */
 def testAndBuildMdbook() {
     return {
         node('docker') {
@@ -170,6 +178,11 @@ def testAndBuildFrontend() {
     }
 }
 
+/**
+ * Decide which type of migration test strategy to return depending on the branch.
+ *
+ * @return A command as String.
+ */
 def testMigrations() {
     if (env.BRANCH_NAME != 'master') {
         return 'make migration && make migration-redo && make migration-redo-a'
