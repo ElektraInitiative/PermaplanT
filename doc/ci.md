@@ -53,12 +53,14 @@ Since there is only one agent for PRs available, the last built PR wins.
 
 ### E2E Tests
 
-E2E tests are run on [dev.permaplant.net](https://dev.permaplant.net).
-If a test times out, it is retried.
+E2E tests are run on [pr.permaplant.net](https://pr.permaplant.net) and optionally retried if they timeout.
 
-[Test reports and results](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/artifact/e2e/) are generated on successful execution.
-They contain videos, screenshots and a html report.
-There is also a [cucumber report](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/cucumber-html-reports/overview-features.html).
+Test reports and results can be found in the jobs [artifacts](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/artifact/e2e/).
+
+Failed tests will generate videos and/or screenshots inside `e2e/test-results/` in the jobs [artifacts](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/artifact/e2e/), depending on what failed.
+The videos have to be downloaded to be viewed.
+
+There is always a html report inside `e2e/test-reports/` in the jobs [artifacts](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/artifact/e2e/) and a [cucumber reports](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/cucumber-html-reports/overview-features.html) on a separate page.
 
 ### Deploy Dev
 
