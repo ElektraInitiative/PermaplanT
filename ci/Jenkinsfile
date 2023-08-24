@@ -70,10 +70,10 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
                     //env in permaplant-deploy.sh, we can only solve it with prepending cd backend
                     sh "cd backend && ${command}"
                     if (stashsrc.size() != stashdir.size()) {
-                        throw new UnequalStashException();
+                        throw new UnequalStashException()
                     }
                     for (int i = 0; i < stashsrc.size(); i++) {
-                        stash includes: stashsrc[i], name: stashdir[i];
+                        stash includes: stashsrc[i], name: stashdir[i]
                     }
                 }
             }
@@ -171,10 +171,10 @@ def testAndBuildFrontend() {
 }
 
 def testMigrations() {
-    if (env.BRANCH_NAME!="master") {
-        return "make migration && make migration-redo && make migration-redo-a"
+    if (env.BRANCH_NAME != 'master') {
+        return 'make migration && make migration-redo && make migration-redo-a'
     } else {
-        return "make migration && make migration-redo"
+        return 'make migration && make migration-redo'
     }
 }
 
@@ -185,52 +185,52 @@ timeout(time: 2, unit: 'HOURS') {
     try {
         stage('Sanity') {
             List<String> schemaStashsrc = [
-                'backend/src/schema.rs','frontend/src/bindings/definitions.ts'
+                'backend/src/schema.rs', 'frontend/src/bindings/definitions.ts'
             ]
             List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
             parallel(
-                    "pre-commit": runDocker(
-                        './ci/scripts/check-pre-commit.sh',
-                        'permaplant-node',
-                        '-f ./ci/container-images/permaplant-node/Dockerfile .'
-                        ),
-                    // Workaround: we can't stop rustfmt from linting the generated schema.rs
-                    // so we empty the file before.
-                    "cargo-fmt": runDockerPostgresSidecar(
-                        "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
-                        ),
-                    // End of workaround
-                    "schema": runDockerPostgresSidecar(
-                        'echo schema test', schemaStashsrc, schemaStashdir
-                        ),
-                    "migration": runDockerPostgresSidecar(testMigrations()),
-                    "changelog": runDocker(
-                        './ci/scripts/check-changelog.sh',
-                        'permaplant-node',
-                        '-f ./ci/container-images/permaplant-node/Dockerfile .'
-                        ),
-                    failFast: true
+                'pre-commit': runDocker(
+                    './ci/scripts/check-pre-commit.sh',
+                    'permaplant-node',
+                    '-f ./ci/container-images/permaplant-node/Dockerfile .'
+                    ),
+                // Workaround: we can't stop rustfmt from linting the generated schema.rs
+                // so we empty the file before.
+                'cargo-fmt': runDockerPostgresSidecar(
+                    "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
+                    ),
+                // End of workaround
+                'schema': runDockerPostgresSidecar(
+                    'echo schema test', schemaStashsrc, schemaStashdir
+                    ),
+                'migration': runDockerPostgresSidecar(testMigrations()),
+                'changelog': runDocker(
+                    './ci/scripts/check-changelog.sh',
+                    'permaplant-node',
+                    '-f ./ci/container-images/permaplant-node/Dockerfile .'
+                    ),
+                failFast: true
             )
         }
 
         stage('Test and Build') {
             parallel(
-                    'cargo-build': runDockerPostgresSidecar(
-                        'cargo build --release',
-                        ['backend/target/release/backend'],
-                        ['backend']
-                    ),
-                    'cargo-clippy/doc': runDockerPostgresSidecar('cargo clippy && cargo doc'),
-                    'cargo-test': runDockerPostgresSidecar('cargo test'),
-                    'frontend': testAndBuildFrontend(),
-                    'mdbook': testAndBuildMdbook(),
-                    failFast: true
+                'cargo-build': runDockerPostgresSidecar(
+                    'cargo build --release',
+                    ['backend/target/release/backend'],
+                    ['backend']
+                ),
+                'cargo-clippy/doc': runDockerPostgresSidecar('cargo clippy && cargo doc'),
+                'cargo-test': runDockerPostgresSidecar('cargo test'),
+                'frontend': testAndBuildFrontend(),
+                'mdbook': testAndBuildMdbook(),
+                failFast: true
             )
         }
-    } catch(err) {
+    } catch (err) {
         node('docker') {
-            deleteDir();
-            throw err;
+            deleteDir()
+            throw err
         }
     }
 }
@@ -281,9 +281,9 @@ lock("${env.NODE_NAME}-exclusive") {
         node('docker') {
             node_info()
             checkout scm
-            def e2eImage = docker.build("permaplant-e2e:build", "./e2e")
+            def e2eImage = docker.build('permaplant-e2e:build', './e2e')
             try {
-                e2eImage.inside("-e E2E_URL=https://pr.permaplant.net") {
+                e2eImage.inside('-e E2E_URL=https://pr.permaplant.net') {
                     wait_for_pr_db()
                     sh 'make test-e2e'
                 }
@@ -298,7 +298,7 @@ lock("${env.NODE_NAME}-exclusive") {
                 cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
                 fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
                 sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
-                deleteDir();
+                deleteDir()
             }
         }
     }
@@ -359,13 +359,17 @@ Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
 // see Jenkinsfile.release
 
 class PackageLockJsonModifiedException extends Exception {
+
     PackageLockJsonModifiedException() {
         super('package-lock.json was modified by npm install. Did you maybe use a wrong node version?')
     }
+
 }
 
 class UnequalStashException extends Exception {
+
     UnequalStashException() {
-        super("The stashed files count in stashsrc and stashdir lists must be equal.")
+        super('The stashed files count in stashsrc and stashdir lists must be equal.')
     }
+
 }
