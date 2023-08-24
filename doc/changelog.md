@@ -58,7 +58,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix drag select not working and add appropriate e2e regression tests #852 _(4ydan & Moritz)_
 - _()_
 - _()_
 - _()_

@@ -121,11 +121,19 @@ class MapPlantingPage(AbstractPage):
         self._page.wait_for_timeout(300)
 
     def drag_select_box_over_canvas(self):
-        """Drags a select box over the canvas from top left to bottom right"""
+        """Drags a select box over 75% of the canvas from top left to bottom right"""
         box = self._canvas.bounding_box()
-        self._page.mouse.move(box["x"], box["y"])
+        x = box["x"]
+        y = box["y"]
+        width = box["width"]
+        height = box["height"]
+        self._page.mouse.move(
+            x + width / 4, y + height / 4
+        )
         self._page.mouse.down()
-        self._page.mouse.move(box["x"] + box["width"], box["y"] + box["height"])
+        self._page.mouse.move(
+            x + (width / 4) * 3, y + (height / 4) * 3
+        )
         self._page.mouse.up()
 
     def click_delete(self):
