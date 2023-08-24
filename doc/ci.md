@@ -28,7 +28,7 @@ Cargo fmt, eslint and groovy linting is not performed through pre-commit.
 
 This is a parallel stage which fails fast (exits if one stage fails) or times out after 2 hours.
 
-It can be subdivided in 3 categories:
+It can be subdivided in following categories:
 
 #### Multiple parallel cargo stages
 
