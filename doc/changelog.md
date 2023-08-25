@@ -41,7 +41,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Added Meeting Agenda for 28.8. 9:00 _(Markus Raab)_
 - _()_
 - _()_
 - update `doc/database/hierarchy.md` to clarify how we render plant names _(temmey)_
