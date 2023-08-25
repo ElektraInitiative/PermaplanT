@@ -21,7 +21,7 @@ class MapCreatePage(AbstractPage):
         self,
         mapname,
         privacy=None,
-        description="SUTDescription",
+        description="SUT-Description",
         latitude="1",
         longitude="1",
     ):

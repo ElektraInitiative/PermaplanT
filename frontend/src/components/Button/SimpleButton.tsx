@@ -11,7 +11,7 @@ export enum ButtonVariant {
   dangerBase,
 }
 
-const variantToClassName = {
+const variantStyles = {
   [ButtonVariant.primaryBase]:
     'bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700',
   [ButtonVariant.secondaryBase]:
@@ -33,8 +33,8 @@ export default function SimpleButton({
   ...props
 }: SimpleButtonProps) {
   const className =
-    'button focus:outline-none focus:ring-4 focus:ring-blue-300 border ' +
-    variantToClassName[variant];
+    'button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border ' +
+    variantStyles[variant];
 
   return (
     <button

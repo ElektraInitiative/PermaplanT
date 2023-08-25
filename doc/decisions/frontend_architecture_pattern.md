@@ -26,7 +26,7 @@ The architecture pattern should be
 ## Decision
 
 [Bulletproof React](https://github.com/alan2207/bulletproof-react) will be used as frontend architecture and guideline for PermaplanT.
-Choices or derivations of this guidelines will be documented in `doc/architecture`.
+Choices or derivations of this guidelines will be documented in [our architecture](../architecture).
 
 ## Rationale
 

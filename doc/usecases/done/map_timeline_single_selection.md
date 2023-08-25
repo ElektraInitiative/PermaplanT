@@ -27,3 +27,8 @@
   - Performance: data in up to 100 years should be fast to use
 - **Note:**
   - Single Date Selection must always be an exact date so we have a well-known date (reference point) when elements got added to the map.
+
+## Development Progress
+
+- Changing the map's date is implemented in [Timeline.tsx and sub-components](https://github.com/ElektraInitiative/PermaplanT/blob/9927a132de09377baad47237f3048939f84c568b/frontend/src/features/map_planning/components/timeline/Timeline.tsx).  
+  The related logic in the MapStore can be found [here](https://github.com/ElektraInitiative/PermaplanT/blob/9927a132de09377baad47237f3048939f84c568b/frontend/src/features/map_planning/store/UntrackedMapStore.ts#L177)
