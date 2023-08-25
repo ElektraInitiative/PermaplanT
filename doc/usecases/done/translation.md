@@ -24,3 +24,7 @@
 - **Postcondition:**
   The app's interface and text are displayed in the selected language.
 - **Non-functional Constraints:**
+
+## Developers
+
+Read [doc/guidelines/i18n.md](../../guidelines/i18n.md) for further information.
