@@ -297,7 +297,36 @@
 - Test Result:
 - Notes:
 
-## TC-018 - Chat: Create conversation
+## TC-018 - Edit seed
+
+- Description: Edit seed.
+- Preconditions:
+  - User is on the view seed page.
+- Test Steps:
+  1. Press Button "Edit seed"
+  2. Change an attribute of the seed.
+  3. Submit the form.
+  4. Repeat steps 1 through 3 for every seed attribute.
+- Expected Result:
+  - The seed attributes updated successfully.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-019 - Delete seed
+
+- Description: Edit seed.
+- Preconditions:
+  - User is on the view seed page.
+- Test Steps:
+  1. Press Button "Delete seed"
+- Expected Result:
+  - The selected seed is no longer available.
+- Actual Result:
+- Test Result:
+- Notes:
+
+## TC-020 - Chat: Create conversation
 
 - Description: A conversation can be created at /chat
 - Preconditions:
@@ -314,7 +343,7 @@
 - Test Result:
 - Notes: Currently only works with CORS disabled.
 
-## TC-019 - Chat: Send message
+## TC-021 - Chat: Send message
 
 - Description: Send a message to a Nextcloud conversation.
 - Preconditions:
@@ -331,35 +360,6 @@
 - Actual Result:
 - Test Result:
 - Notes: Currently only works with CORS disabled.
-
-## TC-020 - Edit seed
-
-- Description: Edit seed.
-- Preconditions:
-  - User is on the view seed page.
-- Test Steps:
-  1. Press Button "Edit seed"
-  2. Change an attribute of the seed.
-  3. Submit the form.
-  4. Repeat steps 1 through 3 for every seed attribute.
-- Expected Result:
-  - The seed attributes updated successfully.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## TC-021 - Delete seed
-
-- Description: Edit seed.
-- Preconditions:
-  - User is on the view seed page.
-- Test Steps:
-  1. Press Button "Delete seed"
-- Expected Result:
-  - The selected seed is no longer available.
-- Actual Result:
-- Test Result:
-- Notes:
 
 <!--
 DONT DELETE THIS.
