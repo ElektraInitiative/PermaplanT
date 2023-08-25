@@ -32,6 +32,7 @@
   },
   "harvest_year": "Harvest Year",
   "additional_name": "Additional Name",
+  "seed_name": "Seed Name",
   "binomial_name": "Plant Name",
   "quantity": "Amount",
   "origin": "Origin",

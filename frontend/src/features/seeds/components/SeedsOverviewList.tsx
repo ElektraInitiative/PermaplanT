@@ -52,6 +52,9 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
             <thead className="text-xs uppercase text-neutral-300">
               <tr>
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
+                  {t('seeds:seed_name')}
+                </th>
+                <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
                   {t('seeds:binomial_name')}
                 </th>
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
@@ -81,12 +84,15 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
                     scope="row"
                     className="whitespace-nowrap px-6 py-4 font-medium text-neutral-900 dark:text-white"
                   >
+                    {seed.name}
+                  </th>
+                  <td className="px-6 py-4">
                     {seed.plant_id ? (
                       <ExtendedPlantsSummaryDisplayNameForSeeds plantId={seed.plant_id ?? 0} />
                     ) : (
                       <span>{t('common:error')}</span>
                     )}
-                  </th>
+                  </td>
                   <td className="px-6 py-4">{seed.quantity}</td>
                   <td className="px-6 py-4">{seed.quality}</td>
                   <td className="px-6 py-4">{seed.harvest_year}</td>
