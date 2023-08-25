@@ -22,16 +22,16 @@ CREATE TYPE membership AS ENUM (
 );
 
 CREATE TABLE users (
-    id UUID PRIMARY KEY,
-    salutation SALUTATION NOT NULL,
-    title TEXT,
-    country TEXT NOT NULL,
-    phone TEXT,
-    website TEXT,
-    organization TEXT,
-    experience EXPERIENCE,
-    membership MEMBERSHIP,
-    member_years INTEGER ARRAY,
-    member_since DATE,
-    permacoins INTEGER ARRAY
+    id uuid PRIMARY KEY,
+    salutation salutation NOT NULL,
+    title text,
+    country text NOT NULL,
+    phone text,
+    website text,
+    organization text,
+    experience experience,
+    membership membership,
+    member_years integer ARRAY,
+    member_since date,
+    permacoins integer ARRAY
 );
