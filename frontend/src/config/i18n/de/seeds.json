@@ -41,6 +41,5 @@
   "yield": "Ertrag",
   "price": "Preis",
   "generation": "Generation",
-  "notes": "Notizen",
-  "error_modal_title": "Fehler"
+  "notes": "Notizen"
 }
