@@ -58,12 +58,12 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- Fix drag select not working and add appropriate e2e regression tests _(4ydan & Moritz)_
+- Fix drag select not working and add appropriate e2e regression tests #852 _(4ydan & Moritz)_
 - _()_
 - _()_
 - _()_
 - _()_
-- E2E: New canvas select box test #852 \_(4ydan)\_g
+- _()_
 - E2E: Worker uuids fixture #837 _(4ydan)_
 - GIT: Add data analysis jupyter notebook #843 _(4ydan)_
 - MDB: Fold all chapters #818 _(4ydan)_
