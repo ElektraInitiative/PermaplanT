@@ -52,9 +52,6 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
             <thead className="text-xs uppercase text-neutral-300">
               <tr>
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
-                  {t('seeds:seed_name')}
-                </th>
-                <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
                   {t('seeds:binomial_name')}
                 </th>
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
@@ -80,15 +77,12 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
                     handleSeedClick(seed);
                   }}
                 >
-                  <th
-                    scope="row"
-                    className="whitespace-nowrap px-6 py-4 font-medium text-neutral-900 dark:text-white"
-                  >
-                    {seed.name}
-                  </th>
                   <td className="px-6 py-4">
                     {seed.plant_id ? (
-                      <ExtendedPlantsSummaryDisplayNameForSeeds plantId={seed.plant_id ?? 0} />
+                      <ExtendedPlantsSummaryDisplayNameForSeeds
+                        plantId={seed.plant_id ?? 0}
+                        seed={seed}
+                      />
                     ) : (
                       <span>{t('common:error')}</span>
                     )}
@@ -107,7 +101,7 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
   );
 };
 
-const ExtendedPlantsSummaryDisplayNameForSeeds = (props: { plantId: number }) => {
+const ExtendedPlantsSummaryDisplayNameForSeeds = (props: { plantId: number; seed: SeedDto }) => {
   const { t } = useTranslation(['common']);
 
   const { isLoading, isError, data } = useQuery(
@@ -123,7 +117,7 @@ const ExtendedPlantsSummaryDisplayNameForSeeds = (props: { plantId: number }) =>
       </div>
     );
   else if (isError) return <span>{t('common:error')}</span>;
-  else return <ExtendedPlantsSummaryDisplayName plant={data} />;
+  else return <ExtendedPlantsSummaryDisplayName plant={data} seed={props.seed} />;
 };
 
 export default SeedsOverviewList;
