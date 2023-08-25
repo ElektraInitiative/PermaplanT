@@ -27,7 +27,11 @@ export function EditSeed() {
 
   const getSeed = () => findSeedById(parseInt(id ?? ''));
 
-  const { data: seed, isError: seedIsError } = useQuery(['seed', id], getSeed, {
+  const {
+    data: seed,
+    isLoading: seedIsLoading,
+    isError: seedIsError,
+  } = useQuery(['seed', id], getSeed, {
     cacheTime: 0,
     staleTime: 0,
   });
@@ -58,16 +62,16 @@ export function EditSeed() {
     <Suspense>
       <PageLayout>
         <PageTitle title={t('seeds:create_seed.title')} />
-        (!seedIsLoading &&
-        <CreateSeedForm
-          isUploadingSeed={false}
-          submitButtonTitle={t('seeds:edit_seed_form.btn_edit_seed')}
-          existingSeed={!seedIsError ? seed : undefined}
-          onCancel={onCancel}
-          onChange={onChange}
-          onSubmit={onSubmit}
-        />
-        )
+        {!seedIsLoading && (
+          <CreateSeedForm
+            isUploadingSeed={false}
+            submitButtonTitle={t('seeds:edit_seed_form.btn_edit_seed')}
+            existingSeed={!seedIsError ? seed : undefined}
+            onCancel={onCancel}
+            onChange={onChange}
+            onSubmit={onSubmit}
+          />
+        )}
       </PageLayout>
       <SimpleModal
         title={t('seeds:create_seed.changes_model_title')}
