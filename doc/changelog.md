@@ -46,7 +46,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - update `doc/database/hierarchy.md` to clarify how we render plant names _(temmey)_
-- _()_
+- updated sqlfluff config, remove unused .sql files _(temmey)_
 - _()_
 - _()_
 - _()_
@@ -64,7 +64,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- CI: Add changelog test to CI #857 _(4ydan)_
 - E2E: Worker uuids fixture #837 _(4ydan)_
 - GIT: Add data analysis jupyter notebook #843 _(4ydan)_
 - MDB: Fold all chapters #818 _(4ydan)_
