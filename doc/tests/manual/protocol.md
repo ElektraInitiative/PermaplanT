@@ -297,7 +297,42 @@
 - Test Result:
 - Notes:
 
-## TC-018 - Edit seed
+## TC-018 - Chat: Create conversation
+
+- Description: A conversation can be created at /chat
+- Preconditions:
+  - User must be logged in.
+- Test Steps:
+  1. Navigate to /chat and click create conversation
+  2. Fill out the Invite with a valid Nextcloud user id.
+  3. Type a name of choice in the Room Name field.
+  4. Click submit.
+- Expected Result:
+  - The conversation is created in Nextcloud.
+  - The conversation will appear in the conversation list after some time.
+- Actual Result:
+- Test Result:
+- Notes: Currently only works with CORS disabled.
+
+## TC-019 - Chat: Send message
+
+- Description: Send a message to a Nextcloud conversation.
+- Preconditions:
+  - User must be logged in.
+  - A conversation for the user must exist.
+- Test Steps:
+  1. Navigate to /chat and select an available conversation
+  2. Type a message in the message field.
+  3. Click Send.
+- Expected Result:
+  - The message is sent to the chat and appears in Nextcloud.
+  - A success message is displayed.
+  - The message will appear in the conversation history after at most 5 seconds.
+- Actual Result:
+- Test Result:
+- Notes: Currently only works with CORS disabled.
+
+## TC-020 - Edit seed
 
 - Description: Edit seed.
 - Preconditions:
@@ -313,7 +348,7 @@
 - Test Result:
 - Notes:
 
-## TC-019 - Delete seed
+## TC-021 - Delete seed
 
 - Description: Edit seed.
 - Preconditions:

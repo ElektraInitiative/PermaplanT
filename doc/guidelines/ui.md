@@ -14,7 +14,7 @@ Use plural to avoid gender, i.e. use "we" or "they", avoid "he"/"she".
 
 ## Error Handling
 
-- All errors should be shown via toastify on the top right.
+- All errors should be shown via toastify on the top right (no modals).
 - Say "Sorry," in the beginning of an error.
 - They should be personified, i.e., start with "I"
 - Only give suggestions how to solve the problem if you are relatively sure what the problem is, but even then say "probably".

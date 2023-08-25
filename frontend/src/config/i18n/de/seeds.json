@@ -10,7 +10,7 @@
     "btn_delete_seed": "Samen löschen"
   },
   "create_seed": {
-    "title": "Neuer Eintrag",
+    "title": "Samen Eintrag",
     "changes_model_title": "Eintrag abbrechen?",
     "changes_model_message": "Änderungen, die Sie vorgenommen haben, werden nicht gespeichert. Wollen Sie wirklich abbrechen?"
   },

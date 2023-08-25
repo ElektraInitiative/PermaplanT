@@ -3,6 +3,7 @@ import { BaseLayerImageDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useEffect, useState } from 'react';
@@ -51,6 +52,7 @@ export const BaseLayerRightToolbar = () => {
   // const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
 
   const { t } = useTranslation(['common', 'baseLayerForm']);
+  const isReadOnlyMode = useIsReadOnlyMode();
 
   // React either requires a defaultValue or value plus onChange props on an input field.
   //
@@ -165,6 +167,7 @@ export const BaseLayerRightToolbar = () => {
       <h2>{t('baseLayerForm:title')}</h2>
       <SimpleFormInput
         id="file"
+        disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:image_path_field')}
         onChange={(e) => setPathInput(e.target.value)}
         value={pathInput}
@@ -197,11 +200,12 @@ export const BaseLayerRightToolbar = () => {
         }}
       />
 
-      <SimpleButton onClick={() => setShowFileSelector(true)}>
+      <SimpleButton onClick={() => setShowFileSelector(true)} disabled={isReadOnlyMode}>
         {t('baseLayerForm:selectImage')}
       </SimpleButton>
       <SimpleFormInput
         id="rotation"
+        disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:rotation_field')}
         onChange={(e) => setRotationInput(parseInt(e.target.value))}
         type="number"
@@ -213,6 +217,7 @@ export const BaseLayerRightToolbar = () => {
       {/* <div className="flex flex-row items-end gap-2"> */}
       <SimpleFormInput
         id="scale"
+        disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:scale')}
         onChange={(e) => setScaleInput(parseInt(e.target.value))}
         type="number"
