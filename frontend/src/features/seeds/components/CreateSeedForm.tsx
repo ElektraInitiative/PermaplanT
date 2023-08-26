@@ -204,6 +204,7 @@ const CreateSeedForm = ({
                 setValue('quantity', mapped);
                 setQuantityOption(option as SelectOption);
               }}
+              isClearable={false}
               onChange={onChange}
             />
             <SimpleFormInput
@@ -234,6 +235,7 @@ const CreateSeedForm = ({
                 setValue('quality', mapped);
                 setQualityOption(option as SelectOption);
               }}
+              isClearable={false}
               onChange={onChange}
             />
             <SimpleFormInput

@@ -38,6 +38,8 @@ export interface SelectMenuProps<
   onChange?: () => void;
   /** Callback that is invoked every time the user changed the search query. */
   onInputChange?: (inputValue: string) => void;
+  /** Disables the x icon at the end of the select menu that allows the user to deselect the current option. */
+  isClearable?: boolean;
 }
 
 /**
@@ -60,6 +62,7 @@ export default function SelectMenu<
   handleOptionsChange,
   onChange,
   onInputChange,
+  isClearable = true,
 }: SelectMenuProps<T, Option, IsMulti>) {
   const customClassNames: ClassNamesConfig<Option, IsMulti, GroupBase<Option>> = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
@@ -122,7 +125,6 @@ export default function SelectMenu<
         render={() => (
           <Select
             name={id}
-            isClearable
             onChange={handleOptionsChange}
             placeholder={placeholder}
             inputValue={inputValue}
@@ -140,6 +142,7 @@ export default function SelectMenu<
               onChange?.();
               onInputChange?.(value);
             }}
+            isClearable={isClearable}
           />
         )}
       />
