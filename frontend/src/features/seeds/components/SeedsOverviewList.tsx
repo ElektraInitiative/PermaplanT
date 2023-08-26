@@ -6,7 +6,7 @@ import { deleteSeed } from '@/features/seeds/api/deleteSeed';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { ReactComponent as EditIcon } from '@/icons/edit.svg';
 import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Suspense, UIEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -44,15 +44,29 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
     navigate(`/seeds/${seed.id}/edit`);
   };
 
-  const handleDeleteSeed = (seed: SeedDto) => {
+  const deleteSeedFunc = async (seed: SeedDto) => {
     try {
-      deleteSeed(Number(seed.id)).then(() => window.location.reload());
+      await deleteSeed(Number(seed.id));
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       }
     }
   };
+
+  const { mutate: handleDeleteSeed } = useMutation<unknown, unknown, SeedDto, unknown>(
+    ['delete seed'],
+    deleteSeedFunc,
+    {
+      onError: () => {
+        toast(t('seeds:create_seed_form.error_delete_seed'));
+      },
+      onSuccess: () => {
+        // Reload the page to make sure the updates are actually displayed to the user.
+        window.location.reload();
+      },
+    },
+  );
 
   return (
     <Suspense>
