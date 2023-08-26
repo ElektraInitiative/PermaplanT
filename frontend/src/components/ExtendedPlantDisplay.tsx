@@ -28,6 +28,7 @@ const ExtendedPlantsSummaryDisplayName = ({
       ) : (
         <>
           <i>{transformedPlant.displayName.unique_name}</i>
+          {additionalName}
           {transformedPlant.displayName.cultivar
             ? ` '${transformedPlant.displayName.cultivar}'`
             : ''}
