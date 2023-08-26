@@ -6,7 +6,6 @@ enum Pages {
   CreateSeed,
   ViewSeeds,
   EditSeed,
-  SeedDetails,
   LandingPage,
   Map,
   MapCreation,
