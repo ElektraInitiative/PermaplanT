@@ -44,8 +44,8 @@ const CreateSeedForm = ({
   const translatedQuality = useTranslatedQuality();
   const translatedQuantity = useTranslatedQuantity();
 
-  const quality: SelectOption[] = enumToSelectOptionArr(Quality, translatedQuality);
-  const quantity: SelectOption[] = enumToSelectOptionArr(Quantity, translatedQuantity);
+  const quality: SelectOption[] = enumToSelectOptionArr(Quality, translatedQuality).reverse();
+  const quantity: SelectOption[] = enumToSelectOptionArr(Quantity, translatedQuantity).reverse();
 
   const currentYear = new Date().getFullYear();
 
@@ -54,8 +54,8 @@ const CreateSeedForm = ({
   // SelectMenu components can't automatically convert from values to select options.
   // We work around this by managing the necessary state ourselves.
   const [plantOption, setPlantOption] = useState<SelectOption | undefined>(undefined);
-  const [quantityOption, setQuantityOption] = useState<SelectOption | undefined>(undefined);
-  const [qualityOption, setQualityOption] = useState<SelectOption | undefined>(undefined);
+  const [quantityOption, setQuantityOption] = useState<SelectOption | undefined>(quantity[0]);
+  const [qualityOption, setQualityOption] = useState<SelectOption | undefined>(quality[0]);
 
   useEffect(
     () => {
