@@ -57,14 +57,14 @@ const CreateSeedForm = ({
   const [quantityOption, setQuantityOption] = useState<SelectOption | undefined>(quantity[0]);
   const [qualityOption, setQualityOption] = useState<SelectOption | undefined>(quality[0]);
 
-  // Makes sure that the default select values are stored in the form data..
-  const currentQuantity = quantityOption?.value as Quantity;
-  const currentQuality = qualityOption?.value as Quality;
-  setValue('quantity', currentQuantity);
-  setValue('quality', currentQuality);
-
   useEffect(
     () => {
+      // Makes sure that the default select values are stored in the form data..
+      const currentQuantity = quantityOption?.value as Quantity;
+      const currentQuality = qualityOption?.value as Quality;
+      setValue('quantity', currentQuantity);
+      setValue('quality', currentQuality);
+
       if (existingSeed) {
         setValue('harvest_year', existingSeed?.harvest_year);
         setValue('name', existingSeed?.name);
