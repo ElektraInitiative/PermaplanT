@@ -39,7 +39,7 @@ const CreateSeedForm = ({
   onChange,
   onSubmit,
 }: CreateSeedFormProps) => {
-  const { t } = useTranslation(['common', 'seeds']);
+  const { t } = useTranslation(['common', 'seeds', 'enums']);
 
   const translatedQuality = useTranslatedQuality();
   const translatedQuantity = useTranslatedQuantity();
@@ -189,6 +189,7 @@ const CreateSeedForm = ({
               control={control}
               options={quantity}
               labelText={t('seeds:quantity')}
+              placeholder={t('enums:Quantity:Enough')}
               value={quantityOption}
               required={true}
               handleOptionsChange={(option) => {
@@ -219,6 +220,7 @@ const CreateSeedForm = ({
               control={control}
               options={quality}
               labelText={t('seeds:quality')}
+              placeholder={t('enums:Quality:Organic')}
               value={qualityOption}
               handleOptionsChange={(option) => {
                 const temp = option as SelectOption;
