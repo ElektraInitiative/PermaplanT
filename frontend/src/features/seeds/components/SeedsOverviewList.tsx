@@ -36,7 +36,7 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
   };
 
   const handleSeedClick = (seed: SeedDto) => {
-    navigate(`/seeds/${seed.id}`);
+    navigate(`/seeds/${seed.id}/edit`);
   };
 
   return (
