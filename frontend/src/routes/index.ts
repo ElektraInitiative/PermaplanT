@@ -8,7 +8,7 @@ import MapOverview from '@/features/maps/routes/MapOverview';
 import { Chat } from '@/features/nextcloud_integration/components/chat';
 import { WebdavTest } from '@/features/nextcloud_integration/components/webdav-test';
 import { Overview } from '@/features/overview/routes/Overview';
-import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
+import { CreateSeed, ViewSeeds } from '@/features/seeds';
 import { EditSeed } from '@/features/seeds/routes/EditSeed';
 
 const routes: Routes = {
@@ -34,12 +34,6 @@ const routes: Routes = {
     component: EditSeed,
     path: '/seeds/:id/edit',
     title: 'Edit Seed',
-    restricted: true,
-  },
-  [Pages.SeedDetails]: {
-    component: SeedDetails,
-    path: '/seeds/:id',
-    title: 'Seed',
     restricted: true,
   },
   [Pages.LandingPage]: {
