@@ -14,7 +14,7 @@ export async function getHeatMap(
   shadeLayerId: number,
   plantId: number | undefined,
 ) {
-  if (!plantId) {
+  if (plantId === undefined) {
     return null;
   }
 
