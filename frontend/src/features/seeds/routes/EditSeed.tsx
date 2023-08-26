@@ -23,6 +23,9 @@ export function EditSeed() {
     onError: () => {
       toast(t('seeds:create_seed_form.error_create_seed'));
     },
+    onSuccess: () => {
+      navigate(`/seeds/`);
+    },
   });
 
   const getSeed = () => findSeedById(parseInt(id ?? ''));
@@ -55,7 +58,6 @@ export function EditSeed() {
 
   const onSubmit = async (newSeed: NewSeedDto) => {
     submitNewSeed({ seed: newSeed, id: parseInt(id ?? '0') });
-    navigate(`/seeds/${id}`);
   };
 
   return (
