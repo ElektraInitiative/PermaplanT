@@ -3,6 +3,7 @@
     "title": "My Seeds",
     "btn_new_entry": "New Entry",
     "search_placeholder": "Search seeds...",
+    "search_hint": "Currently, seed search only considers the additional name.",
     "fetching_error": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
     "fetching_single_error": "Sorry, I could not load the seed from my server. It is possible it doesn't exist."
   },
