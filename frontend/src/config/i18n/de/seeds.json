@@ -42,5 +42,6 @@
   "yield": "Ertrag",
   "price": "Preis",
   "generation": "Generation",
-  "notes": "Notizen"
+  "notes": "Notizen",
+  "actions": "Aktionen"
 }

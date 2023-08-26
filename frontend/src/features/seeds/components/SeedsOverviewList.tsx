@@ -1,11 +1,16 @@
 import { SeedDto } from '@/bindings/definitions';
+import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
 import { ExtendedPlantsSummaryDisplayName } from '@/components/ExtendedPlantDisplay';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { deleteSeed } from '@/features/seeds/api/deleteSeed';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
+import { ReactComponent as EditIcon } from '@/icons/edit.svg';
+import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
 import { useQuery } from '@tanstack/react-query';
 import { Suspense, UIEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface SeedsOverviewListProps {
   seeds: SeedDto[];
@@ -35,8 +40,18 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
     }
   };
 
-  const handleSeedClick = (seed: SeedDto) => {
+  const handleEditSeed = (seed: SeedDto) => {
     navigate(`/seeds/${seed.id}/edit`);
+  };
+
+  const handleDeleteSeed = (seed: SeedDto) => {
+    try {
+      deleteSeed(Number(seed.id)).then(() => window.location.reload());
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   };
 
   return (
@@ -66,16 +81,16 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
                   {t('seeds:origin')}
                 </th>
+                <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
+                  {t('seeds:actions')}
+                </th>
               </tr>
             </thead>
             <tbody>
               {seeds.map((seed) => (
                 <tr
                   key={seed.id}
-                  className="bg-primary-textfield cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-600"
-                  onClick={() => {
-                    handleSeedClick(seed);
-                  }}
+                  className="bg-primary-textfield hover:bg-neutral-300 dark:hover:bg-neutral-600"
                 >
                   <td className="px-6 py-4">
                     {seed.plant_id ? (
@@ -91,6 +106,20 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
                   <td className="px-6 py-4">{seed.quality}</td>
                   <td className="px-6 py-4">{seed.harvest_year}</td>
                   <td className="px-6 py-4">{seed.origin}</td>
+                  <td className="flex flex-row justify-between px-6 py-4">
+                    <IconButton
+                      variant={ButtonVariant.primary}
+                      onClick={() => handleEditSeed(seed)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      variant={ButtonVariant.primary}
+                      onClick={() => handleDeleteSeed(seed)}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </td>
                 </tr>
               ))}
             </tbody>
