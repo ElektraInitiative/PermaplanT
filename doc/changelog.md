@@ -10,6 +10,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - _()_
 - _()_
+- _()_
+- Expand seed overview with additional table fields _(Moritz)_
 - Updated UC for guided tour and gaining blossoms _(Thorben)_
 - _()_
 - _()_
@@ -37,6 +39,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- _()_
+- Enable seeds to be edited and deleted _(Giancarlo & Moritz)_
 - Update UC for timeline and plants layer _(Paul)_
 - _()_
 - _()_

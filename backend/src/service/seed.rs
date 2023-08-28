@@ -57,6 +57,21 @@ pub async fn create(
     Ok(result)
 }
 
+/// Edits a seed in the database.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub async fn edit(
+    id: i32,
+    user_id: Uuid,
+    new_seed: NewSeedDto,
+    app_data: &Data<AppDataInner>,
+) -> Result<SeedDto, ServiceError> {
+    let mut conn = app_data.pool.get().await?;
+    let result = Seed::edit(id, user_id, new_seed, &mut conn).await?;
+    Ok(result)
+}
+
 /// Delete the seed from the database.
 ///
 /// # Errors
