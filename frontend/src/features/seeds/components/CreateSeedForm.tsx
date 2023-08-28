@@ -80,7 +80,7 @@ const CreateSeedForm = ({
         setValue('plant_id', 1);
 
         // Convert existing values to select menu options.
-        loadInitialPlant(existingSeed.plant_id);
+        if (existingSeed.plant_id) loadInitialPlant(existingSeed.plant_id);
         setQuantityOption(quantity.filter((x) => x.value === existingSeed?.quantity)[0]);
         setQualityOption(quality.filter((x) => x.value === existingSeed?.quality)[0]);
       }
@@ -135,9 +135,7 @@ const CreateSeedForm = ({
    *  Convert a plantId into an option for PaginatedSelectMenu.
    *  @param plantId The id that will be converted.
    */
-  const loadInitialPlant = async (plantId: number | undefined) => {
-    if (!plantId) return;
-
+  const loadInitialPlant = async (plantId: number) => {
     const plant = await findPlantById(plantId);
     const common_name_en = plant.common_name_en ? ' (' + plant.common_name_en[0] + ')' : '';
 
