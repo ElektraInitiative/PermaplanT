@@ -27,3 +27,7 @@
 - **Non-functional Constraints:**
   - The login process must be secure to protect the user's personal information.
   - The app must clearly communicate to the user whether the login was successful or not.
+
+## Left-Overs
+
+- [Add an auth mechanism to the /api/updates/maps endpoint](https://github.com/ElektraInitiative/PermaplanT/issues/409)
