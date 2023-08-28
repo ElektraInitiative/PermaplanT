@@ -156,7 +156,7 @@ For the frontend unit tests will be used to test the following areas:
 - Async actions, such as API calls or event handling
 - Form validation and submission
 
-## End-to-End testing of important [use cases](../usecases)
+## Backend
 
 For the backend, unit tests will be used to test the following areas:
 
