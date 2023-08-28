@@ -62,7 +62,7 @@ Test reports and results can be found in the jobs [artifacts](https://build.libe
 Failed tests will generate videos and/or screenshots inside `e2e/test-results/` in the jobs [artifacts](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/artifact/e2e/), depending on what failed.
 The videos have to be downloaded to be viewed.
 
-There is always a html report inside `e2e/test-reports/` in the jobs [artifacts](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/artifact/e2e/) and a [cucumber reports](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/cucumber-html-reports/overview-features.html) on a separate page.
+There is always a html report inside `e2e/test-reports/` in the jobs [artifacts](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/artifact/e2e/) and a [cucumber report](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/cucumber-html-reports/overview-features.html) on a separate page.
 
 ### Deploy Dev
 
@@ -70,8 +70,8 @@ The `master` branch will be automatically deployed to [dev.permaplant.net](https
 
 ### Deploy Prod
 
-This stage is only manually executable through [Jenkins](https://build.libelektra.org/job/PermaplanT-Release/).
-There is a separate Jenkinsfile (`/ci/Jenkinsfile.release`)for this containing build and deploy stages only (no testing).
+There is a separate Jenkinsfile (`/ci/Jenkinsfile.release`) for this pipeline, which is only manually executable through [Jenkins](https://build.libelektra.org/job/PermaplanT-Release/).
+It runs only build and deploying stages (no testing).
 
 Production is deployed to [www.permaplant.net](https://www.permaplant.net).
 
