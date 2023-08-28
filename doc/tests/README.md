@@ -131,8 +131,7 @@ This will include testing of all features, navigation, and error handling.
 ## Test Environment and Infrastructure
 
 - Test environments must mirror production environments as closely as possible.
-  - Windows 10/11 or Linux with Python 11 and node v19 etc ...
-- Virtualization and containerization technologies, such as Docker and Kubernetes, must be utilized for test environment management.
+- Virtualization and containerization technologies, such as Docker must be utilized for test environment management.
 - Test environments must be version controlled and easily reproducible.
 
 ## Testing Tools
@@ -161,9 +160,8 @@ This will include testing of all features, navigation, and error handling.
 
 - Unit and Integration tests must be fully automated.
 - Security and Performance tests may be manual.
-- Some End-to-End tests must be automated by utilizing Capture/Replay techniques.
+- Automated End-to-End tests are implemented according to [the e2e guidelines](../guidelines/e2e.md).
 - Selenium, Cypress and Jest must be used for UI automation testing.
-- API testing must be automated using tools like Postman?
 
 ## Other Considerations
 
