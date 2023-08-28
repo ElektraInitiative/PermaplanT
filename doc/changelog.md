@@ -66,7 +66,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- CI: Update doc _(4ydan)_
 - CI: Add changelog test to CI, only in PR stages #857 _(4ydan)_
 - E2E: Worker uuids fixture #837 _(4ydan)_
 - GIT: Add data analysis jupyter notebook #843 _(4ydan)_
