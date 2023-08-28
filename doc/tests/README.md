@@ -5,10 +5,10 @@
 The software testing strategy aims to ensure the delivery of high-quality software by employing a comprehensive testing approach throughout the development lifecycle.
 This strategy combines various testing types and levels to validate the functionality, performance, and security of the software.
 
-The testing approach for PermaplanT will follow a mix of unit testing, integration testing, and manual testing.
+The testing approach for PermaplanT will follow a mix of unit testing, integration testing, and system testing.
 Unit testing will be conducted for individual components and functions to ensure that they are working as expected.
 Integration testing will be conducted for API endpoints and interactions between components to ensure that they are functioning correctly together.
-Manual testing will be conducted for end-to-end functionality and overall user experience.
+System tests will be conducted as manual tests and automated e2e tests.
 
 ## Objectives
 
@@ -85,10 +85,7 @@ For the backend, unit tests will be used to test the following areas:
 - Authentication and authorization
 - Error handling
 
-In the backend unit tests can be found in the `src/` directory.
-Unit tests are used to test individual units of code in isolation from the rest of the system.
-This is important because it allows us to validate that each unit is working as intended, without interference from other parts of the system.
-
+In the backend unit tests can be found in the `src/test` directory.
 
 ### 2. Integration Testing
 
@@ -116,8 +113,9 @@ The whole module is annotated with `#[cfg(test)]` and will therefore only be com
 System testing will include end-to-end testing of the application to ensure overall functionality and user experience.
 This will include testing of all features, navigation, and error handling.
 
-- Test scenarios must be derived from functional requirements and use cases.
-- Testers must perform End-to-End testing of the software, including all user workflows and system integrations.
+- System test scenarios must be derived from functional requirements and use cases.
+- Manual system tests are documented in [`doc/tests/manual/protocol.md`](./manual/protocol.md).
+- Automated system tests (e2e tests) can be found in [`e2e/`](../../e2e/README.md).
 - Exploratory testing techniques must be utilized to uncover potential issues and edge cases.
 
 ### 4. Performance Testing
@@ -160,7 +158,7 @@ This will include testing of all features, navigation, and error handling.
 
 - Unit and Integration tests must be fully automated.
 - Security and Performance tests may be manual.
-- Automated End-to-End tests are implemented according to [the e2e guidelines](../guidelines/e2e.md).
+- System tests are automated (if possible) according to [the e2e guidelines](../guidelines/e2e.md).
 - Selenium, Cypress and Jest must be used for UI automation testing.
 
 ## Other Considerations
