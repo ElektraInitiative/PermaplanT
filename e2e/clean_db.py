@@ -1,5 +1,5 @@
 # Generated with chatgpt.
-# A helper script to remove all maps starting with the name "SUT" from the database.
+# A helper script to remove all maps and seeds starting with the name "SUT" from the database.
 # Currently tests are not capable of cleaning up maps after they are done, so this is
 # only a workaround and should eventually be removed.
 # Also using a separate database should be considered at some point.
@@ -20,7 +20,7 @@ host = urlparse(
 port = str(os.getenv("DATABASE_PORT", "5432"))
 
 
-def delete_maps_with_sut(dbname, user, password, host, port):
+def delete_maps_and_seeds_with_sut(dbname, user, password, host, port):
     try:
         # Connect to the PostgreSQL server
         conn = psycopg2.connect(
@@ -30,8 +30,10 @@ def delete_maps_with_sut(dbname, user, password, host, port):
         # Create a new cursor
         cursor = conn.cursor()
 
-        # Delete rows with "SUT" in the name from the 'maps' table
+        # Delete rows with "SUT" in the name from the 'maps' and 'seeds' table
         delete_query = "DELETE FROM maps WHERE name LIKE '%SUT%';"
+        cursor.execute(delete_query)
+        delete_query = "DELETE FROM seeds WHERE name LIKE '%SUT%';"
         cursor.execute(delete_query)
 
         # Commit the changes
@@ -46,4 +48,4 @@ def delete_maps_with_sut(dbname, user, password, host, port):
             conn.close()
 
 
-delete_maps_with_sut(dbname, user, password, host, port)
+delete_maps_and_seeds_with_sut(dbname, user, password, host, port)
