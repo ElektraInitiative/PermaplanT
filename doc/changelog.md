@@ -176,6 +176,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Use the correct layer ID for create and fetch actions (for plantings) in the map editor, enabling the possibility for multiple independent maps _(Paul and Thorben)_
 - Location picker map in map creation form only loads after actively pressing a button _(Thorben)_
 - Maps can be duplicated from the map overview (in PR #515) _(Thorben)_
+- Login use case done. _(Gabriel and Samuel)_
+- Layers visibility use case done. _(Samuel)_
 
 ## 0.1.0 - 19.04.2023
 
