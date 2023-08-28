@@ -13,6 +13,7 @@ Please ask if you need login data.
 ## Concurrent Builds
 
 Concurrent builds on the same branch are disabled.
+Only the newest commit will run.
 The master branch is excluded from this rule.
 
 ## Stages
