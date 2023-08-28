@@ -27,10 +27,12 @@
     "error_create_seed": "Sorry, ich habe Schwierigkeiten den Samen auf meinem Server abzulegen. Bitte versuche es später erneut.",
     "error_delete_seed": "Sorry, ich habe Schwierigkeiten den Samen vom Server zu löschen. Bitte versuche es später erneut.",
     "error_fetching_seeds": "Sorry, ich habe Schwierigkeiten Samen von meinem Server zu erhalten. Bitte versuche es später erneut.",
-    "error_fetching_plants": "Sorry, ich habe Schwierigkeiten Pflanzen von meinem Server zu erhalten. Bitte versuche es später erneut."
+    "error_fetching_plants": "Sorry, ich habe Schwierigkeiten Pflanzen von meinem Server zu erhalten. Bitte versuche es später erneut.",
+    "success": "Samen erfolgreich erstellt!"
   },
   "edit_seed_form": {
-    "btn_edit_seed": "Samen editieren"
+    "btn_edit_seed": "Samen editieren",
+    "success": "Samen erfolgreich editiert!"
   },
   "harvest_year": "Bezugsjahr",
   "additional_name": "Zusätzlicher Name",

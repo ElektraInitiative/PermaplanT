@@ -19,14 +19,22 @@ export function EditSeed() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
 
-  const { mutate: submitNewSeed } = useMutation(['edit Seed'], editSeed, {
-    onError: () => {
-      toast(t('seeds:create_seed_form.error_create_seed'));
+  const { mutate: submitNewSeed, isSuccess: isUploadingSuccess } = useMutation(
+    ['edit Seed'],
+    editSeed,
+    {
+      onError: () => {
+        toast(t('seeds:create_seed_form.error_create_seed'));
+      },
+      onSuccess: async () => {
+        // Wait for the seed upload to be completed before navigating.
+        // This ensures that all seeds are present on the overview page once the user sees it.
+        await isUploadingSuccess;
+        navigate(`/seeds/`);
+        toast.success(t('seeds:edit_seed_form.success'));
+      },
     },
-    onSuccess: () => {
-      navigate(`/seeds/`);
-    },
-  });
+  );
 
   const getSeed = () => findSeedById(parseInt(id ?? ''));
 

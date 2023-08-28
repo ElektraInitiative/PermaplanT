@@ -31,6 +31,7 @@ export function CreateSeed() {
       // This ensures that all seeds are present on the overview page once the user sees it.
       await isUploadingSuccess;
       navigate('/seeds');
+      toast.success(t('seeds:create_seed_form.success'));
     },
   });
 
