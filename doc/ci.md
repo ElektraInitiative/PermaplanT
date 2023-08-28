@@ -54,7 +54,8 @@ Since there is only one agent for PRs available, the last built PR wins.
 
 ### E2E Tests
 
-E2E tests are run on [pr.permaplant.net](https://pr.permaplant.net) and optionally retried if they timeout.
+E2E tests are run on [pr.permaplant.net](https://pr.permaplant.net).
+When a test times out, it is retried up to two times with a five second delay between retries.
 
 Test reports and results can be found in the jobs [artifacts](https://build.libelektra.org/job/PermaplanT/job/master/lastCompletedBuild/artifact/e2e/).
 
