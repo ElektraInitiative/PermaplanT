@@ -30,6 +30,9 @@
 
 ## Links
 
-[Authentication Setup](../../research/nextcloud_integration.md)
+- [Authentication Setup](../../research/nextcloud_integration.md)
+- [Authentication Decision](../../decisions/auth.md)
 
-[Authentication Decision](../../decisions/auth.md)
+## Left-Overs
+
+- [Add an auth mechanism to the /api/updates/maps endpoint](https://github.com/ElektraInitiative/PermaplanT/issues/409)

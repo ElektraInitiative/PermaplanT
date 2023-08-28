@@ -1,6 +1,7 @@
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { MapLabel } from '../utils/MapLabel';
+import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
   deselectShapes,
   endSelection,
@@ -216,6 +217,8 @@ export const BaseStage = ({
     }
   };
 
+  const isReadOnly = useIsReadOnlyMode();
+
   return (
     <div className="h-full w-full overflow-hidden" data-testid="canvas" ref={containerRef}>
       <Stage
@@ -247,6 +250,7 @@ export const BaseStage = ({
             y={tooltipPosition.y}
           />
           <Transformer
+            listening={!isReadOnly}
             // We need to manually disable selection when we are transforming
             onTransformStart={() => {
               selectable = false;

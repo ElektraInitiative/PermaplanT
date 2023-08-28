@@ -1,3 +1,4 @@
+import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import { usePlantSearch } from '../hooks/usePlantSearch';
 import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
 import { PlantListItem } from './PlantListItem';
@@ -13,6 +14,8 @@ import { useTranslation } from 'react-i18next';
 export const PlantSearch = () => {
   const { plants, actions: plantSearchActions } = usePlantSearch();
   const { actions } = useSelectPlantForPlanting();
+
+  const isReadOnlyMode = useIsReadOnlyMode();
 
   const [searchVisible, setSearchVisible] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -61,6 +64,7 @@ export const PlantSearch = () => {
             }}
           >
             <SearchInput
+              disabled={isReadOnlyMode}
               placeholder={t('plantSearch:placeholder')}
               handleSearch={(event) => plantSearchActions.searchPlants(event.target.value)}
               ref={searchInputRef}
@@ -72,6 +76,7 @@ export const PlantSearch = () => {
             <ul data-tourid="plant_list">
               {plants.map((plant) => (
                 <PlantListItem
+                  disabled={isReadOnlyMode}
                   plant={plant}
                   key={plant.id}
                   onClick={() => {

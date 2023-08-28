@@ -1,3 +1,4 @@
+import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import { ReactComponent as CheckIcon } from '@/icons/check.svg';
@@ -12,10 +13,7 @@ type TimelineProps = {
    * The date is passed as a string in the format 'YYYY-MM-DD'
    */
   onSelectDate: (date: string) => void;
-
-  /**
-   * The default date to be selected on the timeline.
-   */
+  /** The default date to be selected on the timeline. */
   defaultDate: string;
 };
 
@@ -27,23 +25,9 @@ const TimelineFormSchema = z.object({
   date: z.string().nonempty(),
 });
 
-// const timelineResolver: Resolver<TimelineFormData> = (values) => {
-//   const parsedDate = convertToDate(values.date);
-
-//   const errors: FieldErrors<TimelineFormData> = {};
-
-//   if (isNaN(parsedDate.getTime())) {
-//     errors.date = { message: , type: 'validate' };
-//   }
-
-//   return {
-//     errors,
-//     values,
-//   };
-// };
-
 export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
   const { t } = useTranslation(['timeline']);
+  const isReadOnlyMode = useIsReadOnlyMode();
 
   const { register, handleSubmit, watch } = useForm<TimelineFormData>({
     defaultValues: {
@@ -75,6 +59,7 @@ export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
         register={register}
         title={t('timeline:change_date_hint')}
         data-tourid="date_picker"
+        disabled={isReadOnlyMode}
       />
 
       {submitState === 'loading' && (

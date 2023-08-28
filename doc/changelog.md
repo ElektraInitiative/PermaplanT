@@ -37,15 +37,15 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Update UC for timeline and plants layer _(Paul)_
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- Added Meeting Agenda for 28.8. 9:00 _(Markus Raab)_
 - _()_
 - _()_
 - update `doc/database/hierarchy.md` to clarify how we render plant names _(temmey)_
-- _()_
+- updated sqlfluff config, remove unused .sql files _(temmey)_
 - _()_
 - _()_
 - _()_
@@ -63,8 +63,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- CI: Add changelog test to CI, only in PR stages #857 _(4ydan)_
+- E2E: Worker uuids fixture #837 _(4ydan)_
+- GIT: Add data analysis jupyter notebook #843 _(4ydan)_
 - MDB: Fold all chapters #818 _(4ydan)_
 - CI: Add codespell pre-commit #811 _(4ydan)_
 - E2E: Add base layer tests #777 _(4ydan)_

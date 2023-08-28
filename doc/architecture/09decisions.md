@@ -1,3 +1,3 @@
 # Architecture Decisions
 
-We handle architecture decisions in [its own chapter Decisions](../decisions).
+We handle architecture decisions in [its own Chapter Decisions](../decisions).

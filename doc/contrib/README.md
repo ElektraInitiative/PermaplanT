@@ -4,7 +4,13 @@
 
 Before you start anything, please make sure you:
 
-- skimmed the mdbook (`make run-mdbook`), especially the chapters listed in "Architecture".
+- skimmed the mdbook (`make run-mdbook`), especially the chapters listed in "Architecture", including:
+  - [ ] use cases
+  - [ ] guidelines
+  - [ ] decisions
+- also have a look at other documentations:
+  - [ ] [API](../backend/03api_documentation.md)
+  - [ ] Storybook (`make run-storybook`)
 - report all problems you found during getting started, as it is essential that entry barriers get reduced
 
 For any non-trival work, i.e., not only trivial fixes/updates in documentation or tests, there should be an underlying issue.
