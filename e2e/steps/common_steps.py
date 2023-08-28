@@ -1,14 +1,31 @@
 """
 Frequently used steps in other tests
 """
-
 from pytest_bdd import given, when, then, parsers
-
+from playwright.sync_api import Page
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
 from e2e.pages.maps.create import MapCreatePage
 from e2e.pages.maps.management import MapManagementPage
 from e2e.pages.maps.planting import MapPlantingPage
+from e2e.pages.seeds.management import SeedManagementPage
+
+
+@given("I am on the seed management page")
+def smp(page: Page) -> SeedManagementPage:
+    """
+    Login -> Seed Management Page
+
+    Returns:
+    -------
+    `SeedManagementPage` object
+    """
+    hp = HomePage(page)
+    lp = LoginPage(page)
+    login(hp, lp)
+    smp = hp.to_seed_management_page()
+    smp.verify()
+    return smp
 
 
 @given(
