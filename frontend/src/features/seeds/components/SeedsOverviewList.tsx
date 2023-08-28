@@ -54,19 +54,15 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
     }
   };
 
-  const { mutate: handleDeleteSeed } = useMutation<unknown, unknown, SeedDto, unknown>(
-    ['delete seed'],
-    deleteSeedFunc,
-    {
-      onError: () => {
-        toast(t('seeds:create_seed_form.error_delete_seed'));
-      },
-      onSuccess: () => {
-        // Reload the page to make sure the updates are actually displayed to the user.
-        window.location.reload();
-      },
+  const { mutate: handleDeleteSeed } = useMutation(['delete seed'], deleteSeedFunc, {
+    onError: () => {
+      toast(t('seeds:create_seed_form.error_delete_seed'));
     },
-  );
+    onSuccess: () => {
+      // Reload the page to make sure the updates are actually displayed to the user.
+      window.location.reload();
+    },
+  });
 
   return (
     <Suspense>
