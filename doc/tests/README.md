@@ -154,7 +154,7 @@ This will include testing of all features, navigation, and error handling.
 - Integration tests must be executed by the CI pipeline on every push to PR and every merge to master.
 - Test metrics, such as test coverage and test execution time, must be tracked in the pipeline.
 - System tests and User acceptance tests must be performed before every release.
-- Manual tests will be documented under `doc/tests/protocols` and errors must be categorized by level and priority.
+- Manual tests will be documented under [`doc/tests/manual/reports`](./manual/reports/README.md)
 - An Email is send whenever master fails, with a small report containing information since last build.
 
 ## Test Automation
