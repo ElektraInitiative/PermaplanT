@@ -66,6 +66,30 @@ mod tests {
 }
 ```
 
+#### Frontend
+
+For the frontend unit tests will be used to test the following areas:
+
+- State management logic: Since the frontend relies heavily on state management, it is important to ensure that the state is being properly managed and updated.
+- Functions that handle data manipulation, such as sorting or filtering
+- Components that render UI elements
+- Async actions, such as API calls or event handling
+- Form validation and submission
+
+#### Backend
+
+For the backend, unit tests will be used to test the following areas:
+
+- Database queries and operations
+- Business logic and data manipulation, e.g. code that performs calculations, manipulates data, or makes decisions based on input
+- Authentication and authorization
+- Error handling
+
+In the backend unit tests can be found in the `src/` directory.
+Unit tests are used to test individual units of code in isolation from the rest of the system.
+This is important because it allows us to validate that each unit is working as intended, without interference from other parts of the system.
+
+
 ### 2. Integration Testing
 
 Integration tests are used to test the integration between different parts of the system.
@@ -75,11 +99,11 @@ In the application the integration tests will be used to test the following area
 
 - Continuous Integration (CI) pipelines must run integration tests for different modules and components.
 
-### Frontend
+#### Frontend
 
 - API calls using a mock API
 
-### Backend
+#### Backend
 
 - API endpoints
 - Database queries
@@ -145,26 +169,3 @@ This will include testing of all features, navigation, and error handling.
 
 - Tests should be run before committing via pre-commit hooks
 - Tests should be run on different configurations (e.g. production, staging)
-
-## Frontend
-
-For the frontend unit tests will be used to test the following areas:
-
-- State management logic: Since the frontend relies heavily on state management, it is important to ensure that the state is being properly managed and updated.
-- Functions that handle data manipulation, such as sorting or filtering
-- Components that render UI elements
-- Async actions, such as API calls or event handling
-- Form validation and submission
-
-## Backend
-
-For the backend, unit tests will be used to test the following areas:
-
-- Database queries and operations
-- Business logic and data manipulation, e.g. code that performs calculations, manipulates data, or makes decisions based on input
-- Authentication and authorization
-- Error handling
-
-In the backend unit tests can be found in the `src/` directory.
-Unit tests are used to test individual units of code in isolation from the rest of the system.
-This is important because it allows us to validate that each unit is working as intended, without interference from other parts of the system.
