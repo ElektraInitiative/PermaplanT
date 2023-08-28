@@ -44,17 +44,11 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
     navigate(`/seeds/${seed.id}/edit`);
   };
 
-  const deleteSeedFunc = async (seed: SeedDto) => {
-    try {
-      await deleteSeed(Number(seed.id));
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
+  const deleteSeedUsingDto = async (seed: SeedDto) => {
+    await deleteSeed(Number(seed.id));
   };
 
-  const { mutate: handleDeleteSeed } = useMutation(['delete seed'], deleteSeedFunc, {
+  const { mutate: handleDeleteSeed } = useMutation(['delete seed'], deleteSeedUsingDto, {
     onError: () => {
       toast(t('seeds:create_seed_form.error_delete_seed'));
     },
