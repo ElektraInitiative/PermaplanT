@@ -137,9 +137,9 @@ This will include testing of all features, navigation, and error handling.
 
 ## Testing Tools
 
-- Rust built-in tests by cargo
-- Python Playwright
-- Jest
+- E2E: Python Playwright & Pytest + plugins
+- Backend: Rust built-in tests by cargo
+- Frontend: Jest
 
 ## Test Data Management
 
