@@ -57,15 +57,7 @@ export const ViewSeeds = () => {
     setSeedNameFilter(searchValue);
   };
 
-  // The user should be able to restore a seed that was removed by accident.
-
-  // This function exists to preserve the seed's id for handleRestoreSeeds onSuccess callback.
-  const createSeedUsingSeedDto = async (seed: SeedDto) => {
-    // Without a return statement, variables would be undefined in the onSuccess callback.
-    return await createSeed(seed as NewSeedDto);
-  };
-
-  const { mutate: handleRestoreSeed } = useMutation(['restore seed'], createSeedUsingSeedDto, {
+  const { mutate: handleRestoreSeed } = useMutation(['restore seed'], createSeed, {
     onError: () => {
       toast.error(t('seeds:view_seeds.restore_seed_failure'));
     },
@@ -93,7 +85,7 @@ export const ViewSeeds = () => {
       toast.success(
         <div>
           {t('seeds:view_seeds.restore_seed_message', { seed: seed.name })}
-          <SimpleButton onClick={() => handleRestoreSeed(seed)}>
+          <SimpleButton onClick={() => handleRestoreSeed(seed as NewSeedDto)}>
             {t('seeds:view_seeds.restore_seed_button')}
           </SimpleButton>
         </div>,
