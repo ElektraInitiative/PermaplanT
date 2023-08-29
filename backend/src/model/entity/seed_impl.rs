@@ -21,6 +21,7 @@ use super::{NewSeed, Seed};
 impl Seed {
     /// Get a page of seeds.
     /// Seeds are returned in ascending order of their best_by dates.
+    /// If that is not available, the harvest year is used instead.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -32,7 +33,7 @@ impl Seed {
     ) -> QueryResult<Page<SeedDto>> {
         let mut query = seeds::table
             .select(all_columns)
-            .order(use_by.asc())
+            .order((use_by.asc(), harvest_year.asc()))
             .into_boxed();
 
         if let Some(name_search) = search_parameters.name {
