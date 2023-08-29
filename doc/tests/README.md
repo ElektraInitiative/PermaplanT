@@ -113,7 +113,7 @@ The whole module is annotated with `#[cfg(test)]` and will therefore only be com
 System testing will include end-to-end testing of the application to ensure overall functionality and user experience.
 This will include testing of all features, navigation, and error handling.
 
-- System test scenarios must be derived from functional requirements and use cases.
+- System test scenarios must be derived from the use cases and the requirements they imply.
 - Manual system tests are documented in [`doc/tests/manual/protocol.md`](./manual/protocol.md).
 - Automated system tests (e2e tests) can be found in the top-level `e2e` folder.
 - Both are specified in Gherkin syntax.
