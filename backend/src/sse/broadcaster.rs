@@ -114,9 +114,13 @@ impl Broadcaster {
 
     /// Broadcasts `msg` to all clients on the same map.
     pub async fn broadcast(&self, map_id: i32, action: Action) {
+        let action_id = action.action_id().to_string();
+
         match sse::Data::new_json(action) {
-            Ok(serialized_action) => {
+            Ok(mut serialized_action) => {
                 let guard = self.0.lock().await;
+
+                serialized_action.set_id(action_id);
 
                 if let Some(map) = guard.get(&map_id) {
                     // try to send to all clients, ignoring failures

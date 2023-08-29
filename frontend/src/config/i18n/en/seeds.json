@@ -3,13 +3,17 @@
     "title": "My Seeds",
     "btn_new_entry": "New Entry",
     "search_placeholder": "Search seeds...",
+    "search_hint": "Currently, seed search only considers the additional name.",
     "fetching_error": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
     "fetching_single_error": "Sorry, I could not load the seed from my server. It is possible it doesn't exist."
   },
   "create_seed": {
-    "title": "New Seed Entry",
+    "title": "Seed Entry",
     "changes_model_title": "Cancel Changes?",
     "changes_model_message": "Changes you have made will not be saved. Do you really want to cancel?"
+  },
+  "delete_seed": {
+    "btn_delete_seed": "Delete seed"
   },
   "create_seed_form": {
     "placeholder_binomial_name": "Tomato",
@@ -21,8 +25,14 @@
     "error_price_must_be_number": "Price must be a number",
     "btn_create_seed": "Create Seed",
     "error_create_seed": "Sorry, I'm experiencing trouble storing the seed on my server. Please try again later.",
+    "error_delete_seed": "Sorry, I'm experiencing trouble deleting the seed from the server. Please try again later.",
     "error_fetching_seeds": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
-    "error_fetching_plants": "Sorry, I'm experiencing trouble fetching plants from my server. Please try again later."
+    "error_fetching_plants": "Sorry, I'm experiencing trouble fetching plants from my server. Please try again later.",
+    "success": "Seed created successfully!"
+  },
+  "edit_seed_form": {
+    "btn_edit_seed": "Edit seed",
+    "success": "Seed modified successfully!"
   },
   "harvest_year": "Harvest Year",
   "additional_name": "Additional Name",
@@ -35,5 +45,6 @@
   "yield": "Yield",
   "price": "Price",
   "generation": "Generation",
-  "notes": "Notes"
+  "notes": "Notes",
+  "actions": "Actions"
 }

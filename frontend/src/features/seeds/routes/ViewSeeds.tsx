@@ -58,6 +58,7 @@ export const ViewSeeds = () => {
     <Suspense>
       <PageLayout styleNames="flex flex-col space-y-4">
         <PageTitle title={t('seeds:view_seeds.title')} />
+        <span>{t('seeds:view_seeds.search_hint')}</span>
         <div className="flex flex-row justify-between space-x-6">
           <SearchInput
             placeholder={t('seeds:view_seeds.search_placeholder')}

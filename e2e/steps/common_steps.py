@@ -2,7 +2,7 @@
 Frequently used steps in other tests
 """
 
-from pytest_bdd import given, when, parsers
+from pytest_bdd import given, when, then, parsers
 
 from e2e.pages.home import HomePage
 from e2e.pages.login import LoginPage
@@ -24,7 +24,7 @@ def on_a_map_page_with_layer(
     mpp: MapPlantingPage,
     mapname,
     layer,
-    worker_id,
+    worker_uuid,
 ):
     """
     Login -> create a map -> enter the map -> close tour ->
@@ -38,8 +38,8 @@ def on_a_map_page_with_layer(
     hp.to_map_management_page()
     mmp.verify()
     mmp.to_map_create_page()
-    mcp.create_a_map(mapname + worker_id)
-    mmp.to_map_planting_page(mapname + worker_id)
+    mcp.create_a_map(mapname + worker_uuid)
+    mmp.to_map_planting_page(mapname + worker_uuid)
     mpp.verify()
     mpp.close_tour()
     if layer == "plant":
@@ -52,9 +52,14 @@ def on_a_map_page_with_layer(
 
 
 @given(parsers.parse("I am on the {mapname} map page and I have planted something"))
-def given_on_map_page_and_planted(hp, lp, mmp, mcp, mpp, mapname, worker_id):
-    on_a_map_page_with_layer(hp, lp, mmp, mcp, mpp, mapname, "plant", worker_id)
+def given_on_map_page_and_planted(hp, lp, mmp, mcp, mpp, mapname, worker_uuid):
+    on_a_map_page_with_layer(hp, lp, mmp, mcp, mpp, mapname, "plant", worker_uuid)
     plant_a_tomato(mpp)
+
+
+@given("I capture a screenshot of the canvas")
+def canvas_first_screenshot(mpp: MapPlantingPage):
+    mpp.screenshot_canvas()
 
 
 def login(hp: HomePage, lp: LoginPage) -> HomePage:
@@ -94,3 +99,8 @@ def plant_a_tomato(mpp: MapPlantingPage) -> MapPlantingPage:
 @when(parsers.parse("I select a background image"))
 def select_background_image(mpp: MapPlantingPage):
     mpp.select_birdie_background()
+
+
+@then("the canvas looks like the captured screenshot")
+def canvas_second_screenshot(mpp: MapPlantingPage, request):
+    mpp.expect_canvas_equals_last_screenshot(request.node.name)

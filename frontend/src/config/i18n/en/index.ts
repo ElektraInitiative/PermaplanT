@@ -23,6 +23,7 @@ import plantingSuggestions from './plantingSuggestions.json';
 import plantings from './plantings.json';
 import pricing from './pricing.json';
 import privacyOptions from './privacyOptions.json';
+import readOnly from './readOnly.json';
 import routes from './routes.json';
 import seeds from './seeds.json';
 import team from './team.json';
@@ -62,6 +63,7 @@ const en = {
   plantings,
   guidedTour,
   blossoms,
+  readOnly,
 };
 
 export default en;

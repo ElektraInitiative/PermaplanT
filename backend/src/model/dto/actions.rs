@@ -41,6 +41,24 @@ pub enum Action {
     UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload),
 }
 
+impl Action {
+    /// Returns the `action_id` of the action.
+    #[must_use]
+    pub fn action_id(&self) -> Uuid {
+        match self {
+            Self::CreatePlanting(payload) => payload.action_id,
+            Self::DeletePlanting(payload) => payload.action_id,
+            Self::MovePlanting(payload) => payload.action_id,
+            Self::TransformPlanting(payload) => payload.action_id,
+            Self::CreateBaseLayerImage(payload) => payload.action_id,
+            Self::UpdateBaseLayerImage(payload) => payload.action_id,
+            Self::DeleteBaseLayerImage(payload) => payload.action_id,
+            Self::UpdatePlantingAddDate(payload) => payload.action_id,
+            Self::UpdatePlantingRemoveDate(payload) => payload.action_id,
+        }
+    }
+}
+
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
 /// The payload of the [`Action::CreatePlanting`].

@@ -21,7 +21,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(seed::find)
                 .service(seed::create)
                 .service(seed::delete_by_id)
-                .service(seed::find_by_id),
+                .service(seed::find_by_id)
+                .service(seed::edit_by_id),
         )
         .service(
             web::scope("/plants")

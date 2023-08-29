@@ -5,7 +5,7 @@ enum Pages {
   ImprintPage,
   CreateSeed,
   ViewSeeds,
-  SeedDetails,
+  EditSeed,
   LandingPage,
   Map,
   MapCreation,
@@ -13,6 +13,7 @@ enum Pages {
   Maps,
   Webdav,
   Overview,
+  Chat,
 }
 
 type PathRouteCustomProps = {

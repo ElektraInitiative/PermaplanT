@@ -123,7 +123,7 @@ export interface TrackedMapSlice {
    * @param action The action to apply.
    *
    * @internal This method is only used by the EventSource to handle remote actions from other users.
-   * It is not meant to be used by the user, on called in event handlers.
+   * It is not meant to be used in other places, or called from event handlers.
    */
   __applyRemoteAction: (action: Action<unknown, unknown>) => void;
   /**

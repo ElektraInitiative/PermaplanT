@@ -1,4 +1,4 @@
-import { ExtendedPlantsSummaryDisplayName } from './ExtendedPlantDisplay';
+import { ExtendedPlantsSummaryDisplayName } from '../../../../../components/ExtendedPlantDisplay';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
@@ -28,6 +28,7 @@ export type PlantingAttributeEditFormProps = {
   onDeleteClick: () => void;
   onAddDateChange: (addDate: PlantingAttributeEditFormData) => void;
   onRemoveDateChange: (removeDate: PlantingAttributeEditFormData) => void;
+  disabled?: boolean;
 };
 
 export function PlantingAttributeEditForm({
@@ -36,6 +37,7 @@ export function PlantingAttributeEditForm({
   onDeleteClick,
   onAddDateChange,
   onRemoveDateChange,
+  disabled,
 }: PlantingAttributeEditFormProps) {
   const { t } = useTranslation(['plantings']);
 
@@ -70,9 +72,10 @@ export function PlantingAttributeEditForm({
 
       <div className="flex gap-2">
         <SimpleFormInput
-          aria-invalid={addDateSubmitState === 'error'}
           type="date"
           id="addDate"
+          disabled={disabled}
+          aria-invalid={addDateSubmitState === 'error'}
           labelText={t('plantings:add_date')}
           register={register}
           className="w-36"
@@ -88,9 +91,10 @@ export function PlantingAttributeEditForm({
 
       <div className="flex gap-2">
         <SimpleFormInput
-          aria-invalid={removeDateSubmitState === 'error'}
           type="date"
           id="removeDate"
+          disabled={disabled}
+          aria-invalid={removeDateSubmitState === 'error'}
           labelText={t('plantings:remove_date')}
           register={register}
           className="w-36"
@@ -117,6 +121,7 @@ export function PlantingAttributeEditForm({
       <hr className="my-4 border-neutral-700" />
 
       <SimpleButton
+        disabled={disabled}
         variant={ButtonVariant.dangerBase}
         onClick={onDeleteClick}
         className="w-36"
