@@ -1,4 +1,3 @@
-
 RED := \033[0;31m
 RESET := \033[0m
 
@@ -30,23 +29,23 @@ help:
 
 
 .PHONY: run-frontend
-run-frontend: build-frontend  ## Build & Run frontend
+run-frontend: build-frontend ## Build & Run frontend
 	@cd frontend && npm run dev -- --host
 
 .PHONY: run-backend
-run-backend: build-backend  ## Build & Run backend
+run-backend: build-backend ## Build & Run backend
 	@cd backend && make run
 
 .PHONY: run-reset-backend
-run-reset-backend: reset-database  ## Build & Run backend with a database reset
+run-reset-backend: reset-database ## Build & Run backend with a database reset
 	$(MAKE) run-backend
 
 .PHONY: run-mdbook
-run-mdbook: doc-mdbook  ## Build & Run mdbook
+run-mdbook: doc-mdbook ## Build & Run mdbook
 	@mdbook serve --open
 
 .PHONY: run-storybook
-run-storybook: build-storybook  ## Build & Run storybook
+run-storybook: build-storybook ## Build & Run storybook
 	@cd frontend && npm run storybook
 
 
@@ -57,11 +56,11 @@ run-storybook: build-storybook  ## Build & Run storybook
 build: build-frontend build-backend # Build everything
 
 .PHONY: build-frontend
-build-frontend:  install-types install-frontend  ## Build Frontend
+build-frontend: install-types install-frontend ## Build Frontend
 	@cd frontend && npm run build
 
 .PHONY: build-backend
-build-backend:  install-types install-backend  ## Build Backend
+build-backend: install-types install-backend ## Build Backend
 	@make build -C ./backend
 
 
@@ -69,22 +68,22 @@ build-backend:  install-types install-backend  ## Build Backend
 
 
 .PHONY: doc
-doc:  doc-mdbook doc-backend doc-frontend doc-storybook ## Create all docs
+doc: doc-mdbook doc-backend doc-frontend doc-storybook ## Create all docs
 
 .PHONY: doc-mdbook
-doc-mdbook:  install-mdbook  ## Mdbook doc
+doc-mdbook: install-mdbook ## Mdbook doc
 	@mdbook build
 
 .PHONY: doc-storybook
-doc-storybook:  install-frontend  ## Storybook doc
+doc-storybook: install-frontend ## Storybook doc
 	@cd frontend && npm run build-storybook
 
 .PHONY: doc-backend
-doc-backend:  install-backend ## Backend src doc
+doc-backend: install-backend ## Backend src doc
 	@echo "Not implemented yet."
 
 .PHONY: doc-frontend
-doc-frontend:  install-frontend  ## Frontend src doc
+doc-frontend: install-frontend ## Frontend src doc
 	@cd frontend && npm run doc
 
 
@@ -96,12 +95,12 @@ install: install-pre-commit install-backend install-mdbook install-frontend inst
 	@echo "Installation completed."
 
 .PHONY: install-types
-install-types:  ## Install types
-    @make migration -C ./backend
+install-types: ## Install types
+	@make migration -C ./backend
 	@cd frontend && npm run generate-api-types
 
 .PHONY: install-pre-commit
-install-pre-commit:  ## Install pre-commit
+install-pre-commit: ## Install pre-commit
 	@if [ ! -f $$(which pre-commit) ]; then \
 		echo "pre-commit is not installed. Installing..."; \
 		pip install pre-commit; \
@@ -111,7 +110,7 @@ install-pre-commit:  ## Install pre-commit
 	fi
 
 .PHONY: install-frontend
-install-frontend:  ## Install frontend
+install-frontend: ## Install frontend
 	@echo "Checking if npm install is required..."
 	@if [ $(NODE_MODULES_NEWER) -eq 0 ]; then \
 		echo "Running 'npm install'..."; \
@@ -121,7 +120,7 @@ install-frontend:  ## Install frontend
 	fi
 
 .PHONY: install-backend
-install-backend:  $(FAKE_FILE)  ## Install backend deps
+install-backend: $(FAKE_FILE) ## Install backend deps
 	@echo "Checking if backend is installed..."
 	echo "Installation is up to date"; \
 
@@ -130,7 +129,7 @@ $(FAKE_FILE):  Makefile
 	cd backend && make install
 
 .PHONY: install-backend
-install-mdbook:  ## Install mdbook deps
+install-mdbook: ## Install mdbook deps
 	@echo "Checking if mdbook + deps is installed..."
 	@if [ ! -f "/usr/local/cargo/bin/mdbook" ]; then \
 		echo "Installing mdbook"; \
@@ -141,7 +140,7 @@ install-mdbook:  ## Install mdbook deps
 	fi
 
 .PHONY: install-e2e
-install-e2e:  ## Install e2e dependencies within this repo
+install-e2e: ## Install e2e dependencies within this repo
 	@echo "Checking if e2e is installed..."
 	@if [ $(E2E_INSTALL_NEWER) -eq 0 ]; then \
 		echo "Running 'e2e install'..."; \
@@ -155,7 +154,7 @@ install-e2e:  ## Install e2e dependencies within this repo
 
 
 .PHONY: uninstall
-uninstall:  uninstall-e2e uninstall-pre-commit uninstall-frontend uninstall-backend uninstall-mdbook uninstall-scraper ## Uninstall and clean everything up
+uninstall: uninstall-e2e uninstall-pre-commit uninstall-frontend uninstall-backend uninstall-mdbook uninstall-scraper ## Uninstall and clean everything up
 	-rm -rf frontend/storybook-static
 
 .PHONY: uninstall-pre-commit
@@ -188,23 +187,23 @@ uninstall-scraper:
 
 
 .PHONY: test
-test: test-frontend test-backend test-mdbook test-e2e  ## Test everything
+test: test-frontend test-backend test-mdbook test-e2e ## Test everything
 	$(MAKE) pre-commit
 
 .PHONY: test-e2e
-test-e2e:  ## End-to-End tests. Needs install-e2e, backend and frontend running
+test-e2e: ## End-to-End tests. Needs install-e2e, backend and frontend running
 	@cd e2e && ./e2e.sh
 
 .PHONY: test-frontend
-test-frontend:  ## Build & Test Frontend
+test-frontend: ## Build & Test Frontend
 	@cd frontend && npm install && npm run format:check && npm run lint && npm run test
 
 .PHONY: test-backend
-test-backend:  ## Build & Test Backend
+test-backend: ## Build & Test Backend
 	@make test -C ./backend
 
 .PHONY: test-mdbook
-test-mdbook:  ## Build & Test Mdbook
+test-mdbook: ## Build & Test Mdbook
 	@mdbook test
 
 # Test most makefile targets.
@@ -220,35 +219,35 @@ test-makefile: $(MAKEFILE_LIST)
 
 
 .PHONY: insert-scraper
-insert-scraper:  ## Insert scraped data into the database
+insert-scraper: ## Insert scraped data into the database
 	@cd scraper && npm install && mkdir -p data && npm run insert
 
 .PHONY: migration
-migration:  ## Database migration.
+migration: ## Database migration.
 	@make migration -C ./backend
 
 .PHONY: migration-redo
-migration-redo:  ## Run down.sql and then up.sql for most recent migrations
+migration-redo: ## Run down.sql and then up.sql for most recent migrations
 	@make migration-redo -C ./backend
 
 .PHONY: migration-redo-a
-migration-redo-a:  ## Run down.sql and then up.sql for all migrations
+migration-redo-a: ## Run down.sql and then up.sql for all migrations
 	@make migration-redo-a -C ./backend
 
 .PHONY: reset-database
-reset-database:  ## Reset diesel database AND insert data again
+reset-database: ## Reset diesel database AND insert data again
 	@make reset-database -C ./backend
 	$(MAKE) insert-scraper
 
 .PHONY: psql-r
-psql-r:  ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
+psql-r: ## Remote connect to postgis, uses $POSTGRES_USER and $POSTGRES_DB
 	@psql -h $(HOST) -p 5432 -U $(POSTGRES_USER) $(POSTGRES_DB)
 
 .PHONY: pre-commit
-pre-commit:  ## Check all files with pre-commit
+pre-commit: ## Check all files with pre-commit
 	@pre-commit run --all-files
 
 .PHONY: docker-up
-docker-up:  ## Start a containerized dev environment
+docker-up: ## Start a containerized dev environment
 	@docker compose -p "permaplant_devcontainer" -f .devcontainer/docker-compose.yml up
 

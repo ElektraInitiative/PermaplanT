@@ -21,7 +21,7 @@ Which will open [/doc/architecture/README.md](/doc/architecture/README.md) as fi
 
 ## Makefile commands
 
-Type `make` to see all commands.
+Type `make help` to see all commands.
 
 **Some of the commands require env variables to be set.
 Have a look at [backend env variables](./doc/backend/01setup.md), [frontend env variables](./frontend/README.md) and [scraper env variables](./scraper/README.md)**
