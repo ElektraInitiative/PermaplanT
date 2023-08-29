@@ -20,6 +20,7 @@ use super::{NewSeed, Seed};
 
 impl Seed {
     /// Get a page of seeds.
+    /// Seeds are returned in ascending order of their best_by dates.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.

@@ -15,6 +15,7 @@ use crate::{
 };
 
 /// Search seeds from the database.
+/// Seeds are returned in ascending order of their best_by dates.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
