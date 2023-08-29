@@ -73,7 +73,7 @@ For the frontend unit tests will be used to test the following areas:
 - State management logic: Since the frontend relies heavily on state management, it is important to ensure that the state is being properly managed and updated.
 - Functions that handle data manipulation, such as sorting or filtering
 - Components that render UI elements
-- Async actions, such as API calls or event handling
+- Correct event handling
 - Form validation and submission
 
 #### Backend
