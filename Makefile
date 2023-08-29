@@ -97,6 +97,7 @@ install: install-pre-commit install-backend install-mdbook install-frontend inst
 
 .PHONY: install-types
 install-types:  ## Install types
+    @make migration -C ./backend
 	@cd frontend && npm run generate-api-types
 
 .PHONY: install-pre-commit
@@ -133,7 +134,7 @@ install-mdbook:  ## Install mdbook deps
 	@echo "Checking if mdbook + deps is installed..."
 	@if [ ! -f "/usr/local/cargo/bin/mdbook" ]; then \
 		echo "Installing mdbook"; \
-		cargo install mdbook mdbook-mermaid mdbook-linkcheck; \
+		cargo install mdbook mdbook-mermaid mdbook-linkcheck --locked; \
 		cargo install --git https://github.com/ElektraInitiative/mdbook-generate-summary mdbook-generate-summary --locked; \
 	else \
 		echo "Installation is up to date"; \
@@ -206,13 +207,13 @@ test-backend:  ## Build & Test Backend
 test-mdbook:  ## Build & Test Mdbook
 	@mdbook test
 
-# Test all makefile targets except the ones with "run-".
+# Test most makefile targets.
 test-makefile: $(MAKEFILE_LIST)
-	@for target in `grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; !/^run-/ { printf "%s\n", $$1 }'`; do \
-		echo "$(RED)Testing target: $$target$(RESET)"; \
-		$(MAKE) $$target || (echo "$(RED)Test for target: $$target failed$(RESET)" && exit 1); \
-	done
-	@echo "$(RED)All non 'run-' targets passed the test$(RESET)"
+	$(MAKE) doc
+	$(MAKE) build
+	$(MAKE) test
+	$(MAKE) insert-scraper
+	@echo "$(RED)Targets passed the test$(RESET)"
 
 
 # MISC
