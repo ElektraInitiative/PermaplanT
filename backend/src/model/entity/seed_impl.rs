@@ -20,7 +20,7 @@ use super::{NewSeed, Seed};
 
 impl Seed {
     /// Get a page of seeds.
-    /// Seeds are returned in ascending order of their best_by dates.
+    /// Seeds are returned in ascending order of their `use_by` dates.
     /// If that is not available, the harvest year is used instead.
     ///
     /// # Errors
