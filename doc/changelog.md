@@ -8,8 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.3.3 - UNRELEASED
 
-- _()_
-- _()_
+- Add confirmation modal and undo functionality when deleting seeds _(Moritz)_
 - _()_
 - Expand seed overview with additional table fields _(Moritz)_
 - Updated UC for guided tour and gaining blossoms _(Thorben)_
