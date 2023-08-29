@@ -8,7 +8,7 @@ NODE_MODULES := frontend/node_modules
 PACKAGE_JSON := frontend/package.json
 NODE_MODULES_NEWER := $(shell [ ! -e $(NODE_MODULES) ] || [ $(NODE_MODULES) -ot $(PACKAGE_JSON) ]; echo $$?)
 E2E_VENV := e2e/venv
-E2E_INSTALL := e2e/install_sh
+E2E_INSTALL := e2e/install.sh
 E2E_REQUIREMENTS := e2e/requirements.txt
 E2E_INSTALL_NEWER := $(shell [ ! -e "$(E2E_VENV)" ] || [ "$(E2E_VENV)" -ot "$(E2E_INSTALL)" ] || [ "$(E2E_VENV)" -ot "$(E2E_REQUIREMENTS)" ]; echo $$?)
 
@@ -144,6 +144,7 @@ install-e2e: ## Install e2e dependencies within this repo
 	@echo "Checking if e2e is installed..."
 	@if [ $(E2E_INSTALL_NEWER) -eq 0 ]; then \
 		echo "Running 'e2e install'..."; \
+        rm -rf e2e/venv; \
 		cd e2e && ./install.sh; \
 	else \
 		echo "Installation is up to date"; \
@@ -195,15 +196,15 @@ test-e2e: ## End-to-End tests. Needs install-e2e, backend and frontend running
 	@cd e2e && ./e2e.sh
 
 .PHONY: test-frontend
-test-frontend: ## Build & Test Frontend
+test-frontend: ## Test Frontend
 	@cd frontend && npm install && npm run format:check && npm run lint && npm run test
 
 .PHONY: test-backend
-test-backend: ## Build & Test Backend
+test-backend: ## Test Backend
 	@make test -C ./backend
 
 .PHONY: test-mdbook
-test-mdbook: ## Build & Test Mdbook
+test-mdbook: ## Test Mdbook
 	@mdbook test
 
 # Test most makefile targets.
@@ -250,4 +251,3 @@ pre-commit: ## Check all files with pre-commit
 .PHONY: docker-up
 docker-up: ## Start a containerized dev environment
 	@docker compose -p "permaplant_devcontainer" -f .devcontainer/docker-compose.yml up
-

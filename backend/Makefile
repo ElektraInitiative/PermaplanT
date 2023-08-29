@@ -3,7 +3,7 @@ run: ## Run backend
 	cargo run
 
 .PHONY: test
-test: build ## Build & Test backend
+test: ## Build & Test backend
 	cargo test && cargo check && cargo clippy && cargo doc
 
 .PHONY: build
@@ -25,16 +25,16 @@ migration-redo-a: ## Run down.sql and then up.sql for all migration
 	LC_ALL=C diesel migration redo -a
 
 .PHONY: reset-database
-reset-database:  ## Reset diesel database
+reset-database: ## Reset diesel database
 	diesel database reset
 
 .PHONY: install
-install:  ## Install dependencies within the source repo
+install: ## Install dependencies within the source repo
 	rustup component add rustfmt clippy
 	cargo install diesel_cli@2.0.1 --no-default-features --features postgres && cargo install typeshare-cli
 
 .PHONY: uninstall
-uninstall:  ## Uninstall and clean everything in the backend
+uninstall: ## Uninstall and clean everything in the backend
 	-cargo clean
 	-rustup component remove rustfmt clippy
 	-cargo uninstall diesel_cli@2.0.1 && cargo install typeshare-cli

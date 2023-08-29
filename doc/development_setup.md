@@ -95,6 +95,14 @@ In case you don't prefer any of the previously mentioned installations methods, 
 - Chrome 108.0.5359
 - Firefox 108.0.2
 
+## Dependencies
+
+If you want to install all necessary dependencies for development:
+
+```
+in /workspaces/PermaplanT $ make install
+```
+
 ## Containers
 
 We are also supporting a containerized setup(docker/podman). For more information checkout the README inside [.devcontainer](https://github.com/ElektraInitiative/PermaplanT/blob/master/.devcontainer/README.md).
