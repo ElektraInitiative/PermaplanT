@@ -10,11 +10,16 @@ If problems persist, please create a new issue with the failing build log.
 For users with login credentials for Jenkins, you can manually execute the pipeline for a branch or pull request via the [Jenkins UI](https://build.libelektra.org/job/PermaplanT/).
 Please ask if you need login data.
 
-## Concurrent Builds
+## Succeeding Pushes
 
-Concurrent builds on the same branch are disabled.
-Only the newest commit will run.
-The master branch is excluded from this rule.
+If you push to branches:
+
+- Only the newest commit will be built.
+  It does not matter if commits in between would pass.
+- Builds of older pushes are aborted.
+- Also `jenkins build please` will abort previous builds and start the build again.
+- The latest PR build job will stay deployed on (https://pr.permaplant.net).
+- The [master branch](https://github.com/ElektraInitiative/PermaplanT/commits/master) is excluded from these rules.
 
 ## Stages
 
