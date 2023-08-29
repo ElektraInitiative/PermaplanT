@@ -115,7 +115,8 @@ This will include testing of all features, navigation, and error handling.
 
 - System test scenarios must be derived from functional requirements and use cases.
 - Manual system tests are documented in [`doc/tests/manual/protocol.md`](./manual/protocol.md).
-- Automated system tests (e2e tests) can be found in [`e2e/`](../../e2e/README.md).
+- Automated system tests (e2e tests) can be found in the top-level `e2e` folder.
+- Both are specified in Gherkin syntax.
 - Exploratory testing techniques must be utilized to uncover potential issues and edge cases.
 
 ### 4. Performance Testing
