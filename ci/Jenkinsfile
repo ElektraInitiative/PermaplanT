@@ -124,7 +124,7 @@ def testAndBuildMdbook() {
                 }
 
                 stage('build') {
-                    sh 'make doc-mdbook'
+                    sh 'mdbook build'
                     stash includes: 'book/', name: 'mdbook'
                 }
             }
