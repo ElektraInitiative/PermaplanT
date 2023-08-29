@@ -4,7 +4,7 @@ export const deleteSeed = async (id: number) => {
   const http = createAPI();
 
   try {
-    await http.delete(`/api/seeds/${id}`);
+    return await http.delete(`/api/seeds/${id}`);
   } catch (error) {
     throw error as Error;
   }
