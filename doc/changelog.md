@@ -26,7 +26,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Order seeds by use*by and harvest year *(Moritz)\_
 - _()_
 - _()_
 - Add toggleable plant labels _(Moritz)_
