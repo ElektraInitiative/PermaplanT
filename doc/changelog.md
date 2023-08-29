@@ -61,7 +61,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add Christoph Nemeth as Teammember _(tschawax)_
 - _()_
 - _()_
-- _()_
+- Seeds: translate quality and quantity columns _(Moritz)_
 - _()_
 - _()_
 - _()_
