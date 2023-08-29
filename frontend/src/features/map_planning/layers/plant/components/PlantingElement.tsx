@@ -1,5 +1,4 @@
 import { useFindPlantById } from '../hooks/useFindPlantById';
-import { ExtendedPlantsSummary } from './ExtendedPlantDisplay';
 import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -8,6 +7,7 @@ import {
   showTooltipWithContent,
   hideTooltip,
 } from '@/features/map_planning/utils/Tooltip';
+import { ExtendedPlantsSummary } from '@/utils/ExtendedPlantsSummary';
 import { Group, Circle, Rect } from 'react-konva';
 
 export type PlantingElementProps = {

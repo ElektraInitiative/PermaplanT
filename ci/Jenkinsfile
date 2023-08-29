@@ -1,3 +1,5 @@
+import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
+
 def node_info() {
     echo "Running stage on ${env.NODE_NAME}"
 }
@@ -86,10 +88,14 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
  * @param command The command to be executed inside the Docker container.
  * @param dockerImage The docker image name
  * @param dockerArgs The docker build args.
+ * @param skipInMaster If true, skips this stage in branch master.
  *
  * @return A closure representing the defined Jenkins pipeline steps.
  */
-def runDocker(String command, String dockerImage, String dockerBuildArgs) {
+def runDocker(String command, String dockerImage, String dockerBuildArgs, boolean skipInMaster = false) {
+    if (skipInMaster && env.BRANCH_NAME == 'master') {
+        return { echo "Set to be skipped in master." }
+    }
     return {
         node('docker') {
             node_info()
@@ -104,6 +110,7 @@ def runDocker(String command, String dockerImage, String dockerBuildArgs) {
 /**
  * Test, Build and stash Mdbook inside permaplants docker image.
  *
+
  * @return A closure representing the defined Jenkins pipeline steps.
  */
 def testAndBuildMdbook() {
@@ -220,7 +227,8 @@ timeout(time: 2, unit: 'HOURS') {
                 'changelog': runDocker(
                     './ci/scripts/check-changelog.sh',
                     'permaplant-node',
-                    '-f ./ci/container-images/permaplant-node/Dockerfile .'
+                    '-f ./ci/container-images/permaplant-node/Dockerfile .',
+                    true
                     ),
                 failFast: true
             )

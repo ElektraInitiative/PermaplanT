@@ -1,7 +1,7 @@
 import { PlantingDto } from '@/bindings/definitions';
-import { ExtendedPlantsSummary } from '@/features/map_planning/layers/plant/components/ExtendedPlantDisplay';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
 import { MapLabel } from '@/features/map_planning/utils/MapLabel';
+import { ExtendedPlantsSummary } from '@/utils/ExtendedPlantsSummary';
 import Konva from 'konva';
 import { useEffect, useRef, useState } from 'react';
 import { Label } from 'react-konva';
