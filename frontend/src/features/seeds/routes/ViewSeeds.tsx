@@ -5,7 +5,6 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
-import SimpleModal from '@/components/Modals/SimpleModal';
 import { createSeed } from '@/features/seeds/api/createSeed';
 import { deleteSeed } from '@/features/seeds/api/deleteSeed';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
@@ -93,18 +92,6 @@ export const ViewSeeds = () => {
     },
   });
 
-  type SeedModalStateType = {
-    /** Whether the modal should be shown. */
-    show: boolean;
-    /** Which seed will be deleted. */
-    seed: SeedDto | null;
-  };
-
-  const [deleteSeedModalState, setDeleteSeedModalState] = useState<SeedModalStateType>({
-    show: false,
-    seed: null,
-  });
-
   return (
     <Suspense>
       <PageLayout styleNames="flex flex-col space-y-4">
@@ -121,32 +108,10 @@ export const ViewSeeds = () => {
         </div>
         <SeedsOverviewList
           seeds={seeds}
-          handleDeleteSeed={(seed) => {
-            setDeleteSeedModalState({ show: true, seed: seed });
-          }}
+          handleDeleteSeed={(seed) => handleDeleteSeed(seed)}
           pageFetcher={pageFetcher}
         />
       </PageLayout>
-      {/* Confirm Delete modal */}
-      <SimpleModal
-        title={t('seeds:view_seeds.confirm_deletion_modal_title', {
-          seed: deleteSeedModalState.seed?.name,
-        })}
-        body={t('seeds:view_seeds.confirm_deletion_modal_body', {
-          seed: deleteSeedModalState.seed?.name,
-        })}
-        setShow={(show) => setDeleteSeedModalState((state) => ({ seed: state.seed, show: show }))}
-        show={deleteSeedModalState.show}
-        submitBtnTitle={t('common:yes')}
-        onSubmit={() => {
-          if (deleteSeedModalState.seed) handleDeleteSeed(deleteSeedModalState.seed);
-          setDeleteSeedModalState({ seed: null, show: false });
-        }}
-        cancelBtnTitle={t('common:no')}
-        onCancel={() => {
-          setDeleteSeedModalState({ seed: null, show: false });
-        }}
-      />
     </Suspense>
   );
 };
