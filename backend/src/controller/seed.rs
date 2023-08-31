@@ -14,6 +14,7 @@ use crate::{model::dto::NewSeedDto, service};
 
 /// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
 /// If no page parameters are provided, the first page is returned.
+/// Seeds are ordered using their use_by date in an ascending fashion.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
