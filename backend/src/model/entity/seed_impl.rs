@@ -13,13 +13,15 @@ use crate::db::pagination::Paginate;
 use crate::model::dto::{Page, PageParameters, SeedSearchParameters};
 use crate::{
     model::dto::{NewSeedDto, SeedDto},
-    schema::seeds::{self, all_columns, harvest_year, name, owner_id},
+    schema::seeds::{self, all_columns, harvest_year, name, owner_id, use_by},
 };
 
 use super::{NewSeed, Seed};
 
 impl Seed {
     /// Get a page of seeds.
+    /// Seeds are returned in ascending order of their `use_by` dates.
+    /// If that is not available, the harvest year is used instead.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -29,7 +31,10 @@ impl Seed {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<SeedDto>> {
-        let mut query = seeds::table.select(all_columns).into_boxed();
+        let mut query = seeds::table
+            .select(all_columns)
+            .order((use_by.asc(), harvest_year.asc()))
+            .into_boxed();
 
         if let Some(name_search) = search_parameters.name {
             query = query.filter(name.ilike(format!("%{name_search}%")));
