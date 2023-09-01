@@ -6,7 +6,7 @@ from e2e.pages.maps.planting import MapPlantingPage
 scenarios("features/planting_select.feature")
 
 
-# Scenario : Successfully selecting plants
+# Scenario: Successfully selecting plants
 
 # There is currently no real way to confirm
 # how many plants you have selected with the

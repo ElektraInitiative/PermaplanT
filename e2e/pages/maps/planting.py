@@ -130,6 +130,9 @@ class MapPlantingPage(AbstractPage):
         self._page.mouse.move(x + width / 4, y + height / 4)
         self._page.mouse.down()
         self._page.mouse.move(x + (width / 4) * 3, y + (height / 4) * 3)
+        # https://playwright.dev/docs/input#drag-and-drop:~:text=()%3B-,NOTE,-If%20your%20page
+        # I dont know why, but it works only with a second mouse.move()
+        self._page.mouse.move(x + (width / 4) * 3, y + (height / 4) * 3)
         self._page.mouse.up()
 
     def click_delete(self):
