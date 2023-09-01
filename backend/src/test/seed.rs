@@ -14,6 +14,7 @@ use actix_web::{
     },
     test,
 };
+use chrono::NaiveDate;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::uuid;
@@ -31,6 +32,7 @@ async fn test_find_two_seeds_succeeds() {
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
                         &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2023, 01, 01)),
                     ),
                     (
                         &crate::schema::seeds::id.eq(-2),
@@ -38,6 +40,7 @@ async fn test_find_two_seeds_succeeds() {
                         &crate::schema::seeds::harvest_year.eq(2023),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
                         &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2022, 01, 01)),
                     ),
                 ])
                 .execute(conn)
@@ -67,16 +70,19 @@ async fn test_find_two_seeds_succeeds() {
     let page: Page<SeedDto> = serde_json::from_str(result_string).unwrap();
     assert_eq!(page.results.len(), 2);
 
+    // Seeds should be ordered by use_by date in ascending order.
     let seed_dto1 = page.results.get(0).unwrap();
-    assert_eq!(seed_dto1.id, -1);
-    assert_eq!(seed_dto1.name, "Testia testia".to_owned());
-    assert_eq!(seed_dto1.harvest_year, 2022);
-    assert_eq!(seed_dto1.quantity, Quantity::Enough);
+    assert_eq!(seed_dto1.id, -2);
+    assert_eq!(seed_dto1.name, "Testia testium".to_owned());
+    assert_eq!(seed_dto1.harvest_year, 2023);
+    assert_eq!(seed_dto1.quantity, Quantity::NotEnough);
+    assert_eq!(seed_dto1.use_by, NaiveDate::from_ymd_opt(2022, 01, 01));
     let seed_dto2 = page.results.get(1).unwrap();
-    assert_eq!(seed_dto2.id, -2);
-    assert_eq!(seed_dto2.name, "Testia testium".to_owned());
-    assert_eq!(seed_dto2.harvest_year, 2023);
-    assert_eq!(seed_dto2.quantity, Quantity::NotEnough);
+    assert_eq!(seed_dto2.id, -1);
+    assert_eq!(seed_dto2.name, "Testia testia".to_owned());
+    assert_eq!(seed_dto2.harvest_year, 2022);
+    assert_eq!(seed_dto2.quantity, Quantity::Enough);
+    assert_eq!(seed_dto2.use_by, NaiveDate::from_ymd_opt(2023, 01, 01));
 }
 
 #[actix_rt::test]
