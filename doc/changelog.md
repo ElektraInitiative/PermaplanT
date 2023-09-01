@@ -59,7 +59,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add Christoph Nemeth as Teammember _(tschawax)_
-- _()_
+- Fix middle mouse button to only move the stage or select individual plants _(tschawax)_
 - _()_
 - _()_
 - _()_
