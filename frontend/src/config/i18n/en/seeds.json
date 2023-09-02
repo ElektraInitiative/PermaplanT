@@ -5,7 +5,11 @@
     "search_placeholder": "Search seeds...",
     "search_hint": "Currently, seed search only considers the additional name.",
     "fetching_error": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
-    "fetching_single_error": "Sorry, I could not load the seed from my server. It is possible it doesn't exist."
+    "fetching_single_error": "Sorry, I could not load the seed from my server. It is possible it doesn't exist.",
+    "restore_seed_message": "Deleted {{seed}}",
+    "restore_seed_button": "Restore",
+    "restore_seed_success": "Restored seed {{seed}} successfully!",
+    "restore_seed_failure": "Could not restore seed."
   },
   "create_seed": {
     "title": "Seed Entry",
@@ -27,10 +31,12 @@
     "error_create_seed": "Sorry, I'm experiencing trouble storing the seed on my server. Please try again later.",
     "error_delete_seed": "Sorry, I'm experiencing trouble deleting the seed from the server. Please try again later.",
     "error_fetching_seeds": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
-    "error_fetching_plants": "Sorry, I'm experiencing trouble fetching plants from my server. Please try again later."
+    "error_fetching_plants": "Sorry, I'm experiencing trouble fetching plants from my server. Please try again later.",
+    "success": "Seed created successfully!"
   },
   "edit_seed_form": {
-    "btn_edit_seed": "Edit seed"
+    "btn_edit_seed": "Edit seed",
+    "success": "Seed modified successfully!"
   },
   "harvest_year": "Harvest Year",
   "additional_name": "Additional Name",

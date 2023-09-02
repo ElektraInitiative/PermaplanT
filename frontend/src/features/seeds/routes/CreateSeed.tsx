@@ -6,7 +6,7 @@ import SimpleModal from '@/components/Modals/SimpleModal';
 import { createSeed } from '@/features/seeds/api/createSeed';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
 import { useMutation } from '@tanstack/react-query';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -26,6 +26,13 @@ export function CreateSeed() {
     onError: () => {
       toast(t('seeds:create_seed_form.error_create_seed'));
     },
+    onSuccess: async () => {
+      // Wait for the seed upload to be completed before navigating.
+      // This ensures that all seeds are present on the overview page once the user sees it.
+      await isUploadingSuccess;
+      navigate('/seeds');
+      toast.success(t('seeds:create_seed_form.success'));
+    },
   });
 
   const onCancel = () => {
@@ -44,12 +51,6 @@ export function CreateSeed() {
   const onSubmit = async (newSeed: NewSeedDto) => {
     submitSeed(newSeed);
   };
-
-  // Wait for the seed upload to be completed before navigating.
-  // This ensures that all seeds are present on the overview page once the user sees it.
-  useEffect(() => {
-    if (isUploadingSuccess) navigate('/seeds');
-  }, [isUploadingSuccess, navigate]);
 
   const onChange = () => {
     setFormTouched(true);

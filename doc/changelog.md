@@ -8,8 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.3.3 - UNRELEASED
 
-- _()_
-- _()_
+- Enable undo for seed deletion _(Moritz)_
 - _()_
 - Expand seed overview with additional table fields _(Moritz)_
 - Updated UC for guided tour and gaining blossoms _(Thorben)_
@@ -26,7 +25,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Order seeds by use by and harvest year _(Moritz)_
 - _()_
 - _()_
 - Add toggleable plant labels _(Moritz)_
@@ -45,7 +44,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Added Meeting Agenda for 28.8. 9:00 _(Markus Raab)_
 - _()_
 - _()_
 - update `doc/database/hierarchy.md` to clarify how we render plant names _(temmey)_
@@ -67,7 +66,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- CI: Add changelog test to CI #857 _(4ydan)_
+- CI: Add changelog test to CI, only in PR stages #857 _(4ydan)_
 - E2E: Worker uuids fixture #837 _(4ydan)_
 - GIT: Add data analysis jupyter notebook #843 _(4ydan)_
 - MDB: Fold all chapters #818 _(4ydan)_
@@ -180,6 +179,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Use the correct layer ID for create and fetch actions (for plantings) in the map editor, enabling the possibility for multiple independent maps _(Paul and Thorben)_
 - Location picker map in map creation form only loads after actively pressing a button _(Thorben)_
 - Maps can be duplicated from the map overview (in PR #515) _(Thorben)_
+- Login use case done. _(Gabriel and Samuel)_
+- Layers visibility use case done. _(Samuel)_
 
 ## 0.1.0 - 19.04.2023
 

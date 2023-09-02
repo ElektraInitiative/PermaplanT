@@ -5,7 +5,11 @@
     "search_placeholder": "Suche Samen...",
     "search_hint": "Derzeit wird nur die Samenbezeichnung bei der Suche berücksichtigt.",
     "fetching_error": "Sorry, ich habe Schwierigkeiten Samen von meinem Server zu erhalten. Bitte versuche es später erneut.",
-    "fetching_single_error": "Sorry, ich konnte den Samen nicht von meinem Server laden. Möglicherweise existiert er nicht."
+    "fetching_single_error": "Sorry, ich konnte den Samen nicht von meinem Server laden. Möglicherweise existiert er nicht.",
+    "restore_seed_message": "{{seed}} wurde gelöscht",
+    "restore_seed_button": "Wiederherstellen",
+    "restore_seed_success": "Samen {{seed}} erfolgreich wiederhergestellt!",
+    "restore_seed_failure": "Samen konnte nicht wiederhergestellt werden."
   },
   "delete_seed": {
     "btn_delete_seed": "Samen löschen"
@@ -27,10 +31,12 @@
     "error_create_seed": "Sorry, ich habe Schwierigkeiten den Samen auf meinem Server abzulegen. Bitte versuche es später erneut.",
     "error_delete_seed": "Sorry, ich habe Schwierigkeiten den Samen vom Server zu löschen. Bitte versuche es später erneut.",
     "error_fetching_seeds": "Sorry, ich habe Schwierigkeiten Samen von meinem Server zu erhalten. Bitte versuche es später erneut.",
-    "error_fetching_plants": "Sorry, ich habe Schwierigkeiten Pflanzen von meinem Server zu erhalten. Bitte versuche es später erneut."
+    "error_fetching_plants": "Sorry, ich habe Schwierigkeiten Pflanzen von meinem Server zu erhalten. Bitte versuche es später erneut.",
+    "success": "Samen erfolgreich erstellt!"
   },
   "edit_seed_form": {
-    "btn_edit_seed": "Samen editieren"
+    "btn_edit_seed": "Samen editieren",
+    "success": "Samen erfolgreich editiert!"
   },
   "harvest_year": "Bezugsjahr",
   "additional_name": "Zusätzlicher Name",
