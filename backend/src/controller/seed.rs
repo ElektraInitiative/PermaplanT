@@ -2,7 +2,7 @@
 
 use actix_web::web::Query;
 use actix_web::{
-    delete, get, post, put,
+    delete, get, patch, post, put,
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
@@ -10,7 +10,7 @@ use actix_web::{
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
 use crate::model::dto::{PageParameters, SeedSearchParameters};
-use crate::{model::dto::NewSeedDto, service};
+use crate::{model::dto::ArchiveSeedDto, model::dto::NewSeedDto, service};
 
 /// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
 /// If no page parameters are provided, the first page is returned.
@@ -130,5 +130,21 @@ pub async fn edit_by_id(
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     let response = service::seed::edit(*id, user_info.id, edit_seed_json.0, &app_data).await?;
+    Ok(HttpResponse::Accepted().json(response))
+}
+
+/// Endpoint archiving/unarchiving a [`Seed`](crate::model::entity::Seed).
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+#[patch("/{id}/archive")]
+pub async fn archive(
+    id: Path<i32>,
+    archive_seed_json: Json<ArchiveSeedDto>,
+    user_info: UserInfo,
+    app_data: Data<AppDataInner>,
+) -> Result<HttpResponse> {
+    let response =
+        service::seed::archive(*id, user_info.id, archive_seed_json.0, &app_data).await?;
     Ok(HttpResponse::Accepted().json(response))
 }

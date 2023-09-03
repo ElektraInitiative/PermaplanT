@@ -16,6 +16,8 @@ use crate::{
     schema::seeds::{self, all_columns, harvest_year, name, owner_id, use_by},
 };
 
+use chrono::NaiveDateTime;
+
 use super::{NewSeed, Seed};
 
 impl Seed {
@@ -133,5 +135,24 @@ impl Seed {
         let query = diesel::delete(source);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.execute(conn).await
+    }
+
+    /// Archive or unarchive a seed in the database.
+    ///
+    /// # Errors
+    /// If the connection to the database could not be established.
+    pub async fn archive(
+        id: i32,
+        archived_at: Option<NaiveDateTime>,
+        user_id: Uuid,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<SeedDto> {
+        let source = seeds::table.filter(owner_id.eq(user_id).and(seeds::id.eq(id)));
+
+        let query_result = diesel::update(source)
+            .set((seeds::archived_at.eq(archived_at),))
+            .get_result::<Self>(conn)
+            .await;
+        query_result.map(Into::into)
     }
 }

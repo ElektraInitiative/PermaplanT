@@ -1,7 +1,7 @@
 //! DTOs of `PermaplanT`.
 #![allow(clippy::module_name_repetitions)] // There needs to be a difference between DTOs and entities otherwise imports will be messy.
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, NaiveDateTime};
 use postgis_diesel::types::{Point, Polygon};
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
@@ -11,9 +11,9 @@ use uuid::Uuid;
 use self::plantings::PlantingDto;
 
 use super::r#enum::{
-    experience::Experience, layer_type::LayerType, membership::Membership,
-    plant_spread::PlantSpread, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
-    relation_type::RelationType, salutation::Salutation,
+    experience::Experience, include_archived_seeds::IncludeArchivedSeeds, layer_type::LayerType,
+    membership::Membership, plant_spread::PlantSpread, privacy_option::PrivacyOption,
+    quality::Quality, quantity::Quantity, relation_type::RelationType, salutation::Salutation,
 };
 
 pub mod actions;
@@ -80,6 +80,9 @@ pub struct SeedDto {
     pub notes: Option<String>,
     /// The id of the owner of the seed.
     pub owner_id: Uuid,
+    /// Timestamp indicating when the seed was archived.
+    /// Empty if the seed was not archived.
+    pub archived_at: Option<NaiveDateTime>,
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
@@ -99,6 +102,14 @@ pub struct NewSeedDto {
     pub quality: Option<Quality>,
     pub price: Option<i16>,
     pub notes: Option<String>,
+}
+
+#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct ArchiveSeedDto {
+    /// Whether the seed should be archived.
+    pub archived: bool,
 }
 
 /// The essential identifying information of a plant.
@@ -160,6 +171,9 @@ pub struct SeedSearchParameters {
     pub name: Option<String>,
     /// The exact harvest year of the seed.
     pub harvest_year: Option<i16>,
+    /// Whether archived, not archived or both kinds of seeds should be included.
+    /// If no value is provided, a default value of NotArchived is assumed.
+    pub archived: Option<IncludeArchivedSeeds>,
 }
 
 /// Query parameters paginating list endpoints.

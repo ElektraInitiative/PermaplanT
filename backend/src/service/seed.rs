@@ -3,13 +3,15 @@
 use actix_web::web::Data;
 use uuid::Uuid;
 
+use chrono::Utc;
+
 use crate::config::data::AppDataInner;
 use crate::model::dto::PageParameters;
 use crate::model::dto::{Page, SeedSearchParameters};
 use crate::{
     error::ServiceError,
     model::{
-        dto::{NewSeedDto, SeedDto},
+        dto::{ArchiveSeedDto, NewSeedDto, SeedDto},
         entity::Seed,
     },
 };
@@ -86,4 +88,26 @@ pub async fn delete_by_id(
     let mut conn = app_data.pool.get().await?;
     let _ = Seed::delete_by_id(id, user_id, &mut conn).await?;
     Ok(())
+}
+
+/// Archive or unarchive a seed in the database.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub async fn archive(
+    id: i32,
+    user_id: Uuid,
+    archive_seed: ArchiveSeedDto,
+    app_data: &Data<AppDataInner>,
+) -> Result<SeedDto, ServiceError> {
+    let mut conn = app_data.pool.get().await?;
+
+    // TODO: don't overwrite old date
+    let current_naive_date_time = match archive_seed.archived {
+        true => Some(Utc::now().naive_utc()),
+        false => None,
+    };
+
+    let result = Seed::archive(id, current_naive_date_time, user_id, &mut conn).await?;
+    Ok(result)
 }
