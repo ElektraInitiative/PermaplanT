@@ -13,9 +13,10 @@ use crate::db::pagination::Paginate;
 use crate::model::dto::{Page, PageParameters, SeedSearchParameters};
 use crate::{
     model::dto::{NewSeedDto, SeedDto},
-    schema::seeds::{self, all_columns, harvest_year, name, owner_id, use_by},
+    schema::seeds::{self, all_columns, archived_at, harvest_year, name, owner_id, use_by},
 };
 
+use crate::model::r#enum::include_archived_seeds::IncludeArchivedSeeds;
 use chrono::NaiveDateTime;
 
 use super::{NewSeed, Seed};
@@ -24,6 +25,9 @@ impl Seed {
     /// Get a page of seeds.
     /// Seeds are returned in ascending order of their `use_by` dates.
     /// If that is not available, the harvest year is used instead.
+    ///
+    /// By default, archived seeds will not be returned.
+    /// This behaviour can be changed using search_parameters.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -38,11 +42,23 @@ impl Seed {
             .order((use_by.asc(), harvest_year.asc()))
             .into_boxed();
 
+        let mut include_archived = IncludeArchivedSeeds::NotArchived;
+
         if let Some(name_search) = search_parameters.name {
             query = query.filter(name.ilike(format!("%{name_search}%")));
         }
         if let Some(harvest_year_search) = search_parameters.harvest_year {
             query = query.filter(harvest_year.eq(harvest_year_search));
+        }
+        if let Some(include_archived_) = search_parameters.archived {
+            include_archived = include_archived_;
+        }
+
+        // Don't filter the query if IncludeArchivedSeeds::Both is selected.
+        if include_archived == IncludeArchivedSeeds::Archived {
+            query = query.filter(archived_at.ne(None::<NaiveDateTime>));
+        } else if include_archived == IncludeArchivedSeeds::NotArchived {
+            query = query.filter(archived_at.ne(None::<NaiveDateTime>));
         }
 
         // Only return seeds that belong to the user.
@@ -143,14 +159,14 @@ impl Seed {
     /// If the connection to the database could not be established.
     pub async fn archive(
         id: i32,
-        archived_at: Option<NaiveDateTime>,
+        archived_at_: Option<NaiveDateTime>,
         user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<SeedDto> {
         let source = seeds::table.filter(owner_id.eq(user_id).and(seeds::id.eq(id)));
 
         let query_result = diesel::update(source)
-            .set((seeds::archived_at.eq(archived_at),))
+            .set((seeds::archived_at.eq(archived_at_),))
             .get_result::<Self>(conn)
             .await;
         query_result.map(Into::into)

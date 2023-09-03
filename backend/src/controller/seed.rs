@@ -16,6 +16,9 @@ use crate::{model::dto::ArchiveSeedDto, model::dto::NewSeedDto, service};
 /// If no page parameters are provided, the first page is returned.
 /// Seeds are ordered using their use_by date in an ascending fashion.
 ///
+/// By default, archived seeds will not be returned.
+/// This behaviour can be changed using search_parameters.
+///
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
