@@ -1,5 +1,6 @@
 //! Tests for [`crate::controller::seed`].
 
+use crate::model::dto::ArchiveSeedDto;
 use crate::{
     model::{
         dto::{NewSeedDto, Page, SeedDto},
@@ -415,4 +416,80 @@ async fn test_delete_by_non_existing_id_succeeds() {
         .await;
 
     assert_eq!(resp.status(), StatusCode::OK);
+}
+
+#[actix_rt::test]
+async fn test_archive_seed_succeeds() {
+    let user_id = uuid!("00000000-0000-0000-0000-000000000000");
+    let pool = init_test_database(|conn| {
+        async {
+            diesel::insert_into(crate::schema::seeds::table)
+                .values(vec![
+                    (
+                        &crate::schema::seeds::id.eq(-1),
+                        &crate::schema::seeds::name.eq("Testia testia"),
+                        &crate::schema::seeds::harvest_year.eq(2022),
+                        &crate::schema::seeds::quantity.eq(Quantity::Enough),
+                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2023, 01, 01)),
+                    ),
+                    (
+                        &crate::schema::seeds::id.eq(-2),
+                        &crate::schema::seeds::name.eq("Testia testium"),
+                        &crate::schema::seeds::harvest_year.eq(2023),
+                        &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
+                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2022, 01, 01)),
+                    ),
+                ])
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app_for_user(pool, user_id).await;
+
+    // Archive seed number 1
+    let archive_seed = ArchiveSeedDto { archived: true };
+    let _ = test::TestRequest::patch()
+        .uri("/api/seeds/-1/archive")
+        .set_json(archive_seed)
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .send_request(&app)
+        .await;
+
+    let resp = test::TestRequest::get()
+        .uri("/api/seeds")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .send_request(&app)
+        .await;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(CONTENT_TYPE).unwrap(),
+        "application/json"
+    );
+
+    let result = test::read_body(resp).await;
+    let result_string = std::str::from_utf8(&result).unwrap();
+
+    let page: Page<SeedDto> = serde_json::from_str(result_string).unwrap();
+    assert_eq!(page.results.len(), 2);
+
+    // Seeds should be ordered by use_by date in ascending order.
+    let seed_dto1 = page.results.get(0).unwrap();
+    assert_eq!(seed_dto1.id, -2);
+    assert_eq!(seed_dto1.name, "Testia testium".to_owned());
+    assert_eq!(seed_dto1.harvest_year, 2023);
+    assert_eq!(seed_dto1.quantity, Quantity::NotEnough);
+    assert_ne!(seed_dto1.archived_at, None);
+    assert_eq!(seed_dto1.use_by, NaiveDate::from_ymd_opt(2022, 01, 01));
+    let seed_dto2 = page.results.get(1).unwrap();
+    assert_eq!(seed_dto2.id, -1);
+    assert_eq!(seed_dto2.name, "Testia testia".to_owned());
+    assert_eq!(seed_dto2.harvest_year, 2022);
+    assert_eq!(seed_dto2.quantity, Quantity::Enough);
+    assert_eq!(seed_dto2.use_by, NaiveDate::from_ymd_opt(2023, 01, 01));
 }
