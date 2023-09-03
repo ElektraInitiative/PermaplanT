@@ -56,9 +56,9 @@ impl Seed {
 
         // Don't filter the query if IncludeArchivedSeeds::Both is selected.
         if include_archived == IncludeArchivedSeeds::Archived {
-            query = query.filter(archived_at.ne(None::<NaiveDateTime>));
+            query = query.filter(archived_at.is_not_null());
         } else if include_archived == IncludeArchivedSeeds::NotArchived {
-            query = query.filter(archived_at.ne(None::<NaiveDateTime>));
+            query = query.filter(archived_at.is_null());
         }
 
         // Only return seeds that belong to the user.

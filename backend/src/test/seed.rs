@@ -454,7 +454,7 @@ async fn test_archive_seed_succeeds() {
     // Archive seed number 1
     let archive_seed = ArchiveSeedDto { archived: true };
     let _ = test::TestRequest::patch()
-        .uri("/api/seeds/-1/archive")
+        .uri("/api/seeds/-1/archive?archived=both")
         .set_json(archive_seed)
         .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
