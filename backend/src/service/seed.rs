@@ -105,12 +105,17 @@ pub async fn archive(
 ) -> Result<SeedDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
 
-    // TODO: don't overwrite old date
     let current_naive_date_time = if archive_seed.archived {
         Some(Utc::now().naive_utc())
     } else {
         None
     };
+
+    // Don't archive a seed twice
+    let current_seed = find_by_id(id, user_id, app_data).await?;
+    if archive_seed.archived && current_seed.archived_at != None {
+        return Ok(current_seed);
+    }
 
     let result = Seed::archive(id, current_naive_date_time, user_id, &mut conn).await?;
     Ok(result)
