@@ -27,7 +27,7 @@ impl Seed {
     /// If that is not available, the harvest year is used instead.
     ///
     /// By default, archived seeds will not be returned.
-    /// This behaviour can be changed using search_parameters.
+    /// This behaviour can be changed using `search_parameters`.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.

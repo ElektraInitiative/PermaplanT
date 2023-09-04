@@ -21,7 +21,7 @@ use crate::{
 /// If that is not available, the harvest year is used instead.
 ///
 /// By default, archived seeds will not be returned.
-/// This behaviour can be changed using search_parameters.
+/// This behaviour can be changed using `search_parameters`.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
