@@ -15,7 +15,7 @@ import { useDimensions } from '@/hooks/useDimensions';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
-import { Layer, Stage, Transformer } from 'react-konva';
+import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -231,6 +231,16 @@ export const BaseStage = ({
             scaleY={2 / stage.scale}
             x={tooltipPosition.x}
             y={tooltipPosition.y}
+          />
+          <Rect
+            x={selectionRectAttrs.x}
+            y={selectionRectAttrs.y}
+            width={selectionRectAttrs.width}
+            height={selectionRectAttrs.height}
+            fill={'blue'}
+            visible={selectionRectAttrs.isVisible}
+            opacity={0.2}
+            name="selectionRect"
           />
           <Transformer
             listening={!isReadOnly}
