@@ -106,9 +106,10 @@ pub async fn archive(
     let mut conn = app_data.pool.get().await?;
 
     // TODO: don't overwrite old date
-    let current_naive_date_time = match archive_seed.archived {
-        true => Some(Utc::now().naive_utc()),
-        false => None,
+    let current_naive_date_time = if archive_seed.archived {
+        Some(Utc::now().naive_utc())
+    } else {
+        None
     };
 
     let result = Seed::archive(id, current_naive_date_time, user_id, &mut conn).await?;

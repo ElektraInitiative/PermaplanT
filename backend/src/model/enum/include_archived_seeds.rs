@@ -5,7 +5,7 @@ use typeshare::typeshare;
 
 /// Indicates whether archived seeds should be returned in a seed query.
 #[typeshare]
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub enum IncludeArchivedSeeds {
     #[serde(rename = "not_archvied")]
     /// Return only seeds that have not been archived.
