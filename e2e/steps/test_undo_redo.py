@@ -34,4 +34,5 @@ def click_redo(mpp: MapPlantingPage):
 
 @then("I can see my plant on the canvas again")
 def plant_is_back(mpp: MapPlantingPage):
+    mpp.click_on_canvas_middle()
     mpp.expect_plant_on_canvas("Tomato (Solanum lycopersicum)")
