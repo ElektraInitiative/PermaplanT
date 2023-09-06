@@ -1,7 +1,7 @@
 //! DTOs of `PermaplanT`.
 #![allow(clippy::module_name_repetitions)] // There needs to be a difference between DTOs and entities otherwise imports will be messy.
 
-use chrono::{NaiveDate, NaiveDateTime};
+use chrono::NaiveDate;
 use postgis_diesel::types::{Point, Polygon};
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
@@ -82,7 +82,7 @@ pub struct SeedDto {
     pub owner_id: Uuid,
     /// Timestamp indicating when the seed was archived.
     /// Empty if the seed was not archived.
-    pub archived_at: Option<NaiveDateTime>,
+    pub archived_at: Option<String>,
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.

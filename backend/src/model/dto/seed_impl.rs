@@ -22,7 +22,7 @@ impl From<Seed> for SeedDto {
             price: seed.price,
             notes: seed.notes,
             owner_id: seed.owner_id,
-            archived_at: seed.archived_at,
+            archived_at: seed.archived_at.map(|date| format!("{date}")),
         }
     }
 }
