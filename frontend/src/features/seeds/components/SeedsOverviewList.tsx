@@ -12,11 +12,11 @@ import { useNavigate } from 'react-router-dom';
 
 interface SeedsOverviewListProps {
   seeds: SeedDto[];
-  handleDeleteSeed: (seed: SeedDto) => void;
+  handleArchiveSeed: (seed: SeedDto) => void;
   pageFetcher: { isLoading: boolean; isFetching: boolean; fetcher: () => Promise<unknown> };
 }
 
-const SeedsOverviewList = ({ seeds, handleDeleteSeed, pageFetcher }: SeedsOverviewListProps) => {
+const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverviewListProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['seeds', 'common']);
 
@@ -105,7 +105,7 @@ const SeedsOverviewList = ({ seeds, handleDeleteSeed, pageFetcher }: SeedsOvervi
                     <IconButton
                       variant={ButtonVariant.primary}
                       onClick={() => {
-                        handleDeleteSeed(seed);
+                        handleArchiveSeed(seed);
                       }}
                     >
                       <TrashIcon />

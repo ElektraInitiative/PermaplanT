@@ -1,12 +1,11 @@
 import { findAllSeeds } from '../api/findAllSeeds';
 import SeedsOverviewList from '../components/SeedsOverviewList';
-import { NewSeedDto, Page, SeedDto } from '@/bindings/definitions';
+import { Page, SeedDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
-import { createSeed } from '@/features/seeds/api/createSeed';
-import { deleteSeed } from '@/features/seeds/api/deleteSeed';
+import { archiveSeed } from '@/features/seeds/api/archiveSeed';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
@@ -56,7 +55,16 @@ export const ViewSeeds = () => {
     setSeedNameFilter(searchValue);
   };
 
-  const { mutate: handleRestoreSeed } = useMutation(['restore seed'], createSeed, {
+  // Simple wrapper functions that allows us to submit a seed dto in place of just a seed id.
+  const restoreSeedUsingSeedDto = async (seed: SeedDto) => {
+    return await archiveSeed(Number(seed.id), { archived: false });
+  };
+
+  const archiveSeedUsingSeedDto = async (seed: SeedDto) => {
+    return await archiveSeed(Number(seed.id), { archived: true });
+  };
+
+  const { mutate: handleRestoreSeed } = useMutation(['restore seed'], restoreSeedUsingSeedDto, {
     onError: () => {
       toast.error(t('seeds:view_seeds.restore_seed_failure'));
     },
@@ -67,24 +75,19 @@ export const ViewSeeds = () => {
     },
   });
 
-  // Simple wrapper function that allows us to submit a seed dto in place of just a seed id.
-  const deleteSeedUsingSeedDto = async (seed: SeedDto) => {
-    return await deleteSeed(Number(seed.id));
-  };
-
-  const { mutate: handleDeleteSeed } = useMutation(['delete seed'], deleteSeedUsingSeedDto, {
+  const { mutate: handleArchiveSeed } = useMutation(['archive seed'], archiveSeedUsingSeedDto, {
     onError: () => {
       toast.error(t('seeds:create_seed_form.error_delete_seed'));
     },
     onSuccess: async (data, variables) => {
-      // deleteSeedUsingSeedDto takes SeedDto as its argument
+      // archiveSeedUsingSeedDto takes SeedDto as its argument
       const seed = variables as unknown as SeedDto;
 
       await refetch();
       toast.success(
         <div>
           {t('seeds:view_seeds.restore_seed_message', { seed: seed.name })}
-          <SimpleButton onClick={() => handleRestoreSeed(seed as NewSeedDto)}>
+          <SimpleButton onClick={() => handleRestoreSeed(seed as SeedDto)}>
             {t('seeds:view_seeds.restore_seed_button')}
           </SimpleButton>
         </div>,
@@ -108,7 +111,7 @@ export const ViewSeeds = () => {
         </div>
         <SeedsOverviewList
           seeds={seeds}
-          handleDeleteSeed={(seed) => handleDeleteSeed(seed)}
+          handleArchiveSeed={(seed) => handleArchiveSeed(seed)}
           pageFetcher={pageFetcher}
         />
       </PageLayout>
