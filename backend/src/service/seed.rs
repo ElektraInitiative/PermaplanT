@@ -103,12 +103,14 @@ pub async fn archive(
     archive_seed: ArchiveSeedDto,
     app_data: &Data<AppDataInner>,
 ) -> Result<SeedDto, ServiceError> {
+    // Retrieve the seed before getting the db connection to avoid deadlocks when
+    // fetching two database connections at the same time.
+    let current_seed = find_by_id(id, user_id, app_data).await?;
     let mut conn = app_data.pool.get().await?;
 
     let current_naive_date_time = archive_seed.archived.then(|| Utc::now().naive_utc());
 
     // Don't archive a seed twice
-    let current_seed = find_by_id(id, user_id, app_data).await?;
     if archive_seed.archived && current_seed.archived_at.is_some() {
         return Ok(current_seed);
     }
