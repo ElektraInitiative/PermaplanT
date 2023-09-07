@@ -9,7 +9,9 @@
     "restore_seed_message": "{{seed}} wurde archiviert",
     "restore_seed_button": "Wiederherstellen",
     "restore_seed_success": "Samen {{seed}} erfolgreich wiederhergestellt!",
-    "restore_seed_failure": "Samen konnte nicht wiederhergestellt werden."
+    "restore_seed_failure": "Samen konnte nicht wiederhergestellt werden.",
+    "archive_seed_tooltip": "Samen archivieren",
+    "edit_seed_tooltip": "Samen bearbeiten"
   },
   "delete_seed": {
     "btn_delete_seed": "Samen löschen"

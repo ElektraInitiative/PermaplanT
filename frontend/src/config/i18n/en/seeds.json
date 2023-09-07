@@ -9,7 +9,9 @@
     "restore_seed_message": "Archived {{seed}}",
     "restore_seed_button": "Restore",
     "restore_seed_success": "Restored seed {{seed}} successfully!",
-    "restore_seed_failure": "Could not restore seed."
+    "restore_seed_failure": "Could not restore seed.",
+    "archive_seed_tooltip": "Archive seed",
+    "edit_seed_tooltip": "Edit seed"
   },
   "create_seed": {
     "title": "Seed Entry",
