@@ -1,26 +1,24 @@
-# Use Case: Entry and List of Seeds
-
-## Summary
+@@ -5,7 +5,7 @@
 
 - **Scope:** Seed Management
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The users manage their seeds by adding, editing, and deleting them in the app.
+  - **Brief:** The users manage their seeds by adding, editing, and deleting them in the app.
+  - **Brief:** The users manage their seeds by adding, editing, and archiving them.
 - **Assignee:** Moritz
 
 ## Scenarios
 
-- **Precondition:**
-  The user has opened the seed management feature in the app.
+The user has opened the seed management feature in the app.
+
 - **Main success scenario:**
   - The user is able to add new seeds to their list.
-  - The user is able to view a list of seeds where plant name, additional name, harvest year, amount, and origin is visible.
-  - The user is able to edit or delete seeds of the list.
+  - The user is able to view a list of seeds where the complete name, amount, quality, harvest year, and origin is visible.
+  - The user is able to edit or archive seeds of the list.
 - **Alternative scenario:**
-  The user accidentally deletes a seed from their list and uses the undo feature to correct it.
+  The user accidentally archives a seed from their list and uses the undo feature to correct it.
 - **Error scenario:**
-  There is an error when the user attempts to add a seed to their list, such as an invalid expiration date or a seed with the same name already existing.
-  In this case, the app validates while the user is typing and shows a validation error.
+  There is an error when the user attempts to add or edit a seed entry with invalid data such as an invalid price.
+  In this case, the app validates when saving the seed and shows a validation error.
 - **Postcondition:**
-  The user's seed list is updated with the added, deleted, or restored seeds.
-- **Non-functional Constraints:**
+  The user's seed list corresponds exactly with the physical seeds in the user's seed box in reality.
