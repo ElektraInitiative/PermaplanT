@@ -45,6 +45,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Added Meeting Agenda for 28.8. 9:00 _(Markus Raab)_
+- Added Meeting Agenda for 4.9. 9:00 _(Markus Raab)_
 - _()_
 - _()_
 - update `doc/database/hierarchy.md` to clarify how we render plant names _(temmey)_
@@ -58,10 +59,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add Christoph Nemeth as Teammember _(tschawax)_
+- Fix middle mouse button to only move the stage or select individual plants _(tschawax)_
 - _()_
 - _()_
-- _()_
-- _()_
+- Fix drag select not working and add appropriate e2e regression tests #852 _(4ydan & Moritz)_
 - _()_
 - _()_
 - _()_
