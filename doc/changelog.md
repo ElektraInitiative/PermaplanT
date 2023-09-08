@@ -23,7 +23,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Finish documentation of custom UI elements _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Fix seeds being set to Indian Abelia after edit _(Moritz)_
 - _()_
 - Order seeds by use by and harvest year _(Moritz)_
 - _()_
