@@ -73,7 +73,7 @@ const CreateSeedForm = ({
         setValue('taste', existingSeed?.taste);
         setValue('yield_', existingSeed?.yield_);
         setValue('use_by', existingSeed?.use_by);
-        setValue('price', existingSeed?.price);
+        setValue('price', existingSeed.price === undefined ? undefined : existingSeed.price / 100);
         setValue('quality', existingSeed?.quality);
         setValue('quantity', existingSeed?.quantity);
         setValue('notes', existingSeed?.notes);
@@ -101,7 +101,10 @@ const CreateSeedForm = ({
       data.use_by = new Date(String(data.use_by)).toISOString().split('T')[0];
     }
 
-    onSubmit(data);
+    onSubmit({
+      ...data,
+      price: data.price === undefined ? undefined : data.price * 100,
+    });
   };
 
   /** calls searchPlants and creates options for the select input */
@@ -258,6 +261,10 @@ const CreateSeedForm = ({
               valueAsNumber={true}
               errorTitle={t('seeds:create_seed_form.error_price_must_be_number')}
               onChange={onChange}
+              min={0}
+              max={327.0 /* The backend won't accept any number higher than this. */}
+              type="number"
+              step="0.01"
             />
             <SimpleFormInput
               type="number"
