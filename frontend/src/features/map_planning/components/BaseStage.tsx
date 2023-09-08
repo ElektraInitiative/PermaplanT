@@ -11,6 +11,7 @@ import {
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
+import { isPlacementModeActive } from '../utils/planting-utils';
 import { useDimensions } from '@/hooks/useDimensions';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
@@ -172,6 +173,8 @@ export const BaseStage = ({
       return;
     }
 
+    if (isPlacementModeActive()) return;
+
     if (selectable) {
       startSelection(stage, setSelectionRectAttrs);
     }
@@ -275,27 +278,27 @@ export const BaseStage = ({
   );
 };
 
-function renderGrabbingMouseCursor() {
+function renderGrabbingMouseCursor(): void {
   document.body.style.cursor = 'grabbing';
 }
 
-function renderDefaultMouseCursor() {
+function renderDefaultMouseCursor(): void {
   document.body.style.cursor = 'default';
 }
 
-function getStageByEventTarget(konvaEvent: KonvaEventObject<MouseEvent>) {
+function getStageByEventTarget(konvaEvent: KonvaEventObject<MouseEvent>): Konva.Stage | null {
   return konvaEvent.target.getStage();
 }
 
-function isUsingMiddleMouseButton(konvaEvent: KonvaEventObject<MouseEvent>) {
+function isUsingMiddleMouseButton(konvaEvent: KonvaEventObject<MouseEvent>): boolean {
   return konvaEvent.evt?.buttons === 4;
 }
 
-function isEventTriggeredFromStage(konvaEvent: KonvaEventObject<MouseEvent>) {
+function isEventTriggeredFromStage(konvaEvent: KonvaEventObject<MouseEvent>): boolean {
   return konvaEvent.target instanceof Konva.Stage;
 }
 
-function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>) {
+function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>): void {
   const stage = getStageByEventTarget(konvaEvent);
   if (!stage) return;
 
@@ -304,7 +307,7 @@ function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>) {
   }
 }
 
-function initiateStageDragging(konvaEvent: KonvaEventObject<MouseEvent>, stage: Konva.Stage) {
+function initiateStageDragging(konvaEvent: KonvaEventObject<MouseEvent>, stage: Konva.Stage): void {
   if (!isEventTriggeredFromStage(konvaEvent)) {
     // this adds immediate (i.e. without delay) dragging prevention of any non-stage node
     konvaEvent.target.stopDrag();
@@ -313,7 +316,7 @@ function initiateStageDragging(konvaEvent: KonvaEventObject<MouseEvent>, stage: 
   stage.startDrag();
 }
 
-function stopStageDraggingMode(konvaEvent: KonvaEventObject<MouseEvent>) {
+function stopStageDraggingMode(konvaEvent: KonvaEventObject<MouseEvent>): void {
   const stage = getStageByEventTarget(konvaEvent);
   if (!stage) return;
 
