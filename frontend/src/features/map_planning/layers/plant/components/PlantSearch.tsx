@@ -2,12 +2,14 @@ import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import { usePlantSearch } from '../hooks/usePlantSearch';
 import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
 import { PlantListItem } from './PlantListItem';
+import { PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput from '@/components/Form/SearchInput';
+import useMapStore from '@/features/map_planning/store/MapStore';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /** UI component intended for searching plants that can planted on the plants layer */
@@ -25,6 +27,19 @@ export const PlantSearch = () => {
     plantSearchActions.clearSearchTerm();
     setSearchVisible(false);
   };
+
+  const transformerRef = useMapStore((state) => state.transformer);
+
+  const handleClickOnPlantListItem = useCallback(
+    (plant: PlantsSummaryDto) => {
+      const storeChosenPlantInUntrackedStore = () => actions.selectPlantForPlanting(plant);
+      const resetSelectionsOnMap = () => transformerRef.current?.nodes([]);
+
+      storeChosenPlantInUntrackedStore();
+      resetSelectionsOnMap();
+    },
+    [actions, transformerRef],
+  );
 
   useEffect(() => {
     searchInputRef.current?.focus();
@@ -80,7 +95,7 @@ export const PlantSearch = () => {
                   plant={plant}
                   key={plant.id}
                   onClick={() => {
-                    actions.selectPlantForPlanting(plant);
+                    handleClickOnPlantListItem(plant);
                     clearSearch();
                   }}
                 />
