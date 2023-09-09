@@ -32,7 +32,7 @@ const placeTooltip = (plant: PlantsSummaryDto | undefined) => {
  * - A _Konva Circle_ filled with a selection-dependent colour
  * - A _Konva Image_ depicturing the plant or showing a fallback image
  *
- * @param planting - A plant's details used for rendering it.
+ * @param planting - Plant's details used for rendering the plant.
  * @returns A plant ready to be shown on the map.
  *
  */
