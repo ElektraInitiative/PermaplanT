@@ -135,6 +135,29 @@ class MapPlantingPage(AbstractPage):
         self._page.mouse.move(x + (width / 4) * 3, y + (height / 4) * 3)
         self._page.mouse.up()
 
+    def click_on_canvas_top_left(self):
+        """Clicks on the top left area of the canvas."""
+        box = self._canvas.bounding_box()
+        self._page.mouse.click(
+            box["x"] + box["width"] / 4, box["y"] + box["height"] / 4
+        )
+        self._page.wait_for_timeout(300)
+
+    def drag_select_box_over_canvas(self):
+        """Drags a select box over 75% of the canvas from top left to bottom right"""
+        box = self._canvas.bounding_box()
+        x = box["x"]
+        y = box["y"]
+        width = box["width"]
+        height = box["height"]
+        self._page.mouse.move(x + width / 4, y + height / 4)
+        self._page.mouse.down()
+        self._page.mouse.move(x + (width / 4) * 3, y + (height / 4) * 3)
+        # https://playwright.dev/docs/input#drag-and-drop:~:text=()%3B-,NOTE,-If%20your%20page
+        # I dont know why, but it works only with a second mouse.move()
+        self._page.mouse.move(x + (width / 4) * 3, y + (height / 4) * 3)
+        self._page.mouse.up()
+
     def click_delete(self):
         """Deletes a planting by clicks on the delete button."""
         self._delete_plant_button.click()
