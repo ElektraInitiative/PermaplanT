@@ -69,6 +69,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- CI: Update doc _(4ydan)_
 - Doc: Update testing strategy #864 _(4ydan)_
 - E2E: Add new e2e test for undoing deletions #889 _(4ydan)_
 - CI: Add changelog test to CI, only in PR stages #857 _(4ydan)_
