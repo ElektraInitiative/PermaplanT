@@ -10,6 +10,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - _()_
 - _()_
+- _()_
+- Expand seed overview with additional table fields _(Moritz)_
 - Updated UC for guided tour and gaining blossoms _(Thorben)_
 - _()_
 - _()_
@@ -22,9 +24,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Finish documentation of custom UI elements _(Moritz)_
 - _()_
 - _()_
+- Fix seeds being set to Indian Abelia after edit _(Moritz)_
 - _()_
-- _()_
-- _()_
+- Order seeds by use by and harvest year _(Moritz)_
 - _()_
 - _()_
 - Add toggleable plant labels _(Moritz)_
@@ -37,11 +39,14 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- _()_
+- Enable seeds to be edited and deleted _(Giancarlo & Moritz)_
 - Update UC for timeline and plants layer _(Paul)_
+- Fix bug in updating of the plant selection _(Paul)_
 - _()_
 - _()_
-- _()_
-- _()_
+- Added Meeting Agenda for 28.8. 9:00 _(Markus Raab)_
+- Added Meeting Agenda for 4.9. 9:00 _(Markus Raab)_
 - _()_
 - _()_
 - update `doc/database/hierarchy.md` to clarify how we render plant names _(temmey)_
@@ -55,14 +60,17 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add Christoph Nemeth as Teammember _(tschawax)_
+- Fix middle mouse button to only move the stage or select individual plants _(tschawax)_
 - _()_
 - _()_
+- Fix drag select not working and add appropriate e2e regression tests #852 _(4ydan & Moritz)_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
 - Doc: Update testing strategy #864 _(4ydan)_
+- E2E: Add new e2e test for undoing deletions #889 _(4ydan)_
 - CI: Add changelog test to CI, only in PR stages #857 _(4ydan)_
 - E2E: Worker uuids fixture #837 _(4ydan)_
 - GIT: Add data analysis jupyter notebook #843 _(4ydan)_
@@ -176,6 +184,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Use the correct layer ID for create and fetch actions (for plantings) in the map editor, enabling the possibility for multiple independent maps _(Paul and Thorben)_
 - Location picker map in map creation form only loads after actively pressing a button _(Thorben)_
 - Maps can be duplicated from the map overview (in PR #515) _(Thorben)_
+- Login use case done. _(Gabriel and Samuel)_
+- Layers visibility use case done. _(Samuel)_
 
 ## 0.1.0 - 19.04.2023
 

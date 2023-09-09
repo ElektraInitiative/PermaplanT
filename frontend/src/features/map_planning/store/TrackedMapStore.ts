@@ -264,13 +264,10 @@ function updateSelectedPlanting(set: SetFn, get: GetFn) {
     return;
   }
 
-  const newSelectedPlanting = get().trackedState.layers.plants.loadedObjects.find(
-    (planting) => planting.id === selectedPlanting.id,
-  );
-
-  if (!newSelectedPlanting) {
-    throw new Error('Cannot find selected planting');
-  }
+  const newSelectedPlanting =
+    get().trackedState.layers.plants.loadedObjects.find(
+      (planting) => planting.id === selectedPlanting.id,
+    ) ?? null;
 
   set((state) => ({
     ...state,

@@ -27,3 +27,8 @@
   - On activation of a layer, also the visibility gets turned on.
   - On activation of some layers, the visibility of others layer changes; e.g.,
     activation of the [moisture layer](../assigned/hydrology_layer.md) also sets the visibility of the [infrastructure layer](../assigned/infrastructure_layer.md) to on.
+
+## Notes
+
+The layer opacity is a Konva feature and is implemented in [Map.tsx](https://github.com/ElektraInitiative/PermaplanT/tree/master/frontend/src/features/map_planning/components/Map.tsx).
+The control elements for the opacity and visibility can be found in [LayerList.tsx](https://github.com/ElektraInitiative/PermaplanT/tree/master/frontend/src/features/map_planning/components/toolbar/LayerList.tsx)

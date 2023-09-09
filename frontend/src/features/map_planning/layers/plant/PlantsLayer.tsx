@@ -1,7 +1,7 @@
+import { ExtendedPlantsSummaryDisplayName } from '../../../../components/ExtendedPlantDisplay';
 import useMapStore from '../../store/MapStore';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
-import { ExtendedPlantsSummaryDisplayName } from './components/ExtendedPlantDisplay';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantSpread, PlantsSummaryDto } from '@/bindings/definitions';

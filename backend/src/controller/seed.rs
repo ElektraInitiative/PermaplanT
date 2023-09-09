@@ -2,7 +2,7 @@
 
 use actix_web::web::Query;
 use actix_web::{
-    delete, get, post,
+    delete, get, post, put,
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
@@ -14,6 +14,7 @@ use crate::{model::dto::NewSeedDto, service};
 
 /// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
 /// If no page parameters are provided, the first page is returned.
+/// Seeds are ordered using their use_by date in an ascending fashion.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -115,4 +116,19 @@ pub async fn delete_by_id(
 ) -> Result<HttpResponse> {
     service::seed::delete_by_id(*path, user_info.id, &app_data).await?;
     Ok(HttpResponse::Ok().json(""))
+}
+
+/// Endpoint for editing a [`Seed`](crate::model::entity::Seed).
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+#[put("/{id}")]
+pub async fn edit_by_id(
+    id: Path<i32>,
+    edit_seed_json: Json<NewSeedDto>,
+    user_info: UserInfo,
+    app_data: Data<AppDataInner>,
+) -> Result<HttpResponse> {
+    let response = service::seed::edit(*id, user_info.id, edit_seed_json.0, &app_data).await?;
+    Ok(HttpResponse::Accepted().json(response))
 }
