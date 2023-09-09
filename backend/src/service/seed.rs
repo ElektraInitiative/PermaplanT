@@ -15,6 +15,8 @@ use crate::{
 };
 
 /// Search seeds from the database.
+/// Seeds are returned in ascending order of their `use_by` dates.
+/// If that is not available, the harvest year is used instead.
 ///
 /// # Errors
 /// If the connection to the database could not be established.

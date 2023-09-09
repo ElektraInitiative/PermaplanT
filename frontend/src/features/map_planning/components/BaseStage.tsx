@@ -15,7 +15,7 @@ import { useDimensions } from '@/hooks/useDimensions';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
-import { Layer, Stage, Transformer } from 'react-konva';
+import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
 interface BaseStageProps {
   zoomable?: boolean;
@@ -63,18 +63,17 @@ export const BaseStage = ({
     },
   });
 
-  // Ref to the transformer
-  const trRef = useRef<Konva.Transformer>(null);
+  const transformerRef = useRef<Konva.Transformer>(null);
   useEffect(() => {
-    useMapStore.setState({ transformer: trRef });
-  }, [trRef]);
+    useMapStore.setState({ transformer: transformerRef });
+  }, [transformerRef]);
 
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
-  // Ref to the stage
   const stageRef = useRef<Konva.Stage>(null);
   useEffect(() => {
     useMapStore.setState({ stageRef: stageRef });
   }, [stageRef]);
+
   const tooltipRef = useRef<Konva.Label>(null);
   useEffect(() => {
     useMapStore.setState({ tooltipRef: tooltipRef });
@@ -102,7 +101,7 @@ export const BaseStage = ({
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
 
-    const targetStage = e.target.getStage();
+    const targetStage = getStageByEventTarget(e);
     if (targetStage === null) return;
 
     if (tooltipRef.current) {
@@ -132,31 +131,17 @@ export const BaseStage = ({
     });
   };
 
-  // Event listener responsible for allowing dragging of the stage only with the wheel mouse button
+  // Event listener responsible for allowing stage-dragging only via middle mouse button
   const onStageDragStart = (e: KonvaEventObject<DragEvent>) => {
-    if (e.evt === null || e.evt === undefined) return;
-    e.evt.preventDefault();
+    renderGrabbingMouseCursor();
+    if (!e.evt) return;
 
-    const stage = e.target.getStage();
-    if (stage === null) return;
-
-    // If the mouse pointer is starting the drag on an element that is not a stage then we don't drag
-    // It works for now but there should be a better way since it's a bit wonky
-    // Should work better with .draggable(false)
-    if (e.evt.buttons) {
-      if (e.evt.buttons !== 4 && e.target === stage) {
-        stage.stopDrag();
-      }
-      if (e.evt.buttons === 4 && e.target !== stage) {
-        stage.stopDrag();
-      }
+    if (!isUsingMiddleMouseButton(e)) {
+      preventStageDragging(e);
     }
   };
 
-  const onStageDragEnd = (e: KonvaEventObject<DragEvent>) => {
-    if (e.evt === null || e.evt === undefined) return;
-    e.evt.preventDefault();
-
+  const onStageDragEnd = () => {
     if (stageRef.current === null) return;
 
     updateMapBounds({
@@ -168,52 +153,50 @@ export const BaseStage = ({
   };
 
   // Event listener responsible for updating the selection rectangle
-  const onMouseMove = (e: KonvaEventObject<MouseEvent>) => {
-    e.evt.preventDefault();
-
-    if (e.evt.buttons === 4) return;
-
-    if (e.evt.buttons !== 4) {
-      document.body.style.cursor = 'default';
-    }
-
-    const stage = e.target.getStage();
-    if (stage === null || !selectionRectAttrs.isVisible || !selectable) return;
+  const onStageMouseMove = (e: KonvaEventObject<MouseEvent>) => {
+    const stage = getStageByEventTarget(e);
+    if (!stage || !selectionRectAttrs.isVisible || !selectable) return;
 
     updateSelection(stage, setSelectionRectAttrs);
-    selectIntersectingShapes(stageRef, trRef);
+    selectIntersectingShapes(stageRef, transformerRef);
   };
 
-  // Event listener responsible for positioning the selection rectangle to the current mouse position
+  // Event listener responsible for initiating stage-dragging via middle mouse button
+  // and for positioning the selection rectangle to the current mouse position
   const onStageMouseDown = (e: KonvaEventObject<MouseEvent>) => {
-    e.evt.preventDefault();
+    const stage = getStageByEventTarget(e);
+    if (!stage) return;
 
-    if (e.evt.buttons === 4) {
-      document.body.style.cursor = 'grabbing';
+    if (isUsingMiddleMouseButton(e)) {
+      initiateStageDragging(e, stage);
+      return;
     }
 
-    const stage = e.target.getStage();
-    if (stage == null || !selectable) return;
-
-    startSelection(stage, setSelectionRectAttrs);
+    if (selectable) {
+      startSelection(stage, setSelectionRectAttrs);
+    }
   };
 
-  // Event listener responsible for ending the selection rectangle
+  // Event listener responsible for stopping possible stage-dragging mode
+  // and for ending the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
-    e.evt.preventDefault();
+    renderDefaultMouseCursor();
 
-    if (!selectable) return;
-    endSelection(setSelectionRectAttrs, selectionRectAttrs);
+    stopStageDraggingMode(e);
+
+    if (selectable) {
+      endSelection(setSelectionRectAttrs, selectionRectAttrs);
+    }
   };
 
   // Event listener responsible for unselecting shapes when clicking on the stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 
-    const isStage = e.target instanceof Konva.Stage;
-    const nodeSize = trRef.current?.getNodes().length || 0;
-    if (nodeSize > 0 && isStage) {
-      deselectShapes(trRef);
+    const nodeSize = transformerRef.current?.getNodes().length ?? 0;
+
+    if (nodeSize > 0 && isEventTriggeredFromStage(e)) {
+      deselectShapes(transformerRef);
     }
   };
 
@@ -227,10 +210,10 @@ export const BaseStage = ({
         width={dimensions.width}
         height={dimensions.height}
         onWheel={onStageWheel}
-        onDragEnd={onStageDragEnd}
         onDragStart={onStageDragStart}
+        onDragEnd={onStageDragEnd}
         onMouseDown={onStageMouseDown}
-        onMouseMove={onMouseMove}
+        onMouseMove={onStageMouseMove}
         onMouseUp={onStageMouseUp}
         onClick={onStageClick}
         scaleX={stage.scale}
@@ -249,6 +232,16 @@ export const BaseStage = ({
             x={tooltipPosition.x}
             y={tooltipPosition.y}
           />
+          <Rect
+            x={selectionRectAttrs.x}
+            y={selectionRectAttrs.y}
+            width={selectionRectAttrs.width}
+            height={selectionRectAttrs.height}
+            fill={'blue'}
+            visible={selectionRectAttrs.isVisible}
+            opacity={0.2}
+            name="selectionRect"
+          />
           <Transformer
             listening={!isReadOnly}
             // We need to manually disable selection when we are transforming
@@ -264,7 +257,7 @@ export const BaseStage = ({
             onMouseUp={() => {
               selectable = true;
             }}
-            ref={trRef}
+            ref={transformerRef}
             name="transformer"
             anchorSize={8}
             // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
@@ -281,3 +274,52 @@ export const BaseStage = ({
     </div>
   );
 };
+
+function renderGrabbingMouseCursor() {
+  document.body.style.cursor = 'grabbing';
+}
+
+function renderDefaultMouseCursor() {
+  document.body.style.cursor = 'default';
+}
+
+function getStageByEventTarget(konvaEvent: KonvaEventObject<MouseEvent>) {
+  return konvaEvent.target.getStage();
+}
+
+function isUsingMiddleMouseButton(konvaEvent: KonvaEventObject<MouseEvent>) {
+  return konvaEvent.evt?.buttons === 4;
+}
+
+function isEventTriggeredFromStage(konvaEvent: KonvaEventObject<MouseEvent>) {
+  return konvaEvent.target instanceof Konva.Stage;
+}
+
+function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>) {
+  const stage = getStageByEventTarget(konvaEvent);
+  if (!stage) return;
+
+  if (konvaEvent.target === stage) {
+    stage.stopDrag();
+  }
+}
+
+function initiateStageDragging(konvaEvent: KonvaEventObject<MouseEvent>, stage: Konva.Stage) {
+  if (!isEventTriggeredFromStage(konvaEvent)) {
+    // this adds immediate (i.e. without delay) dragging prevention of any non-stage node
+    konvaEvent.target.stopDrag();
+  }
+
+  stage.startDrag();
+}
+
+function stopStageDraggingMode(konvaEvent: KonvaEventObject<MouseEvent>) {
+  const stage = getStageByEventTarget(konvaEvent);
+  if (!stage) return;
+
+  // this prevents automatic stage-dragging after releasing middle mouse button without
+  // having dragged at all yet, i.e. we are still in dragging mode
+  if (stage.isDragging()) {
+    stage.stopDrag();
+  }
+}
