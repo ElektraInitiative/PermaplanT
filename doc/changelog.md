@@ -24,7 +24,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Finish documentation of custom UI elements _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Fix seeds being set to Indian Abelia after edit _(Moritz)_
 - _()_
 - Order seeds by use by and harvest year _(Moritz)_
 - _()_
@@ -42,7 +42,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Enable seeds to be edited and deleted _(Giancarlo & Moritz)_
 - Update UC for timeline and plants layer _(Paul)_
-- _()_
+- Fix bug in updating of the plant selection _(Paul)_
 - _()_
 - _()_
 - Added Meeting Agenda for 28.8. 9:00 _(Markus Raab)_
@@ -70,6 +70,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- _()_
+- CI: Update doc _(4ydan)_
+- Doc: Update testing strategy #864 _(4ydan)_
+- E2E: Add new e2e test for undoing deletions #889 _(4ydan)_
 - CI: Add changelog test to CI, only in PR stages #857 _(4ydan)_
 - E2E: Worker uuids fixture #837 _(4ydan)_
 - GIT: Add data analysis jupyter notebook #843 _(4ydan)_

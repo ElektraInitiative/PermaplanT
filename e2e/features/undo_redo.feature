@@ -10,5 +10,10 @@ Feature: Undo/Redo
 
     Scenario: Successful redo after accidental undo
         When I accidentally clicked undo after planting one plant
-        And I click redo to get my plant back
+        And I click redo
+        Then I can see my plant on the canvas again
+
+    Scenario: Successful undo deletion
+        When I delete the plant
+        And I click undo
         Then I can see my plant on the canvas again
