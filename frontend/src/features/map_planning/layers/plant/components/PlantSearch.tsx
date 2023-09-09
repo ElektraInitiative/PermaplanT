@@ -6,6 +6,7 @@ import { PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput from '@/components/Form/SearchInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { resetSelection } from '@/features/map_planning/utils/ShapesSelection';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -33,10 +34,9 @@ export const PlantSearch = () => {
   const handleClickOnPlantListItem = useCallback(
     (plant: PlantsSummaryDto) => {
       const storeChosenPlantInUntrackedStore = () => actions.selectPlantForPlanting(plant);
-      const resetSelectionsOnMap = () => transformerRef.current?.nodes([]);
 
       storeChosenPlantInUntrackedStore();
-      resetSelectionsOnMap();
+      resetSelection(transformerRef);
     },
     [actions, transformerRef],
   );

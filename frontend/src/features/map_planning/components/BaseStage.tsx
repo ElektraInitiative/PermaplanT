@@ -3,11 +3,11 @@ import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { MapLabel } from '../utils/MapLabel';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
-  deselectShapes,
-  endSelection,
+  hideSelectionRectangle,
+  initializeSelectionRectangle,
+  resetSelection,
   selectIntersectingShapes,
-  startSelection,
-  updateSelection,
+  updateSelectionRectangle,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
@@ -153,53 +153,52 @@ export const BaseStage = ({
     });
   };
 
-  // Event listener responsible for updating the selection rectangle
+  // Event listener responsible for updating the selection rectangle's size
+  // and subsequently selecting all intersecting shapes
   const onStageMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     const stage = getStageByEventTarget(e);
     if (!stage || !selectionRectAttrs.isVisible || !selectable) return;
 
-    updateSelection(stage, setSelectionRectAttrs);
+    updateSelectionRectangle(stage, setSelectionRectAttrs);
     selectIntersectingShapes(stageRef, transformerRef);
   };
 
-  // Event listener responsible for initiating stage-dragging via middle mouse button
-  // and for positioning the selection rectangle to the current mouse position
+  // Event listener responsible for initializing the stage-dragging mode via middle mouse button
+  // and for positioning the selection rectangle at the current mouse position
   const onStageMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     const stage = getStageByEventTarget(e);
     if (!stage) return;
 
     if (isUsingMiddleMouseButton(e)) {
-      initiateStageDragging(e, stage);
+      initializeStageDraggingMode(e, stage);
       return;
     }
 
-    if (isPlacementModeActive()) return;
-
-    if (selectable) {
-      startSelection(stage, setSelectionRectAttrs);
+    if (selectable && !isPlacementModeActive()) {
+      initializeSelectionRectangle(stage, setSelectionRectAttrs);
     }
   };
 
-  // Event listener responsible for stopping possible stage-dragging mode
-  // and for ending the selection rectangle
+  // Event listener responsible for stopping a possible stage-dragging mode
+  // and for hiding the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
 
     if (selectable) {
-      endSelection(setSelectionRectAttrs, selectionRectAttrs);
+      hideSelectionRectangle(setSelectionRectAttrs, selectionRectAttrs);
     }
   };
 
-  // Event listener responsible for unselecting shapes when clicking on the stage
+  // Event listener responsible for resetting the current selection of shapes when clicking on stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 
     const nodeSize = transformerRef.current?.getNodes().length ?? 0;
 
     if (nodeSize > 0 && isEventTriggeredFromStage(e)) {
-      deselectShapes(transformerRef);
+      resetSelection(transformerRef);
     }
   };
 
@@ -307,7 +306,10 @@ function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>): void {
   }
 }
 
-function initiateStageDragging(konvaEvent: KonvaEventObject<MouseEvent>, stage: Konva.Stage): void {
+function initializeStageDraggingMode(
+  konvaEvent: KonvaEventObject<MouseEvent>,
+  stage: Konva.Stage,
+): void {
   if (!isEventTriggeredFromStage(konvaEvent)) {
     // this adds immediate (i.e. without delay) dragging prevention of any non-stage node
     konvaEvent.target.stopDrag();

@@ -4,13 +4,13 @@ import { isPlacementModeActive } from './planting-utils';
 import { PlantsSummaryDto } from '@/bindings/definitions';
 
 describe('isPlacementModeActive', () => {
-  test('should return true if plant from search list is currently selected', () => {
+  test('should return true if map store currently contains a plant selected for planting', () => {
     useMapStore.setState(createStoreWithGivenPlantSelected(createSomePlant()));
 
     expect(isPlacementModeActive()).toBe(true);
   });
 
-  test('should return false if no plant is selected from search list', () => {
+  test('should return false if map store currently contains nothing selected for planting', () => {
     useMapStore.setState(createStoreWithGivenPlantSelected(null));
 
     expect(isPlacementModeActive()).toBe(false);

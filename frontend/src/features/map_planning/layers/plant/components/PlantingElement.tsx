@@ -52,11 +52,11 @@ export function PlantingElement({ planting }: PlantingElementProps) {
       document.getElementById('canvas')?.dispatchEvent(placeEvent);
     };
 
-    if (isPlacementModeActive()) return;
-
-    triggerPlantSelectionInGuidedTour();
-    addShapeToTransformer(e.currentTarget);
-    selectPlanting(planting);
+    if (!isPlacementModeActive()) {
+      triggerPlantSelectionInGuidedTour();
+      addShapeToTransformer(e.currentTarget);
+      selectPlanting(planting);
+    }
   };
 
   return (
