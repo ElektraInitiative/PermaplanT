@@ -77,7 +77,7 @@ const CreateSeedForm = ({
         setValue('quality', existingSeed?.quality);
         setValue('quantity', existingSeed?.quantity);
         setValue('notes', existingSeed?.notes);
-        setValue('plant_id', 1);
+        setValue('plant_id', existingSeed?.plant_id);
 
         // Convert existing values to select menu options.
         if (existingSeed.plant_id) loadInitialPlant(existingSeed.plant_id);

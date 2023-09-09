@@ -24,7 +24,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Finish documentation of custom UI elements _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Fix seeds being set to Indian Abelia after edit _(Moritz)_
 - _()_
 - Order seeds by use by and harvest year _(Moritz)_
 - _()_
@@ -42,7 +42,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Enable seeds to be edited and deleted _(Giancarlo & Moritz)_
 - Update UC for timeline and plants layer _(Paul)_
-- _()_
+- Fix bug in updating of the plant selection _(Paul)_
 - _()_
 - _()_
 - Added Meeting Agenda for 28.8. 9:00 _(Markus Raab)_
