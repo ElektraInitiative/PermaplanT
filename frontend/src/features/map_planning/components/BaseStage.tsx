@@ -3,14 +3,15 @@ import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { MapLabel } from '../utils/MapLabel';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
-  deselectShapes,
-  endSelection,
+  hideSelectionRectangle,
+  initializeSelectionRectangle,
+  resetSelection,
   selectIntersectingShapes,
-  startSelection,
-  updateSelection,
+  updateSelectionRectangle,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
+import { isPlacementModeActive } from '../utils/planting-utils';
 import { useDimensions } from '@/hooks/useDimensions';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
@@ -152,51 +153,52 @@ export const BaseStage = ({
     });
   };
 
-  // Event listener responsible for updating the selection rectangle
+  // Event listener responsible for updating the selection rectangle's size
+  // and subsequently selecting all intersecting shapes
   const onStageMouseMove = (e: KonvaEventObject<MouseEvent>) => {
     const stage = getStageByEventTarget(e);
     if (!stage || !selectionRectAttrs.isVisible || !selectable) return;
 
-    updateSelection(stage, setSelectionRectAttrs);
+    updateSelectionRectangle(stage, setSelectionRectAttrs);
     selectIntersectingShapes(stageRef, transformerRef);
   };
 
-  // Event listener responsible for initiating stage-dragging via middle mouse button
-  // and for positioning the selection rectangle to the current mouse position
+  // Event listener responsible for initializing the stage-dragging mode via middle mouse button
+  // and for positioning the selection rectangle at the current mouse position
   const onStageMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     const stage = getStageByEventTarget(e);
     if (!stage) return;
 
     if (isUsingMiddleMouseButton(e)) {
-      initiateStageDragging(e, stage);
+      initializeStageDraggingMode(e, stage);
       return;
     }
 
-    if (selectable) {
-      startSelection(stage, setSelectionRectAttrs);
+    if (selectable && !isPlacementModeActive()) {
+      initializeSelectionRectangle(stage, setSelectionRectAttrs);
     }
   };
 
-  // Event listener responsible for stopping possible stage-dragging mode
-  // and for ending the selection rectangle
+  // Event listener responsible for stopping a possible stage-dragging mode
+  // and for hiding the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
 
     if (selectable) {
-      endSelection(setSelectionRectAttrs, selectionRectAttrs);
+      hideSelectionRectangle(setSelectionRectAttrs, selectionRectAttrs);
     }
   };
 
-  // Event listener responsible for unselecting shapes when clicking on the stage
+  // Event listener responsible for resetting the current selection of shapes when clicking on stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 
     const nodeSize = transformerRef.current?.getNodes().length ?? 0;
 
     if (nodeSize > 0 && isEventTriggeredFromStage(e)) {
-      deselectShapes(transformerRef);
+      resetSelection(transformerRef);
     }
   };
 
@@ -275,27 +277,27 @@ export const BaseStage = ({
   );
 };
 
-function renderGrabbingMouseCursor() {
+function renderGrabbingMouseCursor(): void {
   document.body.style.cursor = 'grabbing';
 }
 
-function renderDefaultMouseCursor() {
+function renderDefaultMouseCursor(): void {
   document.body.style.cursor = 'default';
 }
 
-function getStageByEventTarget(konvaEvent: KonvaEventObject<MouseEvent>) {
+function getStageByEventTarget(konvaEvent: KonvaEventObject<MouseEvent>): Konva.Stage | null {
   return konvaEvent.target.getStage();
 }
 
-function isUsingMiddleMouseButton(konvaEvent: KonvaEventObject<MouseEvent>) {
+function isUsingMiddleMouseButton(konvaEvent: KonvaEventObject<MouseEvent>): boolean {
   return konvaEvent.evt?.buttons === 4;
 }
 
-function isEventTriggeredFromStage(konvaEvent: KonvaEventObject<MouseEvent>) {
+function isEventTriggeredFromStage(konvaEvent: KonvaEventObject<MouseEvent>): boolean {
   return konvaEvent.target instanceof Konva.Stage;
 }
 
-function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>) {
+function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>): void {
   const stage = getStageByEventTarget(konvaEvent);
   if (!stage) return;
 
@@ -304,7 +306,10 @@ function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>) {
   }
 }
 
-function initiateStageDragging(konvaEvent: KonvaEventObject<MouseEvent>, stage: Konva.Stage) {
+function initializeStageDraggingMode(
+  konvaEvent: KonvaEventObject<MouseEvent>,
+  stage: Konva.Stage,
+): void {
   if (!isEventTriggeredFromStage(konvaEvent)) {
     // this adds immediate (i.e. without delay) dragging prevention of any non-stage node
     konvaEvent.target.stopDrag();
@@ -313,7 +318,7 @@ function initiateStageDragging(konvaEvent: KonvaEventObject<MouseEvent>, stage: 
   stage.startDrag();
 }
 
-function stopStageDraggingMode(konvaEvent: KonvaEventObject<MouseEvent>) {
+function stopStageDraggingMode(konvaEvent: KonvaEventObject<MouseEvent>): void {
   const stage = getStageByEventTarget(konvaEvent);
   if (!stage) return;
 

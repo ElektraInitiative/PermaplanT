@@ -1,9 +1,11 @@
-import { SeedDto } from '@/bindings/definitions';
+import { Quality, SeedDto } from '@/bindings/definitions';
 import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
 import { ExtendedPlantsSummaryDisplayName } from '@/components/ExtendedPlantDisplay';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { deleteSeed } from '@/features/seeds/api/deleteSeed';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
+import { useTranslateQuality } from '@/hooks/useTranslateQuality';
+import { useTranslateQuantity } from '@/hooks/useTranslateQuantity';
 import { ReactComponent as EditIcon } from '@/icons/edit.svg';
 import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -25,6 +27,8 @@ interface SeedsOverviewListProps {
 const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['seeds', 'common']);
+  const translateQuality = useTranslateQuality();
+  const translateQuantity = useTranslateQuantity();
 
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -112,8 +116,10 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
                       <span>{t('common:error')}</span>
                     )}
                   </td>
-                  <td className="px-6 py-4">{seed.quantity}</td>
-                  <td className="px-6 py-4">{seed.quality}</td>
+                  <td className="px-6 py-4">{translateQuantity(seed.quantity)}</td>
+                  <td className="px-6 py-4">
+                    {translateQuality(seed.quality ?? ('unknown' as Quality))}
+                  </td>
                   <td className="px-6 py-4">{seed.harvest_year}</td>
                   <td className="px-6 py-4">{seed.origin}</td>
                   <td className="flex flex-row justify-between px-6 py-4">

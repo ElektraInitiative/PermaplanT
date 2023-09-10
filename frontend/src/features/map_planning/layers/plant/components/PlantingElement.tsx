@@ -7,7 +7,9 @@ import {
   showTooltipWithContent,
   hideTooltip,
 } from '@/features/map_planning/utils/Tooltip';
+import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
 import { ExtendedPlantsSummary } from '@/utils/ExtendedPlantsSummary';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { Group, Circle, Rect } from 'react-konva';
 
 export type PlantingElementProps = {
@@ -23,6 +25,17 @@ const placeTooltip = (plant: PlantsSummaryDto | undefined) => {
   showTooltipWithContent(extendedPlant.displayName.common_name);
 };
 
+/**
+ * UI Component representing a single plant on the map.
+ *
+ * A single plant consists of a _Konva Group_ which itself is composed of:
+ * - A _Konva Circle_ filled with a selection-dependent colour
+ * - A _Konva Image_ depicturing the plant or showing a fallback image
+ *
+ * @param planting - Plant's details used for rendering the plant.
+ * @returns A plant ready to be shown on the map.
+ *
+ */
 export function PlantingElement({ planting }: PlantingElementProps) {
   const { plant } = useFindPlantById(planting.plantId);
 
@@ -33,16 +46,24 @@ export function PlantingElement({ planting }: PlantingElementProps) {
     (state) => state.untrackedState.layers.plants.selectedPlanting,
   );
 
+  const handleClickOnPlant = (e: KonvaEventObject<MouseEvent>) => {
+    const triggerPlantSelectionInGuidedTour = () => {
+      const placeEvent = new Event('selectPlant');
+      document.getElementById('canvas')?.dispatchEvent(placeEvent);
+    };
+
+    if (!isPlacementModeActive()) {
+      triggerPlantSelectionInGuidedTour();
+      addShapeToTransformer(e.currentTarget);
+      selectPlanting(planting);
+    }
+  };
+
   return (
     <Group
       {...planting}
       planting={planting}
-      onClick={(e) => {
-        const placeEvent = new Event('selectPlant');
-        document.getElementById('canvas')?.dispatchEvent(placeEvent);
-        addShapeToTransformer(e.currentTarget);
-        selectPlanting(planting);
-      }}
+      onClick={(e) => handleClickOnPlant(e)}
       onMouseOut={hideTooltip}
       onMouseMove={() => placeTooltip(plant)}
     >
