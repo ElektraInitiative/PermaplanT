@@ -66,6 +66,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix select box while being in placement mode #886 _(tschawax)_
 - _()_
 - _()_
+- Seeds: translate quality and quantity columns _(Moritz)_
+- _()_
 - Fix drag select not working and add appropriate e2e regression tests #852 _(4ydan & Moritz)_
 - _()_
 - _()_
