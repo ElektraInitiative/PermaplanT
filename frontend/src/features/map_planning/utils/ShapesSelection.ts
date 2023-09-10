@@ -10,7 +10,7 @@ import { Transformer } from 'konva/lib/shapes/Transformer';
 // Todo: optimization -> could probably use a set here
 let previouslySelectedShapes: Shape<ShapeConfig>[] = [];
 
-/** Select shapes that intersect with the selection rect. */
+/** Select shapes that intersect with the selection rectangle. */
 export const selectIntersectingShapes = (
   stageRef: React.RefObject<Stage>,
   trRef: React.RefObject<Transformer>,
@@ -69,13 +69,13 @@ export const selectIntersectingShapes = (
   }
 };
 
-/** Deselects the shapes */
-export const deselectShapes = (trRef: React.RefObject<Transformer>) => {
+/** Resets current selection by removing all nodes from the transformer */
+export const resetSelection = (trRef: React.RefObject<Transformer>) => {
   trRef.current?.nodes([]);
 };
 
-/** Starts the selection and positions the selection rect to the current mouse position. */
-export const startSelection = (
+/** Sets up the selection rectangle by positioning it at the current mouse position. */
+export const initializeSelectionRectangle = (
   stage: Stage,
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
 ) => {
@@ -105,8 +105,8 @@ export const startSelection = (
   }
 };
 
-/** Update the selection box's size based on mouse position. */
-export const updateSelection = (
+/** Update the selection rectangle's size based on the current mouse position. */
+export const updateSelectionRectangle = (
   stage: Stage,
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
 ) => {
@@ -143,8 +143,8 @@ export const updateSelection = (
   }
 };
 
-/** Ends the selection which means the selection rect turns invisible. */
-export const endSelection = (
+/** Ends the selection by making the selection rectangle invisible. */
+export const hideSelectionRectangle = (
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
   selectionRectAttrs: SelectionRectAttrs,
 ) => {

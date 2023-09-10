@@ -60,7 +60,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add Christoph Nemeth as Teammember _(tschawax)_
-- Fix middle mouse button to only move the stage or select individual plants _(tschawax)_
+- Fix middle mouse button to only move the stage or select individual plants #817 _(tschawax)_
+- Fix selections being kept after choosing a plant from the search list #787 _(tschawax)_
+- Fix placing new plants onto existing plants #890 _(tschawax)_
+- Fix select box while being in placement mode #886 _(tschawax)_
 - _()_
 - _()_
 - Fix drag select not working and add appropriate e2e regression tests #852 _(4ydan & Moritz)_
