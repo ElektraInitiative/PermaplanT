@@ -34,11 +34,11 @@ class SeedCreatePage(AbstractPage):
         which navigate to the `SeedManagementPage`
         """
         # Plant Name TODO use better locator
-        self._page.locator("div").filter(has_text=re.compile(r"^Plant Name \*Tomato$")).locator("svg").click()
+        self._page.get_by_role("main").locator("svg").first.click().click()
         self._page.get_by_text("Abelia triflora (indian abelia)", exact=True).click()
 
         # Amount TODO use better locator
-        self._page.locator("div").filter(has_text=re.compile(r"^Amount \*Select\.\.\.$")).locator("svg").click()
+        self._amount.click()
         self._page.locator("#react-select-9-option-2").click()
 
         self._additional_name.fill("SUT")
