@@ -7,7 +7,7 @@ use typeshare::typeshare;
 #[typeshare]
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub enum IncludeArchivedSeeds {
-    #[serde(rename = "not_archvied")]
+    #[serde(rename = "not_archived")]
     /// Return only seeds that have not been archived.
     NotArchived,
     #[serde(rename = "archived")]
