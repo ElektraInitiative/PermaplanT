@@ -1,3 +1,5 @@
+# Use Case: Entry and List of Seeds
+
 - **Scope:** Seed Management
 - **Level:** User Goal
 - **Actors:** App User
