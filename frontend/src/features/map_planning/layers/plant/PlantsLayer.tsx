@@ -10,7 +10,7 @@ import { PlantLabel } from '@/features/map_planning/layers/plant/components/Plan
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
-import { KonvaEventListener } from 'konva/lib/Node';
+import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Layer } from 'react-konva';
@@ -41,11 +41,15 @@ function usePlantLayerListeners(listening: boolean) {
    */
   const handleCreatePlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(
     (e) => {
-      if (e.target instanceof Konva.Shape || !selectedPlant || isReadOnlyMode) {
+      const getPositionForPlantPlacement = (e: KonvaEventObject<MouseEvent | unknown>) => {
+        return e.currentTarget.getRelativePointerPosition();
+      };
+
+      if (!selectedPlant || isReadOnlyMode) {
         return;
       }
 
-      const position = e.target.getRelativePointerPosition();
+      const position = getPositionForPlantPlacement(e);
       if (!position) {
         return;
       }
