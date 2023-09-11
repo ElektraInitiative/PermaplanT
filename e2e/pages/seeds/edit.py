@@ -1,13 +1,13 @@
 
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page
 from e2e.pages.constants import E2E_URL
 from e2e.pages.abstract_page import AbstractPage
 
 
-class SeedDetailsPage(AbstractPage):
+class SeedEditPage(AbstractPage):
     """The seed details page of permaplant"""
 
-    URL: str = E2E_URL + "/seeds"
+    URL: str = E2E_URL + "seeds/*/edit"
     TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):

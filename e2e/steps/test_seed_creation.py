@@ -21,4 +21,4 @@ def create_seed_success(page: Page):
     smp = SeedManagementPage(page)
     smp.expect_alert_is_hidden()
     smp.expect_seed_exists("SUT")
-    smp.to_seed_details_page("SUT")
+    smp.to_seed_edit_page("SUT")

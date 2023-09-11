@@ -4,7 +4,7 @@ from e2e.pages.constants import E2E_URL
 from e2e.pages.abstract_page import AbstractPage
 
 
-class SeedDetailsPage(AbstractPage):
+class SeedCreatePage(AbstractPage):
     """The seed creation page of permaplant"""
 
     URL: str = E2E_URL + "seeds/new"
@@ -14,7 +14,6 @@ class SeedDetailsPage(AbstractPage):
         self._page = page
         self._name = page.get_by_placeholder("Name *")
         self._create_button = page.get_by_role("button", name="Create Seed")
-
         self._plant_name = page.get_by_test_id("plant_name")
         self._additional_name = page.get_by_test_id("additional_name")
         self._harvest_year = page.get_by_test_id("harvest_year")
