@@ -37,7 +37,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Link seeds page in the navbar _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Disable seed search _(Moritz)_
 - _()_
 - _()_
 - Enable seeds to be edited and deleted _(Giancarlo & Moritz)_
