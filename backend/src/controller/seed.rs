@@ -137,6 +137,7 @@ pub async fn edit_by_id(
 }
 
 /// Endpoint archiving/unarchiving a [`Seed`](crate::model::entity::Seed).
+/// A timestamp will be recorded when the seed is first archived.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

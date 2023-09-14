@@ -104,7 +104,7 @@ pub struct NewSeedDto {
     pub notes: Option<String>,
 }
 
-#[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
+/// Data that is required when archiving a seed.
 #[typeshare]
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct ArchiveSeedDto {
