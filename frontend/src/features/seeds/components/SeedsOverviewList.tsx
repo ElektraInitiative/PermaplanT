@@ -16,7 +16,12 @@ import { toast } from 'react-toastify';
 
 interface SeedsOverviewListProps {
   seeds: SeedDto[];
-  pageFetcher: { isLoading: boolean; isFetching: boolean; fetcher: () => Promise<unknown> };
+  pageFetcher: {
+    hasNextPage: boolean;
+    isLoading: boolean;
+    isFetching: boolean;
+    fetcher: () => Promise<unknown>;
+  };
 }
 
 const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
@@ -29,6 +34,7 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
   useEffect(() => {
     if (
       ref?.current?.clientHeight === ref?.current?.scrollHeight &&
+      pageFetcher.hasNextPage &&
       !pageFetcher.isLoading &&
       !pageFetcher.isFetching
     ) {

@@ -20,7 +20,7 @@ export const ViewSeeds = () => {
   // Set the filter when the user types in the search input
   const [seedNameFilter] = useState<string>('');
   const debouncedNameFilter = useDebouncedValue(seedNameFilter, 200);
-  const { fetchNextPage, data, isLoading, isFetching, error } = useInfiniteQuery<
+  const { fetchNextPage, data, isLoading, isFetching, error, hasNextPage } = useInfiniteQuery<
     Page<SeedDto>,
     Error
   >({
@@ -43,6 +43,7 @@ export const ViewSeeds = () => {
   };
 
   const pageFetcher = {
+    hasNextPage,
     isLoading,
     isFetching,
     fetcher: fetchNextPage,
