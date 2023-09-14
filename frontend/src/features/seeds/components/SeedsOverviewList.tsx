@@ -1,25 +1,24 @@
+import { ReactComponent as ArchiveIcon } from '../../../icons/archive-off.svg';
 import { Quality, SeedDto } from '@/bindings/definitions';
 import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
 import { ExtendedPlantsSummaryDisplayName } from '@/components/ExtendedPlantDisplay';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
-import { deleteSeed } from '@/features/seeds/api/deleteSeed';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { useTranslateQuality } from '@/hooks/useTranslateQuality';
 import { useTranslateQuantity } from '@/hooks/useTranslateQuantity';
 import { ReactComponent as EditIcon } from '@/icons/edit.svg';
-import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Suspense, UIEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 interface SeedsOverviewListProps {
   seeds: SeedDto[];
+  handleArchiveSeed: (seed: SeedDto) => void;
   pageFetcher: { isLoading: boolean; isFetching: boolean; fetcher: () => Promise<unknown> };
 }
 
-const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
+const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverviewListProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['seeds', 'common']);
   const translateQuality = useTranslateQuality();
@@ -47,20 +46,6 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
   const handleEditSeed = (seed: SeedDto) => {
     navigate(`/seeds/${seed.id}/edit`);
   };
-
-  const deleteSeedUsingDto = async (seed: SeedDto) => {
-    await deleteSeed(Number(seed.id));
-  };
-
-  const { mutate: handleDeleteSeed } = useMutation(['delete seed'], deleteSeedUsingDto, {
-    onError: () => {
-      toast(t('seeds:create_seed_form.error_delete_seed'));
-    },
-    onSuccess: () => {
-      // Reload the page to make sure the updates are actually displayed to the user.
-      window.location.reload();
-    },
-  });
 
   return (
     <Suspense>
@@ -120,14 +105,18 @@ const SeedsOverviewList = ({ seeds, pageFetcher }: SeedsOverviewListProps) => {
                     <IconButton
                       variant={ButtonVariant.primary}
                       onClick={() => handleEditSeed(seed)}
+                      title={t('seeds:view_seeds.edit_seed_tooltip')}
                     >
                       <EditIcon />
                     </IconButton>
                     <IconButton
                       variant={ButtonVariant.primary}
-                      onClick={() => handleDeleteSeed(seed)}
+                      onClick={() => {
+                        handleArchiveSeed(seed);
+                      }}
+                      title={t('seeds:view_seeds.archive_seed_tooltip')}
                     >
-                      <TrashIcon />
+                      <ArchiveIcon />
                     </IconButton>
                   </td>
                 </tr>
