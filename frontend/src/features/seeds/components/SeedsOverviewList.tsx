@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 interface SeedsOverviewListProps {
   seeds: SeedDto[];
   pageFetcher: {
-    hasNextPage: boolean;
+    hasNextPage: boolean | undefined;
     isLoading: boolean;
     isFetching: boolean;
     fetcher: () => Promise<unknown>;
