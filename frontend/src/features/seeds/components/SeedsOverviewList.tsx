@@ -1,4 +1,4 @@
-import { ReactComponent as ArchiveIcon } from '../../../../public/icons/archive-off.svg';
+import { ReactComponent as ArchiveIcon } from '../../../icons/archive-off.svg';
 import { Quality, SeedDto } from '@/bindings/definitions';
 import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
 import { ExtendedPlantsSummaryDisplayName } from '@/components/ExtendedPlantDisplay';
