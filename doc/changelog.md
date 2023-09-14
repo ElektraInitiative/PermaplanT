@@ -63,6 +63,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix selections being kept after choosing a plant from the search list #787 _(tschawax)_
 - Fix placing new plants onto existing plants #890 _(tschawax)_
 - Fix select box while being in placement mode #886 _(tschawax)_
+- Fix selecting invisible plants #805 _(tschawax)_
 - _()_
 - _()_
 - Seeds: translate quality and quantity columns _(Moritz)_

@@ -1,3 +1,4 @@
+import { useSelectedLayerVisibility } from '../hooks/useSelectedLayerVisibility';
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { MapLabel } from '../utils/MapLabel';
@@ -83,6 +84,8 @@ export const BaseStage = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const dimensions = useDimensions(containerRef);
 
+  const { isSelectedLayerVisible } = useSelectedLayerVisibility();
+
   const updateMapBounds = useMapStore((store) => store.updateMapBounds);
   const mapBounds = useMapStore((store) => store.untrackedState.editorBounds);
   useEffect(() => {
@@ -166,6 +169,16 @@ export const BaseStage = ({
   // Event listener responsible for initializing the stage-dragging mode via middle mouse button
   // and for positioning the selection rectangle at the current mouse position
   const onStageMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+    const shouldAllowSelectionOnCurrentLayer = () => {
+      const isStageSelectable = selectable;
+
+      if (isPlacementModeActive()) {
+        return false;
+      }
+
+      return isStageSelectable && isSelectedLayerVisible;
+    };
+
     const stage = getStageByEventTarget(e);
     if (!stage) return;
 
@@ -174,7 +187,7 @@ export const BaseStage = ({
       return;
     }
 
-    if (selectable && !isPlacementModeActive()) {
+    if (shouldAllowSelectionOnCurrentLayer()) {
       initializeSelectionRectangle(stage, setSelectionRectAttrs);
     }
   };
