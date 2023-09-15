@@ -64,7 +64,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - pump versions _(4ydan)_
 - _()_
 - _()_
-- _()_
+- CI: Run e2e tests on dev.permaplant _(4ydan)_
 - _()_
 
 ## 0.3.4 - 14.10.2023 (203 commits)
