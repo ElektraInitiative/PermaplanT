@@ -6,74 +6,94 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.3.3 - UNRELEASED
+## 0.3.4 - UNRELEASED
+
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+
+## 0.3.3 - 15.09.2023 (536 commits)
 
 - Archive seeds instead of deleting them (with undo) #872 _(Moritz)_
-- _()_
 - Expand seed overview with additional table fields _(Moritz)_
 - Updated UC for guided tour and gaining blossoms _(Thorben)_
-- _()_
-- _()_
-- _()_
-- _()_
 - Added a cancel confirmation to the editor tour _(Thorben)_
-- _()_
-- _()_
-- _()_
 - Finish documentation of custom UI elements _(Moritz)_
-- _()_
-- _()_
 - Fix seeds being set to Indian Abelia after edit _(Moritz)_
-- _()_
 - Order seeds by use by and harvest year _(Moritz)_
-- _()_
-- _()_
 - Add toggleable plant labels _(Moritz)_
-- _()_
-- _()_
 - Fix various validation bugs in seed form _(Moritz)_
-- _()_
 - Link seeds page in the navbar _(Moritz)_
-- _()_
-- _()_
 - Disable seed search _(Moritz)_
-- _()_
-- _()_
 - Enable seeds to be edited and deleted _(Giancarlo & Moritz)_
 - Update UC for timeline and plants layer _(Paul)_
 - Fix bug in updating of the plant selection _(Paul)_
-- _()_
 - Added Meeting Agenda for 28.8. 9:00 _(Markus Raab)_
 - Added Meeting Agenda for 4.9. 9:00 _(Markus Raab)_
 - Added Meeting Agenda for 11.9. 9:00 _(Markus Raab)_
-- _()_
-- _()_
 - update `doc/database/hierarchy.md` to clarify how we render plant names _(temmey)_
 - updated sqlfluff config, remove unused .sql files _(temmey)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
 - Add Christoph Nemeth as Teammember _(tschawax)_
 - Fix middle mouse button to only move the stage or select individual plants #817 _(tschawax)_
 - Fix selections being kept after choosing a plant from the search list #787 _(tschawax)_
 - Fix placing new plants onto existing plants #890 _(tschawax)_
 - Fix select box while being in placement mode #886 _(tschawax)_
 - Fix selecting invisible plants #805 _(tschawax)_
-- _()_
-- _()_
 - Seeds: translate quality and quantity columns _(Moritz)_
-- _()_
 - Fix drag select not working and add appropriate e2e regression tests #852 _(4ydan & Moritz)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
 - CI: Update doc _(4ydan)_
 - Doc: Update testing strategy #864 _(4ydan)_
 - E2E: Add new e2e test for undoing deletions #889 _(4ydan)_
