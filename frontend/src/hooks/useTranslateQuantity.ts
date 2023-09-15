@@ -15,6 +15,8 @@ export function useTranslateQuantity() {
         return t('Nothing');
       case 'not enough':
         return t('NotEnough');
+      case 'enough':
+        return t('Enough');
       case 'more than enough':
         return t('MoreThanEnough');
       default:

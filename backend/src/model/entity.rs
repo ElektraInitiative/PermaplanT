@@ -716,6 +716,9 @@ pub struct Seed {
     pub plant_id: Option<i32>,
     /// The id of the owner of the seed.
     pub owner_id: Uuid,
+    /// Timestamp indicating when the seed was archived.
+    /// Empty if the seed was not archived.
+    pub archived_at: Option<NaiveDateTime>,
 }
 
 /// The `NewSeed` entity.
