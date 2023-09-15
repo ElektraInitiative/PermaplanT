@@ -108,6 +108,40 @@ def runDocker(String command, String dockerImage, String dockerBuildArgs, boolea
 }
 
 /**
+ * This method runs e2e tests inside a docker container.
+ *
+ * @param target The target URL to perform the tests on.
+ * @return A closure representing the defined Jenkins pipeline step.
+ */
+def e2eTest(String target) {
+    return {
+        node('docker') {
+            node_info()
+            checkout scm
+            def e2eImage = docker.build('permaplant-e2e:build', './e2e')
+            try {
+                e2eImage.inside('-e E2E_URL=' + target) {
+                    wait_for_pr_db()
+                    sh 'make test-e2e'
+                }
+            } catch (err) {
+                echo "Error occurred during the e2eImage.inside block: ${err}"
+                // rethrow so build fails
+                // groovylint-disable-next-line
+                throw err;
+            } finally {
+                archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
+                archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,  allowEmptyArchive: true
+                cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
+                fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
+                sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
+                deleteDir()
+            }
+        }
+    }
+}
+
+/**
  * Test, Build and stash Mdbook inside permaplants docker image.
  *
 
@@ -299,29 +333,7 @@ lock("${env.NODE_NAME}-exclusive") {
     }
 
     stage('E2E Tests') {
-        node('docker') {
-            node_info()
-            checkout scm
-            def e2eImage = docker.build('permaplant-e2e:ci', './e2e')
-            try {
-                e2eImage.inside('-e E2E_URL=https://pr.permaplant.net') {
-                    wait_for_pr_db()
-                    sh 'make test-e2e'
-                }
-            } catch (err) {
-                echo "Error occurred during the e2eImage.inside block: ${err}"
-                // rethrow so build fails
-                // groovylint-disable-next-line
-                throw err;
-            } finally {
-                archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
-                archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,  allowEmptyArchive: true
-                cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
-                fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
-                sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
-                deleteDir()
-            }
-        }
+        e2eTest('https://pr.permaplant.net')
     }
 }
 
