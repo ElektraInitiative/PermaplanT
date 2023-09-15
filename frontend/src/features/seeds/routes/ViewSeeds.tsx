@@ -21,18 +21,16 @@ export const ViewSeeds = () => {
   // Set the filter when the user types in the search input
   const [seedNameFilter] = useState<string>('');
   const debouncedNameFilter = useDebouncedValue(seedNameFilter, 200);
-  const { fetchNextPage, data, isLoading, isFetching, error, refetch, hasNextPage } = useInfiniteQuery<
-    Page<SeedDto>,
-    Error
-  >({
-    queryKey: ['seeds', debouncedNameFilter],
-    queryFn: ({ pageParam = 1, queryKey }) => findAllSeeds(pageParam, queryKey[1] as string),
-    getNextPageParam: (lastPage) => {
-      const hasMore = lastPage.total_pages > lastPage.page;
-      return hasMore ? lastPage.page + 1 : undefined;
-    },
-    getPreviousPageParam: () => undefined,
-  });
+  const { fetchNextPage, data, isLoading, isFetching, error, refetch, hasNextPage } =
+    useInfiniteQuery<Page<SeedDto>, Error>({
+      queryKey: ['seeds', debouncedNameFilter],
+      queryFn: ({ pageParam = 1, queryKey }) => findAllSeeds(pageParam, queryKey[1] as string),
+      getNextPageParam: (lastPage) => {
+        const hasMore = lastPage.total_pages > lastPage.page;
+        return hasMore ? lastPage.page + 1 : undefined;
+      },
+      getPreviousPageParam: () => undefined,
+    });
   if (error) {
     console.error(error.message);
     toast.error(t('seeds:view_seeds.fetching_error'));
