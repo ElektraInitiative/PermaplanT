@@ -38,6 +38,13 @@
 - Make sure the [ENV](#environment-variables) variables are set according to your desire.
 - Make sure you have a virtual environment as this will install all Python dependencies.
 
+Create and activate a python virtual environment
+
+```sh
+python3 -m venv venv
+source venv/bin/activate
+```
+
 ```sh
 ./install.sh
 ./e2e.sh
