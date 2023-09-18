@@ -13,7 +13,7 @@
 - **Precondition:**
   - The user has opened the app and is editing a map.
 - **Main success scenario:**
-  - The user hovers over the [for diversity recommended plant](../current/plants_layer.md).
+  - The user hovers over the [for diversity recommended plant](../done/plants_layer.md).
   - The user is shown a little box with additional information and interesting facts about that plant.
   - The user is interested in the plant and places it on the map.
 - **Alternative scenario:**
