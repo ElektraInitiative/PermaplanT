@@ -104,8 +104,8 @@ install-pre-commit: ## Install pre-commit
 	@if [ ! -f $$(which pre-commit) ]; then \
 		echo "pre-commit is not installed. Installing..."; \
 		pip install pre-commit; \
-		pre-commit install; \
 	else \
+        pre-commit install; \
 		echo "Installation is up to date"; \
 	fi
 
