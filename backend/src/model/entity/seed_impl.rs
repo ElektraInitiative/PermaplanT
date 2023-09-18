@@ -9,11 +9,17 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 use uuid::Uuid;
 
-use crate::db::pagination::Paginate;
+use crate::db::{
+    function::{array_to_string, greatest, similarity, similarity_nullable},
+    pagination::Paginate,
+};
 use crate::model::dto::{Page, PageParameters, SeedSearchParameters};
 use crate::{
     model::dto::{NewSeedDto, SeedDto},
-    schema::seeds::{self, all_columns, archived_at, harvest_year, name, owner_id, use_by},
+    schema::{
+        plants::{self, common_name_de, common_name_en, unique_name},
+        seeds::{self, all_columns, archived_at, harvest_year, name, owner_id, use_by},
+    },
 };
 
 use crate::model::r#enum::include_archived_seeds::IncludeArchivedSeeds;
@@ -37,16 +43,27 @@ impl Seed {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<SeedDto>> {
+        let mut search_query = String::new();
+        if let Some(name_search) = search_parameters.name {
+            search_query = name_search;
+        }
+
         let mut query = seeds::table
-            .select(all_columns)
+            .inner_join(plants::table)
+            .select((
+                greatest(
+                    similarity(name, &search_query),
+                    similarity(unique_name, &search_query),
+                    similarity(array_to_string(common_name_de, " "), &search_query),
+                    similarity(array_to_string(common_name_en, " "), &search_query),
+                ),
+                all_columns,
+            ))
             .order((use_by.asc(), harvest_year.asc()))
             .into_boxed();
 
         let mut include_archived = IncludeArchivedSeeds::NotArchived;
 
-        if let Some(name_search) = search_parameters.name {
-            query = query.filter(name.ilike(format!("%{name_search}%")));
-        }
         if let Some(harvest_year_search) = search_parameters.harvest_year {
             query = query.filter(harvest_year.eq(harvest_year_search));
         }
@@ -68,7 +85,10 @@ impl Seed {
             .paginate(page_parameters.page)
             .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));
-        query.load_page::<Self>(conn).await.map(Page::from_entity)
+        query
+            .load_page::<(f32, Self)>(conn)
+            .await
+            .map(Page::from_entity)
     }
 
     /// Fetch seed by id from the database.
