@@ -45,7 +45,7 @@ run-mdbook: doc-mdbook ## Build & Run mdbook
 	@mdbook serve --open
 
 .PHONY: run-storybook
-run-storybook: build-storybook ## Build & Run storybook
+run-storybook: doc-storybook ## Build & Run storybook
 	@cd frontend && npm run storybook
 
 
