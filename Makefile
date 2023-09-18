@@ -140,12 +140,17 @@ install-mdbook: ## Install mdbook deps
 	fi
 
 .PHONY: install-e2e
-install-e2e: ## Install e2e dependencies within this repo
+install-e2e: ## Install e2e python dependencies within this repo
 	@echo "Checking if e2e is installed..."
 	@if [ $(E2E_INSTALL_NEWER) -eq 0 ]; then \
-		echo "Running 'e2e install'..."; \
-        rm -rf e2e/venv; \
-		cd e2e && ./install.sh; \
+        read -p "This will install python packages. Do you want to install them now? (y/n): " choice; \
+		if [ $$choice = "y" ]; then \
+            echo "Running 'e2e install'..."; \
+            rm -rf e2e/venv; \
+            cd e2e && ./install.sh; \
+        else \
+			echo "Installation skipped."; \
+		fi; \
 	else \
 		echo "Installation is up to date"; \
 	fi
