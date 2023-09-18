@@ -176,7 +176,7 @@ const CreateSeedForm = ({
                 setPlantOption(option as SelectOption);
               }}
               onChange={onChange}
-              data-testid="plant_name"
+              data-testid="seed-form-plant-name"
             />
             {/* The text from the title attribute will be displayed in the
                 error message in case the specified pattern does not match. */}
@@ -201,7 +201,7 @@ const CreateSeedForm = ({
               id="harvest_year"
               register={register}
               onChange={onChange}
-              data-testid="harvest_year"
+              data-testid="seed-form-harvest_year"
             />
             <SelectMenu
               id="quantity"
@@ -219,7 +219,7 @@ const CreateSeedForm = ({
               }}
               isClearable={false}
               onChange={onChange}
-              data-testid="amount"
+              data-testid="seed-form-amount"
             />
             <SimpleFormInput
               type="date"
@@ -228,7 +228,7 @@ const CreateSeedForm = ({
               id="use_by"
               register={register}
               onChange={onChange}
-              data-testid="best_by"
+              data-testid="seed-form-best_by"
             />
             <SimpleFormInput
               labelContent={t('seeds:origin')}
@@ -236,7 +236,7 @@ const CreateSeedForm = ({
               id="origin"
               register={register}
               onChange={onChange}
-              data-testid="origin"
+              data-testid="seed-form-origin"
             />
             <SelectMenu
               id="quality"
@@ -253,7 +253,7 @@ const CreateSeedForm = ({
               }}
               isClearable={false}
               onChange={onChange}
-              data-testid="quality"
+              data-testid="seed-form-quality"
             />
             <SimpleFormInput
               labelContent={t('seeds:taste')}
@@ -261,7 +261,7 @@ const CreateSeedForm = ({
               id="taste"
               register={register}
               onChange={onChange}
-              data-testid="taste"
+              data-testid="seed-form-taste"
             />
             <SimpleFormInput
               labelContent={t('seeds:yield')}
@@ -269,7 +269,7 @@ const CreateSeedForm = ({
               id="yield_"
               register={register}
               onChange={onChange}
-              data-testid="yield"
+              data-testid="seed-form-yield"
             />
             <SimpleFormInput
               labelContent={t('seeds:price')}
@@ -283,7 +283,7 @@ const CreateSeedForm = ({
               max={327.0 /* The backend won't accept any number higher than this. */}
               type="number"
               step="0.01"
-              data-testid="price"
+              data-testid="seed-form-price"
             />
             <SimpleFormInput
               type="number"
@@ -293,7 +293,7 @@ const CreateSeedForm = ({
               id="generation"
               register={register}
               onChange={onChange}
-              data-testid="generation"
+              data-testid="seed-form-generation"
             />
           </div>
           <div className="mb-6">
