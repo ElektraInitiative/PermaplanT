@@ -62,7 +62,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Improve Makefile #681 _(4ydan)_
 - _()_
 
 ## 0.3.3 - 15.09.2023 (536 commits)
