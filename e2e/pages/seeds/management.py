@@ -1,4 +1,3 @@
-
 from playwright.sync_api import Page, expect
 from e2e.pages.constants import E2E_URL
 from e2e.pages.abstract_page import AbstractPage
@@ -14,23 +13,31 @@ class SeedManagementPage(AbstractPage):
 
     def __init__(self, page: Page):
         self._page = page
-        self._create_button = page.get_by_role("button", name="New Entry")
+        self._new_entry_button = page.get_by_role("button", name="New Entry")
 
     def delete_seed(self, seed_name):
-        self._page.get_by_role("row", name=seed_name).get_by_test_id("delete-seed-button").click()
+        self._page.get_by_role("row", name=seed_name).get_by_test_id(
+            "delete-seed-button"
+        ).click()
+
+    def archive_first_seed(self):
+        """Archive the top seed of the seeds table"""
+        self._page.get_by_test_id("archive-seed-button").first.click()
 
     def to_seed_create_page(self) -> SeedCreatePage:
         """Navigates to `SeedCreatePage`"""
-        self._create_button.click()
+        self._new_entry_button.click()
         self._page.wait_for_url("**/seeds/new")
         return SeedCreatePage(self._page)
 
     def to_seed_edit_page(self, seed_name) -> SeedEditPage:
         """Navigates to `SeedEditPage`"""
-        self._page.get_by_role("row", name=seed_name).get_by_test_id("edit-seed-button").click()
+        self._page.get_by_role("row", name=seed_name).get_by_test_id(
+            "edit-seed-button"
+        ).click()
         self._page.wait_for_url("**/seeds/*/edit")
         return SeedEditPage(self._page)
 
-    def expect_seed_exists(self, seedname):
-        """Expects a seed to exist on the seed management page by looking for its additional name"""
-        expect(self._page.get_by_role("rowheader", name=seedname)).to_be_visible()
+    def expect_first_cell_exists(self, cell_value):
+        """Expects a cell to exist on the seed management page"""
+        expect(self._page.get_by_role("cell", name=cell_value)).to_be_visible()
