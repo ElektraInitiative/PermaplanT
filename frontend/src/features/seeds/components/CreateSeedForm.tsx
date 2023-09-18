@@ -176,7 +176,6 @@ const CreateSeedForm = ({
                 setPlantOption(option as SelectOption);
               }}
               onChange={onChange}
-              data-testid="seed-form-plant-name"
             />
             {/* The text from the title attribute will be displayed in the
                 error message in case the specified pattern does not match. */}
@@ -304,6 +303,7 @@ const CreateSeedForm = ({
                 setValue('notes', value);
                 setNotes(value);
               }}
+              data-testid="seed-form-notes"
               value={notes}
             />
           </div>

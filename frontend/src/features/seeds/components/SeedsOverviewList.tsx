@@ -119,7 +119,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
                         handleArchiveSeed(seed);
                       }}
                       title={t('seeds:view_seeds.archive_seed_tooltip')}
-                      data-testid="delete-seed-button"
+                      data-testid="archive-seed-button"
                     >
                       <ArchiveIcon />
                     </IconButton>
