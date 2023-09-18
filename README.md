@@ -21,7 +21,14 @@ Which will open [/doc/architecture/README.md](/doc/architecture/README.md) as fi
 
 ## Makefile commands
 
+<<<<<<< HEAD
 Type `make help` to see all commands.
+=======
+The Makefile consists of frequently used workflows.
+For more detailed executions have a look inside the specific subfolders.
+
+Following commands exists:
+>>>>>>> b27a4f1a (Improve documentation, add more env variables)
 
 **Some of the commands require env variables to be set.
 Have a look at [backend env variables](./doc/backend/01setup.md), [frontend env variables](./frontend/README.md) and [scraper env variables](./scraper/README.md)**
