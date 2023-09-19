@@ -28,11 +28,19 @@ use super::{NewSeed, Seed};
 
 impl Seed {
     /// Get a page of seeds.
-    /// Seeds are returned in ascending order of their `use_by` dates.
-    /// If that is not available, the harvest year is used instead.
+    /// The results will be filtered using `search_parameters`.
     ///
+    /// `search_parameters.name` filters seeds by their full names (as defined in the documentation).
+    /// `search_parameters.harvest_year` will only include seeds with a specific harvest year.
+    /// `search_parameters.archived` specifies if archived seeds, non archived seeds or both kinds
+    /// should be part of the results.
     /// By default, archived seeds will not be returned.
-    /// This behaviour can be changed using `search_parameters`.
+    ///
+    /// If `search_parameters.name` is set, seeds will be ordered by how similar they are to the
+    /// `search_parameters.name`.
+    /// Otherwise, seeds are returned in ascending order of their `use_by` dates.
+    /// `harvest_year` will be used if `use_by` has not been set.
+    ///
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
@@ -42,6 +50,9 @@ impl Seed {
         page_parameters: PageParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Page<SeedDto>> {
+        // Diesel allows only one select call per query.
+        // We therefore always include similarity measures for the complete name,
+        // even if we don't need them.
         let mut search_query = &String::new();
         if let Some(name_search) = &search_parameters.name {
             search_query = name_search;
@@ -60,8 +71,6 @@ impl Seed {
             ))
             .into_boxed();
 
-        let mut include_archived = IncludeArchivedSeeds::NotArchived;
-
         if let Some(harvest_year_search) = search_parameters.harvest_year {
             query = query.filter(harvest_year.eq(harvest_year_search));
         }
@@ -75,12 +84,15 @@ impl Seed {
                         .or(similarity(array_to_string(common_name_en, " "), search_query).gt(0.1))
                         .or(similarity(unique_name, search_query).gt(0.1)),
                 )
+                // Order seeds by how similar they are to the search term,
+                // if one was set.
                 .order(sql::<Float>("1").desc());
         } else {
             // By default, seeds should be ordered by either use_by date or harvest year.
             query = query.order((use_by.asc(), harvest_year.asc()));
         }
 
+        let mut include_archived = IncludeArchivedSeeds::NotArchived;
         if let Some(include_archived_) = search_parameters.archived {
             include_archived = include_archived_;
         }
