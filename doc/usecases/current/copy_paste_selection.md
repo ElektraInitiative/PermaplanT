@@ -7,7 +7,7 @@
 - **Actors:** App User
 - **Brief:** The user can copy and paste a selection of elements, including succeeding crops, in their map
 - **Status:** Merge Pending https://github.com/ElektraInitiative/PermaplanT/pull/356
-- **Assignee:** Christoph N. or Giancarlo
+- **Assignee:** Christoph N.
 
 ## Scenarios
 

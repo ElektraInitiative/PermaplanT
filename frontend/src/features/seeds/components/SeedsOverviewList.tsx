@@ -15,7 +15,12 @@ import { useNavigate } from 'react-router-dom';
 interface SeedsOverviewListProps {
   seeds: SeedDto[];
   handleArchiveSeed: (seed: SeedDto) => void;
-  pageFetcher: { isLoading: boolean; isFetching: boolean; fetcher: () => Promise<unknown> };
+  pageFetcher: {
+    isLoading: boolean;
+    isFetching: boolean;
+    fetcher: () => Promise<unknown>;
+    hasNextPage: boolean | undefined;
+  };
 }
 
 const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverviewListProps) => {
@@ -28,6 +33,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
   useEffect(() => {
     if (
       ref?.current?.clientHeight === ref?.current?.scrollHeight &&
+      pageFetcher.hasNextPage &&
       !pageFetcher.isLoading &&
       !pageFetcher.isFetching
     ) {

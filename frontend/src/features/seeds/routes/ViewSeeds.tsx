@@ -2,7 +2,6 @@ import { findAllSeeds } from '../api/findAllSeeds';
 import SeedsOverviewList from '../components/SeedsOverviewList';
 import { Page, SeedDto } from '@/bindings/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
-import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import { archiveSeed } from '@/features/seeds/api/archiveSeed';
@@ -20,20 +19,18 @@ export const ViewSeeds = () => {
   const { t } = useTranslation(['seeds', 'common']);
 
   // Set the filter when the user types in the search input
-  const [seedNameFilter, setSeedNameFilter] = useState<string>('');
+  const [seedNameFilter] = useState<string>('');
   const debouncedNameFilter = useDebouncedValue(seedNameFilter, 200);
-  const { fetchNextPage, data, isLoading, isFetching, error, refetch } = useInfiniteQuery<
-    Page<SeedDto>,
-    Error
-  >({
-    queryKey: ['seeds', debouncedNameFilter],
-    queryFn: ({ pageParam = 1, queryKey }) => findAllSeeds(pageParam, queryKey[1] as string),
-    getNextPageParam: (lastPage) => {
-      const hasMore = lastPage.total_pages > lastPage.page;
-      return hasMore ? lastPage.page + 1 : undefined;
-    },
-    getPreviousPageParam: () => undefined,
-  });
+  const { fetchNextPage, data, isLoading, isFetching, error, refetch, hasNextPage } =
+    useInfiniteQuery<Page<SeedDto>, Error>({
+      queryKey: ['seeds', debouncedNameFilter],
+      queryFn: ({ pageParam = 1, queryKey }) => findAllSeeds(pageParam, queryKey[1] as string),
+      getNextPageParam: (lastPage) => {
+        const hasMore = lastPage.total_pages > lastPage.page;
+        return hasMore ? lastPage.page + 1 : undefined;
+      },
+      getPreviousPageParam: () => undefined,
+    });
   if (error) {
     console.error(error.message);
     toast.error(t('seeds:view_seeds.fetching_error'));
@@ -45,15 +42,18 @@ export const ViewSeeds = () => {
   };
 
   const pageFetcher = {
+    hasNextPage,
     isLoading,
     isFetching,
     fetcher: fetchNextPage,
   };
 
+  /*
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value.toLowerCase();
     setSeedNameFilter(searchValue);
   };
+  */
 
   // Simple wrapper functions that allows us to submit a seed dto in place of just a seed id.
   const restoreSeedUsingSeedDto = async (seed: SeedDto) => {
@@ -99,12 +99,13 @@ export const ViewSeeds = () => {
     <Suspense>
       <PageLayout styleNames="flex flex-col space-y-4">
         <PageTitle title={t('seeds:view_seeds.title')} />
-        <span>{t('seeds:view_seeds.search_hint')}</span>
+        {/* Search is currently disabled, please do not remove! */}
+        {/* <span>{t('seeds:view_seeds.search_hint')}</span> */}
         <div className="flex flex-row justify-between space-x-6">
-          <SearchInput
+          {/* <SearchInput
             placeholder={t('seeds:view_seeds.search_placeholder')}
             handleSearch={handleSearch}
-          />
+          /> */}
           <SimpleButton onClick={handleCreateSeedClick}>
             {t('seeds:view_seeds.btn_new_entry')}
           </SimpleButton>

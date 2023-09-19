@@ -38,6 +38,13 @@
 - Make sure the [ENV](#environment-variables) variables are set according to your desire.
 - Make sure you have a virtual environment as this will install all Python dependencies.
 
+Create and activate a python virtual environment
+
+```sh
+python3 -m venv venv
+source venv/bin/activate
+```
+
 ```sh
 ./install.sh
 ./e2e.sh
@@ -57,14 +64,12 @@ For type details and defaults see [constants.py](pages/constants.py)
 - `E2E_PASSWORD`
   The password to login to permaplant.
 
-### Creating a virtual env
+## Quickstart
+
+- Make sure your app (frontend + backend) is running.
+- Make sure the [ENV](#environment-variables) variables are set according to your desire.
 
 ```sh
-sudo apt update
-sudo apt install python3
-sudo apt install python3-venv
-python3 -m venv venv
-source venv/bin/activate
 ./install.sh
 ./e2e.sh
 ```
