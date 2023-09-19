@@ -12,7 +12,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Re-enable seed search. It will now take the entire plant name into account. _(Moritz)_
 - _()_
 - _()_
 - _()_
