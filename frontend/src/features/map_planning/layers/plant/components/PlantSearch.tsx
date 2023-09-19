@@ -4,7 +4,7 @@ import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
 import { PlantListItem } from './PlantListItem';
 import { PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
-import SearchInput from '@/components/Form/SearchInput';
+import SearchInput, { SearchInputHandle } from '@/components/Form/SearchInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { resetSelection } from '@/features/map_planning/utils/ShapesSelection';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
@@ -21,7 +21,7 @@ export const PlantSearch = () => {
   const isReadOnlyMode = useIsReadOnlyMode();
 
   const [searchVisible, setSearchVisible] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchInputRef = useRef<SearchInputHandle>(null);
   const { t } = useTranslation(['plantSearch']);
 
   const clearSearch = () => {
@@ -42,7 +42,7 @@ export const PlantSearch = () => {
   );
 
   useEffect(() => {
-    searchInputRef.current?.focus();
+    searchInputRef.current?.focusSearchInputField();
   }, [searchVisible]);
 
   return (
@@ -50,7 +50,7 @@ export const PlantSearch = () => {
       <div className="flex items-center justify-between">
         <h2>{t('plantSearch:planting')}</h2>
         {searchVisible ? (
-          <IconButton onClick={clearSearch}>
+          <IconButton onClick={clearSearch} data-testid="plant-search-close-icon">
             <CloseIcon />
           </IconButton>
         ) : (
@@ -83,9 +83,6 @@ export const PlantSearch = () => {
               placeholder={t('plantSearch:placeholder')}
               handleSearch={(event) => plantSearchActions.searchPlants(event.target.value)}
               ref={searchInputRef}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') clearSearch();
-              }}
               data-testid="plant-search-input"
             ></SearchInput>
             <ul data-tourid="plant_list">
@@ -96,7 +93,6 @@ export const PlantSearch = () => {
                   key={plant.id}
                   onClick={() => {
                     handleClickOnPlantListItem(plant);
-                    clearSearch();
                   }}
                 />
               ))}
