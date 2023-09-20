@@ -180,6 +180,7 @@ const CreateSeedForm = ({
               id="name"
               register={register}
               onChange={onChange}
+              pattern="^(?!.*(-|')).*$"
             />
             <SimpleFormInput
               type="number"
