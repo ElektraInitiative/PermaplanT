@@ -39,7 +39,7 @@ impl Seed {
     ) -> QueryResult<Page<SeedDto>> {
         let mut query = seeds::table
             .select(all_columns)
-            .order((use_by.desc(), harvest_year.asc()))
+            .order((harvest_year.asc(), use_by.asc()))
             .into_boxed();
 
         let mut include_archived = IncludeArchivedSeeds::NotArchived;
