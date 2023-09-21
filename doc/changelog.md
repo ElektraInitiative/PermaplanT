@@ -12,7 +12,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Invert ordering of seeds by expiration date _(Moritz)_
 - _()_
 - _()_
 - _()_
