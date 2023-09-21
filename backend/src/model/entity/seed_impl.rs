@@ -23,8 +23,8 @@ use super::{NewSeed, Seed};
 
 impl Seed {
     /// Get a page of seeds.
-    /// Seeds are returned in descending order of their `use_by` dates.
-    /// If that is not available, the harvest year is used in ascending order.
+    /// Seeds are returned in asscending order of their `harvest year`.
+    /// If that is not available, their `use by` date in ascending order is used.
     ///
     /// By default, archived seeds will not be returned.
     /// This behaviour can be changed using `search_parameters`.
