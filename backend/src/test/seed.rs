@@ -551,5 +551,5 @@ async fn test_archive_seed_succeeds() {
     assert_eq!(seed_dto2.harvest_year, 2022);
     assert_ne!(seed_dto2.archived_at, None);
     assert_eq!(seed_dto2.quantity, Quantity::Enough);
-    assert_eq!(seed_dto2.use_by, NaiveDate::from_ymd_opt(2022, 01, 01));
+    assert_eq!(seed_dto2.use_by, NaiveDate::from_ymd_opt(2023, 01, 01));
 }
