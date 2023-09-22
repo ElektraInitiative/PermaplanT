@@ -20,6 +20,16 @@ async fn test_seeds_pagination_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
         async {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::unique_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name_en
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(conn)
+                .await?;
+
             // Generate 15 test entries
             let values = (0..15)
                 .map(|i| {
@@ -27,6 +37,7 @@ async fn test_seeds_pagination_succeeds() {
                         crate::schema::seeds::id.eq(-1 * i),
                         crate::schema::seeds::name.eq(format!("Testia {i}")),
                         crate::schema::seeds::harvest_year.eq(2022),
+                        crate::schema::seeds::plant_id.eq(-1),
                         crate::schema::seeds::quantity.eq(Quantity::Enough),
                         crate::schema::seeds::owner_id.eq(user_id),
                     )

@@ -12,7 +12,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- Invert ordering of seeds by expiration date _(Moritz)_
+- Fix ordering of seeds by expiration date _(Moritz)_
+- Re-enable seed search. It will now take the entire plant name into account. _(Moritz)_
 - _()_
 - _()_
 - _()_
