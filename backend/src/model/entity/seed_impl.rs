@@ -28,7 +28,6 @@ use super::{NewSeed, Seed};
 
 impl Seed {
     /// Get a page of seeds.
-    /// The results will be filtered using `search_parameters`.
     ///
     /// `search_parameters.name` filters seeds by their full names (as defined in the documentation).
     /// `search_parameters.harvest_year` will only include seeds with a specific harvest year.
@@ -38,8 +37,7 @@ impl Seed {
     ///
     /// If `search_parameters.name` is set, seeds will be ordered by how similar they are to the
     /// `search_parameters.name`.
-    /// Otherwise, seeds are returned in ascending order of their `use_by` dates.
-    /// `harvest_year` will be used if `use_by` has not been set.
+    /// Otherwise, seeds are returned in ascending order of their `use_by` and `harvest_year` dates.
     ///
     ///
     /// # Errors
@@ -89,7 +87,7 @@ impl Seed {
                 .order(sql::<Float>("1").desc());
         } else {
             // By default, seeds should be ordered by either use_by date or harvest year.
-            query = query.order((use_by.asc(), harvest_year.asc()));
+            query = query.order((harvest_year.asc(), use_by.asc()));
         }
 
         let mut include_archived = IncludeArchivedSeeds::NotArchived;
