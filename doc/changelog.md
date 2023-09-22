@@ -53,7 +53,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Make resetting in search input component cross-browser compatible and adapt resetting of search results #761 _(tschawax)_
 - _()_
 - _()_
-- _()_
+- Create remember-viewing-state usecase #1 _(tschawax)_
 - _()_
 - _()_
 - _()_
