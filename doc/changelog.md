@@ -58,7 +58,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Add additional name to plant suggestions on map _(Moritz)_
 - _()_
 - _()_
 - _()_
