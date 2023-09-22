@@ -11,6 +11,7 @@ use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 use uuid::Uuid;
 
+use crate::model::entity::Seed;
 use crate::{
     db::{
         function::{array_to_string, greatest, similarity, similarity_nullable},
@@ -25,7 +26,7 @@ use crate::{
             self, all_columns, common_name_de, common_name_en, edible_uses_en, sowing_outdoors,
             unique_name,
         },
-        seeds,
+        seeds::{self, all_columns as seed_all_columns},
     },
 };
 
@@ -120,7 +121,7 @@ impl Plants {
 
         let query = plants::table
             .inner_join(seeds::table)
-            .select(all_columns)
+            .select((all_columns, seed_all_columns))
             .filter(
                 seeds::quantity
                     .ne(Quantity::Nothing)
@@ -139,6 +140,9 @@ impl Plants {
             .per_page(page_parameters.per_page);
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        query.load_page::<Self>(conn).await.map(Page::from_entity)
+        query
+            .load_page::<(Self, Seed)>(conn)
+            .await
+            .map(Page::from_entity)
     }
 }

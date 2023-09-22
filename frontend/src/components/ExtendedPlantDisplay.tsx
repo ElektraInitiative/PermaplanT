@@ -12,7 +12,9 @@ const ExtendedPlantsSummaryDisplayName = ({
 
   // The additional name is the seeds name.
   // It should be displayed every time a seed exists for a plant.
-  const additionalName = seed ? `- ${seed.name}` : '';
+  // The additional name may either be delivered through the backend or
+  // derived on the frontend if necessary.
+  const additionalName = seed ? `- ${seed.name}` : plant.additional_name;
 
   return (
     <span>
