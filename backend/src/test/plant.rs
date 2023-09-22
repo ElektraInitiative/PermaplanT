@@ -54,6 +54,7 @@ async fn test_get_all_plants_succeeds() {
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
         spread: Some(PlantSpread::Wide),
+        additional_name: None,
     };
 
     let result = test::read_body(resp).await;
@@ -103,6 +104,7 @@ async fn test_get_one_plant_succeeds() {
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
         spread: Some(PlantSpread::Wide),
+        additional_name: None,
     };
 
     let result = test::read_body(resp).await;
@@ -152,6 +154,7 @@ async fn test_search_plants_succeeds() {
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
         spread: Some(PlantSpread::Wide),
+        additional_name: None,
     };
 
     let result = test::read_body(resp).await;
