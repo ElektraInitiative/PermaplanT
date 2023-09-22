@@ -87,7 +87,7 @@ impl Seed {
                 .order(sql::<Float>("1").desc());
         } else {
             // By default, seeds should be ordered by either use_by date or harvest year.
-            .order((harvest_year.asc(), use_by.asc()))
+            query = query.order((harvest_year.asc(), use_by.asc()));
         }
 
         let mut include_archived = IncludeArchivedSeeds::NotArchived;
