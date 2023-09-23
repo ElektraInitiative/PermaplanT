@@ -5,9 +5,8 @@
 - [Directory structure](#directory-structure)
 - [Coding Guidelines](#coding-guidelines)
 - [Quickstart](#quickstart)
-  - [Environment Variables](#environment-variables)
-  - [Creating a virtual env](#creating-a-virtual-env)
   - [Docker](#docker)
+- [Environment Variables](#environment-variables)
 - [Test Results](#test-results)
 - [Test Reports](#test-reports)
 - [Cleanup](#cleanup)
@@ -33,10 +32,18 @@
 
 ## Quickstart
 
+Linux (Debian) is the OS under which these tests are developed and executed.
+If you are confronting any issue on different OS, feel free to open a PR or contact someone.
+
+### Pre-requisites
+
 - All commands/scripts in this README are executed from this folder (`/e2e`).
 - Make sure PermaplanT's frontend and backend is running.
 - Make sure the [ENV](#environment-variables) variables are set according to your desire.
 - Make sure you have a virtual environment as this will install all Python dependencies.
+- Make sure `python` & `python3-pip` is installed
+
+### Linux
 
 Create and activate a python virtual environment
 
@@ -50,29 +57,11 @@ source venv/bin/activate
 ./e2e.sh
 ```
 
-### Environment Variables
+For a more detailed execution have a look [here](#optional-arguments)
 
-All environment variables are optional, since they have defaults.
-For type details and defaults see [constants.py](pages/constants.py)
+### Windows
 
-- `E2E_URL`
-  The url where the app is running.
-
-- `E2E_USERNAME`
-  The username to login to permaplant.
-
-- `E2E_PASSWORD`
-  The password to login to permaplant.
-
-## Quickstart
-
-- Make sure your app (frontend + backend) is running.
-- Make sure the [ENV](#environment-variables) variables are set according to your desire.
-
-```sh
-./install.sh
-./e2e.sh
-```
+Have a look inside install.sh and e2e.sh and perform the same steps in your windows terminal.
 
 ### Docker
 
@@ -85,6 +74,38 @@ docker run --network="host" permaplant-e2e ./e2e.sh
 
 The Jenkins pipeline performs exactly these two steps.
 So running this dockerfile locally should mirror CI.
+
+## Environment Variables
+
+If any of the below mentioned variables are not set, the tests will fallback to defaults.
+
+### E2E env variables
+
+- `E2E_TIMEOUT` (default: `30000`)
+
+  The timeout (in ms) for a single action (click, navigate, etc.).
+
+- `E2E_URL` (default: `localhost:5173`)
+
+  The url where the app is running.
+
+- `E2E_USERNAME` (default: `Adi`)
+
+  The username to login to permaplant.
+
+- `E2E_PASSWORD` (default: `1234`)
+
+  The password to login to permaplant.
+
+### Project env variables
+
+Furthermore following variables are expected to be set in your environment and required by `clean_db.py`:
+
+- `POSTGRES_DB` (default: `permaplant`)
+- `POSTGRES_USER` (default: `permaplant`)
+- `POSTGRES_PASSWORD` (default: `permaplant`)
+- `DATABASE_URL` (default: `postgres://permaplant:permaplant@db/permaplant`)
+- `DATABASE_PORT` (default: `5432`)
 
 ## Cleanup
 
