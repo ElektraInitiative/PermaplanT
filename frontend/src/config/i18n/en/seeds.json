@@ -43,7 +43,7 @@
     "success": "Seed modified successfully!"
   },
   "harvest_year": "Harvest Year",
-  "additional_name": "Additional Name (' and - not allowed)",
+  "additional_name": "Additional Name (without ' and -)",
   "binomial_name": "Plant Name",
   "quantity": "Amount",
   "origin": "Origin",
