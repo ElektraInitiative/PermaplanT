@@ -54,7 +54,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- CI: Refactor to use makefile target for storybook #848 _(4ydan)_
 - E2E: Refactor data-testid according to naming convention _(4ydan)_
 - _()_
 - _()_
