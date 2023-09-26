@@ -75,7 +75,7 @@ doc-mdbook: install-mdbook ## Mdbook doc
 	@mdbook build
 
 .PHONY: doc-storybook
-doc-storybook: install-frontend ## Storybook doc
+doc-storybook: install-frontend install-types doc-frontend ## Storybook doc
 	@cd frontend && npm run build-storybook
 
 .PHONY: doc-backend

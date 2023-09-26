@@ -171,13 +171,9 @@ def testAndBuildFrontend() {
                     stash includes: 'frontend/dist/**/*', name: 'frontend'
                 }
 
-                stage('build-typedoc') {
-                    sh 'make generate-type-doc'
-                    stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
-                }
-
                 stage('build-storybook') {
-                    sh 'make build-storybook'
+                    sh 'make doc-frontend'
+                    sh 'make doc-storybook'
                     stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
                 }
             }
@@ -276,7 +272,6 @@ lock("${env.NODE_NAME}-exclusive") {
                 unstash 'frontend'
                 unstash 'backend'
                 unstash 'storybook'
-                unstash 'typedoc'
                 unstash 'mdbook'
 
                 echo 'Deploying to PR'
@@ -339,7 +334,6 @@ if (env.BRANCH_NAME == 'master') {
                 unstash 'frontend'
                 unstash 'backend'
                 unstash 'storybook'
-                unstash 'typedoc'
                 unstash 'mdbook'
 
                 echo 'Deploying to Dev ...'
