@@ -33,7 +33,7 @@
 
     "btn_create_seed": "Samen speichern",
     "error_create_seed": "Sorry, ich habe Schwierigkeiten den Samen auf meinem Server abzulegen. Bitte versuche es später erneut.",
-    "error_seed_already_exists": "Ein Samen mit dieser Kombination aus Namen und Pflanze existiert bereits! Bitte ändere die entsprechenden Felder und versuche es erneut.",
+    "error_seed_already_exists": "Sorry, du hast bereits einen Samen mit dieser Kombination aus Namen und Pflanze angelegt! Bitte ändere die entsprechenden Felder und versuche es erneut.",
     "error_delete_seed": "Sorry, ich habe Schwierigkeiten den Samen vom Server zu löschen. Bitte versuche es später erneut.",
     "error_fetching_seeds": "Sorry, ich habe Schwierigkeiten Samen von meinem Server zu erhalten. Bitte versuche es später erneut.",
     "error_fetching_plants": "Sorry, ich habe Schwierigkeiten Pflanzen von meinem Server zu erhalten. Bitte versuche es später erneut.",

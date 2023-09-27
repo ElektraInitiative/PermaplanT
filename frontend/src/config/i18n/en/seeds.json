@@ -32,7 +32,7 @@
     "error_price_must_be_number": "Sorry, I only understand the price as a number with dot (.) or comma (,) depending on your Browser's preferences as decimal separator, e.g. 2.99",
     "btn_create_seed": "Create Seed",
     "error_create_seed": "Sorry, I'm experiencing trouble storing the seed on my server. Please try again later.",
-    "error_seed_already_exists": "A seed with this combination of name and plant already exists! Please change the relevant fields and try again.",
+    "error_seed_already_exists": "Sorry, you have already created a seed with this combination of name and plant! Please change the relevant fields and try again.",
     "error_delete_seed": "Sorry, I'm experiencing trouble deleting the seed from the server. Please try again later.",
     "error_fetching_seeds": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
     "error_fetching_plants": "Sorry, I'm experiencing trouble fetching plants from my server. Please try again later.",
