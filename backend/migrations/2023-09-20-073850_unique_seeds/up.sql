@@ -7,4 +7,4 @@ UNIQUE (owner_id, plant_id, name);
 -- when seeds are displayed with their full name.
 ALTER TABLE seeds
 ADD CONSTRAINT seeds_disalow_confusing_characters
-CHECK (name ~ '^(?!.*(\-|\'')).*$');
+CHECK (name ~ '^(?!.*(\-|\'')).*$'); -- '' is the escape sequence for a single quote in SQL
