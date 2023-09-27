@@ -3,8 +3,9 @@ ALTER TABLE seeds
 ADD CONSTRAINT unique_seeds
 UNIQUE (owner_id, plant_id, name);
 
--- Make sure the user can't enter names with - or ' in the name, as this could cause confusion
+-- Make sure the user can't enter names with '-' in the name, as this could cause confusion
 -- when seeds are displayed with their full name.
+-- A seed name must also contain at least one character or digit from the English or German alphabet.
 ALTER TABLE seeds
 ADD CONSTRAINT seeds_disallow_confusing_characters
-CHECK (name ~ '^(?!.*(\-|\'')).*$'); -- '' is the escape sequence for a single quote in SQL
+CHECK (name ~ '^(?!.*(\-))(?=.*[a-zA-Z0-9äöüÄÖÜß]).*$');
