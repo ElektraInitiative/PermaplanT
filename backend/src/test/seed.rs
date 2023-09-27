@@ -49,7 +49,7 @@ async fn test_find_two_seeds_succeeds() {
                     (
                         &crate::schema::seeds::id.eq(-2),
                         &crate::schema::seeds::name.eq("Testia testium"),
-                        &crate::schema::seeds::harvest_year.eq(2023),
+                        &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
                         &crate::schema::seeds::owner_id.eq(user_id),
                         &crate::schema::seeds::plant_id.eq(-1),
@@ -87,7 +87,7 @@ async fn test_find_two_seeds_succeeds() {
     let seed_dto1 = page.results.get(0).unwrap();
     assert_eq!(seed_dto1.id, -2);
     assert_eq!(seed_dto1.name, "Testia testium".to_owned());
-    assert_eq!(seed_dto1.harvest_year, 2023);
+    assert_eq!(seed_dto1.harvest_year, 2022);
     assert_eq!(seed_dto1.quantity, Quantity::NotEnough);
     assert_eq!(seed_dto1.use_by, NaiveDate::from_ymd_opt(2022, 01, 01));
     let seed_dto2 = page.results.get(1).unwrap();
@@ -495,7 +495,7 @@ async fn test_archive_seed_succeeds() {
                     (
                         &crate::schema::seeds::id.eq(-2),
                         &crate::schema::seeds::name.eq("Testia testium"),
-                        &crate::schema::seeds::harvest_year.eq(2023),
+                        &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
                         &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::owner_id.eq(user_id),
@@ -542,7 +542,7 @@ async fn test_archive_seed_succeeds() {
     let seed_dto1 = page.results.get(0).unwrap();
     assert_eq!(seed_dto1.id, -2);
     assert_eq!(seed_dto1.name, "Testia testium".to_owned());
-    assert_eq!(seed_dto1.harvest_year, 2023);
+    assert_eq!(seed_dto1.harvest_year, 2022);
     assert_eq!(seed_dto1.quantity, Quantity::NotEnough);
     assert_eq!(seed_dto1.use_by, NaiveDate::from_ymd_opt(2022, 01, 01));
     let seed_dto2 = page.results.get(1).unwrap();
