@@ -62,7 +62,7 @@ pub async fn create(
     let mut conn = app_data.pool.get().await?;
 
     let seed_trimmed_name = NewSeedDto {
-        name: new_seed.name.trim().to_string(),
+        name: new_seed.name.trim().to_owned(),
         ..new_seed
     };
 
