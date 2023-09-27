@@ -45,7 +45,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Make sure that two seeds can't have the same combination of user, name and plant _(Moritz)_
-- _()_
+- Disallow potential confusing characters in seed names _(Moritz)_
 - Make resetting in search input component cross-browser compatible and adapt resetting of search results #761 _(tschawax)_
 - _()_
 - _()_
