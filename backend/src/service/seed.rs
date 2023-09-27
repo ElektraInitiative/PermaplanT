@@ -60,7 +60,13 @@ pub async fn create(
     app_data: &Data<AppDataInner>,
 ) -> Result<SeedDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Seed::create(new_seed, user_id, &mut conn).await?;
+
+    let seed_trimmed_name = NewSeedDto {
+        name: new_seed.name.trim().to_string(),
+        ..new_seed
+    };
+
+    let result = Seed::create(seed_trimmed_name, user_id, &mut conn).await?;
     Ok(result)
 }
 
