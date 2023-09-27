@@ -7,5 +7,5 @@ UNIQUE (owner_id, plant_id, name);
 -- when seeds are displayed with their full name.
 -- A seed name must also contain at least one character or digit from the English or German alphabet.
 ALTER TABLE seeds
-ADD CONSTRAINT seeds_disallow_confusing_characters
+ADD CONSTRAINT restrict_seed_name
 CHECK (name ~ '^(?!.*(\-))(?=.*[a-zA-Z0-9äöüÄÖÜß]).*$');
