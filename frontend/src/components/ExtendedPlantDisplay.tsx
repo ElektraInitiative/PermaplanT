@@ -12,26 +12,26 @@ const ExtendedPlantsSummaryDisplayName = ({
 
   // The additional name is the seeds name.
   // It should be displayed every time a seed exists for a plant.
-  const additionalName = seed ? `- ${seed.name}` : '';
+  const additionalName = seed ? ` - ${seed.name}` : '';
 
   return (
     <span>
       {transformedPlant.displayName.common_name ? (
         <>
-          {transformedPlant.displayName.common_name} {additionalName} (
+          {transformedPlant.displayName.common_name} (
           <i>{transformedPlant.displayName.unique_name}</i>
           {transformedPlant.displayName.cultivar
             ? ` '${transformedPlant.displayName.cultivar}'`
             : ''}
-          )
+          {additionalName})
         </>
       ) : (
         <>
           <i>{transformedPlant.displayName.unique_name}</i>
-          {additionalName}
           {transformedPlant.displayName.cultivar
             ? ` '${transformedPlant.displayName.cultivar}'`
             : ''}
+          {additionalName}
         </>
       )}
     </span>

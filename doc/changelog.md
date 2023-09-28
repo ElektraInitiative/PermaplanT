@@ -25,7 +25,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Rectify order of name parts in plant names _(Moritz)_
 - _()_
 - _()_
 - _()_
