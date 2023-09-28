@@ -7,6 +7,7 @@ import { NewSeedDto, Quality, Quantity, SeedDto } from '@/bindings/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import SimpleFormTextArea from '@/components/Form/SimpleFormTextArea';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
@@ -277,7 +278,7 @@ const CreateSeedForm = ({
             />
           </div>
           <div className="mb-6">
-            <SimpleFormInput
+            <SimpleFormTextArea
               type="textarea"
               labelText={t('seeds:notes')}
               placeholder="..."
