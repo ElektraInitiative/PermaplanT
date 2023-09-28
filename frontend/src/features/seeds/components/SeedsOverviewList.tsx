@@ -74,7 +74,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
                   {t('seeds:quality')}
                 </th>
-                <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
+                <th scope="col" className="whitespace-nowrap px-6 py-3 dark:bg-neutral-200-dark">
                   {t('seeds:harvest_year')}
                 </th>
                 <th scope="col" className="px-6 py-3 dark:bg-neutral-200-dark">
