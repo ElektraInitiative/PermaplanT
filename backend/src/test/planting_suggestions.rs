@@ -96,6 +96,7 @@ async fn test_find_only_available_plants() {
 
     let test_plant = PlantsSummaryDto {
         id: -1,
+        additional_name: None,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant1".to_string())]),
         spread: Some(PlantSpread::Wide),
@@ -186,6 +187,7 @@ async fn test_find_only_available_seasonal_plants() {
 
     let test_plant = PlantsSummaryDto {
         id: -1,
+        additional_name: None,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant1".to_string())]),
         spread: Some(PlantSpread::Wide),
