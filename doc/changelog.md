@@ -16,7 +16,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Re-enable seed search. It will now take the entire plant name into account. _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Make plant names in select menu more consistent with seed overview _(Moritz)_
 - _()_
 - _()_
 - _()_
