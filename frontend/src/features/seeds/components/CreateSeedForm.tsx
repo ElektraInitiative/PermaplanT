@@ -8,6 +8,7 @@ import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
+import { ExtendedPlantsSummary } from '@/utils/ExtendedPlantsSummary';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
 import { Suspense, useEffect, useState } from 'react';
@@ -117,11 +118,11 @@ const CreateSeedForm = ({
     const page = await searchPlants(inputValue, pageNumber);
 
     const plant_options: SelectOption[] = page.results.map((plant) => {
-      const common_name_en = plant.common_name_en ? ' (' + plant.common_name_en[0] + ')' : '';
+      const plantsSummary = new ExtendedPlantsSummary(plant);
 
       return {
         value: plant.id,
-        label: plant.unique_name + common_name_en,
+        label: `${plantsSummary.displayName.common_name} (${plantsSummary.displayName.unique_name})`,
       };
     });
 
