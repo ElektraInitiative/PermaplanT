@@ -40,7 +40,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Update seed use case _(Moritz)_
 - _()_
 - _()_
 - _()_
