@@ -16,7 +16,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Re-enable seed search. It will now take the entire plant name into account. _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Make plant names in select menu more consistent with seed overview _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -46,6 +46,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Make sure that two seeds can't have the same combination of user, name and plant _(Moritz)_
 - Restrict seed names to make complete names less confusing _(Moritz)_
+- _()_
+- Fix "harvest year" column title wrapping inappropriately _(Moritz)_
 - Make resetting in search input component cross-browser compatible and adapt resetting of search results #761 _(tschawax)_
 - _()_
 - _()_
