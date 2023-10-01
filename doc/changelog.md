@@ -63,7 +63,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix cargo deny check _(4ydan)_
 - Improve Makefile #681 _(4ydan)_
 - CI: Tag docker images #931 _(4ydan)_
 
