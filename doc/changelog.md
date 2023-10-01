@@ -60,7 +60,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix textarea not allowing more than one line of text _(Moritz)_
 - _()_
 - _()_
 - Fix cargo deny check _(4ydan)_
