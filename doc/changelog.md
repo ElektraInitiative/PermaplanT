@@ -34,6 +34,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Added Meeting Agenda&Notes for 18.9. 9:00 _(Markus Raab, 4ydan)_
+- Added Meeting Agenda&Notes for 25.9. 9:00 _(Markus Raab, Moritz)_
 - _()_
 - _()_
 - _()_
@@ -62,10 +63,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Fix textarea not allowing more than one line of text _(Moritz)_
 - _()_
 - _()_
-- _()_
-- _()_
+- Fix cargo deny check _(4ydan)_
 - Improve Makefile #681 _(4ydan)_
 - CI: Tag docker images #931 _(4ydan)_
 
