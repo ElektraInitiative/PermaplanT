@@ -62,7 +62,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Fix textarea not allowing more than one line of text _(Moritz)_
-- _()_
+- E2E: Check for exceptions and request failures _(4ydan)_
 - E2E: Increase click on canvas robustness _(4ydan)_
 - Fix cargo deny check _(4ydan)_
 - Improve Makefile #681 _(4ydan)_

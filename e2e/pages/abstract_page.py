@@ -1,7 +1,16 @@
 import re
+import requests
 from abc import ABC
 from e2e.pages.constants import E2E_TIMEOUT
 from playwright.sync_api import Page, expect
+
+
+def handle_request_failed(request):
+    raise requests.exceptions.RequestException(request.url + " " + request.failure)
+
+
+def handle_page_error(exc):
+    raise Exception(f"Uncaught exception: {exc}")
 
 
 class AbstractPage(ABC):
@@ -24,9 +33,13 @@ class AbstractPage(ABC):
         self.dont_load_images_except_birdie()
         self._page.set_default_timeout(timeout=E2E_TIMEOUT)
         expect.set_options(timeout=E2E_TIMEOUT)
+        self._page.on("requestfailed", handle_request_failed)
+        self._page.on("pageerror", handle_page_error)
+
         response = self._page.goto(self.URL)
         assert response.status == 200
         self._page.wait_for_timeout(1000)
+
         self.verify()
         self.click_english_translation()
 
