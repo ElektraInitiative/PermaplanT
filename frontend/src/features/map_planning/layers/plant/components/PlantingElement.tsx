@@ -8,7 +8,7 @@ import {
   hideTooltip,
 } from '@/features/map_planning/utils/Tooltip';
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
-import { ExtendedPlantsSummary } from '@/utils/ExtendedPlantsSummary';
+import { commonName } from '@/utils/plantName';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Group, Circle, Rect } from 'react-konva';
 
@@ -21,8 +21,7 @@ const placeTooltip = (plant: PlantsSummaryDto | undefined) => {
 
   setTooltipPositionToMouseCursor();
 
-  const extendedPlant = new ExtendedPlantsSummary(plant);
-  showTooltipWithContent(extendedPlant.displayName.common_name);
+  showTooltipWithContent(commonName(plant));
 };
 
 /**

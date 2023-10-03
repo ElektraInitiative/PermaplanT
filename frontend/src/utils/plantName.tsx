@@ -2,6 +2,20 @@ import { PlantsSummaryDto, SeedDto } from '@/bindings/definitions';
 import { ReactElement } from 'react';
 
 /**
+ * Gets the common name from a PlantsSummaryDto.
+ *
+ * German common names are currently not supported.
+ * @param plant DTO containing the most essential information of a plant.
+ */
+export function commonName(plant: PlantsSummaryDto): string {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const common_name = plant.common_name_en[0];
+
+  return hasCommonName(plant) ? common_name : '';
+}
+
+/**
  * Generate a partial plant name from a PlantsSummaryDto.
  * Format:
  * - "common name (unique name)"
@@ -25,19 +39,19 @@ export function partialPlantName(plant: PlantsSummaryDto): string {
  * - "unique name" if no common name is specified.
  *
  * German common names are currently not supported.
- * @param plant DTO containing the most essential information of a plant.
+ * @param props component properties
  */
-export function PartialPlantNameFormatted(plant: PlantsSummaryDto): ReactElement {
+export function PartialPlantNameFormatted(props: { plant: PlantsSummaryDto }): ReactElement {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const common_name = plant.common_name_en[0];
+  const common_name = props.plant.common_name_en[0];
 
-  return hasCommonName(plant) ? (
+  return hasCommonName(props.plant) ? (
     <>
-      {common_name} ({formatUniqueName(plant.unique_name)})
+      {common_name} ({formatUniqueName(props.plant.unique_name)})
     </>
   ) : (
-    formatUniqueName(plant.unique_name)
+    formatUniqueName(props.plant.unique_name)
   );
 }
 
@@ -73,20 +87,23 @@ export function completePlantName(seed: SeedDto, plant: PlantsSummaryDto): strin
  * @param plant DTO containing the most essential information of a plant.
  * @param seed DTO containing seed information.
  */
-export function CompletePlantNameFormatted(seed: SeedDto, plant: PlantsSummaryDto): ReactElement {
-  console.assert(seed.plant_id === plant.id);
+export function CompletePlantNameFormatted(props: {
+  seed: SeedDto;
+  plant: PlantsSummaryDto;
+}): ReactElement {
+  console.assert(props.seed.plant_id === props.plant.id);
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const common_name = plant.common_name_en[0];
+  const common_name = props.plant.common_name_en[0];
 
-  return hasCommonName(plant) ? (
+  return hasCommonName(props.plant) ? (
     <>
-      {common_name} - {seed.name} ({formatUniqueName(plant.unique_name)})
+      {common_name} - {props.seed.name} ({formatUniqueName(props.plant.unique_name)})
     </>
   ) : (
     <>
-      {formatUniqueName(plant.unique_name)} - {seed.name}
+      {formatUniqueName(props.plant.unique_name)} - {props.seed.name}
     </>
   );
 }

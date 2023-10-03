@@ -1,12 +1,12 @@
 import { ReactComponent as ArchiveIcon } from '../../../icons/archive-off.svg';
 import { Quality, SeedDto } from '@/bindings/definitions';
 import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
-import { ExtendedPlantsSummaryDisplayName } from '@/components/ExtendedPlantDisplay';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { useTranslateQuality } from '@/hooks/useTranslateQuality';
 import { useTranslateQuantity } from '@/hooks/useTranslateQuantity';
 import { ReactComponent as EditIcon } from '@/icons/edit.svg';
+import { CompletePlantNameFormatted } from '@/utils/plantName';
 import { useQuery } from '@tanstack/react-query';
 import { Suspense, UIEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -93,10 +93,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
                 >
                   <td className="px-6 py-4">
                     {seed.plant_id ? (
-                      <ExtendedPlantsSummaryDisplayNameForSeeds
-                        plantId={seed.plant_id ?? 0}
-                        seed={seed}
-                      />
+                      <CompletePlantNameFromSeed plantId={seed.plant_id ?? 0} seed={seed} />
                     ) : (
                       <span>{t('common:error')}</span>
                     )}
@@ -135,7 +132,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
   );
 };
 
-const ExtendedPlantsSummaryDisplayNameForSeeds = (props: { plantId: number; seed: SeedDto }) => {
+const CompletePlantNameFromSeed = (props: { plantId: number; seed: SeedDto }) => {
   const { t } = useTranslation(['common']);
 
   const { isLoading, isError, data } = useQuery(
@@ -151,7 +148,7 @@ const ExtendedPlantsSummaryDisplayNameForSeeds = (props: { plantId: number; seed
       </div>
     );
   else if (isError) return <span>{t('common:error')}</span>;
-  else return <ExtendedPlantsSummaryDisplayName plant={data} seed={props.seed} />;
+  else return <CompletePlantNameFormatted plant={data} seed={props.seed} />;
 };
 
 export default SeedsOverviewList;

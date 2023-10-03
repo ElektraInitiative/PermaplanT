@@ -34,7 +34,7 @@ it('should generate formatted unique name only when given a plant summary', func
     common_name_en: [],
   };
 
-  expect(ReactTestRenderer.create(PartialPlantNameFormatted(plant)).toJSON()).toEqual(
+  expect(ReactTestRenderer.create(PartialPlantNameFormatted({ plant })).toJSON()).toEqual(
     ReactTestRenderer.create(<i>Brassica oleracea italica</i>).toJSON(),
   );
 });
@@ -46,7 +46,7 @@ it('should generate a formatted partial name when given a plant summary', functi
     common_name_en: ['Italian broccoli'],
   };
 
-  expect(ReactTestRenderer.create(PartialPlantNameFormatted(plant)).toJSON()).toEqual(
+  expect(ReactTestRenderer.create(PartialPlantNameFormatted({ plant })).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
         <>Italian broccoli</> (<i>Brassica oleracea italica</i>)
@@ -62,7 +62,7 @@ it('should generate a correctly formatted partial name when unique name contains
     common_name_en: ['Italian broccoli'],
   };
 
-  expect(ReactTestRenderer.create(PartialPlantNameFormatted(plant)).toJSON()).toEqual(
+  expect(ReactTestRenderer.create(PartialPlantNameFormatted({ plant })).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
         <>Italian broccoli</> (<i>Brassica oleracea italica</i>
@@ -128,10 +128,10 @@ it('should generate formatted unique name only when given a plant summary', func
     owner_id: '00000000-0000-0000-0000-000000000000',
   };
 
-  expect(ReactTestRenderer.create(CompletePlantNameFormatted(seed, plant)).toJSON()).toEqual(
+  expect(ReactTestRenderer.create(CompletePlantNameFormatted({ seed, plant })).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
-        <i>Brassica oleracea italica</i> - violett
+        <i>Brassica oleracea italica</i> - <>violett</>
       </>,
     ).toJSON(),
   );
@@ -153,10 +153,10 @@ it('should generate a formatted partial name when given a plant summary', functi
     owner_id: '00000000-0000-0000-0000-000000000000',
   };
 
-  expect(ReactTestRenderer.create(CompletePlantNameFormatted(seed, plant)).toJSON()).toEqual(
+  expect(ReactTestRenderer.create(CompletePlantNameFormatted({ seed, plant })).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
-        <>Italian broccoli</> - violett (<i>Brassica oleracea italica</i>)
+        <>Italian broccoli</> - <>violett</> (<i>Brassica oleracea italica</i>)
       </>,
     ).toJSON(),
   );
