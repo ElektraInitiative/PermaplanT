@@ -222,7 +222,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
         transition: { delay: 0, duration: 0.1 },
       }}
     >
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-row items-center justify-center">
         <PartialPlantNameFormatted plant={plant} />
       </div>
       <div className="flex items-center justify-center">
