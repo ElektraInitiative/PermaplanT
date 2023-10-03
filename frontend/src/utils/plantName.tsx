@@ -10,9 +10,9 @@ import { ReactElement } from 'react';
 export function commonName(plant: PlantsSummaryDto): string {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const common_name = plant.common_name_en[0];
+  const common_name = formatCommonName(plant.common_name_en[0]);
 
-  return hasCommonName(plant) ? common_name : '';
+  return hasCommonName(plant) ? common_name ?? '' : '';
 }
 
 /**
@@ -27,7 +27,7 @@ export function commonName(plant: PlantsSummaryDto): string {
 export function partialPlantName(plant: PlantsSummaryDto): string {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const common_name = plant.common_name_en[0];
+  const common_name = formatCommonName(plant.common_name_en[0]);
 
   return hasCommonName(plant) ? `${common_name} (${plant.unique_name})` : plant.unique_name;
 }
@@ -39,12 +39,11 @@ export function partialPlantName(plant: PlantsSummaryDto): string {
  * - "unique name" if no common name is specified.
  *
  * German common names are currently not supported.
- * @param props component properties
  */
 export function PartialPlantNameFormatted(props: { plant: PlantsSummaryDto }): ReactElement {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const common_name = props.plant.common_name_en[0];
+  const common_name = formatCommonName(props.plant.common_name_en[0]);
 
   return hasCommonName(props.plant) ? (
     <>
@@ -70,7 +69,7 @@ export function completePlantName(seed: SeedDto, plant: PlantsSummaryDto): strin
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const common_name = plant.common_name_en[0];
+  const common_name = formatCommonName(plant.common_name_en[0]);
 
   return hasCommonName(plant)
     ? `${common_name} - ${seed.name} (${plant.unique_name})`
@@ -84,8 +83,6 @@ export function completePlantName(seed: SeedDto, plant: PlantsSummaryDto): strin
  * - "<i>unique name</i> - additional" if no common name is specified.
  *
  * German common names are currently not supported.
- * @param plant DTO containing the most essential information of a plant.
- * @param seed DTO containing seed information.
  */
 export function CompletePlantNameFormatted(props: {
   seed: SeedDto;
@@ -95,7 +92,7 @@ export function CompletePlantNameFormatted(props: {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const common_name = props.plant.common_name_en[0];
+  const common_name = formatCommonName(props.plant.common_name_en[0]);
 
   return hasCommonName(props.plant) ? (
     <>
@@ -131,6 +128,17 @@ function formatUniqueName(uniqueName: string): ReactElement {
       {!!cultivar && ` '${cultivar}'`}
     </>
   );
+}
+
+/**
+ * Make sure that the common name starts with a capital letter.
+ *
+ * @param commonName The common name
+ */
+function formatCommonName(commonName: string | undefined): string | undefined {
+  if (commonName == undefined) return undefined;
+
+  return commonName.charAt(0).toUpperCase() + commonName.slice(1);
 }
 
 /**

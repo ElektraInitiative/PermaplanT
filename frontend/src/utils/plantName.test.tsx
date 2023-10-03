@@ -43,7 +43,7 @@ it('should generate a formatted partial name when given a plant summary', functi
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
-    common_name_en: ['Italian broccoli'],
+    common_name_en: ['italian broccoli'],
   };
 
   expect(ReactTestRenderer.create(PartialPlantNameFormatted({ plant })).toJSON()).toEqual(
@@ -59,7 +59,7 @@ it('should generate a correctly formatted partial name when unique name contains
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: "Brassica oleracea italica 'Ramoso calabrese'",
-    common_name_en: ['Italian broccoli'],
+    common_name_en: ['italian broccoli'],
   };
 
   expect(ReactTestRenderer.create(PartialPlantNameFormatted({ plant })).toJSON()).toEqual(
@@ -95,7 +95,7 @@ it('should generate a partial name only when given a plant summary', function ()
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
-    common_name_en: ['Italian broccoli'],
+    common_name_en: ['italian broccoli'],
   };
 
   const seed: SeedDto = {
@@ -141,7 +141,7 @@ it('should generate a formatted partial name when given a plant summary', functi
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
-    common_name_en: ['Italian broccoli'],
+    common_name_en: ['italian broccoli'],
   };
 
   const seed: SeedDto = {
