@@ -58,6 +58,13 @@ impl From<DieselError> for ServiceError {
             StatusCode::NOT_FOUND
         } else if let DieselError::DatabaseError(DatabaseErrorKind::UniqueViolation, _) = value {
             StatusCode::CONFLICT
+        } else if let DieselError::DatabaseError(DatabaseErrorKind::CheckViolation, _) = value {
+            StatusCode::BAD_REQUEST
+        } else if let DieselError::DatabaseError(DatabaseErrorKind::ForeignKeyViolation, _) = value
+        {
+            StatusCode::CONFLICT
+        } else if let DieselError::DatabaseError(DatabaseErrorKind::NotNullViolation, _) = value {
+            StatusCode::BAD_REQUEST
         } else {
             log::error!("Error executing diesel SQL query: {}", value.to_string());
             StatusCode::INTERNAL_SERVER_ERROR
