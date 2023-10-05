@@ -1,5 +1,5 @@
 import useMapStore from '../../store/MapStore';
-import { LayerList } from './LayerList';
+import { LayerListItem } from './LayerListItem';
 import { LayerDto } from '@/bindings/definitions';
 // import IconButton from '@/components/Button/IconButton';
 // import { ReactComponent as AddIcon } from '@/icons/add.svg';
@@ -21,7 +21,7 @@ export const Layers = ({ layers }: LayersProps) => {
     ?.filter((l) => !l.is_alternative)
     .map((l) => {
       return (
-        <LayerList
+        <LayerListItem
           key={'layer_settings_' + l.id}
           layer={l}
           setSelectedLayer={updateSelectedLayer}

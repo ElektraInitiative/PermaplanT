@@ -25,7 +25,7 @@ interface LayerListProps {
 }
 
 /** Layer setting UI to control visibility, layer selection, opacity and alternatives */
-export const LayerList = ({
+export const LayerListItem = ({
   layer,
   setSelectedLayer,
   setLayerOpacity,
