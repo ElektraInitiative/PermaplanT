@@ -7,12 +7,12 @@ import { LayerDto } from '@/bindings/definitions';
 // import { ReactComponent as TrashIcon } from '@/icons/trash.svg';
 import { useTranslation } from 'react-i18next';
 
-export type LayersProps = {
+export type LayerListProps = {
   layers: LayerDto[];
 };
 
 /** Layer controls including visibility, layer selection, opacity and alternatives */
-export const Layers = ({ layers }: LayersProps) => {
+export const LayerList = ({ layers }: LayerListProps) => {
   const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
   const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
   const { t } = useTranslation(['layers']);

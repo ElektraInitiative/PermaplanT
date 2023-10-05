@@ -9,6 +9,6 @@ export default meta;
 
 type Story = StoryObj<typeof LayerListItem>;
 
-export const LayerListStory: Story = {
+export const LayerListItemStory: Story = {
   args: {},
 };
