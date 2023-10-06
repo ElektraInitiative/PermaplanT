@@ -44,7 +44,8 @@
     "success": "Samen erfolgreich editiert!"
   },
   "harvest_year": "Bezugsjahr",
-  "additional_name": "Zusätzlicher Name (min. 1 Zeichen; '-' nicht erlaubt)",
+  "additional_name": "Zusätzlicher Name",
+  "additional_name_pattern_hint": "Mindestens ein Buchstabe oder eine Ziffer, '-' ist nicht erlaubt.",
   "binomial_name": "Name der Pflanze",
   "quantity": "Menge",
   "origin": "Herkunft",
