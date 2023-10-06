@@ -12,13 +12,14 @@ import { useTranslation } from 'react-i18next';
 interface LayerListProps {
   /** layer which is controlled by this list element */
   layer: LayerDto;
-  /** function that gets triggered when the layer is selected */
+  /** callback that gets triggered when the layer is selected */
   setSelectedLayer?: (layer: LayerDto) => void;
-  /** function that gets triggered when slider value is changed */
+  /** callback that gets triggered when slider value is changed */
   setLayerOpacity?: (name: LayerType, value: number) => void;
-  /** function that gets triggered when an alternative is selected */
+  /** callback that gets triggered when an alternative is selected */
   setLayerAlternative?: (name: LayerType, value: string) => void;
-  /** list of names of the possible alternatives for this layer
+  /**
+   * list of names of the possible alternatives for this layer
    * if alternatives are given they can be selected in a menu
    **/
   alternatives?: Array<string>;
