@@ -1,7 +1,6 @@
 import { PlantingDto } from '@/bindings/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
 import { MapLabel } from '@/features/map_planning/utils/MapLabel';
-// import { partialPlantName } from '@/utils/plantName';
 import Konva from 'konva';
 import { useEffect, useRef, useState } from 'react';
 import { Label } from 'react-konva';
@@ -25,8 +24,6 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
   if (plant === undefined) {
     return <Label></Label>;
   }
-
-  //const plantDisplayName = partialPlantName(plant);
 
   const labelOffsetX = labelWidth / 2;
   const labelOffsetY = (planting.height / 2) * planting.scaleY * 1.1;
