@@ -9,6 +9,7 @@ import { ReactComponent as LogoSmallSVG } from '@/svg/permaplant-logo.svg';
 import { useTranslation } from 'react-i18next';
 import FullPageNav from './FullPageNav';
 import { useState } from 'react';
+import IconButton from '../Button/IconButton';
 
 /**
  * The navigation component that is fixed on the top.
@@ -55,7 +56,7 @@ const Navbar = () => {
       dark:bg-neutral-100-dark
       "
     >
-      <div className="mx-auto flex h-full max-w-screen-xl flex-wrap items-center justify-between">
+      <div className="mx-auto flex h-full max-w-screen-xl flex-wrap items-center justify-between pl-4 pr-4">
         <div className="flex space-x-16">
           <div className="flex space-x-6">
             <a href="/" className="flex items-center">
@@ -83,29 +84,24 @@ const Navbar = () => {
             <LanguageSwitcher />
             <LoginButton></LoginButton>
           </div>
-          <button
-            data-collapse-toggle="navbar-sticky"
+          <IconButton
             type="button"
-            className="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 md:hidden"
+            className="md:hidden"
             aria-controls="navbar-sticky"
             aria-expanded="false"
             onClick={ openFullPageNav }
           >
             <span className="sr-only">Open main menu</span>
             <svg
-              className="h-6 w-6"
               aria-hidden="true"
-              fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fillRule="evenodd"
                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                clipRule="evenodd"
               ></path>
             </svg>
-          </button>
+          </IconButton>
         </div>
       </div>
     </nav>

@@ -49,8 +49,8 @@ const Navpage = ({ close }: NavpageProps) => {
       dark:bg-neutral-100-dark
       "
     >
-      <div className="flex flex-col gap-4 p-4">
-        <div className="flex justify-between">
+      <div className="flex flex-col gap-4 pl-4 pr-4">
+        <div className="flex justify-between h-16 items-center">
           <a href="/" className="flex items-center">
             {darkMode ? (
               <LogoSmallSVG className="h-12 w-12 pr-2" />
