@@ -1,6 +1,6 @@
 import useMapStore from '../../store/MapStore';
 import { LayerList } from './LayerList';
-import { LayerDto } from '@/bindings/definitions';
+import { LayerDto } from '@/api_types/definitions';
 // import IconButton from '@/components/Button/IconButton';
 // import { ReactComponent as AddIcon } from '@/icons/add.svg';
 // import { ReactComponent as CopyIcon } from '@/icons/copy.svg';

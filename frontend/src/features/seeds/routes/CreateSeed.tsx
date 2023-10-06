@@ -1,6 +1,6 @@
 import PageLayout from '../../../components/Layout/PageLayout';
 import CreateSeedForm from '../components/CreateSeedForm';
-import { NewSeedDto } from '@/bindings/definitions';
+import { NewSeedDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import { createSeed } from '@/features/seeds/api/createSeed';

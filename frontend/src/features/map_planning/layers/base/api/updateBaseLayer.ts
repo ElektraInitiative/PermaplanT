@@ -1,4 +1,4 @@
-import { UpdateBaseLayerImageDto } from '@/bindings/definitions';
+import { UpdateBaseLayerImageDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const updateBaseLayer = async (

@@ -1,5 +1,5 @@
 import { ReactComponent as ArchiveIcon } from '../../../icons/archive-off.svg';
-import { Quality, SeedDto } from '@/bindings/definitions';
+import { Quality, SeedDto } from '@/api_types/definitions';
 import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
 import { ExtendedPlantsSummaryDisplayName } from '@/components/ExtendedPlantDisplay';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';

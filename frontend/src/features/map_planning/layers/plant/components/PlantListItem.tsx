@@ -1,6 +1,6 @@
 import { ExtendedPlantsSummaryDisplayName } from '../../../../../components/ExtendedPlantDisplay';
+import { PlantsSummaryDto } from '@/api_types/definitions';
 import defaultImageUrl from '@/assets/plant.svg';
-import { PlantsSummaryDto } from '@/bindings/definitions';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 
 export type PlantListElementProps = {

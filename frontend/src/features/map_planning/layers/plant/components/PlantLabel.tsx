@@ -1,4 +1,4 @@
-import { PlantingDto } from '@/bindings/definitions';
+import { PlantingDto } from '@/api_types/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
 import { MapLabel } from '@/features/map_planning/utils/MapLabel';
 import { ExtendedPlantsSummary } from '@/utils/ExtendedPlantsSummary';

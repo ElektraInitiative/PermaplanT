@@ -1,5 +1,5 @@
 import CountingButton from './CountingButton';
-import { MapDto } from '@/bindings/definitions';
+import { MapDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 // import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
 import { ReactComponent as EditIcon } from '@/icons/edit.svg';

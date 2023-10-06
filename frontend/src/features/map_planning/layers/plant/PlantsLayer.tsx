@@ -4,7 +4,7 @@ import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { LayerType, PlantSpread, PlantsSummaryDto } from '@/bindings/definitions';
+import { LayerType, PlantSpread, PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';

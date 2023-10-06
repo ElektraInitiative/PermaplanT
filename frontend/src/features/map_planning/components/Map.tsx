@@ -18,7 +18,7 @@ import {
   LayerDto,
   LayerType,
   UpdateGuidedToursDto,
-} from '@/bindings/definitions';
+} from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';

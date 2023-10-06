@@ -1,5 +1,5 @@
 import { ExtendedPlantsSummaryDisplayName } from '../../../../../components/ExtendedPlantDisplay';
-import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';

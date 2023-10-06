@@ -1,5 +1,5 @@
 import { useFindPlantById } from '../hooks/useFindPlantById';
-import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import {

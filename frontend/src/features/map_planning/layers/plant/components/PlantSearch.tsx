@@ -2,7 +2,7 @@ import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import { usePlantSearch } from '../hooks/usePlantSearch';
 import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
 import { PlantListItem } from './PlantListItem';
-import { PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput, { SearchInputHandle } from '@/components/Form/SearchInput';
 import useMapStore from '@/features/map_planning/store/MapStore';

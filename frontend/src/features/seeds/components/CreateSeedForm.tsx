@@ -3,7 +3,7 @@ import PaginatedSelectMenu, {
 } from '../../../components/Form/PaginatedSelectMenu';
 import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
-import { NewSeedDto, Quality, Quantity, SeedDto } from '@/bindings/definitions';
+import { NewSeedDto, Quality, Quantity, SeedDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';

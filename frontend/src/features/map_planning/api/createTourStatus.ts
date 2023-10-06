@@ -1,4 +1,4 @@
-import { GuidedToursDto } from '@/bindings/definitions';
+import { GuidedToursDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function createTourStatus() {

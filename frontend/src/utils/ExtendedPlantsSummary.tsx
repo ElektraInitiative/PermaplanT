@@ -1,4 +1,4 @@
-import { PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantsSummaryDto } from '@/api_types/definitions';
 import { capitalizeFirstLetter } from '@/features/map_planning/utils/string-utils';
 
 class ExtendedPlantsSummary implements PlantsSummaryDto {

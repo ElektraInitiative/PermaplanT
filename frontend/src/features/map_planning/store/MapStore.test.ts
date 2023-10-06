@@ -2,7 +2,7 @@ import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../lay
 import useMapStore from './MapStore';
 import { TrackedLayers } from './MapStoreTypes';
 import { TRACKED_DEFAULT_STATE, UNTRACKED_DEFAULT_STATE } from './MapStoreTypes';
-import { LayerDto, LayerType, PlantingDto } from '@/bindings/definitions';
+import { LayerDto, LayerType, PlantingDto } from '@/api_types/definitions';
 
 // mock the axios api configuration, so that we don't actually send requests to the backend
 jest.mock('@/config/axios');

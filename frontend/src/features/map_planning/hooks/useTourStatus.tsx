@@ -1,5 +1,5 @@
 import { getTourStatus } from '../api/getTourStatus';
-import { GuidedToursDto } from '@/bindings/definitions';
+import { GuidedToursDto } from '@/api_types/definitions';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
