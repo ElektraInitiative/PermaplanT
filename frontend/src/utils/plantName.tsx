@@ -8,9 +8,7 @@ import { ReactElement } from 'react';
  * @param plant DTO containing the most essential information of a plant.
  */
 export function commonName(plant: PlantsSummaryDto): string {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const common_name = formatCommonName(plant.common_name_en[0]);
+  const common_name = formatCommonName(plant.common_name_en);
 
   return hasCommonName(plant) ? common_name ?? '' : '';
 }
@@ -25,9 +23,7 @@ export function commonName(plant: PlantsSummaryDto): string {
  * @param plant DTO containing the most essential information of a plant.
  */
 export function partialPlantName(plant: PlantsSummaryDto): string {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const common_name = formatCommonName(plant.common_name_en[0]);
+  const common_name = formatCommonName(plant.common_name_en);
 
   return hasCommonName(plant) ? `${common_name} (${plant.unique_name})` : plant.unique_name;
 }
@@ -41,9 +37,7 @@ export function partialPlantName(plant: PlantsSummaryDto): string {
  * German common names are currently not supported.
  */
 export function PartialPlantNameFormatted(props: { plant: PlantsSummaryDto }): ReactElement {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const common_name = formatCommonName(props.plant.common_name_en[0]);
+  const common_name = formatCommonName(props.plant.common_name_en);
 
   return hasCommonName(props.plant) ? (
     <>
@@ -67,9 +61,7 @@ export function PartialPlantNameFormatted(props: { plant: PlantsSummaryDto }): R
 export function completePlantName(seed: SeedDto, plant: PlantsSummaryDto): string {
   console.assert(seed.plant_id === plant.id);
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const common_name = formatCommonName(plant.common_name_en[0]);
+  const common_name = formatCommonName(plant.common_name_en);
 
   return hasCommonName(plant)
     ? `${common_name} - ${seed.name} (${plant.unique_name})`
@@ -90,9 +82,7 @@ export function CompletePlantNameFormatted(props: {
 }): ReactElement {
   console.assert(props.seed.plant_id === props.plant.id);
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const common_name = formatCommonName(props.plant.common_name_en[0]);
+  const common_name = formatCommonName(props.plant.common_name_en);
 
   return hasCommonName(props.plant) ? (
     <>
@@ -135,10 +125,10 @@ function formatUniqueName(uniqueName: string): ReactElement {
  *
  * @param commonName The common name
  */
-function formatCommonName(commonName: string | undefined): string | undefined {
-  if (commonName == undefined) return undefined;
+function formatCommonName(commonName: string[] | undefined): string {
+  if (!commonName || commonName.length == undefined || commonName.length == 0) return '';
 
-  return commonName.charAt(0).toUpperCase() + commonName.slice(1);
+  return commonName[0].charAt(0).toUpperCase() + commonName[0].slice(1);
 }
 
 /**
@@ -147,5 +137,5 @@ function formatCommonName(commonName: string | undefined): string | undefined {
  * @param plant the DTO to be checked.
  */
 function hasCommonName(plant: PlantsSummaryDto): boolean {
-  return plant.common_name_en !== undefined && plant.common_name_en.length > 0;
+  return !!plant.common_name_en && plant.common_name_en.length > 0;
 }
