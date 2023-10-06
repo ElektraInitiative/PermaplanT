@@ -1,5 +1,5 @@
-import { ReactComponent as HeartIcon } from '@/icons/heart.svg';
-import { ReactComponent as UserIcon } from '@/icons/user.svg';
+import { ReactComponent as HeartIcon } from '@public/icons/heart.svg';
+import { ReactComponent as UserIcon } from '@public/icons/user.svg';
 import { useTranslation } from 'react-i18next';
 
 enum IconType {

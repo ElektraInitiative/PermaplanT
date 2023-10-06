@@ -13,7 +13,7 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
 import TransparentBackground from '@/components/TransparentBackground';
-import { ReactComponent as AddIcon } from '@/icons/add.svg';
+import { ReactComponent as AddIcon } from '@public/icons/add.svg';
 import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';

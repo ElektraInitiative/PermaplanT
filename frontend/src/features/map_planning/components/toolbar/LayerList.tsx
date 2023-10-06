@@ -2,10 +2,10 @@ import useMapStore from '../../store/MapStore';
 import { LayerDto, LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { NamedSlider } from '@/components/Slider/NamedSlider';
-import { ReactComponent as CaretDownIcon } from '@/icons/caret-down.svg';
-import { ReactComponent as CaretRightIcon } from '@/icons/caret-right.svg';
-import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
-import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
+import { ReactComponent as CaretDownIcon } from '@public/icons/caret-down.svg';
+import { ReactComponent as CaretRightIcon } from '@public/icons/caret-right.svg';
+import { ReactComponent as EyeOffIcon } from '@public/icons/eye-off.svg';
+import { ReactComponent as EyeIcon } from '@public/icons/eye.svg';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
