@@ -1,7 +1,7 @@
+import { ReactComponent as GlobeSVG } from '../../../../public/globe.svg';
+import { ReactComponent as PlanningSVG } from '../../../../public/planning.svg';
 import './Features.css';
-import { ReactComponent as GlobeSVG } from '@/assets/globe.svg';
-import { ReactComponent as PlanningSVG } from '@/assets/planning.svg';
-import { ReactComponent as PlantSVG } from '@/assets/plant.svg';
+import { ReactComponent as PlantSVG } from '@public/plant.svg';
 import { useTranslation } from 'react-i18next';
 import TypewriterComponent from 'typewriter-effect';
 

@@ -1,11 +1,11 @@
-import { ReactComponent as LogoSmallGraySVG } from '../../assets/permaplant-logo-gray.svg';
-import { ReactComponent as LogoSmallSVG } from '../../assets/permaplant-logo.svg';
 import { DarkModeSwitcher } from '../../features/dark_mode';
 import { useDarkModeStore } from '../../features/dark_mode';
 import LanguageSwitcher from '../../features/landing_page/components/LanguageSwitcher';
 import ButtonLink from '../Button/ButtonLink';
 import { LoginButton } from '@/features/auth/components/LoginButton';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
+import { ReactComponent as LogoSmallGraySVG } from '@public//permaplant-logo-gray.svg';
+import { ReactComponent as LogoSmallSVG } from '@public//permaplant-logo.svg';
 import { useTranslation } from 'react-i18next';
 
 /**
