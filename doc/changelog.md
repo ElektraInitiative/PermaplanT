@@ -52,7 +52,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Clean up the asset file structure in frontend _(Moritz)_
 - _()_
 - _()_
 - _()_
