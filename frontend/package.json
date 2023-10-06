@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "https-preview": "serve dist",
-    "generate-api-types": "cd ../backend && typeshare ./ --lang=typescript --output-file=../frontend/src/bindings/definitions.ts",
+    "generate-api-types": "cd ../backend && typeshare ./ --lang=typescript --output-file=../frontend/src/api_types/definitions.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --max-warnings=0 .",
