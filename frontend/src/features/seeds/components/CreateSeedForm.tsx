@@ -175,6 +175,8 @@ const CreateSeedForm = ({
               }}
               onChange={onChange}
             />
+            {/* The text from the title attribute will be displayed in the
+                error message in case the specified pattern does not match. */}
             <SimpleFormInput
               labelText={t('seeds:additional_name')}
               placeholder=""
@@ -182,6 +184,8 @@ const CreateSeedForm = ({
               id="name"
               register={register}
               onChange={onChange}
+              title={t('seeds:additional_name_pattern_hint')}
+              pattern="^(?!.*(-))(?=.*[a-zA-Z0-9äöüÄÖÜß]).*$"
             />
             <SimpleFormInput
               type="number"

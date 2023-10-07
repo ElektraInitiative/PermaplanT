@@ -143,7 +143,7 @@ async fn test_create_layer_with_invalid_map_id_fails() {
         .send_request(&app)
         .await;
 
-    assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
+    assert_eq!(resp.status(), StatusCode::CONFLICT);
 }
 
 #[actix_rt::test]
