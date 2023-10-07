@@ -11,7 +11,7 @@ import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import { convertToDate } from '../utils/date-utils';
 import { BaseStage } from './BaseStage';
 import { Timeline } from './timeline/Timeline';
-import { Layers } from './toolbar/Layers';
+import { LayerList } from './toolbar/LayerList';
 import { Toolbar } from './toolbar/Toolbar';
 import {
   GainedBlossomsDto,
@@ -216,7 +216,7 @@ export const Map = ({ layers }: MapProps) => {
         </section>
         <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
           <Toolbar
-            contentTop={<Layers layers={layers} />}
+            contentTop={<LayerList layers={layers} />}
             contentBottom={getToolbarContent(getSelectedLayerType()).right}
             position="right"
             minWidth={200}
