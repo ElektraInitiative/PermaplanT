@@ -21,7 +21,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Doc: refinement of timeline use cases _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
