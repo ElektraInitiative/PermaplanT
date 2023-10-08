@@ -8,7 +8,7 @@ import { ReactElement } from 'react';
  * @param plant DTO containing the most essential information of a plant.
  */
 export function commonName(plant: PlantsSummaryDto): string {
-  const common_name = commonNameUppercase(plant.common_name_en);
+  const common_name = commonNameToUppercase(plant.common_name_en);
 
   return hasCommonName(plant) ? common_name ?? '' : '';
 }
@@ -22,8 +22,8 @@ export function commonName(plant: PlantsSummaryDto): string {
  * German common names are currently not supported.
  * @param plant DTO containing the most essential information of a plant.
  */
-export function partialPlantName(plant: PlantsSummaryDto): string {
-  const common_name = commonNameUppercase(plant.common_name_en);
+export function getNameFromPlant(plant: PlantsSummaryDto): string {
+  const common_name = commonNameToUppercase(plant.common_name_en);
 
   return hasCommonName(plant) ? `${common_name} (${plant.unique_name})` : plant.unique_name;
 }
@@ -36,15 +36,15 @@ export function partialPlantName(plant: PlantsSummaryDto): string {
  *
  * German common names are currently not supported.
  */
-export function PartialPlantNameFormatted(props: { plant: PlantsSummaryDto }): ReactElement {
-  const common_name = commonNameUppercase(props.plant.common_name_en);
+export function PlantNameFromPlant(props: { plant: PlantsSummaryDto }): ReactElement {
+  const common_name = commonNameToUppercase(props.plant.common_name_en);
 
   return hasCommonName(props.plant) ? (
     <>
-      {common_name} (<UniqueNameFormatted uniqueName={props.plant.unique_name} />)
+      {common_name} (<UniqueNameFromPlant uniqueName={props.plant.unique_name} />)
     </>
   ) : (
-    <UniqueNameFormatted uniqueName={props.plant.unique_name} />
+    <UniqueNameFromPlant uniqueName={props.plant.unique_name} />
   );
 }
 
@@ -58,12 +58,12 @@ export function PartialPlantNameFormatted(props: { plant: PlantsSummaryDto }): R
  * @param plant DTO containing the most essential information of a plant.
  * @param seed DTO containing seed information.
  */
-export function completePlantName(seed: SeedDto, plant: PlantsSummaryDto): string {
+export function getPlantNameFromSeedAndPlant(seed: SeedDto, plant: PlantsSummaryDto): string {
   if (seed.plant_id !== plant.id) {
     throw new Error('seed.plant_id must be equal to plant.id to produce a plant name');
   }
 
-  const common_name = commonNameUppercase(plant.common_name_en);
+  const common_name = commonNameToUppercase(plant.common_name_en);
 
   return hasCommonName(plant)
     ? `${common_name} - ${seed.name} (${plant.unique_name})`
@@ -78,7 +78,7 @@ export function completePlantName(seed: SeedDto, plant: PlantsSummaryDto): strin
  *
  * German common names are currently not supported.
  */
-export function CompletePlantNameFormatted(props: {
+export function PlantNameFromSeedAndPlant(props: {
   seed: SeedDto;
   plant: PlantsSummaryDto;
 }): ReactElement {
@@ -86,16 +86,16 @@ export function CompletePlantNameFormatted(props: {
     throw new Error('seed.plant_id must be equal to plant.id to produce a plant name');
   }
 
-  const common_name = commonNameUppercase(props.plant.common_name_en);
+  const common_name = commonNameToUppercase(props.plant.common_name_en);
 
   return hasCommonName(props.plant) ? (
     <>
       {common_name} - {props.seed.name} (
-      <UniqueNameFormatted uniqueName={props.plant.unique_name} />)
+      <UniqueNameFromPlant uniqueName={props.plant.unique_name} />)
     </>
   ) : (
     <>
-      <UniqueNameFormatted uniqueName={props.plant.unique_name} /> - {props.seed.name}
+      <UniqueNameFromPlant uniqueName={props.plant.unique_name} /> - {props.seed.name}
     </>
   );
 }
@@ -111,7 +111,7 @@ export function CompletePlantNameFormatted(props: {
  *
  * @param uniqueName The unique name
  */
-export function UniqueNameFormatted(props: { uniqueName: string }): ReactElement {
+export function UniqueNameFromPlant(props: { uniqueName: string }): ReactElement {
   const uniqueNameParts = props.uniqueName.split("'");
 
   const species_or_family_name = uniqueNameParts[0].trim();
@@ -130,7 +130,7 @@ export function UniqueNameFormatted(props: { uniqueName: string }): ReactElement
  *
  * @param commonName The common name
  */
-export function commonNameUppercase(commonName: string[] | undefined): string | undefined {
+export function commonNameToUppercase(commonName: string[] | undefined): string | undefined {
   return commonName?.[0]?.charAt(0).toUpperCase().concat(commonName?.[0]?.slice(1));
 }
 

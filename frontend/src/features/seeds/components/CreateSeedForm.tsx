@@ -10,7 +10,7 @@ import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import SimpleFormTextArea from '@/components/Form/SimpleFormTextArea';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { enumToSelectOptionArr } from '@/utils/enum';
-import { partialPlantName } from '@/utils/plantName';
+import { getNameFromPlant } from '@/utils/plantName';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
 import { Suspense, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -121,7 +121,7 @@ const CreateSeedForm = ({
     const plant_options: SelectOption[] = page.results.map((plant) => {
       return {
         value: plant.id,
-        label: partialPlantName(plant),
+        label: getNameFromPlant(plant),
       };
     });
 

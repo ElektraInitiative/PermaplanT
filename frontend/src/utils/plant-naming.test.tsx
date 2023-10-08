@@ -1,11 +1,11 @@
 import { PlantsSummaryDto, Quantity, SeedDto } from '@/bindings/definitions';
 import {
-  completePlantName,
-  CompletePlantNameFormatted,
-  PartialPlantNameFormatted,
-  partialPlantName,
+  getPlantNameFromSeedAndPlant,
+  PlantNameFromSeedAndPlant,
+  PlantNameFromPlant,
+  getNameFromPlant,
   hasCommonName,
-  commonNameUppercase,
+  commonNameToUppercase,
 } from '@/utils/plantName';
 import ReactTestRenderer from 'react-test-renderer';
 
@@ -40,8 +40,8 @@ it('generates plant names given a plant', function () {
   const plant = generateTestPlant();
   const plantWithCommonName = generateTestPlantWithCommonName();
 
-  expect(partialPlantName(plant)).toEqual('Brassica oleracea italica');
-  expect(partialPlantName(plantWithCommonName)).toEqual(
+  expect(getNameFromPlant(plant)).toEqual('Brassica oleracea italica');
+  expect(getNameFromPlant(plantWithCommonName)).toEqual(
     'Italian broccoli (Brassica oleracea italica)',
   );
 });
@@ -55,11 +55,11 @@ it('generates formatted plant names given a plant', function () {
     common_name_en: ['italian broccoli'],
   };
 
-  const formattedPlantName = PartialPlantNameFormatted({ plant });
-  const formattedPlantNameWithCommonName = PartialPlantNameFormatted({
+  const formattedPlantName = PlantNameFromPlant({ plant });
+  const formattedPlantNameWithCommonName = PlantNameFromPlant({
     plant: plantWithCommonName,
   });
-  const formattedPlantNameWithCommonNameAndCultivar = PartialPlantNameFormatted({
+  const formattedPlantNameWithCommonNameAndCultivar = PlantNameFromPlant({
     plant: plantWithCommonNameAndCultivar,
   });
 
@@ -90,8 +90,8 @@ it('generates plant names given plant and seed', function () {
   const plant = generateTestPlant();
   const plantWithCommonName = generateTestPlantWithCommonName();
 
-  expect(completePlantName(seed, plant)).toEqual('Brassica oleracea italica - violett');
-  expect(completePlantName(seed, plantWithCommonName)).toEqual(
+  expect(getPlantNameFromSeedAndPlant(seed, plant)).toEqual('Brassica oleracea italica - violett');
+  expect(getPlantNameFromSeedAndPlant(seed, plantWithCommonName)).toEqual(
     'Italian broccoli - violett (Brassica oleracea italica)',
   );
 });
@@ -101,8 +101,8 @@ it('generatess formatted plant names given plant and seed', function () {
   const plant = generateTestPlant();
   const plantWithCommonName = generateTestPlantWithCommonName();
 
-  const formattedPlantName = CompletePlantNameFormatted({ seed, plant });
-  const formattedPlantNameWithCommonName = CompletePlantNameFormatted({
+  const formattedPlantName = PlantNameFromSeedAndPlant({ seed, plant });
+  const formattedPlantNameWithCommonName = PlantNameFromSeedAndPlant({
     seed,
     plant: plantWithCommonName,
   });
@@ -136,6 +136,6 @@ it('capitalizes the first letter of a common name', function () {
   const plant = generateTestPlant();
   const plantWithCommonName = generateTestPlantWithCommonName();
 
-  expect(commonNameUppercase(plant.common_name_en)).toBe(undefined);
-  expect(commonNameUppercase(plantWithCommonName.common_name_en)).toBe('Italian broccoli');
+  expect(commonNameToUppercase(plant.common_name_en)).toBe(undefined);
+  expect(commonNameToUppercase(plantWithCommonName.common_name_en)).toBe('Italian broccoli');
 });

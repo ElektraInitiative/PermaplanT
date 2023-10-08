@@ -6,7 +6,7 @@ import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { useTranslateQuality } from '@/hooks/useTranslateQuality';
 import { useTranslateQuantity } from '@/hooks/useTranslateQuantity';
 import { ReactComponent as EditIcon } from '@/icons/edit.svg';
-import { CompletePlantNameFormatted } from '@/utils/plantName';
+import { PlantNameFromSeedAndPlant } from '@/utils/plantName';
 import { useQuery } from '@tanstack/react-query';
 import { Suspense, UIEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -148,7 +148,7 @@ const CompletePlantNameFromSeed = (props: { plantId: number; seed: SeedDto }) =>
       </div>
     );
   else if (isError) return <span>{t('common:error')}</span>;
-  else return <CompletePlantNameFormatted plant={data} seed={props.seed} />;
+  else return <PlantNameFromSeedAndPlant plant={data} seed={props.seed} />;
 };
 
 export default SeedsOverviewList;

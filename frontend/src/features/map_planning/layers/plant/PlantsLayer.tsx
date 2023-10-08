@@ -7,7 +7,7 @@ import { LayerType, PlantSpread, PlantsSummaryDto } from '@/bindings/definitions
 import IconButton from '@/components/Button/IconButton';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
-import { PartialPlantNameFormatted } from '@/utils/plantName';
+import { PlantNameFromPlant } from '@/utils/plantName';
 import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
@@ -223,7 +223,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
       }}
     >
       <div className="flex flex-row items-center justify-center">
-        <PartialPlantNameFormatted plant={plant} />
+        <PlantNameFromPlant plant={plant} />
       </div>
       <div className="flex items-center justify-center">
         <IconButton
