@@ -7,6 +7,17 @@ import {
 } from '@/utils/plantName';
 import ReactTestRenderer from 'react-test-renderer';
 
+function generateTestSeed(): SeedDto {
+  return {
+    id: 1,
+    plant_id: 1,
+    name: 'violett',
+    harvest_year: 2022,
+    quantity: Quantity.Enough,
+    owner_id: '00000000-0000-0000-0000-000000000000',
+  };
+}
+
 it('should generate unique name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
@@ -79,14 +90,7 @@ it('should generate unique and additional name', function () {
     common_name_en: [],
   };
 
-  const seed: SeedDto = {
-    id: 1,
-    plant_id: 1,
-    name: 'violett',
-    harvest_year: 2022,
-    quantity: Quantity.Enough,
-    owner_id: '00000000-0000-0000-0000-000000000000',
-  };
+  const seed = generateTestSeed();
 
   expect(completePlantName(seed, plant)).toEqual('Brassica oleracea italica - violett');
 });
@@ -98,14 +102,7 @@ it('should generate a partial name', function () {
     common_name_en: ['italian broccoli'],
   };
 
-  const seed: SeedDto = {
-    id: 1,
-    plant_id: 1,
-    name: 'violett',
-    harvest_year: 2022,
-    quantity: Quantity.Enough,
-    owner_id: '00000000-0000-0000-0000-000000000000',
-  };
+  const seed = generateTestSeed();
 
   expect(completePlantName(seed, plant)).toEqual(
     'Italian broccoli - violett (Brassica oleracea italica)',
@@ -119,14 +116,7 @@ it('should generate formatted unique name', function () {
     common_name_en: [],
   };
 
-  const seed: SeedDto = {
-    id: 1,
-    plant_id: 1,
-    name: 'violett',
-    harvest_year: 2022,
-    quantity: Quantity.Enough,
-    owner_id: '00000000-0000-0000-0000-000000000000',
-  };
+  const seed = generateTestSeed();
 
   expect(ReactTestRenderer.create(CompletePlantNameFormatted({ seed, plant })).toJSON()).toEqual(
     ReactTestRenderer.create(
@@ -144,14 +134,7 @@ it('should generate a formatted partial name', function () {
     common_name_en: ['italian broccoli'],
   };
 
-  const seed: SeedDto = {
-    id: 1,
-    plant_id: 1,
-    name: 'violett',
-    harvest_year: 2022,
-    quantity: Quantity.Enough,
-    owner_id: '00000000-0000-0000-0000-000000000000',
-  };
+  const seed = generateTestSeed();
 
   expect(ReactTestRenderer.create(CompletePlantNameFormatted({ seed, plant })).toJSON()).toEqual(
     ReactTestRenderer.create(
