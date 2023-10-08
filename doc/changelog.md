@@ -23,7 +23,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Finish seed use case _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Add decision for api mocking tool _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
