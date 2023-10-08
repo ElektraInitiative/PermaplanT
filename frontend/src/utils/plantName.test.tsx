@@ -94,7 +94,7 @@ it('generates plant names given plant and seed', function () {
   );
 });
 
-it('generates formatted plant names given plant and seed', function () {
+it('generatess formatted plant names given plant and seed', function () {
   const seed = generateTestSeed();
   const plant = generateTestPlant();
   const plantWithCommonName = generateTestPlantWithCommonName();
