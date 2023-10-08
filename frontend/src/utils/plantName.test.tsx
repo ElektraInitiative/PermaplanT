@@ -7,7 +7,7 @@ import {
 } from '@/utils/plantName';
 import ReactTestRenderer from 'react-test-renderer';
 
-it('should generate unique name only when given a plant summary', function () {
+it('should generate unique name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
@@ -17,7 +17,7 @@ it('should generate unique name only when given a plant summary', function () {
   expect(partialPlantName(plant)).toEqual('Brassica oleracea italica');
 });
 
-it('should generate a partial name only when given a plant summary', function () {
+it('should generate a partial name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
@@ -27,7 +27,7 @@ it('should generate a partial name only when given a plant summary', function ()
   expect(partialPlantName(plant)).toEqual('Italian broccoli (Brassica oleracea italica)');
 });
 
-it('should generate formatted unique name only when given a plant summary', function () {
+it('should generate formatted unique name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
@@ -39,7 +39,7 @@ it('should generate formatted unique name only when given a plant summary', func
   );
 });
 
-it('should generate a formatted partial name when given a plant summary', function () {
+it('should generate a formatted partial name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
@@ -55,7 +55,7 @@ it('should generate a formatted partial name when given a plant summary', functi
   );
 });
 
-it('should generate a correctly formatted partial name when unique name contains a cultivar', function () {
+it('should generate a correctly formatted partial name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: "Brassica oleracea italica 'Ramoso calabrese'",
@@ -72,7 +72,7 @@ it('should generate a correctly formatted partial name when unique name contains
   );
 });
 
-it('should generate unique and additional name from seed and plant summary', function () {
+it('should generate unique and additional name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
@@ -91,7 +91,7 @@ it('should generate unique and additional name from seed and plant summary', fun
   expect(completePlantName(seed, plant)).toEqual('Brassica oleracea italica - violett');
 });
 
-it('should generate a partial name only when given a plant summary', function () {
+it('should generate a partial name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
@@ -112,7 +112,7 @@ it('should generate a partial name only when given a plant summary', function ()
   );
 });
 
-it('should generate formatted unique name only when given a plant summary', function () {
+it('should generate formatted unique name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
@@ -137,7 +137,7 @@ it('should generate formatted unique name only when given a plant summary', func
   );
 });
 
-it('should generate a formatted partial name when given a plant summary', function () {
+it('should generate a formatted partial name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
     unique_name: 'Brassica oleracea italica',
