@@ -4,7 +4,7 @@ import {
   UpdateAddDatePlantAction,
   UpdateRemoveDatePlantAction,
 } from '../actions';
-import { useFindPlantById } from '../hooks/useFindPlantById';
+import { usePlant } from '../hooks/usePlant';
 import {
   PlantingAttributeEditForm,
   PlantingAttributeEditFormData,
@@ -22,7 +22,7 @@ export function PlantLayerLeftToolbar() {
 
   const isReadOnlyMode = useIsReadOnlyMode();
 
-  const { plant } = useFindPlantById(selectedPlanting?.plantId ?? NaN, Boolean(selectedPlanting));
+  const { plant } = usePlant(selectedPlanting?.plantId ?? NaN, Boolean(selectedPlanting));
 
   const onDeleteClick = () => {
     if (!selectedPlanting) return;
