@@ -8,7 +8,7 @@ import { ReactElement } from 'react';
  * @param plant DTO containing the most essential information of a plant.
  */
 export function commonName(plant: PlantsSummaryDto): string {
-  const common_name = formatCommonName(plant.common_name_en);
+  const common_name = commonNameUppercase(plant.common_name_en);
 
   return hasCommonName(plant) ? common_name ?? '' : '';
 }
@@ -23,7 +23,7 @@ export function commonName(plant: PlantsSummaryDto): string {
  * @param plant DTO containing the most essential information of a plant.
  */
 export function partialPlantName(plant: PlantsSummaryDto): string {
-  const common_name = formatCommonName(plant.common_name_en);
+  const common_name = commonNameUppercase(plant.common_name_en);
 
   return hasCommonName(plant) ? `${common_name} (${plant.unique_name})` : plant.unique_name;
 }
@@ -37,14 +37,14 @@ export function partialPlantName(plant: PlantsSummaryDto): string {
  * German common names are currently not supported.
  */
 export function PartialPlantNameFormatted(props: { plant: PlantsSummaryDto }): ReactElement {
-  const common_name = formatCommonName(props.plant.common_name_en);
+  const common_name = commonNameUppercase(props.plant.common_name_en);
 
   return hasCommonName(props.plant) ? (
     <>
-      {common_name} ({formatUniqueName(props.plant.unique_name)})
+      {common_name} (<UniqueNameFormatted uniqueName={props.plant.unique_name} />)
     </>
   ) : (
-    formatUniqueName(props.plant.unique_name)
+    <UniqueNameFormatted uniqueName={props.plant.unique_name} />
   );
 }
 
@@ -59,9 +59,11 @@ export function PartialPlantNameFormatted(props: { plant: PlantsSummaryDto }): R
  * @param seed DTO containing seed information.
  */
 export function completePlantName(seed: SeedDto, plant: PlantsSummaryDto): string {
-  console.assert(seed.plant_id === plant.id);
+  if (seed.plant_id !== plant.id) {
+    throw new Error('seed.plant_id must be equal to plant.id to produce a plant name');
+  }
 
-  const common_name = formatCommonName(plant.common_name_en);
+  const common_name = commonNameUppercase(plant.common_name_en);
 
   return hasCommonName(plant)
     ? `${common_name} - ${seed.name} (${plant.unique_name})`
@@ -80,17 +82,20 @@ export function CompletePlantNameFormatted(props: {
   seed: SeedDto;
   plant: PlantsSummaryDto;
 }): ReactElement {
-  console.assert(props.seed.plant_id === props.plant.id);
+  if (props.seed.plant_id !== props.plant.id) {
+    throw new Error('seed.plant_id must be equal to plant.id to produce a plant name');
+  }
 
-  const common_name = formatCommonName(props.plant.common_name_en);
+  const common_name = commonNameUppercase(props.plant.common_name_en);
 
   return hasCommonName(props.plant) ? (
     <>
-      {common_name} - {props.seed.name} ({formatUniqueName(props.plant.unique_name)})
+      {common_name} - {props.seed.name} (
+      <UniqueNameFormatted uniqueName={props.plant.unique_name} />)
     </>
   ) : (
     <>
-      {formatUniqueName(props.plant.unique_name)} - {props.seed.name}
+      <UniqueNameFormatted uniqueName={props.plant.unique_name} /> - {props.seed.name}
     </>
   );
 }
@@ -106,8 +111,8 @@ export function CompletePlantNameFormatted(props: {
  *
  * @param uniqueName The unique name
  */
-function formatUniqueName(uniqueName: string): ReactElement {
-  const uniqueNameParts = uniqueName.split("'");
+export function UniqueNameFormatted(props: { uniqueName: string }): ReactElement {
+  const uniqueNameParts = props.uniqueName.split("'");
 
   const species_or_family_name = uniqueNameParts[0].trim();
   const cultivar = uniqueNameParts[1]?.trim();
@@ -125,10 +130,8 @@ function formatUniqueName(uniqueName: string): ReactElement {
  *
  * @param commonName The common name
  */
-function formatCommonName(commonName: string[] | undefined): string {
-  if (!commonName || commonName.length == undefined || commonName.length == 0) return '';
-
-  return commonName[0].charAt(0).toUpperCase() + commonName[0].slice(1);
+export function commonNameUppercase(commonName: string[] | undefined): string | undefined {
+  return commonName?.[0]?.charAt(0).toUpperCase().concat(commonName?.[0]?.slice(1));
 }
 
 /**
@@ -136,6 +139,7 @@ function formatCommonName(commonName: string[] | undefined): string {
  *
  * @param plant the DTO to be checked.
  */
-function hasCommonName(plant: PlantsSummaryDto): boolean {
-plant.common_name_en?.[0]?.trim().length
+export function hasCommonName(plant: PlantsSummaryDto): boolean {
+  const commonNameLength = plant.common_name_en?.[0]?.trim().length ?? 0;
+  return commonNameLength > 0;
 }
