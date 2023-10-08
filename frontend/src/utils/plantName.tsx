@@ -137,5 +137,5 @@ function formatCommonName(commonName: string[] | undefined): string {
  * @param plant the DTO to be checked.
  */
 function hasCommonName(plant: PlantsSummaryDto): boolean {
-  return !!plant.common_name_en && plant.common_name_en.length > 0;
+plant.common_name_en?.[0]?.trim().length
 }
