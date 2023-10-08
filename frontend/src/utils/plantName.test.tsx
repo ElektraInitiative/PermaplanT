@@ -4,6 +4,8 @@ import {
   CompletePlantNameFormatted,
   PartialPlantNameFormatted,
   partialPlantName,
+  hasCommonName,
+  commonNameUppercase,
 } from '@/utils/plantName';
 import ReactTestRenderer from 'react-test-renderer';
 
@@ -120,4 +122,20 @@ it('generatess formatted plant names given plant and seed', function () {
       </>,
     ).toJSON(),
   );
+});
+
+it('checks if a plant has a common name', function () {
+  const plant = generateTestPlant();
+  const plantWithCommonName = generateTestPlantWithCommonName();
+
+  expect(hasCommonName(plant)).toBe(false);
+  expect(hasCommonName(plantWithCommonName)).toBe(true);
+});
+
+it('capitalizes the first letter of a common name', function () {
+  const plant = generateTestPlant();
+  const plantWithCommonName = generateTestPlantWithCommonName();
+
+  expect(commonNameUppercase(plant.common_name_en)).toBe(undefined);
+  expect(commonNameUppercase(plantWithCommonName.common_name_en)).toBe('Italian broccoli');
 });
