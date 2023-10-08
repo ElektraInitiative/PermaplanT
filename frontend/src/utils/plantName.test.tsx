@@ -18,62 +18,62 @@ function generateTestSeed(): SeedDto {
   };
 }
 
-it('should generate unique name', function () {
-  const plant: PlantsSummaryDto = {
+function generateTestPlant(): PlantsSummaryDto {
+  return {
     id: 1,
     unique_name: 'Brassica oleracea italica',
     common_name_en: [],
   };
+}
 
-  expect(partialPlantName(plant)).toEqual('Brassica oleracea italica');
-});
-
-it('should generate a partial name', function () {
-  const plant: PlantsSummaryDto = {
-    id: 1,
-    unique_name: 'Brassica oleracea italica',
-    common_name_en: ['Italian broccoli'],
-  };
-
-  expect(partialPlantName(plant)).toEqual('Italian broccoli (Brassica oleracea italica)');
-});
-
-it('should generate formatted unique name', function () {
-  const plant: PlantsSummaryDto = {
-    id: 1,
-    unique_name: 'Brassica oleracea italica',
-    common_name_en: [],
-  };
-
-  expect(ReactTestRenderer.create(PartialPlantNameFormatted({ plant })).toJSON()).toEqual(
-    ReactTestRenderer.create(<i>Brassica oleracea italica</i>).toJSON(),
-  );
-});
-
-it('should generate a formatted partial name', function () {
-  const plant: PlantsSummaryDto = {
+function generateTestPlantWithCommonName(): PlantsSummaryDto {
+  return {
     id: 1,
     unique_name: 'Brassica oleracea italica',
     common_name_en: ['italian broccoli'],
   };
+}
 
-  expect(ReactTestRenderer.create(PartialPlantNameFormatted({ plant })).toJSON()).toEqual(
+it('generates plant names given a plant', function () {
+  const plant = generateTestPlant();
+  const plantWithCommonName = generateTestPlantWithCommonName();
+
+  expect(partialPlantName(plant)).toEqual('Brassica oleracea italica');
+  expect(partialPlantName(plantWithCommonName)).toEqual(
+    'Italian broccoli (Brassica oleracea italica)',
+  );
+});
+
+it('generates formatted plant names given a plant', function () {
+  const plant = generateTestPlant();
+  const plantWithCommonName = generateTestPlantWithCommonName();
+  const plantWithCommonNameAndCultivar: PlantsSummaryDto = {
+    id: 1,
+    unique_name: "Brassica oleracea italica 'Ramoso calabrese'",
+    common_name_en: ['italian broccoli'],
+  };
+
+  const formattedPlantName = PartialPlantNameFormatted({ plant });
+  const formattedPlantNameWithCommonName = PartialPlantNameFormatted({
+    plant: plantWithCommonName,
+  });
+  const formattedPlantNameWithCommonNameAndCultivar = PartialPlantNameFormatted({
+    plant: plantWithCommonNameAndCultivar,
+  });
+
+  expect(ReactTestRenderer.create(formattedPlantName).toJSON()).toEqual(
+    ReactTestRenderer.create(<i>Brassica oleracea italica</i>).toJSON(),
+  );
+
+  expect(ReactTestRenderer.create(formattedPlantNameWithCommonName).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
         <>Italian broccoli</> (<i>Brassica oleracea italica</i>)
       </>,
     ).toJSON(),
   );
-});
 
-it('should generate a correctly formatted partial name', function () {
-  const plant: PlantsSummaryDto = {
-    id: 1,
-    unique_name: "Brassica oleracea italica 'Ramoso calabrese'",
-    common_name_en: ['italian broccoli'],
-  };
-
-  expect(ReactTestRenderer.create(PartialPlantNameFormatted({ plant })).toJSON()).toEqual(
+  expect(ReactTestRenderer.create(formattedPlantNameWithCommonNameAndCultivar).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
         <>Italian broccoli</> (<i>Brassica oleracea italica</i>
@@ -83,60 +83,37 @@ it('should generate a correctly formatted partial name', function () {
   );
 });
 
-it('should generate unique and additional name', function () {
-  const plant: PlantsSummaryDto = {
-    id: 1,
-    unique_name: 'Brassica oleracea italica',
-    common_name_en: [],
-  };
-
+it('generates plant names given plant and seed', function () {
   const seed = generateTestSeed();
+  const plant = generateTestPlant();
+  const plantWithCommonName = generateTestPlantWithCommonName();
 
   expect(completePlantName(seed, plant)).toEqual('Brassica oleracea italica - violett');
-});
-
-it('should generate a partial name', function () {
-  const plant: PlantsSummaryDto = {
-    id: 1,
-    unique_name: 'Brassica oleracea italica',
-    common_name_en: ['italian broccoli'],
-  };
-
-  const seed = generateTestSeed();
-
-  expect(completePlantName(seed, plant)).toEqual(
+  expect(completePlantName(seed, plantWithCommonName)).toEqual(
     'Italian broccoli - violett (Brassica oleracea italica)',
   );
 });
 
-it('should generate formatted unique name', function () {
-  const plant: PlantsSummaryDto = {
-    id: 1,
-    unique_name: 'Brassica oleracea italica',
-    common_name_en: [],
-  };
-
+it('generates formatted plant names given plant and seed', function () {
   const seed = generateTestSeed();
+  const plant = generateTestPlant();
+  const plantWithCommonName = generateTestPlantWithCommonName();
 
-  expect(ReactTestRenderer.create(CompletePlantNameFormatted({ seed, plant })).toJSON()).toEqual(
+  const formattedPlantName = CompletePlantNameFormatted({ seed, plant });
+  const formattedPlantNameWithCommonName = CompletePlantNameFormatted({
+    seed,
+    plant: plantWithCommonName,
+  });
+
+  expect(ReactTestRenderer.create(formattedPlantName).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
         <i>Brassica oleracea italica</i> - <>violett</>
       </>,
     ).toJSON(),
   );
-});
 
-it('should generate a formatted partial name', function () {
-  const plant: PlantsSummaryDto = {
-    id: 1,
-    unique_name: 'Brassica oleracea italica',
-    common_name_en: ['italian broccoli'],
-  };
-
-  const seed = generateTestSeed();
-
-  expect(ReactTestRenderer.create(CompletePlantNameFormatted({ seed, plant })).toJSON()).toEqual(
+  expect(ReactTestRenderer.create(formattedPlantNameWithCommonName).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
         <>Italian broccoli</> - <>violett</> (<i>Brassica oleracea italica</i>)
