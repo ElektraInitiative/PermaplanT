@@ -37,7 +37,7 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
       ref={labelRef}
       x={planting.x - labelOffsetX}
       y={planting.y + labelOffsetY}
-      content={plantName}
+      content={commonName(plant)}
     />
   );
 };
