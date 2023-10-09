@@ -50,7 +50,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Obsolete fix of seeds search in the plants layer #913 _(tschawax)_
 - _()_
 - _()_
 - _()_
