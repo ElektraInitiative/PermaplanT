@@ -1,9 +1,11 @@
 {
   "available_seeds": {
     "list_title": "Verfügbare Samen",
+    "placeholder": "Samen suchen...",
     "empty_list_title": "Fang an, indem du Samen hinzufügst",
     "empty_list_message": "Wir konnten keine saisonalen Pflanzen finden, für die du die zugehörigen Samen besitzt.",
     "empty_list_action": "Deine Samen anzeigen",
-    "error_fetching_seasonal_suggestions": "Sorry, ich habe Schwierigkeiten saisonale Vorschläge von meinem Server zu erhalten. Bitte versuche es später erneut."
+    "error_fetching_seasonal_suggestions": "Sorry, ich habe Schwierigkeiten saisonale Vorschläge von meinem Server zu erhalten. Bitte versuche es später erneut.",
+    "search_empty": "Leider konnte ich unter diesem Suchbegriff nichts finden..."
   }
 }

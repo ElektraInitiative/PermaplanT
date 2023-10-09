@@ -14,7 +14,7 @@ export const getSeasonalAvailablePlants = async (
   searchParams.append('suggestion_type', 'available');
   searchParams.append('relative_to_date', date.toJSON().split('T')[0]);
 
-  searchParams.append('per_page', '5');
+  searchParams.append('per_page', '30');
   searchParams.append('page', pageString);
 
   try {
