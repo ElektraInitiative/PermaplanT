@@ -5,7 +5,7 @@
 - **Scope:** All Layers, except Base
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user deletes or changes properties of multi-selected plants.
+- **Brief:** The user changes properties or deletes multi-selected plants.
 - **Status:** Analysis
 - **Assignee:** Christoph N.
 
