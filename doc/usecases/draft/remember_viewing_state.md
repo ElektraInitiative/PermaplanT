@@ -1,11 +1,11 @@
-# Use Case: Remember Viewing State of Map
+# Use Case: Remember Viewing State
 
 ## Summary
 
 - **Scope:** Map
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** The user logs in, opens a map and all the map's visibility settings (zoom, viewport, layer selection, layer visibilities, grid, plant labels) are restored from his last session.
+- **Brief:** The map's visibility settings are restored from the user's last session.
 - **Status:** Draft
 
 ## Scenarios
@@ -13,19 +13,19 @@
 - **Precondition:**
   The user is logged in and has opened a map.
 - **Main success scenario:**
-  - The user switches to the plants layer.  
+  - The user selects layer _A_.  
     He zooms into the map.  
-    He scrolls/drags the map's viewport until all his plants become visible again.  
-    He sets the base layer invisible.  
+    He scrolls/drags the map's viewport.  
+    He sets layer _B_ invisible.  
     He turns off the grid display.  
     He hides the plant labels.  
-    He logs out and, at some point later, logs in again.
-    He opens that same map again which he edited in his previous session.  
+    He closes the browser, opens it again and logs in.
+    He opens the same map again which he edited in his previous session.  
     He finds all the changes and settings from the last session being restored:
-    - plants layer selected
+    - layer _A_ selected
     - zoomed-in on the map
     - all plants visible on the map's viewport
-    - base layer invisible
+    - layer _B_ invisible
     - grid display turned off
     - plant labels hidden
 - **Alternative scenario:**
@@ -37,6 +37,10 @@
     He opens another map _B_ and changes some visibility settings there too.  
     He goes back to map _A_ and finds all the visibility changes he did on map _A_, still being applied.  
     He goes back to map _B_ and sees that all the visibility settings he changed on map _B_, are still being set.
+  - The user does visibility changes on a map in browser _A_.
+    He logs in in another browser _B_.
+    He opens the same map in browser _B_.
+    All the visibility changes the user applied to the map in browser _A_, are restored in browser _B_.
 - **Error scenario:**
   The app is experiencing technical difficulties and unable to restore one or more of the map's visibility settings, displaying an info message that the map's viewing state could not be fully restored.
 - **Postcondition:**
