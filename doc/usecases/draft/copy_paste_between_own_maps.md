@@ -1,4 +1,4 @@
-# Use Case: Copy & Paste of Selection Between a User's Own Maps
+# Use Case: Copy & Paste Between Own Maps
 
 ## Summary
 
@@ -15,18 +15,18 @@
   The user has opened the app on a key-controlled device and made a selection of elements on his own map _A_ that he wants to copy and paste into his own map _B_.
 - **Main success scenario:**
   - The user copies the selection on map _A_.  
-    He opens map _B_.  
-    He clicks anywhere on map _B_.  
-    He pastes the copied selection into map _B_.  
+    The user opens map _B_.  
+    The user clicks anywhere on map _B_.  
+    The user pastes the copied selection into map _B_.  
     The pasted selection of elements is placed in map _B_ at the user's last click position right before pasting.
 - **Alternative scenarios:**
   - Same as for [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md#scenarios), just with two different maps of the same user
   - The user logs in.  
-    He fails to paste the elements he copied in his previous session because they are removed from the 'copy-storage'.
+    The user fails to paste the elements he copied in his previous session because they are removed from the 'copy-storage'.
 - **Error scenarios:**
-  Same as for [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md#scenarios)
+  - The user attempts to copy and paste a selection but the app is experiencing technical difficulties and is unable to complete the request, displaying an error message.
 - **Postconditions:**
-  - Same as for [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md#scenarios)
+  - The user's map contains the copied and pasted selection of elements.
   - The user's map _A_ still contains the same elements as before the copying and pasting into map _B_.
   - The user's map _B_ contains the pasted selection of elements which he copied from his map _A_.
 - **Non-functional Constraints:**
