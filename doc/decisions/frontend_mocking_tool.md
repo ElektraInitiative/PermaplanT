@@ -7,7 +7,6 @@ We need to select an API mocking tool for our frontend development that allows u
 ## Constraints
 
 - The selected tool should seamlessly integrate with our frontend development environment.
-- It should offer features for simulating different API scenarios, including various response codes, payloads, and latency.
 
 ## Assumptions
 
@@ -27,10 +26,12 @@ We have decided to use [MSW (Mock Service Worker)](https://mswjs.io/) as our API
 
 ## Rationale
 
-MSW offers several advantages that align with our requirements and constraints:
+All the considered alternatives are powerful tools for API mocking, but MSW is widely used by the community and has a lot of documentation and tutorials available.
 
-- **Request Interception and Mocking:** MSW provides a powerful request interception and mocking system, allowing us to simulate various API scenarios, including different response codes, payloads, and latency. This flexibility is crucial for testing and development.
-- **Active Community and Documentation:** MSW has a thriving community and comprehensive documentation, which will aid our team in quickly learning and effectively using the tool. This support ensures that we can troubleshoot any issues that may arise during development.
+Some key advantages of using MSW for API mocking include:
+
+- **Request Interception and Mocking:** MSW provides a powerful request interception and mocking system, allowing us to simulate various API scenarios, including different response codes, payloads, and latency.
+- **Active Community and Documentation:** MSW has a thriving community and comprehensive documentation, which will aid our team in quickly learning and effectively using the tool.
 
 ## Implications
 
