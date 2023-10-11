@@ -6,7 +6,7 @@ import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { useTranslateQuality } from '@/hooks/useTranslateQuality';
 import { useTranslateQuantity } from '@/hooks/useTranslateQuantity';
 import { ReactComponent as EditIcon } from '@/icons/edit.svg';
-import { PlantNameFromSeedAndPlant } from '@/utils/plantName';
+import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import { useQuery } from '@tanstack/react-query';
 import { Suspense, UIEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -93,7 +93,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
                 >
                   <td className="px-6 py-4">
                     {seed.plant_id ? (
-                      <CompletePlantNameFromSeed plantId={seed.plant_id ?? 0} seed={seed} />
+                      <CompletePlantNameFromSeed seed={seed} />
                     ) : (
                       <span>{t('common:error')}</span>
                     )}
@@ -132,12 +132,12 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
   );
 };
 
-const CompletePlantNameFromSeed = (props: { plantId: number; seed: SeedDto }) => {
+const CompletePlantNameFromSeed = (props: { seed: SeedDto }) => {
   const { t } = useTranslation(['common']);
 
   const { isLoading, isError, data } = useQuery(
-    ['plant', props.plantId],
-    () => findPlantById(props.plantId),
+    ['plant', props.seed.plant_id],
+    () => findPlantById(props.seed.plant_id ?? -1),
     { cacheTime: Infinity, staleTime: Infinity },
   );
 
