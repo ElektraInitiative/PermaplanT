@@ -10,7 +10,7 @@ import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import SimpleFormTextArea from '@/components/Form/SimpleFormTextArea';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { enumToSelectOptionArr } from '@/utils/enum';
-import { getNameFromPlant } from '@/utils/plantName';
+import { getNameFromPlant } from '@/utils/plant-naming';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
 import { Suspense, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';

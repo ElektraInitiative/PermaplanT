@@ -4,7 +4,7 @@ import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import { ReactComponent as CheckIcon } from '@/icons/check.svg';
 import { ReactComponent as CircleDottedIcon } from '@/icons/circle-dotted.svg';
-import { PlantNameFromPlant } from '@/utils/plantName';
+import { PlantNameFromPlant } from '@/utils/plant-naming';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

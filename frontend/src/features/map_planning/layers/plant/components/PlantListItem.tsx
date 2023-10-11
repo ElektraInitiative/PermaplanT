@@ -1,7 +1,7 @@
 import defaultImageUrl from '@/assets/plant.svg';
 import { PlantsSummaryDto } from '@/bindings/definitions';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
-import { PlantNameFromPlant } from '@/utils/plantName';
+import { PlantNameFromPlant } from '@/utils/plant-naming';
 
 export type PlantListElementProps = {
   /** The plant that is displayed as element of a list */

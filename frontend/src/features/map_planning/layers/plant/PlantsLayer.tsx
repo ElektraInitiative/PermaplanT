@@ -7,7 +7,7 @@ import { LayerType, PlantSpread, PlantsSummaryDto } from '@/bindings/definitions
 import IconButton from '@/components/Button/IconButton';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
-import { PlantNameFromPlant } from '@/utils/plantName';
+import { PlantNameFromPlant } from '@/utils/plant-naming';
 import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';

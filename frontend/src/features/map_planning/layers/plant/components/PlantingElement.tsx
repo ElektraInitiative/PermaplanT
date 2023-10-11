@@ -8,7 +8,7 @@ import {
   hideTooltip,
 } from '@/features/map_planning/utils/Tooltip';
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
-import { commonName } from '@/utils/plantName';
+import { commonName } from '@/utils/plant-naming';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Group, Circle, Rect } from 'react-konva';
 

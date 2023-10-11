@@ -6,7 +6,7 @@ import {
   getNameFromPlant,
   hasCommonName,
   commonNameToUppercase,
-} from '@/utils/plantName';
+} from '@/utils/plant-naming';
 import ReactTestRenderer from 'react-test-renderer';
 
 function generateTestSeed(): SeedDto {
