@@ -17,9 +17,9 @@
     Events include:
     - addition of an element to the map (colored green)
     - removal of an element from the map (colored red)
-  - the events a represented by either a line or a bar chart on the sliders.
-  - the timeline can be scaled vertically for better graph readability.
-  - if there is no event at a certain point in time, the graph is empty (no line or bar is shown).
+  - the events are represented by a visual indication directly at the day/month/year on the sliders.
+  - the timeline can be scaled vertically for touch screen usage.
+  - if there is no event at a certain point in time, the graph is empty. That means that 0 events should lead to no visual indication, so that 0 and 1 can be easily distinguished.
 - **Alternative scenario:**
   - The user has not yet added/removed any elements, therefore no events are visible on the timeline.
 - **Error scenario:**

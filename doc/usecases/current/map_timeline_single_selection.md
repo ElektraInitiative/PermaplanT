@@ -14,13 +14,13 @@
   - The user has opened the app and selected a map.
   - The timeline shows the current date.
 - **Main success scenario:**
-  - A timeline is presented to the user witch allows them to select year, month and day.
-  - Year, month and day can be individually selected by scrolling or moving sliders.
+  - A timeline is presented to the user which allows them to select year, month and day.
+  - Year, month and day can be individually selected by scrolling, moving sliders or clicking on the elements.
   - This allows navigation to a different point in the past, present and future.
   - The map updates to show the state of the garden at the selected point in time (removing or adding elements accordingly).
   - Adding or removing elements is done on the selected date.
-  - The selected date is highlighted in bold.
-  - The sliders are synchronized (e.g. if the user scrolls the day slider over the last day of the month, the month slider is updated to the next month)
+  - The selected date is highlighted.
+  - The sliders are synchronized, i.e., if the user scrolls the day slider over the last day of the month, the month slider is updated to the next month.
 - **Alternative scenario:**
   - The user corrects the dates in the attributes of elements or presses undo to undo changes in the dates.
 - **Error scenario:**
