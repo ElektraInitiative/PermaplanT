@@ -5,7 +5,6 @@ import {
   PlantNameFromPlant,
   getNameFromPlant,
   hasCommonName,
-  commonNameToUppercase,
 } from '@/utils/plant-naming';
 import ReactTestRenderer from 'react-test-renderer';
 
@@ -130,12 +129,4 @@ it('checks if a plant has a common name', function () {
 
   expect(hasCommonName(plant)).toBe(false);
   expect(hasCommonName(plantWithCommonName)).toBe(true);
-});
-
-it('capitalizes the first letter of a common name', function () {
-  const plant = generateTestPlant();
-  const plantWithCommonName = generateTestPlantWithCommonName();
-
-  expect(commonNameToUppercase(plant.common_name_en)).toBe(undefined);
-  expect(commonNameToUppercase(plantWithCommonName.common_name_en)).toBe('Italian broccoli');
 });

@@ -8,7 +8,7 @@ import { ReactElement } from 'react';
  * @param plant DTO containing the most essential information of a plant.
  */
 export function commonName(plant: PlantsSummaryDto): string {
-  const commonName = commonNameToUppercase(plant.common_name_en);
+  const commonName = capitalizeCommonName(plant.common_name_en);
 
   return hasCommonName(plant) ? commonName ?? '' : '';
 }
@@ -23,7 +23,7 @@ export function commonName(plant: PlantsSummaryDto): string {
  * @param plant DTO containing the most essential information of a plant.
  */
 export function getNameFromPlant(plant: PlantsSummaryDto): string {
-  const commonName = commonNameToUppercase(plant.common_name_en);
+  const commonName = capitalizeCommonName(plant.common_name_en);
 
   return hasCommonName(plant) ? `${commonName} (${plant.unique_name})` : plant.unique_name;
 }
@@ -37,7 +37,7 @@ export function getNameFromPlant(plant: PlantsSummaryDto): string {
  * German common names are currently not supported.
  */
 export function PlantNameFromPlant(props: { plant: PlantsSummaryDto }): ReactElement {
-  const commonName = commonNameToUppercase(props.plant.common_name_en);
+  const commonName = capitalizeCommonName(props.plant.common_name_en);
 
   return hasCommonName(props.plant) ? (
     <>
@@ -59,11 +59,7 @@ export function PlantNameFromPlant(props: { plant: PlantsSummaryDto }): ReactEle
  * @param seed DTO containing seed information.
  */
 export function getPlantNameFromSeedAndPlant(seed: SeedDto, plant: PlantsSummaryDto): string {
-  if (seed.plant_id !== plant.id) {
-    throw new Error('seed.plant_id must be equal to plant.id to produce a plant name');
-  }
-
-  const commonName = commonNameToUppercase(plant.common_name_en);
+  const commonName = capitalizeCommonName(plant.common_name_en);
 
   return hasCommonName(plant)
     ? `${commonName} - ${seed.name} (${plant.unique_name})`
@@ -82,11 +78,7 @@ export function PlantNameFromSeedAndPlant(props: {
   seed: SeedDto;
   plant: PlantsSummaryDto;
 }): ReactElement {
-  if (props.seed.plant_id !== props.plant.id) {
-    throw new Error('seed.plant_id must be equal to plant.id to produce a plant name');
-  }
-
-  const commonName = commonNameToUppercase(props.plant.common_name_en);
+  const commonName = capitalizeCommonName(props.plant.common_name_en);
 
   return hasCommonName(props.plant) ? (
     <>
@@ -130,7 +122,7 @@ export function UniqueNameFromPlant(props: { uniqueName: string }): ReactElement
  *
  * @param commonName The common name
  */
-export function commonNameToUppercase(commonName: string[] | undefined): string | undefined {
+function capitalizeCommonName(commonName: string[] | undefined): string | undefined {
   return commonName?.[0]?.charAt(0).toUpperCase().concat(commonName?.[0]?.slice(1));
 }
 
