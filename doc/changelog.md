@@ -58,7 +58,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Update Zustand documentation #957 _(tschawax)_
 - _()_
 - _()_
 - _()_
