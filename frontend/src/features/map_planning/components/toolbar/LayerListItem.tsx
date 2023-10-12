@@ -1,5 +1,5 @@
 import useMapStore from '../../store/MapStore';
-import { LayerDto, LayerType } from '@/bindings/definitions';
+import { LayerDto, LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { NamedSlider } from '@/components/Slider/NamedSlider';
 import { ReactComponent as CaretDownIcon } from '@/svg/icons/caret-down.svg';

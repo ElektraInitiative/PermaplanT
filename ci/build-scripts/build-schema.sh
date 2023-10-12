@@ -22,4 +22,4 @@ diesel --version
 LC_ALL=C diesel migration run
 
 # Create Bindings
-typeshare ./ --lang=typescript --output-file=../frontend/src/bindings/definitions.ts
+typeshare ./ --lang=typescript --output-file=../frontend/src/api_types/definitions.ts
