@@ -1,4 +1,3 @@
-import { ExtendedPlantsSummaryDisplayName } from '../../../../components/ExtendedPlantDisplay';
 import useMapStore from '../../store/MapStore';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
@@ -7,6 +6,7 @@ import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantSpread, PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
+import { PlantNameFromPlant } from '@/utils/plant-naming';
 import { ReactComponent as CloseIcon } from '@public/icons/close.svg';
 import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
@@ -222,8 +222,8 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
         transition: { delay: 0, duration: 0.1 },
       }}
     >
-      <div className="flex flex-col items-center justify-center">
-        <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
+      <div className="flex flex-row items-center justify-center">
+        <PlantNameFromPlant plant={plant} />
       </div>
       <div className="flex items-center justify-center">
         <IconButton

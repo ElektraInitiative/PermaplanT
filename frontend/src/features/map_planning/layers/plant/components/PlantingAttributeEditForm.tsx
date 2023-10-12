@@ -1,8 +1,8 @@
-import { ExtendedPlantsSummaryDisplayName } from '../../../../../components/ExtendedPlantDisplay';
 import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
+import { PlantNameFromPlant } from '@/utils/plant-naming';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReactComponent as CheckIcon } from '@public/icons/check.svg';
 import { ReactComponent as CircleDottedIcon } from '@public/icons/circle-dotted.svg';
@@ -67,7 +67,7 @@ export function PlantingAttributeEditForm({
   return (
     <div className="flex flex-col gap-2 p-2">
       <h2>
-        <ExtendedPlantsSummaryDisplayName plant={plant} />
+        <PlantNameFromPlant plant={plant} />
       </h2>
 
       <div className="flex gap-2">

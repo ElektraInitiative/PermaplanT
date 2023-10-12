@@ -9,8 +9,8 @@ import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import SimpleFormTextArea from '@/components/Form/SimpleFormTextArea';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
-import { ExtendedPlantsSummary } from '@/utils/ExtendedPlantsSummary';
 import { enumToSelectOptionArr } from '@/utils/enum';
+import { getNameFromPlant } from '@/utils/plant-naming';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
 import { Suspense, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -119,11 +119,9 @@ const CreateSeedForm = ({
     const page = await searchPlants(inputValue, pageNumber);
 
     const plant_options: SelectOption[] = page.results.map((plant) => {
-      const plantsSummary = new ExtendedPlantsSummary(plant);
-
       return {
         value: plant.id,
-        label: `${plantsSummary.displayName.common_name} (${plantsSummary.displayName.unique_name})`,
+        label: getNameFromPlant(plant),
       };
     });
 
@@ -175,6 +173,8 @@ const CreateSeedForm = ({
               }}
               onChange={onChange}
             />
+            {/* The text from the title attribute will be displayed in the
+                error message in case the specified pattern does not match. */}
             <SimpleFormInput
               labelText={t('seeds:additional_name')}
               placeholder=""
@@ -182,6 +182,8 @@ const CreateSeedForm = ({
               id="name"
               register={register}
               onChange={onChange}
+              title={t('seeds:additional_name_pattern_hint')}
+              pattern="^(?!.*(-))(?=.*[a-zA-Z0-9äöüÄÖÜß]).*$"
             />
             <SimpleFormInput
               type="number"
