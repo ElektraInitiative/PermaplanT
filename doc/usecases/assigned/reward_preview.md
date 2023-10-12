@@ -14,7 +14,6 @@
   - The user has opened the app and is editing a map.
   - The user has planted at least one plant on his map.
 - **Main success scenario:**
-  - The dates for the blooming or harvesting periods of all planted plants will be marked on the [map timeline](../assigned/map_timeline_event_view.md).
   - When viewing the map on such a date, the plants with an active blooming or harvesting period at that time will be marked on the map.
 - **Alternative scenario:**
   - Optionally, this can be disabled in the users' preferences.
