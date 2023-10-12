@@ -1,4 +1,4 @@
-import { ReactComponent as LoadingSpinnerIcon } from '@public/icons/loader-quarter.svg';
+import { ReactComponent as LoadingSpinnerIcon } from '@/svg/icons/loader-quarter.svg';
 
 /**
  * Simple component for loading indication

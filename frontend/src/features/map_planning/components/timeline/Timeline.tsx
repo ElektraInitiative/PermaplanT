@@ -1,9 +1,9 @@
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
+import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
+import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ReactComponent as CheckIcon } from '@public/icons/check.svg';
-import { ReactComponent as CircleDottedIcon } from '@public/icons/circle-dotted.svg';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';

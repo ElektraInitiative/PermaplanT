@@ -4,8 +4,8 @@ import LanguageSwitcher from '../../features/landing_page/components/LanguageSwi
 import ButtonLink from '../Button/ButtonLink';
 import { LoginButton } from '@/features/auth/components/LoginButton';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
-import { ReactComponent as LogoSmallGraySVG } from '@public//permaplant-logo-gray.svg';
-import { ReactComponent as LogoSmallSVG } from '@public//permaplant-logo.svg';
+import { ReactComponent as LogoSmallGraySVG } from '@/svg/permaplant-logo-gray.svg';
+import { ReactComponent as LogoSmallSVG } from '@/svg/permaplant-logo.svg';
 import { useTranslation } from 'react-i18next';
 
 /**

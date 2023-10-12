@@ -1,6 +1,6 @@
 import { getPublicImage } from '@/features/nextcloud_integration/api/getImages';
 import { useImageFromBlob } from '@/features/nextcloud_integration/hooks/useImageFromBlob';
-import errorImageSource from '@public/icons/photo-off.svg';
+import errorImageSource from '@/svg/icons/photo-off.svg';
 import { RetryValue } from '@tanstack/query-core/build/lib/retryer';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';

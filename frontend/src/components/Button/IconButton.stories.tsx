@@ -1,6 +1,6 @@
 import IconButton, { ButtonVariant } from './IconButton';
+import { ReactComponent as PlantIcon } from '@/svg/icons/plant.svg';
 import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
-import { ReactComponent as PlantIcon } from '@public/icons/plant.svg';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof IconButton> = {

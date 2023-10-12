@@ -1,7 +1,7 @@
 import { getImage } from '../api/getImages';
 import { useImageFromBlob } from './useImageFromBlob';
 import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
-import errorImageSource from '@public/icons/photo-off.svg';
+import errorImageSource from '@/svg/icons/photo-off.svg';
 import { useQuery } from '@tanstack/react-query';
 import { WebDAVClient } from 'webdav';
 

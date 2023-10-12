@@ -5,10 +5,10 @@ import { LayerDto } from '@/api_types/definitions';
 /* TODO: these imports should be added again when the corresponding functionality of the buttons is implemented */
 // import IconButton from '@/components/Button/IconButton';
 // import { NamedSlider } from '@/components/Slider/NamedSlider';
-// import { ReactComponent as CaretDownIcon } from '@public/icons/caret-down.svg';
-// import { ReactComponent as CaretRightIcon } from '@public/icons/caret-right.svg';
-// import { ReactComponent as EyeOffIcon } from '@public/icons/eye-off.svg';
-// import { ReactComponent as EyeIcon } from '@public/icons/eye.svg';
+// import { ReactComponent as CaretDownIcon } from '@/svg/icons/caret-down.svg';
+// import { ReactComponent as CaretRightIcon } from '@/svg/icons/caret-right.svg';
+// import { ReactComponent as EyeOffIcon } from '@/svg/icons/eye-off.svg';
+// import { ReactComponent as EyeIcon } from '@/svg/icons/eye.svg';
 // import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
