@@ -10,7 +10,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - _()_
 - _()_
-- _()_
+- Exit planting mode with escape _(Daniel Steinkogler)_
 - Renaming of layer list components _(Daniel Steinkogler)_
 - Fix ordering of seeds by expiration date _(Moritz)_
 - Re-enable seed search. It will now take the entire plant name into account. _(Moritz)_
@@ -21,7 +21,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Doc: refinement of timeline use cases _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
@@ -36,6 +36,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 18.9. 9:00 _(Markus Raab, 4ydan)_
 - Added Meeting Agenda&Notes for 25.9. 9:00 _(Markus Raab, Moritz)_
 - Added Meeting Agenda&Notes for 2.10. 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 9.10. 9:00 _(Markus Raab, Christoph)_
 - _()_
 - _()_
 - _()_
@@ -45,6 +46,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Update seed use case _(Moritz)_
 - _()_
 - _()_
+- Implement central facilities for displaying plant names _(Moritz)_
 - _()_
 - Make sure that two seeds can't have the same combination of user, name and plant _(Moritz)_
 - Restrict seed names to make complete names less confusing _(Moritz)_
@@ -56,7 +58,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Create remember-viewing-state usecase #1 _(tschawax)_
 - _()_
 - _()_
-- _()_
+- Update Zustand documentation #957 _(tschawax)_
+- Fix dead end of step 8 of plants layer in guided tour #955 _(tschawax)_
 - _()_
 - _()_
 - _()_

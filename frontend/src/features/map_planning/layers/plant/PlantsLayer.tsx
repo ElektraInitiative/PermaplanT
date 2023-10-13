@@ -1,4 +1,3 @@
-import { ExtendedPlantsSummaryDisplayName } from '../../../../components/ExtendedPlantDisplay';
 import useMapStore from '../../store/MapStore';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
@@ -7,7 +6,9 @@ import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantSpread, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
+import { PlantNameFromPlant } from '@/utils/plant-naming';
 import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
@@ -25,6 +26,10 @@ const PLANT_WIDTHS = new Map<PlantSpread, number>([
 
 function getPlantWidth({ spread = PlantSpread.Medium }): number {
   return PLANT_WIDTHS.get(spread) ?? (PLANT_WIDTHS.get(PlantSpread.Medium) as number);
+}
+
+function exitPlantingMode() {
+  useMapStore.getState().selectPlanting(null);
 }
 
 function usePlantLayerListeners(listening: boolean) {
@@ -92,7 +97,7 @@ function usePlantLayerListeners(listening: boolean) {
       return;
     }
 
-    useMapStore.getState().selectPlanting(null);
+    exitPlantingMode();
   }, []);
 
   /**
@@ -140,11 +145,18 @@ function usePlantLayerListeners(listening: boolean) {
     executeAction(new MovePlantAction(updates));
   }, [executeAction]);
 
+  useKeyHandlers({
+    Escape: () => {
+      if (selectedPlant) {
+        exitPlantingMode();
+      }
+    },
+  });
+
   useEffect(() => {
     if (!listening) {
       return;
     }
-
     useMapStore.getState().stageRef.current?.on('click.placePlant', handleCreatePlanting);
     useMapStore.getState().stageRef.current?.on('click.unselectPlanting', handleUnselectPlanting);
     useMapStore.getState().stageRef.current?.on('mouseup.selectPlanting', handleSelectPlanting);
@@ -222,8 +234,8 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
         transition: { delay: 0, duration: 0.1 },
       }}
     >
-      <div className="flex flex-col items-center justify-center">
-        <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
+      <div className="flex flex-row items-center justify-center">
+        <PlantNameFromPlant plant={plant} />
       </div>
       <div className="flex items-center justify-center">
         <IconButton
