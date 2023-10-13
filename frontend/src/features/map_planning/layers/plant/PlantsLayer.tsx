@@ -6,6 +6,7 @@ import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantSpread, PlantsSummaryDto } from '@/bindings/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/icons/close.svg';
 import { PlantNameFromPlant } from '@/utils/plant-naming';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -25,6 +26,10 @@ const PLANT_WIDTHS = new Map<PlantSpread, number>([
 
 function getPlantWidth({ spread = PlantSpread.Medium }): number {
   return PLANT_WIDTHS.get(spread) ?? (PLANT_WIDTHS.get(PlantSpread.Medium) as number);
+}
+
+function exitPlantingMode() {
+  useMapStore.getState().selectPlanting(null);
 }
 
 function usePlantLayerListeners(listening: boolean) {
@@ -92,7 +97,7 @@ function usePlantLayerListeners(listening: boolean) {
       return;
     }
 
-    useMapStore.getState().selectPlanting(null);
+    exitPlantingMode();
   }, []);
 
   /**
@@ -140,11 +145,18 @@ function usePlantLayerListeners(listening: boolean) {
     executeAction(new MovePlantAction(updates));
   }, [executeAction]);
 
+  useKeyHandlers({
+    Escape: () => {
+      if (selectedPlant) {
+        exitPlantingMode();
+      }
+    },
+  });
+
   useEffect(() => {
     if (!listening) {
       return;
     }
-
     useMapStore.getState().stageRef.current?.on('click.placePlant', handleCreatePlanting);
     useMapStore.getState().stageRef.current?.on('click.unselectPlanting', handleUnselectPlanting);
     useMapStore.getState().stageRef.current?.on('mouseup.selectPlanting', handleSelectPlanting);
