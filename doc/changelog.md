@@ -57,8 +57,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- Fix dead end of step 8 of plants layer in guided tour #955 _(tschawax)_
 - _()_
+- Update Zustand documentation #957 _(tschawax)_
+- Fix dead end of step 8 of plants layer in guided tour #955 _(tschawax)_
 - _()_
 - _()_
 - _()_
