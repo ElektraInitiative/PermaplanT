@@ -31,4 +31,4 @@
 ## Notes
 
 The layer opacity is a Konva feature and is implemented in [Map.tsx](https://github.com/ElektraInitiative/PermaplanT/tree/master/frontend/src/features/map_planning/components/Map.tsx).
-The control elements for the opacity and visibility can be found in [LayerList.tsx](https://github.com/ElektraInitiative/PermaplanT/tree/master/frontend/src/features/map_planning/components/toolbar/LayerList.tsx)
+The control elements for the opacity and visibility can be found in [LayerListItem.tsx](https://github.com/ElektraInitiative/PermaplanT/tree/master/frontend/src/features/map_planning/components/toolbar/LayerListItem.tsx)
