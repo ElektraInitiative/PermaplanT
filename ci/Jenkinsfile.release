@@ -91,7 +91,7 @@ stage('Build in Docker') {
             checkout scm
             docker.build('permaplant-doc:build', './doc').inside {
                 stage('build') {
-                    sh 'make build-mdbook'
+                    sh 'make doc-mdbook'
                     stash includes: 'book/', name: 'mdbook'
                 }
             }
