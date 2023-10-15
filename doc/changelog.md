@@ -38,7 +38,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Create remember-viewing-state usecase #1 _(tschawax)_
 - _()_
 - _()_
 - Clean up the asset file structure in frontend _(Moritz)_
@@ -92,6 +92,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix textarea not allowing more than one line of text _(Moritz)_
 - E2E: Increase click on canvas robustness _(4ydan)_
 - Fix cargo deny check _(4ydan)_
+- Fix: release pipeline mdbook build stage _(4ydan)_
 - Improve Makefile #681 _(4ydan)_
 - CI: Tag docker images #931 _(4ydan)_
 
