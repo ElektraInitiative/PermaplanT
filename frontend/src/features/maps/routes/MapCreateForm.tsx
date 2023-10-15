@@ -44,7 +44,7 @@ export default function MapCreateForm() {
 
   const privacyOptions = [PrivacyOption.Private, PrivacyOption.Protected, PrivacyOption.Public].map(
     (option) => (
-      <option key={option} value={option}>
+      <option key={option} value={option} data-testid={option}>
         {t(`privacyOptions:${option}`)}
       </option>
     ),
@@ -169,6 +169,7 @@ export default function MapCreateForm() {
       <section className="my-2 flex items-center">
         <select
           className="mr-4 block h-11 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          data-testid="map-create-form__select-privacy"
           onChange={(e) => {
             const value = e.target.value;
             const option = value.charAt(0).toUpperCase() + value.slice(1);
