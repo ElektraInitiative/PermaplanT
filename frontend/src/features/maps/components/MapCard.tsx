@@ -22,6 +22,7 @@ export default function MapCard({ map }: MapCardProps) {
       className="mb-4 flex rounded-lg bg-neutral-100 p-4 shadow-md hover:cursor-pointer dark:bg-neutral-800"
       title={map.name}
       onClick={() => navigate(`${map.id}`)}
+      data-testid={map.name}
     >
       {/* A preview image of the map can be placed here later */}
       <div id="placeholderImage" />
