@@ -19,6 +19,10 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
+export const TEST_IDS = Object.freeze({
+  CANVAS: 'base-stage__canvas',
+});
+
 interface BaseStageProps {
   zoomable?: boolean;
   scrollable?: boolean;
@@ -218,7 +222,7 @@ export const BaseStage = ({
   const isReadOnly = useIsReadOnlyMode();
 
   return (
-    <div className="h-full w-full overflow-hidden" data-testid="canvas" ref={containerRef}>
+    <div className="h-full w-full overflow-hidden" data-testid={TEST_IDS.CANVAS} ref={containerRef}>
       <Stage
         ref={stageRef}
         draggable={draggable}

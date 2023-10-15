@@ -13,7 +13,7 @@ export const SHORTCUT_SEARCH_INPUT_RESET = 'Escape';
 
 export const TEST_IDS = Object.freeze({
   SEARCH_ICON: 'search-input__search-icon',
-  SEARCH_INPUT: 'search-input__search-input',
+  SEARCH_INPUT: 'search-input__input-field',
   RESET_ICON: 'search-input__reset-icon',
 });
 
