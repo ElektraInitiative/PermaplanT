@@ -111,7 +111,7 @@ export default function SelectMenu<
   const [inputValue, setInputValue] = useState('');
 
   return (
-    <div data-testid={`select-menu__${labelText.toLowerCase()}-select`}>
+    <div data-testid={`select-menu__${labelText}-select`}>
       {labelText && (
         <label htmlFor={id} className="mb-2 block text-sm font-medium">
           {labelText}
