@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user deletes a map.
-- **Assignee:** Ready to be assigned
+- **Assignee:** Moritz
 
 ## Scenarios
 

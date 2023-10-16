@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user adds labels to their map to identify different elements or areas
-- **Assignee:** Giancarlo
+- **Assignee:** Daniel
 
 ## Scenarios
 

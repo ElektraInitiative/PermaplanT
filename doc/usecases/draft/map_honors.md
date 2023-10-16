@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The users can give an honor to the whole map of another user they visit.
-- **Assignee:** Ready to be assigned
 
 ## Scenarios
 

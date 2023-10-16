@@ -13,18 +13,11 @@
 - **Precondition:**
   The user has opened the app and has selected the plants layer.
 - **Main success scenario:**
-  - The user is presented with a list of seasonal plants (for the selected time of the year), in following groups:
-    - available seeds with early expiration days first
-    - diversity constraints: suggestions which not-yet-used plants fit next to the plant just added, or at a place selected (spatial and temporal)
-    - which were recently planted
-    - and lastly favourites of users
+  - The user can search for plants or seeds.
   - While the user adds a plant, constraints are shown:
-    - The user gets a visual indication which parts of the map are ideal, okay and not suited for the plant to be placed
-      (based on e.g. previous plants, zones, pH value, moisture, animals or shadows).
     - The user is able to view the relationships between the plants.
       She does so by looking at the lines connecting the existing plants with a symbol around the mouse cursor indicating companion or antagonist.
   - The user positions the plant element in the appropriate location in the map.
-  - When drawing an area of plants, the size of the area and the number of plants is shown next to the mouse.
   - The user is able to move, edit (e.g. when planted, when harvested), remove (that it was removed from the garden) and delete (that it never existed) selected plants.
   - The user adjusts the plant elements and their relationships as needed.
 - **Alternative scenario:**
@@ -52,9 +45,4 @@
 - Planting relationships are shown.  
   The backend part is implemented [here](https://github.com/ElektraInitiative/PermaplanT/blob/9927a132de09377baad47237f3048939f84c568b/backend/src/controller/plant_layer.rs).  
   The overlay is displayed from [this component](https://github.com/ElektraInitiative/PermaplanT/blob/9927a132de09377baad47237f3048939f84c568b/frontend/src/features/map_planning/layers/plant/components/PlantLayerRelationsOverlay.tsx)
-- The heatmap is actively worked on.
-- The user can NOT adjust planting relationships.
-- Planting as an area is NOT implemented.
-- The warnings layer is NOT implemented.
-- Offline availability is NOT implemented.
 - Annual plants are NOT automatically removed after one year.

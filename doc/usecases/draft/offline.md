@@ -10,7 +10,6 @@
   - Other user: Other users who have write access to the same layers in the map
   - Owner of the map.
 - **Brief:** The user has some features offline while being in the garden without Internet access.
-- **Assignee:** Paul
 
 ## Scenarios
 

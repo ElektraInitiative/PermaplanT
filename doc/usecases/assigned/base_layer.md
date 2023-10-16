@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User imports a picture to use as a background.
-- **Status:** In Progress
 - **Assignee:** Moritz
 
 ## Scenarios

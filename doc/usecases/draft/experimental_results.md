@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can give a feedback of the actual results for a map in a measuring cycle.
-- **Assignee** Ready to be assigned
 
 ## Scenarios
 

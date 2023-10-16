@@ -8,8 +8,6 @@
   - Host: App User that hosts the event
   - Nearby user: App User that is nearby the host
   - User without location: App User that has no location
-- **Brief:** The user gets a notification when another user has an event.
-- **Assignee:** Ready to be assigned
 
 ## Scenarios
 

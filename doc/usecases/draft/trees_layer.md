@@ -7,7 +7,6 @@
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, remove and delete forests, trees and, hedge bushes in their map.
 - **Simplification:** For first version it is identical to the plants layer (so any plants can be planted)
-- **Assignee:** Moritz
 
 ## Scenarios
 

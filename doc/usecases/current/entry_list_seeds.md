@@ -8,8 +8,8 @@
 
 ## Scenarios
 
-The user has opened the seed management feature in the app.
-
+- **Precondition:**
+  The user has opened the seed management feature in the app.
 - **Main success scenario:**
   - The user is able to add new seeds to their list.
   - The user is able to search for seeds using the full plant name.

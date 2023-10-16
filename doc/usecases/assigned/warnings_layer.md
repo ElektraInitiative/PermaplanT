@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and hides warnings.
-- **Assignee:** Samuel
+- **Assignee:** Daniel
 
 ## Scenarios
 

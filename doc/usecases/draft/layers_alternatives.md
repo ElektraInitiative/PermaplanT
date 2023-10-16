@@ -6,8 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User selects and modifies alternatives of a layer
-- **Status:** Ready to be Assigned
-- **Assignee:** Not yet Assigned
 
 ## Scenarios
 

@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The users buys missing seeds for the planned plants.
-- **Assignee:** Ready to be assigned
+- **Assignee:** Paul
 
 ## Scenarios
 

@@ -6,8 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user is awarded with Blossoms for achieving certain milestones.
-- **Status:** Assigned
-- **Assignee** Not yet assigned
 
 ## Scenarios
 

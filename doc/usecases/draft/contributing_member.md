@@ -6,8 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user receives a membership without compensation via money through contributions.
-- **Status:** Draft
-- **Assignee:** Ready to be assigned
 
 ## Scenarios
 

@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, remove and view webcams in their map
-- **Status:** Draft
 
 ## Scenarios
 

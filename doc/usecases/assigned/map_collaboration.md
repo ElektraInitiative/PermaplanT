@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** Map Creator, Collaborator
 - **Brief:** Collaborators plan on the map of a map creator.
-- **Status:** Ready to be Assigned
+- **Status:** Christoph N.
+- **Simplification:** Without alternatives.
 
 ## Scenarios
 

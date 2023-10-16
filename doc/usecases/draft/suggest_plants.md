@@ -22,6 +22,11 @@
     3. have a high ecological value
 
     are presented to the user.
+    Further more, the plants should be grouped by:
+
+    - available seeds with early expiration days first
+    - favourites of users
+    - and lastly which were recently planted
 
   - Within those suggestions the user can see what plants go well with each other.
   - The user can see why these plants have a high ecological value. e.g.:
