@@ -1,4 +1,4 @@
-import { Page, SeedDto } from '@/bindings/definitions';
+import { Page, SeedDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const findAllSeeds = async (page: number, name?: string): Promise<Page<SeedDto>> => {

@@ -5,7 +5,7 @@ use actix_web::{
     HttpResponse, ResponseError,
 };
 use derive_more::{Display, Error};
-use diesel::result::Error as DieselError;
+use diesel::result::{DatabaseErrorKind, Error as DieselError};
 use diesel_async::pooled_connection::deadpool::PoolError;
 
 /// The default error used by the server.
@@ -56,6 +56,15 @@ impl From<DieselError> for ServiceError {
     fn from(value: DieselError) -> Self {
         let status_code = if value == DieselError::NotFound {
             StatusCode::NOT_FOUND
+        } else if let DieselError::DatabaseError(DatabaseErrorKind::UniqueViolation, _) = value {
+            StatusCode::CONFLICT
+        } else if let DieselError::DatabaseError(DatabaseErrorKind::CheckViolation, _) = value {
+            StatusCode::BAD_REQUEST
+        } else if let DieselError::DatabaseError(DatabaseErrorKind::ForeignKeyViolation, _) = value
+        {
+            StatusCode::CONFLICT
+        } else if let DieselError::DatabaseError(DatabaseErrorKind::NotNullViolation, _) = value {
+            StatusCode::BAD_REQUEST
         } else {
             log::error!("Error executing diesel SQL query: {}", value.to_string());
             StatusCode::INTERNAL_SERVER_ERROR

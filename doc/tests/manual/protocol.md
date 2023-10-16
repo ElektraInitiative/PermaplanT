@@ -31,7 +31,7 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Test Result:
 - Notes:
 
-## Heatmap
+## Heatmap (NOT IMPLEMENTED)
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Given I am on a map page with the plant layer active
@@ -120,7 +120,7 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Test Result:
 - Notes:
 
-## Chat: Create conversation
+## Chat: Create conversation (NOT IMPLEMENTED)
 
 - Description: A conversation can be created
 - Given I am on the chat page
@@ -130,7 +130,7 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Test Result:
 - Notes: Currently only works with CORS disabled.
 
-## Chat: Send message
+## Chat: Send message (NOT IMPLEMENTED)
 
 - Description: Send a message to a Nextcloud conversation.
 - Given I am on the chat page

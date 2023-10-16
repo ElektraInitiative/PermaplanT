@@ -1,5 +1,5 @@
 import { usePlant } from '../hooks/usePlant';
-import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import {
@@ -8,7 +8,7 @@ import {
   hideTooltip,
 } from '@/features/map_planning/utils/Tooltip';
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
-import { ExtendedPlantsSummary } from '@/utils/ExtendedPlantsSummary';
+import { commonName } from '@/utils/plant-naming';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Group, Circle, Rect } from 'react-konva';
 
@@ -21,8 +21,7 @@ const placeTooltip = (plant: PlantsSummaryDto | undefined) => {
 
   setTooltipPositionToMouseCursor();
 
-  const extendedPlant = new ExtendedPlantsSummary(plant);
-  showTooltipWithContent(extendedPlant.displayName.common_name);
+  showTooltipWithContent(commonName(plant));
 };
 
 /**

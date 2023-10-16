@@ -25,6 +25,16 @@ async fn test_find_two_seeds_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
         async {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::unique_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name_en
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(conn)
+                .await?;
+
             diesel::insert_into(crate::schema::seeds::table)
                 .values(vec![
                     (
@@ -33,14 +43,16 @@ async fn test_find_two_seeds_succeeds() {
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
                         &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2023, 01, 01)),
                     ),
                     (
                         &crate::schema::seeds::id.eq(-2),
                         &crate::schema::seeds::name.eq("Testia testium"),
-                        &crate::schema::seeds::harvest_year.eq(2023),
+                        &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
                         &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2022, 01, 01)),
                     ),
                 ])
@@ -75,7 +87,7 @@ async fn test_find_two_seeds_succeeds() {
     let seed_dto1 = page.results.get(0).unwrap();
     assert_eq!(seed_dto1.id, -2);
     assert_eq!(seed_dto1.name, "Testia testium".to_owned());
-    assert_eq!(seed_dto1.harvest_year, 2023);
+    assert_eq!(seed_dto1.harvest_year, 2022);
     assert_eq!(seed_dto1.quantity, Quantity::NotEnough);
     assert_eq!(seed_dto1.use_by, NaiveDate::from_ymd_opt(2022, 01, 01));
     let seed_dto2 = page.results.get(1).unwrap();
@@ -91,20 +103,32 @@ async fn test_search_seeds_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
         async {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::unique_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name_en
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(conn)
+                .await?;
+
             diesel::insert_into(crate::schema::seeds::table)
                 .values(vec![
                     (
                         &crate::schema::seeds::id.eq(-1),
-                        &crate::schema::seeds::name.eq("Testia testia"),
+                        &crate::schema::seeds::name.eq("This one should be found!"),
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::owner_id.eq(user_id),
                     ),
                     (
                         &crate::schema::seeds::id.eq(-2),
-                        &crate::schema::seeds::name.eq("Testia testium"),
+                        &crate::schema::seeds::name.eq("Stays hidden"),
                         &crate::schema::seeds::harvest_year.eq(2023),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::owner_id.eq(user_id),
                     ),
                 ])
@@ -118,7 +142,7 @@ async fn test_search_seeds_succeeds() {
     let (token, app) = init_test_app_for_user(pool, user_id).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/seeds?name=Testia%20testia&per_page=10")
+        .uri("/api/seeds?name=found&per_page=10")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -137,7 +161,7 @@ async fn test_search_seeds_succeeds() {
 
     let seed_dto = page.results.get(0).unwrap();
     assert_eq!(seed_dto.id, -1);
-    assert_eq!(seed_dto.name, "Testia testia".to_owned());
+    assert_eq!(seed_dto.name, "This one should be found!".to_owned());
     assert_eq!(seed_dto.harvest_year, 2022);
     assert_eq!(seed_dto.quantity, Quantity::Enough);
 }
@@ -147,6 +171,16 @@ async fn test_find_by_id_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
         async {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::unique_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name_en
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(conn)
+                .await?;
+
             diesel::insert_into(crate::schema::seeds::table)
                 .values(vec![
                     (
@@ -154,6 +188,7 @@ async fn test_find_by_id_succeeds() {
                         &crate::schema::seeds::name.eq("Testia testia"),
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::owner_id.eq(user_id),
                     ),
                     (
@@ -161,6 +196,7 @@ async fn test_find_by_id_succeeds() {
                         &crate::schema::seeds::name.eq("Testia testium"),
                         &crate::schema::seeds::harvest_year.eq(2023),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::owner_id.eq(user_id),
                     ),
                 ])
@@ -200,6 +236,16 @@ async fn test_find_by_non_existing_id_fails() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
         async {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::unique_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name_en
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(conn)
+                .await?;
+
             diesel::insert_into(crate::schema::seeds::table)
                 .values(vec![
                     (
@@ -207,6 +253,7 @@ async fn test_find_by_non_existing_id_fails() {
                         &crate::schema::seeds::name.eq("Testia testia"),
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::owner_id.eq(user_id),
                     ),
                     (
@@ -214,6 +261,7 @@ async fn test_find_by_non_existing_id_fails() {
                         &crate::schema::seeds::name.eq("Testia testium"),
                         &crate::schema::seeds::harvest_year.eq(2023),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::owner_id.eq(user_id),
                     ),
                 ])
@@ -423,6 +471,16 @@ async fn test_archive_seed_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
         async {
+            diesel::insert_into(crate::schema::plants::table)
+                .values((
+                    &crate::schema::plants::id.eq(-1),
+                    &crate::schema::plants::unique_name.eq("Testia testia"),
+                    &crate::schema::plants::common_name_en
+                        .eq(Some(vec![Some("Testplant".to_string())])),
+                ))
+                .execute(conn)
+                .await?;
+
             diesel::insert_into(crate::schema::seeds::table)
                 .values(vec![
                     (
@@ -430,14 +488,16 @@ async fn test_archive_seed_succeeds() {
                         &crate::schema::seeds::name.eq("Testia testia"),
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::owner_id.eq(user_id),
                         &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2023, 01, 01)),
                     ),
                     (
                         &crate::schema::seeds::id.eq(-2),
                         &crate::schema::seeds::name.eq("Testia testium"),
-                        &crate::schema::seeds::harvest_year.eq(2023),
+                        &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
+                        &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::owner_id.eq(user_id),
                         &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2022, 01, 01)),
                     ),
@@ -482,7 +542,7 @@ async fn test_archive_seed_succeeds() {
     let seed_dto1 = page.results.get(0).unwrap();
     assert_eq!(seed_dto1.id, -2);
     assert_eq!(seed_dto1.name, "Testia testium".to_owned());
-    assert_eq!(seed_dto1.harvest_year, 2023);
+    assert_eq!(seed_dto1.harvest_year, 2022);
     assert_eq!(seed_dto1.quantity, Quantity::NotEnough);
     assert_eq!(seed_dto1.use_by, NaiveDate::from_ymd_opt(2022, 01, 01));
     let seed_dto2 = page.results.get(1).unwrap();

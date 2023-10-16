@@ -54,7 +54,7 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
         node('docker') {
             node_info()
             checkout scm
-            def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
+            def rustImage = docker.build('permaplant-rust:ci', './ci/container-images/permaplant-rust')
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rustImage.inside("--link ${c.id}:db \
                 -e 'DATABASE_URL=postgres://ci:ci@db/ci' \
@@ -94,7 +94,7 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
  */
 def runDocker(String command, String dockerImage, String dockerBuildArgs, boolean skipInMaster = false) {
     if (skipInMaster && env.BRANCH_NAME == 'master') {
-        return { echo "Set to be skipped in master." }
+        return { echo 'Set to be skipped in master.' }
     }
     return {
         node('docker') {
@@ -118,13 +118,13 @@ def testAndBuildMdbook() {
         node('docker') {
             node_info()
             checkout scm
-            docker.build('permaplant-doc:build', './doc').inside {
+            docker.build('permaplant-doc:ci', './doc').inside {
                 stage('test') {
                     sh 'make test-mdbook'
                 }
 
                 stage('build') {
-                    sh 'make build-mdbook'
+                    sh 'mdbook build'
                     stash includes: 'book/', name: 'mdbook'
                 }
             }
@@ -147,7 +147,7 @@ def testAndBuildFrontend() {
         node('docker') {
             node_info()
             checkout scm
-            def nodeImage = docker.build('permaplant-node', '-f ./ci/container-images/permaplant-node/Dockerfile .')
+            def nodeImage = docker.build('permaplant-node:ci', '-f ./ci/container-images/permaplant-node/Dockerfile .')
             nodeImage.inside {
                 unstash 'definitions.ts'
                 stage('test') {
@@ -205,13 +205,13 @@ timeout(time: 2, unit: 'HOURS') {
     try {
         stage('Sanity') {
             List<String> schemaStashsrc = [
-                'backend/src/schema.rs', 'frontend/src/bindings/definitions.ts'
+                'backend/src/schema.rs', 'frontend/src/api_types/definitions.ts'
             ]
             List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
             parallel(
                 'pre-commit': runDocker(
                     './ci/scripts/check-pre-commit.sh',
-                    'permaplant-node',
+                    'permaplant-node:ci',
                     '-f ./ci/container-images/permaplant-node/Dockerfile .'
                     ),
                 // Workaround: we can't stop rustfmt from linting the generated schema.rs
@@ -226,7 +226,7 @@ timeout(time: 2, unit: 'HOURS') {
                 'migration': runDockerPostgresSidecar(testMigrations()),
                 'changelog': runDocker(
                     './ci/scripts/check-changelog.sh',
-                    'permaplant-node',
+                    'permaplant-node:ci',
                     '-f ./ci/container-images/permaplant-node/Dockerfile .',
                     true
                     ),
@@ -302,7 +302,7 @@ lock("${env.NODE_NAME}-exclusive") {
         node('docker') {
             node_info()
             checkout scm
-            def e2eImage = docker.build('permaplant-e2e:build', './e2e')
+            def e2eImage = docker.build('permaplant-e2e:ci', './e2e')
             try {
                 e2eImage.inside('-e E2E_URL=https://pr.permaplant.net') {
                     wait_for_pr_db()

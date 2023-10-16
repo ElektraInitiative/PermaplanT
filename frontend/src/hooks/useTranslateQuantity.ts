@@ -1,4 +1,4 @@
-import { Quantity } from '@/bindings/definitions';
+import { Quantity } from '@/api_types/definitions';
 import { useTranslation } from 'react-i18next';
 
 /**

@@ -1,12 +1,13 @@
 import { findSeedById } from '../api/findSeedById';
 import CreateSeedForm from '../components/CreateSeedForm';
-import { NewSeedDto } from '@/bindings/definitions';
+import { NewSeedDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import { editSeed } from '@/features/seeds/api/editSeeds';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -23,7 +24,14 @@ export function EditSeed() {
     ['edit Seed'],
     editSeed,
     {
-      onError: () => {
+      onError: (error) => {
+        const errorTyped = error as AxiosError;
+
+        if (errorTyped.response?.status === 409) {
+          toast(t('seeds:create_seed_form.error_seed_already_exists'));
+          return;
+        }
+
         toast(t('seeds:create_seed_form.error_create_seed'));
       },
       onSuccess: async () => {

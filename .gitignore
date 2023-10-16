@@ -4,14 +4,14 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,vim,emacs,jetbrains,visualstudiocode,sublimetext,rust,dotenv,react,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,vim,emacs,jetbrains,visualstudiocode,sublimetext,rust,dotenv,react,node
 
+# Custom files
 cucumber.json
 report.html
-
 .mypy_cache
+.install
 
 ### dotenv ###
 .env
-
 ### Emacs ###
 # -*- mode: gitignore; -*-
 *~

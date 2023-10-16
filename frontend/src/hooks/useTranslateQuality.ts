@@ -1,4 +1,4 @@
-import { Quality } from '@/bindings/definitions';
+import { Quality } from '@/api_types/definitions';
 import { useTranslation } from 'react-i18next';
 
 /**

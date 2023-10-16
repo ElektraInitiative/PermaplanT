@@ -1,5 +1,5 @@
 import { getRelations } from '../api/getRelations';
-import { RelationDto } from '@/bindings/definitions';
+import { RelationDto } from '@/api_types/definitions';
 import { useQuery } from '@tanstack/react-query';
 
 export function useRelations(mapId: number, plantId: number, enabled = true) {

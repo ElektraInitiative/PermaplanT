@@ -3,12 +3,14 @@ import PaginatedSelectMenu, {
 } from '../../../components/Form/PaginatedSelectMenu';
 import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
-import { NewSeedDto, Quality, Quantity, SeedDto } from '@/bindings/definitions';
+import { NewSeedDto, Quality, Quantity, SeedDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import SimpleFormTextArea from '@/components/Form/SimpleFormTextArea';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { enumToSelectOptionArr } from '@/utils/enum';
+import { getNameFromPlant } from '@/utils/plant-naming';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
 import { Suspense, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -117,11 +119,9 @@ const CreateSeedForm = ({
     const page = await searchPlants(inputValue, pageNumber);
 
     const plant_options: SelectOption[] = page.results.map((plant) => {
-      const common_name_en = plant.common_name_en ? ' (' + plant.common_name_en[0] + ')' : '';
-
       return {
         value: plant.id,
-        label: plant.unique_name + common_name_en,
+        label: getNameFromPlant(plant),
       };
     });
 
@@ -173,6 +173,8 @@ const CreateSeedForm = ({
               }}
               onChange={onChange}
             />
+            {/* The text from the title attribute will be displayed in the
+                error message in case the specified pattern does not match. */}
             <SimpleFormInput
               labelText={t('seeds:additional_name')}
               placeholder=""
@@ -180,6 +182,8 @@ const CreateSeedForm = ({
               id="name"
               register={register}
               onChange={onChange}
+              title={t('seeds:additional_name_pattern_hint')}
+              pattern="^(?!.*(-))(?=.*[a-zA-Z0-9äöüÄÖÜß]).*$"
             />
             <SimpleFormInput
               type="number"
@@ -277,7 +281,7 @@ const CreateSeedForm = ({
             />
           </div>
           <div className="mb-6">
-            <SimpleFormInput
+            <SimpleFormTextArea
               type="textarea"
               labelText={t('seeds:notes')}
               placeholder="..."

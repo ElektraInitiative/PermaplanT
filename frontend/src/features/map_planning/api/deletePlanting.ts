@@ -1,4 +1,4 @@
-import { DeletePlantingDto } from '@/bindings/definitions';
+import { DeletePlantingDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const deletePlanting = async (

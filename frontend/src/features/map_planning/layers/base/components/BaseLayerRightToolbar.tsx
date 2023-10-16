@@ -1,5 +1,5 @@
 import { UpdateBaseLayerAction } from '../../../layers/base/actions';
-import { BaseLayerImageDto } from '@/bindings/definitions';
+import { BaseLayerImageDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';

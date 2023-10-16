@@ -11,23 +11,23 @@ import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import { convertToDate } from '../utils/date-utils';
 import { BaseStage } from './BaseStage';
 import { Timeline } from './timeline/Timeline';
-import { Layers } from './toolbar/Layers';
+import { LayerList } from './toolbar/LayerList';
 import { Toolbar } from './toolbar/Toolbar';
 import {
   GainedBlossomsDto,
   LayerDto,
   LayerType,
   UpdateGuidedToursDto,
-} from '@/bindings/definitions';
+} from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
-import { ReactComponent as GridIcon } from '@/icons/grid-dots.svg';
-import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
-import { ReactComponent as TagsIcon } from '@/icons/tags.svg';
-import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
+import { ReactComponent as GridIcon } from '@/svg/icons/grid-dots.svg';
+import { ReactComponent as RedoIcon } from '@/svg/icons/redo.svg';
+import { ReactComponent as TagsIcon } from '@/svg/icons/tags.svg';
+import { ReactComponent as UndoIcon } from '@/svg/icons/undo.svg';
 import i18next from 'i18next';
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -216,7 +216,7 @@ export const Map = ({ layers }: MapProps) => {
         </section>
         <section className="min-h-full bg-neutral-100 dark:bg-neutral-200-dark">
           <Toolbar
-            contentTop={<Layers layers={layers} />}
+            contentTop={<LayerList layers={layers} />}
             contentBottom={getToolbarContent(getSelectedLayerType()).right}
             position="right"
             minWidth={200}

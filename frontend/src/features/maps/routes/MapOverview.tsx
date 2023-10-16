@@ -1,7 +1,7 @@
 import { createMap } from '../api/createMap';
 import { findAllMaps } from '../api/findAllMaps';
 import MapCard from '../components/MapCard';
-import { MapDto, MapSearchParameters, NewMapDto } from '@/bindings/definitions';
+import { MapDto, MapSearchParameters, NewMapDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import InfoMessage, { InfoMessageType } from '@/components/Card/InfoMessage';
 import PageTitle from '@/components/Header/PageTitle';

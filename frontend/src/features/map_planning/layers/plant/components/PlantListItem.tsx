@@ -1,7 +1,7 @@
-import { ExtendedPlantsSummaryDisplayName } from '../../../../../components/ExtendedPlantDisplay';
-import defaultImageUrl from '@/assets/plant.svg';
-import { PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantsSummaryDto } from '@/api_types/definitions';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
+import defaultImageUrl from '@/svg/plant.svg';
+import { PlantNameFromPlant } from '@/utils/plant-naming';
 
 export type PlantListElementProps = {
   /** The plant that is displayed as element of a list */
@@ -46,7 +46,7 @@ export function PlantListItem({
           showErrorMessage={false}
         />
         <div className="text-left">
-          <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
+          <PlantNameFromPlant plant={plant} />
         </div>
       </button>
     </li>

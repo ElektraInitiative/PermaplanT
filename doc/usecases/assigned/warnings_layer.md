@@ -24,4 +24,4 @@
   - Performance: more than 10000 elements per year and per alternative should be usable without noticeable delays and acceptable memory overhead
 - **Note:**
   - it gets dynamically generated based on alternatives
-  - while doing drag and drop of [plants](../current/plants_layer.md), warnings are shown anyway.
+  - while doing drag and drop of [plants](../done/plants_layer.md), warnings are shown anyway.
