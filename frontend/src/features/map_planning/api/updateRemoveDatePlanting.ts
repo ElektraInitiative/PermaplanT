@@ -1,4 +1,4 @@
-import { UpdatePlantingDto, UpdateRemoveDatePlantingDto } from '@/bindings/definitions';
+import { UpdatePlantingDto, UpdateRemoveDatePlantingDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function updateRemoveDatePlanting(

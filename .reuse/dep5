@@ -25,3 +25,8 @@ Files: doc/mermaid-init.js
        doc/mermaid.min.js
 Source: https://github.com/badboy/mdbook-mermaid/tree/main/src/bin/assets
 License: MPL-2.0 license
+
+Files: frontend/src/svg/icons/*
+Source: https://tablericons.com/
+Copyright: Paweł Kuna
+License: Free for commercial use. No attribution required.

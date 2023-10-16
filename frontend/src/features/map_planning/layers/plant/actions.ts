@@ -18,7 +18,7 @@ import {
   TransformPlantActionPayload,
   UpdatePlantingAddDateActionPayload,
   UpdatePlantingRemoveDateActionPayload,
-} from '@/bindings/definitions';
+} from '@/api_types/definitions';
 import { v4 } from 'uuid';
 
 export class CreatePlantAction

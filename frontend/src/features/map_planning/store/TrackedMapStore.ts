@@ -9,7 +9,7 @@ import {
   UntrackedMapSlice,
 } from './MapStoreTypes';
 import { clearInvalidSelection } from './utils';
-import { BaseLayerImageDto, PlantingDto } from '@/bindings/definitions';
+import { BaseLayerImageDto, PlantingDto } from '@/api_types/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';

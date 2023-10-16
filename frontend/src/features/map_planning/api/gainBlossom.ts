@@ -1,4 +1,4 @@
-import { GainedBlossomsDto } from '@/bindings/definitions';
+import { GainedBlossomsDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function gainBlossom(gained_blossom: GainedBlossomsDto) {

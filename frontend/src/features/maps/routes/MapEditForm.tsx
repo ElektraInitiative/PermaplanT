@@ -1,6 +1,6 @@
 import { findMapById } from '../api/findMapById';
 import { updateMap } from '../api/updateMap';
-import { Coordinates, MapDto, PrivacyOption, UpdateMapDto } from '@/bindings/definitions';
+import { Coordinates, MapDto, PrivacyOption, UpdateMapDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import PageTitle from '@/components/Header/PageTitle';

@@ -1,9 +1,9 @@
-import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
-import { ReactComponent as CheckIcon } from '@/icons/check.svg';
-import { ReactComponent as CircleDottedIcon } from '@/icons/circle-dotted.svg';
+import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
+import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
 import { PlantNameFromPlant } from '@/utils/plant-naming';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';

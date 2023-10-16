@@ -1,4 +1,4 @@
-import { BaseLayerImageDto } from '@/bindings/definitions';
+import { BaseLayerImageDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function getBaseLayerImage(mapId: number, layerId?: number) {

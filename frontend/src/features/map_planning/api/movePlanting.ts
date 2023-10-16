@@ -1,4 +1,4 @@
-import { MovePlantingDto, PlantingDto, UpdatePlantingDto } from '@/bindings/definitions';
+import { MovePlantingDto, PlantingDto, UpdatePlantingDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const movePlanting = async (

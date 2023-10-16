@@ -25,7 +25,7 @@ stage('Build Schema') {
                 sh './ci/build-scripts/build-schema.sh'
 
                 stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
+                stash includes: 'frontend/src/api_types/definitions.ts', name: 'definitions.ts'
             }
         }
     }

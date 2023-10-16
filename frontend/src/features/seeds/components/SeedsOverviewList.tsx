@@ -1,11 +1,11 @@
-import { ReactComponent as ArchiveIcon } from '../../../icons/archive-off.svg';
-import { Quality, SeedDto } from '@/bindings/definitions';
+import { Quality, SeedDto } from '@/api_types/definitions';
 import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { useTranslateQuality } from '@/hooks/useTranslateQuality';
 import { useTranslateQuantity } from '@/hooks/useTranslateQuantity';
-import { ReactComponent as EditIcon } from '@/icons/edit.svg';
+import { ReactComponent as ArchiveIcon } from '@/svg/icons/archive-off.svg';
+import { ReactComponent as EditIcon } from '@/svg/icons/edit.svg';
 import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import { useQuery } from '@tanstack/react-query';
 import { Suspense, UIEvent, useEffect, useRef } from 'react';
