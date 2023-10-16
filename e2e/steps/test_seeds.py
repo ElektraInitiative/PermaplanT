@@ -4,8 +4,8 @@ from pytest_bdd import scenario, when, then
 from e2e.pages.seeds.management import SeedManagementPage
 
 
-@scenario("features/seed_creation.feature", "Successful seed creation")
-def test_seed_creation():
+@scenario("features/seeds.feature", "Successful seed creation")
+def test_seeds():
     pass
 
 
@@ -31,7 +31,7 @@ def create_seed_success(page: Page):
     smp.expect_first_row_cell_exists("Origin SUT")
 
 
-@scenario("features/seed_creation.feature", "Successful seed editing")
+@scenario("features/seeds.feature", "Successful seed editing")
 def test_seed_editing(page: Page):
     pass
 
@@ -71,7 +71,7 @@ def edited_seed_success(page: Page):
     smp.expect_first_row_cell_exists("New origin SUT")
 
 
-@scenario("features/seed_creation.feature", "Successful searching seed")
+@scenario("features/seeds.feature", "Successful searching seed")
 def test_seed_search(page: Page):
     pass
 
