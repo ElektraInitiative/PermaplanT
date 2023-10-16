@@ -11,20 +11,19 @@ class SeedCreatePage(AbstractPage):
 
     def __init__(self, page: Page):
         self._page = page
-        self._name = page.get_by_placeholder("Name *")
+        self._plant_name = page.get_by_test_id("paginated-select-menu__Plant Name")
+        self._additional_name = page.get_by_label("Additional Name")
+        self._harvest_year = page.get_by_test_id("create-seed-form__harvest_year")
+        self._amount = page.get_by_test_id("select-menu__amount-select")
+        self._best_by = page.get_by_test_id("create-seed-form__best_by")
+        self._origin = page.get_by_test_id("create-seed-form__origin")
+        self._quality = page.get_by_test_id("select-menu__quality-select")
+        self._taste = page.get_by_test_id("create-seed-form__taste")
+        self._yield = page.get_by_test_id("create-seed-form__yield")
+        self._price = page.get_by_test_id("create-seed-form__price")
+        self._generation = page.get_by_test_id("create-seed-form__generation")
+        self._notes = page.get_by_test_id("create-seed-form__notest")
         self._create_button = page.get_by_role("button", name="Create Seed")
-        self._plant_name = page.get_by_test_id("seed-form-plant_name")
-        self._additional_name = page.get_by_test_id("seed-form-additional_name")
-        self._harvest_year = page.get_by_test_id("seed-form-harvest_year")
-        self._amount = page.get_by_test_id("seed-form-amount")
-        self._best_by = page.get_by_test_id("seed-form-best_by")
-        self._origin = page.get_by_test_id("seed-form-origin")
-        self._quality = page.get_by_test_id("seed-form-quality")
-        self._taste = page.get_by_test_id("seed-form-taste")
-        self._yield = page.get_by_test_id("seed-form-yield")
-        self._price = page.get_by_test_id("seed-form-price")
-        self._generation = page.get_by_test_id("seed-form-generation")
-        self._notes = page.get_by_test_id("seed-form-notest")
 
     def create_a_seed(self, plant_name, amount, additional_name, origin, taste):
         """
@@ -32,25 +31,39 @@ class SeedCreatePage(AbstractPage):
         Fills out fields and clicks create at the end
         which navigate to the `SeedManagementPage`
         """
-        self._page.get_by_text("Plant Name *Tomato").click()
+        self._plant_name.click()
         self._page.get_by_text(plant_name, exact=True).click()
 
-        # Amount TODO use better locator
-        self._page.get_by_text("Amount *More than enough").click()
+        self._amount.click()
         self._page.get_by_text(amount, exact=True).click()
+
+        # TODO, needs better locator, not working
+        # self._best_by.fill("2023-10-18")
 
         self._additional_name.fill(additional_name)
         self._origin.fill(origin)
+
+        # Quality
+        self._quality.click()
+        self._page.get_by_text("Organic", exact=True).click()
+
+        # Taste
         self._taste.fill(taste)
 
-        # TODO fill out all fields
+        # Yield
+        self._yield.fill("5")
+
+        # Price
+        self._price.fill("22")
+
+        # Generation
+        self._generation.fill("11")
 
         self.click_create()
 
     def click_create(self):
         """
-        Clicks create at the end
-        which navigate to the `MapManagementPage`
+        Creates seeds and navigates back to the `MapManagementPage`
         """
         self._create_button.click()
         self._page.wait_for_url("**/seeds")

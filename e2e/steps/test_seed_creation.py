@@ -3,12 +3,12 @@ from pytest_bdd import scenario, when, then
 
 from e2e.pages.seeds.management import SeedManagementPage
 
-PLANT_NAME = "Abelia triflora (indian abelia)"
-ADDITIONAL_NAME = "Additional Name under Test"
-PLANT_NAME_WITH_ADDITIONAL = "Abelia triflora - " + ADDITIONAL_NAME + " (indian abelia)"
+PLANT_NAME = "Indian abelia (Abelia triflora)"
+ADDITIONAL_NAME = "SUT"
+PLANT_NAME_WITH_ADDITIONAL = f"Indian abelia - {ADDITIONAL_NAME} (Abelia triflora)"
 AMOUNT = "Enough"
-ORIGIN = "Origin under Test"
-TASTE = "Taste under Test"
+ORIGIN = "Origin SUT"
+TASTE = "Taste SUT"
 
 
 @scenario("features/seed_creation.feature", "Successful seed creation")
@@ -27,7 +27,9 @@ def provide_seed_details(page: Page):
 def create_seed_success(page: Page):
     smp = SeedManagementPage(page)
     smp.expect_alert_is_visible()
-    # smp.to_seed_edit_page(PLANT_NAME_WITH_ADDITIONAL)
-    smp.expect_first_cell_exists(AMOUNT)
-    smp.expect_first_cell_exists(ORIGIN)
-    smp.archive_first_seed()
+    smp.expect_first_row_cell_exists(PLANT_NAME_WITH_ADDITIONAL)
+    smp.expect_first_row_cell_exists(AMOUNT)
+    smp.expect_first_row_cell_exists(ORIGIN)
+
+
+# smp.archive_first_seed()

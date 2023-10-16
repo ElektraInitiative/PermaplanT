@@ -38,6 +38,8 @@ class SeedManagementPage(AbstractPage):
         self._page.wait_for_url("**/seeds/*/edit")
         return SeedEditPage(self._page)
 
-    def expect_first_cell_exists(self, cell_value):
-        """Expects a cell to exist on the seed management page"""
-        expect(self._page.get_by_role("cell", name=cell_value)).to_be_visible()
+    def expect_first_row_cell_exists(self, cell_value):
+        """Expects a cell to exist on the seed management page in the first row of the table"""
+        expect(
+            self._page.get_by_role("cell", name=cell_value, exact=True).first
+        ).to_be_visible()
