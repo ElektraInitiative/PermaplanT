@@ -1,4 +1,4 @@
-import { SeedDto } from '@/bindings/definitions';
+import { SeedDto } from '@/api_types/definitions';
 import { usePlant } from '@/features/map_planning/layers/plant/hooks/usePlant';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import defaultImageUrl from '@/svg/plant.svg';

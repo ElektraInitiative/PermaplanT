@@ -1,4 +1,4 @@
-import { PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantsSummaryDto } from '@/api_types/definitions';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
