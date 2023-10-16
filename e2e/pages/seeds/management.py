@@ -21,8 +21,8 @@ class SeedManagementPage(AbstractPage):
         ).click()
 
     def archive_first_seed(self):
-        """Archive the top seed of the seeds table"""
-        self._page.get_by_test_id("archive-seed-button").first.click()
+        """Archive the seed in the first row of the seeds table"""
+        self._page.get_by_test_id("seed-overview-list__archive-button").first.click()
 
     def to_seed_create_page(self) -> SeedCreatePage:
         """Navigates to `SeedCreatePage`"""
@@ -33,7 +33,7 @@ class SeedManagementPage(AbstractPage):
     def to_seed_edit_page(self, seed_name) -> SeedEditPage:
         """Navigates to `SeedEditPage`"""
         self._page.get_by_role("row", name=seed_name).get_by_test_id(
-            "edit-seed-button"
+            "seed-overview-list__edit-button"
         ).click()
         self._page.wait_for_url("**/seeds/*/edit")
         return SeedEditPage(self._page)

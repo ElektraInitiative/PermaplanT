@@ -25,7 +25,7 @@ class SeedCreatePage(AbstractPage):
         self._notes = page.get_by_test_id("create-seed-form__notest")
         self._create_button = page.get_by_role("button", name="Create Seed")
 
-    def create_a_seed(self, plant_name, amount, additional_name, origin, taste):
+    def create_a_seed(self, plant_name, additional_name, amount, origin, taste):
         """
         Helper function to create a seed
         Fills out fields and clicks create at the end
@@ -43,20 +43,15 @@ class SeedCreatePage(AbstractPage):
         self._additional_name.fill(additional_name)
         self._origin.fill(origin)
 
-        # Quality
         self._quality.click()
         self._page.get_by_text("Organic", exact=True).click()
 
-        # Taste
         self._taste.fill(taste)
 
-        # Yield
         self._yield.fill("5")
 
-        # Price
         self._price.fill("22")
 
-        # Generation
         self._generation.fill("11")
 
         self.click_create()

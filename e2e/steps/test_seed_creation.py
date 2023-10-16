@@ -3,33 +3,69 @@ from pytest_bdd import scenario, when, then
 
 from e2e.pages.seeds.management import SeedManagementPage
 
-PLANT_NAME = "Indian abelia (Abelia triflora)"
-ADDITIONAL_NAME = "SUT"
-PLANT_NAME_WITH_ADDITIONAL = f"Indian abelia - {ADDITIONAL_NAME} (Abelia triflora)"
-AMOUNT = "Enough"
-ORIGIN = "Origin SUT"
-TASTE = "Taste SUT"
-
 
 @scenario("features/seed_creation.feature", "Successful seed creation")
 def test_seed_creation():
     pass
 
 
-@when("I provide all necessary details")
+@when("I create a new seed")
 def provide_seed_details(page: Page):
     smp = SeedManagementPage(page)
     scp = smp.to_seed_create_page()
-    scp.create_a_seed(PLANT_NAME, AMOUNT, ADDITIONAL_NAME, ORIGIN, TASTE)
+    scp.create_a_seed(
+        "Indian abelia (Abelia triflora)",
+        "SUT create",
+        "Enough",
+        "Origin SUT",
+        "Taste SUT",
+    )
 
 
 @then("I can successfully create a new seed without an error message")
 def create_seed_success(page: Page):
     smp = SeedManagementPage(page)
     smp.expect_alert_is_visible()
-    smp.expect_first_row_cell_exists(PLANT_NAME_WITH_ADDITIONAL)
-    smp.expect_first_row_cell_exists(AMOUNT)
-    smp.expect_first_row_cell_exists(ORIGIN)
+    smp.expect_first_row_cell_exists("Indian abelia - SUT create (Abelia triflora)")
+    smp.expect_first_row_cell_exists("Enough")
+    smp.expect_first_row_cell_exists("Origin SUT")
 
 
-# smp.archive_first_seed()
+@scenario("features/seed_creation.feature", "Successful seed editing")
+def test_seed_editing(page: Page):
+    pass
+
+
+@when("I create another new seed")
+def create_seed_for_editing(page: Page):
+    smp = SeedManagementPage(page)
+    scp = smp.to_seed_create_page()
+    scp.create_a_seed(
+        "Indian abelia (Abelia triflora)",
+        "SUT editing",
+        "Enough",
+        "Origin SUT",
+        "Taste SUT",
+    )
+
+
+@when("I edit this seed")
+def editing_seed(page: Page):
+    smp = SeedManagementPage(page)
+    sep = smp.to_seed_edit_page(
+        "Indian abelia - SUT editing (Abelia triflora) Enough Organic 2023 Origin SUT Edit seed Archive seed"
+    )
+    sep.set_additional_name("SUT edited")
+    sep.set_amount("Not enough")
+    sep.set_quality("Not organic")
+    sep.set_origin("New origin SUT")
+    sep.click_edit()
+
+
+@then("The edited seed is saved and displayed correctly")
+def edited_seed_success(page: Page):
+    smp = SeedManagementPage(page)
+    smp.expect_first_row_cell_exists("Indian abelia - SUT edited (Abelia triflora)")
+    smp.expect_first_row_cell_exists("Enough")
+    smp.expect_first_row_cell_exists("Not organic")
+    smp.expect_first_row_cell_exists("New origin SUT")

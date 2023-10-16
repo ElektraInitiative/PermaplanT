@@ -109,7 +109,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
                       variant={ButtonVariant.primary}
                       onClick={() => handleEditSeed(seed)}
                       title={t('seeds:view_seeds.edit_seed_tooltip')}
-                      data-testid="edit-seed-button"
+                      data-testid="seed-overview-list__edit-button"
                     >
                       <EditIcon />
                     </IconButton>
@@ -119,7 +119,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
                         handleArchiveSeed(seed);
                       }}
                       title={t('seeds:view_seeds.archive_seed_tooltip')}
-                      data-testid="archive-seed-button"
+                      data-testid="seed-overview-list__archive-button"
                     >
                       <ArchiveIcon />
                     </IconButton>
