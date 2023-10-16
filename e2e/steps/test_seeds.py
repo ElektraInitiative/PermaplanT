@@ -113,4 +113,37 @@ def search_seed_that_does_not_exist(page: Page):
 @then("the search result is empty")
 def searched_seed_does_not_exist(page: Page):
     smp = SeedManagementPage(page)
-    smp.expect_first_row_cell_exists("No results found")
+    smp.expect_first_row_cell_exists("No seeds found")
+
+
+@scenario("features/seeds.feature", "Archving a seed")
+def test_seed_archive(page: Page):
+    pass
+
+
+@when("I try to archive a seed")
+def archive_seed(page: Page):
+    smp = SeedManagementPage(page)
+    scp = smp.to_seed_create_page()
+    scp.create_a_seed(
+        plant_name="Indian abelia (Abelia triflora)",
+        additional_name="SUT archive",
+        amount="Enough",
+        origin="Origin SUT",
+        taste="Taste SUT",
+    )
+    smp.archive_seed(
+        "Indian abelia - SUT archive (Abelia triflora) Enough Organic 2023 Origin SUT Edit seed Archive seed"
+    )
+
+
+@then("the seed dissapears")
+def archived_seed_dissapears(page: Page):
+    smp = SeedManagementPage(page)
+    smp.expect_first_row_cell_does_not_exist("SUT archive")
+
+
+@then("I have the possiblity to restore it")
+def positive_notification(page: Page):
+    smp = SeedManagementPage(page)
+    smp.expect_restore_button_to_be_visible()

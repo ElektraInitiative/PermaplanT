@@ -24,9 +24,11 @@ class SeedManagementPage(AbstractPage):
             "delete-seed-button"
         ).click()
 
-    def archive_first_seed(self):
+    def archive_seed(self, name):
         """Archive the seed in the first row of the seeds table"""
-        self._page.get_by_test_id("seed-overview-list__archive-button").first.click()
+        self._page.get_by_role("row", name=name).get_by_test_id(
+            "seed-overview-list__archive-button"
+        ).click()
 
     def to_seed_create_page(self) -> SeedCreatePage:
         """Navigates to `SeedCreatePage`"""
@@ -47,3 +49,12 @@ class SeedManagementPage(AbstractPage):
         expect(
             self._page.get_by_role("cell", name=cell_value, exact=True).first
         ).to_be_visible()
+
+    def expect_first_row_cell_does_not_exist(self, cell_value):
+        """Expects a cell to exist on the seed management page in the first row of the table"""
+        expect(
+            self._page.get_by_role("cell", name=cell_value, exact=True).first
+        ).to_be_hidden()
+
+    def expect_restore_button_to_be_visible(self):
+        self._page.get_by_role("button", name="Restore")

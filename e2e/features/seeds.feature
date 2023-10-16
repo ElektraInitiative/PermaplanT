@@ -20,3 +20,8 @@ Feature: Seed Creation
     Scenario: Searching seed that does not exists
         When I search for a seed that does not exist
         Then the search result is empty
+
+    Scenario: Archving a seed
+        When I try to archive a seed
+        Then the seed dissapears
+        And I have the possiblity to restore it
