@@ -107,7 +107,7 @@ def test_seed_search_not_existing_seed():
 @when("I search for a seed that does not exist")
 def search_seed_that_does_not_exist(page: Page):
     smp = SeedManagementPage(page)
-    smp.search("SUT not existing")
+    smp.search("AAAAAAAAA")
 
 
 @then("the search result is empty")
