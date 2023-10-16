@@ -12,7 +12,6 @@ import { toast } from 'react-toastify';
 export function useFindPlantById(afterPlantLoad: (plant: PlantsSummaryDto) => void) {
   const { t } = useTranslation(['plantings']);
   const [plantId, setPlantId] = useState<number>(0);
-  console.log(plantId);
   const { data, error } = useQuery(['plants/plant', plantId] as const, {
     queryFn: (context) => findPlantById(context.queryKey[1]),
     staleTime: Infinity,
@@ -21,11 +20,10 @@ export function useFindPlantById(afterPlantLoad: (plant: PlantsSummaryDto) => vo
   // useQuery's onSuccess is deprecated and does not seem to work in this context
   // for whatever reason.
   useEffect(() => {
-    console.log('plant loaded');
     if (data) afterPlantLoad(data);
   }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (error) {
+  if (error && plantId !== 0) {
     toast.error(t('plantings:error_fetching_plant'), { autoClose: false });
   }
 
