@@ -104,7 +104,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
                   </td>
                   <td className="px-6 py-4">{seed.harvest_year}</td>
                   <td className="px-6 py-4">{seed.origin}</td>
-                  <td className="flex flex-row justify-between px-6 py-4">
+                  <td className="flex justify-between px-6 py-6">
                     <IconButton
                       variant={ButtonVariant.primary}
                       onClick={() => handleEditSeed(seed)}
