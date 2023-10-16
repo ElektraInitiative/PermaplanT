@@ -86,46 +86,54 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
               </tr>
             </thead>
             <tbody>
-              {seeds.map((seed) => (
-                <tr
-                  key={seed.id}
-                  className="bg-primary-textfield hover:bg-neutral-300 dark:hover:bg-neutral-600"
-                >
-                  <td className="px-6 py-4">
-                    {seed.plant_id ? (
-                      <CompletePlantNameFromSeed seed={seed} />
-                    ) : (
-                      <span>{t('common:error')}</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4">{translateQuantity(seed.quantity)}</td>
-                  <td className="px-6 py-4">
-                    {translateQuality(seed.quality ?? ('unknown' as Quality))}
-                  </td>
-                  <td className="px-6 py-4">{seed.harvest_year}</td>
-                  <td className="px-6 py-4">{seed.origin}</td>
-                  <td className="flex justify-between px-6 py-6">
-                    <IconButton
-                      variant={ButtonVariant.primary}
-                      onClick={() => handleEditSeed(seed)}
-                      title={t('seeds:view_seeds.edit_seed_tooltip')}
-                      data-testid="seed-overview-list__edit-button"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      variant={ButtonVariant.primary}
-                      onClick={() => {
-                        handleArchiveSeed(seed);
-                      }}
-                      title={t('seeds:view_seeds.archive_seed_tooltip')}
-                      data-testid="seed-overview-list__archive-button"
-                    >
-                      <ArchiveIcon />
-                    </IconButton>
+              {seeds.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="py-4 text-center">
+                    No results found
                   </td>
                 </tr>
-              ))}
+              ) : (
+                seeds.map((seed) => (
+                  <tr
+                    key={seed.id}
+                    className="bg-primary-textfield dark:hover-bg-neutral-600 hover:bg-neutral-300"
+                  >
+                    <td className="px-6 py-4">
+                      {seed.plant_id ? (
+                        <CompletePlantNameFromSeed seed={seed} />
+                      ) : (
+                        <span>{t('common:error')}</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">{translateQuantity(seed.quantity)}</td>
+                    <td className="px-6 py-4">
+                      {translateQuality(seed.quality ?? ('unknown' as Quality))}
+                    </td>
+                    <td className="px-6 py-4">{seed.harvest_year}</td>
+                    <td className="px-6 py-4">{seed.origin}</td>
+                    <td className="flex justify-between px-6 py-6">
+                      <IconButton
+                        variant={ButtonVariant.primary}
+                        onClick={() => handleEditSeed(seed)}
+                        title={t('seeds:view_seeds.edit_seed_tooltip')}
+                        data-testid="seed-overview-list__edit-button"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        variant={ButtonVariant.primary}
+                        onClick={() => {
+                          handleArchiveSeed(seed);
+                        }}
+                        title={t('seeds:view_seeds.archive_seed_tooltip')}
+                        data-testid="seed-overview-list__archive-button"
+                      >
+                        <ArchiveIcon />
+                      </IconButton>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
