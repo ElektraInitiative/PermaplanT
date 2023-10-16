@@ -17,7 +17,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Enable seed search in plant layer _(Moritz)_
 - _()_
 - _()_
 - _()_
