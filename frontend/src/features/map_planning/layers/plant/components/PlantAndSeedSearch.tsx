@@ -105,7 +105,10 @@ export const PlantAndSeedSearch = () => {
               data-testid="plant-search-input"
             ></SearchInput>
             {/* TODO: welcome tour! */}
-            <ul data-tourid="seed_list">
+            <h2 className="mb-2 mt-3 font-medium" hidden={seeds.length === 0}>
+              Seeds:
+            </h2>
+            <ul data-tourid="seed_list" hidden={seeds.length === 0}>
               {seeds.map((seed) => (
                 <SeedListItem
                   disabled={isReadOnlyMode}
@@ -117,6 +120,8 @@ export const PlantAndSeedSearch = () => {
                 />
               ))}
             </ul>
+            <hr className="my-5" hidden={seeds.length === 0} />
+            <h2 className="mb-2 mt-3 font-medium">Plants:</h2>
             <ul data-tourid="plant_list">
               {plants.map((plant) => (
                 <PlantListItem

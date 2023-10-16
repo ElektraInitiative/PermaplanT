@@ -54,7 +54,6 @@ export function SeedListItem({
           showErrorMessage={false}
         />
         <div className="text-left">
-          SEED
           <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
         </div>
       </button>
