@@ -14,6 +14,10 @@ class SeedManagementPage(AbstractPage):
     def __init__(self, page: Page):
         self._page = page
         self._new_entry_button = page.get_by_role("button", name="New Entry")
+        self._search_field = page.get_by_test_id("search-input__input-field")
+
+    def search(self, input):
+        self._search_field.fill(input)
 
     def delete_seed(self, seed_name):
         self._page.get_by_role("row", name=seed_name).get_by_test_id(

@@ -11,4 +11,8 @@ Feature: Seed Creation
     Scenario: Successful seed editing
         When I create another new seed
         And I edit this seed
-        Then The edited seed is saved and displayed correctly
+        Then the edited seed is saved and displayed correctly
+
+    Scenario: Successful searching seed
+        When I search for a seed
+        Then I can see the seed in the table

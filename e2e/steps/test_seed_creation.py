@@ -41,11 +41,11 @@ def create_seed_for_editing(page: Page):
     smp = SeedManagementPage(page)
     scp = smp.to_seed_create_page()
     scp.create_a_seed(
-        "Indian abelia (Abelia triflora)",
-        "SUT editing",
-        "Enough",
-        "Origin SUT",
-        "Taste SUT",
+        plant_name="Indian abelia (Abelia triflora)",
+        additional_name="SUT editing",
+        amount="Enough",
+        origin="Origin SUT",
+        taste="Taste SUT",
     )
 
 
@@ -62,10 +62,38 @@ def editing_seed(page: Page):
     sep.click_edit()
 
 
-@then("The edited seed is saved and displayed correctly")
+@then("the edited seed is saved and displayed correctly")
 def edited_seed_success(page: Page):
     smp = SeedManagementPage(page)
     smp.expect_first_row_cell_exists("Indian abelia - SUT edited (Abelia triflora)")
     smp.expect_first_row_cell_exists("Enough")
     smp.expect_first_row_cell_exists("Not organic")
     smp.expect_first_row_cell_exists("New origin SUT")
+
+
+@scenario("features/seed_creation.feature", "Successful searching seed")
+def test_seed_search(page: Page):
+    pass
+
+
+@when("I search for a seed")
+def search_seed(page: Page):
+    smp = SeedManagementPage(page)
+    scp = smp.to_seed_create_page()
+    scp.create_a_seed(
+        plant_name="Indian abelia (Abelia triflora)",
+        additional_name="SUT search",
+        amount="Enough",
+        origin="Origin SUT",
+        taste="Taste SUT",
+    )
+    smp.search("SUT search")
+
+
+@then("I can see the seed in the table")
+def searched_seed_exists(page: Page):
+    smp = SeedManagementPage(page)
+    smp.expect_first_row_cell_exists("Indian abelia - SUT search (Abelia triflora)")
+    smp.expect_first_row_cell_exists("Enough")
+    smp.expect_first_row_cell_exists("Organic")
+    smp.expect_first_row_cell_exists("Origin SUT")
