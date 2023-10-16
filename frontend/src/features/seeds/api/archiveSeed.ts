@@ -1,4 +1,4 @@
-import { ArchiveSeedDto } from '@/bindings/definitions';
+import { ArchiveSeedDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const archiveSeed = async (id: number, archive: ArchiveSeedDto) => {

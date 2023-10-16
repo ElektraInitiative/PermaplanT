@@ -1,4 +1,4 @@
-import { LayerDto } from '@/bindings/definitions';
+import { LayerDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function getLayers(mapId: number) {

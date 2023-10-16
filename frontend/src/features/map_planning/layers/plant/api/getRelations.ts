@@ -1,4 +1,4 @@
-import { RelationsDto } from '@/bindings/definitions';
+import { RelationsDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function getRelations(mapId: number, plantId: number): Promise<RelationsDto> {

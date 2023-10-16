@@ -1,4 +1,4 @@
-import { PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantsSummaryDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const findAllPlants = async (): Promise<PlantsSummaryDto[]> => {

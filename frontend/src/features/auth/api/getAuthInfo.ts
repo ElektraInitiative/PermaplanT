@@ -1,4 +1,4 @@
-import { ConfigDto } from '@/bindings/definitions';
+import { ConfigDto } from '@/api_types/definitions';
 import { createUnauthorizedAPI } from '@/config/axios';
 
 export const getAuthInfo = async (): Promise<ConfigDto> => {

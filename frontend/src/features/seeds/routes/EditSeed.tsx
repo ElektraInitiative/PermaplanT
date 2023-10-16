@@ -1,6 +1,6 @@
 import { findSeedById } from '../api/findSeedById';
 import CreateSeedForm from '../components/CreateSeedForm';
-import { NewSeedDto } from '@/bindings/definitions';
+import { NewSeedDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import SimpleModal from '@/components/Modals/SimpleModal';

@@ -205,7 +205,7 @@ timeout(time: 2, unit: 'HOURS') {
     try {
         stage('Sanity') {
             List<String> schemaStashsrc = [
-                'backend/src/schema.rs', 'frontend/src/bindings/definitions.ts'
+                'backend/src/schema.rs', 'frontend/src/api_types/definitions.ts'
             ]
             List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
             parallel(

@@ -1,5 +1,5 @@
-import defaultImageUrl from '@/assets/plant.svg';
 import { useImage } from '@/features/nextcloud_integration/hooks/useImage';
+import defaultImageUrl from '@/svg/plant.svg';
 import { ImageConfig } from 'konva/lib/shapes/Image';
 import { Image } from 'react-konva';
 
