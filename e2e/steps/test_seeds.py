@@ -32,7 +32,7 @@ def create_seed_success(page: Page):
 
 
 @scenario("features/seeds.feature", "Successful seed editing")
-def test_seed_editing(page: Page):
+def test_seed_editing():
     pass
 
 
@@ -72,7 +72,7 @@ def edited_seed_success(page: Page):
 
 
 @scenario("features/seeds.feature", "Successful seed search")
-def test_seed_search(page: Page):
+def test_seed_search():
     pass
 
 
@@ -100,7 +100,7 @@ def searched_seed_exists(page: Page):
 
 
 @scenario("features/seeds.feature", "Searching seed that does not exists")
-def test_seed_search_not_existing_seed(page: Page):
+def test_seed_search_not_existing_seed():
     pass
 
 
@@ -117,7 +117,7 @@ def searched_seed_does_not_exist(page: Page):
 
 
 @scenario("features/seeds.feature", "Archving a seed")
-def test_seed_archive(page: Page):
+def test_seed_archive():
     pass
 
 
