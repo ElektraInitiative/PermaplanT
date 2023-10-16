@@ -123,7 +123,7 @@ export default function PaginatedSelectMenu<
   };
 
   return (
-    <div>
+    <div data-testid={`paginated-select-menu__${labelText}`}>
       {labelText && (
         <label htmlFor={id} className="mb-2 block text-sm font-medium">
           {labelText}

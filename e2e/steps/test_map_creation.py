@@ -35,7 +35,11 @@ def provide_map_details(
 ):
     mmp.to_map_create_page()
     mcp.create_a_map(
-        name, description=description, latitude=latitude, longitude=longitude
+        name,
+        privacy=privacy,
+        description=description,
+        latitude=latitude,
+        longitude=longitude,
     )
 
 

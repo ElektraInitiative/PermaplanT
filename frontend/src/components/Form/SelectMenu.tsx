@@ -111,7 +111,7 @@ export default function SelectMenu<
   const [inputValue, setInputValue] = useState('');
 
   return (
-    <div>
+    <div data-testid={labelText}>
       {labelText && (
         <label htmlFor={id} className="mb-2 block text-sm font-medium">
           {labelText}

@@ -67,7 +67,7 @@ export const PlantAndSeedSearch = () => {
       <div className="flex items-center justify-between">
         <h2>{t('plantSearch:planting')}</h2>
         {searchVisible ? (
-          <IconButton onClick={clearSearch} data-testid="plant-search-close-icon">
+          <IconButton onClick={clearSearch} data-testid="plant-search__close-icon">
             <CloseIcon />
           </IconButton>
         ) : (
@@ -76,7 +76,7 @@ export const PlantAndSeedSearch = () => {
               setSearchVisible(true);
             }}
             data-tourid="search_button"
-            data-testid="plant-search-icon"
+            data-testid="plant-search__icon-button"
           >
             <SearchIcon />
           </IconButton>
@@ -103,7 +103,7 @@ export const PlantAndSeedSearch = () => {
                 seedSearchActions.searchSeeds(event.target.value);
               }}
               ref={searchInputRef}
-              data-testid="plant-search-input"
+              data-testid="plant-search__search-input"
             ></SearchInput>
             {/* TODO: welcome tour! */}
             <h2 className="mb-2 mt-3" hidden={seeds.length === 0}>
@@ -136,7 +136,7 @@ export const PlantAndSeedSearch = () => {
               ))}
             </ul>
             {plants.length === 0 && (
-              <div className="m-4" data-testid="plant-search-results-empty">
+              <div className="m-4" data-testid="plant-search__empty-results">
                 {t('plantSearch:search_empty')}
               </div>
             )}
