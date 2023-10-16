@@ -71,7 +71,7 @@ def edited_seed_success(page: Page):
     smp.expect_first_row_cell_exists("New origin SUT")
 
 
-@scenario("features/seeds.feature", "Successful searching seed")
+@scenario("features/seeds.feature", "Successful seed search")
 def test_seed_search(page: Page):
     pass
 

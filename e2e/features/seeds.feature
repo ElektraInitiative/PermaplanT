@@ -13,7 +13,7 @@ Feature: Seed Creation
         And I edit this seed
         Then the edited seed is saved and displayed correctly
 
-    Scenario: Successful searching seed
+    Scenario: Successful seed search
         When I search for a seed
         Then I can see the seed in the table
 
