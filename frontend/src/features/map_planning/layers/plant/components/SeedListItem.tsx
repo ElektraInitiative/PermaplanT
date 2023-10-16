@@ -1,8 +1,8 @@
-import { ExtendedPlantsSummaryDisplayName } from '../../../../../components/ExtendedPlantDisplay';
-import defaultImageUrl from '@/assets/plant.svg';
 import { SeedDto } from '@/bindings/definitions';
 import { usePlant } from '@/features/map_planning/layers/plant/hooks/usePlant';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
+import defaultImageUrl from '@/svg/plant.svg';
+import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 
 export type SeedListElementProps = {
   /** The plant that is displayed as element of a list */
@@ -55,7 +55,7 @@ export function SeedListItem({
         />
         <div className="text-left">
           SEED
-          <ExtendedPlantsSummaryDisplayName plant={plant}></ExtendedPlantsSummaryDisplayName>
+          <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
         </div>
       </button>
     </li>
