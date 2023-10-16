@@ -18,6 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 /** UI component intended for searching plants that can planted on the plants layer */
 export const PlantAndSeedSearch = () => {
+  const { t } = useTranslation(['plantSearch', 'plantAndSeedSearch']);
+
   const { plants, actions: plantSearchActions } = usePlantSearch();
   const { seeds, actions: seedSearchActions } = useSeedSearch();
   const { actions } = useSelectPlantForPlanting();
@@ -26,7 +28,6 @@ export const PlantAndSeedSearch = () => {
 
   const [searchVisible, setSearchVisible] = useState(false);
   const searchInputRef = useRef<SearchInputHandle>(null);
-  const { t } = useTranslation(['plantSearch']);
 
   const clearSearch = () => {
     plantSearchActions.clearSearchTerm();
@@ -105,8 +106,8 @@ export const PlantAndSeedSearch = () => {
               data-testid="plant-search-input"
             ></SearchInput>
             {/* TODO: welcome tour! */}
-            <h2 className="mb-2 mt-3 font-medium" hidden={seeds.length === 0}>
-              Seeds:
+            <h2 className="mb-2 mt-3" hidden={seeds.length === 0}>
+              {t('plantAndSeedSearch:seed_section_title')}
             </h2>
             <ul data-tourid="seed_list" hidden={seeds.length === 0}>
               {seeds.map((seed) => (
@@ -121,7 +122,7 @@ export const PlantAndSeedSearch = () => {
               ))}
             </ul>
             <hr className="my-5" hidden={seeds.length === 0} />
-            <h2 className="mb-2 mt-3 font-medium">Plants:</h2>
+            <h2 className="mb-2 mt-3">{t('plantAndSeedSearch:plant_section_title')}</h2>
             <ul data-tourid="plant_list">
               {plants.map((plant) => (
                 <PlantListItem
