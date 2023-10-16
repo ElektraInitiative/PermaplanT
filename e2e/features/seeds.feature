@@ -16,3 +16,7 @@ Feature: Seed Creation
     Scenario: Successful searching seed
         When I search for a seed
         Then I can see the seed in the table
+
+    Scenario: Searching seed that does not exists
+        When I search for a seed that does not exist
+        Then the search result is empty

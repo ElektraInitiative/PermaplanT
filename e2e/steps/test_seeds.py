@@ -97,3 +97,20 @@ def searched_seed_exists(page: Page):
     smp.expect_first_row_cell_exists("Enough")
     smp.expect_first_row_cell_exists("Organic")
     smp.expect_first_row_cell_exists("Origin SUT")
+
+
+@scenario("features/seeds.feature", "Searching seed that does not exists")
+def test_seed_search_not_existing_seed(page: Page):
+    pass
+
+
+@when("I search for a seed that does not exist")
+def search_seed_that_does_not_exist(page: Page):
+    smp = SeedManagementPage(page)
+    smp.search("SUT not existing")
+
+
+@then("the search result is empty")
+def searched_seed_does_not_exist(page: Page):
+    smp = SeedManagementPage(page)
+    smp.expect_first_row_cell_exists("No results found")
