@@ -34,6 +34,11 @@ import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
 import { toast } from 'react-toastify';
 
+export const TEST_IDS = Object.freeze({
+  UNDO_BUTTON: 'map__undo-button',
+  REDO_BUTTON: 'map__redo-button',
+});
+
 export type MapProps = {
   layers: LayerDto[];
 };
@@ -147,7 +152,7 @@ export const Map = ({ layers }: MapProps) => {
                   onClick={() => undo()}
                   title={t('undoRedo:undo_tooltip')}
                   data-tourid="undo"
-                  data-testid="undo-button"
+                  data-testid={TEST_IDS.UNDO_BUTTON}
                 >
                   <UndoIcon></UndoIcon>
                 </IconButton>
@@ -156,7 +161,7 @@ export const Map = ({ layers }: MapProps) => {
                   disabled={isReadOnlyMode}
                   onClick={() => redo()}
                   title={t('undoRedo:redo_tooltip')}
-                  data-testid="redo-button"
+                  data-testid={TEST_IDS.REDO_BUTTON}
                 >
                   <RedoIcon></RedoIcon>
                 </IconButton>

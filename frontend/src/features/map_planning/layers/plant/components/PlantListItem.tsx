@@ -30,7 +30,7 @@ export function PlantListItem({
   return (
     <li
       className="my-1 flex"
-      data-testid={`${plant.common_name_en} ${plant.unique_name}-plant-search-result`}
+      data-testid={`plant-list-item__${plant.common_name_en} ${plant.unique_name}`}
     >
       <button
         disabled={disabled}
