@@ -89,7 +89,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
               {seeds.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="py-4 text-center">
-                    No results found
+                    {t('seeds:no-seeds')}
                   </td>
                 </tr>
               ) : (
