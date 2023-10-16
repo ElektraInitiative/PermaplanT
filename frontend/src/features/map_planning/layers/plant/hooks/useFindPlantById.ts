@@ -23,7 +23,7 @@ export function useFindPlantById(afterPlantLoad: (plant: PlantsSummaryDto) => vo
   useEffect(() => {
     console.log('plant loaded');
     if (data) afterPlantLoad(data);
-  }, [data, afterPlantLoad]);
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (error) {
     toast.error(t('plantings:error_fetching_plant'), { autoClose: false });
