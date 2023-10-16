@@ -18,7 +18,7 @@ export const LandingPage = () => {
         <img
           className="mt-10"
           id="home"
-          src="/home/moritz/Bsc/Permaplant_2/PermaplanT/frontend/src/svg/permaplant-logo-2-colors.svg"
+          src="/permaplant-logo-2-colors.svg"
           alt="PermaplanT drawing"
         />
         <Features />
