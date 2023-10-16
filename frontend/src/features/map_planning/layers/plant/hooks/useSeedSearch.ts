@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 export function useSeedSearch() {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 500);
-  const { t } = useTranslation(['plantSearch']);
+  const { t } = useTranslation(['seeds']);
 
   const { fetchNextPage, data, error, hasNextPage } = useInfiniteQuery<Page<SeedDto>, Error>({
     queryKey: ['seeds', debouncedSearchTerm],
@@ -27,8 +27,7 @@ export function useSeedSearch() {
 
   if (error) {
     console.log(error);
-    // TODO: change error message!
-    toast.error(t('plantSearch:error_searching_plants'), { autoClose: false });
+    toast.error(t('seeds:view_seeds.fetching_error'), { autoClose: false });
   }
 
   return {

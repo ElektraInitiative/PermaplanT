@@ -47,15 +47,15 @@ export const PlantAndSeedSearch = () => {
   // We must first load the plant associated to the seed selected by the user
   // before we can be planted on the map.
   const {
-    actions: { findPlant: selectSeedForPlanting },
+    actions: { findPlant: selectPlantIdForPlanting },
   } = useFindPlantById((plant) => selectPlantForPlanting(plant));
 
   const handleClickOnPlantListItem = useCallback(selectPlantForPlanting, [actions, transformerRef]);
 
-  const handleClickOnSeedListItem = useCallback(selectSeedForPlanting, [
+  const handleClickOnSeedListItem = useCallback(selectPlantIdForPlanting, [
     actions,
     transformerRef,
-    selectSeedForPlanting,
+    selectPlantIdForPlanting,
   ]);
 
   useEffect(() => {
@@ -105,7 +105,6 @@ export const PlantAndSeedSearch = () => {
               ref={searchInputRef}
               data-testid="plant-search__search-input"
             ></SearchInput>
-            {/* TODO: welcome tour! */}
             <h2 className="mb-2 mt-3" hidden={seeds.length === 0}>
               {t('plantAndSeedSearch:seed_section_title')}
             </h2>
