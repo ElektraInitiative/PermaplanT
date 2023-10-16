@@ -35,7 +35,7 @@ const BaseLayer = (props: BaseLayerProps) => {
   const scale = pixelsPerMeter / MAP_PIXELS_PER_METER;
 
   return (
-    <Layer {...layerProps}>
+    <Layer {...layerProps} listening={false}>
       {cleanImagePath && (
         <NextcloudKonvaImage
           path={cleanImagePath}
