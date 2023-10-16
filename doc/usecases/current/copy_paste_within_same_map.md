@@ -25,8 +25,8 @@
     The pasted selections are each placed with a horizontal and vertical offset next to each other.
   - The user pastes a copied selection while having other element(s) currently selected.  
     The pasted selection is placed with a horizontal and vertical offset next to the currently selected element(s).
-  - The user pastes a copied selection having the base layer selected and no pasting happens.  
-    The user selects another layer and successfully pastes that selection of elements into it.
+  - The user pastes a copied selection having the wrong layer selected and a warning appears advising the correct layer.  
+    The user selects the correct layer and successfully pastes that selection of elements into it.
   - The user presses CTRL-C without having anything selected.  
     The user presses CTRL-V and no pasting happens because no elements have been copied.
   - In a step #1, the user presses CTRL-C on a selection of elements.  
