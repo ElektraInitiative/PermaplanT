@@ -39,7 +39,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Create remember-viewing-state usecase #1 _(tschawax)_
-- _()_
+- Create multi-select usecase #1 _(tschawax)_
 - _()_
 - Clean up the asset file structure in frontend _(Moritz)_
 - _()_
