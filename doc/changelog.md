@@ -36,7 +36,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Improve vertical scrollbar behaviour #970 _(tschawax)_
 - _()_
 - Create remember-viewing-state usecase #1 _(tschawax)_
 - _()_
