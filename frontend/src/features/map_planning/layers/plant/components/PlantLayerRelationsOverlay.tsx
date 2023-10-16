@@ -1,5 +1,5 @@
 import { useRelations } from '../hooks/useRelations';
-import { LayerType, RelationType } from '@/bindings/definitions';
+import { LayerType, RelationType } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useEffect, useMemo, useState } from 'react';
 import { Layer, Line } from 'react-konva';

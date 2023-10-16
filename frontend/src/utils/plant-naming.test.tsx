@@ -1,4 +1,4 @@
-import { PlantsSummaryDto, Quantity, SeedDto } from '@/bindings/definitions';
+import { PlantsSummaryDto, Quantity, SeedDto } from '@/api_types/definitions';
 import {
   getNameFromPlant,
   getPlantNameFromSeedAndPlant,

@@ -1,5 +1,5 @@
 import { createMap } from '../api/createMap';
-import { NewMapDto, PrivacyOption } from '@/bindings/definitions';
+import { NewMapDto, PrivacyOption } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import PageLayout from '@/components/Layout/PageLayout';
 import 'leaflet/dist/leaflet.css';

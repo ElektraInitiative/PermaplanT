@@ -2,6 +2,6 @@
 **/node_modules
 **/dist
 **/*.css
-src/bindings/definitions.ts
+src/api_types/definitions.ts
 src/generated/docs
 storybook-static/

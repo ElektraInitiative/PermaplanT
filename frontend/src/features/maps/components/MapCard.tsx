@@ -1,8 +1,8 @@
 import CountingButton from './CountingButton';
-import { MapDto } from '@/bindings/definitions';
+import { MapDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
-// import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
-import { ReactComponent as EditIcon } from '@/icons/edit.svg';
+// import { ReactComponent as CopyIcon } from '@/svg/icons/copy.svg';
+import { ReactComponent as EditIcon } from '@/svg/icons/edit.svg';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 

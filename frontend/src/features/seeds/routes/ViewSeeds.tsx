@@ -1,6 +1,6 @@
 import { findAllSeeds } from '../api/findAllSeeds';
 import SeedsOverviewList from '../components/SeedsOverviewList';
-import { Page, SeedDto } from '@/bindings/definitions';
+import { Page, SeedDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';

@@ -8,7 +8,7 @@ import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { mapEditorSteps, tourOptions } from '../utils/EditorTour';
 import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
-import { LayerType, LayerDto, GuidedToursDto } from '@/bindings/definitions';
+import { LayerType, LayerDto, GuidedToursDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
 import { useSafeAuth } from '@/hooks/useSafeAuth';

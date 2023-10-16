@@ -1,4 +1,4 @@
-import { MapDto, UpdateMapDto } from '@/bindings/definitions';
+import { MapDto, UpdateMapDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const updateMap = async (updateObject: UpdateMapDto, mapId: number): Promise<MapDto> => {

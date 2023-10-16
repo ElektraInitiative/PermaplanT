@@ -1,4 +1,4 @@
-import { MapDto, NewMapDto } from '@/bindings/definitions';
+import { MapDto, NewMapDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function createMap(map: NewMapDto) {

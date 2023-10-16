@@ -1,4 +1,4 @@
-import { Quality, Quantity } from '@/bindings/definitions';
+import { Quality, Quantity } from '@/api_types/definitions';
 import { useTranslation } from 'react-i18next';
 
 export function useTranslatedQuality(): Record<Quality, string> {
