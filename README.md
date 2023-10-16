@@ -7,7 +7,7 @@
 
 ## Client Requirements
 
-- Browsers: Firefox, Chromium, Safari, Vivaldi
+- Browsers: Firefox, Chromium, Vivaldi, Edge, Opera
 - RAM: >4GB for small places, >8GB for larger places
 
 ## Documentation
