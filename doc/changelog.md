@@ -34,7 +34,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Improve styling of login and logout button #983 _(tschawax)_
 - _()_
 - _()_
 - _()_
