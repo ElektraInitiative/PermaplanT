@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
  */
 export function useFindPlantById(afterPlantLoad: (plant: PlantsSummaryDto) => void) {
   const { t } = useTranslation(['plantings']);
-  const [plantId, setPlantId] = useState<number>(0);
+  const [plantId, setPlantId] = useState(0);
   const { data, error } = useQuery(['plants/plant', plantId] as const, {
     queryFn: (context) => findPlantById(context.queryKey[1]),
     staleTime: Infinity,
