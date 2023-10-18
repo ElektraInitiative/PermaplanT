@@ -3,21 +3,15 @@ import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/use
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import defaultImageUrl from '@/svg/plant.svg';
 import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
+import { toast } from 'react-toastify';
 
 export type SeedListElementProps = {
-  /** The plant that is displayed as element of a list */
   seed: SeedDto;
-  /** Callback when the element is clicked */
   onClick: () => void;
-  /** Whether the element is highlighted */
   isHighlighted?: boolean;
-  /** Whether the element is disabled */
   disabled?: boolean;
 };
 
-/**
- * A list element for a list of plants
- */
 export function SeedListItem({
   seed,
   onClick,
@@ -28,15 +22,16 @@ export function SeedListItem({
     ? 'text-primary-400 stroke-primary-400 ring-4 ring-primary-300 '
     : undefined;
 
-  if (seed.plant_id === undefined) {
-    throw new Error('Tried to initialize SeedListItem with missing plant_id');
+  if (!seed.plant_id) {
+    // Ideally, this should never happen.
+    toast.error('Tried to initialize SeedListItem with missing plant_id');
   }
 
-  const { plant } = useFindPlantById(seed.plant_id);
+  const { plant } = useFindPlantById(seed.plant_id ?? -1);
 
   // The user should already be provided with an error toast
-  // by usePlant.
-  if (!plant) return <li></li>;
+  // by useFindPlantById.
+  if (!plant) return null;
 
   return (
     <li className="my-1 flex" data-testid={`${seed.name}-plant-search-result`}>
