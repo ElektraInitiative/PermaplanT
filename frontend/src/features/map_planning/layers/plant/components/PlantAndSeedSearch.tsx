@@ -49,8 +49,6 @@ export const PlantAndSeedSearch = () => {
   const handleClickOnPlantListItem = useCallback(selectPlantForPlanting, [actions, transformerRef]);
 
   const handleClickOnSeedListItem = useCallback(selectPlantIdForPlanting, [
-    actions,
-    transformerRef,
     selectPlantIdForPlanting,
   ]);
 
