@@ -1,5 +1,5 @@
 import { SeedDto } from '@/api_types/definitions';
-import { usePlant } from '@/features/map_planning/layers/plant/hooks/usePlant';
+import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import defaultImageUrl from '@/svg/plant.svg';
 import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
@@ -32,7 +32,7 @@ export function SeedListItem({
     throw new Error('Tried to initialize SeedListItem with missing plant_id');
   }
 
-  const { plant } = usePlant(seed.plant_id);
+  const { plant } = useFindPlantById(seed.plant_id);
 
   // The user should already be provided with an error toast
   // by usePlant.

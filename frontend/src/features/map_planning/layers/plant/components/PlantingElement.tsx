@@ -1,4 +1,4 @@
-import { usePlant } from '../hooks/usePlant';
+import { useFindPlantById } from '../hooks/useFindPlantById';
 import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -36,7 +36,7 @@ const placeTooltip = (plant: PlantsSummaryDto | undefined) => {
  *
  */
 export function PlantingElement({ planting }: PlantingElementProps) {
-  const { plant } = usePlant(planting.plantId);
+  const { plant } = useFindPlantById(planting.plantId);
 
   const addShapeToTransformer = useMapStore((state) => state.addShapeToTransformer);
   const selectPlanting = useMapStore((state) => state.selectPlanting);

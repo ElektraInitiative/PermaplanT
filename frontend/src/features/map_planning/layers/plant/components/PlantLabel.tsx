@@ -1,5 +1,5 @@
 import { PlantingDto } from '@/api_types/definitions';
-import { usePlant } from '@/features/map_planning/layers/plant/hooks/usePlant';
+import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
 import { MapLabel } from '@/features/map_planning/utils/MapLabel';
 import { commonName } from '@/utils/plant-naming';
 import Konva from 'konva';
@@ -21,7 +21,7 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
     setLabelWidth(labelRef.current.width());
   }, [labelRef]);
 
-  const { plant } = usePlant(planting.plantId);
+  const { plant } = useFindPlantById(planting.plantId);
   if (plant === undefined) {
     return <Label></Label>;
   }

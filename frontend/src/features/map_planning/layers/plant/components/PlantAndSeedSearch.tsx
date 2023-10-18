@@ -6,7 +6,7 @@ import { PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput, { SearchInputHandle } from '@/components/Form/SearchInput';
 import { SeedListItem } from '@/features/map_planning/layers/plant/components/SeedListItem';
-import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
+import { useFindPlantCallback } from '@/features/map_planning/layers/plant/hooks/useFindPlantCallback';
 import { useSeedSearch } from '@/features/map_planning/layers/plant/hooks/useSeedSearch';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { resetSelection } from '@/features/map_planning/utils/ShapesSelection';
@@ -44,11 +44,7 @@ export const PlantAndSeedSearch = () => {
     resetSelection(transformerRef);
   };
 
-  // We must first load the plant associated to the seed selected by the user
-  // before we can be planted on the map.
-  const {
-    actions: { findPlant: selectPlantIdForPlanting },
-  } = useFindPlantById((plant) => selectPlantForPlanting(plant));
+  const selectPlantIdForPlanting = useFindPlantCallback((plant) => selectPlantForPlanting(plant));
 
   const handleClickOnPlantListItem = useCallback(selectPlantForPlanting, [actions, transformerRef]);
 
