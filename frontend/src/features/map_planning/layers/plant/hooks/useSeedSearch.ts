@@ -26,7 +26,6 @@ export function useSeedSearch() {
   }, []);
 
   if (error) {
-    console.log(error);
     toast.error(t('seeds:view_seeds.fetching_error'), { autoClose: false });
   }
 
