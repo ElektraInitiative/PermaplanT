@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
 /**
  * Request plants from the backend and handle them using a callback.
  *
- * @param afterPlantLoad this function will be called once a new plant is loaded.
+ * @param afterPlantLoad This function will be called once a new plant is loaded.
+ * @returns A function that takes a plant id and triggers a plant load.
  */
 export function useFindPlantCallback(afterPlantLoad: (plant: PlantsSummaryDto) => void) {
   const { t } = useTranslation(['plantings']);
