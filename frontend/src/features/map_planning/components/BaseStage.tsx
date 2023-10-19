@@ -28,6 +28,15 @@ interface BaseStageProps {
   scrollable?: boolean;
   selectable?: boolean;
   draggable?: boolean;
+  listeners?: {
+    stageDragStartListeners: Array<(e: KonvaEventObject<DragEvent>) => void>;
+    stageDragEndListeners: Array<(e: KonvaEventObject<DragEvent>) => void>;
+    stageMouseMoveListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
+    stageMouseWheelListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
+    stageMouseDownListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
+    stageMouseUpListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
+    stageClickListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
+  };
   children: React.ReactNode;
 }
 
@@ -46,6 +55,7 @@ export const BaseStage = ({
   scrollable = true,
   selectable = true,
   draggable = true,
+  listeners,
 }: BaseStageProps) => {
   // Represents the state of the stage
   const [stage, setStage] = useState({
@@ -108,6 +118,7 @@ export const BaseStage = ({
   // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
+    listeners?.stageMouseWheelListeners.forEach((listener) => listener(e));
 
     const targetStage = getStageByEventTarget(e);
     if (targetStage === null) return;
@@ -141,6 +152,7 @@ export const BaseStage = ({
 
   // Event listener responsible for allowing stage-dragging only via middle mouse button
   const onStageDragStart = (e: KonvaEventObject<DragEvent>) => {
+    listeners?.stageDragStartListeners.forEach((listener) => listener(e));
     renderGrabbingMouseCursor();
     if (!e.evt) return;
 
@@ -149,7 +161,8 @@ export const BaseStage = ({
     }
   };
 
-  const onStageDragEnd = () => {
+  const onStageDragEnd = (e: KonvaEventObject<DragEvent>) => {
+    listeners?.stageDragEndListeners.forEach((listener) => listener(e));
     if (stageRef.current === null) return;
 
     updateMapBounds({
@@ -163,6 +176,7 @@ export const BaseStage = ({
   // Event listener responsible for updating the selection rectangle's size
   // and subsequently selecting all intersecting shapes
   const onStageMouseMove = (e: KonvaEventObject<MouseEvent>) => {
+    listeners?.stageMouseMoveListeners.forEach((listener) => listener(e));
     const stage = getStageByEventTarget(e);
     if (!stage || !selectionRectAttrs.isVisible || !selectable) return;
 
@@ -173,6 +187,7 @@ export const BaseStage = ({
   // Event listener responsible for initializing the stage-dragging mode via middle mouse button
   // and for positioning the selection rectangle at the current mouse position
   const onStageMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+    listeners?.stageMouseDownListeners.forEach((listener) => listener(e));
     const shouldAllowSelectionOnCurrentLayer = () => {
       const isStageSelectable = selectable;
 
@@ -199,6 +214,7 @@ export const BaseStage = ({
   // Event listener responsible for stopping a possible stage-dragging mode
   // and for hiding the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
+    listeners?.stageMouseUpListeners.forEach((listener) => listener(e));
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
@@ -210,6 +226,7 @@ export const BaseStage = ({
 
   // Event listener responsible for resetting the current selection of shapes when clicking on stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
+    listeners?.stageClickListeners.forEach((listener) => listener(e));
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 
     const nodeSize = transformerRef.current?.getNodes().length ?? 0;

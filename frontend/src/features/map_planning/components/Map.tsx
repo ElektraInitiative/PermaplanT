@@ -24,15 +24,19 @@ import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
+import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import { ReactComponent as GridIcon } from '@/svg/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/svg/icons/redo.svg';
 import { ReactComponent as TagsIcon } from '@/svg/icons/tags.svg';
 import { ReactComponent as UndoIcon } from '@/svg/icons/undo.svg';
 import i18next from 'i18next';
+import Konva from 'konva';
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
 import { toast } from 'react-toastify';
+
+import KonvaEventObject = Konva.KonvaEventObject;
 
 export const TEST_IDS = Object.freeze({
   UNDO_BUTTON: 'map__undo-button',
@@ -71,6 +75,53 @@ export const Map = ({ layers }: MapProps) => {
   ]);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
+
+  //TODO: use maps instead of arrays for debouncing.
+  const [stageDragStartListeners, setStageDragStartListeners] = useState<
+    Array<(e: KonvaEventObject<DragEvent>) => void>
+  >([]);
+  const [stageDragEndListeners, setStageDragEndListeners] = useState<
+    Array<(e: KonvaEventObject<DragEvent>) => void>
+  >([]);
+  const [stageMouseMoveListeners, setStageMouseMoveListeners] = useState<
+    Array<(e: KonvaEventObject<MouseEvent>) => void>
+  >([]);
+  const [stageMouseWheelListeners, setStageMouseWheelListeners] = useState<
+    Array<(e: KonvaEventObject<MouseEvent>) => void>
+  >([]);
+  const [stageMouseUpListeners, setStageMouseUpListeners] = useState<
+    Array<(e: KonvaEventObject<MouseEvent>) => void>
+  >([]);
+  const [stageMouseDownListeners, setStageMouseDownListeners] = useState<
+    Array<(e: KonvaEventObject<MouseEvent>) => void>
+  >([]);
+  const [stageClickListeners, setStageClickListeners] = useState<
+    Array<(e: KonvaEventObject<MouseEvent>) => void>
+  >([]);
+
+  const baseStageListenerRegister: StageListenerRegister = {
+    registerStageDragStartListener: (listener: (e: KonvaEventObject<DragEvent>) => void) => {
+      setStageDragStartListeners((listeners) => [...listeners, listener]);
+    },
+    registerStageDragEndListener: (listener: (e: KonvaEventObject<DragEvent>) => void) => {
+      setStageDragEndListeners((listeners) => [...listeners, listener]);
+    },
+    registerStageMouseMoveListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
+      setStageMouseMoveListeners((listeners) => [...listeners, listener]);
+    },
+    registerStageMouseWheelListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
+      setStageMouseWheelListeners((listeners) => [...listeners, listener]);
+    },
+    registerStageMouseDownListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
+      setStageMouseDownListeners((listeners) => [...listeners, listener]);
+    },
+    registerStageMouseUpListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
+      setStageMouseUpListeners((listeners) => [...listeners, listener]);
+    },
+    registerStageClickListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
+      setStageClickListeners((listeners) => [...listeners, listener]);
+    },
+  };
 
   const reenableTour = async () => {
     const update: UpdateGuidedToursDto = { editor_tour_completed: false };
@@ -194,8 +245,19 @@ export const Map = ({ layers }: MapProps) => {
           data-tourid="canvas"
           id="canvas"
         >
-          <BaseStage>
+          <BaseStage
+            listeners={{
+              stageDragStartListeners,
+              stageDragEndListeners,
+              stageMouseMoveListeners,
+              stageMouseUpListeners,
+              stageMouseDownListeners,
+              stageMouseWheelListeners,
+              stageClickListeners,
+            }}
+          >
             <BaseLayer
+              stageListenerRegister={baseStageListenerRegister}
               opacity={untrackedState.layers.base.opacity}
               visible={untrackedState.layers.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}

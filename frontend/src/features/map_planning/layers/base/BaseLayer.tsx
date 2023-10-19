@@ -1,14 +1,14 @@
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import Konva from 'konva';
-import { useCallback, useState } from 'react';
+import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
+import { useCallback, useEffect, useState } from 'react';
 import { Layer } from 'react-konva';
 
-type BaseLayerProps = Konva.LayerConfig;
+type BaseLayerProps = LayerConfigWithListenerRegister;
 
 const BaseLayer = (props: BaseLayerProps) => {
-  const { _, ...layerProps } = props;
+  const { stageListenerRegister, ...layerProps } = props;
   const trackedState = useMapStore((map) => map.trackedState);
 
   /** Filepath to the background image in Nextcloud. */
@@ -24,6 +24,13 @@ const BaseLayer = (props: BaseLayerProps) => {
   if (cleanImagePath.startsWith('/')) {
     cleanImagePath = cleanImagePath.substring(1);
   }
+
+  useEffect(() => {
+    stageListenerRegister.registerStageClickListener(() => {
+      // TODO: remove console.log!
+      console.log('Click in base layer!');
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Make sure that the image is centered on, and rotates around, the origin.
   const [imageOffset, setImageOffset] = useState({ x: 0, y: 0 });
