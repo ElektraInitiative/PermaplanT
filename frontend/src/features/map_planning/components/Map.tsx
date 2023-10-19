@@ -256,7 +256,10 @@ export const Map = ({ layers }: MapProps) => {
           setShow(false);
         }}
         secondActionBtnTitle={t('guidedTour:disable')}
-        onSecondAction={() => setShow(false)}
+        onSecondAction={() => {
+          tour?.complete();
+          setShow(false);
+        }}
       />
     </>
   );
