@@ -44,10 +44,7 @@ export const PlantAndSeedSearch = () => {
     resetSelection(transformerRef);
   };
 
-  const selectPlantIdForPlanting = useFindPlantCallback((plant) => selectPlantForPlanting(plant));
-
   const handleClickOnPlantListItem = useCallback(selectPlantForPlanting, [actions, transformerRef]);
-
   const handleClickOnSeedListItem = useFindPlantCallback((plant) => selectPlantForPlanting(plant));
 
   useEffect(() => {
