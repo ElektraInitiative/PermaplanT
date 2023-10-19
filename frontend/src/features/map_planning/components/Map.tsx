@@ -256,7 +256,10 @@ export const Map = ({ layers }: MapProps) => {
           setShow(false);
         }}
         secondActionBtnTitle={t('guidedTour:confirmation_quit')}
-        onSecondAction={() => setShow(false)}
+        onSecondAction={() => {
+          tour?.complete();
+          setShow(false);
+        }}
       />
     </>
   );
