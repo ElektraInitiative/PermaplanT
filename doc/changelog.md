@@ -33,7 +33,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix tour-completion logic of cancel-confirmation dialog in guided tour #986 _(tschawax)_
 - Improve styling of login and logout button #983 _(tschawax)_
 - _()_
 - Improve vertical scrollbar behaviour #970 _(tschawax)_
