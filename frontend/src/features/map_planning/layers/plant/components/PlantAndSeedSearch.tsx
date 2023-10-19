@@ -48,9 +48,7 @@ export const PlantAndSeedSearch = () => {
 
   const handleClickOnPlantListItem = useCallback(selectPlantForPlanting, [actions, transformerRef]);
 
-  const handleClickOnSeedListItem = useCallback(selectPlantIdForPlanting, [
-    selectPlantIdForPlanting,
-  ]);
+  const handleClickOnSeedListItem = useFindPlantCallback((plant) => selectPlantForPlanting(plant));
 
   useEffect(() => {
     searchInputRef.current?.focusSearchInputField();
