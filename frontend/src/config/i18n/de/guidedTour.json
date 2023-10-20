@@ -22,7 +22,7 @@
         "timeline_intro_text": "Nutze die <strong>Zeitleiste</strong>, um dir für einen bestimmten Tag die Planung der Karte anzeigen zu lassen.<p>Alle Änderungen, die du vornimmst, bekommen ihre Gültigkeit mit dem gewählten Tag.</p>",
         "base_layer_intro": "Auf der <strong>Basis-Ebene</strong> kannst du ein <strong>Hintergrundbild</strong> für deine Karte auswählen.",
         "base_layer_toolbar": "Du kannst das Hintergrundbild auch <strong>skalieren</strong>, um es dem Maßstab der Karte anzupassen. Der Maßstab ist immer links oben in der Karte zu sehen.",
-        "plants_layer_intro": "Die <strong>Pflanzen-Ebene</strong> ist das <strong>Herzstück</strong> deiner Planung. Sie erlaubt es dir Pflanzen auf deiner Karte zu setzen.",
+        "plants_layer_intro": "Die <strong>Pflanzen-Ebene</strong> ist das <strong>Herzstück</strong> deiner Planung. Sie erlaubt es dir, Pflanzen auf deiner Karte zu setzen.",
         "plants_layer_select_text": "Nutze das <strong>Ebenen-Panel</strong>, um zur Pflanzen-Ebene zu wechseln und Zugriff auf deren Funktionen zu bekommen.",
         "plants_layer_select_action": "Wähle jetzt die Ebene Pflanzen aus.",
         "plants_layer_right_toolbar": "Nach dem Wechsel der aktiven Ebene werden automatisch deren <strong>Funktionen</strong> hier in der Seitenleiste angezeigt.<p style='margin-top:.5rem'>In der Pflanzen-Ebene kannst du aus deinen <strong>verfügbaren Samen</strong> wählen oder nach <strong>Pflanzen</strong> in unserer Datenbank <strong>suchen</strong>.</p>",
