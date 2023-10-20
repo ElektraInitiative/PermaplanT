@@ -96,7 +96,6 @@ export const Map = ({ layers }: MapProps) => {
     tour?.start();
     if (tour && tour.steps.length > 0) {
       tour?.on('cancel', () => {
-        _completeTour();
         setShow(true);
       });
       tour?.on('complete', () => {
@@ -257,7 +256,10 @@ export const Map = ({ layers }: MapProps) => {
           setShow(false);
         }}
         secondActionBtnTitle={t('guidedTour:disable')}
-        onSecondAction={() => setShow(false)}
+        onSecondAction={() => {
+          tour?.complete();
+          setShow(false);
+        }}
       />
     </>
   );

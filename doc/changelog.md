@@ -33,10 +33,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix tour-completion logic of cancel-confirmation dialog in guided tour #986 _(tschawax)_
 - Improve styling of login and logout button #983 _(tschawax)_
 - Add horizontal scrolling to toolbars #981 _(tschawax)_
-- _()_
+- Improve vertical scrollbar behaviour #970 _(tschawax)_
 - _()_
 - Create remember-viewing-state usecase #1 _(tschawax)_
 - Create multi-select usecase #1 _(tschawax)_
