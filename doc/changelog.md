@@ -20,7 +20,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Enable seed search in plant layer _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Finish seed use case _(Moritz)_
 - _()_
 - _()_
 - _()_
