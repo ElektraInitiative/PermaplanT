@@ -29,7 +29,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- add decision for timeline concept _(Daniel Steinkogler)_
 - _()_
 - _()_
 - Improve wordings, usability and UI of guided tour #871 _(tschawax)_
