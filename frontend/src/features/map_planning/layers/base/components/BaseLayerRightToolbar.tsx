@@ -61,6 +61,8 @@ export const BaseLayerRightToolbar = () => {
   const executeAction = useMapStore((state) => state.executeAction);
   const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
+  const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
+  const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
 
   const { t } = useTranslation(['common', 'baseLayerForm']);
   const isReadOnlyMode = useIsReadOnlyMode();
@@ -109,10 +111,18 @@ export const BaseLayerRightToolbar = () => {
     debouncedRotation,
   ]);
 
+  useEffect(() => {
+    if (measureStep === 'both selected') {
+      clearStatusPanelContent();
+    }
+  }, [measureStep]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const [distMeters, setDistMeters] = useState(0);
   const [distCentimeters, setDistCentimeters] = useState(0);
 
   const onDistModalSubmit = () => {
+    clearStatusPanelContent();
+
     const point1 = measurePoint1 ?? { x: 0, y: 0 };
     const point2 = measurePoint2 ?? { x: 0, y: 0 };
 
@@ -233,11 +243,23 @@ export const BaseLayerRightToolbar = () => {
           data-testid={TEST_IDS.SCALE_INPUT}
         />
         {measureStep === 'inactive' ? (
-          <SimpleButton onClick={() => activateMeasurement()}>
+          <SimpleButton
+            onClick={() => {
+              activateMeasurement();
+              setStatusPanelContent(<span>{t('baseLayerForm:auto_scaling_hint')}</span>);
+            }}
+          >
             {t('baseLayerForm:set_scale')}
           </SimpleButton>
         ) : (
-          <SimpleButton onClick={() => deactivateMeasurement()}>{t('common:cancel')}</SimpleButton>
+          <SimpleButton
+            onClick={() => {
+              deactivateMeasurement();
+              clearStatusPanelContent();
+            }}
+          >
+            {t('common:cancel')}
+          </SimpleButton>
         )}
       </div>
     </div>
