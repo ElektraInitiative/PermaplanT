@@ -25,7 +25,7 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
         const scrollLeft = selectedElement.offsetLeft + itemWidth / 2 - containerWidth / 2;
 
         container.scrollTo({
-          behavior: 'instant', // You can adjust the behavior as needed
+          behavior: 'smooth', // You can adjust the behavior as needed
           left: scrollLeft,
         });
       }
@@ -54,7 +54,7 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
     }
   };
 
-  /*const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (containerRef.current) {
       isDragging.current = true;
       dragStartX.current = e.clientX;
@@ -75,7 +75,7 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
         left: leftScrollStart.current - deltaX,
       });
     }
-  };*/
+  };
 
   // Add an effect to scroll to the selected item when it changes
   useEffect(() => {
@@ -92,12 +92,12 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
     }
   };
 
-  /*const handleMouseWheel = (e: React.WheelEvent) => {
+  const handleMouseWheel = (e: React.WheelEvent) => {
     if (!containerRef.current) return;
 
     e.preventDefault();
     containerRef.current.scrollLeft += e.deltaY;
-  };*/
+  };
 
   useEffect(() => {
     const handleMouseUp = () => {
@@ -111,16 +111,16 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
 
     const container = containerRef.current;
     container?.addEventListener('scroll', handleScroll);
-    //container?.addEventListener('mousedown', handleMouseDown);
-    //container?.addEventListener('wheel', handleMouseWheel);
-    //document.addEventListener('mousemove', handleMouseMove);
+    container?.addEventListener('mousedown', handleMouseDown);
+    container?.addEventListener('wheel', handleMouseWheel);
+    document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
       container?.removeEventListener('scroll', handleScroll);
-      //container?.removeEventListener('mousedown', handleMouseDown);
-      //container?.removeEventListener('wheel', handleMouseWheel);
-      //document.removeEventListener('mousemove', handleMouseMove);
+      container?.removeEventListener('mousedown', handleMouseDown);
+      container?.removeEventListener('wheel', handleMouseWheel);
+      document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [selectedItem]);
