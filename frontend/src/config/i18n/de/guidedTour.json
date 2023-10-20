@@ -46,6 +46,6 @@
         "plants_layer_delete_text": "Wenn du eine Pflanze löschst, ist es so als wäre sie nie auf deiner Karte gewesen.",
         "plants_layer_delete_action": "Lösche nun deine Tomate, um wieder eine leere Karte zu erhalten.",
         "plants_layer_revert_date_action": "Setze zum Abschluss das Datum deiner Karte wieder auf den <strong>heutigen Tag</strong> zurück.",
-        "congratulations_text": "<strong>Herzlichen Glückwunsch!</strong><p style='margin:1rem 0'>Du kennst die wichtigsten Funktionen des Map Editors und kannst jetzt loslegen dein Traumprojekt zu planen.</p><strong>Frohes Pflanzen!</strong>"
+        "congratulations_text": "<strong>Herzlichen Glückwunsch!</strong><p style='margin:1rem 0'>Du kennst die wichtigsten Funktionen des Map Editors und kannst jetzt loslegen.</p><strong>Frohes Pflanzen!</strong>"
     }
 }
