@@ -1,5 +1,5 @@
 import { getPlantings } from '../api/getPlantings';
-import { Map } from '../components/Map';
+import { EditorMap } from '../components/EditorMap';
 import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
 import { useTourStatus } from '../hooks/useTourStatus';
@@ -220,7 +220,7 @@ export function MapWrapper() {
   return (
     <ReadOnlyModeContextProvider>
       <ShepherdTour steps={steps} tourOptions={tourOptions}>
-        <Map layers={mapData.layers} />
+        <EditorMap layers={mapData.layers} />
       </ShepherdTour>
     </ReadOnlyModeContextProvider>
   );

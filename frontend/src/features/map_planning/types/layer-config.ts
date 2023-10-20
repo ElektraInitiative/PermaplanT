@@ -7,13 +7,34 @@ import KonvaEventObject = Konva.KonvaEventObject;
  * a layers enclosing stage.
  */
 export interface StageListenerRegister {
-  registerStageDragStartListener: (listener: (e: KonvaEventObject<DragEvent>) => void) => void;
-  registerStageDragEndListener: (listener: (e: KonvaEventObject<DragEvent>) => void) => void;
-  registerStageMouseMoveListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => void;
-  registerStageMouseWheelListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => void;
-  registerStageMouseDownListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => void;
-  registerStageMouseUpListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => void;
-  registerStageClickListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => void;
+  registerStageDragStartListener: (
+    key: string,
+    listener: (e: KonvaEventObject<DragEvent>) => void,
+  ) => void;
+  registerStageDragEndListener: (
+    key: string,
+    listener: (e: KonvaEventObject<DragEvent>) => void,
+  ) => void;
+  registerStageMouseMoveListener: (
+    key: string,
+    listener: (e: KonvaEventObject<MouseEvent>) => void,
+  ) => void;
+  registerStageMouseWheelListener: (
+    key: string,
+    listener: (e: KonvaEventObject<MouseEvent>) => void,
+  ) => void;
+  registerStageMouseDownListener: (
+    key: string,
+    listener: (e: KonvaEventObject<MouseEvent>) => void,
+  ) => void;
+  registerStageMouseUpListener: (
+    key: string,
+    listener: (e: KonvaEventObject<MouseEvent>) => void,
+  ) => void;
+  registerStageClickListener: (
+    key: string,
+    listener: (e: KonvaEventObject<MouseEvent>) => void,
+  ) => void;
 }
 
 /**

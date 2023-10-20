@@ -29,13 +29,13 @@ interface BaseStageProps {
   selectable?: boolean;
   draggable?: boolean;
   listeners?: {
-    stageDragStartListeners: Array<(e: KonvaEventObject<DragEvent>) => void>;
-    stageDragEndListeners: Array<(e: KonvaEventObject<DragEvent>) => void>;
-    stageMouseMoveListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
-    stageMouseWheelListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
-    stageMouseDownListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
-    stageMouseUpListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
-    stageClickListeners: Array<(e: KonvaEventObject<MouseEvent>) => void>;
+    stageDragStartListeners: Map<string, (e: KonvaEventObject<DragEvent>) => void>;
+    stageDragEndListeners: Map<string, (e: KonvaEventObject<DragEvent>) => void>;
+    stageMouseMoveListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
+    stageMouseWheelListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
+    stageMouseDownListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
+    stageMouseUpListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
+    stageClickListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
   };
   children: React.ReactNode;
 }

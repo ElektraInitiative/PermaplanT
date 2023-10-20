@@ -26,7 +26,7 @@ const BaseLayer = (props: BaseLayerProps) => {
   }
 
   useEffect(() => {
-    stageListenerRegister.registerStageClickListener(() => {
+    stageListenerRegister.registerStageClickListener('BaseLayer', () => {
       // TODO: remove console.log!
       console.log('Click in base layer!');
     });

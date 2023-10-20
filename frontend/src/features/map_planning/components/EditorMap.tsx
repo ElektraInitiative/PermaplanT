@@ -54,7 +54,7 @@ export type MapProps = {
  * You only have to make sure that every shape has the property "draggable" set to true.
  * Otherwise, they cannot be moved.
  */
-export const Map = ({ layers }: MapProps) => {
+export const EditorMap = ({ layers }: MapProps) => {
   const untrackedState = useMapStore((map) => map.untrackedState);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
@@ -76,50 +76,72 @@ export const Map = ({ layers }: MapProps) => {
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
 
-  //TODO: use maps instead of arrays for debouncing.
+  // Allow layers to listen for all events on the base stage.
+  // This enables us to build
   const [stageDragStartListeners, setStageDragStartListeners] = useState<
-    Array<(e: KonvaEventObject<DragEvent>) => void>
-  >([]);
+    Map<string, (e: KonvaEventObject<DragEvent>) => void>
+  >(new Map());
   const [stageDragEndListeners, setStageDragEndListeners] = useState<
-    Array<(e: KonvaEventObject<DragEvent>) => void>
-  >([]);
+    Map<string, (e: KonvaEventObject<DragEvent>) => void>
+  >(new Map());
   const [stageMouseMoveListeners, setStageMouseMoveListeners] = useState<
-    Array<(e: KonvaEventObject<MouseEvent>) => void>
-  >([]);
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
   const [stageMouseWheelListeners, setStageMouseWheelListeners] = useState<
-    Array<(e: KonvaEventObject<MouseEvent>) => void>
-  >([]);
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
   const [stageMouseUpListeners, setStageMouseUpListeners] = useState<
-    Array<(e: KonvaEventObject<MouseEvent>) => void>
-  >([]);
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
   const [stageMouseDownListeners, setStageMouseDownListeners] = useState<
-    Array<(e: KonvaEventObject<MouseEvent>) => void>
-  >([]);
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
   const [stageClickListeners, setStageClickListeners] = useState<
-    Array<(e: KonvaEventObject<MouseEvent>) => void>
-  >([]);
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
 
   const baseStageListenerRegister: StageListenerRegister = {
-    registerStageDragStartListener: (listener: (e: KonvaEventObject<DragEvent>) => void) => {
-      setStageDragStartListeners((listeners) => [...listeners, listener]);
+    registerStageDragStartListener: (
+      key: string,
+      listener: (e: KonvaEventObject<DragEvent>) => void,
+    ) => {
+      setStageDragStartListeners((listeners) => listeners.set(key, listener));
     },
-    registerStageDragEndListener: (listener: (e: KonvaEventObject<DragEvent>) => void) => {
-      setStageDragEndListeners((listeners) => [...listeners, listener]);
+    registerStageDragEndListener: (
+      key: string,
+      listener: (e: KonvaEventObject<DragEvent>) => void,
+    ) => {
+      setStageDragEndListeners((listeners) => listeners.set(key, listener));
     },
-    registerStageMouseMoveListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
-      setStageMouseMoveListeners((listeners) => [...listeners, listener]);
+    registerStageMouseMoveListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseMoveListeners((listeners) => listeners.set(key, listener));
     },
-    registerStageMouseWheelListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
-      setStageMouseWheelListeners((listeners) => [...listeners, listener]);
+    registerStageMouseWheelListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseWheelListeners((listeners) => listeners.set(key, listener));
     },
-    registerStageMouseDownListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
-      setStageMouseDownListeners((listeners) => [...listeners, listener]);
+    registerStageMouseDownListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseDownListeners((listeners) => listeners.set(key, listener));
     },
-    registerStageMouseUpListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
-      setStageMouseUpListeners((listeners) => [...listeners, listener]);
+    registerStageMouseUpListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseUpListeners((listeners) => listeners.set(key, listener));
     },
-    registerStageClickListener: (listener: (e: KonvaEventObject<MouseEvent>) => void) => {
-      setStageClickListeners((listeners) => [...listeners, listener]);
+    registerStageClickListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageClickListeners((listeners) => listeners.set(key, listener));
     },
   };
 
