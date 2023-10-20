@@ -292,11 +292,6 @@ export const createUntrackedMapSlice: StateCreator<
         return state;
 
       // Measurement step 'one selected' being active implies that measurePoint1 must not be null.
-      console.assert(
-        state.untrackedState.layers.base.measureStep !== 'one selected' ||
-          state.untrackedState.layers.base.measurePoint1 !== null,
-      );
-
       const measureStep = state.untrackedState.layers.base.measureStep;
       const measurePoint1 = state.untrackedState.layers.base.measurePoint1;
       const measurePoint2 = state.untrackedState.layers.base.measurePoint2;

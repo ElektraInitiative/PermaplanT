@@ -3,7 +3,7 @@ import { NextcloudKonvaImage } from '@/features/map_planning/components/image/Ne
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { useCallback, useEffect, useState } from 'react';
-import { Layer } from 'react-konva';
+import { Circle, Layer, Line } from 'react-konva';
 
 type BaseLayerProps = LayerConfigWithListenerRegister;
 
@@ -18,6 +18,22 @@ const BaseLayer = (props: BaseLayerProps) => {
   /** The amount of rotation required to align the base layer with geographic north. */
   const rotation = trackedState.layers.base.rotation;
 
+  const untrackedBaseLayerState = useMapStore((map) => map.untrackedState.layers.base);
+  const baseLayerSetMeasurePoint = useMapStore((map) => map.baseLayerSetMeasurePoint);
+
+  const measurementLinePoints = () => {
+    if (untrackedBaseLayerState.measureStep !== 'both selected') return [];
+
+    console.assert(untrackedBaseLayerState.measurePoint1 !== null);
+    console.assert(untrackedBaseLayerState.measurePoint2 !== null);
+    return [
+      untrackedBaseLayerState.measurePoint1?.x ?? Number.NaN,
+      untrackedBaseLayerState.measurePoint1?.y ?? Number.NaN,
+      untrackedBaseLayerState.measurePoint2?.x ?? Number.NaN,
+      untrackedBaseLayerState.measurePoint2?.y ?? Number.NaN,
+    ];
+  };
+
   // It shouldn't matter whether the image path starts with a slash or not.
   // TODO: not sure if needed: double slash in a path is OK
   let cleanImagePath = nextcloudImagePath;
@@ -26,9 +42,9 @@ const BaseLayer = (props: BaseLayerProps) => {
   }
 
   useEffect(() => {
-    stageListenerRegister.registerStageClickListener('BaseLayer', () => {
-      // TODO: remove console.log!
-      console.log('Click in base layer!');
+    stageListenerRegister.registerStageClickListener('BaseLayer', (e) => {
+      console.log(e.currentTarget.getRelativePointerPosition());
+      baseLayerSetMeasurePoint(e.currentTarget.getRelativePointerPosition());
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -53,6 +69,23 @@ const BaseLayer = (props: BaseLayerProps) => {
           offset={imageOffset}
         />
       )}
+      {untrackedBaseLayerState.measurePoint1 && (
+        <Circle
+          x={untrackedBaseLayerState.measurePoint1.x}
+          y={untrackedBaseLayerState.measurePoint1.y}
+          radius={10}
+          fill="red"
+        />
+      )}
+      {untrackedBaseLayerState.measurePoint2 && (
+        <Circle
+          x={untrackedBaseLayerState.measurePoint2.x}
+          y={untrackedBaseLayerState.measurePoint2.y}
+          radius={10}
+          fill="red"
+        />
+      )}
+      <Line points={measurementLinePoints()} strokeWidth={5} stroke="red" />
     </Layer>
   );
 };
