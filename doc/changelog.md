@@ -11,7 +11,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Enable automatic image scaling in base layer _(Moritz)_
 - _()_
 - _()_
 - _()_
