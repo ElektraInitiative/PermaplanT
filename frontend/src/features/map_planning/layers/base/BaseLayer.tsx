@@ -48,7 +48,6 @@ const BaseLayer = (props: BaseLayerProps) => {
 
   useEffect(() => {
     stageListenerRegister.registerStageClickListener('BaseLayer', (e) => {
-      console.log(e.currentTarget.getRelativePointerPosition());
       baseLayerSetMeasurePoint(e.currentTarget.getRelativePointerPosition());
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -60,7 +59,7 @@ const BaseLayer = (props: BaseLayerProps) => {
     setImageOffset({ x: image.width / 2, y: image.height / 2 });
   }, []);
 
-  const scale = pixelsPerMeter / MAP_PIXELS_PER_METER;
+  const scale = MAP_PIXELS_PER_METER / pixelsPerMeter;
 
   return (
     <Layer {...layerProps} listening={false}>
