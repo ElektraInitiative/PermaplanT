@@ -21,6 +21,11 @@ const BaseLayer = (props: BaseLayerProps) => {
   const untrackedBaseLayerState = useMapStore((map) => map.untrackedState.layers.base);
   const baseLayerSetMeasurePoint = useMapStore((map) => map.baseLayerSetMeasurePoint);
 
+  // Needed for scaling the auto-scale indicators.
+  const editorLongestSide = useMapStore((map) =>
+    Math.max(map.untrackedState.editorBounds.width, map.untrackedState.editorBounds.height),
+  );
+
   const measurementLinePoints = () => {
     if (untrackedBaseLayerState.measureStep !== 'both selected') return [];
 
@@ -73,7 +78,7 @@ const BaseLayer = (props: BaseLayerProps) => {
         <Circle
           x={untrackedBaseLayerState.measurePoint1.x}
           y={untrackedBaseLayerState.measurePoint1.y}
-          radius={10}
+          radius={editorLongestSide / 250}
           fill="red"
         />
       )}
@@ -81,11 +86,11 @@ const BaseLayer = (props: BaseLayerProps) => {
         <Circle
           x={untrackedBaseLayerState.measurePoint2.x}
           y={untrackedBaseLayerState.measurePoint2.y}
-          radius={10}
+          radius={editorLongestSide / 250}
           fill="red"
         />
       )}
-      <Line points={measurementLinePoints()} strokeWidth={5} stroke="red" />
+      <Line points={measurementLinePoints()} strokeWidth={editorLongestSide / 500} stroke="red" />
     </Layer>
   );
 };

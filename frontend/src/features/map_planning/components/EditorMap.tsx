@@ -76,7 +76,9 @@ export const EditorMap = ({ layers }: MapProps) => {
   const [show, setShow] = useState(false);
 
   // Allow layers to listen for all events on the base stage.
-  // This enables us to build
+  //
+  // This enables us to build layers with custom input logic that does not
+  // relly on Konva's limited Canvas-Object controls.
   const [stageDragStartListeners, setStageDragStartListeners] = useState<
     Map<string, (e: KonvaEventObject<DragEvent>) => void>
   >(new Map());
