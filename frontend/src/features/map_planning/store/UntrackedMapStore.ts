@@ -325,6 +325,24 @@ export const createUntrackedMapSlice: StateCreator<
 
     return null;
   },
+  setStatusPanelContent(content: React.ReactNode) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        bottomStatusPanelContent: content,
+      },
+    }));
+  },
+  clearStatusPanelContent() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        bottomStatusPanelContent: null,
+      },
+    }));
+  },
   __removeLastAction({ actionId, entityId }) {
     console.log('Removing action', actionId, entityId);
 

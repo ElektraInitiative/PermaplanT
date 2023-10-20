@@ -14,9 +14,10 @@ import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
 import { isPlacementModeActive } from '../utils/planting-utils';
 import { useDimensions } from '@/hooks/useDimensions';
+import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
 export const TEST_IDS = Object.freeze({
@@ -238,6 +239,10 @@ export const BaseStage = ({
 
   const isReadOnly = useIsReadOnlyMode();
 
+  const bottomStatusPanelContent = useMapStore(
+    (map) => map.untrackedState.bottomStatusPanelContent,
+  );
+
   return (
     <div className="h-full w-full overflow-hidden" data-testid={TEST_IDS.CANVAS} ref={containerRef}>
       <Stage
@@ -303,9 +308,14 @@ export const BaseStage = ({
           />
         </Layer>
       </Stage>
-      {/** Portal to display something from different layers */}
+      {/** Panel to display something from different layers */}
       <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
-        <div id="bottom-portal" />
+        <AnimatePresence mode="wait">
+          {bottomStatusPanelContent && (
+            <BottomStatusPanel>{bottomStatusPanelContent}</BottomStatusPanel>
+          )}
+        </AnimatePresence>
+        ,
       </div>
     </div>
   );
@@ -361,4 +371,23 @@ function stopStageDraggingMode(konvaEvent: KonvaEventObject<MouseEvent>): void {
   if (stage.isDragging()) {
     stage.stopDrag();
   }
+}
+
+function BottomStatusPanel(props: React.PropsWithChildren) {
+  return (
+    <motion.div
+      className="flex gap-4 rounded-md bg-neutral-200 py-3 pl-6 pr-4 ring ring-secondary-500 dark:bg-neutral-200-dark"
+      initial={{ opacity: 0 }}
+      animate={{
+        opacity: 100,
+        transition: { delay: 0, duration: 0.1 },
+      }}
+      exit={{
+        opacity: 0,
+        transition: { delay: 0, duration: 0.1 },
+      }}
+    >
+      {props.children}
+    </motion.div>
+  );
 }
