@@ -22,6 +22,4 @@ Advantages of implementing a custom solution over using a chart library:
 
 3. **Event Indicators with Divs:** The custom date picker will employ basic HTML elements for representing event indicators. This approach simplifies event rendering on the date picker, allowing for easy placement and styling of event markers without the need for a comprehensive charting library.
 
-4. **Full Control over Synchronization:** Building a custom date picker provides complete control over slider synchronization. This level of control is essential when multiple sliders or date-related components need to interact seamlessly, allowing users to make precise date selections across different date ranges.
-
-5. **Design Customization:** Customization enables us to design a date picker that precisely matches the project's visual style and UI/UX requirements. It can seamlessly integrate into the application's design language.
+4. **Design Customization:** Customization enables us to design a date picker that precisely matches the project's visual style and UI/UX requirements. It can seamlessly integrate into the application's design language.
