@@ -1,72 +1,27 @@
-# Frontend State Management
+# Timeline: Custom Date Picker Implementation Decision
 
-## Problem
+## Problem Statement
 
-PermaplanT is a web application built with React that requires efficient and flexible state management.
-Inside a React application we can usually distinguish between three types of state:
+To implement the timeline feature, we require a custom date picker capable of displaying indicators for plant additions and removals.
 
-1. Local Component State: Is the dropdown open or not, is the link active or not, and so on.
-2. Global Application State (Synchronous): Local user preferences, Sidenav is open, UI state in a visual design app.
-3. Server State (Asynchronous): A network request is needed before any state can be derived.
+## Proposed Solutions
 
-## Constraints
+Initially, the team considered using [ReactCharts](https://react-charts.tanstack.com/), a powerful charting library. However, it is not designed for date selection. As a result, we have decided to create custom components for building the timeslider:
 
-- The state management library must support React and work seamlessly with the rest of the application's technology stack.
-- The library should be well-maintained, have a large community of developers, and a good documentation.
+- **Picker Slider:** A draggable and scrollable slider where the middle element is the selected one. We will explore existing solutions that may meet our requirements. The elements displayed on the slider can also be customized to accommodate event indicators for each date.
 
-## Considered Alternatives
+- **Date Picker Component:** This component will consist of three sliders for year, month, and day selection. It will be responsible for synchronizing the sliders and calculating data for event indicators. Event indicators will be simple bars or divs – a green one for plant additions and a red one for removal – resembling a mini bar chart.
 
-### Global Application State
+## Rationale
 
-- [Redux](https://redux.js.org/)
-  Requires more complex setup, boilerplate and has a steeper learning curve than Zustand.
-- [React context](https://reactjs.org/docs/context.html)
-  Requires complex custom state management solution for complex application
-- [MobX](https://mobx.js.org/)
-  Requires basic understanding of reactive programming - may otherwise lead to inconsistencies and performance problems.
-- [Recoil](https://recoiljs.org/)
-  Recoil is still in experimental state, not yet recommended for production (16.03.2023).
+Advantages of implementing a custom solution over using a chart library:
 
-### Server State
+1. **Date-Centric Functionality:** React-Charts is a robust library for rendering various charts and graphs, but it lacks the precise date selection functionality required for this project. Customizing the library for date selection may prove complex and may not deliver the desired user experience.
 
-- [SWR](https://github.com/vercel/swr)
-  Fewer features than React Query
+2. **Simplified User Experience:** A dedicated date picker offers a simplified user interface, ensuring intuitive date selection. React-Charts, designed for data visualization, might introduce unnecessary complexities for date selection.
 
-## Decision
+3. **Event Indicators with Divs:** The custom date picker will employ basic HTML elements for representing event indicators. This approach simplifies event rendering on the date picker, allowing for easy placement and styling of event markers without the need for a comprehensive charting library.
 
-### Local Component State
+4. **Full Control over Synchronization:** Building a custom date picker provides complete control over slider synchronization. This level of control is essential when multiple sliders or date-related components need to interact seamlessly, allowing users to make precise date selections across different date ranges.
 
-No library is needed.
-
-Managing component state can be accomplished with React features (useState, Context + useReducer).
-
-### Global Application State
-
-[Zustand](https://github.com/pmndrs/zustand) will be used as the global state management library for PermaplanT.
-
-Zustand is a lightweight and easy-to-use library that uses hooks, which makes it easy to integrate with React.
-Its simplicity also reduces the amount of boilerplate code and the need for complex setup and configuration.
-
-Zustand also provides the [Persist](https://docs.pmnd.rs/zustand/integrations/persisting-store-data) middleware which enables storing state in any type of storage.
-Another benefit of Persist is the serialization and deserialization support for fields of type _Map_ and _Set_.  
-Persist's [partialize](https://docs.pmnd.rs/zustand/integrations/persisting-store-data#partialize) method can be used to store only selected fields of the state.
-
-### Server State
-
-[TanStack React Query v4](https://www.npmjs.com/package/@tanstack/react-query) will be used for managing asynchronous state.
-
-React Query is a feature rich, up-to-date library for managing asynchronous data.
-
-## Implications
-
-## Related Decisions
-
-- Choosing React as the [frontend library](./frontend_ui_framework.md) for PermaplanT
-
-## Notes
-
-## Links
-
-- https://medium.com/readytowork-org/its-zustand-vs-redux-8e24424df713
-- https://tanstack.com/query/latest/docs/react/guides/does-this-replace-client-state
-- https://tanstack.com/query/v4/docs/react/comparison
+5. **Design Customization:** Customization enables us to design a date picker that precisely matches the project's visual style and UI/UX requirements. It can seamlessly integrate into the application's design language.
