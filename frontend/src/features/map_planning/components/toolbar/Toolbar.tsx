@@ -75,9 +75,9 @@ export const Toolbar = ({
             onDrag={onResizeHeight}
             onStop={onResizeHeight}
           >
-            <div className="flex flex-1 flex-col">
+            <div className="flex flex-1 flex-col overflow-x-auto">
               <div
-                className="shrink-0 overflow-auto"
+                className="shrink-0 overflow-y-auto"
                 style={{ height: sizeState.height + 'px' }}
                 data-tourid={position === 'left' ? 'toolbox' : 'layers'}
               >
@@ -85,7 +85,7 @@ export const Toolbar = ({
               </div>
               <HorizontalHandle />
               <div
-                className="flex-shrink overflow-auto"
+                className="flex-shrink overflow-y-auto"
                 data-tourid={position === 'left' ? 'bottom_left_toolbar' : 'bottom_right_toolbar'}
               >
                 {contentBottom}
