@@ -29,8 +29,6 @@ const BaseLayer = (props: BaseLayerProps) => {
   const measurementLinePoints = () => {
     if (untrackedBaseLayerState.measureStep !== 'both selected') return [];
 
-    console.assert(untrackedBaseLayerState.measurePoint1 !== null);
-    console.assert(untrackedBaseLayerState.measurePoint2 !== null);
     return [
       untrackedBaseLayerState.measurePoint1?.x ?? Number.NaN,
       untrackedBaseLayerState.measurePoint1?.y ?? Number.NaN,
