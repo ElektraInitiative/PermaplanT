@@ -17,7 +17,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Enable seed search in plant layer _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -32,7 +32,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add frontend UI and usability guide #918 _(tschawax)_
-- _()_
+- Improve wordings, usability and UI of guided tour #871 _(tschawax)_
 - Fix tour-completion logic of cancel-confirmation dialog in guided tour #986 _(tschawax)_
 - Improve styling of login and logout button #983 _(tschawax)_
 - Add horizontal scrolling to toolbars #981 _(tschawax)_

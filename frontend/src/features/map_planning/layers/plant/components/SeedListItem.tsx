@@ -1,30 +1,40 @@
-import { PlantsSummaryDto } from '@/api_types/definitions';
+import { SeedDto } from '@/api_types/definitions';
+import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import defaultImageUrl from '@/svg/plant.svg';
-import { PlantNameFromPlant } from '@/utils/plant-naming';
+import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
+import { toast } from 'react-toastify';
 
-export type PlantListElementProps = {
-  plant: PlantsSummaryDto;
+export type SeedListElementProps = {
+  seed: SeedDto;
   onClick: () => void;
   isHighlighted?: boolean;
   disabled?: boolean;
 };
 
-export function PlantListItem({
-  plant,
+export function SeedListItem({
+  seed,
   onClick,
   isHighlighted = false,
   disabled,
-}: PlantListElementProps) {
+}: SeedListElementProps) {
   const highlightedClass = isHighlighted
     ? 'text-primary-400 stroke-primary-400 ring-4 ring-primary-300 '
     : undefined;
 
+  if (!seed.plant_id) {
+    // Ideally, this should never happen.
+    toast.error('Tried to initialize SeedListItem with missing plant_id');
+  }
+
+  const { plant } = useFindPlantById(seed.plant_id ?? -1);
+
+  // The user should already be provided with an error toast
+  // by useFindPlantById.
+  if (!plant) return null;
+
   return (
-    <li
-      className="my-1 flex"
-      data-testid={`plant-list-item__${plant.common_name_en} ${plant.unique_name}`}
-    >
+    <li className="my-1 flex" data-testid={`${seed.name}-plant-search-result`}>
       <button
         disabled={disabled}
         onClick={() => onClick()}
@@ -39,7 +49,7 @@ export function PlantListItem({
           showErrorMessage={false}
         />
         <div className="text-left">
-          <PlantNameFromPlant plant={plant} />
+          <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
         </div>
       </button>
     </li>
