@@ -1,11 +1,9 @@
-import { PlantSearch } from './PlantSearch';
-import { PlantSuggestions } from './PlantSuggestions';
+import { PlantAndSeedSearch } from './PlantAndSeedSearch';
 
 export function PlantLayerRightToolbar() {
   return (
     <>
-      <PlantSearch />
-      <PlantSuggestions />
+      <PlantAndSeedSearch />
     </>
   );
 }
