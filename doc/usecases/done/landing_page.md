@@ -25,9 +25,9 @@
 - **Postcondition:**
 - **Non-functional Constraints:**
 - **Linked Use Cases:**
-  - [Membership Application](../assigned/membership_application.md)
-  - [GeoMap](../assigned/geo_map.md)
   - [Login](../done/login.md)
+  - [GeoMap](../draft/geo_map.md)
+  - [Membership Application](../draft/membership_application.md)
 
 ## Open points:
 

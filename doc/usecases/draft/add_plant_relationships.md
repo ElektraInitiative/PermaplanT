@@ -31,6 +31,6 @@
   - The user tries to add a map-specific relationship where another map-specific with identical sides already exits.  
     The user is informed about this and can't create the relationship.
 - **Postcondition:**
-  - A new relationship between plants is [reviewable by other users](../assigned/review_plant_relationships.md).
+  - A new relationship between plants is [reviewable by other users](../draft/review_plant_relationships.md).
   - A new relationship between plants is considered when suggesting alternatives.
 - **Non-functional Constraints:**

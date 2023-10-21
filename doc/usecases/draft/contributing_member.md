@@ -14,9 +14,9 @@
   - The user has currently no membership.
 - **Main success scenario:**
   - The user can receive permacoins through various activities in the app, like:
-    - gaining [Blossoms](../assigned/gain_blossoms.md) in the Expert Track.
+    - gaining [Blossoms](../draft/gain_blossoms.md) in the Expert Track.
     - getting likes from other users on their reviews.
-    - getting [approvals](../assigned/review_plant_relationships.md) on their submitted [plant relationships](../assigned/add_plant_relationships.md).
+    - getting [approvals](../draft/review_plant_relationships.md) on their submitted [plant relationships](../draft/add_plant_relationships.md).
     - getting their comments on a map marked as helpful by the maps owner.
     - recruiting new members.
   - The user can see their exact count of current and previous permacoins in their profile.
