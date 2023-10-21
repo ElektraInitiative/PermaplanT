@@ -1,5 +1,5 @@
-import { ReactComponent as SearchResetIcon } from '@/icons/search-reset.svg';
-import { ReactComponent as SearchIcon } from '@/icons/search.svg';
+import { ReactComponent as SearchResetIcon } from '@/svg/icons/search-reset.svg';
+import { ReactComponent as SearchIcon } from '@/svg/icons/search.svg';
 import React, {
   forwardRef,
   KeyboardEvent,
@@ -13,7 +13,7 @@ export const SHORTCUT_SEARCH_INPUT_RESET = 'Escape';
 
 export const TEST_IDS = Object.freeze({
   SEARCH_ICON: 'search-input__search-icon',
-  SEARCH_INPUT: 'search-input__search-input',
+  SEARCH_INPUT: 'search-input__input-field',
   RESET_ICON: 'search-input__reset-icon',
 });
 

@@ -21,28 +21,40 @@ class MapPlantingPage(AbstractPage):
         # Left side bar
         self._delete_plant_button = page.get_by_role("button", name="Delete Planting")
         # Layer visibility
-        self._hide_plant_layer = page.get_by_test_id("plants-layer-visibility-icon")
-        self._hide_base_layer = page.get_by_test_id("base-layer-visibility-icon")
+        self._hide_plant_layer = page.get_by_test_id(
+            "layer-list-item__plants-layer-visibility-icon"
+        )
+        self._hide_base_layer = page.get_by_test_id(
+            "layer-list-item__base-layer-visibility-icon"
+        )
         # Canvas
-        self._canvas = page.get_by_test_id("canvas")
-        self._close_selected_plant = page.get_by_test_id("canvas").get_by_role("button")
+        self._canvas = page.get_by_test_id("base-stage__canvas")
+        self._close_selected_plant = self._canvas.get_by_role("button")
         self._map_date = page.get_by_label("Change map date")
         # Top left section
-        self._undo_button = page.get_by_test_id("undo-button")
-        self._redo_button = page.get_by_test_id("redo-button")
+        self._undo_button = page.get_by_test_id("map__undo-button")
+        self._redo_button = page.get_by_test_id("map__redo-button")
         # Selected plant section
         self._plant_added_date = page.get_by_label("Added on")
         self._plant_removed_date = page.get_by_label("Removed on")
         # Plant layer
-        self._base_layer_radio = page.get_by_test_id("base-layer-radio")
-        self._plant_layer_radio = page.get_by_test_id("plants-layer-radio")
-        self._plant_search_icon = page.get_by_test_id("plant-search-icon")
-        self._plant_search_input = page.get_by_test_id("plant-search-input")
+        self._base_layer_radio = page.get_by_test_id(
+            "layer-list-item__base-layer-radio"
+        )
+        self._plant_layer_radio = page.get_by_test_id(
+            "layer-list-item__plants-layer-radio"
+        )
+        self._plant_search_icon = page.get_by_test_id("plant-search__icon-button")
+        self._plant_search_input = page.get_by_test_id("plant-search__search-input")
         # Base layer
-        self._background_select = page.get_by_test_id("baseBackgroundSelect")
+        self._background_input = page.get_by_test_id(
+            "base-layer-right-toolbar__background-input"
+        )
         self._background_button = page.get_by_role("button", name="Choose an image")
-        self._rotation_input = page.get_by_test_id("rotation-input")
-        self._scale_input = page.get_by_test_id("scale-input")
+        self._rotation_input = page.get_by_test_id(
+            "base-layer-right-toolbar__rotation-input"
+        )
+        self._scale_input = page.get_by_test_id("base-layer-right-toolbar__scale-input")
 
     """ACTIONS"""
 
@@ -110,7 +122,7 @@ class MapPlantingPage(AbstractPage):
 
     def click_plant_from_search_results(self, plant_name):
         """Selects a plant by name from the search results."""
-        self._page.get_by_test_id(plant_name + "-plant-search-result").click()
+        self._page.get_by_test_id("plant-list-item__" + plant_name).click()
 
     def click_on_canvas_middle(self):
         self._page.wait_for_timeout(200)
@@ -258,16 +270,14 @@ class MapPlantingPage(AbstractPage):
 
     def expect_search_result_is_visible(self, result):
         """Confirms that a search result is visible."""
-        expect(
-            self._page.get_by_test_id(result + "-plant-search-result")
-        ).to_be_visible()
+        expect(self._page.get_by_test_id("plant-list-item__" + result)).to_be_visible()
 
     def expect_no_plants_found_text_is_visible(self):
         """Confirms that `no plants are found` is present."""
-        expect(self._page.get_by_test_id("plant-search-results-empty")).to_be_visible()
+        expect(self._page.get_by_test_id("plant-search__empty-results")).to_be_visible()
 
     def expect_background_image(self, name):
-        expect(self._background_select).to_have_value(name)
+        expect(self._background_input).to_have_value(name)
 
     def expect_rotation_to_have_value(self, val):
         """Expects that the rotation is properly set."""

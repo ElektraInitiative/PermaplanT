@@ -1,11 +1,11 @@
 import useMapStore from '../../store/MapStore';
-import { LayerDto, LayerType } from '@/bindings/definitions';
+import { LayerDto, LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { NamedSlider } from '@/components/Slider/NamedSlider';
-import { ReactComponent as CaretDownIcon } from '@/icons/caret-down.svg';
-import { ReactComponent as CaretRightIcon } from '@/icons/caret-right.svg';
-import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
-import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
+import { ReactComponent as CaretDownIcon } from '@/svg/icons/caret-down.svg';
+import { ReactComponent as CaretRightIcon } from '@/svg/icons/caret-right.svg';
+import { ReactComponent as EyeOffIcon } from '@/svg/icons/eye-off.svg';
+import { ReactComponent as EyeIcon } from '@/svg/icons/eye.svg';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -48,7 +48,7 @@ export const LayerListItem = ({
         <IconButton
           title={t('layerSettings:show_hide_layer')}
           onClick={() => updateLayerVisible(layer.type_, !layerVisible)}
-          data-testid={`${layer.type_}-layer-visibility-icon`}
+          data-testid={`layer-list-item__${layer.type_}-layer-visibility-icon`}
         >
           {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
         </IconButton>
@@ -65,7 +65,7 @@ export const LayerListItem = ({
           }}
           name="layer_enable"
           data-tourid={`${layer.type_}_select`}
-          data-testid={`${layer.type_}-layer-radio`}
+          data-testid={`layer-list-item__${layer.type_}-layer-radio`}
         ></input>
       </div>
       <div className="flex items-center">

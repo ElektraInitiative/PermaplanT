@@ -1,6 +1,6 @@
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { updateBaseLayer } from './api/updateBaseLayer';
-import { BaseLayerImageDto, LayerType, UpdateBaseLayerImageDto } from '@/bindings/definitions';
+import { BaseLayerImageDto, LayerType, UpdateBaseLayerImageDto } from '@/api_types/definitions';
 import { v4 } from 'uuid';
 
 export class UpdateBaseLayerAction

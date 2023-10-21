@@ -1,4 +1,4 @@
-import { NewSeedDto, SeedDto } from '@/bindings/definitions';
+import { NewSeedDto, SeedDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const createSeed = async (seed: NewSeedDto) => {

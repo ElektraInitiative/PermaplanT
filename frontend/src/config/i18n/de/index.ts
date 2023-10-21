@@ -18,6 +18,7 @@ import layers from './layers.json';
 import maps from './maps.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
 import overview from './overview.json';
+import plantAndSeedSearch from './plantAndSeedSearch.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import plantings from './plantings.json';
@@ -31,7 +32,7 @@ import timeline from './timeline.json';
 import undoRedo from './undoRedo.json';
 import uploadFile from './uploadFile.json';
 
-const de = {
+const en = {
   blog,
   baseLayer,
   baseLayerForm,
@@ -52,6 +53,7 @@ const de = {
   undoRedo,
   auth,
   plantingSuggestions,
+  plantAndSeedSearch,
   nextcloudIntegration,
   routes,
   overview,
@@ -66,4 +68,4 @@ const de = {
   readOnly,
 };
 
-export default de;
+export default en;

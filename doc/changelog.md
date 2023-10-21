@@ -17,6 +17,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Enable seed search in plant layer _(Moritz)_
+- _()_
+- _()_
+- Finish seed use case _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -28,17 +32,16 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Improve wordings, usability and UI of guided tour #871 _(tschawax)_
+- Fix tour-completion logic of cancel-confirmation dialog in guided tour #986 _(tschawax)_
+- Improve styling of login and logout button #983 _(tschawax)_
+- Add horizontal scrolling to toolbars #981 _(tschawax)_
+- Improve vertical scrollbar behaviour #970 _(tschawax)_
 - _()_
 - Create remember-viewing-state usecase #1 _(tschawax)_
+- Create multi-select usecase #1 _(tschawax)_
+- _()_
+- Clean up the asset file structure in frontend _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -52,8 +55,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- E2E: Refactor data-testid according to naming convention _(4ydan)_
 - _()_
 - _()_
 - _()_

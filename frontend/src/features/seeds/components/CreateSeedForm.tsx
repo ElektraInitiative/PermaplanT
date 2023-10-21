@@ -3,7 +3,7 @@ import PaginatedSelectMenu, {
 } from '../../../components/Form/PaginatedSelectMenu';
 import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
-import { NewSeedDto, Quality, Quantity, SeedDto } from '@/bindings/definitions';
+import { NewSeedDto, Quality, Quantity, SeedDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
@@ -176,6 +176,7 @@ const CreateSeedForm = ({
             {/* The text from the title attribute will be displayed in the
                 error message in case the specified pattern does not match. */}
             <SimpleFormInput
+              aria-label="Additional Name"
               labelText={t('seeds:additional_name')}
               placeholder=""
               required={true}
@@ -187,6 +188,7 @@ const CreateSeedForm = ({
             />
             <SimpleFormInput
               type="number"
+              aria-label="Harvest Year"
               labelText={t('seeds:harvest_year')}
               defaultValue={currentYear}
               placeholder={currentYear.toString()}

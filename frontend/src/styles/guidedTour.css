@@ -18,6 +18,14 @@
     transition: none;
 }
 
+.shepherd-footer .shepherd-button.shepherd-button-secondary {
+  border: 1px solid; /* override shepherd's native border styling of secondary buttons */
+}
+
+.shepherd-footer .shepherd-button.shepherd-button-secondary {
+  @apply border border-opacity-100 border-neutral-500 dark:bg-neutral-300 dark:text-neutral-900  dark:hover:text-neutral-900;
+}
+
 .shepherd-button:not(:disabled):hover {
     @apply text-primary-50 dark:text-primary-700 hover:bg-primary-600 dark:bg-primary-200;
 }

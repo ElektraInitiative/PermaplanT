@@ -1,4 +1,4 @@
-import { PlantsSummaryDto, SeedDto } from '@/bindings/definitions';
+import { PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 import { ReactElement } from 'react';
 
 /**

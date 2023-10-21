@@ -18,21 +18,26 @@ import {
   LayerDto,
   LayerType,
   UpdateGuidedToursDto,
-} from '@/bindings/definitions';
+} from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
-import { ReactComponent as GridIcon } from '@/icons/grid-dots.svg';
-import { ReactComponent as RedoIcon } from '@/icons/redo.svg';
-import { ReactComponent as TagsIcon } from '@/icons/tags.svg';
-import { ReactComponent as UndoIcon } from '@/icons/undo.svg';
+import { ReactComponent as GridIcon } from '@/svg/icons/grid-dots.svg';
+import { ReactComponent as RedoIcon } from '@/svg/icons/redo.svg';
+import { ReactComponent as TagsIcon } from '@/svg/icons/tags.svg';
+import { ReactComponent as UndoIcon } from '@/svg/icons/undo.svg';
 import i18next from 'i18next';
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
 import { toast } from 'react-toastify';
+
+export const TEST_IDS = Object.freeze({
+  UNDO_BUTTON: 'map__undo-button',
+  REDO_BUTTON: 'map__redo-button',
+});
 
 export type MapProps = {
   layers: LayerDto[];
@@ -91,7 +96,6 @@ export const Map = ({ layers }: MapProps) => {
     tour?.start();
     if (tour && tour.steps.length > 0) {
       tour?.on('cancel', () => {
-        _completeTour();
         setShow(true);
       });
       tour?.on('complete', () => {
@@ -147,7 +151,7 @@ export const Map = ({ layers }: MapProps) => {
                   onClick={() => undo()}
                   title={t('undoRedo:undo_tooltip')}
                   data-tourid="undo"
-                  data-testid="undo-button"
+                  data-testid={TEST_IDS.UNDO_BUTTON}
                 >
                   <UndoIcon></UndoIcon>
                 </IconButton>
@@ -156,7 +160,7 @@ export const Map = ({ layers }: MapProps) => {
                   disabled={isReadOnlyMode}
                   onClick={() => redo()}
                   title={t('undoRedo:redo_tooltip')}
-                  data-testid="redo-button"
+                  data-testid={TEST_IDS.REDO_BUTTON}
                 >
                   <RedoIcon></RedoIcon>
                 </IconButton>
@@ -238,7 +242,7 @@ export const Map = ({ layers }: MapProps) => {
         title={t('guidedTour:skip_title')}
         body={t('guidedTour:skip_text')}
         show={show}
-        cancelBtnTitle={t('common:cancel')}
+        cancelBtnTitle={t('guidedTour:confirmation_resume')}
         onCancel={() => {
           const currentStep = tour?.getCurrentStep()?.id;
           tour?.start();
@@ -246,13 +250,16 @@ export const Map = ({ layers }: MapProps) => {
           reenableTour();
           setShow(false);
         }}
-        firstActionBtnTitle={t('guidedTour:interrupt')}
+        firstActionBtnTitle={t('guidedTour:confirmation_pause')}
         onFirstAction={() => {
           reenableTour();
           setShow(false);
         }}
-        secondActionBtnTitle={t('guidedTour:disable')}
-        onSecondAction={() => setShow(false)}
+        secondActionBtnTitle={t('guidedTour:confirmation_quit')}
+        onSecondAction={() => {
+          tour?.complete();
+          setShow(false);
+        }}
       />
     </>
   );

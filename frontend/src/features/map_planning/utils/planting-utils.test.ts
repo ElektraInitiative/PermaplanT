@@ -1,7 +1,7 @@
 import useMapStore from '../store/MapStore';
 import { UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from '../store/MapStoreTypes';
 import { isPlacementModeActive } from './planting-utils';
-import { PlantsSummaryDto } from '@/bindings/definitions';
+import { PlantsSummaryDto } from '@/api_types/definitions';
 
 describe('isPlacementModeActive', () => {
   test('should return true if map store currently contains a plant selected for planting', () => {
