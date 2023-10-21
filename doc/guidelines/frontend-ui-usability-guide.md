@@ -149,7 +149,7 @@ Error messages should fulfill following criteria:
 - **brief**
 - **specific** to the problem
 - contain **reason for the problem**
-- **solution-oriented**: ideally, a solution to the occured problem is offered
+- **solution-oriented**: ideally, a solution to the occurred problem is offered
 - no **privacy-violating** information: e.g. informing the user upon a failed login that the entered email does not exist in the system - this could additionally also encourage people to scan our database for emails
 
 ### Search Fields
