@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can create lists to keep track of ingredients needed over the year.
-- **Status:** Draft
 
 ## Scenarios
 

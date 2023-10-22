@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User can add, edit, move, remove and delete custom drawings of any shape and color in their map in the drawing layer.
-- **Assignee:** Giancarlo
+- **Assignee:** Daniel
 
 ## Scenarios
 

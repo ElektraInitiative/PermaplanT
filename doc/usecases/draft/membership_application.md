@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** User (Membership Applicant), Administrator (Chairman)
 - **Brief:** The user can apply for a membership (account)
-- **Assignee:** Thorben (Frontend), Lukas (Keycloak Installation)
+- **Assignee:** Ready to be assigned
 
 ## Scenarios
 

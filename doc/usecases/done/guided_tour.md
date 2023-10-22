@@ -19,7 +19,7 @@
 - **Main success scenario:**
   The user is shown a guided tour, which explains the features of the map editor based on a small scenario.
   The user will have to place and remove plants, use the timeline, see plant relations and use the undo feature in this scenario.
-  After completing the guided tour, the user is awarded a [Blossom](../assigned/gain_blossoms.md).
+  After completing the guided tour, the user is awarded a [Blossom](../draft/gain_blossoms.md).
 - **Alternative scenario:**
   The user does not want to do the guided tour and can cancel it during any step.
   Upon cancel, the user decides to see it on their next visit or to cancel it indefinitely.

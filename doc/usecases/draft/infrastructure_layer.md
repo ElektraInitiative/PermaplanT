@@ -14,9 +14,8 @@
 - **Main success scenario:**
   The user successfully adds, edits, moves and deletes infrastructure elements in the infrastructure layer.
   Infrastructure elements are, e.g.:
-  - outlets
-  - wifi spots
   - taps
+  - wifi spots
   - water storage tanks
   - irrigation systems
     For placement:

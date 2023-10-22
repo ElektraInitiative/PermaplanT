@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user gets shown information of plants recommended for diversity.
-- **Assignee** Ready to be assigned
 
 ## Scenarios
 

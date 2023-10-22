@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** A user can see a preview of future rewards for his efforts.
-- **Assignee** Ready to be assigned
 
 ## Scenarios
 

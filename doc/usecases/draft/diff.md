@@ -6,9 +6,6 @@
 - **Level:** User Goal
 - **Actors:** User, App
 - **Brief:** The user can visualize differences between two dates.
-- **Status:** Assigned
-- **Simplification:**
-- **Assignee:** Christoph N.
 
 ## Scenarios
 

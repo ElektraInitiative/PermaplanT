@@ -6,17 +6,19 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can log watering events for parts of or the entire garden to track watering history and improve plant care.
-- **Assignee:** Moritz
 
 ## Scenarios
 
 - **Precondition:**
   - The user has opened the app and has selected the watering layer.
 - **Main success scenario:**
+  - The user brushes permanent infrastructure:
+    - roofs etc. (watering needed despite of rain)
+    - automatic irrigation (no watering needed there)
   - The user logs a watering event:
     - by selecting individual plants
     - by brushing over the map
-    - for all parts of the map, which are open-air (area can be defined by where roofs etc. are)
+    - for all parts of the map which are open-air (area can be defined by where roofs etc. are)
   - The app saves the watering event with the current date.
   - The watering history is visible to the user, providing an overview of past watering events.
 - **Alternative scenario:**

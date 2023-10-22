@@ -6,8 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user is informed about what plant groups need more planning.
-- **Status:** Assigned
-- **Assignee:** Gabriel
 
 ## Scenarios
 
