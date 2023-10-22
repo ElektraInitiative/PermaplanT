@@ -14,7 +14,8 @@ We need to select an API mocking tool for our frontend development that allows u
 
 - **MSW (Mock Service Worker):** [MSW](https://mswjs.io/) is a popular API mocking tool for react applications. It intercepts requests on network level so that code can be tested the same way it is executed in production. Frontend devs can also use msw for development so that they don't have to wait for the backend to be ready.
 
-- **Nock:** [Nock](https://github.com/nock/nock) is also a very popular alternative for API mocking and according to some developers in forums, it is easier to set up than MSW. However, MSW seems to be a more React-centric approach and nock can only be used with node.js. and not in the browser.
+- **Nock:** [Nock](https://github.com/nock/nock) is also a very popular alternative for API mocking and according to some developers in forums, it is easier to set up than MSW.
+   MSW, however, seems to be a more React-centric approach and Nock can only be used with Node.js and not in the browser.
 
 - **MirageJS:** [MirageJS](https://miragejs.com/) provides pretty similar functionality to MSW, but it is not as widely used.
 
