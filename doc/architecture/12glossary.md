@@ -9,6 +9,19 @@
 - garden:
   The physical place which is represented by the map.
   Can also be balcony or similar.
+- event:
+  a day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
+- deletion/creation vs. removal/adding of elements
+  - deletion/creation (German: löschen/erzeugen):
+    The plant never existed.
+    Such elements actually get deleted from the database and can only be restored within the session using undo.
+    I.e. there are often columns named `created_date` but there usually is not a deletion date (with exception of maps which do not immediately get deleted).
+  - removal/adding (German: entfernen/hinzufügen):
+    Removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing).
+    The database must keep removed elements, they never can be deleted.
+
+## Technical
+
 - Nextcloud map:
   A Nextcloud app which is used as overview where which garden is, see [here](https://apps.nextcloud.com/apps/maps).
 - GeoMap:
@@ -22,44 +35,35 @@
   They have _attributes_.
 - canvas context
   - canvas node elements i.e. HTML representation of rectangle, circle, etc. on the canvas
-- map context
+- map context:
   - layers and their attributes e.g. warning layer and its visibility
-- event: a day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
-- deletion/creation vs. removal/adding of elements
-  - deletion/creation (German: löschen/erzeugen):
-    The plant never existed.
-    Such elements actually get deleted from the database and can only be restored within the session using undo.
-    I.e. there are often columns named `created_date` but there usually is not a deletion date (with exception of maps which do not immediately get deleted).
-  - removal/adding (German: entfernen/hinzufügen):
-    Removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing).
-    The database must keep removed elements, they never can be deleted.
-- reversible deletion vs undo-redo functionality
+- reversible deletion vs undo-redo functionality:
   - reversible deletion: a database entity i.e. a whole map and plant is deleted and can be restored within a certain time
   - undo-redo functionality: a user can undo and redo changes in the map, but the history is local to the frontend and not stored in the database
-- lazy loading
+- lazy loading:
   - Lazy loading refers to the process of loading data on-demand, rather than loading everything upfront during the initial load of the app.
-- offloading of the frontend state
+- offloading of the frontend state:
   - the process of cleaning up the frontend state by deleting data that has already been synchronized with the backend and is no longer needed. This can help to reduce the amount of unnecessary data in the frontend, which can improve the performance and efficiency of the application.
-- first contentful paint (FCP)
+- first contentful paint (FCP):
   - the time it takes for the browser to render the first bit of content on the page.
-- time to interactive (TTI)
+- time to interactive (TTI):
   - the time it takes for the page to become fully interactive.
-- The Document Object Model (DOM)
+- Document Object Model (DOM):
   - the data representation of the objects that comprise the structure and content of a document on the web.
-- endpoints
+- endpoints:
   - The API endpoints that can be called in the backend.  
     Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
 
 ## Biology
 
-- Taxonomy:
+- taxonomy:
   A scientific classification of plants into a hierarchy.
   The hierarchy we use is described [here](../database/hierarchy.md).
   As first introduction read:
   - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/) or
   - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy).
   - [Garten Treffpunkt](https://www.garten-treffpunkt.de/lexikon/botanik.aspx)
-- Rank:
+- rank:
   Rank is a level within taxonomy.
   Plants within one taxonomic rank share traits with each other.
   The levels relevant for PermaplanT are from highest to lowest:
@@ -72,46 +76,53 @@
   We say a plant or rank _B_ is _below_ another rank _A_ if it is at least one rank lower than _A_.
 - belong:
   We say a plant _B_ is _belongs_ to rank _A_ if it is exactly rank _A_ (and not below).
-- Concrete Plant:
+- concrete plant:
   Is in an actually existing species, variety and cultivar.
-- Abstract Plant:
+- abstract plant:
   Representants of ranks, which are not actually existing plants.
-- Family:
+- family:
   A taxonomic rank that consists of multiple genera.
-- Genus:
+- genus:
   A taxonomic rank which is part of a family.
   Consists of multiple species.
-- Species (German: Art):
+- species (German: Art):
   A taxonomic rank which is part of a genus.
   Can have multiple varieties or cultivars.
-- Variety (German: Varietät):
+- variety (German: Varietät):
   Has the main characteristics of its species but differs in heritable characteristics.
   Can have multiple cultivars.
-- Cultivar (abbreviated from cultivated variety, German: Sorte):
+- cultivar (abbreviated from cultivated variety, German: Sorte):
   Has the main characteristics of its species or variety but differs in minor heritable characteristics.
   These characteristics were cultivated on purpose.
-- Hybrid:
+- hybrid:
   Hybrids are otherwise not relevant for PermaplanT's functionality.
-- Attributes of plants (traits in scientific literature):
+- attributes of plants (traits in scientific literature):
   A characteristic of a variety, species, genus, subfamily or family.
   E.g. height, width, color, etc.
   Attributes can be defined on different levels of the hierarchy.
   E.g. a variety can have a different height than the species it belongs to.
-- Polyculture (aka companion planting, German: Mischkultur):
+- polyculture (aka companion planting, German: Mischkultur):
   Mutually beneficial way of growing plants together.
-- Relationship:
+- relationship:
   Two plants are in a non-neutral relationship if they either enhance (companion)
   or diminish (antagonist) each other's health and growth.
-- Companion (to plant according polyculture):
+- companion (to plant according polyculture):
   Plants that should be planted together.
-- Antagonist (to plant according polyculture):
+- antagonist (to plant according polyculture):
   Plants that should be avoided next to each other.
-- Seedproof (German: Samenfest):
+- plant database (German: Pflanzen-Datenbank):
+  PermaplanT's large collection of plant entries with comprehensive data, indexed with a unique name.
+- inventory (German: Inventar):
+  A personal collection of plants, e.g., seeds.
+  Every entry of the inventory links to a plant in the plant database.
+  Furthermore, they have an additional name and are more precisely describing a plant than the plant database could do.
+  Only in the inventory you can have seeds plants which are not in the plant database, e.g., of special, new or unknown varieties.
+- seedproof (German: Samenfest):
   From the seeds of a fruit you get again similar fruits.
-- Raising (German: Anzucht, vorziehen)
+- raising (German: Anzucht, vorziehen)
 - (German: Vorkulturen)
 - (German: Sortenrein, ohne/wenig Vermischung anderer Sorten, wenig/keine Fremdbestäubung)
-- Zone (in permaculture, German: Permakultur Zonen):
+- zone (in permaculture, German: Permakultur Zonen):
   Is an area which has the same frequency of human visitors.
   The areas are numbered from:
   - 00: (represented numerically as -1)
