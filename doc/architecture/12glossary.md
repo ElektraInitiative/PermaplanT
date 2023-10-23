@@ -3,14 +3,17 @@
 ## Basics
 
 - PermaplanT:  
-  the planning app implemented in this repository
+  The planning app implemented in this repository.
 - map:  
   The main planning utility for PermaplanT, which contains _elements_ in several _layers_.
+- elements (of a map in a layer):  
+  Can be drawn or added to the map via drag and drop.
+  They have _attributes_.
 - garden:  
   The physical place which is represented by the map.
   Can also be balcony or similar.
 - event:  
-  a day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
+  A day relevant to a user, which occurs on a map, e.g. when elements in the map get added/removed (accuracy: one day) or when a user declares a map ready for review etc.
 - deletion/creation vs. removal/adding of elements:
   - deletion/creation (German: löschen/erzeugen):
     The plant never existed.
@@ -30,9 +33,6 @@
   Means the ability to use a feature without Internet connection, i.e., without calling REST APIs.
 - canvas:  
   The main and middle part of the screen which provides the planning/drawing functionality.
-- elements (of a map in a layer):  
-  Can be drawn or added to the map via drag and drop.
-  They have _attributes_.
 - canvas context:
   - canvas node elements i.e. HTML representation of rectangle, circle, etc. on the canvas
 - map context:
@@ -60,8 +60,8 @@
   A scientific classification of plants into a hierarchy.
   The hierarchy we use is described [here](../database/hierarchy.md).
   As first introduction read:
-  - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/) or
-  - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy).
+  - [permakultur konkret](https://permakultur-konkret.ch/umsetzung-uebersicht/pflanzenkunde/systematik/)
+  - [wikipedia](https://en.wikipedia.org/wiki/Plant_taxonomy)
   - [Garten Treffpunkt](https://www.garten-treffpunkt.de/lexikon/botanik.aspx)
 - rank:  
   Rank is a level within taxonomy.
