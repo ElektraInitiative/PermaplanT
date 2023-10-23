@@ -6,6 +6,6 @@
   "scale": "Skalierung (pixel/meter)",
   "set_scale": "Auto-Skalierung",
   "distance_modal_title": "Wie groß ist diese Distanz in der Wirklichkeit?",
-  "error_actual_distance_zero": "Bitte geben sie eine Distanz größer 0 ein.",
+  "error_actual_distance_zero": "Bitte gib eine Distanz größer 0 ein.",
   "auto_scaling_hint": "Wähle zwei Punkte mit einer bekannten Distanz."
 }
