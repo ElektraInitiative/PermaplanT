@@ -1,4 +1,4 @@
-# Frontend UI & Usability Guide
+# Frontend UI & Usability
 
 ## Terminology
 
