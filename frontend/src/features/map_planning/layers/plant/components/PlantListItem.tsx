@@ -4,19 +4,12 @@ import defaultImageUrl from '@/svg/plant.svg';
 import { PlantNameFromPlant } from '@/utils/plant-naming';
 
 export type PlantListElementProps = {
-  /** The plant that is displayed as element of a list */
   plant: PlantsSummaryDto;
-  /** Callback when the element is clicked */
   onClick: () => void;
-  /** Whether the element is highlighted */
   isHighlighted?: boolean;
-  /** Whether the element is disabled */
   disabled?: boolean;
 };
 
-/**
- * A list element for a list of plants
- */
 export function PlantListItem({
   plant,
   onClick,
@@ -30,7 +23,7 @@ export function PlantListItem({
   return (
     <li
       className="my-1 flex"
-      data-testid={`${plant.common_name_en} ${plant.unique_name}-plant-search-result`}
+      data-testid={`plant-list-item__${plant.common_name_en} ${plant.unique_name}`}
     >
       <button
         disabled={disabled}

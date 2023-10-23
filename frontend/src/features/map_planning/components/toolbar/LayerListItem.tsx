@@ -48,7 +48,7 @@ export const LayerListItem = ({
         <IconButton
           title={t('layerSettings:show_hide_layer')}
           onClick={() => updateLayerVisible(layer.type_, !layerVisible)}
-          data-testid={`${layer.type_}-layer-visibility-icon`}
+          data-testid={`layer-list-item__${layer.type_}-layer-visibility-icon`}
         >
           {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
         </IconButton>
@@ -65,7 +65,7 @@ export const LayerListItem = ({
           }}
           name="layer_enable"
           data-tourid={`${layer.type_}_select`}
-          data-testid={`${layer.type_}-layer-radio`}
+          data-testid={`layer-list-item__${layer.type_}-layer-radio`}
         ></input>
       </div>
       <div className="flex items-center">

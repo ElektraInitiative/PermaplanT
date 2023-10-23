@@ -79,6 +79,11 @@ The most resilient attribute.
 />
 ```
 
+#### Data-testid Naming Convention
+
+For naming data-testid's we have adapted the convention from BEM (https://en.bem.info/methodology/).
+We use double underscores to distinguish between Components and Elements e.g. `search-input__search-icon` where search-input is the component and search-icon the element.
+
 ### [getByText](https://playwright.dev/docs/locators#locate-by-text)
 
 > We recommend using text locators to find non interactive elements like div, span, p, etc.

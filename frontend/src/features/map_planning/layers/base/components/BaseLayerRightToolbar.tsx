@@ -10,6 +10,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
 
+export const TEST_IDS = Object.freeze({
+  BACKGROUND_INPUT: 'base-layer-right-toolbar__background-input',
+  ROTATION_INPUT: 'base-layer-right-toolbar__rotation-input',
+  SCALE_INPUT: 'base-layer-right-toolbar__scale-input',
+});
+
 class ValidationError extends Error {
   constructor(msg: string) {
     super(msg);
@@ -171,7 +177,7 @@ export const BaseLayerRightToolbar = () => {
         labelText={t('baseLayerForm:image_path_field')}
         onChange={(e) => setPathInput(e.target.value)}
         value={pathInput}
-        data-testid="baseBackgroundSelect"
+        data-testid={TEST_IDS.BACKGROUND_INPUT}
       />
       <FileSelectorModal
         setShow={function (show: boolean): void {
@@ -212,7 +218,7 @@ export const BaseLayerRightToolbar = () => {
         value={rotationInput}
         min="0"
         max="359"
-        data-testid="rotation-input"
+        data-testid={TEST_IDS.ROTATION_INPUT}
       />
       {/* <div className="flex flex-row items-end gap-2"> */}
       <SimpleFormInput
@@ -223,7 +229,7 @@ export const BaseLayerRightToolbar = () => {
         type="number"
         value={scaleInput}
         min="0"
-        data-testid="scale-input"
+        data-testid={TEST_IDS.SCALE_INPUT}
       />
       {/*
         {measureStep === 'inactive' ? (

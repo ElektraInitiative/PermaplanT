@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can communicate with members of shared maps.
-- **Status:** Assigned
 - **Assignee:** Samuel
 
 ## Scenarios

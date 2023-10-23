@@ -67,5 +67,9 @@ export default function LanguageSwitcher() {
 }
 
 const SingleValue = ({ getValue }: SingleValueProps<Option, false>) => {
-  return <span className="select-none pl-2">{getValue()[0].value}</span>;
+  return (
+    <span className="select-none pl-2" data-testid={`language-switcher__${getValue()[0].value}`}>
+      {getValue()[0].value}
+    </span>
+  );
 };

@@ -24,7 +24,6 @@ export function usePlantSearch() {
   }, []);
 
   if (error) {
-    console.log(error);
     toast.error(t('plantSearch:error_searching_plants'), { autoClose: false });
   }
 

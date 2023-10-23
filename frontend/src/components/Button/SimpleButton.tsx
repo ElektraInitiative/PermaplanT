@@ -17,7 +17,7 @@ const variantStyles = {
   [ButtonVariant.secondaryBase]:
     'bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700',
   [ButtonVariant.primaryContainer]:
-    'bg-primary-200 dark:bg-primary-600 border-primary-500 hover:bg-primary-200 dark:hover:bg-primary-600 active:bg-primary-900 text-primary-900 dark:text-primary-200',
+    'bg-primary-200 dark:bg-primary-600 border-primary-500 hover:bg-primary-200 dark:hover:bg-primary-600 active:bg-primary-500 text-primary-900 dark:text-primary-200',
   [ButtonVariant.secondaryContainer]:
     'bg-secondary-200 dark:bg-secondary-600 border-secondary-500 hover:bg-secondary-200 dark:hover:bg-secondary-600 active:bg-secondary-900 text-secondary-900 dark:text-secondary-200',
   [ButtonVariant.dangerBase]:

@@ -13,20 +13,23 @@ const t = i18next.t;
  * @returns an HTMLElement.
  */
 function actionText(action: string, text?: string) {
-  const textWrapper = document.createElement('div');
-  const infoSpan = document.createElement('span');
+  const infoTextContainer = document.createElement('p');
   if (text) {
-    infoSpan.innerHTML = `${text}<br />`;
+    infoTextContainer.insertAdjacentHTML('afterbegin', text);
   }
-  const actionSpan = document.createElement('span');
-  actionSpan.innerText = action;
-  actionSpan.classList.add('text-secondary-200', 'font-medium');
-  textWrapper.append(infoSpan, actionSpan);
+
+  const actionTextContainer = document.createElement('div');
+  actionTextContainer.insertAdjacentHTML('afterbegin', action);
+  actionTextContainer.classList.add('font-medium', 'my-3', 'text-secondary-200', 'text-center');
+
+  const textWrapper = document.createElement('div');
+  textWrapper.append(infoTextContainer, actionTextContainer);
   return textWrapper;
 }
 
 const standardButtons = [
   {
+    secondary: true,
     text: t('guidedTour:back'),
     type: 'back',
   },
@@ -97,6 +100,10 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
     title: `${t('guidedTour:mapEditor.base_layer_title')} (2/2)`,
     text: t('guidedTour:mapEditor.base_layer_toolbar'),
     buttons: standardButtons,
+    attachTo: {
+      element: '[data-tourid="bottom_right_toolbar"]',
+      on: 'left',
+    },
   },
   {
     id: 'plantsLayerSelect',
@@ -107,6 +114,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
     ),
     buttons: [
       {
+        secondary: true,
         text: t('guidedTour:back'),
         type: 'back',
       },
@@ -145,6 +153,13 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       t('guidedTour:mapEditor.plants_layer_first_planting_search_action'),
       t('guidedTour:mapEditor.plants_layer_first_planting_search_text'),
     ),
+    buttons: [
+      {
+        secondary: true,
+        text: t('guidedTour:back'),
+        type: 'back',
+      },
+    ],
     attachTo: {
       element: '[data-tourid="search_button"]',
       on: 'left',
@@ -285,6 +300,13 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       t('guidedTour:mapEditor.plants_layer_placement_cancel_action'),
       t('guidedTour:mapEditor.plants_layer_placement_cancel_text'),
     ),
+    buttons: [
+      {
+        secondary: true,
+        text: t('guidedTour:back'),
+        type: 'back',
+      },
+    ],
     attachTo: {
       element: '[data-tourid="placement_cancel"]',
       on: 'top',
@@ -346,6 +368,13 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       t('guidedTour:mapEditor.plants_layer_delete_action'),
       t('guidedTour:mapEditor.plants_layer_delete_text'),
     ),
+    buttons: [
+      {
+        secondary: true,
+        text: t('guidedTour:back'),
+        type: 'back',
+      },
+    ],
     attachTo: {
       element: '[data-tourid="planting_delete"]',
       on: 'right',
@@ -360,10 +389,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
   {
     id: 'plantLayerRevertDate',
     title: `${t('guidedTour:mapEditor.plants_layer_title')} (16/16)`,
-    text: actionText(
-      t('guidedTour:mapEditor.plants_layer_revert_date_action'),
-      t('guidedTour:mapEditor.plants_layer_revert_date_text'),
-    ),
+    text: actionText(t('guidedTour:mapEditor.plants_layer_revert_date_action')),
     attachTo: {
       element: '[data-tourid="date_picker"]',
       on: 'top',
