@@ -23,37 +23,6 @@
     Removal of elements assume that the element actually was on the map (physically) during some time (between adding and removing).
     The database must keep removed elements, they never can be deleted.
 
-## Technical
-
-- Nextcloud map:  
-  A Nextcloud app which is used as overview where which garden is, see [here](https://apps.nextcloud.com/apps/maps).
-- GeoMap:  
-  The geographical map which is found in Nextcloud under the "Maps" tab.
-- offline:  
-  Means the ability to use a feature without Internet connection, i.e., without calling REST APIs.
-- canvas:  
-  The main and middle part of the screen which provides the planning/drawing functionality.
-- canvas context:
-  - canvas node elements i.e. HTML representation of rectangle, circle, etc. on the canvas
-- map context:
-  - layers and their attributes e.g. warning layer and its visibility
-- reversible deletion vs undo-redo functionality:
-  - reversible deletion: a database entity i.e. a whole map and plant is deleted and can be restored within a certain time
-  - undo-redo functionality: a user can undo and redo changes in the map, but the history is local to the frontend and not stored in the database
-- lazy loading:
-  - Lazy loading refers to the process of loading data on-demand, rather than loading everything upfront during the initial load of the app.
-- offloading of the frontend state:
-  - the process of cleaning up the frontend state by deleting data that has already been synchronized with the backend and is no longer needed. This can help to reduce the amount of unnecessary data in the frontend, which can improve the performance and efficiency of the application.
-- first contentful paint (FCP):
-  - the time it takes for the browser to render the first bit of content on the page.
-- time to interactive (TTI):
-  - the time it takes for the page to become fully interactive.
-- Document Object Model (DOM):
-  - the data representation of the objects that comprise the structure and content of a document on the web.
-- endpoints:
-  - The API endpoints that can be called in the backend.  
-    Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
-
 ## Biology
 
 - taxonomy:  
@@ -151,6 +120,37 @@
   When working together on a map, every user can select their own layers.
 - offline availability:  
   Means that layers can be edited also offline, data gets synced when device is online again.
+
+## Technical
+
+- Nextcloud map:  
+  A Nextcloud app which is used as overview where which garden is, see [here](https://apps.nextcloud.com/apps/maps).
+- GeoMap:  
+  The geographical map which is found in Nextcloud under the "Maps" tab.
+- offline:  
+  Means the ability to use a feature without Internet connection, i.e., without calling REST APIs.
+- canvas:  
+  The main and middle part of the screen which provides the planning/drawing functionality.
+- canvas context:
+  - canvas node elements i.e. HTML representation of rectangle, circle, etc. on the canvas
+- map context:
+  - layers and their attributes e.g. warning layer and its visibility
+- reversible deletion vs undo-redo functionality:
+  - reversible deletion: a database entity i.e. a whole map and plant is deleted and can be restored within a certain time
+  - undo-redo functionality: a user can undo and redo changes in the map, but the history is local to the frontend and not stored in the database
+- lazy loading:
+  - Lazy loading refers to the process of loading data on-demand, rather than loading everything upfront during the initial load of the app.
+- offloading of the frontend state:
+  - the process of cleaning up the frontend state by deleting data that has already been synchronized with the backend and is no longer needed. This can help to reduce the amount of unnecessary data in the frontend, which can improve the performance and efficiency of the application.
+- first contentful paint (FCP):
+  - the time it takes for the browser to render the first bit of content on the page.
+- time to interactive (TTI):
+  - the time it takes for the page to become fully interactive.
+- Document Object Model (DOM):
+  - the data representation of the objects that comprise the structure and content of a document on the web.
+- endpoints:
+  - The API endpoints that can be called in the backend.  
+    Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
 
 ## Testing
 
