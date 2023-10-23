@@ -9,7 +9,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 ## 0.3.5 - UNRELEASED
 
 - _()_
-- _()_
+- Decide about which use cases to include for 1.0 _(Markus Raab and Yvonne Markl with the help of PermaplanTeam)_
 - _()_
 - Enable automatic image scaling in base layer _(Moritz)_
 - _()_
@@ -20,6 +20,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Enable seed search in plant layer _(Moritz)_
 - _()_
 - _()_
+- Finish seed use case _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -31,8 +32,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- Improve wordings, usability and UI of guided tour #871 _(tschawax)_
 - Fix tour-completion logic of cancel-confirmation dialog in guided tour #986 _(tschawax)_
 - Improve styling of login and logout button #983 _(tschawax)_
 - Add horizontal scrolling to toolbars #981 _(tschawax)_

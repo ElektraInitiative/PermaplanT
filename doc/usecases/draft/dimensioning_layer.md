@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can put dimensioning between elements.
-- **Status:** Draft
 
 ## Scenarios
 

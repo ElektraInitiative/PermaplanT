@@ -326,7 +326,7 @@ export const EditorMap = ({ layers }: MapProps) => {
         title={t('guidedTour:skip_title')}
         body={t('guidedTour:skip_text')}
         show={show}
-        cancelBtnTitle={t('common:cancel')}
+        cancelBtnTitle={t('guidedTour:confirmation_resume')}
         onCancel={() => {
           const currentStep = tour?.getCurrentStep()?.id;
           tour?.start();
@@ -334,12 +334,12 @@ export const EditorMap = ({ layers }: MapProps) => {
           reenableTour();
           setShow(false);
         }}
-        firstActionBtnTitle={t('guidedTour:interrupt')}
+        firstActionBtnTitle={t('guidedTour:confirmation_pause')}
         onFirstAction={() => {
           reenableTour();
           setShow(false);
         }}
-        secondActionBtnTitle={t('guidedTour:disable')}
+        secondActionBtnTitle={t('guidedTour:confirmation_quit')}
         onSecondAction={() => {
           tour?.complete();
           setShow(false);

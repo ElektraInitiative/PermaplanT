@@ -4,8 +4,9 @@
     "back": "Back",
     "skip_title": "End introduction?",
     "skip_text": "Do you really want to end this introduction? Alternatively you could pause it for now and get it shown next time again.",
-    "disable": "End",
-    "interrupt": "Pause",
+    "confirmation_resume": "Resume",
+    "confirmation_pause": "Pause",
+    "confirmation_quit": "End",
     "fetch_status_error": "Sorry, I'm experiencing trouble fetching the status of your introduction to the Map Editor. Please reload the page so that I can try again.",
     "mapEditor": {
         "welcome_title": "Welcome to the Map Editor",

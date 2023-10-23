@@ -26,7 +26,7 @@
 - **Alternative scenario:**
   - On activation of a layer, also the visibility gets turned on.
   - On activation of some layers, the visibility of others layer changes; e.g.,
-    activation of the [moisture layer](../assigned/hydrology_layer.md) also sets the visibility of the [infrastructure layer](../assigned/infrastructure_layer.md) to on.
+    activation of the [moisture layer](../assigned/hydrology_layer.md) also sets the visibility of the [infrastructure layer](../draft/infrastructure_layer.md) to on.
 
 ## Notes
 
