@@ -85,7 +85,7 @@
   A personal collection of plants, e.g., seeds.
   Every entry of the inventory links to a plant in the plant database.
   Furthermore, they have an additional name and are more precisely describing a plant than the plant database could do.
-  Only in the inventory you can have seeds plants which are not in the plant database, e.g., of special, new or unknown varieties.
+  Only in the inventory you can have plants which are not in the plant database, e.g., of special, new or unknown varieties.
 - seedproof (German: Samenfest):  
   From the seeds of a fruit you get again similar fruits.
 - raising (German: Anzucht, vorziehen)
