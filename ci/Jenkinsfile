@@ -333,7 +333,12 @@ lock("${env.NODE_NAME}-exclusive") {
     }
 
     stage('E2E Tests') {
-        e2eTest('https://pr.permaplant.net')
+        if (env.BRANCH_NAME == 'master') {
+            e2eTest('https://dev.permaplant.net')
+        }
+        else {
+            e2eTest('https://pr.permaplant.net')
+        }
     }
 }
 
