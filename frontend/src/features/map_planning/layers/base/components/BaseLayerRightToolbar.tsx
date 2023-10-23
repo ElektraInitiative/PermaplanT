@@ -76,15 +76,24 @@ export const BaseLayerRightToolbar = () => {
   const [scaleInput, setScaleInput] = useState(baseLayerState.scale);
   const [showFileSelector, setShowFileSelector] = useState(false);
 
+  // We don't want to submit an UpdateBaseLayerAction if we are just updating the form
+  // after the base layers state was updated outside this component.
+  // This fixes redo actions not working after a base layer action is undone and
+  // a few other many other base layer bugs.
+  const [inhibitUpdateAction, setInhibitUpdateAction] = useState(false);
+
   useEffect(() => {
+    setInhibitUpdateAction(true);
     setPathInput(baseLayerState.nextcloudImagePath);
   }, [baseLayerState.nextcloudImagePath]);
 
   useEffect(() => {
+    setInhibitUpdateAction(true);
     setScaleInput(baseLayerState.scale);
   }, [baseLayerState.scale]);
 
   useEffect(() => {
+    setInhibitUpdateAction(true);
     setRotationInput(baseLayerState.rotation);
   }, [baseLayerState.rotation]);
 
@@ -93,6 +102,11 @@ export const BaseLayerRightToolbar = () => {
   const debouncedScale = useDebouncedValue(scaleInput, 200);
 
   useEffect(() => {
+    if (inhibitUpdateAction) {
+      setInhibitUpdateAction(false);
+      return;
+    }
+
     const baseLayerOptions = {
       id: baseLayerState.imageId,
       layer_id: baseLayerState.layerId,
@@ -109,6 +123,7 @@ export const BaseLayerRightToolbar = () => {
     executeAction,
     debouncedScale,
     debouncedRotation,
+    inhibitUpdateAction,
   ]);
 
   useEffect(() => {
