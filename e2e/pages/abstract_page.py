@@ -28,7 +28,7 @@ class AbstractPage(ABC):
         assert response.status == 200
         self._page.wait_for_timeout(1000)
         self.verify()
-        self.click_english_translation()
+        self.switch_language_to_english_if_its_german()
 
     def dont_load_images_except_birdie(self):
         """
@@ -41,9 +41,10 @@ class AbstractPage(ABC):
             ),
         )
 
-    def click_english_translation(self):
-        """When the page is not on english, set it to english"""
-        if self._page.get_by_text("English", exact=True).is_visible():
+    def switch_language_to_english_if_its_german(self):
+        """Change the pages language to english, when its set to german"""
+        if self._page.get_by_test_id("language-switcher__de").is_visible():
+            self._page.get_by_test_id("language-switcher__de").click()
             self._page.get_by_text("English", exact=True).click()
 
     def verify(self):

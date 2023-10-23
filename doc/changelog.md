@@ -60,7 +60,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- E2E: Fix language switcher _(4ydan)_
 - pump versions _(4ydan)_
 - _()_
 - _()_
