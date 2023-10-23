@@ -1,8 +1,5 @@
 # Frontend UI & Usability Guide
 
-This guide should help improve the UI (User Interface) and usability of the PermaplanT web application going forward.  
-The following guidelines are a mix of general UI and usability best practices on one hand and design suggestions tailored to PermaplanT on the other.
-
 ## Terminology
 
 ### Usability
@@ -19,17 +16,18 @@ The following guidelines are a mix of general UI and usability best practices on
 
 ## Guidelines
 
+This guide should help improve the UI (User Interface) and usability of the PermaplanT web application going forward.  
+The following guidelines are:
+
+- on the one hand a mix of general UI and usability best practices and
+- on the other hand design suggestions tailored to PermaplanT.
+
 ### Text
 
 - **Alignment**
 
   - Left align when text spans over more than three lines because centered text becomes hard to follow when having to jump to the next line multiple times.
   - Avoid mixing two different alignments in a text section, e.g. a centered headline should be followed by centered text.
-
-- **Hierarchies / lists**
-
-  - Avoid using more than two different font sizes.
-  - Use bold text and colours for deeper nested hierarchies.
 
 - **Spacing / margin**  
   Multiplier strategy to calculate the margins - if in doubt, use a multiplier of 2, e.g.:
@@ -39,26 +37,31 @@ The following guidelines are a mix of general UI and usability best practices on
   - Navigation bar:  
     logo <- 48px -> navigation-link-1 <- 24px -> navigation-link-2 <- 24px -> navigation-link-3
 
-- **Line height**  
-  The bigger the text the smaller the line height's value should be.
-
-  - Headings: 1.1 - 1.3
-  - Running text: 1.3 - 1.5
-
 - **Letter spacing**  
-  Often times, like in PermaplanT's current case, the default value (in Tailwind: _tracking-normal_) is good enough.
-  - Headings: negative values can be used for the bigger headings h1-h3, i.e. _tracking-tighter_ or _tracking-tight_
-  - Running text: usually can be left as is but, if needed, can be set to _tracking-wide_ or _tracking-wider_
+  Often times, like in PermaplanT's current case, the default value (in Tailwind: `tracking-normal`) is good enough.
+  - Headings: negative values can be used for the bigger headings h1-h3, i.e. `tracking-tighter` or `tracking-tight`
+  - Running text: usually can be left as is but, if needed, can be set to `tracking-wide` or `tracking-wider`
 
 ### Colors
 
-PermaplanT uses following **three colour palettes**:
+PermaplanT uses following **three color palettes**:
 
-- **Neutral** ~60% (PermaplanT: gray): **dominant** colour of the design, e.g. used for background, text and labels
-- **Primary** ~30% (PermaplanT: asparagus green): PermaplanT's **main brand** colour, e.g. used for buttons, hovering, highlighting focused input fields
-- **Secondary** ~10% (PermaplanT: sea blue): PermaplanT's **second brand** colour, e.g. used for highlighting a few UI elements (e.g. in the layers section) and action-texts
+- **Neutral** ~60% (PermaplanT: gray): **dominant** color of the design, e.g. used for background, text and labels
+- **Primary** ~30% (PermaplanT: asparagus green): PermaplanT's **main brand** color, e.g. used for buttons, hovering, highlighting focused input fields
+- **Secondary** ~10% (PermaplanT: sea blue): PermaplanT's **second brand** color, e.g. used for highlighting a few UI elements (e.g. in the layers section) and action-texts
 
-**Only those** three colour palettes **should be used** throughout the whole application. The ratio of their current usage in PermaplanT is conforming nicely to the popular **60-30-10** design rule.
+Check out Google's [Material Design Guidelines](https://m3.material.io/styles/color/the-color-system/key-colors-tones) for more information on color palettes and their usage.
+
+**Only those** three color palettes **should be used** throughout the whole application.
+They can be accessed like any other defined color in Tailwind CSS and can be appended with a number denoting the shade to be used.
+
+Following shade suggestions should be used as a starting point for coloring new UI components:
+| **location** | **light mode** | **dark mode** |
+| :------------------ | :------------- | :------------ |
+| main color | 500 | 300 |
+| text on main | 50 | 700 |
+| alternative color | 200 | 600 |
+| text on alternative | 800 | 200 |
 
 ### Forms
 
@@ -67,22 +70,30 @@ PermaplanT uses following **three colour palettes**:
 - Display a **centered heading** if the form is representing a whole page, e.g. PermaplanT's forms to create maps and seeds.
 - Add a **capitalized label** above each field.
 - **Align** labels to the **left** of their corresponding fields.
-- Always explicitly **associate** the **label with** the belonging **element** by using the label's _for_ attribute (in React: _htmlFor_).
-  This enables focusing the input field by clicking/tapping on the label.
-  It also adds screen reader support.
-- All input fields should have the **same styling**, i.e. border, colour, text size, padding, etc.
-- Use **opacity** for an input field's **placeholder** text.
+- Always use the **_for_** HTML attribute (in React: _htmlFor_) to bind the label to the field.
+- Always use PermaplanT's **SearchInput** component to declare **search fields** instead of declaring them with type _search_.
+- **Don't use** the **title** attribute for any form fields (see <https://inclusive-components.design/tooltips-toggletips/>)
+- All form fields should have the **same styling**:
+  - border color: `border-neutral-500 dark:border-neutral-400-dark`
+  - border focus: `focus:border-primary-500 dark:focus:border-primary-300`
+  - border radius: `rounded-lg`
+  - padding: `p-2.5`
+  - placeholder: `placeholder-neutral-300`
+  - text: `text-sm`
 
 #### Error Prevention
 
 - Use the **corresponding _type_** of the input field, e.g. _date_ for date fields, _number_ for numerical-only inputs etc.
-- Mark required fields with an **asterisk**.
+- Mark required fields with an **asterisk**:
+  - color: `text-red-500`
+  - all other styles are inherited from the parent label
 - Use HTML-native **constraint** attributes for input fields where appropriate, e.g. _maxlength_, _required_, _step_, etc.
 - Use short **placeholder** texts for input fields to show allowed values or further explain the intent of the input field.
 - Users should **never** be **required** to manually enter a **metrical** unit or a **currency** symbol.
   Instead, make the unit part of the input field itself or leave it out if it's clear from the context.
 - **Submission** to the backend should not happen until all fields are **verified** by the **frontend** logic.
-- **Double submission** should be **prevented**, e.g. by disabling the submission button until the server has responded.
+- In case of submissions **on-the-fly**, e.g. setting dates for plants, the data should always be submitted with **debouncing**.
+- **Double submission** should be **prevented** by disabling the submission button until the server has responded.
 
 ### Consistency
 
@@ -91,21 +102,25 @@ Users should never be uncertain if different words mean the same thing or differ
 
 Examples:
 
-- Call-to-action buttons should look the same everywhere.
-- The layout of forms and the styling of their input fields should be the same in every form.
-- Validation errors in forms should be rendered the same way in any form.
-- Toast errors should always be shown in the same location.
-- Headings of different pages should be positioned in the same location and have the same styling.
-- The same application-specific terms should be used everywhere to communicate to the user.
+- **Main Heading** of a page is always defined by `<h1>` which must be the only one of its kind per page
+- **Headings** of all toolbars are always defined by `<h2>`
+- If **textual links**, e.g. the links in PermaplanT's navigation bar, need to be surrounded by space, always set their `margin` instead of `padding`.
+- Make **call-to-action buttons** look the same everywhere by using our `SimpleButton` component.
+  Use Tailwind's classes to define the button's `margin` and `width`, if necessary due to layout or viewport.
+- **Toast errors** are always shown on the top right.
+  To achieve this, we are simply using the default setting of our used library (_react-toastify_).
+- Use the same **application-specific terms** everywhere when communicating to the user, e.g. always write _PermaplanT_.
+- **Forms** and their fields should look and behave the same everywhere according to our guidelines in [Forms](#forms).
+- In every **form**, **validation** errors are detected and shown by using the native input validation of HTML5.
 
 ### Icons
 
-- In their **passive**, i.e. currently not active/enabled, state they should appear in **neutral** colours/colourless.
-- When **active**, i.e. currently activated/enabled, they should get a small **highlighting** through a visually stronger and more colourful appearance by using the design's primary/secondary colours.
-- When **disabled**, i.e. currently not clickable, they should be **greyed-out**, either via decreasing its opacity or choosing light, faint colours.  
-  The mouse **cursor** should be styled with the **_not-allowed_** css property.
-- A **tooltip** on hovering should be displayed for every icon in PermaplanT's toolbox.
-  The tooltip should contain the icon's **label** (as concise as possible) and, if existing, the assigned **shortcut**.
+- In their **passive**, i.e. currently not active/enabled, state they must appear in **neutral** colors/colorless.
+- When **active**, i.e. currently activated/enabled, they must get a small **highlighting** through a visually stronger and more colorful appearance by using the design's primary colors.
+- When **disabled**, i.e. currently not clickable, they must be **greyed-out**, either via decreasing its opacity or choosing light, faint colors.  
+  The mouse cursor must be styled with the `not-allowed` css property.
+- A **tooltip** on hovering must be displayed for every icon in PermaplanT's toolbox.
+  The tooltip contains the icon's **label** (as concise as possible) and, if existing, the assigned **shortcut**.
 
 ### Highlighting
 
@@ -117,9 +132,9 @@ Highlighting techniques:
     In general, it is the preferred highlighting technique to use.
   - _Italic_ text adds minimal noise to the design, but lacks in recognizability.
   - <u>Underlining</u> adds most noise and compromises a text's legibility.
-    It should hardly ever be used.
+    It should not be used.
 
-- Colours: primary and secondary colours of the design's colour palette
+- Colors: primary and secondary colors of the design's color palette
 
 - Images: users generally remember images better than words
 
@@ -131,12 +146,14 @@ Messages shown to the user should strive to fulfill following criteria:
 
 - **concise**: the more text the less likely it will be read by the user
 - **clear**: straight to the message's essence
-- **understandable** for technical laymen: no error codes or technical terms
+- **understandable** for technical laymen: no status codes or technical terms
 - **no exclamation** marks: interpreted as commanding
 - **no uppercase** words: comes across as shouting
 - **detailed** information should be hidden behind a **read more** link or a **collapsed** section
 - **Headlines**, **sub-headlines** and **labels** should be **capitalized**
 - **Minimize hyphenation** of words
+- **American English** spelling
+- use **plural** to avoid gendering, i.e. use _we_/_they_, avoid _he_/_she_
 
 ### Error Messages
 
@@ -146,21 +163,15 @@ Error messages should **only** be used **if** the **user**, without that informa
 Error messages should fulfill following criteria:
 
 - **polite** and **neutral**: do not directly or indirectly blame the user and stay away from jokes
+- start the message with **Sorry, ...**
+- write **personified**, e.g. _I could not find ..._
 - **brief**
 - **specific** to the problem
-- contain **reason for the problem**
-- **solution-oriented**: ideally, a solution to the occurred problem is offered
-- no **privacy-violating** information: e.g. informing the user upon a failed login that the entered email does not exist in the system - this could additionally also encourage people to scan our database for emails
+- **no technical terms** and error codes
+- mention **reason for the problem** and say _probably_ if not totally sure about the problem
+- offer **possible solutions** only, and only if, you are sure about them
+- use **colors/formatting** to highlight important passages
+- show via **toastify** on the **top right**
 
-### Search Fields
-
-To prevent _Chromium_ and _WebKit_ based browsers from adding their own cross icon and functionality into search input fields, **do not declare** input fields with **type _search_**.  
-Instead, **use** PermaplanT's **SearchInput** component which renders its own cross icon, together with a search icon and the input field itself.  
-That way we provide the same search input functionality for every browser.
-
-The **SearchInput** component has following **behavior** and **functionality**:
-
-- The cross icon will be shown if there is any search term entered into the input field, and hidden otherwise.
-- Clicking on the cross icon will reset the current search term and keep the focus on the input field, so the user can continue typing.
-- Pressing the _ESC_ key likewise resets the current search term and keeps the focus on the input field.
-- The _SearchInput_ component exposes a method which enables parent components to set the focus on it, besides that it is fully encapsulated, i.e. it hides all its DOM nodes from the outside.
+E.g.:  
+"Sorry, I **cannot communicate** with my server, there is probably some network problem or the server is down. _Please retry later._"
