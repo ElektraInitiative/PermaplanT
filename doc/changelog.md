@@ -26,10 +26,11 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab)_
 - _()_
 - _()_
 - _()_
-- _()_
+- add decision for timeline concept _(Daniel Steinkogler)_
 - _()_
 - Add frontend UI and usability guide #918 _(tschawax)_
 - Improve wordings, usability and UI of guided tour #871 _(tschawax)_
