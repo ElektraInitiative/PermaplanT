@@ -28,7 +28,7 @@ The following questions have been addressed during the conception:
 
 #### Interesting npm package
 
-During research following npm package was found:
+During research following npm package was found. However, currently it is not planned to use it since our custom hook solution is sufficient and easier to adapt.
 
 [react-hotkeys-hook](https://github.com/JohannesKlauss/react-hotkeys-hook/tree/main)
 
