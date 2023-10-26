@@ -38,7 +38,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Improve styling of login and logout button #983 _(tschawax)_
 - Add horizontal scrolling to toolbars #981 _(tschawax)_
 - Improve vertical scrollbar behaviour #970 _(tschawax)_
-- _()_
+- Split and rewrite copy & paste usecase #1 _(tschawax)_
 - Create remember-viewing-state usecase #1 _(tschawax)_
 - Create multi-select usecase #1 _(tschawax)_
 - Fix transformer rotation handle and moving selected plants #1013 _(tschawax)_
