@@ -14,16 +14,17 @@ Our keybinding solution should adhere to the following constraints:
 
 ## Solution
 
-Following questions have been tackled during conception:
+The following questions have been addressed during the conception:
 
 - **How do we configure keybindings?**
 
-  There should be a single source of truth and it should be easy to understand for developers
+- There should be a single source of truth
+- it should be easy to understand for developers.
 
 - **Where do we add key listeners?**
 
-  While it's easy to add key listeners to focused components like form inputs, it becomes more challenging when dealing with a component like the Konva map.
-  This is because we cannot directly bind keys to the map layer.
+- While it's easy to add key listeners to focused components like form inputs, it becomes more challenging when dealing with a component like the Konva map.
+- This is because we cannot directly bind keys to the map layer.
 
 #### Interesting npm package
 
@@ -41,7 +42,7 @@ During research following npm package was found:
 A json file contains all keybindings that are used in the application and serves the following purpose
 
 - keybindings can easily be changed by editing the file
-- developers have overview of all keybindings
+- Developers have an overview of all keybindings.
 
 Example Structure:
 
@@ -81,9 +82,9 @@ Example
     };
 ```
 
-### keyhandling independent of focus
+### Keyhandling independent of focus
 
-- if keylistener should be triggered independent of focused html elemnt
+- if keylistener should be triggered independent of focused HTML element
 - method: use custom keybinding hook and pass handlers according to config
 
 Example:
@@ -97,3 +98,11 @@ const keyHandlerActions: Record<string, () => void> = {
 
 useKeyHandlers(createKeyHandlersFromConfig(KEYBINDING_SCOPE_PLANTING, keyHandlerActions));
 ```
+
+- key listener can either be bound on document or on specific node that is passed to hook
+- listener is active as long as the component where hook is used is rendered
+
+### To consider for konva map
+
+- since keys cannot be bound directly on konva elements, keyhandlers have to check if the corresponding layer is active to avoid collisions
+- if keys should only be active if map is focused, handlers have to be bound to cancas section of the map component
