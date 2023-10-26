@@ -273,6 +273,7 @@ export const EditorMap = ({ layers }: MapProps) => {
           className="flex h-full w-full flex-col overflow-hidden"
           data-tourid="canvas"
           id="canvas"
+          tabIndex={0} //so that map can be focused
         >
           <BaseStage
             listeners={{

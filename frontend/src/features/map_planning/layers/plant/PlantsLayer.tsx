@@ -8,6 +8,7 @@ import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOver
 import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantSpread, PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
+import { KEYBINDING_SCOPE_PLANTING, createKeyHandlersFromConfig } from '@/config/keybindings';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
@@ -219,14 +220,6 @@ function usePlantLayerListeners(listening: boolean) {
     executeAction(new MovePlantAction(updates));
   }, [executeAction]);
 
-  useKeyHandlers({
-    Escape: () => {
-      if (selectedPlant) {
-        exitPlantingMode();
-      }
-    },
-  });
-
   useEffect(() => {
     if (!listening) {
       return;
@@ -292,6 +285,14 @@ function PlantsLayer(props: PlantsLayerProps) {
 
 function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
   const selectPlant = useMapStore((state) => state.selectPlantForPlanting);
+
+  const keyHandlerActions: Record<string, () => void> = {
+    exitPlantingMode: () => {
+      exitPlantingMode();
+    },
+  };
+
+  useKeyHandlers(createKeyHandlersFromConfig(KEYBINDING_SCOPE_PLANTING, keyHandlerActions));
 
   return (
     <>

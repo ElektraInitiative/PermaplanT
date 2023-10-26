@@ -1,0 +1,8 @@
+{
+  "planting": {
+    "exitPlantingMode": "Escape",
+    "search": {
+      "clearSearch": "Escape"
+    }
+  }
+}

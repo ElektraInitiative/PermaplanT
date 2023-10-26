@@ -37,19 +37,22 @@ import { useEffect } from 'react';
  * }
  * */
 
-export function useKeyHandlers(keyHandlerMap: Record<string, () => void>) {
+export function useKeyHandlers(
+  keyHandlerMap: Record<string, () => void>,
+  htmlNode: HTMLElement | Document = document,
+) {
   useEffect(() => {
-    function handleKeyPress(event: KeyboardEvent) {
+    const handleKeyPress = (event: KeyboardEvent) => {
       const handler = keyHandlerMap[event.key];
       if (handler) {
         handler();
       }
-    }
+    };
 
-    document.addEventListener('keydown', handleKeyPress);
+    htmlNode.addEventListener('keydown', handleKeyPress as EventListener);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyPress);
+      htmlNode.removeEventListener('keydown', handleKeyPress as EventListener);
     };
-  }, [keyHandlerMap]);
+  }, [htmlNode, keyHandlerMap]);
 }

@@ -1,3 +1,4 @@
+import { getActionNameFromKeyEvent } from '@/config/keybindings';
 import { ReactComponent as SearchResetIcon } from '@/svg/icons/search-reset.svg';
 import { ReactComponent as SearchIcon } from '@/svg/icons/search.svg';
 import React, {
@@ -63,9 +64,11 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
       handleSearch(event);
     };
 
-    const resetSearchByKey = (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === SHORTCUT_SEARCH_INPUT_RESET) {
+    const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+      const action = getActionNameFromKeyEvent('planting.search', event);
+      if (action === 'clearSearch') {
         resetSearch();
+        event.stopPropagation();
       }
     };
 
@@ -96,7 +99,7 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
           ref={searchInputRef}
           {...inputProps}
           onInput={search}
-          onKeyDown={resetSearchByKey}
+          onKeyDown={handleKeyDown}
         />
         {shouldShowResetIcon() && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-3">
