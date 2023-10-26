@@ -25,17 +25,12 @@ export const selectIntersectingShapes = (
     //filter out layers which are not selected
     ?.filter((layer) => layer.attrs.listening)
     .flatMap((layer) => layer.children)
-    .filter(
-      (shape) =>
-        shape?.name() !== 'selectionRect' &&
-        !shape?.name().includes('transformer') &&
-        // This comparison has to be '!== false' because react-konva seems to consider
-        // the undefined listening attribute equal to a true listening attribute.
-        //
-        // Also, if a react-konva component does not specify a listening attribute, it is
-        // undefined by default.
-        shape?.attrs.listening !== false,
-    );
+    .filter((shape) => {
+      // To exclude Konva's transformer, check if node contains children.
+      // 'listening' is explicitly checked for '!== false' because
+      // Konva treats it as true if it's undefined or missing at all.
+      return shape?.attrs.listening !== false && shape?.hasChildren();
+    });
 
   if (!allShapes) return;
 
