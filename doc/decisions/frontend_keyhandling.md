@@ -68,7 +68,7 @@ Example Structure:
 
 - for components that provide keylisteners and are usually focused on use (e.g. input fields)
 - method: add scope to json, bind a keyhandler and execute action according to configuration
-- if actions of parent components shouldn't be triggerd, event propagation must be stopped
+- if actions of parent components shouldn't be triggered, event propagation must be stopped
 
 Example
 
