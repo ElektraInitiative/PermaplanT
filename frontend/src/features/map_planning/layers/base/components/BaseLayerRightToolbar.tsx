@@ -149,15 +149,7 @@ export const BaseLayerRightToolbar = () => {
     }
 
     const scale = calculateScale(measuredDistance, baseLayerState.scale, actualDistance);
-    executeAction(
-      new UpdateBaseLayerAction({
-        id: baseLayerState.imageId,
-        layer_id: baseLayerState.layerId,
-        rotation: baseLayerState.rotation,
-        scale,
-        path: baseLayerState.nextcloudImagePath,
-      }),
-    );
+    setScaleInput(scale);
 
     deactivateMeasurement();
   };
