@@ -26,10 +26,11 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab)_
 - _()_
 - _()_
 - _()_
-- _()_
+- add decision for timeline concept _(Daniel Steinkogler)_
 - _()_
 - _()_
 - Improve wordings, usability and UI of guided tour #871 _(tschawax)_
@@ -37,10 +38,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Improve styling of login and logout button #983 _(tschawax)_
 - Add horizontal scrolling to toolbars #981 _(tschawax)_
 - Improve vertical scrollbar behaviour #970 _(tschawax)_
-- _()_
+- Split and rewrite copy & paste usecase #1 _(tschawax)_
 - Create remember-viewing-state usecase #1 _(tschawax)_
 - Create multi-select usecase #1 _(tschawax)_
-- _()_
+- Fix transformer rotation handle and moving selected plants #1013 _(tschawax)_
 - Clean up the asset file structure in frontend _(Moritz)_
 - _()_
 - _()_
