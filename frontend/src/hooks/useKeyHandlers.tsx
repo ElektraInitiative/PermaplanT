@@ -1,3 +1,4 @@
+import { createKeyCombinationString } from '@/utils/key-combinations';
 import { useEffect } from 'react';
 
 /**
@@ -43,7 +44,13 @@ export function useKeyHandlers(
 ) {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      const handler = keyHandlerMap[event.key];
+      const keyCombination = createKeyCombinationString(
+        event.ctrlKey,
+        event.altKey,
+        event.shiftKey,
+        event.key,
+      );
+      const handler = keyHandlerMap[keyCombination];
       if (handler) {
         handler();
       }

@@ -29,12 +29,16 @@ export function createKeyHandlersFromConfig(
   keyHandlerActions: Record<string, () => void>,
 ): Record<string, () => void> {
   const scopedKeybindings = getKeybindingsForScope(scope);
+
   if (scopedKeybindings) {
     return Object.keys(scopedKeybindings).reduce(
-      (handlers: Record<string, () => void>, key: string) => {
-        const handlerFunction = keyHandlerActions[scopedKeybindings[key]];
+      (handlers: Record<string, () => void>, action: string) => {
+        const handlerFunction = keyHandlerActions[action];
         if (handlerFunction) {
-          handlers[key] = handlerFunction;
+          const keys: string[] = getShortcutsForAction(scope, action);
+          keys.forEach((key) => {
+            handlers[key] = handlerFunction;
+          });
         }
         return handlers;
       },
@@ -73,19 +77,21 @@ export function getActionNameFromKeyEvent(
   const keybindings = getKeybindingsForScope(scope);
 
   return keybindings
-    ? Object.entries(keybindings).find(([, key]) => key === shortcut)?.[0] || null
+    ? Object.entries(keybindings).find(([, keys]) =>
+        getKeyListFromString(keys).includes(shortcut),
+      )?.[0] || null
     : null;
 }
 
 /**
- * Retrieves the keyboard shortcut associated with a specific action within a specified scope.
+ * Retrieves the keyboard shortcuts associated with a specific action within a specified scope.
  * @param scope - The scope in which to look for the associated action's shortcut.
  * @param action - The action for which to find the associated keyboard shortcut.
- * @returns The keyboard shortcut if found, or null if not found.
+ * @returns list of keyboard shortcuts
  */
-export function getShortcutForAction(scope: string, action: string): string | null {
+export function getShortcutsForAction(scope: string, action: string): string[] {
   const keybindings = getKeybindingsForScope(scope);
-  return (keybindings && keybindings[action]) || null;
+  return (keybindings && getKeyListFromString(keybindings[action])) || [];
 }
 
 function getKeybindingsForScope(scope: string): KeyBindings | null {
@@ -102,4 +108,8 @@ function getKeybindingsForScope(scope: string): KeyBindings | null {
   return Object.fromEntries(
     Object.entries(scopeObj).filter(([, value]) => typeof value === 'string'),
   ) as KeyBindings;
+}
+
+function getKeyListFromString(keysString: string) {
+  return keysString.split(',').map((item) => item.trim());
 }

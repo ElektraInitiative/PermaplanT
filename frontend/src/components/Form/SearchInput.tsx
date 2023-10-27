@@ -64,7 +64,6 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
 
     const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
       const action = getActionNameFromKeyEvent('planting.search', event);
-      console.log(action);
       if (action === 'clearSearch') {
         resetSearch();
         event.stopPropagation();
