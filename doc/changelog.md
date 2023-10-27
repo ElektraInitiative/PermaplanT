@@ -43,7 +43,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Create multi-select usecase #1 _(tschawax)_
 - _()_
 - Clean up the asset file structure in frontend _(Moritz)_
-- _()_
+- Implement multi-select usecase #727 _(tschawax)_
 - _()_
 - _()_
 - _()_
