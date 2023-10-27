@@ -80,20 +80,17 @@ export const BaseLayerRightToolbar = () => {
   // after the base layers state was updated outside this component.
   // This fixes redo actions not working after a base layer action is undone and
   // a few other many other base layer bugs.
-  const [inhibitUpdateAction, setInhibitUpdateAction] = useState(false);
+  const [inhibitUpdateAction, setInhibitUpdateAction] = useState(true);
 
   useEffect(() => {
-    setInhibitUpdateAction(true);
     setPathInput(baseLayerState.nextcloudImagePath);
   }, [baseLayerState.nextcloudImagePath]);
 
   useEffect(() => {
-    setInhibitUpdateAction(true);
     setScaleInput(baseLayerState.scale);
   }, [baseLayerState.scale]);
 
   useEffect(() => {
-    setInhibitUpdateAction(true);
     setRotationInput(baseLayerState.rotation);
   }, [baseLayerState.rotation]);
 
@@ -103,9 +100,10 @@ export const BaseLayerRightToolbar = () => {
 
   useEffect(() => {
     if (inhibitUpdateAction) {
-      setInhibitUpdateAction(false);
       return;
     }
+
+    setInhibitUpdateAction(true);
 
     const baseLayerOptions = {
       id: baseLayerState.imageId,
@@ -231,7 +229,10 @@ export const BaseLayerRightToolbar = () => {
         id="rotation"
         disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:rotation_field')}
-        onChange={(e) => setRotationInput(parseInt(e.target.value))}
+        onChange={(e) => {
+          setRotationInput(parseInt(e.target.value));
+          setInhibitUpdateAction(false);
+        }}
         type="number"
         value={rotationInput}
         min="0"
@@ -243,7 +244,10 @@ export const BaseLayerRightToolbar = () => {
           id="scale"
           disabled={isReadOnlyMode}
           labelText={t('baseLayerForm:scale')}
-          onChange={(e) => setScaleInput(parseInt(e.target.value))}
+          onChange={(e) => {
+            setScaleInput(parseInt(e.target.value));
+            setInhibitUpdateAction(false);
+          }}
           type="number"
           value={scaleInput}
           min="0"
