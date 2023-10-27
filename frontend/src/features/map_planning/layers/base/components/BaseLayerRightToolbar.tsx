@@ -71,58 +71,63 @@ export const BaseLayerRightToolbar = () => {
   //
   // Therefore, this seems to be the only way to keep track of external state changes to the file path while
   // using the onFocusEvent handler to update the state from this component.
-  const [pathInput, setPathInput] = useState(baseLayerState.nextcloudImagePath);
-  const [rotationInput, setRotationInput] = useState(baseLayerState.rotation);
-  const [scaleInput, setScaleInput] = useState(baseLayerState.scale);
+  //
+  // The 'ignore' option indicates whether a new UpdateBaseLayerAction should be submitted after the value changes.
+  // This prevents base layer update events being submitted twice if they originate from outside this component.
+  const [pathInput, setPathInput] = useState({
+    path: baseLayerState.nextcloudImagePath,
+    ignore: true,
+  });
+  const [rotationInput, setRotationInput] = useState({
+    rotation: baseLayerState.rotation,
+    ignore: true,
+  });
+  const [scaleInput, setScaleInput] = useState({ scale: baseLayerState.scale, ignore: true });
   const [showFileSelector, setShowFileSelector] = useState(false);
 
-  // We don't want to submit an UpdateBaseLayerAction if we are just updating the form
-  // after the base layers state was updated outside this component.
-  // This fixes redo actions not working after a base layer action is undone and
-  // a few other many other base layer bugs.
-  const [inhibitUpdateAction, setInhibitUpdateAction] = useState(true);
-
   useEffect(() => {
-    setPathInput(baseLayerState.nextcloudImagePath);
+    setPathInput({ path: baseLayerState.nextcloudImagePath, ignore: true });
   }, [baseLayerState.nextcloudImagePath]);
 
   useEffect(() => {
-    setScaleInput(baseLayerState.scale);
+    setScaleInput({ scale: baseLayerState.scale, ignore: true });
   }, [baseLayerState.scale]);
 
   useEffect(() => {
-    setRotationInput(baseLayerState.rotation);
+    setRotationInput({ rotation: baseLayerState.rotation, ignore: true });
   }, [baseLayerState.rotation]);
 
   const debouncedPath = useDebouncedValue(pathInput, 200);
   const debouncedRotation = useDebouncedValue(rotationInput, 200);
   const debouncedScale = useDebouncedValue(scaleInput, 200);
 
-  useEffect(() => {
-    if (inhibitUpdateAction) {
-      return;
-    }
+  useEffect(
+    () => {
+      if (debouncedPath.ignore && debouncedRotation.ignore && debouncedScale.ignore) {
+        return;
+      }
 
-    setInhibitUpdateAction(true);
+      const baseLayerOptions = {
+        id: baseLayerState.imageId,
+        layer_id: baseLayerState.layerId,
+        path: debouncedPath.ignore ? baseLayerState.nextcloudImagePath : debouncedPath.path,
+        rotation: debouncedRotation.ignore ? baseLayerState.rotation : debouncedRotation.rotation,
+        scale: debouncedScale.ignore ? baseLayerState.scale : debouncedScale.scale,
+      };
 
-    const baseLayerOptions = {
-      id: baseLayerState.imageId,
-      layer_id: baseLayerState.layerId,
-      path: debouncedPath,
-      rotation: debouncedRotation,
-      scale: debouncedScale,
-    };
-    if (validateBaseLayerOptions(baseLayerOptions))
-      executeAction(new UpdateBaseLayerAction(baseLayerOptions));
-  }, [
-    baseLayerState.imageId,
-    baseLayerState.layerId,
-    debouncedPath,
-    executeAction,
-    debouncedScale,
-    debouncedRotation,
-    inhibitUpdateAction,
-  ]);
+      if (validateBaseLayerOptions(baseLayerOptions))
+        executeAction(new UpdateBaseLayerAction(baseLayerOptions));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      baseLayerState.imageId,
+      baseLayerState.layerId,
+      debouncedPath,
+      executeAction,
+      debouncedScale,
+      debouncedRotation,
+    ],
+  );
 
   useEffect(() => {
     if (measureStep === 'both selected') {
@@ -147,7 +152,7 @@ export const BaseLayerRightToolbar = () => {
     }
 
     const scale = calculateScale(measuredDistance, baseLayerState.scale, actualDistance);
-    setScaleInput(scale);
+    setScaleInput({ scale, ignore: false });
 
     deactivateMeasurement();
   };
@@ -191,8 +196,8 @@ export const BaseLayerRightToolbar = () => {
         id="file"
         disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:image_path_field')}
-        onChange={(e) => setPathInput(e.target.value)}
-        value={pathInput}
+        onChange={(e) => setPathInput({ path: e.target.value, ignore: false })}
+        value={pathInput.path}
         data-testid={TEST_IDS.BACKGROUND_INPUT}
       />
       <FileSelectorModal
@@ -217,7 +222,7 @@ export const BaseLayerRightToolbar = () => {
               scale: scale,
             }),
           );
-          setPathInput(path);
+          setPathInput({ path, ignore: true });
           setShowFileSelector(false);
         }}
       />
@@ -230,26 +235,24 @@ export const BaseLayerRightToolbar = () => {
         disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:rotation_field')}
         onChange={(e) => {
-          setRotationInput(parseInt(e.target.value));
-          setInhibitUpdateAction(false);
+          setRotationInput({ rotation: parseInt(e.target.value), ignore: false });
         }}
         type="number"
-        value={rotationInput}
+        value={rotationInput.rotation}
         min="0"
         max="359"
         data-testid={TEST_IDS.ROTATION_INPUT}
       />
-      <div className="flex flex-row items-end gap-2">
+      <div className="flex flex-col gap-2">
         <SimpleFormInput
           id="scale"
           disabled={isReadOnlyMode}
           labelText={t('baseLayerForm:scale')}
           onChange={(e) => {
-            setScaleInput(parseInt(e.target.value));
-            setInhibitUpdateAction(false);
+            setScaleInput({ scale: parseInt(e.target.value), ignore: false });
           }}
           type="number"
-          value={scaleInput}
+          value={scaleInput.scale}
           min="0"
           data-testid={TEST_IDS.SCALE_INPUT}
         />
