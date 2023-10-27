@@ -1,10 +1,9 @@
 {
   "view_seeds": {
-    "title": "Meine Samen",
+    "title": "Mein Inventar",
     "btn_new_entry": "Neuer Eintrag",
-    "search_placeholder": "Suche Samen...",
-    "search_hint": "Derzeit wird nur die Samenbezeichnung bei der Suche berücksichtigt.",
-    "fetching_error": "Sorry, ich habe Schwierigkeiten Samen von meinem Server zu erhalten. Bitte versuche es später erneut.",
+    "search_placeholder": "Inventar durchsuchen...",
+    "fetching_error": "Sorry, ich habe Schwierigkeiten das Inventar von meinem Server zu erhalten. Bitte versuche es später erneut.",
     "fetching_single_error": "Sorry, ich konnte den Samen nicht von meinem Server laden. Möglicherweise existiert er nicht.",
     "restore_seed_message": "{{seed}} wurde archiviert",
     "restore_seed_button": "Wiederherstellen",
