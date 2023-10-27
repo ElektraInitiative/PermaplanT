@@ -1,3 +1,4 @@
+import keybindings from './keybindings.json';
 import { createKeyCombinationFromKeyEvent } from '@/utils/key-combinations';
 import React from 'react';
 
@@ -9,54 +10,19 @@ type KeyBindingConfig = {
   [scope: string]: string | KeyBindingConfig;
 };
 
-export const keyBindingConfig: KeyBindingConfig = {
-  planting: {
-    exitPlantingMode: 'Escape',
-    search: {
-      clearSearch: 'Escape',
-    },
-  },
-};
+export const keyBindingConfig: KeyBindingConfig = keybindings;
 
 /**
- * Creates a set of key event handlers based on a given scope and a set of predefined key handler actions.
+ * Creates a set of key event handlers based on the provided scope and a set of key handler actions.
+ * These handlers are mapped to specific keyboard shortcuts defined in the configuration for the given scope.
  *
- * @param scope - The scope for which the key handlers are defined, typically representing a specific context or component.
- * @param keyHandlerActions - A record of key handler actions, where keys are the names of key bindings, and values are corresponding handler functions.
- * @returns A record of key event handlers, where keys are key binding names, and values are functions that define the actions to be taken when those keys are pressed within the specified scope.
+ * @param scope - The scope for which to create key event handlers.
+ * @param keyHandlerActions - An object that maps action names to corresponding handler functions.
  *
- * @example
- * // Sample Config
- * keyBindingConfig = {
- *   planting: {
- *     key1: 'action1',
- *     key2: 'action2',
- *   },
- * };
- *
- * //Actions
- * const keyHandlerActions: Record<string, () => void> = {
- *   action1: () => {
- *     console.log('Action 1 executed');
- *   },
- *   action2: () => {
- *     console.log('Action 2 executed');
- *   },
- * };
- *
- * // Specify the scope for which you want to create key handlers
- * const scope = 'planting';
- *
- * // Use the createKeyHandlersFromConfig method to generate key event handlers
- * const keyHandlers = createKeyHandlersFromConfig(scope, keyHandlerActions);
- *
- * // Example: Listen for keydown events and execute the corresponding key handler
- * document.addEventListener('keydown', (event) => {
- *   const key = event.key;
- *   if (keyHandlers[key]) {
- *     keyHandlers[key]();
- *   }
- * });
+ * @returns A record of key event handlers, where each key represents a keyboard shortcut defined in the
+ *          scope's configuration, and the corresponding value is the handler function associated with the
+ *          action triggered by that shortcut. If no matching keybindings are found for the given scope,
+ *          an empty object is returned.
  */
 export function createKeyHandlersFromConfig(
   scope: string,
@@ -79,6 +45,12 @@ export function createKeyHandlersFromConfig(
   return {};
 }
 
+/**
+ * Retrieves the action name associated with a given keyboard shortcut within a specified scope.
+ * @param scope - The scope in which to look for the keyboard shortcut.
+ * @param shortcut - The keyboard shortcut to find the associated action for.
+ * @returns The action name if found, or null if not found.
+ */
 export function getActionNameFromShortcut(scope: string, shortcut: string): string | null {
   const keybindings = getKeybindingsForScope(scope);
 
@@ -87,6 +59,12 @@ export function getActionNameFromShortcut(scope: string, shortcut: string): stri
     : null;
 }
 
+/**
+ * Retrieves the action name associated with a keyboard event within a specified scope.
+ * @param scope - The scope in which to look for the associated action.
+ * @param event - The keyboard event to map to an action.
+ * @returns The action name if found, or null if not found.
+ */
 export function getActionNameFromKeyEvent(
   scope: string,
   event: React.KeyboardEvent,
@@ -99,6 +77,12 @@ export function getActionNameFromKeyEvent(
     : null;
 }
 
+/**
+ * Retrieves the keyboard shortcut associated with a specific action within a specified scope.
+ * @param scope - The scope in which to look for the associated action's shortcut.
+ * @param action - The action for which to find the associated keyboard shortcut.
+ * @returns The keyboard shortcut if found, or null if not found.
+ */
 export function getShortcutForAction(scope: string, action: string): string | null {
   const keybindings = getKeybindingsForScope(scope);
   return (keybindings && keybindings[action]) || null;
@@ -106,19 +90,16 @@ export function getShortcutForAction(scope: string, action: string): string | nu
 
 function getKeybindingsForScope(scope: string): KeyBindings | null {
   const keys = scope.split('.');
-  let scopeObj = keyBindingConfig;
+  let scopeObj: KeyBindingConfig | undefined = keyBindingConfig;
 
   for (const key of keys) {
-    if (scopeObj[key] && typeof scopeObj[key] === 'object') {
-      scopeObj = scopeObj[key] as KeyBindingConfig;
-    } else {
+    if (typeof scopeObj !== 'object' || scopeObj[key] === undefined) {
       return null;
     }
+    scopeObj = scopeObj[key] as KeyBindingConfig;
   }
 
-  const filteredScopeObj = Object.entries(scopeObj)
-    .filter(([, value]) => typeof value === 'string')
-    .reduce((acc, [action, value]) => ({ ...acc, [action]: value }), {});
-
-  return filteredScopeObj;
+  return Object.fromEntries(
+    Object.entries(scopeObj).filter(([, value]) => typeof value === 'string'),
+  ) as KeyBindings;
 }

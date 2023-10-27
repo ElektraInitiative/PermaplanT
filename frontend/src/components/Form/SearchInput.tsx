@@ -10,8 +10,6 @@ import React, {
   useState,
 } from 'react';
 
-export const SHORTCUT_SEARCH_INPUT_RESET = 'Escape';
-
 export const TEST_IDS = Object.freeze({
   SEARCH_ICON: 'search-input__search-icon',
   SEARCH_INPUT: 'search-input__input-field',
@@ -66,6 +64,7 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
 
     const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
       const action = getActionNameFromKeyEvent('planting.search', event);
+      console.log(action);
       if (action === 'clearSearch') {
         resetSearch();
         event.stopPropagation();
