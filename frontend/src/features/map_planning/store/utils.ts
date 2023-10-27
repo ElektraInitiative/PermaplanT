@@ -12,6 +12,6 @@ export function clearInvalidSelection(get: GetFn) {
 
   if (!selectedNodesAreVisible) {
     transformer?.nodes([]);
-    get().selectPlanting(null);
+    get().selectPlantings(null);
   }
 }
