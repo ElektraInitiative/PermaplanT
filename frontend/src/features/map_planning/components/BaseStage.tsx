@@ -116,7 +116,6 @@ export const BaseStage = ({
   const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
   const tooltipPosition = useMapStore((state) => state.untrackedState.tooltipPosition);
 
-  // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
     listeners?.stageMouseWheelListeners.forEach((listener) => listener(e));
