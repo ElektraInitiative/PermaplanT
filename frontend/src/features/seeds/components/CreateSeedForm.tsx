@@ -59,7 +59,7 @@ const CreateSeedForm = ({
   const [quantityOption, setQuantityOption] = useState<SelectOption | undefined>(quantity[0]);
   const [qualityOption, setQualityOption] = useState<SelectOption | undefined>(quality[0]);
 
-  const [note, setNote] = useState<string | undefined>(undefined);
+  const [notes, setNotes] = useState<string | undefined>(undefined);
 
   useEffect(
     () => {
@@ -83,7 +83,7 @@ const CreateSeedForm = ({
         setValue('notes', existingSeed?.notes);
         setValue('plant_id', existingSeed?.plant_id);
 
-        setNote(existingSeed?.notes);
+        setNotes(existingSeed?.notes);
 
         // Convert existing values to select menu options.
         if (existingSeed.plant_id) loadInitialPlant(existingSeed.plant_id);
@@ -292,9 +292,9 @@ const CreateSeedForm = ({
               id="notes"
               onChange={(value) => {
                 setValue('notes', value);
-                setNote(value);
+                setNotes(value);
               }}
-              value={note}
+              value={notes}
             />
           </div>
           <div className="flex flex-row justify-between space-x-4">

@@ -51,7 +51,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- replace notes field in create seed form with markdown editor _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
