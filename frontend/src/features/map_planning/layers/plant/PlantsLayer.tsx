@@ -14,7 +14,7 @@ import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Layer } from 'react-konva';
+import { Group } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
 
@@ -199,7 +199,7 @@ function PlantsLayer(props: PlantsLayerProps) {
   return (
     <>
       <PlantLayerRelationsOverlay />
-      <Layer {...props} ref={layerRef} name={`${LayerType.Plants}`}>
+      <Group {...props} ref={layerRef} name={`${LayerType.Plants}`}>
         {plants.map((o) => (
           <PlantingElement planting={o} key={o.id} />
         ))}
@@ -213,7 +213,7 @@ function PlantsLayer(props: PlantsLayerProps) {
             portalRef.current,
           )}
         </Html>
-      </Layer>
+      </Group>
     </>
   );
 }

@@ -3,7 +3,7 @@ import { NextcloudKonvaImage } from '@/features/map_planning/components/image/Ne
 import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva';
 import { useCallback, useState } from 'react';
-import { Layer } from 'react-konva';
+import { Group } from 'react-konva';
 
 type BaseLayerProps = Konva.LayerConfig;
 
@@ -35,7 +35,7 @@ const BaseLayer = (props: BaseLayerProps) => {
   const scale = pixelsPerMeter / MAP_PIXELS_PER_METER;
 
   return (
-    <Layer {...layerProps} listening={false}>
+    <Group {...layerProps} listening={false}>
       {cleanImagePath && (
         <NextcloudKonvaImage
           path={cleanImagePath}
@@ -46,7 +46,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           offset={imageOffset}
         />
       )}
-    </Layer>
+    </Group>
   );
 };
 

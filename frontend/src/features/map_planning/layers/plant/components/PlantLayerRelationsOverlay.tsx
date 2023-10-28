@@ -2,7 +2,7 @@ import { useRelations } from '../hooks/useRelations';
 import { LayerType, RelationType } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useEffect, useMemo, useState } from 'react';
-import { Layer, Line } from 'react-konva';
+import { Group, Line } from 'react-konva';
 
 const relationColors = {
   [RelationType.Antagonist]: '#f005',
@@ -65,7 +65,7 @@ export function PlantLayerRelationsOverlay() {
   }, [data, layers]);
 
   return (
-    <Layer listening={false}>
+    <Group listening={false}>
       {!isLoading && lineEnd && relatedVisiblePlantings
         ? relatedVisiblePlantings.map((s) => {
             const relation = data?.get(s.attrs.plantId)?.relation;
@@ -81,6 +81,6 @@ export function PlantLayerRelationsOverlay() {
             );
           })
         : null}
-    </Layer>
+    </Group>
   );
 }

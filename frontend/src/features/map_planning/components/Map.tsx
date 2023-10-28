@@ -1,7 +1,6 @@
 import { gainBlossom } from '../api/gainBlossom';
 import { updateTourStatus } from '../api/updateTourStatus';
 import BaseLayer from '../layers/base/BaseLayer';
-import { BaseMeasurementLayer } from '../layers/base/BaseMeasurementLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
@@ -205,7 +204,6 @@ export const Map = ({ layers }: MapProps) => {
               opacity={untrackedState.layers.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
-            <BaseMeasurementLayer />
             <GridLayer
               visible={untrackedState.layers.grid.visible}
               opacity={untrackedState.layers.grid.opacity}

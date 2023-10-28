@@ -240,7 +240,7 @@ export const BaseStage = ({
         x={stage.x}
         y={stage.y}
       >
-        {children}
+        <Layer>{children}</Layer>
         <Layer>
           {/* Tooltip */}
           <MapLabel
