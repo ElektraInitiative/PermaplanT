@@ -23,7 +23,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Finish seed use case _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Rename section "Seeds" to "Inventory" _(Moritz)_
 - _()_
 - _()_
 - Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab)_
