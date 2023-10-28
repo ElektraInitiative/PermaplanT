@@ -54,3 +54,30 @@ Following shade suggestions should be used as a starting point for coloring new 
 | text on main | 50 | 700 |
 | alternative color | 200 | 600 |
 | text on alternative | 800 | 200 |
+
+## Icons
+
+We use https://tablericons.com
+
+Already in use:
+
+- eraser (delete)
+- trash (remove plant, see glossary)
+- tags (show labels of active layer)
+- grid-dots
+
+later:
+
+- settings
+- menu-2
+- download
+- upload
+- ruler-3
+- cut
+- copy
+- versions
+- search
+- zoom-filled
+- square-plus
+- square-arrow-up
+- quare-arrow-down

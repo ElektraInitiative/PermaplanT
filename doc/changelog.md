@@ -9,7 +9,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 ## 0.3.5 - UNRELEASED
 
 - _()_
-- _()_
+- Decide about which use cases to include for 1.0 _(Markus Raab and Yvonne Markl with the help of PermaplanTeam)_
 - _()_
 - _()_
 - _()_
@@ -24,12 +24,14 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add decision for api mocking tool _(Daniel Steinkogler)_
+- Rename section "Seeds" to "Inventory" _(Moritz)_
+- _()_
+- _()_
+- Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab)_
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
+- add decision for timeline concept _(Daniel Steinkogler)_
 - _()_
 - _()_
 - Improve wordings, usability and UI of guided tour #871 _(tschawax)_
@@ -37,13 +39,13 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Improve styling of login and logout button #983 _(tschawax)_
 - Add horizontal scrolling to toolbars #981 _(tschawax)_
 - Improve vertical scrollbar behaviour #970 _(tschawax)_
-- _()_
+- Split and rewrite copy & paste usecase #1 _(tschawax)_
 - Create remember-viewing-state usecase #1 _(tschawax)_
 - Create multi-select usecase #1 _(tschawax)_
-- _()_
+- Fix transformer rotation handle and moving selected plants #1013 _(tschawax)_
 - Clean up the asset file structure in frontend _(Moritz)_
 - _()_
-- _()_
+- Fix plant deletion in guided tour on small screens #861 _(tschawax)_
 - _()_
 - _()_
 - _()_

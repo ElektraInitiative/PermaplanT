@@ -385,6 +385,7 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
     },
     classes: 'action-step',
     canClickTarget: true,
+    scrollTo: true,
   },
   {
     id: 'plantLayerRevertDate',
