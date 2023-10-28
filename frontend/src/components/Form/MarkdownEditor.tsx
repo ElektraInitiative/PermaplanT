@@ -3,12 +3,15 @@ import MDEditor from '@uiw/react-md-editor';
 import { FieldValues, Path } from 'react-hook-form';
 
 interface MarkdownEditorProps<T extends FieldValues> {
+  /** The elements unique id. */
   id: Path<T>;
+  /** Text that should be displayed in the accompanying label component. */
   labelText: string;
-  errorTitle?: string;
+  /** Additional class names to apply to the input. */
   className?: string;
-  required?: boolean;
+  /** Callback function that is called when the input value changes. */
   onChange: (value: string | undefined) => void;
+  /** The current value of the input. */
   value: string | undefined;
 }
 
@@ -18,7 +21,6 @@ export default function MarkdownEditor<T extends FieldValues>({
   className,
   onChange,
   value,
-  ...props
 }: MarkdownEditorProps<T>) {
   const darkMode = useDarkModeStore((state) => state.darkMode);
 
@@ -27,7 +29,6 @@ export default function MarkdownEditor<T extends FieldValues>({
       {labelText && (
         <label htmlFor={id} className="mb-2 block text-sm font-medium">
           {labelText}
-          {props.required ? <span className="text-red-800"> *</span> : <></>}
         </label>
       )}
       <MDEditor
