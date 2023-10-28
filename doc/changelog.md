@@ -44,7 +44,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix transformer rotation handle and moving selected plants #1013 _(tschawax)_
 - Clean up the asset file structure in frontend _(Moritz)_
 - _()_
-- _()_
+- Fix plant deletion in guided tour on small screens #861 _(tschawax)_
 - _()_
 - _()_
 - _()_
