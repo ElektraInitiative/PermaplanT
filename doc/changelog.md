@@ -13,7 +13,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Add seed column to plantings _(Moritz)_
 - _()_
 - _()_
 - _()_
