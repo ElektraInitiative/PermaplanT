@@ -6,6 +6,7 @@ import {
   PlantingDto,
   PlantsSummaryDto,
 } from '@/api_types/definitions';
+import { SeedDto } from '@/bindings/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
@@ -166,7 +167,7 @@ export interface UntrackedMapSlice {
     opacity: UntrackedLayerState['opacity'],
   ) => void;
   lastActions: LastAction[];
-  selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
+  selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
   selectPlanting: (planting: PlantingDto | null) => void;
   toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
@@ -342,7 +343,7 @@ export type UntrackedLayers = {
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
-  selectedPlantForPlanting: PlantsSummaryDto | null;
+  selectedPlantForPlanting: PlantForPlanting | null;
   selectedPlanting: PlantingDto | null;
   showLabels: boolean;
 };
@@ -351,6 +352,14 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
   measurePoint1: Vector2d | null;
   measurePoint2: Vector2d | null;
   measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
+};
+
+/**
+ * Contains information necessary for creating a new planting on the map.
+ */
+export type PlantForPlanting = {
+  plant: PlantsSummaryDto;
+  seed: SeedDto | null;
 };
 
 /**
