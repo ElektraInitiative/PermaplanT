@@ -24,31 +24,49 @@ The following guidelines are:
 
 ### Text
 
+- **Size**
+
+  - `<h1>` Headings : `text-2xl`
+  - `<h2>` Subheadings: `text-xl`
+  - `<h3>` Subheadings (currently not used/needed): `text-lg`
+  - Navigation items: `text-lg`
+  - Running text: `text-sm`
+  - Form fields and labels: `text-sm`
+
 - **Alignment**
 
-  - Left align when text spans over more than three lines because centered text becomes hard to follow when having to jump to the next line multiple times.
-  - Avoid mixing two different alignments in a text section, e.g. a centered headline should be followed by centered text.
+  - Always left align everything.
+  - Exceptions:
+    - Modals: center headings
+    - Guided tour: center highlighted actions
 
-- **Spacing / margin**  
-  Multiplier strategy to calculate the margins - if in doubt, use a multiplier of 2, e.g.:
+- **Spacing / margin**
 
-  - Text sections:  
-    headline-1 <- 16px -> text <- 32px -> headline-2
-  - Navigation bar:  
+  - `<h1>` Headings: `mb-8`
+  - `<h2>` Subheadings: `mb-2`
+  - Cards (like on our Map overview): `mb-4`
+  - Form fields (like on the Seeds page): `mb-8`
+  - Labels of form fields: `mb-2`
+  - If in doubt, use the multiplier strategy to calculate margins between sections, e.g. we are using a multiplier of 4 in our navigation bar:  
     logo <- 48px -> navigation-link-1 <- 24px -> navigation-link-2 <- 24px -> navigation-link-3
 
-- **Letter spacing**  
-  Often times, like in PermaplanT's current case, the default value (in Tailwind: `tracking-normal`) is good enough.
-  - Headings: negative values can be used for the bigger headings h1-h3, i.e. `tracking-tighter` or `tracking-tight`
-  - Running text: usually can be left as is but, if needed, can be set to `tracking-wide` or `tracking-wider`
+- **Letter spacing**
+
+  - Always go with the default value, i.e. `tracking-normal`.
+  - In case letter spacing changes are considered in the future:
+    - Headings: use negative values for the bigger headings h1-h3, i.e. `tracking-tighter` or `tracking-tight`
+    - Running text: `tracking-wide` or `tracking-wider`
 
 ### Colors
 
 PermaplanT uses following **three color palettes**:
 
-- **Neutral** ~60% (PermaplanT: gray): **dominant** color of the design, e.g. used for background, text and labels
-- **Primary** ~30% (PermaplanT: asparagus green): PermaplanT's **main brand** color, e.g. used for buttons, hovering, highlighting focused input fields
-- **Secondary** ~10% (PermaplanT: sea blue): PermaplanT's **second brand** color, e.g. used for highlighting a few UI elements (e.g. in the layers section) and action-texts
+- **Neutral** (PermaplanT: gray): **dominant** color of the design, e.g. used for background, text and labels.  
+  Optimal usage: ~60%
+- **Primary** (PermaplanT: asparagus green): PermaplanT's **main brand** color, e.g. used for buttons, hovering, highlighting focused input fields.  
+  Optimal usage: ~30%
+- **Secondary** (PermaplanT: sea blue): PermaplanT's **second brand** color, e.g. used for highlighting a few UI elements (e.g. in the layers section) and action-texts.  
+  Optimal usage: ~10%
 
 Check out Google's [Material Design Guidelines](https://m3.material.io/styles/color/the-color-system/key-colors-tones) for more information on color palettes and their usage.
 
@@ -67,7 +85,7 @@ Following shade suggestions should be used as a starting point for coloring new 
 
 #### Design
 
-- Display a **centered heading** if the form is representing a whole page, e.g. PermaplanT's forms to create maps and seeds.
+- Display a **left aligned heading** if the form is representing a whole page, e.g. PermaplanT's forms to create maps and seeds.
 - Add a **capitalized label** above each field.
 - **Align** labels to the **left** of their corresponding fields.
 - Always use the **_for_** HTML attribute (in React: _htmlFor_) to bind the label to the field.
@@ -115,12 +133,12 @@ Examples:
 
 ### Icons
 
-- In their **passive**, i.e. currently not active/enabled, state they must appear in **neutral** colors/colorless.
-- When **active**, i.e. currently activated/enabled, they must get a small **highlighting** through a visually stronger and more colorful appearance by using the design's primary colors.
-- When **disabled**, i.e. currently not clickable, they must be **greyed-out**, either via decreasing its opacity or choosing light, faint colors.  
-  The mouse cursor must be styled with the `not-allowed` css property.
 - A **tooltip** on hovering must be displayed for every icon in PermaplanT's toolbox.
   The tooltip contains the icon's **label** (as concise as possible) and, if existing, the assigned **shortcut**.
+- In their **passive**, i.e. currently not active/enabled, state they must appear in **neutral** colors/colorless.
+- When **active**, i.e. currently activated/enabled, they must get a small **highlighting** through a visually stronger and more colorful appearance by using the design's primary colors.
+- When **disabled**, i.e. currently not clickable, they must be **greyed-out**, via decreasing their opacity.  
+  The mouse cursor must be styled with the `not-allowed` css property.
 
 ### Highlighting
 
@@ -138,7 +156,7 @@ Highlighting techniques:
 
 - Images: users generally remember images better than words
 
-- Avoid different fonts for highlighting purposes.
+- Never use a different font family.
 
 ### Wording
 
