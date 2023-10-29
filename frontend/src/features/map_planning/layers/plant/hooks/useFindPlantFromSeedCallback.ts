@@ -1,4 +1,4 @@
-import { SeedDto } from '@/bindings/definitions';
+import { SeedDto } from '@/api_types/definitions';
 import { PlantForPlanting } from '@/features/map_planning/store/MapStoreTypes';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { useQuery } from '@tanstack/react-query';

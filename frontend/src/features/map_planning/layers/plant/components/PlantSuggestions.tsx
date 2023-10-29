@@ -27,12 +27,12 @@ export function PlantSuggestions() {
             disabled={isReadOnlyMode}
             key={plant.id}
             plant={plant}
-            isHighlighted={selectedPlantForPlanting?.id === plant.id}
+            isHighlighted={selectedPlantForPlanting?.plant.id === plant.id}
             onClick={() => {
-              if (selectedPlantForPlanting?.id === plant.id) {
+              if (selectedPlantForPlanting?.plant.id === plant.id) {
                 actions.selectPlantForPlanting(null);
               } else {
-                actions.selectPlantForPlanting(plant);
+                actions.selectPlantForPlanting({ plant, seed: null });
               }
             }}
           />
