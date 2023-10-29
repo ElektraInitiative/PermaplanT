@@ -79,6 +79,7 @@ pub struct CreatePlantActionPayload {
     scale_y: f32,
     add_date: Option<NaiveDate>,
     remove_date: Option<NaiveDate>,
+    seed_id: Option<i32>,
 }
 
 impl CreatePlantActionPayload {
@@ -99,6 +100,7 @@ impl CreatePlantActionPayload {
             scale_y: payload.scale_y,
             add_date: payload.add_date,
             remove_date: payload.remove_date,
+            seed_id: payload.seed_id,
         }
     }
 }
