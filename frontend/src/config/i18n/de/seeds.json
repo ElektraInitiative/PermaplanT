@@ -55,5 +55,6 @@
   "price": "Preis",
   "generation": "Generation",
   "notes": "Notizen",
-  "actions": "Aktionen"
+  "actions": "Aktionen",
+  "error_fetching_seed": "Entschuldigung, ich konnte den Samen nicht finden."
 }

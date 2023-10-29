@@ -1,7 +1,8 @@
 import { PlantingDto } from '@/api_types/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
+import { useFindSeedById } from '@/features/map_planning/layers/plant/hooks/useFindSeedById';
 import { MapLabel } from '@/features/map_planning/utils/MapLabel';
-import { commonName } from '@/utils/plant-naming';
+import { commonName, getPlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import Konva from 'konva';
 import { useEffect, useRef, useState } from 'react';
 import { Label } from 'react-konva';
@@ -14,6 +15,7 @@ export interface PlantLabelProps {
 export const PlantLabel = ({ planting }: PlantLabelProps) => {
   const labelRef = useRef<Konva.Label>(null);
   const [labelWidth, setLabelWidth] = useState<number>(0);
+  const { seed } = useFindSeedById(planting.seedId ?? -1, true, true);
 
   useEffect(() => {
     if (labelRef.current === null) return;
@@ -35,7 +37,7 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
       ref={labelRef}
       x={planting.x - labelOffsetX}
       y={planting.y + labelOffsetY}
-      content={commonName(plant)}
+      content={seed !== undefined ? getPlantNameFromSeedAndPlant(seed, plant) : commonName(plant)}
     />
   );
 };
