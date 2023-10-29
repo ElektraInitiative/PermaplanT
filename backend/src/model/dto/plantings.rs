@@ -38,6 +38,8 @@ pub struct PlantingDto {
     /// The date the planting was removed from the map.
     /// If None, the planting is still on the map.
     pub remove_date: Option<NaiveDate>,
+    /// Plantings may be linked with a seed.
+    pub seed_id: Option,
 }
 
 /// Used to create a new planting.
