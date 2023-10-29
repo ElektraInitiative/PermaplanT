@@ -23,7 +23,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Finish seed use case _(Moritz)_
 - _()_
 - _()_
-- _()_
+- Add decision for api mocking tool _(Daniel Steinkogler)_
+- Rename section "Seeds" to "Inventory" _(Moritz)_
 - _()_
 - _()_
 - Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab)_
@@ -44,7 +45,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix transformer rotation handle and moving selected plants #1013 _(tschawax)_
 - Clean up the asset file structure in frontend _(Moritz)_
 - _()_
-- _()_
+- Fix plant deletion in guided tour on small screens #861 _(tschawax)_
 - _()_
 - _()_
 - _()_
@@ -65,7 +66,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - pump versions _(4ydan)_
 - _()_
 - _()_
-- _()_
+- CI: Run e2e tests on dev.permaplant _(4ydan)_
 - _()_
 
 ## 0.3.4 - 14.10.2023 (203 commits)
