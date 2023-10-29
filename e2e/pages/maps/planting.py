@@ -186,7 +186,7 @@ class MapPlantingPage(AbstractPage):
         self._hide_plant_layer.click()
         self._page.wait_for_timeout(5000)
 
-    def screenshot_canvas(self, timeout=300):
+    def screenshot_canvas(self, timeout=10000):
         """
         Takes a grayscale screenshot of the canvas.
         Has a default 300ms delay before taking the screenshot,
@@ -194,7 +194,7 @@ class MapPlantingPage(AbstractPage):
 
         Parameters
         ----------
-        timeout : int, optional, default=500
+        timeout : int, optional, default=10000
         Timeout in ms before taking the screenshot.
 
         Returns
