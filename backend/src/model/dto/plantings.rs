@@ -39,7 +39,7 @@ pub struct PlantingDto {
     /// If None, the planting is still on the map.
     pub remove_date: Option<NaiveDate>,
     /// Plantings may be linked with a seed.
-    pub seed_id: Option,
+    pub seed_id: Option<i32>,
 }
 
 /// Used to create a new planting.
@@ -72,6 +72,8 @@ pub struct NewPlantingDto {
     pub add_date: Option<NaiveDate>,
     /// Id of the action (for identifying the action in the frontend).
     pub action_id: Uuid,
+    /// Plantings may be linked with a seed.
+    pub seed_id: Option<i32>,
 }
 
 /// Used to differentiate between different update operations on plantings.
