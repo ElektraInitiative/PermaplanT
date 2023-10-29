@@ -302,9 +302,12 @@ lock("${env.NODE_NAME}-exclusive") {
         node('docker') {
             node_info()
             checkout scm
-            def e2eImage = docker.build('permaplant-e2e:ci', './e2e')
+            def target = 'https://pr.permaplant.net'
+            if (env.BRANCH_NAME == 'master') {
+                target = 'https://dev.permaplant.net'
+            }
             try {
-                e2eImage.inside('-e E2E_URL=https://pr.permaplant.net') {
+                docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
                     wait_for_pr_db()
                     sh 'make test-e2e'
                 }
