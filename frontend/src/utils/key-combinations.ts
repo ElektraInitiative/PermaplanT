@@ -4,8 +4,13 @@
  * @param event - The React KeyboardEvent object to extract key combination from.
  * @returns A string representing the key combination, including modifier keys (Ctrl, Shift, Alt) if pressed, and the primary key.
  */
-export function createKeyCombinationFromKeyEvent(event: React.KeyboardEvent) {
-  return createKeyCombinationString(event.ctrlKey, event.altKey, event.shiftKey, event.key);
+export function createShortcutIncludingModifierKeysFromKeyEvent(event: React.KeyboardEvent) {
+  return createShortcutIncludingModifierKeys(
+    event.ctrlKey,
+    event.altKey,
+    event.shiftKey,
+    event.key,
+  );
 }
 
 /**
@@ -21,7 +26,7 @@ export function createKeyCombinationFromKeyEvent(event: React.KeyboardEvent) {
  * const keyString = createKeyCombinationString(true, false, true, 'A');
  * // Returns 'Ctrl+Shift+A'
  */
-export function createKeyCombinationString(
+export function createShortcutIncludingModifierKeys(
   ctrlKey: boolean,
   altKey: boolean,
   shiftKey: boolean,

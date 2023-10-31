@@ -1,4 +1,4 @@
-import { createKeyCombinationString } from '@/utils/key-combinations';
+import { createShortcutIncludingModifierKeys } from '@/utils/key-combinations';
 import { useEffect } from 'react';
 
 /**
@@ -44,13 +44,13 @@ export function useKeyHandlers(
 ) {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      const keyCombination = createKeyCombinationString(
+      const pressedShortcut = createShortcutIncludingModifierKeys(
         event.ctrlKey,
         event.altKey,
         event.shiftKey,
         event.key,
       );
-      const handler = keyHandlerMap[keyCombination];
+      const handler = keyHandlerMap[pressedShortcut];
       if (handler) {
         handler();
       }

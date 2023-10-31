@@ -8,7 +8,10 @@ import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOver
 import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantSpread, PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
-import { KEYBINDING_SCOPE_PLANTING, createKeyHandlersFromConfig } from '@/config/keybindings';
+import {
+  KEYBINDING_SCOPE_PLANTS_LAYER,
+  createKeyBindingsAccordingToConfig,
+} from '@/config/keybindings';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
@@ -292,7 +295,9 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
     },
   };
 
-  useKeyHandlers(createKeyHandlersFromConfig(KEYBINDING_SCOPE_PLANTING, keyHandlerActions));
+  useKeyHandlers(
+    createKeyBindingsAccordingToConfig(KEYBINDING_SCOPE_PLANTS_LAYER, keyHandlerActions),
+  );
 
   return (
     <>

@@ -1,8 +1,10 @@
 {
-  "planting": {
-    "exitPlantingMode": "Escape",
-    "search": {
-      "clearSearch": "Escape"
-    }
+  "global": {
+  },
+  "plants_layer": {
+    "exitPlantingMode": ["Escape"]
+  },
+  "_just_for_documentation_":{
+    "clearSearchInput": ["Escape"]
   }
 }

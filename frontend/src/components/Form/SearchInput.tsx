@@ -1,4 +1,3 @@
-import { getActionNameFromKeyEvent } from '@/config/keybindings';
 import { ReactComponent as SearchResetIcon } from '@/svg/icons/search-reset.svg';
 import { ReactComponent as SearchIcon } from '@/svg/icons/search.svg';
 import React, {
@@ -9,6 +8,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+
+export const SHORTCUT_SEARCH_INPUT_RESET = 'Escape';
 
 export const TEST_IDS = Object.freeze({
   SEARCH_ICON: 'search-input__search-icon',
@@ -62,9 +63,8 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
       handleSearch(event);
     };
 
-    const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-      const action = getActionNameFromKeyEvent('planting.search', event);
-      if (action === 'clearSearch') {
+    const resetSearchByKey = (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === SHORTCUT_SEARCH_INPUT_RESET) {
         resetSearch();
         event.stopPropagation();
       }
@@ -97,7 +97,7 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
           ref={searchInputRef}
           {...inputProps}
           onInput={search}
-          onKeyDown={handleKeyDown}
+          onKeyDown={resetSearchByKey}
         />
         {shouldShowResetIcon() && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-3">

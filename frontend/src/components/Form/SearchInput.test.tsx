@@ -1,5 +1,4 @@
-import SearchInput, { TEST_IDS } from './SearchInput';
-import { getShortcutsForAction } from '@/config/keybindings';
+import SearchInput, { SHORTCUT_SEARCH_INPUT_RESET, TEST_IDS } from './SearchInput';
 import '@testing-library/jest-dom';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -101,7 +100,7 @@ describe('SearchInput', () => {
     expect(searchInputField).toHaveValue('Tomato');
 
     await act(async () => {
-      await user.keyboard(`{${getShortcutsForAction('planting.search', 'clearSearch')[0]}}`);
+      await user.keyboard(`{${SHORTCUT_SEARCH_INPUT_RESET}}`);
     });
 
     expect(searchInputField).toHaveValue('');
