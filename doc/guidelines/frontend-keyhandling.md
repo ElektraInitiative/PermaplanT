@@ -13,26 +13,31 @@ Our key handling solution is designed to address the following key constraints:
 
 ### Keybinding Configuration
 
-The file 'keybindings.json' contains all keybindings that are used in the application and serves the following purpose
+The file 'keybindings.json' contains all keybindings that are used in the application and serves the following characteristics:
 
 - keybindings can easily be changed by editing the file
-- Developers have an overview of all keybindings.
+- developers have an overview of all keybindings.
 - there are different sections for keybindings:
   - global: keybindings that are globally active
   - scopes for specific layers: keybindings that are only active if the corresponding layer is active. this scopes should be named according to the layer name
-- Modifier keys are supported. (e.g. Ctrl+k)
+  - _just_for_documentation_: keybindings that are only used for documentation purposes and are not meant to get configured
+- modifier keys are supported. (e.g. Ctrl+k)
+- multiple keybindings can be assigned to one action
 
 Structure:
 
 ```
 {
   "global": {
-    "<<action_name>>": "<<Key-Binding>>"
+    "<<action_name>>": ["<<Key-Binding>>, ...]"
   }
   "plants_layer": {
-    "exitPlantingMode": "Escape"
+    "exitPlantingMode": ["Escape"]
   }
   ...
+  "_just_for_documentation_": {
+    "clearSearch": ["Escape"}
+  }
 }
 ```
 
