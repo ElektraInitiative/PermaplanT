@@ -3,7 +3,7 @@
 ## Problem
 
 In the development of PermaplanT, we have identified the need for a robust keybinding system to enhance the developer experience.
-During research we considered to use some npm packages which may be helpful for our use case.
+During research we considered to use some npm packages that provide keybinding functionality.
 
 ## Constraints
 
