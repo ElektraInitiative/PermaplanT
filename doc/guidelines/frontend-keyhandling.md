@@ -1,13 +1,12 @@
 # Frontend Keybindings
 
 This document gives guidelines on how to implement keybindings in the frontend.
-Our keybinding solution should adhere to the following constraints:
+Our key handling solution is designed to address the following key constraints:
 
-- **Ease of Integration**: The keybinding system should be straightforward to integrate into different components of the application.
 - **Developer-friendly**: Developers should get an overview where which key binding is assigned.
 - **UX**: Collisions between shortcuts which trigger multiple actions at once should be avoided.
 
-### Important notes Konva Map Keyhandling
+### Important notes for Konva Key handling
 
 - since keys cannot be bound directly on konva elements, keyhandlers have to check if the corresponding layer is active to avoid collisions
 - if keys should only be active if map is focused, handlers have to be bound to canvas section of the map component
