@@ -8,7 +8,7 @@ interface HorizontalScrollingPickerProps {
 
 const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (props) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [selectedItem, setSelectedItem] = useState<number | null>(null);
+  const [selectedItem /*, setSelectedItem*/] = useState<number | null>(null);
   const isDragging = useRef<boolean>(false);
   const dragStartX = useRef<number | null>(null);
   const leftScrollStart = useRef<number | null>(null);
@@ -25,14 +25,20 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
         const scrollLeft = selectedElement.offsetLeft + itemWidth / 2 - containerWidth / 2;
 
         container.scrollTo({
-          behavior: 'smooth', // You can adjust the behavior as needed
+          behavior: 'instant',
           left: scrollLeft,
         });
       }
     }
   };
 
+  /*
   const handleScroll = () => {
+    if (isScrollingToIndex) {
+      setIsScrollingToIndex(false);
+      return;
+    }
+
     const container = containerRef.current;
     if (container) {
       const containerWidth = container.offsetWidth;
@@ -51,19 +57,35 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
           break;
         }
       }
+
+
+
+      // Check if the scroll has stopped for a brief moment
+      clearTimeout(scrollStopTimeout!);
+
+      scrollStopTimeout = setTimeout(() => {
+        if (selectedItem !== null) {
+          // Scroll has stopped; you can react here
+          console.log('Scroll has stopped');
+          scrollToIndex(selectedItem);
+        }
+      }, 1000); // Adjust the timeout duration as needed
+
     }
   };
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+*/
+  const handleMouseDown = (e: MouseEvent) => {
     if (containerRef.current) {
       isDragging.current = true;
       dragStartX.current = e.clientX;
-      leftScrollStart.current = containerRef.current.scrollLeft;
+
+      const currentScrollLeft = containerRef.current.scrollLeft;
+      leftScrollStart.current = currentScrollLeft;
       e.preventDefault();
     }
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.current || dragStartX.current === null) return;
 
     const container = containerRef.current;
@@ -77,22 +99,24 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
     }
   };
 
-  // Add an effect to scroll to the selected item when it changes
-  useEffect(() => {
-    if (selectedItem !== null) {
-      scrollToIndex(selectedItem);
-    }
-  }, [selectedItem]);
-
   const handleItemClick = (index: number) => {
-    console.log('clicked');
-    if (leftScrollStart.current == containerRef.current?.scrollLeft) {
-      // Select an item by clicking on it only if not currently dragging
-      scrollToIndex(index);
+    if (containerRef.current) {
+      const initialScrollLeft = leftScrollStart.current;
+
+      // Wait for a short delay to ensure the scroll position doesn't change due to the click
+      setTimeout(() => {
+        const currentScrollLeft = containerRef.current?.scrollLeft;
+
+        if (initialScrollLeft === currentScrollLeft) {
+          // Scroll position hasn't changed, it's a click
+          console.log('Item clicked');
+          scrollToIndex(index);
+        }
+      }, 100); // You can adjust the delay as needed
     }
   };
 
-  const handleMouseWheel = (e: React.WheelEvent) => {
+  const handleMouseWheel = (e: WheelEvent) => {
     if (!containerRef.current) return;
 
     e.preventDefault();
@@ -110,14 +134,14 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
     };
 
     const container = containerRef.current;
-    container?.addEventListener('scroll', handleScroll);
+    //container?.addEventListener('scroll', handleScroll);
     container?.addEventListener('mousedown', handleMouseDown);
     container?.addEventListener('wheel', handleMouseWheel);
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      container?.removeEventListener('scroll', handleScroll);
+      //container?.removeEventListener('scroll', handleScroll);
       container?.removeEventListener('mousedown', handleMouseDown);
       container?.removeEventListener('wheel', handleMouseWheel);
       document.removeEventListener('mousemove', handleMouseMove);
