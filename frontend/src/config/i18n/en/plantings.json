@@ -3,7 +3,6 @@
   "delete": "Delete Planting",
   "delete_multiple_plantings": "Delete Plantings",
   "error_fetching_plant": "Sorry, I'm experiencing trouble fetching the plant from my server. Please try again later.",
-  "error_fetching_plant_multiple_plantings": "Sorry, I'm experiencing trouble fetching the plants from my server. Please try again later.",
   "add_date": "Added on",
   "remove_date": "Removed on",
   "error_invalid_add_remove_date": "Remove date must be after add date.",

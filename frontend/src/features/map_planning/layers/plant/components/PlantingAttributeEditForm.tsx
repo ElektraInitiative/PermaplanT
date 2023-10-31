@@ -41,6 +41,7 @@ export type EditMultiplePlantingsProps = EditPlantingAttributesProps & {
 export type PlantingAttributeEditFormProps = EditPlantingAttributesProps & {
   addDateDefaultValue: string;
   removeDateDefaultValue: string;
+  multiplePlantings?: boolean;
 };
 
 export function SinglePlantingAttributeForm({
@@ -103,6 +104,7 @@ export function MultiplePlantingsAttributeForm({
         onRemoveDateChange={onRemoveDateChange}
         onDeleteClick={onDeleteClick}
         isReadOnlyMode={isReadOnlyMode}
+        multiplePlantings={true}
       />
     </div>
   );
@@ -115,6 +117,7 @@ export function PlantingAttributeEditForm({
   onRemoveDateChange,
   onDeleteClick,
   isReadOnlyMode,
+  multiplePlantings = false,
 }: PlantingAttributeEditFormProps) {
   const { t } = useTranslation(['plantings']);
 
@@ -164,7 +167,11 @@ export function PlantingAttributeEditForm({
           <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
         )}
       </div>
-      <p className="pb-4 text-[0.8rem] text-neutral-400">{t('plantings:add_date_description')}</p>
+      <p className="pb-4 text-[0.8rem] text-neutral-400">
+        {multiplePlantings
+          ? t('plantings:add_date_description_multiple_plantings')
+          : t('plantings:add_date_description')}
+      </p>
 
       <div className="flex gap-2">
         <SimpleFormInput
@@ -184,7 +191,11 @@ export function PlantingAttributeEditForm({
         )}
       </div>
 
-      <p className="text-[0.8rem] text-neutral-400">{t('plantings:remove_date_description')}</p>
+      <p className="text-[0.8rem] text-neutral-400">
+        {multiplePlantings
+          ? t('plantings:remove_date_description_multiple_plantings')
+          : t('plantings:remove_date_description')}
+      </p>
 
       <hr className="my-4 border-neutral-700" />
 
@@ -195,7 +206,7 @@ export function PlantingAttributeEditForm({
         className="w-36"
         data-tourid="planting_delete"
       >
-        {t('plantings:delete')}
+        {multiplePlantings ? t('plantings:delete_multiple_plantings') : t('plantings:delete')}
       </SimpleButton>
     </>
   );

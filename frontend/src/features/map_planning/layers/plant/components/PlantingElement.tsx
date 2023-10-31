@@ -8,6 +8,7 @@ import {
   hideTooltip,
 } from '@/features/map_planning/utils/Tooltip';
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
+import { COLOR_PRIMARY_400, COLOR_SECONDARY_400 } from '@/utils/constants';
 import { commonName } from '@/utils/plant-naming';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Group, Circle, Rect } from 'react-konva';
@@ -80,7 +81,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
         height={planting.height}
         x={0}
         y={0}
-        fill={isSelected ? '#0084ad' : '#6f9e48'}
+        fill={isSelected ? COLOR_SECONDARY_400 : COLOR_PRIMARY_400}
       />
       {plant ? (
         <PublicNextcloudKonvaImage
