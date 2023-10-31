@@ -22,6 +22,10 @@
   input {
     @apply dark:[color-scheme:dark];
   }
+
+  .list-style-revert * {
+    list-style: revert;
+  }
 }
 
 @layer components {
