@@ -10,7 +10,7 @@ import {
 } from '@/features/map_planning/utils/Tooltip';
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
 import { COLOR_PRIMARY_400, COLOR_SECONDARY_400 } from '@/utils/constants';
-import { commonName, getPlantNameFromSeedAndPlant } from '@/utils/plant-naming';
+import { getNameFromPlant, getPlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Group, Circle, Rect } from 'react-konva';
 
@@ -23,7 +23,7 @@ const placeTooltip = (plant: PlantsSummaryDto | undefined, seed: SeedDto | undef
 
   setTooltipPositionToMouseCursor();
   if (!seed) {
-    showTooltipWithContent(commonName(plant));
+    showTooltipWithContent(getNameFromPlant(plant));
   } else {
     showTooltipWithContent(getPlantNameFromSeedAndPlant(seed, plant));
   }
