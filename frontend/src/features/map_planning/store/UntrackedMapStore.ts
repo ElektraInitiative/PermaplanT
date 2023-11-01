@@ -49,7 +49,7 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers,
             plants: {
               ...state.untrackedState.layers.plants,
-              selectedPlanting: null,
+              selectedPlantings: null,
               selectedPlantForPlanting: null,
             },
           },
@@ -72,7 +72,7 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           plants: {
             ...state.untrackedState.layers.plants,
-            selectedPlanting: null,
+            selectedPlantings: null,
             selectedPlantForPlanting: null,
           },
           base: {
@@ -124,14 +124,14 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           plants: {
             ...state.untrackedState.layers.plants,
-            selectedPlanting: null,
+            selectedPlantings: null,
             selectedPlantForPlanting: plant,
           },
         },
       },
     }));
   },
-  selectPlanting(planting) {
+  selectPlantings(plantings) {
     set((state) => ({
       ...state,
       untrackedState: {
@@ -141,7 +141,7 @@ export const createUntrackedMapSlice: StateCreator<
           plants: {
             ...state.untrackedState.layers.plants,
             selectedPlantForPlanting: null,
-            selectedPlanting: planting,
+            selectedPlantings: plantings,
           },
         },
       },

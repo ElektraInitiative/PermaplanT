@@ -3,14 +3,14 @@ import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { LayerType, PlantSpread, PlantsSummaryDto } from '@/api_types/definitions';
+import { LayerType, PlantSpread, PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
 import { PlantNameFromPlant } from '@/utils/plant-naming';
 import Konva from 'konva';
-import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
+import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
 import { Layer } from 'react-konva';
 import * as uuid from 'uuid';
@@ -26,7 +26,7 @@ function getPlantWidth({ spread = PlantSpread.Medium }): number {
 }
 
 function exitPlantingMode() {
-  useMapStore.getState().selectPlanting(null);
+  useMapStore.getState().selectPlantings(null);
 }
 
 function usePlantLayerListeners(listening: boolean) {
@@ -98,13 +98,19 @@ function usePlantLayerListeners(listening: boolean) {
   }, []);
 
   /**
-   * Event handler for selecting plants
+   * Event handler for selecting plants via the selection rectangle
    */
-  const handleSelectPlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(() => {
+  const handleSelectPlanting: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
+    const selectedPlantings = (foundPlantings: PlantingDto[], konvaNode: Node) => {
+      const plantingNode = konvaNode.getAttr('planting');
+      return plantingNode ? [...foundPlantings, plantingNode] : [foundPlantings];
+    };
+
     const transformer = useMapStore.getState().transformer.current;
-    const element = transformer?.getNodes().find((element) => element.getAttr('planting'));
-    if (element) {
-      useMapStore.getState().selectPlanting(element.getAttr('planting'));
+    const plantings = transformer?.nodes().reduce(selectedPlantings, []);
+
+    if (plantings?.length) {
+      useMapStore.getState().selectPlantings(plantings);
     }
   }, []);
 
