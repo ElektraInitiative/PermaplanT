@@ -194,7 +194,7 @@ class MapPlantingPage(AbstractPage):
 
         Parameters
         ----------
-        timeout : int, optional, default=1000
+        timeout : int, optional, default=10000
         Timeout in ms before taking the screenshot.
 
         Returns
