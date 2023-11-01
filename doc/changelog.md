@@ -13,8 +13,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- Add seed column to plantings _(Moritz)_
-- _()_
+- Plantings now store seed information if they were created using a seed _(Moritz)_
+- Tooltips show the full plant for plantings that were created using a seed _(Moritz)_
 - _()_
 - _()_
 - Enable seed search in plant layer _(Moritz)_
