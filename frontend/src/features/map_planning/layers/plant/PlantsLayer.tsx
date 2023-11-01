@@ -59,12 +59,12 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      const width = getPlantWidth(selectedPlant);
+      const width = getPlantWidth(selectedPlant.plant);
 
       executeAction(
         new CreatePlantAction({
           id: uuid.v4(),
-          plantId: selectedPlant.id,
+          plantId: selectedPlant.plant.id,
           layerId: getSelectedLayerId() ?? -1,
           // consider the offset of the stage and size of the element
           x: Math.round(position.x),
@@ -75,6 +75,7 @@ function usePlantLayerListeners(listening: boolean) {
           scaleX: 1,
           scaleY: 1,
           addDate: timelineDate,
+          seedId: selectedPlant.seed?.id,
         }),
       );
     },
@@ -214,7 +215,7 @@ function PlantsLayer(props: PlantsLayerProps) {
         <Html>
           {createPortal(
             <AnimatePresence mode="wait">
-              {selectedPlant && <SelectedPlantInfo plant={selectedPlant} />}
+              {selectedPlant && <SelectedPlantInfo plant={selectedPlant.plant} />}
             </AnimatePresence>,
             portalRef.current,
           )}
