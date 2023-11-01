@@ -258,6 +258,7 @@ export const BaseLayerRightToolbar = () => {
         />
         {measureStep === 'inactive' ? (
           <SimpleButton
+            disabled={isReadOnlyMode}
             onClick={() => {
               activateMeasurement();
               setStatusPanelContent(<span>{t('baseLayerForm:auto_scaling_hint')}</span>);
