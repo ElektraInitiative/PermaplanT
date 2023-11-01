@@ -168,7 +168,7 @@ export interface UntrackedMapSlice {
   ) => void;
   lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
-  selectPlanting: (planting: PlantingDto | null) => void;
+  selectPlantings: (plantings: PlantingDto[] | null) => void;
   toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
@@ -344,7 +344,7 @@ export type UntrackedLayers = {
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantForPlanting | null;
-  selectedPlanting: PlantingDto | null;
+  selectedPlantings: PlantingDto[] | null;
   showLabels: boolean;
 };
 

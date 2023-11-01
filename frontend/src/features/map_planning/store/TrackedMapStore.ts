@@ -131,7 +131,7 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
  */
 function applyAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
   applyActionToStore(action, set, get);
-  updateSelectedPlanting(set, get);
+  updateSelectedPlantings(set, get);
   clearInvalidSelection(get);
 }
 
@@ -256,18 +256,15 @@ function executeActionImpl(action: Action<unknown, unknown>, set: SetFn, get: Ge
 }
 
 /**
- * Replaces the selected planting with a fresh version.
+ * Replaces the selected plantings with fresh versions from the backend.
  */
-function updateSelectedPlanting(set: SetFn, get: GetFn) {
-  const selectedPlanting = get().untrackedState.layers.plants.selectedPlanting;
-  if (!selectedPlanting) {
+function updateSelectedPlantings(set: SetFn, get: GetFn) {
+  const selectedPlantings = get().untrackedState.layers.plants.selectedPlantings;
+  if (!selectedPlantings?.length) {
     return;
   }
 
-  const newSelectedPlanting =
-    get().trackedState.layers.plants.loadedObjects.find(
-      (planting) => planting.id === selectedPlanting.id,
-    ) ?? null;
+  const updatedSelectedPlantings = getUpdatesForSelectedPlantings(get, selectedPlantings);
 
   set((state) => ({
     ...state,
@@ -277,9 +274,25 @@ function updateSelectedPlanting(set: SetFn, get: GetFn) {
         ...state.untrackedState.layers,
         plants: {
           ...state.untrackedState.layers.plants,
-          selectedPlanting: newSelectedPlanting,
+          selectedPlantings: updatedSelectedPlantings,
         },
       },
     },
   }));
+}
+
+function getUpdatesForSelectedPlantings(get: GetFn, selectedPlantings: PlantingDto[]) {
+  const loadUpdateForSelectedPlanting = (selectedPlanting: PlantingDto) => {
+    return get().trackedState.layers.plants.loadedObjects.find(
+      (loadedPlanting) => loadedPlanting.id === selectedPlanting.id,
+    );
+  };
+
+  const updatePlantings = (updatedPlantings: PlantingDto[], selectedPlanting: PlantingDto) => {
+    const updatedPlanting = loadUpdateForSelectedPlanting(selectedPlanting);
+
+    return updatedPlanting ? [...updatedPlantings, updatedPlanting] : updatedPlantings;
+  };
+
+  return selectedPlantings.reduce(updatePlantings, []);
 }

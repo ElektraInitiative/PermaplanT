@@ -4,53 +4,81 @@ import {
   UpdateAddDatePlantAction,
   UpdateRemoveDatePlantAction,
 } from '../actions';
-import { useFindPlantById } from '../hooks/useFindPlantById';
 import {
-  PlantingAttributeEditForm,
-  PlantingAttributeEditFormData,
+  PlantingDateAttribute,
+  SinglePlantingAttributeForm,
+  MultiplePlantingsAttributeForm,
 } from './PlantingAttributeEditForm';
 import useMapStore from '@/features/map_planning/store/MapStore';
 
 export function PlantLayerLeftToolbar() {
-  const selectedPlanting = useMapStore(
-    (state) => state.untrackedState.layers.plants.selectedPlanting,
+  const selectedPlantings = useMapStore(
+    (state) => state.untrackedState.layers.plants.selectedPlantings,
   );
   const executeAction = useMapStore((state) => state.executeAction);
-  const selectPlanting = useMapStore((state) => state.selectPlanting);
+  const selectPlantings = useMapStore((state) => state.selectPlantings);
   const transformerRef = useMapStore((state) => state.transformer);
   const step = useMapStore((state) => state.step);
 
   const isReadOnlyMode = useIsReadOnlyMode();
 
-  const { plant } = useFindPlantById(selectedPlanting?.plantId ?? NaN, Boolean(selectedPlanting));
+  const nothingSelected = !selectedPlantings?.length;
+  const singlePlantSelected = selectedPlantings?.length === 1;
+
+  const onAddDateChange = ({ addDate }: PlantingDateAttribute) => {
+    if (!selectedPlantings?.length) return;
+
+    selectedPlantings.forEach((selectedPlanting) =>
+      executeAction(new UpdateAddDatePlantAction({ id: selectedPlanting.id, addDate })),
+    );
+  };
+
+  const onRemoveDateChange = ({ removeDate }: PlantingDateAttribute) => {
+    if (!selectedPlantings?.length) return;
+
+    selectedPlantings.forEach((selectedPlanting) =>
+      executeAction(new UpdateRemoveDatePlantAction({ id: selectedPlanting.id, removeDate })),
+    );
+  };
 
   const onDeleteClick = () => {
-    if (!selectedPlanting) return;
-    executeAction(new DeletePlantAction({ id: selectedPlanting?.id }));
-    selectPlanting(null);
+    if (!selectedPlantings?.length) return;
+
+    selectedPlantings.forEach((selectedPlanting) =>
+      executeAction(new DeletePlantAction({ id: selectedPlanting.id })),
+    );
+
+    selectPlantings(null);
     transformerRef.current?.nodes([]);
   };
 
-  const onAddDateChange = ({ addDate }: PlantingAttributeEditFormData) => {
-    if (!selectedPlanting) return;
-    executeAction(new UpdateAddDatePlantAction({ id: selectedPlanting.id, addDate }));
-  };
+  if (nothingSelected) {
+    return null;
+  }
 
-  const onRemoveDateChange = ({ removeDate }: PlantingAttributeEditFormData) => {
-    if (!selectedPlanting) return;
-    executeAction(new UpdateRemoveDatePlantAction({ id: selectedPlanting.id, removeDate }));
-  };
-
-  return selectedPlanting && plant ? (
-    <PlantingAttributeEditForm
-      disabled={isReadOnlyMode}
+  return singlePlantSelected ? (
+    <SinglePlantingAttributeForm
+      planting={selectedPlantings[0]}
       // remount the form when the selected planting or the step changes (on undo/redo)
-      key={`${selectedPlanting.id}-${step}`}
-      plant={plant}
-      planting={selectedPlanting}
-      onDeleteClick={onDeleteClick}
+      key={`${selectedPlantings[0].id}-${step}`}
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
+      onDeleteClick={onDeleteClick}
+      isReadOnlyMode={isReadOnlyMode}
     />
-  ) : null;
+  ) : (
+    <MultiplePlantingsAttributeForm
+      plantings={selectedPlantings}
+      key={
+        selectedPlantings.reduce(
+          (key, selectedPlanting) => (key += selectedPlanting.id + '-'),
+          '',
+        ) + `${step}`
+      }
+      onAddDateChange={onAddDateChange}
+      onRemoveDateChange={onRemoveDateChange}
+      onDeleteClick={onDeleteClick}
+      isReadOnlyMode={isReadOnlyMode}
+    />
+  );
 }

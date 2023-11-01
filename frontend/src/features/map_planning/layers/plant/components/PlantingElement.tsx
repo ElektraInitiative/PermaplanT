@@ -8,6 +8,7 @@ import {
   hideTooltip,
 } from '@/features/map_planning/utils/Tooltip';
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
+import { COLOR_PRIMARY_400, COLOR_SECONDARY_400 } from '@/utils/constants';
 import { commonName } from '@/utils/plant-naming';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Group, Circle, Rect } from 'react-konva';
@@ -20,8 +21,16 @@ const placeTooltip = (plant: PlantsSummaryDto | undefined) => {
   if (!plant) return;
 
   setTooltipPositionToMouseCursor();
-
   showTooltipWithContent(commonName(plant));
+};
+
+const isPlantingElementSelected = (
+  planting: PlantingDto,
+  allSelectedPlantings: PlantingDto[] | null,
+) => {
+  return Boolean(
+    allSelectedPlantings?.find((selectedPlanting) => selectedPlanting.id === planting.id),
+  );
 };
 
 /**
@@ -39,11 +48,12 @@ export function PlantingElement({ planting }: PlantingElementProps) {
   const { plant } = useFindPlantById(planting.plantId);
 
   const addShapeToTransformer = useMapStore((state) => state.addShapeToTransformer);
-  const selectPlanting = useMapStore((state) => state.selectPlanting);
+  const selectPlantings = useMapStore((state) => state.selectPlantings);
 
-  const selectedPlanting = useMapStore(
-    (state) => state.untrackedState.layers.plants.selectedPlanting,
+  const allSelectedPlantings = useMapStore(
+    (state) => state.untrackedState.layers.plants.selectedPlantings,
   );
+  const isSelected = isPlantingElementSelected(planting, allSelectedPlantings);
 
   const handleClickOnPlant = (e: KonvaEventObject<MouseEvent>) => {
     const triggerPlantSelectionInGuidedTour = () => {
@@ -54,7 +64,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
     if (!isPlacementModeActive()) {
       triggerPlantSelectionInGuidedTour();
       addShapeToTransformer(e.currentTarget);
-      selectPlanting(planting);
+      selectPlantings([planting]);
     }
   };
 
@@ -71,7 +81,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
         height={planting.height}
         x={0}
         y={0}
-        fill={selectedPlanting?.id === planting.id ? '#0084ad' : '#6f9e48'}
+        fill={isSelected ? COLOR_SECONDARY_400 : COLOR_PRIMARY_400}
       />
       {plant ? (
         <PublicNextcloudKonvaImage

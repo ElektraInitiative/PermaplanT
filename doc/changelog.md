@@ -27,7 +27,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Rename section "Seeds" to "Inventory" _(Moritz)_
 - _()_
 - _()_
-- Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab)_
+- Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab, Daniel Steinkogler)_
+- Added Meeting Agenda&Notes for 30.10. 9:00 _(Markus Raab, Christoph N.)_
 - _()_
 - _()_
 - _()_
@@ -44,7 +45,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Create multi-select usecase #1 _(tschawax)_
 - Fix transformer rotation handle and moving selected plants #1013 _(tschawax)_
 - Clean up the asset file structure in frontend _(Moritz)_
-- _()_
+- Implement multi-select usecase #727 _(tschawax)_
 - Fix plant deletion in guided tour on small screens #861 _(tschawax)_
 - _()_
 - _()_
