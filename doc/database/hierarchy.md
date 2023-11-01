@@ -85,29 +85,33 @@ Or is built up by several words (for concrete plants):
 
 E.g. `Brassica oleracea italica 'Ramoso calabrese'`
 
-### Hybrid names
+### Hybrid Names
 
 Hybrid names are built up differently.
 Either two parent binomials, separated by a "x" or "×" or a given binomial, with or without an intercalated "×"
 (see [Wikipedia](https://en.wikipedia.org/wiki/Hybrid_name)).
 So the name does not necessarily say if a plant is a hybrid.
 
-### Rendering the Unique Name
+There is no special handling of hybrid names necessary, as the hybrid name is stored as unique name in the database.
 
-The unique name of a plant needs to be displayed in the following manner:
+### Displaying the Unique Name
+
+The unique name of a plant should be displayed as follows:
 
 - Latin name should be displayed in _italics_.
 - The cultivar name should be in regular font, enclosed in single quotes (as stored in the database).
 
 For example: _Brassica oleracea italica_ 'Ramoso calabrese'
 
-### Rendering the Complete Name
+The unique name alone usually is not displayed.
+
+### Displaying the Complete Name
 
 The complete name of a plant should be displayed as follows:
 
 - If there is a common name, the common name appears first and should start with a capital letter (e.g., "tomato" becomes "Tomato").
 - If it is a plant name from the seed database, the name continues with hyphen `-` and the additional name.
-- This is followed by the unique name in brackets, unique name as described above in [Rendering the Complete Name](###rendering-the-complete-name).
+- This is followed by the unique name in brackets, unique name as described above in [Unique Name](###unique-name).
 
 The general format is:
 
@@ -119,7 +123,7 @@ _unique name_ - additional name
 
 The cultivar is a part of the unique name.
 
-For example:
+For example (assuming Brassica oleracea italica doesn't have a common name):
 
 - Italian broccoli - violett (_Brassica oleracea italica_ 'Ramoso calabrese')
 - Italian broccoli - violett (_Brassica oleracea italica_)
@@ -129,12 +133,27 @@ For example:
 - _Brassica oleracea italica_ - violett
 - _Brassica oleracea italica_
 
-### Usage of plant names
+### Displaying the Short Name
 
-- The common name alone is enough for overview, e.g. when you see all labels in the map editor at once.
-  - If no common name exists, it's acceptable to display the unique name as shown in [Rendering the Complete Name](###rendering-the-complete-name).
-- The complete name should always be given if the user wants to know precisely which plant she is dealing with, e.g. in search results or in plant details.
-- The additional name created when adding a new seed needs to be provided as explained above if a plant is connected with a seed.
+The short name should be displayed as follows:
+
+- Common name or, if common name is not not available, the unique name as described above in [Unique Name](###unique-name).
+- If additional name is available, `-` and the additional name should be appended.
+
+For example (assuming Abies mariesii and Brassica oleracea italica don't have common names):
+
+- Tomato - Gelbe Birne
+- _Abies mariesii_
+- _Brassica oleracea italica_ 'Ramoso calabrese' - violett
+
+### Usage of Plant Names
+
+- The short name is for overview, e.g. when you see all labels in the map editor at once (plant labels).
+- The complete name should always be given if the user wants to know precisely which plant she is dealing with, e.g.:
+  - when the mouse is hovering over a plant in the plant layer,
+  - in search results or
+  - in plant details (left bottom toolbar).
+- The additional name must always be added if a plant is connected with a seed.
 
 ### Rules
 
