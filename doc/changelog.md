@@ -13,7 +13,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Enable automatic image scaling in base layer _(Moritz)_
 - _()_
-- Add concept for key handling _(Daniel Steinkogler)_
+- Add [guideline](/doc/guidelines/frontend-keyhandling.md) and [decisions](/doc/decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
 - Plantings now store seed information if they were created using a seed _(Moritz)_
 - Tooltips show the full plant for plantings that were created using a seed _(Moritz)_

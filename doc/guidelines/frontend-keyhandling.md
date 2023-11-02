@@ -1,10 +1,6 @@
 # Frontend Keybindings
 
 This document gives guidelines on how to implement keybindings in the frontend.
-Our key handling solution is designed to address the following key constraints:
-
-- **Developer-friendly**: Developers should get an overview where which key binding is assigned.
-- **UX**: Collisions between shortcuts which trigger multiple actions at once should be avoided.
 
 ### Important notes for Konva Key handling
 
@@ -47,11 +43,11 @@ Structure:
 - method: add scope to JSON, bind a keyhandler and execute action according to configuration
 - if actions of parent components shouldn't be triggered, event propagation must be stopped
 
-Example
+Example:
 
 ```
     const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-      const action = getActionNameFromKeyEvent(<scope>, event)
+      const action = getActionNameFromKeyEvent(<scope>, event);
       if(action === "doSomething"){
         doSomething();
         event.stopPropagation();
@@ -59,7 +55,7 @@ Example
     };
 ```
 
-### Keyhandling independent of focus
+### Keyhandling Independent of Focus
 
 - used if keylistener should be triggered independent of focused HTML element
 - method: use custom keybinding hook and pass handlers according to config
@@ -73,8 +69,15 @@ const keyHandlerActions: Record<string, () => void> = {
   },
 };
 
-useKeyHandlers(createKeyHandlersFromConfig("planting_layer", keyHandlerActions));
+//use or custom hook to bind keyhandlers
+useKeyHandlers(
+  createKeyHandlersFromConfig("planting_layer", keyHandlerActions)
+);
 ```
 
 - key listener can either be bound on document or on specific node that is passed to hook
 - listener is active as long as the component where hook is used is rendered
+
+## Further Readings
+
+- [Keyhandling Decision](/doc/decisions/frontend_keyhandling.md)

@@ -1,4 +1,4 @@
-# Frontend Keybindings
+# Frontend Keyhandling
 
 ## Problem
 
@@ -9,7 +9,9 @@ During research we considered to use some npm packages that provide keybinding f
 
 Our keybinding solution should adhere to the following constraints:
 
+- **Developer-friendly**: Developers should get an overview where which key binding is assigned.
 - **Ease of Integration**: The keybinding system should be straightforward to integrate into different components of the application.
+- **UX**: Collisions between shortcuts which trigger multiple actions at once should be avoided.
 
 ## Solution
 
@@ -26,13 +28,14 @@ Our keybinding solution should adhere to the following constraints:
 - Link: [react-hotkeys-hook](https://github.com/JohannesKlauss/react-hotkeys-hook/tree/main)
 - provides a hook for binding keys in components and also
 - offers scoping abilities.
-- however, integration seems not to be as straightforward as with custom solution and so its doesn't really solve a problem for us.
+- however, integration seems not to be as straightforward as with a custom solution and so it doesn't really solve a problem for us.
 
 ## Decision
 
-- We don't use any of the packages
+- We don't use any of the packages.
+- Guideline: [/doc/guidelines/frontend-keyhandling.md](/doc/guidelines/frontend-keyhandling.md)
 
 ## Rational
 
 - We already have a custom keybinding hook and currently don't need any of the features provided by the packages.
-- the custom hook gives us more flexibility and is easier to integrate into our components.
+- The custom hook gives us more flexibility and is easier to integrate into our components.
