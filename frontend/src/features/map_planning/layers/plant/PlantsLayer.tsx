@@ -9,7 +9,7 @@ import { PlantingElement } from './components/PlantingElement';
 import { LayerType, PlantSpread, PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import {
-  KEYBINDING_SCOPE_PLANTS_LAYER,
+  KEYBINDINGS_SCOPE_PLANTS_LAYER,
   createKeyBindingsAccordingToConfig,
 } from '@/config/keybindings';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
@@ -296,7 +296,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
   };
 
   useKeyHandlers(
-    createKeyBindingsAccordingToConfig(KEYBINDING_SCOPE_PLANTS_LAYER, keyHandlerActions),
+    createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_PLANTS_LAYER, keyHandlerActions),
   );
 
   return (

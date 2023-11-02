@@ -1,6 +1,8 @@
 {
   "global": {
   },
+  "base_layer": {
+  },
   "plants_layer": {
     "exitPlantingMode": ["Escape"]
   },

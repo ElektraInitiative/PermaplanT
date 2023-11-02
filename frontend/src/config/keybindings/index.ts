@@ -2,23 +2,24 @@ import keybindings from './keybindings.json';
 import { createShortcutIncludingModifierKeysFromKeyEvent } from '@/utils/key-combinations';
 import React from 'react';
 
-export const KEYBINDING_SCOPE_GLOBAL = 'global';
-export const KEYBINDING_SCOPE_PLANTS_LAYER = 'plants_layer';
+export const KEYBINDINGS_SCOPE_GLOBAL = 'global';
+export const KEYBINDINGS_SCOPE_PLANTS_LAYER = 'plants_layer';
+export const KEYBINDINGS_SCOPE_BASE_LAYER = 'base_layer';
 
 type KeyBinding = Record<string, string[]>;
 
-type KeyBindingConfig = {
+type KeyBindingsConfig = {
   [scope: string]: KeyBinding;
 };
 
-export const keyBindingConfig: KeyBindingConfig = keybindings;
+export const keyBindingsConfig: KeyBindingsConfig = keybindings;
 
 /**
  * Creates a set of key event handlers based on the provided scope and a set of key handler actions.
  * These handlers are mapped to specific keyboard shortcuts defined in the configuration for the given scope.
  *
  * @param scope - The scope for which to create key event handlers.
- * @param keyHandlerActions - An object that maps action names to corresponding handler functions.
+ * @param keyBindingsActions - An object that maps action names to corresponding handler functions.
  *
  * @returns A record of key event handlers, where each key represents a keyboard shortcut defined in the
  *          scope's configuration, and the corresponding value is the handler function associated with the
@@ -27,14 +28,14 @@ export const keyBindingConfig: KeyBindingConfig = keybindings;
  */
 export function createKeyBindingsAccordingToConfig(
   scope: string,
-  keyHandlerActions: Record<string, () => void>,
+  keyBindingsActions: Record<string, () => void>,
 ): Record<string, () => void> {
-  const configuredKeybindings = keyBindingConfig[scope];
+  const configuredKeybindings = keyBindingsConfig[scope];
 
   if (configuredKeybindings) {
     return Object.keys(configuredKeybindings).reduce(
       (handlers: Record<string, () => void>, action: string) => {
-        const handlerFunction = keyHandlerActions[action];
+        const handlerFunction = keyBindingsActions[action];
         if (handlerFunction) {
           const configuredShortcuts: string[] = configuredKeybindings[action];
           configuredShortcuts.forEach((key) => {
@@ -57,7 +58,7 @@ export function createKeyBindingsAccordingToConfig(
  * @returns list of keyboard shortcuts
  */
 export function getConfiguredShortcutsForAction(scope: string, action: string): string[] {
-  return keyBindingConfig[scope][action];
+  return keyBindingsConfig[scope][action];
 }
 
 /**
@@ -70,7 +71,7 @@ export function getConfiguredActionForShortcut(
   scope: string,
   shortcut: string,
 ): string | undefined {
-  const keybindings = keyBindingConfig[scope];
+  const keybindings = keyBindingsConfig[scope];
 
   if (!keybindings) return undefined;
 
