@@ -80,4 +80,4 @@ useKeyHandlers(
 
 ## Further Readings
 
-- [Keyhandling Decision](/doc/decisions/frontend_keyhandling.md)
+- [Keyhandling Decision](../decisions/frontend_keyhandling.md)

@@ -33,7 +33,7 @@ Our keybinding solution should adhere to the following constraints:
 ## Decision
 
 - We don't use any of the packages.
-- Guideline: [/doc/guidelines/frontend-keyhandling.md](/doc/guidelines/frontend-keyhandling.md)
+- Guideline: [/doc/guidelines/frontend-keyhandling.md](../guidelines/frontend-keyhandling.md)
 
 ## Rational
 
