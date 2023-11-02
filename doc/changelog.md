@@ -33,7 +33,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - add decision for timeline concept _(Daniel Steinkogler)_
-- _()_
+- Improve UI and responsiveness of file selector #1011 _(tschawax)_
 - _()_
 - Improve wordings, usability and UI of guided tour #871 _(tschawax)_
 - Fix tour-completion logic of cancel-confirmation dialog in guided tour #986 _(tschawax)_
