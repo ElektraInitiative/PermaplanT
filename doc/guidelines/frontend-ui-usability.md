@@ -33,6 +33,11 @@ The following guidelines are:
   - Running text: `text-sm`
   - Form fields and labels: `text-sm`
 
+- **Family**
+
+  - PermaplanT is using Tailwind's default cross-browser sans-serif stack everywhere.
+  - If a different family is to be used in the future, extend the theme with a new `theme.fontFamily` section in our Tailwind config file (`tailwind.config.js`).
+
 - **Alignment**
 
   - Always left align everything.
@@ -47,8 +52,6 @@ The following guidelines are:
   - Cards (like on our Map overview): `mb-4`
   - Form fields (like on the Seeds page): `mb-8`
   - Labels of form fields: `mb-2`
-  - If in doubt, use the multiplier strategy to calculate margins between sections, e.g. we are using a multiplier of 4 in our navigation bar:  
-    logo <- 48px -> navigation-link-1 <- 24px -> navigation-link-2 <- 24px -> navigation-link-3
 
 - **Letter spacing**
 
@@ -59,18 +62,16 @@ The following guidelines are:
 
 ### Colors
 
-PermaplanT uses following **three color palettes**:
+PermaplanT uses following **color palettes**:
 
-- **Neutral** (PermaplanT: gray): **dominant** color of the design, e.g. used for background, text and labels.  
-  Optimal usage: ~60%
-- **Primary** (PermaplanT: asparagus green): PermaplanT's **main brand** color, e.g. used for buttons, hovering, highlighting focused input fields.  
-  Optimal usage: ~30%
-- **Secondary** (PermaplanT: sea blue): PermaplanT's **second brand** color, e.g. used for highlighting a few UI elements (e.g. in the layers section) and action-texts.  
-  Optimal usage: ~10%
+- **Neutral** (PermaplanT: gray): **dominant** color of the design, e.g. used for background, text and labels.
+- **Primary** (PermaplanT: asparagus green): PermaplanT's **main brand** color, e.g. used for call-to-action buttons, checkmarks, highlighting focused form input fields, hovering over icons, highlighting active/enabled icons in the toolbox.
+- **Secondary** (PermaplanT: sea blue): PermaplanT's **second brand** color, e.g. used for highlighting selected plants on the map, currently focused icons, spinners, action-texts in the guided tour and bigger UI elements like the transparency bars to have some contrast to the primary color.
+- Tailwind's default color palette for **red** is e.g. used to render validation errors in forms, form field asterisks, buttons for destructive actions.
 
 Check out Google's [Material Design Guidelines](https://m3.material.io/styles/color/the-color-system/key-colors-tones) for more information on color palettes and their usage.
 
-**Only those** three color palettes **should be used** throughout the whole application.
+**Only those** color palettes **should be used** throughout the whole application.
 They can be accessed like any other defined color in Tailwind CSS and can be appended with a number denoting the shade to be used.
 
 Following shade suggestions should be used as a starting point for coloring new UI components:
@@ -135,8 +136,8 @@ Examples:
 
 - A **tooltip** on hovering must be displayed for every icon in PermaplanT's toolbox.
   The tooltip contains the icon's **label** (as concise as possible) and, if existing, the assigned **shortcut**.
-- In their **passive**, i.e. currently not active/enabled, state they must appear in **neutral** colors/colorless.
 - When **active**, i.e. currently activated/enabled, they must get a small **highlighting** through a visually stronger and more colorful appearance by using the design's primary colors.
+- When **passive**, i.e. currently not active/enabled, they must must appear in **neutral** colors/colorless.
 - When **disabled**, i.e. currently not clickable, they must be **greyed-out**, via decreasing their opacity.  
   The mouse cursor must be styled with the `not-allowed` css property.
 
@@ -156,8 +157,6 @@ Highlighting techniques:
 
 - Images: users generally remember images better than words
 
-- Never use a different font family.
-
 ### Wording
 
 Messages shown to the user should strive to fulfill following criteria:
@@ -170,7 +169,8 @@ Messages shown to the user should strive to fulfill following criteria:
 - **detailed** information should be hidden behind a **read more** link or a **collapsed** section
 - **Headlines**, **sub-headlines** and **labels** should be **capitalized**
 - **Minimize hyphenation** of words
-- **American English** spelling
+- English: **American English**
+- German: **Neue Rechtschreibung**
 - use **plural** to avoid gendering, i.e. use _we_/_they_, avoid _he_/_she_
 
 ### Error Messages
