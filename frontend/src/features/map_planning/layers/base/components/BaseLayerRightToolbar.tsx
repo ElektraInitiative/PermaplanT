@@ -204,6 +204,7 @@ export const BaseLayerRightToolbar = () => {
           setPathInput(path);
           setShowFileSelector(false);
         }}
+        title={t('baseLayerForm:selectImage')}
       />
 
       <SimpleButton onClick={() => setShowFileSelector(true)} disabled={isReadOnlyMode}>

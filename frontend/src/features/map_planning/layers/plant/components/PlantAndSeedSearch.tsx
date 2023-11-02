@@ -2,13 +2,13 @@ import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import { usePlantSearch } from '../hooks/usePlantSearch';
 import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
 import { PlantListItem } from './PlantListItem';
-import { PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput, { SearchInputHandle } from '@/components/Form/SearchInput';
 import { SeedListItem } from '@/features/map_planning/layers/plant/components/SeedListItem';
-import { useFindPlantCallback } from '@/features/map_planning/layers/plant/hooks/useFindPlantCallback';
+import { useFindPlantFromSeedCallback } from '@/features/map_planning/layers/plant/hooks/useFindPlantFromSeedCallback';
 import { useSeedSearch } from '@/features/map_planning/layers/plant/hooks/useSeedSearch';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { PlantForPlanting } from '@/features/map_planning/store/MapStoreTypes';
 import { resetSelection } from '@/features/map_planning/utils/ShapesSelection';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
 import { ReactComponent as SearchIcon } from '@/svg/icons/search.svg';
@@ -37,7 +37,7 @@ export const PlantAndSeedSearch = () => {
 
   const transformerRef = useMapStore((state) => state.transformer);
 
-  const selectPlantForPlanting = (plant: PlantsSummaryDto) => {
+  const selectPlantForPlanting = (plant: PlantForPlanting) => {
     const storeChosenPlantInUntrackedStore = () => actions.selectPlantForPlanting(plant);
 
     storeChosenPlantInUntrackedStore();
@@ -45,7 +45,9 @@ export const PlantAndSeedSearch = () => {
   };
 
   const handleClickOnPlantListItem = useCallback(selectPlantForPlanting, [actions, transformerRef]);
-  const handleClickOnSeedListItem = useFindPlantCallback((plant) => selectPlantForPlanting(plant));
+  const handleClickOnSeedListItem = useFindPlantFromSeedCallback((plant) =>
+    selectPlantForPlanting(plant),
+  );
 
   useEffect(() => {
     searchInputRef.current?.focusSearchInputField();
@@ -104,7 +106,7 @@ export const PlantAndSeedSearch = () => {
                   seed={seed}
                   key={seed.id}
                   onClick={() => {
-                    if (seed.plant_id) handleClickOnSeedListItem(seed.plant_id);
+                    if (seed.plant_id) handleClickOnSeedListItem(seed);
                   }}
                 />
               ))}
@@ -118,7 +120,7 @@ export const PlantAndSeedSearch = () => {
                   plant={plant}
                   key={plant.id}
                   onClick={() => {
-                    handleClickOnPlantListItem(plant);
+                    handleClickOnPlantListItem({ plant, seed: null });
                   }}
                 />
               ))}

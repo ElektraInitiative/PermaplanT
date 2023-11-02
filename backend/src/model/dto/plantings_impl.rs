@@ -22,6 +22,7 @@ impl From<Planting> for PlantingDto {
             scale_y: entity.scale_y,
             add_date: entity.add_date,
             remove_date: entity.remove_date,
+            seed_id: entity.seed_id,
         }
     }
 }
@@ -41,6 +42,7 @@ impl From<NewPlantingDto> for Planting {
             scale_y: dto.scale_y,
             add_date: dto.add_date,
             remove_date: None,
+            seed_id: dto.seed_id,
             //create_date: Utc::now().date_naive(),
             //delete_date: None,
         }

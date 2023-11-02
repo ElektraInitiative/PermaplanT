@@ -30,6 +30,6 @@
   }
 
   .input {
-    @apply block h-11 w-full rounded-lg p-2.5 text-sm;
+    @apply block h-10 w-full rounded-lg p-2.5 text-sm;
   }
 }
