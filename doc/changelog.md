@@ -51,8 +51,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- Improve loading spinner size in file selector and improve file selector responsiveness #1026 _(tschawax)_
 - _()_
+- Improve loading spinner size in file selector and improve file selector responsiveness #1026 _(tschawax)_
 - _()_
 - _()_
 - _()_
