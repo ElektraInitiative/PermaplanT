@@ -2,6 +2,7 @@ import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
+import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
 import { useCallback, useEffect, useState } from 'react';
 import { Circle, Layer, Line } from 'react-konva';
 
@@ -76,7 +77,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           x={untrackedBaseLayerState.measurePoint1.x}
           y={untrackedBaseLayerState.measurePoint1.y}
           radius={editorLongestSide / 250}
-          fill="red"
+          fill={COLOR_EDITOR_HIGH_VISIBILITY}
         />
       )}
       {untrackedBaseLayerState.measurePoint2 && (
@@ -84,10 +85,14 @@ const BaseLayer = (props: BaseLayerProps) => {
           x={untrackedBaseLayerState.measurePoint2.x}
           y={untrackedBaseLayerState.measurePoint2.y}
           radius={editorLongestSide / 250}
-          fill="red"
+          fill={COLOR_EDITOR_HIGH_VISIBILITY}
         />
       )}
-      <Line points={measurementLinePoints()} strokeWidth={editorLongestSide / 500} stroke="red" />
+      <Line
+        points={measurementLinePoints()}
+        strokeWidth={editorLongestSide / 500}
+        stroke={COLOR_EDITOR_HIGH_VISIBILITY}
+      />
     </Layer>
   );
 };
