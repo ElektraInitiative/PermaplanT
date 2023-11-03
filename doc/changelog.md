@@ -50,7 +50,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Improve dark mode design of danger variant buttons #1029 _(tschawax)_
 - _()_
 - _()_
 - _()_
