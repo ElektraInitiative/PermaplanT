@@ -48,9 +48,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Implement multi-select usecase #727 _(tschawax)_
 - Fix plant deletion in guided tour on small screens #861 _(tschawax)_
 - _()_
+- _()_
 - Add status-specific toolbox icon design and add toolbox icon support to icon button component #1025 _(tschawax)_
 - Improve design and behavior of undo/redo icons and improve focus design #657 _(tschawax)_
-- _()_
 - _()_
 - _()_
 - _()_
