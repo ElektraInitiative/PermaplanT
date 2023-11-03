@@ -98,13 +98,16 @@ export interface TrackedMapSlice {
    * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
    */
   transformer: React.RefObject<Konva.Transformer>;
-  /**
-   * References to timeouts used by executeActionDebounced.
-   *
-   * @internal This reference should never be modified by any other function than executeActionDebounced.
-   */
-  /** Event listener responsible for adding a single shape to the transformer */
-  addShapeToTransformer: (shape: Node) => void;
+
+  /** Discard the transformer's current nodes and set a single node in the transformer */
+  setSingleNodeInTransformer: (node: Node) => void;
+
+  /** Add a new node to the transformer's current set of nodes */
+  addNodeToTransformer: (node: Node) => void;
+
+  /** Removes given node from the transformer's current set of nodes */
+  removeNodeFromTransformer: (node: Node) => void;
+
   /**
    * Execute a user initiated action.
    * @param action the action to be executed
