@@ -201,7 +201,7 @@ function PlantsLayer(props: PlantsLayerProps) {
 
   useEffect(() => {
     if (selectedPlant) {
-      setStatusPanelContent(<SelectedPlantInfo plant={selectedPlant} />);
+      setStatusPanelContent(<SelectedPlantInfo plant={selectedPlant.plant} />);
     } else {
       clearStatusPanelContent();
     }
