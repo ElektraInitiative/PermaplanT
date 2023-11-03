@@ -16,7 +16,7 @@ const config: Config = {
   },
   watchPathIgnorePatterns: ['node_modules'],
   // node_modules is automatically ignored by jest if this is not provided.
-  // This prevents certain tests from braking, because we use libraries that
+  // It is needed, because we use libraries that
   // are delivered as uncompiled typescript files.
   transformIgnorePatterns: [],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
