@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mx-auto w-full px-4 py-8 md:w-[900px] undefined"
+/>
+`;
