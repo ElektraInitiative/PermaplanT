@@ -1,0 +1,600 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mx-auto w-full px-4 py-8 md:w-[900px] undefined"
+>
+  <h1
+    className="mb-8 text-2xl"
+  >
+    Seed Entry
+  </h1>
+  <div>
+    <form
+      onSubmit={[Function]}
+    >
+      <div
+        className="mb-6 grid gap-8 md:grid-cols-2"
+      >
+        <div
+          data-testid="paginated-select-menu__Plant Name"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="plant_id"
+          >
+            Plant Name
+            <span
+              className="text-red-800"
+            >
+               *
+            </span>
+          </label>
+          <div
+            className=" css-b62m3t-container"
+            onKeyDown={[Function]}
+          >
+            <span
+              className="css-1f43avz-a11yText-A11yText"
+              id="react-select-2-live-region"
+            />
+            <span
+              aria-atomic="false"
+              aria-live="polite"
+              aria-relevant="additions text"
+              className="css-1f43avz-a11yText-A11yText"
+            />
+            <div
+              className="h-[44px] bg-neutral-200 rounded border
+        dark:bg-neutral-50-dark focus:border-primary-500
+        hover:border-primary-500 dark:focus:border-primary-300 dark:hover:border-primary-300
+         dark:border-neutral-400-dark border-neutral-500 css-qz5xir-control"
+              onMouseDown={[Function]}
+              onTouchEnd={[Function]}
+            >
+              <div
+                className="flex-nowrap css-1fdsijx-ValueContainer"
+              >
+                <div
+                  className=" css-1jqq78o-placeholder"
+                  id="react-select-2-placeholder"
+                >
+                  Tomato
+                </div>
+                <div
+                  className=" css-qbdosj-Input"
+                  data-value=""
+                >
+                  <input
+                    aria-autocomplete="list"
+                    aria-describedby="react-select-2-placeholder"
+                    aria-expanded={false}
+                    aria-haspopup={true}
+                    aria-required={true}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    className=""
+                    disabled={false}
+                    id="react-select-2-input"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    role="combobox"
+                    spellCheck="false"
+                    style={
+                      {
+                        "background": 0,
+                        "border": 0,
+                        "color": "inherit",
+                        "font": "inherit",
+                        "gridArea": "1 / 2",
+                        "label": "input",
+                        "margin": 0,
+                        "minWidth": "2px",
+                        "opacity": 1,
+                        "outline": 0,
+                        "padding": 0,
+                        "width": "100%",
+                      }
+                    }
+                    tabIndex={0}
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                className=" css-1hb7zxy-IndicatorsContainer"
+              >
+                <span
+                  className=" css-1u9des2-indicatorSeparator"
+                />
+                <div
+                  aria-hidden="true"
+                  className=" css-1xc3v61-indicatorContainer"
+                  onMouseDown={[Function]}
+                  onTouchEnd={[Function]}
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="css-tj5bde-Svg"
+                    focusable="false"
+                    height={20}
+                    viewBox="0 0 20 20"
+                    width={20}
+                  >
+                    <path
+                      d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <input
+              aria-hidden="true"
+              className="css-5kkxb2-requiredInput-RequiredInput"
+              name="plant_id"
+              onChange={[Function]}
+              onFocus={[Function]}
+              required={true}
+              tabIndex={-1}
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          className="dark:text-white"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="name"
+          >
+            Additional Name
+            <span
+              className="text-red-800"
+            >
+               *
+            </span>
+          </label>
+          <input
+            aria-label="Additional Name"
+            className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 "
+            id="name"
+            name="name"
+            onBlur={[Function]}
+            onChange={[Function]}
+            pattern="^(?!.*(-))(?=.*[a-zA-Z0-9äöüÄÖÜß]).*$"
+            placeholder=""
+            required={true}
+            title="At least one letter or number, '-' is not allowed"
+          />
+        </div>
+        <div
+          className="dark:text-white"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="harvest_year"
+          >
+            Harvest Year
+            <span
+              className="text-red-800"
+            >
+               *
+            </span>
+          </label>
+          <input
+            aria-label="Harvest Year"
+            className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 "
+            defaultValue={2023}
+            id="harvest_year"
+            name="harvest_year"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="2023"
+            required={true}
+            type="number"
+          />
+        </div>
+        <div
+          data-testid="Amount"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="quantity"
+          >
+            Amount
+            <span
+              className="text-red-800"
+            >
+               *
+            </span>
+          </label>
+          <div
+            className=" css-b62m3t-container"
+            onKeyDown={[Function]}
+          >
+            <span
+              className="css-1f43avz-a11yText-A11yText"
+              id="react-select-3-live-region"
+            />
+            <span
+              aria-atomic="false"
+              aria-live="polite"
+              aria-relevant="additions text"
+              className="css-1f43avz-a11yText-A11yText"
+            />
+            <div
+              className="h-[44px] bg-neutral-200 rounded border
+        dark:bg-neutral-50-dark focus:border-primary-500
+        hover:border-primary-500 dark:focus:border-primary-300 dark:hover:border-primary-300
+         dark:border-neutral-400-dark border-neutral-500 css-qz5xir-control"
+              onMouseDown={[Function]}
+              onTouchEnd={[Function]}
+            >
+              <div
+                className="flex-nowrap css-1fdsijx-ValueContainer"
+              >
+                <div
+                  className=" css-1g0ciz2-singleValue"
+                >
+                  More than enough
+                </div>
+                <div
+                  className=" css-qbdosj-Input"
+                  data-value=""
+                >
+                  <input
+                    aria-autocomplete="list"
+                    aria-expanded={false}
+                    aria-haspopup={true}
+                    aria-required={true}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    className=""
+                    disabled={false}
+                    id="react-select-3-input"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    role="combobox"
+                    spellCheck="false"
+                    style={
+                      {
+                        "background": 0,
+                        "border": 0,
+                        "color": "inherit",
+                        "font": "inherit",
+                        "gridArea": "1 / 2",
+                        "label": "input",
+                        "margin": 0,
+                        "minWidth": "2px",
+                        "opacity": 1,
+                        "outline": 0,
+                        "padding": 0,
+                        "width": "100%",
+                      }
+                    }
+                    tabIndex={0}
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                className=" css-1hb7zxy-IndicatorsContainer"
+              >
+                <span
+                  className=" css-1u9des2-indicatorSeparator"
+                />
+                <div
+                  aria-hidden="true"
+                  className=" css-1xc3v61-indicatorContainer"
+                  onMouseDown={[Function]}
+                  onTouchEnd={[Function]}
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="css-tj5bde-Svg"
+                    focusable="false"
+                    height={20}
+                    viewBox="0 0 20 20"
+                    width={20}
+                  >
+                    <path
+                      d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <input
+              name="quantity"
+              type="hidden"
+              value="more than enough"
+            />
+          </div>
+        </div>
+        <div
+          className="dark:text-white"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="use_by"
+          >
+            Best by
+          </label>
+          <input
+            className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 "
+            id="use_by"
+            name="use_by"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder=""
+            type="date"
+          />
+        </div>
+        <div
+          className="dark:text-white"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="origin"
+          >
+            Origin
+          </label>
+          <input
+            className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 "
+            id="origin"
+            name="origin"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="My Home"
+          />
+        </div>
+        <div
+          data-testid="Quality"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="quality"
+          >
+            Quality
+          </label>
+          <div
+            className=" css-b62m3t-container"
+            onKeyDown={[Function]}
+          >
+            <span
+              className="css-1f43avz-a11yText-A11yText"
+              id="react-select-4-live-region"
+            />
+            <span
+              aria-atomic="false"
+              aria-live="polite"
+              aria-relevant="additions text"
+              className="css-1f43avz-a11yText-A11yText"
+            />
+            <div
+              className="h-[44px] bg-neutral-200 rounded border
+        dark:bg-neutral-50-dark focus:border-primary-500
+        hover:border-primary-500 dark:focus:border-primary-300 dark:hover:border-primary-300
+         dark:border-neutral-400-dark border-neutral-500 css-qz5xir-control"
+              onMouseDown={[Function]}
+              onTouchEnd={[Function]}
+            >
+              <div
+                className="flex-nowrap css-1fdsijx-ValueContainer"
+              >
+                <div
+                  className=" css-1g0ciz2-singleValue"
+                >
+                  Unknown
+                </div>
+                <div
+                  className=" css-qbdosj-Input"
+                  data-value=""
+                >
+                  <input
+                    aria-autocomplete="list"
+                    aria-expanded={false}
+                    aria-haspopup={true}
+                    aria-required={false}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    className=""
+                    disabled={false}
+                    id="react-select-4-input"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    role="combobox"
+                    spellCheck="false"
+                    style={
+                      {
+                        "background": 0,
+                        "border": 0,
+                        "color": "inherit",
+                        "font": "inherit",
+                        "gridArea": "1 / 2",
+                        "label": "input",
+                        "margin": 0,
+                        "minWidth": "2px",
+                        "opacity": 1,
+                        "outline": 0,
+                        "padding": 0,
+                        "width": "100%",
+                      }
+                    }
+                    tabIndex={0}
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                className=" css-1hb7zxy-IndicatorsContainer"
+              >
+                <span
+                  className=" css-1u9des2-indicatorSeparator"
+                />
+                <div
+                  aria-hidden="true"
+                  className=" css-1xc3v61-indicatorContainer"
+                  onMouseDown={[Function]}
+                  onTouchEnd={[Function]}
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="css-tj5bde-Svg"
+                    focusable="false"
+                    height={20}
+                    viewBox="0 0 20 20"
+                    width={20}
+                  >
+                    <path
+                      d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <input
+              name="quality"
+              type="hidden"
+              value="unknown"
+            />
+          </div>
+        </div>
+        <div
+          className="dark:text-white"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="taste"
+          >
+            Taste
+          </label>
+          <input
+            className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 "
+            id="taste"
+            name="taste"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="sweet"
+          />
+        </div>
+        <div
+          className="dark:text-white"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="yield_"
+          >
+            Yield
+          </label>
+          <input
+            className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 "
+            id="yield_"
+            name="yield_"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="good"
+          />
+        </div>
+        <div
+          className="dark:text-white"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="price"
+          >
+            Price
+          </label>
+          <input
+            className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 "
+            id="price"
+            max={327}
+            min={0}
+            name="price"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="2.99"
+            step="0.01"
+            title="Sorry, I only understand the price as a number with dot (.) or comma (,) depending on your Browser's preferences as decimal separator, e.g. 2.99"
+            type="number"
+          />
+        </div>
+        <div
+          className="dark:text-white"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="generation"
+          >
+            Generation
+          </label>
+          <input
+            className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 "
+            id="generation"
+            min={0}
+            name="generation"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="0"
+            type="number"
+          />
+        </div>
+      </div>
+      <div
+        className="mb-6"
+      >
+        <div
+          className="dark:text-white"
+        >
+          <label
+            className="mb-2 block text-sm font-medium"
+            htmlFor="notes"
+          >
+            Notes
+          </label>
+          <textarea
+            className="input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 "
+            id="notes"
+            name="notes"
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="..."
+            type="textarea"
+          />
+        </div>
+      </div>
+      <div
+        className="flex flex-row justify-between space-x-4"
+      >
+        <button
+          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 max-w-[240px] grow sm:w-auto"
+          onClick={[Function]}
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 max-w-[240px] grow sm:w-auto"
+          title="Create Seed"
+          type="submit"
+        >
+          Create Seed
+        </button>
+      </div>
+    </form>
+  </div>
+  <div
+    className="fixed bottom-0 right-0 z-[1010] pointer-events-none"
+    onClick={[Function]}
+  />
+</div>
+`;
