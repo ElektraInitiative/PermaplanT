@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+[
+  <div
+    className="mx-auto w-full px-4 py-8 md:w-[900px] undefined"
+  >
+    <h1
+      className="mb-8 text-2xl"
+    >
+      Seed Entry
+    </h1>
+  </div>,
+  <div
+    className="fixed bottom-0 right-0 z-[1010] pointer-events-none"
+    onClick={[Function]}
+  />,
+]
+`;
