@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mx-auto w-full px-4 py-8 md:w-[900px] undefined"
+>
+  <h2>
+    New Map
+  </h2>
+  <input
+    className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+    id="mapNameInput"
+    name="name"
+    onChange={[Function]}
+    placeholder="Name *"
+    style={
+      {
+        "colorScheme": "dark",
+      }
+    }
+  />
+  <section
+    className="my-2 flex items-center"
+  >
+    <select
+      className="mr-4 block h-11 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+      data-testid="map-create-form__select-privacy"
+      defaultValue="public"
+      onChange={[Function]}
+    >
+      <option
+        data-testid="private"
+        value="private"
+      >
+        private
+      </option>
+      <option
+        data-testid="protected"
+        value="protected"
+      >
+        protected
+      </option>
+      <option
+        data-testid="public"
+        value="public"
+      >
+        public
+      </option>
+    </select>
+    <p
+      className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-center text-sm font-medium dark:border-neutral-400-dark dark:bg-neutral-50-dark"
+    >
+      The map is public and visible for everyone
+    </p>
+  </section>
+  <textarea
+    className="mb-4 block h-24 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+    id="mapDescriptionTextfield"
+    name="description"
+    onChange={[Function]}
+    placeholder="Description"
+    style={
+      {
+        "colorScheme": "dark",
+      }
+    }
+  />
+  <div
+    className="mb-12 flex flex-col items-center"
+  >
+    <div
+      className="mb-4 flex"
+    >
+      <input
+        className="mr-2 block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+        id="mapLatInput"
+        name="latitude"
+        onChange={[Function]}
+        placeholder="Latitude"
+        style={
+          {
+            "colorScheme": "dark",
+          }
+        }
+      />
+      <input
+        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+        id="mapLngInput"
+        name="longitude"
+        onChange={[Function]}
+        placeholder="Longitude"
+        style={
+          {
+            "colorScheme": "dark",
+          }
+        }
+      />
+    </div>
+    <span
+      className="text-lg font-medium"
+    >
+      Or
+    </span>
+    <button
+      className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 mt-4 max-w-[240px]"
+      onClick={[Function]}
+      title="On click the external resource openstreetmap.org will be loaded."
+      type="button"
+    >
+      Select location
+    </button>
+  </div>
+  <div
+    className="space-between flex flex-row justify-center space-x-8"
+  >
+    <button
+      className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 max-w-[240px] grow"
+      onClick={[Function]}
+      title="Cancel"
+      type="button"
+    >
+      Cancel
+    </button>
+    <button
+      className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700 max-w-[240px] grow"
+      onClick={[Function]}
+      title="Create"
+      type="button"
+    >
+      Create
+    </button>
+  </div>
+</div>
+`;
