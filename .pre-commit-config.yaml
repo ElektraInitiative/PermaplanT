@@ -21,11 +21,7 @@ repos:
     hooks:
       - id: prettier
         name: frontend format
-        args:
-          [
-            --config=frontend/prettier.config.js,
-            --ignore-path=frontend/.prettierignore,
-          ]
+        args: [--config=frontend/prettier.config.js]
         files: ^frontend/
         types_or:
           - javascript
