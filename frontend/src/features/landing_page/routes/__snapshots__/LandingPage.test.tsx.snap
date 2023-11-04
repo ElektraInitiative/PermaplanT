@@ -1,0 +1,1014 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mx-auto px-4 py-8 sm:w-[75%] md:w-[80%] lg:w-[70%] xl:w-[65%] undefined"
+>
+  <div
+    className="mb-8 flex flex-col items-center p-8"
+  >
+    <img
+      alt="PermaplanT drawing"
+      className="mt-10"
+      id="home"
+      src="/permaplant-logo-2-colors.svg"
+    />
+    <section>
+      <div
+        className="py-24"
+      >
+        <div
+          className="mb-20 text-center"
+        >
+          <h1
+            className="title-font mx-auto mb-4 grid grid-cols-3 gap-2 text-2xl font-medium sm:text-3xl md:w-[500px]"
+          >
+            <div
+              className="col-span-2 text-right"
+            >
+              make your
+
+              <span
+                className="text-primary-400 dark:text-primary-300"
+              >
+                garden
+
+              </span>
+            </div>
+            <div
+              className="text-left"
+            >
+              <div
+                className="Typewriter"
+                data-testid="typewriter-wrapper"
+              />
+            </div>
+          </h1>
+          <p
+            className="mx-auto md:w-[500px]"
+          />
+          <div
+            className="mt-6 flex justify-center"
+          >
+            <div
+              className="h-1 w-16 rounded-full bg-secondary-500 dark:bg-secondary-300"
+            />
+          </div>
+        </div>
+        <div
+          className="-mx-4 -mb-10 -mt-4 flex flex-wrap space-y-6 sm:-m-4 md:space-y-0"
+        >
+          <div
+            className="flex flex-col items-center p-4 text-center md:w-1/3"
+          >
+            <div
+              className="mb-5 inline-flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-primary-400 dark:bg-primary-300"
+            >
+              <svg
+                className="h-8 w-8"
+              />
+            </div>
+            <div
+              className="flex-grow"
+            >
+              <h2
+                className="title-font mb-3 text-lg font-medium"
+              >
+                5-D Design
+              </h2>
+              <p
+                className="text-base leading-relaxed"
+              >
+                Design your garden using our intuitive planning tool. Layer by layer build up your personal map. Choose from over 8.500 plants to create a beautiful and abundant permaculture map, across space, time and alternatives.
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex flex-col items-center p-4 text-center md:w-1/3"
+          >
+            <div
+              className="mb-5 inline-flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-primary-400 dark:bg-primary-300"
+            >
+              <svg
+                className="h-8 w-8"
+              />
+            </div>
+            <div
+              className="flex-grow"
+            >
+              <h2
+                className="title-font mb-3 text-lg font-medium"
+              >
+                Instant Feedback
+              </h2>
+              <p
+                className="text-base leading-relaxed"
+              >
+                Good neighbours? Crop rotation? Environmental requirements? Let the app do the work! Drag and drop your chosen plants on your individual garden and receive instant feedback for their favorite spots - up to 7 years back and into the future!
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex flex-col items-center p-4 text-center md:w-1/3"
+          >
+            <div
+              className="mb-5 inline-flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-primary-400 dark:bg-primary-300"
+            >
+              <svg
+                className="h-8 w-8"
+              />
+            </div>
+            <div
+              className="flex-grow"
+            >
+              <h2
+                className="title-font mb-3 text-lg font-medium"
+              >
+                Community
+              </h2>
+              <p
+                className="text-base leading-relaxed"
+              >
+                Connect and collaborate with other permaculturists, gardeners and friends. Share your successes and challenges. Get inspired by other beautiful beds, gardens and fields nearby you or around the world.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <h2
+      className="mb-4 mt-12 border-l-2 border-neutral-400 pl-4"
+      id="map"
+    >
+      Together, we grow the PermaplanT world!
+    </h2>
+    <div
+      className="mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-10"
+    >
+      <div
+        className="flex h-full w-full flex-col text-center"
+        id="placeholder"
+      >
+        <img
+          alt="PermaplanT Map"
+          className="h-full w-full object-cover hover:cursor-pointer"
+          onClick={[Function]}
+          src="http://localhost/SvgrURL"
+        />
+        <span
+          className="my-2 flex-1 shrink-0 grow text-sm italic"
+        >
+          On click the external resource openstreetmap.org will be loaded.
+        </span>
+      </div>
+    </div>
+    <section
+      className="body-font"
+    >
+      <div
+        className="container mx-auto py-24"
+      >
+        <div
+          className="mb-20 flex w-full flex-col text-center"
+        >
+          <h1
+            className="title-font mb-4 text-2xl font-medium sm:text-3xl"
+          >
+            Our Team
+          </h1>
+          <p
+            className="mx-auto text-base leading-relaxed xl:w-2/3"
+          >
+            This initiative is made possible due to fantastic effort of:
+          </p>
+        </div>
+        <div
+          className="-m-2 flex flex-wrap"
+        >
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Dr. Markus Raab
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Project Lead, Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Yvonne Markl, MSc.
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Project Lead, Permaculture Expert
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Samuel Daurer
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Gabriel Kitzberger
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Moritz Schalk
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Giancarlo Buenaflor
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Nursultan Imanov
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Lukas Hartl
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  DevOps
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Aydan Namdar Ghazani
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  DevOps
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Ramzan Magomadow
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Thorben Staufer
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Benjamin Zinschitz
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Paul Buschmann
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Christoph Kraus
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Security Analyst
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Christoph Nemeth
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Software Engineer
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full p-2 md:w-1/2 xl:w-1/3"
+          >
+            <div
+              className="flex h-full items-center rounded-lg border border-gray-200 p-4 dark:border-neutral-700"
+            >
+              <img
+                alt="picture of a team member"
+                className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <div
+                className="flex-grow"
+              >
+                <h2
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Dr. Pavlo Ardanov
+                </h2>
+                <p
+                  className="text-gray-500"
+                >
+                  Permaculture Expert
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      className="body-font overflow-hidden"
+    >
+      <div
+        className="container mx-auto py-24"
+      >
+        <div
+          className="-m-12 flex flex-wrap"
+        >
+          <div
+            className="flex flex-col items-start p-12 md:w-1/2"
+          >
+            <h2
+              className="title-font mb-4 mt-4 text-2xl font-medium sm:text-3xl"
+            >
+              PermaplanT sprouts!
+            </h2>
+            <p
+              className="mb-8 leading-relaxed"
+            >
+              Nature demonstrates the astonishing results of the fusion of two compatible parts, like pollen with pistil. We merged botany and informatics, and behold - PermaplanT sprouted! An amazing team from various fields has been working hard to nurture the seedling. Join us and be a part of it!
+            </p>
+            <div
+              className="mb-4 mt-auto flex w-full flex-wrap items-center border-b-2 border-neutral-100 pb-4"
+            >
+              <span
+                className="ml-auto mr-3 inline-flex items-center text-sm leading-none"
+              >
+                03/01/2023
+              </span>
+            </div>
+            <a
+              className="inline-flex items-center"
+            >
+              <img
+                alt="picture of the author"
+                className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <span
+                className="flex flex-grow flex-col pl-4"
+              >
+                <span
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Yvonne Markl
+                </span>
+                <span
+                  className="mt-0.5 text-xs tracking-widest text-neutral-400"
+                >
+                  Permaculture Expert
+                </span>
+              </span>
+            </a>
+          </div>
+          <div
+            className="flex flex-col items-start p-12 md:w-1/2"
+          >
+            <h2
+              className="title-font mb-4 mt-4 text-2xl font-medium sm:text-3xl"
+            >
+              Landing Page online!
+            </h2>
+            <p
+              className="mb-8 leading-relaxed"
+            >
+              We're giving our first sign of life with this website. Currently without the app as it is still being worked on. Speaking of signs of life: just in time for the launch, a special guest visited our PermaplanT founding garden, see gallery. There is only one species of tree frog in Austria, the grass green tree frog. This species uses bushes and trees as its habitat. What's even cooler is that it helps with gardening by gulping numerous pests with its sticky tongue.
+            </p>
+            <div
+              className="mb-4 mt-auto flex w-full flex-wrap items-center border-b-2 border-neutral-100 pb-4"
+            >
+              <span
+                className="ml-auto mr-3 inline-flex items-center text-sm leading-none"
+              >
+                04/19/2023
+              </span>
+            </div>
+            <a
+              className="inline-flex items-center"
+            >
+              <img
+                alt="picture of the author"
+                className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
+                src="http://localhost/SvgrURL"
+              />
+              <span
+                className="flex flex-grow flex-col pl-4"
+              >
+                <span
+                  className="title-font font-medium text-primary-500 dark:text-primary-300"
+                >
+                  Yvonne Markl
+                </span>
+                <span
+                  className="mt-0.5 text-xs tracking-widest text-neutral-400"
+                >
+                  Permaculture Expert
+                </span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div>
+      <div
+        className="fixed bottom-0 right-0 z-[1010] pointer-events-none"
+        onClick={[Function]}
+      />
+      <div
+        className="mt-8 flex justify-center gap-4"
+      >
+        <button
+          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 w-24"
+          onClick={[Function]}
+          type="button"
+        >
+          small
+        </button>
+        <button
+          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 w-24"
+          onClick={[Function]}
+          type="button"
+        >
+          mid
+        </button>
+        <button
+          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 w-24"
+          onClick={[Function]}
+          type="button"
+        >
+          large
+        </button>
+      </div>
+      <section
+        className="
+      grid
+      grid-flow-dense
+      grid-cols-6
+      gap-4
+      mt-4
+    "
+        style={
+          {
+            "gridAutoRows": "6vw",
+            "gridTemplateColumns": "repeat(15, 1fr)",
+          }
+        }
+      />
+    </div>
+    <section
+      className="body-font"
+    >
+      <div
+        className="mx-auto py-24"
+      >
+        <div
+          className="mb-20 flex w-full flex-col text-center"
+        >
+          <h1
+            className="title-font mb-12 text-center text-3xl font-medium"
+          >
+            Pricing
+          </h1>
+          <p
+            className="mx-auto text-base leading-relaxed xl:w-2/3"
+          >
+            Be part of the solidary and non-profit PermaplanT world! The whole income will be used to pay for further development, research and continous operation. Prices are per calender year:
+          </p>
+        </div>
+        <div
+          className="mx-auto w-full overflow-auto"
+        >
+          <table
+            className="whitespace-no-wrap w-full table-auto rounded text-left dark:bg-neutral-300-dark"
+          >
+            <thead>
+              <tr>
+                <th
+                  className="title-font rounded-bl rounded-tl bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark"
+                >
+                  Type
+                </th>
+                <th
+                  className="title-font bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark"
+                >
+                  Price
+                </th>
+                <th
+                  className="title-font bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark"
+                >
+                  Description
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                className="cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400 bg-primary-500 text-neutral-100"
+                onClick={[Function]}
+              >
+                <td
+                  className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark"
+                >
+                  Supporting Member
+                </td>
+                <td
+                  className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark"
+                >
+                  100 €
+                </td>
+                <td
+                  className="border-t-2 border-neutral-100 px-4 py-3 text-lg dark:border-neutral-400-dark "
+                >
+                  As a supporting member, you not only become a legal member of the association and enjoy the community and all the features of the app, but you also enable a person with lower financial means to be a contributing member. Thank you!
+                </td>
+              </tr>
+              <tr
+                className="cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400"
+                onClick={[Function]}
+              >
+                <td
+                  className="px-4 py-3"
+                >
+                  Regular Member
+                </td>
+                <td
+                  className="px-4 py-3"
+                >
+                  50 €
+                </td>
+                <td
+                  className="px-4 py-3 text-lg"
+                >
+                  As regular member, you become a legal member of the association and enjoy the community and the features of the app.
+                </td>
+              </tr>
+              <tr
+                className="cursor-pointer hover:bg-primary-400 dark:hover:bg-primary-400"
+                onClick={[Function]}
+              >
+                <td
+                  className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark "
+                >
+                  Contributing Member
+                </td>
+                <td
+                  className="border-t-2 border-neutral-100 px-4 py-3 dark:border-neutral-400-dark"
+                >
+                  50 permacoins
+                </td>
+                <td
+                  className="border-t-2 border-neutral-100 px-4 py-3 text-lg dark:border-neutral-400-dark"
+                >
+                  You enjoy all features of the app, but you need to collect permapoints by helping others. If you reach the required amount before the end of the year, no annual fee in Euro will be charged.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          className="mx-auto mt-4 flex w-full pl-4"
+        >
+          <a
+            className="ml-auto flex rounded border-0 bg-primary-500 px-6 py-2 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200"
+            href="mailto:office@permaplant.net?subject=Membership%20Application&body=Dear%20PermaplanTeam!%0A%0AI%20want%20to%20be%20subscribed%3A%20Yes%0AI%20want%20to%20apply%20for%20following%20membership%3A%20Supporting%20Member"
+          >
+            <button>
+              Apply for Membership
+            </button>
+          </a>
+        </div>
+      </div>
+    </section>
+    <section
+      className="body-font relative w-full"
+    >
+      <div
+        className="container mx-auto py-24"
+      >
+        <div
+          className="mb-12 flex flex-col text-center"
+        >
+          <h1
+            className="title-font mb-4 text-2xl font-medium sm:text-3xl"
+          >
+            Contact us
+          </h1>
+          <p
+            className="mx-auto text-base leading-relaxed lg:w-2/3"
+          />
+        </div>
+        <div
+          className="mx-auto w-full"
+        >
+          <div
+            className="-m-2 flex flex-wrap"
+          >
+            <div
+              className="w-full p-2"
+            >
+              <div
+                className="relative"
+              >
+                <label
+                  className="text-sm leading-7 text-neutral-400"
+                  htmlFor="message"
+                >
+                  My message:
+                </label>
+                <textarea
+                  className="h-32 w-full resize-none rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-6 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
+                  id="message"
+                  name="message"
+                  onChange={[Function]}
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              className="w-full p-2"
+            >
+              <a
+                href="mailto:office@permaplant.net?subject=first%20contact&body=Dear PermaplanTeam%0A%0AI want to be subscribed: Yes%0A%0AMy Message:%0A"
+              >
+                <button
+                  className="mx-auto flex rounded border-0 bg-primary-500 px-8 py-2 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200"
+                >
+                  Compose email
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer
+    className="m-4 rounded-lg bg-white shadow dark:bg-neutral-800"
+  >
+    <div
+      className="mx-auto w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between"
+    >
+      <span
+        className="text-sm text-secondary-500 dark:text-secondary-300 sm:text-center"
+      >
+        © 2023 PermaplanT
+      </span>
+      <span
+        className="text-sm text-secondary-500 dark:text-secondary-300 sm:text-center"
+      >
+        <a
+          href="https://github.com/ElektraInitiative/PermaplanT"
+          style={
+            {
+              "alignItems": "center",
+              "display": "flex",
+              "flexDirection": "column",
+            }
+          }
+        >
+          <img
+            alt="PermaplanT drawing"
+            id="home"
+            src="/github-mark/github-mark-white.svg"
+            style={
+              {
+                "height": "33px",
+                "width": "33px",
+              }
+            }
+          />
+        </a>
+      </span>
+      <ul
+        className="mt-3 flex flex-wrap items-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0"
+      >
+        <li>
+          <a
+            className="items-center text-sm justify-center space-x-2"
+            href="/imprint"
+            onClick={[Function]}
+          >
+            <button>
+              Imprint
+            </button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+</div>
+`;
