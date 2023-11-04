@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mx-auto w-full px-4 py-8 md:w-[900px] body-font relative w-full text-center"
+>
+  <h1
+    className="title-font mb-8 text-3xl font-medium text-primary-500 dark:text-primary-300 sm:text-4xl"
+  >
+    imprint:title
+  </h1>
+  <section
+    className="mx-auto mb-24 flex flex-col text-base leading-relaxed lg:w-2/3"
+    id="general"
+  >
+    <p>
+      PermaplanT
+    </p>
+    <p>
+      imprint:chairman
+      : Markus Raab
+    </p>
+    <p>
+      imprint:zvr_number
+      :
+      imprint:zvr_placeholder
+    </p>
+    <p>
+      imprint:email
+      :
+      <a
+        href="mailto://contact@permaplant.net"
+      >
+        contact@permaplant.net
+      </a>
+    </p>
+  </section>
+  <section
+    className="mx-auto mb-4 flex flex-col text-base leading-relaxed lg:w-2/3"
+    id="address"
+  >
+    <b
+      className="title-font text-1xl mb-4 font-medium sm:text-2xl"
+    >
+      imprint:address
+    </b>
+    <p>
+      Feldgasse 19
+    </p>
+    <p>
+      7321 Unterfrauenhaid
+    </p>
+    <p>
+      imprint:country
+    </p>
+  </section>
+  <i
+    className="mx-auto mb-4 flex flex-col text-base leading-relaxed lg:w-2/3"
+  >
+    imprint:legal_notice
+  </i>
+  <section
+    className="body-font relative w-full"
+  >
+    <div
+      className="container mx-auto py-24"
+    >
+      <div
+        className="mb-12 flex flex-col text-center"
+      >
+        <h1
+          className="title-font mb-4 text-2xl font-medium sm:text-3xl"
+        >
+          contact:header
+        </h1>
+        <p
+          className="mx-auto text-base leading-relaxed lg:w-2/3"
+        >
+          contact:subheader
+        </p>
+      </div>
+      <div
+        className="mx-auto w-full"
+      >
+        <div
+          className="-m-2 flex flex-wrap"
+        >
+          <div
+            className="w-full p-2"
+          >
+            <div
+              className="relative"
+            >
+              <label
+                className="text-sm leading-7 text-neutral-400"
+                htmlFor="message"
+              >
+                contact:message
+              </label>
+              <textarea
+                className="h-32 w-full resize-none rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-6 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
+                id="message"
+                name="message"
+                onChange={[Function]}
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            className="w-full p-2"
+          >
+            <a
+              href="mailto:office@permaplant.net?subject=first%20contact&body=contact:email_text"
+            >
+              <button
+                className="mx-auto flex rounded border-0 bg-primary-500 px-8 py-2 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200"
+              >
+                contact:compose
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer
+    className="m-4 rounded-lg bg-white shadow dark:bg-neutral-800"
+  >
+    <div
+      className="mx-auto w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between"
+    >
+      <span
+        className="text-sm text-secondary-500 dark:text-secondary-300 sm:text-center"
+      >
+        © 2023 PermaplanT
+      </span>
+      <span
+        className="text-sm text-secondary-500 dark:text-secondary-300 sm:text-center"
+      >
+        <a
+          href="https://github.com/ElektraInitiative/PermaplanT"
+          style={
+            {
+              "alignItems": "center",
+              "display": "flex",
+              "flexDirection": "column",
+            }
+          }
+        >
+          <img
+            alt="PermaplanT drawing"
+            id="home"
+            src="/github-mark/github-mark-white.svg"
+            style={
+              {
+                "height": "33px",
+                "width": "33px",
+              }
+            }
+          />
+        </a>
+      </span>
+      <ul
+        className="mt-3 flex flex-wrap items-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0"
+      >
+        <li>
+          <a
+            className="items-center text-sm justify-center space-x-2"
+            href="/imprint"
+            onClick={[Function]}
+          >
+            <button>
+              imprint:title
+            </button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+</div>
+`;
