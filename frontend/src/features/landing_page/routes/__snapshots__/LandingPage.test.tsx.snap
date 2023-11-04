@@ -27,12 +27,12 @@ exports[`renders correctly 1`] = `
               className="col-span-2 text-right"
             >
               make your
-
+               
               <span
                 className="text-primary-400 dark:text-primary-300"
               >
                 garden
-
+                 
               </span>
             </div>
             <div

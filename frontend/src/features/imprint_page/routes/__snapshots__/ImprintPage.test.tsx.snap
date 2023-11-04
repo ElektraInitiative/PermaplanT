@@ -22,12 +22,12 @@ exports[`renders correctly 1`] = `
     </p>
     <p>
       imprint:zvr_number
-      :
+      : 
       imprint:zvr_placeholder
     </p>
     <p>
       imprint:email
-      :
+      : 
       <a
         href="mailto://contact@permaplant.net"
       >
