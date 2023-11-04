@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mx-auto w-full px-4 py-8 md:w-[900px] flex flex-col space-y-4"
+>
+  <h1
+    className="mb-8 text-2xl"
+  >
+    My Inventory
+  </h1>
+  <div
+    className="flex flex-row justify-between space-x-6"
+  >
+    <div
+      className="relative grow"
+    >
+      <div
+        className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+      >
+        <svg
+          data-testid="search-input__search-icon"
+          stroke="currentColor"
+        />
+      </div>
+      <input
+        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 pl-10 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark"
+        data-testid="search-input__input-field"
+        onInput={[Function]}
+        onKeyDown={[Function]}
+        placeholder="Search inventory..."
+        type="text"
+        value=""
+      />
+    </div>
+    <button
+      className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700"
+      onClick={[Function]}
+      type="button"
+    >
+      New Entry
+    </button>
+  </div>
+  <section>
+    <div
+      className="relative overflow-auto rounded-lg"
+      onScroll={[Function]}
+      style={
+        {
+          "height": "75vh",
+        }
+      }
+    >
+      <table
+        className="w-full bg-gray-200 text-left text-sm dark:bg-neutral-300-dark"
+      >
+        <thead
+          className="text-xs uppercase text-neutral-300"
+        >
+          <tr>
+            <th
+              className="px-6 py-3 dark:bg-neutral-200-dark"
+              scope="col"
+            >
+              Plant Name
+            </th>
+            <th
+              className="px-6 py-3 dark:bg-neutral-200-dark"
+              scope="col"
+            >
+              Amount
+            </th>
+            <th
+              className="px-6 py-3 dark:bg-neutral-200-dark"
+              scope="col"
+            >
+              Quality
+            </th>
+            <th
+              className="whitespace-nowrap px-6 py-3 dark:bg-neutral-200-dark"
+              scope="col"
+            >
+              Harvest Year
+            </th>
+            <th
+              className="px-6 py-3 dark:bg-neutral-200-dark"
+              scope="col"
+            >
+              Origin
+            </th>
+            <th
+              className="px-6 py-3 dark:bg-neutral-200-dark"
+              scope="col"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody />
+      </table>
+    </div>
+  </section>
+</div>
+`;
