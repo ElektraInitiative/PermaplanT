@@ -179,7 +179,7 @@ export const BaseStage = ({
     const shouldAllowSelectionOnCurrentLayer = () => {
       const isStageSelectable = selectable;
 
-      // this enables dragging the whole transformer and not just the currently targetted shape
+      // this enables dragging the whole transformer and not just the currently targeted shape
       if (e.target instanceof Konva.Shape) {
         return false;
       }
