@@ -80,7 +80,11 @@ export const FileSelector = (props: FileSelectorProps) => {
   });
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="absolute left-1/2 top-1/2 h-[12vh] -translate-x-1/2 -translate-y-1/2">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
@@ -102,7 +106,7 @@ export const FileSelector = (props: FileSelectorProps) => {
           />
         </div>
       </div>
-      <ul className="mt-3 overflow-auto pr-1">
+      <ul className="mt-3 overflow-auto break-words pr-1 text-sm sm:text-base">
         <li className="mb-2 grid cursor-pointer grid-cols-2 items-center justify-between gap-4 font-bold">
           <p
             onClick={() => {
@@ -137,12 +141,12 @@ export const FileSelector = (props: FileSelectorProps) => {
               .sort(sortFiles(sortAttribute, sortOrder))
               .map((file) => (
                 <li
-                  className="flex grid cursor-pointer grid-cols-2 items-center justify-between gap-4 hover:text-primary-400"
+                  className="mb-1 grid cursor-pointer grid-cols-2 items-center justify-between gap-4 hover:text-primary-400"
                   key={file.filename}
                   onClick={() => onSelect(file)}
                 >
                   <p>{file.basename}</p>
-                  <p className="text-right text-sm text-neutral-400">{file.lastmod}</p>
+                  <p className="text-right text-neutral-400">{file.lastmod}</p>
                 </li>
               ))
           : []}

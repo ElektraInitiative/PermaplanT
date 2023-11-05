@@ -49,10 +49,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix plant deletion in guided tour on small screens #861 _(tschawax)_
 - _()_
 - _()_
-- _()_
+- Add status-specific toolbox icon design and add toolbox icon support to icon button component #1025 _(tschawax)_
+- Improve design and behavior of undo/redo icons and improve focus design #657 _(tschawax)_
 - Improve dark mode design of danger variant buttons #1029 _(tschawax)_
-- _()_
-- _()_
+- Improve loading spinner size in file selector and improve file selector responsiveness #1026 _(tschawax)_
 - _()_
 - _()_
 - _()_
