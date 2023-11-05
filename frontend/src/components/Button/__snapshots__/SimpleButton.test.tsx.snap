@@ -2,28 +2,28 @@
 
 exports[`renders correctly for primary base variant 1`] = `
 <button
-  className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700"
+  className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-700 dark:active:bg-primary-400 text-primary-50 dark:text-primary-700"
   type="button"
 />
 `;
 
 exports[`renders correctly for primary container variant 1`] = `
 <button
-  className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-200 dark:bg-primary-600 border-primary-500 hover:bg-primary-200 dark:hover:bg-primary-600 active:bg-primary-500 text-primary-900 dark:text-primary-200"
+  className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border bg-primary-200 dark:bg-primary-600 border-primary-500 hover:bg-primary-200 dark:hover:bg-primary-600 active:bg-primary-500 text-primary-900 dark:text-primary-200"
   type="button"
 />
 `;
 
 exports[`renders correctly for secondary base variant 1`] = `
 <button
-  className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700"
+  className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 dark:focus:ring-secondary-100"
   type="button"
 />
 `;
 
 exports[`renders correctly for secondary container variant 1`] = `
 <button
-  className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-secondary-200 dark:bg-secondary-600 border-secondary-500 hover:bg-secondary-200 dark:hover:bg-secondary-600 active:bg-secondary-900 text-secondary-900 dark:text-secondary-200"
+  className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border bg-secondary-200 dark:bg-secondary-600 border-secondary-500 hover:bg-secondary-200 dark:hover:bg-secondary-600 active:bg-secondary-900 text-secondary-900 dark:text-secondary-200"
   type="button"
 />
 `;

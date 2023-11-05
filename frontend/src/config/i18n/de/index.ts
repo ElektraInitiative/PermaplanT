@@ -9,7 +9,6 @@ import enums from './enums.json';
 import featureDescriptions from './featureDescriptions.json';
 import fileSelector from './fileSelector.json';
 import geomap from './geomap.json';
-import grid from './grid.json';
 import guidedTour from './guidedTour.json';
 import imprint from './imprint.json';
 import landingPage from './landingPage.json';
@@ -29,6 +28,7 @@ import routes from './routes.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import timeline from './timeline.json';
+import toolboxTooltips from './toolboxTooltips.json';
 import undoRedo from './undoRedo.json';
 import uploadFile from './uploadFile.json';
 
@@ -41,7 +41,6 @@ const en = {
   enums,
   featureDescriptions,
   geomap,
-  grid,
   imprint,
   landingPage,
   pricing,
@@ -66,6 +65,7 @@ const en = {
   guidedTour,
   blossoms,
   readOnly,
+  toolboxTooltips,
 };
 
 export default en;
