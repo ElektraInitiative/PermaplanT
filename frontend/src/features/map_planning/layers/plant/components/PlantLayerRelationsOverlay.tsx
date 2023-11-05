@@ -17,9 +17,10 @@ export function PlantLayerRelationsOverlay() {
   const selectedPlantForPlanting = useMapStore(
     (s) => s.untrackedState.layers.plants.selectedPlantForPlanting,
   );
-  const selectedPlanting = useMapStore((s) => s.untrackedState.layers.plants.selectedPlanting);
+  const selectedPlantings = useMapStore((s) => s.untrackedState.layers.plants.selectedPlantings);
+  const selectedPlanting = selectedPlantings?.length === 1 ? selectedPlantings[0] : null;
 
-  const plantId = selectedPlantForPlanting?.id ?? selectedPlanting?.plantId ?? null;
+  const plantId = selectedPlantForPlanting?.plant.id ?? selectedPlanting?.plantId ?? null;
   const plantingNode = useMemo(
     () => (selectedPlanting?.id ? stage?.findOne(`#${selectedPlanting?.id}`) : null),
     [selectedPlanting?.id, stage],

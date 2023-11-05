@@ -54,5 +54,6 @@
   "price": "Price",
   "generation": "Generation",
   "notes": "Notes",
-  "actions": "Actions"
+  "actions": "Actions",
+  "error_fetching_seed": "Sorry, I could not find this seed."
 }

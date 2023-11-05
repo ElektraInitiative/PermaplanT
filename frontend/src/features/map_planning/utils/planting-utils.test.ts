@@ -27,7 +27,7 @@ function createStoreWithGivenPlantSelected(
         ...UNTRACKED_DEFAULT_STATE.layers,
         plants: {
           ...UNTRACKED_DEFAULT_STATE.layers.plants,
-          selectedPlantForPlanting: plant,
+          selectedPlantForPlanting: plant ? { plant, seed: null } : null,
         },
       },
     },
