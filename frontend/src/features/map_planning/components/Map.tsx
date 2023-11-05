@@ -52,6 +52,8 @@ export type MapProps = {
  */
 export const Map = ({ layers }: MapProps) => {
   const untrackedState = useMapStore((map) => map.untrackedState);
+  const canUndo = useMapStore((map) => map.canUndo);
+  const canRedo = useMapStore((map) => map.canRedo);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
@@ -71,6 +73,14 @@ export const Map = ({ layers }: MapProps) => {
   ]);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
+
+  const isGridLayerEnabled = () => {
+    return untrackedState.layers.grid.visible;
+  };
+
+  const isPlantLabelTooltipEnabled = () => {
+    return untrackedState.layers.plants.showLabels;
+  };
 
   const reenableTour = async () => {
     const update: UpdateGuidedToursDto = { editor_tour_completed: false };
@@ -146,8 +156,9 @@ export const Map = ({ layers }: MapProps) => {
             contentTop={
               <div>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                  disabled={isReadOnlyMode}
+                  isToolboxIcon={true}
+                  className={`${!canUndo ? 'opacity-50' : ''}`}
+                  disabled={isReadOnlyMode || !canUndo}
                   onClick={() => undo()}
                   title={t('undoRedo:undo_tooltip')}
                   data-tourid="undo"
@@ -156,8 +167,9 @@ export const Map = ({ layers }: MapProps) => {
                   <UndoIcon></UndoIcon>
                 </IconButton>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                  disabled={isReadOnlyMode}
+                  isToolboxIcon={true}
+                  className={`${!canRedo ? 'opacity-50' : ''}`}
+                  disabled={isReadOnlyMode || !canRedo}
                   onClick={() => redo()}
                   title={t('undoRedo:redo_tooltip')}
                   data-testid={TEST_IDS.REDO_BUTTON}
@@ -165,7 +177,8 @@ export const Map = ({ layers }: MapProps) => {
                   <RedoIcon></RedoIcon>
                 </IconButton>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  isToolboxIcon={true}
+                  renderAsActive={isGridLayerEnabled()}
                   onClick={() =>
                     updateLayerVisible(
                       FrontendOnlyLayerType.Grid,
@@ -177,7 +190,8 @@ export const Map = ({ layers }: MapProps) => {
                   <GridIcon></GridIcon>
                 </IconButton>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  isToolboxIcon={true}
+                  renderAsActive={isPlantLabelTooltipEnabled()}
                   onClick={() => toggleShowPlantLabel()}
                   title={t('plantings:show_labels_tooltip')}
                 >
