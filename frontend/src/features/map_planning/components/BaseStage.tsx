@@ -7,6 +7,7 @@ import {
   hideSelectionRectangle,
   initializeSelectionRectangle,
   resetSelection,
+  resetSelectionRectangleSize,
   selectIntersectingShapes,
   updateSelectionRectangle,
 } from '../utils/ShapesSelection';
@@ -170,7 +171,10 @@ export const BaseStage = ({
     if (!stage || !selectionRectAttrs.isVisible || !selectable) return;
 
     updateSelectionRectangle(stage, setSelectionRectAttrs);
-    selectIntersectingShapes(stageRef, transformerRef);
+
+    if (!isPlacementModeActive()) {
+      selectIntersectingShapes(stageRef, transformerRef);
+    }
   };
 
   // Event listener responsible for initializing the stage-dragging mode via middle mouse button
@@ -179,12 +183,8 @@ export const BaseStage = ({
     const shouldAllowSelectionOnCurrentLayer = () => {
       const isStageSelectable = selectable;
 
-      // this enables dragging the whole transformer and not just the currently targetted shape
+      // this enables dragging the whole transformer and not just the currently targeted shape
       if (e.target instanceof Konva.Shape) {
-        return false;
-      }
-
-      if (isPlacementModeActive()) {
         return false;
       }
 
@@ -204,7 +204,9 @@ export const BaseStage = ({
     }
 
     if (shouldAllowSelectionOnCurrentLayer()) {
-      resetCurrentPlantingsSelection();
+      if (!isPlacementModeActive()) {
+        resetCurrentPlantingsSelection();
+      }
       initializeSelectionRectangle(stage, setSelectionRectAttrs);
     }
   };
@@ -215,6 +217,7 @@ export const BaseStage = ({
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
+    resetSelectionRectangleSize(stageRef);
 
     if (selectable) {
       hideSelectionRectangle(setSelectionRectAttrs, selectionRectAttrs);

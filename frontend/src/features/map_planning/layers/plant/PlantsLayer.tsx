@@ -1,5 +1,8 @@
 import useMapStore from '../../store/MapStore';
+import { PlantForPlanting } from '../../store/MapStoreTypes';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
+import { SELECTION_RECTANGLE_NAME } from '../../utils/ShapesSelection';
+import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
@@ -17,6 +20,9 @@ import { createPortal } from 'react-dom';
 import { Layer } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
+
+// For performance reasons add limit for amount of plants inside a plant field
+const LIMIT_PLANT_FIELD_PLANTS = 50;
 
 const PLANT_WIDTHS = new Map<PlantSpread, number>([
   [PlantSpread.Narrow, 10],
@@ -41,6 +47,79 @@ function usePlantLayerListeners(listening: boolean) {
   const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
   const isReadOnlyMode = useIsReadOnlyMode();
 
+  const createPlanting = useCallback(
+    (selectedPlantForPlanting: PlantsSummaryDto, xCoordinate: number, yCoordinate: number) => {
+      executeAction(
+        new CreatePlantAction({
+          id: uuid.v4(),
+          plantId: selectedPlantForPlanting.id,
+          layerId: getSelectedLayerId() ?? -1,
+          x: Math.round(xCoordinate),
+          y: Math.round(yCoordinate),
+          height: getPlantWidth(selectedPlantForPlanting),
+          width: getPlantWidth(selectedPlantForPlanting),
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          addDate: timelineDate,
+        }),
+      );
+    },
+    [executeAction, getSelectedLayerId, timelineDate],
+  );
+
+  const drawPlantField = useCallback(
+    (selectedPlantForPlanting: PlantForPlanting) => {
+      const drawnField = useMapStore
+        .getState()
+        .stageRef.current?.findOne(`.${SELECTION_RECTANGLE_NAME}`);
+
+      const fieldWidth = drawnField?.attrs?.width;
+      const fieldHeight = drawnField?.attrs?.height;
+
+      if (!fieldWidth || !fieldHeight) return;
+
+      const plantSize = getPlantWidth(selectedPlantForPlanting.plant);
+      const { horizontalPlantCount, verticalPlantCount } = calculatePlantCount(
+        plantSize,
+        fieldWidth,
+        fieldHeight,
+      );
+
+      const startingPositionX = drawnField.attrs.x;
+      const startingPositionY = drawnField.attrs.y;
+
+      // due to set limit of plants in a plant field, we need to decide in which direction we start drawing, i.e. if drawn field is wider than narrow, we start drawing horizontally and vice versa
+      const { firstDirectionCounter, secondDirectionCounter } = getDrawingDirectionCounters(
+        horizontalPlantCount,
+        verticalPlantCount,
+      );
+
+      let counter = 0;
+      for (let i = 0; i < firstDirectionCounter; i++) {
+        for (let j = 0; j < secondDirectionCounter; j++) {
+          if (counter++ > LIMIT_PLANT_FIELD_PLANTS) break;
+
+          const horizontalCounter = horizontalPlantCount > verticalPlantCount ? j : i;
+          const verticalCounter = horizontalPlantCount > verticalPlantCount ? i : j;
+
+          createPlanting(
+            selectedPlantForPlanting.plant,
+            startingPositionX + plantSize * horizontalCounter,
+            startingPositionY + plantSize * verticalCounter,
+          );
+        }
+      }
+
+      // reset konva rectangle to make sure we always have a rectangle with the newest coordinates when planting
+      drawnField.setAttrs({
+        width: 0,
+        height: 0,
+      });
+    },
+    [createPlanting],
+  );
+
   /**
    * Event handler for planting plants
    */
@@ -59,27 +138,9 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      const width = getPlantWidth(selectedPlant.plant);
-
-      executeAction(
-        new CreatePlantAction({
-          id: uuid.v4(),
-          plantId: selectedPlant.plant.id,
-          layerId: getSelectedLayerId() ?? -1,
-          // consider the offset of the stage and size of the element
-          x: Math.round(position.x),
-          y: Math.round(position.y),
-          height: width,
-          width: width,
-          rotation: 0,
-          scaleX: 1,
-          scaleY: 1,
-          addDate: timelineDate,
-          seedId: selectedPlant.seed?.id,
-        }),
-      );
+      createPlanting(selectedPlant.plant, position.x, position.y);
     },
-    [getSelectedLayerId, executeAction, selectedPlant, timelineDate, isReadOnlyMode],
+    [selectedPlant, isReadOnlyMode, createPlanting],
   );
 
   /**
@@ -102,7 +163,8 @@ function usePlantLayerListeners(listening: boolean) {
   }, []);
 
   /**
-   * Event handler for selecting plants via the selection rectangle
+   * Event handler for selecting plants via the selection rectangle or, if a plant is currently
+   * selected for planting, creating a whole field of that plant inside the selection rectangle
    */
   const handleSelectPlanting: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
     const selectedPlantings = (foundPlantings: PlantingDto[], konvaNode: Node) => {
@@ -110,13 +172,21 @@ function usePlantLayerListeners(listening: boolean) {
       return plantingNode ? [...foundPlantings, plantingNode] : [foundPlantings];
     };
 
+    if (isPlacementModeActive()) {
+      const selectedPlantForPlanting =
+        useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;
+
+      drawPlantField(selectedPlantForPlanting as PlantForPlanting);
+      return;
+    }
+
     const transformer = useMapStore.getState().transformer.current;
     const plantings = transformer?.nodes().reduce(selectedPlantings, []);
 
     if (plantings?.length) {
       useMapStore.getState().selectPlantings(plantings);
     }
-  }, []);
+  }, [drawPlantField]);
 
   /**
    * Event handler for transforming plants
@@ -258,3 +328,33 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
 }
 
 export default PlantsLayer;
+
+function calculatePlantCount(
+  plantSize: number,
+  fieldWidth: number,
+  fieldHeight: number,
+): { horizontalPlantCount: number; verticalPlantCount: number } {
+  const horizontalPlantCount = Math.floor(fieldWidth / plantSize);
+  const verticalPlantCount = Math.floor(fieldHeight / plantSize);
+
+  return {
+    horizontalPlantCount,
+    verticalPlantCount,
+  };
+}
+
+function getDrawingDirectionCounters(
+  horizontalPlantCount: number,
+  verticalPlantCount: number,
+): { firstDirectionCounter: number; secondDirectionCounter: number } {
+  const firstDirectionCounter =
+    horizontalPlantCount >= verticalPlantCount ? verticalPlantCount : horizontalPlantCount;
+
+  const secondDirectionCounter =
+    horizontalPlantCount >= verticalPlantCount ? horizontalPlantCount : verticalPlantCount;
+
+  return {
+    firstDirectionCounter,
+    secondDirectionCounter,
+  };
+}

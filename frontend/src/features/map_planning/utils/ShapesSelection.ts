@@ -10,13 +10,15 @@ import { Transformer } from 'konva/lib/shapes/Transformer';
 // Todo: optimization -> could probably use a set here
 let previouslySelectedShapes: Shape<ShapeConfig>[] = [];
 
+export const SELECTION_RECTANGLE_NAME = 'selectionRect';
+
 /** Select shapes that intersect with the selection rectangle. */
 export const selectIntersectingShapes = (
   stageRef: React.RefObject<Stage>,
   trRef: React.RefObject<Transformer>,
 ) => {
   if (stageRef.current === null) return;
-  const box = stageRef.current.findOne('.selectionRect').getClientRect();
+  const box = stageRef.current.findOne(`.${SELECTION_RECTANGLE_NAME}`).getClientRect();
 
   if (stageRef.current.children === null) return;
 
@@ -67,6 +69,17 @@ export const selectIntersectingShapes = (
 /** Resets current selection by removing all nodes from the transformer */
 export const resetSelection = (trRef: React.RefObject<Transformer>) => {
   trRef.current?.nodes([]);
+};
+
+export const resetSelectionRectangleSize = (stageRef: React.RefObject<Stage>) => {
+  const selectionRectangle = stageRef.current?.findOne(`.${SELECTION_RECTANGLE_NAME}`);
+
+  if (selectionRectangle) {
+    selectionRectangle.setAttrs({
+      width: 0,
+      height: 0,
+    });
+  }
 };
 
 /** Sets up the selection rectangle by positioning it at the current mouse position. */
