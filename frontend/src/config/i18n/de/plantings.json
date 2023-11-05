@@ -9,6 +9,5 @@
   "add_date_description": "Das Datum, an dem die Pflanze zur Karte hinzugefügt wurde. Vor diesem Datum gab es die Pflanze nicht auf der Karte.",
   "add_date_description_multiple_plantings": "Das Datum, an dem die Pflanzen zur Karte hinzugefügt wurden. Vor diesem Datum gab es die Pflanzen nicht auf der Karte.",
   "remove_date_description": "Das Datum, an dem die Pflanze von der Karte entfernt wurde. Vor diesem Datum gab es die Pflanze auf der Karte. Standardmäßig ist dieses Datum nicht gesetzt.",
-  "remove_date_description_multiple_plantings": "Das Datum, an dem die Pflanzen von der Karte entfernt wurden. Vor diesem Datum gab es die Pflanzen auf der Karte. Standardmäßig ist dieses Datum nicht gesetzt.",
-  "show_labels_tooltip": "Pflanzenlabels anzeigen"
+  "remove_date_description_multiple_plantings": "Das Datum, an dem die Pflanzen von der Karte entfernt wurden. Vor diesem Datum gab es die Pflanzen auf der Karte. Standardmäßig ist dieses Datum nicht gesetzt."
 }

@@ -62,15 +62,7 @@ export const Map = ({ layers }: MapProps) => {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
   const tour = useContext(ShepherdTourContext);
-  const { t } = useTranslation([
-    'undoRedo',
-    'grid',
-    'timeline',
-    'blossoms',
-    'common',
-    'guidedTour',
-    'plantings',
-  ]);
+  const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
 
@@ -160,7 +152,7 @@ export const Map = ({ layers }: MapProps) => {
                   className={`${!canUndo ? 'opacity-50' : ''}`}
                   disabled={isReadOnlyMode || !canUndo}
                   onClick={() => undo()}
-                  title={t('undoRedo:undo_tooltip')}
+                  title={t('toolboxTooltips:undo')}
                   data-tourid="undo"
                   data-testid={TEST_IDS.UNDO_BUTTON}
                 >
@@ -171,7 +163,7 @@ export const Map = ({ layers }: MapProps) => {
                   className={`${!canRedo ? 'opacity-50' : ''}`}
                   disabled={isReadOnlyMode || !canRedo}
                   onClick={() => redo()}
-                  title={t('undoRedo:redo_tooltip')}
+                  title={t('toolboxTooltips:redo')}
                   data-testid={TEST_IDS.REDO_BUTTON}
                 >
                   <RedoIcon></RedoIcon>
@@ -185,7 +177,7 @@ export const Map = ({ layers }: MapProps) => {
                       !untrackedState.layers.grid.visible,
                     )
                   }
-                  title={t('grid:tooltip')}
+                  title={t('toolboxTooltips:grid')}
                 >
                   <GridIcon></GridIcon>
                 </IconButton>
@@ -193,7 +185,7 @@ export const Map = ({ layers }: MapProps) => {
                   isToolboxIcon={true}
                   renderAsActive={isPlantLabelTooltipEnabled()}
                   onClick={() => toggleShowPlantLabel()}
-                  title={t('plantings:show_labels_tooltip')}
+                  title={t('toolboxTooltips:plant_labels')}
                 >
                   <TagsIcon></TagsIcon>
                 </IconButton>
