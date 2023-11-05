@@ -53,7 +53,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Improve design and behavior of undo/redo icons and improve focus design #657 _(tschawax)_
 - _()_
 - Improve loading spinner size in file selector and improve file selector responsiveness #1026 _(tschawax)_
-- _()_
+- Improve tooltip wordings of toolbox icons and extract them into new single file #1028 _(tschawax)_
 - _()_
 - _()_
 - _()_
