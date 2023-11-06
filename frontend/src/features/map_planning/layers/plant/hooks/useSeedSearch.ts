@@ -11,9 +11,13 @@ export function useSeedSearch() {
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 500);
   const { t } = useTranslation(['seeds']);
 
-  const { fetchNextPage, data, error, hasNextPage } = useInfiniteQuery<Page<SeedDto>, Error>({
+  const { fetchNextPage, data, hasNextPage } = useInfiniteQuery<Page<SeedDto>, Error>({
     queryKey: ['seeds', debouncedSearchTerm],
     queryFn: ({ pageParam = 1, queryKey }) => findAllSeeds(pageParam, queryKey[1] as string),
+    meta: {
+      autoClose: false,
+      errorMessage: t('seeds:view_seeds.fetching_error'),
+    },
     getNextPageParam: (lastPage) => {
       const hasMore = lastPage.total_pages > lastPage.page;
       return hasMore ? lastPage.page + 1 : undefined;
@@ -24,10 +28,6 @@ export function useSeedSearch() {
   const clearSearchTerm = useCallback(() => {
     setSearchTerm('');
   }, []);
-
-  if (error) {
-    errorToastGrouped(t('seeds:view_seeds.fetching_error'), { autoClose: false });
-  }
 
   return {
     seeds: data?.pages.flatMap((page) => page.results) ?? [],

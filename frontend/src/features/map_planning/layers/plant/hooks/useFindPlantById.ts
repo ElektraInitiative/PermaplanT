@@ -11,15 +11,15 @@ import { useTranslation } from 'react-i18next';
  */
 export function useFindPlantById(plantId: number, enabled = true) {
   const { t } = useTranslation(['plantings']);
-  const { data, error } = useQuery(['plants/plant', plantId] as const, {
+  const { data } = useQuery(['plants/plant', plantId] as const, {
     queryFn: (context) => findPlantById(context.queryKey[1]),
+    meta: {
+      autoClose: false,
+      errorMessage: t('plantings:error_fetching_plant'),
+    },
     enabled,
     staleTime: Infinity,
   });
-
-  if (error) {
-    errorToastGrouped(t('plantings:error_fetching_plant'), { autoClose: false });
-  }
 
   return {
     plant: data,

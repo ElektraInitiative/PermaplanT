@@ -9,9 +9,12 @@ export function usePlantSearch() {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 500);
   const { t } = useTranslation(['plantSearch']);
-
-  const { data, error } = useQuery(['plants/search', debouncedSearchTerm] as const, {
+  const { data } = useQuery(['plants/search', debouncedSearchTerm] as const, {
     queryFn: ({ queryKey: [, search] }) => searchPlants(search, 0),
+    meta: {
+      autoClose: false,
+      errorMessage: t('plantSearch:error_searching_plants'),
+    },
     // prevent the query from being fetched again for the
     // same search term. plants are not expected to change
     staleTime: Infinity,
@@ -22,10 +25,6 @@ export function usePlantSearch() {
   const clearSearchTerm = useCallback(() => {
     setSearchTerm('');
   }, []);
-
-  if (error) {
-    errorToastGrouped(t('plantSearch:error_searching_plants'), { autoClose: false });
-  }
 
   return {
     plants: data?.results ?? [],

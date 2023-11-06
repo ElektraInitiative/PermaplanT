@@ -12,14 +12,14 @@ import { useTranslation } from 'react-i18next';
  */
 export function useFindSeedById(seedId: number, enabled = true, quiet = false) {
   const { t } = useTranslation(['seeds']);
-  const { data, error } = useQuery(['plants/seed', seedId] as const, {
+  const { data } = useQuery(['plants/seed', seedId] as const, {
     queryFn: (context) => findSeedById(context.queryKey[1]),
+    meta: {
+      autoClose: false,
+      errorMessage: !quiet ? t('seeds:error_fetching_seed') : undefined,
+    },
     enabled,
   });
-
-  if (error && !quiet) {
-    errorToastGrouped(t('seeds:error_fetching_seed'), { autoClose: false });
-  }
 
   return {
     seed: data,

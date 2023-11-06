@@ -6,17 +6,15 @@ import { useTranslation } from 'react-i18next';
 export function useSeasonalAvailablePlants(mapId: number, date: Date) {
   const { t } = useTranslation(['plantingSuggestions']);
   const { data, isLoading, error } = useQuery(['plants/suggestions/available'] as const, {
+    meta: {
+      autoClose: false,
+      errorMessage: t('plantingSuggestions:available_seeds.error_fetching_seasonal_suggestions'),
+    },
     queryFn: () => getSeasonalAvailablePlants(mapId, date, 0),
   });
 
   if (error) {
     console.error(error);
-    errorToastGrouped(
-      t('plantingSuggestions:available_seeds.error_fetching_seasonal_suggestions'),
-      {
-        autoClose: false,
-      },
-    );
   }
 
   return {
