@@ -12,7 +12,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Decide about which use cases to include for 1.0 _(Markus Raab and Yvonne Markl with the help of PermaplanTeam)_
 - _()_
 - _()_
-- _()_
+- Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
 - Plantings now store seed information if they were created using a seed _(Moritz)_
 - Tooltips show the full plant for plantings that were created using a seed _(Moritz)_
 - _()_
