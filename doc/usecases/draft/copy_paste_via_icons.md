@@ -19,7 +19,7 @@
     The user pastes the copied selection into the map by clicking on the _paste_ icon in the toolbar.  
     The pasted selection of elements is placed at the user's last click position right before pasting.
 - **Alternative scenario:**
-  - Same as for [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md#scenarios), just with clicking on the icons in the toolbar instead of using the keyboard shortcuts
+  - Same as for [Copy & Paste of Selection Within the Same Map](../assigned/copy_paste_within_same_map.md#scenarios), just with clicking on the icons in the toolbar instead of using the keyboard shortcuts
   - The user copies the selection by pressing CTRL-C.  
     The user clicks on the _paste_ icon to paste the copied selection into the map.
   - The user copies the selection by clicking on the _copy_ icon.  
@@ -38,7 +38,7 @@
   - The _copy_ icon is disabled and greyed out because after pasting every selection is gone.
   - The _paste_ icon is enabled and not greyed out.
 - **Non-functional Constraints:**
-  - Same as for [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md#scenarios)
+  - Same as for [Copy & Paste of Selection Within the Same Map](../assigned/copy_paste_within_same_map.md#scenarios)
   - The icons' Look and Feel should always signal their current state, i.e. if they are enabled or disabled.
 - **Linked Use Cases:**
-  - [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md)
+  - [Copy & Paste of Selection Within the Same Map](../assigned/copy_paste_within_same_map.md)

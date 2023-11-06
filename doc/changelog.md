@@ -51,6 +51,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Add status-specific toolbox icon design and add toolbox icon support to icon button component #1025 _(tschawax)_
 - Improve design and behavior of undo/redo icons and improve focus design #657 _(tschawax)_
+- _()_
+- _()_
+- _()_
+- Replace notes field in create seed form with markdown editor _(Daniel Steinkogler)_
 - Improve dark mode design of danger variant buttons #1029 _(tschawax)_
 - Improve loading spinner size in file selector and improve file selector responsiveness #1026 _(tschawax)_
 - Improve tooltip wordings of toolbox icons and extract them into new single file #1028 _(tschawax)_
