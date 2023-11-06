@@ -27,10 +27,11 @@ We use [Bulletproof React](https://github.com/alan2207/bulletproof-react) with f
 - Use descriptive, plural nouns for resource collections.
 - Use placeholders for dynamic segments in route names.
 
-- **Example Route Names:**
-  - View: "/resource"
-  - Edit: "/resource/:id/edit"
-  - Create: "/resource/create"
+Examples
+
+- **View:** /resource
+- **Edit:** /resource/:id/edit
+- **Create:** /resource/create
 
 ## Incorporate Accessibility Best Practices
 
