@@ -20,7 +20,7 @@ const routes: Routes = {
   },
   [Pages.CreateSeed]: {
     component: CreateSeed,
-    path: '/seeds/new',
+    path: '/seeds/create',
     title: 'New Seed Entry',
     restricted: true,
   },
