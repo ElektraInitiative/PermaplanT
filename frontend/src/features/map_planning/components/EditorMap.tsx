@@ -55,6 +55,8 @@ export type MapProps = {
  */
 export const EditorMap = ({ layers }: MapProps) => {
   const untrackedState = useMapStore((map) => map.untrackedState);
+  const canUndo = useMapStore((map) => map.canUndo);
+  const canRedo = useMapStore((map) => map.canRedo);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
@@ -63,15 +65,7 @@ export const EditorMap = ({ layers }: MapProps) => {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
   const tour = useContext(ShepherdTourContext);
-  const { t } = useTranslation([
-    'undoRedo',
-    'grid',
-    'timeline',
-    'blossoms',
-    'common',
-    'guidedTour',
-    'plantings',
-  ]);
+  const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
 
@@ -144,6 +138,14 @@ export const EditorMap = ({ layers }: MapProps) => {
     ) => {
       setStageClickListeners((listeners) => listeners.set(key, listener));
     },
+  };
+
+  const isGridLayerEnabled = () => {
+    return untrackedState.layers.grid.visible;
+  };
+
+  const isPlantLabelTooltipEnabled = () => {
+    return untrackedState.layers.plants.showLabels;
   };
 
   const reenableTour = async () => {
@@ -220,40 +222,44 @@ export const EditorMap = ({ layers }: MapProps) => {
             contentTop={
               <div>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                  disabled={isReadOnlyMode}
+                  isToolboxIcon={true}
+                  className={`${!canUndo ? 'opacity-50' : ''}`}
+                  disabled={isReadOnlyMode || !canUndo}
                   onClick={() => undo()}
-                  title={t('undoRedo:undo_tooltip')}
+                  title={t('toolboxTooltips:undo')}
                   data-tourid="undo"
                   data-testid={TEST_IDS.UNDO_BUTTON}
                 >
                   <UndoIcon></UndoIcon>
                 </IconButton>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                  disabled={isReadOnlyMode}
+                  isToolboxIcon={true}
+                  className={`${!canRedo ? 'opacity-50' : ''}`}
+                  disabled={isReadOnlyMode || !canRedo}
                   onClick={() => redo()}
-                  title={t('undoRedo:redo_tooltip')}
+                  title={t('toolboxTooltips:redo')}
                   data-testid={TEST_IDS.REDO_BUTTON}
                 >
                   <RedoIcon></RedoIcon>
                 </IconButton>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  isToolboxIcon={true}
+                  renderAsActive={isGridLayerEnabled()}
                   onClick={() =>
                     updateLayerVisible(
                       FrontendOnlyLayerType.Grid,
                       !untrackedState.layers.grid.visible,
                     )
                   }
-                  title={t('grid:tooltip')}
+                  title={t('toolboxTooltips:grid')}
                 >
                   <GridIcon></GridIcon>
                 </IconButton>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  isToolboxIcon={true}
+                  renderAsActive={isPlantLabelTooltipEnabled()}
                   onClick={() => toggleShowPlantLabel()}
-                  title={t('plantings:show_labels_tooltip')}
+                  title={t('toolboxTooltips:plant_labels')}
                 >
                   <TagsIcon></TagsIcon>
                 </IconButton>
