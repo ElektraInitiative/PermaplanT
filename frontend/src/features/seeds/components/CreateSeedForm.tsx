@@ -5,9 +5,9 @@ import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
 import { NewSeedDto, Quality, Quantity, SeedDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+import MarkdownEditor from '@/components/Form/MarkdownEditor';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import SimpleFormTextArea from '@/components/Form/SimpleFormTextArea';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { getNameFromPlant } from '@/utils/plant-naming';
@@ -59,6 +59,8 @@ const CreateSeedForm = ({
   const [quantityOption, setQuantityOption] = useState<SelectOption | undefined>(quantity[0]);
   const [qualityOption, setQualityOption] = useState<SelectOption | undefined>(quality[0]);
 
+  const [notes, setNotes] = useState<string | undefined>(undefined);
+
   useEffect(
     () => {
       // Makes sure that the default select values are stored in the form data..
@@ -80,6 +82,8 @@ const CreateSeedForm = ({
         setValue('quantity', existingSeed?.quantity);
         setValue('notes', existingSeed?.notes);
         setValue('plant_id', existingSeed?.plant_id);
+
+        setNotes(existingSeed?.notes);
 
         // Convert existing values to select menu options.
         if (existingSeed.plant_id) loadInitialPlant(existingSeed.plant_id);
@@ -283,13 +287,14 @@ const CreateSeedForm = ({
             />
           </div>
           <div className="mb-6">
-            <SimpleFormTextArea
-              type="textarea"
+            <MarkdownEditor
               labelText={t('seeds:notes')}
-              placeholder="..."
               id="notes"
-              register={register}
-              onChange={onChange}
+              onChange={(value) => {
+                setValue('notes', value);
+                setNotes(value);
+              }}
+              value={notes}
             />
           </div>
           <div className="flex flex-row justify-between space-x-4">
