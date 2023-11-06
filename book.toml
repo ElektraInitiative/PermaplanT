@@ -20,7 +20,7 @@ enable = true    # whether or not to enable section folding
 [output.linkcheck]
 # Should we check links on the internet? Enabling this option adds a
 # non-negligible performance impact
-follow-web-links = false
+follow-web-links = true
 
 # Are we allowed to link to files outside of the book's root directory? This
 # may help prevent linking to sensitive files (e.g. "../../../../etc/shadow")
@@ -33,7 +33,10 @@ traverse-parent-directories = false
 #
 # Hint: you can use TOML's raw strings (single quote) to avoid needing to
 # escape things twice.
-exclude = []
+exclude = ["localhost", "nextcloud", "mysql",
+"visualstudio", "lib.rs", "crates", "libelektra",
+"pr.permaplant", "dev.permaplant", "www.permaplant",
+"auth.permaplant"]
 
 # The User-Agent to use when sending web requests
 user-agent = "mdbook-linkcheck-0.4.0"
