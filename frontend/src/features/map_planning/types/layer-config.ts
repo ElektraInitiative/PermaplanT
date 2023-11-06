@@ -38,8 +38,11 @@ export interface StageListenerRegister {
 }
 
 /**
- * Extension of Konva.LayerConfig with additional facilities that are commonly needed
- * by layers in PermaplanT.
+ * Extension of the default Konva Layer Config, that allows layers to
+ * register input listeners on the base stage.
+ *
+ * This enables us to work around Konvas limitations around Click listeners on groups
+ * and layers.
  */
 export type LayerConfigWithListenerRegister = Konva.LayerConfig & {
   stageListenerRegister: StageListenerRegister;
