@@ -68,7 +68,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: disable E2E tests in master #1055 _(4ydan)_
 - _()_
 - _()_
-- _()_
+- Close modals with escape #1027 _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
@@ -126,6 +126,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Improve loading spinner size in file selector and improve file selector responsiveness #1026 _(tschawax)_
 - Improve tooltip wordings of toolbox icons and extract them into new single file #1028 _(tschawax)_
 - E2E: Refactor data-testid according to naming convention _(4ydan)_
+- _()_
+- _()_
+- _()_
+- _()_
 - pump versions _(4ydan)_
 - CI: Run e2e tests on dev.permaplant _(4ydan)_
 
