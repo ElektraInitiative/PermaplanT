@@ -217,6 +217,8 @@ export const BaseStage = ({
     stopStageDraggingMode(e);
     updatePreviousTransformerSelection(transformerRef);
 
+    if (isPlacementModeActive()) return;
+
     if (transformerRef.current?.nodes().length === 0) {
       useMapStore.getState().selectPlantings(null);
     }

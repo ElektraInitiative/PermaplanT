@@ -1,5 +1,6 @@
 import useMapStore from '../../store/MapStore';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
+import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
@@ -91,17 +92,7 @@ function usePlantLayerListeners(listening: boolean) {
       return;
     }
 
-    const transformer = useMapStore.getState().transformer.current;
-    if (transformer?.nodes().length === 0) {
-      useMapStore.getState().selectPlantings(null);
-    }
-
-    // only unselect if we are not planting a new plant
-    const selectedPlantForPlanting =
-      useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;
-    if (selectedPlantForPlanting) {
-      return;
-    }
+    if (isPlacementModeActive()) return;
 
     exitPlantingMode();
   }, []);
