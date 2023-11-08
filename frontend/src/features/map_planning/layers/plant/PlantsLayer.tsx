@@ -91,6 +91,11 @@ function usePlantLayerListeners(listening: boolean) {
       return;
     }
 
+    const transformer = useMapStore.getState().transformer.current;
+    if (transformer?.nodes().length === 0) {
+      useMapStore.getState().selectPlantings(null);
+    }
+
     // only unselect if we are not planting a new plant
     const selectedPlantForPlanting =
       useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;

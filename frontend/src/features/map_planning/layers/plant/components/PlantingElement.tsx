@@ -4,6 +4,10 @@ import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/im
 import { useFindSeedById } from '@/features/map_planning/layers/plant/hooks/useFindSeedById';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import {
+  isUsingModiferKey,
+  updatePreviousTransformerSelection,
+} from '@/features/map_planning/utils/ShapesSelection';
+import {
   setTooltipPositionToMouseCursor,
   showTooltipWithContent,
   hideTooltip,
@@ -43,7 +47,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
   const removePlantingFromSelection = (e: KonvaEventObject<MouseEvent>) => {
     const selectedPlantings = (foundPlantings: PlantingDto[], konvaNode: Node) => {
       const plantingNode = konvaNode.getAttr('planting');
-      return plantingNode ? [...foundPlantings, plantingNode] : [foundPlantings];
+      return plantingNode ? [...foundPlantings, plantingNode] : foundPlantings;
     };
 
     const getUpdatedPlantingSelection = () => {
@@ -80,6 +84,9 @@ export function PlantingElement({ planting }: PlantingElementProps) {
     triggerPlantSelectionInGuidedTour();
 
     isUsingModiferKey(e) ? handleMultiSelect(e, planting) : handleSingleSelect(e, planting);
+
+    // Update previous transformer selection so we correctly include/exclude shapes to/from being part of new additional selections triggered by a selection rectangle with modifier key pressed.
+    updatePreviousTransformerSelection(useMapStore.getState().transformer);
   };
 
   return (
@@ -126,10 +133,6 @@ function isPlantingElementSelected(planting: PlantingDto): boolean {
 function triggerPlantSelectionInGuidedTour(): void {
   const placeEvent = new Event('selectPlant');
   document.getElementById('canvas')?.dispatchEvent(placeEvent);
-}
-
-function isUsingModiferKey(e: KonvaEventObject<MouseEvent>): boolean {
-  return e.evt.ctrlKey || e.evt.shiftKey || e.evt.metaKey;
 }
 
 function placeTooltip(plant: PlantsSummaryDto | undefined, seed: SeedDto | undefined) {

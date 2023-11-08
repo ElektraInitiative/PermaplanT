@@ -1,71 +1,37 @@
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
 import { Transformer } from 'konva/lib/shapes/Transformer';
 
-// Keep track of our previously selected shapes so we can trigger the selection
-// only if we have new shapes in our bounds. This fixes a bug where deselection
-// would happen after you moved a single or a group of selected shapes.
-// Todo: optimization -> could probably use a set here
-let previouslySelectedShapes: Shape<ShapeConfig>[] = [];
+// Keeps track of the previous transformer nodes so we can add additional nodes to
+// the transformer when drawing a new selection rectangle with a modifier key pressed.
+let previousTransformerSelection: Shape<ShapeConfig>[] = [];
+
+export const SELECTION_RECTANGLE_NAME = 'selectionRect';
 
 /** Select shapes that intersect with the selection rectangle. */
 export const selectIntersectingShapes = (
   stageRef: React.RefObject<Stage>,
-  trRef: React.RefObject<Transformer>,
+  transformerRef: React.RefObject<Transformer>,
+  konvaEvent: KonvaEventObject<MouseEvent>,
 ) => {
-  if (stageRef.current === null) return;
-  const box = stageRef.current.findOne('.selectionRect').getClientRect();
+  const existingShapes = getExistingShapesOnStage(stageRef);
+  if (existingShapes.length === 0) return;
 
-  if (stageRef.current.children === null) return;
+  const selectedShapes = getIntersectedShapes(stageRef.current as Stage, existingShapes);
 
-  // we don't always have to look for them, we can store them
-  const allShapes = stageRef.current.children
-    //filter out layers which are not selected
-    ?.filter((layer) => layer.attrs.listening)
-    .flatMap((layer) => layer.children)
-    .filter((shape) => {
-      // To exclude Konva's transformer, check if node contains children.
-      // 'listening' is explicitly checked for '!== false' because
-      // Konva treats it as true if it's undefined or missing at all.
-      return shape?.attrs.listening !== false && shape?.hasChildren();
-    });
-
-  if (!allShapes) return;
-
-  const allNodes = trRef.current?.getNodes();
-  if (!allNodes) return;
-
-  const mappedShapes = allShapes.map((shape) => {
-    return shape as Shape<ShapeConfig>;
-  });
-
-  const intersectingShapes = mappedShapes.filter(
-    (shape) => shape && Util.haveIntersection(box, shape.getClientRect()),
-  );
-
-  // If intersectingShape and previouslySelectedShapes are the same, don't update
-  if (intersectingShapes.length === previouslySelectedShapes.length) {
-    let same = true;
-    for (const shape of intersectingShapes) {
-      if (!previouslySelectedShapes.map((node) => node._id).includes(shape._id)) {
-        same = false;
-        break;
-      }
-    }
-    if (same) return;
+  if (isUsingModiferKey(konvaEvent)) {
+    addAdditionalShapesToTransformer(selectedShapes, transformerRef);
+    return;
   }
 
-  if (intersectingShapes) {
-    const nodes = intersectingShapes.filter((shape) => shape !== undefined);
-    previouslySelectedShapes = nodes;
-    trRef.current?.nodes(nodes);
-  }
+  setShapesInTransformer(selectedShapes, transformerRef);
 };
 
 /** Resets current selection by removing all nodes from the transformer */
-export const resetSelection = (trRef: React.RefObject<Transformer>) => {
+export const resetTransformerSelection = (trRef: React.RefObject<Transformer>) => {
   trRef.current?.nodes([]);
 };
 
@@ -150,3 +116,53 @@ export const hideSelectionRectangle = (
     });
   }
 };
+
+export const updatePreviousTransformerSelection = (
+  transformerRef: React.RefObject<Transformer>,
+): void => {
+  previousTransformerSelection = transformerRef.current?.nodes().slice() as Shape<ShapeConfig>[];
+};
+
+export const isUsingModiferKey = (konvaEvent: KonvaEventObject<MouseEvent>): boolean => {
+  return konvaEvent.evt.ctrlKey || konvaEvent.evt.shiftKey || konvaEvent.evt.metaKey;
+};
+
+function getExistingShapesOnStage(stageRef: React.RefObject<Stage>): Shape<ShapeConfig>[] {
+  const nodes =
+    stageRef.current?.children
+      //filter out layers which are not selected
+      ?.filter((layer) => layer.attrs.listening)
+      .flatMap((layer) => layer.children)
+      .filter((node) => {
+        // To exclude Konva's transformer, check if node contains children.
+        // 'listening' is explicitly checked for '!== false' because
+        // Konva treats it as true if it's undefined or missing at all.
+        return node?.attrs.listening !== false && node?.hasChildren();
+      }) ?? [];
+
+  return nodes.map((node) => node as Shape<ShapeConfig>);
+}
+
+function getIntersectedShapes(
+  stage: Stage,
+  existingShapes: Shape<ShapeConfig>[],
+): Shape<ShapeConfig>[] {
+  const box = stage.findOne(`.${SELECTION_RECTANGLE_NAME}`).getClientRect();
+
+  return existingShapes.filter((shape) => Util.haveIntersection(box, shape.getClientRect()));
+}
+
+function addAdditionalShapesToTransformer(
+  selectedShapes: Shape[],
+  transformerRef: React.RefObject<Transformer>,
+): void {
+  const updatedSelection = new Set([...previousTransformerSelection, ...selectedShapes]);
+  transformerRef.current?.nodes([...updatedSelection]);
+}
+
+function setShapesInTransformer(
+  selectedShapes: Shape<ShapeConfig>[],
+  transformerRef: React.RefObject<Transformer>,
+): void {
+  transformerRef.current?.nodes(selectedShapes);
+}

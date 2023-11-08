@@ -6,8 +6,10 @@ import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
   hideSelectionRectangle,
   initializeSelectionRectangle,
-  resetSelection,
+  isUsingModiferKey,
+  resetTransformerSelection,
   selectIntersectingShapes,
+  updatePreviousTransformerSelection,
   updateSelectionRectangle,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
@@ -170,7 +172,7 @@ export const BaseStage = ({
     if (!stage || !selectionRectAttrs.isVisible || !selectable) return;
 
     updateSelectionRectangle(stage, setSelectionRectAttrs);
-    selectIntersectingShapes(stageRef, transformerRef);
+    selectIntersectingShapes(stageRef, transformerRef, e);
   };
 
   // Event listener responsible for initializing the stage-dragging mode via middle mouse button
@@ -191,10 +193,6 @@ export const BaseStage = ({
       return isStageSelectable && isSelectedLayerVisible;
     };
 
-    const resetCurrentPlantingsSelection = () => {
-      useMapStore.getState().selectPlantings(null);
-    };
-
     const stage = getStageByEventTarget(e);
     if (!stage) return;
 
@@ -204,7 +202,9 @@ export const BaseStage = ({
     }
 
     if (shouldAllowSelectionOnCurrentLayer()) {
-      resetCurrentPlantingsSelection();
+      if (!isUsingModiferKey(e)) {
+        resetAnySelections(transformerRef);
+      }
       initializeSelectionRectangle(stage, setSelectionRectAttrs);
     }
   };
@@ -215,6 +215,11 @@ export const BaseStage = ({
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
+    updatePreviousTransformerSelection(transformerRef);
+
+    if (transformerRef.current?.nodes().length === 0) {
+      useMapStore.getState().selectPlantings(null);
+    }
 
     if (selectable) {
       hideSelectionRectangle(setSelectionRectAttrs, selectionRectAttrs);
@@ -227,8 +232,8 @@ export const BaseStage = ({
 
     const nodeSize = transformerRef.current?.getNodes().length ?? 0;
 
-    if (nodeSize > 0 && isEventTriggeredFromStage(e)) {
-      resetSelection(transformerRef);
+    if (nodeSize > 0 && isEventTriggeredFromStage(e) && !isUsingModiferKey(e)) {
+      resetTransformerSelection(transformerRef);
     }
   };
 
@@ -365,4 +370,10 @@ function stopStageDraggingMode(konvaEvent: KonvaEventObject<MouseEvent>): void {
   if (stage.isDragging()) {
     stage.stopDrag();
   }
+}
+
+function resetAnySelections(transformerRef: React.RefObject<Konva.Transformer>) {
+  useMapStore.getState().selectPlantings(null);
+  resetTransformerSelection(transformerRef);
+  updatePreviousTransformerSelection(transformerRef);
 }

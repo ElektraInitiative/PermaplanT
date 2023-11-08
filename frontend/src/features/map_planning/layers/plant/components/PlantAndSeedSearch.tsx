@@ -9,7 +9,7 @@ import { useFindPlantFromSeedCallback } from '@/features/map_planning/layers/pla
 import { useSeedSearch } from '@/features/map_planning/layers/plant/hooks/useSeedSearch';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { PlantForPlanting } from '@/features/map_planning/store/MapStoreTypes';
-import { resetSelection } from '@/features/map_planning/utils/ShapesSelection';
+import { resetTransformerSelection } from '@/features/map_planning/utils/ShapesSelection';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
 import { ReactComponent as SearchIcon } from '@/svg/icons/search.svg';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -41,7 +41,7 @@ export const PlantAndSeedSearch = () => {
     const storeChosenPlantInUntrackedStore = () => actions.selectPlantForPlanting(plant);
 
     storeChosenPlantInUntrackedStore();
-    resetSelection(transformerRef);
+    resetTransformerSelection(transformerRef);
   };
 
   const handleClickOnPlantListItem = useCallback(selectPlantForPlanting, [actions, transformerRef]);
