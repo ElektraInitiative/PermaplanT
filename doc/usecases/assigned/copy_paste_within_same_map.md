@@ -6,8 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can copy and paste a selection of elements, including succeeding crops, within one map.
-- **Status:** Analysis
-- **Assignee:** Christoph N.
+- **Status:** Ready to be Assigned
 
 ## Scenarios
 
