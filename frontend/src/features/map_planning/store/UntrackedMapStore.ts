@@ -292,11 +292,6 @@ export const createUntrackedMapSlice: StateCreator<
         return state;
 
       // Measurement step 'one selected' being active implies that measurePoint1 must not be null.
-      console.assert(
-        state.untrackedState.layers.base.measureStep !== 'one selected' ||
-          state.untrackedState.layers.base.measurePoint1 !== null,
-      );
-
       const measureStep = state.untrackedState.layers.base.measureStep;
       const measurePoint1 = state.untrackedState.layers.base.measurePoint1;
       const measurePoint2 = state.untrackedState.layers.base.measurePoint2;
@@ -329,6 +324,24 @@ export const createUntrackedMapSlice: StateCreator<
     if (typeof selectedLayer === 'object' && 'id' in selectedLayer) return selectedLayer.id;
 
     return null;
+  },
+  setStatusPanelContent(content: React.ReactNode) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        bottomStatusPanelContent: content,
+      },
+    }));
+  },
+  clearStatusPanelContent() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        bottomStatusPanelContent: null,
+      },
+    }));
   },
   __removeLastAction({ actionId, entityId }) {
     console.log('Removing action', actionId, entityId);

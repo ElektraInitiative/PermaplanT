@@ -11,7 +11,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Decide about which use cases to include for 1.0 _(Markus Raab and Yvonne Markl with the help of PermaplanTeam)_
 - _()_
-- _()_
+- Enable automatic image scaling in base layer _(Moritz)_
 - _()_
 - Plantings now store seed information if they were created using a seed _(Moritz)_
 - Tooltips show the full plant for plantings that were created using a seed _(Moritz)_
@@ -27,6 +27,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Rename section "Seeds" to "Inventory" _(Moritz)_
 - _()_
 - _()_
+- Added Meeting Agenda&Notes for 06.11. 9:00 _(Markus Raab, Moritz)_
 - Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab, Daniel Steinkogler)_
 - Added Meeting Agenda&Notes for 30.10. 9:00 _(Markus Raab, Christoph N.)_
 - _()_
@@ -34,7 +35,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - add decision for timeline concept _(Daniel Steinkogler)_
 - Improve UI and responsiveness of file selector #1011 _(tschawax)_
-- _()_
+- Add frontend UI and usability guide #918 _(tschawax)_
 - Improve wordings, usability and UI of guided tour #871 _(tschawax)_
 - Fix tour-completion logic of cancel-confirmation dialog in guided tour #986 _(tschawax)_
 - Improve styling of login and logout button #983 _(tschawax)_
@@ -47,12 +48,13 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Clean up the asset file structure in frontend _(Moritz)_
 - Implement multi-select usecase #727 _(tschawax)_
 - Fix plant deletion in guided tour on small screens #861 _(tschawax)_
-- _()_
-- _()_
+- Enable ctrl, shift, command to modify selection #979 _(tschawax)_
+- Fix tooltips on plant hovering in multi selection #1033 _(tschawax)_
 - Add status-specific toolbox icon design and add toolbox icon support to icon button component #1025 _(tschawax)_
 - Improve design and behavior of undo/redo icons and improve focus design #657 _(tschawax)_
 - _()_
 - _()_
+- Enable planting a field of a plant #1039 _(tschawax)_
 - _()_
 - Replace notes field in create seed form with markdown editor _(Daniel Steinkogler)_
 - Improve dark mode design of danger variant buttons #1029 _(tschawax)_

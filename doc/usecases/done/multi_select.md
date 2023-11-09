@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user changes properties or deletes multi-selected plants.
-- **Status:** Analysis
 - **Assignee:** Christoph N.
 
 ## Scenarios

@@ -1,5 +1,5 @@
 import { getPlantings } from '../api/getPlantings';
-import { Map } from '../components/Map';
+import { EditorMap } from '../components/EditorMap';
 import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
 import { useTourStatus } from '../hooks/useTourStatus';
@@ -76,6 +76,8 @@ function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
     queryKey: ['baselayer', mapId, layerId],
     queryFn: () => getBaseLayerImage(mapId, layerId),
     refetchOnWindowFocus: false,
+    cacheTime: 0,
+    staleTime: 0,
     enabled,
   });
 
@@ -220,7 +222,7 @@ export function MapWrapper() {
   return (
     <ReadOnlyModeContextProvider>
       <ShepherdTour steps={steps} tourOptions={tourOptions}>
-        <Map layers={mapData.layers} />
+        <EditorMap layers={mapData.layers} />
       </ShepherdTour>
     </ReadOnlyModeContextProvider>
   );
