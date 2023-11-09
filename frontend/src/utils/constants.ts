@@ -13,3 +13,6 @@ export const COLOR_SECONDARY_400 = '#0084ad';
 export const COLOR_SEA_BLUE_500 = '#007499';
 export const COLOR_GRAY_700_LIGHT = '#474747';
 export const COLOR_GRAY_700_DARK = '#9e9e9e';
+
+// Accent color used for editor objects that should be visible on most backgrounds.
+export const COLOR_EDITOR_HIGH_VISIBILITY = '#ca3b3b';
