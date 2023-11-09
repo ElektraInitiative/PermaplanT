@@ -2,37 +2,39 @@
 
 This document gives guidelines on how to implement keybindings in the frontend.
 
-### Important notes for Konva Key handling
-
-- since keys cannot be bound directly on konva elements, keyhandlers have to check if the corresponding layer is active to avoid collisions
-- if keys should only be active if map is focused, handlers have to be bound to canvas section of the map component
-
 ### Keybinding Configuration
 
 The file 'keybindings.json' contains all keybindings that are used in the application and serves the following characteristics:
 
 - keybindings can easily be changed by editing the file
-- developers have an overview of all keybindings.
+- developers have an overview of all keybindings
 - there are different sections for keybindings:
   - global: keybindings that are globally active
-  - scopes for specific layers: keybindings that are only active if the corresponding layer is active. this scopes should be named according to the layer name
-  - _just_for_documentation_: keybindings that are only used for documentation purposes and are not meant to get configured
-- modifier keys are supported. (e.g. Ctrl+k)
+  - Scopes for specific layers:
+    Keybindings that are only active if the corresponding layer is active.
+    These scopes should be named according to the layer name, postfixed with `_layer`.
+  - _just_for_documentation_:
+    Keybindings that are only used for documentation purposes since the keybinding is hardcoded in the component.
+    For example, the search field can be cleared by pressing the Escape key, which is typically a native browser action and should not be configurable in the keybindings file.
+- modifier keys are supported (Shift, Alt, Ctrl, Meta)
+  - they can be used in combination with other keys by using the '+' sign (e.g. 'Alt+P', 'Shift+A')
 - multiple keybindings can be assigned to one action
 
 Structure:
 
-```
+```json
 {
   "global": {
-    "<<action_name>>": ["<<Key-Binding>>, ...]"
-  }
+    "<<action_name>>": ["<<Key-Binding>>", "..."]
+  },
+  "base_layer": {
+    "<<action_name>>": ["<<Key-Binding>>", "..."]
+  },
   "plants_layer": {
     "exitPlantingMode": ["Escape"]
-  }
-  ...
+  },
   "_just_for_documentation_": {
-    "clearSearch": ["Escape"}
+    "clearSearch": ["Escape"]
   }
 }
 ```
@@ -77,6 +79,11 @@ useKeyHandlers(
 
 - key listener can either be bound on document or on specific node that is passed to hook
 - listener is active as long as the component where hook is used is rendered
+
+### Important Notes for Konva Key Handling
+
+- since keys cannot be bound directly on konva elements, keybinding have to check if the corresponding layer is active to avoid collisions
+- if keys should only be active if map is focused, handlers have to be bound to canvas section of the map component
 
 ## Further Readings
 
