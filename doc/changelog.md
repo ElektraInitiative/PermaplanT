@@ -34,7 +34,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - add decision for timeline concept _(Daniel Steinkogler)_
 - Improve UI and responsiveness of file selector #1011 _(tschawax)_
-- _()_
+- Add frontend UI and usability guide #918 _(tschawax)_
 - Improve wordings, usability and UI of guided tour #871 _(tschawax)_
 - Fix tour-completion logic of cancel-confirmation dialog in guided tour #986 _(tschawax)_
 - Improve styling of login and logout button #983 _(tschawax)_
