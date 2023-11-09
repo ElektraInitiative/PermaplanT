@@ -47,12 +47,13 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Clean up the asset file structure in frontend _(Moritz)_
 - Implement multi-select usecase #727 _(tschawax)_
 - Fix plant deletion in guided tour on small screens #861 _(tschawax)_
-- _()_
-- _()_
+- Enable ctrl, shift, command to modify selection #979 _(tschawax)_
+- Fix tooltips on plant hovering in multi selection #1033 _(tschawax)_
 - Add status-specific toolbox icon design and add toolbox icon support to icon button component #1025 _(tschawax)_
 - Improve design and behavior of undo/redo icons and improve focus design #657 _(tschawax)_
 - _()_
 - _()_
+- Enable planting a field of a plant #1039 _(tschawax)_
 - _()_
 - Replace notes field in create seed form with markdown editor _(Daniel Steinkogler)_
 - Improve dark mode design of danger variant buttons #1029 _(tschawax)_
