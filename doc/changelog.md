@@ -11,7 +11,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Decide about which use cases to include for 1.0 _(Markus Raab and Yvonne Markl with the help of PermaplanTeam)_
 - _()_
-- _()_
+- Enable automatic image scaling in base layer _(Moritz)_
 - _()_
 - Plantings now store seed information if they were created using a seed _(Moritz)_
 - Tooltips show the full plant for plantings that were created using a seed _(Moritz)_

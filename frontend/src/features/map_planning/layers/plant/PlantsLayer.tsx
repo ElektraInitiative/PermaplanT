@@ -12,13 +12,10 @@ import { PlantLabel } from '@/features/map_planning/layers/plant/components/Plan
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
 import { PlantNameFromPlant } from '@/utils/plant-naming';
-import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { Layer } from 'react-konva';
-import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
 
 // For performance reasons add limit for amount of plants inside a plant field
@@ -269,9 +266,16 @@ function PlantsLayer(props: PlantsLayerProps) {
   );
   const showPlantLabels = useMapStore((state) => state.untrackedState.layers.plants.showLabels);
 
-  const portalRef = useRef<HTMLDivElement>(
-    document.getElementById('bottom-portal') as HTMLDivElement,
-  );
+  const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
+  const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
+
+  useEffect(() => {
+    if (selectedPlant) {
+      setStatusPanelContent(<SelectedPlantInfo plant={selectedPlant.plant} />);
+    } else {
+      clearStatusPanelContent();
+    }
+  }, [selectedPlant]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -281,15 +285,6 @@ function PlantsLayer(props: PlantsLayerProps) {
           <PlantingElement planting={o} key={o.id} />
         ))}
         {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
-
-        <Html>
-          {createPortal(
-            <AnimatePresence mode="wait">
-              {selectedPlant && <SelectedPlantInfo plant={selectedPlant.plant} />}
-            </AnimatePresence>,
-            portalRef.current,
-          )}
-        </Html>
       </Layer>
     </>
   );
@@ -299,18 +294,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
   const selectPlant = useMapStore((state) => state.selectPlantForPlanting);
 
   return (
-    <motion.div
-      className="flex gap-4 rounded-md bg-neutral-200 py-3 pl-6 pr-4 ring ring-secondary-500 dark:bg-neutral-200-dark"
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: 100,
-        transition: { delay: 0, duration: 0.1 },
-      }}
-      exit={{
-        opacity: 0,
-        transition: { delay: 0, duration: 0.1 },
-      }}
-    >
+    <>
       <div className="flex flex-row items-center justify-center">
         <PlantNameFromPlant plant={plant} />
       </div>
@@ -323,7 +307,7 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
           <CloseIcon></CloseIcon>
         </IconButton>
       </div>
-    </motion.div>
+    </>
   );
 }
 

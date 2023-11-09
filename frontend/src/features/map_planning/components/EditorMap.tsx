@@ -1,7 +1,6 @@
 import { gainBlossom } from '../api/gainBlossom';
 import { updateTourStatus } from '../api/updateTourStatus';
 import BaseLayer from '../layers/base/BaseLayer';
-import { BaseMeasurementLayer } from '../layers/base/BaseMeasurementLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
@@ -24,15 +23,19 @@ import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
+import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import { ReactComponent as GridIcon } from '@/svg/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/svg/icons/redo.svg';
 import { ReactComponent as TagsIcon } from '@/svg/icons/tags.svg';
 import { ReactComponent as UndoIcon } from '@/svg/icons/undo.svg';
 import i18next from 'i18next';
+import Konva from 'konva';
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
 import { toast } from 'react-toastify';
+
+import KonvaEventObject = Konva.KonvaEventObject;
 
 export const TEST_IDS = Object.freeze({
   UNDO_BUTTON: 'map__undo-button',
@@ -50,7 +53,7 @@ export type MapProps = {
  * You only have to make sure that every shape has the property "draggable" set to true.
  * Otherwise, they cannot be moved.
  */
-export const Map = ({ layers }: MapProps) => {
+export const EditorMap = ({ layers }: MapProps) => {
   const untrackedState = useMapStore((map) => map.untrackedState);
   const canUndo = useMapStore((map) => map.canUndo);
   const canRedo = useMapStore((map) => map.canRedo);
@@ -65,6 +68,77 @@ export const Map = ({ layers }: MapProps) => {
   const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
+
+  // Allow layers to listen for all events on the base stage.
+  //
+  // This enables us to build layers with custom input logic that does not
+  // rely on Konva's limited Canvas-Object controls.
+  const [stageDragStartListeners, setStageDragStartListeners] = useState<
+    Map<string, (e: KonvaEventObject<DragEvent>) => void>
+  >(new Map());
+  const [stageDragEndListeners, setStageDragEndListeners] = useState<
+    Map<string, (e: KonvaEventObject<DragEvent>) => void>
+  >(new Map());
+  const [stageMouseMoveListeners, setStageMouseMoveListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+  const [stageMouseWheelListeners, setStageMouseWheelListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+  const [stageMouseUpListeners, setStageMouseUpListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+  const [stageMouseDownListeners, setStageMouseDownListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+  const [stageClickListeners, setStageClickListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+
+  const baseStageListenerRegister: StageListenerRegister = {
+    registerStageDragStartListener: (
+      key: string,
+      listener: (e: KonvaEventObject<DragEvent>) => void,
+    ) => {
+      setStageDragStartListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageDragEndListener: (
+      key: string,
+      listener: (e: KonvaEventObject<DragEvent>) => void,
+    ) => {
+      setStageDragEndListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageMouseMoveListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseMoveListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageMouseWheelListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseWheelListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageMouseDownListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseDownListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageMouseUpListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseUpListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageClickListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageClickListeners((listeners) => listeners.set(key, listener));
+    },
+  };
 
   const isGridLayerEnabled = () => {
     return untrackedState.layers.grid.visible;
@@ -200,8 +274,19 @@ export const Map = ({ layers }: MapProps) => {
           data-tourid="canvas"
           id="canvas"
         >
-          <BaseStage>
+          <BaseStage
+            listeners={{
+              stageDragStartListeners,
+              stageDragEndListeners,
+              stageMouseMoveListeners,
+              stageMouseUpListeners,
+              stageMouseDownListeners,
+              stageMouseWheelListeners,
+              stageClickListeners,
+            }}
+          >
             <BaseLayer
+              stageListenerRegister={baseStageListenerRegister}
               opacity={untrackedState.layers.base.opacity}
               visible={untrackedState.layers.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
@@ -211,7 +296,6 @@ export const Map = ({ layers }: MapProps) => {
               opacity={untrackedState.layers.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
-            <BaseMeasurementLayer />
             <GridLayer
               visible={untrackedState.layers.grid.visible}
               opacity={untrackedState.layers.grid.opacity}
