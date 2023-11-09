@@ -9,6 +9,5 @@
   "add_date_description": "The date, the planting was added to the map. The planting was not on the map before this date.",
   "add_date_description_multiple_plantings": "The date, the plantings were added to the map. The plantings were not on the map before this date.",
   "remove_date_description": "The date, the planting was removed from the map. The planting was on the map before this date. Per default, this is date is not set.",
-  "remove_date_description_multiple_plantings": "The date, the plantings were removed from the map. The plantings were on the map before this date. Per default, this is date is not set.",
-  "show_labels_tooltip": "Show plant labels"
+  "remove_date_description_multiple_plantings": "The date, the plantings were removed from the map. The plantings were on the map before this date. Per default, this is date is not set."
 }
