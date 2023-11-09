@@ -22,7 +22,7 @@ import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
 
 // For performance reasons add limit for amount of plants inside a plant field
-const LIMIT_PLANT_FIELD_PLANTS = 50;
+const LIMIT_PLANT_FIELD_PLANTS = 1000;
 
 const PLANT_WIDTHS = new Map<PlantSpread, number>([
   [PlantSpread.Narrow, 10],
