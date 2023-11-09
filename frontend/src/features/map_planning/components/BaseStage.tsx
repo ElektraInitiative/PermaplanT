@@ -7,6 +7,7 @@ import {
   hideSelectionRectangle,
   initializeSelectionRectangle,
   resetSelection,
+  resetSelectionRectangleSize,
   selectIntersectingShapes,
   updateSelectionRectangle,
 } from '../utils/ShapesSelection';
@@ -151,6 +152,7 @@ export const BaseStage = ({
   };
 
   // Event listener responsible for allowing stage-dragging only via middle mouse button
+  // and for preventing dragging of non-selected nodes
   const onStageDragStart = (e: KonvaEventObject<DragEvent>) => {
     listeners?.stageDragStartListeners.forEach((listener) => listener(e));
     renderGrabbingMouseCursor();
@@ -159,6 +161,8 @@ export const BaseStage = ({
     if (!isUsingMiddleMouseButton(e)) {
       preventStageDragging(e);
     }
+
+    preventDraggingOfNonSelectedShapes(e);
   };
 
   const onStageDragEnd = (e: KonvaEventObject<DragEvent>) => {
@@ -181,7 +185,10 @@ export const BaseStage = ({
     if (!stage || !selectionRectAttrs.isVisible || !selectable) return;
 
     updateSelectionRectangle(stage, setSelectionRectAttrs);
-    selectIntersectingShapes(stageRef, transformerRef);
+
+    if (!isPlacementModeActive()) {
+      selectIntersectingShapes(stageRef, transformerRef);
+    }
   };
 
   // Event listener responsible for initializing the stage-dragging mode via middle mouse button
@@ -191,11 +198,16 @@ export const BaseStage = ({
     const shouldAllowSelectionOnCurrentLayer = () => {
       const isStageSelectable = selectable;
 
-      if (isPlacementModeActive()) {
+      // this enables dragging the whole transformer and not just the currently targeted shape
+      if (e.target instanceof Konva.Shape) {
         return false;
       }
 
       return isStageSelectable && isSelectedLayerVisible;
+    };
+
+    const resetCurrentPlantingsSelection = () => {
+      useMapStore.getState().selectPlantings(null);
     };
 
     const stage = getStageByEventTarget(e);
@@ -207,6 +219,9 @@ export const BaseStage = ({
     }
 
     if (shouldAllowSelectionOnCurrentLayer()) {
+      if (!isPlacementModeActive()) {
+        resetCurrentPlantingsSelection();
+      }
       initializeSelectionRectangle(stage, setSelectionRectAttrs);
     }
   };
@@ -218,6 +233,7 @@ export const BaseStage = ({
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
+    resetSelectionRectangleSize(stageRef);
 
     if (selectable) {
       hideSelectionRectangle(setSelectionRectAttrs, selectionRectAttrs);
@@ -300,9 +316,6 @@ export const BaseStage = ({
             ref={transformerRef}
             name="transformer"
             anchorSize={8}
-            // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
-            // It's an experimental property so we should keep an eye out for possible issues
-            shouldOverdrawWholeArea={true}
             enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
           />
         </Layer>
@@ -347,6 +360,17 @@ function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>): void {
   if (konvaEvent.target === stage) {
     stage.stopDrag();
   }
+}
+
+function preventDraggingOfNonSelectedShapes(konvaEvent: KonvaEventObject<DragEvent>): void {
+  if (!transformerContainsNode(konvaEvent.target)) {
+    konvaEvent.target.stopDrag();
+  }
+}
+
+function transformerContainsNode(konvaNode: Konva.Stage | Konva.Shape): boolean {
+  const currentTransformerNodes = useMapStore.getState().transformer.current?.nodes() ?? [];
+  return currentTransformerNodes.includes(konvaNode);
 }
 
 function initializeStageDraggingMode(
