@@ -1,0 +1,12 @@
+{
+  "global": {
+  },
+  "base_layer": {
+  },
+  "plants_layer": {
+    "exitPlantingMode": ["Escape"]
+  },
+  "_just_for_documentation_":{
+    "clearSearchInput": ["Escape"]
+  }
+}
