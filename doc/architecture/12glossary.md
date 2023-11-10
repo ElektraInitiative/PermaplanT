@@ -152,6 +152,13 @@
   - The API endpoints that can be called in the backend.  
     Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
 
+### Keybinding vs Keyhandling
+
+- keybinding:
+  - The association of a specific action or function with a particular key or key combination.
+- keyhandling:
+  - A Broader concept of how the software manages and responds to keyboard input. It includes not only the assignment of actions to keys (keybinding) but also the handling of key events, such as detecting key presses, key releases, and processing them accordingly.
+
 ## Testing
 
 - unit test:  
