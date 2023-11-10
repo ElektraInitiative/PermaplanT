@@ -1,108 +1,44 @@
-import { toast } from 'react-toastify';
+import { toast, ToastItem } from 'react-toastify';
 import { ToastContent, ToastOptions } from 'react-toastify/dist/types';
-import { create } from 'zustand';
 
-type GroupedToastData<TData> = {
-  content: ToastContent<TData>;
-  options: ToastOptions<object> | undefined;
-};
+const infoToastData = new Set<ToastContent>();
+const successToastData = new Set<ToastContent>();
+const warningToastData = new Set<ToastContent>();
+const errorToastData = new Set<ToastContent>();
 
-interface GroupedToastState {
-  loading: Map<GroupedToastData<unknown>, number>;
-  success: Map<GroupedToastData<unknown>, number>;
-  info: Map<GroupedToastData<unknown>, number>;
-  error: Map<GroupedToastData<unknown>, number>;
-  warning: Map<GroupedToastData<unknown>, number>;
-
-  addLoadingContent: (data: GroupedToastData<unknown>) => boolean;
-  addSuccessContent: (data: GroupedToastData<unknown>) => boolean;
-  addInfoContent: (data: GroupedToastData<unknown>) => boolean;
-  addErrorContent: (data: GroupedToastData<unknown>) => boolean;
-  addWarningContent: (data: GroupedToastData<unknown>) => boolean;
-}
-
-const useGroupedToastState = create<GroupedToastState>((set) => {
-  return {
-    loading: new Map(),
-    success: new Map(),
-    info: new Map(),
-    error: new Map(),
-    warning: new Map(),
-
-    addLoadingContent: (data: GroupedToastData<unknown>): boolean => {
-      let contentKnown = false;
-
-      set((state) => {
-        if (state.loading.has(data)) {
-          const count = state.loading.get(data) ?? 0;
-          contentKnown = true;
-          return {
-            ...state,
-            loading: state.loading.set(data, count + 1),
-          };
-        }
-
-        return {
-          ...state,
-          loading: state.loading.set(data, 1),
-        };
-      });
-
-      return contentKnown;
-    },
-    addSuccessContent: (data: GroupedToastData<unknown>): boolean => {
-      return !!data;
-    },
-    addInfoContent: (data: GroupedToastData<unknown>): boolean => {
-      return !!data;
-    },
-    addErrorContent: (data: GroupedToastData<unknown>): boolean => {
-      return !!data;
-    },
-    addWarningContent: (data: GroupedToastData<unknown>): boolean => {
-      return !!data;
-    },
-  };
-});
-
-export function loading(content: ToastContent, options?: ToastOptions<object> | undefined) {
-  if (useGroupedToastState.getState().addLoadingContent({ content, options })) {
-    toast.loading(<LoadingContentDisplay data={{ content, options }} />, options);
+export function info(content: ToastContent, options?: ToastOptions<object> | undefined) {
+  if (!infoToastData.has(content)) {
+    infoToastData.add(content);
+    toast.info(content, options);
   }
 }
 
-function LoadingContentDisplay(props: { data: GroupedToastData<unknown> }) {
-  const loading = useGroupedToastState((state) => state.loading);
-
-  return (
-    <>
-      {props.data.content}
-      {loading.get(props.data) ?? 0 > 1 ? <span>x{loading.get(props.data)}</span> : <></>}
-    </>
-  );
+export function success(content: ToastContent, options?: ToastOptions<object> | undefined) {
+  if (!successToastData.has(content)) {
+    successToastData.add(content);
+    toast.success(content, options);
+  }
 }
 
-/*export function success<TData = unknown>(
-  content: ToastContent<TData>,
-  options?: ToastOptions<object> | undefined,
-) {
-  return toast.success(content, options);
+export function warning(content: ToastContent, options?: ToastOptions<object> | undefined) {
+  if (!warningToastData.has(content)) {
+    warningToastData.add(content);
+    toast.warning(content, options);
+  }
 }
 
-export function info<TData = unknown>(
-  content: ToastContent<TData>,
-  options?: ToastOptions<object> | undefined,
-) {}
+export function error(content: ToastContent, options?: ToastOptions<object> | undefined) {
+  if (!errorToastData.has(content)) {
+    errorToastData.add(content);
+    toast.error(content, options);
+  }
+}
 
-export function error<TData = unknown>(
-  content: ToastContent<TData>,
-  options?: ToastOptions<object> | undefined,
-) {}
+toast.onChange((payload: ToastItem) => {
+  if (payload.status !== 'removed') return;
 
-export function warning<TData = unknown>(
-  content: ToastContent<TData>,
-  options?: ToastOptions<object> | undefined,
-) {}
-
-toast.onChange((payload: ToastItem) => {});
-*/
+  if (payload.type === 'info') infoToastData.delete(payload.content as ToastContent);
+  else if (payload.type === 'success') successToastData.delete(payload.content as ToastContent);
+  else if (payload.type === 'warning') warningToastData.delete(payload.content as ToastContent);
+  else if (payload.type === 'error') errorToastData.delete(payload.content as ToastContent);
+});
