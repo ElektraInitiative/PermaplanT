@@ -7,11 +7,22 @@ import { calculateDistance, calculateScale } from '@/features/map_planning/layer
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
-import useDebouncedValue from '@/hooks/useDebouncedValue';
+import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { FileStat } from 'webdav';
+import { z } from 'zod';
+
+export type BaseLayerDataAttributes = Pick<BaseLayerImageDto, 'path' | 'rotation' | 'scale'>;
+
+const BaseLayerRightToolbarFormSchema = z.object({
+  path: z.nullable(z.string()).transform((value) => value ?? ''),
+  rotation: z.number().transform((value) => value % 360),
+  scale: z.number().min(0),
+});
 
 export const TEST_IDS = Object.freeze({
   BACKGROUND_INPUT: 'base-layer-right-toolbar__background-input',
@@ -67,67 +78,65 @@ export const BaseLayerRightToolbar = () => {
   const { t } = useTranslation(['common', 'baseLayerForm']);
   const isReadOnlyMode = useIsReadOnlyMode();
 
-  // React either requires a defaultValue or value plus onChange props on an input field.
-  //
-  // Therefore, this seems to be the only way to keep track of external state changes to the file path while
-  // using the onFocusEvent handler to update the state from this component.
-  //
-  // The 'ignore' option indicates whether a new UpdateBaseLayerAction should be submitted after the value changes.
-  // This prevents base layer update events being submitted twice if they originate from outside this component.
-  const [pathInput, setPathInput] = useState({
-    path: baseLayerState.nextcloudImagePath,
-    ignore: true,
+  const sendBaseLayerState = ({ scale, rotation, path }: BaseLayerDataAttributes) => {
+    const baseLayerOptions = {
+      id: baseLayerState.imageId,
+      layer_id: baseLayerState.layerId,
+      path: path,
+      rotation: rotation,
+      scale: scale,
+    };
+
+    if (validateBaseLayerOptions(baseLayerOptions))
+      executeAction(new UpdateBaseLayerAction(baseLayerOptions));
+  };
+
+  const { register, handleSubmit, watch, setValue, getValues } = useForm<BaseLayerDataAttributes>({
+    // The 'empty' value for the native date input is an empty string, not null | undefined
+    defaultValues: {
+      scale: baseLayerState.scale,
+      rotation: baseLayerState.rotation,
+      path: baseLayerState.nextcloudImagePath,
+    },
+    resolver: zodResolver(BaseLayerRightToolbarFormSchema),
   });
-  const [rotationInput, setRotationInput] = useState({
-    rotation: baseLayerState.rotation,
-    ignore: true,
-  });
-  const [scaleInput, setScaleInput] = useState({ scale: baseLayerState.scale, ignore: true });
+
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const scaleSubmitState = useDebouncedSubmit<BaseLayerDataAttributes>(
+    watch('scale'),
+    handleSubmit,
+    sendBaseLayerState,
+  );
+
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const rotationSubmitState = useDebouncedSubmit<BaseLayerDataAttributes>(
+    watch('rotation'),
+    handleSubmit,
+    sendBaseLayerState,
+  );
+
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const pathSubmitState = useDebouncedSubmit<BaseLayerDataAttributes>(
+    watch('path'),
+    handleSubmit,
+    sendBaseLayerState,
+  );
   const [showFileSelector, setShowFileSelector] = useState(false);
 
   useEffect(() => {
-    setPathInput({ path: baseLayerState.nextcloudImagePath, ignore: true });
-  }, [baseLayerState.nextcloudImagePath]);
+    if (getValues('scale') === baseLayerState.scale) return;
+    setValue('scale', baseLayerState.scale);
+  }, [baseLayerState.nextcloudImagePath]); //eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setScaleInput({ scale: baseLayerState.scale, ignore: true });
-  }, [baseLayerState.scale]);
+    if (getValues('scale') === baseLayerState.scale) return;
+    setValue('scale', baseLayerState.scale);
+  }, [baseLayerState.scale]); //eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setRotationInput({ rotation: baseLayerState.rotation, ignore: true });
-  }, [baseLayerState.rotation]);
-
-  const debouncedPath = useDebouncedValue(pathInput, 200);
-  const debouncedRotation = useDebouncedValue(rotationInput, 200);
-  const debouncedScale = useDebouncedValue(scaleInput, 200);
-
-  useEffect(
-    () => {
-      if (debouncedPath.ignore && debouncedRotation.ignore && debouncedScale.ignore) {
-        return;
-      }
-
-      const baseLayerOptions = {
-        id: baseLayerState.imageId,
-        layer_id: baseLayerState.layerId,
-        path: debouncedPath.ignore ? baseLayerState.nextcloudImagePath : debouncedPath.path,
-        rotation: debouncedRotation.ignore ? baseLayerState.rotation : debouncedRotation.rotation,
-        scale: debouncedScale.ignore ? baseLayerState.scale : debouncedScale.scale,
-      };
-
-      if (validateBaseLayerOptions(baseLayerOptions))
-        executeAction(new UpdateBaseLayerAction(baseLayerOptions));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      baseLayerState.imageId,
-      baseLayerState.layerId,
-      debouncedPath,
-      executeAction,
-      debouncedScale,
-      debouncedRotation,
-    ],
-  );
+    if (getValues('rotation') === baseLayerState.rotation) return;
+    setValue('rotation', baseLayerState.rotation);
+  }, [baseLayerState.rotation]); //eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (measureStep === 'both selected') {
@@ -152,7 +161,7 @@ export const BaseLayerRightToolbar = () => {
     }
 
     const scale = calculateScale(measuredDistance, baseLayerState.scale, actualDistance);
-    setScaleInput({ scale, ignore: false });
+    setValue('scale', scale);
 
     deactivateMeasurement();
   };
@@ -193,12 +202,11 @@ export const BaseLayerRightToolbar = () => {
       </ModalContainer>
       <h2>{t('baseLayerForm:title')}</h2>
       <SimpleFormInput
-        id="file"
+        id="path"
         disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:image_path_field')}
-        onChange={(e) => setPathInput({ path: e.target.value, ignore: false })}
-        value={pathInput.path}
         data-testid={TEST_IDS.BACKGROUND_INPUT}
+        register={register}
       />
       <FileSelectorModal
         setShow={function (show: boolean): void {
@@ -210,19 +218,8 @@ export const BaseLayerRightToolbar = () => {
         }}
         path={'/Photos/'}
         onSelect={function (item: FileStat): void {
-          const scale = baseLayerState.scale;
           const path = '/Photos/' + item.basename;
-          const rotation = baseLayerState.rotation;
-          executeAction(
-            new UpdateBaseLayerAction({
-              id: baseLayerState.imageId,
-              layer_id: baseLayerState.layerId,
-              path: path,
-              rotation: rotation,
-              scale: scale,
-            }),
-          );
-          setPathInput({ path, ignore: true });
+          setValue('path', path);
           setShowFileSelector(false);
         }}
         title={t('baseLayerForm:selectImage')}
@@ -233,28 +230,19 @@ export const BaseLayerRightToolbar = () => {
       </SimpleButton>
       <SimpleFormInput
         id="rotation"
+        register={register}
         disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:rotation_field')}
-        onChange={(e) => {
-          setRotationInput({ rotation: parseInt(e.target.value), ignore: false });
-        }}
         type="number"
-        value={rotationInput.rotation}
-        min="0"
-        max="359"
         data-testid={TEST_IDS.ROTATION_INPUT}
       />
       <div className="flex flex-col gap-2">
         <SimpleFormInput
           id="scale"
+          register={register}
           disabled={isReadOnlyMode}
           labelText={t('baseLayerForm:scale')}
-          onChange={(e) => {
-            setScaleInput({ scale: parseInt(e.target.value), ignore: false });
-          }}
           type="number"
-          value={scaleInput.scale}
-          min="0"
           data-testid={TEST_IDS.SCALE_INPUT}
         />
         {measureStep === 'inactive' ? (
