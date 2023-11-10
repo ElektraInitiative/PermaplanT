@@ -128,8 +128,8 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
   const calculateVisibleMonths = (year: number) => {
     return monthSliderItems.filter(
       (month) =>
-        month.year >= yearSliderItems[year].date - 1 &&
-        month.year <= yearSliderItems[year].date + 1,
+        month.year >= yearSliderItems[year].date - 3 &&
+        month.year <= yearSliderItems[year].date + 3,
     );
   };
 
