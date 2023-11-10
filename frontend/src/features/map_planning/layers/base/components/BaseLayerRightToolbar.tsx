@@ -92,7 +92,6 @@ export const BaseLayerRightToolbar = () => {
   };
 
   const { register, handleSubmit, watch, setValue, getValues } = useForm<BaseLayerDataAttributes>({
-    // The 'empty' value for the native date input is an empty string, not null | undefined
     defaultValues: {
       scale: baseLayerState.scale,
       rotation: baseLayerState.rotation,
