@@ -8,7 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.3.5 - UNRELEASED
 
-- _()_
+- Fix browser browserlists #954 _(4ydan)_
 - Decide about which use cases to include for 1.0 _(Markus Raab and Yvonne Markl with the help of PermaplanTeam)_
 - _()_
 - Enable automatic image scaling in base layer _(Moritz)_
