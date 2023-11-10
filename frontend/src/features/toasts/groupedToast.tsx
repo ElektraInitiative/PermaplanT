@@ -66,7 +66,7 @@ export function errorToastGrouped(
 ) {
   if (!errorToastData.has(content)) {
     errorToastData.add(content);
-    errorToastGrouped(content, options);
+    toast.error(content, options);
   }
 }
 
