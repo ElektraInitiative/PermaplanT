@@ -1,9 +1,9 @@
 import { SeedDto } from '@/api_types/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import defaultImageUrl from '@/svg/plant.svg';
 import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
-import { toast } from 'react-toastify';
 
 export type SeedListElementProps = {
   seed: SeedDto;
@@ -24,7 +24,7 @@ export function SeedListItem({
 
   if (!seed.plant_id) {
     // Ideally, this should never happen.
-    toast.error('Tried to initialize SeedListItem with missing plant_id');
+    errorToastGrouped('Tried to initialize SeedListItem with missing plant_id');
   }
 
   const { plant } = useFindPlantById(seed.plant_id ?? -1);

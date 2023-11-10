@@ -1,6 +1,7 @@
 import SimpleButton from '@/components/Button/SimpleButton';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useMutation } from '@tanstack/react-query';
 import { ChangeEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +33,7 @@ export const UploadFile = (props: UploadFileProps) => {
       );
     },
     onError: () => {
-      toast.error(t('uploadFile:upload_error'));
+      errorToastGrouped(t('uploadFile:upload_error'));
     },
     onSuccess: (data, variables, context) => {
       toast.success(variables.name + ' successfully uploaded!');

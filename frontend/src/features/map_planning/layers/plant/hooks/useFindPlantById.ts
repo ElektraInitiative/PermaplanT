@@ -1,7 +1,7 @@
 import { findPlantById } from '@/features/seeds/api/findPlantById';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 /**
  * Load a plant from the backend using its id.
@@ -18,7 +18,7 @@ export function useFindPlantById(plantId: number, enabled = true) {
   });
 
   if (error) {
-    toast.error(t('plantings:error_fetching_plant'), { autoClose: false });
+    errorToastGrouped(t('plantings:error_fetching_plant'), { autoClose: false });
   }
 
   return {
