@@ -1,19 +1,26 @@
 import './styles/timeline.css';
-import React, { useRef, useState, useEffect, ReactNode } from 'react';
+import React, { useRef, useState, useEffect, ReactNode, useCallback } from 'react';
 
 interface HorizontalScrollingPickerProps {
   /** List of items to display */
-  items: ReactNode[];
+  items: {
+    key: number;
+    content: ReactNode;
+  }[];
 
   /** Callback when an item is selected */
   onChange: (selectedIndex: number) => void;
+
+  leftEndReached: () => void;
+  rightEndReached: () => void;
+
   /** optinal initial value */
-  value?: string;
+  value?: number;
 }
 
 const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (props) => {
   // State to keep track of the selected item index.
-  const [selectedItem, setSelectedItem] = useState<number>(1);
+  const [selectedItem, setSelectedItem] = useState<number>(0);
 
   // Refs to interact with the scrolling container and handle dragging.
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -24,9 +31,34 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
   const scrollPositionOnMouseDown = useRef<number | null>(null);
   const isScrollingToIndex = useRef<boolean>(false);
 
-  const updateSelectedItem = (index: number) => {
-    setSelectedItem(index);
-    props.onChange(index);
+  const setSelectedItemAndCheckIfBordersAreReached = (itemKey: number) => {
+    setSelectedItem(itemKey);
+
+    const container = containerRef.current;
+    if (container) {
+      const scrollLeft = container.scrollLeft;
+      const containerWidth = container.offsetWidth;
+      const scrollWidth = container.scrollWidth;
+
+      // Define a threshold for how close to the ends you want to trigger the callback.
+      const threshold = 500; // You can adjust this value as needed.
+
+      // Check if you are near the left end.
+      if (scrollLeft < threshold) {
+        props.leftEndReached();
+      } else if (scrollWidth - scrollLeft - containerWidth < threshold) {
+        props.rightEndReached();
+      }
+    }
+  };
+
+  const getSelectedIndex = useCallback(() => {
+    return props.items.findIndex((item) => item.key === selectedItem);
+  }, [props.items, selectedItem]);
+
+  const updateSelectedItem = (itemKey: number) => {
+    setSelectedItemAndCheckIfBordersAreReached(itemKey);
+    props.onChange(itemKey);
   };
 
   const scrollToItem = (idx: number) => {
@@ -50,19 +82,23 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
     const container = containerRef.current;
     if (container) {
       const items = container.getElementsByClassName('item') as HTMLCollectionOf<HTMLElement>;
-      const newSelected = Math.min(selectedItem + 1, items.length - 1);
-      if (newSelected !== selectedItem) {
-        updateSelectedItem(newSelected);
-        scrollToItem(newSelected);
+      const selectedIndex = getSelectedIndex();
+
+      const newSelectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+      if (newSelectedIndex !== selectedIndex) {
+        updateSelectedItem(props.items[newSelectedIndex].key);
+        scrollToItem(newSelectedIndex);
       }
     }
   };
 
   const selectPreviousItem = () => {
-    const newSelected = Math.max(selectedItem - 1, 0);
-    if (newSelected !== selectedItem) {
-      updateSelectedItem(newSelected);
-      scrollToItem(newSelected);
+    const selectedIndex = getSelectedIndex();
+
+    const newSelectedIndex = Math.max(selectedIndex - 1, 0);
+    if (newSelectedIndex !== selectedIndex) {
+      updateSelectedItem(props.items[newSelectedIndex].key);
+      scrollToItem(newSelectedIndex);
     }
   };
 
@@ -81,7 +117,7 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
         const itemLeft = item.offsetLeft;
 
         if (itemLeft <= middle && itemLeft + itemWidth >= middle) {
-          setSelectedItem(i);
+          setSelectedItemAndCheckIfBordersAreReached(props.items[i].key);
           break;
         }
       }
@@ -126,7 +162,7 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
   const handleItemClick = (e: React.MouseEvent, index: number) => {
     const container = containerRef.current;
     if (container && scrollPositionOnMouseDown.current === container.scrollLeft) {
-      updateSelectedItem(index);
+      updateSelectedItem(props.items[index].key);
       scrollToItem(index);
     }
   };
@@ -137,7 +173,7 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
       isDragging.current &&
       scrollPositionOnMouseDown.current !== containerRef.current?.scrollLeft
     ) {
-      scrollToItem(selectedItem);
+      scrollToItem(getSelectedIndex());
       props.onChange(selectedItem);
     }
 
@@ -169,6 +205,22 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
       e.preventDefault();
     }
   };
+
+  // Add a useEffect hook to scroll to the selected item when items change
+  useEffect(() => {
+    const selectedIndex = getSelectedIndex();
+
+    // Ensure the selected item is within bounds
+    const selectedItemIndex = Math.min(Math.max(selectedIndex, 0), props.items.length - 1);
+    scrollToItem(selectedItemIndex);
+  }, [props.items, getSelectedIndex]);
+
+  useEffect(() => {
+    if (props.value === undefined) return;
+
+    setSelectedItem(props.value);
+    scrollToItem(props.items.findIndex((item) => item.key === props.value));
+  }, [props.value, props.items]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -218,11 +270,11 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
             <div
               key={index}
               className={`min-w-1/5 relative w-10 px-7 pt-1 ${
-                selectedItem === index ? 'bg-gray-200 font-bold' : ''
+                getSelectedIndex() === index ? 'bg-gray-200 font-bold' : ''
               } item flex flex-col items-center justify-end`}
               onClick={(e) => handleItemClick(e, index)}
             >
-              {item}
+              {item.content}
             </div>
           );
         })}

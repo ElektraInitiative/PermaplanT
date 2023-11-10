@@ -8,7 +8,6 @@ import { PhotoGallery } from '../components/PhotoGallery';
 import Pricing from '../components/Pricing';
 import Team from '../components/Team';
 import WidePageLayout from '@/components/Layout/WidePageLayout';
-import TimelineDatePicker from '@/components/TImePicker/TimelineDatePicker';
 import { useTranslation } from 'react-i18next';
 
 export const LandingPage = () => {
@@ -34,7 +33,6 @@ export const LandingPage = () => {
         <PhotoGallery />
         <Pricing />
         <Contact />
-        <TimelineDatePicker />
       </div>
       <Footer />
     </WidePageLayout>
