@@ -112,7 +112,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab, Daniel Steinkogler)_
 - Added Meeting Agenda&Notes for 30.10. 9:00 _(Markus Raab, Christoph N.)_
 - Enable planting a field of a plant #1039 _(tschawax)_
-- _()_
 - Add status-specific toolbox icon design and add toolbox icon support to icon button component #1025 _(tschawax)_
 - Improve design and behavior of undo/redo icons and improve focus design #657 _(tschawax)_
 - Replace notes field in create seed form with markdown editor _(Daniel Steinkogler)_
