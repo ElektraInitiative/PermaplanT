@@ -10,7 +10,7 @@ import FileSelectorModal from '@/features/nextcloud_integration/components/FileS
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { FileStat } from 'webdav';
@@ -22,6 +22,23 @@ const BaseLayerRightToolbarFormSchema = z.object({
   path: z.nullable(z.string()).transform((value) => value ?? ''),
   rotation: z.number().transform((value) => value % 360),
   scale: z.number().min(0),
+});
+
+export type BaseLayerDistanceModalAttributes = {
+  meters: number;
+  centimeters: number;
+};
+
+const BaseLayerDistanceModalFormSchema = z.object({
+  meters: z
+    .number()
+    .min(0)
+    .transform((value) => value),
+  centimeters: z
+    .number()
+    .min(0)
+    .max(99)
+    .transform((value) => value),
 });
 
 export const TEST_IDS = Object.freeze({
@@ -121,17 +138,15 @@ export const BaseLayerRightToolbar = () => {
     sendBaseLayerState,
   );
   const [showFileSelector, setShowFileSelector] = useState(false);
-  const [distMeters, setDistMeters] = useState(0);
-  const [distCentimeters, setDistCentimeters] = useState(0);
 
-  const onDistModalSubmit = () => {
+  const onDistModalSubmit: SubmitHandler<BaseLayerDistanceModalAttributes> = (attributes) => {
     clearStatusPanelContent();
 
     const point1 = measurePoint1 ?? { x: 0, y: 0 };
     const point2 = measurePoint2 ?? { x: 0, y: 0 };
 
     const measuredDistance = calculateDistance(point1, point2);
-    const actualDistance = distMeters * 100 + distCentimeters;
+    const actualDistance = attributes.meters * 100 + attributes.centimeters;
     if (actualDistance === 0) {
       toast.error(t('baseLayerForm:error_actual_distance_zero'));
       return;
@@ -143,28 +158,48 @@ export const BaseLayerRightToolbar = () => {
     deactivateMeasurement();
   };
 
+  const {
+    register: registerDistanceModal,
+    handleSubmit: handleSubmitDistanceModal,
+    formState: registerDistanceModalFormState,
+  } = useForm<BaseLayerDistanceModalAttributes>({
+    defaultValues: {
+      meters: 0,
+      centimeters: 0,
+    },
+    resolver: zodResolver(BaseLayerDistanceModalFormSchema),
+  });
+
   return (
     <div className="flex flex-col gap-2 p-2">
       <ModalContainer show={measureStep === 'both selected'}>
         <div className="w-ful flex h-full min-h-[20vh] flex-col gap-2 rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h3>{t('baseLayerForm:distance_modal_title')}</h3>
+          {registerDistanceModalFormState.errors.meters && (
+            <div className="text-sm text-red-400">
+              {t('baseLayerForm:auto_scaling_meters_invalid')}
+            </div>
+          )}
+          {registerDistanceModalFormState.errors.centimeters && (
+            <div className="text-sm text-red-400">
+              {t('baseLayerForm:auto_scaling_centimeters_invalid')}
+            </div>
+          )}
           <div className="flex flex-row gap-2">
             <SimpleFormInput
-              id="dist_meters"
+              id="meters"
               className="w-min"
               labelText={t('common:meters')}
-              onChange={(e) => setDistMeters(parseInt(e.target.value))}
               type="number"
-              value={distMeters}
+              register={registerDistanceModal}
               min="0"
             />
             <SimpleFormInput
-              id="dist_centimeters"
+              id="centimeters"
               className="w-min"
               labelText={t('common:centimeters')}
-              onChange={(e) => setDistCentimeters(parseInt(e.target.value))}
               type="number"
-              value={distCentimeters}
+              register={registerDistanceModal}
               min="0"
               max="99"
             />
@@ -173,7 +208,9 @@ export const BaseLayerRightToolbar = () => {
             <SimpleButton onClick={() => deactivateMeasurement()}>
               {t('common:cancel')}
             </SimpleButton>
-            <SimpleButton onClick={() => onDistModalSubmit()}>{t('common:ok')}</SimpleButton>
+            <SimpleButton onClick={handleSubmitDistanceModal(onDistModalSubmit)}>
+              {t('common:ok')}
+            </SimpleButton>
           </div>
         </div>
       </ModalContainer>
