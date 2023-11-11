@@ -108,7 +108,7 @@ export const BaseLayerRightToolbar = () => {
       executeAction(new UpdateBaseLayerAction(baseLayerOptions));
   };
 
-  const { register, handleSubmit, watch, setValue } = useForm<BaseLayerDataAttributes>({
+  const { register, handleSubmit, watch, setValue, formState } = useForm<BaseLayerDataAttributes>({
     defaultValues: {
       scale: baseLayerState.scale,
       rotation: baseLayerState.rotation,
@@ -259,6 +259,9 @@ export const BaseLayerRightToolbar = () => {
           type="number"
           data-testid={TEST_IDS.SCALE_INPUT}
         />
+        {formState.errors.scale && (
+          <div className="text-sm text-red-400">{t('baseLayerForm:scale_invalid')}</div>
+        )}
         {measureStep === 'inactive' ? (
           <SimpleButton
             disabled={isReadOnlyMode}
