@@ -9,7 +9,7 @@ import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeCon
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -91,7 +91,7 @@ export const BaseLayerRightToolbar = () => {
       executeAction(new UpdateBaseLayerAction(baseLayerOptions));
   };
 
-  const { register, handleSubmit, watch, setValue, getValues } = useForm<BaseLayerDataAttributes>({
+  const { register, handleSubmit, watch, setValue } = useForm<BaseLayerDataAttributes>({
     defaultValues: {
       scale: baseLayerState.scale,
       rotation: baseLayerState.rotation,
@@ -121,28 +121,6 @@ export const BaseLayerRightToolbar = () => {
     sendBaseLayerState,
   );
   const [showFileSelector, setShowFileSelector] = useState(false);
-
-  useEffect(() => {
-    if (getValues('scale') === baseLayerState.scale) return;
-    setValue('scale', baseLayerState.scale);
-  }, [baseLayerState.nextcloudImagePath]); //eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (getValues('scale') === baseLayerState.scale) return;
-    setValue('scale', baseLayerState.scale);
-  }, [baseLayerState.scale]); //eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (getValues('rotation') === baseLayerState.rotation) return;
-    setValue('rotation', baseLayerState.rotation);
-  }, [baseLayerState.rotation]); //eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (measureStep === 'both selected') {
-      clearStatusPanelContent();
-    }
-  }, [measureStep]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const [distMeters, setDistMeters] = useState(0);
   const [distCentimeters, setDistCentimeters] = useState(0);
 
