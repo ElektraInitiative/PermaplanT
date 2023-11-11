@@ -109,7 +109,7 @@ export const BaseLayerRightToolbar = () => {
   };
 
   const { register, handleSubmit, watch, setValue, formState } = useForm<BaseLayerDataAttributes>({
-    defaultValues: {
+    values: {
       scale: baseLayerState.scale,
       rotation: baseLayerState.rotation,
       path: baseLayerState.nextcloudImagePath,
