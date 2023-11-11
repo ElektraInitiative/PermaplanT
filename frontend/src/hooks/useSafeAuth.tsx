@@ -1,9 +1,9 @@
 import { useIsOnline } from './useIsOnline';
 import i18next from '@/config/i18n';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { User, UserManagerEvents } from 'oidc-client-ts';
 import { useContext } from 'react';
 import { AuthContext, AuthContextProps } from 'react-oidc-context';
-import { toast } from 'react-toastify';
 
 /**
  * A fallback for the `AuthContext` from 'react-oidc-context'.
@@ -24,7 +24,7 @@ const AuthContextFallback: AuthContextProps = {
   signinPopup: () => Promise.resolve(null as unknown as User),
   signinSilent: () => Promise.resolve(null),
   signinRedirect: () => {
-    toast.error(i18next.t('auth:error_no_backend'), { autoClose: false });
+    errorToastGrouped(i18next.t('auth:error_no_backend'), { autoClose: false });
     return Promise.resolve(void 0);
   },
   signoutRedirect: () => Promise.resolve(void 0),

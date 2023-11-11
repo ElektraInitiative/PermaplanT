@@ -35,7 +35,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 30.10. 9:00 _(Markus Raab, Christoph N.)_
 - _()_
 - _()_
-- _()_
+- Fix similar toasts appearring multiple times on screen _(Moritz)_
 - add decision for timeline concept _(Daniel Steinkogler)_
 - Improve UI and responsiveness of file selector #1011 _(tschawax)_
 - Add frontend UI and usability guide #918 _(tschawax)_

@@ -5,11 +5,11 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 interface MapUpdateData {
   name: string;
@@ -51,7 +51,7 @@ export default function MapEditForm() {
         });
       } catch (error) {
         console.error(error);
-        toast.error(t('maps:edit.error_map_single_fetch'), {
+        errorToastGrouped(t('maps:edit.error_map_single_fetch'), {
           autoClose: false,
           toastId: 'fetchError',
         });
@@ -168,7 +168,7 @@ export default function MapEditForm() {
     try {
       await updateMap(updatedMap, Number(mapId));
     } catch (error) {
-      toast.error(t('maps:edit.error_map_edit'), { autoClose: false });
+      errorToastGrouped(t('maps:edit.error_map_edit'), { autoClose: false });
     }
     navigate('/maps');
   }
