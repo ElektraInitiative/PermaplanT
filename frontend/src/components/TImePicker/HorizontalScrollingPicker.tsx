@@ -254,7 +254,7 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
         tabIndex={0}
         onKeyDown={handleKeyDown}
         ref={containerRef}
-        className="horizontal-scroll-container  mx-auto flex border border-gray-300 bg-white outline-none"
+        className="horizontal-scroll-container mx-auto flex border border-gray-300 bg-white outline-none dark:border-gray-600 dark:bg-neutral-200-dark"
         style={{
           scrollSnapType: 'x mandatory',
           overflowX: 'auto',
@@ -270,7 +270,7 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
             <div
               key={index}
               className={`min-w-1/5 relative w-10 px-7 pt-1 ${
-                getSelectedIndex() === index ? 'bg-gray-200 font-bold' : ''
+                getSelectedIndex() === index ? 'bg-gray-300 font-bold dark:bg-black' : ''
               } item flex flex-col items-center justify-end`}
               onClick={(e) => handleItemClick(e, index)}
             >

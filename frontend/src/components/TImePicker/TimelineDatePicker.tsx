@@ -317,17 +317,23 @@ function TimelineDatePickerItem({
 
   return (
     <div>
-      <div className="flex select-none	">
+      <div className="flex select-none justify-center">
         <div className="flex items-end">
           <div
-            style={{ backgroundColor: 'green', height: greenBarHeight + 'px' }}
-            className={disabled ? 'w-2 opacity-20' : 'w-2 opacity-50'}
+            style={{ height: greenBarHeight + 'px' }}
+            className={
+              disabled ? 'w-2 bg-primary-400 opacity-30' : 'w-2 bg-primary-400 opacity-100'
+            }
           ></div>
         </div>
         <div className="flex items-end">
           <div
-            style={{ backgroundColor: 'red', height: redBarHeight + 'px' }}
-            className={disabled ? 'w-2 opacity-20' : 'w-2 opacity-50'}
+            style={{ height: redBarHeight + 'px' }}
+            className={
+              disabled
+                ? 'w-2 bg-red-400 opacity-30 dark:bg-red-700'
+                : 'w-2  bg-red-400 opacity-100 dark:bg-red-700'
+            }
           ></div>
         </div>
       </div>
