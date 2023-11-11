@@ -118,10 +118,9 @@ export const BaseLayerRightToolbar = () => {
   });
 
   useDebouncedSubmit<BaseLayerDataAttributes>(watch('scale'), handleSubmit, sendBaseLayerState);
-
   useDebouncedSubmit<BaseLayerDataAttributes>(watch('rotation'), handleSubmit, sendBaseLayerState);
-
   useDebouncedSubmit<BaseLayerDataAttributes>(watch('path'), handleSubmit, sendBaseLayerState);
+
   const [showFileSelector, setShowFileSelector] = useState(false);
 
   const onDistModalSubmit: SubmitHandler<BaseLayerDistanceModalAttributes> = (attributes) => {
