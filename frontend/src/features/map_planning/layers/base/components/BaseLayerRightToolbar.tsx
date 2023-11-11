@@ -117,26 +117,11 @@ export const BaseLayerRightToolbar = () => {
     resolver: zodResolver(BaseLayerRightToolbarFormSchema),
   });
 
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const scaleSubmitState = useDebouncedSubmit<BaseLayerDataAttributes>(
-    watch('scale'),
-    handleSubmit,
-    sendBaseLayerState,
-  );
+  useDebouncedSubmit<BaseLayerDataAttributes>(watch('scale'), handleSubmit, sendBaseLayerState);
 
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const rotationSubmitState = useDebouncedSubmit<BaseLayerDataAttributes>(
-    watch('rotation'),
-    handleSubmit,
-    sendBaseLayerState,
-  );
+  useDebouncedSubmit<BaseLayerDataAttributes>(watch('rotation'), handleSubmit, sendBaseLayerState);
 
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const pathSubmitState = useDebouncedSubmit<BaseLayerDataAttributes>(
-    watch('path'),
-    handleSubmit,
-    sendBaseLayerState,
-  );
+  useDebouncedSubmit<BaseLayerDataAttributes>(watch('path'), handleSubmit, sendBaseLayerState);
   const [showFileSelector, setShowFileSelector] = useState(false);
 
   const onDistModalSubmit: SubmitHandler<BaseLayerDistanceModalAttributes> = (attributes) => {
