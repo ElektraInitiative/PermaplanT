@@ -304,7 +304,8 @@ lock("${env.NODE_NAME}-exclusive") {
             checkout scm
             def target = 'https://pr.permaplant.net'
             if (env.BRANCH_NAME == 'master') {
-                target = 'https://dev.permaplant.net'
+                echo 'Skipping E2E Tests for master'
+                return
             }
             try {
                 docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
