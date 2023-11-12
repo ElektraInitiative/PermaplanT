@@ -2,9 +2,12 @@ import { UpdateBaseLayerAction } from '../../../layers/base/actions';
 import { BaseLayerImageDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import ModalContainer from '@/components/Modals/ModalContainer';
+import { calculateDistance, calculateScale } from '@/features/map_planning/layers/base/util';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -52,10 +55,14 @@ function validateBaseLayerOptions(baseLayerOptions: Omit<BaseLayerImageDto, 'act
 
 export const BaseLayerRightToolbar = () => {
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
-  // const { measureStep } = useMapStore((state) => state.untrackedState.layers.base);
+  const { measureStep, measurePoint1, measurePoint2 } = useMapStore(
+    (state) => state.untrackedState.layers.base,
+  );
   const executeAction = useMapStore((state) => state.executeAction);
-  // const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
-  // const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
+  const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
+  const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
+  const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
+  const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
 
   const { t } = useTranslation(['common', 'baseLayerForm']);
   const isReadOnlyMode = useIsReadOnlyMode();
@@ -64,55 +71,75 @@ export const BaseLayerRightToolbar = () => {
   //
   // Therefore, this seems to be the only way to keep track of external state changes to the file path while
   // using the onFocusEvent handler to update the state from this component.
-  const [pathInput, setPathInput] = useState(baseLayerState.nextcloudImagePath);
-  const [rotationInput, setRotationInput] = useState(baseLayerState.rotation);
-  const [scaleInput, setScaleInput] = useState(baseLayerState.scale);
+  //
+  // The 'ignore' option indicates whether a new UpdateBaseLayerAction should be submitted after the value changes.
+  // This prevents base layer update events being submitted twice if they originate from outside this component.
+  const [pathInput, setPathInput] = useState({
+    path: baseLayerState.nextcloudImagePath,
+    ignore: true,
+  });
+  const [rotationInput, setRotationInput] = useState({
+    rotation: baseLayerState.rotation,
+    ignore: true,
+  });
+  const [scaleInput, setScaleInput] = useState({ scale: baseLayerState.scale, ignore: true });
   const [showFileSelector, setShowFileSelector] = useState(false);
 
   useEffect(() => {
-    setPathInput(baseLayerState.nextcloudImagePath);
+    setPathInput({ path: baseLayerState.nextcloudImagePath, ignore: true });
   }, [baseLayerState.nextcloudImagePath]);
 
   useEffect(() => {
-    setScaleInput(baseLayerState.scale);
+    setScaleInput({ scale: baseLayerState.scale, ignore: true });
   }, [baseLayerState.scale]);
 
   useEffect(() => {
-    setRotationInput(baseLayerState.rotation);
+    setRotationInput({ rotation: baseLayerState.rotation, ignore: true });
   }, [baseLayerState.rotation]);
 
   const debouncedPath = useDebouncedValue(pathInput, 200);
   const debouncedRotation = useDebouncedValue(rotationInput, 200);
   const debouncedScale = useDebouncedValue(scaleInput, 200);
 
-  useEffect(() => {
-    const baseLayerOptions = {
-      id: baseLayerState.imageId,
-      layer_id: baseLayerState.layerId,
-      path: debouncedPath,
-      rotation: debouncedRotation,
-      scale: debouncedScale,
-    };
-    if (validateBaseLayerOptions(baseLayerOptions))
-      executeAction(new UpdateBaseLayerAction(baseLayerOptions));
-  }, [
-    baseLayerState.imageId,
-    baseLayerState.layerId,
-    debouncedPath,
-    executeAction,
-    debouncedScale,
-    debouncedRotation,
-  ]);
+  useEffect(
+    () => {
+      if (debouncedPath.ignore && debouncedRotation.ignore && debouncedScale.ignore) {
+        return;
+      }
 
-  /*
+      const baseLayerOptions = {
+        id: baseLayerState.imageId,
+        layer_id: baseLayerState.layerId,
+        path: debouncedPath.ignore ? baseLayerState.nextcloudImagePath : debouncedPath.path,
+        rotation: debouncedRotation.ignore ? baseLayerState.rotation : debouncedRotation.rotation,
+        scale: debouncedScale.ignore ? baseLayerState.scale : debouncedScale.scale,
+      };
+
+      if (validateBaseLayerOptions(baseLayerOptions))
+        executeAction(new UpdateBaseLayerAction(baseLayerOptions));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      baseLayerState.imageId,
+      baseLayerState.layerId,
+      debouncedPath,
+      executeAction,
+      debouncedScale,
+      debouncedRotation,
+    ],
+  );
+
+  useEffect(() => {
+    if (measureStep === 'both selected') {
+      clearStatusPanelContent();
+    }
+  }, [measureStep]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const [distMeters, setDistMeters] = useState(0);
   const [distCentimeters, setDistCentimeters] = useState(0);
-  */
 
-  /*
   const onDistModalSubmit = () => {
-    console.assert(measurePoint1 !== null);
-    console.assert(measurePoint2 !== null);
+    clearStatusPanelContent();
 
     const point1 = measurePoint1 ?? { x: 0, y: 0 };
     const point2 = measurePoint2 ?? { x: 0, y: 0 };
@@ -120,23 +147,18 @@ export const BaseLayerRightToolbar = () => {
     const measuredDistance = calculateDistance(point1, point2);
     const actualDistance = distMeters * 100 + distCentimeters;
     if (actualDistance === 0) {
-      toast.error(t('baseLayerForm:error_actual_distance_zero'));
+      errorToastGrouped(t('baseLayerForm:error_actual_distance_zero'));
       return;
     }
 
     const scale = calculateScale(measuredDistance, baseLayerState.scale, actualDistance);
-    const path = baseLayerState.nextcloudImagePath;
-    const rotation = baseLayerState.rotation;
-    executeAction(new UpdateBaseLayerAction(rotation, scale, path));
+    setScaleInput({ scale, ignore: false });
 
     deactivateMeasurement();
   };
-  */
 
   return (
     <div className="flex flex-col gap-2 p-2">
-      {/* Automatic scaling is disabled for now due to a bug related to mouse-drag selection. */}
-      {/*
       <ModalContainer show={measureStep === 'both selected'}>
         <div className="w-ful flex h-full min-h-[20vh] flex-col gap-2 rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h3>{t('baseLayerForm:distance_modal_title')}</h3>
@@ -169,14 +191,13 @@ export const BaseLayerRightToolbar = () => {
           </div>
         </div>
       </ModalContainer>
-      */}
       <h2>{t('baseLayerForm:title')}</h2>
       <SimpleFormInput
         id="file"
         disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:image_path_field')}
-        onChange={(e) => setPathInput(e.target.value)}
-        value={pathInput}
+        onChange={(e) => setPathInput({ path: e.target.value, ignore: false })}
+        value={pathInput.path}
         data-testid={TEST_IDS.BACKGROUND_INPUT}
       />
       <FileSelectorModal
@@ -201,9 +222,10 @@ export const BaseLayerRightToolbar = () => {
               scale: scale,
             }),
           );
-          setPathInput(path);
+          setPathInput({ path, ignore: true });
           setShowFileSelector(false);
         }}
+        title={t('baseLayerForm:selectImage')}
       />
 
       <SimpleButton onClick={() => setShowFileSelector(true)} disabled={isReadOnlyMode}>
@@ -213,34 +235,49 @@ export const BaseLayerRightToolbar = () => {
         id="rotation"
         disabled={isReadOnlyMode}
         labelText={t('baseLayerForm:rotation_field')}
-        onChange={(e) => setRotationInput(parseInt(e.target.value))}
+        onChange={(e) => {
+          setRotationInput({ rotation: parseInt(e.target.value), ignore: false });
+        }}
         type="number"
-        value={rotationInput}
+        value={rotationInput.rotation}
         min="0"
         max="359"
         data-testid={TEST_IDS.ROTATION_INPUT}
       />
-      {/* <div className="flex flex-row items-end gap-2"> */}
-      <SimpleFormInput
-        id="scale"
-        disabled={isReadOnlyMode}
-        labelText={t('baseLayerForm:scale')}
-        onChange={(e) => setScaleInput(parseInt(e.target.value))}
-        type="number"
-        value={scaleInput}
-        min="0"
-        data-testid={TEST_IDS.SCALE_INPUT}
-      />
-      {/*
+      <div className="flex flex-col gap-2">
+        <SimpleFormInput
+          id="scale"
+          disabled={isReadOnlyMode}
+          labelText={t('baseLayerForm:scale')}
+          onChange={(e) => {
+            setScaleInput({ scale: parseInt(e.target.value), ignore: false });
+          }}
+          type="number"
+          value={scaleInput.scale}
+          min="0"
+          data-testid={TEST_IDS.SCALE_INPUT}
+        />
         {measureStep === 'inactive' ? (
-          <SimpleButton onClick={() => activateMeasurement()}>
+          <SimpleButton
+            disabled={isReadOnlyMode}
+            onClick={() => {
+              activateMeasurement();
+              setStatusPanelContent(<span>{t('baseLayerForm:auto_scaling_hint')}</span>);
+            }}
+          >
             {t('baseLayerForm:set_scale')}
           </SimpleButton>
         ) : (
-          <SimpleButton onClick={() => deactivateMeasurement()}>{t('common:cancel')}</SimpleButton>
+          <SimpleButton
+            onClick={() => {
+              deactivateMeasurement();
+              clearStatusPanelContent();
+            }}
+          >
+            {t('common:cancel')}
+          </SimpleButton>
         )}
-      */}
-      {/* </div> */}
+      </div>
     </div>
   );
 };

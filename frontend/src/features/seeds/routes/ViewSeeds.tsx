@@ -6,6 +6,7 @@ import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import { archiveSeed } from '@/features/seeds/api/archiveSeed';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
@@ -34,7 +35,7 @@ export const ViewSeeds = () => {
     });
   if (error) {
     console.error(error.message);
-    toast.error(t('seeds:view_seeds.fetching_error'));
+    errorToastGrouped(t('seeds:view_seeds.fetching_error'));
   }
   const seeds = data?.pages.flatMap((page) => page.results) ?? [];
 
@@ -65,7 +66,7 @@ export const ViewSeeds = () => {
 
   const { mutate: handleRestoreSeed } = useMutation(['restore seed'], restoreSeedUsingSeedDto, {
     onError: () => {
-      toast.error(t('seeds:view_seeds.restore_seed_failure'));
+      errorToastGrouped(t('seeds:view_seeds.restore_seed_failure'));
     },
     onSuccess: async (data, variables) => {
       const seed = variables as unknown as SeedDto;
@@ -76,7 +77,7 @@ export const ViewSeeds = () => {
 
   const { mutate: handleArchiveSeed } = useMutation(['archive seed'], archiveSeedUsingSeedDto, {
     onError: () => {
-      toast.error(t('seeds:create_seed_form.error_delete_seed'));
+      errorToastGrouped(t('seeds:create_seed_form.error_delete_seed'));
     },
     onSuccess: async (data, variables) => {
       // archiveSeedUsingSeedDto takes SeedDto as its argument

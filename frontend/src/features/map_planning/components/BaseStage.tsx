@@ -7,6 +7,7 @@ import {
   hideSelectionRectangle,
   initializeSelectionRectangle,
   resetSelection,
+  resetSelectionRectangleSize,
   selectIntersectingShapes,
   updateSelectionRectangle,
 } from '../utils/ShapesSelection';
@@ -14,9 +15,10 @@ import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
 import { isPlacementModeActive } from '../utils/planting-utils';
 import { useDimensions } from '@/hooks/useDimensions';
+import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
 export const TEST_IDS = Object.freeze({
@@ -28,6 +30,15 @@ interface BaseStageProps {
   scrollable?: boolean;
   selectable?: boolean;
   draggable?: boolean;
+  listeners?: {
+    stageDragStartListeners: Map<string, (e: KonvaEventObject<DragEvent>) => void>;
+    stageDragEndListeners: Map<string, (e: KonvaEventObject<DragEvent>) => void>;
+    stageMouseMoveListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
+    stageMouseWheelListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
+    stageMouseDownListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
+    stageMouseUpListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
+    stageClickListeners: Map<string, (e: KonvaEventObject<MouseEvent>) => void>;
+  };
   children: React.ReactNode;
 }
 
@@ -46,6 +57,7 @@ export const BaseStage = ({
   scrollable = true,
   selectable = true,
   draggable = true,
+  listeners,
 }: BaseStageProps) => {
   // Represents the state of the stage
   const [stage, setStage] = useState({
@@ -105,9 +117,9 @@ export const BaseStage = ({
   const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
   const tooltipPosition = useMapStore((state) => state.untrackedState.tooltipPosition);
 
-  // Event listener responsible for allowing zooming with the ctrl key + mouse wheel
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
+    listeners?.stageMouseWheelListeners.forEach((listener) => listener(e));
 
     const targetStage = getStageByEventTarget(e);
     if (targetStage === null) return;
@@ -140,16 +152,21 @@ export const BaseStage = ({
   };
 
   // Event listener responsible for allowing stage-dragging only via middle mouse button
+  // and for preventing dragging of non-selected nodes
   const onStageDragStart = (e: KonvaEventObject<DragEvent>) => {
+    listeners?.stageDragStartListeners.forEach((listener) => listener(e));
     renderGrabbingMouseCursor();
     if (!e.evt) return;
 
     if (!isUsingMiddleMouseButton(e)) {
       preventStageDragging(e);
     }
+
+    preventDraggingOfNonSelectedShapes(e);
   };
 
-  const onStageDragEnd = () => {
+  const onStageDragEnd = (e: KonvaEventObject<DragEvent>) => {
+    listeners?.stageDragEndListeners.forEach((listener) => listener(e));
     if (stageRef.current === null) return;
 
     updateMapBounds({
@@ -163,24 +180,34 @@ export const BaseStage = ({
   // Event listener responsible for updating the selection rectangle's size
   // and subsequently selecting all intersecting shapes
   const onStageMouseMove = (e: KonvaEventObject<MouseEvent>) => {
+    listeners?.stageMouseMoveListeners.forEach((listener) => listener(e));
     const stage = getStageByEventTarget(e);
     if (!stage || !selectionRectAttrs.isVisible || !selectable) return;
 
     updateSelectionRectangle(stage, setSelectionRectAttrs);
-    selectIntersectingShapes(stageRef, transformerRef);
+
+    if (!isPlacementModeActive()) {
+      selectIntersectingShapes(stageRef, transformerRef);
+    }
   };
 
   // Event listener responsible for initializing the stage-dragging mode via middle mouse button
   // and for positioning the selection rectangle at the current mouse position
   const onStageMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+    listeners?.stageMouseDownListeners.forEach((listener) => listener(e));
     const shouldAllowSelectionOnCurrentLayer = () => {
       const isStageSelectable = selectable;
 
-      if (isPlacementModeActive()) {
+      // this enables dragging the whole transformer and not just the currently targeted shape
+      if (e.target instanceof Konva.Shape) {
         return false;
       }
 
       return isStageSelectable && isSelectedLayerVisible;
+    };
+
+    const resetCurrentPlantingsSelection = () => {
+      useMapStore.getState().selectPlantings(null);
     };
 
     const stage = getStageByEventTarget(e);
@@ -192,6 +219,9 @@ export const BaseStage = ({
     }
 
     if (shouldAllowSelectionOnCurrentLayer()) {
+      if (!isPlacementModeActive()) {
+        resetCurrentPlantingsSelection();
+      }
       initializeSelectionRectangle(stage, setSelectionRectAttrs);
     }
   };
@@ -199,9 +229,11 @@ export const BaseStage = ({
   // Event listener responsible for stopping a possible stage-dragging mode
   // and for hiding the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
+    listeners?.stageMouseUpListeners.forEach((listener) => listener(e));
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
+    resetSelectionRectangleSize(stageRef);
 
     if (selectable) {
       hideSelectionRectangle(setSelectionRectAttrs, selectionRectAttrs);
@@ -210,6 +242,7 @@ export const BaseStage = ({
 
   // Event listener responsible for resetting the current selection of shapes when clicking on stage
   const onStageClick = (e: KonvaEventObject<MouseEvent>) => {
+    listeners?.stageClickListeners.forEach((listener) => listener(e));
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 
     const nodeSize = transformerRef.current?.getNodes().length ?? 0;
@@ -220,6 +253,10 @@ export const BaseStage = ({
   };
 
   const isReadOnly = useIsReadOnlyMode();
+
+  const bottomStatusPanelContent = useMapStore(
+    (map) => map.untrackedState.bottomStatusPanelContent,
+  );
 
   return (
     <div className="h-full w-full overflow-hidden" data-testid={TEST_IDS.CANVAS} ref={containerRef}>
@@ -279,16 +316,18 @@ export const BaseStage = ({
             ref={transformerRef}
             name="transformer"
             anchorSize={8}
-            // shouldOverdrawWholeAre allows us to use the whole transformer area for dragging.
-            // It's an experimental property so we should keep an eye out for possible issues
-            shouldOverdrawWholeArea={true}
             enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
           />
         </Layer>
       </Stage>
-      {/** Portal to display something from different layers */}
+      {/** Panel to display something from different layers */}
       <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
-        <div id="bottom-portal" />
+        <AnimatePresence mode="wait">
+          {bottomStatusPanelContent && (
+            <BottomStatusPanel>{bottomStatusPanelContent}</BottomStatusPanel>
+          )}
+        </AnimatePresence>
+        ,
       </div>
     </div>
   );
@@ -323,6 +362,17 @@ function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>): void {
   }
 }
 
+function preventDraggingOfNonSelectedShapes(konvaEvent: KonvaEventObject<DragEvent>): void {
+  if (!transformerContainsNode(konvaEvent.target)) {
+    konvaEvent.target.stopDrag();
+  }
+}
+
+function transformerContainsNode(konvaNode: Konva.Stage | Konva.Shape): boolean {
+  const currentTransformerNodes = useMapStore.getState().transformer.current?.nodes() ?? [];
+  return currentTransformerNodes.includes(konvaNode);
+}
+
 function initializeStageDraggingMode(
   konvaEvent: KonvaEventObject<MouseEvent>,
   stage: Konva.Stage,
@@ -344,4 +394,23 @@ function stopStageDraggingMode(konvaEvent: KonvaEventObject<MouseEvent>): void {
   if (stage.isDragging()) {
     stage.stopDrag();
   }
+}
+
+function BottomStatusPanel(props: React.PropsWithChildren) {
+  return (
+    <motion.div
+      className="flex gap-4 rounded-md bg-neutral-200 py-3 pl-6 pr-4 ring ring-secondary-500 dark:bg-neutral-200-dark"
+      initial={{ opacity: 0 }}
+      animate={{
+        opacity: 100,
+        transition: { delay: 0, duration: 0.1 },
+      }}
+      exit={{
+        opacity: 0,
+        transition: { delay: 0, duration: 0.1 },
+      }}
+    >
+      {props.children}
+    </motion.div>
+  );
 }

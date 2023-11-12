@@ -23,15 +23,19 @@ import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
+import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import { ReactComponent as GridIcon } from '@/svg/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/svg/icons/redo.svg';
 import { ReactComponent as TagsIcon } from '@/svg/icons/tags.svg';
 import { ReactComponent as UndoIcon } from '@/svg/icons/undo.svg';
 import i18next from 'i18next';
+import Konva from 'konva';
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
 import { toast } from 'react-toastify';
+
+import KonvaEventObject = Konva.KonvaEventObject;
 
 export const TEST_IDS = Object.freeze({
   UNDO_BUTTON: 'map__undo-button',
@@ -49,8 +53,10 @@ export type MapProps = {
  * You only have to make sure that every shape has the property "draggable" set to true.
  * Otherwise, they cannot be moved.
  */
-export const Map = ({ layers }: MapProps) => {
+export const EditorMap = ({ layers }: MapProps) => {
   const untrackedState = useMapStore((map) => map.untrackedState);
+  const canUndo = useMapStore((map) => map.canUndo);
+  const canRedo = useMapStore((map) => map.canRedo);
   const undo = useMapStore((map) => map.undo);
   const redo = useMapStore((map) => map.redo);
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
@@ -59,17 +65,88 @@ export const Map = ({ layers }: MapProps) => {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
   const tour = useContext(ShepherdTourContext);
-  const { t } = useTranslation([
-    'undoRedo',
-    'grid',
-    'timeline',
-    'blossoms',
-    'common',
-    'guidedTour',
-    'plantings',
-  ]);
+  const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
+
+  // Allow layers to listen for all events on the base stage.
+  //
+  // This enables us to build layers with custom input logic that does not
+  // rely on Konva's limited Canvas-Object controls.
+  const [stageDragStartListeners, setStageDragStartListeners] = useState<
+    Map<string, (e: KonvaEventObject<DragEvent>) => void>
+  >(new Map());
+  const [stageDragEndListeners, setStageDragEndListeners] = useState<
+    Map<string, (e: KonvaEventObject<DragEvent>) => void>
+  >(new Map());
+  const [stageMouseMoveListeners, setStageMouseMoveListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+  const [stageMouseWheelListeners, setStageMouseWheelListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+  const [stageMouseUpListeners, setStageMouseUpListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+  const [stageMouseDownListeners, setStageMouseDownListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+  const [stageClickListeners, setStageClickListeners] = useState<
+    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
+  >(new Map());
+
+  const baseStageListenerRegister: StageListenerRegister = {
+    registerStageDragStartListener: (
+      key: string,
+      listener: (e: KonvaEventObject<DragEvent>) => void,
+    ) => {
+      setStageDragStartListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageDragEndListener: (
+      key: string,
+      listener: (e: KonvaEventObject<DragEvent>) => void,
+    ) => {
+      setStageDragEndListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageMouseMoveListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseMoveListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageMouseWheelListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseWheelListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageMouseDownListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseDownListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageMouseUpListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageMouseUpListeners((listeners) => listeners.set(key, listener));
+    },
+    registerStageClickListener: (
+      key: string,
+      listener: (e: KonvaEventObject<MouseEvent>) => void,
+    ) => {
+      setStageClickListeners((listeners) => listeners.set(key, listener));
+    },
+  };
+
+  const isGridLayerEnabled = () => {
+    return untrackedState.layers.grid.visible;
+  };
+
+  const isPlantLabelTooltipEnabled = () => {
+    return untrackedState.layers.plants.showLabels;
+  };
 
   const reenableTour = async () => {
     const update: UpdateGuidedToursDto = { editor_tour_completed: false };
@@ -145,40 +222,44 @@ export const Map = ({ layers }: MapProps) => {
             contentTop={
               <div>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                  disabled={isReadOnlyMode}
+                  isToolboxIcon={true}
+                  className={`${!canUndo ? 'opacity-50' : ''}`}
+                  disabled={isReadOnlyMode || !canUndo}
                   onClick={() => undo()}
-                  title={t('undoRedo:undo_tooltip')}
+                  title={t('toolboxTooltips:undo')}
                   data-tourid="undo"
                   data-testid={TEST_IDS.UNDO_BUTTON}
                 >
                   <UndoIcon></UndoIcon>
                 </IconButton>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                  disabled={isReadOnlyMode}
+                  isToolboxIcon={true}
+                  className={`${!canRedo ? 'opacity-50' : ''}`}
+                  disabled={isReadOnlyMode || !canRedo}
                   onClick={() => redo()}
-                  title={t('undoRedo:redo_tooltip')}
+                  title={t('toolboxTooltips:redo')}
                   data-testid={TEST_IDS.REDO_BUTTON}
                 >
                   <RedoIcon></RedoIcon>
                 </IconButton>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  isToolboxIcon={true}
+                  renderAsActive={isGridLayerEnabled()}
                   onClick={() =>
                     updateLayerVisible(
                       FrontendOnlyLayerType.Grid,
                       !untrackedState.layers.grid.visible,
                     )
                   }
-                  title={t('grid:tooltip')}
+                  title={t('toolboxTooltips:grid')}
                 >
                   <GridIcon></GridIcon>
                 </IconButton>
                 <IconButton
-                  className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                  isToolboxIcon={true}
+                  renderAsActive={isPlantLabelTooltipEnabled()}
                   onClick={() => toggleShowPlantLabel()}
-                  title={t('plantings:show_labels_tooltip')}
+                  title={t('toolboxTooltips:plant_labels')}
                 >
                   <TagsIcon></TagsIcon>
                 </IconButton>
@@ -192,9 +273,21 @@ export const Map = ({ layers }: MapProps) => {
           className="flex h-full w-full flex-col overflow-hidden"
           data-tourid="canvas"
           id="canvas"
+          tabIndex={0} //so that map can be focused
         >
-          <BaseStage>
+          <BaseStage
+            listeners={{
+              stageDragStartListeners,
+              stageDragEndListeners,
+              stageMouseMoveListeners,
+              stageMouseUpListeners,
+              stageMouseDownListeners,
+              stageMouseWheelListeners,
+              stageClickListeners,
+            }}
+          >
             <BaseLayer
+              stageListenerRegister={baseStageListenerRegister}
               opacity={untrackedState.layers.base.opacity}
               visible={untrackedState.layers.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}

@@ -36,6 +36,8 @@ pub struct Planting {
     /// The date the planting was removed from the map.
     /// If None, the planting is still on the map.
     pub remove_date: Option<NaiveDate>,
+    /// Plantings may be linked with a seed.
+    pub seed_id: Option<i32>,
     /*
     /// The date the planting was created.
     //pub create_date: NaiveDate,
@@ -68,4 +70,6 @@ pub struct UpdatePlanting {
     pub add_date: Option<Option<NaiveDate>>,
     /// The date the planting was removed from the map.
     pub remove_date: Option<Option<NaiveDate>>,
+    /// Plantings may be linked with a seed.
+    pub seed_id: Option<i32>,
 }

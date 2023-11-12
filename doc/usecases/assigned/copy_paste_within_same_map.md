@@ -6,8 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can copy and paste a selection of elements, including succeeding crops, within one map.
-- **Status:** Analysis
-- **Assignee:** Christoph N.
+- **Status:** Ready to be Assigned
 
 ## Scenarios
 
@@ -52,7 +51,7 @@
 
 ## Development Progress
 
-1. (this usecase) [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md)  
+1. (this usecase) [Copy & Paste of Selection Within the Same Map](../assigned/copy_paste_within_same_map.md)  
    This usecase should be done before any other _Copy & Paste_-related usecase.  
    It will contain the core logic of copying and pasting.
 2. [Copy & Paste of Selection via Icons](../draft/copy_paste_via_icons.md)  

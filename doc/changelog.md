@@ -6,33 +6,92 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.3.5 - UNRELEASED
+## 0.3.6 - UNRELEASED
 
 - _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+
+## 0.3.5 - 06.11.2023 (320 commits)
+
+- Fix similar toasts appearring multiple times on screen _(Moritz)_
+- Fix browser browserlists #954 _(4ydan)_
 - Decide about which use cases to include for 1.0 _(Markus Raab and Yvonne Markl with the help of PermaplanTeam)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Enable automatic image scaling in base layer _(Moritz)_
+- Add concept for key handling _(Daniel Steinkogler)_
+- Refactor keybindings according to new keybinding concept _(Daniel Steinkogler)_
+- Plantings now store seed information if they were created using a seed _(Moritz)_
+- Tooltips show the full plant for plantings that were created using a seed _(Moritz)_
+- Decide about which use cases to include for 1.0 _(Markus Raab and Yvonne Markl with the help of PermaplanTeam)_
+- Plantings now store seed information if they were created using a seed _(Moritz)_
+- Tooltips show the full plant for plantings that were created using a seed _(Moritz)_
 - Enable seed search in plant layer _(Moritz)_
-- _()_
-- _()_
 - Finish seed use case _(Moritz)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab)_
-- _()_
-- _()_
-- _()_
+- Add decision for api mocking tool _(Daniel Steinkogler)_
+- Rename section "Seeds" to "Inventory" _(Moritz)_
+- Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab, Daniel Steinkogler)_
+- Added Meeting Agenda&Notes for 30.10. 9:00 _(Markus Raab, Christoph N.)_
 - add decision for timeline concept _(Daniel Steinkogler)_
-- _()_
-- _()_
+- Improve UI and responsiveness of file selector #1011 _(tschawax)_
+- Add frontend UI and usability guide #918 _(tschawax)_
 - Improve wordings, usability and UI of guided tour #871 _(tschawax)_
 - Fix tour-completion logic of cancel-confirmation dialog in guided tour #986 _(tschawax)_
 - Improve styling of login and logout button #983 _(tschawax)_
@@ -43,30 +102,25 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Create multi-select usecase #1 _(tschawax)_
 - Fix transformer rotation handle and moving selected plants #1013 _(tschawax)_
 - Clean up the asset file structure in frontend _(Moritz)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Implement multi-select usecase #727 _(tschawax)_
+- Fix plant deletion in guided tour on small screens #861 _(tschawax)_
+- Enable ctrl, shift, command to modify selection #979 _(tschawax)_
+- Fix tooltips on plant hovering in multi selection #1033 _(tschawax)_
+- Add status-specific toolbox icon design and add toolbox icon support to icon button component #1025 _(tschawax)_
+- Improve design and behavior of undo/redo icons and improve focus design #657 _(tschawax)_
+- Added Meeting Agenda&Notes for 06.11. 9:00 _(Markus Raab, Moritz)_
+- Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab, Daniel Steinkogler)_
+- Added Meeting Agenda&Notes for 30.10. 9:00 _(Markus Raab, Christoph N.)_
+- Enable planting a field of a plant #1039 _(tschawax)_
+- Add status-specific toolbox icon design and add toolbox icon support to icon button component #1025 _(tschawax)_
+- Improve design and behavior of undo/redo icons and improve focus design #657 _(tschawax)_
+- Replace notes field in create seed form with markdown editor _(Daniel Steinkogler)_
+- Improve dark mode design of danger variant buttons #1029 _(tschawax)_
+- Improve loading spinner size in file selector and improve file selector responsiveness #1026 _(tschawax)_
+- Improve tooltip wordings of toolbox icons and extract them into new single file #1028 _(tschawax)_
 - E2E: Refactor data-testid according to naming convention _(4ydan)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
 - pump versions _(4ydan)_
-- _()_
-- _()_
-- _()_
-- _()_
+- CI: Run e2e tests on dev.permaplant _(4ydan)_
 
 ## 0.3.4 - 14.10.2023 (203 commits)
 

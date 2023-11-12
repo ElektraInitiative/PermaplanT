@@ -20,7 +20,7 @@
     User A pastes the copied selection into user B's map.  
     The pasted selection of elements is placed in user B's map at the position where user A's last click happened.
 - **Alternative scenarios:**
-  - Same as for [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md#scenarios), just with maps of two different users
+  - Same as for [Copy & Paste of Selection Within the Same Map](../assigned/copy_paste_within_same_map.md#scenarios), just with maps of two different users
   - The user logs in.  
     The user fails to paste the elements he copied in his previous session because they are removed from the 'copy-storage'.
 - **Error scenarios:**
@@ -30,9 +30,9 @@
   - User A's map still contains the same elements as before the copying and pasting into user B's map.
   - User B's map contains the pasted selection of elements which user A copied from one of his own maps.
 - **Non-functional Constraints:**
-  - Same as for [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md#scenarios)
+  - Same as for [Copy & Paste of Selection Within the Same Map](../assigned/copy_paste_within_same_map.md#scenarios)
   - For performance reasons and to minimize potential sources of error, the copied selection of elements should be persisted locally on the client side, i.e. in the browser's local storage.
   - The new storage, i.e. the local storage, should be used for every _Copy & Paste_ scenario to store and retrieve the latest copied elements.
   - To avoid inconsistencies of all sorts, the new storage with the copied elements in it, should not be persisted beyond a user's session, i.e. it should cleared upon the user's next login.
 - **Linked Use Cases:**
-  - [Copy & Paste of Selection Within the Same Map](../current/copy_paste_within_same_map.md)
+  - [Copy & Paste of Selection Within the Same Map](../assigned/copy_paste_within_same_map.md)

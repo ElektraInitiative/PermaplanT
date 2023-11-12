@@ -1,3 +1,4 @@
+import { createShortcutIncludingModifierKeys } from '@/utils/key-combinations';
 import { useEffect } from 'react';
 
 /**
@@ -37,19 +38,28 @@ import { useEffect } from 'react';
  * }
  * */
 
-export function useKeyHandlers(keyHandlerMap: Record<string, () => void>) {
+export function useKeyHandlers(
+  keyHandlerMap: Record<string, () => void>,
+  htmlNode: HTMLElement | Document = document,
+) {
   useEffect(() => {
-    function handleKeyPress(event: KeyboardEvent) {
-      const handler = keyHandlerMap[event.key];
+    const handleKeyPress = (event: KeyboardEvent) => {
+      const pressedShortcut = createShortcutIncludingModifierKeys(
+        event.ctrlKey,
+        event.altKey,
+        event.shiftKey,
+        event.key,
+      );
+      const handler = keyHandlerMap[pressedShortcut];
       if (handler) {
         handler();
       }
-    }
+    };
 
-    document.addEventListener('keydown', handleKeyPress);
+    htmlNode.addEventListener('keydown', handleKeyPress as EventListener);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyPress);
+      htmlNode.removeEventListener('keydown', handleKeyPress as EventListener);
     };
-  }, [keyHandlerMap]);
+  }, [htmlNode, keyHandlerMap]);
 }

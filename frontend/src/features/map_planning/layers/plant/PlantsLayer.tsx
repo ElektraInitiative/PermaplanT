@@ -1,22 +1,29 @@
 import useMapStore from '../../store/MapStore';
+import { PlantForPlanting } from '../../store/MapStoreTypes';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
+import { SELECTION_RECTANGLE_NAME } from '../../utils/ShapesSelection';
+import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { LayerType, PlantSpread, PlantsSummaryDto } from '@/api_types/definitions';
+import { LayerType, PlantSpread, PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
+import {
+  KEYBINDINGS_SCOPE_PLANTS_LAYER,
+  createKeyBindingsAccordingToConfig,
+} from '@/config/keybindings';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
 import { PlantNameFromPlant } from '@/utils/plant-naming';
-import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
-import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
+import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { Group } from 'react-konva';
-import { Html } from 'react-konva-utils';
 import * as uuid from 'uuid';
+
+// For performance reasons add limit for amount of plants inside a plant field
+const LIMIT_PLANT_FIELD_PLANTS = 1000;
 
 const PLANT_WIDTHS = new Map<PlantSpread, number>([
   [PlantSpread.Narrow, 10],
@@ -29,7 +36,7 @@ function getPlantWidth({ spread = PlantSpread.Medium }): number {
 }
 
 function exitPlantingMode() {
-  useMapStore.getState().selectPlanting(null);
+  useMapStore.getState().selectPlantings(null);
 }
 
 function usePlantLayerListeners(listening: boolean) {
@@ -40,6 +47,79 @@ function usePlantLayerListeners(listening: boolean) {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
   const isReadOnlyMode = useIsReadOnlyMode();
+
+  const createPlanting = useCallback(
+    (selectedPlantForPlanting: PlantsSummaryDto, xCoordinate: number, yCoordinate: number) => {
+      executeAction(
+        new CreatePlantAction({
+          id: uuid.v4(),
+          plantId: selectedPlantForPlanting.id,
+          layerId: getSelectedLayerId() ?? -1,
+          x: Math.round(xCoordinate),
+          y: Math.round(yCoordinate),
+          height: getPlantWidth(selectedPlantForPlanting),
+          width: getPlantWidth(selectedPlantForPlanting),
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          addDate: timelineDate,
+        }),
+      );
+    },
+    [executeAction, getSelectedLayerId, timelineDate],
+  );
+
+  const drawPlantField = useCallback(
+    (selectedPlantForPlanting: PlantForPlanting) => {
+      const drawnField = useMapStore
+        .getState()
+        .stageRef.current?.findOne(`.${SELECTION_RECTANGLE_NAME}`);
+
+      const fieldWidth = drawnField?.attrs?.width;
+      const fieldHeight = drawnField?.attrs?.height;
+
+      if (!fieldWidth || !fieldHeight) return;
+
+      const plantSize = getPlantWidth(selectedPlantForPlanting.plant);
+      const { horizontalPlantCount, verticalPlantCount } = calculatePlantCount(
+        plantSize,
+        fieldWidth,
+        fieldHeight,
+      );
+
+      const startingPositionX = drawnField.attrs.x;
+      const startingPositionY = drawnField.attrs.y;
+
+      // due to set limit of plants in a plant field, we need to decide in which direction we start drawing, i.e. if drawn field is wider than narrow, we start drawing horizontally and vice versa
+      const { firstDirectionCounter, secondDirectionCounter } = getDrawingDirectionCounters(
+        horizontalPlantCount,
+        verticalPlantCount,
+      );
+
+      let counter = 0;
+      for (let i = 0; i < firstDirectionCounter; i++) {
+        for (let j = 0; j < secondDirectionCounter; j++) {
+          if (counter++ > LIMIT_PLANT_FIELD_PLANTS) break;
+
+          const horizontalCounter = horizontalPlantCount > verticalPlantCount ? j : i;
+          const verticalCounter = horizontalPlantCount > verticalPlantCount ? i : j;
+
+          createPlanting(
+            selectedPlantForPlanting.plant,
+            startingPositionX + plantSize * horizontalCounter,
+            startingPositionY + plantSize * verticalCounter,
+          );
+        }
+      }
+
+      // reset konva rectangle to make sure we always have a rectangle with the newest coordinates when planting
+      drawnField.setAttrs({
+        width: 0,
+        height: 0,
+      });
+    },
+    [createPlanting],
+  );
 
   /**
    * Event handler for planting plants
@@ -59,26 +139,9 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      const width = getPlantWidth(selectedPlant);
-
-      executeAction(
-        new CreatePlantAction({
-          id: uuid.v4(),
-          plantId: selectedPlant.id,
-          layerId: getSelectedLayerId() ?? -1,
-          // consider the offset of the stage and size of the element
-          x: Math.round(position.x),
-          y: Math.round(position.y),
-          height: width,
-          width: width,
-          rotation: 0,
-          scaleX: 1,
-          scaleY: 1,
-          addDate: timelineDate,
-        }),
-      );
+      createPlanting(selectedPlant.plant, position.x, position.y);
     },
-    [getSelectedLayerId, executeAction, selectedPlant, timelineDate, isReadOnlyMode],
+    [selectedPlant, isReadOnlyMode, createPlanting],
   );
 
   /**
@@ -101,15 +164,30 @@ function usePlantLayerListeners(listening: boolean) {
   }, []);
 
   /**
-   * Event handler for selecting plants
+   * Event handler for selecting plants via the selection rectangle or, if a plant is currently
+   * selected for planting, creating a whole field of that plant inside the selection rectangle
    */
-  const handleSelectPlanting: KonvaEventListener<Konva.Stage, unknown> = useCallback(() => {
-    const transformer = useMapStore.getState().transformer.current;
-    const element = transformer?.getNodes().find((element) => element.getAttr('planting'));
-    if (element) {
-      useMapStore.getState().selectPlanting(element.getAttr('planting'));
+  const handleSelectPlanting: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
+    const selectedPlantings = (foundPlantings: PlantingDto[], konvaNode: Node) => {
+      const plantingNode = konvaNode.getAttr('planting');
+      return plantingNode ? [...foundPlantings, plantingNode] : [foundPlantings];
+    };
+
+    if (isPlacementModeActive()) {
+      const selectedPlantForPlanting =
+        useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;
+
+      drawPlantField(selectedPlantForPlanting as PlantForPlanting);
+      return;
     }
-  }, []);
+
+    const transformer = useMapStore.getState().transformer.current;
+    const plantings = transformer?.nodes().reduce(selectedPlantings, []);
+
+    if (plantings?.length) {
+      useMapStore.getState().selectPlantings(plantings);
+    }
+  }, [drawPlantField]);
 
   /**
    * Event handler for transforming plants
@@ -144,14 +222,6 @@ function usePlantLayerListeners(listening: boolean) {
 
     executeAction(new MovePlantAction(updates));
   }, [executeAction]);
-
-  useKeyHandlers({
-    Escape: () => {
-      if (selectedPlant) {
-        exitPlantingMode();
-      }
-    },
-  });
 
   useEffect(() => {
     if (!listening) {
@@ -192,9 +262,16 @@ function PlantsLayer(props: PlantsLayerProps) {
   );
   const showPlantLabels = useMapStore((state) => state.untrackedState.layers.plants.showLabels);
 
-  const portalRef = useRef<HTMLDivElement>(
-    document.getElementById('bottom-portal') as HTMLDivElement,
-  );
+  const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
+  const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
+
+  useEffect(() => {
+    if (selectedPlant) {
+      setStatusPanelContent(<SelectedPlantInfo plant={selectedPlant.plant} />);
+    } else {
+      clearStatusPanelContent();
+    }
+  }, [selectedPlant]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -204,15 +281,6 @@ function PlantsLayer(props: PlantsLayerProps) {
           <PlantingElement planting={o} key={o.id} />
         ))}
         {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
-
-        <Html>
-          {createPortal(
-            <AnimatePresence mode="wait">
-              {selectedPlant && <SelectedPlantInfo plant={selectedPlant} />}
-            </AnimatePresence>,
-            portalRef.current,
-          )}
-        </Html>
       </Group>
     </>
   );
@@ -221,19 +289,18 @@ function PlantsLayer(props: PlantsLayerProps) {
 function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
   const selectPlant = useMapStore((state) => state.selectPlantForPlanting);
 
+  const keyHandlerActions: Record<string, () => void> = {
+    exitPlantingMode: () => {
+      exitPlantingMode();
+    },
+  };
+
+  useKeyHandlers(
+    createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_PLANTS_LAYER, keyHandlerActions),
+  );
+
   return (
-    <motion.div
-      className="flex gap-4 rounded-md bg-neutral-200 py-3 pl-6 pr-4 ring ring-secondary-500 dark:bg-neutral-200-dark"
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: 100,
-        transition: { delay: 0, duration: 0.1 },
-      }}
-      exit={{
-        opacity: 0,
-        transition: { delay: 0, duration: 0.1 },
-      }}
-    >
+    <>
       <div className="flex flex-row items-center justify-center">
         <PlantNameFromPlant plant={plant} />
       </div>
@@ -246,8 +313,38 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
           <CloseIcon></CloseIcon>
         </IconButton>
       </div>
-    </motion.div>
+    </>
   );
 }
 
 export default PlantsLayer;
+
+function calculatePlantCount(
+  plantSize: number,
+  fieldWidth: number,
+  fieldHeight: number,
+): { horizontalPlantCount: number; verticalPlantCount: number } {
+  const horizontalPlantCount = Math.floor(fieldWidth / plantSize);
+  const verticalPlantCount = Math.floor(fieldHeight / plantSize);
+
+  return {
+    horizontalPlantCount,
+    verticalPlantCount,
+  };
+}
+
+function getDrawingDirectionCounters(
+  horizontalPlantCount: number,
+  verticalPlantCount: number,
+): { firstDirectionCounter: number; secondDirectionCounter: number } {
+  const firstDirectionCounter =
+    horizontalPlantCount >= verticalPlantCount ? verticalPlantCount : horizontalPlantCount;
+
+  const secondDirectionCounter =
+    horizontalPlantCount >= verticalPlantCount ? horizontalPlantCount : verticalPlantCount;
+
+  return {
+    firstDirectionCounter,
+    secondDirectionCounter,
+  };
+}

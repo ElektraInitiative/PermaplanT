@@ -1,10 +1,13 @@
 {
+  "heading_multiple_plantings": "Plant Data",
   "delete": "Delete Planting",
+  "delete_multiple_plantings": "Delete Plantings",
   "error_fetching_plant": "Sorry, I'm experiencing trouble fetching the plant from my server. Please try again later.",
   "add_date": "Added on",
   "remove_date": "Removed on",
-  "error_invalid_add_remove_date": "Remove date must be after add date",
+  "error_invalid_add_remove_date": "Remove date must be after add date.",
   "add_date_description": "The date, the planting was added to the map. The planting was not on the map before this date.",
+  "add_date_description_multiple_plantings": "The date, the plantings were added to the map. The plantings were not on the map before this date.",
   "remove_date_description": "The date, the planting was removed from the map. The planting was on the map before this date. Per default, this is date is not set.",
-  "show_labels_tooltip": "Show plant labels"
+  "remove_date_description_multiple_plantings": "The date, the plantings were removed from the map. The plantings were on the map before this date. Per default, this is date is not set."
 }

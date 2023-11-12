@@ -1,5 +1,5 @@
 import { getPlantings } from '../api/getPlantings';
-import { Map } from '../components/Map';
+import { EditorMap } from '../components/EditorMap';
 import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
 import { useTourStatus } from '../hooks/useTourStatus';
@@ -11,12 +11,12 @@ import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
 import { LayerType, LayerDto, GuidedToursDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdOptionsWithType, ShepherdTour } from 'react-shepherd';
-import { toast } from 'react-toastify';
 
 /**
  * Extracts the default layer from the list of layers.
@@ -54,7 +54,7 @@ function usePlantLayer({ mapId, layerId }: UseLayerParams) {
 
   if (query.error) {
     console.error(query.error);
-    toast.error(t('plantSearch:error_initializing_layer'), { autoClose: false });
+    errorToastGrouped(t('plantSearch:error_initializing_layer'), { autoClose: false });
   }
 
   const data = query.data;
@@ -76,6 +76,8 @@ function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
     queryKey: ['baselayer', mapId, layerId],
     queryFn: () => getBaseLayerImage(mapId, layerId),
     refetchOnWindowFocus: false,
+    cacheTime: 0,
+    staleTime: 0,
     enabled,
   });
 
@@ -98,7 +100,7 @@ function useInitializeMap() {
 
   if (error) {
     console.log(error);
-    toast.error(t('layers:error_fetching_layers'), { autoClose: false });
+    errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
   }
 
   useEffect(() => {
@@ -220,7 +222,7 @@ export function MapWrapper() {
   return (
     <ReadOnlyModeContextProvider>
       <ShepherdTour steps={steps} tourOptions={tourOptions}>
-        <Map layers={mapData.layers} />
+        <EditorMap layers={mapData.layers} />
       </ShepherdTour>
     </ReadOnlyModeContextProvider>
   );
