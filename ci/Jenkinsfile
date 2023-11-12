@@ -302,11 +302,11 @@ lock("${env.NODE_NAME}-exclusive") {
         node('docker') {
             node_info()
             checkout scm
-            if (env.BRANCH_NAME != 'master') {
-                echo "Skipping E2E Tests for branch ${env.BRANCH_NAME}"
+            def target = 'https://pr.permaplant.net'
+            if (env.BRANCH_NAME == 'master') {
+                echo 'Skipping E2E Tests for master'
                 return
             }
-            def target = 'https://pr.permaplant.net'
             try {
                 docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
                     wait_for_pr_db()
