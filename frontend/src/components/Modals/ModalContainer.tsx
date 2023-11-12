@@ -1,4 +1,4 @@
-import { createKeyBindingsAccordingToConfig } from '@/config/keybindings';
+import { createKeyBindingsAccordingToConfig, KEYBINDINGS_SCOPE_GLOBAL } from '@/config/keybindings';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -20,7 +20,11 @@ export default function ModalContainer({
   const keyHandlerActions = {
     cancelModal: onCancelKeyPressed,
   };
-  useKeyHandlers(createKeyBindingsAccordingToConfig('global', keyHandlerActions), document, true);
+  useKeyHandlers(
+    createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_GLOBAL, keyHandlerActions),
+    document,
+    true,
+  );
 
   return (
     <AnimatePresence>
