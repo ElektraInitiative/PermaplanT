@@ -4,7 +4,7 @@ body:
   - type: textarea
     attributes:
       label: Release
-      description: A list of what is missing
+      description: The procedure, please update the milestone link.
       value: |
         ### Prep for Release
 
@@ -25,6 +25,6 @@ body:
         - [ ] git tag -s vX.X.X
         - [ ] git push --tags
         - [ ] create release PR to pump versions and new section in Changelog
-        - [ ] write announcement
+        - [ ] write announcement in [nextcloud](https://nextcloud.markus-raab.org/nextcloud/)
     validations:
       required: false

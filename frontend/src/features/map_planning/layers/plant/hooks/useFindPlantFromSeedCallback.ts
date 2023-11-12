@@ -1,10 +1,10 @@
 import { SeedDto } from '@/api_types/definitions';
 import { PlantForPlanting } from '@/features/map_planning/store/MapStoreTypes';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 /**
  * Request plants from the backend using a seed and handle them using a callback.
@@ -28,7 +28,7 @@ export function useFindPlantFromSeedCallback(afterPlantLoad: (plant: PlantForPla
   }, [plant]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (error && plantId !== 0) {
-    toast.error(t('plantings:error_fetching_plant'), { autoClose: false });
+    errorToastGrouped(t('plantings:error_fetching_plant'), { autoClose: false });
   }
 
   return (seed: SeedDto) => {

@@ -5,13 +5,13 @@ import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import { editSeed } from '@/features/seeds/api/editSeeds';
+import { errorToastGrouped, successToastGrouped } from '@/features/toasts/groupedToast';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 export function EditSeed() {
   const { t } = useTranslation(['seeds', 'common']);
@@ -28,18 +28,18 @@ export function EditSeed() {
         const errorTyped = error as AxiosError;
 
         if (errorTyped.response?.status === 409) {
-          toast(t('seeds:create_seed_form.error_seed_already_exists'));
+          errorToastGrouped(t('seeds:create_seed_form.error_seed_already_exists'));
           return;
         }
 
-        toast(t('seeds:create_seed_form.error_create_seed'));
+        errorToastGrouped(t('seeds:create_seed_form.error_create_seed'));
       },
       onSuccess: async () => {
         // Wait for the seed upload to be completed before navigating.
         // This ensures that all seeds are present on the overview page once the user sees it.
         await isUploadingSuccess;
         navigate(`/seeds/`);
-        toast.success(t('seeds:edit_seed_form.success'));
+        successToastGrouped(t('seeds:edit_seed_form.success'));
       },
     },
   );

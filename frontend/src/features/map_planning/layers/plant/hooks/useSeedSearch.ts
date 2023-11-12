@@ -1,10 +1,10 @@
 import { Page, SeedDto } from '@/api_types/definitions';
 import { findAllSeeds } from '@/features/seeds/api/findAllSeeds';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 export function useSeedSearch() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,7 +26,7 @@ export function useSeedSearch() {
   }, []);
 
   if (error) {
-    toast.error(t('seeds:view_seeds.fetching_error'), { autoClose: false });
+    errorToastGrouped(t('seeds:view_seeds.fetching_error'), { autoClose: false });
   }
 
   return {

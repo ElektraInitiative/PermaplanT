@@ -1,7 +1,7 @@
 import { getSeasonalAvailablePlants } from '../api/getSeasonalAvailablePlants';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 export function useSeasonalAvailablePlants(mapId: number, date: Date) {
   const { t } = useTranslation(['plantingSuggestions']);
@@ -11,9 +11,12 @@ export function useSeasonalAvailablePlants(mapId: number, date: Date) {
 
   if (error) {
     console.error(error);
-    toast.error(t('plantingSuggestions:available_seeds.error_fetching_seasonal_suggestions'), {
-      autoClose: false,
-    });
+    errorToastGrouped(
+      t('plantingSuggestions:available_seeds.error_fetching_seasonal_suggestions'),
+      {
+        autoClose: false,
+      },
+    );
   }
 
   return {

@@ -11,9 +11,9 @@ import {
 import { calculateDistance, calculateScale } from '@/features/map_planning/layers/base/util';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { SubmitHandler } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 class ValidationError extends Error {
   constructor(msg: string) {
@@ -88,7 +88,7 @@ export const BaseLayerRightToolbar = () => {
     const measuredDistance = calculateDistance(point1, point2);
     const actualDistance = attributes.meters * 100 + attributes.centimeters;
     if (actualDistance === 0) {
-      toast.error(t('baseLayerForm:error_actual_distance_zero'));
+      errorToastGrouped(t('baseLayerForm:error_actual_distance_zero'));
       return;
     }
 
