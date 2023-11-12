@@ -1,6 +1,5 @@
 import { Page, SeedDto } from '@/api_types/definitions';
 import { findAllSeeds } from '@/features/seeds/api/findAllSeeds';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';

@@ -1,5 +1,4 @@
 import { getSeasonalAvailablePlants } from '../api/getSeasonalAvailablePlants';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 

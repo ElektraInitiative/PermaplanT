@@ -1,5 +1,4 @@
 import { searchPlants } from '@/features/seeds/api/searchPlants';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';

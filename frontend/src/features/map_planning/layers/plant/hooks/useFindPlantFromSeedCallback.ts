@@ -1,7 +1,6 @@
 import { SeedDto } from '@/api_types/definitions';
 import { PlantForPlanting } from '@/features/map_planning/store/MapStoreTypes';
 import { findPlantById } from '@/features/seeds/api/findPlantById';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
