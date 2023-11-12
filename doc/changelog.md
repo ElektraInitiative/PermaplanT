@@ -16,7 +16,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Use Konva groups instead of Layers _(Moritz)_
 - _()_
 - _()_
 - _()_
