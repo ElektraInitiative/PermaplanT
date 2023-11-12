@@ -184,15 +184,8 @@ function BaseLayerEditForm({ onChange, isReadOnlyMode }: BaseLayerEditFormProps)
   const [showFileSelector, setShowFileSelector] = useState(false);
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <h2>{t('baseLayerForm:title')}</h2>
-      <SimpleFormInput
-        id="path"
-        disabled={isReadOnlyMode}
-        labelText={t('baseLayerForm:image_path_field')}
-        data-testid={TEST_IDS.BACKGROUND_INPUT}
-        register={register}
-      />
       <FileSelectorModal
         setShow={function (show: boolean): void {
           setShowFileSelector(show);
@@ -209,10 +202,19 @@ function BaseLayerEditForm({ onChange, isReadOnlyMode }: BaseLayerEditFormProps)
         }}
         title={t('baseLayerForm:selectImage')}
       />
+      <div className="flex flex-col gap-1">
+        <SimpleFormInput
+          id="path"
+          disabled={isReadOnlyMode}
+          labelText={t('baseLayerForm:image_path_field')}
+          data-testid={TEST_IDS.BACKGROUND_INPUT}
+          register={register}
+        />
 
-      <SimpleButton onClick={() => setShowFileSelector(true)} disabled={isReadOnlyMode}>
-        {t('baseLayerForm:selectImage')}
-      </SimpleButton>
+        <SimpleButton onClick={() => setShowFileSelector(true)} disabled={isReadOnlyMode}>
+          {t('baseLayerForm:selectImage')}
+        </SimpleButton>
+      </div>
       <SimpleFormInput
         id="rotation"
         register={register}
@@ -221,7 +223,7 @@ function BaseLayerEditForm({ onChange, isReadOnlyMode }: BaseLayerEditFormProps)
         type="number"
         data-testid={TEST_IDS.ROTATION_INPUT}
       />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <SimpleFormInput
           id="scale"
           register={register}
@@ -293,10 +295,9 @@ function DistanceMeasurementModal({ onSubmit, onCancel, show }: DistanceMeasurem
             {t('baseLayerForm:auto_scaling_centimeters_invalid')}
           </div>
         )}
-        <div className="flex flex-row gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <SimpleFormInput
             id="meters"
-            className="w-min"
             labelText={t('common:meters')}
             type="number"
             register={registerDistanceModal}
@@ -304,7 +305,6 @@ function DistanceMeasurementModal({ onSubmit, onCancel, show }: DistanceMeasurem
           />
           <SimpleFormInput
             id="centimeters"
-            className="w-min"
             labelText={t('common:centimeters')}
             type="number"
             register={registerDistanceModal}
@@ -312,7 +312,7 @@ function DistanceMeasurementModal({ onSubmit, onCancel, show }: DistanceMeasurem
             max="99"
           />
         </div>
-        <div className="flex flex-row items-end gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <SimpleButton onClick={() => onCancel()}>{t('common:cancel')}</SimpleButton>
           <SimpleButton onClick={handleSubmitDistanceModal(onSubmit)}>
             {t('common:ok')}
