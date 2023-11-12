@@ -2,12 +2,12 @@ import { createMap } from '../api/createMap';
 import { NewMapDto, PrivacyOption } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import PageLayout from '@/components/Layout/PageLayout';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 interface MapCreationAttributes {
   name: string;
@@ -142,7 +142,7 @@ export default function MapCreateForm() {
     try {
       await createMap(newMap);
     } catch (error) {
-      toast.error(t('maps:create.error_map_create'), { autoClose: false });
+      errorToastGrouped(t('maps:create.error_map_create'), { autoClose: false });
     }
     navigate('/maps');
   }

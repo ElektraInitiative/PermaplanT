@@ -1,3 +1,4 @@
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useIsOnline } from '@/hooks/useIsOnline';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +15,7 @@ export function ReadOnlyModeContextProvider({ ...props }: ReadOnlyContextProps) 
 
   const isOnline = useIsOnline({
     onOffline: () => {
-      toast.error(t('readOnly:activated'), {
+      errorToastGrouped(t('readOnly:activated'), {
         toastId: 'offline',
         autoClose: false,
       });

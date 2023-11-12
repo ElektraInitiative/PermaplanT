@@ -11,12 +11,12 @@ import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
 import { LayerType, LayerDto, GuidedToursDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdOptionsWithType, ShepherdTour } from 'react-shepherd';
-import { toast } from 'react-toastify';
 
 /**
  * Extracts the default layer from the list of layers.
@@ -54,7 +54,7 @@ function usePlantLayer({ mapId, layerId }: UseLayerParams) {
 
   if (query.error) {
     console.error(query.error);
-    toast.error(t('plantSearch:error_initializing_layer'), { autoClose: false });
+    errorToastGrouped(t('plantSearch:error_initializing_layer'), { autoClose: false });
   }
 
   const data = query.data;
@@ -100,7 +100,7 @@ function useInitializeMap() {
 
   if (error) {
     console.log(error);
-    toast.error(t('layers:error_fetching_layers'), { autoClose: false });
+    errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
   }
 
   useEffect(() => {
