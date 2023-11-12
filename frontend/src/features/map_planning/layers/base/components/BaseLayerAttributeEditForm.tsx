@@ -4,6 +4,8 @@ import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
+import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
+import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -53,17 +55,17 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
       resolver: zodResolver(BaseLayerAttributeEditFormSchema),
     });
 
-  useDebouncedSubmit<BaseLayerAttributeEditFormDataAttributes>(
+  const scaleSubmitState = useDebouncedSubmit<BaseLayerAttributeEditFormDataAttributes>(
     watch('scale'),
     handleSubmit,
     onChange,
   );
-  useDebouncedSubmit<BaseLayerAttributeEditFormDataAttributes>(
+  const rotationSubmitState = useDebouncedSubmit<BaseLayerAttributeEditFormDataAttributes>(
     watch('rotation'),
     handleSubmit,
     onChange,
   );
-  useDebouncedSubmit<BaseLayerAttributeEditFormDataAttributes>(
+  const pathSubmitState = useDebouncedSubmit<BaseLayerAttributeEditFormDataAttributes>(
     watch('path'),
     handleSubmit,
     onChange,
@@ -90,59 +92,80 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
         }}
         title={t('baseLayerForm:selectImage')}
       />
-      <div className="flex flex-col gap-1">
-        <SimpleFormInput
-          id="path"
-          disabled={isReadOnlyMode}
-          labelText={t('baseLayerForm:image_path_field')}
-          data-testid={TEST_IDS.BACKGROUND_INPUT}
-          register={register}
-        />
-
-        <SimpleButton onClick={() => setShowFileSelector(true)} disabled={isReadOnlyMode}>
-          {t('baseLayerForm:selectImage')}
-        </SimpleButton>
-      </div>
-      <SimpleFormInput
-        id="rotation"
-        register={register}
-        disabled={isReadOnlyMode}
-        labelText={t('baseLayerForm:rotation_field')}
-        type="number"
-        data-testid={TEST_IDS.ROTATION_INPUT}
-      />
-      <div className="flex flex-col gap-1">
-        <SimpleFormInput
-          id="scale"
-          register={register}
-          disabled={isReadOnlyMode}
-          labelText={t('baseLayerForm:scale')}
-          type="number"
-          data-testid={TEST_IDS.SCALE_INPUT}
-        />
-        {formState.errors.scale && (
-          <div className="text-sm text-red-400">{t('baseLayerForm:scale_invalid')}</div>
-        )}
-        {measureStep === 'inactive' ? (
-          <SimpleButton
+      <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-col gap-1">
+          <SimpleFormInput
+            id="path"
             disabled={isReadOnlyMode}
-            onClick={() => {
-              activateMeasurement();
-              setStatusPanelContent(<span>{t('baseLayerForm:auto_scaling_hint')}</span>);
-            }}
-          >
-            {t('baseLayerForm:set_scale')}
+            labelText={t('baseLayerForm:image_path_field')}
+            data-testid={TEST_IDS.BACKGROUND_INPUT}
+            register={register}
+          />
+          <SimpleButton onClick={() => setShowFileSelector(true)} disabled={isReadOnlyMode}>
+            {t('baseLayerForm:selectImage')}
           </SimpleButton>
-        ) : (
-          <SimpleButton
-            onClick={() => {
-              deactivateMeasurement();
-              clearStatusPanelContent();
-            }}
-          >
-            {t('common:cancel')}
-          </SimpleButton>
+        </div>
+        {pathSubmitState === 'loading' && (
+          <CircleDottedIcon className="mb-3 h-5 w-5 animate-spin text-secondary-400" />
         )}
+        {pathSubmitState === 'idle' && <CheckIcon className="mb-3 h-5 w-5 text-primary-400" />}
+      </div>
+      <div className="flex flex-row gap-2">
+        <SimpleFormInput
+          id="rotation"
+          register={register}
+          disabled={isReadOnlyMode}
+          labelText={t('baseLayerForm:rotation_field')}
+          type="number"
+          data-testid={TEST_IDS.ROTATION_INPUT}
+        />
+        {rotationSubmitState === 'loading' && (
+          <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
+        )}
+        {rotationSubmitState === 'idle' && (
+          <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <div className="flex flex-row items-center gap-2">
+          <div className="flex flex-col gap-1">
+            <SimpleFormInput
+              id="scale"
+              register={register}
+              disabled={isReadOnlyMode}
+              labelText={t('baseLayerForm:scale')}
+              type="number"
+              data-testid={TEST_IDS.SCALE_INPUT}
+            />
+            {formState.errors.scale && (
+              <div className="text-sm text-red-400">{t('baseLayerForm:scale_invalid')}</div>
+            )}
+            {measureStep === 'inactive' ? (
+              <SimpleButton
+                disabled={isReadOnlyMode}
+                onClick={() => {
+                  activateMeasurement();
+                  setStatusPanelContent(<span>{t('baseLayerForm:auto_scaling_hint')}</span>);
+                }}
+              >
+                {t('baseLayerForm:set_scale')}
+              </SimpleButton>
+            ) : (
+              <SimpleButton
+                onClick={() => {
+                  deactivateMeasurement();
+                  clearStatusPanelContent();
+                }}
+              >
+                {t('common:cancel')}
+              </SimpleButton>
+            )}
+          </div>
+          {scaleSubmitState === 'loading' && (
+            <CircleDottedIcon className="mb-3 h-5 w-5 animate-spin text-secondary-400" />
+          )}
+          {scaleSubmitState === 'idle' && <CheckIcon className="mb-3 h-5 w-5 text-primary-400" />}
+        </div>
       </div>
     </div>
   );
