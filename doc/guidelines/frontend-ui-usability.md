@@ -1,28 +1,12 @@
 # Frontend UI & Usability
 
-## Terminology
-
-### Usability
-
-> Extent to which a system, product or service can be used by specified users to achieve specified goals with effectiveness, efficiency and satisfaction in a specified context of use.
-
-### User Interface (UI)
-
-> Set of all the components of an interactive system that provide information and controls for the user to accomplish specific tasks with the interactive system.
-
-### User Experience (UX)
-
-> Combination of user's perceptions and responses that result from the use and/or anticipated use of a system, product or service.
-
-## Guidelines
-
 This guide should help improve the UI (User Interface) and usability of the PermaplanT web application going forward.  
 The following guidelines are:
 
 - on the one hand a mix of general UI and usability best practices and
 - on the other hand design suggestions tailored to PermaplanT.
 
-### Text
+## Text
 
 - **Size**
 
@@ -36,7 +20,7 @@ The following guidelines are:
 - **Family**
 
   - PermaplanT is using Tailwind's default cross-browser sans-serif stack everywhere.
-  - If a different family is to be used in the future, extend the theme with a new `theme.fontFamily` section in our Tailwind config file (`tailwind.config.js`).
+    (If a different family is to be used in the future, extend the theme with a new `theme.fontFamily` section in our Tailwind config file (`tailwind.config.js`).)
 
 - **Alignment**
 
@@ -60,7 +44,7 @@ The following guidelines are:
     - Headings: use negative values for the bigger headings h1-h3, i.e. `tracking-tighter` or `tracking-tight`
     - Running text: `tracking-wide` or `tracking-wider`
 
-### Colors
+## Colors
 
 PermaplanT uses following **color palettes**:
 
@@ -68,8 +52,6 @@ PermaplanT uses following **color palettes**:
 - **Primary** (PermaplanT: asparagus green): PermaplanT's **main brand** color, e.g. used for call-to-action buttons, checkmarks, highlighting focused form input fields, hovering over icons, highlighting active/enabled icons in the toolbox.
 - **Secondary** (PermaplanT: sea blue): PermaplanT's **second brand** color, e.g. used for highlighting selected plants on the map, currently focused icons, spinners, action-texts in the guided tour and bigger UI elements like the transparency bars to have some contrast to the primary color.
 - Tailwind's default color palette for **red** is e.g. used to render validation errors in forms, form field asterisks, buttons for destructive actions.
-
-Check out Google's [Material Design Guidelines](https://m3.material.io/styles/color/the-color-system/key-colors-tones) for more information on color palettes and their usage.
 
 **Only those** color palettes **should be used** throughout the whole application.
 They can be accessed like any other defined color in Tailwind CSS and can be appended with a number denoting the shade to be used.
@@ -82,10 +64,13 @@ Following shade suggestions should be used as a starting point for coloring new 
 | alternative color | 200 | 600 |
 | text on alternative | 800 | 200 |
 
-### Forms
+Read Google's [Material Design Guidelines](https://m3.material.io/styles/color/the-color-system/key-colors-tones) for more information on color palettes and their usage.
 
-#### Design
+## Forms
 
+### Design
+
+- Cancel should be blue and on the left side.
 - Display a **left aligned heading** if the form is representing a whole page, e.g. PermaplanT's forms to create maps and seeds.
 - Add a **capitalized label** above each field.
 - **Align** labels to the **left** of their corresponding fields.
@@ -100,7 +85,7 @@ Following shade suggestions should be used as a starting point for coloring new 
   - placeholder: `placeholder-neutral-300`
   - text: `text-sm`
 
-#### Error Prevention
+### Error Prevention
 
 - Use the **corresponding _type_** of the input field, e.g. _date_ for date fields, _number_ for numerical-only inputs etc.
 - Mark required fields with an **asterisk**:
@@ -111,10 +96,10 @@ Following shade suggestions should be used as a starting point for coloring new 
 - Users should **never** be **required** to manually enter a **metrical** unit or a **currency** symbol.
   Instead, make the unit part of the input field itself or leave it out if it's clear from the context.
 - **Submission** to the backend should not happen until all fields are **verified** by the **frontend** logic.
-- In case of submissions **on-the-fly**, e.g. setting dates for plants, the data should always be submitted with **debouncing**.
-- **Double submission** should be **prevented** by disabling the submission button until the server has responded.
+- In case of submissions **on-the-fly** (always except of pages that only consist of a form), the data should always be submitted with **debouncing**.
+- **Double submissions** should be correctly **prevented** (not via disabling buttons, as submission via enter or shortcuts still might be possible).
 
-### Consistency
+## Consistency
 
 Things with the **same meaning** should **look and behave** the **same** throughout the whole application.
 Users should never be uncertain if different words mean the same thing or different actions trigger the same process.
@@ -132,7 +117,7 @@ Examples:
 - **Forms** and their fields should look and behave the same everywhere according to our guidelines in [Forms](#forms).
 - In every **form**, **validation** errors are detected and shown by using the native input validation of HTML5.
 
-### Icons
+## Icons
 
 - A **tooltip** on hovering must be displayed for every icon in PermaplanT's toolbox.
   The tooltip contains the icon's **label** (as concise as possible) and, if existing, the assigned **shortcut**.
@@ -141,7 +126,7 @@ Examples:
 - When **disabled**, i.e. currently not clickable, they must be **greyed-out**, via decreasing their opacity.  
   The mouse cursor must be styled with the `not-allowed` css property.
 
-### Highlighting
+## Highlighting
 
 Highlighting techniques:
 
@@ -157,7 +142,7 @@ Highlighting techniques:
 
 - Images: users generally remember images better than words
 
-### Wording
+## Wording
 
 Messages shown to the user should strive to fulfill following criteria:
 
@@ -173,7 +158,7 @@ Messages shown to the user should strive to fulfill following criteria:
 - German: **Neue Rechtschreibung**
 - use **plural** to avoid gendering, i.e. use _we_/_they_, avoid _he_/_she_
 
-### Error Messages
+## Error Messages
 
 In general, error messages often convey the impression that an application's stability is weak which, in consequence, leads to a **declined user experience**.
 Error messages should **only** be used **if** the **user**, without that information, **would be badly surprised** by the result of an action.
