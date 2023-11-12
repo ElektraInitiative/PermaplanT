@@ -94,7 +94,7 @@ export const BaseLayerRightToolbar = () => {
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
   const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
 
-  const sendBaseLayerState = ({ scale, rotation, path }: BaseLayerDataAttributes) => {
+  const onBaseLayerFormChange = ({ scale, rotation, path }: BaseLayerDataAttributes) => {
     const baseLayerOptions = {
       id: baseLayerState.imageId,
       layer_id: baseLayerState.layerId,
@@ -107,7 +107,7 @@ export const BaseLayerRightToolbar = () => {
       executeAction(new UpdateBaseLayerAction(baseLayerOptions));
   };
 
-  const onDistModalSubmit: SubmitHandler<BaseLayerDistanceModalAttributes> = (attributes) => {
+  const onDistanceModalSubmit: SubmitHandler<BaseLayerDistanceModalAttributes> = (attributes) => {
     clearStatusPanelContent();
 
     const point1 = measurePoint1 ?? { x: 0, y: 0 };
@@ -129,72 +129,24 @@ export const BaseLayerRightToolbar = () => {
       rotation: baseLayerState.rotation,
       scale: scale,
     };
+
     if (validateBaseLayerOptions(baseLayerOptions))
       executeAction(new UpdateBaseLayerAction(baseLayerOptions));
 
     deactivateMeasurement();
   };
 
-  const {
-    register: registerDistanceModal,
-    handleSubmit: handleSubmitDistanceModal,
-    formState: registerDistanceModalFormState,
-  } = useForm<BaseLayerDistanceModalAttributes>({
-    defaultValues: {
-      meters: 0,
-      centimeters: 0,
-    },
-    resolver: zodResolver(BaseLayerDistanceModalFormSchema),
-  });
-
   return (
     <div className="flex flex-col gap-2 p-2">
-      <ModalContainer show={measureStep === 'both selected'}>
-        <div className="w-ful flex h-full min-h-[20vh] flex-col gap-2 rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
-          <h3>{t('baseLayerForm:distance_modal_title')}</h3>
-          {registerDistanceModalFormState.errors.meters && (
-            <div className="text-sm text-red-400">
-              {t('baseLayerForm:auto_scaling_meters_invalid')}
-            </div>
-          )}
-          {registerDistanceModalFormState.errors.centimeters && (
-            <div className="text-sm text-red-400">
-              {t('baseLayerForm:auto_scaling_centimeters_invalid')}
-            </div>
-          )}
-          <div className="flex flex-row gap-2">
-            <SimpleFormInput
-              id="meters"
-              className="w-min"
-              labelText={t('common:meters')}
-              type="number"
-              register={registerDistanceModal}
-              min="0"
-            />
-            <SimpleFormInput
-              id="centimeters"
-              className="w-min"
-              labelText={t('common:centimeters')}
-              type="number"
-              register={registerDistanceModal}
-              min="0"
-              max="99"
-            />
-          </div>
-          <div className="flex flex-row items-end gap-2">
-            <SimpleButton onClick={() => deactivateMeasurement()}>
-              {t('common:cancel')}
-            </SimpleButton>
-            <SimpleButton onClick={handleSubmitDistanceModal(onDistModalSubmit)}>
-              {t('common:ok')}
-            </SimpleButton>
-          </div>
-        </div>
-      </ModalContainer>
+      <DistanceMeasurementModal
+        onSubmit={onDistanceModalSubmit}
+        onCancel={deactivateMeasurement}
+        show={measureStep === 'both selected'}
+      />
       <BaseLayerEditForm
         // remount the form when the selected planting or the step changes (on undo/redo)
         key={`${baseLayerState.id}-${step}`}
-        sendBaseLayerState={sendBaseLayerState}
+        onChange={onBaseLayerFormChange}
         isReadOnlyMode={isReadOnlyMode}
       />
     </div>
@@ -202,11 +154,11 @@ export const BaseLayerRightToolbar = () => {
 };
 
 interface BaseLayerEditFormProps {
-  sendBaseLayerState: (data: BaseLayerDataAttributes) => void;
+  onChange: (data: BaseLayerDataAttributes) => void;
   isReadOnlyMode: boolean;
 }
 
-function BaseLayerEditForm({ sendBaseLayerState, isReadOnlyMode }: BaseLayerEditFormProps) {
+function BaseLayerEditForm({ onChange, isReadOnlyMode }: BaseLayerEditFormProps) {
   const { t } = useTranslation(['common', 'baseLayerForm']);
 
   const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
@@ -225,9 +177,9 @@ function BaseLayerEditForm({ sendBaseLayerState, isReadOnlyMode }: BaseLayerEdit
     resolver: zodResolver(BaseLayerRightToolbarFormSchema),
   });
 
-  useDebouncedSubmit<BaseLayerDataAttributes>(watch('scale'), handleSubmit, sendBaseLayerState);
-  useDebouncedSubmit<BaseLayerDataAttributes>(watch('rotation'), handleSubmit, sendBaseLayerState);
-  useDebouncedSubmit<BaseLayerDataAttributes>(watch('path'), handleSubmit, sendBaseLayerState);
+  useDebouncedSubmit<BaseLayerDataAttributes>(watch('scale'), handleSubmit, onChange);
+  useDebouncedSubmit<BaseLayerDataAttributes>(watch('rotation'), handleSubmit, onChange);
+  useDebouncedSubmit<BaseLayerDataAttributes>(watch('path'), handleSubmit, onChange);
 
   const [showFileSelector, setShowFileSelector] = useState(false);
 
@@ -303,6 +255,71 @@ function BaseLayerEditForm({ sendBaseLayerState, isReadOnlyMode }: BaseLayerEdit
         )}
       </div>
     </div>
+  );
+}
+
+interface DistanceMeasurementModalProps {
+  onSubmit: SubmitHandler<BaseLayerDistanceModalAttributes>;
+  onCancel: () => void;
+  show: boolean;
+}
+
+function DistanceMeasurementModal({ onSubmit, onCancel, show }: DistanceMeasurementModalProps) {
+  const { t } = useTranslation(['common', 'baseLayerForm']);
+
+  const {
+    register: registerDistanceModal,
+    handleSubmit: handleSubmitDistanceModal,
+    formState: registerDistanceModalFormState,
+  } = useForm<BaseLayerDistanceModalAttributes>({
+    defaultValues: {
+      meters: 0,
+      centimeters: 0,
+    },
+    resolver: zodResolver(BaseLayerDistanceModalFormSchema),
+  });
+
+  return (
+    <ModalContainer show={show}>
+      <div className="w-ful flex h-full min-h-[20vh] flex-col gap-2 rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+        <h3>{t('baseLayerForm:distance_modal_title')}</h3>
+        {registerDistanceModalFormState.errors.meters && (
+          <div className="text-sm text-red-400">
+            {t('baseLayerForm:auto_scaling_meters_invalid')}
+          </div>
+        )}
+        {registerDistanceModalFormState.errors.centimeters && (
+          <div className="text-sm text-red-400">
+            {t('baseLayerForm:auto_scaling_centimeters_invalid')}
+          </div>
+        )}
+        <div className="flex flex-row gap-2">
+          <SimpleFormInput
+            id="meters"
+            className="w-min"
+            labelText={t('common:meters')}
+            type="number"
+            register={registerDistanceModal}
+            min="0"
+          />
+          <SimpleFormInput
+            id="centimeters"
+            className="w-min"
+            labelText={t('common:centimeters')}
+            type="number"
+            register={registerDistanceModal}
+            min="0"
+            max="99"
+          />
+        </div>
+        <div className="flex flex-row items-end gap-2">
+          <SimpleButton onClick={() => onCancel()}>{t('common:cancel')}</SimpleButton>
+          <SimpleButton onClick={handleSubmitDistanceModal(onSubmit)}>
+            {t('common:ok')}
+          </SimpleButton>
+        </div>
+      </div>
+    </ModalContainer>
   );
 }
 
