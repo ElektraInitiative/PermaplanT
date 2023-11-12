@@ -29,7 +29,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add decision for api mocking tool _(Daniel Steinkogler)_
 - Rename section "Seeds" to "Inventory" _(Moritz)_
 - _()_
-- _()_
+- Refactor base layer toolbar using react hook form _(Moritz)_
 - Added Meeting Agenda&Notes for 06.11. 9:00 _(Markus Raab, Moritz)_
 - Added Meeting Agenda&Notes for 23.10. 9:00 _(Markus Raab, Daniel Steinkogler)_
 - Added Meeting Agenda&Notes for 30.10. 9:00 _(Markus Raab, Christoph N.)_
