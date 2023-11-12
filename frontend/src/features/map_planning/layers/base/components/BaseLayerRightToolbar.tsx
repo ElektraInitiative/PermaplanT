@@ -82,18 +82,17 @@ function validateBaseLayerOptions(baseLayerOptions: Omit<BaseLayerImageDto, 'act
 }
 
 export const BaseLayerRightToolbar = () => {
+  const { t } = useTranslation(['common', 'baseLayerForm']);
+  const isReadOnlyMode = useIsReadOnlyMode();
+
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
   const { measureStep, measurePoint1, measurePoint2 } = useMapStore(
     (state) => state.untrackedState.layers.base,
   );
   const executeAction = useMapStore((state) => state.executeAction);
-  const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
+  const step = useMapStore((state) => state.step);
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
-  const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
   const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
-
-  const { t } = useTranslation(['common', 'baseLayerForm']);
-  const isReadOnlyMode = useIsReadOnlyMode();
 
   const sendBaseLayerState = ({ scale, rotation, path }: BaseLayerDataAttributes) => {
     const baseLayerOptions = {
@@ -107,21 +106,6 @@ export const BaseLayerRightToolbar = () => {
     if (validateBaseLayerOptions(baseLayerOptions))
       executeAction(new UpdateBaseLayerAction(baseLayerOptions));
   };
-
-  const { register, handleSubmit, watch, setValue, formState } = useForm<BaseLayerDataAttributes>({
-    values: {
-      scale: baseLayerState.scale,
-      rotation: baseLayerState.rotation,
-      path: baseLayerState.nextcloudImagePath,
-    },
-    resolver: zodResolver(BaseLayerRightToolbarFormSchema),
-  });
-
-  useDebouncedSubmit<BaseLayerDataAttributes>(watch('scale'), handleSubmit, sendBaseLayerState);
-  useDebouncedSubmit<BaseLayerDataAttributes>(watch('rotation'), handleSubmit, sendBaseLayerState);
-  useDebouncedSubmit<BaseLayerDataAttributes>(watch('path'), handleSubmit, sendBaseLayerState);
-
-  const [showFileSelector, setShowFileSelector] = useState(false);
 
   const onDistModalSubmit: SubmitHandler<BaseLayerDistanceModalAttributes> = (attributes) => {
     clearStatusPanelContent();
@@ -137,7 +121,16 @@ export const BaseLayerRightToolbar = () => {
     }
 
     const scale = calculateScale(measuredDistance, baseLayerState.scale, actualDistance);
-    setValue('scale', scale);
+
+    const baseLayerOptions = {
+      id: baseLayerState.imageId,
+      layer_id: baseLayerState.layerId,
+      path: baseLayerState.nextcloudImagePath,
+      rotation: baseLayerState.rotation,
+      scale: scale,
+    };
+    if (validateBaseLayerOptions(baseLayerOptions))
+      executeAction(new UpdateBaseLayerAction(baseLayerOptions));
 
     deactivateMeasurement();
   };
@@ -198,6 +191,48 @@ export const BaseLayerRightToolbar = () => {
           </div>
         </div>
       </ModalContainer>
+      <BaseLayerEditForm
+        // remount the form when the selected planting or the step changes (on undo/redo)
+        key={`${baseLayerState.id}-${step}`}
+        sendBaseLayerState={sendBaseLayerState}
+        isReadOnlyMode={isReadOnlyMode}
+      />
+    </div>
+  );
+};
+
+interface BaseLayerEditFormProps {
+  sendBaseLayerState: (data: BaseLayerDataAttributes) => void;
+  isReadOnlyMode: boolean;
+}
+
+function BaseLayerEditForm({ sendBaseLayerState, isReadOnlyMode }: BaseLayerEditFormProps) {
+  const { t } = useTranslation(['common', 'baseLayerForm']);
+
+  const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
+  const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
+  const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
+  const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
+  const measureStep = useMapStore((state) => state.untrackedState.layers.base.measureStep);
+  const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
+
+  const { register, handleSubmit, watch, setValue, formState } = useForm<BaseLayerDataAttributes>({
+    values: {
+      scale: baseLayerState.scale,
+      rotation: baseLayerState.rotation,
+      path: baseLayerState.nextcloudImagePath,
+    },
+    resolver: zodResolver(BaseLayerRightToolbarFormSchema),
+  });
+
+  useDebouncedSubmit<BaseLayerDataAttributes>(watch('scale'), handleSubmit, sendBaseLayerState);
+  useDebouncedSubmit<BaseLayerDataAttributes>(watch('rotation'), handleSubmit, sendBaseLayerState);
+  useDebouncedSubmit<BaseLayerDataAttributes>(watch('path'), handleSubmit, sendBaseLayerState);
+
+  const [showFileSelector, setShowFileSelector] = useState(false);
+
+  return (
+    <div>
       <h2>{t('baseLayerForm:title')}</h2>
       <SimpleFormInput
         id="path"
@@ -269,6 +304,6 @@ export const BaseLayerRightToolbar = () => {
       </div>
     </div>
   );
-};
+}
 
 export default BaseLayerRightToolbar;
