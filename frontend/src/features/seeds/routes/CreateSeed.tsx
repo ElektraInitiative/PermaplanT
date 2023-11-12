@@ -4,13 +4,13 @@ import { NewSeedDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
 import { createSeed } from '@/features/seeds/api/createSeed';
+import { infoToastGrouped, successToastGrouped } from '@/features/toasts/groupedToast';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 export function CreateSeed() {
   const navigate = useNavigate();
@@ -28,18 +28,18 @@ export function CreateSeed() {
       const errorTyped = error as AxiosError;
 
       if (errorTyped.response?.status === 409) {
-        toast(t('seeds:create_seed_form.error_seed_already_exists'));
+        infoToastGrouped(t('seeds:create_seed_form.error_seed_already_exists'));
         return;
       }
 
-      toast(t('seeds:create_seed_form.error_create_seed'));
+      infoToastGrouped(t('seeds:create_seed_form.error_create_seed'));
     },
     onSuccess: async () => {
       // Wait for the seed upload to be completed before navigating.
       // This ensures that all seeds are present on the overview page once the user sees it.
       await isUploadingSuccess;
       navigate('/seeds');
-      toast.success(t('seeds:create_seed_form.success'));
+      successToastGrouped(t('seeds:create_seed_form.success'));
     },
   });
 

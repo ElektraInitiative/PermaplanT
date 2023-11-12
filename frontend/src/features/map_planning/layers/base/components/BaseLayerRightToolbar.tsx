@@ -7,10 +7,10 @@ import { calculateDistance, calculateScale } from '@/features/map_planning/layer
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { FileStat } from 'webdav';
 
 export const TEST_IDS = Object.freeze({
@@ -147,7 +147,7 @@ export const BaseLayerRightToolbar = () => {
     const measuredDistance = calculateDistance(point1, point2);
     const actualDistance = distMeters * 100 + distCentimeters;
     if (actualDistance === 0) {
-      toast.error(t('baseLayerForm:error_actual_distance_zero'));
+      errorToastGrouped(t('baseLayerForm:error_actual_distance_zero'));
       return;
     }
 

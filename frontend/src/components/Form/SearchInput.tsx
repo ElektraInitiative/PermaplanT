@@ -66,6 +66,7 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
     const resetSearchByKey = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === SHORTCUT_SEARCH_INPUT_RESET) {
         resetSearch();
+        event.stopPropagation();
       }
     };
 

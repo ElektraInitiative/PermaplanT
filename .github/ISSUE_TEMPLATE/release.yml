@@ -1,0 +1,30 @@
+name: 🚀 Release
+description: PermaplanT's release procedure
+body:
+  - type: textarea
+    attributes:
+      label: Release
+      description: The procedure, please update the milestone link.
+      value: |
+        ### Prep for Release
+
+        - [ ] [Finish release critical task](https://github.com/ElektraInitiative/PermaplanT/milestone/)
+        - [ ] fix _real_ security problems
+              unfortunately `npm audit --omit=dev fix` does [too much and too little](https://overreacted.io/npm-audit-broken-by-design/),
+              `cargo deny check` seems to be more helpful
+        - [ ] check/improve reformatting
+        - [ ] check if all issues labelled `release critical` are fixed
+        - [ ] update mergedDatasets.csv
+        - [ ] Merge PRs (@markus2330)
+
+        ### Actual Release
+
+        - [ ] check if all preps are done
+        - [ ] manually test dev.permaplant.net according to protocol
+        - [ ] build <https://build.libelektra.org/job/PermaplanT-Release/>
+        - [ ] git tag -s vX.X.X
+        - [ ] git push --tags
+        - [ ] create release PR to pump versions and new section in Changelog
+        - [ ] write announcement in [nextcloud](https://nextcloud.markus-raab.org/nextcloud/)
+    validations:
+      required: false
