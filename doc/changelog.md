@@ -11,6 +11,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
+- _()_
+- Plantings now store seed information if they were created using a seed _(Moritz)_
+- Tooltips show the full plant for plantings that were created using a seed _(Moritz)_
 - _()_
 - _()_
 - _()_
