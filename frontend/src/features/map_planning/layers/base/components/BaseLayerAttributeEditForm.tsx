@@ -1,4 +1,5 @@
 import { BaseLayerImageDto } from '@/api_types/definitions';
+import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -7,7 +8,7 @@ import { useFileExists } from '@/features/nextcloud_integration/hooks/useFileExi
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
 import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
-import { ReactComponent as CrossIcon } from '@/svg/icons/close.svg';
+import { ReactComponent as CloseIcon, ReactComponent as CrossIcon } from '@/svg/icons/close.svg';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -165,7 +166,25 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
               disabled={isReadOnlyMode}
               onClick={() => {
                 activateMeasurement();
-                setStatusPanelContent(<span>{t('baseLayerForm:auto_scaling_hint')}</span>);
+                setStatusPanelContent(
+                  <>
+                    <div className="flex flex-row items-center justify-center">
+                      {t('baseLayerForm:auto_scaling_hint')}
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <IconButton
+                        className="m-2 h-8 w-8 border border-neutral-500 p-1"
+                        onClick={() => {
+                          deactivateMeasurement();
+                          clearStatusPanelContent();
+                        }}
+                        data-tourid="placement_cancel"
+                      >
+                        <CloseIcon></CloseIcon>
+                      </IconButton>
+                    </div>
+                  </>,
+                );
               }}
             >
               {t('baseLayerForm:set_scale')}
