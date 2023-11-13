@@ -4,7 +4,7 @@
   "selectImage": "Hintergrund wählen",
   "rotation_field": "Rotation (Grad)",
   "scale": "Skalierung (pixel/meter)",
-  "scale_invalid": "Die Skalierung muss eine Zahl >= 0 sein!",
+  "scale_invalid": "Die Skalierung muss größer als 0 sein!",
   "set_scale": "Auto-Skalierung",
   "distance_modal_title": "Wie groß ist diese Distanz in der Wirklichkeit?",
   "error_actual_distance_zero": "Bitte gib eine Distanz größer 0 ein.",

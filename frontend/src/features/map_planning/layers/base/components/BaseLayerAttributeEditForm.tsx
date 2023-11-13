@@ -29,7 +29,7 @@ export type BaseLayerAttributeEditFormDataAttributes = Pick<
 const BaseLayerAttributeEditFormSchema = z.object({
   path: z.nullable(z.string()).transform((value) => value ?? ''),
   rotation: z.number().transform((value) => value % 360),
-  scale: z.number().min(0),
+  scale: z.number().min(1),
 });
 
 export interface BaseLayerEditFormProps {
