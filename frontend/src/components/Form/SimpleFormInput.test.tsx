@@ -6,7 +6,7 @@ it('renders correctly', () => {
   const tree = renderer
     .create(
       <MemoryRouter>
-        <SimpleFormInput id="test" labelText="Some Label" />
+        <SimpleFormInput id="test" labelContent="Some Label" />
       </MemoryRouter>,
     )
     .toJSON();

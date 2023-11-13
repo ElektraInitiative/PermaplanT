@@ -65,14 +65,14 @@ export function DistanceMeasurementModal({
         <div className="grid grid-cols-2 gap-2">
           <SimpleFormInput
             id="meters"
-            labelText={t('common:meters')}
+            labelContent={t('common:meters')}
             type="number"
             register={registerDistanceModal}
             min="0"
           />
           <SimpleFormInput
             id="centimeters"
-            labelText={t('common:centimeters')}
+            labelContent={t('common:centimeters')}
             type="number"
             register={registerDistanceModal}
             min="0"
