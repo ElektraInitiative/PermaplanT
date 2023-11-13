@@ -1,7 +1,7 @@
 # Frontend UI & Usability
 
 This guide should help improve the UI (User Interface) and usability of the PermaplanT web application going forward.  
-The following guidelines are:
+Its focus is:
 
 - on the one hand a mix of general UI and usability best practices and
 - on the other hand design suggestions tailored to PermaplanT.
@@ -20,7 +20,7 @@ The following guidelines are:
 - **Family**
 
   - PermaplanT is using Tailwind's default cross-browser sans-serif stack everywhere.
-    (If a different family is to be used in the future, extend the theme with a new `theme.fontFamily` section in our Tailwind config file (`tailwind.config.js`).)
+    (If a different family is to be used in the future, extend the theme with a new `theme.fontFamily` section in our Tailwind config file `tailwind.config.js`.)
 
 - **Alignment**
 
@@ -32,7 +32,7 @@ The following guidelines are:
 - **Spacing / margin**
 
   - `<h1>` Headings: `mb-8`
-  - `<h2>` Subheadings: `mb-2`
+  - `<h2>` Subheadings (and below): `mb-2`
   - Cards (like on our Map overview): `mb-4`
   - Form fields (like on the Seeds page): `mb-8`
   - Labels of form fields: `mb-2`
@@ -40,20 +40,21 @@ The following guidelines are:
 - **Letter spacing**
 
   - Always go with the default value, i.e. `tracking-normal`.
-  - In case letter spacing changes are considered in the future:
+    (In case letter spacing changes are considered in the future:
     - Headings: use negative values for the bigger headings h1-h3, i.e. `tracking-tighter` or `tracking-tight`
-    - Running text: `tracking-wide` or `tracking-wider`
+    - Running text: `tracking-wide` or `tracking-wider`)
 
 ## Colors
 
 PermaplanT uses following **color palettes**:
 
-- **Neutral** (PermaplanT: gray): **dominant** color of the design, e.g. used for background, text and labels.
+- **Neutral** (PermaplanT: gray): **dominant** color of the design, e.g., used for background, text and labels.
 - **Primary** (PermaplanT: asparagus green): PermaplanT's **main brand** color, e.g. used for call-to-action buttons, checkmarks, highlighting focused form input fields, hovering over icons, highlighting active/enabled icons in the toolbox.
 - **Secondary** (PermaplanT: sea blue): PermaplanT's **second brand** color, e.g. used for highlighting selected plants on the map, currently focused icons, spinners, action-texts in the guided tour and bigger UI elements like the transparency bars to have some contrast to the primary color.
-- Tailwind's default color palette for **red** is e.g. used to render validation errors in forms, form field asterisks, buttons for destructive actions.
+- Tailwind's default color palette for **red** is e.g. used to render validation errors in forms, form field asterisks (`text-red-500`), buttons for destructive actions.
 
 **Only those** color palettes **should be used** throughout the whole application.
+The colors are stored within the Tailwind CSS color definitions `primary`, `secondary` and `neutral`.
 They can be accessed like any other defined color in Tailwind CSS and can be appended with a number denoting the shade to be used.
 
 Following shade suggestions should be used as a starting point for coloring new UI components:
@@ -64,19 +65,19 @@ Following shade suggestions should be used as a starting point for coloring new 
 | alternative color | 200 | 600 |
 | text on alternative | 800 | 200 |
 
-Read Google's [Material Design Guidelines](https://m3.material.io/styles/color/the-color-system/key-colors-tones) for more information on color palettes and their usage.
+(Google's [Material Design Guidelines](https://m3.material.io/styles/color/the-color-system/key-colors-tones) contains more information on color palettes and their usage.)
 
 ## Forms
 
 ### Design
 
-- Cancel should be blue and on the left side.
-- Display a **left aligned heading** if the form is representing a whole page, e.g. PermaplanT's forms to create maps and seeds.
-- Add a **capitalized label** above each field.
-- **Align** labels to the **left** of their corresponding fields.
-- Always use the **_for_** HTML attribute (in React: _htmlFor_) to bind the label to the field.
-- Always use PermaplanT's **SearchInput** component to declare **search fields** instead of declaring them with type _search_.
-- **Don't use** the **title** attribute for any form fields (see <https://inclusive-components.design/tooltips-toggletips/>)
+- Cancel should be blue and on the left bottom.
+- Display a left aligned heading if the form is representing a whole page, e.g. PermaplanT's forms to create maps and seeds.
+- Add a capitalized label above each field.
+- Align labels to the left of their corresponding fields.
+- Always use the _for_ HTML attribute (in React: _htmlFor_) to bind the label to the field.
+- Always use PermaplanT's _SearchInput_ component to declare search fields instead of declaring them with type _search_.
+- Don't use the title attribute for any form fields (see <https://inclusive-components.design/tooltips-toggletips/>)
 - All form fields should have the **same styling**:
   - border color: `border-neutral-500 dark:border-neutral-400-dark`
   - border focus: `focus:border-primary-500 dark:focus:border-primary-300`
@@ -87,15 +88,13 @@ Read Google's [Material Design Guidelines](https://m3.material.io/styles/color/t
 
 ### Error Prevention
 
-- Use the **corresponding _type_** of the input field, e.g. _date_ for date fields, _number_ for numerical-only inputs etc.
-- Mark required fields with an **asterisk**:
-  - color: `text-red-500`
-  - all other styles are inherited from the parent label
-- Use HTML-native **constraint** attributes for input fields where appropriate, e.g. _maxlength_, _required_, _step_, etc.
-- Use short **placeholder** texts for input fields to show allowed values or further explain the intent of the input field.
-- Users should **never** be **required** to manually enter a **metrical** unit or a **currency** symbol.
+- Use the corresponding _type_ of the input field, e.g. _date_ for date fields, _number_ for numerical-only inputs etc.
+- Mark required fields with an asterisk (see above for coloring)
+- Use HTML-native _constraint_ attributes for input fields where appropriate, e.g. _maxlength_, _required_, _step_, etc.
+- Use short placeholder texts for input fields to show allowed values or further explain the intent of the input field.
+- Users should never be required to manually enter a metrical unit or a currency symbol.
   Instead, make the unit part of the input field itself or leave it out if it's clear from the context.
-- **Submission** to the backend should not happen until all fields are **verified** by the **frontend** logic.
+- Submission to the backend should not happen until all fields are verified by the **frontend** logic.
 - In case of submissions **on-the-fly** (always except of pages that only consist of a form), the data should always be submitted with **debouncing**.
 - **Double submissions** should be correctly **prevented** (not via disabling buttons, as submission via enter or shortcuts still might be possible).
 
@@ -108,7 +107,7 @@ Examples:
 
 - **Main Heading** of a page is always defined by `<h1>` which must be the only one of its kind per page
 - **Headings** of all toolbars are always defined by `<h2>`
-- If **textual links**, e.g. the links in PermaplanT's navigation bar, need to be surrounded by space, always set their `margin` instead of `padding`.
+- If **textual links**, e.g., the links in PermaplanT's navigation bar, need to be surrounded by space, always set their `margin` instead of `padding`.
 - Make **call-to-action buttons** look the same everywhere by using our `SimpleButton` component.
   Use Tailwind's classes to define the button's `margin` and `width`, if necessary due to layout or viewport.
 - **Toast errors** are always shown on the top right.
