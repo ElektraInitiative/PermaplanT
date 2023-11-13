@@ -88,6 +88,7 @@ Following shade suggestions should be used as a starting point for coloring new 
 
 ### Error Prevention
 
+- **Validation** errors are detected and shown by using the native input validation of HTML5.
 - Use the corresponding _type_ of the input field, e.g. _date_ for date fields, _number_ for numerical-only inputs etc.
 - Mark required fields with an asterisk (see above for coloring)
 - Use HTML-native _constraint_ attributes for input fields where appropriate, e.g. _maxlength_, _required_, _step_, etc.
@@ -110,20 +111,18 @@ Examples:
 - If **textual links**, e.g., the links in PermaplanT's navigation bar, need to be surrounded by space, always set their `margin` instead of `padding`.
 - Make **call-to-action buttons** look the same everywhere by using our `SimpleButton` component.
   Use Tailwind's classes to define the button's `margin` and `width`, if necessary due to layout or viewport.
-- **Toast errors** are always shown on the top right.
-  To achieve this, we are simply using the default setting of our used library (_react-toastify_).
-- Use the same **application-specific terms** everywhere when communicating to the user, e.g. always write _PermaplanT_.
-- **Forms** and their fields should look and behave the same everywhere according to our guidelines in [Forms](#forms).
-- In every **form**, **validation** errors are detected and shown by using the native input validation of HTML5.
+- We use `*ToastGrouped` with auto-close and default position (top-right) for information that should be shown as toast.
+  Prefer to indicate errors more locally, if possible (like in forms).
+- Use the same [**application-specific terms** as shown in the glossary](../architecture/12glossary.md) everywhere when communicating to the user, e.g., always write _PermaplanT_.
 
 ## Icons
 
 - A **tooltip** on hovering must be displayed for every icon in PermaplanT's toolbox.
-  The tooltip contains the icon's **label** (as concise as possible) and, if existing, the assigned **shortcut**.
+  The tooltip contains the icon's **label** (as concise as possible) and, if existing, the assigned **shortcut** in italics.
 - When **active**, i.e. currently activated/enabled, they must get a small **highlighting** through a visually stronger and more colorful appearance by using the design's primary colors.
 - When **passive**, i.e. currently not active/enabled, they must must appear in **neutral** colors/colorless.
 - When **disabled**, i.e. currently not clickable, they must be **greyed-out**, via decreasing their opacity.  
-  The mouse cursor must be styled with the `not-allowed` css property.
+  The mouse cursor must be styled with the `not-allowed` CSS property.
 
 ## Highlighting
 
@@ -132,12 +131,14 @@ Highlighting techniques:
 - Font weight:
 
   - **Bold** text adds tolerable noise to the design and enables distinct highlighting in both short and long texts.
-    In general, it is the preferred highlighting technique to use.
+    It is the preferred highlighting technique to use.
+    Nevertheless, use it sparingly.
   - _Italic_ text adds minimal noise to the design, but lacks in recognizability.
   - <u>Underlining</u> adds most noise and compromises a text's legibility.
-    It should not be used.
+    It should not be used except for links.
 
 - Colors: primary and secondary colors of the design's color palette
+  Use the secondary colour only for links.
 
 - Images: users generally remember images better than words
 
@@ -148,10 +149,10 @@ Messages shown to the user should strive to fulfill following criteria:
 - **concise**: the more text the less likely it will be read by the user
 - **clear**: straight to the message's essence
 - **understandable** for technical laymen: no status codes or technical terms
-- **no exclamation** marks: interpreted as commanding
-- **no uppercase** words: comes across as shouting
+- **no exclamation marks**: might come across as commanding
+- **no uppercase** words: might come across as shouting
 - **detailed** information should be hidden behind a **read more** link or a **collapsed** section
-- **Headlines**, **sub-headlines** and **labels** should be **capitalized**
+- Headlines, Sub-headlines and Labels should be capitalized
 - **Minimize hyphenation** of words
 - English: **American English**
 - German: **Neue Rechtschreibung**
@@ -159,21 +160,22 @@ Messages shown to the user should strive to fulfill following criteria:
 
 ## Error Messages
 
-In general, error messages often convey the impression that an application's stability is weak which, in consequence, leads to a **declined user experience**.
-Error messages should **only** be used **if** the **user**, without that information, **would be badly surprised** by the result of an action.
+In general, error messages often convey the impression that an application's stability is weak which, in consequence, leads to a declined user experience.
+Error messages should **only** be used if the user, without that information, would be badly surprised by the result of an action.
+Always prefer locally given visual indications to error messages.
 
 Error messages should fulfill following criteria:
 
 - **polite** and **neutral**: do not directly or indirectly blame the user and stay away from jokes
 - start the message with **Sorry, ...**
-- write **personified**, e.g. _I could not find ..._
+- write **personified**, e.g., _I could not find ..._
 - **brief**
 - **specific** to the problem
 - **no technical terms** and error codes
-- mention **reason for the problem** and say _probably_ if not totally sure about the problem
+- mention a **reason for the problem** and say _probably_ if not totally sure about the problem
 - offer **possible solutions** only, and only if, you are sure about them
-- use **colors/formatting** to highlight important passages
-- show via **toastify** on the **top right**
+- use **colors/formatting** to highlight important passages (see above)
+- show via `errorToastGrouped`, for details see above in Consistency
 
 E.g.:  
 "Sorry, I **cannot communicate** with my server, there is probably some network problem or the server is down. _Please retry later._"
