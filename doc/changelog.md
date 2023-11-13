@@ -73,7 +73,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.3.5 - 06.11.2023 (320 commits)
 
-- Fix similar toasts appearring multiple times on screen _(Moritz)_
+- Calculation of scaling now fixed, please (auto)scale your map again.
+- Fix similar toasts appearing multiple times on screen _(Moritz)_
 - Fix browser browserlists #954 _(4ydan)_
 - Decide about which use cases to include for 1.0 _(Markus Raab and Yvonne Markl with the help of PermaplanTeam)_
 - Enable automatic image scaling in base layer _(Moritz)_
