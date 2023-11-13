@@ -19,7 +19,9 @@ const ButtonLink = ({ title, to, className = '', onClick }: ButtonLinkProps) => 
   return (
     <Link
       to={to}
-      className={`flex items-center ${className} justify-center space-x-2 active:text-primary-700 dark:active:text-primary-400`}
+      className={`flex items-center ${className} justify-center space-x-2
+                  hover:text-primary-500      active:text-primary-300
+                  dark:hover:text-primary-500 dark:active:text-primary-300`}
     >
       <button onClick={onClick}>{title}</button>
     </Link>
