@@ -1,11 +1,12 @@
+import { ReactElement } from 'react';
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
 interface SimpleFormInputProps<T extends FieldValues>
   extends React.InputHTMLAttributes<HTMLInputElement> {
   /** The elements unique id. */
   id: Path<T>;
-  /** Text that should be displayed in the accompanying label component. */
-  labelText: string;
+  /** Content of the accompanying label component. */
+  labelContent: ReactElement | string;
   /** UseFormRegister hook of the surrounding form. */
   register?: UseFormRegister<T>;
   /** Will return the input value as a number if this param is set to true. */
@@ -27,7 +28,7 @@ interface SimpleFormInputProps<T extends FieldValues>
  */
 export default function SimpleFormInput<T extends FieldValues>({
   id,
-  labelText = '',
+  labelContent = '',
   register,
   valueAsNumber = false,
   errorTitle,
@@ -36,9 +37,9 @@ export default function SimpleFormInput<T extends FieldValues>({
 }: SimpleFormInputProps<T>) {
   return (
     <div className="dark:text-white">
-      {labelText && (
+      {labelContent && (
         <label htmlFor={id} className="mb-2 block text-sm font-medium">
-          {labelText}
+          {labelContent}
           {props.required ? <span className="text-red-800"> *</span> : <></>}
         </label>
       )}

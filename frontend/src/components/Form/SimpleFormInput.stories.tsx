@@ -20,7 +20,7 @@ type Story = StoryObj<typeof SimpleFormInput>;
 export const Default: Story = {
   args: {
     id: 'someId',
-    labelText: 'input',
+    labelContent: 'input',
     placeholder: 'Please put your text here!',
   },
   render: (args) => <SimpleFormInput {...args} />,
