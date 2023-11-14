@@ -49,16 +49,17 @@ function usePlantLayerListeners(listening: boolean) {
   const isReadOnlyMode = useIsReadOnlyMode();
 
   const createPlanting = useCallback(
-    (selectedPlantForPlanting: PlantsSummaryDto, xCoordinate: number, yCoordinate: number) => {
+    (selectedPlantForPlanting: PlantForPlanting, xCoordinate: number, yCoordinate: number) => {
       executeAction(
         new CreatePlantAction({
           id: uuid.v4(),
-          plantId: selectedPlantForPlanting.id,
+          plantId: selectedPlantForPlanting.plant.id,
+          seedId: selectedPlantForPlanting.seed?.id,
           layerId: getSelectedLayerId() ?? -1,
           x: Math.round(xCoordinate),
           y: Math.round(yCoordinate),
-          height: getPlantWidth(selectedPlantForPlanting),
-          width: getPlantWidth(selectedPlantForPlanting),
+          height: getPlantWidth(selectedPlantForPlanting.plant),
+          width: getPlantWidth(selectedPlantForPlanting.plant),
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
@@ -105,7 +106,7 @@ function usePlantLayerListeners(listening: boolean) {
           const verticalCounter = horizontalPlantCount > verticalPlantCount ? i : j;
 
           createPlanting(
-            selectedPlantForPlanting.plant,
+            selectedPlantForPlanting,
             startingPositionX + plantSize * horizontalCounter,
             startingPositionY + plantSize * verticalCounter,
           );
@@ -139,7 +140,7 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      createPlanting(selectedPlant.plant, position.x, position.y);
+      createPlanting(selectedPlant, position.x, position.y);
     },
     [selectedPlant, isReadOnlyMode, createPlanting],
   );
