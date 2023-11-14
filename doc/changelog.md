@@ -58,7 +58,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix regression where Full plant names are not shown _(Moritz)_
 - _()_
 - _()_
 - _()_
