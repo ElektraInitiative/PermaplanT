@@ -198,6 +198,13 @@ def testMigrations() {
     }
 }
 
+def deployDoc() {
+    echo 'Deploying documentation'
+    sh 'cp -r book ./opt/permaplant/doc'
+    sh 'cp -r frontend/src/generated/docs/ ./opt/permaplant/doc'
+    sh 'cp -r frontend/storybook-static/ ./opt/permaplant/doc'
+}
+
 // PIPELINE BEGIN
 abortPreviousRunUnlessMaster()
 
@@ -294,6 +301,8 @@ lock("${env.NODE_NAME}-exclusive") {
                     sh 'rm -rf ./data/'
                     sh 'rm -rf ./node_modules/'
                 }
+
+                deployDoc()
             }
         }
     }
@@ -348,6 +357,8 @@ if (env.BRANCH_NAME == 'master') {
 
                 echo 'Deploying to Dev ...'
                 sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+
+                deployDoc()
             }
         }
     } catch (Exception e) { // groovylint-disable-line
