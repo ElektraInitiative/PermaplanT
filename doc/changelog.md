@@ -64,7 +64,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - CI: disable E2E tests in master #1055 _(4ydan)_
-- _()_
+- Doc: deploy mdbook/storybook/code doc #1064 _(4ydan)_
 - _()_
 - _()_
 - _()_
