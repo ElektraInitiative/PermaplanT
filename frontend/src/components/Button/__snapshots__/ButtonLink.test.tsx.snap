@@ -2,7 +2,9 @@
 
 exports[`renders correctly 1`] = `
 <a
-  className="items-center  justify-center space-x-2"
+  className="flex items-center  justify-center space-x-2
+                  hover:text-primary-500      active:text-primary-300
+                  dark:hover:text-primary-500 dark:active:text-primary-300"
   href="https://dev.permaplant.net"
 >
   <button>
