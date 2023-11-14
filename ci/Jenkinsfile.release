@@ -115,5 +115,10 @@ stage('Deploy Prod') {
 
         echo 'Deploying to Prod ...'
         sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
+
+        echo 'Deploying documentation'
+        sh 'cp -r book ./opt/permaplant/doc'
+        sh 'cp -r frontend/src/generated/docs/ ./opt/permaplant/doc'
+        sh 'cp -r frontend/storybook-static/ ./opt/permaplant/doc'
     }
 }
