@@ -41,6 +41,16 @@ export function PlantLayerLeftToolbar() {
     );
   };
 
+  /*
+  const onPlantingNoteChange = ({ plantingNotes }: PlantingAttribute) => {
+    if (!selectedPlantings?.length) return;
+
+    selectedPlantings.forEach(
+      (selectedPlanting) => console.log(selectedPlanting),
+      //executeAction(new UpdatePlantingNotesPlantAction({ id: selectedPlanting.id, plantingNotes })),
+    );
+  };*/
+
   const onSizeChange = ({ sizeX, sizeY }: PlantingFormData) => {
     if (!selectedPlantings?.length) return;
 
@@ -74,6 +84,9 @@ export function PlantLayerLeftToolbar() {
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onDeleteClick={onDeleteClick}
+      onPlantingNotesChange={(newValue) => {
+        console.log(newValue.plantingNotes);
+      }}
       isReadOnlyMode={isReadOnlyMode}
     />
   ) : (
@@ -90,6 +103,9 @@ export function PlantLayerLeftToolbar() {
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onDeleteClick={onDeleteClick}
+      onPlantingNotesChange={(newValue) => {
+        console.log(newValue.plantingNotes);
+      }}
       isReadOnlyMode={isReadOnlyMode}
     />
   );

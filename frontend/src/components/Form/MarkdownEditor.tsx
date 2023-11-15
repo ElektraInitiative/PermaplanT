@@ -1,4 +1,4 @@
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor, { PreviewType } from '@uiw/react-md-editor';
 import { FieldValues, Path } from 'react-hook-form';
 import { useDarkModeStore } from '@/features/dark_mode';
 
@@ -11,8 +11,12 @@ interface MarkdownEditorProps<T extends FieldValues> {
   className?: string;
   /** Callback function that is called when the input value changes. */
   onChange: (value: string | undefined) => void;
+  /*** The preview type of the editor. */
+  preview?: PreviewType;
   /** The current value of the input. */
   value: string | undefined;
+  /** The commands that should be hidden from the toolbar. */
+  hiddenCommands?: (string | undefined)[];
 }
 
 export default function MarkdownEditor<T extends FieldValues>({
@@ -21,6 +25,8 @@ export default function MarkdownEditor<T extends FieldValues>({
   className,
   onChange,
   value,
+  preview,
+  hiddenCommands = [],
 }: MarkdownEditorProps<T>) {
   const darkMode = useDarkModeStore((state) => state.darkMode);
 
@@ -33,11 +39,15 @@ export default function MarkdownEditor<T extends FieldValues>({
       )}
       <MDEditor
         id={id}
+        preview={preview}
         value={value}
-        onChange={onChange}
         className={`input list-style-revert border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 ${
           className ?? ''
         }`}
+        commandsFilter={(cmd) => {
+          return cmd && hiddenCommands.includes(cmd.name) ? false : cmd;
+        }}
+        onChange={onChange}
       />
     </div>
   );
