@@ -45,6 +45,7 @@
     "react-select-async-paginate": "^0.7.3",
     "react-shepherd": "^4.2.0",
     "react-toastify": "^9.1.2",
+    "react-tooltip": "^5.22.0",
     "typewriter-effect": "^2.19.0",
     "uuid": "^9.0.0",
     "webdav": "^5.2.2",

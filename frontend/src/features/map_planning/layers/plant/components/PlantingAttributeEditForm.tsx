@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Tooltip } from 'react-tooltip';
 import { z } from 'zod';
 import { PlantingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
@@ -42,6 +44,7 @@ export type MultiplePlantingsAttributeFormProps = EditPlantingAttributesProps & 
 
 export type PlantingAttributeEditFormProps = EditPlantingAttributesProps & {
   addDateDefaultValue: string;
+  addDateShowDifferentValueWarning?: boolean;
   removeDateDefaultValue: string;
   widthDefaultValue: number | undefined;
   heightDefaultValue: number | undefined;
@@ -103,6 +106,11 @@ export function MultiplePlantingsAttributeForm({
     return existsCommonDate ? comparisonDate : '';
   };
 
+  const multiplePlantingsHaveDifferentAddDate = () => {
+    const comparisonDate = plantings[0].addDate;
+    return plantings.some((planting) => planting.addDate !== comparisonDate);
+  };
+
   const getCommonRemoveDate = () => {
     const comparisonDate = plantings[0].removeDate;
     const existsCommonDate = plantings.every((planting) => planting.removeDate === comparisonDate);
@@ -127,6 +135,7 @@ export function MultiplePlantingsAttributeForm({
 
       <PlantingAttributeEditForm
         addDateDefaultValue={getCommonAddDate() ?? ''}
+        addDateShowDifferentValueWarning={multiplePlantingsHaveDifferentAddDate()}
         removeDateDefaultValue={getCommonRemoveDate() ?? ''}
         widthDefaultValue={getCommonWidth()}
         heightDefaultValue={getCommonHeight()}
@@ -142,11 +151,13 @@ function PlantingAttributeEditForm({
   widthDefaultValue,
   heightDefaultValue,
   addDateDefaultValue,
+  addDateShowDifferentValueWarning = false,
   removeDateDefaultValue,
   onWidthChange,
   onHeightChange,
   onAddDateChange,
   onRemoveDateChange,
+  onPlantingNotesChange,
   onDeleteClick,
   isReadOnlyMode,
   areaOfPlantings,
@@ -162,6 +173,7 @@ function PlantingAttributeEditForm({
       sizeY: heightDefaultValue,
       addDate: addDateDefaultValue,
       removeDate: removeDateDefaultValue,
+      plantingNotes: plantingNotesDefaultValue,
     },
     resolver: zodResolver(PlantingAttributeEditFormSchema),
   });
@@ -176,6 +188,12 @@ function PlantingAttributeEditForm({
     planting && individualPlantSize
       ? calculatePlantCount(individualPlantSize, planting.sizeX, planting.sizeY)
       : null;
+
+  const plantingNotesSubmitState = useDebouncedSubmit<PlantingAttribute>(
+    watch('plantingNotes'),
+    handleSubmit,
+    onPlantingNotesChange,
+  );
 
   return (
     <FormProvider {...formInfo}>
@@ -257,6 +275,29 @@ function PlantingAttributeEditForm({
           : t('plantings:remove_date_description')}
       </p>
 
+      <div className="flex gap-2">
+        <MarkdownEditor
+          id="plantingNotes"
+          aria-invalid={plantingNotesSubmitState === 'error'}
+          labelText={t('plantings:notes')}
+          className="w-46"
+          onChange={(value) => {
+            //setValue('plantingNotes', value);
+            plantingNotesRef.current = value;
+          }}
+          value={plantingNotesRef.current}
+          preview="edit"
+          hiddenCommands={[undefined]}
+        />
+        {plantingNotesSubmitState === 'loading' && (
+          <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
+        )}
+        {plantingNotesSubmitState === 'idle' && (
+          <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
+        )}
+        {plantingNotesShowDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
+      </div>
+
       <hr className="my-4 border-neutral-700" />
 
       <SimpleButton
@@ -269,5 +310,19 @@ function PlantingAttributeEditForm({
         {multiplePlantings ? t('plantings:delete_multiple_plantings') : t('plantings:delete')}
       </SimpleButton>
     </FormProvider>
+  );
+}
+
+export function MultiplePlantingsDifferentValueAlert() {
+  const { t } = useTranslation(['plantings']);
+  return (
+    <>
+      <AlertIcon
+        data-tooltip-id="multiple-plantings-different-value-alert"
+        data-tooltip-content={t('plantings:multiple_plantings_different_value_alert')}
+        className="mb-3 mt-auto h-5 w-5 text-orange-400"
+      />
+      <Tooltip id="multiple-plantings-different-value-alert" />
+    </>
   );
 }
