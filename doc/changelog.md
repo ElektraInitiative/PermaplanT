@@ -30,7 +30,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Refactor base layer toolbar using react hook form _(Moritz)_
 - _()_
-- _()_
+- fixed: slider displays wrong value after toolbar resize _(Samuel)_
 - _()_
 - _()_
 - _()_
