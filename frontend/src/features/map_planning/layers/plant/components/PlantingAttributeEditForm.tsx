@@ -163,7 +163,7 @@ export function PlantingAttributeEditForm({
           id="addDate"
           disabled={isReadOnlyMode}
           aria-invalid={addDateSubmitState === 'error'}
-          labelText={t('plantings:add_date')}
+          labelContent={t('plantings:add_date')}
           register={register}
           className="w-36"
         />
@@ -186,7 +186,7 @@ export function PlantingAttributeEditForm({
           id="removeDate"
           disabled={isReadOnlyMode}
           aria-invalid={removeDateSubmitState === 'error'}
-          labelText={t('plantings:remove_date')}
+          labelContent={t('plantings:remove_date')}
           register={register}
           className="w-36"
         />

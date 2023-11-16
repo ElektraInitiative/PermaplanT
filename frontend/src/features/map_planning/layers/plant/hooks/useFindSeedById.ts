@@ -1,7 +1,7 @@
 import { findSeedById } from '@/features/seeds/api/findSeedById';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 /**
  * Load a seed from the backend using its id.
@@ -19,7 +19,7 @@ export function useFindSeedById(seedId: number, enabled = true, quiet = false) {
   });
 
   if (error && !quiet) {
-    toast.error(t('seeds:error_fetching_seed'), { autoClose: false });
+    errorToastGrouped(t('seeds:error_fetching_seed'), { autoClose: false });
   }
 
   return {

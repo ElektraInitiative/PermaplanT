@@ -55,7 +55,7 @@ export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
         aria-invalid={submitState === 'error'}
         type="date"
         id="date"
-        labelText={t('timeline:change_date')}
+        labelContent={t('timeline:change_date')}
         register={register}
         title={t('timeline:change_date_hint')}
         data-tourid="date_picker"
