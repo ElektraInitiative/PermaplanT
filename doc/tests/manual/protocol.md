@@ -41,6 +41,18 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Test Result:
 - Notes:
 
+## Layer opacity
+
+- Description: Check whether the opacity of a layer changes.
+- Given I am on a map page with a base layer image configured
+- When dragging the slider for the base layer in the layer section of the toolbar to 50%
+- Then I can see the change in opacity of the base layer image
+- When I change the size of the toolbar
+- Then I can see the slider and the filling change in size proportionally. Therefore 50% of the slider should be filled.
+- Actual Result:
+- Test Result:
+- Notes:
+
 ## Base Layer
 
 - Description: Check whether the maps background image is displayed correctly.

@@ -148,7 +148,7 @@ export const Chat = () => {
                 )}
                 <SimpleFormInput
                   id="message"
-                  labelText={
+                  labelContent={
                     'write a message to ' +
                     (selectedConversation ? selectedConversation.displayName : '')
                   }
