@@ -2,14 +2,18 @@
 
 use chrono::NaiveDate;
 use diesel::pg::Pg;
-use diesel::{debug_query, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult};
+use diesel::{
+    debug_query, BoolExpressionMethods, ExpressionMethods, NullableExpressionMethods, QueryDsl,
+    QueryResult,
+};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 use uuid::Uuid;
 
 use crate::model::dto::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
 use crate::model::entity::plantings::{Planting, UpdatePlanting};
-use crate::schema::plantings::{self, all_columns, layer_id, plant_id};
+use crate::schema::plantings::{self, layer_id, plant_id};
+use crate::schema::seeds::{self};
 
 /// Arguments for the database layer find plantings function.
 pub struct FindPlantingsParameters {
@@ -32,7 +36,10 @@ impl Planting {
         search_parameters: FindPlantingsParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantingDto>> {
-        let mut query = plantings::table.select(all_columns).into_boxed();
+        let mut query = plantings::table
+            .left_join(seeds::table)
+            .select((plantings::all_columns, seeds::name.nullable()))
+            .into_boxed();
 
         if let Some(id) = search_parameters.plant_id {
             query = query.filter(plant_id.eq(id));
@@ -55,7 +62,7 @@ impl Planting {
         debug!("{}", debug_query::<Pg, _>(&query));
 
         Ok(query
-            .load::<Self>(conn)
+            .load::<(Self, Option<String>)>(conn)
             .await?
             .into_iter()
             .map(Into::into)

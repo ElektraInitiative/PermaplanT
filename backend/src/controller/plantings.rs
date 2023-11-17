@@ -50,7 +50,7 @@ pub async fn find(
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     let response = plantings::find(search_params.into_inner(), &app_data).await?;
-    Ok(HttpResponse::Ok().json(response))
+    Ok(HttpResponse::Ok().json(response.clone()))
 }
 
 /// Endpoint for creating a new `Planting`.
@@ -85,14 +85,14 @@ pub async fn create(
         .broadcast(
             path.into_inner(),
             Action::CreatePlanting(CreatePlantActionPayload::new(
-                dto,
+                dto.clone(),
                 user_info.id,
                 new_planting.action_id,
             )),
         )
         .await;
 
-    Ok(HttpResponse::Created().json(dto))
+    Ok(HttpResponse::Created().json(dto.clone()))
 }
 
 /// Endpoint for updating a `Planting`.
@@ -126,19 +126,23 @@ pub async fn update(
 
     let action = match update_planting {
         UpdatePlantingDto::Transform(action_dto) => Action::TransformPlanting(
-            TransformPlantActionPayload::new(planting, user_info.id, action_dto.action_id),
+            TransformPlantActionPayload::new(planting.clone(), user_info.id, action_dto.action_id),
         ),
         UpdatePlantingDto::Move(action_dto) => Action::MovePlanting(MovePlantActionPayload::new(
-            planting,
+            planting.clone(),
             user_info.id,
             action_dto.action_id,
         )),
-        UpdatePlantingDto::UpdateAddDate(action_dto) => Action::UpdatePlantingAddDate(
-            UpdatePlantingAddDateActionPayload::new(planting, user_info.id, action_dto.action_id),
-        ),
+        UpdatePlantingDto::UpdateAddDate(action_dto) => {
+            Action::UpdatePlantingAddDate(UpdatePlantingAddDateActionPayload::new(
+                planting.clone(),
+                user_info.id,
+                action_dto.action_id,
+            ))
+        }
         UpdatePlantingDto::UpdateRemoveDate(action_dto) => {
             Action::UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload::new(
-                planting,
+                planting.clone(),
                 user_info.id,
                 action_dto.action_id,
             ))
@@ -147,7 +151,7 @@ pub async fn update(
 
     app_data.broadcaster.broadcast(map_id, action).await;
 
-    Ok(HttpResponse::Ok().json(planting))
+    Ok(HttpResponse::Ok().json(planting.clone()))
 }
 
 /// Endpoint for deleting a `Planting`.
