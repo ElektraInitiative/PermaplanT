@@ -1,7 +1,9 @@
 import { PlantsSummaryDto, Quantity, SeedDto } from '@/api_types/definitions';
 import {
   getNameFromPlant,
+  getPlantNameFromAdditionalNameAndPlant,
   getPlantNameFromSeedAndPlant,
+  PlantNameFromAdditionalNameAndPlant,
   PlantNameFromPlant,
   PlantNameFromSeedAndPlant,
 } from '@/utils/plant-naming';
@@ -84,6 +86,20 @@ it('generates complete plant name without common name', function () {
   expect(getPlantNameFromSeedAndPlant(seed, plant)).toEqual('Brassica oleracea italica - violett');
 });
 
+it('generates complete plant name without common name', function () {
+  const plant: PlantsSummaryDto = {
+    id: 1,
+    unique_name: 'Brassica oleracea italica',
+    common_name_en: [],
+  };
+
+  const additionalName = 'violett';
+
+  expect(getPlantNameFromAdditionalNameAndPlant(additionalName, plant)).toEqual(
+    'Brassica oleracea italica - violett',
+  );
+});
+
 it('generates a complete plant name', function () {
   const plant: PlantsSummaryDto = {
     id: 1,
@@ -94,6 +110,20 @@ it('generates a complete plant name', function () {
   const seed = generateTestSeed('violett');
 
   expect(getPlantNameFromSeedAndPlant(seed, plant)).toEqual(
+    'Italian broccoli - violett (Brassica oleracea italica)',
+  );
+});
+
+it('generates complete plant name', function () {
+  const plant: PlantsSummaryDto = {
+    id: 1,
+    unique_name: 'Brassica oleracea italica',
+    common_name_en: ['italian broccoli'],
+  };
+
+  const additionalName = 'violett';
+
+  expect(getPlantNameFromAdditionalNameAndPlant(additionalName, plant)).toEqual(
     'Italian broccoli - violett (Brassica oleracea italica)',
   );
 });
@@ -126,6 +156,50 @@ it('generates a formatted plant name', function () {
   const seed = generateTestSeed('violett');
 
   expect(ReactTestRenderer.create(PlantNameFromSeedAndPlant({ seed, plant })).toJSON()).toEqual(
+    ReactTestRenderer.create(
+      <>
+        <>Italian broccoli</> - <>violett</> (<i>Brassica oleracea italica</i>)
+      </>,
+    ).toJSON(),
+  );
+});
+
+it('generates formatted unique name', function () {
+  const plant: PlantsSummaryDto = {
+    id: 1,
+    unique_name: 'Brassica oleracea italica',
+    common_name_en: [],
+  };
+
+  const additionalName = 'violett';
+
+  expect(
+    ReactTestRenderer.create(
+      PlantNameFromAdditionalNameAndPlant({ additionalName, plant }),
+    ).toJSON(),
+  ).toEqual(
+    ReactTestRenderer.create(
+      <>
+        <i>Brassica oleracea italica</i> - <>violett</>
+      </>,
+    ).toJSON(),
+  );
+});
+
+it('generates a formatted plant name', function () {
+  const plant: PlantsSummaryDto = {
+    id: 1,
+    unique_name: 'Brassica oleracea italica',
+    common_name_en: ['italian broccoli'],
+  };
+
+  const additionalName = 'violett';
+
+  expect(
+    ReactTestRenderer.create(
+      PlantNameFromAdditionalNameAndPlant({ additionalName, plant }),
+    ).toJSON(),
+  ).toEqual(
     ReactTestRenderer.create(
       <>
         <>Italian broccoli</> - <>violett</> (<i>Brassica oleracea italica</i>)
