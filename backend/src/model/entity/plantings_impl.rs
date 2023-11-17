@@ -80,8 +80,33 @@ impl Planting {
     ) -> QueryResult<PlantingDto> {
         let planting = Self::from(dto);
         let query = diesel::insert_into(plantings::table).values(&planting);
+        let query_result = query.get_result::<Self>(conn).await.map(Into::into);
+
         debug!("{}", debug_query::<Pg, _>(&query));
-        query.get_result::<Self>(conn).await.map(Into::into)
+
+        if planting.seed_id == None || matches!(query_result, Err(_)) {
+            return query_result;
+        }
+
+        // There seems to be no way of retrieving the additional name using the insert query
+        // above.
+        let mut additional_name_query = seeds::table
+            .select(seeds::name.nullable())
+            .filter(seeds::id.eq(planting.seed_id.unwrap()));
+
+        debug!("{}", debug_query::<Pg, _>(&additional_name_query));
+
+        let mut query_result_unwrapped = query_result.unwrap();
+        match additional_name_query
+            .get_result::<Option<String>>(conn)
+            .await
+            .map(Into::into)
+        {
+            Ok(additional_name) => query_result_unwrapped.additional_name = additional_name,
+            Err(e) => return Err(e), // Should not be necessary, but required by the rust compiler.
+        }
+
+        return Ok(query_result_unwrapped);
     }
 
     /// Partially update a planting in the database.
