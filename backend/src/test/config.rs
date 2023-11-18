@@ -8,7 +8,7 @@ use crate::{config::routes, model::dto::ConfigDto, test::util::jwks::init_auth};
 #[actix_rt::test]
 async fn test_search_plants_succeeds() {
     // Has to be done way as static variables are shared in tests and /api/config requires static vars
-    init_auth();
+    let _ = init_auth();
     let app = test::init_service(App::new().configure(routes::config)).await;
 
     let resp = test::TestRequest::get()
