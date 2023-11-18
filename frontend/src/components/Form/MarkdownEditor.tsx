@@ -1,4 +1,11 @@
-import MDEditor, { PreviewType } from '@uiw/react-md-editor';
+import MDEditor, {
+  ICommand,
+  PreviewType,
+  RefMDEditor,
+  commands as MarkdownEditorCommands,
+  fullscreen as DefaultFullScreenCommand,
+} from '@uiw/react-md-editor';
+import { useRef, useState } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 import { useDarkModeStore } from '@/features/dark_mode';
 
@@ -16,8 +23,22 @@ interface MarkdownEditorProps<T extends FieldValues> {
   /** The current value of the input. */
   value: string | undefined;
   /** The commands that should be hidden from the toolbar. */
-  hiddenCommands?: (string | undefined)[];
+  hiddenCommands?: ICommand[];
+  /** List of commands that should be shown in the toolbar. */
+  commands?: ICommand[];
+  /** Whether the fullscreen toggle should be shown. */
+  showFullScreenToggle?: boolean;
+  /** Whether the preview button should be shown. */
+  enablePreview?: boolean;
+  /** Whether the split view button should be shown. */
+  enableSplitView?: boolean;
+  /** Whether the editor should be in fullscreen mode. */
+  fullScreen?: boolean;
+  /** List of commands that should be shown in the toolbar when in fullscreen mode. If not set the default commands of the editor will be used. */
+  fullScreenCommands?: ICommand[];
 }
+
+export { MarkdownEditorCommands };
 
 export default function MarkdownEditor<T extends FieldValues>({
   id,
@@ -27,8 +48,43 @@ export default function MarkdownEditor<T extends FieldValues>({
   value,
   preview,
   hiddenCommands = [],
+  commands,
+  enablePreview = true,
+  enableSplitView = true,
+  showFullScreenToggle = true,
+  fullScreenCommands,
+  fullScreen = false,
 }: MarkdownEditorProps<T>) {
   const darkMode = useDarkModeStore((state) => state.darkMode);
+
+  const editorRef = useRef<RefMDEditor>(null);
+  const [isFullScreen, setIsFullScreen] = useState(fullScreen);
+
+  // custom full screen command to set state fullScreen state of the editor
+  const customFullScreenCommand: ICommand = {
+    name: DefaultFullScreenCommand.name,
+    keyCommand: DefaultFullScreenCommand.keyCommand,
+    shortcuts: DefaultFullScreenCommand.shortcuts,
+    value: DefaultFullScreenCommand.value,
+    buttonProps: DefaultFullScreenCommand.buttonProps,
+    icon: DefaultFullScreenCommand.icon,
+    execute: function execute(state, api, dispatch, executeCommandState, shortcuts) {
+      api.textArea.focus();
+      setIsFullScreen(!isFullScreen);
+      if (shortcuts && dispatch && executeCommandState) {
+        dispatch({
+          fullscreen: !executeCommandState.fullscreen,
+        });
+      }
+    },
+  };
+
+  const extraCommands = [
+    MarkdownEditorCommands.codeEdit,
+    enablePreview ? MarkdownEditorCommands.codePreview : null,
+    enableSplitView ? MarkdownEditorCommands.codeLive : null,
+    showFullScreenToggle ? customFullScreenCommand : null,
+  ].filter((command) => command !== null) as ICommand[];
 
   return (
     <div className="dark:text-white" data-color-mode={darkMode ? 'dark' : 'light'}>
@@ -39,13 +95,17 @@ export default function MarkdownEditor<T extends FieldValues>({
       )}
       <MDEditor
         id={id}
+        ref={editorRef}
         preview={preview}
         value={value}
+        fullscreen={isFullScreen}
+        commands={isFullScreen ? fullScreenCommands : commands}
         className={`input list-style-revert border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 ${
           className ?? ''
         }`}
+        extraCommands={extraCommands}
         commandsFilter={(cmd) => {
-          return cmd && hiddenCommands.includes(cmd.name) ? false : cmd;
+          return cmd && hiddenCommands.includes(cmd) ? false : cmd;
         }}
         onChange={onChange}
       />
