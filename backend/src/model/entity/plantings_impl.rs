@@ -13,7 +13,7 @@ use uuid::Uuid;
 use crate::model::dto::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
 use crate::model::entity::plantings::{Planting, UpdatePlanting};
 use crate::schema::plantings::{self, layer_id, plant_id};
-use crate::schema::seeds::{self};
+use crate::schema::seeds;
 
 /// Arguments for the database layer find plantings function.
 pub struct FindPlantingsParameters {
@@ -74,6 +74,12 @@ impl Planting {
     /// # Errors
     /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
+    ///
+    /// # Panics
+    /// Clippy thinks this function can panic because is makes use of unwrap.
+    /// But because we only unwrap after the relevant Result was checked,
+    /// this should never happen.
+    #[allow(clippy::unwrap_used)]
     pub async fn create(
         dto: NewPlantingDto,
         conn: &mut AsyncPgConnection,
@@ -84,13 +90,13 @@ impl Planting {
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        if planting.seed_id == None || matches!(query_result, Err(_)) {
+        if planting.seed_id.is_none() || matches!(query_result, Err(_)) {
             return query_result;
         }
 
         // There seems to be no way of retrieving the additional name using the insert query
         // above.
-        let mut additional_name_query = seeds::table
+        let additional_name_query = seeds::table
             .select(seeds::name.nullable())
             .filter(seeds::id.eq(planting.seed_id.unwrap()));
 
@@ -106,7 +112,7 @@ impl Planting {
             Err(e) => return Err(e), // Should not be necessary, but required by the rust compiler.
         }
 
-        return Ok(query_result_unwrapped);
+        Ok(query_result_unwrapped)
     }
 
     /// Partially update a planting in the database.

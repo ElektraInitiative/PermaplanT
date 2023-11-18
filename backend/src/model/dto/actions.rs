@@ -142,7 +142,7 @@ pub struct MovePlantActionPayload {
 
 impl MovePlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
@@ -170,7 +170,7 @@ pub struct TransformPlantActionPayload {
 
 impl TransformPlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
@@ -277,7 +277,7 @@ pub struct UpdatePlantingAddDateActionPayload {
 
 impl UpdatePlantingAddDateActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
@@ -300,7 +300,7 @@ pub struct UpdatePlantingRemoveDateActionPayload {
 
 impl UpdatePlantingRemoveDateActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
