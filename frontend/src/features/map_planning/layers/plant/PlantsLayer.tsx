@@ -6,7 +6,13 @@ import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { LayerType, PlantSpread, PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
+import {
+  LayerType,
+  PlantSpread,
+  PlantingDto,
+  PlantsSummaryDto,
+  SeedDto,
+} from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
@@ -15,7 +21,7 @@ import {
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
-import { PlantNameFromPlant } from '@/utils/plant-naming';
+import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
@@ -269,7 +275,9 @@ function PlantsLayer(props: PlantsLayerProps) {
 
   useEffect(() => {
     if (selectedPlant) {
-      setStatusPanelContent(<SelectedPlantInfo plant={selectedPlant.plant} />);
+      setStatusPanelContent(
+        <SelectedPlantInfo plant={selectedPlant.plant} seed={selectedPlant.seed} />,
+      );
     } else {
       clearStatusPanelContent();
     }
@@ -288,7 +296,7 @@ function PlantsLayer(props: PlantsLayerProps) {
   );
 }
 
-function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
+function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: SeedDto | null }) {
   const selectPlant = useMapStore((state) => state.selectPlantForPlanting);
 
   const keyHandlerActions: Record<string, () => void> = {
@@ -304,7 +312,11 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
   return (
     <>
       <div className="flex flex-row items-center justify-center">
-        <PlantNameFromPlant plant={plant} />
+        {seed ? (
+          <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
+        ) : (
+          <PlantNameFromPlant plant={plant} />
+        )}
       </div>
       <div className="flex items-center justify-center">
         <IconButton
