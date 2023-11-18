@@ -64,6 +64,7 @@ function usePlantLayerListeners(listening: boolean) {
           scaleX: 1,
           scaleY: 1,
           addDate: timelineDate,
+          additionalName: selectedPlantForPlanting.seed?.name,
         }),
       );
     },
