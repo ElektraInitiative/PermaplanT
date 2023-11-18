@@ -1,5 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef } from 'react';
+import { useFindPlantById } from '../hooks/useFindPlantById';
+import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
+import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+import MarkdownEditor, { MarkdownEditorCommands } from '@/components/Form/MarkdownEditor';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { useFindSeedById } from '@/features/map_planning/layers/plant/hooks/useFindSeedById';
+import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
+import { ReactComponent as AlertIcon } from '@/svg/icons/alert.svg';
+import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
+import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
+import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'react-tooltip';
@@ -166,6 +177,8 @@ function PlantingAttributeEditForm({
   const { t } = useTranslation(['plantings']);
   const multiplePlantings = planting === null;
 
+  const [plantingNotes, setPlantingNotes] = useState<string | undefined>();
+
   const formInfo = useForm<PlantingFormData>({
     // The 'empty' value for the native date input is an empty string, not null | undefined
     defaultValues: {
@@ -283,11 +296,17 @@ function PlantingAttributeEditForm({
           className="w-46"
           onChange={(value) => {
             //setValue('plantingNotes', value);
-            plantingNotesRef.current = value;
+            setPlantingNotes(value);
           }}
-          value={plantingNotesRef.current}
+          commands={[
+            MarkdownEditorCommands.bold,
+            MarkdownEditorCommands.checkedListCommand,
+            MarkdownEditorCommands.divider,
+          ]}
+          enableSplitView={false}
+          showFullScreenToggle={true}
+          value={plantingNotes}
           preview="edit"
-          hiddenCommands={[undefined]}
         />
         {plantingNotesSubmitState === 'loading' && (
           <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
