@@ -19,7 +19,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { Group, Layer, Rect, Stage, Transformer } from 'react-konva';
 
 export const TEST_IDS = Object.freeze({
   CANVAS: 'base-stage__canvas',
@@ -277,47 +277,49 @@ export const BaseStage = ({
         x={stage.x}
         y={stage.y}
       >
-        <Layer>{children}</Layer>
         <Layer>
-          {/* Tooltip */}
-          <MapLabel
-            content={tooltipContent}
-            visible={tooltipContent !== ''}
-            scaleX={2 / stage.scale}
-            scaleY={2 / stage.scale}
-            x={tooltipPosition.x}
-            y={tooltipPosition.y}
-          />
-          <Rect
-            x={selectionRectAttrs.x}
-            y={selectionRectAttrs.y}
-            width={selectionRectAttrs.width}
-            height={selectionRectAttrs.height}
-            fill={'blue'}
-            visible={selectionRectAttrs.isVisible}
-            opacity={0.2}
-            name="selectionRect"
-          />
-          <Transformer
-            listening={!isReadOnly}
-            // We need to manually disable selection when we are transforming
-            onTransformStart={() => {
-              selectable = false;
-            }}
-            onTransformEnd={() => {
-              selectable = true;
-            }}
-            onMouseDown={() => {
-              selectable = false;
-            }}
-            onMouseUp={() => {
-              selectable = true;
-            }}
-            ref={transformerRef}
-            name="transformer"
-            anchorSize={8}
-            enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
-          />
+          {children}
+          <Group>
+            {/* Tooltip */}
+            <MapLabel
+              content={tooltipContent}
+              visible={tooltipContent !== ''}
+              scaleX={2 / stage.scale}
+              scaleY={2 / stage.scale}
+              x={tooltipPosition.x}
+              y={tooltipPosition.y}
+            />
+            <Rect
+              x={selectionRectAttrs.x}
+              y={selectionRectAttrs.y}
+              width={selectionRectAttrs.width}
+              height={selectionRectAttrs.height}
+              fill={'blue'}
+              visible={selectionRectAttrs.isVisible}
+              opacity={0.2}
+              name="selectionRect"
+            />
+            <Transformer
+              listening={!isReadOnly}
+              // We need to manually disable selection when we are transforming
+              onTransformStart={() => {
+                selectable = false;
+              }}
+              onTransformEnd={() => {
+                selectable = true;
+              }}
+              onMouseDown={() => {
+                selectable = false;
+              }}
+              onMouseUp={() => {
+                selectable = true;
+              }}
+              ref={transformerRef}
+              name="transformer"
+              anchorSize={8}
+              enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
+            />
+          </Group>
         </Layer>
       </Stage>
       {/** Panel to display something from different layers */}
