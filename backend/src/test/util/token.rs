@@ -7,6 +7,7 @@ use uuid::Uuid;
 /// Generate a token using the jwk (see [`super::init_jwks::init_jwks`]) and an offset.
 ///
 /// The offset is added to the current time (meaning -300 would be expired, 300 is valid)
+#[must_use]
 pub fn generate_token(jwk: JsonWebKey, exp_offset: i64) -> String {
     let mut header = jsonwebtoken::Header::new(jwk.algorithm.unwrap().into());
     header.kid = Some(jwk.key_id.clone().unwrap());
@@ -19,6 +20,7 @@ pub fn generate_token(jwk: JsonWebKey, exp_offset: i64) -> String {
     .unwrap()
 }
 
+#[must_use]
 pub fn generate_token_for_user(jwk: JsonWebKey, exp_offset: i64, user_id: Uuid) -> String {
     let mut header = jsonwebtoken::Header::new(jwk.algorithm.unwrap().into());
     header.kid = Some(jwk.key_id.clone().unwrap());

@@ -1,6 +1,7 @@
 use postgis_diesel::types::{Point, Polygon};
 use serde_json::json;
 
+#[must_use]
 pub fn tall_rectangle() -> Polygon<Point> {
     let polygon = json!({
         "rings": [
@@ -32,6 +33,7 @@ pub fn tall_rectangle() -> Polygon<Point> {
     serde_json::from_value(polygon).unwrap()
 }
 
+#[must_use]
 pub fn small_rectangle() -> Polygon<Point> {
     let polygon = json!({
         "rings": [
@@ -63,6 +65,7 @@ pub fn small_rectangle() -> Polygon<Point> {
     serde_json::from_value(polygon).unwrap()
 }
 
+#[must_use]
 pub fn small_rectangle_with_non_0_xmin() -> Polygon<Point> {
     let polygon = json!({
         "rings": [
@@ -94,6 +97,7 @@ pub fn small_rectangle_with_non_0_xmin() -> Polygon<Point> {
     serde_json::from_value(polygon).unwrap()
 }
 
+#[must_use]
 pub fn rectangle_with_missing_bottom_left_corner() -> Polygon<Point> {
     let polygon = json!({
         "rings": [

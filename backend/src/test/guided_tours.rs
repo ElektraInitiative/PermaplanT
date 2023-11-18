@@ -30,7 +30,7 @@ async fn test_can_find_status_object() {
         async {
             diesel::insert_into(crate::schema::guided_tours::table)
                 .values((
-                    &crate::schema::guided_tours::user_id.eq(user_id.clone()),
+                    &crate::schema::guided_tours::user_id.eq(user_id),
                     &crate::schema::guided_tours::editor_tour_completed.eq(false),
                 ))
                 .execute(conn)
@@ -57,7 +57,7 @@ async fn test_can_update_status_object() {
         async {
             diesel::insert_into(crate::schema::guided_tours::table)
                 .values((
-                    &crate::schema::guided_tours::user_id.eq(user_id.clone()),
+                    &crate::schema::guided_tours::user_id.eq(user_id),
                     &crate::schema::guided_tours::editor_tour_completed.eq(false),
                 ))
                 .execute(conn)

@@ -34,7 +34,7 @@ async fn test_seeds_pagination_succeeds() {
             let values = (0..15)
                 .map(|i| {
                     (
-                        crate::schema::seeds::id.eq(-1 * i),
+                        crate::schema::seeds::id.eq(-i),
                         crate::schema::seeds::name.eq(format!("Testia {i}")),
                         crate::schema::seeds::harvest_year.eq(2022),
                         crate::schema::seeds::plant_id.eq(-1),

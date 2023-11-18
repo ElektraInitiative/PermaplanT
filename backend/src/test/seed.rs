@@ -84,13 +84,13 @@ async fn test_find_two_seeds_succeeds() {
     assert_eq!(page.results.len(), 2);
 
     // Seeds should be ordered by use_by date in ascending order.
-    let seed_dto1 = page.results.get(0).unwrap();
+    let seed_dto1 = &page.results[0];
     assert_eq!(seed_dto1.id, -2);
     assert_eq!(seed_dto1.name, "Testia testium".to_owned());
     assert_eq!(seed_dto1.harvest_year, 2022);
     assert_eq!(seed_dto1.quantity, Quantity::NotEnough);
     assert_eq!(seed_dto1.use_by, NaiveDate::from_ymd_opt(2022, 01, 01));
-    let seed_dto2 = page.results.get(1).unwrap();
+    let seed_dto2 = &page.results[1];
     assert_eq!(seed_dto2.id, -1);
     assert_eq!(seed_dto2.name, "Testia testia".to_owned());
     assert_eq!(seed_dto2.harvest_year, 2022);
@@ -159,7 +159,7 @@ async fn test_search_seeds_succeeds() {
     let page: Page<SeedDto> = serde_json::from_str(result_string).unwrap();
     assert_eq!(page.results.len(), 1);
 
-    let seed_dto = page.results.get(0).unwrap();
+    let seed_dto = &page.results[0];
     assert_eq!(seed_dto.id, -1);
     assert_eq!(seed_dto.name, "This one should be found!".to_owned());
     assert_eq!(seed_dto.harvest_year, 2022);
@@ -539,13 +539,13 @@ async fn test_archive_seed_succeeds() {
     assert_eq!(page.results.len(), 2);
 
     // Seeds should be ordered by use_by date in ascending order.
-    let seed_dto1 = page.results.get(0).unwrap();
+    let seed_dto1 = &page.results[0];
     assert_eq!(seed_dto1.id, -2);
     assert_eq!(seed_dto1.name, "Testia testium".to_owned());
     assert_eq!(seed_dto1.harvest_year, 2022);
     assert_eq!(seed_dto1.quantity, Quantity::NotEnough);
     assert_eq!(seed_dto1.use_by, NaiveDate::from_ymd_opt(2022, 01, 01));
-    let seed_dto2 = page.results.get(1).unwrap();
+    let seed_dto2 = &page.results[1];
     assert_eq!(seed_dto2.id, -1);
     assert_eq!(seed_dto2.name, "Testia testia".to_owned());
     assert_eq!(seed_dto2.harvest_year, 2022);

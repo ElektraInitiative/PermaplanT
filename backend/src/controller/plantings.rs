@@ -50,7 +50,7 @@ pub async fn find(
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     let response = plantings::find(search_params.into_inner(), &app_data).await?;
-    Ok(HttpResponse::Ok().json(response.clone()))
+    Ok(HttpResponse::Ok().json(response))
 }
 
 /// Endpoint for creating a new `Planting`.
@@ -126,23 +126,19 @@ pub async fn update(
 
     let action = match update_planting {
         UpdatePlantingDto::Transform(action_dto) => Action::TransformPlanting(
-            TransformPlantActionPayload::new(planting.clone(), user_info.id, action_dto.action_id),
+            TransformPlantActionPayload::new(&planting, user_info.id, action_dto.action_id),
         ),
         UpdatePlantingDto::Move(action_dto) => Action::MovePlanting(MovePlantActionPayload::new(
-            planting.clone(),
+            &planting,
             user_info.id,
             action_dto.action_id,
         )),
-        UpdatePlantingDto::UpdateAddDate(action_dto) => {
-            Action::UpdatePlantingAddDate(UpdatePlantingAddDateActionPayload::new(
-                planting.clone(),
-                user_info.id,
-                action_dto.action_id,
-            ))
-        }
+        UpdatePlantingDto::UpdateAddDate(action_dto) => Action::UpdatePlantingAddDate(
+            UpdatePlantingAddDateActionPayload::new(&planting, user_info.id, action_dto.action_id),
+        ),
         UpdatePlantingDto::UpdateRemoveDate(action_dto) => {
             Action::UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload::new(
-                planting.clone(),
+                &planting,
                 user_info.id,
                 action_dto.action_id,
             ))

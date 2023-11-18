@@ -13,7 +13,7 @@ use uuid::Uuid;
 use crate::model::dto::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
 use crate::model::entity::plantings::{Planting, UpdatePlanting};
 use crate::schema::plantings::{self, layer_id, plant_id};
-use crate::schema::seeds::{self};
+use crate::schema::seeds;
 
 /// Arguments for the database layer find plantings function.
 pub struct FindPlantingsParameters {
@@ -84,29 +84,33 @@ impl Planting {
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        if planting.seed_id == None || matches!(query_result, Err(_)) {
+        if planting.seed_id.is_none() || matches!(query_result, Err(_)) {
             return query_result;
         }
 
         // There seems to be no way of retrieving the additional name using the insert query
         // above.
-        let mut additional_name_query = seeds::table
-            .select(seeds::name.nullable())
-            .filter(seeds::id.eq(planting.seed_id.unwrap()));
+        if let Some(seed_id) = planting.seed_id {
+            if let Ok(mut query_result) = query_result {
+                let additional_name_query = seeds::table
+                    .select(seeds::name.nullable())
+                    .filter(seeds::id.eq(seed_id));
 
-        debug!("{}", debug_query::<Pg, _>(&additional_name_query));
+                debug!("{}", debug_query::<Pg, _>(&additional_name_query));
 
-        let mut query_result_unwrapped = query_result.unwrap();
-        match additional_name_query
-            .get_result::<Option<String>>(conn)
-            .await
-            .map(Into::into)
-        {
-            Ok(additional_name) => query_result_unwrapped.additional_name = additional_name,
-            Err(e) => return Err(e), // Should not be necessary, but required by the rust compiler.
+                match additional_name_query
+                    .get_result::<Option<String>>(conn)
+                    .await
+                    .map(Into::into)
+                {
+                    Ok(additional_name) => query_result.additional_name = additional_name,
+                    Err(e) => return Err(e),
+                }
+                return Ok(query_result);
+            }
         }
 
-        return Ok(query_result_unwrapped);
+        Err(::diesel::result::Error::NotFound)
     }
 
     /// Partially update a planting in the database.
