@@ -39,6 +39,8 @@ pub enum Action {
     UpdatePlantingAddDate(UpdatePlantingAddDateActionPayload),
     /// An action used to update the `remove_date` of a plant.
     UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload),
+    /// An action used to update the `additional_name` of a plant.
+    UpdatePlantingAdditionalName(UpdatePlantingAdditionalNamePayload),
 }
 
 impl Action {
@@ -55,6 +57,7 @@ impl Action {
             Self::DeleteBaseLayerImage(payload) => payload.action_id,
             Self::UpdatePlantingAddDate(payload) => payload.action_id,
             Self::UpdatePlantingRemoveDate(payload) => payload.action_id,
+            Self::UpdatePlantingAdditionalName(payload) => payload.action_id,
         }
     }
 }
@@ -306,6 +309,34 @@ impl UpdatePlantingRemoveDateActionPayload {
             action_id,
             id: payload.id,
             remove_date: payload.remove_date,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlantingRemoveDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingAdditionalNamePayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    additional_name: Option<String>,
+}
+
+impl UpdatePlantingAdditionalNamePayload {
+    #[must_use]
+    pub fn new(
+        payload: &PlantingDto,
+        new_additional_name: Option<String>,
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            additional_name: new_additional_name,
         }
     }
 }

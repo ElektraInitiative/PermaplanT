@@ -69,6 +69,26 @@ impl Planting {
             .collect())
     }
 
+    /// Get all plantings that have a specific seed id.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn find_by_seed_id(
+        seed_id: i32,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<Vec<PlantingDto>> {
+        let query = plantings::table
+            .select(plantings::all_columns)
+            .filter(plantings::seed_id.eq(seed_id));
+
+        Ok(query
+            .load::<Self>(conn)
+            .await?
+            .into_iter()
+            .map(Into::into)
+            .collect())
+    }
+
     /// Create a new planting in the database.
     ///
     /// # Errors

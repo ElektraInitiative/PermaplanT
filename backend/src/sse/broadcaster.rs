@@ -139,4 +139,33 @@ impl Broadcaster {
             }
         };
     }
+
+    /// Broadcasts `msg` to all clients on all maps.
+    pub async fn broadcast_all_maps(&self, action: Action) {
+        let action_id = action.action_id().to_string();
+
+        match sse::Data::new_json(action) {
+            Ok(mut serialized_action) => {
+                let guard = self.0.lock().await;
+
+                serialized_action.set_id(action_id);
+
+                let values = guard.values();
+                for map in values {
+                    // try to send to all clients, ignoring failures
+                    // disconnected clients will get swept up by `remove_stale_clients`
+                    let _ = stream::iter(&map.clients)
+                        .map(|client| client.send(serialized_action.clone()))
+                        .buffer_unordered(15)
+                        .collect::<Vec<_>>()
+                        .await;
+                }
+            }
+            Err(err) => {
+                // log the error and continue
+                // serialization errors are also highly unlikely to happen
+                log::error!("{}", err.to_string());
+            }
+        };
+    }
 }
