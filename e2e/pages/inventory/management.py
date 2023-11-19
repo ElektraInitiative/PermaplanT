@@ -1,8 +1,8 @@
 from playwright.sync_api import Page, expect
 from e2e.pages.constants import E2E_URL
 from e2e.pages.abstract_page import AbstractPage
-from e2e.pages.seeds.create import SeedCreatePage
-from e2e.pages.seeds.edit import SeedEditPage
+from e2e.pages.inventory.create import SeedCreatePage
+from e2e.pages.inventory.edit import SeedEditPage
 
 
 class SeedManagementPage(AbstractPage):

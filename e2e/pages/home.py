@@ -3,7 +3,7 @@ from playwright.sync_api import Page, expect
 from e2e.pages.constants import E2E_URL
 from e2e.pages.abstract_page import AbstractPage
 from e2e.pages.maps.management import MapManagementPage
-from e2e.pages.seeds.management import SeedManagementPage
+from e2e.pages.inventory.management import SeedManagementPage
 
 
 class HomePage(AbstractPage):
@@ -19,7 +19,7 @@ class HomePage(AbstractPage):
         self._logout_button = page.get_by_role("button", name="Log out")
         self._hello_message = page.get_by_text(self.HELLO_MSG, exact=True)
         self._map_management_button = page.get_by_role("button", name="Maps")
-        self._seed_management_button = page.get_by_role("button", name="Seeds")
+        self._inventory_button = page.get_by_role("button", name="Inventory")
 
     def login_button_is_visible(self):
         expect(self._login_button).to_be_visible()
@@ -46,7 +46,7 @@ class HomePage(AbstractPage):
         self._page.wait_for_url("**/maps")
         return MapManagementPage(self._page)
 
-    def to_seed_management_page(self) -> SeedManagementPage:
-        self._seed_management_button.click()
+    def to_inventory_page(self) -> SeedManagementPage:
+        self._inventory_button.click()
         self._page.wait_for_url("**/seeds")
         return SeedManagementPage(self._page)

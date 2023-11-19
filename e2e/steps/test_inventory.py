@@ -1,7 +1,7 @@
 from playwright.sync_api import Page
 from pytest_bdd import scenario, when, then
 
-from e2e.pages.seeds.management import SeedManagementPage
+from e2e.pages.inventory.management import SeedManagementPage
 
 
 @scenario("features/seeds.feature", "Successful seed creation")
@@ -113,7 +113,7 @@ def search_seed_that_does_not_exist(page: Page):
 @then("the search result is empty")
 def searched_seed_does_not_exist(page: Page):
     smp = SeedManagementPage(page)
-    smp.expect_first_row_cell_exists("No seeds found")
+    smp.expect_first_row_cell_exists("Sorry, I could not find this seed.")
 
 
 @scenario("features/seeds.feature", "Archving a seed")

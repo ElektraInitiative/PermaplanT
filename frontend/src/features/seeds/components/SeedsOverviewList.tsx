@@ -88,7 +88,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
             <tbody>
               {seeds.length === 0 ? (
                 <tr>
-                  <td className="py-4 text-center">{t('seeds:no-seeds')}</td>
+                  <td className="py-4 text-center">{t('seeds:error_fetching_seed')}</td>
                 </tr>
               ) : (
                 seeds.map((seed) => (
