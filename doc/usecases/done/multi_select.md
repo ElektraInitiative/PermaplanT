@@ -31,14 +31,4 @@
 
 ## Development Progress
 
-- Change logic of selecting plants so that, instead of a single plant, all the selected plants are recognized by the map store.
-- The _Edit Plant Attributes_ section shouldn't show details of a single plant anymore when several plants are selected.
-- Exclusively for the multi-selection scenario, the _Edit Plant Attributes_ section has to be re-designed from scratch, with following data required (in visual order from top to bottom):
-  - An appropriate headline which points out that multiple plants are selected.
-  - The _Added on_ and _Removed on_ date input fields with small explanations each.
-  - The button to delete all selected plants.
-- Implementation for the various 'for all selected plants at once'-functionalities:
-  - Change _Added on_ date.
-  - Change _Removed on_ date.
-  - Delete them.
-  - Render common dates, and only those, in the respective date input fields.
+fully done
