@@ -256,6 +256,7 @@ class MapPlantingPage(AbstractPage):
         by clicking in the middle of the canvas
         and looking at the left side bar for a delete button.
         """
+        self.click_on_canvas_middle()
         expect(self._delete_plant_button).to_be_visible()
         expect(self._page.get_by_role("heading", name=plant_name)).to_be_visible()
 
