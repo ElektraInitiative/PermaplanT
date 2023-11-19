@@ -62,11 +62,11 @@ def editing_seed(page: Page):
     sep.click_edit()
 
 
-@then("the edited seed is saved and displayed correctly")
+@then("the edited seed is saved and shown on the overview page")
 def edited_seed_success(page: Page):
     smp = SeedManagementPage(page)
     smp.expect_first_row_cell_exists("Indian abelia - SUT edited (Abelia triflora)")
-    smp.expect_first_row_cell_exists("Enough")
+    smp.expect_first_row_cell_exists("Not enough")
     smp.expect_first_row_cell_exists("Not organic")
     smp.expect_first_row_cell_exists("New origin SUT")
 
@@ -90,7 +90,7 @@ def search_seed(page: Page):
     smp.search("SUT search")
 
 
-@then("I can see the seed in the table")
+@then("I can see the seed in the overview page")
 def searched_seed_exists(page: Page):
     smp = SeedManagementPage(page)
     smp.expect_first_row_cell_exists("Indian abelia - SUT search (Abelia triflora)")
@@ -137,8 +137,8 @@ def archive_seed(page: Page):
     )
 
 
-@then("the seed dissapears")
-def archived_seed_dissapears(page: Page):
+@then("the seed disapears")
+def archived_seed_disapears(page: Page):
     smp = SeedManagementPage(page)
     smp.expect_first_row_cell_does_not_exist("SUT archive")
 
