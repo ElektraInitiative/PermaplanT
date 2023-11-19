@@ -125,7 +125,7 @@ class MapPlantingPage(AbstractPage):
         self._page.get_by_test_id("plant-list-item__" + plant_name).click()
 
     def click_on_canvas_middle(self):
-        self._page.wait_for_timeout(200)
+        self._page.wait_for_timeout(2000)
         """Clicks in the middle of the canvas with a 300ms delay."""
         box = self._canvas.bounding_box()
         self._page.mouse.click(
