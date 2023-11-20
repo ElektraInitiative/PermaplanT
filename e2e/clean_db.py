@@ -33,6 +33,8 @@ def delete_maps_with_sut(dbname, user, password, host, port):
         # Delete rows with "SUT" in the name from the 'maps' table
         delete_query = "DELETE FROM maps WHERE name LIKE '%SUT%';"
         cursor.execute(delete_query)
+        delete_query = "DELETE FROM seeds WHERE name LIKE '%SUT%';"
+        cursor.execute(delete_query)
 
         # Commit the changes
         conn.commit()

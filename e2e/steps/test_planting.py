@@ -16,5 +16,4 @@ def planting_persists(mmp: MapManagementPage, mpp: MapPlantingPage, name, worker
     mpp.to_map_management_page()
     mmp.to_map_planting_page(name + worker_uuid)
     mpp.check_plant_layer()
-    mpp.click_on_canvas_middle()
     mpp.expect_plant_on_canvas("Tomato (Solanum lycopersicum)")
