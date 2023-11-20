@@ -32,8 +32,10 @@ class SeedEditPage(AbstractPage):
         self._additional_name.fill(name)
 
     def set_harvest_year(self):
-        # TODO
-        pass
+        self._harvest_year.fill("2022")
+
+    def set_best_by(self):
+        self._best_by.fill("2023-11-22")
 
     def set_origin(self, origin):
         self._origin.fill(origin)

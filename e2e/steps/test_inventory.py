@@ -13,13 +13,7 @@ def test_seeds():
 def provide_seed_details(page: Page):
     smp = SeedManagementPage(page)
     scp = smp.to_seed_create_page()
-    scp.create_a_seed(
-        "Indian abelia (Abelia triflora)",
-        "SUT create",
-        "Enough",
-        "Origin SUT",
-        "Taste SUT",
-    )
+    scp.create_a_seed(additional_name="SUT create")
 
 
 @then("I can successfully create a new seed without an error message")
@@ -40,20 +34,14 @@ def test_seed_editing():
 def create_seed_for_editing(page: Page):
     smp = SeedManagementPage(page)
     scp = smp.to_seed_create_page()
-    scp.create_a_seed(
-        plant_name="Indian abelia (Abelia triflora)",
-        additional_name="SUT editing",
-        amount="Enough",
-        origin="Origin SUT",
-        taste="Taste SUT",
-    )
+    scp.create_a_seed(additional_name="SUT editing")
 
 
 @when("I edit this seed")
 def editing_seed(page: Page):
     smp = SeedManagementPage(page)
     sep = smp.to_seed_edit_page(
-        "Indian abelia - SUT editing (Abelia triflora) Enough Organic 2023 Origin SUT Edit seed Archive seed"
+        "Indian abelia - SUT editing (Abelia triflora) Enough Organic 2022 Origin SUT Edit seed Archive seed"
     )
     sep.set_additional_name("SUT edited")
     sep.set_amount("Not enough")
@@ -80,13 +68,7 @@ def test_seed_search():
 def search_seed(page: Page):
     smp = SeedManagementPage(page)
     scp = smp.to_seed_create_page()
-    scp.create_a_seed(
-        plant_name="Indian abelia (Abelia triflora)",
-        additional_name="SUT search",
-        amount="Enough",
-        origin="Origin SUT",
-        taste="Taste SUT",
-    )
+    scp.create_a_seed(additional_name="SUT search")
     smp.search("SUT search")
 
 
@@ -125,15 +107,9 @@ def test_seed_archive():
 def archive_seed(page: Page):
     smp = SeedManagementPage(page)
     scp = smp.to_seed_create_page()
-    scp.create_a_seed(
-        plant_name="Indian abelia (Abelia triflora)",
-        additional_name="SUT archive",
-        amount="Enough",
-        origin="Origin SUT",
-        taste="Taste SUT",
-    )
+    scp.create_a_seed(additional_name="SUT archive")
     smp.archive_seed(
-        "Indian abelia - SUT archive (Abelia triflora) Enough Organic 2023 Origin SUT Edit seed Archive seed"
+        "Indian abelia - SUT archive (Abelia triflora) Enough Organic 2022 Origin SUT Edit seed Archive seed"
     )
 
 
