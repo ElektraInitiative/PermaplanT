@@ -200,6 +200,7 @@ const CreateSeedForm = ({
               id="harvest_year"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__harvest_year"
             />
             <SelectMenu
               id="quantity"
@@ -225,6 +226,7 @@ const CreateSeedForm = ({
               id="use_by"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__best_by"
             />
             <SimpleFormInput
               labelContent={t('seeds:origin')}
@@ -232,6 +234,7 @@ const CreateSeedForm = ({
               id="origin"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__origin"
             />
             <SelectMenu
               id="quality"
@@ -255,6 +258,7 @@ const CreateSeedForm = ({
               id="taste"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__taste"
             />
             <SimpleFormInput
               labelContent={t('seeds:yield')}
@@ -262,6 +266,7 @@ const CreateSeedForm = ({
               id="yield_"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__yield"
             />
             <SimpleFormInput
               labelContent={t('seeds:price')}
@@ -275,6 +280,7 @@ const CreateSeedForm = ({
               max={327.0 /* The backend won't accept any number higher than this. */}
               type="number"
               step="0.01"
+              data-testid="create-seed-form__price"
             />
             <SimpleFormInput
               type="number"
@@ -284,6 +290,7 @@ const CreateSeedForm = ({
               id="generation"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__generation"
             />
           </div>
           <div className="mb-6">
@@ -294,6 +301,7 @@ const CreateSeedForm = ({
                 setValue('notes', value);
                 setNotes(value);
               }}
+              data-testid="create-seed-form__notes"
               value={notes}
             />
           </div>

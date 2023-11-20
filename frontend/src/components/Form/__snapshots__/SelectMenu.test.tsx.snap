@@ -2,7 +2,7 @@
 
 exports[`renders correctly 1`] = `
 <div
-  data-testid="Some Label"
+  data-testid="select-menu__Some Label-select"
 >
   <label
     className="mb-2 block text-sm font-medium"

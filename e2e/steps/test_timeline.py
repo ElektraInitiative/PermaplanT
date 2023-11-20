@@ -58,5 +58,4 @@ def plant_is_hidden(mpp: MapPlantingPage):
 
 @then(parsers.parse("the plant appears"))
 def plant_appears(mpp: MapPlantingPage):
-    mpp.click_on_canvas_middle()
     mpp.expect_plant_on_canvas("Tomato (Solanum lycopersicum)")
