@@ -1,26 +1,37 @@
 import './styles/timeline.css';
 import React, { useRef, useState, useEffect, ReactNode, useCallback } from 'react';
 
-interface HorizontalScrollingPickerProps {
+export type ItemSliderItem = {
+  key: number;
+  content: ReactNode;
+};
+
+interface ItemSliderPickerProps {
   /** List of items to display */
-  items: {
-    key: number;
-    content: ReactNode;
-  }[];
+  items: ItemSliderItem[];
 
   /** Callback when an item is selected */
-  onChange: (selectedIndex: number) => void;
+  onChange: (selectedItemKey: number) => void;
 
-  leftEndReached: () => void;
-  rightEndReached: () => void;
+  /** Callback that fires when the left end of the slider is reached */
+  leftEndReached?: () => void;
 
-  /** optinal initial value */
+  /** Callback that fires when the right end of the slider is reached */
+  rightEndReached?: () => void;
+
+  /** initial value */
   value?: number;
 }
 
-const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (props) => {
-  // State to keep track of the selected item index.
-  const [selectedItem, setSelectedItem] = useState<number>(0);
+const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
+  items,
+  onChange,
+  value,
+  leftEndReached,
+  rightEndReached,
+}: ItemSliderPickerProps) => {
+  // State to keep track of the selected item key.
+  const [selectedItemKey, setSelectedItemKey] = useState<number>(0);
 
   // Refs to interact with the scrolling container and handle dragging.
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -31,9 +42,7 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
   const scrollPositionOnMouseDown = useRef<number | null>(null);
   const isScrollingToIndex = useRef<boolean>(false);
 
-  const setSelectedItemAndCheckIfBordersAreReached = (itemKey: number) => {
-    setSelectedItem(itemKey);
-
+  const checkIfBordersAreReached = () => {
     const container = containerRef.current;
     if (container) {
       const scrollLeft = container.scrollLeft;
@@ -41,27 +50,32 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
       const scrollWidth = container.scrollWidth;
 
       // Define a threshold for how close to the ends you want to trigger the callback.
-      const threshold = 500; // You can adjust this value as needed.
+      const threshold = 500;
 
       // Check if you are near the left end.
       if (scrollLeft < threshold) {
-        props.leftEndReached();
+        leftEndReached && leftEndReached();
       } else if (scrollWidth - scrollLeft - containerWidth < threshold) {
-        props.rightEndReached();
+        rightEndReached && rightEndReached();
       }
     }
   };
 
-  const getSelectedIndex = useCallback(() => {
-    return props.items.findIndex((item) => item.key === selectedItem);
-  }, [props.items, selectedItem]);
-
-  const updateSelectedItem = (itemKey: number) => {
-    setSelectedItemAndCheckIfBordersAreReached(itemKey);
-    props.onChange(itemKey);
+  const setSelectedItemAndCheckIfBordersAreReached = (itemKey: number) => {
+    setSelectedItemKey(itemKey);
+    checkIfBordersAreReached();
   };
 
-  const scrollToItem = (idx: number) => {
+  const getSelectedItemIndex = useCallback(() => {
+    return items.findIndex((item) => item.key === selectedItemKey);
+  }, [items, selectedItemKey]);
+
+  const setSelectedItemAndNotifyChanged = (selectedItemKey: number) => {
+    setSelectedItemAndCheckIfBordersAreReached(selectedItemKey);
+    onChange(selectedItemKey);
+  };
+
+  const scrollToIndex = (idx: number) => {
     const container = containerRef.current;
     if (container) {
       const items = container.getElementsByClassName('item') as HTMLCollectionOf<HTMLElement>;
@@ -81,43 +95,44 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
   const selectNextItem = () => {
     const container = containerRef.current;
     if (container) {
-      const items = container.getElementsByClassName('item') as HTMLCollectionOf<HTMLElement>;
-      const selectedIndex = getSelectedIndex();
+      const selectedIndex = getSelectedItemIndex();
 
       const newSelectedIndex = Math.min(selectedIndex + 1, items.length - 1);
       if (newSelectedIndex !== selectedIndex) {
-        updateSelectedItem(props.items[newSelectedIndex].key);
-        scrollToItem(newSelectedIndex);
+        setSelectedItemAndNotifyChanged(items[newSelectedIndex].key);
+        scrollToIndex(newSelectedIndex);
       }
     }
   };
 
   const selectPreviousItem = () => {
-    const selectedIndex = getSelectedIndex();
+    const selectedIndex = getSelectedItemIndex();
 
     const newSelectedIndex = Math.max(selectedIndex - 1, 0);
     if (newSelectedIndex !== selectedIndex) {
-      updateSelectedItem(props.items[newSelectedIndex].key);
-      scrollToItem(newSelectedIndex);
+      setSelectedItemAndNotifyChanged(items[newSelectedIndex].key);
+      scrollToIndex(newSelectedIndex);
     }
   };
 
   // Identify the selected item (item that is placed in the middle) based on the scroll position.
-  const identifySelectedElement = () => {
+  const identifySelectedElementBasedOnScrollPosition = () => {
     const container = containerRef.current;
     if (container) {
       const containerWidth = container.offsetWidth;
       const scrollLeft = container.scrollLeft;
       const middle = scrollLeft + containerWidth / 2;
-      const items = container.getElementsByClassName('item') as HTMLCollectionOf<HTMLElement>;
+      const itemElements = container.getElementsByClassName(
+        'item',
+      ) as HTMLCollectionOf<HTMLElement>;
 
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
+      for (let i = 0; i < itemElements.length; i++) {
+        const item = itemElements[i];
         const itemWidth = item.offsetWidth;
         const itemLeft = item.offsetLeft;
 
         if (itemLeft <= middle && itemLeft + itemWidth >= middle) {
-          setSelectedItemAndCheckIfBordersAreReached(props.items[i].key);
+          setSelectedItemAndCheckIfBordersAreReached(items[i].key);
           break;
         }
       }
@@ -125,13 +140,13 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
   };
 
   const handleScroll = () => {
-    // If we are autiomatically scroll to an item we dont't want to handle the scroll event.
+    // If we are autiomatically scroll to an index we dont't want to handle the scroll event.
     if (isScrollingToIndex.current) {
       isScrollingToIndex.current = false;
       return;
     }
 
-    identifySelectedElement();
+    identifySelectedElementBasedOnScrollPosition();
   };
 
   const handleMouseDown = (e: MouseEvent) => {
@@ -162,8 +177,8 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
   const handleItemClick = (e: React.MouseEvent, index: number) => {
     const container = containerRef.current;
     if (container && scrollPositionOnMouseDown.current === container.scrollLeft) {
-      updateSelectedItem(props.items[index].key);
-      scrollToItem(index);
+      setSelectedItemAndNotifyChanged(items[index].key);
+      scrollToIndex(index);
     }
   };
 
@@ -173,8 +188,8 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
       isDragging.current &&
       scrollPositionOnMouseDown.current !== containerRef.current?.scrollLeft
     ) {
-      scrollToItem(getSelectedIndex());
-      props.onChange(selectedItem);
+      scrollToIndex(getSelectedItemIndex());
+      onChange(selectedItemKey);
     }
 
     isDragging.current = false;
@@ -206,22 +221,6 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
     }
   };
 
-  // Add a useEffect hook to scroll to the selected item when items change
-  useEffect(() => {
-    const selectedIndex = getSelectedIndex();
-
-    // Ensure the selected item is within bounds
-    const selectedItemIndex = Math.min(Math.max(selectedIndex, 0), props.items.length - 1);
-    scrollToItem(selectedItemIndex);
-  }, [props.items, getSelectedIndex]);
-
-  useEffect(() => {
-    if (props.value === undefined) return;
-
-    setSelectedItem(props.value);
-    scrollToItem(props.items.findIndex((item) => item.key === props.value));
-  }, [props.value, props.items]);
-
   useEffect(() => {
     const container = containerRef.current;
     container?.addEventListener('scroll', handleScroll);
@@ -238,6 +237,23 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
       document.removeEventListener('mouseup', handleMouseUp);
     };
   });
+
+  // Add a useEffect hook to scroll to the selected item when items change from the outside.
+  useEffect(() => {
+    const selectedIndex = getSelectedItemIndex();
+
+    // Ensure the selected item is within bounds
+    const selectedItemIndex = Math.min(Math.max(selectedIndex, 0), items.length - 1);
+    scrollToIndex(selectedItemIndex);
+  }, [items, getSelectedItemIndex]);
+
+  // Add a useEffect hook to update the selected item when the selected value changes from the outside.
+  useEffect(() => {
+    if (value === undefined) return;
+
+    setSelectedItemKey(value);
+    scrollToIndex(items.findIndex((item) => item.key === value));
+  }, [value, items]);
 
   // Component to add padding to the beginning and end of the scroll container.
   const SliderPadding = () => {
@@ -265,12 +281,12 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
       >
         <SliderPadding />
 
-        {props.items.map((item, index) => {
+        {items.map((item, index) => {
           return (
             <div
               key={index}
               className={`min-w-1/5 relative w-10 px-7 pt-1 ${
-                getSelectedIndex() === index ? 'bg-gray-300 font-bold dark:bg-black' : ''
+                getSelectedItemIndex() === index ? 'bg-gray-300 font-bold dark:bg-black' : ''
               } item flex flex-col items-center justify-end`}
               onClick={(e) => handleItemClick(e, index)}
             >
@@ -285,4 +301,4 @@ const HorizontalScrollingPicker: React.FC<HorizontalScrollingPickerProps> = (pro
   );
 };
 
-export default HorizontalScrollingPicker;
+export default ItemSliderPicker;

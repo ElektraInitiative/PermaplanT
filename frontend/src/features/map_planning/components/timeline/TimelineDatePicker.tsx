@@ -1,6 +1,6 @@
-import HorizontalScrollingPicker from './HorizontalScrollingPicker';
+import HorizontalScrollingPicker from './ItemSliderPicker';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useRef, ReactNode, useState } from 'react';
+import React, { useRef, ReactNode, useState, useEffect } from 'react';
 
 const createYears = () => {
   const years = [];
@@ -148,7 +148,82 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
     { key: number; year: number; month: number; added: number; removed: number }[]
   >(calculateVisibleMonths(selectedYear));
 
-  React.useEffect(() => {
+  const handleDayChange = (key: number) => {
+    const newDay = daySliderItems[key];
+    updateSelectedDay(key);
+    if (newDay.month !== monthSliderItems[selectedMonthItem].month) {
+      setSelectedMonthItem(
+        monthSliderItems.findIndex(
+          (month) => newDay.month === month.month && newDay.year === month.year,
+        ),
+      );
+    }
+    if (newDay.year !== selectedYear) {
+      setSelectedYear(yearSliderItems.findIndex((year) => newDay.year === year.date));
+    }
+  };
+
+  const handleMonthChange = (key: number) => {
+    const newMonth = monthSliderItems[key];
+    setSelectedMonthItem(key);
+
+    if (newMonth.year !== selectedYear) {
+      setSelectedYear(yearSliderItems.findIndex((year) => newMonth.year === year.date));
+    }
+
+    if (daySliderItems[selectedDayItem].month !== newMonth.month) {
+      const newDay = daySliderItems.find(
+        (day) =>
+          newMonth.month === day.month &&
+          newMonth.year === day.year &&
+          day.day === daySliderItems[selectedDayItem].day,
+      );
+      const newDayKey = newDay?.key || getLastDayItemOfMonth(newMonth.month, newMonth.year) || 0;
+      setVisibleDays(calculateVisibleDays(newDayKey));
+      updateSelectedDay(newDayKey);
+    }
+  };
+
+  const handleYearChange = (key: number) => {
+    const newYear = yearSliderItems[key];
+    setSelectedYear(key);
+
+    if (monthSliderItems[selectedMonthItem].year !== newYear.date) {
+      const newMonthKey =
+        monthSliderItems.find(
+          (month) =>
+            newYear.date === month.year &&
+            month.month === monthSliderItems[selectedMonthItem].month,
+        )?.key || 0;
+
+      setVisibleMonts(calculateVisibleMonths(key));
+      setSelectedMonthItem(
+        monthSliderItems.findIndex(
+          (month) =>
+            newYear.date === month.year &&
+            month.month === monthSliderItems[selectedMonthItem].month,
+        ),
+      );
+
+      const newMonth = monthSliderItems[newMonthKey];
+      if (
+        daySliderItems[selectedDayItem].month !== newMonth.month ||
+        daySliderItems[selectedDayItem].year !== newMonth.year
+      ) {
+        const newDay = daySliderItems.find(
+          (day) =>
+            newMonth.month === day.month &&
+            newMonth.year === day.year &&
+            day.day === daySliderItems[selectedDayItem].day,
+        );
+        const newDayKey = newDay?.key || getLastDayItemOfMonth(newMonth.month, newMonth.year) || 0;
+        setVisibleDays(calculateVisibleDays(newDayKey));
+        updateSelectedDay(newDayKey);
+      }
+    }
+  };
+
+  useEffect(() => {
     const timeoutId = setTimeout(() => {
       const newDay = daySliderItems[selectedDayItem];
       onSelectDate(`${newDay.year}-${newDay.month + 1}-${newDay.day + 1}`);
@@ -168,51 +243,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
             removed: year.removed,
           }),
         }))}
-        onChange={(key) => {
-          const newYear = yearSliderItems[key];
-          setSelectedYear(key);
-
-          if (monthSliderItems[selectedMonthItem].year !== newYear.date) {
-            const newMonthKey =
-              monthSliderItems.find(
-                (month) =>
-                  newYear.date === month.year &&
-                  month.month === monthSliderItems[selectedMonthItem].month,
-              )?.key || 0;
-
-            setVisibleMonts(calculateVisibleMonths(key));
-            setSelectedMonthItem(
-              monthSliderItems.findIndex(
-                (month) =>
-                  newYear.date === month.year &&
-                  month.month === monthSliderItems[selectedMonthItem].month,
-              ),
-            );
-
-            const newMonth = monthSliderItems[newMonthKey];
-            if (
-              daySliderItems[selectedDayItem].month !== newMonth.month ||
-              daySliderItems[selectedDayItem].year !== newMonth.year
-            ) {
-              const newDay = daySliderItems.find(
-                (day) =>
-                  newMonth.month === day.month &&
-                  newMonth.year === day.year &&
-                  day.day === daySliderItems[selectedDayItem].day,
-              );
-              const newDayKey =
-                newDay?.key || getLastDayItemOfMonth(newMonth.month, newMonth.year) || 0;
-              setVisibleDays(calculateVisibleDays(newDayKey));
-              updateSelectedDay(newDayKey);
-            }
-          }
-        }}
-        leftEndReached={() => {
-          console.log('left end reached');
-        }}
-        rightEndReached={() => {
-          console.log('right end reached');
-        }}
+        onChange={handleYearChange}
         value={selectedYear}
       />
       <HorizontalScrollingPicker
@@ -225,27 +256,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
             disabled: month.year !== yearSliderItems[selectedYear].date,
           }),
         }))}
-        onChange={(key) => {
-          const newMonth = monthSliderItems[key];
-          setSelectedMonthItem(key);
-
-          if (newMonth.year !== selectedYear) {
-            setSelectedYear(yearSliderItems.findIndex((year) => newMonth.year === year.date));
-          }
-
-          if (daySliderItems[selectedDayItem].month !== newMonth.month) {
-            const newDay = daySliderItems.find(
-              (day) =>
-                newMonth.month === day.month &&
-                newMonth.year === day.year &&
-                day.day === daySliderItems[selectedDayItem].day,
-            );
-            const newDayKey =
-              newDay?.key || getLastDayItemOfMonth(newMonth.month, newMonth.year) || 0;
-            setVisibleDays(calculateVisibleDays(newDayKey));
-            updateSelectedDay(newDayKey);
-          }
-        }}
+        onChange={handleMonthChange}
         leftEndReached={() => {
           if (visibleMonths[0].key > 0) {
             setVisibleMonts(calculateVisibleMonths(selectedYear));
@@ -271,20 +282,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
             ),
           }),
         }))}
-        onChange={(key) => {
-          const newDay = daySliderItems[key];
-          updateSelectedDay(key);
-          if (newDay.month !== monthSliderItems[selectedMonthItem].month) {
-            setSelectedMonthItem(
-              monthSliderItems.findIndex(
-                (month) => newDay.month === month.month && newDay.year === month.year,
-              ),
-            );
-          }
-          if (newDay.year !== selectedYear) {
-            setSelectedYear(yearSliderItems.findIndex((year) => newDay.year === year.date));
-          }
-        }}
+        onChange={handleDayChange}
         leftEndReached={() => {
           if (visibleDays[0].key > 0) {
             setVisibleDays(calculateVisibleDays(selectedDayItem));
