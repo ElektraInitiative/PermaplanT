@@ -181,7 +181,7 @@ const CreateSeedForm = ({
                 error message in case the specified pattern does not match. */}
             <SimpleFormInput
               aria-label="Additional Name"
-              labelText={t('seeds:additional_name')}
+              labelContent={t('seeds:additional_name')}
               placeholder=""
               required={true}
               id="name"
@@ -193,13 +193,14 @@ const CreateSeedForm = ({
             <SimpleFormInput
               type="number"
               aria-label="Harvest Year"
-              labelText={t('seeds:harvest_year')}
+              labelContent={t('seeds:harvest_year')}
               defaultValue={currentYear}
               placeholder={currentYear.toString()}
               required={true}
               id="harvest_year"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__harvest_year"
             />
             <SelectMenu
               id="quantity"
@@ -220,18 +221,20 @@ const CreateSeedForm = ({
             />
             <SimpleFormInput
               type="date"
-              labelText={t('seeds:use_by')}
+              labelContent={t('seeds:use_by')}
               placeholder=""
               id="use_by"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__best_by"
             />
             <SimpleFormInput
-              labelText={t('seeds:origin')}
+              labelContent={t('seeds:origin')}
               placeholder={t('seeds:create_seed_form.placeholder_origin')}
               id="origin"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__origin"
             />
             <SelectMenu
               id="quality"
@@ -250,21 +253,23 @@ const CreateSeedForm = ({
               onChange={onChange}
             />
             <SimpleFormInput
-              labelText={t('seeds:taste')}
+              labelContent={t('seeds:taste')}
               placeholder={t('seeds:create_seed_form.placeholder_taste')}
               id="taste"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__taste"
             />
             <SimpleFormInput
-              labelText={t('seeds:yield')}
+              labelContent={t('seeds:yield')}
               placeholder={t('seeds:create_seed_form.placeholder_yield')}
               id="yield_"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__yield"
             />
             <SimpleFormInput
-              labelText={t('seeds:price')}
+              labelContent={t('seeds:price')}
               placeholder={t('seeds:create_seed_form.placeholder_price')}
               id="price"
               register={register}
@@ -275,15 +280,17 @@ const CreateSeedForm = ({
               max={327.0 /* The backend won't accept any number higher than this. */}
               type="number"
               step="0.01"
+              data-testid="create-seed-form__price"
             />
             <SimpleFormInput
               type="number"
               min={0}
-              labelText={t('seeds:generation')}
+              labelContent={t('seeds:generation')}
               placeholder={t('seeds:create_seed_form.placeholder_generation')}
               id="generation"
               register={register}
               onChange={onChange}
+              data-testid="create-seed-form__generation"
             />
           </div>
           <div className="mb-6">
@@ -294,6 +301,7 @@ const CreateSeedForm = ({
                 setValue('notes', value);
                 setNotes(value);
               }}
+              data-testid="create-seed-form__notes"
               value={notes}
             />
           </div>

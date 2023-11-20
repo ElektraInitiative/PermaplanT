@@ -95,7 +95,7 @@ export default function MapEditForm() {
         <div className="mr-2">
           <SimpleFormInput
             id="latitudeInput"
-            labelText={t('maps:edit.latitude_label')}
+            labelContent={t('maps:edit.latitude_label')}
             defaultValue={updateObject.location?.latitude}
             onChange={(e) =>
               setUpdateObject({
@@ -112,7 +112,7 @@ export default function MapEditForm() {
         </div>
         <SimpleFormInput
           id="longitudeInput"
-          labelText={t('maps:edit.longitude_label')}
+          labelContent={t('maps:edit.longitude_label')}
           defaultValue={updateObject.location?.longitude}
           onChange={(e) =>
             setUpdateObject({
@@ -181,7 +181,7 @@ export default function MapEditForm() {
             <PageTitle title={t('maps:edit.title')} />
             <SimpleFormInput
               id="nameInput"
-              labelText="Name"
+              labelContent="Name"
               required
               defaultValue={updateObject.name}
               onChange={(e) => {

@@ -35,7 +35,6 @@ def click_redo(mpp: MapPlantingPage):
 def plant_is_back(mpp: MapPlantingPage):
     # Click on top left to reset selection
     mpp.click_on_canvas_top_left()
-    mpp.click_on_canvas_middle()
     mpp.expect_plant_on_canvas("Tomato (Solanum lycopersicum)")
 
 

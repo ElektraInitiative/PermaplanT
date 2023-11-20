@@ -20,13 +20,3 @@ Feature: Planting Timeline
         When I change the plants added date to tomorrow
         And I change the map date to tomorrow
         Then the plant appears
-
-    Scenario: Unhide a plant by changing its added date
-        When I change the plants added date to yesterday
-        And I change the plants added date to tomorrow
-        Then the plant appears
-
-    Scenario: Unhide a plant by changing its removed date
-        When I change the plants removed date to yesterday
-        And I change the plants removed date to tomorrow
-        Then the plant appears

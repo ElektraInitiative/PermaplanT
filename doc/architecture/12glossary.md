@@ -123,6 +123,12 @@
 
 ## Technical
 
+- usability:  
+  The extent to which a system, product or service can be used by specified users to achieve specified goals with effectiveness, efficiency and satisfaction in a specified context of use.
+- user interface (UI):  
+  The set of all the components of an interactive system that provide information and controls for the user to accomplish specific tasks with the interactive system.
+- user experience (UX):  
+  Combination of user's perceptions and responses that result from the use and/or anticipated use of a system, product or service.
 - Nextcloud map:  
   A Nextcloud app which is used as overview where which garden is, see [here](https://apps.nextcloud.com/apps/maps).
 - GeoMap:  

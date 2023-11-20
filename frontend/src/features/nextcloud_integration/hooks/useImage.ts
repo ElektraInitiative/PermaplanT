@@ -27,7 +27,7 @@ export function useImage({
 }: UseImageOptions) {
   const webdav = useNextcloudWebDavClient();
 
-  const { isError, isLoading, data } = useQuery(['image', path], {
+  const { isError, isLoading, data } = useQuery(['webdav', path], {
     queryFn: () => getImage(path, webdav as WebDAVClient),
     refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,

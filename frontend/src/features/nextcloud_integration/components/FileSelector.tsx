@@ -93,7 +93,7 @@ export const FileSelector = (props: FileSelectorProps) => {
         <div className="flex-1">
           <SimpleFormInput
             id="FileInput"
-            labelText={t('fileSelector:search')}
+            labelContent={t('fileSelector:search')}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
