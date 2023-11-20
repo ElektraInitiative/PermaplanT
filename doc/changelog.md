@@ -69,7 +69,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Display the plant icon next to the cursor in placement mode _(Samuel)_
 - _()_
 - _()_
 - _()_
