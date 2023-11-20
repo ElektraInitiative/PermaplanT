@@ -9,16 +9,12 @@ export type ItemSliderItem = {
 interface ItemSliderPickerProps {
   /** List of items to display */
   items: ItemSliderItem[];
-
   /** Callback when an item is selected */
   onChange: (selectedItemKey: number) => void;
-
   /** Callback that fires when the left end of the slider is reached */
   leftEndReached?: () => void;
-
   /** Callback that fires when the right end of the slider is reached */
   rightEndReached?: () => void;
-
   /** initial value */
   value?: number;
 }
@@ -241,8 +237,6 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
   // Add a useEffect hook to scroll to the selected item when items change from the outside.
   useEffect(() => {
     const selectedIndex = getSelectedItemIndex();
-
-    // Ensure the selected item is within bounds
     const selectedItemIndex = Math.min(Math.max(selectedIndex, 0), items.length - 1);
     scrollToIndex(selectedItemIndex);
   }, [items, getSelectedItemIndex]);
@@ -285,9 +279,17 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
           return (
             <div
               key={index}
-              className={`min-w-1/5 relative w-10 px-7 pt-1 ${
-                getSelectedItemIndex() === index ? 'bg-gray-300 font-bold dark:bg-black' : ''
-              } item flex flex-col items-center justify-end`}
+              className={`min-w-1/5 relative w-10 border-4 px-7 pb-1 pt-1  ${
+                getSelectedItemIndex() === index
+                  ? 'bg-gray-300 font-bold text-black dark:bg-black'
+                  : ''
+              }
+              ${
+                getSelectedItemIndex() === index && document.activeElement === containerRef.current
+                  ? 'border-blue-300'
+                  : 'border-white'
+              }
+              item flex flex-col items-center justify-end`}
               onClick={(e) => handleItemClick(e, index)}
             >
               {item.content}

@@ -9,6 +9,7 @@ import useMapStore from '../store/MapStore';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import { convertToDate } from '../utils/date-utils';
 import { BaseStage } from './BaseStage';
+import TimelineDatePicker from './timeline/TimelineDatePicker';
 import { LayerList } from './toolbar/LayerList';
 import { Toolbar } from './toolbar/Toolbar';
 import {
@@ -19,7 +20,6 @@ import {
 } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
-import TimelineDatePicker from '@/components/TimelineDatePicker/TimelineDatePicker';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';

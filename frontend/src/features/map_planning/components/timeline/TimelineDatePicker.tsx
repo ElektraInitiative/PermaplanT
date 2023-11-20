@@ -1,232 +1,187 @@
+import useGetTimeLineEvents from '../../hooks/useGetTimelineEvents';
 import HorizontalScrollingPicker from './ItemSliderPicker';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useRef, ReactNode, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const createYears = () => {
-  const years = [];
-  let key = 0;
-  for (let year = 1930; year <= 2030; year++) {
-    const added = Math.floor(Math.random() * 21); // Random value between 0 and 100
-    const removed = Math.floor(Math.random() * 21); // Random value between 0 and 100
+function getMonthName(monthNumber: number, language?: string) {
+  const date = new Date();
+  date.setMonth(monthNumber - 1);
 
-    years.push({
-      key: key++,
-      date: year,
-      added,
-      removed,
-    });
-  }
-  return years;
+  return date.toLocaleString(language, { month: 'short' });
+}
+
+export type DayItem = {
+  key: number;
+  year: number;
+  month: number;
+  day: number;
+  added: number;
+  removed: number;
 };
 
-const createMonths = () => {
-  const months = [];
-  let key = 0;
-  for (let year = 1930; year <= 2030; year++) {
-    for (let month = 0; month < 12; month++) {
-      const added = Math.floor(Math.random() * 21); // Random value between 0 and 100
-      const removed = Math.floor(Math.random() * 21); // Random value between 0 and 100
-
-      months.push({
-        key: key++,
-        year: year,
-        month: month,
-        added,
-        removed,
-      });
-    }
-  }
-  return months;
+export type MonthItem = {
+  key: number;
+  year: number;
+  month: number;
+  added: number;
+  removed: number;
 };
 
-const createDays = () => {
-  const days = [];
-  let key = 0;
-  for (let year = 1930; year <= 2030; year++) {
-    for (let month = 0; month < 12; month++) {
-      for (let day = 0; day <= (month == 2 ? 28 : 30); day++) {
-        const added = Math.floor(Math.random() * 21); // Random value between 0 and 100
-        const removed = Math.floor(Math.random() * 21); // Random value between 0 and 100
-
-        days.push({
-          key: key++,
-          year: year,
-          month: month,
-          day: day,
-          added,
-          removed,
-        });
-      }
-    }
-  }
-  return days;
+export type YearItem = {
+  key: number;
+  year: number;
+  added: number;
+  removed: number;
 };
-
-const getMonthName = (month: string) => {
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'June',
-    'July',
-    'Aug',
-    'Sept',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  return monthNames[parseInt(month)];
-};
-
-const yearSliderItems = createYears();
-const monthSliderItems = createMonths();
-const daySliderItems = createDays();
 
 type TimelineDatePickerProps = {
   /** Is called if the user selects a date from the timeline.
    * The date is passed as a string in the format 'YYYY-MM-DD'
    */
   onSelectDate: (date: string) => void;
+
   /** The default date to be selected on the timeline. */
   defaultDate: string;
 };
 
 const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerProps) => {
-  console.log('rendering TimelineDatePicker');
+  const defaultYear = new Date(defaultDate).getFullYear();
+  const defaultMonth = new Date(defaultDate).getMonth() + 1;
+  const defaultDay = new Date(defaultDate).getDate();
+
+  const { dailyTimeLineEvents, monthlyTimeLineEvents, yearlyTimeLineEvents } =
+    useGetTimeLineEvents();
+
+  const { i18n } = useTranslation();
 
   const [selectedYear, setSelectedYear] = useState<number>(
-    yearSliderItems.findIndex((year) => year.date === parseInt(defaultDate.split('-')[0])),
+    yearlyTimeLineEvents.findIndex((yearSliderItem) => yearSliderItem.year === defaultYear),
   );
 
   const [selectedMonthItem, setSelectedMonthItem] = useState<number>(
-    monthSliderItems.findIndex(
-      (month) =>
-        month.year === parseInt(defaultDate.split('-')[0]) &&
-        month.month === parseInt(defaultDate.split('-')[1]) - 1,
+    monthlyTimeLineEvents.findIndex(
+      (month) => month.year === defaultYear && month.month === defaultMonth,
     ),
   );
 
   const [selectedDayItem, setSelectedDay] = useState<number>(
-    daySliderItems.findIndex(
-      (day) =>
-        day.year === parseInt(defaultDate.split('-')[0]) &&
-        day.month === parseInt(defaultDate.split('-')[1]) - 1 &&
-        day.day === parseInt(defaultDate.split('-')[2]) - 1,
+    dailyTimeLineEvents.findIndex(
+      (day) => day.year === defaultYear && day.month === defaultMonth && day.day === defaultDay,
     ),
   );
 
   const calculateVisibleDays = (selectedDay: number) => {
-    return daySliderItems.filter(
+    return dailyTimeLineEvents.filter(
       (day) =>
-        day.key >= daySliderItems[selectedDay].key - 100 &&
-        day.key <= daySliderItems[selectedDay].key + 100,
+        day.key >= dailyTimeLineEvents[selectedDay].key - 100 &&
+        day.key <= dailyTimeLineEvents[selectedDay].key + 100,
     );
   };
 
-  const calculateVisibleMonths = (year: number) => {
-    return monthSliderItems.filter(
+  const calculateVisibleMonths = (yearItemKey: number) => {
+    return monthlyTimeLineEvents.filter(
       (month) =>
-        month.year >= yearSliderItems[year].date - 3 &&
-        month.year <= yearSliderItems[year].date + 3,
+        month.year >= yearlyTimeLineEvents[yearItemKey].year - 3 &&
+        month.year <= yearlyTimeLineEvents[yearItemKey].year + 3,
     );
   };
 
   const getLastDayItemOfMonth = (month: number, year: number) => {
-    return daySliderItems.filter((day) => day.month === month && day.year === year).pop()?.key;
+    return dailyTimeLineEvents.filter((day) => day.month === month && day.year === year).pop()?.key;
   };
 
-  const updateSelectedDay = (newDayKey: number) => {
-    setSelectedDay(newDayKey);
-  };
+  const [visibleDays, setVisibleDays] = useState<DayItem[]>(calculateVisibleDays(selectedDayItem));
+  const [visibleMonths, setVisibleMonths] = useState<MonthItem[]>(
+    calculateVisibleMonths(selectedYear),
+  );
 
-  const [visibleDays, setVisibleDays] = useState<
-    { key: number; year: number; month: number; day: number; added: number; removed: number }[]
-  >(calculateVisibleDays(selectedDayItem));
-  const [visibleMonths, setVisibleMonts] = useState<
-    { key: number; year: number; month: number; added: number; removed: number }[]
-  >(calculateVisibleMonths(selectedYear));
+  const handleDayChange = (itemKey: number) => {
+    const selectedDayItem = dailyTimeLineEvents[itemKey];
+    setSelectedDay(itemKey);
 
-  const handleDayChange = (key: number) => {
-    const newDay = daySliderItems[key];
-    updateSelectedDay(key);
-    if (newDay.month !== monthSliderItems[selectedMonthItem].month) {
+    // update month if new day is in different month than previous selected day
+    if (selectedDayItem.month !== monthlyTimeLineEvents[selectedMonthItem].month) {
       setSelectedMonthItem(
-        monthSliderItems.findIndex(
-          (month) => newDay.month === month.month && newDay.year === month.year,
+        monthlyTimeLineEvents.findIndex(
+          (month) => selectedDayItem.month === month.month && selectedDayItem.year === month.year,
         ),
       );
     }
-    if (newDay.year !== selectedYear) {
-      setSelectedYear(yearSliderItems.findIndex((year) => newDay.year === year.date));
+
+    // update year if new day is in different year than previous selected day
+    if (selectedDayItem.year !== selectedYear) {
+      setSelectedYear(
+        yearlyTimeLineEvents.findIndex(
+          (yearSliderItem) => selectedDayItem.year === yearSliderItem.year,
+        ),
+      );
     }
   };
 
   const handleMonthChange = (key: number) => {
-    const newMonth = monthSliderItems[key];
+    const newMonthItem = monthlyTimeLineEvents[key];
     setSelectedMonthItem(key);
 
-    if (newMonth.year !== selectedYear) {
-      setSelectedYear(yearSliderItems.findIndex((year) => newMonth.year === year.date));
+    // update year if new month is in different year than previous selected month
+    if (newMonthItem.year !== selectedYear) {
+      setSelectedYear(
+        yearlyTimeLineEvents.findIndex(
+          (yearSliderItem) => newMonthItem.year === yearSliderItem.year,
+        ),
+      );
     }
 
-    if (daySliderItems[selectedDayItem].month !== newMonth.month) {
-      const newDay = daySliderItems.find(
-        (day) =>
-          newMonth.month === day.month &&
-          newMonth.year === day.year &&
-          day.day === daySliderItems[selectedDayItem].day,
-      );
-      const newDayKey = newDay?.key || getLastDayItemOfMonth(newMonth.month, newMonth.year) || 0;
-      setVisibleDays(calculateVisibleDays(newDayKey));
-      updateSelectedDay(newDayKey);
+    // update day if new month has changed
+    if (dailyTimeLineEvents[selectedDayItem].month !== newMonthItem.month) {
+      selectNewDayIfMonthChanged(newMonthItem);
     }
   };
 
-  const handleYearChange = (key: number) => {
-    const newYear = yearSliderItems[key];
-    setSelectedYear(key);
+  const handleYearChange = (yearItemKey: number) => {
+    const newYearItem = yearlyTimeLineEvents[yearItemKey];
+    setSelectedYear(yearItemKey);
 
-    if (monthSliderItems[selectedMonthItem].year !== newYear.date) {
-      const newMonthKey =
-        monthSliderItems.find(
-          (month) =>
-            newYear.date === month.year &&
-            month.month === monthSliderItems[selectedMonthItem].month,
-        )?.key || 0;
-
-      setVisibleMonts(calculateVisibleMonths(key));
-      setSelectedMonthItem(
-        monthSliderItems.findIndex(
-          (month) =>
-            newYear.date === month.year &&
-            month.month === monthSliderItems[selectedMonthItem].month,
-        ),
+    if (monthlyTimeLineEvents[selectedMonthItem].year !== newYearItem.year) {
+      const newMonthItem = monthlyTimeLineEvents.find(
+        (month) =>
+          newYearItem.year === month.year &&
+          month.month === monthlyTimeLineEvents[selectedMonthItem].month,
       );
 
-      const newMonth = monthSliderItems[newMonthKey];
-      if (
-        daySliderItems[selectedDayItem].month !== newMonth.month ||
-        daySliderItems[selectedDayItem].year !== newMonth.year
-      ) {
-        const newDay = daySliderItems.find(
-          (day) =>
-            newMonth.month === day.month &&
-            newMonth.year === day.year &&
-            day.day === daySliderItems[selectedDayItem].day,
-        );
-        const newDayKey = newDay?.key || getLastDayItemOfMonth(newMonth.month, newMonth.year) || 0;
-        setVisibleDays(calculateVisibleDays(newDayKey));
-        updateSelectedDay(newDayKey);
+      if (newMonthItem) {
+        setVisibleMonths(calculateVisibleMonths(yearItemKey));
+        setSelectedMonthItem(newMonthItem.key);
+
+        if (
+          dailyTimeLineEvents[selectedDayItem].month !== newMonthItem.month ||
+          dailyTimeLineEvents[selectedDayItem].year !== newMonthItem.year
+        ) {
+          selectNewDayIfMonthChanged(newMonthItem);
+        }
       }
     }
   };
 
+  const selectNewDayIfMonthChanged = (newMonthItem: MonthItem) => {
+    const newDay = dailyTimeLineEvents.find(
+      (day) =>
+        newMonthItem.month === day.month &&
+        newMonthItem.year === day.year &&
+        day.day === dailyTimeLineEvents[selectedDayItem].day,
+    );
+
+    const newDayKey =
+      newDay?.key || getLastDayItemOfMonth(newMonthItem.month, newMonthItem.year) || 0;
+    setVisibleDays(calculateVisibleDays(newDayKey));
+    setSelectedDay(newDayKey);
+  };
+
+  //debounced submit
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const newDay = daySliderItems[selectedDayItem];
-      onSelectDate(`${newDay.year}-${newDay.month + 1}-${newDay.day + 1}`);
+      const newDay = dailyTimeLineEvents[selectedDayItem];
+      onSelectDate(`${newDay.year}-${newDay.month}-${newDay.day}`);
     }, 500);
     return () => clearTimeout(timeoutId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,50 +190,50 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
   return (
     <>
       <HorizontalScrollingPicker
-        items={yearSliderItems.map((year) => ({
-          key: year.key,
+        items={yearlyTimeLineEvents.map((yearSliderItem) => ({
+          key: yearSliderItem.key,
           content: TimelineDatePickerItem({
-            text: year.date.toString(),
-            added: year.added,
-            removed: year.removed,
+            text: yearSliderItem.year.toString(),
+            added: yearSliderItem.added,
+            removed: yearSliderItem.removed,
           }),
         }))}
         onChange={handleYearChange}
         value={selectedYear}
       />
       <HorizontalScrollingPicker
-        items={visibleMonths.map((month) => ({
-          key: month.key,
+        items={visibleMonths.map((monthSliderItem) => ({
+          key: monthSliderItem.key,
           content: TimelineDatePickerItem({
-            text: getMonthName(month.month.toString()),
-            added: month.added,
-            removed: month.removed,
-            disabled: month.year !== yearSliderItems[selectedYear].date,
+            text: getMonthName(monthSliderItem.month, i18n.resolvedLanguage),
+            added: monthSliderItem.added,
+            removed: monthSliderItem.removed,
+            disabled: monthSliderItem.year !== yearlyTimeLineEvents[selectedYear].year,
           }),
         }))}
         onChange={handleMonthChange}
         leftEndReached={() => {
           if (visibleMonths[0].key > 0) {
-            setVisibleMonts(calculateVisibleMonths(selectedYear));
+            setVisibleMonths(calculateVisibleMonths(selectedYear));
           }
         }}
         rightEndReached={() => {
-          if (visibleMonths[visibleMonths.length - 1].key < monthSliderItems.length - 1) {
-            setVisibleMonts(calculateVisibleMonths(selectedYear));
+          if (visibleMonths[visibleMonths.length - 1].key < monthlyTimeLineEvents.length - 1) {
+            setVisibleMonths(calculateVisibleMonths(selectedYear));
           }
         }}
         value={selectedMonthItem}
       />
       <HorizontalScrollingPicker
-        items={visibleDays.map((day) => ({
-          key: day.key,
+        items={visibleDays.map((daySliderItem) => ({
+          key: daySliderItem.key,
           content: TimelineDatePickerItem({
-            text: (day.day + 1).toString(),
-            added: day.added,
-            removed: day.removed,
+            text: daySliderItem.day.toString(),
+            added: daySliderItem.added,
+            removed: daySliderItem.removed,
             disabled: !(
-              day.month == monthSliderItems[selectedMonthItem].month &&
-              day.year == monthSliderItems[selectedMonthItem].year
+              daySliderItem.month == monthlyTimeLineEvents[selectedMonthItem].month &&
+              daySliderItem.year == monthlyTimeLineEvents[selectedMonthItem].year
             ),
           }),
         }))}
@@ -289,7 +244,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
           }
         }}
         rightEndReached={() => {
-          if (visibleDays[visibleDays.length - 1].key < daySliderItems.length - 1) {
+          if (visibleDays[visibleDays.length - 1].key < dailyTimeLineEvents.length - 1) {
             setVisibleDays(calculateVisibleDays(selectedDayItem));
           }
         }}
@@ -335,9 +290,7 @@ function TimelineDatePickerItem({
           ></div>
         </div>
       </div>
-      <span className="select-none" color={disabled ? 'gray' : 'black'}>
-        {text}
-      </span>
+      <span className={`select-none ${disabled ? 'text-gray-400' : 'text-black'}`}>{text}</span>
     </div>
   );
 }
