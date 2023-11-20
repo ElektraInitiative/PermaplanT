@@ -70,7 +70,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Plant layer is selected per default _(Samuel)_
 - _()_
 - _()_
 - _()_
