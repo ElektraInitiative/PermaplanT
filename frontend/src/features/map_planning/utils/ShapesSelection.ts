@@ -1,11 +1,8 @@
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
-import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
 import { Transformer } from 'konva/lib/shapes/Transformer';
-
-import Group = Konva.Group;
 
 // Keep track of our previously selected shapes so we can trigger the selection
 // only if we have new shapes in our bounds. This fixes a bug where deselection
@@ -30,8 +27,6 @@ export const selectIntersectingShapes = (
     //filter out layers which are not selected
     ?.filter((layer) => layer.attrs.listening)
     // All PermaplanT layers are displayed as a single Konva layer.
-    // It might be possible to
-    .flatMap((layer) => (layer instanceof Group ? layer.children : layer))
     .filter((shape) => {
       // To exclude Konva's transformer, check if node contains children.
       // 'listening' is explicitly checked for '!== false' because
