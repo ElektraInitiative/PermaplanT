@@ -71,15 +71,19 @@ function usePlantLayer({ mapId, layerId }: UseLayerParams) {
 /**
  * Hook that initializes the base layer by fetching it and adding it to the store.
  */
-function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
+function useBaseLayer({ mapId, layerId }: UseLayerParams) {
   const query = useQuery({
     queryKey: ['baselayer', mapId, layerId],
     queryFn: () => getBaseLayerImage(mapId, layerId),
     refetchOnWindowFocus: false,
     cacheTime: 0,
-    staleTime: 0,
-    enabled,
+    staleTime: Infinity,
+    enabled: Boolean(layerId),
   });
+
+  if (query.error) {
+    console.error(query.error);
+  }
 
   useEffect(() => {
     if (!query?.data) return;
@@ -97,9 +101,10 @@ function useInitializeMap() {
   const mapId = useMapId();
   const { data: layers, error } = useGetLayers(mapId);
   const { t } = useTranslation(['layers']);
+  const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
 
   if (error) {
-    console.log(error);
+    console.error(error);
     errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
   }
 
@@ -126,21 +131,13 @@ function useInitializeMap() {
     mapId,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
     layerId: baseLayer?.id!,
-    enabled: !!baseLayer?.id,
   });
 
+  // select plant layer per default
   useEffect(() => {
-    if (!baseLayer) return;
-
-    useMapStore.setState((state) => ({
-      ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        selectedLayer: baseLayer,
-        mapId,
-      },
-    }));
-  }, [mapId, baseLayer]);
+    if (!plantLayer) return;
+    updateSelectedLayer(plantLayer);
+  }, [mapId, plantLayer]);
 
   const isLoading = !layers;
 
