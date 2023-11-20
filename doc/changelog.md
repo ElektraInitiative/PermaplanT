@@ -190,6 +190,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: Update doc _(4ydan)_
 - Doc: Update testing strategy #864 _(4ydan)_
 - E2E: Add new e2e test for undoing deletions #889 _(4ydan)_
+- E2E: Seeds tests _(4ydan)_
 - CI: Add changelog test to CI, only in PR stages #857 _(4ydan)_
 - E2E: Worker uuids fixture #837 _(4ydan)_
 - GIT: Add data analysis jupyter notebook #843 _(4ydan)_

@@ -125,7 +125,7 @@ class MapPlantingPage(AbstractPage):
         self._page.get_by_test_id("plant-list-item__" + plant_name).click()
 
     def click_on_canvas_middle(self):
-        self._page.wait_for_timeout(200)
+        self._page.wait_for_timeout(2000)
         """Clicks in the middle of the canvas with a 300ms delay."""
         box = self._canvas.bounding_box()
         self._page.mouse.click(
@@ -256,6 +256,7 @@ class MapPlantingPage(AbstractPage):
         by clicking in the middle of the canvas
         and looking at the left side bar for a delete button.
         """
+        self.click_on_canvas_middle()
         expect(self._delete_plant_button).to_be_visible()
         expect(self._page.get_by_role("heading", name=plant_name)).to_be_visible()
 
