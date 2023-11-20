@@ -11,12 +11,8 @@ export function PlantCursor() {
   );
   const [pos, setPos] = useState({ x: 0, y: 0 });
 
-  const [width, setWidth] = useState(60);
-  const [height, setHeight] = useState(60);
-
-  if (stage) {
-    stage.on('mousemove.plants', () => {});
-  }
+  const [width] = useState(60);
+  const [height] = useState(60);
 
   useEffect(() => {
     if (!stage || !selectedPlantForPlanting) return;
@@ -25,7 +21,6 @@ export function PlantCursor() {
       const pos = stage.getRelativePointerPosition();
       if (pos !== null) setPos(pos);
     });
-    console.log(selectedPlantForPlanting);
 
     return () => {
       stage.off('mousemove.plants');
