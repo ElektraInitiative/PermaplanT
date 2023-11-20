@@ -137,7 +137,7 @@ function useInitializeMap() {
   useEffect(() => {
     if (!plantLayer) return;
     updateSelectedLayer(plantLayer);
-  }, [mapId, plantLayer]);
+  }, [mapId, plantLayer, updateSelectedLayer]);
 
   const isLoading = !layers;
 
