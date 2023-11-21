@@ -17,18 +17,18 @@ def background_image_stays(
     mpp.to_map_management_page()
     mmp.verify()
     mmp.to_map_planting_page(map_name + worker_uuid)
+    mpp.check_base_layer()
     mpp.expect_background_image(image_name)
 
 
 # Scenario 2: Successfully rotate the background image
-# This test might be flaky, since it depends on the image to be loaded before
-# the rotation is applied and to process the input before navigating away from the page.
 
 
 @when(parsers.parse("I change the rotation of the image to {val} degrees"))
 def change_rotation(mpp: MapPlantingPage, val):
     mpp.select_birdie_background()
     mpp.expect_background_image("/Photos/Birdie.jpg")
+    mpp.check_base_layer()
     mpp.fill_rotation(val)
 
 
@@ -39,18 +39,18 @@ def rotation_gets_changed(
     mpp.to_map_management_page()
     mmp.verify()
     mmp.to_map_planting_page(map_name + worker_uuid)
+    mpp.check_base_layer()
     mpp.expect_rotation_to_have_value(val)
 
 
 # Scenario 3: Successfully scale the background image
-# This test might be flaky, since it depends on the image to be loaded before
-# the scaling is applied and to process the input before navigating away from the page.
 
 
 @when(parsers.parse("I change the scale of the image to {val} percent"))
 def change_scale(mpp: MapPlantingPage, val):
     mpp.select_birdie_background()
     mpp.expect_background_image("/Photos/Birdie.jpg")
+    mpp.check_base_layer()
     mpp.fill_scaling(val)
 
 
@@ -61,4 +61,5 @@ def scale_gets_changed(
     mpp.to_map_management_page()
     mmp.verify()
     mmp.to_map_planting_page(map_name + worker_uuid)
+    mpp.check_base_layer()
     mpp.expect_scaling_to_have_value(val)

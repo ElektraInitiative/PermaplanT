@@ -36,33 +36,6 @@ export const createUntrackedMapSlice: StateCreator<
     // Clear the transformer's nodes.
     get().transformer.current?.nodes([]);
 
-    if (typeof selectedLayer === 'object' && 'is_alternative' in selectedLayer) {
-      // selectedLayer is a LayerDto
-      set((state) => ({
-        ...state,
-        untrackedState: {
-          ...state.untrackedState,
-          selectedLayer: {
-            ...selectedLayer,
-          },
-          layers: {
-            ...state.untrackedState.layers,
-            plants: {
-              ...state.untrackedState.layers.plants,
-              selectedPlantings: null,
-              selectedPlantForPlanting: null,
-            },
-          },
-          base: {
-            ...state.untrackedState.layers.base,
-            measurePoint1: null,
-            measurePoint2: null,
-            measureStep: 'inactive',
-          },
-        },
-      }));
-    }
-
     set((state) => ({
       ...state,
       untrackedState: {
