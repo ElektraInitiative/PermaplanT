@@ -24,6 +24,9 @@ body:
         - [ ] build <https://build.libelektra.org/job/PermaplanT-Release/>
         - [ ] git tag -s vX.X.X
         - [ ] git push --tags
+
+        ### After Release
+
         - [ ] create release PR to pump versions and new section in Changelog
         - [ ] write announcement in [nextcloud](https://nextcloud.markus-raab.org/nextcloud/)
     validations:
