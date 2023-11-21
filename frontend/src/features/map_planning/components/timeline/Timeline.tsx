@@ -65,7 +65,12 @@ export function Timeline({ onSelectDate, defaultDate }: TimelineProps) {
       {submitState === 'loading' && (
         <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
       )}
-      {submitState === 'idle' && <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />}
+      {submitState === 'idle' && (
+        <CheckIcon
+          className="mb-3 mt-auto h-5 w-5 text-primary-400"
+          data-testid="timeline__date-form-idle"
+        />
+      )}
       {submitState === 'error' && (
         <span className="mb-3 mt-auto text-sm text-red-400">{t('timeline:date_error')}</span>
       )}
