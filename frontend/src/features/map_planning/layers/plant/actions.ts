@@ -18,6 +18,7 @@ import {
   TransformPlantActionPayload,
   UpdatePlantingAddDateActionPayload,
   UpdatePlantingRemoveDateActionPayload,
+  UpdatePlantingAdditionalNamePayload,
 } from '@/api_types/definitions';
 import { v4 } from 'uuid';
 
@@ -418,5 +419,46 @@ export class UpdateRemoveDatePlantAction
       removeDate: this._data.removeDate,
       actionId: this.actionId,
     });
+  }
+}
+
+export class UpdatePlantingAdditionalName implements Action<null, null> {
+  constructor(
+    private readonly _data: Omit<UpdatePlantingAdditionalNamePayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {}
+
+  get entityIds() {
+    return [this._data.id];
+  }
+
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  reverse(state: TrackedMapState) {
+    return null;
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    const objects_updated = state.layers.plants.objects.map((object) => ({
+      ...object,
+      additionalName:
+        object.id === this._data.id ? this._data.additionalName : object.additionalName,
+    }));
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        plants: {
+          ...state.layers.plants,
+          objects: objects_updated,
+        },
+      },
+    };
+  }
+
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  execute(mapId: number): Promise<null> {
+    //eslint-disable-next-line @typescript-eslint/no-empty-function
+    return new Promise<null>(() => {});
   }
 }

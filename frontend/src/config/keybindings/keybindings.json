@@ -1,5 +1,6 @@
 {
   "global": {
+    "cancelModal": ["Escape"]
   },
   "base_layer": {
   },

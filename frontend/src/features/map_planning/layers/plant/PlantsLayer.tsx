@@ -7,7 +7,13 @@ import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './acti
 import { PlantCursor } from './components/PlantCursor';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
-import { LayerType, PlantSpread, PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
+import {
+  LayerType,
+  PlantSpread,
+  PlantingDto,
+  PlantsSummaryDto,
+  SeedDto,
+} from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
@@ -16,7 +22,7 @@ import {
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
-import { PlantNameFromPlant } from '@/utils/plant-naming';
+import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
@@ -50,20 +56,22 @@ function usePlantLayerListeners(listening: boolean) {
   const isReadOnlyMode = useIsReadOnlyMode();
 
   const createPlanting = useCallback(
-    (selectedPlantForPlanting: PlantsSummaryDto, xCoordinate: number, yCoordinate: number) => {
+    (selectedPlantForPlanting: PlantForPlanting, xCoordinate: number, yCoordinate: number) => {
       executeAction(
         new CreatePlantAction({
           id: uuid.v4(),
-          plantId: selectedPlantForPlanting.id,
+          plantId: selectedPlantForPlanting.plant.id,
+          seedId: selectedPlantForPlanting.seed?.id,
           layerId: getSelectedLayerId() ?? -1,
           x: Math.round(xCoordinate),
           y: Math.round(yCoordinate),
-          height: getPlantWidth(selectedPlantForPlanting),
-          width: getPlantWidth(selectedPlantForPlanting),
+          height: getPlantWidth(selectedPlantForPlanting.plant),
+          width: getPlantWidth(selectedPlantForPlanting.plant),
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
           addDate: timelineDate,
+          additionalName: selectedPlantForPlanting.seed?.name,
         }),
       );
     },
@@ -106,7 +114,7 @@ function usePlantLayerListeners(listening: boolean) {
           const verticalCounter = horizontalPlantCount > verticalPlantCount ? i : j;
 
           createPlanting(
-            selectedPlantForPlanting.plant,
+            selectedPlantForPlanting,
             startingPositionX + plantSize * horizontalCounter,
             startingPositionY + plantSize * verticalCounter,
           );
@@ -140,7 +148,7 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      createPlanting(selectedPlant.plant, position.x, position.y);
+      createPlanting(selectedPlant, position.x, position.y);
     },
     [selectedPlant, isReadOnlyMode, createPlanting],
   );
@@ -268,7 +276,9 @@ function PlantsLayer(props: PlantsLayerProps) {
 
   useEffect(() => {
     if (selectedPlant) {
-      setStatusPanelContent(<SelectedPlantInfo plant={selectedPlant.plant} />);
+      setStatusPanelContent(
+        <SelectedPlantInfo plant={selectedPlant.plant} seed={selectedPlant.seed} />,
+      );
     } else {
       clearStatusPanelContent();
     }
@@ -290,7 +300,7 @@ function PlantsLayer(props: PlantsLayerProps) {
   );
 }
 
-function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
+function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: SeedDto | null }) {
   const selectPlant = useMapStore((state) => state.selectPlantForPlanting);
 
   const keyHandlerActions: Record<string, () => void> = {
@@ -306,7 +316,11 @@ function SelectedPlantInfo({ plant }: { plant: PlantsSummaryDto }) {
   return (
     <>
       <div className="flex flex-row items-center justify-center">
-        <PlantNameFromPlant plant={plant} />
+        {seed ? (
+          <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
+        ) : (
+          <PlantNameFromPlant plant={plant} />
+        )}
       </div>
       <div className="flex items-center justify-center">
         <IconButton

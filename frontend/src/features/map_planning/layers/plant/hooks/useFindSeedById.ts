@@ -15,7 +15,6 @@ export function useFindSeedById(seedId: number, enabled = true, quiet = false) {
   const { data, error } = useQuery(['plants/seed', seedId] as const, {
     queryFn: (context) => findSeedById(context.queryKey[1]),
     enabled,
-    staleTime: Infinity,
   });
 
   if (error && !quiet) {

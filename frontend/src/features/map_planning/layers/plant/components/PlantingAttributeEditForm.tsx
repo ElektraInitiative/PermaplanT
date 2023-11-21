@@ -2,11 +2,10 @@ import { useFindPlantById } from '../hooks/useFindPlantById';
 import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import { useFindSeedById } from '@/features/map_planning/layers/plant/hooks/useFindSeedById';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
 import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
-import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
+import { PlantNameFromAdditionalNameAndPlant, PlantNameFromPlant } from '@/utils/plant-naming';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -53,15 +52,16 @@ export function SinglePlantingAttributeForm({
   isReadOnlyMode,
 }: EditSinglePlantingProps) {
   const plantId = planting.plantId;
-  const seedId = planting.seedId;
   const { plant } = useFindPlantById(plantId);
-  const { seed } = useFindSeedById(seedId ?? -1, true, true);
 
   return (
     <div className="flex flex-col gap-2 p-2">
       <h2>
-        {seed ? (
-          <PlantNameFromSeedAndPlant seed={seed} plant={plant as PlantsSummaryDto} />
+        {planting.additionalName ? (
+          <PlantNameFromAdditionalNameAndPlant
+            additionalName={planting.additionalName}
+            plant={plant as PlantsSummaryDto}
+          />
         ) : (
           <PlantNameFromPlant plant={plant as PlantsSummaryDto} />
         )}

@@ -5,6 +5,7 @@ import {
   MovePlantAction,
   TransformPlantAction,
   UpdateAddDatePlantAction,
+  UpdatePlantingAdditionalName,
   UpdateRemoveDatePlantAction,
 } from '../layers/plant/actions';
 import useMapStore from './MapStore';
@@ -72,6 +73,11 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
     case 'UpdateBaseLayerImage':
       return new UpdateBaseLayerAction(
         { ...remoteAction.payload, layer_id: remoteAction.payload.layerId },
+        remoteAction.payload.actionId,
+      );
+    case 'UpdatePlantingAdditionalName':
+      return new UpdatePlantingAdditionalName(
+        { ...remoteAction.payload },
         remoteAction.payload.actionId,
       );
     default:

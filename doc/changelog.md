@@ -60,7 +60,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix regression where Full plant names are not shown _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -68,9 +68,11 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: disable E2E tests in master #1055 _(4ydan)_
 - _()_
 - _()_
+- Close modals with escape #1027 _(Daniel Steinkogler)_
 - _()_
 - Display the plant icon next to the cursor in placement mode _(Samuel)_
 - _()_
+- Plant layer is selected per default _(Samuel)_
 - _()_
 - _()_
 - _()_

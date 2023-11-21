@@ -38,7 +38,7 @@ export default function CancelConfirmationModal({
   return (
     <>
       <TransparentBackground show={show} />
-      <ModalContainer show={show}>
+      <ModalContainer show={show} onCancelKeyPressed={onCancel}>
         <div className="flex min-h-[250px] w-[450px] flex-col justify-between rounded-lg bg-neutral-100 p-4 dark:bg-neutral-100-dark">
           <h2 className="mb-4">{title}</h2>
           <p className="mb-4">{body}</p>

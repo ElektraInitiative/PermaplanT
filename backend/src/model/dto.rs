@@ -209,7 +209,7 @@ pub struct Page<T> {
 
 /// A page of results bounded by time.
 #[typeshare]
-#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Serialize, Clone, Deserialize, ToSchema)]
 #[aliases(
     TimelinePagePlantingsDto = TimelinePage<PlantingDto>,
 )]
