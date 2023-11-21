@@ -12,7 +12,7 @@ def wait_for_db() {
 // Imports
 node('docker') {
     checkout scm
-    common = load('ci/Jenkinsfile.groovy')
+    common = load('ci/Jenkinsfile')
 }
 
 stage('Build Schema') {
