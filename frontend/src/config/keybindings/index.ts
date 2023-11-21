@@ -28,7 +28,7 @@ export const keyBindingsConfig: KeyBindingsConfig = keybindings;
  */
 export function createKeyBindingsAccordingToConfig(
   scope: string,
-  keyBindingsActions: Record<string, () => void>,
+  keyBindingsActions: Record<string, (() => void) | undefined>,
 ): Record<string, () => void> {
   const configuredKeybindings = keyBindingsConfig[scope];
 

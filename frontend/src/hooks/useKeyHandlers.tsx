@@ -39,8 +39,9 @@ import { useEffect } from 'react';
  * */
 
 export function useKeyHandlers(
-  keyHandlerMap: Record<string, () => void>,
+  keyHandlerMap: Record<string, (() => void) | undefined>,
   htmlNode: HTMLElement | Document = document,
+  stopPropagation?: boolean,
 ) {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -53,6 +54,9 @@ export function useKeyHandlers(
       const handler = keyHandlerMap[pressedShortcut];
       if (handler) {
         handler();
+        if (stopPropagation === true) {
+          event.stopPropagation();
+        }
       }
     };
 
@@ -61,5 +65,5 @@ export function useKeyHandlers(
     return () => {
       htmlNode.removeEventListener('keydown', handleKeyPress as EventListener);
     };
-  }, [htmlNode, keyHandlerMap]);
+  }, [htmlNode, keyHandlerMap, stopPropagation]);
 }

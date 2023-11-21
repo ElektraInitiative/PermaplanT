@@ -32,7 +32,7 @@ export default function ImageModal({ title, body, setShow, show, onCancel }: Ima
         }}
         show={show}
       />
-      <ModalContainer show={show}>
+      <ModalContainer show={show} onCancelKeyPressed={onCancel}>
         <div className="flex h-[70vh] w-[80vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <div className="flex justify-between">
             <h2>{title}</h2>

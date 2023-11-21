@@ -68,7 +68,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: disable E2E tests in master #1055 _(4ydan)_
 - _()_
 - _()_
-- _()_
+- Close modals with escape #1027 _(Daniel Steinkogler)_
 - _()_
 - Plant layer is selected per default _(Samuel)_
 - _()_
