@@ -48,7 +48,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Hamburger menu opens a full page navigation on small viewports _(Samuel)_
 - _()_
-- _()_
+- Release: npm audit fix #1077 _(4ydan)_
 - _()_
 - _()_
 - _()_
