@@ -4,6 +4,7 @@ import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { SELECTION_RECTANGLE_NAME } from '../../utils/ShapesSelection';
 import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
+import { PlantCursor } from './components/PlantCursor';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
 import {
@@ -291,6 +292,9 @@ function PlantsLayer(props: PlantsLayerProps) {
           <PlantingElement planting={o} key={o.id} />
         ))}
         {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
+      </Layer>
+      <Layer>
+        <PlantCursor />
       </Layer>
     </>
   );
