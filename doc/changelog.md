@@ -69,8 +69,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Close modals with escape #1027 _(Daniel Steinkogler)_
 - _()_
-- Display the plant icon next to the cursor in placement mode _(Samuel)_
-- _()_
 - Plant layer is selected per default _(Samuel)_
 - _()_
 - _()_
