@@ -9,96 +9,27 @@ def wait_for_db() {
     }
 }
 
+// Imports
+node('docker') {
+    checkout scm
+    common = load('ci/Jenkinsfile')
+}
+
 stage('Build Schema') {
-    node('docker') {
-        node_info()
-
-        checkout scm
-        def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
-
-        docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-            rustImage.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                checkout scm
-
-                wait_for_db()
-
-                sh './ci/build-scripts/build-schema.sh'
-
-                stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/api_types/definitions.ts', name: 'definitions.ts'
-            }
-        }
-    }
+    common.runDockerPostgresSidecar('echo schema test', schemaStashsrc, schemaStashdir)
 }
 
 stage('Build in Docker') {
-    def parallelBuild = [:]
-
-    parallelBuild['build-backend'] = {
-        node('docker') {
-            node_info()
-
-            checkout scm
-            def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
-
-            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
-                rustImage.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
-                    checkout scm
-
-                    wait_for_db()
-
-                    sh 'cd backend && cargo build --release'
-
-                    stash includes: 'backend/target/release/backend', name: 'backend'
-                }
-            }
-        }
-    }
-
-    parallelBuild['build-frontend'] = {
-        node('docker') {
-            node_info()
-
-            checkout scm
-            def nodeImage = docker.build('permaplant-node', './ci/container-images/permaplant-node')
-
-            nodeImage.inside {
-                checkout scm
-                unstash 'definitions.ts'
-
-                stage('build-frontend') {
-                    sh './ci/build-scripts/build-frontend.sh'
-                    stash includes: 'frontend/dist/**/*', name: 'frontend'
-                }
-
-                stage('build-typedoc') {
-                    sh 'cd frontend && npm run doc'
-                    stash includes: 'frontend/src/generated/docs/', name: 'typedoc'
-                }
-
-                stage('build-storybook') {
-                    sh './ci/build-scripts/build-storybook.sh'
-                    stash includes: 'frontend/storybook-static/**/*', name: 'storybook'
-                }
-            }
-        }
-    }
-
-    parallelBuild['build-mdbook'] = {
-        node('docker') {
-            node_info()
-
-            checkout scm
-            docker.build('permaplant-doc:build', './doc').inside {
-                stage('build') {
-                    sh 'mdbook build'
-                    stash includes: 'book/', name: 'mdbook'
-                }
-            }
-        }
-    }
-
-    parallel(parallelBuild)
+    parallel(
+    'cargo-build': common.runDockerPostgresSidecar(
+        'cargo build --release',
+        ['backend/target/release/backend'],
+        ['backend']
+    ),
+    'frontend': common.testAndBuildFrontend(),
+    'mdbook': common.testAndBuildMdbook(),
+    failFast: false
+    )
 }
 
 stage('Deploy Prod') {
