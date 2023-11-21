@@ -110,7 +110,10 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
                   <CircleDottedIcon className="h-5 w-5 animate-spin text-secondary-400" />
                 ))}
               {!checkingImage && imageExists && pathSubmitState === 'idle' && (
-                <CheckIcon className="h-5 w-5 text-primary-400" />
+                <CheckIcon
+                  className="h-5 w-5 text-primary-400"
+                  data-testid="base-layer-attribute-edit-form__background-image-file-path-idle"
+                />
               )}
               {!checkingImage && !imageExists && pathSubmitState === 'idle' && (
                 <CrossIcon className="h-5 w-5 text-red-500" />
@@ -134,7 +137,12 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
             {rotationSubmitState === 'loading' && (
               <CircleDottedIcon className="h-5 w-5 animate-spin text-secondary-400" />
             )}
-            {rotationSubmitState === 'idle' && <CheckIcon className="h-5 w-5 text-primary-400" />}
+            {rotationSubmitState === 'idle' && (
+              <CheckIcon
+                className="h-5 w-5 text-primary-400"
+                data-testid="base-layer-attribute-edit-form__rotation-idle"
+              />
+            )}
           </span>
         }
         type="number"
@@ -152,7 +160,12 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
                 {scaleSubmitState === 'loading' && (
                   <CircleDottedIcon className="h-5 w-5 animate-spin text-secondary-400" />
                 )}
-                {scaleSubmitState === 'idle' && <CheckIcon className="h-5 w-5 text-primary-400" />}
+                {scaleSubmitState === 'idle' && (
+                  <CheckIcon
+                    className="h-5 w-5 text-primary-400"
+                    data-testid="base-layer-attribute-edit-form__scale-idle"
+                  />
+                )}
               </span>
             }
             type="number"
