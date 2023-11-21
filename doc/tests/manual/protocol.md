@@ -103,35 +103,6 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Test Result:
 - Notes:
 
-## Edit seed
-
-- Description: Edit seed.
-- Preconditions:
-  - User is on the view seed page.
-- Test Steps:
-  1. Press Button "Edit seed"
-  2. Change an attribute of the seed.
-  3. Submit the form.
-  4. Repeat steps 1 through 3 for every seed attribute.
-- Expected Result:
-  - The seed attributes updated successfully.
-- Actual Result:
-- Test Result:
-- Notes:
-
-## Delete seed
-
-- Description: Edit seed.
-- Preconditions:
-  - User is on the view seed page.
-- Test Steps:
-  1. Press Button "Delete seed"
-- Expected Result:
-  - The selected seed is no longer available.
-- Actual Result:
-- Test Result:
-- Notes:
-
 ## Chat: Create conversation (NOT IMPLEMENTED)
 
 - Description: A conversation can be created
