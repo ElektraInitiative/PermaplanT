@@ -27,7 +27,7 @@ body:
 
         ### After Release
 
-        - [ ] create release PR to pump versions and new section in Changelog
+        - [ ] merge release PR to pump versions and new section in Changelog
         - [ ] write announcement in [nextcloud](https://nextcloud.markus-raab.org/nextcloud/)
     validations:
       required: false
