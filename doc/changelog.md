@@ -59,7 +59,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
 - Fix regression where Full plant names are not shown _(Moritz)_
 - _()_
 - _()_
@@ -74,7 +73,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- E2E: Increase e2e timeline/baselayer test stability, replace timeouts with sleep #1010 _(4ydan)_
 
 ## 0.3.5 - 06.11.2023 (320 commits)
 

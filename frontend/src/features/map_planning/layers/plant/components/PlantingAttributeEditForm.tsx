@@ -171,7 +171,10 @@ export function PlantingAttributeEditForm({
           <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
         )}
         {addDateSubmitState === 'idle' && (
-          <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
+          <CheckIcon
+            className="mb-3 mt-auto h-5 w-5 text-primary-400"
+            data-testid="planting-attribute-edit-form__add-date-idle"
+          />
         )}
       </div>
       <p className="pb-4 text-[0.8rem] text-neutral-400">
@@ -194,7 +197,10 @@ export function PlantingAttributeEditForm({
           <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
         )}
         {removeDateSubmitState === 'idle' && (
-          <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
+          <CheckIcon
+            className="mb-3 mt-auto h-5 w-5 text-primary-400"
+            data-testid="planting-attribute-edit-form__removed-on-idle"
+          />
         )}
       </div>
 
