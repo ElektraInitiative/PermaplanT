@@ -60,7 +60,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix regression where Full plant names are not shown _(Moritz)_
 - _()_
 - _()_
 - _()_
@@ -70,7 +70,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Close modals with escape #1027 _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Plant layer is selected per default _(Samuel)_
 - _()_
 - _()_
 - _()_

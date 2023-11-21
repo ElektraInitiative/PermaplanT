@@ -151,3 +151,35 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Actual Result:
 - Test Result:
 - Notes: Currently only works with CORS disabled.
+
+## Additional name on map: plant labels
+
+- Description: Test additional names being displayed properly.
+- Given I am on the map page with the plants layer active
+- When I create a new plant from a seed.
+- Then I can see the additional name on the label when hovering over the plant.
+- Actual Result:
+- Test Result:
+- Notes: The additional name must also be visible when a different account views the same map in parallel.
+
+## Additional name on map: left toolbar
+
+- Description: Test additional names being displayed properly.
+- Given I am on the map page with the plants layer active
+- When I create a new plant from a seed.
+- When I click on the new plant icon.
+- Then I can see the additional name in the left toolbars heading.
+- Actual Result:
+- Test Result:
+- Notes: The additional name must also be visible when a different account views the same map in parallel.
+
+## Additional name on map: updates
+
+- Description: Test additional names being displayed properly.
+- Given I am on the map page with the plants layer active
+- When I create a new plant from a seed.
+- When I go to the inventory page and change the seeds name.
+- Then I can see the changes in the plant label and left toolbar.
+- Actual Result:
+- Test Result:
+- Notes: The additional name must also be visible when a different account views the same map.

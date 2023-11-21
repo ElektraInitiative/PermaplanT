@@ -52,7 +52,7 @@ export function PlantNameFromPlant(props: { plant: PlantsSummaryDto }): ReactEle
  * Generate a complete plant name from a PlantsSummaryDto and SeedDto.
  * Format:
  * - "common name - additional name (unique name)"
- * - "unique name - additional" if no common name is specified.
+ * - "unique name - additional name" if no common name is specified.
  *
  * German common names are currently not supported.
  * @param plant DTO containing the most essential information of a plant.
@@ -67,7 +67,28 @@ export function getPlantNameFromSeedAndPlant(seed: SeedDto, plant: PlantsSummary
 }
 
 /**
- * Component representing an HTML formatted complete plant name given a PlantsSummaryDto.
+ * Generate a complete plant name from a PlantsSummaryDto and its additional name.
+ * Format:
+ * - "common name - additional name (unique name)"
+ * - "unique name - additional name" if no common name is specified.
+ *
+ * German common names are currently not supported.
+ * @param plant DTO containing the most essential information of a plant.
+ * @param additionalName DTO containing seed information.
+ */
+export function getPlantNameFromAdditionalNameAndPlant(
+  additionalName: string,
+  plant: PlantsSummaryDto,
+): string {
+  const commonName = capitalizeCommonName(plant.common_name_en);
+
+  return hasCommonName(plant)
+    ? `${commonName} - ${additionalName} (${plant.unique_name})`
+    : `${plant.unique_name} - ${additionalName}`;
+}
+
+/**
+ * Component representing an HTML formatted complete plant name given a PlantsSummaryDto and SeedDto.
  * Format:
  * - "common name - additional name (<i>unique name</i>)"
  * - "<i>unique name</i> - additional" if no common name is specified.
@@ -88,6 +109,32 @@ export function PlantNameFromSeedAndPlant(props: {
   ) : (
     <>
       <UniqueNameFromPlant uniqueName={props.plant.unique_name} /> - {props.seed.name}
+    </>
+  );
+}
+
+/**
+ * Component representing an HTML formatted complete plant name given a PlantsSummaryDto and additional name.
+ * Format:
+ * - "common name - additional name (<i>unique name</i>)"
+ * - "<i>unique name</i> - additional name" if no common name is specified.
+ *
+ * German common names are currently not supported.
+ */
+export function PlantNameFromAdditionalNameAndPlant(props: {
+  additionalName: string;
+  plant: PlantsSummaryDto;
+}): ReactElement {
+  const commonName = capitalizeCommonName(props.plant.common_name_en);
+
+  return hasCommonName(props.plant) ? (
+    <>
+      {commonName} - {props.additionalName} (
+      <UniqueNameFromPlant uniqueName={props.plant.unique_name} />)
+    </>
+  ) : (
+    <>
+      <UniqueNameFromPlant uniqueName={props.plant.unique_name} /> - {props.additionalName}
     </>
   );
 }
