@@ -7,22 +7,44 @@ use crate::model::entity::plantings::{Planting, UpdatePlanting};
 
 use super::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
 
-impl From<Planting> for PlantingDto {
-    fn from(entity: Planting) -> Self {
+impl From<(Planting, Option<String>)> for PlantingDto {
+    fn from(entities: (Planting, Option<String>)) -> Self {
         Self {
-            id: entity.id,
-            plant_id: entity.plant_id,
-            layer_id: entity.layer_id,
-            x: entity.x,
-            y: entity.y,
-            width: entity.width,
-            height: entity.height,
-            rotation: entity.rotation,
-            scale_x: entity.scale_x,
-            scale_y: entity.scale_y,
-            add_date: entity.add_date,
-            remove_date: entity.remove_date,
-            seed_id: entity.seed_id,
+            id: entities.0.id,
+            plant_id: entities.0.plant_id,
+            layer_id: entities.0.layer_id,
+            x: entities.0.x,
+            y: entities.0.y,
+            width: entities.0.width,
+            height: entities.0.height,
+            rotation: entities.0.rotation,
+            scale_x: entities.0.scale_x,
+            scale_y: entities.0.scale_y,
+            add_date: entities.0.add_date,
+            remove_date: entities.0.remove_date,
+            seed_id: entities.0.seed_id,
+            additional_name: entities.1,
+        }
+    }
+}
+
+impl From<Planting> for PlantingDto {
+    fn from(entities: Planting) -> Self {
+        Self {
+            id: entities.id,
+            plant_id: entities.plant_id,
+            layer_id: entities.layer_id,
+            x: entities.x,
+            y: entities.y,
+            width: entities.width,
+            height: entities.height,
+            rotation: entities.rotation,
+            scale_x: entities.scale_x,
+            scale_y: entities.scale_y,
+            add_date: entities.add_date,
+            remove_date: entities.remove_date,
+            seed_id: entities.seed_id,
+            additional_name: None,
         }
     }
 }

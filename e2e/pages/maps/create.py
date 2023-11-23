@@ -6,7 +6,7 @@ from e2e.pages.abstract_page import AbstractPage
 class MapCreatePage(AbstractPage):
     """The map creation page of permaplant"""
 
-    URL: str = E2E_URL + "/create"
+    URL: str = E2E_URL + "maps/create"
     TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):

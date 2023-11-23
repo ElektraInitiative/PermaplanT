@@ -18,7 +18,6 @@ export function useFindPlantFromSeedCallback(afterPlantLoad: (plant: PlantForPla
   const [seed, setSeed] = useState<SeedDto | null>(null);
   const { data: plant, error } = useQuery(['plants/plant', plantId] as const, {
     queryFn: (context) => findPlantById(context.queryKey[1]),
-    staleTime: Infinity,
   });
 
   // useQuery's onSuccess is deprecated and does not seem to work in this context
