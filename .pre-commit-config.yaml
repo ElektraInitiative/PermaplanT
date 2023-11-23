@@ -85,7 +85,14 @@ repos:
       - id: fix-npm-groovy-lint
         name: Fix Lint groovy findings
         description: Groovy & Jenkinsfile Auto-fixer
-        entry: npm-groovy-lint --fix ci/Jenkinsfile ci/Jenkinsfile.release --failon warning --loglevel warning --noserver
+        entry: npm-groovy-lint --fix ci/Jenkinsfile ci/Jenkinsfile.release --failon warning --loglevel warning
+  - repo: https://github.com/nvuillam/npm-groovy-lint
+    rev: v11.1.1
+    hooks:
+      - id: format-npm-groovy-lint
+        name: Format groovy findings
+        description: Groovy & Jenkinsfile Auto-formatter
+        entry: npm-groovy-lint --format ci/Jenkinsfile ci/Jenkinsfile.release
   - repo: https://github.com/psf/black
     rev: 23.7.0
     hooks:

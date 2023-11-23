@@ -9,17 +9,17 @@ Feature: Map Creation
         Then I can successfully create <name> without an error message
         Examples:
             | name            | privacy   | description         | latitude | longitude |
-            | SUTPrivateMap   | private   | A private TestMap   | 25       | 25        |
-            | SUTProtectedMap | protected | A protected TestMap | 1        | 1         |
-            | SUTPublicMap    | public    | A public TestMap    | 33       | 33        |
+            | SUT-PrivateMap   | private   | A private TestMap   | 25       | 25        |
+            | SUT-ProtectedMap | protected | A protected TestMap | 1        | 1         |
+            | SUT-PublicMap    | public    | A public TestMap    | 33       | 33        |
 
     Scenario: Edit existing Map
-        Given I create a new map SUTEditMap
-        When I edit SUTEditMap to SUTEditedMap with EditedDescription
-        Then I can successfully save SUTEditedMap without an error message
+        Given I create a new map SUT-EditMap
+        When I edit SUT-EditMap to SUT-EditedMap with EditedDescription
+        Then I can successfully save SUT-EditedMap without an error message
 
     Scenario: Map already exists
-        Given I create a map SUTSameMap
-        When I try to create the same map SUTSameMap
+        Given I create a map SUT-SameMap
+        When I try to create the same map SUT-SameMap
         Then the app displays an error message
-        And my map SUTSameMap is not created
+        And my map SUT-SameMap is not created

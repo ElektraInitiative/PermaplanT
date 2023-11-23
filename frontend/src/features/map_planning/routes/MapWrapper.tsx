@@ -1,6 +1,6 @@
 import { getMap } from '../api/getMap';
 import { getPlantings } from '../api/getPlantings';
-import { Map } from '../components/Map';
+import { EditorMap } from '../components/EditorMap';
 import { useGetLayers } from '../hooks/useGetLayers';
 import { useMapId } from '../hooks/useMapId';
 import { useTourStatus } from '../hooks/useTourStatus';
@@ -8,15 +8,16 @@ import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { mapEditorSteps, tourOptions } from '../utils/EditorTour';
-import { LayerType, LayerDto, GuidedToursDto } from '@/bindings/definitions';
+import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
+import { LayerType, LayerDto, GuidedToursDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdOptionsWithType, ShepherdTour } from 'react-shepherd';
-import { toast } from 'react-toastify';
 
 /**
  * Extracts the default layer from the list of layers.
@@ -54,7 +55,7 @@ function usePlantLayer({ mapId, layerId }: UseLayerParams) {
 
   if (query.error) {
     console.error(query.error);
-    toast.error(t('plantSearch:error_initializing_layer'), { autoClose: false });
+    errorToastGrouped(t('plantSearch:error_initializing_layer'), { autoClose: false });
   }
 
   const data = query.data;
@@ -71,13 +72,19 @@ function usePlantLayer({ mapId, layerId }: UseLayerParams) {
 /**
  * Hook that initializes the base layer by fetching it and adding it to the store.
  */
-function useBaseLayer({ mapId, layerId, enabled }: UseLayerParams) {
+function useBaseLayer({ mapId, layerId }: UseLayerParams) {
   const query = useQuery({
     queryKey: ['baselayer', mapId, layerId],
     queryFn: () => getBaseLayerImage(mapId, layerId),
     refetchOnWindowFocus: false,
-    enabled,
+    cacheTime: 0,
+    staleTime: Infinity,
+    enabled: Boolean(layerId),
   });
+
+  if (query.error) {
+    console.error(query.error);
+  }
 
   useEffect(() => {
     if (!query?.data) return;
@@ -95,10 +102,11 @@ function useInitializeMap() {
   const mapId = useMapId();
   const { data: layers, error } = useGetLayers(mapId);
   const { t } = useTranslation(['layers']);
+  const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
 
   if (error) {
-    console.log(error);
-    toast.error(t('layers:error_fetching_layers'), { autoClose: false });
+    console.error(error);
+    errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
   }
 
   const mapQuery = useQuery({
@@ -130,27 +138,31 @@ function useInitializeMap() {
     mapId,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
     layerId: baseLayer?.id!,
-    enabled: !!baseLayer?.id,
   });
 
   console.log(mapQuery.data);
 
+  // select plant layer per default
   useEffect(() => {
-    if (!baseLayer) return;
+    if (plantLayer) {
+      updateSelectedLayer(plantLayer);
+    }
 
-    useMapStore.setState((state) => ({
-      ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        selectedLayer: baseLayer,
-        mapId,
-      },
-      trackedState: {
-        ...state.trackedState,
-        mapBounds: mapQuery.data.geometry,
-      },
-    }));
-  }, [mapId, baseLayer, mapQuery?.data]);
+    if (baseLayer) {
+      useMapStore.setState((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          selectedLayer: baseLayer,
+          mapId,
+        },
+        trackedState: {
+          ...state.trackedState,
+          mapBounds: mapQuery.data.geometry,
+        },
+      }));
+    }
+  }, [mapId, baseLayer, mapQuery?.data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const isLoading = !layers;
 
@@ -230,8 +242,10 @@ export function MapWrapper() {
   }
 
   return (
-    <ShepherdTour steps={steps} tourOptions={tourOptions}>
-      <Map layers={mapData.layers} />
-    </ShepherdTour>
+    <ReadOnlyModeContextProvider>
+      <ShepherdTour steps={steps} tourOptions={tourOptions}>
+        <EditorMap layers={mapData.layers} />
+      </ShepherdTour>
+    </ReadOnlyModeContextProvider>
   );
 }

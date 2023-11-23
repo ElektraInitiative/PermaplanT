@@ -4,10 +4,10 @@
 
 - **Scope:** All Layers
 - **Level:** User Goal
-- **Actors:** App User
+- **Actors:** User, App
 - **Brief:** The user can measure the distance between different elements in their map.
 - **Status:** Assigned
-- **Simplification:** Measuring only of pixels (not via backend as described below)
+- **Simplification:** Measuring only of pixels (not via backend as described in `Non-functional Constraints`)
 - **Assignee:** Moritz
 
 ## Scenarios

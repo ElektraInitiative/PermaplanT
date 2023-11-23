@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-<div>
+<div
+  data-testid="paginated-select-menu__Some Label"
+>
   <label
     className="mb-2 block text-sm font-medium"
     htmlFor="test"

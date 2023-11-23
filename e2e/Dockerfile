@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/playwright/python:v1.35.0-jammy
 RUN apt-get update && apt install -y git make
 USER root
 
-ENV PERMAPLANT_PATH /home/batman/permaplant/e2e
+ENV PERMAPLANT_PATH /home/moritz/workspace/PermaplanT/e2e
 WORKDIR $PERMAPLANT_PATH
 COPY . $PERMAPLANT_PATH
 

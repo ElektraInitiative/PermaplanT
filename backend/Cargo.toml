@@ -1,9 +1,9 @@
 [package]
 name = "backend"
-version = "0.3.3"
+version = "0.3.7"
 description = "The backend of PermaplanT"
 repository = "https://github.com/ElektraInitiative/PermaplanT"
-license = "BSD 3-Clause"
+license = "BSD-3-Clause"
 keywords = ["PermaplanT"]
 categories = ["web-programming", "web-programming::http-server"]
 edition = "2021"
@@ -45,7 +45,7 @@ postgis_diesel = { version = "2.1.0", features = ["serde"] }
 
 # Other
 serde_json = "1.0.95"
-chrono = { version = "0.4.23", features = ["serde"] }
+chrono = { version = "0.4.23", features = ["serde", "clock"], default-features = false }
 serde = { version = "1.0.152", features = ["derive"] }
 dotenvy = "0.15.0"
 typeshare = "1.0.0"

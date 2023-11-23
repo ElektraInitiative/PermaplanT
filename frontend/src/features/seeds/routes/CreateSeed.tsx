@@ -1,10 +1,13 @@
 import PageLayout from '../../../components/Layout/PageLayout';
 import CreateSeedForm from '../components/CreateSeedForm';
-import useCreateSeedStore from '../store/CreateSeedStore';
-import { NewSeedDto } from '@/bindings/definitions';
+import { NewSeedDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
+import { createSeed } from '@/features/seeds/api/createSeed';
+import { infoToastGrouped, successToastGrouped } from '@/features/toasts/groupedToast';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -15,8 +18,30 @@ export function CreateSeed() {
 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
-  const createSeed = useCreateSeedStore((state) => state.createSeed);
-  const isUploadingSeed = useCreateSeedStore((state) => state.isUploadingSeed);
+
+  const {
+    mutate: submitSeed,
+    isLoading: isUploadingSeed,
+    isSuccess: isUploadingSuccess,
+  } = useMutation(['create new seed'], createSeed, {
+    onError: (error) => {
+      const errorTyped = error as AxiosError;
+
+      if (errorTyped.response?.status === 409) {
+        infoToastGrouped(t('seeds:create_seed_form.error_seed_already_exists'));
+        return;
+      }
+
+      infoToastGrouped(t('seeds:create_seed_form.error_create_seed'));
+    },
+    onSuccess: async () => {
+      // Wait for the seed upload to be completed before navigating.
+      // This ensures that all seeds are present on the overview page once the user sees it.
+      await isUploadingSuccess;
+      navigate('/seeds');
+      successToastGrouped(t('seeds:create_seed_form.success'));
+    },
+  });
 
   const onCancel = () => {
     // There is no need to show the cancel warning modal if the user
@@ -32,15 +57,7 @@ export function CreateSeed() {
   usePreventNavigation(formTouched);
 
   const onSubmit = async (newSeed: NewSeedDto) => {
-    // we can not directly check for an error here because the data would be stale
-    // and not reflect the current state of the store
-    //
-    // an alternative would be to get a reference to the store and get the error from there
-    // const store = useCreateSeedStore.getState();
-    // if (!store.error) {...}
-    await createSeed(newSeed, t('seeds:create_seed_form.error_create_seed'), () =>
-      navigate('/seeds'),
-    );
+    submitSeed(newSeed);
   };
 
   const onChange = () => {
@@ -52,6 +69,7 @@ export function CreateSeed() {
       <PageLayout>
         <PageTitle title={t('seeds:create_seed.title')} />
         <CreateSeedForm
+          submitButtonTitle={t('seeds:create_seed_form.btn_create_seed')}
           isUploadingSeed={isUploadingSeed}
           onCancel={onCancel}
           onChange={onChange}

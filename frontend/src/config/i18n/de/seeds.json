@@ -1,13 +1,22 @@
 {
   "view_seeds": {
-    "title": "Meine Samen",
+    "title": "Mein Inventar",
     "btn_new_entry": "Neuer Eintrag",
-    "search_placeholder": "Suche Samen...",
-    "fetching_error": "Sorry, ich habe Schwierigkeiten Samen von meinem Server zu erhalten. Bitte versuche es später erneut.",
-    "fetching_single_error": "Sorry, ich konnte den Samen nicht von meinem Server laden. Möglicherweise existiert er nicht."
+    "search_placeholder": "Inventar durchsuchen...",
+    "fetching_error": "Sorry, ich habe Schwierigkeiten das Inventar von meinem Server zu erhalten. Bitte versuche es später erneut.",
+    "fetching_single_error": "Sorry, ich konnte den Samen nicht von meinem Server laden. Möglicherweise existiert er nicht.",
+    "restore_seed_message": "{{seed}} wurde archiviert",
+    "restore_seed_button": "Wiederherstellen",
+    "restore_seed_success": "Samen {{seed}} erfolgreich wiederhergestellt!",
+    "restore_seed_failure": "Samen konnte nicht wiederhergestellt werden.",
+    "archive_seed_tooltip": "Samen archivieren",
+    "edit_seed_tooltip": "Samen bearbeiten"
+  },
+  "delete_seed": {
+    "btn_delete_seed": "Samen löschen"
   },
   "create_seed": {
-    "title": "Neuer Eintrag",
+    "title": "Samen Eintrag",
     "changes_model_title": "Eintrag abbrechen?",
     "changes_model_message": "Änderungen, die Sie vorgenommen haben, werden nicht gespeichert. Wollen Sie wirklich abbrechen?"
   },
@@ -15,18 +24,28 @@
     "placeholder_binomial_name": "Tomate",
     "placeholder_origin": "Daheim",
     "placeholder_taste": "nussig",
-    "placeholder_yield": "1",
-    "placeholder_price": "2,99€",
+    "placeholder_yield": "hoch",
+    "placeholder_price": "2.99",
+
     "placeholder_generation": "0",
-    "error_price_must_be_number": "Der Preis muss eine Zahl sein. z.B. 2,99",
+    "error_price_must_be_number": "Entschuldigung, ich verstehe nur Zahlen mit Punkt (.) oder Beistrich (,) abhängig von den Browsereinstellungen als Komma, z.B. 2,99",
+
     "btn_create_seed": "Samen speichern",
     "error_create_seed": "Sorry, ich habe Schwierigkeiten den Samen auf meinem Server abzulegen. Bitte versuche es später erneut.",
+    "error_seed_already_exists": "Sorry, du hast bereits einen Samen mit dieser Kombination aus Namen und Pflanze angelegt! Bitte ändere die entsprechenden Felder und versuche es erneut.",
+    "error_delete_seed": "Sorry, ich habe Schwierigkeiten den Samen vom Server zu löschen. Bitte versuche es später erneut.",
     "error_fetching_seeds": "Sorry, ich habe Schwierigkeiten Samen von meinem Server zu erhalten. Bitte versuche es später erneut.",
-    "error_fetching_plants": "Sorry, ich habe Schwierigkeiten Pflanzen von meinem Server zu erhalten. Bitte versuche es später erneut."
+    "error_fetching_plants": "Sorry, ich habe Schwierigkeiten Pflanzen von meinem Server zu erhalten. Bitte versuche es später erneut.",
+    "success": "Samen erfolgreich erstellt!"
+  },
+  "edit_seed_form": {
+    "btn_edit_seed": "Samen editieren",
+    "success": "Samen erfolgreich editiert!"
   },
   "harvest_year": "Bezugsjahr",
   "additional_name": "Zusätzlicher Name",
-  "binomial_name": "Pflanzen Name",
+  "additional_name_pattern_hint": "Mindestens ein Buchstabe oder eine Ziffer, '-' ist nicht erlaubt",
+  "binomial_name": "Name der Pflanze",
   "quantity": "Menge",
   "origin": "Herkunft",
   "use_by": "Verbrauch bis",
@@ -35,5 +54,7 @@
   "yield": "Ertrag",
   "price": "Preis",
   "generation": "Generation",
-  "notes": "Notizen"
+  "notes": "Notizen",
+  "actions": "Aktionen",
+  "error_fetching_seed": "Entschuldigung, ich konnte den Samen nicht finden."
 }

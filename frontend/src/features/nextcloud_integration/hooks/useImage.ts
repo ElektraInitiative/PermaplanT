@@ -1,7 +1,7 @@
 import { getImage } from '../api/getImages';
 import { useImageFromBlob } from './useImageFromBlob';
 import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
-import errorImageSource from '@/icons/photo-off.svg';
+import errorImageSource from '@/svg/icons/photo-off.svg';
 import { useQuery } from '@tanstack/react-query';
 import { WebDAVClient } from 'webdav';
 
@@ -27,7 +27,7 @@ export function useImage({
 }: UseImageOptions) {
   const webdav = useNextcloudWebDavClient();
 
-  const { isError, isLoading, data } = useQuery(['image', path], {
+  const { isError, isLoading, data } = useQuery(['webdav', path], {
     queryFn: () => getImage(path, webdav as WebDAVClient),
     refetchOnWindowFocus: false,
     enabled: !!webdav && !!path,

@@ -1,18 +1,18 @@
 import { createMap } from '../api/createMap';
 import { findAllMaps } from '../api/findAllMaps';
 import MapCard from '../components/MapCard';
-import { MapDto, MapSearchParameters, NewMapDto } from '@/bindings/definitions';
+import { MapDto, MapSearchParameters, NewMapDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import InfoMessage, { InfoMessageType } from '@/components/Card/InfoMessage';
 import PageTitle from '@/components/Header/PageTitle';
 import Footer from '@/components/Layout/Footer';
 import PageLayout from '@/components/Layout/PageLayout';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 export default function MapOverview() {
   const initialMessage = {
@@ -37,7 +37,7 @@ export default function MapOverview() {
 
   if (error) {
     console.error(error);
-    toast.error(t('maps:overview.error_map_fetch'), { autoClose: false });
+    errorToastGrouped(t('maps:overview.error_map_fetch'), { autoClose: false });
   }
 
   const maps = data?.pages.flatMap((page) => page.results) ?? [];

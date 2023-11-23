@@ -4,7 +4,11 @@
   "rotation_field": "Rotation (Degrees)",
   "selectImage": "Choose an image",
   "scale": "Scaling (pixels/meter)",
+  "scale_invalid": "Scale has to be a number greater than 0!",
   "set_scale": "Auto-Scale",
   "distance_modal_title": "How long is this distance in real life?",
-  "error_actual_distance_zero": "Please enter a distance greater than 0."
+  "error_actual_distance_zero": "Please enter a distance greater than 0.",
+  "auto_scaling_hint": "Select two points with a known distance.",
+  "auto_scaling_meters_invalid": "The field 'meters' is invalid!",
+  "auto_scaling_centimeters_invalid": "The field 'centimeters' is invalid!"
 }

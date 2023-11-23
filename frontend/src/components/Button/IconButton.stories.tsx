@@ -1,5 +1,5 @@
 import IconButton, { ButtonVariant } from './IconButton';
-import { ReactComponent as PlantIcon } from '@/icons/plant.svg';
+import { ReactComponent as PlantIcon } from '@/svg/icons/plant.svg';
 import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
 import type { Meta, StoryObj } from '@storybook/react';
 

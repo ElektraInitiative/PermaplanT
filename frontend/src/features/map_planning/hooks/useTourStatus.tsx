@@ -1,8 +1,8 @@
 import { getTourStatus } from '../api/getTourStatus';
-import { GuidedToursDto } from '@/bindings/definitions';
+import { GuidedToursDto } from '@/api_types/definitions';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 export function useTourStatus(setStatus: (status: GuidedToursDto) => void) {
   const { t } = useTranslation(['guidedTour']);
@@ -16,7 +16,7 @@ export function useTourStatus(setStatus: (status: GuidedToursDto) => void) {
       _getStatus();
     } catch (error) {
       console.error(error);
-      toast.error(t('guidedTour:fetch_status_error'), { autoClose: false });
+      errorToastGrouped(t('guidedTour:fetch_status_error'), { autoClose: false });
     }
   }, [setStatus, t]);
 }

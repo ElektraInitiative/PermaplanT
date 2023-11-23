@@ -25,7 +25,7 @@ stage('Build Schema') {
                 sh './ci/build-scripts/build-schema.sh'
 
                 stash includes: 'backend/src/schema.rs', name: 'schema.rs'
-                stash includes: 'frontend/src/bindings/definitions.ts', name: 'definitions.ts'
+                stash includes: 'frontend/src/api_types/definitions.ts', name: 'definitions.ts'
             }
         }
     }
@@ -84,6 +84,20 @@ stage('Build in Docker') {
         }
     }
 
+    parallelBuild['build-mdbook'] = {
+        node('docker') {
+            node_info()
+
+            checkout scm
+            docker.build('permaplant-doc:build', './doc').inside {
+                stage('build') {
+                    sh 'mdbook build'
+                    stash includes: 'book/', name: 'mdbook'
+                }
+            }
+        }
+    }
+
     parallel(parallelBuild)
 }
 
@@ -97,6 +111,7 @@ stage('Deploy Prod') {
         unstash 'backend'
         unstash 'storybook'
         unstash 'typedoc'
+        unstash 'mdbook'
 
         echo 'Deploying to Prod ...'
         sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"

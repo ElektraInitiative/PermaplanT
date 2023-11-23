@@ -5,11 +5,12 @@ import {
   MovePlantAction,
   TransformPlantAction,
   UpdateAddDatePlantAction,
+  UpdatePlantingAdditionalName,
   UpdateRemoveDatePlantAction,
 } from '../layers/plant/actions';
 import useMapStore from './MapStore';
 import { Action } from './MapStoreTypes';
-import { Action as RemoteAction } from '@/bindings/definitions';
+import { Action as RemoteAction } from '@/api_types/definitions';
 
 export function handleRemoteAction(ev: MessageEvent<unknown>, userId: string) {
   if (typeof ev.data !== 'string') {
@@ -72,6 +73,11 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
     case 'UpdateBaseLayerImage':
       return new UpdateBaseLayerAction(
         { ...remoteAction.payload, layer_id: remoteAction.payload.layerId },
+        remoteAction.payload.actionId,
+      );
+    case 'UpdatePlantingAdditionalName':
+      return new UpdatePlantingAdditionalName(
+        { ...remoteAction.payload },
         remoteAction.payload.actionId,
       );
     default:

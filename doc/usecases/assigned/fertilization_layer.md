@@ -15,6 +15,7 @@
 - **Main success scenario:**
   - The user successfully adds, edits, moves and removes fertilizers in their map in the fertilization layer.
   - Fertilizers can be drawn using brushes of different sizes.
+  - The user can write a note which fertilization was used.
 - **Alternative scenario:**
   - The user accidentally edits, moves or removes an element and uses undo to correct the mistake.
   - The user accidentally adds an element and deletes it with the "delete" or "undo" functionality.

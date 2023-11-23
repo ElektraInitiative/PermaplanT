@@ -6,7 +6,8 @@ import {
   LayerType,
   PlantingDto,
   PlantsSummaryDto,
-} from '@/bindings/definitions';
+  SeedDto,
+} from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
@@ -98,13 +99,16 @@ export interface TrackedMapSlice {
    * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
    */
   transformer: React.RefObject<Konva.Transformer>;
-  /**
-   * References to timeouts used by executeActionDebounced.
-   *
-   * @internal This reference should never be modified by any other function than executeActionDebounced.
-   */
-  /** Event listener responsible for adding a single shape to the transformer */
-  addShapeToTransformer: (shape: Node) => void;
+
+  /** Discard the transformer's current nodes and set a single node in the transformer */
+  setSingleNodeInTransformer: (node: Node) => void;
+
+  /** Add a new node to the transformer's current set of nodes */
+  addNodeToTransformer: (node: Node) => void;
+
+  /** Removes given node from the transformer's current set of nodes */
+  removeNodeFromTransformer: (node: Node) => void;
+
   /**
    * Execute a user initiated action.
    * @param action the action to be executed
@@ -124,7 +128,7 @@ export interface TrackedMapSlice {
    * @param action The action to apply.
    *
    * @internal This method is only used by the EventSource to handle remote actions from other users.
-   * It is not meant to be used by the user, on called in event handlers.
+   * It is not meant to be used in other places, or called from event handlers.
    */
   __applyRemoteAction: (action: Action<unknown, unknown>) => void;
   /**
@@ -167,8 +171,8 @@ export interface UntrackedMapSlice {
     opacity: UntrackedLayerState['opacity'],
   ) => void;
   lastActions: LastAction[];
-  selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
-  selectPlanting: (planting: PlantingDto | null) => void;
+  selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
+  selectPlantings: (plantings: PlantingDto[] | null) => void;
   toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
@@ -179,6 +183,8 @@ export interface UntrackedMapSlice {
   getSelectedLayerId: () => number | null;
   setTooltipText: (content: string) => void;
   setTooltipPosition: (position: { x: number; y: number }) => void;
+  setStatusPanelContent: (content: React.ReactElement) => void;
+  clearStatusPanelContent: () => void;
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -237,6 +243,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   },
   tooltipContent: '',
   tooltipPosition: { x: 0, y: 0 },
+  bottomStatusPanelContent: null,
   layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
@@ -343,8 +350,8 @@ export type UntrackedLayers = {
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
-  selectedPlantForPlanting: PlantsSummaryDto | null;
-  selectedPlanting: PlantingDto | null;
+  selectedPlantForPlanting: PlantForPlanting | null;
+  selectedPlantings: PlantingDto[] | null;
   showLabels: boolean;
 };
 
@@ -352,6 +359,14 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
   measurePoint1: Vector2d | null;
   measurePoint2: Vector2d | null;
   measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
+};
+
+/**
+ * Contains information necessary for creating a new planting on the map.
+ */
+export type PlantForPlanting = {
+  plant: PlantsSummaryDto;
+  seed: SeedDto | null;
 };
 
 /**
@@ -381,6 +396,7 @@ export type UntrackedMapState = {
   /** Storing the current content prevents constant rerenders of the tooltip component.  */
   tooltipContent: string;
   tooltipPosition: { x: number; y: number };
+  bottomStatusPanelContent: React.ReactNode | null;
   layers: UntrackedLayers;
 };
 

@@ -1,9 +1,9 @@
 import { searchPlants } from '@/features/seeds/api/searchPlants';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import useDebouncedValue from '@/hooks/useDebouncedValue';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 export function usePlantSearch() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,8 +24,7 @@ export function usePlantSearch() {
   }, []);
 
   if (error) {
-    console.log(error);
-    toast.error(t('plantSearch:error_searching_plants'), { autoClose: false });
+    errorToastGrouped(t('plantSearch:error_searching_plants'), { autoClose: false });
   }
 
   return {

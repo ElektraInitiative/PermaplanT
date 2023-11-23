@@ -14,6 +14,9 @@ command = "mdbook-mermaid"
 [output.html]
 additional-js = ["doc/mermaid.min.js", "doc/mermaid-init.js"]
 
+[output.html.fold]
+enable = true    # whether or not to enable section folding
+
 [output.linkcheck]
 # Should we check links on the internet? Enabling this option adds a
 # non-negligible performance impact
@@ -30,7 +33,10 @@ traverse-parent-directories = false
 #
 # Hint: you can use TOML's raw strings (single quote) to avoid needing to
 # escape things twice.
-exclude = []
+exclude = ["localhost", "nextcloud", "mysql",
+"visualstudio", "lib.rs", "crates", "libelektra",
+"pr.permaplant", "dev.permaplant", "www.permaplant",
+"auth.permaplant"]
 
 # The User-Agent to use when sending web requests
 user-agent = "mdbook-linkcheck-0.4.0"

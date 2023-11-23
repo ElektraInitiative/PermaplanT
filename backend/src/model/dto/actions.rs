@@ -42,6 +42,27 @@ pub enum Action {
     UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload),
     /// An action used to broadcast an update to the map gemetry.
     UpdateMapGeometry(UpdateMapGeometryActionPayload),
+    /// An action used to update the `additional_name` of a plant.
+    UpdatePlantingAdditionalName(UpdatePlantingAdditionalNamePayload),
+}
+
+impl Action {
+    /// Returns the `action_id` of the action.
+    #[must_use]
+    pub fn action_id(&self) -> Uuid {
+        match self {
+            Self::CreatePlanting(payload) => payload.action_id,
+            Self::DeletePlanting(payload) => payload.action_id,
+            Self::MovePlanting(payload) => payload.action_id,
+            Self::TransformPlanting(payload) => payload.action_id,
+            Self::CreateBaseLayerImage(payload) => payload.action_id,
+            Self::UpdateBaseLayerImage(payload) => payload.action_id,
+            Self::DeleteBaseLayerImage(payload) => payload.action_id,
+            Self::UpdatePlantingAddDate(payload) => payload.action_id,
+            Self::UpdatePlantingRemoveDate(payload) => payload.action_id,
+            Self::UpdatePlantingAdditionalName(payload) => payload.action_id,
+        }
+    }
 }
 
 #[typeshare]
@@ -64,6 +85,8 @@ pub struct CreatePlantActionPayload {
     scale_y: f32,
     add_date: Option<NaiveDate>,
     remove_date: Option<NaiveDate>,
+    seed_id: Option<i32>,
+    additional_name: Option<String>,
 }
 
 impl CreatePlantActionPayload {
@@ -84,6 +107,8 @@ impl CreatePlantActionPayload {
             scale_y: payload.scale_y,
             add_date: payload.add_date,
             remove_date: payload.remove_date,
+            seed_id: payload.seed_id,
+            additional_name: payload.additional_name,
         }
     }
 }
@@ -123,7 +148,7 @@ pub struct MovePlantActionPayload {
 
 impl MovePlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
@@ -151,7 +176,7 @@ pub struct TransformPlantActionPayload {
 
 impl TransformPlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
@@ -258,7 +283,7 @@ pub struct UpdatePlantingAddDateActionPayload {
 
 impl UpdatePlantingAddDateActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
@@ -281,7 +306,7 @@ pub struct UpdatePlantingRemoveDateActionPayload {
 
 impl UpdatePlantingRemoveDateActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
@@ -309,6 +334,34 @@ impl UpdateMapGeometryActionPayload {
             user_id,
             action_id,
             geometry: payload.geometry,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlantingRemoveDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingAdditionalNamePayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    additional_name: Option<String>,
+}
+
+impl UpdatePlantingAdditionalNamePayload {
+    #[must_use]
+    pub fn new(
+        payload: &PlantingDto,
+        new_additional_name: Option<String>,
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            additional_name: new_additional_name,
         }
     }
 }

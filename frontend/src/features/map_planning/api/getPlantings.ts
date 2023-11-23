@@ -1,4 +1,4 @@
-import { PlantingDto, TimelinePage } from '@/bindings/definitions';
+import { PlantingDto, TimelinePage } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function getPlantings(

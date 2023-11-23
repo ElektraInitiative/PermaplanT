@@ -6,6 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, remove and delete zones in their map in the zones layer.
+- **Assignee:** Daniel
 
 ## Scenarios
 
