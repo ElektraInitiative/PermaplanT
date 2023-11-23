@@ -29,13 +29,13 @@ const BaseLayer = (props: BaseLayerProps) => {
   );
 
   const measurementLinePoints = () => {
-    if (untrackedBaseLayerState.measureStep !== 'both selected') return [];
+    if (untrackedBaseLayerState.autoScale.measureStep !== 'both selected') return [];
 
     return [
-      untrackedBaseLayerState.measurePoint1?.x ?? Number.NaN,
-      untrackedBaseLayerState.measurePoint1?.y ?? Number.NaN,
-      untrackedBaseLayerState.measurePoint2?.x ?? Number.NaN,
-      untrackedBaseLayerState.measurePoint2?.y ?? Number.NaN,
+      untrackedBaseLayerState.autoScale.measurePoint1?.x ?? Number.NaN,
+      untrackedBaseLayerState.autoScale.measurePoint1?.y ?? Number.NaN,
+      untrackedBaseLayerState.autoScale.measurePoint2?.x ?? Number.NaN,
+      untrackedBaseLayerState.autoScale.measurePoint2?.y ?? Number.NaN,
     ];
   };
 
@@ -76,18 +76,18 @@ const BaseLayer = (props: BaseLayerProps) => {
         />
       )}
       {trackedState.mapBounds && <Polygon geometry={trackedState.mapBounds} />}
-      {untrackedBaseLayerState.measurePoint1 && (
+      {untrackedBaseLayerState.autoScale.measurePoint1 && (
         <Circle
-          x={untrackedBaseLayerState.measurePoint1.x}
-          y={untrackedBaseLayerState.measurePoint1.y}
+          x={untrackedBaseLayerState.autoScale.measurePoint1.x}
+          y={untrackedBaseLayerState.autoScale.measurePoint1.y}
           radius={editorLongestSide / 250}
           fill={COLOR_EDITOR_HIGH_VISIBILITY}
         />
       )}
-      {untrackedBaseLayerState.measurePoint2 && (
+      {untrackedBaseLayerState.autoScale.measurePoint2 && (
         <Circle
-          x={untrackedBaseLayerState.measurePoint2.x}
-          y={untrackedBaseLayerState.measurePoint2.y}
+          x={untrackedBaseLayerState.autoScale.measurePoint2.x}
+          y={untrackedBaseLayerState.autoScale.measurePoint2.y}
           radius={editorLongestSide / 250}
           fill={COLOR_EDITOR_HIGH_VISIBILITY}
         />

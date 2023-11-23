@@ -1,3 +1,4 @@
+import { MapDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function getMap(mapId: number) {

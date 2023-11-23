@@ -55,7 +55,7 @@ export const BaseLayerRightToolbar = () => {
 
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
   const { measureStep, measurePoint1, measurePoint2 } = useMapStore(
-    (state) => state.untrackedState.layers.base,
+    (state) => state.untrackedState.layers.base.autoScale,
   );
   const executeAction = useMapStore((state) => state.executeAction);
   const step = useMapStore((state) => state.step);

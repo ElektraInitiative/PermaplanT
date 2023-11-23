@@ -259,15 +259,15 @@ export const createUntrackedMapSlice: StateCreator<
     set((state) => {
       // This function should only be called if one of these two states is active.
       if (
-        state.untrackedState.layers.base.measureStep !== 'none selected' &&
-        state.untrackedState.layers.base.measureStep !== 'one selected'
+        state.untrackedState.layers.base.autoScale.measureStep !== 'none selected' &&
+        state.untrackedState.layers.base.autoScale.measureStep !== 'one selected'
       )
         return state;
 
       // Measurement step 'one selected' being active implies that measurePoint1 must not be null.
-      const measureStep = state.untrackedState.layers.base.measureStep;
-      const measurePoint1 = state.untrackedState.layers.base.measurePoint1;
-      const measurePoint2 = state.untrackedState.layers.base.measurePoint2;
+      const measureStep = state.untrackedState.layers.base.autoScale.measureStep;
+      const measurePoint1 = state.untrackedState.layers.base.autoScale.measurePoint1;
+      const measurePoint2 = state.untrackedState.layers.base.autoScale.measurePoint2;
 
       return {
         ...state,

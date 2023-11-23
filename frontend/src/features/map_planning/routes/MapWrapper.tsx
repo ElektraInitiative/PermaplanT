@@ -12,6 +12,7 @@ import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
 import { LayerType, LayerDto, GuidedToursDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
+import { PolygonGeometry } from '@/features/map_planning/components/polygon/PolygonTypes';
 import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
@@ -158,7 +159,7 @@ function useInitializeMap() {
         },
         trackedState: {
           ...state.trackedState,
-          mapBounds: mapQuery.data.geometry,
+          mapBounds: mapQuery.data?.geometry as PolygonGeometry,
         },
       }));
     }

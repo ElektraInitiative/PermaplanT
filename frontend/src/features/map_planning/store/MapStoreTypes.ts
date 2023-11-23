@@ -223,6 +223,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
     }),
     {} as TrackedLayers,
   ),
+  mapBounds: { srid: '', rings: [] },
 };
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
@@ -259,9 +260,15 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
       [LayerType.Base]: {
         visible: true,
         opacity: 1,
-        measureStep: 'inactive',
-        measurePoint1: null,
-        measurePoint2: null,
+        autoScale: {
+          measureStep: 'inactive',
+          measurePoint1: null,
+          measurePoint2: null,
+        },
+        polygon: {
+          editMode: 'inactive',
+          points: new Array<Konva.Vector2d>(),
+        },
       } as UntrackedBaseLayerState,
     }),
     {} as UntrackedLayers,
@@ -356,9 +363,15 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {
-  measurePoint1: Vector2d | null;
-  measurePoint2: Vector2d | null;
-  measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
+  autoScale: {
+    measurePoint1: Vector2d | null;
+    measurePoint2: Vector2d | null;
+    measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
+  };
+  polygon: {
+    points: Array<Vector2d>;
+    editMode: 'inactive' | 'add' | 'remove' | 'move';
+  };
 };
 
 /**
