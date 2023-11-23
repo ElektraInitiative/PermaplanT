@@ -9,6 +9,9 @@ import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
 import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
 import { ReactComponent as CloseIcon, ReactComponent as CrossIcon } from '@/svg/icons/close.svg';
+import { ReactComponent as EraserIcon } from '@/svg/icons/eraser.svg';
+import { ReactComponent as PencilPlusIcon } from '@/svg/icons/pencil-plus.svg';
+import { ReactComponent as PointerIcon } from '@/svg/icons/pointer.svg';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -40,6 +43,14 @@ export interface BaseLayerEditFormProps {
 
 export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLayerEditFormProps) {
   const { t } = useTranslation(['common', 'baseLayerForm']);
+
+  const activatePolygonAddPoints = useMapStore((state) => state.baseLayerActivateAddPolygonPoints);
+  const activatePolygonMovePoints = useMapStore(
+    (state) => state.baseLayerActivateMovePolygonPoints,
+  );
+  const activatePolygonDeletePoints = useMapStore(
+    (state) => state.baseLayerActivateDeletePolygonPoints,
+  );
 
   const activateMeasurement = useMapStore((state) => state.baseLayerActivateMeasurement);
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
@@ -83,6 +94,18 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
 
   return (
     <div className="flex flex-col gap-4">
+      <h2>{t('baseLayerForm:polygon_tools_title')}</h2>
+      <div className="flex flex-row gap-1">
+        <IconButton isToolboxIcon={true} onClick={() => activatePolygonMovePoints()}>
+          <PointerIcon></PointerIcon>
+        </IconButton>
+        <IconButton isToolboxIcon={true} onClick={() => activatePolygonAddPoints()}>
+          <PencilPlusIcon></PencilPlusIcon>
+        </IconButton>
+        <IconButton isToolboxIcon={true} onClick={() => activatePolygonDeletePoints()}>
+          <EraserIcon></EraserIcon>
+        </IconButton>
+      </div>
       <h2>{t('baseLayerForm:title')}</h2>
       <FileSelectorModal
         setShow={function (show: boolean): void {

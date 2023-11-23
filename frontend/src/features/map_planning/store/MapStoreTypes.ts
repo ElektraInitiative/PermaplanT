@@ -177,6 +177,10 @@ export interface UntrackedMapSlice {
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
+  baseLayerActivateAddPolygonPoints: () => void;
+  baseLayerActivateMovePolygonPoints: () => void;
+  baseLayerActivateDeletePolygonPoints: () => void;
+  baseLayerDeactivatePolygonManipulation: () => void;
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;

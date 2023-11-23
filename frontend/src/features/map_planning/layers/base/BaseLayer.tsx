@@ -75,7 +75,9 @@ const BaseLayer = (props: BaseLayerProps) => {
           offset={imageOffset}
         />
       )}
-      {trackedState.mapBounds && <Polygon geometry={trackedState.mapBounds} />}
+      {trackedState.mapBounds && trackedState.mapBounds.rings.length > 0 && (
+        <Polygon geometry={trackedState.mapBounds} />
+      )}
       {untrackedBaseLayerState.autoScale.measurePoint1 && (
         <Circle
           x={untrackedBaseLayerState.autoScale.measurePoint1.x}

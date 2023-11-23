@@ -10,5 +10,6 @@
   "error_actual_distance_zero": "Please enter a distance greater than 0.",
   "auto_scaling_hint": "Select two points with a known distance.",
   "auto_scaling_meters_invalid": "The field 'meters' is invalid!",
-  "auto_scaling_centimeters_invalid": "The field 'centimeters' is invalid!"
+  "auto_scaling_centimeters_invalid": "The field 'centimeters' is invalid!",
+  "polygon_tools_title": "Edit Map Bounds"
 }

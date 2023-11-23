@@ -10,5 +10,6 @@
   "error_actual_distance_zero": "Bitte gib eine Distanz größer 0 ein.",
   "auto_scaling_hint": "Wähle zwei Punkte mit einer bekannten Distanz.",
   "auto_scaling_meters_invalid": "Das Feld 'Meter' ist ungültig!",
-  "auto_scaling_centimeters_invalid": "Das Feld 'Zentimeter' ist ungültig!"
+  "auto_scaling_centimeters_invalid": "Das Feld 'Zentimeter' ist ungültig!",
+  "polygon_tools_title": "Kartengrenzen editieren."
 }

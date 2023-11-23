@@ -216,6 +216,7 @@ export const createUntrackedMapSlice: StateCreator<
    * Allow the user to make measurement inputs on the base layer.
    */
   baseLayerActivateMeasurement() {
+    get().baseLayerDeactivatePolygonManipulation();
     set((state) => ({
       ...state,
       untrackedState: {
@@ -224,9 +225,11 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           base: {
             ...state.untrackedState.layers.base,
-            measurePoint1: null,
-            measurePoint2: null,
-            measureStep: 'none selected',
+            autoScale: {
+              measurePoint1: null,
+              measurePoint2: null,
+              measureStep: 'none selected',
+            },
           },
         },
       },
@@ -244,9 +247,11 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           base: {
             ...state.untrackedState.layers.base,
-            measurePoint1: null,
-            measurePoint2: null,
-            measureStep: 'inactive',
+            autoScale: {
+              measurePoint1: null,
+              measurePoint2: null,
+              measureStep: 'inactive',
+            },
           },
         },
       },
@@ -277,14 +282,91 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers,
             base: {
               ...state.untrackedState.layers.base,
-              measurePoint1: measureStep === 'none selected' ? point : measurePoint1,
-              measurePoint2: measureStep === 'none selected' ? measurePoint2 : point,
-              measureStep: measureStep === 'none selected' ? 'one selected' : 'both selected',
+              autoScale: {
+                measurePoint1: measureStep === 'none selected' ? point : measurePoint1,
+                measurePoint2: measureStep === 'none selected' ? measurePoint2 : point,
+                measureStep: measureStep === 'none selected' ? 'one selected' : 'both selected',
+              },
             },
           },
         },
       };
     });
+  },
+  baseLayerActivateAddPolygonPoints() {
+    get().baseLayerDeactivateMeasurement();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          base: {
+            ...state.untrackedState.layers.base,
+            polygon: {
+              ...state.untrackedState.layers.base.polygon,
+              editMode: 'add',
+            },
+          },
+        },
+      },
+    }));
+  },
+  baseLayerActivateDeletePolygonPoints() {
+    get().baseLayerDeactivateMeasurement();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          base: {
+            ...state.untrackedState.layers.base,
+            polygon: {
+              ...state.untrackedState.layers.base.polygon,
+              editMode: 'remove',
+            },
+          },
+        },
+      },
+    }));
+  },
+  baseLayerActivateMovePolygonPoints() {
+    get().baseLayerDeactivateMeasurement();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          base: {
+            ...state.untrackedState.layers.base,
+            polygon: {
+              ...state.untrackedState.layers.base.polygon,
+              editMode: 'move',
+            },
+          },
+        },
+      },
+    }));
+  },
+  baseLayerDeactivatePolygonManipulation() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          base: {
+            ...state.untrackedState.layers.base,
+            polygon: {
+              ...state.untrackedState.layers.base.polygon,
+              editMode: 'inactive',
+            },
+          },
+        },
+      },
+    }));
   },
   getSelectedLayerType() {
     const selectedLayer = get().untrackedState.selectedLayer;
