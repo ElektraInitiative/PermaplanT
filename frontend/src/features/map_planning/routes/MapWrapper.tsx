@@ -162,7 +162,7 @@ function useInitializeMap() {
         },
       }));
     }
-  }, [mapId, baseLayer, mapQuery?.data]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mapId, baseLayer, plantLayer, mapQuery?.data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const isLoading = !layers;
 
