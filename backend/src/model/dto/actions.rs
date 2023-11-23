@@ -61,6 +61,7 @@ impl Action {
             Self::UpdatePlantingAddDate(payload) => payload.action_id,
             Self::UpdatePlantingRemoveDate(payload) => payload.action_id,
             Self::UpdatePlantingAdditionalName(payload) => payload.action_id,
+            Self::UpdateMapGeometry(payload) => payload.action_id,
         }
     }
 }
