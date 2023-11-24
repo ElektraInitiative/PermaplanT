@@ -831,7 +831,7 @@ pub struct UpdateMap {
 #[diesel(table_name = maps)]
 pub struct UpdateMapGeometry {
     /// New Map Bounds
-    pub geometry: Option<Polygon<Point>>,
+    pub geometry: Polygon<Point>,
 }
 
 /// The `Layer` entity.

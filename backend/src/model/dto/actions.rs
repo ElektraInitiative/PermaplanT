@@ -326,7 +326,7 @@ pub struct UpdateMapGeometryActionPayload {
     action_id: Uuid,
     // E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
     #[typeshare(serialized_as = "Option<object>")]
-    geometry: Option<Polygon<Point>>,
+    geometry: Polygon<Point>,
 }
 
 impl UpdateMapGeometryActionPayload {
