@@ -271,9 +271,7 @@ function TimelineDatePickerItem({
   return (
     <div>
       <TimeLineDatePickerEventIndivatior added={added} removed={removed} />
-      <span className={`select-none ${disabled ? 'text-gray-400' : 'text-black dark:text-white'}`}>
-        {text}
-      </span>
+      <span className={`select-none ${disabled ? 'text-gray-400' : ''}`}>{text}</span>
     </div>
   );
 }

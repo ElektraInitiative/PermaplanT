@@ -264,7 +264,7 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
         tabIndex={0}
         onKeyDown={handleKeyDown}
         ref={sliderContainerRef}
-        className="horizontal-scroll-container mx-auto flex border border-gray-300 bg-white outline-none dark:border-gray-600 dark:bg-neutral-200-dark"
+        className="horizontal-scroll-container mx-auto flex border border-gray-300 bg-white text-black outline-none dark:border-gray-600 dark:bg-neutral-200-dark dark:text-white"
         style={{
           scrollSnapType: 'x mandatory',
           overflowX: 'auto',
@@ -280,9 +280,7 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
             <div
               key={index}
               className={`min-w-1/5 relative w-10 border-4 px-7 pb-1 pt-1  ${
-                getSelectedItemIndex() === index
-                  ? 'bg-gray-300 font-bold text-black dark:bg-black'
-                  : ''
+                getSelectedItemIndex() === index ? 'bg-gray-300 font-bold dark:bg-black' : ''
               }
               ${
                 getSelectedItemIndex() === index &&
