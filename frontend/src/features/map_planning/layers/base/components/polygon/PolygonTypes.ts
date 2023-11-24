@@ -17,4 +17,6 @@ export type PolygonGeometry = {
  * Polygons can have multiple edge rings (i.e. multiple independent areas).
  * Each edge ring is assumed to be wound counterclockwise with lines connecting two neighboring points.
  */
-export type EdgeRing = Array<{ x: number; y: number }>;
+export type EdgeRing = Array<{ x: number; y: number; srid: number }>;
+
+export const DEFAULT_SRID = 4326;

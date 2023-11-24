@@ -7,6 +7,7 @@ import {
   UpdateBaseLayerImageDto,
   UpdateMapDto,
 } from '@/api_types/definitions';
+import { updateMapGeometry } from '@/features/map_planning/api/updateMapGeometry';
 import { PolygonGeometry } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
 import { updateMap } from '@/features/maps/api/updateMap';
 import { v4 } from 'uuid';
@@ -81,17 +82,17 @@ export class UpdateMapGeometry
   }
 
   apply(state: TrackedMapState): TrackedMapState {
-    if (!this._data.geometry) {
+    if (!this._data) {
       return state;
     }
 
     return {
       ...state,
-      mapBounds: this._data.geometry as PolygonGeometry,
+      mapBounds: this._data as PolygonGeometry,
     };
   }
 
   execute(mapId: number): Promise<MapDto> {
-    return updateMap({ geometry: this._data }, mapId);
+    return updateMapGeometry({ geometry: this._data }, mapId);
   }
 }

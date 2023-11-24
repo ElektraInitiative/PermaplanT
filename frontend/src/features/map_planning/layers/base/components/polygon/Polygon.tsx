@@ -1,9 +1,14 @@
-import { EdgeRing } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
+import { UpdateMapGeometry } from '@/features/map_planning/layers/base/actions';
+import {
+  DEFAULT_SRID,
+  EdgeRing,
+} from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Circle, Group, Line } from 'react-konva';
 
 export const Polygon = () => {
+  const executeAction = useMapStore((state) => state.executeAction);
   const mapBounds = useMapStore((state) => state.trackedState.mapBounds);
   const polygonManipulationState = useMapStore(
     (state) => state.untrackedState.layers.base.polygon.editMode,
@@ -16,23 +21,42 @@ export const Polygon = () => {
   };
 
   const handlePointDragEnd = (e: KonvaEventObject<DragEvent>) => {
-    console.log('position', e.currentTarget.position());
+    // Why is currentTarget.index always of by 1??
+    const index = e.currentTarget.index - 1;
+    const geometry = mapBounds;
+
+    geometry.rings[0][index] = {
+      x: e.currentTarget.position().x,
+      y: e.currentTarget.position().y,
+      srid: DEFAULT_SRID,
+    };
+    // The backend expects that the first point equals the last point.
+    if (index === 0) {
+      const ringLength = geometry.rings[0].length;
+      geometry.rings[0][ringLength - 1] = geometry.rings[0][0];
+    }
+
+    executeAction(new UpdateMapGeometry(geometry as object));
   };
 
-  const points = mapBounds.rings[0].map((point, index) => (
-    <Circle
-      index={index}
-      draggable={true}
-      key={`polygon-point-${index}`}
-      x={point.x}
-      y={point.y}
-      fill="red"
-      width={30}
-      height={30}
-      onClick={(e) => handlePointClick(e)}
-      onDragEnd={(e) => handlePointDragEnd(e)}
-    />
-  ));
+  const points = mapBounds.rings[0].map((point, index) => {
+    if (index === mapBounds.rings[0].length - 1) return;
+
+    return (
+      <Circle
+        index={index}
+        draggable={true}
+        key={`polygon-point-${index}`}
+        x={point.x}
+        y={point.y}
+        fill="red"
+        width={30}
+        height={30}
+        onClick={(e) => handlePointClick(e)}
+        onDragEnd={(e) => handlePointDragEnd(e)}
+      />
+    );
+  });
 
   return (
     <Group listening={polygonManipulationState === 'move'}>

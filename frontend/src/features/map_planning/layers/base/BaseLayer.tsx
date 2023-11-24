@@ -61,8 +61,6 @@ const BaseLayer = (props: BaseLayerProps) => {
 
   const scale = MAP_PIXELS_PER_METER / pixelsPerMeter;
 
-  console.log(trackedState.mapBounds);
-
   return (
     <Layer {...layerProps} draggable={true}>
       <Group listening={false}>
@@ -98,9 +96,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           stroke={COLOR_EDITOR_HIGH_VISIBILITY}
         />
       </Group>
-      {trackedState.mapBounds && trackedState.mapBounds.rings.length > 0 && (
-        <Polygon geometry={trackedState.mapBounds} />
-      )}
+      {trackedState.mapBounds && trackedState.mapBounds.rings.length > 0 && <Polygon />}
     </Layer>
   );
 };

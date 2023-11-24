@@ -141,8 +141,6 @@ function useInitializeMap() {
     layerId: baseLayer?.id!,
   });
 
-  console.log(mapQuery.data);
-
   // select plant layer per default
   useEffect(() => {
     if (plantLayer) {
