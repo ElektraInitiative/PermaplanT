@@ -15,11 +15,10 @@
 - **Main success scenario:**
   - While adding a plant, while holding the mouse, the user can draw a rectangle.
   - The size of the arena and the number of plants is shown next to the mouse.
-  - When overlapping with other elements, it is visually indicated.
 - **Alternative scenario:**
   The user accidentally drew a wrong size of the area:
-  - and uses the app's undo function to correct the mistake
-  - or is able to change the size as wanted.
+  - and uses the app's undo function to correct the mistake, and
+  - is able to change the size as wanted.
 - **Error scenario:**
   - The user attempts to add, move or edit a plant area element but the app is experiencing technical difficulties and is unable to complete the request, displaying an error message.
   - There is an error in the app's plant relationship indication and the lines connecting the plants are not displayed correctly. In this case, the app displays an error message.
@@ -29,4 +28,4 @@
 - **Non-functional Constraints:**
   - Partial offline availability: editing attributes, especially for planting and harvesting
   - Supports alternatives
-  - Performance: more than 10000 elements per year and per alternative should be usable without noticeable delays and acceptable memory overhead
+  - Performance: more than 10000 elements per year and per alternative should be usable without noticeable delays and acceptable memory overhead (area of plants should count as one element)
