@@ -18,11 +18,11 @@ export function convertToDateString(date: Date) {
 }
 
 /**
- * Returns the name of a month in the given language.
+ * Returns the short name of a month in the given language.
  *
- * @param monthNumber month number from 1 to 12
+ * @param monthNumber month from 1 to 12
  * @param language language code, e.g. 'en-US'
- * @returns short month name of month in given language
+ * @returns short name of month in given language (e.g. 'Jan')
  */
 
 export function getShortMonthNameFromNumber(monthNumber: number, language?: string) {
