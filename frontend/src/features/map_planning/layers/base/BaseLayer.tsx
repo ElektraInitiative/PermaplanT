@@ -5,7 +5,7 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
 import { useCallback, useEffect, useState } from 'react';
-import { Circle, Layer, Line } from 'react-konva';
+import { Circle, Group, Layer, Line } from 'react-konva';
 
 type BaseLayerProps = LayerConfigWithListenerRegister;
 
@@ -64,41 +64,43 @@ const BaseLayer = (props: BaseLayerProps) => {
   console.log(trackedState.mapBounds);
 
   return (
-    <Layer {...layerProps} listening={false}>
-      {cleanImagePath && (
-        <NextcloudKonvaImage
-          path={cleanImagePath}
-          onload={onload}
-          rotation={rotation ?? 0}
-          scaleX={scale}
-          scaleY={scale}
-          offset={imageOffset}
+    <Layer {...layerProps} draggable={true}>
+      <Group listening={false}>
+        {cleanImagePath && (
+          <NextcloudKonvaImage
+            path={cleanImagePath}
+            onload={onload}
+            rotation={rotation ?? 0}
+            scaleX={scale}
+            scaleY={scale}
+            offset={imageOffset}
+          />
+        )}
+        {untrackedBaseLayerState.autoScale.measurePoint1 && (
+          <Circle
+            x={untrackedBaseLayerState.autoScale.measurePoint1.x}
+            y={untrackedBaseLayerState.autoScale.measurePoint1.y}
+            radius={editorLongestSide / 250}
+            fill={COLOR_EDITOR_HIGH_VISIBILITY}
+          />
+        )}
+        {untrackedBaseLayerState.autoScale.measurePoint2 && (
+          <Circle
+            x={untrackedBaseLayerState.autoScale.measurePoint2.x}
+            y={untrackedBaseLayerState.autoScale.measurePoint2.y}
+            radius={editorLongestSide / 250}
+            fill={COLOR_EDITOR_HIGH_VISIBILITY}
+          />
+        )}
+        <Line
+          points={measurementLinePoints()}
+          strokeWidth={editorLongestSide / 500}
+          stroke={COLOR_EDITOR_HIGH_VISIBILITY}
         />
-      )}
+      </Group>
       {trackedState.mapBounds && trackedState.mapBounds.rings.length > 0 && (
         <Polygon geometry={trackedState.mapBounds} />
       )}
-      {untrackedBaseLayerState.autoScale.measurePoint1 && (
-        <Circle
-          x={untrackedBaseLayerState.autoScale.measurePoint1.x}
-          y={untrackedBaseLayerState.autoScale.measurePoint1.y}
-          radius={editorLongestSide / 250}
-          fill={COLOR_EDITOR_HIGH_VISIBILITY}
-        />
-      )}
-      {untrackedBaseLayerState.autoScale.measurePoint2 && (
-        <Circle
-          x={untrackedBaseLayerState.autoScale.measurePoint2.x}
-          y={untrackedBaseLayerState.autoScale.measurePoint2.y}
-          radius={editorLongestSide / 250}
-          fill={COLOR_EDITOR_HIGH_VISIBILITY}
-        />
-      )}
-      <Line
-        points={measurementLinePoints()}
-        strokeWidth={editorLongestSide / 500}
-        stroke={COLOR_EDITOR_HIGH_VISIBILITY}
-      />
     </Layer>
   );
 };
