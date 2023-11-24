@@ -20,7 +20,7 @@ export function useFindPlantFromSeedCallback(afterPlantLoad: (plant: PlantForPla
     meta: {
       autoClose: false,
       errorMessage: plantId !== 0 ? t('plantings:error_fetching_plant') : undefined,
-    }
+    },
   });
 
   // useQuery's onSuccess is deprecated and does not seem to work in this context
