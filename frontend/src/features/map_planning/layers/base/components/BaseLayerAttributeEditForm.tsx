@@ -96,13 +96,37 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
     <div className="flex flex-col gap-4">
       <h2>{t('baseLayerForm:polygon_tools_title')}</h2>
       <div className="flex flex-row gap-1">
-        <IconButton isToolboxIcon={true} onClick={() => activatePolygonMovePoints()}>
+        <IconButton
+          isToolboxIcon={true}
+          onClick={() => {
+            activatePolygonMovePoints();
+            setStatusPanelContent(
+              <PolygonStatusPanelContent text={t('baseLayerForm:polygon_move_points_hint')} />,
+            );
+          }}
+        >
           <PointerIcon></PointerIcon>
         </IconButton>
-        <IconButton isToolboxIcon={true} onClick={() => activatePolygonAddPoints()}>
+        <IconButton
+          isToolboxIcon={true}
+          onClick={() => {
+            activatePolygonAddPoints();
+            setStatusPanelContent(
+              <PolygonStatusPanelContent text={t('baseLayerForm:polygon_add_points_hint')} />,
+            );
+          }}
+        >
           <PencilPlusIcon></PencilPlusIcon>
         </IconButton>
-        <IconButton isToolboxIcon={true} onClick={() => activatePolygonDeletePoints()}>
+        <IconButton
+          isToolboxIcon={true}
+          onClick={() => {
+            activatePolygonDeletePoints();
+            setStatusPanelContent(
+              <PolygonStatusPanelContent text={t('baseLayerForm:polygon_delete_points_hint')} />,
+            );
+          }}
+        >
           <EraserIcon></EraserIcon>
         </IconButton>
       </div>
@@ -240,5 +264,30 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
         </div>
       </div>
     </div>
+  );
+}
+
+function PolygonStatusPanelContent(props: { text: string }) {
+  const deactivatePolygonManipulation = useMapStore(
+    (state) => state.baseLayerDeactivatePolygonManipulation,
+  );
+  const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
+
+  return (
+    <>
+      <div className="flex flex-row items-center justify-center">{props.text}</div>
+      <div className="flex items-center justify-center">
+        <IconButton
+          className="m-2 h-8 w-8 border border-neutral-500 p-1"
+          onClick={() => {
+            deactivatePolygonManipulation();
+            clearStatusPanelContent();
+          }}
+          data-tourid="placement_cancel"
+        >
+          <CloseIcon></CloseIcon>
+        </IconButton>
+      </div>
+    </>
   );
 }
