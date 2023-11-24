@@ -1,6 +1,6 @@
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
-import { Polygon } from '@/features/map_planning/components/polygon/Polygon';
+import { Polygon } from '@/features/map_planning/layers/base/components/polygon/Polygon';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';

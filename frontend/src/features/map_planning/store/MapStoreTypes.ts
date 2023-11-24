@@ -1,4 +1,3 @@
-import { PolygonGeometry } from '../components/polygon/PolygonTypes';
 import { convertToDateString } from '../utils/date-utils';
 import {
   BaseLayerImageDto,
@@ -9,6 +8,7 @@ import {
   SeedDto,
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
+import { PolygonGeometry } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import * as uuid from 'uuid';

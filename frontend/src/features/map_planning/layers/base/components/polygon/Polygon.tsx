@@ -1,4 +1,4 @@
-import { EdgeRing } from '@/features/map_planning/components/polygon/PolygonTypes';
+import { EdgeRing } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Circle, Group, Line } from 'react-konva';
