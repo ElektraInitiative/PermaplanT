@@ -92,6 +92,6 @@ export class UpdateMapGeometry
   }
 
   execute(mapId: number): Promise<MapDto> {
-    return updateMap({ geometry: this._data.geometry }, mapId);
+    return updateMap({ geometry: this._data }, mapId);
   }
 }
