@@ -29,29 +29,23 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
   rightEndReached,
   testDataId,
 }: ItemSliderPickerProps) => {
-  // State to keep track of the selected item key.
   const [selectedItemKey, setSelectedItemKey] = useState<number>(0);
 
-  // Refs to interact with the scrolling container and handle dragging.
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const sliderContainerRef = useRef<HTMLDivElement | null>(null);
   const isDragging = useRef<boolean>(false);
   const dragStartX = useRef<number | null>(null);
 
-  // Refs to keep track of scrolling and item selection changes.
   const scrollPositionOnMouseDown = useRef<number | null>(null);
   const isScrollingToIndex = useRef<boolean>(false);
 
-  const checkIfBordersAreReached = () => {
-    const container = containerRef.current;
+  const detectAndNotifyIfBordersIsReached = () => {
+    const container = sliderContainerRef.current;
     if (container) {
       const scrollLeft = container.scrollLeft;
       const containerWidth = container.offsetWidth;
       const scrollWidth = container.scrollWidth;
 
-      // Define a threshold for how close to the ends you want to trigger the callback.
       const threshold = 500;
-
-      // Check if you are near the left end.
       if (scrollLeft < threshold) {
         leftEndReached && leftEndReached();
       } else if (scrollWidth - scrollLeft - containerWidth < threshold) {
@@ -60,22 +54,22 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
     }
   };
 
-  const setSelectedItemAndCheckIfBordersAreReached = (itemKey: number) => {
+  const setSelectedItemAndDetectIfBordersAreReached = (itemKey: number) => {
     setSelectedItemKey(itemKey);
-    checkIfBordersAreReached();
+    detectAndNotifyIfBordersIsReached();
   };
 
   const getSelectedItemIndex = useCallback(() => {
     return items.findIndex((item) => item.key === selectedItemKey);
   }, [items, selectedItemKey]);
 
-  const setSelectedItemAndNotifyChanged = (selectedItemKey: number) => {
-    setSelectedItemAndCheckIfBordersAreReached(selectedItemKey);
+  const setSelectedItemAndNotifyParent = (selectedItemKey: number) => {
+    setSelectedItemAndDetectIfBordersAreReached(selectedItemKey);
     onChange(selectedItemKey);
   };
 
   const scrollToIndex = (idx: number) => {
-    const container = containerRef.current;
+    const container = sliderContainerRef.current;
     if (container) {
       const items = container.getElementsByClassName('item') as HTMLCollectionOf<HTMLElement>;
       const selectedElement = items[idx];
@@ -92,13 +86,13 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
   };
 
   const selectNextItem = () => {
-    const container = containerRef.current;
+    const container = sliderContainerRef.current;
     if (container) {
       const selectedIndex = getSelectedItemIndex();
 
       const newSelectedIndex = Math.min(selectedIndex + 1, items.length - 1);
       if (newSelectedIndex !== selectedIndex) {
-        setSelectedItemAndNotifyChanged(items[newSelectedIndex].key);
+        setSelectedItemAndNotifyParent(items[newSelectedIndex].key);
         scrollToIndex(newSelectedIndex);
       }
     }
@@ -109,14 +103,14 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
 
     const newSelectedIndex = Math.max(selectedIndex - 1, 0);
     if (newSelectedIndex !== selectedIndex) {
-      setSelectedItemAndNotifyChanged(items[newSelectedIndex].key);
+      setSelectedItemAndNotifyParent(items[newSelectedIndex].key);
       scrollToIndex(newSelectedIndex);
     }
   };
 
-  // Identify the selected item (item that is placed in the middle) based on the scroll position.
-  const identifySelectedElementBasedOnScrollPosition = () => {
-    const container = containerRef.current;
+  const identifySelectedIndexBasedOnScrollPosition: () => number = () => {
+    const container = sliderContainerRef.current;
+
     if (container) {
       const containerWidth = container.offsetWidth;
       const scrollLeft = container.scrollLeft;
@@ -131,11 +125,12 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
         const itemLeft = item.offsetLeft;
 
         if (itemLeft <= middle && itemLeft + itemWidth >= middle) {
-          setSelectedItemAndCheckIfBordersAreReached(items[i].key);
-          break;
+          return i;
         }
       }
     }
+
+    return 0;
   };
 
   const handleScroll = () => {
@@ -145,11 +140,12 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
       return;
     }
 
-    identifySelectedElementBasedOnScrollPosition();
+    const selectedItemIndex: number = identifySelectedIndexBasedOnScrollPosition();
+    setSelectedItemAndDetectIfBordersAreReached(items[selectedItemIndex].key);
   };
 
   const handleMouseDown = (e: MouseEvent) => {
-    const container = containerRef.current;
+    const container = sliderContainerRef.current;
 
     if (container) {
       isDragging.current = true;
@@ -162,7 +158,7 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.current || dragStartX.current === null) return;
 
-    const container = containerRef.current;
+    const container = sliderContainerRef.current;
     if (container && scrollPositionOnMouseDown.current) {
       const deltaX = e.clientX - dragStartX.current;
 
@@ -174,18 +170,17 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
   };
 
   const handleItemClick = (e: React.MouseEvent, index: number) => {
-    const container = containerRef.current;
+    const container = sliderContainerRef.current;
     if (container && scrollPositionOnMouseDown.current === container.scrollLeft) {
-      setSelectedItemAndNotifyChanged(items[index].key);
+      setSelectedItemAndNotifyParent(items[index].key);
       scrollToIndex(index);
     }
   };
 
   const handleMouseUp = () => {
-    //when stop dragging we want to scroll to the selected item and update the selected item
     if (
       isDragging.current &&
-      scrollPositionOnMouseDown.current !== containerRef.current?.scrollLeft
+      scrollPositionOnMouseDown.current !== sliderContainerRef.current?.scrollLeft
     ) {
       scrollToIndex(getSelectedItemIndex());
       onChange(selectedItemKey);
@@ -196,9 +191,9 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
   };
 
   const handleMouseWheel = (e: WheelEvent) => {
-    const container = containerRef.current;
+    const container = sliderContainerRef.current;
     if (container) {
-      e.preventDefault(); // Prevent the page from scrolling
+      e.preventDefault();
 
       if (e.deltaY > 0) {
         selectPreviousItem();
@@ -221,7 +216,7 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
   };
 
   useEffect(() => {
-    const container = containerRef.current;
+    const container = sliderContainerRef.current;
     container?.addEventListener('scroll', handleScroll);
     container?.addEventListener('mousedown', handleMouseDown);
     container?.addEventListener('wheel', handleMouseWheel);
@@ -252,11 +247,12 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
     scrollToIndex(items.findIndex((item) => item.key === value));
   }, [value, items]);
 
-  // Component to add padding to the beginning and end of the scroll container.
   const SliderPadding = () => {
     return (
       <div
-        style={{ minWidth: containerRef.current ? containerRef.current.offsetWidth / 2 : 0 }}
+        style={{
+          minWidth: sliderContainerRef.current ? sliderContainerRef.current.offsetWidth / 2 : 0,
+        }}
       ></div>
     );
   };
@@ -267,7 +263,7 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
         data-testid={testDataId}
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        ref={containerRef}
+        ref={sliderContainerRef}
         className="horizontal-scroll-container mx-auto flex border border-gray-300 bg-white outline-none dark:border-gray-600 dark:bg-neutral-200-dark"
         style={{
           scrollSnapType: 'x mandatory',
@@ -289,9 +285,10 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
                   : ''
               }
               ${
-                getSelectedItemIndex() === index && document.activeElement === containerRef.current
+                getSelectedItemIndex() === index &&
+                document.activeElement === sliderContainerRef.current
                   ? 'border-blue-300'
-                  : 'border-white'
+                  : 'dark border-white dark:border-neutral-200-dark'
               }
               item flex flex-col items-center justify-end`}
               onClick={(e) => handleItemClick(e, index)}

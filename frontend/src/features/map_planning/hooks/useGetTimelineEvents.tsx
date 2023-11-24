@@ -1,3 +1,7 @@
+/**
+ * This hook is currently just creating dummy data for the timeline until the backend is ready.
+ */
+
 const MIN_YEAR = 1930;
 const MAX_YEAR = 2130;
 
@@ -53,7 +57,6 @@ const createDays = () => {
 };
 
 export default function useGetTimeLineEvents() {
-  //TODO: useQuery to fetch timeline events from backend
   return {
     dailyTimeLineEvents: createDays(),
     monthlyTimeLineEvents: createMonths(),

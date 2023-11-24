@@ -1,19 +1,12 @@
 import useGetTimeLineEvents from '../../hooks/useGetTimelineEvents';
+import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useRef, ReactNode, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const TEST_IDS = Object.freeze({
   DAY_SLIDER: 'timeline__date-input',
 });
-
-function getMonthName(monthNumber: number, language?: string) {
-  const date = new Date();
-  date.setMonth(monthNumber - 1);
-
-  return date.toLocaleString(language, { month: 'short' });
-}
 
 export type DayItem = {
   key: number;
@@ -54,137 +47,159 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
   const defaultMonth = new Date(defaultDate).getMonth() + 1;
   const defaultDay = new Date(defaultDate).getDate();
 
-  const { dailyTimeLineEvents, monthlyTimeLineEvents, yearlyTimeLineEvents } =
-    useGetTimeLineEvents();
-
+  const {
+    dailyTimeLineEvents: daySilderItems,
+    monthlyTimeLineEvents: monthSliderItems,
+    yearlyTimeLineEvents,
+  } = useGetTimeLineEvents();
   const { i18n } = useTranslation();
 
-  const [selectedYear, setSelectedYear] = useState<number>(
-    yearlyTimeLineEvents.findIndex((yearSliderItem) => yearSliderItem.year === defaultYear),
+  const [selectedYearItem, setSelectedYearItem] = useState<YearItem>(
+    yearlyTimeLineEvents.find((yearSliderItem) => yearSliderItem.year === defaultYear) ||
+      yearlyTimeLineEvents[0],
   );
 
-  const [selectedMonthItem, setSelectedMonthItem] = useState<number>(
-    monthlyTimeLineEvents.findIndex(
-      (month) => month.year === defaultYear && month.month === defaultMonth,
-    ),
+  const [selectedMonthItem, setSelectedMonthItem] = useState<MonthItem>(
+    monthSliderItems.find((month) => month.year === defaultYear && month.month === defaultMonth) ||
+      monthSliderItems[0],
   );
 
-  const [selectedDayItem, setSelectedDay] = useState<number>(
-    dailyTimeLineEvents.findIndex(
+  const [selectedDayItem, setSelectedDay] = useState<DayItem>(
+    daySilderItems.find(
       (day) => day.year === defaultYear && day.month === defaultMonth && day.day === defaultDay,
-    ),
+    ) || daySilderItems[0],
   );
 
-  const calculateVisibleDays = (selectedDay: number) => {
-    return dailyTimeLineEvents.filter(
-      (day) =>
-        day.key >= dailyTimeLineEvents[selectedDay].key - 100 &&
-        day.key <= dailyTimeLineEvents[selectedDay].key + 100,
+  const calculateVisibleDays = (dayItem: DayItem) => {
+    return daySilderItems.filter(
+      (day) => day.key >= dayItem.key - 100 && day.key <= dayItem.key + 100,
     );
   };
 
-  const calculateVisibleMonths = (yearItemKey: number) => {
-    return monthlyTimeLineEvents.filter(
-      (month) =>
-        month.year >= yearlyTimeLineEvents[yearItemKey].year - 3 &&
-        month.year <= yearlyTimeLineEvents[yearItemKey].year + 3,
+  const calculateVisibleMonths = (yearItem: YearItem) => {
+    return monthSliderItems.filter(
+      (month) => month.year >= yearItem.year - 3 && month.year <= yearItem.year + 3,
     );
   };
 
   const getLastDayItemOfMonth = (month: number, year: number) => {
-    return dailyTimeLineEvents.filter((day) => day.month === month && day.year === year).pop()?.key;
+    return daySilderItems
+      .filter((daySliderItem) => daySliderItem.month === month && daySliderItem.year === year)
+      .pop();
   };
 
   const [visibleDays, setVisibleDays] = useState<DayItem[]>(calculateVisibleDays(selectedDayItem));
   const [visibleMonths, setVisibleMonths] = useState<MonthItem[]>(
-    calculateVisibleMonths(selectedYear),
+    calculateVisibleMonths(selectedYearItem),
   );
 
-  const handleDayChange = (itemKey: number) => {
-    const selectedDayItem = dailyTimeLineEvents[itemKey];
-    setSelectedDay(itemKey);
+  const handleDayItemChange = (itemKey: number) => {
+    const selectedDayItem = daySilderItems[itemKey];
+    setSelectedDay(selectedDayItem);
 
-    // update month if new day is in different month than previous selected day
-    if (selectedDayItem.month !== monthlyTimeLineEvents[selectedMonthItem].month) {
-      setSelectedMonthItem(
-        monthlyTimeLineEvents.findIndex(
-          (month) => selectedDayItem.month === month.month && selectedDayItem.year === month.year,
-        ),
+    if (selectedDayItem.month !== selectedMonthItem.month) {
+      const newMonthItem = monthSliderItems.find(
+        (month) => selectedDayItem.month === month.month && selectedDayItem.year === month.year,
       );
+      if (newMonthItem) {
+        setSelectedMonthItem(newMonthItem);
+      }
     }
 
-    // update year if new day is in different year than previous selected day
-    if (selectedDayItem.year !== selectedYear) {
-      setSelectedYear(
-        yearlyTimeLineEvents.findIndex(
-          (yearSliderItem) => selectedDayItem.year === yearSliderItem.year,
-        ),
+    if (selectedDayItem.year !== selectedYearItem.year) {
+      const newYearItem = yearlyTimeLineEvents.find(
+        (yearSliderItem) => selectedDayItem.year === yearSliderItem.year,
       );
+      if (newYearItem) {
+        setSelectedYearItem(newYearItem);
+      }
     }
   };
 
   const handleMonthChange = (key: number) => {
-    const newMonthItem = monthlyTimeLineEvents[key];
-    setSelectedMonthItem(key);
+    const newMonthItem = monthSliderItems[key];
+    setSelectedMonthItem(newMonthItem);
 
-    // update year if new month is in different year than previous selected month
-    if (newMonthItem.year !== selectedYear) {
-      setSelectedYear(
-        yearlyTimeLineEvents.findIndex(
-          (yearSliderItem) => newMonthItem.year === yearSliderItem.year,
-        ),
+    if (newMonthItem.year !== selectedYearItem.year) {
+      const newYearItem = yearlyTimeLineEvents.find(
+        (yearSliderItem) => newMonthItem.year === yearSliderItem.year,
       );
+      if (newYearItem) {
+        setSelectedYearItem(newYearItem);
+      }
     }
 
-    // update day if new month has changed
-    if (dailyTimeLineEvents[selectedDayItem].month !== newMonthItem.month) {
-      selectNewDayIfMonthChanged(newMonthItem);
+    if (selectedDayItem.month !== newMonthItem.month) {
+      selectNewDayWhenMonthChanged(newMonthItem);
     }
   };
 
   const handleYearChange = (yearItemKey: number) => {
     const newYearItem = yearlyTimeLineEvents[yearItemKey];
-    setSelectedYear(yearItemKey);
+    setSelectedYearItem(newYearItem);
 
-    if (monthlyTimeLineEvents[selectedMonthItem].year !== newYearItem.year) {
-      const newMonthItem = monthlyTimeLineEvents.find(
-        (month) =>
-          newYearItem.year === month.year &&
-          month.month === monthlyTimeLineEvents[selectedMonthItem].month,
+    if (selectedMonthItem.year !== newYearItem.year) {
+      const newMonthItem = monthSliderItems.find(
+        (month) => newYearItem.year === month.year && month.month === selectedMonthItem.month,
       );
 
       if (newMonthItem) {
-        setVisibleMonths(calculateVisibleMonths(yearItemKey));
-        setSelectedMonthItem(newMonthItem.key);
+        setVisibleMonths(calculateVisibleMonths(newYearItem));
+        setSelectedMonthItem(newMonthItem);
 
         if (
-          dailyTimeLineEvents[selectedDayItem].month !== newMonthItem.month ||
-          dailyTimeLineEvents[selectedDayItem].year !== newMonthItem.year
+          selectedDayItem.month !== newMonthItem.month ||
+          selectedDayItem.year !== newMonthItem.year
         ) {
-          selectNewDayIfMonthChanged(newMonthItem);
+          selectNewDayWhenMonthChanged(newMonthItem);
         }
       }
     }
   };
 
-  const selectNewDayIfMonthChanged = (newMonthItem: MonthItem) => {
-    const newDay = dailyTimeLineEvents.find(
+  const selectNewDayWhenMonthChanged = (newMonthItem: MonthItem) => {
+    const sameDayInNewMonth = daySilderItems.find(
       (day) =>
         newMonthItem.month === day.month &&
         newMonthItem.year === day.year &&
-        day.day === dailyTimeLineEvents[selectedDayItem].day,
+        day.day === selectedDayItem.day,
     );
 
-    const newDayKey =
-      newDay?.key || getLastDayItemOfMonth(newMonthItem.month, newMonthItem.year) || 0;
-    setVisibleDays(calculateVisibleDays(newDayKey));
-    setSelectedDay(newDayKey);
+    const newDay =
+      sameDayInNewMonth || getLastDayItemOfMonth(newMonthItem.month, newMonthItem.year);
+    if (newDay) {
+      setVisibleDays(calculateVisibleDays(newDay));
+      setSelectedDay(newDay);
+    }
   };
 
-  //debounced submit
+  const handleMontSliderLeftEndReached = () => {
+    if (visibleMonths[0].key > 0) {
+      setVisibleMonths(calculateVisibleMonths(selectedYearItem));
+    }
+  };
+
+  const handleMontSliderRightEndReached = () => {
+    if (visibleMonths[visibleMonths.length - 1].key < monthSliderItems.length - 1) {
+      setVisibleMonths(calculateVisibleMonths(selectedYearItem));
+    }
+  };
+
+  const handleDaySliderLeftEndReached = () => {
+    if (visibleDays[0].key > 0) {
+      setVisibleDays(calculateVisibleDays(selectedDayItem));
+    }
+  };
+
+  const handleDaySliderRightEndReached = () => {
+    if (visibleDays[visibleDays.length - 1].key < daySilderItems.length - 1) {
+      setVisibleDays(calculateVisibleDays(selectedDayItem));
+    }
+  };
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const newDay = dailyTimeLineEvents[selectedDayItem];
+      const newDay = selectedDayItem;
       onSelectDate(`${newDay.year}-${newDay.month}-${newDay.day}`);
     }, 500);
     return () => clearTimeout(timeoutId);
@@ -203,30 +218,22 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
           }),
         }))}
         onChange={handleYearChange}
-        value={selectedYear}
+        value={selectedYearItem.key}
       />
       <ItemSliderPicker
         items={visibleMonths.map((monthSliderItem) => ({
           key: monthSliderItem.key,
           content: TimelineDatePickerItem({
-            text: getMonthName(monthSliderItem.month, i18n.resolvedLanguage),
+            text: getShortMonthNameFromNumber(monthSliderItem.month, i18n.resolvedLanguage),
             added: monthSliderItem.added,
             removed: monthSliderItem.removed,
-            disabled: monthSliderItem.year !== yearlyTimeLineEvents[selectedYear].year,
+            disabled: monthSliderItem.year !== selectedYearItem.year,
           }),
         }))}
         onChange={handleMonthChange}
-        leftEndReached={() => {
-          if (visibleMonths[0].key > 0) {
-            setVisibleMonths(calculateVisibleMonths(selectedYear));
-          }
-        }}
-        rightEndReached={() => {
-          if (visibleMonths[visibleMonths.length - 1].key < monthlyTimeLineEvents.length - 1) {
-            setVisibleMonths(calculateVisibleMonths(selectedYear));
-          }
-        }}
-        value={selectedMonthItem}
+        leftEndReached={handleMontSliderLeftEndReached}
+        rightEndReached={handleMontSliderRightEndReached}
+        value={selectedMonthItem.key}
       />
       <ItemSliderPicker
         testDataId={TEST_IDS.DAY_SLIDER}
@@ -236,24 +243,15 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
             text: daySliderItem.day.toString(),
             added: daySliderItem.added,
             removed: daySliderItem.removed,
-            disabled: !(
-              daySliderItem.month == monthlyTimeLineEvents[selectedMonthItem].month &&
-              daySliderItem.year == monthlyTimeLineEvents[selectedMonthItem].year
-            ),
+            disabled:
+              daySliderItem.month != selectedMonthItem.month ||
+              daySliderItem.year != selectedMonthItem.year,
           }),
         }))}
-        onChange={handleDayChange}
-        leftEndReached={() => {
-          if (visibleDays[0].key > 0) {
-            setVisibleDays(calculateVisibleDays(selectedDayItem));
-          }
-        }}
-        rightEndReached={() => {
-          if (visibleDays[visibleDays.length - 1].key < dailyTimeLineEvents.length - 1) {
-            setVisibleDays(calculateVisibleDays(selectedDayItem));
-          }
-        }}
-        value={selectedDayItem}
+        onChange={handleDayItemChange}
+        leftEndReached={handleDaySliderLeftEndReached}
+        rightEndReached={handleDaySliderRightEndReached}
+        value={selectedDayItem.key}
       />
     </>
   );
@@ -270,32 +268,34 @@ function TimelineDatePickerItem({
   removed: number;
   disabled?: boolean;
 }) {
+  return (
+    <div>
+      <TimeLineDatePickerEventIndivatior added={added} removed={removed} />
+      <span className={`select-none ${disabled ? 'text-gray-400' : 'text-black dark:text-white'}`}>
+        {text}
+      </span>
+    </div>
+  );
+}
+
+function TimeLineDatePickerEventIndivatior({ added, removed }: { added: number; removed: number }) {
   const greenBarHeight = added;
   const redBarHeight = removed;
 
   return (
-    <div>
-      <div className="flex select-none justify-center">
-        <div className="flex items-end">
-          <div
-            style={{ height: greenBarHeight + 'px' }}
-            className={
-              disabled ? 'w-2 bg-primary-400 opacity-30' : 'w-2 bg-primary-400 opacity-100'
-            }
-          ></div>
-        </div>
-        <div className="flex items-end">
-          <div
-            style={{ height: redBarHeight + 'px' }}
-            className={
-              disabled
-                ? 'w-2 bg-red-400 opacity-30 dark:bg-red-700'
-                : 'w-2  bg-red-400 opacity-100 dark:bg-red-700'
-            }
-          ></div>
-        </div>
+    <div className="flex select-none justify-center">
+      <div className="flex items-end">
+        <div
+          style={{ height: greenBarHeight + 'px' }}
+          className="w-2 bg-primary-400 opacity-100"
+        ></div>
       </div>
-      <span className={`select-none ${disabled ? 'text-gray-400' : 'text-black'}`}>{text}</span>
+      <div className="flex items-end">
+        <div
+          style={{ height: redBarHeight + 'px' }}
+          className="w-2 bg-red-400 opacity-100 dark:bg-red-700"
+        ></div>
+      </div>
     </div>
   );
 }

@@ -16,3 +16,18 @@ export function convertToDateString(date: Date) {
 
   return `${year}-${month}-${day}`;
 }
+
+/**
+ * Returns the name of a month in the given language.
+ *
+ * @param monthNumber month number from 1 to 12
+ * @param language language code, e.g. 'en-US'
+ * @returns short month name of month in given language
+ */
+
+export function getShortMonthNameFromNumber(monthNumber: number, language?: string) {
+  const date = new Date();
+  date.setMonth(monthNumber - 1);
+
+  return date.toLocaleString(language, { month: 'short' });
+}
