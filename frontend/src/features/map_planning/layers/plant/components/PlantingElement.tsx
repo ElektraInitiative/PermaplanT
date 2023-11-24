@@ -1,7 +1,6 @@
 import { useFindPlantById } from '../hooks/useFindPlantById';
-import { PlantingDto, PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
+import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
-import { useFindSeedById } from '@/features/map_planning/layers/plant/hooks/useFindSeedById';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import {
   setTooltipPositionToMouseCursor,
@@ -10,7 +9,7 @@ import {
 } from '@/features/map_planning/utils/Tooltip';
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
 import { COLOR_PRIMARY_400, COLOR_SECONDARY_400 } from '@/utils/constants';
-import { getNameFromPlant, getPlantNameFromSeedAndPlant } from '@/utils/plant-naming';
+import { getNameFromPlant, getPlantNameFromAdditionalNameAndPlant } from '@/utils/plant-naming';
 import { KonvaEventObject, Node } from 'konva/lib/Node';
 import { Group, Circle, Rect } from 'react-konva';
 
@@ -31,7 +30,6 @@ export type PlantingElementProps = {
  */
 export function PlantingElement({ planting }: PlantingElementProps) {
   const { plant } = useFindPlantById(planting.plantId);
-  const { seed } = useFindSeedById(planting.seedId ?? -1, true, true);
 
   const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
   const addNodeToTransformer = useMapStore((state) => state.addNodeToTransformer);
@@ -89,7 +87,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
       draggable={true}
       onClick={(e) => handleClickOnPlant(e)}
       onMouseOut={hideTooltip}
-      onMouseMove={() => placeTooltip(plant, seed)}
+      onMouseMove={() => placeTooltip(plant, planting.additionalName)}
     >
       <Circle
         width={planting.width}
@@ -132,13 +130,13 @@ function isUsingModiferKey(e: KonvaEventObject<MouseEvent>): boolean {
   return e.evt.ctrlKey || e.evt.shiftKey || e.evt.metaKey;
 }
 
-function placeTooltip(plant: PlantsSummaryDto | undefined, seed: SeedDto | undefined) {
+function placeTooltip(plant: PlantsSummaryDto | undefined, additionalName: string | undefined) {
   if (!plant) return;
 
   setTooltipPositionToMouseCursor();
-  if (!seed) {
+  if (!additionalName) {
     showTooltipWithContent(getNameFromPlant(plant));
   } else {
-    showTooltipWithContent(getPlantNameFromSeedAndPlant(seed, plant));
+    showTooltipWithContent(getPlantNameFromAdditionalNameAndPlant(additionalName, plant));
   }
 }

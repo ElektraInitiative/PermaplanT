@@ -62,6 +62,20 @@ pub async fn find(
     })
 }
 
+/// Get all plantings that have a specific seed id.
+/// Also returns a plantings map id.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub async fn find_by_seed_id(
+    seed_id: i32,
+    app_data: &Data<AppDataInner>,
+) -> Result<Vec<PlantingDto>, ServiceError> {
+    let mut conn = app_data.pool.get().await?;
+    let result = Planting::find_by_seed_id(seed_id, &mut conn).await?;
+    Ok(result)
+}
+
 /// Create a new planting in the database.
 ///
 /// # Errors

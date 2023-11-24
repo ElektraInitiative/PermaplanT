@@ -9,7 +9,7 @@ use uuid::Uuid;
 /// Represents plant planted on a map.
 /// E.g. a user drags a plant from the search results and drops it on the map.
 #[typeshare]
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct PlantingDto {
     /// The id of the planting.
@@ -40,6 +40,10 @@ pub struct PlantingDto {
     pub remove_date: Option<NaiveDate>,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
+    /// Eqivalent to the seed name.
+    /// It is used to display the full plant name on a map
+    /// even if a user does not have access to the seed.
+    pub additional_name: Option<String>,
 }
 
 /// Used to create a new planting.
