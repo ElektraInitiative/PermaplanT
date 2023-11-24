@@ -327,6 +327,7 @@ export const BaseStage = ({
             <BottomStatusPanel>{bottomStatusPanelContent}</BottomStatusPanel>
           )}
         </AnimatePresence>
+        ,
       </div>
     </div>
   );
