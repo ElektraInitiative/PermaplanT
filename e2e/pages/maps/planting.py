@@ -41,9 +41,8 @@ class MapPlantingPage(AbstractPage):
         # Canvas
         self._canvas = page.get_by_test_id("base-stage__canvas")
         self._close_selected_plant = self._canvas.get_by_role("button")
-        self._map_date = page.get_by_label("Change map date")
+        self._map_date = page.get_by_test_id("timeline__date-input")
         self._timeline_idle = page.get_by_test_id("timeline__date-form-idle")
-
         # Top left section
         self._undo_button = page.get_by_test_id("map__undo-button")
         self._redo_button = page.get_by_test_id("map__redo-button")
@@ -93,9 +92,12 @@ class MapPlantingPage(AbstractPage):
 
     def change_map_date_by_days(self, delta_days: int):
         """Changes the date by a given amount of days."""
-        day = datetime.today() + timedelta(days=delta_days)
-        self._map_date.fill(day.strftime("%Y-%m-%d"))
-        self._timeline_idle.wait_for()
+        if delta_days > 0:
+            for i in range(delta_days):
+                self._map_date.press("ArrowRight")
+        else:
+            for i in range(abs(delta_days)):
+                self._map_date.press("ArrowLeft")
 
     def change_plant_added_date_by_days(self, delta_days: int):
         """Changes the date by a given amount of days and checks the spinner if possible."""

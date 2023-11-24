@@ -17,6 +17,8 @@ interface ItemSliderPickerProps {
   rightEndReached?: () => void;
   /** initial value */
   value?: number;
+  /** id for testing */
+  testDataId?: string;
 }
 
 const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
@@ -25,6 +27,7 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
   value,
   leftEndReached,
   rightEndReached,
+  testDataId,
 }: ItemSliderPickerProps) => {
   // State to keep track of the selected item key.
   const [selectedItemKey, setSelectedItemKey] = useState<number>(0);
@@ -261,6 +264,7 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
   return (
     <div className="relative w-full">
       <div
+        data-testid={testDataId}
         tabIndex={0}
         onKeyDown={handleKeyDown}
         ref={containerRef}

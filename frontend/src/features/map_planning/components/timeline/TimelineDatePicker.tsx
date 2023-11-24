@@ -1,8 +1,12 @@
 import useGetTimeLineEvents from '../../hooks/useGetTimelineEvents';
-import HorizontalScrollingPicker from './ItemSliderPicker';
+import ItemSliderPicker from './ItemSliderPicker';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useRef, ReactNode, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+
+export const TEST_IDS = Object.freeze({
+  DAY_SLIDER: 'timeline__date-input',
+});
 
 function getMonthName(monthNumber: number, language?: string) {
   const date = new Date();
@@ -189,7 +193,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
 
   return (
     <>
-      <HorizontalScrollingPicker
+      <ItemSliderPicker
         items={yearlyTimeLineEvents.map((yearSliderItem) => ({
           key: yearSliderItem.key,
           content: TimelineDatePickerItem({
@@ -201,7 +205,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
         onChange={handleYearChange}
         value={selectedYear}
       />
-      <HorizontalScrollingPicker
+      <ItemSliderPicker
         items={visibleMonths.map((monthSliderItem) => ({
           key: monthSliderItem.key,
           content: TimelineDatePickerItem({
@@ -224,7 +228,8 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
         }}
         value={selectedMonthItem}
       />
-      <HorizontalScrollingPicker
+      <ItemSliderPicker
+        testDataId={TEST_IDS.DAY_SLIDER}
         items={visibleDays.map((daySliderItem) => ({
           key: daySliderItem.key,
           content: TimelineDatePickerItem({
