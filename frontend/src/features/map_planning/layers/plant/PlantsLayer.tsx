@@ -2,11 +2,13 @@ import useMapStore from '../../store/MapStore';
 import { PlantForPlanting } from '../../store/MapStoreTypes';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { SELECTION_RECTANGLE_NAME } from '../../utils/ShapesSelection';
+import { isPlantLayerActive } from '../../utils/layer-utils';
 import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 // import { PlantCursor } from './components/PlantCursor';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
+import { useDeleteSelectedPlantings } from './hooks/useDeleteSelectedPlantings';
 import {
   LayerType,
   PlantSpread,
@@ -259,10 +261,24 @@ function usePlantLayerListeners(listening: boolean) {
   ]);
 }
 
+function usePlantLayerKeyListeners() {
+  const { deleteSelectedPlantings } = useDeleteSelectedPlantings();
+
+  const keybindings = createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_PLANTS_LAYER, {
+    deleteSelectedPlantings: () => {
+      deleteSelectedPlantings();
+    },
+  });
+
+  useKeyHandlers(isPlantLayerActive() ? keybindings : {});
+}
+
 type PlantsLayerProps = Konva.LayerConfig;
 
 function PlantsLayer(props: PlantsLayerProps) {
   usePlantLayerListeners(props.listening || false);
+  usePlantLayerKeyListeners();
+
   const layerRef = useRef<Konva.Layer>(null);
 
   const plants = useMapStore((map) => map.trackedState.layers.plants.objects);
