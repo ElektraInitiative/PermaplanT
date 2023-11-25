@@ -16,8 +16,21 @@ export const Polygon = () => {
 
   const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
 
-  const handlePointClick = (e: KonvaEventObject<MouseEvent>) => {
-    setSingleNodeInTransformer(e.currentTarget);
+  const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
+    if (polygonManipulationState === 'move') {
+      setSingleNodeInTransformer(e.currentTarget);
+      return;
+    }
+
+    if (polygonManipulationState !== 'remove') return;
+
+    const index = e.currentTarget.index - 1;
+    const geometry = mapBounds;
+    const ring = geometry.rings[0];
+
+    geometry.rings[0] = ring.slice(0, index).concat(ring.slice(index + 1, ring.length));
+
+    executeAction(new UpdateMapGeometry(geometry as object));
   };
 
   const handlePointDragEnd = (e: KonvaEventObject<DragEvent>) => {
@@ -52,14 +65,15 @@ export const Polygon = () => {
         fill="red"
         width={30}
         height={30}
-        onClick={(e) => handlePointClick(e)}
+        onClick={(e) => handlePointSelect(e)}
+        onDragStart={(e) => handlePointSelect(e)}
         onDragEnd={(e) => handlePointDragEnd(e)}
       />
     );
   });
 
   return (
-    <Group listening={polygonManipulationState === 'move'}>
+    <Group listening={polygonManipulationState === 'move' || polygonManipulationState === 'remove'}>
       <Line
         listening={true}
         points={flattenRing(mapBounds.rings[0])}
