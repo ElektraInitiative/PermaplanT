@@ -4,6 +4,7 @@ import {
   EdgeRing,
 } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Circle, Group, Line } from 'react-konva';
 
@@ -15,7 +16,9 @@ export const Polygon = (props: { show: boolean }) => {
   const polygonManipulationState = useMapStore(
     (state) => state.untrackedState.layers.base.polygon.editMode,
   );
-
+  const editorLongestSide = useMapStore((map) =>
+    Math.max(map.untrackedState.editorBounds.width, map.untrackedState.editorBounds.height),
+  );
   const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
 
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
@@ -69,8 +72,7 @@ export const Polygon = (props: { show: boolean }) => {
         x={point.x}
         y={point.y}
         fill="red"
-        width={30}
-        height={30}
+        radius={editorLongestSide / 200}
         onClick={(e) => handlePointSelect(e)}
         onDragStart={(e) => handlePointSelect(e)}
         onDragEnd={(e) => handlePointDragEnd(e)}
@@ -86,8 +88,8 @@ export const Polygon = (props: { show: boolean }) => {
       <Line
         listening={true}
         points={flattenRing(mapBounds.rings[0])}
-        stroke="red"
-        strokeWidth={10}
+        stroke={COLOR_EDITOR_HIGH_VISIBILITY}
+        strokeWidth={editorLongestSide / 500}
         lineCap="round"
         closed={true}
       />
