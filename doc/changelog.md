@@ -11,6 +11,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
+- Enable automatic image scaling in base layer _(Moritz)_
+- _()_
+- Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_

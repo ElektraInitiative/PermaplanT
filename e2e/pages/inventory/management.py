@@ -33,7 +33,7 @@ class SeedManagementPage(AbstractPage):
     def to_seed_create_page(self) -> SeedCreatePage:
         """Navigates to `SeedCreatePage`"""
         self._new_entry_button.click()
-        self._page.wait_for_url("**/seeds/new")
+        self._page.wait_for_url("**/seeds/create")
         return SeedCreatePage(self._page)
 
     def to_seed_edit_page(self, seed_name) -> SeedEditPage:

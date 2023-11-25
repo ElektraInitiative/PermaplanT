@@ -21,6 +21,18 @@ We use [Bulletproof React](https://github.com/alan2207/bulletproof-react) with f
 - Error Handling <https://tkdodo.eu/blog/breaking-react-querys-api-on-purpose#a-bad-api>
 - Lists are called `*List` and items of such a list are called `*ListItem`, e.g., `LayerList` and `LayerListItem` for a list of layers
 
+### Route Naming Conventions
+
+- Follow RESTful conventions for route names.
+- Use descriptive, plural nouns for resource collections.
+- Use placeholders for dynamic segments in route names.
+
+Examples
+
+- **View:** /resource
+- **Edit:** /resource/:id/edit
+- **Create:** /resource/create
+
 ## Incorporate Accessibility Best Practices
 
 Writing code that is highly accessible and easily testable should be a priority whenever possible.
