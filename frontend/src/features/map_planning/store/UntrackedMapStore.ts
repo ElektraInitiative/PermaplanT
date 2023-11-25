@@ -314,6 +314,8 @@ export const createUntrackedMapSlice: StateCreator<
   },
   baseLayerActivateDeletePolygonPoints() {
     get().baseLayerDeactivateMeasurement();
+    get().transformer.current?.rotateEnabled(false);
+    get().transformer.current?.resizeEnabled(false);
     set((state) => ({
       ...state,
       untrackedState: {
@@ -333,6 +335,8 @@ export const createUntrackedMapSlice: StateCreator<
   },
   baseLayerActivateMovePolygonPoints() {
     get().baseLayerDeactivateMeasurement();
+    get().transformer.current?.rotateEnabled(false);
+    get().transformer.current?.resizeEnabled(false);
     set((state) => ({
       ...state,
       untrackedState: {
@@ -351,6 +355,8 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   baseLayerDeactivatePolygonManipulation() {
+    get().transformer.current?.rotateEnabled(true);
+    get().transformer.current?.resizeEnabled(true);
     set((state) => ({
       ...state,
       untrackedState: {
