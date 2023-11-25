@@ -5,7 +5,7 @@ import {
   LayerType,
   MapDto,
   UpdateBaseLayerImageDto,
-  UpdateMapDto,
+  UpdateMapGeometryDto,
 } from '@/api_types/definitions';
 import { updateMapGeometry } from '@/features/map_planning/api/updateMapGeometry';
 import { PolygonGeometry } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
@@ -66,14 +66,20 @@ export class UpdateBaseLayerAction
 export class UpdateMapGeometry
   implements Action<Awaited<ReturnType<typeof updateMap>>, Awaited<ReturnType<typeof updateMap>>>
 {
-  constructor(private readonly _data: Pick<UpdateMapDto, 'geometry'>, public actionId = v4()) {}
+  constructor(
+    private readonly _data: UpdateMapGeometryDto & { mapId: number },
+    public actionId = v4(),
+  ) {}
 
   get entityIds() {
-    return [];
+    return [this._data.mapId.toString()];
   }
 
   reverse(state: TrackedMapState) {
-    return new UpdateMapGeometry(state.mapBounds as object, this.actionId);
+    return new UpdateMapGeometry(
+      { mapId: this._data.mapId, geometry: state.mapBounds as object },
+      this.actionId,
+    );
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -83,11 +89,11 @@ export class UpdateMapGeometry
 
     return {
       ...state,
-      mapBounds: this._data as PolygonGeometry,
+      mapBounds: this._data.geometry as PolygonGeometry,
     };
   }
 
   execute(mapId: number): Promise<MapDto> {
-    return updateMapGeometry({ geometry: this._data }, mapId);
+    return updateMapGeometry({ geometry: this._data.geometry }, mapId);
   }
 }

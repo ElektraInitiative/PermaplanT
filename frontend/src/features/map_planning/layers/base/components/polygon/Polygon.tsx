@@ -10,6 +10,7 @@ import { Circle, Group, Line } from 'react-konva';
 export const Polygon = () => {
   const executeAction = useMapStore((state) => state.executeAction);
   const mapBounds = useMapStore((state) => state.trackedState.mapBounds);
+  const mapId = useMapStore((state) => state.untrackedState.mapId);
   const polygonManipulationState = useMapStore(
     (state) => state.untrackedState.layers.base.polygon.editMode,
   );
@@ -30,10 +31,12 @@ export const Polygon = () => {
 
     geometry.rings[0] = ring.slice(0, index).concat(ring.slice(index + 1, ring.length));
 
-    executeAction(new UpdateMapGeometry(geometry as object));
+    executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
   };
 
   const handlePointDragEnd = (e: KonvaEventObject<DragEvent>) => {
+    if (polygonManipulationState !== 'move') return;
+
     // Why is currentTarget.index always of by 1??
     const index = e.currentTarget.index - 1;
     const geometry = mapBounds;
@@ -49,7 +52,7 @@ export const Polygon = () => {
       geometry.rings[0][ringLength - 1] = geometry.rings[0][0];
     }
 
-    executeAction(new UpdateMapGeometry(geometry as object));
+    executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
   };
 
   const points = mapBounds.rings[0].map((point, index) => {
