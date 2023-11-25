@@ -35,6 +35,8 @@ export const createUntrackedMapSlice: StateCreator<
   updateSelectedLayer(selectedLayer) {
     // Clear the transformer's nodes.
     get().transformer.current?.nodes([]);
+    get().baseLayerDeactivatePolygonManipulation();
+    get().clearStatusPanelContent();
 
     set((state) => ({
       ...state,
