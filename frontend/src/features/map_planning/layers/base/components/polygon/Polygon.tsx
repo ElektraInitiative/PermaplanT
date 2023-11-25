@@ -7,8 +7,9 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Circle, Group, Line } from 'react-konva';
 
-export const Polygon = () => {
+export const Polygon = (props: { show: boolean }) => {
   const executeAction = useMapStore((state) => state.executeAction);
+  const trackedState = useMapStore((map) => map.trackedState);
   const mapBounds = useMapStore((state) => state.trackedState.mapBounds);
   const mapId = useMapStore((state) => state.untrackedState.mapId);
   const polygonManipulationState = useMapStore(
@@ -55,6 +56,8 @@ export const Polygon = () => {
     executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
   };
 
+  if (!trackedState.mapBounds || !trackedState.mapBounds.rings.length) return <Group></Group>;
+
   const points = mapBounds.rings[0].map((point, index) => {
     if (index === mapBounds.rings[0].length - 1) return;
 
@@ -76,7 +79,10 @@ export const Polygon = () => {
   });
 
   return (
-    <Group listening={polygonManipulationState === 'move' || polygonManipulationState === 'remove'}>
+    <Group
+      visible={props.show}
+      listening={polygonManipulationState === 'move' || polygonManipulationState === 'remove'}
+    >
       <Line
         listening={true}
         points={flattenRing(mapBounds.rings[0])}

@@ -1,4 +1,5 @@
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
+import { LayerType } from '@/api_types/definitions';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
 import { Polygon } from '@/features/map_planning/layers/base/components/polygon/Polygon';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -12,6 +13,7 @@ type BaseLayerProps = LayerConfigWithListenerRegister;
 const BaseLayer = (props: BaseLayerProps) => {
   const { stageListenerRegister, ...layerProps } = props;
   const trackedState = useMapStore((map) => map.trackedState);
+  const untrackedState = useMapStore((map) => map.untrackedState);
 
   /** Filepath to the background image in Nextcloud. */
   const nextcloudImagePath = trackedState.layers.base.nextcloudImagePath;
@@ -27,6 +29,12 @@ const BaseLayer = (props: BaseLayerProps) => {
   const editorLongestSide = useMapStore((map) =>
     Math.max(map.untrackedState.editorBounds.width, map.untrackedState.editorBounds.height),
   );
+
+  const isBaseLayerActive =
+    untrackedState.selectedLayer &&
+    typeof untrackedState.selectedLayer === 'object' &&
+    Object.hasOwn(untrackedState.selectedLayer, 'type_') &&
+    untrackedState.selectedLayer.type_ === LayerType.Base;
 
   const measurementLinePoints = () => {
     if (untrackedBaseLayerState.autoScale.measureStep !== 'both selected') return [];
@@ -96,7 +104,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           stroke={COLOR_EDITOR_HIGH_VISIBILITY}
         />
       </Group>
-      {trackedState.mapBounds && trackedState.mapBounds.rings.length > 0 && <Polygon />}
+      <Polygon show={isBaseLayerActive} />
     </Layer>
   );
 };
