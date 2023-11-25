@@ -73,12 +73,7 @@ export class UpdateMapGeometry
   }
 
   reverse(state: TrackedMapState) {
-    return new UpdateMapGeometry(
-      {
-        geometry: state.mapBounds,
-      },
-      this.actionId,
-    );
+    return new UpdateMapGeometry(state.mapBounds as object, this.actionId);
   }
 
   apply(state: TrackedMapState): TrackedMapState {
