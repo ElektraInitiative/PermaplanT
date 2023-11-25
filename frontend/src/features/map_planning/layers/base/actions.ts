@@ -5,7 +5,7 @@ import {
   LayerType,
   MapDto,
   UpdateBaseLayerImageDto,
-  UpdateMapGeometryDto,
+  UpdateMapGeometryActionPayload,
 } from '@/api_types/definitions';
 import { updateMapGeometry } from '@/features/map_planning/api/updateMapGeometry';
 import { PolygonGeometry } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
@@ -67,7 +67,7 @@ export class UpdateMapGeometry
   implements Action<Awaited<ReturnType<typeof updateMap>>, Awaited<ReturnType<typeof updateMap>>>
 {
   constructor(
-    private readonly _data: UpdateMapGeometryDto & { mapId: number },
+    private readonly _data: Omit<UpdateMapGeometryActionPayload, 'actionId' | 'userId'>,
     public actionId = v4(),
   ) {}
 

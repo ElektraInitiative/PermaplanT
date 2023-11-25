@@ -6,9 +6,11 @@ use actix_web::{
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
+use uuid::Uuid;
 
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
+use crate::model::dto::actions::{Action, UpdateMapGeometryActionPayload};
 use crate::model::dto::{MapSearchParameters, PageParameters, UpdateMapDto, UpdateMapGeometryDto};
 use crate::{model::dto::NewMapDto, service};
 
@@ -140,12 +142,28 @@ pub async fn update_geometry(
     user_info: UserInfo,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
+    let map_id_inner = map_id.into_inner();
+
     let response = service::map::update_geomtery(
-        map_update_geometry_json.0,
-        map_id.into_inner(),
+        map_update_geometry_json.0.clone(),
+        map_id_inner,
         user_info.id,
         &app_data,
     )
     .await?;
+
+    app_data
+        .broadcaster
+        .broadcast(
+            map_id_inner,
+            Action::UpdateMapGeometry(UpdateMapGeometryActionPayload::new(
+                map_update_geometry_json.0,
+                map_id_inner,
+                user_info.id,
+                Uuid::new_v4(),
+            )),
+        )
+        .await;
+
     Ok(HttpResponse::Ok().json(response))
 }

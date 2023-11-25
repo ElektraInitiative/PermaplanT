@@ -324,17 +324,20 @@ impl UpdatePlantingRemoveDateActionPayload {
 pub struct UpdateMapGeometryActionPayload {
     user_id: Uuid,
     action_id: Uuid,
+    /// The entity id for this action.
+    map_id: i32,
     // E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[typeshare(serialized_as = "Option<object>")]
+    #[typeshare(serialized_as = "object")]
     geometry: Polygon<Point>,
 }
 
 impl UpdateMapGeometryActionPayload {
     #[must_use]
-    pub fn new(payload: UpdateMapGeometryDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: UpdateMapGeometryDto, map_id: i32, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
+            map_id,
             geometry: payload.geometry,
         }
     }
