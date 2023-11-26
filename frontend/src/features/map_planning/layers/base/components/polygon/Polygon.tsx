@@ -10,9 +10,11 @@ import {
 } from '@/features/map_planning/layers/base/components/polygon/PolygonUtils';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
+import { warningToastGrouped } from '@/features/toasts/groupedToast';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Circle, Group, Line } from 'react-konva';
 
 export interface PolygonProps extends LayerConfigWithListenerRegister {
@@ -20,6 +22,7 @@ export interface PolygonProps extends LayerConfigWithListenerRegister {
 }
 
 export const Polygon = (props: PolygonProps) => {
+  const { t } = useTranslation('polygon');
   const executeAction = useMapStore((state) => state.executeAction);
   const trackedState = useMapStore((map) => map.trackedState);
   const mapBounds = useMapStore((state) => state.trackedState.mapBounds);
@@ -55,6 +58,11 @@ export const Polygon = (props: PolygonProps) => {
     }
 
     if (polygonManipulationState !== 'remove') return;
+
+    if (mapBounds.rings[0].length - 1 <= 3) {
+      warningToastGrouped(t('polygon_delete_point_forbidden'));
+      return;
+    }
 
     const index = e.currentTarget.index - 1;
 
