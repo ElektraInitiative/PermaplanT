@@ -1,6 +1,9 @@
 /**
  * All polygons returned from the backend are returned in this format.
- * See backend/src/model/dto.rs for details.
+ * Type-Share does not seem to play nice with PostGIS-Diesel objects.
+ * This type therefore had to be created manually.
+ *
+ * See backend/src/model/dto.rs for additional details.
  */
 export type PolygonGeometry = {
   /**
@@ -16,6 +19,8 @@ export type PolygonGeometry = {
 /**
  * Polygons can have multiple edge rings (i.e. multiple independent areas).
  * Each edge ring is assumed to be wound counterclockwise with lines connecting two neighboring points.
+ *
+ * CAUTION: The backend expects the first point to be equal to the last point!
  */
 export type EdgeRing = Array<PolygonPoint>;
 
