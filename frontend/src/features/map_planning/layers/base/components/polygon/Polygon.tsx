@@ -63,9 +63,9 @@ export const Polygon = (props: PolygonProps) => {
       const ring = geometry.rings[0];
 
       geometry.rings[0] = ring
-        .slice(0, insertNewPointAfterIndex)
+        .slice(0, insertNewPointAfterIndex + 1)
         .concat([newPoint])
-        .concat(ring.slice(insertNewPointAfterIndex, ring.length));
+        .concat(ring.slice(insertNewPointAfterIndex + 1, ring.length));
 
       executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
     });
