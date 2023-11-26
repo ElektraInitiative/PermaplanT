@@ -12,7 +12,7 @@ import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
 import { LayerType, LayerDto, GuidedToursDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
-import { PolygonGeometry } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
+import { PolygonGeometry } from '@/features/map_planning/utils/PolygonTypes';
 import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';

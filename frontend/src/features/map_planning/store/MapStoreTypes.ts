@@ -8,7 +8,7 @@ import {
   SeedDto,
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
-import { PolygonGeometry } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
+import { PolygonGeometry } from '@/features/map_planning/utils/PolygonTypes';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import * as uuid from 'uuid';

@@ -1,15 +1,12 @@
 import { UpdateMapGeometry } from '@/features/map_planning/layers/base/actions';
-import {
-  DEFAULT_SRID,
-  EdgeRing,
-} from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
+import useMapStore from '@/features/map_planning/store/MapStore';
+import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
+import { DEFAULT_SRID, EdgeRing } from '@/features/map_planning/utils/PolygonTypes';
 import {
   insertBetweenPointsWithLeastTotalDistance,
   removePointAtIndex,
   setPointAtIndex,
-} from '@/features/map_planning/layers/base/components/polygon/PolygonUtils';
-import useMapStore from '@/features/map_planning/store/MapStore';
-import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
+} from '@/features/map_planning/utils/PolygonUtils';
 import { warningToastGrouped } from '@/features/toasts/groupedToast';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
 import { KonvaEventObject } from 'konva/lib/Node';

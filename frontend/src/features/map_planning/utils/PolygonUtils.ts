@@ -1,8 +1,5 @@
-import {
-  PolygonGeometry,
-  PolygonPoint,
-} from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
 import { calculateDistance } from '@/features/map_planning/layers/base/util';
+import { PolygonGeometry, PolygonPoint } from '@/features/map_planning/utils/PolygonTypes';
 
 /**
  * Insert a PolygonPoint P into an edge Ring of a PolygonGeometry object between
