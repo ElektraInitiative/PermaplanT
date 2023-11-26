@@ -198,7 +198,6 @@ async fn test_update_fails_for_not_owner() {
         privacy: None,
         description: None,
         location: None,
-        geometry: None,
     };
 
     let resp = test::TestRequest::patch()
@@ -244,7 +243,6 @@ async fn test_can_update_map() {
         privacy: None,
         description: None,
         location: None,
-        geometry: None,
     };
 
     let resp = test::TestRequest::patch()
@@ -287,7 +285,7 @@ async fn test_can_update_map_geometry() {
     let map: MapDto = test::read_body_json(resp).await;
 
     let map_update_geometry = UpdateMapGeometryDto {
-        geometry: Option::from(small_rectangle()),
+        geometry: small_rectangle(),
     };
 
     let resp = test::TestRequest::patch()
