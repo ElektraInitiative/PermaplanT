@@ -28,7 +28,9 @@ class HomePage(AbstractPage):
         """
         Clicks the login button which
         navigates to the `LoginPage`.
+        Waits for the backend to be ready before doing so.
         """
+        self._page.get_by_test_id("login-button__is-loading").wait_for(state="detached")
         self._login_button.click()
 
     def click_logout_button(self):

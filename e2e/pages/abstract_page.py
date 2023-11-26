@@ -1,4 +1,5 @@
 import re
+import time
 from abc import ABC
 from e2e.pages.constants import E2E_TIMEOUT
 from playwright.sync_api import Page, expect
@@ -26,7 +27,7 @@ class AbstractPage(ABC):
         expect.set_options(timeout=E2E_TIMEOUT)
         response = self._page.goto(self.URL)
         assert response.status == 200
-        self._page.wait_for_timeout(1000)
+        time.sleep(1)
         self.verify()
         self.click_english_translation()
 

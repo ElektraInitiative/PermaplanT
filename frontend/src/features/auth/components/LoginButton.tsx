@@ -33,7 +33,7 @@ export const LoginButton = () => {
       onClick={() => void auth.signinRedirect()}
     >
       {t('auth:log_in')}
-      <ConditionalLoadingSpinner show={auth.isLoading} />
+      <ConditionalLoadingSpinner show={auth.isLoading} data-testid="login-button__is-loading" />
     </SimpleButton>
   );
 };

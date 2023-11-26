@@ -6,9 +6,12 @@ use actix_web::{
     web::{Data, Json, Path},
     HttpResponse, Result,
 };
+use uuid::Uuid;
 
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
+use crate::model::dto::actions::Action;
+use crate::model::dto::actions::UpdatePlantingAdditionalNamePayload;
 use crate::model::dto::{PageParameters, SeedSearchParameters};
 use crate::{model::dto::ArchiveSeedDto, model::dto::NewSeedDto, service};
 
@@ -133,6 +136,22 @@ pub async fn edit_by_id(
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     let response = service::seed::edit(*id, user_info.id, edit_seed_json.0, &app_data).await?;
+    let affected_plantings = service::plantings::find_by_seed_id(*id, &app_data);
+
+    for planting in affected_plantings.await? {
+        app_data
+            .broadcaster
+            .broadcast_all_maps(Action::UpdatePlantingAdditionalName(
+                UpdatePlantingAdditionalNamePayload::new(
+                    &planting,
+                    Some(response.name.clone()),
+                    user_info.id,
+                    Uuid::new_v4(),
+                ),
+            ))
+            .await;
+    }
+
     Ok(HttpResponse::Accepted().json(response))
 }
 

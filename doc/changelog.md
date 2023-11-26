@@ -6,15 +6,23 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.3.6 - UNRELEASED
+## 0.3.7 - UNRELEASED
 
 - _()_
 - _()_
+- Refactor react query error handling _(Daniel Steinkogler)_
+- _()_
+- Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
+- Enable automatic image scaling in base layer _(Moritz)_
 - _()_
 - Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
-- Plantings now store seed information if they were created using a seed _(Moritz)_
-- Tooltips show the full plant for plantings that were created using a seed _(Moritz)_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
 - _()_
 - _()_
 - _()_
@@ -24,13 +32,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- Refactor base layer toolbar using react hook form _(Moritz)_
-- _()_
-- fixed: slider displays wrong value after toolbar resize _(Samuel)_
 - _()_
 - _()_
 - _()_
@@ -38,43 +39,59 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Use Konva groups instead of Layers _(Moritz)_
 - _()_
+- Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
 - _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+
+## 0.3.6 - 21.11.2023 (151 commits)
+
+- Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
+- Plantings now store seed information if they were created using a seed _(Moritz)_
+- Tooltips show the full plant for plantings that were created using a seed _(Moritz)_
+- Refactor base layer toolbar using react hook form _(Moritz)_
+- fixed: slider displays wrong value after toolbar resize _(Samuel)_
 - Added Meeting Agenda&Notes for 13.11. 9:00 _(Markus Raab, Adi)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
 - Hamburger menu opens a full page navigation on small viewports _(Samuel)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Fix regression where Full plant names are not shown _(Moritz)_
 - CI: disable E2E tests in master #1055 _(4ydan)_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Close modals with escape #1027 _(Daniel Steinkogler)_
+- Display the plant icon next to the cursor in placement mode _(Samuel)_
+- Plant layer is selected per default _(Samuel)_
+- E2E: Increase e2e timeline/baselayer test stability, replace timeouts with sleep #1010 _(4ydan)_
+- Release: npm audit fix #1077 _(4ydan)_
 
 ## 0.3.5 - 06.11.2023 (320 commits)
 

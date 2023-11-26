@@ -103,6 +103,27 @@
   - 5: usually not visited
   - 6: never visited/protection zone
 
+## UI
+
+- Layer:  
+  Layers allow to group elements of the same kind and set all of them visible or transparent.
+  (implemented as Konva group)
+- Right top toolbar:  
+  Allows to enable or hide layers.
+- Right bottom toolbar:  
+  Contextual toolbar for the enabled layer.
+- Left top toolbar:  
+  Buttons that have potentially global effects for the map or the functionality on the next click.
+- Left bottom toolbar:  
+  Contextual toolbar for the enabled element.
+- Status panel:  
+  Indicates what action a mouse click would have.
+  Is not shown if mouse clicks would select elements.
+- Navigation Bar (NavBar):  
+  The top bar for login etc.
+- Timeline:  
+  The bottom bar to set the current date.
+
 ## Layers
 
 - enable (a layer):  
@@ -129,10 +150,6 @@
   The set of all the components of an interactive system that provide information and controls for the user to accomplish specific tasks with the interactive system.
 - user experience (UX):  
   Combination of user's perceptions and responses that result from the use and/or anticipated use of a system, product or service.
-- Nextcloud map:  
-  A Nextcloud app which is used as overview where which garden is, see [here](https://apps.nextcloud.com/apps/maps).
-- GeoMap:  
-  The geographical map which is found in Nextcloud under the "Maps" tab.
 - offline:  
   Means the ability to use a feature without Internet connection, i.e., without calling REST APIs.
 - canvas:  
@@ -157,9 +174,6 @@
 - endpoints:
   - The API endpoints that can be called in the backend.  
     Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
-
-### Keybinding vs Keyhandling
-
 - keybinding:
   - The association of a specific action or function with a particular key or key combination.
 - keyhandling:
