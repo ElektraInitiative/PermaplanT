@@ -40,7 +40,7 @@ export const ViewSeeds = () => {
   const seeds = data?.pages.flatMap((page) => page.results) ?? [];
 
   const handleCreateSeedClick = () => {
-    navigate('/seeds/new');
+    navigate('/seeds/create');
   };
 
   const pageFetcher = {
