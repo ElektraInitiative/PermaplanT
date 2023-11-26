@@ -44,12 +44,12 @@ export const Polygon = (props: PolygonProps) => {
         const firstPoint = value;
         const secondPoint = array[(index + 1) % array.length];
 
-        const distanceOneX = Math.abs(newPoint.x - firstPoint.x);
-        const distanceOneY = Math.abs(newPoint.y - firstPoint.y);
+        const distanceOneX = Math.abs(firstPoint.x - newPoint.x);
+        const distanceOneY = Math.abs(firstPoint.y - newPoint.y);
         const distanceOne = Math.sqrt(distanceOneX * distanceOneX + distanceOneY * distanceOneY);
 
-        const distanceTwoX = Math.abs(newPoint.x - secondPoint.x);
-        const distanceTwoY = Math.abs(newPoint.y - secondPoint.y);
+        const distanceTwoX = Math.abs(secondPoint.x - newPoint.x);
+        const distanceTwoY = Math.abs(secondPoint.y - newPoint.y);
         const distanceTwo = Math.sqrt(distanceTwoX * distanceTwoX + distanceTwoY * distanceTwoY);
 
         const totalDistance = distanceOne + distanceTwo;
