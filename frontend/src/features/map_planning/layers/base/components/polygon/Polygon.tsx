@@ -3,6 +3,7 @@ import {
   DEFAULT_SRID,
   EdgeRing,
 } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
+import { insertBetweenPointsWithLeastTotalDistance } from '@/features/map_planning/layers/base/components/polygon/PolygonUtils';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
@@ -38,35 +39,7 @@ export const Polygon = (props: PolygonProps) => {
         srid: DEFAULT_SRID,
       };
 
-      let smallestTotalDistance = Infinity;
-      let insertNewPointAfterIndex = -1;
-      mapBounds.rings[0].forEach((value, index, array) => {
-        const firstPoint = value;
-        const secondPoint = array[(index + 1) % array.length];
-
-        const distanceOneX = Math.abs(firstPoint.x - newPoint.x);
-        const distanceOneY = Math.abs(firstPoint.y - newPoint.y);
-        const distanceOne = Math.sqrt(distanceOneX * distanceOneX + distanceOneY * distanceOneY);
-
-        const distanceTwoX = Math.abs(secondPoint.x - newPoint.x);
-        const distanceTwoY = Math.abs(secondPoint.y - newPoint.y);
-        const distanceTwo = Math.sqrt(distanceTwoX * distanceTwoX + distanceTwoY * distanceTwoY);
-
-        const totalDistance = distanceOne + distanceTwo;
-        if (totalDistance < smallestTotalDistance) {
-          smallestTotalDistance = totalDistance;
-          insertNewPointAfterIndex = index;
-        }
-      });
-
-      const geometry = mapBounds;
-      const ring = geometry.rings[0];
-
-      geometry.rings[0] = ring
-        .slice(0, insertNewPointAfterIndex + 1)
-        .concat([newPoint])
-        .concat(ring.slice(insertNewPointAfterIndex + 1, ring.length));
-
+      const geometry = insertBetweenPointsWithLeastTotalDistance(mapBounds, newPoint);
       executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
     });
   }, [polygonManipulationState]); // eslint-disable-line react-hooks/exhaustive-deps
