@@ -20,19 +20,22 @@ export function insertBetweenPointsWithLeastTotalDistance(
 ): PolygonGeometry {
   let smallestTotalDistance = Infinity;
   let insertNewPointAfterIndex = -1;
-  geometry.rings[edgeRing ?? 0].forEach((value, index, array) => {
-    const firstPoint = value;
-    const secondPoint = array[(index + 1) % array.length];
+  geometry.rings[edgeRing ?? 0]
+    // the last point is identical to the first point
+    .slice(0, geometry.rings[edgeRing ?? 0].length - 1)
+    .forEach((value, index, array) => {
+      const firstPoint = value;
+      const secondPoint = array[(index + 1) % array.length];
 
-    const distanceOne = calculateDistance(pointToInsert, firstPoint);
-    const distanceTwo = calculateDistance(pointToInsert, secondPoint);
+      const distanceOne = calculateDistance(pointToInsert, firstPoint);
+      const distanceTwo = calculateDistance(pointToInsert, secondPoint);
 
-    const totalDistance = distanceOne + distanceTwo;
-    if (totalDistance < smallestTotalDistance) {
-      smallestTotalDistance = totalDistance;
-      insertNewPointAfterIndex = index;
-    }
-  });
+      const totalDistance = distanceOne + distanceTwo;
+      if (totalDistance < smallestTotalDistance) {
+        smallestTotalDistance = totalDistance;
+        insertNewPointAfterIndex = index;
+      }
+    });
 
   const ring = geometry.rings[edgeRing ?? 0];
   geometry.rings[edgeRing ?? 0] = ring
