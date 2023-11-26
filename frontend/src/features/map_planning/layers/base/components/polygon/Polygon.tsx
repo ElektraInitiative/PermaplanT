@@ -6,6 +6,7 @@ import {
 import {
   insertBetweenPointsWithLeastTotalDistance,
   removePointAtIndex,
+  setPointAtIndex,
 } from '@/features/map_planning/layers/base/components/polygon/PolygonUtils';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
@@ -70,20 +71,19 @@ export const Polygon = (props: PolygonProps) => {
 
     // Why is currentTarget.index always of by 1??
     const index = e.currentTarget.index - 1;
-    const geometry = mapBounds;
 
-    geometry.rings[0][index] = {
+    const newPoint = {
       x: e.currentTarget.position().x,
       y: e.currentTarget.position().y,
       srid: DEFAULT_SRID,
     };
-    // The backend expects that the first point equals the last point.
-    if (index === 0) {
-      const ringLength = geometry.rings[0].length;
-      geometry.rings[0][ringLength - 1] = geometry.rings[0][0];
-    }
 
-    executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
+    executeAction(
+      new UpdateMapGeometry({
+        geometry: setPointAtIndex(mapBounds, newPoint, index) as object,
+        mapId: mapId,
+      }),
+    );
   };
 
   if (!trackedState.mapBounds || !trackedState.mapBounds.rings.length) return <Group></Group>;

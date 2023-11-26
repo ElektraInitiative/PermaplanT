@@ -60,3 +60,28 @@ export function removePointAtIndex(
     .concat(ring.slice(indexToRemove + 1, ring.length));
   return geometry;
 }
+
+/**
+ * Update a point of a PolygonGeometry object, while making sure that no invariants are violated.
+ *
+ * @param geometry Object to be updated.
+ * @param newPoint New point data.
+ * @param indexToUpdate The index of the point that should be replaced.
+ * @param edgeRing The index of the edge ring that should be updated. Defaults to 0 if undefined.
+ */
+export function setPointAtIndex(
+  geometry: PolygonGeometry,
+  newPoint: PolygonPoint,
+  indexToUpdate: number,
+  edgeRing?: number,
+): PolygonGeometry {
+  geometry.rings[edgeRing ?? 0][indexToUpdate] = newPoint;
+
+  // The backend expects that the first point equals the last point.
+  if (indexToUpdate === 0) {
+    const ringLength = geometry.rings[edgeRing ?? 0].length;
+    geometry.rings[edgeRing ?? 0][ringLength - 1] = geometry.rings[edgeRing ?? 0][0];
+  }
+
+  return geometry;
+}
