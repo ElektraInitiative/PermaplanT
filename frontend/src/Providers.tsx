@@ -6,6 +6,13 @@ import { ReactNode } from 'react';
 import { AuthProvider } from 'react-oidc-context';
 import { BrowserRouter } from 'react-router-dom';
 
+declare module '@tanstack/query-core' {
+  interface QueryMeta {
+    autoClose?: false | number;
+    errorMessage?: string;
+  }
+}
+
 interface ProviderProps {
   children: ReactNode;
 }
@@ -14,7 +21,7 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error, query) => {
       if (query.meta?.errorMessage && typeof query.meta.errorMessage === 'string') {
-        errorToastGrouped(query.meta.errorMessage);
+        errorToastGrouped(query.meta.errorMessage, { autoClose: query.meta.autoClose });
       }
     },
   }),
