@@ -23,7 +23,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Make map geometry viewable and editable _(Moritz)_
 - _()_
 - _()_
 - _()_
