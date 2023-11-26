@@ -42,6 +42,13 @@ export function insertBetweenPointsWithLeastTotalDistance(
   return geometry;
 }
 
+/**
+ * Removes a point from the PolygonGeometry object.
+ *
+ * @param geometry The object the point should be removed from.
+ * @param indexToRemove The index of the point to be removed
+ * @param edgeRing The edge ring that the point should be removed from. Defaults to 0 if undefined.
+ */
 export function removePointAtIndex(
   geometry: PolygonGeometry,
   indexToRemove: number,
