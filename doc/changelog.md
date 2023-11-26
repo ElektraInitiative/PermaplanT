@@ -22,6 +22,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
+- Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
 - _()_
 - _()_
 - _()_
