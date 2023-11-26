@@ -10,6 +10,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - _()_
 - _()_
+- Refactor react query error handling _(Daniel Steinkogler)_
 - _()_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
 - Enable automatic image scaling in base layer _(Moritz)_
