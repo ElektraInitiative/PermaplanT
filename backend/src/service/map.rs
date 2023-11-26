@@ -151,19 +151,19 @@ pub async fn update_geomtery(
 
 /// Checks if a Polygon can be used as a maps geometry attribute.
 fn is_valid_map_geometry(geometry: &Polygon<Point>) -> Option<ServiceError> {
-    let geometry_points_length = geometry.rings.get(0).len();
+    if geometry.rings.len() != 1 {
+        return Some(ServiceError {
+            status_code: StatusCode::BAD_REQUEST,
+            reason: "Map geometry must have exactly one ring".to_owned(),
+        });
+    }
+
+    let geometry_points_length = geometry.rings.get(0).unwrap_or(&Vec::new()).len();
 
     if geometry_points_length < 3 + 1 {
         return Some(ServiceError {
             status_code: StatusCode::BAD_REQUEST,
             reason: "Map geometry must be a polygon of at least three points.".to_owned(),
-        });
-    }
-
-    if geometry.rings.len() != 1 {
-        return Some(ServiceError {
-            status_code: StatusCode::BAD_REQUEST,
-            reason: "Map geometry must have exactly one ring".to_owned(),
         });
     }
 
