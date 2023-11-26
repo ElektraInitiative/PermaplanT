@@ -10,6 +10,19 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - _()_
 - _()_
+- Refactor react query error handling _(Daniel Steinkogler)_
+- _()_
+- Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
+- Enable automatic image scaling in base layer _(Moritz)_
+- _()_
+- Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
 - _()_
 - _()_
 - _()_
@@ -26,14 +39,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Make map geometry viewable and editable _(Moritz)_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_

@@ -5,7 +5,8 @@
   "base_layer": {
   },
   "plants_layer": {
-    "exitPlantingMode": ["Escape"]
+    "exitPlantingMode": ["Escape"],
+    "deleteSelectedPlantings": ["Delete"]
   },
   "_just_for_documentation_":{
     "clearSearchInput": ["Escape"]

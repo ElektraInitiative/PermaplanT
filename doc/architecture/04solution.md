@@ -33,7 +33,8 @@ We use specific types (prefer enum over int over string etc.) and share types wh
 ## API
 
 The API is implemented in the backend.
-It serves no other purpose as being used by the frontend, so:
+The backend is stateless (except of the data base) and agnostic to language.
+The backend serves no other purpose as being used by the frontend, so:
 
 - it can be tailored to the needs of the frontend
 - the frontend ideally only needs to do a single API call to get what it needs
