@@ -149,8 +149,9 @@ pub async fn update_geomtery(
     Ok(result)
 }
 
+/// Checks if a Polygon can be used as a maps geometry attribute.
 fn is_valid_map_geometry(geometry: &Polygon<Point>) -> Option<ServiceError> {
-    let geometry_points_length = geometry.rings[0].len();
+    let geometry_points_length = geometry.rings.get(0).len();
 
     if geometry_points_length < 3 + 1 {
         return Some(ServiceError {
