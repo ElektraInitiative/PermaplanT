@@ -1,5 +1,9 @@
 import { calculateDistance } from '@/features/map_planning/layers/base/util';
-import { PolygonGeometry, PolygonPoint } from '@/features/map_planning/utils/PolygonTypes';
+import {
+  EdgeRing,
+  PolygonGeometry,
+  PolygonPoint,
+} from '@/features/map_planning/utils/PolygonTypes';
 
 /**
  * Insert a PolygonPoint P into an edge Ring of a PolygonGeometry object between
@@ -81,4 +85,15 @@ export function setPointAtIndex(
   }
 
   return geometry;
+}
+
+/**
+ * Extract the coordinates from an edge ring and put them in a flattened array.
+ *
+ * @param ring The ring to flatten.
+ */
+export function flattenRing(ring: EdgeRing): number[] {
+  return ring
+    .map((point) => [point.x, point.y])
+    .reduce((accumulator, next) => accumulator.concat(next));
 }

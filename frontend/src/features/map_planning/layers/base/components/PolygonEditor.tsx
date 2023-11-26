@@ -1,11 +1,12 @@
 import { UpdateMapGeometry } from '@/features/map_planning/layers/base/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
-import { DEFAULT_SRID, EdgeRing } from '@/features/map_planning/utils/PolygonTypes';
+import { DEFAULT_SRID } from '@/features/map_planning/utils/PolygonTypes';
 import {
   insertBetweenPointsWithLeastTotalDistance,
   removePointAtIndex,
   setPointAtIndex,
+  flattenRing,
 } from '@/features/map_planning/utils/PolygonUtils';
 import { warningToastGrouped } from '@/features/toasts/groupedToast';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
@@ -129,14 +130,3 @@ export const PolygonEditor = (props: PolygonProps) => {
     </Group>
   );
 };
-
-/**
- * Extract the coordinates from an edge ring and put them in a flattened array.
- *
- * @param ring The ring to flatten.
- */
-function flattenRing(ring: EdgeRing): number[] {
-  return ring
-    .map((point) => [point.x, point.y])
-    .reduce((accumulator, next) => accumulator.concat(next));
-}
