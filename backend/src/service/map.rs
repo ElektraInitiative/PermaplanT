@@ -2,6 +2,7 @@
 
 use actix_http::StatusCode;
 use actix_web::web::Data;
+use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
@@ -56,6 +57,12 @@ pub async fn create(
     app_data: &Data<AppDataInner>,
 ) -> Result<MapDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
+
+    let geometry_validation_result = is_valid_map_geometry(&new_map.geometry);
+    if let Some(error) = geometry_validation_result {
+        return Err(error);
+    }
+
     let result = Map::create(new_map, user_id, &mut conn).await?;
     for layer_type in &LAYER_TYPES {
         let new_layer = NewLayerDto {
@@ -132,6 +139,32 @@ pub async fn update_geomtery(
             reason: "No permission to update data".to_owned(),
         });
     }
+
+    let geometry_validation_result = is_valid_map_geometry(&map_update_geometry.geometry);
+    if let Some(error) = geometry_validation_result {
+        return Err(error);
+    }
+
     let result = Map::update_geometry(map_update_geometry, id, &mut conn).await?;
     Ok(result)
+}
+
+fn is_valid_map_geometry(geometry: &Polygon<Point>) -> Option<ServiceError> {
+    let geometry_points_length = geometry.rings[0].len();
+
+    if geometry_points_length < 3 + 1 {
+        return Some(ServiceError {
+            status_code: StatusCode::BAD_REQUEST,
+            reason: "Map geometry must be a polygon of at least three points.".to_owned(),
+        });
+    }
+
+    if !geometry.rings.len() != 1 {
+        return Some(ServiceError {
+            status_code: StatusCode::BAD_REQUEST,
+            reason: "Map geometry must have exactly one ring".to_owned(),
+        });
+    }
+
+    None
 }

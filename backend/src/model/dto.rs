@@ -311,12 +311,6 @@ pub struct UpdateMapDto {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Coordinates>,
-    /// The geometry of the map.
-    ///
-    /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[typeshare(serialized_as = "Option<object>")]
-    #[schema(value_type = Option<Object>)]
-    pub geometry: Option<Polygon<Point>>,
 }
 
 /// Data for updating a maps geometry.
