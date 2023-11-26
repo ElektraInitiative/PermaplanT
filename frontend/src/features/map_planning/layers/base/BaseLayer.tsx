@@ -1,7 +1,7 @@
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { LayerType } from '@/api_types/definitions';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
-import { PolygonEdior } from '@/features/map_planning/layers/base/components/polygon/PolygonEdior';
+import { PolygonEditor } from '@/features/map_planning/layers/base/components/polygon/PolygonEditor';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
@@ -104,7 +104,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           stroke={COLOR_EDITOR_HIGH_VISIBILITY}
         />
       </Group>
-      <PolygonEdior show={isBaseLayerActive} {...props} />
+      <PolygonEditor show={isBaseLayerActive} {...props} />
     </Layer>
   );
 };
