@@ -159,7 +159,7 @@ fn is_valid_map_geometry(geometry: &Polygon<Point>) -> Option<ServiceError> {
         });
     }
 
-    if !geometry.rings.len() != 1 {
+    if geometry.rings.len() != 1 {
         return Some(ServiceError {
             status_code: StatusCode::BAD_REQUEST,
             reason: "Map geometry must have exactly one ring".to_owned(),
