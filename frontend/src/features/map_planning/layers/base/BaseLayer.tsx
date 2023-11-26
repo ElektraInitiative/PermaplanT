@@ -104,7 +104,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           stroke={COLOR_EDITOR_HIGH_VISIBILITY}
         />
       </Group>
-      <Polygon show={isBaseLayerActive} />
+      <Polygon show={isBaseLayerActive} {...props} />
     </Layer>
   );
 };

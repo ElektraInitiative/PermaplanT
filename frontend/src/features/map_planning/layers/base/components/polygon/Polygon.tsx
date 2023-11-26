@@ -4,11 +4,17 @@ import {
   EdgeRing,
 } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
 import { KonvaEventObject } from 'konva/lib/Node';
+import { useEffect } from 'react';
 import { Circle, Group, Line } from 'react-konva';
 
-export const Polygon = (props: { show: boolean }) => {
+export interface PolygonProps extends LayerConfigWithListenerRegister {
+  show: boolean;
+}
+
+export const Polygon = (props: PolygonProps) => {
   const executeAction = useMapStore((state) => state.executeAction);
   const trackedState = useMapStore((map) => map.trackedState);
   const mapBounds = useMapStore((state) => state.trackedState.mapBounds);
@@ -20,6 +26,50 @@ export const Polygon = (props: { show: boolean }) => {
     Math.max(map.untrackedState.editorBounds.width, map.untrackedState.editorBounds.height),
   );
   const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
+
+  // The Konva-Group of this component is not listening while add mode is active.
+  useEffect(() => {
+    props.stageListenerRegister.registerStageClickListener('Polygon', (e) => {
+      if (polygonManipulationState !== 'add') return;
+
+      const newPoint = {
+        x: e.currentTarget.getRelativePointerPosition().x,
+        y: e.currentTarget.getRelativePointerPosition().y,
+        srid: DEFAULT_SRID,
+      };
+
+      let smallestTotalDistance = Infinity;
+      let insertNewPointAfterIndex = -1;
+      mapBounds.rings[0].forEach((value, index, array) => {
+        const firstPoint = value;
+        const secondPoint = array[(index + 1) % array.length];
+
+        const distanceOneX = Math.abs(newPoint.x - firstPoint.x);
+        const distanceOneY = Math.abs(newPoint.y - firstPoint.y);
+        const distanceOne = Math.sqrt(distanceOneX * distanceOneX + distanceOneY * distanceOneY);
+
+        const distanceTwoX = Math.abs(newPoint.x - secondPoint.x);
+        const distanceTwoY = Math.abs(newPoint.y - secondPoint.y);
+        const distanceTwo = Math.sqrt(distanceTwoX * distanceTwoX + distanceTwoY * distanceTwoY);
+
+        const totalDistance = distanceOne + distanceTwo;
+        if (totalDistance < smallestTotalDistance) {
+          smallestTotalDistance = totalDistance;
+          insertNewPointAfterIndex = index;
+        }
+      });
+
+      const geometry = mapBounds;
+      const ring = geometry.rings[0];
+
+      geometry.rings[0] = ring
+        .slice(0, insertNewPointAfterIndex)
+        .concat([newPoint])
+        .concat(ring.slice(insertNewPointAfterIndex, ring.length));
+
+      executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
+    });
+  }, [polygonManipulationState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
     if (polygonManipulationState === 'move') {
