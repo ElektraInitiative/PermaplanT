@@ -3,7 +3,10 @@ import {
   DEFAULT_SRID,
   EdgeRing,
 } from '@/features/map_planning/layers/base/components/polygon/PolygonTypes';
-import { insertBetweenPointsWithLeastTotalDistance } from '@/features/map_planning/layers/base/components/polygon/PolygonUtils';
+import {
+  insertBetweenPointsWithLeastTotalDistance,
+  removePointAtIndex,
+} from '@/features/map_planning/layers/base/components/polygon/PolygonUtils';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
@@ -53,12 +56,13 @@ export const Polygon = (props: PolygonProps) => {
     if (polygonManipulationState !== 'remove') return;
 
     const index = e.currentTarget.index - 1;
-    const geometry = mapBounds;
-    const ring = geometry.rings[0];
 
-    geometry.rings[0] = ring.slice(0, index).concat(ring.slice(index + 1, ring.length));
-
-    executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
+    executeAction(
+      new UpdateMapGeometry({
+        geometry: removePointAtIndex(mapBounds, index) as object,
+        mapId: mapId,
+      }),
+    );
   };
 
   const handlePointDragEnd = (e: KonvaEventObject<DragEvent>) => {

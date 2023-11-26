@@ -41,3 +41,15 @@ export function insertBetweenPointsWithLeastTotalDistance(
 
   return geometry;
 }
+
+export function removePointAtIndex(
+  geometry: PolygonGeometry,
+  indexToRemove: number,
+  edgeRing?: number,
+) {
+  const ring = geometry.rings[edgeRing ?? 0];
+  geometry.rings[edgeRing ?? 0] = ring
+    .slice(0, indexToRemove)
+    .concat(ring.slice(indexToRemove + 1, ring.length));
+  return geometry;
+}
