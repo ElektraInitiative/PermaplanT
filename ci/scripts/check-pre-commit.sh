@@ -7,6 +7,7 @@ pre-commit run end-of-file-fixer -a
 pre-commit run mixed-line-ending -a
 pre-commit run trailing-whitespace -a
 pre-commit run prettier -a
+pre-commit run eslint -a
 pre-commit run black -a
 pre-commit run flake8 -a
 pre-commit run mypy -a
