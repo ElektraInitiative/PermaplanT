@@ -8,13 +8,13 @@ import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { mapEditorSteps, tourOptions } from '../utils/EditorTour';
 import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
-import { LayerType, LayerDto, GuidedToursDto } from '@/api_types/definitions';
+import { LayerType, LayerDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
 import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdOptionsWithType, ShepherdTour } from 'react-shepherd';
 
@@ -204,15 +204,14 @@ export function MapWrapper() {
   const mapData = useInitializeMap();
   useMapUpdates();
 
-  const [status, setStatus] = useState<GuidedToursDto>();
-  useTourStatus(setStatus);
+  const tourStatus = useTourStatus();
 
   if (!mapData) {
     return null;
   }
 
   let steps: ShepherdOptionsWithType[] = [];
-  if (status && !status.editor_tour_completed) {
+  if (tourStatus && !tourStatus.editor_tour_completed) {
     steps = mapEditorSteps;
   }
 

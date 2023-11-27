@@ -21,7 +21,10 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error, query) => {
       if (query.meta?.errorMessage && typeof query.meta.errorMessage === 'string') {
-        errorToastGrouped(query.meta.errorMessage, { autoClose: query.meta.autoClose });
+        errorToastGrouped(query.meta.errorMessage, {
+          autoClose: query.meta.autoClose,
+          toastId: query.meta.toastId,
+        });
       }
     },
   }),
