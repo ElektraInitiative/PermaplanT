@@ -1,4 +1,4 @@
-FROM rust:1.67.1-slim
+FROM rust:1.74-slim-bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUSTFLAGS="-C link-arg=-fuse-ld=lld"
