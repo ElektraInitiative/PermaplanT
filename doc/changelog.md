@@ -52,7 +52,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- wrap api queries using react query _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
