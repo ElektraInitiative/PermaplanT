@@ -1,8 +1,16 @@
 import re
+import os
 import time
 from abc import ABC
 from e2e.pages.constants import E2E_TIMEOUT
 from playwright.sync_api import Page, expect
+
+
+def log_errors(msg):
+    file1 = open("console_logs.txt", "a")  # append mode
+    for arg in msg.args:
+        file1.write(f"{arg.json_value()}\n")
+        file1.flush()
 
 
 class AbstractPage(ABC):
@@ -24,6 +32,10 @@ class AbstractPage(ABC):
         )
         self.dont_load_images_except_birdie()
         self._page.set_default_timeout(timeout=E2E_TIMEOUT)
+
+        if "BROWSER_LOGS" in os.environ:
+            self._page.on("console", log_errors)
+
         expect.set_options(timeout=E2E_TIMEOUT)
         response = self._page.goto(self.URL)
         assert response.status == 200
