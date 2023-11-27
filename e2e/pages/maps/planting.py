@@ -153,6 +153,7 @@ class MapPlantingPage(AbstractPage):
         """Clicks in the middle of the canvas with a 300ms delay."""
         time.sleep(1)
         box = self._canvas.bounding_box()
+        self._page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
         self._page.mouse.click(
             box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
         )
@@ -288,7 +289,6 @@ class MapPlantingPage(AbstractPage):
         by clicking in the middle of the canvas
         and making sure the delete button is not visible.
         """
-
         self.click_on_canvas_middle()
         expect(self._delete_plant_button).not_to_be_visible()
 
