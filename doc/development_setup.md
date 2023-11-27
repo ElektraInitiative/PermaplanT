@@ -97,10 +97,10 @@ In case you don't prefer any of the previously mentioned installations methods, 
 
 ## Dependencies
 
-If you want to install all necessary dependencies for development:
+If you want to install all necessary dependencies for development run following command in `/workspaces/PermaplanT`:
 
-```
-in /workspaces/PermaplanT $ make install
+```bash
+make install
 ```
 
 ## Containers
