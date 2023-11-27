@@ -74,7 +74,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
 - _()_
 - _()_
 

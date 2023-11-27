@@ -3,3 +3,7 @@
     width: 0 !important;
     height: 0 !important;
   }
+
+  .horizontal-scroll-container{
+    overflow-x: hidden !important;
+  }

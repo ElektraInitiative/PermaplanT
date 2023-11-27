@@ -197,17 +197,23 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
     }
   };
 
+  function triggerDateChangedInGuidedTour(): void {
+    const changeDateEvent = new Event('dateChanged');
+    document.getElementById('timeline')?.dispatchEvent(changeDateEvent);
+  }
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const newDay = selectedDayItem;
       onSelectDate(`${newDay.year}-${newDay.month}-${newDay.day}`);
+      triggerDateChangedInGuidedTour();
     }, 500);
     return () => clearTimeout(timeoutId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDayItem]);
 
   return (
-    <>
+    <div data-tourid="timeline" id="timeline">
       <ItemSliderPicker
         items={yearlyTimeLineEvents.map((yearSliderItem) => ({
           key: yearSliderItem.key,
@@ -253,7 +259,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
         rightEndReached={handleDaySliderRightEndReached}
         value={selectedDayItem.key}
       />
-    </>
+    </div>
   );
 };
 
@@ -270,13 +276,13 @@ function TimelineDatePickerItem({
 }) {
   return (
     <div>
-      <TimeLineDatePickerEventIndivatior added={added} removed={removed} />
+      <TimeLineDatePickerEventIndicator added={added} removed={removed} />
       <span className={`select-none ${disabled ? 'text-gray-400' : ''}`}>{text}</span>
     </div>
   );
 }
 
-function TimeLineDatePickerEventIndivatior({ added, removed }: { added: number; removed: number }) {
+function TimeLineDatePickerEventIndicator({ added, removed }: { added: number; removed: number }) {
   const greenBarHeight = added;
   const redBarHeight = removed;
 

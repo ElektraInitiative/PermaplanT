@@ -280,7 +280,9 @@ const ItemSliderPicker: React.FC<ItemSliderPickerProps> = ({
             <div
               key={index}
               className={`min-w-1/5 relative w-10 border-4 px-7 pb-1 pt-1  ${
-                getSelectedItemIndex() === index ? 'bg-gray-300 font-bold dark:bg-black' : ''
+                getSelectedItemIndex() === index
+                  ? 'bg-gray-300 font-bold text-secondary-300 dark:bg-black'
+                  : ''
               }
               ${
                 getSelectedItemIndex() === index &&
