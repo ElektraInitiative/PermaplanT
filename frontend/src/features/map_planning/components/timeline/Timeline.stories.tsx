@@ -7,7 +7,6 @@ const meta: Meta<typeof TimelineDatePicker> = {
     onSelectDate: { action: 'onSelectDate' },
   },
 };
-
 export default meta;
 
 type Story = StoryObj<typeof TimelineDatePicker>;
