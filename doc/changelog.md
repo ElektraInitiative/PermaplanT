@@ -60,7 +60,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
 - _()_
 - _()_
 - _()_
