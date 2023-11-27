@@ -10,6 +10,7 @@ declare module '@tanstack/query-core' {
   interface QueryMeta {
     autoClose?: false | number;
     errorMessage?: string;
+    toastId?: string;
   }
 }
 
