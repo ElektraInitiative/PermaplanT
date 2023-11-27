@@ -38,7 +38,7 @@ export default function MapEditForm() {
   const { t } = useTranslation(['maps', 'privacyOptions', 'common']);
   const navigate = useNavigate();
 
-  const { data: loadedMapData } = useQuery(['map', mapId], () => findMapById(Number(mapId)), {
+  const { data: loadedMapData } = useQuery(['maps', mapId], () => findMapById(Number(mapId)), {
     meta: {
       errorMessage: t('maps:edit.error_map_single_fetch'),
       autoClose: false,

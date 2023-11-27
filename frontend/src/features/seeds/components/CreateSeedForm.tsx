@@ -63,7 +63,7 @@ const CreateSeedForm = ({
   const [notes, setNotes] = useState<string | undefined>(undefined);
 
   const initialPlant = useQuery(
-    ['plant', existingSeed],
+    ['plants', existingSeed?.plant_id],
     () => {
       if (existingSeed?.plant_id) {
         return findPlantById(existingSeed.plant_id);
