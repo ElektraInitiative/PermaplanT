@@ -1,8 +1,9 @@
 // if using Jest:
 import { act } from 'react-dom/test-utils';
+import { vi } from 'vitest';
 import { StateCreator } from 'zustand';
 
-const { create: actualCreate } = jest.requireActual<typeof import('zustand')>('zustand');
+const { create: actualCreate } = vi.importActual('zustand');
 
 // a variable to hold reset functions for all stores declared in the app
 const storeResetFns = new Set<() => void>();

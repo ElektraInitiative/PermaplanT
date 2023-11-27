@@ -87,7 +87,7 @@ flowchart LR
 
 ### `__mocks__`
 
-This folder has a special name to be recognized by our test runner jest.
+This folder has a special name to be recognized by our test runner vi.
 More details on how mocking with jest works can be found in the [jest documentation](https://jestjs.io/docs/manual-mocks).
 
 ### `assets`

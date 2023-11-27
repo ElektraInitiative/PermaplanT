@@ -37,7 +37,7 @@ it('calls loadOptions on interaction', async () => {
     </MemoryRouter>,
   );
 
-  const input = getByRole('combobox');
+  const input = getByRole('combobox', { hidden: true });
 
   await act(async () => {
     await userEvent.click(input);

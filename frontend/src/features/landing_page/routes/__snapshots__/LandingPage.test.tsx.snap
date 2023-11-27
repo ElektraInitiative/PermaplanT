@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`renders correctly 1`] = `
 <div
@@ -66,7 +66,15 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 className="h-8 w-8"
-              />
+                height={48}
+                viewBox="0 96 960 960"
+                width={48}
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M751 460 596 305l70-70q17-17 42-17t42 17l71 71q17 17 17 42t-17 42l-70 70ZM120 936V780l194-194L93 364l174-176 223 223 106-106 155 155-106 106 223 223-175 173-222-221-195 195H120Zm237-393 90-90-73-73-48 48-42-42 48-48-64-64-90 90 179 179Zm334 335 90-90-64-64-48 48-42-42 48-48-73-73-90 90 179 179Zm-511-2h70l415-415-70-70-415 415v70Z"
+                />
+              </svg>
             </div>
             <div
               className="flex-grow"
@@ -91,7 +99,15 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 className="h-8 w-8"
-              />
+                height={48}
+                viewBox="0 96 960 960"
+                width={48}
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M450 926V617h-20q-64 0-120.5-24.5T209 523q-44-45-66.5-104T120 296v-80h78.322Q260 216 317 240.5T419 310q33 34 54.5 76t30.5 89q7.647-11.9 16.824-22.95Q530 441 540 430q45-45 102-69.5T761.667 336H840v80q0 64-23.979 123Q792.043 598 748 643q-45 45-101.561 69Q589.878 736 528 736h-18v190h-60Zm1-370q0-61-20-113.5t-55-89q-35-36.5-86-57T180 276q0 63 18.5 115.5T252 481q42 45 90.5 60T451 556Zm59 120q60 0 111-19.5t86-56q35-36.5 54-89T780 396q-60 0-111 20.5T583 473q-43 45-58 94t-15 109Zm0 0Zm-59-120Z"
+                />
+              </svg>
             </div>
             <div
               className="flex-grow"
@@ -116,7 +132,15 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 className="h-8 w-8"
-              />
+                height={48}
+                viewBox="0 96 960 960"
+                width={48}
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M480 976q-83 0-156-31.5T197 859q-54-54-85.5-127T80 576q0-83 31.5-156T197 293q54-54 127-85.5T480 176q83 0 156 31.5T763 293q54 54 85.5 127T880 576q0 83-31.5 156T763 859q-54 54-127 85.5T480 976Zm-43-61v-82q-35 0-59-26t-24-61v-44L149 497q-5 20-7 39.5t-2 39.5q0 130 84.5 227T437 915Zm294-108q22-24 38.5-51t28-56.5q11.5-29.5 17-60.5t5.5-63q0-106-58-192.5T607 257v18q0 35-24 61t-59 26h-87v87q0 17-13.5 28T393 488h-83v88h258q17 0 28 13t11 30v127h43q29 0 51 17t30 44Z"
+                />
+              </svg>
             </div>
             <div
               className="flex-grow"
@@ -153,7 +177,7 @@ exports[`renders correctly 1`] = `
           alt="PermaplanT Map"
           className="h-full w-full object-cover hover:cursor-pointer"
           onClick={[Function]}
-          src="http://localhost/SvgrURL"
+          src="/src/svg/icons/photo-off.svg"
         />
         <span
           className="my-2 flex-1 shrink-0 grow text-sm italic"
@@ -194,7 +218,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -221,7 +245,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -248,7 +272,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -275,7 +299,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -302,7 +326,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -329,7 +353,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -356,7 +380,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -383,7 +407,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -410,7 +434,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -437,7 +461,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -464,7 +488,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -491,7 +515,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -518,7 +542,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -545,7 +569,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -572,7 +596,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -599,7 +623,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of a team member"
                 className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <div
                 className="flex-grow"
@@ -657,7 +681,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of the author"
                 className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <span
                 className="flex flex-grow flex-col pl-4"
@@ -703,7 +727,7 @@ exports[`renders correctly 1`] = `
               <img
                 alt="picture of the author"
                 className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
-                src="http://localhost/SvgrURL"
+                src="/src/svg/icons/photo-off.svg"
               />
               <span
                 className="flex flex-grow flex-col pl-4"
@@ -733,21 +757,21 @@ exports[`renders correctly 1`] = `
         className="mt-8 flex justify-center gap-4"
       >
         <button
-          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 w-24"
+          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 dark:focus:ring-secondary-100 w-24"
           onClick={[Function]}
           type="button"
         >
           small
         </button>
         <button
-          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 w-24"
+          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 dark:focus:ring-secondary-100 w-24"
           onClick={[Function]}
           type="button"
         >
           mid
         </button>
         <button
-          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 w-24"
+          className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border bg-secondary-500 dark:bg-secondary-300 border-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-200 active:bg-secondary-900 text-secondary-50 dark:text-secondary-700 dark:focus:ring-secondary-100 w-24"
           onClick={[Function]}
           type="button"
         >
@@ -998,7 +1022,9 @@ exports[`renders correctly 1`] = `
       >
         <li>
           <a
-            className="items-center text-sm justify-center space-x-2"
+            className="flex items-center text-sm justify-center space-x-2
+                  hover:text-primary-500      active:text-primary-300
+                  dark:hover:text-primary-500 dark:active:text-primary-300"
             href="/imprint"
             onClick={[Function]}
           >

@@ -19,7 +19,7 @@ it('renders correctly', () => {
 });
 
 it('calls onInputChange on input change', async () => {
-  const callback = jest.fn();
+  const callback = vi.fn();
 
   const { getByRole } = render(
     <MemoryRouter>
@@ -36,7 +36,7 @@ it('calls onInputChange on input change', async () => {
   );
 
   await act(async () => {
-    await userEvent.click(getByRole('combobox'));
+    await userEvent.click(getByRole('combobox', { hidden: true }));
     await userEvent.paste('Hello World!');
   });
 
@@ -45,7 +45,7 @@ it('calls onInputChange on input change', async () => {
 });
 
 it('calls onChange on input change', async () => {
-  const callback = jest.fn();
+  const callback = vi.fn();
   const { getByRole } = render(
     <MemoryRouter>
       <FormWrapper>
@@ -61,7 +61,7 @@ it('calls onChange on input change', async () => {
   );
 
   await act(async () => {
-    await userEvent.click(getByRole('combobox'));
+    await userEvent.click(getByRole('combobox', { hidden: true }));
     await userEvent.paste('Hello World!');
   });
 
@@ -69,7 +69,7 @@ it('calls onChange on input change', async () => {
 });
 
 it('calls handleOptionsChange on options change', async () => {
-  const callback = jest.fn();
+  const callback = vi.fn();
   const { getByRole, getByText } = render(
     <MemoryRouter>
       <FormWrapper>
@@ -85,7 +85,7 @@ it('calls handleOptionsChange on options change', async () => {
   );
 
   await act(async () => {
-    await userEvent.click(getByRole('combobox'));
+    await userEvent.click(getByRole('combobox', { hidden: true }));
     await userEvent.paste('fo');
     await userEvent.click(getByText('foo'));
   });

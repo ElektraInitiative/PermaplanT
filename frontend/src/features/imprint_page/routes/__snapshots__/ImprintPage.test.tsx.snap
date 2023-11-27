@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`renders correctly 1`] = `
 <div
@@ -165,7 +165,9 @@ exports[`renders correctly 1`] = `
       >
         <li>
           <a
-            className="items-center text-sm justify-center space-x-2"
+            className="flex items-center text-sm justify-center space-x-2
+                  hover:text-primary-500      active:text-primary-300
+                  dark:hover:text-primary-500 dark:active:text-primary-300"
             href="/imprint"
             onClick={[Function]}
           >

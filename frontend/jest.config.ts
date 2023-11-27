@@ -19,7 +19,7 @@ const config: Config = {
   // It is needed, because we use libraries that
   // are delivered as uncompiled typescript files.
   transformIgnorePatterns: [],
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/vi.setup.ts'],
 };
 
 export default config;

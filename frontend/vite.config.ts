@@ -30,5 +30,10 @@ export default defineConfig(() => {
         '@public': path.resolve(__dirname, './public'),
       },
     },
+    test: {
+      globals: true,
+      environment: 'happy-dom',
+      setupFiles: './test.setup.ts',
+    },
   };
 });
