@@ -9,7 +9,7 @@ const BlogOverview = () => {
         <div className="-m-12 flex flex-wrap">
           {t('blog:blog_entries', { returnObjects: true }).map((entry) => (
             <div key={entry.title} className="flex flex-col items-start p-12 md:w-1/2">
-              <h2 className="title-font mb-4 mt-4 text-2xl font-medium sm:text-3xl">
+              <h2 className="title-font my-4 text-2xl font-medium sm:text-3xl">
                 {entry.title}
               </h2>
               <p className="mb-8 leading-relaxed">{entry.content}</p>
@@ -23,9 +23,9 @@ const BlogOverview = () => {
                   path={entry.picture}
                   shareToken="2arzyJZYj2oNnHX"
                   alt="picture of the author"
-                  className="h-12 w-12 flex-shrink-0 rounded-full object-cover object-center"
+                  className="h-12 w-12 shrink-0 rounded-full object-cover object-center"
                 />
-                <span className="flex flex-grow flex-col pl-4">
+                <span className="flex grow flex-col pl-4">
                   <span className="title-font font-medium text-primary-500 dark:text-primary-300">
                     {entry.author}
                   </span>

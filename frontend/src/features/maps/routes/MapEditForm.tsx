@@ -215,7 +215,7 @@ export default function MapEditForm() {
             </label>
             <textarea
               id="descriptionArea"
-              className="mb-4 block h-24 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+              className="mb-4 block h-24 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder:text-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
               defaultValue={updateObject.description}
               onChange={(e) => setUpdateObject({ ...updateObject, description: e.target.value })}
             />

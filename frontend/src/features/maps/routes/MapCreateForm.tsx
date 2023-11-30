@@ -80,7 +80,7 @@ export default function MapCreateForm() {
               location: { ...mapInput.location, latitude: +e.target.value.replace(',', '.') },
             })
           }
-          className="mr-2 block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          className="mr-2 block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder:text-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
           style={{ colorScheme: 'dark' }}
           placeholder="Latitude"
         />
@@ -93,7 +93,7 @@ export default function MapCreateForm() {
               location: { ...mapInput.location, longitude: +e.target.value.replace(',', '.') },
             })
           }
-          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder:text-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
           style={{ colorScheme: 'dark' }}
           placeholder="Longitude"
         />
@@ -161,7 +161,7 @@ export default function MapCreateForm() {
           setMapInput({ ...mapInput, name: e.target.value });
           setMissingName(false);
         }}
-        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+        className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder:text-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
         style={{ colorScheme: 'dark' }}
         placeholder="Name *"
       />
@@ -188,7 +188,7 @@ export default function MapCreateForm() {
         id="mapDescriptionTextfield"
         name="description"
         onChange={(e) => setMapInput({ ...mapInput, description: e.target.value })}
-        className="mb-4 block h-24 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+        className="mb-4 block h-24 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm placeholder:text-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
         style={{ colorScheme: 'dark' }}
         placeholder={t('maps:create.description_placeholer')}
       />

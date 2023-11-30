@@ -70,10 +70,10 @@ const Features = () => {
               key={feature.title}
               className="flex flex-col items-center p-4 text-center md:w-1/3"
             >
-              <div className="mb-5 inline-flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-primary-400 dark:bg-primary-300">
+              <div className="mb-5 inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-400 dark:bg-primary-300">
                 {<feature.icon className="h-8 w-8" />}
               </div>
-              <div className="flex-grow">
+              <div className="grow">
                 <h2 className="title-font mb-3 text-lg font-medium">{feature.title}</h2>
                 <p className="text-base leading-relaxed">{feature.description}</p>
               </div>

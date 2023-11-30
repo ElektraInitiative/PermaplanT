@@ -71,7 +71,7 @@ export const LayerListItem = ({
       <div className="flex items-center">
         {alternatives && alternatives.length > 0 && (
           <IconButton
-            className="flex-shrink"
+            className="shrink"
             onClick={() => setAlternativesVisible(!alternativesVisible)}
           >
             {alternativesVisible ? <CaretDownIcon /> : <CaretRightIcon />}

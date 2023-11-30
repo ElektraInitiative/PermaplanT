@@ -55,7 +55,7 @@ const Navbar = () => {
       dark:bg-neutral-100-dark
       "
       >
-        <div className="mx-auto flex h-full max-w-screen-xl flex-wrap items-center justify-between pl-4 pr-4">
+        <div className="mx-auto flex h-full max-w-screen-xl flex-wrap items-center justify-between px-4">
           <div className="flex space-x-16">
             <div className="flex space-x-6">
               <a href="/" className="flex items-center">

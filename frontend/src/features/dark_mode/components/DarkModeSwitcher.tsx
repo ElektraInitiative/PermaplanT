@@ -9,7 +9,7 @@ export const DarkModeSwitcher = () => {
     <IconButton
       aria-label="Toggle Dark Mode"
       type="button"
-      className="flex-shrink-0"
+      className="shrink-0"
       onClick={toggle}
     >
       <svg

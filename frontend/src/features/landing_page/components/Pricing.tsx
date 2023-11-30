@@ -30,7 +30,7 @@ const Pricing = () => {
           <table className="whitespace-no-wrap w-full table-auto rounded text-left dark:bg-neutral-300-dark">
             <thead>
               <tr>
-                <th className="title-font rounded-bl rounded-tl bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">
+                <th className="title-font rounded-l bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">
                   {t('pricing:table_headers.membership')}
                 </th>
                 <th className="title-font bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wider dark:bg-neutral-200-dark">

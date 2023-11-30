@@ -4,7 +4,7 @@ import { DraggableCore, DraggableEventHandler } from 'react-draggable';
 /** horizontal toolbar handle used to hide and show content */
 /** includes extra padding to increase surface size */
 const HorizontalHandle = () => (
-  <div className={`horizontal-handle w-full pb-2 pt-2 hover:cursor-row-resize`}>
+  <div className={`horizontal-handle w-full py-2 hover:cursor-row-resize`}>
     <div className="h-[3px] w-full bg-neutral-700" />
   </div>
 );
@@ -85,7 +85,7 @@ export const Toolbar = ({
               </div>
               <HorizontalHandle />
               <div
-                className="flex-shrink overflow-y-auto"
+                className="shrink overflow-y-auto"
                 data-tourid={position === 'left' ? 'bottom_left_toolbar' : 'bottom_right_toolbar'}
               >
                 {contentBottom}

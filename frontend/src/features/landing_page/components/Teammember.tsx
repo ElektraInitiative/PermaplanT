@@ -8,9 +8,9 @@ export const Teammember = ({ name, path, role }: { name: string; path: string; r
           path={path}
           shareToken="2arzyJZYj2oNnHX"
           alt="picture of a team member"
-          className="mr-4 h-16 w-16 flex-shrink-0 rounded-full bg-gray-100 object-cover object-center"
+          className="mr-4 h-16 w-16 shrink-0 rounded-full bg-gray-100 object-cover object-center"
         />
-        <div className="flex-grow">
+        <div className="grow">
           <h2 className="title-font font-medium text-primary-500 dark:text-primary-300">{name}</h2>
           <p className="text-gray-500">{role}</p>
         </div>

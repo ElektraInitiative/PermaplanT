@@ -59,7 +59,7 @@ const Navpage = ({ close }: NavpageProps) => {
       dark:bg-neutral-100-dark
       "
     >
-      <div className="flex flex-col gap-4 pl-4 pr-4">
+      <div className="flex flex-col gap-4 px-4">
         <div className="flex h-16 items-center justify-between">
           <a href="/" className="flex items-center">
             {darkMode ? (
