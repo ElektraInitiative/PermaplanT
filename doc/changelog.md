@@ -50,7 +50,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
 - _()_
 - _()_
 - _()_
