@@ -31,7 +31,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- After planting a plant, the last planted plant is selected. _(Samuel)_
 - _()_
 - _()_
 - _()_
