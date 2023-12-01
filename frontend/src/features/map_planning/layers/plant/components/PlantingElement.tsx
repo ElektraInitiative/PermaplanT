@@ -37,6 +37,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
 
   const selectPlantings = useMapStore((state) => state.selectPlantings);
   const isSelected = isPlantingElementSelected(planting);
+  console.log('selection: ', planting.plantId, isSelected);
 
   const removePlantingFromSelection = (e: KonvaEventObject<MouseEvent>) => {
     const selectedPlantings = (foundPlantings: PlantingDto[], konvaNode: Node) => {

@@ -26,7 +26,7 @@ import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
 import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import Konva from 'konva';
-import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
+import { KonvaEventListener, KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
 import { Layer } from 'react-konva';
 import * as uuid from 'uuid';
@@ -44,9 +44,7 @@ function getPlantWidth({ spread = PlantSpread.Medium }): number {
   return PLANT_WIDTHS.get(spread) ?? (PLANT_WIDTHS.get(PlantSpread.Medium) as number);
 }
 
-function exitPlantingMode() {
-  useMapStore.getState().selectPlantings(null);
-}
+function exitPlantingMode() {}
 
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
@@ -56,26 +54,34 @@ function usePlantLayerListeners(listening: boolean) {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
   const isReadOnlyMode = useIsReadOnlyMode();
+  //const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
+  const selectPlantings = useMapStore((state) => state.selectPlantings);
+
+  const selectPlanting = (planting: PlantingDto) => {
+    // setSingleNodeInTransformer(plantingNode);
+    selectPlantings([planting]);
+  };
 
   const createPlanting = useCallback(
     (selectedPlantForPlanting: PlantForPlanting, xCoordinate: number, yCoordinate: number) => {
-      executeAction(
-        new CreatePlantAction({
-          id: uuid.v4(),
-          plantId: selectedPlantForPlanting.plant.id,
-          seedId: selectedPlantForPlanting.seed?.id,
-          layerId: getSelectedLayerId() ?? -1,
-          x: Math.round(xCoordinate),
-          y: Math.round(yCoordinate),
-          height: getPlantWidth(selectedPlantForPlanting.plant),
-          width: getPlantWidth(selectedPlantForPlanting.plant),
-          rotation: 0,
-          scaleX: 1,
-          scaleY: 1,
-          addDate: timelineDate,
-          additionalName: selectedPlantForPlanting.seed?.name,
-        }),
-      );
+      const planting: PlantingDto = {
+        id: uuid.v4(),
+        plantId: selectedPlantForPlanting.plant.id,
+        seedId: selectedPlantForPlanting.seed?.id,
+        layerId: getSelectedLayerId() ?? -1,
+        x: Math.round(xCoordinate),
+        y: Math.round(yCoordinate),
+        height: getPlantWidth(selectedPlantForPlanting.plant),
+        width: getPlantWidth(selectedPlantForPlanting.plant),
+        rotation: 0,
+        scaleX: 1,
+        scaleY: 1,
+        addDate: timelineDate,
+        additionalName: selectedPlantForPlanting.seed?.name,
+      };
+      executeAction(new CreatePlantAction(planting));
+
+      selectPlanting(planting);
     },
     [executeAction, getSelectedLayerId, timelineDate],
   );

@@ -105,6 +105,7 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   selectPlantings(plantings) {
+    console.log('selection: ', plantings);
     set((state) => ({
       ...state,
       untrackedState: {
