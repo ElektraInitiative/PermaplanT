@@ -18,11 +18,14 @@ export function insertBetweenPointsWithLeastTotalDistance(
   pointToInsert: PolygonPoint,
   edgeRing?: number,
 ): PolygonGeometry {
+  const newGeometry: PolygonGeometry = deepCopyGeometry(geometry);
+
   let smallestTotalDistance = Infinity;
   let insertNewPointAfterIndex = -1;
-  geometry.rings[edgeRing ?? 0]
+
+  newGeometry.rings[edgeRing ?? 0]
     // the last point is identical to the first point
-    .slice(0, geometry.rings[edgeRing ?? 0].length - 1)
+    .slice(0, newGeometry.rings[edgeRing ?? 0].length - 1)
     .forEach((value, index, array) => {
       const firstPoint = value;
       const secondPoint = array[(index + 1) % array.length];
@@ -37,13 +40,13 @@ export function insertBetweenPointsWithLeastTotalDistance(
       }
     });
 
-  const ring = geometry.rings[edgeRing ?? 0];
-  geometry.rings[edgeRing ?? 0] = ring
+  const ring = newGeometry.rings[edgeRing ?? 0];
+  newGeometry.rings[edgeRing ?? 0] = ring
     .slice(0, insertNewPointAfterIndex + 1)
     .concat([pointToInsert])
     .concat(ring.slice(insertNewPointAfterIndex + 1, ring.length));
 
-  return geometry;
+  return newGeometry;
 }
 
 /**
@@ -58,11 +61,12 @@ export function removePointAtIndex(
   indexToRemove: number,
   edgeRing?: number,
 ) {
-  const ring = geometry.rings[edgeRing ?? 0];
-  geometry.rings[edgeRing ?? 0] = ring
+  const newGeometry: PolygonGeometry = deepCopyGeometry(geometry);
+  const ring = newGeometry.rings[edgeRing ?? 0];
+  newGeometry.rings[edgeRing ?? 0] = ring
     .slice(0, indexToRemove)
     .concat(ring.slice(indexToRemove + 1, ring.length));
-  return geometry;
+  return newGeometry;
 }
 
 /**
@@ -79,15 +83,17 @@ export function setPointAtIndex(
   indexToUpdate: number,
   edgeRing?: number,
 ): PolygonGeometry {
-  geometry.rings[edgeRing ?? 0][indexToUpdate] = newPoint;
+  const newGeometry: PolygonGeometry = deepCopyGeometry(geometry);
+
+  newGeometry.rings[edgeRing ?? 0][indexToUpdate] = newPoint;
 
   // The backend expects that the first point equals the last point.
   if (indexToUpdate === 0) {
-    const ringLength = geometry.rings[edgeRing ?? 0].length;
-    geometry.rings[edgeRing ?? 0][ringLength - 1] = geometry.rings[edgeRing ?? 0][0];
+    const ringLength = newGeometry.rings[edgeRing ?? 0].length;
+    newGeometry.rings[edgeRing ?? 0][ringLength - 1] = newGeometry.rings[edgeRing ?? 0][0];
   }
 
-  return geometry;
+  return newGeometry;
 }
 
 /**
@@ -99,4 +105,11 @@ export function flattenRing(ring: EdgeRing): number[] {
   return ring
     .map((point) => [point.x, point.y])
     .reduce((accumulator, next) => accumulator.concat(next));
+}
+
+/**
+ * Creates a deep copy of a geometry object.
+ */
+function deepCopyGeometry(geometry: PolygonGeometry): PolygonGeometry {
+  return JSON.parse(JSON.stringify(geometry));
 }
