@@ -8,7 +8,7 @@ import {
   UpdateMapGeometryActionPayload,
 } from '@/api_types/definitions';
 import { updateMapGeometry } from '@/features/map_planning/api/updateMapGeometry';
-import { PolygonGeometry } from '@/features/map_planning/utils/PolygonTypes';
+import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
 import { updateMap } from '@/features/maps/api/updateMap';
 import { v4 } from 'uuid';
 

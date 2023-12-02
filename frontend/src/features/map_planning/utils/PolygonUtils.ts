@@ -3,7 +3,7 @@ import {
   EdgeRing,
   PolygonGeometry,
   PolygonPoint,
-} from '@/features/map_planning/utils/PolygonTypes';
+} from '@/features/map_planning/types/PolygonTypes';
 
 /**
  * Insert a PolygonPoint P into an edge Ring of a PolygonGeometry object between

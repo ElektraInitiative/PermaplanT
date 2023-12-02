@@ -1,7 +1,7 @@
 import { UpdateMapGeometry } from '@/features/map_planning/layers/base/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
-import { DEFAULT_SRID } from '@/features/map_planning/utils/PolygonTypes';
 import {
   insertBetweenPointsWithLeastTotalDistance,
   removePointAtIndex,
