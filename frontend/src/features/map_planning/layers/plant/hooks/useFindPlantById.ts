@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
  * @param plantId the id of the requested plant.
  * @param enabled will disable the backend query if set to false.
  */
-export function useFindPlantById(plantId: number, enabled = true) {
+export function useFindPlantById(plantId: number | undefined, enabled = true) {
   const { t } = useTranslation(['plantings']);
   const { data } = useQuery(['plants/plant', plantId] as const, {
     queryFn: (context) => findPlantById(context.queryKey[1]),
