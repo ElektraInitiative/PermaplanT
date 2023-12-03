@@ -23,7 +23,7 @@ export const PolygonEditor = (props: PolygonProps) => {
   const { t } = useTranslation('polygon');
   const executeAction = useMapStore((state) => state.executeAction);
   const trackedState = useMapStore((map) => map.trackedState);
-  const mapBounds = useMapStore((state) => state.trackedState.mapBounds);
+  const mapGeometry = useMapStore((state) => state.trackedState.mapGeometry);
   const mapId = useMapStore((state) => state.untrackedState.mapId);
   const polygonManipulationState = useMapStore(
     (state) => state.untrackedState.layers.base.polygon.editMode,
@@ -44,10 +44,10 @@ export const PolygonEditor = (props: PolygonProps) => {
         srid: DEFAULT_SRID,
       };
 
-      const geometry = insertBetweenPointsWithLeastTotalDistance(mapBounds, newPoint);
+      const geometry = insertBetweenPointsWithLeastTotalDistance(mapGeometry, newPoint);
       executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
     });
-  }, [polygonManipulationState, mapBounds]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [polygonManipulationState, mapGeometry]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
     if (polygonManipulationState === 'move') {
@@ -57,7 +57,7 @@ export const PolygonEditor = (props: PolygonProps) => {
 
     if (polygonManipulationState !== 'remove') return;
 
-    if (mapBounds.rings[0].length - 1 <= 3) {
+    if (mapGeometry.rings[0].length - 1 <= 3) {
       warningToastGrouped(t('polygon_delete_point_forbidden'));
       return;
     }
@@ -66,7 +66,7 @@ export const PolygonEditor = (props: PolygonProps) => {
 
     executeAction(
       new UpdateMapGeometry({
-        geometry: removePointAtIndex(mapBounds, index) as object,
+        geometry: removePointAtIndex(mapGeometry, index) as object,
         mapId: mapId,
       }),
     );
@@ -86,16 +86,16 @@ export const PolygonEditor = (props: PolygonProps) => {
 
     executeAction(
       new UpdateMapGeometry({
-        geometry: setPointAtIndex(mapBounds, newPoint, index) as object,
+        geometry: setPointAtIndex(mapGeometry, newPoint, index) as object,
         mapId: mapId,
       }),
     );
   };
 
-  if (!trackedState.mapBounds || !trackedState.mapBounds.rings.length) return <Group></Group>;
+  if (!trackedState.mapGeometry || !trackedState.mapGeometry.rings.length) return <Group></Group>;
 
-  const points = mapBounds.rings[0].map((point, index) => {
-    if (index === mapBounds.rings[0].length - 1) return;
+  const points = mapGeometry.rings[0].map((point, index) => {
+    if (index === mapGeometry.rings[0].length - 1) return;
 
     return (
       <Circle
@@ -120,7 +120,7 @@ export const PolygonEditor = (props: PolygonProps) => {
     >
       <Line
         listening={true}
-        points={flattenRing(mapBounds.rings[0])}
+        points={flattenRing(mapGeometry.rings[0])}
         stroke={COLOR_EDITOR_HIGH_VISIBILITY}
         strokeWidth={editorLongestSide / 500}
         lineCap="round"

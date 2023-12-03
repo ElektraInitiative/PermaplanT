@@ -77,7 +77,7 @@ export class UpdateMapGeometry
 
   reverse(state: TrackedMapState) {
     return new UpdateMapGeometry(
-      { mapId: this._data.mapId, geometry: state.mapBounds as object },
+      { mapId: this._data.mapId, geometry: state.mapGeometry as object },
       this.actionId,
     );
   }
@@ -89,7 +89,7 @@ export class UpdateMapGeometry
 
     return {
       ...state,
-      mapBounds: this._data.geometry as PolygonGeometry,
+      mapGeometry: this._data.geometry as PolygonGeometry,
     };
   }
 

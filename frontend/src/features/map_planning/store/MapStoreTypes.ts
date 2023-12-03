@@ -227,7 +227,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
     }),
     {} as TrackedLayers,
   ),
-  mapBounds: { srid: '', rings: [] },
+  mapGeometry: { srid: '', rings: [] },
 };
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
@@ -391,7 +391,7 @@ export type PlantForPlanting = {
  */
 export type TrackedMapState = {
   layers: TrackedLayers;
-  mapBounds: PolygonGeometry;
+  mapGeometry: PolygonGeometry;
 };
 
 /**

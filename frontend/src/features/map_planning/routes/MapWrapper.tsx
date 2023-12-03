@@ -157,7 +157,7 @@ function useInitializeMap() {
         },
         trackedState: {
           ...state.trackedState,
-          mapBounds: mapQuery.data?.geometry as PolygonGeometry,
+          mapGeometry: mapQuery.data?.geometry as PolygonGeometry,
         },
       }));
     }
