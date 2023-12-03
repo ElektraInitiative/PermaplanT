@@ -66,6 +66,12 @@ export function removePointAtIndex(
   newGeometry.rings[edgeRing ?? 0] = ring
     .slice(0, indexToRemove)
     .concat(ring.slice(indexToRemove + 1, ring.length));
+
+  if (indexToRemove == 0) {
+    const ringLength = newGeometry.rings[edgeRing ?? 0].length;
+    newGeometry.rings[edgeRing ?? 0][ringLength - 1] = newGeometry.rings[edgeRing ?? 0][0];
+  }
+
   return newGeometry;
 }
 
