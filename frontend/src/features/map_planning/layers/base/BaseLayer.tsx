@@ -27,7 +27,7 @@ const BaseLayer = (props: BaseLayerProps) => {
 
   // Needed for scaling the auto-scale indicators.
   const editorLongestSide = useMapStore((map) =>
-    Math.max(map.untrackedState.editorBounds.width, map.untrackedState.editorBounds.height),
+    Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
   );
 
   const isBaseLayerActive =

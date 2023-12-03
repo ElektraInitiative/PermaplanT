@@ -1,10 +1,10 @@
 import { calculateGridStep } from '@/features/map_planning/layers/_frontend_only/grid/util/Calculations';
 import { RELATIVE_DOT_SIZE } from '@/features/map_planning/layers/_frontend_only/grid/util/Constants';
-import { BoundsRect } from '@/features/map_planning/store/MapStoreTypes';
+import { ViewRect } from '@/features/map_planning/store/MapStoreTypes';
 import { COLOR_SEA_BLUE_500 } from '@/utils/constants';
 import { Group, Line } from 'react-konva';
 
-export const Grid = (rect: BoundsRect) => {
+export const Grid = (rect: ViewRect) => {
   const gridStep = calculateGridStep(rect.width);
 
   const gridDotSize = rect.width * RELATIVE_DOT_SIZE;

@@ -1,7 +1,7 @@
 import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import {
-  BoundsRect,
+  ViewRect,
   TrackedMapSlice,
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
@@ -22,12 +22,12 @@ export const createUntrackedMapSlice: StateCreator<
   untrackedState: UNTRACKED_DEFAULT_STATE,
   stageRef: createRef<Konva.Stage>(),
   tooltipRef: createRef(),
-  updateMapBounds(bounds: BoundsRect) {
+  updateViewRect(bounds: ViewRect) {
     set((state) => ({
       ...state,
       untrackedState: {
         ...state.untrackedState,
-        editorBounds: bounds,
+        editorViewRect: bounds,
       },
     }));
   },

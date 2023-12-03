@@ -159,7 +159,7 @@ export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
   tooltipRef: React.RefObject<Konva.Label>;
-  updateMapBounds: (bounds: BoundsRect) => void;
+  updateViewRect: (bounds: ViewRect) => void;
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   updateSelectedLayer: (selectedLayer: LayerDto | FrontendOnlyLayerType) => void;
   updateLayerVisible: (
@@ -232,7 +232,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
-  editorBounds: { x: 0, y: 0, width: 0, height: 0 },
+  editorViewRect: { x: 0, y: 0, width: 0, height: 0 },
   timelineDate: convertToDateString(new Date()),
   fetchDate: convertToDateString(new Date()),
   timelineBounds: {
@@ -399,7 +399,7 @@ export type TrackedMapState = {
  */
 export type UntrackedMapState = {
   mapId: number;
-  editorBounds: BoundsRect;
+  editorViewRect: ViewRect;
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   selectedLayer: LayerDto | FrontendOnlyLayerType;
   /** used for the bounds calculation */
@@ -420,7 +420,7 @@ export type UntrackedMapState = {
 /**
  * Represents a simple rectangle with width, height and position.
  */
-export type BoundsRect = {
+export type ViewRect = {
   x: number;
   y: number;
   width: number;
