@@ -104,7 +104,7 @@ export const PolygonEditor = (props: PolygonProps) => {
         key={`polygon-point-${index}`}
         x={point.x}
         y={point.y}
-        fill="red"
+        fill={COLOR_EDITOR_HIGH_VISIBILITY}
         radius={editorLongestSide / 200}
         onClick={(e) => handlePointSelect(e)}
         onDragStart={(e) => handlePointSelect(e)}
