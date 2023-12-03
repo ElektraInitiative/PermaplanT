@@ -1,4 +1,4 @@
-//! Contains the implementation of [`UpdateMapBoundsDto`].
+//! Contains the implementation of [`UpdateMapGeometryDto`].
 
 use crate::model::dto::UpdateMapGeometryDto;
 use crate::model::entity::UpdateMapGeometry;
