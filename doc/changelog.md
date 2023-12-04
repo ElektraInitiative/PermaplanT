@@ -17,26 +17,29 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
-- _()_
-- _()_
+- Fix ref warning in PlantLabel, center labels as intended _(Paul)_
+- Fix planting cursor preventing the placement of an area of plants _(Paul)_
 - _()_
 - _()_
 - _()_
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
+- Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
+- Added Meeting Agenda&Notes for 04.12. 9:00 _(Markus Raab, Daniel)_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
+- Remove error messages in console if a seed was not found _(Moritz)_
 - _()_
 - _()_
 - After planting a plant, the last planted plant is selected. _(Samuel)_
 - _()_
+- Fix the markdown so that mdbook tests pass _(Daniel Steinkogler)_
 - _()_
 - _()_
-- _()_
-- _()_
+- Make map geometry viewable and editable _(Moritz)_
 - _()_
 - _()_
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
@@ -50,29 +53,29 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
+- _()_
+- _()_
+- wrap api queries using react query _(Daniel Steinkogler)_
+- _()_
+- CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
+- E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
+- _()_
+- _()_
+- _()_
+- _()_
+- Up the rust version to 1.74 _(4ydan)_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
 - _()_
 - _()_
 

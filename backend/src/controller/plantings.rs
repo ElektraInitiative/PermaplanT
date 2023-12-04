@@ -46,6 +46,9 @@ use crate::{
 )]
 #[get("")]
 pub async fn find(
+    // define here, even though it's not used.
+    // So clients need to provide the map_id and it is checked.
+    _map_id: Path<i32>,
     search_params: Query<PlantingSearchParameters>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {

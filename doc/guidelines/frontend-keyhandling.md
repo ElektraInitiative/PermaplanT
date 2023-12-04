@@ -51,7 +51,7 @@ Structure:
 
 Example:
 
-```
+```typescript
     const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
       const action = getActionNameFromKeyEvent(<scope>, event);
       if(action === "doSomething"){
@@ -72,7 +72,7 @@ Example:
 
 Example:
 
-```
+```typescript
 const keyHandlerActions: Record<string, () => void> = {
   exitPlantingMode: () => {
     exitPlantingMode();

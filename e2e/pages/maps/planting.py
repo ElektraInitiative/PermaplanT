@@ -41,8 +41,12 @@ class MapPlantingPage(AbstractPage):
         # Canvas
         self._canvas = page.get_by_test_id("base-stage__canvas")
         self._close_selected_plant = self._canvas.get_by_role("button")
-        self._map_date = page.get_by_label("Change map date")
-        self._timeline_idle = page.get_by_test_id("timeline__date-form-idle")
+
+        # Timeline
+        self._timeline_day_slider = page.get_by_test_id("timeline__day-slider")
+        self._timeline_month_slider = page.get_by_test_id("timeline__month-slider")
+        self._timeline_year_slider = page.get_by_test_id("timeline__year-slider")
+        self._timeline_idle = page.get_by_test_id("timeline__state-idle")
 
         # Top left section
         self._undo_button = page.get_by_test_id("map__undo-button")
@@ -93,8 +97,32 @@ class MapPlantingPage(AbstractPage):
 
     def change_map_date_by_days(self, delta_days: int):
         """Changes the date by a given amount of days."""
-        day = datetime.today() + timedelta(days=delta_days)
-        self._map_date.fill(day.strftime("%Y-%m-%d"))
+        if delta_days > 0:
+            for i in range(delta_days):
+                self._timeline_day_slider.press("ArrowRight")
+        else:
+            for i in range(abs(delta_days)):
+                self._timeline_day_slider.press("ArrowLeft")
+        self._timeline_idle.wait_for()
+
+    def change_map_date_by_months(self, delta_months: int):
+        """Changes the date by a given amount of months."""
+        if delta_months > 0:
+            for i in range(delta_months):
+                self._timeline_month_slider.press("ArrowRight")
+        else:
+            for i in range(abs(delta_months)):
+                self._timeline_month_slider.press("ArrowLeft")
+        self._timeline_idle.wait_for()
+
+    def change_map_date_by_years(self, delta_years: int):
+        """Changes the date by a given amount of years."""
+        if delta_years > 0:
+            for i in range(delta_years):
+                self._timeline_year_slider.press("ArrowRight")
+        else:
+            for i in range(abs(delta_years)):
+                self._timeline_year_slider.press("ArrowLeft")
         self._timeline_idle.wait_for()
 
     def change_plant_added_date_by_days(self, delta_days: int):
@@ -153,6 +181,7 @@ class MapPlantingPage(AbstractPage):
         """Clicks in the middle of the canvas with a 300ms delay."""
         time.sleep(1)
         box = self._canvas.bounding_box()
+        self._page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
         self._page.mouse.click(
             box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
         )
@@ -288,7 +317,6 @@ class MapPlantingPage(AbstractPage):
         by clicking in the middle of the canvas
         and making sure the delete button is not visible.
         """
-
         self.click_on_canvas_middle()
         expect(self._delete_plant_button).not_to_be_visible()
 

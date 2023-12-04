@@ -13,7 +13,9 @@
 - **Precondition:**
   The user has opened the app and has selected the warnings layer.
 - **Main success scenario:**
-  - Warnings can be individual elements or connecting two elements (e.g. antagonists).
+  - Warnings can be individual elements or connecting two elements, when modifying elements on the map:
+    - shade mismatch
+    - nearby antagonists
   - The user successfully adds, edits, moves and hides warnings.
 - **Alternative scenario:**
   The user accidentally adds, edits, moves or hides the wrong warnings and uses the app's undo function to correct the mistake.
@@ -25,3 +27,7 @@
 - **Note:**
   - it gets dynamically generated based on alternatives
   - while doing drag and drop of [plants](../done/plants_layer.md), warnings are shown anyway.
+
+## Development
+
+- warnings are generated and stored in backend

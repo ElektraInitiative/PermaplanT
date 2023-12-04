@@ -22,7 +22,7 @@ export type PlantingElementProps = {
  *
  * A single plant consists of a _Konva Group_ which itself is composed of:
  * - A _Konva Circle_ filled with a selection-dependent colour
- * - A _Konva Image_ depicturing the plant or showing a fallback image
+ * - A _Konva Image_ picturing the plant or showing a fallback image
  *
  * @param planting - Plant's details used for rendering the plant.
  * @returns A plant ready to be shown on the map.
@@ -78,7 +78,7 @@ export function PlantingElement({ planting }: PlantingElementProps) {
 
     triggerPlantSelectionInGuidedTour();
 
-    isUsingModiferKey(e) ? handleMultiSelect(e, planting) : handleSingleSelect(e, planting);
+    isUsingModifierKey(e) ? handleMultiSelect(e, planting) : handleSingleSelect(e, planting);
   };
 
   return (
@@ -127,7 +127,7 @@ function triggerPlantSelectionInGuidedTour(): void {
   document.getElementById('canvas')?.dispatchEvent(placeEvent);
 }
 
-function isUsingModiferKey(e: KonvaEventObject<MouseEvent>): boolean {
+function isUsingModifierKey(e: KonvaEventObject<MouseEvent>): boolean {
   return e.evt.ctrlKey || e.evt.shiftKey || e.evt.metaKey;
 }
 

@@ -102,11 +102,11 @@ export const BaseStage = ({
 
   const { isSelectedLayerVisible } = useSelectedLayerVisibility();
 
-  const updateMapBounds = useMapStore((store) => store.updateMapBounds);
-  const mapBounds = useMapStore((store) => store.untrackedState.editorBounds);
+  const updateViewRect = useMapStore((store) => store.updateViewRect);
+  const viewRect = useMapStore((store) => store.untrackedState.editorViewRect);
   useEffect(() => {
-    if (mapBounds.width !== 0 || mapBounds.height !== 0) return;
-    updateMapBounds({
+    if (viewRect.width !== 0 || viewRect.height !== 0) return;
+    updateViewRect({
       x: 0,
       y: 0,
       width: Math.floor(window.innerWidth / stage.scale),
@@ -143,7 +143,7 @@ export const BaseStage = ({
 
     if (stageRef.current === null) return;
 
-    updateMapBounds({
+    updateViewRect({
       x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
       y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
       width: Math.floor(window.innerWidth / stage.scale),
@@ -169,7 +169,7 @@ export const BaseStage = ({
     listeners?.stageDragEndListeners.forEach((listener) => listener(e));
     if (stageRef.current === null) return;
 
-    updateMapBounds({
+    updateViewRect({
       x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
       y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
       width: Math.floor(window.innerWidth / stage.scale),
@@ -321,7 +321,7 @@ export const BaseStage = ({
         </Layer>
       </Stage>
       {/** Panel to display something from different layers */}
-      <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
+      <div className="absolute bottom-36 left-1/2 z-10 -translate-x-1/2">
         <AnimatePresence mode="wait">
           {bottomStatusPanelContent && (
             <BottomStatusPanel>{bottomStatusPanelContent}</BottomStatusPanel>

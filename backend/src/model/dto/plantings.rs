@@ -40,7 +40,7 @@ pub struct PlantingDto {
     pub remove_date: Option<NaiveDate>,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
-    /// Eqivalent to the seed name.
+    /// Equivalent to the seed name.
     /// It is used to display the full plant name on a map
     /// even if a user does not have access to the seed.
     pub additional_name: Option<String>,
