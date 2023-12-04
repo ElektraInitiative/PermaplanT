@@ -97,6 +97,10 @@ If any of the below mentioned variables are not set, the tests will fallback to 
 
   The password to login to permaplant.
 
+- `BROWSER_LOGS` (default: not set)
+
+  Writes console logs to console_logs.txt
+
 ### Project env variables
 
 Furthermore following variables are expected to be set in your environment and required by `clean_db.py`:
