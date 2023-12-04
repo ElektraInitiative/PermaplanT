@@ -13,13 +13,15 @@
 - **Precondition:** User has opened the app and selected the landscape layer.
 - **Main success scenario:**
   User successfully adds elements to their map using hand-drawn shapes or common shapes such as circles, ellipses, squares, and rectangles.
-  Element types include:
+  Element types include (icons from Nextcloud):
   - wall
   - plain
   - pond
   - (glas)houses
   - barns
   - plant beds
+  - circles
+  - doors
 - **Alternative scenario:**
   User accidentally adds a shape in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**
