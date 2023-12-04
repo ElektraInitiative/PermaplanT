@@ -16,7 +16,7 @@ export const handleZoom = (
   const pointerX = pointer.x;
   const pointerY = pointer.y;
 
-  const scaleBy = 1.1;
+  const scaleBy = 1.4;
 
   const oldScale = stage.scaleX();
   const mousePointTo = {
