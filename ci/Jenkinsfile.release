@@ -44,6 +44,7 @@ stage('Build in Docker') {
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rustImage.inside("--link ${c.id}:db -e 'DATABASE_URL=postgres://ci:ci@db/ci'") {
                     checkout scm
+                    unstash 'schema.rs'
 
                     wait_for_db()
 
