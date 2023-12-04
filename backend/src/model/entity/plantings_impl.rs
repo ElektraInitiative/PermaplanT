@@ -110,7 +110,7 @@ impl Planting {
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        if planting.seed_id.is_none() || matches!(query_result, Err(_)) {
+        if planting.seed_id.is_none() || query_result.is_err() {
             return query_result;
         }
 
