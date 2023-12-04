@@ -116,13 +116,13 @@ export const BaseLayerRightToolbar = () => {
         onCancel={deactivateMeasurement}
         show={measureStep === 'both selected'}
       />
-      <PolygonToolForm />
       <BaseLayerAttributeEditForm
         // remount the form when the selected planting or the step changes (on undo/redo)
         key={`${baseLayerState.id}-${step}`}
         onChange={onBaseLayerFormChange}
         isReadOnlyMode={isReadOnlyMode}
       />
+      <PolygonToolForm />
     </div>
   );
 };
