@@ -4,7 +4,7 @@ Feature: Planting Timeline
     Background:
         Given I am on the SUT-Timeline map page and I have planted something
 
-    Scenario: Hide a plant by changing the map date
+    Scenario: Hide a plant by changing the map date by day
         When I change the map date to yesterday
         Then the plant disappears
 
@@ -20,3 +20,7 @@ Feature: Planting Timeline
         When I change the plants added date to tomorrow
         And I change the map date to tomorrow
         Then the plant appears
+
+    Scenario: Hide a plant by changing the map date by year
+        When I change the map date to last year
+        Then the plant disappears

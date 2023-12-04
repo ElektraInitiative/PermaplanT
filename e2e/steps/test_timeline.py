@@ -10,8 +10,6 @@ scenarios("features/timeline.feature")
 
 
 # WHEN
-
-
 @when("I change the map date to yesterday")
 def change_map_date_to_yesterday(mpp: MapPlantingPage):
     mpp.change_map_date_by_days(-1)
@@ -20,6 +18,16 @@ def change_map_date_to_yesterday(mpp: MapPlantingPage):
 @when("I change the map date to tomorrow")
 def change_map_date_to_tomorrow(mpp: MapPlantingPage):
     mpp.change_map_date_by_days(1)
+
+
+@when("I change the map date to last year")
+def change_map_date_to_last_year(mpp: MapPlantingPage):
+    mpp.change_map_date_by_years(-1)
+
+
+@when("I change the map date next year")
+def change_map_date_to_next_year(mpp: MapPlantingPage):
+    mpp.change_map_date_by_years(1)
 
 
 @when("I change the plants added date to tomorrow")

@@ -5,7 +5,9 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const TEST_IDS = Object.freeze({
-  DAY_SLIDER: 'timeline__date-input',
+  DAY_SLIDER: 'timeline__day-slider',
+  MONTH_SLIDER: 'timeline__month-slider',
+  YEAR_SLIDER: 'timeline__year-slider',
 });
 
 export type DayItem = {
@@ -215,6 +217,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
   return (
     <div data-tourid="timeline" id="timeline">
       <ItemSliderPicker
+        dataTestId={TEST_IDS.YEAR_SLIDER}
         items={yearlyTimeLineEvents.map((yearSliderItem) => ({
           key: yearSliderItem.key,
           content: TimelineDatePickerItem({
@@ -227,6 +230,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
         value={selectedYearItem.key}
       />
       <ItemSliderPicker
+        dataTestId={TEST_IDS.MONTH_SLIDER}
         items={visibleMonths.map((monthSliderItem) => ({
           key: monthSliderItem.key,
           content: TimelineDatePickerItem({
@@ -242,7 +246,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
         value={selectedMonthItem.key}
       />
       <ItemSliderPicker
-        testDataId={TEST_IDS.DAY_SLIDER}
+        dataTestId={TEST_IDS.DAY_SLIDER}
         items={visibleDays.map((daySliderItem) => ({
           key: daySliderItem.key,
           content: TimelineDatePickerItem({

@@ -24,7 +24,6 @@ export function convertToDateString(date: Date) {
  * @param language language code, e.g. 'en-US'
  * @returns short name of month in given language (e.g. 'Jan')
  */
-
 export function getShortMonthNameFromNumber(monthNumber: number, language?: string) {
   const date = new Date();
   date.setMonth(monthNumber - 1);
