@@ -17,7 +17,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Fix ref warning in PlantLabel, center labels as intended _(Paul)_
 - _()_
 - _()_
 - _()_
