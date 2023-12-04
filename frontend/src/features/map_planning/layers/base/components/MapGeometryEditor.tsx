@@ -19,7 +19,7 @@ export interface PolygonProps extends LayerConfigWithListenerRegister {
   show: boolean;
 }
 
-export const PolygonEditor = (props: PolygonProps) => {
+export const MapGeometryEditor = (props: PolygonProps) => {
   const { t } = useTranslation('polygon');
   const executeAction = useMapStore((state) => state.executeAction);
   const trackedState = useMapStore((map) => map.trackedState);
