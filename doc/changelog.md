@@ -23,6 +23,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
+- Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
 - _()_
 - _()_
 - _()_
@@ -50,6 +51,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
 - _()_
 - _()_
 - _()_
@@ -65,8 +67,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- Up the rust version to 1.74 _(4ydan)_
 - _()_
 - _()_
 - _()_
