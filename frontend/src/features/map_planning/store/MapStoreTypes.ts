@@ -372,7 +372,6 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
     measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
   };
   mapGeometry: {
-    points: Array<Vector2d>;
     editMode: 'inactive' | 'add' | 'remove' | 'move';
   };
 };
