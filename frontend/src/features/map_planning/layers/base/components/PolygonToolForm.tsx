@@ -30,6 +30,7 @@ export function PolygonToolForm() {
               <PolygonStatusPanelContent text={t('baseLayerForm:polygon_move_points_hint')} />,
             );
           }}
+          title={t('baseLayerForm:polygon_move_points_tooltip')}
         >
           <PointerIcon></PointerIcon>
         </IconButton>
@@ -41,6 +42,7 @@ export function PolygonToolForm() {
               <PolygonStatusPanelContent text={t('baseLayerForm:polygon_add_points_hint')} />,
             );
           }}
+          title={t('baseLayerForm:polygon_add_points_tooltip')}
         >
           <PencilPlusIcon></PencilPlusIcon>
         </IconButton>
@@ -52,6 +54,7 @@ export function PolygonToolForm() {
               <PolygonStatusPanelContent text={t('baseLayerForm:polygon_delete_points_hint')} />,
             );
           }}
+          title={t('baseLayerForm:polygon_delete_points_tooltip')}
         >
           <EraserIcon></EraserIcon>
         </IconButton>

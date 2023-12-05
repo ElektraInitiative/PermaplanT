@@ -14,5 +14,8 @@
   "polygon_tools_title": "Edit Map Bounds",
   "polygon_add_points_hint": "Click on the map to add additional points to the map borders.",
   "polygon_move_points_hint": "Click on a point to move the map border.",
-  "polygon_delete_points_hint": "Click on a point to remove it from the map border."
+  "polygon_delete_points_hint": "Click on a point to remove it from the map border.",
+  "polygon_add_points_tooltip": "Add points to map border",
+  "polygon_move_points_tooltip": "Move map border",
+  "polygon_delete_points_tooltip": "Delete points from map border"
 }
