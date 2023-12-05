@@ -8,7 +8,7 @@ import {
   BaseLayerDistanceModalAttributes,
   DistanceMeasurementModal,
 } from '@/features/map_planning/layers/base/components/DistanceMeasurementModal';
-import { PolygonToolForm } from '@/features/map_planning/layers/base/components/PolygonToolForm';
+import { MapGeometryToolForm } from '@/features/map_planning/layers/base/components/MapGeometryToolForm';
 import { calculateDistance, calculateScale } from '@/features/map_planning/layers/base/util';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
@@ -122,7 +122,7 @@ export const BaseLayerRightToolbar = () => {
         onChange={onBaseLayerFormChange}
         isReadOnlyMode={isReadOnlyMode}
       />
-      <PolygonToolForm />
+      <MapGeometryToolForm />
     </div>
   );
 };

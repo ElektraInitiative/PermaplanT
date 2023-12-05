@@ -269,9 +269,8 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
           measurePoint1: null,
           measurePoint2: null,
         },
-        polygon: {
+        mapGeometry: {
           editMode: 'inactive',
-          points: new Array<Konva.Vector2d>(),
         },
       } as UntrackedBaseLayerState,
     }),
@@ -372,7 +371,7 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
     measurePoint2: Vector2d | null;
     measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
   };
-  polygon: {
+  mapGeometry: {
     points: Array<Vector2d>;
     editMode: 'inactive' | 'add' | 'remove' | 'move';
   };

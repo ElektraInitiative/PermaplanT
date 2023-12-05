@@ -26,7 +26,7 @@ export const MapGeometryEditor = (props: PolygonProps) => {
   const mapGeometry = useMapStore((state) => state.trackedState.mapGeometry);
   const mapId = useMapStore((state) => state.untrackedState.mapId);
   const polygonManipulationState = useMapStore(
-    (state) => state.untrackedState.layers.base.polygon.editMode,
+    (state) => state.untrackedState.layers.base.mapGeometry.editMode,
   );
   const editorLongestSide = useMapStore((map) =>
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),

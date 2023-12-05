@@ -305,8 +305,8 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           base: {
             ...state.untrackedState.layers.base,
-            polygon: {
-              ...state.untrackedState.layers.base.polygon,
+            mapGeometry: {
+              ...state.untrackedState.layers.base.mapGeometry,
               editMode: 'add',
             },
           },
@@ -326,8 +326,8 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           base: {
             ...state.untrackedState.layers.base,
-            polygon: {
-              ...state.untrackedState.layers.base.polygon,
+            mapGeometry: {
+              ...state.untrackedState.layers.base.mapGeometry,
               editMode: 'remove',
             },
           },
@@ -347,8 +347,8 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           base: {
             ...state.untrackedState.layers.base,
-            polygon: {
-              ...state.untrackedState.layers.base.polygon,
+            mapGeometry: {
+              ...state.untrackedState.layers.base.mapGeometry,
               editMode: 'move',
             },
           },
@@ -367,8 +367,8 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           base: {
             ...state.untrackedState.layers.base,
-            polygon: {
-              ...state.untrackedState.layers.base.polygon,
+            mapGeometry: {
+              ...state.untrackedState.layers.base.mapGeometry,
               editMode: 'inactive',
             },
           },

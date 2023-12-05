@@ -6,7 +6,7 @@ import { ReactComponent as PencilPlusIcon } from '@/svg/icons/pencil-plus.svg';
 import { ReactComponent as PointerIcon } from '@/svg/icons/pointer.svg';
 import { useTranslation } from 'react-i18next';
 
-export function PolygonToolForm() {
+export function MapGeometryToolForm() {
   const { t } = useTranslation(['common', 'baseLayerForm']);
 
   const activatePolygonAddPoints = useMapStore((state) => state.baseLayerActivateAddPolygonPoints);
@@ -27,7 +27,7 @@ export function PolygonToolForm() {
           onClick={() => {
             activatePolygonMovePoints();
             setStatusPanelContent(
-              <PolygonStatusPanelContent text={t('baseLayerForm:polygon_move_points_hint')} />,
+              <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_move_points_hint')} />,
             );
           }}
           title={t('baseLayerForm:polygon_move_points_tooltip')}
@@ -39,7 +39,7 @@ export function PolygonToolForm() {
           onClick={() => {
             activatePolygonAddPoints();
             setStatusPanelContent(
-              <PolygonStatusPanelContent text={t('baseLayerForm:polygon_add_points_hint')} />,
+              <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_add_points_hint')} />,
             );
           }}
           title={t('baseLayerForm:polygon_add_points_tooltip')}
@@ -51,7 +51,9 @@ export function PolygonToolForm() {
           onClick={() => {
             activatePolygonDeletePoints();
             setStatusPanelContent(
-              <PolygonStatusPanelContent text={t('baseLayerForm:polygon_delete_points_hint')} />,
+              <MapGeometryStatusPanelContent
+                text={t('baseLayerForm:polygon_delete_points_hint')}
+              />,
             );
           }}
           title={t('baseLayerForm:polygon_delete_points_tooltip')}
@@ -63,7 +65,7 @@ export function PolygonToolForm() {
   );
 }
 
-function PolygonStatusPanelContent(props: { text: string }) {
+function MapGeometryStatusPanelContent(props: { text: string }) {
   const deactivatePolygonManipulation = useMapStore(
     (state) => state.baseLayerDeactivatePolygonManipulation,
   );
