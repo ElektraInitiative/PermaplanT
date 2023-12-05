@@ -56,7 +56,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
 - _()_
 - _()_
