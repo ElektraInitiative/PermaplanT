@@ -207,7 +207,10 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const newDay = selectedDayItem;
-      onSelectDate(`${newDay.year}-${newDay.month}-${newDay.day}`);
+      const formattedMonth = String(newDay.month).padStart(2, '0');
+      const formattedDay = String(newDay.day).padStart(2, '0');
+      const formattedDate = `${newDay.year}-${formattedMonth}-${formattedDay}`;
+      onSelectDate(formattedDate);
       triggerDateChangedInGuidedTour();
     }, 500);
     return () => clearTimeout(timeoutId);
