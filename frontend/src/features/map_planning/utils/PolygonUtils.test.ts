@@ -5,7 +5,7 @@ import {
 } from '@/features/map_planning/types/PolygonTypes';
 import {
   flattenRing,
-  insertBetweenPointsWithLeastTotalDistance,
+  insertPointIntoLineSegmentWithLeastDistance,
   removePointAtIndex,
   setPointAtIndex,
 } from '@/features/map_planning/utils/PolygonUtils';
@@ -217,7 +217,7 @@ describe('Add a point between the two nearest points', () => {
       srid: '',
     };
 
-    expect(insertBetweenPointsWithLeastTotalDistance(polygon, newPoint)).toEqual({
+    expect(insertPointIntoLineSegmentWithLeastDistance(polygon, newPoint, 0)).toEqual({
       rings: [
         [
           { x: 0, y: 0, srid: 0 },
