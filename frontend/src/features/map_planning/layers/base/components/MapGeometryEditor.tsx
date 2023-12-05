@@ -3,10 +3,10 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import {
-  insertBetweenPointsWithLeastTotalDistance,
   removePointAtIndex,
   setPointAtIndex,
   flattenRing,
+  insertPointIntoLineSegmentWithLeastDistance,
 } from '@/features/map_planning/utils/PolygonUtils';
 import { warningToastGrouped } from '@/features/toasts/groupedToast';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
@@ -44,10 +44,14 @@ export const MapGeometryEditor = (props: PolygonProps) => {
         srid: DEFAULT_SRID,
       };
 
-      const geometry = insertBetweenPointsWithLeastTotalDistance(mapGeometry, newPoint);
+      const geometry = insertPointIntoLineSegmentWithLeastDistance(
+        mapGeometry,
+        newPoint,
+        editorLongestSide / 100,
+      );
       executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
     });
-  }, [polygonManipulationState, mapGeometry]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [polygonManipulationState, mapGeometry, editorLongestSide]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
     if (polygonManipulationState === 'move') {

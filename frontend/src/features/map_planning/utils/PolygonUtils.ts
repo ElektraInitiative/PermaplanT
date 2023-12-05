@@ -6,6 +6,85 @@ import {
 } from '@/features/map_planning/types/PolygonTypes';
 
 /**
+ * Try to insert pointToInsert between the two points in geometry where the distance between pointToInsert and the
+ * line segment formed by the two points is minimal.
+ * If this does not work (e.g. because the distance is undefined for all line segments), the algorithm will fall
+ * back to insertBetweenPointsWithLeastTotalDistance.
+ *
+ * @param geometry PolygonGeometry object, that will receive pointToInsert.
+ * @param pointToInsert The new point, that will be inserted to geometry.
+ * @param minCoordinateDelta
+ * @param edgeRing Index of the edge ring that will receive pointToInsert. Defaults to 0 if undefined.
+ */
+export function insertPointIntoLineSegmentWithLeastDistance(
+  geometry: PolygonGeometry,
+  pointToInsert: PolygonPoint,
+  minCoordinateDelta: number,
+  edgeRing?: number,
+): PolygonGeometry {
+  const newGeometry: PolygonGeometry = deepCopyGeometry(geometry);
+
+  let smallestTotalDistanceToLine = Infinity;
+  let insertNewPointAfterIndex = -1;
+
+  geometry.rings[edgeRing ?? 0]
+    // the last point is identical to the first point
+    .slice(0, geometry.rings[edgeRing ?? 0].length - 1)
+    .forEach((value, index, array) => {
+      const firstPoint = value;
+      const secondPoint = array[(index + 1) % array.length];
+
+      // Due to winding order we don't know how the first and second point are situated relative to each other.
+      const leftPoint = firstPoint.x < secondPoint.x ? firstPoint : secondPoint;
+      const rightPoint = firstPoint.x > secondPoint.x ? firstPoint : secondPoint;
+      const lowerPoint = firstPoint.y < secondPoint.y ? firstPoint : secondPoint;
+      const upperPoint = firstPoint.y > secondPoint.y ? firstPoint : secondPoint;
+
+      const newPointBetweenFirstAndSecondPointX =
+        leftPoint.x < pointToInsert.x &&
+        rightPoint.x > pointToInsert.x &&
+        Math.abs(rightPoint.x - leftPoint.x) > minCoordinateDelta;
+      const newPointBetweenFirstAndSecondPointY =
+        lowerPoint.y < pointToInsert.y &&
+        upperPoint.y > pointToInsert.y &&
+        Math.abs(rightPoint.y - leftPoint.y) > minCoordinateDelta;
+
+      // The distance calculation below would no longer be accurate because the formula was designed for lines of
+      // infinite length that go through points instead of fixed length line segments.
+      if (!newPointBetweenFirstAndSecondPointX && !newPointBetweenFirstAndSecondPointY) return;
+
+      // https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+      const distanceToLine =
+        Math.abs(
+          (secondPoint.x - firstPoint.x) * (firstPoint.y - pointToInsert.y) -
+            (firstPoint.x - pointToInsert.x) * (secondPoint.y - firstPoint.y),
+        ) /
+        Math.sqrt(
+          (secondPoint.x - firstPoint.x) * (secondPoint.x - firstPoint.x) +
+            (secondPoint.y - firstPoint.y) * (secondPoint.y - firstPoint.y),
+        );
+
+      if (distanceToLine < smallestTotalDistanceToLine) {
+        smallestTotalDistanceToLine = distanceToLine;
+        insertNewPointAfterIndex = index;
+      }
+    });
+
+  // The algorithm above might discard all line segments in some cases.
+  // If this is the case we use the function bellow as our "fallback-algorithm"
+  if (insertNewPointAfterIndex == -1)
+    return insertBetweenPointsWithLeastTotalDistance(newGeometry, pointToInsert, edgeRing);
+
+  const ring = newGeometry.rings[edgeRing ?? 0];
+  newGeometry.rings[edgeRing ?? 0] = ring
+    .slice(0, insertNewPointAfterIndex + 1)
+    .concat([pointToInsert])
+    .concat(ring.slice(insertNewPointAfterIndex + 1, ring.length));
+
+  return newGeometry;
+}
+
+/**
  * Insert a PolygonPoint P into an edge Ring of a PolygonGeometry object between
  * the two points with the smallest cumulative distance to P.
  *
