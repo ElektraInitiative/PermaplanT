@@ -5,7 +5,7 @@
 - **Scope:** Drawing Layer
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** User can add, edit, move, remove and delete custom drawings of any shape and color in their map in the drawing layer.
+- **Brief:** Users add, edit, move, remove and delete custom drawings.
 - **Assignee:** Daniel
 
 ## Scenarios
@@ -13,7 +13,10 @@
 - **Precondition:**
   The user has opened the app and has selected the drawing layer.
 - **Main success scenario:**
-  - The user successfully adds, edits, moves, removes and deletes custom drawings of any form and color in the drawing layer.
+  - The user successfully adds, edits, moves, removes and deletes custom drawings of any color of following forms:
+    - open polygons (lines and bezier)
+    - closed polygons with 3 different fillings
+    - icons from Nextcloud
 - **Alternative scenario:**
   - The user accidentally edits, moves or removes an element and uses undo to correct the mistake.
   - The user accidentally adds an element and deletes it with the "delete" or "undo" functionality.
