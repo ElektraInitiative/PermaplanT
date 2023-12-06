@@ -34,6 +34,7 @@ export default defineConfig(() => {
       globals: true,
       environment: 'happy-dom',
       setupFiles: './test.setup.ts',
+      threads: false, // Workaround for this bug: https://github.com/vitest-dev/vitest/issues/740
     },
   };
 });
