@@ -35,6 +35,18 @@ export default defineConfig(() => {
       environment: 'happy-dom',
       setupFiles: './test.setup.ts',
       threads: false, // Workaround for this bug: https://github.com/vitest-dev/vitest/issues/740
+      // Another workaround package.json for react-markdown is broken.
+      // https://github.com/vitest-dev/vitest/discussions/3654
+      alias: [
+        {
+          find: /^@uiw\/react-markdown-preview$/,
+          replacement: '@uiw/react-markdown-preview/esm/index.js',
+        },
+        {
+          find: /^@uiw\/react-md-editor$/,
+          replacement: '@uiw/react-md-editor/esm/index.js',
+        },
+      ],
     },
   };
 });

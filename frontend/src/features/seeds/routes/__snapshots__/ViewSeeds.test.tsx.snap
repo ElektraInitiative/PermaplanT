@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`renders correctly 1`] = `
 <div
@@ -19,9 +19,21 @@ exports[`renders correctly 1`] = `
         className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
       >
         <svg
+          aria-hidden="true"
+          className="h-5 w-5 text-neutral-500 dark:text-neutral-400"
           data-testid="search-input__search-icon"
+          fill="none"
           stroke="currentColor"
-        />
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+          />
+        </svg>
       </div>
       <input
         className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 pl-10 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark"
@@ -34,7 +46,7 @@ exports[`renders correctly 1`] = `
       />
     </div>
     <button
-      className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-blue-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-900 text-primary-50 dark:text-primary-700"
+      className="button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border bg-primary-500 dark:bg-primary-300 border-primary-500 hover:bg-primary-600 dark:hover:bg-primary-200 active:bg-primary-700 dark:active:bg-primary-400 text-primary-50 dark:text-primary-700"
       onClick={[Function]}
       type="button"
     >
@@ -96,7 +108,15 @@ exports[`renders correctly 1`] = `
             </th>
           </tr>
         </thead>
-        <tbody />
+        <tbody>
+          <tr>
+            <td
+              className="py-4 text-center"
+            >
+              Sorry, I could not find this seed.
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </section>
