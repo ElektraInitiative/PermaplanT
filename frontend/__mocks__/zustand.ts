@@ -3,7 +3,7 @@ import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 import { StateCreator } from 'zustand';
 
-const { create: actualCreate } = vi.importActual('zustand');
+const { create: actualCreate } = await vi.importActual<typeof import('zustand')>('zustand');
 
 // a variable to hold reset functions for all stores declared in the app
 const storeResetFns = new Set<() => void>();
