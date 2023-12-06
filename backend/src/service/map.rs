@@ -123,8 +123,8 @@ pub async fn update(
 /// Checks if the map is owned by the requesting user.
 ///
 /// # Errors
-/// If the connection to the database could not be established.
-/// If the requesting user is not the owner of the map.
+/// * If the connection to the database could not be established.
+/// * If the requesting user is not the owner of the map.
 pub async fn update_geomtery(
     map_update_geometry: UpdateMapGeometryDto,
     id: i32,
