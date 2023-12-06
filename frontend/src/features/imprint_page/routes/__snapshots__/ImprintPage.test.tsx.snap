@@ -7,7 +7,7 @@ exports[`renders correctly 1`] = `
   <h1
     className="title-font mb-8 text-3xl font-medium text-primary-500 dark:text-primary-300 sm:text-4xl"
   >
-    imprint:title
+    Imprint
   </h1>
   <section
     className="mx-auto mb-24 flex flex-col text-base leading-relaxed lg:w-2/3"
@@ -17,16 +17,16 @@ exports[`renders correctly 1`] = `
       PermaplanT
     </p>
     <p>
-      imprint:chairman
+      Chairman
       : Markus Raab
     </p>
     <p>
-      imprint:zvr_number
+      ZVR no.
       : 
-      imprint:zvr_placeholder
+      not yet registered
     </p>
     <p>
-      imprint:email
+      Email
       : 
       <a
         href="mailto://contact@permaplant.net"
@@ -42,7 +42,7 @@ exports[`renders correctly 1`] = `
     <b
       className="title-font text-1xl mb-4 font-medium sm:text-2xl"
     >
-      imprint:address
+      Address
     </b>
     <p>
       Feldgasse 19
@@ -51,13 +51,13 @@ exports[`renders correctly 1`] = `
       7321 Unterfrauenhaid
     </p>
     <p>
-      imprint:country
+      Austria
     </p>
   </section>
   <i
     className="mx-auto mb-4 flex flex-col text-base leading-relaxed lg:w-2/3"
   >
-    imprint:legal_notice
+    This website is purely non-commercial, this website does not sell anything. It offers you various forms of memberships.
   </i>
   <section
     className="body-font relative w-full"
@@ -71,13 +71,11 @@ exports[`renders correctly 1`] = `
         <h1
           className="title-font mb-4 text-2xl font-medium sm:text-3xl"
         >
-          contact:header
+          Contact us
         </h1>
         <p
           className="mx-auto text-base leading-relaxed lg:w-2/3"
-        >
-          contact:subheader
-        </p>
+        />
       </div>
       <div
         className="mx-auto w-full"
@@ -95,7 +93,7 @@ exports[`renders correctly 1`] = `
                 className="text-sm leading-7 text-neutral-400"
                 htmlFor="message"
               >
-                contact:message
+                My message:
               </label>
               <textarea
                 className="h-32 w-full resize-none rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-6 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
@@ -110,12 +108,12 @@ exports[`renders correctly 1`] = `
             className="w-full p-2"
           >
             <a
-              href="mailto:office@permaplant.net?subject=first%20contact&body=contact:email_text"
+              href="mailto:office@permaplant.net?subject=first%20contact&body=Dear PermaplanTeam%0A%0AI want to be subscribed: Yes%0A%0AMy Message:%0A"
             >
               <button
                 className="mx-auto flex rounded border-0 bg-primary-500 px-8 py-2 text-primary-50 hover:bg-primary-600 focus:outline-none dark:bg-primary-300 dark:text-primary-700 dark:hover:bg-primary-200"
               >
-                contact:compose
+                Compose email
               </button>
             </a>
           </div>
@@ -172,7 +170,7 @@ exports[`renders correctly 1`] = `
             onClick={[Function]}
           >
             <button>
-              imprint:title
+              Imprint
             </button>
           </a>
         </li>

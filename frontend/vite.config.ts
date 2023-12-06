@@ -46,6 +46,10 @@ export default defineConfig(() => {
           find: /^@uiw\/react-md-editor$/,
           replacement: '@uiw/react-md-editor/esm/index.js',
         },
+        {
+          find: /^react-konva$/,
+          replacement: 'react-konva/es/ReactKonva.js',
+        },
       ],
     },
   };
