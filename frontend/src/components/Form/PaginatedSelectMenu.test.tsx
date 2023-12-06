@@ -25,7 +25,7 @@ it('renders correctly', () => {
 });
 
 it('calls loadOptions on interaction', async () => {
-  const loadOptions = jest
+  const loadOptions = vi
     .fn()
     .mockReturnValue({ options: [], hasMore: false, additional: { page: 0 } });
 
