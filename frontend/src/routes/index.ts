@@ -9,7 +9,7 @@ import MapOverview from '@/features/maps/routes/MapOverview';
 import { Chat } from '@/features/nextcloud_integration/components/chat';
 import { Overview } from '@/features/overview/routes/Overview';
 import { CreateSeed, ViewSeeds } from '@/features/seeds';
-import { EditSeed } from '@/features/seeds/routes/EditSeed';
+import { EditSeedPage } from '@/features/seeds/routes/EditSeed';
 
 const routes: Routes = {
   [Pages.ImprintPage]: {
@@ -31,7 +31,7 @@ const routes: Routes = {
     restricted: true,
   },
   [Pages.EditSeed]: {
-    component: EditSeed,
+    component: EditSeedPage,
     path: '/seeds/:id/edit',
     title: 'Edit Seed',
     restricted: true,

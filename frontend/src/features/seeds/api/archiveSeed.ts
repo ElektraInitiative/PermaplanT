@@ -1,11 +1,12 @@
-import { ArchiveSeedDto } from '@/api_types/definitions';
+import { ArchiveSeedDto, SeedDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const archiveSeed = async (id: number, archive: ArchiveSeedDto) => {
   const http = createAPI();
 
   try {
-    return await http.patch(`/api/seeds/${id}/archive`, archive);
+    const response = await http.patch<SeedDto>(`/api/seeds/${id}/archive`, archive);
+    return response.data;
   } catch (error) {
     throw error as Error;
   }
