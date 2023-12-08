@@ -17,13 +17,14 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Fix ref warning in PlantLabel, center labels as intended _(Paul)_
 - _()_
 - _()_
 - _()_
 - _()_
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
 - Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
+- Added Meeting Agenda&Notes for 04.12. 9:00 _(Markus Raab, Daniel)_
 - _()_
 - _()_
 - _()_
@@ -56,13 +57,13 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
 - _()_
 - _()_
 - _()_

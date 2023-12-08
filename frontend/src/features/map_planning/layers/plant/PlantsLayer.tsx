@@ -5,7 +5,7 @@ import { SELECTION_RECTANGLE_NAME } from '../../utils/ShapesSelection';
 import { isPlantLayerActive } from '../../utils/layer-utils';
 import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
-// import { PlantCursor } from './components/PlantCursor';
+import { PlantCursor } from './components/PlantCursor';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
 import { useDeleteSelectedPlantings } from './hooks/useDeleteSelectedPlantings';
