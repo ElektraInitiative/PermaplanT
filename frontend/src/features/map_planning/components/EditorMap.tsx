@@ -6,7 +6,6 @@ import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
 import useMapStore from '../store/MapStore';
-import { useTimeLineStore } from '../store/TimelineStore';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import { convertToDate } from '../utils/date-utils';
 import { BaseStage } from './BaseStage';
@@ -71,7 +70,7 @@ export const EditorMap = ({ layers }: MapProps) => {
   const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
-  const { state: timelineState } = useTimeLineStore();
+  const [timeLineState, setTimeLineState] = useState<'loading' | 'idle'>('idle');
 
   // Allow layers to listen for all events on the base stage.
   //
@@ -315,7 +314,11 @@ export const EditorMap = ({ layers }: MapProps) => {
             <TimelineDatePicker
               onSelectDate={(date) => {
                 triggerDateChangedInGuidedTour();
+                setTimeLineState('idle');
                 updateTimelineDate(date);
+              }}
+              onLoading={() => {
+                setTimeLineState('loading');
               }}
               defaultDate={timelineDate}
             />
@@ -336,10 +339,10 @@ export const EditorMap = ({ layers }: MapProps) => {
                   month: 'numeric',
                   day: 'numeric',
                 })}
-                {timelineState === 'loading' && (
+                {timeLineState === 'loading' && (
                   <CircleDottedIcon className="mb-3 ml-2 mt-auto h-5 w-5 animate-spin text-secondary-400" />
                 )}
-                {timelineState === 'idle' && (
+                {timeLineState === 'idle' && (
                   <CheckIcon
                     className="mb-3 ml-2 mt-auto h-5 w-5 text-primary-400"
                     data-testid="timeline__state-idle"

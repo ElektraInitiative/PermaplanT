@@ -1,5 +1,4 @@
 import useGetTimeLineEvents from '../../hooks/useGetTimelineEvents';
-import { useTimeLineStore } from '../../store/TimelineStore';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
 import { useState, useEffect, useRef } from 'react';
@@ -36,21 +35,22 @@ export type YearItem = {
 };
 
 type TimelineDatePickerProps = {
-  /** Is called if the user selects a date from the timeline.
+  /** Is called when date is selected and process is completed.
    * The date is passed as a string in the format 'YYYY-MM-DD'
    */
   onSelectDate: (date: string) => void;
+
+  /** Is called when date is selected and debouncing process is started */
+  onLoading: () => void;
 
   /** The default date to be selected on the timeline. */
   defaultDate: string;
 };
 
-const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerProps) => {
+const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDatePickerProps) => {
   const defaultYear = new Date(defaultDate).getFullYear();
   const defaultMonth = new Date(defaultDate).getMonth() + 1;
   const defaultDay = new Date(defaultDate).getDate();
-
-  const { setTimelineLoading, setTimelineIdle } = useTimeLineStore();
 
   const submitTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
   const {
@@ -204,14 +204,13 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
   };
 
   useEffect(() => {
-    setTimelineLoading();
+    onLoading();
     submitTimeout.current = setTimeout(() => {
       const newDay = selectedDayItem;
       const formattedMonth = String(newDay.month).padStart(2, '0');
       const formattedDay = String(newDay.day).padStart(2, '0');
       const formattedDate = `${newDay.year}-${formattedMonth}-${formattedDay}`;
       onSelectDate(formattedDate);
-      setTimelineIdle();
     }, 500);
     return () => clearTimeout(submitTimeout.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps

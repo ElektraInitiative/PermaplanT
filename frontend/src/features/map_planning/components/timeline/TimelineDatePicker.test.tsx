@@ -2,14 +2,20 @@ import TimelineDatePicker from './TimelineDatePicker';
 import { render } from '@testing-library/react';
 import ReactTestUtils, { act } from 'react-dom/test-utils';
 
+const onSelectChange = jest.fn();
+const onLoading = jest.fn();
+
 describe('handleDayItemChange', () => {
   jest.useFakeTimers();
   it('should callback correct date when day item is changed', () => {
     Element.prototype.scrollTo = jest.fn();
-    const onSelectChange = jest.fn();
 
     const timeline = render(
-      <TimelineDatePicker defaultDate="2020-12-31" onSelectDate={onSelectChange} />,
+      <TimelineDatePicker
+        defaultDate="2020-12-31"
+        onSelectDate={onSelectChange}
+        onLoading={onLoading}
+      />,
     );
     act(() => {
       ReactTestUtils.Simulate.keyDown(timeline.getByTestId('timeline__day-slider'), {
@@ -42,7 +48,11 @@ describe('handleMonthItemChange', () => {
     const onSelectChange = jest.fn();
 
     const timeline = render(
-      <TimelineDatePicker defaultDate="2020-12-01" onSelectDate={onSelectChange} />,
+      <TimelineDatePicker
+        defaultDate="2020-12-01"
+        onSelectDate={onSelectChange}
+        onLoading={onLoading}
+      />,
     );
 
     for (let i = 1; i <= 13; i++) {
@@ -74,7 +84,11 @@ describe('handleMonthItemChange', () => {
     const onSelectChange = jest.fn();
 
     const timeline = render(
-      <TimelineDatePicker defaultDate="2020-03-31" onSelectDate={onSelectChange} />,
+      <TimelineDatePicker
+        defaultDate="2020-03-31"
+        onSelectDate={onSelectChange}
+        onLoading={onLoading}
+      />,
     );
 
     act(() => {
@@ -107,7 +121,11 @@ describe('handleYearItemChange', () => {
     const onSelectChange = jest.fn();
 
     const timeline = render(
-      <TimelineDatePicker defaultDate="2000-01-31" onSelectDate={onSelectChange} />,
+      <TimelineDatePicker
+        defaultDate="2000-01-31"
+        onSelectDate={onSelectChange}
+        onLoading={onLoading}
+      />,
     );
 
     act(() => {
