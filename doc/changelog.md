@@ -39,7 +39,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Use Konva groups instead of Layers _(Moritz)_
 - _()_
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_

@@ -28,7 +28,7 @@ import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-nam
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
-import { Layer } from 'react-konva';
+import { Group } from 'react-konva';
 import * as uuid from 'uuid';
 
 // For performance reasons add limit for amount of plants inside a plant field
@@ -303,15 +303,15 @@ function PlantsLayer(props: PlantsLayerProps) {
   return (
     <>
       <PlantLayerRelationsOverlay />
-      <Layer {...props} ref={layerRef} name={`${LayerType.Plants}`}>
+      <Group {...props} ref={layerRef} name={`${LayerType.Plants}`}>
         {plants.map((o) => (
           <PlantingElement planting={o} key={o.id} />
         ))}
         {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
-      </Layer>
-      <Layer>
+      </Group>
+      <Group>
         <PlantCursor />
-      </Layer>
+      </Group>
     </>
   );
 }

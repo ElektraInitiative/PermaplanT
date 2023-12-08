@@ -23,10 +23,10 @@ export const selectIntersectingShapes = (
   if (stageRef.current.children === null) return;
 
   // we don't always have to look for them, we can store them
-  const allShapes = stageRef.current.children
+  const allShapes = stageRef.current.children?.[0].children
     //filter out layers which are not selected
     ?.filter((layer) => layer.attrs.listening)
-    .flatMap((layer) => layer.children)
+    // All PermaplanT layers are displayed as a single Konva layer.
     .filter((shape) => {
       // To exclude Konva's transformer, check if node contains children.
       // 'listening' is explicitly checked for '!== false' because

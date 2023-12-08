@@ -4,7 +4,7 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
 import { useCallback, useEffect, useState } from 'react';
-import { Circle, Layer, Line } from 'react-konva';
+import { Circle, Group, Line } from 'react-konva';
 
 type BaseLayerProps = LayerConfigWithListenerRegister;
 
@@ -61,7 +61,7 @@ const BaseLayer = (props: BaseLayerProps) => {
   const scale = MAP_PIXELS_PER_METER / pixelsPerMeter;
 
   return (
-    <Layer {...layerProps} listening={false}>
+    <Group {...layerProps} listening={false}>
       {cleanImagePath && (
         <NextcloudKonvaImage
           path={cleanImagePath}
@@ -93,7 +93,7 @@ const BaseLayer = (props: BaseLayerProps) => {
         strokeWidth={editorLongestSide / 500}
         stroke={COLOR_EDITOR_HIGH_VISIBILITY}
       />
-    </Layer>
+    </Group>
   );
 };
 
