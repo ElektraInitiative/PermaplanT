@@ -9,9 +9,8 @@ const fs = require("fs");
 let browser;
 const results = [];
 
-const audit = async (testname, url, result_arr) => {
+const audit = async (testname, url, page, result_arr) => {
   console.log("Starting Lighthouse audit for " + testname);
-  const page = await browser.newPage();
   await page.goto(url);
 
   const result = await playAudit({
@@ -54,8 +53,8 @@ test.describe("Map canvas performance audit", () => {
     await page.getByLabel("Username or email").fill("adi");
     await page.getByLabel("Password").fill("1234");
     await page.getByRole("button", { name: "Sign In" }).click();
-
-    await audit(testname, "http://localhost:5173/map", results);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await audit(testname, "http://localhost:5173/maps/92", page, results);
 
     await browser.close();
     const outputFilename = `report/${Date.now()}-lighthouse-results.csv`;
