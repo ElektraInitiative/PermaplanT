@@ -18,7 +18,7 @@ import { useDimensions } from '@/hooks/useDimensions';
 import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { Group, Layer, Rect, Stage, Transformer } from 'react-konva';
 
 export const TEST_IDS = Object.freeze({
@@ -258,6 +258,32 @@ export const BaseStage = ({
     (map) => map.untrackedState.bottomStatusPanelContent,
   );
 
+  const [testGroups, _] = useState(() => {
+    const groups: Array<ReactElement> = [];
+    for (let i = 0; i < 10; i++) {
+      const rects = [];
+      const randomFill =
+        '#' +
+        Math.round(Math.random() * 0xff).toString(16) +
+        Math.round(Math.random() * 0xff).toString(16) +
+        Math.round(Math.random() * 0xff).toString(16);
+      for (let i = 0; i < 1000; i++) {
+        rects.push(
+          <Rect
+            x={Math.random() * 10000 - 5000}
+            y={Math.random() * 10000 - 5000}
+            fill={randomFill}
+            width={100}
+            height={100}
+          />,
+        );
+      }
+
+      groups.push(<Group>{rects}</Group>);
+    }
+
+    return groups;
+  });
   return (
     <div className="h-full w-full overflow-hidden" data-testid={TEST_IDS.CANVAS} ref={containerRef}>
       <Stage
@@ -279,6 +305,7 @@ export const BaseStage = ({
       >
         <Layer>
           {children}
+          {testGroups}
           <Group>
             {/* Tooltip */}
             <MapLabel
