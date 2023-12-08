@@ -67,7 +67,6 @@ export const getPublicImageList = async (publicShareToken: string): Promise<Arra
     }
 
     return urls;
-    da;
   } catch (error) {
     throw error as Error;
   }
