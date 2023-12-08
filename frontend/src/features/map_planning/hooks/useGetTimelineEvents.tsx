@@ -2,8 +2,20 @@
  * This hook is currently just creating dummy data for the timeline until the backend is ready.
  */
 
-const MIN_YEAR = 1930;
-const MAX_YEAR = 2130;
+const MIN_YEAR = 1900;
+const MAX_YEAR = 2100;
+
+function getDatesBetween(startDate: Date, endDate: Date) {
+  const dates = [];
+  const currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    dates.push(new Date(currentDate));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+}
 
 const createYears = () => {
   const years = [];
@@ -37,23 +49,17 @@ const createMonths = () => {
 };
 
 const createDays = () => {
-  const days = [];
-  let key = 0;
-  for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
-    for (let month = 1; month <= 12; month++) {
-      for (let day = 1; day <= 31; day++) {
-        days.push({
-          key: key++,
-          year: year,
-          month: month,
-          day: day,
-          removed: 0,
-          added: 0,
-        });
-      }
-    }
-  }
-  return days;
+  const dates = getDatesBetween(new Date(MIN_YEAR, 0, 1), new Date(MAX_YEAR, 11, 31));
+  return dates.map((date, index) => {
+    return {
+      key: index,
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate(),
+      removed: 0,
+      added: 0,
+    };
+  });
 };
 
 export default function useGetTimeLineEvents() {

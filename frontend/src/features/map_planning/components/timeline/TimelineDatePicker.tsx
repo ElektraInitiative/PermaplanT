@@ -1,7 +1,8 @@
 import useGetTimeLineEvents from '../../hooks/useGetTimelineEvents';
+import { useTimeLineStore } from '../../store/TimelineStore';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const TEST_IDS = Object.freeze({
@@ -49,6 +50,9 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
   const defaultMonth = new Date(defaultDate).getMonth() + 1;
   const defaultDay = new Date(defaultDate).getDate();
 
+  const { setTimelineLoading, setTimelineIdle } = useTimeLineStore();
+
+  const submitTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
   const {
     dailyTimeLineEvents: daySilderItems,
     monthlyTimeLineEvents: monthSliderItems,
@@ -66,7 +70,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
       monthSliderItems[0],
   );
 
-  const [selectedDayItem, setSelectedDay] = useState<DayItem>(
+  const [selectedDayItem, setSelectedDayItem] = useState<DayItem>(
     daySilderItems.find(
       (day) => day.year === defaultYear && day.month === defaultMonth && day.day === defaultDay,
     ) || daySilderItems[0],
@@ -97,7 +101,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
 
   const handleDayItemChange = (itemKey: number) => {
     const selectedDayItem = daySilderItems[itemKey];
-    setSelectedDay(selectedDayItem);
+    setSelectedDayItem(selectedDayItem);
 
     if (selectedDayItem.month !== selectedMonthItem.month) {
       const newMonthItem = monthSliderItems.find(
@@ -171,7 +175,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
       sameDayInNewMonth || getLastDayItemOfMonth(newMonthItem.month, newMonthItem.year);
     if (newDay) {
       setVisibleDays(calculateVisibleDays(newDay));
-      setSelectedDay(newDay);
+      setSelectedDayItem(newDay);
     }
   };
 
@@ -199,26 +203,22 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
     }
   };
 
-  function triggerDateChangedInGuidedTour(): void {
-    const changeDateEvent = new Event('dateChanged');
-    document.getElementById('timeline')?.dispatchEvent(changeDateEvent);
-  }
-
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    setTimelineLoading();
+    submitTimeout.current = setTimeout(() => {
       const newDay = selectedDayItem;
       const formattedMonth = String(newDay.month).padStart(2, '0');
       const formattedDay = String(newDay.day).padStart(2, '0');
       const formattedDate = `${newDay.year}-${formattedMonth}-${formattedDay}`;
       onSelectDate(formattedDate);
-      triggerDateChangedInGuidedTour();
+      setTimelineIdle();
     }, 500);
-    return () => clearTimeout(timeoutId);
+    return () => clearTimeout(submitTimeout.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDayItem]);
 
   return (
-    <div data-tourid="timeline" id="timeline">
+    <div data-tourid="timeline" id="timeline" className="select-none">
       <ItemSliderPicker
         dataTestId={TEST_IDS.YEAR_SLIDER}
         items={yearlyTimeLineEvents.map((yearSliderItem) => ({
@@ -230,6 +230,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
           }),
         }))}
         onChange={handleYearChange}
+        onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
         value={selectedYearItem.key}
       />
       <ItemSliderPicker
@@ -247,6 +248,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
         leftEndReached={handleMontSliderLeftEndReached}
         rightEndReached={handleMontSliderRightEndReached}
         value={selectedMonthItem.key}
+        onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
       />
       <ItemSliderPicker
         dataTestId={TEST_IDS.DAY_SLIDER}
@@ -265,6 +267,7 @@ const TimelineDatePicker = ({ onSelectDate, defaultDate }: TimelineDatePickerPro
         leftEndReached={handleDaySliderLeftEndReached}
         rightEndReached={handleDaySliderRightEndReached}
         value={selectedDayItem.key}
+        onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
       />
     </div>
   );
@@ -282,7 +285,7 @@ function TimelineDatePickerItem({
   disabled?: boolean;
 }) {
   return (
-    <div>
+    <div className="select-none">
       <TimeLineDatePickerEventIndicator added={added} removed={removed} />
       <span className={`select-none ${disabled ? 'text-gray-400' : ''}`}>{text}</span>
     </div>

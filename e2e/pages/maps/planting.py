@@ -46,7 +46,7 @@ class MapPlantingPage(AbstractPage):
         self._timeline_day_slider = page.get_by_test_id("timeline__day-slider")
         self._timeline_month_slider = page.get_by_test_id("timeline__month-slider")
         self._timeline_year_slider = page.get_by_test_id("timeline__year-slider")
-        self._timeline_idle = page.get_by_test_id("timeline__date-form-idle")
+        self._timeline_idle = page.get_by_test_id("timeline__state-idle")
 
         # Top left section
         self._undo_button = page.get_by_test_id("map__undo-button")
@@ -103,6 +103,7 @@ class MapPlantingPage(AbstractPage):
         else:
             for i in range(abs(delta_days)):
                 self._timeline_day_slider.press("ArrowLeft")
+        self._timeline_idle.wait_for()
 
     def change_map_date_by_months(self, delta_months: int):
         """Changes the date by a given amount of months."""
