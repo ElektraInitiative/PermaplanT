@@ -6,8 +6,8 @@ import IconButton from '../Button/IconButton';
 import FullPageNav from './FullPageNav';
 import { LoginButton } from '@/features/auth/components/LoginButton';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
-import { ReactComponent as LogoSmallGraySVG } from '@/svg/permaplant-logo-gray.svg';
-import { ReactComponent as LogoSmallSVG } from '@/svg/permaplant-logo.svg';
+import LogoSmallGraySVG from '@/svg/permaplant-logo-gray.svg?react';
+import LogoSmallSVG from '@/svg/permaplant-logo.svg?react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

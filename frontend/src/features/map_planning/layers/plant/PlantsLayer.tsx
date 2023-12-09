@@ -23,7 +23,7 @@ import {
 } from '@/config/keybindings';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
-import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
+import CloseIcon from '@/svg/icons/close.svg?react';
 import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';

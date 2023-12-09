@@ -13,6 +13,7 @@ const config: Config = {
     '\\.(css)$': '<rootDir>/src/__mocks__/styleMock.ts',
   },
   watchPathIgnorePatterns: ['node_modules'],
+  setupFiles: ['<rootDir>/jest.polyfills.ts'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };
 

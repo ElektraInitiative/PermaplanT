@@ -23,7 +23,7 @@ repos:
         name: frontend format
         args:
           [
-            --config=frontend/prettier.config.js,
+            --config=frontend/prettier.config.cjs,
             --ignore-path=frontend/.prettierignore,
           ]
         files: ^frontend/
@@ -47,7 +47,7 @@ repos:
         name: frontend lint
         args:
           [
-            --config=frontend/.eslintrc.js,
+            --config=frontend/.eslintrc.cjs,
             --max-warnings=0,
             --ignore-path=frontend/.eslintignore,
           ]

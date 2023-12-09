@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`renders correctly 1`] = `
 [
@@ -38,7 +38,7 @@ exports[`renders correctly 1`] = `
         </h2>
         <button
           className="rounded-lg border border-neutral-600 px-5 py-2.5 text-center text-sm font-medium hover:bg-neutral-600 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto"
-          onClick={[MockFunction]}
+          onClick={[MockFunction spy]}
         >
           x
         </button>

@@ -1,5 +1,5 @@
 import { toast, ToastItem } from 'react-toastify';
-import { ToastContent, ToastOptions } from 'react-toastify/dist/types';
+import { ToastContent, ToastOptions } from 'react-toastify';
 
 const infoToastData = new Set<ToastContent>();
 const successToastData = new Set<ToastContent>();
