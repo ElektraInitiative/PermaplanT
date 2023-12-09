@@ -5,17 +5,12 @@ import Konva from 'konva/cmj';
 import { Layer } from 'react-konva';
 
 export const GridLayer = (props: Konva.LayerConfig) => {
-  const mapBounds = useMapStore((state) => state.untrackedState.editorBounds);
+  const viewRect = useMapStore((state) => state.untrackedState.editorViewRect);
 
   return (
     <Layer listening={false} visible={props.visible} opacity={props.opacity}>
-      <Grid x={mapBounds.x} y={mapBounds.y} width={mapBounds.width} height={mapBounds.height} />
-      <YardStick
-        x={mapBounds.x}
-        y={mapBounds.y}
-        width={mapBounds.width}
-        height={mapBounds.height}
-      />
+      <Grid x={viewRect.x} y={viewRect.y} width={viewRect.width} height={viewRect.height} />
+      <YardStick x={viewRect.x} y={viewRect.y} width={viewRect.width} height={viewRect.height} />
     </Layer>
   );
 };

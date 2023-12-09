@@ -1,3 +1,4 @@
+import { getMap } from '../api/getMap';
 import { getPlantings } from '../api/getPlantings';
 import { EditorMap } from '../components/EditorMap';
 import { useGetLayers } from '../hooks/useGetLayers';
@@ -11,6 +12,7 @@ import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
 import { LayerType, LayerDto, GuidedToursDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
+import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
 import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useQuery } from '@tanstack/react-query';
@@ -95,7 +97,7 @@ function useBaseLayer({ mapId, layerId }: UseLayerParams) {
 }
 
 /**
- * Hook that initializes the map by fetching all layers and layer elements.
+ * Hook that initializes the map by fetching all map data, layers and layer elements.
  */
 function useInitializeMap() {
   const mapId = useMapId();
@@ -107,6 +109,12 @@ function useInitializeMap() {
     console.error(error);
     errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
   }
+
+  const mapQuery = useQuery({
+    queryKey: ['map', mapId],
+    queryFn: () => getMap(mapId),
+    refetchOnWindowFocus: false,
+  });
 
   useEffect(() => {
     if (!layers) return;
@@ -135,9 +143,25 @@ function useInitializeMap() {
 
   // select plant layer per default
   useEffect(() => {
-    if (!plantLayer) return;
-    updateSelectedLayer(plantLayer);
-  }, [mapId, plantLayer, updateSelectedLayer]);
+    if (plantLayer) {
+      updateSelectedLayer(plantLayer);
+    }
+
+    if (baseLayer) {
+      useMapStore.setState((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          selectedLayer: baseLayer,
+          mapId,
+        },
+        trackedState: {
+          ...state.trackedState,
+          mapGeometry: mapQuery.data?.geometry as PolygonGeometry,
+        },
+      }));
+    }
+  }, [mapId, baseLayer, plantLayer, mapQuery?.data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const isLoading = !layers;
 

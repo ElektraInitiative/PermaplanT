@@ -826,6 +826,14 @@ pub struct UpdateMap {
     pub location: Option<Point>,
 }
 
+/// The `UpdateMapGeometry` entity.
+#[derive(AsChangeset)]
+#[diesel(table_name = maps)]
+pub struct UpdateMapGeometry {
+    /// New Map Bounds
+    pub geometry: Polygon<Point>,
+}
+
 /// The `Layer` entity.
 #[derive(Identifiable, Queryable)]
 #[diesel(table_name = layers)]

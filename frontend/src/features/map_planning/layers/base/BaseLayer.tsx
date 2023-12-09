@@ -1,10 +1,12 @@
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
+import { MapGeometryEditor } from '@/features/map_planning/layers/base/components/MapGeometryEditor';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
+import { isBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
 import { useCallback, useEffect, useState } from 'react';
-import { Circle, Layer, Line } from 'react-konva';
+import { Circle, Group, Layer, Line } from 'react-konva';
 
 type BaseLayerProps = LayerConfigWithListenerRegister;
 
@@ -24,17 +26,17 @@ const BaseLayer = (props: BaseLayerProps) => {
 
   // Needed for scaling the auto-scale indicators.
   const editorLongestSide = useMapStore((map) =>
-    Math.max(map.untrackedState.editorBounds.width, map.untrackedState.editorBounds.height),
+    Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
   );
 
   const measurementLinePoints = () => {
-    if (untrackedBaseLayerState.measureStep !== 'both selected') return [];
+    if (untrackedBaseLayerState.autoScale.measureStep !== 'both selected') return [];
 
     return [
-      untrackedBaseLayerState.measurePoint1?.x ?? Number.NaN,
-      untrackedBaseLayerState.measurePoint1?.y ?? Number.NaN,
-      untrackedBaseLayerState.measurePoint2?.x ?? Number.NaN,
-      untrackedBaseLayerState.measurePoint2?.y ?? Number.NaN,
+      untrackedBaseLayerState.autoScale.measurePoint1?.x ?? Number.NaN,
+      untrackedBaseLayerState.autoScale.measurePoint1?.y ?? Number.NaN,
+      untrackedBaseLayerState.autoScale.measurePoint2?.x ?? Number.NaN,
+      untrackedBaseLayerState.autoScale.measurePoint2?.y ?? Number.NaN,
     ];
   };
 
@@ -61,38 +63,41 @@ const BaseLayer = (props: BaseLayerProps) => {
   const scale = MAP_PIXELS_PER_METER / pixelsPerMeter;
 
   return (
-    <Layer {...layerProps} listening={false}>
-      {cleanImagePath && (
-        <NextcloudKonvaImage
-          path={cleanImagePath}
-          onload={onload}
-          rotation={rotation ?? 0}
-          scaleX={scale}
-          scaleY={scale}
-          offset={imageOffset}
+    <Layer {...layerProps} draggable={true}>
+      <Group listening={false}>
+        {cleanImagePath && (
+          <NextcloudKonvaImage
+            path={cleanImagePath}
+            onload={onload}
+            rotation={rotation ?? 0}
+            scaleX={scale}
+            scaleY={scale}
+            offset={imageOffset}
+          />
+        )}
+        {untrackedBaseLayerState.autoScale.measurePoint1 && (
+          <Circle
+            x={untrackedBaseLayerState.autoScale.measurePoint1.x}
+            y={untrackedBaseLayerState.autoScale.measurePoint1.y}
+            radius={editorLongestSide / 250}
+            fill={COLOR_EDITOR_HIGH_VISIBILITY}
+          />
+        )}
+        {untrackedBaseLayerState.autoScale.measurePoint2 && (
+          <Circle
+            x={untrackedBaseLayerState.autoScale.measurePoint2.x}
+            y={untrackedBaseLayerState.autoScale.measurePoint2.y}
+            radius={editorLongestSide / 250}
+            fill={COLOR_EDITOR_HIGH_VISIBILITY}
+          />
+        )}
+        <Line
+          points={measurementLinePoints()}
+          strokeWidth={editorLongestSide / 500}
+          stroke={COLOR_EDITOR_HIGH_VISIBILITY}
         />
-      )}
-      {untrackedBaseLayerState.measurePoint1 && (
-        <Circle
-          x={untrackedBaseLayerState.measurePoint1.x}
-          y={untrackedBaseLayerState.measurePoint1.y}
-          radius={editorLongestSide / 250}
-          fill={COLOR_EDITOR_HIGH_VISIBILITY}
-        />
-      )}
-      {untrackedBaseLayerState.measurePoint2 && (
-        <Circle
-          x={untrackedBaseLayerState.measurePoint2.x}
-          y={untrackedBaseLayerState.measurePoint2.y}
-          radius={editorLongestSide / 250}
-          fill={COLOR_EDITOR_HIGH_VISIBILITY}
-        />
-      )}
-      <Line
-        points={measurementLinePoints()}
-        strokeWidth={editorLongestSide / 500}
-        stroke={COLOR_EDITOR_HIGH_VISIBILITY}
-      />
+      </Group>
+      <MapGeometryEditor show={isBaseLayerActive()} {...props} />
     </Layer>
   );
 };

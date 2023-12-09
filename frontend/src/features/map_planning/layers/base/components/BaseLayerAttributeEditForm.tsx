@@ -45,7 +45,9 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
   const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
-  const measureStep = useMapStore((state) => state.untrackedState.layers.base.measureStep);
+  const measureStep = useMapStore(
+    (state) => state.untrackedState.layers.base.autoScale.measureStep,
+  );
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
 
   const { register, handleSubmit, watch, setValue, formState } =

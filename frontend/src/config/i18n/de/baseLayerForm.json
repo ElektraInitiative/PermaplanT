@@ -10,5 +10,12 @@
   "error_actual_distance_zero": "Bitte gib eine Distanz größer 0 ein.",
   "auto_scaling_hint": "Wähle zwei Punkte mit einer bekannten Distanz.",
   "auto_scaling_meters_invalid": "Das Feld 'Meter' ist ungültig!",
-  "auto_scaling_centimeters_invalid": "Das Feld 'Zentimeter' ist ungültig!"
+  "auto_scaling_centimeters_invalid": "Das Feld 'Zentimeter' ist ungültig!",
+  "polygon_tools_title": "Kartengrenzen editieren.",
+  "polygon_add_points_hint": "Klicke auf die Karte um weitere Punkte zu den Kartengrenzen hinzuzufügen.",
+  "polygon_move_points_hint": "Klicke auf einen Punkt um die Kartengrenzen zu verschieben.",
+  "polygon_delete_points_hint": "Klicke auf einen Punkt um ihn aus den Kartengrenzen zu entfernen.",
+  "polygon_add_points_tooltip": "Punkte zu Kartengrenzen hinzufügen.",
+  "polygon_move_points_tooltip": "Kartengrenzen verschieben.",
+  "polygon_delete_points_tooltip": "Punkte der Kartengrenze löschen."
 }

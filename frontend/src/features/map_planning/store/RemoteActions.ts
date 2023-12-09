@@ -1,4 +1,4 @@
-import { UpdateBaseLayerAction } from '../layers/base/actions';
+import { UpdateBaseLayerAction, UpdateMapGeometry } from '../layers/base/actions';
 import {
   CreatePlantAction,
   DeletePlantAction,
@@ -75,6 +75,8 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
         { ...remoteAction.payload, layer_id: remoteAction.payload.layerId },
         remoteAction.payload.actionId,
       );
+    case 'UpdateMapGeometry':
+      return new UpdateMapGeometry({ ...remoteAction.payload }, remoteAction.payload.actionId);
     case 'UpdatePlantingAdditionalName':
       return new UpdatePlantingAdditionalName(
         { ...remoteAction.payload },

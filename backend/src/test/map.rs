@@ -1,5 +1,7 @@
 //! Tests for [`crate::controller::map`].
 
+use crate::model::dto::UpdateMapGeometryDto;
+use crate::test::util::dummy_map_polygons::small_rectangle;
 use crate::{
     model::{
         dto::{MapDto, NewMapDto, Page, UpdateMapDto},
@@ -196,7 +198,6 @@ async fn test_update_fails_for_not_owner() {
         privacy: None,
         description: None,
         location: None,
-        geometry: None,
     };
 
     let resp = test::TestRequest::patch()
@@ -242,7 +243,6 @@ async fn test_can_update_map() {
         privacy: None,
         description: None,
         location: None,
-        geometry: None,
     };
 
     let resp = test::TestRequest::patch()
@@ -254,4 +254,47 @@ async fn test_can_update_map() {
 
     let updated_map: MapDto = test::read_body_json(resp).await;
     assert_ne!(updated_map.name, map.name)
+}
+#[actix_rt::test]
+async fn test_can_update_map_geometry() {
+    let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let new_map = NewMapDto {
+        name: "Test Map: can update map geomety".to_string(),
+        creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        deletion_date: None,
+        last_visit: None,
+        is_inactive: false,
+        zoom_factor: 100,
+        honors: 0,
+        visits: 0,
+        harvested: 0,
+        privacy: PrivacyOption::Public,
+        description: None,
+        location: None,
+        geometry: tall_rectangle(),
+    };
+
+    let resp = test::TestRequest::post()
+        .uri("/api/maps")
+        .insert_header((header::AUTHORIZATION, token.clone()))
+        .set_json(new_map)
+        .send_request(&app)
+        .await;
+    let map: MapDto = test::read_body_json(resp).await;
+
+    let map_update_geometry = UpdateMapGeometryDto {
+        geometry: small_rectangle(),
+    };
+
+    let resp = test::TestRequest::patch()
+        .uri(&format!("/api/maps/{}/geometry", map.id))
+        .insert_header((header::AUTHORIZATION, token))
+        .set_json(map_update_geometry)
+        .send_request(&app)
+        .await;
+
+    let updated_map: MapDto = test::read_body_json(resp).await;
+    assert_ne!(updated_map.geometry, map.geometry)
 }
