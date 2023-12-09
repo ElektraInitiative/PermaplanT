@@ -309,7 +309,7 @@ function PlantsLayer(props: PlantsLayerProps) {
         ))}
         {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
       </Layer>
-      <Layer>
+      <Layer listening={false}>
         <PlantCursor />
       </Layer>
     </>

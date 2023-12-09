@@ -2,24 +2,29 @@ import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/im
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { COLOR_PRIMARY_400 } from '@/utils/constants';
 import { useEffect, useState } from 'react';
-import { Circle, Group, Rect } from 'react-konva';
+import { Circle, Group } from 'react-konva';
+
+const CURSOR_WIDTH = 60;
+type Position = { x: number; y: number };
+type Size = { width: number; height: number };
+
+const CURSOR_SIZE: Size = { width: CURSOR_WIDTH, height: CURSOR_WIDTH };
+const IMAGE_OFFSET: Position = { x: (CURSOR_WIDTH * 0.9) / 2, y: (CURSOR_WIDTH * 0.9) / 2 };
+const IMAGE_SIZE: Size = { width: CURSOR_WIDTH * 0.9, height: CURSOR_WIDTH * 0.9 };
 
 export function PlantCursor() {
   const stage = useMapStore((s) => s.stageRef?.current);
   const selectedPlantForPlanting = useMapStore(
     (s) => s.untrackedState.layers.plants.selectedPlantForPlanting,
   );
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-
-  const [width] = useState(60);
-  const [height] = useState(60);
+  const [pos, setPos] = useState<Position | null>(null);
 
   useEffect(() => {
     if (!stage || !selectedPlantForPlanting) return;
 
     stage.on('mousemove.plants', () => {
       const pos = stage.getRelativePointerPosition();
-      if (pos !== null) setPos(pos);
+      setPos(pos);
     });
 
     return () => {
@@ -27,19 +32,24 @@ export function PlantCursor() {
     };
   }, [stage, selectedPlantForPlanting]);
 
-  return selectedPlantForPlanting ? (
-    <Group x={pos.x} y={pos.y} opacity={0.7}>
-      <Circle width={width} height={height} fill={COLOR_PRIMARY_400} />
+  useEffect(() => {
+    if (!selectedPlantForPlanting) {
+      setPos(null);
+    }
+  }, [selectedPlantForPlanting]);
+
+  if (!selectedPlantForPlanting || !pos) return null;
+
+  return (
+    <Group {...pos} opacity={0.7}>
+      <Circle fill={COLOR_PRIMARY_400} {...CURSOR_SIZE} />
       <PublicNextcloudKonvaImage
+        {...IMAGE_SIZE}
+        offset={IMAGE_OFFSET}
         shareToken="2arzyJZYj2oNnHX"
         path={`Icons/${selectedPlantForPlanting?.plant.unique_name}.png`}
-        width={width * 0.9}
-        height={height * 0.9}
-        offset={{ x: (width * 0.9) / 2, y: (height * 0.9) / 2 }}
         showErrorMessage={true}
       />
     </Group>
-  ) : (
-    <Rect width={0} height={0} />
   );
 }
