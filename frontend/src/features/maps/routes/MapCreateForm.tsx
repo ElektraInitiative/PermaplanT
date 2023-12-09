@@ -125,7 +125,6 @@ export default function MapCreateForm() {
       privacy: mapInput.privacy,
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
-      // TODO #349: implement selector to specify the maps borders
       geometry: {
         rings: [
           [
