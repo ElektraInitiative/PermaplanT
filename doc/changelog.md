@@ -35,7 +35,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fix the markdown so that mdbook tests pass _(Daniel Steinkogler)_
 - _()_
 - _()_
 - Make map geometry viewable and editable _(Moritz)_
