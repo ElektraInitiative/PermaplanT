@@ -21,6 +21,7 @@ import plantAndSeedSearch from './plantAndSeedSearch.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import plantings from './plantings.json';
+import polygon from './polygon.json';
 import pricing from './pricing.json';
 import privacyOptions from './privacyOptions.json';
 import readOnly from './readOnly.json';
@@ -66,6 +67,7 @@ const en = {
   blossoms,
   readOnly,
   toolboxTooltips,
+  polygon,
 };
 
 export default en;
