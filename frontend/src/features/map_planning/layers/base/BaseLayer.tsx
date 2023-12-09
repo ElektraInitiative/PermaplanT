@@ -1,9 +1,9 @@
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
-import { LayerType } from '@/api_types/definitions';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
 import { MapGeometryEditor } from '@/features/map_planning/layers/base/components/MapGeometryEditor';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
+import { isBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
 import { useCallback, useEffect, useState } from 'react';
 import { Circle, Group, Layer, Line } from 'react-konva';
@@ -13,7 +13,6 @@ type BaseLayerProps = LayerConfigWithListenerRegister;
 const BaseLayer = (props: BaseLayerProps) => {
   const { stageListenerRegister, ...layerProps } = props;
   const trackedState = useMapStore((map) => map.trackedState);
-  const untrackedState = useMapStore((map) => map.untrackedState);
 
   /** Filepath to the background image in Nextcloud. */
   const nextcloudImagePath = trackedState.layers.base.nextcloudImagePath;
@@ -29,12 +28,6 @@ const BaseLayer = (props: BaseLayerProps) => {
   const editorLongestSide = useMapStore((map) =>
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
   );
-
-  const isBaseLayerActive =
-    untrackedState.selectedLayer &&
-    typeof untrackedState.selectedLayer === 'object' &&
-    Object.hasOwn(untrackedState.selectedLayer, 'type_') &&
-    untrackedState.selectedLayer.type_ === LayerType.Base;
 
   const measurementLinePoints = () => {
     if (untrackedBaseLayerState.autoScale.measureStep !== 'both selected') return [];
@@ -104,7 +97,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           stroke={COLOR_EDITOR_HIGH_VISIBILITY}
         />
       </Group>
-      <MapGeometryEditor show={isBaseLayerActive} {...props} />
+      <MapGeometryEditor show={isBaseLayerActive()} {...props} />
     </Layer>
   );
 };
