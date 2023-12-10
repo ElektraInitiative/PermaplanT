@@ -13,7 +13,7 @@ When integrating React-Query for API calls, consider the following guidelines:
 ### Query keys
 
 - Use meaningful and unique query keys to identify each API call. The query key is crucial for React-Query to manage caching and data fetching efficiently.
-- Have a look at following guidelines: [https://react-query.tanstack.com/docs/guides/query-keys](https://react-query.tanstack.com/docs/guides/query-keys)
+- Have a look at following guidelines: <https://react-query.tanstack.com/docs/guides/query-keys> and <https://tkdodo.eu/blog/effective-react-query-keys>
 
 #### Example
 
@@ -23,13 +23,29 @@ const useUserData = (userId) => {
 };
 ```
 
-### Error handling
+### Local Error handling
 
-- Use meta information for passing error message when using `useQuery`.
-- Related blog post: https://tkdodo.eu/blog/breaking-react-querys-api-on-purpose#a-bad-api
-- If an error occurs a toast message will be shown automatically.
+Errors can be handled locally by using `isError` flag from `useQuery`:
 
-#### Example
+```javascript
+const UserProfile = () => {
+  const { data, isError } = useQuery("userData", fetchUserData);
+
+  if (isError) {
+    // Render UI for error state
+    return <div>Error fetching data</div>;
+  }
+
+  // Render UI for successful data fetch
+  return <div>{data}</div>;
+};
+```
+
+### Global Error Callbacks
+
+- If a toast message should be shown use meta information for passing error message.
+- The error will be handeled by QueryCache defined in `Providers.tsx`.
+- Related blog post: <https://tkdodo.eu/blog/breaking-react-querys-api-on-purpose#a-bad-api>
 
 ```javascript
 const { data, isLoading } = useQuery(['files', path], {
@@ -39,6 +55,10 @@ const { data, isLoading } = useQuery(['files', path], {
     },
   });
 ```
+
+#### Further reading
+
+- <https://tkdodo.eu/blog/react-query-error-handling>
 
 ### Mutation
 
