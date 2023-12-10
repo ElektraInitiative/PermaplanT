@@ -44,7 +44,7 @@ const UserProfile = () => {
 ### Global Error Callbacks
 
 - If a toast message should be shown use meta information for passing error message.
-- The error will be handeled by QueryCache defined in `Providers.tsx`.
+- The error will be handled by QueryCache defined in `Providers.tsx`.
 - Related blog post: <https://tkdodo.eu/blog/breaking-react-querys-api-on-purpose#a-bad-api>
 
 ```javascript
