@@ -5,10 +5,7 @@ import SimpleButton from '@/components/Button/SimpleButton';
 import SearchInput from '@/components/Form/SearchInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
-import {
-  useArchiveSeed,
-  useSeedSearch,
-} from '@/features/map_planning/layers/plant/hooks/seedHookApi';
+import { useArchiveSeed, useSeedSearch } from '@/features/seeds/hooks/seedHookApi';
 import { Suspense, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

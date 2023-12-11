@@ -3,7 +3,7 @@ import CreateSeedForm from '../components/CreateSeedForm';
 import { NewSeedDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import { useCreateSeed } from '@/features/map_planning/layers/plant/hooks/seedHookApi';
+import { useCreateSeed } from '@/features/seeds/hooks/seedHookApi';
 import { successToastGrouped } from '@/features/toasts/groupedToast';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
 import { Suspense, useCallback, useState } from 'react';

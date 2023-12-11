@@ -1,6 +1,6 @@
 import { SeedDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
-import { useRestoreSeed } from '@/features/map_planning/layers/plant/hooks/seedHookApi';
+import { useRestoreSeed } from '@/features/seeds/hooks/seedHookApi';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';

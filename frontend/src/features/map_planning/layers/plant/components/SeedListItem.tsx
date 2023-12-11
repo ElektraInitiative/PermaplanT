@@ -24,7 +24,7 @@ export function SeedListItem({
   }
 
   const { data: plant } = useFindPlantById({
-    // the cast is safe because the query is only executed if plant_id is defined
+    // cast is fine because the query can only execute if plant_id is defined
     plantId: seed.plant_id as number,
     enabled: seed.plant_id !== undefined,
   });

@@ -113,6 +113,7 @@ function searchPlantsQueryFn({
 
   return searchPlants(searchTerm, 0);
 }
+
 /**
  * A hook to fetch plants that are available in the current season.
  */
@@ -120,7 +121,7 @@ export function useSeasonalAvailablePlants(mapId: number, date: Date) {
   const { t } = useTranslation(['plantingSuggestions']);
 
   return useQuery({
-    queryKey: PLANT_KEYS.seasonalAvailable(mapId, date, 0),
+    queryKey: PLANT_KEYS.seasonalAvailable(mapId, date, 1),
     queryFn: seasonalAvailablePlants,
     select: mapPageToList,
     meta: {
