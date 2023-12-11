@@ -4,6 +4,7 @@ import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { MapLabel } from '../utils/MapLabel';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
+  SELECTION_RECTANGLE_NAME,
   hideSelectionRectangle,
   initializeSelectionRectangle,
   resetSelection,
@@ -15,6 +16,7 @@ import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
 import { isPlacementModeActive } from '../utils/planting-utils';
 import { useDimensions } from '@/hooks/useDimensions';
+import { colors } from '@/utils/colors';
 import { AnimatePresence, motion } from 'framer-motion';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
@@ -293,10 +295,10 @@ export const BaseStage = ({
             y={selectionRectAttrs.y}
             width={selectionRectAttrs.width}
             height={selectionRectAttrs.height}
-            fill={'blue'}
+            fill={colors.secondary[500]}
             visible={selectionRectAttrs.isVisible}
             opacity={0.2}
-            name="selectionRect"
+            name={SELECTION_RECTANGLE_NAME}
           />
           <Transformer
             listening={!isReadOnly}

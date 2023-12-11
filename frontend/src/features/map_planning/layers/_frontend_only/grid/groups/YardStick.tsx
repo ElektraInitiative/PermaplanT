@@ -10,7 +10,7 @@ import {
   RELATIVE_YARD_STICK_STROKE_WIDTH,
 } from '@/features/map_planning/layers/_frontend_only/grid/util/Constants';
 import { ViewRect } from '@/features/map_planning/store/MapStoreTypes';
-import { COLOR_GRAY_700_DARK, COLOR_GRAY_700_LIGHT } from '@/utils/constants';
+import { colors } from '@/utils/colors';
 import { useTranslation } from 'react-i18next';
 import { Group, Line, Text } from 'react-konva';
 
@@ -39,13 +39,13 @@ export const YardStick = (rect: ViewRect) => {
     <Group>
       <Line
         strokeWidth={strokeWidth}
-        stroke={darkMode ? COLOR_GRAY_700_DARK : COLOR_GRAY_700_LIGHT}
+        stroke={darkMode ? colors.neutral[700].dark : colors.neutral[700].light}
         points={[lineStartX, lineY, lineEndX, lineY]}
       />
       <Text
         x={textX}
         y={textY}
-        fill={darkMode ? COLOR_GRAY_700_DARK : COLOR_GRAY_700_LIGHT}
+        fill={darkMode ? colors.neutral[700].dark : colors.neutral[700].light}
         text={yardStickLengthLabel}
         fontSize={strokeWidth * 10}
       />

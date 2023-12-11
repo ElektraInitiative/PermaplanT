@@ -9,7 +9,7 @@ import {
   insertPointIntoLineSegmentWithLeastDistance,
 } from '@/features/map_planning/utils/PolygonUtils';
 import { warningToastGrouped } from '@/features/toasts/groupedToast';
-import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
+import { colors } from '@/utils/colors';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -108,7 +108,7 @@ export const MapGeometryEditor = (props: PolygonProps) => {
         key={`polygon-point-${index}`}
         x={point.x}
         y={point.y}
-        fill={COLOR_EDITOR_HIGH_VISIBILITY}
+        fill={colors.highlight.DEFAULT}
         radius={editorLongestSide / 200}
         onClick={(e) => handlePointSelect(e)}
         onDragStart={(e) => handlePointSelect(e)}
@@ -125,7 +125,7 @@ export const MapGeometryEditor = (props: PolygonProps) => {
       <Line
         listening={true}
         points={flattenRing(mapGeometry.rings[0])}
-        stroke={COLOR_EDITOR_HIGH_VISIBILITY}
+        stroke={colors.highlight.DEFAULT}
         strokeWidth={editorLongestSide / 500}
         lineCap="round"
         closed={true}
