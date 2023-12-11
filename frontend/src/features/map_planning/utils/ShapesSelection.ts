@@ -1,8 +1,9 @@
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
+import Konva from 'konva';
 import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
 import { Transformer } from 'konva/lib/shapes/Transformer';
-import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 
 // Keep track of our previously selected shapes so we can trigger the selection
 // only if we have new shapes in our bounds. This fixes a bug where deselection
@@ -31,8 +32,10 @@ export const selectIntersectingShapes = (
       // To exclude Konva's transformer, check if node contains children.
       // 'listening' is explicitly checked for '!== false' because
       // Konva treats it as true if it's undefined or missing at all.
-      return shape?.attrs.listening !== false && shape?.hasChildren();
+      return shape?.attrs.listening !== false;
     });
+
+  console.log('allShapes', allShapes);
 
   if (!allShapes) return;
 
@@ -62,6 +65,7 @@ export const selectIntersectingShapes = (
   if (intersectingShapes) {
     const nodes = intersectingShapes.filter((shape) => shape !== undefined);
     previouslySelectedShapeIds = new Set(nodes.map((shape) => shape._id));
+    setTransformerAnchors(trRef, nodes);
     trRef.current?.nodes(nodes);
   }
 };
@@ -149,4 +153,26 @@ export const hideSelectionRectangle = (
     ...attrs,
     isVisible: false,
   }));
+};
+
+export const selectSingleNode = (trRef: React.RefObject<Transformer>, node: Konva.Node) => {
+  setTransformerAnchors(trRef, [node]);
+  trRef.current?.nodes([node]);
+};
+
+const setTransformerAnchors = (trRef: React.RefObject<Transformer>, nodes: Konva.Node[]) => {
+  if (nodes.length == 1 && nodes[0].attrs.canBeDistorted) {
+    trRef.current?.enabledAnchors([
+      'top-left',
+      'top-right',
+      'bottom-left',
+      'bottom-right',
+      'middle-left',
+      'middle-right',
+      'top-center',
+      'bottom-center',
+    ]);
+  } else {
+    trRef.current?.enabledAnchors(['top-left', 'top-right', 'bottom-left', 'bottom-right']);
+  }
 };

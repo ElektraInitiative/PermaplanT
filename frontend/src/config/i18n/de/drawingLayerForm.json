@@ -1,0 +1,10 @@
+{
+  "tools_title": "Form auswählen",
+  "draw_rectangle_hint": "Benutze die Maus, um ein Rechteck aufzuziehen.",
+  "draw_ellipse_hint": "Benutze die Maus, um eine Ellipse aufzuziehen.",
+  "draw_free_line_hint": "Benututze die Maus, um eine freie Linie zu zeichnen.",
+
+  "draw_rectangle_tooltip": "Rechteck zeichnen.",
+  "draw_ellipse_tooltip": "Ellipse zeichnen.",
+  "draw_free_line_tooltip": "Freie Linie zeichnen."
+}

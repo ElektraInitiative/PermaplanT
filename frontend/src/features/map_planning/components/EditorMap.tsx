@@ -21,6 +21,9 @@ import { gainBlossom } from '../api/gainBlossom';
 import { useCompleteTour, useReenableTour } from '../hooks/tourHookApi';
 import BaseLayer from '../layers/base/BaseLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
+import DrawingLayer from '../layers/drawing/DrawingLayer';
+import { DrawingLayerLeftToolbar } from '../layers/drawing/DrawingLayerLeftToolbar';
+import DrawingLayerRightToolbar from '../layers/drawing/DrawingLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
@@ -69,6 +72,9 @@ export const EditorMap = ({ layers }: MapProps) => {
 
   const { mutate: reenableTour } = useReenableTour();
   const { mutate: completeTour } = useCompleteTour();
+  const isShapeSelectionEnabled = useMapStore(
+    (state) => state.untrackedState.shapeSelectionEnabled,
+  );
 
   // Allow layers to listen for all events on the base stage.
   //
@@ -201,7 +207,10 @@ export const EditorMap = ({ layers }: MapProps) => {
         right: <BaseLayerRightToolbar />,
       },
       [LayerType.Plants]: { left: <PlantLayerLeftToolbar />, right: <PlantLayerRightToolbar /> },
-      [LayerType.Drawing]: { left: <div></div>, right: <div></div> },
+      [LayerType.Drawing]: {
+        left: <DrawingLayerLeftToolbar />,
+        right: <DrawingLayerRightToolbar />,
+      },
       [LayerType.Fertilization]: { left: <div></div>, right: <div></div> },
       [LayerType.Habitats]: { left: <div></div>, right: <div></div> },
       [LayerType.Hydrology]: { left: <div></div>, right: <div></div> },
@@ -294,6 +303,7 @@ export const EditorMap = ({ layers }: MapProps) => {
               stageMouseWheelListeners,
               stageClickListeners,
             }}
+            selectable={isShapeSelectionEnabled}
           >
             <BaseLayer
               stageListenerRegister={baseStageListenerRegister}
@@ -301,6 +311,12 @@ export const EditorMap = ({ layers }: MapProps) => {
               visible={layersState.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
             />
+            <DrawingLayer
+              stageListenerRegister={baseStageListenerRegister}
+              visible={layersState.drawing.visible}
+              opacity={layersState.drawing.opacity}
+              listening={getSelectedLayerType() === LayerType.Drawing}
+            ></DrawingLayer>
             <PlantsLayer
               visible={layersState.plants.visible}
               opacity={layersState.plants.opacity}

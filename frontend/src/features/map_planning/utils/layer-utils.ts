@@ -1,6 +1,7 @@
 import { FrontendOnlyLayerType } from '../layers/_frontend_only';
 import useMapStore from '../store/MapStore';
 import { CombinedLayerType } from '../store/MapStoreTypes';
+import { LayerType } from '@/api_types/definitions';
 
 export function useSelectedLayerType(): CombinedLayerType {
   const selectedLayer = useMapStore((state) => state.untrackedState.selectedLayer);
@@ -14,10 +15,15 @@ export function useSelectedLayerType(): CombinedLayerType {
 
 export function useIsPlantLayerActive(): boolean {
   const selectedLayerType = useSelectedLayerType();
-  return selectedLayerType === 'plants';
+  return selectedLayerType === LayerType.Plants;
 }
 
 export function useIsBaseLayerActive(): boolean {
   const selectedLayerType = useSelectedLayerType();
-  return selectedLayerType === 'base';
+  return selectedLayerType === LayerType.Base;
+}
+
+export function isDrawingLayerActive(): boolean {
+  const selectedLayerType = useMapStore.getState().getSelectedLayerType();
+  return selectedLayerType === LayerType.Drawing;
 }

@@ -1,3 +1,4 @@
+import { DrawingDto, DrawingShapeType } from '../layers/drawing/types';
 import Konva from 'konva';
 import * as uuid from 'uuid';
 import { StateCreator } from 'zustand';
@@ -181,6 +182,16 @@ export interface UntrackedMapSlice {
   baseLayerActivateMovePolygonPoints: () => void;
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
+
+  drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
+  drawingLayerClearSelectedShape: () => void;
+  drawingLayerSetSelectedColor: (color: string) => void;
+  drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
+  selectDrawings: (drawings: DrawingDto[] | null) => void;
+
+  disableShapeSelection: () => void;
+  enableShapeSelection: () => void;
+
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
@@ -189,6 +200,7 @@ export interface UntrackedMapSlice {
   setTooltipPosition: (position: { x: number; y: number }) => void;
   setStatusPanelContent: (content: React.ReactElement) => void;
   clearStatusPanelContent: () => void;
+
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -224,6 +236,12 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         objects: [],
         loadedObjects: [],
       },
+      [LayerType.Drawing]: {
+        layerId: 0,
+        id: -1,
+        objects: [],
+        loadedObjects: [],
+      },
     }),
     {} as TrackedLayers,
   ),
@@ -249,6 +267,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   tooltipContent: '',
   tooltipPosition: { x: 0, y: 0 },
   bottomStatusPanelContent: null,
+  shapeSelectionEnabled: true,
   layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
@@ -261,6 +280,13 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         opacity: 1,
         showLabels: true,
       } as UntrackedPlantLayerState,
+      [LayerType.Drawing]: {
+        visible: true,
+        opacity: 1,
+        shape: null,
+        selectedColor: 'black',
+        selectedStrokeWidth: 3,
+      } as UntrackedDrawingLayerState,
       [LayerType.Base]: {
         visible: true,
         opacity: 1,
@@ -319,10 +345,14 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: TrackedLayerState;
+  [key in Exclude<
+    LayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Drawing
+  >]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
+  [LayerType.Drawing]: TrackedDrawingLayerState;
 };
 
 export type TrackedPlantLayerState = {
@@ -349,20 +379,38 @@ export type TrackedBaseLayerState = {
   nextcloudImagePath: string;
 };
 
+export type TrackedDrawingLayerState = {
+  id: number;
+  layerId: number;
+  objects: DrawingDto[];
+  loadedObjects: DrawingDto[];
+};
+
 /**
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<CombinedLayerType, LayerType.Plants | LayerType.Base>]: UntrackedLayerState;
+  [key in Exclude<
+    CombinedLayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Drawing
+  >]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
   [LayerType.Base]: UntrackedBaseLayerState;
+  [LayerType.Drawing]: UntrackedDrawingLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantForPlanting | null;
   selectedPlantings: PlantingDto[] | null;
   showLabels: boolean;
+};
+
+export type UntrackedDrawingLayerState = UntrackedLayerState & {
+  shape: DrawingShapeType | null;
+  selectedDrawings: DrawingDto[] | null;
+  selectedColor: string;
+  selectedStrokeWidth: number;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {
@@ -408,6 +456,7 @@ export type UntrackedMapState = {
     from: string;
     to: string;
   };
+  shapeSelectionEnabled: boolean;
   /** Storing the current content prevents constant rerenders of the tooltip component.  */
   tooltipContent: string;
   tooltipPosition: { x: number; y: number };
