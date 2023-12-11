@@ -6,6 +6,7 @@ import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import { errorToastGrouped } from '@/features/toasts/groupedToast';
+import { useQuery } from '@tanstack/react-query';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
@@ -37,28 +38,26 @@ export default function MapEditForm() {
   const { t } = useTranslation(['maps', 'privacyOptions', 'common']);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const _findOneMap = async () => {
-      try {
-        const map = await findMapById(Number(mapId));
-        oldValues.current = map;
+  const { data: loadedMapData } = useQuery(['maps', mapId], () => findMapById(Number(mapId)), {
+    meta: {
+      errorMessage: t('maps:edit.error_map_single_fetch'),
+      autoClose: false,
+      toastId: 'fetchError',
+    },
+  });
 
-        setUpdateObject({
-          name: map.name,
-          privacy: map.privacy,
-          description: map.description,
-          location: map.location,
-        });
-      } catch (error) {
-        console.error(error);
-        errorToastGrouped(t('maps:edit.error_map_single_fetch'), {
-          autoClose: false,
-          toastId: 'fetchError',
-        });
-      }
-    };
-    _findOneMap();
-  }, [mapId, t]);
+  useEffect(() => {
+    if (loadedMapData) {
+      oldValues.current = loadedMapData;
+
+      setUpdateObject({
+        name: loadedMapData.name,
+        privacy: loadedMapData.privacy,
+        description: loadedMapData.description,
+        location: loadedMapData.location,
+      });
+    }
+  }, [loadedMapData]);
 
   const missingNameText = (
     <p className="mb-2 ml-2 block text-sm font-medium text-red-500">

@@ -55,7 +55,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
 - _()_
 - _()_
-- _()_
+- wrap api queries using react query _(Daniel Steinkogler)_
 - _()_
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
