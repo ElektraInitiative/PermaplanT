@@ -145,7 +145,7 @@ const CompletePlantNameFromSeed = (props: { seed: SeedDto }) => {
 
   const { isLoading, isError, data } = useQuery(
     ['plant', props.seed.plant_id],
-    () => findPlantById(props.seed.plant_id ?? -1),
+    () => findPlantById(props.seed.plant_id),
     { cacheTime: Infinity, staleTime: Infinity },
   );
 

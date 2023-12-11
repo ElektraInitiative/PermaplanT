@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
  */
 export function useFindPlantFromSeedCallback(afterPlantLoad: (plant: PlantForPlanting) => void) {
   const { t } = useTranslation(['plantings']);
-  const [plantId, setPlantId] = useState(0);
+  const [plantId, setPlantId] = useState<number | undefined>(0);
   const [seed, setSeed] = useState<SeedDto | null>(null);
   const { data: plant } = useQuery(['plants/plant', plantId] as const, {
     queryFn: (context) => findPlantById(context.queryKey[1]),
@@ -31,7 +31,7 @@ export function useFindPlantFromSeedCallback(afterPlantLoad: (plant: PlantForPla
 
   return (seed: SeedDto) => {
     // useQuery will not return any data if th plant_id is undefined.
-    setPlantId(seed.plant_id ?? -1);
+    setPlantId(seed.plant_id);
     setSeed(seed);
   };
 }

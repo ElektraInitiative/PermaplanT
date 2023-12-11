@@ -31,7 +31,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Remove error messages in console if a seed was not found _(Moritz)_
 - _()_
 - _()_
 - _()_
