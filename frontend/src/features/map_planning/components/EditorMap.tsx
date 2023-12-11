@@ -2,6 +2,8 @@ import { gainBlossom } from '../api/gainBlossom';
 import { updateTourStatus } from '../api/updateTourStatus';
 import BaseLayer from '../layers/base/BaseLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
+import DrawingLayer from '../layers/drawing/DrawingLayer';
+import DrawingLayerRightToolbar from '../layers/drawing/DrawingLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
@@ -189,7 +191,7 @@ export const EditorMap = ({ layers }: MapProps) => {
         right: <BaseLayerRightToolbar />,
       },
       [LayerType.Plants]: { left: <PlantLayerLeftToolbar />, right: <PlantLayerRightToolbar /> },
-      [LayerType.Drawing]: { left: <div></div>, right: <div></div> },
+      [LayerType.Drawing]: { left: <div></div>, right: <DrawingLayerRightToolbar /> },
       [LayerType.Fertilization]: { left: <div></div>, right: <div></div> },
       [LayerType.Habitats]: { left: <div></div>, right: <div></div> },
       [LayerType.Hydrology]: { left: <div></div>, right: <div></div> },
@@ -297,6 +299,12 @@ export const EditorMap = ({ layers }: MapProps) => {
               opacity={untrackedState.layers.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
+            <DrawingLayer
+              stageListenerRegister={baseStageListenerRegister}
+              visible={untrackedState.layers.drawing.visible}
+              opacity={untrackedState.layers.drawing.opacity}
+              listening={getSelectedLayerType() === LayerType.Drawing}
+            ></DrawingLayer>
             <GridLayer
               visible={untrackedState.layers.grid.visible}
               opacity={untrackedState.layers.grid.opacity}

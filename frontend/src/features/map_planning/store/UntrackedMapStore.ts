@@ -376,6 +376,52 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+
+  drawingLayerActivateDrawRectangle() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            shape: 'rectangle',
+          },
+        },
+      },
+    }));
+  },
+  drawingLayerActivateFreeDrawing() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            shape: 'free',
+          },
+        },
+      },
+    }));
+  },
+  drawingLayerActivateDrawEllipse() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            shape: 'ellipse',
+          },
+        },
+      },
+    }));
+  },
   getSelectedLayerType() {
     const selectedLayer = get().untrackedState.selectedLayer;
     if (typeof selectedLayer === 'object' && 'type_' in selectedLayer) return selectedLayer.type_;

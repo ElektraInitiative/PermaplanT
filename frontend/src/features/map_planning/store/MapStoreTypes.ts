@@ -181,6 +181,11 @@ export interface UntrackedMapSlice {
   baseLayerActivateMovePolygonPoints: () => void;
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
+
+  drawingLayerActivateFreeDrawing: () => void;
+  drawingLayerActivateDrawRectangle: () => void;
+  drawingLayerActivateDrawEllipse: () => void;
+
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
@@ -261,6 +266,11 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         opacity: 1,
         showLabels: true,
       } as UntrackedPlantLayerState,
+      [LayerType.Drawing]: {
+        visible: true,
+        opacity: 1,
+        shape: 'free',
+      } as UntrackedDrawingLayerState,
       [LayerType.Base]: {
         visible: true,
         opacity: 1,
@@ -353,16 +363,26 @@ export type TrackedBaseLayerState = {
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<CombinedLayerType, LayerType.Plants | LayerType.Base>]: UntrackedLayerState;
+  [key in Exclude<
+    CombinedLayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Drawing
+  >]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
   [LayerType.Base]: UntrackedBaseLayerState;
+  [LayerType.Drawing]: UntrackedDrawingLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantForPlanting | null;
   selectedPlantings: PlantingDto[] | null;
   showLabels: boolean;
+};
+
+export type UntrackedDrawingLayerState = UntrackedLayerState & {
+  selectedPlantForPlanting: PlantForPlanting | null;
+  selectedPlantings: PlantingDto[] | null;
+  shape: 'free' | 'rectangle' | 'ellipse';
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {
