@@ -95,7 +95,7 @@ function useInitializeMap() {
     return null;
   }
 
-  return { layers };
+  return layers;
 }
 
 /**
@@ -168,7 +168,7 @@ export function MapWrapper() {
   return (
     <ReadOnlyModeContextProvider>
       <ShepherdTour steps={steps} tourOptions={tourOptions}>
-        <EditorMap layers={mapData.layers} />
+        <EditorMap layers={mapData} />
       </ShepherdTour>
     </ReadOnlyModeContextProvider>
   );

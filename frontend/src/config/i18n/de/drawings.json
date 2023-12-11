@@ -1,0 +1,9 @@
+{
+  "delete": "Element löschen",
+  "delete_multiple_drawings": "Elemente löschen",
+  "add_date": "Hinzugefügt am",
+  "remove_date": "Entfernt am",
+  "color": "Farbe",
+  "stroke": "Stärke",
+  "error_invalid_add_remove_date": "Das Entfernungsdatum muss nach dem Hinzufügungsdatum liegen."
+}

@@ -1,0 +1,9 @@
+{
+  "delete": "Delete Drawing",
+  "delete_multiple_drawings": "Delete Drawings",
+  "add_date": "Added on",
+  "remove_date": "Removed on",
+  "color": "Color",
+  "stroke": "Stroke",
+  "error_invalid_add_remove_date": "Remove date must be after add date."
+}

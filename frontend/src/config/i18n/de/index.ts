@@ -6,6 +6,8 @@ import blog from './blog.json';
 import blossoms from './blossoms.json';
 import common from './common.json';
 import contact from './contact.json';
+import drawingLayerForm from './drawingLayerForm.json';
+import drawings from './drawings.json';
 import enums from './enums.json';
 import featureDescriptions from './featureDescriptions.json';
 import fileSelector from './fileSelector.json';
@@ -39,6 +41,7 @@ export default {
   blog,
   baseLayer,
   baseLayerForm,
+  drawingLayerForm,
   common,
   contact,
   enums,
@@ -65,6 +68,7 @@ export default {
   layers,
   timeline,
   plantings,
+  drawings,
   guidedTour,
   blossoms,
   readOnly,
