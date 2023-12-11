@@ -113,6 +113,7 @@ class MapPlantingPage(AbstractPage):
         else:
             for i in range(abs(delta_months)):
                 self._timeline_month_slider.press("ArrowLeft")
+        self._timeline_idle.wait_for()
 
     def change_map_date_by_years(self, delta_years: int):
         """Changes the date by a given amount of years."""
@@ -122,6 +123,7 @@ class MapPlantingPage(AbstractPage):
         else:
             for i in range(abs(delta_years)):
                 self._timeline_year_slider.press("ArrowLeft")
+        self._timeline_idle.wait_for()
 
     def change_plant_added_date_by_days(self, delta_days: int):
         """Changes the date by a given amount of days and checks the spinner if possible."""
