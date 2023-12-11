@@ -226,12 +226,12 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       t('guidedTour:mapEditor.plants_layer_change_date_text'),
     ),
     attachTo: {
-      element: '[data-tourid="date_picker"]',
+      element: '[data-tourid="timeline"]',
       on: 'top',
     },
     advanceOn: {
-      selector: '[data-tourid="date_picker"]',
-      event: 'change',
+      selector: '[data-tourid="timeline"]',
+      event: 'dateChanged',
     },
     classes: 'action-step',
     canClickTarget: true,
@@ -392,12 +392,12 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
     title: `${t('guidedTour:mapEditor.plants_layer_title')} (16/16)`,
     text: actionText(t('guidedTour:mapEditor.plants_layer_revert_date_action')),
     attachTo: {
-      element: '[data-tourid="date_picker"]',
+      element: '[data-tourid="timeline"]',
       on: 'top',
     },
     advanceOn: {
-      selector: '[data-tourid="date_picker"]',
-      event: 'change',
+      selector: '[data-tourid="timeline"]',
+      event: 'dateChanged',
     },
     classes: 'action-step',
     canClickTarget: true,
