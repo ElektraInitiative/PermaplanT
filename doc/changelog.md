@@ -49,7 +49,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Use arrow keys to naviagte between timepicker sliders _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
