@@ -10,12 +10,6 @@ export const TEST_IDS = Object.freeze({
   YEAR_SLIDER: 'timeline__year-slider',
 });
 
-export const SLIDER_NAMES = Object.freeze({
-  DAY_SLIDER: 'day',
-  MONTH_SLIDER: 'month',
-  YEAR_SLIDER: 'year',
-});
-
 export type DayItem = {
   key: number;
   year: number;
