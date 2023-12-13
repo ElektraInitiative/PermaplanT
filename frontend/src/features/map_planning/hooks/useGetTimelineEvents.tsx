@@ -1,5 +1,5 @@
 /**
- * This hook is currently just creating dummy data for the timeline until the backend is ready.
+ * This file is currently just used or creating dummy data for the timeline until the backend is ready.
  */
 
 const MIN_YEAR = 1900;
@@ -62,7 +62,7 @@ const createDays = () => {
   });
 };
 
-export default function useGetTimeLineEvents() {
+export default function getTimeLineEvents() {
   return {
     dailyTimeLineEvents: createDays(),
     monthlyTimeLineEvents: createMonths(),

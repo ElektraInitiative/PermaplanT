@@ -1,7 +1,7 @@
-import useGetTimeLineEvents from '../../hooks/useGetTimelineEvents';
+import getTimeLineEvents from '../../hooks/useGetTimelineEvents';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const TEST_IDS = Object.freeze({
@@ -58,7 +58,7 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     dailyTimeLineEvents: daySilderItems,
     monthlyTimeLineEvents: monthSliderItems,
     yearlyTimeLineEvents,
-  } = useGetTimeLineEvents();
+  } = useMemo(() => getTimeLineEvents(), []);
 
   const { i18n } = useTranslation();
 
