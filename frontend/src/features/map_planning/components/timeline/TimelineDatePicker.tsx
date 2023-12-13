@@ -53,11 +53,13 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   const defaultDay = new Date(defaultDate).getDate();
 
   const submitTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
+
   const {
     dailyTimeLineEvents: daySilderItems,
     monthlyTimeLineEvents: monthSliderItems,
     yearlyTimeLineEvents,
   } = useGetTimeLineEvents();
+
   const { i18n } = useTranslation();
 
   const [selectedYearItem, setSelectedYearItem] = useState<YearItem>(
@@ -98,6 +100,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   const [visibleMonths, setVisibleMonths] = useState<MonthItem[]>(
     calculateVisibleMonths(selectedYearItem),
   );
+
+  const [focusedPicker, setFocusedPicker] = useState<'year' | 'month' | 'day'>();
 
   const handleDayItemChange = (itemKey: number) => {
     const selectedDayItem = daySilderItems[itemKey];
@@ -203,6 +207,56 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     }
   };
 
+  const handleFocusChange = (picker: 'year' | 'month' | 'day') => {
+    console.log('handleFOcusChange', picker);
+    setFocusedPicker(picker);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case 'ArrowUp':
+        setFocus('up');
+        break;
+      case 'ArrowDown':
+        setFocus('down');
+        break;
+      default:
+        break;
+    }
+  };
+
+  const setFocus = (direction: 'up' | 'down') => {
+    if (direction === 'up') {
+      switch (focusedPicker) {
+        case 'year':
+          setFocusedPicker('day');
+          break;
+        case 'month':
+          setFocusedPicker('year');
+          break;
+        case 'day':
+          setFocusedPicker('month');
+          break;
+        default:
+          break;
+      }
+    } else if (direction === 'down') {
+      switch (focusedPicker) {
+        case 'year':
+          setFocusedPicker('month');
+          break;
+        case 'month':
+          setFocusedPicker('day');
+          break;
+        case 'day':
+          setFocusedPicker('year');
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
   useEffect(() => {
     onLoading();
     submitTimeout.current = setTimeout(() => {
@@ -211,13 +265,19 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
       const formattedDay = String(newDay.day).padStart(2, '0');
       const formattedDate = `${newDay.year}-${formattedMonth}-${formattedDay}`;
       onSelectDate(formattedDate);
-    }, 500);
+    }, 1000);
     return () => clearTimeout(submitTimeout.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDayItem]);
 
   return (
-    <div data-tourid="timeline" id="timeline" className="select-none">
+    <div
+      data-tourid="timeline"
+      id="timeline"
+      className="select-none"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+    >
       <ItemSliderPicker
         dataTestId={TEST_IDS.YEAR_SLIDER}
         items={yearlyTimeLineEvents.map((yearSliderItem) => ({
@@ -231,6 +291,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
         onChange={handleYearChange}
         onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
         value={selectedYearItem.key}
+        autoFocus={focusedPicker === 'year'}
+        onFocus={() => handleFocusChange('year')}
       />
       <ItemSliderPicker
         dataTestId={TEST_IDS.MONTH_SLIDER}
@@ -248,6 +310,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
         rightEndReached={handleMontSliderRightEndReached}
         value={selectedMonthItem.key}
         onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
+        autoFocus={focusedPicker === 'month'}
+        onFocus={() => handleFocusChange('month')}
       />
       <ItemSliderPicker
         dataTestId={TEST_IDS.DAY_SLIDER}
@@ -267,6 +331,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
         rightEndReached={handleDaySliderRightEndReached}
         value={selectedDayItem.key}
         onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
+        autoFocus={focusedPicker === 'day'}
+        onFocus={() => handleFocusChange('day')}
       />
     </div>
   );
