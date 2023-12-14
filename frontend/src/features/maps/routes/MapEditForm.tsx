@@ -1,16 +1,26 @@
-import { findMapById } from '../api/findMapById';
-import { updateMap } from '../api/updateMap';
+import { useEditMap, useFindMapById } from '../hooks/mapHookApi';
 import { Coordinates, MapDto, PrivacyOption, UpdateMapDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
-import { useQuery } from '@tanstack/react-query';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+
+export function EditMapPage() {
+  const { id } = useParams();
+
+  const mapId = id ? parseInt(id) : null;
+
+  // Showing the page without an id would be a bug.
+  if (!mapId) {
+    return <Navigate to="/maps" />;
+  }
+
+  return <MapEditForm mapId={mapId} />;
+}
 
 interface MapUpdateData {
   name: string;
@@ -19,7 +29,11 @@ interface MapUpdateData {
   location?: Coordinates;
 }
 
-export default function MapEditForm() {
+type MapEditFormProps = {
+  mapId: number;
+};
+
+function MapEditForm({ mapId }: MapEditFormProps) {
   const initialValue: MapUpdateData = {
     name: '',
     privacy: PrivacyOption.Public,
@@ -31,20 +45,15 @@ export default function MapEditForm() {
   };
 
   const [updateObject, setUpdateObject] = useState<MapUpdateData>(initialValue);
-  const [loadMap, setLoadMap] = useState(false);
+  const [locationPickerActive, setLocationPickerActive] = useState(false);
   const [missingName, setMissingName] = useState(false);
   const oldValues = useRef<MapDto>();
-  const { mapId } = useParams();
   const { t } = useTranslation(['maps', 'privacyOptions', 'common']);
   const navigate = useNavigate();
 
-  const { data: loadedMapData } = useQuery(['maps', mapId], () => findMapById(Number(mapId)), {
-    meta: {
-      errorMessage: t('maps:edit.error_map_single_fetch'),
-      autoClose: false,
-      toastId: 'fetchError',
-    },
-  });
+  const { data: loadedMapData } = useFindMapById(mapId);
+
+  const { mutate: editMap } = useEditMap();
 
   useEffect(() => {
     if (loadedMapData) {
@@ -129,7 +138,7 @@ export default function MapEditForm() {
         className="mt-4 max-w-[240px]"
         onClick={() => {
           setUpdateObject({ ...updateObject, location: undefined });
-          setLoadMap(true);
+          setLocationPickerActive(true);
         }}
       >
         {t('maps:edit.location_button')}
@@ -164,12 +173,15 @@ export default function MapEditForm() {
     if (updateObject.name === oldValues.current?.name) {
       updatedMap.name = undefined;
     }
-    try {
-      await updateMap(updatedMap, Number(mapId));
-    } catch (error) {
-      errorToastGrouped(t('maps:edit.error_map_edit'), { autoClose: false });
-    }
-    navigate('/maps');
+
+    editMap(
+      { map: updateObject, id: mapId },
+      {
+        onSuccess: () => {
+          navigate('/maps');
+        },
+      },
+    );
   }
 
   return (
@@ -218,8 +230,8 @@ export default function MapEditForm() {
               defaultValue={updateObject.description}
               onChange={(e) => setUpdateObject({ ...updateObject, description: e.target.value })}
             />
-            {loadMap && locationPicker}
-            {!loadMap && locationPickerPlaceholder}
+            {locationPickerActive && locationPicker}
+            {!locationPickerActive && locationPickerPlaceholder}
             <div className="space-between mt-8 flex flex-row justify-center space-x-8">
               <SimpleButton title={t('common:cancel')} onClick={() => navigate(-1)}>
                 {t('common:cancel')}
