@@ -122,7 +122,7 @@ export function useSeasonalAvailablePlants(mapId: number, date: Date) {
 
   return useQuery({
     queryKey: PLANT_KEYS.seasonalAvailable(mapId, date, 1),
-    queryFn: seasonalAvailablePlants,
+    queryFn: seasonalAvailablePlantsQueryFn,
     select: mapPageToList,
     meta: {
       autoClose: false,
@@ -131,7 +131,7 @@ export function useSeasonalAvailablePlants(mapId: number, date: Date) {
   });
 }
 
-function seasonalAvailablePlants({
+function seasonalAvailablePlantsQueryFn({
   queryKey,
 }: QueryFunctionContext<ReturnType<(typeof PLANT_KEYS)['seasonalAvailable']>>) {
   const { mapId, date, page } = queryKey[0];

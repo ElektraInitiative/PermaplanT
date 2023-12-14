@@ -1,7 +1,7 @@
 import { SeedDto } from '@/api_types/definitions';
 import { archiveSeed } from '@/features/seeds/api/archiveSeed';
 import { createSeed } from '@/features/seeds/api/createSeed';
-import { editSeed } from '@/features/seeds/api/editSeeds';
+import { editSeed } from '@/features/seeds/api/editSeed';
 import { findAllSeeds } from '@/features/seeds/api/findAllSeeds';
 import { findSeedById } from '@/features/seeds/api/findSeedById';
 import { errorToastGrouped, infoToastGrouped } from '@/features/toasts/groupedToast';
@@ -62,6 +62,10 @@ function findSeedByIdQueryFn({
   return findSeedById(seedId);
 }
 
+/**
+ * A hook to search for seeds.
+ * @returns an infinite query object and actions to search for seeds.
+ */
 export function useSeedSearch() {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 500);
@@ -146,6 +150,9 @@ export function useArchiveSeed() {
 const archiveSeedUsingSeedDto = async (seed: SeedDto) =>
   archiveSeed(Number(seed.id), { archived: true });
 
+/**
+ * A mutation to create a seed.
+ */
 export function useCreateSeed() {
   const { t } = useTranslation(['seeds', 'common']);
   const queryClient = useQueryClient();
@@ -168,6 +175,9 @@ export function useCreateSeed() {
   });
 }
 
+/**
+ * A mutation to edit a seed.
+ */
 export function useEditSeed() {
   const { t } = useTranslation(['seeds', 'common']);
   const queryClient = useQueryClient();
