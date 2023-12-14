@@ -5,7 +5,7 @@ import {
   useInvalidateMapQueries,
   useMap,
   usePlantLayer,
-} from '../hooks/mapHookApi';
+} from '../hooks/mapEditorHookApi';
 import { useTourStatus } from '../hooks/tourHookApi';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';

@@ -49,8 +49,8 @@ export function EditSeed({ seedId }: EditSeedProps) {
         { seed: updatedSeed, id: seedId },
         {
           onSuccess: () => {
-            navigate('/seeds');
             successToastGrouped(t('seeds:edit_seed_form.success'));
+            navigate('/seeds');
           },
         },
       );

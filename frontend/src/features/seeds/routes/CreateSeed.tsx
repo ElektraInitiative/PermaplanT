@@ -22,8 +22,8 @@ export function CreateSeed() {
     (newSeed: NewSeedDto) => {
       submitSeed(newSeed, {
         onSuccess: () => {
-          navigate('/seeds');
           successToastGrouped(t('seeds:create_seed_form.success'));
+          navigate('/seeds');
         },
       });
     },
