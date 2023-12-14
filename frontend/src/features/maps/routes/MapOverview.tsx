@@ -1,6 +1,5 @@
-import { createMap } from '../api/createMap';
 import MapCard from '../components/MapCard';
-import { useMapsSearch } from '../hooks/mapHookApi';
+import { useCreateMap, useMapsSearch } from '../hooks/mapHookApi';
 import { MapDto, MapSearchParameters, NewMapDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import InfoMessage, { InfoMessageType } from '@/components/Card/InfoMessage';
@@ -28,6 +27,7 @@ export default function MapOverview() {
   };
 
   const { data } = useMapsSearch(searchParams);
+  const { mutate: createMap } = useCreateMap();
 
   const maps = data?.pages.flatMap((page) => page.results) ?? [];
   const mapList = maps.map((map) => <MapCard key={map.id} map={map} onDuplicate={duplicateMap} />);
@@ -62,8 +62,11 @@ export default function MapOverview() {
       geometry: targetMap.geometry,
     };
 
-    await createMap(mapCopy);
-    navigate(0);
+    createMap(mapCopy, {
+      onSuccess: () => {
+        navigate('/maps');
+      },
+    });
   }
 
   return (
