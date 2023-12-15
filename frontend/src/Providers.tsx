@@ -10,6 +10,7 @@ declare module '@tanstack/query-core' {
   interface QueryMeta {
     autoClose?: false | number;
     errorMessage?: string;
+    toastId?: string;
   }
 }
 
@@ -21,7 +22,10 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error, query) => {
       if (query.meta?.errorMessage && typeof query.meta.errorMessage === 'string') {
-        errorToastGrouped(query.meta.errorMessage, { autoClose: query.meta.autoClose });
+        errorToastGrouped(query.meta.errorMessage, {
+          autoClose: query.meta.autoClose,
+          toastId: query.meta.toastId,
+        });
       }
     },
   }),

@@ -11,7 +11,7 @@ import useMapStore from '../store/MapStore';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import { convertToDate } from '../utils/date-utils';
 import { BaseStage } from './BaseStage';
-import { Timeline } from './timeline/Timeline';
+import TimelineDatePicker from './timeline/TimelineDatePicker';
 import { LayerList } from './toolbar/LayerList';
 import { Toolbar } from './toolbar/Toolbar';
 import {
@@ -26,6 +26,8 @@ import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
+import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
+import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
 import { ReactComponent as GridIcon } from '@/svg/icons/grid-dots.svg';
 import { ReactComponent as RedoIcon } from '@/svg/icons/redo.svg';
 import { ReactComponent as TagsIcon } from '@/svg/icons/tags.svg';
@@ -70,6 +72,7 @@ export const EditorMap = ({ layers }: MapProps) => {
   const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
+  const [timeLineState, setTimeLineState] = useState<'loading' | 'idle'>('idle');
 
   // Allow layers to listen for all events on the base stage.
   //
@@ -154,6 +157,11 @@ export const EditorMap = ({ layers }: MapProps) => {
     const update: UpdateGuidedToursDto = { editor_tour_completed: false };
     await updateTourStatus(update);
   };
+
+  function triggerDateChangedInGuidedTour(): void {
+    const changeDateEvent = new Event('dateChanged');
+    document.getElementById('timeline')?.dispatchEvent(changeDateEvent);
+  }
 
   useEffect(() => {
     const _completeTour = async () => {
@@ -312,8 +320,15 @@ export const EditorMap = ({ layers }: MapProps) => {
             ></GridLayer>
           </BaseStage>
           <div>
-            <Timeline
-              onSelectDate={(date) => updateTimelineDate(date)}
+            <TimelineDatePicker
+              onSelectDate={(date) => {
+                triggerDateChangedInGuidedTour();
+                setTimeLineState('idle');
+                updateTimelineDate(date);
+              }}
+              onLoading={() => {
+                setTimeLineState('loading');
+              }}
               defaultDate={timelineDate}
             />
           </div>
@@ -325,7 +340,7 @@ export const EditorMap = ({ layers }: MapProps) => {
             position="right"
             minWidth={200}
             fixedContentBottom={
-              <div className="mb-0 mt-auto border-t-2 border-neutral-700 p-2 tracking-wide">
+              <div className="mb-0 mt-auto flex border-t-2 border-neutral-700 p-2 tracking-wide">
                 {t('timeline:map_date')}
                 {convertToDate(timelineDate).toLocaleDateString(i18next.resolvedLanguage, {
                   weekday: 'short',
@@ -333,6 +348,15 @@ export const EditorMap = ({ layers }: MapProps) => {
                   month: 'numeric',
                   day: 'numeric',
                 })}
+                {timeLineState === 'loading' && (
+                  <CircleDottedIcon className="mb-3 ml-2 mt-auto h-5 w-5 animate-spin text-secondary-400" />
+                )}
+                {timeLineState === 'idle' && (
+                  <CheckIcon
+                    className="mb-3 ml-2 mt-auto h-5 w-5 text-primary-400"
+                    data-testid="timeline__state-idle"
+                  />
+                )}
               </div>
             }
           ></Toolbar>

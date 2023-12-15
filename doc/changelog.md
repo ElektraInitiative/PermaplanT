@@ -33,6 +33,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add basic drawing layer functionality _(Daniel Steinkogler)_
+- Remove error messages in console if a seed was not found _(Moritz)_
+- _()_
 - _()_
 - _()_
 - Fix the markdown so that mdbook tests pass _(Daniel Steinkogler)_
@@ -55,7 +57,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
 - _()_
 - _()_
-- _()_
+- wrap api queries using react query _(Daniel Steinkogler)_
 - _()_
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
@@ -74,7 +76,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
 - _()_
 - _()_
 

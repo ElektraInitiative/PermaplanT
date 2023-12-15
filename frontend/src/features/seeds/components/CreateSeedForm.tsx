@@ -12,6 +12,7 @@ import { findPlantById } from '@/features/seeds/api/findPlantById';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { getNameFromPlant } from '@/utils/plant-naming';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
+import { useQuery } from '@tanstack/react-query';
 import { Suspense, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -61,6 +62,32 @@ const CreateSeedForm = ({
 
   const [notes, setNotes] = useState<string | undefined>(undefined);
 
+  const initialPlant = useQuery(
+    ['plant', existingSeed?.plant_id],
+    () => {
+      if (existingSeed?.plant_id) {
+        return findPlantById(existingSeed.plant_id);
+      }
+      return null;
+    },
+    {
+      enabled: !!existingSeed?.plant_id,
+    },
+  ).data;
+
+  useEffect(() => {
+    if (initialPlant) {
+      const common_name_en = initialPlant.common_name_en
+        ? ' (' + initialPlant.common_name_en[0] + ')'
+        : '';
+
+      setPlantOption({
+        value: initialPlant.id,
+        label: initialPlant.unique_name + common_name_en,
+      });
+    }
+  }, [initialPlant]);
+
   useEffect(
     () => {
       // Makes sure that the default select values are stored in the form data..
@@ -86,7 +113,6 @@ const CreateSeedForm = ({
         setNotes(existingSeed?.notes);
 
         // Convert existing values to select menu options.
-        if (existingSeed.plant_id) loadInitialPlant(existingSeed.plant_id);
         setQuantityOption(quantity.filter((x) => x.value === existingSeed?.quantity)[0]);
         setQualityOption(quality.filter((x) => x.value === existingSeed?.quality)[0]);
       }
@@ -136,20 +162,6 @@ const CreateSeedForm = ({
         pageNumber: pageNumber + 1,
       },
     };
-  };
-
-  /**
-   *  Convert a plantId into an option for PaginatedSelectMenu.
-   *  @param plantId The id that will be converted.
-   */
-  const loadInitialPlant = async (plantId: number) => {
-    const plant = await findPlantById(plantId);
-    const common_name_en = plant.common_name_en ? ' (' + plant.common_name_en[0] + ')' : '';
-
-    setPlantOption({
-      value: plant.id,
-      label: plant.unique_name + common_name_en,
-    });
   };
 
   return (
