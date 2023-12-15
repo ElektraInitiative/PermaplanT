@@ -422,6 +422,21 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+  drawingLayerClearSelectedShape() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            shape: null,
+          },
+        },
+      },
+    }));
+  },
   getSelectedLayerType() {
     const selectedLayer = get().untrackedState.selectedLayer;
     if (typeof selectedLayer === 'object' && 'type_' in selectedLayer) return selectedLayer.type_;

@@ -41,9 +41,12 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const isDrawing = useRef(false);
 
-  const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
-    if (!isDrawingLayerActive()) return;
+  const isShapeSelected = () => {
+    return shape !== null;
+  };
 
+  const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+    if (!isShapeSelected || !isDrawingLayerActive()) return;
     if (e.target.getStage() == null) return;
 
     isDrawing.current = true;
@@ -66,18 +69,13 @@ function DrawingLayer(props: DrawingLayerProps) {
   const handleDrawLine = (point: Vector2d) => {
     const lastLine = lines[lines.length - 1] || { points: [] };
 
-    // Calculate distance between last point and current point
     const distance = Math.sqrt(
       Math.pow(point.x - lastLine.points[lastLine.points.length - 2], 2) +
         Math.pow(point.y - lastLine.points[lastLine.points.length - 1], 2),
     );
 
-    // Only store the point if the distance exceeds a certain threshold
     if (distance > 10) {
-      // add point
       lastLine.points = lastLine.points.concat([point.x, point.y]);
-
-      // replace last
       lines.splice(lines.length - 1, 1, lastLine);
       setLines([...lines]);
     }
@@ -93,6 +91,17 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
   };
 
+  const handleDrawSquare = (point: Vector2d) => {
+    if (!previewRectangle) return;
+
+    setPreviewRectangle({
+      x1: previewRectangle?.x1,
+      y1: previewRectangle?.y1,
+      x2: point.x,
+      y2: previewRectangle?.y1 + (point.x - previewRectangle?.x1),
+    });
+  };
+
   const handleDrawEllipse = (point: Vector2d) => {
     if (!previewEllipse) return;
     setPreviewEllipse({
@@ -100,6 +109,18 @@ function DrawingLayer(props: DrawingLayerProps) {
       y: previewEllipse.y,
       radiusX: Math.abs(point.x - previewEllipse.x),
       radiusY: Math.abs(point.y - previewEllipse.y),
+    });
+  };
+
+  const handleDrawCircle = (point: Vector2d) => {
+    if (!previewEllipse) return;
+
+    const radius = Math.abs(point.x - previewEllipse.x);
+    setPreviewEllipse({
+      x: previewEllipse.x,
+      y: previewEllipse.y,
+      radiusX: radius,
+      radiusY: radius,
     });
   };
 
@@ -117,9 +138,17 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (shape === 'free') {
       handleDrawLine(point);
     } else if (shape == 'rectangle') {
-      handleDrawRectangle(point);
+      if (e.evt.shiftKey) {
+        handleDrawSquare(point);
+      } else {
+        handleDrawRectangle(point);
+      }
     } else if (shape === 'ellipse') {
-      handleDrawEllipse(point);
+      if (e.evt.shiftKey) {
+        handleDrawCircle(point);
+      } else {
+        handleDrawEllipse(point);
+      }
     }
   };
 
@@ -169,7 +198,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             points={line.points}
             stroke="#df4b26"
             strokeWidth={5}
-            tension={0.5}
+            tension={0.2}
             lineCap="round"
             lineJoin="round"
             globalCompositeOperation="source-over"
@@ -178,7 +207,8 @@ function DrawingLayer(props: DrawingLayerProps) {
 
         {rectangles.map((rectangle, i) => (
           <Rect
-            key={'rect-' + i}
+            cornerRadius={5}
+            key={`rect-${i}`}
             x={rectangle.x1}
             y={rectangle.y1}
             width={rectangle.x2 - rectangle.x1}
@@ -191,6 +221,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
         {previewRectangle && (
           <Rect
+            cornerRadius={5}
             key={'preview-rect'}
             x={Math.min(previewRectangle.x1, previewRectangle.x2)}
             y={Math.min(previewRectangle.y1, previewRectangle.y2)}
@@ -209,8 +240,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             radiusX={ellipse.radiusX}
             radiusY={ellipse.radiusY}
             stroke="blue"
-            strokeWidth={5}
             fill="blue"
+            strokeWidth={5}
           />
         ))}
 

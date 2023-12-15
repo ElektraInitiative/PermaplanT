@@ -185,6 +185,7 @@ export interface UntrackedMapSlice {
   drawingLayerActivateFreeDrawing: () => void;
   drawingLayerActivateDrawRectangle: () => void;
   drawingLayerActivateDrawEllipse: () => void;
+  drawingLayerClearSelectedShape: () => void;
 
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
@@ -269,7 +270,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
       [LayerType.Drawing]: {
         visible: true,
         opacity: 1,
-        shape: 'free',
+        shape: null,
       } as UntrackedDrawingLayerState,
       [LayerType.Base]: {
         visible: true,
@@ -382,7 +383,7 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
 export type UntrackedDrawingLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantForPlanting | null;
   selectedPlantings: PlantingDto[] | null;
-  shape: 'free' | 'rectangle' | 'ellipse';
+  shape: 'free' | 'rectangle' | 'ellipse' | null;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {

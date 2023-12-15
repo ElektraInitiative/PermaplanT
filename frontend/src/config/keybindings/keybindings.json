@@ -8,6 +8,9 @@
     "exitPlantingMode": ["Escape"],
     "deleteSelectedPlantings": ["Delete"]
   },
+  "drawing_layer": {
+    "exitDrawingMode": ["Escape"]
+  },
   "_just_for_documentation_":{
     "clearSearchInput": ["Escape"]
   }

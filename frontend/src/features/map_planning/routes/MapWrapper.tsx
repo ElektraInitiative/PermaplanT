@@ -97,13 +97,6 @@ function useBaseLayer({ mapId, layerId }: UseLayerParams) {
 }
 
 /**
- * Hook that initializes the drawing layer by fetching it and adding it to the store.
- */
-function useDrawingLayer() {
-  return null;
-}
-
-/**
  * Hook that initializes the map by fetching all map data, layers and layer elements.
  */
 function useInitializeMap() {
@@ -130,12 +123,10 @@ function useInitializeMap() {
     for (const layer of defaultLayers) {
       useMapStore.getState().initLayerId(layer.type_, layer.id);
     }
-    useMapStore.getState().initLayerId(LayerType.Drawing, 689);
   }, [layers]);
 
   const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
   const baseLayer = getDefaultLayer(layers ?? [], LayerType.Base);
-  const drawingLayer = getDefaultLayer(layers ?? [], LayerType.Drawing);
 
   usePlantLayer({
     mapId,
@@ -148,12 +139,6 @@ function useInitializeMap() {
     mapId,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
     layerId: baseLayer?.id!,
-  });
-
-  useDrawingLayer({
-    mapId,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-    layerId: drawingLayer?.id!,
   });
 
   // select plant layer per default
@@ -184,16 +169,7 @@ function useInitializeMap() {
     return null;
   }
 
-  return [
-    ...layers,
-    {
-      id: 689,
-      map_id: 357,
-      type_: LayerType.Drawing,
-      name: 'Drawing',
-      is_alternative: false,
-    },
-  ];
+  return layers;
 }
 
 /**

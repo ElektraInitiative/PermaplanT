@@ -4,6 +4,7 @@ import React from 'react';
 
 export const KEYBINDINGS_SCOPE_GLOBAL = 'global';
 export const KEYBINDINGS_SCOPE_PLANTS_LAYER = 'plants_layer';
+export const KEYBINDINGS_SCOPE_DRAWING_LAYER = 'drawing_layer';
 export const KEYBINDINGS_SCOPE_BASE_LAYER = 'base_layer';
 
 type KeyBinding = Record<string, string[]>;

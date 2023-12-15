@@ -294,17 +294,18 @@ export const EditorMap = ({ layers }: MapProps) => {
               visible={untrackedState.layers.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
             />
-            <PlantsLayer
-              visible={untrackedState.layers.plants.visible}
-              opacity={untrackedState.layers.plants.opacity}
-              listening={getSelectedLayerType() === LayerType.Plants}
-            ></PlantsLayer>
             <DrawingLayer
               stageListenerRegister={baseStageListenerRegister}
               visible={untrackedState.layers.drawing.visible}
               opacity={untrackedState.layers.drawing.opacity}
               listening={getSelectedLayerType() === LayerType.Drawing}
             ></DrawingLayer>
+            <PlantsLayer
+              visible={untrackedState.layers.plants.visible}
+              opacity={untrackedState.layers.plants.opacity}
+              listening={getSelectedLayerType() === LayerType.Plants}
+            ></PlantsLayer>
+
             <GridLayer
               visible={untrackedState.layers.grid.visible}
               opacity={untrackedState.layers.grid.opacity}

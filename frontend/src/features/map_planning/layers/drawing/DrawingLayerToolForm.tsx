@@ -1,5 +1,10 @@
 import IconButton from '@/components/Button/IconButton';
+import {
+  KEYBINDINGS_SCOPE_DRAWING_LAYER,
+  createKeyBindingsAccordingToConfig,
+} from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import { ReactComponent as CircleIcon } from '@/svg/icons/circle.svg';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
 import { ReactComponent as RectangleIcon } from '@/svg/icons/rectangle.svg';
@@ -7,7 +12,7 @@ import { ReactComponent as LineIcon } from '@/svg/icons/wavy-line.svg';
 import { useTranslation } from 'react-i18next';
 
 export function DrawingLayerToolForm() {
-  const { t } = useTranslation(['common', 'baseLayerForm']);
+  const { t } = useTranslation(['common', 'drawingLayerForm']);
 
   const drawingLayerActivateFreeDrawing = useMapStore(
     (state) => state.drawingLayerActivateFreeDrawing,
@@ -23,15 +28,18 @@ export function DrawingLayerToolForm() {
 
   return (
     <div>
-      <h2>Form auswählen</h2>
+      <h2>{t('drawingLayerForm:tools_title')}</h2>
       <div className="flex flex-row gap-1">
         <IconButton
+          className={'active'}
           isToolboxIcon={true}
           onClick={() => {
             drawingLayerActivateFreeDrawing();
-            setStatusPanelContent(<DrawingLayerStatusPanelContent text="Free Drawing" />);
+            setStatusPanelContent(
+              <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_free_line_hint')} />,
+            );
           }}
-          title={t('baseLayerForm:polygon_move_points_tooltip')}
+          title={t('drawingLayerForm:draw_free_line_tooltip')}
         >
           <LineIcon></LineIcon>
         </IconButton>
@@ -39,9 +47,11 @@ export function DrawingLayerToolForm() {
           isToolboxIcon={true}
           onClick={() => {
             drawingLayerActivateRectangleDrawing();
-            setStatusPanelContent(<DrawingLayerStatusPanelContent text="Draw Rectangle" />);
+            setStatusPanelContent(
+              <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_ellipse_hint')} />,
+            );
           }}
-          title={t('baseLayerForm:polygon_add_points_tooltip')}
+          title={t('drawingLayerForm:draw_rectangle_tooltip')}
         >
           <RectangleIcon></RectangleIcon>
         </IconButton>
@@ -50,9 +60,11 @@ export function DrawingLayerToolForm() {
           isToolboxIcon={true}
           onClick={() => {
             drawingLayerActivateDrawEllipse();
-            setStatusPanelContent(<DrawingLayerStatusPanelContent text="Draw Ellipse" />);
+            setStatusPanelContent(
+              <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_rectangle_hint')} />,
+            );
           }}
-          title={t('baseLayerForm:polygon_add_points_tooltip')}
+          title={t('drawingLayerForm:draw_ellipse_tooltip')}
         >
           <CircleIcon></CircleIcon>
         </IconButton>
@@ -63,6 +75,22 @@ export function DrawingLayerToolForm() {
 
 function DrawingLayerStatusPanelContent(props: { text: string }) {
   const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
+  const drawingLayerClearSelectedShape = useMapStore(
+    (state) => state.drawingLayerClearSelectedShape,
+  );
+
+  const exitDrawingMode = () => {
+    clearStatusPanelContent();
+    drawingLayerClearSelectedShape();
+  };
+
+  const keyHandlerActions: Record<string, () => void> = {
+    exitDrawingMode: exitDrawingMode,
+  };
+
+  useKeyHandlers(
+    createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_DRAWING_LAYER, keyHandlerActions),
+  );
 
   return (
     <>
@@ -70,9 +98,7 @@ function DrawingLayerStatusPanelContent(props: { text: string }) {
       <div className="flex items-center justify-center">
         <IconButton
           className="m-2 h-8 w-8 border border-neutral-500 p-1"
-          onClick={() => {
-            clearStatusPanelContent();
-          }}
+          onClick={exitDrawingMode}
           data-tourid="placement_cancel"
         >
           <CloseIcon></CloseIcon>
