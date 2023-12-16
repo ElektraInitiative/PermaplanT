@@ -53,8 +53,8 @@ We will use [TypeDoc](https://typedoc.org/) with the markdown plugin to extract 
 
 ## Decision
 
-We will use [Storybook](https://storybook.js.org/) to enable a project wide component overview and style-guide.
-It has support for `MDX`, a format that enables embeddable components in markdown.
+We will use [Storybook](https://storybook.js.org/) to enable a project-wide component overview and style guide.
+It has support for `MDX`, a format that enables embeddable components in Markdown.
 It has support for automated testing via `Vitest` and `Playwright`.
 
 ## Rationale
