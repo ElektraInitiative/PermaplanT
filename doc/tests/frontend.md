@@ -48,4 +48,4 @@ The remaining tests are used to test our helper functions and in general code th
 
 Mocking API requests should be done with [MSW](https://mswjs.io/docs/).
 There is an example of this in `src/__test_utils__/msw_handlers/plants.ts`.
-The gist is, MSW intercepts all requests that are defined in as a handler and returns the handler's response instead of the backend's.
+The gist is, MSW intercepts all requests, for which a handler is defined returns the handler's response instead of the backend's.

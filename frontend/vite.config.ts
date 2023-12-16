@@ -35,7 +35,9 @@ export default defineConfig(() => {
       globals: true,
       environment: 'jsdom',
       setupFiles: ['./src/vitest-setup.ts'],
-      // For this config, check https://github.com/vitest-dev/vitest/issues/740
+      // To understand this config, check https://github.com/vitest-dev/vitest/issues/740
+      // Because of this issue, we need to use a forked pool
+      pool: 'forks',
       environmentOptions: {
         jsdom: {
           resources: 'usable',
@@ -49,7 +51,6 @@ export default defineConfig(() => {
           },
         },
       },
-      pool: 'forks',
       onConsoleLog: (logMessage, type) => {
         if (type === 'stdout') {
           for (const ignoredMessage of ignoredLogs) {
