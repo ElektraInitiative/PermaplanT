@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- nodejs 19.4.0 ([Installation guide](../doc/development_setup.md))
-- npm v9.2.0
+- nodejs 20 ([Installation guide](../doc/development_setup.md))
+- npm v10
 
 ## Installation and Usage
 
