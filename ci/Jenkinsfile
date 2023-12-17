@@ -151,6 +151,9 @@ def testAndBuildFrontend() {
             nodeImage.inside {
                 unstash 'definitions.ts'
                 stage('test') {
+                    environment {
+                        VITE_BASE_API_URL = '/'
+                    }
                     // groovylint-disable-next-line
                     dir('frontend') {
                         def checksumBefore = checksum('package-lock.json')
@@ -159,7 +162,6 @@ def testAndBuildFrontend() {
                         echo 'Checking if package-lock.json is modified by npm install'
                         // groovylint-disable-next-line
                         if (checksumBefore != checksumAfter) { throw new PackageLockJsonModifiedException() }
-                        sh 'export VITE_BASE_API_URL="/"'
                         sh 'npm ci'
                         sh 'npm run format:check'
                         sh 'npm run lint'
