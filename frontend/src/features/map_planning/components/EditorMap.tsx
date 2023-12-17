@@ -70,6 +70,9 @@ export const EditorMap = ({ layers }: MapProps) => {
   const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
+  const isShapeSelectionEnabled = useMapStore(
+    (state) => state.untrackedState.shapeSelectionEnabled,
+  );
 
   // Allow layers to listen for all events on the base stage.
   //
@@ -287,6 +290,7 @@ export const EditorMap = ({ layers }: MapProps) => {
               stageMouseWheelListeners,
               stageClickListeners,
             }}
+            selectable={isShapeSelectionEnabled}
           >
             <BaseLayer
               stageListenerRegister={baseStageListenerRegister}

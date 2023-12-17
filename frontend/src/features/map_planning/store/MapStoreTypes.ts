@@ -173,6 +173,7 @@ export interface UntrackedMapSlice {
   lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
   selectPlantings: (plantings: PlantingDto[] | null) => void;
+
   toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
@@ -186,6 +187,9 @@ export interface UntrackedMapSlice {
   drawingLayerActivateDrawRectangle: () => void;
   drawingLayerActivateDrawEllipse: () => void;
   drawingLayerClearSelectedShape: () => void;
+
+  disableShapeSelection: () => void;
+  enableShapeSelection: () => void;
 
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
@@ -255,6 +259,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   tooltipContent: '',
   tooltipPosition: { x: 0, y: 0 },
   bottomStatusPanelContent: null,
+  shapeSelectionEnabled: true,
   layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
@@ -429,6 +434,7 @@ export type UntrackedMapState = {
     from: string;
     to: string;
   };
+  shapeSelectionEnabled: boolean;
   /** Storing the current content prevents constant rerenders of the tooltip component.  */
   tooltipContent: string;
   tooltipPosition: { x: number; y: number };

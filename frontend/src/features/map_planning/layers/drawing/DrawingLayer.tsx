@@ -183,6 +183,26 @@ function DrawingLayer(props: DrawingLayerProps) {
     }
   };
 
+  const handleShapeClicked = (e: KonvaEventObject<MouseEvent>) => {
+    const transformer = useMapStore.getState().transformer;
+    transformer.current?.enabledAnchors([
+      'top-left',
+      'top-center',
+      'top-right',
+      'middle-left',
+      'middle-right',
+      'bottom-left',
+      'bottom-center',
+      'bottom-right',
+    ]);
+
+    useMapStore.getState().setSingleNodeInTransformer(e.target);
+  };
+
+  const moveToTop = (e: KonvaEventObject<MouseEvent>) => {
+    e.target.moveToTop();
+  };
+
   useEffect(() => {
     stageListenerRegister.registerStageMouseDownListener('DrawingLayer', handleMouseDown);
     stageListenerRegister.registerStageMouseUpListener('DrawingLayer', handleMouseUp);
@@ -194,6 +214,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       <Layer {...layerProps} name={`${LayerType.Drawing}`}>
         {lines.map((line, i) => (
           <Line
+            listening={true}
             key={i}
             points={line.points}
             stroke="#df4b26"
@@ -202,11 +223,15 @@ function DrawingLayer(props: DrawingLayerProps) {
             lineCap="round"
             lineJoin="round"
             globalCompositeOperation="source-over"
+            onClick={handleShapeClicked}
+            draggable
+            onDragStart={moveToTop}
           />
         ))}
 
         {rectangles.map((rectangle, i) => (
           <Rect
+            listening={true}
             cornerRadius={5}
             key={`rect-${i}`}
             x={rectangle.x1}
@@ -216,6 +241,9 @@ function DrawingLayer(props: DrawingLayerProps) {
             stroke="#df4b26"
             fill="#df4b26"
             strokeWidth={5}
+            onClick={handleShapeClicked}
+            draggable
+            onDragStart={moveToTop}
           ></Rect>
         ))}
 
@@ -234,6 +262,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
         {ellipses.map((ellipse, i) => (
           <Ellipse
+            listening={true}
             key={`ellipse-${i}`}
             x={ellipse.x}
             y={ellipse.y}
@@ -242,6 +271,9 @@ function DrawingLayer(props: DrawingLayerProps) {
             stroke="blue"
             fill="blue"
             strokeWidth={5}
+            onClick={handleShapeClicked}
+            draggable
+            onDragStart={moveToTop}
           />
         ))}
 

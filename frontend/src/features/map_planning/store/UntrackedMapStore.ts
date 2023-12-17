@@ -377,7 +377,28 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
 
+  disableShapeSelection() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        shapeSelectionEnabled: false,
+      },
+    }));
+  },
+
+  enableShapeSelection() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        shapeSelectionEnabled: true,
+      },
+    }));
+  },
+
   drawingLayerActivateDrawRectangle() {
+    get().disableShapeSelection();
     set((state) => ({
       ...state,
       untrackedState: {
@@ -393,6 +414,7 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   drawingLayerActivateFreeDrawing() {
+    get().disableShapeSelection();
     set((state) => ({
       ...state,
       untrackedState: {
@@ -408,6 +430,7 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   drawingLayerActivateDrawEllipse() {
+    get().disableShapeSelection();
     set((state) => ({
       ...state,
       untrackedState: {
@@ -423,6 +446,7 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   drawingLayerClearSelectedShape() {
+    get().enableShapeSelection();
     set((state) => ({
       ...state,
       untrackedState: {
