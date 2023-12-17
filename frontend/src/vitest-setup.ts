@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 // we need to mock canvas because
 // node canvas does not work correctly with jsdom
 import 'vitest-canvas-mock';
