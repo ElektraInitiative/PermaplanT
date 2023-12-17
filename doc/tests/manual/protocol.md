@@ -31,7 +31,7 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Test Result:
 - Notes:
 
-## Heatmap (NOT IMPLEMENTED)
+## Heatmap
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Given I am on a map page with the plant layer active
@@ -154,17 +154,3 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Actual Result:
 - Test Result:
 - Notes: The additional name must also be visible when a different account views the same map.
-
-## Heatmap
-
-- Description: Test whether the heatmap endpoints generates the image correctly.
-- Given i am on the map editor page.
-- Given data is inserted via the scraper (plants and plant relations)
-- When I create a map
-- When I plant some plants with relations.
-- When I add other constraints such as shade or soil ph.
-- When I generate the heatmap.
-- Then the heatmap considers map polygon and environmental constraints.
-- Actual Result:
-- Test Result:
-- Notes:

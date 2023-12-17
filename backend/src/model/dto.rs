@@ -33,7 +33,7 @@ pub mod plants_impl;
 pub mod seed_impl;
 pub mod shadings;
 pub mod shadings_impl;
-mod update_map_geometry_impl;
+pub mod update_map_geometry_impl;
 pub mod update_map_impl;
 pub mod users_impl;
 
