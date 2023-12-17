@@ -151,9 +151,6 @@ def testAndBuildFrontend() {
             nodeImage.inside {
                 unstash 'definitions.ts'
                 stage('test') {
-                    environment {
-                        VITE_BASE_API_URL = '/'
-                    }
                     // groovylint-disable-next-line
                     dir('frontend') {
                         def checksumBefore = checksum('package-lock.json')
