@@ -9,7 +9,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 ## 0.3.7 - UNRELEASED
 
 - _()_
-- _()_
+- Implement a heatmap that shows which locations are most suited for a specific plant _(Gabriel, Paul, Moritz)_
 - Refactor react query error handling _(Daniel Steinkogler)_
 - _()_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
