@@ -1,6 +1,6 @@
 import useMapStore from '../../store/MapStore';
 import { LayerListItem } from './LayerListItem';
-import { LayerDto } from '@/api_types/definitions';
+import { LayerDto, LayerType } from '@/api_types/definitions';
 
 /* TODO: these imports should be added again when the corresponding functionality of the buttons is implemented */
 // import IconButton from '@/components/Button/IconButton';
@@ -24,6 +24,7 @@ export const LayerList = ({ layers }: LayerListProps) => {
 
   const layerSettingsList = layers
     ?.filter((l) => !l.is_alternative)
+    .filter((l) => l.type_ !== LayerType.Shade) // Remove this line after the shade layer has been implemented on the frontend.
     .map((l) => {
       return (
         <LayerListItem
