@@ -18,7 +18,7 @@ export const HeatMapLayer = (props: HeatMapLayerProps) => {
   const plantLayerId = useMapStore((state) => state.trackedState.layers.plants.id);
   const shadeLayerId = useMapStore((state) => state.trackedState.layers.shade.id);
   const selectedPlantId = useMapStore(
-    (state) => state.untrackedState.layers.plants.selectedPlantForPlanting?.id,
+    (state) => state.untrackedState.layers.plants.selectedPlantForPlanting?.plant.id,
   );
 
   const {
