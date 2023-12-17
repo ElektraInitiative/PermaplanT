@@ -1,7 +1,7 @@
-import getTimeLineEvents from '../../hooks/useGetTimelineEvents';
+import useGetTimelineEvents from '../../hooks/useGetTimelineEvents';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const TEST_IDS = Object.freeze({
@@ -58,7 +58,7 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     dailyTimeLineEvents: daySilderItems,
     monthlyTimeLineEvents: monthSliderItems,
     yearlyTimeLineEvents,
-  } = useMemo(() => getTimeLineEvents(), []);
+  } = useGetTimelineEvents();
 
   const { i18n } = useTranslation();
 
@@ -103,9 +103,15 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
 
   const [focusedSlider, setFocusedSlider] = useState<'year' | 'month' | 'day'>();
 
+  const updateSelectedDate = (selectedDayItem: DayItem) => {
+    onLoading();
+    setSelectedDayItem(selectedDayItem);
+  };
+
   const handleDayItemChange = (itemKey: number) => {
     const selectedDayItem = daySilderItems[itemKey];
-    setSelectedDayItem(selectedDayItem);
+
+    updateSelectedDate(selectedDayItem);
 
     if (selectedDayItem.month !== selectedMonthItem.month) {
       const newMonthItem = monthSliderItems.find(
@@ -179,7 +185,7 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
       sameDayInNewMonth || getLastDayItemOfMonth(newMonthItem.month, newMonthItem.year);
     if (newDay) {
       setVisibleDays(calculateVisibleDays(newDay));
-      setSelectedDayItem(newDay);
+      updateSelectedDate(newDay);
     }
   };
 
@@ -253,7 +259,6 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   useEffect(() => {
-    onLoading();
     submitTimeout.current = setTimeout(() => {
       const newDay = selectedDayItem;
       const formattedMonth = String(newDay.month).padStart(2, '0');
@@ -262,8 +267,7 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
       onSelectDate(formattedDate);
     }, 1000);
     return () => clearTimeout(submitTimeout.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDayItem]);
+  }, [selectedDayItem, onSelectDate]);
 
   return (
     <div
