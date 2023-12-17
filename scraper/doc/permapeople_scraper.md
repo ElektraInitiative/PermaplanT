@@ -10,10 +10,10 @@ The official documentation for the Permapeople API can be found [here](https://p
 npm install && mkdir -p data
 ```
 
-2. Create .env file from .env.example and fill in the required values:
+2. Create .env.local file from .env.example and fill in the required values:
 
 ```shell
-cp .env.example .env
+cp .env.example .env.local
 ```
 
 - `PERMAPEOPLE_KEY_ID` (called `API_KEY_ID` by permapeople) and

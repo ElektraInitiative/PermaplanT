@@ -11,10 +11,10 @@ Therefore, we need to scrape the data from the webpage, which can be found [here
 npm install && mkdir -p data
 ```
 
-2. Create .env file from .env.example and fill in the required values:
+2. Create .env.local file from .env.example and fill in the required values:
 
 ```shell
-cp .env.example .env
+cp .env.example .env.local
 ```
 
 3. Fetch the English and German data
