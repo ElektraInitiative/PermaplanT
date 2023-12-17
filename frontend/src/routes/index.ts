@@ -1,13 +1,15 @@
 import { Pages, Routes } from './types';
+import { Debug } from '@/features/debugging/routes/Debug';
 import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { MapWrapper } from '@/features/map_planning';
 import MapCreateForm from '@/features/maps/routes/MapCreateForm';
 import MapEditForm from '@/features/maps/routes/MapEditForm';
 import MapOverview from '@/features/maps/routes/MapOverview';
-import { WebdavTest } from '@/features/nextcloud_integration/components/webdav-test';
+import { Chat } from '@/features/nextcloud_integration/components/chat';
 import { Overview } from '@/features/overview/routes/Overview';
-import { CreateSeed, SeedDetails, ViewSeeds } from '@/features/seeds';
+import { CreateSeed, ViewSeeds } from '@/features/seeds';
+import { EditSeed } from '@/features/seeds/routes/EditSeed';
 
 const routes: Routes = {
   [Pages.ImprintPage]: {
@@ -18,7 +20,7 @@ const routes: Routes = {
   },
   [Pages.CreateSeed]: {
     component: CreateSeed,
-    path: '/seeds/new',
+    path: '/seeds/create',
     title: 'New Seed Entry',
     restricted: true,
   },
@@ -28,10 +30,10 @@ const routes: Routes = {
     title: 'My Seeds',
     restricted: true,
   },
-  [Pages.SeedDetails]: {
-    component: SeedDetails,
-    path: '/seeds/:id',
-    title: 'Seed',
+  [Pages.EditSeed]: {
+    component: EditSeed,
+    path: '/seeds/:id/edit',
+    title: 'Edit Seed',
     restricted: true,
   },
   [Pages.LandingPage]: {
@@ -64,17 +66,22 @@ const routes: Routes = {
     title: 'Edit Map',
     restricted: true,
   },
-  [Pages.Webdav]: {
-    component: WebdavTest,
-    // path needs to change later to something like /user/:id/maps
-    path: '/webdav',
-    title: 'webdav',
+  [Pages.Debug]: {
+    component: Debug,
+    path: '/debug',
+    title: 'debug',
     restricted: false,
   },
   [Pages.Overview]: {
     component: Overview,
     path: '/overview',
     title: 'overview',
+    restricted: false,
+  },
+  [Pages.Chat]: {
+    component: Chat,
+    path: '/chat',
+    title: 'chat',
     restricted: false,
   },
 };

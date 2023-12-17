@@ -1,4 +1,4 @@
-FROM rust:1.67.1-slim
+FROM rust:1.74-slim-bullseye
 
 RUN apt update && apt install -y make libpq-dev libssl-dev pkg-config postgresql-client
 RUN rustup component add clippy rustfmt

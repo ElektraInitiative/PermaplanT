@@ -10,13 +10,15 @@ import { Transformer } from 'konva/lib/shapes/Transformer';
 // Todo: optimization -> could probably use a set here
 let previouslySelectedShapes: Shape<ShapeConfig>[] = [];
 
-/** Select shapes that intersect with the selection rect. */
+export const SELECTION_RECTANGLE_NAME = 'selectionRect';
+
+/** Select shapes that intersect with the selection rectangle. */
 export const selectIntersectingShapes = (
   stageRef: React.RefObject<Stage>,
   trRef: React.RefObject<Transformer>,
 ) => {
   if (stageRef.current === null) return;
-  const box = stageRef.current.findOne('.selectionRect').getClientRect();
+  const box = stageRef.current.findOne(`.${SELECTION_RECTANGLE_NAME}`).getClientRect();
 
   if (stageRef.current.children === null) return;
 
@@ -25,7 +27,12 @@ export const selectIntersectingShapes = (
     //filter out layers which are not selected
     ?.filter((layer) => layer.attrs.listening)
     .flatMap((layer) => layer.children)
-    .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'));
+    .filter((shape) => {
+      // To exclude Konva's transformer, check if node contains children.
+      // 'listening' is explicitly checked for '!== false' because
+      // Konva treats it as true if it's undefined or missing at all.
+      return shape?.attrs.listening !== false && shape?.hasChildren();
+    });
 
   if (!allShapes) return;
 
@@ -59,13 +66,24 @@ export const selectIntersectingShapes = (
   }
 };
 
-/** Deselects the shapes */
-export const deselectShapes = (trRef: React.RefObject<Transformer>) => {
+/** Resets current selection by removing all nodes from the transformer */
+export const resetSelection = (trRef: React.RefObject<Transformer>) => {
   trRef.current?.nodes([]);
 };
 
-/** Starts the selection and positions the selection rect to the current mouse position. */
-export const startSelection = (
+export const resetSelectionRectangleSize = (stageRef: React.RefObject<Stage>) => {
+  const selectionRectangle = stageRef.current?.findOne(`.${SELECTION_RECTANGLE_NAME}`);
+
+  if (selectionRectangle) {
+    selectionRectangle.setAttrs({
+      width: 0,
+      height: 0,
+    });
+  }
+};
+
+/** Sets up the selection rectangle by positioning it at the current mouse position. */
+export const initializeSelectionRectangle = (
   stage: Stage,
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
 ) => {
@@ -95,8 +113,8 @@ export const startSelection = (
   }
 };
 
-/** Update the selection box's size based on mouse position. */
-export const updateSelection = (
+/** Update the selection rectangle's size based on the current mouse position. */
+export const updateSelectionRectangle = (
   stage: Stage,
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
 ) => {
@@ -133,8 +151,8 @@ export const updateSelection = (
   }
 };
 
-/** Ends the selection which means the selection rect turns invisible. */
-export const endSelection = (
+/** Ends the selection by making the selection rectangle invisible. */
+export const hideSelectionRectangle = (
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
   selectionRectAttrs: SelectionRectAttrs,
 ) => {

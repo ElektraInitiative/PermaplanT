@@ -1,109 +1,61 @@
 import useMapStore from '../../store/MapStore';
-import { LayerDto, LayerType } from '@/bindings/definitions';
-import IconButton from '@/components/Button/IconButton';
-import { NamedSlider } from '@/components/Slider/NamedSlider';
-import { ReactComponent as CaretDownIcon } from '@/icons/caret-down.svg';
-import { ReactComponent as CaretRightIcon } from '@/icons/caret-right.svg';
-import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg';
-import { ReactComponent as EyeIcon } from '@/icons/eye.svg';
-import { useState } from 'react';
+import { LayerListItem } from './LayerListItem';
+import { LayerDto } from '@/api_types/definitions';
+
+/* TODO: these imports should be added again when the corresponding functionality of the buttons is implemented */
+// import IconButton from '@/components/Button/IconButton';
+// import { NamedSlider } from '@/components/Slider/NamedSlider';
+// import { ReactComponent as CaretDownIcon } from '@/svg/icons/caret-down.svg';
+// import { ReactComponent as CaretRightIcon } from '@/svg/icons/caret-right.svg';
+// import { ReactComponent as EyeOffIcon } from '@/svg/icons/eye-off.svg';
+// import { ReactComponent as EyeIcon } from '@/svg/icons/eye.svg';
+// import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface LayerListProps {
-  /** layer which is controlled by this list element */
-  layer: LayerDto;
-  /** function that gets triggered when the layer is selected */
-  setSelectedLayer?: (layer: LayerDto) => void;
-  /** function that gets triggered when slider value is changed */
-  setLayerOpacity?: (name: LayerType, value: number) => void;
-  /** function that gets triggered when an alternative is selected */
-  setLayerAlternative?: (name: LayerType, value: string) => void;
-  /** list of names of the possible alternatives for this layer
-   * if alternatives are given they can be selected in a menu
-   **/
-  alternatives?: Array<string>;
-}
+export type LayerListProps = {
+  layers: LayerDto[];
+};
 
-/** Layer setting UI to control visibility, layer selection, opacity and alternatives */
-export const LayerList = ({
-  layer,
-  setSelectedLayer,
-  setLayerOpacity,
-  setLayerAlternative,
-  alternatives,
-}: LayerListProps) => {
-  const layerVisible = useMapStore((map) => map.untrackedState.layers[layer.type_].visible);
-  const selectedLayer = useMapStore((map) => map.untrackedState.selectedLayer);
-  const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
-  const [alternativesVisible, setAlternativesVisible] = useState(false);
-  const { t } = useTranslation(['layerSettings', 'layers']);
+/** Layer controls including visibility, layer selection, opacity and alternatives */
+export const LayerList = ({ layers }: LayerListProps) => {
+  const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
+  const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
+  const { t } = useTranslation(['layers']);
 
-  // If a frontend only layer is active, no other layer should be selected.
-  const selectedLayerId = typeof selectedLayer === 'object' ? selectedLayer.id : null;
-
+  const layerSettingsList = layers
+    ?.filter((l) => !l.is_alternative)
+    .map((l) => {
+      return (
+        <LayerListItem
+          key={'layer_settings_' + l.id}
+          layer={l}
+          setSelectedLayer={updateSelectedLayer}
+          setLayerOpacity={updateLayerOpacity}
+        />
+      );
+    });
   return (
-    <>
-      <div className="flex items-center justify-center">
-        <IconButton
-          title={t('layerSettings:show_hide_layer')}
-          onClick={() => updateLayerVisible(layer.type_, !layerVisible)}
-          data-testid={`${layer.type_}-layer-visibility-icon`}
-        >
-          {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
-        </IconButton>
-      </div>
-      <div className="flex items-center justify-center">
-        <input
-          title={t('layerSettings:select_layer')}
-          className="h-4 w-4"
-          type="radio"
-          value={layer.name}
-          checked={selectedLayerId === layer.id}
-          onChange={() => {
-            if (setSelectedLayer) setSelectedLayer(layer);
-          }}
-          name="layer_enable"
-          data-tourid={`${layer.type_}_select`}
-          data-testid={`${layer.type_}-layer-radio`}
-        ></input>
-      </div>
-      <div className="flex items-center">
-        {alternatives && alternatives.length > 0 && (
-          <IconButton
-            className="flex-shrink"
-            onClick={() => setAlternativesVisible(!alternativesVisible)}
-          >
-            {alternativesVisible ? <CaretDownIcon /> : <CaretRightIcon />}
-          </IconButton>
-        )}
-        <NamedSlider
-          onChange={(percentage) => {
-            if (setLayerOpacity) setLayerOpacity(layer.type_, percentage);
-          }}
-          title={t('layerSettings:sliderTooltip')}
-          value={1}
-        >
-          {t(`layers:${layer.type_}`)}
-        </NamedSlider>
-      </div>
-      {alternativesVisible &&
-        alternatives?.map((a) => (
-          <div className="col-span-3 grid grid-cols-[1.5rem_1.5rem_minmax(0,_1fr)] gap-2" key={a}>
-            <div className="col-span-2"></div>
-            <div className="flex items-center justify-start gap-2">
-              <input
-                type="radio"
-                value={a}
-                name={'alternative_layer_' + name}
-                className="h-4 w-4"
-                onClick={() => {
-                  if (setLayerAlternative) setLayerAlternative(layer.type_, a);
-                }}
-              ></input>
-              <div className="flex flex-col">{a}</div>
-            </div>
-          </div>
-        ))}
-    </>
+    <div className="flex flex-col p-2">
+      <section className="flex justify-between">
+        <h2>{t('layers:header')}</h2>
+        {/* TODO: these buttons should be added again when the corresponding functionality is implemented */}
+        {/* <div className="flex gap-2"> */}
+        {/*   <IconButton disabled={true}> */}
+        {/*     <AddIcon className="h-6 w-6" /> */}
+        {/*   </IconButton> */}
+        {/*   <IconButton disabled={true}> */}
+        {/*     <CopyIcon className="h-6 w-6" /> */}
+        {/*   </IconButton> */}
+        {/*   <IconButton disabled={true}> */}
+        {/*     <TrashIcon className="h-6 w-6" /> */}
+        {/*   </IconButton> */}
+        {/* </div> */}
+      </section>
+      <section className="mt-6">
+        <div className="grid-cols grid grid-cols-[1.5rem_1.5rem_minmax(0,_1fr)] gap-2">
+          {layerSettingsList}
+        </div>
+      </section>
+    </div>
   );
 };

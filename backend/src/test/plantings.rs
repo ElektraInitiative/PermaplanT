@@ -132,6 +132,7 @@ async fn test_create_fails_with_invalid_layer() {
         scale_x: 0.0,
         scale_y: 0.0,
         add_date: None,
+        seed_id: None,
     };
 
     let resp = test::TestRequest::post()
@@ -179,6 +180,7 @@ async fn test_can_create_plantings() {
         scale_x: 0.0,
         scale_y: 0.0,
         add_date: None,
+        seed_id: None,
     };
 
     let resp = test::TestRequest::post()

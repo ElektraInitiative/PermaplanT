@@ -1,11 +1,12 @@
+import { ReactElement } from 'react';
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
 interface SimpleFormInputProps<T extends FieldValues>
   extends React.InputHTMLAttributes<HTMLInputElement> {
   /** The elements unique id. */
   id: Path<T>;
-  /** Text that should be displayed in the accompanying label component. */
-  labelText: string;
+  /** Content of the accompanying label component. */
+  labelContent: ReactElement | string;
   /** UseFormRegister hook of the surrounding form. */
   register?: UseFormRegister<T>;
   /** Will return the input value as a number if this param is set to true. */
@@ -27,7 +28,7 @@ interface SimpleFormInputProps<T extends FieldValues>
  */
 export default function SimpleFormInput<T extends FieldValues>({
   id,
-  labelText = '',
+  labelContent = '',
   register,
   valueAsNumber = false,
   errorTitle,
@@ -36,9 +37,9 @@ export default function SimpleFormInput<T extends FieldValues>({
 }: SimpleFormInputProps<T>) {
   return (
     <div className="dark:text-white">
-      {labelText && (
+      {labelContent && (
         <label htmlFor={id} className="mb-2 block text-sm font-medium">
-          {labelText}
+          {labelContent}
           {props.required ? <span className="text-red-800"> *</span> : <></>}
         </label>
       )}
@@ -49,7 +50,7 @@ export default function SimpleFormInput<T extends FieldValues>({
         {...register?.(id, {
           valueAsNumber: props.type === 'number' || valueAsNumber,
         })}
-        className={`input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 aria-[invalid=true]:dark:border-red-400 ${
+        className={`input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 ${
           className ?? ''
         }`}
       />

@@ -7,7 +7,6 @@ pub mod guided_tours;
 pub mod layers;
 pub mod map;
 pub mod plant_layer;
-pub mod planting_suggestions;
 pub mod plantings;
 pub mod plants;
 pub mod seed;

@@ -1,9 +1,9 @@
-import { PlantingDto } from '@/bindings/definitions';
-import { ExtendedPlantsSummary } from '@/features/map_planning/layers/plant/components/ExtendedPlantDisplay';
+import { PlantingDto } from '@/api_types/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
 import { MapLabel } from '@/features/map_planning/utils/MapLabel';
+import { commonName } from '@/utils/plant-naming';
 import Konva from 'konva';
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Label } from 'react-konva';
 
 export interface PlantLabelProps {
@@ -13,24 +13,18 @@ export interface PlantLabelProps {
 
 export const PlantLabel = ({ planting }: PlantLabelProps) => {
   const labelRef = useRef<Konva.Label>(null);
-  const [labelWidth, setLabelWidth] = useState<number>(0);
-
-  useEffect(() => {
-    if (labelRef.current === null) return;
-
-    setLabelWidth(labelRef.current.width());
-  }, [labelRef]);
-
+  const [labelWidth, setLabelWidth] = useState(0);
   const { plant } = useFindPlantById(planting.plantId);
+
+  useLayoutEffect(() => {
+    if (labelRef.current !== null) {
+      setLabelWidth(labelRef.current.width());
+    }
+  }, [plant]);
+
   if (plant === undefined) {
     return <Label></Label>;
   }
-
-  const plantsSummary = new ExtendedPlantsSummary(plant);
-  const plantDisplayName =
-    plantsSummary.displayName.common_name !== ''
-      ? plantsSummary.displayName.common_name
-      : plantsSummary.displayName.unique_name;
 
   const labelOffsetX = labelWidth / 2;
   const labelOffsetY = (planting.height / 2) * planting.scaleY * 1.1;
@@ -41,7 +35,7 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
       ref={labelRef}
       x={planting.x - labelOffsetX}
       y={planting.y + labelOffsetY}
-      content={plantDisplayName}
+      content={commonName(plant)}
     />
   );
 };

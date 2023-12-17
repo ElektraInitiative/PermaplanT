@@ -3,7 +3,5 @@
   "successful_redo": "'{{action}}' erfolgreich wiederholt",
   "OBJECT_ADD": "{{name}} hinzufügen",
   "OBJECT_UPDATE_POSITION": "{{name}} bewegen",
-  "OBJECT_UPDATE_TRANSFORM": "{{name}} transformieren",
-  "redo_tooltip": "Stelle die letzte Aktion wiederher.",
-  "undo_tooltip": "Mach die letzte Aktion rückgängig."
+  "OBJECT_UPDATE_TRANSFORM": "{{name}} transformieren"
 }

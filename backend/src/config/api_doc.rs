@@ -10,15 +10,14 @@ use utoipa_swagger_ui::SwaggerUi;
 use super::auth::Config;
 use crate::{
     controller::{
-        base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer,
-        planting_suggestions, plantings, plants, seed, shadings, users,
+        base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer, plantings,
+        plants, seed, shadings, users,
     },
     model::{
         dto::{
             plantings::{
-                DeletePlantingDto, MovePlantingDto, NewPlantingDto, PlantingDto,
-                TransformPlantingDto, UpdateAddDatePlantingDto, UpdatePlantingDto,
-                UpdateRemoveDatePlantingDto,
+                MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
+                UpdatePlantingDto,
             },
             shadings::{
                 DeleteShadingDto, NewShadingDto, ShadingDto, UpdateAddDateShadingDto,
@@ -174,11 +173,8 @@ struct BaseLayerImagesApiDoc;
             PlantingDto,
             NewPlantingDto,
             UpdatePlantingDto,
-            DeletePlantingDto,
             TransformPlantingDto,
-            MovePlantingDto,
-            UpdateAddDatePlantingDto,
-            UpdateRemoveDatePlantingDto
+            MovePlantingDto
         )
     ),
     modifiers(&SecurityAddon)
@@ -210,22 +206,6 @@ struct PlantingsApiDoc;
     modifiers(&SecurityAddon)
 )]
 struct ShadingsApiDoc;
-
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all suggestions endpoints.
-#[derive(OpenApi)]
-#[openapi(
-    paths(
-        planting_suggestions::find
-    ),
-    components(
-        schemas(
-            PagePlantsSummaryDto,
-        )
-    ),
-    tags((name = "planting_suggestions")),
-    modifiers(&SecurityAddon)
-)]
-struct PlantingSuggestionsApiDoc;
 
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all user data endpoints.
 #[derive(OpenApi)]
@@ -280,7 +260,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = ConfigApiDoc::openapi();
     openapi.merge(SeedApiDoc::openapi());
     openapi.merge(PlantsApiDoc::openapi());
-    openapi.merge(PlantingSuggestionsApiDoc::openapi());
     openapi.merge(MapApiDoc::openapi());
     openapi.merge(LayerApiDoc::openapi());
     openapi.merge(PlantLayerApiDoc::openapi());

@@ -1,6 +1,6 @@
---- src/schema.rs	2023-07-22 11:22:05.218010765 +0200
-+++ src/schema_tmp.rs	2023-07-22 11:25:09.654549966 +0200
-@@ -11,20 +11,12 @@
+--- src/schema.rs	2023-12-16 21:15:32.447836438 +0100
++++ src/schema_that_works.rs	2023-12-16 21:13:48.667866145 +0100
+@@ -15,20 +15,12 @@
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "fertility"))]
@@ -21,7 +21,7 @@
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "herbaceous_or_woody"))]
      pub struct HerbaceousOrWoody;
-@@ -113,16 +105,15 @@
+@@ -165,16 +157,15 @@
          is_alternative -> Bool,
      }
  }
@@ -39,15 +39,14 @@
          name -> Text,
          creation_date -> Date,
          deletion_date -> Nullable<Date>,
-@@ -256,16 +247,16 @@
-         plant_id -> Nullable<Int4>,
-         owner_id -> Uuid,
+@@ -311,15 +302,15 @@
+         archived_at -> Nullable<Timestamp>,
      }
  }
 
  diesel::table! {
-+    use postgis_diesel::sql_types::Geometry;
      use postgis_diesel::sql_types::Geography;
++    use postgis_diesel::sql_types::Geometry;
      use diesel::sql_types::*;
      use super::sql_types::Shade;
 -    use super::sql_types::Geometry;

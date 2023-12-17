@@ -2,14 +2,18 @@
 
 use chrono::NaiveDate;
 use diesel::pg::Pg;
-use diesel::{debug_query, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult};
+use diesel::{
+    debug_query, BoolExpressionMethods, ExpressionMethods, NullableExpressionMethods, QueryDsl,
+    QueryResult,
+};
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
 use uuid::Uuid;
 
 use crate::model::dto::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
 use crate::model::entity::plantings::{Planting, UpdatePlanting};
-use crate::schema::plantings::{self, all_columns, layer_id, plant_id};
+use crate::schema::plantings::{self, layer_id, plant_id};
+use crate::schema::seeds;
 
 /// Arguments for the database layer find plantings function.
 pub struct FindPlantingsParameters {
@@ -32,7 +36,10 @@ impl Planting {
         search_parameters: FindPlantingsParameters,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantingDto>> {
-        let mut query = plantings::table.select(all_columns).into_boxed();
+        let mut query = plantings::table
+            .left_join(seeds::table)
+            .select((plantings::all_columns, seeds::name.nullable()))
+            .into_boxed();
 
         if let Some(id) = search_parameters.plant_id {
             query = query.filter(plant_id.eq(id));
@@ -55,6 +62,26 @@ impl Planting {
         debug!("{}", debug_query::<Pg, _>(&query));
 
         Ok(query
+            .load::<(Self, Option<String>)>(conn)
+            .await?
+            .into_iter()
+            .map(Into::into)
+            .collect())
+    }
+
+    /// Get all plantings that have a specific seed id.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn find_by_seed_id(
+        seed_id: i32,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<Vec<PlantingDto>> {
+        let query = plantings::table
+            .select(plantings::all_columns)
+            .filter(plantings::seed_id.eq(seed_id));
+
+        Ok(query
             .load::<Self>(conn)
             .await?
             .into_iter()
@@ -67,14 +94,45 @@ impl Planting {
     /// # Errors
     /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
+    ///
+    /// # Panics
+    /// Clippy thinks this function can panic because is makes use of unwrap.
+    /// But because we only unwrap after the relevant Result was checked,
+    /// this should never happen.
+    #[allow(clippy::unwrap_used)]
     pub async fn create(
         dto: NewPlantingDto,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<PlantingDto> {
         let planting = Self::from(dto);
         let query = diesel::insert_into(plantings::table).values(&planting);
+        let query_result = query.get_result::<Self>(conn).await.map(Into::into);
+
         debug!("{}", debug_query::<Pg, _>(&query));
-        query.get_result::<Self>(conn).await.map(Into::into)
+
+        if planting.seed_id.is_none() || query_result.is_err() {
+            return query_result;
+        }
+
+        // There seems to be no way of retrieving the additional name using the insert query
+        // above.
+        let additional_name_query = seeds::table
+            .select(seeds::name.nullable())
+            .filter(seeds::id.eq(planting.seed_id.unwrap()));
+
+        debug!("{}", debug_query::<Pg, _>(&additional_name_query));
+
+        let mut query_result_unwrapped = query_result.unwrap();
+        match additional_name_query
+            .get_result::<Option<String>>(conn)
+            .await
+            .map(Into::into)
+        {
+            Ok(additional_name) => query_result_unwrapped.additional_name = additional_name,
+            Err(e) => return Err(e), // Should not be necessary, but required by the rust compiler.
+        }
+
+        Ok(query_result_unwrapped)
     }
 
     /// Partially update a planting in the database.

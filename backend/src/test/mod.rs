@@ -13,7 +13,6 @@ mod pagination;
 mod plant;
 mod plant_layer;
 mod plant_layer_heatmap;
-mod planting_suggestions;
 mod plantings;
 mod seed;
 mod shadings;

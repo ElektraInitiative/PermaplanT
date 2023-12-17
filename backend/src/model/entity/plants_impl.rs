@@ -1,31 +1,20 @@
 //! Contains the implementation of [`Plants`].
 
 use diesel::{
-    debug_query,
-    dsl::sql,
-    pg::Pg,
-    sql_types::{Bool, Float, Integer},
-    BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult,
+    debug_query, dsl::sql, pg::Pg, sql_types::Float, BoolExpressionMethods, ExpressionMethods,
+    QueryDsl, QueryResult,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
-use uuid::Uuid;
 
 use crate::{
     db::{
         function::{array_to_string, greatest, similarity, similarity_nullable},
         pagination::Paginate,
     },
-    model::{
-        dto::{Page, PageParameters, PlantsSummaryDto},
-        r#enum::quantity::Quantity,
-    },
-    schema::{
-        plants::{
-            self, all_columns, common_name_de, common_name_en, edible_uses_en, sowing_outdoors,
-            unique_name,
-        },
-        seeds,
+    model::dto::{Page, PageParameters, PlantsSummaryDto},
+    schema::plants::{
+        self, all_columns, common_name_de, common_name_en, edible_uses_en, unique_name,
     },
 };
 
@@ -99,46 +88,5 @@ impl Plants {
         let query = plants::table.find(id);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.first::<Self>(conn).await.map(Into::into)
-    }
-
-    /// Fetch available and seasonal plants.
-    /// - A plant is available if for the given `user_id` there is a `Seed` with `quantity` not `Nothing`.
-    /// - A plant is seasonal if the given `half_of_month` is included in a `Plant`'s `sowing_outdoors`
-    /// or the `sowing_outdoors` is empty.
-    ///
-    /// # Errors
-    /// * Unknown, diesel doesn't say why it might error.
-    pub async fn find_available_seasonal(
-        half_month_bucket: i32,
-        user_id: Uuid,
-        page_parameters: PageParameters,
-        conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Page<PlantsSummaryDto>> {
-        // select unique_name, p.id from plants p inner join seeds s on p.id = s.plant_id
-        // where s.quantity != 'Nothing' and 5 = ANY(p.sowing_outdoors);
-        // let half_of_month_expr = Some(vec![Some(half_of_month)]);
-
-        let query = plants::table
-            .inner_join(seeds::table)
-            .select(all_columns)
-            .filter(
-                seeds::quantity
-                    .ne(Quantity::Nothing)
-                    .and(seeds::owner_id.eq(user_id))
-                    .and(
-                        sql::<Bool>("")
-                            .bind::<Integer, _>(half_month_bucket)
-                            .sql(" = ANY(")
-                            .bind(sowing_outdoors)
-                            .sql(")")
-                            .or(sowing_outdoors.is_null()),
-                    ),
-            )
-            .order(seeds::quantity.desc())
-            .paginate(page_parameters.page)
-            .per_page(page_parameters.per_page);
-        debug!("{}", debug_query::<Pg, _>(&query));
-
-        query.load_page::<Self>(conn).await.map(Page::from_entity)
     }
 }

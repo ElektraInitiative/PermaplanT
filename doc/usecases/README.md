@@ -4,9 +4,9 @@ This folder contains all use cases of PermaplanT.
 
 They are structured in folders by progress:
 
-- `draft`: something is yet unclear about the use case
-- `assigned`: use case could be implemented but is not part of current milestone
-- `current`: use case is currently implemented (within milestone)
+- `draft`: not yet ready for implementation
+- `assigned`: use case is part of PermaplanT 1.0
+- `current`: use case is currently worked on
 - `done`: use case was successfully implemented
 
 ## Done

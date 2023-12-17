@@ -1,15 +1,16 @@
 import { findMapById } from '../api/findMapById';
 import { updateMap } from '../api/updateMap';
-import { Coordinates, MapDto, PrivacyOption, UpdateMapDto } from '@/bindings/definitions';
+import { Coordinates, MapDto, PrivacyOption, UpdateMapDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
+import { useQuery } from '@tanstack/react-query';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 interface MapUpdateData {
   name: string;
@@ -37,28 +38,26 @@ export default function MapEditForm() {
   const { t } = useTranslation(['maps', 'privacyOptions', 'common']);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const _findOneMap = async () => {
-      try {
-        const map = await findMapById(Number(mapId));
-        oldValues.current = map;
+  const { data: loadedMapData } = useQuery(['maps', mapId], () => findMapById(Number(mapId)), {
+    meta: {
+      errorMessage: t('maps:edit.error_map_single_fetch'),
+      autoClose: false,
+      toastId: 'fetchError',
+    },
+  });
 
-        setUpdateObject({
-          name: map.name,
-          privacy: map.privacy,
-          description: map.description,
-          location: map.location,
-        });
-      } catch (error) {
-        console.error(error);
-        toast.error(t('maps:edit.error_map_single_fetch'), {
-          autoClose: false,
-          toastId: 'fetchError',
-        });
-      }
-    };
-    _findOneMap();
-  }, [mapId, t]);
+  useEffect(() => {
+    if (loadedMapData) {
+      oldValues.current = loadedMapData;
+
+      setUpdateObject({
+        name: loadedMapData.name,
+        privacy: loadedMapData.privacy,
+        description: loadedMapData.description,
+        location: loadedMapData.location,
+      });
+    }
+  }, [loadedMapData]);
 
   const missingNameText = (
     <p className="mb-2 ml-2 block text-sm font-medium text-red-500">
@@ -95,7 +94,7 @@ export default function MapEditForm() {
         <div className="mr-2">
           <SimpleFormInput
             id="latitudeInput"
-            labelText={t('maps:edit.latitude_label')}
+            labelContent={t('maps:edit.latitude_label')}
             defaultValue={updateObject.location?.latitude}
             onChange={(e) =>
               setUpdateObject({
@@ -112,7 +111,7 @@ export default function MapEditForm() {
         </div>
         <SimpleFormInput
           id="longitudeInput"
-          labelText={t('maps:edit.longitude_label')}
+          labelContent={t('maps:edit.longitude_label')}
           defaultValue={updateObject.location?.longitude}
           onChange={(e) =>
             setUpdateObject({
@@ -168,7 +167,7 @@ export default function MapEditForm() {
     try {
       await updateMap(updatedMap, Number(mapId));
     } catch (error) {
-      toast.error(t('maps:edit.error_map_edit'), { autoClose: false });
+      errorToastGrouped(t('maps:edit.error_map_edit'), { autoClose: false });
     }
     navigate('/maps');
   }
@@ -181,7 +180,7 @@ export default function MapEditForm() {
             <PageTitle title={t('maps:edit.title')} />
             <SimpleFormInput
               id="nameInput"
-              labelText="Name"
+              labelContent="Name"
               required
               defaultValue={updateObject.name}
               onChange={(e) => {

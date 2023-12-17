@@ -46,6 +46,9 @@ use crate::{
 )]
 #[get("")]
 pub async fn find(
+    // define here, even though it's not used.
+    // So clients need to provide the map_id and it is checked.
+    _map_id: Path<i32>,
     search_params: Query<PlantingSearchParameters>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
@@ -85,7 +88,7 @@ pub async fn create(
         .broadcast(
             path.into_inner(),
             Action::CreatePlanting(CreatePlantActionPayload::new(
-                dto,
+                dto.clone(),
                 user_info.id,
                 new_planting.action_id,
             )),
@@ -126,19 +129,19 @@ pub async fn update(
 
     let action = match update_planting {
         UpdatePlantingDto::Transform(action_dto) => Action::TransformPlanting(
-            TransformPlantActionPayload::new(planting, user_info.id, action_dto.action_id),
+            TransformPlantActionPayload::new(&planting, user_info.id, action_dto.action_id),
         ),
         UpdatePlantingDto::Move(action_dto) => Action::MovePlanting(MovePlantActionPayload::new(
-            planting,
+            &planting,
             user_info.id,
             action_dto.action_id,
         )),
         UpdatePlantingDto::UpdateAddDate(action_dto) => Action::UpdatePlantingAddDate(
-            UpdatePlantingAddDateActionPayload::new(planting, user_info.id, action_dto.action_id),
+            UpdatePlantingAddDateActionPayload::new(&planting, user_info.id, action_dto.action_id),
         ),
         UpdatePlantingDto::UpdateRemoveDate(action_dto) => {
             Action::UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload::new(
-                planting,
+                &planting,
                 user_info.id,
                 action_dto.action_id,
             ))
@@ -147,7 +150,7 @@ pub async fn update(
 
     app_data.broadcaster.broadcast(map_id, action).await;
 
-    Ok(HttpResponse::Ok().json(planting))
+    Ok(HttpResponse::Ok().json(planting.clone()))
 }
 
 /// Endpoint for deleting a `Planting`.

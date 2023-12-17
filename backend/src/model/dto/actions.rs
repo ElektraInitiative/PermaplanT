@@ -14,7 +14,7 @@ use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;
 
-use super::{shadings::ShadingDto, BaseLayerImageDto};
+use super::{shadings::ShadingDto, BaseLayerImageDto, UpdateMapGeometryDto};
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
@@ -30,10 +30,6 @@ pub enum Action {
     MovePlanting(MovePlantActionPayload),
     /// An action used to broadcast transformation of a plant.
     TransformPlanting(TransformPlantActionPayload),
-    /// An action used to update the `add_date` of a plant.
-    UpdatePlantingAddDate(UpdatePlantingAddDateActionPayload),
-    /// An action used to update the `remove_date` of a plant.
-    UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload),
 
     /// An action used to broadcast creation of a shading.
     CreateShading(CreateShadingActionPayload),
@@ -52,6 +48,39 @@ pub enum Action {
     UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
     /// An action used to broadcast deletion of a baseLayerImage.
     DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
+    /// An action used to update the `add_date` of a plant.
+    UpdatePlantingAddDate(UpdatePlantingAddDateActionPayload),
+    /// An action used to update the `remove_date` of a plant.
+    UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload),
+    /// An action used to broadcast an update to the map gemetry.
+    UpdateMapGeometry(UpdateMapGeometryActionPayload),
+    /// An action used to update the `additional_name` of a plant.
+    UpdatePlantingAdditionalName(UpdatePlantingAdditionalNamePayload),
+}
+
+impl Action {
+    /// Returns the `action_id` of the action.
+    #[must_use]
+    pub fn action_id(&self) -> Uuid {
+        match self {
+            Self::CreatePlanting(payload) => payload.action_id,
+            Self::DeletePlanting(payload) => payload.action_id,
+            Self::MovePlanting(payload) => payload.action_id,
+            Self::TransformPlanting(payload) => payload.action_id,
+            Self::CreateBaseLayerImage(payload) => payload.action_id,
+            Self::UpdateBaseLayerImage(payload) => payload.action_id,
+            Self::DeleteBaseLayerImage(payload) => payload.action_id,
+            Self::UpdatePlantingAddDate(payload) => payload.action_id,
+            Self::UpdatePlantingRemoveDate(payload) => payload.action_id,
+            Self::UpdatePlantingAdditionalName(payload) => payload.action_id,
+            Self::UpdateMapGeometry(payload) => payload.action_id,
+            Self::CreateShading(payload) => payload.action_id,
+            Self::DeleteShading(payload) => payload.action_id,
+            Self::UpdateShading(payload) => payload.action_id,
+            Self::UpdateShadingAddDate(payload) => payload.action_id,
+            Self::UpdateShadingRemoveDate(payload) => payload.action_id,
+        }
+    }
 }
 
 #[typeshare]
@@ -74,6 +103,8 @@ pub struct CreatePlantActionPayload {
     scale_y: f32,
     add_date: Option<NaiveDate>,
     remove_date: Option<NaiveDate>,
+    seed_id: Option<i32>,
+    additional_name: Option<String>,
 }
 
 impl CreatePlantActionPayload {
@@ -94,6 +125,8 @@ impl CreatePlantActionPayload {
             scale_y: payload.scale_y,
             add_date: payload.add_date,
             remove_date: payload.remove_date,
+            seed_id: payload.seed_id,
+            additional_name: payload.additional_name,
         }
     }
 }
@@ -133,7 +166,7 @@ pub struct MovePlantActionPayload {
 
 impl MovePlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
@@ -161,7 +194,7 @@ pub struct TransformPlantActionPayload {
 
 impl TransformPlantActionPayload {
     #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
         Self {
             user_id,
             action_id,
@@ -177,54 +210,6 @@ impl TransformPlantActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdatePlantingAddDate`].
-#[serde(rename_all = "camelCase")]
-pub struct UpdatePlantingAddDateActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
-    id: Uuid,
-    add_date: Option<NaiveDate>,
-}
-
-impl UpdatePlantingAddDateActionPayload {
-    #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id: payload.id,
-            add_date: payload.add_date,
-        }
-    }
-}
-
-#[typeshare]
-#[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdatePlantingRemoveDate`].
-#[serde(rename_all = "camelCase")]
-pub struct UpdatePlantingRemoveDateActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
-    id: Uuid,
-    remove_date: Option<NaiveDate>,
-}
-
-impl UpdatePlantingRemoveDateActionPayload {
-    #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id: payload.id,
-            remove_date: payload.remove_date,
-        }
-    }
-}
-
-#[typeshare]
-#[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::CreateShading`].
-/// This struct should always match [`ShadingDto`].
 #[serde(rename_all = "camelCase")]
 pub struct CreateShadingActionPayload {
     user_id: Uuid,
@@ -421,6 +406,106 @@ impl UpdateBaseLayerImageActionPayload {
             rotation: payload.rotation,
             scale: payload.scale,
             path: payload.path,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlantingAddDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingAddDateActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    add_date: Option<NaiveDate>,
+}
+
+impl UpdatePlantingAddDateActionPayload {
+    #[must_use]
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            add_date: payload.add_date,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlantingRemoveDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingRemoveDateActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    remove_date: Option<NaiveDate>,
+}
+
+impl UpdatePlantingRemoveDateActionPayload {
+    #[must_use]
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            remove_date: payload.remove_date,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdateMapGeometry`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdateMapGeometryActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    /// The entity id for this action.
+    map_id: i32,
+    // E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "object")]
+    geometry: Polygon<Point>,
+}
+
+impl UpdateMapGeometryActionPayload {
+    #[must_use]
+    pub fn new(payload: UpdateMapGeometryDto, map_id: i32, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            map_id,
+            geometry: payload.geometry,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlantingRemoveDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingAdditionalNamePayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    additional_name: Option<String>,
+}
+
+impl UpdatePlantingAdditionalNamePayload {
+    #[must_use]
+    pub fn new(
+        payload: &PlantingDto,
+        new_additional_name: Option<String>,
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            additional_name: new_additional_name,
         }
     }
 }

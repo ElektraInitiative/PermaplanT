@@ -1,4 +1,4 @@
-import { PlantingDto, TransformPlantingDto, UpdatePlantingDto } from '@/bindings/definitions';
+import { PlantingDto, TransformPlantingDto, UpdatePlantingDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const transformPlanting = async (

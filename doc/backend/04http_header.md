@@ -8,3 +8,7 @@ The Authorization header is used for authentication/authorization.
 The access token should be set either by the frontend or manually when making requests with for example curl.
 
 For instructions on obtaining and using an access token, refer to [this document](./02obtain_access_tokens.md).
+
+## Language etc.
+
+Are not sent nor used, as the backend is agnostic to it.

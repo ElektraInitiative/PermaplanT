@@ -92,8 +92,8 @@ Cons:
 - We add "cultivar" as lowest rank.
 - We remove the rank "subfamily".
 
-For details on the schema see this [example SQL](example_migrations/normalized-plants-and-ranks/2023-04-07-130215_plant_relationships/up.sql)
-Here are some [example queries](example_migrations/normalized-plants-and-ranks/example_queries.sql)
+For details on the schema see this [example SQL](example_migrations/normalized-plants-and-ranks/2023-04-07-130215_plant_relationships/up.sql.md)
+Here are some [example queries](example_migrations/normalized-plants-and-ranks/example_queries.sql.md)
 
 ## Rationale
 

@@ -80,16 +80,20 @@ export const FileSelector = (props: FileSelectorProps) => {
   });
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="absolute left-1/2 top-1/2 h-[12vh] -translate-x-1/2 -translate-y-1/2">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
-    <div className="w-full max-w-2xl overflow-y-auto p-8">
-      <div className="flex items-end gap-4">
+    <>
+      <div className="flex flex-row items-end gap-4">
         <div className="flex-1">
           <SimpleFormInput
             id="FileInput"
-            labelText={t('fileSelector:search')}
+            labelContent={t('fileSelector:search')}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
@@ -102,8 +106,8 @@ export const FileSelector = (props: FileSelectorProps) => {
           />
         </div>
       </div>
-      <ul className="mt-2">
-        <li className="mb-2 flex cursor-pointer items-center justify-between gap-4 font-bold">
+      <ul className="mt-3 overflow-auto break-words pr-1 text-sm sm:text-base">
+        <li className="mb-2 grid cursor-pointer grid-cols-2 items-center justify-between gap-4 font-bold">
           <p
             onClick={() => {
               if (sortAttribute === 'name') {
@@ -124,7 +128,7 @@ export const FileSelector = (props: FileSelectorProps) => {
               }
               setSortAttribute('date');
             }}
-            className="text-neutral-400 hover:text-primary-400"
+            className="text-right text-neutral-400 hover:text-primary-400"
           >
             Last Modified
           </p>
@@ -137,16 +141,16 @@ export const FileSelector = (props: FileSelectorProps) => {
               .sort(sortFiles(sortAttribute, sortOrder))
               .map((file) => (
                 <li
-                  className="flex cursor-pointer items-center justify-between gap-4 hover:text-primary-400"
+                  className="mb-1 grid cursor-pointer grid-cols-2 items-center justify-between gap-4 hover:text-primary-400"
                   key={file.filename}
                   onClick={() => onSelect(file)}
                 >
                   <p>{file.basename}</p>
-                  <p className="text-sm text-neutral-400">{file.lastmod}</p>
+                  <p className="text-right text-neutral-400">{file.lastmod}</p>
                 </li>
               ))
           : []}
       </ul>
-    </div>
+    </>
   );
 };

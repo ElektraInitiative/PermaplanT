@@ -23,20 +23,16 @@ interface SliderProps {
  * A Slider with a label which can be controlled by dragging, clicking, arrow left/right and j/k.
  */
 export const NamedSlider = (props: SliderProps) => {
+  // width in percentage
   const [width, setWidth] = useState(0);
   const sliderDivRef = useRef<HTMLDivElement>(null);
-
-  const minWidth = 0;
-  const maxWidth = sliderDivRef.current ? sliderDivRef.current.clientWidth : 100;
 
   // bind value to slider fill width
   useEffect(() => {
     if (props.value) {
-      const w = props.value * maxWidth;
-      const newWidth = w > minWidth ? (w < maxWidth ? w : maxWidth) : minWidth;
-      setWidth(newWidth);
+      setWidth(props.value);
     }
-  }, [props.value, maxWidth]);
+  }, [props.value]);
 
   /** keybinding for changing the value */
   const keybindings = {
@@ -44,17 +40,20 @@ export const NamedSlider = (props: SliderProps) => {
     valueDown: ['j', 'ArrowLeft'],
   };
 
+  /** bind value to a min and max value */
+  const boundValue = (min: number, max: number, value: number) =>
+    value > min ? (value < max ? value : max) : min;
+
   const dragHandler: MouseEventHandler = (pointerEvent) => {
-    const startWidth = width;
     const startPosition = { x: pointerEvent.pageX, y: pointerEvent.pageY };
+    const maxPixelWidth = sliderDivRef.current ? sliderDivRef.current.clientWidth : 100;
 
     function onMouseMove(pointerEvent: PointerEvent) {
       if (!sliderDivRef.current) return;
-      const w = startWidth - startPosition.x + pointerEvent.pageX;
-      const newWidth = w > minWidth ? (w < maxWidth ? w : maxWidth) : minWidth;
-      const sliderWidth = sliderDivRef.current.clientWidth;
+      const diffPercentage = (startPosition.x - pointerEvent.pageX) / maxPixelWidth;
+      const newWidth = boundValue(0, 1, width - diffPercentage);
       setWidth(newWidth);
-      props.onChange(newWidth / sliderWidth);
+      props.onChange(newWidth);
     }
     function onMouseUp() {
       document.body.removeEventListener('pointermove', onMouseMove);
@@ -67,21 +66,19 @@ export const NamedSlider = (props: SliderProps) => {
   const clickHandler: MouseEventHandler = (mouseClickEvent) => {
     if (!sliderDivRef.current) return;
     const offsetLeft = sliderDivRef.current.getBoundingClientRect().left;
-    const newWidth = mouseClickEvent.pageX - offsetLeft;
+    // calculate new witdh in pixel
+    const pixelWidth = mouseClickEvent.pageX - offsetLeft;
     const sliderWidth = sliderDivRef.current.clientWidth;
-    setWidth(newWidth);
-    props.onChange(newWidth / sliderWidth);
+    setWidth(pixelWidth / sliderWidth);
+    props.onChange(pixelWidth / sliderWidth);
   };
 
   /** adds the given value to the current slider value */
   /** the slider value is float between 0 and 1 */
   const changePercentage = (value: number) => {
-    if (!sliderDivRef.current) return 0;
-    const sliderWidth = sliderDivRef.current.clientWidth;
-    const p = width / sliderWidth + (sliderWidth * value) / sliderWidth;
-    const percentage = p > 1 ? 1 : p < 0 ? 0 : p;
-    setWidth(percentage * sliderWidth);
-    props.onChange(percentage);
+    const newValue = boundValue(0, 1, width + value);
+    setWidth(newValue);
+    props.onChange(newValue);
   };
 
   /** increases or decreases the slider value when one of the corresponding keys defined in keybindings are pressed */
@@ -102,7 +99,10 @@ export const NamedSlider = (props: SliderProps) => {
       onKeyDown={keyDownHandler}
       title={props.title}
     >
-      <div className="h-full bg-secondary-100 dark:bg-secondary-600" style={{ width: width }}></div>
+      <div
+        className="h-full bg-secondary-100 dark:bg-secondary-600"
+        style={{ width: width * 100 + '%' }}
+      ></div>
       <div
         className="h-full w-[4px] bg-secondary-500 hover:cursor-col-resize"
         onPointerDown={dragHandler}

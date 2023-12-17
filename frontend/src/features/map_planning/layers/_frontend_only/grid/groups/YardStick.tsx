@@ -4,18 +4,17 @@ import {
   yardStickLabel,
 } from '@/features/map_planning/layers/_frontend_only/grid/util/Calculations';
 import {
-  GRAY_700_DARK,
-  GRAY_700_LIGHT,
   RELATIVE_YARD_STICK_LABEL_OFFSET_Y,
   RELATIVE_YARD_STICK_OFFSET_X,
   RELATIVE_YARD_STICK_OFFSET_Y,
   RELATIVE_YARD_STICK_STROKE_WIDTH,
 } from '@/features/map_planning/layers/_frontend_only/grid/util/Constants';
-import { BoundsRect } from '@/features/map_planning/store/MapStoreTypes';
+import { ViewRect } from '@/features/map_planning/store/MapStoreTypes';
+import { COLOR_GRAY_700_DARK, COLOR_GRAY_700_LIGHT } from '@/utils/constants';
 import { useTranslation } from 'react-i18next';
 import { Group, Line, Text } from 'react-konva';
 
-export const YardStick = (rect: BoundsRect) => {
+export const YardStick = (rect: ViewRect) => {
   const { t } = useTranslation('common');
   const { darkMode } = useDarkModeStore();
 
@@ -40,13 +39,13 @@ export const YardStick = (rect: BoundsRect) => {
     <Group>
       <Line
         strokeWidth={strokeWidth}
-        stroke={darkMode ? GRAY_700_DARK : GRAY_700_LIGHT}
+        stroke={darkMode ? COLOR_GRAY_700_DARK : COLOR_GRAY_700_LIGHT}
         points={[lineStartX, lineY, lineEndX, lineY]}
       />
       <Text
         x={textX}
         y={textY}
-        fill={darkMode ? GRAY_700_DARK : GRAY_700_LIGHT}
+        fill={darkMode ? COLOR_GRAY_700_DARK : COLOR_GRAY_700_LIGHT}
         text={yardStickLengthLabel}
         fontSize={strokeWidth * 10}
       />

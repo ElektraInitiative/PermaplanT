@@ -6,7 +6,6 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user sees which of the planned plants are to be planted next. ("Saisonübersicht")
-- **Status:** Assigned
 - **Assignee:** Samuel
 
 ## Scenarios

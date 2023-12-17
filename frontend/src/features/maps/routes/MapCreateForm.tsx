@@ -1,13 +1,13 @@
 import { createMap } from '../api/createMap';
-import { NewMapDto, PrivacyOption } from '@/bindings/definitions';
+import { NewMapDto, PrivacyOption } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import PageLayout from '@/components/Layout/PageLayout';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 interface MapCreationAttributes {
   name: string;
@@ -44,7 +44,7 @@ export default function MapCreateForm() {
 
   const privacyOptions = [PrivacyOption.Private, PrivacyOption.Protected, PrivacyOption.Public].map(
     (option) => (
-      <option key={option} value={option}>
+      <option key={option} value={option} data-testid={option}>
         {t(`privacyOptions:${option}`)}
       </option>
     ),
@@ -125,15 +125,14 @@ export default function MapCreateForm() {
       privacy: mapInput.privacy,
       description: mapInput.description,
       location: !Number.isNaN(mapInput.location.latitude) ? mapInput.location : undefined,
-      // TODO #349: implement selector to specify the maps borders
       geometry: {
         rings: [
           [
-            { x: 0.0, y: 0.0 },
-            { x: 0.0, y: 10_000.0 },
-            { x: 10_000.0, y: 10_000.0 },
-            { x: 10_000.0, y: 0.0 },
-            { x: 0.0, y: 0.0 },
+            { x: -5_000.0, y: -5_000.0 },
+            { x: -5_000.0, y: 5_000.0 },
+            { x: 5_000.0, y: 5_000.0 },
+            { x: 5_000.0, y: -5_000.0 },
+            { x: -5_000.0, y: -5_000.0 },
           ],
         ],
         srid: 4326,
@@ -142,7 +141,7 @@ export default function MapCreateForm() {
     try {
       await createMap(newMap);
     } catch (error) {
-      toast.error(t('maps:create.error_map_create'), { autoClose: false });
+      errorToastGrouped(t('maps:create.error_map_create'), { autoClose: false });
     }
     navigate('/maps');
   }
@@ -169,6 +168,7 @@ export default function MapCreateForm() {
       <section className="my-2 flex items-center">
         <select
           className="mr-4 block h-11 rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 text-sm focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
+          data-testid="map-create-form__select-privacy"
           onChange={(e) => {
             const value = e.target.value;
             const option = value.charAt(0).toUpperCase() + value.slice(1);

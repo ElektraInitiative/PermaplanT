@@ -718,6 +718,9 @@ pub struct Seed {
     pub plant_id: Option<i32>,
     /// The id of the owner of the seed.
     pub owner_id: Uuid,
+    /// Timestamp indicating when the seed was archived.
+    /// Empty if the seed was not archived.
+    pub archived_at: Option<NaiveDateTime>,
 }
 
 /// The `NewSeed` entity.
@@ -823,6 +826,14 @@ pub struct UpdateMap {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Point>,
+}
+
+/// The `UpdateMapGeometry` entity.
+#[derive(AsChangeset)]
+#[diesel(table_name = maps)]
+pub struct UpdateMapGeometry {
+    /// New Map Bounds
+    pub geometry: Polygon<Point>,
 }
 
 /// The `Layer` entity.

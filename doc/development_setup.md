@@ -5,6 +5,12 @@
 If you want to develop on the backend, make sure you have enough RAM.
 When performing cargo build, we have experienced (on wsl) a usage of ~12GB.
 
+- Python
+- Rust
+- Javascript
+  - nvm
+  - node
+
 ## Operating Systems
 
 - Windows 11
@@ -66,10 +72,10 @@ $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 This installs rust and cargo automatically on your machine.
 If you get linker errors, proceed by installing a C Compiler, which will typically include a linker.
 
-To install a specific version of rust (we use 1.67.1), just run the following command:
+To install our specific version of Rust, just run the following command:
 
 ```bash
-rustup install 1.67.1
+rustup install 1.74
 ```
 
 On Windows, go to https://www.rust-lang.org/tools/install and follow the instructions for installing Rust.
@@ -88,6 +94,14 @@ In case you don't prefer any of the previously mentioned installations methods, 
 
 - Chrome 108.0.5359
 - Firefox 108.0.2
+
+## Dependencies
+
+If you want to install all necessary dependencies for development run following command in `/workspaces/PermaplanT`:
+
+```bash
+make install
+```
 
 ## Containers
 

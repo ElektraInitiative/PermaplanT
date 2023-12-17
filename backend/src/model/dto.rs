@@ -11,9 +11,9 @@ use uuid::Uuid;
 use self::plantings::PlantingDto;
 
 use super::r#enum::{
-    experience::Experience, layer_type::LayerType, membership::Membership,
-    plant_spread::PlantSpread, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
-    relation_type::RelationType, salutation::Salutation,
+    experience::Experience, include_archived_seeds::IncludeArchivedSeeds, layer_type::LayerType,
+    membership::Membership, plant_spread::PlantSpread, privacy_option::PrivacyOption,
+    quality::Quality, quantity::Quantity, relation_type::RelationType, salutation::Salutation,
 };
 
 pub mod actions;
@@ -33,6 +33,7 @@ pub mod plants_impl;
 pub mod seed_impl;
 pub mod shadings;
 pub mod shadings_impl;
+mod update_map_geometry_impl;
 pub mod update_map_impl;
 pub mod users_impl;
 
@@ -82,6 +83,9 @@ pub struct SeedDto {
     pub notes: Option<String>,
     /// The id of the owner of the seed.
     pub owner_id: Uuid,
+    /// Timestamp indicating when the seed was archived.
+    /// Empty if the seed was not archived.
+    pub archived_at: Option<String>,
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
@@ -101,6 +105,14 @@ pub struct NewSeedDto {
     pub quality: Option<Quality>,
     pub price: Option<i16>,
     pub notes: Option<String>,
+}
+
+/// Data that is required when archiving a seed.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct ArchiveSeedDto {
+    /// Whether the seed should be archived.
+    pub archived: bool,
 }
 
 /// The essential identifying information of a plant.
@@ -162,6 +174,9 @@ pub struct SeedSearchParameters {
     pub name: Option<String>,
     /// The exact harvest year of the seed.
     pub harvest_year: Option<i16>,
+    /// Whether archived, not archived or both kinds of seeds should be included.
+    /// If no value is provided, a default value of NotArchived is assumed.
+    pub archived: Option<IncludeArchivedSeeds>,
 }
 
 /// Query parameters paginating list endpoints.
@@ -197,7 +212,7 @@ pub struct Page<T> {
 
 /// A page of results bounded by time.
 #[typeshare]
-#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Serialize, Clone, Deserialize, ToSchema)]
 #[aliases(
     TimelinePagePlantingsDto = TimelinePage<PlantingDto>,
 )]
@@ -245,6 +260,7 @@ pub struct MapDto {
     /// The geometry of the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
     pub geometry: Polygon<Point>,
 }
@@ -280,6 +296,7 @@ pub struct NewMapDto {
     /// The geometry of the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
+    #[typeshare(serialized_as = "object")]
     #[schema(value_type = Object)]
     pub geometry: Polygon<Point>,
 }
@@ -296,11 +313,18 @@ pub struct UpdateMapDto {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Coordinates>,
+}
+
+/// Data for updating a maps geometry.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct UpdateMapGeometryDto {
     /// The geometry of the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[schema(value_type = Option<Object>)]
-    pub geometry: Option<Polygon<Point>>,
+    #[typeshare(serialized_as = "object")]
+    #[schema(value_type = Object)]
+    pub geometry: Polygon<Point>,
 }
 
 /// Query parameters for searching maps.
@@ -377,29 +401,6 @@ pub struct ConnectToMapQueryParams {
     pub map_id: i32,
     /// The id of the user connecting to the map.
     pub user_id: String,
-}
-
-/// Search parameters for plant suggestions.
-#[typeshare]
-#[derive(Debug, Deserialize, IntoParams)]
-pub struct PlantSuggestionsSearchParameters {
-    /// The kind of suggestion returned by the endpoint.
-    #[param(inline)]
-    pub suggestion_type: SuggestionType,
-    /// Date representing the season to search for.
-    /// Only the month and day are used, nevertheless it must be an existing date.
-    pub relative_to_date: NaiveDate,
-}
-
-/// Kind of suggestion.
-#[typeshare]
-#[derive(Debug, Deserialize, ToSchema)]
-#[serde(rename_all = "lowercase")]
-pub enum SuggestionType {
-    /// Suggests plants that are available for planting.
-    Available,
-    /// Suggests plants based on diversity criteria.
-    Diversity,
 }
 
 /// Contains information about an image displayed on the base layer.

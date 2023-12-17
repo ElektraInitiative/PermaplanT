@@ -1,4 +1,4 @@
-# Mail client for the backend
+# Mail Client for the Backend
 
 ## Problem
 

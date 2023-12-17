@@ -1,4 +1,4 @@
-import { Page, PlantsSummaryDto } from '@/bindings/definitions';
+import { Page, PlantsSummaryDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const searchPlants = async (

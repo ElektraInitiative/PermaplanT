@@ -3,10 +3,12 @@
 [![Build Status](https://build.libelektra.org/job/PermaplanT/job/master/lastBuild/badge/icon)](https://build.libelektra.org/job/PermaplanT/job/master/lastBuild/)
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/ElektraInitiative/PermaplanT)
 
-[PermaplanT](https://www.permaplant.net) is an app for
+[PermaplanT](https://www.permaplant.net) is a web app for planning permaculture.
 
-- Web: Firefox, Chromium
-- Larger mobile devices like tablets: Progressive Web App (PWA) Android 9+
+## Client Requirements
+
+- Browsers: Firefox, Chromium, Vivaldi, Edge, Opera
+- RAM: >4GB for small places, >8GB for larger places
 
 ## Documentation
 
@@ -21,19 +23,12 @@ Which will open [/doc/architecture/README.md](/doc/architecture/README.md) as fi
 
 ## Makefile commands
 
-Following commands exists:
+Type `make help` to see all commands.
+The Makefile consists of frequently used workflows.
+For more detailed executions have a look inside the specific subfolders.
 
-`run, test, build, clean`
-
-Following entities exist:
-
-`frontend, backend, mdbook, storybook`
-
-You can construct your commands now, e.g `run-backend`, `test-mdbook`, `build-storybook` or `clean-backend`
-
-Type `make help` to see all commands
-
-**SOME OF THESE COMMANDS REQUIRE ENV VARIABLES, LOOK AT [backend env variables](./doc/backend/01setup.md) or [frontend env variables](./frontend/README.md)**
+**Some of the commands require env variables to be set.
+Have a look at [backend env variables](./doc/backend/01setup.md), [frontend env variables](./frontend/README.md) and [scraper env variables](./scraper/README.md)**
 
 Important links:
 
@@ -41,7 +36,8 @@ Important links:
 
 ## Community and Contributing
 
-PermaplanT is developed by [us](./doc/authors.md) and by users like you. We welcome both pull requests and issues on GitHub.
+PermaplanT is developed by [us](./doc/authors.md) and by users like you.
+We welcome both pull requests and issues on GitHub.
 Check out the [contributing docs](.github/CONTRIBUTING.md).
 
 Information about developing can be found under [our development setup](./doc/development_setup.md).

@@ -1,8 +1,8 @@
 import CountingButton from './CountingButton';
-import { MapDto } from '@/bindings/definitions';
+import { MapDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
-// import { ReactComponent as CopyIcon } from '@/icons/copy.svg';
-import { ReactComponent as EditIcon } from '@/icons/edit.svg';
+// import { ReactComponent as CopyIcon } from '@/svg/icons/copy.svg';
+import { ReactComponent as EditIcon } from '@/svg/icons/edit.svg';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,6 +22,7 @@ export default function MapCard({ map }: MapCardProps) {
       className="mb-4 flex rounded-lg bg-neutral-100 p-4 shadow-md hover:cursor-pointer dark:bg-neutral-800"
       title={map.name}
       onClick={() => navigate(`${map.id}`)}
+      data-testid={map.name}
     >
       {/* A preview image of the map can be placed here later */}
       <div id="placeholderImage" />

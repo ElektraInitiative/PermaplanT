@@ -1,4 +1,5 @@
 import cv2
+import time
 import numpy as np
 from datetime import datetime, timedelta
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
@@ -15,34 +16,74 @@ class MapPlantingPage(AbstractPage):
     def __init__(self, page: Page):
         self._page = page
         self._screenshot = None
+
         """ Selectors """
         # Navbar
         self._map_management_button = page.get_by_role("button", name="Maps")
+
         # Left side bar
+        self._added_date_state_idle = page.get_by_test_id(
+            "planting-attribute-edit-form__add-date-idle"
+        )
+        self._removed_on_state_idle = page.get_by_test_id(
+            "planting-attribute-edit-form__removed-on-idle"
+        )
         self._delete_plant_button = page.get_by_role("button", name="Delete Planting")
+
         # Layer visibility
-        self._hide_plant_layer = page.get_by_test_id("plants-layer-visibility-icon")
-        self._hide_base_layer = page.get_by_test_id("base-layer-visibility-icon")
+        self._hide_plant_layer = page.get_by_test_id(
+            "layer-list-item__plants-layer-visibility-icon"
+        )
+        self._hide_base_layer = page.get_by_test_id(
+            "layer-list-item__base-layer-visibility-icon"
+        )
+
         # Canvas
-        self._canvas = page.get_by_test_id("canvas")
-        self._close_selected_plant = page.get_by_test_id("canvas").get_by_role("button")
-        self._map_date = page.get_by_label("Change map date")
+        self._canvas = page.get_by_test_id("base-stage__canvas")
+        self._close_selected_plant = self._canvas.get_by_role("button")
+
+        # Timeline
+        self._timeline_day_slider = page.get_by_test_id("timeline__day-slider")
+        self._timeline_month_slider = page.get_by_test_id("timeline__month-slider")
+        self._timeline_year_slider = page.get_by_test_id("timeline__year-slider")
+        self._timeline_idle = page.get_by_test_id("timeline__state-idle")
+
         # Top left section
-        self._undo_button = page.get_by_test_id("undo-button")
-        self._redo_button = page.get_by_test_id("redo-button")
+        self._undo_button = page.get_by_test_id("map__undo-button")
+        self._redo_button = page.get_by_test_id("map__redo-button")
+
         # Selected plant section
         self._plant_added_date = page.get_by_label("Added on")
         self._plant_removed_date = page.get_by_label("Removed on")
+
         # Plant layer
-        self._base_layer_radio = page.get_by_test_id("base-layer-radio")
-        self._plant_layer_radio = page.get_by_test_id("plants-layer-radio")
-        self._plant_search_icon = page.get_by_test_id("plant-search-icon")
-        self._plant_search_input = page.get_by_test_id("plant-search-input")
+        self._base_layer_radio = page.get_by_test_id(
+            "layer-list-item__base-layer-radio"
+        )
+        self._plant_layer_radio = page.get_by_test_id(
+            "layer-list-item__plants-layer-radio"
+        )
+        self._plant_search_icon = page.get_by_test_id("plant-search__icon-button")
+        self._plant_search_input = page.get_by_test_id("plant-search__search-input")
+
         # Base layer
-        self._background_select = page.get_by_test_id("baseBackgroundSelect")
+        self._background_image_file_path = page.get_by_test_id(
+            "base-layer-right-toolbar__background-input"
+        )
+        self._background_image_file_path_idle = page.get_by_test_id(
+            "base-layer-attribute-edit-form__background-image-file-path-idle"
+        )
         self._background_button = page.get_by_role("button", name="Choose an image")
-        self._rotation_input = page.get_by_test_id("rotation-input")
-        self._scale_input = page.get_by_test_id("scale-input")
+        self._rotation_input = page.get_by_test_id(
+            "base-layer-right-toolbar__rotation-input"
+        )
+        self._rotation_input_idle = page.get_by_test_id(
+            "base-layer-attribute-edit-form__rotation-idle"
+        )
+        self._scale_input = page.get_by_test_id("base-layer-right-toolbar__scale-input")
+        self._scale_input_idle = page.get_by_test_id(
+            "base-layer-attribute-edit-form__scale-idle"
+        )
 
     """ACTIONS"""
 
@@ -56,18 +97,47 @@ class MapPlantingPage(AbstractPage):
 
     def change_map_date_by_days(self, delta_days: int):
         """Changes the date by a given amount of days."""
-        day = datetime.today() + timedelta(days=delta_days)
-        self._map_date.fill(day.strftime("%Y-%m-%d"))
+        if delta_days > 0:
+            for i in range(delta_days):
+                self._timeline_day_slider.press("ArrowRight")
+        else:
+            for i in range(abs(delta_days)):
+                self._timeline_day_slider.press("ArrowLeft")
+        self._timeline_idle.wait_for()
+
+    def change_map_date_by_months(self, delta_months: int):
+        """Changes the date by a given amount of months."""
+        if delta_months > 0:
+            for i in range(delta_months):
+                self._timeline_month_slider.press("ArrowRight")
+        else:
+            for i in range(abs(delta_months)):
+                self._timeline_month_slider.press("ArrowLeft")
+        self._timeline_idle.wait_for()
+
+    def change_map_date_by_years(self, delta_years: int):
+        """Changes the date by a given amount of years."""
+        if delta_years > 0:
+            for i in range(delta_years):
+                self._timeline_year_slider.press("ArrowRight")
+        else:
+            for i in range(abs(delta_years)):
+                self._timeline_year_slider.press("ArrowLeft")
+        self._timeline_idle.wait_for()
 
     def change_plant_added_date_by_days(self, delta_days: int):
-        """Changes the date by a given amount of days."""
+        """Changes the date by a given amount of days and checks the spinner if possible."""
         day = datetime.today() + timedelta(days=delta_days)
         self._plant_added_date.fill(day.strftime("%Y-%m-%d"))
+        if delta_days < 0:
+            self._added_date_state_idle.wait_for()
 
     def change_plant_removed_date_by_days(self, delta_days: int):
-        """Changes the date by a given amount of days."""
+        """Changes the date by a given amount of days  and checks the spinner if possible."""
         day = datetime.today() + timedelta(days=delta_days)
         self._plant_removed_date.fill(day.strftime("%Y-%m-%d"))
+        if delta_days > 0:
+            self._removed_on_state_idle.wait_for()
 
     def fill_plant_search(self, plantname):
         """Clicks the search icon and types plantname into the plant search."""
@@ -76,21 +146,16 @@ class MapPlantingPage(AbstractPage):
     def fill_rotation(self, rotation):
         """Fills the rotation input according to rotation."""
         self._rotation_input.fill(rotation)
-        # Wait for input to be processed and saved
-        self._page.wait_for_timeout(2000)
+        self._rotation_input_idle.wait_for()
 
     def fill_scaling(self, scaling):
         """Fills the scaling input according to scaling."""
         self._scale_input.fill(scaling)
-        # Wait for input to be processed and saved
-        self._page.wait_for_timeout(2000)
+        self._scale_input_idle.wait_for()
 
     def close_tour(self):
         """
-        Currently you get greeted with the tour.
-        In case you rerun the tests locally or if this gets removed
-        it is wrapped, so it does not fail the tests.
-        The timeout is also lowered to not slow down the tests by a lot.
+        Closes the tour window and catches the exception if the tour window does not exist.
         """
         try:
             tour_close = self._page.get_by_label("Close Tour")
@@ -110,15 +175,39 @@ class MapPlantingPage(AbstractPage):
 
     def click_plant_from_search_results(self, plant_name):
         """Selects a plant by name from the search results."""
-        self._page.get_by_test_id(plant_name + "-plant-search-result").click()
+        self._page.get_by_test_id("plant-list-item__" + plant_name).click()
 
     def click_on_canvas_middle(self):
         """Clicks in the middle of the canvas with a 300ms delay."""
+        time.sleep(1)
         box = self._canvas.bounding_box()
+        self._page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
         self._page.mouse.click(
             box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
         )
-        self._page.wait_for_timeout(300)
+
+    def drag_select_box_over_canvas(self):
+        """Drags a select box over 75% of the canvas from top left to bottom right"""
+        time.sleep(1)
+        box = self._canvas.bounding_box()
+        x = box["x"]
+        y = box["y"]
+        width = box["width"]
+        height = box["height"]
+        self._page.mouse.move(x + width / 4, y + height / 4)
+        self._page.mouse.down()
+        self._page.mouse.move(x + (width / 4) * 3, y + (height / 4) * 3)
+        # https://playwright.dev/docs/input#drag-and-drop:~:text=()%3B-,NOTE,-If%20your%20page
+        # I dont know why, but it works only with a second mouse.move()
+        self._page.mouse.move(x + (width / 4) * 3, y + (height / 4) * 3)
+        self._page.mouse.up()
+
+    def click_on_canvas_top_left(self):
+        """Clicks on the top left area of the canvas."""
+        box = self._canvas.bounding_box()
+        self._page.mouse.click(
+            box["x"] + box["width"] / 4, box["y"] + box["height"] / 4
+        )
 
     def click_delete(self):
         """Deletes a planting by clicks on the delete button."""
@@ -140,17 +229,15 @@ class MapPlantingPage(AbstractPage):
         """
         self._background_button.click()
         self._page.get_by_text("Birdie.jpg").click()
-        # Delay so image can be rendered on canvas
-        self._page.wait_for_timeout(2000)
+        self._background_image_file_path_idle.wait_for()
 
     def click_hide_base_layer(self):
         self._hide_base_layer.click()
 
     def click_hide_plant_layer(self):
         self._hide_plant_layer.click()
-        self._page.wait_for_timeout(5000)
 
-    def screenshot_canvas(self, timeout=300):
+    def screenshot_canvas(self, timeout=3):
         """
         Takes a grayscale screenshot of the canvas.
         Has a default 300ms delay before taking the screenshot,
@@ -158,19 +245,21 @@ class MapPlantingPage(AbstractPage):
 
         Parameters
         ----------
-        timeout : int, optional, default=500
+        timeout : int, optional, default=3 in seconds
         Timeout in ms before taking the screenshot.
 
         Returns
         -------
         opencv2 image object of the screenshot
         """
-        self._page.wait_for_timeout(timeout)
+        time.sleep(timeout)
         buffer = self._canvas.screenshot()
         self._screenshot = cv2.imdecode(
             np.frombuffer(buffer, dtype=np.uint8), cv2.IMREAD_GRAYSCALE
         )
         return self._screenshot
+
+    """ASSERTIONS"""
 
     def expect_canvas_equals_last_screenshot(self, test_name, rtol=0, atol=5):
         """
@@ -233,16 +322,14 @@ class MapPlantingPage(AbstractPage):
 
     def expect_search_result_is_visible(self, result):
         """Confirms that a search result is visible."""
-        expect(
-            self._page.get_by_test_id(result + "-plant-search-result")
-        ).to_be_visible()
+        expect(self._page.get_by_test_id("plant-list-item__" + result)).to_be_visible()
 
     def expect_no_plants_found_text_is_visible(self):
         """Confirms that `no plants are found` is present."""
-        expect(self._page.get_by_test_id("plant-search-results-empty")).to_be_visible()
+        expect(self._page.get_by_test_id("plant-search__empty-results")).to_be_visible()
 
     def expect_background_image(self, name):
-        expect(self._background_select).to_have_value(name)
+        expect(self._background_image_file_path).to_have_value(name)
 
     def expect_rotation_to_have_value(self, val):
         """Expects that the rotation is properly set."""

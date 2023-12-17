@@ -6,7 +6,7 @@ from e2e.pages.abstract_page import AbstractPage
 class MapCreatePage(AbstractPage):
     """The map creation page of permaplant"""
 
-    URL: str = E2E_URL + "/create"
+    URL: str = E2E_URL + "maps/create"
     TITLE: str = "PermaplanT"
 
     def __init__(self, page: Page):
@@ -16,12 +16,13 @@ class MapCreatePage(AbstractPage):
         self._longitude = page.get_by_placeholder("Longitude")
         self._latitude = page.get_by_placeholder("Latitude")
         self._create_button = page.get_by_role("button", name="Create")
+        self._privacy_select = page.get_by_test_id("map-create-form__select-privacy")
 
     def create_a_map(
         self,
         mapname,
-        privacy=None,
-        description="SUTDescription",
+        privacy="private",
+        description="SUT-Description",
         latitude="1",
         longitude="1",
     ):
@@ -31,7 +32,7 @@ class MapCreatePage(AbstractPage):
         which navigate to the `MapManagementPage`
         """
         self.fill_name(mapname)
-        # mcp.select_privacy(privacy)
+        self.select_privacy(privacy)
         self.fill_description(description)
         self.fill_latitude(latitude)
         self.fill_longitude(longitude)
@@ -41,7 +42,7 @@ class MapCreatePage(AbstractPage):
         self._name.fill(name)
 
     def select_privacy(self, privacy: str):
-        self._page.locator("select").select_option(privacy)
+        self._privacy_select.select_option(privacy)
 
     def fill_description(self, description: str):
         self._description.fill(description)

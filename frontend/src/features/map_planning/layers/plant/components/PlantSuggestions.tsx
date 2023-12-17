@@ -1,3 +1,4 @@
+import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import { useSeasonalAvailablePlants } from '../hooks/useSeasonalAvailablePlants';
 import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
 import { useSelectedPlantForPlanting } from '../hooks/useSelectedPlantForPlanting';
@@ -11,6 +12,7 @@ export function PlantSuggestions() {
   const { actions } = useSelectPlantForPlanting();
   const selectedPlantForPlanting = useSelectedPlantForPlanting();
   const { t } = useTranslation(['plantingSuggestions']);
+  const isReadOnlyMode = useIsReadOnlyMode();
 
   return (
     <div className="flex flex-col gap-4 p-2">
@@ -22,14 +24,15 @@ export function PlantSuggestions() {
       >
         {plants.map((plant) => (
           <PlantListItem
+            disabled={isReadOnlyMode}
             key={plant.id}
             plant={plant}
-            isHighlighted={selectedPlantForPlanting?.id === plant.id}
+            isHighlighted={selectedPlantForPlanting?.plant.id === plant.id}
             onClick={() => {
-              if (selectedPlantForPlanting?.id === plant.id) {
+              if (selectedPlantForPlanting?.plant.id === plant.id) {
                 actions.selectPlantForPlanting(null);
               } else {
-                actions.selectPlantForPlanting(plant);
+                actions.selectPlantForPlanting({ plant, seed: null });
               }
             }}
           />
