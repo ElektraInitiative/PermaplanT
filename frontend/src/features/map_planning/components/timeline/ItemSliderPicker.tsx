@@ -296,7 +296,7 @@ const ItemSliderPicker = ({
           return (
             <div
               key={index}
-              className={`item min-w-1/5 dark relative flex w-10 flex-col items-center justify-end border-4 border-white px-7 pb-1 pt-1 dark:border-neutral-200-dark
+              className={`item dark border-4 border-white px-2 pt-1 dark:border-neutral-200-dark
               ${
                 getSelectedItemIndex() === index
                   ? 'selected-item bg-gray-300 font-bold text-secondary-300 group-focus:border-blue-300 dark:bg-black '

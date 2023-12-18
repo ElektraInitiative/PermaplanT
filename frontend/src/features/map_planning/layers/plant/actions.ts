@@ -1,6 +1,21 @@
 /**
  * @module this module contains actions for the plant layer.
  */
+import { createPlanting } from '../../api/createPlanting';
+import { deletePlanting } from '../../api/deletePlanting';
+import { movePlanting } from '../../api/movePlanting';
+import { transformPlanting } from '../../api/transformPlanting';
+import { updateAddDatePlanting } from '../../api/updateAddDatePlanting';
+import { updateRemoveDatePlanting } from '../../api/updateRemoveDatePlanting';
+import useMapStore from '../../store/MapStore';
+import { Action, TrackedMapState } from '../../store/MapStoreTypes';
+import {
+  decreaseAddedPlantsForDate,
+  increaseAddedPlantsForDate,
+  timlineEventsUpdateAdedDate,
+  timlineEventsUpdateRemoveDate,
+} from '../../utils/TimelineEventsHelper';
+import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
 import { v4 } from 'uuid';
 import {
   PlantingDto,
@@ -47,6 +62,7 @@ export class CreatePlantAction
 
   apply(state: TrackedMapState): TrackedMapState {
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+    increaseAddedPlantsForDate(newPlant.addDate || timelineDate);
 
     return {
       ...state,
@@ -96,6 +112,12 @@ export class DeletePlantAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._data.id);
+    if (plant) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      decreaseAddedPlantsForDate(plant.addDate!);
+    }
+
     return {
       ...state,
       layers: {
@@ -294,6 +316,12 @@ export class UpdateAddDatePlantAction
     };
 
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._data.id);
+
+    if (plant) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      timlineEventsUpdateAdedDate(plant.addDate!, this._data.addDate!);
+    }
 
     return {
       ...state,
@@ -428,7 +456,9 @@ export class UpdateRemoveDatePlantAction
       });
     };
 
+    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._data.id);
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+    timlineEventsUpdateRemoveDate(plant?.removeDate, this._data.removeDate);
 
     return {
       ...state,

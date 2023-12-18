@@ -276,6 +276,11 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     }),
     {} as UntrackedLayers,
   ),
+  timeLineEvents: {
+    daily: [],
+    monthly: [],
+    yearly: [],
+  },
 };
 
 /**
@@ -338,6 +343,36 @@ export type TrackedPlantLayerState = {
    * The objects that have been loaded from the backend.
    */
   loadedObjects: PlantingDto[];
+};
+
+export type TimelineDailyEvent = {
+  key: number;
+  year: number;
+  month: number;
+  day: number;
+  added: number;
+  removed: number;
+};
+
+export type TimelineMonthlyEvent = {
+  key: number;
+  year: number;
+  month: number;
+  added: number;
+  removed: number;
+};
+
+export type TimelineYearlyEvent = {
+  key: number;
+  year: number;
+  added: number;
+  removed: number;
+};
+
+export type TimeLineEvents = {
+  daily: TimelineDailyEvent[];
+  monthly: TimelineMonthlyEvent[];
+  yearly: TimelineYearlyEvent[];
 };
 
 export type TrackedBaseLayerState = {
@@ -413,6 +448,7 @@ export type UntrackedMapState = {
   tooltipPosition: { x: number; y: number };
   bottomStatusPanelContent: React.ReactNode | null;
   layers: UntrackedLayers;
+  timeLineEvents: TimeLineEvents;
 };
 
 /**

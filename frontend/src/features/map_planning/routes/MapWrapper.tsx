@@ -13,6 +13,7 @@ import {
   usePlantLayer,
 } from '../hooks/mapEditorHookApi';
 import { useTourStatus } from '../hooks/tourHookApi';
+import useGetTimeLineEvents from '../hooks/useGetTimelineEvents';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
@@ -33,6 +34,38 @@ function useInitializeMap() {
   const mapId = useMapId();
   const { data: layers } = useGetLayers(mapId);
   const { data: map } = useMap(mapId);
+  const { data: layers, error } = useGetLayers(mapId);
+  const { t } = useTranslation(['layers']);
+  const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
+
+  const timeLineEvent = useGetTimeLineEvents();
+
+  useEffect(() => {
+    if (timeLineEvent) {
+      useMapStore.setState((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          timeLineEvents: {
+            daily: timeLineEvent.daily,
+            monthly: timeLineEvent.monthly,
+            yearly: timeLineEvent.yearly,
+          },
+        },
+      }));
+    }
+  }, [timeLineEvent]);
+
+  if (error) {
+    console.error(error);
+    errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
+  }
+
+  const mapQuery = useQuery({
+    queryKey: ['map', mapId],
+    queryFn: () => getMap(mapId),
+    refetchOnWindowFocus: false,
+  });
 
   useEffect(() => {
     if (!layers) return;
