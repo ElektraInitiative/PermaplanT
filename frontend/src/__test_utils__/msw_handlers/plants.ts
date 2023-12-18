@@ -29,8 +29,6 @@ export const handlers = [
   }),
 
   http.get(`${baseApiUrl}/api/plants`, ({ request }) => {
-    console.log(request.url);
-
     const url = new URL(request.url);
 
     const searchTerm = url.searchParams.get('name');
@@ -39,7 +37,7 @@ export const handlers = [
     const response: Page<PlantsSummaryDto> = {
       page: parseInt(page as string),
       per_page: 30,
-      total_pages: 3,
+      total_pages: 1,
       results: allPlants.filter((plant) => plant.unique_name.includes(searchTerm as string)),
     };
 
