@@ -1,9 +1,9 @@
 import IconButton from '@/components/Button/IconButton';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
-import { ReactComponent as EraserIcon } from '@/svg/icons/eraser.svg';
-import { ReactComponent as PencilPlusIcon } from '@/svg/icons/pencil-plus.svg';
-import { ReactComponent as PointerIcon } from '@/svg/icons/pointer.svg';
+import CloseIcon from '@/svg/icons/close.svg?react';
+import EraserIcon from '@/svg/icons/eraser.svg?react';
+import PencilPlusIcon from '@/svg/icons/pencil-plus.svg?react';
+import PointerIcon from '@/svg/icons/pointer.svg?react';
 import { useTranslation } from 'react-i18next';
 
 export function MapGeometryToolForm() {

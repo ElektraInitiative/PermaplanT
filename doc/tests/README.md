@@ -137,7 +137,7 @@ This will include testing of all features, navigation, and error handling.
 
 - E2E: Python Playwright & Pytest + plugins
 - Backend: Rust built-in tests by cargo
-- Frontend: Jest
+- Frontend: Vitest
 
 ## Test Data Management
 
@@ -160,7 +160,6 @@ This will include testing of all features, navigation, and error handling.
 - Unit and Integration tests must be fully automated.
 - Security and Performance tests may be manual.
 - System tests are automated (if possible) according to [the e2e guidelines](../guidelines/e2e.md).
-- Selenium, Cypress and Jest must be used for UI automation testing.
 
 ## Other Considerations
 

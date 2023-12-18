@@ -1,11 +1,10 @@
 import SearchInput, { SHORTCUT_SEARCH_INPUT_RESET, TEST_IDS } from './SearchInput';
-import '@testing-library/jest-dom';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ChangeEvent, ReactElement } from 'react';
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer';
 
-const mockHandleSearch = jest.fn();
+const mockHandleSearch = vi.fn();
 
 describe('SearchInput', () => {
   it('should render correctly', () => {

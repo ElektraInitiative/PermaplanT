@@ -10,8 +10,8 @@ import { useSeedSearch } from '@/features/map_planning/layers/plant/hooks/useSee
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { PlantForPlanting } from '@/features/map_planning/store/MapStoreTypes';
 import { resetSelection } from '@/features/map_planning/utils/ShapesSelection';
-import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
-import { ReactComponent as SearchIcon } from '@/svg/icons/search.svg';
+import CloseIcon from '@/svg/icons/close.svg?react';
+import SearchIcon from '@/svg/icons/search.svg?react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

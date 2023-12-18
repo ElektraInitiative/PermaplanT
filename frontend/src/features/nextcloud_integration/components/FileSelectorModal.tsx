@@ -2,7 +2,7 @@ import { FileSelector } from './FileSelector';
 import IconButton from '@/components/Button/IconButton';
 import ModalContainer from '@/components/Modals/ModalContainer';
 import TransparentBackground from '@/components/TransparentBackground';
-import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
+import CloseIcon from '@/svg/icons/close.svg?react';
 import { FileStat } from 'webdav';
 
 interface FileSelectorModalProps {

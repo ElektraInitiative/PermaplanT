@@ -29,7 +29,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
 - _()_
 - _()_
 - Remove error messages in console if a seed was not found _(Moritz)_

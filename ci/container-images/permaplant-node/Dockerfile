@@ -1,5 +1,5 @@
 # docker build -t permaplant-node -f ci/container-images/permaplant-node/Dockerfile .
-FROM node:19.4.0-slim
+FROM node:20.10.0-slim
 
 RUN mkdir /.npm /.cache /.java-caller
 RUN chown 47110:47110 -R /.npm /.cache /.java-caller
