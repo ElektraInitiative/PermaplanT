@@ -1,0 +1,19 @@
+{
+    "geometry_tool_form": {
+      "title": "Edit shape",
+      "add_points": "Add points",
+      "delete_points": "Delete points",
+      "move_points": "Move points"
+    },
+    "shading_amount": {
+      "no_shade": "None",
+      "light_shade": "Light",
+      "partial_shade": "Partial",
+      "permanent_shade": "Permanent",
+      "permanent_deep_shade": "Permanent deep shade"
+    },
+    "left_toolbar": {
+      "shading_amount_select_title": "Shading Type",
+      "delete_button": "Delete shading"
+    }
+}

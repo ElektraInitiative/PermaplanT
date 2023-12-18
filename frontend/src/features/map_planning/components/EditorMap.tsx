@@ -23,6 +23,9 @@ import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { HeatMapLayer } from '@/features/map_planning/layers/heatmap/HeatMapLayer';
+import { ShadeLayer } from '@/features/map_planning/layers/shade/ShadeLayer';
+import { ShadeLayerLeftToolbar } from '@/features/map_planning/layers/shade/components/ShadeLayerLeftToolbar';
+import { ShadeLayerRightToolbar } from '@/features/map_planning/layers/shade/components/ShadeLayerRightToolbar';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import CheckIcon from '@/svg/icons/check.svg?react';
@@ -206,7 +209,7 @@ export const EditorMap = ({ layers }: MapProps) => {
       [LayerType.Label]: { left: <div></div>, right: <div></div> },
       [LayerType.Landscape]: { left: <div></div>, right: <div></div> },
       [LayerType.Paths]: { left: <div></div>, right: <div></div> },
-      [LayerType.Shade]: { left: <div></div>, right: <div></div> },
+      [LayerType.Shade]: { left: <ShadeLayerLeftToolbar />, right: <ShadeLayerRightToolbar /> },
       [LayerType.Soil]: { left: <div></div>, right: <div></div> },
       [LayerType.Terrain]: { left: <div></div>, right: <div></div> },
       [LayerType.Trees]: { left: <div></div>, right: <div></div> },
@@ -306,6 +309,7 @@ export const EditorMap = ({ layers }: MapProps) => {
               opacity={untrackedState.layers.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
+            <ShadeLayer />
             <HeatMapLayer />
             <GridLayer
               visible={untrackedState.layers.grid.visible}
