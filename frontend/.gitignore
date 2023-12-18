@@ -13,7 +13,5 @@ src/generated/*
 *.sln
 *.sw?
 
-.env
-
 # storybook build
 storybook-static

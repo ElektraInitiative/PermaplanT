@@ -2,13 +2,13 @@ import TimelineDatePicker from './TimelineDatePicker';
 import { render } from '@testing-library/react';
 import ReactTestUtils, { act } from 'react-dom/test-utils';
 
-const onSelectChange = jest.fn();
-const onLoading = jest.fn();
+const onSelectChange = vi.fn();
+const onLoading = vi.fn();
 
 describe('handleDayItemChange', () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
   it('should callback correct date when day item is changed', () => {
-    Element.prototype.scrollTo = jest.fn();
+    Element.prototype.scrollTo = vi.fn(() => void 0);
 
     const timeline = render(
       <TimelineDatePicker
@@ -22,7 +22,7 @@ describe('handleDayItemChange', () => {
         key: 'ArrowRight',
       });
     });
-    jest.runAllTimers();
+    vi.runAllTimers();
 
     expect(onSelectChange).toBeCalledWith('2021-01-01');
     expect(
@@ -41,11 +41,11 @@ describe('handleDayItemChange', () => {
 });
 
 describe('handleMonthItemChange', () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   it('should callback correct date when month item is changed', () => {
-    Element.prototype.scrollTo = jest.fn();
-    const onSelectChange = jest.fn();
+    Element.prototype.scrollTo = vi.fn(() => void 0);
+    const onSelectChange = vi.fn();
 
     const timeline = render(
       <TimelineDatePicker
@@ -63,7 +63,7 @@ describe('handleMonthItemChange', () => {
       });
     }
 
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(onSelectChange).toBeCalledWith('2019-11-01');
     expect(
       timeline.getByTestId('timeline__year-slider').getElementsByClassName('selected-item')[0]
@@ -80,8 +80,8 @@ describe('handleMonthItemChange', () => {
   });
 
   it('should automatically select last day of month if new month has less days than previous selected day', () => {
-    Element.prototype.scrollTo = jest.fn();
-    const onSelectChange = jest.fn();
+    Element.prototype.scrollTo = vi.fn(() => void 0);
+    const onSelectChange = vi.fn();
 
     const timeline = render(
       <TimelineDatePicker
@@ -97,7 +97,7 @@ describe('handleMonthItemChange', () => {
       });
     });
 
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(onSelectChange).toBeCalledWith('2020-02-29');
     expect(
       timeline.getByTestId('timeline__year-slider').getElementsByClassName('selected-item')[0]
@@ -115,10 +115,10 @@ describe('handleMonthItemChange', () => {
 });
 
 describe('handleYearItemChange', () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
   it('should callback correct date when year item is changed', () => {
-    Element.prototype.scrollTo = jest.fn();
-    const onSelectChange = jest.fn();
+    Element.prototype.scrollTo = vi.fn(() => void 0);
+    const onSelectChange = vi.fn();
 
     const timeline = render(
       <TimelineDatePicker
@@ -134,7 +134,7 @@ describe('handleYearItemChange', () => {
       });
     });
 
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(onSelectChange).toBeCalledWith('2001-01-31');
     expect(
       timeline.getByTestId('timeline__year-slider').getElementsByClassName('selected-item')[0]

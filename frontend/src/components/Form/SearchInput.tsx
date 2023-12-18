@@ -1,5 +1,5 @@
-import { ReactComponent as SearchResetIcon } from '@/svg/icons/search-reset.svg';
-import { ReactComponent as SearchIcon } from '@/svg/icons/search.svg';
+import SearchResetIcon from '@/svg/icons/search-reset.svg?react';
+import SearchIcon from '@/svg/icons/search.svg?react';
 import React, {
   forwardRef,
   KeyboardEvent,

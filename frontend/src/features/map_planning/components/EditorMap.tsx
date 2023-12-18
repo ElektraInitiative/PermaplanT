@@ -25,12 +25,12 @@ import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/Gr
 import { HeatMapLayer } from '@/features/map_planning/layers/heatmap/HeatMapLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
-import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
-import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
-import { ReactComponent as GridIcon } from '@/svg/icons/grid-dots.svg';
-import { ReactComponent as RedoIcon } from '@/svg/icons/redo.svg';
-import { ReactComponent as TagsIcon } from '@/svg/icons/tags.svg';
-import { ReactComponent as UndoIcon } from '@/svg/icons/undo.svg';
+import CheckIcon from '@/svg/icons/check.svg?react';
+import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
+import GridIcon from '@/svg/icons/grid-dots.svg?react';
+import RedoIcon from '@/svg/icons/redo.svg?react';
+import TagsIcon from '@/svg/icons/tags.svg?react';
+import UndoIcon from '@/svg/icons/undo.svg?react';
 import i18next from 'i18next';
 import Konva from 'konva';
 import { useContext, useEffect, useState } from 'react';

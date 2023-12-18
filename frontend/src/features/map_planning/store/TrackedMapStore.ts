@@ -1,13 +1,6 @@
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
-import {
-  Action,
-  GetFn,
-  SetFn,
-  TRACKED_DEFAULT_STATE,
-  TrackedMapSlice,
-  UNTRACKED_DEFAULT_STATE,
-  UntrackedMapSlice,
-} from './MapStoreTypes';
+import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
+import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
 import { clearInvalidSelection } from './utils';
 import { BaseLayerImageDto, PlantingDto } from '@/api_types/definitions';
 import Konva from 'konva';
