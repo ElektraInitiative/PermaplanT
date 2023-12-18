@@ -24,52 +24,88 @@ export function DrawingLayerToolForm() {
     (state) => state.drawingLayerActivateDrawEllipse,
   );
 
+  const setSelectedColor = useMapStore((state) => state.drawingLayerSetSelectedColor);
+  const setSelectedStrokeWidth = useMapStore((state) => state.drawingLayerSetSelectedStrokeWidth);
+  const selectedColor = useMapStore((state) => state.untrackedState.layers.drawing.selectedColor);
+  const selectedStrokeWidth = useMapStore(
+    (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
+  );
+
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   return (
-    <div>
-      <h2>{t('drawingLayerForm:tools_title')}</h2>
-      <div className="flex flex-row gap-1">
-        <IconButton
-          className={'active'}
-          isToolboxIcon={true}
-          onClick={() => {
-            drawingLayerActivateFreeDrawing();
-            setStatusPanelContent(
-              <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_free_line_hint')} />,
-            );
-          }}
-          title={t('drawingLayerForm:draw_free_line_tooltip')}
-        >
-          <LineIcon></LineIcon>
-        </IconButton>
-        <IconButton
-          isToolboxIcon={true}
-          onClick={() => {
-            drawingLayerActivateRectangleDrawing();
-            setStatusPanelContent(
-              <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_ellipse_hint')} />,
-            );
-          }}
-          title={t('drawingLayerForm:draw_rectangle_tooltip')}
-        >
-          <RectangleIcon></RectangleIcon>
-        </IconButton>
-
-        <IconButton
-          isToolboxIcon={true}
-          onClick={() => {
-            drawingLayerActivateDrawEllipse();
-            setStatusPanelContent(
-              <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_rectangle_hint')} />,
-            );
-          }}
-          title={t('drawingLayerForm:draw_ellipse_tooltip')}
-        >
-          <CircleIcon></CircleIcon>
-        </IconButton>
+    <>
+      <div>
+        <h2>Settings</h2>
+        <div>
+          <div>
+            <label htmlFor="selectedDrawingLayerColor">Color: </label>
+            <input
+              id="selectedDrawingLayerColor"
+              type="color"
+              value={selectedColor}
+              onChange={(e) => setSelectedColor(e.target.value)}
+            ></input>
+          </div>
+          <div>
+            <label htmlFor="selectedDrawingLayerStrokeWidth">Stroke: </label>{' '}
+            <input
+              id="selectedDrawingLayerStrokeWidth"
+              type="range"
+              name="cowbell"
+              min="0"
+              max="100"
+              value={selectedStrokeWidth}
+              onChange={(e) => setSelectedStrokeWidth(+e.target.value)}
+              step="1"
+            />
+          </div>
+        </div>
       </div>
-    </div>
+      <div>
+        <h2>{t('drawingLayerForm:tools_title')}</h2>
+        <div className="flex flex-row gap-1">
+          <IconButton
+            className={'active'}
+            isToolboxIcon={true}
+            onClick={() => {
+              drawingLayerActivateFreeDrawing();
+              setStatusPanelContent(
+                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_free_line_hint')} />,
+              );
+            }}
+            title={t('drawingLayerForm:draw_free_line_tooltip')}
+          >
+            <LineIcon></LineIcon>
+          </IconButton>
+          <IconButton
+            isToolboxIcon={true}
+            onClick={() => {
+              drawingLayerActivateRectangleDrawing();
+              setStatusPanelContent(
+                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_ellipse_hint')} />,
+              );
+            }}
+            title={t('drawingLayerForm:draw_rectangle_tooltip')}
+          >
+            <RectangleIcon></RectangleIcon>
+          </IconButton>
+
+          <IconButton
+            isToolboxIcon={true}
+            onClick={() => {
+              drawingLayerActivateDrawEllipse();
+              setStatusPanelContent(
+                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_rectangle_hint')} />,
+              );
+            }}
+            title={t('drawingLayerForm:draw_ellipse_tooltip')}
+          >
+            <CircleIcon></CircleIcon>
+          </IconButton>
+        </div>
+      </div>
+    </>
   );
 }
 

@@ -187,6 +187,8 @@ export interface UntrackedMapSlice {
   drawingLayerActivateDrawRectangle: () => void;
   drawingLayerActivateDrawEllipse: () => void;
   drawingLayerClearSelectedShape: () => void;
+  drawingLayerSetSelectedColor: (color: string) => void;
+  drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
 
   disableShapeSelection: () => void;
   enableShapeSelection: () => void;
@@ -386,9 +388,9 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
 };
 
 export type UntrackedDrawingLayerState = UntrackedLayerState & {
-  selectedPlantForPlanting: PlantForPlanting | null;
-  selectedPlantings: PlantingDto[] | null;
   shape: 'free' | 'rectangle' | 'ellipse' | null;
+  selectedColor: string;
+  selectedStrokeWidth: number;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {

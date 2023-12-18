@@ -397,6 +397,38 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
 
+  drawingLayerSetSelectedColor(color) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedColor: color,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetSelectedStrokeWidth(strokeWidth) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedStrokeWidth: strokeWidth,
+          },
+        },
+      },
+    }));
+  },
+
   drawingLayerActivateDrawRectangle() {
     get().disableShapeSelection();
     set((state) => ({

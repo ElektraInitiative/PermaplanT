@@ -16,6 +16,7 @@ export function MapGeometryToolForm() {
   const activatePolygonDeletePoints = useMapStore(
     (state) => state.baseLayerActivateDeletePolygonPoints,
   );
+
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   return (

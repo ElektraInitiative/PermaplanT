@@ -10,10 +10,13 @@ import { Ellipse, Layer, Line, Rect } from 'react-konva';
 type DrawingLayerProps = LayerConfigWithListenerRegister;
 
 type Line = {
+  color: string;
+  strokeWidth: number;
   points: number[];
 };
 
 type Rectangle = {
+  color: string;
   x1: number;
   y1: number;
   x2: number;
@@ -21,6 +24,7 @@ type Rectangle = {
 };
 
 type Ellipse = {
+  color: string;
   x: number;
   y: number;
   radiusX: number;
@@ -29,6 +33,12 @@ type Ellipse = {
 
 function DrawingLayer(props: DrawingLayerProps) {
   const shape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
+
+  const selectedColor = useMapStore((state) => state.untrackedState.layers.drawing.selectedColor);
+  const selectedStrokeWidth = useMapStore(
+    (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
+  );
+
   const { stageListenerRegister, ...layerProps } = props;
 
   const [lines, setLines] = useState<Line[]>([]);
@@ -58,11 +68,14 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (pos == null) return;
 
     if (shape == 'free') {
-      setLines((prevLines) => [...prevLines, { points: [pos.x, pos.y] }]);
+      setLines((prevLines) => [
+        ...prevLines,
+        { strokeWidth: selectedStrokeWidth, color: selectedColor, points: [pos.x, pos.y] },
+      ]);
     } else if (shape == 'rectangle') {
-      setPreviewRectangle({ x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y });
+      setPreviewRectangle({ color: selectedColor, x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y });
     } else if (shape == 'ellipse') {
-      setPreviewEllipse({ x: pos.x, y: pos.y, radiusX: 0, radiusY: 0 });
+      setPreviewEllipse({ color: selectedColor, x: pos.x, y: pos.y, radiusX: 0, radiusY: 0 });
     }
   };
 
@@ -84,6 +97,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   const handleDrawRectangle = (point: Vector2d) => {
     if (!previewRectangle) return;
     setPreviewRectangle({
+      color: selectedColor,
       x1: previewRectangle?.x1,
       y1: previewRectangle?.y1,
       x2: point.x,
@@ -95,6 +109,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (!previewRectangle) return;
 
     setPreviewRectangle({
+      color: selectedColor,
       x1: previewRectangle?.x1,
       y1: previewRectangle?.y1,
       x2: point.x,
@@ -105,6 +120,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   const handleDrawEllipse = (point: Vector2d) => {
     if (!previewEllipse) return;
     setPreviewEllipse({
+      color: selectedColor,
       x: previewEllipse.x,
       y: previewEllipse.y,
       radiusX: Math.abs(point.x - previewEllipse.x),
@@ -117,6 +133,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
     const radius = Math.abs(point.x - previewEllipse.x);
     setPreviewEllipse({
+      color: selectedColor,
       x: previewEllipse.x,
       y: previewEllipse.y,
       radiusX: radius,
@@ -160,6 +177,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       if (!previewRectangle) return;
 
       const newRect: Rectangle = {
+        color: selectedColor,
         x1: Math.min(previewRectangle.x1, previewRectangle.x2),
         x2: Math.max(previewRectangle.x1, previewRectangle.x2),
         y1: Math.min(previewRectangle.y1, previewRectangle.y2),
@@ -172,6 +190,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       if (!previewEllipse) return;
 
       const newEllipse: Ellipse = {
+        color: selectedColor,
         x: previewEllipse.x,
         y: previewEllipse.y,
         radiusX: previewEllipse.radiusX,
@@ -217,8 +236,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             listening={true}
             key={i}
             points={line.points}
-            stroke="#df4b26"
-            strokeWidth={5}
+            stroke={line.color}
+            strokeWidth={line.strokeWidth}
             tension={0.2}
             lineCap="round"
             lineJoin="round"
@@ -238,8 +257,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             y={rectangle.y1}
             width={rectangle.x2 - rectangle.x1}
             height={rectangle.y2 - rectangle.y1}
-            stroke="#df4b26"
-            fill="#df4b26"
+            stroke={rectangle.color}
+            fill={rectangle.color}
             strokeWidth={5}
             onClick={handleShapeClicked}
             draggable
@@ -255,7 +274,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             y={Math.min(previewRectangle.y1, previewRectangle.y2)}
             width={Math.abs(previewRectangle.x1 - previewRectangle.x2)}
             height={Math.abs(previewRectangle.y1 - previewRectangle.y2)}
-            stroke="#df4b26"
+            stroke={previewRectangle.color}
             strokeWidth={5}
           ></Rect>
         )}
@@ -268,8 +287,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             y={ellipse.y}
             radiusX={ellipse.radiusX}
             radiusY={ellipse.radiusY}
-            stroke="blue"
-            fill="blue"
+            stroke={ellipse.color}
+            fill={ellipse.color}
             strokeWidth={5}
             onClick={handleShapeClicked}
             draggable
@@ -284,7 +303,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             y={previewEllipse.y}
             radiusX={previewEllipse.radiusX}
             radiusY={previewEllipse.radiusY}
-            stroke="blue"
+            stroke={previewEllipse.color}
             strokeWidth={5}
           />
         )}
