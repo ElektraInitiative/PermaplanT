@@ -1,38 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import useGetTimelineEvents from '../../hooks/useGetTimelineEvents';
+import useMapStore from '../../store/MapStore';
+import {
+  TimelineDailyEvent,
+  TimelineMonthlyEvent,
+  TimelineYearlyEvent,
+} from '../../store/MapStoreTypes';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const TEST_IDS = Object.freeze({
   DAY_SLIDER: 'timeline__day-slider',
   MONTH_SLIDER: 'timeline__month-slider',
   YEAR_SLIDER: 'timeline__year-slider',
 });
-
-export type DayItem = {
-  key: number;
-  year: number;
-  month: number;
-  day: number;
-  added: number;
-  removed: number;
-};
-
-export type MonthItem = {
-  key: number;
-  year: number;
-  month: number;
-  added: number;
-  removed: number;
-};
-
-export type YearItem = {
-  key: number;
-  year: number;
-  added: number;
-  removed: number;
-};
 
 type TimelineDatePickerProps = {
   /** Is called when date is selected and process is completed.
@@ -54,62 +37,72 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
 
   const submitTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  const {
-    dailyTimeLineEvents: daySilderItems,
-    monthlyTimeLineEvents: monthSliderItems,
-    yearlyTimeLineEvents,
-  } = useGetTimelineEvents();
+  const daySliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.daily);
+  const monthSliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.monthly);
+  const yearlyTimeLineEvents = useMapStore((state) => state.untrackedState.timeLineEvents.yearly);
 
   const { i18n } = useTranslation();
 
-  const [selectedYearItem, setSelectedYearItem] = useState<YearItem>(
+  const [selectedYearItem, setSelectedYearItem] = useState<TimelineYearlyEvent>(
     yearlyTimeLineEvents.find((yearSliderItem) => yearSliderItem.year === defaultYear) ||
-      yearlyTimeLineEvents[0],
+      yearlyTimeLineEvents[0] ||
+      undefined,
   );
 
-  const [selectedMonthItem, setSelectedMonthItem] = useState<MonthItem>(
+  const [selectedMonthItem, setSelectedMonthItem] = useState<TimelineMonthlyEvent>(
     monthSliderItems.find((month) => month.year === defaultYear && month.month === defaultMonth) ||
-      monthSliderItems[0],
+      monthSliderItems[0] ||
+      undefined,
   );
 
-  const [selectedDayItem, setSelectedDayItem] = useState<DayItem>(
-    daySilderItems.find(
+  const [selectedDayItem, setSelectedDayItem] = useState<TimelineDailyEvent>(
+    daySliderItems.find(
       (day) => day.year === defaultYear && day.month === defaultMonth && day.day === defaultDay,
-    ) || daySilderItems[0],
+    ) ||
+      daySliderItems[0] ||
+      undefined,
   );
 
-  const calculateVisibleDays = (dayItem: DayItem) => {
-    return daySilderItems.filter(
-      (day) => day.key >= dayItem.key - 100 && day.key <= dayItem.key + 100,
-    );
-  };
+  const calculateVisibleDays = useCallback(
+    (dayItem: TimelineDailyEvent) => {
+      return daySliderItems.filter(
+        (day) => day.key >= dayItem.key - 100 && day.key <= dayItem.key + 100,
+      );
+    },
+    [daySliderItems],
+  );
 
-  const calculateVisibleMonths = (yearItem: YearItem) => {
-    return monthSliderItems.filter(
-      (month) => month.year >= yearItem.year - 3 && month.year <= yearItem.year + 3,
-    );
-  };
+  const calculateVisibleMonths = useCallback(
+    (yearItem: TimelineYearlyEvent) => {
+      return monthSliderItems.filter(
+        (month) => month.year >= yearItem.year - 3 && month.year <= yearItem.year + 3,
+      );
+    },
+    [monthSliderItems],
+  );
 
   const getLastDayItemOfMonth = (month: number, year: number) => {
-    return daySilderItems
+    return daySliderItems
       .filter((daySliderItem) => daySliderItem.month === month && daySliderItem.year === year)
       .pop();
   };
 
-  const [visibleDays, setVisibleDays] = useState<DayItem[]>(calculateVisibleDays(selectedDayItem));
-  const [visibleMonths, setVisibleMonths] = useState<MonthItem[]>(
+  const [visibleDays, setVisibleDays] = useState<TimelineDailyEvent[]>(
+    calculateVisibleDays(selectedDayItem),
+  );
+  const [visibleMonths, setVisibleMonths] = useState<TimelineMonthlyEvent[]>(
     calculateVisibleMonths(selectedYearItem),
   );
 
   const [focusedSlider, setFocusedSlider] = useState<'year' | 'month' | 'day'>();
 
-  const updateSelectedDate = (selectedDayItem: DayItem) => {
+  const updateSelectedDate = (selectedDayItem: TimelineDailyEvent) => {
     onLoading();
     setSelectedDayItem(selectedDayItem);
   };
 
   const handleDayItemChange = (itemKey: number) => {
-    const selectedDayItem = daySilderItems[itemKey];
+    const selectedDayItem = daySliderItems[itemKey];
 
     updateSelectedDate(selectedDayItem);
 
@@ -173,8 +166,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     }
   };
 
-  const selectNewDayWhenMonthChanged = (newMonthItem: MonthItem) => {
-    const sameDayInNewMonth = daySilderItems.find(
+  const selectNewDayWhenMonthChanged = (newMonthItem: TimelineMonthlyEvent) => {
+    const sameDayInNewMonth = daySliderItems.find(
       (day) =>
         newMonthItem.month === day.month &&
         newMonthItem.year === day.year &&
@@ -208,10 +201,18 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   const handleDaySliderRightEndReached = () => {
-    if (visibleDays[visibleDays.length - 1].key < daySilderItems.length - 1) {
+    if (visibleDays[visibleDays.length - 1].key < daySliderItems.length - 1) {
       setVisibleDays(calculateVisibleDays(selectedDayItem));
     }
   };
+
+  useEffect(() => {
+    setVisibleDays(calculateVisibleDays(selectedDayItem));
+  }, [calculateVisibleDays, selectedDayItem]);
+
+  useEffect(() => {
+    setVisibleMonths(calculateVisibleMonths(selectedYearItem));
+  }, [calculateVisibleMonths, selectedYearItem]);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     switch (event.key) {
@@ -269,6 +270,13 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     return () => clearTimeout(submitTimeout.current);
   }, [selectedDayItem, onSelectDate]);
 
+  const maxAddedDay = Math.max(...daySliderItems.map((day) => day.added));
+  const maxRemovedDay = Math.max(...daySliderItems.map((day) => day.removed));
+  const maxAddedMonth = Math.max(...monthSliderItems.map((month) => month.added));
+  const maxRemovedMonth = Math.max(...monthSliderItems.map((month) => month.removed));
+  const maxAddedYear = Math.max(...yearlyTimeLineEvents.map((year) => year.added));
+  const maxRemovedYear = Math.max(...yearlyTimeLineEvents.map((year) => year.removed));
+
   return (
     <div
       data-tourid="timeline"
@@ -285,6 +293,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
             text: yearSliderItem.year.toString(),
             added: yearSliderItem.added,
             removed: yearSliderItem.removed,
+            maxAdded: maxAddedYear,
+            maxRemoved: maxRemovedYear,
           }),
         }))}
         onChange={handleYearChange}
@@ -300,6 +310,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
           content: TimelineDatePickerItem({
             text: getShortMonthNameFromNumber(monthSliderItem.month, i18n.resolvedLanguage),
             added: monthSliderItem.added,
+            maxAdded: maxAddedMonth,
+            maxRemoved: maxRemovedMonth,
             removed: monthSliderItem.removed,
             disabled: monthSliderItem.year !== selectedYearItem.year,
           }),
@@ -320,6 +332,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
             text: daySliderItem.day.toString(),
             added: daySliderItem.added,
             removed: daySliderItem.removed,
+            maxAdded: maxAddedDay,
+            maxRemoved: maxRemovedDay,
             disabled:
               daySliderItem.month != selectedMonthItem.month ||
               daySliderItem.year != selectedMonthItem.year,
@@ -341,39 +355,47 @@ function TimelineDatePickerItem({
   text,
   added,
   removed,
+  maxAdded,
+  maxRemoved,
   disabled,
 }: {
   text: string;
   added: number;
   removed: number;
+  maxAdded: number;
+  maxRemoved: number;
   disabled?: boolean;
 }) {
+  const max = Math.max(maxAdded, maxRemoved, 200);
+
+  const addedHeight = added == 0 ? 0 : (Math.log(added) / Math.log(max)) * 40 + 5;
+  const removedHeight = removed == 0 ? 0 : (Math.log(removed) / Math.log(max)) * 40 + 5;
+
   return (
-    <div className="select-none">
-      <TimeLineDatePickerEventIndicator added={added} removed={removed} />
-      <span className={`select-none ${disabled ? 'text-gray-400' : ''}`}>{text}</span>
+    <div className="full-width flex w-9 select-none flex-col">
+      <TimeLineDatePickerEventIndicator addedHeight={addedHeight} removedHeight={removedHeight} />
+      <span className={`select-none	 text-center ${disabled ? 'text-gray-400' : ''}`}>{text}</span>
     </div>
   );
 }
 
-function TimeLineDatePickerEventIndicator({ added, removed }: { added: number; removed: number }) {
-  const greenBarHeight = added;
-  const redBarHeight = removed;
-
+function TimeLineDatePickerEventIndicator({
+  addedHeight,
+  removedHeight,
+}: {
+  addedHeight: number;
+  removedHeight: number;
+}) {
   return (
-    <div className="flex select-none justify-center">
-      <div className="flex items-end">
-        <div
-          style={{ height: greenBarHeight + 'px' }}
-          className="w-2 bg-primary-400 opacity-100"
-        ></div>
-      </div>
-      <div className="flex items-end">
-        <div
-          style={{ height: redBarHeight + 'px' }}
-          className="w-2 bg-red-400 opacity-100 dark:bg-red-700"
-        ></div>
-      </div>
+    <div className="full-width select-none">
+      <div
+        style={{ width: addedHeight + 'px' }}
+        className="h-[3px] bg-primary-400 opacity-100"
+      ></div>
+      <div
+        style={{ width: removedHeight + 'px' }}
+        className="mt-[1px] h-[3px] bg-red-400 opacity-100 dark:bg-red-700"
+      ></div>
     </div>
   );
 }

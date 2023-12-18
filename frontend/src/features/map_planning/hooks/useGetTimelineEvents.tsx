@@ -66,9 +66,9 @@ const createDays = () => {
 export default function useGetTimeLineEvents() {
   return useMemo(() => {
     return {
-      dailyTimeLineEvents: createDays(),
-      monthlyTimeLineEvents: createMonths(),
-      yearlyTimeLineEvents: createYears(),
+      daily: createDays(),
+      monthly: createMonths(),
+      yearly: createYears(),
     };
   }, []);
 }
