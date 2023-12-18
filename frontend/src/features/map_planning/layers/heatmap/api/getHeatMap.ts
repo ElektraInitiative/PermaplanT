@@ -24,6 +24,7 @@ export async function getHeatMap(
     return await http.get(`api/maps/${mapId}/layers/plants/heatmap`, {
       params: { plant_layer_id: plantLayerId, plant_id: plantId, shade_layer_id: shadeLayerId },
       responseType: 'blob',
+      timeout: Infinity,
     });
   } catch (error) {
     throw error as Error;
