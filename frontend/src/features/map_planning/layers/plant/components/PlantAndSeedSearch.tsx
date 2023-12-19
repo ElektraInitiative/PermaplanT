@@ -95,9 +95,9 @@ export const PlantAndSeedSearch = () => {
             <SearchInput
               disabled={isReadOnlyMode}
               placeholder={t('plantSearch:placeholder')}
-              handleSearch={(event) => {
-                plantSearchActions.searchPlants(event.target.value);
-                seedSearchActions.searchSeeds(event.target.value);
+              handleSearch={(value) => {
+                plantSearchActions.searchPlants(value);
+                seedSearchActions.searchSeeds(value);
               }}
               ref={searchInputRef}
               data-testid="plant-search__search-input"

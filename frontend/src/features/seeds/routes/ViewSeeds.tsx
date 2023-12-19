@@ -36,8 +36,8 @@ export const ViewSeeds = () => {
 
   const seeds = useMemo(() => data?.pages.flatMap((page) => page.results) ?? [], [data]);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = event.target.value.toLowerCase();
+  const handleSearch = (value: string) => {
+    const searchValue = value.toLowerCase();
     actions.searchSeeds(searchValue);
   };
 
