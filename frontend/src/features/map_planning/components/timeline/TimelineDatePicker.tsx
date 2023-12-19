@@ -1,4 +1,4 @@
-import useGetTimeLineEvents from '../../hooks/useGetTimelineEvents';
+import useGetTimelineEvents from '../../hooks/useGetTimelineEvents';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
 import { useState, useEffect, useRef } from 'react';
@@ -53,11 +53,13 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   const defaultDay = new Date(defaultDate).getDate();
 
   const submitTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
+
   const {
     dailyTimeLineEvents: daySilderItems,
     monthlyTimeLineEvents: monthSliderItems,
     yearlyTimeLineEvents,
-  } = useGetTimeLineEvents();
+  } = useGetTimelineEvents();
+
   const { i18n } = useTranslation();
 
   const [selectedYearItem, setSelectedYearItem] = useState<YearItem>(
@@ -99,9 +101,17 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     calculateVisibleMonths(selectedYearItem),
   );
 
+  const [focusedSlider, setFocusedSlider] = useState<'year' | 'month' | 'day'>();
+
+  const updateSelectedDate = (selectedDayItem: DayItem) => {
+    onLoading();
+    setSelectedDayItem(selectedDayItem);
+  };
+
   const handleDayItemChange = (itemKey: number) => {
     const selectedDayItem = daySilderItems[itemKey];
-    setSelectedDayItem(selectedDayItem);
+
+    updateSelectedDate(selectedDayItem);
 
     if (selectedDayItem.month !== selectedMonthItem.month) {
       const newMonthItem = monthSliderItems.find(
@@ -175,7 +185,7 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
       sameDayInNewMonth || getLastDayItemOfMonth(newMonthItem.month, newMonthItem.year);
     if (newDay) {
       setVisibleDays(calculateVisibleDays(newDay));
-      setSelectedDayItem(newDay);
+      updateSelectedDate(newDay);
     }
   };
 
@@ -203,21 +213,70 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case 'ArrowUp':
+        setFocus('up');
+        break;
+      case 'ArrowDown':
+        setFocus('down');
+        break;
+      default:
+        break;
+    }
+  };
+
+  const setFocus = (direction: 'up' | 'down') => {
+    if (direction === 'up') {
+      switch (focusedSlider) {
+        case 'year':
+          setFocusedSlider('day');
+          break;
+        case 'month':
+          setFocusedSlider('year');
+          break;
+        case 'day':
+          setFocusedSlider('month');
+          break;
+        default:
+          break;
+      }
+    } else if (direction === 'down') {
+      switch (focusedSlider) {
+        case 'year':
+          setFocusedSlider('month');
+          break;
+        case 'month':
+          setFocusedSlider('day');
+          break;
+        case 'day':
+          setFocusedSlider('year');
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
   useEffect(() => {
-    onLoading();
     submitTimeout.current = setTimeout(() => {
       const newDay = selectedDayItem;
       const formattedMonth = String(newDay.month).padStart(2, '0');
       const formattedDay = String(newDay.day).padStart(2, '0');
       const formattedDate = `${newDay.year}-${formattedMonth}-${formattedDay}`;
       onSelectDate(formattedDate);
-    }, 500);
+    }, 1000);
     return () => clearTimeout(submitTimeout.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDayItem]);
+  }, [selectedDayItem, onSelectDate]);
 
   return (
-    <div data-tourid="timeline" id="timeline" className="select-none">
+    <div
+      data-tourid="timeline"
+      id="timeline"
+      className="select-none"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+    >
       <ItemSliderPicker
         dataTestId={TEST_IDS.YEAR_SLIDER}
         items={yearlyTimeLineEvents.map((yearSliderItem) => ({
@@ -231,6 +290,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
         onChange={handleYearChange}
         onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
         value={selectedYearItem.key}
+        autoFocus={focusedSlider === 'year'}
+        onFocus={() => setFocusedSlider('year')}
       />
       <ItemSliderPicker
         dataTestId={TEST_IDS.MONTH_SLIDER}
@@ -248,6 +309,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
         rightEndReached={handleMontSliderRightEndReached}
         value={selectedMonthItem.key}
         onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
+        autoFocus={focusedSlider === 'month'}
+        onFocus={() => setFocusedSlider('month')}
       />
       <ItemSliderPicker
         dataTestId={TEST_IDS.DAY_SLIDER}
@@ -267,6 +330,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
         rightEndReached={handleDaySliderRightEndReached}
         value={selectedDayItem.key}
         onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
+        autoFocus={focusedSlider === 'day'}
+        onFocus={() => setFocusedSlider('day')}
       />
     </div>
   );
