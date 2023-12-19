@@ -1,5 +1,5 @@
 import SearchInput, { SHORTCUT_SEARCH_INPUT_RESET, TEST_IDS } from './SearchInput';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ChangeEvent, ReactElement } from 'react';
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer';
@@ -32,9 +32,7 @@ describe('SearchInput', () => {
 
     expect(screen.queryByTestId(TEST_IDS.RESET_ICON)).not.toBeInTheDocument();
 
-    await act(async () => {
-      await user.type(screen.getByTestId(TEST_IDS.SEARCH_INPUT), 'Tomato');
-    });
+    await user.type(screen.getByTestId(TEST_IDS.SEARCH_INPUT), 'Tomato');
 
     expect(screen.getByTestId(TEST_IDS.RESET_ICON)).toBeInTheDocument();
   });
@@ -42,15 +40,11 @@ describe('SearchInput', () => {
   it('should hide the search reset icon again when the search input field is manually cleared', async () => {
     const { user } = renderComponent(<SearchInput handleSearch={mockHandleSearch} />);
 
-    await act(async () => {
-      await user.type(screen.getByTestId(TEST_IDS.SEARCH_INPUT), 'Tomato');
-    });
+    await user.type(screen.getByTestId(TEST_IDS.SEARCH_INPUT), 'Tomato');
 
     expect(screen.getByTestId(TEST_IDS.RESET_ICON)).toBeInTheDocument();
 
-    await act(async () => {
-      await user.clear(screen.getByTestId(TEST_IDS.SEARCH_INPUT));
-    });
+    await user.clear(screen.getByTestId(TEST_IDS.SEARCH_INPUT));
 
     expect(screen.queryByTestId(TEST_IDS.RESET_ICON)).not.toBeInTheDocument();
   });
@@ -58,15 +52,11 @@ describe('SearchInput', () => {
   it('should hide the search reset icon again when the search input field is cleared via click on reset icon', async () => {
     const { user } = renderComponent(<SearchInput handleSearch={mockHandleSearch} />);
 
-    await act(async () => {
-      await user.type(screen.getByTestId(TEST_IDS.SEARCH_INPUT), 'Tomato');
-    });
+    await user.type(screen.getByTestId(TEST_IDS.SEARCH_INPUT), 'Tomato');
 
     expect(screen.getByTestId(TEST_IDS.RESET_ICON)).toBeInTheDocument();
 
-    await act(async () => {
-      await user.click(screen.getByTestId(TEST_IDS.RESET_ICON) as Element);
-    });
+    await user.click(screen.getByTestId(TEST_IDS.RESET_ICON) as Element);
 
     expect(screen.queryByTestId(TEST_IDS.RESET_ICON)).not.toBeInTheDocument();
   });
@@ -75,15 +65,11 @@ describe('SearchInput', () => {
     const { user } = renderComponent(<SearchInput handleSearch={mockHandleSearch} />);
     const searchInputField = screen.getByTestId(TEST_IDS.SEARCH_INPUT);
 
-    await act(async () => {
-      await user.type(searchInputField, 'Tomato');
-    });
+    await user.type(searchInputField, 'Tomato');
 
     expect(searchInputField).toHaveValue('Tomato');
 
-    await act(async () => {
-      await user.click(screen.getByTestId(TEST_IDS.RESET_ICON) as Element);
-    });
+    await user.click(screen.getByTestId(TEST_IDS.RESET_ICON) as Element);
 
     expect(searchInputField).toHaveValue('');
   });
@@ -92,27 +78,25 @@ describe('SearchInput', () => {
     const { user } = renderComponent(<SearchInput handleSearch={mockHandleSearch} />);
     const searchInputField = screen.getByTestId(TEST_IDS.SEARCH_INPUT);
 
-    await act(async () => {
-      await user.type(searchInputField, 'Tomato');
-    });
+    await user.type(searchInputField, 'Tomato');
 
     expect(searchInputField).toHaveValue('Tomato');
 
-    await act(async () => {
-      await user.keyboard(`{${SHORTCUT_SEARCH_INPUT_RESET}}`);
-    });
+    await user.keyboard(`{${SHORTCUT_SEARCH_INPUT_RESET}}`);
 
     expect(searchInputField).toHaveValue('');
   });
 
-  it('should call passed search handler with current search term', () => {
+  it('should call passed search handler with current search term', async () => {
+    let searchTerm = '';
+    const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+      searchTerm = event.target.value;
+    };
     const { user } = renderComponent(<SearchInput handleSearch={handleSearch} />);
 
-    user.type(screen.getByTestId(TEST_IDS.SEARCH_INPUT), 'Tomato');
+    await user.type(screen.getByTestId(TEST_IDS.SEARCH_INPUT), 'Tomato');
 
-    function handleSearch(event: ChangeEvent<HTMLInputElement>) {
-      expect(event.target.value).toBe('Tomato');
-    }
+    expect(searchTerm).toBe('Tomato');
   });
 });
 
