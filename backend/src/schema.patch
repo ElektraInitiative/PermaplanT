@@ -1,15 +1,12 @@
-diff --git a/backend/src/schema.rs b/backend/src/schema.rs 2023-07-20
-index 54f26f46..68427977 100644
---- a/backend/src/schema.rs
-+++ b/backend/src/schema.rs
-@@ -10,20 +10,12 @@ pub mod sql_types {
-     pub struct ExternalSource;
+--- src/schema.rs	2023-12-16 21:15:32.447836438 +0100
++++ src/schema_that_works.rs	2023-12-16 21:13:48.667866145 +0100
+@@ -15,20 +15,12 @@
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "fertility"))]
      pub struct Fertility;
 
--    #[derive(diesel::sql_types::SqlType)]
+     #[derive(diesel::sql_types::SqlType)]
 -    #[diesel(postgres_type(name = "geography"))]
 -    pub struct Geography;
 -
@@ -17,13 +14,14 @@ index 54f26f46..68427977 100644
 -    #[diesel(postgres_type(name = "geometry"))]
 -    pub struct Geometry;
 -
-     #[derive(diesel::sql_types::SqlType)]
+-    #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "growth_rate"))]
      pub struct GrowthRate;
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "herbaceous_or_woody"))]
-@@ -100,16 +92,15 @@ diesel::table! {
+     pub struct HerbaceousOrWoody;
+@@ -165,16 +157,15 @@
          is_alternative -> Bool,
      }
  }
@@ -41,3 +39,20 @@ index 54f26f46..68427977 100644
          name -> Text,
          creation_date -> Date,
          deletion_date -> Nullable<Date>,
+@@ -311,15 +302,15 @@
+         archived_at -> Nullable<Timestamp>,
+     }
+ }
+
+ diesel::table! {
+     use postgis_diesel::sql_types::Geography;
++    use postgis_diesel::sql_types::Geometry;
+     use diesel::sql_types::*;
+     use super::sql_types::Shade;
+-    use super::sql_types::Geometry;
+
+     shadings (id) {
+         id -> Uuid,
+         layer_id -> Int4,
+         shade -> Shade,
+         geometry -> Geometry,

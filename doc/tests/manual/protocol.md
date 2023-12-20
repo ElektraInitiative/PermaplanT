@@ -31,7 +31,7 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Test Result:
 - Notes:
 
-## Heatmap (NOT IMPLEMENTED)
+## Heatmap
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Given I am on a map page with the plant layer active

@@ -7,14 +7,14 @@
 // Don't make the `new` functions const, there might come more fields in the future.
 #![allow(clippy::missing_const_for_fn)]
 
-use crate::model::dto::plantings::PlantingDto;
+use crate::model::{dto::plantings::PlantingDto, r#enum::shade::Shade};
 use chrono::NaiveDate;
 use postgis_diesel::types::{Point, Polygon};
 use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;
 
-use super::{BaseLayerImageDto, UpdateMapGeometryDto};
+use super::{shadings::ShadingDto, BaseLayerImageDto, UpdateMapGeometryDto};
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
@@ -30,6 +30,18 @@ pub enum Action {
     MovePlanting(MovePlantActionPayload),
     /// An action used to broadcast transformation of a plant.
     TransformPlanting(TransformPlantActionPayload),
+
+    /// An action used to broadcast creation of a shading.
+    CreateShading(CreateShadingActionPayload),
+    /// An action used to broadcast deletion of a shading.
+    DeleteShading(DeleteShadingActionPayload),
+    /// An action used to broadcast change of a shading.
+    UpdateShading(UpdateShadingActionPayload),
+    /// An action used to update the `add_date` of a shading.
+    UpdateShadingAddDate(UpdateShadingAddDateActionPayload),
+    /// An action used to update the `remove_date` of a shading.
+    UpdateShadingRemoveDate(UpdateShadingRemoveDateActionPayload),
+
     /// An action used to broadcast creation of a baseLayerImage.
     CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
     /// An action used to broadcast update of a baseLayerImage.
@@ -62,6 +74,11 @@ impl Action {
             Self::UpdatePlantingRemoveDate(payload) => payload.action_id,
             Self::UpdatePlantingAdditionalName(payload) => payload.action_id,
             Self::UpdateMapGeometry(payload) => payload.action_id,
+            Self::CreateShading(payload) => payload.action_id,
+            Self::DeleteShading(payload) => payload.action_id,
+            Self::UpdateShading(payload) => payload.action_id,
+            Self::UpdateShadingAddDate(payload) => payload.action_id,
+            Self::UpdateShadingRemoveDate(payload) => payload.action_id,
         }
     }
 }
@@ -187,6 +204,128 @@ impl TransformPlantActionPayload {
             rotation: payload.rotation,
             scale_x: payload.scale_x,
             scale_y: payload.scale_y,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateShadingActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    layer_id: i32,
+    shade: Shade,
+    geometry: Polygon<Point>,
+    add_date: Option<NaiveDate>,
+    remove_date: Option<NaiveDate>,
+}
+
+impl CreateShadingActionPayload {
+    #[must_use]
+    pub fn new(payload: ShadingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            layer_id: payload.layer_id,
+            shade: payload.shade,
+            geometry: payload.geometry,
+            add_date: payload.add_date,
+            remove_date: payload.remove_date,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdateShading`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdateShadingActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    shade: Shade,
+    geometry: Polygon<Point>,
+}
+
+impl UpdateShadingActionPayload {
+    #[must_use]
+    pub fn new(payload: ShadingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            shade: payload.shade,
+            geometry: payload.geometry,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::DeleteShading`].
+#[serde(rename_all = "camelCase")]
+pub struct DeleteShadingActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+}
+
+impl DeleteShadingActionPayload {
+    #[must_use]
+    pub fn new(id: Uuid, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdateShadingAddDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdateShadingAddDateActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    add_date: Option<NaiveDate>,
+}
+
+impl UpdateShadingAddDateActionPayload {
+    #[must_use]
+    pub fn new(payload: &ShadingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            add_date: payload.add_date,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdateShadingRemoveDate`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdateShadingRemoveDateActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    remove_date: Option<NaiveDate>,
+}
+
+impl UpdateShadingRemoveDateActionPayload {
+    #[must_use]
+    pub fn new(payload: &ShadingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            remove_date: payload.remove_date,
         }
     }
 }

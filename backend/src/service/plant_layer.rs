@@ -4,7 +4,8 @@ use std::io::Cursor;
 
 use actix_http::StatusCode;
 use actix_web::web::Data;
-use image::{ImageBuffer, Rgb};
+use chrono::Utc;
+use image::{ImageBuffer, Rgba};
 
 use crate::{
     config::data::AppDataInner,
@@ -32,8 +33,10 @@ pub async fn heatmap(
     let mut conn = app_data.pool.get().await?;
     let result = plant_layer::heatmap(
         map_id,
-        query_params.layer_id,
+        query_params.plant_layer_id,
+        query_params.shade_layer_id,
         query_params.plant_id,
+        query_params.date.unwrap_or_else(|| Utc::now().date_naive()),
         &mut conn,
     )
     .await?;
@@ -49,19 +52,26 @@ pub async fn heatmap(
     clippy::indexing_slicing,           // ok, because size of image is generated using matrix width and height
     clippy::cast_sign_loss              // ok, because we only care about positive values
 )]
-fn matrix_to_image(matrix: &Vec<Vec<f32>>) -> Result<Vec<u8>, ServiceError> {
+fn matrix_to_image(matrix: &Vec<Vec<(f32, f32)>>) -> Result<Vec<u8>, ServiceError> {
     let (width, height) = (matrix[0].len(), matrix.len());
     let mut imgbuf = ImageBuffer::new(width as u32, height as u32);
 
     for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
-        let data = matrix[y as usize][x as usize];
+        let (preference, relevance) = matrix[y as usize][x as usize];
 
-        // The closer data is to 1 the green it gets.
-        let red = data.mul_add(-128.0, 128.0);
-        let green = data.mul_add(255.0 - 128.0, 128.0);
-        let blue = data.mul_add(-128.0, 128.0);
+        // The closer data is to 1 the greener it gets.
+        let red = preference.mul_add(-255.0, 255.0);
+        let green = preference * 255.0;
+        let blue = 0.0_f32;
+        // For some reason every relevance value returned by the database is between
+        // (about) 0.5 and 1 while it should be between 0 and 1.
+        //
+        // Unfortunately I could not figure out why this is the case and therefore just
+        // rescaled the relevance value accordingly.
+        // - Moritz (badnames)
+        let alpha = (relevance - 0.5) * 512.0;
 
-        *pixel = Rgb([red as u8, green as u8, blue as u8]);
+        *pixel = Rgba([red as u8, green as u8, blue as u8, alpha as u8]);
     }
 
     let mut buffer: Vec<u8> = Vec::new();

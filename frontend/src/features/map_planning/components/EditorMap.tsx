@@ -22,6 +22,7 @@ import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
+import { HeatMapLayer } from '@/features/map_planning/layers/heatmap/HeatMapLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import CheckIcon from '@/svg/icons/check.svg?react';
@@ -315,6 +316,7 @@ export const EditorMap = ({ layers }: MapProps) => {
               opacity={layersState.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
+            <HeatMapLayer />
             <GridLayer
               visible={layersState.grid.visible}
               opacity={layersState.grid.opacity}

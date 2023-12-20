@@ -10,6 +10,8 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod shadings;
+pub mod shadings_impl;
 pub mod users_impl;
 
 use chrono::NaiveDate;
