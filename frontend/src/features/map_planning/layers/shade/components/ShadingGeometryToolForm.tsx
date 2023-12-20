@@ -8,7 +8,7 @@ export function ShadingGeometryToolForm() {
   const { t } = useTranslation('shadeLayer');
   return (
     <div>
-      <h2>{t('geometry_tool_form.title')}</h2>
+      <h6>{t('geometry_tool_form.title')}</h6>
       <div className="flex flex-row gap-1">
         <IconButton isToolboxIcon={true} title={t('geometry_tool_form.move_points')}>
           <PointerIcon></PointerIcon>
