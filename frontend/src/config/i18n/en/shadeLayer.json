@@ -14,6 +14,8 @@
     },
     "left_toolbar": {
       "shading_amount_select_title": "Shading Type",
+      "add_date": "Applied from",
+      "remove_date": "Applied until",
       "delete_button": "Delete shading"
     }
 }

@@ -14,6 +14,8 @@
     },
     "left_toolbar": {
       "shading_amount_select_title": "Beschattungsart",
+      "add_date": "Wird angewendet ab",
+      "remove_date": "Wird angewendet bis",
       "delete_button": "Beschattung löschen"
     }
 }

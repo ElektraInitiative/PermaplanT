@@ -46,6 +46,8 @@ export interface SelectMenuProps<
   onInputChange?: (inputValue: string) => void;
   /** Disables the x icon at the end of the select menu that allows the user to deselect the current option. */
   isClearable?: boolean;
+  /** Additional CSS classes */
+  className?: string;
 }
 
 /**
@@ -69,11 +71,13 @@ export default function SelectMenu<
   onChange,
   onInputChange,
   isClearable = true,
+  className,
 }: SelectMenuProps<T, Option, IsMulti>) {
   const customClassNames: ClassNamesConfig<Option, IsMulti, GroupBase<Option>> = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
     control: (state) => {
       return `
+        ${className}
         h-[44px] bg-neutral-200 rounded border
         dark:bg-neutral-50-dark focus:border-primary-500
         hover:border-primary-500 dark:focus:border-primary-300 dark:hover:border-primary-300
