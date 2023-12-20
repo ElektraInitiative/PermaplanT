@@ -17,5 +17,10 @@
       "add_date": "Applied from",
       "remove_date": "Applied until",
       "delete_button": "Delete shading"
+    },
+    "right_toolbar": {
+      "add_shading_title": "",
+      "add_shading": "Beschattung hinzufügen",
+      "shading_select_title": "Beschattungsart"
     }
 }

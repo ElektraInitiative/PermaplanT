@@ -17,5 +17,8 @@
       "add_date": "Wird angewendet ab",
       "remove_date": "Wird angewendet bis",
       "delete_button": "Beschattung löschen"
+    },
+    "right_toolbar": {
+      "add_shading": "Beschattung hinzufügen"
     }
 }
