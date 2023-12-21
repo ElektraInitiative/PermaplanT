@@ -1,7 +1,6 @@
 import { useSelectedLayerVisibility } from '../hooks/useSelectedLayerVisibility';
 import useMapStore from '../store/MapStore';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
-import { MapLabel } from '../utils/MapLabel';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
   SELECTION_RECTANGLE_NAME,
@@ -15,6 +14,7 @@ import {
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
 import { isPlacementModeActive } from '../utils/planting-utils';
+import { CursorTooltip } from './CursorTooltip';
 import { useDimensions } from '@/hooks/useDimensions';
 import { colors } from '@/utils/colors';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -115,9 +115,6 @@ export const BaseStage = ({
       height: Math.floor(window.innerHeight / stage.scale),
     });
   });
-
-  const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
-  const tooltipPosition = useMapStore((state) => state.untrackedState.tooltipPosition);
 
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
@@ -281,15 +278,7 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
-          {/* Tooltip */}
-          <MapLabel
-            content={tooltipContent}
-            visible={tooltipContent !== ''}
-            scaleX={2 / stage.scale}
-            scaleY={2 / stage.scale}
-            x={tooltipPosition.x}
-            y={tooltipPosition.y}
-          />
+          <CursorTooltip />
           <Rect
             x={selectionRectAttrs.x}
             y={selectionRectAttrs.y}
