@@ -8,6 +8,7 @@ import {
   flattenRing,
   insertPointIntoLineSegmentWithLeastDistance,
 } from '@/features/map_planning/utils/PolygonUtils';
+import { useIsBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { warningToastGrouped } from '@/features/toasts/groupedToast';
 import { colors } from '@/utils/colors';
 import { KonvaEventObject } from 'konva/lib/Node';
@@ -15,11 +16,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Circle, Group, Line } from 'react-konva';
 
-export interface PolygonProps extends LayerConfigWithListenerRegister {
-  show: boolean;
-}
-
-export const MapGeometryEditor = (props: PolygonProps) => {
+export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
   const { t } = useTranslation('polygon');
   const executeAction = useMapStore((state) => state.executeAction);
   const trackedState = useMapStore((map) => map.trackedState);
@@ -32,6 +29,7 @@ export const MapGeometryEditor = (props: PolygonProps) => {
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
   );
   const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
+  const isBaseLayerActive = useIsBaseLayerActive();
 
   // The Konva-Group of this component is not listening while add mode is active.
   useEffect(() => {
@@ -119,7 +117,7 @@ export const MapGeometryEditor = (props: PolygonProps) => {
 
   return (
     <Group
-      visible={props.show}
+      visible={isBaseLayerActive}
       listening={polygonManipulationState === 'move' || polygonManipulationState === 'remove'}
     >
       <Line

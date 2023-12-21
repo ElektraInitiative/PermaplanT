@@ -2,7 +2,7 @@ import useMapStore from '../../store/MapStore';
 import { PlantForPlanting } from '../../store/MapStoreTypes';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { SELECTION_RECTANGLE_NAME } from '../../utils/ShapesSelection';
-import { isPlantLayerActive } from '../../utils/layer-utils';
+import { useIsPlantLayerActive } from '../../utils/layer-utils';
 import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
 import { PlantCursor } from './components/PlantCursor';
@@ -263,6 +263,7 @@ function usePlantLayerListeners(listening: boolean) {
 
 function usePlantLayerKeyListeners() {
   const { deleteSelectedPlantings } = useDeleteSelectedPlantings();
+  const isPlantLayerActive = useIsPlantLayerActive();
 
   const keybindings = createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_PLANTS_LAYER, {
     deleteSelectedPlantings: () => {
@@ -270,7 +271,7 @@ function usePlantLayerKeyListeners() {
     },
   });
 
-  useKeyHandlers(isPlantLayerActive() ? keybindings : {});
+  useKeyHandlers(isPlantLayerActive ? keybindings : {});
 }
 
 type PlantsLayerProps = Konva.LayerConfig;

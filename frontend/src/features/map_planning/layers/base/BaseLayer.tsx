@@ -3,7 +3,6 @@ import { NextcloudKonvaImage } from '@/features/map_planning/components/image/Ne
 import { MapGeometryEditor } from '@/features/map_planning/layers/base/components/MapGeometryEditor';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
-import { isBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { colors } from '@/utils/colors';
 import { useCallback, useEffect, useState } from 'react';
 import { Circle, Group, Layer, Line } from 'react-konva';
@@ -97,7 +96,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           stroke={colors.highlight.DEFAULT}
         />
       </Group>
-      <MapGeometryEditor show={isBaseLayerActive()} {...props} />
+      <MapGeometryEditor {...props} />
     </Layer>
   );
 };
