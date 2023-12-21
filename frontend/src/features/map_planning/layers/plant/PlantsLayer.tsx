@@ -4,17 +4,13 @@ import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { useIsPlantLayerActive } from '../../utils/layer-utils';
 import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
+import { AreaOfPlantingsIndicator } from './components/AreaOfPlantingsIndicator/AreaOfPlantingsIndicator';
 import { PlantCursor } from './components/PlantCursor';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
 import { PlantingElement } from './components/PlantingElement';
 import { useDeleteSelectedPlantings } from './hooks/useDeleteSelectedPlantings';
-import {
-  LayerType,
-  PlantSpread,
-  PlantingDto,
-  PlantsSummaryDto,
-  SeedDto,
-} from '@/api_types/definitions';
+import { calculatePlantCount, getPlantWidth } from './util';
+import { LayerType, PlantingDto, PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
@@ -32,16 +28,6 @@ import * as uuid from 'uuid';
 
 // For performance reasons add limit for amount of plants inside a plant field
 const LIMIT_PLANT_FIELD_PLANTS = 1000;
-
-const PLANT_WIDTHS = new Map<PlantSpread, number>([
-  [PlantSpread.Narrow, 10],
-  [PlantSpread.Medium, 50],
-  [PlantSpread.Wide, 100],
-]);
-
-function getPlantWidth({ spread = PlantSpread.Medium }): number {
-  return PLANT_WIDTHS.get(spread) ?? (PLANT_WIDTHS.get(PlantSpread.Medium) as number);
-}
 
 function exitPlantingMode() {
   useMapStore.getState().selectPlantings(null);
@@ -300,6 +286,7 @@ function PlantsLayer(props: PlantsLayerProps) {
       </Layer>
       <Layer listening={false}>
         <PlantCursor />
+        <AreaOfPlantingsIndicator />
       </Layer>
     </>
   );
@@ -341,20 +328,6 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
 }
 
 export default PlantsLayer;
-
-function calculatePlantCount(
-  plantSize: number,
-  fieldWidth: number,
-  fieldHeight: number,
-): { horizontalPlantCount: number; verticalPlantCount: number } {
-  const horizontalPlantCount = Math.floor(fieldWidth / plantSize);
-  const verticalPlantCount = Math.floor(fieldHeight / plantSize);
-
-  return {
-    horizontalPlantCount,
-    verticalPlantCount,
-  };
-}
 
 function getDrawingDirectionCounters(
   horizontalPlantCount: number,
