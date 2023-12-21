@@ -4,7 +4,6 @@ import style from './AreaOfPlantingsIndicator.module.css';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { colors } from '@/utils/colors';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Group, Label, Tag } from 'react-konva';
 import { Html } from 'react-konva-utils';
 
 export function AreaOfPlantingsIndicator() {
@@ -45,29 +44,27 @@ export function AreaOfPlantingsIndicator() {
   const scaleY = stage?.scaleY() ?? 1;
 
   return (
-    <Group
-      {...pos}
-      offsetX={-15 / scaleX}
-      offsetY={25 / scaleY}
-      visible={isVisible}
-      listening={false}
+    <Html
+      groupProps={{
+        ...pos,
+        scaleX: 1 / scaleX,
+        scaleY: 1 / scaleY,
+        offsetX: -15,
+        offsetY: 25,
+        visible: true,
+        listening: false,
+      }}
+      divProps={{
+        className: `${style.info_text__container}`,
+        style: { backgroundColor: colors.secondary[200] },
+      }}
     >
-      <Label>
-        <Tag fill={colors.secondary[200]} />
-        <Html
-          divProps={{
-            className: `${style.info_text__container}`,
-            style: { pointerEvents: 'none', backgroundColor: colors.secondary[200] },
-          }}
-        >
-          <InfoTextLabel
-            fieldWidth={selectionRectAttributes.width}
-            fieldHeight={selectionRectAttributes.height}
-            plantWidth={plantWidth}
-          />
-        </Html>
-      </Label>
-    </Group>
+      <InfoTextLabel
+        fieldWidth={selectionRectAttributes.width}
+        fieldHeight={selectionRectAttributes.height}
+        plantWidth={plantWidth}
+      />
+    </Html>
   );
 }
 
@@ -88,16 +85,14 @@ function InfoTextLabel({
 
   return (
     <>
-      <span className="text-right">
-        {horizontalPlantCount} x {verticalPlantCount}
-      </span>
+      <span>{fieldWidth.toFixed(0)}</span>
+      <span className="text-center">x</span>
+      <span className="text-right">{fieldHeight.toFixed(0)}</span>
+      <span className="font-bold">cm</span>
+      <span>{horizontalPlantCount}</span>
+      <span className="text-center">x</span>
+      <span className="text-right">{verticalPlantCount}</span>
       <span className="font-bold">plants</span>
-      <span className="text-right">{plantWidth}</span>
-      <span className="font-bold">cm</span>
-      <span className="text-right">
-        {fieldWidth} x {fieldHeight}
-      </span>
-      <span className="font-bold">cm</span>
     </>
   );
 }
