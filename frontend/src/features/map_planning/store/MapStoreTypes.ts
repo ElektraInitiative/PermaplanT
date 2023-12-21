@@ -152,6 +152,20 @@ export interface TrackedMapSlice {
  */
 export type History = Array<Action<unknown, unknown>>;
 
+type SelectionRectAttributes = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  isVisible: boolean;
+  boundingBox: {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  };
+};
+
 /**
  * Part of store which is unaffected by the History
  */
@@ -159,6 +173,8 @@ export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
   tooltipRef: React.RefObject<Konva.Label>;
+  selectionRectAttributes: SelectionRectAttributes;
+  updateSelectionRect: (update: React.SetStateAction<SelectionRectAttributes>) => void;
   updateViewRect: (bounds: ViewRect) => void;
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   updateSelectedLayer: (selectedLayer: LayerDto | FrontendOnlyLayerType) => void;

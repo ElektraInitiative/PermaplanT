@@ -1,3 +1,4 @@
+import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import {
@@ -22,6 +23,35 @@ export const createUntrackedMapSlice: StateCreator<
   untrackedState: UNTRACKED_DEFAULT_STATE,
   stageRef: createRef<Konva.Stage>(),
   tooltipRef: createRef(),
+  selectionRectAttributes: {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    isVisible: false,
+    boundingBox: {
+      x1: 0,
+      y1: 0,
+      x2: 0,
+      y2: 0,
+    },
+  },
+  updateSelectionRect(update: React.SetStateAction<SelectionRectAttrs>) {
+    if (typeof update === 'function') {
+      set((state) => ({
+        ...state,
+        selectionRectAttributes: update(state.selectionRectAttributes),
+      }));
+    } else {
+      set((state) => ({
+        ...state,
+        selectionRectAttributes: {
+          ...state.selectionRectAttributes,
+          ...update,
+        },
+      }));
+    }
+  },
   updateViewRect(bounds: ViewRect) {
     set((state) => ({
       ...state,

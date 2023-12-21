@@ -1,6 +1,5 @@
 import { useSelectedLayerVisibility } from '../hooks/useSelectedLayerVisibility';
 import useMapStore from '../store/MapStore';
-import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
   SELECTION_RECTANGLE_NAME,
@@ -69,19 +68,8 @@ export const BaseStage = ({
   });
 
   // Represents the state of the current selection rectangle
-  const [selectionRectAttrs, setSelectionRectAttrs] = useState<SelectionRectAttrs>({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-    isVisible: false,
-    boundingBox: {
-      x1: 0,
-      y1: 0,
-      x2: 0,
-      y2: 0,
-    },
-  });
+  const selectionRectAttrs = useMapStore((store) => store.selectionRectAttributes);
+  const setSelectionRectAttrs = useMapStore((store) => store.updateSelectionRect);
 
   const transformerRef = useRef<Konva.Transformer>(null);
   useEffect(() => {

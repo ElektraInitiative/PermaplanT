@@ -1,7 +1,6 @@
 import useMapStore from '../../store/MapStore';
 import { PlantForPlanting } from '../../store/MapStoreTypes';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
-import { SELECTION_RECTANGLE_NAME } from '../../utils/ShapesSelection';
 import { useIsPlantLayerActive } from '../../utils/layer-utils';
 import { isPlacementModeActive } from '../../utils/planting-utils';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
@@ -82,14 +81,12 @@ function usePlantLayerListeners(listening: boolean) {
 
   const drawPlantField = useCallback(
     (selectedPlantForPlanting: PlantForPlanting) => {
-      const drawnField = useMapStore
-        .getState()
-        .stageRef.current?.findOne(`.${SELECTION_RECTANGLE_NAME}`);
-
-      const fieldWidth = drawnField?.attrs?.width;
-      const fieldHeight = drawnField?.attrs?.height;
-
-      if (!fieldWidth || !fieldHeight) return;
+      const {
+        width: fieldWidth,
+        height: fieldHeight,
+        x: startingPositionX,
+        y: startingPositionY,
+      } = useMapStore.getState().selectionRectAttributes;
 
       const plantSize = getPlantWidth(selectedPlantForPlanting.plant);
       const { horizontalPlantCount, verticalPlantCount } = calculatePlantCount(
@@ -97,9 +94,6 @@ function usePlantLayerListeners(listening: boolean) {
         fieldWidth,
         fieldHeight,
       );
-
-      const startingPositionX = drawnField.attrs.x;
-      const startingPositionY = drawnField.attrs.y;
 
       // due to set limit of plants in a plant field, we need to decide in which direction we start drawing, i.e. if drawn field is wider than narrow, we start drawing horizontally and vice versa
       const { firstDirectionCounter, secondDirectionCounter } = getDrawingDirectionCounters(
@@ -122,12 +116,6 @@ function usePlantLayerListeners(listening: boolean) {
           );
         }
       }
-
-      // reset konva rectangle to make sure we always have a rectangle with the newest coordinates when planting
-      drawnField.setAttrs({
-        width: 0,
-        height: 0,
-      });
     },
     [createPlanting],
   );
