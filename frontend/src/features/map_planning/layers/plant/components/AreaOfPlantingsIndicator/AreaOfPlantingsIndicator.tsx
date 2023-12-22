@@ -88,23 +88,16 @@ function PlacementInfoTooltip({
     fieldHeight,
   );
 
-  const unitIsMeters = Math.min(fieldWidth, fieldHeight) > 100;
-  const unit = unitIsMeters ? t('meter_shorthand') : t('centimeter_shorthand');
-
   return (
     <>
-      <span className="font-mono">{formatLength(fieldWidth, unitIsMeters)}</span>
+      <span className="text-right font-mono">{fieldWidth.toFixed(0)}</span>
       <span className="text-center font-mono">&times;</span>
-      <span className="text-right font-mono">{formatLength(fieldHeight, unitIsMeters)}</span>
-      <span className="font-bold">{unit}</span>
-      <span className="font-mono">{horizontalPlantCount}</span>
+      <span className="text-right font-mono">{fieldHeight.toFixed(0)}</span>
+      <span className="font-bold">{t('centimeter_shorthand')}</span>
+      <span className="text-right font-mono">{horizontalPlantCount}</span>
       <span className="text-center font-mono">&times;</span>
       <span className="text-right font-mono">{verticalPlantCount}</span>
       <span className="font-bold">{t('layers:plants')}</span>
     </>
   );
-}
-
-function formatLength(length: number, unitIsMeters: boolean) {
-  return unitIsMeters ? (length / 100).toFixed(2) : length.toFixed(0);
 }
