@@ -45,7 +45,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
 - _()_
-- _()_
+- Add key combinations for map geometry _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
