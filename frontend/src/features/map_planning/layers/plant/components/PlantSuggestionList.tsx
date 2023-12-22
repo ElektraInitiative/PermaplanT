@@ -1,5 +1,5 @@
 import IconButton from '@/components/Button/IconButton';
-import { ReactComponent as CaretDown } from '@/svg/icons/caret-down.svg';
+import CaretDown from '@/svg/icons/caret-down.svg?react';
 import { motion } from 'framer-motion';
 import React from 'react';
 

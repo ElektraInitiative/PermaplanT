@@ -1,4 +1,4 @@
-import { GetFn } from './MapStoreTypes';
+import type { GetFn } from './MapStoreTypes';
 
 /**
  * If any of the selected nodes can not be found on the map, clear the selection.

@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- nodejs 19.4.0 ([Installation guide](../doc/development_setup.md))
-- npm v9.2.0
+- nodejs 20 ([Installation guide](../doc/development_setup.md))
+- npm v10
 
 ## Installation and Usage
 
@@ -20,11 +20,11 @@ npm install
 npm run generate-api-types
 ```
 
-3. Create '.env' file and copy content from '.env.sample'.
+3. Create '.env.local' file and copy content from '.env.sample'.
    Modify env variables to fit the environment.
 
 ```shell
-cp .env.sample .env
+cp .env.sample .env.local
 ```
 
 4. Start development server

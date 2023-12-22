@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- nodejs 19.4.0
+- nodejs 20
 - npm
 
 ## Installation and Usage

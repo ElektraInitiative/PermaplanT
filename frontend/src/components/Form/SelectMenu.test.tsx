@@ -1,4 +1,4 @@
-import { FormWrapper } from '../../utils/testing';
+import { FormWrapper } from '../../__test_utils__/utils';
 import SelectMenu from './SelectMenu';
 import { render, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -19,7 +19,7 @@ it('renders correctly', () => {
 });
 
 it('calls onInputChange on input change', async () => {
-  const callback = jest.fn();
+  const callback = vi.fn();
 
   const { getByRole } = render(
     <MemoryRouter>
@@ -45,7 +45,7 @@ it('calls onInputChange on input change', async () => {
 });
 
 it('calls onChange on input change', async () => {
-  const callback = jest.fn();
+  const callback = vi.fn();
   const { getByRole } = render(
     <MemoryRouter>
       <FormWrapper>
@@ -69,7 +69,7 @@ it('calls onChange on input change', async () => {
 });
 
 it('calls handleOptionsChange on options change', async () => {
-  const callback = jest.fn();
+  const callback = vi.fn();
   const { getByRole, getByText } = render(
     <MemoryRouter>
       <FormWrapper>

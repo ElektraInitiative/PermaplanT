@@ -1,22 +1,16 @@
 import { getTourStatus } from '../api/getTourStatus';
-import { GuidedToursDto } from '@/api_types/definitions';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
-import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-export function useTourStatus(setStatus: (status: GuidedToursDto) => void) {
+export function useTourStatus() {
   const { t } = useTranslation(['guidedTour']);
 
-  useEffect(() => {
-    const _getStatus = async () => {
-      const data = await getTourStatus();
-      setStatus(data);
-    };
-    try {
-      _getStatus();
-    } catch (error) {
-      console.error(error);
-      errorToastGrouped(t('guidedTour:fetch_status_error'), { autoClose: false });
-    }
-  }, [setStatus, t]);
+  const queryResponse = useQuery(['tour-status'], getTourStatus, {
+    meta: {
+      errorMessage: t('guidedTour:fetch_status_error'),
+      autoClose: false,
+    },
+  });
+
+  return queryResponse.data;
 }

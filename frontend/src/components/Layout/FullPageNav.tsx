@@ -1,9 +1,9 @@
 import { DarkModeSwitcher } from '../../features/dark_mode';
 import { useDarkModeStore } from '../../features/dark_mode';
 import LanguageSwitcher from '../../features/landing_page/components/LanguageSwitcher';
-import { ReactComponent as CloseIcon } from '../../svg/icons/close.svg';
-import { ReactComponent as LogoSmallGraySVG } from '../../svg/permaplant-logo-gray.svg';
-import { ReactComponent as LogoSmallSVG } from '../../svg/permaplant-logo.svg';
+import CloseIcon from '../../svg/icons/close.svg?react';
+import LogoSmallGraySVG from '../../svg/permaplant-logo-gray.svg?react';
+import LogoSmallSVG from '../../svg/permaplant-logo.svg?react';
 import ButtonLink from '../Button/ButtonLink';
 import IconButton from '../Button/IconButton';
 import { LoginButton } from '@/features/auth/components/LoginButton';

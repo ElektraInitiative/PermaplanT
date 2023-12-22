@@ -27,7 +27,7 @@ export function SeedListItem({
     errorToastGrouped('Tried to initialize SeedListItem with missing plant_id');
   }
 
-  const { plant } = useFindPlantById(seed.plant_id ?? -1);
+  const { plant } = useFindPlantById(seed.plant_id);
 
   // The user should already be provided with an error toast
   // by useFindPlantById.

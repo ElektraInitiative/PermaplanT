@@ -321,7 +321,7 @@ export const BaseStage = ({
         </Layer>
       </Stage>
       {/** Panel to display something from different layers */}
-      <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
+      <div className="absolute bottom-36 left-1/2 z-10 -translate-x-1/2">
         <AnimatePresence mode="wait">
           {bottomStatusPanelContent && (
             <BottomStatusPanel>{bottomStatusPanelContent}</BottomStatusPanel>

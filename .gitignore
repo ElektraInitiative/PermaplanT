@@ -10,8 +10,6 @@ report.html
 .mypy_cache
 .install
 
-### dotenv ###
-.env
 ### Emacs ###
 # -*- mode: gitignore; -*-
 *~

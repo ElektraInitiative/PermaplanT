@@ -4,8 +4,8 @@ import '@/components/Modals/ImageModal';
 import ImageModal from '@/components/Modals/ImageModal';
 import { getPublicImageList } from '@/features/nextcloud_integration/api/getImages';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
-import { ReactComponent as ChevronLeftIcon } from '@/svg/icons/chevron-left.svg';
-import { ReactComponent as ChevronRightIcon } from '@/svg/icons/chevron-right.svg';
+import ChevronLeftIcon from '@/svg/icons/chevron-left.svg?react';
+import ChevronRightIcon from '@/svg/icons/chevron-right.svg?react';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 

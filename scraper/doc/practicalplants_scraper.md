@@ -11,10 +11,10 @@ The scraper scrapes the data from the PracticalPlants wiki dump and stores it in
 npm install && mkdir -p data
 ```
 
-2. Create .env file from .env.example and fill in the required values:
+2. Create .env.local file from .env.example and fill in the required values:
 
 ```shell
-cp .env.example .env
+cp .env.example .env.local
 ```
 
 `PRACTICALPLANTSPATH` mentioned in .env is the path on your local filesystem to the PracticalPlants wiki dump, which could be fetched from our [repository](https://github.com/ElektraInitiative/practicalplants).

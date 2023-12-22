@@ -11,7 +11,7 @@ import useMapStore from '../store/MapStore';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import { convertToDate } from '../utils/date-utils';
 import { BaseStage } from './BaseStage';
-import { Timeline } from './timeline/Timeline';
+import TimelineDatePicker from './timeline/TimelineDatePicker';
 import { LayerList } from './toolbar/LayerList';
 import { Toolbar } from './toolbar/Toolbar';
 import {
@@ -26,13 +26,15 @@ import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
-import { ReactComponent as GridIcon } from '@/svg/icons/grid-dots.svg';
-import { ReactComponent as RedoIcon } from '@/svg/icons/redo.svg';
-import { ReactComponent as TagsIcon } from '@/svg/icons/tags.svg';
-import { ReactComponent as UndoIcon } from '@/svg/icons/undo.svg';
+import CheckIcon from '@/svg/icons/check.svg?react';
+import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
+import GridIcon from '@/svg/icons/grid-dots.svg?react';
+import RedoIcon from '@/svg/icons/redo.svg?react';
+import TagsIcon from '@/svg/icons/tags.svg?react';
+import UndoIcon from '@/svg/icons/undo.svg?react';
 import i18next from 'i18next';
 import Konva from 'konva';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
 import { toast } from 'react-toastify';
@@ -56,7 +58,7 @@ export type MapProps = {
  * Otherwise, they cannot be moved.
  */
 export const EditorMap = ({ layers }: MapProps) => {
-  const untrackedState = useMapStore((map) => map.untrackedState);
+  const layersState = useMapStore((map) => map.untrackedState.layers);
   const canUndo = useMapStore((map) => map.canUndo);
   const canRedo = useMapStore((map) => map.canRedo);
   const undo = useMapStore((map) => map.undo);
@@ -73,6 +75,7 @@ export const EditorMap = ({ layers }: MapProps) => {
   const isShapeSelectionEnabled = useMapStore(
     (state) => state.untrackedState.shapeSelectionEnabled,
   );
+  const [timeLineState, setTimeLineState] = useState<'loading' | 'idle'>('idle');
 
   // Allow layers to listen for all events on the base stage.
   //
@@ -146,17 +149,22 @@ export const EditorMap = ({ layers }: MapProps) => {
   };
 
   const isGridLayerEnabled = () => {
-    return untrackedState.layers.grid.visible;
+    return layersState.grid.visible;
   };
 
   const isPlantLabelTooltipEnabled = () => {
-    return untrackedState.layers.plants.showLabels;
+    return layersState.plants.showLabels;
   };
 
   const reenableTour = async () => {
     const update: UpdateGuidedToursDto = { editor_tour_completed: false };
     await updateTourStatus(update);
   };
+
+  function triggerDateChangedInGuidedTour(): void {
+    const changeDateEvent = new Event('dateChanged');
+    document.getElementById('timeline')?.dispatchEvent(changeDateEvent);
+  }
 
   useEffect(() => {
     const _completeTour = async () => {
@@ -186,6 +194,19 @@ export const EditorMap = ({ layers }: MapProps) => {
     }
     return () => tour?.hide();
   }, [tour, t]);
+
+  const handleTimeLineDateChanged = useCallback(
+    (date: string) => {
+      triggerDateChangedInGuidedTour();
+      setTimeLineState('idle');
+      updateTimelineDate(date);
+    },
+    [updateTimelineDate],
+  );
+
+  const handleTimeLineLoading = useCallback(() => {
+    setTimeLineState('loading');
+  }, []);
 
   const getToolbarContent = (layerType: CombinedLayerType) => {
     const content = {
@@ -251,10 +272,7 @@ export const EditorMap = ({ layers }: MapProps) => {
                   isToolboxIcon={true}
                   renderAsActive={isGridLayerEnabled()}
                   onClick={() =>
-                    updateLayerVisible(
-                      FrontendOnlyLayerType.Grid,
-                      !untrackedState.layers.grid.visible,
-                    )
+                    updateLayerVisible(FrontendOnlyLayerType.Grid, !layersState.grid.visible)
                   }
                   title={t('toolboxTooltips:grid')}
                 >
@@ -294,8 +312,8 @@ export const EditorMap = ({ layers }: MapProps) => {
           >
             <BaseLayer
               stageListenerRegister={baseStageListenerRegister}
-              opacity={untrackedState.layers.base.opacity}
-              visible={untrackedState.layers.base.visible}
+              opacity={layersState.base.opacity}
+              visible={layersState.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
             />
             <DrawingLayer
@@ -305,18 +323,19 @@ export const EditorMap = ({ layers }: MapProps) => {
               listening={getSelectedLayerType() === LayerType.Drawing}
             ></DrawingLayer>
             <PlantsLayer
-              visible={untrackedState.layers.plants.visible}
-              opacity={untrackedState.layers.plants.opacity}
+              visible={layersState.plants.visible}
+              opacity={layersState.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
             <GridLayer
-              visible={untrackedState.layers.grid.visible}
-              opacity={untrackedState.layers.grid.opacity}
+              visible={layersState.grid.visible}
+              opacity={layersState.grid.opacity}
             ></GridLayer>
           </BaseStage>
           <div>
-            <Timeline
-              onSelectDate={(date) => updateTimelineDate(date)}
+            <TimelineDatePicker
+              onSelectDate={handleTimeLineDateChanged}
+              onLoading={handleTimeLineLoading}
               defaultDate={timelineDate}
             />
           </div>
@@ -328,7 +347,7 @@ export const EditorMap = ({ layers }: MapProps) => {
             position="right"
             minWidth={200}
             fixedContentBottom={
-              <div className="mb-0 mt-auto border-t-2 border-neutral-700 p-2 tracking-wide">
+              <div className="mb-0 mt-auto flex border-t-2 border-neutral-700 p-2 tracking-wide">
                 {t('timeline:map_date')}
                 {convertToDate(timelineDate).toLocaleDateString(i18next.resolvedLanguage, {
                   weekday: 'short',
@@ -336,6 +355,15 @@ export const EditorMap = ({ layers }: MapProps) => {
                   month: 'numeric',
                   day: 'numeric',
                 })}
+                {timeLineState === 'loading' && (
+                  <CircleDottedIcon className="mb-3 ml-2 mt-auto h-5 w-5 animate-spin text-secondary-400" />
+                )}
+                {timeLineState === 'idle' && (
+                  <CheckIcon
+                    className="mb-3 ml-2 mt-auto h-5 w-5 text-primary-400"
+                    data-testid="timeline__state-idle"
+                  />
+                )}
               </div>
             }
           ></Toolbar>

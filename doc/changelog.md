@@ -25,14 +25,19 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
 - Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
 - Added Meeting Agenda&Notes for 04.12. 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda for 11.12. 9:00 _(Markus Raab)_
 - _()_
 - _()_
 - _()_
+- Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
+- Fix broken .env reading for scraper _(Paul)_
 - _()_
 - _()_
 - _()_
 - _()_
 - Add basic drawing layer functionality _(Daniel Steinkogler)_
+- Remove error messages in console if a seed was not found _(Moritz)_
+- _()_
 - _()_
 - _()_
 - Fix the markdown so that mdbook tests pass _(Daniel Steinkogler)_
@@ -48,14 +53,14 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
 - Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
 - _()_
 - _()_
-- _()_
+- wrap api queries using react query _(Daniel Steinkogler)_
 - _()_
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
@@ -74,7 +79,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
 - _()_
 - _()_
 
