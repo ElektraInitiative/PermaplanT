@@ -29,16 +29,15 @@ type Ellipse = {
 };
 
 function DrawingLayer(props: DrawingLayerProps) {
-  const shape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
+  const drawingObjects = useMapStore((state) => state.trackedState.layers.drawing.objects);
 
+  const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
   const selectedColor = useMapStore((state) => state.untrackedState.layers.drawing.selectedColor);
   const selectedStrokeWidth = useMapStore(
     (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
   );
 
   const { stageListenerRegister, ...layerProps } = props;
-
-  const drawingObjects = useMapStore((state) => state.trackedState.layers.drawing.objects);
 
   const rectangles = drawingObjects
     .filter((object) => object.type === 'rectangle')
@@ -61,7 +60,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   const executeAction = useMapStore((state) => state.executeAction);
 
   const isShapeSelected = () => {
-    return shape !== null;
+    return selectedShape !== null;
   };
 
   const createRectangle = useCallback(
@@ -140,15 +139,15 @@ function DrawingLayer(props: DrawingLayerProps) {
     const pos = stage.getRelativePointerPosition();
     if (pos == null) return;
 
-    if (shape == 'free') {
+    if (selectedShape == 'free') {
       setNewLine({
         strokeWidth: selectedStrokeWidth,
         color: selectedColor,
         points: [pos.x, pos.y],
       });
-    } else if (shape == 'rectangle') {
+    } else if (selectedShape == 'rectangle') {
       setPreviewRectangle({ color: selectedColor, x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y });
-    } else if (shape == 'ellipse') {
+    } else if (selectedShape == 'ellipse') {
       setPreviewEllipse({ color: selectedColor, x: pos.x, y: pos.y, radiusX: 0, radiusY: 0 });
     }
   };
@@ -227,20 +226,24 @@ function DrawingLayer(props: DrawingLayerProps) {
     const point = stage.getRelativePointerPosition();
     if (point == null) return;
 
-    if (shape === 'free') {
-      handleDrawLine(point);
-    } else if (shape == 'rectangle') {
-      if (e.evt.shiftKey) {
-        handleDrawSquare(point);
-      } else {
-        handleDrawRectangle(point);
-      }
-    } else if (shape === 'ellipse') {
-      if (e.evt.shiftKey) {
-        handleDrawCircle(point);
-      } else {
-        handleDrawEllipse(point);
-      }
+    switch (selectedShape) {
+      case 'free':
+        handleDrawLine(point);
+        break;
+      case 'rectangle':
+        if (e.evt.shiftKey) {
+          handleDrawSquare(point);
+        } else {
+          handleDrawRectangle(point);
+        }
+        break;
+      case 'ellipse':
+        if (e.evt.shiftKey) {
+          handleDrawCircle(point);
+        } else {
+          handleDrawEllipse(point);
+        }
+        break;
     }
   };
 
@@ -248,7 +251,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (!isDrawingLayerActive()) return;
     isDrawing.current = false;
 
-    switch (shape) {
+    switch (selectedShape) {
       case 'free':
         handleFreeLineMouseUp();
         break;

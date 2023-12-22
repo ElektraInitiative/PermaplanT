@@ -7,6 +7,7 @@
 - **Actors:** App User
 - **Brief:** Users add, edit, move, remove and delete custom drawings.
 - **Assignee:** Daniel
+  P
 
 ## Scenarios
 

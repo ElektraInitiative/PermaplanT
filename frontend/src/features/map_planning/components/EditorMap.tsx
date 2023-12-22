@@ -309,7 +309,6 @@ export const EditorMap = ({ layers }: MapProps) => {
               opacity={untrackedState.layers.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
-
             <GridLayer
               visible={untrackedState.layers.grid.visible}
               opacity={untrackedState.layers.grid.opacity}
