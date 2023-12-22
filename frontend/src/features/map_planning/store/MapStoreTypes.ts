@@ -146,6 +146,10 @@ export interface TrackedMapSlice {
    * Initializes the base layer.
    */
   initBaseLayer: (baseLayer: BaseLayerImageDto) => void;
+  /**
+   *  Initialize the shade layer.
+   */
+  initShadeLayer: (shadeLayer: ShadingDto[]) => void;
   initLayerId: (layer: LayerType, layerId: number) => void;
 }
 
@@ -188,6 +192,7 @@ export interface UntrackedMapSlice {
   shadeLayerActivateMovePolygonPoints: () => void;
   shadeLayerActivateDeletePolygonPoints: () => void;
   shadeLayerDeactivatePolygonManipulation: () => void;
+  shadeLayerSelectShadeForNewShading: (shade: Shade | null) => void;
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
@@ -228,6 +233,12 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
       [LayerType.Plants]: {
         id: -1,
         index: LayerType.Plants,
+        objects: [],
+        loadedObjects: [],
+      },
+      [LayerType.Shade]: {
+        id: -1,
+        index: LayerType.Shade,
         objects: [],
         loadedObjects: [],
       },
@@ -280,6 +291,12 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
           editMode: 'inactive',
         },
       } as UntrackedBaseLayerState,
+      [LayerType.Shade]: {
+        visible: true,
+        opacity: 1,
+        selectedShadingEditMode: 'inactive',
+        selectedShadeForNewShading: null,
+      } as UntrackedShadeLayerState,
     }),
     {} as UntrackedLayers,
   ),

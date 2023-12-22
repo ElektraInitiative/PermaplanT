@@ -2,7 +2,7 @@ import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
 import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
 import { clearInvalidSelection } from './utils';
-import { BaseLayerImageDto, PlantingDto } from '@/api_types/definitions';
+import { BaseLayerImageDto, PlantingDto, ShadingDto } from '@/api_types/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
@@ -74,6 +74,22 @@ export const createTrackedMapSlice: StateCreator<
               rotation: dto.rotation,
               scale: dto.scale,
               nextcloudImagePath: dto.path,
+            },
+          },
+        },
+      }));
+    },
+    initShadeLayer(shadings: ShadingDto[]) {
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            shade: {
+              ...state.trackedState.layers.shade,
+              objects: filterVisibleObjects(shadings, state.untrackedState.timelineDate),
+              loadedObjects: shadings,
             },
           },
         },

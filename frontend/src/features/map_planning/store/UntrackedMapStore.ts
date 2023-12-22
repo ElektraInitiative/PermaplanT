@@ -7,7 +7,7 @@ import {
   UntrackedMapSlice,
 } from './MapStoreTypes';
 import { clearInvalidSelection } from './utils';
-import { ShadingDto } from '@/api_types/definitions';
+import { Shade, ShadingDto } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
@@ -453,6 +453,21 @@ export const createUntrackedMapSlice: StateCreator<
           shade: {
             ...state.untrackedState.layers.shade,
             selectedShadingEditMode: 'inactive',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerSelectShadeForNewShading(shade: Shade | null) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadeForNewShading: shade,
           },
         },
       },
