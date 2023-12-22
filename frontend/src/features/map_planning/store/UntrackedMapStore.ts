@@ -7,6 +7,7 @@ import {
   UntrackedMapSlice,
 } from './MapStoreTypes';
 import { clearInvalidSelection } from './utils';
+import { ShadingDto } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
@@ -371,6 +372,87 @@ export const createUntrackedMapSlice: StateCreator<
               ...state.untrackedState.layers.base.mapGeometry,
               editMode: 'inactive',
             },
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerSelectShadings(shadings: ShadingDto[] | null) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadings: shadings,
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerActivateAddPolygonPoints() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'add',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerActivateDeletePolygonPoints() {
+    get().transformer.current?.rotateEnabled(false);
+    get().transformer.current?.resizeEnabled(false);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'remove',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerActivateMovePolygonPoints() {
+    get().transformer.current?.rotateEnabled(false);
+    get().transformer.current?.resizeEnabled(false);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'move',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerDeactivatePolygonManipulation() {
+    get().transformer.current?.rotateEnabled(true);
+    get().transformer.current?.resizeEnabled(true);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'inactive',
           },
         },
       },

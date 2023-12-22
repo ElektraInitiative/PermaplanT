@@ -6,6 +6,7 @@ import {
   PlantingDto,
   PlantsSummaryDto,
   SeedDto,
+  ShadingDto,
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
@@ -181,6 +182,11 @@ export interface UntrackedMapSlice {
   baseLayerActivateMovePolygonPoints: () => void;
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
+  shadeLayerSelectShadings: (shadings: ShadingDto[] | null) => void;
+  shadeLayerActivateAddPolygonPoints: () => void;
+  shadeLayerActivateMovePolygonPoints: () => void;
+  shadeLayerActivateDeletePolygonPoints: () => void;
+  shadeLayerDeactivatePolygonManipulation: () => void;
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
@@ -319,10 +325,14 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: TrackedLayerState;
+  [key in Exclude<
+    LayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Shade
+  >]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
+  [LayerType.Shade]: TrackedShadeLayerState;
 };
 
 export type TrackedPlantLayerState = {
@@ -349,14 +359,32 @@ export type TrackedBaseLayerState = {
   nextcloudImagePath: string;
 };
 
+export type TrackedShadeLayerState = {
+  index: LayerType.Shade;
+  id: number;
+  /**
+   * The objects visible relative to the current selected date.
+   * This is a subset of `loadedObjects`.
+   */
+  objects: ShadingDto[];
+  /**
+   * The objects that have been loaded from the backend.
+   */
+  loadedObjects: ShadingDto[];
+};
+
 /**
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<CombinedLayerType, LayerType.Plants | LayerType.Base>]: UntrackedLayerState;
+  [key in Exclude<
+    CombinedLayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Shade
+  >]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
   [LayerType.Base]: UntrackedBaseLayerState;
+  [LayerType.Shade]: UntrackedShadeLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
@@ -372,9 +400,16 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
     measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
   };
   mapGeometry: {
-    editMode: 'inactive' | 'add' | 'remove' | 'move';
+    editMode: PolygonEditMode;
   };
 };
+
+export type UntrackedShadeLayerState = UntrackedLayerState & {
+  selectedShadings: ShadingDto[] | null;
+  selectedShadingEditMode: PolygonEditMode;
+};
+
+export type PolygonEditMode = 'inactive' | 'add' | 'remove' | 'move';
 
 /**
  * Contains information necessary for creating a new planting on the map.
