@@ -6,6 +6,7 @@ import { QueryCache } from '@tanstack/react-query';
  */
 export const QUERY_KEYS = {
   PLANTINGS: 'plantings',
+  SHADINGS: 'shadings',
   LAYERS: 'layers',
 };
 

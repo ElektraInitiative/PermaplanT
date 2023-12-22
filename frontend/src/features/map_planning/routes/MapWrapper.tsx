@@ -12,6 +12,7 @@ import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
 import { LayerType, LayerDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { QUERY_KEYS } from '@/config/react_query';
+import { getShadings } from '@/features/map_planning/api/getShadings';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
 import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
@@ -97,6 +98,39 @@ function useBaseLayer({ mapId, layerId }: UseLayerParams) {
 }
 
 /**
+ * Hook that initializes the shade layer by fetching it and adding it to the store.
+ */
+function useShadeLayer({ mapId, layerId }: UseLayerParams) {
+  const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
+  const { t } = useTranslation(['shadeLayer']);
+
+  const query = useQuery({
+    queryKey: [QUERY_KEYS.SHADINGS, mapId, { layerId, fetchDate }],
+    queryFn: () => getShadings(mapId, { layer_id: layerId, relative_to_date: fetchDate }),
+    // We want to refetch manually.
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    cacheTime: 0,
+    enabled: Boolean(layerId),
+  });
+
+  if (query.error) {
+    console.error(query.error);
+    errorToastGrouped(t('shadeLayer:error_loading_shadings'), { autoClose: false });
+  }
+
+  const data = query.data;
+  useEffect(() => {
+    if (!data) return;
+
+    useMapStore.getState().setTimelineBounds(data.from, data.to);
+    useMapStore.getState().initShadeLayer(data.results);
+  }, [mapId, data]);
+
+  return query;
+}
+
+/**
  * Hook that initializes the map by fetching all map data, layers and layer elements.
  */
 function useInitializeMap() {
@@ -136,6 +170,12 @@ function useInitializeMap() {
   });
 
   useBaseLayer({
+    mapId,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+    layerId: baseLayer?.id!,
+  });
+
+  useShadeLayer({
     mapId,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
     layerId: baseLayer?.id!,
