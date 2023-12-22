@@ -318,8 +318,8 @@ export const EditorMap = ({ layers }: MapProps) => {
             />
             <DrawingLayer
               stageListenerRegister={baseStageListenerRegister}
-              visible={untrackedState.layers.drawing.visible}
-              opacity={untrackedState.layers.drawing.opacity}
+              visible={layersState.drawing.visible}
+              opacity={layersState.drawing.opacity}
               listening={getSelectedLayerType() === LayerType.Drawing}
             ></DrawingLayer>
             <PlantsLayer
