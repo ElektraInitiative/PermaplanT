@@ -58,7 +58,7 @@ export default function MapCreateForm() {
   );
 
   const locationPicker = (
-    <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark md:min-w-[32rem] md:p-4">
+    <div className="mb-4 mt-2 h-[50vh] min-h-[24rem] w-full max-w-6xl grow rounded bg-neutral-100 p-4 md:min-w-[32rem] md:p-4 dark:border-neutral-300-dark dark:bg-neutral-200-dark">
       <MapContainer center={[47.57, 16.496]} zoom={7} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

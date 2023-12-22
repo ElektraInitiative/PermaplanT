@@ -8,10 +8,10 @@ export const Footer = () => {
   return (
     <footer className="m-4 rounded-lg bg-white shadow dark:bg-neutral-800">
       <div className="mx-auto w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-        <span className="text-sm text-secondary-500 dark:text-secondary-300 sm:text-center">
+        <span className="text-sm text-secondary-500 sm:text-center dark:text-secondary-300">
           © 2023 PermaplanT
         </span>
-        <span className="text-sm text-secondary-500 dark:text-secondary-300 sm:text-center">
+        <span className="text-sm text-secondary-500 sm:text-center dark:text-secondary-300">
           <a
             href="https://github.com/ElektraInitiative/PermaplanT"
             style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}
@@ -24,7 +24,7 @@ export const Footer = () => {
             />
           </a>
         </span>
-        <ul className="mt-3 flex flex-wrap items-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+        <ul className="mt-3 flex flex-wrap items-center text-sm font-medium text-gray-500 sm:mt-0 dark:text-gray-400">
           <li>
             <ButtonLink className="text-sm" to="/imprint" title={t('imprint:title')} />
           </li>

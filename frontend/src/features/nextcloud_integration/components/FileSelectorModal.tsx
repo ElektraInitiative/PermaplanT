@@ -40,7 +40,7 @@ export default function FileSelectorModal({
         show={show}
       />
       <ModalContainer show={show} onCancelKeyPressed={onCancel}>
-        <div className="flex h-[70vh] w-[90vw] flex-col rounded-lg bg-neutral-100 p-1 dark:bg-neutral-100-dark sm:h-[60vh] sm:w-[85vw] md:w-[75vw] md:p-6 lg:w-[60vw] xl:w-[50vw] 2xl:w-[40vw]">
+        <div className="flex h-[70vh] w-[90vw] flex-col rounded-lg bg-neutral-100 p-1 sm:h-[60vh] sm:w-[85vw] md:w-[75vw] md:p-6 lg:w-[60vw] xl:w-[50vw] 2xl:w-[40vw] dark:bg-neutral-100-dark">
           <IconButton
             className="absolute right-3 top-3 h-7 w-7 place-self-end overflow-hidden p-0.5"
             onClick={onCancel}

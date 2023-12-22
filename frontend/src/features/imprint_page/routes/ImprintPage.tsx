@@ -8,7 +8,7 @@ export function ImprintPage() {
 
   return (
     <PageLayout styleNames="body-font relative w-full text-center">
-      <h1 className="title-font mb-8 text-3xl font-medium text-primary-500 dark:text-primary-300 sm:text-4xl">
+      <h1 className="title-font mb-8 text-3xl font-medium text-primary-500 sm:text-4xl dark:text-primary-300">
         {t('imprint:title')}
       </h1>
       <section
