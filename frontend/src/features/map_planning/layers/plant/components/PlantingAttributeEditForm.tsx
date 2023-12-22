@@ -1,4 +1,4 @@
-import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
+import { PlantingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
@@ -52,7 +52,14 @@ export function SinglePlantingAttributeForm({
   isReadOnlyMode,
 }: EditSinglePlantingProps) {
   const { plantId } = planting;
-  const { data: plant } = useFindPlantById({ plantId });
+  const {
+    data: plant,
+    isLoading: plantSummaryIsLoading,
+    isError: plantSummaryIsError,
+  } = useFindPlantById({ plantId });
+
+  if (plantSummaryIsLoading) return null;
+  if (plantSummaryIsError) return null;
 
   return (
     <div className="flex flex-col gap-2 p-2">
@@ -60,10 +67,10 @@ export function SinglePlantingAttributeForm({
         {planting.additionalName ? (
           <PlantNameFromAdditionalNameAndPlant
             additionalName={planting.additionalName}
-            plant={plant as PlantsSummaryDto}
+            plant={plant}
           />
         ) : (
-          <PlantNameFromPlant plant={plant as PlantsSummaryDto} />
+          <PlantNameFromPlant plant={plant} />
         )}
       </h2>
 
@@ -117,7 +124,7 @@ export function MultiplePlantingsAttributeForm({
   );
 }
 
-export function PlantingAttributeEditForm({
+function PlantingAttributeEditForm({
   addDateDefaultValue,
   removeDateDefaultValue,
   onAddDateChange,
