@@ -34,8 +34,6 @@ export const selectIntersectingShapes = (
       return shape?.attrs.listening !== false;
     });
 
-  console.log('allShapes', allShapes);
-
   if (!allShapes) return;
 
   const allNodes = trRef.current?.getNodes();

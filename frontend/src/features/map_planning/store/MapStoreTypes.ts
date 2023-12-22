@@ -1,3 +1,4 @@
+import { DrawingDto } from '../layers/drawing/api/createDrawing';
 import { convertToDateString } from '../utils/date-utils';
 import {
   BaseLayerImageDto,
@@ -236,6 +237,11 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         objects: [],
         loadedObjects: [],
       },
+      [LayerType.Drawing]: {
+        layerId: 0,
+        id: -1,
+        objects: [],
+      },
     }),
     {} as TrackedLayers,
   ),
@@ -278,6 +284,8 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         visible: true,
         opacity: 1,
         shape: null,
+        selectedColor: 'black',
+        selectedStrokeWidth: 3,
       } as UntrackedDrawingLayerState,
       [LayerType.Base]: {
         visible: true,
@@ -337,10 +345,14 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: TrackedLayerState;
+  [key in Exclude<
+    LayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Drawing
+  >]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
+  [LayerType.Drawing]: TrackedDrawingLayerState;
 };
 
 export type TrackedPlantLayerState = {
@@ -365,6 +377,12 @@ export type TrackedBaseLayerState = {
   rotation: number;
   scale: number;
   nextcloudImagePath: string;
+};
+
+export type TrackedDrawingLayerState = {
+  id: number;
+  layerId: number;
+  objects: DrawingDto[];
 };
 
 /**

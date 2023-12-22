@@ -1,19 +1,16 @@
 import useMapStore from '../../store/MapStore';
 import { LayerConfigWithListenerRegister } from '../../types/layer-config';
 import { isDrawingLayerActive } from '../../utils/layer-utils';
+import { CreateDrawingAction } from './actions';
+import { EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
 import { LayerType } from '@/api_types/definitions';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Vector2d } from 'konva/lib/types';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Ellipse, Layer, Line, Rect } from 'react-konva';
+import * as uuid from 'uuid';
 
 type DrawingLayerProps = LayerConfigWithListenerRegister;
-
-type Line = {
-  color: string;
-  strokeWidth: number;
-  points: number[];
-};
 
 type Rectangle = {
   color: string;
@@ -41,19 +38,95 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const { stageListenerRegister, ...layerProps } = props;
 
-  const [lines, setLines] = useState<Line[]>([]);
+  const drawingObjects = useMapStore((state) => state.trackedState.layers.drawing.objects);
 
-  const [rectangles, setRectangles] = useState<Rectangle[]>([]);
+  const rectangles = drawingObjects
+    .filter((object) => object.type === 'rectangle')
+    .map((object) => object.properties as RectangleProperties);
+  const ellipses = drawingObjects
+    .filter((object) => object.type === 'ellipse')
+    .map((object) => object.properties as EllipseProperties);
+  const lines = drawingObjects
+    .filter((object) => object.type === 'freeLine')
+    .map((object) => object.properties as FreeLineProperties);
+
+  const [newLine, setNewLine] = useState<FreeLineProperties>();
   const [previewRectangle, setPreviewRectangle] = useState<Rectangle | undefined>();
-
-  const [ellipses, setEllipses] = useState<Ellipse[]>([]);
   const [previewEllipse, setPreviewEllipse] = useState<Ellipse | undefined>();
 
   const isDrawing = useRef(false);
 
+  const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
+  const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
+  const executeAction = useMapStore((state) => state.executeAction);
+
   const isShapeSelected = () => {
     return shape !== null;
   };
+
+  const createRectangle = useCallback(
+    (rectangle: Rectangle) => {
+      executeAction(
+        new CreateDrawingAction({
+          id: uuid.v4(),
+          layerId: getSelectedLayerId() ?? -1,
+          type: 'rectangle',
+          rotation: 0,
+          addDate: timelineDate,
+          properties: {
+            color: rectangle.color,
+            x: rectangle.x1,
+            y: rectangle.y1,
+            width: rectangle.x2 - rectangle.x1,
+            height: rectangle.y2 - rectangle.y1,
+          },
+        }),
+      );
+    },
+    [executeAction, getSelectedLayerId, timelineDate],
+  );
+
+  const createEllipse = useCallback(
+    (ellipse: Ellipse) => {
+      executeAction(
+        new CreateDrawingAction({
+          id: uuid.v4(),
+          layerId: getSelectedLayerId() ?? -1,
+          rotation: 0,
+          addDate: timelineDate,
+          type: 'ellipse',
+          properties: {
+            x: ellipse.x,
+            y: ellipse.y,
+            radiusX: ellipse.radiusX,
+            radiusY: ellipse.radiusY,
+            color: ellipse.color,
+          },
+        }),
+      );
+    },
+    [executeAction, getSelectedLayerId, timelineDate],
+  );
+
+  const createFreeLine = useCallback(
+    (fleeLine: FreeLineProperties) => {
+      executeAction(
+        new CreateDrawingAction({
+          id: uuid.v4(),
+          layerId: getSelectedLayerId() ?? -1,
+          rotation: 0,
+          addDate: timelineDate,
+          type: 'freeLine',
+          properties: {
+            color: fleeLine.color,
+            strokeWidth: fleeLine.strokeWidth,
+            points: fleeLine.points,
+          },
+        }),
+      );
+    },
+    [executeAction, getSelectedLayerId, timelineDate],
+  );
 
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     if (!isShapeSelected || !isDrawingLayerActive()) return;
@@ -68,10 +141,11 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (pos == null) return;
 
     if (shape == 'free') {
-      setLines((prevLines) => [
-        ...prevLines,
-        { strokeWidth: selectedStrokeWidth, color: selectedColor, points: [pos.x, pos.y] },
-      ]);
+      setNewLine({
+        strokeWidth: selectedStrokeWidth,
+        color: selectedColor,
+        points: [pos.x, pos.y],
+      });
     } else if (shape == 'rectangle') {
       setPreviewRectangle({ color: selectedColor, x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y });
     } else if (shape == 'ellipse') {
@@ -80,17 +154,18 @@ function DrawingLayer(props: DrawingLayerProps) {
   };
 
   const handleDrawLine = (point: Vector2d) => {
-    const lastLine = lines[lines.length - 1] || { points: [] };
+    if (!newLine) return;
 
     const distance = Math.sqrt(
-      Math.pow(point.x - lastLine.points[lastLine.points.length - 2], 2) +
-        Math.pow(point.y - lastLine.points[lastLine.points.length - 1], 2),
+      Math.pow(point.x - newLine.points[newLine.points.length - 2], 2) +
+        Math.pow(point.y - newLine.points[newLine.points.length - 1], 2),
     );
 
     if (distance > 10) {
-      lastLine.points = lastLine.points.concat([point.x, point.y]);
-      lines.splice(lines.length - 1, 1, lastLine);
-      setLines([...lines]);
+      setNewLine({
+        ...newLine,
+        points: [...newLine.points, point.x, point.y],
+      });
     }
   };
 
@@ -173,33 +248,53 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (!isDrawingLayerActive()) return;
     isDrawing.current = false;
 
-    if (shape == 'rectangle') {
-      if (!previewRectangle) return;
-
-      const newRect: Rectangle = {
-        color: selectedColor,
-        x1: Math.min(previewRectangle.x1, previewRectangle.x2),
-        x2: Math.max(previewRectangle.x1, previewRectangle.x2),
-        y1: Math.min(previewRectangle.y1, previewRectangle.y2),
-        y2: Math.max(previewRectangle.y1, previewRectangle.y2),
-      };
-
-      setRectangles([...rectangles, newRect]);
-      setPreviewRectangle(undefined);
-    } else if (shape === 'ellipse') {
-      if (!previewEllipse) return;
-
-      const newEllipse: Ellipse = {
-        color: selectedColor,
-        x: previewEllipse.x,
-        y: previewEllipse.y,
-        radiusX: previewEllipse.radiusX,
-        radiusY: previewEllipse.radiusY,
-      };
-
-      setEllipses([...ellipses, newEllipse]);
-      setPreviewEllipse(undefined);
+    switch (shape) {
+      case 'free':
+        handleFreeLineMouseUp();
+        break;
+      case 'rectangle':
+        handleRectangleMouseUp();
+        break;
+      case 'ellipse':
+        handleEllipseMouseUp();
+        break;
     }
+  };
+
+  const handleFreeLineMouseUp = () => {
+    if (!newLine) return;
+    createFreeLine(newLine);
+    setNewLine(undefined);
+  };
+
+  const handleRectangleMouseUp = () => {
+    if (!previewRectangle) return;
+
+    const newRect: Rectangle = {
+      color: selectedColor,
+      x1: Math.min(previewRectangle.x1, previewRectangle.x2),
+      x2: Math.max(previewRectangle.x1, previewRectangle.x2),
+      y1: Math.min(previewRectangle.y1, previewRectangle.y2),
+      y2: Math.max(previewRectangle.y1, previewRectangle.y2),
+    };
+
+    setPreviewRectangle(undefined);
+    createRectangle(newRect);
+  };
+
+  const handleEllipseMouseUp = () => {
+    if (!previewEllipse) return;
+
+    const newEllipse: Ellipse = {
+      color: selectedColor,
+      x: previewEllipse.x,
+      y: previewEllipse.y,
+      radiusX: previewEllipse.radiusX,
+      radiusY: previewEllipse.radiusY,
+    };
+
+    setPreviewEllipse(undefined);
+    createEllipse(newEllipse);
   };
 
   const handleShapeClicked = (e: KonvaEventObject<MouseEvent>) => {
@@ -248,15 +343,29 @@ function DrawingLayer(props: DrawingLayerProps) {
           />
         ))}
 
+        {newLine && (
+          <Line
+            listening={true}
+            key={'new-line'}
+            points={newLine.points}
+            stroke={newLine.color}
+            strokeWidth={newLine.strokeWidth}
+            tension={0.2}
+            lineCap="round"
+            lineJoin="round"
+            globalCompositeOperation="source-over"
+          />
+        )}
+
         {rectangles.map((rectangle, i) => (
           <Rect
             listening={true}
             cornerRadius={5}
             key={`rect-${i}`}
-            x={rectangle.x1}
-            y={rectangle.y1}
-            width={rectangle.x2 - rectangle.x1}
-            height={rectangle.y2 - rectangle.y1}
+            x={rectangle.x}
+            y={rectangle.y}
+            width={rectangle.width}
+            height={rectangle.height}
             stroke={rectangle.color}
             fill={rectangle.color}
             strokeWidth={5}

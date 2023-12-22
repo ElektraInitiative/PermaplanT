@@ -1,4 +1,5 @@
 import IconButton from '@/components/Button/IconButton';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import {
   KEYBINDINGS_SCOPE_DRAWING_LAYER,
   createKeyBindingsAccordingToConfig,
@@ -24,50 +25,17 @@ export function DrawingLayerToolForm() {
     (state) => state.drawingLayerActivateDrawEllipse,
   );
 
-  const setSelectedColor = useMapStore((state) => state.drawingLayerSetSelectedColor);
-  const setSelectedStrokeWidth = useMapStore((state) => state.drawingLayerSetSelectedStrokeWidth);
-  const selectedColor = useMapStore((state) => state.untrackedState.layers.drawing.selectedColor);
-  const selectedStrokeWidth = useMapStore(
-    (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
-  );
-
+  const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   return (
     <>
       <div>
-        <h2>Settings</h2>
-        <div>
-          <div>
-            <label htmlFor="selectedDrawingLayerColor">Color: </label>
-            <input
-              id="selectedDrawingLayerColor"
-              type="color"
-              value={selectedColor}
-              onChange={(e) => setSelectedColor(e.target.value)}
-            ></input>
-          </div>
-          <div>
-            <label htmlFor="selectedDrawingLayerStrokeWidth">Stroke: </label>{' '}
-            <input
-              id="selectedDrawingLayerStrokeWidth"
-              type="range"
-              name="cowbell"
-              min="0"
-              max="100"
-              value={selectedStrokeWidth}
-              onChange={(e) => setSelectedStrokeWidth(+e.target.value)}
-              step="1"
-            />
-          </div>
-        </div>
-      </div>
-      <div>
         <h2>{t('drawingLayerForm:tools_title')}</h2>
         <div className="flex flex-row gap-1">
           <IconButton
-            className={'active'}
             isToolboxIcon={true}
+            renderAsActive={selectedShape === 'free'}
             onClick={() => {
               drawingLayerActivateFreeDrawing();
               setStatusPanelContent(
@@ -80,10 +48,11 @@ export function DrawingLayerToolForm() {
           </IconButton>
           <IconButton
             isToolboxIcon={true}
+            renderAsActive={selectedShape === 'rectangle'}
             onClick={() => {
               drawingLayerActivateRectangleDrawing();
               setStatusPanelContent(
-                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_ellipse_hint')} />,
+                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_rectangle_hint')} />,
               );
             }}
             title={t('drawingLayerForm:draw_rectangle_tooltip')}
@@ -93,10 +62,11 @@ export function DrawingLayerToolForm() {
 
           <IconButton
             isToolboxIcon={true}
+            renderAsActive={selectedShape === 'ellipse'}
             onClick={() => {
               drawingLayerActivateDrawEllipse();
               setStatusPanelContent(
-                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_rectangle_hint')} />,
+                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_ellipse_hint')} />,
               );
             }}
             title={t('drawingLayerForm:draw_ellipse_tooltip')}
@@ -105,7 +75,50 @@ export function DrawingLayerToolForm() {
           </IconButton>
         </div>
       </div>
+
+      <hr className="my-4 border-neutral-700" />
+
+      <ShapePropertyForm selectedShape={selectedShape} />
     </>
+  );
+}
+
+function ShapePropertyForm(props: { selectedShape: string | null }) {
+  const setSelectedColor = useMapStore((state) => state.drawingLayerSetSelectedColor);
+  const setSelectedStrokeWidth = useMapStore((state) => state.drawingLayerSetSelectedStrokeWidth);
+  const selectedColor = useMapStore((state) => state.untrackedState.layers.drawing.selectedColor);
+  const selectedStrokeWidth = useMapStore(
+    (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
+  );
+
+  const showStrokeProperty = props.selectedShape === 'free';
+
+  return (
+    props.selectedShape && (
+      <div>
+        <SimpleFormInput
+          id="rotation"
+          className="mb-3"
+          type="color"
+          labelContent={'Color'}
+          onChange={(e) => setSelectedColor(e.target.value)}
+          value={selectedColor}
+        />
+
+        {showStrokeProperty && (
+          <SimpleFormInput
+            id="rotation"
+            className="background-red"
+            type="range"
+            labelContent={'Stroke'}
+            min={1}
+            max={100}
+            onChange={(e) => setSelectedStrokeWidth(+e.target.value)}
+            value={selectedStrokeWidth}
+          />
+        )}
+      </div>
+    )
   );
 }
 
