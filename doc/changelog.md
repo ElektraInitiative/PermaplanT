@@ -20,7 +20,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix ref warning in PlantLabel, center labels as intended _(Paul)_
 - Fix planting cursor preventing the placement of an area of plants _(Paul)_
 - Refactor nearly all api calls to idiomatic react query _(Paul)_
-- _()_
+- Add an area of plant indicator _(Paul)_
 - _()_
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
 - Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
