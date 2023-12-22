@@ -8,12 +8,16 @@ import { useTranslation } from 'react-i18next';
 import { Html } from 'react-konva-utils';
 
 export function AreaOfPlantingsIndicator() {
-  const selectionRectAttributes = useMapStore((state) => state.selectionRectAttributes);
+  const selection = useMapStore((state) => state.selectionRectAttributes);
   const selectedPlant = useSelectedPlantForPlanting();
   const stage = useMapStore((store) => store.stageRef.current);
   const [pos, setPos] = useState({ x: 0, y: 0 });
 
-  const isVisible = selectedPlant !== null && selectionRectAttributes.isVisible;
+  const selectionWidth = Math.floor(selection.width);
+  const selectionHeight = Math.floor(selection.height);
+
+  const isVisible =
+    selectedPlant !== null && selection.isVisible && selectionWidth > 0 && selectionHeight > 0;
 
   useEffect(() => {
     if (!stage) return;
@@ -36,7 +40,7 @@ export function AreaOfPlantingsIndicator() {
     // before showing the tooltip, place it where the selection rect is
     if (!isVisible) return;
 
-    setPos({ x: selectionRectAttributes.x, y: selectionRectAttributes.y });
+    setPos({ x: selection.x, y: selection.y });
     // we only want to run this if isVisible changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible]);
@@ -64,8 +68,8 @@ export function AreaOfPlantingsIndicator() {
       }}
     >
       <PlacementInfoTooltip
-        fieldWidth={selectionRectAttributes.width}
-        fieldHeight={selectionRectAttributes.height}
+        fieldWidth={selectionWidth}
+        fieldHeight={selectionHeight}
         plantWidth={plantWidth}
       />
     </Html>
