@@ -6,6 +6,7 @@ import {
   PlantingDto,
   PlantsSummaryDto,
   SeedDto,
+  Shade,
   ShadingDto,
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
@@ -407,6 +408,7 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
 export type UntrackedShadeLayerState = UntrackedLayerState & {
   selectedShadings: ShadingDto[] | null;
   selectedShadingEditMode: PolygonEditMode;
+  selectedShadeForNewShading: Shade | null;
 };
 
 export type PolygonEditMode = 'inactive' | 'add' | 'remove' | 'move';
