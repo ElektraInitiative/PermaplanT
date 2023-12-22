@@ -298,6 +298,8 @@ function DrawingLayer(props: DrawingLayerProps) {
   };
 
   const handleShapeClicked = (e: KonvaEventObject<MouseEvent>) => {
+    if (isShapeSelected()) return;
+
     const transformer = useMapStore.getState().transformer;
     transformer.current?.enabledAnchors([
       'top-left',

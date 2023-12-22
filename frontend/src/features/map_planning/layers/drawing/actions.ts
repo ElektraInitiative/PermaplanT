@@ -69,8 +69,8 @@ export class DeleteDrawingAction
     return [this._data.id];
   }
 
-  async execute(mapId: number): Promise<boolean> {
-    return deleteDrawing(mapId, this._data.id);
+  async execute(): Promise<boolean> {
+    return deleteDrawing();
   }
 
   reverse(state: TrackedMapState) {

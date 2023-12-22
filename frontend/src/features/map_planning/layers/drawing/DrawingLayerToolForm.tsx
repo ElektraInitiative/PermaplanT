@@ -10,6 +10,7 @@ import { ReactComponent as CircleIcon } from '@/svg/icons/circle.svg';
 import { ReactComponent as CloseIcon } from '@/svg/icons/close.svg';
 import { ReactComponent as RectangleIcon } from '@/svg/icons/rectangle.svg';
 import { ReactComponent as LineIcon } from '@/svg/icons/wavy-line.svg';
+import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export function DrawingLayerToolForm() {
@@ -83,7 +84,7 @@ export function DrawingLayerToolForm() {
   );
 }
 
-function ShapePropertyForm(props: { selectedShape: string | null }) {
+function ShapePropertyForm(props: { selectedShape: string | null }): ReactElement {
   const setSelectedColor = useMapStore((state) => state.drawingLayerSetSelectedColor);
   const setSelectedStrokeWidth = useMapStore((state) => state.drawingLayerSetSelectedStrokeWidth);
   const selectedColor = useMapStore((state) => state.untrackedState.layers.drawing.selectedColor);
@@ -94,35 +95,37 @@ function ShapePropertyForm(props: { selectedShape: string | null }) {
   const showStrokeProperty = props.selectedShape === 'free';
 
   return (
-    props.selectedShape && (
-      <div>
-        <SimpleFormInput
-          id="rotation"
-          className="mb-3"
-          type="color"
-          labelContent={'Color'}
-          onChange={(e) => setSelectedColor(e.target.value)}
-          value={selectedColor}
-        />
-
-        {showStrokeProperty && (
+    <>
+      {props.selectedShape && (
+        <div>
           <SimpleFormInput
             id="rotation"
-            className="background-red"
-            type="range"
-            labelContent={'Stroke'}
-            min={1}
-            max={100}
-            onChange={(e) => setSelectedStrokeWidth(+e.target.value)}
-            value={selectedStrokeWidth}
+            className="mb-3"
+            type="color"
+            labelContent={'Color'}
+            onChange={(e) => setSelectedColor(e.target.value)}
+            value={selectedColor}
           />
-        )}
-      </div>
-    )
+
+          {showStrokeProperty && (
+            <SimpleFormInput
+              id="rotation"
+              className="background-red"
+              type="range"
+              labelContent={'Stroke'}
+              min={1}
+              max={100}
+              onChange={(e) => setSelectedStrokeWidth(+e.target.value)}
+              value={selectedStrokeWidth}
+            />
+          )}
+        </div>
+      )}
+    </>
   );
 }
 
-function DrawingLayerStatusPanelContent(props: { text: string }) {
+function DrawingLayerStatusPanelContent(props: { text: string }): ReactElement {
   const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
   const drawingLayerClearSelectedShape = useMapStore(
     (state) => state.drawingLayerClearSelectedShape,

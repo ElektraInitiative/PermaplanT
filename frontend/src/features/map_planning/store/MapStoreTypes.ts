@@ -1,4 +1,4 @@
-import { DrawingDto } from '../layers/drawing/api/createDrawing';
+import { DrawingDto } from '../layers/drawing/types';
 import { convertToDateString } from '../utils/date-utils';
 import {
   BaseLayerImageDto,
