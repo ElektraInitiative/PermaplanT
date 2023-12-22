@@ -1,3 +1,4 @@
+import { queryOffline } from './config';
 import { getAuthInfo } from './features/auth';
 import { onError } from '@/config/react_query';
 import { QueryCache, QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
@@ -11,6 +12,15 @@ interface ProviderProps {
 }
 
 const queryClient = new QueryClient({
+  // even when no internet connection is available, send stuff
+  defaultOptions: {
+    queries: {
+      networkMode: queryOffline ? 'always' : undefined,
+    },
+    mutations: {
+      networkMode: queryOffline ? 'always' : undefined,
+    },
+  },
   queryCache: new QueryCache({
     onError: onError,
   }),
