@@ -7,11 +7,9 @@ export type PlantSuggestionListProps = {
   /** A title to display above the list */
   header: string;
   /** The elements to display */
-  children: React.ReactNode[];
+  children: React.ReactNode;
   /** Whether the list is loading */
   isLoading: boolean;
-  /** Whether the list has content */
-  hasContent: boolean;
   /** The element to display when there is no content */
   noContentElement: React.ReactNode;
 };
@@ -21,7 +19,6 @@ export type PlantSuggestionListProps = {
  */
 export function PlantSuggestionList({
   header,
-  hasContent,
   isLoading,
   noContentElement,
   children,
@@ -31,6 +28,8 @@ export function PlantSuggestionList({
   const toggleExpand = () => {
     setIsExpanded((e) => !e);
   };
+
+  const hasContent = React.Children.count(children) > 0;
 
   return (
     <>
