@@ -17,7 +17,7 @@ export async function getShadings(
 
   try {
     const response = await http.get<TimelinePage<ShadingDto>>(
-      `api/maps/${mapId}/layers/shadings/shade?${params}`,
+      `api/maps/${mapId}/layers/shade/shadings?${params}`,
     );
     return response.data;
   } catch (error) {
