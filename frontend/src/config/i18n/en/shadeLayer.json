@@ -1,5 +1,6 @@
 {
     "error_loading_shadings": "Sorry, there was an error while loading the shadings from the backend.",
+    "place_shadings_message": "Click on the map to place a new shading area.",
     "geometry_tool_form": {
       "title": "Edit shape",
       "add_points": "Add points",

@@ -1,4 +1,6 @@
 {
+    "error_loading_shadings": "Sorry, es gab einen Fehler beim Laden der Beschattungen.",
+    "place_shadings_message": "Klicke auf die Karte um eine neue Beschattung zu platzieren.",
     "geometry_tool_form": {
       "title": "Beschattung Bearbeiten",
       "add_points": "Punkte hinzufügen",
