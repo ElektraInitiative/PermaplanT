@@ -161,6 +161,7 @@ function useInitializeMap() {
 
   const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
   const baseLayer = getDefaultLayer(layers ?? [], LayerType.Base);
+  const shadeLayer = getDefaultLayer(layers ?? [], LayerType.Shade);
 
   usePlantLayer({
     mapId,
@@ -178,7 +179,7 @@ function useInitializeMap() {
   useShadeLayer({
     mapId,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-    layerId: baseLayer?.id!,
+    layerId: shadeLayer?.id!,
   });
 
   // select plant layer per default
