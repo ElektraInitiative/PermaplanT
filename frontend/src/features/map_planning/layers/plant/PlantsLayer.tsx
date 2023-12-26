@@ -16,15 +16,14 @@ import {
   PlantsSummaryDto,
   SeedDto,
 } from '@/api_types/definitions';
-import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
   createKeyBindingsAccordingToConfig,
 } from '@/config/keybindings';
+import { StatusPanelContentWrapper } from '@/features/map_planning/components/statuspanel/StatusPanelContentWrapper';
 import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
-import CloseIcon from '@/svg/icons/close.svg?react';
-import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
+import { getNameFromPlant, getPlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
@@ -330,24 +329,10 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
   );
 
   return (
-    <>
-      <div className="flex flex-row items-center justify-center">
-        {seed ? (
-          <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
-        ) : (
-          <PlantNameFromPlant plant={plant} />
-        )}
-      </div>
-      <div className="flex items-center justify-center">
-        <IconButton
-          className="m-2 h-8 w-8 border border-neutral-500 p-1"
-          onClick={() => selectPlant(null)}
-          data-tourid="placement_cancel"
-        >
-          <CloseIcon></CloseIcon>
-        </IconButton>
-      </div>
-    </>
+    <StatusPanelContentWrapper
+      content={seed ? getPlantNameFromSeedAndPlant(seed, plant) : getNameFromPlant(plant)}
+      onClose={() => selectPlant(null)}
+    />
   );
 }
 

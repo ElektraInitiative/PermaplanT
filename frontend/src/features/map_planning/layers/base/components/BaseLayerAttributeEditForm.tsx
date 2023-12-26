@@ -1,14 +1,13 @@
 import { BaseLayerImageDto } from '@/api_types/definitions';
-import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { StatusPanelContentWrapper } from '@/features/map_planning/components/statuspanel/StatusPanelContentWrapper';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 import { useFileExists } from '@/features/nextcloud_integration/hooks/useFileExists';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
-import CloseIcon from '@/svg/icons/close.svg?react';
 import CrossIcon from '@/svg/icons/close.svg?react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -183,23 +182,13 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
               onClick={() => {
                 activateMeasurement();
                 setStatusPanelContent(
-                  <>
-                    <div className="flex flex-row items-center justify-center">
-                      {t('baseLayerForm:auto_scaling_hint')}
-                    </div>
-                    <div className="flex items-center justify-center">
-                      <IconButton
-                        className="m-2 h-8 w-8 border border-neutral-500 p-1"
-                        onClick={() => {
-                          deactivateMeasurement();
-                          clearStatusPanelContent();
-                        }}
-                        data-tourid="placement_cancel"
-                      >
-                        <CloseIcon></CloseIcon>
-                      </IconButton>
-                    </div>
-                  </>,
+                  <StatusPanelContentWrapper
+                    content={t('baseLayerForm:auto_scaling_hint')}
+                    onClose={() => {
+                      deactivateMeasurement();
+                      clearStatusPanelContent();
+                    }}
+                  />,
                 );
               }}
             >
