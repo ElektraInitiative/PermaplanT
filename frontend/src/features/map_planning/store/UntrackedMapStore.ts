@@ -37,6 +37,7 @@ export const createUntrackedMapSlice: StateCreator<
     // Clear the transformer's nodes.
     get().transformer.current?.nodes([]);
     get().baseLayerDeactivatePolygonManipulation();
+    get().shadeLayerDeactivatePolygonManipulation();
     get().clearStatusPanelContent();
 
     set((state) => ({
@@ -56,6 +57,11 @@ export const createUntrackedMapSlice: StateCreator<
             measurePoint1: null,
             measurePoint2: null,
             measureStep: 'inactive',
+          },
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadeForNewShading: null,
+            selectedShadings: null,
           },
         },
       },
