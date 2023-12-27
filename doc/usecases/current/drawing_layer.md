@@ -14,8 +14,8 @@
   The user has opened the app and has selected the drawing layer.
 - **Main success scenario:**
   - The user successfully adds, edits, moves, removes and deletes custom drawings of any color of following forms:
-    - free drawing
-    - ellipse
+    - free drawings
+    - ellipses
     - rectangles
     - polygons (consisting of lines and bezier helper-points, that can be created by dragging existing lines)
       - open without filling
