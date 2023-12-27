@@ -11,6 +11,10 @@ import {
 import useMapStore from './MapStore';
 import { Action } from './MapStoreTypes';
 import { Action as RemoteAction } from '@/api_types/definitions';
+import {
+  CreateShadingAction,
+  DeleteShadingAction,
+} from '@/features/map_planning/layers/shade/actions';
 
 export function handleRemoteAction(ev: MessageEvent<unknown>, userId: string) {
   if (typeof ev.data !== 'string') {
@@ -82,6 +86,13 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
         { ...remoteAction.payload },
         remoteAction.payload.actionId,
       );
+    case 'CreateShading':
+      return new CreateShadingAction(
+        { ...remoteAction.payload, layerId: remoteAction.payload.layerId },
+        remoteAction.payload.actionId,
+      );
+    case 'DeleteShading':
+      return new DeleteShadingAction({ ...remoteAction.payload }, remoteAction.payload.actionId);
     default:
       throw new Error(`Unknown remote action`) as never;
   }

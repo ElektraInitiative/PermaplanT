@@ -193,6 +193,30 @@ export function flattenRing(ring: EdgeRing): number[] {
 }
 
 /**
+ * Create a geometry around a specific point.
+ * The srid of the newly generated polygon is equal to the srid of the supplied point.
+ *
+ * @param point Center point of the new geometry.
+ */
+export function squareGeometryAroundPoint(
+  point: PolygonPoint,
+  sideLength: number,
+): PolygonGeometry {
+  return {
+    rings: [
+      [
+        { x: point.x - sideLength / 2, y: point.y + sideLength / 2, srid: point.srid },
+        { x: point.x + sideLength / 2, y: point.y + sideLength / 2, srid: point.srid },
+        { x: point.x + sideLength / 2, y: point.y - sideLength / 2, srid: point.srid },
+        { x: point.x - sideLength / 2, y: point.y - sideLength / 2, srid: point.srid },
+        { x: point.x - sideLength / 2, y: point.y + sideLength / 2, srid: point.srid },
+      ],
+    ],
+    srid: point.srid,
+  };
+}
+
+/**
  * Creates a deep copy of a geometry object.
  */
 function deepCopyGeometry(geometry: PolygonGeometry): PolygonGeometry {

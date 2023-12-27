@@ -8,7 +8,9 @@ import {
   insertPointIntoLineSegmentWithLeastDistance,
   removePointAtIndex,
   setPointAtIndex,
+  squareGeometryAroundPoint,
 } from '@/features/map_planning/utils/PolygonUtils';
+import { expect } from 'vitest';
 
 describe('Flatten Polygon rings', () => {
   it('should return all x and y coordinates as an array', () => {
@@ -236,6 +238,23 @@ describe('Add a point between the two nearest points', () => {
         ],
       ],
       srid: '',
+    });
+  });
+});
+
+describe('Generate a new polygon', () => {
+  it('Should generate a square shaped polygon around a point', () => {
+    expect(squareGeometryAroundPoint({ x: 0, y: 0, srid: 0 }, 2)).toEqual({
+      rings: [
+        [
+          { x: -1, y: 1, srid: 0 },
+          { x: 1, y: 1, srid: 0 },
+          { x: 1, y: -1, srid: 0 },
+          { x: -1, y: -1, srid: 0 },
+          { x: -1, y: 1, srid: 0 },
+        ],
+      ],
+      srid: 0,
     });
   });
 });

@@ -9,7 +9,7 @@ export type PolygonGeometry = {
   /**
    * ID of the coordinate type used by the backend.
    */
-  srid: string;
+  srid: string | number;
   /**
    * Coordinate data used to construct the polygon.
    */

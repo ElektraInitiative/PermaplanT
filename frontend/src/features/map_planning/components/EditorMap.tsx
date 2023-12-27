@@ -309,7 +309,12 @@ export const EditorMap = ({ layers }: MapProps) => {
               opacity={untrackedState.layers.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
-            <ShadeLayer />
+            <ShadeLayer
+              stageListenerRegister={baseStageListenerRegister}
+              opacity={untrackedState.layers.shade.opacity}
+              visible={untrackedState.layers.shade.visible}
+              listening={getSelectedLayerType() === LayerType.Shade}
+            />
             <HeatMapLayer />
             <GridLayer
               visible={untrackedState.layers.grid.visible}

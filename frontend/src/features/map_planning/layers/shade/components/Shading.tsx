@@ -26,7 +26,7 @@ export function Shading(props: { shading: ShadingDto }) {
 
   // Editing this shading should only be possible if this shading is the only one selected.
   const isShadingSelected =
-    selectedShadings !== null &&
+    !!selectedShadings &&
     selectedShadings.length === 1 &&
     selectedShadings[1].id === props.shading.id;
 

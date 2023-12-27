@@ -41,7 +41,7 @@ export function ShadeLayerRightToolbar() {
       <SimpleButton onClick={() => toggleShadeForShading(Shade.PartialShade)}>
         {t('shading_amount.partial_shade')}
       </SimpleButton>
-      <SimpleButton onClick={() => toggleShadeForShading(Shade.PermanentDeepShade)}>
+      <SimpleButton onClick={() => toggleShadeForShading(Shade.PermanentShade)}>
         {t('shading_amount.permanent_shade')}
       </SimpleButton>
       <SimpleButton onClick={() => toggleShadeForShading(Shade.PermanentDeepShade)}>
