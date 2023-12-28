@@ -36,14 +36,16 @@ export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerP
 
   useEffect(() => {
     stageListenerRegister.registerStageClickListener('ShadeLayer', (e) => {
-      console.log('Shade layer click listener ' + untrackedState.selectedShadeForNewShading);
       if (untrackedState.selectedShadeForNewShading !== null)
         placeNewShading(e.currentTarget.getRelativePointerPosition());
     });
   }, [untrackedState.selectedShadeForNewShading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Layer {...layerProps} listening={false}>
+    <Layer
+      {...layerProps}
+      listening={untrackedState.selectedShadeForNewShading === null && layerProps.listening}
+    >
       {shadings}
     </Layer>
   );

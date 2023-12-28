@@ -7,6 +7,7 @@ import {
   showTooltipWithContent,
   hideTooltip,
 } from '@/features/map_planning/utils/Tooltip';
+import { isUsingModifierKey } from '@/features/map_planning/utils/event-utils';
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
 import { COLOR_PRIMARY_400, COLOR_SECONDARY_400 } from '@/utils/constants';
 import { getNameFromPlant, getPlantNameFromAdditionalNameAndPlant } from '@/utils/plant-naming';
@@ -124,10 +125,6 @@ function isPlantingElementSelected(planting: PlantingDto): boolean {
 function triggerPlantSelectionInGuidedTour(): void {
   const placeEvent = new Event('selectPlant');
   document.getElementById('canvas')?.dispatchEvent(placeEvent);
-}
-
-function isUsingModifierKey(e: KonvaEventObject<MouseEvent>): boolean {
-  return e.evt.ctrlKey || e.evt.shiftKey || e.evt.metaKey;
 }
 
 function placeTooltip(plant: PlantsSummaryDto | undefined, additionalName: string | undefined) {

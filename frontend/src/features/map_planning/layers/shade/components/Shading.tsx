@@ -2,6 +2,7 @@ import { Shade, ShadingDto } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
 import { flattenRing } from '@/features/map_planning/utils/PolygonUtils';
+import { isUsingModifierKey } from '@/features/map_planning/utils/event-utils';
 import {
   COLOR_EDITOR_HIGH_VISIBILITY,
   COLOR_LIGHT_SHADE,
@@ -10,45 +11,94 @@ import {
   COLOR_PERMANENT_DEEP_SHADE,
   COLOR_PERMANENT_SHADE,
 } from '@/utils/constants';
+import { KonvaEventObject, Node } from 'konva/lib/Node';
 import { Group, Line } from 'react-konva';
 
-export function Shading(props: { shading: ShadingDto }) {
-  const geometry = props.shading.geometry as PolygonGeometry;
+export interface ShadingProps {
+  shading: ShadingDto;
+}
+
+export function Shading({ shading }: ShadingProps) {
+  const geometry = shading.geometry as PolygonGeometry;
   const editorLongestSide = useMapStore((map) =>
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
   );
   const shadingManipulationState = useMapStore(
     (store) => store.untrackedState.layers.shade.selectedShadingEditMode,
   );
-  const selectedShadings = useMapStore(
-    (store) => store.untrackedState.layers.shade.selectedShadings,
-  );
+  const selectShadings = useMapStore((store) => store.shadeLayerSelectShadings);
+  const setSingleNodeInTransformer = useMapStore((store) => store.setSingleNodeInTransformer);
+  const addNodeToTransformer = useMapStore((store) => store.addNodeToTransformer);
+  const removeNodeFromTransformer = useMapStore((store) => store.removeNodeFromTransformer);
 
-  // Editing this shading should only be possible if this shading is the only one selected.
-  const isShadingSelected =
-    !!selectedShadings &&
-    selectedShadings.length === 1 &&
-    selectedShadings[1].id === props.shading.id;
+  const isShadingEdited = shadingManipulationState !== 'inactive';
 
-  const isShadingEdited = isShadingSelected && shadingManipulationState !== 'inactive';
+  const removeShadingFromSelection = (e: KonvaEventObject<MouseEvent>) => {
+    const selectedShadings = (foundShadings: ShadingDto[], konvaNode: Node) => {
+      const shadingNode = konvaNode.getAttr('shading');
+      return shadingNode ? [...foundShadings, shadingNode] : [foundShadings];
+    };
+
+    const getUpdatedShadingSelection = () => {
+      const transformer = useMapStore.getState().transformer.current;
+      return transformer?.nodes().reduce(selectedShadings, []) ?? [];
+    };
+
+    removeNodeFromTransformer(e.currentTarget);
+    selectShadings(getUpdatedShadingSelection());
+  };
+
+  const addShadingToSelection = (e: KonvaEventObject<MouseEvent>) => {
+    addNodeToTransformer(e.currentTarget);
+
+    const currentPlantingSelection =
+      useMapStore.getState().untrackedState.layers.shade.selectedShadings ?? [];
+    selectShadings([...currentPlantingSelection, shading]);
+  };
+
+  const handleMultiSelect = (e: KonvaEventObject<MouseEvent>, shading: ShadingDto) => {
+    isShadingElementSelected(shading) ? removeShadingFromSelection(e) : addShadingToSelection(e);
+  };
+
+  const handleSingleSelect = (e: KonvaEventObject<MouseEvent>, shading: ShadingDto) => {
+    setSingleNodeInTransformer(e.currentTarget);
+    selectShadings([shading]);
+  };
+
+  const handleClickOnShading = (e: KonvaEventObject<MouseEvent>) => {
+    if (isShadingPlacementModeActive()) return;
+
+    isUsingModifierKey(e) ? handleMultiSelect(e, shading) : handleSingleSelect(e, shading);
+  };
 
   return (
-    <Group
-      listening={
-        isShadingSelected &&
-        (shadingManipulationState === 'move' || shadingManipulationState === 'remove')
-      }
-    >
+    <Group shading={shading} draggable={false}>
       <Line
+        onClick={handleClickOnShading}
         listening={true}
         points={flattenRing(geometry.rings[0])}
         stroke={isShadingEdited ? COLOR_EDITOR_HIGH_VISIBILITY : COLOR_NONE}
-        fill={fillColorFromShadeType(props.shading.shade)}
+        fill={fillColorFromShadeType(shading.shade)}
         strokeWidth={editorLongestSide / 500}
         lineCap="round"
         closed={true}
       />
     </Group>
+  );
+}
+
+function isShadingPlacementModeActive() {
+  const selectedPlantForPlanting =
+    useMapStore.getState().untrackedState.layers.shade.selectedShadeForNewShading;
+
+  return Boolean(selectedPlantForPlanting);
+}
+
+function isShadingElementSelected(shading: ShadingDto): boolean {
+  const allSelectedShadings = useMapStore.getState().untrackedState.layers.shade.selectedShadings;
+
+  return Boolean(
+    allSelectedShadings?.find((selectedPlanting) => selectedPlanting.id === shading.id),
   );
 }
 
