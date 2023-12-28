@@ -1,13 +1,13 @@
 import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import {
-  ViewRect,
   TrackedMapSlice,
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
+  ViewRect,
 } from './MapStoreTypes';
-import { clearInvalidSelection } from './utils';
-import { Shade, ShadingDto } from '@/api_types/definitions';
+import { clearInvalidSelection, typeOfLayer } from './utils';
+import { LayerType, Shade, ShadingDto } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
@@ -39,6 +39,14 @@ export const createUntrackedMapSlice: StateCreator<
     get().baseLayerDeactivatePolygonManipulation();
     get().shadeLayerDeactivatePolygonManipulation();
     get().clearStatusPanelContent();
+
+    if (typeOfLayer(selectedLayer) === LayerType.Shade) {
+      get().transformer.current?.rotateEnabled(false);
+      get().transformer.current?.resizeEnabled(false);
+    } else {
+      get().transformer.current?.rotateEnabled(true);
+      get().transformer.current?.resizeEnabled(true);
+    }
 
     set((state) => ({
       ...state,

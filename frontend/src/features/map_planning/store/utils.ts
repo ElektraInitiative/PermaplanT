@@ -1,4 +1,6 @@
 import type { GetFn } from './MapStoreTypes';
+import { LayerDto, LayerType } from '@/api_types/definitions';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 
 /**
  * If any of the selected nodes can not be found on the map, clear the selection.
@@ -14,4 +16,14 @@ export function clearInvalidSelection(get: GetFn) {
     transformer?.nodes([]);
     get().selectPlantings(null);
   }
+}
+
+export function typeOfLayer(
+  layer: LayerDto | FrontendOnlyLayerType,
+): FrontendOnlyLayerType | LayerType {
+  if (!(typeof layer === 'object' && 'type_' in layer)) {
+    return layer;
+  }
+
+  return layer.type_;
 }
