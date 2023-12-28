@@ -1,7 +1,8 @@
-import { Shade } from '@/api_types/definitions';
+import { LayerType, Shade } from '@/api_types/definitions';
 import { CreateShadingAction } from '@/features/map_planning/layers/shade/actions';
 import { Shading } from '@/features/map_planning/layers/shade/components/Shading';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { typeOfLayer } from '@/features/map_planning/store/utils';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { squareGeometryAroundPoint } from '@/features/map_planning/utils/PolygonUtils';
@@ -17,6 +18,8 @@ export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerP
   const executeAction = useMapStore((state) => state.executeAction);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const untrackedState = useMapStore((state) => state.untrackedState.layers.shade);
+  const currentLayer = useMapStore((state) => state.untrackedState.selectedLayer);
+  const shadeLayerSelectShading = useMapStore((state) => state.shadeLayerSelectShadings);
 
   const shadings = currentDateShadingDtos.map((dto) => (
     <Shading key={`shading-${dto.id}`} shading={dto} />
@@ -36,8 +39,16 @@ export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerP
 
   useEffect(() => {
     stageListenerRegister.registerStageClickListener('ShadeLayer', (e) => {
-      if (untrackedState.selectedShadeForNewShading !== null)
+      if (typeOfLayer(currentLayer) !== LayerType.Shade) return;
+
+      if (untrackedState.selectedShadeForNewShading !== null) {
         placeNewShading(e.currentTarget.getRelativePointerPosition());
+        return;
+      }
+
+      if (!e.target.getAttr('shading')) {
+        shadeLayerSelectShading(null);
+      }
     });
   }, [untrackedState.selectedShadeForNewShading]); // eslint-disable-line react-hooks/exhaustive-deps
 
