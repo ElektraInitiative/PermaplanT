@@ -1,6 +1,11 @@
-import { CreateShadingActionPayload, DeleteShadingActionPayload } from '@/api_types/definitions';
+import {
+  CreateShadingActionPayload,
+  DeleteShadingActionPayload,
+  UpdateShadingActionPayload,
+} from '@/api_types/definitions';
 import { createShading } from '@/features/map_planning/layers/shade/api/createShading';
 import { deleteShading } from '@/features/map_planning/layers/shade/api/deleteShading';
+import { updateShading } from '@/features/map_planning/layers/shade/api/updateShading';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { Action, TrackedMapState } from '@/features/map_planning/store/MapStoreTypes';
 import { filterVisibleObjects } from '@/features/map_planning/utils/filterVisibleObjects';
@@ -104,5 +109,69 @@ export class DeleteShadingAction
         },
       },
     };
+  }
+}
+
+export class UpdateShadingAction
+  implements
+    Action<Awaited<ReturnType<typeof updateShading>>, Awaited<ReturnType<typeof updateShading>>>
+{
+  get entityIds() {
+    return [this._data.id];
+  }
+
+  constructor(
+    private readonly _data: Omit<UpdateShadingActionPayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {}
+
+  reverse(state: TrackedMapState) {
+    const shading = state.layers.shade.loadedObjects.find((obj) => obj.id === this._data.id);
+
+    if (!shading) {
+      return null;
+    }
+
+    return new UpdateShadingAction(shading, this.actionId);
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    const updatedShadings = useMapStore
+      .getState()
+      .trackedState.layers.shade.loadedObjects.map((shading) => {
+        if (shading.id === this._data.id) {
+          return {
+            ...shading,
+            shade: this._data.shade ?? shading.shade,
+            geometry: this._data.geometry ?? shading.geometry,
+          };
+        }
+
+        return shading;
+      });
+
+    const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        shade: {
+          ...state.layers.shade,
+          objects: filterVisibleObjects(updatedShadings, timelineDate),
+          loadedObjects: updatedShadings,
+        },
+      },
+    };
+  }
+
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof createShading>>> {
+    return updateShading(mapId, this._data.id, {
+      type: 'Update',
+      content: {
+        ...this._data,
+        action_id: this.actionId,
+      },
+    });
   }
 }
