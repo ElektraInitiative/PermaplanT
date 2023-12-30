@@ -7,6 +7,7 @@ import Select, {
   ClassNamesConfig,
   GroupBase,
   MultiValue,
+  OnChangeValue,
   SingleValue,
   StylesConfig,
 } from 'react-select';
@@ -15,6 +16,7 @@ export interface SelectMenuProps<
   T extends FieldValues,
   Option = SelectOption,
   IsMulti extends boolean = false,
+  Value = string | number,
 > {
   /** Per page unique identifier of this UI element. */
   id: Path<T>;
@@ -29,6 +31,10 @@ export interface SelectMenuProps<
   control?: Control<T, unknown>;
   /** Options content that may be selected by the user */
   options: Option[];
+  /** If this component is used with react hook form, you must supply a function to convert from values to options */
+  optionFromValue?: (value: Value) => Option;
+  /** If this component is used with react hook form, you must supply a function to convert from options to values */
+  valueFromOption?: (value: OnChangeValue<Option, IsMulti>) => Value;
   /** Force a selected option. */
   value?: Option;
   defaultValue?: Option;
@@ -70,6 +76,8 @@ export default function SelectMenu<
   defaultValue,
   placeholder,
   handleOptionsChange,
+  optionFromValue,
+  valueFromOption,
   onChange,
   onInputChange,
   isClearable = true,
@@ -134,14 +142,18 @@ export default function SelectMenu<
       <Controller
         name={id}
         control={control}
-        render={() => (
+        render={({ field }) => (
           <Select
+            ref={field.ref}
             name={id}
-            onChange={handleOptionsChange}
+            onChange={(value, actionMeta) => {
+              if (valueFromOption) field.onChange(valueFromOption(value));
+              if (handleOptionsChange) handleOptionsChange(value, actionMeta);
+            }}
             placeholder={placeholder}
             inputValue={inputValue}
             options={options}
-            value={value}
+            value={optionFromValue ? optionFromValue(field.value) : value}
             defaultValue={defaultValue}
             isMulti={isMulti}
             styles={customStyles}

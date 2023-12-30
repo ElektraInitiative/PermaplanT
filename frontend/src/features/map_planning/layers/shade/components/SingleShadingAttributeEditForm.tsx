@@ -16,10 +16,9 @@ import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { SingleValue } from 'react-select';
 import { z } from 'zod';
 
 const ShadingAttributeEditFormSchema = z
@@ -27,6 +26,7 @@ const ShadingAttributeEditFormSchema = z
   .object({
     addDate: z.nullable(z.string()).transform((value) => value || undefined),
     removeDate: z.nullable(z.string()).transform((value) => value || undefined),
+    shade: z.string(),
   })
   .refine((schema) => !schema.removeDate || !schema.addDate || schema.addDate < schema.removeDate, {
     path: ['dateRelation'],
@@ -43,7 +43,7 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
   const isReadOnlyMode = useIsReadOnlyMode();
   const executeAction = useMapStore((store) => store.executeAction);
 
-  const { register, control, watch, handleSubmit, setValue } = useForm<ShadingDateAttribute>({
+  const formFunctions = useForm<ShadingDateAttribute>({
     defaultValues: {
       addDate: shading.addDate,
       removeDate: shading.removeDate,
@@ -58,33 +58,17 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
     { value: Shade.PermanentDeepShade, label: t('shading_amount.permanent_deep_shade') },
   ];
 
-  // Ideally we should use React Hook Form for this but setting a shading option using
-  // React Hook Forms 'setValue' function does not seem to work.
-  const [shadingOption, setShadingOption] = useState<SelectOption | null>(
-    shadeOptions.find((e) => e.value == shading.shade) ?? null,
-  );
-
   useEffect(() => {
-    setShadingOption(shadeOptions.find((e) => e.value == shading.shade) ?? null);
-    setValue('addDate', shading.addDate, {
+    formFunctions.setValue('addDate', shading.addDate, {
       shouldDirty: false,
       shouldTouch: false,
     });
-    setValue('removeDate', shading.removeDate, {
+    formFunctions.setValue('removeDate', shading.removeDate, {
       shouldDirty: false,
       shouldTouch: false,
     });
+    formFunctions.setValue('shade', shading.shade);
   }, [shading]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    executeAction(
-      new UpdateShadingAction({
-        shade: (shadingOption?.value ?? Shade.NoShade) as Shade,
-        id: shading.id,
-        geometry: shading.geometry,
-      }),
-    );
-  }, [shadingOption, shading.id, shading.geometry]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onAddDateChange = ({ addDate }: ShadingDateAttribute) => {
     executeAction(
@@ -104,33 +88,59 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
     );
   };
 
+  const onShadeChange = ({ shade }: ShadingDateAttribute) => {
+    executeAction(
+      new UpdateShadingAction({
+        shade: shade,
+        id: shading.id,
+        geometry: shading.geometry,
+      }),
+    );
+  };
+
   const deleteShading = () => {
     executeAction(new DeleteShadingAction(shading));
   };
 
+  const shadeSubmitState = useDebouncedSubmit<ShadingDateAttribute>(
+    formFunctions.watch('shade'),
+    formFunctions.handleSubmit,
+    onShadeChange,
+  );
+
   const addDateSubmitState = useDebouncedSubmit<ShadingDateAttribute>(
-    watch('addDate'),
-    handleSubmit,
+    formFunctions.watch('addDate'),
+    formFunctions.handleSubmit,
     onAddDateChange,
   );
 
   const removeDateSubmitState = useDebouncedSubmit<ShadingDateAttribute>(
-    watch('removeDate'),
-    handleSubmit,
+    formFunctions.watch('removeDate'),
+    formFunctions.handleSubmit,
     onRemoveDateChange,
   );
 
   return (
     <div className="flex flex-col gap-2 p-2">
-      <SelectMenu
-        id="shade"
-        labelText={t('left_toolbar.shading_amount_select_title')}
-        className="w-64"
-        control={control}
-        value={shadingOption}
-        handleOptionsChange={(option) => setShadingOption(option as SingleValue<SelectOption>)}
-        options={shadeOptions}
-      />
+      <FormProvider {...formFunctions}>
+        <SelectMenu
+          id="shade"
+          labelText={t('left_toolbar.shading_amount_select_title')}
+          className="w-64"
+          options={shadeOptions}
+          optionFromValue={(value) => shadeOptions.find((o) => o.value === value)}
+          valueFromOption={(option) => option?.value ?? Shade.LightShade}
+        />
+      </FormProvider>
+      {shadeSubmitState === 'loading' && (
+        <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
+      )}
+      {shadeSubmitState === 'idle' && (
+        <CheckIcon
+          className="mb-3 mt-auto h-5 w-5 text-primary-400"
+          data-testid="planting-attribute-edit-form__add-date-idle"
+        />
+      )}
       <hr className="my-4 border-neutral-700" />
 
       <ShadingGeometryToolForm />
@@ -143,7 +153,7 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
           id="addDate"
           disabled={isReadOnlyMode}
           labelContent={t('left_toolbar.add_date')}
-          register={register}
+          register={formFunctions.register}
           className="w-36"
         />
         {addDateSubmitState === 'loading' && (
@@ -163,7 +173,7 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
           id="removeDate"
           disabled={isReadOnlyMode}
           labelContent={t('left_toolbar.remove_date')}
-          register={register}
+          register={formFunctions.register}
           className="w-36"
         />
         {removeDateSubmitState === 'loading' && (

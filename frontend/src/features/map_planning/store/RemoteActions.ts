@@ -14,6 +14,9 @@ import { Action as RemoteAction } from '@/api_types/definitions';
 import {
   CreateShadingAction,
   DeleteShadingAction,
+  UpdateShadingAction,
+  UpdateShadingAddDateAction,
+  UpdateShadingRemoveDateAction,
 } from '@/features/map_planning/layers/shade/actions';
 
 export function handleRemoteAction(ev: MessageEvent<unknown>, userId: string) {
@@ -93,6 +96,18 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
       );
     case 'DeleteShading':
       return new DeleteShadingAction({ ...remoteAction.payload }, remoteAction.payload.actionId);
+    case 'UpdateShading':
+      return new UpdateShadingAction({ ...remoteAction.payload }, remoteAction.payload.actionId);
+    case 'UpdateShadingAddDate':
+      return new UpdateShadingAddDateAction(
+        { ...remoteAction.payload },
+        remoteAction.payload.actionId,
+      );
+    case 'UpdateShadingRemoveDate':
+      return new UpdateShadingRemoveDateAction(
+        { ...remoteAction.payload },
+        remoteAction.payload.actionId,
+      );
     default:
       throw new Error(`Unknown remote action`) as never;
   }
