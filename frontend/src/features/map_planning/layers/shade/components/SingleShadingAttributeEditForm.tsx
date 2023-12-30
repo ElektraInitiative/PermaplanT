@@ -4,6 +4,7 @@ import SelectMenu from '@/components/Form/SelectMenu';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import {
+  DeleteShadingAction,
   UpdateShadingAction,
   UpdateShadingAddDateAction,
   UpdateShadingRemoveDateAction,
@@ -103,6 +104,10 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
     );
   };
 
+  const deleteShading = () => {
+    executeAction(new DeleteShadingAction(shading));
+  };
+
   const addDateSubmitState = useDebouncedSubmit<ShadingDateAttribute>(
     watch('addDate'),
     handleSubmit,
@@ -174,7 +179,11 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
 
       <hr className="my-4 border-neutral-700" />
 
-      <SimpleButton variant={ButtonVariant.dangerBase} className="top-5 w-44">
+      <SimpleButton
+        variant={ButtonVariant.dangerBase}
+        onClick={deleteShading}
+        className="top-5 w-44"
+      >
         {t('left_toolbar.delete_button')}
       </SimpleButton>
     </div>
