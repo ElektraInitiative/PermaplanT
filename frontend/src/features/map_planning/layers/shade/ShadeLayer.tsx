@@ -50,7 +50,7 @@ export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerP
         shadeLayerSelectShading(null);
       }
     });
-  }, [untrackedState.selectedShadeForNewShading]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [untrackedState.selectedShadeForNewShading, currentLayer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Layer
