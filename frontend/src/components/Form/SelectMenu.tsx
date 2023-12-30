@@ -24,6 +24,8 @@ export interface SelectMenuProps<
   isMulti?: IsMulti;
   /** This text will be displayed in a label above select menu. */
   labelText?: string;
+  /** Deactivate this UI element. */
+  disabled?: boolean;
   /**
    * Reference to a react-hook-form control.
    * Caution: control can only be omitted in the context of a FormProvider.
@@ -71,6 +73,7 @@ export default function SelectMenu<
   labelText,
   control,
   options,
+  disabled,
   required = false,
   value,
   defaultValue,
@@ -153,6 +156,7 @@ export default function SelectMenu<
             placeholder={placeholder}
             inputValue={inputValue}
             options={options}
+            isDisabled={disabled}
             value={optionFromValue ? optionFromValue(field.value) : value}
             defaultValue={defaultValue}
             isMulti={isMulti}

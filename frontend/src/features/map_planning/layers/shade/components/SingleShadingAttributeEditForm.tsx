@@ -127,6 +127,7 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
           id="shade"
           labelText={t('left_toolbar.shading_amount_select_title')}
           className="w-64"
+          disabled={isReadOnlyMode}
           options={shadeOptions}
           optionFromValue={(value) => shadeOptions.find((o) => o.value === value)}
           valueFromOption={(option) => option?.value ?? Shade.LightShade}
@@ -192,6 +193,7 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
       <SimpleButton
         variant={ButtonVariant.dangerBase}
         onClick={deleteShading}
+        disabled={isReadOnlyMode}
         className="top-5 w-44"
       >
         {t('left_toolbar.delete_button')}
