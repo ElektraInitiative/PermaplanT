@@ -196,6 +196,11 @@ export const createUntrackedMapSlice: StateCreator<
       date,
     );
 
+    const shadingsVisibleRelativeToTimelineDate = filterVisibleObjects(
+      get().trackedState.layers.shade.loadedObjects,
+      date,
+    );
+
     set((state) => ({
       ...state,
       trackedState: {
@@ -205,6 +210,10 @@ export const createUntrackedMapSlice: StateCreator<
           plants: {
             ...state.trackedState.layers.plants,
             objects: plantsVisibleRelativeToTimelineDate,
+          },
+          shade: {
+            ...state.trackedState.layers.shade,
+            objects: shadingsVisibleRelativeToTimelineDate,
           },
         },
       },
