@@ -2,6 +2,8 @@ import {
   CreateShadingActionPayload,
   DeleteShadingActionPayload,
   UpdateShadingActionPayload,
+  UpdateShadingAddDateActionPayload,
+  UpdateShadingRemoveDateActionPayload,
 } from '@/api_types/definitions';
 import { createShading } from '@/features/map_planning/layers/shade/api/createShading';
 import { deleteShading } from '@/features/map_planning/layers/shade/api/deleteShading';
@@ -165,12 +167,138 @@ export class UpdateShadingAction
     };
   }
 
-  async execute(mapId: number): Promise<Awaited<ReturnType<typeof createShading>>> {
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateShading>>> {
     return updateShading(mapId, this._data.id, {
       type: 'Update',
       content: {
         ...this._data,
         action_id: this.actionId,
+      },
+    });
+  }
+}
+
+export class UpdateShadingAddDateAction
+  implements
+    Action<Awaited<ReturnType<typeof updateShading>>, Awaited<ReturnType<typeof updateShading>>>
+{
+  get entityIds() {
+    return [this._data.id];
+  }
+
+  constructor(
+    private readonly _data: Omit<UpdateShadingAddDateActionPayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {}
+
+  reverse(state: TrackedMapState) {
+    const shading = state.layers.shade.loadedObjects.find((obj) => obj.id === this._data.id);
+
+    if (!shading) {
+      return null;
+    }
+
+    return new UpdateShadingAddDateAction(shading, this.actionId);
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    const updatedShadings = useMapStore
+      .getState()
+      .trackedState.layers.shade.loadedObjects.map((shading) => {
+        if (shading.id === this._data.id) {
+          return {
+            ...shading,
+            addDate: this._data.addDate,
+          };
+        }
+
+        return shading;
+      });
+
+    const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        shade: {
+          ...state.layers.shade,
+          objects: filterVisibleObjects(updatedShadings, timelineDate),
+          loadedObjects: updatedShadings,
+        },
+      },
+    };
+  }
+
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateShading>>> {
+    return updateShading(mapId, this._data.id, {
+      type: 'UpdateAddDate',
+      content: {
+        ...this._data,
+        actionId: this.actionId,
+      },
+    });
+  }
+}
+
+export class UpdateShadingRemoveDateAction
+  implements
+    Action<Awaited<ReturnType<typeof updateShading>>, Awaited<ReturnType<typeof updateShading>>>
+{
+  get entityIds() {
+    return [this._data.id];
+  }
+
+  constructor(
+    private readonly _data: Omit<UpdateShadingRemoveDateActionPayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {}
+
+  reverse(state: TrackedMapState) {
+    const shading = state.layers.shade.loadedObjects.find((obj) => obj.id === this._data.id);
+
+    if (!shading) {
+      return null;
+    }
+
+    return new UpdateShadingRemoveDateAction(shading, this.actionId);
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    const updatedShadings = useMapStore
+      .getState()
+      .trackedState.layers.shade.loadedObjects.map((shading) => {
+        if (shading.id === this._data.id) {
+          return {
+            ...shading,
+            removeDate: this._data.removeDate,
+          };
+        }
+
+        return shading;
+      });
+
+    const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        shade: {
+          ...state.layers.shade,
+          objects: filterVisibleObjects(updatedShadings, timelineDate),
+          loadedObjects: updatedShadings,
+        },
+      },
+    };
+  }
+
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateShading>>> {
+    return updateShading(mapId, this._data.id, {
+      type: 'UpdateRemoveDate',
+      content: {
+        ...this._data,
+        actionId: this.actionId,
       },
     });
   }
