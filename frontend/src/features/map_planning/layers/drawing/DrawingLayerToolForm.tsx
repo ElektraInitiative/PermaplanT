@@ -6,10 +6,10 @@ import {
 } from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
-import CircleIcon from '@/svg/icons/plant.svg?react';
-import CloseIcon from '@/svg/icons/plant.svg?react';
-import RectangleIcon from '@/svg/icons/plant.svg?react';
-import LineIcon from '@/svg/icons/plant.svg?react';
+import CircleIcon from '@/svg/icons/circle.svg?react';
+import CloseIcon from '@/svg/icons/close.svg?react';
+import RectangleIcon from '@/svg/icons/rectangle.svg?react';
+import LineIcon from '@/svg/icons/wavy-line.svg?react';
 import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 
