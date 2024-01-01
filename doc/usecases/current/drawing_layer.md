@@ -21,6 +21,7 @@
       - open without filling
       - closed with 3 different fillings
     - icons from Nextcloud
+    - Arrows can be used to indicate water flow.
 - **Alternative scenario:**
   - The user accidentally edits, moves or removes an element and uses undo to correct the mistake.
   - The user accidentally adds an element and deletes it with the "delete" or "undo" functionality.
