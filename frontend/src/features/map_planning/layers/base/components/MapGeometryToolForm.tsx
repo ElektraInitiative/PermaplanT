@@ -1,10 +1,10 @@
+import { LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_BASE_LAYER,
   createKeyBindingsAccordingToConfig,
 } from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { isBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
@@ -25,8 +25,6 @@ export function MapGeometryToolForm() {
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   const activatePolygonMovePointsAction = () => {
-    if (!isBaseLayerActive) return;
-
     activatePolygonMovePoints();
     setStatusPanelContent(
       <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_move_points_hint')} />,
@@ -34,8 +32,6 @@ export function MapGeometryToolForm() {
   };
 
   const activatePolygonAddPointsAction = () => {
-    if (!isBaseLayerActive) return;
-
     activatePolygonAddPoints();
     setStatusPanelContent(
       <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_add_points_hint')} />,
@@ -43,8 +39,6 @@ export function MapGeometryToolForm() {
   };
 
   const activatePolygonDeletePointsAction = () => {
-    if (!isBaseLayerActive) return;
-
     activatePolygonDeletePoints();
     setStatusPanelContent(
       <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_delete_points_hint')} />,
@@ -59,6 +53,8 @@ export function MapGeometryToolForm() {
 
   useKeyHandlers(
     createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_BASE_LAYER, keyHandlerActions),
+    document,
+    LayerType.Base,
   );
 
   return (
