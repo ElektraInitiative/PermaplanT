@@ -1,18 +1,15 @@
-import PaginatedSelectMenu, {
-  PageAdditionalInfo,
-} from '../../../components/Form/PaginatedSelectMenu';
-import SelectMenu from '../../../components/Form/SelectMenu';
 import { searchPlants } from '../api/searchPlants';
 import { NewSeedDto, Quality, Quantity, SeedDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import MarkdownEditor from '@/components/Form/MarkdownEditor';
+import PaginatedSelectMenu, { PageAdditionalInfo } from '@/components/Form/PaginatedSelectMenu';
+import SelectMenu from '@/components/Form/SelectMenu';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import { findPlantById } from '@/features/seeds/api/findPlantById';
+import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { getNameFromPlant } from '@/utils/plant-naming';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
-import { useQuery } from '@tanstack/react-query';
 import { Suspense, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -52,6 +49,12 @@ const CreateSeedForm = ({
 
   const currentYear = new Date().getFullYear();
 
+  const { data: initialPlant } = useFindPlantById({
+    // cast is fine because the query can only execute if plant_id is defined
+    plantId: existingSeed?.plant_id as number,
+    enabled: Boolean(existingSeed?.plant_id),
+  });
+
   const { register, handleSubmit, control, setValue } = useForm<NewSeedDto>();
 
   // SelectMenu components can't automatically convert from values to select options.
@@ -61,19 +64,6 @@ const CreateSeedForm = ({
   const [qualityOption, setQualityOption] = useState<SelectOption | undefined>(quality[0]);
 
   const [notes, setNotes] = useState<string | undefined>(undefined);
-
-  const initialPlant = useQuery(
-    ['plant', existingSeed?.plant_id],
-    () => {
-      if (existingSeed?.plant_id) {
-        return findPlantById(existingSeed.plant_id);
-      }
-      return null;
-    },
-    {
-      enabled: !!existingSeed?.plant_id,
-    },
-  ).data;
 
   useEffect(() => {
     if (initialPlant) {
@@ -113,8 +103,8 @@ const CreateSeedForm = ({
         setNotes(existingSeed?.notes);
 
         // Convert existing values to select menu options.
-        setQuantityOption(quantity.filter((x) => x.value === existingSeed?.quantity)[0]);
-        setQualityOption(quality.filter((x) => x.value === existingSeed?.quality)[0]);
+        setQuantityOption(quantity.find((x) => x.value === existingSeed?.quantity));
+        setQualityOption(quality.find((x) => x.value === existingSeed?.quality));
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

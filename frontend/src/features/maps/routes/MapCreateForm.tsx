@@ -1,8 +1,7 @@
-import { createMap } from '../api/createMap';
+import { useCreateMap } from '../hooks/mapHookApi';
 import { NewMapDto, PrivacyOption } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import PageLayout from '@/components/Layout/PageLayout';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +35,8 @@ export default function MapCreateForm() {
   const [mapInput, setMapInput] = useState(initialData);
   const navigate = useNavigate();
 
+  const { mutate: createMap } = useCreateMap();
+
   const missingNameText = (
     <p className="mb-2 ml-2 block text-sm font-medium text-red-500">
       {t('maps:overview.missing_name')}
@@ -68,7 +69,7 @@ export default function MapCreateForm() {
     </div>
   );
 
-  const locactionPickerPlaceholder = (
+  const locationPickerPlaceholder = (
     <div className="mb-12 flex flex-col items-center">
       <div className="mb-4 flex">
         <input
@@ -138,12 +139,12 @@ export default function MapCreateForm() {
         srid: 4326,
       },
     };
-    try {
-      await createMap(newMap);
-    } catch (error) {
-      errorToastGrouped(t('maps:create.error_map_create'), { autoClose: false });
-    }
-    navigate('/maps');
+
+    createMap(newMap, {
+      onSuccess: () => {
+        navigate('/maps');
+      },
+    });
   }
 
   function onCancel() {
@@ -192,7 +193,7 @@ export default function MapCreateForm() {
         placeholder={t('maps:create.description_placeholer')}
       />
       {mapVisible && locationPicker}
-      {!mapVisible && locactionPickerPlaceholder}
+      {!mapVisible && locationPickerPlaceholder}
       <div className="space-between flex flex-row justify-center space-x-8">
         <SimpleButton
           onClick={onCancel}

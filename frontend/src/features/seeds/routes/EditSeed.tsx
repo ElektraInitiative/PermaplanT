@@ -1,59 +1,62 @@
-import { findSeedById } from '../api/findSeedById';
 import CreateSeedForm from '../components/CreateSeedForm';
 import { NewSeedDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import { editSeed } from '@/features/seeds/api/editSeeds';
-import { errorToastGrouped, successToastGrouped } from '@/features/toasts/groupedToast';
+import { useEditSeed, useFindSeedById } from '@/features/seeds/hooks/seedHookApi';
+import { successToastGrouped } from '@/features/toasts/groupedToast';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import { Suspense, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-export function EditSeed() {
-  const { t } = useTranslation(['seeds', 'common']);
+export function EditSeedPage() {
   const { id } = useParams();
+
+  const seedId = id ? parseInt(id) : null;
+
+  // Showing the page without an id would be a bug.
+  if (!seedId) {
+    return <Navigate to="/seeds" />;
+  }
+
+  return <EditSeed seedId={seedId} />;
+}
+
+type EditSeedProps = {
+  seedId: number;
+};
+
+export function EditSeed({ seedId }: EditSeedProps) {
+  const { t } = useTranslation(['seeds', 'common']);
   const navigate = useNavigate();
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
-
-  const { mutate: submitNewSeed, isSuccess: isUploadingSuccess } = useMutation(
-    ['edit Seed'],
-    editSeed,
-    {
-      onError: (error) => {
-        const errorTyped = error as AxiosError;
-
-        if (errorTyped.response?.status === 409) {
-          errorToastGrouped(t('seeds:create_seed_form.error_seed_already_exists'));
-          return;
-        }
-
-        errorToastGrouped(t('seeds:create_seed_form.error_create_seed'));
-      },
-      onSuccess: async () => {
-        // Wait for the seed upload to be completed before navigating.
-        // This ensures that all seeds are present on the overview page once the user sees it.
-        await isUploadingSuccess;
-        navigate(`/seeds/`);
-        successToastGrouped(t('seeds:edit_seed_form.success'));
-      },
-    },
-  );
-
-  const getSeed = () => findSeedById(parseInt(id ?? ''));
 
   const {
     data: seed,
     isLoading: seedIsLoading,
     isError: seedIsError,
-  } = useQuery(['seed', id], getSeed, {
-    cacheTime: 0,
-    staleTime: 0,
+  } = useFindSeedById({
+    seedId: seedId,
   });
+
+  const { mutate: updateSeed } = useEditSeed();
+
+  const handleEditSeed = useCallback(
+    (updatedSeed: NewSeedDto, seedId: number) => {
+      updateSeed(
+        { seed: updatedSeed, id: seedId },
+        {
+          onSuccess: () => {
+            successToastGrouped(t('seeds:edit_seed_form.success'));
+            navigate('/seeds');
+          },
+        },
+      );
+    },
+    [navigate, t, updateSeed],
+  );
 
   const onCancel = () => {
     // There is no need to show the cancel warning modal if the user
@@ -72,10 +75,6 @@ export function EditSeed() {
     setFormTouched(true);
   };
 
-  const onSubmit = async (newSeed: NewSeedDto) => {
-    submitNewSeed({ seed: newSeed, id: parseInt(id ?? '0') });
-  };
-
   return (
     <Suspense>
       <PageLayout>
@@ -87,7 +86,7 @@ export function EditSeed() {
             existingSeed={!seedIsError ? seed : undefined}
             onCancel={onCancel}
             onChange={onChange}
-            onSubmit={onSubmit}
+            onSubmit={(newSeed) => handleEditSeed(newSeed, seedId)}
           />
         )}
       </PageLayout>

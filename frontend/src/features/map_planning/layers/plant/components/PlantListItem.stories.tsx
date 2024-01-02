@@ -39,7 +39,6 @@ export const InPlantSuggestionList: Story = {
   render: (args) => (
     <PlantSuggestionList
       header="A List of Plants"
-      hasContent={true}
       isLoading={false}
       noContentElement={<div>No Content</div>}
     >
