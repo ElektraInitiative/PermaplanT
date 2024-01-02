@@ -17,7 +17,6 @@
     - nearby antagonists
     - shade mismatch
     - hydrology mismatch
-    - plant is on unsuitable landscape
     - plant is on unsuitable zone
   - The user successfully adds, edits, moves and hides warnings.
 - **Alternative scenario:**
