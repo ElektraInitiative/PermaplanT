@@ -11,13 +11,8 @@ import { useEffect } from 'react';
  * @param {Record<string, () => void>} keyHandlerMap - A dictionary where keys are key names
  *     (e.g., 'Enter', 'Escape') and values are callback functions to be executed when the
  *     corresponding key is pressed.
- *
  * @param {HTMLElement | Document} htmlNode - The HTML node to which the event listener should be bound.
- *
- * @param {LayerType} activeLayer - Only trigger the key handler if this layer is active.
- *
  * @param {boolean} stopPropagation - Whether to stop the event from propagating to parent elements.
- *
  * @param {boolean} enabled - Whether the key handlers should be enabled.
  *
  * @example
