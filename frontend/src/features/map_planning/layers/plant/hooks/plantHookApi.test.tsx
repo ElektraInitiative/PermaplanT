@@ -48,7 +48,7 @@ describe('usePlantSearch', () => {
   });
 
   it('should return results for the search term', async () => {
-    vi.useFakeTimers();
+    vi.useFakeTimers({ shouldAdvanceTime: true });
 
     const { result } = renderUsePlantSearch();
     await waitFor(() => expect(result.current.queryInfo.isSuccess).toBe(true));
@@ -71,7 +71,7 @@ describe('usePlantSearch', () => {
   });
 
   it('should return a page of plants after clearing the search term', async () => {
-    vi.useFakeTimers();
+    vi.useFakeTimers({ shouldAdvanceTime: true });
 
     const { result } = renderUsePlantSearch();
     await waitFor(() => expect(result.current.queryInfo.isSuccess).toBe(true));
