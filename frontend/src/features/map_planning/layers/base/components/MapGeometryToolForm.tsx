@@ -1,10 +1,10 @@
-import { LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_BASE_LAYER,
   createKeyBindingsAccordingToConfig,
 } from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { isBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
@@ -54,7 +54,8 @@ export function MapGeometryToolForm() {
   useKeyHandlers(
     createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_BASE_LAYER, keyHandlerActions),
     document,
-    LayerType.Base,
+    true,
+    isBaseLayerActive(),
   );
 
   return (

@@ -1,5 +1,3 @@
-import { LayerType } from '@/api_types/definitions';
-import { isLayerOfTypeActive } from '@/features/map_planning/utils/layer-utils';
 import { createShortcutIncludingModifierKeys } from '@/utils/key-combinations';
 import { useEffect } from 'react';
 
@@ -17,6 +15,10 @@ import { useEffect } from 'react';
  * @param {HTMLElement | Document} htmlNode - The HTML node to which the event listener should be bound.
  *
  * @param {LayerType} activeLayer - Only trigger the key handler if this layer is active.
+ *
+ * @param {boolean} stopPropagation - Whether to stop the event from propagating to parent elements.
+ *
+ * @param {boolean} enabled - Whether the key handlers should be enabled.
  *
  * @example
  * // Example usage:
@@ -47,8 +49,8 @@ import { useEffect } from 'react';
 export function useKeyHandlers(
   keyHandlerMap: Record<string, (() => void) | undefined>,
   htmlNode: HTMLElement | Document = document,
-  activeLayer?: LayerType,
   stopPropagation?: boolean,
+  enabled = true,
 ) {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -59,7 +61,7 @@ export function useKeyHandlers(
         event.key,
       );
       const handler = keyHandlerMap[pressedShortcut];
-      if (handler && (!activeLayer || isLayerOfTypeActive(activeLayer))) {
+      if (handler && enabled) {
         handler();
         if (stopPropagation === true) {
           event.stopPropagation();
@@ -72,5 +74,5 @@ export function useKeyHandlers(
     return () => {
       htmlNode.removeEventListener('keydown', handleKeyPress as EventListener);
     };
-  }, [htmlNode, keyHandlerMap, stopPropagation, activeLayer]);
+  }, [htmlNode, keyHandlerMap, stopPropagation, enabled]);
 }

@@ -24,8 +24,8 @@ export default function ModalContainer({
   useKeyHandlers(
     createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_GLOBAL, keyHandlerActions),
     document,
-    undefined,
     true,
+    show,
   );
 
   return (
