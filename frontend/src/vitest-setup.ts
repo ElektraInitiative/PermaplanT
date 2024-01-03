@@ -3,5 +3,7 @@ import '@testing-library/jest-dom/vitest';
 // node canvas does not work correctly with jsdom
 import 'vitest-canvas-mock';
 
+vi.stubGlobal('jest', vi);
+
 // https://docs.pmnd.rs/zustand/guides/testing
 vi.mock('zustand');
