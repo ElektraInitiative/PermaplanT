@@ -1,5 +1,5 @@
-import { Teammember } from './Teammember';
 import { useTranslation } from 'react-i18next';
+import { Teammember } from './Teammember';
 
 const Team = () => {
   const { t } = useTranslation(['team']);

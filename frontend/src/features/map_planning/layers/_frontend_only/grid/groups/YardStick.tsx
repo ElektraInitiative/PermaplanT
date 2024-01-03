@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+import { Group, Line, Text } from 'react-konva';
 import { useDarkModeStore } from '@/features/dark_mode';
 import {
   calculateGridStep,
@@ -11,8 +13,6 @@ import {
 } from '@/features/map_planning/layers/_frontend_only/grid/util/Constants';
 import { ViewRect } from '@/features/map_planning/store/MapStoreTypes';
 import { colors } from '@/utils/colors';
-import { useTranslation } from 'react-i18next';
-import { Group, Line, Text } from 'react-konva';
 
 export const YardStick = (rect: ViewRect) => {
   const { t } = useTranslation('common');

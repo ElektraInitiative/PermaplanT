@@ -1,13 +1,13 @@
-import { useEditMap, useFindMapById } from '../hooks/mapHookApi';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Coordinates, MapDto, PrivacyOption, UpdateMapDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
-import { Suspense, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useEditMap, useFindMapById } from '../hooks/mapHookApi';
 
 export function EditMapPage() {
   const { id } = useParams();

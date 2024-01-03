@@ -1,4 +1,8 @@
-import { searchPlants } from '../api/searchPlants';
+import { Suspense, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { GroupBase, OptionsOrGroups } from 'react-select';
+import { LoadOptions } from 'react-select-async-paginate';
 import { NewSeedDto, Quality, Quantity, SeedDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import MarkdownEditor from '@/components/Form/MarkdownEditor';
@@ -10,11 +14,7 @@ import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/pla
 import { enumToSelectOptionArr } from '@/utils/enum';
 import { getNameFromPlant } from '@/utils/plant-naming';
 import { useTranslatedQuality, useTranslatedQuantity } from '@/utils/translated-enums';
-import { Suspense, useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { GroupBase, OptionsOrGroups } from 'react-select';
-import { LoadOptions } from 'react-select-async-paginate';
+import { searchPlants } from '../api/searchPlants';
 
 /** Options for CreateSeedForm */
 interface CreateSeedFormProps {

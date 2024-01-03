@@ -1,7 +1,7 @@
+import { useTranslation } from 'react-i18next';
 import Footer from '@/components/Layout/Footer';
 import PageLayout from '@/components/Layout/PageLayout';
 import Contact from '@/features/landing_page/components/Contact';
-import { useTranslation } from 'react-i18next';
 
 export function ImprintPage() {
   const { t } = useTranslation(['imprint']);

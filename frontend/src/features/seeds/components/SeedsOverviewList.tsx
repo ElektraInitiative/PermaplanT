@@ -1,3 +1,6 @@
+import { Suspense, UIEvent, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Quality, SeedDto } from '@/api_types/definitions';
 import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
@@ -7,9 +10,6 @@ import { useTranslateQuantity } from '@/hooks/useTranslateQuantity';
 import ArchiveIcon from '@/svg/icons/archive-off.svg?react';
 import EditIcon from '@/svg/icons/edit.svg?react';
 import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
-import { Suspense, UIEvent, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 interface SeedsOverviewListProps {
   seeds: SeedDto[];

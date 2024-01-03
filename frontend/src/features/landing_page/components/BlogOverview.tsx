@@ -1,5 +1,5 @@
-import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import { useTranslation } from 'react-i18next';
+import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 
 const BlogOverview = () => {
   const { t } = useTranslation(['blog']);

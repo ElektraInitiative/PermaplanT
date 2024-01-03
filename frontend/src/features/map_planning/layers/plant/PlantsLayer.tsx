@@ -1,3 +1,18 @@
+import Konva from 'konva';
+import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
+import { useCallback, useEffect, useRef } from 'react';
+import { Layer } from 'react-konva';
+import * as uuid from 'uuid';
+import { LayerType, PlantingDto, PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
+import IconButton from '@/components/Button/IconButton';
+import {
+  KEYBINDINGS_SCOPE_PLANTS_LAYER,
+  createKeyBindingsAccordingToConfig,
+} from '@/config/keybindings';
+import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
+import CloseIcon from '@/svg/icons/close.svg?react';
+import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import useMapStore from '../../store/MapStore';
 import { PlantForPlanting } from '../../store/MapStoreTypes';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
@@ -10,21 +25,6 @@ import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOver
 import { PlantingElement } from './components/PlantingElement';
 import { useDeleteSelectedPlantings } from './hooks/useDeleteSelectedPlantings';
 import { calculatePlantCount, getPlantWidth } from './util';
-import { LayerType, PlantingDto, PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
-import IconButton from '@/components/Button/IconButton';
-import {
-  KEYBINDINGS_SCOPE_PLANTS_LAYER,
-  createKeyBindingsAccordingToConfig,
-} from '@/config/keybindings';
-import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
-import { useKeyHandlers } from '@/hooks/useKeyHandlers';
-import CloseIcon from '@/svg/icons/close.svg?react';
-import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
-import Konva from 'konva';
-import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
-import { useCallback, useEffect, useRef } from 'react';
-import { Layer } from 'react-konva';
-import * as uuid from 'uuid';
 
 // For performance reasons add limit for amount of plants inside a plant field
 const LIMIT_PLANT_FIELD_PLANTS = 1000;

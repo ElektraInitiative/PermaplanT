@@ -1,5 +1,5 @@
-import ButtonLink from '@/components/Button/ButtonLink';
 import { useTranslation } from 'react-i18next';
+import ButtonLink from '@/components/Button/ButtonLink';
 
 export function EmptyAvailablePlants() {
   const { t } = useTranslation(['plantingSuggestions']);

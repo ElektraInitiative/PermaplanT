@@ -1,10 +1,10 @@
+import Konva from 'konva';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { Label } from 'react-konva';
 import { PlantingDto } from '@/api_types/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
 import { MapLabel } from '@/features/map_planning/utils/MapLabel';
 import { commonName } from '@/utils/plant-naming';
-import Konva from 'konva';
-import { useLayoutEffect, useRef, useState } from 'react';
-import { Label } from 'react-konva';
 
 export interface PlantLabelProps {
   /** Contains plant name that will be displayed on the label. */

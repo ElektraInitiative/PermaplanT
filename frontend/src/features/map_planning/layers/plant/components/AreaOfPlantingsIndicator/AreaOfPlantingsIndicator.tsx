@@ -1,11 +1,11 @@
-import { useSelectedPlantForPlanting } from '../../hooks/useSelectedPlantForPlanting';
-import { calculatePlantCount, getPlantWidth } from '../../util';
-import style from './AreaOfPlantingsIndicator.module.css';
-import useMapStore from '@/features/map_planning/store/MapStore';
-import { colors } from '@/utils/colors';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Html } from 'react-konva-utils';
+import useMapStore from '@/features/map_planning/store/MapStore';
+import { colors } from '@/utils/colors';
+import { useSelectedPlantForPlanting } from '../../hooks/useSelectedPlantForPlanting';
+import { calculatePlantCount, getPlantWidth } from '../../util';
+import style from './AreaOfPlantingsIndicator.module.css';
 
 export function AreaOfPlantingsIndicator() {
   const selection = useMapStore((state) => state.selectionRectAttributes);

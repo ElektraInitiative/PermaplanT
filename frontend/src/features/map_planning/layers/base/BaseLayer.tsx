@@ -1,11 +1,11 @@
-import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
+import { useCallback, useEffect, useState } from 'react';
+import { Circle, Group, Layer, Line } from 'react-konva';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
 import { MapGeometryEditor } from '@/features/map_planning/layers/base/components/MapGeometryEditor';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { colors } from '@/utils/colors';
-import { useCallback, useEffect, useState } from 'react';
-import { Circle, Group, Layer, Line } from 'react-konva';
+import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 
 type BaseLayerProps = LayerConfigWithListenerRegister;
 

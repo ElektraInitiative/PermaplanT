@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+import WidePageLayout from '@/components/Layout/WidePageLayout';
 import Footer from '../../../components/Layout/Footer';
 import '../../../styles/geoMap.css';
 import BlogOverview from '../components/BlogOverview';
@@ -7,8 +9,6 @@ import { GeoMap } from '../components/GeoMap';
 import { PhotoGallery } from '../components/PhotoGallery';
 import Pricing from '../components/Pricing';
 import Team from '../components/Team';
-import WidePageLayout from '@/components/Layout/WidePageLayout';
-import { useTranslation } from 'react-i18next';
 
 export const LandingPage = () => {
   const { t } = useTranslation(['landingPage']);

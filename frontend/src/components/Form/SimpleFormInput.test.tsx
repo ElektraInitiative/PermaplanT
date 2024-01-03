@@ -1,6 +1,6 @@
-import SimpleFormInput from './SimpleFormInput';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
+import SimpleFormInput from './SimpleFormInput';
 
 it('renders correctly', () => {
   const tree = renderer

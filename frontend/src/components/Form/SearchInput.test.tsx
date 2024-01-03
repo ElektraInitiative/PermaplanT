@@ -1,8 +1,8 @@
-import SearchInput, { SHORTCUT_SEARCH_INPUT_RESET, TEST_IDS } from './SearchInput';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReactElement } from 'react';
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer';
+import SearchInput, { SHORTCUT_SEARCH_INPUT_RESET, TEST_IDS } from './SearchInput';
 
 const findSearchInput = () => screen.findByTestId(TEST_IDS.SEARCH_INPUT);
 const findResetIcon = () => screen.findByTestId(TEST_IDS.RESET_ICON);

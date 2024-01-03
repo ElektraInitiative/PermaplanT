@@ -8,5 +8,5 @@ module.exports = {
   singleQuote: true,
   printWidth: 100,
   trailingComma: 'all',
-  importOrder: ['<THIRD_PARTY_MODULES>', '^@/', '^[./]', '^.*.css'],
+  importOrder: ['<THIRD_PARTY_MODULES>', '^@/', '^[./]', '\\.css$'],
 };

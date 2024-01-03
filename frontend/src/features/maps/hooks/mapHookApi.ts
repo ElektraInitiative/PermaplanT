@@ -1,9 +1,3 @@
-import { createMap } from '../api/createMap';
-import { findAllMaps } from '../api/findAllMaps';
-import { findMapById } from '../api/findMapById';
-import { updateMap } from '../api/updateMap';
-import { MapSearchParameters } from '@/api_types/definitions';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import {
   QueryFunctionContext,
   useInfiniteQuery,
@@ -12,6 +6,12 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { MapSearchParameters } from '@/api_types/definitions';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
+import { createMap } from '../api/createMap';
+import { findAllMaps } from '../api/findAllMaps';
+import { findMapById } from '../api/findMapById';
+import { updateMap } from '../api/updateMap';
 
 const MAP_KEYS = {
   _helpers: {

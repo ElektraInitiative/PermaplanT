@@ -1,7 +1,7 @@
-import { useImage } from '@/features/nextcloud_integration/hooks/useImage';
-import defaultImageUrl from '@/svg/plant.svg';
 import { ImageConfig } from 'konva/lib/shapes/Image';
 import { Image } from 'react-konva';
+import { useImage } from '@/features/nextcloud_integration/hooks/useImage';
+import defaultImageUrl from '@/svg/plant.svg';
 
 interface NextcloudKonvaImageProps extends Omit<ImageConfig, 'image'> {
   /** relative path starting at the users Nextcloud root directory */

@@ -1,7 +1,7 @@
-import { colors } from '@/utils/colors';
 import Konva from 'konva';
 import { forwardRef } from 'react';
 import { Label, Tag, Text } from 'react-konva';
+import { colors } from '@/utils/colors';
 
 export interface MapLabelProps extends React.ComponentProps<typeof Label> {
   content: string;

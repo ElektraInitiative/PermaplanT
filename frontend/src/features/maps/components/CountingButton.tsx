@@ -1,6 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import HeartIcon from '@/svg/icons/heart.svg?react';
 import UserIcon from '@/svg/icons/user.svg?react';
-import { useTranslation } from 'react-i18next';
 
 enum IconType {
   honors,

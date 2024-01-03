@@ -1,10 +1,10 @@
 /// <reference types="vitest" />
-import manifest from './manifest.json';
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import svgr from 'vite-plugin-svgr';
+import manifest from './manifest.json';
 
 // https://vitejs.dev/config/
 export default defineConfig(() => {

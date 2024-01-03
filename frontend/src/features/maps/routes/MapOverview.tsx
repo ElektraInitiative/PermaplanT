@@ -1,5 +1,6 @@
-import MapCard from '../components/MapCard';
-import { useCreateMap, useMapsSearch } from '../hooks/mapHookApi';
+import { Suspense, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { MapDto, MapSearchParameters, NewMapDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import InfoMessage, { InfoMessageType } from '@/components/Card/InfoMessage';
@@ -7,9 +8,8 @@ import PageTitle from '@/components/Header/PageTitle';
 import Footer from '@/components/Layout/Footer';
 import PageLayout from '@/components/Layout/PageLayout';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
-import { Suspense, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import MapCard from '../components/MapCard';
+import { useCreateMap, useMapsSearch } from '../hooks/mapHookApi';
 
 export default function MapOverview() {
   const initialMessage = {

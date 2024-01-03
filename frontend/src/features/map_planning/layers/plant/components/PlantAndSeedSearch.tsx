@@ -1,7 +1,6 @@
-import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
-import { usePlantSearch } from '../hooks/plantHookApi';
-import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
-import { PlantListItem } from './PlantListItem';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput, { SearchInputHandle } from '@/components/Form/SearchInput';
@@ -12,9 +11,10 @@ import { resetSelection } from '@/features/map_planning/utils/ShapesSelection';
 import { useSeedSearch } from '@/features/seeds/hooks/seedHookApi';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import SearchIcon from '@/svg/icons/search.svg?react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
+import { usePlantSearch } from '../hooks/plantHookApi';
+import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
+import { PlantListItem } from './PlantListItem';
 
 /** UI component intended for searching plants that can planted on the plants layer */
 export const PlantAndSeedSearch = () => {

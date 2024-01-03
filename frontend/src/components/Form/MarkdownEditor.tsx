@@ -1,6 +1,6 @@
-import { useDarkModeStore } from '@/features/dark_mode';
 import MDEditor from '@uiw/react-md-editor';
 import { FieldValues, Path } from 'react-hook-form';
+import { useDarkModeStore } from '@/features/dark_mode';
 
 interface MarkdownEditorProps<T extends FieldValues> {
   /** The elements unique id. */

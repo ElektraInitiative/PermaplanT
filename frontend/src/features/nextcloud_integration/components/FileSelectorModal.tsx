@@ -1,9 +1,9 @@
-import { FileSelector } from './FileSelector';
+import { FileStat } from 'webdav';
 import IconButton from '@/components/Button/IconButton';
 import ModalContainer from '@/components/Modals/ModalContainer';
 import TransparentBackground from '@/components/TransparentBackground';
 import CloseIcon from '@/svg/icons/close.svg?react';
-import { FileStat } from 'webdav';
+import { FileSelector } from './FileSelector';
 
 interface FileSelectorModalProps {
   /** Callback that informs the parent when the modal should be hidden/displayed (e.g. when the user pressed the close button).*/

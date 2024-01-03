@@ -1,5 +1,5 @@
-import { queryOffline } from '@/config';
 import { useEffect, useRef, useState } from 'react';
+import { queryOffline } from '@/config';
 
 export type UseIsOnlineArgs = {
   onOffline?: () => void;

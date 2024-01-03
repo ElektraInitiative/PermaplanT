@@ -1,12 +1,12 @@
-import { useCreateMap } from '../hooks/mapHookApi';
-import { NewMapDto, PrivacyOption } from '@/api_types/definitions';
-import SimpleButton from '@/components/Button/SimpleButton';
-import PageLayout from '@/components/Layout/PageLayout';
-import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
+import { NewMapDto, PrivacyOption } from '@/api_types/definitions';
+import SimpleButton from '@/components/Button/SimpleButton';
+import PageLayout from '@/components/Layout/PageLayout';
+import { useCreateMap } from '../hooks/mapHookApi';
+import 'leaflet/dist/leaflet.css';
 
 interface MapCreationAttributes {
   name: string;

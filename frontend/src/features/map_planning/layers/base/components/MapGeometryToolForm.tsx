@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_BASE_LAYER,
@@ -10,7 +11,6 @@ import CloseIcon from '@/svg/icons/close.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import PencilPlusIcon from '@/svg/icons/pencil-plus.svg?react';
 import PointerIcon from '@/svg/icons/pointer.svg?react';
-import { useTranslation } from 'react-i18next';
 
 export function MapGeometryToolForm() {
   const { t } = useTranslation(['common', 'baseLayerForm']);

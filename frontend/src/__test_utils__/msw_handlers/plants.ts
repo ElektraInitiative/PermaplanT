@@ -1,6 +1,6 @@
+import { http, HttpResponse } from 'msw';
 import { Page, PlantSpread, PlantsSummaryDto } from '@/api_types/definitions';
 import { baseApiUrl } from '@/config';
-import { http, HttpResponse } from 'msw';
 
 const allPlants: PlantsSummaryDto[] = [
   {

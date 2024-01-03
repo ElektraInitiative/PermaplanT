@@ -1,3 +1,10 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import Konva from 'konva';
+import { KonvaEventObject } from 'konva/lib/Node';
+import React, { useEffect, useRef, useState } from 'react';
+import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { useDimensions } from '@/hooks/useDimensions';
+import { colors } from '@/utils/colors';
 import { useSelectedLayerVisibility } from '../hooks/useSelectedLayerVisibility';
 import useMapStore from '../store/MapStore';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
@@ -14,13 +21,6 @@ import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
 import { isPlacementModeActive } from '../utils/planting-utils';
 import { CursorTooltip } from './CursorTooltip';
-import { useDimensions } from '@/hooks/useDimensions';
-import { colors } from '@/utils/colors';
-import { AnimatePresence, motion } from 'framer-motion';
-import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer } from 'react-konva';
 
 export const TEST_IDS = Object.freeze({
   CANVAS: 'base-stage__canvas',

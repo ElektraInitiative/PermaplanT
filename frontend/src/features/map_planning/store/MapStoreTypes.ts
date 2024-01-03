@@ -1,4 +1,7 @@
-import { convertToDateString } from '../utils/date-utils';
+import Konva from 'konva';
+import { Node } from 'konva/lib/Node';
+import * as uuid from 'uuid';
+import { StateCreator } from 'zustand';
 import {
   BaseLayerImageDto,
   LayerDto,
@@ -9,10 +12,7 @@ import {
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
-import Konva from 'konva';
-import { Node } from 'konva/lib/Node';
-import * as uuid from 'uuid';
-import { StateCreator } from 'zustand';
+import { convertToDateString } from '../utils/date-utils';
 
 import Vector2d = Konva.Vector2d;
 

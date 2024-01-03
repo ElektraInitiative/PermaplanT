@@ -1,6 +1,6 @@
-import TimelineDatePicker from './TimelineDatePicker';
 import { render } from '@testing-library/react';
 import ReactTestUtils, { act } from 'react-dom/test-utils';
+import TimelineDatePicker from './TimelineDatePicker';
 
 const onSelectChange = vi.fn();
 const onLoading = vi.fn();

@@ -1,7 +1,7 @@
-import IconButton from '@/components/Button/IconButton';
-import CaretDown from '@/svg/icons/caret-down.svg?react';
 import { motion } from 'framer-motion';
 import React from 'react';
+import IconButton from '@/components/Button/IconButton';
+import CaretDown from '@/svg/icons/caret-down.svg?react';
 
 export type PlantSuggestionListProps = {
   /** A title to display above the list */

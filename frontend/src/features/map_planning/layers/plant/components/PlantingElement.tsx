@@ -1,3 +1,5 @@
+import { KonvaEventObject, Node } from 'konva/lib/Node';
+import { Group, Circle, Rect } from 'react-konva';
 import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
@@ -10,8 +12,6 @@ import {
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
 import { colors } from '@/utils/colors';
 import { getNameFromPlant, getPlantNameFromAdditionalNameAndPlant } from '@/utils/plant-naming';
-import { KonvaEventObject, Node } from 'konva/lib/Node';
-import { Group, Circle, Rect } from 'react-konva';
 
 export type PlantingElementProps = {
   planting: PlantingDto;

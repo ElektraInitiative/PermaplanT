@@ -1,11 +1,11 @@
+import { QueryFunctionContext, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getLayers } from '../api/getLayers';
 import { getMap } from '../api/getMap';
 import { getPlantings } from '../api/getPlantings';
 import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
-import { QueryFunctionContext, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 
 const MAP_EDITOR_KEYS = {
   _helpers: {

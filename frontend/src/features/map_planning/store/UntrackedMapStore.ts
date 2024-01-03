@@ -1,3 +1,8 @@
+import Konva from 'konva';
+import { Vector2d } from 'konva/lib/types';
+import { createRef } from 'react';
+import { StateCreator } from 'zustand';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
@@ -8,11 +13,6 @@ import {
   UntrackedMapSlice,
 } from './MapStoreTypes';
 import { clearInvalidSelection } from './utils';
-import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
-import Konva from 'konva';
-import { Vector2d } from 'konva/lib/types';
-import { createRef } from 'react';
-import { StateCreator } from 'zustand';
 
 export const createUntrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,

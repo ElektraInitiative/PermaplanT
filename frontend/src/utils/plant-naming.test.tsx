@@ -1,3 +1,4 @@
+import ReactTestRenderer from 'react-test-renderer';
 import { PlantsSummaryDto, Quantity, SeedDto } from '@/api_types/definitions';
 import {
   getNameFromPlant,
@@ -7,7 +8,6 @@ import {
   PlantNameFromPlant,
   PlantNameFromSeedAndPlant,
 } from '@/utils/plant-naming';
-import ReactTestRenderer from 'react-test-renderer';
 
 it('generates unique name', function () {
   const plant: PlantsSummaryDto = {

@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next';
+import { LoginButton } from '@/features/auth/components/LoginButton';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { DarkModeSwitcher } from '../../features/dark_mode';
 import { useDarkModeStore } from '../../features/dark_mode';
 import LanguageSwitcher from '../../features/landing_page/components/LanguageSwitcher';
@@ -6,9 +9,6 @@ import LogoSmallGraySVG from '../../svg/permaplant-logo-gray.svg?react';
 import LogoSmallSVG from '../../svg/permaplant-logo.svg?react';
 import ButtonLink from '../Button/ButtonLink';
 import IconButton from '../Button/IconButton';
-import { LoginButton } from '@/features/auth/components/LoginButton';
-import { useSafeAuth } from '@/hooks/useSafeAuth';
-import { useTranslation } from 'react-i18next';
 
 interface NavpageProps {
   close: () => void;

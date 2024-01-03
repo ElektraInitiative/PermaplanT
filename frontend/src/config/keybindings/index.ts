@@ -1,6 +1,6 @@
-import keybindings from './keybindings.json';
-import { createShortcutIncludingModifierKeysFromKeyEvent } from '@/utils/key-combinations';
 import React from 'react';
+import { createShortcutIncludingModifierKeysFromKeyEvent } from '@/utils/key-combinations';
+import keybindings from './keybindings.json';
 
 export const KEYBINDINGS_SCOPE_GLOBAL = 'global';
 export const KEYBINDINGS_SCOPE_PLANTS_LAYER = 'plants_layer';

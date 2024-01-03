@@ -1,3 +1,7 @@
+import { KonvaEventObject } from 'konva/lib/Node';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Circle, Group, Line } from 'react-konva';
 import { UpdateMapGeometry } from '@/features/map_planning/layers/base/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
@@ -11,10 +15,6 @@ import {
 import { useIsBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { warningToastGrouped } from '@/features/toasts/groupedToast';
 import { colors } from '@/utils/colors';
-import { KonvaEventObject } from 'konva/lib/Node';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Circle, Group, Line } from 'react-konva';
 
 export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
   const { t } = useTranslation('polygon');

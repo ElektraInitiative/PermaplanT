@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import { useSeasonalAvailablePlants } from '../hooks/plantHookApi';
 import { useSelectPlantForPlanting } from '../hooks/useSelectPlantForPlanting';
@@ -5,7 +6,6 @@ import { useSelectedPlantForPlanting } from '../hooks/useSelectedPlantForPlantin
 import { EmptyAvailablePlants } from './EmptyList/EmptyAvailablePlants';
 import { PlantListItem } from './PlantListItem';
 import { PlantSuggestionList } from './PlantSuggestionList';
-import { useTranslation } from 'react-i18next';
 
 export function PlantSuggestions() {
   const { data: plants, isLoading: arePlantsLoading } = useSeasonalAvailablePlants(1, new Date());

@@ -1,7 +1,7 @@
+import { useTranslation } from 'react-i18next';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
-import { useTranslation } from 'react-i18next';
 
 const ConditionalLoadingSpinner = ({ show }: { show: boolean }) => {
   return <div className="h-6 w-6">{show ? <LoadingSpinner /> : null}</div>;

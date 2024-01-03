@@ -1,4 +1,6 @@
-import CreateSeedForm from '../components/CreateSeedForm';
+import { Suspense, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { NewSeedDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
@@ -6,9 +8,7 @@ import SimpleModal from '@/components/Modals/SimpleModal';
 import { useEditSeed, useFindSeedById } from '@/features/seeds/hooks/seedHookApi';
 import { successToastGrouped } from '@/features/toasts/groupedToast';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
-import { Suspense, useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import CreateSeedForm from '../components/CreateSeedForm';
 
 export function EditSeedPage() {
   const { id } = useParams();

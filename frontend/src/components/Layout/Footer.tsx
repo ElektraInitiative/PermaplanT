@@ -1,5 +1,5 @@
-import ButtonLink from '../Button/ButtonLink';
 import { useTranslation } from 'react-i18next';
+import ButtonLink from '../Button/ButtonLink';
 
 /** PermaplanT Footer component */
 export const Footer = () => {
