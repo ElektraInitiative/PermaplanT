@@ -85,12 +85,14 @@ function PlacementInfoTooltip({
   fieldHeight: number;
   plantWidth: number;
 }) {
-  const { t } = useTranslation(['common', 'layers']);
+  const { t } = useTranslation(['common', 'areaOfPlantingsIndicator']);
   const { horizontalPlantCount, verticalPlantCount } = calculatePlantCount(
     plantWidth,
     fieldWidth,
     fieldHeight,
   );
+
+  const totalPlantCount = horizontalPlantCount * verticalPlantCount;
 
   return (
     <>
@@ -101,7 +103,9 @@ function PlacementInfoTooltip({
       <span className="text-right font-mono">{horizontalPlantCount}</span>
       <span className="text-center font-mono">&times;</span>
       <span className="text-right font-mono">{verticalPlantCount}</span>
-      <span className="font-bold">{t('layers:plants')}</span>
+      <span className="font-bold">
+        = {totalPlantCount} {t('areaOfPlantingsIndicator:plantAmount', { count: totalPlantCount })}
+      </span>
     </>
   );
 }

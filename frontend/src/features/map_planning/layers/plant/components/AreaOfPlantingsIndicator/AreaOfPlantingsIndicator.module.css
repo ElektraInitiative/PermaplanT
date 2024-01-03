@@ -5,6 +5,6 @@
   border-radius: 0.5em;
   display: grid;
   column-gap: 0.5em;
-  grid-template-columns: 30px 5px 30px auto;
+  grid-template-columns: 30px 5px minmax(30px, auto) auto;
   pointer-events: none;
 }
