@@ -34,7 +34,10 @@ export default defineConfig(() => {
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: ['./src/vitest-setup.ts'],
+      setupFiles: ['./src/vitest-setup-globals.ts', './src/vitest-setup.ts'],
+      sequence: {
+        setupFiles: 'list',
+      },
       // To understand this config, check https://github.com/vitest-dev/vitest/issues/740
       // Because of this issue, we need to use a forked pool
       pool: 'forks',
