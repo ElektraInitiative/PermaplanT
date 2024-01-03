@@ -104,7 +104,7 @@ function PlacementInfoTooltip({
       <span className="text-center font-mono">&times;</span>
       <span className="text-right font-mono">{verticalPlantCount}</span>
       <span className="font-bold">
-        = {totalPlantCount} {t('areaOfPlantingsIndicator:plantAmount', { count: totalPlantCount })}
+        = {totalPlantCount} {t('areaOfPlantingsIndicator:plant', { count: totalPlantCount })}
       </span>
     </>
   );
