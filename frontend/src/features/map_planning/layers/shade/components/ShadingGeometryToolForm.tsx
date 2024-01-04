@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 export function ShadingGeometryToolForm() {
   const { t } = useTranslation('shadeLayer');
   const movePolygonPoints = useMapStore((store) => store.shadeLayerActivateMovePolygonPoints);
-  const addPolygonPoints = useMapStore((store) => store.shadeLayerActivateMovePolygonPoints);
+  const addPolygonPoints = useMapStore((store) => store.shadeLayerActivateAddPolygonPoints);
   const removePolygonPoints = useMapStore((store) => store.shadeLayerActivateDeletePolygonPoints);
   const deactivatePolygonManipulation = useMapStore(
     (store) => store.shadeLayerDeactivatePolygonManipulation,

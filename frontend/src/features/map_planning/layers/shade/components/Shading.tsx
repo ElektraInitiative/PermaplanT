@@ -2,8 +2,10 @@ import { Shade, ShadingDto } from '@/api_types/definitions';
 import { UpdateShadingAction } from '@/features/map_planning/layers/shade/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DEFAULT_SRID, PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
+import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import {
   flattenRing,
+  insertPointIntoLineSegmentWithLeastDistance,
   removePointAtIndex,
   setPointAtIndex,
 } from '@/features/map_planning/utils/PolygonUtils';
@@ -18,15 +20,16 @@ import {
   COLOR_PERMANENT_SHADE,
 } from '@/utils/constants';
 import { KonvaEventObject, Node } from 'konva/lib/Node';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Circle, Group, Line } from 'react-konva';
 
 export interface ShadingProps {
   shading: ShadingDto;
+  stageListenerRegister: StageListenerRegister;
 }
 
-export function Shading({ shading }: ShadingProps) {
+export function Shading({ shading, stageListenerRegister }: ShadingProps) {
   const { t } = useTranslation('shadeLayer');
   const editorLongestSide = useMapStore((map) =>
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
@@ -88,6 +91,32 @@ export function Shading({ shading }: ShadingProps) {
     isUsingModifierKey(e) ? handleMultiSelect(e, shading) : handleSingleSelect(e, shading);
   };
 
+  useEffect(() => {
+    stageListenerRegister.registerStageClickListener(`Shading-${shading.id}`, (e) => {
+      if (!isShadingEdited || shadingManipulationState !== 'add') return;
+
+      const newPoint = {
+        x: e.currentTarget.getRelativePointerPosition().x,
+        y: e.currentTarget.getRelativePointerPosition().y,
+        srid: DEFAULT_SRID,
+      };
+
+      const newGeometry = insertPointIntoLineSegmentWithLeastDistance(
+        geometry,
+        newPoint,
+        editorLongestSide / 100,
+      );
+
+      executeAction(
+        new UpdateShadingAction({
+          id: shading.id,
+          shade: shading.shade,
+          geometry: newGeometry as object,
+        }),
+      );
+    });
+  }, [shadingManipulationState, isShadingEdited, shading, geometry, editorLongestSide]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
     if (shadingManipulationState === 'move') {
       setSingleNodeInTransformer(e.currentTarget, true);
@@ -141,7 +170,7 @@ export function Shading({ shading }: ShadingProps) {
         index={index}
         draggable={true}
         visible={isShadingEdited}
-        key={`polygon-point-${index}`}
+        key={`shading-${shading.id}-point-${index}`}
         x={point.x}
         y={point.y}
         fill={COLOR_EDITOR_HIGH_VISIBILITY}

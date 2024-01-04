@@ -25,7 +25,11 @@ export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerP
   );
 
   const shadings = currentDateShadingDtos.map((dto) => (
-    <Shading key={`shading-${dto.id}`} shading={dto} />
+    <Shading
+      key={`shading-${dto.id}`}
+      shading={dto}
+      stageListenerRegister={stageListenerRegister}
+    />
   ));
 
   const placeNewShading = (point: Vector2d) => {
