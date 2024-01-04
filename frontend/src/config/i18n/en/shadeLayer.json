@@ -4,7 +4,8 @@
     "edit_polygon": {
       "add": "Click on the map to add a new point to the shading.",
       "remove": "Click on a point to remove it from the shading.",
-      "move": "Click on a point to move it to a new position."
+      "move": "Click on a point to move it to a new position.",
+      "delete_point_forbidden": "The shape of this shading must contain at least three points."
     },
     "geometry_tool_form": {
       "title": "Edit shape",

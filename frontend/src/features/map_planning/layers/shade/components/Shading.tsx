@@ -1,8 +1,14 @@
 import { Shade, ShadingDto } from '@/api_types/definitions';
+import { UpdateShadingAction } from '@/features/map_planning/layers/shade/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
-import { flattenRing } from '@/features/map_planning/utils/PolygonUtils';
+import { DEFAULT_SRID, PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
+import {
+  flattenRing,
+  removePointAtIndex,
+  setPointAtIndex,
+} from '@/features/map_planning/utils/PolygonUtils';
 import { isUsingModifierKey } from '@/features/map_planning/utils/event-utils';
+import { warningToastGrouped } from '@/features/toasts/groupedToast';
 import {
   COLOR_EDITOR_HIGH_VISIBILITY,
   COLOR_LIGHT_SHADE,
@@ -12,14 +18,16 @@ import {
   COLOR_PERMANENT_SHADE,
 } from '@/utils/constants';
 import { KonvaEventObject, Node } from 'konva/lib/Node';
-import { Group, Line } from 'react-konva';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Circle, Group, Line } from 'react-konva';
 
 export interface ShadingProps {
   shading: ShadingDto;
 }
 
 export function Shading({ shading }: ShadingProps) {
-  const geometry = shading.geometry as PolygonGeometry;
+  const { t } = useTranslation('shadeLayer');
   const editorLongestSide = useMapStore((map) =>
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
   );
@@ -33,6 +41,9 @@ export function Shading({ shading }: ShadingProps) {
   const setSingleNodeInTransformer = useMapStore((store) => store.setSingleNodeInTransformer);
   const addNodeToTransformer = useMapStore((store) => store.addNodeToTransformer);
   const removeNodeFromTransformer = useMapStore((store) => store.removeNodeFromTransformer);
+  const executeAction = useMapStore((store) => store.executeAction);
+
+  const geometry = shading.geometry as PolygonGeometry;
 
   const isShadingEdited =
     shadingManipulationState !== 'inactive' &&
@@ -77,6 +88,71 @@ export function Shading({ shading }: ShadingProps) {
     isUsingModifierKey(e) ? handleMultiSelect(e, shading) : handleSingleSelect(e, shading);
   };
 
+  const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
+    if (shadingManipulationState === 'move') {
+      setSingleNodeInTransformer(e.currentTarget, true);
+      return;
+    }
+
+    if (shadingManipulationState !== 'remove') return;
+
+    if (geometry.rings[0].length - 1 <= 3) {
+      warningToastGrouped(t('edit_polygon.delete_point_forbidden'));
+      return;
+    }
+
+    const index = e.currentTarget.index - 1;
+
+    executeAction(
+      new UpdateShadingAction({
+        id: shading.id,
+        shade: shading.shade,
+        geometry: removePointAtIndex(geometry, index) as object,
+      }),
+    );
+  };
+
+  const handlePointDragEnd = (e: KonvaEventObject<DragEvent>) => {
+    if (shadingManipulationState !== 'move') return;
+
+    // Why is currentTarget.index always of by 1??
+    const index = e.currentTarget.index - 1;
+
+    const newPoint = {
+      x: e.currentTarget.position().x,
+      y: e.currentTarget.position().y,
+      srid: DEFAULT_SRID,
+    };
+
+    executeAction(
+      new UpdateShadingAction({
+        id: shading.id,
+        shade: shading.shade,
+        geometry: setPointAtIndex(geometry, newPoint, index) as object,
+      }),
+    );
+  };
+
+  const polygonPoints = geometry.rings[0].map((point, index) => {
+    if (index === geometry.rings[0].length - 1) return;
+
+    return (
+      <Circle
+        index={index}
+        draggable={true}
+        visible={isShadingEdited}
+        key={`polygon-point-${index}`}
+        x={point.x}
+        y={point.y}
+        fill={COLOR_EDITOR_HIGH_VISIBILITY}
+        radius={editorLongestSide / 200}
+        onClick={(e) => handlePointSelect(e)}
+        onDragStart={(e) => handlePointSelect(e)}
+        onDragEnd={(e) => handlePointDragEnd(e)}
+      />
+    );
+  });
+
   return (
     <Group shading={shading} draggable={false}>
       <Line
@@ -90,6 +166,7 @@ export function Shading({ shading }: ShadingProps) {
         closed={true}
         shading={shading}
       />
+      {polygonPoints}
     </Group>
   );
 }

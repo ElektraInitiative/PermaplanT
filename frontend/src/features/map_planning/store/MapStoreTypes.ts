@@ -110,13 +110,13 @@ export interface TrackedMapSlice {
   setInhibitTransformer: (inhibit: boolean) => void;
 
   /** Discard the transformer's current nodes and set a single node in the transformer */
-  setSingleNodeInTransformer: (node: Node) => void;
+  setSingleNodeInTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
 
   /** Add a new node to the transformer's current set of nodes */
-  addNodeToTransformer: (node: Node) => void;
+  addNodeToTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
 
   /** Removes given node from the transformer's current set of nodes */
-  removeNodeFromTransformer: (node: Node) => void;
+  removeNodeFromTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
 
   /**
    * Execute a user initiated action.

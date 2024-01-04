@@ -32,21 +32,21 @@ export const createTrackedMapSlice: StateCreator<
         inhibitTransformer: inhibit,
       }));
     },
-    setSingleNodeInTransformer: (node: Node) => {
-      if (get().inhibitTransformer) return;
+    setSingleNodeInTransformer: (node: Node, overrideInhibitTransformer?: boolean) => {
+      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
 
       get().transformer?.current?.nodes([node]);
     },
-    addNodeToTransformer: (node: Node) => {
-      if (get().inhibitTransformer) return;
+    addNodeToTransformer: (node: Node, overrideInhibitTransformer?: boolean) => {
+      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
 
       const currentNodes = get().transformer.current?.nodes() ?? [];
       if (!currentNodes.includes(node)) {
         get().transformer?.current?.nodes([...currentNodes, node]);
       }
     },
-    removeNodeFromTransformer: (node: Node) => {
-      if (get().inhibitTransformer) return;
+    removeNodeFromTransformer: (node: Node, overrideInhibitTransformer?: boolean) => {
+      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
 
       const currentNodes = get().transformer.current?.nodes() ?? [];
       const nodeToRemove = currentNodes.indexOf(node);
