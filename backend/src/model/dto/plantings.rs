@@ -48,7 +48,7 @@ pub struct PlantingDto {
 
 /// Used to create a new planting.
 #[typeshare]
-#[derive(Debug, Clone, Default, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct NewPlantingDto {
     /// The id of the planting.
