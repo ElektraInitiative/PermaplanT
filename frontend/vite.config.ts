@@ -34,7 +34,7 @@ export default defineConfig(() => {
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: ['./src/vitest-setup-globals.ts', './src/vitest-setup.ts'],
+      setupFiles: ['./src/vitest-setup.ts'],
       sequence: {
         setupFiles: 'list',
       },
