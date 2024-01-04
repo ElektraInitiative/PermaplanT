@@ -398,5 +398,6 @@ function createPlantTestObject(testValue: number): PlantingDto {
     rotation: testValue,
     scaleX: testValue,
     scaleY: testValue,
+    isArea: false,
   };
 }

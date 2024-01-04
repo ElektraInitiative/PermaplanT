@@ -9,7 +9,6 @@ import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
   createKeyBindingsAccordingToConfig,
 } from '@/config/keybindings';
-import { PlantLabel } from '@/features/map_planning/layers/plant/components/PlantLabel';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
@@ -26,12 +25,25 @@ import { PlantingElement } from './components/PlantingElement';
 import { useDeleteSelectedPlantings } from './hooks/useDeleteSelectedPlantings';
 import { calculatePlantCount, getPlantWidth } from './util';
 
-// For performance reasons add limit for amount of plants inside a plant field
-const LIMIT_PLANT_FIELD_PLANTS = 1000;
-
 function exitPlantingMode() {
   useMapStore.getState().selectPlantings(null);
 }
+
+type CreatePlantingArgs =
+  | {
+      isArea: false;
+      selectedPlantForPlanting: PlantForPlanting;
+      xCoordinate: number;
+      yCoordinate: number;
+    }
+  | {
+      isArea: true;
+      selectedPlantForPlanting: PlantForPlanting;
+      xCoordinate: number;
+      yCoordinate: number;
+      width: number;
+      height: number;
+    };
 
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
@@ -43,24 +55,39 @@ function usePlantLayerListeners(listening: boolean) {
   const isReadOnlyMode = useIsReadOnlyMode();
 
   const createPlanting = useCallback(
-    (selectedPlantForPlanting: PlantForPlanting, xCoordinate: number, yCoordinate: number) => {
-      executeAction(
-        new CreatePlantAction({
-          id: uuid.v4(),
-          plantId: selectedPlantForPlanting.plant.id,
-          seedId: selectedPlantForPlanting.seed?.id,
-          layerId: getSelectedLayerId() ?? -1,
-          x: Math.round(xCoordinate),
-          y: Math.round(yCoordinate),
-          height: getPlantWidth(selectedPlantForPlanting.plant),
-          width: getPlantWidth(selectedPlantForPlanting.plant),
-          rotation: 0,
-          scaleX: 1,
-          scaleY: 1,
-          addDate: timelineDate,
-          additionalName: selectedPlantForPlanting.seed?.name,
-        }),
-      );
+    (args: CreatePlantingArgs) => {
+      const data: Omit<ConstructorParameters<typeof CreatePlantAction>[0], 'width' | 'height'> = {
+        id: uuid.v4(),
+        plantId: args.selectedPlantForPlanting.plant.id,
+        seedId: args.selectedPlantForPlanting.seed?.id,
+        layerId: getSelectedLayerId() ?? -1,
+        x: Math.round(args.xCoordinate),
+        y: Math.round(args.yCoordinate),
+        rotation: 0,
+        scaleX: 1,
+        scaleY: 1,
+        addDate: timelineDate,
+        additionalName: args.selectedPlantForPlanting.seed?.name,
+        isArea: args.isArea,
+      };
+
+      if (args.isArea) {
+        executeAction(
+          new CreatePlantAction({
+            ...data,
+            width: Math.round(args.width),
+            height: Math.round(args.height),
+          }),
+        );
+      } else {
+        executeAction(
+          new CreatePlantAction({
+            ...data,
+            height: getPlantWidth(args.selectedPlantForPlanting.plant),
+            width: getPlantWidth(args.selectedPlantForPlanting.plant),
+          }),
+        );
+      }
     },
     [executeAction, getSelectedLayerId, timelineDate],
   );
@@ -70,8 +97,8 @@ function usePlantLayerListeners(listening: boolean) {
       const {
         width: fieldWidth,
         height: fieldHeight,
-        x: startingPositionX,
-        y: startingPositionY,
+        x: fieldX,
+        y: fieldY,
       } = useMapStore.getState().selectionRectAttributes;
 
       const plantSize = getPlantWidth(selectedPlantForPlanting.plant);
@@ -80,27 +107,17 @@ function usePlantLayerListeners(listening: boolean) {
         fieldWidth,
         fieldHeight,
       );
+      const totalPlantCount = horizontalPlantCount * verticalPlantCount;
 
-      // due to set limit of plants in a plant field, we need to decide in which direction we start drawing, i.e. if drawn field is wider than narrow, we start drawing horizontally and vice versa
-      const { firstDirectionCounter, secondDirectionCounter } = getDrawingDirectionCounters(
-        horizontalPlantCount,
-        verticalPlantCount,
-      );
-
-      let counter = 0;
-      for (let i = 0; i < firstDirectionCounter; i++) {
-        for (let j = 0; j < secondDirectionCounter; j++) {
-          if (counter++ > LIMIT_PLANT_FIELD_PLANTS) break;
-
-          const horizontalCounter = horizontalPlantCount > verticalPlantCount ? j : i;
-          const verticalCounter = horizontalPlantCount > verticalPlantCount ? i : j;
-
-          createPlanting(
-            selectedPlantForPlanting,
-            startingPositionX + plantSize * horizontalCounter,
-            startingPositionY + plantSize * verticalCounter,
-          );
-        }
+      if (totalPlantCount > 1) {
+        createPlanting({
+          isArea: true,
+          selectedPlantForPlanting,
+          xCoordinate: fieldX,
+          yCoordinate: fieldY,
+          width: fieldWidth,
+          height: fieldHeight,
+        });
       }
     },
     [createPlanting],
@@ -124,7 +141,12 @@ function usePlantLayerListeners(listening: boolean) {
         return;
       }
 
-      createPlanting(selectedPlant, position.x, position.y);
+      createPlanting({
+        isArea: false,
+        selectedPlantForPlanting: selectedPlant,
+        xCoordinate: position.x,
+        yCoordinate: position.y,
+      });
     },
     [selectedPlant, isReadOnlyMode, createPlanting],
   );
@@ -256,11 +278,10 @@ function PlantsLayer(props: PlantsLayerProps) {
 
   const layerRef = useRef<Konva.Layer>(null);
 
-  const plants = useMapStore((map) => map.trackedState.layers.plants.objects);
+  const plantings = useMapStore((map) => map.trackedState.layers.plants.objects);
   const selectedPlant = useMapStore(
     (state) => state.untrackedState.layers.plants.selectedPlantForPlanting,
   );
-  const showPlantLabels = useMapStore((state) => state.untrackedState.layers.plants.showLabels);
 
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
   const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
@@ -279,10 +300,9 @@ function PlantsLayer(props: PlantsLayerProps) {
     <>
       <PlantLayerRelationsOverlay />
       <Layer {...props} ref={layerRef} name={`${LayerType.Plants}`}>
-        {plants.map((o) => (
-          <PlantingElement planting={o} key={o.id} />
+        {plantings.map((planting) => (
+          <PlantingElement planting={planting} key={planting.id} />
         ))}
-        {plants.map((o) => showPlantLabels && <PlantLabel planting={o} key={o.id} />)}
       </Layer>
       <Layer listening={false}>
         <PlantCursor />
@@ -328,19 +348,3 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
 }
 
 export default PlantsLayer;
-
-function getDrawingDirectionCounters(
-  horizontalPlantCount: number,
-  verticalPlantCount: number,
-): { firstDirectionCounter: number; secondDirectionCounter: number } {
-  const firstDirectionCounter =
-    horizontalPlantCount >= verticalPlantCount ? verticalPlantCount : horizontalPlantCount;
-
-  const secondDirectionCounter =
-    horizontalPlantCount >= verticalPlantCount ? horizontalPlantCount : verticalPlantCount;
-
-  return {
-    firstDirectionCounter,
-    secondDirectionCounter,
-  };
-}
