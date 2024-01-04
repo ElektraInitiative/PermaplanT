@@ -27,11 +27,17 @@ export function Shading({ shading }: ShadingProps) {
     (store) => store.untrackedState.layers.shade.selectedShadingEditMode,
   );
   const selectShadings = useMapStore((store) => store.shadeLayerSelectShadings);
+  const selectedShadings = useMapStore(
+    (store) => store.untrackedState.layers.shade.selectedShadings,
+  );
   const setSingleNodeInTransformer = useMapStore((store) => store.setSingleNodeInTransformer);
   const addNodeToTransformer = useMapStore((store) => store.addNodeToTransformer);
   const removeNodeFromTransformer = useMapStore((store) => store.removeNodeFromTransformer);
 
-  const isShadingEdited = shadingManipulationState !== 'inactive';
+  const isShadingEdited =
+    shadingManipulationState !== 'inactive' &&
+    selectedShadings?.length === 1 &&
+    selectedShadings[0].id == shading.id;
 
   const removeShadingFromSelection = (e: KonvaEventObject<MouseEvent>) => {
     const selectedShadings = (foundShadings: ShadingDto[], konvaNode: Node) => {

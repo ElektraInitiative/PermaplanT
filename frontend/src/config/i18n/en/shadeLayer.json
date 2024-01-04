@@ -1,6 +1,11 @@
 {
     "error_loading_shadings": "Sorry, there was an error while loading the shadings from the backend.",
     "place_shadings_message": "Click on the map to place a new shading area.",
+    "edit_polygon": {
+      "add": "Click on the map to add a new point to the shading.",
+      "remove": "Click on a point to remove it from the shading.",
+      "move": "Click on a point to move it to a new position."
+    },
     "geometry_tool_form": {
       "title": "Edit shape",
       "add_points": "Add points",

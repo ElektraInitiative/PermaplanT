@@ -1,4 +1,5 @@
 import IconButton from '@/components/Button/IconButton';
+import useMapStore from '@/features/map_planning/store/MapStore';
 import CloseIcon from '@/svg/icons/close.svg?react';
 
 export interface StatusPanelContentWrapperProps {
@@ -15,13 +16,18 @@ export interface StatusPanelContentWrapperProps {
  * @constructor
  */
 export function StatusPanelContentWrapper({ content, onClose }: StatusPanelContentWrapperProps) {
+  const clearStatusPanelContent = useMapStore((store) => store.clearStatusPanelContent);
+
   return (
     <>
       <div className="flex flex-row items-center justify-center">{content}</div>
       <div className="flex items-center justify-center">
         <IconButton
           className="m-2 h-8 w-8 border border-neutral-500 p-1"
-          onClick={onClose}
+          onClick={() => {
+            clearStatusPanelContent();
+            if (onClose) onClose();
+          }}
           data-tourid="placement_cancel"
         >
           <CloseIcon></CloseIcon>

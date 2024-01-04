@@ -1,6 +1,11 @@
 {
     "error_loading_shadings": "Sorry, es gab einen Fehler beim Laden der Beschattungen.",
     "place_shadings_message": "Klicke auf die Karte um eine neue Beschattung zu platzieren.",
+    "edit_polygon": {
+      "add": "Klicke auf die Karte um einen neuen Punkt zur Beschattung hinzuzufügen.",
+      "remove": "Klicke auf die Karte um einen Punkt aus der Beschattung zu entfernen.",
+      "move": "Klicke auf einen Punkt der Beschattung um ihn an einen anderen Ort zu bewegen."
+    },
     "geometry_tool_form": {
       "title": "Beschattung Bearbeiten",
       "add_points": "Punkte hinzufügen",

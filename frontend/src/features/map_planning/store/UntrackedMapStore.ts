@@ -431,8 +431,6 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   shadeLayerActivateDeletePolygonPoints() {
-    get().transformer.current?.rotateEnabled(false);
-    get().transformer.current?.resizeEnabled(false);
     set((state) => ({
       ...state,
       untrackedState: {
@@ -448,8 +446,6 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   shadeLayerActivateMovePolygonPoints() {
-    get().transformer.current?.rotateEnabled(false);
-    get().transformer.current?.resizeEnabled(false);
     set((state) => ({
       ...state,
       untrackedState: {
@@ -465,8 +461,6 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   shadeLayerDeactivatePolygonManipulation() {
-    get().transformer.current?.rotateEnabled(true);
-    get().transformer.current?.resizeEnabled(true);
     set((state) => ({
       ...state,
       untrackedState: {
