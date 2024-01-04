@@ -21,20 +21,33 @@ export const createTrackedMapSlice: StateCreator<
     step: 0,
     canUndo: false,
     canRedo: false,
+    inhibitTransformer: false,
     executeAction: (action: Action<unknown, unknown>) => executeAction(action, set, get),
     undo: () => undo(set, get),
     redo: () => redo(set, get),
     __applyRemoteAction: (action: Action<unknown, unknown>) => applyAction(action, set, get),
+    setInhibitTransformer: (inhibit: boolean) => {
+      set((state) => ({
+        ...state,
+        inhibitTransformer: inhibit,
+      }));
+    },
     setSingleNodeInTransformer: (node: Node) => {
+      if (get().inhibitTransformer) return;
+
       get().transformer?.current?.nodes([node]);
     },
     addNodeToTransformer: (node: Node) => {
+      if (get().inhibitTransformer) return;
+
       const currentNodes = get().transformer.current?.nodes() ?? [];
       if (!currentNodes.includes(node)) {
         get().transformer?.current?.nodes([...currentNodes, node]);
       }
     },
     removeNodeFromTransformer: (node: Node) => {
+      if (get().inhibitTransformer) return;
+
       const currentNodes = get().transformer.current?.nodes() ?? [];
       const nodeToRemove = currentNodes.indexOf(node);
 

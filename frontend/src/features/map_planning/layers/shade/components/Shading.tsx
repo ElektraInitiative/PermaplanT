@@ -72,7 +72,7 @@ export function Shading({ shading }: ShadingProps) {
   };
 
   const handleClickOnShading = (e: KonvaEventObject<MouseEvent>) => {
-    if (isShadingPlacementModeActive()) return;
+    if (isShadingPlacementModeActive() || shadingManipulationState !== 'inactive') return;
 
     isUsingModifierKey(e) ? handleMultiSelect(e, shading) : handleSingleSelect(e, shading);
   };

@@ -20,6 +20,9 @@ export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerP
   const untrackedState = useMapStore((state) => state.untrackedState.layers.shade);
   const currentLayer = useMapStore((state) => state.untrackedState.selectedLayer);
   const shadeLayerSelectShading = useMapStore((state) => state.shadeLayerSelectShadings);
+  const shadingManipulationState = useMapStore(
+    (store) => store.untrackedState.layers.shade.selectedShadingEditMode,
+  );
 
   const shadings = currentDateShadingDtos.map((dto) => (
     <Shading key={`shading-${dto.id}`} shading={dto} />
@@ -39,7 +42,8 @@ export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerP
 
   useEffect(() => {
     stageListenerRegister.registerStageClickListener('ShadeLayer', (e) => {
-      if (typeOfLayer(currentLayer) !== LayerType.Shade) return;
+      if (typeOfLayer(currentLayer) !== LayerType.Shade || shadingManipulationState !== 'inactive')
+        return;
 
       if (untrackedState.selectedShadeForNewShading !== null) {
         placeNewShading(e.currentTarget.getRelativePointerPosition());
@@ -50,7 +54,7 @@ export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerP
         shadeLayerSelectShading(null);
       }
     });
-  }, [untrackedState.selectedShadeForNewShading, currentLayer]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [untrackedState.selectedShadeForNewShading, currentLayer, shadingManipulationState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Layer

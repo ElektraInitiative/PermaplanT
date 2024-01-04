@@ -101,6 +101,13 @@ export interface TrackedMapSlice {
    * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
    */
   transformer: React.RefObject<Konva.Transformer>;
+  /**
+   * If this is true, all functions that manipulate the Konva transformer will be disabled.
+   */
+  inhibitTransformer: boolean;
+
+  /** Temporarily disable all functions that manipulate the transformer. */
+  setInhibitTransformer: (inhibit: boolean) => void;
 
   /** Discard the transformer's current nodes and set a single node in the transformer */
   setSingleNodeInTransformer: (node: Node) => void;

@@ -117,6 +117,8 @@ export const BaseStage = ({
   const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
   const tooltipPosition = useMapStore((state) => state.untrackedState.tooltipPosition);
 
+  const inhibitTransformer = useMapStore((store) => store.inhibitTransformer);
+
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
     listeners?.stageMouseWheelListeners.forEach((listener) => listener(e));
@@ -186,7 +188,7 @@ export const BaseStage = ({
 
     updateSelectionRectangle(stage, setSelectionRectAttrs);
 
-    if (!isPlacementModeActive()) {
+    if (!isPlacementModeActive() && !inhibitTransformer) {
       selectIntersectingShapes(stageRef, transformerRef);
     }
   };
@@ -247,7 +249,7 @@ export const BaseStage = ({
 
     const nodeSize = transformerRef.current?.getNodes().length ?? 0;
 
-    if (nodeSize > 0 && isEventTriggeredFromStage(e)) {
+    if (nodeSize > 0 && isEventTriggeredFromStage(e) && !inhibitTransformer) {
       resetSelection(transformerRef);
     }
   };

@@ -15,6 +15,12 @@ export function ShadingGeometryToolForm() {
     (store) => store.shadeLayerDeactivatePolygonManipulation,
   );
   const setStatusPanelContent = useMapStore((store) => store.setStatusPanelContent);
+  const setInhibitTransformer = useMapStore((store) => store.setInhibitTransformer);
+
+  const onStatusPanelClose = () => {
+    deactivatePolygonManipulation();
+    setInhibitTransformer(false);
+  };
 
   return (
     <div>
@@ -25,10 +31,11 @@ export function ShadingGeometryToolForm() {
           title={t('geometry_tool_form.move_points')}
           onClick={() => {
             movePolygonPoints();
+            setInhibitTransformer(true);
             setStatusPanelContent(
               <StatusPanelContentWrapper
                 content={t('edit_polygon.move')}
-                onClose={deactivatePolygonManipulation}
+                onClose={onStatusPanelClose}
               />,
             );
           }}
@@ -40,10 +47,11 @@ export function ShadingGeometryToolForm() {
           title={t('geometry_tool_form.add_points')}
           onClick={() => {
             addPolygonPoints();
+            setInhibitTransformer(true);
             setStatusPanelContent(
               <StatusPanelContentWrapper
                 content={t('edit_polygon.add')}
-                onClose={deactivatePolygonManipulation}
+                onClose={onStatusPanelClose}
               />,
             );
           }}
@@ -55,10 +63,11 @@ export function ShadingGeometryToolForm() {
           title={t('geometry_tool_form.delete_points')}
           onClick={() => {
             removePolygonPoints();
+            setInhibitTransformer(true);
             setStatusPanelContent(
               <StatusPanelContentWrapper
                 content={t('edit_polygon.remove')}
-                onClose={deactivatePolygonManipulation}
+                onClose={onStatusPanelClose}
               />,
             );
           }}
