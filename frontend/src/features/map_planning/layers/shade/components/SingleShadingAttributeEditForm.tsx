@@ -42,6 +42,7 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
   const { t } = useTranslation('shadeLayer');
   const isReadOnlyMode = useIsReadOnlyMode();
   const executeAction = useMapStore((store) => store.executeAction);
+  const selectShadings = useMapStore((store) => store.shadeLayerSelectShadings);
 
   const formFunctions = useForm<ShadingDateAttribute>({
     defaultValues: {
@@ -99,6 +100,7 @@ export function SingleShadingAttributeEditForm({ shading }: SingleShadingAttribu
   };
 
   const deleteShading = () => {
+    selectShadings(null);
     executeAction(new DeleteShadingAction(shading));
   };
 
