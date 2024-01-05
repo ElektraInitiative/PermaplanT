@@ -1,5 +1,5 @@
 import { Group, Circle, Rect } from 'react-konva';
-import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
+import { PlantingDto } from '@/api_types/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { hideTooltip } from '@/features/map_planning/utils/Tooltip';
@@ -47,7 +47,7 @@ export function Planting({ planting }: PlantingElementProps) {
  */
 function SinglePlanting({ planting }: PlantingElementProps) {
   const { plant, isSelected, handleOnClick } = usePlanting(planting);
-  const fillColor = colors.primary[400];
+  const fillColor = isSelected ? colors.secondary[200] : colors.primary[400];
 
   return (
     <Group
@@ -58,13 +58,7 @@ function SinglePlanting({ planting }: PlantingElementProps) {
       onMouseOut={hideTooltip}
       onMouseMove={() => placeTooltip(plant, planting.additionalName)}
     >
-      <Circle
-        width={planting.width}
-        height={planting.height}
-        x={0}
-        y={0}
-        fill={isSelected ? colors.secondary[200] : fillColor}
-      />
+      <Circle width={planting.width} height={planting.height} x={0} y={0} fill={fillColor} />
       {plant ? (
         <PublicNextcloudKonvaImage
           shareToken="2arzyJZYj2oNnHX"
@@ -84,7 +78,8 @@ function SinglePlanting({ planting }: PlantingElementProps) {
  */
 function AreaOfPlantings({ planting }: PlantingElementProps) {
   const { plant, isSelected, handleOnClick } = usePlanting(planting);
-  const fillColor = isSelected ? colors.secondary[200] : colors.purple[400];
+  const fillColor = isSelected ? colors.secondary[200] : colors.primary[600];
+  const imageSize = Math.min(planting.width, planting.height) * 0.9;
 
   return (
     <Group
@@ -96,28 +91,21 @@ function AreaOfPlantings({ planting }: PlantingElementProps) {
       onMouseMove={() => placeTooltip(plant, planting.additionalName)}
     >
       <Rect width={planting.width} height={planting.height} fill={fillColor} />
-      {plant ? <AreaPlantingImage planting={planting} plant={plant} /> : null}
+      {plant ? (
+        <PublicNextcloudKonvaImage
+          shareToken="2arzyJZYj2oNnHX"
+          path={`Icons/${plant?.unique_name}.png`}
+          width={imageSize}
+          height={imageSize}
+          offset={{
+            x: -planting.width / 2 + imageSize / 2,
+            y: 0,
+          }}
+          showErrorMessage={false}
+          draggable={false}
+          listening={false}
+        />
+      ) : null}
     </Group>
-  );
-}
-
-function AreaPlantingImage({
-  planting,
-  plant,
-}: PlantingElementProps & { plant: PlantsSummaryDto }) {
-  const size = Math.min(planting.width, planting.height) * 0.9;
-
-  return (
-    <PublicNextcloudKonvaImage
-      shareToken="2arzyJZYj2oNnHX"
-      path={`Icons/${plant?.unique_name}.png`}
-      width={size}
-      height={size}
-      offset={{
-        x: -planting.width / 2 + size / 2,
-        y: 0,
-      }}
-      showErrorMessage={false}
-    />
   );
 }
