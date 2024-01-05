@@ -8,7 +8,7 @@ import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import MarkdownEditor from '@/components/Form/MarkdownEditor';
 import PaginatedSelectMenu, { PageAdditionalInfo } from '@/components/Form/PaginatedSelectMenu';
 import SelectMenu from '@/components/Form/SelectMenu';
-import { SelectOption } from '@/components/Form/SelectMenuTypes';
+import { SelectOption } from '@/components/Form/SelectMenu';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
 import { enumToSelectOptionArr } from '@/utils/enum';
