@@ -21,7 +21,7 @@ import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './acti
 import { AreaOfPlantingsIndicator } from './components/AreaOfPlantingsIndicator/AreaOfPlantingsIndicator';
 import { PlantCursor } from './components/PlantCursor';
 import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
-import { PlantingElement } from './components/PlantingElement';
+import { Planting } from './components/Planting/Planting';
 import { useDeleteSelectedPlantings } from './hooks/useDeleteSelectedPlantings';
 import { calculatePlantCount, getPlantWidth } from './util';
 
@@ -301,7 +301,7 @@ function PlantsLayer(props: PlantsLayerProps) {
       <PlantLayerRelationsOverlay />
       <Layer {...props} ref={layerRef} name={`${LayerType.Plants}`}>
         {plantings.map((planting) => (
-          <PlantingElement planting={planting} key={planting.id} />
+          <Planting planting={planting} key={planting.id} />
         ))}
       </Layer>
       <Layer listening={false}>
