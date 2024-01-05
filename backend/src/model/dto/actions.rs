@@ -48,7 +48,7 @@ pub enum Action {
     UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
     /// An action used to broadcast deletion of a baseLayerImage.
     DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
-    /// An action used to broadcast an update to the map gemetry.
+    /// An action used to broadcast an update to the map geometry.
     UpdateMapGeometry(UpdateMapGeometryActionPayload),
     /// An action used to update the `additional_name` of a plant.
     UpdatePlantingAdditionalName(UpdatePlantingAdditionalNamePayload),
@@ -100,11 +100,9 @@ impl Action {
                     plant_id: dto.plant_id,
                     x: dto.x,
                     y: dto.y,
-                    width: dto.width,
-                    height: dto.height,
                     rotation: dto.rotation,
-                    scale_x: dto.scale_x,
-                    scale_y: dto.scale_y,
+                    size_x: dto.size_x,
+                    size_y: dto.size_y,
                     add_date: dto.add_date,
                     remove_date: dto.remove_date,
                     seed_id: dto.seed_id,
@@ -167,8 +165,8 @@ impl Action {
                     x: dto.x,
                     y: dto.y,
                     rotation: dto.rotation,
-                    scale_x: dto.scale_x,
-                    scale_y: dto.scale_y,
+                    size_x: dto.size_x,
+                    size_y: dto.size_y,
                 })
                 .collect(),
         })
@@ -225,8 +223,6 @@ impl Action {
                 .iter()
                 .map(|dto| UpdatePlantingNoteActionPayload {
                     id: dto.id,
-                    action_id,
-                    user_id,
                     notes: dto.notes.clone(),
                 })
                 .collect(),
@@ -245,11 +241,9 @@ pub struct CreatePlantActionPayload {
     plant_id: i32,
     x: i32,
     y: i32,
-    width: i32,
-    height: i32,
     rotation: f32,
-    scale_x: f32,
-    scale_y: f32,
+    size_x: i32,
+    size_y: i32,
     add_date: Option<NaiveDate>,
     remove_date: Option<NaiveDate>,
     seed_id: Option<i32>,
@@ -284,8 +278,8 @@ pub struct TransformPlantActionPayload {
     x: i32,
     y: i32,
     rotation: f32,
-    scale_x: f32,
-    scale_y: f32,
+    size_x: i32,
+    size_y: i32,
 }
 
 #[typeshare]
@@ -293,8 +287,6 @@ pub struct TransformPlantActionPayload {
 /// The payload of the [`Action::UpdatePlatingNotes`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdatePlantingNoteActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     notes: String,
 }

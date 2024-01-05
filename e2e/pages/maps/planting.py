@@ -23,11 +23,11 @@ class MapPlantingPage(AbstractPage):
 
         # Left side bar
         self._added_date_state_idle = page.get_by_test_id(
-            "planting-attribute-edit-form__add-date-idle"
-        )
-        self._removed_on_state_idle = page.get_by_test_id(
-            "planting-attribute-edit-form__removed-on-idle"
-        )
+            "planting-attribute-edit-form__add-date"
+        ).get_by_test_id("form-input-idle")
+        self._removed_date_state_idle = page.get_by_test_id(
+            "planting-attribute-edit-form__removed-date"
+        ).get_by_test_id("form-input-idle")
         self._delete_plant_button = page.get_by_role("button", name="Delete Planting")
 
         # Layer visibility
@@ -137,7 +137,7 @@ class MapPlantingPage(AbstractPage):
         day = datetime.today() + timedelta(days=delta_days)
         self._plant_removed_date.fill(day.strftime("%Y-%m-%d"))
         if delta_days > 0:
-            self._removed_on_state_idle.wait_for()
+            self._removed_date_state_idle.wait_for()
 
     def fill_plant_search(self, plantname):
         """Clicks the search icon and types plantname into the plant search."""

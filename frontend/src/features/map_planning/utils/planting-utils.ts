@@ -1,3 +1,4 @@
+import { PlantingDto } from '@/api_types/definitions';
 import useMapStore from '../store/MapStore';
 
 /**
@@ -14,4 +15,8 @@ export function isPlacementModeActive(): boolean {
     useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;
 
   return Boolean(selectedPlantForPlanting);
+}
+
+export function isOneAreaOfPlanting(dtos: PlantingDto[] | null): boolean {
+  return dtos?.length === 1 && dtos[0].isArea;
 }

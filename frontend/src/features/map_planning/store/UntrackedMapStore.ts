@@ -6,12 +6,14 @@ import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
+import { isOneAreaOfPlanting } from '../utils/planting-utils';
 import {
   ViewRect,
   TrackedMapSlice,
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
+import { TransformerStore, useTransformerStore } from './transformer/TransformerStore';
 import { clearInvalidSelection } from './utils';
 
 export const createUntrackedMapSlice: StateCreator<
@@ -64,7 +66,7 @@ export const createUntrackedMapSlice: StateCreator<
   lastActions: [],
   updateSelectedLayer(selectedLayer) {
     // Clear the transformer's nodes.
-    get().transformer.current?.nodes([]);
+    useTransformerStore.getState().actions.clearSelection();
     get().baseLayerDeactivatePolygonManipulation();
     get().clearStatusPanelContent();
 
@@ -136,7 +138,15 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-  selectPlantings(plantings) {
+  selectPlantings(plantings, transformerStore?: TransformerStore) {
+    if (transformerStore) {
+      if (isOneAreaOfPlanting(plantings)) {
+        transformerStore.actions.enableAllAnchors();
+      } else {
+        transformerStore.actions.enableDefaultAnchors();
+      }
+    }
+
     set((state) => ({
       ...state,
       untrackedState: {
@@ -346,8 +356,8 @@ export const createUntrackedMapSlice: StateCreator<
   },
   baseLayerActivateDeletePolygonPoints() {
     get().baseLayerDeactivateMeasurement();
-    get().transformer.current?.rotateEnabled(false);
-    get().transformer.current?.resizeEnabled(false);
+    useTransformerStore.getState().actions.enableRotation(false);
+    useTransformerStore.getState().actions.enableResizing(false);
     set((state) => ({
       ...state,
       untrackedState: {
@@ -367,8 +377,8 @@ export const createUntrackedMapSlice: StateCreator<
   },
   baseLayerActivateMovePolygonPoints() {
     get().baseLayerDeactivateMeasurement();
-    get().transformer.current?.rotateEnabled(false);
-    get().transformer.current?.resizeEnabled(false);
+    useTransformerStore.getState().actions.enableRotation(false);
+    useTransformerStore.getState().actions.enableResizing(false);
     set((state) => ({
       ...state,
       untrackedState: {
@@ -387,8 +397,8 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   baseLayerDeactivatePolygonManipulation() {
-    get().transformer.current?.rotateEnabled(true);
-    get().transformer.current?.resizeEnabled(true);
+    useTransformerStore.getState().actions.enableRotation(true);
+    useTransformerStore.getState().actions.enableResizing(true);
     set((state) => ({
       ...state,
       untrackedState: {
