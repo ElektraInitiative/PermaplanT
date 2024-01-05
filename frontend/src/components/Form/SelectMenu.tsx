@@ -16,7 +16,7 @@ export interface SelectMenuProps<
   T extends FieldValues,
   Option = SelectOption,
   IsMulti extends boolean = false,
-  Value = string | number,
+  Value = string | number | undefined,
 > {
   /** Per page unique identifier of this UI element. */
   id: Path<T>;

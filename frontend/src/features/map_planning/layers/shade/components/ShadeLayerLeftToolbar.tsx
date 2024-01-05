@@ -1,6 +1,9 @@
-import { MultipleShadingsAttributeEditForm } from '@/features/map_planning/layers/shade/components/MultipleShadingsAttributeEditForm';
-import { SingleShadingAttributeEditForm } from '@/features/map_planning/layers/shade/components/SingleShadingAttributeEditForm';
+import {
+  MultipleShadingAttributeEditFrom,
+  SingleShadingAttributeEditFrom,
+} from '@/features/map_planning/layers/shade/components/ShadingAttributeEditForm';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import React from 'react';
 
 export function ShadeLayerLeftToolbar() {
   const selectedShadings = useMapStore(
@@ -10,9 +13,11 @@ export function ShadeLayerLeftToolbar() {
   return (
     <>
       {selectedShadings.length == 1 && (
-        <SingleShadingAttributeEditForm shading={selectedShadings[0]} />
+        <SingleShadingAttributeEditFrom shading={selectedShadings[0]} />
       )}
-      {selectedShadings.length > 1 && <MultipleShadingsAttributeEditForm />}
+      {selectedShadings.length > 1 && (
+        <MultipleShadingAttributeEditFrom shadings={selectedShadings} />
+      )}
     </>
   );
 }
