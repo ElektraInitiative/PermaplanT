@@ -18,8 +18,8 @@ export const COLOR_GRAY_700_DARK = '#9e9e9e';
 // Accent color used for editor objects that should be visible on most backgrounds.
 export const COLOR_EDITOR_HIGH_VISIBILITY = '#ca3b3b';
 
-export const COLOR_NO_SHADE = 'rgba(219,215,18,0.2)';
-export const COLOR_LIGHT_SHADE = 'rgba(146,213,255,0.2)';
-export const COLOR_PARTIAL_SHADE = 'rgba(51,76,255,0.2)';
-export const COLOR_PERMANENT_SHADE = 'rgba(108,54,208,0.2)';
-export const COLOR_PERMANENT_DEEP_SHADE = 'rgba(0,0,0,0.2)';
+export const COLOR_NO_SHADE = 'rgba(219,215,18,0.6)';
+export const COLOR_LIGHT_SHADE = 'rgba(146,213,255,0.6)';
+export const COLOR_PARTIAL_SHADE = 'rgba(51,76,255,0.6)';
+export const COLOR_PERMANENT_SHADE = 'rgba(108,54,208,0.6)';
+export const COLOR_PERMANENT_DEEP_SHADE = 'rgba(0,0,0,0.6)';
