@@ -262,31 +262,30 @@ function ShadingAttributeEditForm({
 
   return (
     <div className="flex flex-col gap-2 p-2">
-      <FormProvider {...formFunctions}>
-        <SelectMenu
-          id="shade"
-          labelText={t('left_toolbar.shading_amount_select_title')}
-          className="w-64"
-          disabled={isReadOnlyMode}
-          options={shadeOptions}
-          optionFromValue={(value) => shadeOptions.find((o) => o.value === value)}
-          valueFromOption={(option) => option?.value}
-        />
-      </FormProvider>
-      {shadeSubmitState === 'loading' && (
-        <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
-      )}
-      {shadeSubmitState === 'idle' && (
-        <CheckIcon
-          className="mb-3 mt-auto h-5 w-5 text-primary-400"
-          data-testid="planting-attribute-edit-form__add-date-idle"
-        />
-      )}
-      <hr className="my-4 border-neutral-700" />
+      <div className="flex gap-2">
+        <FormProvider {...formFunctions}>
+          <SelectMenu
+            id="shade"
+            labelText={t('left_toolbar.shading_amount_select_title')}
+            className="w-64"
+            disabled={isReadOnlyMode}
+            options={shadeOptions}
+            optionFromValue={(value) => shadeOptions.find((o) => o.value === value)}
+            valueFromOption={(option) => option?.value}
+          />
+        </FormProvider>
+        {shadeSubmitState === 'loading' && (
+          <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
+        )}
+        {shadeSubmitState === 'idle' && (
+          <CheckIcon
+            className="mb-3 mt-auto h-5 w-5 text-primary-400"
+            data-testid="planting-attribute-edit-form__add-date-idle"
+          />
+        )}
+      </div>
 
       {showPolygonTools && <ShadingGeometryToolForm />}
-
-      <hr className="my-4 border-neutral-700" />
 
       <div className="flex gap-2">
         <SimpleFormInput
