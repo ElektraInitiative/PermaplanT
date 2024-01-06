@@ -20,10 +20,12 @@ export default function ModalContainer({
   const keyHandlerActions = {
     cancelModal: onCancelKeyPressed,
   };
+
   useKeyHandlers(
     createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_GLOBAL, keyHandlerActions),
     document,
     true,
+    show,
   );
 
   return (
