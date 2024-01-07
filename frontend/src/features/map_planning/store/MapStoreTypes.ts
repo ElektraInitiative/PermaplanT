@@ -174,9 +174,7 @@ export interface UntrackedMapSlice {
   lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
   selectPlantings: (plantings: PlantingDto[] | null) => void;
-
   toggleShowPlantLabel: () => void;
-
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;

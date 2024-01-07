@@ -309,7 +309,7 @@ function getUpdatesForSelectedPlantings(get: GetFn, selectedPlantings: PlantingD
 }
 
 /**
- * Replaces the selected plantings with fresh versions from the backend.
+ * Replaces the selected drawings with fresh versions from the backend.
  */
 function updateSelectedDrawings(set: SetFn, get: GetFn) {
   const selectedDrawings = get().untrackedState.layers.drawing.selectedDrawings;

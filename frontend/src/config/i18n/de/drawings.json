@@ -1,7 +1,6 @@
 {
   "delete": "Element löschen",
   "delete_multiple_drawings": "Elemente löschen",
-  "error_fetching_plant": "Sorry, ich habe Schwierigkeiten die Pflanze von meinem Server zu erhalten. Bitte versuche es später erneut.",
   "add_date": "Hinzugefügt am",
   "remove_date": "Entfernt am",
   "color": "Farbe",

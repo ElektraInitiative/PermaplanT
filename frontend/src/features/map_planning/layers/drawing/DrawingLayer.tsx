@@ -428,12 +428,18 @@ function DrawingLayer(props: DrawingLayerProps) {
   }, [executeAction]);
 
   useEffect(() => {
+    if (!props.listening) {
+      return;
+    }
     stageListenerRegister.registerStageMouseDownListener('DrawingLayer', handleMouseDown);
     stageListenerRegister.registerStageMouseUpListener('DrawingLayer', handleMouseUp);
     stageListenerRegister.registerStageMouseMoveListener('DrawingLayer', handleMouseMove);
   }, [handleMouseDown, handleMouseMove, handleMouseUp]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
+    if (!props.listening) {
+      return;
+    }
     useMapStore.getState().transformer.current?.on('dragend.drawings', handleMoveDrawing);
     useMapStore.getState().transformer.current?.on('transformend.drawings', handleTransformDrawing);
     useMapStore.getState().stageRef.current?.on('mouseup.selectDrawing', handleSelectDrawing);
@@ -443,7 +449,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       useMapStore.getState().transformer.current?.off('transformend.drawings');
       useMapStore.getState().stageRef.current?.off('mouseup.selectDrawing');
     };
-  }, [handleMoveDrawing, handleTransformDrawing, handleSelectDrawing]);
+  }, [handleMoveDrawing, handleTransformDrawing, handleSelectDrawing, props.listening]);
 
   return (
     <>

@@ -1,7 +1,7 @@
 {
   "tools_title": "Choose Shape",
-  "draw_rectangle_hint": "Use Mouse to draw a rectangle.",
-  "draw_ellipse_hint": "Use Mouse to draw a ellipse.",
+  "draw_rectangle_hint": "Use mouse to draw a rectangle.",
+  "draw_ellipse_hint": "Use mouse to draw an ellipse.",
   "draw_free_line_hint": "Use mouse to draw a line.",
 
   "draw_rectangle_tooltip": "Draw rectangle.",
