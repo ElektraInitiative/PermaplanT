@@ -23,7 +23,6 @@ export const Default: Story = {
   args: {
     header: 'Plant List',
     isLoading: false,
-    hasContent: true,
     noContentElement: <div>No Content</div>,
     children: Array(5)
       .fill(0)
@@ -46,7 +45,7 @@ export const Default: Story = {
 export const NoContent: Story = {
   args: {
     ...Default.args,
-    hasContent: false,
+    children: null,
   },
 };
 

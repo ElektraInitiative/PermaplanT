@@ -1,13 +1,6 @@
 import SearchResetIcon from '@/svg/icons/search-reset.svg?react';
 import SearchIcon from '@/svg/icons/search.svg?react';
-import React, {
-  forwardRef,
-  KeyboardEvent,
-  MutableRefObject,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import React, { forwardRef, KeyboardEvent, useImperativeHandle, useRef, useState } from 'react';
 
 export const SHORTCUT_SEARCH_INPUT_RESET = 'Escape';
 
@@ -22,7 +15,7 @@ export type SearchInputHandle = {
 };
 
 interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSearch: (searchTerm: string) => void;
 }
 
 /**
@@ -56,31 +49,19 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
       [],
     );
 
-    const shouldShowResetIcon = () => searchTerm.length > 0;
+    const shouldShowResetIcon = searchTerm.length > 0;
 
-    const search = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchTerm(event.target.value);
-      handleSearch(event);
+    const search = (value: string) => {
+      setSearchTerm(value);
+      handleSearch(value);
     };
+
+    const resetSearch = () => search('');
 
     const resetSearchByKey = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === SHORTCUT_SEARCH_INPUT_RESET) {
         resetSearch();
         event.stopPropagation();
-      }
-    };
-
-    const resetSearch = () => {
-      const searchInputField = (searchInputRef as MutableRefObject<HTMLInputElement>).current;
-
-      const clearSearchInputField = () => (searchInputField.value = '');
-      const triggerNewSearch = () =>
-        searchInputField.dispatchEvent(new Event('input', { bubbles: true }));
-
-      if (searchInputField) {
-        clearSearchInputField();
-        triggerNewSearch();
-        searchInputField.focus();
       }
     };
 
@@ -96,10 +77,10 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
           value={searchTerm}
           ref={searchInputRef}
           {...inputProps}
-          onInput={search}
+          onInput={(e) => search(e.currentTarget.value)}
           onKeyDown={resetSearchByKey}
         />
-        {shouldShowResetIcon() && (
+        {shouldShowResetIcon && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-3">
             <SearchResetIcon
               className="h-4 w-4 cursor-pointer stroke-secondary-600 dark:stroke-secondary-50"

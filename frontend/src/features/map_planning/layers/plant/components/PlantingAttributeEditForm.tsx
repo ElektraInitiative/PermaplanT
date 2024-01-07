@@ -1,7 +1,7 @@
-import { useFindPlantById } from '../hooks/useFindPlantById';
 import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
@@ -51,8 +51,8 @@ export function SinglePlantingAttributeForm({
   onDeleteClick,
   isReadOnlyMode,
 }: EditSinglePlantingProps) {
-  const plantId = planting.plantId;
-  const { plant } = useFindPlantById(plantId);
+  const { plantId } = planting;
+  const { data: plant } = useFindPlantById({ plantId });
 
   return (
     <div className="flex flex-col gap-2 p-2">
