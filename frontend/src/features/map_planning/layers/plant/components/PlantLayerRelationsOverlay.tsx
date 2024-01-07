@@ -1,4 +1,4 @@
-import { useRelations } from '../hooks/useRelations';
+import { useRelations } from '../hooks/relationsHookApi';
 import { LayerType, RelationType } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useEffect, useMemo, useState } from 'react';
@@ -52,8 +52,11 @@ export function PlantLayerRelationsOverlay() {
     };
   }, [stage, selectedPlantForPlanting, selectedPlanting]);
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { data, isLoading } = useRelations(mapId, plantId!, Boolean(plantId));
+  const { data: relations, isLoading: areRelationsLoading } = useRelations({
+    mapId,
+    plantId: plantId as number,
+    enabled: Boolean(plantId),
+  });
 
   const layers = stage?.children;
 
@@ -62,14 +65,14 @@ export function PlantLayerRelationsOverlay() {
       ?.filter((l) => l.name() === LayerType.Plants)
       .flatMap((l) => l.children ?? [])
       .filter((s) => s.attrs.plantId && s.isClientRectOnScreen())
-      .filter((s) => data?.has(s.attrs.plantId));
-  }, [data, layers]);
+      .filter((s) => relations?.has(s.attrs.plantId));
+  }, [relations, layers]);
 
   return (
     <Layer listening={false}>
-      {!isLoading && lineEnd && relatedVisiblePlantings
+      {!areRelationsLoading && lineEnd && relatedVisiblePlantings
         ? relatedVisiblePlantings.map((s) => {
-            const relation = data?.get(s.attrs.plantId)?.relation;
+            const relation = relations?.get(s.attrs.plantId)?.relation;
             if (!relation || relation === RelationType.Neutral) return null;
 
             return (

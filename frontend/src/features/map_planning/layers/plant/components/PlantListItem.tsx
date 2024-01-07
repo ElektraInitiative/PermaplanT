@@ -2,6 +2,7 @@ import { PlantsSummaryDto } from '@/api_types/definitions';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import defaultImageUrl from '@/svg/plant.svg';
 import { PlantNameFromPlant } from '@/utils/plant-naming';
+import { AxiosError } from 'axios';
 
 export type PlantListElementProps = {
   plant: PlantsSummaryDto;
@@ -27,7 +28,7 @@ export function PlantListItem({
     >
       <button
         disabled={disabled}
-        onClick={() => onClick()}
+        onClick={onClick}
         className={`${highlightedClass} flex flex-1 items-center gap-2 rounded-md stroke-neutral-400 px-2 py-1 hover:bg-neutral-200 hover:stroke-primary-400 hover:text-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-300 disabled:cursor-not-allowed disabled:border-neutral-300 disabled:bg-neutral-300 disabled:text-neutral-500 dark:hover:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:bg-neutral-300-dark dark:disabled:text-neutral-500-dark`}
       >
         <PublicNextcloudImage
@@ -35,7 +36,7 @@ export function PlantListItem({
           defaultImageUrl={defaultImageUrl}
           path={`Icons/${plant?.unique_name}.png`}
           shareToken="2arzyJZYj2oNnHX"
-          retry={(failureCount, error) => error.response?.status !== 404}
+          retry={shouldImageLoadingRetry}
           showErrorMessage={false}
         />
         <div className="text-left">
@@ -44,4 +45,8 @@ export function PlantListItem({
       </button>
     </li>
   );
+}
+
+function shouldImageLoadingRetry(_: unknown, error: AxiosError) {
+  return error.response?.status !== 404;
 }

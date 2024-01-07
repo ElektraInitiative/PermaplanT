@@ -1,5 +1,5 @@
 import { gainBlossom } from '../api/gainBlossom';
-import { updateTourStatus } from '../api/updateTourStatus';
+import { useCompleteTour, useReenableTour } from '../hooks/tourHookApi';
 import BaseLayer from '../layers/base/BaseLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
 import DrawingLayer from '../layers/drawing/DrawingLayer';
@@ -15,12 +15,7 @@ import { BaseStage } from './BaseStage';
 import TimelineDatePicker from './timeline/TimelineDatePicker';
 import { LayerList } from './toolbar/LayerList';
 import { Toolbar } from './toolbar/Toolbar';
-import {
-  GainedBlossomsDto,
-  LayerDto,
-  LayerType,
-  UpdateGuidedToursDto,
-} from '@/api_types/definitions';
+import { GainedBlossomsDto, LayerDto, LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
@@ -77,6 +72,9 @@ export const EditorMap = ({ layers }: MapProps) => {
     (state) => state.untrackedState.shapeSelectionEnabled,
   );
   const [timeLineState, setTimeLineState] = useState<'loading' | 'idle'>('idle');
+
+  const { mutate: reenableTour } = useReenableTour();
+  const { mutate: completeTour } = useCompleteTour();
 
   // Allow layers to listen for all events on the base stage.
   //
@@ -157,21 +155,12 @@ export const EditorMap = ({ layers }: MapProps) => {
     return layersState.plants.showLabels;
   };
 
-  const reenableTour = async () => {
-    const update: UpdateGuidedToursDto = { editor_tour_completed: false };
-    await updateTourStatus(update);
-  };
-
   function triggerDateChangedInGuidedTour(): void {
     const changeDateEvent = new Event('dateChanged');
     document.getElementById('timeline')?.dispatchEvent(changeDateEvent);
   }
 
   useEffect(() => {
-    const _completeTour = async () => {
-      const update: UpdateGuidedToursDto = { editor_tour_completed: true };
-      await updateTourStatus(update);
-    };
     const _tourCompletionBlossom = async () => {
       const blossom: GainedBlossomsDto = {
         blossom: 'graduation_day',
@@ -183,6 +172,7 @@ export const EditorMap = ({ layers }: MapProps) => {
         icon: '\u{1F338}',
       });
     };
+
     tour?.start();
     if (tour && tour.steps.length > 0) {
       tour?.on('cancel', () => {
@@ -190,11 +180,12 @@ export const EditorMap = ({ layers }: MapProps) => {
       });
       tour?.on('complete', () => {
         _tourCompletionBlossom();
-        _completeTour();
+        completeTour();
       });
     }
+
     return () => tour?.hide();
-  }, [tour, t]);
+  }, [completeTour, tour, t]);
 
   const handleTimeLineDateChanged = useCallback(
     (date: string) => {

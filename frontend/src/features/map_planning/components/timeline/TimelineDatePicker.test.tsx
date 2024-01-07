@@ -6,7 +6,14 @@ const onSelectChange = vi.fn();
 const onLoading = vi.fn();
 
 describe('handleDayItemChange', () => {
-  vi.useFakeTimers();
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
+  beforeAll(() => {
+    vi.useFakeTimers();
+  });
+
   it('should callback correct date when day item is changed', () => {
     Element.prototype.scrollTo = vi.fn(() => void 0);
 
@@ -41,7 +48,13 @@ describe('handleDayItemChange', () => {
 });
 
 describe('handleMonthItemChange', () => {
-  vi.useFakeTimers();
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
+  beforeAll(() => {
+    vi.useFakeTimers();
+  });
 
   it('should callback correct date when month item is changed', () => {
     Element.prototype.scrollTo = vi.fn(() => void 0);
@@ -115,7 +128,14 @@ describe('handleMonthItemChange', () => {
 });
 
 describe('handleYearItemChange', () => {
-  vi.useFakeTimers();
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
+  beforeAll(() => {
+    vi.useFakeTimers();
+  });
+
   it('should callback correct date when year item is changed', () => {
     Element.prototype.scrollTo = vi.fn(() => void 0);
     const onSelectChange = vi.fn();

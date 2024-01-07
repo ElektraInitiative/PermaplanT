@@ -19,13 +19,16 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Fix ref warning in PlantLabel, center labels as intended _(Paul)_
 - Fix planting cursor preventing the placement of an area of plants _(Paul)_
-- _()_
+- Refactor nearly all api calls to idiomatic react query _(Paul)_
 - _()_
 - _()_
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
 - Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
 - Added Meeting Agenda&Notes for 04.12. 9:00 _(Markus Raab, Daniel)_
-- Added Meeting Agenda for 11.12. 9:00 _(Markus Raab)_
+- Added Meeting Agenda&Notes for 11.12. 9:00 _(Markus Raab)_
+- Added Meeting Agenda&Notes for 18.12. 9:00 _(Markus Raab, Christoph)_
+- Added Meeting Agenda&Notes for 27.12.2023 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda for 02.01.2024 9:00 _(Markus Raab, Daniel)_
 - _()_
 - _()_
 - _()_
@@ -49,7 +52,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
 - _()_
-- _()_
+- Add key combinations for map geometry _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_

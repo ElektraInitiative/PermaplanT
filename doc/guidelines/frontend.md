@@ -14,7 +14,7 @@ We use [Bulletproof React](https://github.com/alan2207/bulletproof-react) with f
 - We use minimal number of packages: need to be noted in solutions or in a decision
 - Be thoughtful of memory consumption and runtime
 - Use debounce hook as in `PlantingAttributeEditForm.tsx`
-- Use react-query correctly with constant strings, see <https://tkdodo.eu/blog/thinking-in-react-query>
+- Use react-query correctly, see our guidelines [`doc/guidelines/frontend-api-calls.md`](./frontend-api-calls.md)
 - Always validate form, use `zod` for more complicated validations
 - Wrap APIs using `create*API` in `api` folder
 - Be careful in writing hooks, especially when using `useEffect`

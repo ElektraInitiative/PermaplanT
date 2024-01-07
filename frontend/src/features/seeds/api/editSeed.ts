@@ -5,7 +5,8 @@ import { createAPI } from '@/config/axios';
 export const editSeed = async (data: { seed: NewSeedDto; id: number }) => {
   const http = createAPI();
   try {
-    await http.put<SeedDto>(`/api/seeds/${data.id}`, data.seed);
+    const response = await http.put<SeedDto>(`/api/seeds/${data.id}`, data.seed);
+    return response.data;
   } catch (error) {
     throw error as Error;
   }

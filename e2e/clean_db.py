@@ -9,7 +9,7 @@ import psycopg2
 from dotenv import load_dotenv
 from urllib.parse import urlparse
 
-load_dotenv()
+load_dotenv(".env.local")
 
 dbname = str(os.getenv("POSTGRES_DB", "permaplant"))
 user = str(os.getenv("POSTGRES_USER", "permaplant"))
@@ -21,6 +21,7 @@ port = str(os.getenv("DATABASE_PORT", "5432"))
 
 
 def delete_maps_with_sut(dbname, user, password, host, port):
+    conn = None
     try:
         # Connect to the PostgreSQL server
         conn = psycopg2.connect(

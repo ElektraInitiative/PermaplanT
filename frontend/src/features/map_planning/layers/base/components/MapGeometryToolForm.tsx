@@ -1,5 +1,11 @@
 import IconButton from '@/components/Button/IconButton';
+import {
+  KEYBINDINGS_SCOPE_BASE_LAYER,
+  createKeyBindingsAccordingToConfig,
+} from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { isBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import PencilPlusIcon from '@/svg/icons/pencil-plus.svg?react';
@@ -18,6 +24,40 @@ export function MapGeometryToolForm() {
   );
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
+  const activatePolygonMovePointsAction = () => {
+    activatePolygonMovePoints();
+    setStatusPanelContent(
+      <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_move_points_hint')} />,
+    );
+  };
+
+  const activatePolygonAddPointsAction = () => {
+    activatePolygonAddPoints();
+    setStatusPanelContent(
+      <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_add_points_hint')} />,
+    );
+  };
+
+  const activatePolygonDeletePointsAction = () => {
+    activatePolygonDeletePoints();
+    setStatusPanelContent(
+      <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_delete_points_hint')} />,
+    );
+  };
+
+  const keyHandlerActions: Record<string, () => void> = {
+    activatePolygonMovePoints: activatePolygonMovePointsAction,
+    activatePolygonAddPoints: activatePolygonAddPointsAction,
+    activatePolygonDeletePoints: activatePolygonDeletePointsAction,
+  };
+
+  useKeyHandlers(
+    createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_BASE_LAYER, keyHandlerActions),
+    document,
+    true,
+    isBaseLayerActive(),
+  );
+
   return (
     <div>
       <h2>{t('baseLayerForm:polygon_tools_title')}</h2>
@@ -25,10 +65,7 @@ export function MapGeometryToolForm() {
         <IconButton
           isToolboxIcon={true}
           onClick={() => {
-            activatePolygonMovePoints();
-            setStatusPanelContent(
-              <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_move_points_hint')} />,
-            );
+            activatePolygonMovePointsAction();
           }}
           title={t('baseLayerForm:polygon_move_points_tooltip')}
         >
@@ -37,10 +74,7 @@ export function MapGeometryToolForm() {
         <IconButton
           isToolboxIcon={true}
           onClick={() => {
-            activatePolygonAddPoints();
-            setStatusPanelContent(
-              <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_add_points_hint')} />,
-            );
+            activatePolygonAddPointsAction();
           }}
           title={t('baseLayerForm:polygon_add_points_tooltip')}
         >
@@ -49,12 +83,7 @@ export function MapGeometryToolForm() {
         <IconButton
           isToolboxIcon={true}
           onClick={() => {
-            activatePolygonDeletePoints();
-            setStatusPanelContent(
-              <MapGeometryStatusPanelContent
-                text={t('baseLayerForm:polygon_delete_points_hint')}
-              />,
-            );
+            activatePolygonDeletePointsAction();
           }}
           title={t('baseLayerForm:polygon_delete_points_tooltip')}
         >
