@@ -5,7 +5,7 @@ import {
   createKeyBindingsAccordingToConfig,
 } from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { isBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
+import { useIsBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
@@ -23,6 +23,7 @@ export function MapGeometryToolForm() {
     (state) => state.baseLayerActivateDeletePolygonPoints,
   );
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
+  const isBaseLayerActive = useIsBaseLayerActive();
 
   const activatePolygonMovePointsAction = () => {
     activatePolygonMovePoints();
@@ -55,7 +56,7 @@ export function MapGeometryToolForm() {
     createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_BASE_LAYER, keyHandlerActions),
     document,
     true,
-    isBaseLayerActive(),
+    isBaseLayerActive,
   );
 
   return (
