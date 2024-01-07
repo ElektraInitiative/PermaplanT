@@ -1,4 +1,4 @@
-import { DrawingDto } from '../layers/drawing/types';
+import { DrawingDto, DrawingShapeType } from '../layers/drawing/types';
 import { convertToDateString } from '../utils/date-utils';
 import {
   BaseLayerImageDto,
@@ -176,6 +176,7 @@ export interface UntrackedMapSlice {
   selectPlantings: (plantings: PlantingDto[] | null) => void;
 
   toggleShowPlantLabel: () => void;
+
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
@@ -184,12 +185,11 @@ export interface UntrackedMapSlice {
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
 
-  drawingLayerActivateFreeDrawing: () => void;
-  drawingLayerActivateDrawRectangle: () => void;
-  drawingLayerActivateDrawEllipse: () => void;
+  drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
   drawingLayerClearSelectedShape: () => void;
   drawingLayerSetSelectedColor: (color: string) => void;
   drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
+  selectDrawings: (drawings: DrawingDto[] | null) => void;
 
   disableShapeSelection: () => void;
   enableShapeSelection: () => void;
@@ -202,6 +202,7 @@ export interface UntrackedMapSlice {
   setTooltipPosition: (position: { x: number; y: number }) => void;
   setStatusPanelContent: (content: React.ReactElement) => void;
   clearStatusPanelContent: () => void;
+
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -241,6 +242,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         layerId: 0,
         id: -1,
         objects: [],
+        loadedObjects: [],
       },
     }),
     {} as TrackedLayers,
@@ -383,6 +385,7 @@ export type TrackedDrawingLayerState = {
   id: number;
   layerId: number;
   objects: DrawingDto[];
+  loadedObjects: DrawingDto[];
 };
 
 /**
@@ -406,7 +409,8 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
 };
 
 export type UntrackedDrawingLayerState = UntrackedLayerState & {
-  shape: 'free' | 'rectangle' | 'ellipse' | null;
+  shape: DrawingShapeType | null;
+  selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
   selectedStrokeWidth: number;
 };

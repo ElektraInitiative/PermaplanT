@@ -1,3 +1,5 @@
+import { DrawingDto } from '../layers/drawing/types';
+import { selectSingleNode } from '../utils/ShapesSelection';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
 import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
@@ -26,7 +28,7 @@ export const createTrackedMapSlice: StateCreator<
     redo: () => redo(set, get),
     __applyRemoteAction: (action: Action<unknown, unknown>) => applyAction(action, set, get),
     setSingleNodeInTransformer: (node: Node) => {
-      get().transformer?.current?.nodes([node]);
+      selectSingleNode(get().transformer, node);
     },
     addNodeToTransformer: (node: Node) => {
       const currentNodes = get().transformer.current?.nodes() ?? [];
@@ -119,6 +121,7 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
 
   executeActionImpl(action, set, get);
   trackReverseActionInHistory(action, get().step, set, get);
+
   applyAction(action, set, get);
 
   set((state) => ({
@@ -137,6 +140,8 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
 function applyAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
   applyActionToStore(action, set, get);
   updateSelectedPlantings(set, get);
+  updateSelectedDrawings(set, get);
+
   clearInvalidSelection(get);
 }
 
@@ -167,6 +172,7 @@ function trackReverseActionInHistory(
   get: GetFn,
 ): void {
   const reverseAction = action.reverse(get().trackedState);
+
   if (!reverseAction) {
     throw new Error('Cannot reverse action');
   }
@@ -300,4 +306,46 @@ function getUpdatesForSelectedPlantings(get: GetFn, selectedPlantings: PlantingD
   };
 
   return selectedPlantings.reduce(updatePlantings, []);
+}
+
+/**
+ * Replaces the selected plantings with fresh versions from the backend.
+ */
+function updateSelectedDrawings(set: SetFn, get: GetFn) {
+  const selectedDrawings = get().untrackedState.layers.drawing.selectedDrawings;
+  if (!selectedDrawings?.length) {
+    return;
+  }
+
+  const updatedSelectedDrawings = getUpdatesForSelectedDrawings(get, selectedDrawings);
+
+  set((state) => ({
+    ...state,
+    untrackedState: {
+      ...state.untrackedState,
+      layers: {
+        ...state.untrackedState.layers,
+        drawing: {
+          ...state.untrackedState.layers.drawing,
+          selectedDrawings: updatedSelectedDrawings,
+        },
+      },
+    },
+  }));
+}
+
+function getUpdatesForSelectedDrawings(get: GetFn, selectedDrawings: DrawingDto[]) {
+  const loadUpdateForSelectedDrawing = (selectedDrawing: DrawingDto) => {
+    return get().trackedState.layers.drawing.loadedObjects.find(
+      (loadedDrawing) => loadedDrawing.id === selectedDrawing.id,
+    );
+  };
+
+  const updateDrawings = (updatedDrawings: DrawingDto[], selectedDrawing: DrawingDto) => {
+    const updatedDrawing = loadUpdateForSelectedDrawing(selectedDrawing);
+
+    return updatedDrawing ? [...updatedDrawings, updatedDrawing] : updatedDrawings;
+  };
+
+  return selectedDrawings.reduce(updateDrawings, []);
 }

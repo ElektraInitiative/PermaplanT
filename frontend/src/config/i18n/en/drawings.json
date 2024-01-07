@@ -1,0 +1,10 @@
+{
+  "delete": "Delete Drawing",
+  "delete_multiple_drawings": "Delete Drawings",
+  "error_fetching_drawing": "Sorry, I'm experiencing trouble fetching the drawing from my server. Please try again later.",
+  "add_date": "Added on",
+  "remove_date": "Removed on",
+  "color": "Color",
+  "stroke": "Stroke",
+  "error_invalid_add_remove_date": "Remove date must be after add date."
+}

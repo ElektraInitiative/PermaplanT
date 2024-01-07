@@ -3,6 +3,7 @@ import { updateTourStatus } from '../api/updateTourStatus';
 import BaseLayer from '../layers/base/BaseLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
 import DrawingLayer from '../layers/drawing/DrawingLayer';
+import { DrawingLayerLeftToolbar } from '../layers/drawing/DrawingLayerLeftToolbar';
 import DrawingLayerRightToolbar from '../layers/drawing/DrawingLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
@@ -215,7 +216,10 @@ export const EditorMap = ({ layers }: MapProps) => {
         right: <BaseLayerRightToolbar />,
       },
       [LayerType.Plants]: { left: <PlantLayerLeftToolbar />, right: <PlantLayerRightToolbar /> },
-      [LayerType.Drawing]: { left: <div></div>, right: <DrawingLayerRightToolbar /> },
+      [LayerType.Drawing]: {
+        left: <DrawingLayerLeftToolbar />,
+        right: <DrawingLayerRightToolbar />,
+      },
       [LayerType.Fertilization]: { left: <div></div>, right: <div></div> },
       [LayerType.Habitats]: { left: <div></div>, right: <div></div> },
       [LayerType.Hydrology]: { left: <div></div>, right: <div></div> },

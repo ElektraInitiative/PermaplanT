@@ -1,3 +1,5 @@
+import { resetSelection } from '../../utils/ShapesSelection';
+import { DrawingShapeType } from './types';
 import IconButton from '@/components/Button/IconButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import {
@@ -5,29 +7,30 @@ import {
   createKeyBindingsAccordingToConfig,
 } from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import useDebounceEffect from '@/hooks/useDebounceEffect';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CircleIcon from '@/svg/icons/circle.svg?react';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import RectangleIcon from '@/svg/icons/rectangle.svg?react';
 import LineIcon from '@/svg/icons/wavy-line.svg?react';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export function DrawingLayerToolForm() {
   const { t } = useTranslation(['common', 'drawingLayerForm']);
 
-  const drawingLayerActivateFreeDrawing = useMapStore(
-    (state) => state.drawingLayerActivateFreeDrawing,
-  );
-  const drawingLayerActivateRectangleDrawing = useMapStore(
-    (state) => state.drawingLayerActivateDrawRectangle,
-  );
-  const drawingLayerActivateDrawEllipse = useMapStore(
-    (state) => state.drawingLayerActivateDrawEllipse,
+  const drawingLayerActivateDrawingMode = useMapStore(
+    (state) => state.drawingLayerActivateDrawingMode,
   );
 
+  const transformerRef = useMapStore((state) => state.transformer);
   const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
+
+  const activateDrawingMode = (shape: DrawingShapeType) => {
+    drawingLayerActivateDrawingMode(shape);
+    resetSelection(transformerRef);
+  };
 
   return (
     <>
@@ -36,9 +39,9 @@ export function DrawingLayerToolForm() {
         <div className="flex flex-row gap-1">
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedShape === 'free'}
+            renderAsActive={selectedShape === 'freeLine'}
             onClick={() => {
-              drawingLayerActivateFreeDrawing();
+              activateDrawingMode('freeLine');
               setStatusPanelContent(
                 <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_free_line_hint')} />,
               );
@@ -51,7 +54,7 @@ export function DrawingLayerToolForm() {
             isToolboxIcon={true}
             renderAsActive={selectedShape === 'rectangle'}
             onClick={() => {
-              drawingLayerActivateRectangleDrawing();
+              activateDrawingMode('rectangle');
               setStatusPanelContent(
                 <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_rectangle_hint')} />,
               );
@@ -65,7 +68,7 @@ export function DrawingLayerToolForm() {
             isToolboxIcon={true}
             renderAsActive={selectedShape === 'ellipse'}
             onClick={() => {
-              drawingLayerActivateDrawEllipse();
+              activateDrawingMode('ellipse');
               setStatusPanelContent(
                 <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_ellipse_hint')} />,
               );
@@ -84,35 +87,45 @@ export function DrawingLayerToolForm() {
   );
 }
 
-function ShapePropertyForm(props: { selectedShape: string | null }): ReactElement {
+function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): ReactElement {
+  const { t } = useTranslation(['drawings']);
+
   const setSelectedColor = useMapStore((state) => state.drawingLayerSetSelectedColor);
   const setSelectedStrokeWidth = useMapStore((state) => state.drawingLayerSetSelectedStrokeWidth);
-  const selectedColor = useMapStore((state) => state.untrackedState.layers.drawing.selectedColor);
   const selectedStrokeWidth = useMapStore(
     (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
   );
 
-  const showStrokeProperty = props.selectedShape === 'free';
+  const [pickerColor, setPickerColor] = useState('#000000');
+
+  const showStrokeProperty = props.selectedShape === 'freeLine';
+
+  useDebounceEffect(
+    () => {
+      setSelectedColor(pickerColor);
+    },
+    100,
+    [pickerColor],
+  );
 
   return (
     <>
       {props.selectedShape && (
         <div>
           <SimpleFormInput
-            id="rotation"
-            className="mb-3"
+            id="color"
             type="color"
-            labelContent={'Color'}
-            onChange={(e) => setSelectedColor(e.target.value)}
-            value={selectedColor}
+            labelContent={t('drawings:color')}
+            onChange={(e) => setPickerColor(e.target.value)}
+            value={pickerColor}
           />
 
           {showStrokeProperty && (
             <SimpleFormInput
-              id="rotation"
+              id="stroke"
               className="background-red"
               type="range"
-              labelContent={'Stroke'}
+              labelContent={t('drawings:stroke')}
               min={1}
               max={100}
               onChange={(e) => setSelectedStrokeWidth(+e.target.value)}

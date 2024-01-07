@@ -181,6 +181,11 @@ export const createUntrackedMapSlice: StateCreator<
       date,
     );
 
+    const drawingsVisibleRelativeToTimelineDate = filterVisibleObjects(
+      get().trackedState.layers.drawing.loadedObjects,
+      date,
+    );
+
     set((state) => ({
       ...state,
       trackedState: {
@@ -191,9 +196,14 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.trackedState.layers.plants,
             objects: plantsVisibleRelativeToTimelineDate,
           },
+          drawing: {
+            ...state.trackedState.layers.drawing,
+            objects: drawingsVisibleRelativeToTimelineDate,
+          },
         },
       },
     }));
+
     clearInvalidSelection(get);
   },
   setTooltipText(content) {
@@ -429,7 +439,8 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
 
-  drawingLayerActivateDrawRectangle() {
+  drawingLayerActivateDrawingMode(shape) {
+    get().drawingLayerClearSelectedShape();
     get().disableShapeSelection();
     set((state) => ({
       ...state,
@@ -439,39 +450,8 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           drawing: {
             ...state.untrackedState.layers.drawing,
-            shape: 'rectangle',
-          },
-        },
-      },
-    }));
-  },
-  drawingLayerActivateFreeDrawing() {
-    get().disableShapeSelection();
-    set((state) => ({
-      ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        layers: {
-          ...state.untrackedState.layers,
-          drawing: {
-            ...state.untrackedState.layers.drawing,
-            shape: 'free',
-          },
-        },
-      },
-    }));
-  },
-  drawingLayerActivateDrawEllipse() {
-    get().disableShapeSelection();
-    set((state) => ({
-      ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        layers: {
-          ...state.untrackedState.layers,
-          drawing: {
-            ...state.untrackedState.layers.drawing,
-            shape: 'ellipse',
+            shape: shape,
+            selectedDrawings: null,
           },
         },
       },
@@ -488,6 +468,21 @@ export const createUntrackedMapSlice: StateCreator<
           drawing: {
             ...state.untrackedState.layers.drawing,
             shape: null,
+          },
+        },
+      },
+    }));
+  },
+  selectDrawings(drawings) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedDrawings: drawings,
           },
         },
       },

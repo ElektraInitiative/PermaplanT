@@ -37,7 +37,7 @@ export default function IconButton({
     variantStyles[variant];
 
   const activeIcon = renderAsActive
-    ? 'fill-primary-500 dark:fill-primary-400 stroke-primary-500 dark:stroke-primary-400 border-primary-500 dark:border-primary-400 border-2'
+    ? 'fill-primary-500 dark:fill-primary-400 stroke-primary-500 dark:stroke-primary-400 border-primary-500 '
     : '';
   const toolboxIcon = isToolboxIcon
     ? 'mx-1 my-2 first-of-type:ml-2 last-of-type:mr-2 h-8 w-8 p-1 border border-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 dark:hover:stroke-primary-400 active:stroke-primary-400 active:fill-primary-400'

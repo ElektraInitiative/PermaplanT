@@ -1,10 +1,11 @@
 import useMapStore from '../../store/MapStore';
 import { LayerConfigWithListenerRegister } from '../../types/layer-config';
 import { isDrawingLayerActive } from '../../utils/layer-utils';
-import { CreateDrawingAction } from './actions';
-import { EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
+import { CreateDrawingAction, MoveDrawingAction, TransformDrawingAction } from './actions';
+import { DrawingDto, EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
 import { LayerType } from '@/api_types/definitions';
-import { KonvaEventObject } from 'konva/lib/Node';
+import Konva from 'konva';
+import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
 import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Ellipse, Layer, Line, Rect } from 'react-konva';
@@ -28,6 +29,14 @@ type Ellipse = {
   radiusY: number;
 };
 
+type Line = {
+  color: string;
+  strokeWidth: number;
+  x: number;
+  y: number;
+  points: number[];
+};
+
 function DrawingLayer(props: DrawingLayerProps) {
   const drawingObjects = useMapStore((state) => state.trackedState.layers.drawing.objects);
 
@@ -37,19 +46,41 @@ function DrawingLayer(props: DrawingLayerProps) {
     (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
   );
 
+  const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
+  const addNodeToTransformer = useMapStore((state) => state.addNodeToTransformer);
+  const removeNodeFromTransformer = useMapStore((state) => state.removeNodeFromTransformer);
+  const selectDrawings = useMapStore((state) => state.selectDrawings);
+
   const { stageListenerRegister, ...layerProps } = props;
 
   const rectangles = drawingObjects
     .filter((object) => object.type === 'rectangle')
-    .map((object) => object.properties as RectangleProperties);
+    .map((object) => {
+      return {
+        ...object,
+        properties: object.properties as RectangleProperties,
+      };
+    });
+
   const ellipses = drawingObjects
     .filter((object) => object.type === 'ellipse')
-    .map((object) => object.properties as EllipseProperties);
+    .map((object) => {
+      return {
+        ...object,
+        properties: object.properties as EllipseProperties,
+      };
+    });
+
   const lines = drawingObjects
     .filter((object) => object.type === 'freeLine')
-    .map((object) => object.properties as FreeLineProperties);
+    .map((object) => {
+      return {
+        ...object,
+        properties: object.properties as FreeLineProperties,
+      };
+    });
 
-  const [newLine, setNewLine] = useState<FreeLineProperties>();
+  const [newLine, setNewLine] = useState<Line>();
   const [previewRectangle, setPreviewRectangle] = useState<Rectangle | undefined>();
   const [previewEllipse, setPreviewEllipse] = useState<Ellipse | undefined>();
 
@@ -72,10 +103,12 @@ function DrawingLayer(props: DrawingLayerProps) {
           type: 'rectangle',
           rotation: 0,
           addDate: timelineDate,
+          x: rectangle.x1,
+          y: rectangle.y1,
+          scaleX: 1,
+          scaleY: 1,
+          color: rectangle.color,
           properties: {
-            color: rectangle.color,
-            x: rectangle.x1,
-            y: rectangle.y1,
             width: rectangle.x2 - rectangle.x1,
             height: rectangle.y2 - rectangle.y1,
           },
@@ -94,12 +127,14 @@ function DrawingLayer(props: DrawingLayerProps) {
           rotation: 0,
           addDate: timelineDate,
           type: 'ellipse',
+          scaleX: 1,
+          scaleY: 1,
+          x: ellipse.x,
+          y: ellipse.y,
+          color: ellipse.color,
           properties: {
-            x: ellipse.x,
-            y: ellipse.y,
             radiusX: ellipse.radiusX,
             radiusY: ellipse.radiusY,
-            color: ellipse.color,
           },
         }),
       );
@@ -108,7 +143,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   );
 
   const createFreeLine = useCallback(
-    (fleeLine: FreeLineProperties) => {
+    (line: Line) => {
       executeAction(
         new CreateDrawingAction({
           id: uuid.v4(),
@@ -116,16 +151,60 @@ function DrawingLayer(props: DrawingLayerProps) {
           rotation: 0,
           addDate: timelineDate,
           type: 'freeLine',
+          scaleX: 1,
+          scaleY: 1,
+          x: line.x,
+          y: line.y,
+          color: line.color,
           properties: {
-            color: fleeLine.color,
-            strokeWidth: fleeLine.strokeWidth,
-            points: fleeLine.points,
+            strokeWidth: line.strokeWidth,
+            points: line.points,
           },
         }),
       );
     },
     [executeAction, getSelectedLayerId, timelineDate],
   );
+
+  const removePlantingFromSelection = (e: KonvaEventObject<MouseEvent>) => {
+    const selectedDrawings = (foundDrawings: DrawingDto[], konvaNode: Konva.Node) => {
+      const drawingNode = konvaNode.getAttr('object');
+      return drawingNode ? [...foundDrawings, drawingNode] : [foundDrawings];
+    };
+
+    const getUpdatedDrawingSelection = () => {
+      const transformer = useMapStore.getState().transformer.current;
+      return transformer?.nodes().reduce(selectedDrawings, []) ?? [];
+    };
+
+    removeNodeFromTransformer(e.currentTarget);
+    selectDrawings(getUpdatedDrawingSelection());
+  };
+
+  const addPlantingToSelection = (e: KonvaEventObject<MouseEvent>) => {
+    addNodeToTransformer(e.currentTarget);
+
+    const currentDrawingSelected =
+      useMapStore.getState().untrackedState.layers.drawing.selectedDrawings ?? [];
+    selectDrawings([...currentDrawingSelected, e.currentTarget.getAttr('object')]);
+  };
+
+  const handleMultiSelect = (e: KonvaEventObject<MouseEvent>, drawing: DrawingDto) => {
+    isDrawingSelected(drawing) ? removePlantingFromSelection(e) : addPlantingToSelection(e);
+  };
+
+  const handleSingleSelect = (e: KonvaEventObject<MouseEvent>, drawing: DrawingDto) => {
+    setSingleNodeInTransformer(e.currentTarget);
+    selectDrawings([drawing]);
+  };
+
+  const handleShapeClicked = (e: KonvaEventObject<MouseEvent>) => {
+    if (isShapeSelected()) return;
+
+    isUsingModifierKey(e)
+      ? handleMultiSelect(e, e.currentTarget.getAttr('object'))
+      : handleSingleSelect(e, e.currentTarget.getAttr('object'));
+  };
 
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     if (!isShapeSelected || !isDrawingLayerActive()) return;
@@ -139,11 +218,13 @@ function DrawingLayer(props: DrawingLayerProps) {
     const pos = stage.getRelativePointerPosition();
     if (pos == null) return;
 
-    if (selectedShape == 'free') {
+    if (selectedShape == 'freeLine') {
       setNewLine({
         strokeWidth: selectedStrokeWidth,
         color: selectedColor,
-        points: [pos.x, pos.y],
+        x: pos.x,
+        y: pos.y,
+        points: [0, 0],
       });
     } else if (selectedShape == 'rectangle') {
       setPreviewRectangle({ color: selectedColor, x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y });
@@ -163,7 +244,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (distance > 10) {
       setNewLine({
         ...newLine,
-        points: [...newLine.points, point.x, point.y],
+        points: [...newLine.points, point.x - newLine.x, point.y - newLine.y],
       });
     }
   };
@@ -227,7 +308,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (point == null) return;
 
     switch (selectedShape) {
-      case 'free':
+      case 'freeLine':
         handleDrawLine(point);
         break;
       case 'rectangle':
@@ -252,7 +333,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     isDrawing.current = false;
 
     switch (selectedShape) {
-      case 'free':
+      case 'freeLine':
         handleFreeLineMouseUp();
         break;
       case 'rectangle':
@@ -300,27 +381,51 @@ function DrawingLayer(props: DrawingLayerProps) {
     createEllipse(newEllipse);
   };
 
-  const handleShapeClicked = (e: KonvaEventObject<MouseEvent>) => {
-    if (isShapeSelected()) return;
-
-    const transformer = useMapStore.getState().transformer;
-    transformer.current?.enabledAnchors([
-      'top-left',
-      'top-center',
-      'top-right',
-      'middle-left',
-      'middle-right',
-      'bottom-left',
-      'bottom-center',
-      'bottom-right',
-    ]);
-
-    useMapStore.getState().setSingleNodeInTransformer(e.target);
-  };
-
   const moveToTop = (e: KonvaEventObject<MouseEvent>) => {
     e.target.moveToTop();
   };
+
+  const handleSelectDrawing: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
+    const selectedDrawings = (foundDrawings: DrawingDto[], konvaNode: Konva.Node) => {
+      const drawingNode = konvaNode.getAttr('object');
+      return drawingNode ? [...foundDrawings, drawingNode] : [foundDrawings];
+    };
+
+    const transformer = useMapStore.getState().transformer.current;
+    const drawings = transformer?.nodes().reduce(selectedDrawings, []);
+
+    if (drawings?.length) {
+      useMapStore.getState().selectDrawings(drawings);
+    }
+  }, []);
+
+  const handleTransformDrawing: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
+    console.log('transformend');
+    const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
+      return {
+        id: node.id(),
+        x: Math.round(node.x()),
+        y: Math.round(node.y()),
+        rotation: node.rotation(),
+        scaleX: node.scaleX(),
+        scaleY: node.scaleY(),
+      };
+    });
+
+    executeAction(new TransformDrawingAction(updates));
+  }, [executeAction]);
+
+  const handleMoveDrawing: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
+    const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
+      return {
+        id: node.id(),
+        x: Math.round(node.x()),
+        y: Math.round(node.y()),
+      };
+    });
+
+    executeAction(new MoveDrawingAction(updates));
+  }, [executeAction]);
 
   useEffect(() => {
     stageListenerRegister.registerStageMouseDownListener('DrawingLayer', handleMouseDown);
@@ -328,30 +433,52 @@ function DrawingLayer(props: DrawingLayerProps) {
     stageListenerRegister.registerStageMouseMoveListener('DrawingLayer', handleMouseMove);
   }, [handleMouseDown, handleMouseMove, handleMouseUp]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    useMapStore.getState().transformer.current?.on('dragend.drawings', handleMoveDrawing);
+    useMapStore.getState().transformer.current?.on('transformend.drawings', handleTransformDrawing);
+    useMapStore.getState().stageRef.current?.on('mouseup.selectDrawing', handleSelectDrawing);
+
+    return () => {
+      useMapStore.getState().transformer.current?.off('dragend.drawings');
+      useMapStore.getState().transformer.current?.off('transformend.drawings');
+      useMapStore.getState().stageRef.current?.off('mouseup.selectDrawing');
+    };
+  }, [handleMoveDrawing, handleTransformDrawing, handleSelectDrawing]);
+
   return (
     <>
       <Layer {...layerProps} name={`${LayerType.Drawing}`}>
         {lines.map((line, i) => (
           <Line
+            id={line.id}
             listening={true}
+            object={line}
+            hitStrokeWidth={line.properties.strokeWidth + 100}
             key={i}
-            points={line.points}
+            x={line.x}
+            y={line.y}
+            scaleX={line.scaleX}
+            scaleY={line.scaleY}
+            points={line.properties.points}
             stroke={line.color}
-            strokeWidth={line.strokeWidth}
-            tension={0.2}
+            strokeWidth={line.properties.strokeWidth}
+            tension={0.1}
             lineCap="round"
             lineJoin="round"
-            globalCompositeOperation="source-over"
             onClick={handleShapeClicked}
             draggable
             onDragStart={moveToTop}
+            bezier
           />
         ))}
 
         {newLine && (
           <Line
             listening={true}
+            canBeDistorted={false}
             key={'new-line'}
+            x={newLine.x}
+            y={newLine.y}
             points={newLine.points}
             stroke={newLine.color}
             strokeWidth={newLine.strokeWidth}
@@ -364,16 +491,21 @@ function DrawingLayer(props: DrawingLayerProps) {
 
         {rectangles.map((rectangle, i) => (
           <Rect
+            id={rectangle.id}
+            canBeDistorted={true}
             listening={true}
+            object={rectangle}
             cornerRadius={5}
             key={`rect-${i}`}
             x={rectangle.x}
             y={rectangle.y}
-            width={rectangle.width}
-            height={rectangle.height}
+            width={rectangle.properties.width}
+            height={rectangle.properties.height}
             stroke={rectangle.color}
             fill={rectangle.color}
             strokeWidth={5}
+            scaleX={rectangle.scaleX}
+            scaleY={rectangle.scaleY}
             onClick={handleShapeClicked}
             draggable
             onDragStart={moveToTop}
@@ -395,12 +527,17 @@ function DrawingLayer(props: DrawingLayerProps) {
 
         {ellipses.map((ellipse, i) => (
           <Ellipse
+            id={ellipse.id}
             listening={true}
+            object={ellipse}
+            canBeDistorted={true}
             key={`ellipse-${i}`}
             x={ellipse.x}
             y={ellipse.y}
-            radiusX={ellipse.radiusX}
-            radiusY={ellipse.radiusY}
+            scaleX={ellipse.scaleX}
+            scaleY={ellipse.scaleY}
+            radiusX={ellipse.properties.radiusX}
+            radiusY={ellipse.properties.radiusY}
             stroke={ellipse.color}
             fill={ellipse.color}
             strokeWidth={5}
@@ -424,6 +561,16 @@ function DrawingLayer(props: DrawingLayerProps) {
       </Layer>
     </>
   );
+}
+
+function isDrawingSelected(drawing: DrawingDto): boolean {
+  const allSelectedDrawings = useMapStore.getState().untrackedState.layers.drawing.selectedDrawings;
+
+  return Boolean(allSelectedDrawings?.find((selectedDrawing) => selectedDrawing.id === drawing.id));
+}
+
+function isUsingModifierKey(e: KonvaEventObject<MouseEvent>): boolean {
+  return e.evt.ctrlKey || e.evt.shiftKey || e.evt.metaKey;
 }
 
 export default DrawingLayer;

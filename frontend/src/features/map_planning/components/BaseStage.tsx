@@ -316,7 +316,6 @@ export const BaseStage = ({
             ref={transformerRef}
             name="transformer"
             anchorSize={8}
-            enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
           />
         </Layer>
       </Stage>
