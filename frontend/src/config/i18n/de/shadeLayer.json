@@ -5,7 +5,7 @@
       "add": "Klicke auf die Karte um einen neuen Punkt zur Beschattung hinzuzufügen.",
       "remove": "Klicke auf die Karte um einen Punkt aus der Beschattung zu entfernen.",
       "move": "Klicke auf einen Punkt der Beschattung um ihn an einen anderen Ort zu bewegen.",
-      "delete_point_forbidden": "Das Form dieser Schattierung muss mindestens drei Punkte enthalten."
+      "delete_point_forbidden": "Die Form dieser Schattierung muss mindestens drei Punkte enthalten."
     },
     "geometry_tool_form": {
       "title": "Beschattung Bearbeiten",
