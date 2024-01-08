@@ -1,6 +1,6 @@
-import TimelineDatePicker from './TimelineDatePicker';
 import { render } from '@testing-library/react';
 import ReactTestUtils, { act } from 'react-dom/test-utils';
+import TimelineDatePicker from './TimelineDatePicker';
 
 const onSelectChange = vi.fn();
 const onLoading = vi.fn();
@@ -11,7 +11,7 @@ describe('handleDayItemChange', () => {
   });
 
   beforeAll(() => {
-    vi.useFakeTimers();
+    vi.useFakeTimers({ shouldAdvanceTime: true });
   });
 
   it('should callback correct date when day item is changed', () => {
@@ -53,7 +53,7 @@ describe('handleMonthItemChange', () => {
   });
 
   beforeAll(() => {
-    vi.useFakeTimers();
+    vi.useFakeTimers({ shouldAdvanceTime: true });
   });
 
   it('should callback correct date when month item is changed', () => {
@@ -133,7 +133,7 @@ describe('handleYearItemChange', () => {
   });
 
   beforeAll(() => {
-    vi.useFakeTimers();
+    vi.useFakeTimers({ shouldAdvanceTime: true });
   });
 
   it('should callback correct date when year item is changed', () => {

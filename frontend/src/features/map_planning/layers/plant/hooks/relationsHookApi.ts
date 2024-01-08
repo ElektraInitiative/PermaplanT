@@ -1,6 +1,6 @@
-import { getRelations } from '../api/getRelations';
-import { RelationDto, RelationsDto } from '@/api_types/definitions';
 import { QueryFunctionContext, useQuery } from '@tanstack/react-query';
+import { RelationDto, RelationsDto } from '@/api_types/definitions';
+import { getRelations } from '../api/getRelations';
 
 const RELATION_KEYS = {
   _helpers: {

@@ -1,3 +1,4 @@
+import areaOfPlantsIndicator from './areaOfPlantingsIndicator.json';
 import auth from './auth.json';
 import baseLayer from './baseLayer.json';
 import baseLayerForm from './baseLayerForm.json';
@@ -33,7 +34,8 @@ import toolboxTooltips from './toolboxTooltips.json';
 import undoRedo from './undoRedo.json';
 import uploadFile from './uploadFile.json';
 
-const en = {
+export default {
+  areaOfPlantsIndicator,
   blog,
   baseLayer,
   baseLayerForm,
@@ -69,5 +71,3 @@ const en = {
   toolboxTooltips,
   polygon,
 };
-
-export default en;

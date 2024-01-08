@@ -1,21 +1,9 @@
-import useMapStore from '../../store/MapStore';
-import { PlantForPlanting } from '../../store/MapStoreTypes';
-import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
-import { SELECTION_RECTANGLE_NAME } from '../../utils/ShapesSelection';
-import { isPlantLayerActive } from '../../utils/layer-utils';
-import { isPlacementModeActive } from '../../utils/planting-utils';
-import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
-import { PlantCursor } from './components/PlantCursor';
-import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
-import { PlantingElement } from './components/PlantingElement';
-import { useDeleteSelectedPlantings } from './hooks/useDeleteSelectedPlantings';
-import {
-  LayerType,
-  PlantSpread,
-  PlantingDto,
-  PlantsSummaryDto,
-  SeedDto,
-} from '@/api_types/definitions';
+import Konva from 'konva';
+import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
+import { useCallback, useEffect, useRef } from 'react';
+import { Layer } from 'react-konva';
+import * as uuid from 'uuid';
+import { LayerType, PlantingDto, PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
@@ -25,24 +13,21 @@ import { PlantLabel } from '@/features/map_planning/layers/plant/components/Plan
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
-import Konva from 'konva';
-import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
-import { useCallback, useEffect, useRef } from 'react';
-import { Layer } from 'react-konva';
-import * as uuid from 'uuid';
+import useMapStore from '../../store/MapStore';
+import { PlantForPlanting } from '../../store/MapStoreTypes';
+import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
+import { useIsPlantLayerActive } from '../../utils/layer-utils';
+import { isPlacementModeActive } from '../../utils/planting-utils';
+import { CreatePlantAction, MovePlantAction, TransformPlantAction } from './actions';
+import { AreaOfPlantingsIndicator } from './components/AreaOfPlantingsIndicator/AreaOfPlantingsIndicator';
+import { PlantCursor } from './components/PlantCursor';
+import { PlantLayerRelationsOverlay } from './components/PlantLayerRelationsOverlay';
+import { PlantingElement } from './components/PlantingElement';
+import { useDeleteSelectedPlantings } from './hooks/useDeleteSelectedPlantings';
+import { calculatePlantCount, getPlantWidth } from './util';
 
 // For performance reasons add limit for amount of plants inside a plant field
 const LIMIT_PLANT_FIELD_PLANTS = 1000;
-
-const PLANT_WIDTHS = new Map<PlantSpread, number>([
-  [PlantSpread.Narrow, 10],
-  [PlantSpread.Medium, 50],
-  [PlantSpread.Wide, 100],
-]);
-
-function getPlantWidth({ spread = PlantSpread.Medium }): number {
-  return PLANT_WIDTHS.get(spread) ?? (PLANT_WIDTHS.get(PlantSpread.Medium) as number);
-}
 
 function exitPlantingMode() {
   useMapStore.getState().selectPlantings(null);
@@ -82,14 +67,12 @@ function usePlantLayerListeners(listening: boolean) {
 
   const drawPlantField = useCallback(
     (selectedPlantForPlanting: PlantForPlanting) => {
-      const drawnField = useMapStore
-        .getState()
-        .stageRef.current?.findOne(`.${SELECTION_RECTANGLE_NAME}`);
-
-      const fieldWidth = drawnField?.attrs?.width;
-      const fieldHeight = drawnField?.attrs?.height;
-
-      if (!fieldWidth || !fieldHeight) return;
+      const {
+        width: fieldWidth,
+        height: fieldHeight,
+        x: startingPositionX,
+        y: startingPositionY,
+      } = useMapStore.getState().selectionRectAttributes;
 
       const plantSize = getPlantWidth(selectedPlantForPlanting.plant);
       const { horizontalPlantCount, verticalPlantCount } = calculatePlantCount(
@@ -97,9 +80,6 @@ function usePlantLayerListeners(listening: boolean) {
         fieldWidth,
         fieldHeight,
       );
-
-      const startingPositionX = drawnField.attrs.x;
-      const startingPositionY = drawnField.attrs.y;
 
       // due to set limit of plants in a plant field, we need to decide in which direction we start drawing, i.e. if drawn field is wider than narrow, we start drawing horizontally and vice versa
       const { firstDirectionCounter, secondDirectionCounter } = getDrawingDirectionCounters(
@@ -122,12 +102,6 @@ function usePlantLayerListeners(listening: boolean) {
           );
         }
       }
-
-      // reset konva rectangle to make sure we always have a rectangle with the newest coordinates when planting
-      drawnField.setAttrs({
-        width: 0,
-        height: 0,
-      });
     },
     [createPlanting],
   );
@@ -263,6 +237,7 @@ function usePlantLayerListeners(listening: boolean) {
 
 function usePlantLayerKeyListeners() {
   const { deleteSelectedPlantings } = useDeleteSelectedPlantings();
+  const isPlantLayerActive = useIsPlantLayerActive();
 
   const keybindings = createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_PLANTS_LAYER, {
     deleteSelectedPlantings: () => {
@@ -270,7 +245,7 @@ function usePlantLayerKeyListeners() {
     },
   });
 
-  useKeyHandlers(isPlantLayerActive() ? keybindings : {});
+  useKeyHandlers(isPlantLayerActive ? keybindings : {});
 }
 
 type PlantsLayerProps = Konva.LayerConfig;
@@ -311,6 +286,7 @@ function PlantsLayer(props: PlantsLayerProps) {
       </Layer>
       <Layer listening={false}>
         <PlantCursor />
+        <AreaOfPlantingsIndicator />
       </Layer>
     </>
   );
@@ -352,20 +328,6 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
 }
 
 export default PlantsLayer;
-
-function calculatePlantCount(
-  plantSize: number,
-  fieldWidth: number,
-  fieldHeight: number,
-): { horizontalPlantCount: number; verticalPlantCount: number } {
-  const horizontalPlantCount = Math.floor(fieldWidth / plantSize);
-  const verticalPlantCount = Math.floor(fieldHeight / plantSize);
-
-  return {
-    horizontalPlantCount,
-    verticalPlantCount,
-  };
-}
 
 function getDrawingDirectionCounters(
   horizontalPlantCount: number,

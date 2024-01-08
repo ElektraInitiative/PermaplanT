@@ -1,6 +1,6 @@
-import { LoadingSpinner } from './LoadingSpinner';
-import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
 import type { Meta, StoryObj } from '@storybook/react';
+import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
+import { LoadingSpinner } from './LoadingSpinner';
 
 const meta: Meta<typeof LoadingSpinner> = {
   title: 'Components/LoadingSpinner/LoadingSpinner',

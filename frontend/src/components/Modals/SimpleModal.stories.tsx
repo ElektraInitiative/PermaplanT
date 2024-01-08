@@ -1,6 +1,6 @@
-import SimpleModal from './SimpleModal';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentType } from 'react';
+import SimpleModal from './SimpleModal';
 
 const meta: Meta<typeof SimpleModal> = {
   title: 'Components/Modals/SimpleModal',

@@ -1,4 +1,8 @@
-import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
+import { PlantingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
@@ -6,10 +10,6 @@ import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
 import { PlantNameFromAdditionalNameAndPlant, PlantNameFromPlant } from '@/utils/plant-naming';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 const PlantingAttributeEditFormSchema = z
   // The 'empty' value for the API is undefined, so we need to transform the empty string to undefined
@@ -52,7 +52,14 @@ export function SinglePlantingAttributeForm({
   isReadOnlyMode,
 }: EditSinglePlantingProps) {
   const { plantId } = planting;
-  const { data: plant } = useFindPlantById({ plantId });
+  const {
+    data: plant,
+    isLoading: plantSummaryIsLoading,
+    isError: plantSummaryIsError,
+  } = useFindPlantById({ plantId });
+
+  if (plantSummaryIsLoading) return null;
+  if (plantSummaryIsError) return null;
 
   return (
     <div className="flex flex-col gap-2 p-2">
@@ -60,10 +67,10 @@ export function SinglePlantingAttributeForm({
         {planting.additionalName ? (
           <PlantNameFromAdditionalNameAndPlant
             additionalName={planting.additionalName}
-            plant={plant as PlantsSummaryDto}
+            plant={plant}
           />
         ) : (
-          <PlantNameFromPlant plant={plant as PlantsSummaryDto} />
+          <PlantNameFromPlant plant={plant} />
         )}
       </h2>
 
@@ -117,7 +124,7 @@ export function MultiplePlantingsAttributeForm({
   );
 }
 
-export function PlantingAttributeEditForm({
+function PlantingAttributeEditForm({
   addDateDefaultValue,
   removeDateDefaultValue,
   onAddDateChange,

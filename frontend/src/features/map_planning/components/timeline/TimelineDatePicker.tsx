@@ -1,8 +1,8 @@
+import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import useGetTimelineEvents from '../../hooks/useGetTimelineEvents';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
-import { useState, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 
 export const TEST_IDS = Object.freeze({
   DAY_SLIDER: 'timeline__day-slider',

@@ -1,5 +1,5 @@
-import { createShortcutIncludingModifierKeys } from '@/utils/key-combinations';
 import { useEffect } from 'react';
+import { createShortcutIncludingModifierKeys } from '@/utils/key-combinations';
 
 /**
  * Custom React Hook: useKeyHandlers

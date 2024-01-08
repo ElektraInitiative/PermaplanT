@@ -1,16 +1,16 @@
+import { useTranslation } from 'react-i18next';
 import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_BASE_LAYER,
   createKeyBindingsAccordingToConfig,
 } from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { isBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
+import { useIsBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import PencilPlusIcon from '@/svg/icons/pencil-plus.svg?react';
 import PointerIcon from '@/svg/icons/pointer.svg?react';
-import { useTranslation } from 'react-i18next';
 
 export function MapGeometryToolForm() {
   const { t } = useTranslation(['common', 'baseLayerForm']);
@@ -23,6 +23,7 @@ export function MapGeometryToolForm() {
     (state) => state.baseLayerActivateDeletePolygonPoints,
   );
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
+  const isBaseLayerActive = useIsBaseLayerActive();
 
   const activatePolygonMovePointsAction = () => {
     activatePolygonMovePoints();
@@ -55,7 +56,7 @@ export function MapGeometryToolForm() {
     createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_BASE_LAYER, keyHandlerActions),
     document,
     true,
-    isBaseLayerActive(),
+    isBaseLayerActive,
   );
 
   return (

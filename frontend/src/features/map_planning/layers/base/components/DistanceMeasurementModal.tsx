@@ -1,10 +1,10 @@
-import SimpleButton from '@/components/Button/SimpleButton';
-import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import ModalContainer from '@/components/Modals/ModalContainer';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+import SimpleButton from '@/components/Button/SimpleButton';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import ModalContainer from '@/components/Modals/ModalContainer';
 
 export type BaseLayerDistanceModalAttributes = {
   meters: number;

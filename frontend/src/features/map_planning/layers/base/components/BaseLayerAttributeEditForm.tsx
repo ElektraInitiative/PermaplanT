@@ -1,3 +1,9 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { FileStat } from 'webdav';
+import { z } from 'zod';
 import { BaseLayerImageDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
@@ -10,12 +16,6 @@ import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import CrossIcon from '@/svg/icons/close.svg?react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { FileStat } from 'webdav';
-import { z } from 'zod';
 
 export const TEST_IDS = Object.freeze({
   BACKGROUND_INPUT: 'base-layer-right-toolbar__background-input',

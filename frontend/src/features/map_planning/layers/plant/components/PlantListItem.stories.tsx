@@ -1,6 +1,6 @@
+import type { Meta, StoryObj } from '@storybook/react';
 import { PlantListItem } from './PlantListItem';
 import { PlantSuggestionList } from './PlantSuggestionList';
-import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof PlantListItem> = {
   component: PlantListItem,

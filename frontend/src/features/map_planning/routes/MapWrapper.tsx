@@ -1,3 +1,9 @@
+import { useRef, useEffect } from 'react';
+import { ShepherdTour } from 'react-shepherd';
+import { LayerType, LayerDto } from '@/api_types/definitions';
+import { createAPI } from '@/config/axios';
+import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { EditorMap } from '../components/EditorMap';
 import {
   useBaseLayer,
@@ -12,12 +18,6 @@ import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { mapEditorSteps, tourOptions } from '../utils/EditorTour';
 import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
-import { LayerType, LayerDto } from '@/api_types/definitions';
-import { createAPI } from '@/config/axios';
-import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
-import { useSafeAuth } from '@/hooks/useSafeAuth';
-import { useRef, useEffect } from 'react';
-import { ShepherdTour } from 'react-shepherd';
 
 /**
  * Extracts the default layer from the list of layers.

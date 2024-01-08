@@ -1,5 +1,5 @@
-import './styles/timeline.css';
 import React, { useRef, useState, useEffect, ReactNode, useCallback } from 'react';
+import './styles/timeline.css';
 
 export type ItemSliderItem = {
   key: number;

@@ -1,6 +1,6 @@
+import { ReactNode } from 'react';
 import TransparentBackground from '../TransparentBackground';
 import ModalContainer from './ModalContainer';
-import { ReactNode } from 'react';
 
 interface ImageModalProps {
   /** Modal headline displayed on top.*/

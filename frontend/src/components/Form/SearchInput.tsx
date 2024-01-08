@@ -1,6 +1,6 @@
+import React, { forwardRef, KeyboardEvent, useImperativeHandle, useRef, useState } from 'react';
 import SearchResetIcon from '@/svg/icons/search-reset.svg?react';
 import SearchIcon from '@/svg/icons/search.svg?react';
-import React, { forwardRef, KeyboardEvent, useImperativeHandle, useRef, useState } from 'react';
 
 export const SHORTCUT_SEARCH_INPUT_RESET = 'Escape';
 

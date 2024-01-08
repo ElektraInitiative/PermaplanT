@@ -1,5 +1,5 @@
-import { isDev } from '@/config';
 import { AxiosError, isAxiosError } from 'axios';
+import { isDev } from '@/config';
 
 const errorMap = {
   ERR_NETWORK:

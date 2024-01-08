@@ -1,4 +1,3 @@
-import { Pages, Routes } from './types';
 import { Debug } from '@/features/debugging/routes/Debug';
 import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
@@ -10,6 +9,7 @@ import { Chat } from '@/features/nextcloud_integration/components/chat';
 import { Overview } from '@/features/overview/routes/Overview';
 import { CreateSeed, ViewSeeds } from '@/features/seeds';
 import { EditSeedPage } from '@/features/seeds/routes/EditSeed';
+import { Pages, Routes } from './types';
 
 const routes: Routes = {
   [Pages.ImprintPage]: {

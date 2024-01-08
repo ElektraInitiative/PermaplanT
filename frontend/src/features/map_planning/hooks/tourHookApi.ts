@@ -1,7 +1,7 @@
-import { getTourStatus } from '../api/getTourStatus';
-import { updateTourStatus } from '../api/updateTourStatus';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { getTourStatus } from '../api/getTourStatus';
+import { updateTourStatus } from '../api/updateTourStatus';
 
 const TOUR_KEYS = {
   _helpers: {

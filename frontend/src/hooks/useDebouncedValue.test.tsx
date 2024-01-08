@@ -1,6 +1,6 @@
-import useDebouncedValue from './useDebouncedValue';
 import { act, renderHook } from '@testing-library/react';
 import { useState } from 'react';
+import useDebouncedValue from './useDebouncedValue';
 
 describe('useDebouncedValue', () => {
   const renderUseDebouncedValue = () => {
