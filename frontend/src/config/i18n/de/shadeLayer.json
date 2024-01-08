@@ -8,7 +8,7 @@
       "delete_point_forbidden": "Die Form dieser Schattierung muss mindestens drei Punkte enthalten."
     },
     "geometry_tool_form": {
-      "title": "Beschattung Bearbeiten",
+      "title": "Beschattung bearbeiten",
       "add_points": "Punkte hinzufügen",
       "delete_points": "Punkte entfernen",
       "move_points": "Punkte verschieben"
