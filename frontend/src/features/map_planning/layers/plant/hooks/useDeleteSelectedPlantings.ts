@@ -11,12 +11,9 @@ export function useDeleteSelectedPlantings() {
   const transformerRef = useMapStore((state) => state.transformer);
 
   const deleteSelectedPlantings = () => {
-    if (!selectedPlantings?.length) return;
+    if (!Array.isArray(selectedPlantings)) return;
 
-    selectedPlantings.forEach((selectedPlanting) =>
-      executeAction(new DeletePlantAction({ id: selectedPlanting.id })),
-    );
-
+    executeAction(new DeletePlantAction(selectedPlantings.map(({ id }) => ({ id }))));
     selectPlantings(null);
     transformerRef.current?.nodes([]);
   };

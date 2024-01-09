@@ -56,6 +56,9 @@ pub struct Planting {
 #[derive(Debug, Clone, Default, AsChangeset)]
 #[diesel(table_name = plantings)]
 pub struct UpdatePlanting {
+    /// The id of the planting.
+    /// This is not updated.
+    pub id: Uuid,
     /// The x coordinate of the position on the map.
     pub x: Option<i32>,
     /// The y coordinate of the position on the map.

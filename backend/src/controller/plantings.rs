@@ -5,22 +5,9 @@ use actix_web::{
     web::{Data, Json, Path, Query},
     HttpResponse, Result,
 };
-use uuid::Uuid;
 
-use crate::{
-    config::auth::user_info::UserInfo,
-    model::dto::actions::{
-        Action, UpdatePlantingAddDateActionPayload, UpdatePlantingNoteActionPayload,
-        UpdatePlantingRemoveDateActionPayload,
-    },
-};
-use crate::{
-    config::data::AppDataInner,
-    model::dto::actions::{
-        CreatePlantActionPayload, DeletePlantActionPayload, MovePlantActionPayload,
-        TransformPlantActionPayload,
-    },
-};
+use crate::{config::auth::user_info::UserInfo, model::dto::actions::Action};
+use crate::{config::data::AppDataInner, model::dto::core::ActionDtoWrapper};
 use crate::{
     model::dto::plantings::{
         DeletePlantingDto, NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto,
@@ -28,7 +15,7 @@ use crate::{
     service::plantings,
 };
 
-/// Endpoint for listing and filtering `Planting`.
+/// Endpoint for listing and filtering `Planting`s.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -39,7 +26,7 @@ use crate::{
         PlantingSearchParameters
     ),
     responses(
-        (status = 200, description = "Find plantings", body = Vec<PlantingDto>)
+        (status = 200, description = "Find plantings", body = TimelinePagePlantingsDto)
     ),
     security(
         ("oauth2" = [])
@@ -57,7 +44,7 @@ pub async fn find(
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Endpoint for creating a new `Planting`.
+/// Endpoint for creating new `Planting`s.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -66,9 +53,9 @@ pub async fn find(
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
     ),
-    request_body = NewPlantingDto,
+    request_body = ActionDtoWrapperNewPlantings,
     responses(
-        (status = 201, description = "Create a planting", body = PlantingDto)
+        (status = 201, description = "Create plantings", body = Vec<PlantingDto>)
     ),
     security(
         ("oauth2" = [])
@@ -77,123 +64,115 @@ pub async fn find(
 #[post("")]
 pub async fn create(
     path: Path<i32>,
-    new_planting: Json<NewPlantingDto>,
+    new_plantings: Json<ActionDtoWrapper<Vec<NewPlantingDto>>>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let dto = plantings::create(*new_planting, &app_data).await?;
+    let map_id = path.into_inner();
 
-    app_data
-        .broadcaster
-        .broadcast(
-            path.into_inner(),
-            Action::CreatePlanting(CreatePlantActionPayload::new(
-                dto.clone(),
-                user_info.id,
-                new_planting.action_id,
-            )),
-        )
-        .await;
+    let ActionDtoWrapper { action_id, dto } = new_plantings.into_inner();
 
-    Ok(HttpResponse::Created().json(dto))
-}
-
-/// Endpoint for updating a `Planting`.
-///
-/// # Errors
-/// * If the connection to the database could not be established.
-#[utoipa::path(
-    context_path = "/api/maps/{map_id}/layers/plants/plantings",
-    params(
-        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
-    ),
-    request_body = UpdatePlantingDto,
-    responses(
-        (status = 200, description = "Update a planting", body = PlantingDto)
-    ),
-    security(
-        ("oauth2" = [])
-    )
-)]
-#[patch("/{planting_id}")]
-pub async fn update(
-    path: Path<(i32, Uuid)>,
-    update_planting: Json<UpdatePlantingDto>,
-    app_data: Data<AppDataInner>,
-    user_info: UserInfo,
-) -> Result<HttpResponse> {
-    let (map_id, planting_id) = path.into_inner();
-
-    let update_planting_data = update_planting.into_inner();
-
-    let planting = plantings::update(planting_id, update_planting_data.clone(), &app_data).await?;
-
-    let action = match update_planting_data {
-        UpdatePlantingDto::Transform(action_dto) => Action::TransformPlanting(
-            TransformPlantActionPayload::new(&planting, user_info.id, action_dto.action_id),
-        ),
-        UpdatePlantingDto::Move(action_dto) => Action::MovePlanting(MovePlantActionPayload::new(
-            &planting,
-            user_info.id,
-            action_dto.action_id,
-        )),
-        UpdatePlantingDto::UpdateAddDate(action_dto) => Action::UpdatePlantingAddDate(
-            UpdatePlantingAddDateActionPayload::new(&planting, user_info.id, action_dto.action_id),
-        ),
-        UpdatePlantingDto::UpdateRemoveDate(action_dto) => {
-            Action::UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload::new(
-                &planting,
-                user_info.id,
-                action_dto.action_id,
-            ))
-        }
-        UpdatePlantingDto::UpdateNote(action_dto) => Action::UpdatePlatingNotes(
-            UpdatePlantingNoteActionPayload::new(&planting, user_info.id, action_dto.action_id),
-        ),
-    };
-
-    app_data.broadcaster.broadcast(map_id, action).await;
-
-    Ok(HttpResponse::Ok().json(planting.clone()))
-}
-
-/// Endpoint for deleting a `Planting`.
-///
-/// # Errors
-/// * If the connection to the database could not be established.
-#[utoipa::path(
-    context_path = "/api/maps/{map_id}/layers/plants/plantings",
-    params(
-        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
-    ),
-    request_body = DeletePlantingDto,
-    responses(
-        (status = 200, description = "Delete a planting")
-    ),
-    security(
-        ("oauth2" = [])
-    )
-)]
-#[delete("/{planting_id}")]
-pub async fn delete(
-    path: Path<(i32, Uuid)>,
-    delete_planting: Json<DeletePlantingDto>,
-    app_data: Data<AppDataInner>,
-    user_info: UserInfo,
-) -> Result<HttpResponse> {
-    let (map_id, planting_id) = path.into_inner();
-
-    plantings::delete_by_id(planting_id, &app_data).await?;
+    let created_plantings = plantings::create(dto, &app_data).await?;
 
     app_data
         .broadcaster
         .broadcast(
             map_id,
-            Action::DeletePlanting(DeletePlantActionPayload::new(
-                planting_id,
-                user_info.id,
-                delete_planting.action_id,
-            )),
+            Action::new_create_planting_action(&created_plantings, user_info.id, action_id),
+        )
+        .await;
+
+    Ok(HttpResponse::Created().json(created_plantings))
+}
+
+/// Endpoint for updating `Planting`s.
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+#[utoipa::path(
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
+    request_body = ActionDtoWrapperUpdatePlantings,
+    responses(
+        (status = 200, description = "Update plantings", body = Vec<PlantingDto>)
+    ),
+    security(
+        ("oauth2" = [])
+    )
+)]
+#[patch("")]
+pub async fn update(
+    path: Path<i32>,
+    update_planting: Json<ActionDtoWrapper<UpdatePlantingDto>>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
+) -> Result<HttpResponse> {
+    let map_id = path.into_inner();
+
+    let ActionDtoWrapper { action_id, dto } = update_planting.into_inner();
+
+    let updated_plantings = plantings::update(dto.clone(), &app_data).await?;
+
+    let action = match &dto {
+        UpdatePlantingDto::Transform(dto) => {
+            Action::new_transform_planting_action(dto, user_info.id, action_id)
+        }
+        UpdatePlantingDto::Move(dto) => {
+            Action::new_move_planting_action(dto, user_info.id, action_id)
+        }
+        UpdatePlantingDto::UpdateAddDate(dto) => {
+            Action::new_update_planting_add_date_action(dto, user_info.id, action_id)
+        }
+        UpdatePlantingDto::UpdateRemoveDate(dto) => {
+            Action::new_update_planting_remove_date_action(dto, user_info.id, action_id)
+        }
+        UpdatePlantingDto::UpdateNote(dto) => {
+            Action::new_update_planting_note_action(dto, user_info.id, action_id)
+        }
+    };
+
+    app_data.broadcaster.broadcast(map_id, action).await;
+
+    Ok(HttpResponse::Ok().json(updated_plantings))
+}
+
+/// Endpoint for deleting `Planting`s.
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+#[utoipa::path(
+    context_path = "/api/maps/{map_id}/layers/plants/plantings",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map the layer is on"),
+    ),
+    request_body = ActionDtoWrapperDeletePlantings,
+    responses(
+        (status = 200, description = "Delete plantings")
+    ),
+    security(
+        ("oauth2" = [])
+    )
+)]
+#[delete("")]
+pub async fn delete(
+    path: Path<i32>,
+    delete_planting: Json<ActionDtoWrapper<Vec<DeletePlantingDto>>>,
+    app_data: Data<AppDataInner>,
+    user_info: UserInfo,
+) -> Result<HttpResponse> {
+    let map_id = path.into_inner();
+
+    let ActionDtoWrapper { action_id, dto } = delete_planting.into_inner();
+
+    plantings::delete_by_ids(dto.clone(), &app_data).await?;
+
+    app_data
+        .broadcaster
+        .broadcast(
+            map_id,
+            Action::new_delete_planting_action(&dto, user_info.id, action_id),
         )
         .await;
 
