@@ -38,6 +38,8 @@ pub struct Planting {
     pub remove_date: Option<NaiveDate>,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
     /*
     /// The date the planting was created.
     //pub create_date: NaiveDate,

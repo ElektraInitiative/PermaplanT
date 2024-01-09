@@ -73,7 +73,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Up the rust version to 1.74 _(4ydan)_
-- _()_
+- Display a rectangle for area of plantings _(Paul)_
 - _()_
 - _()_
 - _()_

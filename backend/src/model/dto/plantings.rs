@@ -44,11 +44,13 @@ pub struct PlantingDto {
     /// It is used to display the full plant name on a map
     /// even if a user does not have access to the seed.
     pub additional_name: Option<String>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
 }
 
 /// Used to create a new planting.
 #[typeshare]
-#[derive(Debug, Clone, Default, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct NewPlantingDto {
     /// The id of the planting.
@@ -78,6 +80,8 @@ pub struct NewPlantingDto {
     pub action_id: Uuid,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
 }
 
 /// Used to differentiate between different update operations on plantings.

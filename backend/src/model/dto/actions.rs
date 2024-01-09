@@ -88,6 +88,7 @@ pub struct CreatePlantActionPayload {
     remove_date: Option<NaiveDate>,
     seed_id: Option<i32>,
     additional_name: Option<String>,
+    is_area: bool,
 }
 
 impl CreatePlantActionPayload {
@@ -110,6 +111,7 @@ impl CreatePlantActionPayload {
             remove_date: payload.remove_date,
             seed_id: payload.seed_id,
             additional_name: payload.additional_name,
+            is_area: payload.is_area,
         }
     }
 }

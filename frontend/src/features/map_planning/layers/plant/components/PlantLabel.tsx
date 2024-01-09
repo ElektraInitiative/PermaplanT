@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Label } from 'react-konva';
 import { PlantingDto } from '@/api_types/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
@@ -11,7 +11,7 @@ export interface PlantLabelProps {
   planting: PlantingDto;
 }
 
-export const PlantLabel = ({ planting }: PlantLabelProps) => {
+export const PlantLabel = React.memo(function PlantLabel({ planting }: PlantLabelProps) {
   const labelRef = useRef<Konva.Label>(null);
   const [labelWidth, setLabelWidth] = useState(0);
   const { data: plant } = useFindPlantById({ plantId: planting.plantId });
@@ -26,6 +26,9 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
     return <Label></Label>;
   }
 
+  const offsetWhenAreaX = planting.isArea ? planting.width / 2 : 0;
+  const offsetWhenAreaY = planting.isArea ? planting.height / 2 : 0;
+
   const labelOffsetX = labelWidth / 2;
   const labelOffsetY = (planting.height / 2) * planting.scaleY * 1.1;
 
@@ -33,9 +36,11 @@ export const PlantLabel = ({ planting }: PlantLabelProps) => {
     <MapLabel
       listening={false}
       ref={labelRef}
-      x={planting.x - labelOffsetX}
-      y={planting.y + labelOffsetY}
+      x={planting.x}
+      y={planting.y}
+      offsetX={labelOffsetX - offsetWhenAreaX}
+      offsetY={-labelOffsetY - offsetWhenAreaY}
       content={commonName(plant)}
     />
   );
-};
+});

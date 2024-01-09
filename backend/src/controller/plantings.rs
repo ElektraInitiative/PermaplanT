@@ -76,12 +76,11 @@ pub async fn find(
 #[post("")]
 pub async fn create(
     path: Path<i32>,
-    json: Json<NewPlantingDto>,
+    new_planting: Json<NewPlantingDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let new_planting = json.0;
-    let dto = plantings::create(new_planting.clone(), &app_data).await?;
+    let dto = plantings::create(*new_planting, &app_data).await?;
 
     app_data
         .broadcaster
@@ -118,16 +117,15 @@ pub async fn create(
 #[patch("/{planting_id}")]
 pub async fn update(
     path: Path<(i32, Uuid)>,
-    json: Json<UpdatePlantingDto>,
+    update_planting: Json<UpdatePlantingDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let (map_id, planting_id) = path.into_inner();
-    let update_planting = json.0;
 
-    let planting = plantings::update(planting_id, update_planting, &app_data).await?;
+    let planting = plantings::update(planting_id, *update_planting, &app_data).await?;
 
-    let action = match update_planting {
+    let action = match *update_planting {
         UpdatePlantingDto::Transform(action_dto) => Action::TransformPlanting(
             TransformPlantActionPayload::new(&planting, user_info.id, action_dto.action_id),
         ),
@@ -173,12 +171,11 @@ pub async fn update(
 #[delete("/{planting_id}")]
 pub async fn delete(
     path: Path<(i32, Uuid)>,
-    json: Json<DeletePlantingDto>,
+    delete_planting: Json<DeletePlantingDto>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let (map_id, planting_id) = path.into_inner();
-    let delete_planting = json.0;
 
     plantings::delete_by_id(planting_id, &app_data).await?;
 
