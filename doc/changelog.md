@@ -11,7 +11,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Refactor react query error handling _(Daniel Steinkogler)_
-- _()_
+- Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
 - Enable automatic image scaling in base layer _(Moritz)_
 - _()_

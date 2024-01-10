@@ -10,7 +10,8 @@ use uuid::Uuid;
 use crate::{
     config::auth::user_info::UserInfo,
     model::dto::actions::{
-        Action, UpdatePlantingAddDateActionPayload, UpdatePlantingRemoveDateActionPayload,
+        Action, UpdatePlantingAddDateActionPayload, UpdatePlantingNoteActionPayload,
+        UpdatePlantingRemoveDateActionPayload,
     },
 };
 use crate::{
@@ -123,9 +124,11 @@ pub async fn update(
 ) -> Result<HttpResponse> {
     let (map_id, planting_id) = path.into_inner();
 
-    let planting = plantings::update(planting_id, *update_planting, &app_data).await?;
+    let update_planting_data = update_planting.into_inner();
 
-    let action = match *update_planting {
+    let planting = plantings::update(planting_id, update_planting_data.clone(), &app_data).await?;
+
+    let action = match update_planting_data {
         UpdatePlantingDto::Transform(action_dto) => Action::TransformPlanting(
             TransformPlantActionPayload::new(&planting, user_info.id, action_dto.action_id),
         ),
@@ -144,6 +147,9 @@ pub async fn update(
                 action_dto.action_id,
             ))
         }
+        UpdatePlantingDto::UpdateNote(action_dto) => Action::UpdatePlatingNotes(
+            UpdatePlantingNoteActionPayload::new(&planting, user_info.id, action_dto.action_id),
+        ),
     };
 
     app_data.broadcaster.broadcast(map_id, action).await;
