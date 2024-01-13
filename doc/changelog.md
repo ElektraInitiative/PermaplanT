@@ -32,6 +32,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 08.01.2024 9:00 _(Markus Raab, Christoph @chr_schr)_
 - _()_
 - _()_
+- Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
 - _()_
 - Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
 - Fix broken .env reading for scraper _(Paul)_
