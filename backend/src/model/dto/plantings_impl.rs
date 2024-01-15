@@ -34,6 +34,7 @@ impl From<Planting> for PlantingDto {
             seed_id: planting.seed_id,
             is_area: planting.is_area,
             additional_name: None,
+            planting_notes: planting.notes,
         }
     }
 }
@@ -57,6 +58,7 @@ impl From<NewPlantingDto> for Planting {
             is_area: dto.is_area,
             //create_date: Utc::now().date_naive(),
             //delete_date: None,
+            notes: None,
         }
     }
 }
@@ -83,6 +85,10 @@ impl From<UpdatePlantingDto> for UpdatePlanting {
             },
             UpdatePlantingDto::UpdateRemoveDate(dto) => Self {
                 remove_date: Some(dto.remove_date),
+                ..Default::default()
+            },
+            UpdatePlantingDto::UpdateNote(dto) => Self {
+                notes: Some(dto.notes),
                 ..Default::default()
             },
         }

@@ -30,6 +30,8 @@ pub enum Action {
     MovePlanting(MovePlantActionPayload),
     /// An action used to broadcast transformation of a plant.
     TransformPlanting(TransformPlantActionPayload),
+    /// An action used to broadcast updating a Markdown notes of a plant.
+    UpdatePlatingNotes(UpdatePlantingNoteActionPayload),
     /// An action used to broadcast creation of a baseLayerImage.
     CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
     /// An action used to broadcast update of a baseLayerImage.
@@ -55,6 +57,7 @@ impl Action {
             Self::DeletePlanting(payload) => payload.action_id,
             Self::MovePlanting(payload) => payload.action_id,
             Self::TransformPlanting(payload) => payload.action_id,
+            Self::UpdatePlatingNotes(payload) => payload.action_id,
             Self::CreateBaseLayerImage(payload) => payload.action_id,
             Self::UpdateBaseLayerImage(payload) => payload.action_id,
             Self::DeleteBaseLayerImage(payload) => payload.action_id,
@@ -189,6 +192,33 @@ impl TransformPlantActionPayload {
             rotation: payload.rotation,
             scale_x: payload.scale_x,
             scale_y: payload.scale_y,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlatingNotes`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingNoteActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    notes: String,
+}
+
+impl UpdatePlantingNoteActionPayload {
+    #[must_use]
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        let notes = payload
+            .planting_notes
+            .as_ref()
+            .map_or_else(String::new, ToOwned::to_owned);
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            notes,
         }
     }
 }

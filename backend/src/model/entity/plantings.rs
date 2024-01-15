@@ -48,6 +48,8 @@ pub struct Planting {
     /// and is still able to be restored.
     //pub delete_date: Option<NaiveDate>,
     */
+    /// Notes about the planting in Markdown.
+    pub notes: Option<String>,
 }
 
 /// The `UpdatePlanting` entity.
@@ -74,4 +76,6 @@ pub struct UpdatePlanting {
     pub remove_date: Option<Option<NaiveDate>>,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
+    /// Notes about the planting in Markdown.
+    pub notes: Option<String>,
 }

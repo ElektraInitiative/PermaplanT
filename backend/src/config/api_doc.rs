@@ -17,7 +17,8 @@ use crate::{
         dto::{
             plantings::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
-                UpdatePlantingDto,
+                UpdateAddDatePlantingDto, UpdatePlantingDto, UpdatePlantingNoteDto,
+                UpdateRemoveDatePlantingDto,
             },
             BaseLayerImageDto, ConfigDto, Coordinates, GainedBlossomsDto, GuidedToursDto, LayerDto,
             MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto,
@@ -170,7 +171,10 @@ struct BaseLayerImagesApiDoc;
             NewPlantingDto,
             UpdatePlantingDto,
             TransformPlantingDto,
-            MovePlantingDto
+            MovePlantingDto,
+            UpdateAddDatePlantingDto,
+            UpdateRemoveDatePlantingDto,
+            UpdatePlantingNoteDto,
         )
     ),
     modifiers(&SecurityAddon)
