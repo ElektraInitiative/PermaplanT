@@ -139,7 +139,6 @@ export class MoveDrawingAction
 
   reverse(state: TrackedMapState) {
     const drawings = state.layers.drawing.objects.filter((obj) => this._ids.includes(obj.id));
-    console.log(drawings);
 
     if (!drawings.length) {
       return null;

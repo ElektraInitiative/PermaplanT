@@ -77,6 +77,21 @@ export function DrawingLayerToolForm() {
           >
             <CircleIcon></CircleIcon>
           </IconButton>
+
+          <IconButton
+            isToolboxIcon={true}
+            renderAsActive={selectedShape === 'bezierPolygon'}
+            onClick={() => {
+              activateDrawingMode('bezierPolygon');
+
+              setStatusPanelContent(
+                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_ellipse_hint')} />,
+              );
+            }}
+            title={t('drawingLayerForm:draw_ellipse_tooltip')}
+          >
+            <CircleIcon></CircleIcon>
+          </IconButton>
         </div>
       </div>
 

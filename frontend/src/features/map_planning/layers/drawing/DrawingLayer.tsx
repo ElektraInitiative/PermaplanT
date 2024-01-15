@@ -2,6 +2,7 @@ import useMapStore from '../../store/MapStore';
 import { LayerConfigWithListenerRegister } from '../../types/layer-config';
 import { isDrawingLayerActive } from '../../utils/layer-utils';
 import { CreateDrawingAction, MoveDrawingAction, TransformDrawingAction } from './actions';
+import BezierPolygon from './shapes/BezierPolygon';
 import { DrawingDto, EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
 import { LayerType } from '@/api_types/definitions';
 import Konva from 'konva';
@@ -34,7 +35,7 @@ type Line = {
   strokeWidth: number;
   x: number;
   y: number;
-  points: number[];
+  points: number[][];
 };
 
 function DrawingLayer(props: DrawingLayerProps) {
@@ -80,9 +81,22 @@ function DrawingLayer(props: DrawingLayerProps) {
       };
     });
 
+  const bezierLines = drawingObjects
+    .filter((object) => object.type === 'bezierPolygon')
+    .map((object) => {
+      return {
+        ...object,
+        properties: object.properties as FreeLineProperties,
+      };
+    });
+
   const [newLine, setNewLine] = useState<Line>();
+  const [newBezierLine, setNewBezierLine] = useState<Line>();
+
   const [previewRectangle, setPreviewRectangle] = useState<Rectangle | undefined>();
   const [previewEllipse, setPreviewEllipse] = useState<Ellipse | undefined>();
+
+  const [activeBezierLine, setActiveBezierLine] = useState<string>();
 
   const isDrawing = useRef(false);
 
@@ -166,6 +180,31 @@ function DrawingLayer(props: DrawingLayerProps) {
     [executeAction, getSelectedLayerId, timelineDate],
   );
 
+  const createBezierLine = useCallback(
+    (line: Line) => {
+      console.log(line);
+      executeAction(
+        new CreateDrawingAction({
+          id: uuid.v4(),
+          layerId: getSelectedLayerId() ?? -1,
+          rotation: 0,
+          addDate: timelineDate,
+          type: 'bezierPolygon',
+          scaleX: 1,
+          scaleY: 1,
+          x: line.x,
+          y: line.y,
+          color: line.color,
+          properties: {
+            strokeWidth: line.strokeWidth,
+            points: line.points,
+          },
+        }),
+      );
+    },
+    [executeAction, getSelectedLayerId, timelineDate],
+  );
+
   const removePlantingFromSelection = (e: KonvaEventObject<MouseEvent>) => {
     const selectedDrawings = (foundDrawings: DrawingDto[], konvaNode: Konva.Node) => {
       const drawingNode = konvaNode.getAttr('object');
@@ -208,9 +247,8 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     if (!isShapeSelected || !isDrawingLayerActive()) return;
-    if (e.target.getStage() == null) return;
 
-    isDrawing.current = true;
+    if (e.target.getStage() == null) return;
 
     const stage = e.target.getStage();
     if (stage == null) return;
@@ -219,32 +257,56 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (pos == null) return;
 
     if (selectedShape == 'freeLine') {
+      isDrawing.current = true;
       setNewLine({
         strokeWidth: selectedStrokeWidth,
         color: selectedColor,
         x: pos.x,
         y: pos.y,
-        points: [0, 0],
+        points: [[0, 0]],
       });
     } else if (selectedShape == 'rectangle') {
+      isDrawing.current = true;
       setPreviewRectangle({ color: selectedColor, x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y });
     } else if (selectedShape == 'ellipse') {
+      isDrawing.current = true;
       setPreviewEllipse({ color: selectedColor, x: pos.x, y: pos.y, radiusX: 0, radiusY: 0 });
+    } else if (selectedShape == 'bezierPolygon') {
+      if (!newBezierLine) {
+        setNewBezierLine({
+          color: selectedColor,
+          strokeWidth: selectedStrokeWidth,
+          x: pos.x,
+          y: pos.y,
+          points: [],
+        });
+      }
+    }
+  };
+
+  const handleFinishBezierLine = () => {
+    if (selectedShape == 'bezierPolygon') {
+      if (newBezierLine) {
+        createBezierLine(newBezierLine);
+        setNewBezierLine(undefined);
+      }
     }
   };
 
   const handleDrawLine = (point: Vector2d) => {
     if (!newLine) return;
 
+    const flatPoints = newLine.points.flat();
+
     const distance = Math.sqrt(
-      Math.pow(point.x - newLine.points[newLine.points.length - 2], 2) +
-        Math.pow(point.y - newLine.points[newLine.points.length - 1], 2),
+      Math.pow(point.x - flatPoints[flatPoints.length - 2], 2) +
+        Math.pow(point.y - flatPoints[flatPoints.length - 1], 2),
     );
 
     if (distance > 10) {
       setNewLine({
         ...newLine,
-        points: [...newLine.points, point.x - newLine.x, point.y - newLine.y],
+        points: [...newLine.points, [point.x - newLine.x, point.y - newLine.y]],
       });
     }
   };
@@ -400,7 +462,6 @@ function DrawingLayer(props: DrawingLayerProps) {
   }, []);
 
   const handleTransformDrawing: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
-    console.log('transformend');
     const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
       return {
         id: node.id(),
@@ -416,7 +477,14 @@ function DrawingLayer(props: DrawingLayerProps) {
   }, [executeAction]);
 
   const handleMoveDrawing: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
-    const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
+    const transformer = useMapStore.getState().transformer.current;
+    const selectedDrawings = transformer?.getNodes().filter((d) => d.attrs.object);
+
+    if (!selectedDrawings || selectedDrawings.length == 0) return;
+
+    console.log(selectDrawings);
+
+    const updates = selectedDrawings.map((node) => {
       return {
         id: node.id(),
         x: Math.round(node.x()),
@@ -425,7 +493,14 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
     executeAction(new MoveDrawingAction(updates));
-  }, [executeAction]);
+  }, [executeAction, selectDrawings]);
+
+  useEffect(() => {
+    if (selectedShape != 'bezierPolygon' && newBezierLine) {
+      createBezierLine(newBezierLine);
+      setNewBezierLine(undefined);
+    }
+  }, [selectedShape]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!props.listening) {
@@ -451,9 +526,57 @@ function DrawingLayer(props: DrawingLayerProps) {
     };
   }, [handleMoveDrawing, handleTransformDrawing, handleSelectDrawing, props.listening]);
 
+  const updateNewBezierLinePoints = (points: number[][]) => {
+    if (!newBezierLine) return;
+
+    setNewBezierLine({
+      ...newBezierLine,
+      points: points,
+    });
+  };
+
+  const handleBezierLineClicked = (e: KonvaEventObject<MouseEvent>) => {
+    if (!isDrawingLayerActive() || isShapeSelected()) {
+      return;
+    }
+
+    handleShapeClicked(e);
+
+    if (e.target.attrs.object) {
+      setActiveBezierLine(e.target.attrs.object.id);
+    }
+  };
+
   return (
     <>
       <Layer {...layerProps} name={`${LayerType.Drawing}`}>
+        {bezierLines.map((bezierLine, i) => (
+          <BezierPolygon
+            key={`bezier-line-${i}`}
+            object={bezierLine}
+            onLineClick={handleBezierLineClicked}
+            editModeActive={activeBezierLine === bezierLine.id}
+            drawingModeActive={activeBezierLine === bezierLine.id}
+            onPointsChanged={console.log}
+            initialPoints={bezierLine.properties.points}
+            strokeWidth={bezierLine.properties.strokeWidth}
+            color={bezierLine.color}
+          ></BezierPolygon>
+        ))}
+
+        {newBezierLine && (
+          <BezierPolygon
+            key={`new-bezier-line`}
+            onFinishLine={handleFinishBezierLine}
+            onPointsChanged={updateNewBezierLinePoints}
+            initialPoints={newBezierLine.points}
+            drawingModeActive={selectedShape == 'bezierPolygon'}
+            editModeActive={selectedShape == 'bezierPolygon'}
+            strokeWidth={selectedStrokeWidth}
+            color={selectedColor}
+          ></BezierPolygon>
+        )}
+
         {lines.map((line, i) => (
           <Line
             id={line.id}
@@ -465,7 +588,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             y={line.y}
             scaleX={line.scaleX}
             scaleY={line.scaleY}
-            points={line.properties.points}
+            points={line.properties.points.flat()}
             stroke={line.color}
             strokeWidth={line.properties.strokeWidth}
             tension={0.1}
@@ -485,7 +608,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             key={'new-line'}
             x={newLine.x}
             y={newLine.y}
-            points={newLine.points}
+            points={newLine.points.flat()}
             stroke={newLine.color}
             strokeWidth={newLine.strokeWidth}
             tension={0.2}
