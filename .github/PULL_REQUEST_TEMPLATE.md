@@ -8,11 +8,11 @@ Check relevant points but **please do not remove entries**.
 These points need to be fulfilled for every PR.
 -->
 
+- [ ] The PR is rebased with current master
 - [ ] I added a line to [changelog.md](/doc/changelog.md)
-- [ ] The PR is rebased with current master.
-- [ ] Details of what you changed are in commit messages.
-- [ ] References to issues, e.g. `close #X`, are in the commit messages and changelog.
-- [ ] The buildserver is happy.
+- [ ] Details of what I changed are in the commit messages
+- [ ] References to issues, e.g. `close #X`, are in the commit messages and changelog
+- [ ] The buildserver is happy
 
 <!--
 If you have any troubles fulfilling these criteria, please write about the trouble as comment in the PR.
@@ -26,7 +26,6 @@ For documentation fixes, spell checking, and similar none of these points below 
 Otherwise please check these points when getting a PR done:
 -->
 
-- [ ] I have installed and I am using [pre-commit hooks](../doc/contrib/README.md#Hooks)
 - [ ] I fully described what my PR does in the documentation
 - [ ] I fixed all affected documentation
 - [ ] I fixed the introduction tour
@@ -41,6 +40,15 @@ Otherwise please check these points when getting a PR done:
 - [ ] Code is conforming to [our Guidelines](/doc/guidelines)
 - [ ] Code is consistent to [our Design Decisions](/doc/decisions)
 - [ ] Exceptions to any guidelines are documented
+
+## First Time Checklist
+
+<!--
+These points are only relevant when creating a PR the first time.
+-->
+
+- [ ] I have installed and I am using [pre-commit hooks](../doc/contrib/README.md#Hooks)
+- [ ] I am using [Tailwind CSS Linting](https://tailwindcss.com/blog/introducing-linting-for-tailwindcss-intellisense)
 
 ## Review
 
