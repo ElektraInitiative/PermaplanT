@@ -1,3 +1,7 @@
+import { KonvaEventObject } from 'konva/lib/Node';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Circle, Group, Line } from 'react-konva';
 import { UpdateMapGeometry } from '@/features/map_planning/layers/base/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
@@ -8,18 +12,11 @@ import {
   flattenRing,
   insertPointIntoLineSegmentWithLeastDistance,
 } from '@/features/map_planning/utils/PolygonUtils';
+import { useIsBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { warningToastGrouped } from '@/features/toasts/groupedToast';
-import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
-import { KonvaEventObject } from 'konva/lib/Node';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Circle, Group, Line } from 'react-konva';
+import { colors } from '@/utils/colors';
 
-export interface PolygonProps extends LayerConfigWithListenerRegister {
-  show: boolean;
-}
-
-export const MapGeometryEditor = (props: PolygonProps) => {
+export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
   const { t } = useTranslation('polygon');
   const executeAction = useMapStore((state) => state.executeAction);
   const trackedState = useMapStore((map) => map.trackedState);
@@ -32,6 +29,7 @@ export const MapGeometryEditor = (props: PolygonProps) => {
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
   );
   const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
+  const isBaseLayerActive = useIsBaseLayerActive();
 
   // The Konva-Group of this component is not listening while add mode is active.
   useEffect(() => {
@@ -108,7 +106,7 @@ export const MapGeometryEditor = (props: PolygonProps) => {
         key={`polygon-point-${index}`}
         x={point.x}
         y={point.y}
-        fill={COLOR_EDITOR_HIGH_VISIBILITY}
+        fill={colors.highlight.DEFAULT}
         radius={editorLongestSide / 200}
         onClick={(e) => handlePointSelect(e)}
         onDragStart={(e) => handlePointSelect(e)}
@@ -119,13 +117,13 @@ export const MapGeometryEditor = (props: PolygonProps) => {
 
   return (
     <Group
-      visible={props.show}
+      visible={isBaseLayerActive}
       listening={polygonManipulationState === 'move' || polygonManipulationState === 'remove'}
     >
       <Line
         listening={true}
         points={flattenRing(mapGeometry.rings[0])}
-        stroke={COLOR_EDITOR_HIGH_VISIBILITY}
+        stroke={colors.highlight.DEFAULT}
         strokeWidth={editorLongestSide / 500}
         lineCap="round"
         closed={true}

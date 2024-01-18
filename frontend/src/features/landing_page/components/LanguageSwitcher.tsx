@@ -1,6 +1,6 @@
-import filterObject from '../../../utils/filterObject';
 import { useTranslation } from 'react-i18next';
 import Select, { ClassNamesConfig, SingleValueProps, StylesConfig } from 'react-select';
+import filterObject from '../../../utils/filterObject';
 
 const languages = [
   { value: 'en', label: 'English' },

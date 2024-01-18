@@ -14,8 +14,10 @@
   The user has opened the app and has selected the warnings layer.
 - **Main success scenario:**
   - Warnings can be individual elements or connecting two elements, when modifying elements on the map:
-    - shade mismatch
     - nearby antagonists
+    - shade mismatch
+    - hydrology mismatch
+    - plant is on unsuitable zone
   - The user successfully adds, edits, moves and hides warnings.
 - **Alternative scenario:**
   The user accidentally adds, edits, moves or hides the wrong warnings and uses the app's undo function to correct the mistake.

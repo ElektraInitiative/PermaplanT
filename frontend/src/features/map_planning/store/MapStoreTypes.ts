@@ -1,4 +1,7 @@
-import { convertToDateString } from '../utils/date-utils';
+import Konva from 'konva';
+import { Node } from 'konva/lib/Node';
+import * as uuid from 'uuid';
+import { StateCreator } from 'zustand';
 import {
   BaseLayerImageDto,
   LayerDto,
@@ -11,10 +14,7 @@ import {
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
-import Konva from 'konva';
-import { Node } from 'konva/lib/Node';
-import * as uuid from 'uuid';
-import { StateCreator } from 'zustand';
+import { convertToDateString } from '../utils/date-utils';
 
 import Vector2d = Konva.Vector2d;
 
@@ -165,6 +165,20 @@ export interface TrackedMapSlice {
  */
 export type History = Array<Action<unknown, unknown>>;
 
+type SelectionRectAttributes = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  isVisible: boolean;
+  boundingBox: {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  };
+};
+
 /**
  * Part of store which is unaffected by the History
  */
@@ -172,6 +186,8 @@ export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
   tooltipRef: React.RefObject<Konva.Label>;
+  selectionRectAttributes: SelectionRectAttributes;
+  updateSelectionRect: (update: React.SetStateAction<SelectionRectAttributes>) => void;
   updateViewRect: (bounds: ViewRect) => void;
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   updateSelectedLayer: (selectedLayer: LayerDto | FrontendOnlyLayerType) => void;

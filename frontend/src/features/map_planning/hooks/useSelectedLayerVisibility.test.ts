@@ -1,8 +1,8 @@
+import { renderHook } from '@testing-library/react';
+import { LayerDto, LayerType } from '@/api_types/definitions';
 import useMapStore from '../store/MapStore';
 import { UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from '../store/MapStoreTypes';
 import { useSelectedLayerVisibility } from './useSelectedLayerVisibility';
-import { LayerDto, LayerType } from '@/api_types/definitions';
-import { renderHook } from '@testing-library/react';
 
 describe('useSelectedLayerVisibility', () => {
   test('should return base layer as selected and visible', () => {

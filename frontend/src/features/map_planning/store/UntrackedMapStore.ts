@@ -1,18 +1,19 @@
-import { convertToDate } from '../utils/date-utils';
-import { filterVisibleObjects } from '../utils/filterVisibleObjects';
-import {
-  TrackedMapSlice,
-  UNTRACKED_DEFAULT_STATE,
-  UntrackedMapSlice,
-  ViewRect,
-} from './MapStoreTypes';
-import { clearInvalidSelection, typeOfLayer } from './utils';
-import { LayerType, Shade, ShadingDto } from '@/api_types/definitions';
-import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
+import { LayerType, Shade, ShadingDto } from '@/api_types/definitions';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
+import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
+import { convertToDate } from '../utils/date-utils';
+import { filterVisibleObjects } from '../utils/filterVisibleObjects';
+import {
+  ViewRect,
+  TrackedMapSlice,
+  UNTRACKED_DEFAULT_STATE,
+  UntrackedMapSlice,
+} from './MapStoreTypes';
+import { clearInvalidSelection, typeOfLayer } from './utils';
 
 export const createUntrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -23,6 +24,35 @@ export const createUntrackedMapSlice: StateCreator<
   untrackedState: UNTRACKED_DEFAULT_STATE,
   stageRef: createRef<Konva.Stage>(),
   tooltipRef: createRef(),
+  selectionRectAttributes: {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    isVisible: false,
+    boundingBox: {
+      x1: 0,
+      y1: 0,
+      x2: 0,
+      y2: 0,
+    },
+  },
+  updateSelectionRect(update: React.SetStateAction<SelectionRectAttrs>) {
+    if (typeof update === 'function') {
+      set((state) => ({
+        ...state,
+        selectionRectAttributes: update(state.selectionRectAttributes),
+      }));
+    } else {
+      set((state) => ({
+        ...state,
+        selectionRectAttributes: {
+          ...state.selectionRectAttributes,
+          ...update,
+        },
+      }));
+    }
+  },
   updateViewRect(bounds: ViewRect) {
     set((state) => ({
       ...state,

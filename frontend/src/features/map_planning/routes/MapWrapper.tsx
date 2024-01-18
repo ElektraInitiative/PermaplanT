@@ -1,133 +1,30 @@
-import { getMap } from '../api/getMap';
-import { getPlantings } from '../api/getPlantings';
+import { useRef, useEffect } from 'react';
+import { ShepherdTour } from 'react-shepherd';
+import { LayerType, LayerDto } from '@/api_types/definitions';
+import { createAPI } from '@/config/axios';
+import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { EditorMap } from '../components/EditorMap';
-import { useGetLayers } from '../hooks/useGetLayers';
+import {
+  useBaseLayer,
+  useGetLayers,
+  useInvalidateMapQueries,
+  useMap,
+  usePlantLayer,
+  useShadeLayer,
+} from '../hooks/mapEditorHookApi';
+import { useTourStatus } from '../hooks/tourHookApi';
 import { useMapId } from '../hooks/useMapId';
-import { useTourStatus } from '../hooks/useTourStatus';
-import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
 import { mapEditorSteps, tourOptions } from '../utils/EditorTour';
 import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
-import { LayerType, LayerDto } from '@/api_types/definitions';
-import { createAPI } from '@/config/axios';
-import { QUERY_KEYS } from '@/config/react_query';
-import { getShadings } from '@/features/map_planning/api/getShadings';
-import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
-import { useSafeAuth } from '@/hooks/useSafeAuth';
-import { useQuery } from '@tanstack/react-query';
-import { useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ShepherdOptionsWithType, ShepherdTour } from 'react-shepherd';
 
 /**
  * Extracts the default layer from the list of layers.
  */
-function getDefaultLayer(layers: LayerDto[], layerType: LayerType) {
-  return layers.find((l) => l.type_ === layerType && !l.is_alternative);
-}
-
-/**
- * Parameters for the useLayer types of hooks.
- */
-type UseLayerParams = {
-  mapId: number;
-  layerId: number;
-  enabled?: boolean;
-};
-
-/**
- * Hook that initializes the plant layer by fetching all plantings
- * and adding them to the store.
- */
-function usePlantLayer({ mapId, layerId }: UseLayerParams) {
-  const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
-  const { t } = useTranslation(['plantSearch']);
-
-  const query = useQuery({
-    queryKey: [QUERY_KEYS.PLANTINGS, mapId, { layerId, fetchDate }],
-    queryFn: () => getPlantings(mapId, { layer_id: layerId, relative_to_date: fetchDate }),
-    // We want to refetch manually.
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-    cacheTime: 0,
-    enabled: Boolean(layerId),
-  });
-
-  if (query.error) {
-    console.error(query.error);
-    errorToastGrouped(t('plantSearch:error_initializing_layer'), { autoClose: false });
-  }
-
-  const data = query.data;
-  useEffect(() => {
-    if (!data) return;
-
-    useMapStore.getState().setTimelineBounds(data.from, data.to);
-    useMapStore.getState().initPlantLayer(data.results);
-  }, [mapId, data]);
-
-  return query;
-}
-
-/**
- * Hook that initializes the base layer by fetching it and adding it to the store.
- */
-function useBaseLayer({ mapId, layerId }: UseLayerParams) {
-  const query = useQuery({
-    queryKey: ['baselayer', mapId, layerId],
-    queryFn: () => getBaseLayerImage(mapId, layerId),
-    refetchOnWindowFocus: false,
-    cacheTime: 0,
-    staleTime: Infinity,
-    enabled: Boolean(layerId),
-  });
-
-  if (query.error) {
-    console.error(query.error);
-  }
-
-  useEffect(() => {
-    if (!query?.data) return;
-
-    useMapStore.getState().initBaseLayer(query.data);
-  }, [mapId, layerId, query?.data]);
-
-  return query;
-}
-
-/**
- * Hook that initializes the shade layer by fetching it and adding it to the store.
- */
-function useShadeLayer({ mapId, layerId }: UseLayerParams) {
-  const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
-  const { t } = useTranslation(['shadeLayer']);
-
-  const query = useQuery({
-    queryKey: [QUERY_KEYS.SHADINGS, mapId, { layerId, fetchDate }],
-    queryFn: () => getShadings(mapId, { layer_id: layerId, relative_to_date: fetchDate }),
-    // We want to refetch manually.
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-    cacheTime: 0,
-    enabled: Boolean(layerId),
-  });
-
-  if (query.error) {
-    console.error(query.error);
-    errorToastGrouped(t('shadeLayer:error_loading_shadings'), { autoClose: false });
-  }
-
-  const data = query.data;
-  useEffect(() => {
-    if (!data) return;
-
-    useMapStore.getState().setTimelineBounds(data.from, data.to);
-    useMapStore.getState().initShadeLayer(data.results);
-  }, [mapId, data]);
-
-  return query;
+function getDefaultLayer(layerType: LayerType, layers?: LayerDto[]) {
+  return layers?.find((l) => l.type_ === layerType && !l.is_alternative);
 }
 
 /**
@@ -135,20 +32,8 @@ function useShadeLayer({ mapId, layerId }: UseLayerParams) {
  */
 function useInitializeMap() {
   const mapId = useMapId();
-  const { data: layers, error } = useGetLayers(mapId);
-  const { t } = useTranslation(['layers']);
-  const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
-
-  if (error) {
-    console.error(error);
-    errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
-  }
-
-  const mapQuery = useQuery({
-    queryKey: ['map', mapId],
-    queryFn: () => getMap(mapId),
-    refetchOnWindowFocus: false,
-  });
+  const { data: layers } = useGetLayers(mapId);
+  const { data: map } = useMap(mapId);
 
   useEffect(() => {
     if (!layers) return;
@@ -159,52 +44,62 @@ function useInitializeMap() {
     }
   }, [layers]);
 
-  const plantLayer = getDefaultLayer(layers ?? [], LayerType.Plants);
-  const baseLayer = getDefaultLayer(layers ?? [], LayerType.Base);
-  const shadeLayer = getDefaultLayer(layers ?? [], LayerType.Shade);
+  const plantLayer = getDefaultLayer(LayerType.Plants, layers);
+  const baseLayer = getDefaultLayer(LayerType.Base, layers);
+  const shadeLayer = getDefaultLayer(LayerType.Shade, layers);
 
+  // The casts are fine because we know that the queries only execute once they are enabled.
   usePlantLayer({
     mapId,
-    // The enabled flag prevents the query from being executed with an invalid layer id.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-    layerId: plantLayer?.id!,
+    layerId: plantLayer?.id as number,
+    enabled: Boolean(plantLayer),
   });
 
   useBaseLayer({
     mapId,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-    layerId: baseLayer?.id!,
+    layerId: baseLayer?.id as number,
+    enabled: Boolean(baseLayer),
   });
 
+  // set the map id in the store
   useShadeLayer({
     mapId,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
     layerId: shadeLayer?.id!,
+    enabled: Boolean(shadeLayer),
   });
 
   // select plant layer per default
   useEffect(() => {
-    if (plantLayer) {
-      updateSelectedLayer(plantLayer);
-    }
+    useMapStore.setState((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        mapId,
+      },
+    }));
+  }, [mapId]);
 
-    if (baseLayer) {
-      useMapStore.setState((state) => ({
-        ...state,
-        untrackedState: {
-          ...state.untrackedState,
-          selectedLayer: baseLayer,
-          mapId,
-        },
-        trackedState: {
-          ...state.trackedState,
-          mapGeometry: mapQuery.data?.geometry as PolygonGeometry,
-        },
-      }));
-    }
-  }, [mapId, baseLayer, plantLayer, mapQuery?.data]); // eslint-disable-line react-hooks/exhaustive-deps
+  // select plant layer per default
+  useEffect(() => {
+    if (!plantLayer) return;
+    useMapStore.getState().updateSelectedLayer(plantLayer);
+  }, [plantLayer]);
 
-  const isLoading = !layers;
+  // initialize the map geometry
+  useEffect(() => {
+    if (!map) return;
+
+    useMapStore.setState((state) => ({
+      ...state,
+      trackedState: {
+        ...state.trackedState,
+        mapGeometry: map.geometry as PolygonGeometry,
+      },
+    }));
+  }, [map]);
+
+  const isLoading = !layers || !map;
 
   if (isLoading) {
     return null;
@@ -219,11 +114,14 @@ function useInitializeMap() {
  * the user navigates to a different map.
  */
 function useCleanMapStore() {
+  const invalidateMapQueries = useInvalidateMapQueries();
+
   useEffect(() => {
     return () => {
       useMapStore.getState().__resetStore();
+      invalidateMapQueries();
     };
-  }, []);
+  }, [invalidateMapQueries]);
 }
 
 function useMapUpdates() {
@@ -269,16 +167,13 @@ export function MapWrapper() {
   const mapData = useInitializeMap();
   useMapUpdates();
 
-  const tourStatus = useTourStatus();
+  const { data: tourStatus } = useTourStatus();
 
-  if (!mapData) {
+  if (!mapData || !tourStatus) {
     return null;
   }
 
-  let steps: ShepherdOptionsWithType[] = [];
-  if (tourStatus && !tourStatus.editor_tour_completed) {
-    steps = mapEditorSteps;
-  }
+  const steps = !tourStatus.editor_tour_completed ? mapEditorSteps : [];
 
   return (
     <ReadOnlyModeContextProvider>

@@ -1,0 +1,10 @@
+.info_text__container {
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  display: grid;
+  column-gap: 0.5em;
+  grid-template-columns: 30px 5px minmax(30px, auto) auto;
+  pointer-events: none;
+}

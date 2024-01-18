@@ -1,5 +1,5 @@
-import { DeletePlantAction } from '../actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { DeletePlantAction } from '../actions';
 
 export function useDeleteSelectedPlantings() {
   const selectedPlantings = useMapStore(

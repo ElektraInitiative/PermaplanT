@@ -1,12 +1,11 @@
-import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
+import { useCallback, useEffect, useState } from 'react';
+import { Circle, Group, Layer, Line } from 'react-konva';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
 import { MapGeometryEditor } from '@/features/map_planning/layers/base/components/MapGeometryEditor';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
-import { isBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
-import { COLOR_EDITOR_HIGH_VISIBILITY } from '@/utils/constants';
-import { useCallback, useEffect, useState } from 'react';
-import { Circle, Group, Layer, Line } from 'react-konva';
+import { colors } from '@/utils/colors';
+import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 
 type BaseLayerProps = LayerConfigWithListenerRegister;
 
@@ -80,7 +79,7 @@ const BaseLayer = (props: BaseLayerProps) => {
             x={untrackedBaseLayerState.autoScale.measurePoint1.x}
             y={untrackedBaseLayerState.autoScale.measurePoint1.y}
             radius={editorLongestSide / 250}
-            fill={COLOR_EDITOR_HIGH_VISIBILITY}
+            fill={colors.highlight.DEFAULT}
           />
         )}
         {untrackedBaseLayerState.autoScale.measurePoint2 && (
@@ -88,16 +87,16 @@ const BaseLayer = (props: BaseLayerProps) => {
             x={untrackedBaseLayerState.autoScale.measurePoint2.x}
             y={untrackedBaseLayerState.autoScale.measurePoint2.y}
             radius={editorLongestSide / 250}
-            fill={COLOR_EDITOR_HIGH_VISIBILITY}
+            fill={colors.highlight.DEFAULT}
           />
         )}
         <Line
           points={measurementLinePoints()}
           strokeWidth={editorLongestSide / 500}
-          stroke={COLOR_EDITOR_HIGH_VISIBILITY}
+          stroke={colors.highlight.DEFAULT}
         />
       </Group>
-      <MapGeometryEditor show={isBaseLayerActive()} {...props} />
+      <MapGeometryEditor {...props} />
     </Layer>
   );
 };

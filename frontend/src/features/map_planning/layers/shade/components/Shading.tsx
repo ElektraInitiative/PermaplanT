@@ -1,3 +1,7 @@
+import { KonvaEventObject, Node } from 'konva/lib/Node';
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Circle, Group, Line } from 'react-konva';
 import { Shade, ShadingDto } from '@/api_types/definitions';
 import { UpdateShadingAction } from '@/features/map_planning/layers/shade/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -11,18 +15,7 @@ import {
 } from '@/features/map_planning/utils/PolygonUtils';
 import { isUsingModifierKey } from '@/features/map_planning/utils/event-utils';
 import { warningToastGrouped } from '@/features/toasts/groupedToast';
-import {
-  COLOR_EDITOR_HIGH_VISIBILITY,
-  COLOR_LIGHT_SHADE,
-  COLOR_NONE,
-  COLOR_PARTIAL_SHADE,
-  COLOR_PERMANENT_DEEP_SHADE,
-  COLOR_PERMANENT_SHADE,
-} from '@/utils/constants';
-import { KonvaEventObject, Node } from 'konva/lib/Node';
-import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Circle, Group, Line } from 'react-konva';
+import { colors } from '@/utils/colors';
 
 export interface ShadingProps {
   shading: ShadingDto;
@@ -173,7 +166,7 @@ export function Shading({ shading, stageListenerRegister }: ShadingProps) {
         key={`shading-${shading.id}-point-${index}`}
         x={point.x}
         y={point.y}
-        fill={COLOR_EDITOR_HIGH_VISIBILITY}
+        fill={colors.highlight.DEFAULT}
         radius={editorLongestSide / 200}
         onClick={(e) => handlePointSelect(e)}
         onDragStart={(e) => handlePointSelect(e)}
@@ -188,7 +181,7 @@ export function Shading({ shading, stageListenerRegister }: ShadingProps) {
         onClick={handleClickOnShading}
         listening={true}
         points={flattenRing(geometry.rings[0])}
-        stroke={isShadingEdited ? COLOR_EDITOR_HIGH_VISIBILITY : COLOR_NONE}
+        stroke={isShadingEdited ? colors.highlight.DEFAULT : '#00000000'}
         fill={fillColorFromShadeType(shading.shade)}
         strokeWidth={editorLongestSide / 500}
         lineCap="round"
@@ -218,14 +211,14 @@ function isShadingElementSelected(shading: ShadingDto): boolean {
 function fillColorFromShadeType(shadeType: Shade) {
   switch (shadeType) {
     case Shade.NoShade:
-      return COLOR_NONE;
+      return colors.shadings.noShade.DEFAULT;
     case Shade.LightShade:
-      return COLOR_LIGHT_SHADE;
+      return colors.shadings.lightShade.DEFAULT;
     case Shade.PartialShade:
-      return COLOR_PARTIAL_SHADE;
+      return colors.shadings.partialShade.DEFAULT;
     case Shade.PermanentShade:
-      return COLOR_PERMANENT_SHADE;
+      return colors.shadings.permanentShade.DEFAULT;
     case Shade.PermanentDeepShade:
-      return COLOR_PERMANENT_DEEP_SHADE;
+      return colors.shadings.permanentDeepShade.DEFAULT;
   }
 }

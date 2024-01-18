@@ -42,6 +42,8 @@ pub enum Action {
     /// An action used to update the `remove_date` of a shading.
     UpdateShadingRemoveDate(UpdateShadingRemoveDateActionPayload),
 
+    /// An action used to broadcast updating a Markdown notes of a plant.
+    UpdatePlatingNotes(UpdatePlantingNoteActionPayload),
     /// An action used to broadcast creation of a baseLayerImage.
     CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
     /// An action used to broadcast update of a baseLayerImage.
@@ -67,6 +69,7 @@ impl Action {
             Self::DeletePlanting(payload) => payload.action_id,
             Self::MovePlanting(payload) => payload.action_id,
             Self::TransformPlanting(payload) => payload.action_id,
+            Self::UpdatePlatingNotes(payload) => payload.action_id,
             Self::CreateBaseLayerImage(payload) => payload.action_id,
             Self::UpdateBaseLayerImage(payload) => payload.action_id,
             Self::DeleteBaseLayerImage(payload) => payload.action_id,
@@ -105,6 +108,7 @@ pub struct CreatePlantActionPayload {
     remove_date: Option<NaiveDate>,
     seed_id: Option<i32>,
     additional_name: Option<String>,
+    is_area: bool,
 }
 
 impl CreatePlantActionPayload {
@@ -127,6 +131,7 @@ impl CreatePlantActionPayload {
             remove_date: payload.remove_date,
             seed_id: payload.seed_id,
             additional_name: payload.additional_name,
+            is_area: payload.is_area,
         }
     }
 }
@@ -326,6 +331,33 @@ impl UpdateShadingRemoveDateActionPayload {
             action_id,
             id: payload.id,
             remove_date: payload.remove_date,
+        }
+    }
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+/// The payload of the [`Action::UpdatePlatingNotes`].
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingNoteActionPayload {
+    user_id: Uuid,
+    action_id: Uuid,
+    id: Uuid,
+    notes: String,
+}
+
+impl UpdatePlantingNoteActionPayload {
+    #[must_use]
+    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
+        let notes = payload
+            .planting_notes
+            .as_ref()
+            .map_or_else(String::new, ToOwned::to_owned);
+        Self {
+            user_id,
+            action_id,
+            id: payload.id,
+            notes,
         }
     }
 }

@@ -1,9 +1,9 @@
-import { isDev } from '../env';
-import de from './de';
-import en from './en';
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
+import { isDev } from '../env';
+import de from './de';
+import en from './en';
 
 export const defaultNS = 'common';
 

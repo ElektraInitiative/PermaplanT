@@ -1,6 +1,6 @@
-import routes from '..';
-import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { Route, Routes, Navigate } from 'react-router-dom';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
+import routes from '..';
 
 function Pages() {
   const auth = useSafeAuth();
