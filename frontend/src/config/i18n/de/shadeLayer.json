@@ -5,10 +5,10 @@
       "add": "Klicke auf die Karte um einen neuen Punkt zur Beschattung hinzuzufügen.",
       "remove": "Klicke auf die Karte um einen Punkt aus der Beschattung zu entfernen.",
       "move": "Klicke auf einen Punkt der Beschattung um ihn an einen anderen Ort zu bewegen.",
-      "delete_point_forbidden": "Das Form dieser Schattierung muss mindestens drei Punkte enthalten."
+      "delete_point_forbidden": "Die Form dieser Schattierung muss mindestens drei Punkte enthalten."
     },
     "geometry_tool_form": {
-      "title": "Beschattung Bearbeiten",
+      "title": "Beschattung bearbeiten",
       "add_points": "Punkte hinzufügen",
       "delete_points": "Punkte entfernen",
       "move_points": "Punkte verschieben"
@@ -18,7 +18,7 @@
       "light_shade": "Leicht beschattet",
       "partial_shade": "Teilbeschattet",
       "permanent_shade": "Permanent beschattet",
-      "permanent_deep_shade": "Permanent Tief beschattet"
+      "permanent_deep_shade": "Permanent stark beschattet"
     },
     "left_toolbar": {
       "shading_amount_select_title": "Beschattungsart",
