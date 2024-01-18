@@ -64,9 +64,9 @@ export function Shading({ shading, stageListenerRegister }: ShadingProps) {
   const addShadingToSelection = (e: KonvaEventObject<MouseEvent>) => {
     addNodeToTransformer(e.currentTarget);
 
-    const currentPlantingSelection =
+    const currentShadingSelection =
       useMapStore.getState().untrackedState.layers.shade.selectedShadings ?? [];
-    selectShadings([...currentPlantingSelection, shading]);
+    selectShadings([...currentShadingSelection, shading]);
   };
 
   const handleMultiSelect = (e: KonvaEventObject<MouseEvent>, shading: ShadingDto) => {
