@@ -1,11 +1,8 @@
 import Konva from 'konva';
 import { Layer, Image } from 'react-konva';
 import { useHeatmap } from '@/features/map_planning/layers/heatmap/hooks/useHeatmap';
-import {
-  calculateGeometryStats,
-  Geometry,
-} from '@/features/map_planning/layers/heatmap/util/geometry';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { calculateGeometryStats } from '@/features/map_planning/utils/PolygonUtils';
 
 type HeatMapLayerProps = Konva.LayerConfig;
 
@@ -30,7 +27,7 @@ export const HeatMapLayer = (props: HeatMapLayerProps) => {
     return <Layer listening={false} />;
   }
 
-  const geometryStats = calculateGeometryStats(mapGeometry as Geometry);
+  const geometryStats = calculateGeometryStats(mapGeometry, 0);
 
   return (
     <Layer {...layerProps} listening={false}>

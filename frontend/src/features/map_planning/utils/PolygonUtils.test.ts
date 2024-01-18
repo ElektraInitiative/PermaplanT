@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import {
   EdgeRing,
   PolygonGeometry,
@@ -9,8 +10,8 @@ import {
   removePointAtIndex,
   setPointAtIndex,
   squareGeometryAroundPoint,
+  calculateGeometryStats,
 } from '@/features/map_planning/utils/PolygonUtils';
-import { expect } from 'vitest';
 
 describe('Flatten Polygon rings', () => {
   it('should return all x and y coordinates as an array', () => {
@@ -256,5 +257,33 @@ describe('Generate a new polygon', () => {
       ],
       srid: 0,
     });
+  });
+});
+
+describe('Geometry stats', () => {
+  it('calculates stats from geometry', () => {
+    const geometry = {
+      srid: '1234',
+      rings: [
+        [
+          { x: 0, y: 0 },
+          { x: 1, y: 0 },
+          { x: 1, y: 1 },
+          { x: 0, y: 1 },
+        ],
+        [
+          { x: 7, y: 8 },
+          { x: 8, y: 10 },
+        ],
+      ],
+    };
+
+    const geometryStats = calculateGeometryStats(geometry as PolygonGeometry, 0);
+    expect(geometryStats.width).toEqual(1);
+    expect(geometryStats.height).toEqual(1);
+    expect(geometryStats.maxX).toEqual(1);
+    expect(geometryStats.maxY).toEqual(1);
+    expect(geometryStats.minX).toEqual(0);
+    expect(geometryStats.minY).toEqual(0);
   });
 });

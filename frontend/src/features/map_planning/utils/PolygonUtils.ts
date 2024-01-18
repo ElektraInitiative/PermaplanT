@@ -1,9 +1,43 @@
 import { calculateDistance } from '@/features/map_planning/layers/base/util';
 import {
   EdgeRing,
+  GeometryStats,
   PolygonGeometry,
   PolygonPoint,
 } from '@/features/map_planning/types/PolygonTypes';
+
+/**
+ * Derive GeometryStats from a Geometry object.
+ * CAUTION: for simplicity reasons only the first edge loop will be considered.
+ *
+ * @param geometry The object for which GeometryStats should be generated.
+ */
+export function calculateGeometryStats(geometry: PolygonGeometry, ring: number): GeometryStats {
+  const firstEdgeRing = geometry.rings[ring];
+  let minX = firstEdgeRing[0].x;
+  let maxX = firstEdgeRing[0].x;
+  let minY = firstEdgeRing[0].y;
+  let maxY = firstEdgeRing[0].y;
+
+  for (const point of firstEdgeRing) {
+    minX = Math.min(point.x, minX);
+    maxX = Math.max(point.x, maxX);
+    minY = Math.min(point.y, minY);
+    maxY = Math.max(point.y, maxY);
+  }
+
+  const width = Math.abs(maxX - minX);
+  const height = Math.abs(maxY - minY);
+
+  return {
+    minX,
+    minY,
+    maxX,
+    maxY,
+    width,
+    height,
+  };
+}
 
 /**
  * Try to insert pointToInsert between the two points in geometry where the distance between pointToInsert and the

@@ -43,3 +43,15 @@ export type PolygonPoint = {
 };
 
 export const DEFAULT_SRID = 4326;
+
+/**
+ * Contains additional properties of a polygon that need to be derived in the frontend.
+ */
+export type GeometryStats = {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+  width: number;
+  height: number;
+};
