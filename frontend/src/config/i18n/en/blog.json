@@ -5,7 +5,7 @@
       "date": "03/01/2023",
       "content": "Nature demonstrates the astonishing results of the fusion of two compatible parts, like pollen with pistil. We merged botany and informatics, and behold - PermaplanT sprouted! An amazing team from various fields has been working hard to nurture the seedling. Join us and be a part of it!",
       "author": "Yvonne Markl",
-      "author_role": "Permaculture Expert",
+      "author_role": "Project Lead, Permaculture Expert",
       "picture": "Avatars/Yvonne_Markl.jpg"
     },
     {
@@ -13,7 +13,23 @@
       "date": "04/19/2023",
       "content": "We're giving our first sign of life with this website. Currently without the app as it is still being worked on. Speaking of signs of life: just in time for the launch, a special guest visited our PermaplanT founding garden, see gallery. There is only one species of tree frog in Austria, the grass green tree frog. This species uses bushes and trees as its habitat. What's even cooler is that it helps with gardening by gulping numerous pests with its sticky tongue.",
       "author": "Yvonne Markl",
-      "author_role": "Permaculture Expert",
+      "author_role": "Project Lead, Permaculture Expert",
+      "picture": "Avatars/Yvonne_Markl.jpg"
+    },
+    {
+      "title": "Inventory, naturally",
+      "date": "01/20/2024",
+      "content": "In future, you can also record your personal seeds or purchased seedlings in your PermaplanT inventory list. Your inventory gives you an overview of which seeds you already have at home and in what quantities. This allows you to automatically plan existing varieties on your map or those that are to be purchased or exchanged first.",
+      "author": "Yvonne Markl",
+      "author_role": "Project Lead, Permaculture Expert",
+      "picture": "Avatars/Yvonne_Markl.jpg"
+    },
+    {
+      "title": "Time travelling in the garden",
+      "date": "01/20/2024",
+      "content": "With the PermaplanT timeline, you always have an overview of all changes on your map, whether in the future or in the past. You can change the day, month and year of your choice at the click of a mouse. This allows you, for example, to plan all subsequent crops to the exact day or to document garden activities. Visual markers show you at what time actions were taken on the map.",
+      "author": "Yvonne Markl",
+      "author_role": "Project Lead, Permaculture Expert",
       "picture": "Avatars/Yvonne_Markl.jpg"
     }
   ]
