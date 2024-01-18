@@ -84,7 +84,7 @@ export default function SelectMenu<
   onChange,
   onInputChange,
   isClearable = true,
-  className = "",
+  className = '',
 }: SelectMenuProps<T, Option, IsMulti>) {
   const customClassNames: ClassNamesConfig<Option, IsMulti, GroupBase<Option>> = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',

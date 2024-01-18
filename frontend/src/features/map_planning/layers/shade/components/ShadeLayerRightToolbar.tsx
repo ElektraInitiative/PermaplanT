@@ -1,8 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { Shade } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import { StatusPanelContentWrapper } from '@/features/map_planning/components/statuspanel/StatusPanelContentWrapper';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { useTranslation } from 'react-i18next';
 
 export function ShadeLayerRightToolbar() {
   const { t } = useTranslation('shadeLayer');

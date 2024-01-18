@@ -1,6 +1,6 @@
-import type { GetFn } from './MapStoreTypes';
 import { LayerDto, LayerType } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
+import type { GetFn } from './MapStoreTypes';
 
 /**
  * If any of the selected nodes can not be found on the map, clear the selection.

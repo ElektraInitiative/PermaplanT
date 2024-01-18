@@ -1,3 +1,7 @@
+import { Vector2d } from 'konva/lib/types';
+import { useEffect } from 'react';
+import { Layer } from 'react-konva';
+import * as uuid from 'uuid';
 import { LayerType, Shade } from '@/api_types/definitions';
 import { CreateShadingAction } from '@/features/map_planning/layers/shade/actions';
 import { Shading } from '@/features/map_planning/layers/shade/components/Shading';
@@ -6,10 +10,6 @@ import { typeOfLayer } from '@/features/map_planning/store/utils';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { squareGeometryAroundPoint } from '@/features/map_planning/utils/PolygonUtils';
-import { Vector2d } from 'konva/lib/types';
-import { useEffect } from 'react';
-import { Layer } from 'react-konva';
-import * as uuid from 'uuid';
 
 type ShadeLayerProps = LayerConfigWithListenerRegister;
 export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerProps) {

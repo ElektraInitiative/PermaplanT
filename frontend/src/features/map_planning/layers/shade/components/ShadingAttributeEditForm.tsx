@@ -1,3 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useEffect } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 import { Shade, ShadingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SelectMenu from '@/components/Form/SelectMenu';
@@ -15,11 +20,6 @@ import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeCon
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 const ShadingAttributeEditFormSchema = z
   // The 'empty' value for the API is undefined, so we need to transform the empty string to undefined

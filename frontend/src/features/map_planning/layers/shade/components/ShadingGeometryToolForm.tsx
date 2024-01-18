@@ -1,10 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import IconButton from '@/components/Button/IconButton';
 import { StatusPanelContentWrapper } from '@/features/map_planning/components/statuspanel/StatusPanelContentWrapper';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import PencilPlusIcon from '@/svg/icons/pencil-plus.svg?react';
 import PointerIcon from '@/svg/icons/pointer.svg?react';
-import { useTranslation } from 'react-i18next';
 
 export function ShadingGeometryToolForm() {
   const { t } = useTranslation('shadeLayer');

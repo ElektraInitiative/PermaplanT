@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import {
   CreateShadingActionPayload,
   DeleteShadingActionPayload,
@@ -11,7 +12,6 @@ import { updateShading } from '@/features/map_planning/layers/shade/api/updateSh
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { Action, TrackedMapState } from '@/features/map_planning/store/MapStoreTypes';
 import { filterVisibleObjects } from '@/features/map_planning/utils/filterVisibleObjects';
-import { v4 } from 'uuid';
 
 export class CreateShadingAction
   implements Action<Awaited<ReturnType<typeof createShading>>, boolean>
