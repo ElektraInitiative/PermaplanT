@@ -431,6 +431,12 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   shadeLayerSelectShadings(shadings: ShadingDto[] | null) {
+    if (shadings === null) {
+      get().setInhibitTransformer(false);
+      get().shadeLayerDeactivatePolygonManipulation();
+      get().clearStatusPanelContent();
+    }
+
     set((state) => ({
       ...state,
       untrackedState: {
