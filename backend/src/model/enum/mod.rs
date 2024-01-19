@@ -13,8 +13,6 @@ pub mod life_cycle;
 pub mod light_requirement;
 pub mod membership;
 //pub mod nutrition_demand;
-pub mod plant_height;
-pub mod plant_spread;
 pub mod privacy_option;
 pub mod propagation_method;
 pub mod quality;

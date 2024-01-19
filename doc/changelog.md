@@ -56,7 +56,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Use integer for plant spread and height _(Christoph Schreiner)_
 - _()_
 - Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
 - _()_

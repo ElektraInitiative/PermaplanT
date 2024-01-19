@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { Page, PlantSpread, PlantsSummaryDto } from '@/api_types/definitions';
+import { Page, PlantsSummaryDto } from '@/api_types/definitions';
 import { baseApiUrl } from '@/config';
 
 const allPlants: PlantsSummaryDto[] = [
@@ -7,19 +7,19 @@ const allPlants: PlantsSummaryDto[] = [
     id: 1,
     unique_name: 'test',
     common_name_en: ['test'],
-    spread: PlantSpread.Na,
+    spread: undefined,
   },
   {
     id: 2,
     unique_name: 'asdf',
     common_name_en: ['asdf'],
-    spread: PlantSpread.Na,
+    spread: undefined,
   },
   {
     id: 3,
     unique_name: 'plant',
     common_name_en: ['plant'],
-    spread: PlantSpread.Na,
+    spread: undefined,
   },
 ];
 

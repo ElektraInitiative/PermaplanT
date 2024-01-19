@@ -1,5 +1,4 @@
 // Plant layer util functions
-import { PlantSpread } from '@/api_types/definitions';
 
 export function calculatePlantCount(
   plantSize: number,
@@ -15,12 +14,12 @@ export function calculatePlantCount(
   };
 }
 
-const PLANT_WIDTHS = new Map<PlantSpread, number>([
-  [PlantSpread.Narrow, 10],
-  [PlantSpread.Medium, 50],
-  [PlantSpread.Wide, 100],
-]);
+const MINIMUM_PLANT_WIDTH = 10; // in cm
 
-export function getPlantWidth({ spread = PlantSpread.Medium }): number {
-  return PLANT_WIDTHS.get(spread) ?? (PLANT_WIDTHS.get(PlantSpread.Medium) as number);
+/**
+ * @param the plant object which has a spread property
+ * @returns the width of the plant in cm
+ */
+export function getPlantWidth({ spread = MINIMUM_PLANT_WIDTH }): number {
+  return Math.max(spread, MINIMUM_PLANT_WIDTH);
 }
