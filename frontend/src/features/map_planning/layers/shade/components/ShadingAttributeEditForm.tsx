@@ -240,7 +240,7 @@ function ShadingAttributeEditForm({
       shouldTouch: false,
     });
     formFunctions.setValue('shade', shade);
-  }, [addDate, removeDate, shade]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [addDate, formFunctions, removeDate, shade]);
 
   const shadeSubmitState = useDebouncedSubmit<ShadingDateAttribute>(
     formFunctions.watch('shade'),
