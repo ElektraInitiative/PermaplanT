@@ -87,6 +87,14 @@ export function Shading({ shading }: ShadingProps) {
     (e: Konva.KonvaEventObject<MouseEvent>) => {
       if (!isShadingEdited || shadingManipulationState !== 'add') return;
 
+      // Prevents a bug where the shading polygon is edited twice after one click
+      // because the Shading component is being rerendered during the executeAction call bellow.
+      const shadingDto = useMapStore
+        .getState()
+        .trackedState.layers.shade.objects.find((s) => s.id == shading.id);
+
+      if (!shadingDto) return;
+
       const newPoint = {
         x: e.currentTarget.getRelativePointerPosition().x,
         y: e.currentTarget.getRelativePointerPosition().y,
@@ -94,33 +102,26 @@ export function Shading({ shading }: ShadingProps) {
       };
 
       const newGeometry = insertPointIntoLineSegmentWithLeastDistance(
-        geometry,
+        shadingDto.geometry as PolygonGeometry,
         newPoint,
         editorLongestSide / 100,
       );
 
       executeAction(
         new UpdateShadingAction({
-          id: shading.id,
-          shade: shading.shade,
+          id: shadingDto.id,
+          shade: shadingDto.shade,
           geometry: newGeometry as object,
         }),
       );
     },
-    [
-      isShadingEdited,
-      shadingManipulationState,
-      geometry,
-      editorLongestSide,
-      executeAction,
-      shading.id,
-      shading.shade,
-    ],
+    [isShadingEdited, editorLongestSide, shadingManipulationState, executeAction, shading.id],
   );
 
   useEffect(() => {
     const stageRef = useMapStore.getState().stageRef;
     // Prevent multiple being registered for the same component.
+    console.log(shading.id);
     stageRef.current?.off(`click.shading-${shading.id}`);
     stageRef.current?.on(`click.shading-${shading.id}`, onStageClick);
   }, [onStageClick, shading.id]);
