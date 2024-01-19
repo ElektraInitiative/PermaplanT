@@ -1,5 +1,6 @@
+import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Layer } from 'react-konva';
 import * as uuid from 'uuid';
 import { LayerType, Shade } from '@/api_types/definitions';
@@ -12,44 +13,35 @@ import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/l
 import { squareGeometryAroundPoint } from '@/features/map_planning/utils/PolygonUtils';
 
 type ShadeLayerProps = LayerConfigWithListenerRegister;
-export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerProps) {
+
+export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
   const currentDateShadingDtos = useMapStore((state) => state.trackedState.layers.shade.objects);
-  const shadeLayerId = useMapStore((state) => state.trackedState.layers.shade.id);
   const executeAction = useMapStore((state) => state.executeAction);
-  const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
-  const untrackedState = useMapStore((state) => state.untrackedState.layers.shade);
-  const currentLayer = useMapStore((state) => state.untrackedState.selectedLayer);
   const shadeLayerSelectShading = useMapStore((state) => state.shadeLayerSelectShadings);
-  const shadingManipulationState = useMapStore(
-    (store) => store.untrackedState.layers.shade.selectedShadingEditMode,
+  const selectedShadeForNewShading = useMapStore(
+    (state) => state.untrackedState.layers.shade.selectedShadeForNewShading,
   );
 
   const shadings = currentDateShadingDtos.map((dto) => (
-    <Shading
-      key={`shading-${dto.id}`}
-      shading={dto}
-      stageListenerRegister={stageListenerRegister}
-    />
+    <Shading key={`shading-${dto.id}`} shading={dto} />
   ));
 
-  const placeNewShading = (point: Vector2d) => {
-    executeAction(
-      new CreateShadingAction({
-        id: uuid.v4(),
-        layerId: shadeLayerId,
-        addDate: timelineDate,
-        shade: untrackedState.selectedShadeForNewShading ?? Shade.NoShade,
-        geometry: squareGeometryAroundPoint({ ...point, srid: DEFAULT_SRID }, 400),
-      }),
-    );
-  };
+  const onStageClick = useCallback(
+    (e: Konva.KonvaEventObject<MouseEvent>) => {
+      const currentLayer = useMapStore.getState().untrackedState.selectedLayer;
+      const shadingManipulationState =
+        useMapStore.getState().untrackedState.layers.shade.selectedShadingEditMode;
+      const shadeLayerId = useMapStore.getState().trackedState.layers.shade.id;
+      const timelineDate = useMapStore.getState().untrackedState.timelineDate;
 
-  useEffect(() => {
-    stageListenerRegister.registerStageClickListener('ShadeLayer', (e) => {
-      if (typeOfLayer(currentLayer) !== LayerType.Shade || shadingManipulationState !== 'inactive')
+      if (
+        typeOfLayer(currentLayer) !== LayerType.Shade ||
+        shadingManipulationState !== 'inactive'
+      ) {
         return;
+      }
 
-      if (untrackedState.selectedShadeForNewShading !== null) {
+      if (selectedShadeForNewShading !== null) {
         placeNewShading(e.currentTarget.getRelativePointerPosition());
         return;
       }
@@ -57,14 +49,30 @@ export function ShadeLayer({ stageListenerRegister, ...layerProps }: ShadeLayerP
       if (!e.target.getAttr('shading')) {
         shadeLayerSelectShading(null);
       }
-    });
-  }, [untrackedState.selectedShadeForNewShading, currentLayer, shadingManipulationState]); // eslint-disable-line react-hooks/exhaustive-deps
+
+      function placeNewShading(point: Vector2d) {
+        executeAction(
+          new CreateShadingAction({
+            id: uuid.v4(),
+            layerId: shadeLayerId,
+            addDate: timelineDate,
+            shade: selectedShadeForNewShading ?? Shade.NoShade,
+            geometry: squareGeometryAroundPoint({ ...point, srid: DEFAULT_SRID }, 400),
+          }),
+        );
+      }
+    },
+    [selectedShadeForNewShading, executeAction, shadeLayerSelectShading],
+  );
+
+  useEffect(() => {
+    const stageRef = useMapStore.getState().stageRef;
+    stageRef.current?.off('click.shadeLayer');
+    stageRef.current?.on('click.shadeLayer', onStageClick);
+  }, [onStageClick]);
 
   return (
-    <Layer
-      {...layerProps}
-      listening={untrackedState.selectedShadeForNewShading === null && layerProps.listening}
-    >
+    <Layer {...layerProps} listening={selectedShadeForNewShading === null && layerProps.listening}>
       {shadings}
     </Layer>
   );

@@ -1,12 +1,12 @@
+import Konva from 'konva';
 import { KonvaEventObject, Node } from 'konva/lib/Node';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Circle, Group, Line } from 'react-konva';
 import { Shade, ShadingDto } from '@/api_types/definitions';
 import { UpdateShadingAction } from '@/features/map_planning/layers/shade/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DEFAULT_SRID, PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
-import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import {
   flattenRing,
   insertPointIntoLineSegmentWithLeastDistance,
@@ -19,10 +19,9 @@ import { colors } from '@/utils/colors';
 
 export interface ShadingProps {
   shading: ShadingDto;
-  stageListenerRegister: StageListenerRegister;
 }
 
-export function Shading({ shading, stageListenerRegister }: ShadingProps) {
+export function Shading({ shading }: ShadingProps) {
   const { t } = useTranslation('shadeLayer');
   const editorLongestSide = useMapStore((map) =>
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
@@ -84,8 +83,8 @@ export function Shading({ shading, stageListenerRegister }: ShadingProps) {
     isUsingModifierKey(e) ? handleMultiSelect(e, shading) : handleSingleSelect(e, shading);
   };
 
-  useEffect(() => {
-    stageListenerRegister.registerStageClickListener(`Shading-${shading.id}`, (e) => {
+  const onStageClick = useCallback(
+    (e: Konva.KonvaEventObject<MouseEvent>) => {
       if (!isShadingEdited || shadingManipulationState !== 'add') return;
 
       const newPoint = {
@@ -107,8 +106,24 @@ export function Shading({ shading, stageListenerRegister }: ShadingProps) {
           geometry: newGeometry as object,
         }),
       );
-    });
-  }, [shadingManipulationState, isShadingEdited, shading, geometry, editorLongestSide]); // eslint-disable-line react-hooks/exhaustive-deps
+    },
+    [
+      isShadingEdited,
+      shadingManipulationState,
+      geometry,
+      editorLongestSide,
+      executeAction,
+      shading.id,
+      shading.shade,
+    ],
+  );
+
+  useEffect(() => {
+    const stageRef = useMapStore.getState().stageRef;
+    // Prevent multiple being registered for the same component.
+    stageRef.current?.off(`click.shading-${shading.id}`);
+    stageRef.current?.on(`click.shading-${shading.id}`, onStageClick);
+  }, [onStageClick, shading.id]);
 
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
     if (shadingManipulationState === 'move') {
