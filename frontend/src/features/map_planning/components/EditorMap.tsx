@@ -1,5 +1,4 @@
 import i18next from 'i18next';
-import Konva from 'konva';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
@@ -14,7 +13,6 @@ import { ShadeLayer } from '@/features/map_planning/layers/shade/ShadeLayer';
 import { ShadeLayerLeftToolbar } from '@/features/map_planning/layers/shade/components/ShadeLayerLeftToolbar';
 import { ShadeLayerRightToolbar } from '@/features/map_planning/layers/shade/components/ShadeLayerRightToolbar';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
-import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
 import GridIcon from '@/svg/icons/grid-dots.svg?react';
@@ -35,8 +33,6 @@ import { BaseStage } from './BaseStage';
 import TimelineDatePicker from './timeline/TimelineDatePicker';
 import { LayerList } from './toolbar/LayerList';
 import { Toolbar } from './toolbar/Toolbar';
-
-import KonvaEventObject = Konva.KonvaEventObject;
 
 export const TEST_IDS = Object.freeze({
   UNDO_BUTTON: 'map__undo-button',
@@ -73,77 +69,6 @@ export const EditorMap = ({ layers }: MapProps) => {
 
   const { mutate: reenableTour } = useReenableTour();
   const { mutate: completeTour } = useCompleteTour();
-
-  // Allow layers to listen for all events on the base stage.
-  //
-  // This enables us to build layers with custom input logic that does not
-  // rely on Konva's limited Canvas-Object controls.
-  const [stageDragStartListeners, setStageDragStartListeners] = useState<
-    Map<string, (e: KonvaEventObject<DragEvent>) => void>
-  >(new Map());
-  const [stageDragEndListeners, setStageDragEndListeners] = useState<
-    Map<string, (e: KonvaEventObject<DragEvent>) => void>
-  >(new Map());
-  const [stageMouseMoveListeners, setStageMouseMoveListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageMouseWheelListeners, setStageMouseWheelListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageMouseUpListeners, setStageMouseUpListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageMouseDownListeners, setStageMouseDownListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageClickListeners, setStageClickListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-
-  const baseStageListenerRegister: StageListenerRegister = {
-    registerStageDragStartListener: (
-      key: string,
-      listener: (e: KonvaEventObject<DragEvent>) => void,
-    ) => {
-      setStageDragStartListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageDragEndListener: (
-      key: string,
-      listener: (e: KonvaEventObject<DragEvent>) => void,
-    ) => {
-      setStageDragEndListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseMoveListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseMoveListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseWheelListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseWheelListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseDownListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseDownListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseUpListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseUpListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageClickListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageClickListeners((listeners) => listeners.set(key, listener));
-    },
-  };
 
   const isGridLayerEnabled = () => {
     return layersState.grid.visible;
@@ -288,19 +213,8 @@ export const EditorMap = ({ layers }: MapProps) => {
           id="canvas"
           tabIndex={0} //so that map can be focused
         >
-          <BaseStage
-            listeners={{
-              stageDragStartListeners,
-              stageDragEndListeners,
-              stageMouseMoveListeners,
-              stageMouseUpListeners,
-              stageMouseDownListeners,
-              stageMouseWheelListeners,
-              stageClickListeners,
-            }}
-          >
+          <BaseStage>
             <BaseLayer
-              stageListenerRegister={baseStageListenerRegister}
               opacity={layersState.base.opacity}
               visible={layersState.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
@@ -311,7 +225,6 @@ export const EditorMap = ({ layers }: MapProps) => {
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
             <ShadeLayer
-              stageListenerRegister={baseStageListenerRegister}
               opacity={layersState.shade.opacity}
               visible={layersState.shade.visible}
               listening={getSelectedLayerType() === LayerType.Shade}

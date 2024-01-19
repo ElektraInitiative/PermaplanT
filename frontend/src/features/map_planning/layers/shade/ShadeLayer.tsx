@@ -9,10 +9,9 @@ import { Shading } from '@/features/map_planning/layers/shade/components/Shading
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { typeOfLayer } from '@/features/map_planning/store/utils';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
-import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { squareGeometryAroundPoint } from '@/features/map_planning/utils/PolygonUtils';
 
-type ShadeLayerProps = LayerConfigWithListenerRegister;
+type ShadeLayerProps = Konva.LayerConfig;
 
 export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
   const currentDateShadingDtos = useMapStore((state) => state.trackedState.layers.shade.objects);
@@ -67,8 +66,11 @@ export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
 
   useEffect(() => {
     const stageRef = useMapStore.getState().stageRef;
-    stageRef.current?.off('click.shadeLayer');
     stageRef.current?.on('click.shadeLayer', onStageClick);
+
+    return () => {
+      stageRef.current?.off('click.shadeLayer');
+    };
   }, [onStageClick]);
 
   return (

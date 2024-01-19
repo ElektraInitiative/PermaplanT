@@ -120,11 +120,12 @@ export function Shading({ shading }: ShadingProps) {
 
   useEffect(() => {
     const stageRef = useMapStore.getState().stageRef;
-    // Prevent multiple being registered for the same component.
-    console.log(shading.id);
-    stageRef.current?.off(`click.shading-${shading.id}`);
-    stageRef.current?.on(`click.shading-${shading.id}`, onStageClick);
-  }, [onStageClick, shading.id]);
+    stageRef.current?.on('click.shadeLayer', onStageClick);
+
+    return () => {
+      stageRef.current?.off('click.shadeLayer');
+    };
+  }, [onStageClick]);
 
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
     if (shadingManipulationState === 'move') {

@@ -1,11 +1,10 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Circle, Group, Line } from 'react-konva';
 import { UpdateMapGeometry } from '@/features/map_planning/layers/base/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
-import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import {
   removePointAtIndex,
   setPointAtIndex,
@@ -16,7 +15,7 @@ import { useIsBaseLayerActive } from '@/features/map_planning/utils/layer-utils'
 import { warningToastGrouped } from '@/features/toasts/groupedToast';
 import { colors } from '@/utils/colors';
 
-export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
+export const MapGeometryEditor = () => {
   const { t } = useTranslation('polygon');
   const executeAction = useMapStore((state) => state.executeAction);
   const trackedState = useMapStore((map) => map.trackedState);
@@ -32,9 +31,11 @@ export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
   const isBaseLayerActive = useIsBaseLayerActive();
 
   // The Konva-Group of this component is not listening while add mode is active.
-  useEffect(() => {
-    props.stageListenerRegister.registerStageClickListener('Polygon', (e) => {
+  const onStageClick = useCallback(
+    (e: KonvaEventObject<MouseEvent>) => {
       if (polygonManipulationState !== 'add') return;
+
+      const mapGeometry = useMapStore.getState().trackedState.mapGeometry;
 
       const newPoint = {
         x: e.currentTarget.getRelativePointerPosition().x,
@@ -48,8 +49,18 @@ export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
         editorLongestSide / 100,
       );
       executeAction(new UpdateMapGeometry({ geometry: geometry as object, mapId: mapId }));
-    });
-  }, [polygonManipulationState, mapGeometry, editorLongestSide]); // eslint-disable-line react-hooks/exhaustive-deps
+    },
+    [polygonManipulationState, editorLongestSide, executeAction, mapId],
+  );
+
+  useEffect(() => {
+    const stageRef = useMapStore.getState().stageRef;
+    stageRef.current?.on('click.shadeLayer', onStageClick);
+
+    return () => {
+      stageRef.current?.off('click.shadeLayer');
+    };
+  }, [onStageClick]);
 
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
     if (polygonManipulationState === 'move') {
@@ -77,7 +88,7 @@ export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
   const handlePointDragEnd = (e: KonvaEventObject<DragEvent>) => {
     if (polygonManipulationState !== 'move') return;
 
-    // Why is currentTarget.index always of by 1??
+    // Why is currentTarget.index always of any, anyby 1??
     const index = e.currentTarget.index - 1;
 
     const newPoint = {
@@ -95,7 +106,6 @@ export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
   };
 
   if (!trackedState.mapGeometry || !trackedState.mapGeometry.rings.length) return <Group></Group>;
-
   const points = mapGeometry.rings[0].map((point, index) => {
     if (index === mapGeometry.rings[0].length - 1) return;
 
