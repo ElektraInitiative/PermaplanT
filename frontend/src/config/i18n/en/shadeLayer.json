@@ -27,7 +27,8 @@
       "shading_amount_select_title": "Shading Type",
       "add_date": "Applied from",
       "remove_date": "Applied until",
-      "delete_button": "Delete shading"
+      "delete_button": "Delete shading",
+      "error_remove_date_before_add_date": "The 'Applied until' date must be after the 'Applied from' date!"
     },
     "right_toolbar": {
       "legend": {

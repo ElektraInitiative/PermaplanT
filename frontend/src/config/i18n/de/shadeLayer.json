@@ -27,7 +27,8 @@
       "shading_amount_select_title": "Beschattungsart",
       "add_date": "Wird angewendet ab",
       "remove_date": "Wird angewendet bis",
-      "delete_button": "Beschattung löschen"
+      "delete_button": "Beschattung löschen",
+      "error_remove_date_before_add_date": "Das 'angewendet ab' Datum muss vor dem 'angewendet bis' Datum liegen!"
     },
     "right_toolbar": {
       "legend": {

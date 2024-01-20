@@ -287,6 +287,14 @@ function ShadingAttributeEditForm({
 
       {showPolygonTools && <ShadingGeometryToolForm />}
 
+      {/**
+       * See https://github.com/orgs/react-hook-form/discussions/7111
+       * @ts-expect-error this error path was added by zod refine(). hook form is unaware, which is a shortcoming.*/}
+      {formFunctions.formState.errors.dateRelation && (
+        <div className="text-sm text-red-400">
+          {t('left_toolbar.error_remove_date_before_add_date')}
+        </div>
+      )}
       <div className="flex gap-2">
         <SimpleFormInput
           type="date"
