@@ -24,12 +24,28 @@ export function ShadeLayerRightToolbar() {
       return;
     }
 
+    let statusPanelContent;
+    switch (shade) {
+      case Shade.LightShade:
+        statusPanelContent = t('place_light_shadings_message');
+        break;
+      case Shade.PartialShade:
+        statusPanelContent = t('place_partial_shadings_message');
+        break;
+      case Shade.PermanentShade:
+        statusPanelContent = t('place_permanent_shadings_message');
+        break;
+      case Shade.PermanentDeepShade:
+        statusPanelContent = t('place_permanent_deep_shadings_message');
+        break;
+      default:
+        // Should never happen
+        statusPanelContent = '';
+    }
+
     selectShadeForNewShading(shade);
     setStatusPanelContent(
-      <StatusPanelContentWrapper
-        onClose={removeShadeForShading}
-        content={t('place_shadings_message')}
-      />,
+      <StatusPanelContentWrapper onClose={removeShadeForShading} content={statusPanelContent} />,
     );
   };
 

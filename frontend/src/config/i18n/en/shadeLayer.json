@@ -1,6 +1,9 @@
 {
     "error_loading_shadings": "Sorry, there was an error while loading the shadings from the backend.",
-    "place_shadings_message": "Click on the map to place a new shading area.",
+    "place_light_shadings_message": "Click on the map to place a new light shading area.",
+    "place_partial_shadings_message": "Click on the map to place a new partial shading area.",
+    "place_permanent_shadings_message": "Click on the map to place a new permanent shading area.",
+    "place_permanent_deep_shadings_message": "Click on the map to place a new permanent deep shading area.",
     "edit_polygon": {
       "add": "Click on the map to add a new point to the shading.",
       "remove": "Click on a point to remove it from the shading.",

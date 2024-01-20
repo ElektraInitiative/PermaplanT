@@ -1,6 +1,9 @@
 {
     "error_loading_shadings": "Sorry, es gab einen Fehler beim Laden der Beschattungen.",
-    "place_shadings_message": "Klicke auf die Karte um eine neue Beschattung zu platzieren.",
+    "place_light_shadings_message": "Klicke auf die Karte um eine leichte Beschattung zu platzieren.",
+    "place_partial_shadings_message": "Klicke auf die Karte um eine Teilbeschattung zu platzieren.",
+    "place_permanent_shadings_message": "Klicke auf die Karte um eine permanente Beschattung zu platzieren.",
+    "place_permanent_deep_shadings_message": "Klicke auf die Karte um eine permanente starke Beschattung zu platzieren.",
     "edit_polygon": {
       "add": "Klicke auf die Karte um einen neuen Punkt zur Beschattung hinzuzufügen.",
       "remove": "Klicke auf die Karte um einen Punkt aus der Beschattung zu entfernen.",
