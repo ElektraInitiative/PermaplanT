@@ -10,6 +10,13 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 import { typeOfLayer } from '@/features/map_planning/store/utils';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
 import { squareGeometryAroundPoint } from '@/features/map_planning/utils/PolygonUtils';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
+
+function stopEditingShadeLayer() {
+  useMapStore.getState().shadeLayerSelectShadeForNewShading(null);
+  useMapStore.getState().shadeLayerDeactivatePolygonManipulation();
+  useMapStore.getState().clearStatusPanelContent();
+}
 
 type ShadeLayerProps = Konva.LayerConfig;
 
@@ -19,6 +26,15 @@ export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
   const shadeLayerSelectShading = useMapStore((state) => state.shadeLayerSelectShadings);
   const selectedShadeForNewShading = useMapStore(
     (state) => state.untrackedState.layers.shade.selectedShadeForNewShading,
+  );
+
+  useKeyHandlers(
+    {
+      Escape: stopEditingShadeLayer,
+    },
+    document,
+    false,
+    layerProps.listening,
   );
 
   const shadings = currentDateShadingDtos.map((dto) => (
