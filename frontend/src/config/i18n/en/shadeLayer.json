@@ -27,8 +27,18 @@
       "delete_button": "Delete shading"
     },
     "right_toolbar": {
-      "add_shading_title": "",
-      "add_shading": "Beschattung hinzufügen",
-      "shading_select_title": "Beschattungsart"
+      "legend": {
+        "title": "Legend",
+        "color_none": "no color",
+        "color_light_shade": "light blue",
+        "color_partial_shade": "dark blue",
+        "color_permanent_shade": "violet",
+        "color_permanent_deep_shade": "black",
+        "no_shade": "The area receives all available sunlight at all times of the day. This applies to all areas where no shading has been placed.",
+        "light_shade": "This section of the map receives plenty of sunlight and is at most only lightly shaded. Areas that are sparsely populated with trees fall under this category.",
+        "partial_shade": "Depending on the time of day this area may sometimes receive average to high amounts shading. This mainly applies to areas behind walls or non-transparent fences.",
+        "permanent_shade": "An area that is permanently covered with an average amount of shade. E.g. forests or other areas with a dense tree population.",
+        "permanent_deep_shade": "A dense cover of vegetation or an artificial surface causes this area to receive barely any sunlight."
+      }
     }
 }
