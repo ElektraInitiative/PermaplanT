@@ -57,6 +57,11 @@ export const createTrackedMapSlice: StateCreator<
         get().transformer.current?.nodes(newNodes);
       }
     },
+    removeNodesFromTransformer: (overrideInhibitTransformer?: boolean) => {
+      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
+
+      get().transformer.current?.nodes([]);
+    },
     initPlantLayer: (plants: PlantingDto[]) => {
       set((state) => ({
         ...state,

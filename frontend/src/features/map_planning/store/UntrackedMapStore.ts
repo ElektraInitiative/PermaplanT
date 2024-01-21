@@ -64,8 +64,9 @@ export const createUntrackedMapSlice: StateCreator<
   },
   lastActions: [],
   updateSelectedLayer(selectedLayer) {
-    // Clear the transformer's nodes.
-    get().transformer.current?.nodes([]);
+    // Disable all layer specific actions.
+    get().setInhibitTransformer(false);
+    get().removeNodesFromTransformer();
     get().baseLayerDeactivatePolygonManipulation();
     get().shadeLayerDeactivatePolygonManipulation();
     get().clearStatusPanelContent();
@@ -432,6 +433,7 @@ export const createUntrackedMapSlice: StateCreator<
   },
   shadeLayerSelectShadings(shadings: ShadingDto[] | null) {
     if (shadings === null) {
+      get().removeNodesFromTransformer();
       get().setInhibitTransformer(false);
       get().shadeLayerDeactivatePolygonManipulation();
       get().clearStatusPanelContent();

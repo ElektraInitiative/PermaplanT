@@ -118,6 +118,9 @@ export interface TrackedMapSlice {
   /** Removes given node from the transformer's current set of nodes */
   removeNodeFromTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
 
+  /** Discard the transformer's current nodes */
+  removeNodesFromTransformer: (overrideInhibitTransformer?: boolean) => void;
+
   /**
    * Execute a user initiated action.
    * @param action the action to be executed
