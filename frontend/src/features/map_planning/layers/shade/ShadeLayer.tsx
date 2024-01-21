@@ -9,7 +9,7 @@ import { Shading } from '@/features/map_planning/layers/shade/components/Shading
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { typeOfLayer } from '@/features/map_planning/store/utils';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
-import { squareGeometryAroundPoint } from '@/features/map_planning/utils/PolygonUtils';
+import { ringGeometryAroundPoint } from '@/features/map_planning/utils/PolygonUtils';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 
 function stopEditingShadeLayer() {
@@ -105,7 +105,7 @@ export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
             layerId: shadeLayerId,
             addDate: timelineDate,
             shade: selectedShadeForNewShading ?? Shade.NoShade,
-            geometry: squareGeometryAroundPoint({ ...point, srid: DEFAULT_SRID }, 400),
+            geometry: ringGeometryAroundPoint({ ...point, srid: DEFAULT_SRID }, 8, 200),
           }),
         );
       }

@@ -9,7 +9,7 @@ import {
   insertPointIntoLineSegmentWithLeastDistance,
   removePointAtIndex,
   setPointAtIndex,
-  squareGeometryAroundPoint,
+  ringGeometryAroundPoint,
   calculateGeometryStats,
 } from '@/features/map_planning/utils/PolygonUtils';
 
@@ -245,14 +245,15 @@ describe('Add a point between the two nearest points', () => {
 
 describe('Generate a new polygon', () => {
   it('Should generate a square shaped polygon around a point', () => {
-    expect(squareGeometryAroundPoint({ x: 0, y: 0, srid: 0 }, 2)).toEqual({
+    // @ts-expect-error toEqualApproximate is defined using expect.extend in src/vitest-setup.ts
+    expect(ringGeometryAroundPoint({ x: 0, y: 0, srid: 0 }, 4, 1)).toEqualApproximately({
       rings: [
         [
-          { x: -1, y: 1, srid: 0 },
-          { x: 1, y: 1, srid: 0 },
-          { x: 1, y: -1, srid: 0 },
-          { x: -1, y: -1, srid: 0 },
-          { x: -1, y: 1, srid: 0 },
+          { x: 1, y: 0, srid: 0 },
+          { x: 0, y: 1, srid: 0 },
+          { x: -1, y: 0, srid: 0 },
+          { x: 0, y: -1, srid: 0 },
+          { x: 1, y: 0, srid: 0 },
         ],
       ],
       srid: 0,
