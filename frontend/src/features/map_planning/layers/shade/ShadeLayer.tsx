@@ -37,9 +37,42 @@ export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
     layerProps.listening,
   );
 
-  const shadings = currentDateShadingDtos.map((dto) => (
-    <Shading key={`shading-${dto.id}`} shading={dto} />
-  ));
+  const shadings = currentDateShadingDtos
+    .map((dto) => {
+      // We sort all shadings such that darker shading values are always on top.
+      let shadeIndex;
+      switch (dto.shade) {
+        case Shade.LightShade:
+          shadeIndex = 3;
+          break;
+
+        case Shade.PartialShade:
+          shadeIndex = 2;
+          break;
+
+        case Shade.PermanentShade:
+          shadeIndex = 1;
+          break;
+
+        case Shade.PermanentDeepShade:
+          shadeIndex = 0;
+          break;
+
+        default:
+          shadeIndex = 4;
+          break;
+      }
+
+      return <Shading key={`${shadeIndex}-shading-${dto.id}`} shading={dto} />;
+    })
+    .sort((a, b) => {
+      const indexA = a.key?.at(0) ?? '4';
+      const indexB = b.key?.at(0) ?? '4';
+
+      if (indexA === indexB) return 0;
+      else if (indexA > indexB) return -1;
+      else return 1;
+    });
 
   const onStageClick = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -90,7 +123,11 @@ export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
   }, [onStageClick]);
 
   return (
-    <Layer {...layerProps} listening={selectedShadeForNewShading === null && layerProps.listening}>
+    <Layer
+      {...layerProps}
+      opacity={(layerProps.opacity ?? 0) * 0.6}
+      listening={selectedShadeForNewShading === null && layerProps.listening}
+    >
       {shadings}
     </Layer>
   );

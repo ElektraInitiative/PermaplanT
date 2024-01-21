@@ -60,19 +60,19 @@ const highlight = {
 
 const shadings = {
   noShade: {
-    DEFAULT: 'rgba(219,215,18,0.6)',
+    DEFAULT: 'rgba(219,215,18)',
   },
   lightShade: {
-    DEFAULT: 'rgba(146,213,255,0.6)',
+    DEFAULT: 'rgba(146,213,255)',
   },
   partialShade: {
-    DEFAULT: 'rgba(51,76,255,0.6)',
+    DEFAULT: 'rgba(51,76,255)',
   },
   permanentShade: {
-    DEFAULT: 'rgba(108,54,208,0.6)',
+    DEFAULT: 'rgba(108,54,208)',
   },
   permanentDeepShade: {
-    DEFAULT: 'rgba(0,0,0,0.6)',
+    DEFAULT: 'rgba(0,0,0)',
   },
 };
 
