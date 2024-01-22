@@ -1,17 +1,9 @@
 {
   "blog_entries": [
     {
-      "title": "PermaplanT keimt!",
-      "date": "01.03.2023",
-      "content": "Die Natur zeigt vor, was bei der Verschmelzung zweier zusammenpassender Teile, Pollen mit Fruchtknoten, Erstaunliches entstehen kann. Wir ließen Botanik und Informatik verschmelzen und siehe da - es keimte PermaplanT! Ein großartiges Team aus verschiedenen Fachgebieten setzt sich seither ein, den Keimling groß zu ziehen. Sei auch du ein Teil davon!",
-      "author": "Yvonne Markl",
-      "author_role": "Projektleiterin, Permakultur Expertin",
-      "picture": "Avatars/Yvonne_Markl.jpg"
-    },
-    {
-      "title": "Landing Page online!",
-      "date": "19.04.2023",
-      "content": "Wir geben das erste Lebenszeichen von uns und starten mit dieser Webseite. Noch ohne App, da an dieser noch heftig geschraubt wird. Apropos Lebenszeichen: Rechtzeitig zum Start hat uns ein besonderer Gast im PermaplanT-Gründungsgarten besucht, siehe Gallerie. Baumfrosch-Arten gibt es in Österreich genau nur eine, den grasgrünen Laubfrosch. Diese Art nutzt Büsche und Bäume als Lebensraum. Noch cooler ist allerdings, dass er dir beim Gärtnern hilft, indem er zahlreiche Schädlinge mit seiner klebrigen Zunge verschlingt.",
+      "title": "Zeitreise im Garten",
+      "date": "20.01.2024",
+      "content": "Durch die PermaplanT-Zeitleiste hast du alle Änderungen auf deiner Karte ständig im Blick, egal ob in der Zukunft oder in der Vergangenheit. Du kannst den Tag, das Monat und das Jahr deiner Wahl mit einem Mausklick ändern. Dies ermöglicht dir zum Beispiel, sämtliche Folgekulturen auf den Tag genau zu planen oder Gartenaktivitäten nachzutragen. Visuelle Marker zeigen dir, wann welche Aktionen auf der Karte gesetzt wurden.",
       "author": "Yvonne Markl",
       "author_role": "Projektleiterin, Permakultur Expertin",
       "picture": "Avatars/Yvonne_Markl.jpg"
@@ -25,9 +17,17 @@
       "picture": "Avatars/Yvonne_Markl.jpg"
     },
     {
-      "title": "Zeitreise im Garten",
-      "date": "20.01.2024",
-      "content": "Durch die PermaplanT-Zeitleiste hast du alle Änderungen auf deiner Karte ständig im Blick, egal ob in der Zukunft oder in der Vergangenheit. Du kannst den Tag, das Monat und das Jahr deiner Wahl mit einem Mausklick ändern. Dies ermöglicht dir zum Beispiel, sämtliche Folgekulturen auf den Tag genau zu planen oder Gartenaktivitäten nachzutragen. Visuelle Marker zeigen dir, wann welche Aktionen auf der Karte gesetzt wurden.",
+      "title": "Landing Page online!",
+      "date": "19.04.2023",
+      "content": "Wir geben das erste Lebenszeichen von uns und starten mit dieser Webseite. Noch ohne App, da an dieser noch heftig geschraubt wird. Apropos Lebenszeichen: Rechtzeitig zum Start hat uns ein besonderer Gast im PermaplanT-Gründungsgarten besucht, siehe Gallerie. Baumfrosch-Arten gibt es in Österreich genau nur eine, den grasgrünen Laubfrosch. Diese Art nutzt Büsche und Bäume als Lebensraum. Noch cooler ist allerdings, dass er dir beim Gärtnern hilft, indem er zahlreiche Schädlinge mit seiner klebrigen Zunge verschlingt.",
+      "author": "Yvonne Markl",
+      "author_role": "Projektleiterin, Permakultur Expertin",
+      "picture": "Avatars/Yvonne_Markl.jpg"
+    },
+    {
+      "title": "PermaplanT keimt!",
+      "date": "01.03.2023",
+      "content": "Die Natur zeigt vor, was bei der Verschmelzung zweier zusammenpassender Teile, Pollen mit Fruchtknoten, Erstaunliches entstehen kann. Wir ließen Botanik und Informatik verschmelzen und siehe da - es keimte PermaplanT! Ein großartiges Team aus verschiedenen Fachgebieten setzt sich seither ein, den Keimling groß zu ziehen. Sei auch du ein Teil davon!",
       "author": "Yvonne Markl",
       "author_role": "Projektleiterin, Permakultur Expertin",
       "picture": "Avatars/Yvonne_Markl.jpg"
