@@ -24,4 +24,5 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved, removed or deleted connected network of paths and fences as desired.
 - **Non-functional Constraints:**
+  - Non-semantic
   - Performance: more than 100 elements per year should be usable without noticeable delays and acceptable memory overhead

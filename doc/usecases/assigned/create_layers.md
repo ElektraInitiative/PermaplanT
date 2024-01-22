@@ -5,7 +5,7 @@
 - **Scope:** Drawing and Labels Layers
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** User can create new drawing and labels layers
+- **Brief:** User can create new non-semantic layers
 - **Assignee:** Daniel
 
 ## Scenarios
