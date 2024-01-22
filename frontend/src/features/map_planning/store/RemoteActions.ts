@@ -53,21 +53,21 @@ export function handleRemoteAction(ev: MessageEvent<unknown>, userId: string) {
 function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
   switch (remoteAction.type) {
     case 'CreatePlanting':
-      return new CreatePlantAction({ ...remoteAction.payload }, remoteAction.payload.actionId);
+      return new CreatePlantAction(remoteAction.payload.payload, remoteAction.payload.actionId);
     case 'DeletePlanting':
-      return new DeletePlantAction({ ...remoteAction.payload }, remoteAction.payload.actionId);
+      return new DeletePlantAction(remoteAction.payload.payload, remoteAction.payload.actionId);
     case 'MovePlanting':
-      return new MovePlantAction([{ ...remoteAction.payload }], remoteAction.payload.actionId);
+      return new MovePlantAction(remoteAction.payload.payload, remoteAction.payload.actionId);
     case 'TransformPlanting':
-      return new TransformPlantAction([{ ...remoteAction.payload }], remoteAction.payload.actionId);
+      return new TransformPlantAction(remoteAction.payload.payload, remoteAction.payload.actionId);
     case 'UpdatePlantingAddDate':
       return new UpdateAddDatePlantAction(
-        { ...remoteAction.payload },
+        remoteAction.payload.payload,
         remoteAction.payload.actionId,
       );
     case 'UpdatePlantingRemoveDate':
       return new UpdateRemoveDatePlantAction(
-        { ...remoteAction.payload },
+        remoteAction.payload.payload,
         remoteAction.payload.actionId,
       );
     case 'UpdateBaseLayerImage':
@@ -83,6 +83,6 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
         remoteAction.payload.actionId,
       );
     default:
-      throw new Error(`Unknown remote action`) as never;
+      throw new Error(`Unknown remote action '${remoteAction.type}'`) as never;
   }
 }

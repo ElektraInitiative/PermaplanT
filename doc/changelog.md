@@ -77,7 +77,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Up the rust version to 1.74 _(4ydan)_
 - Display a rectangle for area of plantings _(Paul)_
-- _()_
+- Refactor the planting api to batch processing _(Paul, Jannis)_
 - _()_
 - _()_
 - _()_
