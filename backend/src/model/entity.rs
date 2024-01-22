@@ -10,6 +10,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod timeline;
 pub mod users_impl;
 
 use chrono::NaiveDate;

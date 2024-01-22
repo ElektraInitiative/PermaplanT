@@ -6,7 +6,7 @@ use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::controller::{
     base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer, plantings, plants,
-    seed, sse, users,
+    seed, sse, timeline, users,
 };
 
 use super::auth::middleware::validator;
@@ -74,6 +74,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         )
         .service(web::scope("/users").service(users::create))
         .service(web::scope("/blossoms").service(blossoms::gain))
+        .service(web::scope("/timeline").service(timeline::get_timeline))
         .wrap(NormalizePath::trim())
         .wrap(auth);
 
