@@ -30,6 +30,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod timeline;
 mod update_map_geometry_impl;
 pub mod update_map_impl;
 pub mod users_impl;
