@@ -372,7 +372,6 @@ async fn test_create_seed_ok() {
 
     let new_seed = NewSeedDto {
         name: "tomato test".to_string(),
-        variety: Some("testvariety".to_string()),
         plant_id: Some(-1),
         harvest_year: 2022,
         quantity: Quantity::Nothing,

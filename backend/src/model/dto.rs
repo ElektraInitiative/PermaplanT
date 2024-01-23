@@ -54,8 +54,6 @@ pub struct SeedDto {
     pub id: i32,
     /// An additional name for the seed.
     pub name: String,
-    /// The variety of the seed. Currently unused.
-    pub variety: Option<String>,
     /// The id of the plant this seed belongs to.
     pub plant_id: Option<i32>,
     /// When the seeds were harvested.
@@ -90,7 +88,6 @@ pub struct SeedDto {
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewSeedDto {
     pub name: String,
-    pub variety: Option<String>,
     pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub quantity: Quantity,
