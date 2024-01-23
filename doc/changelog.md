@@ -30,6 +30,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 27.12.2023 9:00 _(Markus Raab, Daniel)_
 - Added Meeting Agenda&Notes for 02.01.2024 9:00 _(Markus Raab, Daniel)_
 - Added Meeting Agenda&Notes for 08.01.2024 9:00 _(Markus Raab, Christoph @chr_schr)_
+- Added Meeting Agenda&Notes for 15.01.2024 9:00 _(Markus Raab, Moritz)_
 - _()_
 - _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
@@ -76,7 +77,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Up the rust version to 1.74 _(4ydan)_
 - Display a rectangle for area of plantings _(Paul)_
-- _()_
+- Refactor the planting api to batch processing _(Paul, Jannis)_
 - _()_
 - _()_
 - _()_

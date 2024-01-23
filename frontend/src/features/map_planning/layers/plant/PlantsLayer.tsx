@@ -56,7 +56,7 @@ function usePlantLayerListeners(listening: boolean) {
 
   const createPlanting = useCallback(
     (args: CreatePlantingArgs) => {
-      const data: Omit<ConstructorParameters<typeof CreatePlantAction>[0], 'width' | 'height'> = {
+      const data = {
         id: uuid.v4(),
         plantId: args.selectedPlantForPlanting.plant.id,
         seedId: args.selectedPlantForPlanting.seed?.id,
@@ -69,23 +69,30 @@ function usePlantLayerListeners(listening: boolean) {
         addDate: timelineDate,
         additionalName: args.selectedPlantForPlanting.seed?.name,
         isArea: args.isArea,
-      };
+      } satisfies Omit<
+        ConstructorParameters<typeof CreatePlantAction>[0][number],
+        'width' | 'height'
+      >;
 
       if (args.isArea) {
         executeAction(
-          new CreatePlantAction({
-            ...data,
-            width: Math.round(args.width),
-            height: Math.round(args.height),
-          }),
+          new CreatePlantAction([
+            {
+              ...data,
+              width: Math.round(args.width),
+              height: Math.round(args.height),
+            },
+          ]),
         );
       } else {
         executeAction(
-          new CreatePlantAction({
-            ...data,
-            height: getPlantWidth(args.selectedPlantForPlanting.plant),
-            width: getPlantWidth(args.selectedPlantForPlanting.plant),
-          }),
+          new CreatePlantAction([
+            {
+              ...data,
+              height: getPlantWidth(args.selectedPlantForPlanting.plant),
+              width: getPlantWidth(args.selectedPlantForPlanting.plant),
+            },
+          ]),
         );
       }
     },
