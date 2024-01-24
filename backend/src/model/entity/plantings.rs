@@ -1,6 +1,6 @@
 //! All entities associated with [`Planting`].
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, NaiveDateTime};
 use diesel::{AsChangeset, Identifiable, Insertable, Queryable};
 use uuid::Uuid;
 
@@ -16,6 +16,66 @@ pub struct Planting {
     pub layer_id: i32,
     /// The plant that is planted.
     pub plant_id: i32,
+
+    /// The datetime the planting was created.
+    pub created_at: NaiveDateTime,
+    /// The uuid of the user that created the planting.
+    pub created_by: Uuid,
+    /// The datetime the planting was last modified.
+    pub modified_at: NaiveDateTime,
+    /// The uuid of the user that last modified the planting.
+    pub modified_by: Uuid,
+
+    /// The x coordinate of the position on the map.
+    pub x: i32,
+    /// The y coordinate of the position on the map.
+    pub y: i32,
+    /// The width of the plant on the map.
+    pub width: i32,
+    /// The height of the plant on the map.
+    pub height: i32,
+    /// The rotation in degrees (0-360) of the plant on the map.
+    pub rotation: f32,
+    /// The x scale of the plant on the map.
+    pub scale_x: f32,
+    /// The y scale of the plant on the map.
+    pub scale_y: f32,
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
+    /// The date the planting was removed from the map.
+    /// If None, the planting is still on the map.
+    pub remove_date: Option<NaiveDate>,
+    /// Plantings may be linked with a seed.
+    pub seed_id: Option<i32>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
+    /*
+    /// The date the planting was created.
+    //pub create_date: NaiveDate,
+
+    /// The date the planting was 'soft' deleted
+    /// and is still able to be restored.
+    //pub delete_date: Option<NaiveDate>,
+    */
+    /// Notes about the planting in Markdown.
+    pub notes: Option<String>,
+}
+
+/// The `NewPlanting` entity.
+#[derive(Insertable)]
+#[diesel(table_name = plantings)]
+pub struct NewPlanting {
+    /// The plant layer the plantings is on.
+    pub layer_id: i32,
+    /// The plant that is planted.
+    pub plant_id: i32,
+
+    /// The uuid of the user that created the planting.
+    pub created_by: Uuid,
+    /// The datetime the planting was last modified.
+    pub modified_by: Uuid,
+
     /// The x coordinate of the position on the map.
     pub x: i32,
     /// The y coordinate of the position on the map.
