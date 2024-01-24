@@ -14,7 +14,7 @@ use uuid::Uuid;
 use crate::model::dto::plantings::{
     DeletePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto,
 };
-use crate::model::entity::plantings::Planting;
+use crate::model::entity::plantings::{NewPlanting, Planting};
 use crate::schema::plantings::{self, layer_id, plant_id};
 use crate::schema::seeds;
 
@@ -101,14 +101,20 @@ impl Planting {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn create(
         dto_vec: Vec<NewPlantingDto>,
+        user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantingDto>> {
-        let planting_creations: Vec<Self> = dto_vec.into_iter().map(Into::into).collect();
-        let query = diesel::insert_into(plantings::table).values(&planting_creations);
+        let planting_creations: Vec<NewPlanting> = dto_vec
+            .into_iter()
+            .map(|dto| NewPlanting::from((dto, user_id)))
+            .collect();
+        let query = diesel::insert_into(plantings::table)
+            .values(&planting_creations)
+            .returning((plantings::id, plantings::created_at, plantings::modified_at));
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        let query_result: Vec<Self> = query.get_results(conn).await?;
+        let query_result: Vec<Planting> = query.get_results(conn).await?;
 
         let seed_ids = query_result
             .iter()

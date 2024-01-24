@@ -75,7 +75,7 @@ pub async fn create(
 
     let ActionDtoWrapper { action_id, dto } = new_plantings.into_inner();
 
-    let created_plantings = plantings::create(dto, &app_data).await?;
+    let created_plantings = plantings::create(dto, user_info.id, &app_data).await?;
 
     app_data
         .broadcaster
