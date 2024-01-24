@@ -3,7 +3,7 @@
 //use chrono::Utc;
 use uuid::Uuid;
 
-use crate::model::entity::plantings::{Planting, UpdatePlanting};
+use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
 
 use super::plantings::{
     MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
@@ -23,6 +23,10 @@ impl From<Planting> for PlantingDto {
     fn from(planting: Planting) -> Self {
         Self {
             id: planting.id,
+            created_at: planting.created_at,
+            created_by: planting.created_by,
+            modified_at: planting.modified_at,
+            modified_by: planting.modified_by,
             plant_id: planting.plant_id,
             layer_id: planting.layer_id,
             x: planting.x,
@@ -42,12 +46,13 @@ impl From<Planting> for PlantingDto {
     }
 }
 
-impl From<NewPlantingDto> for Planting {
-    fn from(dto: NewPlantingDto) -> Self {
+impl From<(NewPlantingDto, Uuid)> for NewPlanting {
+    fn from((dto, user_id): (NewPlantingDto, Uuid)) -> Self {
         Self {
-            id: dto.id.unwrap_or_else(Uuid::new_v4),
             plant_id: dto.plant_id,
             layer_id: dto.layer_id,
+            created_by: user_id,
+            modified_by: user_id,
             x: dto.x,
             y: dto.y,
             width: dto.width,
@@ -59,8 +64,6 @@ impl From<NewPlantingDto> for Planting {
             remove_date: None,
             seed_id: dto.seed_id,
             is_area: dto.is_area,
-            //create_date: Utc::now().date_naive(),
-            //delete_date: None,
             notes: None,
         }
     }
