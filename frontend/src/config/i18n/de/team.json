@@ -1,4 +1,12 @@
 {
-    "header": "Unser Team",
-    "subheader": "Diese Initiative wurde durch den fantastischen Einsatz folgender Personen ermöglicht:"
+  "header": "Unser Team",
+  "subheader": "Diese Initiative wurde durch den fantastischen Einsatz folgender Personen ermöglicht:",
+  "role_lead_male": "Projektleiter",
+  "role_lead_female": "Projektleiterin",
+  "role_permaculture_expert_male": "Permakultur Experte",
+  "role_permaculture_expert_female": "Permakultur Expertin",
+  "role_devops": "DevOps",
+  "role_software_engineer_male": "Softwareentwickler",
+  "role_software_engineer_female": "Softwareentwicklerin",
+  "role_security_analyst": "Security Analyst"
 }

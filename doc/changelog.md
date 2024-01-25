@@ -40,7 +40,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add a dev env variable for react query when developing in offline env (e.g. plane) _(Paul)_
 - Remove error messages in console if a seed was not found _(Moritz)_
 - _()_
-- _()_
+- Landing page: Added blog entries, updated team members, minor text changes _(Christoph Schreiner)_
 - _()_
 - Fix the markdown so that mdbook tests pass _(Daniel Steinkogler)_
 - _()_
