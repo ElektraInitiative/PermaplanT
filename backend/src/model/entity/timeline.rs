@@ -9,7 +9,7 @@ use std::collections::HashMap;
 
 use crate::model::dto::timeline::{TimelineDto, TimelineEntryDto, TimelineParameters};
 
-/// Stores the result of the timeline query. Dates and sum of addtions and removals.
+/// Stores the result of the timeline query. Dates and sum of additions and removals of plantings.
 #[derive(QueryableByName, Debug)]
 struct TimelineQeueryResult {
     #[diesel(sql_type = Nullable<Date>)]
