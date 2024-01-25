@@ -60,7 +60,7 @@ pub struct PlantingDto {
 #[serde(rename_all = "camelCase")]
 pub struct NewPlantingDto {
     /// The id of the planting.
-    pub id: Option<Uuid>,
+    pub id: Uuid,
     /// The plant layer the plantings is on.
     pub layer_id: i32,
     /// The plant that is planted.
@@ -76,8 +76,7 @@ pub struct NewPlantingDto {
     /// The rotation of the plant on the map.
     pub rotation: f32,
     /// The date the planting was added to the map.
-    /// If None, the planting always existed.
-    pub add_date: Option<NaiveDate>,
+    pub add_date: NaiveDate,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
     /// Is the planting an area of plants.

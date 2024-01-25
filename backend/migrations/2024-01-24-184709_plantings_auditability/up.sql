@@ -15,9 +15,12 @@ INNER JOIN maps ON layers.map_id = maps.id
 WHERE plantings.layer_id = layers.id;
 
 ALTER TABLE plantings
-ALTER COLUMN created_at SET DEFAULT now(),
-ALTER COLUMN created_at SET NOT NULL,
-ALTER COLUMN modified_at SET DEFAULT now(),
-ALTER COLUMN modified_at SET NOT NULL,
-ALTER COLUMN created_by SET NOT NULL,
-ALTER COLUMN modified_by SET NOT NULL;
+    ALTER COLUMN created_at SET DEFAULT now(),
+    ALTER COLUMN created_at SET NOT NULL,
+    ALTER COLUMN modified_at SET DEFAULT now(),
+    ALTER COLUMN modified_at SET NOT NULL,
+    ALTER COLUMN created_by SET NOT NULL,
+    ALTER COLUMN modified_by SET NOT NULL,
+    ALTER COLUMN remove_date SET DEFAULT NULL,
+    ALTER COLUMN notes SET DEFAULT '',
+    ALTER COLUMN notes SET NOT NULL;
