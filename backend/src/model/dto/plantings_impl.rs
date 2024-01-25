@@ -47,6 +47,7 @@ impl From<Planting> for PlantingDto {
 impl From<(NewPlantingDto, Uuid)> for NewPlanting {
     fn from((dto, user_id): (NewPlantingDto, Uuid)) -> Self {
         Self {
+            id: dto.id,
             plant_id: dto.plant_id,
             layer_id: dto.layer_id,
             created_by: user_id,
@@ -57,10 +58,8 @@ impl From<(NewPlantingDto, Uuid)> for NewPlanting {
             size_y: dto.size_y,
             rotation: dto.rotation,
             add_date: dto.add_date,
-            remove_date: None,
             seed_id: dto.seed_id,
             is_area: dto.is_area,
-            notes: None,
         }
     }
 }

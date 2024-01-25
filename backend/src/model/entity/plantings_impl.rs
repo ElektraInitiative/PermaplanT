@@ -108,13 +108,11 @@ impl Planting {
             .into_iter()
             .map(|dto| NewPlanting::from((dto, user_id)))
             .collect();
-        let query = diesel::insert_into(plantings::table)
-            .values(&planting_creations)
-            .returning((plantings::id, plantings::created_at, plantings::modified_at));
+        let query = diesel::insert_into(plantings::table).values(&planting_creations);
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        let query_result: Vec<Planting> = query.get_results(conn).await?;
+        let query_result: Vec<Self> = query.get_results::<Self>(conn).await?;
 
         let seed_ids = query_result
             .iter()
