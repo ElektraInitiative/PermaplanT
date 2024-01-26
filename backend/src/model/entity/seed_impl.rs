@@ -15,7 +15,7 @@ use crate::{
     model::dto::{NewSeedDto, SeedDto},
     schema::{
         plants::{self, common_name_de, common_name_en, unique_name},
-        seeds::{self, all_columns, archived_at, harvest_year, name, owner_id, use_by},
+        seeds::{self, all_columns, harvest_year, name, owner_id, use_by},
     },
 };
 
@@ -97,9 +97,9 @@ impl Seed {
 
         // Don't filter the query if IncludeArchivedSeeds::Both is selected.
         if include_archived == IncludeArchivedSeeds::Archived {
-            query = query.filter(archived_at.is_not_null());
+            query = query.filter(seeds::archived_at.is_not_null());
         } else if include_archived == IncludeArchivedSeeds::NotArchived {
-            query = query.filter(archived_at.is_null());
+            query = query.filter(seeds::archived_at.is_null());
         }
 
         // Only return seeds that belong to the user.
@@ -202,14 +202,14 @@ impl Seed {
     /// If the connection to the database could not be established.
     pub async fn archive(
         id: i32,
-        archived_at_: Option<NaiveDateTime>,
+        archived_at: Option<NaiveDateTime>,
         user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<SeedDto> {
         let source = seeds::table.filter(owner_id.eq(user_id).and(seeds::id.eq(id)));
 
         let query_result = diesel::update(source)
-            .set((seeds::archived_at.eq(archived_at_),))
+            .set(seeds::archived_at.eq(archived_at))
             .get_result::<Self>(conn)
             .await;
         query_result.map(Into::into)

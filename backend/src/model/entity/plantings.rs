@@ -51,14 +51,14 @@ pub struct Planting {
     //pub delete_date: Option<NaiveDate>,
     */
     /// Notes about the planting in Markdown.
-    pub notes: Option<String>,
+    pub notes: String,
 
     /// The datetime the planting was created.
     pub created_at: NaiveDateTime,
-    /// The uuid of the user that created the planting.
-    pub created_by: Uuid,
     /// The datetime the planting was last modified.
     pub modified_at: NaiveDateTime,
+    /// The uuid of the user that created the planting.
+    pub created_by: Uuid,
     /// The uuid of the user that last modified the planting.
     pub modified_by: Uuid,
 }
@@ -89,9 +89,6 @@ pub struct NewPlanting {
     /// The y scale of the plant on the map.
     pub scale_y: f32,
 
-    /// The date the planting was added to the map.
-    /// If None, the planting always existed.
-    pub add_date: NaiveDate,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
     /// Is the planting an area of plants.

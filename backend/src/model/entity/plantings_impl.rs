@@ -112,7 +112,7 @@ impl Planting {
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        let query_result: Vec<Self> = query.get_results::<Self>(conn).await?;
+        let query_result = query.get_results::<Self>(conn).await?;
 
         let seed_ids = query_result
             .iter()
