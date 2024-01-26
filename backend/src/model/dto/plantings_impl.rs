@@ -57,7 +57,8 @@ impl From<(NewPlantingDto, Uuid)> for NewPlanting {
             size_x: dto.size_x,
             size_y: dto.size_y,
             rotation: dto.rotation,
-            add_date: dto.add_date,
+            scale_x: dto.scale_x,
+            scale_y: dto.scale_y,
             seed_id: dto.seed_id,
             is_area: dto.is_area,
         }

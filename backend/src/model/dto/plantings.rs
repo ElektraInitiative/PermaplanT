@@ -51,7 +51,7 @@ pub struct PlantingDto {
     /// Is the planting an area of plants.
     pub is_area: bool,
     /// Notes about the planting in Markdown.
-    pub planting_notes: Option<String>,
+    pub planting_notes: String,
 }
 
 /// Used to create a new planting.
@@ -75,8 +75,10 @@ pub struct NewPlantingDto {
     pub size_y: i32,
     /// The rotation of the plant on the map.
     pub rotation: f32,
-    /// The date the planting was added to the map.
-    pub add_date: NaiveDate,
+    /// The x scale of the plant on the map.
+    pub scale_x: f32,
+    /// The y scale of the plant on the map.
+    pub scale_y: f32,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
     /// Is the planting an area of plants.
