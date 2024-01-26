@@ -163,7 +163,6 @@ impl Seed {
             .set((
                 seeds::name.eq(new_seed.name),
                 seeds::harvest_year.eq(new_seed.harvest_year),
-                seeds::variety.eq(new_seed.variety),
                 seeds::plant_id.eq(new_seed.plant_id),
                 seeds::use_by.eq(new_seed.use_by),
                 seeds::origin.eq(new_seed.origin),
