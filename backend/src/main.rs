@@ -88,6 +88,20 @@ async fn main() -> std::io::Result<()> {
     let data = config::data::init(&config.database_url);
     start_cronjobs(data.pool.clone());
 
+    let mut client = config::keycloak_client::KeycloakClient::new(&config).map_err(|e| {
+        std::io::Error::new(
+            std::io::ErrorKind::Other,
+            format!("Error creating Keycloak client: {e}"),
+        )
+    })?;
+
+    client.get_users().await.map_err(|e| {
+        std::io::Error::new(
+            std::io::ErrorKind::Other,
+            format!("Error getting users from Keycloak: {e}"),
+        )
+    })?;
+
     HttpServer::new(move || {
         App::new()
             .wrap(cors_configuration())
