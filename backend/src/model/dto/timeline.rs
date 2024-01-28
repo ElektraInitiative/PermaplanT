@@ -18,8 +18,11 @@ pub struct TimelineEntryDto {
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct TimelineDto {
+    #[schema(example = "{ \"2020\": { \"additions\": 7, \"removals\": 7 } }")]
     pub years: HashMap<String, TimelineEntryDto>,
+    #[schema(example = "{ \"2020-01\": { \"additions\": 7, \"removals\": 7 } }")]
     pub months: HashMap<String, TimelineEntryDto>,
+    #[schema(example = "{ \"2020-01-01\": { \"additions\": 3, \"removals\": 2 }, \"2020-01-05\": { \"additions\": 4, \"removals\": 5 } }")]
     pub dates: HashMap<String, TimelineEntryDto>,
 }
 
