@@ -1,3 +1,4 @@
 //! Keycloak admin API
 
-pub mod client;
+pub mod api;
+pub mod dtos;

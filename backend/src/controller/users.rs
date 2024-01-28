@@ -1,7 +1,7 @@
 //! `Users` endpoints.
 
 use actix_web::{
-    post,
+    get, post,
     web::{Data, Json},
     HttpResponse, Result,
 };
@@ -11,6 +11,22 @@ use crate::{
     model::dto::UsersDto,
     service,
 };
+
+/// Endpoint for getting users.
+#[utoipa::path(
+    context_path = "/api/users",
+    responses(
+        (status = 200, description = "Find users", body = Vec<UserDto>)
+    ),
+    security(
+        ("oauth2" = [])
+    )
+)]
+#[get("")]
+pub async fn find(app_data: Data<AppDataInner>) -> Result<HttpResponse> {
+    let response = service::users::find(&app_data).await?;
+    Ok(HttpResponse::Ok().json(response))
+}
 
 /// Endpoint for creating an [`Users`](crate::model::entity::Users) entry.
 ///

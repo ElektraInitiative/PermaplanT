@@ -77,7 +77,11 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(guided_tours::find_by_user)
                 .service(guided_tours::update),
         )
-        .service(web::scope("/users").service(users::create))
+        .service(
+            web::scope("/users")
+                .service(users::create)
+                .service(users::find),
+        )
         .service(web::scope("/blossoms").service(blossoms::gain))
         .service(web::scope("/timeline").service(timeline::get_timeline))
         .wrap(NormalizePath::trim())
