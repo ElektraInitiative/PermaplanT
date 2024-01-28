@@ -1,7 +1,7 @@
 //! Configurations for the app data that is available to all controllers.
 
 use crate::config::app::Config;
-use crate::config::keycloak_client::KeycloakClient;
+use crate::keycloak_api::client::KeycloakClient;
 use crate::sse::broadcaster::Broadcaster;
 use actix_web::web::Data;
 
