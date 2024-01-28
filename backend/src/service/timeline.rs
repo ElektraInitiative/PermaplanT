@@ -9,7 +9,12 @@ use crate::{
     },
 };
 
-pub async fn calculate_timeline(
+/// Summarizes the all additions and removals of plantings
+/// between `params.start` and `params.end`.
+///
+/// # Errors
+/// If the connection to the database could not be established.
+pub async fn calculate(
     params: TimelineParameters,
     app_data: &Data<AppDataInner>,
 ) -> Result<TimelineDto, ServiceError> {
