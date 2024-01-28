@@ -26,6 +26,7 @@ pub struct TimelineDto {
 /// Query parameters for getting the timeline
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
+#[serde(rename_all = "camelCase")]
 pub struct TimelineParameters {
     /// Start date of the timeline
     pub start: NaiveDate,
