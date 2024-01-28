@@ -9,7 +9,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 ## 0.3.7 - UNRELEASED
 
 - _()_
-- _()_
+- Remove variety from table seeds _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
@@ -30,6 +30,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 27.12.2023 9:00 _(Markus Raab, Daniel)_
 - Added Meeting Agenda&Notes for 02.01.2024 9:00 _(Markus Raab, Daniel)_
 - Added Meeting Agenda&Notes for 08.01.2024 9:00 _(Markus Raab, Christoph @chr_schr)_
+- Added Meeting Agenda&Notes for 15.01.2024 9:00 _(Markus Raab, Moritz)_
+- Added Meeting Agenda&Notes for 22.01.2024 9:00 _(Markus Raab, Daniel)_
 - _()_
 - _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
@@ -39,7 +41,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add a dev env variable for react query when developing in offline env (e.g. plane) _(Paul)_
 - Remove error messages in console if a seed was not found _(Moritz)_
 - _()_
-- _()_
+- Landing page: Added blog entries, updated team members, minor text changes _(Christoph Schreiner)_
 - _()_
 - Fix the markdown so that mdbook tests pass _(Daniel Steinkogler)_
 - _()_
@@ -76,7 +78,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Up the rust version to 1.74 _(4ydan)_
 - Display a rectangle for area of plantings _(Paul)_
-- _()_
+- Refactor the planting api to batch processing _(Paul, Jannis)_
 - _()_
 - _()_
 - _()_

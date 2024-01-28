@@ -24,16 +24,16 @@ export function PlantLayerLeftToolbar() {
   const onAddDateChange = ({ addDate }: PlantingDateAttribute) => {
     if (!selectedPlantings?.length) return;
 
-    selectedPlantings.forEach((selectedPlanting) =>
-      executeAction(new UpdateAddDatePlantAction({ id: selectedPlanting.id, addDate })),
+    executeAction(
+      new UpdateAddDatePlantAction(selectedPlantings.map((p) => ({ id: p.id, addDate }))),
     );
   };
 
   const onRemoveDateChange = ({ removeDate }: PlantingDateAttribute) => {
     if (!selectedPlantings?.length) return;
 
-    selectedPlantings.forEach((selectedPlanting) =>
-      executeAction(new UpdateRemoveDatePlantAction({ id: selectedPlanting.id, removeDate })),
+    executeAction(
+      new UpdateRemoveDatePlantAction(selectedPlantings.map((p) => ({ id: p.id, removeDate }))),
     );
   };
 

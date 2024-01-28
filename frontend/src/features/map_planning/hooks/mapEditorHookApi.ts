@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getLayers } from '../api/getLayers';
 import { getMap } from '../api/getMap';
-import { getPlantings } from '../api/getPlantings';
+import { getPlantings } from '../api/plantingApi';
 import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
 

@@ -14,7 +14,13 @@ use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;
 
-use super::{BaseLayerImageDto, UpdateMapGeometryDto};
+use super::{
+    plantings::{
+        DeletePlantingDto, MovePlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
+        UpdatePlantingNoteDto, UpdateRemoveDatePlantingDto,
+    },
+    BaseLayerImageDto, UpdateMapGeometryDto,
+};
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
@@ -23,29 +29,38 @@ use super::{BaseLayerImageDto, UpdateMapGeometryDto};
 #[serde(tag = "type", content = "payload")]
 pub enum Action {
     /// An action used to broadcast creation of a plant.
-    CreatePlanting(CreatePlantActionPayload),
+    CreatePlanting(ActionWrapper<Vec<CreatePlantActionPayload>>),
     /// An action used to broadcast deletion of a plant.
-    DeletePlanting(DeletePlantActionPayload),
+    DeletePlanting(ActionWrapper<Vec<DeletePlantActionPayload>>),
     /// An action used to broadcast movement of a plant.
-    MovePlanting(MovePlantActionPayload),
+    MovePlanting(ActionWrapper<Vec<MovePlantActionPayload>>),
     /// An action used to broadcast transformation of a plant.
-    TransformPlanting(TransformPlantActionPayload),
+    TransformPlanting(ActionWrapper<Vec<TransformPlantActionPayload>>),
+    /// An action used to update the `add_date` of a plant.
+    UpdatePlantingAddDate(ActionWrapper<Vec<UpdatePlantingAddDateActionPayload>>),
+    /// An action used to update the `remove_date` of a plant.
+    UpdatePlantingRemoveDate(ActionWrapper<Vec<UpdatePlantingRemoveDateActionPayload>>),
     /// An action used to broadcast updating a Markdown notes of a plant.
-    UpdatePlatingNotes(UpdatePlantingNoteActionPayload),
+    UpdatePlatingNotes(ActionWrapper<Vec<UpdatePlantingNoteActionPayload>>),
     /// An action used to broadcast creation of a baseLayerImage.
     CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
     /// An action used to broadcast update of a baseLayerImage.
     UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
     /// An action used to broadcast deletion of a baseLayerImage.
     DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
-    /// An action used to update the `add_date` of a plant.
-    UpdatePlantingAddDate(UpdatePlantingAddDateActionPayload),
-    /// An action used to update the `remove_date` of a plant.
-    UpdatePlantingRemoveDate(UpdatePlantingRemoveDateActionPayload),
     /// An action used to broadcast an update to the map gemetry.
     UpdateMapGeometry(UpdateMapGeometryActionPayload),
     /// An action used to update the `additional_name` of a plant.
     UpdatePlantingAdditionalName(UpdatePlantingAdditionalNamePayload),
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct ActionWrapper<T> {
+    pub action_id: Uuid,
+    pub user_id: Uuid,
+    pub payload: T,
 }
 
 impl Action {
@@ -67,6 +82,156 @@ impl Action {
             Self::UpdateMapGeometry(payload) => payload.action_id,
         }
     }
+
+    #[must_use]
+    pub fn new_create_planting_action(
+        dtos: &[PlantingDto],
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self::CreatePlanting(ActionWrapper {
+            action_id,
+            user_id,
+            payload: dtos
+                .iter()
+                .map(|dto| CreatePlantActionPayload {
+                    id: dto.id,
+                    layer_id: dto.layer_id,
+                    plant_id: dto.plant_id,
+                    x: dto.x,
+                    y: dto.y,
+                    width: dto.width,
+                    height: dto.height,
+                    rotation: dto.rotation,
+                    scale_x: dto.scale_x,
+                    scale_y: dto.scale_y,
+                    add_date: dto.add_date,
+                    remove_date: dto.remove_date,
+                    seed_id: dto.seed_id,
+                    additional_name: dto.additional_name.clone(),
+                    is_area: dto.is_area,
+                })
+                .collect(),
+        })
+    }
+
+    #[must_use]
+    pub fn new_delete_planting_action(
+        dtos: &[DeletePlantingDto],
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self::DeletePlanting(ActionWrapper {
+            action_id,
+            user_id,
+            payload: dtos
+                .iter()
+                .map(|dto| DeletePlantActionPayload { id: dto.id })
+                .collect(),
+        })
+    }
+
+    #[must_use]
+    pub fn new_move_planting_action(
+        dtos: &[MovePlantingDto],
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self::MovePlanting(ActionWrapper {
+            action_id,
+            user_id,
+            payload: dtos
+                .iter()
+                .map(|dto| MovePlantActionPayload {
+                    id: dto.id,
+                    x: dto.x,
+                    y: dto.y,
+                })
+                .collect(),
+        })
+    }
+
+    #[must_use]
+    pub fn new_transform_planting_action(
+        dtos: &[TransformPlantingDto],
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self::TransformPlanting(ActionWrapper {
+            action_id,
+            user_id,
+            payload: dtos
+                .iter()
+                .map(|dto| TransformPlantActionPayload {
+                    id: dto.id,
+                    x: dto.x,
+                    y: dto.y,
+                    rotation: dto.rotation,
+                    scale_x: dto.scale_x,
+                    scale_y: dto.scale_y,
+                })
+                .collect(),
+        })
+    }
+
+    #[must_use]
+    pub fn new_update_planting_add_date_action(
+        dtos: &[UpdateAddDatePlantingDto],
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self::UpdatePlantingAddDate(ActionWrapper {
+            action_id,
+            user_id,
+            payload: dtos
+                .iter()
+                .map(|dto| UpdatePlantingAddDateActionPayload {
+                    id: dto.id,
+                    add_date: dto.add_date,
+                })
+                .collect(),
+        })
+    }
+
+    #[must_use]
+    pub fn new_update_planting_remove_date_action(
+        dtos: &[UpdateRemoveDatePlantingDto],
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self::UpdatePlantingRemoveDate(ActionWrapper {
+            action_id,
+            user_id,
+            payload: dtos
+                .iter()
+                .map(|dto| UpdatePlantingRemoveDateActionPayload {
+                    id: dto.id,
+                    remove_date: dto.remove_date,
+                })
+                .collect(),
+        })
+    }
+
+    #[must_use]
+    pub fn new_update_planting_note_action(
+        dtos: &[UpdatePlantingNoteDto],
+        user_id: Uuid,
+        action_id: Uuid,
+    ) -> Self {
+        Self::UpdatePlatingNotes(ActionWrapper {
+            action_id,
+            user_id,
+            payload: dtos
+                .iter()
+                .map(|dto| UpdatePlantingNoteActionPayload {
+                    id: dto.id,
+                    action_id,
+                    user_id,
+                    notes: dto.notes.clone(),
+                })
+                .collect(),
+        })
+    }
 }
 
 #[typeshare]
@@ -75,8 +240,6 @@ impl Action {
 /// This struct should always match [`PlantingDto`].
 #[serde(rename_all = "camelCase")]
 pub struct CreatePlantActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     plant_id: i32,
@@ -94,50 +257,12 @@ pub struct CreatePlantActionPayload {
     is_area: bool,
 }
 
-impl CreatePlantActionPayload {
-    #[must_use]
-    pub fn new(payload: PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id: payload.id,
-            layer_id: payload.layer_id,
-            plant_id: payload.plant_id,
-            x: payload.x,
-            y: payload.y,
-            width: payload.width,
-            height: payload.height,
-            rotation: payload.rotation,
-            scale_x: payload.scale_x,
-            scale_y: payload.scale_y,
-            add_date: payload.add_date,
-            remove_date: payload.remove_date,
-            seed_id: payload.seed_id,
-            additional_name: payload.additional_name,
-            is_area: payload.is_area,
-        }
-    }
-}
-
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
 /// The payload of the [`Action::DeletePlanting`].
 #[serde(rename_all = "camelCase")]
 pub struct DeletePlantActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
-}
-
-impl DeletePlantActionPayload {
-    #[must_use]
-    pub fn new(id: Uuid, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id,
-        }
-    }
 }
 
 #[typeshare]
@@ -145,24 +270,9 @@ impl DeletePlantActionPayload {
 /// The payload of the [`Action::MovePlanting`].
 #[serde(rename_all = "camelCase")]
 pub struct MovePlantActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     x: i32,
     y: i32,
-}
-
-impl MovePlantActionPayload {
-    #[must_use]
-    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id: payload.id,
-            x: payload.x,
-            y: payload.y,
-        }
-    }
 }
 
 #[typeshare]
@@ -170,30 +280,12 @@ impl MovePlantActionPayload {
 /// The payload of the [`Action::TransformPlanting`].
 #[serde(rename_all = "camelCase")]
 pub struct TransformPlantActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     x: i32,
     y: i32,
     rotation: f32,
     scale_x: f32,
     scale_y: f32,
-}
-
-impl TransformPlantActionPayload {
-    #[must_use]
-    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id: payload.id,
-            x: payload.x,
-            y: payload.y,
-            rotation: payload.rotation,
-            scale_x: payload.scale_x,
-            scale_y: payload.scale_y,
-        }
-    }
 }
 
 #[typeshare]
@@ -205,22 +297,6 @@ pub struct UpdatePlantingNoteActionPayload {
     action_id: Uuid,
     id: Uuid,
     notes: String,
-}
-
-impl UpdatePlantingNoteActionPayload {
-    #[must_use]
-    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
-        let notes = payload
-            .planting_notes
-            .as_ref()
-            .map_or_else(String::new, ToOwned::to_owned);
-        Self {
-            user_id,
-            action_id,
-            id: payload.id,
-            notes,
-        }
-    }
 }
 
 #[typeshare]
@@ -308,22 +384,8 @@ impl UpdateBaseLayerImageActionPayload {
 /// The payload of the [`Action::UpdatePlantingAddDate`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdatePlantingAddDateActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     add_date: Option<NaiveDate>,
-}
-
-impl UpdatePlantingAddDateActionPayload {
-    #[must_use]
-    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id: payload.id,
-            add_date: payload.add_date,
-        }
-    }
 }
 
 #[typeshare]
@@ -331,22 +393,8 @@ impl UpdatePlantingAddDateActionPayload {
 /// The payload of the [`Action::UpdatePlantingRemoveDate`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdatePlantingRemoveDateActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     remove_date: Option<NaiveDate>,
-}
-
-impl UpdatePlantingRemoveDateActionPayload {
-    #[must_use]
-    pub fn new(payload: &PlantingDto, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id: payload.id,
-            remove_date: payload.remove_date,
-        }
-    }
 }
 
 #[typeshare]

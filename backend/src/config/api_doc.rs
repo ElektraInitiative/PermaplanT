@@ -15,6 +15,10 @@ use crate::{
     },
     model::{
         dto::{
+            core::{
+                ActionDtoWrapperDeletePlantings, ActionDtoWrapperNewPlantings,
+                ActionDtoWrapperUpdatePlantings, TimelinePagePlantingsDto,
+            },
             plantings::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
                 UpdateAddDatePlantingDto, UpdatePlantingDto, UpdatePlantingNoteDto,
@@ -168,6 +172,7 @@ struct BaseLayerImagesApiDoc;
     components(
         schemas(
             PlantingDto,
+            TimelinePagePlantingsDto,
             NewPlantingDto,
             UpdatePlantingDto,
             TransformPlantingDto,
@@ -175,6 +180,9 @@ struct BaseLayerImagesApiDoc;
             UpdateAddDatePlantingDto,
             UpdateRemoveDatePlantingDto,
             UpdatePlantingNoteDto,
+            ActionDtoWrapperNewPlantings,
+            ActionDtoWrapperUpdatePlantings,
+            ActionDtoWrapperDeletePlantings,
         )
     ),
     modifiers(&SecurityAddon)

@@ -29,4 +29,5 @@
 - **Non-functional Constraints:**
   - Elements automatically get removed after one year.
 - **Linked Use Cases:**
+  - Non-semantic
   - [Map Webcam](../draft/map_webcam.md)

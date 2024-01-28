@@ -1,5 +1,5 @@
 {
-  "header": "Pricing",
+  "header": "Pricing 2024",
   "subheader": "Be part of the solidary and non-profit PermaplanT world! The whole income will be used to pay for further development, research and continous operation. Prices are per calender year:",
   "table_headers": {
     "membership": "Type",
@@ -9,17 +9,17 @@
   "membership_types": {
     "pro": {
       "name": "Supporting Member",
-      "price": "100\u00a0€",
+      "price": "119\u00a0€",
       "description": "As a supporting member, you not only become a legal member of the association and enjoy the community and all the features of the app, but you also enable a person with lower financial means to be a contributing member. Thank you!"
     },
     "starter": {
       "name": "Regular Member",
-      "price": "50\u00a0€",
+      "price": "59\u00a0€",
       "description": "As regular member, you become a legal member of the association and enjoy the community and the features of the app."
     },
     "collab": {
       "name": "Contributing Member",
-      "price": "50\u00a0permacoins",
+      "price": "59\u00a0permacoins",
       "description": "You enjoy all features of the app, but you need to collect permapoints by helping others. If you reach the required amount before the end of the year, no annual fee in Euro will be charged."
     }
   },
