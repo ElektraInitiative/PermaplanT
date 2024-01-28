@@ -1,5 +1,7 @@
 //! Configurations for the app data that is available to all controllers.
 
+use crate::config::app::Config;
+use crate::config::keycloak_client::KeycloakClient;
 use crate::sse::broadcaster::Broadcaster;
 use actix_web::web::Data;
 
@@ -11,6 +13,8 @@ pub struct AppDataInner {
     pub pool: connection::Pool,
     /// Server-Sent Events broadcaster.
     pub broadcaster: Broadcaster,
+    /// Client for the keycloak admin API
+    pub keycloak_client: KeycloakClient,
 }
 
 /// Initializes the app data that is available to all controllers.
@@ -18,9 +22,14 @@ pub struct AppDataInner {
 /// # Panics
 /// If the database pool can not be initialized.
 #[must_use]
-pub fn init(database_url: &str) -> Data<AppDataInner> {
-    let pool = connection::init_pool(database_url);
+pub fn init(config: &Config) -> Data<AppDataInner> {
+    let pool = connection::init_pool(&config.database_url);
     let broadcaster = Broadcaster::new();
+    let keycloak_client = KeycloakClient::new(&config);
 
-    Data::new(AppDataInner { pool, broadcaster })
+    Data::new(AppDataInner {
+        pool,
+        broadcaster,
+        keycloak_client,
+    })
 }

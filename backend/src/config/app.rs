@@ -4,6 +4,35 @@ use std::env;
 
 use dotenvy::dotenv;
 use oauth2::{ClientId, ClientSecret, ResourceOwnerPassword, ResourceOwnerUsername};
+use reqwest::Url;
+
+/// Environment variables that are required for the configuration of the server.
+pub struct EnvVars {
+    pub bind_address_host: &'static str,
+    pub bind_address_port: &'static str,
+    pub database_url: &'static str,
+    pub auth_discovery_uri: &'static str,
+    pub auth_client_id: &'static str,
+    pub keycloak_auth_uri: &'static str,
+    pub keycloak_client_id: &'static str,
+    pub keycloak_client_secret: &'static str,
+    pub keycloak_username: &'static str,
+    pub keycloak_password: &'static str,
+}
+
+/// Holds the names of all required environment variables
+const ENV_VARS: EnvVars = EnvVars {
+    bind_address_host: "BIND_ADDRESS_HOST",
+    bind_address_port: "BIND_ADDRESS_PORT",
+    database_url: "DATABASE_URL",
+    auth_discovery_uri: "AUTH_DISCOVERY_URI",
+    auth_client_id: "AUTH_CLIENT_ID",
+    keycloak_auth_uri: "KEYCLOAK_AUTH_URI",
+    keycloak_client_id: "KEYCLOAK_CLIENT_ID",
+    keycloak_client_secret: "KEYCLOAK_CLIENT_SECRET",
+    keycloak_username: "KEYCLOAK_USERNAME",
+    keycloak_password: "KEYCLOAK_PASSWORD",
+};
 
 /// Configuration data for the server.
 pub struct Config {
@@ -18,6 +47,8 @@ pub struct Config {
     /// The `client_id` the frontend should use to log in its users.
     pub client_id: String,
 
+    /// The URI of the auth server used to acquire a token for the admin API.
+    pub keycloak_auth_uri: Url,
     /// The `client_id` the backend uses to communicate with the auth server.
     pub keycloak_client_id: ClientId,
     /// The `client_secret` the backend uses to communicate with the auth server.
@@ -38,40 +69,50 @@ impl Config {
     pub fn from_env() -> Result<Self, Box<dyn std::error::Error>> {
         load_env_file()?;
 
-        let host = env::var("BIND_ADDRESS_HOST")
-            .map_err(|_| "Failed to get BIND_ADDRESS_HOST from environment.")?;
-        let port = env::var("BIND_ADDRESS_PORT")
-            .map_err(|_| "Failed to get BIND_ADDRESS_PORT from environment.")?
+        let host = env::var(ENV_VARS.bind_address_host)
+            .map_err(|_| env_error(ENV_VARS.bind_address_host))?;
+        let port = env::var(ENV_VARS.bind_address_port)
+            .map_err(|_| env_error(ENV_VARS.bind_address_port))?
             .parse::<u16>()
             .map_err(|e| e.to_string())?;
 
         let database_url =
-            env::var("DATABASE_URL").map_err(|_| "Failed to get DATABASE_URL from environment.")?;
-        let auth_discovery_uri = env::var("AUTH_DISCOVERY_URI")
-            .map_err(|_| "Failed to get AUTH_DISCOVERY_URI from environment.")?;
-        let client_id = env::var("AUTH_CLIENT_ID")
-            .map_err(|_| "Failed to get AUTH_CLIENT_ID from environment.")?;
+            env::var(ENV_VARS.database_url).map_err(|_| env_error(ENV_VARS.database_url))?;
+        let auth_discovery_uri = env::var(ENV_VARS.auth_discovery_uri)
+            .map_err(|_| env_error(ENV_VARS.auth_discovery_uri))?;
+        let client_id =
+            env::var(ENV_VARS.auth_client_id).map_err(|_| env_error(ENV_VARS.auth_client_id))?;
 
-        let keycloak_client_id = env::var("KEYCLOAK_CLIENT_ID")
-            .map_err(|_| "Failed to get KEYCLOAK_CLIENT_ID from environment.")?;
-        let keycloak_client_secret = env::var("KEYCLOAK_CLIENT_SECRET")
-            .map_err(|_| "Failed to get KEYCLOAK_CLIENT_SECRET from environment.")?;
-        let keycloak_username = env::var("KEYCLOAK_USERNAME")
-            .map_err(|_| "Failed to get KEYCLOAK_USERNAME from environment.")?;
-        let keycloak_password = env::var("KEYCLOAK_PASSWORD")
-            .map_err(|_| "Failed to get KEYCLOAK_PASSWORD from environment.")?;
+        let keycloak_auth_uri = env::var(ENV_VARS.keycloak_auth_uri)
+            .map_err(|_| env_error(ENV_VARS.keycloak_auth_uri))?
+            .parse::<Url>()
+            .map_err(|e| e.to_string())?;
+        let keycloak_client_id = env::var(ENV_VARS.keycloak_client_id)
+            .map_err(|_| env_error(ENV_VARS.keycloak_client_id))?;
+        let keycloak_client_secret = env::var(ENV_VARS.keycloak_client_secret)
+            .map_err(|_| env_error(ENV_VARS.keycloak_client_secret))?;
+        let keycloak_username = env::var(ENV_VARS.keycloak_username)
+            .map_err(|_| env_error(ENV_VARS.keycloak_username))?;
+        let keycloak_password = env::var(ENV_VARS.keycloak_password)
+            .map_err(|_| env_error(ENV_VARS.keycloak_password))?;
 
         Ok(Self {
             bind_address: (host, port),
             database_url,
             auth_discovery_uri,
             client_id,
+            keycloak_auth_uri,
             keycloak_client_id: ClientId::new(keycloak_client_id),
             keycloak_client_secret: ClientSecret::new(keycloak_client_secret),
             keycloak_username: ResourceOwnerUsername::new(keycloak_username),
             keycloak_password: ResourceOwnerPassword::new(keycloak_password),
         })
     }
+}
+
+/// Generates an error message for missing env variables
+fn env_error(env_var: &str) -> String {
+    format!("Failed to get {env_var} from environment")
 }
 
 /// Load the .env file. A missing file does not result in an error.

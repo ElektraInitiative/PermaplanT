@@ -46,14 +46,13 @@
     clippy::use_debug,
     clippy::verbose_file_reads
 )]
-// Cannot fix some errors because dependecies import them.
+// Cannot fix some errors because dependencies import them.
 #![allow(clippy::multiple_crate_versions)]
 
 use actix_cors::Cors;
 use actix_web::{http, middleware::Logger, App, HttpServer};
 use config::{api_doc, auth::Config, routes};
 use db::{connection::Pool, cronjobs::cleanup_maps};
-use log::info;
 
 pub mod config;
 pub mod controller;
@@ -80,27 +79,14 @@ async fn main() -> std::io::Result<()> {
 
     Config::init(&config).await;
 
-    info!(
+    log::info!(
         "Starting server on {}:{}",
-        config.bind_address.0, config.bind_address.1
+        config.bind_address.0,
+        config.bind_address.1
     );
 
-    let data = config::data::init(&config.database_url);
+    let data = config::data::init(&config);
     start_cronjobs(data.pool.clone());
-
-    let mut client = config::keycloak_client::KeycloakClient::new(&config).map_err(|e| {
-        std::io::Error::new(
-            std::io::ErrorKind::Other,
-            format!("Error creating Keycloak client: {e}"),
-        )
-    })?;
-
-    client.get_users().await.map_err(|e| {
-        std::io::Error::new(
-            std::io::ErrorKind::Other,
-            format!("Error getting users from Keycloak: {e}"),
-        )
-    })?;
 
     HttpServer::new(move || {
         App::new()
