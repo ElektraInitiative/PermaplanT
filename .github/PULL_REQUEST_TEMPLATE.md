@@ -62,3 +62,5 @@ But also the PR creator should check these points when getting a PR done:
 - [ ] I've read through the whole code
 - [ ] I've read through the whole documentation
 - [ ] I've checked conformity to guidelines
+- [ ] I've checked conformity to requirements
+- [ ] I've checked that the requirements are tested

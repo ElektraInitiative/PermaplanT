@@ -1,4 +1,9 @@
 {
   "header": "Our Team",
-  "subheader": "This initiative is made possible due to fantastic effort of:"
+  "subheader": "This initiative is made possible due to fantastic effort of:",
+  "role_lead": "Project Lead",
+  "role_permaculture_expert": "Permaculture Expert",
+  "role_devops": "DevOps",
+  "role_software_engineer": "Software Engineer",
+  "role_security_analyst": "Security Analyst"
 }

@@ -711,8 +711,6 @@ pub struct Seed {
     pub generation: Option<i16>,
     /// Notes about the seeds.
     pub notes: Option<String>,
-    /// The variety of the seed. Currently unused.
-    pub variety: Option<String>,
     /// The id of the plant this seed belongs to.
     pub plant_id: Option<i32>,
     /// The id of the owner of the seed.
@@ -739,7 +737,6 @@ pub struct NewSeed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
-    pub variety: Option<String>,
     pub owner_id: Uuid,
 }
 

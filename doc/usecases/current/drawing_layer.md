@@ -30,6 +30,7 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved, removed or deleted drawings as desired.
 - **Non-functional Constraints:**
+  - Non-semantic
   - Offline availability
   - New Layers can be created.
   - Performance: at least 1000 elements per year per drawing layer should be usable without noticeable delays and acceptable memory overhead
