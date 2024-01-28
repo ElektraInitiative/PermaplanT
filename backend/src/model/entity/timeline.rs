@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 use diesel::{
     sql_query,
-    sql_types::{BigInt, Date, Nullable},
+    sql_types::{Date, Integer},
     QueryResult, QueryableByName,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
@@ -9,15 +9,21 @@ use std::collections::HashMap;
 
 use crate::model::dto::timeline::{TimelineDto, TimelineEntryDto, TimelineParameters};
 
+///Query that calculates the timeline
+const CALCULATE_TIMELINE_QUERY: &str = include_str!("../sql/calculate_timeline.sql");
+
 /// Stores the result of the timeline query. Dates and sum of additions and removals of plantings.
 #[derive(QueryableByName, Debug)]
 struct TimelineQeueryResult {
-    #[diesel(sql_type = Nullable<Date>)]
-    date: Option<NaiveDate>,
-    #[diesel(sql_type = BigInt)]
-    additions: i64,
-    #[diesel(sql_type = BigInt)]
-    removals: i64,
+    /// a date where at least one addition or removal of a planting took place
+    #[diesel(sql_type = Date)]
+    date: NaiveDate,
+    /// the sum of planting additions on this date
+    #[diesel(sql_type = Integer)]
+    additions: i32,
+    /// the sum of planting removals on this date
+    #[diesel(sql_type = Integer)]
+    removals: i32,
 }
 
 /// Summarize all plantings into a timeline.
@@ -33,101 +39,68 @@ pub async fn calculate(
     // 2000-01-01  7          3
     // 2000-01-02  4          0
     // 2000-01-03  2          8
-
-    let query = sql_query(
-        "SELECT
-            COALESCE(t1.add_date, t2.remove_date) as date,
-            COALESCE(t1.additions, 0) as additions,
-            COALESCE(t2.removals, 0) as removals
-        FROM
-            (
-                SELECT
-                    add_date,
-                    COUNT(*) as additions
-                FROM
-                    plantings
-                WHERE
-                    add_date BETWEEN $1 AND $2
-                GROUP BY
-                    add_date
-            ) t1
-        FULL OUTER JOIN
-            (
-                SELECT
-                    remove_date,
-                    COUNT(*) as removals
-                FROM
-                    plantings
-                WHERE
-                    remove_date BETWEEN $1 AND $2
-                GROUP BY
-                    remove_date
-            ) t2
-        ON
-            t1.add_date = t2.remove_date",
-    )
-    .bind::<diesel::sql_types::Date, _>(params.start)
-    .bind::<diesel::sql_types::Date, _>(params.end);
+    let query = sql_query(CALCULATE_TIMELINE_QUERY)
+        .bind::<diesel::sql_types::Date, _>(params.start)
+        .bind::<diesel::sql_types::Date, _>(params.end);
 
     let results = query.load::<TimelineQeueryResult>(conn).await?;
 
-    let mut date_map: HashMap<String, TimelineEntryDto> = HashMap::new();
-    let mut month_map: HashMap<String, TimelineEntryDto> = HashMap::new();
-    let mut year_map: HashMap<String, TimelineEntryDto> = HashMap::new();
+    let mut years: HashMap<String, TimelineEntryDto> = HashMap::new();
+    let mut months: HashMap<String, TimelineEntryDto> = HashMap::new();
+    let mut dates: HashMap<String, TimelineEntryDto> = HashMap::new();
 
     for result in results {
-        // Due to the query date cannot actually be null
-        let date = result.date.unwrap();
+        let date = result.date;
         let date_string = date.format("%Y-%m-%d").to_string();
         let month_string = date.format("%Y-%m").to_string();
         let year_string = date.format("%Y").to_string();
 
-        date_map.insert(
+        dates.insert(
             date_string,
             TimelineEntryDto {
-                additions: result.additions as i32,
-                removals: result.removals as i32,
+                additions: result.additions,
+                removals: result.removals,
             },
         );
 
-        let (month_additions, month_removals) = month_map.get(&month_string).map_or(
-            (result.additions as i32, result.removals as i32),
-            |entry| {
-                (
-                    entry.additions + result.additions as i32,
-                    entry.removals + result.removals as i32,
-                )
-            },
-        );
-        month_map.insert(
+        let (month_additions, month_removals) =
+            months
+                .get(&month_string)
+                .map_or((result.additions, result.removals), |entry| {
+                    (
+                        entry.additions + result.additions,
+                        entry.removals + result.removals,
+                    )
+                });
+        months.insert(
             month_string,
             TimelineEntryDto {
-                additions: month_additions as i32,
-                removals: month_removals as i32,
+                additions: month_additions,
+                removals: month_removals,
             },
         );
 
-        let (year_additions, year_removals) = year_map.get(&year_string).map_or(
-            (result.additions as i32, result.removals as i32),
-            |entry| {
-                (
-                    entry.additions + result.additions as i32,
-                    entry.removals + result.removals as i32,
-                )
-            },
-        );
-        year_map.insert(
+        let (year_additions, year_removals) =
+            years
+                .get(&year_string)
+                .map_or((result.additions, result.removals), |entry| {
+                    (
+                        entry.additions + result.additions,
+                        entry.removals + result.removals,
+                    )
+                });
+        years.insert(
             year_string,
             TimelineEntryDto {
-                additions: year_additions as i32,
-                removals: year_removals as i32,
+                additions: year_additions,
+                removals: year_removals,
             },
         );
     }
 
     Ok(TimelineDto {
-        years: year_map,
-        months: month_map,
-        dates: date_map,
+        years,
+        months,
+        dates,
     })
 }

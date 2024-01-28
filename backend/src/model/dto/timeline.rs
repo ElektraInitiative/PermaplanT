@@ -22,7 +22,9 @@ pub struct TimelineDto {
     pub years: HashMap<String, TimelineEntryDto>,
     #[schema(example = "{ \"2020-01\": { \"additions\": 7, \"removals\": 7 } }")]
     pub months: HashMap<String, TimelineEntryDto>,
-    #[schema(example = "{ \"2020-01-01\": { \"additions\": 3, \"removals\": 2 }, \"2020-01-05\": { \"additions\": 4, \"removals\": 5 } }")]
+    #[schema(
+        example = "{ \"2020-01-01\": { \"additions\": 3, \"removals\": 2 }, \"2020-01-05\": { \"additions\": 4, \"removals\": 5 } }"
+    )]
     pub dates: HashMap<String, TimelineEntryDto>,
 }
 

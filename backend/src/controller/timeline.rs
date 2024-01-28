@@ -30,6 +30,6 @@ pub async fn get_timeline(
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     let params = parameters.into_inner();
-    let dto = service::timeline::calculate_timeline(params, &app_data).await?;
+    let dto = service::timeline::calculate(params, &app_data).await?;
     Ok(HttpResponse::Ok().json(dto))
 }

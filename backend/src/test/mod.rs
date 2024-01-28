@@ -15,5 +15,6 @@ mod plant_layer;
 // mod plant_layer_heatmap;
 mod plantings;
 mod seed;
+mod timeline;
 mod users;
 pub mod util;
