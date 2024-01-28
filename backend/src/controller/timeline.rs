@@ -18,7 +18,7 @@ use actix_web::{
         TimelineParameters
     ),
     responses(
-        (status = 200, description = "Get timeline of plantings", body = TimelineDto)
+      (status = 200, description = "Get timeline data from plantings", body = TimelineDto)
     ),
     security(
         ("oauth2" = [])
