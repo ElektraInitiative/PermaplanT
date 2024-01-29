@@ -1,9 +1,12 @@
 import Konva from 'konva';
+import { KonvaEventListener, Node } from 'konva/lib/Node';
+import { Shape } from 'konva/lib/Shape';
+import { Stage } from 'konva/lib/Stage';
 import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect } from 'react';
 import { Layer } from 'react-konva';
 import * as uuid from 'uuid';
-import { LayerType, Shade } from '@/api_types/definitions';
+import { LayerType, Shade, ShadingDto } from '@/api_types/definitions';
 import { CreateShadingAction } from '@/features/map_planning/layers/shade/actions';
 import { Shading } from '@/features/map_planning/layers/shade/components/Shading';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -18,15 +21,20 @@ function stopEditingShadeLayer() {
   useMapStore.getState().clearStatusPanelContent();
 }
 
+function isShading(obj: Stage | Shape | Node) {
+  return obj.getAttr('shading') || obj.parent?.getAttr('shading');
+}
+
 type ShadeLayerProps = Konva.LayerConfig;
 
-export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
+export function ShadeLayer(props: ShadeLayerProps) {
   const currentDateShadingDtos = useMapStore((state) => state.trackedState.layers.shade.objects);
   const executeAction = useMapStore((state) => state.executeAction);
   const shadeLayerSelectShading = useMapStore((state) => state.shadeLayerSelectShadings);
   const selectedShadeForNewShading = useMapStore(
     (state) => state.untrackedState.layers.shade.selectedShadeForNewShading,
   );
+  const removeNodesFromTransformer = useMapStore((store) => store.removeNodesFromTransformer);
 
   useKeyHandlers(
     {
@@ -34,7 +42,7 @@ export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
     },
     document,
     false,
-    layerProps.listening,
+    props.listening,
   );
 
   const shadings = currentDateShadingDtos
@@ -74,7 +82,9 @@ export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
       else return 1;
     });
 
-  const onStageClick = useCallback(
+  removeNodesFromTransformer();
+
+  const handlePlaceShading = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
       const currentLayer = useMapStore.getState().untrackedState.selectedLayer;
       const shadingManipulationState =
@@ -84,19 +94,13 @@ export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
 
       if (
         typeOfLayer(currentLayer) !== LayerType.Shade ||
-        shadingManipulationState !== 'inactive'
+        shadingManipulationState !== 'inactive' ||
+        selectedShadeForNewShading === null
       ) {
         return;
       }
 
-      if (selectedShadeForNewShading !== null) {
-        placeNewShading(e.currentTarget.getRelativePointerPosition());
-        return;
-      }
-
-      if (!e.target.getAttr('shading')) {
-        shadeLayerSelectShading(null);
-      }
+      placeNewShading(e.currentTarget.getRelativePointerPosition());
 
       function placeNewShading(point: Vector2d) {
         executeAction(
@@ -110,23 +114,77 @@ export function ShadeLayer({ ...layerProps }: ShadeLayerProps) {
         );
       }
     },
-    [selectedShadeForNewShading, executeAction, shadeLayerSelectShading],
+    [selectedShadeForNewShading, executeAction],
+  );
+
+  const handleSelectShading: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
+    const currentLayer = useMapStore.getState().untrackedState.selectedLayer;
+    const shadingManipulationState =
+      useMapStore.getState().untrackedState.layers.shade.selectedShadingEditMode;
+
+    if (
+      typeOfLayer(currentLayer) !== LayerType.Shade ||
+      shadingManipulationState !== 'inactive' ||
+      selectedShadeForNewShading !== null
+    ) {
+      return;
+    }
+
+    const selectedShadings = (foundPlantings: ShadingDto[], konvaNode: Node) => {
+      const shadingNode = isShading(konvaNode);
+      return shadingNode ? [...foundPlantings, shadingNode] : [foundPlantings];
+    };
+
+    const transformer = useMapStore.getState().transformer.current;
+    const shadings = transformer?.nodes().reduce(selectedShadings, []);
+
+    if (shadings?.length) {
+      useMapStore.getState().shadeLayerSelectShadings(shadings);
+    }
+  }, [selectedShadeForNewShading]);
+
+  const handleUnselectShading = useCallback(
+    (e: Konva.KonvaEventObject<MouseEvent>) => {
+      const currentLayer = useMapStore.getState().untrackedState.selectedLayer;
+      const shadingManipulationState =
+        useMapStore.getState().untrackedState.layers.shade.selectedShadingEditMode;
+
+      if (
+        typeOfLayer(currentLayer) !== LayerType.Shade ||
+        shadingManipulationState !== 'inactive' ||
+        selectedShadeForNewShading !== null
+      ) {
+        return;
+      }
+
+      if (!isShading(e.target)) {
+        shadeLayerSelectShading(null);
+      }
+    },
+    [selectedShadeForNewShading, shadeLayerSelectShading],
   );
 
   useEffect(() => {
-    const stageRef = useMapStore.getState().stageRef;
-    stageRef.current?.on('click.shadeLayer', onStageClick);
+    if (!props.listening) {
+      return;
+    }
+
+    useMapStore.getState().stageRef.current?.on('click.placeShading', handlePlaceShading);
+    useMapStore.getState().stageRef.current?.on('click.unselectShading', handleUnselectShading);
+    useMapStore.getState().stageRef.current?.on('mouseup.selectShading', handleSelectShading);
 
     return () => {
-      stageRef.current?.off('click.shadeLayer');
+      useMapStore.getState().stageRef.current?.off('click.placeShading');
+      useMapStore.getState().stageRef.current?.off('click.unselectShading');
+      useMapStore.getState().stageRef.current?.off('mouseup.selectShading');
     };
-  }, [onStageClick]);
+  }, [handlePlaceShading, handleSelectShading, handleUnselectShading, props.listening]);
 
   return (
     <Layer
-      {...layerProps}
-      opacity={(layerProps.opacity ?? 0) * 0.6}
-      listening={selectedShadeForNewShading === null && layerProps.listening}
+      {...props}
+      opacity={(props.opacity ?? 0) * 0.6}
+      listening={selectedShadeForNewShading === null && props.listening}
     >
       {shadings}
     </Layer>
