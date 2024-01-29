@@ -48,7 +48,6 @@ export default function MapOverview() {
     ).length;
     const mapCopy: NewMapDto = {
       name: `${targetMap.name.replace(/ \([0123456789]+\)$/, '')} (${copyNumber})`,
-      created_at: new Date().toISOString().split('T')[0],
       deletion_date: targetMap.deletion_date,
       last_visit: targetMap.last_visit,
       is_inactive: targetMap.is_inactive,
