@@ -95,7 +95,7 @@ pub struct NewPlanting {
     pub is_area: bool,
     /// The uuid of the user that created the planting.
     pub created_by: Uuid,
-    /// The datetime the planting was last modified.
+    /// The user who last modified the planting.
     pub modified_by: Uuid,
 }
 

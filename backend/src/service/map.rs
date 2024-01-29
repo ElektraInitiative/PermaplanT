@@ -109,7 +109,7 @@ pub async fn update(
 ) -> Result<MapDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
     let map = Map::find_by_id(id, &mut conn).await?;
-    if map.owner_id != user_id {
+    if map.created_by != user_id {
         return Err(ServiceError {
             status_code: StatusCode::FORBIDDEN,
             reason: "No permission to update data".to_owned(),
@@ -133,7 +133,7 @@ pub async fn update_geomtery(
 ) -> Result<MapDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
     let map = Map::find_by_id(id, &mut conn).await?;
-    if map.owner_id != user_id {
+    if map.created_by != user_id {
         return Err(ServiceError {
             status_code: StatusCode::FORBIDDEN,
             reason: "No permission to update data".to_owned(),

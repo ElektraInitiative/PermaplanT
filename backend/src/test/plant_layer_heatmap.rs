@@ -35,7 +35,7 @@ async fn initial_db_values(
         .values((
             &crate::schema::maps::id.eq(-1),
             &crate::schema::maps::name.eq("Test Map: can search map"),
-            &crate::schema::maps::creation_date
+            &crate::schema::maps::created_at
                 .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
             &crate::schema::maps::is_inactive.eq(false),
             &crate::schema::maps::zoom_factor.eq(100),
@@ -43,7 +43,7 @@ async fn initial_db_values(
             &crate::schema::maps::visits.eq(0),
             &crate::schema::maps::harvested.eq(0),
             &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-            &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+            &crate::schema::maps::created_by.eq(Uuid::new_v4()),
             &crate::schema::maps::geometry.eq(polygon),
         ))
         .execute(conn)

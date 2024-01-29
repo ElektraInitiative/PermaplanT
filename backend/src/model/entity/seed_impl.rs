@@ -15,7 +15,7 @@ use crate::{
     model::dto::{NewSeedDto, SeedDto},
     schema::{
         plants::{self, common_name_de, common_name_en, unique_name},
-        seeds::{self, all_columns, harvest_year, name, owner_id, use_by},
+        seeds::{self, all_columns, created_by, harvest_year, name, use_by},
     },
 };
 
@@ -103,7 +103,7 @@ impl Seed {
         }
 
         // Only return seeds that belong to the user.
-        query = query.filter(owner_id.eq(user_id));
+        query = query.filter(created_by.eq(user_id));
 
         let query = query
             .paginate(page_parameters.page)
@@ -127,7 +127,7 @@ impl Seed {
         let mut query = seeds::table.select(all_columns).into_boxed();
 
         // Only return seeds that belong to the user.
-        query = query.filter(owner_id.eq(user_id).and(seeds::id.eq(id)));
+        query = query.filter(created_by.eq(user_id).and(seeds::id.eq(id)));
 
         debug!("{}", debug_query::<Pg, _>(&query));
         query.first::<Self>(conn).await.map(Into::into)
@@ -189,7 +189,7 @@ impl Seed {
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<usize> {
         // Only delete seeds that belong to the user.
-        let source = seeds::table.filter(owner_id.eq(user_id).and(seeds::id.eq(id)));
+        let source = seeds::table.filter(created_by.eq(user_id).and(seeds::id.eq(id)));
 
         let query = diesel::delete(source);
         debug!("{}", debug_query::<Pg, _>(&query));
@@ -206,7 +206,7 @@ impl Seed {
         user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<SeedDto> {
-        let source = seeds::table.filter(owner_id.eq(user_id).and(seeds::id.eq(id)));
+        let source = seeds::table.filter(created_by.eq(user_id).and(seeds::id.eq(id)));
 
         let query_result = diesel::update(source)
             .set(seeds::archived_at.eq(archived_at))

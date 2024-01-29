@@ -117,7 +117,7 @@ export default function MapCreateForm() {
     }
     const newMap: NewMapDto = {
       name: mapInput.name,
-      creation_date: new Date().toISOString().split('T')[0],
+      created_at: new Date().toISOString().split('T')[0],
       is_inactive: false,
       zoom_factor: 100,
       honors: 0,

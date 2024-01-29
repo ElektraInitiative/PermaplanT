@@ -1,4 +1,5 @@
 [typescript.type_mappings]
 "NaiveDate" = "string"
+"NaiveDateTime" = "string"
 "Uuid" = "string"
 "Value" = "object"

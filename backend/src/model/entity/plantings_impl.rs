@@ -1,6 +1,6 @@
 //! Contains the implementation of [`Planting`].
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, Utc};
 use diesel::pg::Pg;
 use diesel::{
     debug_query, BoolExpressionMethods, ExpressionMethods, NullableExpressionMethods, QueryDsl,
@@ -17,6 +17,8 @@ use crate::model::dto::plantings::{
 use crate::model::entity::plantings::{NewPlanting, Planting};
 use crate::schema::plantings::{self, layer_id, plant_id};
 use crate::schema::seeds;
+
+use crate::schema::maps;
 
 use super::plantings::UpdatePlanting;
 
@@ -153,6 +155,8 @@ impl Planting {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn update(
         dto: UpdatePlantingDto,
+        map_id: i32,
+        user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantingDto>> {
         let planting_updates = Vec::from(dto);
@@ -160,9 +164,19 @@ impl Planting {
         let result = conn
             .transaction(|transaction| {
                 Box::pin(async {
-                    let futures = Self::do_update(planting_updates, transaction);
+                    let futures = Self::do_update(planting_updates, user_id, transaction);
 
                     let results = futures_util::future::try_join_all(futures).await?;
+
+                    if let Some(first) = results.get(0) {
+                        // Update modification metadate on maps because a planting has been modified
+                        diesel::update(maps::table.find(map_id))
+                            .set((
+                                maps::modified_at.eq(first.modified_at),
+                                maps::modified_by.eq(user_id),
+                            ))
+                            .execute(transaction);
+                    }
 
                     Ok(results) as QueryResult<Vec<Self>>
                 })
@@ -178,13 +192,19 @@ impl Planting {
     /// this helper function is needed, with explicit type annotations.
     fn do_update(
         updates: Vec<UpdatePlanting>,
+        user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> Vec<impl Future<Output = QueryResult<Self>>> {
         let mut futures = Vec::with_capacity(updates.len());
+        let now = Utc::now().naive_utc();
 
         for update in updates {
             let updated_planting = diesel::update(plantings::table.find(update.id))
-                .set(update)
+                .set((
+                    update,
+                    plantings::modified_at.eq(now),
+                    plantings::modified_by.eq(user_id),
+                ))
                 .get_result::<Self>(conn);
 
             futures.push(updated_planting);

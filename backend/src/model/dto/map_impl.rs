@@ -9,7 +9,10 @@ impl From<Map> for MapDto {
         Self {
             id: map.id,
             name: map.name,
-            creation_date: map.creation_date,
+            created_at: map.created_at,
+            modified_at: map.modified_at,
+            created_by: map.created_by,
+            modified_by: map.modified_by,
             deletion_date: map.deletion_date,
             last_visit: map.last_visit,
             is_inactive: map.is_inactive,
@@ -20,7 +23,6 @@ impl From<Map> for MapDto {
             privacy: map.privacy,
             description: map.description,
             location: map.location.map(From::from),
-            owner_id: map.owner_id,
             geometry: map.geometry,
         }
     }

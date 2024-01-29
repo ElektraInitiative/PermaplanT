@@ -39,7 +39,7 @@ async fn test_seeds_pagination_succeeds() {
                         crate::schema::seeds::harvest_year.eq(2022),
                         crate::schema::seeds::plant_id.eq(-1),
                         crate::schema::seeds::quantity.eq(Quantity::Enough),
-                        crate::schema::seeds::owner_id.eq(user_id),
+                        crate::schema::seeds::created_by.eq(user_id),
                     )
                 })
                 .collect::<Vec<_>>();

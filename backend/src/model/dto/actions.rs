@@ -39,7 +39,7 @@ pub struct Action {
 #[serde(tag = "type", content = "payload")]
 pub enum ActionType {
     /// An action used to broadcast creation of a plant.
-    CreatePlanting(Vec<CreatePlantActionPayload>),
+    CreatePlanting(Vec<PlantingDto>),
     /// An action used to broadcast deletion of a plant.
     DeletePlanting(Vec<DeletePlantActionPayload>),
     /// An action used to broadcast movement of a plant.
@@ -85,25 +85,7 @@ impl Action {
         Self {
             action_id,
             user_id,
-            action: ActionType::CreatePlanting(
-                dtos.iter()
-                    .map(|dto| CreatePlantActionPayload {
-                        id: dto.id,
-                        layer_id: dto.layer_id,
-                        plant_id: dto.plant_id,
-                        x: dto.x,
-                        y: dto.y,
-                        rotation: dto.rotation,
-                        size_x: dto.size_x,
-                        size_y: dto.size_y,
-                        add_date: dto.add_date,
-                        remove_date: dto.remove_date,
-                        seed_id: dto.seed_id,
-                        additional_name: dto.additional_name.clone(),
-                        is_area: dto.is_area,
-                    })
-                    .collect(),
-            ),
+            payload: Vec::from(dtos),
         }
     }
 
@@ -228,27 +210,6 @@ impl Action {
             ),
         }
     }
-}
-
-#[typeshare]
-#[derive(Debug, Serialize, Clone)]
-/// The payload of the [`ActionType::CreatePlanting`].
-/// This struct should always match [`PlantingDto`].
-#[serde(rename_all = "camelCase")]
-pub struct CreatePlantActionPayload {
-    id: Uuid,
-    layer_id: i32,
-    plant_id: i32,
-    x: i32,
-    y: i32,
-    rotation: f32,
-    size_x: i32,
-    size_y: i32,
-    add_date: Option<NaiveDate>,
-    remove_date: Option<NaiveDate>,
-    seed_id: Option<i32>,
-    additional_name: Option<String>,
-    is_area: bool,
 }
 
 #[typeshare]

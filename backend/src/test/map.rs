@@ -26,7 +26,7 @@ async fn test_can_search_maps() {
                 .values(vec![(
                     &crate::schema::maps::id.eq(-1),
                     &crate::schema::maps::name.eq("Test Map: can find map"),
-                    &crate::schema::maps::creation_date
+                    &crate::schema::maps::created_at
                         .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
                     &crate::schema::maps::is_inactive.eq(false),
                     &crate::schema::maps::zoom_factor.eq(100),
@@ -34,12 +34,12 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::created_by.eq(Uuid::new_v4()),
                     &crate::schema::maps::geometry.eq(tall_rectangle()),
                 ),(
                     &crate::schema::maps::id.eq(-2),
                     &crate::schema::maps::name.eq("Other"),
-                    &crate::schema::maps::creation_date
+                    &crate::schema::maps::created_at
                         .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
                     &crate::schema::maps::is_inactive.eq(false),
                     &crate::schema::maps::zoom_factor.eq(100),
@@ -47,7 +47,7 @@ async fn test_can_search_maps() {
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::created_by.eq(Uuid::new_v4()),
                     &crate::schema::maps::geometry.eq(tall_rectangle()),
                 )])
                 .execute(conn)
@@ -96,7 +96,7 @@ async fn test_can_find_map_by_id() {
                 .values((
                     &crate::schema::maps::id.eq(-1),
                     &crate::schema::maps::name.eq("Test Map: can search map"),
-                    &crate::schema::maps::creation_date
+                    &crate::schema::maps::created_at
                         .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
                     &crate::schema::maps::is_inactive.eq(false),
                     &crate::schema::maps::zoom_factor.eq(100),
@@ -104,7 +104,7 @@ async fn test_can_find_map_by_id() {
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::created_by.eq(Uuid::new_v4()),
                     &crate::schema::maps::geometry.eq(tall_rectangle()),
                 ))
                 .execute(conn)
@@ -132,7 +132,7 @@ async fn test_can_create_map() {
 
     let new_map = NewMapDto {
         name: "Test Map: can create map".to_string(),
-        creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        created_at: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
         deletion_date: None,
         last_visit: None,
         is_inactive: false,
@@ -173,7 +173,7 @@ async fn test_update_fails_for_not_owner() {
                 .values((
                     &crate::schema::maps::id.eq(-1),
                     &crate::schema::maps::name.eq("Test Map: no update permission"),
-                    &crate::schema::maps::creation_date
+                    &crate::schema::maps::created_at
                         .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
                     &crate::schema::maps::is_inactive.eq(false),
                     &crate::schema::maps::zoom_factor.eq(100),
@@ -181,7 +181,7 @@ async fn test_update_fails_for_not_owner() {
                     &crate::schema::maps::visits.eq(0),
                     &crate::schema::maps::harvested.eq(0),
                     &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-                    &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
+                    &crate::schema::maps::created_by.eq(Uuid::new_v4()),
                     &crate::schema::maps::geometry.eq(tall_rectangle()),
                 ))
                 .execute(conn)
@@ -216,7 +216,7 @@ async fn test_can_update_map() {
 
     let new_map = NewMapDto {
         name: "Test Map: can update map".to_string(),
-        creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        created_at: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
         deletion_date: None,
         last_visit: None,
         is_inactive: false,
@@ -262,7 +262,7 @@ async fn test_can_update_map_geometry() {
 
     let new_map = NewMapDto {
         name: "Test Map: can update map geomety".to_string(),
-        creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        created_at: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
         deletion_date: None,
         last_visit: None,
         is_inactive: false,
