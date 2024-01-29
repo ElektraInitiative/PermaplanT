@@ -203,7 +203,6 @@ export function Shading({ shading }: ShadingProps) {
         strokeWidth={editorLongestSide / 500}
         lineCap="round"
         closed={true}
-        shading={shading}
       />
       {polygonPoints}
     </Group>
