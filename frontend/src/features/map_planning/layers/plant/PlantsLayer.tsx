@@ -39,19 +39,19 @@ function exitPlantingMode() {
 
 type CreatePlantingArgs =
   | {
-      isArea: false;
-      selectedPlantForPlanting: PlantForPlanting;
-      xCoordinate: number;
-      yCoordinate: number;
-    }
+    isArea: false;
+    selectedPlantForPlanting: PlantForPlanting;
+    xCoordinate: number;
+    yCoordinate: number;
+  }
   | {
-      isArea: true;
-      selectedPlantForPlanting: PlantForPlanting;
-      xCoordinate: number;
-      yCoordinate: number;
-      width: number;
-      height: number;
-    };
+    isArea: true;
+    selectedPlantForPlanting: PlantForPlanting;
+    xCoordinate: number;
+    yCoordinate: number;
+    width: number;
+    height: number;
+  };
 
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
@@ -77,6 +77,11 @@ function usePlantLayerListeners(listening: boolean) {
         isArea: args.isArea,
         // This `satisfies` gives us type safety while omitting the `sizeX` and `sizeY` properties
         // they get set later in this function
+        modifiedAt: '',
+        modifiedBy: '',
+        createdAt: '',
+        createdBy: '',
+        plantingNotes: '',
       } satisfies Omit<
         ConstructorParameters<typeof CreatePlantAction>[0][number],
         'sizeX' | 'sizeY'

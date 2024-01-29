@@ -23,7 +23,7 @@ export default function MapOverview() {
   const [infoMessage, setInfoMessage] = useState(initialMessage);
 
   const searchParams: MapSearchParameters = {
-    owner_id: user?.profile.sub,
+    created_by: user?.profile.sub,
   };
 
   const { data } = useMapsSearch(searchParams);
@@ -48,7 +48,7 @@ export default function MapOverview() {
     ).length;
     const mapCopy: NewMapDto = {
       name: `${targetMap.name.replace(/ \([0123456789]+\)$/, '')} (${copyNumber})`,
-      creation_date: new Date().toISOString().split('T')[0],
+      created_at: new Date().toISOString().split('T')[0],
       deletion_date: targetMap.deletion_date,
       last_visit: targetMap.last_visit,
       is_inactive: targetMap.is_inactive,

@@ -27,13 +27,13 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
         .values(vec![(
             &crate::schema::maps::id.eq(-1),
             &crate::schema::maps::name.eq("MyMap"),
-            &crate::schema::maps::creation_date.eq(Utc::now().date_naive()),
+            &crate::schema::maps::created_at.eq(Utc::now().date_naive()),
             &crate::schema::maps::is_inactive.eq(false),
             &crate::schema::maps::zoom_factor.eq(0),
             &crate::schema::maps::honors.eq(0),
             &crate::schema::maps::visits.eq(0),
             &crate::schema::maps::harvested.eq(0),
-            &crate::schema::maps::owner_id.eq(Uuid::default()),
+            &crate::schema::maps::created_by.eq(Uuid::default()),
             &crate::schema::maps::privacy.eq(PrivacyOption::Private),
             &crate::schema::maps::geometry.eq(tall_rectangle()),
         )])

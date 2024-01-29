@@ -1,7 +1,7 @@
 //! DTOs of `PermaplanT`.
 #![allow(clippy::module_name_repetitions)] // There needs to be a difference between DTOs and entities otherwise imports will be messy.
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, NaiveDateTime};
 use postgis_diesel::types::{Point, Polygon};
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
@@ -77,8 +77,8 @@ pub struct SeedDto {
     pub price: Option<i16>,
     /// Notes about the seeds.
     pub notes: Option<String>,
-    /// The id of the owner of the seed.
-    pub owner_id: Uuid,
+    /// The id of the creator of the seed.
+    pub created_by: Uuid,
     /// Timestamp indicating when the seed was archived.
     /// Empty if the seed was not archived.
     pub archived_at: Option<String>,
@@ -213,8 +213,14 @@ pub struct MapDto {
     pub id: i32,
     /// The name of the map.
     pub name: String,
-    /// The date the map was created.
-    pub creation_date: NaiveDate,
+    /// When the map was created.
+    pub created_at: NaiveDateTime,
+    /// When a map was last modified, e.g by modifying plantings.
+    pub modified_at: NaiveDateTime,
+    /// The id of the creator of the map.
+    pub created_by: Uuid,
+    /// By whom the map was last modified.
+    pub modified_by: Uuid,
     /// The date the map is supposed to be deleted.
     pub deletion_date: Option<NaiveDate>,
     /// The date the last time the map view was opened by any user.
@@ -235,8 +241,6 @@ pub struct MapDto {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Coordinates>,
-    /// The id of the owner of the map.
-    pub owner_id: Uuid,
     /// The geometry of the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
@@ -251,8 +255,6 @@ pub struct MapDto {
 pub struct NewMapDto {
     /// The name of the map.
     pub name: String,
-    /// The date the map was created.
-    pub creation_date: NaiveDate,
     /// The date the map is supposed to be deleted.
     pub deletion_date: Option<NaiveDate>,
     /// The date the last time the map view was opened by any user.
@@ -315,8 +317,8 @@ pub struct MapSearchParameters {
     pub name: Option<String>,
     /// Whether or not the map is active.
     pub is_inactive: Option<bool>,
-    /// The owner of the map.
-    pub owner_id: Option<Uuid>,
+    /// The creator of the map.
+    pub created_by: Option<Uuid>,
     /// The selected privacy of the map.
     pub privacy: Option<PrivacyOption>,
 }

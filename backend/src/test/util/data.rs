@@ -1,6 +1,6 @@
 //! Dummy-Data for tests.
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, NaiveDateTime};
 use diesel::Insertable;
 use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
@@ -14,14 +14,14 @@ use super::dummy_map_polygons::tall_rectangle;
 pub struct TestInsertableMap {
     pub id: i32,
     pub name: String,
-    pub creation_date: NaiveDate,
+    pub created_at: NaiveDateTime,
     pub is_inactive: bool,
     pub zoom_factor: i16,
     pub honors: i16,
     pub visits: i16,
     pub harvested: i16,
     pub privacy: PrivacyOption,
-    pub owner_id: Uuid,
+    pub created_by: Uuid,
     pub geometry: Polygon<Point>,
 }
 
@@ -30,14 +30,14 @@ impl Default for TestInsertableMap {
         Self {
             id: -1,
             name: "Test Map 1".to_owned(),
-            creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+            created_at: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
             is_inactive: false,
             zoom_factor: 100,
             honors: 0,
             visits: 0,
             harvested: 0,
             privacy: PrivacyOption::Public,
-            owner_id: Uuid::default(),
+            created_by: Uuid::default(),
             geometry: tall_rectangle(),
         }
     }

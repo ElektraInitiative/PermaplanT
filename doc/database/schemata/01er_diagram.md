@@ -96,7 +96,7 @@ maps {
   INT honors
   INT visits
   INT harvested
-  DATE creation_date
+  DATE created_at
   DATE deletion_date
   DATE inactivity_date
   INT zoom_factor

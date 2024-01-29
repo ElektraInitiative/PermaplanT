@@ -116,7 +116,7 @@ pub async fn update(
 
     let ActionDtoWrapper { action_id, dto } = update_planting.into_inner();
 
-    let updated_plantings = plantings::update(dto.clone(), &app_data).await?;
+    let updated_plantings = plantings::update(dto.clone(), map_id, user_info.id, &app_data).await?;
 
     let action = match &dto {
         UpdatePlantingDto::Transform(dto) => {

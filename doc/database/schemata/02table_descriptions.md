@@ -72,7 +72,7 @@ Store relations between plants.
 | **_Column name_**   | **_Example_** | **_Description_**                                                                              |
 | :------------------ | :------------ | :--------------------------------------------------------------------------------------------- |
 | **id**              | 1             |
-| **owner_id**        | 1             |
+| **created_by**      | 1             |
 | **name**            | My Map        | only alphanumerical values                                                                     |
 | **is_inactive**     | false         |
 | **last_visit**      | 2023-04-04    |
@@ -80,7 +80,7 @@ Store relations between plants.
 | **visits**          | 0             | 0 to infinity                                                                                  |
 | **harvested**       | 0             | 0 to infinity, amount of plants harvested on this map                                          |
 | **version_date**    | 2023-04-04    | the date the snapshot for this version was taken                                               |
-| **creation_date**   | 2023-04-04    |
+| **created_at**      | 2023-04-04    |
 | **deletion_date**   | 2023-04-04    |
 | **inactivity_date** | 2023-04-04    |
 | **zoom_factor**     | 100           | value used in formula "X by X cm", e.g. 100 would mean "100 x 100 cm", range from 10 to 100000 |
@@ -160,7 +160,7 @@ Store relations between plants.
 | **_Column name_** | **_Example_**                          | **_Description_**                                                              |
 | :---------------- | :------------------------------------- | :----------------------------------------------------------------------------- |
 | **id**            | 1                                      | list id                                                                        |
-| **owner_id**      | 1                                      | user id                                                                        |
+| **created_by**    | 1                                      | user id                                                                        |
 | **map_id**        | 1                                      | id of the map this list is for                                                 |
 | **name**          | Smoothie Ingredients                   | name of the list                                                               |
 | **description**   | Ingredients for my strawberry smoothie | description of the list                                                        |

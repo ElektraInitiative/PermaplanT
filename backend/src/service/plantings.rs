@@ -96,10 +96,12 @@ pub async fn create(
 /// If the connection to the database could not be established.
 pub async fn update(
     dto: UpdatePlantingDto,
+    map_id: i32,
+    user_id: Uuid,
     app_data: &Data<AppDataInner>,
 ) -> Result<Vec<PlantingDto>, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Planting::update(dto, &mut conn).await?;
+    let result = Planting::update(dto, map_id, user_id, &mut conn).await?;
     Ok(result)
 }
 
