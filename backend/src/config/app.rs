@@ -11,9 +11,8 @@ pub struct EnvVars {
     pub bind_address_host: &'static str,
     pub bind_address_port: &'static str,
     pub database_url: &'static str,
-    pub auth_discovery_uri: &'static str,
+    pub auth_host: &'static str,
     pub auth_client_id: &'static str,
-    pub keycloak_auth_uri: &'static str,
     pub keycloak_client_id: &'static str,
     pub keycloak_client_secret: &'static str,
     pub keycloak_username: &'static str,
@@ -25,9 +24,8 @@ const ENV_VARS: EnvVars = EnvVars {
     bind_address_host: "BIND_ADDRESS_HOST",
     bind_address_port: "BIND_ADDRESS_PORT",
     database_url: "DATABASE_URL",
-    auth_discovery_uri: "AUTH_DISCOVERY_URI",
+    auth_host: "AUTH_HOST",
     auth_client_id: "AUTH_CLIENT_ID",
-    keycloak_auth_uri: "KEYCLOAK_AUTH_URI",
     keycloak_client_id: "KEYCLOAK_CLIENT_ID",
     keycloak_client_secret: "KEYCLOAK_CLIENT_SECRET",
     keycloak_username: "KEYCLOAK_USERNAME",
@@ -78,15 +76,18 @@ impl Config {
 
         let database_url =
             env::var(ENV_VARS.database_url).map_err(|_| env_error(ENV_VARS.database_url))?;
-        let auth_discovery_uri = env::var(ENV_VARS.auth_discovery_uri)
-            .map_err(|_| env_error(ENV_VARS.auth_discovery_uri))?;
+        let auth_host = env::var(ENV_VARS.auth_host).map_err(|_| env_error(ENV_VARS.auth_host))?;
+
+        let auth_discovery_uri =
+            format!("{auth_host}/realms/PermaplanT/.well-known/openid-configuration");
+        let keycloak_auth_uri =
+            format!("{auth_host}/auth/realms/master/protocol/openid-connect/token")
+                .parse::<Url>()
+                .map_err(|e| e.to_string())?;
+
         let client_id =
             env::var(ENV_VARS.auth_client_id).map_err(|_| env_error(ENV_VARS.auth_client_id))?;
 
-        let keycloak_auth_uri = env::var(ENV_VARS.keycloak_auth_uri)
-            .map_err(|_| env_error(ENV_VARS.keycloak_auth_uri))?
-            .parse::<Url>()
-            .map_err(|e| e.to_string())?;
         let keycloak_client_id = env::var(ENV_VARS.keycloak_client_id)
             .map_err(|_| env_error(ENV_VARS.keycloak_client_id))?;
         let keycloak_client_secret = env::var(ENV_VARS.keycloak_client_secret)

@@ -91,10 +91,9 @@ impl KeycloakApi {
         let token_header = HeaderValue::from_str(&format!("Bearer {}", token.secret()))?;
         request.headers_mut().append("Authorization", token_header);
 
-        let res = client.execute(request).await?;
-        let text = res.text().await?;
+        let res = client.execute(request).await?.json::<T>().await?;
 
-        serde_json::from_str(&text).map_err(Into::into)
+        Ok(res)
     }
 
     /// Refreshes the access token if it is expired.
