@@ -1,5 +1,6 @@
 //! Contains the implementation of [`Map`].
 
+use chrono::NaiveDateTime;
 use diesel::dsl::sql;
 use diesel::pg::Pg;
 use diesel::sql_types::Float;
@@ -130,5 +131,22 @@ impl Map {
         let query = diesel::update(maps::table.find(id)).set(&map_update);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
+    }
+
+    /// Update modified metadate (modified_at, modified_by) of the map.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn update_modified_metadata(
+        map_id: i32,
+        user_id: Uuid,
+        time: NaiveDateTime,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<()> {
+        diesel::update(maps::table.find(map_id))
+            .set((maps::modified_at.eq(time), maps::modified_by.eq(user_id)))
+            .execute(conn)
+            .await?;
+        Ok(())
     }
 }
