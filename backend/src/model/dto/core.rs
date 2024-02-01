@@ -7,13 +7,13 @@ use typeshare::typeshare;
 use utoipa::ToSchema;
 use uuid::Uuid;
 
-use super::plantings::{DeletePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto};
+use super::plantings::{DeletePlantingDto, PlantingDto, UpdatePlantingDto};
 
 /// A wrapper for a dto that is used to perform an action.
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[aliases(
-    ActionDtoWrapperNewPlantings = ActionDtoWrapper<Vec<NewPlantingDto>>,
+    ActionDtoWrapperPlantings = ActionDtoWrapper<Vec<PlantingDto>>,
     ActionDtoWrapperUpdatePlantings = ActionDtoWrapper<UpdatePlantingDto>,
     ActionDtoWrapperDeletePlantings = ActionDtoWrapper<Vec<DeletePlantingDto>>,
     ActionDtoWrapperDeleteDrawings = ActionDtoWrapper<Vec<Uuid>>,

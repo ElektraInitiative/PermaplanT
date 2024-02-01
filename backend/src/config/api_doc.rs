@@ -16,14 +16,12 @@ use crate::{
     model::{
         dto::{
             core::{
-                ActionDtoWrapperDeleteDrawings, ActionDtoWrapperDeletePlantings,
-                ActionDtoWrapperNewPlantings, ActionDtoWrapperUpdatePlantings,
-                TimelinePagePlantingsDto,
+                ActionDtoWrapperDeletePlantings, ActionDtoWrapperPlantings,
+                ActionDtoWrapperUpdatePlantings, TimelinePagePlantingsDto,
             },
             plantings::{
-                MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
-                UpdateAddDatePlantingDto, UpdatePlantingDto, UpdatePlantingNoteDto,
-                UpdateRemoveDatePlantingDto,
+                MovePlantingDto, PlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
+                UpdatePlantingDto, UpdatePlantingNoteDto, UpdateRemoveDatePlantingDto,
             },
             timeline::{TimelineDto, TimelineEntryDto},
             BaseLayerImageDto, ConfigDto, Coordinates, GainedBlossomsDto, GuidedToursDto, LayerDto,
@@ -173,16 +171,15 @@ struct BaseLayerImagesApiDoc;
     ),
     components(
         schemas(
-            PlantingDto,
             TimelinePagePlantingsDto,
-            NewPlantingDto,
+            PlantingDto,
             UpdatePlantingDto,
             TransformPlantingDto,
             MovePlantingDto,
             UpdateAddDatePlantingDto,
             UpdateRemoveDatePlantingDto,
             UpdatePlantingNoteDto,
-            ActionDtoWrapperNewPlantings,
+            ActionDtoWrapperPlantings,
             ActionDtoWrapperUpdatePlantings,
             ActionDtoWrapperDeletePlantings,
             ActionDtoWrapperDeleteDrawings,

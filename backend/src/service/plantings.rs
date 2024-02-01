@@ -9,7 +9,7 @@ use crate::config::data::AppDataInner;
 use crate::error::ServiceError;
 use crate::model::dto::core::TimelinePage;
 use crate::model::dto::plantings::{
-    DeletePlantingDto, NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+    DeletePlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
 };
 use crate::model::entity::plantings::Planting;
 use crate::model::entity::plantings_impl::FindPlantingsParameters;
@@ -81,7 +81,7 @@ pub async fn find_by_seed_id(
 /// # Errors
 /// If the connection to the database could not be established.
 pub async fn create(
-    dtos: Vec<NewPlantingDto>,
+    dtos: Vec<PlantingDto>,
     map_id: i32,
     user_id: Uuid,
     app_data: &Data<AppDataInner>,

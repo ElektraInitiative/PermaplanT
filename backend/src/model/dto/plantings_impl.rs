@@ -6,7 +6,7 @@ use uuid::Uuid;
 use crate::model::entity::plantings::{NewPlanting, Planting, UpdatePlanting};
 
 use super::plantings::{
-    MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
+    MovePlantingDto, PlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
     UpdatePlantingDto, UpdatePlantingNoteDto, UpdateRemoveDatePlantingDto,
 };
 
@@ -44,8 +44,8 @@ impl From<Planting> for PlantingDto {
     }
 }
 
-impl From<(NewPlantingDto, Uuid)> for NewPlanting {
-    fn from((dto, user_id): (NewPlantingDto, Uuid)) -> Self {
+impl From<(PlantingDto, Uuid)> for NewPlanting {
+    fn from((dto, user_id): (PlantingDto, Uuid)) -> Self {
         Self {
             id: dto.id,
             plant_id: dto.plant_id,
