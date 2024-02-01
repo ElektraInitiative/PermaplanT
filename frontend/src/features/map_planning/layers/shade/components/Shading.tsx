@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import { KonvaEventObject, Node } from 'konva/lib/Node';
-import React, { useCallback, useEffect } from 'react';
+import React, { forwardRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Circle, Group, Line } from 'react-konva';
 import { Shade, ShadingDto } from '@/api_types/definitions';
@@ -21,7 +21,10 @@ export interface ShadingProps {
   shading: ShadingDto;
 }
 
-export function Shading({ shading }: ShadingProps) {
+export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
+  { shading }: ShadingProps,
+  ref,
+) {
   const { t } = useTranslation('shadeLayer');
   const editorLongestSide = useMapStore((map) =>
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
@@ -195,6 +198,7 @@ export function Shading({ shading }: ShadingProps) {
   return (
     <Group shading={shading} draggable={false}>
       <Line
+        ref={ref}
         onClick={handleClickOnShading}
         listening={true}
         points={flattenRing(geometry.rings[0])}
@@ -207,7 +211,7 @@ export function Shading({ shading }: ShadingProps) {
       {polygonPoints}
     </Group>
   );
-}
+});
 
 function isShadingPlacementModeActive() {
   const selectedPlantForPlanting =

@@ -3,7 +3,7 @@ import { KonvaEventListener, Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { Vector2d } from 'konva/lib/types';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Layer } from 'react-konva';
 import * as uuid from 'uuid';
 import { LayerType, Shade, ShadingDto } from '@/api_types/definitions';
@@ -27,6 +27,11 @@ function isShading(obj: Stage | Shape | Node) {
 
 type ShadeLayerProps = Konva.LayerConfig;
 
+type ShadingRef = {
+  id: string;
+  ref: Konva.Line;
+};
+
 export function ShadeLayer(props: ShadeLayerProps) {
   const currentDateShadingDtos = useMapStore((state) => state.trackedState.layers.shade.objects);
   const executeAction = useMapStore((state) => state.executeAction);
@@ -34,7 +39,9 @@ export function ShadeLayer(props: ShadeLayerProps) {
   const selectedShadeForNewShading = useMapStore(
     (state) => state.untrackedState.layers.shade.selectedShadeForNewShading,
   );
-  const removeNodesFromTransformer = useMapStore((store) => store.removeNodesFromTransformer);
+
+  const shadingRefs = useRef<Array<ShadingRef>>([]);
+  shadingRefs.current = []; // Old shading refs become invalid once this component is rerendered.
 
   useKeyHandlers(
     {
@@ -46,7 +53,7 @@ export function ShadeLayer(props: ShadeLayerProps) {
   );
 
   const shadings = currentDateShadingDtos
-    .map((dto) => {
+    .map((dto, i) => {
       // We sort all shadings such that darker shading values are always on top.
       let shadeIndex;
       switch (dto.shade) {
@@ -71,7 +78,16 @@ export function ShadeLayer(props: ShadeLayerProps) {
           break;
       }
 
-      return <Shading key={`${shadeIndex}-shading-${dto.id}`} shading={dto} />;
+      return (
+        <Shading
+          ref={(ref) => {
+            //
+            if (ref && shadingRefs?.current) shadingRefs.current[i] = { ref, id: dto.id };
+          }}
+          key={`${shadeIndex}-shading-${dto.id}`}
+          shading={dto}
+        />
+      );
     })
     .sort((a, b) => {
       const indexA = a.key?.at(0) ?? '4';
@@ -81,8 +97,6 @@ export function ShadeLayer(props: ShadeLayerProps) {
       else if (indexA > indexB) return -1;
       else return 1;
     });
-
-  removeNodesFromTransformer();
 
   const handlePlaceShading = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -179,6 +193,39 @@ export function ShadeLayer(props: ShadeLayerProps) {
       useMapStore.getState().stageRef.current?.off('mouseup.selectShading');
     };
   }, [handlePlaceShading, handleSelectShading, handleUnselectShading, props.listening]);
+
+  /*
+    This is an ugly workaround for a pretty annoying bug involving the Konva transformer.
+
+    The problem:
+    Updating a shade value using ShadeLayerLeftToolbar causes a rerender of the corresponding shading component.
+    Since this causes all affected shading components to be replaced by new React nodes, the Konva transformer looses
+    all references to previously selected shadings.
+
+    In simpler therms this means that the selection rectangle either disappears or becomes completely screwed up
+    every time the user changes a shadings shade value.
+
+    The solution:
+    Manually reset the transformer after each rerender of the shade layer.
+  */
+  useEffect(
+    () => {
+      const selectedShadings = useMapStore.getState().untrackedState.layers.shade.selectedShadings;
+
+      const isSelected = (id: string) => {
+        return Boolean(selectedShadings?.find((shading) => shading.id === id));
+      };
+
+      const filteredShadingRefs = shadingRefs.current
+        ?.filter((ref) => isSelected(ref.id))
+        .map((ref) => ref.ref);
+
+      useMapStore.getState().transformer.current?.nodes([]);
+      useMapStore.getState().transformer.current?.nodes(filteredShadingRefs ?? []);
+    },
+    // For some reason using only shadingRefs is not enough to detect changes made to shadingRefs.current
+    [shadingRefs.current], // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   return (
     <Layer
