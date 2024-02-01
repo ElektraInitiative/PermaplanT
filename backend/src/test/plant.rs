@@ -21,8 +21,8 @@ async fn test_get_all_plants_succeeds() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                    &crate::schema::plants::spread.eq(50),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
+                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
                 ))
                 .execute(conn)
                 .await?;
@@ -48,9 +48,9 @@ async fn test_get_all_plants_succeeds() {
 
     let test_plant = PlantsSummaryDto {
         id: -1,
-        unique_name: "Testia testia".to_string(),
+        unique_name: "Testia testia".to_owned(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
-        spread: Some(50),
+        spread: Some(PlantSpread::Wide),
     };
 
     let result = test::read_body(resp).await;
@@ -70,8 +70,8 @@ async fn test_get_one_plant_succeeds() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                    &crate::schema::plants::spread.eq(50),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
+                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
                 ))
                 .execute(conn)
                 .await?;
@@ -97,9 +97,9 @@ async fn test_get_one_plant_succeeds() {
 
     let test_plant = PlantsSummaryDto {
         id: -1,
-        unique_name: "Testia testia".to_string(),
-        common_name_en: Some(vec![Some("Testplant".to_string())]),
-        spread: Some(50),
+        unique_name: "Testia testia".to_owned(),
+        common_name_en: Some(vec![Some("Testplant".to_owned())]),
+        spread: Some(PlantSpread::Wide),
     };
 
     let result = test::read_body(resp).await;
@@ -119,8 +119,8 @@ async fn test_search_plants_succeeds() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
-                    &crate::schema::plants::spread.eq(50),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
+                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
                 ))
                 .execute(conn)
                 .await?;
@@ -146,9 +146,9 @@ async fn test_search_plants_succeeds() {
 
     let test_plant = PlantsSummaryDto {
         id: -1,
-        unique_name: "Testia testia".to_string(),
-        common_name_en: Some(vec![Some("Testplant".to_string())]),
-        spread: Some(50),
+        unique_name: "Testia testia".to_owned(),
+        common_name_en: Some(vec![Some("Testplant".to_owned())]),
+        spread: Some(PlantSpread::Wide),
     };
 
     let result = test::read_body(resp).await;

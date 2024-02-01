@@ -1,6 +1,7 @@
 //! Tests for [`crate::controller::map`].
 
 use crate::model::dto::UpdateMapGeometryDto;
+use crate::test::util::data::TestInsertableMap;
 use crate::test::util::dummy_map_polygons::small_rectangle;
 use crate::{
     model::{
@@ -13,8 +14,6 @@ use actix_web::{
     http::{header, StatusCode},
     test,
 };
-use chrono::NaiveDate;
-use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::Uuid;
 
@@ -23,33 +22,18 @@ async fn test_can_search_maps() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values(vec![(
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("Test Map: can find map"),
-                    &crate::schema::maps::created_at
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-                    &crate::schema::maps::created_by.eq(Uuid::new_v4()),
-                    &crate::schema::maps::geometry.eq(tall_rectangle()),
-                ),(
-                    &crate::schema::maps::id.eq(-2),
-                    &crate::schema::maps::name.eq("Other"),
-                    &crate::schema::maps::created_at
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-                    &crate::schema::maps::created_by.eq(Uuid::new_v4()),
-                    &crate::schema::maps::geometry.eq(tall_rectangle()),
-                )])
+                .values(vec![
+                    TestInsertableMap {
+                        name: "Test Map: can find map".to_owned(),
+                        ..Default::default()
+                    },
+                    TestInsertableMap {
+                        id: -2,
+                        name: "Other".to_owned(),
+                        created_by: Uuid::new_v4(),
+                        ..Default::default()
+                    },
+                ])
                 .execute(conn)
                 .await?;
             Ok(())
@@ -71,7 +55,7 @@ async fn test_can_search_maps() {
     let result_string = std::str::from_utf8(&result).unwrap();
     let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
 
-    assert!(page.results.len() == 2);
+    assert_eq!(page.results.len(), 2);
 
     let resp = test::TestRequest::get()
         .uri("/api/maps?name=Other")
@@ -85,7 +69,7 @@ async fn test_can_search_maps() {
     let result_string = std::str::from_utf8(&result).unwrap();
     let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
 
-    assert!(page.results.len() == 1);
+    assert_eq!(page.results.len(), 1);
 }
 
 #[actix_rt::test]
@@ -93,20 +77,11 @@ async fn test_can_find_map_by_id() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values((
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("Test Map: can search map"),
-                    &crate::schema::maps::created_at
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-                    &crate::schema::maps::created_by.eq(Uuid::new_v4()),
-                    &crate::schema::maps::geometry.eq(tall_rectangle()),
-                ))
+                .values(TestInsertableMap {
+                    id: -1,
+                    name: "Test Map: can find map".to_owned(),
+                    ..Default::default()
+                })
                 .execute(conn)
                 .await?;
             Ok(())
@@ -131,8 +106,7 @@ async fn test_can_create_map() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let new_map = NewMapDto {
-        name: "Test Map: can create map".to_string(),
-        created_at: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        name: "Test Map: can create map".to_owned(),
         deletion_date: None,
         last_visit: None,
         is_inactive: false,
@@ -170,20 +144,11 @@ async fn test_update_fails_for_not_owner() {
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
-                .values((
-                    &crate::schema::maps::id.eq(-1),
-                    &crate::schema::maps::name.eq("Test Map: no update permission"),
-                    &crate::schema::maps::created_at
-                        .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-                    &crate::schema::maps::is_inactive.eq(false),
-                    &crate::schema::maps::zoom_factor.eq(100),
-                    &crate::schema::maps::honors.eq(0),
-                    &crate::schema::maps::visits.eq(0),
-                    &crate::schema::maps::harvested.eq(0),
-                    &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-                    &crate::schema::maps::created_by.eq(Uuid::new_v4()),
-                    &crate::schema::maps::geometry.eq(tall_rectangle()),
-                ))
+                .values(TestInsertableMap {
+                    id: -1,
+                    name: "Test Map: no update permission".to_owned(),
+                    ..Default::default()
+                })
                 .execute(conn)
                 .await?;
             Ok(())
@@ -194,7 +159,7 @@ async fn test_update_fails_for_not_owner() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let map_update = UpdateMapDto {
-        name: Some("This will fail".to_string()),
+        name: Some("This will fail".to_owned()),
         privacy: None,
         description: None,
         location: None,
@@ -215,8 +180,7 @@ async fn test_can_update_map() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let new_map = NewMapDto {
-        name: "Test Map: can update map".to_string(),
-        created_at: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        name: "Test Map: can update map".to_owned(),
         deletion_date: None,
         last_visit: None,
         is_inactive: false,
@@ -239,7 +203,7 @@ async fn test_can_update_map() {
     let map: MapDto = test::read_body_json(resp).await;
 
     let map_update = UpdateMapDto {
-        name: Some("This will succeed".to_string()),
+        name: Some("This will succeed".to_owned()),
         privacy: None,
         description: None,
         location: None,
@@ -261,8 +225,7 @@ async fn test_can_update_map_geometry() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let new_map = NewMapDto {
-        name: "Test Map: can update map geomety".to_string(),
-        created_at: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        name: "Test Map: can update map geometry".to_owned(),
         deletion_date: None,
         last_visit: None,
         is_inactive: false,
@@ -296,5 +259,5 @@ async fn test_can_update_map_geometry() {
         .await;
 
     let updated_map: MapDto = test::read_body_json(resp).await;
-    assert_ne!(updated_map.geometry, map.geometry)
+    assert_ne!(updated_map.geometry, map.geometry);
 }
