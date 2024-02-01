@@ -82,11 +82,12 @@ pub async fn find_by_seed_id(
 /// If the connection to the database could not be established.
 pub async fn create(
     dtos: Vec<NewPlantingDto>,
+    map_id: i32,
     user_id: Uuid,
     app_data: &Data<AppDataInner>,
 ) -> Result<Vec<PlantingDto>, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Planting::create(dtos, user_id, &mut conn).await?;
+    let result = Planting::create(dtos, map_id, user_id, &mut conn).await?;
     Ok(result)
 }
 
@@ -111,9 +112,11 @@ pub async fn update(
 /// If the connection to the database could not be established.
 pub async fn delete_by_ids(
     dtos: Vec<DeletePlantingDto>,
+    map_id: i32,
+    user_id: Uuid,
     app_data: &Data<AppDataInner>,
 ) -> Result<(), ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let _ = Planting::delete_by_ids(dtos, &mut conn).await?;
+    let _ = Planting::delete_by_ids(dtos, map_id, user_id, &mut conn).await?;
     Ok(())
 }

@@ -738,7 +738,6 @@ pub struct NewSeed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
-    pub variety: Option<String>,
     pub created_by: Uuid,
 }
 

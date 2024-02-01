@@ -75,7 +75,7 @@ pub async fn create(
 
     let ActionDtoWrapper { action_id, dto } = new_plantings.into_inner();
 
-    let created_plantings = plantings::create(dto, user_info.id, &app_data).await?;
+    let created_plantings = plantings::create(dto, map_id, user_info.id, &app_data).await?;
 
     app_data
         .broadcaster
@@ -169,7 +169,7 @@ pub async fn delete(
 
     let ActionDtoWrapper { action_id, dto } = delete_planting.into_inner();
 
-    plantings::delete_by_ids(dto.clone(), &app_data).await?;
+    plantings::delete_by_ids(dto.clone(), map_id, user_info.id, &app_data).await?;
 
     app_data
         .broadcaster
