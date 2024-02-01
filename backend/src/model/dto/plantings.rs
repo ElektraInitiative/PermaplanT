@@ -6,8 +6,8 @@ use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
-/// Represents plant planted on a map.
-/// E.g. a user drags a plant from the search results and drops it on the map.
+/// Represents a plant on a map.
+/// E.g. a user selects a plant from the search results and plants it on the map.
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]

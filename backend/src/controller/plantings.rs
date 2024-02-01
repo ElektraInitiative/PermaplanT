@@ -15,6 +15,13 @@ use crate::{
             DeletePlantingDto, NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto,
         },
     },
+use crate::{
+    config::auth::user_info::UserInfo,
+    model::dto::{actions::Action, plantings::MapPlantingDto},
+};
+use crate::{config::data::AppDataInner, model::dto::core::ActionDtoWrapper};
+use crate::{
+    model::dto::plantings::{DeletePlantingDto, PlantingSearchParameters, UpdatePlantingDto},
     service::plantings,
 };
 
@@ -56,9 +63,9 @@ pub async fn find(
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
     ),
-    request_body = ActionDtoWrapperNewPlantings,
+    request_body = ActionDtoWrapperPlantings,
     responses(
-        (status = 201, description = "Create plantings", body = Vec<PlantingDto>)
+        (status = 201, description = "Create plantings", body = Vec<MapPlantingDto>)
     ),
     security(
         ("oauth2" = [])
@@ -67,7 +74,7 @@ pub async fn find(
 #[post("")]
 pub async fn create(
     path: Path<i32>,
-    new_plantings: Json<ActionDtoWrapper<Vec<NewPlantingDto>>>,
+    new_plantings: Json<ActionDtoWrapper<Vec<MapPlantingDto>>>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
@@ -99,7 +106,7 @@ pub async fn create(
     ),
     request_body = ActionDtoWrapperUpdatePlantings,
     responses(
-        (status = 200, description = "Update plantings", body = Vec<PlantingDto>)
+        (status = 200, description = "Update plantings", body = Vec<MapPlantingDto>)
     ),
     security(
         ("oauth2" = [])

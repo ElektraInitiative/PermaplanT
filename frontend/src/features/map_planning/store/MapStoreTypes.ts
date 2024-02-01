@@ -172,7 +172,7 @@ export interface UntrackedMapSlice {
   ) => void;
   lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
-  selectPlantings: (plantings: PlantingDto[] | null, transformerStore?: TransformerStore) => void;
+  selectPlantings: (plantings: PlantingDto[] | null) => void;
   toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;

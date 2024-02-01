@@ -3,14 +3,7 @@ import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
 import { Layer } from 'react-konva';
 import * as uuid from 'uuid';
-import {
-  LayerType,
-  MovePlantActionPayload,
-  PlantingDto,
-  PlantsSummaryDto,
-  SeedDto,
-  TransformPlantActionPayload,
-} from '@/api_types/definitions';
+import { LayerType, PlantingDto, PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
@@ -195,6 +188,11 @@ function usePlantLayerListeners(listening: boolean) {
    * selected for planting, creating an area of plantings inside the selection rectangle
    */
   const handleSelectPlanting: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
+    const selectedPlantings = (foundPlantings: PlantingDto[], konvaNode: Node) => {
+      const plantingNode = konvaNode.getAttr('planting');
+      return plantingNode ? [...foundPlantings, plantingNode] : [foundPlantings];
+    };
+
     if (isPlacementModeActive()) {
       const selectedPlantForPlanting =
         useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;

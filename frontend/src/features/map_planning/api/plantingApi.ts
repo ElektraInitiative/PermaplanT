@@ -2,7 +2,6 @@ import {
   ActionDtoWrapper,
   DeletePlantingDto,
   MovePlantingDto,
-  NewPlantingDto,
   PlantingDto,
   TimelinePage,
   TransformPlantingDto,
@@ -37,10 +36,10 @@ export async function getPlantings(
   }
 }
 
-export async function createPlanting(mapId: number, actionId: string, data: NewPlantingDto[]) {
+export async function createPlanting(mapId: number, actionId: string, data: PlantingDto[]) {
   const http = createAPI();
 
-  const dto: ActionDtoWrapper<NewPlantingDto[]> = {
+  const dto: ActionDtoWrapper<PlantingDto[]> = {
     actionId: actionId,
     dto: data,
   };
