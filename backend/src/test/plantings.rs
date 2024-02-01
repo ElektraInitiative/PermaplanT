@@ -4,7 +4,7 @@ use std::ops::Add;
 
 use actix_http::StatusCode;
 use actix_web::{http::header, test};
-use chrono::{Days, NaiveDate, NaiveDateTime};
+use chrono::{Days, NaiveDate, Utc};
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::Uuid;
 
@@ -134,13 +134,13 @@ async fn test_create_fails_with_invalid_layer() {
             add_date: None,
             seed_id: None,
             is_area: false,
-            created_at: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
+            created_at: Utc::now().naive_utc(),
             created_by: Uuid::new_v4(),
-            modified_at: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
+            modified_at: Utc::now().naive_utc(),
             modified_by: Uuid::new_v4(),
-            remove_date: NaiveDate::from_ymd_opt(2022, 1, 1),
+            remove_date: Some(Utc::now().date_naive()),
             additional_name: None,
-            planting_notes: "".to_owned(),
+            planting_notes: String::new(),
         }],
     };
 
@@ -190,13 +190,13 @@ async fn test_can_create_plantings() {
             add_date: None,
             seed_id: None,
             is_area: false,
-            created_at: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
+            created_at: Utc::now().naive_utc(),
             created_by: Uuid::new_v4(),
-            modified_at: NaiveDateTime::from_timestamp_opt(0, 0).unwrap(),
+            modified_at: Utc::now().naive_utc(),
             modified_by: Uuid::new_v4(),
-            remove_date: NaiveDate::from_ymd_opt(2022, 1, 1),
+            remove_date: Some(Utc::now().date_naive()),
             additional_name: None,
-            planting_notes: "".to_owned(),
+            planting_notes: String::new(),
         }],
     };
 

@@ -29,7 +29,7 @@ async fn test_can_gain_blossom() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let gained_blossom = GainedBlossomsDto {
-        blossom: "Brave Tester".to_string(),
+        blossom: "Brave Tester".to_owned(),
         times_gained: 1,
         gained_date: NaiveDate::from_ymd_opt(2023, 7, 18).expect("Could not parse date!"),
     };

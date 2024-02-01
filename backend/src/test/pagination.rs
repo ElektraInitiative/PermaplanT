@@ -25,7 +25,7 @@ async fn test_seeds_pagination_succeeds() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
                 ))
                 .execute(conn)
                 .await?;
