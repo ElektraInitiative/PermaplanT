@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Circle, Group, Line } from 'react-konva';
 import { UpdateMapGeometry } from '@/features/map_planning/layers/base/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
 import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import {
@@ -28,7 +29,7 @@ export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
   const editorLongestSide = useMapStore((map) =>
     Math.max(map.untrackedState.editorViewRect.width, map.untrackedState.editorViewRect.height),
   );
-  const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
+  const transformerActions = useTransformerStore((state) => state.actions);
   const isBaseLayerActive = useIsBaseLayerActive();
 
   // The Konva-Group of this component is not listening while add mode is active.
@@ -53,7 +54,7 @@ export const MapGeometryEditor = (props: LayerConfigWithListenerRegister) => {
 
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
     if (polygonManipulationState === 'move') {
-      setSingleNodeInTransformer(e.currentTarget);
+      transformerActions.select(e.currentTarget);
       return;
     }
 

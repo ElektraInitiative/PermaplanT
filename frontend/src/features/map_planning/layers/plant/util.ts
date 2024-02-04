@@ -5,13 +5,14 @@ export function calculatePlantCount(
   plantSize: number,
   fieldWidth: number,
   fieldHeight: number,
-): { horizontalPlantCount: number; verticalPlantCount: number } {
-  const horizontalPlantCount = Math.floor(fieldWidth / plantSize);
-  const verticalPlantCount = Math.floor(fieldHeight / plantSize);
+): { perRow: number; perColumn: number; total: number } {
+  const perRow = Math.floor(fieldWidth / plantSize);
+  const perColumn = Math.floor(fieldHeight / plantSize);
 
   return {
-    horizontalPlantCount,
-    verticalPlantCount,
+    perRow: perRow,
+    perColumn: perColumn,
+    total: perRow * perColumn,
   };
 }
 

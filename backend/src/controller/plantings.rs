@@ -6,11 +6,14 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::{config::auth::user_info::UserInfo, model::dto::actions::Action};
-use crate::{config::data::AppDataInner, model::dto::core::ActionDtoWrapper};
 use crate::{
-    model::dto::plantings::{
-        DeletePlantingDto, NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+    config::{auth::user_info::UserInfo, data::AppDataInner},
+    model::dto::{
+        actions::Action,
+        core::ActionDtoWrapper,
+        plantings::{
+            DeletePlantingDto, NewPlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+        },
     },
     service::plantings,
 };

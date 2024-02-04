@@ -1,62 +1,106 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Html } from 'react-konva-utils';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
+import { isOneAreaOfPlanting } from '@/features/map_planning/utils/planting-utils';
 import { colors } from '@/utils/colors';
+import { useFindPlantById } from '../../hooks/plantHookApi';
 import { useSelectedPlantForPlanting } from '../../hooks/useSelectedPlantForPlanting';
 import { calculatePlantCount, getPlantWidth } from '../../util';
 import style from './AreaOfPlantingsIndicator.module.css';
 
-export function AreaOfPlantingsIndicator() {
+function useIndicatorWhilePlanting() {
+  const isSelecting = useMapStore(
+    (state) =>
+      state.untrackedState.layers.plants.selectedPlantForPlanting &&
+      state.selectionRectAttributes.isVisible &&
+      Math.floor(state.selectionRectAttributes.width) > 0 &&
+      Math.floor(state.selectionRectAttributes.height) > 0,
+  );
   const selection = useMapStore((state) => state.selectionRectAttributes);
   const selectedPlant = useSelectedPlantForPlanting();
-  const stage = useMapStore((store) => store.stageRef.current);
+  const stage = useMapStore((state) => state.stageRef.current);
+
+  if (!isSelecting || !selectedPlant || !stage) return null;
+  const mousePos = stage.getRelativePointerPosition();
+
+  return {
+    x: mousePos.x,
+    y: mousePos.y,
+    width: selection.width,
+    height: selection.height,
+    plantWidth: getPlantWidth(selectedPlant.plant),
+  };
+}
+
+const TRANSFORM_EVENT = 'transform.areaOfPlantings';
+
+function useIndicatorWhileResizingAreaOfPlantings() {
+  const transformerActions = useTransformerStore((state) => state.actions);
+  const isResizingAreaOfPlantings = useMapStore(
+    (state) =>
+      isOneAreaOfPlanting(state.untrackedState.layers.plants.selectedPlantings) &&
+      transformerActions.isTransforming(),
+  );
+  const selectedPlantings = useMapStore(
+    (store) => store.untrackedState.layers.plants.selectedPlantings,
+  );
+  const selectedPlanting = selectedPlantings?.[0];
+  const { data: plant } = useFindPlantById({
+    plantId: selectedPlanting?.plantId as number,
+    enabled: Boolean(selectedPlanting?.plantId),
+  });
+  const selectedPlantingNode = transformerActions.getSelection()[0];
   const [pos, setPos] = useState({ x: 0, y: 0 });
-
-  const selectionWidth = Math.floor(selection.width);
-  const selectionHeight = Math.floor(selection.height);
-
-  const isVisible =
-    selectedPlant !== null && selection.isVisible && selectionWidth > 0 && selectionHeight > 0;
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
 
   useEffect(() => {
-    if (!stage) return;
+    if (!selectedPlantingNode) return;
 
-    stage.on('mousemove.areaOfPlantingsIndicator', () => {
-      if (!isVisible) return;
+    selectedPlantingNode.on(TRANSFORM_EVENT, function (this) {
+      const width = this.width() * this.scaleX();
+      const height = this.height() * this.scaleY();
 
-      const pos = stage.getRelativePointerPosition();
-      if (pos === null) return;
-
-      setPos(pos);
+      setPos({ x: this.x() + width, y: this.y() });
+      setWidth(width);
+      setHeight(height);
     });
 
     return () => {
-      stage.off('mousemove.areaOfPlantingsIndicator');
+      selectedPlantingNode.off(TRANSFORM_EVENT);
     };
-  }, [isVisible, stage]);
+  }, [selectedPlantingNode]);
 
-  useLayoutEffect(() => {
-    // before showing the tooltip, place it where the selection rect is
-    if (!isVisible) return;
+  if (!isResizingAreaOfPlantings || !selectedPlanting || !plant || !selectedPlantingNode) {
+    return null;
+  }
 
-    setPos({ x: selection.x, y: selection.y });
-    // we only want to run this if isVisible changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isVisible]);
+  return {
+    x: pos.x,
+    y: pos.y,
+    width: width,
+    height: height,
+    plantWidth: getPlantWidth(plant),
+  };
+}
 
-  if (!isVisible) return null;
+export function AreaOfPlantingsIndicator() {
+  const indicatorDataPlanting = useIndicatorWhilePlanting();
+  const indicatorDataResize = useIndicatorWhileResizingAreaOfPlantings();
+  const stage = useMapStore((store) => store.stageRef.current);
 
-  const plantWidth = getPlantWidth(selectedPlant.plant);
-  const scaleX = stage?.scaleX() ?? 1;
-  const scaleY = stage?.scaleY() ?? 1;
+  const indicatorData = indicatorDataPlanting ?? indicatorDataResize;
+  if (!indicatorData || !stage) return null;
 
   return (
     <Html
       groupProps={{
-        ...pos,
-        scaleX: 1 / scaleX,
-        scaleY: 1 / scaleY,
+        x: indicatorData.x,
+        y: indicatorData.y,
+        scaleX: 1 / stage.scaleX(),
+        scaleY: 1 / stage.scaleY(),
         offsetX: -15,
         offsetY: 25,
         visible: true,
@@ -64,41 +108,41 @@ export function AreaOfPlantingsIndicator() {
       }}
       divProps={{
         className: `${style.info_text__container}`,
-        style: { backgroundColor: colors.secondary[200] },
+        style: { backgroundColor: colors.secondary[200], opacity: 0.7 },
       }}
     >
       <PlacementInfoTooltip
-        fieldWidth={selectionWidth}
-        fieldHeight={selectionHeight}
-        plantWidth={plantWidth}
+        areaOfPlantingsWidth={indicatorData.width}
+        areaOfPlantingsHeight={indicatorData.height}
+        plantWidth={indicatorData.plantWidth}
       />
     </Html>
   );
 }
 
 function PlacementInfoTooltip({
-  fieldWidth,
-  fieldHeight,
+  areaOfPlantingsWidth,
+  areaOfPlantingsHeight,
   plantWidth,
 }: {
-  fieldWidth: number;
-  fieldHeight: number;
+  areaOfPlantingsWidth: number;
+  areaOfPlantingsHeight: number;
   plantWidth: number;
 }) {
   const { t } = useTranslation(['common', 'areaOfPlantingsIndicator']);
-  const { horizontalPlantCount, verticalPlantCount } = calculatePlantCount(
+  const { perRow: horizontalPlantCount, perColumn: verticalPlantCount } = calculatePlantCount(
     plantWidth,
-    fieldWidth,
-    fieldHeight,
+    areaOfPlantingsWidth,
+    areaOfPlantingsHeight,
   );
 
   const totalPlantCount = horizontalPlantCount * verticalPlantCount;
 
   return (
     <>
-      <span className="text-right font-mono">{fieldWidth.toFixed(0)}</span>
+      <span className="text-right font-mono">{areaOfPlantingsWidth.toFixed(0)}</span>
       <span className="text-center font-mono">&times;</span>
-      <span className="text-right font-mono">{fieldHeight.toFixed(0)}</span>
+      <span className="text-right font-mono">{areaOfPlantingsHeight.toFixed(0)}</span>
       <span className="font-bold">{t('centimeter_shorthand')}</span>
       <span className="text-right font-mono">{horizontalPlantCount}</span>
       <span className="text-center font-mono">&times;</span>

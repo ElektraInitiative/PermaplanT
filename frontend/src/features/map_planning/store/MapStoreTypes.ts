@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import { Node } from 'konva/lib/Node';
 import * as uuid from 'uuid';
 import { StateCreator } from 'zustand';
 import {
@@ -13,6 +12,7 @@ import {
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
 import { convertToDateString } from '../utils/date-utils';
+import { TransformerStore } from './transformer/TransformerStore';
 
 import Vector2d = Konva.Vector2d;
 
@@ -94,22 +94,6 @@ export interface TrackedMapSlice {
   canUndo: boolean;
   canRedo: boolean;
   /**
-   * A reference to the Konva Transformer.
-   * It is used to transform selected objects.
-   * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
-   */
-  transformer: React.RefObject<Konva.Transformer>;
-
-  /** Discard the transformer's current nodes and set a single node in the transformer */
-  setSingleNodeInTransformer: (node: Node) => void;
-
-  /** Add a new node to the transformer's current set of nodes */
-  addNodeToTransformer: (node: Node) => void;
-
-  /** Removes given node from the transformer's current set of nodes */
-  removeNodeFromTransformer: (node: Node) => void;
-
-  /**
    * Execute a user initiated action.
    * @param action the action to be executed
    */
@@ -188,7 +172,7 @@ export interface UntrackedMapSlice {
   ) => void;
   lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
-  selectPlantings: (plantings: PlantingDto[] | null) => void;
+  selectPlantings: (plantings: PlantingDto[] | null, transformerStore?: TransformerStore) => void;
   toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;

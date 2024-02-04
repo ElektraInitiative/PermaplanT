@@ -1,15 +1,14 @@
 import { KonvaEventObject, Node } from 'konva/lib/Node';
 import { PlantingDto } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
 import { isPlacementModeActive } from '@/features/map_planning/utils/planting-utils';
 import { useFindPlantById } from '../../hooks/plantHookApi';
 import { triggerPlantSelectionInGuidedTour, isUsingModifierKey } from './utils';
 
 export function usePlanting(planting: PlantingDto) {
   const { data: plant } = useFindPlantById({ plantId: planting.plantId });
-  const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
-  const addNodeToTransformer = useMapStore((state) => state.addNodeToTransformer);
-  const removeNodeFromTransformer = useMapStore((state) => state.removeNodeFromTransformer);
+  const transformerActions = useTransformerStore((state) => state.actions);
   const selectPlantings = useMapStore((state) => state.selectPlantings);
   const isSelected = useIsPlantingElementSelected(planting);
 
@@ -20,16 +19,15 @@ export function usePlanting(planting: PlantingDto) {
     };
 
     const getUpdatedPlantingSelection = () => {
-      const transformer = useMapStore.getState().transformer.current;
-      return transformer?.nodes().reduce(selectedPlantings, []) ?? [];
+      return transformerActions.getSelection().reduce(selectedPlantings, []) ?? [];
     };
 
-    removeNodeFromTransformer(e.currentTarget);
+    transformerActions.removeNodeFromSelection(e.currentTarget);
     selectPlantings(getUpdatedPlantingSelection());
   };
 
   const addPlantingToSelection = (e: KonvaEventObject<MouseEvent>) => {
-    addNodeToTransformer(e.currentTarget);
+    transformerActions.addNodeToSelection(e.currentTarget);
 
     const currentPlantingSelection =
       useMapStore.getState().untrackedState.layers.plants.selectedPlantings ?? [];
@@ -41,8 +39,8 @@ export function usePlanting(planting: PlantingDto) {
   };
 
   const handleSingleSelect = (e: KonvaEventObject<MouseEvent>) => {
-    setSingleNodeInTransformer(e.currentTarget);
-    selectPlantings([planting]);
+    transformerActions.select(e.currentTarget);
+    selectPlantings([planting], useTransformerStore.getState());
   };
 
   const handleOnClick = (e: KonvaEventObject<MouseEvent>) => {

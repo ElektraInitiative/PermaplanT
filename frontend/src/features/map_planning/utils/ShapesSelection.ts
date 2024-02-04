@@ -8,7 +8,7 @@ import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 // only if we have new shapes in our bounds. This fixes a bug where deselection
 // would happen after you moved a single or a group of selected shapes.
 // Todo: optimization -> could probably use a set here
-let previouslySelectedShapes: Shape<ShapeConfig>[] = [];
+let previouslySelectedShapeIds: Set<number> = new Set();
 
 export const SELECTION_RECTANGLE_NAME = 'selectionRect';
 
@@ -48,10 +48,10 @@ export const selectIntersectingShapes = (
   );
 
   // If intersectingShape and previouslySelectedShapes are the same, don't update
-  if (intersectingShapes.length === previouslySelectedShapes.length) {
+  if (intersectingShapes.length === previouslySelectedShapeIds.size) {
     let same = true;
     for (const shape of intersectingShapes) {
-      if (!previouslySelectedShapes.map((node) => node._id).includes(shape._id)) {
+      if (!previouslySelectedShapeIds.has(shape._id)) {
         same = false;
         break;
       }
@@ -61,25 +61,15 @@ export const selectIntersectingShapes = (
 
   if (intersectingShapes) {
     const nodes = intersectingShapes.filter((shape) => shape !== undefined);
-    previouslySelectedShapes = nodes;
+    previouslySelectedShapeIds = new Set(nodes.map((shape) => shape._id));
     trRef.current?.nodes(nodes);
   }
 };
 
-/** Resets current selection by removing all nodes from the transformer */
-export const resetSelection = (trRef: React.RefObject<Transformer>) => {
-  trRef.current?.nodes([]);
-};
-
-export const resetSelectionRectangleSize = (stageRef: React.RefObject<Stage>) => {
-  const selectionRectangle = stageRef.current?.findOne(`.${SELECTION_RECTANGLE_NAME}`);
-
-  if (selectionRectangle) {
-    selectionRectangle.setAttrs({
-      width: 0,
-      height: 0,
-    });
-  }
+export const resetSelectionRectangleSize = (
+  setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
+) => {
+  setSelectionRectAttrs((attrs) => ({ ...attrs, width: 0, height: 0 }));
 };
 
 /** Sets up the selection rectangle by positioning it at the current mouse position. */
@@ -154,12 +144,9 @@ export const updateSelectionRectangle = (
 /** Ends the selection by making the selection rectangle invisible. */
 export const hideSelectionRectangle = (
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
-  selectionRectAttrs: SelectionRectAttrs,
 ) => {
-  if (selectionRectAttrs.isVisible) {
-    setSelectionRectAttrs({
-      ...selectionRectAttrs,
-      isVisible: false,
-    });
-  }
+  setSelectionRectAttrs((attrs) => ({
+    ...attrs,
+    isVisible: false,
+  }));
 };

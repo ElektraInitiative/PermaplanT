@@ -197,8 +197,8 @@ export class TransformPlantAction
         id: p.id,
         x: p.x,
         y: p.y,
-        scaleX: p.scaleX,
-        scaleY: p.scaleY,
+        sizeX: p.sizeX,
+        sizeY: p.sizeY,
         rotation: p.rotation,
       })),
       this.actionId,
@@ -213,8 +213,8 @@ export class TransformPlantAction
             ...p,
             x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
             y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
-            scaleX: this._data.find((d) => d.id === p.id)?.scaleX ?? p.scaleX,
-            scaleY: this._data.find((d) => d.id === p.id)?.scaleY ?? p.scaleY,
+            sizeX: this._data.find((d) => d.id === p.id)?.sizeX ?? p.sizeX,
+            sizeY: this._data.find((d) => d.id === p.id)?.sizeY ?? p.sizeY,
             rotation: this._data.find((d) => d.id === p.id)?.rotation ?? p.rotation,
           };
         }
@@ -384,11 +384,12 @@ export class UpdateRemoveDatePlantAction
   }
 }
 
+export type UpdatePlantingAdditionalNameParam = Omit<
+  UpdatePlantingAdditionalNamePayload,
+  'userId' | 'actionId'
+>;
 export class UpdatePlantingAdditionalName implements Action<null, null> {
-  constructor(
-    private readonly _data: Omit<UpdatePlantingAdditionalNamePayload, 'userId' | 'actionId'>,
-    public actionId = v4(),
-  ) {}
+  constructor(private readonly _data: UpdatePlantingAdditionalNameParam, public actionId = v4()) {}
 
   get entityIds() {
     return [this._data.id];

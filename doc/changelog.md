@@ -80,8 +80,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Display a rectangle for area of plantings _(Paul)_
 - Refactor the planting api to batch processing _(Paul, Jannis)_
 - _()_
-- _()_
-- _()_
+- Area of plants resizing. Rename width & height of plantings to `size_x` & `size_y`. Remove `scale` from plantings. _(Paul)_
+- Refactor transformer into a separate store _(Paul)_
 - Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
 - _()_
 - _()_
