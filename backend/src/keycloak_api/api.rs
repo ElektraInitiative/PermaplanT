@@ -1,8 +1,8 @@
 //! This module contains the implementation of the client for the keycloak admin API.
 
-use std::sync::RwLock;
 use std::time::Instant;
 
+use actix_web::cookie::time::Duration;
 use oauth2::basic::BasicClient;
 use oauth2::reqwest::Error;
 use oauth2::{
@@ -12,6 +12,7 @@ use oauth2::{
 use reqwest::header::HeaderValue;
 use reqwest::Url;
 use serde::de::DeserializeOwned;
+use tokio::sync::Mutex;
 
 use crate::config::app::Config;
 use crate::keycloak_api::dtos::UserDto;
@@ -20,7 +21,7 @@ use crate::keycloak_api::dtos::UserDto;
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 /// The keycloak admin API.
-pub struct KeycloakApi {
+pub struct Api {
     /// Oauth2 client for auth with Keycloak.
     oauth_api: BasicClient,
     /// Username for auth with Keycloak.
@@ -31,7 +32,7 @@ pub struct KeycloakApi {
     base_url: Url,
     /// Cached access token (needs to be thread safe).
     /// Might be expired, in which case it will be refreshed.
-    auth_data: RwLock<Option<AuthData>>,
+    auth_data: Mutex<Option<AuthData>>,
 }
 
 /// Helper struct to cache the access token and its expiration time.
@@ -43,7 +44,7 @@ struct AuthData {
     expires_at: Instant,
 }
 
-impl KeycloakApi {
+impl Api {
     /// Creates a new Keycloak API.
     ///
     /// # Panics
@@ -68,7 +69,7 @@ impl KeycloakApi {
             username: config.keycloak_username.clone(),
             password: config.keycloak_password.clone(),
             base_url,
-            auth_data: RwLock::new(None),
+            auth_data: Mutex::new(None),
         }
     }
 
@@ -87,7 +88,7 @@ impl KeycloakApi {
         let url = format!("{}{}", self.base_url, path);
 
         let mut request = reqwest::Request::new(reqwest::Method::GET, url.parse()?);
-        let token = self.refresh_access_token(client).await?;
+        let token = self.get_or_refresh_access_token(client).await?;
         let token_header = HeaderValue::from_str(&format!("Bearer {}", token.secret()))?;
         request.headers_mut().append("Authorization", token_header);
 
@@ -96,56 +97,46 @@ impl KeycloakApi {
         Ok(res)
     }
 
-    /// Refreshes the access token if it is expired.
+    /// Gets the access token or refreshes it if it is expired.
     #[allow(clippy::unwrap_used)]
-    async fn refresh_access_token(&self, client: &reqwest::Client) -> Result<AccessToken> {
-        let auth_data = self.cloned_auth_data();
+    async fn get_or_refresh_access_token(&self, client: &reqwest::Client) -> Result<AccessToken> {
+        let mut guard = self.auth_data.lock().await;
 
-        match auth_data.as_ref() {
+        match &*guard {
             Some(AuthData {
                 access_token,
                 expires_at,
             }) if *expires_at > Instant::now() => Ok(access_token.clone()),
-            _ => self.get_access_token(client).await,
+            _ => {
+                let new_auth_data = self.refresh_access_token(client).await?;
+
+                *guard = Some(new_auth_data.clone());
+                drop(guard);
+
+                Ok(new_auth_data.access_token)
+            }
         }
     }
 
-    /// Gets a new access token from the keycloak API.
-    async fn get_access_token(&self, client: &reqwest::Client) -> Result<AccessToken> {
+    /// Refresh the access token.
+    async fn refresh_access_token(&self, client: &reqwest::Client) -> Result<AuthData> {
         let token_result = self
             .oauth_api
             .exchange_password(&self.username, &self.password)
             .request_async(|req| send_token_request(client, req))
             .await?;
 
-        let token = token_result.access_token().clone();
+        let access_token = token_result.access_token().clone();
+        let expires_at = token_result
+            .expires_in()
+            .map_or(Err("No expiration time"), |expires_in| {
+                Ok(Instant::now() + expires_in - Duration::seconds(5))
+            })?;
 
-        token_result.expires_in().map_or_else(
-            || Err("No expires_in in token response".into()),
-            |expires_in| {
-                self.update_auth_data(AuthData {
-                    access_token: token.clone(),
-                    expires_at: Instant::now() + expires_in,
-                });
-
-                Ok(token)
-            },
-        )
-    }
-
-    /// We clone the auth data to avoid holding the read lock longer than necessary.
-    /// The critical section should be as short as possible.
-    #[allow(clippy::unwrap_in_result, clippy::unwrap_used)]
-    fn cloned_auth_data(&self) -> Option<AuthData> {
-        self.auth_data.read().unwrap().clone()
-    }
-
-    /// We acquire the write lock to update the token and expiration time.
-    /// The critical section should be as short as possible.
-    #[allow(clippy::unwrap_used)]
-    fn update_auth_data(&self, update: AuthData) {
-        let mut auth_data = self.auth_data.write().unwrap();
-        *auth_data = Some(update);
+        Ok(AuthData {
+            access_token,
+            expires_at,
+        })
     }
 }
 

@@ -15,9 +15,12 @@ use diesel_async::{
 };
 use dotenvy::dotenv;
 
-use crate::config::{app, data::AppDataInner, routes};
 use crate::error::ServiceError;
 use crate::sse::broadcaster::Broadcaster;
+use crate::{
+    config::{app, data::AppDataInner, routes},
+    keycloak_api,
+};
 
 use self::token::{generate_token, generate_token_for_user};
 
@@ -100,6 +103,10 @@ async fn init_test_app_impl(
             .app_data(Data::new(AppDataInner {
                 pool,
                 broadcaster: Broadcaster::new(),
+                keycloak_api: keycloak_api::api::Api::new(
+                    &app::Config::from_env().expect("Error loading configuration"),
+                ),
+                http_client: reqwest::Client::new(),
             }))
             .configure(routes::config),
     )
