@@ -80,10 +80,9 @@ impl Config {
 
         let auth_discovery_uri =
             format!("{auth_host}/realms/PermaplanT/.well-known/openid-configuration");
-        let keycloak_auth_uri =
-            format!("{auth_host}/auth/realms/master/protocol/openid-connect/token")
-                .parse::<Url>()
-                .map_err(|e| e.to_string())?;
+        let keycloak_auth_uri = format!("{auth_host}/realms/master/protocol/openid-connect/token")
+            .parse::<Url>()
+            .map_err(|e| e.to_string())?;
 
         let client_id =
             env::var(ENV_VARS.auth_client_id).map_err(|_| env_error(ENV_VARS.auth_client_id))?;

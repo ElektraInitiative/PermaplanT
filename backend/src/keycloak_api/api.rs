@@ -149,13 +149,10 @@ async fn send_token_request(
     client: &reqwest::Client,
     request: HttpRequest,
 ) -> std::result::Result<HttpResponse, Error<reqwest::Error>> {
-    let mut request_builder = client
+    let request_builder = client
         .request(request.method, request.url.as_str())
+        .headers(request.headers)
         .body(request.body);
-    for (name, value) in &request.headers {
-        request_builder = request_builder.header(name.as_str(), value.as_bytes());
-    }
-
     let req = request_builder.build().map_err(Error::Reqwest)?;
 
     let response = client.execute(req).await.map_err(Error::Reqwest)?;
