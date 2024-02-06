@@ -16,6 +16,15 @@ pub struct Claims {
     pub sub: Uuid,
     /// The OAuth2 scope
     pub scope: String,
+    /// Realm roles
+    pub realm_access: RealmAccess,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+/// The roles active at the realm level.
+pub struct RealmAccess {
+    /// The roles active at the realm level.
+    pub roles: Vec<String>,
 }
 
 impl Claims {

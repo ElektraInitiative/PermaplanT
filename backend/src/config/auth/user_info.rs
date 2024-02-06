@@ -17,6 +17,15 @@ pub struct UserInfo {
     pub id: Uuid,
     /// The scopes the current user has.
     pub scopes: Vec<String>,
+    /// The roles the current user has.
+    pub roles: Vec<Role>,
+}
+
+/// Roles a user can have
+#[derive(Debug, Clone, Deserialize)]
+pub enum Role {
+    /// The user is a member.
+    Member,
 }
 
 impl From<Claims> for UserInfo {
@@ -24,7 +33,22 @@ impl From<Claims> for UserInfo {
         Self {
             id: value.sub,
             scopes: value.scope.split(' ').map(str::to_owned).collect(),
+            roles: value
+                .realm_access
+                .roles
+                .into_iter()
+                .filter_map(map_realm_access_role)
+                .collect::<Vec<_>>(),
         }
+    }
+}
+
+/// Maps a role from the [`super::claims::RealmAccess`] to a [`Role`].
+#[allow(clippy::needless_pass_by_value)] // The function signature is required by `filter_map`.
+fn map_realm_access_role(role: String) -> Option<Role> {
+    match role.as_str() {
+        "member" => Some(Role::Member),
+        _ => None,
     }
 }
 
@@ -48,5 +72,13 @@ impl FromRequest for UserInfo {
                 |user_info| Ok(user_info.clone()),
             )
         })
+    }
+}
+
+impl UserInfo {
+    /// Checks if the user is a member.
+    #[must_use]
+    pub fn is_member(&self) -> bool {
+        self.roles.iter().any(|role| matches!(role, Role::Member))
     }
 }
