@@ -33,20 +33,12 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
     (store) => store.untrackedState.layers.shade.selectedShadingEditMode,
   );
   const selectShadings = useMapStore((store) => store.shadeLayerSelectShadings);
-  const selectedShadings = useMapStore(
-    (store) => store.untrackedState.layers.shade.selectedShadings,
-  );
   const setSingleNodeInTransformer = useMapStore((store) => store.setSingleNodeInTransformer);
   const addNodeToTransformer = useMapStore((store) => store.addNodeToTransformer);
   const removeNodeFromTransformer = useMapStore((store) => store.removeNodeFromTransformer);
   const executeAction = useMapStore((store) => store.executeAction);
 
   const geometry = shading.geometry as PolygonGeometry;
-
-  const isShadingEdited =
-    shadingManipulationState !== 'inactive' &&
-    selectedShadings?.length === 1 &&
-    selectedShadings[0].id == shading.id;
 
   const removeShadingFromSelection = (e: KonvaEventObject<MouseEvent>) => {
     const selectedShadings = (foundShadings: ShadingDto[], konvaNode: Node) => {
@@ -88,13 +80,13 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
 
   const onStageClick = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
-      if (!isShadingEdited || shadingManipulationState !== 'add') return;
+      if (!isShadingElementEdited(shading) || shadingManipulationState !== 'add') return;
 
       // Prevents a bug where the shading polygon is edited twice after one click
       // because the Shading component is being rerendered during the executeAction call bellow.
       const shadingDto = useMapStore
         .getState()
-        .trackedState.layers.shade.objects.find((s) => s.id == shading.id);
+        .trackedState.layers.shade.objects.find((s) => s.id === shading.id);
 
       if (!shadingDto) return;
 
@@ -118,7 +110,7 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
         }),
       );
     },
-    [isShadingEdited, editorLongestSide, shadingManipulationState, executeAction, shading.id],
+    [shading, shadingManipulationState, editorLongestSide, executeAction],
   );
 
   useEffect(() => {
@@ -182,7 +174,7 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
       <Circle
         index={index}
         draggable={true}
-        visible={isShadingEdited}
+        visible={isShadingElementEdited(shading)}
         key={`shading-${shading.id}-point-${index}`}
         x={point.x}
         y={point.y}
@@ -202,7 +194,7 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
         onClick={handleClickOnShading}
         listening={true}
         points={flattenRing(geometry.rings[0])}
-        stroke={isShadingEdited ? colors.highlight.DEFAULT : '#00000000'}
+        stroke={isShadingElementEdited(shading) ? colors.highlight.DEFAULT : '#00000000'}
         fill={fillColorFromShadeType(shading.shade)}
         strokeWidth={editorLongestSide / 500}
         lineCap="round"
@@ -225,6 +217,18 @@ function isShadingElementSelected(shading: ShadingDto): boolean {
 
   return Boolean(
     allSelectedShadings?.find((selectedPlanting) => selectedPlanting.id === shading.id),
+  );
+}
+
+function isShadingElementEdited(shading: ShadingDto): boolean {
+  const selectedShadings = useMapStore.getState().untrackedState.layers.shade.selectedShadings;
+  const shadingManipulationState =
+    useMapStore.getState().untrackedState.layers.shade.selectedShadingEditMode;
+
+  return Boolean(
+    shadingManipulationState !== 'inactive' &&
+      selectedShadings?.length === 1 &&
+      selectedShadings[0].id == shading.id,
   );
 }
 
