@@ -10,6 +10,7 @@ import { DEFAULT_SRID, PolygonGeometry } from '@/features/map_planning/types/Pol
 import {
   flattenRing,
   insertPointIntoLineSegmentWithLeastDistance,
+  isPointInGeometry,
   removePointAtIndex,
   setPointAtIndex,
 } from '@/features/map_planning/utils/PolygonUtils';
@@ -82,8 +83,6 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
       if (!isShadingElementEdited(shading) || shadingManipulationState !== 'add') return;
 
-      // Prevents a bug where the shading polygon is edited twice after one click
-      // because the Shading component is being rerendered during the executeAction call bellow.
       const shadingDto = useMapStore
         .getState()
         .trackedState.layers.shade.objects.find((s) => s.id === shading.id);
@@ -95,6 +94,10 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
         y: e.currentTarget.getRelativePointerPosition().y,
         srid: DEFAULT_SRID,
       };
+
+      // Prevents a bug where the shading polygon is edited twice after one click
+      // because the Shading component is being rerendered during the executeAction call bellow.
+      if (isPointInGeometry(shadingDto.geometry as PolygonGeometry, newPoint)) return;
 
       const newGeometry = insertPointIntoLineSegmentWithLeastDistance(
         shadingDto.geometry as PolygonGeometry,

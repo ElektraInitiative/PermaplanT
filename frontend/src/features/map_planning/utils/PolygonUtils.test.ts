@@ -11,6 +11,7 @@ import {
   setPointAtIndex,
   ringGeometryAroundPoint,
   calculateGeometryStats,
+  isPointInGeometry,
 } from '@/features/map_planning/utils/PolygonUtils';
 
 describe('Flatten Polygon rings', () => {
@@ -24,6 +25,61 @@ describe('Flatten Polygon rings', () => {
     ];
 
     expect(flattenRing(ring)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 0, 1]);
+  });
+});
+
+describe('Test if a point was already inserted into a geometry object', () => {
+  it('should return true for points that are the same object', () => {
+    const point = { x: 0, y: 1, srid: 0 };
+
+    const ring: EdgeRing = [
+      point,
+      { x: 2, y: 3, srid: 0 },
+      { x: 4, y: 5, srid: 0 },
+      { x: 6, y: 7, srid: 0 },
+      { x: 0, y: 1, srid: 0 },
+    ];
+
+    const polygon: PolygonGeometry = {
+      rings: [ring, ring],
+      srid: '',
+    };
+
+    expect(isPointInGeometry(polygon, point)).toBeTruthy();
+  });
+
+  it('should return true for points that are equal but not the same object', () => {
+    const ring: EdgeRing = [
+      { x: 0, y: 1, srid: 0 },
+      { x: 2, y: 3, srid: 0 },
+      { x: 4, y: 5, srid: 0 },
+      { x: 6, y: 7, srid: 0 },
+      { x: 0, y: 1, srid: 0 },
+    ];
+
+    const polygon: PolygonGeometry = {
+      rings: [ring, ring],
+      srid: '',
+    };
+
+    expect(isPointInGeometry(polygon, { x: 4, y: 5, srid: 0 })).toBeTruthy();
+  });
+
+  it('should return false for points that not in the polygon', () => {
+    const ring: EdgeRing = [
+      { x: 0, y: 1, srid: 0 },
+      { x: 2, y: 3, srid: 0 },
+      { x: 4, y: 5, srid: 0 },
+      { x: 6, y: 7, srid: 0 },
+      { x: 0, y: 1, srid: 0 },
+    ];
+
+    const polygon: PolygonGeometry = {
+      rings: [ring, ring],
+      srid: '',
+    };
+
+    expect(isPointInGeometry(polygon, { x: 99, y: 99, srid: 0 })).toBeFalsy();
   });
 });
 

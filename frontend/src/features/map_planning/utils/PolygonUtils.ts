@@ -163,6 +163,20 @@ export function insertBetweenPointsWithLeastTotalDistance(
 }
 
 /**
+ * Checks whether a point was already inserted into the first ring of a geometry.
+ *
+ * @param geometry The geomtery to check.
+ * @param pointToCheck A point that might already have been inserted.
+ */
+export function isPointInGeometry(geometry: PolygonGeometry, pointToCheck: PolygonPoint): boolean {
+  for (const point of geometry.rings[0]) {
+    if (point.x === pointToCheck.x && point.y === pointToCheck.y) return true;
+  }
+
+  return false;
+}
+
+/**
  * Removes a point from the PolygonGeometry object.
  *
  * @param geometry The object the point should be removed from.
