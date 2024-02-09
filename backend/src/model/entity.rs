@@ -4,6 +4,7 @@ pub mod base_layer_images_impl;
 pub mod blossoms_impl;
 pub mod guided_tours_impl;
 pub mod layer_impl;
+pub mod map_collaborator_impl;
 pub mod map_impl;
 pub mod plant_layer;
 pub mod plantings;
@@ -24,7 +25,8 @@ use postgis_diesel::types::Polygon;
 use uuid::Uuid;
 
 use crate::schema::{
-    base_layer_images, blossoms, gained_blossoms, guided_tours, layers, maps, plants, seeds, users,
+    base_layer_images, blossoms, gained_blossoms, guided_tours, layers, map_collaborators, maps,
+    plants, seeds, users,
 };
 
 use super::r#enum::experience::Experience;
@@ -955,4 +957,13 @@ pub struct GainedBlossoms {
     pub times_gained: i32,
     /// The date on which the user gained this Blossom.
     pub gained_date: NaiveDate,
+}
+
+/// The [`MapCollaborator`] entity.
+#[derive(Insertable, Identifiable, Queryable)]
+#[diesel(primary_key(map_id, user_id), table_name = map_collaborators)]
+pub struct MapCollaborator {
+    pub map_id: i32,
+    pub user_id: Uuid,
+    pub created_at: NaiveDateTime,
 }

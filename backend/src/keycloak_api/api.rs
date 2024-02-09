@@ -3,6 +3,7 @@
 use std::time::Instant;
 
 use actix_web::cookie::time::Duration;
+use futures_util::{stream, StreamExt};
 use oauth2::basic::BasicClient;
 use oauth2::reqwest::Error;
 use oauth2::{
@@ -17,10 +18,13 @@ use tokio::sync::Mutex;
 use crate::config::app::Config;
 use crate::keycloak_api::dtos::UserDto;
 
+use super::errors::KeycloakApiError;
+
 /// Helper type for results.
-type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
+type Result<T> = std::result::Result<T, KeycloakApiError>;
 
 /// The keycloak admin API.
+#[derive(Clone)]
 pub struct Api {
     /// Oauth2 client for auth with Keycloak.
     oauth_api: BasicClient,
@@ -83,11 +87,60 @@ impl Api {
         self.get::<Vec<UserDto>>(client, "/users").await
     }
 
+    /// Gets all users given their ids from the Keycloak API.
+    ///
+    /// # Errors
+    /// - If the url cannot be parsed.
+    /// - If the authorization header cannot be created.
+    /// - If the request fails or the response cannot be deserialized.
+    pub async fn get_users_by_ids(
+        &self,
+        client: &reqwest::Client,
+        user_ids: Vec<uuid::Uuid>,
+    ) -> Result<Vec<UserDto>> {
+        let x = stream::iter(user_ids)
+            .map(|id| {
+                let client = client.clone();
+                // TODO: we probably need to move from this OO style to a more functional style
+                let api = self.clone();
+                tokio::spawn(async move { api.get_user_by_id(&client, id).await })
+            })
+            .buffer_unordered(10);
+
+        let y = x
+            .map(|res| match res {
+                Ok(Ok(user)) => Ok(user),
+                Ok(Err(e)) => Err(e),
+                Err(e) => return Err(KeycloakApiError::Other(e.to_string())),
+            })
+            .collect::<Vec<_>>()
+            .await
+            .into_iter()
+            .collect::<std::result::Result<Vec<_>, _>>()?;
+
+        Ok(y)
+    }
+
+    /// Gets a user by its id from the Keycloak API.
+    ///
+    /// # Errors
+    /// - If the url cannot be parsed.
+    /// - If the authorization header cannot be created.
+    /// - If the request fails or the response cannot be deserialized.
+    pub async fn get_user_by_id(
+        &self,
+        client: &reqwest::Client,
+        user_id: uuid::Uuid,
+    ) -> Result<UserDto> {
+        self.get::<UserDto>(client, &format!("/users/{user_id}"))
+            .await
+    }
+
     /// Executes a get request authenticated with the access token.
     async fn get<T: DeserializeOwned>(&self, client: &reqwest::Client, path: &str) -> Result<T> {
-        let url = format!("{}{}", self.base_url, path);
+        let url = reqwest::Url::parse(&format!("{}{}", self.base_url, path))?;
 
-        let mut request = reqwest::Request::new(reqwest::Method::GET, url.parse()?);
+        let mut request = reqwest::Request::new(reqwest::Method::GET, url);
         let token = self.get_or_refresh_access_token(client).await?;
         let token_header = HeaderValue::from_str(&format!("Bearer {}", token.secret()))?;
         request.headers_mut().append("Authorization", token_header);
@@ -127,11 +180,14 @@ impl Api {
             .await?;
 
         let access_token = token_result.access_token().clone();
-        let expires_at = token_result
-            .expires_in()
-            .map_or(Err("No expiration time"), |expires_in| {
-                Ok(Instant::now() + expires_in - Duration::seconds(5))
-            })?;
+        let expires_at = token_result.expires_in().map_or_else(
+            || {
+                Err(KeycloakApiError::Other(
+                    "No expires_in in token response".to_owned(),
+                ))
+            },
+            |expires_in| Ok(Instant::now() + expires_in - Duration::seconds(5)),
+        )?;
 
         Ok(AuthData {
             access_token,

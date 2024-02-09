@@ -41,3 +41,23 @@ pub async fn find(app_data: &Data<AppDataInner>) -> Result<Vec<UserDto>, Service
 
     Ok(users)
 }
+
+/// Get a user by its id.
+pub async fn find_by_id(
+    user_id: Uuid,
+    app_data: &Data<AppDataInner>,
+) -> Result<UserDto, ServiceError> {
+    let user = app_data
+        .keycloak_api
+        .get_user_by_id(&app_data.http_client, user_id)
+        .await
+        .map_err(|e| {
+            log::error!("Error getting user data from Keycloak API: {e}");
+            ServiceError::new(
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Error getting user data from Keycloak API".to_owned(),
+            )
+        })?;
+
+    Ok(user)
+}

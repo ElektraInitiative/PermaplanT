@@ -6,6 +6,7 @@ pub mod config;
 pub mod guided_tours;
 pub mod layers;
 pub mod map;
+pub mod map_collaborators;
 pub mod plant_layer;
 pub mod plantings;
 pub mod plants;

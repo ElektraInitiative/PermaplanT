@@ -176,17 +176,15 @@ impl Planting {
         updates: Vec<UpdatePlanting>,
         conn: &mut AsyncPgConnection,
     ) -> Vec<impl Future<Output = QueryResult<Self>>> {
-        let mut futures = Vec::with_capacity(updates.len());
-
-        for update in updates {
-            let updated_planting = diesel::update(plantings::table.find(update.id))
-                .set(update)
-                .get_result::<Self>(conn);
-
-            futures.push(updated_planting);
-        }
-
-        futures
+        // TODO: restrict concurrency
+        updates
+            .into_iter()
+            .map(|update| {
+                diesel::update(plantings::table.find(update.id))
+                    .set(update)
+                    .get_result::<Self>(conn)
+            })
+            .collect::<Vec<_>>()
     }
 
     /// Delete the plantings from the database.
