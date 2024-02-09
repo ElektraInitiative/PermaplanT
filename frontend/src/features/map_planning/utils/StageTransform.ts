@@ -35,7 +35,18 @@ export const handleZoom = (
   });
 };
 
-export const handleScroll = (dx: number, dy: number, stage: Stage) => {
+export const handleScroll = (
+  dx: number,
+  dy: number,
+  stage: Stage,
+  setStage: React.Dispatch<
+    React.SetStateAction<{
+      scale: number;
+      x: number;
+      y: number;
+    }>
+  >,
+) => {
   const x = stage.position().x;
   const y = stage.position().y;
   const scrollingScalePx = 15;
@@ -51,13 +62,22 @@ export const handleScroll = (dx: number, dy: number, stage: Stage) => {
   // how do we determine a scroll has finished? ideas: debounce or timeout.
 
   if (dx !== 0 && dy !== 0) {
-    stage.setPosition({
+    setStage({
       x: x - (dx / diagonalScalingFactor) * decayFactor,
       y: y - (dy / diagonalScalingFactor) * decayFactor,
+      scale: stage.scaleX(),
     });
   } else if (dx !== 0) {
-    stage.setPosition({ x: x - (dx / scrollingScalePx) * decayFactor, y });
+    setStage({
+      x: x - (dx / scrollingScalePx) * decayFactor,
+      y,
+      scale: stage.scaleX(),
+    });
   } else if (dy !== 0) {
-    stage.setPosition({ x, y: y - (dy / scrollingScalePx) * decayFactor });
+    setStage({
+      x,
+      y: y - (dy / scrollingScalePx) * decayFactor,
+      scale: stage.scaleX(),
+    });
   }
 };
