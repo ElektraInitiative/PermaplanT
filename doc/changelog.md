@@ -8,7 +8,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.3.7 - UNRELEASED
 
-- _()_
+- Display lines at y=0 and x=0 on the grid. _(Moritz)_
+- Fix a bug that caused the yard stick to jump around while zooming the map _(Moritz)_
 - Remove variety from table seeds _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
