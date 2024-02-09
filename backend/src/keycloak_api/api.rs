@@ -1,5 +1,6 @@
 //! This module contains the implementation of the client for the keycloak admin API.
 
+use std::sync::Arc;
 use std::time::Instant;
 
 use actix_web::cookie::time::Duration;
@@ -36,7 +37,7 @@ pub struct Api {
     base_url: Url,
     /// Cached access token (needs to be thread safe).
     /// Might be expired, in which case it will be refreshed.
-    auth_data: Mutex<Option<AuthData>>,
+    auth_data: Arc<Mutex<Option<AuthData>>>,
 }
 
 /// Helper struct to cache the access token and its expiration time.
@@ -73,7 +74,7 @@ impl Api {
             username: config.keycloak_username.clone(),
             password: config.keycloak_password.clone(),
             base_url,
-            auth_data: Mutex::new(None),
+            auth_data: Arc::new(Mutex::new(None)),
         }
     }
 
@@ -101,7 +102,6 @@ impl Api {
         let x = stream::iter(user_ids)
             .map(|id| {
                 let client = client.clone();
-                // TODO: we probably need to move from this OO style to a more functional style
                 let api = self.clone();
                 tokio::spawn(async move { api.get_user_by_id(&client, id).await })
             })
@@ -111,7 +111,7 @@ impl Api {
             .map(|res| match res {
                 Ok(Ok(user)) => Ok(user),
                 Ok(Err(e)) => Err(e),
-                Err(e) => return Err(KeycloakApiError::Other(e.to_string())),
+                Err(e) => Err(KeycloakApiError::Other(e.to_string())),
             })
             .collect::<Vec<_>>()
             .await
@@ -138,7 +138,7 @@ impl Api {
 
     /// Executes a get request authenticated with the access token.
     async fn get<T: DeserializeOwned>(&self, client: &reqwest::Client, path: &str) -> Result<T> {
-        let url = reqwest::Url::parse(&format!("{}{}", self.base_url, path))?;
+        let url = Url::parse(&format!("{}{}", self.base_url, path))?;
 
         let mut request = reqwest::Request::new(reqwest::Method::GET, url);
         let token = self.get_or_refresh_access_token(client).await?;

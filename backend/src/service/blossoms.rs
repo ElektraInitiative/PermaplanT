@@ -1,10 +1,9 @@
 //! Service layer for blossoms.
 
-use actix_web::web::Data;
 use uuid::Uuid;
 
 use crate::{
-    config::data::AppDataInner,
+    config::data::SharedPool,
     error::ServiceError,
     model::{dto::GainedBlossomsDto, entity::GainedBlossoms},
 };
@@ -16,9 +15,9 @@ use crate::{
 pub async fn gain(
     gained_blossom: GainedBlossomsDto,
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<GainedBlossomsDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = GainedBlossoms::create(gained_blossom, user_id, &mut conn).await?;
     Ok(result)
 }

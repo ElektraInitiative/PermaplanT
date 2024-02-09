@@ -51,9 +51,13 @@
 
 use actix_cors::Cors;
 use actix_web::{http, middleware::Logger, App, HttpServer};
+use std::sync::Arc;
 
-use config::{api_doc, auth::Config, routes};
-use db::{connection::Pool, cronjobs::cleanup_maps};
+use crate::db::connection::Pool;
+use crate::{
+    config::{api_doc, auth::Config, routes},
+    db::cronjobs::cleanup_maps,
+};
 
 pub mod config;
 pub mod controller;
@@ -87,13 +91,17 @@ async fn main() -> std::io::Result<()> {
         config.bind_address.1
     );
 
-    let data = config::data::init(&config);
-    start_cronjobs(data.pool.clone());
+    let data_init = config::data::init(&config);
+    let pool = data_init.pool.clone().into_inner();
+    start_cronjobs(pool);
 
     HttpServer::new(move || {
         App::new()
             .wrap(cors_configuration())
-            .app_data(data.clone())
+            .app_data(data_init.pool.clone())
+            .app_data(data_init.broadcaster.clone())
+            .app_data(data_init.http_client.clone())
+            .app_data(data_init.keycloak_api.clone())
             .configure(routes::config)
             .configure(api_doc::config)
             .wrap(Logger::default())
@@ -122,6 +130,6 @@ fn cors_configuration() -> Cors {
 }
 
 /// Start all scheduled jobs that get run in the backend.
-fn start_cronjobs(pool: Pool) {
+fn start_cronjobs(pool: Arc<Pool>) {
     tokio::spawn(cleanup_maps(pool));
 }

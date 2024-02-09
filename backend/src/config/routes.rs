@@ -68,8 +68,12 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                         ),
                                 ),
                         )
-                        .service(web::scope("/collaborators").service(map_collaborators::create))
-                        .service(timeline::get_timeline),
+                        .service(timeline::get_timeline)
+                        .service(
+                            web::scope("/collaborators")
+                                .service(map_collaborators::create)
+                                .service(map_collaborators::find),
+                        ),
                 ),
         )
         .service(

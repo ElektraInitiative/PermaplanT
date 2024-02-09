@@ -1,18 +1,19 @@
 //! `Plants` endpoints.
 
-use crate::config::data::AppDataInner;
-use crate::model::dto::{PageParameters, PlantsSearchParameters};
-use crate::service::plants;
-
 use actix_web::{
     get,
-    web::{Data, Path, Query},
+    web::{Path, Query},
     HttpResponse, Result,
+};
+
+use crate::{
+    config::data::SharedPool,
+    model::dto::{PageParameters, PlantsSearchParameters},
+    service::plants,
 };
 
 /// Endpoint for fetching or searching [`PlantsSummaryDto`](crate::model::dto::PlantsSummaryDto).
 /// Search parameters are taken from the URLs query string (e.g. .../api/plants?name=example&per_page=5).
-/// If no page parameters are provided, the first page is returned.
 /// If no page parameters are provided, the first page is returned.
 ///
 /// # Errors
@@ -34,14 +35,9 @@ use actix_web::{
 pub async fn find(
     search_query: Query<PlantsSearchParameters>,
     page_query: Query<PageParameters>,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let payload = plants::find(
-        search_query.into_inner(),
-        page_query.into_inner(),
-        &app_data,
-    )
-    .await?;
+    let payload = plants::find(search_query.into_inner(), page_query.into_inner(), &pool).await?;
     Ok(HttpResponse::Ok().json(payload))
 }
 
@@ -59,7 +55,7 @@ pub async fn find(
     )
 )]
 #[get("/{id}")]
-pub async fn find_by_id(id: Path<i32>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let response = plants::find_by_id(*id, &app_data).await?;
+pub async fn find_by_id(id: Path<i32>, pool: SharedPool) -> Result<HttpResponse> {
+    let response = plants::find_by_id(*id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }

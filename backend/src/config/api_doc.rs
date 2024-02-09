@@ -260,6 +260,7 @@ struct TimelineApiDoc;
 #[openapi(
     paths(
         map_collaborators::create,
+        map_collaborators::find,
     ),
     components(
         schemas(

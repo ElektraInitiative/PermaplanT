@@ -1,17 +1,13 @@
 //! Service layer for seeds.
 
-use actix_web::web::Data;
+use chrono::Utc;
 use uuid::Uuid;
 
-use chrono::Utc;
-
-use crate::config::data::AppDataInner;
-use crate::model::dto::PageParameters;
-use crate::model::dto::{Page, SeedSearchParameters};
 use crate::{
+    config::data::SharedPool,
     error::ServiceError,
     model::{
-        dto::{ArchiveSeedDto, NewSeedDto, SeedDto},
+        dto::{ArchiveSeedDto, NewSeedDto, Page, PageParameters, SeedDto, SeedSearchParameters},
         entity::Seed,
     },
 };
@@ -29,9 +25,9 @@ pub async fn find(
     search_parameters: SeedSearchParameters,
     page_parameters: PageParameters,
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<Page<SeedDto>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = Seed::find(search_parameters, user_id, page_parameters, &mut conn).await?;
     Ok(result)
 }
@@ -43,9 +39,9 @@ pub async fn find(
 pub async fn find_by_id(
     id: i32,
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<SeedDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = Seed::find_by_id(id, user_id, &mut conn).await?;
     Ok(result)
 }
@@ -57,9 +53,9 @@ pub async fn find_by_id(
 pub async fn create(
     new_seed: NewSeedDto,
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<SeedDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
 
     let seed_trimmed_name = NewSeedDto {
         name: new_seed.name.trim().to_owned(),
@@ -78,9 +74,9 @@ pub async fn edit(
     id: i32,
     user_id: Uuid,
     new_seed: NewSeedDto,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<SeedDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = Seed::edit(id, user_id, new_seed, &mut conn).await?;
     Ok(result)
 }
@@ -89,12 +85,8 @@ pub async fn edit(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn delete_by_id(
-    id: i32,
-    user_id: Uuid,
-    app_data: &Data<AppDataInner>,
-) -> Result<(), ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+pub async fn delete_by_id(id: i32, user_id: Uuid, pool: &SharedPool) -> Result<(), ServiceError> {
+    let mut conn = pool.get().await?;
     let _ = Seed::delete_by_id(id, user_id, &mut conn).await?;
     Ok(())
 }
@@ -107,12 +99,12 @@ pub async fn archive(
     id: i32,
     user_id: Uuid,
     archive_seed: ArchiveSeedDto,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<SeedDto, ServiceError> {
     // Retrieve the seed before getting the db connection to avoid deadlocks when
     // fetching two database connections at the same time.
-    let current_seed = find_by_id(id, user_id, app_data).await?;
-    let mut conn = app_data.pool.get().await?;
+    let current_seed = find_by_id(id, user_id, pool).await?;
+    let mut conn = pool.get().await?;
 
     let current_naive_date_time = archive_seed.archived.then(|| Utc::now().naive_utc());
 

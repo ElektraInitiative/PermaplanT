@@ -3,16 +3,20 @@
 use actix_web::web::Query;
 use actix_web::{
     get, patch, post,
-    web::{Data, Json, Path},
+    web::{Json, Path},
     HttpResponse, Result,
 };
 use uuid::Uuid;
 
-use crate::config::auth::user_info::UserInfo;
-use crate::config::data::AppDataInner;
-use crate::model::dto::actions::{Action, UpdateMapGeometryActionPayload};
-use crate::model::dto::{MapSearchParameters, PageParameters, UpdateMapDto, UpdateMapGeometryDto};
-use crate::{model::dto::NewMapDto, service};
+use crate::config::data::SharedBroadcaster;
+use crate::{
+    config::{auth::user_info::UserInfo, data::SharedPool},
+    model::dto::{
+        actions::{Action, UpdateMapGeometryActionPayload},
+        MapSearchParameters, NewMapDto, PageParameters, UpdateMapDto, UpdateMapGeometryDto,
+    },
+    service,
+};
 
 /// Endpoint for fetching or searching all [`Map`](crate::model::entity::Map).
 /// Search parameters are taken from the URLs query string (e.g. .../api/maps?is_inactive=false&per_page=5).
@@ -37,14 +41,10 @@ use crate::{model::dto::NewMapDto, service};
 pub async fn find(
     search_query: Query<MapSearchParameters>,
     page_query: Query<PageParameters>,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response = service::map::find(
-        search_query.into_inner(),
-        page_query.into_inner(),
-        &app_data,
-    )
-    .await?;
+    let response =
+        service::map::find(search_query.into_inner(), page_query.into_inner(), &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -62,8 +62,8 @@ pub async fn find(
     )
 )]
 #[get("/{map_id}")]
-pub async fn find_by_id(map_id: Path<i32>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let response = service::map::find_by_id(*map_id, &app_data).await?;
+pub async fn find_by_id(map_id: Path<i32>, pool: SharedPool) -> Result<HttpResponse> {
+    let response = service::map::find_by_id(*map_id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -85,9 +85,9 @@ pub async fn find_by_id(map_id: Path<i32>, app_data: Data<AppDataInner>) -> Resu
 pub async fn create(
     new_map_json: Json<NewMapDto>,
     user_info: UserInfo,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response = service::map::create(new_map_json.0, user_info.id, &app_data).await?;
+    let response = service::map::create(new_map_json.0, user_info.id, &pool).await?;
     Ok(HttpResponse::Created().json(response))
 }
 
@@ -110,15 +110,10 @@ pub async fn update(
     map_update_json: Json<UpdateMapDto>,
     map_id: Path<i32>,
     user_info: UserInfo,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response = service::map::update(
-        map_update_json.0,
-        map_id.into_inner(),
-        user_info.id,
-        &app_data,
-    )
-    .await?;
+    let response =
+        service::map::update(map_update_json.0, map_id.into_inner(), user_info.id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 /// Endpoint for updating the [´Geometry`] of a [`Map`](crate::model::entity::Map).
@@ -140,20 +135,20 @@ pub async fn update_geometry(
     map_update_geometry_json: Json<UpdateMapGeometryDto>,
     map_id: Path<i32>,
     user_info: UserInfo,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
+    broadcaster: SharedBroadcaster,
 ) -> Result<HttpResponse> {
     let map_id_inner = map_id.into_inner();
 
-    let response = service::map::update_geomtery(
+    let response = service::map::update_geometry(
         map_update_geometry_json.0.clone(),
         map_id_inner,
         user_info.id,
-        &app_data,
+        &pool,
     )
     .await?;
 
-    app_data
-        .broadcaster
+    broadcaster
         .broadcast(
             map_id_inner,
             Action::UpdateMapGeometry(UpdateMapGeometryActionPayload::new(

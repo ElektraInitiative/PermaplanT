@@ -1,10 +1,9 @@
 //! Service layer for guided tours.
 
-use actix_web::web::Data;
 use uuid::Uuid;
 
 use crate::{
-    config::data::AppDataInner,
+    config::data::SharedPool,
     error::ServiceError,
     model::{
         dto::{GuidedToursDto, UpdateGuidedToursDto},
@@ -16,11 +15,8 @@ use crate::{
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn setup(
-    user_id: Uuid,
-    app_data: &Data<AppDataInner>,
-) -> Result<GuidedToursDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+pub async fn setup(user_id: Uuid, pool: &SharedPool) -> Result<GuidedToursDto, ServiceError> {
+    let mut conn = pool.get().await?;
     let result = GuidedTours::setup(user_id, &mut conn).await?;
     Ok(result)
 }
@@ -32,9 +28,9 @@ pub async fn setup(
 /// If the connection to the database could not be established.
 pub async fn find_by_user(
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<GuidedToursDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = GuidedTours::find_by_user(user_id, &mut conn).await;
     match result {
         Ok(result) => Ok(result),
@@ -50,9 +46,9 @@ pub async fn find_by_user(
 pub async fn update(
     status_update: UpdateGuidedToursDto,
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<GuidedToursDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = GuidedTours::update(status_update, user_id, &mut conn).await?;
     Ok(result)
 }

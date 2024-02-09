@@ -1,39 +1,46 @@
-//! Configurations for the app data that is available to all controllers.
+//! Configurations for shared data that is available to all controllers.
 
 use actix_web::web::Data;
 
 use crate::config::app::Config;
 use crate::db::connection;
-use crate::keycloak_api::api::Api;
+use crate::keycloak_api;
 use crate::sse::broadcaster::Broadcaster;
 
-/// Data available to all controllers.
-pub struct AppDataInner {
+/// Helper-Type - Connection pool to the database.
+pub type SharedPool = Data<connection::Pool>;
+
+/// Helper-Type - Server-Sent Events broadcaster.
+pub type SharedBroadcaster = Data<Broadcaster>;
+
+/// Helper-Type - Keycloak admin API.
+pub type SharedKeycloakApi = Data<keycloak_api::api::Api>;
+
+/// Helper-Type - Pooled HTTP client.
+pub type SharedHttpClient = Data<reqwest::Client>;
+
+/// Data-structure holding the initialized shared data across the application.
+pub struct DataInit {
     /// Connection pool to the database.
-    pub pool: connection::Pool,
+    pub pool: SharedPool,
     /// Server-Sent Events broadcaster.
-    pub broadcaster: Broadcaster,
+    pub broadcaster: SharedBroadcaster,
     /// Keycloak admin API.
-    pub keycloak_api: Api,
+    pub keycloak_api: SharedKeycloakApi,
     /// Pooled HTTP client.
-    pub http_client: reqwest::Client,
+    pub http_client: SharedHttpClient,
 }
 
-/// Initializes the app data that is available to all controllers.
+/// Initializes shared data.
 ///
 /// # Panics
 /// If the database pool can not be initialized.
 #[must_use]
-pub fn init(config: &Config) -> Data<AppDataInner> {
-    let pool = connection::init_pool(&config.database_url);
-    let broadcaster = Broadcaster::new();
-    let keycloak_api = Api::new(&config);
-    let http_client = reqwest::Client::new();
-
-    Data::new(AppDataInner {
-        pool,
-        broadcaster,
-        keycloak_api,
-        http_client,
-    })
+pub fn init(config: &Config) -> DataInit {
+    DataInit {
+        pool: Data::new(connection::init_pool(&config.database_url)),
+        broadcaster: Data::new(Broadcaster::new()),
+        keycloak_api: Data::new(keycloak_api::api::Api::new(&config)),
+        http_client: Data::new(reqwest::Client::new()),
+    }
 }

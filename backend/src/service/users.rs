@@ -1,13 +1,12 @@
 //! Service layer for user data.
 
-use actix_web::web::Data;
 use reqwest::StatusCode;
 use uuid::Uuid;
 
-use crate::keycloak_api::dtos::UserDto;
 use crate::{
-    config::data::AppDataInner,
+    config::data::{SharedHttpClient, SharedKeycloakApi, SharedPool},
     error::ServiceError,
+    keycloak_api::dtos::UserDto,
     model::{dto::UsersDto, entity::Users},
 };
 
@@ -18,26 +17,25 @@ use crate::{
 pub async fn create(
     user_id: Uuid,
     user_data: UsersDto,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<UsersDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = Users::create(user_data, user_id, &mut conn).await?;
     Ok(result)
 }
 
 /// Get all users.
-pub async fn find(app_data: &Data<AppDataInner>) -> Result<Vec<UserDto>, ServiceError> {
-    let users = app_data
-        .keycloak_api
-        .get_users(&app_data.http_client)
-        .await
-        .map_err(|e| {
-            log::error!("Error getting user data from Keycloak API: {e}");
-            ServiceError::new(
-                StatusCode::INTERNAL_SERVER_ERROR,
-                "Error getting user data from Keycloak API".to_owned(),
-            )
-        })?;
+pub async fn find(
+    keycloak_api: &SharedKeycloakApi,
+    http_client: &SharedHttpClient,
+) -> Result<Vec<UserDto>, ServiceError> {
+    let users = keycloak_api.get_users(&http_client).await.map_err(|e| {
+        log::error!("Error getting user data from Keycloak API: {e}");
+        ServiceError::new(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Error getting user data from Keycloak API".to_owned(),
+        )
+    })?;
 
     Ok(users)
 }
@@ -45,11 +43,11 @@ pub async fn find(app_data: &Data<AppDataInner>) -> Result<Vec<UserDto>, Service
 /// Get a user by its id.
 pub async fn find_by_id(
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    keycloak_api: &SharedKeycloakApi,
+    http_client: &SharedHttpClient,
 ) -> Result<UserDto, ServiceError> {
-    let user = app_data
-        .keycloak_api
-        .get_user_by_id(&app_data.http_client, user_id)
+    let user = keycloak_api
+        .get_user_by_id(&http_client, user_id)
         .await
         .map_err(|e| {
             log::error!("Error getting user data from Keycloak API: {e}");
@@ -60,4 +58,24 @@ pub async fn find_by_id(
         })?;
 
     Ok(user)
+}
+
+/// Get users by their ids.
+pub async fn find_by_ids(
+    user_ids: Vec<Uuid>,
+    keycloak_api: &SharedKeycloakApi,
+    http_client: &SharedHttpClient,
+) -> Result<Vec<UserDto>, ServiceError> {
+    let users = keycloak_api
+        .get_users_by_ids(&http_client, user_ids)
+        .await
+        .map_err(|e| {
+            log::error!("Error getting user data from Keycloak API: {e}");
+            ServiceError::new(
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Error getting user data from Keycloak API".to_owned(),
+            )
+        })?;
+
+    Ok(users)
 }

@@ -1,13 +1,12 @@
 //! `Users` endpoints.
 
-use actix_web::{
-    get, post,
-    web::{Data, Json},
-    HttpResponse, Result,
-};
+use actix_web::{get, post, web::Json, HttpResponse, Result};
 
 use crate::{
-    config::{auth::user_info::UserInfo, data::AppDataInner},
+    config::{
+        auth::user_info::UserInfo,
+        data::{SharedHttpClient, SharedKeycloakApi, SharedPool},
+    },
     model::dto::UsersDto,
     service,
 };
@@ -23,8 +22,11 @@ use crate::{
     )
 )]
 #[get("")]
-pub async fn find(app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let response = service::users::find(&app_data).await?;
+pub async fn find(
+    keycloak_api: SharedKeycloakApi,
+    http_client: SharedHttpClient,
+) -> Result<HttpResponse> {
+    let response = service::users::find(&keycloak_api, &http_client).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -45,8 +47,8 @@ pub async fn find(app_data: Data<AppDataInner>) -> Result<HttpResponse> {
 pub async fn create(
     user_info: UserInfo,
     user_data_json: Json<UsersDto>,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response = service::users::create(user_info.id, user_data_json.0, &app_data).await?;
+    let response = service::users::create(user_info.id, user_data_json.0, &pool).await?;
     Ok(HttpResponse::Created().json(response))
 }

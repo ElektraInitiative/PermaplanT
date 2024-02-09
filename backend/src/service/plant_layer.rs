@@ -3,11 +3,10 @@
 use std::io::Cursor;
 
 use actix_http::StatusCode;
-use actix_web::web::Data;
 use image::{ImageBuffer, Rgb};
 
 use crate::{
-    config::data::AppDataInner,
+    config::data::SharedPool,
     error::ServiceError,
     model::{
         dto::{HeatMapQueryParams, RelationSearchParameters, RelationsDto},
@@ -27,9 +26,9 @@ use crate::{
 pub async fn heatmap(
     map_id: i32,
     query_params: HeatMapQueryParams,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<Vec<u8>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = plant_layer::heatmap(
         map_id,
         query_params.layer_id,
@@ -78,9 +77,9 @@ fn matrix_to_image(matrix: &Vec<Vec<f32>>) -> Result<Vec<u8>, ServiceError> {
 /// * If the SQL query failed.
 pub async fn find_relations(
     search_query: RelationSearchParameters,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<RelationsDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = plant_layer::find_relations(search_query, &mut conn).await?;
     Ok(result)
 }
