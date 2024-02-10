@@ -19,8 +19,8 @@ pub type SharedKeycloakApi = Data<keycloak_api::api::Api>;
 /// Helper-Type - Pooled HTTP client.
 pub type SharedHttpClient = Data<reqwest::Client>;
 
-/// Data-structure holding the initialized shared data across the application.
-pub struct DataInit {
+/// Data-structure holding the initialized shared data.
+pub struct SharedInit {
     /// Connection pool to the database.
     pub pool: SharedPool,
     /// Server-Sent Events broadcaster.
@@ -36,11 +36,11 @@ pub struct DataInit {
 /// # Panics
 /// If the database pool can not be initialized.
 #[must_use]
-pub fn init(config: &Config) -> DataInit {
-    DataInit {
+pub fn init(config: &Config) -> SharedInit {
+    SharedInit {
         pool: Data::new(connection::init_pool(&config.database_url)),
         broadcaster: Data::new(Broadcaster::new()),
-        keycloak_api: Data::new(keycloak_api::api::Api::new(&config)),
+        keycloak_api: Data::new(keycloak_api::api::Api::new(config)),
         http_client: Data::new(reqwest::Client::new()),
     }
 }

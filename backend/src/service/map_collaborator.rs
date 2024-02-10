@@ -11,9 +11,11 @@ use crate::{
     service::users,
 };
 
-/// Todo
+/// Get all collaborators for a map.
 ///
 /// # Errors
+/// * If the connection to the database could not be established.
+/// * If the connection to the Keycloak API could not be established.
 pub async fn get_all(
     map_id: i32,
     pool: &SharedPool,
@@ -38,9 +40,15 @@ pub async fn get_all(
     Ok(dtos)
 }
 
-/// Todo
+/// Create a new collaborator for a map.
 ///
 /// # Errors
+/// * If the path and body `map_id` do not match.
+/// * If the user tries to add themselves as a collaborator.
+/// * If the user is not the owner of the map.
+/// * If the map already has 30 collaborators.
+/// * If the connection to the database could not be established.
+/// * If the connection to the Keycloak API could not be established.
 pub async fn create(
     new_map_collaborator: NewMapCollaboratorDto,
     map_id: i32,
