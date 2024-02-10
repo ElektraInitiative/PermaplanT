@@ -34,6 +34,11 @@ pub mod token;
 /// All transactions are run inside [`AsyncConnection::begin_test_transaction`].
 ///
 /// The pool is limited to 1 connection.
+///
+/// # Panics
+/// - If the configuration cannot be loaded.
+/// - If the pool cannot be initialized.
+/// - If the test transaction cannot be started.
 pub async fn init_test_database<'a, F>(init_database: F) -> Pool<AsyncPgConnection>
 where
     F: for<'r> FnOnce(
@@ -60,7 +65,7 @@ where
         .await
         .expect("Failed to begin test transaction");
 
-    conn.transaction(|conn| init_database(conn))
+    conn.transaction(|c| init_database(c))
         .await
         .expect("Failed to initialize test database");
 
@@ -113,10 +118,10 @@ async fn init_test_app_impl(
 
 fn setup_auth() -> String {
     let jwk = jwks::init_auth();
-    generate_token(jwk, 300)
+    generate_token(&jwk, 300)
 }
 
 fn setup_auth_for_user(user_id: uuid::Uuid) -> String {
     let jwk = jwks::init_auth();
-    generate_token_for_user(jwk, 300, user_id)
+    generate_token_for_user(&jwk, 300, user_id)
 }

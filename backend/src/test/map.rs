@@ -18,7 +18,7 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::Uuid;
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_search_maps() {
     let pool = init_test_database(|conn| {
         async {
@@ -88,7 +88,7 @@ async fn test_can_search_maps() {
     assert!(page.results.len() == 1);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_find_map_by_id() {
     let pool = init_test_database(|conn| {
         async {
@@ -125,7 +125,7 @@ async fn test_can_find_map_by_id() {
     assert_eq!(resp.status(), StatusCode::OK);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_create_map() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -165,7 +165,7 @@ async fn test_can_create_map() {
     assert_eq!(resp.status(), StatusCode::OK);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_update_fails_for_not_owner() {
     let pool = init_test_database(|conn| {
         async {
@@ -209,7 +209,7 @@ async fn test_update_fails_for_not_owner() {
     assert_eq!(resp.status(), StatusCode::FORBIDDEN);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_update_map() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -255,7 +255,7 @@ async fn test_can_update_map() {
     let updated_map: MapDto = test::read_body_json(resp).await;
     assert_ne!(updated_map.name, map.name)
 }
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_update_map_geometry() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;

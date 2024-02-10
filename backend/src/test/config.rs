@@ -5,7 +5,7 @@ use actix_web::{http::StatusCode, test, App};
 
 use crate::{config::routes, model::dto::ConfigDto, test::util::jwks::init_auth};
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_search_plants_succeeds() {
     // Has to be done way as static variables are shared in tests and /api/config requires static vars
     init_auth();

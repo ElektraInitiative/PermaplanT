@@ -7,7 +7,7 @@ use actix_web::{
 };
 use diesel_async::scoped_futures::ScopedFutureExt;
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_with_token_succeeds() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -21,7 +21,7 @@ async fn test_with_token_succeeds() {
     assert_eq!(resp.status(), StatusCode::OK);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_missing_token_fails() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (_, app) = init_test_app(pool.clone()).await;

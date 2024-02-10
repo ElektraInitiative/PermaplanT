@@ -17,7 +17,7 @@ pub struct Claims {
     /// The OAuth2 scope
     pub scope: String,
     /// Realm roles
-    pub realm_access: RealmAccess,
+    pub realm_access: Option<RealmAccess>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -50,7 +50,11 @@ impl Claims {
             .map_err(|err| ServiceError::new(StatusCode::INTERNAL_SERVER_ERROR, err.to_string()))?;
 
         let claims = decode(token, decoding_key, &Validation::new(header.alg))
-            .map_err(|_| ServiceError::new(StatusCode::UNAUTHORIZED, "invalid token".to_owned()))?
+            .map_err(|err| {
+                let reason = err.to_string();
+                log::error!("Error decoding claims: {}", reason);
+                ServiceError::new(StatusCode::UNAUTHORIZED, "invalid token".to_owned())
+            })?
             .claims;
         Ok(claims)
     }
@@ -65,14 +69,14 @@ mod test {
     #[test]
     fn test_simple_token_succeeds() {
         let jwk = init_auth();
-        let token = generate_token(jwk, 300);
+        let token = generate_token(&jwk, 300);
         assert!(Claims::validate(&token).is_ok());
     }
 
     #[test]
     fn test_expired_token_fails() {
         let jwk = init_auth();
-        let token = generate_token(jwk, -300);
+        let token = generate_token(&jwk, -300);
         assert!(Claims::validate(&token).is_err());
     }
 

@@ -10,7 +10,7 @@ use crate::model::dto::{GuidedToursDto, UpdateGuidedToursDto};
 
 use super::util::{init_test_app, init_test_app_for_user, init_test_database};
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_setup_status_object() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -23,7 +23,7 @@ async fn test_can_setup_status_object() {
     assert_eq!(resp.status(), StatusCode::CREATED);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_find_status_object() {
     let user_id = Uuid::new_v4();
     let pool = init_test_database(|conn| {
@@ -50,7 +50,7 @@ async fn test_can_find_status_object() {
     assert_eq!(resp.status(), StatusCode::OK);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_update_status_object() {
     let user_id = Uuid::new_v4();
     let pool = init_test_database(|conn| {

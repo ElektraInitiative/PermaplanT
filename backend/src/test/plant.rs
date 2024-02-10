@@ -12,7 +12,7 @@ use actix_web::{
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_get_all_plants_succeeds() {
     let pool = init_test_database(|conn| {
         async {
@@ -61,7 +61,7 @@ async fn test_get_all_plants_succeeds() {
     assert!(page.results.contains(&test_plant));
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_get_one_plant_succeeds() {
     let pool = init_test_database(|conn| {
         async {
@@ -110,7 +110,7 @@ async fn test_get_one_plant_succeeds() {
     assert_eq!(dto, test_plant);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_search_plants_succeeds() {
     let pool = init_test_database(|conn| {
         async {

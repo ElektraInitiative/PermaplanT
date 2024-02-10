@@ -20,7 +20,7 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::uuid;
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_find_two_seeds_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
@@ -98,7 +98,7 @@ async fn test_find_two_seeds_succeeds() {
     assert_eq!(seed_dto2.use_by, NaiveDate::from_ymd_opt(2023, 01, 01));
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_search_seeds_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
@@ -166,7 +166,7 @@ async fn test_search_seeds_succeeds() {
     assert_eq!(seed_dto.quantity, Quantity::Enough);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_find_by_id_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
@@ -231,7 +231,7 @@ async fn test_find_by_id_succeeds() {
     assert_eq!(seed_dto.quantity, Quantity::Enough);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_find_by_non_existing_id_fails() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
@@ -283,7 +283,7 @@ async fn test_find_by_non_existing_id_fails() {
     assert_eq!(resp.status(), StatusCode::NOT_FOUND);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_create_seed_fails_with_invalid_quantity() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -305,7 +305,7 @@ async fn test_create_seed_fails_with_invalid_quantity() {
     assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_create_seed_fails_with_invalid_tags() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -327,7 +327,7 @@ async fn test_create_seed_fails_with_invalid_tags() {
     assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_create_seed_fails_with_invalid_quality() {
     let pool = init_test_database(|_| async { Ok(()) }.scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -350,7 +350,7 @@ async fn test_create_seed_fails_with_invalid_quality() {
     assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_create_seed_ok() {
     let pool = init_test_database(|conn| {
         async {
@@ -403,7 +403,7 @@ async fn test_create_seed_ok() {
     assert_eq!(resp.status(), StatusCode::OK);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_delete_by_id_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
@@ -434,7 +434,7 @@ async fn test_delete_by_id_succeeds() {
     assert_eq!(resp.status(), StatusCode::OK);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_delete_by_non_existing_id_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {
@@ -465,7 +465,7 @@ async fn test_delete_by_non_existing_id_succeeds() {
     assert_eq!(resp.status(), StatusCode::OK);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_archive_seed_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {

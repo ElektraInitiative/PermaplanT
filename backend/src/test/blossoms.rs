@@ -10,7 +10,7 @@ use crate::model::dto::GainedBlossomsDto;
 
 use super::util::{init_test_app, init_test_database};
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_gain_blossom() {
     let pool = init_test_database(|conn| {
         async {

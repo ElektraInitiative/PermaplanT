@@ -15,7 +15,7 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::uuid;
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_seeds_pagination_succeeds() {
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
     let pool = init_test_database(|conn| {

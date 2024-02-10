@@ -61,7 +61,7 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
     Ok(())
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_find_layers_succeeds() {
     let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
     let (token, app) = init_test_app(pool).await;
@@ -82,7 +82,7 @@ async fn test_find_layers_succeeds() {
     assert_eq!(results.len(), 2);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_find_layer_by_id_succeeds() {
     let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
     let (token, app) = init_test_app(pool).await;
@@ -106,7 +106,7 @@ async fn test_find_layer_by_id_succeeds() {
     assert_eq!(dto.id, -1);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_create_layer_succeeds() {
     let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -126,7 +126,7 @@ async fn test_create_layer_succeeds() {
     assert_eq!(resp.status(), StatusCode::CREATED);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_create_layer_with_invalid_map_id_fails() {
     let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
     let (token, app) = init_test_app(pool.clone()).await;
@@ -146,7 +146,7 @@ async fn test_create_layer_with_invalid_map_id_fails() {
     assert_eq!(resp.status(), StatusCode::CONFLICT);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_delete_by_id_succeeds() {
     let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
     let (token, app) = init_test_app(pool).await;

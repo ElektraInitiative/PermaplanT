@@ -51,15 +51,19 @@ impl Role {
 
 impl From<Claims> for UserInfo {
     fn from(value: Claims) -> Self {
-        Self {
-            id: value.sub,
-            scopes: value.scope.split(' ').map(str::to_owned).collect(),
-            roles: value
-                .realm_access
+        let roles = match value.realm_access {
+            Some(realm_access) => realm_access
                 .roles
                 .into_iter()
                 .filter_map(|s| Role::from_string(&s))
                 .collect::<Vec<_>>(),
+            None => Vec::new(),
+        };
+
+        Self {
+            id: value.sub,
+            scopes: value.scope.split(' ').map(str::to_owned).collect(),
+            roles,
         }
     }
 }
