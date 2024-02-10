@@ -51,3 +51,9 @@ where
         Self::Other(value.to_string())
     }
 }
+
+impl From<serde_json::Error> for KeycloakApiError {
+    fn from(err: serde_json::Error) -> Self {
+        Self::Other(err.to_string())
+    }
+}

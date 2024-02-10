@@ -28,6 +28,27 @@ pub enum Role {
     Member,
 }
 
+impl UserInfo {
+    /// Checks if the user is a member.
+    #[must_use]
+    pub fn is_member(&self) -> bool {
+        self.roles.iter().any(|role| matches!(role, Role::Member))
+    }
+}
+
+impl Role {
+    /// Convert a role from a string.
+    #[must_use]
+    pub fn from_string(str: &str) -> Option<Self> {
+        match str {
+            "member" => Some(Self::Member),
+            _ => None,
+        }
+    }
+}
+
+// Trait implementations
+
 impl From<Claims> for UserInfo {
     fn from(value: Claims) -> Self {
         Self {
@@ -37,18 +58,9 @@ impl From<Claims> for UserInfo {
                 .realm_access
                 .roles
                 .into_iter()
-                .filter_map(map_realm_access_role)
+                .filter_map(|s| Role::from_string(&s))
                 .collect::<Vec<_>>(),
         }
-    }
-}
-
-/// Maps a role from the [`super::claims::RealmAccess`] to a [`Role`].
-#[allow(clippy::needless_pass_by_value)] // The function signature is required by `filter_map`.
-fn map_realm_access_role(role: String) -> Option<Role> {
-    match role.as_str() {
-        "member" => Some(Role::Member),
-        _ => None,
     }
 }
 
@@ -72,13 +84,5 @@ impl FromRequest for UserInfo {
                 |user_info| Ok(user_info.clone()),
             )
         })
-    }
-}
-
-impl UserInfo {
-    /// Checks if the user is a member.
-    #[must_use]
-    pub fn is_member(&self) -> bool {
-        self.roles.iter().any(|role| matches!(role, Role::Member))
     }
 }

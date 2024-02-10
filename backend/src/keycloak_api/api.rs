@@ -160,13 +160,14 @@ impl Api {
         let token_header = HeaderValue::from_str(&format!("Bearer {}", token.secret()))?;
         request.headers_mut().append("Authorization", token_header);
 
-        let res = client.execute(request).await?.json::<T>().await?;
+        // There is a `json` method, but then we can not log the response for debugging easily.
+        let response = client.execute(request).await?;
+        let response_text = response.text().await?;
 
-        Ok(res)
+        Ok(serde_json::from_str(&response_text)?)
     }
 
     /// Gets the access token or refreshes it if it is expired.
-    #[allow(clippy::unwrap_used)]
     async fn get_or_refresh_access_token(&self, client: &reqwest::Client) -> Result<AccessToken> {
         let mut guard = self.auth_data.lock().await;
 
