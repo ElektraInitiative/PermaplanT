@@ -40,12 +40,12 @@ use crate::{
     },
 };
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`config`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@config`] endpoints.
 #[derive(OpenApi)]
 #[openapi(paths(config::get), components(schemas(ConfigDto)))]
 struct ConfigApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`seed`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@seed`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -67,7 +67,7 @@ struct ConfigApiDoc;
 )]
 struct SeedApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`plants`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@plants`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -84,7 +84,7 @@ struct SeedApiDoc;
 )]
 struct PlantsApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`map`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@map`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -107,7 +107,7 @@ struct PlantsApiDoc;
 )]
 struct MapApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`layers`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@layers`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -127,7 +127,7 @@ struct MapApiDoc;
 )]
 struct LayerApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`plant_layer`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@plant_layer`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -145,7 +145,7 @@ struct LayerApiDoc;
 )]
 struct PlantLayerApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`base_layer_image`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@base_layer_image`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -164,7 +164,7 @@ struct PlantLayerApiDoc;
 )]
 struct BaseLayerImagesApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`plantings`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@plantings`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -193,7 +193,7 @@ struct BaseLayerImagesApiDoc;
 )]
 struct PlantingsApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`users`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@users`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -213,7 +213,7 @@ struct PlantingsApiDoc;
 )]
 struct UsersApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`guided_tours`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@guided_tours`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -231,7 +231,7 @@ struct UsersApiDoc;
 )]
 struct GuidedToursApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`blossoms`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@blossoms`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -262,7 +262,7 @@ struct BlossomsApiDoc;
 )]
 struct TimelineApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`map_collaborators`] endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@map_collaborators`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
