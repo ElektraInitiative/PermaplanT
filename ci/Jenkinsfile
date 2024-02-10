@@ -60,12 +60,12 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
                 -e 'DATABASE_URL=postgres://ci:ci@db/ci' \
                 -e 'BIND_ADDRESS_HOST=127.0.0.1' \
                 -e 'BIND_ADDRESS_PORT=8080' \
-                -e 'AUTH_HOST=unused' \
+                -e 'AUTH_HOST=https://auth.permaplant.net' \
                 -e 'AUTH_CLIENT_ID=unused' \
-                -e 'KEYCLOAK_CLIENT_ID'=unused \
-                -e 'KEYCLOAK_CLIENT_SECRET'=unused \
-                -e 'KEYCLOAK_USERNAME'=unused \
-                -e 'KEYCLOAK_PASSWORD'=unused \
+                -e 'KEYCLOAK_CLIENT_ID=unused' \
+                -e 'KEYCLOAK_CLIENT_SECRET=unused' \
+                -e 'KEYCLOAK_USERNAME=unused' \
+                -e 'KEYCLOAK_PASSWORD=unused' \
                 -e 'RUSTFLAGS=-D warnings' \
                 -e 'RUSTDOCFLAGS=-D warnings'"
                 ) {

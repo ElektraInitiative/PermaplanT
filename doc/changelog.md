@@ -90,7 +90,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Area of plants resizing. Rename width & height of plantings to `size_x` & `size_y`. Remove `scale` from plantings. _(Paul)_
 - Refactor transformer into a separate store _(Paul)_
 - Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
-- _()_
+- Update the backend environment variables for easier setup, add keycloak config _(Paul)_
 - _()_
 
 ## 0.3.6 - 21.11.2023 (151 commits)
