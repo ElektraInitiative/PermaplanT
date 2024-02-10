@@ -26,11 +26,11 @@ use crate::{
                 UpdateRemoveDatePlantingDto,
             },
             timeline::{TimelineDto, TimelineEntryDto},
-            BaseLayerImageDto, ConfigDto, Coordinates, GainedBlossomsDto, GuidedToursDto, LayerDto,
-            MapCollaboratorDto, MapDto, NewLayerDto, NewMapCollaboratorDto, NewMapDto, NewSeedDto,
-            PageLayerDto, PageMapDto, PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto,
-            RelationDto, RelationsDto, SeedDto, UpdateBaseLayerImageDto, UpdateGuidedToursDto,
-            UpdateMapDto, UsersDto,
+            BaseLayerImageDto, ConfigDto, Coordinates, DeleteMapCollaboratorDto, GainedBlossomsDto,
+            GuidedToursDto, LayerDto, MapCollaboratorDto, MapDto, NewLayerDto,
+            NewMapCollaboratorDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto,
+            PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto, RelationsDto,
+            SeedDto, UpdateBaseLayerImageDto, UpdateGuidedToursDto, UpdateMapDto, UsersDto,
         },
         r#enum::{
             experience::Experience, membership::Membership, privacy_option::PrivacyOption,
@@ -268,11 +268,13 @@ struct TimelineApiDoc;
     paths(
         map_collaborators::create,
         map_collaborators::find,
+        map_collaborators::delete,
     ),
     components(
         schemas(
             NewMapCollaboratorDto,
             MapCollaboratorDto,
+            DeleteMapCollaboratorDto,
         )
     ),
     modifiers(&SecurityAddon)

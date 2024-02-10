@@ -1,5 +1,5 @@
 use actix_web::{
-    get, post,
+    delete, get, post,
     web::{Json, Path},
     HttpResponse, Result,
 };
@@ -9,7 +9,7 @@ use crate::{
         auth::user_info::UserInfo,
         data::{SharedHttpClient, SharedKeycloakApi, SharedPool},
     },
-    model::dto::NewMapCollaboratorDto,
+    model::dto::{DeleteMapCollaboratorDto, NewMapCollaboratorDto},
     service::map_collaborator,
 };
 
@@ -71,8 +71,7 @@ pub async fn create(
     http_client: SharedHttpClient,
 ) -> Result<HttpResponse> {
     let response = map_collaborator::create(
-        json.into_inner(),
-        map_id.into_inner(),
+        (map_id.into_inner(), json.into_inner()),
         user_info.id,
         &pool,
         &keycloak_api,
@@ -81,4 +80,34 @@ pub async fn create(
     .await?;
 
     Ok(HttpResponse::Created().json(response))
+}
+
+/// Endpoint for deleting a collaborator from a map.
+///
+/// # Errors
+/// * If the user is not the owner of the map.
+/// * If the connection to the database could not be established.
+#[utoipa::path(
+    context_path = "/api/maps/{map_id}/collaborators",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map on which to collaborate"),
+    ),
+    request_body = DeleteMapCollaboratorDto,
+    responses(
+        (status = 204, description = "The collaborator was removed from the map"),
+    ),
+    security(
+        ("oauth2" = [])
+    )
+)]
+#[delete("")]
+pub async fn delete(
+    map_id: Path<i32>,
+    dto: Json<DeleteMapCollaboratorDto>,
+    user_info: UserInfo,
+    pool: SharedPool,
+) -> Result<HttpResponse> {
+    map_collaborator::delete((map_id.into_inner(), dto.into_inner()), user_info.id, &pool).await?;
+
+    Ok(HttpResponse::NoContent().finish())
 }

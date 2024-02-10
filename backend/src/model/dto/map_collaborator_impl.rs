@@ -7,7 +7,7 @@ impl From<(MapCollaborator, UserDto)> for MapCollaboratorDto {
         Self {
             map_id: value.0.map_id,
             user_id: value.0.user_id,
-            user_name: value.1.username,
+            username: value.1.username,
         }
     }
 }

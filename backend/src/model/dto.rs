@@ -520,6 +520,7 @@ pub struct GainedBlossomsDto {
 
 #[typeshare]
 #[derive(Debug, Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 /// Information on user collaborating on a map.
 pub struct MapCollaboratorDto {
     /// The id of the map.
@@ -527,21 +528,29 @@ pub struct MapCollaboratorDto {
     /// The id of the collaborator.
     pub user_id: Uuid,
     /// The user name of the collaborator.
-    pub user_name: String,
+    pub username: String,
 }
 
 #[typeshare]
 #[derive(Debug, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 /// The information of a map collaborator necessary for its creation.
 pub struct NewMapCollaboratorDto {
-    /// The id of the map.
-    pub map_id: i32,
+    /// The id of the collaborator.
+    pub user_id: Uuid,
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct DeleteMapCollaboratorDto {
     /// The id of the collaborator.
     pub user_id: Uuid,
 }
 
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
+#[serde(rename_all = "camelCase")]
 /// Query params for searching map collaborators.
 pub struct MapCollaboratorSearchParameters {
     /// The id of the map.
@@ -550,6 +559,7 @@ pub struct MapCollaboratorSearchParameters {
 
 #[typeshare]
 #[derive(Debug, Deserialize, IntoParams)]
+#[serde(rename_all = "camelCase")]
 /// Query params for searching users.
 pub struct UserSearchParameters {
     /// The name of the user to search for.
