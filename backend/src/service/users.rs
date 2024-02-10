@@ -88,3 +88,26 @@ pub async fn find_by_ids(
 
     Ok(users)
 }
+
+/// Search for users by their username.
+///
+/// # Errors
+/// * If the connection to the Keycloak API could not be established.
+pub async fn search_by_username(
+    username: &str,
+    keycloak_api: &SharedKeycloakApi,
+    http_client: &SharedHttpClient,
+) -> Result<Vec<UserDto>, ServiceError> {
+    let users = keycloak_api
+        .search_users_by_username(username, http_client)
+        .await
+        .map_err(|e| {
+            log::error!("Error getting user data from Keycloak API: {e}");
+            ServiceError::new(
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Error getting user data from Keycloak API".to_owned(),
+            )
+        })?;
+
+    Ok(users)
+}

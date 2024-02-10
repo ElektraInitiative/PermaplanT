@@ -1,21 +1,31 @@
 //! `Users` endpoints.
 
-use actix_web::{get, post, web::Json, HttpResponse, Result};
+use actix_web::{
+    get, post,
+    web::{Json, Query},
+    HttpResponse, Result,
+};
 
 use crate::{
     config::{
         auth::user_info::UserInfo,
         data::{SharedHttpClient, SharedKeycloakApi, SharedPool},
     },
-    model::dto::UsersDto,
+    model::dto::{UserSearchParameters, UsersDto},
     service,
 };
 
-/// Endpoint for getting users.
+/// Endpoint for searching users.
+///
+/// # Errors
+/// * If the connection to the keycloak API could not be established.
 #[utoipa::path(
     context_path = "/api/users",
+    params(
+        UserSearchParameters,
+    ),
     responses(
-        (status = 200, description = "Find users", body = Vec<UserDto>)
+        (status = 200, description = "Users matching the username search", body = Vec<UserDto>)
     ),
     security(
         ("oauth2" = [])
@@ -23,10 +33,13 @@ use crate::{
 )]
 #[get("")]
 pub async fn find(
+    search_query: Query<UserSearchParameters>,
     keycloak_api: SharedKeycloakApi,
     http_client: SharedHttpClient,
 ) -> Result<HttpResponse> {
-    let response = service::users::find(&keycloak_api, &http_client).await?;
+    let response =
+        service::users::search_by_username(&search_query.username, &keycloak_api, &http_client)
+            .await?;
     Ok(HttpResponse::Ok().json(response))
 }
 

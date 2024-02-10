@@ -13,6 +13,7 @@ use crate::{
         base_layer_image, blossoms, config, guided_tours, layers, map, map_collaborators,
         plant_layer, plantings, plants, seed, timeline, users,
     },
+    keycloak_api,
     model::{
         dto::{
             core::{
@@ -32,8 +33,9 @@ use crate::{
             UpdateMapDto, UsersDto,
         },
         r#enum::{
-            privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
-            relation_type::RelationType,
+            experience::Experience, membership::Membership, privacy_option::PrivacyOption,
+            quality::Quality, quantity::Quantity, relation_type::RelationType,
+            salutation::Salutation,
         },
     },
 };
@@ -195,11 +197,16 @@ struct PlantingsApiDoc;
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        users::create
+        users::create,
+        users::find
     ),
     components(
         schemas(
-            UsersDto
+            keycloak_api::UserDto,
+            UsersDto,
+            Experience,
+            Membership,
+            Salutation
         )
     ),
     modifiers(&SecurityAddon)

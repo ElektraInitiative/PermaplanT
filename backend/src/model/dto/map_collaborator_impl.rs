@@ -1,4 +1,4 @@
-use crate::{keycloak_api::dtos::UserDto, model::entity::MapCollaborator};
+use crate::{keycloak_api::UserDto, model::entity::MapCollaborator};
 
 use super::MapCollaboratorDto;
 

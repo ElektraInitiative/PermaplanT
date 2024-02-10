@@ -88,6 +88,21 @@ impl Api {
         self.get::<Vec<UserDto>>(client, "/users").await
     }
 
+    /// Search for users by their username.
+    ///
+    /// # Errors
+    /// - If the url cannot be parsed.
+    /// - If the authorization header cannot be created.
+    /// - If the request fails or the response cannot be deserialized.
+    pub async fn search_users_by_username(
+        &self,
+        username: &str,
+        client: &reqwest::Client,
+    ) -> Result<Vec<UserDto>> {
+        self.get::<Vec<UserDto>>(client, &format!("/users?username={username}"))
+            .await
+    }
+
     /// Gets all users given their ids from the Keycloak API.
     ///
     /// # Errors
