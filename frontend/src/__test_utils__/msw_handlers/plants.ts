@@ -7,19 +7,16 @@ const allPlants: PlantsSummaryDto[] = [
     id: 1,
     unique_name: 'test',
     common_name_en: ['test'],
-    spread: undefined,
   },
   {
     id: 2,
     unique_name: 'asdf',
     common_name_en: ['asdf'],
-    spread: undefined,
   },
   {
     id: 3,
     unique_name: 'plant',
     common_name_en: ['plant'],
-    spread: undefined,
   },
 ];
 
