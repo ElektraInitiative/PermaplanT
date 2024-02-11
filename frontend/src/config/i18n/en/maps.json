@@ -15,35 +15,19 @@
         "name_placeholder": "My garden",
         "privacy_label": "Privacy",
         "description_label": "Description",
-        "description_placeholder": "A beautiful garden with a lot of flowers.",
+        "description_placeholder": "A beautiful garden with lots of flowers.",
         "latitude_label": "Latitude",
         "longitude_label": "Longitude",
         "location_selected": "Your selected location.",
-        "location_button_hint": "On click the external resource openstreetmap.org will be loaded."
+        "location_button_hint": "On click the external resource openstreetmap.org will be loaded.",
+        "or": "or"
     },
     "create": {
-        "modal_title": "New Map",
-        "cancel_button": "Cancel",
-        "submit_button": "Create",
-        "success": "Map successfully created!",
-        "failure": "Something went wrong, please try again later!",
-        "description_placeholer": "Description",
-        "location_selected": "Your selected location.",
-        "location_button": "Select location",
-        "location_button_hint": "On click the external resource openstreetmap.org will be loaded.",
-        "or": "Or",
+        "title": "New Map",
         "error_map_create": "Sorry, I couldn't store the map on my server. It is possible there already exists a map with the same name."
     },
     "edit": {
         "title": "Edit Map",
-        "privacy_label": "Privacy",
-        "description_label": "Description",
-        "location_label": "Location",
-        "location_selected": "Your selected location.",
-        "latitude_label": "Latitude",
-        "longitude_label": "Longitude",
-        "location_button": "Select Location",
-        "location_button_hint": "On click the external resource openstreetmap.org will be loaded.",
         "error_map_edit": "Sorry, I couldn't update the map on my server. It is possible there already exists a map with the same name.",
         "error_map_single_fetch": "Sorry, I could not load the map from my server. It is possible it doesn't exist."
     }

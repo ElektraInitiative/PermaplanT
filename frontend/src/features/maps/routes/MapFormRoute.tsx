@@ -122,7 +122,7 @@ function MapCreateForm() {
 
   return (
     <>
-      <PageTitle title={t('maps:create.modal_title')} />
+      <PageTitle title={t('maps:create.title')} />
       <MapForm defaultValues={defaultValues} onSubmit={onSubmit} isEdit={false} />
     </>
   );

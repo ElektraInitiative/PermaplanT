@@ -181,7 +181,7 @@ function LocationInput() {
         <MapPinIcon />
       </IconButton>
 
-      <span className="mt-4 flex items-center justify-center">{t('maps:create.or')}</span>
+      <span className="mt-4 flex items-center justify-center">{t('maps:form.or')}</span>
 
       <ZodValidatedFormInput
         id="latitude"
@@ -221,7 +221,7 @@ function MapView() {
   const formInfo = useFormContext<MapFormData>();
   const map = useMapEvents({
     click: (e) => {
-      map.openPopup(t('maps:create.location_selected'), e.latlng);
+      map.openPopup(t('maps:form.location_selected'), e.latlng);
       formInfo.setValue('latitude', e.latlng.lat);
       formInfo.setValue('longitude', e.latlng.lng);
     },

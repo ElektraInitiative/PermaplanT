@@ -10,29 +10,24 @@
         "duplicate_title": "Karte duplizieren",
         "error_map_fetch": "Sorry, ich habe Schwierigkeiten Karten von meinem Server zu erhalten. Bitte versuche es später erneut."
     },
-    "create": {
-        "modal_title": "Neue Karte",
-        "cancel_button": "Abbrechen",
-        "submit_button": "Erstellen",
-        "success": "Karte wurde erfolgreich erstellt!",
-        "failure": "Etwas ist schief gelaufen, bitte versuchen Sie es später erneut!",
-        "description_placeholer": "Beschreibung",
+    "form": {
+        "name_label": "Name",
+        "name_placeholder": "Mein Garten",
+        "privacy_label": "Privatsphäre",
+        "description_label": "Beschreibung",
+        "description_placeholder": "Ein wunderschöner Garten voller Blumen.",
         "location_selected": "Dein gewählter Standort.",
-        "location_button": "Wähle Standort",
+        "latitude_label": "Längengrad",
+        "longitude_label": "Breitegrad",
         "location_button_hint": "Durch Klick wird die externe Ressource openstreetmap.org geladen.",
-        "or": "Oder",
+        "or": "or"
+    },
+    "create": {
+        "title": "Neue Karte",
         "error_map_create": "Sorry, ich konnte die Karte nicht auf meinem Server ablegen. Möglicherweise existiert bereits eine Karte mit diesem Namen."
     },
     "edit": {
         "title": "Karte bearbeiten",
-        "privacy_label": "Privatsphäre",
-        "description_label": "Beschreibung",
-        "location_label": "Standort",
-        "location_selected": "Dein gewählter Standort.",
-        "latitude_label": "Längengrad",
-        "longitude_label": "Breitegrad",
-        "location_button": "Wähle Standort",
-        "location_button_hint": "Durch Klick wird die externe Ressource openstreetmap.org geladen.",
         "error_map_edit": "Sorry, ich konnte die Karte nicht auf meinem Server aktualisieren. Möglicherweise existiert bereits eine Karte mit diesem Namen.",
         "error_map_single_fetch": "Sorry, ich konnte die Karte nicht von meinem Server laden. Möglicherweise existiert sie nicht."
     }
