@@ -9,7 +9,11 @@ import Select, {
   StylesConfig,
 } from 'react-select';
 import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenuTypes';
+
+export interface SelectOption {
+  value: string | number;
+  label: string;
+}
 
 export interface SelectMenuProps<
   T extends FieldValues,

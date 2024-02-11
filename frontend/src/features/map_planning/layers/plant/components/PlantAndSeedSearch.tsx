@@ -1,13 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SearchInput, { SearchInputHandle } from '@/components/Form/SearchInput';
 import { SeedListItem } from '@/features/map_planning/layers/plant/components/SeedListItem';
-import useMapStore from '@/features/map_planning/store/MapStore';
-import { PlantForPlanting } from '@/features/map_planning/store/MapStoreTypes';
-import { resetSelection } from '@/features/map_planning/utils/ShapesSelection';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
 import { useSeedSearch } from '@/features/seeds/hooks/seedHookApi';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import SearchIcon from '@/svg/icons/search.svg?react';
@@ -32,6 +30,7 @@ export const PlantAndSeedSearch = () => {
   const { actions } = useSelectPlantForPlanting();
 
   const seeds = useMemo(() => data?.pages.flatMap((page) => page.results) ?? [], [data]);
+  const transformerActions = useTransformerStore((state) => state.actions);
 
   const isReadOnlyMode = useIsReadOnlyMode();
 
@@ -44,16 +43,13 @@ export const PlantAndSeedSearch = () => {
     setSearchVisible(false);
   };
 
-  const transformerRef = useMapStore((state) => state.transformer);
-
-  const selectPlantForPlanting = (plant: PlantForPlanting) => {
-    actions.selectPlantForPlanting(plant);
-    resetSelection(transformerRef);
+  const handleClickOnPlantListItem = (plant: PlantsSummaryDto) => {
+    transformerActions.clearSelection();
+    actions.selectPlantForPlanting({ plant, seed: null });
   };
 
-  const handleClickOnPlantListItem = useCallback(selectPlantForPlanting, [actions, transformerRef]);
   const handleClickOnSeedListItem = (seed: SeedDto, plant: PlantsSummaryDto) =>
-    selectPlantForPlanting({ plant, seed });
+    actions.selectPlantForPlanting({ seed, plant });
 
   useEffect(() => {
     searchInputRef.current?.focusSearchInputField();
@@ -123,9 +119,7 @@ export const PlantAndSeedSearch = () => {
                   disabled={isReadOnlyMode}
                   plant={plant}
                   key={plant.id}
-                  onClick={() => {
-                    handleClickOnPlantListItem({ plant, seed: null });
-                  }}
+                  onClick={handleClickOnPlantListItem}
                 />
               ))}
             </ul>

@@ -26,20 +26,18 @@ export const PlantLabel = React.memo(function PlantLabel({ planting }: PlantLabe
     return <Label></Label>;
   }
 
-  const offsetWhenAreaX = planting.isArea ? planting.width / 2 : 0;
-  const offsetWhenAreaY = planting.isArea ? planting.height / 2 : 0;
+  const labelOffsetXArea = planting.sizeX / 2 - labelWidth / 2;
+  const labelOffsetYArea = planting.sizeY + 10;
 
-  const labelOffsetX = labelWidth / 2;
-  const labelOffsetY = (planting.height / 2) * planting.scaleY * 1.1;
+  const labelOffsetX = -labelWidth / 2;
+  const labelOffsetY = planting.sizeY / 2 + 10;
 
   return (
     <MapLabel
       listening={false}
       ref={labelRef}
-      x={planting.x}
-      y={planting.y}
-      offsetX={labelOffsetX - offsetWhenAreaX}
-      offsetY={-labelOffsetY - offsetWhenAreaY}
+      x={planting.x + (planting.isArea ? labelOffsetXArea : labelOffsetX)}
+      y={planting.y + (planting.isArea ? labelOffsetYArea : labelOffsetY)}
       content={commonName(plant)}
     />
   );

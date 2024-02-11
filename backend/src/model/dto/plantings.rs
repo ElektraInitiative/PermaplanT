@@ -22,16 +22,12 @@ pub struct PlantingDto {
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
-    /// The width of the plant on the map.
-    pub width: i32,
-    /// The height of the plant on the map.
-    pub height: i32,
+    /// The size of the planting on the map in x direction.
+    pub size_x: i32,
+    /// The size of the planting on the map in y direction.
+    pub size_y: i32,
     /// The rotation in degrees (0-360) of the plant on the map.
     pub rotation: f32,
-    /// The x scale of the plant on the map.
-    pub scale_x: f32,
-    /// The y scale of the plant on the map.
-    pub scale_y: f32,
     /// The date the planting was added to the map.
     /// If None, the planting always existed.
     pub add_date: Option<NaiveDate>,
@@ -65,16 +61,12 @@ pub struct NewPlantingDto {
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
-    /// The width of the plant on the map.
-    pub width: i32,
-    /// The height of the plant on the map.
-    pub height: i32,
+    /// The size of the planting on the map in x direction.
+    pub size_x: i32,
+    /// The size of the planting on the map in y direction.
+    pub size_y: i32,
     /// The rotation of the plant on the map.
     pub rotation: f32,
-    /// The x scale of the plant on the map.
-    pub scale_x: f32,
-    /// The y scale of the plant on the map.
-    pub scale_y: f32,
     /// The date the planting was added to the map.
     /// If None, the planting always existed.
     pub add_date: Option<NaiveDate>,
@@ -118,9 +110,9 @@ pub struct TransformPlantingDto {
     /// The rotation of the plant on the map.
     pub rotation: f32,
     /// The x scale of the plant on the map.
-    pub scale_x: f32,
+    pub size_x: i32,
     /// The y scale of the plant on the map.
-    pub scale_y: f32,
+    pub size_y: i32,
 }
 
 /// Used to move an existing planting.

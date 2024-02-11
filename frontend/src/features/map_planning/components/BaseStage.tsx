@@ -7,12 +7,12 @@ import { useDimensions } from '@/hooks/useDimensions';
 import { colors } from '@/utils/colors';
 import { useSelectedLayerVisibility } from '../hooks/useSelectedLayerVisibility';
 import useMapStore from '../store/MapStore';
+import { useTransformerStore } from '../store/transformer/TransformerStore';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
   SELECTION_RECTANGLE_NAME,
   hideSelectionRectangle,
   initializeSelectionRectangle,
-  resetSelection,
   resetSelectionRectangleSize,
   selectIntersectingShapes,
   updateSelectionRectangle,
@@ -70,10 +70,11 @@ export const BaseStage = ({
   // Represents the state of the current selection rectangle
   const selectionRectAttrs = useMapStore((store) => store.selectionRectAttributes);
   const setSelectionRectAttrs = useMapStore((store) => store.updateSelectionRect);
+  const transformerActions = useTransformerStore((store) => store.actions);
 
   const transformerRef = useRef<Konva.Transformer>(null);
   useEffect(() => {
-    useMapStore.setState({ transformer: transformerRef });
+    useTransformerStore.getState().actions.initialize(transformerRef);
   }, [transformerRef]);
 
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
@@ -220,10 +221,10 @@ export const BaseStage = ({
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
-    resetSelectionRectangleSize(stageRef);
+    resetSelectionRectangleSize(setSelectionRectAttrs);
 
     if (selectable) {
-      hideSelectionRectangle(setSelectionRectAttrs, selectionRectAttrs);
+      hideSelectionRectangle(setSelectionRectAttrs);
     }
   };
 
@@ -232,10 +233,8 @@ export const BaseStage = ({
     listeners?.stageClickListeners.forEach((listener) => listener(e));
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 
-    const nodeSize = transformerRef.current?.getNodes().length ?? 0;
-
-    if (nodeSize > 0 && isEventTriggeredFromStage(e)) {
-      resetSelection(transformerRef);
+    if (transformerActions.hasSelection() && isEventTriggeredFromStage(e)) {
+      transformerActions.clearSelection();
     }
   };
 
@@ -277,7 +276,7 @@ export const BaseStage = ({
             opacity={0.2}
             name={SELECTION_RECTANGLE_NAME}
           />
-          <Transformer
+          <Transformer // DO NOT CONDITIONALLY RENDER THIS COMPONENT
             listening={!isReadOnly}
             // We need to manually disable selection when we are transforming
             onTransformStart={() => {
@@ -295,7 +294,6 @@ export const BaseStage = ({
             ref={transformerRef}
             name="transformer"
             anchorSize={8}
-            enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
           />
         </Layer>
       </Stage>
@@ -341,14 +339,9 @@ function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>): void {
 }
 
 function preventDraggingOfNonSelectedShapes(konvaEvent: KonvaEventObject<DragEvent>): void {
-  if (!transformerContainsNode(konvaEvent.target)) {
+  if (!useTransformerStore.getState().actions.isNodeSelected(konvaEvent.target)) {
     konvaEvent.target.stopDrag();
   }
-}
-
-function transformerContainsNode(konvaNode: Konva.Stage | Konva.Shape): boolean {
-  const currentTransformerNodes = useMapStore.getState().transformer.current?.nodes() ?? [];
-  return currentTransformerNodes.includes(konvaNode);
 }
 
 function initializeStageDraggingMode(

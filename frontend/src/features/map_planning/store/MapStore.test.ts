@@ -130,8 +130,8 @@ describe('MapHistoryStore', () => {
         x: 123,
         y: 123,
         rotation: 123,
-        scaleX: 1.23,
-        scaleY: 1.23,
+        sizeX: 123,
+        sizeY: 123,
       },
     ]);
 
@@ -145,8 +145,8 @@ describe('MapHistoryStore', () => {
       x: 123,
       y: 123,
       rotation: 123,
-      scaleX: 1.23,
-      scaleY: 1.23,
+      sizeX: 123,
+      sizeY: 123,
     });
   });
 
@@ -195,16 +195,16 @@ describe('MapHistoryStore', () => {
         x: 111,
         y: 111,
         rotation: 111,
-        scaleX: 1.11,
-        scaleY: 1.11,
+        sizeX: 123,
+        sizeY: 123,
       },
       {
         id: '2',
         x: 222,
         y: 222,
         rotation: 222,
-        scaleX: 2.22,
-        scaleY: 2.22,
+        sizeX: 123,
+        sizeY: 123,
       },
     ]);
 
@@ -219,16 +219,16 @@ describe('MapHistoryStore', () => {
       x: 111,
       y: 111,
       rotation: 111,
-      scaleX: 1.11,
-      scaleY: 1.11,
+      sizeX: 123,
+      sizeY: 123,
     });
     expect(newState.layers.plants.objects[1]).toMatchObject({
       id: '2',
       x: 222,
       y: 222,
       rotation: 222,
-      scaleX: 2.22,
-      scaleY: 2.22,
+      sizeX: 123,
+      sizeY: 123,
     });
   });
 
@@ -391,13 +391,11 @@ function createPlantTestObject(testValue: number): PlantingDto {
     id: testValue.toString(),
     layerId: 1,
     plantId: 1,
-    height: testValue,
-    width: testValue,
+    sizeX: testValue,
+    sizeY: testValue,
     x: testValue,
     y: testValue,
     rotation: testValue,
-    scaleX: testValue,
-    scaleY: testValue,
     isArea: false,
   };
 }

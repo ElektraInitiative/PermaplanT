@@ -32,6 +32,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 08.01.2024 9:00 _(Markus Raab, Christoph @chr_schr)_
 - Added Meeting Agenda&Notes for 15.01.2024 9:00 _(Markus Raab, Moritz)_
 - Added Meeting Agenda&Notes for 22.01.2024 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 29.01.2024 9:00 _(Markus Raab, Jannis)_
+- Added Meeting Agenda&Notes for 05.02.2024 9:00 _(Markus Raab, Christoph)_
 - _()_
 - _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
@@ -80,8 +82,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Display a rectangle for area of plantings _(Paul)_
 - Refactor the planting api to batch processing _(Paul, Jannis)_
 - _()_
-- _()_
-- _()_
+- Area of plants resizing. Rename width & height of plantings to `size_x` & `size_y`. Remove `scale` from plantings. _(Paul)_
+- Refactor transformer into a separate store _(Paul)_
 - Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
 - _()_
 - _()_

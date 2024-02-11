@@ -3,7 +3,7 @@ import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import type { ClassNamesConfig, StylesConfig, GroupBase } from 'react-select';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
 import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenuTypes';
+import { SelectOption } from './SelectMenu';
 
 /**
  * Contains the information needed by react-select-async-paginate for loading a single page.

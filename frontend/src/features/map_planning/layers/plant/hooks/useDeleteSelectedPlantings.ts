@@ -1,4 +1,5 @@
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
 import { DeletePlantAction } from '../actions';
 
 export function useDeleteSelectedPlantings() {
@@ -8,14 +9,14 @@ export function useDeleteSelectedPlantings() {
 
   const executeAction = useMapStore((state) => state.executeAction);
   const selectPlantings = useMapStore((state) => state.selectPlantings);
-  const transformerRef = useMapStore((state) => state.transformer);
+  const transformerActions = useTransformerStore((state) => state.actions);
 
   const deleteSelectedPlantings = () => {
     if (!Array.isArray(selectedPlantings)) return;
 
     executeAction(new DeletePlantAction(selectedPlantings.map(({ id }) => ({ id }))));
     selectPlantings(null);
-    transformerRef.current?.nodes([]);
+    transformerActions.clearSelection();
   };
 
   return {

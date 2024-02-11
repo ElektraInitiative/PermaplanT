@@ -10,7 +10,7 @@ import {
 } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenuTypes';
+import { SelectOption } from './SelectMenu';
 
 export interface CreatableSelectMenuProps<
   T extends FieldValues,
