@@ -1,3 +1,5 @@
+import { cn } from '@/utils/cn';
+
 interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** The variant specifies the look of the button. */
   variant?: ButtonVariant;
@@ -30,25 +32,29 @@ export default function IconButton({
   isToolboxIcon = false,
   ...props
 }: IconButtonProps) {
-  const defaultIconStyles =
+  const defaultIconButtonStyles =
     'inline-flex h-6 w-6 justify-center rounded-lg items-center text-sm font-medium focus:outline-none focus:ring-1 focus:ring-secondary-100 dark:focus:ring-secondary-500 focus:border-0 dark:focus:border-0 stroke-neutral-800 dark:stroke-neutral-800-dark fill-neutral-800 dark:fill-neutral-800-dark' +
     ' disabled:stroke-neutral-500 dark:disabled:stroke-neutral-500-dark disabled:fill-neutral-500 dark:disabled:fill-neutral-500-dark disabled:cursor-not-allowed' +
     ' ' +
     variantStyles[variant];
 
-  const activeIcon = renderAsActive
-    ? 'fill-primary-500 dark:fill-primary-400 stroke-primary-500 dark:stroke-primary-400'
-    : '';
-  const toolboxIcon = isToolboxIcon
-    ? 'mx-1 my-2 first-of-type:ml-2 last-of-type:mr-2 h-8 w-8 p-1 border border-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 dark:hover:stroke-primary-400 active:stroke-primary-400 active:fill-primary-400'
-    : '';
-  const additionalClasses = props.className ? props.className : '';
+  const activeStyles =
+    'fill-primary-500 dark:fill-primary-400 stroke-primary-500 dark:stroke-primary-400';
+  const toolboxStyles =
+    'mx-1 my-2 first-of-type:ml-2 last-of-type:mr-2 h-8 w-8 p-1 border border-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 dark:hover:stroke-primary-400 active:stroke-primary-400 active:fill-primary-400';
 
   return (
     <button
       type="button"
       {...props}
-      className={activeIcon + ' ' + toolboxIcon + ' ' + defaultIconStyles + ' ' + additionalClasses}
+      className={cn(
+        defaultIconButtonStyles,
+        {
+          [activeStyles]: renderAsActive,
+          [toolboxStyles]: isToolboxIcon,
+        },
+        props.className,
+      )}
     ></button>
   );
 }

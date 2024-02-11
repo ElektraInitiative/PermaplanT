@@ -10,6 +10,17 @@
         "duplicate_title": "Duplicate map",
         "error_map_fetch": "Sorry, I'm experiencing trouble fetching maps from my server. Please try again later."
     },
+    "form": {
+        "name_label": "Name",
+        "name_placeholder": "My garden",
+        "privacy_label": "Privacy",
+        "description_label": "Description",
+        "description_placeholder": "A beautiful garden with a lot of flowers.",
+        "latitude_label": "Latitude",
+        "longitude_label": "Longitude",
+        "location_selected": "Your selected location.",
+        "location_button_hint": "On click the external resource openstreetmap.org will be loaded."
+    },
     "create": {
         "modal_title": "New Map",
         "cancel_button": "Cancel",

@@ -11,12 +11,12 @@ class MapCreatePage(AbstractPage):
 
     def __init__(self, page: Page):
         self._page = page
-        self._name = page.get_by_placeholder("Name *")
-        self._description = page.get_by_placeholder("Description")
-        self._longitude = page.get_by_placeholder("Longitude")
-        self._latitude = page.get_by_placeholder("Latitude")
+        self._name = page.get_by_label("Name")
+        self._description = page.get_by_label("Description")
+        self._longitude = page.get_by_label("Longitude")
+        self._latitude = page.get_by_label("Latitude")
         self._create_button = page.get_by_role("button", name="Create")
-        self._privacy_select = page.get_by_test_id("map-create-form__select-privacy")
+        self._privacy_select = page.get_by_test_id("select-menu__Privacy-select")
 
     def try_create_a_map(
         self,
@@ -62,7 +62,9 @@ class MapCreatePage(AbstractPage):
         self._name.fill(name)
 
     def select_privacy(self, privacy: str):
-        self._privacy_select.select_option(privacy)
+        """Selects the maps privacy."""
+        self._privacy_select.click()
+        self._page.get_by_role("option").get_by_text(privacy, exact=True).click()
 
     def fill_description(self, description: str):
         self._description.fill(description)
