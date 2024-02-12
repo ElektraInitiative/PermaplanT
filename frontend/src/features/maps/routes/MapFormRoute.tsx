@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PrivacyOption } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
+import { useFindCollaborators } from '../hooks/collaboratorHookApi';
 import { useCreateMap, useEditMap, useFindMapById } from '../hooks/mapHookApi';
 import { MapForm, MapFormData } from './MapForm';
 
@@ -19,6 +20,10 @@ function MapEditForm({ mapId }: { mapId: number }) {
   const { t } = useTranslation(['maps']);
 
   const { data } = useFindMapById(mapId);
+  const { data: collaborators } = useFindCollaborators(mapId);
+
+  console.log(collaborators);
+
   const { mutate: editMap } = useEditMap();
 
   if (!data) {

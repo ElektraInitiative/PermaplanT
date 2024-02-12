@@ -7,7 +7,6 @@ import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { PrivacyOption } from '@/api_types/definitions';
-import IconButton from '@/components/Button/IconButton';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SelectMenu, { SelectOption } from '@/components/Form/SelectMenu';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
@@ -16,6 +15,7 @@ import ZodValidatedFormInput from '@/components/Form/ZodValidatedFromInput';
 import MapPinIcon from '@/svg/icons/map-pin.svg?react';
 import { enumFromStringValue, enumToSelectOptionArr } from '@/utils/enum';
 import { useTranslatedPrivacy } from '@/utils/translated-enums';
+import { CollaboratorPanel } from '../components/CollaboratorPanel';
 
 const MapFormSchema = z
   .object({
@@ -96,6 +96,7 @@ export function MapForm({ defaultValues, onSubmit, isEdit }: MapFormProps) {
           placeholder={t('maps:form.name_placeholder')}
         />
 
+        {/** PRIVACY */}
         <div className="grid grid-cols-[1fr_2fr]">
           <SelectMenu
             id="privacy"
@@ -126,6 +127,7 @@ export function MapForm({ defaultValues, onSubmit, isEdit }: MapFormProps) {
           </div>
         </div>
 
+        {/** DESCRIPTION */}
         <SimpleFormTextArea
           className="h-auto"
           id="description"
@@ -135,8 +137,14 @@ export function MapForm({ defaultValues, onSubmit, isEdit }: MapFormProps) {
           rows={2}
         />
 
-        <div className="grid grid-cols-[3fr_1fr]">
+        <div className="grid grid-cols-[1fr_1fr] gap-4">
+          {/** LOCATION LATITUDE, LONGITUDE OR MAP */}
           <LocationInput />
+
+          {/** COLLABORATOR */}
+          <div className="flex shrink-0 grow">
+            <CollaboratorPanel collaborators={[]} handleSearch={() => []} />
+          </div>
         </div>
 
         <div className="flex flex-row justify-between space-x-4">
@@ -166,42 +174,54 @@ function LocationInput() {
   const formInfo = useFormContext<MapFormData>();
   const [mapVisible, setMapVisible] = useState(false);
 
-  return mapVisible ? (
-    <>
-      <SimpleButton onClick={() => setMapVisible(false)} title={'Close map'} className="mb-4" />
-      <LocationMapInput />
-    </>
-  ) : (
-    <div className="flex gap-4">
-      <IconButton
-        className="mt-7"
-        title={t('maps:form.location_button_hint')}
-        onClick={() => setMapVisible(true)}
-      >
-        <MapPinIcon />
-      </IconButton>
+  return (
+    <div className=" md:min-w-[32rem]">
+      {mapVisible ? (
+        <LocationMapInput />
+      ) : (
+        <div className="mt-4 space-y-4">
+          <div className="flex justify-center">
+            <SimpleButton
+              className="max-w-80"
+              title={t('maps:form.location_button_hint')}
+              variant={ButtonVariant.secondaryBase}
+              onClick={() => setMapVisible(true)}
+            >
+              Select your location on the map
+              <MapPinIcon className="ml-2 h-7 w-7 stroke-current" />
+            </SimpleButton>
+          </div>
 
-      <span className="mt-4 flex items-center justify-center">{t('maps:form.or')}</span>
+          <div className="relative">
+            <div className="inline-flex w-full items-center justify-center">
+              <hr className="my-4 h-0.5 w-64 rounded border-0 bg-neutral-300 dark:bg-neutral-700" />
+              <div className="absolute left-1/2 -translate-x-1/2 bg-[rgb(238,238,238)] px-4 dark:bg-[rgb(33,33,33)]">
+                {t('maps:form.or')}
+              </div>
+            </div>
+          </div>
 
-      <ZodValidatedFormInput
-        id="latitude"
-        register={formInfo.register}
-        type="number"
-        aria-invalid={Boolean(formInfo.formState.errors.latitude)}
-        errorTitle={formInfo.formState.errors.latitude?.message ?? undefined}
-        labelContent={t('maps:form.latitude_label')}
-        placeholder={t('maps:form.latitude_label')}
-      />
+          <ZodValidatedFormInput
+            id="latitude"
+            register={formInfo.register}
+            type="number"
+            aria-invalid={Boolean(formInfo.formState.errors.latitude)}
+            errorTitle={formInfo.formState.errors.latitude?.message ?? undefined}
+            labelContent={t('maps:form.latitude_label')}
+            placeholder={t('maps:form.latitude_label')}
+          />
 
-      <ZodValidatedFormInput
-        id="longitude"
-        register={formInfo.register}
-        type="number"
-        aria-invalid={Boolean(formInfo.formState.errors.longitude)}
-        errorTitle={formInfo.formState.errors.longitude?.message ?? undefined}
-        labelContent={t('maps:form.longitude_label')}
-        placeholder={t('maps:form.longitude_label')}
-      />
+          <ZodValidatedFormInput
+            id="longitude"
+            register={formInfo.register}
+            type="number"
+            aria-invalid={Boolean(formInfo.formState.errors.longitude)}
+            errorTitle={formInfo.formState.errors.longitude?.message ?? undefined}
+            labelContent={t('maps:form.longitude_label')}
+            placeholder={t('maps:form.longitude_label')}
+          />
+        </div>
+      )}
     </div>
   );
 }
