@@ -10,6 +10,8 @@
     "merge:datasets": "node src/merge_datasets.js",
     "merge:reinsaat": "node src/merge_reinsaat.js",
     "merge:csvfiles": "node src/helpers/merge_csv_files.js",
+    "fetch:germannames": "node src/fetch_german_names.js",
+    "apply:overrides": "node src/apply_overrides.js",
     "insert:plants": "node src/insert_plants.js",
     "insert:relations": "node src/insert_plant_relations.js",
     "insert": "npm run insert:plants && npm run insert:relations",
