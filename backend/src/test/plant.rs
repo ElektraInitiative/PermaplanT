@@ -1,10 +1,7 @@
 //! Tests for [`crate::controller::plants`].
 
 use crate::{
-    model::{
-        dto::{Page, PlantsSummaryDto},
-        r#enum::plant_spread::PlantSpread,
-    },
+    model::dto::{Page, PlantsSummaryDto},
     test::util::{init_test_app, init_test_database},
 };
 use actix_web::{
@@ -25,7 +22,7 @@ async fn test_get_all_plants_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
-                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
+                    &crate::schema::plants::spread.eq(50),
                 ))
                 .execute(conn)
                 .await?;
@@ -53,7 +50,7 @@ async fn test_get_all_plants_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
-        spread: Some(PlantSpread::Wide),
+        spread: Some(50),
     };
 
     let result = test::read_body(resp).await;
@@ -74,7 +71,7 @@ async fn test_get_one_plant_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
-                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
+                    &crate::schema::plants::spread.eq(50),
                 ))
                 .execute(conn)
                 .await?;
@@ -102,7 +99,7 @@ async fn test_get_one_plant_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
-        spread: Some(PlantSpread::Wide),
+        spread: Some(50),
     };
 
     let result = test::read_body(resp).await;
@@ -123,7 +120,7 @@ async fn test_search_plants_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
-                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
+                    &crate::schema::plants::spread.eq(50),
                 ))
                 .execute(conn)
                 .await?;
@@ -151,7 +148,7 @@ async fn test_search_plants_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
-        spread: Some(PlantSpread::Wide),
+        spread: Some(50),
     };
 
     let result = test::read_body(resp).await;
