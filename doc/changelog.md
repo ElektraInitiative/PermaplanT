@@ -8,6 +8,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.3.7 - UNRELEASED
 
+- needs new migrations
+- needs new scraper data (integer for plant spread and height)
 - _()_
 - Remove variety from table seeds _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
