@@ -5,14 +5,9 @@ use std::time::Instant;
 
 use actix_web::cookie::time::Duration;
 use futures_util::{stream, StreamExt};
-use oauth2::basic::BasicClient;
-use oauth2::reqwest::Error;
-use oauth2::{
-    AccessToken, AuthUrl, HttpRequest, HttpResponse, ResourceOwnerPassword, ResourceOwnerUsername,
-    TokenResponse, TokenUrl,
-};
 use reqwest::header::HeaderValue;
 use reqwest::Url;
+use secrecy::{ExposeSecret, Secret};
 use serde::de::DeserializeOwned;
 use tokio::sync::Mutex;
 
@@ -27,26 +22,35 @@ type Result<T> = std::result::Result<T, KeycloakApiError>;
 /// The keycloak admin API.
 #[derive(Clone)]
 pub struct Api {
-    /// Oauth2 client for auth with Keycloak.
-    oauth_api: BasicClient,
-    /// Username for auth with Keycloak.
-    username: ResourceOwnerUsername,
-    /// Password for auth with Keycloak.
-    password: ResourceOwnerPassword,
-    /// Base url for the Keycloak admin API.
+    /// Base url for the Keycloak admin REST API.
     base_url: Url,
     /// Cached access token (needs to be thread safe).
     /// Might be expired, in which case it will be refreshed.
     auth_data: Arc<Mutex<Option<AuthData>>>,
+    /// Url for requesting the access token from the auth server.
+    token_url: Url,
+    /// The client id for the oauth2 client.
+    client_id: String,
+    /// The client secret for the oauth2 client.
+    client_secret: Secret<String>,
 }
 
 /// Helper struct to cache the access token and its expiration time.
 #[derive(Clone)]
 struct AuthData {
     /// The access token.
-    access_token: AccessToken,
-    /// The time when the access token expires.
+    access_token: Secret<String>,
+    /// Timestamp the token expires.
     expires_at: Instant,
+}
+
+/// Helper struct to deserialize the token response.
+#[derive(serde::Deserialize)]
+struct TokenResponse {
+    /// The access token.
+    pub access_token: Secret<String>,
+    /// Timestamp the token expires.
+    pub expires_in: i64,
 }
 
 impl Api {
@@ -57,23 +61,18 @@ impl Api {
     #[allow(clippy::expect_used)]
     #[must_use]
     pub fn new(config: &Config) -> Self {
-        let auth_url = AuthUrl::from_url(config.keycloak_auth_uri.clone());
-        let token_url = TokenUrl::from_url(config.keycloak_auth_uri.clone());
-        let mut base_url = to_base_url(token_url.url().clone());
+        let token_url = config.auth_token_uri.clone();
+        let mut base_url = to_base_url(token_url.clone());
         base_url.set_path("admin/realms/PermaplanT");
 
-        let oauth_api = BasicClient::new(
-            config.keycloak_client_id.clone(),
-            Some(config.keycloak_client_secret.clone()),
-            auth_url,
-            Some(token_url),
-        );
+        let client_secret = config.auth_admin_client_secret.clone();
+        let client_id = config.auth_admin_client_id.clone();
 
         Self {
-            oauth_api,
-            username: config.keycloak_username.clone(),
-            password: config.keycloak_password.clone(),
             base_url,
+            token_url,
+            client_id,
+            client_secret,
             auth_data: Arc::new(Mutex::new(None)),
         }
     }
@@ -157,7 +156,8 @@ impl Api {
 
         let mut request = reqwest::Request::new(reqwest::Method::GET, url);
         let token = self.get_or_refresh_access_token(client).await?;
-        let token_header = HeaderValue::from_str(&format!("Bearer {}", token.secret()))?;
+        let token_header =
+            HeaderValue::from_str(&format!("Bearer {}", token.expose_secret().as_str()))?;
         request.headers_mut().append("Authorization", token_header);
 
         // There is a `json` method, but then we can not log the response for debugging easily.
@@ -168,7 +168,10 @@ impl Api {
     }
 
     /// Gets the access token or refreshes it if it is expired.
-    async fn get_or_refresh_access_token(&self, client: &reqwest::Client) -> Result<AccessToken> {
+    async fn get_or_refresh_access_token(
+        &self,
+        client: &reqwest::Client,
+    ) -> Result<Secret<String>> {
         let mut guard = self.auth_data.lock().await;
 
         match &*guard {
@@ -189,54 +192,27 @@ impl Api {
 
     /// Refresh the access token.
     async fn refresh_access_token(&self, client: &reqwest::Client) -> Result<AuthData> {
-        let token_result = self
-            .oauth_api
-            .exchange_password(&self.username, &self.password)
-            .request_async(|req| send_token_request(client, req))
+        let token_response = client
+            .post(self.token_url.clone())
+            .form(&[
+                ("grant_type", "client_credentials"),
+                ("client_id", &self.client_id),
+                ("client_secret", self.client_secret.expose_secret().as_str()),
+            ])
+            .send()
+            .await?
+            .json::<TokenResponse>()
             .await?;
 
-        let access_token = token_result.access_token().clone();
-        let expires_at = token_result.expires_in().map_or_else(
-            || {
-                Err(KeycloakApiError::Other(
-                    "No expires_in in token response".to_owned(),
-                ))
-            },
-            |expires_in| Ok(Instant::now() + expires_in - Duration::seconds(5)),
-        )?;
+        let access_token = token_response.access_token.clone();
+        let expires_at =
+            Instant::now() + Duration::seconds(token_response.expires_in) - Duration::seconds(5);
 
         Ok(AuthData {
             access_token,
             expires_at,
         })
     }
-}
-
-/// Helper function to send a token request.
-///
-/// Basically a copy of [`oauth2::reqwest::async_http_client`].
-/// Uses a client instance instead of a new client.
-/// This enables connection pooling. See: <https://github.com/seanmonstar/reqwest/discussions/2067>
-async fn send_token_request(
-    client: &reqwest::Client,
-    request: HttpRequest,
-) -> std::result::Result<HttpResponse, Error<reqwest::Error>> {
-    let request_builder = client
-        .request(request.method, request.url.as_str())
-        .headers(request.headers)
-        .body(request.body);
-    let req = request_builder.build().map_err(Error::Reqwest)?;
-
-    let response = client.execute(req).await.map_err(Error::Reqwest)?;
-
-    let status_code = response.status();
-    let headers = response.headers().to_owned();
-    let chunks = response.bytes().await.map_err(Error::Reqwest)?;
-    Ok(HttpResponse {
-        status_code,
-        headers,
-        body: chunks.to_vec(),
-    })
 }
 
 /// Helper function to create a base URL.

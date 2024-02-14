@@ -5,8 +5,6 @@ use std::{
     fmt::{self, Display, Formatter},
 };
 
-use oauth2::ErrorResponse;
-
 #[derive(Debug, Clone)]
 pub enum KeycloakApiError {
     Reqwest(String),
@@ -30,8 +28,8 @@ impl From<reqwest::Error> for KeycloakApiError {
     }
 }
 
-impl From<oauth2::url::ParseError> for KeycloakApiError {
-    fn from(err: oauth2::url::ParseError) -> Self {
+impl From<url::ParseError> for KeycloakApiError {
+    fn from(err: url::ParseError) -> Self {
         Self::Other(err.to_string())
     }
 }
@@ -39,16 +37,6 @@ impl From<oauth2::url::ParseError> for KeycloakApiError {
 impl From<actix_http::header::InvalidHeaderValue> for KeycloakApiError {
     fn from(err: actix_http::header::InvalidHeaderValue) -> Self {
         Self::Other(err.to_string())
-    }
-}
-
-impl<RE, T> From<oauth2::RequestTokenError<RE, T>> for KeycloakApiError
-where
-    RE: Error,
-    T: ErrorResponse,
-{
-    fn from(value: oauth2::RequestTokenError<RE, T>) -> Self {
-        Self::Other(value.to_string())
     }
 }
 

@@ -3,8 +3,8 @@
 use std::env;
 
 use dotenvy::dotenv;
-use oauth2::{ClientId, ClientSecret, ResourceOwnerPassword, ResourceOwnerUsername};
 use reqwest::Url;
+use secrecy::Secret;
 
 /// Environment variables that are required for the configuration of the server.
 pub struct EnvVars {
@@ -13,10 +13,8 @@ pub struct EnvVars {
     pub database_url: &'static str,
     pub auth_host: &'static str,
     pub auth_client_id: &'static str,
-    pub keycloak_client_id: &'static str,
-    pub keycloak_client_secret: &'static str,
-    pub keycloak_username: &'static str,
-    pub keycloak_password: &'static str,
+    pub auth_admin_client_id: &'static str,
+    pub auth_admin_client_secret: &'static str,
 }
 
 /// Holds the names of all required environment variables
@@ -26,10 +24,8 @@ const ENV_VARS: EnvVars = EnvVars {
     database_url: "DATABASE_URL",
     auth_host: "AUTH_HOST",
     auth_client_id: "AUTH_CLIENT_ID",
-    keycloak_client_id: "KEYCLOAK_CLIENT_ID",
-    keycloak_client_secret: "KEYCLOAK_CLIENT_SECRET",
-    keycloak_username: "KEYCLOAK_USERNAME",
-    keycloak_password: "KEYCLOAK_PASSWORD",
+    auth_admin_client_id: "AUTH_ADMIN_CLIENT_ID",
+    auth_admin_client_secret: "AUTH_ADMIN_CLIENT_SECRET",
 };
 
 /// Configuration data for the server.
@@ -45,16 +41,12 @@ pub struct Config {
     /// The `client_id` the frontend should use to log in its users.
     pub client_id: String,
 
-    /// The URI of the auth server used to acquire a token for the admin API.
-    pub keycloak_auth_uri: Url,
+    /// The URI of the auth server used to acquire a token.
+    pub auth_token_uri: Url,
     /// The `client_id` the backend uses to communicate with the auth server.
-    pub keycloak_client_id: ClientId,
+    pub auth_admin_client_id: String,
     /// The `client_secret` the backend uses to communicate with the auth server.
-    pub keycloak_client_secret: ClientSecret,
-    /// The `username` the backend uses to communicate with the auth server.
-    pub keycloak_username: ResourceOwnerUsername,
-    /// The `password` the backend uses to communicate with the auth server.
-    pub keycloak_password: ResourceOwnerPassword,
+    pub auth_admin_client_secret: Secret<String>,
 }
 
 impl Config {
@@ -80,32 +72,26 @@ impl Config {
 
         let auth_discovery_uri =
             format!("{auth_host}/realms/PermaplanT/.well-known/openid-configuration");
-        let keycloak_auth_uri = format!("{auth_host}/realms/master/protocol/openid-connect/token")
+        let auth_token_uri = format!("{auth_host}/realms/master/protocol/openid-connect/token")
             .parse::<Url>()
             .map_err(|e| e.to_string())?;
 
         let client_id =
             env::var(ENV_VARS.auth_client_id).map_err(|_| env_error(ENV_VARS.auth_client_id))?;
 
-        let keycloak_client_id = env::var(ENV_VARS.keycloak_client_id)
-            .map_err(|_| env_error(ENV_VARS.keycloak_client_id))?;
-        let keycloak_client_secret = env::var(ENV_VARS.keycloak_client_secret)
-            .map_err(|_| env_error(ENV_VARS.keycloak_client_secret))?;
-        let keycloak_username = env::var(ENV_VARS.keycloak_username)
-            .map_err(|_| env_error(ENV_VARS.keycloak_username))?;
-        let keycloak_password = env::var(ENV_VARS.keycloak_password)
-            .map_err(|_| env_error(ENV_VARS.keycloak_password))?;
+        let keycloak_client_id = env::var(ENV_VARS.auth_admin_client_id)
+            .map_err(|_| env_error(ENV_VARS.auth_admin_client_id))?;
+        let keycloak_client_secret = env::var(ENV_VARS.auth_admin_client_secret)
+            .map_err(|_| env_error(ENV_VARS.auth_admin_client_secret))?;
 
         Ok(Self {
             bind_address: (host, port),
             database_url,
             auth_discovery_uri,
             client_id,
-            keycloak_auth_uri,
-            keycloak_client_id: ClientId::new(keycloak_client_id),
-            keycloak_client_secret: ClientSecret::new(keycloak_client_secret),
-            keycloak_username: ResourceOwnerUsername::new(keycloak_username),
-            keycloak_password: ResourceOwnerPassword::new(keycloak_password),
+            auth_token_uri,
+            auth_admin_client_id: keycloak_client_id,
+            auth_admin_client_secret: Secret::new(keycloak_client_secret),
         })
     }
 }
