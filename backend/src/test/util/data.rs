@@ -100,16 +100,6 @@ impl Default for TestInsertablePlant {
     }
 }
 
-impl TestInsertablePlant {
-    fn from(id: i32, unique_name: String, name_en: String) -> Self {
-        Self {
-            id,
-            unique_name,
-            common_name_en: Some(vec![Some(name_en)]),
-        }
-    }
-}
-
 #[derive(Insertable)]
 #[diesel(table_name = crate::schema::plantings)]
 pub struct TestInsertablePlanting {

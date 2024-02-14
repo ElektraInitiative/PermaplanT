@@ -34,19 +34,19 @@ function exitPlantingMode() {
 
 type CreatePlantingArgs =
   | {
-    isArea: false;
-    selectedPlantForPlanting: PlantForPlanting;
-    xCoordinate: number;
-    yCoordinate: number;
-  }
+      isArea: false;
+      selectedPlantForPlanting: PlantForPlanting;
+      xCoordinate: number;
+      yCoordinate: number;
+    }
   | {
-    isArea: true;
-    selectedPlantForPlanting: PlantForPlanting;
-    xCoordinate: number;
-    yCoordinate: number;
-    width: number;
-    height: number;
-  };
+      isArea: true;
+      selectedPlantForPlanting: PlantForPlanting;
+      xCoordinate: number;
+      yCoordinate: number;
+      width: number;
+      height: number;
+    };
 
 function usePlantLayerListeners(listening: boolean) {
   const executeAction = useMapStore((state) => state.executeAction);
@@ -191,11 +191,6 @@ function usePlantLayerListeners(listening: boolean) {
    * selected for planting, creating an area of plantings inside the selection rectangle
    */
   const handleSelectPlanting: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
-    const selectedPlantings = (foundPlantings: PlantingDto[], konvaNode: Node) => {
-      const plantingNode = konvaNode.getAttr('planting');
-      return plantingNode ? [...foundPlantings, plantingNode] : [foundPlantings];
-    };
-
     if (isPlacementModeActive()) {
       const selectedPlantForPlanting =
         useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;

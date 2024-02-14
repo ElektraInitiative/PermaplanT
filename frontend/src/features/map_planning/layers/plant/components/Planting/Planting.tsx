@@ -27,7 +27,7 @@ export type PlantingElementProps = {
  * @returns A plant ready to be shown on the map.
  *
  */
-export function Planting({ planting }: PlantingElementProps) {
+export function Planting({ planting }: PlantingProps) {
   const showPlantLabels = useMapStore((state) => state.untrackedState.layers.plants.showLabels);
 
   return (
@@ -45,26 +45,31 @@ export function Planting({ planting }: PlantingElementProps) {
 /**
  * The component representing a single plant on the map.
  */
-function SinglePlanting({ planting }: PlantingElementProps) {
+function SinglePlanting({ planting }: PlantingProps) {
   const { plant, isSelected, handleOnClick } = usePlanting(planting);
   const fillColor = isSelected ? colors.secondary[200] : colors.primary[400];
 
   return (
     <Group
       planting={planting}
+      {...planting}
+      width={planting.sizeX}
+      height={planting.sizeY}
+      scaleX={1}
+      scaleY={1}
       draggable={true}
       onClick={handleOnClick}
       onMouseOut={hideTooltip}
       onMouseMove={() => placeTooltip(plant, planting.additionalName)}
     >
-      <Circle width={planting.width} height={planting.height} x={0} y={0} fill={fillColor} />
+      <Circle width={planting.sizeX} height={planting.sizeY} x={0} y={0} fill={fillColor} />
       {plant ? (
         <PublicNextcloudKonvaImage
           shareToken="2arzyJZYj2oNnHX"
           path={`Icons/${plant?.unique_name}.png`}
-          width={planting.width * 0.9}
-          height={planting.height * 0.9}
-          offset={{ x: (planting.width * 0.9) / 2, y: (planting.height * 0.9) / 2 }}
+          width={planting.sizeX * 0.9}
+          height={planting.sizeY * 0.9}
+          offset={{ x: (planting.sizeX * 0.9) / 2, y: (planting.sizeY * 0.9) / 2 }}
           showErrorMessage={false}
         />
       ) : null}
@@ -75,20 +80,25 @@ function SinglePlanting({ planting }: PlantingElementProps) {
 /**
  * The component representing an area of plants on the map.
  */
-function AreaOfPlantings({ planting }: PlantingElementProps) {
+function AreaOfPlantings({ planting }: PlantingProps) {
   const { plant, isSelected, handleOnClick } = usePlanting(planting);
   const fillColor = isSelected ? colors.secondary[200] : colors.primary[600];
-  const imageSize = Math.min(planting.width, planting.height) * 0.9;
+  const imageSize = Math.min(planting.sizeX, planting.sizeY) * 0.9;
 
   return (
     <Group
       planting={planting}
+      {...planting}
+      width={planting.sizeX}
+      height={planting.sizeY}
+      scaleX={1}
+      scaleY={1}
       draggable={true}
       onClick={handleOnClick}
       onMouseOut={hideTooltip}
       onMouseMove={() => placeTooltip(plant, planting.additionalName)}
     >
-      <Rect width={planting.width} height={planting.height} fill={fillColor} cornerRadius={8} />
+      <Rect width={planting.sizeX} height={planting.sizeY} fill={fillColor} cornerRadius={8} />
       {plant ? (
         <PublicNextcloudKonvaImage
           shareToken="2arzyJZYj2oNnHX"
@@ -96,7 +106,7 @@ function AreaOfPlantings({ planting }: PlantingElementProps) {
           width={imageSize}
           height={imageSize}
           offset={{
-            x: -planting.width / 2 + imageSize / 2,
+            x: -planting.sizeX / 2 + imageSize / 2,
             y: 0,
           }}
           showErrorMessage={false}

@@ -16,22 +16,16 @@ pub struct Planting {
     pub layer_id: i32,
     /// The plant that is planted.
     pub plant_id: i32,
-
     /// The x coordinate of the position on the map.
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
-    /// The width of the plant on the map.
-    pub width: i32,
-    /// The height of the plant on the map.
-    pub height: i32,
+    /// The size of the planting on the map in x direction.
+    pub size_x: i32,
+    /// The size of the planting on the map in y direction.
+    pub size_y: i32,
     /// The rotation in degrees (0-360) of the plant on the map.
     pub rotation: f32,
-    /// The x scale of the plant on the map.
-    pub scale_x: f32,
-    /// The y scale of the plant on the map.
-    pub scale_y: f32,
-
     /// The date the planting was added to the map.
     /// If None, the planting always existed.
     pub add_date: Option<NaiveDate>,
@@ -84,11 +78,9 @@ pub struct NewPlanting {
     pub size_y: i32,
     /// The rotation in degrees (0-360) of the plant on the map.
     pub rotation: f32,
-    /// The x scale of the plant on the map.
-    pub scale_x: f32,
-    /// The y scale of the plant on the map.
-    pub scale_y: f32,
-
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
     /// Is the planting an area of plants.

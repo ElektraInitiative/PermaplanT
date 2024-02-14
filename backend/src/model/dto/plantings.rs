@@ -75,10 +75,9 @@ pub struct NewPlantingDto {
     pub size_y: i32,
     /// The rotation of the plant on the map.
     pub rotation: f32,
-    /// The x scale of the plant on the map.
-    pub scale_x: f32,
-    /// The y scale of the plant on the map.
-    pub scale_y: f32,
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
     /// Is the planting an area of plants.

@@ -45,7 +45,7 @@ export type EditPlantingAttributesProps = {
   isReadOnlyMode: boolean;
 };
 
-export type EditSinglePlantingProps = EditPlantingAttributesProps & {
+export type SinglePlantingAttributeFormProps = EditPlantingAttributesProps & {
   planting: PlantingDto;
 };
 
@@ -69,7 +69,7 @@ export type PlantingAttributeEditFormProps = EditPlantingAttributesProps & {
 export function SinglePlantingAttributeForm({
   planting,
   ...props
-}: EditSinglePlantingProps) {
+}: SinglePlantingAttributeFormProps) {
   const { plantId } = planting;
   const {
     data: plant,
@@ -110,7 +110,7 @@ export function SinglePlantingAttributeForm({
 export function MultiplePlantingsAttributeForm({
   plantings,
   ...props
-}: EditMultiplePlantingsProps) {
+}: MultiplePlantingsAttributeFormProps) {
   const { t } = useTranslation(['plantings']);
 
   const areAllPlantingsAreas = plantings.every((planting) => planting.isArea);

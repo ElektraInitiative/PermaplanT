@@ -16,7 +16,7 @@ use crate::{
     model::{
         dto::{
             core::{
-                ActionDtoWrapperDeletePlantings, ActionDtoWrapperPlantings,
+                ActionDtoWrapperDeletePlantings, ActionDtoWrapperNewPlantings,
                 ActionDtoWrapperUpdatePlantings, TimelinePagePlantingsDto,
             },
             plantings::{
@@ -179,7 +179,7 @@ struct BaseLayerImagesApiDoc;
             UpdateAddDatePlantingDto,
             UpdateRemoveDatePlantingDto,
             UpdatePlantingNoteDto,
-            ActionDtoWrapperPlantings,
+            ActionDtoWrapperNewPlantings,
             ActionDtoWrapperUpdatePlantings,
             ActionDtoWrapperDeletePlantings,
             ActionDtoWrapperDeleteDrawings,

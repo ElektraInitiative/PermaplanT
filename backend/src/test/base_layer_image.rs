@@ -32,6 +32,7 @@ async fn initial_db_values(
         .values(TestInsertableMap {
             id: -1,
             name: "MyMap".to_owned(),
+            geometry: polygon,
             ..Default::default()
         })
         .execute(conn)
