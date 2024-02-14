@@ -4,7 +4,7 @@ use crate::{
     error::ServiceError,
     model::{
         dto::{LayerDto, NewLayerDto},
-        r#enum::{layer_type::LayerType, privacy_option::PrivacyOption},
+        r#enum::layer_type::LayerType,
     },
     test::util::{init_test_app, init_test_database},
 };
@@ -15,15 +15,9 @@ use actix_web::{
     },
     test,
 };
-use chrono::Utc;
-use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
-use uuid::Uuid;
 
-use super::util::{
-    data::{TestInsertableLayer, TestInsertableMap},
-    dummy_map_polygons::tall_rectangle,
-};
+use super::util::data::{TestInsertableLayer, TestInsertableMap};
 
 async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceError> {
     diesel::insert_into(crate::schema::maps::table)

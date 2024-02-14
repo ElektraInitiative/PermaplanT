@@ -133,7 +133,7 @@ impl Map {
         query.get_result::<Self>(conn).await.map(Into::into)
     }
 
-    /// Update modified metadate (modified_at, modified_by) of the map.
+    /// Update modified metadate (`modified_at`, `modified_by`) of the map.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.

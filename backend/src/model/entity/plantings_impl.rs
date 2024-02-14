@@ -13,7 +13,9 @@ use uuid::Uuid;
 
 use super::plantings::UpdatePlanting;
 use super::Map;
-use crate::model::dto::plantings::{DeletePlantingDto, MapPlantingDto, UpdatePlantingDto};
+use crate::model::dto::plantings::{
+    DeletePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto,
+};
 use crate::model::entity::plantings::{NewPlanting, Planting};
 use crate::schema::plantings::{self, layer_id, plant_id};
 use crate::schema::seeds;
@@ -38,7 +40,7 @@ impl Planting {
     pub async fn find(
         search_parameters: FindPlantingsParameters,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Vec<MapPlantingDto>> {
+    ) -> QueryResult<Vec<PlantingDto>> {
         let mut query = plantings::table
             .left_join(seeds::table)
             .select((plantings::all_columns, seeds::name.nullable()))
@@ -79,7 +81,7 @@ impl Planting {
     pub async fn find_by_seed_id(
         seed_id: i32,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Vec<MapPlantingDto>> {
+    ) -> QueryResult<Vec<PlantingDto>> {
         let query = plantings::table
             .select(plantings::all_columns)
             .filter(plantings::seed_id.eq(seed_id));
@@ -98,11 +100,11 @@ impl Planting {
     /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn create(
-        dto_vec: Vec<MapPlantingDto>,
+        dto_vec: Vec<NewPlantingDto>,
         map_id: i32,
         user_id: Uuid,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Vec<MapPlantingDto>> {
+    ) -> QueryResult<Vec<PlantingDto>> {
         let planting_creations: Vec<NewPlanting> = dto_vec
             .into_iter()
             .map(|dto| NewPlanting::from((dto, user_id)))
@@ -134,7 +136,7 @@ impl Planting {
 
         let result_vec = query_result
             .into_iter()
-            .map(MapPlantingDto::from)
+            .map(PlantingDto::from)
             .map(|mut dto| {
                 if let Some(seed_id) = dto.seed_id {
                     dto.additional_name = seed_ids_to_names.get(&seed_id).cloned();
@@ -159,7 +161,7 @@ impl Planting {
         map_id: i32,
         user_id: Uuid,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<Vec<MapPlantingDto>> {
+    ) -> QueryResult<Vec<PlantingDto>> {
         let planting_updates = Vec::from(dto);
 
         let result = conn

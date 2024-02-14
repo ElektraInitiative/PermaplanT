@@ -13,7 +13,7 @@ use super::plantings::{DeletePlantingDto, PlantingDto, UpdatePlantingDto};
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[aliases(
-    ActionDtoWrapperPlantings = ActionDtoWrapper<Vec<PlantingDto>>,
+    ActionDtoWrapperNewPlantings = ActionDtoWrapper<Vec<PlantingDto>>,
     ActionDtoWrapperUpdatePlantings = ActionDtoWrapper<UpdatePlantingDto>,
     ActionDtoWrapperDeletePlantings = ActionDtoWrapper<Vec<DeletePlantingDto>>,
 )]
