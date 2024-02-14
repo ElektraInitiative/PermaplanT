@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import { PrivacyOption } from '@/api_types/definitions';
+import { MapCollaboratorDto, PrivacyOption, UserDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SelectMenu, { SelectOption } from '@/components/Form/SelectMenu';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
@@ -16,6 +16,7 @@ import MapPinIcon from '@/svg/icons/map-pin.svg?react';
 import { enumFromStringValue, enumToSelectOptionArr } from '@/utils/enum';
 import { useTranslatedPrivacy } from '@/utils/translated-enums';
 import { CollaboratorPanel } from '../components/CollaboratorPanel';
+import { useSearchUsers } from '../hooks/userHookApi';
 
 const MapFormSchema = z
   .object({
@@ -59,16 +60,27 @@ export type MapFormData = z.infer<typeof MapFormSchema>;
 
 export interface MapFormProps {
   defaultValues: MapFormData;
+  collaborators: MapCollaboratorDto[];
   onSubmit: (data: MapFormData) => void;
+  onAddCollaborator: (collaborator: UserDto) => void;
+  onRemoveCollaborator: (userId: string) => void;
   isEdit: boolean;
 }
 
-export function MapForm({ defaultValues, onSubmit, isEdit }: MapFormProps) {
+export function MapForm({
+  defaultValues,
+  collaborators,
+  isEdit,
+  onSubmit,
+  onAddCollaborator,
+  onRemoveCollaborator,
+}: MapFormProps) {
   const navigate = useNavigate();
   const formInfo = useForm<MapFormData>({
     defaultValues,
     resolver: zodResolver(MapFormSchema),
   });
+  const { queryInfo, actions: searchUserActions } = useSearchUsers();
 
   const translatedPrivacy = useTranslatedPrivacy();
   const privacy: SelectOption[] = enumToSelectOptionArr(PrivacyOption, translatedPrivacy).reverse();
@@ -82,6 +94,10 @@ export function MapForm({ defaultValues, onSubmit, isEdit }: MapFormProps) {
   }
 
   const handleSubmit = formInfo.handleSubmit(onSubmit, console.error);
+
+  const userSearchResults = queryInfo.data?.filter((user) =>
+    collaborators.every((c) => c.userId !== user.id),
+  );
 
   return (
     <FormProvider {...formInfo}>
@@ -143,7 +159,13 @@ export function MapForm({ defaultValues, onSubmit, isEdit }: MapFormProps) {
 
           {/** COLLABORATOR */}
           <div className="flex shrink-0 grow">
-            <CollaboratorPanel collaborators={[]} handleSearch={() => []} />
+            <CollaboratorPanel
+              onRemoveCollaborator={onRemoveCollaborator}
+              collaborators={collaborators}
+              handleSearch={searchUserActions.searchUsers}
+              onResultClick={onAddCollaborator}
+              userSearchResults={userSearchResults}
+            />
           </div>
         </div>
 

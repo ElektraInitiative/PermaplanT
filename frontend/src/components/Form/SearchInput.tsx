@@ -43,13 +43,14 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
 
     useImperativeHandle(
       forwardedRef,
-      () => {
-        return {
-          focusSearchInputField() {
-            searchInputRef.current?.focus();
-          },
-        };
-      },
+      () => ({
+        contains(node: Node) {
+          return searchInputRef.current?.contains(node);
+        },
+        focusSearchInputField() {
+          searchInputRef.current?.focus();
+        },
+      }),
       [],
     );
 

@@ -1,9 +1,14 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PrivacyOption } from '@/api_types/definitions';
+import { MapCollaboratorDto, PrivacyOption, UserDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import PageLayout from '@/components/Layout/PageLayout';
-import { useFindCollaborators } from '../hooks/collaboratorHookApi';
+import {
+  useAddCollaborator,
+  useFindCollaborators,
+  useRemoveCollaborator,
+} from '../hooks/collaboratorHookApi';
 import { useCreateMap, useEditMap, useFindMapById } from '../hooks/mapHookApi';
 import { MapForm, MapFormData } from './MapForm';
 
@@ -21,12 +26,12 @@ function MapEditForm({ mapId }: { mapId: number }) {
 
   const { data } = useFindMapById(mapId);
   const { data: collaborators } = useFindCollaborators(mapId);
-
-  console.log(collaborators);
+  const { mutate: addCollaborator } = useAddCollaborator();
+  const { mutate: removeCollaborator } = useRemoveCollaborator();
 
   const { mutate: editMap } = useEditMap();
 
-  if (!data) {
+  if (!data || !collaborators) {
     return null;
   }
 
@@ -63,10 +68,35 @@ function MapEditForm({ mapId }: { mapId: number }) {
     );
   }
 
+  function onAddCollaborator(collaborator: UserDto) {
+    addCollaborator({
+      mapId,
+      dto: {
+        userId: collaborator.id,
+      },
+    });
+  }
+
+  function onRemoveCollaborator(userId: string) {
+    removeCollaborator({
+      mapId,
+      dto: {
+        userId,
+      },
+    });
+  }
+
   return (
     <>
       <PageTitle title={t('maps:edit.title')} />
-      <MapForm defaultValues={defaultValues} onSubmit={onSubmit} isEdit />
+      <MapForm
+        onAddCollaborator={onAddCollaborator}
+        onRemoveCollaborator={onRemoveCollaborator}
+        defaultValues={defaultValues}
+        collaborators={collaborators}
+        onSubmit={onSubmit}
+        isEdit
+      />
     </>
   );
 }
@@ -74,8 +104,10 @@ function MapEditForm({ mapId }: { mapId: number }) {
 function MapCreateForm() {
   const { t } = useTranslation(['maps']);
   const navigate = useNavigate();
+  const [collaborators, setCollaborators] = useState<MapCollaboratorDto[]>([]);
 
   const { mutate: createMap } = useCreateMap();
+  const { mutate: addCollaborator } = useAddCollaborator();
 
   const defaultValues: MapFormData = {
     name: '',
@@ -118,17 +150,51 @@ function MapCreateForm() {
         },
       },
       {
-        onSuccess: () => {
-          navigate('/maps');
+        onSuccess: (data) => {
+          // TODO: make this better
+          const promises = collaborators.map((col) =>
+            addCollaborator({
+              mapId: data.id,
+              dto: col,
+            }),
+          );
+          Promise.all(promises).then(() => navigate('/maps'));
         },
       },
     );
   }
 
+  function onAddCollaborator(collaborator: UserDto) {
+    setCollaborators((prev) => {
+      return prev.findIndex((c) => c.userId === collaborator.id) === -1
+        ? [
+            ...prev,
+            {
+              userId: collaborator.id,
+              username: collaborator.username,
+              // just a placeholder, the mapId is not known yet
+              mapId: -1,
+            },
+          ]
+        : prev;
+    });
+  }
+
+  function onRemoveCollaborator(userId: string) {
+    setCollaborators((prev) => prev.filter((c) => c.userId !== userId));
+  }
+
   return (
     <>
       <PageTitle title={t('maps:create.title')} />
-      <MapForm defaultValues={defaultValues} onSubmit={onSubmit} isEdit={false} />
+      <MapForm
+        onRemoveCollaborator={onRemoveCollaborator}
+        onAddCollaborator={onAddCollaborator}
+        defaultValues={defaultValues}
+        collaborators={collaborators}
+        onSubmit={onSubmit}
+        isEdit={false}
+      />
     </>
   );
 }
