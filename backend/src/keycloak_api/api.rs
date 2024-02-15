@@ -100,18 +100,28 @@ impl Api {
         pagination: &PageParameters,
         client: &reqwest::Client,
     ) -> Result<Vec<UserDto>> {
-        let mut url = self.make_url("/users");
+        let page = pagination
+            .page
+            .map_or(MIN_PAGE, |v| if v < MIN_PAGE { MIN_PAGE } else { v });
+        let per_page = pagination.per_page.map_or(DEFAULT_PER_PAGE, |v| {
+            if v < MIN_PER_PAGE {
+                MIN_PER_PAGE
+            } else {
+                v
+            }
+        });
 
+        let first = (page - 1) * per_page;
+
+        let mut url = self.make_url("/users");
         url.query_pairs_mut()
             .append_pair("username", &search_params.username)
-            .append_pair(
-                "first",
-                &format!("{}", &pagination.page.unwrap_or(MIN_PAGE)),
-            )
-            .append_pair(
-                "max",
-                &format!("{}", &pagination.per_page.unwrap_or(MIN_PAGE)),
-            );
+            .append_pair("first", &format!("{first}"))
+            .append_pair("max", &format!("{per_page}"))
+            // optimize the response by only requesting the brief representation
+            .append_pair("briefRepresentation", "true")
+            // only request enabled users
+            .append_pair("enabled", "true");
         self.get::<Vec<UserDto>>(client, url).await
     }
 

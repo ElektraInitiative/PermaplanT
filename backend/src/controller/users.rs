@@ -35,12 +35,14 @@ use crate::{
 pub async fn find(
     search_query: Query<UserSearchParameters>,
     pagination_query: Query<PageParameters>,
+    user_info: UserInfo,
     keycloak_api: SharedKeycloakApi,
     http_client: SharedHttpClient,
 ) -> Result<HttpResponse> {
     let response = service::users::search_by_username(
         &search_query,
         &pagination_query,
+        user_info.id,
         &keycloak_api,
         &http_client,
     )

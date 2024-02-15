@@ -80,6 +80,7 @@ pub async fn find_by_ids(
 pub async fn search_by_username(
     search_params: &UserSearchParameters,
     pagination: &PageParameters,
+    user_id: Uuid,
     keycloak_api: &SharedKeycloakApi,
     http_client: &SharedHttpClient,
 ) -> Result<Vec<UserDto>, ServiceError> {
@@ -94,5 +95,12 @@ pub async fn search_by_username(
             )
         })?;
 
-    Ok(users)
+    // Filter out the user making the request
+    let filtered_users = users
+        .iter()
+        .filter(|user| user.id != user_id)
+        .cloned()
+        .collect::<Vec<_>>();
+
+    Ok(filtered_users)
 }
