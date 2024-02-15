@@ -38,6 +38,15 @@ export const createUntrackedMapSlice: StateCreator<
       y2: 0,
     },
   },
+  setMarkdownEditorFullscreen(isFullscreen: boolean) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        markdownEditorFullScreen: isFullscreen,
+      },
+    }));
+  },
   updateSelectionRect(update: React.SetStateAction<SelectionRectAttrs>) {
     if (typeof update === 'function') {
       set((state) => ({

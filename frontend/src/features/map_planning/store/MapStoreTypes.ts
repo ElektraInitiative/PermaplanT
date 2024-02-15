@@ -189,6 +189,7 @@ export interface UntrackedMapSlice {
   setTooltipPosition: (position: { x: number; y: number }) => void;
   setStatusPanelContent: (content: React.ReactElement) => void;
   clearStatusPanelContent: () => void;
+  setMarkdownEditorFullscreen: (fullscreen: boolean) => void;
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -235,6 +236,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   editorViewRect: { x: 0, y: 0, width: 0, height: 0 },
   timelineDate: convertToDateString(new Date()),
   fetchDate: convertToDateString(new Date()),
+  markdownEditorFullScreen: false,
   timelineBounds: {
     from: convertToDateString(new Date()),
     to: convertToDateString(new Date()),
@@ -413,6 +415,7 @@ export type UntrackedMapState = {
   tooltipPosition: { x: number; y: number };
   bottomStatusPanelContent: React.ReactNode | null;
   layers: UntrackedLayers;
+  markdownEditorFullScreen: boolean;
 };
 
 /**
