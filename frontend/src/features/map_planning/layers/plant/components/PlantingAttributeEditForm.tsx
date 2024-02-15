@@ -1,16 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useFindPlantById } from '../hooks/useFindPlantById';
-import { PlantingDto, PlantsSummaryDto } from '@/api_types/definitions';
-import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
-import MarkdownEditor, { MarkdownEditorCommands } from '@/components/Form/MarkdownEditor';
-import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import { useFindSeedById } from '@/features/map_planning/layers/plant/hooks/useFindSeedById';
-import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
-import { ReactComponent as AlertIcon } from '@/svg/icons/alert.svg';
-import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
-import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
-import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
-import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'react-tooltip';
@@ -18,8 +6,11 @@ import { z } from 'zod';
 import { PlantingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
-import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
+import { MarkdownEditorFormInput } from '@/components/Form/MarkdownEditorFormInput';
+import useMapStore from '@/features/map_planning/store/MapStore';
+import AlertIcon from '@/svg/icons/alert.svg?react';
 import { PlantNameFromAdditionalNameAndPlant, PlantNameFromPlant } from '@/utils/plant-naming';
+import { useFindPlantById } from '../hooks/plantHookApi';
 import { calculatePlantCount, getPlantWidth } from '../util';
 
 const PlantingAttributeEditFormSchema = z
@@ -27,6 +18,7 @@ const PlantingAttributeEditFormSchema = z
   .object({
     addDate: z.nullable(z.string()).transform((value) => value || undefined),
     removeDate: z.nullable(z.string()).transform((value) => value || undefined),
+    plantingNotes: z.nullable(z.string()),
     sizeX: z.number().int().nullable(),
     sizeY: z.number().int().nullable(),
   })
@@ -34,11 +26,15 @@ const PlantingAttributeEditFormSchema = z
     path: ['dateRelation'],
   });
 
-export type PlantingFormData = Pick<PlantingDto, 'addDate' | 'removeDate' | 'sizeX' | 'sizeY'>;
+export type PlantingFormData = Pick<
+  PlantingDto,
+  'addDate' | 'removeDate' | 'sizeX' | 'sizeY' | 'plantingNotes'
+>;
 
 export type EditPlantingAttributesProps = {
   onAddDateChange: (formData: PlantingFormData) => void;
   onRemoveDateChange: (formData: PlantingFormData) => void;
+  onPlantingNotesChange: (formData: PlantingFormData) => void;
   onWidthChange: (formData: PlantingFormData) => void;
   onHeightChange: (formData: PlantingFormData) => void;
   onDeleteClick: () => void;
@@ -56,7 +52,10 @@ export type MultiplePlantingsAttributeFormProps = EditPlantingAttributesProps & 
 export type PlantingAttributeEditFormProps = EditPlantingAttributesProps & {
   addDateDefaultValue: string;
   addDateShowDifferentValueWarning?: boolean;
+  removeDateShowDifferentValueWarning?: boolean;
+  plantingNoteShowDifferentValueWarning?: boolean;
   removeDateDefaultValue: string;
+  plantingNotesDefaultValue: string;
   widthDefaultValue: number | undefined;
   heightDefaultValue: number | undefined;
   planting: PlantingDto | null;
@@ -93,6 +92,7 @@ export function SinglePlantingAttributeForm({
       <PlantingAttributeEditForm
         addDateDefaultValue={planting.addDate ?? ''}
         removeDateDefaultValue={planting.removeDate ?? ''}
+        plantingNotesDefaultValue={planting.plantingNotes ?? ''}
         widthDefaultValue={planting.sizeX}
         heightDefaultValue={planting.sizeY}
         areaOfPlantings={planting.isArea}
@@ -117,15 +117,18 @@ export function MultiplePlantingsAttributeForm({
     return existsCommonDate ? comparisonDate : '';
   };
 
-  const multiplePlantingsHaveDifferentAddDate = () => {
-    const comparisonDate = plantings[0].addDate;
-    return plantings.some((planting) => planting.addDate !== comparisonDate);
-  };
-
   const getCommonRemoveDate = () => {
     const comparisonDate = plantings[0].removeDate;
     const existsCommonDate = plantings.every((planting) => planting.removeDate === comparisonDate);
     return existsCommonDate ? comparisonDate : '';
+  };
+
+  const getCommonPlantingNotes = () => {
+    const comparisonNotes = plantings[0].plantingNotes;
+    const existsCommonNotes = plantings.every(
+      (planting) => planting.plantingNotes === comparisonNotes,
+    );
+    return existsCommonNotes ? comparisonNotes : '';
   };
 
   const getCommonWidth = () => {
@@ -146,8 +149,17 @@ export function MultiplePlantingsAttributeForm({
 
       <PlantingAttributeEditForm
         addDateDefaultValue={getCommonAddDate() ?? ''}
-        addDateShowDifferentValueWarning={multiplePlantingsHaveDifferentAddDate()}
+        addDateShowDifferentValueWarning={plantings.some(
+          (planting) => planting.addDate !== getCommonAddDate(),
+        )}
+        removeDateShowDifferentValueWarning={plantings.some(
+          (planting) => planting.removeDate !== getCommonRemoveDate(),
+        )}
+        plantingNoteShowDifferentValueWarning={plantings.some(
+          (planting) => planting.plantingNotes !== getCommonPlantingNotes(),
+        )}
         removeDateDefaultValue={getCommonRemoveDate() ?? ''}
+        plantingNotesDefaultValue={getCommonPlantingNotes() ?? ''}
         widthDefaultValue={getCommonWidth()}
         heightDefaultValue={getCommonHeight()}
         planting={null}
@@ -162,8 +174,11 @@ function PlantingAttributeEditForm({
   widthDefaultValue,
   heightDefaultValue,
   addDateDefaultValue,
-  addDateShowDifferentValueWarning = false,
+  addDateShowDifferentValueWarning,
+  removeDateShowDifferentValueWarning,
+  plantingNoteShowDifferentValueWarning,
   removeDateDefaultValue,
+  plantingNotesDefaultValue,
   onWidthChange,
   onHeightChange,
   onAddDateChange,
@@ -176,8 +191,6 @@ function PlantingAttributeEditForm({
 }: PlantingAttributeEditFormProps) {
   const { t } = useTranslation(['plantings']);
   const multiplePlantings = planting === null;
-
-  const [plantingNotes, setPlantingNotes] = useState<string | undefined>();
 
   const formInfo = useForm<PlantingFormData>({
     // The 'empty' value for the native date input is an empty string, not null | undefined
@@ -202,11 +215,10 @@ function PlantingAttributeEditForm({
       ? calculatePlantCount(individualPlantSize, planting.sizeX, planting.sizeY)
       : null;
 
-  const plantingNotesSubmitState = useDebouncedSubmit<PlantingAttribute>(
-    watch('plantingNotes'),
-    handleSubmit,
-    onPlantingNotesChange,
+  const plantintNotesFullScreen = useMapStore(
+    (store) => store.untrackedState.markdownEditorFullScreen,
   );
+  const setMarkdownEditorFullscreen = useMapStore((store) => store.setMarkdownEditorFullscreen);
 
   return (
     <FormProvider {...formInfo}>
@@ -258,63 +270,58 @@ function PlantingAttributeEditForm({
         </div>
       )}
 
-      <DebouncedSimpleFormInput
-        onValid={onAddDateChange}
-        type="date"
-        id="addDate"
-        data-testid="planting-attribute-edit-form__add-date"
-        disabled={isReadOnlyMode}
-        labelContent={t('plantings:add_date')}
-        className="w-36"
-      />
+      <div className="flex gap-2">
+        <DebouncedSimpleFormInput
+          onValid={onAddDateChange}
+          type="date"
+          id="addDate"
+          data-testid="planting-attribute-edit-form__add-date"
+          disabled={isReadOnlyMode}
+          labelContent={t('plantings:add_date')}
+          className="w-36"
+        />
+        {addDateShowDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
+      </div>
       <p className="pb-4 text-[0.8rem] text-neutral-400">
         {multiplePlantings
           ? t('plantings:add_date_description_multiple_plantings')
           : t('plantings:add_date_description')}
       </p>
 
-      <DebouncedSimpleFormInput
-        onValid={onRemoveDateChange}
-        type="date"
-        id="removeDate"
-        data-testid="planting-attribute-edit-form__removed-date"
-        disabled={isReadOnlyMode}
-        labelContent={t('plantings:remove_date')}
-        className="w-36"
-      />
+      <div className="flex gap-2">
+        <DebouncedSimpleFormInput
+          onValid={onRemoveDateChange}
+          type="date"
+          id="removeDate"
+          data-testid="planting-attribute-edit-form__removed-date"
+          disabled={isReadOnlyMode}
+          labelContent={t('plantings:remove_date')}
+          className="w-36"
+        />
+        {removeDateShowDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
+      </div>
+
       <p className="text-[0.8rem] text-neutral-400">
         {multiplePlantings
           ? t('plantings:remove_date_description_multiple_plantings')
           : t('plantings:remove_date_description')}
       </p>
 
-      <div className="flex gap-2">
-        <MarkdownEditor
+      <div className="align-items-center flex gap-2">
+        <MarkdownEditorFormInput
+          key="plantingNotes"
+          onValid={onPlantingNotesChange}
+          defaultValue={plantingNotesDefaultValue}
           id="plantingNotes"
-          aria-invalid={plantingNotesSubmitState === 'error'}
-          labelText={t('plantings:notes')}
-          className="w-46"
-          onChange={(value) => {
-            //setValue('plantingNotes', value);
-            setPlantingNotes(value);
+          className="w-full"
+          disabled={isReadOnlyMode}
+          labelContent={t('plantings:notes')}
+          fullScreen={plantintNotesFullScreen}
+          changeFullScreen={(value) => {
+            setMarkdownEditorFullscreen(value);
           }}
-          commands={[
-            MarkdownEditorCommands.bold,
-            MarkdownEditorCommands.checkedListCommand,
-            MarkdownEditorCommands.divider,
-          ]}
-          enableSplitView={false}
-          showFullScreenToggle={true}
-          value={plantingNotes}
-          preview="edit"
         />
-        {plantingNotesSubmitState === 'loading' && (
-          <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
-        )}
-        {plantingNotesSubmitState === 'idle' && (
-          <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
-        )}
-        {plantingNotesShowDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
+        {plantingNoteShowDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
       </div>
 
       <hr className="my-4 border-neutral-700" />
@@ -339,7 +346,7 @@ export function MultiplePlantingsDifferentValueAlert() {
       <AlertIcon
         data-tooltip-id="multiple-plantings-different-value-alert"
         data-tooltip-content={t('plantings:multiple_plantings_different_value_alert')}
-        className="mb-3 mt-auto h-5 w-5 text-orange-400"
+        className="mb-3 mt-auto h-5 w-5 flex-shrink-0 text-orange-400"
       />
       <Tooltip id="multiple-plantings-different-value-alert" />
     </>

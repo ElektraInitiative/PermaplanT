@@ -3,6 +3,7 @@ import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import {
   TransformPlantAction,
   UpdateAddDatePlantAction,
+  UpdatePlantingNotesAction,
   UpdateRemoveDatePlantAction,
 } from '../actions';
 import { useDeleteSelectedPlantings } from '../hooks/useDeleteSelectedPlantings';
@@ -41,15 +42,15 @@ export function PlantLayerLeftToolbar() {
     );
   };
 
-  /*
-  const onPlantingNoteChange = ({ plantingNotes }: PlantingAttribute) => {
+  const onPlantingNoteChange = ({ plantingNotes }: PlantingFormData) => {
     if (!selectedPlantings?.length) return;
 
-    selectedPlantings.forEach(
-      (selectedPlanting) => console.log(selectedPlanting),
-      //executeAction(new UpdatePlantingNotesPlantAction({ id: selectedPlanting.id, plantingNotes })),
+    executeAction(
+      new UpdatePlantingNotesAction(
+        selectedPlantings.map((p) => ({ id: p.id, notes: plantingNotes || '' })),
+      ),
     );
-  };*/
+  };
 
   const onSizeChange = ({ sizeX, sizeY }: PlantingFormData) => {
     if (!selectedPlantings?.length) return;
@@ -84,9 +85,7 @@ export function PlantLayerLeftToolbar() {
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onDeleteClick={onDeleteClick}
-      onPlantingNotesChange={(newValue) => {
-        console.log(newValue.plantingNotes);
-      }}
+      onPlantingNotesChange={onPlantingNoteChange}
       isReadOnlyMode={isReadOnlyMode}
     />
   ) : (
@@ -103,9 +102,7 @@ export function PlantLayerLeftToolbar() {
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onDeleteClick={onDeleteClick}
-      onPlantingNotesChange={(newValue) => {
-        console.log(newValue.plantingNotes);
-      }}
+      onPlantingNotesChange={onPlantingNoteChange}
       isReadOnlyMode={isReadOnlyMode}
     />
   );
