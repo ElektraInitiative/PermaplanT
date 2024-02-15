@@ -17,6 +17,7 @@ export function setup() {
   return authenticate(
     "http://localhost:8081/realms/PermaplanT/protocol/openid-connect/token",
     "PermaplanT",
+    // You should replace these values with your own.
     "test",
     "test"
   );
@@ -30,7 +31,6 @@ export default function (data) {
     },
   };
 
-  let response = http.get("http://localhost:8080/api/users", params);
-  console.log(response);
+  let response = http.get("http://localhost:8080/api/users?username=", params);
   sleep(1);
 }
