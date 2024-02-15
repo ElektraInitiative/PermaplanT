@@ -1,5 +1,7 @@
 //! Configurations for shared data that is available to all controllers.
 
+use std::sync::Arc;
+
 use actix_web::web::Data;
 
 use crate::config::app::Config;
@@ -14,7 +16,7 @@ pub type SharedPool = Data<connection::Pool>;
 pub type SharedBroadcaster = Data<Broadcaster>;
 
 /// Helper-Type - Keycloak admin API.
-pub type SharedKeycloakApi = Data<keycloak_api::api::Api>;
+pub type SharedKeycloakApi = Data<dyn keycloak_api::traits::KeycloakApi + Send + Sync + 'static>;
 
 /// Helper-Type - Pooled HTTP client.
 pub type SharedHttpClient = Data<reqwest::Client>;
@@ -37,10 +39,20 @@ pub struct SharedInit {
 /// If the database pool can not be initialized.
 #[must_use]
 pub fn init(config: &Config) -> SharedInit {
+    let api = Data::from(create_api(config));
+
     SharedInit {
+        keycloak_api: api,
         pool: Data::new(connection::init_pool(&config.database_url)),
         broadcaster: Data::new(Broadcaster::new()),
-        keycloak_api: Data::new(keycloak_api::api::Api::new(config)),
         http_client: Data::new(reqwest::Client::new()),
     }
+}
+
+/// Creates a new Keycloak API.
+#[must_use]
+pub fn create_api(
+    config: &Config,
+) -> Arc<dyn keycloak_api::traits::KeycloakApi + Send + Sync + 'static> {
+    Arc::new(keycloak_api::api::Api::new(config))
 }

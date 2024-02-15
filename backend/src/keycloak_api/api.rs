@@ -6,6 +6,7 @@ use std::sync::Arc;
 use std::time::Instant;
 
 use actix_web::cookie::time::Duration;
+use async_trait::async_trait;
 use futures_util::{stream, StreamExt};
 use reqwest::header::HeaderValue;
 use reqwest::Url;
@@ -17,10 +18,8 @@ use crate::config::app::Config;
 use crate::keycloak_api::dtos::UserDto;
 use crate::model::dto::{PageParameters, UserSearchParameters};
 
-use super::errors::KeycloakApiError;
-
-/// Helper type for results.
-type Result<T> = std::result::Result<T, KeycloakApiError>;
+use super::traits::KeycloakApi;
+use super::{errors::KeycloakApiError, traits::Result};
 
 /// The default number of rows returned from a paginated request.
 pub const DEFAULT_PER_PAGE: i32 = 10;
@@ -64,37 +63,15 @@ struct TokenResponse {
     pub expires_in: i64,
 }
 
-impl Api {
-    /// Creates a new Keycloak API.
-    ///
-    /// # Panics
-    /// If the config does not contain a valid keycloak auth URI.
-    #[allow(clippy::expect_used)]
-    #[must_use]
-    pub fn new(config: &Config) -> Self {
-        let token_url = config.auth_token_uri.clone();
-        let mut base_url = to_base_url(token_url.clone());
-        base_url.set_path("admin/realms/PermaplanT");
-
-        let client_secret = config.auth_admin_client_secret.clone();
-        let client_id = config.auth_admin_client_id.clone();
-
-        Self {
-            base_url,
-            token_url,
-            client_id,
-            client_secret,
-            auth_data: Arc::new(Mutex::new(None)),
-        }
-    }
-
+#[async_trait]
+impl KeycloakApi for Api {
     /// Search for users by their username.
     ///
     /// # Errors
     /// - If the url cannot be parsed.
     /// - If the authorization header cannot be created.
     /// - If the request fails or the response cannot be deserialized.
-    pub async fn search_users_by_username(
+    async fn search_users_by_username(
         &self,
         search_params: &UserSearchParameters,
         pagination: &PageParameters,
@@ -131,7 +108,7 @@ impl Api {
     /// - If the url cannot be parsed.
     /// - If the authorization header cannot be created.
     /// - If the request fails or the response cannot be deserialized.
-    pub async fn get_users_by_ids(
+    async fn get_users_by_ids(
         &self,
         client: &reqwest::Client,
         user_ids: Vec<uuid::Uuid>,
@@ -164,13 +141,38 @@ impl Api {
     /// - If the url cannot be parsed.
     /// - If the authorization header cannot be created.
     /// - If the request fails or the response cannot be deserialized.
-    pub async fn get_user_by_id(
+    async fn get_user_by_id(
         &self,
         client: &reqwest::Client,
         user_id: uuid::Uuid,
     ) -> Result<UserDto> {
         let url = self.make_url(&format!("/users/{user_id}"));
         self.get::<UserDto>(client, url).await
+    }
+}
+
+impl Api {
+    /// Creates a new Keycloak API.
+    ///
+    /// # Panics
+    /// If the config does not contain a valid keycloak auth URI.
+    #[allow(clippy::expect_used)]
+    #[must_use]
+    pub fn new(config: &Config) -> Self {
+        let token_url = config.auth_token_uri.clone();
+        let mut base_url = to_base_url(token_url.clone());
+        base_url.set_path("admin/realms/PermaplanT");
+
+        let client_secret = config.auth_admin_client_secret.clone();
+        let client_id = config.auth_admin_client_id.clone();
+
+        Self {
+            base_url,
+            token_url,
+            client_id,
+            client_secret,
+            auth_data: Arc::new(Mutex::new(None)),
+        }
     }
 
     /// Executes a get request authenticated with the access token.
