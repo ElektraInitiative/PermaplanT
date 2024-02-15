@@ -1,4 +1,6 @@
 //! This module contains the implementation of the client for the keycloak admin API.
+//! Find the documentation here of the keycloak admin API here:
+//! <https://www.keycloak.org/docs-api/22.0.1/rest-api/index.html#_users/>
 
 use std::sync::Arc;
 use std::time::Instant;
@@ -13,11 +15,20 @@ use tokio::sync::Mutex;
 
 use crate::config::app::Config;
 use crate::keycloak_api::dtos::UserDto;
+use crate::model::dto::{PageParameters, UserSearchParameters};
 
 use super::errors::KeycloakApiError;
 
 /// Helper type for results.
 type Result<T> = std::result::Result<T, KeycloakApiError>;
+
+/// The default number of rows returned from a paginated request.
+pub const DEFAULT_PER_PAGE: i32 = 10;
+/// The minimum value for page number in a paginated request.
+/// Pages start at 1. Using a lower value would lead to nonsensical queries.
+pub const MIN_PAGE: i32 = 1;
+/// The minimum number of rows returned from a paginated query.
+pub const MIN_PER_PAGE: i32 = 1;
 
 /// The keycloak admin API.
 #[derive(Clone)]
@@ -77,16 +88,6 @@ impl Api {
         }
     }
 
-    /// Gets all users from the Keycloak API.
-    ///
-    /// # Errors
-    /// - If the url cannot be parsed.
-    /// - If the authorization header cannot be created.
-    /// - If the request fails or the response cannot be deserialized.
-    pub async fn get_users(&self, client: &reqwest::Client) -> Result<Vec<UserDto>> {
-        self.get::<Vec<UserDto>>(client, "/users").await
-    }
-
     /// Search for users by their username.
     ///
     /// # Errors
@@ -95,11 +96,23 @@ impl Api {
     /// - If the request fails or the response cannot be deserialized.
     pub async fn search_users_by_username(
         &self,
-        username: &str,
+        search_params: &UserSearchParameters,
+        pagination: &PageParameters,
         client: &reqwest::Client,
     ) -> Result<Vec<UserDto>> {
-        self.get::<Vec<UserDto>>(client, &format!("/users?username={username}"))
-            .await
+        let mut url = self.make_url("/users");
+
+        url.query_pairs_mut()
+            .append_pair("username", &search_params.username)
+            .append_pair(
+                "first",
+                &format!("{}", &pagination.page.unwrap_or(MIN_PAGE)),
+            )
+            .append_pair(
+                "max",
+                &format!("{}", &pagination.per_page.unwrap_or(MIN_PAGE)),
+            );
+        self.get::<Vec<UserDto>>(client, url).await
     }
 
     /// Gets all users given their ids from the Keycloak API.
@@ -146,14 +159,12 @@ impl Api {
         client: &reqwest::Client,
         user_id: uuid::Uuid,
     ) -> Result<UserDto> {
-        self.get::<UserDto>(client, &format!("/users/{user_id}"))
-            .await
+        let url = self.make_url(&format!("/users/{user_id}"));
+        self.get::<UserDto>(client, url).await
     }
 
     /// Executes a get request authenticated with the access token.
-    async fn get<T: DeserializeOwned>(&self, client: &reqwest::Client, path: &str) -> Result<T> {
-        let url = Url::parse(&format!("{}{}", self.base_url, path))?;
-
+    async fn get<T: DeserializeOwned>(&self, client: &reqwest::Client, url: Url) -> Result<T> {
         let mut request = reqwest::Request::new(reqwest::Method::GET, url);
         let token = self.get_or_refresh_access_token(client).await?;
         let token_header =
@@ -162,8 +173,12 @@ impl Api {
 
         // There is a `json` method, but then we can not log the response for debugging easily.
         let response = client.execute(request).await?;
-        let response_text = response.text().await?;
 
+        if let Err(err) = response.error_for_status_ref() {
+            return Err(KeycloakApiError::Reqwest(err.to_string()));
+        }
+
+        let response_text = response.text().await?;
         Ok(serde_json::from_str(&response_text)?)
     }
 
@@ -212,6 +227,13 @@ impl Api {
             access_token,
             expires_at,
         })
+    }
+
+    /// Creates a URL from the base URL and the given path.
+    fn make_url(&self, path: &str) -> url::Url {
+        let mut url = self.base_url.clone();
+        url.set_path(&format!("{}{}", self.base_url.path(), path));
+        url
     }
 }
 

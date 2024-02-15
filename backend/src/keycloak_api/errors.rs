@@ -24,24 +24,28 @@ impl Error for KeycloakApiError {}
 
 impl From<reqwest::Error> for KeycloakApiError {
     fn from(err: reqwest::Error) -> Self {
+        log::debug!("Reqwest error: {err}");
         Self::Reqwest(err.to_string())
     }
 }
 
 impl From<url::ParseError> for KeycloakApiError {
     fn from(err: url::ParseError) -> Self {
+        log::debug!("ParseError error: {err}");
         Self::Other(err.to_string())
     }
 }
 
 impl From<actix_http::header::InvalidHeaderValue> for KeycloakApiError {
     fn from(err: actix_http::header::InvalidHeaderValue) -> Self {
+        log::debug!("InvalidHeaderValue error: {err}");
         Self::Other(err.to_string())
     }
 }
 
 impl From<serde_json::Error> for KeycloakApiError {
     fn from(err: serde_json::Error) -> Self {
+        log::debug!("serde_json error: {err}");
         Self::Other(err.to_string())
     }
 }

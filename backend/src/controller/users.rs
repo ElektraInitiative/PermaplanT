@@ -11,7 +11,7 @@ use crate::{
         auth::user_info::UserInfo,
         data::{SharedHttpClient, SharedKeycloakApi, SharedPool},
     },
-    model::dto::{UserSearchParameters, UsersDto},
+    model::dto::{PageParameters, UserSearchParameters, UsersDto},
     service,
 };
 
@@ -34,12 +34,17 @@ use crate::{
 #[get("")]
 pub async fn find(
     search_query: Query<UserSearchParameters>,
+    pagination_query: Query<PageParameters>,
     keycloak_api: SharedKeycloakApi,
     http_client: SharedHttpClient,
 ) -> Result<HttpResponse> {
-    let response =
-        service::users::search_by_username(&search_query.username, &keycloak_api, &http_client)
-            .await?;
+    let response = service::users::search_by_username(
+        &search_query,
+        &pagination_query,
+        &keycloak_api,
+        &http_client,
+    )
+    .await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
