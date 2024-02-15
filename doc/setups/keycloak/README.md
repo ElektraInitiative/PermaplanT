@@ -31,3 +31,17 @@ Create a second client `swagger-ui` with `Root URL = http://localhost:8080/doc/a
 
 Go to `Users` and create a user `test`.  
 Click `Credentials` and set password to `test`.
+
+## Setup the Keycloak Admin REST API (for collaboration & users endpoints):
+
+Make sure you are on the `master` realm.
+Click on `Clients` -> `Create client`.  
+Set the `Client ID` to `permaplant-server`.  
+Click `Next`.  
+Switch on `Client authentication`.  
+Under `Authentication flow` uncheck everything but `Service account roles`.  
+Click `Next` and `Save`.  
+Under `Clients` chose the newly created `permaplant-server` client.  
+Under `Service account roles` assign the role `admin`.  
+From `Credentials` copy the `Client secret` into the related `AUTH_ADMIN_CLIENT_SECRET` environment variable.  
+Copy `permaplant-server` into the related `AUTH_ADMIN_CLIENT_ID` environment variable.
