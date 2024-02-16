@@ -85,7 +85,7 @@ pub async fn create(
 /// Endpoint for deleting a collaborator from a map.
 ///
 /// # Errors
-/// * If the user is not the owner of the map.
+/// * If the user is not the creator of the map.
 /// * If the connection to the database could not be established.
 #[utoipa::path(
     context_path = "/api/maps/{map_id}/collaborators",

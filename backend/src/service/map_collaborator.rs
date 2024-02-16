@@ -44,7 +44,7 @@ pub async fn get_all(
 ///
 /// # Errors
 /// * If the user tries to add themselves as a collaborator.
-/// * If the user is not the owner of the map.
+/// * If the user is not the creator of the map.
 /// * If the map already has 30 collaborators.
 /// * If the connection to the database could not be established.
 /// * If the connection to the Keycloak API could not be established.
@@ -95,7 +95,7 @@ pub async fn create(
 /// Remove a collaborator from a map.
 ///
 /// # Errors
-/// * If the user is not the owner of the map.
+/// * If the user is not the creator of the map.
 /// * If the connection to the database could not be established.
 /// * If the connection to the Keycloak API could not be established.
 pub async fn delete(
@@ -112,7 +112,7 @@ pub async fn delete(
     if map.owner_id != user_id {
         return Err(ServiceError::new(
             StatusCode::FORBIDDEN,
-            "You are not the owner of this map.".to_owned(),
+            "You are not the creator of this map.".to_owned(),
         ));
     }
 
