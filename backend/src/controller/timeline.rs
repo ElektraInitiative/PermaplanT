@@ -4,7 +4,7 @@ use crate::model::dto::timeline::TimelineParameters;
 use crate::service;
 use actix_web::{
     get,
-    web::{Data, Query},
+    web::{Data, Path, Query},
     HttpResponse, Result,
 };
 
@@ -13,7 +13,7 @@ use actix_web::{
 /// # Errors
 /// * If the connection to the database could not be established.
 #[utoipa::path(
-    context_path = "/api/timeline",
+    context_path = "/api/maps/{map_id}/timeline",
     params(
         TimelineParameters
     ),
@@ -24,12 +24,13 @@ use actix_web::{
         ("oauth2" = [])
     )
 )]
-#[get("")]
+#[get("timeline")]
 pub async fn get_timeline(
+    map_id: Path<i32>,
     parameters: Query<TimelineParameters>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     let params = parameters.into_inner();
-    let dto = service::timeline::calculate(params, &app_data).await?;
+    let dto = service::timeline::calculate(map_id.into_inner(), params, &app_data).await?;
     Ok(HttpResponse::Ok().json(dto))
 }

@@ -83,7 +83,7 @@ async fn test_calculate_timeline() {
     let (token, app) = init_test_app(pool).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/timeline")
+        .uri("/api/maps/-1/timeline")
         .param("start", "2000-01-01")
         .param("end", "2020-01-01")
         .insert_header((header::AUTHORIZATION, token))
@@ -94,4 +94,19 @@ async fn test_calculate_timeline() {
     let timeline: TimelineDto = test::read_body_json(resp).await;
     dbg!("Got timeline: {}", timeline);
     // assert_eq!(timeline.results.len(), 0);
+}
+
+#[actix_rt::test]
+async fn test_calculate_timeline_invalid_map() {
+    let pool = init_test_database(|conn| initial_db_values(conn).scope_boxed()).await;
+    let (token, app) = init_test_app(pool).await;
+
+    let resp = test::TestRequest::get()
+        .uri("/api/maps/10000/timeline")
+        .param("start", "2000-01-01")
+        .param("end", "2020-01-01")
+        .insert_header((header::AUTHORIZATION, token))
+        .send_request(&app)
+        .await;
+    assert_eq!(resp.status(), StatusCode::NOT_FOUND);
 }

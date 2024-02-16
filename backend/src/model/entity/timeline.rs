@@ -31,6 +31,7 @@ struct TimelineQeueryResult {
 /// # Errors
 /// * Unknown, diesel doesn't say why it might error.
 pub async fn calculate(
+    map_id: i32,
     params: TimelineParameters,
     conn: &mut AsyncPgConnection,
 ) -> QueryResult<TimelineDto> {
@@ -40,6 +41,7 @@ pub async fn calculate(
     // 2000-01-02  4          0
     // 2000-01-03  2          8
     let query = sql_query(CALCULATE_TIMELINE_QUERY)
+        .bind::<diesel::sql_types::Integer, _>(map_id)
         .bind::<diesel::sql_types::Date, _>(params.start)
         .bind::<diesel::sql_types::Date, _>(params.end);
 

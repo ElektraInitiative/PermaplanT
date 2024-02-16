@@ -1,25 +1,33 @@
 WITH t1 AS (
     SELECT
-        add_date,
+        p.add_date,
         count(*)::integer AS additions
     FROM
-        plantings
+        plantings AS p
+    INNER JOIN
+        layers AS l
+        ON plantings.layer_id = layers.id
     WHERE
-        add_date BETWEEN $1 AND $2
+        l.map_id = $1 AND
+        p.add_date BETWEEN $2 AND $3
     GROUP BY
-        add_date
+        p.add_date
 ),
 
 t2 AS (
     SELECT
-        remove_date,
+        p.remove_date,
         count(*)::integer AS removals
     FROM
-        plantings
+        plantings AS p
+    INNER JOIN
+        layers AS l
+        ON plantings.layer_id = layers.id
     WHERE
-        remove_date BETWEEN $1 AND $2
+        l.map_id = $1 AND
+        p.remove_date BETWEEN $2 AND $3
     GROUP BY
-        remove_date
+        p.remove_date
 )
 
 SELECT
