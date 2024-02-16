@@ -14,7 +14,6 @@ use secrecy::{ExposeSecret, Secret};
 use serde::de::DeserializeOwned;
 use tokio::sync::Mutex;
 
-use crate::config::app::Config;
 use crate::keycloak_api::dtos::UserDto;
 use crate::model::dto::{PageParameters, UserSearchParameters};
 
@@ -63,14 +62,14 @@ struct TokenResponse {
     pub expires_in: i64,
 }
 
+pub struct Config {
+    pub token_url: Url,
+    pub client_id: String,
+    pub client_secret: Secret<String>,
+}
+
 #[async_trait]
 impl KeycloakApi for Api {
-    /// Search for users by their username.
-    ///
-    /// # Errors
-    /// - If the url cannot be parsed.
-    /// - If the authorization header cannot be created.
-    /// - If the request fails or the response cannot be deserialized.
     async fn search_users_by_username(
         &self,
         search_params: &UserSearchParameters,
@@ -102,12 +101,6 @@ impl KeycloakApi for Api {
         self.get::<Vec<UserDto>>(client, url).await
     }
 
-    /// Gets all users given their ids from the Keycloak API.
-    ///
-    /// # Errors
-    /// - If the url cannot be parsed.
-    /// - If the authorization header cannot be created.
-    /// - If the request fails or the response cannot be deserialized.
     async fn get_users_by_ids(
         &self,
         client: &reqwest::Client,
@@ -135,12 +128,6 @@ impl KeycloakApi for Api {
         Ok(y)
     }
 
-    /// Gets a user by its id from the Keycloak API.
-    ///
-    /// # Errors
-    /// - If the url cannot be parsed.
-    /// - If the authorization header cannot be created.
-    /// - If the request fails or the response cannot be deserialized.
     async fn get_user_by_id(
         &self,
         client: &reqwest::Client,
@@ -158,13 +145,14 @@ impl Api {
     /// If the config does not contain a valid keycloak auth URI.
     #[allow(clippy::expect_used)]
     #[must_use]
-    pub fn new(config: &Config) -> Self {
-        let token_url = config.auth_token_uri.clone();
+    pub fn new(config: Config) -> Self {
+        let Config {
+            token_url,
+            client_id,
+            client_secret,
+        } = config;
         let mut base_url = to_base_url(token_url.clone());
         base_url.set_path("admin/realms/PermaplanT");
-
-        let client_secret = config.auth_admin_client_secret.clone();
-        let client_id = config.auth_admin_client_id.clone();
 
         Self {
             base_url,

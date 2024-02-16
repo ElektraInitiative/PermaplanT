@@ -44,9 +44,9 @@ pub struct Config {
     /// The URI of the auth server used to acquire a token.
     pub auth_token_uri: Url,
     /// The `client_id` the backend uses to communicate with the auth server.
-    pub auth_admin_client_id: String,
+    pub auth_admin_client_id: Option<String>,
     /// The `client_secret` the backend uses to communicate with the auth server.
-    pub auth_admin_client_secret: Secret<String>,
+    pub auth_admin_client_secret: Option<Secret<String>>,
 }
 
 impl Config {
@@ -79,10 +79,9 @@ impl Config {
         let client_id =
             env::var(ENV_VARS.auth_client_id).map_err(|_| env_error(ENV_VARS.auth_client_id))?;
 
-        let keycloak_client_id = env::var(ENV_VARS.auth_admin_client_id)
-            .map_err(|_| env_error(ENV_VARS.auth_admin_client_id))?;
-        let keycloak_client_secret = env::var(ENV_VARS.auth_admin_client_secret)
-            .map_err(|_| env_error(ENV_VARS.auth_admin_client_secret))?;
+        let auth_admin_client_id = env::var(ENV_VARS.auth_admin_client_id).ok();
+        let auth_admin_client_secret = env::var(ENV_VARS.auth_admin_client_secret)
+            .map_or_else(|_| None, |client_secret| Some(Secret::new(client_secret)));
 
         Ok(Self {
             bind_address: (host, port),
@@ -90,8 +89,8 @@ impl Config {
             auth_discovery_uri,
             client_id,
             auth_token_uri,
-            auth_admin_client_id: keycloak_client_id,
-            auth_admin_client_secret: Secret::new(keycloak_client_secret),
+            auth_admin_client_id,
+            auth_admin_client_secret,
         })
     }
 }

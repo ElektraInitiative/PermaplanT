@@ -50,9 +50,22 @@ pub fn init(config: &Config) -> SharedInit {
 }
 
 /// Creates a new Keycloak API.
+/// If the admin client ID and secret are not set, a mock API is created.
 #[must_use]
 pub fn create_api(
     config: &Config,
 ) -> Arc<dyn keycloak_api::traits::KeycloakApi + Send + Sync + 'static> {
-    Arc::new(keycloak_api::api::Api::new(config))
+    if let (Some(client_id), Some(client_secret)) = (
+        config.auth_admin_client_id.clone(),
+        config.auth_admin_client_secret.clone(),
+    ) {
+        Arc::new(keycloak_api::api::Api::new(keycloak_api::api::Config {
+            token_url: config.auth_token_uri.clone(),
+            client_id,
+            client_secret,
+        }))
+    } else {
+        log::info!("Using mock Keycloak API");
+        Arc::new(keycloak_api::mock_api::MockApi)
+    }
 }
