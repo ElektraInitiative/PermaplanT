@@ -22,8 +22,6 @@ interface MarkdownEditorProps<T extends FieldValues> {
   preview?: PreviewType;
   /** The current value of the input. */
   value: string | undefined;
-  /** The commands that should be hidden from the toolbar. */
-  hiddenCommands?: ICommand[];
   /** List of commands that should be shown in the toolbar. */
   commands?: ICommand[];
   /** Whether the fullscreen toggle should be shown. */
@@ -49,7 +47,6 @@ export default function MarkdownEditor<T extends FieldValues>({
   onChange,
   value,
   preview,
-  hiddenCommands = [],
   commands,
   enablePreview = true,
   enableSplitView = true,
@@ -117,9 +114,6 @@ export default function MarkdownEditor<T extends FieldValues>({
             fontFamily: 'inherit',
             fontWeight: 'inherit',
           },
-        }}
-        commandsFilter={(cmd) => {
-          return cmd && hiddenCommands.includes(cmd) ? false : cmd;
         }}
         onChange={onChange}
       />
