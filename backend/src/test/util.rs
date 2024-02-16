@@ -18,7 +18,6 @@ use dotenvy::dotenv;
 use crate::{
     config::{app, routes},
     error::ServiceError,
-    keycloak_api,
     sse::broadcaster::Broadcaster,
 };
 
@@ -103,13 +102,15 @@ pub async fn init_test_app_for_user(
 async fn init_test_app_impl(
     pool: Pool<AsyncPgConnection>,
 ) -> impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error> {
+    let keycloak_api = crate::config::data::create_api(
+        &app::Config::from_env().expect("Error loading configuration"),
+    );
+
     test::init_service(
         App::new()
             .app_data(Data::new(pool))
             .app_data(Data::new(Broadcaster::new()))
-            .app_data(Data::new(keycloak_api::api::Api::new(
-                &app::Config::from_env().expect("Error loading configuration"),
-            )))
+            .app_data(Data::from(keycloak_api))
             .app_data(Data::new(reqwest::Client::new()))
             .configure(routes::config),
     )
