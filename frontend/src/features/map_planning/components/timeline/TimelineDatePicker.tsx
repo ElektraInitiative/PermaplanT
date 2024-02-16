@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import useMapStore from '../../store/MapStore';
 import {
@@ -8,8 +8,6 @@ import {
 } from '../../store/MapStoreTypes';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 
 export const TEST_IDS = Object.freeze({
   DAY_SLIDER: 'timeline__day-slider',
