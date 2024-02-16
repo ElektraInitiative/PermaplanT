@@ -6,8 +6,7 @@ import { z } from 'zod';
 import { PlantingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
-import { MarkdownEditorFormInput } from '@/components/Form/MarkdownEditorFormInput';
-import useMapStore from '@/features/map_planning/store/MapStore';
+import { DebouncedMarkdownEditorFormInput } from '@/components/Form/MarkdownEditorFormInput';
 import AlertIcon from '@/svg/icons/alert.svg?react';
 import { PlantNameFromAdditionalNameAndPlant, PlantNameFromPlant } from '@/utils/plant-naming';
 import { useFindPlantById } from '../hooks/plantHookApi';
@@ -38,6 +37,8 @@ export type EditPlantingAttributesProps = {
   onWidthChange: (formData: PlantingFormData) => void;
   onHeightChange: (formData: PlantingFormData) => void;
   onDeleteClick: () => void;
+  plantingNotesFullScreen: boolean;
+  changePlantingNotesFullScreen: (value: boolean) => void;
   isReadOnlyMode: boolean;
 };
 
@@ -60,6 +61,8 @@ export type PlantingAttributeEditFormProps = EditPlantingAttributesProps & {
   heightDefaultValue: number | undefined;
   planting: PlantingDto | null;
   areaOfPlantings: boolean;
+  plantingNotesFullScreen: boolean;
+  changePlantingNotesFullScreen: (value: boolean) => void;
 };
 
 export function SinglePlantingAttributeForm({
@@ -179,6 +182,8 @@ function PlantingAttributeEditForm({
   plantingNoteShowDifferentValueWarning,
   removeDateDefaultValue,
   plantingNotesDefaultValue,
+  plantingNotesFullScreen,
+  changePlantingNotesFullScreen,
   onWidthChange,
   onHeightChange,
   onAddDateChange,
@@ -214,11 +219,6 @@ function PlantingAttributeEditForm({
     planting && individualPlantSize
       ? calculatePlantCount(individualPlantSize, planting.sizeX, planting.sizeY)
       : null;
-
-  const plantintNotesFullScreen = useMapStore(
-    (store) => store.untrackedState.markdownEditorFullScreen,
-  );
-  const setMarkdownEditorFullscreen = useMapStore((store) => store.setMarkdownEditorFullscreen);
 
   return (
     <FormProvider {...formInfo}>
@@ -308,7 +308,7 @@ function PlantingAttributeEditForm({
       </p>
 
       <div className="align-items-center flex gap-2">
-        <MarkdownEditorFormInput
+        <DebouncedMarkdownEditorFormInput
           key="plantingNotes"
           onValid={onPlantingNotesChange}
           defaultValue={plantingNotesDefaultValue}
@@ -316,10 +316,8 @@ function PlantingAttributeEditForm({
           className="w-full"
           disabled={isReadOnlyMode}
           labelContent={t('plantings:notes')}
-          fullScreen={plantintNotesFullScreen}
-          changeFullScreen={(value) => {
-            setMarkdownEditorFullscreen(value);
-          }}
+          fullScreen={plantingNotesFullScreen}
+          changeFullScreen={changePlantingNotesFullScreen}
         />
         {plantingNoteShowDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
       </div>

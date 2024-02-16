@@ -2,6 +2,7 @@ import { ComponentPropsWithoutRef, useState } from 'react';
 import {
   FieldValues,
   Path,
+  PathValue,
   SubmitErrorHandler,
   SubmitHandler,
   useFormContext,
@@ -20,15 +21,16 @@ type DebouncedMarkdownEditorFormInputProps<T extends FieldValues = FieldValues> 
    * It is called if the settled value of the input is invalid */
   onInvalid?: SubmitErrorHandler<T> | undefined;
 
-  setFormValue: (id: string, value: string) => void;
-
   /** The default value of the input */
   defaultValue?: string;
 
   /** Text that should be displayed in the accompanying label component. */
   labelContent: string;
 
+  /** Whether the editor should be in fullscreen mode. */
   fullScreen?: boolean;
+
+  /** Callback that is called when the editor enters or exits fullscreen mode. */
   changeFullScreen?: (fullScreen: boolean) => void;
 
   /** The elements unique id.
@@ -50,7 +52,7 @@ type SimpleFormInputProps = ComponentPropsWithoutRef<typeof SimpleFormInput>;
  * @param props - {@link DebouncedSimpleFormInputProps}
  * @returns
  */
-export function MarkdownEditorFormInput<T extends FieldValues>({
+export function DebouncedMarkdownEditorFormInput<T extends FieldValues>({
   onValid,
   onInvalid,
   fullScreen,
@@ -76,9 +78,7 @@ export function MarkdownEditorFormInput<T extends FieldValues>({
         {...register}
         labelText={labelContent}
         onChange={(value) => {
-          // eslint-disable-next-line
-          // @ts-ignore
-          setValue(id, value);
+          setValue(id, value as PathValue<T, Path<T>>);
           setPlantingNotes(value);
         }}
         commands={[
