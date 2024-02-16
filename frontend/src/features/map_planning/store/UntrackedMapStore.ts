@@ -38,12 +38,12 @@ export const createUntrackedMapSlice: StateCreator<
       y2: 0,
     },
   },
-  setMarkdownEditorFullscreen(isFullscreen: boolean) {
+  setPlantingDetailNotesFullscreen(isFullscreen: boolean) {
     set((state) => ({
       ...state,
       untrackedState: {
         ...state.untrackedState,
-        markdownEditorFullScreen: isFullscreen,
+        plantingDetailsNotesFullscreen: isFullscreen,
       },
     }));
   },

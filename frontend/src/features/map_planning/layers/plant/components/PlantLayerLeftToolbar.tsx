@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import {
@@ -52,6 +53,9 @@ export function PlantLayerLeftToolbar() {
     );
   };
 
+  // since the toolbar is currently rerendered when the selected plantings change, we need to keep the state of the fullscreen mode
+  const [plantingNotesFullScreen, setPlantingNotesFullscreen] = useState(false);
+
   const onSizeChange = ({ sizeX, sizeY }: PlantingFormData) => {
     if (!selectedPlantings?.length) return;
 
@@ -86,6 +90,8 @@ export function PlantLayerLeftToolbar() {
       onRemoveDateChange={onRemoveDateChange}
       onDeleteClick={onDeleteClick}
       onPlantingNotesChange={onPlantingNoteChange}
+      plantingNotesFullScreen={plantingNotesFullScreen}
+      changePlantingNotesFullScreen={setPlantingNotesFullscreen}
       isReadOnlyMode={isReadOnlyMode}
     />
   ) : (
@@ -103,6 +109,8 @@ export function PlantLayerLeftToolbar() {
       onRemoveDateChange={onRemoveDateChange}
       onDeleteClick={onDeleteClick}
       onPlantingNotesChange={onPlantingNoteChange}
+      plantingNotesFullScreen={plantingNotesFullScreen}
+      changePlantingNotesFullScreen={setPlantingNotesFullscreen}
       isReadOnlyMode={isReadOnlyMode}
     />
   );
