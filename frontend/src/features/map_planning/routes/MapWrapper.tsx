@@ -1,8 +1,10 @@
 import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ShepherdTour } from 'react-shepherd';
 import { LayerType, LayerDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { EditorMap } from '../components/EditorMap';
 import {
@@ -13,7 +15,7 @@ import {
   usePlantLayer,
 } from '../hooks/mapEditorHookApi';
 import { useTourStatus } from '../hooks/tourHookApi';
-import useGetTimeLineEvents from '../hooks/useGetTimelineEvents';
+import useGetTimeLineData from '../hooks/useGetTimelineData';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
@@ -32,14 +34,11 @@ function getDefaultLayer(layerType: LayerType, layers?: LayerDto[]) {
  */
 function useInitializeMap() {
   const mapId = useMapId();
-  const { data: layers } = useGetLayers(mapId);
   const { data: map } = useMap(mapId);
   const { data: layers, error } = useGetLayers(mapId);
   const { t } = useTranslation(['layers']);
-  const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
 
-  const timeLineEvent = useGetTimeLineEvents();
-
+  const timeLineEvent = useGetTimeLineData(mapId);
   useEffect(() => {
     if (timeLineEvent) {
       useMapStore.setState((state) => ({
@@ -60,12 +59,6 @@ function useInitializeMap() {
     console.error(error);
     errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
   }
-
-  const mapQuery = useQuery({
-    queryKey: ['map', mapId],
-    queryFn: () => getMap(mapId),
-    refetchOnWindowFocus: false,
-  });
 
   useEffect(() => {
     if (!layers) return;

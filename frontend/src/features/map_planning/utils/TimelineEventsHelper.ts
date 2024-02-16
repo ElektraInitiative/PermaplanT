@@ -1,10 +1,10 @@
+import { PlantingDto } from '@/api_types/definitions';
 import useMapStore from '../store/MapStore';
 import {
   TimelineYearlyEvent,
   TimelineMonthlyEvent,
   TimelineDailyEvent,
 } from '../store/MapStoreTypes';
-import { PlantingDto } from '@/api_types/definitions';
 
 export default function updateTimlelineEventsForDate(
   loadedPlants: PlantingDto[],
@@ -29,8 +29,6 @@ export default function updateTimlelineEventsForDate(
   const dayItem = dayItems.find(
     (item) => item.year === year && item.month === month && item.day === day,
   );
-
-  console.log(loadedPlants);
 
   const addedPlants = loadedPlants.filter((plant) => {
     return plant.addDate === timelineDate;
