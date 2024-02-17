@@ -112,7 +112,7 @@ impl KeycloakApi for Api {
                 let api = self.clone();
                 tokio::spawn(async move { api.get_user_by_id(&client, id).await })
             })
-            .buffer_unordered(10);
+            .buffered(10); // buffered, because we want the users in the order of the ids
 
         let users = future_stream
             .map(|res| match res {
