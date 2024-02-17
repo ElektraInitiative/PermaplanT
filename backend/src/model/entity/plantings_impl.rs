@@ -1,13 +1,15 @@
 //! Contains the implementation of [`Planting`].
 
+use std::future::Future;
+
 use chrono::NaiveDate;
 use diesel::pg::Pg;
 use diesel::{
     debug_query, BoolExpressionMethods, ExpressionMethods, NullableExpressionMethods, QueryDsl,
     QueryResult,
 };
+use diesel_async::scoped_futures::ScopedFutureExt;
 use diesel_async::{AsyncConnection, AsyncPgConnection, RunQueryDsl};
-use futures_util::Future;
 use log::debug;
 use uuid::Uuid;
 
@@ -155,13 +157,14 @@ impl Planting {
 
         let result = conn
             .transaction(|transaction| {
-                Box::pin(async {
+                async move {
                     let futures = Self::do_update(planting_updates, transaction);
 
                     let results = futures_util::future::try_join_all(futures).await?;
 
                     Ok(results) as QueryResult<Vec<Self>>
-                })
+                }
+                .scope_boxed()
             })
             .await?;
 
