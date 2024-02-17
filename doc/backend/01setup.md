@@ -62,7 +62,7 @@ You can do one of the following two steps, the first one being the simpler one, 
 - To use the preconfigured Keycloak instance simply copy the newest version of `.env.sample` to `.env`
 - To use the local Keycloak variant follow the steps in [Keycloak Setup](../setups/keycloak/README.md)  
   You then also have to change following two env variables in `.env`
-  - `AUTH_DISCOVERY_URI=http://localhost:8081/realms/PermaplanT/.well-known/openid-configuration`
+  - `AUTH_HOST=http://localhost:8081`
   - `AUTH_CLIENT_ID=PermaplanT`
 
 6. run
