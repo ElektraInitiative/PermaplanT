@@ -18,7 +18,7 @@ interface MarkdownEditorProps<T extends FieldValues> {
   className?: string;
   /** Callback function that is called when the input value changes. */
   onChange: (value: string | undefined) => void;
-  /*** The preview type of the editor. */
+  /*** The preview type of the editor. Either 'live', 'edit' or 'preview'. */
   preview?: PreviewType;
   /** The current value of the input. */
   value: string | undefined;
