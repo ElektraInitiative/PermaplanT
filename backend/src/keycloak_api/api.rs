@@ -106,7 +106,7 @@ impl KeycloakApi for Api {
         client: &reqwest::Client,
         user_ids: Vec<uuid::Uuid>,
     ) -> Result<Vec<UserDto>> {
-        let x = stream::iter(user_ids)
+        let future_stream = stream::iter(user_ids)
             .map(|id| {
                 let client = client.clone();
                 let api = self.clone();
@@ -114,7 +114,7 @@ impl KeycloakApi for Api {
             })
             .buffer_unordered(10);
 
-        let y = x
+        let users = future_stream
             .map(|res| match res {
                 Ok(Ok(user)) => Ok(user),
                 Ok(Err(e)) => Err(e),
@@ -125,7 +125,7 @@ impl KeycloakApi for Api {
             .into_iter()
             .collect::<std::result::Result<Vec<_>, _>>()?;
 
-        Ok(y)
+        Ok(users)
     }
 
     async fn get_user_by_id(
