@@ -102,12 +102,14 @@ function processMeasurement(value) {
   const processedValue = processValue(value);
   if (processedValue === null) return null;
 
-  return value <= 0.25 ? "low" : value <= 0.61 ? "medium" : "high";
+  return Math.round(processedValue * 100);
 }
 
 /**
  * Cleans up a JSON array entries for smoother CSV export.
- * Changes empty strings to null and removes the subfamily column
+ * - Changes empty strings to null
+ * - Removes the subfamily column
+ * - Trims unique_name column
  *
  * @param {Array} plants - Array of plants
  */
@@ -118,29 +120,17 @@ function cleanUpJsonForCsv(plants) {
     columns.forEach((column) => {
       if (plant[column] === "") {
         plant[column] = null;
+      } else if (column === "unique_name") {
+        plant[column] = plant[column].trim();
       }
     });
   });
 }
 
-/**
- * Returns the spread enum typ based on the spread/width
- *
- * @param {string} spread String containing the spread/width value in meter
- * @returns {string}
- */
-function getSpreadEnumTyp(spread) {
-  const value = processValue(spread);
-  if (value === null) return null;
-
-  return value <= 0.15 ? "narrow" : value <= 0.61 ? "medium" : "wide";
-}
-
 export {
   sanitizeColumnNames,
   getSoilPH,
-  getHeightEnumTyp,
-  getSpreadEnumTyp,
   capitalizeWords,
   cleanUpJsonForCsv,
+  processMeasurement,
 };
