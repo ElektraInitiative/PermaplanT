@@ -1,14 +1,33 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { createKeyBindingsAccordingToConfig, KEYBINDINGS_SCOPE_GLOBAL } from '@/config/keybindings';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 
 interface ModalContainerProps {
   /** usually the Modal content */
   children: React.ReactNode;
   /** controls the visibility */
   show: boolean;
+  /** Callback that is executed when the user presses the configured cancelModal key. */
+  onCancelKeyPressed?: () => void;
 }
 
 /** animated container for Modals */
-export default function ModalContainer({ children, show }: ModalContainerProps) {
+export default function ModalContainer({
+  children,
+  show,
+  onCancelKeyPressed,
+}: ModalContainerProps) {
+  const keyHandlerActions = {
+    cancelModal: onCancelKeyPressed,
+  };
+
+  useKeyHandlers(
+    createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_GLOBAL, keyHandlerActions),
+    document,
+    true,
+    show,
+  );
+
   return (
     <AnimatePresence>
       {show && (

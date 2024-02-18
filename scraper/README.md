@@ -21,10 +21,10 @@ Configure your environment:
 npm install && mkdir -p data
 ```
 
-2. Create .env file from .env.example and fill in the required values:
+2. Create .env.local file from .env.example and fill in the required values:
 
 ```shell
-cp .env.example .env
+cp .env.example .env.local
 ```
 
 ### Installation Option 1: With a single command

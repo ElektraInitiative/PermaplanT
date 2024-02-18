@@ -1,31 +1,49 @@
 {
   "view_seeds": {
-    "title": "My Seeds",
+    "title": "My Inventory",
     "btn_new_entry": "New Entry",
-    "search_placeholder": "Search seeds...",
-    "fetching_error": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
-    "fetching_single_error": "Sorry, I could not load the seed from my server. It is possible it doesn't exist."
+    "search_placeholder": "Search inventory...",
+    "fetching_error": "Sorry, I'm experiencing trouble fetching the inventory from my server. Please try again later.",
+    "fetching_single_error": "Sorry, I could not load the seed from my server. It is possible it doesn't exist.",
+    "restore_seed_message": "Archived {{seed}}",
+    "restore_seed_button": "Restore",
+    "restore_seed_success": "Restored seed {{seed}} successfully!",
+    "restore_seed_failure": "Could not restore seed.",
+    "archive_seed_tooltip": "Archive seed",
+    "edit_seed_tooltip": "Edit seed"
   },
   "create_seed": {
-    "title": "New Seed Entry",
+    "title": "Seed Entry",
     "changes_model_title": "Cancel Changes?",
     "changes_model_message": "Changes you have made will not be saved. Do you really want to cancel?"
+  },
+  "delete_seed": {
+    "btn_delete_seed": "Delete seed"
   },
   "create_seed_form": {
     "placeholder_binomial_name": "Tomato",
     "placeholder_origin": "My Home",
     "placeholder_taste": "sweet",
-    "placeholder_yield": "1",
-    "placeholder_price": "2,99€",
+    "placeholder_yield": "good",
+    "placeholder_price": "2.99",
+
     "placeholder_generation": "0",
-    "error_price_must_be_number": "Price must be a number",
+    "error_price_must_be_number": "Sorry, I only understand the price as a number with dot (.) or comma (,) depending on your Browser's preferences as decimal separator, e.g. 2.99",
     "btn_create_seed": "Create Seed",
     "error_create_seed": "Sorry, I'm experiencing trouble storing the seed on my server. Please try again later.",
+    "error_seed_already_exists": "Sorry, you have already created a seed with this combination of name and plant! Please change the relevant fields and try again.",
+    "error_delete_seed": "Sorry, I'm experiencing trouble deleting the seed from the server. Please try again later.",
     "error_fetching_seeds": "Sorry, I'm experiencing trouble fetching seeds from my server. Please try again later.",
-    "error_fetching_plants": "Sorry, I'm experiencing trouble fetching plants from my server. Please try again later."
+    "error_fetching_plants": "Sorry, I'm experiencing trouble fetching plants from my server. Please try again later.",
+    "success": "Seed created successfully!"
+  },
+  "edit_seed_form": {
+    "btn_edit_seed": "Edit seed",
+    "success": "Seed modified successfully!"
   },
   "harvest_year": "Harvest Year",
   "additional_name": "Additional Name",
+  "additional_name_pattern_hint": "At least one letter or number, '-' is not allowed",
   "binomial_name": "Plant Name",
   "quantity": "Amount",
   "origin": "Origin",
@@ -35,5 +53,7 @@
   "yield": "Yield",
   "price": "Price",
   "generation": "Generation",
-  "notes": "Notes"
+  "notes": "Notes",
+  "actions": "Actions",
+  "error_fetching_seed": "Sorry, I could not find this seed."
 }

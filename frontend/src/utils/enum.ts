@@ -1,4 +1,4 @@
-import { SelectOption } from '@/components/Form/SelectMenuTypes';
+import { SelectOption } from '@/components/Form/SelectMenu';
 
 export function enumFromStringValue<T>(enm: { [s: string]: T }, value: string): T | undefined {
   return (Object.values(enm) as unknown as string[]).includes(value)
@@ -13,4 +13,11 @@ export function enumToSelectOptionArr<T extends string | number>(
   return Object.values(originalEnum).map((element) => {
     return { value: `${element}`, label: `${translatedEnum[element]}` };
   });
+}
+
+export function enumToSelectOption<T extends string | number>(
+  originalEnum: T,
+  translatedEnum: T,
+): SelectOption {
+  return { value: `${originalEnum}`, label: `${translatedEnum}` };
 }

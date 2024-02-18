@@ -6,20 +6,22 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User adds elements to their map using hand-drawn shapes or common shapes.
-- **Assignee:** Moritz
+- **Assignee:** Daniel
 
 ## Scenarios
 
 - **Precondition:** User has opened the app and selected the landscape layer.
 - **Main success scenario:**
   User successfully adds elements to their map using hand-drawn shapes or common shapes such as circles, ellipses, squares, and rectangles.
-  Element types include:
+  Element types include (icons from Nextcloud):
   - wall
   - plain
   - pond
   - (glas)houses
   - barns
   - plant beds
+  - circles
+  - doors
 - **Alternative scenario:**
   User accidentally adds a shape in the wrong location and uses the app's undo function to correct the mistake.
 - **Error scenario:**
@@ -27,4 +29,5 @@
 - **Postcondition:**
   The user's map includes elements added using hand-drawn or common shapes.
 - **Non-functional Constraints:**
+  - Non-semantic
   - Performance: more than 200 elements per year should be usable without noticeable delays and acceptable memory overhead

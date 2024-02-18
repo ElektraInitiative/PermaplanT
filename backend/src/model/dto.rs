@@ -8,11 +8,9 @@ use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
-use self::plantings::PlantingDto;
-
 use super::r#enum::{
-    experience::Experience, layer_type::LayerType, membership::Membership,
-    plant_spread::PlantSpread, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
+    experience::Experience, include_archived_seeds::IncludeArchivedSeeds, layer_type::LayerType,
+    membership::Membership, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
     relation_type::RelationType, salutation::Salutation,
 };
 
@@ -20,6 +18,7 @@ pub mod actions;
 pub mod base_layer_images_impl;
 pub mod blossoms_impl;
 pub mod coordinates_impl;
+pub mod core;
 pub mod guided_tours_impl;
 pub mod layer_impl;
 pub mod map_impl;
@@ -31,6 +30,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+mod update_map_geometry_impl;
 pub mod update_map_impl;
 pub mod users_impl;
 
@@ -54,8 +54,6 @@ pub struct SeedDto {
     pub id: i32,
     /// An additional name for the seed.
     pub name: String,
-    /// The variety of the seed. Currently unused.
-    pub variety: Option<String>,
     /// The id of the plant this seed belongs to.
     pub plant_id: Option<i32>,
     /// When the seeds were harvested.
@@ -80,6 +78,9 @@ pub struct SeedDto {
     pub notes: Option<String>,
     /// The id of the owner of the seed.
     pub owner_id: Uuid,
+    /// Timestamp indicating when the seed was archived.
+    /// Empty if the seed was not archived.
+    pub archived_at: Option<String>,
 }
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
@@ -87,7 +88,6 @@ pub struct SeedDto {
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct NewSeedDto {
     pub name: String,
-    pub variety: Option<String>,
     pub plant_id: Option<i32>,
     pub harvest_year: i16,
     pub quantity: Quantity,
@@ -101,6 +101,14 @@ pub struct NewSeedDto {
     pub notes: Option<String>,
 }
 
+/// Data that is required when archiving a seed.
+#[typeshare]
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct ArchiveSeedDto {
+    /// Whether the seed should be archived.
+    pub archived: bool,
+}
+
 /// The essential identifying information of a plant.
 #[typeshare]
 #[derive(Debug, Serialize, PartialEq, Eq, Deserialize, ToSchema)]
@@ -112,8 +120,8 @@ pub struct PlantsSummaryDto {
     /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
     pub common_name_en: Option<Vec<Option<String>>>,
     //TODO: add icon_path: String
-    /// How far a plant spreads (The 'width' of a plant)
-    pub spread: Option<PlantSpread>,
+    /// How far a plant spreads (The 'width' of a plant) in cm
+    pub spread: Option<i32>,
 }
 
 /// Query parameters for searching plants.
@@ -160,6 +168,9 @@ pub struct SeedSearchParameters {
     pub name: Option<String>,
     /// The exact harvest year of the seed.
     pub harvest_year: Option<i16>,
+    /// Whether archived, not archived or both kinds of seeds should be included.
+    /// If no value is provided, a default value of NotArchived is assumed.
+    pub archived: Option<IncludeArchivedSeeds>,
 }
 
 /// Query parameters paginating list endpoints.
@@ -191,21 +202,6 @@ pub struct Page<T> {
     pub per_page: i32,
     /// Number of pages in total.
     pub total_pages: i32,
-}
-
-/// A page of results bounded by time.
-#[typeshare]
-#[derive(Debug, Serialize, Deserialize, ToSchema)]
-#[aliases(
-    TimelinePagePlantingsDto = TimelinePage<PlantingDto>,
-)]
-pub struct TimelinePage<T> {
-    /// Resulting records.
-    pub results: Vec<T>,
-    /// The time frame start date.
-    pub from: NaiveDate,
-    /// The time frame end date.
-    pub to: NaiveDate,
 }
 
 /// The whole information of a map.
@@ -296,12 +292,18 @@ pub struct UpdateMapDto {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Coordinates>,
+}
+
+/// Data for updating a maps geometry.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct UpdateMapGeometryDto {
     /// The geometry of the map.
     ///
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
-    #[typeshare(serialized_as = "Option<object>")]
-    #[schema(value_type = Option<Object>)]
-    pub geometry: Option<Polygon<Point>>,
+    #[typeshare(serialized_as = "object")]
+    #[schema(value_type = Object)]
+    pub geometry: Polygon<Point>,
 }
 
 /// Query parameters for searching maps.

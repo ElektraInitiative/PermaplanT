@@ -1,10 +1,10 @@
-import { useDarkModeStore } from '@/features/dark_mode';
-import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import { LatLngExpression, Icon } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { useDarkModeStore } from '@/features/dark_mode';
+import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
+import 'leaflet/dist/leaflet.css';
 
 const locations: Array<LatLngExpression> = [
   [47.57, 16.496],

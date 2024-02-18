@@ -1,5 +1,5 @@
+import photoOffUrl from '@/svg/icons/photo-off.svg';
 import { useImage } from '../hooks/useImage';
-import photoOffUrl from '@/icons/photo-off.svg';
 
 /**
  * Component used for fetching and displaying images from private Nextcloud directories

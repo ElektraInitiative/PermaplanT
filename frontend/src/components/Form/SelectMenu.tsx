@@ -1,9 +1,19 @@
-import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenuTypes';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import Select, { ActionMeta, GroupBase, MultiValue, SingleValue, StylesConfig } from 'react-select';
-import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
+import Select, {
+  ActionMeta,
+  ClassNamesConfig,
+  GroupBase,
+  MultiValue,
+  SingleValue,
+  StylesConfig,
+} from 'react-select';
+import filterObject from '../../utils/filterObject';
+
+export interface SelectOption {
+  value: string | number;
+  label: string;
+}
 
 export interface SelectMenuProps<
   T extends FieldValues,
@@ -23,6 +33,8 @@ export interface SelectMenuProps<
   control?: Control<T, unknown>;
   /** Options content that may be selected by the user */
   options: Option[];
+  /** Force a selected option. */
+  value?: Option;
   /** Whether the user has to select something before they can submit the containing form. */
   required?: boolean;
   /** Text that is displayed in place of the content if no option has been selected. */
@@ -36,6 +48,8 @@ export interface SelectMenuProps<
   onChange?: () => void;
   /** Callback that is invoked every time the user changed the search query. */
   onInputChange?: (inputValue: string) => void;
+  /** Disables the x icon at the end of the select menu that allows the user to deselect the current option. */
+  isClearable?: boolean;
 }
 
 /**
@@ -53,10 +67,12 @@ export default function SelectMenu<
   control,
   options,
   required = false,
+  value,
   placeholder,
   handleOptionsChange,
   onChange,
   onInputChange,
+  isClearable = true,
 }: SelectMenuProps<T, Option, IsMulti>) {
   const customClassNames: ClassNamesConfig<Option, IsMulti, GroupBase<Option>> = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
@@ -105,7 +121,7 @@ export default function SelectMenu<
   const [inputValue, setInputValue] = useState('');
 
   return (
-    <div>
+    <div data-testid={`select-menu__${labelText}-select`}>
       {labelText && (
         <label htmlFor={id} className="mb-2 block text-sm font-medium">
           {labelText}
@@ -119,11 +135,11 @@ export default function SelectMenu<
         render={() => (
           <Select
             name={id}
-            isClearable
             onChange={handleOptionsChange}
             placeholder={placeholder}
             inputValue={inputValue}
             options={options}
+            value={value}
             isMulti={isMulti}
             styles={customStyles}
             classNames={customClassNames}
@@ -136,6 +152,7 @@ export default function SelectMenu<
               onChange?.();
               onInputChange?.(value);
             }}
+            isClearable={isClearable}
           />
         )}
       />

@@ -47,6 +47,10 @@ Managing component state can be accomplished with React features (useState, Cont
 Zustand is a lightweight and easy-to-use library that uses hooks, which makes it easy to integrate with React.
 Its simplicity also reduces the amount of boilerplate code and the need for complex setup and configuration.
 
+Zustand also provides the [Persist](https://docs.pmnd.rs/zustand/integrations/persisting-store-data) middleware which enables storing state in any type of storage.
+Another benefit of Persist is the serialization and deserialization support for fields of type _Map_ and _Set_.  
+Persist's [partialize](https://docs.pmnd.rs/zustand/integrations/persisting-store-data#partialize) method can be used to store only selected fields of the state.
+
 ### Server State
 
 [TanStack React Query v4](https://www.npmjs.com/package/@tanstack/react-query) will be used for managing asynchronous state.

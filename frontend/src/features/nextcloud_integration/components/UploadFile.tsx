@@ -1,12 +1,13 @@
-import SimpleButton from '@/components/Button/SimpleButton';
-import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
-import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { useMutation } from '@tanstack/react-query';
 import { ChangeEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Readable } from 'stream';
 import { BufferLike, WebDAVClient } from 'webdav';
+import SimpleButton from '@/components/Button/SimpleButton';
+import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 
 const WEBDAV_PATH = '/remote.php/webdav/';
 
@@ -32,7 +33,7 @@ export const UploadFile = (props: UploadFileProps) => {
       );
     },
     onError: () => {
-      toast.error(t('uploadFile:upload_error'));
+      errorToastGrouped(t('uploadFile:upload_error'));
     },
     onSuccess: (data, variables, context) => {
       toast.success(variables.name + ' successfully uploaded!');

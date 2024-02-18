@@ -1,10 +1,11 @@
-import NavContainer from './components/Layout/NavContainer';
-import { useSafeAuth } from './hooks/useSafeAuth';
-import Pages from './routes/Pages';
-import './styles/guidedTour.css';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import NavContainer from '@/components/Layout/NavContainer';
+import { errorToastGrouped, infoToastGrouped } from '@/features/toasts/groupedToast';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
+import Pages from './routes/Pages';
+import './styles/guidedTour.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'shepherd.js/dist/css/shepherd.css';
 
@@ -26,14 +27,14 @@ const useAuthEffect = () => {
   useEffect(() => {
     if (auth.error) {
       console.error(auth.error.message);
-      toast.error(t('auth:error_failed_authentication'), { autoClose: false });
+      errorToastGrouped(t('auth:error_failed_authentication'), { autoClose: false });
     }
     switch (auth.activeNavigator) {
       case 'signinSilent':
-        toast.info(t('auth:signing_in'));
+        infoToastGrouped(t('auth:signing_in'));
         break;
       case 'signoutRedirect':
-        toast.info(t('auth:signing_out'));
+        infoToastGrouped(t('auth:signing_out'));
     }
   }, [auth, t]);
 
@@ -42,7 +43,7 @@ const useAuthEffect = () => {
 
   useEffect(() => {
     if (isAuth) {
-      toast.info(`${t('auth:hello')} ${preferredUsername}`, { icon: false });
+      infoToastGrouped(`${t('auth:hello')} ${preferredUsername}`, { icon: false });
     }
   }, [isAuth, t, preferredUsername]);
 };

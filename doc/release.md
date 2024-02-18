@@ -2,11 +2,13 @@
 
 This document describes what needs to be done for a release.
 
+- [ ] check if all issues labelled `release critical` are fixed
+- [ ] check if jenkins master pipeline succeeds
 - [ ] run external link check (change follow-web-links in book.toml and do `mdbook build`)
 - [ ] fix _real_ security problems
-      (unfortunately `npm audit --omit=dev fix` does [too much and too little](https://overreacted.io/npm-audit-broken-by-design/))
+      unfortunately `npm audit --omit=dev fix` does [too much and too little](https://overreacted.io/npm-audit-broken-by-design/),
+      `cargo deny check` seems to be more helpful
 - [ ] check/improve reformatting
-- [ ] check if all release-critical issues are fixed
 - [ ] update mergedDatasets.csv
 - [ ] manually test dev.permaplant.net according to protocol
 - [ ] build <https://build.libelektra.org/job/PermaplanT-Release/>

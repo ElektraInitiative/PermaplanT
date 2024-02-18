@@ -1,6 +1,6 @@
-import SimpleCard from './SimpleCard';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
+import SimpleCard from './SimpleCard';
 
 it('renders correctly', () => {
   const tree = renderer

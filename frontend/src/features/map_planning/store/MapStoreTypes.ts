@@ -1,16 +1,18 @@
-import { convertToDateString } from '../utils/date-utils';
+import Konva from 'konva';
+import * as uuid from 'uuid';
+import { StateCreator } from 'zustand';
 import {
   BaseLayerImageDto,
   LayerDto,
   LayerType,
   PlantingDto,
   PlantsSummaryDto,
-} from '@/bindings/definitions';
+  SeedDto,
+} from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
-import Konva from 'konva';
-import { Node } from 'konva/lib/Node';
-import * as uuid from 'uuid';
-import { StateCreator } from 'zustand';
+import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
+import { convertToDateString } from '../utils/date-utils';
+import { TransformerStore } from './transformer/TransformerStore';
 
 import Vector2d = Konva.Vector2d;
 
@@ -92,19 +94,6 @@ export interface TrackedMapSlice {
   canUndo: boolean;
   canRedo: boolean;
   /**
-   * A reference to the Konva Transformer.
-   * It is used to transform selected objects.
-   * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
-   */
-  transformer: React.RefObject<Konva.Transformer>;
-  /**
-   * References to timeouts used by executeActionDebounced.
-   *
-   * @internal This reference should never be modified by any other function than executeActionDebounced.
-   */
-  /** Event listener responsible for adding a single shape to the transformer */
-  addShapeToTransformer: (shape: Node) => void;
-  /**
    * Execute a user initiated action.
    * @param action the action to be executed
    */
@@ -123,7 +112,7 @@ export interface TrackedMapSlice {
    * @param action The action to apply.
    *
    * @internal This method is only used by the EventSource to handle remote actions from other users.
-   * It is not meant to be used by the user, on called in event handlers.
+   * It is not meant to be used in other places, or called from event handlers.
    */
   __applyRemoteAction: (action: Action<unknown, unknown>) => void;
   /**
@@ -147,6 +136,20 @@ export interface TrackedMapSlice {
  */
 export type History = Array<Action<unknown, unknown>>;
 
+type SelectionRectAttributes = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  isVisible: boolean;
+  boundingBox: {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  };
+};
+
 /**
  * Part of store which is unaffected by the History
  */
@@ -154,7 +157,9 @@ export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
   tooltipRef: React.RefObject<Konva.Label>;
-  updateMapBounds: (bounds: BoundsRect) => void;
+  selectionRectAttributes: SelectionRectAttributes;
+  updateSelectionRect: (update: React.SetStateAction<SelectionRectAttributes>) => void;
+  updateViewRect: (bounds: ViewRect) => void;
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   updateSelectedLayer: (selectedLayer: LayerDto | FrontendOnlyLayerType) => void;
   updateLayerVisible: (
@@ -166,18 +171,24 @@ export interface UntrackedMapSlice {
     opacity: UntrackedLayerState['opacity'],
   ) => void;
   lastActions: LastAction[];
-  selectPlantForPlanting: (plant: PlantsSummaryDto | null) => void;
-  selectPlanting: (planting: PlantingDto | null) => void;
+  selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
+  selectPlantings: (plantings: PlantingDto[] | null, transformerStore?: TransformerStore) => void;
   toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
   baseLayerSetMeasurePoint: (point: Vector2d) => void;
+  baseLayerActivateAddPolygonPoints: () => void;
+  baseLayerActivateMovePolygonPoints: () => void;
+  baseLayerActivateDeletePolygonPoints: () => void;
+  baseLayerDeactivatePolygonManipulation: () => void;
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
   getSelectedLayerId: () => number | null;
   setTooltipText: (content: string) => void;
   setTooltipPosition: (position: { x: number; y: number }) => void;
+  setStatusPanelContent: (content: React.ReactElement) => void;
+  clearStatusPanelContent: () => void;
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -216,11 +227,12 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
     }),
     {} as TrackedLayers,
   ),
+  mapGeometry: { srid: '', rings: [] },
 };
 
 export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   mapId: -1,
-  editorBounds: { x: 0, y: 0, width: 0, height: 0 },
+  editorViewRect: { x: 0, y: 0, width: 0, height: 0 },
   timelineDate: convertToDateString(new Date()),
   fetchDate: convertToDateString(new Date()),
   timelineBounds: {
@@ -236,6 +248,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   },
   tooltipContent: '',
   tooltipPosition: { x: 0, y: 0 },
+  bottomStatusPanelContent: null,
   layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
@@ -251,9 +264,14 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
       [LayerType.Base]: {
         visible: true,
         opacity: 1,
-        measureStep: 'inactive',
-        measurePoint1: null,
-        measurePoint2: null,
+        autoScale: {
+          measureStep: 'inactive',
+          measurePoint1: null,
+          measurePoint2: null,
+        },
+        mapGeometry: {
+          editMode: 'inactive',
+        },
       } as UntrackedBaseLayerState,
     }),
     {} as UntrackedLayers,
@@ -342,15 +360,28 @@ export type UntrackedLayers = {
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
-  selectedPlantForPlanting: PlantsSummaryDto | null;
-  selectedPlanting: PlantingDto | null;
+  selectedPlantForPlanting: PlantForPlanting | null;
+  selectedPlantings: PlantingDto[] | null;
   showLabels: boolean;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {
-  measurePoint1: Vector2d | null;
-  measurePoint2: Vector2d | null;
-  measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
+  autoScale: {
+    measurePoint1: Vector2d | null;
+    measurePoint2: Vector2d | null;
+    measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
+  };
+  mapGeometry: {
+    editMode: 'inactive' | 'add' | 'remove' | 'move';
+  };
+};
+
+/**
+ * Contains information necessary for creating a new planting on the map.
+ */
+export type PlantForPlanting = {
+  plant: PlantsSummaryDto;
+  seed: SeedDto | null;
 };
 
 /**
@@ -358,6 +389,7 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
  */
 export type TrackedMapState = {
   layers: TrackedLayers;
+  mapGeometry: PolygonGeometry;
 };
 
 /**
@@ -365,7 +397,7 @@ export type TrackedMapState = {
  */
 export type UntrackedMapState = {
   mapId: number;
-  editorBounds: BoundsRect;
+  editorViewRect: ViewRect;
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   selectedLayer: LayerDto | FrontendOnlyLayerType;
   /** used for the bounds calculation */
@@ -379,13 +411,14 @@ export type UntrackedMapState = {
   /** Storing the current content prevents constant rerenders of the tooltip component.  */
   tooltipContent: string;
   tooltipPosition: { x: number; y: number };
+  bottomStatusPanelContent: React.ReactNode | null;
   layers: UntrackedLayers;
 };
 
 /**
  * Represents a simple rectangle with width, height and position.
  */
-export type BoundsRect = {
+export type ViewRect = {
   x: number;
   y: number;
   width: number;

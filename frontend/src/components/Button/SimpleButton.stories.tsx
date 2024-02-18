@@ -1,5 +1,5 @@
-import SimpleButton, { ButtonVariant } from './SimpleButton';
 import type { Meta, StoryObj } from '@storybook/react';
+import SimpleButton, { ButtonVariant } from './SimpleButton';
 
 const meta: Meta<typeof SimpleButton> = {
   title: 'Components/Button/SimpleButton',

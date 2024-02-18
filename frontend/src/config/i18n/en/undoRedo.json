@@ -4,7 +4,5 @@
   "CREATE_PLANT": "Add {{name}}",
   "DELETE_PLANT": "Delete {{name}}",
   "OBJECT_UPDATE_POSITION": "Move {{name}}",
-  "OBJECT_UPDATE_TRANSFORM": "Transform {{name}}",
-  "redo_tooltip": "Redo your last action.",
-  "undo_tooltip": "Undo your last action."
+  "OBJECT_UPDATE_TRANSFORM": "Transform {{name}}"
 }

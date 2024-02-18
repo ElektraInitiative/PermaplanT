@@ -1,19 +1,9 @@
-import { filterVisibleObjects } from '../utils/filterVisibleObjects';
-import {
-  Action,
-  GetFn,
-  SetFn,
-  TRACKED_DEFAULT_STATE,
-  TrackedMapSlice,
-  UNTRACKED_DEFAULT_STATE,
-  UntrackedMapSlice,
-} from './MapStoreTypes';
-import { clearInvalidSelection } from './utils';
-import { BaseLayerImageDto, PlantingDto } from '@/bindings/definitions';
-import Konva from 'konva';
-import { Node } from 'konva/lib/Node';
-import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
+import { BaseLayerImageDto, PlantingDto } from '@/api_types/definitions';
+import { filterVisibleObjects } from '../utils/filterVisibleObjects';
+import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
+import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
+import { clearInvalidSelection } from './utils';
 
 export const createTrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -22,7 +12,6 @@ export const createTrackedMapSlice: StateCreator<
   TrackedMapSlice
 > = (set, get) => {
   return {
-    transformer: createRef<Konva.Transformer>(),
     trackedState: TRACKED_DEFAULT_STATE,
     history: [],
     step: 0,
@@ -31,14 +20,7 @@ export const createTrackedMapSlice: StateCreator<
     executeAction: (action: Action<unknown, unknown>) => executeAction(action, set, get),
     undo: () => undo(set, get),
     redo: () => redo(set, get),
-    __applyRemoteAction: (action: Action<unknown, unknown>) => applyActionToStore(action, set, get),
-    addShapeToTransformer: (node: Node) => {
-      const transformer = get().transformer.current;
-      const nodes = transformer?.getNodes() || [];
-      if (!nodes.includes(node)) {
-        transformer?.nodes([node]);
-      }
-    },
+    __applyRemoteAction: (action: Action<unknown, unknown>) => applyAction(action, set, get),
     initPlantLayer: (plants: PlantingDto[]) => {
       set((state) => ({
         ...state,
@@ -104,16 +86,17 @@ export const createTrackedMapSlice: StateCreator<
 };
 
 /**
- * Execute an action, use it instead of directly calling action.execute().
- * It will also update the history and applies the changes to the store.
+ * Executes an action.
+ * This function is used instead of directly calling action.execute().
+ * It will also update the history and apply the changes to the store.
  * After execution, the ability to redo any undone action is lost.
  */
 function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn) {
   trackUserAction(action, set);
-  action.execute(get().untrackedState.mapId);
+
+  executeActionImpl(action, set, get);
   trackReverseActionInHistory(action, get().step, set, get);
-  applyActionToStore(action, set, get);
-  clearInvalidSelection(get);
+  applyAction(action, set, get);
 
   set((state) => ({
     ...state,
@@ -125,21 +108,18 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
 }
 
 /**
- * Apply the action to the store.
- *
- * Do not call this function before `trackReverseActionInHistory`.
+ * Applies the action to the store.
+ * Also executing functions that depend on the updated store.
  */
-function applyActionToStore(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
-  const newTrackedState = action.apply(get().trackedState);
-
-  set((state) => ({
-    ...state,
-    trackedState: newTrackedState,
-  }));
+function applyAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
+  applyActionToStore(action, set, get);
+  updateSelectedPlantings(set, get);
+  clearInvalidSelection(get);
 }
 
 /**
- * Tracks the user action such that RemoteActions can be filtered.
+ * Tracks the user action by its `actionId`.
+ * RemoteActions that have such id are filtered out.
  */
 function trackUserAction(action: Action<unknown, unknown>, set: SetFn) {
   set((state) => ({
@@ -152,7 +132,7 @@ function trackUserAction(action: Action<unknown, unknown>, set: SetFn) {
 }
 
 /**
- * Track the reverse action in the history.
+ * Tracks the reverse action in the history.
  *
  * Always call this function before `applyActionToStore` to track the reverse action in the history.
  * Otherwise, the reverse action will be wrong, or might cause an exception.
@@ -179,6 +159,20 @@ function trackReverseActionInHistory(
 }
 
 /**
+ * Apply the action to the store.
+ *
+ * Do not call this function before `trackReverseActionInHistory`.
+ */
+function applyActionToStore(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
+  const newTrackedState = action.apply(get().trackedState);
+
+  set((state) => ({
+    ...state,
+    trackedState: newTrackedState,
+  }));
+}
+
+/**
  * Undo the action at step - 1.
  */
 function undo(set: SetFn, get: GetFn): void {
@@ -192,10 +186,9 @@ function undo(set: SetFn, get: GetFn): void {
   }
 
   trackUserAction(actionToUndo, set);
-  actionToUndo.execute(get().untrackedState.mapId);
+  executeActionImpl(actionToUndo, set, get);
   trackReverseActionInHistory(actionToUndo, get().step - 1, set, get);
-  applyActionToStore(actionToUndo, set, get);
-  clearInvalidSelection(get);
+  applyAction(actionToUndo, set, get);
 
   set((state) => ({
     ...state,
@@ -219,10 +212,9 @@ function redo(set: SetFn, get: GetFn): void {
   }
 
   trackUserAction(actionToRedo, set);
-  actionToRedo.execute(get().untrackedState.mapId);
+  executeActionImpl(actionToRedo, set, get);
   trackReverseActionInHistory(actionToRedo, get().step, set, get);
-  applyActionToStore(actionToRedo, set, get);
-  clearInvalidSelection(get);
+  applyAction(actionToRedo, set, get);
 
   set((state) => ({
     ...state,
@@ -230,4 +222,59 @@ function redo(set: SetFn, get: GetFn): void {
     canUndo: true,
     canRedo: state.step + 1 < state.history.length,
   }));
+}
+
+/**
+ * Executes the action by calling its execute function and handles errors.
+ */
+function executeActionImpl(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
+  // this works because zustand returns a copy of the state see `zustand_get.test.ts`
+  const snap = get();
+
+  action.execute(get().untrackedState.mapId).catch(() => {
+    // if the action fails, revert to the previous state
+    set(snap);
+  });
+}
+
+/**
+ * Replaces the selected plantings with fresh versions from the backend.
+ */
+function updateSelectedPlantings(set: SetFn, get: GetFn) {
+  const selectedPlantings = get().untrackedState.layers.plants.selectedPlantings;
+  if (!selectedPlantings?.length) {
+    return;
+  }
+
+  const updatedSelectedPlantings = getUpdatesForSelectedPlantings(get, selectedPlantings);
+
+  set((state) => ({
+    ...state,
+    untrackedState: {
+      ...state.untrackedState,
+      layers: {
+        ...state.untrackedState.layers,
+        plants: {
+          ...state.untrackedState.layers.plants,
+          selectedPlantings: updatedSelectedPlantings,
+        },
+      },
+    },
+  }));
+}
+
+function getUpdatesForSelectedPlantings(get: GetFn, selectedPlantings: PlantingDto[]) {
+  const loadUpdateForSelectedPlanting = (selectedPlanting: PlantingDto) => {
+    return get().trackedState.layers.plants.loadedObjects.find(
+      (loadedPlanting) => loadedPlanting.id === selectedPlanting.id,
+    );
+  };
+
+  const updatePlantings = (updatedPlantings: PlantingDto[], selectedPlanting: PlantingDto) => {
+    const updatedPlanting = loadUpdateForSelectedPlanting(selectedPlanting);
+
+    return updatedPlanting ? [...updatedPlantings, updatedPlanting] : updatedPlantings;
+  };
+
+  return selectedPlantings.reduce(updatePlantings, []);
 }

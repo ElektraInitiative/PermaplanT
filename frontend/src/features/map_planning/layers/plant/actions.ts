@@ -1,57 +1,49 @@
 /**
  * @module this module contains actions for the plant layer.
  */
-import { createPlanting } from '../../api/createPlanting';
-import { deletePlanting } from '../../api/deletePlanting';
-import { movePlanting } from '../../api/movePlanting';
-import { transformPlanting } from '../../api/transformPlanting';
-import { updateAddDatePlanting } from '../../api/updateAddDatePlanting';
-import { updateRemoveDatePlanting } from '../../api/updateRemoveDatePlanting';
-import useMapStore from '../../store/MapStore';
-import { Action, TrackedMapState } from '../../store/MapStoreTypes';
-import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
+import { v4 } from 'uuid';
 import {
+  PlantingDto,
   CreatePlantActionPayload,
   DeletePlantActionPayload,
   MovePlantActionPayload,
-  PlantingDto,
   TransformPlantActionPayload,
   UpdatePlantingAddDateActionPayload,
   UpdatePlantingRemoveDateActionPayload,
-} from '@/bindings/definitions';
-import { v4 } from 'uuid';
+  UpdatePlantingAdditionalNamePayload,
+} from '@/api_types/definitions';
+import updateAddDatePlanting, {
+  createPlanting,
+  deletePlanting,
+  movePlanting,
+  transformPlanting,
+  updateRemoveDatePlanting,
+} from '../../api/plantingApi';
+import useMapStore from '../../store/MapStore';
+import { Action, TrackedMapState } from '../../store/MapStoreTypes';
+import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
 
 export class CreatePlantAction
   implements Action<Awaited<ReturnType<typeof createPlanting>>, boolean>
 {
-  private readonly _id: string;
+  private readonly _ids: string[];
 
   get entityIds() {
-    return [this._id];
+    return this._ids;
   }
 
-  constructor(
-    private readonly _data: Omit<CreatePlantActionPayload, 'userId' | 'actionId'>,
-    public actionId = v4(),
-  ) {
-    this._id = _data.id;
+  constructor(private readonly _data: CreatePlantActionPayload[], public actionId = v4()) {
+    this._ids = _data.map(({ id }) => id);
   }
 
   reverse() {
     return new DeletePlantAction(
-      {
-        id: this._id,
-      },
+      this._ids.map((id) => ({ id })),
       this.actionId,
     );
   }
 
   apply(state: TrackedMapState): TrackedMapState {
-    const newPlant = {
-      ...this._data,
-      id: this._id,
-    };
-
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
 
     return {
@@ -61,50 +53,44 @@ export class CreatePlantAction
         plants: {
           ...state.layers.plants,
           objects: filterVisibleObjects(
-            [...state.layers.plants.objects, { ...newPlant }],
+            [...state.layers.plants.objects, ...this._data],
             timelineDate,
           ),
-          loadedObjects: [...state.layers.plants.loadedObjects, { ...newPlant }],
+          loadedObjects: [...state.layers.plants.loadedObjects, ...this._data],
         },
       },
     };
   }
 
-  async execute(mapId: number): Promise<Awaited<ReturnType<typeof createPlanting>>> {
-    return createPlanting(mapId, {
-      ...this._data,
-      id: this._id,
-      actionId: this.actionId,
-    });
+  async execute(mapId: number) {
+    return createPlanting(mapId, this.actionId, this._data);
   }
 }
 
 export class DeletePlantAction
   implements Action<boolean, Awaited<ReturnType<typeof createPlanting>>>
 {
-  constructor(
-    private readonly _data: Omit<DeletePlantActionPayload, 'userId' | 'actionId'>,
-    public actionId = v4(),
-  ) {}
-
-  get entityIds() {
-    return [this._data.id];
+  private readonly _ids: string[];
+  constructor(private readonly _data: DeletePlantActionPayload[], public actionId = v4()) {
+    this._ids = this._data.map(({ id }) => id);
   }
 
-  async execute(mapId: number): Promise<boolean> {
-    return deletePlanting(mapId, this._data.id, {
-      actionId: this.actionId,
-    });
+  get entityIds() {
+    return this._ids;
+  }
+
+  async execute(mapId: number) {
+    return deletePlanting(mapId, this.actionId, this._data);
   }
 
   reverse(state: TrackedMapState) {
-    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._data.id);
+    const plants = filterByIds(state.layers.plants.loadedObjects, this._ids);
 
-    if (!plant) {
+    if (!plants.length) {
       return null;
     }
 
-    return new CreatePlantAction(plant, this.actionId);
+    return new CreatePlantAction(plants, this.actionId);
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -114,8 +100,8 @@ export class DeletePlantAction
         ...state.layers,
         plants: {
           ...state.layers.plants,
-          objects: state.layers.plants.objects.filter((p) => p.id !== this._data.id),
-          loadedObjects: state.layers.plants.loadedObjects.filter((p) => p.id !== this._data.id),
+          objects: state.layers.plants.objects.filter((p) => !this._ids.includes(p.id)),
+          loadedObjects: state.layers.plants.objects.filter((p) => !this._ids.includes(p.id)),
         },
       },
     };
@@ -124,23 +110,20 @@ export class DeletePlantAction
 
 export class MovePlantAction
   implements
-    Action<Awaited<ReturnType<typeof movePlanting>>[], Awaited<ReturnType<typeof movePlanting>>[]>
+    Action<Awaited<ReturnType<typeof movePlanting>>, Awaited<ReturnType<typeof movePlanting>>>
 {
-  private readonly _ids: Array<string>;
+  private readonly _ids: string[];
 
   get entityIds() {
     return this._ids;
   }
 
-  constructor(
-    private readonly _data: Omit<MovePlantActionPayload, 'userId' | 'actionId'>[],
-    public actionId = v4(),
-  ) {
-    this._ids = _data.map((d) => d.id);
+  constructor(private readonly _data: MovePlantActionPayload[], public actionId = v4()) {
+    this._ids = _data.map(({ id }) => id);
   }
 
   reverse(state: TrackedMapState) {
-    const plants = state.layers.plants.loadedObjects.filter((obj) => this._ids.includes(obj.id));
+    const plants = filterByIds(state.layers.plants.loadedObjects, this._ids);
 
     if (!plants.length) {
       return null;
@@ -180,38 +163,30 @@ export class MovePlantAction
     };
   }
 
-  execute(mapId: number): Promise<PlantingDto[]> {
-    const tasks = this._data.map((d) =>
-      movePlanting(mapId, d.id, {
-        x: d.x,
-        y: d.y,
-        actionId: this.actionId,
-      }),
-    );
-
-    return Promise.all(tasks);
+  execute(mapId: number) {
+    return movePlanting(mapId, this.actionId, this._data);
   }
 }
 
 export class TransformPlantAction
   implements
-    Action<Awaited<ReturnType<typeof movePlanting>>[], Awaited<ReturnType<typeof movePlanting>>[]>
+    Action<
+      Awaited<ReturnType<typeof transformPlanting>>,
+      Awaited<ReturnType<typeof transformPlanting>>
+    >
 {
-  private readonly _ids: Array<string>;
+  private readonly _ids: string[];
 
   get entityIds() {
     return this._ids;
   }
 
-  constructor(
-    private readonly _data: Omit<TransformPlantActionPayload, 'userId' | 'actionId'>[],
-    public actionId = v4(),
-  ) {
+  constructor(private readonly _data: TransformPlantActionPayload[], public actionId = v4()) {
     this._ids = _data.map((d) => d.id);
   }
 
   reverse(state: TrackedMapState) {
-    const plants = state.layers.plants.loadedObjects.filter((obj) => this._ids.includes(obj.id));
+    const plants = filterByIds(state.layers.plants.loadedObjects, this._ids);
 
     if (!plants.length) {
       return null;
@@ -222,8 +197,8 @@ export class TransformPlantAction
         id: p.id,
         x: p.x,
         y: p.y,
-        scaleX: p.scaleX,
-        scaleY: p.scaleY,
+        sizeX: p.sizeX,
+        sizeY: p.sizeY,
         rotation: p.rotation,
       })),
       this.actionId,
@@ -238,8 +213,8 @@ export class TransformPlantAction
             ...p,
             x: this._data.find((d) => d.id === p.id)?.x ?? p.x,
             y: this._data.find((d) => d.id === p.id)?.y ?? p.y,
-            scaleX: this._data.find((d) => d.id === p.id)?.scaleX ?? p.scaleX,
-            scaleY: this._data.find((d) => d.id === p.id)?.scaleY ?? p.scaleY,
+            sizeX: this._data.find((d) => d.id === p.id)?.sizeX ?? p.sizeX,
+            sizeY: this._data.find((d) => d.id === p.id)?.sizeY ?? p.sizeY,
             rotation: this._data.find((d) => d.id === p.id)?.rotation ?? p.rotation,
           };
         }
@@ -261,19 +236,8 @@ export class TransformPlantAction
     };
   }
 
-  execute(mapId: number): Promise<PlantingDto[]> {
-    const tasks = this._data.map((d) =>
-      transformPlanting(mapId, d.id, {
-        x: d.x,
-        y: d.y,
-        scaleX: d.scaleX,
-        scaleY: d.scaleY,
-        rotation: d.rotation,
-        actionId: this.actionId,
-      }),
-    );
-
-    return Promise.all(tasks);
+  execute(mapId: number) {
+    return transformPlanting(mapId, this.actionId, this._data);
   }
 }
 
@@ -284,27 +248,31 @@ export class UpdateAddDatePlantAction
       Awaited<ReturnType<typeof updateAddDatePlanting>>
     >
 {
+  private readonly _ids: string[];
+
   constructor(
-    private readonly _data: Omit<UpdatePlantingAddDateActionPayload, 'userId' | 'actionId'>,
+    private readonly _data: UpdatePlantingAddDateActionPayload[],
     public actionId = v4(),
-  ) {}
+  ) {
+    this._ids = this._data.map(({ id }) => id);
+  }
 
   get entityIds() {
-    return [this._data.id];
+    return this._ids;
   }
 
   reverse(state: TrackedMapState) {
-    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._data.id);
+    const plants = filterByIds(state.layers.plants.loadedObjects, this._ids);
 
-    if (!plant) {
+    if (!plants.length) {
       return null;
     }
 
     return new UpdateAddDatePlantAction(
-      {
-        id: plant.id,
-        addDate: plant.addDate,
-      },
+      plants.map((p) => ({
+        id: p.id,
+        addDate: p.addDate,
+      })),
       this.actionId,
     );
   }
@@ -312,10 +280,10 @@ export class UpdateAddDatePlantAction
   apply(state: TrackedMapState): TrackedMapState {
     const updatePlants = (plants: Array<PlantingDto>) => {
       return plants.map((p) => {
-        if (p.id === this._data.id) {
+        if (this._ids.includes(p.id)) {
           return {
             ...p,
-            addDate: this._data.addDate,
+            addDate: this._data.find((d) => d.id === p.id)?.addDate ?? p.addDate,
           };
         }
 
@@ -342,10 +310,7 @@ export class UpdateAddDatePlantAction
   }
 
   execute(mapId: number): Promise<PlantingDto> {
-    return updateAddDatePlanting(mapId, this._data.id, {
-      addDate: this._data.addDate,
-      actionId: this.actionId,
-    });
+    return updateAddDatePlanting(mapId, this.actionId, this._data);
   }
 }
 
@@ -356,27 +321,28 @@ export class UpdateRemoveDatePlantAction
       Awaited<ReturnType<typeof updateRemoveDatePlanting>>
     >
 {
+  private readonly _ids: string[];
+
   constructor(
-    private readonly _data: Omit<UpdatePlantingRemoveDateActionPayload, 'userId' | 'actionId'>,
+    private readonly _data: UpdatePlantingRemoveDateActionPayload[],
     public actionId = v4(),
-  ) {}
+  ) {
+    this._ids = _data.map(({ id }) => id);
+  }
 
   get entityIds() {
-    return [this._data.id];
+    return this._ids;
   }
 
   reverse(state: TrackedMapState) {
-    const plant = state.layers.plants.loadedObjects.find((obj) => obj.id === this._data.id);
+    const plants = filterByIds(state.layers.plants.loadedObjects, this._ids);
 
-    if (!plant) {
+    if (!plants.length) {
       return null;
     }
 
     return new UpdateRemoveDatePlantAction(
-      {
-        id: plant.id,
-        removeDate: plant.removeDate,
-      },
+      this._data.map((p) => ({ id: p.id, removeDate: p.removeDate })),
       this.actionId,
     );
   }
@@ -384,10 +350,10 @@ export class UpdateRemoveDatePlantAction
   apply(state: TrackedMapState): TrackedMapState {
     const updatePlants = (plants: Array<PlantingDto>) => {
       return plants.map((p) => {
-        if (p.id === this._data.id) {
+        if (this._ids.includes(p.id)) {
           return {
             ...p,
-            removeDate: this._data.removeDate,
+            removeDate: this._data.find((d) => d.id === p.id)?.removeDate ?? p.removeDate,
           };
         }
 
@@ -414,9 +380,59 @@ export class UpdateRemoveDatePlantAction
   }
 
   execute(mapId: number): Promise<PlantingDto> {
-    return updateRemoveDatePlanting(mapId, this._data.id, {
-      removeDate: this._data.removeDate,
-      actionId: this.actionId,
-    });
+    return updateRemoveDatePlanting(mapId, this.actionId, this._data);
   }
+}
+
+export type UpdatePlantingAdditionalNameParam = Omit<
+  UpdatePlantingAdditionalNamePayload,
+  'userId' | 'actionId'
+>;
+export class UpdatePlantingAdditionalName implements Action<null, null> {
+  constructor(private readonly _data: UpdatePlantingAdditionalNameParam, public actionId = v4()) {}
+
+  get entityIds() {
+    return [this._data.id];
+  }
+
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  reverse(state: TrackedMapState) {
+    return null;
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    const objects_updated = state.layers.plants.objects.map((object) => ({
+      ...object,
+      additionalName:
+        object.id === this._data.id ? this._data.additionalName : object.additionalName,
+    }));
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        plants: {
+          ...state.layers.plants,
+          objects: objects_updated,
+        },
+      },
+    };
+  }
+
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  execute(mapId: number): Promise<null> {
+    //eslint-disable-next-line @typescript-eslint/no-empty-function
+    return new Promise<null>(() => {});
+  }
+}
+
+/**
+ * Filters an array of objects by their IDs.
+ *
+ * @param array - The array of objects to filter.
+ * @param ids - The array of IDs to filter by.
+ * @returns An array of objects that have IDs matching the provided IDs.
+ */
+function filterByIds<T extends { id: unknown }>(array: T[], ids: unknown[]): T[] {
+  return array.filter((e) => ids.includes(e.id));
 }

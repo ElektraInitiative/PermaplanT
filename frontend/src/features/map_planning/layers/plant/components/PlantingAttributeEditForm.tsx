@@ -1,129 +1,273 @@
-import { ExtendedPlantsSummaryDisplayName } from './ExtendedPlantDisplay';
-import { PlantingDto, PlantsSummaryDto } from '@/bindings/definitions';
-import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
-import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
-import { ReactComponent as CheckIcon } from '@/icons/check.svg';
-import { ReactComponent as CircleDottedIcon } from '@/icons/circle-dotted.svg';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-
-export type PlantingAttributeEditFormData = Pick<PlantingDto, 'addDate' | 'removeDate'>;
+import { PlantingDto } from '@/api_types/definitions';
+import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
+import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
+import { PlantNameFromAdditionalNameAndPlant, PlantNameFromPlant } from '@/utils/plant-naming';
+import { calculatePlantCount, getPlantWidth } from '../util';
 
 const PlantingAttributeEditFormSchema = z
   // The 'empty' value for the API is undefined, so we need to transform the empty string to undefined
   .object({
     addDate: z.nullable(z.string()).transform((value) => value || undefined),
     removeDate: z.nullable(z.string()).transform((value) => value || undefined),
+    sizeX: z.number().int().nullable(),
+    sizeY: z.number().int().nullable(),
   })
   .refine((schema) => !schema.removeDate || !schema.addDate || schema.addDate < schema.removeDate, {
     path: ['dateRelation'],
   });
 
-export type PlantingAttributeEditFormProps = {
-  planting: PlantingDto;
-  plant: PlantsSummaryDto;
+export type PlantingFormData = Pick<PlantingDto, 'addDate' | 'removeDate' | 'sizeX' | 'sizeY'>;
+
+export type EditPlantingAttributesProps = {
+  onAddDateChange: (formData: PlantingFormData) => void;
+  onRemoveDateChange: (formData: PlantingFormData) => void;
+  onWidthChange: (formData: PlantingFormData) => void;
+  onHeightChange: (formData: PlantingFormData) => void;
   onDeleteClick: () => void;
-  onAddDateChange: (addDate: PlantingAttributeEditFormData) => void;
-  onRemoveDateChange: (removeDate: PlantingAttributeEditFormData) => void;
+  isReadOnlyMode: boolean;
 };
 
-export function PlantingAttributeEditForm({
-  plant,
+export type SinglePlantingAttributeFormProps = EditPlantingAttributesProps & {
+  planting: PlantingDto;
+};
+
+export type MultiplePlantingsAttributeFormProps = EditPlantingAttributesProps & {
+  plantings: PlantingDto[];
+};
+
+export type PlantingAttributeEditFormProps = EditPlantingAttributesProps & {
+  addDateDefaultValue: string;
+  removeDateDefaultValue: string;
+  widthDefaultValue: number | undefined;
+  heightDefaultValue: number | undefined;
+  planting: PlantingDto | null;
+  areaOfPlantings: boolean;
+};
+
+export function SinglePlantingAttributeForm({
   planting,
-  onDeleteClick,
-  onAddDateChange,
-  onRemoveDateChange,
-}: PlantingAttributeEditFormProps) {
-  const { t } = useTranslation(['plantings']);
+  ...props
+}: SinglePlantingAttributeFormProps) {
+  const { plantId } = planting;
+  const {
+    data: plant,
+    isLoading: plantSummaryIsLoading,
+    isError: plantSummaryIsError,
+  } = useFindPlantById({ plantId });
 
-  const { register, handleSubmit, watch, formState } = useForm<PlantingAttributeEditFormData>({
-    // The 'empty' value for the native date input is an empty string, not null | undefined
-    defaultValues: {
-      addDate: planting.addDate || '',
-      removeDate: planting.removeDate || '',
-    },
-    resolver: zodResolver(PlantingAttributeEditFormSchema),
-  });
-
-  const addDateSubmitState = useDebouncedSubmit<PlantingAttributeEditFormData>(
-    watch('addDate'),
-    handleSubmit,
-    onAddDateChange,
-    (e) => console.error(e),
-  );
-
-  const removeDateSubmitState = useDebouncedSubmit<PlantingAttributeEditFormData>(
-    watch('removeDate'),
-    handleSubmit,
-    onRemoveDateChange,
-    (e) => console.error(e),
-  );
+  if (plantSummaryIsLoading) return null;
+  if (plantSummaryIsError) return null;
 
   return (
     <div className="flex flex-col gap-2 p-2">
       <h2>
-        <ExtendedPlantsSummaryDisplayName plant={plant} />
+        {planting.additionalName ? (
+          <PlantNameFromAdditionalNameAndPlant
+            additionalName={planting.additionalName}
+            plant={plant}
+          />
+        ) : (
+          <PlantNameFromPlant plant={plant} />
+        )}
       </h2>
 
-      <div className="flex gap-2">
-        <SimpleFormInput
-          aria-invalid={addDateSubmitState === 'error'}
-          type="date"
-          id="addDate"
-          labelText={t('plantings:add_date')}
-          register={register}
-          className="w-36"
-        />
-        {addDateSubmitState === 'loading' && (
-          <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
-        )}
-        {addDateSubmitState === 'idle' && (
-          <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
-        )}
-      </div>
-      <p className="pb-4 text-[0.8rem] text-neutral-400">{t('plantings:add_date_description')}</p>
+      <PlantingAttributeEditForm
+        addDateDefaultValue={planting.addDate ?? ''}
+        removeDateDefaultValue={planting.removeDate ?? ''}
+        widthDefaultValue={planting.sizeX}
+        heightDefaultValue={planting.sizeY}
+        areaOfPlantings={planting.isArea}
+        planting={planting}
+        {...props}
+      />
+    </div>
+  );
+}
 
-      <div className="flex gap-2">
-        <SimpleFormInput
-          aria-invalid={removeDateSubmitState === 'error'}
-          type="date"
-          id="removeDate"
-          labelText={t('plantings:remove_date')}
-          register={register}
-          className="w-36"
-        />
-        {removeDateSubmitState === 'loading' && (
-          <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
-        )}
-        {removeDateSubmitState === 'idle' && (
-          <CheckIcon className="mb-3 mt-auto h-5 w-5 text-primary-400" />
-        )}
-      </div>
+export function MultiplePlantingsAttributeForm({
+  plantings,
+  ...props
+}: MultiplePlantingsAttributeFormProps) {
+  const { t } = useTranslation(['plantings']);
 
-      <p className="text-[0.8rem] text-neutral-400">{t('plantings:remove_date_description')}</p>
+  const areAllPlantingsAreas = plantings.every((planting) => planting.isArea);
 
+  const getCommonAddDate = () => {
+    const comparisonDate = plantings[0].addDate;
+    const existsCommonDate = plantings.every((planting) => planting.addDate === comparisonDate);
+    return existsCommonDate ? comparisonDate : '';
+  };
+
+  const getCommonRemoveDate = () => {
+    const comparisonDate = plantings[0].removeDate;
+    const existsCommonDate = plantings.every((planting) => planting.removeDate === comparisonDate);
+    return existsCommonDate ? comparisonDate : '';
+  };
+
+  const getCommonWidth = () => {
+    const comparisonWidth = plantings[0].sizeX;
+    const existsCommonWidth = plantings.every((planting) => planting.sizeY === comparisonWidth);
+    return existsCommonWidth ? comparisonWidth : undefined;
+  };
+
+  const getCommonHeight = () => {
+    const comparisonHeight = plantings[0].sizeX;
+    const existsCommonHeight = plantings.every((planting) => planting.sizeY === comparisonHeight);
+    return existsCommonHeight ? comparisonHeight : undefined;
+  };
+
+  return (
+    <div className="flex flex-col gap-2 p-2">
+      <h2>{t('plantings:heading_multiple_plantings')}</h2>
+
+      <PlantingAttributeEditForm
+        addDateDefaultValue={getCommonAddDate() ?? ''}
+        removeDateDefaultValue={getCommonRemoveDate() ?? ''}
+        widthDefaultValue={getCommonWidth()}
+        heightDefaultValue={getCommonHeight()}
+        planting={null}
+        areaOfPlantings={areAllPlantingsAreas}
+        {...props}
+      />
+    </div>
+  );
+}
+
+function PlantingAttributeEditForm({
+  widthDefaultValue,
+  heightDefaultValue,
+  addDateDefaultValue,
+  removeDateDefaultValue,
+  onWidthChange,
+  onHeightChange,
+  onAddDateChange,
+  onRemoveDateChange,
+  onDeleteClick,
+  isReadOnlyMode,
+  areaOfPlantings,
+  planting,
+}: PlantingAttributeEditFormProps) {
+  const { t } = useTranslation(['plantings']);
+  const multiplePlantings = planting === null;
+
+  const formInfo = useForm<PlantingFormData>({
+    // The 'empty' value for the native date input is an empty string, not null | undefined
+    defaultValues: {
+      sizeX: widthDefaultValue,
+      sizeY: heightDefaultValue,
+      addDate: addDateDefaultValue,
+      removeDate: removeDateDefaultValue,
+    },
+    resolver: zodResolver(PlantingAttributeEditFormSchema),
+  });
+
+  const { data: plant } = useFindPlantById({
+    plantId: planting?.plantId ?? 0,
+    enabled: !multiplePlantings,
+  });
+
+  const individualPlantSize = plant ? getPlantWidth(plant) : undefined;
+  const plantCountInfo =
+    planting && individualPlantSize
+      ? calculatePlantCount(individualPlantSize, planting.sizeX, planting.sizeY)
+      : null;
+
+  return (
+    <FormProvider {...formInfo}>
       {/**
        * See https://github.com/orgs/react-hook-form/discussions/7111
        * @ts-expect-error this error path was added by zod refine(). hook form is unaware, which is a shortcoming.*/}
-      {formState.errors.dateRelation && (
-        <span className="mb-3 mt-auto text-sm text-red-400">
-          {t('plantings:error_invalid_add_remove_date')}
-        </span>
+      {formInfo.formState.errors.dateRelation && (
+        <div className="text-sm text-red-400">{t('plantings:error_invalid_add_remove_date')}</div>
       )}
+
+      {areaOfPlantings && (
+        <div className="py-2">
+          <h3>Area of Plantings</h3>
+
+          {plantCountInfo && (
+            <div className="grid grid-cols-[2fr_1fr] grid-rows-3 gap-y-2 py-2 text-sm">
+              <span className="font-medium">
+                {t('plantings:area_of_plantings.individual_plant_size')}
+              </span>
+              <span className="text-neutral-500">{individualPlantSize}</span>
+              <span className="font-medium">{t('plantings:area_of_plantings.plants_per_row')}</span>
+              <span className="text-neutral-500">{plantCountInfo.perRow}</span>
+              <span className="font-medium">{t('plantings:area_of_plantings.number_of_rows')}</span>
+              <span className="text-neutral-500">{plantCountInfo.perColumn}</span>
+              <span className="font-medium">{t('plantings:area_of_plantings.total_plants')}</span>
+              <span className="text-neutral-500">{plantCountInfo.total}</span>
+            </div>
+          )}
+          <DebouncedSimpleFormInput
+            onValid={onWidthChange}
+            type="number"
+            id="sizeX"
+            data-testid="planting-attribute-edit-form__size-x"
+            disabled={isReadOnlyMode}
+            labelContent={t('plantings:width')}
+            className="w-36"
+          />
+
+          <DebouncedSimpleFormInput
+            onValid={onHeightChange}
+            type="number"
+            id="sizeY"
+            data-testid="planting-attribute-edit-form__size-y"
+            disabled={isReadOnlyMode}
+            labelContent={t('plantings:height')}
+            className="w-36"
+          />
+          <hr className="my-4 border-neutral-700" />
+        </div>
+      )}
+
+      <DebouncedSimpleFormInput
+        onValid={onAddDateChange}
+        type="date"
+        id="addDate"
+        data-testid="planting-attribute-edit-form__add-date"
+        disabled={isReadOnlyMode}
+        labelContent={t('plantings:add_date')}
+        className="w-36"
+      />
+      <p className="pb-4 text-[0.8rem] text-neutral-400">
+        {multiplePlantings
+          ? t('plantings:add_date_description_multiple_plantings')
+          : t('plantings:add_date_description')}
+      </p>
+
+      <DebouncedSimpleFormInput
+        onValid={onRemoveDateChange}
+        type="date"
+        id="removeDate"
+        data-testid="planting-attribute-edit-form__removed-date"
+        disabled={isReadOnlyMode}
+        labelContent={t('plantings:remove_date')}
+        className="w-36"
+      />
+      <p className="text-[0.8rem] text-neutral-400">
+        {multiplePlantings
+          ? t('plantings:remove_date_description_multiple_plantings')
+          : t('plantings:remove_date_description')}
+      </p>
 
       <hr className="my-4 border-neutral-700" />
 
       <SimpleButton
+        disabled={isReadOnlyMode}
         variant={ButtonVariant.dangerBase}
         onClick={onDeleteClick}
         className="w-36"
         data-tourid="planting_delete"
       >
-        {t('plantings:delete')}
+        {multiplePlantings ? t('plantings:delete_multiple_plantings') : t('plantings:delete')}
       </SimpleButton>
-    </div>
+    </FormProvider>
   );
 }

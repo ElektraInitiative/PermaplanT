@@ -35,7 +35,11 @@ def provide_map_details(
 ):
     mmp.to_map_create_page()
     mcp.create_a_map(
-        name, description=description, latitude=latitude, longitude=longitude
+        name,
+        privacy=privacy,
+        description=description,
+        latitude=latitude,
+        longitude=longitude,
     )
 
 
@@ -83,14 +87,14 @@ def create_same_map(mmp: MapManagementPage, mcp: MapCreatePage, name):
 @when(parsers.parse("I try to create the same map {name}"))
 def create_the_same_map_again(mmp: MapManagementPage, mcp: MapCreatePage, name):
     mmp.to_map_create_page()
-    mcp.create_a_map(name)
+    mcp.try_create_a_map(name)
 
 
 @then("the app displays an error message")
-def error_message_is_displayed(mmp: MapManagementPage):
-    mmp.expect_alert_is_visible()
+def error_message_is_displayed(mcp: MapCreatePage):
+    mcp.expect_alert_is_visible()
 
 
 @then(parsers.parse("my map {mapname} is not created"))
-def map_is_not_created(mmp: MapManagementPage, mapname):
-    mmp.expect_mapname_is_visible(mapname)
+def map_is_not_created(mcp: MapCreatePage, mapname):
+    mcp.expect_mapname_editable(mapname)

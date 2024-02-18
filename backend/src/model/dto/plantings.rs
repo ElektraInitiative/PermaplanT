@@ -9,7 +9,7 @@ use uuid::Uuid;
 /// Represents plant planted on a map.
 /// E.g. a user drags a plant from the search results and drops it on the map.
 #[typeshare]
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct PlantingDto {
     /// The id of the planting.
@@ -22,27 +22,33 @@ pub struct PlantingDto {
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
-    /// The width of the plant on the map.
-    pub width: i32,
-    /// The height of the plant on the map.
-    pub height: i32,
+    /// The size of the planting on the map in x direction.
+    pub size_x: i32,
+    /// The size of the planting on the map in y direction.
+    pub size_y: i32,
     /// The rotation in degrees (0-360) of the plant on the map.
     pub rotation: f32,
-    /// The x scale of the plant on the map.
-    pub scale_x: f32,
-    /// The y scale of the plant on the map.
-    pub scale_y: f32,
     /// The date the planting was added to the map.
     /// If None, the planting always existed.
     pub add_date: Option<NaiveDate>,
     /// The date the planting was removed from the map.
     /// If None, the planting is still on the map.
     pub remove_date: Option<NaiveDate>,
+    /// Plantings may be linked with a seed.
+    pub seed_id: Option<i32>,
+    /// Equivalent to the seed name.
+    /// It is used to display the full plant name on a map
+    /// even if a user does not have access to the seed.
+    pub additional_name: Option<String>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
+    /// Notes about the planting in Markdown.
+    pub planting_notes: Option<String>,
 }
 
 /// Used to create a new planting.
 #[typeshare]
-#[derive(Debug, Clone, Default, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct NewPlantingDto {
     /// The id of the planting.
@@ -55,21 +61,19 @@ pub struct NewPlantingDto {
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
-    /// The width of the plant on the map.
-    pub width: i32,
-    /// The height of the plant on the map.
-    pub height: i32,
+    /// The size of the planting on the map in x direction.
+    pub size_x: i32,
+    /// The size of the planting on the map in y direction.
+    pub size_y: i32,
     /// The rotation of the plant on the map.
     pub rotation: f32,
-    /// The x scale of the plant on the map.
-    pub scale_x: f32,
-    /// The y scale of the plant on the map.
-    pub scale_y: f32,
     /// The date the planting was added to the map.
     /// If None, the planting always existed.
     pub add_date: Option<NaiveDate>,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
+    /// Plantings may be linked with a seed.
+    pub seed_id: Option<i32>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
 }
 
 /// Used to differentiate between different update operations on plantings.
@@ -77,17 +81,19 @@ pub struct NewPlantingDto {
 /// Ordering of enum variants is important.
 /// Serde will try to deserialize starting from the top.
 #[typeshare]
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[serde(tag = "type", content = "content")]
 pub enum UpdatePlantingDto {
-    /// Transform a plantings.
-    Transform(TransformPlantingDto),
-    /// Move a plantings an the map.
-    Move(MovePlantingDto),
+    /// Transform a planting.
+    Transform(Vec<TransformPlantingDto>),
+    /// Move a planting on the map.
+    Move(Vec<MovePlantingDto>),
     /// Change the `add_date` of a planting.
-    UpdateAddDate(UpdateAddDatePlantingDto),
+    UpdateAddDate(Vec<UpdateAddDatePlantingDto>),
     /// Change the `remove_date` of a planting.
-    UpdateRemoveDate(UpdateRemoveDatePlantingDto),
+    UpdateRemoveDate(Vec<UpdateRemoveDatePlantingDto>),
+    /// Update Markdown notes.
+    UpdateNote(Vec<UpdatePlantingNoteDto>),
 }
 
 /// Used to transform an existing planting.
@@ -95,6 +101,8 @@ pub enum UpdatePlantingDto {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct TransformPlantingDto {
+    /// The id of the planting.
+    pub id: Uuid,
     /// The x coordinate of the position on the map.
     pub x: i32,
     /// The y coordinate of the position on the map.
@@ -102,11 +110,9 @@ pub struct TransformPlantingDto {
     /// The rotation of the plant on the map.
     pub rotation: f32,
     /// The x scale of the plant on the map.
-    pub scale_x: f32,
+    pub size_x: i32,
     /// The y scale of the plant on the map.
-    pub scale_y: f32,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
+    pub size_y: i32,
 }
 
 /// Used to move an existing planting.
@@ -114,12 +120,12 @@ pub struct TransformPlantingDto {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MovePlantingDto {
+    /// The id of the planting.
+    pub id: Uuid,
     /// The x coordinate of the position on the map.
     pub x: i32,
     /// The y coordinate of the position on the map.
     pub y: i32,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
 }
 
 /// Used to change the `add_date` of a planting.
@@ -127,11 +133,11 @@ pub struct MovePlantingDto {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateAddDatePlantingDto {
+    /// The id of the planting.
+    pub id: Uuid,
     /// The date the planting was added to the map.
     /// If None, the planting always existed.
     pub add_date: Option<NaiveDate>,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
 }
 
 /// Used to change the `remove_date` of a planting.
@@ -139,21 +145,32 @@ pub struct UpdateAddDatePlantingDto {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateRemoveDatePlantingDto {
+    /// The id of the planting.
+    pub id: Uuid,
     /// The date the planting was removed from the map.
     /// If None, the planting is still on the map.
     pub remove_date: Option<NaiveDate>,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
+}
+
+/// Update Markdown planting notes.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingNoteDto {
+    /// The id of the planting.
+    pub id: Uuid,
+    /// Notes about the planting in Markdown.
+    pub notes: String,
 }
 
 /// Used to delete a planting.
 /// The id of the planting is passed in the path.
 #[typeshare]
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct DeletePlantingDto {
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
+    /// Id of the planting to delete.
+    pub id: Uuid,
 }
 
 /// Query parameters for searching plantings.

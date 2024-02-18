@@ -1,5 +1,5 @@
-import { Quality, Quantity } from '@/bindings/definitions';
 import { useTranslation } from 'react-i18next';
+import { Quality, Quantity } from '@/api_types/definitions';
 
 export function useTranslatedQuality(): Record<Quality, string> {
   // The record return type ensures that all the keys are present in the returned object.

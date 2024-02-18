@@ -3,7 +3,7 @@ dist-ssr
 *.local
 
 # Auto generated
-src/bindings/*
+src/api_types/*
 src/generated/*
 
 # Editor directories and files
@@ -12,8 +12,6 @@ src/generated/*
 *.njsproj
 *.sln
 *.sw?
-
-.env
 
 # storybook build
 storybook-static

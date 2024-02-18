@@ -1,12 +1,10 @@
-import { calculateGridStep } from '@/features/map_planning/layers/_frontend_only/grid/util/Calculations';
-import {
-  RELATIVE_DOT_SIZE,
-  SEA_BLUE_500,
-} from '@/features/map_planning/layers/_frontend_only/grid/util/Constants';
-import { BoundsRect } from '@/features/map_planning/store/MapStoreTypes';
 import { Group, Line } from 'react-konva';
+import { calculateGridStep } from '@/features/map_planning/layers/_frontend_only/grid/util/Calculations';
+import { RELATIVE_DOT_SIZE } from '@/features/map_planning/layers/_frontend_only/grid/util/Constants';
+import { ViewRect } from '@/features/map_planning/store/MapStoreTypes';
+import { colors } from '@/utils/colors';
 
-export const Grid = (rect: BoundsRect) => {
+export const Grid = (rect: ViewRect) => {
   const gridStep = calculateGridStep(rect.width);
 
   const gridDotSize = rect.width * RELATIVE_DOT_SIZE;
@@ -23,7 +21,7 @@ export const Grid = (rect: BoundsRect) => {
     lines.push(
       <Line
         strokeWidth={gridDotSize}
-        stroke={SEA_BLUE_500}
+        stroke={colors.secondary[500]}
         points={[startX, y, endX, y]}
         dash={[gridDotSize, gridStep - gridDotSize]}
       ></Line>,

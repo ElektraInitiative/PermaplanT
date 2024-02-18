@@ -1,4 +1,4 @@
-import { MapDto, MapSearchParameters, Page } from '@/bindings/definitions';
+import { MapDto, MapSearchParameters, Page } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const findAllMaps = async (

@@ -1,18 +1,15 @@
-import { createMap } from '../api/createMap';
-import { findAllMaps } from '../api/findAllMaps';
-import MapCard from '../components/MapCard';
-import { MapDto, MapSearchParameters, NewMapDto } from '@/bindings/definitions';
+import { Suspense, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { MapDto, MapSearchParameters, NewMapDto } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import InfoMessage, { InfoMessageType } from '@/components/Card/InfoMessage';
 import PageTitle from '@/components/Header/PageTitle';
 import Footer from '@/components/Layout/Footer';
 import PageLayout from '@/components/Layout/PageLayout';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { Suspense, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import MapCard from '../components/MapCard';
+import { useCreateMap, useMapsSearch } from '../hooks/mapHookApi';
 
 export default function MapOverview() {
   const initialMessage = {
@@ -29,16 +26,8 @@ export default function MapOverview() {
     owner_id: user?.profile.sub,
   };
 
-  const { data, error } = useInfiniteQuery({
-    queryKey: ['maps', searchParams] as const,
-    queryFn: ({ pageParam = 1, queryKey: [, params] }) => findAllMaps(pageParam, params),
-    getNextPageParam: (lastPage) => lastPage.page + 1,
-  });
-
-  if (error) {
-    console.error(error);
-    toast.error(t('maps:overview.error_map_fetch'), { autoClose: false });
-  }
+  const { data } = useMapsSearch(searchParams);
+  const { mutate: createMap } = useCreateMap();
 
   const maps = data?.pages.flatMap((page) => page.results) ?? [];
   const mapList = maps.map((map) => <MapCard key={map.id} map={map} onDuplicate={duplicateMap} />);
@@ -73,8 +62,11 @@ export default function MapOverview() {
       geometry: targetMap.geometry,
     };
 
-    await createMap(mapCopy);
-    navigate(0);
+    createMap(mapCopy, {
+      onSuccess: () => {
+        navigate('/maps');
+      },
+    });
   }
 
   return (

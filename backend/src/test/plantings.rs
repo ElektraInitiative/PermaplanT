@@ -11,10 +11,10 @@ use uuid::Uuid;
 use crate::{
     model::{
         dto::{
+            core::{ActionDtoWrapper, TimelinePage},
             plantings::{
                 DeletePlantingDto, MovePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto,
             },
-            TimelinePage,
         },
         r#enum::layer_type::LayerType,
     },
@@ -72,25 +72,28 @@ async fn test_can_search_plantings() {
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/plantings?layer_id=-1&relative_to_date=2023-05-08")
-        .insert_header((header::AUTHORIZATION, token.clone()))
-        .send_request(&app)
-        .await;
-    assert_eq!(resp.status(), StatusCode::OK);
+    {
+        let resp = test::TestRequest::get()
+            .uri("/api/maps/-1/layers/plants/plantings?layer_id=-1&relative_to_date=2023-05-08")
+            .insert_header((header::AUTHORIZATION, token.clone()))
+            .send_request(&app)
+            .await;
+        assert_eq!(resp.status(), StatusCode::OK);
+        let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
+        assert_eq!(page.results.len(), 1);
+    }
 
-    let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
-    assert_eq!(page.results.len(), 1);
+    {
+        let resp = test::TestRequest::get()
+            .uri("/api/maps/-1/layers/plants/plantings?relative_to_date=2023-05-08")
+            .insert_header((header::AUTHORIZATION, token))
+            .send_request(&app)
+            .await;
+        assert_eq!(resp.status(), StatusCode::OK);
 
-    let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/plantings?relative_to_date=2023-05-08")
-        .insert_header((header::AUTHORIZATION, token))
-        .send_request(&app)
-        .await;
-    assert_eq!(resp.status(), StatusCode::OK);
-
-    let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
-    assert_eq!(page.results.len(), 2);
+        let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
+        assert_eq!(page.results.len(), 2);
+    }
 }
 
 #[actix_rt::test]
@@ -119,25 +122,27 @@ async fn test_create_fails_with_invalid_layer() {
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let new_planting = NewPlantingDto {
-        id: Some(Uuid::new_v4()),
+    let data = ActionDtoWrapper {
         action_id: Uuid::new_v4(),
-        layer_id: -1,
-        plant_id: -1,
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        rotation: 0.0,
-        scale_x: 0.0,
-        scale_y: 0.0,
-        add_date: None,
+        dto: vec![NewPlantingDto {
+            id: Some(Uuid::new_v4()),
+            layer_id: -1,
+            plant_id: -1,
+            x: 0,
+            y: 0,
+            rotation: 0.0,
+            size_x: 0,
+            size_y: 0,
+            add_date: None,
+            seed_id: None,
+            is_area: false,
+        }],
     };
 
     let resp = test::TestRequest::post()
         .uri("/api/maps/-1/layers/plants/plantings")
         .insert_header((header::AUTHORIZATION, token))
-        .set_json(new_planting)
+        .set_json(data)
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
@@ -166,25 +171,27 @@ async fn test_can_create_plantings() {
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let new_planting = NewPlantingDto {
-        id: Some(Uuid::new_v4()),
+    let data = ActionDtoWrapper {
         action_id: Uuid::new_v4(),
-        layer_id: -1,
-        plant_id: -1,
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        rotation: 0.0,
-        scale_x: 0.0,
-        scale_y: 0.0,
-        add_date: None,
+        dto: vec![NewPlantingDto {
+            id: Some(Uuid::new_v4()),
+            layer_id: -1,
+            plant_id: -1,
+            x: 0,
+            y: 0,
+            rotation: 0.0,
+            size_x: 0,
+            size_y: 0,
+            add_date: None,
+            seed_id: None,
+            is_area: false,
+        }],
     };
 
     let resp = test::TestRequest::post()
         .uri("/api/maps/-1/layers/plants/plantings")
         .insert_header((header::AUTHORIZATION, token))
-        .set_json(new_planting)
+        .set_json(data)
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::CREATED);
@@ -192,7 +199,8 @@ async fn test_can_create_plantings() {
 
 #[actix_rt::test]
 async fn test_can_update_plantings() {
-    let planting_id = Uuid::new_v4();
+    let planting_id1 = Uuid::new_v4();
+    let planting_id2 = Uuid::new_v4();
     let pool = init_test_database(|conn| {
         async {
             diesel::insert_into(crate::schema::maps::table)
@@ -208,10 +216,16 @@ async fn test_can_update_plantings() {
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plantings::table)
-                .values(data::TestInsertablePlanting {
-                    id: planting_id,
-                    ..Default::default()
-                })
+                .values(vec![
+                    data::TestInsertablePlanting {
+                        id: planting_id1,
+                        ..Default::default()
+                    },
+                    data::TestInsertablePlanting {
+                        id: planting_id2,
+                        ..Default::default()
+                    },
+                ])
                 .execute(conn)
                 .await?;
             Ok(())
@@ -221,26 +235,36 @@ async fn test_can_update_plantings() {
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let update_data = MovePlantingDto {
-        x: 1,
-        y: 1,
+    let data = ActionDtoWrapper {
         action_id: Uuid::new_v4(),
+        dto: UpdatePlantingDto::Move(vec![
+            MovePlantingDto {
+                id: planting_id1,
+                x: 10,
+                y: 10,
+            },
+            MovePlantingDto {
+                id: planting_id2,
+                x: 20,
+                y: 20,
+            },
+        ]),
     };
-    let update_object = UpdatePlantingDto::Move(update_data);
 
     let resp = test::TestRequest::patch()
-        .uri(&format!(
-            "/api/maps/-1/layers/plants/plantings/{planting_id}"
-        ))
+        .uri("/api/maps/-1/layers/plants/plantings")
         .insert_header((header::AUTHORIZATION, token))
-        .set_json(update_object)
+        .set_json(data)
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);
 
-    let planting: PlantingDto = test::read_body_json(resp).await;
-    assert_eq!(planting.x, 1);
-    assert_eq!(planting.y, 1);
+    let plantings: Vec<PlantingDto> = test::read_body_json(resp).await;
+    assert_eq!(plantings.len(), 2);
+    assert_eq!(plantings.get(0).map(|p| p.x), Some(10));
+    assert_eq!(plantings.get(0).map(|p| p.y), Some(10));
+    assert_eq!(plantings.get(1).map(|p| p.x), Some(20));
+    assert_eq!(plantings.get(1).map(|p| p.y), Some(20));
 }
 
 #[actix_rt::test]
@@ -274,27 +298,30 @@ async fn test_can_delete_planting() {
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
 
-    let resp = test::TestRequest::delete()
-        .uri(&format!(
-            "/api/maps/-1/layers/plants/plantings/{planting_id}",
-        ))
-        .insert_header((header::AUTHORIZATION, token.clone()))
-        .set_json(DeletePlantingDto {
-            action_id: Uuid::new_v4(),
-        })
-        .send_request(&app)
-        .await;
-    assert_eq!(resp.status(), StatusCode::OK);
+    {
+        let resp = test::TestRequest::delete()
+            .uri("/api/maps/-1/layers/plants/plantings")
+            .insert_header((header::AUTHORIZATION, token.clone()))
+            .set_json(ActionDtoWrapper {
+                action_id: Uuid::new_v4(),
+                dto: vec![DeletePlantingDto { id: planting_id }],
+            })
+            .send_request(&app)
+            .await;
+        assert_eq!(resp.status(), StatusCode::OK);
+    }
 
-    let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/plants/plantings?relative_to_date=2023-05-08")
-        .insert_header((header::AUTHORIZATION, token))
-        .send_request(&app)
-        .await;
-    assert_eq!(resp.status(), StatusCode::OK);
+    {
+        let resp = test::TestRequest::get()
+            .uri("/api/maps/-1/layers/plants/plantings?relative_to_date=2023-05-08")
+            .insert_header((header::AUTHORIZATION, token))
+            .send_request(&app)
+            .await;
+        assert_eq!(resp.status(), StatusCode::OK);
 
-    let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
-    assert_eq!(page.results.len(), 0);
+        let page: TimelinePage<PlantingDto> = test::read_body_json(resp).await;
+        assert_eq!(page.results.len(), 0);
+    }
 }
 
 #[actix_rt::test]

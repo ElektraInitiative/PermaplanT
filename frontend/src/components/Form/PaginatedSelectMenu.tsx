@@ -1,10 +1,9 @@
-import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenuTypes';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { GroupBase, StylesConfig } from 'react-select';
+import type { ClassNamesConfig, StylesConfig, GroupBase } from 'react-select';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
-import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
+import filterObject from '../../utils/filterObject';
+import { SelectOption } from './SelectMenu';
 
 /**
  * Contains the information needed by react-select-async-paginate for loading a single page.
@@ -39,6 +38,11 @@ export interface PaginatedSelectMenuProps<
   control?: Control<T, unknown>;
   /** If set to true, the user has to select an option before the form can be completed (default false).*/
   required?: boolean;
+  /**
+   * Forces a selected option.
+   * If this option is set, the component will always display its value regardless of user input.
+   */
+  value?: Option;
   /** Text that is displayed instead of the input if it has not been selected yet.*/
   placeholder?: string;
   /** Maximum time interval between two inputs (in milliseconds) before they are considered separate inputs. */
@@ -64,6 +68,7 @@ export default function PaginatedSelectMenu<
   labelText,
   control,
   required = false,
+  value,
   placeholder,
   loadOptions,
   handleOptionsChange,
@@ -117,7 +122,7 @@ export default function PaginatedSelectMenu<
   };
 
   return (
-    <div>
+    <div data-testid={`paginated-select-menu__${labelText}`}>
       {labelText && (
         <label htmlFor={id} className="mb-2 block text-sm font-medium">
           {labelText}
@@ -140,6 +145,7 @@ export default function PaginatedSelectMenu<
             placeholder={placeholder}
             isMulti={isMulti}
             classNames={customClassNames}
+            value={value}
             required={required}
             onInputChange={(value, event) => {
               // prevent the text from disapearing when clicking inside the input field

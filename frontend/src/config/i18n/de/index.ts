@@ -1,3 +1,4 @@
+import areaOfPlantsIndicator from './areaOfPlantingsIndicator.json';
 import auth from './auth.json';
 import baseLayer from './baseLayer.json';
 import baseLayerForm from './baseLayerForm.json';
@@ -9,7 +10,6 @@ import enums from './enums.json';
 import featureDescriptions from './featureDescriptions.json';
 import fileSelector from './fileSelector.json';
 import geomap from './geomap.json';
-import grid from './grid.json';
 import guidedTour from './guidedTour.json';
 import imprint from './imprint.json';
 import landingPage from './landingPage.json';
@@ -18,19 +18,24 @@ import layers from './layers.json';
 import maps from './maps.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
 import overview from './overview.json';
+import plantAndSeedSearch from './plantAndSeedSearch.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import plantings from './plantings.json';
+import polygon from './polygon.json';
 import pricing from './pricing.json';
 import privacyOptions from './privacyOptions.json';
+import readOnly from './readOnly.json';
 import routes from './routes.json';
 import seeds from './seeds.json';
 import team from './team.json';
 import timeline from './timeline.json';
+import toolboxTooltips from './toolboxTooltips.json';
 import undoRedo from './undoRedo.json';
 import uploadFile from './uploadFile.json';
 
-const de = {
+export default {
+  areaOfPlantsIndicator,
   blog,
   baseLayer,
   baseLayerForm,
@@ -39,7 +44,6 @@ const de = {
   enums,
   featureDescriptions,
   geomap,
-  grid,
   imprint,
   landingPage,
   pricing,
@@ -51,6 +55,7 @@ const de = {
   undoRedo,
   auth,
   plantingSuggestions,
+  plantAndSeedSearch,
   nextcloudIntegration,
   routes,
   overview,
@@ -62,6 +67,7 @@ const de = {
   plantings,
   guidedTour,
   blossoms,
+  readOnly,
+  toolboxTooltips,
+  polygon,
 };
-
-export default de;

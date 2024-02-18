@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`renders correctly 1`] = `
+exports[`SearchInput > should render correctly 1`] = `
 <div
   className="relative grow"
 >
@@ -8,14 +8,29 @@ exports[`renders correctly 1`] = `
     className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
   >
     <svg
+      aria-hidden="true"
+      className="h-5 w-5 text-neutral-500 dark:text-neutral-400"
+      data-testid="search-input__search-icon"
+      fill="none"
       stroke="currentColor"
-    />
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+      />
+    </svg>
   </div>
   <input
-    className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 pl-10 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300"
-    onChange={[MockFunction]}
-    placeholder="Test"
-    type="search"
+    className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 pl-10 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark"
+    data-testid="search-input__input-field"
+    onInput={[Function]}
+    onKeyDown={[Function]}
+    type="text"
+    value=""
   />
 </div>
 `;

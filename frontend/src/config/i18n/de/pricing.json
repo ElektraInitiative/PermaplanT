@@ -1,5 +1,5 @@
 {
-  "header": "Preisgestaltung",
+  "header": "Preisgestaltung 2024",
   "subheader": "Sei Teil der solidarischen und gemeinnützigen PermaplanT-Welt! Die gesamten Einnahmen werden aufgewendet, um weitere Entwicklung, Forschung und den laufenden Betrieb von PermaplanT zu finanzieren. Preise sind pro Kalenderjahr:",
   "table_headers": {
     "membership": "Typ",
@@ -9,18 +9,18 @@
   "membership_types": {
     "pro": {
       "name": "Fördermitglied",
-      "price": "100\u00a0Euro",
+      "price": "119\u00a0Euro",
       "description": "Als Fördermitglied genießt du nicht nur die Community und alle Funktionen der App, sondern du ermöglichst auch einer finanzschwächeren Person, mitwirkendes Mitglied zu sein. Danke!"
     },
     "starter": {
       "name": "Reguläres Mitglied",
-      "price": "50\u00a0Euro",
+      "price": "59\u00a0Euro",
       "description": "Mit einer Mitgliedschaft bist du Vereinsmitglied und genießt die Community und alle Funktionen der App."
     },
     "collab": {
       "name": "Mitwirkendes Mitglied",
-      "price": "50\u00a0Permacoins",
-      "description": "Du genießt die Community und alle Funktionen der App. Indem du anderen Mitgliedern hilfst, sammelst du Permacoins. Erreichst du am Ende des Jahres 50 Permacoins oder mehr, fällt für dich keine Jahresgebühr in Euro an."
+      "price": "59\u00a0Permacoins",
+      "description": "Du genießt die Community und alle Funktionen der App. Indem du anderen Mitgliedern hilfst, sammelst du Permacoins. Erreichst du am Ende des Jahres 59 Permacoins oder mehr, fällt für dich keine Jahresgebühr in Euro an."
     }
   },
   "apply": "Mitgliedschaft beantragen",

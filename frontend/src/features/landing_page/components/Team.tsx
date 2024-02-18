@@ -1,5 +1,5 @@
-import { Teammember } from './Teammember';
 import { useTranslation } from 'react-i18next';
+import { Teammember } from './Teammember';
 
 const Team = () => {
   const { t } = useTranslation(['team']);
@@ -12,75 +12,109 @@ const Team = () => {
         </div>
         <div className="-m-2 flex flex-wrap">
           <Teammember
-            name="Dr. Markus Raab"
-            role="Project Lead, Software Engineer"
-            path="/Avatars/Markus_Raab.jpg"
-          />
-          <Teammember
             name="Yvonne Markl, MSc."
-            role="Project Lead, Permaculture Expert"
+            role={`${t('team:role_lead', { context: 'female' })}, ${t(
+              'team:role_permaculture_expert',
+              { context: 'female' },
+            )}`}
             path="/Avatars/Yvonne_Markl.jpg"
           />
           <Teammember
+            name="Dr. Markus Raab"
+            role={`${t('team:role_lead', { context: 'male' })}, ${t('team:role_software_engineer', {
+              context: 'male',
+            })}`}
+            path="/Avatars/Markus_Raab.jpg"
+          />
+          <Teammember
+            name="Paul Buschmann"
+            role={t('team:role_software_engineer', { context: 'male' })}
+            path="/Avatars/Paul_Buschmann.jpg"
+          />
+          <Teammember
+            name="Christoph Schreiner"
+            role={t('team:role_software_engineer', { context: 'male' })}
+            path="/Avatars/person_placeholder.png"
+          />
+          <Teammember
+            name="Daniel Steinkogler"
+            role={t('team:role_software_engineer', { context: 'male' })}
+            path="/Avatars/person_placeholder.png"
+          />
+          <Teammember
+            name="Jannis Adamek"
+            role={t('team:role_software_engineer', { context: 'male' })}
+            path="/Avatars/person_placeholder.png"
+          />
+          <Teammember
+            name="Moritz Schalk"
+            role={t('team:role_software_engineer', { context: 'male' })}
+            path="/Avatars/person_placeholder.png"
+          />
+          <Teammember
             name="Samuel Daurer"
-            role="Software Engineer"
+            role={t('team:role_software_engineer', { context: 'male' })}
             path="/Avatars/Samuel_Daurer_profile.jpg"
           />
           <Teammember
             name="Gabriel Kitzberger"
-            role="Software Engineer"
+            role={t('team:role_software_engineer', { context: 'male' })}
             path="/Avatars/Gabriel_Kitzberger.jpg"
           />
           <Teammember
-            name="Moritz Schalk"
-            role="Software Engineer"
-            path="/Avatars/person_placeholder.png"
-          />
-          <Teammember
             name="Giancarlo Buenaflor"
-            role="Software Engineer"
+            role={t('team:role_software_engineer', { context: 'male' })}
             path="/Avatars/person_placeholder.png"
           />
           <Teammember
             name="Nursultan Imanov"
-            role="Software Engineer"
+            role={t('team:role_software_engineer', { context: 'male' })}
             path="/Avatars/person_placeholder.png"
           />
-          <Teammember name="Lukas Hartl" role="DevOps" path="/Avatars/person_placeholder.png" />
+          <Teammember
+            name="Lukas Hartl"
+            role={t('team:role_devops', { context: 'male' })}
+            path="/Avatars/person_placeholder.png"
+          />
           <Teammember
             name="Aydan Namdar Ghazani"
-            role="DevOps"
+            role={t('team:role_devops', { context: 'male' })}
             path="/Avatars/person_placeholder.png"
           />
           <Teammember
             name="Ramzan Magomadow"
-            role="Software Engineer"
+            role={t('team:role_software_engineer', { context: 'male' })}
             path="/Avatars/Ramzan_Magomadow.jpg"
           />
           <Teammember
             name="Thorben Staufer"
-            role="Software Engineer"
+            role={t('team:role_software_engineer', { context: 'male' })}
             path="/Avatars/Thorben_Staufer.jpg"
           />
           <Teammember
             name="Benjamin Zinschitz"
-            role="Software Engineer"
+            role={t('team:role_software_engineer', { context: 'male' })}
             path="/Avatars/Benjamin_Zinschitz.jpg"
           />
           <Teammember
-            name="Paul Buschmann"
-            role="Software Engineer"
-            path="/Avatars/Paul_Buschmann.jpg"
+            name="Christoph Kraus"
+            role={t('team:role_security_analyst', { context: 'male' })}
+            path="/Avatars/person_placeholder.png"
           />
           <Teammember
-            name="Christoph Kraus"
-            role="Security Analyst"
+            name="Christoph Nemeth"
+            role={t('team:role_software_engineer', { context: 'male' })}
             path="/Avatars/person_placeholder.png"
           />
           <Teammember
             name="Dr. Pavlo Ardanov"
-            role="Permaculture Expert"
+            role={t('team:role_permaculture_expert', { context: 'male' })}
             path="/Avatars/Pavlo_Ardanov.jpg"
+          />
+          <Teammember
+            name="Dr. Christoph Höfer"
+            role={t('team:role_permaculture_expert', { context: 'male' })}
+            path="/Avatars/person_placeholder.png"
           />
         </div>
       </div>

@@ -18,21 +18,6 @@ including their responsibilities, skills, etc.
 - main responsibility: Biology
 - focus groups: frontend, UX
 
-## Samuel
-
-- GitHub: @absurd-turtle
-- main responsibilities: Nextcloud Integration, Frontend Architecture
-- focus groups: UX
-- special skills: SQL, Tailwind CSS, TypeScript
-- positioning: frontend
-
-## Gabriel
-
-- GitHub: @kitzbergerg
-- main responsibility: Backend
-- special skills: Rust, Docker, OAuth2
-- positioning: backend
-
 ## Moritz
 
 - GitHub: @badnames
@@ -41,13 +26,6 @@ including their responsibilities, skills, etc.
 - focus groups: DB, Frontend
 - positioning: full-stack
 - worked on: seeds use case, base layer use case, db, frontend, backend
-
-## Giancarlo
-
-- GitHub: @buenaflor
-- main responsibility: Drawing Part of Frontend (Canvas)
-- focus group: UX
-- positioning: full-stack
 
 ## Lukas
 
@@ -59,23 +37,7 @@ including their responsibilities, skills, etc.
 
 - GitHub: 4ydan
 - devel/test on: Debian Oldstable/Stable
-- main responsibility: Software Testing and CI/CD
-- positioning: Front End Testing and Jenkins Pipeline
-
-## Ramzan
-
-- main responsibility: PostGIS
-- focus group: DB, PostGIS
-- positioning: DB
-
-## Thorben
-
-- GitHub: @ThorbenStaufer
-- main responsibility: Gamification
-- worked on: DB, gamification, frontend, colors
-- focus group: DB, frontend, gamification
-- special skills: Jenkins
-- positioning: frontend, DB
+- main responsibility: Releases and CI/CD
 
 ## Paul
 
@@ -85,14 +47,22 @@ including their responsibilities, skills, etc.
 - special skills: React, TypeScript, Tailwind CSS
 - positioning: full-stack
 
-## Christoph
+## Christoph Schreiner
 
-- GitHub: @temmey
-- main responsibility: Database & Security Analysis
-- focus group: Security Analysis
-- positioning: DB
+- GitHub: @chr-schr
+- main responsibilities: DB optimizations, Backend, E2E Tests
+- special skills: SQL, Python
+- focus group: Backend, PostGIS, E2E
+- positioning: Backend
 
 # Previous Authors
+
+## Gabriel
+
+- GitHub: @kitzbergerg
+- main responsibility: Backend
+- special skills: Rust, Docker, OAuth2
+- positioning: backend
 
 ## Nursultan
 
@@ -109,3 +79,47 @@ including their responsibilities, skills, etc.
 - focus group: polyculture, PostGIS
 - special skills: BOKU
 - positioning: backend
+
+## Christoph
+
+- GitHub: @temmey
+- main responsibility: Database & Security Analysis
+- focus group: Security Analysis
+- positioning: DB
+
+## Christoph N
+
+- GitHub: @tschawax
+- main responsibility: Usability Improvements
+- focus groups: UX, frontend
+- positioning: frontend
+
+## Samuel
+
+- GitHub: @absurd-turtle
+- main responsibilities: Nextcloud Integration, Frontend Architecture
+- focus groups: UX
+- special skills: SQL, Tailwind CSS, TypeScript
+- positioning: frontend
+
+## Giancarlo
+
+- GitHub: @buenaflor
+- main responsibility: Drawing Part of Frontend (Canvas)
+- focus group: UX
+- positioning: full-stack
+
+## Ramzan
+
+- main responsibility: PostGIS
+- focus group: DB, PostGIS
+- positioning: DB
+
+## Thorben
+
+- GitHub: @ThorbenStaufer
+- main responsibility: Gamification
+- worked on: DB, gamification, frontend, colors
+- focus group: DB, frontend, gamification
+- special skills: Jenkins
+- positioning: frontend, DB

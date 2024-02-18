@@ -1,6 +1,8 @@
 //! This module contains the Server-Sent Events broadcaster, which is responsible for keeping track of connected clients and broadcasting messages to them.
 //! For broadcasting, the broadcaster takes a `map_id` and an `Action` and broadcasts the action to all clients connected to that map.
 
+#![allow(clippy::significant_drop_tightening)]
+
 use actix_web_lab::sse::{self, ChannelStream, Sse};
 use futures::{future::ready, stream, StreamExt};
 use std::{collections::HashMap, sync::Arc, time::Duration};
@@ -114,11 +116,44 @@ impl Broadcaster {
 
     /// Broadcasts `msg` to all clients on the same map.
     pub async fn broadcast(&self, map_id: i32, action: Action) {
+        let action_id = action.action_id().to_string();
+
         match sse::Data::new_json(action) {
-            Ok(serialized_action) => {
+            Ok(mut serialized_action) => {
                 let guard = self.0.lock().await;
 
+                serialized_action.set_id(action_id);
+
                 if let Some(map) = guard.get(&map_id) {
+                    // try to send to all clients, ignoring failures
+                    // disconnected clients will get swept up by `remove_stale_clients`
+                    let _ = stream::iter(&map.clients)
+                        .map(|client| client.send(serialized_action.clone()))
+                        .buffer_unordered(15)
+                        .collect::<Vec<_>>()
+                        .await;
+                }
+            }
+            Err(err) => {
+                // log the error and continue
+                // serialization errors are also highly unlikely to happen
+                log::error!("{}", err.to_string());
+            }
+        };
+    }
+
+    /// Broadcasts `msg` to all clients on all maps.
+    pub async fn broadcast_all_maps(&self, action: Action) {
+        let action_id = action.action_id().to_string();
+
+        match sse::Data::new_json(action) {
+            Ok(mut serialized_action) => {
+                let guard = self.0.lock().await;
+
+                serialized_action.set_id(action_id);
+
+                let values = guard.values();
+                for map in values {
                     // try to send to all clients, ignoring failures
                     // disconnected clients will get swept up by `remove_stale_clients`
                     let _ = stream::iter(&map.clients)

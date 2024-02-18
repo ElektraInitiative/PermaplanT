@@ -5,10 +5,10 @@
 The software testing strategy aims to ensure the delivery of high-quality software by employing a comprehensive testing approach throughout the development lifecycle.
 This strategy combines various testing types and levels to validate the functionality, performance, and security of the software.
 
-The testing approach for PermaplanT will follow a mix of unit testing, integration testing, and manual testing.
+The testing approach for PermaplanT will follow a mix of unit testing, integration testing, and system testing.
 Unit testing will be conducted for individual components and functions to ensure that they are working as expected.
 Integration testing will be conducted for API endpoints and interactions between components to ensure that they are functioning correctly together.
-Manual testing will be conducted for end-to-end functionality and overall user experience.
+System tests will be conducted as manual tests and automated e2e tests.
 
 ## Objectives
 
@@ -66,6 +66,27 @@ mod tests {
 }
 ```
 
+#### Frontend
+
+For the frontend unit tests will be used to test the following areas:
+
+- State management logic: Since the frontend relies heavily on state management, it is important to ensure that the state is being properly managed and updated.
+- Functions that handle data manipulation, such as sorting or filtering
+- Components that render UI elements
+- Correct event handling
+- Form validation and submission
+
+#### Backend
+
+For the backend, unit tests will be used to test the following areas:
+
+- Database queries and operations
+- Business logic and data manipulation, e.g. code that performs calculations, manipulates data, or makes decisions based on input
+- Authentication and authorization
+- Error handling
+
+In the backend unit tests can be found in the `src/test` directory.
+
 ### 2. Integration Testing
 
 Integration tests are used to test the integration between different parts of the system.
@@ -75,11 +96,11 @@ In the application the integration tests will be used to test the following area
 
 - Continuous Integration (CI) pipelines must run integration tests for different modules and components.
 
-### Frontend
+#### Frontend
 
 - API calls using a mock API
 
-### Backend
+#### Backend
 
 - API endpoints
 - Database queries
@@ -92,8 +113,10 @@ The whole module is annotated with `#[cfg(test)]` and will therefore only be com
 System testing will include end-to-end testing of the application to ensure overall functionality and user experience.
 This will include testing of all features, navigation, and error handling.
 
-- Test scenarios must be derived from functional requirements and use cases.
-- Testers must perform End-to-End testing of the software, including all user workflows and system integrations.
+- System test scenarios must be derived from the use cases and the requirements they imply.
+- Manual system tests are documented in [`doc/tests/manual/protocol.md`](./manual/protocol.md).
+- Automated system tests (e2e tests) can be found in the top-level `e2e` folder.
+- Both are specified in Gherkin syntax.
 - Exploratory testing techniques must be utilized to uncover potential issues and edge cases.
 
 ### 4. Performance Testing
@@ -107,15 +130,14 @@ This will include testing of all features, navigation, and error handling.
 ## Test Environment and Infrastructure
 
 - Test environments must mirror production environments as closely as possible.
-  - Windows 10/11 or Linux with Python 11 and node v19 etc ...
-- Virtualization and containerization technologies, such as Docker and Kubernetes, must be utilized for test environment management.
+- Virtualization and containerization technologies, such as Docker must be utilized for test environment management.
 - Test environments must be version controlled and easily reproducible.
 
 ## Testing Tools
 
-- Rust built-in tests by cargo
-- Python Playwright
-- Jest
+- E2E: Python Playwright & Pytest + plugins
+- Backend: Rust built-in tests by cargo
+- Frontend: Vitest
 
 ## Test Data Management
 
@@ -130,41 +152,16 @@ This will include testing of all features, navigation, and error handling.
 - Integration tests must be executed by the CI pipeline on every push to PR and every merge to master.
 - Test metrics, such as test coverage and test execution time, must be tracked in the pipeline.
 - System tests and User acceptance tests must be performed before every release.
-- Manual tests will be documented under `doc/tests/protocols` and errors must be categorized by level and priority.
+- Manual tests will be documented under [`doc/tests/manual/reports`](./manual/reports/README.md)
 - An Email is send whenever master fails, with a small report containing information since last build.
 
 ## Test Automation
 
 - Unit and Integration tests must be fully automated.
 - Security and Performance tests may be manual.
-- Some End-to-End tests must be automated by utilizing Capture/Replay techniques.
-- Selenium, Cypress and Jest must be used for UI automation testing.
-- API testing must be automated using tools like Postman?
+- System tests are automated (if possible) according to [the e2e guidelines](../guidelines/e2e.md).
 
 ## Other Considerations
 
 - Tests should be run before committing via pre-commit hooks
 - Tests should be run on different configurations (e.g. production, staging)
-
-## Frontend
-
-For the frontend unit tests will be used to test the following areas:
-
-- State management logic: Since the frontend relies heavily on state management, it is important to ensure that the state is being properly managed and updated.
-- Functions that handle data manipulation, such as sorting or filtering
-- Components that render UI elements
-- Async actions, such as API calls or event handling
-- Form validation and submission
-
-## End-to-End testing of important [use cases](../usecases)
-
-For the backend, unit tests will be used to test the following areas:
-
-- Database queries and operations
-- Business logic and data manipulation, e.g. code that performs calculations, manipulates data, or makes decisions based on input
-- Authentication and authorization
-- Error handling
-
-In the backend unit tests can be found in the `src/` directory.
-Unit tests are used to test individual units of code in isolation from the rest of the system.
-This is important because it allows us to validate that each unit is working as intended, without interference from other parts of the system.

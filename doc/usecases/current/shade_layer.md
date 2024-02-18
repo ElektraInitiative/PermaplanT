@@ -6,7 +6,8 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, remove and delete shade areas in their map in the shade layer and adjust the intensity.
-- **Assignee:** Moritz (Frontend), Gabriel (Backend)
+- **Assignee:** Moritz
+- **Simplification:** we don't distinguish between Winter and Summer shade
 
 ## Scenarios
 
@@ -24,4 +25,4 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved, removed or deleted shade area as desired.
 - **Non-functional Constraints:**
-  - Performance: Map sizes with more than 1ha in 10000 raster elements (m²) per year should be usable without noticeable delays and acceptable memory overhead
+  - Performance: Map sizes with more than 1000 shadings in 1ha in 10000 raster elements (m²) per year should be usable without noticeable delays and acceptable memory overhead

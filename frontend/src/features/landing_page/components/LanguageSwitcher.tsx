@@ -1,6 +1,6 @@
-import filterObject from '../../../utils/filterObject';
 import { useTranslation } from 'react-i18next';
 import Select, { ClassNamesConfig, SingleValueProps, StylesConfig } from 'react-select';
+import filterObject from '../../../utils/filterObject';
 
 const languages = [
   { value: 'en', label: 'English' },
@@ -67,5 +67,9 @@ export default function LanguageSwitcher() {
 }
 
 const SingleValue = ({ getValue }: SingleValueProps<Option, false>) => {
-  return <span className="select-none pl-2">{getValue()[0].value}</span>;
+  return (
+    <span className="select-none pl-2" data-testid={`language-switcher__${getValue()[0].value}`}>
+      {getValue()[0].value}
+    </span>
+  );
 };

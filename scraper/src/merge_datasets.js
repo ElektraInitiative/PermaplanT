@@ -4,9 +4,8 @@ import csv from "csvtojson";
 import permapeopleColumnMapping from "./helpers/column_mapping_permapeople.js";
 import {
   sanitizeColumnNames,
+  processMeasurement,
   getSoilPH,
-  getHeightEnumTyp,
-  getSpreadEnumTyp,
   cleanUpJsonForCsv,
 } from "./helpers/helpers.js";
 
@@ -54,15 +53,15 @@ const unifyValueFormat = (plants, columnMapping) => {
     });
 
     if ("height" in plant) {
-      plant["height"] = getHeightEnumTyp(plant["height"]);
+      plant["height"] = processMeasurement(plant["height"]);
     }
 
     if ("spread" in plant) {
-      plant["spread"] = getSpreadEnumTyp(plant["spread"]);
+      plant["spread"] = processMeasurement(plant["spread"]);
     }
 
     if ("width" in plant) {
-      plant["spread"] = getSpreadEnumTyp(plant["width"]);
+      plant["spread"] = processMeasurement(plant["width"]);
     }
   });
 
@@ -180,6 +179,17 @@ async function mergeDatasets() {
 
   practicalPlants.forEach((plant) => {
     const scientific_name = plant["scientific_name"];
+
+    // some plants are duplicates in the practicalplants dataset (detail.csv)
+    const mergedPlant = allPlants.find(
+      (plant) => plant["scientific_name"] === scientific_name
+    );
+
+    // stop processing plant if we already have it in the merged dataset
+    if (mergedPlant !== undefined) {
+      return;
+    }
+
     const plantInPermapeople = permapeople.find(
       (plant) => plant["scientific_name"] === scientific_name
     );

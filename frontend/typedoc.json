@@ -11,7 +11,9 @@
     // Exclude route components, they are not public API
     "src/features/**/routes/**/*.tsx",
     // Exclude Storybook stories
-    "src/**/*.stories.tsx"
+    "src/**/*.stories.tsx",
+    // Exclude tour wordings due to storybook's bug/inability to parse HTML tags in json
+    "src/config/i18n/**/guidedTour.json",
   ],
   "useStorybook": true
 }

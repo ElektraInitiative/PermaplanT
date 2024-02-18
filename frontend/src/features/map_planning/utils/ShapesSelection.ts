@@ -1,22 +1,24 @@
-import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
 import { Transformer } from 'konva/lib/shapes/Transformer';
+import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 
 // Keep track of our previously selected shapes so we can trigger the selection
 // only if we have new shapes in our bounds. This fixes a bug where deselection
 // would happen after you moved a single or a group of selected shapes.
 // Todo: optimization -> could probably use a set here
-let previouslySelectedShapes: Shape<ShapeConfig>[] = [];
+let previouslySelectedShapeIds: Set<number> = new Set();
 
-/** Select shapes that intersect with the selection rect. */
+export const SELECTION_RECTANGLE_NAME = 'selectionRect';
+
+/** Select shapes that intersect with the selection rectangle. */
 export const selectIntersectingShapes = (
   stageRef: React.RefObject<Stage>,
   trRef: React.RefObject<Transformer>,
 ) => {
   if (stageRef.current === null) return;
-  const box = stageRef.current.findOne('.selectionRect').getClientRect();
+  const box = stageRef.current.findOne(`.${SELECTION_RECTANGLE_NAME}`).getClientRect();
 
   if (stageRef.current.children === null) return;
 
@@ -25,7 +27,12 @@ export const selectIntersectingShapes = (
     //filter out layers which are not selected
     ?.filter((layer) => layer.attrs.listening)
     .flatMap((layer) => layer.children)
-    .filter((shape) => shape?.name() !== 'selectionRect' && !shape?.name().includes('transformer'));
+    .filter((shape) => {
+      // To exclude Konva's transformer, check if node contains children.
+      // 'listening' is explicitly checked for '!== false' because
+      // Konva treats it as true if it's undefined or missing at all.
+      return shape?.attrs.listening !== false && shape?.hasChildren();
+    });
 
   if (!allShapes) return;
 
@@ -41,10 +48,10 @@ export const selectIntersectingShapes = (
   );
 
   // If intersectingShape and previouslySelectedShapes are the same, don't update
-  if (intersectingShapes.length === previouslySelectedShapes.length) {
+  if (intersectingShapes.length === previouslySelectedShapeIds.size) {
     let same = true;
     for (const shape of intersectingShapes) {
-      if (!previouslySelectedShapes.map((node) => node._id).includes(shape._id)) {
+      if (!previouslySelectedShapeIds.has(shape._id)) {
         same = false;
         break;
       }
@@ -54,18 +61,19 @@ export const selectIntersectingShapes = (
 
   if (intersectingShapes) {
     const nodes = intersectingShapes.filter((shape) => shape !== undefined);
-    previouslySelectedShapes = nodes;
+    previouslySelectedShapeIds = new Set(nodes.map((shape) => shape._id));
     trRef.current?.nodes(nodes);
   }
 };
 
-/** Deselects the shapes */
-export const deselectShapes = (trRef: React.RefObject<Transformer>) => {
-  trRef.current?.nodes([]);
+export const resetSelectionRectangleSize = (
+  setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
+) => {
+  setSelectionRectAttrs((attrs) => ({ ...attrs, width: 0, height: 0 }));
 };
 
-/** Starts the selection and positions the selection rect to the current mouse position. */
-export const startSelection = (
+/** Sets up the selection rectangle by positioning it at the current mouse position. */
+export const initializeSelectionRectangle = (
   stage: Stage,
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
 ) => {
@@ -95,8 +103,8 @@ export const startSelection = (
   }
 };
 
-/** Update the selection box's size based on mouse position. */
-export const updateSelection = (
+/** Update the selection rectangle's size based on the current mouse position. */
+export const updateSelectionRectangle = (
   stage: Stage,
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
 ) => {
@@ -133,15 +141,12 @@ export const updateSelection = (
   }
 };
 
-/** Ends the selection which means the selection rect turns invisible. */
-export const endSelection = (
+/** Ends the selection by making the selection rectangle invisible. */
+export const hideSelectionRectangle = (
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
-  selectionRectAttrs: SelectionRectAttrs,
 ) => {
-  if (selectionRectAttrs.isVisible) {
-    setSelectionRectAttrs({
-      ...selectionRectAttrs,
-      isVisible: false,
-    });
-  }
+  setSelectionRectAttrs((attrs) => ({
+    ...attrs,
+    isVisible: false,
+  }));
 };

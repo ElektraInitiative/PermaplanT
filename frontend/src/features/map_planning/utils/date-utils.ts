@@ -16,3 +16,17 @@ export function convertToDateString(date: Date) {
 
   return `${year}-${month}-${day}`;
 }
+
+/**
+ * Returns the short name of a month in the given language.
+ *
+ * @param monthNumber month from 1 to 12
+ * @param language language code, e.g. 'en-US'
+ * @returns short name of month in given language (e.g. 'Jan')
+ */
+export function getShortMonthNameFromNumber(monthNumber: number, language?: string) {
+  // use a fixed timestamp to avoid timezone issues
+  const utcTimestamp = Date.UTC(2000, monthNumber - 1, 1, 12, 0, 0, 0);
+  const date = new Date(utcTimestamp);
+  return date.toLocaleString(language, { month: 'short' });
+}

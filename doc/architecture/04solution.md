@@ -33,7 +33,8 @@ We use specific types (prefer enum over int over string etc.) and share types wh
 ## API
 
 The API is implemented in the backend.
-It serves no other purpose as being used by the frontend, so:
+The backend is stateless (except of the data base) and agnostic to language.
+The backend serves no other purpose as being used by the frontend, so:
 
 - it can be tailored to the needs of the frontend
 - the frontend ideally only needs to do a single API call to get what it needs
@@ -138,14 +139,12 @@ While the lock is active, other users see these layers read-only.
 
 Upon coming back online the changes made are synchronized and the lock is released.
 
-See also [offline use case](../usecases/assigned/offline.md).
-
 ## Identity and Access Management
 
 Only the landing page can be seen without registration.
 We use [Keycloak](https://www.keycloak.org/) for Identity and Access Management with 3 roles:
 
-1. default-roles-permaplant (only [public maps and the membership application](../usecases/assigned/membership_application.md) can be visited)
+1. default-roles-permaplant (only public maps can be visited)
 2. member (can do everything but administration tasks)
 3. admin (possibility to change data from other users, as needed for onboarding or offboarding)
 

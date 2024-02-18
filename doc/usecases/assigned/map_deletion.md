@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user deletes a map.
-- **Assignee:** Thorben
+- **Assignee:** Moritz
 
 ## Scenarios
 

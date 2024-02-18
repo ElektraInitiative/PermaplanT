@@ -1,3 +1,4 @@
+import uuid
 import pytest
 from dotenv import load_dotenv
 from playwright.sync_api import Page
@@ -13,6 +14,11 @@ from steps.common_steps import *  # noqa: F401 F403
 
 
 load_dotenv()
+
+
+@pytest.fixture
+def worker_uuid(worker_id):
+    return "-" + worker_id + "-" + str(uuid.uuid4())
 
 
 @pytest.fixture

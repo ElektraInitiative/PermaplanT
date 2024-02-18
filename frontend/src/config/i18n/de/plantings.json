@@ -1,10 +1,21 @@
 {
+  "heading_multiple_plantings": "Pflanzendaten",
   "delete": "Pflanze löschen",
+  "delete_multiple_plantings": "Pflanzen löschen",
   "error_fetching_plant": "Sorry, ich habe Schwierigkeiten die Pflanze von meinem Server zu erhalten. Bitte versuche es später erneut.",
+  "width": "Breite",
+  "height": "Länge",
+  "area_of_plantings": {
+    "individual_plant_size": "Individuelle Pflanzengröße:",
+    "plants_per_row": "Pflanzen pro Reihe:",
+    "number_of_rows": "Anzahl der Reihen:",
+    "total_plants": "Gesamtzahl der Pflanzen:"
+  },
   "add_date": "Hinzugefügt am",
   "remove_date": "Entfernt am",
-  "error_invalid_add_remove_date": "Das Datum an dem die Pflanze hinzugefügt wurde muss vor dem Datum liegen, an dem sie entfernt wurde.",
-  "add_date_description": "Das Datum an dem die Pflanze zur Karte hinzugefügt wurde. Vor diesem Datum gab es die Pflanze nicht auf der Karte.",
-  "remove_date_description": "Das Datum an dem die Pflanze von der Karte entfernt wurde. Vor diesem Datum gab es die Pflanze auf der Karte. Standardmäßig ist dieses Datum nicht gesetzt.",
-  "show_labels_tooltip": "Pflanzenlabels anzeigen"
+  "error_invalid_add_remove_date": "Das Entfernungsdatum muss nach dem Hinzufügungsdatum liegen.",
+  "add_date_description": "Das Datum, an dem die Pflanze zur Karte hinzugefügt wurde. Vor diesem Datum gab es die Pflanze nicht auf der Karte.",
+  "add_date_description_multiple_plantings": "Das Datum, an dem die Pflanzen zur Karte hinzugefügt wurden. Vor diesem Datum gab es die Pflanzen nicht auf der Karte.",
+  "remove_date_description": "Das Datum, an dem die Pflanze von der Karte entfernt wurde. Vor diesem Datum gab es die Pflanze auf der Karte. Standardmäßig ist dieses Datum nicht gesetzt.",
+  "remove_date_description_multiple_plantings": "Das Datum, an dem die Pflanzen von der Karte entfernt wurden. Vor diesem Datum gab es die Pflanzen auf der Karte. Standardmäßig ist dieses Datum nicht gesetzt."
 }

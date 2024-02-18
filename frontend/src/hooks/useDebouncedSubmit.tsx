@@ -1,4 +1,3 @@
-import useDebounceEffect from './useDebounceEffect';
 import { useState, useEffect } from 'react';
 import {
   FieldValues,
@@ -7,8 +6,11 @@ import {
   SubmitErrorHandler,
   FieldErrors,
 } from 'react-hook-form';
+import useDebounceEffect from './useDebounceEffect';
 
 const SUBMIT_DELAY = 1000;
+
+type SubmitState = 'loading' | 'idle' | 'error';
 
 export function useDebouncedSubmit<T extends FieldValues>(
   value: T[keyof T],
@@ -16,7 +18,7 @@ export function useDebouncedSubmit<T extends FieldValues>(
   onValid: SubmitHandler<T>,
   onInvalid?: SubmitErrorHandler<T> | undefined,
 ) {
-  const [submitState, setSubmitState] = useState<'loading' | 'idle' | 'error'>('idle');
+  const [submitState, setSubmitState] = useState<SubmitState>('idle');
   const [lastValue, setLastValue] = useState<T[keyof T]>(value);
 
   useEffect(() => {

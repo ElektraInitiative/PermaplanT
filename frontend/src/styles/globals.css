@@ -12,15 +12,16 @@
   h3 {
     @apply text-lg;
   }
-  a:hover {
-    @apply hover:text-neutral-300 dark:text-neutral-300-dark;
-  }
   body {
     @apply bg-neutral-200 text-neutral-700 dark:bg-neutral-100-dark dark:text-white;
   }
 
   input {
     @apply dark:[color-scheme:dark];
+  }
+
+  .list-style-revert * {
+    list-style: revert;
   }
 }
 
@@ -30,6 +31,6 @@
   }
 
   .input {
-    @apply block h-11 w-full rounded-lg p-2.5 text-sm;
+    @apply block h-10 w-full rounded-lg p-2.5 text-sm;
   }
 }

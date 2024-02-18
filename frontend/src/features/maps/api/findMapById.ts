@@ -1,4 +1,4 @@
-import { MapDto } from '@/bindings/definitions';
+import { MapDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export const findMapById = async (mapId: number): Promise<MapDto> => {

@@ -36,8 +36,8 @@ use super::r#enum::{
     fertility::Fertility, /*flower_type::FlowerType, */ growth_rate::GrowthRate,
     herbaceous_or_woody::HerbaceousOrWoody, layer_type::LayerType, life_cycle::LifeCycle,
     light_requirement::LightRequirement, /*nutrition_demand::NutritionDemand,*/
-    plant_height::PlantHeight, plant_spread::PlantSpread, propagation_method::PropagationMethod,
-    quality::Quality, quantity::Quantity, shade::Shade, soil_ph::SoilPh, soil_texture::SoilTexture,
+    propagation_method::PropagationMethod, quality::Quality, quantity::Quantity, shade::Shade,
+    soil_ph::SoilPh, soil_texture::SoilTexture,
     /*soil_water_retention::SoilWaterRetention, */ water_requirement::WaterRequirement,
 };
 
@@ -216,9 +216,9 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants as `mature_size_height` and merged with Permapeople.
-    /// - informs about the maximum height that the plant gains
+    /// - informs about the maximum height that the plant gains in cm
     /// - *Fill ratio:* 80%
-    pub height: Option<PlantHeight>,
+    pub height: Option<i32>,
 
     /*
     /// - Determines how large the plant can grow in diameter.
@@ -436,9 +436,10 @@ pub struct Plants {
     //pub slug: Option<String>,
     */
     /// - To be used.
+    /// - How far a plant spreads (The 'width' of a plant) in cm
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.1%
-    pub spread: Option<PlantSpread>,
+    pub spread: Option<i32>,
 
     /*
     /// - Not used.
@@ -710,12 +711,13 @@ pub struct Seed {
     pub generation: Option<i16>,
     /// Notes about the seeds.
     pub notes: Option<String>,
-    /// The variety of the seed. Currently unused.
-    pub variety: Option<String>,
     /// The id of the plant this seed belongs to.
     pub plant_id: Option<i32>,
     /// The id of the owner of the seed.
     pub owner_id: Uuid,
+    /// Timestamp indicating when the seed was archived.
+    /// Empty if the seed was not archived.
+    pub archived_at: Option<NaiveDateTime>,
 }
 
 /// The `NewSeed` entity.
@@ -735,7 +737,6 @@ pub struct NewSeed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
-    pub variety: Option<String>,
     pub owner_id: Uuid,
 }
 
@@ -821,6 +822,14 @@ pub struct UpdateMap {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Point>,
+}
+
+/// The `UpdateMapGeometry` entity.
+#[derive(AsChangeset)]
+#[diesel(table_name = maps)]
+pub struct UpdateMapGeometry {
+    /// New Map Bounds
+    pub geometry: Polygon<Point>,
 }
 
 /// The `Layer` entity.

@@ -6,14 +6,18 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and hides warnings.
-- **Assignee:** Samuel
+- **Assignee:** Daniel
 
 ## Scenarios
 
 - **Precondition:**
   The user has opened the app and has selected the warnings layer.
 - **Main success scenario:**
-  - Warnings can be individual elements or connecting two elements (e.g. antagonists).
+  - Warnings can be individual elements or connecting two elements, when modifying elements on the map:
+    - nearby antagonists
+    - shade mismatch
+    - hydrology mismatch
+    - plant is on unsuitable zone
   - The user successfully adds, edits, moves and hides warnings.
 - **Alternative scenario:**
   The user accidentally adds, edits, moves or hides the wrong warnings and uses the app's undo function to correct the mistake.
@@ -24,4 +28,8 @@
   - Performance: more than 10000 elements per year and per alternative should be usable without noticeable delays and acceptable memory overhead
 - **Note:**
   - it gets dynamically generated based on alternatives
-  - while doing drag and drop of [plants](../current/plants_layer.md), warnings are shown anyway.
+  - while doing drag and drop of [plants](../done/plants_layer.md), warnings are shown anyway.
+
+## Development
+
+- warnings are generated and stored in backend

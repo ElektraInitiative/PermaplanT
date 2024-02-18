@@ -1,7 +1,7 @@
-import { NextcloudKonvaImage } from './NextcloudKonvaImage';
+import type { Meta, StoryObj } from '@storybook/react';
 import { layerDecorator } from '@/utils/stories/layer-decorator';
 import { QueryClientProviderDecorator } from '@/utils/stories/query-client-provider-decorator';
-import type { Meta, StoryObj } from '@storybook/react';
+import { NextcloudKonvaImage } from './NextcloudKonvaImage';
 
 const meta: Meta<typeof NextcloudKonvaImage> = {
   component: NextcloudKonvaImage,

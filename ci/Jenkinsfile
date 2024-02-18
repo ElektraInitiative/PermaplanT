@@ -1,3 +1,5 @@
+import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
+
 def node_info() {
     echo "Running stage on ${env.NODE_NAME}"
 }
@@ -11,6 +13,7 @@ def wait_for_db() {
 
 def wait_for_pr_db() {
     retry(6) {
+        // groovylint-disable-next-line
         sleep(time: 5, unit: 'SECONDS')
         sh 'curl --fail https://pr.permaplant.net/api/config'
     }
@@ -39,19 +42,19 @@ def abortPreviousRunUnlessMaster() {
 /**
  * This method runs a Docker container with a Postgres sidecar and executes the specified command inside the container.
  *
- * @param commands The list of commands to be executed inside the Docker container.
+ * @param command The command to be executed inside the Docker container.
  * @param stashsrcList The list of file paths to be stashed (optional).
  * @param stashdirList The list of stash directory names for stashing files (optional).
  * @return A closure representing the defined Jenkins pipeline steps.
  * @throws UnequalStashException If the stashed files are not equal in count between stashsrcList and
  * stashdirList.
  */
-def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], List<String> stashdir = []) {
+def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<String> stashdir = []) {
     return {
         node('docker') {
             node_info()
             checkout scm
-            def rustImage = docker.build('permaplant-rust', './ci/container-images/permaplant-rust')
+            def rustImage = docker.build('permaplant-rust:ci', './ci/container-images/permaplant-rust')
             docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
                 rustImage.inside("--link ${c.id}:db \
                 -e 'DATABASE_URL=postgres://ci:ci@db/ci' \
@@ -69,10 +72,10 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
                     //env in permaplant-deploy.sh, we can only solve it with prepending cd backend
                     sh "cd backend && ${command}"
                     if (stashsrc.size() != stashdir.size()) {
-                        throw new UnequalStashException();
+                        throw new UnequalStashException()
                     }
                     for (int i = 0; i < stashsrc.size(); i++) {
-                        stash includes: stashsrc[i], name: stashdir[i];
+                        stash includes: stashsrc[i], name: stashdir[i]
                     }
                 }
             }
@@ -81,43 +84,47 @@ def runDockerWithPostgresSidecar(String command,  List<String> stashsrc = [], Li
 }
 
 /**
- * Run make pre-commit-a inside permaplant-rust image.
+ * Run a script inside a desired docker image with custom docker arguments.
+ * @param command The command to be executed inside the Docker container.
+ * @param dockerImage The docker image name
+ * @param dockerArgs The docker build args.
+ * @param skipInMaster If true, skips this stage in branch master.
  *
  * @return A closure representing the defined Jenkins pipeline steps.
  */
-def runDockerPreCommit() {
+def runDocker(String command, String dockerImage, String dockerBuildArgs, boolean skipInMaster = false) {
+    if (skipInMaster && env.BRANCH_NAME == 'master') {
+        return { echo 'Set to be skipped in master.' }
+    }
     return {
         node('docker') {
             node_info()
             checkout scm
-            docker.build('permaplant-node', '-f ./ci/container-images/permaplant-node/Dockerfile .').inside() {
-                sh "git init"
-                sh "pre-commit run check-merge-conflict -a"
-                sh "pre-commit run end-of-file-fixer -a"
-                sh "pre-commit run mixed-line-ending -a"
-                sh "pre-commit run trailing-whitespace -a"
-                sh "pre-commit run prettier -a"
-                sh "pre-commit run black -a"
-                sh "pre-commit run flake8 -a"
-                sh "pre-commit run mypy -a"
-                sh "pre-commit run --hook-stage manual codespell -a"
+            docker.build(dockerImage, dockerBuildArgs).inside() {
+                sh "${command}"
             }
         }
     }
 }
 
+/**
+ * Test, Build and stash Mdbook inside permaplants docker image.
+ *
+
+ * @return A closure representing the defined Jenkins pipeline steps.
+ */
 def testAndBuildMdbook() {
     return {
         node('docker') {
             node_info()
             checkout scm
-            docker.build('permaplant-doc:build', './doc').inside {
+            docker.build('permaplant-doc:ci', './doc').inside {
                 stage('test') {
                     sh 'make test-mdbook'
                 }
 
                 stage('build') {
-                    sh 'make build-mdbook'
+                    sh 'mdbook build'
                     stash includes: 'book/', name: 'mdbook'
                 }
             }
@@ -140,7 +147,7 @@ def testAndBuildFrontend() {
         node('docker') {
             node_info()
             checkout scm
-            def nodeImage = docker.build('permaplant-node', '-f ./ci/container-images/permaplant-node/Dockerfile .')
+            def nodeImage = docker.build('permaplant-node:ci', '-f ./ci/container-images/permaplant-node/Dockerfile .')
             nodeImage.inside {
                 unstash 'definitions.ts'
                 stage('test') {
@@ -178,11 +185,16 @@ def testAndBuildFrontend() {
     }
 }
 
+/**
+ * Decide which type of migration test strategy to return depending on the branch.
+ *
+ * @return A command as String.
+ */
 def testMigrations() {
-    if (env.BRANCH_NAME!="master") {
-        return "make migration && make migration-redo && make migration-redo-a"
+    if (env.BRANCH_NAME != 'master') {
+        return 'make migration && make migration-redo && make migration-redo-a'
     } else {
-        return "make migration && make migration-redo"
+        return 'make migration && make migration-redo'
     }
 }
 
@@ -193,42 +205,54 @@ timeout(time: 2, unit: 'HOURS') {
     try {
         stage('Sanity') {
             List<String> schemaStashsrc = [
-                'backend/src/schema.rs','frontend/src/bindings/definitions.ts'
+                'backend/src/schema.rs', 'frontend/src/api_types/definitions.ts'
             ]
             List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
             parallel(
-                    "pre-commit": runDockerPreCommit(),
-                    // Workaround: we can't stop rustfmt from linting the generated schema.rs
-                    // so we empty the file before.
-                    "cargo-fmt": runDockerWithPostgresSidecar(
-                        "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
-                        ),
-                    // End of workaround
-                    "schema": runDockerWithPostgresSidecar(
-                        'echo schema test', schemaStashsrc, schemaStashdir
-                        ),
-                    "migration": runDockerWithPostgresSidecar(testMigrations()),
-                    failFast: true
+                'pre-commit': runDocker(
+                    './ci/scripts/check-pre-commit.sh',
+                    'permaplant-node:ci',
+                    '-f ./ci/container-images/permaplant-node/Dockerfile .'
+                    ),
+                // Workaround: we can't stop rustfmt from linting the generated schema.rs
+                // so we empty the file before.
+                'cargo-fmt': runDockerPostgresSidecar(
+                    "/bin/bash -c 'echo \"\" > src/schema.rs' && cargo fmt --check"
+                    ),
+                // End of workaround
+                'schema': runDockerPostgresSidecar(
+                    'echo schema test', schemaStashsrc, schemaStashdir
+                    ),
+                'migration': runDockerPostgresSidecar(testMigrations()),
+                'changelog': runDocker(
+                    './ci/scripts/check-changelog.sh',
+                    'permaplant-node:ci',
+                    '-f ./ci/container-images/permaplant-node/Dockerfile .',
+                    true
+                    ),
+                failFast: true
             )
         }
 
         stage('Test and Build') {
             parallel(
-                    'cargo-build': runDockerWithPostgresSidecar(
-                        'cargo build --release',
-                        ['backend/target/release/backend'],
-                        ['backend']
-                    ),
-                    'cargo-clippy/doc': runDockerWithPostgresSidecar('cargo clippy && cargo doc'),
-                    'cargo-test': runDockerWithPostgresSidecar('cargo test'),
-                    'frontend': testAndBuildFrontend(),
-                    'mdbook': testAndBuildMdbook(),
-                    failFast: true
+                'cargo-build': runDockerPostgresSidecar(
+                    'cargo build --release',
+                    ['backend/target/release/backend'],
+                    ['backend']
+                ),
+                'cargo-clippy/doc': runDockerPostgresSidecar('cargo clippy && cargo doc'),
+                'cargo-test': runDockerPostgresSidecar('cargo test'),
+                'frontend': testAndBuildFrontend(),
+                'mdbook': testAndBuildMdbook(),
+                failFast: true
             )
         }
-    } catch(err) {
-        deleteDir();
-        throw err;
+    } catch (err) {
+        node('docker') {
+            deleteDir()
+            throw err
+        }
     }
 }
 
@@ -262,10 +286,9 @@ lock("${env.NODE_NAME}-exclusive") {
                 dir('scraper') {
                     sh 'npm ci'
                     sh 'mkdir ./data/'
-                    sh 'cp /nextcloud/mergedDatasets.csv ./data/'
-                    sh 'cp /nextcloud/Companions.csv ./data/'
-                    sh 'cp /nextcloud/Antagonist.csv ./data/'
-                    sh 'cp /nextcloud/Sizes.csv ./data/'
+                    sh 'cp /nextcloud/Database/scraper-data/mergedDatasets.csv ./data/'
+                    sh 'cp /nextcloud/Database/scraper-data/Companions.csv ./data/'
+                    sh 'cp /nextcloud/Database/scraper-data/Antagonist.csv ./data/'
                     sh 'npm run insert'
                     sh 'rm -rf ./data/'
                     sh 'rm -rf ./node_modules/'
@@ -278,9 +301,13 @@ lock("${env.NODE_NAME}-exclusive") {
         node('docker') {
             node_info()
             checkout scm
-            def e2eImage = docker.build("permaplant-e2e:build", "./e2e")
+            def target = 'https://pr.permaplant.net'
+            if (env.BRANCH_NAME == 'master') {
+                echo 'Skipping E2E Tests for master'
+                return
+            }
             try {
-                e2eImage.inside("-e E2E_URL=https://pr.permaplant.net") {
+                docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
                     wait_for_pr_db()
                     sh 'make test-e2e'
                 }
@@ -295,7 +322,7 @@ lock("${env.NODE_NAME}-exclusive") {
                 cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
                 fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
                 sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
-                deleteDir();
+                deleteDir()
             }
         }
     }
@@ -356,13 +383,17 @@ Logs: ${currentBuild.rawBuild.getLog(20).join('\n')}
 // see Jenkinsfile.release
 
 class PackageLockJsonModifiedException extends Exception {
+
     PackageLockJsonModifiedException() {
         super('package-lock.json was modified by npm install. Did you maybe use a wrong node version?')
     }
+
 }
 
 class UnequalStashException extends Exception {
+
     UnequalStashException() {
-        super("The stashed files count in stashsrc and stashdir lists must be equal.")
+        super('The stashed files count in stashsrc and stashdir lists must be equal.')
     }
+
 }
