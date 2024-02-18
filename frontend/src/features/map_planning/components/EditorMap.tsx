@@ -51,16 +51,7 @@ export type MapProps = {
  * Otherwise, they cannot be moved.
  */
 export const EditorMap = ({ layers }: MapProps) => {
-  const plantLabelVisible = useMapStore((map) => map.untrackedState.layers.plants.showLabels);
-
-  const baseLayerOpacity = useMapStore((map) => map.untrackedState.layers.base.opacity);
-  const plantLayerOpacity = useMapStore((map) => map.untrackedState.layers.plants.opacity);
-  const gridLayerOpacity = useMapStore((map) => map.untrackedState.layers.grid.opacity);
-
-  const gridLayerVisible = useMapStore((map) => map.untrackedState.layers.grid.visible);
-  const plantLayerVisible = useMapStore((map) => map.untrackedState.layers.plants.visible);
-  const baseLayerVisible = useMapStore((map) => map.untrackedState.layers.base.visible);
-
+  const layersState = useMapStore((map) => map.untrackedState.layers);
   const canUndo = useMapStore((map) => map.canUndo);
   const canRedo = useMapStore((map) => map.canRedo);
   const undo = useMapStore((map) => map.undo);
@@ -151,11 +142,11 @@ export const EditorMap = ({ layers }: MapProps) => {
   };
 
   const isGridLayerEnabled = () => {
-    return gridLayerVisible;
+    return layersState.grid.visible;
   };
 
   const isPlantLabelTooltipEnabled = () => {
-    return plantLabelVisible;
+    return layersState.plants.showLabels;
   };
 
   function triggerDateChangedInGuidedTour(): void {
@@ -266,7 +257,9 @@ export const EditorMap = ({ layers }: MapProps) => {
                 <IconButton
                   isToolboxIcon={true}
                   renderAsActive={isGridLayerEnabled()}
-                  onClick={() => updateLayerVisible(FrontendOnlyLayerType.Grid, !gridLayerVisible)}
+                  onClick={() =>
+                    updateLayerVisible(FrontendOnlyLayerType.Grid, !layersState.grid.visible)
+                  }
                   title={t('toolboxTooltips:grid')}
                 >
                   <GridIcon></GridIcon>
@@ -304,16 +297,19 @@ export const EditorMap = ({ layers }: MapProps) => {
           >
             <BaseLayer
               stageListenerRegister={baseStageListenerRegister}
-              opacity={baseLayerOpacity}
-              visible={baseLayerVisible}
+              opacity={layersState.base.opacity}
+              visible={layersState.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
             />
             <PlantsLayer
-              visible={plantLayerVisible}
-              opacity={plantLayerOpacity}
+              visible={layersState.plants.visible}
+              opacity={layersState.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
-            <GridLayer visible={gridLayerVisible} opacity={gridLayerOpacity}></GridLayer>
+            <GridLayer
+              visible={layersState.grid.visible}
+              opacity={layersState.grid.opacity}
+            ></GridLayer>
           </BaseStage>
           <div>
             <TimelineDatePicker
