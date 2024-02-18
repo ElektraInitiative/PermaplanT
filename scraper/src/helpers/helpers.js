@@ -78,29 +78,16 @@ function getSoilPH(pH) {
 }
 
 /**
- * Returns the height enum typ based on the height
+ * Returns a plant measurement (height or spread) in cm
  *
- * @param {string} height String containing the height value in meter
+ * @param {string} measurement String containing the spread/width value in meter
  * @returns {string}
  */
-function getHeightEnumTyp(height) {
-  const value = processValue(height);
-  if (value === null) return null;
+function processMeasurement(value) {
+  const processedValue = processValue(value);
+  if (processedValue === null) return null;
 
-  return value <= 0.25 ? "low" : value <= 0.61 ? "medium" : "high";
-}
-
-/**
- * Returns the spread enum typ based on the spread/width
- *
- * @param {string} spread String containing the spread/width value in meter
- * @returns {string}
- */
-function getSpreadEnumTyp(spread) {
-  const value = processValue(spread);
-  if (value === null) return null;
-
-  return value <= 0.15 ? "narrow" : value <= 0.61 ? "medium" : "wide";
+  return Math.round(processedValue * 100);
 }
 
 /**
@@ -133,10 +120,4 @@ async function fetchGermanName(binomialName) {
   return null;
 }
 
-export {
-  sanitizeColumnNames,
-  getSoilPH,
-  getHeightEnumTyp,
-  getSpreadEnumTyp,
-  fetchGermanName,
-};
+export { sanitizeColumnNames, getSoilPH, processMeasurement, fetchGermanName };
