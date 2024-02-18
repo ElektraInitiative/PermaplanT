@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '../../../utils/ReadOnlyModeContext';
 import {
@@ -19,7 +18,6 @@ export function PlantLayerLeftToolbar() {
     (state) => state.untrackedState.layers.plants.selectedPlantings,
   );
   const executeAction = useMapStore((state) => state.executeAction);
-  const step = useMapStore((state) => state.step);
   const { deleteSelectedPlantings } = useDeleteSelectedPlantings();
 
   const isReadOnlyMode = useIsReadOnlyMode();
@@ -30,6 +28,11 @@ export function PlantLayerLeftToolbar() {
   const onAddDateChange = ({ addDate }: PlantingFormData) => {
     if (!selectedPlantings?.length) return;
 
+    const hasChanged = selectedPlantings.some(
+      (selectedPlanting) => selectedPlanting.addDate !== addDate,
+    );
+    if (!hasChanged) return;
+
     executeAction(
       new UpdateAddDatePlantAction(selectedPlantings.map((p) => ({ id: p.id, addDate }))),
     );
@@ -37,6 +40,11 @@ export function PlantLayerLeftToolbar() {
 
   const onRemoveDateChange = ({ removeDate }: PlantingFormData) => {
     if (!selectedPlantings?.length) return;
+
+    const hasChanged = selectedPlantings.some(
+      (selectedPlanting) => selectedPlanting.removeDate !== removeDate,
+    );
+    if (!hasChanged) return;
 
     executeAction(
       new UpdateRemoveDatePlantAction(selectedPlantings.map((p) => ({ id: p.id, removeDate }))),
@@ -46,6 +54,11 @@ export function PlantLayerLeftToolbar() {
   const onPlantingNoteChange = ({ plantingNotes }: PlantingFormData) => {
     if (!selectedPlantings?.length) return;
 
+    const hasChanged = selectedPlantings.some(
+      (selectedPlanting) => selectedPlanting.plantingNotes !== plantingNotes,
+    );
+    if (!hasChanged) return;
+
     executeAction(
       new UpdatePlantingNotesAction(
         selectedPlantings.map((p) => ({ id: p.id, notes: plantingNotes || '' })),
@@ -53,11 +66,15 @@ export function PlantLayerLeftToolbar() {
     );
   };
 
-  // since the toolbar is currently rerendered when the selected plantings change, we need to keep the state of the fullscreen mode
-  const [plantingNotesFullScreen, setPlantingNotesFullscreen] = useState(false);
-
   const onSizeChange = ({ sizeX, sizeY }: PlantingFormData) => {
     if (!selectedPlantings?.length) return;
+
+    const hasChanged = selectedPlantings.some(
+      (selectedPlanting) =>
+        selectedPlanting.sizeX !== Math.round(sizeX) ||
+        selectedPlanting.sizeY !== Math.round(sizeY),
+    );
+    if (!hasChanged) return;
 
     const updates = selectedPlantings.map((selectedPlanting) => ({
       id: selectedPlanting.id,
@@ -82,35 +99,23 @@ export function PlantLayerLeftToolbar() {
   return singlePlantSelected ? (
     <SinglePlantingAttributeForm
       planting={selectedPlantings[0]}
-      // remount the form when the selected planting or the step changes (on undo/redo)
-      key={`${selectedPlantings[0].id}-${step}`}
       onHeightChange={onSizeChange}
       onWidthChange={onSizeChange}
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onDeleteClick={onDeleteClick}
       onPlantingNotesChange={onPlantingNoteChange}
-      plantingNotesFullScreen={plantingNotesFullScreen}
-      changePlantingNotesFullScreen={setPlantingNotesFullscreen}
       isReadOnlyMode={isReadOnlyMode}
     />
   ) : (
     <MultiplePlantingsAttributeForm
       plantings={selectedPlantings}
-      key={
-        selectedPlantings.reduce(
-          (key, selectedPlanting) => (key += selectedPlanting.id + '-'),
-          '',
-        ) + `${step}`
-      }
       onHeightChange={onSizeChange}
       onWidthChange={onSizeChange}
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onDeleteClick={onDeleteClick}
       onPlantingNotesChange={onPlantingNoteChange}
-      plantingNotesFullScreen={plantingNotesFullScreen}
-      changePlantingNotesFullScreen={setPlantingNotesFullscreen}
       isReadOnlyMode={isReadOnlyMode}
     />
   );

@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'react-tooltip';
@@ -37,8 +38,6 @@ export type EditPlantingAttributesProps = {
   onWidthChange: (formData: PlantingFormData) => void;
   onHeightChange: (formData: PlantingFormData) => void;
   onDeleteClick: () => void;
-  plantingNotesFullScreen: boolean;
-  changePlantingNotesFullScreen: (value: boolean) => void;
   isReadOnlyMode: boolean;
 };
 
@@ -61,8 +60,6 @@ export type PlantingAttributeEditFormProps = EditPlantingAttributesProps & {
   heightDefaultValue: number | undefined;
   planting: PlantingDto | null;
   areaOfPlantings: boolean;
-  plantingNotesFullScreen: boolean;
-  changePlantingNotesFullScreen: (value: boolean) => void;
 };
 
 export function SinglePlantingAttributeForm({
@@ -182,8 +179,6 @@ function PlantingAttributeEditForm({
   plantingNoteShowDifferentValueWarning,
   removeDateDefaultValue,
   plantingNotesDefaultValue,
-  plantingNotesFullScreen,
-  changePlantingNotesFullScreen,
   onWidthChange,
   onHeightChange,
   onAddDateChange,
@@ -208,6 +203,23 @@ function PlantingAttributeEditForm({
     },
     resolver: zodResolver(PlantingAttributeEditFormSchema),
   });
+
+  useEffect(() => {
+    formInfo.reset({
+      sizeX: widthDefaultValue,
+      sizeY: heightDefaultValue,
+      addDate: addDateDefaultValue,
+      removeDate: removeDateDefaultValue,
+      plantingNotes: plantingNotesDefaultValue,
+    });
+  }, [
+    plantingNotesDefaultValue,
+    addDateDefaultValue,
+    widthDefaultValue,
+    formInfo,
+    heightDefaultValue,
+    removeDateDefaultValue,
+  ]);
 
   const { data: plant } = useFindPlantById({
     plantId: planting?.plantId ?? 0,
@@ -316,8 +328,6 @@ function PlantingAttributeEditForm({
           className="w-full"
           disabled={isReadOnlyMode}
           labelContent={t('plantings:notes')}
-          fullScreen={plantingNotesFullScreen}
-          changeFullScreen={changePlantingNotesFullScreen}
         />
         {plantingNoteShowDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
       </div>
