@@ -4,6 +4,7 @@ import fs from "fs";
 import { parse as json2csv } from "json2csv";
 import csv from "csvtojson";
 import { capitalizeWords } from "./helpers/helpers.js";
+import { log } from "console";
 
 let GermanNamesFound = 0;
 
@@ -14,7 +15,7 @@ let GermanNamesFound = 0;
 axiosRetry(axios, {
   retries: 5, // number of retries
   retryDelay: (retryCount) => {
-    console.log(`retry attempt: ${retryCount}`);
+    if (retryCount == 5) console.log(`last retry attempt (${retryCount})`);
     return retryCount * 3000; // time interval between retries
   },
   retryCondition: (error) => {
@@ -47,11 +48,11 @@ const filterGermanNames = (germanNames, unique_name) => {
     unique_name_filter = unique_name_filter.replace(/\s+/g, " ");
 
     germanName = germanName.trim();
-    if (
-      unique_names.some((unique_name_part) =>
-        germanName.includes(unique_name_part)
-      )
-    ) {
+
+    const areSetsEqual = (a, b) =>
+      a.size === b.size && [...a].every((value) => b.has(value));
+    // If the German name is the same as the unique name, skip it
+    if (areSetsEqual(new Set(germanName.split(" ")), new Set(unique_names))) {
       continue;
     }
 
@@ -101,13 +102,6 @@ const handleResponseAddGermanNamesFound = (response, germanNames) => {
   const dewiki_entity = entity.sitelinks.dewiki;
   if (dewiki_entity) {
     germanNames.push(dewiki_entity.title);
-  }
-
-  const aliase_entities = entity.aliases.de;
-  if (aliase_entities) {
-    aliase_entities.forEach((alias) => {
-      germanNames.push(alias.value);
-    });
   }
 };
 
@@ -208,7 +202,7 @@ async function writePlantsToOverwriteCsv(plants) {
     fields: ["unique_name", "common_name_de"],
   };
   const csvFile = json2csv(plants, opts);
-  fs.writeFileSync("data/overrides/01_germanCommonNames.csv", csvFile);
+  fs.writeFileSync("data/germanCommonNames.csv", csvFile);
 
   return plants;
 }

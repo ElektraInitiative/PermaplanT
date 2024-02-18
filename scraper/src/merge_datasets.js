@@ -7,7 +7,7 @@ import {
   getSoilPH,
   getHeightEnumTyp,
   getSpreadEnumTyp,
-  capitalizeWords,
+  cleanUpJsonForCsv,
 } from "./helpers/helpers.js";
 
 /**
@@ -248,23 +248,6 @@ async function mergeDatasets() {
   });
 
   return allPlants;
-}
-
-/**
- * Cleans up a JSON array entries for smoother CSV export.
- *
- * @param {Array} plants - Array of plants
- */
-function cleanUpJsonForCsv(plants) {
-  const columns = Object.keys(plants[0]);
-  plants.forEach((plant, index) => {
-    delete plant.subfamily;
-    columns.forEach((column) => {
-      if (plant[column] === "") {
-        plant[column] = null;
-      }
-    });
-  });
 }
 
 /**

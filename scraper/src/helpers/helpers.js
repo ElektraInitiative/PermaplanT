@@ -106,6 +106,24 @@ function getHeightEnumTyp(height) {
 }
 
 /**
+ * Cleans up a JSON array entries for smoother CSV export.
+ * Changes empty strings to null and removes the subfamily column
+ *
+ * @param {Array} plants - Array of plants
+ */
+function cleanUpJsonForCsv(plants) {
+  const columns = Object.keys(plants[0]);
+  plants.forEach((plant, index) => {
+    delete plant.subfamily;
+    columns.forEach((column) => {
+      if (plant[column] === "") {
+        plant[column] = null;
+      }
+    });
+  });
+}
+
+/**
  * Returns the spread enum typ based on the spread/width
  *
  * @param {string} spread String containing the spread/width value in meter
@@ -124,4 +142,5 @@ export {
   getHeightEnumTyp,
   getSpreadEnumTyp,
   capitalizeWords,
+  cleanUpJsonForCsv,
 };
