@@ -11,6 +11,9 @@ use crate::{
     service::users,
 };
 
+/// The maximum number of collaborators a map can have.
+const MAX_COLLABORATORS: usize = 30;
+
 /// Get all collaborators for a map.
 ///
 /// # Errors
@@ -77,10 +80,10 @@ pub async fn create(
 
     let current_collaborators = MapCollaborator::find_by_map_id(map_id, &mut conn).await?;
 
-    if current_collaborators.len() >= 30 {
+    if current_collaborators.len() >= MAX_COLLABORATORS {
         return Err(ServiceError::new(
             StatusCode::BAD_REQUEST,
-            "A map can have at most 30 collaborators.".to_owned(),
+            format!("A map can have at most {MAX_COLLABORATORS} collaborators."),
         ));
     }
 
