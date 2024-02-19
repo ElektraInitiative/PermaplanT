@@ -10,13 +10,14 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - needs new migrations
 - needs new scraper data (integer for plant spread and height)
-- _()_
+- Add database documentation. _(Christoph @chr_schr, Jannis @horenso)_
 - Remove variety from table seeds _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
 - Enable automatic image scaling in base layer _(Moritz)_
 - _()_
+
 - Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
 - Fix ref warning in PlantLabel, center labels as intended _(Paul)_
