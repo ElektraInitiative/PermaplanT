@@ -1,13 +1,13 @@
 import { TimelineDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
-export async function getTimelineEvents(mapId: number) {
+export async function getTimelineEvents(mapId: number, startDate: string, endDate: string) {
   const http = createAPI();
 
   try {
     const searchParams = new URLSearchParams();
-    searchParams.append('start', '2020-01-01');
-    searchParams.append('end', '2024-04-01');
+    searchParams.append('start', startDate);
+    searchParams.append('end', endDate);
 
     const response = await http.get<TimelineDto>(`/api/maps/${mapId}/timeline?${searchParams}`);
     return response.data;

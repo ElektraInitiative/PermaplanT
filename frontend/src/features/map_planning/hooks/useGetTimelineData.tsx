@@ -73,8 +73,7 @@ const createDays = (dailyEvents: Record<string, TimelineEntryDto>) => {
 };
 
 export default function useGetTimeLineData(mapId: number) {
-  const events = useGetTimelineEvents(mapId);
-  console.log('events', events?.dates);
+  const events = useGetTimelineEvents(mapId, '1900-01-01', '2100-12-31');
 
   return useMemo(() => {
     return {
