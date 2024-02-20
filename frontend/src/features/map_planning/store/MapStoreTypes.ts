@@ -281,6 +281,10 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     monthly: [],
     yearly: [],
   },
+  timeLineVisibleYears: {
+    from: 1900,
+    to: 2100,
+  },
 };
 
 /**
@@ -436,19 +440,23 @@ export type UntrackedMapState = {
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   selectedLayer: LayerDto | FrontendOnlyLayerType;
   /** used for the bounds calculation */
-  timelineDate: string;
-  /** used for fetching */
-  fetchDate: string;
   timelineBounds: {
     from: string;
     to: string;
   };
+  timelineDate: string;
+  /** used for fetching */
+  fetchDate: string;
   /** Storing the current content prevents constant rerenders of the tooltip component.  */
   tooltipContent: string;
   tooltipPosition: { x: number; y: number };
   bottomStatusPanelContent: React.ReactNode | null;
   layers: UntrackedLayers;
   timeLineEvents: TimeLineEvents;
+  timeLineVisibleYears: {
+    from: number;
+    to: number;
+  };
 };
 
 /**

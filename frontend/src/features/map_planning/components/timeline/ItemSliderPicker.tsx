@@ -56,7 +56,10 @@ const ItemSliderPicker = ({
     const containerWidth = container.offsetWidth;
     const scrollWidth = container.scrollWidth;
 
-    const threshold = 500;
+    const threshold = 1000;
+
+    if (isDragging.current) return;
+
     if (scrollLeft < threshold) {
       leftEndReached?.();
     } else if (scrollWidth - scrollLeft - containerWidth < threshold) {
@@ -87,6 +90,9 @@ const ItemSliderPicker = ({
 
     const items = container.getElementsByClassName('item') as HTMLCollectionOf<HTMLElement>;
     const selectedElement = items[idx];
+
+    if (!selectedElement) return;
+
     const containerWidth = container.offsetWidth;
     const itemWidth = selectedElement.offsetWidth;
     const scrollLeft = selectedElement.offsetLeft + itemWidth / 2 - containerWidth / 2;
@@ -201,6 +207,8 @@ const ItemSliderPicker = ({
 
     isDragging.current = false;
     dragStartX.current = null;
+
+    detectAndNotifyIfBordersIsReached();
   };
 
   const handleMouseWheel = (e: WheelEvent) => {
@@ -299,7 +307,7 @@ const ItemSliderPicker = ({
               className={`item dark border-4 border-white px-2 pt-1 dark:border-neutral-200-dark
               ${
                 getSelectedItemIndex() === index
-                  ? 'selected-item bg-gray-300 font-bold text-secondary-300 group-focus:border-blue-300 dark:bg-black '
+                  ? 'selected-item border-b border-t border-blue-300 bg-gray-100 font-bold text-secondary-300 group-focus:border-blue-400 dark:border-blue-200 dark:bg-black '
                   : ''
               }
               `}

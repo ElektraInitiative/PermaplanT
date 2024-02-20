@@ -47,7 +47,6 @@ function getTimelineEventsQueryFn({
   queryKey,
 }: QueryFunctionContext<ReturnType<(typeof MAP_EDITOR_KEYS)['timeline']>>) {
   const { mapId, startDate, endDate } = queryKey[0];
-  console.log('getTimelineEventsQueryFn', mapId, startDate, endDate);
   return getTimelineEvents(mapId, startDate, endDate);
 }
 

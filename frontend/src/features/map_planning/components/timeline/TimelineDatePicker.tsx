@@ -37,13 +37,13 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
 
   const daySliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.daily);
   const monthSliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.monthly);
-  const yearlyTimeLineEvents = useMapStore((state) => state.untrackedState.timeLineEvents.yearly);
+  const yearSliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.yearly);
 
   const { i18n } = useTranslation();
 
   const [selectedYearItem, setSelectedYearItem] = useState<TimelineYearlyEvent>(
-    yearlyTimeLineEvents.find((yearSliderItem) => yearSliderItem.year === defaultYear) ||
-      yearlyTimeLineEvents[0] ||
+    yearSliderItems.find((yearSliderItem) => yearSliderItem.year === defaultYear) ||
+      yearSliderItems[0] ||
       undefined,
   );
 
@@ -100,7 +100,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   const handleDayItemChange = (itemKey: number) => {
-    const selectedDayItem = daySliderItems[itemKey];
+    const selectedDayItem = daySliderItems.find((day) => day.key === itemKey);
+    if (!selectedDayItem) return;
 
     updateSelectedDate(selectedDayItem);
 
@@ -114,7 +115,7 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     }
 
     if (selectedDayItem.year !== selectedYearItem.year) {
-      const newYearItem = yearlyTimeLineEvents.find(
+      const newYearItem = yearSliderItems.find(
         (yearSliderItem) => selectedDayItem.year === yearSliderItem.year,
       );
       if (newYearItem) {
@@ -124,11 +125,13 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   const handleMonthChange = (key: number) => {
-    const newMonthItem = monthSliderItems[key];
+    const newMonthItem = monthSliderItems.find((month) => month.key === key);
+    if (!newMonthItem) return;
+
     setSelectedMonthItem(newMonthItem);
 
     if (newMonthItem.year !== selectedYearItem.year) {
-      const newYearItem = yearlyTimeLineEvents.find(
+      const newYearItem = yearSliderItems.find(
         (yearSliderItem) => newMonthItem.year === yearSliderItem.year,
       );
       if (newYearItem) {
@@ -142,7 +145,9 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   const handleYearChange = (yearItemKey: number) => {
-    const newYearItem = yearlyTimeLineEvents[yearItemKey];
+    const newYearItem = yearSliderItems.find((year) => year.key === yearItemKey);
+    if (!newYearItem) return;
+
     setSelectedYearItem(newYearItem);
 
     if (selectedMonthItem.year !== newYearItem.year) {
@@ -202,6 +207,31 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     if (visibleDays[visibleDays.length - 1].key < daySliderItems.length - 1) {
       setVisibleDays(calculateVisibleDays(selectedDayItem));
     }
+  };
+
+  const handleYearSliderLeftEndReached = () => {
+    useMapStore.setState((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        timeLineVisibleYears: {
+          from: state.untrackedState.timeLineVisibleYears.from - 100,
+          to: state.untrackedState.timeLineVisibleYears.to - 100,
+        },
+      },
+    }));
+  };
+  const handleYearSliderRightEndReached = () => {
+    useMapStore.setState((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        timeLineVisibleYears: {
+          from: state.untrackedState.timeLineVisibleYears.from + 100,
+          to: state.untrackedState.timeLineVisibleYears.to + 100,
+        },
+      },
+    }));
   };
 
   useEffect(() => {
@@ -272,8 +302,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   const maxRemovedDay = Math.max(...daySliderItems.map((day) => day.removed));
   const maxAddedMonth = Math.max(...monthSliderItems.map((month) => month.added));
   const maxRemovedMonth = Math.max(...monthSliderItems.map((month) => month.removed));
-  const maxAddedYear = Math.max(...yearlyTimeLineEvents.map((year) => year.added));
-  const maxRemovedYear = Math.max(...yearlyTimeLineEvents.map((year) => year.removed));
+  const maxAddedYear = Math.max(...yearSliderItems.map((year) => year.added));
+  const maxRemovedYear = Math.max(...yearSliderItems.map((year) => year.removed));
 
   return (
     <div
@@ -285,7 +315,7 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     >
       <ItemSliderPicker
         dataTestId={TEST_IDS.YEAR_SLIDER}
-        items={yearlyTimeLineEvents.map((yearSliderItem) => ({
+        items={yearSliderItems.map((yearSliderItem) => ({
           key: yearSliderItem.key,
           content: TimelineDatePickerItem({
             text: yearSliderItem.year.toString(),
@@ -300,6 +330,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
         value={selectedYearItem.key}
         autoFocus={focusedSlider === 'year'}
         onFocus={() => setFocusedSlider('year')}
+        rightEndReached={handleYearSliderRightEndReached}
+        leftEndReached={handleYearSliderLeftEndReached}
       />
       <ItemSliderPicker
         dataTestId={TEST_IDS.MONTH_SLIDER}
@@ -366,8 +398,8 @@ function TimelineDatePickerItem({
 }) {
   const max = Math.max(maxAdded, maxRemoved, 200);
 
-  const addedHeight = added == 0 ? 0 : (Math.log(added) / Math.log(max)) * 40 + 5;
-  const removedHeight = removed == 0 ? 0 : (Math.log(removed) / Math.log(max)) * 40 + 5;
+  const addedHeight = added == 0 ? 0 : (Math.log(added) / Math.log(max)) * 40 + 2;
+  const removedHeight = removed == 0 ? 0 : (Math.log(removed) / Math.log(max)) * 40 + 2;
 
   return (
     <div className="full-width flex w-9 select-none flex-col">

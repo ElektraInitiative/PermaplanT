@@ -38,22 +38,28 @@ function useInitializeMap() {
   const { data: layers, error } = useGetLayers(mapId);
   const { t } = useTranslation(['layers']);
 
-  const timeLineEvent = useGetTimeLineData(mapId);
+  const timeLineVisibleYears = useMapStore((state) => state.untrackedState.timeLineVisibleYears);
+  const timeLineEvents = useGetTimeLineData(
+    mapId,
+    timeLineVisibleYears.from,
+    timeLineVisibleYears.to,
+  );
+
   useEffect(() => {
-    if (timeLineEvent) {
+    if (timeLineEvents) {
       useMapStore.setState((state) => ({
         ...state,
         untrackedState: {
           ...state.untrackedState,
           timeLineEvents: {
-            daily: timeLineEvent.daily,
-            monthly: timeLineEvent.monthly,
-            yearly: timeLineEvent.yearly,
+            daily: timeLineEvents.daily,
+            monthly: timeLineEvents.monthly,
+            yearly: timeLineEvents.yearly,
           },
         },
       }));
     }
-  }, [timeLineEvent]);
+  }, [timeLineEvents]);
 
   if (error) {
     console.error(error);

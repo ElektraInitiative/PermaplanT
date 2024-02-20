@@ -1,12 +1,6 @@
-/**
- * This hook is currently just creating dummy data for the timeline until the backend is ready.
- */
 import { useMemo } from 'react';
 import { TimelineEntryDto } from '@/api_types/definitions';
 import { useGetTimelineEvents } from './mapEditorHookApi';
-
-const MIN_YEAR = 1900;
-const MAX_YEAR = 2100;
 
 function getDatesBetween(startDate: Date, endDate: Date) {
   const dates = [];
@@ -20,66 +14,77 @@ function getDatesBetween(startDate: Date, endDate: Date) {
   return dates;
 }
 
-const createYears = (yearlyEvents: Record<string, TimelineEntryDto>) => {
+const createYearsAndMonths = (
+  startYear: number,
+  endYear: number,
+  monthlyEvents: Record<string, TimelineEntryDto>,
+  yearlyEvents: Record<string, TimelineEntryDto>,
+) => {
   const years = [];
-  let key = 0;
-  for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
-    const events = yearlyEvents[year];
-
-    years.push({
-      key: key++,
-      year: year,
-      removed: events?.removals || 0,
-      added: events?.additions || 0,
-    });
-  }
-  return years;
-};
-
-const createMonths = (monthlyEvents: Record<string, TimelineEntryDto>) => {
   const months = [];
-  let key = 0;
-  for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
+  for (let year = startYear; year <= endYear; year++) {
     for (let month = 1; month <= 12; month++) {
       const events = monthlyEvents[`${year}-${month.toString().padStart(2, '0')}`];
 
       months.push({
-        key: key++,
+        key: year * 100 + month,
         year: year,
         month: month,
         removed: events?.removals || 0,
         added: events?.additions || 0,
       });
     }
+
+    const events = yearlyEvents[year];
+    years.push({
+      key: year,
+      year: year,
+      removed: events?.removals || 0,
+      added: events?.additions || 0,
+    });
   }
-  return months;
+  return { years, months };
 };
 
-const createDays = (dailyEvents: Record<string, TimelineEntryDto>) => {
-  const dates = getDatesBetween(new Date(MIN_YEAR, 0, 1), new Date(MAX_YEAR, 11, 31));
-  return dates.map((date, index) => {
+const createDays = (
+  startYear: number,
+  endYear: number,
+  dailyEvents: Record<string, TimelineEntryDto>,
+) => {
+  const dates = getDatesBetween(new Date(startYear, 0, 1), new Date(endYear, 11, 31));
+  return dates.map((date) => {
     const key = date.toISOString().split('T')[0];
     const events = dailyEvents[key];
 
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
     return {
-      key: index,
-      year: date.getFullYear(),
-      month: date.getMonth() + 1,
-      day: date.getDate(),
+      key: year * 10000 + month * 100 + day,
+      year: year,
+      month: month,
+      day: day,
       removed: events?.removals || 0,
       added: events?.additions || 0,
     };
   });
 };
 
-export default function useGetTimeLineData(mapId: number) {
-  const events = useGetTimelineEvents(mapId, '1900-01-01', '2100-12-31');
-
+export default function useGetTimeLineData(mapId: number, startYear: number, endYear: number) {
+  const events = useGetTimelineEvents(mapId, `${startYear}-01-01`, `${endYear}-12-31`);
   return useMemo(() => {
+    const { years, months } = createYearsAndMonths(
+      startYear,
+      endYear,
+      events?.months || {},
+      events?.years || {},
+    );
+
     return {
-      daily: createDays(events?.dates || {}),
-      monthly: createMonths(events?.months || {}),
-      yearly: createYears(events?.years || {}),
+      daily: createDays(startYear, endYear, events?.dates || {}),
+      monthly: months,
+      yearly: years,
     };
-  }, [events?.dates, events?.months, events?.years]);
+  }, [startYear, endYear, events?.dates, events?.months, events?.years]);
 }
