@@ -1,10 +1,11 @@
-import { DrawingDto } from '../types';
-import useMapStore from '@/features/map_planning/store/MapStore';
 import Konva from 'konva';
 import { range } from 'lodash';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { Circle, Line } from 'react-konva';
+import useMapStore from '@/features/map_planning/store/MapStore';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
+import { DrawingDto } from '../types';
 
 export type BezierPolygonProps = {
   drawingModeActive: boolean;
@@ -47,9 +48,8 @@ function BezierPolygon({
   const [activeSegments, setActiveSegments] = useState<number[]>([]);
   const [segPos, setSegPos] = useState<Point>([]);
 
-  const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
-
-  useEffect(() => {
+  const transformerActions = useTransformerStore().actions;
+  +useEffect(() => {
     if (points) {
       onPointsChanged(points);
     }
@@ -256,7 +256,7 @@ function BezierPolygon({
                 setActivePoint(i);
               }}
               onMouseDown={(e) => {
-                setSingleNodeInTransformer(e.currentTarget);
+                transformerActions.select(e.currentTarget);
               }}
               onMouseLeave={() => {
                 setActiveSegments([]);

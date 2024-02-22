@@ -1,5 +1,6 @@
-import { DeleteDrawingAction } from '../actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
+import { DeleteDrawingAction } from '../actions';
 
 export function useDeleteSelectedDrawings() {
   const selectedDrawings = useMapStore(
@@ -8,7 +9,7 @@ export function useDeleteSelectedDrawings() {
 
   const executeAction = useMapStore((state) => state.executeAction);
   const selectDrawings = useMapStore((state) => state.selectDrawings);
-  const transformerRef = useMapStore((state) => state.transformer);
+  const transformerActions = useTransformerStore().actions;
 
   const deleteSelectedDrawings = () => {
     if (!selectedDrawings?.length) return;
@@ -18,7 +19,7 @@ export function useDeleteSelectedDrawings() {
     );
 
     selectDrawings(null);
-    transformerRef.current?.nodes([]);
+    transformerActions.clearSelection();
   };
 
   return {

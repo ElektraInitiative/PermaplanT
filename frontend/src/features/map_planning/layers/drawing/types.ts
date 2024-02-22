@@ -13,7 +13,7 @@ export type DrawingDto = {
   x: number;
   y: number;
   color: string;
-
+  strokeWidth?: number;
   properties: DrawingProperties;
 };
 
@@ -83,6 +83,13 @@ export interface UpdateDrawingColorActionPayload {
   color: string;
 }
 
+export interface UpdateDrawingStrokeWidthActionPayload {
+  userId: string;
+  actionId: string;
+  id: string;
+  strokeWidth?: number;
+}
+
 export interface UpdateRemoveDateDrawingDto {
   removeDate?: string;
   actionId: string;
@@ -99,6 +106,5 @@ export type EllipseProperties = {
 };
 
 export type FreeLineProperties = {
-  strokeWidth: number;
   points: number[][];
 };

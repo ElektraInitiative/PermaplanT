@@ -152,6 +152,7 @@ function usePlantLayerListeners(listening: boolean) {
       }
 
       const position = getPositionForPlantPlacement(e);
+
       if (!position) {
         return;
       }
@@ -271,7 +272,6 @@ function usePlantLayerListeners(listening: boolean) {
       return;
     }
     const transformerActions = useTransformerStore.getState().actions;
-
     useMapStore.getState().stageRef.current?.on('click.placePlant', handleCreatePlanting);
     useMapStore.getState().stageRef.current?.on('click.unselectPlanting', handleUnselectPlanting);
     useMapStore.getState().stageRef.current?.on('mouseup.selectPlanting', handleSelectPlanting);

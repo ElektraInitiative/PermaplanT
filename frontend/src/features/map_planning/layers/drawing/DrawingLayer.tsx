@@ -1,16 +1,17 @@
-import useMapStore from '../../store/MapStore';
-import { LayerConfigWithListenerRegister } from '../../types/layer-config';
-import { isDrawingLayerActive } from '../../utils/layer-utils';
-import { CreateDrawingAction, MoveDrawingAction, TransformDrawingAction } from './actions';
-import BezierPolygon from './shapes/BezierPolygon';
-import { DrawingDto, EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
-import { LayerType } from '@/api_types/definitions';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
 import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Ellipse, Layer, Line, Rect } from 'react-konva';
 import * as uuid from 'uuid';
+import { LayerType } from '@/api_types/definitions';
+import useMapStore from '../../store/MapStore';
+import { useTransformerStore } from '../../store/transformer/TransformerStore';
+import { LayerConfigWithListenerRegister } from '../../types/layer-config';
+import { isDrawingLayerActive } from '../../utils/layer-utils';
+import { CreateDrawingAction, MoveDrawingAction, TransformDrawingAction } from './actions';
+import BezierPolygon from './shapes/BezierPolygon';
+import { DrawingDto, EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
 
 type DrawingLayerProps = LayerConfigWithListenerRegister;
 
@@ -40,6 +41,7 @@ type Line = {
 
 function DrawingLayer(props: DrawingLayerProps) {
   const drawingObjects = useMapStore((state) => state.trackedState.layers.drawing.objects);
+  const transformerActions = useTransformerStore((state) => state.actions);
 
   const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
   const selectedColor = useMapStore((state) => state.untrackedState.layers.drawing.selectedColor);
@@ -47,9 +49,6 @@ function DrawingLayer(props: DrawingLayerProps) {
     (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
   );
 
-  const setSingleNodeInTransformer = useMapStore((state) => state.setSingleNodeInTransformer);
-  const addNodeToTransformer = useMapStore((state) => state.addNodeToTransformer);
-  const removeNodeFromTransformer = useMapStore((state) => state.removeNodeFromTransformer);
   const selectDrawings = useMapStore((state) => state.selectDrawings);
 
   const { stageListenerRegister, ...layerProps } = props;
@@ -170,8 +169,8 @@ function DrawingLayer(props: DrawingLayerProps) {
           x: line.x,
           y: line.y,
           color: line.color,
+          strokeWidth: line.strokeWidth,
           properties: {
-            strokeWidth: line.strokeWidth,
             points: line.points,
           },
         }),
@@ -195,8 +194,8 @@ function DrawingLayer(props: DrawingLayerProps) {
           x: line.x,
           y: line.y,
           color: line.color,
+          strokeWidth: line.strokeWidth,
           properties: {
-            strokeWidth: line.strokeWidth,
             points: line.points,
           },
         }),
@@ -205,23 +204,22 @@ function DrawingLayer(props: DrawingLayerProps) {
     [executeAction, getSelectedLayerId, timelineDate],
   );
 
-  const removePlantingFromSelection = (e: KonvaEventObject<MouseEvent>) => {
+  const removeDrawingFromSelection = (e: KonvaEventObject<MouseEvent>) => {
     const selectedDrawings = (foundDrawings: DrawingDto[], konvaNode: Konva.Node) => {
       const drawingNode = konvaNode.getAttr('object');
       return drawingNode ? [...foundDrawings, drawingNode] : [foundDrawings];
     };
 
     const getUpdatedDrawingSelection = () => {
-      const transformer = useMapStore.getState().transformer.current;
-      return transformer?.nodes().reduce(selectedDrawings, []) ?? [];
+      return transformerActions.getSelection().reduce(selectedDrawings, []) ?? [];
     };
 
-    removeNodeFromTransformer(e.currentTarget);
+    transformerActions.removeNodeFromSelection(e.currentTarget);
     selectDrawings(getUpdatedDrawingSelection());
   };
 
   const addPlantingToSelection = (e: KonvaEventObject<MouseEvent>) => {
-    addNodeToTransformer(e.currentTarget);
+    transformerActions.addNodeToSelection(e.currentTarget);
 
     const currentDrawingSelected =
       useMapStore.getState().untrackedState.layers.drawing.selectedDrawings ?? [];
@@ -229,12 +227,12 @@ function DrawingLayer(props: DrawingLayerProps) {
   };
 
   const handleMultiSelect = (e: KonvaEventObject<MouseEvent>, drawing: DrawingDto) => {
-    isDrawingSelected(drawing) ? removePlantingFromSelection(e) : addPlantingToSelection(e);
+    isDrawingSelected(drawing) ? removeDrawingFromSelection(e) : addPlantingToSelection(e);
   };
 
   const handleSingleSelect = (e: KonvaEventObject<MouseEvent>, drawing: DrawingDto) => {
-    setSingleNodeInTransformer(e.currentTarget);
-    selectDrawings([drawing]);
+    transformerActions.select(e.currentTarget);
+    selectDrawings([drawing], useTransformerStore.getState());
   };
 
   const handleShapeClicked = (e: KonvaEventObject<MouseEvent>) => {
@@ -453,16 +451,23 @@ function DrawingLayer(props: DrawingLayerProps) {
       return drawingNode ? [...foundDrawings, drawingNode] : [foundDrawings];
     };
 
-    const transformer = useMapStore.getState().transformer.current;
-    const drawings = transformer?.nodes().reduce(selectedDrawings, []);
+    const transformerActions = useTransformerStore.getState().actions;
+    const drawings = transformerActions.getSelection().reduce(selectedDrawings, []);
 
+    console.log(drawings);
     if (drawings?.length) {
       useMapStore.getState().selectDrawings(drawings);
     }
   }, []);
 
   const handleTransformDrawing: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
-    const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
+    const transformerActions = useTransformerStore.getState().actions;
+    const nodes = transformerActions.getSelection();
+    if (!nodes.length) {
+      return;
+    }
+
+    const updates = nodes.map((node) => {
       return {
         id: node.id(),
         x: Math.round(node.x()),
@@ -477,14 +482,13 @@ function DrawingLayer(props: DrawingLayerProps) {
   }, [executeAction]);
 
   const handleMoveDrawing: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
-    const transformer = useMapStore.getState().transformer.current;
-    const selectedDrawings = transformer?.getNodes().filter((d) => d.attrs.object);
+    const transformerActions = useTransformerStore.getState().actions;
+    const nodes = transformerActions.getSelection();
+    if (!nodes.length) {
+      return;
+    }
 
-    if (!selectedDrawings || selectedDrawings.length == 0) return;
-
-    console.log(selectDrawings);
-
-    const updates = selectedDrawings.map((node) => {
+    const updates = nodes.map((node) => {
       return {
         id: node.id(),
         x: Math.round(node.x()),
@@ -493,7 +497,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
     executeAction(new MoveDrawingAction(updates));
-  }, [executeAction, selectDrawings]);
+  }, [executeAction]);
 
   useEffect(() => {
     if (selectedShape != 'bezierPolygon' && newBezierLine) {
@@ -501,26 +505,6 @@ function DrawingLayer(props: DrawingLayerProps) {
       setNewBezierLine(undefined);
     }
   }, [selectedShape]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleShapeClicked = (e: KonvaEventObject<MouseEvent>) => {
-    const transformer = useMapStore.getState().transformer;
-    transformer.current?.enabledAnchors([
-      'top-left',
-      'top-center',
-      'top-right',
-      'middle-left',
-      'middle-right',
-      'bottom-left',
-      'bottom-center',
-      'bottom-right',
-    ]);
-
-    useMapStore.getState().setSingleNodeInTransformer(e.target);
-  };
-
-  const moveToTop = (e: KonvaEventObject<MouseEvent>) => {
-    e.target.moveToTop();
-  };
 
   useEffect(() => {
     if (!props.listening) {
@@ -535,13 +519,16 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (!props.listening) {
       return;
     }
-    useMapStore.getState().transformer.current?.on('dragend.drawings', handleMoveDrawing);
-    useMapStore.getState().transformer.current?.on('transformend.drawings', handleTransformDrawing);
+
+    const transformerActions = useTransformerStore.getState().actions;
+
+    transformerActions.addEventListener('dragend.drawings', handleMoveDrawing);
+    transformerActions.addEventListener('transformend.drawings', handleTransformDrawing);
     useMapStore.getState().stageRef.current?.on('mouseup.selectDrawing', handleSelectDrawing);
 
     return () => {
-      useMapStore.getState().transformer.current?.off('dragend.drawings');
-      useMapStore.getState().transformer.current?.off('transformend.drawings');
+      transformerActions.removeEventListener('dragend.drawings');
+      transformerActions.removeEventListener('transformend.drawings');
       useMapStore.getState().stageRef.current?.off('mouseup.selectDrawing');
     };
   }, [handleMoveDrawing, handleTransformDrawing, handleSelectDrawing, props.listening]);
@@ -579,7 +566,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             drawingModeActive={activeBezierLine === bezierLine.id}
             onPointsChanged={console.log}
             initialPoints={bezierLine.properties.points}
-            strokeWidth={bezierLine.properties.strokeWidth}
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            strokeWidth={bezierLine.strokeWidth!}
             color={bezierLine.color}
           ></BezierPolygon>
         ))}
@@ -602,7 +590,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             id={line.id}
             listening={true}
             object={line}
-            hitStrokeWidth={line.properties.strokeWidth + 100}
+            hitStrokeWidth={(line.strokeWidth ? 1 : 0) + 100}
             key={i}
             x={line.x}
             y={line.y}
@@ -610,7 +598,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             scaleY={line.scaleY}
             points={line.properties.points.flat()}
             stroke={line.color}
-            strokeWidth={line.properties.strokeWidth}
+            strokeWidth={line.strokeWidth}
             tension={0.1}
             lineCap="round"
             lineJoin="round"

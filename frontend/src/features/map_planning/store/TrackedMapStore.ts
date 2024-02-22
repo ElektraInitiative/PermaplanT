@@ -1,7 +1,6 @@
-import { DrawingDto } from '../layers/drawing/types';
-import { selectSingleNode } from '../utils/ShapesSelection';
 import type { StateCreator } from 'zustand';
 import { BaseLayerImageDto, PlantingDto } from '@/api_types/definitions';
+import { DrawingDto } from '../layers/drawing/types';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
 import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
@@ -23,25 +22,7 @@ export const createTrackedMapSlice: StateCreator<
     undo: () => undo(set, get),
     redo: () => redo(set, get),
     __applyRemoteAction: (action: Action<unknown, unknown>) => applyAction(action, set, get),
-    setSingleNodeInTransformer: (node: Node) => {
-      selectSingleNode(get().transformer, node);
-    },
-    addNodeToTransformer: (node: Node) => {
-      const currentNodes = get().transformer.current?.nodes() ?? [];
-      if (!currentNodes.includes(node)) {
-        get().transformer?.current?.nodes([...currentNodes, node]);
-      }
-    },
-    removeNodeFromTransformer: (node: Node) => {
-      const currentNodes = get().transformer.current?.nodes() ?? [];
-      const nodeToRemove = currentNodes.indexOf(node);
 
-      if (nodeToRemove !== -1) {
-        const newNodes = currentNodes.slice();
-        newNodes.splice(nodeToRemove, 1);
-        get().transformer.current?.nodes(newNodes);
-      }
-    },
     initPlantLayer: (plants: PlantingDto[]) => {
       set((state) => ({
         ...state,

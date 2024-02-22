@@ -1,7 +1,7 @@
+import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import {
-  DrawingColorAttribute,
-  DrawingDateAttribute,
+  DrawingFormData,
   MultipleDrawingAttributeForm,
   SingleDrawingAttributeForm,
 } from './DrawingAttributeEditForm';
@@ -9,9 +9,9 @@ import {
   UpdateAddDateDrawingAction,
   UpdateColorDrawingAction,
   UpdateRemoveDateDrawingAction,
+  UpdateStrokeWidthDrawingAction,
 } from './actions';
 import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
-import useMapStore from '@/features/map_planning/store/MapStore';
 
 export function DrawingLayerLeftToolbar() {
   const selectedDrawings = useMapStore(
@@ -19,7 +19,6 @@ export function DrawingLayerLeftToolbar() {
   );
 
   const executeAction = useMapStore((state) => state.executeAction);
-  const step = useMapStore((state) => state.step);
   const { deleteSelectedDrawings } = useDeleteSelectedDrawings();
 
   const isReadOnlyMode = useIsReadOnlyMode();
@@ -27,7 +26,7 @@ export function DrawingLayerLeftToolbar() {
   const nothingSelected = !selectedDrawings?.length;
   const singeleDrawingSelected = selectedDrawings?.length === 1;
 
-  const onAddDateChange = ({ addDate }: DrawingDateAttribute) => {
+  const onAddDateChange = ({ addDate }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
     selectedDrawings.forEach((selectedDrawing) =>
@@ -35,7 +34,7 @@ export function DrawingLayerLeftToolbar() {
     );
   };
 
-  const onRemoveDateChange = ({ removeDate }: DrawingDateAttribute) => {
+  const onRemoveDateChange = ({ removeDate }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
     selectedDrawings.forEach((selectedDrawing) =>
@@ -43,11 +42,20 @@ export function DrawingLayerLeftToolbar() {
     );
   };
 
-  const onColorChange = ({ color }: DrawingColorAttribute) => {
+  const onColorChange = ({ color }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
     selectedDrawings.forEach((selectedDrawing) =>
       executeAction(new UpdateColorDrawingAction({ id: selectedDrawing.id, color })),
+    );
+  };
+
+  const onStrokeWidthChange = ({ strokeWidth }: DrawingFormData) => {
+    console.log('onStrokeWidthChange', strokeWidth);
+    if (!selectedDrawings?.length) return;
+
+    selectedDrawings.forEach((selectedDrawing) =>
+      executeAction(new UpdateStrokeWidthDrawingAction({ id: selectedDrawing.id, strokeWidth })),
     );
   };
 
@@ -62,23 +70,20 @@ export function DrawingLayerLeftToolbar() {
   return singeleDrawingSelected ? (
     <SingleDrawingAttributeForm
       drawing={selectedDrawings[0]}
-      key={`${selectedDrawings[0].id}-${step}`}
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onColorChange={onColorChange}
+      onStrokeWidthChange={onStrokeWidthChange}
       onDeleteClick={onDeleteClick}
       isReadOnlyMode={isReadOnlyMode}
     />
   ) : (
     <MultipleDrawingAttributeForm
       drawings={selectedDrawings}
-      key={
-        selectedDrawings.reduce((key, selectedDrawingg) => (key += selectedDrawingg.id + '-'), '') +
-        `${step}`
-      }
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onColorChange={onColorChange}
+      onStrokeWidthChange={onStrokeWidthChange}
       onDeleteClick={onDeleteClick}
       isReadOnlyMode={isReadOnlyMode}
     />

@@ -514,7 +514,11 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-  selectDrawings(drawings) {
+  selectDrawings(drawings, transformerStore?: TransformerStore) {
+    if (transformerStore) {
+      transformerStore.actions.enableAllAnchors();
+    }
+
     set((state) => ({
       ...state,
       untrackedState: {
