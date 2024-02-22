@@ -3,8 +3,10 @@
   "draw_rectangle_hint": "Use mouse to draw a rectangle.",
   "draw_ellipse_hint": "Use mouse to draw an ellipse.",
   "draw_free_line_hint": "Use mouse to draw a line.",
+  "draw_bezier_polygon_hint": "Use left mouse button to add points, right mouse button to finish current polygon.",
 
   "draw_rectangle_tooltip": "Draw rectangle.",
   "draw_ellipse_tooltip": "Draw ellipse.",
-  "draw_free_line_tooltip": "Draw free line."
+  "draw_free_line_tooltip": "Draw free line.",
+  "draw_bezier_polygon_tooltip": "Draw bezier polygon."
 }

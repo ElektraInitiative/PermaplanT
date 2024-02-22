@@ -498,8 +498,29 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+
+  drawingLayerSetActivateShape(id: string) {
+    get().disableShapeSelection();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            activeShape: id,
+          },
+        },
+      },
+    }));
+  },
+
   drawingLayerClearSelectedShape() {
     get().enableShapeSelection();
+    get().clearStatusPanelContent();
+    get().disableShapeSelection();
+    useTransformerStore.getState().actions.clearSelection();
     set((state) => ({
       ...state,
       untrackedState: {
@@ -509,6 +530,7 @@ export const createUntrackedMapSlice: StateCreator<
           drawing: {
             ...state.untrackedState.layers.drawing,
             shape: null,
+            activeShape: undefined,
           },
         },
       },

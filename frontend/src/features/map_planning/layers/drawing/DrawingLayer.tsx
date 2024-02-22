@@ -51,7 +51,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const selectDrawings = useMapStore((state) => state.selectDrawings);
 
-  const { stageListenerRegister, ...layerProps } = props;
+  const { ...layerProps } = props;
 
   const rectangles = drawingObjects
     .filter((object) => object.type === 'rectangle')
@@ -95,7 +95,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   const [previewRectangle, setPreviewRectangle] = useState<Rectangle | undefined>();
   const [previewEllipse, setPreviewEllipse] = useState<Ellipse | undefined>();
 
-  const [activeBezierLine, setActiveBezierLine] = useState<string>();
+  const activeShape = useMapStore((state) => state.untrackedState.layers.drawing.activeShape);
 
   const isDrawing = useRef(false);
 
@@ -103,9 +103,9 @@ function DrawingLayer(props: DrawingLayerProps) {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const executeAction = useMapStore((state) => state.executeAction);
 
-  const isShapeSelected = () => {
+  const isShapeSelected = useCallback(() => {
     return selectedShape !== null;
-  };
+  }, [selectedShape]);
 
   const createRectangle = useCallback(
     (rectangle: Rectangle) => {
@@ -181,7 +181,6 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const createBezierLine = useCallback(
     (line: Line) => {
-      console.log(line);
       executeAction(
         new CreateDrawingAction({
           id: uuid.v4(),
@@ -191,8 +190,8 @@ function DrawingLayer(props: DrawingLayerProps) {
           type: 'bezierPolygon',
           scaleX: 1,
           scaleY: 1,
-          x: line.x,
-          y: line.y,
+          x: 0,
+          y: 0,
           color: line.color,
           strokeWidth: line.strokeWidth,
           properties: {
@@ -243,44 +242,47 @@ function DrawingLayer(props: DrawingLayerProps) {
       : handleSingleSelect(e, e.currentTarget.getAttr('object'));
   };
 
-  const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
-    if (!isShapeSelected || !isDrawingLayerActive()) return;
+  const handleMouseDown = useCallback(
+    (e: KonvaEventObject<MouseEvent>) => {
+      if (!isShapeSelected || !isDrawingLayerActive()) return;
 
-    if (e.target.getStage() == null) return;
+      if (e.target.getStage() == null) return;
 
-    const stage = e.target.getStage();
-    if (stage == null) return;
+      const stage = e.target.getStage();
+      if (stage == null) return;
 
-    const pos = stage.getRelativePointerPosition();
-    if (pos == null) return;
+      const pos = stage.getRelativePointerPosition();
+      if (pos == null) return;
 
-    if (selectedShape == 'freeLine') {
-      isDrawing.current = true;
-      setNewLine({
-        strokeWidth: selectedStrokeWidth,
-        color: selectedColor,
-        x: pos.x,
-        y: pos.y,
-        points: [[0, 0]],
-      });
-    } else if (selectedShape == 'rectangle') {
-      isDrawing.current = true;
-      setPreviewRectangle({ color: selectedColor, x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y });
-    } else if (selectedShape == 'ellipse') {
-      isDrawing.current = true;
-      setPreviewEllipse({ color: selectedColor, x: pos.x, y: pos.y, radiusX: 0, radiusY: 0 });
-    } else if (selectedShape == 'bezierPolygon') {
-      if (!newBezierLine) {
-        setNewBezierLine({
-          color: selectedColor,
+      if (selectedShape == 'freeLine') {
+        isDrawing.current = true;
+        setNewLine({
           strokeWidth: selectedStrokeWidth,
+          color: selectedColor,
           x: pos.x,
           y: pos.y,
-          points: [],
+          points: [[0, 0]],
         });
+      } else if (selectedShape == 'rectangle') {
+        isDrawing.current = true;
+        setPreviewRectangle({ color: selectedColor, x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y });
+      } else if (selectedShape == 'ellipse') {
+        isDrawing.current = true;
+        setPreviewEllipse({ color: selectedColor, x: pos.x, y: pos.y, radiusX: 0, radiusY: 0 });
+      } else if (selectedShape == 'bezierPolygon') {
+        if (!newBezierLine) {
+          setNewBezierLine({
+            color: selectedColor,
+            strokeWidth: selectedStrokeWidth,
+            x: pos.x,
+            y: pos.y,
+            points: [],
+          });
+        }
       }
-    }
-  };
+    },
+    [isShapeSelected, newBezierLine, selectedColor, selectedShape, selectedStrokeWidth],
+  );
 
   const handleFinishBezierLine = () => {
     if (selectedShape == 'bezierPolygon') {
@@ -291,104 +293,165 @@ function DrawingLayer(props: DrawingLayerProps) {
     }
   };
 
-  const handleDrawLine = (point: Vector2d) => {
-    if (!newLine) return;
+  const handleDrawLine = useCallback(
+    (point: Vector2d) => {
+      if (!newLine) return;
 
-    const flatPoints = newLine.points.flat();
+      const flatPoints = newLine.points.flat();
 
-    const distance = Math.sqrt(
-      Math.pow(point.x - flatPoints[flatPoints.length - 2], 2) +
-        Math.pow(point.y - flatPoints[flatPoints.length - 1], 2),
-    );
+      const distance = Math.sqrt(
+        Math.pow(point.x - flatPoints[flatPoints.length - 2], 2) +
+          Math.pow(point.y - flatPoints[flatPoints.length - 1], 2),
+      );
 
-    if (distance > 10) {
-      setNewLine({
-        ...newLine,
-        points: [...newLine.points, [point.x - newLine.x, point.y - newLine.y]],
+      if (distance > 10) {
+        setNewLine({
+          ...newLine,
+          points: [...newLine.points, [point.x - newLine.x, point.y - newLine.y]],
+        });
+      }
+    },
+    [newLine],
+  );
+
+  const handleDrawRectangle = useCallback(
+    (point: Vector2d) => {
+      if (!previewRectangle) return;
+      setPreviewRectangle({
+        color: selectedColor,
+        x1: previewRectangle?.x1,
+        y1: previewRectangle?.y1,
+        x2: point.x,
+        y2: point.y,
       });
-    }
-  };
+    },
+    [previewRectangle, selectedColor],
+  );
 
-  const handleDrawRectangle = (point: Vector2d) => {
+  const handleDrawSquare = useCallback(
+    (point: Vector2d) => {
+      if (!previewRectangle) return;
+
+      setPreviewRectangle({
+        color: selectedColor,
+        x1: previewRectangle?.x1,
+        y1: previewRectangle?.y1,
+        x2: point.x,
+        y2: previewRectangle?.y1 + (point.x - previewRectangle?.x1),
+      });
+    },
+    [previewRectangle, selectedColor],
+  );
+
+  const handleDrawEllipse = useCallback(
+    (point: Vector2d) => {
+      if (!previewEllipse) return;
+      setPreviewEllipse({
+        color: selectedColor,
+        x: previewEllipse.x,
+        y: previewEllipse.y,
+        radiusX: Math.abs(point.x - previewEllipse.x),
+        radiusY: Math.abs(point.y - previewEllipse.y),
+      });
+    },
+    [previewEllipse, selectedColor],
+  );
+
+  const handleDrawCircle = useCallback(
+    (point: Vector2d) => {
+      if (!previewEllipse) return;
+
+      const radius = Math.abs(point.x - previewEllipse.x);
+      setPreviewEllipse({
+        color: selectedColor,
+        x: previewEllipse.x,
+        y: previewEllipse.y,
+        radiusX: radius,
+        radiusY: radius,
+      });
+    },
+    [previewEllipse, selectedColor],
+  );
+
+  const handleMouseMove = useCallback(
+    (e: KonvaEventObject<MouseEvent>) => {
+      if (!isDrawingLayerActive() || !isDrawing.current) {
+        return;
+      }
+
+      const stage = e.target.getStage();
+      if (stage == null) return;
+
+      const point = stage.getRelativePointerPosition();
+      if (point == null) return;
+
+      switch (selectedShape) {
+        case 'freeLine':
+          handleDrawLine(point);
+          break;
+        case 'rectangle':
+          if (e.evt.shiftKey) {
+            handleDrawSquare(point);
+          } else {
+            handleDrawRectangle(point);
+          }
+          break;
+        case 'ellipse':
+          if (e.evt.shiftKey) {
+            handleDrawCircle(point);
+          } else {
+            handleDrawEllipse(point);
+          }
+          break;
+      }
+    },
+    [
+      handleDrawCircle,
+      handleDrawEllipse,
+      handleDrawLine,
+      handleDrawRectangle,
+      handleDrawSquare,
+      selectedShape,
+    ],
+  );
+
+  const handleFreeLineMouseUp = useCallback(() => {
+    if (!newLine) return;
+    createFreeLine(newLine);
+    setNewLine(undefined);
+  }, [createFreeLine, newLine]);
+
+  const handleRectangleMouseUp = useCallback(() => {
     if (!previewRectangle) return;
-    setPreviewRectangle({
+
+    const newRect: Rectangle = {
       color: selectedColor,
-      x1: previewRectangle?.x1,
-      y1: previewRectangle?.y1,
-      x2: point.x,
-      y2: point.y,
-    });
-  };
+      x1: Math.min(previewRectangle.x1, previewRectangle.x2),
+      x2: Math.max(previewRectangle.x1, previewRectangle.x2),
+      y1: Math.min(previewRectangle.y1, previewRectangle.y2),
+      y2: Math.max(previewRectangle.y1, previewRectangle.y2),
+    };
 
-  const handleDrawSquare = (point: Vector2d) => {
-    if (!previewRectangle) return;
+    setPreviewRectangle(undefined);
+    createRectangle(newRect);
+  }, [createRectangle, previewRectangle, selectedColor]);
 
-    setPreviewRectangle({
-      color: selectedColor,
-      x1: previewRectangle?.x1,
-      y1: previewRectangle?.y1,
-      x2: point.x,
-      y2: previewRectangle?.y1 + (point.x - previewRectangle?.x1),
-    });
-  };
-
-  const handleDrawEllipse = (point: Vector2d) => {
+  const handleEllipseMouseUp = useCallback(() => {
     if (!previewEllipse) return;
-    setPreviewEllipse({
+
+    const newEllipse: Ellipse = {
       color: selectedColor,
       x: previewEllipse.x,
       y: previewEllipse.y,
-      radiusX: Math.abs(point.x - previewEllipse.x),
-      radiusY: Math.abs(point.y - previewEllipse.y),
-    });
-  };
+      radiusX: previewEllipse.radiusX,
+      radiusY: previewEllipse.radiusY,
+    };
 
-  const handleDrawCircle = (point: Vector2d) => {
-    if (!previewEllipse) return;
+    setPreviewEllipse(undefined);
+    createEllipse(newEllipse);
+  }, [createEllipse, previewEllipse, selectedColor]);
 
-    const radius = Math.abs(point.x - previewEllipse.x);
-    setPreviewEllipse({
-      color: selectedColor,
-      x: previewEllipse.x,
-      y: previewEllipse.y,
-      radiusX: radius,
-      radiusY: radius,
-    });
-  };
-
-  const handleMouseMove = (e: KonvaEventObject<MouseEvent>) => {
-    if (!isDrawingLayerActive() || !isDrawing.current) {
-      return;
-    }
-
-    const stage = e.target.getStage();
-    if (stage == null) return;
-
-    const point = stage.getRelativePointerPosition();
-    if (point == null) return;
-
-    switch (selectedShape) {
-      case 'freeLine':
-        handleDrawLine(point);
-        break;
-      case 'rectangle':
-        if (e.evt.shiftKey) {
-          handleDrawSquare(point);
-        } else {
-          handleDrawRectangle(point);
-        }
-        break;
-      case 'ellipse':
-        if (e.evt.shiftKey) {
-          handleDrawCircle(point);
-        } else {
-          handleDrawEllipse(point);
-        }
-        break;
-    }
-  };
-
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     if (!isDrawingLayerActive()) return;
     isDrawing.current = false;
 
@@ -403,43 +466,7 @@ function DrawingLayer(props: DrawingLayerProps) {
         handleEllipseMouseUp();
         break;
     }
-  };
-
-  const handleFreeLineMouseUp = () => {
-    if (!newLine) return;
-    createFreeLine(newLine);
-    setNewLine(undefined);
-  };
-
-  const handleRectangleMouseUp = () => {
-    if (!previewRectangle) return;
-
-    const newRect: Rectangle = {
-      color: selectedColor,
-      x1: Math.min(previewRectangle.x1, previewRectangle.x2),
-      x2: Math.max(previewRectangle.x1, previewRectangle.x2),
-      y1: Math.min(previewRectangle.y1, previewRectangle.y2),
-      y2: Math.max(previewRectangle.y1, previewRectangle.y2),
-    };
-
-    setPreviewRectangle(undefined);
-    createRectangle(newRect);
-  };
-
-  const handleEllipseMouseUp = () => {
-    if (!previewEllipse) return;
-
-    const newEllipse: Ellipse = {
-      color: selectedColor,
-      x: previewEllipse.x,
-      y: previewEllipse.y,
-      radiusX: previewEllipse.radiusX,
-      radiusY: previewEllipse.radiusY,
-    };
-
-    setPreviewEllipse(undefined);
-    createEllipse(newEllipse);
-  };
+  }, [handleEllipseMouseUp, handleFreeLineMouseUp, handleRectangleMouseUp, selectedShape]);
 
   const moveToTop = (e: KonvaEventObject<MouseEvent>) => {
     e.target.moveToTop();
@@ -483,7 +510,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const handleMoveDrawing: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
     const transformerActions = useTransformerStore.getState().actions;
-    const nodes = transformerActions.getSelection();
+    const nodes = transformerActions.getSelection().filter((node) => !node.attrs.isControlElement);
     if (!nodes.length) {
       return;
     }
@@ -496,7 +523,16 @@ function DrawingLayer(props: DrawingLayerProps) {
       };
     });
 
-    executeAction(new MoveDrawingAction(updates));
+    // Remove null values
+    const filteredUpdates = updates.filter((update) => update !== null) as {
+      id: string;
+      x: number;
+      y: number;
+    }[];
+
+    console.log('filteredUpdates', filteredUpdates);
+    if (!filteredUpdates.length) return;
+    executeAction(new MoveDrawingAction(filteredUpdates));
   }, [executeAction]);
 
   useEffect(() => {
@@ -510,28 +546,33 @@ function DrawingLayer(props: DrawingLayerProps) {
     if (!props.listening) {
       return;
     }
-    stageListenerRegister.registerStageMouseDownListener('DrawingLayer', handleMouseDown);
-    stageListenerRegister.registerStageMouseUpListener('DrawingLayer', handleMouseUp);
-    stageListenerRegister.registerStageMouseMoveListener('DrawingLayer', handleMouseMove);
-  }, [handleMouseDown, handleMouseMove, handleMouseUp]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (!props.listening) {
-      return;
-    }
 
     const transformerActions = useTransformerStore.getState().actions;
 
+    useMapStore.getState().stageRef.current?.on('mousedown.startDrawing', handleMouseDown);
+    useMapStore.getState().stageRef.current?.on('mousemove.draw', handleMouseMove);
+    useMapStore.getState().stageRef.current?.on('mouseup.endDrawing', handleMouseUp);
+    useMapStore.getState().stageRef.current?.on('mouseup.selectDrawing', handleSelectDrawing);
     transformerActions.addEventListener('dragend.drawings', handleMoveDrawing);
     transformerActions.addEventListener('transformend.drawings', handleTransformDrawing);
-    useMapStore.getState().stageRef.current?.on('mouseup.selectDrawing', handleSelectDrawing);
 
     return () => {
+      useMapStore.getState().stageRef.current?.off('mousedown.startDrawing');
+      useMapStore.getState().stageRef.current?.off('mousemove.draw');
+      useMapStore.getState().stageRef.current?.off('mouseup.endDrawing');
+      useMapStore.getState().stageRef.current?.off('mouseup.selectDrawing');
       transformerActions.removeEventListener('dragend.drawings');
       transformerActions.removeEventListener('transformend.drawings');
-      useMapStore.getState().stageRef.current?.off('mouseup.selectDrawing');
     };
-  }, [handleMoveDrawing, handleTransformDrawing, handleSelectDrawing, props.listening]);
+  }, [
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    handleMoveDrawing,
+    handleSelectDrawing,
+    handleTransformDrawing,
+    props.listening,
+  ]);
 
   const updateNewBezierLinePoints = (points: number[][]) => {
     if (!newBezierLine) return;
@@ -542,18 +583,6 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
   };
 
-  const handleBezierLineClicked = (e: KonvaEventObject<MouseEvent>) => {
-    if (!isDrawingLayerActive() || isShapeSelected()) {
-      return;
-    }
-
-    handleShapeClicked(e);
-
-    if (e.target.attrs.object) {
-      setActiveBezierLine(e.target.attrs.object.id);
-    }
-  };
-
   return (
     <>
       <Layer {...layerProps} name={`${LayerType.Drawing}`}>
@@ -561,14 +590,18 @@ function DrawingLayer(props: DrawingLayerProps) {
           <BezierPolygon
             key={`bezier-line-${i}`}
             object={bezierLine}
-            onLineClick={handleBezierLineClicked}
-            editModeActive={activeBezierLine === bezierLine.id}
-            drawingModeActive={activeBezierLine === bezierLine.id}
+            editModeActive={activeShape === bezierLine.id}
+            drawingModeActive={activeShape === bezierLine.id}
             onPointsChanged={console.log}
             initialPoints={bezierLine.properties.points}
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             strokeWidth={bezierLine.strokeWidth!}
+            onLineClick={handleShapeClicked}
             color={bezierLine.color}
+            x={bezierLine.x}
+            y={bezierLine.y}
+            scaleX={bezierLine.scaleX}
+            scaleY={bezierLine.scaleY}
           ></BezierPolygon>
         ))}
 
@@ -582,6 +615,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             editModeActive={selectedShape == 'bezierPolygon'}
             strokeWidth={selectedStrokeWidth}
             color={selectedColor}
+            x={0}
+            y={0}
           ></BezierPolygon>
         )}
 

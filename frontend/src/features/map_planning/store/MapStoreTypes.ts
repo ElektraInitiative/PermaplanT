@@ -104,7 +104,7 @@ export interface TrackedMapSlice {
    */
   undo: () => void;
   /**
-   * Redo the last user initiated action.
+   * Redo the last user initiaPplated action.
    */
   redo: () => void;
 
@@ -187,6 +187,7 @@ export interface UntrackedMapSlice {
   drawingLayerClearSelectedShape: () => void;
   drawingLayerSetSelectedColor: (color: string) => void;
   drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
+  drawingLayerSetActivateShape: (id: string) => void;
   selectDrawings: (drawings: DrawingDto[] | null, transformerStore?: TransformerStore) => void;
 
   disableShapeSelection: () => void;
@@ -286,6 +287,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         shape: null,
         selectedColor: 'black',
         selectedStrokeWidth: 3,
+        activeShape: false,
       } as UntrackedDrawingLayerState,
       [LayerType.Base]: {
         visible: true,
@@ -411,6 +413,7 @@ export type UntrackedDrawingLayerState = UntrackedLayerState & {
   selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
   selectedStrokeWidth: number;
+  activeShape?: string;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {

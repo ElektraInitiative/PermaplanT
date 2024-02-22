@@ -3,8 +3,12 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+import IconButton from '@/components/Button/IconButton';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
+import EditIcon from '@/svg/icons/edit.svg?react';
+import useMapStore from '../../store/MapStore';
+import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
 import { DrawingDto } from './types';
 
 const DrawingAttributeEditFormSchema = z
@@ -37,6 +41,7 @@ export type EditMultipleDrawingsProps = EditDrawingAttributesProps & {
 };
 
 export type DrawingAttributeEditFormProps = EditDrawingAttributesProps & {
+  drawingId?: string;
   addDateDefaultValue: string;
   removeDateDefaultValue: string;
   colorDefaultValue: string;
@@ -71,6 +76,7 @@ export function SingleDrawingAttributeForm({
         onColorChange={onColorChange}
         onStrokeWidthChange={onStrokeWidthChange}
         isReadOnlyMode={isReadOnlyMode}
+        drawingId={drawing.id}
       />
     </div>
   );
@@ -131,6 +137,7 @@ export function MultipleDrawingAttributeForm({
 }
 
 export function DrawingAttributeEditForm({
+  drawingId,
   addDateDefaultValue,
   removeDateDefaultValue,
   colorDefaultValue,
@@ -156,6 +163,8 @@ export function DrawingAttributeEditForm({
   });
 
   const showStrokeWidth = strokeWidthDefaultValue !== undefined && strokeWidthDefaultValue > 0;
+  const drawingLayerSetActiveShape = useMapStore((state) => state.drawingLayerSetActivateShape);
+  const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   useEffect(() => {
     formInfo.reset({
@@ -233,6 +242,23 @@ export function DrawingAttributeEditForm({
       )}
 
       <hr className="my-4 border-neutral-700" />
+
+      {drawingId && (
+        <IconButton
+          isToolboxIcon={true}
+          onClick={() => {
+            drawingLayerSetActiveShape(drawingId);
+            setStatusPanelContent(
+              <DrawingLayerStatusPanelContent
+                text={t('drawingLayerForm:draw_bezier_polygon_hint')}
+              />,
+            );
+          }}
+          title={t('drawingLayerForm:draw_ellipse_tooltip')}
+        >
+          <EditIcon></EditIcon>
+        </IconButton>
+      )}
 
       <SimpleButton
         disabled={isReadOnlyMode}

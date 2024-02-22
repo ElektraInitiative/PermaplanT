@@ -2,18 +2,14 @@ import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import IconButton from '@/components/Button/IconButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import {
-  KEYBINDINGS_SCOPE_DRAWING_LAYER,
-  createKeyBindingsAccordingToConfig,
-} from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import useDebounceEffect from '@/hooks/useDebounceEffect';
-import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CircleIcon from '@/svg/icons/circle.svg?react';
-import CloseIcon from '@/svg/icons/close.svg?react';
+import PolygonIcon from '@/svg/icons/polygon.svg?react';
 import RectangleIcon from '@/svg/icons/rectangle.svg?react';
 import LineIcon from '@/svg/icons/wavy-line.svg?react';
 import { useTransformerStore } from '../../store/transformer/TransformerStore';
+import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
 import { DrawingShapeType } from './types';
 
 export function DrawingLayerToolForm() {
@@ -83,14 +79,15 @@ export function DrawingLayerToolForm() {
             renderAsActive={selectedShape === 'bezierPolygon'}
             onClick={() => {
               activateDrawingMode('bezierPolygon');
-
               setStatusPanelContent(
-                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_ellipse_hint')} />,
+                <DrawingLayerStatusPanelContent
+                  text={t('drawingLayerForm:draw_bezier_polygon_hint')}
+                />,
               );
             }}
-            title={t('drawingLayerForm:draw_ellipse_tooltip')}
+            title={t('drawingLayerForm:draw_bezier_polygon_tooltip')}
           >
-            <CircleIcon></CircleIcon>
+            <PolygonIcon></PolygonIcon>
           </IconButton>
         </div>
       </div>
@@ -149,41 +146,6 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
           )}
         </div>
       )}
-    </>
-  );
-}
-
-function DrawingLayerStatusPanelContent(props: { text: string }): ReactElement {
-  const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
-  const drawingLayerClearSelectedShape = useMapStore(
-    (state) => state.drawingLayerClearSelectedShape,
-  );
-
-  const exitDrawingMode = () => {
-    clearStatusPanelContent();
-    drawingLayerClearSelectedShape();
-  };
-
-  const keyHandlerActions: Record<string, () => void> = {
-    exitDrawingMode: exitDrawingMode,
-  };
-
-  useKeyHandlers(
-    createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_DRAWING_LAYER, keyHandlerActions),
-  );
-
-  return (
-    <>
-      <div className="flex flex-row items-center justify-center">{props.text}</div>
-      <div className="flex items-center justify-center">
-        <IconButton
-          className="m-2 h-8 w-8 border border-neutral-500 p-1"
-          onClick={exitDrawingMode}
-          data-tourid="placement_cancel"
-        >
-          <CloseIcon></CloseIcon>
-        </IconButton>
-      </div>
     </>
   );
 }
