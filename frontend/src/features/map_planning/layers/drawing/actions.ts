@@ -1,6 +1,7 @@
 /**
  * @module this module contains actions for the drawing layer.
  */
+import { v4 } from 'uuid';
 import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
@@ -11,6 +12,7 @@ import { updateAddDateDrawing } from './api/updateAddDateDrawing';
 import { updateColorDrawing } from './api/updateColorDrawing';
 import { updatePropertiesDrawing } from './api/updatePropertiesDrawing';
 import { updateRemoveDateDrawing } from './api/updateRemoveDateDrawing';
+import { updateStrokeWidthDrawing } from './api/updateStrokeWidthDrawing';
 import {
   DrawingDto,
   MoveDrawingActionPayload,
@@ -19,8 +21,8 @@ import {
   UpdateDrawingColorActionPayload,
   UpdateDrawingPropertiesActionPayload,
   UpdateDrawingRemoveDateActionPayload,
+  UpdateDrawingStrokeWidthActionPayload,
 } from './types';
-import { v4 } from 'uuid';
 
 export class CreateDrawingAction
   implements Action<Awaited<ReturnType<typeof createDrawing>>, boolean>
@@ -503,12 +505,84 @@ export class UpdateColorDrawingAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    console.log('updateColorDrawing');
     const updateDrawings = (drawings: Array<DrawingDto>) => {
       return drawings.map((p) => {
         if (p.id === this._data.id) {
           return {
             ...p,
             color: this._data.color,
+          };
+        }
+
+        return p;
+      });
+    };
+
+    const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        drawing: {
+          ...state.layers.drawing,
+          objects: filterVisibleObjects(
+            updateDrawings(state.layers.drawing.loadedObjects),
+            timelineDate,
+          ),
+          loadedObjects: updateDrawings(state.layers.drawing.loadedObjects),
+        },
+      },
+    };
+  }
+
+  //TODO #1123 - implement funtion to call backend
+  execute(): Promise<boolean> {
+    return updateColorDrawing();
+  }
+}
+
+export class UpdateStrokeWidthDrawingAction
+  implements
+    Action<
+      Awaited<ReturnType<typeof updateStrokeWidthDrawing>>,
+      Awaited<ReturnType<typeof updateStrokeWidthDrawing>>
+    >
+{
+  constructor(
+    private readonly _data: Omit<UpdateDrawingStrokeWidthActionPayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {}
+
+  get entityIds() {
+    return [this._data.id];
+  }
+
+  reverse(state: TrackedMapState) {
+    const drawing = state.layers.drawing.loadedObjects.find((obj) => obj.id === this._data.id);
+
+    if (!drawing) {
+      return null;
+    }
+
+    return new UpdateStrokeWidthDrawingAction(
+      {
+        id: drawing.id,
+        strokeWidth: drawing.strokeWidth,
+      },
+      this.actionId,
+    );
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    console.log('updateStrokeWidthDrawing');
+    const updateDrawings = (drawings: Array<DrawingDto>) => {
+      return drawings.map((p) => {
+        if (p.id === this._data.id) {
+          return {
+            ...p,
+            strokeWidth: this._data.strokeWidth,
           };
         }
 

@@ -1,5 +1,5 @@
-import { resetSelection } from '../../utils/ShapesSelection';
-import { DrawingShapeType } from './types';
+import { ReactElement, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import IconButton from '@/components/Button/IconButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import {
@@ -13,8 +13,8 @@ import CircleIcon from '@/svg/icons/circle.svg?react';
 import CloseIcon from '@/svg/icons/close.svg?react';
 import RectangleIcon from '@/svg/icons/rectangle.svg?react';
 import LineIcon from '@/svg/icons/wavy-line.svg?react';
-import { ReactElement, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTransformerStore } from '../../store/transformer/TransformerStore';
+import { DrawingShapeType } from './types';
 
 export function DrawingLayerToolForm() {
   const { t } = useTranslation(['common', 'drawingLayerForm']);
@@ -23,13 +23,13 @@ export function DrawingLayerToolForm() {
     (state) => state.drawingLayerActivateDrawingMode,
   );
 
-  const transformerRef = useMapStore((state) => state.transformer);
+  const transformerActions = useTransformerStore().actions;
   const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   const activateDrawingMode = (shape: DrawingShapeType) => {
     drawingLayerActivateDrawingMode(shape);
-    resetSelection(transformerRef);
+    transformerActions.clearSelection();
   };
 
   return (
@@ -140,7 +140,7 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
               id="stroke"
               className="background-red"
               type="range"
-              labelContent={t('drawings:stroke')}
+              labelContent={t('drawings:strokeWidth')}
               min={1}
               max={100}
               onChange={(e) => setSelectedStrokeWidth(+e.target.value)}

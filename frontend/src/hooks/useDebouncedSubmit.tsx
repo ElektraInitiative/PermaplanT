@@ -43,11 +43,13 @@ export function useDebouncedSubmit<T extends FieldValues>(
   );
 
   const onFormSubmit = (data: T) => {
+    console.log('onFormSubmit', data);
     onValid(data);
     setSubmitState('idle');
   };
 
   const onFormError = (errors: FieldErrors<T>) => {
+    console.log('onFormError', errors);
     onInvalid?.(errors);
     setSubmitState('error');
   };

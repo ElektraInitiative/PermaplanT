@@ -217,6 +217,7 @@ export const BaseStage = ({
   // Event listener responsible for stopping a possible stage-dragging mode
   // and for hiding the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
+    console.log('onStageMouseUp');
     listeners?.stageMouseUpListeners.forEach((listener) => listener(e));
     renderDefaultMouseCursor();
 

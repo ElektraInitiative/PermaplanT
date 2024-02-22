@@ -4,6 +4,6 @@
   "add_date": "Hinzugefügt am",
   "remove_date": "Entfernt am",
   "color": "Farbe",
-  "stroke": "Stärke",
+  "strokeWidth": "Stärke",
   "error_invalid_add_remove_date": "Das Entfernungsdatum muss nach dem Hinzufügungsdatum liegen."
 }
