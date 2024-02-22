@@ -17,6 +17,11 @@ export type BezierPolygonProps = {
   strokeWidth: number;
   color: string;
   object?: DrawingDto;
+  x: number;
+  y: number;
+  scaleX?: number;
+  scaleY?: number;
+  rotation?: number;
 };
 
 type Point = number[];
@@ -42,6 +47,11 @@ function BezierPolygon({
   onFinishLine,
   onLineClick,
   object,
+  x,
+  y,
+  scaleX,
+  scaleY,
+  rotation,
 }: BezierPolygonProps) {
   const [points, setPoints] = useState<Point[]>(initialPoints);
   const [, setActivePoint] = useState(-1);
@@ -49,7 +59,7 @@ function BezierPolygon({
   const [segPos, setSegPos] = useState<Point>([]);
 
   const transformerActions = useTransformerStore().actions;
-  +useEffect(() => {
+  useEffect(() => {
     if (points) {
       onPointsChanged(points);
     }
@@ -59,9 +69,10 @@ function BezierPolygon({
     points.slice(3 * segI, 3 * segI + 4),
   );
 
-  const handeAddPoint = (e: Konva.KonvaEventObject<MouseEvent>) => {
+  const handleAddPoint = (e: Konva.KonvaEventObject<MouseEvent>) => {
     if (!drawingModeActive) return;
 
+    // if right click
     if (e.evt.button == 2) {
       e.evt.preventDefault();
       e.evt.stopPropagation();
@@ -85,7 +96,7 @@ function BezierPolygon({
     if (pos == null) return [];
 
     setPoints((points) => {
-      const newPoint = [pos.x, pos.y];
+      const newPoint = [pos.x - x, pos.y - y];
 
       if (!points.length) return [newPoint];
 
@@ -95,8 +106,18 @@ function BezierPolygon({
     });
   };
 
+  const handleDoubleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    if (e.target !== e.currentTarget) return;
+
+    if (e.evt.button == 2) {
+      e.evt.preventDefault();
+      e.evt.stopPropagation();
+    } else {
+      handleAddPoint(e);
+    }
+  };
+
   const handleFinishDrawing = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    console.log('dfinis');
     // Must click in blank space to add a point.
     if (e.target !== e.currentTarget) return;
 
@@ -110,23 +131,22 @@ function BezierPolygon({
       return;
     }
 
-    useMapStore.getState().stageRef.current?.on('dblclick.finishDrawing', handleFinishDrawing);
-    useMapStore.getState().stageRef.current?.on('click.addPoint', handeAddPoint);
+    useMapStore.getState().stageRef.current?.on('dblclick.finishDrawing', handleDoubleClick);
+    useMapStore.getState().stageRef.current?.on('click.addPoint', handleAddPoint);
 
     // do not show context menu on right click
     useMapStore.getState().stageRef.current?.on('contextmenu', (e) => {
       e.evt.preventDefault();
+      e.evt.stopPropagation();
+      handleFinishDrawing(e);
     });
 
     return () => {
       useMapStore.getState().stageRef.current?.off('dblclick.finishDrawing');
       useMapStore.getState().stageRef.current?.off('click.addPoint');
-      // do not show context menu on right click
       useMapStore.getState().stageRef.current?.off('contextmenu');
     };
-  }, [handeAddPoint]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  console.log(color);
+  }, [handleAddPoint]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -137,10 +157,17 @@ function BezierPolygon({
           points={points.flat()}
           stroke={color}
           strokeWidth={strokeWidth}
+          hitStrokeWidth={(strokeWidth ? 1 : 0) + 100}
           lineCap={'round'}
           lineJoin={'round'}
           object={object}
           bezier
+          x={x}
+          y={y}
+          scaleX={scaleX}
+          scaleY={scaleY}
+          rotation={rotation}
+          draggable
         />
       )}
       {/* Segmented dashed control line AND segmented curve */}
@@ -210,7 +237,7 @@ function BezierPolygon({
               <Line
                 points={flatSegmentPoints}
                 stroke={'#bbb'}
-                strokeWidth={10}
+                strokeWidth={2}
                 dash={[10, 10]}
                 opacity={isActive ? 1 : 0.5}
               />
@@ -230,6 +257,8 @@ function BezierPolygon({
               x={p[0]}
               y={p[1]}
               radius={5}
+              isControlElement={true}
+              listening={true}
               opacity={isActive ? 1 : 0.5}
               scaleX={isActive ? 1.5 : 1}
               scaleY={isActive ? 1.5 : 1}
@@ -239,7 +268,7 @@ function BezierPolygon({
                     strokeWidth: 10,
                   }
                 : {
-                    fill: '#ee90aa',
+                    fill: i == points.length - 1 ? '#0000ff' : '#ee90aa',
                   })}
               onDragMove={({ target }) => {
                 setPoints((points) => {

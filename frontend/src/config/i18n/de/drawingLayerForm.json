@@ -3,8 +3,9 @@
   "draw_rectangle_hint": "Benutze die Maus, um ein Rechteck aufzuziehen.",
   "draw_ellipse_hint": "Benutze die Maus, um eine Ellipse aufzuziehen.",
   "draw_free_line_hint": "Benututze die Maus, um eine freie Linie zu zeichnen.",
-
+  "draw_bezier_polygon_hint": "Klicken Sie mit der linken Maustaste, um einen Punkt zu setzen. Klicken Sie mit der rechten Maustaste, um die Zeichnung zu beenden.",
   "draw_rectangle_tooltip": "Rechteck zeichnen.",
   "draw_ellipse_tooltip": "Ellipse zeichnen.",
-  "draw_free_line_tooltip": "Freie Linie zeichnen."
+  "draw_free_line_tooltip": "Freie Linie zeichnen.",
+  "draw_bezier_polygon_tooltip": "Freies Polygon zeichnen."
 }

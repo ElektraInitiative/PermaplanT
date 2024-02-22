@@ -153,9 +153,11 @@ export class MoveDrawingAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    console.log('moveDrawing');
     const updateDrawings = (drawings: Array<DrawingDto>) => {
       return drawings.map((drawing) => {
         if (this._ids.includes(drawing.id)) {
+          console.log('drawing', drawing.id);
           return {
             ...drawing,
             x: this._data.find((d) => drawing.id === d.id)?.x ?? drawing.x,
@@ -225,6 +227,8 @@ export class TransformDrawingAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    console.log('moveDrawing');
+
     const updateDrawings = (drawings: Array<DrawingDto>) => {
       return drawings.map((drawing) => {
         if (this._ids.includes(drawing.id)) {

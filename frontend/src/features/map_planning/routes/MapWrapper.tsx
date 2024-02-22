@@ -1,8 +1,10 @@
 import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ShepherdTour } from 'react-shepherd';
 import { LayerType, LayerDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { EditorMap } from '../components/EditorMap';
 import {
@@ -13,6 +15,7 @@ import {
   usePlantLayer,
 } from '../hooks/mapEditorHookApi';
 import { useTourStatus } from '../hooks/tourHookApi';
+import useGetTimeLineData from '../hooks/useGetTimelineData';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
@@ -31,8 +34,37 @@ function getDefaultLayer(layerType: LayerType, layers?: LayerDto[]) {
  */
 function useInitializeMap() {
   const mapId = useMapId();
-  const { data: layers } = useGetLayers(mapId);
   const { data: map } = useMap(mapId);
+  const { data: layers, error } = useGetLayers(mapId);
+  const { t } = useTranslation(['layers']);
+
+  const timeLineVisibleYears = useMapStore((state) => state.untrackedState.timeLineVisibleYears);
+  const timeLineEvents = useGetTimeLineData(
+    mapId,
+    timeLineVisibleYears.from,
+    timeLineVisibleYears.to,
+  );
+
+  useEffect(() => {
+    if (timeLineEvents) {
+      useMapStore.setState((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          timeLineEvents: {
+            daily: timeLineEvents.daily,
+            monthly: timeLineEvents.monthly,
+            yearly: timeLineEvents.yearly,
+          },
+        },
+      }));
+    }
+  }, [timeLineEvents]);
+
+  if (error) {
+    console.error(error);
+    errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
+  }
 
   useEffect(() => {
     if (!layers) return;
@@ -95,7 +127,7 @@ function useInitializeMap() {
     return null;
   }
 
-  return layers;
+  return { layers };
 }
 
 /**
@@ -168,7 +200,7 @@ export function MapWrapper() {
   return (
     <ReadOnlyModeContextProvider>
       <ShepherdTour steps={steps} tourOptions={tourOptions}>
-        <EditorMap layers={mapData} />
+        <EditorMap layers={mapData.layers} />
       </ShepherdTour>
     </ReadOnlyModeContextProvider>
   );

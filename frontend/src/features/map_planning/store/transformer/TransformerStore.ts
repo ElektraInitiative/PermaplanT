@@ -126,8 +126,6 @@ function isTransforming(transformer: Konva.Transformer | null): boolean {
 }
 
 function select(transformer: Konva.Transformer | null, node: Konva.Node) {
-  console.log('single select', node);
-
   transformer?.nodes([node]);
 }
 
