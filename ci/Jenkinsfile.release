@@ -1,3 +1,6 @@
+// Pipeline for releases, which is manually triggered on the jenkins webapp
+// This pipeline contains duplicate code from the other `Jenkinsfile`
+
 def node_info() {
     echo "Running stage on ${env.NODE_NAME}"
 }
