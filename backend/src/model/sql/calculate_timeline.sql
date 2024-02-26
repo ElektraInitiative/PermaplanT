@@ -6,7 +6,7 @@ WITH t1 AS (
         plantings AS p
     INNER JOIN
         layers AS l
-        ON plantings.layer_id = layers.id
+        ON p.layer_id = l.id
     WHERE
         l.map_id = $1 AND
         p.add_date BETWEEN $2 AND $3
@@ -22,7 +22,7 @@ t2 AS (
         plantings AS p
     INNER JOIN
         layers AS l
-        ON plantings.layer_id = layers.id
+        ON p.layer_id = l.id
     WHERE
         l.map_id = $1 AND
         p.remove_date BETWEEN $2 AND $3
