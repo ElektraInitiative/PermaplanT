@@ -64,8 +64,6 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
                 -e 'AUTH_CLIENT_ID=unused' \
                 -e 'KEYCLOAK_CLIENT_ID=unused' \
                 -e 'KEYCLOAK_CLIENT_SECRET=unused' \
-                -e 'KEYCLOAK_USERNAME=unused' \
-                -e 'KEYCLOAK_PASSWORD=unused' \
                 -e 'RUSTFLAGS=-D warnings' \
                 -e 'RUSTDOCFLAGS=-D warnings'"
                 ) {

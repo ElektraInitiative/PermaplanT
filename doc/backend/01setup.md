@@ -13,8 +13,6 @@ All steps mentioned here have to be executed in the `backend/` folder.
 - `AUTH_CLIENT_ID` the client id the frontend should use to log in
 - `KEYCLOAK_CLIENT_ID` the client id the server uses to communicate with keycloak (needs to be configured in keycloak)
 - `KEYCLOAK_CLIENT_SECRET` the client secret the server uses to communicate with keycloak (needs to be configured in keycloak)
-- `KEYCLOAK_USERNAME` the username the server uses to authenticate for the keycloak api (admin console)
-- `KEYCLOAK_PASSWORD` the password the server uses to authenticate for the keycloak api (admin console)
 - `RUST_LOG` used to set the logging config for [env_logger](https://docs.rs/env_logger/latest/env_logger/)
 
 To install an extension, a user needs to be a 'superuser',
