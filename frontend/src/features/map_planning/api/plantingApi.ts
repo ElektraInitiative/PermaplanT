@@ -8,6 +8,7 @@ import {
   TransformPlantingDto,
   UpdateAddDatePlantingDto,
   UpdatePlantingDto,
+  UpdatePlantingNoteDto,
   UpdateRemoveDatePlantingDto,
 } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
@@ -152,6 +153,28 @@ export async function updateRemoveDatePlanting(
     actionId: actionId,
     dto: {
       type: 'UpdateRemoveDate',
+      content: updates,
+    },
+  };
+  try {
+    const response = await http.patch(`api/maps/${mapId}/layers/plants/plantings`, dto);
+    return response.data;
+  } catch (error) {
+    throw error as Error;
+  }
+}
+
+export async function updatePlantingNotes(
+  mapId: number,
+  actionId: string,
+  updates: UpdatePlantingNoteDto[],
+) {
+  const http = createAPI();
+
+  const dto: ActionDtoWrapper<UpdatePlantingDto> = {
+    actionId: actionId,
+    dto: {
+      type: 'UpdateNote',
       content: updates,
     },
   };

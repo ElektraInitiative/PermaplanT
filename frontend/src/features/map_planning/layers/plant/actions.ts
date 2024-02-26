@@ -11,12 +11,14 @@ import {
   UpdatePlantingAddDateActionPayload,
   UpdatePlantingRemoveDateActionPayload,
   UpdatePlantingAdditionalNamePayload,
+  UpdatePlantingNoteActionPayload,
 } from '@/api_types/definitions';
 import updateAddDatePlanting, {
   createPlanting,
   deletePlanting,
   movePlanting,
   transformPlanting,
+  updatePlantingNotes,
   updateRemoveDatePlanting,
 } from '../../api/plantingApi';
 import useMapStore from '../../store/MapStore';
@@ -311,6 +313,71 @@ export class UpdateAddDatePlantAction
 
   execute(mapId: number): Promise<PlantingDto> {
     return updateAddDatePlanting(mapId, this.actionId, this._data);
+  }
+}
+
+export class UpdatePlantingNotesAction
+  implements
+    Action<
+      Awaited<ReturnType<typeof updatePlantingNotes>>,
+      Awaited<ReturnType<typeof updatePlantingNotes>>
+    >
+{
+  private readonly _ids: string[];
+
+  constructor(private readonly _data: UpdatePlantingNoteActionPayload[], public actionId = v4()) {
+    this._ids = this._data.map(({ id }) => id);
+  }
+
+  get entityIds() {
+    return this._ids;
+  }
+
+  reverse(state: TrackedMapState) {
+    const plants = filterByIds(state.layers.plants.loadedObjects, this._ids);
+
+    if (!plants.length) {
+      return null;
+    }
+
+    return new UpdatePlantingNotesAction(
+      plants.map((p) => ({
+        id: p.id,
+        notes: p.plantingNotes || '',
+      })),
+      this.actionId,
+    );
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    const updatePlants = (plants: Array<PlantingDto>) => {
+      return plants.map((p) => {
+        if (this._ids.includes(p.id)) {
+          return {
+            ...p,
+            plantingNotes: this._data.find((d) => d.id === p.id)?.notes ?? p.plantingNotes,
+          };
+        }
+
+        return p;
+      });
+    };
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        plants: {
+          ...state.layers.plants,
+          objects: updatePlants(state.layers.plants.objects),
+          loadedObjects: updatePlants(state.layers.plants.loadedObjects),
+        },
+      },
+    };
+  }
+
+  execute(mapId: number): Promise<PlantingDto> {
+    return updatePlantingNotes(mapId, this.actionId, this._data);
   }
 }
 
