@@ -15,7 +15,6 @@ import {
   usePlantLayer,
 } from '../hooks/mapEditorHookApi';
 import { useTourStatus } from '../hooks/tourHookApi';
-import useGetTimeLineData from '../hooks/useGetTimelineData';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
@@ -37,29 +36,6 @@ function useInitializeMap() {
   const { data: map } = useMap(mapId);
   const { data: layers, error } = useGetLayers(mapId);
   const { t } = useTranslation(['layers']);
-
-  const timeLineVisibleYears = useMapStore((state) => state.untrackedState.timeLineVisibleYears);
-  const timeLineEvents = useGetTimeLineData(
-    mapId,
-    timeLineVisibleYears.from,
-    timeLineVisibleYears.to,
-  );
-
-  useEffect(() => {
-    if (timeLineEvents) {
-      useMapStore.setState((state) => ({
-        ...state,
-        untrackedState: {
-          ...state.untrackedState,
-          timeLineEvents: {
-            daily: timeLineEvents.daily,
-            monthly: timeLineEvents.monthly,
-            yearly: timeLineEvents.yearly,
-          },
-        },
-      }));
-    }
-  }, [timeLineEvents]);
 
   if (error) {
     console.error(error);

@@ -187,7 +187,7 @@ export interface UntrackedMapSlice {
   drawingLayerClearSelectedShape: () => void;
   drawingLayerSetSelectedColor: (color: string) => void;
   drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
-  drawingLayerSetActivateShape: (id: string) => void;
+  drawingLayerSetActiveShape: (id: string) => void;
   selectDrawings: (drawings: DrawingDto[] | null, transformerStore?: TransformerStore) => void;
 
   disableShapeSelection: () => void;
@@ -240,6 +240,7 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
       [LayerType.Drawing]: {
         layerId: 0,
         id: -1,
+        index: LayerType.Drawing,
         objects: [],
         loadedObjects: [],
       },
@@ -282,12 +283,14 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         showLabels: true,
       } as UntrackedPlantLayerState,
       [LayerType.Drawing]: {
+        index: LayerType.Drawing,
         visible: true,
         opacity: 1,
         shape: null,
         selectedColor: 'black',
         selectedStrokeWidth: 3,
-        activeShape: false,
+        selectedDrawings: [],
+        activeShape: undefined,
       } as UntrackedDrawingLayerState,
       [LayerType.Base]: {
         visible: true,
@@ -413,7 +416,7 @@ export type UntrackedDrawingLayerState = UntrackedLayerState & {
   selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
   selectedStrokeWidth: number;
-  activeShape?: string;
+  activeShape: string | undefined;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {
