@@ -573,12 +573,15 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
   };
 
+  const transformerRef = useRef<Konva.Transformer>(null);
+
   return (
     <>
       <Layer {...layerProps} name={`${LayerType.Drawing}`}>
         {bezierLines.map((bezierLine, i) => (
           <BezierPolygon
             key={`bezier-line-${i}`}
+            transformerRef={transformerRef}
             id={bezierLine.id}
             object={bezierLine}
             editModeActive={activeShape === bezierLine.id}
@@ -633,6 +636,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             draggable
             onDragStart={moveToTop}
             bezier
+            rotation={line.rotation}
             globalCompositeOperation="source-over"
           />
         ))}
@@ -667,6 +671,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             key={`rect-${i}`}
             x={rectangle.x}
             y={rectangle.y}
+            rotation={rectangle.rotation}
             width={rectangle.properties.width}
             height={rectangle.properties.height}
             stroke={rectangle.color}
@@ -702,6 +707,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             key={`ellipse-${i}`}
             x={ellipse.x}
             y={ellipse.y}
+            rotation={ellipse.rotation}
             scaleX={ellipse.scaleX}
             scaleY={ellipse.scaleY}
             radiusX={ellipse.properties.radiusX}

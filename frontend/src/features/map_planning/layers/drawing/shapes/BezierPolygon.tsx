@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { Circle, Line } from 'react-konva';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
 import { DrawingDto } from '../types';
 
 export type BezierPolygonProps = {
+  transformerRef?: React.MutableRefObject<Konva.Transformer | null>;
   id: string;
   drawingModeActive: boolean;
   editModeActive: boolean;
@@ -60,7 +60,6 @@ function BezierPolygon({
   const [activeSegments, setActiveSegments] = useState<number[]>([]);
   const [segPos, setSegPos] = useState<Point>([]);
 
-  const transformerActions = useTransformerStore().actions;
   useEffect(() => {
     if (points) {
       onPointsChanged(points);
@@ -269,6 +268,7 @@ function BezierPolygon({
               opacity={isActive ? 1 : 0.5}
               scaleX={isActive ? 1.5 : 1}
               scaleY={isActive ? 1.5 : 1}
+              draggable
               {...(i % 3
                 ? {
                     stroke: '#ccc',
@@ -290,9 +290,6 @@ function BezierPolygon({
                   i % 3 === 0 && thisSegment ? [thisSegment - 1, thisSegment] : [thisSegment];
                 setActiveSegments(activeSegments);
                 setActivePoint(i);
-              }}
-              onMouseDown={(e) => {
-                transformerActions.select(e.currentTarget);
               }}
               onMouseLeave={() => {
                 setActiveSegments([]);
@@ -325,7 +322,6 @@ function BezierPolygon({
                   });
                 }
               }}
-              draggable
             />
           );
         })}

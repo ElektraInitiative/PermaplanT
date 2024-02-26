@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, { useRef, useState, useEffect, ReactNode, useCallback } from 'react';
 import './styles/timeline.css';
 
@@ -294,7 +295,8 @@ const ItemSliderPicker = ({
 
         {items.map((item, index) => {
           return (
-            <div
+            <motion.div
+              viewport={{ root: sliderContainerRef }}
               key={index}
               className={`item min-w-1/5 dark relative flex w-10 flex-col items-center justify-end border-4 border-white px-7 pb-1 pt-1 dark:border-neutral-200-dark
               ${
@@ -306,7 +308,7 @@ const ItemSliderPicker = ({
               onClick={(e) => handleItemClick(e, index)}
             >
               {item.content}
-            </div>
+            </motion.div>
           );
         })}
 

@@ -336,7 +336,10 @@ function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>): void {
 }
 
 function preventDraggingOfNonSelectedShapes(konvaEvent: KonvaEventObject<DragEvent>): void {
-  if (!useTransformerStore.getState().actions.isNodeSelected(konvaEvent.target)) {
+  if (
+    !konvaEvent.target.attrs.isControlElement &&
+    !useTransformerStore.getState().actions.isNodeSelected(konvaEvent.target)
+  ) {
     konvaEvent.target.stopDrag();
   }
 }

@@ -1,3 +1,5 @@
+import Konva from 'konva';
+import { useRef } from 'react';
 import { Group, Circle, Rect } from 'react-konva';
 import { PlantingDto } from '@/api_types/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
@@ -49,8 +51,11 @@ function SinglePlanting({ planting }: PlantingProps) {
   const { plant, isSelected, handleOnClick } = usePlanting(planting);
   const fillColor = isSelected ? colors.secondary[200] : colors.primary[400];
 
+  const plantingRef = useRef<Konva.Group>(null);
+
   return (
     <Group
+      ref={plantingRef}
       planting={planting}
       {...planting}
       width={planting.sizeX}
