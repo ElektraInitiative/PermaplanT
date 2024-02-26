@@ -38,15 +38,6 @@ export const createUntrackedMapSlice: StateCreator<
       y2: 0,
     },
   },
-  setPlantingDetailNotesFullscreen(isFullscreen: boolean) {
-    set((state) => ({
-      ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        plantingDetailsNotesFullscreen: isFullscreen,
-      },
-    }));
-  },
   updateSelectionRect(update: React.SetStateAction<SelectionRectAttrs>) {
     if (typeof update === 'function') {
       set((state) => ({

@@ -68,8 +68,7 @@ export default function MarkdownEditor<T extends FieldValues>({
     value: DefaultFullScreenCommand.value,
     buttonProps: DefaultFullScreenCommand.buttonProps,
     icon: DefaultFullScreenCommand.icon,
-    execute: function execute(state, api, dispatch, executeCommandState, shortcuts) {
-      console.log('executeCommandState', executeCommandState);
+    execute(state, api, dispatch, executeCommandState, shortcuts) {
       api.textArea.focus();
       setIsFullScreen(!isFullScreen);
       fullScreenChange?.(!isFullScreen);
