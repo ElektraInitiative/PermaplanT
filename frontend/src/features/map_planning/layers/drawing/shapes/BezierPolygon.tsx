@@ -8,6 +8,7 @@ import { useTransformerStore } from '@/features/map_planning/store/transformer/T
 import { DrawingDto } from '../types';
 
 export type BezierPolygonProps = {
+  id: string;
   drawingModeActive: boolean;
   editModeActive: boolean;
   initialPoints: number[][];
@@ -38,6 +39,7 @@ function getMidPoints(p1: Point, p2: Point) {
 }
 
 function BezierPolygon({
+  id,
   drawingModeActive,
   editModeActive,
   strokeWidth,
@@ -153,6 +155,7 @@ function BezierPolygon({
       {/* The curve */}
       {!editModeActive && (
         <Line
+          id={id}
           onClick={onLineClick}
           points={points.flat()}
           stroke={color}
@@ -187,6 +190,8 @@ function BezierPolygon({
                 lineCap={'round'}
                 lineJoin={'round'}
                 shadowColor={'white'}
+                x={x}
+                y={y}
                 onMouseMove={(e: Konva.KonvaEventObject<MouseEvent>) => {
                   setActiveSegments([i]);
 
@@ -235,6 +240,8 @@ function BezierPolygon({
 
               {/* Control line */}
               <Line
+                x={x}
+                y={y}
                 points={flatSegmentPoints}
                 stroke={'#bbb'}
                 strokeWidth={2}
@@ -254,8 +261,8 @@ function BezierPolygon({
           return (
             <Circle
               key={i}
-              x={p[0]}
-              y={p[1]}
+              x={x + p[0]}
+              y={y + p[1]}
               radius={5}
               isControlElement={true}
               listening={true}
@@ -273,7 +280,7 @@ function BezierPolygon({
               onDragMove={({ target }) => {
                 setPoints((points) => {
                   const newPoints = [...points];
-                  newPoints[i] = [target.attrs.x, target.attrs.y];
+                  newPoints[i] = [target.attrs.x - x, target.attrs.y - y];
                   return newPoints;
                 });
               }}
@@ -324,8 +331,8 @@ function BezierPolygon({
         })}
       {!!segPos.length && (
         <Circle
-          x={segPos[0]}
-          y={segPos[1]}
+          x={x + segPos[0]}
+          y={y + segPos[1]}
           radius={5}
           opacity={0.75}
           scaleX={1.5}

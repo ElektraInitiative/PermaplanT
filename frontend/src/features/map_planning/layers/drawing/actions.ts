@@ -140,6 +140,8 @@ export class MoveDrawingAction
   }
 
   reverse(state: TrackedMapState) {
+    console.log(state.layers.drawing.objects);
+    console.log(this._ids);
     const drawings = state.layers.drawing.objects.filter((obj) => this._ids.includes(obj.id));
 
     if (!drawings.length) {
@@ -153,11 +155,9 @@ export class MoveDrawingAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
-    console.log('moveDrawing');
     const updateDrawings = (drawings: Array<DrawingDto>) => {
       return drawings.map((drawing) => {
         if (this._ids.includes(drawing.id)) {
-          console.log('drawing', drawing.id);
           return {
             ...drawing,
             x: this._data.find((d) => drawing.id === d.id)?.x ?? drawing.x,
@@ -168,6 +168,8 @@ export class MoveDrawingAction
         return drawing;
       });
     };
+
+    console.log('moveDrawing');
 
     return {
       ...state,
@@ -509,7 +511,6 @@ export class UpdateColorDrawingAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
-    console.log('updateColorDrawing');
     const updateDrawings = (drawings: Array<DrawingDto>) => {
       return drawings.map((p) => {
         if (p.id === this._data.id) {
@@ -580,7 +581,6 @@ export class UpdateStrokeWidthDrawingAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
-    console.log('updateStrokeWidthDrawing');
     const updateDrawings = (drawings: Array<DrawingDto>) => {
       return drawings.map((p) => {
         if (p.id === this._data.id) {

@@ -481,7 +481,6 @@ function DrawingLayer(props: DrawingLayerProps) {
     const transformerActions = useTransformerStore.getState().actions;
     const drawings = transformerActions.getSelection().reduce(selectedDrawings, []);
 
-    console.log(drawings);
     if (drawings?.length) {
       useMapStore.getState().selectDrawings(drawings);
     }
@@ -523,16 +522,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       };
     });
 
-    // Remove null values
-    const filteredUpdates = updates.filter((update) => update !== null) as {
-      id: string;
-      x: number;
-      y: number;
-    }[];
-
-    console.log('filteredUpdates', filteredUpdates);
-    if (!filteredUpdates.length) return;
-    executeAction(new MoveDrawingAction(filteredUpdates));
+    executeAction(new MoveDrawingAction(updates));
   }, [executeAction]);
 
   useEffect(() => {
@@ -589,6 +579,7 @@ function DrawingLayer(props: DrawingLayerProps) {
         {bezierLines.map((bezierLine, i) => (
           <BezierPolygon
             key={`bezier-line-${i}`}
+            id={bezierLine.id}
             object={bezierLine}
             editModeActive={activeShape === bezierLine.id}
             drawingModeActive={activeShape === bezierLine.id}
@@ -607,6 +598,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
         {newBezierLine && (
           <BezierPolygon
+            id="new-bezier-line"
             key={`new-bezier-line`}
             onFinishLine={handleFinishBezierLine}
             onPointsChanged={updateNewBezierLinePoints}

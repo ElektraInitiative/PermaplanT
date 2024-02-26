@@ -150,7 +150,7 @@ export function DrawingAttributeEditForm({
   isReadOnlyMode,
   multipleDrawings = false,
 }: DrawingAttributeEditFormProps) {
-  const { t } = useTranslation(['drawings']);
+  const { t } = useTranslation(['drawings', 'drawingLayerForm']);
 
   const formInfo = useForm<DrawingFormData>({
     defaultValues: {
@@ -163,7 +163,7 @@ export function DrawingAttributeEditForm({
   });
 
   const showStrokeWidth = strokeWidthDefaultValue !== undefined && strokeWidthDefaultValue > 0;
-  const drawingLayerSetActiveShape = useMapStore((state) => state.drawingLayerSetActivateShape);
+  const drawingLayerSetActiveShape = useMapStore((state) => state.drawingLayerSetActiveShape);
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   useEffect(() => {
@@ -225,7 +225,7 @@ export function DrawingAttributeEditForm({
       </div>
 
       {showStrokeWidth && (
-        <div className="flex gap-2">
+        <div className="mt-2 flex gap-2">
           <DebouncedSimpleFormInput
             required={false}
             id="strokeWidth"
@@ -241,7 +241,7 @@ export function DrawingAttributeEditForm({
         </div>
       )}
 
-      <hr className="my-4 border-neutral-700" />
+      <hr className="my-2 border-neutral-700" />
 
       {drawingId && (
         <IconButton
@@ -254,7 +254,7 @@ export function DrawingAttributeEditForm({
               />,
             );
           }}
-          title={t('drawingLayerForm:draw_ellipse_tooltip')}
+          title={t('drawings:edit_mode')}
         >
           <EditIcon></EditIcon>
         </IconButton>

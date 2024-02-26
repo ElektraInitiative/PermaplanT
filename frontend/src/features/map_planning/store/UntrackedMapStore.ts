@@ -499,7 +499,7 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
 
-  drawingLayerSetActivateShape(id: string) {
+  drawingLayerSetActiveShape(id: string) {
     get().disableShapeSelection();
     set((state) => ({
       ...state,
