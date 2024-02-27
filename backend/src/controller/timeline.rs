@@ -8,7 +8,10 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-/// Endpoint for gettings generated timeline data.
+/// Get calculated timeline data for a given map from dates start to end.
+/// The timeline contains all additions and removals of `Plantings` aggregated
+/// by years, months, and also on the actual dates. It only contains years, months
+/// and dates if there is at least one addition or removal.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

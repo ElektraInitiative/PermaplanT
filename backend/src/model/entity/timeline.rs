@@ -35,11 +35,6 @@ pub async fn calculate(
     params: TimelineParameters,
     conn: &mut AsyncPgConnection,
 ) -> QueryResult<TimelineDto> {
-    // the following query gives us additions and removals per day
-    // date        additions  removals
-    // 2000-01-01  7          3
-    // 2000-01-02  4          0
-    // 2000-01-03  2          8
     let query = sql_query(CALCULATE_TIMELINE_QUERY)
         .bind::<diesel::sql_types::Integer, _>(map_id)
         .bind::<diesel::sql_types::Date, _>(params.start)
