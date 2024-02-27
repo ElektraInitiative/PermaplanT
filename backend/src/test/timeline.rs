@@ -4,7 +4,6 @@ use std::collections::HashMap;
 
 use crate::error::ServiceError;
 use crate::model::dto::timeline::{TimelineDto, TimelineEntryDto};
-use crate::schema::plantings::y;
 use crate::test::util::init_test_database;
 use actix_http::{header, StatusCode};
 use actix_web::test;
@@ -241,7 +240,7 @@ async fn test_calculate_timeline_invalid_requests() {
         .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
-    assert_eq!(resp.status(), StatusCode::NOT_FOUND);
+    assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
 
     // We should return 422 if start > end (we understand the request but the data is invalid)
     let resp = test::TestRequest::get()
