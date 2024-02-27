@@ -17,6 +17,8 @@ type DrawingLayerProps = LayerConfigWithListenerRegister;
 
 type Rectangle = {
   color: string;
+  fillEnabled: boolean;
+  strokeWidth: number;
   x1: number;
   y1: number;
   x2: number;
@@ -24,6 +26,8 @@ type Rectangle = {
 };
 
 type Ellipse = {
+  fillEnabled: boolean;
+  strokeWidth: number;
   color: string;
   x: number;
   y: number;
@@ -34,6 +38,7 @@ type Ellipse = {
 type Line = {
   color: string;
   strokeWidth: number;
+  fillEnabled: boolean;
   x: number;
   y: number;
   points: number[][];
@@ -48,6 +53,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   const selectedStrokeWidth = useMapStore(
     (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
   );
+  const fillEnabled = useMapStore((state) => state.untrackedState.layers.drawing.fillEnabled);
 
   const selectDrawings = useMapStore((state) => state.selectDrawings);
 
@@ -121,6 +127,8 @@ function DrawingLayer(props: DrawingLayerProps) {
           scaleX: 1,
           scaleY: 1,
           color: rectangle.color,
+          fillEnabled: rectangle.fillEnabled,
+          strokeWidth: rectangle.strokeWidth,
           properties: {
             width: rectangle.x2 - rectangle.x1,
             height: rectangle.y2 - rectangle.y1,
@@ -145,6 +153,8 @@ function DrawingLayer(props: DrawingLayerProps) {
           x: ellipse.x,
           y: ellipse.y,
           color: ellipse.color,
+          fillEnabled: ellipse.fillEnabled,
+          strokeWidth: ellipse.strokeWidth,
           properties: {
             radiusX: ellipse.radiusX,
             radiusY: ellipse.radiusY,
@@ -168,6 +178,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           scaleY: 1,
           x: line.x,
           y: line.y,
+          fillEnabled: false,
           color: line.color,
           strokeWidth: line.strokeWidth,
           properties: {
@@ -192,6 +203,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           scaleY: 1,
           x: 0,
           y: 0,
+          fillEnabled: line.fillEnabled,
           color: line.color,
           strokeWidth: line.strokeWidth,
           properties: {
@@ -258,6 +270,7 @@ function DrawingLayer(props: DrawingLayerProps) {
         isDrawing.current = true;
         setNewLine({
           strokeWidth: selectedStrokeWidth,
+          fillEnabled: false,
           color: selectedColor,
           x: pos.x,
           y: pos.y,
@@ -265,14 +278,31 @@ function DrawingLayer(props: DrawingLayerProps) {
         });
       } else if (selectedShape == 'rectangle') {
         isDrawing.current = true;
-        setPreviewRectangle({ color: selectedColor, x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y });
+        setPreviewRectangle({
+          color: selectedColor,
+          fillEnabled: fillEnabled,
+          strokeWidth: selectedStrokeWidth,
+          x1: pos.x,
+          y1: pos.y,
+          x2: pos.x,
+          y2: pos.y,
+        });
       } else if (selectedShape == 'ellipse') {
         isDrawing.current = true;
-        setPreviewEllipse({ color: selectedColor, x: pos.x, y: pos.y, radiusX: 0, radiusY: 0 });
+        setPreviewEllipse({
+          color: selectedColor,
+          fillEnabled: fillEnabled,
+          strokeWidth: selectedStrokeWidth,
+          x: pos.x,
+          y: pos.y,
+          radiusX: 0,
+          radiusY: 0,
+        });
       } else if (selectedShape == 'bezierPolygon') {
         if (!newBezierLine) {
           setNewBezierLine({
             color: selectedColor,
+            fillEnabled: fillEnabled,
             strokeWidth: selectedStrokeWidth,
             x: pos.x,
             y: pos.y,
@@ -281,7 +311,14 @@ function DrawingLayer(props: DrawingLayerProps) {
         }
       }
     },
-    [isShapeSelected, newBezierLine, selectedColor, selectedShape, selectedStrokeWidth],
+    [
+      isShapeSelected,
+      newBezierLine,
+      selectedColor,
+      selectedShape,
+      selectedStrokeWidth,
+      fillEnabled,
+    ],
   );
 
   const handleFinishBezierLine = () => {
@@ -318,6 +355,8 @@ function DrawingLayer(props: DrawingLayerProps) {
     (point: Vector2d) => {
       if (!previewRectangle) return;
       setPreviewRectangle({
+        fillEnabled: fillEnabled,
+        strokeWidth: selectedStrokeWidth,
         color: selectedColor,
         x1: previewRectangle?.x1,
         y1: previewRectangle?.y1,
@@ -325,7 +364,7 @@ function DrawingLayer(props: DrawingLayerProps) {
         y2: point.y,
       });
     },
-    [previewRectangle, selectedColor],
+    [fillEnabled, previewRectangle, selectedColor, selectedStrokeWidth],
   );
 
   const handleDrawSquare = useCallback(
@@ -333,6 +372,8 @@ function DrawingLayer(props: DrawingLayerProps) {
       if (!previewRectangle) return;
 
       setPreviewRectangle({
+        fillEnabled: fillEnabled,
+        strokeWidth: selectedStrokeWidth,
         color: selectedColor,
         x1: previewRectangle?.x1,
         y1: previewRectangle?.y1,
@@ -340,13 +381,15 @@ function DrawingLayer(props: DrawingLayerProps) {
         y2: previewRectangle?.y1 + (point.x - previewRectangle?.x1),
       });
     },
-    [previewRectangle, selectedColor],
+    [fillEnabled, previewRectangle, selectedColor, selectedStrokeWidth],
   );
 
   const handleDrawEllipse = useCallback(
     (point: Vector2d) => {
       if (!previewEllipse) return;
       setPreviewEllipse({
+        fillEnabled: fillEnabled,
+        strokeWidth: selectedStrokeWidth,
         color: selectedColor,
         x: previewEllipse.x,
         y: previewEllipse.y,
@@ -354,7 +397,7 @@ function DrawingLayer(props: DrawingLayerProps) {
         radiusY: Math.abs(point.y - previewEllipse.y),
       });
     },
-    [previewEllipse, selectedColor],
+    [fillEnabled, previewEllipse, selectedColor, selectedStrokeWidth],
   );
 
   const handleDrawCircle = useCallback(
@@ -363,6 +406,8 @@ function DrawingLayer(props: DrawingLayerProps) {
 
       const radius = Math.abs(point.x - previewEllipse.x);
       setPreviewEllipse({
+        fillEnabled: fillEnabled,
+        strokeWidth: selectedStrokeWidth,
         color: selectedColor,
         x: previewEllipse.x,
         y: previewEllipse.y,
@@ -370,7 +415,7 @@ function DrawingLayer(props: DrawingLayerProps) {
         radiusY: radius,
       });
     },
-    [previewEllipse, selectedColor],
+    [fillEnabled, previewEllipse, selectedColor, selectedStrokeWidth],
   );
 
   const handleMouseMove = useCallback(
@@ -426,6 +471,8 @@ function DrawingLayer(props: DrawingLayerProps) {
 
     const newRect: Rectangle = {
       color: selectedColor,
+      fillEnabled: fillEnabled,
+      strokeWidth: selectedStrokeWidth,
       x1: Math.min(previewRectangle.x1, previewRectangle.x2),
       x2: Math.max(previewRectangle.x1, previewRectangle.x2),
       y1: Math.min(previewRectangle.y1, previewRectangle.y2),
@@ -434,12 +481,14 @@ function DrawingLayer(props: DrawingLayerProps) {
 
     setPreviewRectangle(undefined);
     createRectangle(newRect);
-  }, [createRectangle, previewRectangle, selectedColor]);
+  }, [createRectangle, fillEnabled, previewRectangle, selectedColor, selectedStrokeWidth]);
 
   const handleEllipseMouseUp = useCallback(() => {
     if (!previewEllipse) return;
 
     const newEllipse: Ellipse = {
+      fillEnabled: fillEnabled,
+      strokeWidth: selectedStrokeWidth,
       color: selectedColor,
       x: previewEllipse.x,
       y: previewEllipse.y,
@@ -449,7 +498,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
     setPreviewEllipse(undefined);
     createEllipse(newEllipse);
-  }, [createEllipse, previewEllipse, selectedColor]);
+  }, [createEllipse, fillEnabled, previewEllipse, selectedColor, selectedStrokeWidth]);
 
   const handleMouseUp = useCallback(() => {
     if (!isDrawingLayerActive()) return;
@@ -591,6 +640,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             strokeWidth={bezierLine.strokeWidth!}
             onLineClick={handleShapeClicked}
             color={bezierLine.color}
+            fillEnabled={bezierLine.fillEnabled}
             x={bezierLine.x}
             y={bezierLine.y}
             scaleX={bezierLine.scaleX}
@@ -627,6 +677,9 @@ function DrawingLayer(props: DrawingLayerProps) {
             scaleY={line.scaleY}
             points={line.properties.points.flat()}
             stroke={line.color}
+            fill={line.color}
+            fillEnabled={line.fillEnabled}
+            closed={line.fillEnabled}
             strokeWidth={line.strokeWidth}
             tension={0.1}
             lineCap="round"
@@ -675,7 +728,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             height={rectangle.properties.height}
             stroke={rectangle.color}
             fill={rectangle.color}
-            strokeWidth={5}
+            fillEnabled={rectangle.fillEnabled}
+            strokeWidth={rectangle.strokeWidth}
             scaleX={rectangle.scaleX}
             scaleY={rectangle.scaleY}
             onClick={handleShapeClicked}
@@ -693,7 +747,9 @@ function DrawingLayer(props: DrawingLayerProps) {
             width={Math.abs(previewRectangle.x1 - previewRectangle.x2)}
             height={Math.abs(previewRectangle.y1 - previewRectangle.y2)}
             stroke={previewRectangle.color}
-            strokeWidth={5}
+            strokeWidth={previewRectangle.strokeWidth}
+            fill={previewRectangle.color}
+            fillEnabled={previewRectangle.fillEnabled}
           ></Rect>
         )}
 
@@ -713,7 +769,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             radiusY={ellipse.properties.radiusY}
             stroke={ellipse.color}
             fill={ellipse.color}
-            strokeWidth={5}
+            fillEnabled={ellipse.fillEnabled}
+            strokeWidth={ellipse.strokeWidth}
             onClick={handleShapeClicked}
             draggable
             onDragStart={moveToTop}
@@ -728,7 +785,9 @@ function DrawingLayer(props: DrawingLayerProps) {
             radiusX={previewEllipse.radiusX}
             radiusY={previewEllipse.radiusY}
             stroke={previewEllipse.color}
-            strokeWidth={5}
+            strokeWidth={previewEllipse.strokeWidth}
+            fill={previewEllipse.color}
+            fillEnabled={previewEllipse.fillEnabled}
           />
         )}
       </Layer>

@@ -18,6 +18,7 @@ const DrawingAttributeEditFormSchema = z
     removeDate: z.nullable(z.string()).transform((value) => value || undefined),
     color: z.string(),
     strokeWidth: z.number().nullable(),
+    fillEnabled: z.boolean().nullable(),
   })
   .refine((schema) => !schema.removeDate || !schema.addDate || schema.addDate < schema.removeDate, {
     path: ['dateRelation'],
@@ -28,6 +29,7 @@ export type EditDrawingAttributesProps = {
   onRemoveDateChange: (removeDate: DrawingFormData) => void;
   onColorChange: (color: DrawingFormData) => void;
   onStrokeWidthChange: (strokeWidth: DrawingFormData) => void;
+  onFillEnabledChange: (fillEnabled: DrawingFormData) => void;
   onDeleteClick: () => void;
   isReadOnlyMode: boolean;
 };
@@ -46,13 +48,14 @@ export type DrawingAttributeEditFormProps = EditDrawingAttributesProps & {
   removeDateDefaultValue: string;
   colorDefaultValue: string;
   strokeWidthDefaultValue?: number;
+  fillEnabledDefaultValue?: boolean;
   multipleDrawings?: boolean;
   showShapeEditButton: boolean;
 };
 
 export type DrawingFormData = Pick<
   DrawingDto,
-  'addDate' | 'removeDate' | 'scaleX' | 'scaleY' | 'color' | 'strokeWidth'
+  'addDate' | 'removeDate' | 'scaleX' | 'scaleY' | 'color' | 'strokeWidth' | 'fillEnabled'
 >;
 
 export function SingleDrawingAttributeForm({
@@ -62,6 +65,7 @@ export function SingleDrawingAttributeForm({
   onDeleteClick,
   onColorChange,
   onStrokeWidthChange,
+  onFillEnabledChange,
   isReadOnlyMode,
 }: EditSingleDrawingProps) {
   return (
@@ -71,11 +75,13 @@ export function SingleDrawingAttributeForm({
         removeDateDefaultValue={drawing.removeDate ?? ''}
         colorDefaultValue={drawing.color ?? ''}
         strokeWidthDefaultValue={drawing.strokeWidth ?? 0}
+        fillEnabledDefaultValue={drawing.fillEnabled}
         onAddDateChange={onAddDateChange}
         onRemoveDateChange={onRemoveDateChange}
         onDeleteClick={onDeleteClick}
         onColorChange={onColorChange}
         onStrokeWidthChange={onStrokeWidthChange}
+        onFillEnabledChange={onFillEnabledChange}
         isReadOnlyMode={isReadOnlyMode}
         drawingId={drawing.id}
         showShapeEditButton={drawing.type === 'bezierPolygon'}
@@ -91,6 +97,7 @@ export function MultipleDrawingAttributeForm({
   onDeleteClick,
   onColorChange,
   onStrokeWidthChange,
+  onFillEnabledChange,
   isReadOnlyMode,
 }: EditMultipleDrawingsProps) {
   const getCommonAddDate = () => {
@@ -119,6 +126,14 @@ export function MultipleDrawingAttributeForm({
     return existsCommonStrokeWidth ? strokeWidth : 0;
   };
 
+  const getCommonFillEnabled = () => {
+    const fillEnabled = drawings[0].fillEnabled;
+    const existsCommonFillEnabled = drawings.every(
+      (drawing) => drawing.fillEnabled === fillEnabled,
+    );
+    return existsCommonFillEnabled ? fillEnabled : false;
+  };
+
   return (
     <div className="flex flex-col gap-2 p-2">
       <DrawingAttributeEditForm
@@ -126,11 +141,13 @@ export function MultipleDrawingAttributeForm({
         removeDateDefaultValue={getCommonRemoveDate() ?? ''}
         colorDefaultValue={getCommonColor()}
         strokeWidthDefaultValue={getCommonStrokeWidth()}
+        fillEnabledDefaultValue={getCommonFillEnabled()}
         onAddDateChange={onAddDateChange}
         onRemoveDateChange={onRemoveDateChange}
         onDeleteClick={onDeleteClick}
         onColorChange={onColorChange}
         onStrokeWidthChange={onStrokeWidthChange}
+        onFillEnabledChange={onFillEnabledChange}
         isReadOnlyMode={isReadOnlyMode}
         multipleDrawings={true}
         showShapeEditButton={false}
@@ -145,11 +162,13 @@ export function DrawingAttributeEditForm({
   removeDateDefaultValue,
   colorDefaultValue,
   strokeWidthDefaultValue,
+  fillEnabledDefaultValue,
   onAddDateChange,
   onRemoveDateChange,
   onDeleteClick,
   onColorChange,
   onStrokeWidthChange,
+  onFillEnabledChange,
   isReadOnlyMode,
   multipleDrawings = false,
   showShapeEditButton,
@@ -162,11 +181,13 @@ export function DrawingAttributeEditForm({
       removeDate: removeDateDefaultValue,
       color: colorDefaultValue,
       strokeWidth: strokeWidthDefaultValue,
+      fillEnabled: fillEnabledDefaultValue,
     },
     resolver: zodResolver(DrawingAttributeEditFormSchema),
   });
 
   const showStrokeWidth = strokeWidthDefaultValue !== undefined && strokeWidthDefaultValue > 0;
+  const showFillEnabled = fillEnabledDefaultValue !== undefined;
 
   const drawingLayerSetActiveShape = useMapStore((state) => state.drawingLayerSetActiveShape);
   const activeShape = useMapStore((state) => state.untrackedState.layers.drawing.activeShape);
@@ -179,12 +200,14 @@ export function DrawingAttributeEditForm({
       removeDate: removeDateDefaultValue,
       color: colorDefaultValue,
       strokeWidth: strokeWidthDefaultValue,
+      fillEnabled: fillEnabledDefaultValue,
     });
   }, [
     addDateDefaultValue,
     removeDateDefaultValue,
     colorDefaultValue,
     strokeWidthDefaultValue,
+    fillEnabledDefaultValue,
     formInfo,
   ]);
 
@@ -244,6 +267,19 @@ export function DrawingAttributeEditForm({
             disabled={isReadOnlyMode}
             onValid={onStrokeWidthChange}
             valueAsNumber={true}
+          />
+        </div>
+      )}
+
+      {showFillEnabled && (
+        <div className="mt-2 flex gap-2">
+          <DebouncedSimpleFormInput
+            id="fillEnabled"
+            type="checkbox"
+            labelContent={t('drawings:fillEnabled')}
+            className="h-4 w-4"
+            disabled={isReadOnlyMode}
+            onValid={onFillEnabledChange}
           />
         </div>
       )}

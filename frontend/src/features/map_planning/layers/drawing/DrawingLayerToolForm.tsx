@@ -103,14 +103,19 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
   const { t } = useTranslation(['drawings']);
 
   const setSelectedColor = useMapStore((state) => state.drawingLayerSetSelectedColor);
+  const setFill = useMapStore((state) => state.drawingLayerSetFillEnabled);
   const setSelectedStrokeWidth = useMapStore((state) => state.drawingLayerSetSelectedStrokeWidth);
   const selectedStrokeWidth = useMapStore(
     (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
   );
+  const fill = useMapStore((state) => state.untrackedState.layers.drawing.fillEnabled);
 
   const [pickerColor, setPickerColor] = useState('#000000');
 
-  const showStrokeProperty = props.selectedShape === 'freeLine';
+  const showFillFlag =
+    props.selectedShape === 'rectangle' ||
+    props.selectedShape === 'ellipse' ||
+    props.selectedShape === 'bezierPolygon';
 
   useDebounceEffect(
     () => {
@@ -127,21 +132,31 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
           <SimpleFormInput
             id="color"
             type="color"
+            className="mb-4"
             labelContent={t('drawings:color')}
             onChange={(e) => setPickerColor(e.target.value)}
             value={pickerColor}
           />
 
-          {showStrokeProperty && (
+          <SimpleFormInput
+            id="stroke"
+            className="background-red mb-4"
+            type="range"
+            labelContent={t('drawings:strokeWidth')}
+            min={1}
+            max={100}
+            onChange={(e) => setSelectedStrokeWidth(+e.target.value)}
+            value={selectedStrokeWidth}
+          />
+
+          {showFillFlag && (
             <SimpleFormInput
-              id="stroke"
-              className="background-red"
-              type="range"
-              labelContent={t('drawings:strokeWidth')}
-              min={1}
-              max={100}
-              onChange={(e) => setSelectedStrokeWidth(+e.target.value)}
-              value={selectedStrokeWidth}
+              id="fill"
+              type="checkbox"
+              className="mt-2 h-4 w-4"
+              labelContent={t('drawings:fillEnabled')}
+              onChange={(e) => setFill(e.target.checked)}
+              checked={fill}
             />
           )}
         </div>

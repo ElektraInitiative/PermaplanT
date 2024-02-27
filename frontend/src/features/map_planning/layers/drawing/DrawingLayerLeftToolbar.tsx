@@ -8,6 +8,7 @@ import {
 import {
   UpdateAddDateDrawingAction,
   UpdateColorDrawingAction,
+  UpdateEnableFillDrawingAction,
   UpdateRemoveDateDrawingAction,
   UpdateStrokeWidthDrawingAction,
 } from './actions';
@@ -29,33 +30,50 @@ export function DrawingLayerLeftToolbar() {
   const onAddDateChange = ({ addDate }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach((selectedDrawing) =>
-      executeAction(new UpdateAddDateDrawingAction({ id: selectedDrawing.id, addDate })),
+    selectedDrawings.forEach(
+      (selectedDrawing) =>
+        addDate != selectedDrawing.addDate &&
+        executeAction(new UpdateAddDateDrawingAction({ id: selectedDrawing.id, addDate })),
     );
   };
 
   const onRemoveDateChange = ({ removeDate }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach((selectedDrawing) =>
-      executeAction(new UpdateRemoveDateDrawingAction({ id: selectedDrawing.id, removeDate })),
+    selectedDrawings.forEach(
+      (selectedDrawing) =>
+        removeDate != selectedDrawing.removeDate &&
+        executeAction(new UpdateRemoveDateDrawingAction({ id: selectedDrawing.id, removeDate })),
     );
   };
 
   const onColorChange = ({ color }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach((selectedDrawing) =>
-      executeAction(new UpdateColorDrawingAction({ id: selectedDrawing.id, color })),
+    selectedDrawings.forEach(
+      (selectedDrawing) =>
+        color != selectedDrawing.color &&
+        executeAction(new UpdateColorDrawingAction({ id: selectedDrawing.id, color })),
     );
   };
 
   const onStrokeWidthChange = ({ strokeWidth }: DrawingFormData) => {
-    console.log('onStrokeWidthChange', strokeWidth);
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach((selectedDrawing) =>
-      executeAction(new UpdateStrokeWidthDrawingAction({ id: selectedDrawing.id, strokeWidth })),
+    selectedDrawings.forEach(
+      (selectedDrawing) =>
+        strokeWidth != selectedDrawing.strokeWidth &&
+        executeAction(new UpdateStrokeWidthDrawingAction({ id: selectedDrawing.id, strokeWidth })),
+    );
+  };
+
+  const onFillEnabledChange = ({ fillEnabled }: DrawingFormData) => {
+    if (!selectedDrawings?.length) return;
+
+    selectedDrawings.forEach(
+      (selectedDrawing) =>
+        fillEnabled != selectedDrawing.fillEnabled &&
+        executeAction(new UpdateEnableFillDrawingAction({ id: selectedDrawing.id, fillEnabled })),
     );
   };
 
@@ -74,6 +92,7 @@ export function DrawingLayerLeftToolbar() {
       onRemoveDateChange={onRemoveDateChange}
       onColorChange={onColorChange}
       onStrokeWidthChange={onStrokeWidthChange}
+      onFillEnabledChange={onFillEnabledChange}
       onDeleteClick={onDeleteClick}
       isReadOnlyMode={isReadOnlyMode}
     />
@@ -84,6 +103,7 @@ export function DrawingLayerLeftToolbar() {
       onRemoveDateChange={onRemoveDateChange}
       onColorChange={onColorChange}
       onStrokeWidthChange={onStrokeWidthChange}
+      onFillEnabledChange={onFillEnabledChange}
       onDeleteClick={onDeleteClick}
       isReadOnlyMode={isReadOnlyMode}
     />

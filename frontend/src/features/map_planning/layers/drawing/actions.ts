@@ -19,6 +19,7 @@ import {
   TransformDrawingActionPayload,
   UpdateDrawingAddDateActionPayload,
   UpdateDrawingColorActionPayload,
+  UpdateDrawingEnableFIllActionPayload as UpdateDrawingEnableFillActionPayload,
   UpdateDrawingPropertiesActionPayload,
   UpdateDrawingRemoveDateActionPayload,
   UpdateDrawingStrokeWidthActionPayload,
@@ -534,6 +535,71 @@ export class UpdateColorDrawingAction
             updateDrawings(state.layers.drawing.loadedObjects),
             timelineDate,
           ),
+          loadedObjects: updateDrawings(state.layers.drawing.loadedObjects),
+        },
+      },
+    };
+  }
+
+  //TODO #1123 - implement funtion to call backend
+  execute(): Promise<boolean> {
+    return updateColorDrawing();
+  }
+}
+
+export class UpdateEnableFillDrawingAction
+  implements
+    Action<
+      Awaited<ReturnType<typeof updateColorDrawing>>,
+      Awaited<ReturnType<typeof updateColorDrawing>>
+    >
+{
+  constructor(
+    private readonly _data: Omit<UpdateDrawingEnableFillActionPayload, 'userId' | 'actionId'>,
+    public actionId = v4(),
+  ) {}
+
+  get entityIds() {
+    return [this._data.id];
+  }
+
+  reverse(state: TrackedMapState) {
+    const drawing = state.layers.drawing.loadedObjects.find((obj) => obj.id === this._data.id);
+
+    if (!drawing) {
+      return null;
+    }
+
+    return new UpdateEnableFillDrawingAction(
+      {
+        id: drawing.id,
+        fillEnabled: drawing.fillEnabled,
+      },
+      this.actionId,
+    );
+  }
+
+  apply(state: TrackedMapState): TrackedMapState {
+    const updateDrawings = (drawings: Array<DrawingDto>) => {
+      return drawings.map((p) => {
+        if (p.id === this._data.id) {
+          return {
+            ...p,
+            fillEnabled: this._data.fillEnabled,
+          };
+        }
+
+        return p;
+      });
+    };
+
+    return {
+      ...state,
+      layers: {
+        ...state.layers,
+        drawing: {
+          ...state.layers.drawing,
+          objects: updateDrawings(state.layers.drawing.loadedObjects),
           loadedObjects: updateDrawings(state.layers.drawing.loadedObjects),
         },
       },
