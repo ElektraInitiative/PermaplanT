@@ -58,7 +58,11 @@ function BezierPolygon({
   const [points, setPoints] = useState<Point[]>(initialPoints);
   const [, setActivePoint] = useState(-1);
   const [activeSegments, setActiveSegments] = useState<number[]>([]);
-  const [segPos, setSegPos] = useState<Point>([]);
+  const [, setSegPos] = useState<Point>([]);
+
+  const mapScale = useMapStore.getState().stageRef.current?.scale();
+
+  console.log;
 
   useEffect(() => {
     if (points) {
@@ -263,11 +267,11 @@ function BezierPolygon({
               x={x + p[0]}
               y={y + p[1]}
               radius={5}
+              scaleX={1 / (mapScale?.x || 1)}
+              scaleY={1 / (mapScale?.y || 1)}
               isControlElement={true}
               listening={true}
               opacity={isActive ? 1 : 0.5}
-              scaleX={isActive ? 1.5 : 1}
-              scaleY={isActive ? 1.5 : 1}
               draggable
               {...(i % 3
                 ? {
@@ -325,18 +329,6 @@ function BezierPolygon({
             />
           );
         })}
-      {!!segPos.length && (
-        <Circle
-          x={x + segPos[0]}
-          y={y + segPos[1]}
-          radius={5}
-          opacity={0.75}
-          scaleX={1.5}
-          scaleY={1.5}
-          fill={'#ee90aa'}
-          listening={false}
-        />
-      )}
     </>
   );
 }

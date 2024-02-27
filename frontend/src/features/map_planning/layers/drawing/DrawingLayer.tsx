@@ -538,7 +538,6 @@ function DrawingLayer(props: DrawingLayerProps) {
     }
 
     const transformerActions = useTransformerStore.getState().actions;
-
     useMapStore.getState().stageRef.current?.on('mousedown.startDrawing', handleMouseDown);
     useMapStore.getState().stageRef.current?.on('mousemove.draw', handleMouseMove);
     useMapStore.getState().stageRef.current?.on('mouseup.endDrawing', handleMouseUp);

@@ -47,6 +47,7 @@ export type DrawingAttributeEditFormProps = EditDrawingAttributesProps & {
   colorDefaultValue: string;
   strokeWidthDefaultValue?: number;
   multipleDrawings?: boolean;
+  showShapeEditButton: boolean;
 };
 
 export type DrawingFormData = Pick<
@@ -77,6 +78,7 @@ export function SingleDrawingAttributeForm({
         onStrokeWidthChange={onStrokeWidthChange}
         isReadOnlyMode={isReadOnlyMode}
         drawingId={drawing.id}
+        showShapeEditButton={drawing.type === 'bezierPolygon'}
       />
     </div>
   );
@@ -131,6 +133,7 @@ export function MultipleDrawingAttributeForm({
         onStrokeWidthChange={onStrokeWidthChange}
         isReadOnlyMode={isReadOnlyMode}
         multipleDrawings={true}
+        showShapeEditButton={false}
       />
     </div>
   );
@@ -149,6 +152,7 @@ export function DrawingAttributeEditForm({
   onStrokeWidthChange,
   isReadOnlyMode,
   multipleDrawings = false,
+  showShapeEditButton,
 }: DrawingAttributeEditFormProps) {
   const { t } = useTranslation(['drawings', 'drawingLayerForm']);
 
@@ -163,7 +167,10 @@ export function DrawingAttributeEditForm({
   });
 
   const showStrokeWidth = strokeWidthDefaultValue !== undefined && strokeWidthDefaultValue > 0;
+
   const drawingLayerSetActiveShape = useMapStore((state) => state.drawingLayerSetActiveShape);
+  const activeShape = useMapStore((state) => state.untrackedState.layers.drawing.activeShape);
+
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   useEffect(() => {
@@ -243,9 +250,10 @@ export function DrawingAttributeEditForm({
 
       <hr className="my-2 border-neutral-700" />
 
-      {drawingId && (
+      {showShapeEditButton && drawingId && (
         <IconButton
           isToolboxIcon={true}
+          renderAsActive={activeShape != undefined}
           onClick={() => {
             drawingLayerSetActiveShape(drawingId);
             setStatusPanelContent(
