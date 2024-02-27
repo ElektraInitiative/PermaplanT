@@ -8,6 +8,8 @@
     "confirmation_pause": "Pause",
     "confirmation_quit": "End",
     "fetch_status_error": "Sorry, I'm experiencing trouble fetching the status of your introduction to the Map Editor. Please reload the page so that I can try again.",
+    "update_tour_status_error": "Sorry, I'm experiencing trouble updating the status of your introduction to the Map Editor.",
+    "complete_tour_error": "Sorry, I'm experiencing trouble completing the introduction to the Map Editor.",
     "mapEditor": {
         "welcome_title": "Welcome to the Map Editor",
         "toolbox_intro_title": "Toolbox",

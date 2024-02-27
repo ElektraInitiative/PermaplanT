@@ -57,11 +57,15 @@ function getLayersQueryFn({
  * Get map data for the given map id.
  */
 export function useMap(mapId: number) {
+  const { t } = useTranslation(['maps']);
+
   return useQuery({
     queryKey: MAP_EDITOR_KEYS.map(mapId),
     queryFn: getMapQueryFn,
     refetchOnWindowFocus: false,
-    // TODO: add error message
+    meta: {
+      errorMessage: t('maps:error_fetch_map_data'),
+    },
   });
 }
 
