@@ -6,7 +6,7 @@ use utoipa::{IntoParams, ToSchema};
 
 /// One summary datapoint in the timeline, used for a year, month or date
 #[typeshare]
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct TimelineEntryDto {
     pub additions: i32,
@@ -15,7 +15,7 @@ pub struct TimelineEntryDto {
 
 /// Used to summerize the data necessary for the timeline
 #[typeshare]
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct TimelineDto {
     #[schema(example = "{ \"2020\": { \"additions\": 7, \"removals\": 7 } }")]

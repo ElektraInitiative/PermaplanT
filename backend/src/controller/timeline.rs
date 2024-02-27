@@ -18,7 +18,9 @@ use actix_web::{
         TimelineParameters
     ),
     responses(
-      (status = 200, description = "Get timeline data from plantings", body = TimelineDto)
+      (status = 200, description = "Get timeline data from plantings", body = TimelineDto),
+      (status = 404, description = "Map not found", body = TimelineDto),
+      (status = 422, description = "Start is not smaller than end", body = TimelineDto)
     ),
     security(
         ("oauth2" = [])
@@ -31,6 +33,9 @@ pub async fn get_timeline(
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
     let params = parameters.into_inner();
+    if params.start > params.end {
+        return Ok(HttpResponse::UnprocessableEntity().body("Start must be smaller than end"));
+    }
     let dto = service::timeline::calculate(map_id.into_inner(), params, &app_data).await?;
     Ok(HttpResponse::Ok().json(dto))
 }
