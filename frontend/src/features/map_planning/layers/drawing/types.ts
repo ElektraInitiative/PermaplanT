@@ -13,6 +13,7 @@ export type DrawingDto = {
   x: number;
   y: number;
   color: string;
+  fillEnabled: boolean;
   strokeWidth?: number;
   properties: DrawingProperties;
 };
@@ -81,6 +82,13 @@ export interface UpdateDrawingColorActionPayload {
   actionId: string;
   id: string;
   color: string;
+}
+
+export interface UpdateDrawingEnableFIllActionPayload {
+  userId: string;
+  actionId: string;
+  id: string;
+  fillEnabled: boolean;
 }
 
 export interface UpdateDrawingStrokeWidthActionPayload {

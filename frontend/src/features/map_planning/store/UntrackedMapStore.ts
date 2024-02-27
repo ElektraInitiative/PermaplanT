@@ -463,6 +463,23 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
 
+  drawingLayerSetFillEnabled(fill: boolean) {
+    get().disableShapeSelection();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            fillEnabled: fill,
+          },
+        },
+      },
+    }));
+  },
+
   drawingLayerSetSelectedStrokeWidth(strokeWidth) {
     get().disableShapeSelection();
     set((state) => ({

@@ -23,6 +23,7 @@ export type BezierPolygonProps = {
   scaleX?: number;
   scaleY?: number;
   rotation?: number;
+  fillEnabled?: boolean;
 };
 
 type Point = number[];
@@ -54,6 +55,7 @@ function BezierPolygon({
   scaleX,
   scaleY,
   rotation,
+  fillEnabled,
 }: BezierPolygonProps) {
   const [points, setPoints] = useState<Point[]>(initialPoints);
   const [, setActivePoint] = useState(-1);
@@ -61,8 +63,6 @@ function BezierPolygon({
   const [, setSegPos] = useState<Point>([]);
 
   const mapScale = useMapStore.getState().stageRef.current?.scale();
-
-  console.log;
 
   useEffect(() => {
     if (points) {
@@ -174,6 +174,9 @@ function BezierPolygon({
           scaleY={scaleY}
           rotation={rotation}
           draggable
+          fill={color}
+          fillEnabled={fillEnabled}
+          closed={fillEnabled}
         />
       )}
       {/* Segmented dashed control line AND segmented curve */}
@@ -224,7 +227,7 @@ function BezierPolygon({
                     const pos = stage.getRelativePointerPosition();
                     if (pos == null) return [];
 
-                    const newPoint = [pos.x, pos.y];
+                    const newPoint = [pos.x - x, pos.y - y];
 
                     const spliceIndex = i * 3 + 2;
                     newPoints.splice(
@@ -266,7 +269,7 @@ function BezierPolygon({
               key={i}
               x={x + p[0]}
               y={y + p[1]}
-              radius={5}
+              radius={6}
               scaleX={1 / (mapScale?.x || 1)}
               scaleY={1 / (mapScale?.y || 1)}
               isControlElement={true}
@@ -276,7 +279,6 @@ function BezierPolygon({
               {...(i % 3
                 ? {
                     stroke: '#ccc',
-                    strokeWidth: 10,
                   }
                 : {
                     fill: i == points.length - 1 ? '#0000ff' : '#ee90aa',
@@ -298,6 +300,11 @@ function BezierPolygon({
               onMouseLeave={() => {
                 setActiveSegments([]);
                 setActivePoint(-1);
+              }}
+              onClick={(e) => {
+                if (i === 0) {
+                  handleAddPoint(e);
+                }
               }}
               onDblClick={() => {
                 if (i % 3 && points.length >= 4) {

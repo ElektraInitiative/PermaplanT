@@ -186,6 +186,7 @@ export interface UntrackedMapSlice {
   drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
   drawingLayerClearSelectedShape: () => void;
   drawingLayerSetSelectedColor: (color: string) => void;
+  drawingLayerSetFillEnabled: (fill: boolean) => void;
   drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
   drawingLayerSetActiveShape: (id: string) => void;
   selectDrawings: (drawings: DrawingDto[] | null, transformerStore?: TransformerStore) => void;
@@ -288,6 +289,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         opacity: 1,
         shape: null,
         selectedColor: 'black',
+        fillEnabled: false,
         selectedStrokeWidth: 3,
         selectedDrawings: [],
         activeShape: undefined,
@@ -415,6 +417,7 @@ export type UntrackedDrawingLayerState = UntrackedLayerState & {
   shape: DrawingShapeType | null;
   selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
+  fillEnabled: boolean;
   selectedStrokeWidth: number;
   activeShape: string | undefined;
 };
