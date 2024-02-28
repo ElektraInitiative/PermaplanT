@@ -659,6 +659,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             editModeActive={selectedShape == 'bezierPolygon'}
             strokeWidth={selectedStrokeWidth}
             color={selectedColor}
+            scaleX={1}
+            scaleY={1}
             x={0}
             y={0}
           ></BezierPolygon>

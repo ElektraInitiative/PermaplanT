@@ -88,6 +88,12 @@ export const createUntrackedMapSlice: StateCreator<
             measurePoint2: null,
             measureStep: 'inactive',
           },
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedDrawings: null,
+            shape: null,
+            activeShape: undefined,
+          },
         },
       },
     }));
