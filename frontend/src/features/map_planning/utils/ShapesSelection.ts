@@ -1,4 +1,3 @@
-import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
@@ -63,8 +62,6 @@ export const selectIntersectingShapes = (
   if (intersectingShapes) {
     const nodes = intersectingShapes.filter((shape) => shape !== undefined);
     previouslySelectedShapes = nodes;
-    setTransformerAnchors(trRef, nodes);
-
     trRef.current?.nodes(nodes);
   }
 };
@@ -164,27 +161,5 @@ export const hideSelectionRectangle = (
       ...selectionRectAttrs,
       isVisible: false,
     });
-  }
-};
-
-export const selectSingleNode = (trRef: React.RefObject<Transformer>, node: Konva.Node) => {
-  setTransformerAnchors(trRef, [node]);
-  trRef.current?.nodes([node]);
-};
-
-const setTransformerAnchors = (trRef: React.RefObject<Transformer>, nodes: Konva.Node[]) => {
-  if (nodes.length == 1 && nodes[0].attrs.canBeDistorted) {
-    trRef.current?.enabledAnchors([
-      'top-left',
-      'top-right',
-      'bottom-left',
-      'bottom-right',
-      'middle-left',
-      'middle-right',
-      'top-center',
-      'bottom-center',
-    ]);
-  } else {
-    trRef.current?.enabledAnchors(['top-left', 'top-right', 'bottom-left', 'bottom-right']);
   }
 };

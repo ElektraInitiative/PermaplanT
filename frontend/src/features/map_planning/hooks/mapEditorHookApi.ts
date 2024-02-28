@@ -14,6 +14,7 @@ const MAP_EDITOR_KEYS = {
     layers: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'layers' }] as const,
     plant: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'plant_layer' }] as const,
     base: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'base_layer' }] as const,
+    drawing: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'drawing_layer' }] as const,
   },
   layers: (mapId: number) => [{ ...MAP_EDITOR_KEYS._helpers.layers()[0], mapId }] as const,
   map: (mapId: number) => [{ ...MAP_EDITOR_KEYS._helpers.map()[0], mapId }] as const,
@@ -21,6 +22,8 @@ const MAP_EDITOR_KEYS = {
     [{ ...MAP_EDITOR_KEYS._helpers.plant()[0], mapId, layerId, fetchDate }] as const,
   baseLayer: (mapId: number, layerId: number) =>
     [{ ...MAP_EDITOR_KEYS._helpers.base()[0], mapId, layerId }] as const,
+  drawingLayer: (mapId: number, layerId: number) =>
+    [{ ...MAP_EDITOR_KEYS._helpers.drawing()[0], mapId, layerId }] as const,
 };
 
 const TEN_MINUTES = 1000 * 60 * 10;
@@ -81,6 +84,36 @@ type UseLayerArgs = {
   layerId: number;
   enabled?: boolean;
 };
+
+/**
+ * Hook that initializes the drawing layer by fetching all drawings
+ */
+export function useDrawingLayer({ mapId, layerId, enabled }: UseLayerArgs) {
+  const queryInfo = useQuery({
+    queryKey: MAP_EDITOR_KEYS.layers(mapId),
+    queryFn: drawingLayerQueryFn,
+    // We want to refetch manually.
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    cacheTime: 0,
+    enabled,
+  });
+
+  useEffect(() => {
+    if (!queryInfo?.data) return;
+
+    useMapStore.getState().initDrawingLayer(queryInfo.data);
+  }, [mapId, layerId, queryInfo?.data]);
+
+  return queryInfo;
+}
+
+function drawingLayerQueryFn({
+  queryKey,
+}: QueryFunctionContext<ReturnType<(typeof MAP_EDITOR_KEYS)['layers']>>) {
+  const { mapId } = queryKey[0];
+  return getLayers(mapId);
+}
 
 /**
  * Hook that initializes the plant layer by fetching all plantings

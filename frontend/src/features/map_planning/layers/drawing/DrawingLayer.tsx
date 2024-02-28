@@ -5,11 +5,17 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Ellipse, Layer, Line, Rect } from 'react-konva';
 import * as uuid from 'uuid';
 import { LayerType } from '@/api_types/definitions';
+import {
+  KEYBINDINGS_SCOPE_DRAWING_LAYER,
+  createKeyBindingsAccordingToConfig,
+} from '@/config/keybindings';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import useMapStore from '../../store/MapStore';
 import { useTransformerStore } from '../../store/transformer/TransformerStore';
 import { LayerConfigWithListenerRegister } from '../../types/layer-config';
-import { isDrawingLayerActive } from '../../utils/layer-utils';
+import { useIsDrawingLayerActive } from '../../utils/layer-utils';
 import { CreateDrawingAction, MoveDrawingAction, TransformDrawingAction } from './actions';
+import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
 import BezierPolygon from './shapes/BezierPolygon';
 import { DrawingDto, EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
 
@@ -44,6 +50,17 @@ type Line = {
   points: number[][];
 };
 
+function useDrawingLayerKeyListeners() {
+  const { deleteSelectedDrawings } = useDeleteSelectedDrawings();
+  const isDrawingLayerActive = useIsDrawingLayerActive();
+  const keybindings = createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_DRAWING_LAYER, {
+    deleteSelectedDrawings: () => {
+      deleteSelectedDrawings();
+    },
+  });
+  useKeyHandlers(isDrawingLayerActive ? keybindings : {});
+}
+
 function DrawingLayer(props: DrawingLayerProps) {
   const drawingObjects = useMapStore((state) => state.trackedState.layers.drawing.objects);
   const transformerActions = useTransformerStore((state) => state.actions);
@@ -54,8 +71,10 @@ function DrawingLayer(props: DrawingLayerProps) {
     (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
   );
   const fillEnabled = useMapStore((state) => state.untrackedState.layers.drawing.fillEnabled);
+  const isDrawingLayerActive = useIsDrawingLayerActive();
 
   const selectDrawings = useMapStore((state) => state.selectDrawings);
+  useDrawingLayerKeyListeners();
 
   const { ...layerProps } = props;
 
@@ -247,6 +266,8 @@ function DrawingLayer(props: DrawingLayerProps) {
   };
 
   const handleShapeClicked = (e: KonvaEventObject<MouseEvent>) => {
+    moveToTop(e);
+
     if (isShapeSelected()) return;
 
     isUsingModifierKey(e)
@@ -256,7 +277,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const handleMouseDown = useCallback(
     (e: KonvaEventObject<MouseEvent>) => {
-      if (!isShapeSelected || !isDrawingLayerActive()) return;
+      if (!isShapeSelected || !isDrawingLayerActive) return;
 
       if (e.target.getStage() == null) return;
 
@@ -313,11 +334,12 @@ function DrawingLayer(props: DrawingLayerProps) {
     },
     [
       isShapeSelected,
-      newBezierLine,
-      selectedColor,
+      isDrawingLayerActive,
       selectedShape,
       selectedStrokeWidth,
+      selectedColor,
       fillEnabled,
+      newBezierLine,
     ],
   );
 
@@ -420,7 +442,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const handleMouseMove = useCallback(
     (e: KonvaEventObject<MouseEvent>) => {
-      if (!isDrawingLayerActive() || !isDrawing.current) {
+      if (!isDrawingLayerActive || !isDrawing.current) {
         return;
       }
 
@@ -456,6 +478,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       handleDrawLine,
       handleDrawRectangle,
       handleDrawSquare,
+      isDrawingLayerActive,
       selectedShape,
     ],
   );
@@ -501,7 +524,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   }, [createEllipse, fillEnabled, previewEllipse, selectedColor, selectedStrokeWidth]);
 
   const handleMouseUp = useCallback(() => {
-    if (!isDrawingLayerActive()) return;
+    if (!isDrawingLayerActive) return;
     isDrawing.current = false;
 
     switch (selectedShape) {
@@ -515,7 +538,13 @@ function DrawingLayer(props: DrawingLayerProps) {
         handleEllipseMouseUp();
         break;
     }
-  }, [handleEllipseMouseUp, handleFreeLineMouseUp, handleRectangleMouseUp, selectedShape]);
+  }, [
+    handleEllipseMouseUp,
+    handleFreeLineMouseUp,
+    handleRectangleMouseUp,
+    isDrawingLayerActive,
+    selectedShape,
+  ]);
 
   const moveToTop = (e: KonvaEventObject<MouseEvent>) => {
     e.target.moveToTop();
@@ -636,8 +665,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             drawingModeActive={activeShape === bezierLine.id}
             onPointsChanged={console.log}
             initialPoints={bezierLine.properties.points}
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            strokeWidth={bezierLine.strokeWidth!}
+            strokeWidth={bezierLine.strokeWidth}
             onLineClick={handleShapeClicked}
             color={bezierLine.color}
             fillEnabled={bezierLine.fillEnabled}
@@ -645,6 +673,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             y={bezierLine.y}
             scaleX={bezierLine.scaleX}
             scaleY={bezierLine.scaleY}
+            onDragStart={moveToTop}
           ></BezierPolygon>
         ))}
 
@@ -721,6 +750,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             canBeDistorted={true}
             listening={true}
             object={rectangle}
+            hitStrokeWidth={rectangle.strokeWidth + 100}
             cornerRadius={5}
             key={`rect-${i}`}
             x={rectangle.x}
@@ -763,6 +793,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             canBeDistorted={true}
             key={`ellipse-${i}`}
             x={ellipse.x}
+            hitStrokeWidth={ellipse.strokeWidth + 100}
             y={ellipse.y}
             rotation={ellipse.rotation}
             scaleX={ellipse.scaleX}

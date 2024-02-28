@@ -189,7 +189,6 @@ export const BaseStage = ({
       if (e.target instanceof Konva.Shape) {
         return false;
       }
-
       return isStageSelectable && isSelectedLayerVisible;
     };
 

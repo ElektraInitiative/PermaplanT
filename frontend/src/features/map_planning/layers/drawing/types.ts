@@ -14,7 +14,7 @@ export type DrawingDto = {
   y: number;
   color: string;
   fillEnabled: boolean;
-  strokeWidth?: number;
+  strokeWidth: number;
   properties: DrawingProperties;
 };
 

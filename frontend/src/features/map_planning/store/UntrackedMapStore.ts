@@ -470,7 +470,6 @@ export const createUntrackedMapSlice: StateCreator<
   },
 
   drawingLayerSetFillEnabled(fill: boolean) {
-    get().disableShapeSelection();
     set((state) => ({
       ...state,
       untrackedState: {
@@ -487,7 +486,6 @@ export const createUntrackedMapSlice: StateCreator<
   },
 
   drawingLayerSetSelectedStrokeWidth(strokeWidth) {
-    get().disableShapeSelection();
     set((state) => ({
       ...state,
       untrackedState: {
@@ -542,7 +540,7 @@ export const createUntrackedMapSlice: StateCreator<
   drawingLayerClearSelectedShape() {
     get().enableShapeSelection();
     get().clearStatusPanelContent();
-    get().disableShapeSelection();
+    get().enableShapeSelection();
     useTransformerStore.getState().actions.clearSelection();
     set((state) => ({
       ...state,
@@ -609,8 +607,6 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   __removeLastAction({ actionId, entityId }) {
-    console.log('Removing action', actionId, entityId);
-
     set((state) => ({
       ...state,
       lastActions: state.lastActions.filter(

@@ -140,7 +140,7 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
 
           <SimpleFormInput
             id="stroke"
-            className="background-red mb-4"
+            className="mb-4"
             type="range"
             labelContent={t('drawings:strokeWidth')}
             min={1}
