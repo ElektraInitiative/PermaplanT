@@ -272,7 +272,7 @@ export function DrawingAttributeEditForm({
       )}
 
       {showFillEnabled && (
-        <div className="mt-2 flex gap-2">
+        <div className="flex gap-2">
           <DebouncedSimpleFormInput
             id="fillEnabled"
             type="checkbox"

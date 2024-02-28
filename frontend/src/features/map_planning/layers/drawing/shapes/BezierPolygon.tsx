@@ -15,6 +15,7 @@ export type BezierPolygonProps = {
   onPointsChanged: (points: number[][]) => void;
   onFinishLine?: () => void;
   onLineClick?: (evt: Konva.KonvaEventObject<MouseEvent>) => void;
+  onDragStart?: (evt: Konva.KonvaEventObject<MouseEvent>) => void;
   strokeWidth: number;
   color: string;
   object?: DrawingDto;
@@ -49,6 +50,7 @@ function BezierPolygon({
   onPointsChanged,
   onFinishLine,
   onLineClick,
+  onDragStart,
   object,
   x,
   y,
@@ -177,6 +179,7 @@ function BezierPolygon({
           fill={color}
           fillEnabled={fillEnabled}
           closed={fillEnabled}
+          onDragStart={onDragStart}
         />
       )}
       {/* Segmented dashed control line AND segmented curve */}
@@ -269,7 +272,7 @@ function BezierPolygon({
               key={i}
               x={x + p[0] * scaleX}
               y={y + p[1] * scaleY}
-              radius={3}
+              radius={5}
               scaleX={1 / (mapScale?.x || 1)}
               scaleY={1 / (mapScale?.y || 1)}
               strokeWidth={8}
