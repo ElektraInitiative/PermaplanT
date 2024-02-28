@@ -20,8 +20,8 @@ export type BezierPolygonProps = {
   object?: DrawingDto;
   x: number;
   y: number;
-  scaleX?: number;
-  scaleY?: number;
+  scaleX: number;
+  scaleY: number;
   rotation?: number;
   fillEnabled?: boolean;
 };
@@ -196,6 +196,8 @@ function BezierPolygon({
                 lineCap={'round'}
                 lineJoin={'round'}
                 shadowColor={'white'}
+                scaleX={scaleX}
+                scaleY={scaleY}
                 x={x}
                 y={y}
                 onMouseMove={(e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -248,6 +250,8 @@ function BezierPolygon({
               <Line
                 x={x}
                 y={y}
+                scaleX={scaleX}
+                scaleY={scaleY}
                 points={flatSegmentPoints}
                 stroke={'#bbb'}
                 strokeWidth={2}
@@ -260,21 +264,18 @@ function BezierPolygon({
 
       {editModeActive &&
         points.map((p, i) => {
-          const isActive = activeSegments.some(
-            (seg) => seg !== -1 && (seg === Math.floor(i / 3) || i === (seg + 1) * 3),
-          );
-
           return (
             <Circle
               key={i}
-              x={x + p[0]}
-              y={y + p[1]}
-              radius={6}
+              x={x + p[0] * scaleX}
+              y={y + p[1] * scaleY}
+              radius={3}
               scaleX={1 / (mapScale?.x || 1)}
               scaleY={1 / (mapScale?.y || 1)}
+              strokeWidth={8}
               isControlElement={true}
               listening={true}
-              opacity={isActive ? 1 : 0.5}
+              perfectDrawEnabled={false}
               draggable
               {...(i % 3
                 ? {
@@ -286,7 +287,7 @@ function BezierPolygon({
               onDragMove={({ target }) => {
                 setPoints((points) => {
                   const newPoints = [...points];
-                  newPoints[i] = [target.attrs.x - x, target.attrs.y - y];
+                  newPoints[i] = [(target.attrs.x - x) / scaleX, (target.attrs.y - y) / scaleY];
                   return newPoints;
                 });
               }}
@@ -308,7 +309,6 @@ function BezierPolygon({
               }}
               onDblClick={() => {
                 if (i % 3 && points.length >= 4) {
-                  // Straight a curve segment
                   setPoints((points) => {
                     const newPoints = [...points];
 
