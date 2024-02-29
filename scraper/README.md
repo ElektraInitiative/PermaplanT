@@ -125,7 +125,7 @@ npm run insert:plants
 
 The scraper inserts the relation data into the database.
 
-First you need to download the `Companions.csv` and `Antigonist.csv` file from the nextcloud server or export them yourself from the current `Plant_Relations.ods`.  
+First you need to download the `Companions.csv` and `Antagonist.csv` file from the nextcloud server or export them yourself from the current `Plant_Relations.ods`.  
 Copy them into the /data directory and run:
 
 ```shell

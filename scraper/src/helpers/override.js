@@ -27,14 +27,15 @@ async function applyOverride(plants, file) {
     }
 
     // for each column in the override plant, update the plant
-    Object.keys(overridePlant).forEach((key) => {
-      if (key !== "unique_name") {
-        if (key === "new_unique_name") {
+    Object.keys(overridePlant).forEach((source_key) => {
+      if (source_key !== "unique_name") {
+        let destination_key = source_key;
+        if (source_key === "new_unique_name") {
           // actually override the unique name
-          key = "unique_name";
+          destination_key = "unique_name";
         }
 
-        plants[index][key] = overridePlant[key].trim();
+        plants[index][destination_key] = overridePlant[source_key].trim();
       }
     });
   });

@@ -16,8 +16,8 @@
     "insert:plants": "node src/insert_plants.js",
     "insert:relations": "node src/insert_plant_relations.js",
     "insert": "npm run insert:plants && npm run insert:relations",
-    "start:full": "npm run fetch:permapeople && npm run fetch:practicalplants && npm run fetch:reinsaat && npm run merge:reinsaat && npm run merge:datasets && npm run fetch:germannames && npm run merge:germannames && npm run insert:plants",
-    "start": "npm run merge:datasets && npm run merge:germannames && npm run insert:plants"
+    "start:full": "npm run fetch:permapeople && npm run fetch:practicalplants && npm run fetch:reinsaat && npm run merge:reinsaat && npm run merge:datasets && npm run fetch:germannames && npm run merge:germannames && apply:overrides && npm run insert:plants",
+    "start": "npm run merge:datasets && npm run merge:germannames && apply:overrides && npm run insert:plants"
   },
   "keywords": [],
   "author": "",

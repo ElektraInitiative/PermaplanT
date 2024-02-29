@@ -163,7 +163,7 @@ const processPlants = async (plants) => {
 const fetchGermanNamesForPlantsConcurrent = async (plants) => {
   const MAX_CONCURRENT_REQUESTS = 25;
 
-  console.log("[INFO] Start fetching German common names!");
+  console.log("[INFO] Fetching German common names ...");
 
   // Chunk the plants into batches of MAX_CONCURRENT_REQUESTS
   const chunks = [];
