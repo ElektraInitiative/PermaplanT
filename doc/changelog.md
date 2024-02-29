@@ -12,6 +12,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - needs new scraper data (integer for plant spread and height)
 - _()_
 - Remove variety from table seeds _(Jannis Adamek)_
+- Add timeline API that summarizes plantings #967 _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
