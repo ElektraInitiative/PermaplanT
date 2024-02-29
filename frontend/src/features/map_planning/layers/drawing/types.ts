@@ -95,7 +95,7 @@ export interface UpdateDrawingStrokeWidthActionPayload {
   userId: string;
   actionId: string;
   id: string;
-  strokeWidth?: number;
+  strokeWidth: number;
 }
 
 export interface UpdateRemoveDateDrawingDto {

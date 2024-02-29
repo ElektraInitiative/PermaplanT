@@ -141,8 +141,6 @@ export class MoveDrawingAction
   }
 
   reverse(state: TrackedMapState) {
-    console.log(state.layers.drawing.objects);
-    console.log(this._ids);
     const drawings = state.layers.drawing.objects.filter((obj) => this._ids.includes(obj.id));
 
     if (!drawings.length) {
@@ -169,8 +167,6 @@ export class MoveDrawingAction
         return drawing;
       });
     };
-
-    console.log('moveDrawing');
 
     return {
       ...state,
@@ -658,18 +654,13 @@ export class UpdateStrokeWidthDrawingAction
       });
     };
 
-    const timelineDate = useMapStore.getState().untrackedState.timelineDate;
-
     return {
       ...state,
       layers: {
         ...state.layers,
         drawing: {
           ...state.layers.drawing,
-          objects: filterVisibleObjects(
-            updateDrawings(state.layers.drawing.loadedObjects),
-            timelineDate,
-          ),
+          objects: updateDrawings(state.layers.drawing.loadedObjects),
           loadedObjects: updateDrawings(state.layers.drawing.loadedObjects),
         },
       },

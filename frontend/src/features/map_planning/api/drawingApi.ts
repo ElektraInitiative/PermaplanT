@@ -26,12 +26,7 @@ export async function getDrawings(
   }
 }
 
-export async function createDrawing(
-  mapId: number,
-  layerId: number,
-  actionId: string,
-  data: DrawingDto[],
-) {
+export async function createDrawing(mapId: number, actionId: string, data: DrawingDto[]) {
   const http = createAPI();
 
   const dto: ActionDtoWrapper<DrawingDto[]> = {

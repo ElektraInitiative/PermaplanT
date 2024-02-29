@@ -1,6 +1,7 @@
 import { QueryFunctionContext, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getDrawings } from '../api/drawingApi';
 import { getLayers } from '../api/getLayers';
 import { getMap } from '../api/getMap';
 import { getPlantings } from '../api/plantingApi';
@@ -22,8 +23,8 @@ const MAP_EDITOR_KEYS = {
     [{ ...MAP_EDITOR_KEYS._helpers.plant()[0], mapId, layerId, fetchDate }] as const,
   baseLayer: (mapId: number, layerId: number) =>
     [{ ...MAP_EDITOR_KEYS._helpers.base()[0], mapId, layerId }] as const,
-  drawingLayer: (mapId: number, layerId: number) =>
-    [{ ...MAP_EDITOR_KEYS._helpers.drawing()[0], mapId, layerId }] as const,
+  drawingLayer: (mapId: number, layerId: number, fetchDate: string) =>
+    [{ ...MAP_EDITOR_KEYS._helpers.drawing()[0], mapId, layerId, fetchDate }] as const,
 };
 
 const TEN_MINUTES = 1000 * 60 * 10;
@@ -89,8 +90,10 @@ type UseLayerArgs = {
  * Hook that initializes the drawing layer by fetching all drawings
  */
 export function useDrawingLayer({ mapId, layerId, enabled }: UseLayerArgs) {
+  const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
+
   const queryInfo = useQuery({
-    queryKey: MAP_EDITOR_KEYS.layers(mapId),
+    queryKey: MAP_EDITOR_KEYS.drawingLayer(mapId, layerId, fetchDate),
     queryFn: drawingLayerQueryFn,
     // We want to refetch manually.
     refetchOnWindowFocus: false,
@@ -102,17 +105,17 @@ export function useDrawingLayer({ mapId, layerId, enabled }: UseLayerArgs) {
   useEffect(() => {
     if (!queryInfo?.data) return;
 
-    useMapStore.getState().initDrawingLayer(queryInfo.data);
-  }, [mapId, layerId, queryInfo?.data]);
+    useMapStore.getState().initDrawingLayer(queryInfo.data.results);
+  }, [mapId, layerId, queryInfo.data]);
 
   return queryInfo;
 }
 
 function drawingLayerQueryFn({
   queryKey,
-}: QueryFunctionContext<ReturnType<(typeof MAP_EDITOR_KEYS)['layers']>>) {
-  const { mapId } = queryKey[0];
-  return getLayers(mapId);
+}: QueryFunctionContext<ReturnType<(typeof MAP_EDITOR_KEYS)['drawingLayer']>>) {
+  const { mapId, layerId, fetchDate } = queryKey[0];
+  return getDrawings(mapId, { layer_id: layerId, relative_to_date: fetchDate });
 }
 
 /**

@@ -1,16 +1,18 @@
 import Konva from 'konva';
+import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { Stage } from 'konva/lib/Stage';
 import { range } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import React from 'react';
 import { Circle, Line } from 'react-konva';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { DrawingLayerEditMode } from '@/features/map_planning/store/MapStoreTypes';
 import { DrawingDto } from '../types';
 
 export type BezierPolygonProps = {
   transformerRef?: React.MutableRefObject<Konva.Transformer | null>;
   id: string;
-  drawingModeActive: boolean;
-  editModeActive: boolean;
+  editMode?: DrawingLayerEditMode;
   initialPoints: number[][];
   onPointsChanged: (points: number[][]) => void;
   onFinishLine?: () => void;
@@ -42,8 +44,7 @@ function getMidPoints(p1: Point, p2: Point) {
 
 function BezierPolygon({
   id,
-  drawingModeActive,
-  editModeActive,
+  editMode,
   strokeWidth,
   color,
   initialPoints,
@@ -66,6 +67,10 @@ function BezierPolygon({
 
   const mapScale = useMapStore.getState().stageRef.current?.scale();
 
+  const editModeActive = editMode != undefined;
+  const drawingModeActive = editMode === 'draw';
+  const removeModeActive = editMode === 'remove';
+
   useEffect(() => {
     if (points) {
       onPointsChanged(points);
@@ -76,61 +81,172 @@ function BezierPolygon({
     points.slice(3 * segI, 3 * segI + 4),
   );
 
-  const handleAddPoint = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    if (!drawingModeActive) return;
+  const isControlPoint = (pointIndex: number) => pointIndex % 3 !== 0;
 
-    // if right click
-    if (e.evt.button == 2) {
+  const handleAddPoint = useCallback(
+    (e: Konva.KonvaEventObject<MouseEvent>) => {
+      if (e.target !== e.currentTarget) return;
+      if (e.target.getStage() == null) return [];
+
+      const stage = e.target.getStage();
+      if (stage == null) return [];
+
+      const pos = stage.getRelativePointerPosition();
+      if (pos == null) return [];
+
+      setPoints((points) => {
+        const newPoint = [pos.x - x, pos.y - y];
+
+        if (!points.length) return [newPoint];
+
+        const lastPoint = points[points.length - 1];
+
+        return [...points, ...getMidPoints(lastPoint, newPoint), newPoint];
+      });
+    },
+    [x, y],
+  );
+
+  const handleRightClick = useCallback(
+    (e: Konva.KonvaEventObject<MouseEvent>) => {
       e.evt.preventDefault();
       e.evt.stopPropagation();
       if (onFinishLine) {
         onFinishLine();
       }
+    },
+    [onFinishLine],
+  );
+
+  const handleClick = useCallback(
+    (e: Konva.KonvaEventObject<MouseEvent>) => {
+      if (!drawingModeActive) return;
+
+      if (e.evt.button == 2) {
+        handleRightClick(e);
+      } else if (e.evt.button === 0) {
+        handleAddPoint(e);
+      }
+    },
+    [drawingModeActive, handleAddPoint, handleRightClick],
+  );
+
+  const handleDoubleClick = useCallback(
+    (e: Konva.KonvaEventObject<MouseEvent>) => {
+      if (e.target !== e.currentTarget) return;
+
+      if (e.evt.button == 2) {
+        e.evt.preventDefault();
+        e.evt.stopPropagation();
+      } else {
+        handleAddPoint(e);
+      }
+    },
+    [handleAddPoint],
+  );
+
+  const handlePointDoubleClick = (pointIndex: number) => {
+    if (isControlPoint(pointIndex)) {
+      flattenLine(pointIndex);
+    } else {
+      removePoint(pointIndex);
     }
-
-    // Only left click
-    if (e.evt.button !== 0) return;
-
-    // Must click in blank space to add a point.
-    if (e.target !== e.currentTarget) return;
-
-    if (e.target.getStage() == null) return [];
-
-    const stage = e.target.getStage();
-    if (stage == null) return [];
-
-    const pos = stage.getRelativePointerPosition();
-    if (pos == null) return [];
-
-    setPoints((points) => {
-      const newPoint = [pos.x - x, pos.y - y];
-
-      if (!points.length) return [newPoint];
-
-      const lastPoint = points[points.length - 1];
-
-      return [...points, ...getMidPoints(lastPoint, newPoint), newPoint];
-    });
   };
 
-  const handleDoubleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    if (e.target !== e.currentTarget) return;
-
-    if (e.evt.button == 2) {
-      e.evt.preventDefault();
-      e.evt.stopPropagation();
-    } else {
+  const handleOnPointClick = (e: Konva.KonvaEventObject<MouseEvent>, pointIndex: number) => {
+    if (removeModeActive) {
+      removePoint(pointIndex);
+    } else if (pointIndex === 0) {
       handleAddPoint(e);
     }
   };
 
-  const handleFinishDrawing = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    // Must click in blank space to add a point.
-    if (e.target !== e.currentTarget) return;
+  const handlePointMouseEnter = (pointIndex: number) => {
+    const thisSegment = (pointIndex - (pointIndex % 3)) / 3;
+    const activeSegments =
+      pointIndex % 3 === 0 && thisSegment ? [thisSegment - 1, thisSegment] : [thisSegment];
+    setActiveSegments(activeSegments);
+    setActivePoint(pointIndex);
+  };
 
-    if (onFinishLine) {
-      onFinishLine();
-    }
+  const handlePointMove = (pointIndex: number, target: Stage | Shape<ShapeConfig>) => {
+    setPoints((points) => {
+      const newPoints = [...points];
+      newPoints[pointIndex] = [(target.attrs.x - x) / scaleX, (target.attrs.y - y) / scaleY];
+      return newPoints;
+    });
+  };
+
+  const handleLineMouserOver = (e: Konva.KonvaEventObject<MouseEvent>, pointIndex: number) => {
+    setActiveSegments([pointIndex]);
+
+    if (e.target.getStage() == null) return;
+
+    const stage = e.target.getStage();
+    if (stage == null) return;
+
+    const pos = stage.getRelativePointerPosition();
+    if (pos == null) return;
+
+    setSegPos([pos.x, pos.y]);
+  };
+
+  const handleLineClick = (e: Konva.KonvaEventObject<MouseEvent>, pointIndex: number) => {
+    setPoints((points) => {
+      const newPoints = [...points];
+
+      if (e.target.getStage() == null) return [];
+
+      const stage = e.target.getStage();
+      if (stage == null) return [];
+
+      const pos = stage.getRelativePointerPosition();
+      if (pos == null) return [];
+
+      const newPoint = [pos.x - x, pos.y - y];
+
+      const spliceIndex = pointIndex * 3 + 2;
+      newPoints.splice(
+        spliceIndex,
+        0,
+        getBetweenPoint(newPoints[spliceIndex - 1], newPoint, 0.5),
+        newPoint,
+        getBetweenPoint(newPoint, newPoints[spliceIndex], 0.5),
+      );
+
+      return newPoints;
+    });
+  };
+
+  const handleLineMouseLeave = () => {
+    setActiveSegments([]);
+    setSegPos([]);
+  };
+
+  const removePoint = (i: number) => {
+    setPoints((points) => {
+      const newPoints = [...points];
+
+      const spliceIndex = i === points.length - 1 ? i - 2 : Math.max(i - 1, 0);
+      newPoints.splice(spliceIndex, 3);
+
+      return newPoints;
+    });
+  };
+
+  const flattenLine = (i: number) => {
+    setPoints((points) => {
+      const newPoints = [...points];
+
+      const newIndex = i - ((i % 3) - 1);
+
+      newPoints.splice(newIndex, 2);
+      i = newIndex;
+
+      newPoints.splice(i, 0, ...getMidPoints(newPoints[i - 1], newPoints[i]));
+
+      return newPoints;
+    });
   };
 
   useEffect(() => {
@@ -139,21 +255,15 @@ function BezierPolygon({
     }
 
     useMapStore.getState().stageRef.current?.on('dblclick.finishDrawing', handleDoubleClick);
-    useMapStore.getState().stageRef.current?.on('click.addPoint', handleAddPoint);
-
-    // do not show context menu on right click
-    useMapStore.getState().stageRef.current?.on('contextmenu', (e) => {
-      e.evt.preventDefault();
-      e.evt.stopPropagation();
-      handleFinishDrawing(e);
-    });
+    useMapStore.getState().stageRef.current?.on('click.addPoint', handleClick);
+    useMapStore.getState().stageRef.current?.on('contextmenu', handleRightClick);
 
     return () => {
       useMapStore.getState().stageRef.current?.off('dblclick.finishDrawing');
       useMapStore.getState().stageRef.current?.off('click.addPoint');
       useMapStore.getState().stageRef.current?.off('contextmenu');
     };
-  }, [handleAddPoint]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [drawingModeActive, handleClick, handleDoubleClick, handleRightClick]);
 
   return (
     <>
@@ -203,64 +313,29 @@ function BezierPolygon({
                 scaleY={scaleY}
                 x={x}
                 y={y}
-                onMouseMove={(e: Konva.KonvaEventObject<MouseEvent>) => {
-                  setActiveSegments([i]);
-
-                  if (e.target.getStage() == null) return;
-
-                  const stage = e.target.getStage();
-                  if (stage == null) return;
-
-                  const pos = stage.getRelativePointerPosition();
-                  if (pos == null) return;
-
-                  setSegPos([pos.x, pos.y]);
-                }}
-                onMouseLeave={() => {
-                  setActiveSegments([]);
-                  setSegPos([]);
-                }}
+                onMouseMove={(e) => handleLineMouserOver(e, i)}
+                onMouseLeave={handleLineMouseLeave}
                 onClick={(e: Konva.KonvaEventObject<MouseEvent>) => {
-                  setPoints((points) => {
-                    const newPoints = [...points];
-
-                    if (e.target.getStage() == null) return [];
-
-                    const stage = e.target.getStage();
-                    if (stage == null) return [];
-
-                    const pos = stage.getRelativePointerPosition();
-                    if (pos == null) return [];
-
-                    const newPoint = [pos.x - x, pos.y - y];
-
-                    const spliceIndex = i * 3 + 2;
-                    newPoints.splice(
-                      spliceIndex,
-                      0,
-                      getBetweenPoint(newPoints[spliceIndex - 1], newPoint, 0.5),
-                      newPoint,
-                      getBetweenPoint(newPoint, newPoints[spliceIndex], 0.5),
-                    );
-
-                    return newPoints;
-                  });
+                  handleLineClick(e, i);
                 }}
                 bezier
               />
 
               {/* Control line */}
-              <Line
-                x={x}
-                y={y}
-                scaleX={scaleX}
-                scaleY={scaleY}
-                points={flatSegmentPoints}
-                stroke={'#bbb'}
-                strokeWidth={2}
-                dash={[10, 10]}
-                opacity={isActive ? 1 : 0.5}
-              />
+
+              {drawingModeActive && (
+                <Line
+                  x={x}
+                  y={y}
+                  scaleX={scaleX}
+                  scaleY={scaleY}
+                  points={flatSegmentPoints}
+                  stroke={'#bbb'}
+                  strokeWidth={2}
+                  dash={[10, 10]}
+                  opacity={isActive ? 1 : 0.5}
+                />
+              )}
             </React.Fragment>
           );
         })}
@@ -280,62 +355,30 @@ function BezierPolygon({
               listening={true}
               perfectDrawEnabled={false}
               draggable
-              {...(i % 3
-                ? {
-                    stroke: '#ccc',
-                  }
-                : {
-                    fill: i == points.length - 1 ? '#0000ff' : '#ee90aa',
-                  })}
               onDragMove={({ target }) => {
-                setPoints((points) => {
-                  const newPoints = [...points];
-                  newPoints[i] = [(target.attrs.x - x) / scaleX, (target.attrs.y - y) / scaleY];
-                  return newPoints;
-                });
+                handlePointMove(i, target);
               }}
               onMouseEnter={() => {
-                const thisSegment = (i - (i % 3)) / 3;
-                const activeSegments =
-                  i % 3 === 0 && thisSegment ? [thisSegment - 1, thisSegment] : [thisSegment];
-                setActiveSegments(activeSegments);
-                setActivePoint(i);
+                handlePointMouseEnter(i);
               }}
               onMouseLeave={() => {
                 setActiveSegments([]);
                 setActivePoint(-1);
               }}
               onClick={(e) => {
-                if (i === 0) {
-                  handleAddPoint(e);
-                }
+                handleOnPointClick(e, i);
               }}
               onDblClick={() => {
-                if (i % 3 && points.length >= 4) {
-                  setPoints((points) => {
-                    const newPoints = [...points];
-
-                    const newI = i - ((i % 3) - 1);
-
-                    newPoints.splice(newI, 2);
-                    i = newI;
-
-                    newPoints.splice(i, 0, ...getMidPoints(newPoints[i - 1], newPoints[i]));
-
-                    return newPoints;
-                  });
-                } else {
-                  // Remove point
-                  setPoints((points) => {
-                    const newPoints = [...points];
-
-                    const spliceIndex = i === points.length - 1 ? i - 2 : Math.max(i - 1, 0);
-                    newPoints.splice(spliceIndex, 3);
-
-                    return newPoints;
-                  });
-                }
+                handlePointDoubleClick(i);
               }}
+              {...(i % 3
+                ? {
+                    stroke: '#ccc',
+                    visible: drawingModeActive,
+                  }
+                : {
+                    fill: i == points.length - 1 && drawingModeActive ? '#0000ff' : '#ee90aa',
+                  })}
             />
           );
         })}

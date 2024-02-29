@@ -39,6 +39,22 @@ export const createTrackedMapSlice: StateCreator<
         },
       }));
     },
+    initDrawingLayer: (drawings: DrawingDto[]) => {
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            drawing: {
+              ...state.trackedState.layers.drawing,
+              objects: filterVisibleObjects(drawings, state.untrackedState.timelineDate),
+              loadedObjects: drawings,
+            },
+          },
+        },
+      }));
+    },
     initBaseLayer(dto: BaseLayerImageDto) {
       set((state) => ({
         ...state,

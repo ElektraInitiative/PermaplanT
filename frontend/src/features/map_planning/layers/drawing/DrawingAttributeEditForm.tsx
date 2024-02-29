@@ -7,6 +7,7 @@ import IconButton from '@/components/Button/IconButton';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
 import EditIcon from '@/svg/icons/edit.svg?react';
+import EraserIcon from '@/svg/icons/eraser.svg?react';
 import useMapStore from '../../store/MapStore';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
 import { DrawingDto } from './types';
@@ -173,7 +174,7 @@ export function DrawingAttributeEditForm({
   multipleDrawings = false,
   showShapeEditButton,
 }: DrawingAttributeEditFormProps) {
-  const { t } = useTranslation(['drawings', 'drawingLayerForm']);
+  const { t } = useTranslation(['drawings']);
 
   const formInfo = useForm<DrawingFormData>({
     defaultValues: {
@@ -189,8 +190,8 @@ export function DrawingAttributeEditForm({
   const showStrokeWidth = strokeWidthDefaultValue !== undefined && strokeWidthDefaultValue > 0;
   const showFillEnabled = fillEnabledDefaultValue !== undefined;
 
-  const drawingLayerSetActiveShape = useMapStore((state) => state.drawingLayerSetActiveShape);
-  const activeShape = useMapStore((state) => state.untrackedState.layers.drawing.activeShape);
+  const drawingLayerSetEditMode = useMapStore((state) => state.drawingLayerSetEditMode);
+  const editMode = useMapStore((state) => state.untrackedState.layers.drawing.editMode);
 
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
@@ -287,22 +288,40 @@ export function DrawingAttributeEditForm({
       <hr className="my-2 border-neutral-700" />
 
       {showShapeEditButton && drawingId && (
-        <IconButton
-          isToolboxIcon={true}
-          renderAsActive={activeShape != undefined}
-          onClick={() => {
-            drawingLayerSetActiveShape(drawingId);
-            setStatusPanelContent(
-              <DrawingLayerStatusPanelContent
-                text={t('drawingLayerForm:draw_bezier_polygon_hint')}
-              />,
-            );
-          }}
-          title={t('drawings:edit_mode')}
-        >
-          <EditIcon></EditIcon>
-        </IconButton>
+        <div>
+          <label className="mb-2 block text-sm font-medium">{t('drawings:operations')}</label>
+          <IconButton
+            isToolboxIcon={true}
+            renderAsActive={editMode != undefined}
+            onClick={() => {
+              drawingLayerSetEditMode(drawingId, 'draw');
+              setStatusPanelContent(
+                <DrawingLayerStatusPanelContent text={t('drawings:edit_bezier_polygon_hint')} />,
+              );
+            }}
+            title={t('drawings:edit_bezier_polygon_tooltip')}
+          >
+            <EditIcon></EditIcon>
+          </IconButton>
+
+          <IconButton
+            isToolboxIcon={true}
+            onClick={() => {
+              drawingLayerSetEditMode(drawingId, 'remove');
+              setStatusPanelContent(
+                <DrawingLayerStatusPanelContent
+                  text={t('drawings:delete_bezier_polygon_point_hint')}
+                />,
+              );
+            }}
+            title={t('drawings:delete_bezier_polygon_point_tooltip')}
+          >
+            <EraserIcon></EraserIcon>
+          </IconButton>
+        </div>
       )}
+
+      <hr className="my-2 border-neutral-700" />
 
       <SimpleButton
         disabled={isReadOnlyMode}
