@@ -129,6 +129,12 @@ export interface TrackedMapSlice {
    * Initializes the base layer.
    */
   initBaseLayer: (baseLayer: BaseLayerImageDto) => void;
+
+  /**
+   * Initializes the drawing layer.
+   */
+  initDrawingLayer: (drawingLayer: DrawingDto[]) => void;
+
   initLayerId: (layer: LayerType, layerId: number) => void;
 }
 
@@ -188,7 +194,7 @@ export interface UntrackedMapSlice {
   drawingLayerSetSelectedColor: (color: string) => void;
   drawingLayerSetFillEnabled: (fill: boolean) => void;
   drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
-  drawingLayerSetActiveShape: (id: string) => void;
+  drawingLayerSetEditMode: (drawingId: string, editMode: DrawingLayerEditMode) => void;
   selectDrawings: (drawings: DrawingDto[] | null, transformerStore?: TransformerStore) => void;
 
   disableShapeSelection: () => void;
@@ -292,7 +298,8 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         fillEnabled: false,
         selectedStrokeWidth: 3,
         selectedDrawings: [],
-        activeShape: undefined,
+        editMode: undefined,
+        editDrawingId: undefined,
       } as UntrackedDrawingLayerState,
       [LayerType.Base]: {
         visible: true,
@@ -419,7 +426,8 @@ export type UntrackedDrawingLayerState = UntrackedLayerState & {
   selectedColor: string;
   fillEnabled: boolean;
   selectedStrokeWidth: number;
-  activeShape: string | undefined;
+  editMode: DrawingLayerEditMode;
+  editDrawingId?: string;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {
@@ -440,6 +448,8 @@ export type PlantForPlanting = {
   plant: PlantsSummaryDto;
   seed: SeedDto | null;
 };
+
+export type DrawingLayerEditMode = 'draw' | 'add' | 'remove' | undefined;
 
 /**
  * The state of the map tracked by the history.

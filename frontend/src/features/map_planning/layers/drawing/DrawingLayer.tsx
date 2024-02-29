@@ -120,7 +120,8 @@ function DrawingLayer(props: DrawingLayerProps) {
   const [previewRectangle, setPreviewRectangle] = useState<Rectangle | undefined>();
   const [previewEllipse, setPreviewEllipse] = useState<Ellipse | undefined>();
 
-  const activeShape = useMapStore((state) => state.untrackedState.layers.drawing.activeShape);
+  const editMode = useMapStore((state) => state.untrackedState.layers.drawing.editMode);
+  const editDrawingId = useMapStore((state) => state.untrackedState.layers.drawing.editDrawingId);
 
   const isDrawing = useRef(false);
 
@@ -661,8 +662,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             transformerRef={transformerRef}
             id={bezierLine.id}
             object={bezierLine}
-            editModeActive={activeShape === bezierLine.id}
-            drawingModeActive={activeShape === bezierLine.id}
+            editMode={editDrawingId === bezierLine.id ? editMode : undefined}
             onPointsChanged={console.log}
             initialPoints={bezierLine.properties.points}
             strokeWidth={bezierLine.strokeWidth}
@@ -684,8 +684,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             onFinishLine={handleFinishBezierLine}
             onPointsChanged={updateNewBezierLinePoints}
             initialPoints={newBezierLine.points}
-            drawingModeActive={selectedShape == 'bezierPolygon'}
-            editModeActive={selectedShape == 'bezierPolygon'}
+            editMode={selectedShape == 'bezierPolygon' ? 'draw' : undefined}
             strokeWidth={selectedStrokeWidth}
             color={selectedColor}
             scaleX={1}

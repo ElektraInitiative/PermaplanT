@@ -1,6 +1,23 @@
 {
+  "tools_title": "Choose Shape",
+  "draw_rectangle_hint": "Use mouse to draw a rectangle.",
+  "draw_ellipse_hint": "Use mouse to draw an ellipse.",
+  "draw_free_line_hint": "Use mouse to draw a line.",
+  "draw_bezier_polygon_hint": "Use left mouse button to add points, right mouse button to finish current polygon.",
+  "edit_bezier_polygon_hint": "Use left mouse button to add points.",
+  "delete_bezier_polygon_point_hint": "Click on a point to delete it.",
+
+  "draw_rectangle_tooltip": "Draw rectangle.",
+  "draw_ellipse_tooltip": "Draw ellipse.",
+  "draw_free_line_tooltip": "Draw free line.",
+  "draw_bezier_polygon_tooltip": "Draw bezier polygon.",
+  "edit_bezier_polygon_tooltip": "Edit bezier polygon.",
+  "delete_bezier_polygon_point_tooltip": "Delete points.",
+
   "delete": "Delete Drawing",
   "delete_multiple_drawings": "Delete Drawings",
+
+
   "add_date": "Added on",
   "remove_date": "Removed on",
   "color": "Color",
@@ -8,5 +25,6 @@
   "fillEnabled": "Fill Enabled",
 
   "error_invalid_add_remove_date": "Remove date must be after add date.",
+  "operations": "Edit Operations",
   "edit_mode": "Activate Edit Mode"
 }

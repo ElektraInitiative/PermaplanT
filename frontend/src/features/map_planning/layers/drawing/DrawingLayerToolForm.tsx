@@ -13,7 +13,7 @@ import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent
 import { DrawingShapeType } from './types';
 
 export function DrawingLayerToolForm() {
-  const { t } = useTranslation(['common', 'drawingLayerForm']);
+  const { t } = useTranslation(['common', 'drawings']);
 
   const drawingLayerActivateDrawingMode = useMapStore(
     (state) => state.drawingLayerActivateDrawingMode,
@@ -31,7 +31,7 @@ export function DrawingLayerToolForm() {
   return (
     <>
       <div>
-        <h2>{t('drawingLayerForm:tools_title')}</h2>
+        <h2>{t('drawings:tools_title')}</h2>
         <div className="flex flex-row gap-1">
           <IconButton
             isToolboxIcon={true}
@@ -39,10 +39,10 @@ export function DrawingLayerToolForm() {
             onClick={() => {
               activateDrawingMode('freeLine');
               setStatusPanelContent(
-                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_free_line_hint')} />,
+                <DrawingLayerStatusPanelContent text={t('drawings:draw_free_line_hint')} />,
               );
             }}
-            title={t('drawingLayerForm:draw_free_line_tooltip')}
+            title={t('drawings:draw_free_line_tooltip')}
           >
             <LineIcon></LineIcon>
           </IconButton>
@@ -52,10 +52,10 @@ export function DrawingLayerToolForm() {
             onClick={() => {
               activateDrawingMode('rectangle');
               setStatusPanelContent(
-                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_rectangle_hint')} />,
+                <DrawingLayerStatusPanelContent text={t('drawings:draw_rectangle_hint')} />,
               );
             }}
-            title={t('drawingLayerForm:draw_rectangle_tooltip')}
+            title={t('drawings:draw_rectangle_tooltip')}
           >
             <RectangleIcon></RectangleIcon>
           </IconButton>
@@ -66,10 +66,10 @@ export function DrawingLayerToolForm() {
             onClick={() => {
               activateDrawingMode('ellipse');
               setStatusPanelContent(
-                <DrawingLayerStatusPanelContent text={t('drawingLayerForm:draw_ellipse_hint')} />,
+                <DrawingLayerStatusPanelContent text={t('drawings:draw_ellipse_hint')} />,
               );
             }}
-            title={t('drawingLayerForm:draw_ellipse_tooltip')}
+            title={t('drawings:draw_ellipse_tooltip')}
           >
             <CircleIcon></CircleIcon>
           </IconButton>
@@ -80,12 +80,10 @@ export function DrawingLayerToolForm() {
             onClick={() => {
               activateDrawingMode('bezierPolygon');
               setStatusPanelContent(
-                <DrawingLayerStatusPanelContent
-                  text={t('drawingLayerForm:draw_bezier_polygon_hint')}
-                />,
+                <DrawingLayerStatusPanelContent text={t('drawings:draw_bezier_polygon_hint')} />,
               );
             }}
-            title={t('drawingLayerForm:draw_bezier_polygon_tooltip')}
+            title={t('drawings:draw_bezier_polygon_tooltip')}
           >
             <PolygonIcon></PolygonIcon>
           </IconButton>

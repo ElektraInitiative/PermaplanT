@@ -92,7 +92,7 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers.drawing,
             selectedDrawings: null,
             shape: null,
-            activeShape: undefined,
+            editMode: undefined,
           },
         },
       },
@@ -520,8 +520,7 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
 
-  drawingLayerSetActiveShape(id: string) {
-    get().disableShapeSelection();
+  drawingLayerSetEditMode(drawingId, editMode) {
     set((state) => ({
       ...state,
       untrackedState: {
@@ -530,7 +529,8 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           drawing: {
             ...state.untrackedState.layers.drawing,
-            activeShape: id,
+            editDrawingId: drawingId,
+            editMode: editMode,
           },
         },
       },
@@ -551,7 +551,7 @@ export const createUntrackedMapSlice: StateCreator<
           drawing: {
             ...state.untrackedState.layers.drawing,
             shape: null,
-            activeShape: undefined,
+            editMode: undefined,
           },
         },
       },
