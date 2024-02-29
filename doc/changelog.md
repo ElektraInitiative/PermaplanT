@@ -8,6 +8,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.3.7 - UNRELEASED
 
+- needs new migrations
+- needs new scraper data (integer for plant spread and height)
 - _()_
 - Remove variety from table seeds _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
@@ -34,6 +36,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 22.01.2024 9:00 _(Markus Raab, Daniel)_
 - Added Meeting Agenda&Notes for 29.01.2024 9:00 _(Markus Raab, Jannis)_
 - Added Meeting Agenda&Notes for 05.02.2024 9:00 _(Markus Raab, Christoph)_
+- Added Meeting Agenda&Notes for 12.02.2024 9:00 _(Markus Raab, Christoph)_
+- Added Meeting Agenda&Notes for 19.02.2024 9:00 _(Markus Raab, Daniel)_
 - _()_
 - _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
@@ -78,7 +82,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
 - _()_
-- _()_
+- Added planting notes to planting details _(Daniel Steinkogler)_
 - _()_
 - _()_
 - Up the rust version to 1.74 _(4ydan)_
