@@ -13,17 +13,17 @@ body:
               unfortunately `npm audit --omit=dev fix` does [too much and too little](https://overreacted.io/npm-audit-broken-by-design/),
               `cargo deny check` seems to be more helpful
         - [ ] check/improve reformatting
-        - [ ] check if all issues labelled `release critical` are fixed
+        - [ ] check if all issues labelled []`release critical`](https://github.com/ElektraInitiative/PermaplanT/issues?q=is%3Aopen+is%3Aissue+label%3A%22release+critical%22) are fixed
         - [ ] update mergedDatasets.csv
         - [ ] Merge PRs (@markus2330)
 
         ### Actual Release
 
         - [ ] check if all preps are done
-        - [ ] manually test dev.permaplant.net according to protocol
+        - [ ] manually test [dev.permaplant.net](https://dev.permaplant.net/) according to protocol
         - [ ] build <https://build.libelektra.org/job/PermaplanT-Release/>
-        - [ ] git tag -s vX.X.X
-        - [ ] git push --tags
+        - [ ] `git tag -s vX.X.X`
+        - [ ] `git push --tags`
 
         ### After Release
 
