@@ -14,7 +14,7 @@ function getDatesBetween(startDate: Date, endDate: Date) {
   return dates;
 }
 
-const createYearsAndMonths = (
+export const createYearsAndMonths = (
   startYear: number,
   endYear: number,
   monthlyEvents: Record<string, TimelineEntryDto>,
@@ -46,7 +46,7 @@ const createYearsAndMonths = (
   return { years, months };
 };
 
-const createDays = (
+export const createDays = (
   startYear: number,
   endYear: number,
   dailyEvents: Record<string, TimelineEntryDto>,
