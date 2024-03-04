@@ -1,73 +1,4 @@
-import { PlantingDto } from '@/api_types/definitions';
 import useMapStore from '../store/MapStore';
-import {
-  TimelineYearlyEvent,
-  TimelineMonthlyEvent,
-  TimelineDailyEvent,
-} from '../store/MapStoreTypes';
-
-export default function updateTimlelineEventsForDate(
-  loadedPlants: PlantingDto[],
-  timelineDate: string,
-) {
-  const day = new Date(timelineDate).getDate();
-  const month = new Date(timelineDate).getMonth() + 1;
-  const year = new Date(timelineDate).getFullYear();
-
-  const yearItems: TimelineYearlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.yearly),
-  );
-  const monthItems: TimelineMonthlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.monthly),
-  );
-  const dayItems: TimelineDailyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.daily),
-  );
-
-  const yearItem = yearItems.find((item) => item.year === year);
-  const monthItem = monthItems.find((item) => item.year === year && item.month === month);
-  const dayItem = dayItems.find(
-    (item) => item.year === year && item.month === month && item.day === day,
-  );
-
-  const addedPlants = loadedPlants.filter((plant) => {
-    return plant.addDate === timelineDate;
-  }).length;
-  const removedPlants = loadedPlants.filter((plant) => {
-    return plant.removeDate === timelineDate;
-  }).length;
-
-  if (!dayItem) return;
-
-  const deltaAdded = addedPlants - dayItem.added;
-  const deltaRemoved = removedPlants - dayItem.removed;
-
-  if (yearItem) {
-    yearItem.added += deltaAdded;
-    yearItem.removed += deltaRemoved;
-  }
-
-  if (monthItem) {
-    monthItem.added += deltaAdded;
-    monthItem.removed += deltaRemoved;
-  }
-
-  console.log(yearItem, monthItem, dayItem);
-
-  dayItem.added = addedPlants;
-  dayItem.removed = removedPlants;
-
-  useMapStore.setState({
-    untrackedState: {
-      ...useMapStore.getState().untrackedState,
-      timeLineEvents: {
-        yearly: yearItems,
-        monthly: monthItems,
-        daily: dayItems,
-      },
-    },
-  });
-}
 
 export function timlineEventsUpdateRemoveDate(oldRemoveDate?: string, newRemoveDate?: string) {
   if (oldRemoveDate) decreaseRemovedPlantsForDate(oldRemoveDate);
@@ -80,180 +11,163 @@ export function timlineEventsUpdateAdedDate(oldAddedDate: string, newAddedDate: 
 }
 
 export function decreaseRemovedPlantsForDate(date: string) {
-  const day = new Date(date).getDate();
-  const month = new Date(date).getMonth() + 1;
-  const year = new Date(date).getFullYear();
+  const parsedDate = new Date(date);
+  const day = parsedDate.getDate();
+  const month = parsedDate.getMonth() + 1;
+  const year = parsedDate.getFullYear();
 
-  const yearItems: TimelineYearlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.yearly),
-  );
-  const monthItems: TimelineMonthlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.monthly),
-  );
-  const dayItems: TimelineDailyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.daily),
-  );
+  const timelineEvents = useMapStore.getState().untrackedState.timeLineEvents;
 
-  const yearItem = yearItems.find((item) => item.year === year);
-  const monthItem = monthItems.find((item) => item.year === year && item.month === month);
-  const dayItem = dayItems.find(
-    (item) => item.year === year && item.month === month && item.day === day,
-  );
+  const updatedYearly = timelineEvents.yearly.map((yearItem) => {
+    if (yearItem.year === year) {
+      return { ...yearItem, removed: yearItem.removed - 1 };
+    }
+    return yearItem;
+  });
 
-  if (!dayItem) return;
+  const updatedMonthly = timelineEvents.monthly.map((monthItem) => {
+    if (monthItem.year === year && monthItem.month === month) {
+      return { ...monthItem, removed: monthItem.removed - 1 };
+    }
+    return monthItem;
+  });
 
-  if (yearItem) {
-    yearItem.removed -= 1;
-  }
-
-  if (monthItem) {
-    monthItem.removed -= 1;
-  }
-
-  dayItem.removed -= 1;
+  const updatedDaily = timelineEvents.daily.map((dayItem) => {
+    if (dayItem.year === year && dayItem.month === month && dayItem.day === day) {
+      return { ...dayItem, removed: dayItem.removed - 1 };
+    }
+    return dayItem;
+  });
 
   useMapStore.setState({
     untrackedState: {
       ...useMapStore.getState().untrackedState,
       timeLineEvents: {
-        yearly: yearItems,
-        monthly: monthItems,
-        daily: dayItems,
+        yearly: updatedYearly,
+        monthly: updatedMonthly,
+        daily: updatedDaily,
       },
     },
   });
 }
 
 export function increaseRemovedPlantsForDate(date: string) {
-  const day = new Date(date).getDate();
-  const month = new Date(date).getMonth() + 1;
-  const year = new Date(date).getFullYear();
+  const parsedDate = new Date(date);
+  const day = parsedDate.getDate();
+  const month = parsedDate.getMonth() + 1;
+  const year = parsedDate.getFullYear();
 
-  const yearItems: TimelineYearlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.yearly),
-  );
-  const monthItems: TimelineMonthlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.monthly),
-  );
-  const dayItems: TimelineDailyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.daily),
-  );
+  const timelineEvents = useMapStore.getState().untrackedState.timeLineEvents;
 
-  const yearItem = yearItems.find((item) => item.year === year);
-  const monthItem = monthItems.find((item) => item.year === year && item.month === month);
-  const dayItem = dayItems.find(
-    (item) => item.year === year && item.month === month && item.day === day,
-  );
+  const updatedYearly = timelineEvents.yearly.map((yearItem) => {
+    if (yearItem.year === year) {
+      return { ...yearItem, removed: yearItem.removed + 1 };
+    }
+    return yearItem;
+  });
 
-  if (!dayItem) return;
+  const updatedMonthly = timelineEvents.monthly.map((monthItem) => {
+    if (monthItem.year === year && monthItem.month === month) {
+      return { ...monthItem, removed: monthItem.removed + 1 };
+    }
+    return monthItem;
+  });
 
-  if (yearItem) {
-    yearItem.removed += 1;
-  }
-
-  if (monthItem) {
-    monthItem.removed += 1;
-  }
-
-  dayItem.removed += 1;
+  const updatedDaily = timelineEvents.daily.map((dayItem) => {
+    if (dayItem.year === year && dayItem.month === month && dayItem.day === day) {
+      return { ...dayItem, removed: dayItem.removed + 1 };
+    }
+    return dayItem;
+  });
 
   useMapStore.setState({
     untrackedState: {
       ...useMapStore.getState().untrackedState,
       timeLineEvents: {
-        yearly: yearItems,
-        monthly: monthItems,
-        daily: dayItems,
+        yearly: updatedYearly,
+        monthly: updatedMonthly,
+        daily: updatedDaily,
       },
     },
   });
 }
-
 export function increaseAddedPlantsForDate(date: string) {
-  const day = new Date(date).getDate();
-  const month = new Date(date).getMonth() + 1;
-  const year = new Date(date).getFullYear();
+  const parsedDate = new Date(date);
+  const day = parsedDate.getDate();
+  const month = parsedDate.getMonth() + 1;
+  const year = parsedDate.getFullYear();
 
-  const yearItems: TimelineYearlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.yearly),
-  );
-  const monthItems: TimelineMonthlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.monthly),
-  );
-  const dayItems: TimelineDailyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.daily),
-  );
+  const timelineEvents = useMapStore.getState().untrackedState.timeLineEvents;
 
-  const yearItem = yearItems.find((item) => item.year === year);
-  const monthItem = monthItems.find((item) => item.year === year && item.month === month);
-  const dayItem = dayItems.find(
-    (item) => item.year === year && item.month === month && item.day === day,
-  );
+  const updatedYearly = timelineEvents.yearly.map((yearItem) => {
+    if (yearItem.year === year) {
+      return { ...yearItem, added: yearItem.added + 1 };
+    }
+    return yearItem;
+  });
 
-  if (!dayItem) return;
+  const updatedMonthly = timelineEvents.monthly.map((monthItem) => {
+    if (monthItem.year === year && monthItem.month === month) {
+      return { ...monthItem, added: monthItem.added + 1 };
+    }
+    return monthItem;
+  });
 
-  if (yearItem) {
-    yearItem.added += 1;
-  }
-
-  if (monthItem) {
-    monthItem.added += 1;
-  }
-
-  dayItem.added += 1;
+  const updatedDaily = timelineEvents.daily.map((dayItem) => {
+    if (dayItem.year === year && dayItem.month === month && dayItem.day === day) {
+      return { ...dayItem, added: dayItem.added + 1 };
+    }
+    return dayItem;
+  });
 
   useMapStore.setState({
     untrackedState: {
       ...useMapStore.getState().untrackedState,
       timeLineEvents: {
-        yearly: yearItems,
-        monthly: monthItems,
-        daily: dayItems,
+        yearly: updatedYearly,
+        monthly: updatedMonthly,
+        daily: updatedDaily,
       },
     },
   });
 }
 
 export function decreaseAddedPlantsForDate(date: string) {
-  const day = new Date(date).getDate();
-  const month = new Date(date).getMonth() + 1;
-  const year = new Date(date).getFullYear();
+  const parsedDate = new Date(date);
+  const day = parsedDate.getDate();
+  const month = parsedDate.getMonth() + 1;
+  const year = parsedDate.getFullYear();
 
-  const yearItems: TimelineYearlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.yearly),
-  );
-  const monthItems: TimelineMonthlyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.monthly),
-  );
-  const dayItems: TimelineDailyEvent[] = JSON.parse(
-    JSON.stringify(useMapStore.getState().untrackedState.timeLineEvents.daily),
-  );
+  const timelineEvents = useMapStore.getState().untrackedState.timeLineEvents;
 
-  const yearItem = yearItems.find((item) => item.year === year);
-  const monthItem = monthItems.find((item) => item.year === year && item.month === month);
-  const dayItem = dayItems.find(
-    (item) => item.year === year && item.month === month && item.day === day,
-  );
+  const updatedYearly = timelineEvents.yearly.map((yearItem) => {
+    if (yearItem.year === year) {
+      return { ...yearItem, added: yearItem.added - 1 };
+    }
+    return yearItem;
+  });
 
-  if (!dayItem) return;
+  const updatedMonthly = timelineEvents.monthly.map((monthItem) => {
+    if (monthItem.year === year && monthItem.month === month) {
+      return { ...monthItem, added: monthItem.added - 1 };
+    }
+    return monthItem;
+  });
 
-  if (yearItem) {
-    yearItem.added -= 1;
-  }
-
-  if (monthItem) {
-    monthItem.added -= 1;
-  }
-
-  dayItem.added -= 1;
+  const updatedDaily = timelineEvents.daily.map((dayItem) => {
+    if (dayItem.year === year && dayItem.month === month && dayItem.day === day) {
+      return { ...dayItem, added: dayItem.added - 1 };
+    }
+    return dayItem;
+  });
 
   useMapStore.setState({
     untrackedState: {
       ...useMapStore.getState().untrackedState,
       timeLineEvents: {
-        yearly: yearItems,
-        monthly: monthItems,
-        daily: dayItems,
+        yearly: updatedYearly,
+        monthly: updatedMonthly,
+        daily: updatedDaily,
       },
     },
   });

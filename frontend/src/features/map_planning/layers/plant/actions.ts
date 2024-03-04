@@ -107,9 +107,8 @@ export class DeletePlantAction
       const plant = state.layers.plants.loadedObjects.find(
         (obj) => obj.id === deleteActionPayload.id,
       );
-      if (plant) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        decreaseAddedPlantsForDate(plant.addDate!);
+      if (plant?.addDate) {
+        decreaseAddedPlantsForDate(plant.addDate);
       }
     }
 
@@ -316,9 +315,8 @@ export class UpdateAddDatePlantAction
       const plant = state.layers.plants.loadedObjects.find(
         (obj) => obj.id === addDateActionPayload.id,
       );
-      if (plant) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        timlineEventsUpdateAdedDate(plant.addDate!, addDateActionPayload.addDate!);
+      if (plant?.addDate && addDateActionPayload.addDate) {
+        timlineEventsUpdateAdedDate(plant.addDate, addDateActionPayload.addDate);
       }
     }
 

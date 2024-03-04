@@ -15,6 +15,8 @@ export const TEST_IDS = Object.freeze({
   YEAR_SLIDER: 'timeline__year-slider',
 });
 
+const DAY_SLIDER_VISIBLE_MONTHS = 3;
+
 type TimelineDatePickerProps = {
   /** Is called when date is selected and process is completed.
    * The date is passed as a string in the format 'YYYY-MM-DD'
@@ -63,11 +65,19 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
 
   const calculateVisibleDays = useCallback(
     (dayItem: TimelineDailyEvent) => {
-      const yearStart = dayItem.month < 2 ? dayItem.year - 1 : dayItem.year;
-      const yearEnd = dayItem.month > 10 ? dayItem.year + 1 : dayItem.year;
+      const monthDifference = Math.floor(DAY_SLIDER_VISIBLE_MONTHS / 2);
 
-      const monthStart = dayItem.month < 2 ? dayItem.month + 10 : dayItem.month - 2;
-      const monthEnd = dayItem.month > 10 ? dayItem.month - 10 : dayItem.month + 2;
+      const yearStart = dayItem.month <= monthDifference ? dayItem.year - 1 : dayItem.year;
+      const yearEnd = dayItem.month > 12 - monthDifference ? dayItem.year + 1 : dayItem.year;
+
+      const monthStart =
+        dayItem.month <= monthDifference
+          ? dayItem.month + (12 - monthDifference)
+          : dayItem.month - monthDifference;
+      const monthEnd =
+        dayItem.month > monthDifference
+          ? dayItem.month - (12 - monthDifference)
+          : dayItem.month + monthDifference;
 
       return daySliderItems.filter(
         (day) =>
@@ -404,10 +414,9 @@ function TimelineDatePickerItem({
   maxRemoved: number;
   disabled?: boolean;
 }) {
-  const max = Math.max(maxAdded, maxRemoved, 200);
-
-  const addedHeight = added == 0 ? 0 : (Math.log(added) / Math.log(max)) * 40 + 2;
-  const removedHeight = removed == 0 ? 0 : (Math.log(removed) / Math.log(max)) * 40 + 2;
+  const maxHeight = Math.max(maxAdded, maxRemoved, 200);
+  const addedHeight = added == 0 ? 0 : (Math.log(added) / Math.log(maxHeight)) * 40 + 2;
+  const removedHeight = removed == 0 ? 0 : (Math.log(removed) / Math.log(maxHeight)) * 40 + 2;
 
   return (
     <div className="full-width flex w-9 select-none flex-col">
