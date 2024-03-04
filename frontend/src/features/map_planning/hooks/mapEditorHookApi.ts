@@ -39,7 +39,6 @@ export function useGetLayers(mapId: number) {
     staleTime: TEN_MINUTES,
     refetchOnWindowFocus: false,
     meta: {
-      autoClose: false,
       errorMessage: t('layers:error_fetching_layers'),
     },
   });
@@ -103,7 +102,6 @@ export function usePlantLayer({ mapId, layerId, enabled }: UseLayerArgs) {
     cacheTime: 0,
     enabled,
     meta: {
-      autoClose: false,
       errorMessage: t('plantSearch:error_initializing_layer'),
     },
   });
