@@ -282,8 +282,8 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     yearly: [],
   },
   timeLineVisibleYears: {
-    from: 1900,
-    to: 2100,
+    from: new Date().getFullYear() - 100,
+    to: new Date().getFullYear() + 100,
   },
 };
 

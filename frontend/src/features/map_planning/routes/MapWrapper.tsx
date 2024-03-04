@@ -29,15 +29,7 @@ function getDefaultLayer(layerType: LayerType, layers?: LayerDto[]) {
   return layers?.find((l) => l.type_ === layerType && !l.is_alternative);
 }
 
-/**
- * Hook that initializes the map by fetching all map data, layers and layer elements.
- */
-function useInitializeMap() {
-  const mapId = useMapId();
-  const { data: map } = useMap(mapId);
-  const { data: layers, error } = useGetLayers(mapId);
-  const { t } = useTranslation(['layers']);
-
+const useInitializeTimeline = (mapId: number) => {
   const timeLineVisibleYears = useMapStore((state) => state.untrackedState.timeLineVisibleYears);
   const timeLineEvents = useGetTimeLineData(
     mapId,
@@ -60,12 +52,23 @@ function useInitializeMap() {
       }));
     }
   }, [timeLineEvents]);
+};
+
+/**
+ * Hook that initializes the map by fetching all map data, layers and layer elements.
+ */
+function useInitializeMap() {
+  const mapId = useMapId();
+  const { data: map } = useMap(mapId);
+  const { t } = useTranslation(['layers']);
+  const { data: layers, error } = useGetLayers(mapId);
 
   if (error) {
     console.error(error);
     errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
   }
 
+  useInitializeTimeline(mapId);
   useEffect(() => {
     if (!layers) return;
 
