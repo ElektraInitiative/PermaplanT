@@ -26,4 +26,8 @@
   "edit_mode": "Bearbeitungsmodus aktivieren",
 
   "error_init_layer": "Entschuldigung, ich habe Schwierigkeiten gezeichnete Elemente von meinem Server zu erhalten. Bitte versuche es später erneut."
+  "operations": "Operationen zur Bearbeitung",
+  "edit_mode": "Bearbeitungsmodus aktivieren",
+  "fillPattern": "Füllmuster",
+  "select_image": "Bild auswählen"
 }
