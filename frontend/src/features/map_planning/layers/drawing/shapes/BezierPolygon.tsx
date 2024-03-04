@@ -8,6 +8,7 @@ import { Circle, Line } from 'react-konva';
 import { DrawingDto } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DrawingLayerEditMode } from '@/features/map_planning/store/MapStoreTypes';
+import { DrawingDto, FillPatternType } from '../types';
 
 export type BezierPolygonProps = {
   transformerRef?: React.MutableRefObject<Konva.Transformer | null>;
@@ -26,7 +27,7 @@ export type BezierPolygonProps = {
   scaleX: number;
   scaleY: number;
   rotation?: number;
-  fillEnabled?: boolean;
+  fillPattern?: FillPatternType;
 };
 
 type Point = number[];
@@ -58,7 +59,7 @@ function BezierPolygon({
   scaleX,
   scaleY,
   rotation,
-  fillEnabled,
+  fillPattern,
 }: BezierPolygonProps) {
   const [points, setPoints] = useState<Point[]>(initialPoints);
   const [, setActivePoint] = useState(-1);
@@ -294,8 +295,8 @@ function BezierPolygon({
           rotation={rotation}
           draggable
           fill={color}
-          fillEnabled={fillEnabled}
-          closed={fillEnabled}
+          fillEnabled={fillPattern === 'fill'}
+          closed={fillPattern !== 'none'}
           onDragStart={onDragStart}
         />
       )}

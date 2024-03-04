@@ -81,11 +81,11 @@ export function DrawingLayerLeftToolbar() {
     executeAction(new UpdateDrawingAction(updatedDrawings));
   };
 
-  const onFillEnabledChange = ({ fillEnabled }: DrawingFormData) => {
+  const onFillPatternChange = ({ fillPattern }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
     const hasChanged = selectedDrawings.some(
-      (selectedDrawing) => selectedDrawing.fillEnabled !== fillEnabled,
+      (selectedDrawing) => selectedDrawing.fillPattern !== fillPattern,
     );
     if (!hasChanged) return;
 
@@ -112,7 +112,7 @@ export function DrawingLayerLeftToolbar() {
       onRemoveDateChange={onRemoveDateChange}
       onColorChange={onColorChange}
       onStrokeWidthChange={onStrokeWidthChange}
-      onFillEnabledChange={onFillEnabledChange}
+      onFillPatternChange={onFillPatternChange}
       onDeleteClick={onDeleteClick}
       isReadOnlyMode={isReadOnlyMode}
     />
@@ -123,7 +123,7 @@ export function DrawingLayerLeftToolbar() {
       onRemoveDateChange={onRemoveDateChange}
       onColorChange={onColorChange}
       onStrokeWidthChange={onStrokeWidthChange}
-      onFillEnabledChange={onFillEnabledChange}
+      onFillPatternChange={onFillPatternChange}
       onDeleteClick={onDeleteClick}
       isReadOnlyMode={isReadOnlyMode}
     />

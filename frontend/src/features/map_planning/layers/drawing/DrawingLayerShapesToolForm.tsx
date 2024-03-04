@@ -10,9 +10,10 @@ import PolygonIcon from '@/svg/icons/polygon.svg?react';
 import RectangleIcon from '@/svg/icons/rectangle.svg?react';
 import LineIcon from '@/svg/icons/wavy-line.svg?react';
 import { useTransformerStore } from '../../store/transformer/TransformerStore';
+import { DrawingLayerFillPatterns } from './DrawingLayerFillPatterns';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
 
-export function DrawingLayerToolForm() {
+export function DrawingLayerShapesToolForm() {
   const { t } = useTranslation(['common', 'drawings']);
 
   const drawingLayerActivateDrawingMode = useMapStore(
@@ -31,7 +32,6 @@ export function DrawingLayerToolForm() {
   return (
     <>
       <div>
-        <h2>{t('drawings:tools_title')}</h2>
         <div className="flex flex-row gap-1">
           <IconButton
             isToolboxIcon={true}
@@ -101,12 +101,12 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
   const { t } = useTranslation(['drawings']);
 
   const setSelectedColor = useMapStore((state) => state.drawingLayerSetSelectedColor);
-  const setFill = useMapStore((state) => state.drawingLayerSetFillEnabled);
+  const setFillPattern = useMapStore((state) => state.drawingLayerSetFillPattern);
   const setSelectedStrokeWidth = useMapStore((state) => state.drawingLayerSetSelectedStrokeWidth);
   const selectedStrokeWidth = useMapStore(
     (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
   );
-  const fill = useMapStore((state) => state.untrackedState.layers.drawing.fillEnabled);
+  const fill = useMapStore((state) => state.untrackedState.layers.drawing.fillPattern);
 
   const [pickerColor, setPickerColor] = useState('#000000');
 
@@ -140,14 +140,11 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
             onChange={(e) => setSelectedStrokeWidth(+e.target.value)}
             value={selectedStrokeWidth}
           />
-          <SimpleFormInput
-            id="fill"
-            type="checkbox"
-            className="mt-2 h-4 w-4"
-            labelContent={t('drawings:fillEnabled')}
-            onChange={(e) => setFill(e.target.checked)}
-            checked={fill}
-          />
+
+          <DrawingLayerFillPatterns
+            onChange={setFillPattern}
+            selectedPattern={fill}
+          ></DrawingLayerFillPatterns>
         </div>
       )}
     </>
