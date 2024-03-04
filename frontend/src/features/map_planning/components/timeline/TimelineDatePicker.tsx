@@ -63,8 +63,16 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
 
   const calculateVisibleDays = useCallback(
     (dayItem: TimelineDailyEvent) => {
+      const yearStart = dayItem.month < 2 ? dayItem.year - 1 : dayItem.year;
+      const yearEnd = dayItem.month > 10 ? dayItem.year + 1 : dayItem.year;
+
+      const monthStart = dayItem.month < 2 ? dayItem.month + 10 : dayItem.month - 2;
+      const monthEnd = dayItem.month > 10 ? dayItem.month - 10 : dayItem.month + 2;
+
       return daySliderItems.filter(
-        (day) => day.key >= dayItem.key - 100 && day.key <= dayItem.key + 100,
+        (day) =>
+          (day.year == yearStart && day.month >= monthStart) ||
+          (day.year == yearEnd && day.month <= monthEnd),
       );
     },
     [daySliderItems],

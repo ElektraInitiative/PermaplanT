@@ -47,7 +47,7 @@ const ItemSliderPicker = ({
   const scrollPositionOnMouseDown = useRef<number | null>(null);
   const isScrollingToIndex = useRef(false);
 
-  const detectAndNotifyIfBordersIsReached = () => {
+  const detectAndNotifyIfBorderIsReached = () => {
     const container = sliderContainerRef.current;
 
     if (!container) return;
@@ -71,7 +71,7 @@ const ItemSliderPicker = ({
     if (itemKey == selectedItemKey) return;
 
     setSelectedItemKey(itemKey);
-    detectAndNotifyIfBordersIsReached();
+    detectAndNotifyIfBorderIsReached();
   };
 
   const getSelectedItemIndex = useCallback(() => {
@@ -208,7 +208,7 @@ const ItemSliderPicker = ({
     isDragging.current = false;
     dragStartX.current = null;
 
-    detectAndNotifyIfBordersIsReached();
+    detectAndNotifyIfBorderIsReached();
   };
 
   const handleMouseWheel = (e: WheelEvent) => {
@@ -307,7 +307,7 @@ const ItemSliderPicker = ({
               className={`item dark border-4 border-white px-2 pt-1 dark:border-neutral-200-dark
               ${
                 getSelectedItemIndex() === index
-                  ? 'selected-item border-b border-t border-blue-300 bg-gray-100 font-bold text-secondary-300 group-focus:border-blue-400 dark:border-blue-200 dark:bg-black '
+                  ? 'selected-item border-b border-t border-blue-200 bg-gray-100 font-bold text-secondary-300 group-focus:border-blue-400 dark:border-blue-300 dark:bg-gray-800 '
                   : ''
               }
               `}
