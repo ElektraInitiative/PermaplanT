@@ -1,5 +1,5 @@
 {
-    "error_fetch_map_data": "Sorry, ich habe Schwierigkeiten die Karten-Daten von meinem Server zu erhalten. Bitte versuche es später erneut.",
+    "error_fetch_map_data": "Entschuldigung, ich habe Schwierigkeiten die Karten von meinem Server zu erhalten. Bitte versuche es später erneut.",
     "overview": {
         "page_title": "Meine Karten",
         "create_button": "Neue Karte",
