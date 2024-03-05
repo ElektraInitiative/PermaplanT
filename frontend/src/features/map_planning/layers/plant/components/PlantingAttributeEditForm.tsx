@@ -8,6 +8,7 @@ import { PlantingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
 import { DebouncedMarkdownEditorFormInput } from '@/components/Form/MarkdownEditorFormInput';
+import { KEYBINDINGS_SCOPE_PLANTS_LAYER, getTooltipStringWithShortcut } from '@/config/keybindings';
 import AlertIcon from '@/svg/icons/alert.svg?react';
 import { PlantNameFromAdditionalNameAndPlant, PlantNameFromPlant } from '@/utils/plant-naming';
 import { useFindPlantById } from '../hooks/plantHookApi';
@@ -240,7 +241,6 @@ function PlantingAttributeEditForm({
       {formInfo.formState.errors.dateRelation && (
         <div className="text-sm text-red-400">{t('plantings:error_invalid_add_remove_date')}</div>
       )}
-
       {areaOfPlantings && (
         <div className="py-2">
           <h3>Area of Plantings</h3>
@@ -281,7 +281,6 @@ function PlantingAttributeEditForm({
           <hr className="my-4 border-neutral-700" />
         </div>
       )}
-
       <div className="flex gap-2">
         <DebouncedSimpleFormInput
           onValid={onAddDateChange}
@@ -299,7 +298,6 @@ function PlantingAttributeEditForm({
           ? t('plantings:add_date_description_multiple_plantings')
           : t('plantings:add_date_description')}
       </p>
-
       <div className="flex gap-2">
         <DebouncedSimpleFormInput
           onValid={onRemoveDateChange}
@@ -312,13 +310,11 @@ function PlantingAttributeEditForm({
         />
         {removeDateShowDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
       </div>
-
       <p className="text-[0.8rem] text-neutral-400">
         {multiplePlantings
           ? t('plantings:remove_date_description_multiple_plantings')
           : t('plantings:remove_date_description')}
       </p>
-
       <div className="align-items-center flex gap-2">
         <DebouncedMarkdownEditorFormInput
           key="plantingNotes"
@@ -331,10 +327,13 @@ function PlantingAttributeEditForm({
         />
         {plantingNoteShowDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
       </div>
-
       <hr className="my-4 border-neutral-700" />
-
       <SimpleButton
+        title={getTooltipStringWithShortcut(
+          KEYBINDINGS_SCOPE_PLANTS_LAYER,
+          'deleteSelectedPlantings',
+          multiplePlantings ? t('plantings:delete_multiple_plantings') : t('plantings:delete'),
+        )}
         disabled={isReadOnlyMode}
         variant={ButtonVariant.dangerBase}
         onClick={onDeleteClick}

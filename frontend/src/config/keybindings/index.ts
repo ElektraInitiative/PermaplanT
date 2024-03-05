@@ -62,6 +62,23 @@ export function getConfiguredShortcutsForAction(scope: string, action: string): 
 }
 
 /**
+ * Retrieves the tooltip string for a specific action within a specified scope, including the associated keyboard shortcut.
+ * @param scope - The scope in which to look for the associated action's shortcut.
+ * @param action - The action for which to find the associated keyboard shortcut.
+ * @param descriptionText - Optional description text to include in the tooltip.
+ * @returns The tooltip string including the keyboard shortcut if found, or just the description text if not found.
+ *         If no description text is provided, the tooltip will only include the keyboard shortcut.
+ *
+ * */
+export function getTooltipStringWithShortcut(
+  scope: string,
+  action: string,
+  descriptionText?: string,
+): string {
+  return `${descriptionText || ''} (${getConfiguredShortcutsForAction(scope, action).join(',')})`;
+}
+
+/**
  * Retrieves the action name associated with a given keyboard shortcut within a specified scope.
  * @param scope - The scope in which to look for the keyboard shortcut.
  * @param shortcut - The keyboard shortcut to find the associated action for.

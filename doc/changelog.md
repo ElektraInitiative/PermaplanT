@@ -61,7 +61,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Add key combinations for map geometry _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Add tooltips to show keybindings _(Daniel Steinkogler)_
 - _()_
 - Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
 - _()_
