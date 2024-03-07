@@ -52,6 +52,8 @@ const useInitializeTimeline = (mapId: number) => {
       }));
     }
   }, [timeLineEvents]);
+
+  return timeLineEvents;
 };
 
 /**
@@ -68,7 +70,7 @@ function useInitializeMap() {
     errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
   }
 
-  useInitializeTimeline(mapId);
+  const timeLineData = useInitializeTimeline(mapId);
   useEffect(() => {
     if (!layers) return;
 
@@ -124,7 +126,7 @@ function useInitializeMap() {
     }));
   }, [map]);
 
-  const isLoading = !layers || !map;
+  const isLoading = !layers || !map || !timeLineData;
 
   if (isLoading) {
     return null;
