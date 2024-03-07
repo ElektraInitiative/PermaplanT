@@ -310,10 +310,7 @@ function getUpdatesForSelectedPlantings(get: GetFn, selectedPlantings: PlantingD
     );
   };
 
-  const updatePlantings = (
-    updatedPlantings: PlantingDto[],
-    selectedPlanting: PlantingDto,
-  ) => {
+  const updatePlantings = (updatedPlantings: PlantingDto[], selectedPlanting: PlantingDto) => {
     const updatedPlanting = loadUpdateForSelectedPlanting(selectedPlanting);
 
     return updatedPlanting ? [...updatedPlantings, updatedPlanting] : updatedPlantings;

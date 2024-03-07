@@ -128,7 +128,7 @@ export class DeletePlantAction
 
 export class MovePlantAction
   implements
-  Action<Awaited<ReturnType<typeof movePlanting>>, Awaited<ReturnType<typeof movePlanting>>>
+    Action<Awaited<ReturnType<typeof movePlanting>>, Awaited<ReturnType<typeof movePlanting>>>
 {
   private readonly _ids: string[];
 
@@ -188,10 +188,10 @@ export class MovePlantAction
 
 export class TransformPlantAction
   implements
-  Action<
-    Awaited<ReturnType<typeof transformPlanting>>,
-    Awaited<ReturnType<typeof transformPlanting>>
-  >
+    Action<
+      Awaited<ReturnType<typeof transformPlanting>>,
+      Awaited<ReturnType<typeof transformPlanting>>
+    >
 {
   private readonly _ids: string[];
 
@@ -261,10 +261,10 @@ export class TransformPlantAction
 
 export class UpdateAddDatePlantAction
   implements
-  Action<
-    Awaited<ReturnType<typeof updateAddDatePlanting>>,
-    Awaited<ReturnType<typeof updateAddDatePlanting>>
-  >
+    Action<
+      Awaited<ReturnType<typeof updateAddDatePlanting>>,
+      Awaited<ReturnType<typeof updateAddDatePlanting>>
+    >
 {
   private readonly _ids: string[];
 
@@ -340,10 +340,10 @@ export class UpdateAddDatePlantAction
 
 export class UpdatePlantingNotesAction
   implements
-  Action<
-    Awaited<ReturnType<typeof updatePlantingNotes>>,
-    Awaited<ReturnType<typeof updatePlantingNotes>>
-  >
+    Action<
+      Awaited<ReturnType<typeof updatePlantingNotes>>,
+      Awaited<ReturnType<typeof updatePlantingNotes>>
+    >
 {
   private readonly _ids: string[];
 
@@ -405,10 +405,10 @@ export class UpdatePlantingNotesAction
 
 export class UpdateRemoveDatePlantAction
   implements
-  Action<
-    Awaited<ReturnType<typeof updateRemoveDatePlanting>>,
-    Awaited<ReturnType<typeof updateRemoveDatePlanting>>
-  >
+    Action<
+      Awaited<ReturnType<typeof updateRemoveDatePlanting>>,
+      Awaited<ReturnType<typeof updateRemoveDatePlanting>>
+    >
 {
   private readonly _ids: string[];
 
@@ -482,7 +482,7 @@ export type UpdatePlantingAdditionalNameParam = Omit<
   'userId' | 'actionId'
 >;
 export class UpdatePlantingAdditionalName implements Action<null, null> {
-  constructor(private readonly _data: UpdatePlantingAdditionalNameParam, public actionId = v4()) { }
+  constructor(private readonly _data: UpdatePlantingAdditionalNameParam, public actionId = v4()) {}
 
   get entityIds() {
     return [this._data.id];
@@ -515,7 +515,7 @@ export class UpdatePlantingAdditionalName implements Action<null, null> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
   execute(mapId: number): Promise<null> {
     //eslint-disable-next-line @typescript-eslint/no-empty-function
-    return new Promise<null>(() => { });
+    return new Promise<null>(() => {});
   }
 }
 

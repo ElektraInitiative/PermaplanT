@@ -53,10 +53,7 @@ async fn test_get_all_plants_succeeds() {
         spread: Some(50),
     };
 
-    let result = test::read_body(resp).await;
-    let result_string = std::str::from_utf8(&result).unwrap();
-
-    let page: Page<PlantsSummaryDto> = serde_json::from_str(result_string).unwrap();
+    let page: Page<PlantsSummaryDto> = test::read_body_json(resp).await;
 
     assert!(page.results.contains(&test_plant));
 }
