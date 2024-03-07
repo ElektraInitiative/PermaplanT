@@ -22,7 +22,7 @@ async fn test_get_all_plants_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_owned())])),
-                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
+                    &crate::schema::plants::spread.eq(50),
                 ))
                 .execute(conn)
                 .await?;
@@ -49,8 +49,8 @@ async fn test_get_all_plants_succeeds() {
     let test_plant = PlantsSummaryDto {
         id: -1,
         unique_name: "Testia testia".to_owned(),
-        common_name_en: Some(vec![Some("Testplant".to_string())]),
-        spread: Some(PlantSpread::Wide),
+        common_name_en: Some(vec![Some("Testplant".to_owned())]),
+        spread: Some(50),
     };
 
     let result = test::read_body(resp).await;
@@ -71,7 +71,7 @@ async fn test_get_one_plant_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_owned())])),
-                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
+                    &crate::schema::plants::spread.eq(50),
                 ))
                 .execute(conn)
                 .await?;
@@ -99,7 +99,7 @@ async fn test_get_one_plant_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_owned(),
         common_name_en: Some(vec![Some("Testplant".to_owned())]),
-        spread: Some(PlantSpread::Wide),
+        spread: Some(50),
     };
 
     let result = test::read_body(resp).await;
@@ -120,7 +120,7 @@ async fn test_search_plants_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_owned())])),
-                    &crate::schema::plants::spread.eq(PlantSpread::Wide),
+                    &crate::schema::plants::spread.eq(50),
                 ))
                 .execute(conn)
                 .await?;
@@ -148,7 +148,7 @@ async fn test_search_plants_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_owned(),
         common_name_en: Some(vec![Some("Testplant".to_owned())]),
-        spread: Some(PlantSpread::Wide),
+        spread: Some(50),
     };
 
     let result = test::read_body(resp).await;
