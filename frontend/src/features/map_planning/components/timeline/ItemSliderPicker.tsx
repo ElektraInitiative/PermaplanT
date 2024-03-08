@@ -304,11 +304,11 @@ const ItemSliderPicker = ({
           return (
             <div
               key={index}
-              className={`item dark border-4 border-white px-2 pt-1 dark:border-neutral-200-dark
+              className={`item dark border-4 px-2 pt-1
               ${
                 getSelectedItemIndex() === index
-                  ? 'selected-item border-b border-t border-blue-300 bg-gray-100 font-bold text-secondary-300 group-focus:border-blue-400 dark:border-black dark:bg-gray-800 '
-                  : ''
+                  ? 'selected-item border-b border-t border-blue-200 bg-gray-100 font-bold text-secondary-300 group-focus:border-blue-400 dark:border-black dark:bg-gray-900 '
+                  : 'border-white dark:border-neutral-200-dark'
               }
               `}
               onClick={(e) => handleItemClick(e, index)}
