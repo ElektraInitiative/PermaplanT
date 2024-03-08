@@ -75,7 +75,7 @@ export function getTooltipStringWithShortcut(
   action: string,
   descriptionText?: string,
 ): string {
-  return `${descriptionText || ''} (${getConfiguredShortcutsForAction(scope, action).join(',')})`;
+  return `${descriptionText || ''} (${getConfiguredShortcutsForAction(scope, action).join(',')})`.trim();
 }
 
 /**
