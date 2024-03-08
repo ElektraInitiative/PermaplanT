@@ -16,7 +16,7 @@ import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
   createKeyBindingsAccordingToConfig,
-  getTooltipStringWithShortcut,
+  getFormattedKeybindingDescriptionForAction,
 } from '@/config/keybindings';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
@@ -379,7 +379,7 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
           className="m-2 h-8 w-8 border border-neutral-500 p-1"
           onClick={() => selectPlant(null)}
           data-tourid="placement_cancel"
-          title={getTooltipStringWithShortcut(
+          title={getFormattedKeybindingDescriptionForAction(
             KEYBINDINGS_SCOPE_PLANTS_LAYER,
             'exitPlantingMode',
             t('common:cancel'),

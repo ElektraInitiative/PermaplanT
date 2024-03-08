@@ -57,25 +57,27 @@ export function createKeyBindingsAccordingToConfig(
  * @param action - The action for which to find the associated keyboard shortcut.
  * @returns list of keyboard shortcuts
  */
-export function getConfiguredShortcutsForAction(scope: string, action: string): string[] {
+export function getConfiguredKeybindingsForAction(scope: string, action: string): string[] {
   return keyBindingsConfig[scope][action];
 }
 
 /**
- * Retrieves the tooltip string for a specific action within a specified scope, including the associated keyboard shortcut.
+ * Retrieves formatted string containing keyboard shortcuts associated with a specific action.
  * @param scope - The scope in which to look for the associated action's shortcut.
  * @param action - The action for which to find the associated keyboard shortcut.
- * @param descriptionText - Optional description text to include in the tooltip.
- * @returns The tooltip string including the keyboard shortcut if found, or just the description text if not found.
+ * @param descriptionText - Optional description text to include in the formatted string.
+ * @returns The string including the keyboard shortcut if found, or just the description text if not found.
  *         If no description text is provided, the tooltip will only include the keyboard shortcut.
  *
  * */
-export function getTooltipStringWithShortcut(
+export function getFormattedKeybindingDescriptionForAction(
   scope: string,
   action: string,
   descriptionText?: string,
 ): string {
-  return `${descriptionText || ''} (${getConfiguredShortcutsForAction(scope, action).join(',')})`.trim();
+  return `${descriptionText || ''} (${getConfiguredKeybindingsForAction(scope, action).join(
+    ',',
+  )})`.trim();
 }
 
 /**

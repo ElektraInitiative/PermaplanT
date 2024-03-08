@@ -8,7 +8,10 @@ import { PlantingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
 import { DebouncedMarkdownEditorFormInput } from '@/components/Form/MarkdownEditorFormInput';
-import { KEYBINDINGS_SCOPE_PLANTS_LAYER, getTooltipStringWithShortcut } from '@/config/keybindings';
+import {
+  KEYBINDINGS_SCOPE_PLANTS_LAYER,
+  getFormattedKeybindingDescriptionForAction,
+} from '@/config/keybindings';
 import AlertIcon from '@/svg/icons/alert.svg?react';
 import { PlantNameFromAdditionalNameAndPlant, PlantNameFromPlant } from '@/utils/plant-naming';
 import { useFindPlantById } from '../hooks/plantHookApi';
@@ -329,7 +332,7 @@ function PlantingAttributeEditForm({
       </div>
       <hr className="my-4 border-neutral-700" />
       <SimpleButton
-        title={getTooltipStringWithShortcut(
+        title={getFormattedKeybindingDescriptionForAction(
           KEYBINDINGS_SCOPE_PLANTS_LAYER,
           'deleteSelectedPlantings',
           multiplePlantings ? t('plantings:delete_multiple_plantings') : t('plantings:delete'),
