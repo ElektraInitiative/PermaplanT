@@ -1,4 +1,5 @@
 import { QueryFunctionContext, useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { RelationDto, RelationsDto } from '@/api_types/definitions';
 import { getRelations } from '../api/getRelations';
 
@@ -12,12 +13,16 @@ const RELATION_KEYS = {
 };
 
 export function useRelations({ mapId, plantId, enabled = true }: UseRelationsArgs) {
+  const { t } = useTranslation(['plantRelations']);
+
   return useQuery({
     queryKey: RELATION_KEYS.detail(mapId, plantId),
     queryFn: getRelationsQueryFn,
     enabled,
     select: mapRelationToMap,
-    // TODO: add error messages
+    meta: {
+      errorMessage: t('plantRelations:error_fetching_relations'),
+    },
   });
 }
 
