@@ -110,11 +110,6 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
 
   const [pickerColor, setPickerColor] = useState('#000000');
 
-  const showFillFlag =
-    props.selectedShape === 'rectangle' ||
-    props.selectedShape === 'ellipse' ||
-    props.selectedShape === 'bezierPolygon';
-
   useDebounceEffect(
     () => {
       setSelectedColor(pickerColor);
@@ -135,7 +130,6 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
             onChange={(e) => setPickerColor(e.target.value)}
             value={pickerColor}
           />
-
           <SimpleFormInput
             id="stroke"
             className="mb-4"
@@ -146,17 +140,14 @@ function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): R
             onChange={(e) => setSelectedStrokeWidth(+e.target.value)}
             value={selectedStrokeWidth}
           />
-
-          {showFillFlag && (
-            <SimpleFormInput
-              id="fill"
-              type="checkbox"
-              className="mt-2 h-4 w-4"
-              labelContent={t('drawings:fillEnabled')}
-              onChange={(e) => setFill(e.target.checked)}
-              checked={fill}
-            />
-          )}
+          <SimpleFormInput
+            id="fill"
+            type="checkbox"
+            className="mt-2 h-4 w-4"
+            labelContent={t('drawings:fillEnabled')}
+            onChange={(e) => setFill(e.target.checked)}
+            checked={fill}
+          />
         </div>
       )}
     </>

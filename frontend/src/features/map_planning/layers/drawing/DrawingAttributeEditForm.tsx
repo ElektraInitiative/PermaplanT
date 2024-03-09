@@ -285,10 +285,9 @@ export function DrawingAttributeEditForm({
         </div>
       )}
 
-      <hr className="my-2 border-neutral-700" />
-
       {showShapeEditButton && drawingId && (
         <div>
+          <hr className="my-2 border-neutral-700" />
           <label className="mb-2 block text-sm font-medium">{t('drawings:operations')}</label>
           <IconButton
             isToolboxIcon={true}

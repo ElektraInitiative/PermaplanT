@@ -85,9 +85,6 @@ function BezierPolygon({
 
   const handleAddPoint = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
-      if (e.target !== e.currentTarget) return;
-      if (e.target.getStage() == null) return [];
-
       const stage = e.target.getStage();
       if (stage == null) return [];
 
@@ -121,7 +118,6 @@ function BezierPolygon({
   const handleClick = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
       if (!drawingModeActive) return;
-
       if (e.evt.button == 2) {
         handleRightClick(e);
       } else if (e.evt.button === 0) {
