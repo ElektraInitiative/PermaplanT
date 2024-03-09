@@ -11,7 +11,7 @@ use super::auth::Config;
 use crate::{
     controller::{
         base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer, plantings,
-        plants, seed, users,
+        plants, seed, timeline, users,
     },
     model::{
         dto::{
@@ -24,6 +24,7 @@ use crate::{
                 UpdateAddDatePlantingDto, UpdatePlantingDto, UpdatePlantingNoteDto,
                 UpdateRemoveDatePlantingDto,
             },
+            timeline::{TimelineDto, TimelineEntryDto},
             BaseLayerImageDto, ConfigDto, Coordinates, GainedBlossomsDto, GuidedToursDto, LayerDto,
             MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto,
             PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto, RelationsDto,
@@ -237,6 +238,22 @@ struct GuidedToursApiDoc;
 )]
 struct BlossomsApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all timeline endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        timeline::get_timeline,
+    ),
+    components(
+        schemas(
+            TimelineEntryDto,
+            TimelineDto
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct TimelineApiDoc;
+
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = ConfigApiDoc::openapi();
@@ -248,6 +265,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(BaseLayerImagesApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
     openapi.merge(UsersApiDoc::openapi());
+    openapi.merge(TimelineApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }

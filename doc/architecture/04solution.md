@@ -33,7 +33,7 @@ We use specific types (prefer enum over int over string etc.) and share types wh
 ## API
 
 The API is implemented in the backend.
-The backend is stateless (except of the data base) and agnostic to language.
+The backend is stateless (except of the database) and agnostic to language.
 The backend serves no other purpose as being used by the frontend, so:
 
 - it can be tailored to the needs of the frontend
@@ -106,7 +106,11 @@ type MovementAction {
 - per user action only a minimal number of API calls should be used (ideally one)
 - relations are only calculated to plants within bounding box
 
-## Low Memory Consumption
+### PostGIS
+
+Coordinates of all elements are stored via PostGIS types to have uniform access and to allow retrieving elements of segments of the map.
+
+### Low Memory Consumption
 
 As the planning tools are also used for longer sessions, e.g. a whole working day, it is essential to keep the memory usage at acceptable levels:
 
