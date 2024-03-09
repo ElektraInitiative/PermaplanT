@@ -38,7 +38,6 @@ export function useFindMapById(mapId: number) {
     queryFn: findMapByIdQueryFn,
     meta: {
       errorMessage: t('maps:edit.error_map_single_fetch'),
-      autoClose: false,
       toastId: 'fetchError',
     },
   });
@@ -65,7 +64,6 @@ export function useMapsSearch(searchParams: MapSearchParameters) {
     queryFn: searchSeedsQueryFn,
     getNextPageParam: (lastPage) => lastPage.page + 1,
     meta: {
-      autoClose: false,
       errorMessage: t('maps:overview.error_map_fetch'),
     },
   });
@@ -97,7 +95,7 @@ export function useCreateMap() {
       queryClient.invalidateQueries(MAP_KEYS._helpers.all);
     },
     onError: () => {
-      errorToastGrouped(t('maps:create.error_map_create'), { autoClose: false });
+      errorToastGrouped(t('maps:create.error_map_create'));
     },
   });
 }
@@ -115,7 +113,7 @@ export function useEditMap() {
       queryClient.invalidateQueries(MAP_KEYS.detail(id));
     },
     onError: () => {
-      errorToastGrouped(t('maps:edit.error_map_edit'), { autoClose: false });
+      errorToastGrouped(t('maps:edit.error_map_edit'));
     },
   });
 }

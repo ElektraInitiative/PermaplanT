@@ -41,7 +41,6 @@ export function useFindSeedById({ seedId, enabled = true, quiet = false }: FindS
     queryKey: SEED_KEYS.detail(seedId),
     queryFn: findSeedByIdQueryFn,
     meta: {
-      autoClose: false,
       errorMessage: !quiet ? t('seeds:error_fetching_seed') : undefined,
     },
     enabled,
@@ -80,7 +79,6 @@ export function useSeedSearch() {
     },
     getPreviousPageParam: () => undefined,
     meta: {
-      autoClose: false,
       errorMessage: t('seeds:view_seeds.fetching_error'),
     },
   });
