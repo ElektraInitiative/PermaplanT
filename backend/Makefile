@@ -31,11 +31,11 @@ reset-database: ## Reset diesel database
 .PHONY: install
 install: ## Install dependencies within the source repo
 	rustup component add rustfmt clippy
-	cargo install diesel_cli@2.0.1 --no-default-features --features postgres && cargo install typeshare-cli
+	cargo install diesel_cli@2.1.1 --no-default-features --features postgres && cargo install typeshare-cli
 
 .PHONY: uninstall
 uninstall: ## Uninstall and clean everything in the backend
 	-cargo clean
 	-rustup component remove rustfmt clippy
-	-cargo uninstall diesel_cli@2.0.1 && cargo install typeshare-cli
+	-cargo uninstall diesel_cli@2.1.1 && cargo install typeshare-cli
 	-rm -rf target/*
