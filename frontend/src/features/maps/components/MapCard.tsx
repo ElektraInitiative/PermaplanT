@@ -30,7 +30,7 @@ export default function MapCard({ map }: MapCardProps) {
         <span className="text-lg font-medium text-primary-500 dark:text-primary-300">
           {map.name}
         </span>
-        <span className="text-sm italic">{map.creation_date}</span>
+        <span className="text-sm italic">{map.created_at}</span>
       </section>
       <span className="ml-1 text-sm">({t(`privacyOptions:${map.privacy}`)})</span>
       <section className="ml-auto flex items-center">

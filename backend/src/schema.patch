@@ -1,15 +1,12 @@
-diff --git a/backend/src/schema.rs b/backend/src/schema.rs 2023-07-20
-index 54f26f46..68427977 100644
---- a/backend/src/schema.rs
-+++ b/backend/src/schema.rs
-@@ -10,20 +10,12 @@ pub mod sql_types {
-     pub struct ExternalSource;
+--- schema_old.rs	2024-01-29 15:27:13.298391417 +0000
++++ schema.rs	2024-01-29 15:28:30.420393299 +0000
+@@ -15,20 +15,12 @@
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "fertility"))]
      pub struct Fertility;
 
--    #[derive(diesel::sql_types::SqlType)]
+     #[derive(diesel::sql_types::SqlType)]
 -    #[diesel(postgres_type(name = "geography"))]
 -    pub struct Geography;
 -
@@ -17,13 +14,14 @@ index 54f26f46..68427977 100644
 -    #[diesel(postgres_type(name = "geometry"))]
 -    pub struct Geometry;
 -
-     #[derive(diesel::sql_types::SqlType)]
+-    #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "growth_rate"))]
      pub struct GrowthRate;
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "herbaceous_or_woody"))]
-@@ -100,16 +92,15 @@ diesel::table! {
+     pub struct HerbaceousOrWoody;
+@@ -165,16 +157,15 @@
          is_alternative -> Bool,
      }
  }
@@ -39,5 +37,5 @@ index 54f26f46..68427977 100644
      maps (id) {
          id -> Int4,
          name -> Text,
-         creation_date -> Date,
          deletion_date -> Nullable<Date>,
+         last_visit -> Nullable<Date>,

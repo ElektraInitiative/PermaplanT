@@ -30,7 +30,7 @@ async fn test_find_two_seeds_succeeds() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
                 ))
                 .execute(conn)
                 .await?;
@@ -42,7 +42,7 @@ async fn test_find_two_seeds_succeeds() {
                         &crate::schema::seeds::name.eq("Testia testia"),
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                         &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2023, 01, 01)),
                     ),
@@ -51,7 +51,7 @@ async fn test_find_two_seeds_succeeds() {
                         &crate::schema::seeds::name.eq("Testia testium"),
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                         &crate::schema::seeds::plant_id.eq(-1),
                         &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2022, 01, 01)),
                     ),
@@ -108,7 +108,7 @@ async fn test_search_seeds_succeeds() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
                 ))
                 .execute(conn)
                 .await?;
@@ -121,7 +121,7 @@ async fn test_search_seeds_succeeds() {
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
                         &crate::schema::seeds::plant_id.eq(-1),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                     ),
                     (
                         &crate::schema::seeds::id.eq(-2),
@@ -129,7 +129,7 @@ async fn test_search_seeds_succeeds() {
                         &crate::schema::seeds::harvest_year.eq(2023),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
                         &crate::schema::seeds::plant_id.eq(-1),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                     ),
                 ])
                 .execute(conn)
@@ -176,7 +176,7 @@ async fn test_find_by_id_succeeds() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
                 ))
                 .execute(conn)
                 .await?;
@@ -189,7 +189,7 @@ async fn test_find_by_id_succeeds() {
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
                         &crate::schema::seeds::plant_id.eq(-1),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                     ),
                     (
                         &crate::schema::seeds::id.eq(-2),
@@ -197,7 +197,7 @@ async fn test_find_by_id_succeeds() {
                         &crate::schema::seeds::harvest_year.eq(2023),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
                         &crate::schema::seeds::plant_id.eq(-1),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                     ),
                 ])
                 .execute(conn)
@@ -241,7 +241,7 @@ async fn test_find_by_non_existing_id_fails() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
                 ))
                 .execute(conn)
                 .await?;
@@ -254,7 +254,7 @@ async fn test_find_by_non_existing_id_fails() {
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
                         &crate::schema::seeds::plant_id.eq(-1),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                     ),
                     (
                         &crate::schema::seeds::id.eq(-2),
@@ -262,7 +262,7 @@ async fn test_find_by_non_existing_id_fails() {
                         &crate::schema::seeds::harvest_year.eq(2023),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
                         &crate::schema::seeds::plant_id.eq(-1),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                     ),
                 ])
                 .execute(conn)
@@ -359,7 +359,7 @@ async fn test_create_seed_ok() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
                 ))
                 .execute(conn)
                 .await?;
@@ -371,7 +371,7 @@ async fn test_create_seed_ok() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let new_seed = NewSeedDto {
-        name: "tomato test".to_string(),
+        name: "tomato test".to_owned(),
         plant_id: Some(-1),
         harvest_year: 2022,
         quantity: Quantity::Nothing,
@@ -414,7 +414,7 @@ async fn test_delete_by_id_succeeds() {
                     &crate::schema::seeds::name.eq("Testia testia"),
                     &crate::schema::seeds::harvest_year.eq(2022),
                     &crate::schema::seeds::quantity.eq(Quantity::Enough),
-                    &crate::schema::seeds::owner_id.eq(user_id),
+                    &crate::schema::seeds::created_by.eq(user_id),
                 ))
                 .execute(conn)
                 .await?;
@@ -445,7 +445,7 @@ async fn test_delete_by_non_existing_id_succeeds() {
                     &crate::schema::seeds::name.eq("Testia testia"),
                     &crate::schema::seeds::harvest_year.eq(2022),
                     &crate::schema::seeds::quantity.eq(Quantity::Enough),
-                    &crate::schema::seeds::owner_id.eq(user_id),
+                    &crate::schema::seeds::created_by.eq(user_id),
                 ))
                 .execute(conn)
                 .await?;
@@ -475,7 +475,7 @@ async fn test_archive_seed_succeeds() {
                     &crate::schema::plants::id.eq(-1),
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
-                        .eq(Some(vec![Some("Testplant".to_string())])),
+                        .eq(Some(vec![Some("Testplant".to_owned())])),
                 ))
                 .execute(conn)
                 .await?;
@@ -488,7 +488,7 @@ async fn test_archive_seed_succeeds() {
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::Enough),
                         &crate::schema::seeds::plant_id.eq(-1),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                         &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2023, 01, 01)),
                     ),
                     (
@@ -497,7 +497,7 @@ async fn test_archive_seed_succeeds() {
                         &crate::schema::seeds::harvest_year.eq(2022),
                         &crate::schema::seeds::quantity.eq(Quantity::NotEnough),
                         &crate::schema::seeds::plant_id.eq(-1),
-                        &crate::schema::seeds::owner_id.eq(user_id),
+                        &crate::schema::seeds::created_by.eq(user_id),
                         &crate::schema::seeds::use_by.eq(NaiveDate::from_ymd_opt(2022, 01, 01)),
                     ),
                 ])

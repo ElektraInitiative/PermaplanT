@@ -7,7 +7,7 @@ use crate::model::entity::NewSeed;
 use super::NewSeedDto;
 
 impl From<(NewSeedDto, Uuid)> for NewSeed {
-    fn from((new_seed, owner_id): (NewSeedDto, Uuid)) -> Self {
+    fn from((new_seed, user_id): (NewSeedDto, Uuid)) -> Self {
         Self {
             name: new_seed.name,
             plant_id: new_seed.plant_id,
@@ -21,7 +21,7 @@ impl From<(NewSeedDto, Uuid)> for NewSeed {
             quality: new_seed.quality,
             price: new_seed.price,
             notes: new_seed.notes,
-            owner_id,
+            created_by: user_id,
         }
     }
 }

@@ -73,6 +73,7 @@ pub async fn init_test_app(
     String,
     impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error>,
 ) {
+    let _ = env_logger::try_init();
     let app = init_test_app_impl(pool).await;
     let token = setup_auth();
 

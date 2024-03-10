@@ -15,7 +15,7 @@ pub fn init_auth() -> JsonWebKey {
     // Init application auth settings
     Config::set(Config {
         openid_configuration: OpenIDEndpointConfiguration::default(),
-        client_id: "PermaplanT".to_string(),
+        client_id: "PermaplanT".to_owned(),
         jwk_set: JwkSet { keys: vec![jwk1] },
     });
 

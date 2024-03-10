@@ -10,7 +10,8 @@
       "name": "Debug",
       "program": "${workspaceFolder}/backend/target/debug/backend",
       "args": [],
-      "cwd": "${workspaceFolder}/backend"
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/backend/.env"
     },
     {
       "type": "chrome",

@@ -215,6 +215,6 @@ function generateTestSeed(seed_name: string): SeedDto {
     name: seed_name,
     harvest_year: 2022,
     quantity: Quantity.Enough,
-    owner_id: '00000000-0000-0000-0000-000000000000',
+    created_by: '00000000-0000-0000-0000-000000000000',
   };
 }

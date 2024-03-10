@@ -16,8 +16,8 @@ export const findAllMaps = async (
     if (mapSearchParameters.name) {
       searchParams.append('name', mapSearchParameters.name);
     }
-    if (mapSearchParameters.owner_id) {
-      searchParams.append('owner_id', mapSearchParameters.owner_id);
+    if (mapSearchParameters.created_by) {
+      searchParams.append('created_by', mapSearchParameters.created_by);
     }
     if (mapSearchParameters.privacy) {
       searchParams.append('privacy', mapSearchParameters.privacy);

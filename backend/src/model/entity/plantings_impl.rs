@@ -1,6 +1,6 @@
 //! Contains the implementation of [`Planting`].
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, Utc};
 use diesel::pg::Pg;
 use diesel::{
     debug_query, BoolExpressionMethods, ExpressionMethods, NullableExpressionMethods, QueryDsl,
@@ -11,14 +11,14 @@ use futures_util::Future;
 use log::debug;
 use uuid::Uuid;
 
+use super::plantings::UpdatePlanting;
+use super::Map;
 use crate::model::dto::plantings::{
     DeletePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto,
 };
-use crate::model::entity::plantings::Planting;
+use crate::model::entity::plantings::{NewPlanting, Planting};
 use crate::schema::plantings::{self, layer_id, plant_id};
 use crate::schema::seeds;
-
-use super::plantings::UpdatePlanting;
 
 /// Arguments for the database layer find plantings function.
 pub struct FindPlantingsParameters {
@@ -101,14 +101,19 @@ impl Planting {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn create(
         dto_vec: Vec<NewPlantingDto>,
+        map_id: i32,
+        user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantingDto>> {
-        let planting_creations: Vec<Self> = dto_vec.into_iter().map(Into::into).collect();
+        let planting_creations: Vec<NewPlanting> = dto_vec
+            .into_iter()
+            .map(|dto| NewPlanting::from((dto, user_id)))
+            .collect();
         let query = diesel::insert_into(plantings::table).values(&planting_creations);
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        let query_result: Vec<Self> = query.get_results(conn).await?;
+        let query_result = query.get_results::<Self>(conn).await?;
 
         let seed_ids = query_result
             .iter()
@@ -140,6 +145,10 @@ impl Planting {
             })
             .collect::<Vec<_>>();
 
+        if let Some(first) = result_vec.get(0) {
+            Map::update_modified_metadata(map_id, user_id, first.created_at, conn).await?;
+        }
+
         Ok(result_vec)
     }
 
@@ -149,6 +158,8 @@ impl Planting {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn update(
         dto: UpdatePlantingDto,
+        map_id: i32,
+        user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantingDto>> {
         let planting_updates = Vec::from(dto);
@@ -156,9 +167,19 @@ impl Planting {
         let result = conn
             .transaction(|transaction| {
                 Box::pin(async {
-                    let futures = Self::do_update(planting_updates, transaction);
+                    let futures = Self::do_update(planting_updates, user_id, transaction);
 
                     let results = futures_util::future::try_join_all(futures).await?;
+
+                    if let Some(first) = results.get(0) {
+                        Map::update_modified_metadata(
+                            map_id,
+                            user_id,
+                            first.modified_at,
+                            transaction,
+                        )
+                        .await?;
+                    }
 
                     Ok(results) as QueryResult<Vec<Self>>
                 })
@@ -174,13 +195,19 @@ impl Planting {
     /// this helper function is needed, with explicit type annotations.
     fn do_update(
         updates: Vec<UpdatePlanting>,
+        user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> Vec<impl Future<Output = QueryResult<Self>>> {
         let mut futures = Vec::with_capacity(updates.len());
+        let now = Utc::now().naive_utc();
 
         for update in updates {
             let updated_planting = diesel::update(plantings::table.find(update.id))
-                .set(update)
+                .set((
+                    update,
+                    plantings::modified_at.eq(now),
+                    plantings::modified_by.eq(user_id),
+                ))
                 .get_result::<Self>(conn);
 
             futures.push(updated_planting);
@@ -195,12 +222,23 @@ impl Planting {
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn delete_by_ids(
         dto: Vec<DeletePlantingDto>,
+        map_id: i32,
+        user_id: Uuid,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<usize> {
         let ids: Vec<Uuid> = dto.iter().map(|&DeletePlantingDto { id }| id).collect();
 
-        let query = diesel::delete(plantings::table.filter(plantings::id.eq_any(ids)));
-        debug!("{}", debug_query::<Pg, _>(&query));
-        query.execute(conn).await
+        conn.transaction(|transaction| {
+            Box::pin(async {
+                let query = diesel::delete(plantings::table.filter(plantings::id.eq_any(ids)));
+                debug!("{}", debug_query::<Pg, _>(&query));
+                let deleted_plantings = query.execute(transaction).await?;
+
+                Map::update_modified_metadata(map_id, user_id, Utc::now().naive_utc(), transaction)
+                    .await?;
+                Ok(deleted_plantings)
+            })
+        })
+        .await
     }
 }

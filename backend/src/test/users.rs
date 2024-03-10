@@ -16,7 +16,7 @@ async fn test_can_create_user_data() {
     let user_data = UsersDto {
         salutation: Salutation::Mr,
         title: None,
-        country: "Austria".to_string(),
+        country: "Austria".to_owned(),
         phone: None,
         website: None,
         organization: None,

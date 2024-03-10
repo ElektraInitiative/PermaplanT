@@ -1,13 +1,13 @@
 //! All DTOs associated with [`PlantingDto`].
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
-/// Represents plant planted on a map.
-/// E.g. a user drags a plant from the search results and drops it on the map.
+/// Represents a plant on a map.
+/// E.g. a user selects a plant from the search results and plants it on the map.
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
@@ -18,6 +18,14 @@ pub struct PlantingDto {
     pub layer_id: i32,
     /// The plant that is planted.
     pub plant_id: i32,
+    /// The datetime the planting was created.
+    pub created_at: NaiveDateTime,
+    /// The uuid of the user that created the planting.
+    pub created_by: Uuid,
+    /// The datetime the planting was last modified.
+    pub modified_at: NaiveDateTime,
+    /// The uuid of the user that last modified the planting.
+    pub modified_by: Uuid,
     /// The x coordinate of the position on the map.
     pub x: i32,
     /// The y coordinate of the position on the map.
@@ -43,7 +51,7 @@ pub struct PlantingDto {
     /// Is the planting an area of plants.
     pub is_area: bool,
     /// Notes about the planting in Markdown.
-    pub planting_notes: Option<String>,
+    pub planting_notes: String,
 }
 
 /// Used to create a new planting.
@@ -52,7 +60,7 @@ pub struct PlantingDto {
 #[serde(rename_all = "camelCase")]
 pub struct NewPlantingDto {
     /// The id of the planting.
-    pub id: Option<Uuid>,
+    pub id: Uuid,
     /// The plant layer the plantings is on.
     pub layer_id: i32,
     /// The plant that is planted.

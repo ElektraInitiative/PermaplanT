@@ -1,13 +1,13 @@
 //! All entities associated with [`Planting`].
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, NaiveDateTime};
 use diesel::{AsChangeset, Identifiable, Insertable, Queryable};
 use uuid::Uuid;
 
 use crate::schema::plantings;
 
 /// The `Planting` entity.
-#[derive(Debug, Clone, Identifiable, Queryable, Insertable)]
+#[derive(Debug, Clone, Identifiable, Queryable)]
 #[diesel(table_name = plantings)]
 pub struct Planting {
     /// The id of the planting.
@@ -45,7 +45,50 @@ pub struct Planting {
     //pub delete_date: Option<NaiveDate>,
     */
     /// Notes about the planting in Markdown.
-    pub notes: Option<String>,
+    pub notes: String,
+
+    /// The datetime the planting was created.
+    pub created_at: NaiveDateTime,
+    /// The datetime the planting was last modified.
+    pub modified_at: NaiveDateTime,
+    /// The uuid of the user that created the planting.
+    pub created_by: Uuid,
+    /// The uuid of the user that last modified the planting.
+    pub modified_by: Uuid,
+}
+
+/// The `NewPlanting` entity.
+#[derive(Insertable)]
+#[diesel(table_name = plantings)]
+pub struct NewPlanting {
+    /// The id of the planting (set by the frontend)
+    pub id: Uuid,
+    /// The plant layer the plantings is on.
+    pub layer_id: i32,
+    /// The plant that is planted.
+    pub plant_id: i32,
+
+    /// The x coordinate of the position on the map.
+    pub x: i32,
+    /// The y coordinate of the position on the map.
+    pub y: i32,
+    /// The size of the planting on the map in x direction.
+    pub size_x: i32,
+    /// The size of the planting on the map in y direction.
+    pub size_y: i32,
+    /// The rotation in degrees (0-360) of the plant on the map.
+    pub rotation: f32,
+    /// The date the planting was added to the map.
+    /// If None, the planting always existed.
+    pub add_date: Option<NaiveDate>,
+    /// Plantings may be linked with a seed.
+    pub seed_id: Option<i32>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
+    /// The uuid of the user that created the planting.
+    pub created_by: Uuid,
+    /// The user who last modified the planting.
+    pub modified_by: Uuid,
 }
 
 /// The `UpdatePlanting` entity.
