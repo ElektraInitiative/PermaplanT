@@ -14,6 +14,7 @@ import {
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
 import { convertToDateString } from '../utils/date-utils';
+import { TransformerStore } from './transformer/TransformerStore';
 
 import Vector2d = Konva.Vector2d;
 
@@ -179,7 +180,7 @@ export interface UntrackedMapSlice {
   ) => void;
   lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
-  selectPlantings: (plantings: PlantingDto[] | null) => void;
+  selectPlantings: (plantings: PlantingDto[] | null, transformerStore?: TransformerStore) => void;
   toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;

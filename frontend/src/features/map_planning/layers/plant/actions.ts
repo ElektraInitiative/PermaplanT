@@ -39,7 +39,6 @@ export class CreatePlantAction
     return this._ids;
   }
 
-  // TODO: Sollte hier beim constructor nicht NewPlantingDto verwendet werden?
   constructor(private readonly _data: PlantingDto[], public actionId = v4()) {
     this._ids = _data.map(({ id }) => id);
   }
