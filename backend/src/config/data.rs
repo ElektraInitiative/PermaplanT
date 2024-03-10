@@ -3,7 +3,7 @@
 use crate::sse::broadcaster::Broadcaster;
 use actix_web::web::Data;
 
-use crate::db::connection;
+use lib_db::db::connection;
 
 /// Data available to all controllers.
 pub struct AppDataInner {

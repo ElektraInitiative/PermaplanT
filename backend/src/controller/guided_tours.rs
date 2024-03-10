@@ -12,7 +12,7 @@ use crate::{
     service,
 };
 
-/// Endpoint for setting up a [`GuidedTours`](crate::model::entity::GuidedTours) object.
+/// Endpoint for setting up a [`GuidedTours`](lib_db::model::entity::GuidedTours) object.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -28,10 +28,11 @@ use crate::{
 #[post("")]
 pub async fn setup(user_info: UserInfo, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
     let response = service::guided_tours::setup(user_info.id, &app_data).await?;
+
     Ok(HttpResponse::Created().json(response))
 }
 
-/// Endpoint for fetching a [`GuidedTours`](crate::model::entity::GuidedTours) object.
+/// Endpoint for fetching a [`GuidedTours`](lib_db::model::entity::GuidedTours) object.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -53,7 +54,7 @@ pub async fn find_by_user(
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Endpoint for updating a [`GuidedTours`](crate::model::entity::GuidedTours) object.
+/// Endpoint for updating a [`GuidedTours`](lib_db::model::entity::GuidedTours) object.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

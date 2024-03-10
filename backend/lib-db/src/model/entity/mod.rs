@@ -1,5 +1,8 @@
 //! Contains all entities used in `PermaplanT`.
 
+use chrono::NaiveDate;
+use chrono::NaiveDateTime;
+
 pub mod base_layer_images_impl;
 pub mod blossoms_impl;
 pub mod guided_tours_impl;
@@ -12,9 +15,6 @@ pub mod plants_impl;
 pub mod seed_impl;
 pub mod timeline;
 pub mod users_impl;
-
-use chrono::NaiveDate;
-use chrono::NaiveDateTime;
 
 use diesel::AsChangeset;
 use diesel::QueryableByName;
@@ -44,7 +44,7 @@ use super::r#enum::{
 
 /// The `Plants` entity builds up an hierarchical structure, see `/doc/database/hierarchy.md`:
 ///
-#[doc = include_str!("../../../doc/database/hierarchy.md")]
+#[doc = include_str!("../../../../../doc/database/hierarchy.md")]
 ///
 #[derive(Debug, Identifiable, Queryable, QueryableByName)]
 #[diesel(table_name = plants)]

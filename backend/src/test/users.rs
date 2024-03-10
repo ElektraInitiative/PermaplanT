@@ -4,7 +4,7 @@ use actix_http::StatusCode;
 use actix_web::{http::header, test};
 use diesel_async::scoped_futures::ScopedFutureExt;
 
-use crate::model::{dto::UsersDto, r#enum::salutation::Salutation};
+use lib_db::model::{dto::UsersDto, r#enum::salutation::Salutation};
 
 use super::util::{init_test_app, init_test_database};
 

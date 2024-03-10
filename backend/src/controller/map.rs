@@ -10,11 +10,11 @@ use uuid::Uuid;
 
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
-use crate::model::dto::actions::{Action, UpdateMapGeometryActionPayload};
-use crate::model::dto::{MapSearchParameters, PageParameters, UpdateMapDto, UpdateMapGeometryDto};
 use crate::{model::dto::NewMapDto, service};
+use lib_db::model::dto::actions::{Action, UpdateMapGeometryActionPayload};
+use lib_db::model::dto::{MapSearchParameters, PageParameters, UpdateMapDto, UpdateMapGeometryDto};
 
-/// Endpoint for fetching or searching all [`Map`](crate::model::entity::Map).
+/// Endpoint for fetching or searching all [`Map`](lib_db::model::entity::Map).
 /// Search parameters are taken from the URLs query string (e.g. .../api/maps?is_inactive=false&per_page=5).
 /// If no page parameters are provided, the first page is returned.
 ///
@@ -48,7 +48,7 @@ pub async fn find(
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Endpoint for fetching a [`Map`](crate::model::entity::Map).
+/// Endpoint for fetching a [`Map`](lib_db::model::entity::Map).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -67,7 +67,7 @@ pub async fn find_by_id(map_id: Path<i32>, app_data: Data<AppDataInner>) -> Resu
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Endpoint for creating a new [`Map`](crate::model::entity::Map).
+/// Endpoint for creating a new [`Map`](lib_db::model::entity::Map).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -91,7 +91,7 @@ pub async fn create(
     Ok(HttpResponse::Created().json(response))
 }
 
-/// Endpoint for updating a [`Map`](crate::model::entity::Map).
+/// Endpoint for updating a [`Map`](lib_db::model::entity::Map).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -121,7 +121,7 @@ pub async fn update(
     .await?;
     Ok(HttpResponse::Ok().json(response))
 }
-/// Endpoint for updating the [´Geometry`] of a [`Map`](crate::model::entity::Map).
+/// Endpoint for updating the [´Geometry`] of a [`Map`](lib_db::model::entity::Map).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

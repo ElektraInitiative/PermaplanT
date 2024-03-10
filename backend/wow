@@ -1,0 +1,14 @@
+    Updating crates.io index
+error: failed to select a version for `diesel`.
+    ... required by package `diesel-async v0.2.2`
+    ... which satisfies dependency `diesel-async = "^0.2.2"` of package `backend v0.3.7 (/workspaces/PermaplanT/backend)`
+versions that meet the requirements `~2.0.0` are: 2.0.4, 2.0.3, 2.0.2, 2.0.1, 2.0.0
+
+all possible versions conflict with previously selected packages.
+
+  previously selected package `diesel v2.1.1`
+    ... which satisfies dependency `diesel = "~2.1.1"` of package `diesel-async v0.4.1`
+    ... which satisfies dependency `diesel-async = "^0.4.1"` of package `lib-db v0.3.7 (/workspaces/PermaplanT/backend/lib-db)`
+    ... which satisfies path dependency `lib-db` (locked to 0.3.7) of package `backend v0.3.7 (/workspaces/PermaplanT/backend)`
+
+failed to select a version for `diesel` which could resolve this conflict

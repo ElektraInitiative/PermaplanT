@@ -24,7 +24,7 @@ use crate::{
     schema::maps::{self, all_columns, created_by, is_inactive, privacy},
 };
 
-use super::{Map, NewMap};
+use crate::model::entity::{Map, NewMap};
 
 impl Map {
     /// Get the top maps matching the search query.

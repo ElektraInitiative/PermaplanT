@@ -11,8 +11,8 @@ use futures_util::Future;
 use log::debug;
 use uuid::Uuid;
 
-use super::plantings::UpdatePlanting;
-use super::Map;
+use crate::model::entity::plantings::UpdatePlanting;
+use crate::model::entity::Map;
 use crate::model::dto::plantings::{
     DeletePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto,
 };

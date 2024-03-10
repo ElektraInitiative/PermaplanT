@@ -9,6 +9,8 @@ categories = ["web-programming", "web-programming::http-server"]
 edition = "2021"
 
 [dependencies]
+lib-db = { path = "./lib-db", version = "*" }
+
 tokio = { version = "1.28.0", features = ["full"] }
 
 # Actix
@@ -39,13 +41,16 @@ diesel = { version = "2.0.2", features = [
     "64-column-tables",
     "uuid",
 ] }
-diesel-async = { version = "0.2.2", features = ["deadpool", "postgres"] }
-diesel-derive-enum = { version = "2.0.0-rc.0", features = ["postgres"] }
+diesel-async = { version = "0.4.1", features = ["deadpool", "postgres"] }
+diesel-derive-enum = { version = "2.1.0", features = ["postgres"] }
 postgis_diesel = { version = "2.1.0", features = ["serde"] }
 
 # Other
 serde_json = "1.0.95"
-chrono = { version = "0.4.23", features = ["serde", "clock"], default-features = false }
+chrono = { version = "0.4.23", features = [
+    "serde",
+    "clock",
+], default-features = false }
 serde = { version = "1.0.152", features = ["derive"] }
 dotenvy = "0.15.0"
 typeshare = "1.0.0"

@@ -8,7 +8,7 @@ use futures::{future::ready, stream, StreamExt};
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tokio::{sync::Mutex, time::interval};
 
-use crate::model::dto::actions::Action;
+use lib_db::model::dto::actions::Action;
 
 /// Map that clients are connected to.
 #[derive(Debug, Clone)]

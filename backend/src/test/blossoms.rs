@@ -6,7 +6,7 @@ use chrono::NaiveDate;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 
-use crate::model::dto::GainedBlossomsDto;
+use lib_db::model::dto::GainedBlossomsDto;
 
 use super::util::{init_test_app, init_test_database};
 

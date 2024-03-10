@@ -5,8 +5,8 @@ use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
 use crate::error::ServiceError;
-use crate::model::dto::{BaseLayerImageDto, UpdateBaseLayerImageDto};
-use crate::model::entity::BaseLayerImages;
+use lib_db::model::dto::{BaseLayerImageDto, UpdateBaseLayerImageDto};
+use lib_db::model::entity::BaseLayerImages;
 
 /// Fetch all base layer images for the layer from the database.
 ///

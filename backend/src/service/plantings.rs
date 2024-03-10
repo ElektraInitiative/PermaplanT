@@ -7,12 +7,12 @@ use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
 use crate::error::ServiceError;
-use crate::model::dto::core::TimelinePage;
-use crate::model::dto::plantings::{
+use lib_db::model::dto::core::TimelinePage;
+use lib_db::model::dto::plantings::{
     DeletePlantingDto, NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
 };
-use crate::model::entity::plantings::Planting;
-use crate::model::entity::plantings_impl::FindPlantingsParameters;
+use lib_db::model::entity::plantings::Planting;
+use lib_db::model::entity::plantings_impl::FindPlantingsParameters;
 
 /// Time offset in days for loading plantings in the timeline.
 pub const TIME_LINE_LOADING_OFFSET_DAYS: u64 = 356;

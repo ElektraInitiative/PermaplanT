@@ -10,12 +10,12 @@ use uuid::Uuid;
 
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
-use crate::model::dto::actions::Action;
-use crate::model::dto::actions::UpdatePlantingAdditionalNamePayload;
-use crate::model::dto::{PageParameters, SeedSearchParameters};
 use crate::{model::dto::ArchiveSeedDto, model::dto::NewSeedDto, service};
+use lib_db::model::dto::actions::Action;
+use lib_db::model::dto::actions::UpdatePlantingAdditionalNamePayload;
+use lib_db::model::dto::{PageParameters, SeedSearchParameters};
 
-/// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
+/// Endpoint for fetching all [`SeedDto`](lib_db::model::dto::SeedDto).
 /// If no page parameters are provided, the first page is returned.
 /// Seeds are ordered using their use_by date in an ascending fashion.
 ///
@@ -54,7 +54,7 @@ pub async fn find(
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Endpoint for fetching a [`Seed`](crate::model::entity::Seed).
+/// Endpoint for fetching a [`Seed`](lib_db::model::entity::Seed).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -77,7 +77,7 @@ pub async fn find_by_id(
     Ok(HttpResponse::Ok().json(response))
 }
 
-/// Endpoint for creating a new [`Seed`](crate::model::entity::Seed).
+/// Endpoint for creating a new [`Seed`](lib_db::model::entity::Seed).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -101,7 +101,7 @@ pub async fn create(
     Ok(HttpResponse::Created().json(response))
 }
 
-/// Endpoint for deleting a [`Seed`](crate::model::entity::Seed).
+/// Endpoint for deleting a [`Seed`](lib_db::model::entity::Seed).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -124,7 +124,7 @@ pub async fn delete_by_id(
     Ok(HttpResponse::Ok().json(""))
 }
 
-/// Endpoint for editing a [`Seed`](crate::model::entity::Seed).
+/// Endpoint for editing a [`Seed`](lib_db::model::entity::Seed).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
@@ -155,7 +155,7 @@ pub async fn edit_by_id(
     Ok(HttpResponse::Accepted().json(response))
 }
 
-/// Endpoint archiving/unarchiving a [`Seed`](crate::model::entity::Seed).
+/// Endpoint archiving/unarchiving a [`Seed`](lib_db::model::entity::Seed).
 /// A timestamp will be recorded when the seed is first archived.
 ///
 /// # Errors

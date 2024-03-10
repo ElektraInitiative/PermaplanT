@@ -1,8 +1,8 @@
 //! `Plants` endpoints.
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::{PageParameters, PlantsSearchParameters};
 use crate::service::plants;
+use lib_db::model::dto::{PageParameters, PlantsSearchParameters};
 
 use actix_web::{
     get,
@@ -10,7 +10,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-/// Endpoint for fetching or searching [`PlantsSummaryDto`](crate::model::dto::PlantsSummaryDto).
+/// Endpoint for fetching or searching [`PlantsSummaryDto`](lib_db::model::dto::PlantsSummaryDto).
 /// Search parameters are taken from the URLs query string (e.g. .../api/plants?name=example&per_page=5).
 /// If no page parameters are provided, the first page is returned.
 /// If no page parameters are provided, the first page is returned.
@@ -45,7 +45,7 @@ pub async fn find(
     Ok(HttpResponse::Ok().json(payload))
 }
 
-/// Endpoint for fetching a [`Plant`](crate::model::entity::Plants).
+/// Endpoint for fetching a [`Plant`](lib_db::model::entity::Plants).
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

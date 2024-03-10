@@ -7,7 +7,7 @@ use actix_web::{
 };
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::ConnectToMapQueryParams;
+use lib_db::model::dto::ConnectToMapQueryParams;
 
 /// Create a new SSE client.
 #[get("")]

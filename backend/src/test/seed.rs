@@ -1,6 +1,5 @@
 //! Tests for [`crate::controller::seed`].
 
-use crate::model::dto::ArchiveSeedDto;
 use crate::{
     model::{
         dto::{NewSeedDto, Page, SeedDto},
@@ -18,6 +17,7 @@ use actix_web::{
 use chrono::NaiveDate;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
+use lib_db::model::dto::ArchiveSeedDto;
 use uuid::uuid;
 
 #[actix_rt::test]

@@ -6,12 +6,6 @@ use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::{
-    BaseLayerImageDto, MapSearchParameters, Page, UpdateMapDto, UpdateMapGeometryDto,
-};
-use crate::model::dto::{NewLayerDto, PageParameters};
-use crate::model::entity::{BaseLayerImages, Layer};
-use crate::model::r#enum::layer_type::LayerType;
 use crate::{
     error::ServiceError,
     model::{
@@ -19,6 +13,12 @@ use crate::{
         entity::Map,
     },
 };
+use lib_db::model::dto::{
+    BaseLayerImageDto, MapSearchParameters, Page, UpdateMapDto, UpdateMapGeometryDto,
+};
+use lib_db::model::dto::{NewLayerDto, PageParameters};
+use lib_db::model::entity::{BaseLayerImages, Layer};
+use lib_db::model::r#enum::layer_type::LayerType;
 
 /// Defines which layers should be created when a new map is created.
 const LAYER_TYPES: [LayerType; 2] = [LayerType::Base, LayerType::Plants];

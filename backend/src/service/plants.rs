@@ -4,9 +4,9 @@ use actix_web::web::Data;
 
 use crate::config::data::AppDataInner;
 use crate::error::ServiceError;
-use crate::model::dto::Page;
-use crate::model::dto::PageParameters;
-use crate::model::{
+use lib_db::model::dto::Page;
+use lib_db::model::dto::PageParameters;
+use lib_db::model::{
     dto::{PlantsSearchParameters, PlantsSummaryDto},
     entity::Plants,
 };

@@ -12,7 +12,7 @@ use crate::{
     service,
 };
 
-/// Endpoint for creating an [`Users`](crate::model::entity::Users) entry.
+/// Endpoint for creating an [`Users`](lib_db::model::entity::Users) entry.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.

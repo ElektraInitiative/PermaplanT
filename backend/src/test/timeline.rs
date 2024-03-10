@@ -3,13 +3,13 @@
 use std::collections::HashMap;
 
 use crate::error::ServiceError;
-use crate::model::dto::timeline::{TimelineDto, TimelineEntryDto};
 use crate::test::util::init_test_database;
 use actix_http::{header, StatusCode};
 use actix_web::test;
 use chrono::NaiveDate;
 use diesel_async::AsyncPgConnection;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
+use lib_db::model::dto::timeline::{TimelineDto, TimelineEntryDto};
 use uuid::Uuid;
 
 use super::util::{data, init_test_app};

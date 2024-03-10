@@ -5,7 +5,7 @@ use diesel::Insertable;
 use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
 
-use crate::model::r#enum::{layer_type::LayerType, privacy_option::PrivacyOption};
+use lib_db::model::r#enum::{layer_type::LayerType, privacy_option::PrivacyOption};
 
 use super::dummy_map_polygons::tall_rectangle;
 

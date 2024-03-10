@@ -1,6 +1,5 @@
 //! Tests for [`crate::controller::base_layer_image`].
 
-use crate::model::dto::DeleteBaseLayerImageDto;
 use crate::test::util::dummy_map_polygons::small_rectangle_with_non_0_xmin;
 use crate::{
     error::ServiceError,
@@ -19,6 +18,7 @@ use actix_web::{
 };
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
+use lib_db::model::dto::DeleteBaseLayerImageDto;
 use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
 

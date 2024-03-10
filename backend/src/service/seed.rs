@@ -6,8 +6,6 @@ use uuid::Uuid;
 use chrono::Utc;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::PageParameters;
-use crate::model::dto::{Page, SeedSearchParameters};
 use crate::{
     error::ServiceError,
     model::{
@@ -15,6 +13,8 @@ use crate::{
         entity::Seed,
     },
 };
+use lib_db::model::dto::PageParameters;
+use lib_db::model::dto::{Page, SeedSearchParameters};
 
 /// Search seeds from the database.
 /// Seeds are returned in ascending order of their `use_by` dates.

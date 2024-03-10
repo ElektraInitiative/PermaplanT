@@ -3,7 +3,6 @@
 use actix_web::web::Data;
 
 use crate::config::data::AppDataInner;
-use crate::model::dto::LayerSearchParameters;
 use crate::{
     error::ServiceError,
     model::{
@@ -11,6 +10,7 @@ use crate::{
         entity::Layer,
     },
 };
+use lib_db::model::dto::LayerSearchParameters;
 
 /// Search layers from the database.
 ///

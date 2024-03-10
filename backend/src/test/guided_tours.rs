@@ -6,7 +6,7 @@ use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::Uuid;
 
-use crate::model::dto::{GuidedToursDto, UpdateGuidedToursDto};
+use lib_db::model::dto::{GuidedToursDto, UpdateGuidedToursDto};
 
 use super::util::{init_test_app, init_test_app_for_user, init_test_database};
 

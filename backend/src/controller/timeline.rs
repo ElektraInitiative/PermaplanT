@@ -1,12 +1,12 @@
 //! `Users` endpoints.
 use crate::config::data::AppDataInner;
-use crate::model::dto::timeline::TimelineParameters;
 use crate::service;
 use actix_web::{
     get,
     web::{Data, Path, Query},
     HttpResponse, Result,
 };
+use lib_db::model::dto::timeline::TimelineParameters;
 
 /// Get calculated timeline data for a given map from dates start to end.
 /// The timeline contains all additions and removals of `Plantings` aggregated

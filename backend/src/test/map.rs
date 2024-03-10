@@ -2,14 +2,6 @@
 
 use std::time::Duration;
 
-use crate::model::dto::core::{
-    ActionDtoWrapper, ActionDtoWrapperDeletePlantings, ActionDtoWrapperNewPlantings,
-    ActionDtoWrapperUpdatePlantings,
-};
-use crate::model::dto::plantings::{
-    DeletePlantingDto, PlantingDto, TransformPlantingDto, UpdatePlantingDto,
-};
-use crate::model::dto::UpdateMapGeometryDto;
 use crate::test::util::data::{self, TestInsertableMap};
 use crate::test::util::dummy_map_polygons::small_rectangle;
 use crate::{
@@ -30,6 +22,14 @@ use actix_web::{
 };
 use chrono::Utc;
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
+use lib_db::model::dto::core::{
+    ActionDtoWrapper, ActionDtoWrapperDeletePlantings, ActionDtoWrapperNewPlantings,
+    ActionDtoWrapperUpdatePlantings,
+};
+use lib_db::model::dto::plantings::{
+    DeletePlantingDto, PlantingDto, TransformPlantingDto, UpdatePlantingDto,
+};
+use lib_db::model::dto::UpdateMapGeometryDto;
 use tokio::time::sleep;
 use uuid::Uuid;
 

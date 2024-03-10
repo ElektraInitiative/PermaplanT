@@ -3,7 +3,7 @@
 use actix_web::{get, HttpResponse};
 
 use crate::config::auth;
-use crate::model::dto::ConfigDto;
+use lib_db::model::dto::ConfigDto;
 
 /// Endpoint for fetching configuration for the frontend.
 #[allow(clippy::unused_async)]
