@@ -7,7 +7,9 @@
     "confirmation_resume": "Fortsetzen",
     "confirmation_pause": "Pausieren",
     "confirmation_quit": "Beenden",
-    "fetch_status_error": "Sorry, ich habe Schwierigkeiten den Status deiner Einführung in den Map Editor zu empfangen. Bitte lade die Seite neu, damit ich es noch einmal versuchen kann.",
+    "fetch_status_error": "Entschuldigung, ich habe Schwierigkeiten den Status deiner Einführung in den Map Editor zu empfangen. Bitte lade die Seite neu, damit ich es noch einmal versuchen kann.",
+    "update_tour_status_error": "Entschuldigung, ich habe Schwierigkeiten den Status deiner Einführung zu aktualisieren.",
+    "complete_tour_error": "Entschuldigung, ich habe Schwierigkeiten die Einführungstour abzuschließen.",
     "mapEditor": {
         "welcome_title": "Willkommen im Map Editor",
         "toolbox_intro_title": "Toolbox",

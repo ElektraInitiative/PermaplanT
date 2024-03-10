@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { getTourStatus } from '../api/getTourStatus';
 import { updateTourStatus } from '../api/updateTourStatus';
 
@@ -23,7 +24,6 @@ export function useTourStatus() {
     refetchOnWindowFocus: false,
     meta: {
       errorMessage: t('guidedTour:fetch_status_error'),
-      autoClose: false,
     },
   });
 }
@@ -33,12 +33,12 @@ export function useTourStatus() {
  */
 export function useReenableTour() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation(['guidedTour']);
 
   return useMutation({
     mutationFn: () => updateTourStatus({ editor_tour_completed: false }),
     onError: () => {
-      // TODO toast
-      console.error('Failed to re-enable guided tour');
+      errorToastGrouped(t('guidedTour:update_tour_status_error'));
     },
     onSuccess: () => queryClient.invalidateQueries(TOUR_KEYS.status()),
   });
@@ -49,12 +49,12 @@ export function useReenableTour() {
  */
 export function useCompleteTour() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation(['guidedTour']);
 
   return useMutation({
     mutationFn: () => updateTourStatus({ editor_tour_completed: true }),
     onError: () => {
-      // TODO toast
-      console.error('Failed to complete guided tour');
+      errorToastGrouped(t('guidedTour:complete_tour_error'));
     },
     onSuccess: () => queryClient.invalidateQueries(TOUR_KEYS.status()),
   });

@@ -19,6 +19,7 @@ import maps from './maps.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
 import overview from './overview.json';
 import plantAndSeedSearch from './plantAndSeedSearch.json';
+import plantRelations from './plantRelations.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import plantings from './plantings.json';
@@ -70,4 +71,5 @@ export default {
   readOnly,
   toolboxTooltips,
   polygon,
+  plantRelations,
 };

@@ -1,5 +1,6 @@
 {
-    "overview": {
+  "error_fetch_map_data": "Sorry, I'm experiencing trouble fetching maps from my server. Please try again later.",
+   "overview": {
         "page_title": "My Maps",
         "create_button": "New Map",
         "create_button_title": "Create new map",

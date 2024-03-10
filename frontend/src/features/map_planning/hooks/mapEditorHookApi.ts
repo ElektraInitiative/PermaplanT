@@ -64,7 +64,6 @@ export function useGetLayers(mapId: number) {
     staleTime: TEN_MINUTES,
     refetchOnWindowFocus: false,
     meta: {
-      autoClose: false,
       errorMessage: t('layers:error_fetching_layers'),
     },
   });
@@ -82,11 +81,15 @@ function getLayersQueryFn({
  * Get map data for the given map id.
  */
 export function useMap(mapId: number) {
+  const { t } = useTranslation(['maps']);
+
   return useQuery({
     queryKey: MAP_EDITOR_KEYS.map(mapId),
     queryFn: getMapQueryFn,
     refetchOnWindowFocus: false,
-    // TODO: add error message
+    meta: {
+      errorMessage: t('maps:error_fetch_map_data'),
+    },
   });
 }
 
@@ -124,7 +127,6 @@ export function usePlantLayer({ mapId, layerId, enabled }: UseLayerArgs) {
     cacheTime: 0,
     enabled,
     meta: {
-      autoClose: false,
       errorMessage: t('plantSearch:error_initializing_layer'),
     },
   });
