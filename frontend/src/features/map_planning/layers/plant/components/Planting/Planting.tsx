@@ -8,7 +8,7 @@ import { PlantLabel } from '../PlantLabel';
 import { usePlanting } from './hooks';
 import { placeTooltip } from './utils';
 
-export type PlantingElementProps = {
+export type PlantingProps = {
   planting: PlantingDto;
 };
 

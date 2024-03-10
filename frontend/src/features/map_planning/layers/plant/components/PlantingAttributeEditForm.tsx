@@ -45,7 +45,7 @@ export type SinglePlantingAttributeFormProps = EditPlantingAttributesProps & {
   planting: PlantingDto;
 };
 
-export type EditMultiplePlantingsProps = EditPlantingAttributesProps & {
+export type MultiplePlantingsAttributeFormProps = EditPlantingAttributesProps & {
   plantings: PlantingDto[];
 };
 
