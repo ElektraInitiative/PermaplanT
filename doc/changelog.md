@@ -60,7 +60,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add key combinations for map geometry _(Daniel Steinkogler)_
-- _()_
+- Add documentation for adding a new field to a model _(Christoph Schreiner)_
 - _()_
 - _()_
 - Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
