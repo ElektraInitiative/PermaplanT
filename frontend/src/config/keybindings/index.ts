@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { createShortcutIncludingModifierKeysFromKeyEvent } from '@/utils/key-combinations';
 import keybindings from './keybindings.json';
 
@@ -7,6 +8,13 @@ export const KEYBINDINGS_SCOPE_PLANTS_LAYER = 'plants_layer';
 export const KEYBINDINGS_SCOPE_BASE_LAYER = 'base_layer';
 
 type KeyBinding = Record<string, string[]>;
+
+enum SpecialKeys {
+  Escape = 'Escape',
+  Delete = 'Delete',
+  Shift = 'Shift',
+  Control = 'Control',
+}
 
 type KeyBindingsConfig = {
   [scope: string]: KeyBinding;
@@ -70,14 +78,27 @@ export function getConfiguredKeybindingsForAction(scope: string, action: string)
  *         If no description text is provided, the tooltip will only include the keyboard shortcut.
  *
  * */
-export function getFormattedKeybindingDescriptionForAction(
+export function useGetFormattedKeybindingDescriptionForAction(
   scope: string,
   action: string,
   descriptionText?: string,
 ): string {
-  return `${descriptionText || ''} (${getConfiguredKeybindingsForAction(scope, action).join(
-    ',',
-  )})`.trim();
+  const keybindings = getConfiguredKeybindingsForAction(scope, action);
+  const { t } = useTranslation(['keybindings']);
+
+  const translatedKeybindings = keybindings.map((keybinding) => {
+    const parts = keybinding.split('+');
+    return parts
+      .map((part) => {
+        if (Object.values(SpecialKeys).includes(part as SpecialKeys)) {
+          return t(`keybindings:${part as SpecialKeys}`);
+        }
+        return part;
+      })
+      .join('+');
+  });
+
+  return `${descriptionText || ''} (${translatedKeybindings.join(',')})`.trim();
 }
 
 /**

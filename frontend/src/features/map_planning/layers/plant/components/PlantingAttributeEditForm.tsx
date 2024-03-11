@@ -10,7 +10,7 @@ import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormI
 import { DebouncedMarkdownEditorFormInput } from '@/components/Form/MarkdownEditorFormInput';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
-  getFormattedKeybindingDescriptionForAction,
+  useGetFormattedKeybindingDescriptionForAction,
 } from '@/config/keybindings';
 import AlertIcon from '@/svg/icons/alert.svg?react';
 import { PlantNameFromAdditionalNameAndPlant, PlantNameFromPlant } from '@/utils/plant-naming';
@@ -332,7 +332,7 @@ function PlantingAttributeEditForm({
       </div>
       <hr className="my-4 border-neutral-700" />
       <SimpleButton
-        title={getFormattedKeybindingDescriptionForAction(
+        title={useGetFormattedKeybindingDescriptionForAction(
           KEYBINDINGS_SCOPE_PLANTS_LAYER,
           'deleteSelectedPlantings',
           multiplePlantings ? t('plantings:delete_multiple_plantings') : t('plantings:delete'),
