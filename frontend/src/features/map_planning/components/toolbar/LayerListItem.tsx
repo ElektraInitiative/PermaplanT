@@ -84,7 +84,9 @@ export const LayerListItem = ({
           title={t('layerSettings:sliderTooltip')}
           value={1}
         >
-          {t(`layers:${layer.type_}`)}
+          {`${t(`layers:${layer.type_}`)} ${
+            layer.type_ === LayerType.Drawing ? '(' + layer.name + ')' : ''
+          }`}
         </NamedSlider>
       </div>
       {alternativesVisible &&

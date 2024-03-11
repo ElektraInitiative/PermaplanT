@@ -7,7 +7,8 @@
 // import EyeIcon  from '@/svg/icons/eye.svg?react';
 // import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayerDto } from '@/api_types/definitions';
+import { LayerDto, LayerType } from '@/api_types/definitions';
+import { createLayer } from '../../api/createLayer';
 import useMapStore from '../../store/MapStore';
 import { LayerListItem } from './LayerListItem';
 
@@ -37,6 +38,14 @@ export const LayerList = ({ layers }: LayerListProps) => {
     <div className="flex flex-col p-2">
       <section className="flex justify-between">
         <h2>{t('layers:header')}</h2>
+
+        <button
+          className="flex items-center gap-2"
+          onClick={() => createLayer(1, LayerType.Drawing, 'Drawing2')}
+        >
+          Create
+        </button>
+
         {/* TODO: these buttons should be added again when the corresponding functionality is implemented */}
         {/* <div className="flex gap-2"> */}
         {/*   <IconButton disabled={true}> */}
