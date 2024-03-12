@@ -1,6 +1,8 @@
 {
   "global": {
-    "cancelModal": ["Escape"]
+    "cancelModal": ["Escape"],
+    "redo": ["Ctrl+Y"],
+    "undo": ["Ctrl+Z"]
   },
   "base_layer": {
     "activatePolygonMovePoints": ["Shift+M"],

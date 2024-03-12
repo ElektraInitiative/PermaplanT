@@ -48,7 +48,22 @@ const useAuthEffect = () => {
   }, [isAuth, t, preferredUsername]);
 };
 
+const handleGlobalKeyDown = (event: KeyboardEvent): void => {
+  // Prevent the default behavior of Ctrl+A to select all text
+  if (event.ctrlKey && event.key === 'a') {
+    event.preventDefault();
+  }
+};
+
+const useGlobalKeyHandlers = () => {
+  document.addEventListener('keydown', handleGlobalKeyDown);
+  return () => {
+    document.removeEventListener('keydown', handleGlobalKeyDown);
+  };
+};
+
 function App() {
+  useGlobalKeyHandlers();
   useInitDarkMode();
   useAuthEffect();
   return (
