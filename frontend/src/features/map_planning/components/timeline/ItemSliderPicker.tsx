@@ -248,13 +248,6 @@ const ItemSliderPicker = ({
     };
   });
 
-  // Add a useEffect hook to scroll to the selected item when items change from the outside.
-  useEffect(() => {
-    const selectedIndex = getSelectedItemIndex();
-    const selectedItemIndex = Math.min(Math.max(selectedIndex, 0), items.length - 1);
-    scrollToIndex(selectedItemIndex);
-  }, [items, getSelectedItemIndex]);
-
   // Add a useEffect hook to update the selected item when the selected value changes from the outside.
   useEffect(() => {
     if (value === undefined) return;

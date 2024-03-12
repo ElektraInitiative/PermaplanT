@@ -59,6 +59,9 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     useState<TimelineMonthlyEvent>(defaultMonthItem);
   const [selectedDayItem, setSelectedDayItem] = useState<TimelineDailyEvent>(defaultDayItem);
 
+  const yearRightBoundReached = useRef(false);
+  const yearLeftBoundReached = useRef(false);
+
   useEffect(() => {
     if (defaultDayItem) {
       setSelectedDayItem(defaultDayItem);
@@ -246,25 +249,21 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   const handleYearSliderLeftEndReached = () => {
-    useMapStore.setState((state) => ({
-      ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        timeLineVisibleYears: {
-          from: state.untrackedState.timeLineVisibleYears.from - 100,
-          to: state.untrackedState.timeLineVisibleYears.to - 100,
-        },
-      },
-    }));
+    yearLeftBoundReached.current = true;
   };
+
   const handleYearSliderRightEndReached = () => {
+    yearRightBoundReached.current = true;
+  };
+
+  const updateTimeLineVisibleYears = (from: number, to: number) => {
     useMapStore.setState((state) => ({
       ...state,
       untrackedState: {
         ...state.untrackedState,
         timeLineVisibleYears: {
-          from: state.untrackedState.timeLineVisibleYears.from + 100,
-          to: state.untrackedState.timeLineVisibleYears.to + 100,
+          from,
+          to,
         },
       },
     }));
@@ -323,16 +322,38 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     }
   };
 
+  const getFormattedDate = useCallback(() => {
+    const newDay = selectedDayItem;
+    const formattedMonth = String(newDay.month).padStart(2, '0');
+    const formattedDay = String(newDay.day).padStart(2, '0');
+    return `${newDay.year}-${formattedMonth}-${formattedDay}`;
+  }, [selectedDayItem]);
+
+  const updateVisibleYears = useCallback(() => {
+    const timeLineVisibleYears = useMapStore.getState().untrackedState.timeLineVisibleYears;
+    if (yearLeftBoundReached.current) {
+      updateTimeLineVisibleYears(timeLineVisibleYears.from - 100, timeLineVisibleYears.to - 100);
+      yearLeftBoundReached.current = false;
+    } else if (yearRightBoundReached.current) {
+      updateTimeLineVisibleYears(timeLineVisibleYears.from + 100, timeLineVisibleYears.to + 100);
+      yearRightBoundReached.current = false;
+    }
+  }, []);
+
   useEffect(() => {
     submitTimeout.current = setTimeout(() => {
-      const newDay = selectedDayItem;
-      const formattedMonth = String(newDay.month).padStart(2, '0');
-      const formattedDay = String(newDay.day).padStart(2, '0');
-      const formattedDate = `${newDay.year}-${formattedMonth}-${formattedDay}`;
-      onSelectDate(formattedDate);
+      onSelectDate(getFormattedDate());
+      updateVisibleYears();
     }, 1000);
     return () => clearTimeout(submitTimeout.current);
-  }, [selectedDayItem, onSelectDate]);
+  }, [
+    getFormattedDate,
+    onSelectDate,
+    selectedDayItem,
+    selectedMonthItem,
+    selectedYearItem,
+    updateVisibleYears,
+  ]);
 
   const maxAddedDay = Math.max(...daySliderItems.map((day) => day.added));
   const maxRemovedDay = Math.max(...daySliderItems.map((day) => day.removed));
