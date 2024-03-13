@@ -2,7 +2,7 @@
 
 ## Problem
 
-For drawing zones (shadings, hydrology, zones), we need to transform a set of points, drawn using a brush, into a polygon. Furthermore, we want to be able to create unions of polygons so that zones can be expanded.
+For drawing areas of shadings, hydrology, zones, etc., we need to transform a set of points, drawn using a brush, into a polygon. Furthermore, we want to be able to create unions of polygons so that areas can be expanded and differences of polygons to reduce areas.
 
 ## Constraints
 
