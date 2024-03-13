@@ -59,13 +59,7 @@ export function createKeyBindingsAccordingToConfig(
   return {};
 }
 
-/**
- * Retrieves the keyboard shortcuts associated with a specific action within a specified scope.
- * @param scope - The scope in which to look for the associated action's shortcut.
- * @param action - The action for which to find the associated keyboard shortcut.
- * @returns list of keyboard shortcuts
- */
-export function getConfiguredKeybindingsForAction(scope: string, action: string): string[] {
+function getConfiguredKeybindingsForAction(scope: string, action: string): string[] {
   return keyBindingsConfig[scope][action];
 }
 

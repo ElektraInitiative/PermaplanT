@@ -55,7 +55,10 @@ export function useKeyHandlers(
         event.shiftKey,
         event.key,
       );
+
+      console.log('pressedShortcut', pressedShortcut);
       const handler = keyHandlerMap[pressedShortcut];
+
       if (handler && enabled) {
         handler();
         if (stopPropagation === true) {
