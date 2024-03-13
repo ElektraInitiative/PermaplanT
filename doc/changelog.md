@@ -46,6 +46,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
 - Fix broken .env reading for scraper _(Paul)_
 - Add a dev env variable for react query when developing in offline env (e.g. plane) _(Paul)_
+- Collect events from planting layer and add it to timeline _(Daniel Steinkogler)_
+- _()_
+- _()_
 - Remove error messages in console if a seed was not found _(Moritz)_
 - _()_
 - Landing page: Added blog entries, updated team members, minor text changes _(Christoph Schreiner)_
