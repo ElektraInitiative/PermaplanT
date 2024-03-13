@@ -1,0 +1,13 @@
+playwright==1.35.0
+pytest>=7.1.2
+pytest-playwright>=0.3.0
+pytest-bdd>=6.0.1
+pytest-rerunfailures
+pytest-html
+pytest-sugar
+pytest-xdist
+mypy
+python-dotenv
+psycopg2-binary # only needed for development
+opencv-python
+numpy
