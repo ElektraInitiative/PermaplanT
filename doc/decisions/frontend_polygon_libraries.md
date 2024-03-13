@@ -17,9 +17,10 @@ For drawing areas of shadings, hydrology, zones, etc., we need to transform a se
 
 - hull.js: [hull.js](https://www.npmjs.com/package/hull.js) provides functions for calculating convex and concave hulls from a given set of points.
   - Concavity can be configured by a parameter.
-  - Very easy to integrate and fast calculation.
+  - Very easy to integrate.
+  - Fast calculation.
 
-Note: Click [here](https://www.researchgate.net/profile/Zahrah-Yahya-Assoc-Prof-Ts-Dr/publication/312373158/figure/fig5/AS:668462426898432@1536385270015/Classification-of-convex-and-concave-hull-Adapted-from-6.png) to see an image that shows the difference between convex and concave hulls.
+> Note: Click [here](https://www.researchgate.net/profile/Zahrah-Yahya-Assoc-Prof-Ts-Dr/publication/312373158/figure/fig5/AS:668462426898432@1536385270015/Classification-of-convex-and-concave-hull-Adapted-from-6.png) to see an image that shows the difference between convex and concave hulls.
 
 ## Considered Alternatives (Clipping Operations)
 
