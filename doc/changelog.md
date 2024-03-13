@@ -80,7 +80,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Added missing error toast messages _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Added keybindings for undo and redo _(Daniel Steinkogler)_
 - E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
 - _()_
 - Added planting notes to planting details _(Daniel Steinkogler)_
