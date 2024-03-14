@@ -23,5 +23,6 @@ pub mod shade;
 pub mod soil_ph;
 pub mod soil_texture;
 //pub mod soil_water_retention;
+pub mod drawing_shape_kind;
 pub mod track;
 pub mod water_requirement;
