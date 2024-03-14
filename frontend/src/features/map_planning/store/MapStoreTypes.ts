@@ -185,6 +185,7 @@ type SelectionRectAttributes = {
 /**
  * Part of store which is unaffected by the History
  */
+// REFACTOR this interface should be organized in some sort of hierarchy.
 export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
@@ -353,6 +354,8 @@ export type TrackedLayerState = {
   /**
    * The state of the objects on the layer.
    */
+  // REFACTOR is this really needed?
+  // All layers that have to manage their own objects do so in their own way.
   objects: ObjectState[];
 };
 
