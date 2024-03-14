@@ -10,7 +10,11 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - Display lines at y=0 and x=0 on the grid. _(Moritz)_
 - Fix a bug that caused the yard stick to jump around while zooming the map _(Moritz)_
+- needs new migrations
+- needs new scraper data (integer for plant spread and height)
+- pin python package versions for e2e tests #1200 _(4ydan)_
 - Remove variety from table seeds _(Jannis Adamek)_
+- Add timeline API that summarizes plantings #967 _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
@@ -35,6 +39,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 22.01.2024 9:00 _(Markus Raab, Daniel)_
 - Added Meeting Agenda&Notes for 29.01.2024 9:00 _(Markus Raab, Jannis)_
 - Added Meeting Agenda&Notes for 05.02.2024 9:00 _(Markus Raab, Christoph)_
+- Added Meeting Agenda&Notes for 12.02.2024 9:00 _(Markus Raab, Christoph)_
+- Added Meeting Agenda&Notes for 19.02.2024 9:00 _(Markus Raab, Daniel)_
 - _()_
 - _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
@@ -42,6 +48,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
 - Fix broken .env reading for scraper _(Paul)_
 - Add a dev env variable for react query when developing in offline env (e.g. plane) _(Paul)_
+- Collect events from planting layer and add it to timeline _(Daniel Steinkogler)_
+- _()_
+- _()_
 - Remove error messages in console if a seed was not found _(Moritz)_
 - _()_
 - Landing page: Added blog entries, updated team members, minor text changes _(Christoph Schreiner)_
@@ -57,7 +66,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Add key combinations for map geometry _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Add tooltips to show keybindings _(Daniel Steinkogler)_
 - _()_
 - Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
 - _()_
@@ -71,12 +80,12 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
 - _()_
+- Added missing error toast messages _(Daniel Steinkogler)_
 - _()_
-- _()_
-- _()_
+- Added keybindings for undo and redo _(Daniel Steinkogler)_
 - E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
 - _()_
-- _()_
+- Added planting notes to planting details _(Daniel Steinkogler)_
 - _()_
 - _()_
 - Up the rust version to 1.74 _(4ydan)_

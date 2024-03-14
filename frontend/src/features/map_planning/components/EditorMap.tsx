@@ -7,10 +7,16 @@ import { toast } from 'react-toastify';
 import { GainedBlossomsDto, LayerDto, LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
+import {
+  KEYBINDINGS_SCOPE_GLOBAL,
+  createKeyBindingsAccordingToConfig,
+  useGetFormattedKeybindingDescriptionForAction,
+} from '@/config/keybindings';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
 import GridIcon from '@/svg/icons/grid-dots.svg?react';
@@ -225,6 +231,18 @@ export const EditorMap = ({ layers }: MapProps) => {
     return content[layerType];
   };
 
+  const keyHandlerActions: Record<string, () => void> = {
+    undo: undo,
+    redo: redo,
+  };
+
+  const keybindings = createKeyBindingsAccordingToConfig(
+    KEYBINDINGS_SCOPE_GLOBAL,
+    keyHandlerActions,
+  );
+
+  useKeyHandlers(keybindings, document, true, true);
+
   return (
     <>
       <div className="flex h-full justify-between">
@@ -238,7 +256,11 @@ export const EditorMap = ({ layers }: MapProps) => {
                   className={`${!canUndo ? 'opacity-50' : ''}`}
                   disabled={isReadOnlyMode || !canUndo}
                   onClick={() => undo()}
-                  title={t('toolboxTooltips:undo')}
+                  title={useGetFormattedKeybindingDescriptionForAction(
+                    KEYBINDINGS_SCOPE_GLOBAL,
+                    'undo',
+                    t('toolboxTooltips:undo'),
+                  )}
                   data-tourid="undo"
                   data-testid={TEST_IDS.UNDO_BUTTON}
                 >
@@ -249,7 +271,11 @@ export const EditorMap = ({ layers }: MapProps) => {
                   className={`${!canRedo ? 'opacity-50' : ''}`}
                   disabled={isReadOnlyMode || !canRedo}
                   onClick={() => redo()}
-                  title={t('toolboxTooltips:redo')}
+                  title={useGetFormattedKeybindingDescriptionForAction(
+                    KEYBINDINGS_SCOPE_GLOBAL,
+                    'redo',
+                    t('toolboxTooltips:redo'),
+                  )}
                   data-testid={TEST_IDS.REDO_BUTTON}
                 >
                   <RedoIcon></RedoIcon>

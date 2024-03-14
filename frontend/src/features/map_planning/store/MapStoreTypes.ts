@@ -276,6 +276,15 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     }),
     {} as UntrackedLayers,
   ),
+  timeLineEvents: {
+    daily: [],
+    monthly: [],
+    yearly: [],
+  },
+  timeLineVisibleYears: {
+    from: new Date().getFullYear() - 100,
+    to: new Date().getFullYear() + 100,
+  },
 };
 
 /**
@@ -340,6 +349,36 @@ export type TrackedPlantLayerState = {
   loadedObjects: PlantingDto[];
 };
 
+export type TimelineDailyEvent = {
+  key: number;
+  year: number;
+  month: number;
+  day: number;
+  added: number;
+  removed: number;
+};
+
+export type TimelineMonthlyEvent = {
+  key: number;
+  year: number;
+  month: number;
+  added: number;
+  removed: number;
+};
+
+export type TimelineYearlyEvent = {
+  key: number;
+  year: number;
+  added: number;
+  removed: number;
+};
+
+export type TimeLineEvents = {
+  daily: TimelineDailyEvent[];
+  monthly: TimelineMonthlyEvent[];
+  yearly: TimelineYearlyEvent[];
+};
+
 export type TrackedBaseLayerState = {
   id: number;
   layerId: number;
@@ -401,18 +440,23 @@ export type UntrackedMapState = {
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   selectedLayer: LayerDto | FrontendOnlyLayerType;
   /** used for the bounds calculation */
-  timelineDate: string;
-  /** used for fetching */
-  fetchDate: string;
   timelineBounds: {
     from: string;
     to: string;
   };
+  timelineDate: string;
+  /** used for fetching */
+  fetchDate: string;
   /** Storing the current content prevents constant rerenders of the tooltip component.  */
   tooltipContent: string;
   tooltipPosition: { x: number; y: number };
   bottomStatusPanelContent: React.ReactNode | null;
   layers: UntrackedLayers;
+  timeLineEvents: TimeLineEvents;
+  timeLineVisibleYears: {
+    from: number;
+    to: number;
+  };
 };
 
 /**
