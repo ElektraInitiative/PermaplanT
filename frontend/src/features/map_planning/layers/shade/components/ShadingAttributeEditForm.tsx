@@ -109,7 +109,7 @@ export function MultipleShadingAttributeEditFrom({
   return (
     <ShadingAttributeEditForm
       showPolygonTools={false}
-      shade={getCommonShade() ?? Shade.LightShade}
+      shade={getCommonShade()}
       addDate={getCommonAddDate() ?? ''}
       removeDate={getCommonRemoveDate() ?? ''}
       onAddDateChange={onAddDateChange}
