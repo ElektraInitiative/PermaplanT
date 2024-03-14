@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -8,14 +8,7 @@ import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import SelectMenu from '@/components/Form/SelectMenu';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import {
-  DeleteShadingAction,
-  UpdateShadingAction,
-  UpdateShadingAddDateAction,
-  UpdateShadingRemoveDateAction,
-} from '@/features/map_planning/layers/shade/actions';
 import { ShadingGeometryToolForm } from '@/features/map_planning/layers/shade/components/ShadingGeometryToolForm';
-import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import CheckIcon from '@/svg/icons/check.svg?react';
@@ -32,74 +25,45 @@ const ShadingAttributeEditFormSchema = z
     path: ['dateRelation'],
   });
 
-export type ShadingDateAttribute = Pick<ShadingDto, 'addDate' | 'removeDate'> & {
+export type ShadingCoreDataAttribute = Pick<ShadingDto, 'addDate' | 'removeDate'> & {
   shade: Shade | undefined;
 };
 
-export interface SingleShadingAttributeEditFormProps {
-  shading: ShadingDto;
-}
-
-export interface MultipleShadingAttributeEditFormProps {
-  shadings: ShadingDto[];
-}
-
-interface ShadingAttributeEditFormProps {
-  showPolygonTools: boolean;
-  addDate: string | undefined;
-  removeDate: string | undefined;
-  shade: Shade | undefined;
-  onAddDateChange: ({ addDate }: ShadingDateAttribute) => void;
-  onRemoveDateChange: ({ removeDate }: ShadingDateAttribute) => void;
-  onShadeChange: ({ shade }: ShadingDateAttribute) => void;
+interface EditShadingAttributesProps {
+  onAddDateChange: ({ addDate }: ShadingCoreDataAttribute) => void;
+  onRemoveDateChange: ({ removeDate }: ShadingCoreDataAttribute) => void;
+  onShadeChange: ({ shade }: ShadingCoreDataAttribute) => void;
   onDeleteShading: () => void;
 }
 
-export function SingleShadingAttributeEditFrom({ shading }: SingleShadingAttributeEditFormProps) {
-  const executeAction = useMapStore((store) => store.executeAction);
-  const selectShadings = useMapStore((store) => store.shadeLayerSelectShadings);
+export type SingleShadingAttributeEditFormProps = EditShadingAttributesProps & {
+  shading: ShadingDto;
+};
 
-  const onAddDateChange = ({ addDate }: ShadingDateAttribute) => {
-    executeAction(
-      new UpdateShadingAddDateAction({
-        addDate: addDate,
-        id: shading.id,
-      }),
-    );
-  };
+export type MultipleShadingAttributeEditFormProps = EditShadingAttributesProps & {
+  shadings: ShadingDto[];
+};
 
-  const onRemoveDateChange = ({ removeDate }: ShadingDateAttribute) => {
-    executeAction(
-      new UpdateShadingRemoveDateAction({
-        removeDate: removeDate,
-        id: shading.id,
-      }),
-    );
-  };
+export type ShadingAttributeEditFormProps = EditShadingAttributesProps & {
+  showPolygonTools: boolean;
+  addDate: string;
+  removeDate: string;
+  shade: Shade;
+};
 
-  const onShadeChange = ({ shade }: ShadingDateAttribute) => {
-    if (!shade) return;
-
-    executeAction(
-      new UpdateShadingAction({
-        shade: shade,
-        id: shading.id,
-        geometry: shading.geometry,
-      }),
-    );
-  };
-
-  const onDeleteShading = () => {
-    selectShadings(null);
-    executeAction(new DeleteShadingAction(shading));
-  };
-
+export function SingleShadingAttributeEditFrom({
+  shading,
+  onAddDateChange,
+  onRemoveDateChange,
+  onShadeChange,
+  onDeleteShading,
+}: SingleShadingAttributeEditFormProps) {
   return (
     <ShadingAttributeEditForm
       shade={shading.shade}
       showPolygonTools={true}
-      addDate={shading.addDate}
-      removeDate={shading.removeDate}
+      addDate={shading.addDate ?? ''}
+      removeDate={shading.removeDate ?? ''}
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onShadeChange={onShadeChange}
@@ -110,57 +74,11 @@ export function SingleShadingAttributeEditFrom({ shading }: SingleShadingAttribu
 
 export function MultipleShadingAttributeEditFrom({
   shadings,
+  onAddDateChange,
+  onRemoveDateChange,
+  onShadeChange,
+  onDeleteShading,
 }: MultipleShadingAttributeEditFormProps) {
-  const executeAction = useMapStore((store) => store.executeAction);
-  const selectShadings = useMapStore((store) => store.shadeLayerSelectShadings);
-
-  const onAddDateChange = ({ addDate }: ShadingDateAttribute) => {
-    if (!addDate) return;
-
-    shadings.forEach((shading) => {
-      executeAction(
-        new UpdateShadingAddDateAction({
-          addDate: addDate,
-          id: shading.id,
-        }),
-      );
-    });
-  };
-
-  const onRemoveDateChange = ({ removeDate }: ShadingDateAttribute) => {
-    if (!removeDate) return;
-
-    shadings.forEach((shading) => {
-      executeAction(
-        new UpdateShadingRemoveDateAction({
-          removeDate: removeDate,
-          id: shading.id,
-        }),
-      );
-    });
-  };
-
-  const onShadeChange = ({ shade }: ShadingDateAttribute) => {
-    if (!shade) return;
-
-    shadings.forEach((shading) => {
-      executeAction(
-        new UpdateShadingAction({
-          shade: shade,
-          id: shading.id,
-          geometry: shading.geometry,
-        }),
-      );
-    });
-  };
-
-  const onDeleteShading = () => {
-    selectShadings(null);
-    shadings.forEach((shading) => {
-      executeAction(new DeleteShadingAction(shading));
-    });
-  };
-
   const getCommonShade = () => {
     const commonShade = shadings[0].shade;
     for (const shading of shadings) {
@@ -191,9 +109,9 @@ export function MultipleShadingAttributeEditFrom({
   return (
     <ShadingAttributeEditForm
       showPolygonTools={false}
-      shade={getCommonShade()}
-      addDate={getCommonAddDate()}
-      removeDate={getCommonRemoveDate()}
+      shade={getCommonShade() ?? Shade.LightShade}
+      addDate={getCommonAddDate() ?? ''}
+      removeDate={getCommonRemoveDate() ?? ''}
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onShadeChange={onShadeChange}
@@ -215,8 +133,9 @@ function ShadingAttributeEditForm({
   const { t } = useTranslation('shadeLayer');
   const isReadOnlyMode = useIsReadOnlyMode();
 
-  const formFunctions = useForm<ShadingDateAttribute>({
+  const formFunctions = useForm<ShadingCoreDataAttribute>({
     defaultValues: {
+      shade,
       addDate,
       removeDate,
     },
@@ -230,31 +149,19 @@ function ShadingAttributeEditForm({
     { value: Shade.PermanentDeepShade, label: t('shading_amount.permanent_deep_shade') },
   ];
 
-  useEffect(() => {
-    formFunctions.setValue('addDate', addDate, {
-      shouldDirty: false,
-      shouldTouch: false,
-    });
-    formFunctions.setValue('removeDate', removeDate, {
-      shouldDirty: false,
-      shouldTouch: false,
-    });
-    formFunctions.setValue('shade', shade);
-  }, [addDate, formFunctions, removeDate, shade]);
-
-  const shadeSubmitState = useDebouncedSubmit<ShadingDateAttribute>(
+  const shadeSubmitState = useDebouncedSubmit<ShadingCoreDataAttribute>(
     formFunctions.watch('shade'),
     formFunctions.handleSubmit,
     onShadeChange,
   );
 
-  const addDateSubmitState = useDebouncedSubmit<ShadingDateAttribute>(
+  const addDateSubmitState = useDebouncedSubmit<ShadingCoreDataAttribute>(
     formFunctions.watch('addDate'),
     formFunctions.handleSubmit,
     onAddDateChange,
   );
 
-  const removeDateSubmitState = useDebouncedSubmit<ShadingDateAttribute>(
+  const removeDateSubmitState = useDebouncedSubmit<ShadingCoreDataAttribute>(
     formFunctions.watch('removeDate'),
     formFunctions.handleSubmit,
     onRemoveDateChange,
