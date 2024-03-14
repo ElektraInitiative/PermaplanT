@@ -48,7 +48,7 @@ export type ShadingAttributeEditFormProps = EditShadingAttributesProps & {
   showPolygonTools: boolean;
   addDate: string;
   removeDate: string;
-  shade: Shade;
+  shade: Shade | undefined;
 };
 
 export function SingleShadingAttributeEditFrom({
