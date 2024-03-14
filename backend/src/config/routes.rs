@@ -75,6 +75,13 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                         ),
                                 ),
                         )
+                        .service(
+                            web::scope("/drawings")
+                                .service(drawings::find)
+                                .service(drawings::create)
+                                .service(drawings::update)
+                                .service(drawings::delete),
+                        )
                         .service(timeline::get_timeline),
                 ),
         )
