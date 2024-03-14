@@ -9,6 +9,7 @@ import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { EditorMap } from '../components/EditorMap';
 import {
   useBaseLayer,
+  useDrawingLayer,
   useGetLayers,
   useInvalidateMapQueries,
   useMap,
@@ -53,12 +54,19 @@ function useInitializeMap() {
 
   const plantLayer = getDefaultLayer(LayerType.Plants, layers);
   const baseLayer = getDefaultLayer(LayerType.Base, layers);
+  const drawingLayer = getDefaultLayer(LayerType.Drawing, layers);
 
   // The casts are fine because we know that the queries only execute once they are enabled.
   usePlantLayer({
     mapId,
     layerId: plantLayer?.id as number,
     enabled: Boolean(plantLayer),
+  });
+
+  useDrawingLayer({
+    mapId,
+    layerId: drawingLayer?.id as number,
+    enabled: Boolean(drawingLayer),
   });
 
   useBaseLayer({

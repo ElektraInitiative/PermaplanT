@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+import { DrawingDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
@@ -10,7 +11,6 @@ import EditIcon from '@/svg/icons/edit.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import useMapStore from '../../store/MapStore';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
-import { DrawingDto } from './types';
 
 const DrawingAttributeEditFormSchema = z
   // The 'empty' value for the API is undefined, so we need to transform the empty string to undefined

@@ -1,6 +1,5 @@
-import { ActionDtoWrapper, TimelinePage } from '@/api_types/definitions';
+import { DrawingDto, TimelinePage } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
-import { DrawingDto } from '../layers/drawing/types';
 
 export async function getDrawings(
   mapId: number,
@@ -29,13 +28,8 @@ export async function getDrawings(
 export async function createDrawing(mapId: number, actionId: string, data: DrawingDto[]) {
   const http = createAPI();
 
-  const dto: ActionDtoWrapper<DrawingDto[]> = {
-    actionId: actionId,
-    dto: data,
-  };
-
   try {
-    const response = await http.post<DrawingDto[]>(`api/maps/${mapId}/drawings`, dto);
+    const response = await http.post<DrawingDto[]>(`api/maps/${mapId}/drawings`, data);
     return response.data;
   } catch (error) {
     throw error as Error;

@@ -4,7 +4,7 @@ import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Ellipse, Layer, Line, Rect } from 'react-konva';
 import * as uuid from 'uuid';
-import { LayerType } from '@/api_types/definitions';
+import { DrawingDto, DrawingShapeKind, LayerType } from '@/api_types/definitions';
 import {
   KEYBINDINGS_SCOPE_DRAWING_LAYER,
   createKeyBindingsAccordingToConfig,
@@ -17,7 +17,7 @@ import { useIsDrawingLayerActive } from '../../utils/layer-utils';
 import { CreateDrawingAction, MoveDrawingAction, TransformDrawingAction } from './actions';
 import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
 import BezierPolygon from './shapes/BezierPolygon';
-import { DrawingDto, EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
+import { EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
 
 type DrawingLayerProps = LayerConfigWithListenerRegister;
 
@@ -79,7 +79,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   const { ...layerProps } = props;
 
   const rectangles = drawingObjects
-    .filter((object) => object.type === 'rectangle')
+    .filter((object) => object.kind === DrawingShapeKind.Rectangle)
     .map((object) => {
       return {
         ...object,
@@ -88,7 +88,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
   const ellipses = drawingObjects
-    .filter((object) => object.type === 'ellipse')
+    .filter((object) => object.kind === DrawingShapeKind.Ellipse)
     .map((object) => {
       return {
         ...object,
@@ -97,7 +97,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
   const lines = drawingObjects
-    .filter((object) => object.type === 'freeLine')
+    .filter((object) => object.kind === DrawingShapeKind.FreeLine)
     .map((object) => {
       return {
         ...object,
@@ -106,7 +106,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
   const bezierLines = drawingObjects
-    .filter((object) => object.type === 'bezierPolygon')
+    .filter((object) => object.kind === DrawingShapeKind.BezierPolygon)
     .map((object) => {
       return {
         ...object,
@@ -139,11 +139,11 @@ function DrawingLayer(props: DrawingLayerProps) {
         new CreateDrawingAction({
           id: uuid.v4(),
           layerId: getSelectedLayerId() ?? -1,
-          type: 'rectangle',
+          kind: DrawingShapeKind.Rectangle,
           rotation: 0,
           addDate: timelineDate,
-          x: rectangle.x1,
-          y: rectangle.y1,
+          x: Math.round(rectangle.x1),
+          y: Math.round(rectangle.y1),
           scaleX: 1,
           scaleY: 1,
           color: rectangle.color,
@@ -167,11 +167,11 @@ function DrawingLayer(props: DrawingLayerProps) {
           layerId: getSelectedLayerId() ?? -1,
           rotation: 0,
           addDate: timelineDate,
-          type: 'ellipse',
+          kind: DrawingShapeKind.Ellipse,
           scaleX: 1,
           scaleY: 1,
-          x: ellipse.x,
-          y: ellipse.y,
+          x: Math.round(ellipse.x),
+          y: Math.round(ellipse.y),
           color: ellipse.color,
           fillEnabled: ellipse.fillEnabled,
           strokeWidth: ellipse.strokeWidth,
@@ -193,11 +193,11 @@ function DrawingLayer(props: DrawingLayerProps) {
           layerId: getSelectedLayerId() ?? -1,
           rotation: 0,
           addDate: timelineDate,
-          type: 'freeLine',
+          kind: DrawingShapeKind.FreeLine,
           scaleX: 1,
           scaleY: 1,
-          x: line.x,
-          y: line.y,
+          x: Math.round(line.x),
+          y: Math.round(line.y),
           fillEnabled: false,
           color: line.color,
           strokeWidth: line.strokeWidth,
@@ -218,7 +218,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           layerId: getSelectedLayerId() ?? -1,
           rotation: 0,
           addDate: timelineDate,
-          type: 'bezierPolygon',
+          kind: DrawingShapeKind.BezierPolygon,
           scaleX: 1,
           scaleY: 1,
           x: 0,

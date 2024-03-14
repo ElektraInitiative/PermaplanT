@@ -2,10 +2,11 @@
  * @module this module contains actions for the drawing layer.
  */
 import { v4 } from 'uuid';
+import { DrawingDto } from '@/api_types/definitions';
+import { createDrawing } from '../../api/drawingApi';
 import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
-import { createDrawing } from './api/createDrawing';
 import { DeleteDrawingDto, deleteDrawing } from './api/deleteDrawing';
 import { moveDrawing } from './api/moveDrawing';
 import { updateAddDateDrawing } from './api/updateAddDateDrawing';
@@ -14,7 +15,6 @@ import { updatePropertiesDrawing } from './api/updatePropertiesDrawing';
 import { updateRemoveDateDrawing } from './api/updateRemoveDateDrawing';
 import { updateStrokeWidthDrawing } from './api/updateStrokeWidthDrawing';
 import {
-  DrawingDto,
   MoveDrawingActionPayload,
   TransformDrawingActionPayload,
   UpdateDrawingAddDateActionPayload,
@@ -76,9 +76,7 @@ export class CreateDrawingAction
 
   //TODO #1123 - implement funtion to call backend
   async execute(mapId: number): Promise<Awaited<ReturnType<typeof createDrawing>>> {
-    return createDrawing(mapId, {
-      ...this._data,
-    });
+    return createDrawing(mapId, this.actionId, [this._data]);
   }
 }
 

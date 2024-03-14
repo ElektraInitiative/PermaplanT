@@ -1,6 +1,5 @@
 import type { StateCreator } from 'zustand';
-import { BaseLayerImageDto, PlantingDto } from '@/api_types/definitions';
-import { DrawingDto } from '../layers/drawing/types';
+import { BaseLayerImageDto, DrawingDto, PlantingDto } from '@/api_types/definitions';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
 import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
@@ -40,6 +39,7 @@ export const createTrackedMapSlice: StateCreator<
       }));
     },
     initDrawingLayer: (drawings: DrawingDto[]) => {
+      console.log('drawings', drawings);
       set((state) => ({
         ...state,
         trackedState: {

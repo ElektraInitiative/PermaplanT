@@ -94,6 +94,7 @@ type UseLayerArgs = {
  */
 export function useDrawingLayer({ mapId, layerId, enabled }: UseLayerArgs) {
   const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
+  const { t } = useTranslation(['plantSearch']);
 
   const queryInfo = useQuery({
     queryKey: MAP_EDITOR_KEYS.drawingLayer(mapId, layerId, fetchDate),
@@ -103,13 +104,20 @@ export function useDrawingLayer({ mapId, layerId, enabled }: UseLayerArgs) {
     staleTime: Infinity,
     cacheTime: 0,
     enabled,
+    meta: {
+      errorMessage: t('plantSearch:error_initializing_layer'),
+    },
   });
 
-  useEffect(() => {
-    if (!queryInfo?.data) return;
+  const { data: drawingInfo } = queryInfo;
 
-    useMapStore.getState().initDrawingLayer(queryInfo.data.results);
-  }, [mapId, layerId, queryInfo.data]);
+  useEffect(() => {
+    if (!drawingInfo) return;
+
+    console.log('drawingInfo', drawingInfo);
+
+    useMapStore.getState().initDrawingLayer(drawingInfo);
+  }, [mapId, drawingInfo]);
 
   return queryInfo;
 }
