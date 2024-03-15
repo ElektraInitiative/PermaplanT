@@ -84,6 +84,7 @@ describe('MapHistoryStore', () => {
     expect(trackedState.layers.plants.objects).toHaveLength(1);
   });
 
+  // REFACTOR: tests involving plants should go into their own files.
   it('adds plant objects to the plants layer on CreatePlantAction', () => {
     const { executeAction } = useMapStore.getState();
     const createAction1 = new CreatePlantAction(createPlantTestObject(1));
