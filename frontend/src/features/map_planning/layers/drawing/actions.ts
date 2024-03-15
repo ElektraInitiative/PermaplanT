@@ -3,11 +3,10 @@
  */
 import { v4 } from 'uuid';
 import { DrawingDto } from '@/api_types/definitions';
-import { createDrawing } from '../../api/drawingApi';
+import { createDrawing, deleteDrawing } from '../../api/drawingApi';
 import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
-import { DeleteDrawingDto, deleteDrawing } from './api/deleteDrawing';
 import { moveDrawing } from './api/moveDrawing';
 import { updateAddDateDrawing } from './api/updateAddDateDrawing';
 import { updateColorDrawing } from './api/updateColorDrawing';
@@ -42,12 +41,7 @@ export class CreateDrawingAction
   }
 
   reverse() {
-    return new DeleteDrawingAction(
-      {
-        id: this._id,
-      },
-      this.actionId,
-    );
+    return new DeleteDrawingAction(this._data, this.actionId);
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -74,7 +68,6 @@ export class CreateDrawingAction
     };
   }
 
-  //TODO #1123 - implement funtion to call backend
   async execute(mapId: number): Promise<Awaited<ReturnType<typeof createDrawing>>> {
     return createDrawing(mapId, this.actionId, [this._data]);
   }
@@ -84,7 +77,7 @@ export class DeleteDrawingAction
   implements Action<boolean, Awaited<ReturnType<typeof createDrawing>>>
 {
   constructor(
-    private readonly _data: Omit<DeleteDrawingDto, 'userId' | 'actionId'>,
+    private readonly _data: Omit<DrawingDto, 'userId' | 'actionId'>,
     public actionId = v4(),
   ) {}
 
@@ -92,8 +85,8 @@ export class DeleteDrawingAction
     return [this._data.id];
   }
 
-  async execute(): Promise<boolean> {
-    return deleteDrawing();
+  async execute(mapId: number): Promise<boolean> {
+    return deleteDrawing(mapId, this.actionId, [this._data]);
   }
 
   reverse(state: TrackedMapState) {

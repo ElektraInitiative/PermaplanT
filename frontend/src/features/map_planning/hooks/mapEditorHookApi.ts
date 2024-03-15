@@ -113,9 +113,6 @@ export function useDrawingLayer({ mapId, layerId, enabled }: UseLayerArgs) {
 
   useEffect(() => {
     if (!drawingInfo) return;
-
-    console.log('drawingInfo', drawingInfo);
-
     useMapStore.getState().initDrawingLayer(drawingInfo);
   }, [mapId, drawingInfo]);
 
