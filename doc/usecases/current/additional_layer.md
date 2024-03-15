@@ -5,7 +5,7 @@
 - **Scope:** Additional Layer
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** Users add, edit, move, remove and delete custom drawings, labels and images.
+- **Brief:** Users add, edit, move, remove and delete custom elements.
 - **Assignee:** Daniel
 
 ## Scenarios

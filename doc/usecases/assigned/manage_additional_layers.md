@@ -1,11 +1,11 @@
-# Use Case: Create Layer
+# Use Case: Manage Additional Layers
 
 ## Summary
 
-- **Scope:** Create Layer
+- **Scope:** Additional Layers
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** User creates new additional layer
+- **Brief:** User creates, renames, ranks and removes a new additional layer
 - **Assignee:** Daniel
 
 ## Scenarios
