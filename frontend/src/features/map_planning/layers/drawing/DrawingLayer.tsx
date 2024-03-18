@@ -14,7 +14,7 @@ import useMapStore from '../../store/MapStore';
 import { useTransformerStore } from '../../store/transformer/TransformerStore';
 import { LayerConfigWithListenerRegister } from '../../types/layer-config';
 import { useIsDrawingLayerActive } from '../../utils/layer-utils';
-import { CreateDrawingAction, MoveDrawingAction, TransformDrawingAction } from './actions';
+import { CreateDrawingAction, UpdateDrawingAction } from './actions';
 import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
 import BezierPolygon from './shapes/BezierPolygon';
 import { EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
@@ -573,7 +573,10 @@ function DrawingLayer(props: DrawingLayerProps) {
     }
 
     const updates = nodes.map((node) => {
+      const drawing = node.getAttr('object');
+
       return {
+        ...drawing,
         id: node.id(),
         x: Math.round(node.x()),
         y: Math.round(node.y()),
@@ -583,7 +586,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       };
     });
 
-    executeAction(new TransformDrawingAction(updates));
+    executeAction(new UpdateDrawingAction(updates));
   }, [executeAction]);
 
   const handleMoveDrawing: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
@@ -594,14 +597,16 @@ function DrawingLayer(props: DrawingLayerProps) {
     }
 
     const updates = nodes.map((node) => {
+      const drawing = node.getAttr('object');
+
       return {
-        id: node.id(),
+        ...drawing,
         x: Math.round(node.x()),
         y: Math.round(node.y()),
       };
     });
 
-    executeAction(new MoveDrawingAction(updates));
+    executeAction(new UpdateDrawingAction(updates));
   }, [executeAction]);
 
   useEffect(() => {

@@ -88,6 +88,7 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
         remoteAction.payload.payload,
         remoteAction.payload.actionId,
       );
+
     default:
       throw new Error(`Unknown remote action '${remoteAction.type}'`) as never;
   }

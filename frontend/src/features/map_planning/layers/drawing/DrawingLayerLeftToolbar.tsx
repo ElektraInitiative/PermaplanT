@@ -7,10 +7,8 @@ import {
 } from './DrawingAttributeEditForm';
 import {
   UpdateAddDateDrawingAction,
-  UpdateColorDrawingAction,
-  UpdateEnableFillDrawingAction,
+  UpdateDrawingAction,
   UpdateRemoveDateDrawingAction,
-  UpdateStrokeWidthDrawingAction,
 } from './actions';
 import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
 
@@ -33,7 +31,7 @@ export function DrawingLayerLeftToolbar() {
     selectedDrawings.forEach(
       (selectedDrawing) =>
         addDate != selectedDrawing.addDate &&
-        executeAction(new UpdateAddDateDrawingAction({ id: selectedDrawing.id, addDate })),
+        executeAction(new UpdateAddDateDrawingAction([{ ...selectedDrawing, addDate }])),
     );
   };
 
@@ -43,7 +41,7 @@ export function DrawingLayerLeftToolbar() {
     selectedDrawings.forEach(
       (selectedDrawing) =>
         removeDate != selectedDrawing.removeDate &&
-        executeAction(new UpdateRemoveDateDrawingAction({ id: selectedDrawing.id, removeDate })),
+        executeAction(new UpdateRemoveDateDrawingAction([{ ...selectedDrawing, removeDate }])),
     );
   };
 
@@ -53,7 +51,7 @@ export function DrawingLayerLeftToolbar() {
     selectedDrawings.forEach(
       (selectedDrawing) =>
         color != selectedDrawing.color &&
-        executeAction(new UpdateColorDrawingAction({ id: selectedDrawing.id, color })),
+        executeAction(new UpdateDrawingAction([{ ...selectedDrawing, color }])),
     );
   };
 
@@ -63,7 +61,7 @@ export function DrawingLayerLeftToolbar() {
     selectedDrawings.forEach(
       (selectedDrawing) =>
         strokeWidth != selectedDrawing.strokeWidth &&
-        executeAction(new UpdateStrokeWidthDrawingAction({ id: selectedDrawing.id, strokeWidth })),
+        executeAction(new UpdateDrawingAction([{ ...selectedDrawing, strokeWidth }])),
     );
   };
 
@@ -73,7 +71,7 @@ export function DrawingLayerLeftToolbar() {
     selectedDrawings.forEach(
       (selectedDrawing) =>
         fillEnabled != selectedDrawing.fillEnabled &&
-        executeAction(new UpdateEnableFillDrawingAction({ id: selectedDrawing.id, fillEnabled })),
+        executeAction(new UpdateDrawingAction([{ ...selectedDrawing, fillEnabled }])),
     );
   };
 

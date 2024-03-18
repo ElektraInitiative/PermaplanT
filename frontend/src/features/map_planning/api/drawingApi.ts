@@ -1,4 +1,4 @@
-import { DrawingDto } from '@/api_types/definitions';
+import { ActionDtoWrapper, DrawingDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function getDrawings(
@@ -26,8 +26,13 @@ export async function getDrawings(
 export async function createDrawing(mapId: number, actionId: string, data: DrawingDto[]) {
   const http = createAPI();
 
+  const dto: ActionDtoWrapper<DrawingDto[]> = {
+    actionId: actionId,
+    dto: data,
+  };
+
   try {
-    const response = await http.post<DrawingDto[]>(`api/maps/${mapId}/drawings`, data);
+    const response = await http.post<DrawingDto[]>(`api/maps/${mapId}/drawings`, dto);
     return response.data;
   } catch (error) {
     throw error as Error;
@@ -37,11 +42,32 @@ export async function createDrawing(mapId: number, actionId: string, data: Drawi
 export async function deleteDrawing(mapId: number, actionId: string, data: DrawingDto[]) {
   const http = createAPI();
 
+  const dto: ActionDtoWrapper<string[]> = {
+    actionId: actionId,
+    dto: data.map((d) => d.id),
+  };
+
   try {
     const response = await http.delete<boolean>(`api/maps/${mapId}/drawings`, {
-      data: data.map((d) => d.id),
+      data: dto,
     });
     return Boolean(response.data);
+  } catch (error) {
+    throw error as Error;
+  }
+}
+
+export async function updateDrawing(mapId: number, actionId: string, data: DrawingDto[]) {
+  const http = createAPI();
+
+  const dto: ActionDtoWrapper<DrawingDto[]> = {
+    actionId: actionId,
+    dto: data,
+  };
+
+  try {
+    const response = await http.patch<DrawingDto[]>(`api/maps/${mapId}/drawings`, dto);
+    return response.data;
   } catch (error) {
     throw error as Error;
   }
