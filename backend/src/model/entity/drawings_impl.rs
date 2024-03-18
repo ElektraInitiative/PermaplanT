@@ -17,7 +17,7 @@ impl Drawing {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find(map_id: i32, conn: &mut AsyncPgConnection) -> QueryResult<Vec<DrawingDto>> {
-        let mut query = drawings::table
+        let query = drawings::table
             .left_join(layers::table)
             .filter(layers::map_id.eq(map_id))
             .select(drawings::all_columns)
@@ -85,7 +85,7 @@ impl Drawing {
     /// Because the type system can not easily infer the type of futures
     /// this helper function is needed, with explicit type annotations.
     fn do_update(
-        updates: Vec<Drawing>,
+        updates: Vec<Self>,
         conn: &mut AsyncPgConnection,
     ) -> Vec<impl Future<Output = QueryResult<Self>>> {
         let mut futures = Vec::with_capacity(updates.len());

@@ -9,7 +9,11 @@ use uuid::Uuid;
 
 use crate::{
     config::{auth::user_info::UserInfo, data::AppDataInner},
-    model::dto::drawings::DrawingDto,
+    model::dto::{
+        actions::{Action, ActionWrapper},
+        core::ActionDtoWrapper,
+        drawings::DrawingDto,
+    },
     service,
 };
 
@@ -55,12 +59,29 @@ pub async fn find(map_id: Path<i32>, app_data: Data<AppDataInner>) -> Result<Htt
 #[post("")]
 pub async fn create(
     path: Path<i32>,
-    new_drawings: Json<Vec<DrawingDto>>,
+    new_drawings: Json<ActionDtoWrapper<Vec<DrawingDto>>>,
     app_data: Data<AppDataInner>,
+    user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let map_id = path.into_inner();
-    let created_plantings = service::drawings::create(new_drawings.into_inner(), &app_data).await?;
-    Ok(HttpResponse::Created().json(created_plantings))
+
+    let ActionDtoWrapper { action_id, dto } = new_drawings.into_inner();
+
+    let created_drawings = service::drawings::create(dto, &app_data).await?;
+
+    app_data
+        .broadcaster
+        .broadcast(
+            map_id,
+            Action::CreateDrawing(ActionWrapper {
+                action_id,
+                user_id: user_info.id,
+                payload: created_drawings.clone(),
+            }),
+        )
+        .await;
+
+    Ok(HttpResponse::Created().json(created_drawings))
 }
 
 /// Endpoint for updating `Drawings`s.
@@ -83,14 +104,29 @@ pub async fn create(
 #[patch("")]
 pub async fn update(
     path: Path<i32>,
-    update_drawings: Json<Vec<DrawingDto>>,
+    update_drawings: Json<ActionDtoWrapper<Vec<DrawingDto>>>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let map_id = path.into_inner();
-    let updated_plantings =
-        service::drawings::update(update_drawings.into_inner(), &app_data).await?;
-    Ok(HttpResponse::Ok().json(updated_plantings))
+
+    let ActionDtoWrapper { action_id, dto } = update_drawings.into_inner();
+
+    let updated = service::drawings::update(dto, &app_data).await?;
+
+    app_data
+        .broadcaster
+        .broadcast(
+            map_id,
+            Action::UpdateDrawing(ActionWrapper {
+                action_id,
+                user_id: user_info.id,
+                payload: updated.clone(),
+            }),
+        )
+        .await;
+
+    Ok(HttpResponse::Ok().json(updated))
 }
 
 /// Endpoint for deleting `Drawings`s.
@@ -113,10 +149,27 @@ pub async fn update(
 #[delete("")]
 pub async fn delete(
     path: Path<i32>,
-    delete_drawings: Json<Vec<Uuid>>,
+    delete_drawings: Json<ActionDtoWrapper<Vec<Uuid>>>,
     app_data: Data<AppDataInner>,
+    user_info: UserInfo,
 ) -> Result<HttpResponse> {
     let map_id = path.into_inner();
-    service::drawings::delete_by_ids(delete_drawings.into_inner(), &app_data).await?;
+
+    let ActionDtoWrapper { action_id, dto } = delete_drawings.into_inner();
+
+    service::drawings::delete_by_ids(dto.clone(), &app_data).await?;
+
+    app_data
+        .broadcaster
+        .broadcast(
+            map_id,
+            Action::DeleteDrawing(ActionWrapper {
+                action_id,
+                user_id: user_info.id,
+                payload: dto,
+            }),
+        )
+        .await;
+
     Ok(HttpResponse::Ok().finish())
 }

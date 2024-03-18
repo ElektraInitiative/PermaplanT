@@ -15,6 +15,7 @@ use typeshare::typeshare;
 use uuid::Uuid;
 
 use super::{
+    drawings::DrawingDto,
     plantings::{
         DeletePlantingDto, MovePlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
         UpdatePlantingNoteDto, UpdateRemoveDatePlantingDto,
@@ -52,6 +53,13 @@ pub enum Action {
     UpdateMapGeometry(UpdateMapGeometryActionPayload),
     /// An action used to update the `additional_name` of a plant.
     UpdatePlantingAdditionalName(UpdatePlantingAdditionalNamePayload),
+
+    /// An action used to broadcast creation of a new drawing shape.
+    CreateDrawing(ActionWrapper<Vec<DrawingDto>>),
+    /// An action used to broadcast deletion of an existing drawing shape.
+    DeleteDrawing(ActionWrapper<Vec<Uuid>>),
+    /// An action used to broadcast the update of an existing drawing shape.
+    UpdateDrawing(ActionWrapper<Vec<DrawingDto>>),
 }
 
 #[typeshare]
@@ -80,6 +88,9 @@ impl Action {
             Self::UpdatePlantingRemoveDate(payload) => payload.action_id,
             Self::UpdatePlantingAdditionalName(payload) => payload.action_id,
             Self::UpdateMapGeometry(payload) => payload.action_id,
+            Self::CreateDrawing(payload) => payload.action_id,
+            Self::UpdateDrawing(payload) => payload.action_id,
+            Self::DeleteDrawing(payload) => payload.action_id,
         }
     }
 
