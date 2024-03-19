@@ -117,7 +117,6 @@ export class UpdateDrawingAction
 
   reverse(state: TrackedMapState) {
     const drawings = state.layers.drawing.objects.filter((obj) => this._ids.includes(obj.id));
-
     if (!drawings.length) {
       return null;
     }
@@ -129,12 +128,15 @@ export class UpdateDrawingAction
     const updateDrawings = (drawings: Array<DrawingDto>) => {
       return drawings.map((drawing) => {
         if (this._ids.includes(drawing.id)) {
-          const updatedDrawing = this._data.find((d) => d.id === drawing.id);
-
+          const updatedDrawing = JSON.parse(
+            JSON.stringify(this._data.find((d) => d.id === drawing.id)),
+          );
           if (updatedDrawing) {
             return {
-              ...drawing,
               ...updatedDrawing,
+              properties: {
+                ...updatedDrawing.properties,
+              },
             };
           }
         }

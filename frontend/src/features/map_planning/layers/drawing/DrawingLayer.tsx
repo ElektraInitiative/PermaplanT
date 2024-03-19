@@ -609,6 +609,26 @@ function DrawingLayer(props: DrawingLayerProps) {
     executeAction(new UpdateDrawingAction(updates));
   }, [executeAction]);
 
+  const handleBezierPointsChanged = useCallback(
+    (id: string, points: number[][]) => {
+      const bezierLine = bezierLines.find((line) => line.id === id);
+
+      if (!bezierLine) return;
+
+      const updates = [
+        {
+          ...bezierLine,
+          properties: {
+            points: points,
+          },
+        },
+      ];
+
+      executeAction(new UpdateDrawingAction(updates));
+    },
+    [bezierLines, executeAction],
+  );
+
   useEffect(() => {
     if (selectedShape != 'bezierPolygon' && newBezierLine) {
       createBezierLine(newBezierLine);
@@ -668,7 +688,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             id={bezierLine.id}
             object={bezierLine}
             editMode={editDrawingId === bezierLine.id ? editMode : undefined}
-            onPointsChanged={console.log}
+            onPointsChanged={(p) => handleBezierPointsChanged(bezierLine.id, p)}
             initialPoints={bezierLine.properties.points}
             strokeWidth={bezierLine.strokeWidth}
             onLineClick={handleShapeClicked}

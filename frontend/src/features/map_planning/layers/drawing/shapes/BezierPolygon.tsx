@@ -72,10 +72,14 @@ function BezierPolygon({
   const removeModeActive = editMode === 'remove';
 
   useEffect(() => {
-    if (points) {
-      onPointsChanged(points);
+    if (editMode === undefined && onFinishLine) {
+      onFinishLine();
     }
-  }, [points]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [editMode, onFinishLine]);
+
+  useEffect(() => {
+    setPoints(initialPoints);
+  }, [initialPoints]);
 
   const segments = range(Math.max(points.length / 3 - 1, 0)).map((segI) =>
     points.slice(3 * segI, 3 * segI + 4),
@@ -91,17 +95,18 @@ function BezierPolygon({
       const pos = stage.getRelativePointerPosition();
       if (pos == null) return [];
 
-      setPoints((points) => {
-        const newPoint = [pos.x - x, pos.y - y];
+      const newPoint = [pos.x - x, pos.y - y];
+      if (!points.length) {
+        onPointsChanged([newPoint]);
+        return;
+      }
 
-        if (!points.length) return [newPoint];
+      const lastPoint = points[points.length - 1];
+      const newPoints = [...points, ...getMidPoints(lastPoint, newPoint), newPoint];
 
-        const lastPoint = points[points.length - 1];
-
-        return [...points, ...getMidPoints(lastPoint, newPoint), newPoint];
-      });
+      onPointsChanged(newPoints);
     },
-    [x, y],
+    [onPointsChanged, points, x, y],
   );
 
   const handleRightClick = useCallback(
@@ -173,6 +178,10 @@ function BezierPolygon({
     });
   };
 
+  const handlePointMouseUp = () => {
+    onPointsChanged(points);
+  };
+
   const handleLineMouserOver = (e: Konva.KonvaEventObject<MouseEvent>, pointIndex: number) => {
     setActiveSegments([pointIndex]);
 
@@ -226,6 +235,7 @@ function BezierPolygon({
       const spliceIndex = i === points.length - 1 ? i - 2 : Math.max(i - 1, 0);
       newPoints.splice(spliceIndex, 3);
 
+      onPointsChanged(newPoints);
       return newPoints;
     });
   };
@@ -318,7 +328,6 @@ function BezierPolygon({
               />
 
               {/* Control line */}
-
               {drawingModeActive && (
                 <Line
                   x={x}
@@ -351,6 +360,9 @@ function BezierPolygon({
               listening={true}
               perfectDrawEnabled={false}
               draggable
+              onMouseUp={() => {
+                handlePointMouseUp();
+              }}
               onDragMove={({ target }) => {
                 handlePointMove(i, target);
               }}
