@@ -62,7 +62,7 @@ export class CreateDrawingAction
 }
 
 export class DeleteDrawingAction
-  implements Action<boolean, Awaited<ReturnType<typeof deleteDrawing>>>
+  implements Action<boolean, Awaited<ReturnType<typeof createDrawing>>>
 {
   constructor(private readonly _data: string[], public actionId = v4()) {}
 
