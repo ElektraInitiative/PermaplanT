@@ -198,7 +198,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           scaleY: 1,
           x: Math.round(line.x),
           y: Math.round(line.y),
-          fillEnabled: false,
+          fillEnabled: line.fillEnabled,
           color: line.color,
           strokeWidth: line.strokeWidth,
           properties: {
@@ -292,7 +292,7 @@ function DrawingLayer(props: DrawingLayerProps) {
         isDrawing.current = true;
         setNewLine({
           strokeWidth: selectedStrokeWidth,
-          fillEnabled: false,
+          fillEnabled: fillEnabled,
           color: selectedColor,
           x: pos.x,
           y: pos.y,
