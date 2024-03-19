@@ -1,6 +1,11 @@
 import { Action as RemoteAction } from '@/api_types/definitions';
 import { UpdateBaseLayerAction, UpdateMapGeometry } from '../layers/base/actions';
 import {
+  CreateDrawingAction,
+  UpdateDrawingAction,
+  DeleteDrawingAction,
+} from '../layers/drawing/actions';
+import {
   CreatePlantAction,
   DeletePlantAction,
   MovePlantAction,
@@ -88,6 +93,13 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
         remoteAction.payload.payload,
         remoteAction.payload.actionId,
       );
+
+    case 'CreateDrawing':
+      return new CreateDrawingAction(remoteAction.payload.payload, remoteAction.payload.actionId);
+    case 'UpdateDrawing':
+      return new UpdateDrawingAction(remoteAction.payload.payload, remoteAction.payload.actionId);
+    case 'DeleteDrawing':
+      return new DeleteDrawingAction(remoteAction.payload.payload, remoteAction.payload.actionId);
 
     default:
       throw new Error(`Unknown remote action '${remoteAction.type}'`) as never;

@@ -136,24 +136,26 @@ function DrawingLayer(props: DrawingLayerProps) {
   const createRectangle = useCallback(
     (rectangle: Rectangle) => {
       executeAction(
-        new CreateDrawingAction({
-          id: uuid.v4(),
-          layerId: getSelectedLayerId() ?? -1,
-          kind: DrawingShapeKind.Rectangle,
-          rotation: 0,
-          addDate: timelineDate,
-          x: Math.round(rectangle.x1),
-          y: Math.round(rectangle.y1),
-          scaleX: 1,
-          scaleY: 1,
-          color: rectangle.color,
-          fillEnabled: rectangle.fillEnabled,
-          strokeWidth: rectangle.strokeWidth,
-          properties: {
-            width: rectangle.x2 - rectangle.x1,
-            height: rectangle.y2 - rectangle.y1,
+        new CreateDrawingAction([
+          {
+            id: uuid.v4(),
+            layerId: getSelectedLayerId() ?? -1,
+            kind: DrawingShapeKind.Rectangle,
+            rotation: 0,
+            addDate: timelineDate,
+            x: Math.round(rectangle.x1),
+            y: Math.round(rectangle.y1),
+            scaleX: 1,
+            scaleY: 1,
+            color: rectangle.color,
+            fillEnabled: rectangle.fillEnabled,
+            strokeWidth: rectangle.strokeWidth,
+            properties: {
+              width: rectangle.x2 - rectangle.x1,
+              height: rectangle.y2 - rectangle.y1,
+            },
           },
-        }),
+        ]),
       );
     },
     [executeAction, getSelectedLayerId, timelineDate],
@@ -162,24 +164,26 @@ function DrawingLayer(props: DrawingLayerProps) {
   const createEllipse = useCallback(
     (ellipse: Ellipse) => {
       executeAction(
-        new CreateDrawingAction({
-          id: uuid.v4(),
-          layerId: getSelectedLayerId() ?? -1,
-          rotation: 0,
-          addDate: timelineDate,
-          kind: DrawingShapeKind.Ellipse,
-          scaleX: 1,
-          scaleY: 1,
-          x: Math.round(ellipse.x),
-          y: Math.round(ellipse.y),
-          color: ellipse.color,
-          fillEnabled: ellipse.fillEnabled,
-          strokeWidth: ellipse.strokeWidth,
-          properties: {
-            radiusX: ellipse.radiusX,
-            radiusY: ellipse.radiusY,
+        new CreateDrawingAction([
+          {
+            id: uuid.v4(),
+            layerId: getSelectedLayerId() ?? -1,
+            rotation: 0,
+            addDate: timelineDate,
+            kind: DrawingShapeKind.Ellipse,
+            scaleX: 1,
+            scaleY: 1,
+            x: Math.round(ellipse.x),
+            y: Math.round(ellipse.y),
+            color: ellipse.color,
+            fillEnabled: ellipse.fillEnabled,
+            strokeWidth: ellipse.strokeWidth,
+            properties: {
+              radiusX: ellipse.radiusX,
+              radiusY: ellipse.radiusY,
+            },
           },
-        }),
+        ]),
       );
     },
     [executeAction, getSelectedLayerId, timelineDate],
@@ -188,23 +192,25 @@ function DrawingLayer(props: DrawingLayerProps) {
   const createFreeLine = useCallback(
     (line: Line) => {
       executeAction(
-        new CreateDrawingAction({
-          id: uuid.v4(),
-          layerId: getSelectedLayerId() ?? -1,
-          rotation: 0,
-          addDate: timelineDate,
-          kind: DrawingShapeKind.FreeLine,
-          scaleX: 1,
-          scaleY: 1,
-          x: Math.round(line.x),
-          y: Math.round(line.y),
-          fillEnabled: line.fillEnabled,
-          color: line.color,
-          strokeWidth: line.strokeWidth,
-          properties: {
-            points: line.points,
+        new CreateDrawingAction([
+          {
+            id: uuid.v4(),
+            layerId: getSelectedLayerId() ?? -1,
+            rotation: 0,
+            addDate: timelineDate,
+            kind: DrawingShapeKind.FreeLine,
+            scaleX: 1,
+            scaleY: 1,
+            x: Math.round(line.x),
+            y: Math.round(line.y),
+            fillEnabled: line.fillEnabled,
+            color: line.color,
+            strokeWidth: line.strokeWidth,
+            properties: {
+              points: line.points,
+            },
           },
-        }),
+        ]),
       );
     },
     [executeAction, getSelectedLayerId, timelineDate],
@@ -213,23 +219,25 @@ function DrawingLayer(props: DrawingLayerProps) {
   const createBezierLine = useCallback(
     (line: Line) => {
       executeAction(
-        new CreateDrawingAction({
-          id: uuid.v4(),
-          layerId: getSelectedLayerId() ?? -1,
-          rotation: 0,
-          addDate: timelineDate,
-          kind: DrawingShapeKind.BezierPolygon,
-          scaleX: 1,
-          scaleY: 1,
-          x: 0,
-          y: 0,
-          fillEnabled: line.fillEnabled,
-          color: line.color,
-          strokeWidth: line.strokeWidth,
-          properties: {
-            points: line.points,
+        new CreateDrawingAction([
+          {
+            id: uuid.v4(),
+            layerId: getSelectedLayerId() ?? -1,
+            rotation: 0,
+            addDate: timelineDate,
+            kind: DrawingShapeKind.BezierPolygon,
+            scaleX: 1,
+            scaleY: 1,
+            x: 0,
+            y: 0,
+            fillEnabled: line.fillEnabled,
+            color: line.color,
+            strokeWidth: line.strokeWidth,
+            properties: {
+              points: line.points,
+            },
           },
-        }),
+        ]),
       );
     },
     [executeAction, getSelectedLayerId, timelineDate],

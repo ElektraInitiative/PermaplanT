@@ -11,28 +11,32 @@ import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
 export class CreateDrawingAction
   implements Action<Awaited<ReturnType<typeof createDrawing>>, boolean>
 {
-  private readonly _id: string;
+  private readonly _ids: Array<string>;
 
   get entityIds() {
-    return [this._id];
+    return this._ids;
   }
 
   constructor(
-    private readonly _data: Omit<DrawingDto, 'userId' | 'actionId'>,
+    private readonly _data: Omit<DrawingDto, 'userId' | 'actionId'>[],
     public actionId = v4(),
   ) {
-    this._id = _data.id;
+    this._ids = _data.map((d) => d.id);
   }
 
   reverse() {
-    return new DeleteDrawingAction(this._data, this.actionId);
+    return new DeleteDrawingAction(this._ids, this.actionId);
   }
 
   apply(state: TrackedMapState): TrackedMapState {
-    const newDrawing: DrawingDto = {
-      ...this._data,
-      id: this._id,
-    };
+    const newDrawings = this._data.map((newDrawing) => {
+      return {
+        ...newDrawing,
+        properties: {
+          ...newDrawing.properties,
+        },
+      };
+    });
 
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
 
@@ -43,44 +47,41 @@ export class CreateDrawingAction
         drawing: {
           ...state.layers.drawing,
           objects: filterVisibleObjects(
-            [...state.layers.drawing.objects, { ...newDrawing }],
+            [...state.layers.drawing.objects, ...newDrawings],
             timelineDate,
           ),
-          loadedObjects: [...state.layers.drawing.loadedObjects, { ...newDrawing }],
+          loadedObjects: [...state.layers.drawing.loadedObjects, ...newDrawings],
         },
       },
     };
   }
 
   async execute(mapId: number): Promise<Awaited<ReturnType<typeof createDrawing>>> {
-    return createDrawing(mapId, this.actionId, [this._data]);
+    return createDrawing(mapId, this.actionId, this._data);
   }
 }
 
 export class DeleteDrawingAction
-  implements Action<boolean, Awaited<ReturnType<typeof createDrawing>>>
+  implements Action<boolean, Awaited<ReturnType<typeof deleteDrawing>>>
 {
-  constructor(
-    private readonly _data: Omit<DrawingDto, 'userId' | 'actionId'>,
-    public actionId = v4(),
-  ) {}
+  constructor(private readonly _data: string[], public actionId = v4()) {}
 
   get entityIds() {
-    return [this._data.id];
+    return this._data;
   }
 
   async execute(mapId: number): Promise<boolean> {
-    return deleteDrawing(mapId, this.actionId, [this._data]);
+    return deleteDrawing(mapId, this.actionId, this._data);
   }
 
   reverse(state: TrackedMapState) {
-    const drawing = state.layers.drawing.objects.find((obj) => obj.id === this._data.id);
+    const drawings = state.layers.drawing.objects.filter((obj) => this._data.includes(obj.id));
 
-    if (!drawing) {
+    if (!drawings || drawings.length < 1) {
       return null;
     }
 
-    return new CreateDrawingAction(drawing, this.actionId);
+    return new CreateDrawingAction(drawings, this.actionId);
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -90,8 +91,10 @@ export class DeleteDrawingAction
         ...state.layers,
         drawing: {
           ...state.layers.drawing,
-          objects: state.layers.drawing.objects.filter((p) => p.id !== this._data.id),
-          loadedObjects: state.layers.drawing.loadedObjects.filter((p) => p.id !== this._data.id),
+          objects: state.layers.drawing.objects.filter((p) => !this._data.includes(p.id)),
+          loadedObjects: state.layers.drawing.loadedObjects.filter(
+            (p) => !this._data.includes(p.id),
+          ),
         },
       },
     };

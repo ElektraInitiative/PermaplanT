@@ -8,6 +8,7 @@ export async function getDrawings(
     relative_to_date: string;
   },
 ) {
+  p;
   const http = createAPI();
 
   const params = new URLSearchParams({
@@ -39,12 +40,12 @@ export async function createDrawing(mapId: number, actionId: string, data: Drawi
   }
 }
 
-export async function deleteDrawing(mapId: number, actionId: string, data: DrawingDto[]) {
+export async function deleteDrawing(mapId: number, actionId: string, ids: string[]) {
   const http = createAPI();
 
   const dto: ActionDtoWrapper<string[]> = {
     actionId: actionId,
-    dto: data.map((d) => d.id),
+    dto: ids,
   };
 
   try {

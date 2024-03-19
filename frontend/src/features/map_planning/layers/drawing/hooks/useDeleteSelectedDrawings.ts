@@ -14,9 +14,7 @@ export function useDeleteSelectedDrawings() {
   const deleteSelectedDrawings = () => {
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach((selectedDrawings) =>
-      executeAction(new DeleteDrawingAction({ id: selectedDrawings.id })),
-    );
+    executeAction(new DeleteDrawingAction(selectedDrawings.map((d) => d.id)));
 
     selectDrawings(null);
     transformerActions.clearSelection();
