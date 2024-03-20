@@ -287,11 +287,11 @@ export function DrawingAttributeEditForm({
 
       {showShapeEditButton && drawingId && (
         <div>
-          <hr className="my-2 border-neutral-700" />
+          <hr className="my-6 border-neutral-700" />
           <label className="mb-2 block text-sm font-medium">{t('drawings:operations')}</label>
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={editMode != undefined}
+            renderAsActive={editMode === 'draw'}
             onClick={() => {
               drawingLayerSetEditMode(drawingId, 'draw');
               setStatusPanelContent(
@@ -305,6 +305,7 @@ export function DrawingAttributeEditForm({
 
           <IconButton
             isToolboxIcon={true}
+            renderAsActive={editMode === 'remove'}
             onClick={() => {
               drawingLayerSetEditMode(drawingId, 'remove');
               setStatusPanelContent(

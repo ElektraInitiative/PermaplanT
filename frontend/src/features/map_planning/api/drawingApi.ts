@@ -8,7 +8,6 @@ export async function getDrawings(
     relative_to_date: string;
   },
 ) {
-  p;
   const http = createAPI();
 
   const params = new URLSearchParams({

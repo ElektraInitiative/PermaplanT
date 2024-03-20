@@ -2,7 +2,7 @@ import Konva from 'konva';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { range } from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import React from 'react';
 import { Circle, Line } from 'react-konva';
 import { DrawingDto } from '@/api_types/definitions';
@@ -71,11 +71,7 @@ function BezierPolygon({
   const drawingModeActive = editMode === 'draw';
   const removeModeActive = editMode === 'remove';
 
-  useEffect(() => {
-    if (editMode === undefined && onFinishLine) {
-      onFinishLine();
-    }
-  }, [editMode, onFinishLine]);
+  const lineRef = useRef<Konva.Line | null>(null);
 
   useEffect(() => {
     setPoints(initialPoints);
@@ -89,6 +85,8 @@ function BezierPolygon({
 
   const handleAddPoint = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
+      if (e.target.attrs.active) return;
+
       const stage = e.target.getStage();
       if (stage == null) return [];
 
@@ -123,6 +121,7 @@ function BezierPolygon({
   const handleClick = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
       if (!drawingModeActive) return;
+
       if (e.evt.button == 2) {
         handleRightClick(e);
       } else if (e.evt.button === 0) {
@@ -197,6 +196,8 @@ function BezierPolygon({
   };
 
   const handleLineClick = (e: Konva.KonvaEventObject<MouseEvent>, pointIndex: number) => {
+    if (editMode === 'remove') return;
+
     setPoints((points) => {
       const newPoints = [...points];
 
@@ -260,12 +261,12 @@ function BezierPolygon({
       return;
     }
 
-    useMapStore.getState().stageRef.current?.on('dblclick.finishDrawing', handleDoubleClick);
+    useMapStore.getState().stageRef.current?.on('dblclick', handleDoubleClick);
     useMapStore.getState().stageRef.current?.on('click.addPoint', handleClick);
     useMapStore.getState().stageRef.current?.on('contextmenu', handleRightClick);
 
     return () => {
-      useMapStore.getState().stageRef.current?.off('dblclick.finishDrawing');
+      useMapStore.getState().stageRef.current?.off('dblclick');
       useMapStore.getState().stageRef.current?.off('click.addPoint');
       useMapStore.getState().stageRef.current?.off('contextmenu');
     };
@@ -309,6 +310,7 @@ function BezierPolygon({
             <React.Fragment key={i}>
               {/* Curve */}
               <Line
+                ref={lineRef}
                 points={flatSegmentPoints}
                 stroke={color}
                 strokeWidth={isActive ? strokeWidth + 5 : strokeWidth}
@@ -319,6 +321,7 @@ function BezierPolygon({
                 scaleY={scaleY}
                 x={x}
                 y={y}
+                active={editModeActive}
                 onMouseMove={(e) => handleLineMouserOver(e, i)}
                 onMouseLeave={handleLineMouseLeave}
                 onClick={(e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -359,6 +362,7 @@ function BezierPolygon({
               isControlElement={true}
               listening={true}
               perfectDrawEnabled={false}
+              active={true}
               draggable
               onMouseUp={() => {
                 handlePointMouseUp();

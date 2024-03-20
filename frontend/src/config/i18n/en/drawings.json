@@ -25,6 +25,6 @@
   "fillEnabled": "Fill Enabled",
 
   "error_invalid_add_remove_date": "Remove date must be after add date.",
-  "operations": "Edit Operations",
+  "operations": "Edit Points",
   "edit_mode": "Activate Edit Mode"
 }
