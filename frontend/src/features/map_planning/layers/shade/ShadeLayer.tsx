@@ -230,7 +230,7 @@ export function ShadeLayer(props: ShadeLayerProps) {
   return (
     <Layer
       {...props}
-      opacity={(props.opacity ?? 0) * 0.6}
+      opacity={props.opacity ?? 0}
       listening={selectedShadeForNewShading === null && props.listening}
     >
       {shadings}
