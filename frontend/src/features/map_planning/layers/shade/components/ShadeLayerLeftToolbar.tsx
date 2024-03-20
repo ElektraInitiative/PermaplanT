@@ -11,6 +11,7 @@ import {
 } from '@/features/map_planning/layers/shade/components/ShadingAttributeEditForm';
 import { ShadingCoreDataAttribute } from '@/features/map_planning/layers/shade/components/ShadingAttributeEditForm';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 
 export function ShadeLayerLeftToolbar() {
   const selectedShadings = useMapStore(
@@ -19,13 +20,12 @@ export function ShadeLayerLeftToolbar() {
   const executeAction = useMapStore((state) => state.executeAction);
   const step = useMapStore((state) => state.step);
 
-  // TODO: implement read only mode
-  // const isReadOnlyMode = useIsReadOnlyMode();
+  const isReadOnlyMode = useIsReadOnlyMode();
 
   const nothingSelected = !selectedShadings?.length;
 
   const onShadeChange = ({ shade }: ShadingCoreDataAttribute) => {
-    if (!selectedShadings?.length) return;
+    if (!selectedShadings?.length || isReadOnlyMode) return;
 
     selectedShadings.forEach((selectedShading) => {
       // This prevents an infinite loop because the corresponding select menu triggers an
@@ -43,7 +43,7 @@ export function ShadeLayerLeftToolbar() {
   };
 
   const onAddDateChange = ({ addDate }: ShadingCoreDataAttribute) => {
-    if (!selectedShadings?.length) return;
+    if (!selectedShadings?.length || isReadOnlyMode) return;
 
     selectedShadings.forEach((selectedShading) =>
       executeAction(new UpdateShadingAddDateAction({ id: selectedShading.id, addDate })),
@@ -51,7 +51,7 @@ export function ShadeLayerLeftToolbar() {
   };
 
   const onRemoveDateChange = ({ removeDate }: ShadingCoreDataAttribute) => {
-    if (!selectedShadings?.length) return;
+    if (!selectedShadings?.length || isReadOnlyMode) return;
 
     selectedShadings.forEach((selectedShading) =>
       executeAction(new UpdateShadingRemoveDateAction({ id: selectedShading.id, removeDate })),
@@ -59,7 +59,7 @@ export function ShadeLayerLeftToolbar() {
   };
 
   const onDeleteClick = () => {
-    if (!selectedShadings?.length) return;
+    if (!selectedShadings?.length || isReadOnlyMode) return;
 
     selectedShadings.forEach((selectedShading) =>
       executeAction(new DeleteShadingAction({ id: selectedShading.id })),
