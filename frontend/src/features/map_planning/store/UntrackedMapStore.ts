@@ -521,6 +521,10 @@ export const createUntrackedMapSlice: StateCreator<
   },
 
   drawingLayerSetEditMode(drawingId, editMode) {
+    if (drawingId != undefined) {
+      get().disableShapeSelection();
+    }
+
     set((state) => ({
       ...state,
       untrackedState: {
@@ -540,7 +544,6 @@ export const createUntrackedMapSlice: StateCreator<
   drawingLayerClearSelectedShape() {
     get().enableShapeSelection();
     get().clearStatusPanelContent();
-    get().enableShapeSelection();
     useTransformerStore.getState().actions.clearSelection();
     set((state) => ({
       ...state,
