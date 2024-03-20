@@ -20,6 +20,7 @@ describe('Shade layer actions', () => {
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.shade.objects).toHaveLength(2);
+    expect(newState.layers.shade.loadedObjects).toHaveLength(2);
     expect(newState.layers.shade.objects[0]).toMatchObject({
       id: '1',
       geometry: {
@@ -54,6 +55,7 @@ describe('Shade layer actions', () => {
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.shade.objects).toHaveLength(0);
+    expect(newState.layers.shade.loadedObjects).toHaveLength(0);
   });
 
   it('changes shading objects on the shade layer on UpdateShadingAction', () => {
@@ -68,6 +70,7 @@ describe('Shade layer actions', () => {
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.shade.objects.length).toBe(1);
+    expect(newState.layers.shade.loadedObjects.length).toBe(1);
     expect(newState.layers.shade.objects[0]).toMatchObject({
       id: '1',
       geometry: {
@@ -93,6 +96,7 @@ describe('Shade layer actions', () => {
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.shade.objects.length).toBe(1);
+    expect(newState.layers.shade.loadedObjects.length).toBe(1);
     expect(newState.layers.shade.objects[0]).toMatchObject({
       id: '1',
       geometry: {
@@ -118,6 +122,7 @@ describe('Shade layer actions', () => {
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.shade.objects.length).toBe(1);
+    expect(newState.layers.shade.loadedObjects.length).toBe(1);
     expect(newState.layers.shade.objects[0]).toMatchObject({
       id: '1',
       geometry: {
@@ -140,6 +145,7 @@ describe('Shade layer actions', () => {
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.shade.objects.length).toBe(0);
+    expect(newState.layers.shade.loadedObjects.length).toBe(1);
     expect(newState.layers.shade.loadedObjects[0]).toMatchObject({
       id: '1',
       geometry: {
@@ -162,6 +168,7 @@ describe('Shade layer actions', () => {
 
     const { trackedState: newState } = useMapStore.getState();
     expect(newState.layers.shade.objects.length).toBe(0);
+    expect(newState.layers.shade.loadedObjects.length).toBe(1);
     expect(newState.layers.shade.loadedObjects[0]).toMatchObject({
       id: '1',
       geometry: {
