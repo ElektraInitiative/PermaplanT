@@ -36,7 +36,7 @@ export default function SimpleFormInput<T extends FieldValues>({
   ...props
 }: SimpleFormInputProps<T>) {
   return (
-    <div className={`dark:text-white`}>
+    <div className="dark:text-white">
       {labelContent && (
         <label htmlFor={id} className="mb-2 block text-sm font-medium">
           {labelContent}

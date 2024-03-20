@@ -782,7 +782,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             canBeDistorted={true}
             listening={true}
             object={rectangle}
-            hitStrokeWidth={rectangle.strokeWidth + 100}
+            hitStrokeWidth={rectangle.strokeWidth + 40}
             cornerRadius={5}
             key={`rect-${i}`}
             x={rectangle.x}
@@ -825,7 +825,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             canBeDistorted={true}
             key={`ellipse-${i}`}
             x={ellipse.x}
-            hitStrokeWidth={ellipse.strokeWidth + 100}
+            hitStrokeWidth={ellipse.strokeWidth + 40}
             y={ellipse.y}
             rotation={ellipse.rotation}
             scaleX={ellipse.scaleX}

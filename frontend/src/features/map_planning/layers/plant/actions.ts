@@ -47,7 +47,6 @@ export class CreatePlantAction
 
   apply(state: TrackedMapState): TrackedMapState {
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
-    console.log('timelineDate', timelineDate);
 
     return {
       ...state,

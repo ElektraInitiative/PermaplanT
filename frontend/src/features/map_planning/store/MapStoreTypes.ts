@@ -105,7 +105,7 @@ export interface TrackedMapSlice {
    */
   undo: () => void;
   /**
-   * Redo the last user initiaPplated action.
+   * Redo the last user initiated action.
    */
   redo: () => void;
 
