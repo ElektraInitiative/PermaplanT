@@ -16,6 +16,7 @@ import {
   usePlantLayer,
 } from '../hooks/mapEditorHookApi';
 import { useTourStatus } from '../hooks/tourHookApi';
+import useGetTimeLineData from '../hooks/useGetTimelineData';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
@@ -28,6 +29,33 @@ import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
 function getDefaultLayer(layerType: LayerType, layers?: LayerDto[]) {
   return layers?.find((l) => l.type_ === layerType && !l.is_alternative);
 }
+
+const useInitializeTimeline = (mapId: number) => {
+  const timeLineVisibleYears = useMapStore((state) => state.untrackedState.timeLineVisibleYears);
+  const timeLineEvents = useGetTimeLineData(
+    mapId,
+    timeLineVisibleYears.from,
+    timeLineVisibleYears.to,
+  );
+
+  useEffect(() => {
+    if (timeLineEvents) {
+      useMapStore.setState((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          timeLineEvents: {
+            daily: timeLineEvents.daily,
+            monthly: timeLineEvents.monthly,
+            yearly: timeLineEvents.yearly,
+          },
+        },
+      }));
+    }
+  }, [timeLineEvents]);
+
+  return timeLineEvents;
+};
 
 /**
  * Hook that initializes the map by fetching all map data, layers and layer elements.
@@ -43,6 +71,12 @@ function useInitializeMap() {
     errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
   }
 
+  if (error) {
+    console.error(error);
+    errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
+  }
+
+  const timeLineData = useInitializeTimeline(mapId);
   useEffect(() => {
     if (!layers) return;
 
@@ -105,7 +139,7 @@ function useInitializeMap() {
     }));
   }, [map]);
 
-  const isLoading = !layers || !map;
+  const isLoading = !layers || !map || !timeLineData;
 
   if (isLoading) {
     return null;

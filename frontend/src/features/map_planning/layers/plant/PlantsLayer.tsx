@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
@@ -15,6 +16,7 @@ import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
   createKeyBindingsAccordingToConfig,
+  useGetFormattedKeybindingDescriptionForAction,
 } from '@/config/keybindings';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
@@ -377,8 +379,13 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
           className="m-2 h-8 w-8 border border-neutral-500 p-1"
           onClick={() => selectPlant(null)}
           data-tourid="placement_cancel"
+          title={useGetFormattedKeybindingDescriptionForAction(
+            KEYBINDINGS_SCOPE_PLANTS_LAYER,
+            'exitPlantingMode',
+            t('common:cancel'),
+          )}
         >
-          <CloseIcon></CloseIcon>
+          <CloseIcon />
         </IconButton>
       </div>
     </>

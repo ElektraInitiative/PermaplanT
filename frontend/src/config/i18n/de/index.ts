@@ -13,6 +13,7 @@ import fileSelector from './fileSelector.json';
 import geomap from './geomap.json';
 import guidedTour from './guidedTour.json';
 import imprint from './imprint.json';
+import keybindings from './keybindings.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import layers from './layers.json';
@@ -74,4 +75,5 @@ export default {
   toolboxTooltips,
   polygon,
   plantRelations,
+  keybindings,
 };
