@@ -38,9 +38,9 @@ pub enum Action {
     /// An action used to broadcast transformation of a plant.
     TransformPlanting(ActionWrapper<Vec<TransformPlantActionPayload>>),
     /// An action used to update the `add_date` of a plant.
-    UpdatePlantingAddDate(ActionWrapper<Vec<UpdatePlantingAddDateActionPayload>>),
+    UpdatePlantingAddDate(ActionWrapper<Vec<UpdateAddDateActionPayload>>),
     /// An action used to update the `remove_date` of a plant.
-    UpdatePlantingRemoveDate(ActionWrapper<Vec<UpdatePlantingRemoveDateActionPayload>>),
+    UpdatePlantingRemoveDate(ActionWrapper<Vec<UpdateRemoveDateActionPayload>>),
     /// An action used to broadcast updating a Markdown notes of a plant.
     UpdatePlatingNotes(ActionWrapper<Vec<UpdatePlantingNoteActionPayload>>),
     /// An action used to broadcast creation of a baseLayerImage.
@@ -60,6 +60,10 @@ pub enum Action {
     DeleteDrawing(ActionWrapper<Vec<Uuid>>),
     /// An action used to broadcast the update of an existing drawing shape.
     UpdateDrawing(ActionWrapper<Vec<DrawingDto>>),
+    /// An action used to update the `add_date` of a drawing.
+    UpdateDrawingAddDate(ActionWrapper<Vec<UpdateAddDateActionPayload>>),
+    /// An action used to update the `remove_date` of a drawing.
+    UpdateDrawingRemoveDate(ActionWrapper<Vec<UpdateRemoveDateActionPayload>>),
 }
 
 #[typeshare]
@@ -91,6 +95,8 @@ impl Action {
             Self::CreateDrawing(payload) => payload.action_id,
             Self::UpdateDrawing(payload) => payload.action_id,
             Self::DeleteDrawing(payload) => payload.action_id,
+            Self::UpdateDrawingAddDate(payload) => payload.action_id,
+            Self::UpdateDrawingRemoveDate(payload) => payload.action_id,
         }
     }
 
@@ -194,7 +200,7 @@ impl Action {
             user_id,
             payload: dtos
                 .iter()
-                .map(|dto| UpdatePlantingAddDateActionPayload {
+                .map(|dto| UpdateAddDateActionPayload {
                     id: dto.id,
                     add_date: dto.add_date,
                 })
@@ -213,7 +219,7 @@ impl Action {
             user_id,
             payload: dtos
                 .iter()
-                .map(|dto| UpdatePlantingRemoveDateActionPayload {
+                .map(|dto| UpdateRemoveDateActionPayload {
                     id: dto.id,
                     remove_date: dto.remove_date,
                 })
@@ -384,9 +390,9 @@ impl UpdateBaseLayerImageActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdatePlantingAddDate`].
+/// The payload of the actions [`Action::]`].
 #[serde(rename_all = "camelCase")]
-pub struct UpdatePlantingAddDateActionPayload {
+pub struct UpdateAddDateActionPayload {
     id: Uuid,
     add_date: Option<NaiveDate>,
 }
@@ -395,7 +401,7 @@ pub struct UpdatePlantingAddDateActionPayload {
 #[derive(Debug, Serialize, Clone)]
 /// The payload of the [`Action::UpdatePlantingRemoveDate`].
 #[serde(rename_all = "camelCase")]
-pub struct UpdatePlantingRemoveDateActionPayload {
+pub struct UpdateRemoveDateActionPayload {
     id: Uuid,
     remove_date: Option<NaiveDate>,
 }
