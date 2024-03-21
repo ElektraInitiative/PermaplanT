@@ -4,6 +4,8 @@ import {
   CreateDrawingAction,
   UpdateDrawingAction,
   DeleteDrawingAction,
+  UpdateDrawingAddDateAction,
+  UpdateDrawingRemoveDateAction,
 } from '../layers/drawing/actions';
 import {
   CreatePlantAction,
@@ -100,6 +102,17 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
       return new UpdateDrawingAction(remoteAction.payload.payload, remoteAction.payload.actionId);
     case 'DeleteDrawing':
       return new DeleteDrawingAction(remoteAction.payload.payload, remoteAction.payload.actionId);
+
+    case 'UpdateDrawingAddDate':
+      return new UpdateDrawingAddDateAction(
+        remoteAction.payload.payload,
+        remoteAction.payload.actionId,
+      );
+    case 'UpdateDrawingRemoveDate':
+      return new UpdateDrawingRemoveDateAction(
+        remoteAction.payload.payload,
+        remoteAction.payload.actionId,
+      );
 
     default:
       throw new Error(`Unknown remote action '${remoteAction.type}'`) as never;

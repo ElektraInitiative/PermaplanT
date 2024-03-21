@@ -6,9 +6,9 @@ import {
   SingleDrawingAttributeForm,
 } from './DrawingAttributeEditForm';
 import {
-  UpdateAddDateDrawingAction,
+  UpdateDrawingAddDateAction,
   UpdateDrawingAction,
-  UpdateRemoveDateDrawingAction,
+  UpdateDrawingRemoveDateAction,
 } from './actions';
 import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
 
@@ -28,51 +28,73 @@ export function DrawingLayerLeftToolbar() {
   const onAddDateChange = ({ addDate }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach(
-      (selectedDrawing) =>
-        addDate != selectedDrawing.addDate &&
-        executeAction(new UpdateAddDateDrawingAction([{ ...selectedDrawing, addDate }])),
+    const hasChanged = selectedDrawings.some(
+      (selectedDrawing) => selectedDrawing.addDate !== addDate,
+    );
+    if (!hasChanged) return;
+
+    executeAction(
+      new UpdateDrawingAddDateAction(selectedDrawings.map((d) => ({ id: d.id, addDate }))),
     );
   };
 
   const onRemoveDateChange = ({ removeDate }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach(
-      (selectedDrawing) =>
-        removeDate != selectedDrawing.removeDate &&
-        executeAction(new UpdateRemoveDateDrawingAction([{ ...selectedDrawing, removeDate }])),
+    const hasChanged = selectedDrawings.some(
+      (selectedDrawing) => selectedDrawing.removeDate !== removeDate,
+    );
+    if (!hasChanged) return;
+
+    executeAction(
+      new UpdateDrawingRemoveDateAction(selectedDrawings.map((d) => ({ id: d.id, removeDate }))),
     );
   };
 
   const onColorChange = ({ color }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach(
-      (selectedDrawing) =>
-        color != selectedDrawing.color &&
-        executeAction(new UpdateDrawingAction([{ ...selectedDrawing, color }])),
-    );
+    const hasChanged = selectedDrawings.some((selectedDrawing) => selectedDrawing.color !== color);
+    if (!hasChanged) return;
+
+    const updatedDrawings = selectedDrawings.map((selectedDrawing) => ({
+      ...selectedDrawing,
+      color,
+    }));
+
+    executeAction(new UpdateDrawingAction(updatedDrawings));
   };
 
   const onStrokeWidthChange = ({ strokeWidth }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach(
-      (selectedDrawing) =>
-        strokeWidth != selectedDrawing.strokeWidth &&
-        executeAction(new UpdateDrawingAction([{ ...selectedDrawing, strokeWidth }])),
+    const hasChanged = selectedDrawings.some(
+      (selectedDrawing) => selectedDrawing.strokeWidth !== strokeWidth,
     );
+    if (!hasChanged) return;
+
+    const updatedDrawings = selectedDrawings.map((selectedDrawing) => ({
+      ...selectedDrawing,
+      strokeWidth,
+    }));
+
+    executeAction(new UpdateDrawingAction(updatedDrawings));
   };
 
   const onFillEnabledChange = ({ fillEnabled }: DrawingFormData) => {
     if (!selectedDrawings?.length) return;
 
-    selectedDrawings.forEach(
-      (selectedDrawing) =>
-        fillEnabled != selectedDrawing.fillEnabled &&
-        executeAction(new UpdateDrawingAction([{ ...selectedDrawing, fillEnabled }])),
+    const hasChanged = selectedDrawings.some(
+      (selectedDrawing) => selectedDrawing.fillEnabled !== fillEnabled,
     );
+    if (!hasChanged) return;
+
+    const updatedDrawings = selectedDrawings.map((selectedDrawing) => ({
+      ...selectedDrawing,
+      fillEnabled,
+    }));
+
+    executeAction(new UpdateDrawingAction(updatedDrawings));
   };
 
   const onDeleteClick = () => {

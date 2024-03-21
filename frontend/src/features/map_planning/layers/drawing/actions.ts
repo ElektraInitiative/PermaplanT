@@ -2,8 +2,17 @@
  * @module this module contains actions for the drawing layer.
  */
 import { v4 } from 'uuid';
-import { DrawingDto } from '@/api_types/definitions';
-import { createDrawing, deleteDrawing, updateDrawing } from '../../api/drawingApi';
+import {
+  DrawingDto,
+  UpdateAddDateActionPayload,
+  UpdateRemoveDateActionPayload,
+} from '@/api_types/definitions';
+import updateDrawingAddDate, {
+  createDrawing,
+  deleteDrawing,
+  updateDrawing,
+  updateDrawingRemoveDate,
+} from '../../api/drawingApi';
 import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
 import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
@@ -131,15 +140,11 @@ export class UpdateDrawingAction
     const updateDrawings = (drawings: Array<DrawingDto>) => {
       return drawings.map((drawing) => {
         if (this._ids.includes(drawing.id)) {
-          const updatedDrawing = JSON.parse(
-            JSON.stringify(this._data.find((d) => d.id === drawing.id)),
-          );
+          const updatedDrawing = this._data.find((d) => d.id === drawing.id);
+
           if (updatedDrawing) {
             return {
               ...updatedDrawing,
-              properties: {
-                ...updatedDrawing.properties,
-              },
             };
           }
         }
@@ -166,9 +171,12 @@ export class UpdateDrawingAction
   }
 }
 
-export class UpdateAddDateDrawingAction
+export class UpdateDrawingAddDateAction
   implements
-    Action<Awaited<ReturnType<typeof updateDrawing>>, Awaited<ReturnType<typeof updateDrawing>>>
+    Action<
+      Awaited<ReturnType<typeof updateDrawingAddDate>>,
+      Awaited<ReturnType<typeof updateDrawingAddDate>>
+    >
 {
   private readonly _ids: Array<string>;
 
@@ -176,10 +184,7 @@ export class UpdateAddDateDrawingAction
     return this._ids;
   }
 
-  constructor(
-    private readonly _data: Omit<DrawingDto, 'userId' | 'actionId'>[],
-    public actionId = v4(),
-  ) {
+  constructor(private readonly _data: UpdateAddDateActionPayload[], public actionId = v4()) {
     this._ids = _data.map((d) => d.id);
   }
 
@@ -190,21 +195,17 @@ export class UpdateAddDateDrawingAction
       return null;
     }
 
-    return new UpdateDrawingAction(drawings, this.actionId);
+    return new UpdateDrawingAddDateAction(drawings.map((d) => ({ ...d, addDate: d.addDate })));
   }
 
   apply(state: TrackedMapState): TrackedMapState {
     const updateDrawings = (drawings: Array<DrawingDto>) => {
       return drawings.map((drawing) => {
         if (this._ids.includes(drawing.id)) {
-          const updatedDrawing = this._data.find((d) => d.id === drawing.id);
-
-          if (updatedDrawing) {
-            return {
-              ...drawing,
-              ...updatedDrawing,
-            };
-          }
+          return {
+            ...drawing,
+            addDate: this._data.find((d) => d.id === drawing.id)?.addDate ?? drawing.addDate,
+          };
         }
 
         return drawing;
@@ -229,14 +230,17 @@ export class UpdateAddDateDrawingAction
     };
   }
 
-  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateDrawing>>> {
-    return await updateDrawing(mapId, this.actionId, this._data);
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateDrawingAddDate>>> {
+    return await updateDrawingAddDate(mapId, this.actionId, this._data);
   }
 }
 
-export class UpdateRemoveDateDrawingAction
+export class UpdateDrawingRemoveDateAction
   implements
-    Action<Awaited<ReturnType<typeof updateDrawing>>, Awaited<ReturnType<typeof updateDrawing>>>
+    Action<
+      Awaited<ReturnType<typeof updateDrawingRemoveDate>>,
+      Awaited<ReturnType<typeof updateDrawingRemoveDate>>
+    >
 {
   private readonly _ids: Array<string>;
 
@@ -245,7 +249,7 @@ export class UpdateRemoveDateDrawingAction
   }
 
   constructor(
-    private readonly _data: Omit<DrawingDto, 'userId' | 'actionId'>[],
+    private readonly _data: Omit<UpdateRemoveDateActionPayload, 'userId' | 'actionId'>[],
     public actionId = v4(),
   ) {
     this._ids = _data.map((d) => d.id);
@@ -297,7 +301,7 @@ export class UpdateRemoveDateDrawingAction
     };
   }
 
-  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateDrawing>>> {
-    return await updateDrawing(mapId, this.actionId, this._data);
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateDrawingRemoveDate>>> {
+    return await updateDrawingRemoveDate(mapId, this.actionId, this._data);
   }
 }

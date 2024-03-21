@@ -1,4 +1,10 @@
-import { ActionDtoWrapper, DrawingDto } from '@/api_types/definitions';
+import {
+  ActionDtoWrapper,
+  DrawingDto,
+  UpdateAddDateDrawingDto,
+  UpdateDrawingsDto,
+  UpdateRemoveDateDrawingDto,
+} from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 
 export async function getDrawings(
@@ -60,73 +66,30 @@ export async function deleteDrawing(mapId: number, actionId: string, ids: string
 export async function updateDrawing(mapId: number, actionId: string, data: DrawingDto[]) {
   const http = createAPI();
 
-  const dto: ActionDtoWrapper<DrawingDto[]> = {
-    actionId: actionId,
-    dto: data,
-  };
-
-  try {
-    const response = await http.patch<DrawingDto[]>(`api/maps/${mapId}/drawings`, dto);
-    return response.data;
-  } catch (error) {
-    throw error as Error;
-  }
-}
-
-/*
-export async function movePlanting(mapId: number, actionId: string, updates: MovePlantingDto[]) {
-  const http = createAPI();
-
-  const dto: ActionDtoWrapper<UpdatePlantingDto> = {
+  const dto: ActionDtoWrapper<UpdateDrawingsDto> = {
     actionId: actionId,
     dto: {
-      type: 'Move',
-      content: updates,
+      type: 'Update',
+      content: data,
     },
   };
 
   try {
-    const response = await http.patch<PlantingDto[]>(
-      `api/maps/${mapId}/layers/plants/plantings`,
-      dto,
-    );
+    const response = await http.patch<UpdateDrawingsDto[]>(`api/maps/${mapId}/drawings`, dto);
     return response.data;
   } catch (error) {
     throw error as Error;
   }
 }
 
-export async function transformPlanting(
+export default async function updateDrawingAddDate(
   mapId: number,
   actionId: string,
-  updates: TransformPlantingDto[],
-): Promise<PlantingDto> {
-  const http = createAPI();
-
-  const dto: ActionDtoWrapper<UpdatePlantingDto> = {
-    actionId: actionId,
-    dto: {
-      type: 'Transform',
-      content: updates,
-    },
-  };
-
-  try {
-    const response = await http.patch(`api/maps/${mapId}/layers/plants/plantings`, dto);
-    return response.data;
-  } catch (error) {
-    throw error as Error;
-  }
-}
-
-export default async function updateAddDatePlanting(
-  mapId: number,
-  actionId: string,
-  updates: UpdateAddDatePlantingDto[],
+  updates: UpdateAddDateDrawingDto[],
 ) {
   const http = createAPI();
 
-  const dto: ActionDtoWrapper<UpdatePlantingDto> = {
+  const dto: ActionDtoWrapper<UpdateDrawingsDto> = {
     actionId: actionId,
     dto: {
       type: 'UpdateAddDate',
@@ -135,21 +98,21 @@ export default async function updateAddDatePlanting(
   };
 
   try {
-    const response = await http.patch(`api/maps/${mapId}/layers/plants/plantings`, dto);
+    const response = await http.patch(`api/maps/${mapId}/drawings`, dto);
     return response.data;
   } catch (error) {
     throw error as Error;
   }
 }
 
-export async function updateRemoveDatePlanting(
+export async function updateDrawingRemoveDate(
   mapId: number,
   actionId: string,
-  updates: UpdateRemoveDatePlantingDto[],
+  updates: UpdateRemoveDateDrawingDto[],
 ) {
   const http = createAPI();
 
-  const dto: ActionDtoWrapper<UpdatePlantingDto> = {
+  const dto: ActionDtoWrapper<UpdateDrawingsDto> = {
     actionId: actionId,
     dto: {
       type: 'UpdateRemoveDate',
@@ -157,10 +120,9 @@ export async function updateRemoveDatePlanting(
     },
   };
   try {
-    const response = await http.patch(`api/maps/${mapId}/layers/plants/plantings`, dto);
+    const response = await http.patch(`api/maps/${mapId}/drawings`, dto);
     return response.data;
   } catch (error) {
     throw error as Error;
   }
 }
-*/
