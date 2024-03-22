@@ -61,6 +61,7 @@ const useInitializeTimeline = (mapId: number) => {
  * Hook that initializes the map by fetching all map data, layers and layer elements.
  */
 function useInitializeMap() {
+  console.log('useInitializeMap');
   const mapId = useMapId();
   const { data: map } = useMap(mapId);
   const { data: layers, error } = useGetLayers(mapId);
