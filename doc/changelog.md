@@ -60,7 +60,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Make map geometry viewable and editable _(Moritz)_
 - _()_
-- _()_
+- Prevent propagating enft key on markdown editor _(Daniel Steinkogler)_
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
 - _()_
