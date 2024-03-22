@@ -1,14 +1,19 @@
 /* TODO: these imports should be added again when the corresponding functionality of the buttons is implemented */
-// import IconButton from '@/components/Button/IconButton';
-// import { NamedSlider } from '@/components/Slider/NamedSlider';
-// import CaretDownIcon  from '@/svg/icons/caret-down.svg?react';
-// import CaretRightIcon  from '@/svg/icons/caret-right.svg?react';
-// import EyeOffIcon  from '@/svg/icons/eye-off.svg?react';
-// import EyeIcon  from '@/svg/icons/eye.svg?react';
-// import { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayerDto, LayerType } from '@/api_types/definitions';
+import IconButton from '@/components/Button/IconButton';
+import SimpleButton from '@/components/Button/SimpleButton';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import ModalContainer from '@/components/Modals/ModalContainer';
+import TransparentBackground from '@/components/TransparentBackground';
+import AddIcon from '@/svg/icons/add.svg?react';
+import ArrowDownIcon from '@/svg/icons/arrow_down.svg?react';
+import ArrowUpIcon from '@/svg/icons/arrow_up.svg?react';
+import RenameIcon from '@/svg/icons/rename.svg?react';
+import RemoveIcon from '@/svg/icons/trash.svg?react';
 import { createLayer } from '../../api/createLayer';
+import { useMapId } from '../../hooks/useMapId';
 import useMapStore from '../../store/MapStore';
 import { LayerListItem } from './LayerListItem';
 
@@ -20,7 +25,17 @@ export type LayerListProps = {
 export const LayerList = ({ layers }: LayerListProps) => {
   const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
   const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
-  const { t } = useTranslation(['layers']);
+  const { t } = useTranslation(['layers', 'common']);
+
+  const [newLayerName, setNewLayerName] = React.useState('');
+  const [showNameModal, setShowNameModal] = React.useState(false);
+
+  const mapId = useMapId();
+
+  const handleSumbitName = () => {
+    createLayer(mapId, LayerType.Drawing, newLayerName);
+    setShowNameModal(false);
+  };
 
   const layerSettingsList = layers
     ?.filter((l) => !l.is_alternative)
@@ -35,35 +50,65 @@ export const LayerList = ({ layers }: LayerListProps) => {
       );
     });
   return (
-    <div className="flex flex-col p-2">
-      <section className="flex justify-between">
-        <h2>{t('layers:header')}</h2>
+    <>
+      <div className="flex flex-col p-2">
+        <section className="flex justify-between gap-2">
+          <h2>{t('layers:header')}</h2>
+          <LayerListToolbar onAddLayer={() => setShowNameModal(true)} />
+        </section>
+        <section className="mt-6">
+          <div className="grid-cols grid grid-cols-[1.5rem_1.5rem_minmax(0,_1fr)] gap-2">
+            {layerSettingsList}
+          </div>
+        </section>
+      </div>
 
-        <button
-          className="flex items-center gap-2"
-          onClick={() => createLayer(1, LayerType.Drawing, 'Drawing2')}
-        >
-          Create
-        </button>
+      <TransparentBackground show={showNameModal} />
+      <ModalContainer show={showNameModal} onCancelKeyPressed={() => setShowNameModal(false)}>
+        <div className="flex h-[15vh] w-[30vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+          <h2 className="mb-3">Name eingeben</h2>
+          <SimpleFormInput
+            value={newLayerName}
+            onChange={(e) => setNewLayerName(e.target.value)}
+            id={''}
+            labelContent={''}
+          ></SimpleFormInput>
+          <div className="flex h-full max-h-[60vh] w-full justify-center p-4"></div>
 
-        {/* TODO: these buttons should be added again when the corresponding functionality is implemented */}
-        {/* <div className="flex gap-2"> */}
-        {/*   <IconButton disabled={true}> */}
-        {/*     <AddIcon className="h-6 w-6" /> */}
-        {/*   </IconButton> */}
-        {/*   <IconButton disabled={true}> */}
-        {/*     <CopyIcon className="h-6 w-6" /> */}
-        {/*   </IconButton> */}
-        {/*   <IconButton disabled={true}> */}
-        {/*     <TrashIcon className="h-6 w-6" /> */}
-        {/*   </IconButton> */}
-        {/* </div> */}
-      </section>
-      <section className="mt-6">
-        <div className="grid-cols grid grid-cols-[1.5rem_1.5rem_minmax(0,_1fr)] gap-2">
-          {layerSettingsList}
+          <div className="grid grid-cols-2 gap-2">
+            <SimpleButton onClick={() => setShowNameModal(false)}>
+              {t('common:cancel')}
+            </SimpleButton>
+            <SimpleButton onClick={handleSumbitName}>{t('common:ok')}</SimpleButton>
+          </div>
         </div>
-      </section>
-    </div>
+      </ModalContainer>
+    </>
+  );
+};
+
+export type LayerListToolbarProps = {
+  onAddLayer: () => void;
+};
+
+const LayerListToolbar = ({ onAddLayer }: LayerListToolbarProps) => {
+  return (
+    <section className="flex justify-between gap-2">
+      <IconButton>
+        <RenameIcon></RenameIcon>
+      </IconButton>
+      <IconButton>
+        <ArrowUpIcon></ArrowUpIcon>
+      </IconButton>
+      <IconButton>
+        <ArrowDownIcon></ArrowDownIcon>
+      </IconButton>
+      <IconButton onClick={() => onAddLayer()}>
+        <AddIcon></AddIcon>
+      </IconButton>
+      <IconButton>
+        <RemoveIcon></RemoveIcon>
+      </IconButton>
+    </section>
   );
 };
