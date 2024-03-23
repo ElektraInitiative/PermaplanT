@@ -34,6 +34,8 @@ See the [PSQL documentation](https://www.postgresql.org/docs/current/ddl-inherit
 
 > Table inheritance is typically established when the child table is created, using the INHERITS clause of the CREATE TABLE statement.
 
+> Rust Diesel isn't intended for that. To only select data from a specific table, and not include all child tables, we would need to use the `FROM ONLY` keyword, which is not implemented in Rust Diesel.
+
 So the inheritance is useful to deal with complex DDL structure on the startup, but will not help us to avoid bulk operations e.g. updating a column for every `variety` in the entire `genus`
 
 ### One table per taxonomy rank and one for concrete plants.
@@ -71,7 +73,7 @@ Cons:
   Then we need to check for each column value if there is a higher rank that already defines the same value.
   Only if we can't find a match the value should be written.
 
-### All ranks in one table.
+### All ranks in one table
 
 [Example](example_migrations/normalized-plants-and-ranks)
 
@@ -84,6 +86,46 @@ Cons:
 
 - Almost everything in the plants table needs to be nullable.
 - More complex insert and update logic.
+
+### One table per taxonomy rank and one for concrete plants. + View and custom insert/update/delete functionality
+
+[Example](example_migrations/one-table-per-taxonomy-view-functions)
+
+It's similar to `One table for taxonomy ranks and one for concrete plants` We are extending it with a view and custom functions to reduce insert and update complexity in the backend and scraper.
+
+#### compared to [All ranks in one table](#all-ranks-in-one-table)
+
+Could allow us to override properties of a plant, but only under certain conditions:
+
+- We still need to implement a view and custom insert/update events.
+  Without these, we wouldn't be able to distinguish between a custom overwrite and a standard value.
+  This limitation makes property overrides on every level not possible.
+
+- There are a couple of possible approaches for FKs:
+
+  - Each plant has multiple foreign keys representing family, genus, and species.
+    However, this would often lead to empty fields and potential confusion, especially when the genus of a plant and its own species are linked to a different genus.
+
+  - Alternatively, a plant could have a single foreign key representing a plant in a higher-order category, from which it would inherit properties. However, this approach could lead to:
+    a) Circular references, where plants inherit from each other indefinitely.
+    b) Extremely long inheritance chains, with a single plant inheriting properties from numerous others.
+
+Pros:
+
+- Inserting new plants is easy. We only need to implement minor backend changes.
+- Properties overrides can be done on every level.
+- It's the only proposed solution that allows us to override the properties of a plant without significantly increasing the complexity of the backend.
+
+Cons:
+
+- More complex insert and update logic.
+  When a species/variety is added or updated, the columns can't just be set.
+  First, we need to make sure all higher levels are in the table.
+  Then we need to check for each column value if there is a higher rank that already defines the same value.
+  Only if we can't find a match, the value should be written.
+  - We can offset this issue by implementing insert/update functions.
+    Since they are going to be complicated, long-term maintainability may be an issue.
+- Almost everything in the plants and parent tables needs to be nullable. (Is this a downside?)
 
 ## Decision
 
