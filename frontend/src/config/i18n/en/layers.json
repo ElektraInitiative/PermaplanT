@@ -20,5 +20,8 @@
 	"hydrology": "Hydrology",
 	"fertilization": "Fertilization",
 	"infrastructure": "Infrastructure",
-	"error_fetching_layers": "Sorry, I'm experiencing trouble fetching map data from my server. It is possible it doesn't exist."
+	"error_fetching_layers": "Sorry, I'm experiencing trouble fetching map data from my server. It is possible it doesn't exist.",
+  "error_creating_layer": "Sorry, I'm experiencing trouble creating a new layer.",
+  "error_delete_layer": "Sorry, I'm experiencing trouble deleting the layer."
+
 }
