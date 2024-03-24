@@ -1,6 +1,10 @@
-import { QueryFunctionContext, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryFunctionContext, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LayerType } from '@/api_types/definitions';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
+import { createLayer } from '../api/createLayer';
+import { deleteLayer } from '../api/deleteLayer';
 import { getDrawings } from '../api/drawingApi';
 import { getLayers } from '../api/getLayers';
 import { getMap } from '../api/getMap';
@@ -79,6 +83,36 @@ function getLayersQueryFn({
   const { mapId } = queryKey[0];
 
   return getLayers(mapId);
+}
+
+export function useCreateLayer(mapId: number, type: LayerType, name: string) {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation(['layers']);
+
+  return useMutation({
+    mutationFn: () => createLayer(mapId, type, name),
+    onSuccess: () => {
+      queryClient.invalidateQueries(MAP_EDITOR_KEYS.layers(mapId));
+    },
+    onError: () => {
+      errorToastGrouped(t('layers:error_creating_layer'), { autoClose: false });
+    },
+  });
+}
+
+export function useDeleteLayer(mapId: number, layerId: number) {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation(['layers']);
+
+  return useMutation({
+    mutationFn: () => deleteLayer(mapId, layerId),
+    onSuccess: () => {
+      queryClient.invalidateQueries(MAP_EDITOR_KEYS.layers(mapId));
+    },
+    onError: () => {
+      errorToastGrouped(t('layers:error_delete_layer'), { autoClose: false });
+    },
+  });
 }
 
 /**

@@ -12,7 +12,7 @@ import ArrowDownIcon from '@/svg/icons/arrow_down.svg?react';
 import ArrowUpIcon from '@/svg/icons/arrow_up.svg?react';
 import RenameIcon from '@/svg/icons/rename.svg?react';
 import RemoveIcon from '@/svg/icons/trash.svg?react';
-import { createLayer } from '../../api/createLayer';
+import { useCreateLayer, useDeleteLayer } from '../../hooks/mapEditorHookApi';
 import { useMapId } from '../../hooks/useMapId';
 import useMapStore from '../../store/MapStore';
 import { LayerListItem } from './LayerListItem';
@@ -24,6 +24,7 @@ export type LayerListProps = {
 /** Layer controls including visibility, layer selection, opacity and alternatives */
 export const LayerList = ({ layers }: LayerListProps) => {
   const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
+  const selectedLayer = useMapStore((map) => map.untrackedState.selectedLayer);
   const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
   const { t } = useTranslation(['layers', 'common']);
 
@@ -32,8 +33,11 @@ export const LayerList = ({ layers }: LayerListProps) => {
 
   const mapId = useMapId();
 
+  const { mutate: createLayer } = useCreateLayer(mapId, LayerType.Drawing, newLayerName);
+  const { mutate: deleteLayer } = useDeleteLayer(mapId, selectedLayer?.id || 0);
+
   const handleSumbitName = () => {
-    createLayer(mapId, LayerType.Drawing, newLayerName);
+    createLayer();
     setShowNameModal(false);
   };
 
@@ -49,12 +53,21 @@ export const LayerList = ({ layers }: LayerListProps) => {
         />
       );
     });
+
+  const handleRemoveLayer = () => {
+    console.log('handleRemoveLayer');
+    deleteLayer();
+  };
+
   return (
     <>
       <div className="flex flex-col p-2">
         <section className="flex justify-between gap-2">
           <h2>{t('layers:header')}</h2>
-          <LayerListToolbar onAddLayer={() => setShowNameModal(true)} />
+          <LayerListToolbar
+            onAddLayer={() => setShowNameModal(true)}
+            onRemoveLayer={handleRemoveLayer}
+          />
         </section>
         <section className="mt-6">
           <div className="grid-cols grid grid-cols-[1.5rem_1.5rem_minmax(0,_1fr)] gap-2">
@@ -89,9 +102,10 @@ export const LayerList = ({ layers }: LayerListProps) => {
 
 export type LayerListToolbarProps = {
   onAddLayer: () => void;
+  onRemoveLayer: () => void;
 };
 
-const LayerListToolbar = ({ onAddLayer }: LayerListToolbarProps) => {
+const LayerListToolbar = ({ onAddLayer, onRemoveLayer }: LayerListToolbarProps) => {
   return (
     <section className="flex justify-between gap-2">
       <IconButton>
@@ -107,7 +121,7 @@ const LayerListToolbar = ({ onAddLayer }: LayerListToolbarProps) => {
         <AddIcon></AddIcon>
       </IconButton>
       <IconButton>
-        <RemoveIcon></RemoveIcon>
+        <RemoveIcon onClick={() => onRemoveLayer()}></RemoveIcon>
       </IconButton>
     </section>
   );
