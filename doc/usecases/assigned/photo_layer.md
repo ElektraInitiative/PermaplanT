@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, move, remove and delete pictures in a map in the photo layer.
-- **Assignee:** Samuel
+- **Assignee:** Daniel
 
 ## Scenarios
 
