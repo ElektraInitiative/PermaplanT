@@ -28,7 +28,7 @@
   - There is an error in the app's plant relationship indication and the lines connecting the plants are not displayed correctly. In this case, the app displays an error message.
 - **Postcondition:**
   - The user's map includes the added, edited, moved, removed or deleted plant element as desired.
-  - If constraints are violated for the place where a plant was added or moved, warnings get added (or removed) to (from) the [warnings layer](../assigned/warnings_layer.md).
+  - If constraints are violated for the place where a plant was added or moved, warnings get added (or removed) to (from) the [relation layer](../assigned/relation_layer.md).
 - **Non-functional Constraints:**
   - Partial offline availability: editing attributes, especially for planting and harvesting
   - Supports alternatives

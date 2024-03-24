@@ -39,6 +39,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 05.02.2024 9:00 _(Markus Raab, Christoph)_
 - Added Meeting Agenda&Notes for 12.02.2024 9:00 _(Markus Raab, Christoph)_
 - Added Meeting Agenda&Notes for 19.02.2024 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 11.03.2024 9:00 _(Markus Raab, Jannis)_
 - _()_
 - _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
