@@ -78,7 +78,7 @@ pub async fn create(
             Action {
                 action_id: create_dto.action_id,
                 user_id: user_info.id,
-                payload: ActionType::CreateBaseLayerImage(CreateBaseLayerImageActionPayload::new(
+                action: ActionType::CreateBaseLayerImage(CreateBaseLayerImageActionPayload::new(
                     dto.clone(),
                 )),
             },
@@ -130,7 +130,7 @@ pub async fn update(
             Action {
                 action_id: update_base_layer_image.action_id,
                 user_id: user_info.id,
-                payload: ActionType::UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload::new(
+                action: ActionType::UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload::new(
                     dto.clone(),
                 )),
             },
@@ -176,7 +176,7 @@ pub async fn delete(
             Action {
                 action_id: delete_dto.action_id,
                 user_id: user_info.id,
-                payload: ActionType::DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload::new(
+                action: ActionType::DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload::new(
                     base_layer_image_id,
                 )),
             },

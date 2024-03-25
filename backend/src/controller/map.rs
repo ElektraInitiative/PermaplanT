@@ -159,7 +159,7 @@ pub async fn update_geometry(
             Action {
                 action_id: Uuid::new_v4(),
                 user_id: user_info.id,
-                payload: ActionType::UpdateMapGeometry(UpdateMapGeometryActionPayload::new(
+                action: ActionType::UpdateMapGeometry(UpdateMapGeometryActionPayload::new(
                     map_update_geometry_json.0,
                     map_id_inner,
                 )),

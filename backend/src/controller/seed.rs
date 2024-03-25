@@ -144,7 +144,7 @@ pub async fn edit_by_id(
             .broadcast_all_maps(Action {
                 action_id: Uuid::new_v4(),
                 user_id: user_info.id,
-                payload: ActionType::UpdatePlantingAdditionalName(
+                action: ActionType::UpdatePlantingAdditionalName(
                     UpdatePlantingAdditionalNamePayload::new(
                         &planting,
                         Some(response.name.clone()),

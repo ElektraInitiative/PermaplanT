@@ -26,10 +26,7 @@ export class CreateDrawingAction
     return this._ids;
   }
 
-  constructor(
-    private readonly _data: Omit<DrawingDto, 'userId' | 'actionId'>[],
-    public actionId = v4(),
-  ) {
+  constructor(private readonly _data: DrawingDto[], public actionId = v4()) {
     this._ids = _data.map((d) => d.id);
   }
 

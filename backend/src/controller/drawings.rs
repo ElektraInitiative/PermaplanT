@@ -76,7 +76,7 @@ pub async fn create(
             Action {
                 action_id,
                 user_id: user_info.id,
-                payload: ActionType::CreateDrawing(created_drawings.clone()),
+                action: ActionType::CreateDrawing(created_drawings.clone()),
             },
         )
         .await;
@@ -121,7 +121,7 @@ pub async fn update(
             Action {
                 action_id,
                 user_id: user_info.id,
-                payload: ActionType::UpdateDrawingRemoveDate(updated.clone()),
+                action: ActionType::UpdateDrawingRemoveDate(updated.clone()),
             },
         )
         .await;
@@ -166,7 +166,7 @@ pub async fn delete(
             Action {
                 action_id,
                 user_id: user_info.id,
-                payload: ActionType::DeleteDrawing(dto),
+                action: ActionType::DeleteDrawing(dto),
             },
         )
         .await;

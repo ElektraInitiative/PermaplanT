@@ -29,7 +29,7 @@ use super::{
 pub struct Action {
     pub action_id: Uuid,
     pub user_id: Uuid,
-    pub payload: ActionType,
+    pub action: ActionType,
 }
 
 #[typeshare]
@@ -85,7 +85,7 @@ impl Action {
         Self {
             action_id,
             user_id,
-            payload: ActionType::CreatePlanting(
+            action: ActionType::CreatePlanting(
                 dtos.iter()
                     .map(|dto| CreatePlantActionPayload {
                         id: dto.id,
@@ -116,7 +116,7 @@ impl Action {
         Self {
             action_id,
             user_id,
-            payload: ActionType::DeletePlanting(
+            action: ActionType::DeletePlanting(
                 dtos.iter()
                     .map(|dto| DeletePlantActionPayload { id: dto.id })
                     .collect(),
@@ -133,7 +133,7 @@ impl Action {
         Self {
             action_id,
             user_id,
-            payload: ActionType::MovePlanting(
+            action: ActionType::MovePlanting(
                 dtos.iter()
                     .map(|dto| MovePlantActionPayload {
                         id: dto.id,
@@ -154,7 +154,7 @@ impl Action {
         Self {
             action_id,
             user_id,
-            payload: ActionType::TransformPlanting(
+            action: ActionType::TransformPlanting(
                 dtos.iter()
                     .map(|dto| TransformPlantActionPayload {
                         id: dto.id,
@@ -178,7 +178,7 @@ impl Action {
         Self {
             action_id,
             user_id,
-            payload: ActionType::UpdatePlantingAddDate(
+            action: ActionType::UpdatePlantingAddDate(
                 dtos.iter()
                     .map(|dto| UpdateAddDateActionPayload {
                         id: dto.id,
@@ -198,7 +198,7 @@ impl Action {
         Self {
             action_id,
             user_id,
-            payload: ActionType::UpdatePlantingRemoveDate(
+            action: ActionType::UpdatePlantingRemoveDate(
                 dtos.iter()
                     .map(|dto| UpdateRemoveDateActionPayload {
                         id: dto.id,
@@ -218,7 +218,7 @@ impl Action {
         Self {
             action_id,
             user_id,
-            payload: ActionType::UpdatePlatingNotes(
+            action: ActionType::UpdatePlatingNotes(
                 dtos.iter()
                     .map(|dto| UpdatePlantingNoteActionPayload {
                         id: dto.id,
