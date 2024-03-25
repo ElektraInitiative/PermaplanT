@@ -45,17 +45,17 @@
   - Left-click, middle-click and right-click should be accepted for setting the target position of the next pasting.
   - The shortcuts for copying and pasting (CTRL-C and CTRL-V) should be stored in a central place where future keybindings will be added too.
 - **Linked Use Cases:**
-  - [Copy & Paste of Selection Between a User's Own Maps](../draft/copy_paste_between_own_maps.md)
-  - [Copy & Paste of Selection Between Maps of Different Users](../draft/copy_paste_between_users.md)
-  - [Copy & Paste of Selection via Icons](../draft/copy_paste_via_icons.md)
+  - [Copy & Paste of Selection Between a User's Own Maps](../current/copy_paste_between_own_maps.md)
+  - [Copy & Paste of Selection Between Maps of Different Users](../assigned/copy_paste_between_users.md)
+  - [Copy & Paste of Selection via Icons](../current/copy_paste_via_icons.md)
 
 ## Development Progress
 
 1. (this usecase) [Copy & Paste of Selection Within the Same Map](../assigned/copy_paste_within_same_map.md)  
    This usecase should be done before any other _Copy & Paste_-related usecase.  
    It will contain the core logic of copying and pasting.
-2. [Copy & Paste of Selection via Icons](../draft/copy_paste_via_icons.md)  
+2. [Copy & Paste of Selection via Icons](../current/copy_paste_via_icons.md)  
    It can reuse everything implemented in the first usecase one-to-one.  
    Additionally it will add the logically-isolated possibility to copy and paste via icons plus the 'visibility-toggling' of the copy- and paste-icons' design.
-3. [Copy & Paste of Selection Between a User's Own Maps](../draft/copy_paste_between_own_maps.md) / [Copy & Paste of Selection Between Maps of Different Users](../draft/copy_paste_between_users.md)  
+3. [Copy & Paste of Selection Between a User's Own Maps](../current/copy_paste_between_own_maps.md) / [Copy & Paste of Selection Between Maps of Different Users](../assigned/copy_paste_between_users.md)  
    Here, the storing of the copied elements will have to be moved from the app's map store to the client side, i.e. the browser's local storage.

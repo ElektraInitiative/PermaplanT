@@ -26,7 +26,7 @@
 - **Non-functional Constraints:**
 - **Linked Use Cases:**
   - [Login](../done/login.md)
-  - [GeoMap](../draft/geo_map.md)
+  - [GeoMap](../current/geo_map.md)
   - [Membership Application](../draft/membership_application.md)
 
 ## Open points:
