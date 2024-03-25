@@ -36,7 +36,6 @@ impl Drawing {
     /// Save new drawings into the database.
     ///
     /// # Errors
-    /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn create(
         dto_vec: Vec<DrawingDto>,
@@ -91,10 +90,6 @@ impl Drawing {
         Ok(result.into_iter().map(Into::into).collect())
     }
 
-    /// Performs the actual update of the plantings using pipelined requests.
-    /// See [`diesel_async::AsyncPgConnection`] for more information.
-    /// Because the type system can not easily infer the type of futures
-    /// this helper function is needed, with explicit type annotations.
     fn do_update(
         updates: Vec<UpdateDrawing>,
         conn: &mut AsyncPgConnection,

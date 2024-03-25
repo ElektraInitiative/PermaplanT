@@ -157,7 +157,7 @@ function drawingLayerQueryFn({
  */
 export function usePlantLayer({ mapId, layerId, enabled }: UseLayerArgs) {
   const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
-  const { t } = useTranslation(['plantSearch']);
+  const { t } = useTranslation(['drawings']);
 
   const queryInfo = useQuery({
     queryKey: MAP_EDITOR_KEYS.plantLayer(mapId, layerId, fetchDate),
@@ -168,7 +168,7 @@ export function usePlantLayer({ mapId, layerId, enabled }: UseLayerArgs) {
     cacheTime: 0,
     enabled,
     meta: {
-      errorMessage: t('plantSearch:error_initializing_layer'),
+      errorMessage: t('drawings:error_init_layer'),
     },
   });
   const { data: plantingInfo } = queryInfo;

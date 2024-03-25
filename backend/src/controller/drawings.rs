@@ -50,7 +50,7 @@ pub async fn find(map_id: Path<i32>, app_data: Data<AppDataInner>) -> Result<Htt
     ),
     request_body = ActionDtoWrapperNewPlantings,
     responses(
-        (status = 201, description = "Create plantings", body = Vec<PlantingDto>)
+        (status = 201, description = "Create plantings", body = Vec<DrawingDto>)
     ),
     security(
         ("oauth2" = [])
@@ -95,7 +95,7 @@ pub async fn create(
     ),
     request_body = ActionDtoWrapperUpdatePlantings,
     responses(
-        (status = 200, description = "Update plantings", body = Vec<PlantingDto>)
+        (status = 200, description = "Update plantings", body = Vec<DrawingDto>)
     ),
     security(
         ("oauth2" = [])
@@ -146,7 +146,7 @@ pub async fn update(
     params(
         ("map_id" = i32, Path, description = "The id of the map"),
     ),
-    request_body = ActionDtoWrapperDeletePlantings,
+    request_body = ActionDtoWrapperDeleteDrawings,
     responses(
         (status = 200, description = "Drawings have been deleted")
     ),

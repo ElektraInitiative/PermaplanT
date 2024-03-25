@@ -6,8 +6,7 @@ use uuid::Uuid;
 
 use crate::model::r#enum::drawing_shape_kind::DrawingShapeKind;
 
-/// Represents plant planted on a map.
-/// E.g. a user drags a plant from the search results and drops it on the map.
+/// Represents user drawing.
 #[typeshare]
 #[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
 #[serde(rename_all = "camelCase")]

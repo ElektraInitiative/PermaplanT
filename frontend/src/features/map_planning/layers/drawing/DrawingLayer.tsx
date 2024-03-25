@@ -257,7 +257,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     selectDrawings(getUpdatedDrawingSelection());
   };
 
-  const addPlantingToSelection = (e: KonvaEventObject<MouseEvent>) => {
+  const addDrawingToSelection = (e: KonvaEventObject<MouseEvent>) => {
     transformerActions.addNodeToSelection(e.currentTarget);
 
     const currentDrawingSelected =
@@ -266,7 +266,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   };
 
   const handleMultiSelect = (e: KonvaEventObject<MouseEvent>, drawing: DrawingDto) => {
-    isDrawingSelected(drawing) ? removeDrawingFromSelection(e) : addPlantingToSelection(e);
+    isDrawingSelected(drawing) ? removeDrawingFromSelection(e) : addDrawingToSelection(e);
   };
 
   const handleSingleSelect = (e: KonvaEventObject<MouseEvent>, drawing: DrawingDto) => {
@@ -296,7 +296,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       const pos = stage.getRelativePointerPosition();
       if (pos == null) return;
 
-      if (selectedShape == 'freeLine') {
+      if (selectedShape == DrawingShapeKind.FreeLine) {
         isDrawing.current = true;
         setNewLine({
           strokeWidth: selectedStrokeWidth,
@@ -306,7 +306,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           y: pos.y,
           points: [[0, 0]],
         });
-      } else if (selectedShape == 'rectangle') {
+      } else if (selectedShape == DrawingShapeKind.Rectangle) {
         isDrawing.current = true;
         setPreviewRectangle({
           color: selectedColor,
@@ -317,7 +317,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           x2: pos.x,
           y2: pos.y,
         });
-      } else if (selectedShape == 'ellipse') {
+      } else if (selectedShape == DrawingShapeKind.Ellipse) {
         isDrawing.current = true;
         setPreviewEllipse({
           color: selectedColor,
@@ -328,7 +328,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           radiusX: 0,
           radiusY: 0,
         });
-      } else if (selectedShape == 'bezierPolygon') {
+      } else if (selectedShape == DrawingShapeKind.BezierPolygon) {
         if (!newBezierLine) {
           setNewBezierLine({
             color: selectedColor,
@@ -353,7 +353,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   );
 
   const handleFinishBezierLine = () => {
-    if (selectedShape == 'bezierPolygon') {
+    if (selectedShape == DrawingShapeKind.BezierPolygon) {
       if (newBezierLine) {
         createBezierLine(newBezierLine);
         setNewBezierLine(undefined);
@@ -462,17 +462,17 @@ function DrawingLayer(props: DrawingLayerProps) {
       if (point == null) return;
 
       switch (selectedShape) {
-        case 'freeLine':
+        case DrawingShapeKind.FreeLine:
           handleDrawLine(point);
           break;
-        case 'rectangle':
+        case DrawingShapeKind.Rectangle:
           if (e.evt.shiftKey) {
             handleDrawSquare(point);
           } else {
             handleDrawRectangle(point);
           }
           break;
-        case 'ellipse':
+        case DrawingShapeKind.Ellipse:
           if (e.evt.shiftKey) {
             handleDrawCircle(point);
           } else {
@@ -537,13 +537,13 @@ function DrawingLayer(props: DrawingLayerProps) {
     isDrawing.current = false;
 
     switch (selectedShape) {
-      case 'freeLine':
+      case DrawingShapeKind.FreeLine:
         handleFreeLineMouseUp();
         break;
-      case 'rectangle':
+      case DrawingShapeKind.Rectangle:
         handleRectangleMouseUp();
         break;
-      case 'ellipse':
+      case DrawingShapeKind.Ellipse:
         handleEllipseMouseUp();
         break;
     }
@@ -638,7 +638,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   );
 
   useEffect(() => {
-    if (selectedShape != 'bezierPolygon' && newBezierLine) {
+    if (selectedShape != DrawingShapeKind.BezierPolygon && newBezierLine) {
       createBezierLine(newBezierLine);
       setNewBezierLine(undefined);
     }
@@ -717,7 +717,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             onFinishLine={handleFinishBezierLine}
             onPointsChanged={updateNewBezierLinePoints}
             initialPoints={newBezierLine.points}
-            editMode={selectedShape == 'bezierPolygon' ? 'draw' : undefined}
+            editMode={selectedShape == DrawingShapeKind.BezierPolygon ? 'draw' : undefined}
             strokeWidth={selectedStrokeWidth}
             color={selectedColor}
             scaleX={1}

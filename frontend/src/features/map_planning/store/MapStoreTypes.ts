@@ -4,6 +4,7 @@ import { StateCreator } from 'zustand';
 import {
   BaseLayerImageDto,
   DrawingDto,
+  DrawingShapeKind,
   LayerDto,
   LayerType,
   PlantingDto,
@@ -12,7 +13,6 @@ import {
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
-import { DrawingShapeType } from '../layers/drawing/types';
 import { convertToDateString } from '../utils/date-utils';
 import { TransformerStore } from './transformer/TransformerStore';
 
@@ -190,7 +190,7 @@ export interface UntrackedMapSlice {
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
 
-  drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
+  drawingLayerActivateDrawingMode: (shape: DrawingShapeKind) => void;
   drawingLayerClearSelectedShape: () => void;
   drawingLayerSetSelectedColor: (color: string) => void;
   drawingLayerSetFillEnabled: (fill: boolean) => void;
@@ -461,7 +461,7 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
 };
 
 export type UntrackedDrawingLayerState = UntrackedLayerState & {
-  shape: DrawingShapeType | null;
+  shape: DrawingShapeKind | null;
   selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
   fillEnabled: boolean;

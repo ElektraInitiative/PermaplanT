@@ -1,4 +1,4 @@
-//! Service layer for plantings.
+//! Service layer for user drawings.
 
 use actix_web::web::Data;
 use uuid::Uuid;
@@ -34,7 +34,7 @@ pub async fn create(
     Ok(result)
 }
 
-/// Update the planting in the database.
+/// Update the drawing in the database.
 ///
 /// # Errors
 /// If the connection to the database could not be established.
