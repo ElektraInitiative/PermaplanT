@@ -1,14 +1,15 @@
 //! Contains the implementation of [`Drawings`].
 
 use diesel::pg::Pg;
+use diesel::query_dsl::methods::FilterDsl;
 use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
 use diesel_async::{AsyncConnection, AsyncPgConnection, RunQueryDsl};
 use futures_util::Future;
 use log::debug;
 use uuid::Uuid;
 
-use crate::model::dto::drawings::DrawingDto;
-use crate::model::entity::drawings::Drawing;
+use crate::model::dto::drawings::{DrawingDto, UpdateDrawingsDto};
+use crate::model::entity::drawings::{Drawing, UpdateDrawing};
 use crate::schema::{drawings, layers};
 
 impl Drawing {
@@ -17,11 +18,12 @@ impl Drawing {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find(map_id: i32, conn: &mut AsyncPgConnection) -> QueryResult<Vec<DrawingDto>> {
-        let query = drawings::table
-            .left_join(layers::table)
-            .filter(layers::map_id.eq(map_id))
-            .select(drawings::all_columns)
-            .into_boxed();
+        let query = FilterDsl::filter(
+            drawings::table.left_join(layers::table),
+            layers::map_id.eq(map_id),
+        )
+        .select(drawings::all_columns)
+        .into_boxed();
 
         Ok(query
             .load::<Self>(conn)
@@ -60,17 +62,26 @@ impl Drawing {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn update(
-        dto_vec: Vec<DrawingDto>,
+        dto_vec: UpdateDrawingsDto,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<DrawingDto>> {
-        let drawing_updates = dto_vec.into_iter().map(Into::into).collect();
+        let drawing_updates = Vec::from(dto_vec);
 
         let result = conn
             .transaction(|transaction| {
                 Box::pin(async {
-                    let futures = Self::do_update(drawing_updates, transaction);
+                    let futures = Self::do_update(drawing_updates.clone(), transaction);
 
-                    let results = futures_util::future::try_join_all(futures).await?;
+                    futures_util::future::try_join_all(futures).await?;
+
+                    let ids: Vec<Uuid> = drawing_updates.iter().map(|dto| dto.id).collect();
+
+                    let results = FilterDsl::filter(
+                        drawings::table.select(drawings::all_columns),
+                        drawings::id.eq_any(ids),
+                    )
+                    .load::<Drawing>(transaction)
+                    .await?;
 
                     Ok(results) as QueryResult<Vec<Self>>
                 })
@@ -85,7 +96,7 @@ impl Drawing {
     /// Because the type system can not easily infer the type of futures
     /// this helper function is needed, with explicit type annotations.
     fn do_update(
-        updates: Vec<Self>,
+        updates: Vec<UpdateDrawing>,
         conn: &mut AsyncPgConnection,
     ) -> Vec<impl Future<Output = QueryResult<Self>>> {
         let mut futures = Vec::with_capacity(updates.len());
@@ -106,7 +117,7 @@ impl Drawing {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn delete_by_ids(ids: Vec<Uuid>, conn: &mut AsyncPgConnection) -> QueryResult<usize> {
-        let query = diesel::delete(drawings::table.filter(drawings::id.eq_any(ids)));
+        let query = diesel::delete(FilterDsl::filter(drawings::table, drawings::id.eq_any(ids)));
         debug!("{}", debug_query::<Pg, _>(&query));
         query.execute(conn).await
     }

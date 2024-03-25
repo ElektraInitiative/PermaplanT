@@ -61,9 +61,9 @@ pub enum Action {
     /// An action used to broadcast the update of an existing drawing shape.
     UpdateDrawing(ActionWrapper<Vec<DrawingDto>>),
     /// An action used to update the `add_date` of a drawing.
-    UpdateDrawingAddDate(ActionWrapper<Vec<UpdateAddDateActionPayload>>),
+    UpdateDrawingAddDate(ActionWrapper<Vec<DrawingDto>>),
     /// An action used to update the `remove_date` of a drawing.
-    UpdateDrawingRemoveDate(ActionWrapper<Vec<UpdateRemoveDateActionPayload>>),
+    UpdateDrawingRemoveDate(ActionWrapper<Vec<DrawingDto>>),
 }
 
 #[typeshare]

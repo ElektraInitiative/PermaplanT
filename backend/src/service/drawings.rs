@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
 use crate::error::ServiceError;
-use crate::model::dto::drawings::DrawingDto;
+use crate::model::dto::drawings::{DrawingDto, UpdateDrawingsDto};
 use crate::model::entity::drawings::Drawing;
 
 /// Get all drawings from one map.
@@ -39,7 +39,7 @@ pub async fn create(
 /// # Errors
 /// If the connection to the database could not be established.
 pub async fn update(
-    dto: Vec<DrawingDto>,
+    dto: UpdateDrawingsDto,
     app_data: &Data<AppDataInner>,
 ) -> Result<Vec<DrawingDto>, ServiceError> {
     let mut conn = app_data.pool.get().await?;

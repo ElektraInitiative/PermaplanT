@@ -12,7 +12,7 @@ use crate::{
     model::dto::{
         actions::{Action, ActionWrapper},
         core::ActionDtoWrapper,
-        drawings::DrawingDto,
+        drawings::{DrawingDto, UpdateDrawingsDto},
     },
     service,
 };
@@ -104,7 +104,7 @@ pub async fn create(
 #[patch("")]
 pub async fn update(
     path: Path<i32>,
-    update_drawings: Json<ActionDtoWrapper<Vec<DrawingDto>>>,
+    update_drawings: Json<ActionDtoWrapper<UpdateDrawingsDto>>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
@@ -112,13 +112,13 @@ pub async fn update(
 
     let ActionDtoWrapper { action_id, dto } = update_drawings.into_inner();
 
-    let updated = service::drawings::update(dto, &app_data).await?;
+    let updated = service::drawings::update(dto.clone(), &app_data).await?;
 
     app_data
         .broadcaster
         .broadcast(
             map_id,
-            Action::UpdateDrawing(ActionWrapper {
+            Action::UpdateDrawingRemoveDate(ActionWrapper {
                 action_id,
                 user_id: user_info.id,
                 payload: updated.clone(),
