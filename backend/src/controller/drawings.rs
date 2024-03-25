@@ -10,7 +10,7 @@ use uuid::Uuid;
 use crate::{
     config::{auth::user_info::UserInfo, data::AppDataInner},
     model::dto::{
-        actions::{Action, ActionWrapper},
+        actions::{Action, ActionType},
         core::ActionDtoWrapper,
         drawings::{DrawingDto, UpdateDrawingsDto},
     },
@@ -73,11 +73,11 @@ pub async fn create(
         .broadcaster
         .broadcast(
             map_id,
-            Action::CreateDrawing(ActionWrapper {
+            Action {
                 action_id,
                 user_id: user_info.id,
-                payload: created_drawings.clone(),
-            }),
+                payload: ActionType::CreateDrawing(created_drawings.clone()),
+            },
         )
         .await;
 
@@ -118,11 +118,11 @@ pub async fn update(
         .broadcaster
         .broadcast(
             map_id,
-            Action::UpdateDrawingRemoveDate(ActionWrapper {
+            Action {
                 action_id,
                 user_id: user_info.id,
-                payload: updated.clone(),
-            }),
+                payload: ActionType::UpdateDrawingRemoveDate(updated.clone()),
+            },
         )
         .await;
 
@@ -163,11 +163,11 @@ pub async fn delete(
         .broadcaster
         .broadcast(
             map_id,
-            Action::DeleteDrawing(ActionWrapper {
+            Action {
                 action_id,
                 user_id: user_info.id,
-                payload: dto,
-            }),
+                payload: ActionType::DeleteDrawing(dto),
+            },
         )
         .await;
 

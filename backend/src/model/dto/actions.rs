@@ -25,109 +25,86 @@ use super::{
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-// Use the name of the enum variant as the type field looking like { "type": "CreatePlanting", ... }.
-/// An enum representing all the actions that can be broadcasted via [`crate::sse::broadcaster::Broadcaster`].
-#[serde(tag = "type", content = "payload")]
-pub enum Action {
-    /// An action used to broadcast creation of a plant.
-    CreatePlanting(ActionWrapper<Vec<CreatePlantActionPayload>>),
-    /// An action used to broadcast deletion of a plant.
-    DeletePlanting(ActionWrapper<Vec<DeletePlantActionPayload>>),
-    /// An action used to broadcast movement of a plant.
-    MovePlanting(ActionWrapper<Vec<MovePlantActionPayload>>),
-    /// An action used to broadcast transformation of a plant.
-    TransformPlanting(ActionWrapper<Vec<TransformPlantActionPayload>>),
-    /// An action used to update the `add_date` of a plant.
-    UpdatePlantingAddDate(ActionWrapper<Vec<UpdateAddDateActionPayload>>),
-    /// An action used to update the `remove_date` of a plant.
-    UpdatePlantingRemoveDate(ActionWrapper<Vec<UpdateRemoveDateActionPayload>>),
-    /// An action used to broadcast updating a Markdown notes of a plant.
-    UpdatePlatingNotes(ActionWrapper<Vec<UpdatePlantingNoteActionPayload>>),
-    /// An action used to broadcast creation of a baseLayerImage.
-    CreateBaseLayerImage(ActionWrapper<CreateBaseLayerImageActionPayload>),
-    /// An action used to broadcast update of a baseLayerImage.
-    UpdateBaseLayerImage(ActionWrapper<UpdateBaseLayerImageActionPayload>),
-    /// An action used to broadcast deletion of a baseLayerImage.
-    DeleteBaseLayerImage(ActionWrapper<DeleteBaseLayerImageActionPayload>),
-    /// An action used to broadcast an update to the map geometry.
-    UpdateMapGeometry(ActionWrapper<UpdateMapGeometryActionPayload>),
-    /// An action used to update the `additional_name` of a plant.
-    UpdatePlantingAdditionalName(ActionWrapper<UpdatePlantingAdditionalNamePayload>),
-
-    /// An action used to broadcast creation of a new drawing shape.
-    CreateDrawing(ActionWrapper<Vec<DrawingDto>>),
-    /// An action used to broadcast deletion of an existing drawing shape.
-    DeleteDrawing(ActionWrapper<Vec<Uuid>>),
-    /// An action used to broadcast the update of an existing drawing shape.
-    UpdateDrawing(ActionWrapper<Vec<DrawingDto>>),
-    /// An action used to update the `add_date` of a drawing.
-    UpdateDrawingAddDate(ActionWrapper<Vec<DrawingDto>>),
-    /// An action used to update the `remove_date` of a drawing.
-    UpdateDrawingRemoveDate(ActionWrapper<Vec<DrawingDto>>),
+#[serde(rename_all = "camelCase")]
+pub struct Action {
+    pub action_id: Uuid,
+    pub user_id: Uuid,
+    pub payload: ActionType,
 }
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct ActionWrapper<T> {
-    pub action_id: Uuid,
-    pub user_id: Uuid,
-    pub payload: T,
+// Use the name of the enum variant as the type field looking like { "type": "CreatePlanting", ... }.
+/// An enum representing all the actions that can be broadcasted via [`crate::sse::broadcaster::Broadcaster`].
+#[serde(tag = "type", content = "payload")]
+pub enum ActionType {
+    /// An action used to broadcast creation of a plant.
+    CreatePlanting(Vec<CreatePlantActionPayload>),
+    /// An action used to broadcast deletion of a plant.
+    DeletePlanting(Vec<DeletePlantActionPayload>),
+    /// An action used to broadcast movement of a plant.
+    MovePlanting(Vec<MovePlantActionPayload>),
+    /// An action used to broadcast transformation of a plant.
+    TransformPlanting(Vec<TransformPlantActionPayload>),
+    /// An action used to update the `add_date` of a plant.
+    UpdatePlantingAddDate(Vec<UpdateAddDateActionPayload>),
+    /// An action used to update the `remove_date` of a plant.
+    UpdatePlantingRemoveDate(Vec<UpdateRemoveDateActionPayload>),
+    /// An action used to broadcast updating a Markdown notes of a plant.
+    UpdatePlatingNotes(Vec<UpdatePlantingNoteActionPayload>),
+    /// An action used to broadcast creation of a baseLayerImage.
+    CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
+    /// An action used to broadcast update of a baseLayerImage.
+    UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
+    /// An action used to broadcast deletion of a baseLayerImage.
+    DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
+    /// An action used to broadcast an update to the map geometry.
+    UpdateMapGeometry(UpdateMapGeometryActionPayload),
+    /// An action used to update the `additional_name` of a plant.
+    UpdatePlantingAdditionalName(UpdatePlantingAdditionalNamePayload),
+
+    /// An action used to broadcast creation of a new drawing shape.
+    CreateDrawing(Vec<DrawingDto>),
+    /// An action used to broadcast deletion of an existing drawing shape.
+    DeleteDrawing(Vec<Uuid>),
+    /// An action used to broadcast the update of an existing drawing shape.
+    UpdateDrawing(Vec<DrawingDto>),
+    /// An action used to update the `add_date` of a drawing.
+    UpdateDrawingAddDate(Vec<DrawingDto>),
+    /// An action used to update the `remove_date` of a drawing.
+    UpdateDrawingRemoveDate(Vec<DrawingDto>),
 }
 
 impl Action {
-    /// Returns the `action_id` of the action.
-    #[must_use]
-    pub fn action_id(&self) -> Uuid {
-        match self {
-            Self::CreatePlanting(ActionWrapper { action_id, .. })
-            | Self::DeletePlanting(ActionWrapper { action_id, .. })
-            | Self::MovePlanting(ActionWrapper { action_id, .. })
-            | Self::TransformPlanting(ActionWrapper { action_id, .. })
-            | Self::UpdatePlatingNotes(ActionWrapper { action_id, .. })
-            | Self::CreateBaseLayerImage(ActionWrapper { action_id, .. })
-            | Self::UpdateBaseLayerImage(ActionWrapper { action_id, .. })
-            | Self::DeleteBaseLayerImage(ActionWrapper { action_id, .. })
-            | Self::UpdatePlantingAddDate(ActionWrapper { action_id, .. })
-            | Self::UpdatePlantingRemoveDate(ActionWrapper { action_id, .. })
-            | Self::UpdatePlantingAdditionalName(ActionWrapper { action_id, .. })
-            | Self::UpdateMapGeometry(ActionWrapper { action_id, .. })
-            | Self::CreateDrawing(ActionWrapper { action_id, .. })
-            | Self::UpdateDrawing(ActionWrapper { action_id, .. })
-            | Self::DeleteDrawing(ActionWrapper { action_id, .. })
-            | Self::UpdateDrawingAddDate(ActionWrapper { action_id, .. })
-            | Self::UpdateDrawingRemoveDate(ActionWrapper { action_id, .. }) => *action_id,
-        }
-    }
-
     #[must_use]
     pub fn new_create_planting_action(
         dtos: &[PlantingDto],
         user_id: Uuid,
         action_id: Uuid,
     ) -> Self {
-        Self::CreatePlanting(ActionWrapper {
+        Self {
             action_id,
             user_id,
-            payload: dtos
-                .iter()
-                .map(|dto| CreatePlantActionPayload {
-                    id: dto.id,
-                    layer_id: dto.layer_id,
-                    plant_id: dto.plant_id,
-                    x: dto.x,
-                    y: dto.y,
-                    rotation: dto.rotation,
-                    size_x: dto.size_x,
-                    size_y: dto.size_y,
-                    add_date: dto.add_date,
-                    remove_date: dto.remove_date,
-                    seed_id: dto.seed_id,
-                    additional_name: dto.additional_name.clone(),
-                    is_area: dto.is_area,
-                })
-                .collect(),
-        })
+            payload: ActionType::CreatePlanting(
+                dtos.iter()
+                    .map(|dto| CreatePlantActionPayload {
+                        id: dto.id,
+                        layer_id: dto.layer_id,
+                        plant_id: dto.plant_id,
+                        x: dto.x,
+                        y: dto.y,
+                        rotation: dto.rotation,
+                        size_x: dto.size_x,
+                        size_y: dto.size_y,
+                        add_date: dto.add_date,
+                        remove_date: dto.remove_date,
+                        seed_id: dto.seed_id,
+                        additional_name: dto.additional_name.clone(),
+                        is_area: dto.is_area,
+                    })
+                    .collect(),
+            ),
+        }
     }
 
     #[must_use]
@@ -136,14 +113,15 @@ impl Action {
         user_id: Uuid,
         action_id: Uuid,
     ) -> Self {
-        Self::DeletePlanting(ActionWrapper {
+        Self {
             action_id,
             user_id,
-            payload: dtos
-                .iter()
-                .map(|dto| DeletePlantActionPayload { id: dto.id })
-                .collect(),
-        })
+            payload: ActionType::DeletePlanting(
+                dtos.iter()
+                    .map(|dto| DeletePlantActionPayload { id: dto.id })
+                    .collect(),
+            ),
+        }
     }
 
     #[must_use]
@@ -152,18 +130,19 @@ impl Action {
         user_id: Uuid,
         action_id: Uuid,
     ) -> Self {
-        Self::MovePlanting(ActionWrapper {
+        Self {
             action_id,
             user_id,
-            payload: dtos
-                .iter()
-                .map(|dto| MovePlantActionPayload {
-                    id: dto.id,
-                    x: dto.x,
-                    y: dto.y,
-                })
-                .collect(),
-        })
+            payload: ActionType::MovePlanting(
+                dtos.iter()
+                    .map(|dto| MovePlantActionPayload {
+                        id: dto.id,
+                        x: dto.x,
+                        y: dto.y,
+                    })
+                    .collect(),
+            ),
+        }
     }
 
     #[must_use]
@@ -172,21 +151,22 @@ impl Action {
         user_id: Uuid,
         action_id: Uuid,
     ) -> Self {
-        Self::TransformPlanting(ActionWrapper {
+        Self {
             action_id,
             user_id,
-            payload: dtos
-                .iter()
-                .map(|dto| TransformPlantActionPayload {
-                    id: dto.id,
-                    x: dto.x,
-                    y: dto.y,
-                    rotation: dto.rotation,
-                    size_x: dto.size_x,
-                    size_y: dto.size_y,
-                })
-                .collect(),
-        })
+            payload: ActionType::TransformPlanting(
+                dtos.iter()
+                    .map(|dto| TransformPlantActionPayload {
+                        id: dto.id,
+                        x: dto.x,
+                        y: dto.y,
+                        rotation: dto.rotation,
+                        size_x: dto.size_x,
+                        size_y: dto.size_y,
+                    })
+                    .collect(),
+            ),
+        }
     }
 
     #[must_use]
@@ -195,17 +175,18 @@ impl Action {
         user_id: Uuid,
         action_id: Uuid,
     ) -> Self {
-        Self::UpdatePlantingAddDate(ActionWrapper {
+        Self {
             action_id,
             user_id,
-            payload: dtos
-                .iter()
-                .map(|dto| UpdateAddDateActionPayload {
-                    id: dto.id,
-                    add_date: dto.add_date,
-                })
-                .collect(),
-        })
+            payload: ActionType::UpdatePlantingAddDate(
+                dtos.iter()
+                    .map(|dto| UpdateAddDateActionPayload {
+                        id: dto.id,
+                        add_date: dto.add_date,
+                    })
+                    .collect(),
+            ),
+        }
     }
 
     #[must_use]
@@ -214,17 +195,18 @@ impl Action {
         user_id: Uuid,
         action_id: Uuid,
     ) -> Self {
-        Self::UpdatePlantingRemoveDate(ActionWrapper {
+        Self {
             action_id,
             user_id,
-            payload: dtos
-                .iter()
-                .map(|dto| UpdateRemoveDateActionPayload {
-                    id: dto.id,
-                    remove_date: dto.remove_date,
-                })
-                .collect(),
-        })
+            payload: ActionType::UpdatePlantingRemoveDate(
+                dtos.iter()
+                    .map(|dto| UpdateRemoveDateActionPayload {
+                        id: dto.id,
+                        remove_date: dto.remove_date,
+                    })
+                    .collect(),
+            ),
+        }
     }
 
     #[must_use]
@@ -233,23 +215,24 @@ impl Action {
         user_id: Uuid,
         action_id: Uuid,
     ) -> Self {
-        Self::UpdatePlatingNotes(ActionWrapper {
+        Self {
             action_id,
             user_id,
-            payload: dtos
-                .iter()
-                .map(|dto| UpdatePlantingNoteActionPayload {
-                    id: dto.id,
-                    notes: dto.notes.clone(),
-                })
-                .collect(),
-        })
+            payload: ActionType::UpdatePlatingNotes(
+                dtos.iter()
+                    .map(|dto| UpdatePlantingNoteActionPayload {
+                        id: dto.id,
+                        notes: dto.notes.clone(),
+                    })
+                    .collect(),
+            ),
+        }
     }
 }
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::CreatePlanting`].
+/// The payload of the [`ActionType::CreatePlanting`].
 /// This struct should always match [`PlantingDto`].
 #[serde(rename_all = "camelCase")]
 pub struct CreatePlantActionPayload {
@@ -270,7 +253,7 @@ pub struct CreatePlantActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::DeletePlanting`].
+/// The payload of the [`ActionType::DeletePlanting`].
 #[serde(rename_all = "camelCase")]
 pub struct DeletePlantActionPayload {
     id: Uuid,
@@ -278,7 +261,7 @@ pub struct DeletePlantActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::MovePlanting`].
+/// The payload of the [`ActionType::MovePlanting`].
 #[serde(rename_all = "camelCase")]
 pub struct MovePlantActionPayload {
     id: Uuid,
@@ -288,7 +271,7 @@ pub struct MovePlantActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::TransformPlanting`].
+/// The payload of the [`ActionType::TransformPlanting`].
 #[serde(rename_all = "camelCase")]
 pub struct TransformPlantActionPayload {
     id: Uuid,
@@ -301,7 +284,7 @@ pub struct TransformPlantActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdatePlatingNotes`].
+/// The payload of the [`ActionType::UpdatePlatingNotes`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdatePlantingNoteActionPayload {
     id: Uuid,
@@ -310,7 +293,7 @@ pub struct UpdatePlantingNoteActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::CreateBaseLayerImage`].
+/// The payload of the [`ActionType::CreateBaseLayerImage`].
 /// This struct should always match [`BaseLayerImageDto`].
 #[serde(rename_all = "camelCase")]
 pub struct CreateBaseLayerImageActionPayload {
@@ -336,7 +319,7 @@ impl CreateBaseLayerImageActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::DeleteBaseLayerImage`].
+/// The payload of the [`ActionType::DeleteBaseLayerImage`].
 #[serde(rename_all = "camelCase")]
 pub struct DeleteBaseLayerImageActionPayload {
     id: Uuid,
@@ -351,7 +334,7 @@ impl DeleteBaseLayerImageActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdateBaseLayerImage`].
+/// The payload of the [`ActionType::UpdateBaseLayerImage`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateBaseLayerImageActionPayload {
     id: Uuid,
@@ -376,7 +359,7 @@ impl UpdateBaseLayerImageActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the actions [`Action::]`].
+/// The payload of the actions [`ActionType::UpdatePlantingAddDate]`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateAddDateActionPayload {
     id: Uuid,
@@ -385,7 +368,7 @@ pub struct UpdateAddDateActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdatePlantingRemoveDate`].
+/// The payload of the [`ActionType::UpdatePlantingRemoveDate`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateRemoveDateActionPayload {
     id: Uuid,
@@ -394,7 +377,7 @@ pub struct UpdateRemoveDateActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdateMapGeometry`].
+/// The payload of the [`ActionType::UpdateMapGeometry`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateMapGeometryActionPayload {
     /// The entity id for this action.
@@ -416,7 +399,7 @@ impl UpdateMapGeometryActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdatePlantingRemoveDate`].
+/// The payload of the [`ActionType::UpdatePlantingRemoveDate`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdatePlantingAdditionalNamePayload {
     id: Uuid,
