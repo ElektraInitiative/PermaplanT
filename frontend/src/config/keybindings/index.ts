@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { createShortcutIncludingModifierKeysFromKeyEvent } from '@/utils/key-combinations';
 import keybindings from './keybindings.json';
 
@@ -7,6 +8,13 @@ export const KEYBINDINGS_SCOPE_PLANTS_LAYER = 'plants_layer';
 export const KEYBINDINGS_SCOPE_BASE_LAYER = 'base_layer';
 
 type KeyBinding = Record<string, string[]>;
+
+enum SpecialKeys {
+  Escape = 'Escape',
+  Delete = 'Delete',
+  Shift = 'Shift',
+  Control = 'Control',
+}
 
 type KeyBindingsConfig = {
   [scope: string]: KeyBinding;
@@ -51,14 +59,40 @@ export function createKeyBindingsAccordingToConfig(
   return {};
 }
 
+function getConfiguredKeybindingsForAction(scope: string, action: string): string[] {
+  return keyBindingsConfig[scope][action];
+}
+
 /**
- * Retrieves the keyboard shortcuts associated with a specific action within a specified scope.
+ * Retrieves formatted string containing keyboard shortcuts associated with a specific action.
  * @param scope - The scope in which to look for the associated action's shortcut.
  * @param action - The action for which to find the associated keyboard shortcut.
- * @returns list of keyboard shortcuts
- */
-export function getConfiguredShortcutsForAction(scope: string, action: string): string[] {
-  return keyBindingsConfig[scope][action];
+ * @param descriptionText - Optional description text to include in the formatted string.
+ * @returns The string including the keyboard shortcut if found, or just the description text if not found.
+ *         If no description text is provided, the tooltip will only include the keyboard shortcut.
+ *
+ * */
+export function useGetFormattedKeybindingDescriptionForAction(
+  scope: string,
+  action: string,
+  descriptionText?: string,
+): string {
+  const keybindings = getConfiguredKeybindingsForAction(scope, action);
+  const { t } = useTranslation(['keybindings']);
+
+  const translatedKeybindings = keybindings.map((keybinding) => {
+    const parts = keybinding.split('+');
+    return parts
+      .map((part) => {
+        if (Object.values(SpecialKeys).includes(part as SpecialKeys)) {
+          return t(`keybindings:${part as SpecialKeys}`);
+        }
+        return part;
+      })
+      .join('+');
+  });
+
+  return `${descriptionText || ''} (${translatedKeybindings.join(',')})`.trim();
 }
 
 /**

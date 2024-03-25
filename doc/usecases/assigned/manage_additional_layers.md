@@ -1,11 +1,11 @@
-# Use Case: Create Layers
+# Use Case: Manage Additional Layers
 
 ## Summary
 
-- **Scope:** Drawing and Labels Layers
+- **Scope:** Additional Layers
 - **Level:** User Goal
 - **Actors:** App User
-- **Brief:** User can create new non-semantic layers
+- **Brief:** User creates, renames, ranks and removes a new additional layer
 - **Assignee:** Daniel
 
 ## Scenarios
@@ -13,7 +13,7 @@
 - **Precondition:**
   - User has opened the app.
 - **Main success scenario:**
-  - The user can create a new drawing or labels layer.
+  - The user can create a new additional layer.
   - These layers should give hints that they are not semantic for the application.
 - **Alternative scenario:**
 - **Error scenario:**

@@ -114,6 +114,11 @@ export default function MarkdownEditor<T extends FieldValues>({
             fontWeight: 'inherit',
           },
         }}
+        onKeyDown={(event) => {
+          if (event.key === 'Delete') {
+            event.stopPropagation();
+          }
+        }}
         onChange={onChange}
       />
     </div>

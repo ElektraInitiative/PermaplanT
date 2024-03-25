@@ -1,6 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import useGetTimelineEvents from '../../hooks/useGetTimelineEvents';
+import useMapStore from '../../store/MapStore';
+import {
+  TimelineDailyEvent,
+  TimelineMonthlyEvent,
+  TimelineYearlyEvent,
+} from '../../store/MapStoreTypes';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
 
@@ -10,29 +15,7 @@ export const TEST_IDS = Object.freeze({
   YEAR_SLIDER: 'timeline__year-slider',
 });
 
-export type DayItem = {
-  key: number;
-  year: number;
-  month: number;
-  day: number;
-  added: number;
-  removed: number;
-};
-
-export type MonthItem = {
-  key: number;
-  year: number;
-  month: number;
-  added: number;
-  removed: number;
-};
-
-export type YearItem = {
-  key: number;
-  year: number;
-  added: number;
-  removed: number;
-};
+const DAY_SLIDER_VISIBLE_MONTHS = 3;
 
 type TimelineDatePickerProps = {
   /** Is called when date is selected and process is completed.
@@ -48,68 +31,116 @@ type TimelineDatePickerProps = {
 };
 
 const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDatePickerProps) => {
-  const defaultYear = new Date(defaultDate).getFullYear();
-  const defaultMonth = new Date(defaultDate).getMonth() + 1;
-  const defaultDay = new Date(defaultDate).getDate();
+  const { i18n } = useTranslation();
+
+  const daySliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.daily);
+  const monthSliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.monthly);
+  const yearSliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.yearly);
+
+  const defaulttDateObject = new Date(defaultDate);
+  const defaultYear = defaulttDateObject.getFullYear();
+  const defaultMonth = defaulttDateObject.getMonth() + 1;
+  const defaultDay = defaulttDateObject.getDate();
+
+  const defaultDayItem =
+    daySliderItems.find(
+      (day) => day.year === defaultYear && day.month === defaultMonth && day.day === defaultDay,
+    ) || daySliderItems[0];
+  const defaultMonthItem =
+    monthSliderItems.find((month) => month.year === defaultYear && month.month === defaultMonth) ||
+    monthSliderItems[0];
+  const defaultYearItem =
+    yearSliderItems.find((year) => year.year === defaultYear) || yearSliderItems[0];
 
   const submitTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  const {
-    dailyTimeLineEvents: daySilderItems,
-    monthlyTimeLineEvents: monthSliderItems,
-    yearlyTimeLineEvents,
-  } = useGetTimelineEvents();
+  const [selectedYearItem, setSelectedYearItem] = useState<TimelineYearlyEvent>(defaultYearItem);
+  const [selectedMonthItem, setSelectedMonthItem] =
+    useState<TimelineMonthlyEvent>(defaultMonthItem);
+  const [selectedDayItem, setSelectedDayItem] = useState<TimelineDailyEvent>(defaultDayItem);
 
-  const { i18n } = useTranslation();
+  const yearRightBoundReached = useRef(false);
+  const yearLeftBoundReached = useRef(false);
 
-  const [selectedYearItem, setSelectedYearItem] = useState<YearItem>(
-    yearlyTimeLineEvents.find((yearSliderItem) => yearSliderItem.year === defaultYear) ||
-      yearlyTimeLineEvents[0],
+  useEffect(() => {
+    if (defaultDayItem) {
+      setSelectedDayItem(defaultDayItem);
+    }
+  }, [defaultDayItem]);
+
+  useEffect(() => {
+    if (defaultMonthItem) {
+      setSelectedMonthItem(defaultMonthItem);
+    }
+  }, [defaultMonthItem]);
+
+  useEffect(() => {
+    if (defaultYearItem) {
+      setSelectedYearItem(defaultYearItem);
+    }
+  }, [defaultYearItem]);
+
+  const calculateVisibleDays = useCallback(
+    (dayItem: TimelineDailyEvent) => {
+      if (dayItem === undefined) return [];
+
+      const monthDifference = Math.floor(DAY_SLIDER_VISIBLE_MONTHS / 2);
+
+      const yearStart = dayItem.month <= monthDifference ? dayItem.year - 1 : dayItem.year;
+      const yearEnd = dayItem.month > 12 - monthDifference ? dayItem.year + 1 : dayItem.year;
+
+      const monthStart =
+        dayItem.month <= monthDifference
+          ? dayItem.month + (12 - monthDifference)
+          : dayItem.month - monthDifference;
+      const monthEnd =
+        dayItem.month > monthDifference
+          ? dayItem.month - (12 - monthDifference)
+          : dayItem.month + monthDifference;
+
+      return daySliderItems.filter(
+        (day) =>
+          (day.year == yearStart && day.month >= monthStart) ||
+          (day.year == yearEnd && day.month <= monthEnd),
+      );
+    },
+    [daySliderItems],
   );
 
-  const [selectedMonthItem, setSelectedMonthItem] = useState<MonthItem>(
-    monthSliderItems.find((month) => month.year === defaultYear && month.month === defaultMonth) ||
-      monthSliderItems[0],
+  const calculateVisibleMonths = useCallback(
+    (yearItem: TimelineYearlyEvent) => {
+      if (yearItem === undefined) return [];
+
+      return monthSliderItems.filter(
+        (month) => month.year >= yearItem.year - 3 && month.year <= yearItem.year + 3,
+      );
+    },
+    [monthSliderItems],
   );
-
-  const [selectedDayItem, setSelectedDayItem] = useState<DayItem>(
-    daySilderItems.find(
-      (day) => day.year === defaultYear && day.month === defaultMonth && day.day === defaultDay,
-    ) || daySilderItems[0],
-  );
-
-  const calculateVisibleDays = (dayItem: DayItem) => {
-    return daySilderItems.filter(
-      (day) => day.key >= dayItem.key - 100 && day.key <= dayItem.key + 100,
-    );
-  };
-
-  const calculateVisibleMonths = (yearItem: YearItem) => {
-    return monthSliderItems.filter(
-      (month) => month.year >= yearItem.year - 3 && month.year <= yearItem.year + 3,
-    );
-  };
 
   const getLastDayItemOfMonth = (month: number, year: number) => {
-    return daySilderItems
+    return daySliderItems
       .filter((daySliderItem) => daySliderItem.month === month && daySliderItem.year === year)
       .pop();
   };
 
-  const [visibleDays, setVisibleDays] = useState<DayItem[]>(calculateVisibleDays(selectedDayItem));
-  const [visibleMonths, setVisibleMonths] = useState<MonthItem[]>(
-    calculateVisibleMonths(selectedYearItem),
+  const [visibleDays, setVisibleDays] = useState<TimelineDailyEvent[]>(
+    calculateVisibleDays(defaultDayItem),
+  );
+  const [visibleMonths, setVisibleMonths] = useState<TimelineMonthlyEvent[]>(
+    calculateVisibleMonths(defaultYearItem),
   );
 
   const [focusedSlider, setFocusedSlider] = useState<'year' | 'month' | 'day'>();
 
-  const updateSelectedDate = (selectedDayItem: DayItem) => {
+  const updateSelectedDate = (selectedDayItem: TimelineDailyEvent) => {
     onLoading();
     setSelectedDayItem(selectedDayItem);
   };
 
   const handleDayItemChange = (itemKey: number) => {
-    const selectedDayItem = daySilderItems[itemKey];
+    const selectedDayItem = daySliderItems.find((day) => day.key === itemKey);
+    if (!selectedDayItem) return;
 
     updateSelectedDate(selectedDayItem);
 
@@ -123,7 +154,7 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     }
 
     if (selectedDayItem.year !== selectedYearItem.year) {
-      const newYearItem = yearlyTimeLineEvents.find(
+      const newYearItem = yearSliderItems.find(
         (yearSliderItem) => selectedDayItem.year === yearSliderItem.year,
       );
       if (newYearItem) {
@@ -133,11 +164,13 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   const handleMonthChange = (key: number) => {
-    const newMonthItem = monthSliderItems[key];
+    const newMonthItem = monthSliderItems.find((month) => month.key === key);
+    if (!newMonthItem) return;
+
     setSelectedMonthItem(newMonthItem);
 
     if (newMonthItem.year !== selectedYearItem.year) {
-      const newYearItem = yearlyTimeLineEvents.find(
+      const newYearItem = yearSliderItems.find(
         (yearSliderItem) => newMonthItem.year === yearSliderItem.year,
       );
       if (newYearItem) {
@@ -151,7 +184,9 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   const handleYearChange = (yearItemKey: number) => {
-    const newYearItem = yearlyTimeLineEvents[yearItemKey];
+    const newYearItem = yearSliderItems.find((year) => year.key === yearItemKey);
+    if (!newYearItem) return;
+
     setSelectedYearItem(newYearItem);
 
     if (selectedMonthItem.year !== newYearItem.year) {
@@ -173,8 +208,8 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     }
   };
 
-  const selectNewDayWhenMonthChanged = (newMonthItem: MonthItem) => {
-    const sameDayInNewMonth = daySilderItems.find(
+  const selectNewDayWhenMonthChanged = (newMonthItem: TimelineMonthlyEvent) => {
+    const sameDayInNewMonth = daySliderItems.find(
       (day) =>
         newMonthItem.month === day.month &&
         newMonthItem.year === day.year &&
@@ -208,10 +243,39 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   const handleDaySliderRightEndReached = () => {
-    if (visibleDays[visibleDays.length - 1].key < daySilderItems.length - 1) {
+    if (visibleDays[visibleDays.length - 1].key < daySliderItems.length - 1) {
       setVisibleDays(calculateVisibleDays(selectedDayItem));
     }
   };
+
+  const handleYearSliderLeftEndReached = () => {
+    yearLeftBoundReached.current = true;
+  };
+
+  const handleYearSliderRightEndReached = () => {
+    yearRightBoundReached.current = true;
+  };
+
+  const updateTimeLineVisibleYears = (from: number, to: number) => {
+    useMapStore.setState((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        timeLineVisibleYears: {
+          from,
+          to,
+        },
+      },
+    }));
+  };
+
+  useEffect(() => {
+    setVisibleDays(calculateVisibleDays(selectedDayItem));
+  }, [calculateVisibleDays, selectedDayItem]);
+
+  useEffect(() => {
+    setVisibleMonths(calculateVisibleMonths(selectedYearItem));
+  }, [calculateVisibleMonths, selectedYearItem]);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     switch (event.key) {
@@ -258,16 +322,45 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
     }
   };
 
+  const getFormattedDate = useCallback(() => {
+    const newDay = selectedDayItem;
+    const formattedMonth = String(newDay.month).padStart(2, '0');
+    const formattedDay = String(newDay.day).padStart(2, '0');
+    return `${newDay.year}-${formattedMonth}-${formattedDay}`;
+  }, [selectedDayItem]);
+
+  const updateVisibleYears = useCallback(() => {
+    const timeLineVisibleYears = useMapStore.getState().untrackedState.timeLineVisibleYears;
+    if (yearLeftBoundReached.current) {
+      updateTimeLineVisibleYears(timeLineVisibleYears.from - 100, timeLineVisibleYears.to - 100);
+      yearLeftBoundReached.current = false;
+    } else if (yearRightBoundReached.current) {
+      updateTimeLineVisibleYears(timeLineVisibleYears.from + 100, timeLineVisibleYears.to + 100);
+      yearRightBoundReached.current = false;
+    }
+  }, []);
+
   useEffect(() => {
     submitTimeout.current = setTimeout(() => {
-      const newDay = selectedDayItem;
-      const formattedMonth = String(newDay.month).padStart(2, '0');
-      const formattedDay = String(newDay.day).padStart(2, '0');
-      const formattedDate = `${newDay.year}-${formattedMonth}-${formattedDay}`;
-      onSelectDate(formattedDate);
+      onSelectDate(getFormattedDate());
+      updateVisibleYears();
     }, 1000);
     return () => clearTimeout(submitTimeout.current);
-  }, [selectedDayItem, onSelectDate]);
+  }, [
+    getFormattedDate,
+    onSelectDate,
+    selectedDayItem,
+    selectedMonthItem,
+    selectedYearItem,
+    updateVisibleYears,
+  ]);
+
+  const maxAddedDay = Math.max(...daySliderItems.map((day) => day.added));
+  const maxRemovedDay = Math.max(...daySliderItems.map((day) => day.removed));
+  const maxAddedMonth = Math.max(...monthSliderItems.map((month) => month.added));
+  const maxRemovedMonth = Math.max(...monthSliderItems.map((month) => month.removed));
+  const maxAddedYear = Math.max(...yearSliderItems.map((year) => year.added));
+  const maxRemovedYear = Math.max(...yearSliderItems.map((year) => year.removed));
 
   return (
     <div
@@ -277,62 +370,76 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
-      <ItemSliderPicker
-        dataTestId={TEST_IDS.YEAR_SLIDER}
-        items={yearlyTimeLineEvents.map((yearSliderItem) => ({
-          key: yearSliderItem.key,
-          content: TimelineDatePickerItem({
-            text: yearSliderItem.year.toString(),
-            added: yearSliderItem.added,
-            removed: yearSliderItem.removed,
-          }),
-        }))}
-        onChange={handleYearChange}
-        onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
-        value={selectedYearItem.key}
-        autoFocus={focusedSlider === 'year'}
-        onFocus={() => setFocusedSlider('year')}
-      />
-      <ItemSliderPicker
-        dataTestId={TEST_IDS.MONTH_SLIDER}
-        items={visibleMonths.map((monthSliderItem) => ({
-          key: monthSliderItem.key,
-          content: TimelineDatePickerItem({
-            text: getShortMonthNameFromNumber(monthSliderItem.month, i18n.resolvedLanguage),
-            added: monthSliderItem.added,
-            removed: monthSliderItem.removed,
-            disabled: monthSliderItem.year !== selectedYearItem.year,
-          }),
-        }))}
-        onChange={handleMonthChange}
-        leftEndReached={handleMontSliderLeftEndReached}
-        rightEndReached={handleMontSliderRightEndReached}
-        value={selectedMonthItem.key}
-        onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
-        autoFocus={focusedSlider === 'month'}
-        onFocus={() => setFocusedSlider('month')}
-      />
-      <ItemSliderPicker
-        dataTestId={TEST_IDS.DAY_SLIDER}
-        items={visibleDays.map((daySliderItem) => ({
-          key: daySliderItem.key,
-          content: TimelineDatePickerItem({
-            text: daySliderItem.day.toString(),
-            added: daySliderItem.added,
-            removed: daySliderItem.removed,
-            disabled:
-              daySliderItem.month != selectedMonthItem.month ||
-              daySliderItem.year != selectedMonthItem.year,
-          }),
-        }))}
-        onChange={handleDayItemChange}
-        leftEndReached={handleDaySliderLeftEndReached}
-        rightEndReached={handleDaySliderRightEndReached}
-        value={selectedDayItem.key}
-        onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
-        autoFocus={focusedSlider === 'day'}
-        onFocus={() => setFocusedSlider('day')}
-      />
+      {yearSliderItems.length > 0 && (
+        <ItemSliderPicker
+          dataTestId={TEST_IDS.YEAR_SLIDER}
+          items={yearSliderItems.map((yearSliderItem) => ({
+            key: yearSliderItem.key,
+            content: TimelineDatePickerItem({
+              text: yearSliderItem.year.toString(),
+              added: yearSliderItem.added,
+              removed: yearSliderItem.removed,
+              maxAdded: maxAddedYear,
+              maxRemoved: maxRemovedYear,
+            }),
+          }))}
+          onChange={handleYearChange}
+          onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
+          value={selectedYearItem?.key || 0}
+          autoFocus={focusedSlider === 'year'}
+          onFocus={() => setFocusedSlider('year')}
+          rightEndReached={handleYearSliderRightEndReached}
+          leftEndReached={handleYearSliderLeftEndReached}
+        />
+      )}
+      {monthSliderItems.length > 0 && (
+        <ItemSliderPicker
+          dataTestId={TEST_IDS.MONTH_SLIDER}
+          items={visibleMonths.map((monthSliderItem) => ({
+            key: monthSliderItem.key,
+            content: TimelineDatePickerItem({
+              text: getShortMonthNameFromNumber(monthSliderItem.month, i18n.resolvedLanguage),
+              added: monthSliderItem.added,
+              maxAdded: maxAddedMonth,
+              maxRemoved: maxRemovedMonth,
+              removed: monthSliderItem.removed,
+              disabled: monthSliderItem.year !== selectedYearItem.year,
+            }),
+          }))}
+          onChange={handleMonthChange}
+          leftEndReached={handleMontSliderLeftEndReached}
+          rightEndReached={handleMontSliderRightEndReached}
+          value={selectedMonthItem?.key || 0}
+          onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
+          autoFocus={focusedSlider === 'month'}
+          onFocus={() => setFocusedSlider('month')}
+        />
+      )}
+      {daySliderItems.length > 0 && (
+        <ItemSliderPicker
+          dataTestId={TEST_IDS.DAY_SLIDER}
+          items={visibleDays.map((daySliderItem) => ({
+            key: daySliderItem.key,
+            content: TimelineDatePickerItem({
+              text: daySliderItem.day.toString(),
+              added: daySliderItem.added,
+              removed: daySliderItem.removed,
+              maxAdded: maxAddedDay,
+              maxRemoved: maxRemovedDay,
+              disabled:
+                daySliderItem.month != selectedMonthItem.month ||
+                daySliderItem.year != selectedMonthItem.year,
+            }),
+          }))}
+          onChange={handleDayItemChange}
+          leftEndReached={handleDaySliderLeftEndReached}
+          rightEndReached={handleDaySliderRightEndReached}
+          value={selectedDayItem?.key || 0}
+          onDragSelectionChanged={() => clearTimeout(submitTimeout.current)}
+          autoFocus={focusedSlider === 'day'}
+          onFocus={() => setFocusedSlider('day')}
+        />
+      )}
     </div>
   );
 };
@@ -341,39 +448,46 @@ function TimelineDatePickerItem({
   text,
   added,
   removed,
+  maxAdded,
+  maxRemoved,
   disabled,
 }: {
   text: string;
   added: number;
   removed: number;
+  maxAdded: number;
+  maxRemoved: number;
   disabled?: boolean;
 }) {
+  const maxHeight = Math.max(maxAdded, maxRemoved, 200);
+  const addedHeight = added == 0 ? 0 : (Math.log(added) / Math.log(maxHeight)) * 40 + 2;
+  const removedHeight = removed == 0 ? 0 : (Math.log(removed) / Math.log(maxHeight)) * 40 + 2;
+
   return (
-    <div className="select-none">
-      <TimeLineDatePickerEventIndicator added={added} removed={removed} />
-      <span className={`select-none ${disabled ? 'text-gray-400' : ''}`}>{text}</span>
+    <div className="full-width flex w-9 select-none flex-col">
+      <TimeLineDatePickerEventIndicator addedHeight={addedHeight} removedHeight={removedHeight} />
+      <span className={`select-none	 text-center ${disabled ? 'text-gray-400' : ''}`}>{text}</span>
     </div>
   );
 }
 
-function TimeLineDatePickerEventIndicator({ added, removed }: { added: number; removed: number }) {
-  const greenBarHeight = added;
-  const redBarHeight = removed;
-
+function TimeLineDatePickerEventIndicator({
+  addedHeight,
+  removedHeight,
+}: {
+  addedHeight: number;
+  removedHeight: number;
+}) {
   return (
-    <div className="flex select-none justify-center">
-      <div className="flex items-end">
-        <div
-          style={{ height: greenBarHeight + 'px' }}
-          className="w-2 bg-primary-400 opacity-100"
-        ></div>
-      </div>
-      <div className="flex items-end">
-        <div
-          style={{ height: redBarHeight + 'px' }}
-          className="w-2 bg-red-400 opacity-100 dark:bg-red-700"
-        ></div>
-      </div>
+    <div className="full-width select-none">
+      <div
+        style={{ width: addedHeight + 'px' }}
+        className="h-[3px] bg-primary-400 opacity-100"
+      ></div>
+      <div
+        style={{ width: removedHeight + 'px' }}
+        className="mt-[1px] h-[3px] bg-red-400 opacity-100 dark:bg-red-700"
+      ></div>
     </div>
   );
 }

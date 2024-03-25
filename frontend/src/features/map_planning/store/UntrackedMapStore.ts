@@ -189,6 +189,7 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+
   async updateTimelineDate(date) {
     const bounds = get().untrackedState.timelineBounds;
     const from = convertToDate(bounds.from);

@@ -3,6 +3,7 @@ import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_BASE_LAYER,
   createKeyBindingsAccordingToConfig,
+  useGetFormattedKeybindingDescriptionForAction,
 } from '@/config/keybindings';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
@@ -68,7 +69,11 @@ export function MapGeometryToolForm() {
           onClick={() => {
             activatePolygonMovePointsAction();
           }}
-          title={t('baseLayerForm:polygon_move_points_tooltip')}
+          title={useGetFormattedKeybindingDescriptionForAction(
+            KEYBINDINGS_SCOPE_BASE_LAYER,
+            'activatePolygonMovePoints',
+            t('baseLayerForm:polygon_move_points_tooltip'),
+          )}
         >
           <PointerIcon></PointerIcon>
         </IconButton>
@@ -77,7 +82,11 @@ export function MapGeometryToolForm() {
           onClick={() => {
             activatePolygonAddPointsAction();
           }}
-          title={t('baseLayerForm:polygon_add_points_tooltip')}
+          title={useGetFormattedKeybindingDescriptionForAction(
+            KEYBINDINGS_SCOPE_BASE_LAYER,
+            'activatePolygonAddPoints',
+            t('baseLayerForm:polygon_add_points_tooltip'),
+          )}
         >
           <PencilPlusIcon></PencilPlusIcon>
         </IconButton>
@@ -86,7 +95,11 @@ export function MapGeometryToolForm() {
           onClick={() => {
             activatePolygonDeletePointsAction();
           }}
-          title={t('baseLayerForm:polygon_delete_points_tooltip')}
+          title={useGetFormattedKeybindingDescriptionForAction(
+            KEYBINDINGS_SCOPE_BASE_LAYER,
+            'activatePolygonDeletePoints',
+            t('baseLayerForm:polygon_delete_points_tooltip'),
+          )}
         >
           <EraserIcon></EraserIcon>
         </IconButton>

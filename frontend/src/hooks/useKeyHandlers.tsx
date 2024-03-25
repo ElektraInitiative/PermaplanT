@@ -55,7 +55,9 @@ export function useKeyHandlers(
         event.shiftKey,
         event.key,
       );
+
       const handler = keyHandlerMap[pressedShortcut];
+
       if (handler && enabled) {
         handler();
         if (stopPropagation === true) {

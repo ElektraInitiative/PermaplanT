@@ -1,5 +1,8 @@
 import { render } from '@testing-library/react';
 import ReactTestUtils, { act } from 'react-dom/test-utils';
+import { createDays, createYearsAndMonths } from '../../hooks/useGetTimelineData';
+import useMapStore from '../../store/MapStore';
+import { UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from '../../store/MapStoreTypes';
 import TimelineDatePicker from './TimelineDatePicker';
 
 const onSelectChange = vi.fn();
@@ -11,12 +14,14 @@ describe('handleDayItemChange', () => {
   });
 
   beforeAll(() => {
+    setupTimeline();
     vi.useFakeTimers({ shouldAdvanceTime: true });
   });
 
   it('should callback correct date when day item is changed', () => {
-    Element.prototype.scrollTo = vi.fn(() => void 0);
+    setupTimeline();
 
+    Element.prototype.scrollTo = vi.fn(() => void 0);
     const timeline = render(
       <TimelineDatePicker
         defaultDate="2020-12-31"
@@ -24,6 +29,7 @@ describe('handleDayItemChange', () => {
         onLoading={onLoading}
       />,
     );
+
     act(() => {
       ReactTestUtils.Simulate.keyDown(timeline.getByTestId('timeline__day-slider'), {
         key: 'ArrowRight',
@@ -57,6 +63,8 @@ describe('handleMonthItemChange', () => {
   });
 
   it('should callback correct date when month item is changed', () => {
+    setupTimeline();
+
     Element.prototype.scrollTo = vi.fn(() => void 0);
     const onSelectChange = vi.fn();
 
@@ -93,6 +101,8 @@ describe('handleMonthItemChange', () => {
   });
 
   it('should automatically select last day of month if new month has less days than previous selected day', () => {
+    setupTimeline();
+
     Element.prototype.scrollTo = vi.fn(() => void 0);
     const onSelectChange = vi.fn();
 
@@ -137,12 +147,14 @@ describe('handleYearItemChange', () => {
   });
 
   it('should callback correct date when year item is changed', () => {
+    setupTimeline();
+
     Element.prototype.scrollTo = vi.fn(() => void 0);
     const onSelectChange = vi.fn();
 
     const timeline = render(
       <TimelineDatePicker
-        defaultDate="2000-01-31"
+        defaultDate="2020-01-31"
         onSelectDate={onSelectChange}
         onLoading={onLoading}
       />,
@@ -155,11 +167,11 @@ describe('handleYearItemChange', () => {
     });
 
     vi.runAllTimers();
-    expect(onSelectChange).toBeCalledWith('2001-01-31');
+    expect(onSelectChange).toBeCalledWith('2021-01-31');
     expect(
       timeline.getByTestId('timeline__year-slider').getElementsByClassName('selected-item')[0]
         .textContent,
-    ).toBe('2001');
+    ).toBe('2021');
     expect(
       timeline.getByTestId('timeline__month-slider').getElementsByClassName('selected-item')[0]
         .textContent,
@@ -170,3 +182,23 @@ describe('handleYearItemChange', () => {
     ).toBe('31');
   });
 });
+
+function setupTimeline() {
+  useMapStore.setState(createStoreWithTimelineData());
+}
+
+function createStoreWithTimelineData(): Pick<UntrackedMapSlice, 'untrackedState'> {
+  const { years, months } = createYearsAndMonths(2000, 2021, {}, {});
+  const days = createDays(2000, 2021, {});
+
+  return {
+    untrackedState: {
+      ...UNTRACKED_DEFAULT_STATE,
+      timeLineEvents: {
+        yearly: years,
+        monthly: months,
+        daily: days,
+      },
+    },
+  };
+}

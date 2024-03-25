@@ -47,7 +47,7 @@ const ItemSliderPicker = ({
   const scrollPositionOnMouseDown = useRef<number | null>(null);
   const isScrollingToIndex = useRef(false);
 
-  const detectAndNotifyIfBordersIsReached = () => {
+  const detectAndNotifyIfBorderIsReached = () => {
     const container = sliderContainerRef.current;
 
     if (!container) return;
@@ -56,7 +56,10 @@ const ItemSliderPicker = ({
     const containerWidth = container.offsetWidth;
     const scrollWidth = container.scrollWidth;
 
-    const threshold = 500;
+    const threshold = 1000;
+
+    if (isDragging.current) return;
+
     if (scrollLeft < threshold) {
       leftEndReached?.();
     } else if (scrollWidth - scrollLeft - containerWidth < threshold) {
@@ -68,7 +71,7 @@ const ItemSliderPicker = ({
     if (itemKey == selectedItemKey) return;
 
     setSelectedItemKey(itemKey);
-    detectAndNotifyIfBordersIsReached();
+    detectAndNotifyIfBorderIsReached();
   };
 
   const getSelectedItemIndex = useCallback(() => {
@@ -87,6 +90,9 @@ const ItemSliderPicker = ({
 
     const items = container.getElementsByClassName('item') as HTMLCollectionOf<HTMLElement>;
     const selectedElement = items[idx];
+
+    if (!selectedElement) return;
+
     const containerWidth = container.offsetWidth;
     const itemWidth = selectedElement.offsetWidth;
     const scrollLeft = selectedElement.offsetLeft + itemWidth / 2 - containerWidth / 2;
@@ -201,6 +207,8 @@ const ItemSliderPicker = ({
 
     isDragging.current = false;
     dragStartX.current = null;
+
+    detectAndNotifyIfBorderIsReached();
   };
 
   const handleMouseWheel = (e: WheelEvent) => {
@@ -239,13 +247,6 @@ const ItemSliderPicker = ({
       document.removeEventListener('mouseup', handleMouseUp);
     };
   });
-
-  // Add a useEffect hook to scroll to the selected item when items change from the outside.
-  useEffect(() => {
-    const selectedIndex = getSelectedItemIndex();
-    const selectedItemIndex = Math.min(Math.max(selectedIndex, 0), items.length - 1);
-    scrollToIndex(selectedItemIndex);
-  }, [items, getSelectedItemIndex]);
 
   // Add a useEffect hook to update the selected item when the selected value changes from the outside.
   useEffect(() => {
@@ -296,11 +297,11 @@ const ItemSliderPicker = ({
           return (
             <div
               key={index}
-              className={`item min-w-1/5 dark relative flex w-10 flex-col items-center justify-end border-4 border-white px-7 pb-1 pt-1 dark:border-neutral-200-dark
+              className={`item dark border-4 px-2 pt-1
               ${
                 getSelectedItemIndex() === index
-                  ? 'selected-item bg-gray-300 font-bold text-secondary-300 group-focus:border-blue-300 dark:bg-black '
-                  : ''
+                  ? 'selected-item border-b border-t border-blue-200 bg-gray-100 font-bold text-secondary-300 group-focus:border-blue-400 dark:border-black dark:bg-gray-900 '
+                  : 'border-white dark:border-neutral-200-dark'
               }
               `}
               onClick={(e) => handleItemClick(e, index)}

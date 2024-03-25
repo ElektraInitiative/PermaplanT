@@ -10,7 +10,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - needs new migrations
 - needs new scraper data (integer for plant spread and height)
-- _()_
+- pin python package versions for e2e tests #1200 _(4ydan)_
 - Remove variety from table seeds _(Jannis Adamek)_
 - Add timeline API that summarizes plantings #967 _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
@@ -39,6 +39,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 05.02.2024 9:00 _(Markus Raab, Christoph)_
 - Added Meeting Agenda&Notes for 12.02.2024 9:00 _(Markus Raab, Christoph)_
 - Added Meeting Agenda&Notes for 19.02.2024 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 11.03.2024 9:00 _(Markus Raab, Jannis)_
 - _()_
 - _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
@@ -46,6 +47,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
 - Fix broken .env reading for scraper _(Paul)_
 - Add a dev env variable for react query when developing in offline env (e.g. plane) _(Paul)_
+- Collect events from planting layer and add it to timeline _(Daniel Steinkogler)_
+- _()_
+- _()_
 - Remove error messages in console if a seed was not found _(Moritz)_
 - _()_
 - Landing page: Added blog entries, updated team members, minor text changes _(Christoph Schreiner)_
@@ -55,13 +59,14 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Make map geometry viewable and editable _(Moritz)_
 - _()_
-- _()_
+- Prevent propagating enft key on markdown editor _(Daniel Steinkogler)_
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
 - _()_
 - Add key combinations for map geometry _(Daniel Steinkogler)_
 - Add documentation for adding a new field to a model _(Christoph Schreiner)_
 - _()_
+- Add tooltips to show keybindings _(Daniel Steinkogler)_
 - _()_
 - Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
 - _()_
@@ -77,7 +82,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Added missing error toast messages _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Added keybindings for undo and redo _(Daniel Steinkogler)_
 - E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
 - _()_
 - Added planting notes to planting details _(Daniel Steinkogler)_
