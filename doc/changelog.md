@@ -64,7 +64,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add key combinations for map geometry _(Daniel Steinkogler)_
-- Add documentation for adding a new field to a model _(Christoph Schreiner)_
+- Add documentation for adding a new field to an entity _(Christoph Schreiner)_
 - _()_
 - Add tooltips to show keybindings _(Daniel Steinkogler)_
 - _()_
