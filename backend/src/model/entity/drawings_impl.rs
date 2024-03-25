@@ -90,6 +90,7 @@ impl Drawing {
         Ok(result.into_iter().map(Into::into).collect())
     }
 
+    /// Helper that performs the actual update of the drawings.
     fn do_update(
         updates: Vec<UpdateDrawing>,
         conn: &mut AsyncPgConnection,
