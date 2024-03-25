@@ -7,7 +7,7 @@
 - **Actors:** Map Creator, Collaborator
 - **Brief:** Enable collaborators to modify a map.
 - **Simplification:** Without alternatives.
-- **Assignee:** Paul
+- **Assignee:** Paul, Andrei
 
 ## Scenarios
 

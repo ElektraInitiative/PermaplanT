@@ -6,6 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can log watering events for parts of or the entire garden to track watering history and improve plant care.
+- **Assignee:** Lukas
 
 ## Scenarios
 

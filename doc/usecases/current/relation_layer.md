@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move and hides relations.
-- **Assignee:** Daniel
+- **Assignee:** Daniel, Lukas
 
 ## Scenarios
 
@@ -14,6 +14,8 @@
   The user has opened the app and has selected the relations layer.
 - **Main success scenario:**
   - Relations are individual elements or connect two elements, that are removed or added when adding, moving, removing, deleting or modifying elements on the map:
+    - crop rotation (+-)
+    - another plant is at the same spot in future (+-)
     - nearby companion or antagonist (+-)
     - temporal beneficial or destructive relation (+-)
     - shade mismatch (-)

@@ -6,8 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can copy and paste a selection of elements, including succeeding crops, between his own map and a map of another user.
-- **Status:** Analysis
-- **Assignee:** Draft
+- **Assignee:** Andrei
 
 ## Scenarios
 

@@ -6,6 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** Users can generate a PDF file of the map.
+- **Assignee:** Andrei
 
 ## Scenarios
 

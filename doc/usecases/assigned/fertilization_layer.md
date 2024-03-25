@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, remove and delete fertilizers in their map in the layer.
-- **Assignee:** Moritz
+- **Assignee:** Moritz, Lukas
 
 ## Scenarios
 

@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** User renames created or alternative layers
-- **Assignee:** Giancarlo
+- **Assignee:** Daniel
 - **Simplification:** No support for alternative layers
 
 ## Scenarios
