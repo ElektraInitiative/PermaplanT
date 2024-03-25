@@ -44,15 +44,15 @@ pub enum Action {
     /// An action used to broadcast updating a Markdown notes of a plant.
     UpdatePlatingNotes(ActionWrapper<Vec<UpdatePlantingNoteActionPayload>>),
     /// An action used to broadcast creation of a baseLayerImage.
-    CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
+    CreateBaseLayerImage(ActionWrapper<CreateBaseLayerImageActionPayload>),
     /// An action used to broadcast update of a baseLayerImage.
-    UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
+    UpdateBaseLayerImage(ActionWrapper<UpdateBaseLayerImageActionPayload>),
     /// An action used to broadcast deletion of a baseLayerImage.
-    DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
+    DeleteBaseLayerImage(ActionWrapper<DeleteBaseLayerImageActionPayload>),
     /// An action used to broadcast an update to the map geometry.
-    UpdateMapGeometry(UpdateMapGeometryActionPayload),
+    UpdateMapGeometry(ActionWrapper<UpdateMapGeometryActionPayload>),
     /// An action used to update the `additional_name` of a plant.
-    UpdatePlantingAdditionalName(UpdatePlantingAdditionalNamePayload),
+    UpdatePlantingAdditionalName(ActionWrapper<UpdatePlantingAdditionalNamePayload>),
 
     /// An action used to broadcast creation of a new drawing shape.
     CreateDrawing(ActionWrapper<Vec<DrawingDto>>),
@@ -80,23 +80,23 @@ impl Action {
     #[must_use]
     pub fn action_id(&self) -> Uuid {
         match self {
-            Self::CreatePlanting(payload) => payload.action_id,
-            Self::DeletePlanting(payload) => payload.action_id,
-            Self::MovePlanting(payload) => payload.action_id,
-            Self::TransformPlanting(payload) => payload.action_id,
-            Self::UpdatePlatingNotes(payload) => payload.action_id,
-            Self::CreateBaseLayerImage(payload) => payload.action_id,
-            Self::UpdateBaseLayerImage(payload) => payload.action_id,
-            Self::DeleteBaseLayerImage(payload) => payload.action_id,
-            Self::UpdatePlantingAddDate(payload) => payload.action_id,
-            Self::UpdatePlantingRemoveDate(payload) => payload.action_id,
-            Self::UpdatePlantingAdditionalName(payload) => payload.action_id,
-            Self::UpdateMapGeometry(payload) => payload.action_id,
-            Self::CreateDrawing(payload) => payload.action_id,
-            Self::UpdateDrawing(payload) => payload.action_id,
-            Self::DeleteDrawing(payload) => payload.action_id,
-            Self::UpdateDrawingAddDate(payload) => payload.action_id,
-            Self::UpdateDrawingRemoveDate(payload) => payload.action_id,
+            Self::CreatePlanting(ActionWrapper { action_id, .. })
+            | Self::DeletePlanting(ActionWrapper { action_id, .. })
+            | Self::MovePlanting(ActionWrapper { action_id, .. })
+            | Self::TransformPlanting(ActionWrapper { action_id, .. })
+            | Self::UpdatePlatingNotes(ActionWrapper { action_id, .. })
+            | Self::CreateBaseLayerImage(ActionWrapper { action_id, .. })
+            | Self::UpdateBaseLayerImage(ActionWrapper { action_id, .. })
+            | Self::DeleteBaseLayerImage(ActionWrapper { action_id, .. })
+            | Self::UpdatePlantingAddDate(ActionWrapper { action_id, .. })
+            | Self::UpdatePlantingRemoveDate(ActionWrapper { action_id, .. })
+            | Self::UpdatePlantingAdditionalName(ActionWrapper { action_id, .. })
+            | Self::UpdateMapGeometry(ActionWrapper { action_id, .. })
+            | Self::CreateDrawing(ActionWrapper { action_id, .. })
+            | Self::UpdateDrawing(ActionWrapper { action_id, .. })
+            | Self::DeleteDrawing(ActionWrapper { action_id, .. })
+            | Self::UpdateDrawingAddDate(ActionWrapper { action_id, .. })
+            | Self::UpdateDrawingRemoveDate(ActionWrapper { action_id, .. }) => *action_id,
         }
     }
 
@@ -314,8 +314,6 @@ pub struct UpdatePlantingNoteActionPayload {
 /// This struct should always match [`BaseLayerImageDto`].
 #[serde(rename_all = "camelCase")]
 pub struct CreateBaseLayerImageActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     rotation: f32,
@@ -325,10 +323,8 @@ pub struct CreateBaseLayerImageActionPayload {
 
 impl CreateBaseLayerImageActionPayload {
     #[must_use]
-    pub fn new(payload: BaseLayerImageDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: BaseLayerImageDto) -> Self {
         Self {
-            user_id,
-            action_id,
             id: payload.id,
             layer_id: payload.layer_id,
             rotation: payload.rotation,
@@ -343,19 +339,13 @@ impl CreateBaseLayerImageActionPayload {
 /// The payload of the [`Action::DeleteBaseLayerImage`].
 #[serde(rename_all = "camelCase")]
 pub struct DeleteBaseLayerImageActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
 }
 
 impl DeleteBaseLayerImageActionPayload {
     #[must_use]
-    pub fn new(id: Uuid, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id,
-        }
+    pub fn new(id: Uuid) -> Self {
+        Self { id }
     }
 }
 
@@ -364,8 +354,6 @@ impl DeleteBaseLayerImageActionPayload {
 /// The payload of the [`Action::UpdateBaseLayerImage`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateBaseLayerImageActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     rotation: f32,
@@ -375,10 +363,8 @@ pub struct UpdateBaseLayerImageActionPayload {
 
 impl UpdateBaseLayerImageActionPayload {
     #[must_use]
-    pub fn new(payload: BaseLayerImageDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: BaseLayerImageDto) -> Self {
         Self {
-            user_id,
-            action_id,
             id: payload.id,
             layer_id: payload.layer_id,
             rotation: payload.rotation,
@@ -411,8 +397,6 @@ pub struct UpdateRemoveDateActionPayload {
 /// The payload of the [`Action::UpdateMapGeometry`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateMapGeometryActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     /// The entity id for this action.
     map_id: i32,
     // E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
@@ -422,10 +406,8 @@ pub struct UpdateMapGeometryActionPayload {
 
 impl UpdateMapGeometryActionPayload {
     #[must_use]
-    pub fn new(payload: UpdateMapGeometryDto, map_id: i32, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: UpdateMapGeometryDto, map_id: i32) -> Self {
         Self {
-            user_id,
-            action_id,
             map_id,
             geometry: payload.geometry,
         }
@@ -437,23 +419,14 @@ impl UpdateMapGeometryActionPayload {
 /// The payload of the [`Action::UpdatePlantingRemoveDate`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdatePlantingAdditionalNamePayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     additional_name: Option<String>,
 }
 
 impl UpdatePlantingAdditionalNamePayload {
     #[must_use]
-    pub fn new(
-        payload: &PlantingDto,
-        new_additional_name: Option<String>,
-        user_id: Uuid,
-        action_id: Uuid,
-    ) -> Self {
+    pub fn new(payload: &PlantingDto, new_additional_name: Option<String>) -> Self {
         Self {
-            user_id,
-            action_id,
             id: payload.id,
             additional_name: new_additional_name,
         }

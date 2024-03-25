@@ -10,7 +10,7 @@ use uuid::Uuid;
 
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
-use crate::model::dto::actions::{Action, UpdateMapGeometryActionPayload};
+use crate::model::dto::actions::{Action, ActionWrapper, UpdateMapGeometryActionPayload};
 use crate::model::dto::{MapSearchParameters, PageParameters, UpdateMapDto, UpdateMapGeometryDto};
 use crate::{model::dto::NewMapDto, service};
 
@@ -156,12 +156,14 @@ pub async fn update_geometry(
         .broadcaster
         .broadcast(
             map_id_inner,
-            Action::UpdateMapGeometry(UpdateMapGeometryActionPayload::new(
-                map_update_geometry_json.0,
-                map_id_inner,
-                user_info.id,
-                Uuid::new_v4(),
-            )),
+            Action::UpdateMapGeometry(ActionWrapper {
+                action_id: Uuid::new_v4(),
+                user_id: user_info.id,
+                payload: UpdateMapGeometryActionPayload::new(
+                    map_update_geometry_json.0,
+                    map_id_inner,
+                ),
+            }),
         )
         .await;
 

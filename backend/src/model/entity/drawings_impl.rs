@@ -1,4 +1,4 @@
-//! Contains the implementation of [`Drawings`].
+//! Contains the implementation of [`Drawing`].
 
 use diesel::pg::Pg;
 use diesel::query_dsl::methods::FilterDsl;
@@ -80,7 +80,7 @@ impl Drawing {
                         drawings::table.select(drawings::all_columns),
                         drawings::id.eq_any(ids),
                     )
-                    .load::<Drawing>(transaction)
+                    .load::<Self>(transaction)
                     .await?;
 
                     Ok(results) as QueryResult<Vec<Self>>

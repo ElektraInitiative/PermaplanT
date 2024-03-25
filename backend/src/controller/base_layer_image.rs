@@ -11,8 +11,8 @@ use crate::{
     config::auth::user_info::UserInfo,
     model::dto::{
         actions::{
-            Action, CreateBaseLayerImageActionPayload, DeleteBaseLayerImageActionPayload,
-            UpdateBaseLayerImageActionPayload,
+            Action, ActionWrapper, CreateBaseLayerImageActionPayload,
+            DeleteBaseLayerImageActionPayload, UpdateBaseLayerImageActionPayload,
         },
         DeleteBaseLayerImageDto,
     },
@@ -75,11 +75,11 @@ pub async fn create(
         .broadcaster
         .broadcast(
             path.into_inner(),
-            Action::CreateBaseLayerImage(CreateBaseLayerImageActionPayload::new(
-                dto.clone(),
-                user_info.id,
-                create_dto.action_id,
-            )),
+            Action::CreateBaseLayerImage(ActionWrapper {
+                action_id: create_dto.action_id,
+                user_id: user_info.id,
+                payload: CreateBaseLayerImageActionPayload::new(dto.clone()),
+            }),
         )
         .await;
 
@@ -125,11 +125,11 @@ pub async fn update(
         .broadcaster
         .broadcast(
             map_id,
-            Action::UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload::new(
-                dto.clone(),
-                user_info.id,
-                update_base_layer_image.action_id,
-            )),
+            Action::UpdateBaseLayerImage(ActionWrapper {
+                action_id: update_base_layer_image.action_id,
+                user_id: user_info.id,
+                payload: UpdateBaseLayerImageActionPayload::new(dto.clone()),
+            }),
         )
         .await;
 
@@ -169,11 +169,11 @@ pub async fn delete(
         .broadcaster
         .broadcast(
             map_id,
-            Action::DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload::new(
-                base_layer_image_id,
-                user_info.id,
-                delete_dto.action_id,
-            )),
+            Action::DeleteBaseLayerImage(ActionWrapper {
+                action_id: delete_dto.action_id,
+                user_id: user_info.id,
+                payload: DeleteBaseLayerImageActionPayload::new(base_layer_image_id),
+            }),
         )
         .await;
 

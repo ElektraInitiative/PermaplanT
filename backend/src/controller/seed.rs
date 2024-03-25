@@ -10,8 +10,8 @@ use uuid::Uuid;
 
 use crate::config::auth::user_info::UserInfo;
 use crate::config::data::AppDataInner;
-use crate::model::dto::actions::Action;
 use crate::model::dto::actions::UpdatePlantingAdditionalNamePayload;
+use crate::model::dto::actions::{Action, ActionWrapper};
 use crate::model::dto::{PageParameters, SeedSearchParameters};
 use crate::{model::dto::ArchiveSeedDto, model::dto::NewSeedDto, service};
 
@@ -141,14 +141,14 @@ pub async fn edit_by_id(
     for planting in affected_plantings.await? {
         app_data
             .broadcaster
-            .broadcast_all_maps(Action::UpdatePlantingAdditionalName(
-                UpdatePlantingAdditionalNamePayload::new(
+            .broadcast_all_maps(Action::UpdatePlantingAdditionalName(ActionWrapper {
+                action_id: Uuid::new_v4(),
+                user_id: user_info.id,
+                payload: UpdatePlantingAdditionalNamePayload::new(
                     &planting,
                     Some(response.name.clone()),
-                    user_info.id,
-                    Uuid::new_v4(),
                 ),
-            ))
+            }))
             .await;
     }
 
