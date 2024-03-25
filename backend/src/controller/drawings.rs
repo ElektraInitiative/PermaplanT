@@ -114,6 +114,14 @@ pub async fn update(
 
     let updated = service::drawings::update(dto.clone(), &app_data).await?;
 
+    let action = match &dto {
+        UpdateDrawingsDto::Update(_) => ActionType::UpdateDrawing(updated.clone()),
+        UpdateDrawingsDto::UpdateAddDate(_) => ActionType::UpdateDrawingAddDate(updated.clone()),
+        UpdateDrawingsDto::UpdateRemoveDate(_) => {
+            ActionType::UpdateDrawingRemoveDate(updated.clone())
+        }
+    };
+
     app_data
         .broadcaster
         .broadcast(
@@ -121,7 +129,7 @@ pub async fn update(
             Action {
                 action_id,
                 user_id: user_info.id,
-                action: ActionType::UpdateDrawingRemoveDate(updated.clone()),
+                action,
             },
         )
         .await;
