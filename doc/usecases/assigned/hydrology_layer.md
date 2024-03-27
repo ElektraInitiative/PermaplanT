@@ -18,7 +18,6 @@
     For example: surface water runoff, natural reservoirs, gullies, rills, etc.
     This includes positioning the areas in the appropriate location.
   - Moisture or dry areas can be added by a small (rills) or big brush (surface water) to draw on the moisture layer.
-  - Arrows can be used to indicate water flow.
 - **Alternative scenario:**
   - The user accidentally edits, moves or removes an element and uses undo to correct the mistake.
   - The user accidentally adds an element and deletes it with the "delete" or "undo" functionality.

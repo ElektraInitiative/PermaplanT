@@ -1,3 +1,5 @@
+import type { Config } from 'tailwindcss';
+
 const gray = {
   50: {
     light: '#fefefe',
@@ -48,6 +50,29 @@ const gray = {
     light: '#161616',
     DEFAULT: '#161616',
     dark: '#cdcdcd',
+  },
+};
+
+// Accent color used for editor objects that should be visible on most backgrounds.
+const highlight = {
+  DEFAULT: '#ca3b3b',
+};
+
+const shadings = {
+  noShade: {
+    DEFAULT: 'rgba(219,215,18,0.6)',
+  },
+  lightShade: {
+    DEFAULT: 'rgba(146,213,255,0.6)',
+  },
+  partialShade: {
+    DEFAULT: 'rgba(51,76,255,0.6)',
+  },
+  permanentShade: {
+    DEFAULT: 'rgba(108,54,208,0.6)',
+  },
+  permanentDeepShade: {
+    DEFAULT: 'rgba(0,0,0,0.6)',
   },
 };
 
@@ -123,8 +148,7 @@ const accentColors = {
   },
 };
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: 'class',
   content: ['./src/**/*.{html,ts,tsx}'],
   theme: {
@@ -140,8 +164,10 @@ module.exports = {
         primary: accentColors.asparagus,
         secondary: accentColors.sea_blue,
         neutral: gray,
+        highlight: highlight,
+        shadings: shadings,
       },
     },
   },
   plugins: [],
-};
+} satisfies Config;

@@ -1,8 +1,19 @@
-import useDebouncedValue from './useDebouncedValue';
 import { act, renderHook } from '@testing-library/react';
 import { useState } from 'react';
+import useDebouncedValue from './useDebouncedValue';
 
 describe('useDebouncedValue', () => {
+  const renderUseDebouncedValue = () => {
+    const result = renderHook(() => {
+      const [value, setValue] = useState('');
+      const debouncedValue = useDebouncedValue(value, 500);
+
+      return { value, setValue, debouncedValue };
+    });
+
+    return result;
+  };
+
   afterEach(() => {
     vi.useRealTimers();
   });
@@ -10,12 +21,7 @@ describe('useDebouncedValue', () => {
   test('there should only be one timer running at a time', async () => {
     vi.useFakeTimers();
 
-    const { result } = renderHook(() => {
-      const [value, setValue] = useState('');
-      const debouncedValue = useDebouncedValue(value, 500);
-
-      return { value, setValue, debouncedValue };
-    });
+    const { result } = renderUseDebouncedValue();
 
     act(() => {
       result.current.setValue('t');
@@ -39,12 +45,7 @@ describe('useDebouncedValue', () => {
   test('it should return the value after the delay', async () => {
     vi.useFakeTimers();
 
-    const { result } = renderHook(() => {
-      const [value, setValue] = useState('');
-      const debouncedValue = useDebouncedValue(value, 500);
-
-      return { value, setValue, debouncedValue };
-    });
+    const { result } = renderUseDebouncedValue();
 
     act(() => {
       result.current.setValue('t');

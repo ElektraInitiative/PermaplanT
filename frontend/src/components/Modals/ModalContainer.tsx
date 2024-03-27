@@ -1,6 +1,6 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { createKeyBindingsAccordingToConfig, KEYBINDINGS_SCOPE_GLOBAL } from '@/config/keybindings';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
-import { AnimatePresence, motion } from 'framer-motion';
 
 interface ModalContainerProps {
   /** usually the Modal content */
@@ -20,10 +20,12 @@ export default function ModalContainer({
   const keyHandlerActions = {
     cancelModal: onCancelKeyPressed,
   };
+
   useKeyHandlers(
     createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_GLOBAL, keyHandlerActions),
     document,
     true,
+    show,
   );
 
   return (

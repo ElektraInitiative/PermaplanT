@@ -2,11 +2,19 @@
     @apply bg-neutral-200-light dark:bg-neutral-200-dark;
 }
 
-.shepherd-has-title .shepherd-content .shepherd-header {
+div.shepherd-element {
+    border-radius: 10px;
+}
+
+div.shepherd-arrow::before {
+    @apply bg-neutral-200-light dark:bg-neutral-200-dark;
+}
+
+.shepherd-has-title .shepherd-content header.shepherd-header {
     @apply bg-neutral-100-light dark:bg-neutral-100-dark;
 }
 
-.shepherd-text, .shepherd-title {
+div.shepherd-text, h3.shepherd-title {
     @apply dark:text-white;
 }
 
@@ -39,7 +47,7 @@
 }
 
 .highlighted {
-    @apply border border-4 border-secondary-200 dark:border-secondary-600;
+    @apply border-solid border-4 border-secondary-200 dark:border-secondary-600;
 }
 
 input[type=radio].highlighted, input[type=date].highlighted {
@@ -47,5 +55,5 @@ input[type=radio].highlighted, input[type=date].highlighted {
 }
 
 .action-step {
-    @apply border border-4 border-secondary-200 dark:border-secondary-600;
+    @apply border-solid border-4 border-secondary-200 dark:border-secondary-600;
 }

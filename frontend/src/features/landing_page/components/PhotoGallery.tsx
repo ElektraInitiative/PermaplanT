@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import '@/components/Modals/ImageModal';
@@ -6,8 +8,6 @@ import { getPublicImageList } from '@/features/nextcloud_integration/api/getImag
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import ChevronLeftIcon from '@/svg/icons/chevron-left.svg?react';
 import ChevronRightIcon from '@/svg/icons/chevron-right.svg?react';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 
 /** Component used for the landing page to show photos from the PermaplanT public Nextcloud directory */
 export const PhotoGallery = () => {

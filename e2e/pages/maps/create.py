@@ -18,6 +18,26 @@ class MapCreatePage(AbstractPage):
         self._create_button = page.get_by_role("button", name="Create")
         self._privacy_select = page.get_by_test_id("map-create-form__select-privacy")
 
+    def try_create_a_map(
+        self,
+        mapname,
+        privacy="private",
+        description="SUT-Description",
+        latitude="1",
+        longitude="1",
+    ):
+        """
+        Helper function to create a map
+        Fills out fields and clicks create at the end
+        which navigate to the `MapManagementPage`
+        """
+        self.fill_name(mapname)
+        self.select_privacy(privacy)
+        self.fill_description(description)
+        self.fill_latitude(latitude)
+        self.fill_longitude(longitude)
+        self.click_create(check_for_navigation=False)
+
     def create_a_map(
         self,
         mapname,
@@ -53,10 +73,17 @@ class MapCreatePage(AbstractPage):
     def fill_latitude(self, latitude: str):
         self._latitude.fill(latitude)
 
-    def click_create(self):
+    def click_create(self, check_for_navigation=True):
         """
         Clicks create at the end
-        which navigate to the `MapManagementPage`
+        which navigates to the `MapManagementPage`
+        in case of success
         """
         self._create_button.click()
-        self._page.wait_for_url("**/maps")
+
+        if check_for_navigation:
+            self._page.wait_for_url("**/maps")
+
+    def expect_mapname_editable(self, mapname: str):
+        """Checks if the mapname is editable"""
+        self._name.fill(mapname)

@@ -1,6 +1,6 @@
-import ModalContainer from './ModalContainer';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
+import ModalContainer from './ModalContainer';
 
 it('renders correctly', () => {
   const tree = renderer

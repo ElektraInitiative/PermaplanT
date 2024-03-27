@@ -1,7 +1,7 @@
-import { ButtonVariant } from '../Button/SimpleButton';
-import SimpleButton from '../Button/SimpleButton';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
+import { ButtonVariant } from '../Button/SimpleButton';
+import SimpleButton from '../Button/SimpleButton';
 
 it('renders correctly for primary base variant', () => {
   const tree = renderer

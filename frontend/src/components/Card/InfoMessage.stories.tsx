@@ -1,5 +1,5 @@
-import InfoMessage, { InfoMessageType } from './InfoMessage';
 import type { Meta, StoryObj } from '@storybook/react';
+import InfoMessage, { InfoMessageType } from './InfoMessage';
 
 const meta: Meta<typeof InfoMessage> = {
   title: 'Components/Cards/InfoMessage',

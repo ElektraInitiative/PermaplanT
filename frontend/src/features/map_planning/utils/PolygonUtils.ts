@@ -1,9 +1,43 @@
 import { calculateDistance } from '@/features/map_planning/layers/base/util';
 import {
   EdgeRing,
+  GeometryStats,
   PolygonGeometry,
   PolygonPoint,
 } from '@/features/map_planning/types/PolygonTypes';
+
+/**
+ * Derive GeometryStats from a Geometry object.
+ * CAUTION: for simplicity reasons only the first edge loop will be considered.
+ *
+ * @param geometry The object for which GeometryStats should be generated.
+ */
+export function calculateGeometryStats(geometry: PolygonGeometry, ring: number): GeometryStats {
+  const firstEdgeRing = geometry.rings[ring];
+  let minX = firstEdgeRing[0].x;
+  let maxX = firstEdgeRing[0].x;
+  let minY = firstEdgeRing[0].y;
+  let maxY = firstEdgeRing[0].y;
+
+  for (const point of firstEdgeRing) {
+    minX = Math.min(point.x, minX);
+    maxX = Math.max(point.x, maxX);
+    minY = Math.min(point.y, minY);
+    maxY = Math.max(point.y, maxY);
+  }
+
+  const width = Math.abs(maxX - minX);
+  const height = Math.abs(maxY - minY);
+
+  return {
+    minX,
+    minY,
+    maxX,
+    maxY,
+    width,
+    height,
+  };
+}
 
 /**
  * Try to insert pointToInsert between the two points in geometry where the distance between pointToInsert and the
@@ -129,6 +163,20 @@ export function insertBetweenPointsWithLeastTotalDistance(
 }
 
 /**
+ * Checks whether a point was already inserted into the first ring of a geometry.
+ *
+ * @param geometry The geomtery to check.
+ * @param pointToCheck A point that might already have been inserted.
+ */
+export function isPointInGeometry(geometry: PolygonGeometry, pointToCheck: PolygonPoint): boolean {
+  for (const point of geometry.rings[0]) {
+    if (point.x === pointToCheck.x && point.y === pointToCheck.y) return true;
+  }
+
+  return false;
+}
+
+/**
  * Removes a point from the PolygonGeometry object.
  *
  * @param geometry The object the point should be removed from.
@@ -190,6 +238,38 @@ export function flattenRing(ring: EdgeRing): number[] {
   return ring
     .map((point) => [point.x, point.y])
     .reduce((accumulator, next) => accumulator.concat(next));
+}
+
+/**
+ * Create a circular shape around a specified point.
+ * The srid of the newly generated polygon is equal to the srid of the supplied point.
+ *
+ * @param centerPoint Center point of the new geometry.
+ * @param ringPoints The number of points to be generated.
+ * @param radius Distance between the center point and each point on the shape.
+ */
+export function ringGeometryAroundPoint(
+  centerPoint: PolygonPoint,
+  ringPoints: number,
+  radius: number,
+): PolygonGeometry {
+  const points: Array<PolygonPoint> = [];
+  for (let point = 0; point < ringPoints; point++) {
+    // The position of each point is given in polar coordinates (radius, theta).
+    const theta = ((2 * Math.PI) / ringPoints) * point;
+    // Polygons require carthesian coordinates.
+    const x = centerPoint.x + radius * Math.cos(theta);
+    const y = centerPoint.y + radius * Math.sin(theta);
+
+    points.push({ x, y, srid: centerPoint.srid });
+  }
+
+  points.push(points[0]);
+
+  return {
+    rings: [points],
+    srid: centerPoint.srid,
+  };
 }
 
 /**

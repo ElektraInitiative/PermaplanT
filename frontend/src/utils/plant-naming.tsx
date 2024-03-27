@@ -1,5 +1,5 @@
-import { PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 import { ReactElement } from 'react';
+import { PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 
 /**
  * Gets the common name from a PlantsSummaryDto.

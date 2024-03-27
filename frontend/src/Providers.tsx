@@ -1,16 +1,26 @@
-import { getAuthInfo } from './features/auth';
-import { onError } from '@/config/react_query';
 import { QueryCache, QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactNode } from 'react';
 import { AuthProvider } from 'react-oidc-context';
 import { BrowserRouter } from 'react-router-dom';
+import { onError } from '@/config/react_query';
+import { queryOffline } from './config';
+import { getAuthInfo } from './features/auth';
 
 interface ProviderProps {
   children: ReactNode;
 }
 
 const queryClient = new QueryClient({
+  // even when no internet connection is available, send stuff
+  defaultOptions: {
+    queries: {
+      networkMode: queryOffline ? 'always' : undefined,
+    },
+    mutations: {
+      networkMode: queryOffline ? 'always' : undefined,
+    },
+  },
   queryCache: new QueryCache({
     onError: onError,
   }),

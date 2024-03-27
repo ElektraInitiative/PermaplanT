@@ -94,45 +94,36 @@ impl Planting {
     /// # Errors
     /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
-    ///
-    /// # Panics
-    /// Clippy thinks this function can panic because is makes use of unwrap.
-    /// But because we only unwrap after the relevant Result was checked,
-    /// this should never happen.
-    #[allow(clippy::unwrap_used)]
     pub async fn create(
         dto: NewPlantingDto,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<PlantingDto> {
         let planting = Self::from(dto);
         let query = diesel::insert_into(plantings::table).values(&planting);
-        let query_result = query.get_result::<Self>(conn).await.map(Into::into);
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        if planting.seed_id.is_none() || query_result.is_err() {
-            return query_result;
-        }
+        let mut query_result: PlantingDto = query.get_result::<Self>(conn).await.map(Into::into)?;
+        let Some(seed_id) = planting.seed_id else {
+            return Ok(query_result);
+        };
 
         // There seems to be no way of retrieving the additional name using the insert query
         // above.
         let additional_name_query = seeds::table
             .select(seeds::name.nullable())
-            .filter(seeds::id.eq(planting.seed_id.unwrap()));
+            .filter(seeds::id.eq(seed_id));
 
         debug!("{}", debug_query::<Pg, _>(&additional_name_query));
 
-        let mut query_result_unwrapped = query_result.unwrap();
-        match additional_name_query
+        let additional_name: Option<String> = additional_name_query
             .get_result::<Option<String>>(conn)
             .await
-            .map(Into::into)
-        {
-            Ok(additional_name) => query_result_unwrapped.additional_name = additional_name,
-            Err(e) => return Err(e), // Should not be necessary, but required by the rust compiler.
-        }
+            .map(Into::into)?;
 
-        Ok(query_result_unwrapped)
+        query_result.additional_name = additional_name;
+
+        Ok(query_result)
     }
 
     /// Partially update a planting in the database.

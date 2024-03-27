@@ -13,7 +13,7 @@ const CTA = () => {
             roathse. Craies vegan tousled etsy austin.
           </p>
         </div>
-        <div className="mt-10 flex w-full flex-col rounded-lg bg-gray-100 p-8 dark:bg-neutral-300-dark md:ml-auto md:mt-0 md:w-full lg:w-1/2">
+        <div className="mt-10 flex w-full flex-col rounded-lg bg-gray-100 p-8 md:ml-auto md:mt-0 md:w-full lg:w-1/2 dark:bg-neutral-300-dark">
           <h2 className="title-font mb-5 text-lg font-medium text-gray-900">Sign Up</h2>
           <div className="relative mb-4">
             <label htmlFor="full-name" className="text-sm leading-7 text-gray-600">

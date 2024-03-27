@@ -1,9 +1,9 @@
+import { useTranslation } from 'react-i18next';
+import TypewriterComponent from 'typewriter-effect';
+import PlantSVG from '@/svg/plant.svg?react';
 import GlobeSVG from '../../../svg/globe.svg?react';
 import PlanningSVG from '../../../svg/planning.svg?react';
 import './Features.css';
-import PlantSVG from '@/svg/plant.svg?react';
-import { useTranslation } from 'react-i18next';
-import TypewriterComponent from 'typewriter-effect';
 
 interface Feature {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;

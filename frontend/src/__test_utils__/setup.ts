@@ -1,5 +1,5 @@
-import * as plants from './msw_handlers/plants';
 import { setupServer } from 'msw/node';
+import * as plants from './msw_handlers/plants';
 
 export const server = setupServer(...plants.handlers);
 

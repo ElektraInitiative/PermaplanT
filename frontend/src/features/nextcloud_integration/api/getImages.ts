@@ -1,7 +1,7 @@
-import { nextcloudUri } from '@/config';
-import { createNextcloudAPI } from '@/config/axios';
 import axios from 'axios';
 import { FileStat, ResponseDataDetailed, WebDAVClient } from 'webdav';
+import { nextcloudUri } from '@/config';
+import { createNextcloudAPI } from '@/config/axios';
 
 // NOTE: Leaving this for now as it could be useful as an exmample
 // when fetching ressources from other parts of Nextcloud

@@ -65,4 +65,4 @@ class SeedEditPage(AbstractPage):
         Edits seeds and navigates back to the `MapManagementPage`
         """
         self._edit_button.click()
-        self._page.wait_for_url("**/seeds/")
+        self._page.wait_for_url("**/seeds")

@@ -1,6 +1,6 @@
-import { usePublicImage } from '../hooks/usePublicImage';
 import { QueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { usePublicImage } from '../hooks/usePublicImage';
 
 type RetryValue<TError> = QueryOptions<unknown, TError>['retry'];
 

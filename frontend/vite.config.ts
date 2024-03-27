@@ -1,10 +1,10 @@
 /// <reference types="vitest" />
-import manifest from './manifest.json';
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import svgr from 'vite-plugin-svgr';
+import manifest from './manifest.json';
 
 // https://vitejs.dev/config/
 export default defineConfig(() => {
@@ -35,6 +35,9 @@ export default defineConfig(() => {
       globals: true,
       environment: 'jsdom',
       setupFiles: ['./src/vitest-setup.ts'],
+      sequence: {
+        setupFiles: 'list',
+      },
       // To understand this config, check https://github.com/vitest-dev/vitest/issues/740
       // Because of this issue, we need to use a forked pool
       pool: 'forks',

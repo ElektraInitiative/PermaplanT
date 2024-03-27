@@ -1,8 +1,8 @@
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
-import { useIsOnline } from '@/hooks/useIsOnline';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
+import { useIsOnline } from '@/hooks/useIsOnline';
 
 const ReadOnlyModeContext = React.createContext(false);
 

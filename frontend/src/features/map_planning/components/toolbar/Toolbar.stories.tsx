@@ -1,6 +1,6 @@
-import { Toolbar } from './Toolbar';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ReactNode } from 'react';
+import { Toolbar } from './Toolbar';
 
 const meta: Meta<typeof Toolbar> = {
   component: Toolbar,

@@ -1,4 +1,5 @@
-import { UpdateBaseLayerAction } from '../../../layers/base/actions';
+import { SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { BaseLayerImageDto } from '@/api_types/definitions';
 import {
   BaseLayerAttributeEditForm,
@@ -13,8 +14,7 @@ import { calculateDistance, calculateScale } from '@/features/map_planning/layer
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 import { errorToastGrouped } from '@/features/toasts/groupedToast';
-import { SubmitHandler } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { UpdateBaseLayerAction } from '../../../layers/base/actions';
 
 class ValidationError extends Error {
   constructor(msg: string) {

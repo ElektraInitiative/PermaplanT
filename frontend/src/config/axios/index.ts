@@ -1,7 +1,7 @@
-import { baseApiUrl, nextcloudUri } from '../env';
+import axios from 'axios';
 import { getUser } from '@/utils/getUser';
 import mapErrorToString from '@/utils/map-error-to-string';
-import axios from 'axios';
+import { baseApiUrl, nextcloudUri } from '../env';
 
 /**
  * create an instance of axios configured for PermaplanT

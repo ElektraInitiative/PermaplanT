@@ -1,4 +1,3 @@
-import useDebounceEffect from './useDebounceEffect';
 import { useState, useEffect } from 'react';
 import {
   FieldValues,
@@ -7,6 +6,7 @@ import {
   SubmitErrorHandler,
   FieldErrors,
 } from 'react-hook-form';
+import useDebounceEffect from './useDebounceEffect';
 
 const SUBMIT_DELAY = 1000;
 

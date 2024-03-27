@@ -1,0 +1,48 @@
+{
+    "error_loading_shadings": "Sorry, es gab einen Fehler beim Laden der Beschattungen.",
+    "place_light_shadings_message": "Klicke auf die Karte um eine leichte Beschattung zu platzieren.",
+    "place_partial_shadings_message": "Klicke auf die Karte um eine Teilbeschattung zu platzieren.",
+    "place_permanent_shadings_message": "Klicke auf die Karte um eine permanente Beschattung zu platzieren.",
+    "place_permanent_deep_shadings_message": "Klicke auf die Karte um eine permanente starke Beschattung zu platzieren.",
+    "edit_polygon": {
+      "add": "Klicke auf die Karte um einen neuen Punkt zur Beschattung hinzuzufügen.",
+      "remove": "Klicke auf die Karte um einen Punkt aus der Beschattung zu entfernen.",
+      "move": "Klicke auf einen Punkt der Beschattung um ihn an einen anderen Ort zu bewegen.",
+      "delete_point_forbidden": "Die Form dieser Schattierung muss mindestens drei Punkte enthalten."
+    },
+    "geometry_tool_form": {
+      "title": "Beschattung bearbeiten",
+      "add_points": "Punkte hinzufügen",
+      "delete_points": "Punkte entfernen",
+      "move_points": "Punkte verschieben"
+    },
+    "shading_amount": {
+      "no_shade": "Kein Schatten",
+      "light_shade": "Leicht beschattet",
+      "partial_shade": "Teilbeschattet",
+      "permanent_shade": "Permanent beschattet",
+      "permanent_deep_shade": "Permanent stark beschattet"
+    },
+    "left_toolbar": {
+      "shading_amount_select_title": "Beschattungsart",
+      "add_date": "Wird angewendet ab",
+      "remove_date": "Wird angewendet bis",
+      "delete_button": "Beschattung löschen",
+      "error_remove_date_before_add_date": "Das 'angewendet ab' Datum muss vor dem 'angewendet bis' Datum liegen!"
+    },
+    "right_toolbar": {
+      "legend": {
+        "title": "Legende",
+        "color_none": "Keine Farbe",
+        "color_light_shade": "Hellblau",
+        "color_partial_shade": "Dunkelblau",
+        "color_permanent_shade": "Violett",
+        "color_permanent_deep_shade": "Schwarz",
+        "no_shade": "An dieser Stelle scheint den ganzen Tag über die Sonne. Die Karte geht davon aus, dass jede nicht markierte Stelle unbeschattet ist.",
+        "light_shade": "Auf diesen Flächen kommt es maximal zu moderatem Schattenwurf. Das könnte z.B. in einem Obstgarten oder anderen Flächen mit wenigen Bäumen der Fall sein.",
+        "partial_shade": "Diese Fläche wird zwischen 3 und 6 Stunden pro Tag von der Sonne bestrahlt.",
+        "permanent_shade": "Diese Fläche erhält maximal 3 pro Tag direkte Sonneneinstrahlung",
+        "permanent_deep_shade": "Diese Fläche ist durchgehend stark beschattet. Oft ist das unter Sträuchern oder sehr dicht bewachsenen Böschungen der Fall."
+      }
+    }
+}

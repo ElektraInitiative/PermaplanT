@@ -1,9 +1,9 @@
-import { useIsOnline } from './useIsOnline';
-import i18next from '@/config/i18n';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { User, UserManagerEvents } from 'oidc-client-ts';
 import { useContext } from 'react';
 import { AuthContext, AuthContextProps } from 'react-oidc-context';
+import i18next from '@/config/i18n';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
+import { useIsOnline } from './useIsOnline';
 
 /**
  * A fallback for the `AuthContext` from 'react-oidc-context'.

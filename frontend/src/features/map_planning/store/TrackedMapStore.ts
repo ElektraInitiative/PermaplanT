@@ -1,12 +1,12 @@
-import { filterVisibleObjects } from '../utils/filterVisibleObjects';
-import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
-import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
-import { clearInvalidSelection } from './utils';
-import { BaseLayerImageDto, PlantingDto } from '@/api_types/definitions';
 import Konva from 'konva';
 import { Node } from 'konva/lib/Node';
 import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
+import { BaseLayerImageDto, PlantingDto, ShadingDto } from '@/api_types/definitions';
+import { filterVisibleObjects } from '../utils/filterVisibleObjects';
+import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
+import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
+import { clearInvalidSelection } from './utils';
 
 export const createTrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -21,20 +21,33 @@ export const createTrackedMapSlice: StateCreator<
     step: 0,
     canUndo: false,
     canRedo: false,
+    inhibitTransformer: false,
     executeAction: (action: Action<unknown, unknown>) => executeAction(action, set, get),
     undo: () => undo(set, get),
     redo: () => redo(set, get),
     __applyRemoteAction: (action: Action<unknown, unknown>) => applyAction(action, set, get),
-    setSingleNodeInTransformer: (node: Node) => {
+    setInhibitTransformer: (inhibit: boolean) => {
+      set((state) => ({
+        ...state,
+        inhibitTransformer: inhibit,
+      }));
+    },
+    setSingleNodeInTransformer: (node: Node, overrideInhibitTransformer?: boolean) => {
+      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
+
       get().transformer?.current?.nodes([node]);
     },
-    addNodeToTransformer: (node: Node) => {
+    addNodeToTransformer: (node: Node, overrideInhibitTransformer?: boolean) => {
+      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
+
       const currentNodes = get().transformer.current?.nodes() ?? [];
       if (!currentNodes.includes(node)) {
         get().transformer?.current?.nodes([...currentNodes, node]);
       }
     },
-    removeNodeFromTransformer: (node: Node) => {
+    removeNodeFromTransformer: (node: Node, overrideInhibitTransformer?: boolean) => {
+      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
+
       const currentNodes = get().transformer.current?.nodes() ?? [];
       const nodeToRemove = currentNodes.indexOf(node);
 
@@ -43,6 +56,11 @@ export const createTrackedMapSlice: StateCreator<
         newNodes.splice(nodeToRemove, 1);
         get().transformer.current?.nodes(newNodes);
       }
+    },
+    removeNodesFromTransformer: (overrideInhibitTransformer?: boolean) => {
+      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
+
+      get().transformer.current?.nodes([]);
     },
     initPlantLayer: (plants: PlantingDto[]) => {
       set((state) => ({
@@ -74,6 +92,22 @@ export const createTrackedMapSlice: StateCreator<
               rotation: dto.rotation,
               scale: dto.scale,
               nextcloudImagePath: dto.path,
+            },
+          },
+        },
+      }));
+    },
+    initShadeLayer(shadings: ShadingDto[]) {
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            shade: {
+              ...state.trackedState.layers.shade,
+              objects: filterVisibleObjects(shadings, state.untrackedState.timelineDate),
+              loadedObjects: shadings,
             },
           },
         },
@@ -136,7 +170,11 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
  */
 function applyAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
   applyActionToStore(action, set, get);
+  // REFACTORING: these functions should not be here in the map store.
+  // Actions should get some sort of mechanism for updating the untracked store.
   updateSelectedPlantings(set, get);
+  updateSelectedShadings(set, get);
+
   clearInvalidSelection(get);
 }
 
@@ -286,6 +324,32 @@ function updateSelectedPlantings(set: SetFn, get: GetFn) {
   }));
 }
 
+/**
+ * Replaces the selected shadings with fresh versions from the backend.
+ */
+function updateSelectedShadings(set: SetFn, get: GetFn) {
+  const selectedShadings = get().untrackedState.layers.shade.selectedShadings;
+  if (!selectedShadings?.length) {
+    return;
+  }
+
+  const updatedSelectedShadings = getUpdatesForSelectedShadings(get, selectedShadings);
+
+  set((state) => ({
+    ...state,
+    untrackedState: {
+      ...state.untrackedState,
+      layers: {
+        ...state.untrackedState.layers,
+        shade: {
+          ...state.untrackedState.layers.shade,
+          selectedShadings: updatedSelectedShadings,
+        },
+      },
+    },
+  }));
+}
+
 function getUpdatesForSelectedPlantings(get: GetFn, selectedPlantings: PlantingDto[]) {
   const loadUpdateForSelectedPlanting = (selectedPlanting: PlantingDto) => {
     return get().trackedState.layers.plants.loadedObjects.find(
@@ -300,4 +364,20 @@ function getUpdatesForSelectedPlantings(get: GetFn, selectedPlantings: PlantingD
   };
 
   return selectedPlantings.reduce(updatePlantings, []);
+}
+
+function getUpdatesForSelectedShadings(get: GetFn, selectedShadings: ShadingDto[]) {
+  const loadUpdateForSelectedShadings = (selectedPlanting: ShadingDto) => {
+    return get().trackedState.layers.shade.loadedObjects.find(
+      (loadedPlanting) => loadedPlanting.id === selectedPlanting.id,
+    );
+  };
+
+  const updateShadings = (updatedShadings: ShadingDto[], selectedPlanting: ShadingDto) => {
+    const updatedShading = loadUpdateForSelectedShadings(selectedPlanting);
+
+    return updatedShading ? [...updatedShadings, updatedShading] : updatedShadings;
+  };
+
+  return selectedShadings.reduce(updateShadings, []);
 }

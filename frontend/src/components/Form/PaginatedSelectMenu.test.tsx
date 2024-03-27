@@ -1,9 +1,9 @@
-import { FormWrapper } from '../../__test_utils__/utils';
-import PaginatedSelectMenu from './PaginatedSelectMenu';
 import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
+import { FormWrapper } from '../../__test_utils__/utils';
+import PaginatedSelectMenu from './PaginatedSelectMenu';
 
 it('renders correctly', () => {
   const tree = renderer

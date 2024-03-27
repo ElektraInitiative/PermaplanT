@@ -1,7 +1,7 @@
-import { nextcloudUri } from '../env';
-import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { useEffect, useState } from 'react';
 import { AuthType, createClient, WebDAVClient } from 'webdav';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
+import { nextcloudUri } from '../env';
 
 /**
  * create a webdav client configured for the PermaplanT Nextcloud instance

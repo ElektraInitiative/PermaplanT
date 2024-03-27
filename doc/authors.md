@@ -92,6 +92,14 @@ including their responsibilities, skills, etc.
 - focus groups: UX, frontend
 - positioning: frontend
 
+## Christpoh Schreiner
+
+- GitHub: @chr-schr
+- main responsibilities: DB optimizations, Backend, E2E Tests
+- special skills: SQL, Python
+- focus group: Backend, PostGIS
+- positioning: Backend
+
 # Previous Authors
 
 ## Gabriel

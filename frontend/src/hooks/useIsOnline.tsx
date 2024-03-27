@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { queryOffline } from '@/config';
 
 export type UseIsOnlineArgs = {
   onOffline?: () => void;
@@ -21,11 +22,15 @@ export function useIsOnline({ onOffline, onOnline }: UseIsOnlineArgs = {}) {
 
   useEffect(() => {
     function handleOnline() {
+      if (queryOffline) return;
+
       setIsOnline(true);
       onOnlineRef.current?.();
     }
 
     function handleOffline() {
+      if (queryOffline) return;
+
       setIsOnline(false);
       onOfflineRef.current?.();
     }
@@ -39,5 +44,5 @@ export function useIsOnline({ onOffline, onOnline }: UseIsOnlineArgs = {}) {
     };
   }, []);
 
-  return isOnline;
+  return queryOffline ? true : isOnline;
 }

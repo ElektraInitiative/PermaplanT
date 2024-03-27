@@ -1,8 +1,8 @@
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 import type { TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
 import { createTrackedMapSlice } from './TrackedMapStore';
 import { createUntrackedMapSlice } from './UntrackedMapStore';
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
 
 /**
  * This is the main store for the map planning feature.

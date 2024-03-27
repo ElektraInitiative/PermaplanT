@@ -1,6 +1,6 @@
-import { BaseStage } from '@/features/map_planning/components/BaseStage';
 import { ComponentType } from 'react';
 import { Layer } from 'react-konva';
+import { BaseStage } from '@/features/map_planning/components/BaseStage';
 
 /**
  * A decorator to wrap stories in our base stage.

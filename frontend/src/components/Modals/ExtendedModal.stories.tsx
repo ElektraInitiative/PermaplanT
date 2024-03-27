@@ -1,6 +1,6 @@
-import ExtendedModal from './ExtendedModal';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentType } from 'react';
+import ExtendedModal from './ExtendedModal';
 
 const meta: Meta<typeof ExtendedModal> = {
   title: 'Components/Modals/ExtendedModal',

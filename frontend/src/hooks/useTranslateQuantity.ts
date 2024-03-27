@@ -1,5 +1,5 @@
-import { Quantity } from '@/api_types/definitions';
 import { useTranslation } from 'react-i18next';
+import { Quantity } from '@/api_types/definitions';
 
 /**
  * Returns a function that translates values of the Quantity enum.

@@ -1,5 +1,5 @@
-import './styles/timeline.css';
 import React, { useRef, useState, useEffect, ReactNode, useCallback } from 'react';
+import './styles/timeline.css';
 
 export type ItemSliderItem = {
   key: number;
@@ -21,6 +21,10 @@ interface ItemSliderPickerProps {
   value?: number;
   /** id for testing */
   dataTestId?: string;
+  /** If set to true, the slider will automatically gain focus when rendered or displayed. */
+  autoFocus: boolean;
+  /** Callback that fires when slider is focused*/
+  onFocus: () => void;
 }
 
 const ItemSliderPicker = ({
@@ -31,6 +35,8 @@ const ItemSliderPicker = ({
   leftEndReached,
   rightEndReached,
   dataTestId,
+  autoFocus,
+  onFocus,
 }: ItemSliderPickerProps) => {
   const [selectedItemKey, setSelectedItemKey] = useState(0);
 
@@ -249,6 +255,12 @@ const ItemSliderPicker = ({
     scrollToIndex(items.findIndex((item) => item.key === value));
   }, [value, items]);
 
+  useEffect(() => {
+    if (sliderContainerRef.current && autoFocus) {
+      sliderContainerRef.current.focus();
+    }
+  }, [autoFocus]);
+
   const SliderPadding = () => {
     return (
       <div
@@ -260,15 +272,16 @@ const ItemSliderPicker = ({
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full select-none">
       <div
-        data-testid={dataTestId}
         tabIndex={0}
+        data-testid={dataTestId}
         onScroll={handleScroll}
         onMouseDown={handleMouseDown}
         onKeyDown={handleKeyDown}
         ref={sliderContainerRef}
-        className="horizontal-scroll-container mx-auto flex border border-gray-300 bg-white text-black outline-none dark:border-gray-600 dark:bg-neutral-200-dark dark:text-white"
+        onFocus={onFocus}
+        className="horizontal-scroll-container group mx-auto flex border border-gray-300 bg-white text-black outline-none dark:border-gray-600 dark:bg-neutral-200-dark dark:text-white"
         style={{
           scrollSnapType: 'x mandatory',
           overflowX: 'auto',
@@ -283,18 +296,13 @@ const ItemSliderPicker = ({
           return (
             <div
               key={index}
-              className={`min-w-1/5 relative w-10 border-4 px-7 pb-1 pt-1  ${
+              className={`item min-w-1/5 dark relative flex w-10 flex-col items-center justify-end border-4 border-white px-7 pb-1 pt-1 dark:border-neutral-200-dark
+              ${
                 getSelectedItemIndex() === index
-                  ? 'selected-item bg-gray-300 font-bold text-secondary-300 dark:bg-black'
+                  ? 'selected-item bg-gray-300 font-bold text-secondary-300 group-focus:border-blue-300 dark:bg-black '
                   : ''
               }
-              ${
-                getSelectedItemIndex() === index &&
-                document.activeElement === sliderContainerRef.current
-                  ? 'border-blue-300'
-                  : 'dark border-white dark:border-neutral-200-dark'
-              }
-              item flex flex-col items-center justify-end`}
+              `}
               onClick={(e) => handleItemClick(e, index)}
             >
               {item.content}

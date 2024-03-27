@@ -1,6 +1,6 @@
-import ButtonLink from './ButtonLink';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
+import ButtonLink from './ButtonLink';
 
 it('renders correctly', () => {
   const tree = renderer

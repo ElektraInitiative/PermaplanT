@@ -1,5 +1,5 @@
-import { PlantAndSeedSearch } from './PlantAndSeedSearch';
 import type { Meta, StoryObj } from '@storybook/react';
+import { PlantAndSeedSearch } from './PlantAndSeedSearch';
 
 const meta: Meta<typeof PlantAndSeedSearch> = {
   component: PlantAndSeedSearch,

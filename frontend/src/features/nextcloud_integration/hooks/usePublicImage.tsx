@@ -1,8 +1,8 @@
+import { QueryOptions, useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { getPublicImage } from '@/features/nextcloud_integration/api/getImages';
 import { useImageFromBlob } from '@/features/nextcloud_integration/hooks/useImageFromBlob';
 import errorImageSource from '@/svg/icons/photo-off.svg';
-import { QueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 
 type RetryValue<TError> = QueryOptions<unknown, TError>['retry'];
 

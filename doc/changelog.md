@@ -11,7 +11,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Implement a heatmap that shows which locations are most suited for a specific plant _(Gabriel, Paul, Moritz)_
 - Refactor react query error handling _(Daniel Steinkogler)_
-- _()_
+- Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
 - Enable automatic image scaling in base layer _(Moritz)_
 - _()_
@@ -19,19 +19,24 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Fix ref warning in PlantLabel, center labels as intended _(Paul)_
 - Fix planting cursor preventing the placement of an area of plants _(Paul)_
-- _()_
-- _()_
+- Refactor nearly all api calls to idiomatic react query _(Paul)_
+- Add an area of plant indicator _(Paul)_
 - _()_
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
 - Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
 - Added Meeting Agenda&Notes for 04.12. 9:00 _(Markus Raab, Daniel)_
-- Added Meeting Agenda for 11.12. 9:00 _(Markus Raab)_
+- Added Meeting Agenda&Notes for 11.12. 9:00 _(Markus Raab)_
+- Added Meeting Agenda&Notes for 18.12. 9:00 _(Markus Raab, Christoph)_
+- Added Meeting Agenda&Notes for 27.12.2023 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 02.01.2024 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 08.01.2024 9:00 _(Markus Raab, Christoph @chr_schr)_
 - _()_
 - _()_
+- Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
 - _()_
 - Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
-- _()_
-- _()_
+- Fix broken .env reading for scraper _(Paul)_
+- Add a dev env variable for react query when developing in offline env (e.g. plane) _(Paul)_
 - Remove error messages in console if a seed was not found _(Moritz)_
 - _()_
 - _()_
@@ -45,11 +50,11 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
 - _()_
+- Add key combinations for map geometry _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
@@ -70,7 +75,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Up the rust version to 1.74 _(4ydan)_
-- _()_
+- Display a rectangle for area of plantings _(Paul)_
 - _()_
 - _()_
 - _()_

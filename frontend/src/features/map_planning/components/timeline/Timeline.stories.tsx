@@ -1,5 +1,5 @@
-import TimelineDatePicker from './TimelineDatePicker';
 import type { Meta, StoryObj } from '@storybook/react';
+import TimelineDatePicker from './TimelineDatePicker';
 
 const meta: Meta<typeof TimelineDatePicker> = {
   component: TimelineDatePicker,

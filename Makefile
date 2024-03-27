@@ -95,7 +95,7 @@ install: install-pre-commit install-backend install-mdbook install-frontend inst
 	@echo "Installation completed."
 
 .PHONY: install-types
-install-types: ## Install types
+install-types: ## Run migrations and generate types for frontend
 	@make migration -C ./backend
 	@cd frontend && npm run generate-api-types
 

@@ -1,8 +1,8 @@
-import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
-import useMapStore from '@/features/map_planning/store/MapStore';
-import { COLOR_PRIMARY_400 } from '@/utils/constants';
 import { useEffect, useState } from 'react';
 import { Circle, Group } from 'react-konva';
+import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
+import useMapStore from '@/features/map_planning/store/MapStore';
+import { colors } from '@/utils/colors';
 
 const CURSOR_WIDTH = 60;
 type Position = { x: number; y: number };
@@ -42,7 +42,7 @@ export function PlantCursor() {
 
   return (
     <Group {...pos} opacity={0.7}>
-      <Circle fill={COLOR_PRIMARY_400} {...CURSOR_SIZE} />
+      <Circle fill={colors.primary[400]} {...CURSOR_SIZE} />
       <PublicNextcloudKonvaImage
         {...IMAGE_SIZE}
         offset={IMAGE_OFFSET}

@@ -29,13 +29,14 @@ const state = create<State>()((set, get) => {
 });
 
 test("zustand's get() returns a copy not a reference", async () => {
+  vi.useFakeTimers();
   const { exec } = state.getState();
   exec(1);
   exec(2);
   exec(3);
 
   // wait for the 'error'
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  vi.advanceTimersByTime(1000);
 
   const { val, history, step } = state.getState();
 

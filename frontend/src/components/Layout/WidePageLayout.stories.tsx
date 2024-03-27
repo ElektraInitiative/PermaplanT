@@ -1,5 +1,5 @@
-import WidePageLayout from './WidePageLayout';
 import type { Meta, StoryObj } from '@storybook/react';
+import WidePageLayout from './WidePageLayout';
 
 const meta: Meta<typeof WidePageLayout> = {
   title: 'Components/Layout/WidePageLayout',

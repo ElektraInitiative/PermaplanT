@@ -3,9 +3,9 @@
  *
  * @module @ignore
  */
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 
 type UseImageFromBlobOptions = {
   /**

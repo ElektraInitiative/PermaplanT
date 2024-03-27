@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "custom.ts.d", "__mocks__"],
+  "include": ["src", "custom.ts.d", "tailwind.config.ts", "__mocks__"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

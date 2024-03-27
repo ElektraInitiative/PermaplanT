@@ -38,6 +38,8 @@ pub struct Planting {
     pub remove_date: Option<NaiveDate>,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
     /*
     /// The date the planting was created.
     //pub create_date: NaiveDate,
@@ -46,6 +48,8 @@ pub struct Planting {
     /// and is still able to be restored.
     //pub delete_date: Option<NaiveDate>,
     */
+    /// Notes about the planting in Markdown.
+    pub notes: Option<String>,
 }
 
 /// The `UpdatePlanting` entity.
@@ -72,4 +76,6 @@ pub struct UpdatePlanting {
     pub remove_date: Option<Option<NaiveDate>>,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
+    /// Notes about the planting in Markdown.
+    pub notes: Option<String>,
 }

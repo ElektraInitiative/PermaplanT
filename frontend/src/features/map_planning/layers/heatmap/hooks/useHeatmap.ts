@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { getHeatMap } from '@/features/map_planning/layers/heatmap/api/getHeatMap';
 import { useImageFromBlob } from '@/features/nextcloud_integration/hooks/useImageFromBlob';
-import { useQuery } from '@tanstack/react-query';
 
 export function useHeatmap(
   mapId: number,

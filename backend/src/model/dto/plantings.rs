@@ -44,11 +44,15 @@ pub struct PlantingDto {
     /// It is used to display the full plant name on a map
     /// even if a user does not have access to the seed.
     pub additional_name: Option<String>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
+    /// Notes about the planting in Markdown.
+    pub planting_notes: Option<String>,
 }
 
 /// Used to create a new planting.
 #[typeshare]
-#[derive(Debug, Clone, Default, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct NewPlantingDto {
     /// The id of the planting.
@@ -78,6 +82,8 @@ pub struct NewPlantingDto {
     pub action_id: Uuid,
     /// Plantings may be linked with a seed.
     pub seed_id: Option<i32>,
+    /// Is the planting an area of plants.
+    pub is_area: bool,
 }
 
 /// Used to differentiate between different update operations on plantings.
@@ -85,7 +91,7 @@ pub struct NewPlantingDto {
 /// Ordering of enum variants is important.
 /// Serde will try to deserialize starting from the top.
 #[typeshare]
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 #[serde(tag = "type", content = "content")]
 pub enum UpdatePlantingDto {
     /// Transform a plantings.
@@ -96,6 +102,8 @@ pub enum UpdatePlantingDto {
     UpdateAddDate(UpdateAddDatePlantingDto),
     /// Change the `remove_date` of a planting.
     UpdateRemoveDate(UpdateRemoveDatePlantingDto),
+    /// Update Markdown notes.
+    UpdateNote(UpdatePlantingNoteDto),
 }
 
 /// Used to transform an existing planting.
@@ -150,6 +158,17 @@ pub struct UpdateRemoveDatePlantingDto {
     /// The date the planting was removed from the map.
     /// If None, the planting is still on the map.
     pub remove_date: Option<NaiveDate>,
+    /// Id of the action (for identifying the action in the frontend).
+    pub action_id: Uuid,
+}
+
+/// Update Markdown planting notes.
+#[typeshare]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePlantingNoteDto {
+    /// Notes about the planting in Markdown.
+    pub notes: String,
     /// Id of the action (for identifying the action in the frontend).
     pub action_id: Uuid,
 }

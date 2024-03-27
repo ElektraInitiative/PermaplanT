@@ -3,6 +3,9 @@
     "cancelModal": ["Escape"]
   },
   "base_layer": {
+    "activatePolygonMovePoints": ["Shift+M"],
+    "activatePolygonAddPoints": ["Shift+A"],
+    "activatePolygonDeletePoints": ["Shift+D"]
   },
   "plants_layer": {
     "exitPlantingMode": ["Escape"],

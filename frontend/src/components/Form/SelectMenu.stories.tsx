@@ -1,7 +1,7 @@
-import SelectMenu from './SelectMenu';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { useForm } from 'react-hook-form';
+import SelectMenu from './SelectMenu';
 
 const meta: Meta<typeof SelectMenu> = {
   title: 'Components/Form/SelectMenu/SelectMenu',

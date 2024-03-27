@@ -1,4 +1,7 @@
-import { convertToDateString } from '../utils/date-utils';
+import Konva from 'konva';
+import { Node } from 'konva/lib/Node';
+import * as uuid from 'uuid';
+import { StateCreator } from 'zustand';
 import {
   BaseLayerImageDto,
   LayerDto,
@@ -6,13 +9,12 @@ import {
   PlantingDto,
   PlantsSummaryDto,
   SeedDto,
+  Shade,
+  ShadingDto,
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
-import Konva from 'konva';
-import { Node } from 'konva/lib/Node';
-import * as uuid from 'uuid';
-import { StateCreator } from 'zustand';
+import { convertToDateString } from '../utils/date-utils';
 
 import Vector2d = Konva.Vector2d;
 
@@ -99,15 +101,25 @@ export interface TrackedMapSlice {
    * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
    */
   transformer: React.RefObject<Konva.Transformer>;
+  /**
+   * If this is true, all functions that manipulate the Konva transformer will be disabled.
+   */
+  inhibitTransformer: boolean;
+
+  /** Temporarily disable all functions that manipulate the transformer. */
+  setInhibitTransformer: (inhibit: boolean) => void;
 
   /** Discard the transformer's current nodes and set a single node in the transformer */
-  setSingleNodeInTransformer: (node: Node) => void;
+  setSingleNodeInTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
 
   /** Add a new node to the transformer's current set of nodes */
-  addNodeToTransformer: (node: Node) => void;
+  addNodeToTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
 
   /** Removes given node from the transformer's current set of nodes */
-  removeNodeFromTransformer: (node: Node) => void;
+  removeNodeFromTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
+
+  /** Discard the transformer's current nodes */
+  removeNodesFromTransformer: (overrideInhibitTransformer?: boolean) => void;
 
   /**
    * Execute a user initiated action.
@@ -144,6 +156,10 @@ export interface TrackedMapSlice {
    * Initializes the base layer.
    */
   initBaseLayer: (baseLayer: BaseLayerImageDto) => void;
+  /**
+   *  Initialize the shade layer.
+   */
+  initShadeLayer: (shadeLayer: ShadingDto[]) => void;
   initLayerId: (layer: LayerType, layerId: number) => void;
 }
 
@@ -152,13 +168,30 @@ export interface TrackedMapSlice {
  */
 export type History = Array<Action<unknown, unknown>>;
 
+type SelectionRectAttributes = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  isVisible: boolean;
+  boundingBox: {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  };
+};
+
 /**
  * Part of store which is unaffected by the History
  */
+// REFACTOR this interface should be organized in some sort of hierarchy.
 export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
   tooltipRef: React.RefObject<Konva.Label>;
+  selectionRectAttributes: SelectionRectAttributes;
+  updateSelectionRect: (update: React.SetStateAction<SelectionRectAttributes>) => void;
   updateViewRect: (bounds: ViewRect) => void;
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   updateSelectedLayer: (selectedLayer: LayerDto | FrontendOnlyLayerType) => void;
@@ -181,6 +214,12 @@ export interface UntrackedMapSlice {
   baseLayerActivateMovePolygonPoints: () => void;
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
+  shadeLayerSelectShadings: (shadings: ShadingDto[] | null) => void;
+  shadeLayerActivateAddPolygonPoints: () => void;
+  shadeLayerActivateMovePolygonPoints: () => void;
+  shadeLayerActivateDeletePolygonPoints: () => void;
+  shadeLayerDeactivatePolygonManipulation: () => void;
+  shadeLayerSelectShadeForNewShading: (shade: Shade | null) => void;
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
@@ -221,6 +260,12 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
       [LayerType.Plants]: {
         id: -1,
         index: LayerType.Plants,
+        objects: [],
+        loadedObjects: [],
+      },
+      [LayerType.Shade]: {
+        id: -1,
+        index: LayerType.Shade,
         objects: [],
         loadedObjects: [],
       },
@@ -273,6 +318,12 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
           editMode: 'inactive',
         },
       } as UntrackedBaseLayerState,
+      [LayerType.Shade]: {
+        visible: true,
+        opacity: 1,
+        selectedShadingEditMode: 'inactive',
+        selectedShadeForNewShading: null,
+      } as UntrackedShadeLayerState,
     }),
     {} as UntrackedLayers,
   ),
@@ -303,6 +354,8 @@ export type TrackedLayerState = {
   /**
    * The state of the objects on the layer.
    */
+  // REFACTOR is this really needed?
+  // All layers that have to manage their own objects do so in their own way.
   objects: ObjectState[];
 };
 
@@ -319,10 +372,14 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: TrackedLayerState;
+  [key in Exclude<
+    LayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Shade
+  >]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
+  [LayerType.Shade]: TrackedShadeLayerState;
 };
 
 export type TrackedPlantLayerState = {
@@ -349,14 +406,32 @@ export type TrackedBaseLayerState = {
   nextcloudImagePath: string;
 };
 
+export type TrackedShadeLayerState = {
+  index: LayerType.Shade;
+  id: number;
+  /**
+   * The objects visible relative to the current selected date.
+   * This is a subset of `loadedObjects`.
+   */
+  objects: ShadingDto[];
+  /**
+   * The objects that have been loaded from the backend.
+   */
+  loadedObjects: ShadingDto[];
+};
+
 /**
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<CombinedLayerType, LayerType.Plants | LayerType.Base>]: UntrackedLayerState;
+  [key in Exclude<
+    CombinedLayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Shade
+  >]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
   [LayerType.Base]: UntrackedBaseLayerState;
+  [LayerType.Shade]: UntrackedShadeLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
@@ -372,9 +447,17 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
     measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
   };
   mapGeometry: {
-    editMode: 'inactive' | 'add' | 'remove' | 'move';
+    editMode: PolygonEditMode;
   };
 };
+
+export type UntrackedShadeLayerState = UntrackedLayerState & {
+  selectedShadings: ShadingDto[] | null;
+  selectedShadingEditMode: PolygonEditMode;
+  selectedShadeForNewShading: Shade | null;
+};
+
+export type PolygonEditMode = 'inactive' | 'add' | 'remove' | 'move';
 
 /**
  * Contains information necessary for creating a new planting on the map.

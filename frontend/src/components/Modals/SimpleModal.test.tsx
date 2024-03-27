@@ -1,6 +1,6 @@
-import SimpleModal from './SimpleModal';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
+import SimpleModal from './SimpleModal';
 
 it('renders correctly', () => {
   const callback = vi.fn();

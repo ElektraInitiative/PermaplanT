@@ -1,15 +1,15 @@
-import { Pages, Routes } from './types';
 import { Debug } from '@/features/debugging/routes/Debug';
 import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { MapWrapper } from '@/features/map_planning';
 import MapCreateForm from '@/features/maps/routes/MapCreateForm';
-import MapEditForm from '@/features/maps/routes/MapEditForm';
+import { EditMapPage } from '@/features/maps/routes/MapEditForm';
 import MapOverview from '@/features/maps/routes/MapOverview';
 import { Chat } from '@/features/nextcloud_integration/components/chat';
 import { Overview } from '@/features/overview/routes/Overview';
 import { CreateSeed, ViewSeeds } from '@/features/seeds';
-import { EditSeed } from '@/features/seeds/routes/EditSeed';
+import { EditSeedPage } from '@/features/seeds/routes/EditSeed';
+import { Pages, Routes } from './types';
 
 const routes: Routes = {
   [Pages.ImprintPage]: {
@@ -31,7 +31,7 @@ const routes: Routes = {
     restricted: true,
   },
   [Pages.EditSeed]: {
-    component: EditSeed,
+    component: EditSeedPage,
     path: '/seeds/:id/edit',
     title: 'Edit Seed',
     restricted: true,
@@ -61,8 +61,8 @@ const routes: Routes = {
     restricted: true,
   },
   [Pages.MapEdit]: {
-    component: MapEditForm,
-    path: '/maps/:mapId/edit',
+    component: EditMapPage,
+    path: '/maps/:id/edit',
     title: 'Edit Map',
     restricted: true,
   },

@@ -1,5 +1,5 @@
-import { Teammember } from './Teammember';
 import { useTranslation } from 'react-i18next';
+import { Teammember } from './Teammember';
 
 const Team = () => {
   const { t } = useTranslation(['team']);
@@ -86,6 +86,11 @@ const Team = () => {
             name="Dr. Pavlo Ardanov"
             role="Permaculture Expert"
             path="/Avatars/Pavlo_Ardanov.jpg"
+          />
+          <Teammember
+            name="Christoph Schreiner"
+            role="Software Engineer"
+            path="/Avatars/person_placeholder.png"
           />
         </div>
       </div>

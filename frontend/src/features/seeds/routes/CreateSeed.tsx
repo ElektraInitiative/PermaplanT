@@ -1,16 +1,14 @@
-import PageLayout from '../../../components/Layout/PageLayout';
-import CreateSeedForm from '../components/CreateSeedForm';
+import { Suspense, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { NewSeedDto } from '@/api_types/definitions';
 import PageTitle from '@/components/Header/PageTitle';
 import SimpleModal from '@/components/Modals/SimpleModal';
-import { createSeed } from '@/features/seeds/api/createSeed';
-import { infoToastGrouped, successToastGrouped } from '@/features/toasts/groupedToast';
+import { useCreateSeed } from '@/features/seeds/hooks/seedHookApi';
+import { successToastGrouped } from '@/features/toasts/groupedToast';
 import usePreventNavigation from '@/hooks/usePreventNavigation';
-import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import { Suspense, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import PageLayout from '../../../components/Layout/PageLayout';
+import CreateSeedForm from '../components/CreateSeedForm';
 
 export function CreateSeed() {
   const navigate = useNavigate();
@@ -18,30 +16,19 @@ export function CreateSeed() {
 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
+  const { mutate: submitSeed, isLoading: isUploadingSeed } = useCreateSeed();
 
-  const {
-    mutate: submitSeed,
-    isLoading: isUploadingSeed,
-    isSuccess: isUploadingSuccess,
-  } = useMutation(['create new seed'], createSeed, {
-    onError: (error) => {
-      const errorTyped = error as AxiosError;
-
-      if (errorTyped.response?.status === 409) {
-        infoToastGrouped(t('seeds:create_seed_form.error_seed_already_exists'));
-        return;
-      }
-
-      infoToastGrouped(t('seeds:create_seed_form.error_create_seed'));
+  const handleCreateSeed = useCallback(
+    (newSeed: NewSeedDto) => {
+      submitSeed(newSeed, {
+        onSuccess: () => {
+          successToastGrouped(t('seeds:create_seed_form.success'));
+          navigate('/seeds');
+        },
+      });
     },
-    onSuccess: async () => {
-      // Wait for the seed upload to be completed before navigating.
-      // This ensures that all seeds are present on the overview page once the user sees it.
-      await isUploadingSuccess;
-      navigate('/seeds');
-      successToastGrouped(t('seeds:create_seed_form.success'));
-    },
-  });
+    [navigate, submitSeed, t],
+  );
 
   const onCancel = () => {
     // There is no need to show the cancel warning modal if the user
@@ -56,10 +43,6 @@ export function CreateSeed() {
 
   usePreventNavigation(formTouched);
 
-  const onSubmit = async (newSeed: NewSeedDto) => {
-    submitSeed(newSeed);
-  };
-
   const onChange = () => {
     setFormTouched(true);
   };
@@ -73,7 +56,7 @@ export function CreateSeed() {
           isUploadingSeed={isUploadingSeed}
           onCancel={onCancel}
           onChange={onChange}
-          onSubmit={onSubmit}
+          onSubmit={handleCreateSeed}
         />
         <SimpleModal
           title={t('seeds:create_seed.changes_model_title')}

@@ -1,6 +1,7 @@
 /**
  * This hook is currently just creating dummy data for the timeline until the backend is ready.
  */
+import { useMemo } from 'react';
 
 const MIN_YEAR = 1900;
 const MAX_YEAR = 2100;
@@ -63,9 +64,11 @@ const createDays = () => {
 };
 
 export default function useGetTimeLineEvents() {
-  return {
-    dailyTimeLineEvents: createDays(),
-    monthlyTimeLineEvents: createMonths(),
-    yearlyTimeLineEvents: createYears(),
-  };
+  return useMemo(() => {
+    return {
+      dailyTimeLineEvents: createDays(),
+      monthlyTimeLineEvents: createMonths(),
+      yearlyTimeLineEvents: createYears(),
+    };
+  }, []);
 }

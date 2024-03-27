@@ -1,7 +1,7 @@
-import { onError } from '@/config/react_query';
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ToastContainer } from 'react-toastify';
+import { onError } from '@/config/react_query';
 
 export interface TestDto {
   foo: string;
