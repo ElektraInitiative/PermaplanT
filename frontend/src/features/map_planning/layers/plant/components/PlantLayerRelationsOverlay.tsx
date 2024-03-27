@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import { useEffect, useMemo, useState } from 'react';
-import { Layer, Line } from 'react-konva';
+import { Group, Line } from 'react-konva';
 import { LayerType, RelationType } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useRelations } from '../hooks/relationsHookApi';
@@ -70,7 +70,7 @@ export function PlantLayerRelationsOverlay() {
   }, [relations, layers]);
 
   return (
-    <Layer listening={false}>
+    <Group listening={false}>
       {!areRelationsLoading && lineEnd && visiblePlantingNodes
         ? visiblePlantingNodes.map((node) => {
             const relation = relations?.get(node.attrs.plantId)?.relation;
@@ -88,7 +88,7 @@ export function PlantLayerRelationsOverlay() {
             );
           })
         : null}
-    </Layer>
+    </Group>
   );
 }
 
