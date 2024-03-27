@@ -2,8 +2,7 @@ import { Debug } from '@/features/debugging/routes/Debug';
 import { ImprintPage } from '@/features/imprint_page';
 import { LandingPage } from '@/features/landing_page';
 import { MapWrapper } from '@/features/map_planning';
-import MapCreateForm from '@/features/maps/routes/MapCreateForm';
-import { EditMapPage } from '@/features/maps/routes/MapEditForm';
+import { MapFormRoute } from '@/features/maps/routes/MapFormRoute';
 import MapOverview from '@/features/maps/routes/MapOverview';
 import { Chat } from '@/features/nextcloud_integration/components/chat';
 import { Overview } from '@/features/overview/routes/Overview';
@@ -55,13 +54,13 @@ const routes: Routes = {
     restricted: true,
   },
   [Pages.MapCreation]: {
-    component: MapCreateForm,
+    component: MapFormRoute,
     path: '/maps/create',
     title: 'Map Creation',
     restricted: true,
   },
   [Pages.MapEdit]: {
-    component: EditMapPage,
+    component: MapFormRoute,
     path: '/maps/:id/edit',
     title: 'Edit Map',
     restricted: true,

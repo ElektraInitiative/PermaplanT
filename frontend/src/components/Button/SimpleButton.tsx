@@ -1,3 +1,5 @@
+import { cn } from '@/utils/cn';
+
 interface SimpleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** The variant specifies the look of the button. */
   variant?: ButtonVariant;
@@ -30,17 +32,17 @@ const variantStyles = {
  */
 export default function SimpleButton({
   variant = ButtonVariant.primaryBase,
+  className,
   ...props
 }: SimpleButtonProps) {
-  const className =
-    'button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border ' +
-    variantStyles[variant];
+  const baseStyles =
+    'button disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-500 dark:disabled:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:text-neutral-500-dark disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-secondary-200 dark:focus:ring-secondary-300 border';
 
   return (
     <button
       type="button"
       {...props}
-      className={className + (props.className ? ' ' + props.className : '')}
+      className={cn(baseStyles, variantStyles[variant], className)}
     ></button>
   );
 }

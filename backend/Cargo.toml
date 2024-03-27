@@ -56,7 +56,9 @@ env_logger = "0.10.0"
 futures = "0.3.28"
 futures-util = "0.3.30"
 image = { version = "0.24.6", default-features = false, features = ["png"] }
-
+secrecy = { version = "0.8", features = ["serde"] }
+url = "2.5.0"
+async-trait = "0.1.77"
 
 [dev-dependencies]
 jsonwebkey = { version = "0.3.5", features = ["generate", "jwt-convert"] }

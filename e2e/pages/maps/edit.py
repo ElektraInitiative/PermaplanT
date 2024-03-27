@@ -11,12 +11,12 @@ class MapEditPage(AbstractPage):
 
     def __init__(self, page: Page):
         self._page = page
-        self._name = page.get_by_label("Name *")
+        self._name = page.get_by_label("Name")
         self._description = page.get_by_label("Description")
         self._longitude = page.get_by_label("Longitude")
         self._latitude = page.get_by_label("Latitude")
         self._save_button = page.get_by_role("button", name="Save")
-        self._privacy = page.locator("select")
+        self._privacy_select = page.get_by_test_id("select-menu__Privacy-select")
 
     def fill_name(self, name):
         """Fills out the map name field."""
@@ -24,7 +24,8 @@ class MapEditPage(AbstractPage):
 
     def select_privacy(self, privacy: str):
         """Selects the maps privacy."""
-        self._privacy.select_option(privacy)
+        self._privacy_select.click()
+        self._page._page.get_by_role("option").get_by_text(privacy, exact=True).click()
 
     def fill_description(self, description: str):
         """Fills out the map description field."""

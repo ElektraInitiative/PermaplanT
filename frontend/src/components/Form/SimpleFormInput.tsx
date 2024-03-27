@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
+import { cn } from '@/utils/cn';
 
 interface SimpleFormInputProps<T extends FieldValues>
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -35,6 +36,9 @@ export default function SimpleFormInput<T extends FieldValues>({
   className,
   ...props
 }: SimpleFormInputProps<T>) {
+  const defaultStyles =
+    'input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400';
+
   return (
     <div className="dark:text-white">
       {labelContent && (
@@ -50,9 +54,7 @@ export default function SimpleFormInput<T extends FieldValues>({
         {...register?.(id, {
           valueAsNumber: props.type === 'number' || valueAsNumber,
         })}
-        className={`input border border-neutral-500 bg-neutral-100 placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 aria-[invalid=true]:border-red-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark dark:aria-[invalid=true]:border-red-400 ${
-          className ?? ''
-        }`}
+        className={cn(defaultStyles, className)}
       />
     </div>
   );

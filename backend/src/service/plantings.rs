@@ -1,17 +1,22 @@
 //! Service layer for plantings.
 
 use actix_http::StatusCode;
-use actix_web::web::Data;
 use chrono::Days;
 
-use crate::config::data::AppDataInner;
-use crate::error::ServiceError;
-use crate::model::dto::core::TimelinePage;
-use crate::model::dto::plantings::{
-    DeletePlantingDto, NewPlantingDto, PlantingDto, PlantingSearchParameters, UpdatePlantingDto,
+use crate::{
+    config::data::SharedPool,
+    error::ServiceError,
+    model::{
+        dto::{
+            core::TimelinePage,
+            plantings::{
+                DeletePlantingDto, NewPlantingDto, PlantingDto, PlantingSearchParameters,
+                UpdatePlantingDto,
+            },
+        },
+        entity::{plantings::Planting, plantings_impl::FindPlantingsParameters},
+    },
 };
-use crate::model::entity::plantings::Planting;
-use crate::model::entity::plantings_impl::FindPlantingsParameters;
 
 /// Time offset in days for loading plantings in the timeline.
 pub const TIME_LINE_LOADING_OFFSET_DAYS: u64 = 356;
@@ -22,9 +27,9 @@ pub const TIME_LINE_LOADING_OFFSET_DAYS: u64 = 356;
 /// If the connection to the database could not be established.
 pub async fn find(
     search_parameters: PlantingSearchParameters,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<TimelinePage<PlantingDto>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
 
     let from = search_parameters
         .relative_to_date
@@ -68,9 +73,9 @@ pub async fn find(
 /// If the connection to the database could not be established.
 pub async fn find_by_seed_id(
     seed_id: i32,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<Vec<PlantingDto>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = Planting::find_by_seed_id(seed_id, &mut conn).await?;
     Ok(result)
 }
@@ -81,9 +86,9 @@ pub async fn find_by_seed_id(
 /// If the connection to the database could not be established.
 pub async fn create(
     dtos: Vec<NewPlantingDto>,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<Vec<PlantingDto>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = Planting::create(dtos, &mut conn).await?;
     Ok(result)
 }
@@ -94,9 +99,9 @@ pub async fn create(
 /// If the connection to the database could not be established.
 pub async fn update(
     dto: UpdatePlantingDto,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<Vec<PlantingDto>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = Planting::update(dto, &mut conn).await?;
     Ok(result)
 }
@@ -107,9 +112,9 @@ pub async fn update(
 /// If the connection to the database could not be established.
 pub async fn delete_by_ids(
     dtos: Vec<DeletePlantingDto>,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<(), ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let _ = Planting::delete_by_ids(dtos, &mut conn).await?;
     Ok(())
 }

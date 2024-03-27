@@ -5,8 +5,8 @@ use actix_web::{middleware::NormalizePath, web};
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::controller::{
-    base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer, plantings, plants,
-    seed, sse, timeline, users,
+    base_layer_image, blossoms, config, guided_tours, layers, map, map_collaborators, plant_layer,
+    plantings, plants, seed, sse, timeline, users,
 };
 
 use super::auth::middleware::validator;
@@ -68,7 +68,13 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                         ),
                                 ),
                         )
-                        .service(timeline::get_timeline),
+                        .service(timeline::get_timeline)
+                        .service(
+                            web::scope("/collaborators")
+                                .service(map_collaborators::create)
+                                .service(map_collaborators::find)
+                                .service(map_collaborators::delete),
+                        ),
                 ),
         )
         .service(
@@ -77,7 +83,11 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(guided_tours::find_by_user)
                 .service(guided_tours::update),
         )
-        .service(web::scope("/users").service(users::create))
+        .service(
+            web::scope("/users")
+                .service(users::create)
+                .service(users::find),
+        )
         .service(web::scope("/blossoms").service(blossoms::gain))
         .service(web::scope("/timeline").service(timeline::get_timeline))
         .wrap(NormalizePath::trim())

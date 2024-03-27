@@ -2,12 +2,12 @@
 
 use actix_web::{
     delete, get, post,
-    web::{Data, Json, Path, Query},
+    web::{Json, Path, Query},
     HttpResponse, Result,
 };
 
-use crate::{config::data::AppDataInner, model::dto::LayerSearchParameters};
-use crate::{model::dto::NewLayerDto, service::layer};
+use crate::model::dto::NewLayerDto;
+use crate::{config::data::SharedPool, model::dto::LayerSearchParameters, service::layer};
 
 /// Endpoint for searching layers.
 ///
@@ -30,12 +30,12 @@ use crate::{model::dto::NewLayerDto, service::layer};
 pub async fn find(
     search_query: Query<LayerSearchParameters>,
     map_id: Path<i32>,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
     let mut search_params = search_query.into_inner();
     search_params.map_id = Some(map_id.into_inner());
 
-    let response = layer::find(search_params, &app_data).await?;
+    let response = layer::find(search_params, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -56,12 +56,9 @@ pub async fn find(
     )
 )]
 #[get("/{id}")]
-pub async fn find_by_id(
-    path: Path<(i32, i32)>,
-    app_data: Data<AppDataInner>,
-) -> Result<HttpResponse> {
+pub async fn find_by_id(path: Path<(i32, i32)>, pool: SharedPool) -> Result<HttpResponse> {
     let (_, id) = path.into_inner();
-    let response = layer::find_by_id(id, &app_data).await?;
+    let response = layer::find_by_id(id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -83,11 +80,8 @@ pub async fn find_by_id(
     )
 )]
 #[post("")]
-pub async fn create(
-    new_layer: Json<NewLayerDto>,
-    app_data: Data<AppDataInner>,
-) -> Result<HttpResponse> {
-    let dto = layer::create(new_layer.0, &app_data).await?;
+pub async fn create(new_layer: Json<NewLayerDto>, pool: SharedPool) -> Result<HttpResponse> {
+    let dto = layer::create(new_layer.0, &pool).await?;
     Ok(HttpResponse::Created().json(dto))
 }
 
@@ -108,8 +102,8 @@ pub async fn create(
     )
 )]
 #[delete("/{id}")]
-pub async fn delete(path: Path<(i32, i32)>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
+pub async fn delete(path: Path<(i32, i32)>, pool: SharedPool) -> Result<HttpResponse> {
     let (_, layer_id) = path.into_inner();
-    layer::delete_by_id(layer_id, &app_data).await?;
+    layer::delete_by_id(layer_id, &pool).await?;
     Ok(HttpResponse::Ok().finish())
 }

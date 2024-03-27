@@ -1,14 +1,12 @@
 //! Service layer for plants.
 
-use actix_web::web::Data;
-
-use crate::config::data::AppDataInner;
-use crate::error::ServiceError;
-use crate::model::dto::Page;
-use crate::model::dto::PageParameters;
-use crate::model::{
-    dto::{PlantsSearchParameters, PlantsSummaryDto},
-    entity::Plants,
+use crate::{
+    config::data::SharedPool,
+    error::ServiceError,
+    model::{
+        dto::{Page, PageParameters, PlantsSearchParameters, PlantsSummaryDto},
+        entity::Plants,
+    },
 };
 
 /// Search plants from in the database.
@@ -18,9 +16,9 @@ use crate::model::{
 pub async fn find(
     search_parameters: PlantsSearchParameters,
     page_parameters: PageParameters,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<Page<PlantsSummaryDto>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = match &search_parameters.name {
         // Empty search queries should be treated like nonexistent queries.
         Some(query) if !query.is_empty() => {
@@ -36,11 +34,8 @@ pub async fn find(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn find_by_id(
-    id: i32,
-    app_data: &Data<AppDataInner>,
-) -> Result<PlantsSummaryDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+pub async fn find_by_id(id: i32, pool: &SharedPool) -> Result<PlantsSummaryDto, ServiceError> {
+    let mut conn = pool.get().await?;
     let result = Plants::find_by_id(id, &mut conn).await?;
     Ok(result)
 }

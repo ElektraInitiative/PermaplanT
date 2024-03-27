@@ -3,17 +3,20 @@
 use actix_web::web::Query;
 use actix_web::{
     delete, get, patch, post, put,
-    web::{Data, Json, Path},
+    web::{Json, Path},
     HttpResponse, Result,
 };
 use uuid::Uuid;
 
-use crate::config::auth::user_info::UserInfo;
-use crate::config::data::AppDataInner;
-use crate::model::dto::actions::Action;
-use crate::model::dto::actions::UpdatePlantingAdditionalNamePayload;
-use crate::model::dto::{PageParameters, SeedSearchParameters};
-use crate::{model::dto::ArchiveSeedDto, model::dto::NewSeedDto, service};
+use crate::config::data::{SharedBroadcaster, SharedPool};
+use crate::{
+    config::auth::user_info::UserInfo,
+    model::dto::{
+        actions::{Action, UpdatePlantingAdditionalNamePayload},
+        ArchiveSeedDto, NewSeedDto, PageParameters, SeedSearchParameters,
+    },
+    service,
+};
 
 /// Endpoint for fetching all [`SeedDto`](crate::model::dto::SeedDto).
 /// If no page parameters are provided, the first page is returned.
@@ -41,14 +44,14 @@ use crate::{model::dto::ArchiveSeedDto, model::dto::NewSeedDto, service};
 pub async fn find(
     search_query: Query<SeedSearchParameters>,
     page_query: Query<PageParameters>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
     let response = service::seed::find(
         search_query.into_inner(),
         page_query.into_inner(),
         user_info.id,
-        &app_data,
+        &pool,
     )
     .await?;
     Ok(HttpResponse::Ok().json(response))
@@ -70,10 +73,10 @@ pub async fn find(
 #[get("/{id}")]
 pub async fn find_by_id(
     id: Path<i32>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response = service::seed::find_by_id(*id, user_info.id, &app_data).await?;
+    let response = service::seed::find_by_id(*id, user_info.id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -94,10 +97,10 @@ pub async fn find_by_id(
 #[post("")]
 pub async fn create(
     new_seed_json: Json<NewSeedDto>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response = service::seed::create(new_seed_json.0, user_info.id, &app_data).await?;
+    let response = service::seed::create(new_seed_json.0, user_info.id, &pool).await?;
     Ok(HttpResponse::Created().json(response))
 }
 
@@ -117,10 +120,10 @@ pub async fn create(
 #[delete("/{id}")]
 pub async fn delete_by_id(
     path: Path<i32>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    service::seed::delete_by_id(*path, user_info.id, &app_data).await?;
+    service::seed::delete_by_id(*path, user_info.id, &pool).await?;
     Ok(HttpResponse::Ok().json(""))
 }
 
@@ -133,14 +136,14 @@ pub async fn edit_by_id(
     id: Path<i32>,
     edit_seed_json: Json<NewSeedDto>,
     user_info: UserInfo,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
+    broadcaster: SharedBroadcaster,
 ) -> Result<HttpResponse> {
-    let response = service::seed::edit(*id, user_info.id, edit_seed_json.0, &app_data).await?;
-    let affected_plantings = service::plantings::find_by_seed_id(*id, &app_data);
+    let response = service::seed::edit(*id, user_info.id, edit_seed_json.0, &pool).await?;
+    let affected_plantings = service::plantings::find_by_seed_id(*id, &pool);
 
     for planting in affected_plantings.await? {
-        app_data
-            .broadcaster
+        broadcaster
             .broadcast_all_maps(Action::UpdatePlantingAdditionalName(
                 UpdatePlantingAdditionalNamePayload::new(
                     &planting,
@@ -165,9 +168,8 @@ pub async fn archive(
     id: Path<i32>,
     archive_seed_json: Json<ArchiveSeedDto>,
     user_info: UserInfo,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response =
-        service::seed::archive(*id, user_info.id, archive_seed_json.0, &app_data).await?;
+    let response = service::seed::archive(*id, user_info.id, archive_seed_json.0, &pool).await?;
     Ok(HttpResponse::Accepted().json(response))
 }

@@ -1,12 +1,13 @@
 //! `Users` endpoints.
-use crate::config::data::AppDataInner;
-use crate::model::dto::timeline::TimelineParameters;
-use crate::service;
+
 use actix_web::{
     get,
-    web::{Data, Path, Query},
+    web::{Path, Query},
     HttpResponse, Result,
 };
+
+use crate::service;
+use crate::{config::data::SharedPool, model::dto::timeline::TimelineParameters};
 
 /// Get calculated timeline data for a given map from dates start to end.
 /// The timeline contains all additions and removals of `Plantings` aggregated
@@ -33,12 +34,12 @@ use actix_web::{
 pub async fn get_timeline(
     map_id: Path<i32>,
     parameters: Query<TimelineParameters>,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
     let params = parameters.into_inner();
     if params.start > params.end {
         return Ok(HttpResponse::UnprocessableEntity().body("Start must be smaller than end"));
     }
-    let dto = service::timeline::calculate(map_id.into_inner(), params, &app_data).await?;
+    let dto = service::timeline::calculate(map_id.into_inner(), params, &pool).await?;
     Ok(HttpResponse::Ok().json(dto))
 }

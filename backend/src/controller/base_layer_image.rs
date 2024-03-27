@@ -2,11 +2,12 @@
 
 use actix_web::{
     delete, get, patch, post,
-    web::{Data, Json, Path},
+    web::{Json, Path},
     HttpResponse, Result,
 };
 use uuid::Uuid;
 
+use crate::config::data::{SharedBroadcaster, SharedPool};
 use crate::{
     config::auth::user_info::UserInfo,
     model::dto::{
@@ -14,11 +15,10 @@ use crate::{
             Action, CreateBaseLayerImageActionPayload, DeleteBaseLayerImageActionPayload,
             UpdateBaseLayerImageActionPayload,
         },
-        DeleteBaseLayerImageDto,
+        BaseLayerImageDto, DeleteBaseLayerImageDto, UpdateBaseLayerImageDto,
     },
+    service::base_layer_images,
 };
-use crate::{config::data::AppDataInner, model::dto::BaseLayerImageDto};
-use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
 
 /// Endpoint for listing and filtering `BaseLayerImage`.
 ///
@@ -38,9 +38,9 @@ use crate::{model::dto::UpdateBaseLayerImageDto, service::base_layer_images};
     )
 )]
 #[get("")]
-pub async fn find(path: Path<(i32, i32)>, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
+pub async fn find(path: Path<(i32, i32)>, pool: SharedPool) -> Result<HttpResponse> {
     let (_map_id, layer_id) = path.into_inner();
-    let response = base_layer_images::find(&app_data, layer_id).await?;
+    let response = base_layer_images::find(&pool, layer_id).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -65,14 +65,14 @@ pub async fn find(path: Path<(i32, i32)>, app_data: Data<AppDataInner>) -> Resul
 pub async fn create(
     path: Path<i32>,
     json: Json<BaseLayerImageDto>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
+    broadcaster: SharedBroadcaster,
 ) -> Result<HttpResponse> {
     let create_dto = json.0;
-    let dto = base_layer_images::create(create_dto.clone(), &app_data).await?;
+    let dto = base_layer_images::create(create_dto.clone(), &pool).await?;
 
-    app_data
-        .broadcaster
+    broadcaster
         .broadcast(
             path.into_inner(),
             Action::CreateBaseLayerImage(CreateBaseLayerImageActionPayload::new(
@@ -108,21 +108,18 @@ pub async fn create(
 pub async fn update(
     path: Path<(i32, Uuid)>,
     json: Json<UpdateBaseLayerImageDto>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
+    broadcaster: SharedBroadcaster,
 ) -> Result<HttpResponse> {
     let (map_id, base_layer_image_id) = path.into_inner();
     let update_base_layer_image = json.0;
 
-    let dto = base_layer_images::update(
-        base_layer_image_id,
-        update_base_layer_image.clone(),
-        &app_data,
-    )
-    .await?;
+    let dto =
+        base_layer_images::update(base_layer_image_id, update_base_layer_image.clone(), &pool)
+            .await?;
 
-    app_data
-        .broadcaster
+    broadcaster
         .broadcast(
             map_id,
             Action::UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload::new(
@@ -157,16 +154,16 @@ pub async fn update(
 pub async fn delete(
     path: Path<(i32, Uuid)>,
     json: Json<DeleteBaseLayerImageDto>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
+    broadcaster: SharedBroadcaster,
 ) -> Result<HttpResponse> {
     let (map_id, base_layer_image_id) = path.into_inner();
     let delete_dto = json.0;
 
-    base_layer_images::delete_by_id(base_layer_image_id, &app_data).await?;
+    base_layer_images::delete_by_id(base_layer_image_id, &pool).await?;
 
-    app_data
-        .broadcaster
+    broadcaster
         .broadcast(
             map_id,
             Action::DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload::new(

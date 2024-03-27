@@ -2,12 +2,12 @@
 
 use actix_web::{
     get,
-    web::{Data, Path, Query},
+    web::{Path, Query},
     HttpResponse, Result,
 };
 
 use crate::{
-    config::data::AppDataInner,
+    config::data::SharedPool,
     model::dto::{HeatMapQueryParams, RelationSearchParameters},
     service::plant_layer,
 };
@@ -75,10 +75,10 @@ use crate::{
 pub async fn heatmap(
     query_params: Query<HeatMapQueryParams>,
     map_id: Path<i32>,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
     let response =
-        plant_layer::heatmap(map_id.into_inner(), query_params.into_inner(), &app_data).await?;
+        plant_layer::heatmap(map_id.into_inner(), query_params.into_inner(), &pool).await?;
     Ok(HttpResponse::Ok().content_type("image/png").body(response))
 }
 
@@ -102,8 +102,8 @@ pub async fn heatmap(
 #[get("/relations")]
 pub async fn find_relations(
     search_query: Query<RelationSearchParameters>,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response = plant_layer::find_relations(search_query.into_inner(), &app_data).await?;
+    let response = plant_layer::find_relations(search_query.into_inner(), &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }

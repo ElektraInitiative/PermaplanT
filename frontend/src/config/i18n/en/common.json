@@ -7,6 +7,7 @@
   "error": "Error",
   "unknown_error": "An unknown error occurred.",
   "save": "Save",
+  "create": "Create",
   "meters": "Meters",
   "centimeters": "Centimeters",
   "meter_shorthand": "m",

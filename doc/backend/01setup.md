@@ -9,8 +9,10 @@ All steps mentioned here have to be executed in the `backend/` folder.
 - `DATABASE_URL` is the Connection [URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) to your PostgreSQL database
 - `BIND_ADDRESS_HOST` defines the host on which the server will run on
 - `BIND_ADDRESS_PORT` defines the port on which the server will run on
-- `AUTH_DISCOVERY_URI` the .well-known endpoint of the auth server (see [RFC 8414](https://www.rfc-editor.org/rfc/rfc8414.html#section-2) for more detail)
+- `AUTH_HOST` defines the host on which the auth server is running on
 - `AUTH_CLIENT_ID` the client id the frontend should use to log in
+- `KEYCLOAK_CLIENT_ID` the client id the server uses to communicate with keycloak (needs to be configured in keycloak)
+- `KEYCLOAK_CLIENT_SECRET` the client secret the server uses to communicate with keycloak (needs to be configured in keycloak)
 - `RUST_LOG` used to set the logging config for [env_logger](https://docs.rs/env_logger/latest/env_logger/)
 
 To install an extension, a user needs to be a 'superuser',
@@ -58,7 +60,7 @@ You can do one of the following two steps, the first one being the simpler one, 
 - To use the preconfigured Keycloak instance simply copy the newest version of `.env.sample` to `.env`
 - To use the local Keycloak variant follow the steps in [Keycloak Setup](../setups/keycloak/README.md)  
   You then also have to change following two env variables in `.env`
-  - `AUTH_DISCOVERY_URI=http://localhost:8081/realms/PermaplanT/.well-known/openid-configuration`
+  - `AUTH_HOST=http://localhost:8081`
   - `AUTH_CLIENT_ID=PermaplanT`
 
 6. run

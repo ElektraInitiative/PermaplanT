@@ -15,9 +15,11 @@ use diesel_async::{
 };
 use dotenvy::dotenv;
 
-use crate::config::{app, data::AppDataInner, routes};
-use crate::error::ServiceError;
-use crate::sse::broadcaster::Broadcaster;
+use crate::{
+    config::{app, routes},
+    error::ServiceError,
+    sse::broadcaster::Broadcaster,
+};
 
 use self::token::{generate_token, generate_token_for_user};
 
@@ -31,6 +33,11 @@ pub mod token;
 /// All transactions are run inside [`AsyncConnection::begin_test_transaction`].
 ///
 /// The pool is limited to 1 connection.
+///
+/// # Panics
+/// - If the configuration cannot be loaded.
+/// - If the pool cannot be initialized.
+/// - If the test transaction cannot be started.
 pub async fn init_test_database<'a, F>(init_database: F) -> Pool<AsyncPgConnection>
 where
     F: for<'r> FnOnce(
@@ -57,7 +64,7 @@ where
         .await
         .expect("Failed to begin test transaction");
 
-    conn.transaction(|conn| init_database(conn))
+    conn.transaction(|c| init_database(c))
         .await
         .expect("Failed to initialize test database");
 
@@ -95,12 +102,16 @@ pub async fn init_test_app_for_user(
 async fn init_test_app_impl(
     pool: Pool<AsyncPgConnection>,
 ) -> impl Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error> {
+    let keycloak_api = crate::config::data::create_api(
+        &app::Config::from_env().expect("Error loading configuration"),
+    );
+
     test::init_service(
         App::new()
-            .app_data(Data::new(AppDataInner {
-                pool,
-                broadcaster: Broadcaster::new(),
-            }))
+            .app_data(Data::new(pool))
+            .app_data(Data::new(Broadcaster::new()))
+            .app_data(Data::from(keycloak_api))
+            .app_data(Data::new(reqwest::Client::new()))
             .configure(routes::config),
     )
     .await
@@ -108,10 +119,10 @@ async fn init_test_app_impl(
 
 fn setup_auth() -> String {
     let jwk = jwks::init_auth();
-    generate_token(jwk, 300)
+    generate_token(&jwk, 300)
 }
 
 fn setup_auth_for_user(user_id: uuid::Uuid) -> String {
     let jwk = jwks::init_auth();
-    generate_token_for_user(jwk, 300, user_id)
+    generate_token_for_user(&jwk, 300, user_id)
 }

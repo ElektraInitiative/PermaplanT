@@ -1,6 +1,8 @@
+import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
 import { QueryCache, QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { AuthProvider } from 'react-oidc-context';
 import { BrowserRouter } from 'react-router-dom';
 import { onError } from '@/config/react_query';
@@ -44,6 +46,23 @@ const onSigninCallback = (): void => {
   window.history.replaceState({}, document.title, window.location.pathname);
 };
 
+// https://react-select.com/styles#the-classnames-prop
+// https://github.com/JedWatson/react-select/blob/master/storybook/stories/ClassNamesWithTailwind.stories.tsx
+// This ensures that Emotion's styles are inserted before Tailwind's styles so that Tailwind classes have precedence over Emotion
+function EmotionCacheProvider({ children }: { children: ReactNode }) {
+  const cache = useMemo(
+    () =>
+      createCache({
+        key: 'with-tailwind',
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we know it's there
+        insertionPoint: document.querySelector('title')!,
+      }),
+    [],
+  );
+
+  return <CacheProvider value={cache}>{children}</CacheProvider>;
+}
+
 function AuthProviderWrapper({ children }: ProviderProps) {
   const { data } = useQuery({
     queryFn: getOidcConfig,
@@ -62,7 +81,7 @@ export function Providers({ children }: ProviderProps) {
     <QueryClientProvider client={queryClient}>
       <AuthProviderWrapper>
         <BrowserRouter>
-          {children}
+          <EmotionCacheProvider>{children}</EmotionCacheProvider>
           <ReactQueryDevtools position="top-left" panelPosition="left" />
         </BrowserRouter>
       </AuthProviderWrapper>

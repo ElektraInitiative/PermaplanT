@@ -1,13 +1,14 @@
 //! Scheduled tasks for the database.
 
+use crate::db::connection::Pool;
 use chrono::{Days, Utc};
 use diesel::{debug_query, pg::Pg, QueryDsl};
 use diesel::{BoolExpressionMethods, ExpressionMethods};
 use diesel_async::RunQueryDsl;
 use log::debug;
+use std::sync::Arc;
 use std::time::Duration;
 
-use super::connection::Pool;
 use crate::schema::maps;
 
 /// How often the deleted maps are cleaned up in seconds.
@@ -15,7 +16,7 @@ const CLEANUP_MAPS_INTERVAL: u64 = 60 * 60 * 24;
 
 /// Permanently remove deleted maps older than 30 days from the database.
 /// Runs every [`CLEANUP_MAPS_INTERVAL`] seconds.
-pub async fn cleanup_maps(pool: Pool) -> ! {
+pub async fn cleanup_maps(pool: Arc<Pool>) -> ! {
     loop {
         tokio::time::sleep(Duration::from_secs(CLEANUP_MAPS_INTERVAL)).await;
 

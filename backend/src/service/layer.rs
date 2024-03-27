@@ -1,13 +1,10 @@
 //! Service layer for layers.
 
-use actix_web::web::Data;
-
-use crate::config::data::AppDataInner;
-use crate::model::dto::LayerSearchParameters;
 use crate::{
+    config::data::SharedPool,
     error::ServiceError,
     model::{
-        dto::{LayerDto, NewLayerDto},
+        dto::{LayerDto, LayerSearchParameters, NewLayerDto},
         entity::Layer,
     },
 };
@@ -18,9 +15,9 @@ use crate::{
 /// If the connection to the database could not be established.
 pub async fn find(
     search_parameters: LayerSearchParameters,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<Vec<LayerDto>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = Layer::find(search_parameters, &mut conn).await?;
     Ok(result)
 }
@@ -29,8 +26,8 @@ pub async fn find(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn find_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<LayerDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+pub async fn find_by_id(id: i32, pool: &SharedPool) -> Result<LayerDto, ServiceError> {
+    let mut conn = pool.get().await?;
     let result = Layer::find_by_id(id, &mut conn).await?;
     Ok(result)
 }
@@ -39,11 +36,8 @@ pub async fn find_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<LayerD
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn create(
-    new_layer: NewLayerDto,
-    app_data: &Data<AppDataInner>,
-) -> Result<LayerDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+pub async fn create(new_layer: NewLayerDto, pool: &SharedPool) -> Result<LayerDto, ServiceError> {
+    let mut conn = pool.get().await?;
     let result = Layer::create(new_layer, &mut conn).await?;
     Ok(result)
 }
@@ -52,8 +46,8 @@ pub async fn create(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn delete_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<(), ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+pub async fn delete_by_id(id: i32, pool: &SharedPool) -> Result<(), ServiceError> {
+    let mut conn = pool.get().await?;
     let _ = Layer::delete_by_id(id, &mut conn).await?;
     Ok(())
 }

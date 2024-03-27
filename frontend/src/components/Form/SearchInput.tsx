@@ -1,6 +1,7 @@
 import React, { forwardRef, KeyboardEvent, useImperativeHandle, useRef, useState } from 'react';
 import SearchResetIcon from '@/svg/icons/search-reset.svg?react';
 import SearchIcon from '@/svg/icons/search.svg?react';
+import { cn } from '@/utils/cn';
 
 export const SHORTCUT_SEARCH_INPUT_RESET = 'Escape';
 
@@ -33,19 +34,23 @@ interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
  * - Exposing the focusability of its search input field to parent components
  */
 const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
-  ({ handleSearch, ...inputProps }, forwardedRef) => {
+  ({ handleSearch, className, ...inputProps }, forwardedRef) => {
     const [searchTerm, setSearchTerm] = useState('');
     const searchInputRef = useRef<HTMLInputElement>(null);
 
+    const baseInputStyles =
+      'block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 pl-10 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark';
+
     useImperativeHandle(
       forwardedRef,
-      () => {
-        return {
-          focusSearchInputField() {
-            searchInputRef.current?.focus();
-          },
-        };
-      },
+      () => ({
+        contains(node: Node) {
+          return searchInputRef.current?.contains(node);
+        },
+        focusSearchInputField() {
+          searchInputRef.current?.focus();
+        },
+      }),
       [],
     );
 
@@ -72,7 +77,7 @@ const SearchInput = forwardRef<SearchInputHandle, SearchInputProps>(
         </div>
         <input
           type="text"
-          className="block h-11 w-full rounded-lg border border-neutral-500 bg-neutral-100 p-2.5 pl-10 text-sm placeholder-neutral-500 focus:border-primary-500 focus:outline-none disabled:cursor-not-allowed disabled:border-neutral-400 disabled:text-neutral-400 dark:border-neutral-400-dark dark:bg-neutral-50-dark dark:focus:border-primary-300 dark:disabled:border-neutral-400-dark dark:disabled:text-neutral-400-dark"
+          className={cn(baseInputStyles, className)}
           data-testid={TEST_IDS.SEARCH_INPUT}
           value={searchTerm}
           ref={searchInputRef}

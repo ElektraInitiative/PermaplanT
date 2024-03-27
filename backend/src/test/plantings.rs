@@ -24,7 +24,7 @@ use crate::{
 
 use crate::test::util::{init_test_app, init_test_database};
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_search_plantings() {
     let pool = init_test_database(|conn| {
         async {
@@ -96,7 +96,7 @@ async fn test_can_search_plantings() {
     }
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_create_fails_with_invalid_layer() {
     let pool = init_test_database(|conn| {
         async {
@@ -148,7 +148,7 @@ async fn test_create_fails_with_invalid_layer() {
     assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_create_plantings() {
     let pool = init_test_database(|conn| {
         async {
@@ -197,7 +197,7 @@ async fn test_can_create_plantings() {
     assert_eq!(resp.status(), StatusCode::CREATED);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_update_plantings() {
     let planting_id1 = Uuid::new_v4();
     let planting_id2 = Uuid::new_v4();
@@ -267,7 +267,7 @@ async fn test_can_update_plantings() {
     assert_eq!(plantings.get(1).map(|p| p.y), Some(20));
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_can_delete_planting() {
     let planting_id = Uuid::new_v4();
     let pool = init_test_database(|conn| {
@@ -324,7 +324,7 @@ async fn test_can_delete_planting() {
     }
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_removed_planting_outside_loading_offset_is_not_in_timeline() {
     let planting_id = Uuid::new_v4();
     let remove_date = NaiveDate::from_ymd_opt(2022, 1, 1).expect("date is valid");
@@ -374,7 +374,7 @@ async fn test_removed_planting_outside_loading_offset_is_not_in_timeline() {
     assert_eq!(page.results.len(), 0);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_removed_planting_inside_loading_offset_is_in_timeline() {
     let planting_id = Uuid::new_v4();
     let remove_date = NaiveDate::from_ymd_opt(2022, 1, 1).expect("date is valid");
@@ -422,7 +422,7 @@ async fn test_removed_planting_inside_loading_offset_is_in_timeline() {
     assert_eq!(page.results.len(), 1);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_added_planting_outside_loading_offset_is_not_in_timeline() {
     let planting_id = Uuid::new_v4();
     let current_date = NaiveDate::from_ymd_opt(2022, 1, 1).expect("date is valid");

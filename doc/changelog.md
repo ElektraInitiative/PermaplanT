@@ -90,11 +90,11 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Up the rust version to 1.74 _(4ydan)_
 - Display a rectangle for area of plantings _(Paul)_
 - Refactor the planting api to batch processing _(Paul, Jannis)_
-- _()_
+- Add map collaborator api _(Paul)_
 - Area of plants resizing. Rename width & height of plantings to `size_x` & `size_y`. Remove `scale` from plantings. _(Paul)_
 - Refactor transformer into a separate store _(Paul)_
 - Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
-- _()_
+- Update the backend environment variables for easier setup, add keycloak config _(Paul)_
 - _()_
 
 ## 0.3.6 - 21.11.2023 (151 commits)

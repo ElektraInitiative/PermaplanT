@@ -4,8 +4,7 @@ import Select, {
   ActionMeta,
   ClassNamesConfig,
   GroupBase,
-  MultiValue,
-  SingleValue,
+  OnChangeValue,
   StylesConfig,
 } from 'react-select';
 import filterObject from '../../utils/filterObject';
@@ -40,10 +39,9 @@ export interface SelectMenuProps<
   /** Text that is displayed in place of the content if no option has been selected. */
   placeholder?: string;
   /** Callback that is invoked every time a new option is selected. */
-  handleOptionsChange?: (
-    option: SingleValue<Option> | MultiValue<Option>,
-    actionMeta: ActionMeta<Option>,
-  ) => void;
+  handleOptionsChange?:
+    | ((newValue: OnChangeValue<Option, IsMulti>, actionMeta: ActionMeta<Option>) => void)
+    | undefined;
   /** Callback that is invoked if the user made any input. */
   onChange?: () => void;
   /** Callback that is invoked every time the user changed the search query. */

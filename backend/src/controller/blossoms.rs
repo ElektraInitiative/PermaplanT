@@ -1,16 +1,9 @@
 //! `Blossom` endpoints.
 
-use actix_web::{
-    post,
-    web::{Data, Json},
-    HttpResponse, Result,
-};
+use actix_web::{post, web::Json, HttpResponse, Result};
 
-use crate::{
-    config::{auth::user_info::UserInfo, data::AppDataInner},
-    model::dto::GainedBlossomsDto,
-    service,
-};
+use crate::config::data::SharedPool;
+use crate::{config::auth::user_info::UserInfo, model::dto::GainedBlossomsDto, service};
 
 /// Endpoint for gaining a [`Blossom`](crate::model::entity::Blossom).
 ///
@@ -30,8 +23,8 @@ use crate::{
 pub async fn gain(
     gained_blossom_json: Json<GainedBlossomsDto>,
     user_info: UserInfo,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response = service::blossoms::gain(gained_blossom_json.0, user_info.id, &app_data).await?;
+    let response = service::blossoms::gain(gained_blossom_json.0, user_info.id, &pool).await?;
     Ok(HttpResponse::Created().json(response))
 }

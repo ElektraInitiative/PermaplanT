@@ -69,7 +69,7 @@ async fn initial_db_values(
     Ok(())
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_generate_heatmap_succeeds() {
     let pool =
         init_test_database(|conn| initial_db_values(conn, tall_rectangle()).scope_boxed()).await;
@@ -88,7 +88,7 @@ async fn test_generate_heatmap_succeeds() {
     );
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_check_heatmap_dimensionality_succeeds() {
     let pool =
         init_test_database(|conn| initial_db_values(conn, small_rectangle()).scope_boxed()).await;
@@ -115,7 +115,7 @@ async fn test_check_heatmap_dimensionality_succeeds() {
     ); // smaller by factor of 10 because of granularity
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_check_heatmap_non_0_xmin_succeeds() {
     let pool = init_test_database(|conn| {
         initial_db_values(conn, small_rectangle_with_non_0_xmin()).scope_boxed()
@@ -146,7 +146,7 @@ async fn test_check_heatmap_non_0_xmin_succeeds() {
 
 /// Test with a map geometry that excludes a corner.
 /// The missing corner should be colored entirely in grey, as you cannot put plants there.
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_heatmap_with_missing_corner_succeeds() {
     let pool = init_test_database(|conn| {
         initial_db_values(conn, rectangle_with_missing_bottom_left_corner()).scope_boxed()
@@ -185,7 +185,7 @@ async fn test_heatmap_with_missing_corner_succeeds() {
     assert_eq!([64, 191, 64], bottom_right_pixel.0);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_missing_entities_fails() {
     let pool = init_test_database(|conn| {
         initial_db_values(conn, rectangle_with_missing_bottom_left_corner()).scope_boxed()

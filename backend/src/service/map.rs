@@ -1,22 +1,19 @@
 //! Service layer for maps.
 
 use actix_http::StatusCode;
-use actix_web::web::Data;
 use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
 
-use crate::config::data::AppDataInner;
-use crate::model::dto::{
-    BaseLayerImageDto, MapSearchParameters, Page, UpdateMapDto, UpdateMapGeometryDto,
-};
-use crate::model::dto::{NewLayerDto, PageParameters};
-use crate::model::entity::{BaseLayerImages, Layer};
-use crate::model::r#enum::layer_type::LayerType;
 use crate::{
+    config::data::SharedPool,
     error::ServiceError,
     model::{
-        dto::{MapDto, NewMapDto},
-        entity::Map,
+        dto::{
+            BaseLayerImageDto, MapDto, MapSearchParameters, NewLayerDto, NewMapDto, Page,
+            PageParameters, UpdateMapDto, UpdateMapGeometryDto,
+        },
+        entity::{BaseLayerImages, Layer, Map},
+        r#enum::layer_type::LayerType,
     },
 };
 
@@ -30,9 +27,9 @@ const LAYER_TYPES: [LayerType; 2] = [LayerType::Base, LayerType::Plants];
 pub async fn find(
     search_parameters: MapSearchParameters,
     page_parameters: PageParameters,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<Page<MapDto>, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let result = Map::find(search_parameters, page_parameters, &mut conn).await?;
     Ok(result)
 }
@@ -41,8 +38,8 @@ pub async fn find(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn find_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<MapDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+pub async fn find_by_id(id: i32, pool: &SharedPool) -> Result<MapDto, ServiceError> {
+    let mut conn = pool.get().await?;
     let result = Map::find_by_id(id, &mut conn).await?;
     Ok(result)
 }
@@ -54,9 +51,9 @@ pub async fn find_by_id(id: i32, app_data: &Data<AppDataInner>) -> Result<MapDto
 pub async fn create(
     new_map: NewMapDto,
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<MapDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
 
     let geometry_validation_result = is_valid_map_geometry(&new_map.geometry);
     if let Some(error) = geometry_validation_result {
@@ -105,9 +102,9 @@ pub async fn update(
     map_update: UpdateMapDto,
     id: i32,
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<MapDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let map = Map::find_by_id(id, &mut conn).await?;
     if map.owner_id != user_id {
         return Err(ServiceError {
@@ -119,19 +116,19 @@ pub async fn update(
     Ok(result)
 }
 
-/// Update a maps gemoetry in the database.
+/// Update a maps geometry in the database.
 /// Checks if the map is owned by the requesting user.
 ///
 /// # Errors
 /// * If the connection to the database could not be established.
 /// * If the requesting user is not the owner of the map.
-pub async fn update_geomtery(
+pub async fn update_geometry(
     map_update_geometry: UpdateMapGeometryDto,
     id: i32,
     user_id: Uuid,
-    app_data: &Data<AppDataInner>,
+    pool: &SharedPool,
 ) -> Result<MapDto, ServiceError> {
-    let mut conn = app_data.pool.get().await?;
+    let mut conn = pool.get().await?;
     let map = Map::find_by_id(id, &mut conn).await?;
     if map.owner_id != user_id {
         return Err(ServiceError {

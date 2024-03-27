@@ -12,7 +12,7 @@ use crate::{
     test::util::{init_test_app, init_test_database},
 };
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_plants_relations_include_the_other_plant_in_the_relation() {
     let pool = init_test_database(|conn| {
         async {
@@ -79,7 +79,7 @@ async fn test_plants_relations_include_the_other_plant_in_the_relation() {
     assert!(dto.relations.iter().any(|r| r.id == -2));
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_plants_relations_can_be_related_to_themselves() {
     let pool = init_test_database(|conn| {
         async {
@@ -141,7 +141,7 @@ async fn test_plants_relations_can_be_related_to_themselves() {
     assert!(dto.relations.iter().any(|r| r.id == -3));
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_plants_relations_are_distinct() {
     let pool = init_test_database(|conn| {
         async {

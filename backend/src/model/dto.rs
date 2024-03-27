@@ -21,8 +21,10 @@ pub mod coordinates_impl;
 pub mod core;
 pub mod guided_tours_impl;
 pub mod layer_impl;
+pub mod map_collaborator_impl;
 pub mod map_impl;
 pub mod new_layer_impl;
+pub mod new_map_collaborator_impl;
 pub mod new_map_impl;
 pub mod new_seed_impl;
 pub mod page_impl;
@@ -514,4 +516,52 @@ pub struct GainedBlossomsDto {
     pub times_gained: i32,
     /// The date on which the user gained this Blossom.
     pub gained_date: NaiveDate,
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+/// Information on user collaborating on a map.
+pub struct MapCollaboratorDto {
+    /// The id of the map.
+    pub map_id: i32,
+    /// The id of the collaborator.
+    pub user_id: Uuid,
+    /// The user name of the collaborator.
+    pub username: String,
+}
+
+#[typeshare]
+#[derive(Debug, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+/// The information of a map collaborator necessary for its creation.
+pub struct NewMapCollaboratorDto {
+    /// The id of the collaborator.
+    pub user_id: Uuid,
+}
+
+#[typeshare]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct DeleteMapCollaboratorDto {
+    /// The id of the collaborator.
+    pub user_id: Uuid,
+}
+
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+#[serde(rename_all = "camelCase")]
+/// Query params for searching map collaborators.
+pub struct MapCollaboratorSearchParameters {
+    /// The id of the map.
+    pub map_id: i32,
+}
+
+#[typeshare]
+#[derive(Debug, Deserialize, IntoParams)]
+#[serde(rename_all = "camelCase")]
+/// Query params for searching users.
+pub struct UserSearchParameters {
+    /// The name of the user to search for.
+    pub username: String,
 }

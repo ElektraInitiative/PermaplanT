@@ -1,16 +1,9 @@
 //! `GuidedTours` endpoints.
 
-use actix_web::{
-    get, patch, post,
-    web::{Data, Json},
-    HttpResponse, Result,
-};
+use actix_web::{get, patch, post, web::Json, HttpResponse, Result};
 
-use crate::{
-    config::{auth::user_info::UserInfo, data::AppDataInner},
-    model::dto::UpdateGuidedToursDto,
-    service,
-};
+use crate::config::data::SharedPool;
+use crate::{config::auth::user_info::UserInfo, model::dto::UpdateGuidedToursDto, service};
 
 /// Endpoint for setting up a [`GuidedTours`](crate::model::entity::GuidedTours) object.
 ///
@@ -26,8 +19,8 @@ use crate::{
     )
 )]
 #[post("")]
-pub async fn setup(user_info: UserInfo, app_data: Data<AppDataInner>) -> Result<HttpResponse> {
-    let response = service::guided_tours::setup(user_info.id, &app_data).await?;
+pub async fn setup(user_info: UserInfo, pool: SharedPool) -> Result<HttpResponse> {
+    let response = service::guided_tours::setup(user_info.id, &pool).await?;
     Ok(HttpResponse::Created().json(response))
 }
 
@@ -45,11 +38,8 @@ pub async fn setup(user_info: UserInfo, app_data: Data<AppDataInner>) -> Result<
     )
 )]
 #[get("")]
-pub async fn find_by_user(
-    user_info: UserInfo,
-    app_data: Data<AppDataInner>,
-) -> Result<HttpResponse> {
-    let response = service::guided_tours::find_by_user(user_info.id, &app_data).await?;
+pub async fn find_by_user(user_info: UserInfo, pool: SharedPool) -> Result<HttpResponse> {
+    let response = service::guided_tours::find_by_user(user_info.id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -71,9 +61,8 @@ pub async fn find_by_user(
 pub async fn update(
     status_update_json: Json<UpdateGuidedToursDto>,
     user_info: UserInfo,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response =
-        service::guided_tours::update(status_update_json.0, user_info.id, &app_data).await?;
+    let response = service::guided_tours::update(status_update_json.0, user_info.id, &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }

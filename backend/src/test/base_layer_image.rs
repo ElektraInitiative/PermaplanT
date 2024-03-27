@@ -75,7 +75,7 @@ async fn initial_db_values(
     Ok(())
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_find_succeeds() {
     let pool = init_test_database(|conn| {
         initial_db_values(conn, small_rectangle_with_non_0_xmin()).scope_boxed()
@@ -99,7 +99,7 @@ async fn test_find_succeeds() {
     assert_eq!(results.len(), 1);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_create_succeeds() {
     let pool = init_test_database(|conn| {
         initial_db_values(conn, small_rectangle_with_non_0_xmin()).scope_boxed()
@@ -124,7 +124,7 @@ async fn test_create_succeeds() {
     assert_eq!(resp.status(), StatusCode::CREATED);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_update_succeeds() {
     let pool = init_test_database(|conn| {
         initial_db_values(conn, small_rectangle_with_non_0_xmin()).scope_boxed()
@@ -151,7 +151,7 @@ async fn test_update_succeeds() {
     assert_eq!(resp.status(), StatusCode::NOT_FOUND);
 }
 
-#[actix_rt::test]
+#[actix_web::test]
 async fn test_delete_by_id_succeeds() {
     let pool = init_test_database(|conn| {
         initial_db_values(conn, small_rectangle_with_non_0_xmin()).scope_boxed()

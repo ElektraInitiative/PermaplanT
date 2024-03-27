@@ -5,6 +5,7 @@ pub mod blossoms;
 pub mod guided_tours;
 pub mod layer;
 pub mod map;
+pub mod map_collaborator;
 pub mod plant_layer;
 pub mod plantings;
 pub mod plants;

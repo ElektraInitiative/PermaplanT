@@ -2,12 +2,13 @@
 
 use actix_web::{
     delete, get, patch, post,
-    web::{Data, Json, Path, Query},
+    web::{Json, Path, Query},
     HttpResponse, Result,
 };
 
+use crate::config::data::{SharedBroadcaster, SharedPool};
 use crate::{
-    config::{auth::user_info::UserInfo, data::AppDataInner},
+    config::auth::user_info::UserInfo,
     model::dto::{
         actions::Action,
         core::ActionDtoWrapper,
@@ -41,9 +42,9 @@ pub async fn find(
     // So clients need to provide the map_id and it is checked.
     _map_id: Path<i32>,
     search_params: Query<PlantingSearchParameters>,
-    app_data: Data<AppDataInner>,
+    pool: SharedPool,
 ) -> Result<HttpResponse> {
-    let response = plantings::find(search_params.into_inner(), &app_data).await?;
+    let response = plantings::find(search_params.into_inner(), &pool).await?;
     Ok(HttpResponse::Ok().json(response))
 }
 
@@ -68,17 +69,17 @@ pub async fn find(
 pub async fn create(
     path: Path<i32>,
     new_plantings: Json<ActionDtoWrapper<Vec<NewPlantingDto>>>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
+    broadcaster: SharedBroadcaster,
 ) -> Result<HttpResponse> {
     let map_id = path.into_inner();
 
     let ActionDtoWrapper { action_id, dto } = new_plantings.into_inner();
 
-    let created_plantings = plantings::create(dto, &app_data).await?;
+    let created_plantings = plantings::create(dto, &pool).await?;
 
-    app_data
-        .broadcaster
+    broadcaster
         .broadcast(
             map_id,
             Action::new_create_planting_action(&created_plantings, user_info.id, action_id),
@@ -109,14 +110,15 @@ pub async fn create(
 pub async fn update(
     path: Path<i32>,
     update_planting: Json<ActionDtoWrapper<UpdatePlantingDto>>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
+    broadcaster: SharedBroadcaster,
 ) -> Result<HttpResponse> {
     let map_id = path.into_inner();
 
     let ActionDtoWrapper { action_id, dto } = update_planting.into_inner();
 
-    let updated_plantings = plantings::update(dto.clone(), &app_data).await?;
+    let updated_plantings = plantings::update(dto.clone(), &pool).await?;
 
     let action = match &dto {
         UpdatePlantingDto::Transform(dto) => {
@@ -136,7 +138,7 @@ pub async fn update(
         }
     };
 
-    app_data.broadcaster.broadcast(map_id, action).await;
+    broadcaster.broadcast(map_id, action).await;
 
     Ok(HttpResponse::Ok().json(updated_plantings))
 }
@@ -162,17 +164,17 @@ pub async fn update(
 pub async fn delete(
     path: Path<i32>,
     delete_planting: Json<ActionDtoWrapper<Vec<DeletePlantingDto>>>,
-    app_data: Data<AppDataInner>,
     user_info: UserInfo,
+    pool: SharedPool,
+    broadcaster: SharedBroadcaster,
 ) -> Result<HttpResponse> {
     let map_id = path.into_inner();
 
     let ActionDtoWrapper { action_id, dto } = delete_planting.into_inner();
 
-    plantings::delete_by_ids(dto.clone(), &app_data).await?;
+    plantings::delete_by_ids(dto.clone(), &pool).await?;
 
-    app_data
-        .broadcaster
+    broadcaster
         .broadcast(
             map_id,
             Action::new_delete_planting_action(&dto, user_info.id, action_id),

@@ -10,9 +10,10 @@ use utoipa_swagger_ui::SwaggerUi;
 use super::auth::Config;
 use crate::{
     controller::{
-        base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer, plantings,
-        plants, seed, timeline, users,
+        base_layer_image, blossoms, config, guided_tours, layers, map, map_collaborators,
+        plant_layer, plantings, plants, seed, timeline, users,
     },
+    keycloak_api,
     model::{
         dto::{
             core::{
@@ -25,24 +26,26 @@ use crate::{
                 UpdateRemoveDatePlantingDto,
             },
             timeline::{TimelineDto, TimelineEntryDto},
-            BaseLayerImageDto, ConfigDto, Coordinates, GainedBlossomsDto, GuidedToursDto, LayerDto,
-            MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto,
+            BaseLayerImageDto, ConfigDto, Coordinates, DeleteMapCollaboratorDto, GainedBlossomsDto,
+            GuidedToursDto, LayerDto, MapCollaboratorDto, MapDto, NewLayerDto,
+            NewMapCollaboratorDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto,
             PagePlantsSummaryDto, PageSeedDto, PlantsSummaryDto, RelationDto, RelationsDto,
             SeedDto, UpdateBaseLayerImageDto, UpdateGuidedToursDto, UpdateMapDto, UsersDto,
         },
         r#enum::{
-            privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
-            relation_type::RelationType,
+            experience::Experience, membership::Membership, privacy_option::PrivacyOption,
+            quality::Quality, quantity::Quantity, relation_type::RelationType,
+            salutation::Salutation,
         },
     },
 };
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all config endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@config`] endpoints.
 #[derive(OpenApi)]
 #[openapi(paths(config::get), components(schemas(ConfigDto)))]
 struct ConfigApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all seed endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@seed`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -64,7 +67,7 @@ struct ConfigApiDoc;
 )]
 struct SeedApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plant endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@plants`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -81,7 +84,7 @@ struct SeedApiDoc;
 )]
 struct PlantsApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all map endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@map`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -104,7 +107,7 @@ struct PlantsApiDoc;
 )]
 struct MapApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all layer endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@layers`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -124,7 +127,7 @@ struct MapApiDoc;
 )]
 struct LayerApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plant layer endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@plant_layer`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -142,7 +145,7 @@ struct LayerApiDoc;
 )]
 struct PlantLayerApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plantings endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@base_layer_image`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -161,7 +164,7 @@ struct PlantLayerApiDoc;
 )]
 struct BaseLayerImagesApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all plantings endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@plantings`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -190,22 +193,27 @@ struct BaseLayerImagesApiDoc;
 )]
 struct PlantingsApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all user data endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@users`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        users::create
+        users::create,
+        users::find
     ),
     components(
         schemas(
-            UsersDto
+            keycloak_api::UserDto,
+            UsersDto,
+            Experience,
+            Membership,
+            Salutation
         )
     ),
     modifiers(&SecurityAddon)
 )]
 struct UsersApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all guided tours endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@guided_tours`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -223,7 +231,7 @@ struct UsersApiDoc;
 )]
 struct GuidedToursApiDoc;
 
-/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all blossom endpoints.
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@blossoms`] endpoints.
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -254,6 +262,25 @@ struct BlossomsApiDoc;
 )]
 struct TimelineApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all [`mod@map_collaborators`] endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        map_collaborators::create,
+        map_collaborators::find,
+        map_collaborators::delete,
+    ),
+    components(
+        schemas(
+            NewMapCollaboratorDto,
+            MapCollaboratorDto,
+            DeleteMapCollaboratorDto,
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct MapCollaboratorsApiDoc;
+
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = ConfigApiDoc::openapi();
@@ -266,6 +293,9 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(PlantingsApiDoc::openapi());
     openapi.merge(UsersApiDoc::openapi());
     openapi.merge(TimelineApiDoc::openapi());
+    openapi.merge(GuidedToursApiDoc::openapi());
+    openapi.merge(BlossomsApiDoc::openapi());
+    openapi.merge(MapCollaboratorsApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }
