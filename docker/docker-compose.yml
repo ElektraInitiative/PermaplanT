@@ -19,7 +19,7 @@ services:
     volumes:
       - pgadmin-data-dev:/var/lib/pgadmin
     env_file:
-      - .env
+      - .env.db
     ports:
       - "5050:80"
 
