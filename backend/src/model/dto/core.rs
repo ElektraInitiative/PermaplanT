@@ -16,6 +16,7 @@ use super::plantings::{DeletePlantingDto, NewPlantingDto, PlantingDto, UpdatePla
     ActionDtoWrapperNewPlantings = ActionDtoWrapper<Vec<NewPlantingDto>>,
     ActionDtoWrapperUpdatePlantings = ActionDtoWrapper<UpdatePlantingDto>,
     ActionDtoWrapperDeletePlantings = ActionDtoWrapper<Vec<DeletePlantingDto>>,
+    ActionDtoWrapperDeleteDrawings = ActionDtoWrapper<Vec<Uuid>>,
 )]
 #[serde(rename_all = "camelCase")]
 pub struct ActionDtoWrapper<T> {

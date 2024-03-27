@@ -17,6 +17,7 @@ describe('MapHistoryStore', () => {
     for (const layerName of Object.keys(trackedState.layers)) {
       if (layerName === LayerType.Base) continue;
       if (layerName === LayerType.Plants) continue;
+      if (layerName === LayerType.Drawing) continue;
 
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
         id: -1,

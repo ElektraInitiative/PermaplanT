@@ -34,7 +34,7 @@ async fn test_get_all_plants_succeeds() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/plants")
+        .uri("/api/plants?per_page=100000")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;

@@ -8,10 +8,10 @@ import {
   DeletePlantActionPayload,
   MovePlantActionPayload,
   TransformPlantActionPayload,
-  UpdatePlantingAddDateActionPayload,
-  UpdatePlantingRemoveDateActionPayload,
   UpdatePlantingAdditionalNamePayload,
   UpdatePlantingNoteActionPayload,
+  UpdateAddDateActionPayload,
+  UpdateRemoveDateActionPayload,
 } from '@/api_types/definitions';
 import updateAddDatePlanting, {
   createPlanting,
@@ -268,10 +268,7 @@ export class UpdateAddDatePlantAction
 {
   private readonly _ids: string[];
 
-  constructor(
-    private readonly _data: UpdatePlantingAddDateActionPayload[],
-    public actionId = v4(),
-  ) {
+  constructor(private readonly _data: UpdateAddDateActionPayload[], public actionId = v4()) {
     this._ids = this._data.map(({ id }) => id);
   }
 
@@ -415,10 +412,7 @@ export class UpdateRemoveDatePlantAction
 {
   private readonly _ids: string[];
 
-  constructor(
-    private readonly _data: UpdatePlantingRemoveDateActionPayload[],
-    public actionId = v4(),
-  ) {
+  constructor(private readonly _data: UpdateRemoveDateActionPayload[], public actionId = v4()) {
     this._ids = _data.map(({ id }) => id);
   }
 

@@ -3,6 +3,8 @@ import * as uuid from 'uuid';
 import { StateCreator } from 'zustand';
 import {
   BaseLayerImageDto,
+  DrawingDto,
+  DrawingShapeType,
   LayerDto,
   LayerType,
   PlantingDto,
@@ -128,6 +130,12 @@ export interface TrackedMapSlice {
    * Initializes the base layer.
    */
   initBaseLayer: (baseLayer: BaseLayerImageDto) => void;
+
+  /**
+   * Initializes the drawing layer.
+   */
+  initDrawingLayer: (drawingLayer: DrawingDto[]) => void;
+
   initLayerId: (layer: LayerType, layerId: number) => void;
 }
 
@@ -181,6 +189,18 @@ export interface UntrackedMapSlice {
   baseLayerActivateMovePolygonPoints: () => void;
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
+
+  drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
+  drawingLayerClearSelectedShape: () => void;
+  drawingLayerSetSelectedColor: (color: string) => void;
+  drawingLayerSetFillEnabled: (fill: boolean) => void;
+  drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
+  drawingLayerSetEditMode: (drawingId?: string, editMode?: DrawingLayerEditMode) => void;
+  selectDrawings: (drawings: DrawingDto[] | null, transformerStore?: TransformerStore) => void;
+
+  disableShapeSelection: () => void;
+  enableShapeSelection: () => void;
+
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
@@ -189,6 +209,7 @@ export interface UntrackedMapSlice {
   setTooltipPosition: (position: { x: number; y: number }) => void;
   setStatusPanelContent: (content: React.ReactElement) => void;
   clearStatusPanelContent: () => void;
+
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -224,6 +245,13 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         objects: [],
         loadedObjects: [],
       },
+      [LayerType.Drawing]: {
+        layerId: 0,
+        id: -1,
+        index: LayerType.Drawing,
+        objects: [],
+        loadedObjects: [],
+      },
     }),
     {} as TrackedLayers,
   ),
@@ -249,6 +277,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   tooltipContent: '',
   tooltipPosition: { x: 0, y: 0 },
   bottomStatusPanelContent: null,
+  shapeSelectionEnabled: true,
   layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
@@ -261,6 +290,18 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         opacity: 1,
         showLabels: true,
       } as UntrackedPlantLayerState,
+      [LayerType.Drawing]: {
+        index: LayerType.Drawing,
+        visible: true,
+        opacity: 1,
+        selectedShape: null,
+        selectedColor: 'black',
+        fillEnabled: false,
+        selectedStrokeWidth: 3,
+        selectedDrawings: [],
+        editMode: undefined,
+        editDrawingId: undefined,
+      } as UntrackedDrawingLayerState,
       [LayerType.Base]: {
         visible: true,
         opacity: 1,
@@ -328,10 +369,14 @@ export type UntrackedLayerState = {
  * The state of the layers of the map.
  */
 export type TrackedLayers = {
-  [key in Exclude<LayerType, LayerType.Plants | LayerType.Base>]: TrackedLayerState;
+  [key in Exclude<
+    LayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Drawing
+  >]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
+  [LayerType.Drawing]: TrackedDrawingLayerState;
 };
 
 export type TrackedPlantLayerState = {
@@ -388,20 +433,41 @@ export type TrackedBaseLayerState = {
   nextcloudImagePath: string;
 };
 
+export type TrackedDrawingLayerState = {
+  id: number;
+  layerId: number;
+  objects: DrawingDto[];
+  loadedObjects: DrawingDto[];
+};
+
 /**
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
-  [key in Exclude<CombinedLayerType, LayerType.Plants | LayerType.Base>]: UntrackedLayerState;
+  [key in Exclude<
+    CombinedLayerType,
+    LayerType.Plants | LayerType.Base | LayerType.Drawing
+  >]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
   [LayerType.Base]: UntrackedBaseLayerState;
+  [LayerType.Drawing]: UntrackedDrawingLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantForPlanting | null;
   selectedPlantings: PlantingDto[] | null;
   showLabels: boolean;
+};
+
+export type UntrackedDrawingLayerState = UntrackedLayerState & {
+  selectedShape: DrawingShapeType | null;
+  selectedDrawings: DrawingDto[] | null;
+  selectedColor: string;
+  fillEnabled: boolean;
+  selectedStrokeWidth: number;
+  editMode: DrawingLayerEditMode;
+  editDrawingId?: string;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {
@@ -422,6 +488,8 @@ export type PlantForPlanting = {
   plant: PlantsSummaryDto;
   seed: SeedDto | null;
 };
+
+export type DrawingLayerEditMode = 'draw' | 'add' | 'remove' | undefined;
 
 /**
  * The state of the map tracked by the history.
@@ -444,6 +512,7 @@ export type UntrackedMapState = {
     from: string;
     to: string;
   };
+  shapeSelectionEnabled: boolean;
   timelineDate: string;
   /** used for fetching */
   fetchDate: string;

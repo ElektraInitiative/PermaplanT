@@ -8,7 +8,7 @@ import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 // only if we have new shapes in our bounds. This fixes a bug where deselection
 // would happen after you moved a single or a group of selected shapes.
 // Todo: optimization -> could probably use a set here
-let previouslySelectedShapeIds: Set<number> = new Set();
+let previouslySelectedShapes: Shape<ShapeConfig>[] = [];
 
 export const SELECTION_RECTANGLE_NAME = 'selectionRect';
 
@@ -31,7 +31,7 @@ export const selectIntersectingShapes = (
       // To exclude Konva's transformer, check if node contains children.
       // 'listening' is explicitly checked for '!== false' because
       // Konva treats it as true if it's undefined or missing at all.
-      return shape?.attrs.listening !== false && shape?.hasChildren();
+      return shape?.attrs.listening !== false;
     });
 
   if (!allShapes) return;
@@ -48,10 +48,10 @@ export const selectIntersectingShapes = (
   );
 
   // If intersectingShape and previouslySelectedShapes are the same, don't update
-  if (intersectingShapes.length === previouslySelectedShapeIds.size) {
+  if (intersectingShapes.length === previouslySelectedShapes.length) {
     let same = true;
     for (const shape of intersectingShapes) {
-      if (!previouslySelectedShapeIds.has(shape._id)) {
+      if (!previouslySelectedShapes.map((node) => node._id).includes(shape._id)) {
         same = false;
         break;
       }
@@ -61,15 +61,25 @@ export const selectIntersectingShapes = (
 
   if (intersectingShapes) {
     const nodes = intersectingShapes.filter((shape) => shape !== undefined);
-    previouslySelectedShapeIds = new Set(nodes.map((shape) => shape._id));
+    previouslySelectedShapes = nodes;
     trRef.current?.nodes(nodes);
   }
 };
 
-export const resetSelectionRectangleSize = (
-  setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
-) => {
-  setSelectionRectAttrs((attrs) => ({ ...attrs, width: 0, height: 0 }));
+/** Resets current selection by removing all nodes from the transformer */
+export const resetSelection = (trRef: React.RefObject<Transformer>) => {
+  trRef.current?.nodes([]);
+};
+
+export const resetSelectionRectangleSize = (stageRef: React.RefObject<Stage>) => {
+  const selectionRectangle = stageRef.current?.findOne(`.${SELECTION_RECTANGLE_NAME}`);
+
+  if (selectionRectangle) {
+    selectionRectangle.setAttrs({
+      width: 0,
+      height: 0,
+    });
+  }
 };
 
 /** Sets up the selection rectangle by positioning it at the current mouse position. */
@@ -144,9 +154,12 @@ export const updateSelectionRectangle = (
 /** Ends the selection by making the selection rectangle invisible. */
 export const hideSelectionRectangle = (
   setSelectionRectAttrs: React.Dispatch<React.SetStateAction<SelectionRectAttrs>>,
+  selectionRectAttrs: SelectionRectAttrs,
 ) => {
-  setSelectionRectAttrs((attrs) => ({
-    ...attrs,
-    isVisible: false,
-  }));
+  if (selectionRectAttrs.isVisible) {
+    setSelectionRectAttrs({
+      ...selectionRectAttrs,
+      isVisible: false,
+    });
+  }
 };
