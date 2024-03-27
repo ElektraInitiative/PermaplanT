@@ -461,7 +461,7 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
 };
 
 export type UntrackedDrawingLayerState = UntrackedLayerState & {
-  selectedShape: DrawingShapeType | null;
+  selectedShape: DrawingShapeKind | null;
   selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
   fillEnabled: boolean;
