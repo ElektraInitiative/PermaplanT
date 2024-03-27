@@ -219,17 +219,17 @@ export const EditorMap = ({ layers }: MapProps) => {
               visible={layersState.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
             />
-            <PlantsLayer
-              visible={layersState.plants.visible}
-              opacity={layersState.plants.opacity}
-              listening={getSelectedLayerType() === LayerType.Plants}
-            ></PlantsLayer>
             <ShadeLayer
               opacity={layersState.shade.opacity}
               visible={layersState.shade.visible}
               listening={getSelectedLayerType() === LayerType.Shade}
             />
             <HeatMapLayer />
+            <PlantsLayer
+              visible={layersState.plants.visible}
+              opacity={layersState.plants.opacity}
+              listening={getSelectedLayerType() === LayerType.Plants}
+            ></PlantsLayer>
             <GridLayer
               visible={layersState.grid.visible}
               opacity={layersState.grid.opacity}
