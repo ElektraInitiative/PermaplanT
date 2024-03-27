@@ -2,7 +2,7 @@ import { t } from 'i18next';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
-import { Layer } from 'react-konva';
+import { Group } from 'react-konva';
 import * as uuid from 'uuid';
 import {
   LayerType,
@@ -339,15 +339,15 @@ function PlantsLayer(props: PlantsLayerProps) {
   return (
     <>
       <PlantLayerRelationsOverlay />
-      <Layer {...props} ref={layerRef} name={`${LayerType.Plants}`}>
+      <Group {...props} ref={layerRef} name={`${LayerType.Plants}`}>
         {plantings.map((planting) => (
           <Planting planting={planting} key={planting.id} />
         ))}
-      </Layer>
-      <Layer listening={false}>
+      </Group>
+      <Group listening={false}>
         <PlantCursor />
         <AreaOfPlantingsIndicator />
-      </Layer>
+      </Group>
     </>
   );
 }
