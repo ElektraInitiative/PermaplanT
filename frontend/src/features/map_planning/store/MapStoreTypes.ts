@@ -4,7 +4,7 @@ import { StateCreator } from 'zustand';
 import {
   BaseLayerImageDto,
   DrawingDto,
-  DrawingShapeKind,
+  DrawingShapeType,
   LayerDto,
   LayerType,
   PlantingDto,
@@ -190,7 +190,7 @@ export interface UntrackedMapSlice {
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
 
-  drawingLayerActivateDrawingMode: (shape: DrawingShapeKind) => void;
+  drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
   drawingLayerClearSelectedShape: () => void;
   drawingLayerSetSelectedColor: (color: string) => void;
   drawingLayerSetFillEnabled: (fill: boolean) => void;
@@ -461,7 +461,7 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
 };
 
 export type UntrackedDrawingLayerState = UntrackedLayerState & {
-  selectedShape: DrawingShapeKind | null;
+  selectedShape: DrawingShapeType | null;
   selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
   fillEnabled: boolean;

@@ -7,7 +7,7 @@ impl From<Drawing> for DrawingDto {
     fn from(drawing: Drawing) -> Self {
         Self {
             id: drawing.id,
-            kind: drawing.kind,
+            shape_type: drawing.shape_type,
             layer_id: drawing.layer_id,
             add_date: drawing.add_date,
             remove_date: drawing.remove_date,
@@ -28,7 +28,7 @@ impl From<DrawingDto> for Drawing {
     fn from(drawing_dto: DrawingDto) -> Self {
         Self {
             id: drawing_dto.id,
-            kind: drawing_dto.kind,
+            shape_type: drawing_dto.shape_type,
             layer_id: drawing_dto.layer_id,
             add_date: drawing_dto.add_date,
             remove_date: drawing_dto.remove_date,
@@ -49,7 +49,7 @@ impl From<DrawingDto> for UpdateDrawing {
     fn from(drawing_dto: DrawingDto) -> Self {
         Self {
             id: drawing_dto.id,
-            kind: Some(drawing_dto.kind),
+            shape_type: Some(drawing_dto.shape_type),
             layer_id: Some(drawing_dto.layer_id),
             add_date: Some(drawing_dto.add_date),
             remove_date: Some(drawing_dto.remove_date),

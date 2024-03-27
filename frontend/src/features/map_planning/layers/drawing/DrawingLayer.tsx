@@ -5,7 +5,7 @@ import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Ellipse, Layer, Line, Rect } from 'react-konva';
 import * as uuid from 'uuid';
-import { DrawingDto, DrawingShapeKind, LayerType } from '@/api_types/definitions';
+import { DrawingDto, DrawingShapeType, LayerType } from '@/api_types/definitions';
 import {
   KEYBINDINGS_SCOPE_DRAWING_LAYER,
   createKeyBindingsAccordingToConfig,
@@ -79,7 +79,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   const { ...layerProps } = props;
 
   const rectangles = drawingObjects
-    .filter((object) => object.kind === DrawingShapeKind.Rectangle)
+    .filter((object) => object.shapeType === DrawingShapeType.Rectangle)
     .map((object) => {
       return {
         ...object,
@@ -88,7 +88,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
   const ellipses = drawingObjects
-    .filter((object) => object.kind === DrawingShapeKind.Ellipse)
+    .filter((object) => object.shapeType === DrawingShapeType.Ellipse)
     .map((object) => {
       return {
         ...object,
@@ -97,7 +97,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
   const lines = drawingObjects
-    .filter((object) => object.kind === DrawingShapeKind.FreeLine)
+    .filter((object) => object.shapeType === DrawingShapeType.FreeLine)
     .map((object) => {
       return {
         ...object,
@@ -106,7 +106,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
   const bezierLines = drawingObjects
-    .filter((object) => object.kind === DrawingShapeKind.BezierPolygon)
+    .filter((object) => object.shapeType === DrawingShapeType.BezierPolygon)
     .map((object) => {
       return {
         ...object,
@@ -140,7 +140,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           {
             id: uuid.v4(),
             layerId: getSelectedLayerId() ?? -1,
-            kind: DrawingShapeKind.Rectangle,
+            shapeType: DrawingShapeType.Rectangle,
             rotation: 0,
             addDate: timelineDate,
             x: Math.round(rectangle.x1),
@@ -170,7 +170,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             layerId: getSelectedLayerId() ?? -1,
             rotation: 0,
             addDate: timelineDate,
-            kind: DrawingShapeKind.Ellipse,
+            shapeType: DrawingShapeType.Ellipse,
             scaleX: 1,
             scaleY: 1,
             x: Math.round(ellipse.x),
@@ -198,7 +198,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             layerId: getSelectedLayerId() ?? -1,
             rotation: 0,
             addDate: timelineDate,
-            kind: DrawingShapeKind.FreeLine,
+            shapeType: DrawingShapeType.FreeLine,
             scaleX: 1,
             scaleY: 1,
             x: Math.round(line.x),
@@ -225,7 +225,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             layerId: getSelectedLayerId() ?? -1,
             rotation: 0,
             addDate: timelineDate,
-            kind: DrawingShapeKind.BezierPolygon,
+            shapeType: DrawingShapeType.BezierPolygon,
             scaleX: 1,
             scaleY: 1,
             x: 0,
@@ -296,7 +296,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       const pos = stage.getRelativePointerPosition();
       if (pos == null) return;
 
-      if (selectedShape == DrawingShapeKind.FreeLine) {
+      if (selectedShape == DrawingShapeType.FreeLine) {
         isDrawing.current = true;
         setNewLine({
           strokeWidth: selectedStrokeWidth,
@@ -306,7 +306,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           y: pos.y,
           points: [[0, 0]],
         });
-      } else if (selectedShape == DrawingShapeKind.Rectangle) {
+      } else if (selectedShape == DrawingShapeType.Rectangle) {
         isDrawing.current = true;
         setPreviewRectangle({
           color: selectedColor,
@@ -317,7 +317,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           x2: pos.x,
           y2: pos.y,
         });
-      } else if (selectedShape == DrawingShapeKind.Ellipse) {
+      } else if (selectedShape == DrawingShapeType.Ellipse) {
         isDrawing.current = true;
         setPreviewEllipse({
           color: selectedColor,
@@ -328,7 +328,7 @@ function DrawingLayer(props: DrawingLayerProps) {
           radiusX: 0,
           radiusY: 0,
         });
-      } else if (selectedShape == DrawingShapeKind.BezierPolygon) {
+      } else if (selectedShape == DrawingShapeType.BezierPolygon) {
         if (!newBezierLine) {
           setNewBezierLine({
             color: selectedColor,
@@ -353,7 +353,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   );
 
   const handleFinishBezierLine = () => {
-    if (selectedShape == DrawingShapeKind.BezierPolygon) {
+    if (selectedShape == DrawingShapeType.BezierPolygon) {
       if (newBezierLine) {
         createBezierLine(newBezierLine);
         setNewBezierLine(undefined);
@@ -462,17 +462,17 @@ function DrawingLayer(props: DrawingLayerProps) {
       if (point == null) return;
 
       switch (selectedShape) {
-        case DrawingShapeKind.FreeLine:
+        case DrawingShapeType.FreeLine:
           handleDrawLine(point);
           break;
-        case DrawingShapeKind.Rectangle:
+        case DrawingShapeType.Rectangle:
           if (e.evt.shiftKey) {
             handleDrawSquare(point);
           } else {
             handleDrawRectangle(point);
           }
           break;
-        case DrawingShapeKind.Ellipse:
+        case DrawingShapeType.Ellipse:
           if (e.evt.shiftKey) {
             handleDrawCircle(point);
           } else {
@@ -537,13 +537,13 @@ function DrawingLayer(props: DrawingLayerProps) {
     isDrawing.current = false;
 
     switch (selectedShape) {
-      case DrawingShapeKind.FreeLine:
+      case DrawingShapeType.FreeLine:
         handleFreeLineMouseUp();
         break;
-      case DrawingShapeKind.Rectangle:
+      case DrawingShapeType.Rectangle:
         handleRectangleMouseUp();
         break;
-      case DrawingShapeKind.Ellipse:
+      case DrawingShapeType.Ellipse:
         handleEllipseMouseUp();
         break;
     }
@@ -638,7 +638,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   );
 
   useEffect(() => {
-    if (selectedShape != DrawingShapeKind.BezierPolygon && newBezierLine) {
+    if (selectedShape != DrawingShapeType.BezierPolygon && newBezierLine) {
       createBezierLine(newBezierLine);
       setNewBezierLine(undefined);
     }
@@ -717,7 +717,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             onFinishLine={handleFinishBezierLine}
             onPointsChanged={updateNewBezierLinePoints}
             initialPoints={newBezierLine.points}
-            editMode={selectedShape == DrawingShapeKind.BezierPolygon ? 'draw' : undefined}
+            editMode={selectedShape == DrawingShapeType.BezierPolygon ? 'draw' : undefined}
             strokeWidth={selectedStrokeWidth}
             color={selectedColor}
             scaleX={1}

@@ -1,4 +1,4 @@
-CREATE TYPE drawing_shape_kind AS ENUM (
+CREATE TYPE drawing_shape_type AS ENUM (
     'rectangle',
     'ellipse',
     'free line',
@@ -7,7 +7,7 @@ CREATE TYPE drawing_shape_kind AS ENUM (
 
 CREATE TABLE drawings (
     id uuid PRIMARY KEY,
-    kind drawing_shape_kind NOT NULL,
+    shape_type drawing_shape_type NOT NULL,
     layer_id integer NOT NULL,
     add_date date,
     remove_date date,

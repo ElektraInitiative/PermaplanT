@@ -1,7 +1,7 @@
 //! Enums used in the database.
 
 pub mod deciduous_or_evergreen;
-pub mod drawing_shape_kind;
+pub mod drawing_shape_type;
 pub mod experience;
 pub mod external_source;
 pub mod fertility;

@@ -1,4 +1,4 @@
-//! [`DrawingShapeKind`] enum.
+//! [`DrawingShapeType`] enum.
 
 use diesel_derive_enum::DbEnum;
 use serde::{Deserialize, Serialize};
@@ -8,8 +8,8 @@ use utoipa::ToSchema;
 /// Enum for all possible drawing shapes.
 #[typeshare]
 #[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema, Clone)]
-#[ExistingTypePath = "crate::schema::sql_types::DrawingShapeKind"]
-pub enum DrawingShapeKind {
+#[ExistingTypePath = "crate::schema::sql_types::DrawingShapeType"]
+pub enum DrawingShapeType {
     #[db_rename = "rectangle"]
     Rectangle,
     #[db_rename = "ellipse"]

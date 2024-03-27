@@ -4,7 +4,7 @@ use typeshare::typeshare;
 use utoipa::ToSchema;
 use uuid::Uuid;
 
-use crate::model::r#enum::drawing_shape_kind::DrawingShapeKind;
+use crate::model::r#enum::drawing_shape_type::DrawingShapeType;
 
 /// Represents user drawing.
 #[typeshare]
@@ -12,7 +12,7 @@ use crate::model::r#enum::drawing_shape_kind::DrawingShapeKind;
 #[serde(rename_all = "camelCase")]
 pub struct DrawingDto {
     pub id: Uuid,
-    pub kind: DrawingShapeKind,
+    pub shape_type: DrawingShapeType,
     pub layer_id: i32,
     pub add_date: Option<NaiveDate>,
     pub remove_date: Option<NaiveDate>,

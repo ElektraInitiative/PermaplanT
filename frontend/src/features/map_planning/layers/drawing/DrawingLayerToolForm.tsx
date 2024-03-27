@@ -1,6 +1,6 @@
 import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DrawingShapeKind } from '@/api_types/definitions';
+import { DrawingShapeType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -23,7 +23,7 @@ export function DrawingLayerToolForm() {
   const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.selectedShape);
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
-  const activateDrawingMode = (shape: DrawingShapeKind) => {
+  const activateDrawingMode = (shape: DrawingShapeType) => {
     drawingLayerActivateDrawingMode(shape);
     transformerActions.clearSelection();
   };
@@ -35,9 +35,9 @@ export function DrawingLayerToolForm() {
         <div className="flex flex-row gap-1">
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedShape === DrawingShapeKind.FreeLine}
+            renderAsActive={selectedShape === DrawingShapeType.FreeLine}
             onClick={() => {
-              activateDrawingMode(DrawingShapeKind.FreeLine);
+              activateDrawingMode(DrawingShapeType.FreeLine);
               setStatusPanelContent(
                 <DrawingLayerStatusPanelContent text={t('drawings:draw_free_line_hint')} />,
               );
@@ -48,9 +48,9 @@ export function DrawingLayerToolForm() {
           </IconButton>
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedShape === DrawingShapeKind.Rectangle}
+            renderAsActive={selectedShape === DrawingShapeType.Rectangle}
             onClick={() => {
-              activateDrawingMode(DrawingShapeKind.Rectangle);
+              activateDrawingMode(DrawingShapeType.Rectangle);
               setStatusPanelContent(
                 <DrawingLayerStatusPanelContent text={t('drawings:draw_rectangle_hint')} />,
               );
@@ -62,9 +62,9 @@ export function DrawingLayerToolForm() {
 
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedShape === DrawingShapeKind.Ellipse}
+            renderAsActive={selectedShape === DrawingShapeType.Ellipse}
             onClick={() => {
-              activateDrawingMode(DrawingShapeKind.Ellipse);
+              activateDrawingMode(DrawingShapeType.Ellipse);
               setStatusPanelContent(
                 <DrawingLayerStatusPanelContent text={t('drawings:draw_ellipse_hint')} />,
               );
@@ -76,9 +76,9 @@ export function DrawingLayerToolForm() {
 
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedShape === DrawingShapeKind.BezierPolygon}
+            renderAsActive={selectedShape === DrawingShapeType.BezierPolygon}
             onClick={() => {
-              activateDrawingMode(DrawingShapeKind.BezierPolygon);
+              activateDrawingMode(DrawingShapeType.BezierPolygon);
               setStatusPanelContent(
                 <DrawingLayerStatusPanelContent text={t('drawings:draw_bezier_polygon_hint')} />,
               );
@@ -97,7 +97,7 @@ export function DrawingLayerToolForm() {
   );
 }
 
-function ShapePropertyForm(props: { selectedShape: DrawingShapeKind | null }): ReactElement {
+function ShapePropertyForm(props: { selectedShape: DrawingShapeType | null }): ReactElement {
   const { t } = useTranslation(['drawings']);
 
   const setSelectedColor = useMapStore((state) => state.drawingLayerSetSelectedColor);

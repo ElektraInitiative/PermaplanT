@@ -2,14 +2,14 @@ use chrono::NaiveDate;
 use diesel::{AsChangeset, Identifiable, Insertable, Queryable};
 use uuid::Uuid;
 
-use crate::model::r#enum::drawing_shape_kind::DrawingShapeKind;
+use crate::model::r#enum::drawing_shape_type::DrawingShapeType;
 use crate::schema::drawings;
 
 #[derive(Debug, Clone, Identifiable, Queryable, Insertable)]
 #[diesel(table_name = drawings)]
 pub struct Drawing {
     pub id: Uuid,
-    pub kind: DrawingShapeKind,
+    pub shape_type: DrawingShapeType,
     pub layer_id: i32,
     pub add_date: Option<NaiveDate>,
     pub remove_date: Option<NaiveDate>,
@@ -28,7 +28,7 @@ pub struct Drawing {
 #[diesel(table_name = drawings)]
 pub struct UpdateDrawing {
     pub id: Uuid,
-    pub kind: Option<DrawingShapeKind>,
+    pub shape_type: Option<DrawingShapeType>,
     pub layer_id: Option<i32>,
     pub add_date: Option<Option<NaiveDate>>,
     pub remove_date: Option<Option<NaiveDate>>,

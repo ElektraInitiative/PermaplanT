@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import { DrawingDto, DrawingShapeKind } from '@/api_types/definitions';
+import { DrawingDto, DrawingShapeType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
@@ -85,7 +85,7 @@ export function SingleDrawingAttributeForm({
         onFillEnabledChange={onFillEnabledChange}
         isReadOnlyMode={isReadOnlyMode}
         drawingId={drawing.id}
-        showShapeEditButton={drawing.kind === DrawingShapeKind.BezierPolygon}
+        showShapeEditButton={drawing.shapeType === DrawingShapeType.BezierPolygon}
       />
     </div>
   );
