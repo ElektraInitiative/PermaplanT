@@ -80,7 +80,7 @@ That has the added benefit, that presentational components can be easily integra
 
 ## Documentation
 
-We use Storybook [Storybook](https://storybook.js.org) to document shared components.
+We use [Storybook](https://storybook.js.org) to document shared components.
 Story files are named `*.stories.tsx` and should be located in the same folder as the component they are documenting.
 For an example please take a look in the `src/components` folder.
 
@@ -139,7 +139,7 @@ React:
 
 Frontend Architecture:
 
-- https://martinfowler.com/articles/modularizing-react-apps.html
+- [Modularizing React Applications](https://martinfowler.com/articles/modularizing-react-apps.html)
 
 Zustand (Global State Management):
 

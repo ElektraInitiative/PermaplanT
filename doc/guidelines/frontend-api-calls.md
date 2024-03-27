@@ -15,7 +15,7 @@ When integrating React-Query for API calls, consider the following guidelines:
 - Query keys are crucial for React-Query to manage caching and data fetching efficiently.
   They also play a crucial role in how queries get invalidated after a mutation.
 - Use meaningful and unique query keys to identify each API call.
-- Have a look at following guidelines: <https://react-query.tanstack.com/docs/guides/query-keys> and <https://tkdodo.eu/blog/effective-react-query-keys>
+- Have a look at following guidelines: <https://tanstack.com/query/v3/docs/framework/react/guides/query-keys> and <https://tkdodo.eu/blog/effective-react-query-keys>
 
 #### Example
 
