@@ -17,7 +17,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
 - Enable automatic image scaling in base layer _(Moritz)_
-- _()_
+- Use Konva Groups instead of Layers _(Moritz)_
 - Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
 - Fix ref warning in PlantLabel, center labels as intended _(Paul)_
