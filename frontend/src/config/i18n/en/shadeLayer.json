@@ -39,9 +39,9 @@
         "color_permanent_shade": "violet",
         "color_permanent_deep_shade": "black",
         "no_shade": "The area receives all available sunlight at all times of the day. This applies to all areas where no shading has been placed.",
-        "light_shade": "This section of the map receives plenty of sunlight and is at most only lightly shaded. Areas that are sparsely populated with trees fall under this category.",
-        "partial_shade": "Depending on the time of day this area may sometimes receive average to high amounts shading. This mainly applies to areas behind walls or non-transparent fences.",
-        "permanent_shade": "An area that is permanently covered with an average amount of shade. E.g. forests or other areas with a dense tree population.",
+        "light_shade": "This section of the map receives at most a moderate amount of shade. Areas that are sparsely populated with trees fall under this category.",
+        "partial_shade": "This area receives between 3 and 6 hours of sunlight.",
+        "permanent_shade": "An area that gets 3 hours of direct sunlight per day at most.",
         "permanent_deep_shade": "A dense cover of vegetation or an artificial surface causes this area to receive barely any sunlight."
       }
     }

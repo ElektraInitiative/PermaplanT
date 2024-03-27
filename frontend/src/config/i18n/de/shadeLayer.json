@@ -39,9 +39,9 @@
         "color_permanent_shade": "Violett",
         "color_permanent_deep_shade": "Schwarz",
         "no_shade": "An dieser Stelle scheint den ganzen Tag über die Sonne. Die Karte geht davon aus, dass jede nicht markierte Stelle unbeschattet ist.",
-        "light_shade": "Auf diesen Flächen kommt es maximal zu leichtem Schattenwurf. Das könnte z.B. in einem Obstgarten oder anderen Flächen mit wenigen Bäumen der Fall sein.",
-        "partial_shade": "Hier kommt es je nach Tageszeit zeitweise zu durchschnittlichem bis starkem Schattenwurf. Etwa hinter einer Mauer oder einem undurchsichtigen Zaun.",
-        "permanent_shade": "Eine Fläche die durchgehend durchschnittlich beschattet ist. Z.B. ein Waldstück.",
+        "light_shade": "Auf diesen Flächen kommt es maximal zu moderatem Schattenwurf. Das könnte z.B. in einem Obstgarten oder anderen Flächen mit wenigen Bäumen der Fall sein.",
+        "partial_shade": "Diese Fläche wird zwischen 3 und 6 Stunden pro Tag von der Sonne bestrahlt.",
+        "permanent_shade": "Diese Fläche erhält maximal 3 pro Tag direkte Sonneneinstrahlung",
         "permanent_deep_shade": "Diese Fläche ist durchgehend stark beschattet. Oft ist das unter Sträuchern oder sehr dicht bewachsenen Böschungen der Fall."
       }
     }
