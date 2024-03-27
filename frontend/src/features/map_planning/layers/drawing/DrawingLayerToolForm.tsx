@@ -20,7 +20,7 @@ export function DrawingLayerToolForm() {
   );
 
   const transformerActions = useTransformerStore().actions;
-  const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
+  const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.selectedShape);
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   const activateDrawingMode = (shape: DrawingShapeKind) => {

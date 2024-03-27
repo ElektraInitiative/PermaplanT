@@ -1,4 +1,5 @@
 import Konva from 'konva';
+import { LayerConfig } from 'konva/lib/Layer';
 import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
 import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -12,14 +13,13 @@ import {
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import useMapStore from '../../store/MapStore';
 import { useTransformerStore } from '../../store/transformer/TransformerStore';
-import { LayerConfigWithListenerRegister } from '../../types/layer-config';
 import { useIsDrawingLayerActive } from '../../utils/layer-utils';
 import { CreateDrawingAction, UpdateDrawingAction } from './actions';
 import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
 import BezierPolygon from './shapes/BezierPolygon';
 import { EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
 
-type DrawingLayerProps = LayerConfigWithListenerRegister;
+type DrawingLayerProps = LayerConfig;
 
 type Rectangle = {
   color: string;
@@ -65,7 +65,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   const drawingObjects = useMapStore((state) => state.trackedState.layers.drawing.objects);
   const transformerActions = useTransformerStore((state) => state.actions);
 
-  const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
+  const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.selectedShape);
   const selectedColor = useMapStore((state) => state.untrackedState.layers.drawing.selectedColor);
   const selectedStrokeWidth = useMapStore(
     (state) => state.untrackedState.layers.drawing.selectedStrokeWidth,
