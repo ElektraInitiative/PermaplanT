@@ -1,0 +1,5 @@
+# This Dockerfile is used inside the docker-compose.yml as development environment
+FROM dpage/pgadmin4:7.3
+
+COPY ./servers.json ./servers.json
+COPY ./pgpass ../pgpass
