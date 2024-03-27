@@ -294,7 +294,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         index: LayerType.Drawing,
         visible: true,
         opacity: 1,
-        shape: null,
+        selectedShape: null,
         selectedColor: 'black',
         fillEnabled: false,
         selectedStrokeWidth: 3,
@@ -461,7 +461,7 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
 };
 
 export type UntrackedDrawingLayerState = UntrackedLayerState & {
-  shape: DrawingShapeType | null;
+  selectedShape: DrawingShapeType | null;
   selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
   fillEnabled: boolean;

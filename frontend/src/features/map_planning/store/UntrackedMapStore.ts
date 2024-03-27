@@ -91,7 +91,7 @@ export const createUntrackedMapSlice: StateCreator<
           drawing: {
             ...state.untrackedState.layers.drawing,
             selectedDrawings: null,
-            shape: null,
+            selectedShape: null,
             editMode: undefined,
           },
         },
@@ -513,7 +513,7 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           drawing: {
             ...state.untrackedState.layers.drawing,
-            shape: shape,
+            selectedShape: shape,
             selectedDrawings: null,
           },
         },
@@ -554,7 +554,7 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           drawing: {
             ...state.untrackedState.layers.drawing,
-            shape: null,
+            selectedShape: null,
             editMode: undefined,
           },
         },

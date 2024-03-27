@@ -338,7 +338,6 @@ export const EditorMap = ({ layers }: MapProps) => {
               listening={getSelectedLayerType() === LayerType.Base}
             />
             <DrawingLayer
-              stageListenerRegister={baseStageListenerRegister}
               visible={layersState.drawing.visible}
               opacity={layersState.drawing.opacity}
               listening={getSelectedLayerType() === LayerType.Drawing}
