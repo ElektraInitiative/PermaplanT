@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Circle, Group, Layer, Line } from 'react-konva';
+import { Circle, Group, Line } from 'react-konva';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
 import { MapGeometryEditor } from '@/features/map_planning/layers/base/components/MapGeometryEditor';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -62,7 +62,7 @@ const BaseLayer = (props: BaseLayerProps) => {
   const scale = MAP_PIXELS_PER_METER / pixelsPerMeter;
 
   return (
-    <Layer {...layerProps} draggable={true}>
+    <Group {...layerProps} draggable={true}>
       <Group listening={false}>
         {cleanImagePath && (
           <NextcloudKonvaImage
@@ -97,7 +97,7 @@ const BaseLayer = (props: BaseLayerProps) => {
         />
       </Group>
       <MapGeometryEditor {...props} />
-    </Layer>
+    </Group>
   );
 };
 

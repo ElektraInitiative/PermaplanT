@@ -1,7 +1,8 @@
 import i18next from 'i18next';
 import Konva from 'konva';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Layer } from 'react-konva';
 import { ShepherdTourContext } from 'react-shepherd';
 import { toast } from 'react-toastify';
 import { GainedBlossomsDto, LayerDto, LayerType } from '@/api_types/definitions';
@@ -321,21 +322,23 @@ export const EditorMap = ({ layers }: MapProps) => {
               stageClickListeners,
             }}
           >
-            <BaseLayer
-              stageListenerRegister={baseStageListenerRegister}
-              opacity={layersState.base.opacity}
-              visible={layersState.base.visible}
-              listening={getSelectedLayerType() === LayerType.Base}
-            />
-            <PlantsLayer
-              visible={layersState.plants.visible}
-              opacity={layersState.plants.opacity}
-              listening={getSelectedLayerType() === LayerType.Plants}
-            ></PlantsLayer>
-            <GridLayer
-              visible={layersState.grid.visible}
-              opacity={layersState.grid.opacity}
-            ></GridLayer>
+            <Layer>
+              <BaseLayer
+                stageListenerRegister={baseStageListenerRegister}
+                opacity={layersState.base.opacity}
+                visible={layersState.base.visible}
+                listening={getSelectedLayerType() === LayerType.Base}
+              />
+              <PlantsLayer
+                visible={layersState.plants.visible}
+                opacity={layersState.plants.opacity}
+                listening={getSelectedLayerType() === LayerType.Plants}
+              ></PlantsLayer>
+              <GridLayer
+                visible={layersState.grid.visible}
+                opacity={layersState.grid.opacity}
+              ></GridLayer>
+            </Layer>
           </BaseStage>
           <div>
             <TimelineDatePicker
