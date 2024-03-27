@@ -3,22 +3,36 @@
 ## Prerequisites
 
 If you want to develop on the backend, make sure you have enough RAM.
-When performing cargo build, we have experienced (on wsl) a usage of ~12GB.
-
-- Python
-- Rust
-- Javascript
-  - nvm
-  - node
+When performing cargo build, we have experienced a usage of ~12GB.
 
 ## Operating Systems
 
-- Windows 11
-- macOS 13.1 (Unix)
+- Ubuntu or another Ubuntu/Debian-based Linux system
+- Ubuntu in [WSL](https://learn.microsoft.com/de-de/windows/wsl/install) on Windows
+
+## Ways to develop PermaplanT
+
+Right now we have three different ways to develop Permaplant:
+
+### Docker services + local development
+
+Run the database and other services in Docker containers but run backend and frontend locally.
+[Read more](development/01docker+local.md)
+
+### Dev container
+
+Run everything within the VSCode devcontainer.
+[Read more](development/02devcontainer.md)
+
+### Local setup
+
+Run everything locally, including the database setup.
+[Read more](development/03local.md)
 
 ## IDE
 
 - [Visual Studio Code](https://code.visualstudio.com/) for both Frontend and Backend
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/?var=1) for both Frontend and Backend
 
 ## Visual Studio Code Extensions
 
@@ -39,57 +53,6 @@ Rust formatting can be achieved by adding the following to settings.json in VSCo
   }
 ```
 
-## Package Managers
-
-- Frontend [npm](https://www.npmjs.com/)
-- Backend [cargo](https://crates.io/)
-
-### Installing Node + Npm
-
-If you are using unix, macOS, and windows WSL, consider using [nvm](https://github.com/nvm-sh/nvm)
-to manage your node environment:
-
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-nvm install 20
-nvm use 20
-```
-
-Or if you use the default macOS starting with Catalina shell `zsh`, try:
-
-```zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh)"
-```
-
-### Installing Rust + Cargo
-
-If you’re using Linux or macOS, open a terminal and enter the following command:
-
-```bash
-$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
-```
-
-This installs rust and cargo automatically on your machine.
-If you get linker errors, proceed by installing a C Compiler, which will typically include a linker.
-
-To install our specific version of Rust, just run the following command:
-
-```bash
-rustup install 1.74
-```
-
-On Windows, go to https://www.rust-lang.org/tools/install and follow the instructions for installing Rust.
-At some point in the installation, you’ll receive a message explaining that you’ll also need the MSVC build tools for Visual Studio 2013 or later.
-
-To acquire the build tools, you’ll need to install Visual Studio 2022. When asked which workloads to install, include:
-
-- Desktop Development with C++
-- The Windows 10 or 11 SDK
-- The English language pack component, along with any other language pack of your choosing
-
-In case you don't prefer any of the previously mentioned installations methods, click
-[here](https://forge.rust-lang.org/infra/other-installation-methods.html) for alternatives.
-
 ## Browsers
 
 - Chrome 108.0.5359
@@ -103,10 +66,14 @@ If you want to install all necessary dependencies for development run following 
 make install
 ```
 
-## Containers
-
-We are also supporting a containerized setup(docker/podman). For more information checkout the README inside [.devcontainer](https://github.com/ElektraInitiative/PermaplanT/blob/master/.devcontainer/README.md).
-
 ## Github Codespaces
 
 PermaplanT supports Github codespaces. If you are interested in developing inside Github Codespaces you can learn more about [here](https://docs.github.com/de/codespaces).
+
+## Backend Setup
+
+[Setup for Backend](backend/01setup.md)
+
+## Frontend Setup
+
+[Readme in Frontend](https://blob.permaplant.net/master/frontend/README.md)
