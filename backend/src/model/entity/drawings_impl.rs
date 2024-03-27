@@ -69,11 +69,11 @@ impl Drawing {
         let result = conn
             .transaction(|transaction| {
                 Box::pin(async {
-                    let futures = Self::do_update(drawing_updates.clone(), transaction);
+                    let ids: Vec<Uuid> = drawing_updates.iter().map(|dto| dto.id).collect();
+
+                    let futures = Self::do_update(drawing_updates, transaction);
 
                     futures_util::future::try_join_all(futures).await?;
-
-                    let ids: Vec<Uuid> = drawing_updates.iter().map(|dto| dto.id).collect();
 
                     let results = FilterDsl::filter(
                         drawings::table.select(drawings::all_columns),
