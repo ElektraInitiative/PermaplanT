@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getLayers } from '../api/getLayers';
 import { getMap } from '../api/getMap';
+import { getTimelineEvents } from '../api/getTimelineEvents';
 import { getPlantings } from '../api/plantingApi';
 import { getBaseLayerImage } from '../layers/base/api/getBaseLayer';
 import useMapStore from '../store/MapStore';
@@ -14,6 +15,7 @@ const MAP_EDITOR_KEYS = {
     layers: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'layers' }] as const,
     plant: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'plant_layer' }] as const,
     base: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'base_layer' }] as const,
+    timeline: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'timeline' }] as const,
   },
   layers: (mapId: number) => [{ ...MAP_EDITOR_KEYS._helpers.layers()[0], mapId }] as const,
   map: (mapId: number) => [{ ...MAP_EDITOR_KEYS._helpers.map()[0], mapId }] as const,
@@ -21,9 +23,32 @@ const MAP_EDITOR_KEYS = {
     [{ ...MAP_EDITOR_KEYS._helpers.plant()[0], mapId, layerId, fetchDate }] as const,
   baseLayer: (mapId: number, layerId: number) =>
     [{ ...MAP_EDITOR_KEYS._helpers.base()[0], mapId, layerId }] as const,
+  timeline: (mapId: number, startDate: string, endDate: string) =>
+    [{ ...MAP_EDITOR_KEYS._helpers.timeline()[0], mapId, startDate, endDate }] as const,
 };
 
 const TEN_MINUTES = 1000 * 60 * 10;
+
+/**
+ * Fetch timeline events for the given map id.
+ */
+export function useGetTimelineEvents(mapId: number, startDate: string, endDate: string) {
+  const queryInfo = useQuery({
+    queryKey: MAP_EDITOR_KEYS.timeline(mapId, startDate, endDate),
+    queryFn: getTimelineEventsQueryFn,
+    refetchOnWindowFocus: false,
+    staleTime: TEN_MINUTES,
+  });
+
+  return queryInfo.data;
+}
+
+function getTimelineEventsQueryFn({
+  queryKey,
+}: QueryFunctionContext<ReturnType<(typeof MAP_EDITOR_KEYS)['timeline']>>) {
+  const { mapId, startDate, endDate } = queryKey[0];
+  return getTimelineEvents(mapId, startDate, endDate);
+}
 
 /**
  * Gets all layers for the given map id.
@@ -39,7 +64,6 @@ export function useGetLayers(mapId: number) {
     staleTime: TEN_MINUTES,
     refetchOnWindowFocus: false,
     meta: {
-      autoClose: false,
       errorMessage: t('layers:error_fetching_layers'),
     },
   });
@@ -57,11 +81,15 @@ function getLayersQueryFn({
  * Get map data for the given map id.
  */
 export function useMap(mapId: number) {
+  const { t } = useTranslation(['maps']);
+
   return useQuery({
     queryKey: MAP_EDITOR_KEYS.map(mapId),
     queryFn: getMapQueryFn,
     refetchOnWindowFocus: false,
-    // TODO: add error message
+    meta: {
+      errorMessage: t('maps:error_fetch_map_data'),
+    },
   });
 }
 
@@ -99,7 +127,6 @@ export function usePlantLayer({ mapId, layerId, enabled }: UseLayerArgs) {
     cacheTime: 0,
     enabled,
     meta: {
-      autoClose: false,
       errorMessage: t('plantSearch:error_initializing_layer'),
     },
   });

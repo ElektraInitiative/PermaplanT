@@ -45,7 +45,6 @@ export function useFindPlantById({ plantId, enabled = true }: FindPlantByIdArgs)
     queryKey: PLANT_KEYS.detail(plantId),
     queryFn: findPlantByIdQueryFn,
     meta: {
-      autoClose: false,
       errorMessage: t('plantings:error_fetching_plant'),
     },
     enabled,
@@ -79,7 +78,6 @@ export function usePlantSearch() {
     queryFn: searchPlantsQueryFn,
     select: mapPageToList,
     meta: {
-      autoClose: false,
       errorMessage: t('plantSearch:error_searching_plants'),
     },
     // prevent the query from being fetched again for the
@@ -125,7 +123,6 @@ export function useSeasonalAvailablePlants(mapId: number, date: Date) {
     queryFn: seasonalAvailablePlantsQueryFn,
     select: mapPageToList,
     meta: {
-      autoClose: false,
       errorMessage: t('plantingSuggestions:available_seeds.error_fetching_seasonal_suggestions'),
     },
   });
