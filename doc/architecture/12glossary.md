@@ -174,6 +174,11 @@
 - endpoints:
   - The API endpoints that can be called in the backend.  
     Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
+- entity:
+  - an object or concept of interest (map, user, plant, planting, etc.)
+  - contains all necessary attributes to describe its properties
+  - represented as table in the database
+  - each database row is a specific instance of the entity
 - keybinding:
   - The association of a specific action or function with a particular key or key combination.
 - keyhandling:
