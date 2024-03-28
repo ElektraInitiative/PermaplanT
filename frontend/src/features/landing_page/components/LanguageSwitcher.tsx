@@ -14,13 +14,15 @@ const customStyles: StylesConfig<Option, false> = {
   option: (styles) => filterObject(styles, ['backgroundColor', 'color']),
   control: () => ({}),
   valueContainer: () => ({}),
-  menu: (styles) => filterObject(styles, ['width', 'height']),
+  menu: (styles) => filterObject(styles, ['backgroundColor', 'width', 'height']),
 };
 
 const customClassNames: ClassNamesConfig<Option, false> = {
   option: (state) => {
+    const optionClassName = `hover:bg-neutral-200 dark:hover:bg-neutral-400-dark dark:bg-neutral-100-dark`;
+
     return `
-        hover:bg-neutral-200 dark:hover:bg-neutral-400-dark
+        ${optionClassName}
         ${state.isFocused ? ' bg-neutral-300 dark:bg-neutral-500' : ''}
         ${state.isSelected ? ' bg-primary-500' : ''}
       `;
