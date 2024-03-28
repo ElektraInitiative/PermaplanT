@@ -24,7 +24,7 @@ const customClassNames: ClassNamesConfig<Option, false> = {
     return `
         ${optionClassName}
         ${state.isFocused ? ' bg-neutral-300 dark:bg-neutral-500' : ''}
-        ${state.isSelected ? ' bg-primary-500' : ''}
+        ${state.isSelected ? ' bg-primary-500 hover:bg-primary-600 text-neutral-50' : ''}
       `;
   },
   menu: () => 'bg-white dark:bg-neutral-100-dark',
