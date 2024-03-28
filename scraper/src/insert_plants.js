@@ -12,7 +12,7 @@ config({
 const pgp = pgPromise({});
 
 const db = pgp(process.env.DATABASE_URL);
-const plantsFilePath = process.argv[2] || "data/mergedDatasets.csv";
+const plantsFilePath = process.argv[2] || "data/finalDataset.csv";
 
 /**
  * Sanitizes the values of the json array

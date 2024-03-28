@@ -29,7 +29,7 @@ cp .env.example .env.local
 
 ### Installation Option 1: With a single command
 
-The following command will fetch the data from the sources, merge the datasets and insert the data into the database:
+The following command will fetch the data from the sources, merge the datasets, apply the overrides and insert the data into the database:
 
 ```shell
 npm run start:full
@@ -46,6 +46,7 @@ npm run start
 1. `detail.csv` - scraped from PracticalPlants
 2. `permapeopleRawData.csv` - scraped from Permapeople
 3. `reinsaatRawData.csv` - scraped from Reinsaat and merged from `reinsaatRawDataEN.csv` and `reinsaatRawDataDE.csv`
+4. `germanCommonNames.csv` - scraped from wikidata
 
 ### Installation Option 2: Step by Step
 
@@ -76,6 +77,7 @@ The scraped data is stored in the `data` directory:
 - `reinsaatRawDataEN.csv`: This file contains the raw data scraped from the english version of the Reinsaat webpage.
 - `reinsaatRawDataDE.csv`: This file contains the raw data scraped from the german version of the Reinsaat webpage.
 - `reinsaatRawData.csv`: This file contains the merged data scraped from the english and german version of the Reinsaat webpage.
+- `germanCommonNames.csv`: This file contains the German common names fetched from https://www.wikidata.org
 
 2. Merge the scraped datasets
 
@@ -89,13 +91,29 @@ This can be done with the following command:
 npm run merge:datasets
 ```
 
-3. Correct data manually before the insertion (optional)
+3. Fetch German common names
+
+Goes through all unique names from mergedDatasets.csv and fetches the German common names from https://www.wikidata.org concurrently. Then merges them into `mergedDatasets.csv`
+
+If it starts throwing 429 errors, reduce MAX_CONCURRENT_REQUESTS to a lower number, such as 10.
+
+```shell
+npm run fetch:germannames && npm run merge:germannames
+```
+
+4. Apply overrides
 
 The scraped data can contain inconsistencies and errors.
-In order to correct these mistakes, we can manually correct the data i.e. change the values in the `mergedDatasets.csv` file.
-The corrected data in the new file should be stored in the same format as the generated data i.e. columns may not be changed.
+In order to correct these mistakes, we can create override files.
+`data/overrides` may contain any number of `csv` files, which are applied consecutively to `mergedDatasets.csv` to create `finalDataset.csv`
 
-4. Insert the data into the database
+For details see `data/overrides/README.md`
+
+```shell
+npm run apply:overrides
+```
+
+5. Insert the data into the database
 
 The scraper also inserts the scraped data into the database:
 
@@ -103,11 +121,11 @@ The scraper also inserts the scraped data into the database:
 npm run insert:plants
 ```
 
-5. Insert relations into the database
+6. Insert relations into the database
 
 The scraper inserts the relation data into the database.
 
-First you need to download the `Companions.csv` and `Antigonist.csv` file from the nextcloud server or export them yourself from the current `Plant_Relations.ods`.  
+First you need to download the `Companions.csv` and `Antagonist.csv` file from the nextcloud server or export them yourself from the current `Plant_Relations.ods`.  
 Copy them into the /data directory and run:
 
 ```shell

@@ -6,24 +6,8 @@ import {
   sanitizeColumnNames,
   processMeasurement,
   getSoilPH,
-  fetchGermanName,
+  cleanUpJsonForCsv,
 } from "./helpers/helpers.js";
-
-/**
- * Fetches the German names for the plants from Wikidata API
- */
-const fetchGermanNames = async (plants) => {
-  return Promise.all(
-    plants.map(async (plant) => {
-      if (plant["common_name_de"]) {
-        return plant;
-      }
-      const germanName = await fetchGermanName(plant["unique_name"]);
-      plant["common_name_de"] = germanName;
-      return plant;
-    })
-  );
-};
 
 /**
  *  Custom rules to unify the value format of merged datasets.
@@ -35,10 +19,7 @@ const unifyValueFormat = (plants, columnMapping) => {
   const mappedColumns = Object.keys(columnMapping).filter(
     (key) => columnMapping[key] !== null
   );
-  //console.log(mappedColumns)
   plants.forEach((plant) => {
-    //console.log(plant)
-
     mappedColumns.forEach((column) => {
       if (plant[column]) {
         if (!!columnMapping[column]["valueMapping"]) {
@@ -81,28 +62,6 @@ const unifyValueFormat = (plants, columnMapping) => {
 
     if ("width" in plant) {
       plant["spread"] = processMeasurement(plant["width"]);
-    }
-
-    if (plant["unique_name"].startsWith("Papaver somnif. paeonifl.")) {
-      plant["unique_name"] = plant["unique_name"].replace(
-        "Papaver somnif. paeonifl.",
-        "Papaver somniferum paeoniflorum"
-      );
-    } else if (plant["unique_name"].startsWith("Alcea rosea fl. pl.")) {
-      plant["unique_name"] = plant["unique_name"].replace(
-        "Alcea rosea fl. pl.",
-        "Alcea rosea flore pleno"
-      );
-    } else if (plant["unique_name"].startsWith("Campanula lat. macr.")) {
-      plant["unique_name"] = plant["unique_name"].replace(
-        "Campanula lat. macr.",
-        "Campanula latifolia macrantha"
-      );
-    } else if (plant["unique_name"].startsWith("Malva sylvestris ssp. maur.")) {
-      plant["unique_name"] = plant["unique_name"].replace(
-        "Malva sylvestris ssp. maur.",
-        "Malva sylvestris mauritiana"
-      );
     }
   });
 
@@ -312,8 +271,7 @@ async function writePlantsToCsv(plants) {
   }
 
   let updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
-
-  updatedPlants = await fetchGermanNames(updatedPlants);
+  cleanUpJsonForCsv(updatedPlants);
 
   console.log("[INFO] Writing merged dataset to CSV file...");
   console.log("[INFO] Total number of plants: ", updatedPlants.length);
