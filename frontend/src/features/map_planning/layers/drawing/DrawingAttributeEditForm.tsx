@@ -12,7 +12,7 @@ import EditIcon from '@/svg/icons/edit.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import useMapStore from '../../store/MapStore';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
-import { DrawingDto, FillPatternType } from './types';
+import { FillPatternType } from './types';
 
 const DrawingAttributeEditFormSchema = z
   // The 'empty' value for the API is undefined, so we need to transform the empty string to undefined

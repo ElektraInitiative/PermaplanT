@@ -5,7 +5,6 @@ import { range } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import React from 'react';
 import { Circle, Line } from 'react-konva';
-import { DrawingDto } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DrawingLayerEditMode } from '@/features/map_planning/store/MapStoreTypes';
 import { DrawingDto, FillPatternType } from '../types';
