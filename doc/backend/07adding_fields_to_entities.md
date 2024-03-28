@@ -1,4 +1,4 @@
-# Steps to add a field to a model
+# Steps to add a Field to Entities
 
 1. Create a migration  
    `cd backend && diesel migration generate my_new_migration`  
