@@ -8,6 +8,10 @@ For drawing areas of shadings, hydrology, zones, etc., we need to transform a se
 
 - Algorithms need to be fast enough so that users won't recognize any delays.
 
+## Assumptions
+
+- We assume that there are no alternative packages readily available that offer significantly better performance or features than the ones we have explored.
+
 ## Solutions
 
 ### graham_scan
