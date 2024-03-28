@@ -6,14 +6,12 @@
   "draw_bezier_polygon_hint": "Klicken Sie mit der linken Maustaste, um einen Punkt zu setzen. Klicken Sie mit der rechten Maustaste, um die Zeichnung zu beenden.",
   "edit_bezier_polygon_hint": "Klicken Sie mit der linken Maustaste, um einen Punkt zu setzen.",
   "delete_bezier_polygon_point_hint": "Klicken Sie auf einen Punkt, um ihn zu löschen.",
-
   "draw_rectangle_tooltip": "Rechteck zeichnen.",
   "draw_ellipse_tooltip": "Ellipse zeichnen.",
   "draw_free_line_tooltip": "Freie Linie zeichnen.",
   "draw_bezier_polygon_tooltip": "Freies Polygon zeichnen.",
   "edit_bezier_polygon_tooltip": "Freies Polygon bearbeiten.",
   "delete_bezier_polygon_point_tooltip": "Punkte löschen.",
-
   "delete": "Element löschen",
   "delete_multiple_drawings": "Elemente löschen",
   "add_date": "Hinzugefügt am",
@@ -24,10 +22,7 @@
   "error_invalid_add_remove_date": "Das Entfernungsdatum muss nach dem Hinzufügungsdatum liegen.",
   "operations": "Punkte bearbeiten",
   "edit_mode": "Bearbeitungsmodus aktivieren",
-
-  "error_init_layer": "Entschuldigung, ich habe Schwierigkeiten gezeichnete Elemente von meinem Server zu erhalten. Bitte versuche es später erneut."
-  "operations": "Operationen zur Bearbeitung",
-  "edit_mode": "Bearbeitungsmodus aktivieren",
+  "error_init_layer": "Entschuldigung, ich habe Schwierigkeiten gezeichnete Elemente von meinem Server zu erhalten. Bitte versuche es später erneut.",
   "fillPattern": "Füllmuster",
   "select_image": "Bild auswählen"
 }

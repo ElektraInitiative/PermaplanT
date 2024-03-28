@@ -22,7 +22,7 @@
   "error_invalid_add_remove_date": "Remove date must be after add date.",
   "operations": "Edit Points",
   "edit_mode": "Activate Edit Mode",
-  "error_init_layer": "Sorry, I'm having trouble loading drawn elements from my server. Please try again later."
+  "error_init_layer": "Sorry, I'm having trouble loading drawn elements from my server. Please try again later.",
   "fillPattern": "Fill Pattern",
   "select_image": "Select Image"
 }
