@@ -270,8 +270,6 @@ async function writePlantsToCsv(plants) {
     fs.mkdirSync("data");
   }
 
-  //const slicedPlants = plants.slice(0,100)
-
   let updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
   cleanUpJsonForCsv(updatedPlants);
 

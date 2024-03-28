@@ -4,13 +4,12 @@ import fs from "fs";
 import { parse as json2csv } from "json2csv";
 import csv from "csvtojson";
 import { capitalizeWords } from "./helpers/helpers.js";
-import { log } from "console";
 
 let GermanNamesFound = 0;
 
 /**
  * Defines the amount of retries we do, if axios encounters errors during a HTTP GET Request.
- * Increse Delay if we encounter error to prevent 429 Errors.
+ * Increase delay if we encounter error to prevent 429 Errors.
  */
 axiosRetry(axios, {
   retries: 5, // number of retries
@@ -24,8 +23,7 @@ axiosRetry(axios, {
 });
 
 /**
- * Fetches the German name of the plant from the Wikidata API.
- * Sets the 'common_name_de' property of every plant in the array.
+ * Filter out German names that are the same as the unique name and remove duplicates
  *
  * @param {string[]} germanNames - An array with German plant names.
  * @param {string} unique_name - A plant name to filter if it's in the German names.
@@ -60,7 +58,8 @@ const filterGermanNames = (germanNames, unique_name) => {
       cleanedGermanNames.push(capitalizeWords(germanName));
     }
   }
-  //remove duplicates
+
+  // remove duplicates
   const uniqueNameSet = new Set(cleanedGermanNames);
 
   return Array.from(uniqueNameSet);
@@ -186,8 +185,6 @@ async function fetchGermanNames() {
   }
 
   let plants = await csv().fromFile("data/mergedDatasets.csv");
-
-  // plants = plants.slice(0, 100) // during developement
 
   await fetchGermanNamesForPlantsConcurrent(plants);
 
