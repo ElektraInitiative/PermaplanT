@@ -70,11 +70,11 @@ export function errorToastGrouped(
   }
 }
 
-toast.onChange((payload: ToastItem) => {
-  if (payload.status !== 'removed') return;
+toast.onChange((action: ToastItem) => {
+  if (action.status !== 'removed') return;
 
-  if (payload.type === 'info') infoToastData.delete(payload.content as ToastContent);
-  else if (payload.type === 'success') successToastData.delete(payload.content as ToastContent);
-  else if (payload.type === 'warning') warningToastData.delete(payload.content as ToastContent);
-  else if (payload.type === 'error') errorToastData.delete(payload.content as ToastContent);
+  if (action.type === 'info') infoToastData.delete(action.content as ToastContent);
+  else if (action.type === 'success') successToastData.delete(action.content as ToastContent);
+  else if (action.type === 'warning') warningToastData.delete(action.content as ToastContent);
+  else if (action.type === 'error') errorToastData.delete(action.content as ToastContent);
 });
