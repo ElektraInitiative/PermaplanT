@@ -13,6 +13,10 @@
     "exitPlantingMode": ["Escape"],
     "deleteSelectedPlantings": ["Delete"]
   },
+  "drawing_layer": {
+    "exitDrawingMode": ["Escape"],
+    "deleteSelectedDrawings": ["Delete"]
+  },
   "_just_for_documentation_":{
     "clearSearchInput": ["Escape"]
   }

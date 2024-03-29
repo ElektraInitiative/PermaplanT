@@ -26,7 +26,8 @@
         "serayuzgur.crates",
         "mutantdino.resourcemonitor",
         "tamasfe.even-better-toml",
-        "vadimcn.vscode-lldb"
+        "vadimcn.vscode-lldb",
+        "1YiB.rust-bundle"
       ]
     }
   },

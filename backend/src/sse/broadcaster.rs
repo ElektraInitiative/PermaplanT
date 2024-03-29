@@ -116,7 +116,7 @@ impl Broadcaster {
 
     /// Broadcasts `msg` to all clients on the same map.
     pub async fn broadcast(&self, map_id: i32, action: Action) {
-        let action_id = action.action_id().to_string();
+        let action_id = action.action_id.to_string();
 
         match sse::Data::new_json(action) {
             Ok(mut serialized_action) => {
@@ -144,7 +144,7 @@ impl Broadcaster {
 
     /// Broadcasts `msg` to all clients on all maps.
     pub async fn broadcast_all_maps(&self, action: Action) {
-        let action_id = action.action_id().to_string();
+        let action_id = action.action_id.to_string();
 
         match sse::Data::new_json(action) {
             Ok(mut serialized_action) => {

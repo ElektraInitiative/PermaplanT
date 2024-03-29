@@ -51,6 +51,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Remove error messages in console if a seed was not found _(Moritz)_
+- Add drawing layer functionality including rectangles, ellipses, lines and bezier polygons _(Daniel Steinkogler, Jannis Adamek)_
 - _()_
 - Landing page: Added blog entries, updated team members, minor text changes _(Christoph Schreiner)_
 - _()_
