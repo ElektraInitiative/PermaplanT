@@ -15,6 +15,9 @@ import {
 } from '@/config/keybindings';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
+import DrawingLayer from '@/features/map_planning/layers/drawing/DrawingLayer';
+import { DrawingLayerLeftToolbar } from '@/features/map_planning/layers/drawing/DrawingLayerLeftToolbar';
+import DrawingLayerRightToolbar from '@/features/map_planning/layers/drawing/DrawingLayerRightToolbar';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';

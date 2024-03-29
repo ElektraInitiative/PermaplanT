@@ -3,7 +3,7 @@ import { LayerConfig } from 'konva/lib/Layer';
 import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
 import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Ellipse, Layer, Line, Rect } from 'react-konva';
+import { Ellipse, Group, Line, Rect } from 'react-konva';
 import * as uuid from 'uuid';
 import { DrawingDto, DrawingShapeType, LayerType } from '@/api_types/definitions';
 import {
@@ -688,7 +688,7 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   return (
     <>
-      <Layer {...layerProps} name={`${LayerType.Drawing}`}>
+      <Group {...layerProps} name={`${LayerType.Drawing}`}>
         {bezierLines.map((bezierLine, i) => (
           <BezierPolygon
             key={`bezier-line-${i}`}
@@ -855,7 +855,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             fillEnabled={previewEllipse.fillEnabled}
           />
         )}
-      </Layer>
+      </Group>
     </>
   );
 }
