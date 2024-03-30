@@ -90,7 +90,7 @@ impl Action {
         Self {
             action_id,
             user_id,
-            payload: Vec::from(dtos),
+            action: ActionType::CreatePlanting(Vec::from(dtos)),
         }
     }
 

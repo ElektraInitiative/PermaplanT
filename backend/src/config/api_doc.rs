@@ -16,8 +16,9 @@ use crate::{
     model::{
         dto::{
             core::{
-                ActionDtoWrapperDeletePlantings, ActionDtoWrapperNewPlantings,
-                ActionDtoWrapperUpdatePlantings, TimelinePagePlantingsDto,
+                ActionDtoWrapperDeleteDrawings, ActionDtoWrapperDeletePlantings,
+                ActionDtoWrapperNewPlantings, ActionDtoWrapperUpdatePlantings,
+                TimelinePagePlantingsDto,
             },
             plantings::{
                 MovePlantingDto, PlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
