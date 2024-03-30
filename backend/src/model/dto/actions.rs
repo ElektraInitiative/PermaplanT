@@ -23,6 +23,9 @@ use super::{
     BaseLayerImageDto, UpdateMapGeometryDto,
 };
 
+/// Actions broadcast events to other users viewing the same map,
+/// so that they can update the map state appropriately.
+/// It keeps all users on the map in sync via [`crate::sse::broadcaster::Broadcaster`]
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -34,44 +37,46 @@ pub struct Action {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-// Use the name of the enum variant as the type field looking like { "type": "CreatePlanting", ... }.
-/// An enum representing all the actions that can be broadcasted via [`crate::sse::broadcaster::Broadcaster`].
+// Use the name of the enum variant as the field "type" looking like
+/// { "type": "CreatePlanting", "payload": ... }.
 #[serde(tag = "type", content = "payload")]
 pub enum ActionType {
-    /// An action used to broadcast creation of a plant.
+    /// New plantings have been created.
     CreatePlanting(Vec<PlantingDto>),
-    /// An action used to broadcast deletion of a plant.
+    /// Existing plantings have been deleted.
     DeletePlanting(Vec<DeletePlantActionPayload>),
-    /// An action used to broadcast movement of a plant.
+    /// Plantings have been moved (panned).
     MovePlanting(Vec<MovePlantActionPayload>),
-    /// An action used to broadcast transformation of a plant.
+    /// Plantings have been transformation.
     TransformPlanting(Vec<TransformPlantActionPayload>),
-    /// An action used to update the `add_date` of a plant.
+    /// The `add_date` field of plantings has been changed.
     UpdatePlantingAddDate(Vec<UpdateAddDateActionPayload>),
-    /// An action used to update the `remove_date` of a plant.
+    /// The `remove_date` field of plantings has been changed.
     UpdatePlantingRemoveDate(Vec<UpdateRemoveDateActionPayload>),
-    /// An action used to broadcast updating a Markdown notes of a plant.
+    /// Note (markdown) of plantings had been changed.
     UpdatePlatingNotes(Vec<UpdatePlantingNoteActionPayload>),
-    /// An action used to broadcast creation of a baseLayerImage.
-    CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
-    /// An action used to broadcast update of a baseLayerImage.
-    UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
-    /// An action used to broadcast deletion of a baseLayerImage.
-    DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
-    /// An action used to broadcast an update to the map geometry.
-    UpdateMapGeometry(UpdateMapGeometryActionPayload),
-    /// An action used to update the `additional_name` of a plant.
+    /// The `additional_name` field of one planting has been changed.
     UpdatePlantingAdditionalName(UpdatePlantingAdditionalNamePayload),
 
-    /// An action used to broadcast creation of a new drawing shape.
+    /// A new base layer image has been created.
+    CreateBaseLayerImage(CreateBaseLayerImageActionPayload),
+    /// A base layer image has been update.
+    UpdateBaseLayerImage(UpdateBaseLayerImageActionPayload),
+    /// A base later image has been deleted.
+    DeleteBaseLayerImage(DeleteBaseLayerImageActionPayload),
+
+    /// The map geometry has been changed.
+    UpdateMapGeometry(UpdateMapGeometryActionPayload),
+
+    /// New drawings have been created.
     CreateDrawing(Vec<DrawingDto>),
-    /// An action used to broadcast deletion of an existing drawing shape.
+    /// Existing drawings have been deleted.
     DeleteDrawing(Vec<Uuid>),
-    /// An action used to broadcast the update of an existing drawing shape.
+    /// Drawings have been updated.
     UpdateDrawing(Vec<DrawingDto>),
-    /// An action used to update the `add_date` of a drawing.
+    /// The `add_date` field of drawings has been changed.
     UpdateDrawingAddDate(Vec<DrawingDto>),
-    /// An action used to update the `remove_date` of a drawing.
+    /// The `remove_date` of drawings has changed.
     UpdateDrawingRemoveDate(Vec<DrawingDto>),
 }
 
