@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The map's visibility settings are restored from the user's last session.
-- **Status:** Draft
+- **Status:** Lukas
 
 ## Scenarios
 
