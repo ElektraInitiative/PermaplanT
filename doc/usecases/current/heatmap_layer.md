@@ -11,7 +11,9 @@
 - **Precondition:**
   The user has opened the plant layer.
 - **Main success scenario:**
-  - The user selects an plant.
+  - The user:
+    - selects a plant or area of plants.
+    - places a new plant or area of plants.
   - The user gets a visual indication which places of the map are ideal, okay and not suited for the plant to be placed.
   - After placement gets aborted, the visual indication disappears.
 - **Alternative scenarios:**

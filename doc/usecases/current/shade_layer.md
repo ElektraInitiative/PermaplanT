@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, remove and delete shade areas in their map in the shade layer and adjust the intensity.
-- **Assignee:** Moritz
+- **Assignee:** Moritz, Daniel (Brush)
 - **Simplification:** we don't distinguish between Winter and Summer shade
 
 ## Scenarios

@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can view sites/maps on a GeoMap
-- **Assignee:** Samuel
+- **Assignee:** Andrei
 
 ## Scenarios
 
