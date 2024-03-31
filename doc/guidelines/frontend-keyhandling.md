@@ -18,7 +18,7 @@ The files `config/keybindings/keybindings_windows_linux` and `config/keybindings
     For example, the search field can be cleared by pressing the Escape key, which is typically a native browser action and should not be configurable in the keybindings file.
 - modifier keys are supported:
   - Windows and Linux: Shift, Ctrl, Alt, Meta
-  - MacOS: Shift, Ctrl, Opt, Cmd
+  - macOS: Shift, Ctrl, Opt, Cmd
   - they can be used in combination with other keys by using the '+' sign (e.g. 'Alt+P', 'Shift+A')
 - multiple keybindings can be assigned to one action
 
