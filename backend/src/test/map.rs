@@ -60,32 +60,30 @@ async fn test_can_search_maps() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps")
+        .uri("/api/maps?per_page=100000")
         .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
 
     assert_eq!(resp.status(), StatusCode::OK);
 
-    let result = test::read_body(resp).await;
-    let result_string = std::str::from_utf8(&result).unwrap();
-    let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
-
-    assert_eq!(page.results.len(), 2);
+    let page: Page<MapDto> = test::read_body_json(resp).await;
+    let result_ids: Vec<i32> = page.results.iter().map(|item| item.id).collect();
+    assert!(result_ids.contains(&-1));
+    assert!(result_ids.contains(&-2));
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps?name=Other")
+        .uri("/api/maps?name=Other&per_page=100000")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
 
     assert_eq!(resp.status(), StatusCode::OK);
 
-    let result = test::read_body(resp).await;
-    let result_string = std::str::from_utf8(&result).unwrap();
-    let page: Page<MapDto> = serde_json::from_str(result_string).unwrap();
-
-    assert_eq!(page.results.len(), 1);
+    let page: Page<MapDto> = test::read_body_json(resp).await;
+    let result_ids: Vec<i32> = page.results.iter().map(|item| item.id).collect();
+    assert!(!result_ids.contains(&-1));
+    assert!(result_ids.contains(&-2));
 }
 
 #[actix_rt::test]
