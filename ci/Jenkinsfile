@@ -198,6 +198,41 @@ def testMigrations() {
     }
 }
 
+// /**
+//  * Copy the documentation to community.libelektra.org 
+//  */
+def copyDocumentation(String location) {
+    
+    uploadDir = "/srv/permaplant/doc/'${location}'"
+
+    sshPublisher(
+        publishers: [
+        sshPublisherDesc(
+            verbose: true,
+            configName: 'doc.permaplant.net',
+            transfers: [
+            sshTransfer(
+                sourceFiles: 'backend/target/doc/*',
+                removePrefix: 'backend/target/doc/',
+                remoteDirectory: "'${uploadDir}'/cargodoc"
+            ),
+            sshTransfer(
+                sourceFiles: 'book/html/*',
+                removePrefix: 'book/html/',
+                remoteDirectory: "'${uploadDir}'/mdbook"
+            ),
+            sshTransfer(
+                sourceFiles: 'frontend/storybook-static/*',
+                removePrefix: 'frontend/storybook-static/',
+                remoteDirectory: "'${uploadDir}'/storybook"
+            )
+            ]
+        )
+        ]
+    )
+
+}
+
 // PIPELINE BEGIN
 abortPreviousRunUnlessMaster()
 
@@ -241,7 +276,11 @@ timeout(time: 2, unit: 'HOURS') {
                     ['backend/target/release/backend'],
                     ['backend']
                 ),
-                'cargo-clippy/doc': runDockerPostgresSidecar('cargo clippy && cargo doc'),
+                'cargo-clippy/doc': runDockerPostgresSidecar(
+                    'cargo clippy && cargo doc'
+                    ['backend/target/doc'],
+                    ['cargodoc']
+                ),
                 'cargo-test': runDockerPostgresSidecar('cargo test'),
                 'frontend': testAndBuildFrontend(),
                 'mdbook': testAndBuildMdbook(),
@@ -278,6 +317,7 @@ lock("${env.NODE_NAME}-exclusive") {
                 unstash 'storybook'
                 unstash 'typedoc'
                 unstash 'mdbook'
+                unstash 'cargodoc'
 
                 echo 'Deploying to PR'
                 sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
@@ -291,6 +331,8 @@ lock("${env.NODE_NAME}-exclusive") {
                     sh 'rm -rf ./data/'
                     sh 'rm -rf ./node_modules/'
                 }
+
+                copyDocumentation(${env.BRANCH_NAME})
             }
         }
     }
@@ -342,9 +384,12 @@ if (env.BRANCH_NAME == 'master') {
                 unstash 'storybook'
                 unstash 'typedoc'
                 unstash 'mdbook'
+                unstash 'cargodoc'
 
                 echo 'Deploying to Dev ...'
                 sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+
+                copyDocumentation('prod')
             }
         }
     } catch (Exception e) { // groovylint-disable-line
