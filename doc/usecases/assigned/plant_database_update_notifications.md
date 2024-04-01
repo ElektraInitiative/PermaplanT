@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** Notify users about updates of the plant database.
-- **Status:** Draft
+- **Assignee:** Andrei (Frontend), Jannis (Backend)
 
 ## Scenarios
 
