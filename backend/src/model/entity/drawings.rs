@@ -19,9 +19,9 @@ pub struct Drawing {
     pub x: i32,
     pub y: i32,
     pub color: String,
-    pub fill_enabled: bool,
     pub stroke_width: f32,
     pub properties: serde_json::Value,
+    pub fill_pattern: String,
 }
 
 #[derive(Debug, Clone, Default, AsChangeset)]
@@ -38,7 +38,7 @@ pub struct UpdateDrawing {
     pub x: Option<i32>,
     pub y: Option<i32>,
     pub color: Option<String>,
-    pub fill_enabled: Option<bool>,
     pub stroke_width: Option<f32>,
     pub properties: Option<serde_json::Value>,
+    pub fill_pattern: Option<String>,
 }

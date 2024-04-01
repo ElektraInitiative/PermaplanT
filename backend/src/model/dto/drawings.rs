@@ -22,7 +22,7 @@ pub struct DrawingDto {
     pub x: i32,
     pub y: i32,
     pub color: String,
-    pub fill_enabled: bool,
+    pub fill_pattern: String,
     pub stroke_width: f32,
     pub properties: serde_json::Value,
 }

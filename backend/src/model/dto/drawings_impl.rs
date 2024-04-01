@@ -17,7 +17,7 @@ impl From<Drawing> for DrawingDto {
             x: drawing.x,
             y: drawing.y,
             color: drawing.color,
-            fill_enabled: drawing.fill_enabled,
+            fill_pattern: drawing.fill_pattern,
             stroke_width: drawing.stroke_width,
             properties: drawing.properties,
         }
@@ -38,7 +38,7 @@ impl From<DrawingDto> for Drawing {
             x: drawing_dto.x,
             y: drawing_dto.y,
             color: drawing_dto.color,
-            fill_enabled: drawing_dto.fill_enabled,
+            fill_pattern: drawing_dto.fill_pattern,
             stroke_width: drawing_dto.stroke_width,
             properties: drawing_dto.properties,
         }
@@ -59,7 +59,7 @@ impl From<DrawingDto> for UpdateDrawing {
             x: Some(drawing_dto.x),
             y: Some(drawing_dto.y),
             color: Some(drawing_dto.color),
-            fill_enabled: Some(drawing_dto.fill_enabled),
+            fill_pattern: Some(drawing_dto.fill_pattern),
             stroke_width: Some(drawing_dto.stroke_width),
             properties: Some(drawing_dto.properties),
         }
