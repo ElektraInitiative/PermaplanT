@@ -8,7 +8,7 @@
   "macos": {
     "Delete": "Del",
     "Escape": "Esc",
-    "Shift": "Umschalt",
+    "Shift": "Shift",
     "Control": "Ctrl",
     "Cmd": "Command",
     "Opt": "Option"
