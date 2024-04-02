@@ -81,7 +81,6 @@ export function ShadeLayer(props: ShadeLayerProps) {
       return (
         <Shading
           ref={(ref) => {
-            //
             if (ref && shadingRefs?.current) shadingRefs.current[i] = { ref, id: dto.id };
           }}
           key={`${shadeIndex}-shading-${dto.id}`}
