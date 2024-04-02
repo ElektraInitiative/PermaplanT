@@ -192,9 +192,9 @@ def testAndBuildFrontend() {
  */
 def testMigrations() {
     if (env.BRANCH_NAME != 'master') {
-        return 'make migration && make migration-redo && make migration-redo-a'
+        return 'make migration-redo && make migration-redo-a'
     } else {
-        return 'make migration && make migration-redo'
+        return 'make migration-redo'
     }
 }
 
@@ -224,12 +224,18 @@ timeout(time: 2, unit: 'HOURS') {
                     'echo schema test', schemaStashsrc, schemaStashdir
                     ),
 
+                'migration': runDockerPostgresSidecar(
+                    'make migration',
+                    ['backend/src/schema.rs'],
+                    ['schema.rs']
+                    ),
+                unstash('schema.rs'),
                 def beforeChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
-                'migration': runDockerPostgresSidecar(testMigrations(), ['backend/src/schema.rs'], ['schema.rs']),
+                'migration-test': runDockerPostgresSidecar(testMigrations(), ['backend/src/schema.rs'], ['schema.rs']),
                 unstash('schema.rs'),
                 def afterChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
                 if (beforeChecksum != afterChecksum) {
-                        throw new Exception('Schema.rs was modified during migration tests.')
+                    throw new SchemaModifiedException()
                 }
 
                 'changelog': runDocker(
@@ -402,6 +408,14 @@ class UnequalStashException extends Exception {
 
     UnequalStashException() {
         super('The stashed files count in stashsrc and stashdir lists must be equal.')
+    }
+
+}
+
+class SchemaModifiedException extends Exception {
+
+    SchemaModifiedException() {
+        super('Schema.rs was modified during migration tests.')
     }
 
 }
