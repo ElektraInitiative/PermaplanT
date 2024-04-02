@@ -223,7 +223,15 @@ timeout(time: 2, unit: 'HOURS') {
                 'schema': runDockerPostgresSidecar(
                     'echo schema test', schemaStashsrc, schemaStashdir
                     ),
-                'migration': runDockerPostgresSidecar(testMigrations()),
+
+                def beforeChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
+                'migration': runDockerPostgresSidecar(testMigrations(), ['backend/src/schema.rs'], ['schema.rs']),
+                unstash('schema.rs'),
+                def afterChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
+                if (beforeChecksum != afterChecksum) {
+                        throw new Exception('Schema.rs was modified during migration tests.')
+                }
+
                 'changelog': runDocker(
                     './ci/scripts/check-changelog.sh',
                     'permaplant-node:ci',
