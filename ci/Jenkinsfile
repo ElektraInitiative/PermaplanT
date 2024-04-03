@@ -203,8 +203,6 @@ def testMigrations() {
 //  */
 def copyDocumentation(String location) {
     
-    uploadDir = "/srv/permaplant/doc/'${location}'"
-
     sshPublisher(
         publishers: [
         sshPublisherDesc(
@@ -214,17 +212,17 @@ def copyDocumentation(String location) {
             sshTransfer(
                 sourceFiles: 'backend/target/doc/*',
                 removePrefix: 'backend/target/doc/',
-                remoteDirectory: "'${uploadDir}'/cargodoc"
+                remoteDirectory: "/cargodoc"
             ),
             sshTransfer(
                 sourceFiles: 'book/html/*',
                 removePrefix: 'book/html/',
-                remoteDirectory: "'${uploadDir}'/mdbook"
+                remoteDirectory: "/mdbook"
             ),
             sshTransfer(
                 sourceFiles: 'frontend/storybook-static/*',
                 removePrefix: 'frontend/storybook-static/',
-                remoteDirectory: "'${uploadDir}'/storybook"
+                remoteDirectory: "/storybook"
             )
             ]
         )
