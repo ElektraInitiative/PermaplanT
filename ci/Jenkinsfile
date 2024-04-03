@@ -199,7 +199,7 @@ def testMigrations() {
 }
 
 // /**
-//  * Copy the documentation to community.libelektra.org 
+//  * Copy the documentation to doc.permaplant.net server
 //  */
 def copyDocumentation(String location) {
     
@@ -275,7 +275,7 @@ timeout(time: 2, unit: 'HOURS') {
                     ['backend']
                 ),
                 'cargo-clippy/doc': runDockerPostgresSidecar(
-                    'cargo clippy && cargo doc'
+                    'cargo clippy && cargo doc --document-private-items'
                     ['backend/target/doc'],
                     ['cargodoc']
                 ),
@@ -330,7 +330,7 @@ lock("${env.NODE_NAME}-exclusive") {
                     sh 'rm -rf ./node_modules/'
                 }
 
-                copyDocumentation(${env.BRANCH_NAME})
+                copyDocumentation('pr')
             }
         }
     }
