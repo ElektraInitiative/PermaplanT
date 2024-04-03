@@ -332,7 +332,7 @@ export const EditorMap = ({ layers }: MapProps) => {
             }}
             selectable={isShapeSelectionEnabled}
           >
-            <Layer>
+            <Layer listening={true}>
               <BaseLayer
                 stageListenerRegister={baseStageListenerRegister}
                 opacity={layersState.base.opacity}

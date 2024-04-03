@@ -24,9 +24,15 @@ export const selectIntersectingShapes = (
 
   // we don't always have to look for them, we can store them
   const allShapes = stageRef.current.children
-    //filter out layers which are not selected
+    // only layers
     ?.filter((layer) => layer.attrs.listening)
     .flatMap((layer) => layer.children)
+    .filter((group) => !!group)
+    .filter((group) => group?.attrs.listening)
+    // @ts-expect-error Typescript can't tell that all direct children layer must have children themselves
+    .filter((group) => group['children'] !== undefined)
+    // @ts-expect-error Typescript can't tell that all direct children layer must have children themselves
+    .flatMap((group) => group?.children)
     .filter((shape) => {
       // To exclude Konva's transformer, check if node contains children.
       // 'listening' is explicitly checked for '!== false' because
