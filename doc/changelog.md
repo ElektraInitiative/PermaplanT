@@ -49,7 +49,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix broken .env reading for scraper _(Paul)_
 - Add a dev env variable for react query when developing in offline env (e.g. plane) _(Paul)_
 - Collect events from planting layer and add it to timeline _(Daniel Steinkogler)_
-- _()_
+- Flatten bezier polygon line after deleting point _(Daniel Steinkogler)_
 - _()_
 - Remove error messages in console if a seed was not found _(Moritz)_
 - Add drawing layer functionality including rectangles, ellipses, lines and bezier polygons _(Daniel Steinkogler, Jannis Adamek)_
