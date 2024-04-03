@@ -387,7 +387,7 @@ if (env.BRANCH_NAME == 'master') {
                 echo 'Deploying to Dev ...'
                 sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
 
-                copyDocumentation('prod')
+                copyDocumentation('dev')
             }
         }
     } catch (Exception e) { // groovylint-disable-line
