@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat } from 'webdav';
+import { DrawingShapeType } from '@/api_types/definitions';
 import SimpleButton from '@/components/Button/SimpleButton';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
@@ -22,7 +23,7 @@ export function DrawingLayerIconToolForm() {
 
   const handleSelectImage = (item: FileStat) => {
     const path = '/Photos/' + item.basename;
-    drawingLayerActivateDrawingMode('image');
+    drawingLayerActivateDrawingMode(DrawingShapeType.Image);
     drawingLayerSetSelectedIconPath(path);
     setStatusPanelContent(
       <DrawingLayerStatusPanelContent text={t('drawings:draw_free_line_hint')} />,

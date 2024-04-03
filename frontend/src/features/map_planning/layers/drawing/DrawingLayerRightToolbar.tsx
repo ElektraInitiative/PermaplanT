@@ -16,7 +16,6 @@ export const DrawingLayerRightToolbar = () => {
         <TabList>
           <Tab>Shapes</Tab>
           <Tab>Label</Tab>
-          <Tab>Brushes</Tab>
           <Tab>Icons</Tab>
         </TabList>
 
@@ -26,7 +25,6 @@ export const DrawingLayerRightToolbar = () => {
         <TabPanel>
           <DrawingLayerLabelToolForm />
         </TabPanel>
-        <TabPanel></TabPanel>
         <TabPanel>
           <DrawingLayerIconToolForm />
         </TabPanel>

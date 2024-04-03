@@ -1,5 +1,6 @@
 import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DrawingShapeType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import useMapStore from '@/features/map_planning/store/MapStore';
@@ -7,7 +8,6 @@ import useDebounceEffect from '@/hooks/useDebounceEffect';
 import TextIcon from '@/svg/icons/text.svg?react';
 import { useTransformerStore } from '../../store/transformer/TransformerStore';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
-import { DrawingShapeType } from './types';
 
 export function DrawingLayerLabelToolForm() {
   const { t } = useTranslation(['common', 'drawings']);
@@ -17,7 +17,7 @@ export function DrawingLayerLabelToolForm() {
   );
 
   const transformerActions = useTransformerStore().actions;
-  const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.shape);
+  const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.selectedShape);
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
 
   const activateDrawingMode = (shape: DrawingShapeType) => {
@@ -31,9 +31,9 @@ export function DrawingLayerLabelToolForm() {
         <div className="flex flex-row gap-1">
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedShape === 'text'}
+            renderAsActive={selectedShape === DrawingShapeType.Text}
             onClick={() => {
-              activateDrawingMode('text');
+              activateDrawingMode(DrawingShapeType.Text);
               setStatusPanelContent(
                 <DrawingLayerStatusPanelContent text={t('drawings:draw_bezier_polygon_hint')} />,
               );

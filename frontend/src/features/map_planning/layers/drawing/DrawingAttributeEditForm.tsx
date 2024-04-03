@@ -12,7 +12,6 @@ import EditIcon from '@/svg/icons/edit.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import useMapStore from '../../store/MapStore';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
-import { FillPatternType } from './types';
 
 const DrawingAttributeEditFormSchema = z
   // The 'empty' value for the API is undefined, so we need to transform the empty string to undefined
@@ -51,7 +50,7 @@ export type DrawingAttributeEditFormProps = EditDrawingAttributesProps & {
   removeDateDefaultValue: string;
   colorDefaultValue: string;
   strokeWidthDefaultValue?: number;
-  fillPatternDefaultValue?: FillPatternType;
+  fillPatternDefaultValue?: string;
   multipleDrawings?: boolean;
   showShapeEditButton: boolean;
 };
@@ -71,14 +70,16 @@ export function SingleDrawingAttributeForm({
   onFillPatternChange,
   isReadOnlyMode,
 }: EditSingleDrawingProps) {
+  console.log('drawing', drawing);
+
   return (
     <div className="flex flex-col gap-2 p-2">
       <DrawingAttributeEditForm
         addDateDefaultValue={drawing.addDate ?? ''}
         removeDateDefaultValue={drawing.removeDate ?? ''}
-        colorDefaultValue={drawing.color ?? ''}
-        strokeWidthDefaultValue={drawing.strokeWidth ?? 0}
-        fillPatternDefaultValue={drawing.fillPattern}
+        colorDefaultValue={drawing.properties.color ?? ''}
+        strokeWidthDefaultValue={drawing.properties.strokeWidth ?? 0}
+        fillPatternDefaultValue={drawing.properties.fillPattern}
         onAddDateChange={onAddDateChange}
         onRemoveDateChange={onRemoveDateChange}
         onDeleteClick={onDeleteClick}
@@ -116,25 +117,27 @@ export function MultipleDrawingAttributeForm({
   };
 
   const getCommonColor = () => {
-    const color = drawings[0].color;
-    const existsCommonColor = drawings.every((drawing) => drawing.color === color);
+    const color = drawings[0].properties?.color;
+    const existsCommonColor = drawings.every((drawing) => drawing.properties.color === color);
     return existsCommonColor ? color : '#000000';
   };
 
   const getCommonStrokeWidth = () => {
-    const strokeWidth = drawings[0].strokeWidth;
+    const strokeWidth = drawings[0].properties?.strokeWidth;
     const existsCommonStrokeWidth = drawings.every(
-      (drawing) => drawing.strokeWidth === strokeWidth,
+      (drawing) => drawing.properties.strokeWidth === strokeWidth,
     );
     return existsCommonStrokeWidth ? strokeWidth : 0;
   };
 
-  const getCommonFillEnabled = () => {
-    const fillEnabled = drawings[0].fillPattern;
-    const existsCommonFillEnabled = drawings.every(
-      (drawing) => drawing.fillPattern === fillEnabled,
+  const getCommonFillPattern = () => {
+    const fillPattern = drawings[0].properties?.fillPattern;
+
+    const existsCommonFillPattern = drawings.every(
+      (drawing) => drawing.properties.fillPattern === fillPattern,
     );
-    return existsCommonFillEnabled ? fillEnabled : undefined;
+
+    return existsCommonFillPattern ? fillPattern : undefined;
   };
 
   return (
@@ -144,7 +147,7 @@ export function MultipleDrawingAttributeForm({
         removeDateDefaultValue={getCommonRemoveDate() ?? ''}
         colorDefaultValue={getCommonColor()}
         strokeWidthDefaultValue={getCommonStrokeWidth()}
-        fillPatternDefaultValue={getCommonFillEnabled()}
+        fillPatternDefaultValue={getCommonFillPattern()}
         onAddDateChange={onAddDateChange}
         onRemoveDateChange={onRemoveDateChange}
         onDeleteClick={onDeleteClick}
@@ -190,6 +193,9 @@ export function DrawingAttributeEditForm({
   });
 
   const showStrokeWidth = strokeWidthDefaultValue !== undefined && strokeWidthDefaultValue > 0;
+  const showFillPattern = fillPatternDefaultValue !== undefined;
+  const showColor = colorDefaultValue !== undefined && colorDefaultValue.length > 0;
+  const showProperties = showStrokeWidth || showFillPattern || showColor;
 
   const drawingLayerSetEditMode = useMapStore((state) => state.drawingLayerSetEditMode);
   const editMode = useMapStore((state) => state.untrackedState.layers.drawing.editMode);
@@ -243,18 +249,20 @@ export function DrawingAttributeEditForm({
         />
       </div>
 
-      <hr className="my-4 border-neutral-700" />
+      {showProperties && <hr className="my-4 border-neutral-700" />}
 
-      <div className="flex gap-2">
-        <DebouncedSimpleFormInput
-          id="color"
-          type="color"
-          labelContent={t('drawings:color')}
-          className="w-36"
-          disabled={isReadOnlyMode}
-          onValid={onColorChange}
-        />
-      </div>
+      {showColor && (
+        <div className="flex gap-2">
+          <DebouncedSimpleFormInput
+            id="color"
+            type="color"
+            labelContent={t('drawings:color')}
+            className="w-36"
+            disabled={isReadOnlyMode}
+            onValid={onColorChange}
+          />
+        </div>
+      )}
 
       {showStrokeWidth && (
         <div className="mt-2 flex gap-2">
@@ -273,13 +281,15 @@ export function DrawingAttributeEditForm({
         </div>
       )}
 
-      <div className="flex gap-2">
-        <DebouncedFillPatternSelector
-          id="fillPattern"
-          onValid={onFillPatternChange}
-          labelContent={t('drawings:fillPattern')}
-        />
-      </div>
+      {showFillPattern && (
+        <div className="flex gap-2">
+          <DebouncedFillPatternSelector
+            id="fillPattern"
+            onValid={onFillPatternChange}
+            labelContent={t('drawings:fillPattern')}
+          />
+        </div>
+      )}
 
       {showShapeEditButton && drawingId && (
         <div>
