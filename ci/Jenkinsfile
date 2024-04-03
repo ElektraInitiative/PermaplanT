@@ -202,7 +202,7 @@ def testMigrations() {
 //  * Copy the documentation to doc.permaplant.net server
 //  */
 def copyDocumentation(String location) {
-    
+    echo 'Copying Documentation ...'
     sshPublisher(
         publishers: [
         sshPublisherDesc(

@@ -13,7 +13,7 @@ def wait_for_db() {
 //  * Copy the documentation to doc.permaplant.net server
 //  */
 def copyDocumentation() {
-    
+    echo 'Copying Documentation ...'
     sshPublisher(
         publishers: [
         sshPublisherDesc(
@@ -149,8 +149,11 @@ stage('Deploy Prod') {
         unstash 'storybook'
         unstash 'typedoc'
         unstash 'mdbook'
+        unstash 'cargodoc'
 
         echo 'Deploying to Prod ...'
         sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
+
+        copyDocumentation()
     }
 }
