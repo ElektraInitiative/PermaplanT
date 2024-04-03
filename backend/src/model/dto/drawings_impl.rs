@@ -1,10 +1,23 @@
+use std::collections::HashMap;
+
+use serde::Serialize;
+use serde_json::{Map, Value};
+
 use super::drawings::{
     DrawingDto, UpdateAddDateDrawingDto, UpdateDrawingsDto, UpdateRemoveDateDrawingDto,
 };
-use crate::model::entity::drawings::{Drawing, UpdateDrawing};
+use crate::model::entity::drawings::Drawing;
 
 impl From<Drawing> for DrawingDto {
     fn from(drawing: Drawing) -> Self {
+        let shape_type = match drawing.shape_type {
+            DrawingShapeType::Rectangle => todo!(),
+            DrawingShapeType::Ellipse => todo!(),
+            DrawingShapeType::FreeLine => todo!(),
+            DrawingShapeType::BezierPolygon => todo!(),
+            DrawingShapeType::LabelText => todo!(),
+            DrawingShapeType::Image => todo!(),
+        };
         Self {
             id: drawing.id,
             shape_type: drawing.shape_type,
@@ -28,7 +41,7 @@ impl From<DrawingDto> for Drawing {
     fn from(drawing_dto: DrawingDto) -> Self {
         Self {
             id: drawing_dto.id,
-            shape_type: drawing_dto.shape_type,
+            shape_type: drawing_dto.properties.to_drawing_shape_type(),
             layer_id: drawing_dto.layer_id,
             add_date: drawing_dto.add_date,
             remove_date: drawing_dto.remove_date,
@@ -37,9 +50,6 @@ impl From<DrawingDto> for Drawing {
             scale_y: drawing_dto.scale_y,
             x: drawing_dto.x,
             y: drawing_dto.y,
-            color: drawing_dto.color,
-            fill_pattern: drawing_dto.fill_pattern,
-            stroke_width: drawing_dto.stroke_width,
             properties: drawing_dto.properties,
         }
     }
@@ -49,7 +59,7 @@ impl From<DrawingDto> for UpdateDrawing {
     fn from(drawing_dto: DrawingDto) -> Self {
         Self {
             id: drawing_dto.id,
-            shape_type: Some(drawing_dto.shape_type),
+            shape_type: Some(drawing_dto.properties.to_drawing_shape_type()),
             layer_id: Some(drawing_dto.layer_id),
             add_date: Some(drawing_dto.add_date),
             remove_date: Some(drawing_dto.remove_date),
@@ -58,10 +68,7 @@ impl From<DrawingDto> for UpdateDrawing {
             scale_y: Some(drawing_dto.scale_y),
             x: Some(drawing_dto.x),
             y: Some(drawing_dto.y),
-            color: Some(drawing_dto.color),
-            fill_pattern: Some(drawing_dto.fill_pattern),
-            stroke_width: Some(drawing_dto.stroke_width),
-            properties: Some(drawing_dto.properties),
+            properties: drawing_dto.properties,
         }
     }
 }

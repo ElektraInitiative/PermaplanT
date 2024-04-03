@@ -9,8 +9,13 @@ use log::debug;
 use uuid::Uuid;
 
 use crate::model::dto::drawings::{DrawingDto, UpdateDrawingsDto};
-use crate::model::entity::drawings::{Drawing, UpdateDrawing};
-use crate::schema::{drawings, layers};
+use crate::model::entity::drawings::Drawing;
+use crate::schema::{
+    drawings, ellipse_drawings, freeline_drawings, image_drawings, labeltext_drawings, layers,
+    rectangle_drawings,
+};
+
+use super::drawings::{DrawingsJoined, UpdateDrawing};
 
 impl Drawing {
     /// Get all drawings assosicated with one map.
@@ -22,15 +27,10 @@ impl Drawing {
             drawings::table.left_join(layers::table),
             layers::map_id.eq(map_id),
         )
-        .select(drawings::all_columns)
         .into_boxed();
 
-        Ok(query
-            .load::<Self>(conn)
-            .await?
-            .into_iter()
-            .map(Into::into)
-            .collect())
+        let results: Vec<DrawingsJoined> = query.load::<DrawingsJoined>(conn).await?;
+        results
     }
 
     /// Save new drawings into the database.
