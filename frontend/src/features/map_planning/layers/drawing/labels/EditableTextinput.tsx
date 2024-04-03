@@ -1,20 +1,20 @@
 import { useEffect, useRef } from 'react';
 import { Html } from 'react-konva-utils';
 
-function getStyle(width: number, height: number) {
-  console.log(width, height);
+function getStyle(color: string) {
   const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
   const baseStyle = {
-    width: '100%',
+    width: 'fit-content',
     height: '100%',
     border: '1px solid black',
     padding: '0px',
     margin: '0px',
     background: 'none',
     outline: 'none',
-    colour: 'black',
+    color: color,
     fontSize: '24px',
     fontFamily: 'sans-serif',
+    resize: 'both',
   };
   if (isFirefox) {
     return baseStyle;
@@ -30,9 +30,9 @@ type EditableTextInputProps = {
   y: number;
   scaleX: number;
   scaleY: number;
-  width: number;
   height: number;
   value: string;
+  color: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 };
@@ -45,12 +45,12 @@ export function EditableTextInput({
   value,
   onChange,
   onKeyDown,
-  width,
   height,
+  color,
 }: EditableTextInputProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const style = getStyle(width, height);
+  const style = getStyle(color);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -59,7 +59,7 @@ export function EditableTextInput({
   }, []);
 
   return (
-    <Html groupProps={{ x, y, scaleX, scaleY, width, height }} divProps={{ style: { opacity: 1 } }}>
+    <Html groupProps={{ x, y, scaleX, scaleY, height }} divProps={{ style: { opacity: 1 } }}>
       <textarea
         ref={inputRef}
         value={value}

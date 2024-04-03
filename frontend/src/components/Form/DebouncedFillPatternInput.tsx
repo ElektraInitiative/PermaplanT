@@ -8,7 +8,6 @@ import {
   useFormContext,
 } from 'react-hook-form';
 import { DrawingLayerFillPatterns } from '@/features/map_planning/layers/drawing/DrawingLayerFillPatterns';
-import { FillPatternType } from '@/features/map_planning/layers/drawing/types';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
@@ -60,7 +59,7 @@ export function DebouncedFillPatternSelector<T extends FieldValues>({
           <DrawingLayerFillPatterns
             {...{ id, ...rest }}
             {...field}
-            selectedPattern={watch(id) as FillPatternType}
+            selectedPattern={watch(id) as string}
           ></DrawingLayerFillPatterns>
         )}
       />

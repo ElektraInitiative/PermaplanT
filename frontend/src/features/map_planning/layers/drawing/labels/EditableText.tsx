@@ -1,7 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Text } from 'react-konva';
-import { DrawingDto } from '../types';
+import { DrawingDto } from '@/api_types/definitions';
 import { EditableTextInput } from './EditableTextinput';
 
 type EditableTextProps = {
@@ -32,12 +32,12 @@ export function EditableText({
   onEndEdit,
   onClick,
   text,
-  width,
   height,
   scaleX,
   scaleY,
   color,
   object,
+  width,
 }: EditableTextProps) {
   function handleTextChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     onChange(e.currentTarget.value);
@@ -48,11 +48,11 @@ export function EditableText({
       <EditableTextInput
         x={x}
         y={y}
-        width={width}
         height={height}
         scaleX={scaleX}
         scaleY={scaleY}
         value={text}
+        color={color || '#000000'}
         onChange={handleTextChange}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && onEndEdit) {

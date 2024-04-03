@@ -1,6 +1,4 @@
-import { FillPatternType } from '@/features/map_planning/layers/drawing/types';
-
-export function getFillPattern(fillPatternType: FillPatternType, color: string) {
+export function getFillPattern(fillPatternType: string, color: string) {
   switch (fillPatternType) {
     case 'hatch':
       return getHatchFillPattern(color);

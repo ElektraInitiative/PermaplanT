@@ -21,9 +21,7 @@ import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
 import { EditableText } from './labels/EditableText';
 import BezierPolygon from './shapes/BezierPolygon';
 import {
-
   EllipseProperties,
-  FillPatternType,
   FreeLineProperties,
   ImageProperties,
   LabelTextProperties,
@@ -34,7 +32,7 @@ type DrawingLayerProps = LayerConfig;
 
 type Rectangle = {
   color: string;
-  fillPattern: FillPatternType;
+  fillPattern: string;
   strokeWidth: number;
   x1: number;
   y1: number;
@@ -43,7 +41,7 @@ type Rectangle = {
 };
 
 type Ellipse = {
-  fillPattern: FillPatternType;
+  fillPattern: string;
   strokeWidth: number;
   color: string;
   x: number;
@@ -55,7 +53,7 @@ type Ellipse = {
 type Line = {
   color: string;
   strokeWidth: number;
-  fillPattern: FillPatternType;
+  fillPattern: string;
   x: number;
   y: number;
   points: number[][];
@@ -151,7 +149,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
   const textLabels = drawingObjects
-    .filter((object) => object.type === 'text')
+    .filter((object) => object.shapeType === DrawingShapeType.Text)
     .map((object) => {
       return {
         ...object,
@@ -160,7 +158,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     });
 
   const images = drawingObjects
-    .filter((object) => object.type === 'image')
+    .filter((object) => object.shapeType === DrawingShapeType.Image)
     .map((object) => {
       return {
         ...object,
@@ -209,6 +207,9 @@ function DrawingLayer(props: DrawingLayerProps) {
             properties: {
               width: rectangle.x2 - rectangle.x1,
               height: rectangle.y2 - rectangle.y1,
+              color: rectangle.color,
+              fillPattern: rectangle.fillPattern,
+              strokeWidth: rectangle.strokeWidth,
             },
           },
         ]),
@@ -237,6 +238,9 @@ function DrawingLayer(props: DrawingLayerProps) {
             properties: {
               radiusX: ellipse.radiusX,
               radiusY: ellipse.radiusY,
+              color: ellipse.color,
+              fillPattern: ellipse.fillPattern,
+              strokeWidth: ellipse.strokeWidth,
             },
           },
         ]),
@@ -248,23 +252,27 @@ function DrawingLayer(props: DrawingLayerProps) {
   const createFreeLine = useCallback(
     (line: Line) => {
       executeAction(
-        new CreateDrawingAction([{
-          id: uuid.v4(),
-          layerId: getSelectedLayerId() ?? -1,
-          rotation: 0,
-          addDate: timelineDate,
-          type: 'freeLine',
-          scaleX: 1,
-          scaleY: 1,
-          x: Math.round(line.x),
-          y: Math.round(line.y),
-          fillPattern: line.fillPattern,
-          color: line.color,
-          strokeWidth: line.strokeWidth,
-          properties: {
-            points: line.points,
-          }
-        }
+        new CreateDrawingAction([
+          {
+            id: uuid.v4(),
+            layerId: getSelectedLayerId() ?? -1,
+            rotation: 0,
+            addDate: timelineDate,
+            shapeType: DrawingShapeType.FreeLine,
+            scaleX: 1,
+            scaleY: 1,
+            x: Math.round(line.x),
+            y: Math.round(line.y),
+            fillPattern: line.fillPattern,
+            color: line.color,
+            strokeWidth: line.strokeWidth,
+            properties: {
+              points: line.points,
+              color: line.color,
+              fillPattern: line.fillPattern,
+              strokeWidth: line.strokeWidth,
+            },
+          },
         ]),
       );
     },
@@ -290,6 +298,9 @@ function DrawingLayer(props: DrawingLayerProps) {
             strokeWidth: line.strokeWidth,
             properties: {
               points: line.points,
+              color: line.color,
+              fillPattern: line.fillPattern,
+              strokeWidth: line.strokeWidth,
             },
           },
         ]),
@@ -301,23 +312,26 @@ function DrawingLayer(props: DrawingLayerProps) {
   const createTextLabel = useCallback(
     (text: Text) => {
       executeAction(
-        new CreateDrawingAction({
-          id: uuid.v4(),
-          layerId: getSelectedLayerId() ?? -1,
-          rotation: 0,
-          addDate: timelineDate,
-          type: 'text',
-          scaleX: text.scaleX,
-          scaleY: text.scaleY,
-          x: text.x,
-          y: text.y,
-          fillPattern: 'none',
-          color: text.color,
-          strokeWidth: 0,
-          properties: {
-            text: text.text,
+        new CreateDrawingAction([
+          {
+            id: uuid.v4(),
+            layerId: getSelectedLayerId() ?? -1,
+            rotation: 0,
+            addDate: timelineDate,
+            shapeType: DrawingShapeType.Text,
+            scaleX: text.scaleX,
+            scaleY: text.scaleY,
+            x: Math.round(text.x),
+            y: Math.round(text.y),
+            fillPattern: 'none',
+            color: text.color,
+            strokeWidth: 0,
+            properties: {
+              text: text.text,
+              color: text.color,
+            },
           },
-        }),
+        ]),
       );
     },
     [executeAction, getSelectedLayerId, timelineDate],
@@ -326,23 +340,26 @@ function DrawingLayer(props: DrawingLayerProps) {
   const createImage = useCallback(
     (image: Image) => {
       executeAction(
-        new CreateDrawingAction({
-          id: uuid.v4(),
-          layerId: getSelectedLayerId() ?? -1,
-          rotation: 0,
-          addDate: timelineDate,
-          type: 'image',
-          scaleX: image.scaleX,
-          scaleY: image.scaleY,
-          x: image.x,
-          y: image.y,
-          fillPattern: 'none',
-          color: '',
-          strokeWidth: 0,
-          properties: {
-            path: image.path,
+        new CreateDrawingAction([
+          {
+            id: uuid.v4(),
+            layerId: getSelectedLayerId() ?? -1,
+            rotation: 0,
+            addDate: timelineDate,
+            shapeType: DrawingShapeType.Image,
+            scaleX: image.scaleX,
+            scaleY: image.scaleY,
+            x: Math.round(image.x),
+            y: Math.round(image.y),
+            fillPattern: 'none',
+            color: '',
+            strokeWidth: 0,
+            properties: {
+              path: image.path,
+              color: undefined,
+            },
           },
-        }),
+        ]),
       );
     },
     [executeAction, getSelectedLayerId, timelineDate],
@@ -444,7 +461,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             points: [],
           });
         }
-      } else if (selectedShape == 'text') {
+      } else if (selectedShape == DrawingShapeType.Text) {
         if (newLabelText && newLabelText.text.length > 0) {
           createTextLabel(newLabelText);
           setNewLabelText(undefined);
@@ -458,7 +475,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             text: '',
           });
         }
-      } else if (selectedShape == 'image') {
+      } else if (selectedShape == DrawingShapeType.Image) {
         if (newImage) {
           createImage(newImage);
           setNewImage(undefined);
@@ -626,7 +643,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             handleDrawEllipse(point);
           }
           break;
-        case 'image':
+        case DrawingShapeType.Image:
           handleDrawImage(point);
           break;
       }
@@ -789,7 +806,7 @@ function DrawingLayer(props: DrawingLayerProps) {
   );
 
   useEffect(() => {
-    if (selectedShape != 'image' && newImage) {
+    if (selectedShape != DrawingShapeType.Image && newImage) {
       setNewImage(undefined);
     }
     if (selectedShape != DrawingShapeType.BezierPolygon && newBezierLine) {
@@ -1053,11 +1070,12 @@ function DrawingLayer(props: DrawingLayerProps) {
             x={newLabelText.x}
             y={newLabelText.y}
             text={newLabelText.text}
-            width={1000}
-            height={20}
+            height={10}
+            width={100}
+            color={newLabelText.color}
             scaleX={newLabelText.scaleX}
             scaleY={newLabelText.scaleY}
-            isEditing={selectedShape == 'text'}
+            isEditing={selectedShape == DrawingShapeType.Text}
             onToggleEdit={console.log}
             onChange={(text) => {
               setNewLabelText({ ...newLabelText, text: text });

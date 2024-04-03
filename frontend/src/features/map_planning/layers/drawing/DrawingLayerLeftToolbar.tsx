@@ -91,7 +91,7 @@ export function DrawingLayerLeftToolbar() {
 
     const updatedDrawings = selectedDrawings.map((selectedDrawing) => ({
       ...selectedDrawing,
-      fillEnabled,
+      fillPattern,
     }));
 
     executeAction(new UpdateDrawingAction(updatedDrawings));
