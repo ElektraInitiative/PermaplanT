@@ -2,6 +2,8 @@
 
 pub mod base_layer_images_impl;
 pub mod blossoms_impl;
+pub mod drawings;
+pub mod drawings_impl;
 pub mod guided_tours_impl;
 pub mod layer_impl;
 pub mod map_impl;

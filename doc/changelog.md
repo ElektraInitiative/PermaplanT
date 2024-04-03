@@ -41,6 +41,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 05.02.2024 9:00 _(Markus Raab, Christoph)_
 - Added Meeting Agenda&Notes for 12.02.2024 9:00 _(Markus Raab, Christoph)_
 - Added Meeting Agenda&Notes for 19.02.2024 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 11.03.2024 9:00 _(Markus Raab, Jannis)_
+- Added Meeting Agenda&Notes for 25.03.2024 9:00 _(Markus Raab, Moritz)_
 - _()_
 - _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
@@ -52,6 +54,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Remove error messages in console if a seed was not found _(Moritz)_
+- Add drawing layer functionality including rectangles, ellipses, lines and bezier polygons _(Daniel Steinkogler, Jannis Adamek)_
 - _()_
 - Landing page: Added blog entries, updated team members, minor text changes _(Christoph Schreiner)_
 - _()_
@@ -80,7 +83,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
 - _()_
-- Added missing error toast messages _(Daniel Steinkogler)_
+- Add decision for polygon libraries _(Daniel Steinkogler)_
 - _()_
 - Added keybindings for undo and redo _(Daniel Steinkogler)_
 - E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
