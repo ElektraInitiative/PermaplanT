@@ -192,9 +192,9 @@ def testAndBuildFrontend() {
  */
 def testMigrations() {
     if (env.BRANCH_NAME != 'master') {
-        return 'make migration-redo && make migration-redo-a'
+        return 'make migration && make migration-redo && make migration-redo-a'
     } else {
-        return 'make migration-redo'
+        return 'make migration && make migration-redo'
     }
 }
 
