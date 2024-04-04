@@ -59,6 +59,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix the markdown so that mdbook tests pass _(Daniel Steinkogler)_
 - _()_
 - _()_
+- Improved the scraper: Fixed a bug and improved cleaning for German common names _(temmey)_
+- Scraper: Separate fetching of German common names from merging datasets _(Christoph Schreiner)_
+- Scraper: Allow applying overrides to merged dataset _(Christoph Schreiner)_
 - Make map geometry viewable and editable _(Moritz)_
 - _()_
 - Prevent propagating enft key on markdown editor _(Daniel Steinkogler)_
