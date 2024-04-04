@@ -1,8 +1,8 @@
+import { LayerDto, LayerType, PlantingDto } from '@/api_types/definitions';
 import { CreatePlantAction, MovePlantAction, TransformPlantAction } from '../layers/plant/actions';
 import useMapStore from './MapStore';
 import { TrackedLayers } from './MapStoreTypes';
 import { TRACKED_DEFAULT_STATE, UNTRACKED_DEFAULT_STATE } from './MapStoreTypes';
-import { LayerDto, LayerType, PlantingDto } from '@/api_types/definitions';
 
 // mock the axios api configuration, so that we don't actually send requests to the backend
 vi.mock('@/config/axios');
@@ -17,6 +17,7 @@ describe('MapHistoryStore', () => {
     for (const layerName of Object.keys(trackedState.layers)) {
       if (layerName === LayerType.Base) continue;
       if (layerName === LayerType.Plants) continue;
+      if (layerName === LayerType.Shade) continue;
 
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
         id: -1,
@@ -39,6 +40,13 @@ describe('MapHistoryStore', () => {
       rotation: 0,
       scale: 100,
       nextcloudImagePath: '',
+    });
+
+    expect(trackedState.layers[LayerType.Shade]).toEqual({
+      id: -1,
+      index: 'shade',
+      objects: [],
+      loadedObjects: [],
     });
   });
 
@@ -76,6 +84,7 @@ describe('MapHistoryStore', () => {
     expect(trackedState.layers.plants.objects).toHaveLength(1);
   });
 
+  // REFACTOR: tests involving plants should go into their own files.
   it('adds plant objects to the plants layer on CreatePlantAction', () => {
     const { executeAction } = useMapStore.getState();
     const createAction1 = new CreatePlantAction(createPlantTestObject(1));
@@ -398,5 +407,6 @@ function createPlantTestObject(testValue: number): PlantingDto {
     rotation: testValue,
     scaleX: testValue,
     scaleY: testValue,
+    isArea: false,
   };
 }

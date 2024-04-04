@@ -1,11 +1,12 @@
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { QueryCache } from '@tanstack/react-query';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 
 /**
  * Holds the query key constants for react-query
  */
 export const QUERY_KEYS = {
   PLANTINGS: 'plantings',
+  SHADINGS: 'shadings',
   LAYERS: 'layers',
 };
 

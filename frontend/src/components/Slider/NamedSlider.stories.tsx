@@ -1,5 +1,5 @@
-import { NamedSlider } from './NamedSlider';
 import type { Meta, StoryObj } from '@storybook/react';
+import { NamedSlider } from './NamedSlider';
 
 const meta: Meta<typeof NamedSlider> = {
   title: 'Components/Slider/NamedSlider',

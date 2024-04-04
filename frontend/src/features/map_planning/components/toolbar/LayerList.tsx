@@ -1,7 +1,3 @@
-import useMapStore from '../../store/MapStore';
-import { LayerListItem } from './LayerListItem';
-import { LayerDto, LayerType } from '@/api_types/definitions';
-
 /* TODO: these imports should be added again when the corresponding functionality of the buttons is implemented */
 // import IconButton from '@/components/Button/IconButton';
 // import { NamedSlider } from '@/components/Slider/NamedSlider';
@@ -11,6 +7,9 @@ import { LayerDto, LayerType } from '@/api_types/definitions';
 // import EyeIcon  from '@/svg/icons/eye.svg?react';
 // import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LayerDto } from '@/api_types/definitions';
+import useMapStore from '../../store/MapStore';
+import { LayerListItem } from './LayerListItem';
 
 export type LayerListProps = {
   layers: LayerDto[];
@@ -24,7 +23,6 @@ export const LayerList = ({ layers }: LayerListProps) => {
 
   const layerSettingsList = layers
     ?.filter((l) => !l.is_alternative)
-    .filter((l) => l.type_ !== LayerType.Shade) // Remove this line after the shade layer has been implemented on the frontend.
     .map((l) => {
       return (
         <LayerListItem

@@ -1,9 +1,15 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import Konva from 'konva';
+import { KonvaEventObject } from 'konva/lib/Node';
+import React, { useEffect, useRef, useState } from 'react';
+import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { useDimensions } from '@/hooks/useDimensions';
+import { colors } from '@/utils/colors';
 import { useSelectedLayerVisibility } from '../hooks/useSelectedLayerVisibility';
 import useMapStore from '../store/MapStore';
-import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
-import { MapLabel } from '../utils/MapLabel';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
+  SELECTION_RECTANGLE_NAME,
   hideSelectionRectangle,
   initializeSelectionRectangle,
   resetSelection,
@@ -14,12 +20,7 @@ import {
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
 import { isPlacementModeActive } from '../utils/planting-utils';
-import { useDimensions } from '@/hooks/useDimensions';
-import { AnimatePresence, motion } from 'framer-motion';
-import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { CursorTooltip } from './CursorTooltip';
 
 export const TEST_IDS = Object.freeze({
   CANVAS: 'base-stage__canvas',
@@ -67,19 +68,8 @@ export const BaseStage = ({
   });
 
   // Represents the state of the current selection rectangle
-  const [selectionRectAttrs, setSelectionRectAttrs] = useState<SelectionRectAttrs>({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-    isVisible: false,
-    boundingBox: {
-      x1: 0,
-      y1: 0,
-      x2: 0,
-      y2: 0,
-    },
-  });
+  const selectionRectAttrs = useMapStore((store) => store.selectionRectAttributes);
+  const setSelectionRectAttrs = useMapStore((store) => store.updateSelectionRect);
 
   const transformerRef = useRef<Konva.Transformer>(null);
   useEffect(() => {
@@ -114,8 +104,7 @@ export const BaseStage = ({
     });
   });
 
-  const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
-  const tooltipPosition = useMapStore((state) => state.untrackedState.tooltipPosition);
+  const inhibitTransformer = useMapStore((store) => store.inhibitTransformer);
 
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
@@ -186,7 +175,7 @@ export const BaseStage = ({
 
     updateSelectionRectangle(stage, setSelectionRectAttrs);
 
-    if (!isPlacementModeActive()) {
+    if (!isPlacementModeActive() && !inhibitTransformer) {
       selectIntersectingShapes(stageRef, transformerRef);
     }
   };
@@ -247,7 +236,7 @@ export const BaseStage = ({
 
     const nodeSize = transformerRef.current?.getNodes().length ?? 0;
 
-    if (nodeSize > 0 && isEventTriggeredFromStage(e)) {
+    if (nodeSize > 0 && isEventTriggeredFromStage(e) && !inhibitTransformer) {
       resetSelection(transformerRef);
     }
   };
@@ -279,24 +268,16 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
-          {/* Tooltip */}
-          <MapLabel
-            content={tooltipContent}
-            visible={tooltipContent !== ''}
-            scaleX={2 / stage.scale}
-            scaleY={2 / stage.scale}
-            x={tooltipPosition.x}
-            y={tooltipPosition.y}
-          />
+          <CursorTooltip />
           <Rect
             x={selectionRectAttrs.x}
             y={selectionRectAttrs.y}
             width={selectionRectAttrs.width}
             height={selectionRectAttrs.height}
-            fill={'blue'}
+            fill={colors.secondary[500]}
             visible={selectionRectAttrs.isVisible}
             opacity={0.2}
-            name="selectionRect"
+            name={SELECTION_RECTANGLE_NAME}
           />
           <Transformer
             listening={!isReadOnly}

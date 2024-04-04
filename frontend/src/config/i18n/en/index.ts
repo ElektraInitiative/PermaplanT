@@ -1,3 +1,4 @@
+import areaOfPlantingsIndicator from './areaOfPlantingsIndicator.json';
 import auth from './auth.json';
 import baseLayer from './baseLayer.json';
 import baseLayerForm from './baseLayerForm.json';
@@ -27,13 +28,15 @@ import privacyOptions from './privacyOptions.json';
 import readOnly from './readOnly.json';
 import routes from './routes.json';
 import seeds from './seeds.json';
+import shadeLayer from './shadeLayer.json';
 import team from './team.json';
 import timeline from './timeline.json';
 import toolboxTooltips from './toolboxTooltips.json';
 import undoRedo from './undoRedo.json';
 import uploadFile from './uploadFile.json';
 
-const en = {
+export default {
+  areaOfPlantingsIndicator,
   blog,
   baseLayer,
   baseLayerForm,
@@ -68,6 +71,5 @@ const en = {
   readOnly,
   toolboxTooltips,
   polygon,
+  shadeLayer,
 };
-
-export default en;

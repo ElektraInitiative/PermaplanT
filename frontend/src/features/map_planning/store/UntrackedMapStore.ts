@@ -1,3 +1,10 @@
+import Konva from 'konva';
+import { Vector2d } from 'konva/lib/types';
+import { createRef } from 'react';
+import { StateCreator } from 'zustand';
+import { LayerType, Shade, ShadingDto } from '@/api_types/definitions';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
+import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import {
@@ -6,12 +13,7 @@ import {
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
-import { clearInvalidSelection } from './utils';
-import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
-import Konva from 'konva';
-import { Vector2d } from 'konva/lib/types';
-import { createRef } from 'react';
-import { StateCreator } from 'zustand';
+import { clearInvalidSelection, typeOfLayer } from './utils';
 
 export const createUntrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -22,6 +24,35 @@ export const createUntrackedMapSlice: StateCreator<
   untrackedState: UNTRACKED_DEFAULT_STATE,
   stageRef: createRef<Konva.Stage>(),
   tooltipRef: createRef(),
+  selectionRectAttributes: {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    isVisible: false,
+    boundingBox: {
+      x1: 0,
+      y1: 0,
+      x2: 0,
+      y2: 0,
+    },
+  },
+  updateSelectionRect(update: React.SetStateAction<SelectionRectAttrs>) {
+    if (typeof update === 'function') {
+      set((state) => ({
+        ...state,
+        selectionRectAttributes: update(state.selectionRectAttributes),
+      }));
+    } else {
+      set((state) => ({
+        ...state,
+        selectionRectAttributes: {
+          ...state.selectionRectAttributes,
+          ...update,
+        },
+      }));
+    }
+  },
   updateViewRect(bounds: ViewRect) {
     set((state) => ({
       ...state,
@@ -33,10 +64,20 @@ export const createUntrackedMapSlice: StateCreator<
   },
   lastActions: [],
   updateSelectedLayer(selectedLayer) {
-    // Clear the transformer's nodes.
-    get().transformer.current?.nodes([]);
+    // Disable all layer specific actions.
+    get().setInhibitTransformer(false);
+    get().removeNodesFromTransformer();
     get().baseLayerDeactivatePolygonManipulation();
+    get().shadeLayerDeactivatePolygonManipulation();
     get().clearStatusPanelContent();
+
+    if (typeOfLayer(selectedLayer) === LayerType.Shade) {
+      get().transformer.current?.rotateEnabled(false);
+      get().transformer.current?.resizeEnabled(false);
+    } else {
+      get().transformer.current?.rotateEnabled(true);
+      get().transformer.current?.resizeEnabled(true);
+    }
 
     set((state) => ({
       ...state,
@@ -55,6 +96,11 @@ export const createUntrackedMapSlice: StateCreator<
             measurePoint1: null,
             measurePoint2: null,
             measureStep: 'inactive',
+          },
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadeForNewShading: null,
+            selectedShadings: null,
           },
         },
       },
@@ -181,6 +227,11 @@ export const createUntrackedMapSlice: StateCreator<
       date,
     );
 
+    const shadingsVisibleRelativeToTimelineDate = filterVisibleObjects(
+      get().trackedState.layers.shade.loadedObjects,
+      date,
+    );
+
     set((state) => ({
       ...state,
       trackedState: {
@@ -190,6 +241,10 @@ export const createUntrackedMapSlice: StateCreator<
           plants: {
             ...state.trackedState.layers.plants,
             objects: plantsVisibleRelativeToTimelineDate,
+          },
+          shade: {
+            ...state.trackedState.layers.shade,
+            objects: shadingsVisibleRelativeToTimelineDate,
           },
         },
       },
@@ -371,6 +426,110 @@ export const createUntrackedMapSlice: StateCreator<
               ...state.untrackedState.layers.base.mapGeometry,
               editMode: 'inactive',
             },
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerSelectShadings(shadings: ShadingDto[] | null) {
+    if (shadings === null) {
+      get().removeNodesFromTransformer();
+      get().setInhibitTransformer(false);
+      get().shadeLayerDeactivatePolygonManipulation();
+      get().clearStatusPanelContent();
+    }
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadings: shadings,
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerActivateAddPolygonPoints() {
+    get().shadeLayerSelectShadeForNewShading(null);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'add',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerActivateDeletePolygonPoints() {
+    get().shadeLayerSelectShadeForNewShading(null);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'remove',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerActivateMovePolygonPoints() {
+    get().shadeLayerSelectShadeForNewShading(null);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'move',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerDeactivatePolygonManipulation() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'inactive',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerSelectShadeForNewShading(shade: Shade | null) {
+    if (shade !== null) {
+      get().shadeLayerDeactivatePolygonManipulation();
+      get().shadeLayerSelectShadings(null);
+    }
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadeForNewShading: shade,
           },
         },
       },

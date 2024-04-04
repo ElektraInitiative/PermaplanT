@@ -1,5 +1,4 @@
-import { Action, TrackedMapState } from '../../store/MapStoreTypes';
-import { updateBaseLayer } from './api/updateBaseLayer';
+import { v4 } from 'uuid';
 import {
   BaseLayerImageDto,
   LayerType,
@@ -10,7 +9,8 @@ import {
 import { updateMapGeometry } from '@/features/map_planning/api/updateMapGeometry';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
 import { updateMap } from '@/features/maps/api/updateMap';
-import { v4 } from 'uuid';
+import { Action, TrackedMapState } from '../../store/MapStoreTypes';
+import { updateBaseLayer } from './api/updateBaseLayer';
 
 export class UpdateBaseLayerAction
   implements

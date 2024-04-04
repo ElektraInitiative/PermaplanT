@@ -1,7 +1,7 @@
-import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
-import { getImage } from '@/features/nextcloud_integration/api/getImages';
 import { useQuery } from '@tanstack/react-query';
 import { WebDAVClient } from 'webdav';
+import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
+import { getImage } from '@/features/nextcloud_integration/api/getImages';
 
 /**
  * Checks if a file exists in Nextcloud.

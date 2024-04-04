@@ -1,5 +1,3 @@
-import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenuTypes';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import Select, {
@@ -7,14 +5,18 @@ import Select, {
   ClassNamesConfig,
   GroupBase,
   MultiValue,
+  OnChangeValue,
   SingleValue,
   StylesConfig,
 } from 'react-select';
+import filterObject from '../../utils/filterObject';
+import { SelectOption } from './SelectMenuTypes';
 
 export interface SelectMenuProps<
   T extends FieldValues,
   Option = SelectOption,
   IsMulti extends boolean = false,
+  Value = string | number | undefined,
 > {
   /** Per page unique identifier of this UI element. */
   id: Path<T>;
@@ -22,6 +24,8 @@ export interface SelectMenuProps<
   isMulti?: IsMulti;
   /** This text will be displayed in a label above select menu. */
   labelText?: string;
+  /** Deactivate this UI element. */
+  disabled?: boolean;
   /**
    * Reference to a react-hook-form control.
    * Caution: control can only be omitted in the context of a FormProvider.
@@ -29,8 +33,13 @@ export interface SelectMenuProps<
   control?: Control<T, unknown>;
   /** Options content that may be selected by the user */
   options: Option[];
+  /** If this component is used with react hook form, you must supply a function to convert from values to options */
+  optionFromValue?: (value: Value) => Option;
+  /** If this component is used with react hook form, you must supply a function to convert from options to values */
+  valueFromOption?: (value: OnChangeValue<Option, IsMulti>) => Value;
   /** Force a selected option. */
   value?: Option;
+  defaultValue?: Option;
   /** Whether the user has to select something before they can submit the containing form. */
   required?: boolean;
   /** Text that is displayed in place of the content if no option has been selected. */
@@ -46,6 +55,8 @@ export interface SelectMenuProps<
   onInputChange?: (inputValue: string) => void;
   /** Disables the x icon at the end of the select menu that allows the user to deselect the current option. */
   isClearable?: boolean;
+  /** Additional CSS classes */
+  className?: string;
 }
 
 /**
@@ -62,18 +73,24 @@ export default function SelectMenu<
   labelText,
   control,
   options,
+  disabled,
   required = false,
   value,
+  defaultValue,
   placeholder,
   handleOptionsChange,
+  optionFromValue,
+  valueFromOption,
   onChange,
   onInputChange,
   isClearable = true,
+  className = '',
 }: SelectMenuProps<T, Option, IsMulti>) {
   const customClassNames: ClassNamesConfig<Option, IsMulti, GroupBase<Option>> = {
     menu: () => 'bg-neutral-100 dark:bg-neutral-50-dark',
     control: (state) => {
       return `
+        ${className}
         h-[44px] bg-neutral-200 rounded border
         dark:bg-neutral-50-dark focus:border-primary-500
         hover:border-primary-500 dark:focus:border-primary-300 dark:hover:border-primary-300
@@ -128,14 +145,20 @@ export default function SelectMenu<
       <Controller
         name={id}
         control={control}
-        render={() => (
+        render={({ field }) => (
           <Select
+            ref={field.ref}
             name={id}
-            onChange={handleOptionsChange}
+            onChange={(value, actionMeta) => {
+              if (valueFromOption) field.onChange(valueFromOption(value));
+              if (handleOptionsChange) handleOptionsChange(value, actionMeta);
+            }}
             placeholder={placeholder}
             inputValue={inputValue}
             options={options}
-            value={value}
+            isDisabled={disabled}
+            value={optionFromValue ? optionFromValue(field.value) : value}
+            defaultValue={defaultValue}
             isMulti={isMulti}
             styles={customStyles}
             classNames={customClassNames}

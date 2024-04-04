@@ -1,6 +1,6 @@
-import NavContainer from './NavContainer';
-import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
 import type { Meta, StoryObj } from '@storybook/react';
+import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
+import NavContainer from './NavContainer';
 
 const meta: Meta<typeof NavContainer> = {
   title: 'Components/Layout/NavContainer',

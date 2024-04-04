@@ -1,5 +1,26 @@
+import i18next from 'i18next';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ShepherdTourContext } from 'react-shepherd';
+import { toast } from 'react-toastify';
+import { GainedBlossomsDto, LayerDto, LayerType } from '@/api_types/definitions';
+import IconButton from '@/components/Button/IconButton';
+import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
+import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
+import { HeatMapLayer } from '@/features/map_planning/layers/heatmap/HeatMapLayer';
+import { ShadeLayer } from '@/features/map_planning/layers/shade/ShadeLayer';
+import { ShadeLayerLeftToolbar } from '@/features/map_planning/layers/shade/components/ShadeLayerLeftToolbar';
+import { ShadeLayerRightToolbar } from '@/features/map_planning/layers/shade/components/ShadeLayerRightToolbar';
+import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
+import CheckIcon from '@/svg/icons/check.svg?react';
+import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
+import GridIcon from '@/svg/icons/grid-dots.svg?react';
+import RedoIcon from '@/svg/icons/redo.svg?react';
+import TagsIcon from '@/svg/icons/tags.svg?react';
+import UndoIcon from '@/svg/icons/undo.svg?react';
 import { gainBlossom } from '../api/gainBlossom';
-import { updateTourStatus } from '../api/updateTourStatus';
+import { useCompleteTour, useReenableTour } from '../hooks/tourHookApi';
 import BaseLayer from '../layers/base/BaseLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
@@ -12,33 +33,6 @@ import { BaseStage } from './BaseStage';
 import TimelineDatePicker from './timeline/TimelineDatePicker';
 import { LayerList } from './toolbar/LayerList';
 import { Toolbar } from './toolbar/Toolbar';
-import {
-  GainedBlossomsDto,
-  LayerDto,
-  LayerType,
-  UpdateGuidedToursDto,
-} from '@/api_types/definitions';
-import IconButton from '@/components/Button/IconButton';
-import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
-import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
-import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
-import { HeatMapLayer } from '@/features/map_planning/layers/heatmap/HeatMapLayer';
-import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
-import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
-import CheckIcon from '@/svg/icons/check.svg?react';
-import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
-import GridIcon from '@/svg/icons/grid-dots.svg?react';
-import RedoIcon from '@/svg/icons/redo.svg?react';
-import TagsIcon from '@/svg/icons/tags.svg?react';
-import UndoIcon from '@/svg/icons/undo.svg?react';
-import i18next from 'i18next';
-import Konva from 'konva';
-import { useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ShepherdTourContext } from 'react-shepherd';
-import { toast } from 'react-toastify';
-
-import KonvaEventObject = Konva.KonvaEventObject;
 
 export const TEST_IDS = Object.freeze({
   UNDO_BUTTON: 'map__undo-button',
@@ -57,7 +51,7 @@ export type MapProps = {
  * Otherwise, they cannot be moved.
  */
 export const EditorMap = ({ layers }: MapProps) => {
-  const untrackedState = useMapStore((map) => map.untrackedState);
+  const layersState = useMapStore((map) => map.untrackedState.layers);
   const canUndo = useMapStore((map) => map.canUndo);
   const canRedo = useMapStore((map) => map.canRedo);
   const undo = useMapStore((map) => map.undo);
@@ -73,88 +67,15 @@ export const EditorMap = ({ layers }: MapProps) => {
   const [show, setShow] = useState(false);
   const [timeLineState, setTimeLineState] = useState<'loading' | 'idle'>('idle');
 
-  // Allow layers to listen for all events on the base stage.
-  //
-  // This enables us to build layers with custom input logic that does not
-  // rely on Konva's limited Canvas-Object controls.
-  const [stageDragStartListeners, setStageDragStartListeners] = useState<
-    Map<string, (e: KonvaEventObject<DragEvent>) => void>
-  >(new Map());
-  const [stageDragEndListeners, setStageDragEndListeners] = useState<
-    Map<string, (e: KonvaEventObject<DragEvent>) => void>
-  >(new Map());
-  const [stageMouseMoveListeners, setStageMouseMoveListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageMouseWheelListeners, setStageMouseWheelListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageMouseUpListeners, setStageMouseUpListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageMouseDownListeners, setStageMouseDownListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageClickListeners, setStageClickListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-
-  const baseStageListenerRegister: StageListenerRegister = {
-    registerStageDragStartListener: (
-      key: string,
-      listener: (e: KonvaEventObject<DragEvent>) => void,
-    ) => {
-      setStageDragStartListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageDragEndListener: (
-      key: string,
-      listener: (e: KonvaEventObject<DragEvent>) => void,
-    ) => {
-      setStageDragEndListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseMoveListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseMoveListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseWheelListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseWheelListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseDownListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseDownListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseUpListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseUpListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageClickListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageClickListeners((listeners) => listeners.set(key, listener));
-    },
-  };
+  const { mutate: reenableTour } = useReenableTour();
+  const { mutate: completeTour } = useCompleteTour();
 
   const isGridLayerEnabled = () => {
-    return untrackedState.layers.grid.visible;
+    return layersState.grid.visible;
   };
 
   const isPlantLabelTooltipEnabled = () => {
-    return untrackedState.layers.plants.showLabels;
-  };
-
-  const reenableTour = async () => {
-    const update: UpdateGuidedToursDto = { editor_tour_completed: false };
-    await updateTourStatus(update);
+    return layersState.plants.showLabels;
   };
 
   function triggerDateChangedInGuidedTour(): void {
@@ -163,10 +84,6 @@ export const EditorMap = ({ layers }: MapProps) => {
   }
 
   useEffect(() => {
-    const _completeTour = async () => {
-      const update: UpdateGuidedToursDto = { editor_tour_completed: true };
-      await updateTourStatus(update);
-    };
     const _tourCompletionBlossom = async () => {
       const blossom: GainedBlossomsDto = {
         blossom: 'graduation_day',
@@ -178,6 +95,7 @@ export const EditorMap = ({ layers }: MapProps) => {
         icon: '\u{1F338}',
       });
     };
+
     tour?.start();
     if (tour && tour.steps.length > 0) {
       tour?.on('cancel', () => {
@@ -185,11 +103,25 @@ export const EditorMap = ({ layers }: MapProps) => {
       });
       tour?.on('complete', () => {
         _tourCompletionBlossom();
-        _completeTour();
+        completeTour();
       });
     }
+
     return () => tour?.hide();
-  }, [tour, t]);
+  }, [completeTour, tour, t]);
+
+  const handleTimeLineDateChanged = useCallback(
+    (date: string) => {
+      triggerDateChangedInGuidedTour();
+      setTimeLineState('idle');
+      updateTimelineDate(date);
+    },
+    [updateTimelineDate],
+  );
+
+  const handleTimeLineLoading = useCallback(() => {
+    setTimeLineState('loading');
+  }, []);
 
   const getToolbarContent = (layerType: CombinedLayerType) => {
     const content = {
@@ -206,7 +138,7 @@ export const EditorMap = ({ layers }: MapProps) => {
       [LayerType.Label]: { left: <div></div>, right: <div></div> },
       [LayerType.Landscape]: { left: <div></div>, right: <div></div> },
       [LayerType.Paths]: { left: <div></div>, right: <div></div> },
-      [LayerType.Shade]: { left: <div></div>, right: <div></div> },
+      [LayerType.Shade]: { left: <ShadeLayerLeftToolbar />, right: <ShadeLayerRightToolbar /> },
       [LayerType.Soil]: { left: <div></div>, right: <div></div> },
       [LayerType.Terrain]: { left: <div></div>, right: <div></div> },
       [LayerType.Trees]: { left: <div></div>, right: <div></div> },
@@ -255,10 +187,7 @@ export const EditorMap = ({ layers }: MapProps) => {
                   isToolboxIcon={true}
                   renderAsActive={isGridLayerEnabled()}
                   onClick={() =>
-                    updateLayerVisible(
-                      FrontendOnlyLayerType.Grid,
-                      !untrackedState.layers.grid.visible,
-                    )
+                    updateLayerVisible(FrontendOnlyLayerType.Grid, !layersState.grid.visible)
                   }
                   title={t('toolboxTooltips:grid')}
                 >
@@ -284,44 +213,32 @@ export const EditorMap = ({ layers }: MapProps) => {
           id="canvas"
           tabIndex={0} //so that map can be focused
         >
-          <BaseStage
-            listeners={{
-              stageDragStartListeners,
-              stageDragEndListeners,
-              stageMouseMoveListeners,
-              stageMouseUpListeners,
-              stageMouseDownListeners,
-              stageMouseWheelListeners,
-              stageClickListeners,
-            }}
-          >
+          <BaseStage>
             <BaseLayer
-              stageListenerRegister={baseStageListenerRegister}
-              opacity={untrackedState.layers.base.opacity}
-              visible={untrackedState.layers.base.visible}
+              opacity={layersState.base.opacity}
+              visible={layersState.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
             />
+            <ShadeLayer
+              opacity={layersState.shade.opacity}
+              visible={layersState.shade.visible}
+              listening={getSelectedLayerType() === LayerType.Shade}
+            />
+            <HeatMapLayer />
             <PlantsLayer
-              visible={untrackedState.layers.plants.visible}
-              opacity={untrackedState.layers.plants.opacity}
+              visible={layersState.plants.visible}
+              opacity={layersState.plants.opacity}
               listening={getSelectedLayerType() === LayerType.Plants}
             ></PlantsLayer>
-            <HeatMapLayer />
             <GridLayer
-              visible={untrackedState.layers.grid.visible}
-              opacity={untrackedState.layers.grid.opacity}
+              visible={layersState.grid.visible}
+              opacity={layersState.grid.opacity}
             ></GridLayer>
           </BaseStage>
           <div>
             <TimelineDatePicker
-              onSelectDate={(date) => {
-                triggerDateChangedInGuidedTour();
-                setTimeLineState('idle');
-                updateTimelineDate(date);
-              }}
-              onLoading={() => {
-                setTimeLineState('loading');
-              }}
+              onSelectDate={handleTimeLineDateChanged}
+              onLoading={handleTimeLineLoading}
               defaultDate={timelineDate}
             />
           </div>

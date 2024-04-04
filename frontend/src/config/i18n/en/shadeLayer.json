@@ -1,0 +1,48 @@
+{
+    "error_loading_shadings": "Sorry, there was an error while loading the shadings from the backend.",
+    "place_light_shadings_message": "Click on the map to place a new light shading area.",
+    "place_partial_shadings_message": "Click on the map to place a new partial shading area.",
+    "place_permanent_shadings_message": "Click on the map to place a new permanent shading area.",
+    "place_permanent_deep_shadings_message": "Click on the map to place a new permanent deep shading area.",
+    "edit_polygon": {
+      "add": "Click on the map to add a new point to the shading.",
+      "remove": "Click on a point to remove it from the shading.",
+      "move": "Click on a point to move it to a new position.",
+      "delete_point_forbidden": "The shape of this shading must contain at least three points."
+    },
+    "geometry_tool_form": {
+      "title": "Edit shape",
+      "add_points": "Add points",
+      "delete_points": "Delete points",
+      "move_points": "Move points"
+    },
+    "shading_amount": {
+      "no_shade": "None",
+      "light_shade": "Light",
+      "partial_shade": "Partial",
+      "permanent_shade": "Permanent",
+      "permanent_deep_shade": "Permanent deep shade"
+    },
+    "left_toolbar": {
+      "shading_amount_select_title": "Shading Type",
+      "add_date": "Applied from",
+      "remove_date": "Applied until",
+      "delete_button": "Delete shading",
+      "error_remove_date_before_add_date": "The 'Applied until' date must be after the 'Applied from' date!"
+    },
+    "right_toolbar": {
+      "legend": {
+        "title": "Legend",
+        "color_none": "no color",
+        "color_light_shade": "light blue",
+        "color_partial_shade": "dark blue",
+        "color_permanent_shade": "violet",
+        "color_permanent_deep_shade": "black",
+        "no_shade": "The area receives all available sunlight at all times of the day. This applies to all areas where no shading has been placed.",
+        "light_shade": "This section of the map receives at most a moderate amount of shade. Areas that are sparsely populated with trees fall under this category.",
+        "partial_shade": "This area receives between 3 and 6 hours of sunlight.",
+        "permanent_shade": "An area that gets 3 hours of direct sunlight per day at most.",
+        "permanent_deep_shade": "A dense cover of vegetation or an artificial surface causes this area to receive barely any sunlight."
+      }
+    }
+}

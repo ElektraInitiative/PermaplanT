@@ -1,6 +1,6 @@
-import ImageModal from './ImageModal';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentType } from 'react';
+import ImageModal from './ImageModal';
 
 const meta: Meta<typeof ImageModal> = {
   title: 'Components/Modals/ImageModal',

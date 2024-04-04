@@ -1,6 +1,6 @@
-import ModalContainer from './ModalContainer';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentType } from 'react';
+import ModalContainer from './ModalContainer';
 
 const meta: Meta<typeof ModalContainer> = {
   title: 'Components/Modals/ModalContainer',
