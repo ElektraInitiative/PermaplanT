@@ -50,6 +50,7 @@ async fn test_get_all_plants_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
+        common_name_de: Some(vec![Some("Testpflanze".to_string())]),
         spread: Some(50),
     };
 
@@ -99,6 +100,7 @@ async fn test_get_one_plant_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
+        common_name_de: Some(vec![Some("Testpflanze".to_string())]),
         spread: Some(50),
     };
 
@@ -148,6 +150,7 @@ async fn test_search_plants_succeeds() {
         id: -1,
         unique_name: "Testia testia".to_string(),
         common_name_en: Some(vec![Some("Testplant".to_string())]),
+        common_name_de: Some(vec![Some("Testpflanze".to_string())]),
         spread: Some(50),
     };
 
