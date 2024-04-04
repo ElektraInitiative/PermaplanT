@@ -2,7 +2,7 @@
 
 use diesel::pg::Pg;
 use diesel::query_dsl::methods::FilterDsl;
-use diesel::{debug_query, ExpressionMethods, QueryDsl, QueryResult};
+use diesel::{debug_query, ExpressionMethods, JoinOnDsl, QueryDsl, QueryResult};
 use diesel_async::{AsyncConnection, AsyncPgConnection, RunQueryDsl};
 use futures_util::Future;
 use log::debug;
@@ -12,10 +12,10 @@ use crate::model::dto::drawings::{DrawingDto, UpdateDrawingsDto};
 use crate::model::entity::drawings::Drawing;
 use crate::schema::{
     drawings, ellipse_drawings, freeline_drawings, image_drawings, labeltext_drawings, layers,
-    rectangle_drawings,
+    polygon_drawings, rectangle_drawings,
 };
 
-use super::drawings::{DrawingsJoined, UpdateDrawing};
+use super::drawings::{DrawingJoined, UpdateDrawing};
 
 impl Drawing {
     /// Get all drawings assosicated with one map.
@@ -23,14 +23,43 @@ impl Drawing {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn find(map_id: i32, conn: &mut AsyncPgConnection) -> QueryResult<Vec<DrawingDto>> {
-        let query = FilterDsl::filter(
-            drawings::table.left_join(layers::table),
-            layers::map_id.eq(map_id),
-        )
-        .into_boxed();
+        let query = drawings::table
+            .left_join(
+                rectangle_drawings::table.on(drawings::properties_id.eq(rectangle_drawings::id)),
+            )
+            .left_join(ellipse_drawings::table.on(drawings::properties_id.eq(ellipse_drawings::id)))
+            .left_join(
+                freeline_drawings::table.on(drawings::properties_id.eq(freeline_drawings::id)),
+            )
+            .left_join(polygon_drawings::table.on(drawings::properties_id.eq(polygon_drawings::id)))
+            .left_join(
+                labeltext_drawings::table.on(drawings::properties_id.eq(labeltext_drawings::id)),
+            )
+            .left_join(image_drawings::table.on(drawings::properties_id.eq(image_drawings::id)))
+            .select((
+                drawings::all_columns,
+                rectangle_drawings::all_columns.nullable(),
+                ellipse_drawings::all_columns.nullable(),
+                freeline_drawings::all_columns.nullable(),
+                polygon_drawings::all_columns.nullable(),
+                labeltext_drawings::all_columns.nullable(),
+                image_drawings::all_columns.nullable(),
+            ));
 
-        let results: Vec<DrawingsJoined> = query.load::<DrawingsJoined>(conn).await?;
-        results
+        let results: Vec<DrawingJoined> = query.load::<DrawingJoined>(conn).await?;
+        results.into_iter()
+            .map(|drawings_joined| {
+
+            if let Some(rect) = drawings_joined.rectangle_drawing {
+                DrawingProperties::Rectangle(rect)
+            } else if let Some(ell) = ellipse {
+                DrawingProperties::Ellipse(ell)
+            } else {
+                // Handle other property types here
+                // For simplicity, we're assuming all drawings have either rectangle or ellipse properties
+                panic!("Unexpected combination of drawing and properties")
+            };
+        ).collect()
     }
 
     /// Save new drawings into the database.

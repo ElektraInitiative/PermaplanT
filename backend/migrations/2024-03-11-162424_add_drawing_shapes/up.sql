@@ -2,7 +2,7 @@ CREATE TYPE drawing_shape_type AS ENUM (
     'rectangle',
     'ellipse',
     'free line',
-    'polygon',
+    'bezier polygon',
     'label text',
     'image'
 );
@@ -93,7 +93,7 @@ BEGIN
             exists := EXISTS (SELECT 1 FROM ellipse_drawings WHERE id = NEW.properties_id);
         WHEN 'free line' THEN
             exists := EXISTS (SELECT 1 FROM freeline_drawings WHERE id = NEW.properties_id);
-        WHEN 'polygon' THEN
+        WHEN 'bezier polygon' THEN
             exists := EXISTS (SELECT 1 FROM polygon_drawings WHERE id = NEW.properties_id);
         WHEN 'label text' THEN
             exists := EXISTS (SELECT 1 FROM labeltext_drawings WHERE id = NEW.properties_id);

@@ -16,6 +16,8 @@ pub enum DrawingShapeType {
     Ellipse,
     #[db_rename = "free line"]
     FreeLine,
+    #[db_rename = "polygon"]
+    Polygon,
     #[db_rename = "bezier polygon"]
     BezierPolygon,
     #[db_rename = "label text"]

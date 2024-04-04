@@ -6,7 +6,40 @@ use serde_json::{Map, Value};
 use super::drawings::{
     DrawingDto, UpdateAddDateDrawingDto, UpdateDrawingsDto, UpdateRemoveDateDrawingDto,
 };
-use crate::model::entity::drawings::Drawing;
+use crate::model::entity::drawings::{Drawing, DrawingJoined};
+
+impl From<DrawingJoined> for DrawingDto {
+    fn from(drawing_joined: DrawingJoined) -> Self {
+        let properties = if let Some(rectangle) = drawing_joined.rectangle_drawing {
+            DrawingProperties::Rectangle(rect)
+        } else if let Some(ellipse) = drawing_joined.ellipse_drawing {
+            DrawingProperties::Ellipse(ell)
+        } else if let Some(freeline) = drawing_joined.freeline_drawing {
+            DrawingProperties::FreeLine();
+        } else if let Some(polygon) = drawing_joined.polygon_drawing {
+            DrawingProperties::PolygonDrawing();
+        } else if let Some(labeltext) = drawing_joined.labeltext_drawing {
+            DrawingProperties::LabelText();
+        } else if let Some(image) = drawing_joined.image_drawing {
+            DrawingProperties::Image();
+        } else {
+            panic!("Bla bla")
+        };
+
+        Self {
+            id: drawing_joined.drawing.id,
+            layer_id: drawing_joined.drawing.layer_id,
+            add_date: drawing_joined.drawing.add_date,
+            remove_date: drawing_joined.drawing.remove_date,
+            rotation: drawing_joined.drawing.rotation,
+            scale_x: drawing_joined.drawing.scale_x,
+            scale_y: drawing_joined.drawing.scale_y,
+            x: drawing_joined.drawing.x,
+            y: drawing_joined.drawing.y,
+            properties: properties,
+        }
+    }
+}
 
 impl From<Drawing> for DrawingDto {
     fn from(drawing: Drawing) -> Self {

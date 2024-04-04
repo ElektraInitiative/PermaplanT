@@ -58,6 +58,16 @@ pub struct FreeLineProperties {
 #[typeshare]
 #[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
 #[serde(rename_all = "camelCase")]
+pub struct PolygonProperties {
+    pub points: Vec<Vec<f32>>,
+    pub color: String,
+    pub fill_pattern: String,
+    pub stroke_width: f32,
+}
+
+#[typeshare]
+#[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct LabelTextProperties {
     pub text: String,
     pub width: i32,
@@ -81,6 +91,7 @@ enum DrawingProperties {
     Rectangle(RectangleProperties),
     Ellipse(EllipseProperties),
     FreeLine(FreeLineProperties),
+    Polygon(PolygonProperties),
     LabelText(LabelTextProperties),
     Image(ImageProperties),
 }

@@ -16,6 +16,7 @@ pub struct Drawing {
     pub id: Uuid,
     pub layer_id: i32,
     pub shape_type: DrawingShapeType,
+    pub properties_id: Uuid,
     pub add_date: Option<NaiveDate>,
     pub remove_date: Option<NaiveDate>,
     pub rotation: f32,
@@ -73,6 +74,16 @@ pub struct FreelineDrawing {
 }
 
 #[derive(Debug, Clone, Identifiable, Queryable, Insertable)]
+#[diesel(table_name = freeline_drawings)]
+pub struct PolygonDrawing {
+    pub id: Uuid,
+    pub points: Option<serde_json::Value>,
+    pub color: Option<String>,
+    pub fill_pattern: Option<String>,
+    pub stroke_width: Option<f64>,
+}
+
+#[derive(Debug, Clone, Identifiable, Queryable, Insertable)]
 #[diesel(table_name = labeltext_drawings)]
 pub struct LabeltextDrawing {
     pub id: Uuid,
@@ -90,11 +101,12 @@ pub struct ImageDrawing {
 }
 
 #[derive(Debug, Queryable)]
-pub struct DrawingsJoined {
+pub struct DrawingJoined {
     pub drawing: Drawing,
     pub rectangle_drawing: Option<RectangleDrawing>,
     pub ellipse_drawing: Option<EllipseDrawing>,
     pub freeline_drawing: Option<FreelineDrawing>,
+    pub polygon_drawing: Option<PolygonDrawing>,
     pub labeltext_drawing: Option<LabeltextDrawing>,
     pub image_drawing: Option<ImageDrawing>,
 }
