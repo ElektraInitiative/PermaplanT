@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { createShortcutIncludingModifierKeysFromKeyEvent } from '@/utils/key-combinations';
-import keybindings from './keybindings.json';
+import keybindingsMacOS from './keybindings_macos.json';
+import keybindingsWindowsLinux from './keybindings_windows_linux.json';
 
 export const KEYBINDINGS_SCOPE_GLOBAL = 'global';
 export const KEYBINDINGS_SCOPE_PLANTS_LAYER = 'plants_layer';
@@ -10,18 +10,30 @@ export const KEYBINDINGS_SCOPE_BASE_LAYER = 'base_layer';
 
 type KeyBinding = Record<string, string[]>;
 
-enum SpecialKeys {
+enum SpecialKeys_WindowsLinux {
   Escape = 'Escape',
   Delete = 'Delete',
   Shift = 'Shift',
   Control = 'Control',
 }
 
+enum SpecialKeys_MacOS {
+  Escape = 'Escape',
+  Delete = 'Delete',
+  Shift = 'Shift',
+  Control = 'Control',
+  Cmd = 'Cmd',
+  Opt = 'Opt',
+}
+
 type KeyBindingsConfig = {
   [scope: string]: KeyBinding;
 };
 
-export const keyBindingsConfig: KeyBindingsConfig = keybindings;
+const isMacOS = navigator.userAgent.includes('Macintosh');
+export const keyBindingsConfig: KeyBindingsConfig = isMacOS
+  ? keybindingsMacOS
+  : keybindingsWindowsLinux;
 
 /**
  * Creates a set of key event handlers based on the provided scope and a set of key handler actions.
@@ -83,14 +95,26 @@ export function useGetFormattedKeybindingDescriptionForAction(
 
   const translatedKeybindings = keybindings.map((keybinding) => {
     const parts = keybinding.split('+');
-    return parts
-      .map((part) => {
-        if (Object.values(SpecialKeys).includes(part as SpecialKeys)) {
-          return t(`keybindings:${part as SpecialKeys}`);
-        }
-        return part;
-      })
-      .join('+');
+
+    if (isMacOS) {
+      return parts
+        .map((part) => {
+          if (Object.values(SpecialKeys_MacOS).includes(part as SpecialKeys_MacOS)) {
+            return t(`keybindings:macos.${part as SpecialKeys_MacOS}`);
+          }
+          return part;
+        })
+        .join('+');
+    } else {
+      return parts
+        .map((part) => {
+          if (Object.values(SpecialKeys_WindowsLinux).includes(part as SpecialKeys_WindowsLinux)) {
+            return t(`keybindings:windows_linux.${part as SpecialKeys_WindowsLinux}`);
+          }
+          return part;
+        })
+        .join('+');
+    }
   });
 
   return `${descriptionText || ''} (${translatedKeybindings.join(',')})`.trim();
@@ -127,4 +151,63 @@ export function getConfiguredActionFromKeyEvent(
 ): string | undefined {
   const pressedShortcut = createShortcutIncludingModifierKeysFromKeyEvent(event);
   return getConfiguredActionForShortcut(scope, pressedShortcut);
+}
+
+/**
+ * Create a key combination string from a React KeyboardEvent object.
+ *
+ * @param event - The React KeyboardEvent object to extract key combination from.
+ * @returns A string representing the key combination, including modifier keys (Ctrl, Shift, Alt) if pressed, and the primary key.
+ */
+export function createShortcutIncludingModifierKeysFromKeyEvent(event: React.KeyboardEvent) {
+  return createShortcutIncludingModifierKeys(
+    event.ctrlKey,
+    event.altKey,
+    event.shiftKey,
+    event.metaKey,
+    event.key,
+  );
+}
+
+/**
+ * Creates a key combination string based on modifier keys and a main key.
+ *
+ * @param ctrlKey - Indicates if the Ctrl key is pressed.
+ * @param altKey - Indicates if the Alt key is pressed.
+ * @param shiftKey - Indicates if the Shift key is pressed.
+ * @param key - The main key pressed.
+ * @returns {string} - A string representing the key combination.
+ *
+ * @example
+ * const keyString = createKeyCombinationString(true, false, true, 'A');
+ * // Returns 'Ctrl+Shift+A'
+ */
+export function createShortcutIncludingModifierKeys(
+  ctrlKey: boolean,
+  altKey: boolean,
+  shiftKey: boolean,
+  metaKey: boolean,
+  key: string,
+) {
+  const modifierKeys = [];
+
+  if (ctrlKey) {
+    modifierKeys.push('Ctrl');
+  }
+
+  if (shiftKey) {
+    modifierKeys.push('Shift');
+  }
+
+  if (altKey) {
+    modifierKeys.push(isMacOS ? 'Opt' : 'Alt');
+  }
+
+  if (metaKey) {
+    modifierKeys.push(isMacOS ? 'Cmd' : 'Meta');
+  }
+
+  modifierKeys.push(key);
+
+  return modifierKeys.join('+');
 }

@@ -6,6 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can view the map over a range of consecutive points in time by using the timeline feature.
+- **Assignee:** Andrei
 
 ## Scenarios
 

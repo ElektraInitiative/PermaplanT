@@ -6,8 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can copy and paste a selection of elements, including succeeding crops, by using the appropriate icons in the toolbar.
-- **Status:** Analysis
-- **Assignee:** Draft
+- **Assignee:** Andrei
 
 ## Scenarios
 
