@@ -276,7 +276,7 @@ timeout(time: 2, unit: 'HOURS') {
                 ),
                 'cargo-clippy-doc': runDockerPostgresSidecar(
                     'cargo clippy && cargo doc --document-private-items',
-                    ['backend/target/doc'],
+                    ['backend/target/doc/**/*'],
                     ['cargodoc']
                 ),
                 'cargo-test': runDockerPostgresSidecar('cargo test'),
