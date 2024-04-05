@@ -21,6 +21,15 @@ make run-mdbook
 
 Which will open [/doc/architecture/README.md](/doc/architecture/README.md) as first page.
 
+The documentation is also hosted for PR/Development/Release:
+
+| Branch              | Cargo Documentation                              | General Documentation (mdBook)                       | API Documentation (Swagger UI)                | Storybook Frontend Documentation                 |
+|---------------------|--------------------------------------------------|------------------------------------------------------|----------------------------------------------|--------------------------------------------------|
+| Pull Request | [cargodoc](https://doc.permaplant.net/pr/cargodoc) | [mdbook](https://doc.permaplant.net/pr/mdbook) | [swaggerui](https://pr.permaplant.net/doc/api/swagger/ui/) | [storybook](https://doc.permaplant.net/pr/storybook) |
+| Development  | [cargodoc](https://doc.permaplant.net/dev/cargodoc) | [mdbook](https://doc.permaplant.net/dev/mdbook) | [swaggerui](https://dev.permaplant.net/doc/api/swagger/ui/) | [storybook](https://doc.permaplant.net/dev/storybook) |
+| Production | [cargodoc](https://doc.permaplant.net/www/cargodoc) | [mdbook](https://doc.permaplant.net/www/mdbook) | [swaggerui](https://www.permaplant.net/doc/api/swagger/ui) | [storybook](https://doc.permaplant.net/www/storybook) |
+
+
 ## Makefile commands
 
 Type `make help` to see all commands.
