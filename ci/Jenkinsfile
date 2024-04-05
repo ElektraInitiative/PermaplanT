@@ -209,21 +209,21 @@ def copyDocumentation(String location) {
             verbose: true,
             configName: 'doc.permaplant.net',
             transfers: [
-            sshTransfer(
-                sourceFiles: 'backend/target/doc/*',
-                removePrefix: 'backend/target/doc/',
-                remoteDirectory: "'{$location}'/cargodoc"
-            ),
-            sshTransfer(
-                sourceFiles: 'book/html/*',
-                removePrefix: 'book/html/',
-                remoteDirectory: "'{$location}'/mdbook"
-            ),
-            sshTransfer(
-                sourceFiles: 'frontend/storybook-static/*',
-                removePrefix: 'frontend/storybook-static/',
-                remoteDirectory: "'{$location}'/storybook"
-            )
+                sshTransfer(
+                    sourceFiles: 'backend/target/doc/*',
+                    removePrefix: 'backend/target/doc/',
+                    remoteDirectory: "${location}/cargodoc"
+                ),
+                sshTransfer(
+                    sourceFiles: 'book/html/*',
+                    removePrefix: 'book/html/',
+                    remoteDirectory: "${location}/mdbook"
+                ),
+                sshTransfer(
+                    sourceFiles: 'frontend/storybook-static/*',
+                    removePrefix: 'frontend/storybook-static/',
+                    remoteDirectory: "${location}/storybook"
+                )
             ]
         )
         ]
