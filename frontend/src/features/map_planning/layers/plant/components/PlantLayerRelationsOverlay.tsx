@@ -62,11 +62,17 @@ export function PlantLayerRelationsOverlay() {
   const layers = stage?.children;
 
   const visiblePlantingNodes = useMemo(() => {
-    return layers
-      ?.filter((l) => l.name() === LayerType.Plants)
-      .flatMap((l) => l.children ?? [])
-      .filter((s) => s.attrs.plantId && s.isClientRectOnScreen())
-      .filter((s) => relations?.has(s.attrs.plantId));
+    return (
+      layers
+        ?.flatMap((l) => l.children ?? [])
+        .filter((l) => l.name() === LayerType.Plants)
+        // @ts-expect-error Typescript can't tell that all direct children layer must have children themselves
+        .filter((group) => group['children'] !== undefined)
+        // @ts-expect-error Typescript can't tell that all direct children layer must have children themselves
+        .flatMap((group) => group?.children)
+        .filter((s) => s.attrs.plantId && s.isClientRectOnScreen())
+        .filter((s) => relations?.has(s.attrs.plantId))
+    );
   }, [relations, layers]);
 
   return (
