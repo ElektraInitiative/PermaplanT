@@ -25,9 +25,9 @@ The documentation is also hosted for PR/Development/Release:
 
 | Branch | Backend Documentation (Cargo) | General Documentation (mdBook) | API Documentation (Swagger UI) | Frontend Documentation (Storybook) |
 |---------------------|--------------------------------------------------|------------------------------------------------------|----------------------------------------------|--------------------------------------------------|
-| Pull Request | [cargodoc](https://doc.permaplant.net/pr/cargodoc) | [mdbook](https://doc.permaplant.net/pr/mdbook) | [swaggerui](https://pr.permaplant.net/doc/api/swagger/ui/) | [storybook](https://doc.permaplant.net/pr/storybook) |
-| Development  | [cargodoc](https://doc.permaplant.net/dev/cargodoc) | [mdbook](https://doc.permaplant.net/dev/mdbook) | [swaggerui](https://dev.permaplant.net/doc/api/swagger/ui/) | [storybook](https://doc.permaplant.net/dev/storybook) |
-| Production | [cargodoc](https://doc.permaplant.net/www/cargodoc) | [mdbook](https://doc.permaplant.net/www/mdbook) | [swaggerui](https://www.permaplant.net/doc/api/swagger/ui) | [storybook](https://doc.permaplant.net/www/storybook) |
+| Pull Request | [cargodoc](https://doc.permaplant.net/pr/cargodoc/backend) | [mdbook](https://doc.permaplant.net/pr/mdbook) | [swaggerui](https://pr.permaplant.net/doc/api/swagger/ui/) | [storybook](https://doc.permaplant.net/pr/storybook) |
+| Development  | [cargodoc](https://doc.permaplant.net/dev/cargodoc/backend) | [mdbook](https://doc.permaplant.net/dev/mdbook) | [swaggerui](https://dev.permaplant.net/doc/api/swagger/ui/) | [storybook](https://doc.permaplant.net/dev/storybook) |
+| Production | [cargodoc](https://doc.permaplant.net/www/cargodoc/backend) | [mdbook](https://doc.permaplant.net/www/mdbook) | [swaggerui](https://www.permaplant.net/doc/api/swagger/ui) | [storybook](https://doc.permaplant.net/www/storybook) |
 
 
 ## Makefile commands

@@ -21,17 +21,17 @@ def copyDocumentation() {
             configName: 'doc.permaplant.net',
             transfers: [
             sshTransfer(
-                sourceFiles: 'backend/target/doc/*',
+                sourceFiles: 'backend/target/doc/**/*',
                 removePrefix: 'backend/target/doc/',
                 remoteDirectory: "www/cargodoc"
             ),
             sshTransfer(
-                sourceFiles: 'book/html/*',
+                sourceFiles: 'book/html/**/*',
                 removePrefix: 'book/html/',
                 remoteDirectory: "www/mdbook"
             ),
             sshTransfer(
-                sourceFiles: 'frontend/storybook-static/*',
+                sourceFiles: 'frontend/storybook-static/**/*',
                 removePrefix: 'frontend/storybook-static/',
                 remoteDirectory: "www/storybook"
             )
@@ -86,7 +86,7 @@ stage('Build in Docker') {
                     stash includes: 'backend/target/release/backend', name: 'backend'
 
                     sh 'cargo doc --document-private-items'
-                    stash includes: 'backend/target/doc/', name: 'cargodoc'
+                    stash includes: 'backend/target/doc/**/*', name: 'cargodoc'
                 }
             }
         }
