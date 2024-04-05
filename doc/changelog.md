@@ -59,6 +59,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fix the markdown so that mdbook tests pass _(Daniel Steinkogler)_
 - _()_
 - _()_
+- Improved the scraper: Fixed a bug and improved cleaning for German common names _(temmey)_
+- Scraper: Separate fetching of German common names from merging datasets _(Christoph Schreiner)_
+- Scraper: Allow applying overrides to merged dataset _(Christoph Schreiner)_
 - Make map geometry viewable and editable _(Moritz)_
 - _()_
 - Prevent propagating enft key on markdown editor _(Daniel Steinkogler)_
@@ -66,6 +69,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - Add key combinations for map geometry _(Daniel Steinkogler)_
+- Add documentation for adding a new field to an entity _(Christoph Schreiner)_
 - _()_
 - Add tooltips to show keybindings _(Daniel Steinkogler)_
 - _()_
@@ -88,7 +92,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Added planting notes to planting details _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Added keybinding configuration for macOS _(Daniel Steinkogler)_
 - Up the rust version to 1.74 _(4ydan)_
 - Display a rectangle for area of plantings _(Paul)_
 - Refactor the planting api to batch processing _(Paul, Jannis)_
@@ -96,7 +100,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Area of plants resizing. Rename width & height of plantings to `size_x` & `size_y`. Remove `scale` from plantings. _(Paul)_
 - Refactor transformer into a separate store _(Paul)_
 - Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
-- _()_
+- Fix broken dark mode for LanguageSwitcher, SelectMenu & PaginatedSelectMenu _(Lukas Anton Lakits)_
 - _()_
 
 ## 0.3.6 - 21.11.2023 (151 commits)

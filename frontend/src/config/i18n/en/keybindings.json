@@ -1,6 +1,16 @@
 {
-  "Delete": "Del",
-  "Escape": "Esc",
-  "Shift": "Shift",
-  "Control": "Ctrl"
+  "windows_linux": {
+    "Delete": "Del",
+    "Escape": "Esc",
+    "Shift": "Shift",
+    "Control": "Ctrl"
+  },
+  "macos": {
+    "Delete": "Del",
+    "Escape": "Esc",
+    "Shift": "Shift",
+    "Control": "Ctrl",
+    "Cmd": "Command",
+    "Opt": "Option"
+  }
 }
