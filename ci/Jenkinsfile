@@ -231,7 +231,10 @@ timeout(time: 2, unit: 'HOURS') {
                     ),
                 unstash('schema.rs'),
                 def beforeChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
-                'migration-test': runDockerPostgresSidecar(testMigrations(), ['backend/src/schema.rs'], ['schema.rs']),
+                'migrationtest': runDockerPostgresSidecar(
+                    testMigrations(), 
+                    ['backend/src/schema.rs'], 
+                    ['schema.rs']),
                 unstash('schema.rs'),
                 def afterChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
                 if (beforeChecksum != afterChecksum) {
