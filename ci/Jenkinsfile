@@ -208,6 +208,7 @@ timeout(time: 2, unit: 'HOURS') {
                 'backend/src/schema.rs', 'frontend/src/api_types/definitions.ts'
             ]
             List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
+
             parallel(
                 'pre-commit': runDocker(
                     './ci/scripts/check-pre-commit.sh',
@@ -229,17 +230,6 @@ timeout(time: 2, unit: 'HOURS') {
                     ['backend/src/schema.rs'],
                     ['schema.rs']
                     ),
-                unstash('schema.rs'),
-                def beforeChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
-                'migrationtest': runDockerPostgresSidecar(
-                    testMigrations(), 
-                    ['backend/src/schema.rs'], 
-                    ['schema.rs']),
-                unstash('schema.rs'),
-                def afterChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
-                if (beforeChecksum != afterChecksum) {
-                    throw new SchemaModifiedException()
-                }
 
                 'changelog': runDocker(
                     './ci/scripts/check-changelog.sh',
@@ -249,6 +239,21 @@ timeout(time: 2, unit: 'HOURS') {
                     ),
                 failFast: true
             )
+
+            unstash('schema.rs')
+            def beforeChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
+
+            runDockerPostgresSidecar(
+                testMigrations(), 
+                ['backend/src/schema.rs'], 
+                ['schema.rs']
+            )
+
+            unstash('schema.rs')
+            def afterChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
+            if (beforeChecksum != afterChecksum) {
+                throw new SchemaModifiedException()
+            }
         }
 
         stage('Test and Build') {
