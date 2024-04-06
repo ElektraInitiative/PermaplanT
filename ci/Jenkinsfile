@@ -231,7 +231,7 @@ timeout(time: 2, unit: 'HOURS') {
                     ['schemaold.rs']
                     ),
 
-                runDockerPostgresSidecar(
+                'redomigration': runDockerPostgresSidecar(
                     testMigrations(), 
                     ['backend/src/schema.rs'], 
                     ['schemanew.rs']
