@@ -231,6 +231,12 @@ timeout(time: 2, unit: 'HOURS') {
                     ['schemaold.rs']
                     ),
 
+                runDockerPostgresSidecar(
+                    testMigrations(), 
+                    ['backend/src/schema.rs'], 
+                    ['schemanew.rs']
+                    ),
+
                 'changelog': runDocker(
                     './ci/scripts/check-changelog.sh',
                     'permaplant-node:ci',
@@ -238,11 +244,6 @@ timeout(time: 2, unit: 'HOURS') {
                     true
                     ),
                 failFast: true
-            )
-            runDockerPostgresSidecar(
-                testMigrations(), 
-                ['backend/src/schema.rs'], 
-                ['schemanew.rs']
             )
 
             node('docker') {
