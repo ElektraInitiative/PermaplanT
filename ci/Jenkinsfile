@@ -321,6 +321,7 @@ if (env.BRANCH_NAME.startsWith('PR')){
                     fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
                     sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
                     deleteDir()
+                    }
                 }
             }
         }
