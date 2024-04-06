@@ -208,7 +208,6 @@ timeout(time: 2, unit: 'HOURS') {
                 'backend/src/schema.rs', 'frontend/src/api_types/definitions.ts'
             ]
             List<String> schemaStashdir = ['schema.rs', 'definitions.ts']
-
             parallel(
                 'pre-commit': runDocker(
                     './ci/scripts/check-pre-commit.sh',
@@ -253,6 +252,8 @@ timeout(time: 2, unit: 'HOURS') {
                 def afterChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
                 if (beforeChecksum != afterChecksum) {
                     throw new SchemaModifiedException()
+                } else {
+                    echo 'Schema.rs was not modified during migration tests.'
                 }
             }
         }
