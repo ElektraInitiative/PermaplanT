@@ -286,9 +286,7 @@ lock("${env.NODE_NAME}-exclusive") {
                 dir('scraper') {
                     sh 'npm ci'
                     sh 'mkdir ./data/'
-                    sh 'cp /nextcloud/Database/scraper-data/mergedDatasets.csv ./data/'
-                    sh 'cp /nextcloud/Database/scraper-data/Companions.csv ./data/'
-                    sh 'cp /nextcloud/Database/scraper-data/Antagonist.csv ./data/'
+                    sh 'cp /data/*.csv ./data/'
                     sh 'npm run insert'
                     sh 'rm -rf ./data/'
                     sh 'rm -rf ./node_modules/'
