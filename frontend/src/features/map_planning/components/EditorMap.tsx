@@ -1,7 +1,8 @@
 import i18next from 'i18next';
 import Konva from 'konva';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Layer } from 'react-konva';
 import { ShepherdTourContext } from 'react-shepherd';
 import { toast } from 'react-toastify';
 import { GainedBlossomsDto, LayerDto, LayerType } from '@/api_types/definitions';
@@ -14,6 +15,9 @@ import {
 } from '@/config/keybindings';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
+import DrawingLayer from '@/features/map_planning/layers/drawing/DrawingLayer';
+import { DrawingLayerLeftToolbar } from '@/features/map_planning/layers/drawing/DrawingLayerLeftToolbar';
+import DrawingLayerRightToolbar from '@/features/map_planning/layers/drawing/DrawingLayerRightToolbar';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
@@ -27,9 +31,6 @@ import { gainBlossom } from '../api/gainBlossom';
 import { useCompleteTour, useReenableTour } from '../hooks/tourHookApi';
 import BaseLayer from '../layers/base/BaseLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
-import DrawingLayer from '../layers/drawing/DrawingLayer';
-import { DrawingLayerLeftToolbar } from '../layers/drawing/DrawingLayerLeftToolbar';
-import DrawingLayerRightToolbar from '../layers/drawing/DrawingLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
@@ -331,26 +332,28 @@ export const EditorMap = ({ layers }: MapProps) => {
             }}
             selectable={isShapeSelectionEnabled}
           >
-            <BaseLayer
-              stageListenerRegister={baseStageListenerRegister}
-              opacity={layersState.base.opacity}
-              visible={layersState.base.visible}
-              listening={getSelectedLayerType() === LayerType.Base}
-            />
-            <DrawingLayer
-              visible={layersState.drawing.visible}
-              opacity={layersState.drawing.opacity}
-              listening={getSelectedLayerType() === LayerType.Drawing}
-            ></DrawingLayer>
-            <PlantsLayer
-              visible={layersState.plants.visible}
-              opacity={layersState.plants.opacity}
-              listening={getSelectedLayerType() === LayerType.Plants}
-            ></PlantsLayer>
-            <GridLayer
-              visible={layersState.grid.visible}
-              opacity={layersState.grid.opacity}
-            ></GridLayer>
+            <Layer listening={true}>
+              <BaseLayer
+                stageListenerRegister={baseStageListenerRegister}
+                opacity={layersState.base.opacity}
+                visible={layersState.base.visible}
+                listening={getSelectedLayerType() === LayerType.Base}
+              />
+              <DrawingLayer
+                visible={layersState.drawing.visible}
+                opacity={layersState.drawing.opacity}
+                listening={getSelectedLayerType() === LayerType.Drawing}
+              ></DrawingLayer>
+              <PlantsLayer
+                visible={layersState.plants.visible}
+                opacity={layersState.plants.opacity}
+                listening={getSelectedLayerType() === LayerType.Plants}
+              ></PlantsLayer>
+              <GridLayer
+                visible={layersState.grid.visible}
+                opacity={layersState.grid.opacity}
+              ></GridLayer>
+            </Layer>
           </BaseStage>
           <div>
             <TimelineDatePicker
