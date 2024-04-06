@@ -85,7 +85,11 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
+- Fixed German common names not being used when language is set to German _(Christoph Schreiner)_
+- _()_
+- _()_
 - CI: added deployment of doc and README links to doc _(Filip Markovic)_
+- _()_
 - Add decision for polygon libraries _(Daniel Steinkogler)_
 - _()_
 - Added keybindings for undo and redo _(Daniel Steinkogler)_
