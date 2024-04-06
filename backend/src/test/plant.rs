@@ -22,6 +22,8 @@ async fn test_get_all_plants_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
+                    &crate::schema::plants::common_name_de
+                        .eq(Some(vec![Some("Testpflanze".to_string())])),
                     &crate::schema::plants::spread.eq(50),
                 ))
                 .execute(conn)
@@ -72,6 +74,8 @@ async fn test_get_one_plant_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
+                    &crate::schema::plants::common_name_de
+                        .eq(Some(vec![Some("Testpflanze".to_string())])),
                     &crate::schema::plants::spread.eq(50),
                 ))
                 .execute(conn)
@@ -122,6 +126,8 @@ async fn test_search_plants_succeeds() {
                     &crate::schema::plants::unique_name.eq("Testia testia"),
                     &crate::schema::plants::common_name_en
                         .eq(Some(vec![Some("Testplant".to_string())])),
+                    &crate::schema::plants::common_name_de
+                        .eq(Some(vec![Some("Testpflanze".to_string())])),
                     &crate::schema::plants::spread.eq(50),
                 ))
                 .execute(conn)
