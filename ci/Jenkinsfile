@@ -228,7 +228,7 @@ timeout(time: 2, unit: 'HOURS') {
                 'migration': runDockerPostgresSidecar(
                     'make migration',
                     ['backend/src/schema.rs'],
-                    ['schema.rs']
+                    ['schemaold.rs']
                     ),
 
                 'changelog': runDocker(
@@ -239,20 +239,20 @@ timeout(time: 2, unit: 'HOURS') {
                     ),
                 failFast: true
             )
-
-            unstash('schema.rs')
-            def beforeChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
-
             runDockerPostgresSidecar(
                 testMigrations(), 
                 ['backend/src/schema.rs'], 
-                ['schema.rs']
+                ['schemanew.rs']
             )
 
-            unstash('schema.rs')
-            def afterChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
-            if (beforeChecksum != afterChecksum) {
-                throw new SchemaModifiedException()
+            node('docker') {
+                unstash('schemaold.rs')
+                def beforeChecksum = sh(script: "sha256sum backend/src/schemaold.rs", returnStdout: true).trim()
+                unstash('schemanew.rs')
+                def afterChecksum = sh(script: "sha256sum backend/src/schemanew.rs", returnStdout: true).trim()
+                if (beforeChecksum != afterChecksum) {
+                    throw new SchemaModifiedException()
+                }
             }
         }
 
