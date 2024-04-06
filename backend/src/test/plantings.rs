@@ -4,7 +4,7 @@ use std::ops::Add;
 
 use actix_http::StatusCode;
 use actix_web::{http::header, test};
-use chrono::{Days, NaiveDate};
+use chrono::{Days, NaiveDate, Utc};
 use diesel_async::{scoped_futures::ScopedFutureExt, RunQueryDsl};
 use uuid::Uuid;
 
@@ -12,9 +12,7 @@ use crate::{
     model::{
         dto::{
             core::{ActionDtoWrapper, TimelinePage},
-            plantings::{
-                DeletePlantingDto, MovePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto,
-            },
+            plantings::{DeletePlantingDto, MovePlantingDto, PlantingDto, UpdatePlantingDto},
         },
         r#enum::layer_type::LayerType,
     },
@@ -124,8 +122,8 @@ async fn test_create_fails_with_invalid_layer() {
 
     let data = ActionDtoWrapper {
         action_id: Uuid::new_v4(),
-        dto: vec![NewPlantingDto {
-            id: Some(Uuid::new_v4()),
+        dto: vec![PlantingDto {
+            id: Uuid::new_v4(),
             layer_id: -1,
             plant_id: -1,
             x: 0,
@@ -136,6 +134,13 @@ async fn test_create_fails_with_invalid_layer() {
             add_date: None,
             seed_id: None,
             is_area: false,
+            created_at: Utc::now().naive_utc(),
+            created_by: Uuid::new_v4(),
+            modified_at: Utc::now().naive_utc(),
+            modified_by: Uuid::new_v4(),
+            remove_date: Some(Utc::now().date_naive()),
+            additional_name: None,
+            planting_notes: String::new(),
         }],
     };
 
@@ -173,8 +178,8 @@ async fn test_can_create_plantings() {
 
     let data = ActionDtoWrapper {
         action_id: Uuid::new_v4(),
-        dto: vec![NewPlantingDto {
-            id: Some(Uuid::new_v4()),
+        dto: vec![PlantingDto {
+            id: Uuid::new_v4(),
             layer_id: -1,
             plant_id: -1,
             x: 0,
@@ -185,6 +190,13 @@ async fn test_can_create_plantings() {
             add_date: None,
             seed_id: None,
             is_area: false,
+            created_at: Utc::now().naive_utc(),
+            created_by: Uuid::new_v4(),
+            modified_at: Utc::now().naive_utc(),
+            modified_by: Uuid::new_v4(),
+            remove_date: Some(Utc::now().date_naive()),
+            additional_name: None,
+            planting_notes: String::new(),
         }],
     };
 

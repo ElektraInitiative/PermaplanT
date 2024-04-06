@@ -58,7 +58,7 @@ pub async fn find(
     ),
     request_body = ActionDtoWrapperNewPlantings,
     responses(
-        (status = 201, description = "Create plantings", body = Vec<PlantingDto>)
+        (status = 201, description = "Create plantings", body = Vec<NewPlantingDto>)
     ),
     security(
         ("oauth2" = [])
@@ -75,7 +75,7 @@ pub async fn create(
 
     let ActionDtoWrapper { action_id, dto } = new_plantings.into_inner();
 
-    let created_plantings = plantings::create(dto, &app_data).await?;
+    let created_plantings = plantings::create(dto, map_id, user_info.id, &app_data).await?;
 
     app_data
         .broadcaster
@@ -116,7 +116,7 @@ pub async fn update(
 
     let ActionDtoWrapper { action_id, dto } = update_planting.into_inner();
 
-    let updated_plantings = plantings::update(dto.clone(), &app_data).await?;
+    let updated_plantings = plantings::update(dto.clone(), map_id, user_info.id, &app_data).await?;
 
     let action = match &dto {
         UpdatePlantingDto::Transform(dto) => {
@@ -169,7 +169,7 @@ pub async fn delete(
 
     let ActionDtoWrapper { action_id, dto } = delete_planting.into_inner();
 
-    plantings::delete_by_ids(dto.clone(), &app_data).await?;
+    plantings::delete_by_ids(dto.clone(), map_id, user_info.id, &app_data).await?;
 
     app_data
         .broadcaster

@@ -21,7 +21,6 @@ export const createTrackedMapSlice: StateCreator<
     undo: () => undo(set, get),
     redo: () => redo(set, get),
     __applyRemoteAction: (action: Action<unknown, unknown>) => applyAction(action, set, get),
-
     initPlantLayer: (plants: PlantingDto[]) => {
       set((state) => ({
         ...state,

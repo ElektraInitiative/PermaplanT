@@ -1,5 +1,6 @@
 //! Contains the implementation of [`Map`].
 
+use chrono::NaiveDateTime;
 use diesel::dsl::sql;
 use diesel::pg::Pg;
 use diesel::sql_types::Float;
@@ -20,7 +21,7 @@ use crate::model::entity::{UpdateMap, UpdateMapGeometry};
 use crate::schema::maps::name;
 use crate::{
     model::dto::{MapDto, NewMapDto},
-    schema::maps::{self, all_columns, is_inactive, owner_id, privacy},
+    schema::maps::{self, all_columns, created_by, is_inactive, privacy},
 };
 
 use super::{Map, NewMap};
@@ -28,7 +29,7 @@ use super::{Map, NewMap};
 impl Map {
     /// Get the top maps matching the search query.
     ///
-    /// Can be filtered by `is_inactive` and `owner_id` if provided in `search_parameters`.
+    /// Can be filtered by `is_inactive` and `created_by` if provided in `search_parameters`.
     /// This will be done with equals and is additional functionality for maps (when compared to plant search).
     ///
     /// Uses `pg_trgm` to find matches in `name`.
@@ -62,8 +63,8 @@ impl Map {
         if let Some(privacy_search) = search_parameters.privacy {
             query = query.filter(privacy.eq(privacy_search));
         }
-        if let Some(owner_id_search) = search_parameters.owner_id {
-            query = query.filter(owner_id.eq(owner_id_search));
+        if let Some(created_by_search) = search_parameters.created_by {
+            query = query.filter(created_by.eq(created_by_search));
         }
 
         let query = query
@@ -130,5 +131,22 @@ impl Map {
         let query = diesel::update(maps::table.find(id)).set(&map_update);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.get_result::<Self>(conn).await.map(Into::into)
+    }
+
+    /// Update modified metadate (`modified_at`, `modified_by`) of the map.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn update_modified_metadata(
+        map_id: i32,
+        user_id: Uuid,
+        time: NaiveDateTime,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<()> {
+        diesel::update(maps::table.find(map_id))
+            .set((maps::modified_at.eq(time), maps::modified_by.eq(user_id)))
+            .execute(conn)
+            .await?;
+        Ok(())
     }
 }

@@ -4,7 +4,7 @@ use crate::{
     error::ServiceError,
     model::{
         dto::{LayerDto, NewLayerDto},
-        r#enum::{layer_type::LayerType, privacy_option::PrivacyOption},
+        r#enum::layer_type::LayerType,
     },
     test::util::{init_test_app, init_test_database},
 };
@@ -15,46 +15,31 @@ use actix_web::{
     },
     test,
 };
-use chrono::Utc;
-use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
-use uuid::Uuid;
 
-use super::util::dummy_map_polygons::tall_rectangle;
+use super::util::data::{TestInsertableLayer, TestInsertableMap};
 
 async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceError> {
     diesel::insert_into(crate::schema::maps::table)
-        .values(vec![(
-            &crate::schema::maps::id.eq(-1),
-            &crate::schema::maps::name.eq("MyMap"),
-            &crate::schema::maps::creation_date.eq(Utc::now().date_naive()),
-            &crate::schema::maps::is_inactive.eq(false),
-            &crate::schema::maps::zoom_factor.eq(0),
-            &crate::schema::maps::honors.eq(0),
-            &crate::schema::maps::visits.eq(0),
-            &crate::schema::maps::harvested.eq(0),
-            &crate::schema::maps::owner_id.eq(Uuid::default()),
-            &crate::schema::maps::privacy.eq(PrivacyOption::Private),
-            &crate::schema::maps::geometry.eq(tall_rectangle()),
-        )])
+        .values(TestInsertableMap::default())
         .execute(conn)
         .await?;
     diesel::insert_into(crate::schema::layers::table)
         .values(vec![
-            (
-                &crate::schema::layers::id.eq(-1),
-                &crate::schema::layers::map_id.eq(-1),
-                &crate::schema::layers::type_.eq(LayerType::Plants),
-                &crate::schema::layers::name.eq("My Map"),
-                &crate::schema::layers::is_alternative.eq(false),
-            ),
-            (
-                &crate::schema::layers::id.eq(-2),
-                &crate::schema::layers::map_id.eq(-1),
-                &crate::schema::layers::type_.eq(LayerType::Plants),
-                &crate::schema::layers::name.eq("MyMap2"),
-                &crate::schema::layers::is_alternative.eq(true),
-            ),
+            TestInsertableLayer {
+                id: -1,
+                map_id: -1,
+                type_: LayerType::Plants,
+                name: "My Map".to_owned(),
+                is_alternative: false,
+            },
+            TestInsertableLayer {
+                id: -2,
+                map_id: -1,
+                type_: LayerType::Plants,
+                name: "My Map".to_owned(),
+                is_alternative: true,
+            },
         ])
         .execute(conn)
         .await?;
@@ -117,7 +102,7 @@ async fn test_create_layer_succeeds() {
         .set_json(NewLayerDto {
             map_id: -1,
             type_: LayerType::Base,
-            name: "MyBaseLayer".to_string(),
+            name: "MyBaseLayer".to_owned(),
             is_alternative: false,
         })
         .send_request(&app)
@@ -137,7 +122,7 @@ async fn test_create_layer_with_invalid_map_id_fails() {
         .set_json(NewLayerDto {
             map_id: -2,
             type_: LayerType::Base,
-            name: "MyBaseLayer2".to_string(),
+            name: "MyBaseLayer2".to_owned(),
             is_alternative: false,
         })
         .send_request(&app)

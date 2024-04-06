@@ -20,7 +20,7 @@ impl From<Seed> for SeedDto {
             quality: seed.quality,
             price: seed.price,
             notes: seed.notes,
-            owner_id: seed.owner_id,
+            created_by: seed.created_by,
             archived_at: seed.archived_at.map(|date| format!("{date}")),
         }
     }
@@ -42,7 +42,7 @@ impl From<(f32, Seed)> for SeedDto {
             quality: seed.quality,
             price: seed.price,
             notes: seed.notes,
-            owner_id: seed.owner_id,
+            created_by: seed.created_by,
             archived_at: seed.archived_at.map(|date| format!("{date}")),
         }
     }

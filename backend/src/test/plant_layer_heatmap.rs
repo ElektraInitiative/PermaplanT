@@ -32,38 +32,23 @@ async fn initial_db_values(
     polygon: Polygon<Point>,
 ) -> Result<(), ServiceError> {
     diesel::insert_into(crate::schema::maps::table)
-        .values((
-            &crate::schema::maps::id.eq(-1),
-            &crate::schema::maps::name.eq("Test Map: can search map"),
-            &crate::schema::maps::creation_date
-                .eq(NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!")),
-            &crate::schema::maps::is_inactive.eq(false),
-            &crate::schema::maps::zoom_factor.eq(100),
-            &crate::schema::maps::honors.eq(0),
-            &crate::schema::maps::visits.eq(0),
-            &crate::schema::maps::harvested.eq(0),
-            &crate::schema::maps::privacy.eq(PrivacyOption::Public),
-            &crate::schema::maps::owner_id.eq(Uuid::new_v4()),
-            &crate::schema::maps::geometry.eq(polygon),
-        ))
+        .values(TestInsertableMap {
+            id: -1,
+            name: "Test Map: can search map",
+            polygon,
+            ..Default::default()
+        })
         .execute(conn)
         .await?;
     diesel::insert_into(crate::schema::layers::table)
-        .values((
-            &crate::schema::layers::id.eq(-1),
-            &crate::schema::layers::map_id.eq(-1),
-            &crate::schema::layers::type_.eq(LayerType::Plants),
-            &crate::schema::layers::name.eq("Some name"),
-            &crate::schema::layers::is_alternative.eq(false),
-        ))
+        .values(TestInsertableLayer {
+            id: -1,
+            ..Default::default()
+        })
         .execute(conn)
         .await?;
     diesel::insert_into(crate::schema::plants::table)
-        .values((
-            &crate::schema::plants::id.eq(-1),
-            &crate::schema::plants::unique_name.eq("Testia testia"),
-            &crate::schema::plants::common_name_en.eq(Some(vec![Some("T".to_owned())])),
-        ))
+        .values(TestInsertablePlant::default())
         .execute(conn)
         .await?;
     Ok(())

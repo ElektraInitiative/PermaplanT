@@ -79,6 +79,11 @@ function usePlantLayerListeners(listening: boolean) {
         isArea: args.isArea,
         // This `satisfies` gives us type safety while omitting the `sizeX` and `sizeY` properties
         // they get set later in this function
+        modifiedAt: '',
+        modifiedBy: '',
+        createdAt: '',
+        createdBy: '',
+        plantingNotes: '',
       } satisfies Omit<
         ConstructorParameters<typeof CreatePlantAction>[0][number],
         'sizeX' | 'sizeY'

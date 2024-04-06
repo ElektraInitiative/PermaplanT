@@ -4,7 +4,6 @@
 import { v4 } from 'uuid';
 import {
   PlantingDto,
-  CreatePlantActionPayload,
   DeletePlantActionPayload,
   MovePlantActionPayload,
   TransformPlantActionPayload,
@@ -40,7 +39,7 @@ export class CreatePlantAction
     return this._ids;
   }
 
-  constructor(private readonly _data: CreatePlantActionPayload[], public actionId = v4()) {
+  constructor(private readonly _data: PlantingDto[], public actionId = v4()) {
     this._ids = _data.map(({ id }) => id);
   }
 

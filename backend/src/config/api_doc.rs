@@ -21,9 +21,8 @@ use crate::{
                 TimelinePagePlantingsDto,
             },
             plantings::{
-                MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
-                UpdateAddDatePlantingDto, UpdatePlantingDto, UpdatePlantingNoteDto,
-                UpdateRemoveDatePlantingDto,
+                MovePlantingDto, PlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
+                UpdatePlantingDto, UpdatePlantingNoteDto, UpdateRemoveDatePlantingDto,
             },
             timeline::{TimelineDto, TimelineEntryDto},
             BaseLayerImageDto, ConfigDto, Coordinates, GainedBlossomsDto, GuidedToursDto, LayerDto,
@@ -173,9 +172,8 @@ struct BaseLayerImagesApiDoc;
     ),
     components(
         schemas(
-            PlantingDto,
             TimelinePagePlantingsDto,
-            NewPlantingDto,
+            PlantingDto,
             UpdatePlantingDto,
             TransformPlantingDto,
             MovePlantingDto,

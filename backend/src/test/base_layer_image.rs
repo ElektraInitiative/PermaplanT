@@ -6,7 +6,7 @@ use crate::{
     error::ServiceError,
     model::{
         dto::{BaseLayerImageDto, UpdateBaseLayerImageDto},
-        r#enum::{layer_type::LayerType, privacy_option::PrivacyOption},
+        r#enum::layer_type::LayerType,
     },
     test::util::{init_test_app, init_test_database},
 };
@@ -17,30 +17,24 @@ use actix_web::{
     },
     test,
 };
-use chrono::Utc;
 use diesel::ExpressionMethods;
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncPgConnection, RunQueryDsl};
 use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
+
+use super::util::data::TestInsertableMap;
 
 async fn initial_db_values(
     conn: &mut AsyncPgConnection,
     polygon: Polygon<Point>,
 ) -> Result<(), ServiceError> {
     diesel::insert_into(crate::schema::maps::table)
-        .values(vec![(
-            &crate::schema::maps::id.eq(-1),
-            &crate::schema::maps::name.eq("MyMap"),
-            &crate::schema::maps::creation_date.eq(Utc::now().date_naive()),
-            &crate::schema::maps::is_inactive.eq(false),
-            &crate::schema::maps::zoom_factor.eq(0),
-            &crate::schema::maps::honors.eq(0),
-            &crate::schema::maps::visits.eq(0),
-            &crate::schema::maps::harvested.eq(0),
-            &crate::schema::maps::owner_id.eq(Uuid::default()),
-            &crate::schema::maps::privacy.eq(PrivacyOption::Private),
-            &crate::schema::maps::geometry.eq(polygon),
-        )])
+        .values(TestInsertableMap {
+            id: -1,
+            name: "MyMap".to_owned(),
+            geometry: polygon,
+            ..Default::default()
+        })
         .execute(conn)
         .await?;
     diesel::insert_into(crate::schema::layers::table)
