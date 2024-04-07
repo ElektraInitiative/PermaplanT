@@ -13,6 +13,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - pin python package versions for e2e tests #1200 _(4ydan)_
 - Remove variety from table seeds _(Jannis Adamek)_
 - Add timeline API that summarizes plantings #967 _(Jannis Adamek)_
+- Add migration to add drawing layer to existing maps #1234 _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
