@@ -291,6 +291,7 @@ lock("${env.NODE_NAME}-exclusive") {
                     sh 'npm run insert'
                     sh 'rm -rf ./data/'
                     sh 'rm -rf ./node_modules/'
+                }
             }
         }
     }
@@ -321,7 +322,6 @@ lock("${env.NODE_NAME}-exclusive") {
                 fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
                 sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
                 deleteDir()
-                }
             }
         }
     }
