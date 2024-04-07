@@ -13,6 +13,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - pin python package versions for e2e tests #1200 _(4ydan)_
 - Remove variety from table seeds _(Jannis Adamek)_
 - Add timeline API that summarizes plantings #967 _(Jannis Adamek)_
+- Add migration to add drawing layer to existing maps #1234 _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
@@ -85,6 +86,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: running pr deployment only on pr and not master branch _(Filip Markovic)_
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
+- Fixed German common names not being used when language is set to German _(Christoph Schreiner)_
+- _()_
+- _()_
+- CI: added deployment of doc and README links to doc _(Filip Markovic)_
 - _()_
 - Add decision for polygon libraries _(Daniel Steinkogler)_
 - _()_

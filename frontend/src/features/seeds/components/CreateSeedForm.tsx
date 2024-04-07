@@ -65,6 +65,8 @@ const CreateSeedForm = ({
 
   const [notes, setNotes] = useState<string | undefined>(undefined);
 
+  const { i18n } = useTranslation();
+
   useEffect(() => {
     if (initialPlant) {
       const common_name_en = initialPlant.common_name_en
@@ -141,7 +143,7 @@ const CreateSeedForm = ({
     const plant_options: SelectOption[] = page.results.map((plant) => {
       return {
         value: plant.id,
-        label: getNameFromPlant(plant),
+        label: getNameFromPlant(plant, i18n.language),
       };
     });
 
