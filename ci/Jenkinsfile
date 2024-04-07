@@ -257,75 +257,75 @@ timeout(time: 2, unit: 'HOURS') {
 }
 
 if (env.BRANCH_NAME.startsWith('PR')){
-    lock("${env.NODE_NAME}-exclusive") {
-        stage('Deploy PR') {
-            node('permaplant && pr') {
-                node_info()
+lock("${env.NODE_NAME}-exclusive") {
+    stage('Deploy PR') {
+        node('permaplant && pr') {
+            node_info()
 
-                checkout scm
+            checkout scm
 
-                echo "Workspace is '${WORKSPACE}'"
-                echo 'Ensure permaplant service is stopped'
-                sh 'sudo /usr/sbin/service permaplant stop'
+            echo "Workspace is '${WORKSPACE}'"
+            echo 'Ensure permaplant service is stopped'
+            sh 'sudo /usr/sbin/service permaplant stop'
 
-                withEnv(['DATABASE_URL=postgres://permaplant:permaplant@127.0.0.1/permaplant']) {
-                    echo 'Resetting the CI DB ...'
-                    sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
+            withEnv(['DATABASE_URL=postgres://permaplant:permaplant@127.0.0.1/permaplant']) {
+                echo 'Resetting the CI DB ...'
+                sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
-                    echo 'Unstash Artifacts'
-                    unstash 'schema.rs'
-                    unstash 'frontend'
-                    unstash 'backend'
-                    unstash 'storybook'
-                    unstash 'typedoc'
-                    unstash 'mdbook'
+                echo 'Unstash Artifacts'
+                unstash 'schema.rs'
+                unstash 'frontend'
+                unstash 'backend'
+                unstash 'storybook'
+                unstash 'typedoc'
+                unstash 'mdbook'
 
-                    echo 'Deploying to PR'
-                    sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
+                echo 'Deploying to PR'
+                sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
 
-                    echo 'Loading Data to PR'
-                    dir('scraper') {
-                        sh 'npm ci'
-                        sh 'mkdir ./data/'
-                        sh 'cp /data/*.csv ./data/'
-                        sh 'npm run insert'
-                        sh 'rm -rf ./data/'
-                        sh 'rm -rf ./node_modules/'
-                }
+                echo 'Loading Data to PR'
+                dir('scraper') {
+                    sh 'npm ci'
+                    sh 'mkdir ./data/'
+                    sh 'cp /data/*.csv ./data/'
+                    sh 'npm run insert'
+                    sh 'rm -rf ./data/'
+                    sh 'rm -rf ./node_modules/'
             }
         }
+    }
 
-        stage('E2E Tests') {
-            node('docker') {
-                node_info()
-                checkout scm
-                def target = 'https://pr.permaplant.net'
-                if (env.BRANCH_NAME == 'master') {
-                    echo 'Skipping E2E Tests for master'
-                    return
+    stage('E2E Tests') {
+        node('docker') {
+            node_info()
+            checkout scm
+            def target = 'https://pr.permaplant.net'
+            if (env.BRANCH_NAME == 'master') {
+                echo 'Skipping E2E Tests for master'
+                return
+            }
+            try {
+                docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
+                    wait_for_pr_db()
+                    sh 'make test-e2e'
                 }
-                try {
-                    docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
-                        wait_for_pr_db()
-                        sh 'make test-e2e'
-                    }
-                } catch (err) {
-                    echo "Error occurred during the e2eImage.inside block: ${err}"
-                    // rethrow so build fails
-                    // groovylint-disable-next-line
-                    throw err;
-                } finally {
-                    archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
-                    archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,  allowEmptyArchive: true
-                    cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
-                    fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
-                    sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
-                    deleteDir()
-                    }
+            } catch (err) {
+                echo "Error occurred during the e2eImage.inside block: ${err}"
+                // rethrow so build fails
+                // groovylint-disable-next-line
+                throw err;
+            } finally {
+                archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
+                archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,  allowEmptyArchive: true
+                cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
+                fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
+                sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
+                deleteDir()
                 }
             }
         }
     }
+}
 }
 
 // Deploying to Dev only happens on branch "master"
