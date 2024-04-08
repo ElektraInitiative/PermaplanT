@@ -81,7 +81,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
 - _()_
-- _()_
+- Added PermaplanT logo to link previews in meta tag and replaced default React logo _(Andrei Dinu)_
 - wrap api queries using react query _(Daniel Steinkogler)_
 - _()_
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
