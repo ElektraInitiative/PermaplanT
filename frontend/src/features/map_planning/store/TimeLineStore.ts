@@ -91,9 +91,6 @@ export const useTimelineStore = create<TimelineState>((set, get) => {
       const month = parsedDate.getMonth() + 1;
       const year = parsedDate.getFullYear();
 
-      console.log('increaseAddedEventsForDate', year, month, day);
-      console.log(get().timeLineEvents.daily);
-
       set((state) => ({
         timeLineEvents: {
           ...state.timeLineEvents,
@@ -117,8 +114,6 @@ export const useTimelineStore = create<TimelineState>((set, get) => {
           }),
         },
       }));
-
-      console.log(get().timeLineEvents.daily);
     },
     decreaseRemovedEventsForDate: (date: string) => {
       const parsedDate = new Date(date);
