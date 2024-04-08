@@ -43,7 +43,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 25.03.2024 9:00 _(Markus Raab, Moritz)_
 - Added Meeting Agenda&Notes for 02.04.2024 9:00 _(Markus Raab, Lukas)_
 - _()_
-- _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
 - _()_
 - Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
@@ -68,6 +67,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Prevent propagating enft key on markdown editor _(Daniel Steinkogler)_
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
+- Refactoring of timeline state and add unit tests _(Daniel Steinkogler)_
 - _()_
 - Add key combinations for map geometry _(Daniel Steinkogler)_
 - Add documentation for adding a new field to an entity _(Christoph Schreiner)_
