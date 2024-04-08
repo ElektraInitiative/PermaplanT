@@ -141,6 +141,7 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
 
 const CompletePlantNameFromSeed = ({ seed }: { seed: SeedDto }) => {
   const { t } = useTranslation(['common']);
+  const { i18n } = useTranslation();
 
   const {
     data: plant,
@@ -159,7 +160,7 @@ const CompletePlantNameFromSeed = ({ seed }: { seed: SeedDto }) => {
       </div>
     );
   else if (hasPlantError) return <span>{t('common:error')}</span>;
-  else return <PlantNameFromSeedAndPlant plant={plant} seed={seed} />;
+  else return <PlantNameFromSeedAndPlant plant={plant} seed={seed} language={i18n.language} />;
 };
 
 export default SeedsOverviewList;

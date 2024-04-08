@@ -10,6 +10,7 @@ impl From<Plants> for PlantsSummaryDto {
             id: plants.id,
             unique_name: plants.unique_name,
             common_name_en: plants.common_name_en,
+            common_name_de: plants.common_name_de,
             spread: plants.spread,
         }
     }

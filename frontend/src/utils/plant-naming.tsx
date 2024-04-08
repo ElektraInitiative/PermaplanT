@@ -2,42 +2,54 @@ import { ReactElement } from 'react';
 import { PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 
 /**
- * Gets the common name from a PlantsSummaryDto.
+ * Gets the common name from a PlantsSummaryDto according to the language.
  *
- * German common names are currently not supported.
+ * Uses the english common name as a fallback, if no german common name is available.
+ * If no common name is available, an empty string is returned.
+ *
  * @param plant DTO containing the most essential information of a plant.
  */
-export function commonName(plant: PlantsSummaryDto): string {
-  const commonName = capitalizeCommonName(plant.common_name_en);
+export function getCommonName(plant: PlantsSummaryDto, language: string): string {
+  let commonName;
 
-  return hasCommonName(plant) ? commonName ?? '' : '';
+  if (language === 'de') {
+    commonName = capitalizeCommonName(plant.common_name_de);
+  }
+
+  // use english common name as a fallback or if language is set to english
+  commonName = commonName ? commonName : capitalizeCommonName(plant.common_name_en);
+
+  return commonName ? commonName : '';
 }
 
 /**
  * Generate a partial plant name from a PlantsSummaryDto.
+ * Chooses the common name according to the language
  * Format:
  * - "common name (unique name)"
  * - "unique name" if no common name is specified.
  *
- * German common names are currently not supported.
  * @param plant DTO containing the most essential information of a plant.
  */
-export function getNameFromPlant(plant: PlantsSummaryDto): string {
-  const commonName = capitalizeCommonName(plant.common_name_en);
+export function getNameFromPlant(plant: PlantsSummaryDto, language: string): string {
+  const commonName = getCommonName(plant, language);
 
   return hasCommonName(plant) ? `${commonName} (${plant.unique_name})` : plant.unique_name;
 }
 
 /**
  * Component representing an HTML formatted partial plant name.
+ * Chooses the common name according to the language
+ *
  * Format:
  * - "common name (<i>unique name</i>)"
  * - "unique name" if no common name is specified.
- *
- * German common names are currently not supported.
  */
-export function PlantNameFromPlant(props: { plant: PlantsSummaryDto }): ReactElement {
-  const commonName = capitalizeCommonName(props.plant.common_name_en);
+export function PlantNameFromPlant(props: {
+  plant: PlantsSummaryDto;
+  language: string;
+}): ReactElement {
+  const commonName = getCommonName(props.plant, props.language);
 
   return hasCommonName(props.plant) ? (
     <>
@@ -50,16 +62,21 @@ export function PlantNameFromPlant(props: { plant: PlantsSummaryDto }): ReactEle
 
 /**
  * Generate a complete plant name from a PlantsSummaryDto and SeedDto.
+ * Chooses the common name according to the language
+ *
  * Format:
  * - "common name - additional name (unique name)"
  * - "unique name - additional name" if no common name is specified.
  *
- * German common names are currently not supported.
  * @param plant DTO containing the most essential information of a plant.
  * @param seed DTO containing seed information.
  */
-export function getPlantNameFromSeedAndPlant(seed: SeedDto, plant: PlantsSummaryDto): string {
-  const commonName = capitalizeCommonName(plant.common_name_en);
+export function getPlantNameFromSeedAndPlant(
+  seed: SeedDto,
+  plant: PlantsSummaryDto,
+  language: string,
+): string {
+  const commonName = getCommonName(plant, language);
 
   return hasCommonName(plant)
     ? `${commonName} - ${seed.name} (${plant.unique_name})`
@@ -68,19 +85,21 @@ export function getPlantNameFromSeedAndPlant(seed: SeedDto, plant: PlantsSummary
 
 /**
  * Generate a complete plant name from a PlantsSummaryDto and its additional name.
+ * Chooses the common name according to the language
+ *
  * Format:
  * - "common name - additional name (unique name)"
  * - "unique name - additional name" if no common name is specified.
  *
- * German common names are currently not supported.
  * @param plant DTO containing the most essential information of a plant.
  * @param additionalName DTO containing seed information.
  */
 export function getPlantNameFromAdditionalNameAndPlant(
   additionalName: string,
   plant: PlantsSummaryDto,
+  language: string,
 ): string {
-  const commonName = capitalizeCommonName(plant.common_name_en);
+  const commonName = getCommonName(plant, language);
 
   return hasCommonName(plant)
     ? `${commonName} - ${additionalName} (${plant.unique_name})`
@@ -89,17 +108,18 @@ export function getPlantNameFromAdditionalNameAndPlant(
 
 /**
  * Component representing an HTML formatted complete plant name given a PlantsSummaryDto and SeedDto.
+ * Chooses the common name according to the language
+ *
  * Format:
  * - "common name - additional name (<i>unique name</i>)"
  * - "<i>unique name</i> - additional" if no common name is specified.
- *
- * German common names are currently not supported.
  */
 export function PlantNameFromSeedAndPlant(props: {
   seed: SeedDto;
   plant: PlantsSummaryDto;
+  language: string;
 }): ReactElement {
-  const commonName = capitalizeCommonName(props.plant.common_name_en);
+  const commonName = getCommonName(props.plant, props.language);
 
   return hasCommonName(props.plant) ? (
     <>
@@ -115,17 +135,18 @@ export function PlantNameFromSeedAndPlant(props: {
 
 /**
  * Component representing an HTML formatted complete plant name given a PlantsSummaryDto and additional name.
+ * Chooses the common name according to the language
+ *
  * Format:
  * - "common name - additional name (<i>unique name</i>)"
  * - "<i>unique name</i> - additional name" if no common name is specified.
- *
- * German common names are currently not supported.
  */
 export function PlantNameFromAdditionalNameAndPlant(props: {
   additionalName: string;
   plant: PlantsSummaryDto;
+  language: string;
 }): ReactElement {
-  const commonName = capitalizeCommonName(props.plant.common_name_en);
+  const commonName = getCommonName(props.plant, props.language);
 
   return hasCommonName(props.plant) ? (
     <>
