@@ -69,7 +69,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Prevent propagating enft key on markdown editor _(Daniel Steinkogler)_
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Fix link to Plant image for Openstreetmap _(Andrei Dinu)_
 - Add key combinations for map geometry _(Daniel Steinkogler)_
 - Add documentation for adding a new field to an entity _(Christoph Schreiner)_
 - _()_
