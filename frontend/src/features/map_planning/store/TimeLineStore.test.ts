@@ -4,7 +4,7 @@ import { useTimelineStore } from './TimeLineStore';
 vi.mock('@/config/axios');
 
 describe('TimeLineStore', () => {
-  it('increased added events from store', () => {
+  it('increase added events from store', () => {
     initializeTimeLineEvents();
 
     useTimelineStore.getState().increaseAddedEventsForDate('2022-01-01');
@@ -43,7 +43,7 @@ describe('TimeLineStore', () => {
     expect(timeLineState.timeLineEvents.yearly[1].added).toEqual(10);
   });
 
-  it('increased removed events from store', () => {
+  it('increase removed events from store', () => {
     initializeTimeLineEvents();
 
     useTimelineStore.getState().increaseRemovedEventsForDate('2022-01-01');
