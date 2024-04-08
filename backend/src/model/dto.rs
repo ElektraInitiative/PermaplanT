@@ -122,6 +122,8 @@ pub struct PlantsSummaryDto {
     pub unique_name: String,
     /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
     pub common_name_en: Option<Vec<Option<String>>>,
+    /// A list of common german names (E.g. "Brotweizen", "Sauerkirsche")
+    pub common_name_de: Option<Vec<Option<String>>>,
     //TODO: add icon_path: String
     /// How far a plant spreads (The 'width' of a plant) in cm
     pub spread: Option<i32>,
