@@ -108,6 +108,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
 - Fix broken dark mode for LanguageSwitcher, SelectMenu & PaginatedSelectMenu _(Lukas Anton Lakits)_
 - _()_
+- Fixed small issues in the documentation (typos/links/phrasing) _(Andrei Dinu)_
 
 ## 0.3.6 - 21.11.2023 (151 commits)
 
