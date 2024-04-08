@@ -83,7 +83,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Added PermaplanT logo to link previews in meta tag and replaced default React logo _(Andrei Dinu)_
 - wrap api queries using react query _(Daniel Steinkogler)_
-- _()_
+- CI: running pr deployment only on pr and not master branch _(Filip Markovic)_
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
 - _()_
 - Fixed German common names not being used when language is set to German _(Christoph Schreiner)_

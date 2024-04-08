@@ -293,6 +293,7 @@ timeout(time: 2, unit: 'HOURS') {
     }
 }
 
+if (env.BRANCH_NAME.startsWith('PR')){
 lock("${env.NODE_NAME}-exclusive") {
     stage('Deploy PR') {
         node('permaplant && pr') {
@@ -364,6 +365,7 @@ lock("${env.NODE_NAME}-exclusive") {
             }
         }
     }
+}
 }
 
 // Deploying to Dev only happens on branch "master"
