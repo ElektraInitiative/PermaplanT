@@ -65,7 +65,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Scraper: Separate fetching of German common names from merging datasets _(Christoph Schreiner)_
 - Scraper: Allow applying overrides to merged dataset _(Christoph Schreiner)_
 - Make map geometry viewable and editable _(Moritz)_
-- _()_
+- Improve documentation of schema.rs patch workflow. _(Jannis @horenso, Christoph @chr_schr)_
 - Prevent propagating enft key on markdown editor _(Daniel Steinkogler)_
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
