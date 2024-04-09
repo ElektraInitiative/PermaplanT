@@ -1,6 +1,8 @@
+import { t } from 'i18next';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Layer } from 'react-konva';
 import * as uuid from 'uuid';
 import {
@@ -15,6 +17,7 @@ import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
   createKeyBindingsAccordingToConfig,
+  useGetFormattedKeybindingDescriptionForAction,
 } from '@/config/keybindings';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CloseIcon from '@/svg/icons/close.svg?react';
@@ -152,6 +155,7 @@ function usePlantLayerListeners(listening: boolean) {
       }
 
       const position = getPositionForPlantPlacement(e);
+
       if (!position) {
         return;
       }
@@ -271,7 +275,6 @@ function usePlantLayerListeners(listening: boolean) {
       return;
     }
     const transformerActions = useTransformerStore.getState().actions;
-
     useMapStore.getState().stageRef.current?.on('click.placePlant', handleCreatePlanting);
     useMapStore.getState().stageRef.current?.on('click.unselectPlanting', handleUnselectPlanting);
     useMapStore.getState().stageRef.current?.on('mouseup.selectPlanting', handleSelectPlanting);
@@ -352,6 +355,7 @@ function PlantsLayer(props: PlantsLayerProps) {
 
 function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: SeedDto | null }) {
   const selectPlant = useMapStore((state) => state.selectPlantForPlanting);
+  const { i18n } = useTranslation();
 
   const keyHandlerActions: Record<string, () => void> = {
     exitPlantingMode: () => {
@@ -367,9 +371,9 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
     <>
       <div className="flex flex-row items-center justify-center">
         {seed ? (
-          <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
+          <PlantNameFromSeedAndPlant seed={seed} plant={plant} language={i18n.language} />
         ) : (
-          <PlantNameFromPlant plant={plant} />
+          <PlantNameFromPlant plant={plant} language={i18n.language} />
         )}
       </div>
       <div className="flex items-center justify-center">
@@ -377,8 +381,13 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
           className="m-2 h-8 w-8 border border-neutral-500 p-1"
           onClick={() => selectPlant(null)}
           data-tourid="placement_cancel"
+          title={useGetFormattedKeybindingDescriptionForAction(
+            KEYBINDINGS_SCOPE_PLANTS_LAYER,
+            'exitPlantingMode',
+            t('common:cancel'),
+          )}
         >
-          <CloseIcon></CloseIcon>
+          <CloseIcon />
         </IconButton>
       </div>
     </>

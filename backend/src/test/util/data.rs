@@ -71,6 +71,7 @@ pub struct TestInsertablePlant {
     pub id: i32,
     pub unique_name: String,
     pub common_name_en: Option<Vec<Option<String>>>,
+    pub common_name_de: Option<Vec<Option<String>>>,
 }
 
 impl Default for TestInsertablePlant {
@@ -79,6 +80,7 @@ impl Default for TestInsertablePlant {
             id: -1,
             unique_name: "Test Plant 1".to_owned(),
             common_name_en: Some(vec![Some("Testplant".to_owned())]),
+            common_name_de: Some(vec![Some("Testpflanze".to_owned())]),
         }
     }
 }

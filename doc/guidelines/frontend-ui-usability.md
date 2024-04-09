@@ -156,7 +156,7 @@ Messages shown to the user should strive to fulfill following criteria:
 - Headlines, Sub-headlines and Labels should be capitalized
 - **Minimize hyphenation** of words
 - English: **American English**
-- German: **Neue Rechtschreibung**
+- German: **Neue Rechtschreibung**, informal "du"
 - use **plural** to avoid gendering, i.e. use _we_/_they_, avoid _he_/_she_
 
 ## Error Messages

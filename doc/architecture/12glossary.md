@@ -72,9 +72,9 @@
   E.g. a variety can have a different height than the species it belongs to.
 - polyculture (aka companion planting, German: Mischkultur):  
   Mutually beneficial way of growing plants together.
-- relationship:  
-  Two plants are in a non-neutral relationship if they either enhance (companion)
-  or diminish (antagonist) each other's health and growth.
+- relation:
+  - Spatial: Plants are in a non-neutral relation if they either enhance (companion) or diminish (antagonist) each other's health and growth.
+  - Temporal: Plants are in a non-neutral relation if crop rotation is beneficial or destructive on the later plant's health and growth.
 - companion (to plant according polyculture):  
   Plants that should be planted together.
 - antagonist (to plant according polyculture):  
@@ -157,7 +157,7 @@
 - canvas context:
   - canvas node elements i.e. HTML representation of rectangle, circle, etc. on the canvas
 - map context:
-  - layers and their attributes e.g. warning layer and its visibility
+  - layers and their attributes e.g. relation layer and its visibility
 - reversible deletion vs undo-redo functionality:
   - reversible deletion: a database entity i.e. a whole map and plant is deleted and can be restored within a certain time
   - undo-redo functionality: a user can undo and redo changes in the map, but the history is local to the frontend and not stored in the database
@@ -174,6 +174,11 @@
 - endpoints:
   - The API endpoints that can be called in the backend.  
     Their documentation can be viewed using swagger-ui (see [here](../backend/03api_documentation.md) for reference).
+- entity:
+  - an object or concept of interest (map, user, plant, planting, etc.)
+  - contains all necessary attributes to describe its properties
+  - represented as table in the database
+  - each database row is a specific instance of the entity
 - keybinding:
   - The association of a specific action or function with a particular key or key combination.
 - keyhandling:

@@ -59,7 +59,6 @@ export function useImageFromBlob({
     if (isError) {
       if (showErrorMessage) {
         errorToastGrouped(t('nextcloudIntegration:load_image_failed'), {
-          autoClose: false,
           toastId: 'ncError',
         });
       }

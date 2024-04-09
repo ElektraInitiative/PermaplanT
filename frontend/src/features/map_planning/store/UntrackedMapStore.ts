@@ -88,6 +88,12 @@ export const createUntrackedMapSlice: StateCreator<
             measurePoint2: null,
             measureStep: 'inactive',
           },
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedDrawings: null,
+            selectedShape: null,
+            editMode: undefined,
+          },
         },
       },
     }));
@@ -189,6 +195,7 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+
   async updateTimelineDate(date) {
     const bounds = get().untrackedState.timelineBounds;
     const from = convertToDate(bounds.from);
@@ -221,6 +228,11 @@ export const createUntrackedMapSlice: StateCreator<
       date,
     );
 
+    const drawingsVisibleRelativeToTimelineDate = filterVisibleObjects(
+      get().trackedState.layers.drawing.loadedObjects,
+      date,
+    );
+
     set((state) => ({
       ...state,
       trackedState: {
@@ -231,9 +243,14 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.trackedState.layers.plants,
             objects: plantsVisibleRelativeToTimelineDate,
           },
+          drawing: {
+            ...state.trackedState.layers.drawing,
+            objects: drawingsVisibleRelativeToTimelineDate,
+          },
         },
       },
     }));
+
     clearInvalidSelection(get);
   },
   setTooltipText(content) {
@@ -416,6 +433,153 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+
+  disableShapeSelection() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        shapeSelectionEnabled: false,
+      },
+    }));
+  },
+
+  enableShapeSelection() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        shapeSelectionEnabled: true,
+      },
+    }));
+  },
+
+  drawingLayerSetSelectedColor(color) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedColor: color,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetFillEnabled(fill: boolean) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            fillEnabled: fill,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetSelectedStrokeWidth(strokeWidth) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedStrokeWidth: strokeWidth,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerActivateDrawingMode(shape) {
+    get().drawingLayerClearSelectedShape();
+    get().disableShapeSelection();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedShape: shape,
+            selectedDrawings: null,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetEditMode(drawingId, editMode) {
+    if (drawingId != undefined) {
+      get().disableShapeSelection();
+    }
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            editDrawingId: drawingId,
+            editMode: editMode,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerClearSelectedShape() {
+    get().enableShapeSelection();
+    get().clearStatusPanelContent();
+    useTransformerStore.getState().actions.clearSelection();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedShape: null,
+            editMode: undefined,
+          },
+        },
+      },
+    }));
+  },
+  selectDrawings(drawings, transformerStore?: TransformerStore) {
+    if (transformerStore) {
+      transformerStore.actions.enableAllAnchors();
+    }
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedDrawings: drawings,
+          },
+        },
+      },
+    }));
+  },
   getSelectedLayerType() {
     const selectedLayer = get().untrackedState.selectedLayer;
     if (typeof selectedLayer === 'object' && 'type_' in selectedLayer) return selectedLayer.type_;
@@ -447,8 +611,6 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   __removeLastAction({ actionId, entityId }) {
-    console.log('Removing action', actionId, entityId);
-
     set((state) => ({
       ...state,
       lastActions: state.lastActions.filter(

@@ -1,0 +1,23 @@
+{
+  "global": {
+    "cancelModal": ["Escape"],
+    "redo": ["Ctrl+y"],
+    "undo": ["Ctrl+z"]
+  },
+  "base_layer": {
+    "activatePolygonMovePoints": ["Shift+M"],
+    "activatePolygonAddPoints": ["Shift+A"],
+    "activatePolygonDeletePoints": ["Shift+D"]
+  },
+  "plants_layer": {
+    "exitPlantingMode": ["Escape"],
+    "deleteSelectedPlantings": ["Delete"]
+  },
+  "drawing_layer": {
+    "exitDrawingMode": ["Escape"],
+    "deleteSelectedDrawings": ["Delete"]
+  },
+  "_just_for_documentation_":{
+    "clearSearchInput": ["Escape"]
+  }
+}

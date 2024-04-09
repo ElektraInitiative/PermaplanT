@@ -7,10 +7,16 @@ import { toast } from 'react-toastify';
 import { GainedBlossomsDto, LayerDto, LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
+import {
+  KEYBINDINGS_SCOPE_GLOBAL,
+  createKeyBindingsAccordingToConfig,
+  useGetFormattedKeybindingDescriptionForAction,
+} from '@/config/keybindings';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
 import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
+import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
 import GridIcon from '@/svg/icons/grid-dots.svg?react';
@@ -21,6 +27,9 @@ import { gainBlossom } from '../api/gainBlossom';
 import { useCompleteTour, useReenableTour } from '../hooks/tourHookApi';
 import BaseLayer from '../layers/base/BaseLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
+import DrawingLayer from '../layers/drawing/DrawingLayer';
+import { DrawingLayerLeftToolbar } from '../layers/drawing/DrawingLayerLeftToolbar';
+import DrawingLayerRightToolbar from '../layers/drawing/DrawingLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
@@ -69,6 +78,9 @@ export const EditorMap = ({ layers }: MapProps) => {
 
   const { mutate: reenableTour } = useReenableTour();
   const { mutate: completeTour } = useCompleteTour();
+  const isShapeSelectionEnabled = useMapStore(
+    (state) => state.untrackedState.shapeSelectionEnabled,
+  );
 
   // Allow layers to listen for all events on the base stage.
   //
@@ -201,7 +213,10 @@ export const EditorMap = ({ layers }: MapProps) => {
         right: <BaseLayerRightToolbar />,
       },
       [LayerType.Plants]: { left: <PlantLayerLeftToolbar />, right: <PlantLayerRightToolbar /> },
-      [LayerType.Drawing]: { left: <div></div>, right: <div></div> },
+      [LayerType.Drawing]: {
+        left: <DrawingLayerLeftToolbar />,
+        right: <DrawingLayerRightToolbar />,
+      },
       [LayerType.Fertilization]: { left: <div></div>, right: <div></div> },
       [LayerType.Habitats]: { left: <div></div>, right: <div></div> },
       [LayerType.Hydrology]: { left: <div></div>, right: <div></div> },
@@ -225,6 +240,18 @@ export const EditorMap = ({ layers }: MapProps) => {
     return content[layerType];
   };
 
+  const keyHandlerActions: Record<string, () => void> = {
+    undo: undo,
+    redo: redo,
+  };
+
+  const keybindings = createKeyBindingsAccordingToConfig(
+    KEYBINDINGS_SCOPE_GLOBAL,
+    keyHandlerActions,
+  );
+
+  useKeyHandlers(keybindings, document, true, true);
+
   return (
     <>
       <div className="flex h-full justify-between">
@@ -238,7 +265,11 @@ export const EditorMap = ({ layers }: MapProps) => {
                   className={`${!canUndo ? 'opacity-50' : ''}`}
                   disabled={isReadOnlyMode || !canUndo}
                   onClick={() => undo()}
-                  title={t('toolboxTooltips:undo')}
+                  title={useGetFormattedKeybindingDescriptionForAction(
+                    KEYBINDINGS_SCOPE_GLOBAL,
+                    'undo',
+                    t('toolboxTooltips:undo'),
+                  )}
                   data-tourid="undo"
                   data-testid={TEST_IDS.UNDO_BUTTON}
                 >
@@ -249,7 +280,11 @@ export const EditorMap = ({ layers }: MapProps) => {
                   className={`${!canRedo ? 'opacity-50' : ''}`}
                   disabled={isReadOnlyMode || !canRedo}
                   onClick={() => redo()}
-                  title={t('toolboxTooltips:redo')}
+                  title={useGetFormattedKeybindingDescriptionForAction(
+                    KEYBINDINGS_SCOPE_GLOBAL,
+                    'redo',
+                    t('toolboxTooltips:redo'),
+                  )}
                   data-testid={TEST_IDS.REDO_BUTTON}
                 >
                   <RedoIcon></RedoIcon>
@@ -294,6 +329,7 @@ export const EditorMap = ({ layers }: MapProps) => {
               stageMouseWheelListeners,
               stageClickListeners,
             }}
+            selectable={isShapeSelectionEnabled}
           >
             <BaseLayer
               stageListenerRegister={baseStageListenerRegister}
@@ -301,6 +337,11 @@ export const EditorMap = ({ layers }: MapProps) => {
               visible={layersState.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
             />
+            <DrawingLayer
+              visible={layersState.drawing.visible}
+              opacity={layersState.drawing.opacity}
+              listening={getSelectedLayerType() === LayerType.Drawing}
+            ></DrawingLayer>
             <PlantsLayer
               visible={layersState.plants.visible}
               opacity={layersState.plants.opacity}

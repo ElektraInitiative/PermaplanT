@@ -13,7 +13,6 @@ import {
   SELECTION_RECTANGLE_NAME,
   hideSelectionRectangle,
   initializeSelectionRectangle,
-  resetSelectionRectangleSize,
   selectIntersectingShapes,
   updateSelectionRectangle,
 } from '../utils/ShapesSelection';
@@ -190,7 +189,6 @@ export const BaseStage = ({
       if (e.target instanceof Konva.Shape) {
         return false;
       }
-
       return isStageSelectable && isSelectedLayerVisible;
     };
 
@@ -217,14 +215,12 @@ export const BaseStage = ({
   // Event listener responsible for stopping a possible stage-dragging mode
   // and for hiding the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
-    listeners?.stageMouseUpListeners.forEach((listener) => listener(e));
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
-    resetSelectionRectangleSize(setSelectionRectAttrs);
 
     if (selectable) {
-      hideSelectionRectangle(setSelectionRectAttrs);
+      hideSelectionRectangle(setSelectionRectAttrs, selectionRectAttrs);
     }
   };
 
@@ -339,7 +335,10 @@ function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>): void {
 }
 
 function preventDraggingOfNonSelectedShapes(konvaEvent: KonvaEventObject<DragEvent>): void {
-  if (!useTransformerStore.getState().actions.isNodeSelected(konvaEvent.target)) {
+  if (
+    !konvaEvent.target.attrs.isControlElement &&
+    !useTransformerStore.getState().actions.isNodeSelected(konvaEvent.target)
+  ) {
     konvaEvent.target.stopDrag();
   }
 }

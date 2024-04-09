@@ -19,6 +19,8 @@ pub mod base_layer_images_impl;
 pub mod blossoms_impl;
 pub mod coordinates_impl;
 pub mod core;
+pub mod drawings;
+pub mod drawings_impl;
 pub mod guided_tours_impl;
 pub mod layer_impl;
 pub mod map_impl;
@@ -120,6 +122,8 @@ pub struct PlantsSummaryDto {
     pub unique_name: String,
     /// A list of common english names (E.g. "Bread wheat", "Sour cherry")
     pub common_name_en: Option<Vec<Option<String>>>,
+    /// A list of common german names (E.g. "Brotweizen", "Sauerkirsche")
+    pub common_name_de: Option<Vec<Option<String>>>,
     //TODO: add icon_path: String
     /// How far a plant spreads (The 'width' of a plant) in cm
     pub spread: Option<i32>,

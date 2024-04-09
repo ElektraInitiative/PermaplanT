@@ -8,10 +8,10 @@ import {
   DeletePlantActionPayload,
   MovePlantActionPayload,
   TransformPlantActionPayload,
-  UpdatePlantingAddDateActionPayload,
-  UpdatePlantingRemoveDateActionPayload,
   UpdatePlantingAdditionalNamePayload,
   UpdatePlantingNoteActionPayload,
+  UpdateAddDateActionPayload,
+  UpdateRemoveDateActionPayload,
 } from '@/api_types/definitions';
 import updateAddDatePlanting, {
   createPlanting,
@@ -23,6 +23,12 @@ import updateAddDatePlanting, {
 } from '../../api/plantingApi';
 import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
+import {
+  decreaseAddedPlantsForDate,
+  increaseAddedPlantsForDate,
+  timlineEventsUpdateAdedDate,
+  timlineEventsUpdateRemoveDate,
+} from '../../utils/TimelineEventsHelper';
 import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
 
 export class CreatePlantAction
@@ -47,6 +53,7 @@ export class CreatePlantAction
 
   apply(state: TrackedMapState): TrackedMapState {
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+    increaseAddedPlantsForDate(this._data[0].addDate || timelineDate);
 
     return {
       ...state,
@@ -96,6 +103,15 @@ export class DeletePlantAction
   }
 
   apply(state: TrackedMapState): TrackedMapState {
+    for (const deleteActionPayload of this._data) {
+      const plant = state.layers.plants.loadedObjects.find(
+        (obj) => obj.id === deleteActionPayload.id,
+      );
+      if (plant?.addDate) {
+        decreaseAddedPlantsForDate(plant.addDate);
+      }
+    }
+
     return {
       ...state,
       layers: {
@@ -252,10 +268,7 @@ export class UpdateAddDatePlantAction
 {
   private readonly _ids: string[];
 
-  constructor(
-    private readonly _data: UpdatePlantingAddDateActionPayload[],
-    public actionId = v4(),
-  ) {
+  constructor(private readonly _data: UpdateAddDateActionPayload[], public actionId = v4()) {
     this._ids = this._data.map(({ id }) => id);
   }
 
@@ -294,6 +307,15 @@ export class UpdateAddDatePlantAction
     };
 
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+
+    for (const addDateActionPayload of this._data) {
+      const plant = state.layers.plants.loadedObjects.find(
+        (obj) => obj.id === addDateActionPayload.id,
+      );
+      if (plant?.addDate && addDateActionPayload.addDate) {
+        timlineEventsUpdateAdedDate(plant.addDate, addDateActionPayload.addDate);
+      }
+    }
 
     return {
       ...state,
@@ -390,10 +412,7 @@ export class UpdateRemoveDatePlantAction
 {
   private readonly _ids: string[];
 
-  constructor(
-    private readonly _data: UpdatePlantingRemoveDateActionPayload[],
-    public actionId = v4(),
-  ) {
+  constructor(private readonly _data: UpdateRemoveDateActionPayload[], public actionId = v4()) {
     this._ids = _data.map(({ id }) => id);
   }
 
@@ -429,6 +448,13 @@ export class UpdateRemoveDatePlantAction
     };
 
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
+
+    for (const removeDateActionPayload of this._data) {
+      const plant = state.layers.plants.loadedObjects.find(
+        (obj) => obj.id === removeDateActionPayload.id,
+      );
+      timlineEventsUpdateRemoveDate(plant?.removeDate, removeDateActionPayload.removeDate);
+    }
 
     return {
       ...state,

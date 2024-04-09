@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import { useTranslation } from 'react-i18next';
 import { PlantsSummaryDto } from '@/api_types/definitions';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import defaultImageUrl from '@/svg/plant.svg';
@@ -20,6 +21,7 @@ export function PlantListItem({
   const highlightedClass = isHighlighted
     ? 'text-primary-400 stroke-primary-400 ring-4 ring-primary-300 '
     : undefined;
+  const { i18n } = useTranslation();
 
   return (
     <li
@@ -40,7 +42,7 @@ export function PlantListItem({
           showErrorMessage={false}
         />
         <div className="text-left">
-          <PlantNameFromPlant plant={plant} />
+          <PlantNameFromPlant plant={plant} language={i18n.language} />
         </div>
       </button>
     </li>

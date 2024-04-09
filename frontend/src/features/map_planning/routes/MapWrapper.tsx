@@ -1,18 +1,22 @@
 import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ShepherdTour } from 'react-shepherd';
 import { LayerType, LayerDto } from '@/api_types/definitions';
 import { createAPI } from '@/config/axios';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { EditorMap } from '../components/EditorMap';
 import {
   useBaseLayer,
+  useDrawingLayer,
   useGetLayers,
   useInvalidateMapQueries,
   useMap,
   usePlantLayer,
 } from '../hooks/mapEditorHookApi';
 import { useTourStatus } from '../hooks/tourHookApi';
+import useGetTimeLineData from '../hooks/useGetTimelineData';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
@@ -26,14 +30,53 @@ function getDefaultLayer(layerType: LayerType, layers?: LayerDto[]) {
   return layers?.find((l) => l.type_ === layerType && !l.is_alternative);
 }
 
+const useInitializeTimeline = (mapId: number) => {
+  const timeLineVisibleYears = useMapStore((state) => state.untrackedState.timeLineVisibleYears);
+  const timeLineEvents = useGetTimeLineData(
+    mapId,
+    timeLineVisibleYears.from,
+    timeLineVisibleYears.to,
+  );
+
+  useEffect(() => {
+    if (timeLineEvents) {
+      useMapStore.setState((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          timeLineEvents: {
+            daily: timeLineEvents.daily,
+            monthly: timeLineEvents.monthly,
+            yearly: timeLineEvents.yearly,
+          },
+        },
+      }));
+    }
+  }, [timeLineEvents]);
+
+  return timeLineEvents;
+};
+
 /**
  * Hook that initializes the map by fetching all map data, layers and layer elements.
  */
 function useInitializeMap() {
   const mapId = useMapId();
-  const { data: layers } = useGetLayers(mapId);
   const { data: map } = useMap(mapId);
+  const { data: layers, error } = useGetLayers(mapId);
+  const { t } = useTranslation(['layers']);
 
+  if (error) {
+    console.error(error);
+    errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
+  }
+
+  if (error) {
+    console.error(error);
+    errorToastGrouped(t('layers:error_fetching_layers'), { autoClose: false });
+  }
+
+  const timeLineData = useInitializeTimeline(mapId);
   useEffect(() => {
     if (!layers) return;
 
@@ -45,12 +88,19 @@ function useInitializeMap() {
 
   const plantLayer = getDefaultLayer(LayerType.Plants, layers);
   const baseLayer = getDefaultLayer(LayerType.Base, layers);
+  const drawingLayer = getDefaultLayer(LayerType.Drawing, layers);
 
   // The casts are fine because we know that the queries only execute once they are enabled.
   usePlantLayer({
     mapId,
     layerId: plantLayer?.id as number,
     enabled: Boolean(plantLayer),
+  });
+
+  useDrawingLayer({
+    mapId,
+    layerId: drawingLayer?.id as number,
+    enabled: Boolean(drawingLayer),
   });
 
   useBaseLayer({
@@ -89,7 +139,7 @@ function useInitializeMap() {
     }));
   }, [map]);
 
-  const isLoading = !layers || !map;
+  const isLoading = !layers || !map || !timeLineData;
 
   if (isLoading) {
     return null;
