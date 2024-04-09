@@ -70,8 +70,6 @@ export function SingleDrawingAttributeForm({
   onFillPatternChange,
   isReadOnlyMode,
 }: EditSingleDrawingProps) {
-  console.log('drawing', drawing);
-
   return (
     <div className="flex flex-col gap-2 p-2">
       <DrawingAttributeEditForm

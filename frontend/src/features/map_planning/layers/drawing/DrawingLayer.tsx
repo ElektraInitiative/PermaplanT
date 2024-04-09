@@ -103,9 +103,6 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const mapScale = useMapStore.getState().stageRef.current?.scale();
 
-  const fillPatternScaleX = mapScale == undefined ? 1 : 1 / mapScale.x;
-  const fillPatternScaleY = mapScale == undefined ? 1 : 1 / mapScale.y;
-
   const selectDrawings = useMapStore((state) => state.selectDrawings);
 
   useDrawingLayerKeyListeners();
@@ -806,6 +803,12 @@ function DrawingLayer(props: DrawingLayerProps) {
   );
 
   useEffect(() => {
+    if (selectedShape != DrawingShapeType.Text && newLabelText) {
+      if (newLabelText.text.length > 0) {
+        createTextLabel(newLabelText);
+      }
+      setNewLabelText(undefined);
+    }
     if (selectedShape != DrawingShapeType.Image && newImage) {
       setNewImage(undefined);
     }
@@ -912,8 +915,6 @@ function DrawingLayer(props: DrawingLayerProps) {
             stroke={line.color}
             fillPattern={line.fillPattern}
             fill={line.fillPattern == 'fill' ? line.color : undefined}
-            fillPatternScaleX={fillPatternScaleX}
-            fillPatternScaleY={fillPatternScaleY}
             fillPatternImage={getFillPattern(line.fillPattern, line.color)}
             fillPatternRepeat="repeat"
             closed={line.fillPattern !== 'none'}
@@ -966,8 +967,6 @@ function DrawingLayer(props: DrawingLayerProps) {
             height={rectangle.properties.height}
             stroke={rectangle.color}
             fill={rectangle.fillPattern == 'fill' ? rectangle.color : undefined}
-            fillPatternScaleX={fillPatternScaleX}
-            fillPatternScaleY={fillPatternScaleY}
             fillPatternImage={getFillPattern(rectangle.fillPattern, rectangle.color)}
             fillPatternRepeat="repeat"
             strokeWidth={rectangle.strokeWidth}
@@ -991,8 +990,6 @@ function DrawingLayer(props: DrawingLayerProps) {
             strokeWidth={previewRectangle.strokeWidth}
             fill={previewRectangle.fillPattern == 'fill' ? previewRectangle.color : undefined}
             fillPatternImage={getFillPattern(previewRectangle.fillPattern, previewRectangle.color)}
-            fillPatternScaleX={fillPatternScaleX}
-            fillPatternScaleY={fillPatternScaleY}
             fillPatternRepeat="repeat"
           ></Rect>
         )}
@@ -1013,8 +1010,6 @@ function DrawingLayer(props: DrawingLayerProps) {
             radiusX={ellipse.properties.radiusX}
             radiusY={ellipse.properties.radiusY}
             fill={ellipse.fillPattern == 'fill' ? ellipse.color : undefined}
-            fillPatternScaleX={fillPatternScaleX}
-            fillPatternScaleY={fillPatternScaleY}
             fillPatternImage={getFillPattern(ellipse.fillPattern, ellipse.color)}
             fillPatternRepeat="repeat"
             stroke={ellipse.color}
@@ -1036,8 +1031,6 @@ function DrawingLayer(props: DrawingLayerProps) {
             stroke={previewEllipse.color}
             strokeWidth={previewEllipse.strokeWidth}
             fill={previewEllipse.fillPattern == 'fill' ? previewEllipse.color : undefined}
-            fillPatternScaleX={fillPatternScaleX}
-            fillPatternScaleY={fillPatternScaleY}
             fillPatternImage={getFillPattern(previewEllipse.fillPattern, previewEllipse.color)}
             fillPatternRepeat="repeat"
             fillPattern={previewEllipse.fillPattern}
