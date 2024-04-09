@@ -85,7 +85,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - wrap api queries using react query _(Daniel Steinkogler)_
 - CI: running pr deployment only on pr and not master branch _(Filip Markovic)_
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
-- CI: updated packages unsafe packages for release & fixed release github template _(4ydan, Filip Markovic)_
+- CI: updated unsafe packages for release & fixed release github template _(4ydan, Filip Markovic)_
 - _()_
 - Fixed German common names not being used when language is set to German _(Christoph Schreiner)_
 - _()_
