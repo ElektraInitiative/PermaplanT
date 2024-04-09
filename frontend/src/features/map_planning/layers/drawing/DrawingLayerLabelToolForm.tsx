@@ -35,10 +35,10 @@ export function DrawingLayerLabelToolForm() {
             onClick={() => {
               activateDrawingMode(DrawingShapeType.Text);
               setStatusPanelContent(
-                <DrawingLayerStatusPanelContent text={t('drawings:draw_bezier_polygon_hint')} />,
+                <DrawingLayerStatusPanelContent text={t('drawings:place_text_hint')} />,
               );
             }}
-            title={t('drawings:draw_bezier_polygon_tooltip')}
+            title={t('drawings:place_text_tooltip')}
           >
             <TextIcon></TextIcon>
           </IconButton>

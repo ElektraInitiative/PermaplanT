@@ -4,11 +4,13 @@
   "draw_ellipse_hint": "Benutze die Maus, um eine Ellipse aufzuziehen.",
   "draw_free_line_hint": "Benututze die Maus, um eine freie Linie zu zeichnen.",
   "draw_bezier_polygon_hint": "Klicken Sie mit der linken Maustaste, um einen Punkt zu setzen. Klicken Sie mit der rechten Maustaste, um die Zeichnung zu beenden.",
+  "place_text_hint": "Klicken Sie auf die Stelle, an der der Text platziert werden soll.",
   "edit_bezier_polygon_hint": "Klicken Sie mit der linken Maustaste, um einen Punkt zu setzen.",
   "delete_bezier_polygon_point_hint": "Klicken Sie auf einen Punkt, um ihn zu löschen.",
   "draw_rectangle_tooltip": "Rechteck zeichnen.",
   "draw_ellipse_tooltip": "Ellipse zeichnen.",
   "draw_free_line_tooltip": "Freie Linie zeichnen.",
+  "place_text_tooltip": "Text platzieren.",
   "draw_bezier_polygon_tooltip": "Freies Polygon zeichnen.",
   "edit_bezier_polygon_tooltip": "Freies Polygon bearbeiten.",
   "delete_bezier_polygon_point_tooltip": "Punkte löschen.",
@@ -24,5 +26,12 @@
   "edit_mode": "Bearbeitungsmodus aktivieren",
   "error_init_layer": "Entschuldigung, ich habe Schwierigkeiten gezeichnete Elemente von meinem Server zu erhalten. Bitte versuche es später erneut.",
   "fillPattern": "Füllmuster",
-  "select_image": "Bild auswählen"
+  "select_image": "Bild auswählen",
+  "drawing_layer_right_toolbar": {
+    "tab_headers":{
+      "shapes": "Formen",
+      "text": "Text",
+      "images": "Bilder"
+    }
+  }
 }

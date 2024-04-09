@@ -65,6 +65,7 @@ export function EditableTextInput({
         value={value}
         onChange={onChange}
         onKeyDown={onKeyDown}
+        rows={1}
         style={style}
       />
     </Html>
