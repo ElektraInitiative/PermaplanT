@@ -256,7 +256,19 @@ timeout(time: 2, unit: 'HOURS') {
                 'schema': runDockerPostgresSidecar(
                     'echo schema test', schemaStashsrc, schemaStashdir
                     ),
-                'migration': runDockerPostgresSidecar(testMigrations()),
+
+                'migration': runDockerPostgresSidecar(
+                    'make migration',
+                    ['backend/src/schema.rs'],
+                    ['schemaold.rs']
+                    ),
+
+                'redomigration': runDockerPostgresSidecar(
+                    testMigrations(), 
+                    ['backend/src/schema.rs'], 
+                    ['schemanew.rs']
+                    ),
+
                 'changelog': runDocker(
                     './ci/scripts/check-changelog.sh',
                     'permaplant-node:ci',
@@ -265,6 +277,18 @@ timeout(time: 2, unit: 'HOURS') {
                     ),
                 failFast: true
             )
+
+            node('docker') {
+                unstash('schemaold.rs')
+                def beforeChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
+                unstash('schemanew.rs')
+                def afterChecksum = sh(script: "sha256sum backend/src/schema.rs", returnStdout: true).trim()
+                if (beforeChecksum != afterChecksum) {
+                    throw new SchemaModifiedException()
+                } else {
+                    echo 'Schema.rs was not modified during migration tests.'
+                }
+            }
         }
 
         stage('Test and Build') {
@@ -437,6 +461,14 @@ class UnequalStashException extends Exception {
 
     UnequalStashException() {
         super('The stashed files count in stashsrc and stashdir lists must be equal.')
+    }
+
+}
+
+class SchemaModifiedException extends Exception {
+
+    SchemaModifiedException() {
+        super('Schema.rs was modified during migration tests.')
     }
 
 }
