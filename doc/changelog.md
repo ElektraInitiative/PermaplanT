@@ -73,7 +73,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - wrap api queries using react query _(Daniel Steinkogler)_
 - _()_
 - CI: unstash schemas in release pipeline in build-backend _(4ydan)_
-- _()_
+- CI: updated packages unsafe packages for release & fixed release github template _(4ydan, Filip Markovic)_
 - _()_
 - _()_
 - _()_
