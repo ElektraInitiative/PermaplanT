@@ -9,6 +9,39 @@ def wait_for_db() {
     }
 }
 
+// /**
+//  * Copy the documentation to doc.permaplant.net server
+//  */
+def copyDocumentation() {
+    echo 'Copying Documentation ...'
+    sshPublisher(
+        publishers: [
+        sshPublisherDesc(
+            verbose: true,
+            configName: 'doc.permaplant.net',
+            transfers: [
+            sshTransfer(
+                sourceFiles: 'backend/target/doc/**/*',
+                removePrefix: 'backend/target/doc/',
+                remoteDirectory: "www/cargodoc"
+            ),
+            sshTransfer(
+                sourceFiles: 'book/html/**/*',
+                removePrefix: 'book/html/',
+                remoteDirectory: "www/mdbook"
+            ),
+            sshTransfer(
+                sourceFiles: 'frontend/storybook-static/**/*',
+                removePrefix: 'frontend/storybook-static/',
+                remoteDirectory: "www/storybook"
+            )
+            ]
+        )
+        ]
+    )
+
+}
+
 stage('Build Schema') {
     node('docker') {
         node_info()
@@ -51,6 +84,9 @@ stage('Build in Docker') {
                     sh 'cd backend && cargo build --release'
 
                     stash includes: 'backend/target/release/backend', name: 'backend'
+
+                    sh 'cargo doc --document-private-items'
+                    stash includes: 'backend/target/doc/**/*', name: 'cargodoc'
                 }
             }
         }
@@ -113,8 +149,11 @@ stage('Deploy Prod') {
         unstash 'storybook'
         unstash 'typedoc'
         unstash 'mdbook'
+        unstash 'cargodoc'
 
         echo 'Deploying to Prod ...'
         sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
+
+        copyDocumentation()
     }
 }
