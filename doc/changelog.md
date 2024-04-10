@@ -88,7 +88,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: updated unsafe packages for release & fixed release github template _(4ydan, Filip Markovic)_
 - _()_
 - Fixed German common names not being used when language is set to German _(Christoph Schreiner)_
-- _()_
+- added manual testing for 0.3.7 (succesful) _(Filip Markovic)_
 - _()_
 - CI: added deployment of doc and README links to doc _(Filip Markovic)_
 - _()_
