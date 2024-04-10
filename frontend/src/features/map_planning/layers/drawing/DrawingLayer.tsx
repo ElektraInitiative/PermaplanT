@@ -19,7 +19,9 @@ import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
 import BezierPolygon from './shapes/BezierPolygon';
 import { EllipseProperties, FreeLineProperties, RectangleProperties } from './types';
 
-type DrawingLayerProps = LayerConfig;
+type DrawingLayerProps = Konva.LayerConfig & {
+  layerId: number;
+};
 
 type Rectangle = {
   color: string;
@@ -62,7 +64,7 @@ function useDrawingLayerKeyListeners() {
 }
 
 function DrawingLayer(props: DrawingLayerProps) {
-  const drawingObjects = useMapStore((state) => state.trackedState.layers.drawing.objects);
+  const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
   const transformerActions = useTransformerStore((state) => state.actions);
 
   const selectedShape = useMapStore((state) => state.untrackedState.layers.drawing.selectedShape);
@@ -77,6 +79,10 @@ function DrawingLayer(props: DrawingLayerProps) {
   useDrawingLayerKeyListeners();
 
   const { ...layerProps } = props;
+
+  const drawingObjects = useMapStore((state) => state.trackedState.layers.drawing.objects).filter(
+    (o) => o.layerId === props.layerId,
+  );
 
   const rectangles = drawingObjects
     .filter((object) => object.shapeType === DrawingShapeType.Rectangle)
@@ -125,7 +131,6 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const isDrawing = useRef(false);
 
-  const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const executeAction = useMapStore((state) => state.executeAction);
 

@@ -2,6 +2,7 @@ import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
+import { LayerDto, LayerType } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { convertToDate } from '../utils/date-utils';
@@ -98,35 +99,71 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-  updateLayerVisible(layerName, visible) {
-    set((state) => ({
-      ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        layers: {
-          ...state.untrackedState.layers,
-          [layerName]: {
-            ...state.untrackedState.layers[layerName],
-            visible: visible,
+  updateLayerVisible(layerType, layerId, visible) {
+    if (layerType === LayerType.Drawing) {
+      set((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          layers: {
+            ...state.untrackedState.layers,
+            drawing: {
+              ...state.untrackedState.layers.drawing,
+              states: state.untrackedState.layers.drawing.states.map((l) =>
+                l.layerId === layerId ? { ...l, visible: visible } : l,
+              ),
+            },
           },
         },
-      },
-    }));
+      }));
+    } else {
+      set((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          layers: {
+            ...state.untrackedState.layers,
+            [layerType]: {
+              ...state.untrackedState.layers[layerType],
+              visible: visible,
+            },
+          },
+        },
+      }));
+    }
   },
-  updateLayerOpacity(layerName, opacity) {
-    set((state) => ({
-      ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        layers: {
-          ...state.untrackedState.layers,
-          [layerName]: {
-            ...state.untrackedState.layers[layerName],
-            opacity: opacity,
+  updateLayerOpacity(layerType, layerId, opacity) {
+    if (layerType === LayerType.Drawing) {
+      set((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          layers: {
+            ...state.untrackedState.layers,
+            drawing: {
+              ...state.untrackedState.layers.drawing,
+              states: state.untrackedState.layers.drawing.states.map((l) =>
+                l.layerId === layerId ? { ...l, opacity: opacity } : l,
+              ),
+            },
           },
         },
-      },
-    }));
+      }));
+    } else {
+      set((state) => ({
+        ...state,
+        untrackedState: {
+          ...state.untrackedState,
+          layers: {
+            ...state.untrackedState.layers,
+            [layerType]: {
+              ...state.untrackedState.layers[layerType],
+              opacity: opacity,
+            },
+          },
+        },
+      }));
+    }
   },
   selectPlantForPlanting(plant) {
     set((state) => ({
@@ -561,6 +598,39 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+
+  initDrawingLayersUntrackedState: (drawingLayers: LayerDto[]) => {
+    const drawingLayersState = drawingLayers.map((layer) => {
+      const existingLayer = get().untrackedState?.layers?.drawing?.states?.find(
+        (existing) => existing.layerId === layer.id,
+      );
+
+      if (!existingLayer) {
+        return {
+          layerId: layer.id,
+          visible: true,
+          index: layer.type_,
+          opacity: 1,
+        };
+      }
+      return existingLayer;
+    });
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            states: drawingLayersState,
+          },
+        },
+      },
+    }));
+  },
+
   selectDrawings(drawings, transformerStore?: TransformerStore) {
     if (transformerStore) {
       transformerStore.actions.enableAllAnchors();

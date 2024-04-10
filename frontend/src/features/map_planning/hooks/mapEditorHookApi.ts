@@ -100,7 +100,7 @@ export function useCreateLayer(mapId: number, type: LayerType, name: string) {
   });
 }
 
-export function useDeleteLayer(mapId: number, layerId: number) {
+export function useDeleteLayer(mapId: number, layerId: number, successCallback?: () => void) {
   const queryClient = useQueryClient();
   const { t } = useTranslation(['layers']);
 
@@ -108,6 +108,7 @@ export function useDeleteLayer(mapId: number, layerId: number) {
     mutationFn: () => deleteLayer(mapId, layerId),
     onSuccess: () => {
       queryClient.invalidateQueries(MAP_EDITOR_KEYS.layers(mapId));
+      successCallback?.();
     },
     onError: () => {
       errorToastGrouped(t('layers:error_delete_layer'), { autoClose: false });

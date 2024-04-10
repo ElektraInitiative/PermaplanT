@@ -1,5 +1,7 @@
 {
   "sliderTooltip": "Change opacity:\n j or left arrow key - increases opacity\n k or right arrow key - decreases opacity",
   "show_hide_layer": "show/hide layer",
-  "select_layer": "select layer"
+  "select_layer": "select layer",
+  "enter_layer_name": "Enter name",
+  "confirm_delete": "Are you sure you want to delete this layer?"
 }

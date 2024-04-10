@@ -171,11 +171,13 @@ export interface UntrackedMapSlice {
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   updateSelectedLayer: (selectedLayer: LayerDto | FrontendOnlyLayerType) => void;
   updateLayerVisible: (
-    layerName: CombinedLayerType,
+    layerType: CombinedLayerType,
+    layerId: number,
     visible: UntrackedLayerState['visible'],
   ) => void;
   updateLayerOpacity: (
-    layerName: CombinedLayerType,
+    layerType: CombinedLayerType,
+    layerId: number,
     opacity: UntrackedLayerState['opacity'],
   ) => void;
   lastActions: LastAction[];
@@ -209,6 +211,8 @@ export interface UntrackedMapSlice {
   setTooltipPosition: (position: { x: number; y: number }) => void;
   setStatusPanelContent: (content: React.ReactElement) => void;
   clearStatusPanelContent: () => void;
+
+  initDrawingLayersUntrackedState: (drawingLayers: LayerDto[]) => void;
 
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
@@ -301,7 +305,14 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         selectedDrawings: [],
         editMode: undefined,
         editDrawingId: undefined,
-      } as UntrackedDrawingLayerState,
+        states: [
+          {
+            layerId: 0,
+            visble: true,
+            opacity: 1,
+          },
+        ],
+      },
       [LayerType.Base]: {
         visible: true,
         opacity: 1,
@@ -360,6 +371,7 @@ export type TrackedLayerState = {
  * The state of a map's layer.
  */
 export type UntrackedLayerState = {
+  layerId: number;
   index: LayerType;
   visible: boolean;
   opacity: number;
@@ -460,7 +472,7 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
   showLabels: boolean;
 };
 
-export type UntrackedDrawingLayerState = UntrackedLayerState & {
+export type UntrackedDrawingLayerState = {
   selectedShape: DrawingShapeType | null;
   selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
@@ -468,6 +480,7 @@ export type UntrackedDrawingLayerState = UntrackedLayerState & {
   selectedStrokeWidth: number;
   editMode: DrawingLayerEditMode;
   editDrawingId?: string;
+  states: UntrackedLayerState[];
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {

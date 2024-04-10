@@ -293,7 +293,7 @@ export const EditorMap = ({ layers }: MapProps) => {
                   isToolboxIcon={true}
                   renderAsActive={isGridLayerEnabled()}
                   onClick={() =>
-                    updateLayerVisible(FrontendOnlyLayerType.Grid, !layersState.grid.visible)
+                    updateLayerVisible(FrontendOnlyLayerType.Grid, 0, !layersState.grid.visible)
                   }
                   title={t('toolboxTooltips:grid')}
                 >
@@ -337,11 +337,18 @@ export const EditorMap = ({ layers }: MapProps) => {
               visible={layersState.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
             />
-            <DrawingLayer
-              visible={layersState.drawing.visible}
-              opacity={layersState.drawing.opacity}
-              listening={getSelectedLayerType() === LayerType.Drawing}
-            ></DrawingLayer>
+
+            {layersState.drawing.states.length > 0 &&
+              layersState.drawing.states.map((state) => (
+                <DrawingLayer
+                  layerId={state.layerId}
+                  key={state.layerId}
+                  opacity={state.opacity}
+                  visible={state.visible}
+                  listening={getSelectedLayerType() === LayerType.Drawing}
+                />
+              ))}
+
             <PlantsLayer
               visible={layersState.plants.visible}
               opacity={layersState.plants.opacity}

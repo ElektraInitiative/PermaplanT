@@ -23,5 +23,4 @@
 	"error_fetching_layers": "Sorry, ich habe Schwierigkeiten Daten der Karte von meinem Server zu empfangen. Möglicherweise existiert die Karte nicht.",
   "error_creating_layer": "Entschuldigung, ich kann die Karte nicht erstellen. Bitte versuchen Sie es später erneut.",
   "error_delete_layer": "Entschuldigung, ich kann die Karte nicht löschen. Bitte versuchen Sie es später erneut."
-
 }

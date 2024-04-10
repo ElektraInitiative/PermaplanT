@@ -84,6 +84,10 @@ function useInitializeMap() {
     for (const layer of defaultLayers) {
       useMapStore.getState().initLayerId(layer.type_, layer.id);
     }
+
+    useMapStore
+      .getState()
+      .initDrawingLayersUntrackedState(layers.filter((l) => l.type_ === LayerType.Drawing));
   }, [layers]);
 
   const plantLayer = getDefaultLayer(LayerType.Plants, layers);

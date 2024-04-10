@@ -8,6 +8,7 @@ import CaretRightIcon from '@/svg/icons/caret-right.svg?react';
 import EyeOffIcon from '@/svg/icons/eye-off.svg?react';
 import EyeIcon from '@/svg/icons/eye.svg?react';
 import useMapStore from '../../store/MapStore';
+import { UntrackedLayers } from '../../store/MapStoreTypes';
 
 interface LayerListProps {
   /** layer which is controlled by this list element */
@@ -15,7 +16,7 @@ interface LayerListProps {
   /** callback that gets triggered when the layer is selected */
   setSelectedLayer?: (layer: LayerDto) => void;
   /** callback that gets triggered when slider value is changed */
-  setLayerOpacity?: (name: LayerType, value: number) => void;
+  setLayerOpacity?: (name: LayerType, layerId: number, value: number) => void;
   /** callback that gets triggered when an alternative is selected */
   setLayerAlternative?: (name: LayerType, value: string) => void;
   /**
@@ -23,6 +24,15 @@ interface LayerListProps {
    * if alternatives are given they can be selected in a menu
    **/
   alternatives?: Array<string>;
+}
+
+function isLayerVisible(layer: LayerDto, layers: UntrackedLayers) {
+  if (layer.type_ === LayerType.Drawing) {
+    const drawingLayer = layers.drawing.states.find((l) => l.layerId === layer.id);
+    return drawingLayer?.visible;
+  }
+
+  return layers[layer.type_].visible;
 }
 
 /** Layer setting UI to control visibility, layer selection, opacity and alternatives */
@@ -33,11 +43,13 @@ export const LayerListItem = ({
   setLayerAlternative,
   alternatives,
 }: LayerListProps) => {
-  const layerVisible = useMapStore((map) => map.untrackedState.layers[layer.type_].visible);
+  const layers = useMapStore((map) => map.untrackedState.layers);
   const selectedLayer = useMapStore((map) => map.untrackedState.selectedLayer);
   const updateLayerVisible = useMapStore((map) => map.updateLayerVisible);
   const [alternativesVisible, setAlternativesVisible] = useState(false);
   const { t } = useTranslation(['layerSettings', 'layers']);
+
+  const layerVisible = isLayerVisible(layer, layers);
 
   // If a frontend only layer is active, no other layer should be selected.
   const selectedLayerId = typeof selectedLayer === 'object' ? selectedLayer.id : null;
@@ -47,7 +59,7 @@ export const LayerListItem = ({
       <div className="flex items-center justify-center">
         <IconButton
           title={t('layerSettings:show_hide_layer')}
-          onClick={() => updateLayerVisible(layer.type_, !layerVisible)}
+          onClick={() => updateLayerVisible(layer.type_, layer.id, !layerVisible)}
           data-testid={`layer-list-item__${layer.type_}-layer-visibility-icon`}
         >
           {layerVisible ? <EyeIcon className="h-5 w-5" /> : <EyeOffIcon className="h-5 w-5" />}
@@ -79,14 +91,12 @@ export const LayerListItem = ({
         )}
         <NamedSlider
           onChange={(percentage) => {
-            if (setLayerOpacity) setLayerOpacity(layer.type_, percentage);
+            if (setLayerOpacity) setLayerOpacity(layer.type_, layer.id, percentage);
           }}
           title={t('layerSettings:sliderTooltip')}
           value={1}
         >
-          {`${t(`layers:${layer.type_}`)} ${
-            layer.type_ === LayerType.Drawing ? '(' + layer.name + ')' : ''
-          }`}
+          {layer.type_ === LayerType.Drawing ? `${layer.name}` : t(`layers:${layer.type_}`)}
         </NamedSlider>
       </div>
       {alternativesVisible &&

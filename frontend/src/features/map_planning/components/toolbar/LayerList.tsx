@@ -8,9 +8,6 @@ import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import ModalContainer from '@/components/Modals/ModalContainer';
 import TransparentBackground from '@/components/TransparentBackground';
 import AddIcon from '@/svg/icons/add.svg?react';
-import ArrowDownIcon from '@/svg/icons/arrow_down.svg?react';
-import ArrowUpIcon from '@/svg/icons/arrow_up.svg?react';
-import RenameIcon from '@/svg/icons/rename.svg?react';
 import RemoveIcon from '@/svg/icons/trash.svg?react';
 import { useCreateLayer, useDeleteLayer } from '../../hooks/mapEditorHookApi';
 import { useMapId } from '../../hooks/useMapId';
@@ -24,22 +21,27 @@ export type LayerListProps = {
 /** Layer controls including visibility, layer selection, opacity and alternatives */
 export const LayerList = ({ layers }: LayerListProps) => {
   const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
-  const selectedLayer = useMapStore((map) => map.untrackedState.selectedLayer);
+  const selectedLayer = useMapStore((map) => map.untrackedState.selectedLayer) as LayerDto;
   const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
-  const { t } = useTranslation(['layers', 'common']);
+  const { t } = useTranslation(['layers', 'layerSettings', 'common']);
 
   const [newLayerName, setNewLayerName] = React.useState('');
   const [showNameModal, setShowNameModal] = React.useState(false);
+  const [showConfirmDeleteModal, setShowConfirmDeleteModal] = React.useState(false);
 
   const mapId = useMapId();
 
-  const { mutate: createLayer } = useCreateLayer(mapId, LayerType.Drawing, newLayerName);
-  const { mutate: deleteLayer } = useDeleteLayer(mapId, selectedLayer?.id || 0);
-
-  const handleSumbitName = () => {
-    createLayer();
-    setShowNameModal(false);
+  const deleteLayerSuccessCallback = () => {
+    const selectedLayerIndex = layers.findIndex((l) => l.id === selectedLayer.id);
+    updateSelectedLayer(selectedLayerIndex > 0 ? layers[selectedLayerIndex - 1] : layers[0]);
   };
+
+  const { mutate: createLayer } = useCreateLayer(mapId, LayerType.Drawing, newLayerName);
+  const { mutate: deleteLayer } = useDeleteLayer(
+    mapId,
+    selectedLayer?.id || 0,
+    deleteLayerSuccessCallback,
+  );
 
   const layerSettingsList = layers
     ?.filter((l) => !l.is_alternative)
@@ -54,9 +56,14 @@ export const LayerList = ({ layers }: LayerListProps) => {
       );
     });
 
+  const handleSumbitName = () => {
+    createLayer();
+    setShowNameModal(false);
+  };
+
   const handleRemoveLayer = () => {
-    console.log('handleRemoveLayer');
     deleteLayer();
+    setShowConfirmDeleteModal(false);
   };
 
   return (
@@ -65,8 +72,9 @@ export const LayerList = ({ layers }: LayerListProps) => {
         <section className="flex justify-between gap-2">
           <h2>{t('layers:header')}</h2>
           <LayerListToolbar
+            isAdditionalLayerSelected={selectedLayer.type_ === LayerType.Drawing}
             onAddLayer={() => setShowNameModal(true)}
-            onRemoveLayer={handleRemoveLayer}
+            onRemoveLayer={() => setShowConfirmDeleteModal(true)}
           />
         </section>
         <section className="mt-6">
@@ -77,9 +85,10 @@ export const LayerList = ({ layers }: LayerListProps) => {
       </div>
 
       <TransparentBackground show={showNameModal} />
+
       <ModalContainer show={showNameModal} onCancelKeyPressed={() => setShowNameModal(false)}>
         <div className="flex h-[15vh] w-[30vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
-          <h2 className="mb-3">Name eingeben</h2>
+          <h2 className="mb-3">{t('layerSettings:enter_layer_name')}</h2>
           <SimpleFormInput
             value={newLayerName}
             onChange={(e) => setNewLayerName(e.target.value)}
@@ -96,6 +105,22 @@ export const LayerList = ({ layers }: LayerListProps) => {
           </div>
         </div>
       </ModalContainer>
+
+      <ModalContainer
+        show={showConfirmDeleteModal}
+        onCancelKeyPressed={() => setShowConfirmDeleteModal(false)}
+      >
+        <div className="flex h-[10vh] w-[30vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+          <h2 className="mb-3">{t('layerSettings:confirm_delete')}</h2>
+
+          <div className="grid grid-cols-2 gap-2">
+            <SimpleButton onClick={() => setShowConfirmDeleteModal(false)}>
+              {t('common:no')}
+            </SimpleButton>
+            <SimpleButton onClick={handleRemoveLayer}>{t('common:yes')}</SimpleButton>
+          </div>
+        </div>
+      </ModalContainer>
     </>
   );
 };
@@ -103,24 +128,32 @@ export const LayerList = ({ layers }: LayerListProps) => {
 export type LayerListToolbarProps = {
   onAddLayer: () => void;
   onRemoveLayer: () => void;
+  isAdditionalLayerSelected: boolean;
 };
 
-const LayerListToolbar = ({ onAddLayer, onRemoveLayer }: LayerListToolbarProps) => {
+/*
+    <IconButton disabled={!isAdditionalLayerSelected}>
+      <RenameIcon></RenameIcon>
+    </IconButton>
+    <IconButton disabled>
+      <ArrowUpIcon></ArrowUpIcon>
+    </IconButton>
+    <IconButton disabled>
+      <ArrowDownIcon></ArrowDownIcon>
+    </IconButton>
+*/
+
+const LayerListToolbar = ({
+  onAddLayer,
+  onRemoveLayer,
+  isAdditionalLayerSelected,
+}: LayerListToolbarProps) => {
   return (
     <section className="flex justify-between gap-2">
-      <IconButton>
-        <RenameIcon></RenameIcon>
-      </IconButton>
-      <IconButton>
-        <ArrowUpIcon></ArrowUpIcon>
-      </IconButton>
-      <IconButton>
-        <ArrowDownIcon></ArrowDownIcon>
-      </IconButton>
-      <IconButton onClick={() => onAddLayer()}>
+      <IconButton onClick={onAddLayer}>
         <AddIcon></AddIcon>
       </IconButton>
-      <IconButton>
+      <IconButton disabled={!isAdditionalLayerSelected}>
         <RemoveIcon onClick={() => onRemoveLayer()}></RemoveIcon>
       </IconButton>
     </section>
