@@ -2,6 +2,7 @@ import { t } from 'i18next';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Layer } from 'react-konva';
 import * as uuid from 'uuid';
 import {
@@ -354,6 +355,7 @@ function PlantsLayer(props: PlantsLayerProps) {
 
 function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: SeedDto | null }) {
   const selectPlant = useMapStore((state) => state.selectPlantForPlanting);
+  const { i18n } = useTranslation();
 
   const keyHandlerActions: Record<string, () => void> = {
     exitPlantingMode: () => {
@@ -369,9 +371,9 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
     <>
       <div className="flex flex-row items-center justify-center">
         {seed ? (
-          <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
+          <PlantNameFromSeedAndPlant seed={seed} plant={plant} language={i18n.language} />
         ) : (
-          <PlantNameFromPlant plant={plant} />
+          <PlantNameFromPlant plant={plant} language={i18n.language} />
         )}
       </div>
       <div className="flex items-center justify-center">

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Group, Circle, Rect } from 'react-konva';
 import { PlantingDto } from '@/api_types/definitions';
 import { PublicNextcloudKonvaImage } from '@/features/map_planning/components/image/PublicNextcloudKonvaImage';
@@ -48,6 +49,7 @@ export function Planting({ planting }: PlantingProps) {
 function SinglePlanting({ planting }: PlantingProps) {
   const { plant, isSelected, handleOnClick } = usePlanting(planting);
   const fillColor = isSelected ? colors.secondary[200] : colors.primary[400];
+  const { i18n } = useTranslation();
 
   return (
     <Group
@@ -60,7 +62,7 @@ function SinglePlanting({ planting }: PlantingProps) {
       draggable={true}
       onClick={handleOnClick}
       onMouseOut={hideTooltip}
-      onMouseMove={() => placeTooltip(plant, planting.additionalName)}
+      onMouseMove={() => placeTooltip(plant, planting.additionalName, i18n.language)}
     >
       <Circle width={planting.sizeX} height={planting.sizeY} x={0} y={0} fill={fillColor} />
       {plant ? (
@@ -84,6 +86,7 @@ function AreaOfPlantings({ planting }: PlantingProps) {
   const { plant, isSelected, handleOnClick } = usePlanting(planting);
   const fillColor = isSelected ? colors.secondary[200] : colors.primary[600];
   const imageSize = Math.min(planting.sizeX, planting.sizeY) * 0.9;
+  const { i18n } = useTranslation();
 
   return (
     <Group
@@ -96,7 +99,7 @@ function AreaOfPlantings({ planting }: PlantingProps) {
       draggable={true}
       onClick={handleOnClick}
       onMouseOut={hideTooltip}
-      onMouseMove={() => placeTooltip(plant, planting.additionalName)}
+      onMouseMove={() => placeTooltip(plant, planting.additionalName, i18n.language)}
     >
       <Rect width={planting.sizeX} height={planting.sizeY} fill={fillColor} cornerRadius={8} />
       {plant ? (

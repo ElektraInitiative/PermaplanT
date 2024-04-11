@@ -76,6 +76,7 @@ export function SinglePlantingAttributeForm({
     isLoading: plantSummaryIsLoading,
     isError: plantSummaryIsError,
   } = useFindPlantById({ plantId });
+  const { i18n } = useTranslation();
 
   if (plantSummaryIsLoading) return null;
   if (plantSummaryIsError) return null;
@@ -87,9 +88,10 @@ export function SinglePlantingAttributeForm({
           <PlantNameFromAdditionalNameAndPlant
             additionalName={planting.additionalName}
             plant={plant}
+            language={i18n.language}
           />
         ) : (
-          <PlantNameFromPlant plant={plant} />
+          <PlantNameFromPlant plant={plant} language={i18n.language} />
         )}
       </h2>
 
