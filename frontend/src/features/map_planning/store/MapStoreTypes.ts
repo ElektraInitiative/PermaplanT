@@ -5,6 +5,7 @@ import {
   BaseLayerImageDto,
   DrawingDto,
   DrawingShapeType,
+  FillPatternType,
   LayerDto,
   LayerType,
   PlantingDto,
@@ -13,7 +14,6 @@ import {
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
-import { DrawingDto, DrawingShapeType, FillPatternType } from '../layers/drawing/types';
 import { convertToDateString } from '../utils/date-utils';
 import { TransformerStore } from './transformer/TransformerStore';
 

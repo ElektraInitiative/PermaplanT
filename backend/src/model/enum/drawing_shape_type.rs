@@ -19,7 +19,7 @@ pub enum DrawingShapeType {
     #[db_rename = "bezier polygon"]
     BezierPolygon,
     #[db_rename = "label text"]
-    Text,
+    LabelText,
     #[db_rename = "image"]
     Image,
 }
