@@ -2,6 +2,7 @@ import ReactTestRenderer from 'react-test-renderer';
 import { PlantsSummaryDto, Quantity, SeedDto } from '@/api_types/definitions';
 import {
   getCommonName,
+  getCommonOrUniqueName,
   getNameFromPlant,
   getPlantNameFromAdditionalNameAndPlant,
   getPlantNameFromSeedAndPlant,
@@ -52,6 +53,50 @@ it('generates an empty name', function () {
   };
 
   expect(getCommonName(plant, 'en')).toEqual('');
+});
+
+it('generates the english common name', function () {
+  const plant: PlantsSummaryDto = {
+    id: 1,
+    unique_name: 'Brassica oleracea italica',
+    common_name_en: ['Broccoli'],
+    common_name_de: ['Brokkoli'],
+  };
+
+  expect(getCommonOrUniqueName(plant, 'en')).toEqual('Broccoli');
+});
+
+it('generates the german common name', function () {
+  const plant: PlantsSummaryDto = {
+    id: 1,
+    unique_name: 'Brassica oleracea italica',
+    common_name_en: ['Broccoli'],
+    common_name_de: ['Brokkoli'],
+  };
+
+  expect(getCommonOrUniqueName(plant, 'de')).toEqual('Brokkoli');
+});
+
+it('generates the english name (fallback from german)', function () {
+  const plant: PlantsSummaryDto = {
+    id: 1,
+    unique_name: 'Brassica oleracea italica',
+    common_name_en: ['Broccoli'],
+    common_name_de: [''],
+  };
+
+  expect(getCommonOrUniqueName(plant, 'de')).toEqual('Broccoli');
+});
+
+it('generates the unique name as a fallback', function () {
+  const plant: PlantsSummaryDto = {
+    id: 1,
+    unique_name: 'Brassica oleracea italica',
+    common_name_en: [''],
+    common_name_de: ['Brokkoli'],
+  };
+
+  expect(getCommonOrUniqueName(plant, 'en')).toEqual('Brassica oleracea italica');
 });
 
 it('generates unique name', function () {

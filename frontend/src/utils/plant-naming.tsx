@@ -23,6 +23,20 @@ export function getCommonName(plant: PlantsSummaryDto, language: string): string
 }
 
 /**
+ * Gets the common name from a PlantsSummaryDto according to the language.
+ *
+ * Uses the english common name as a fallback, if no german common name is available.
+ * If no common name is available either, the unique name is returned.
+ *
+ * @param plant DTO containing the most essential information of a plant.
+ */
+export function getCommonOrUniqueName(plant: PlantsSummaryDto, language: string): string {
+  const commonName = getCommonName(plant, language);
+
+  return commonName ? commonName : plant.unique_name;
+}
+
+/**
  * Generate a partial plant name from a PlantsSummaryDto.
  * Chooses the common name according to the language
  * Format:
