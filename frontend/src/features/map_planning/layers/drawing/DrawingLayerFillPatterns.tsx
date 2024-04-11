@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
+import { FillPatternType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import NoFillIcon from '@/svg/icons/forbid.svg?react';
 import SquareFilled from '@/svg/icons/square-filled.svg?react';
 import TextureIcon from '@/svg/icons/texture.svg?react';
 import CrosshatchIcon from '@/svg/icons/track.svg?react';
-import { FillPatternType } from './types';
 
 interface DrawingLayerFillPatternProps {
   selectedPattern: FillPatternType;
@@ -26,7 +26,7 @@ export function DrawingLayerFillPatterns({
             isToolboxIcon={true}
             renderAsActive={selectedPattern === 'none'}
             onClick={() => {
-              onChange('none');
+              onChange(FillPatternType.None);
             }}
             title={t('drawings:draw_free_line_tooltip')}
           >
@@ -36,7 +36,7 @@ export function DrawingLayerFillPatterns({
             isToolboxIcon={true}
             renderAsActive={selectedPattern === 'hatch'}
             onClick={() => {
-              onChange('hatch');
+              onChange(FillPatternType.Hatch);
             }}
             title={t('drawings:draw_free_line_tooltip')}
           >
@@ -46,7 +46,7 @@ export function DrawingLayerFillPatterns({
             isToolboxIcon={true}
             renderAsActive={selectedPattern === 'crosshatch'}
             onClick={() => {
-              onChange('crosshatch');
+              onChange(FillPatternType.CrossHatch);
             }}
             title={t('drawings:draw_rectangle_tooltip')}
           >
@@ -57,7 +57,7 @@ export function DrawingLayerFillPatterns({
             isToolboxIcon={true}
             renderAsActive={selectedPattern === 'fill'}
             onClick={() => {
-              onChange('fill');
+              onChange(FillPatternType.Fill);
             }}
             title={t('drawings:draw_ellipse_tooltip')}
           >

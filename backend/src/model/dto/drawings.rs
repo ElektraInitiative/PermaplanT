@@ -102,6 +102,10 @@ pub enum FillPatternType {
     Fill,
     #[serde(rename = "none")]
     None,
+    #[serde(rename = "hatch")]
+    Hatch,
+    #[serde(rename = "crosshatch")]
+    CrossHatch,
 }
 
 /// Used to change the `add_date` of a drawing.

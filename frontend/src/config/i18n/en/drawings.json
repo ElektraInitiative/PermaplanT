@@ -20,6 +20,7 @@
   "add_date": "Added on",
   "remove_date": "Removed on",
   "color": "Color",
+  "text": "Text",
   "strokeWidth": "Stroke Width",
   "fillEnabled": "Fill Enabled",
   "error_invalid_add_remove_date": "Remove date must be after add date.",

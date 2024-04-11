@@ -2,6 +2,7 @@ import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
+import { FillPatternType } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { convertToDate } from '../utils/date-utils';
@@ -484,7 +485,7 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-  drawingLayerSetFillPattern(fillPattern: string) {
+  drawingLayerSetFillPattern(fillPattern: FillPatternType) {
     set((state) => ({
       ...state,
       untrackedState: {

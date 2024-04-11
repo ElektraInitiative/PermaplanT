@@ -11,7 +11,7 @@ type EditableTextProps = {
   scaleX: number;
   scaleY: number;
   isEditing: boolean;
-  onToggleEdit: (e: KonvaEventObject<MouseEvent>) => void;
+  onToggleEdit?: (e: KonvaEventObject<MouseEvent>) => void;
   onEndEdit?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
   onClick: (e: KonvaEventObject<MouseEvent>) => void;
   onChange: (text: string) => void;
@@ -37,7 +37,6 @@ export function EditableText({
   scaleY,
   color,
   object,
-  width,
 }: EditableTextProps) {
   function handleTextChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     onChange(e.currentTarget.value);
@@ -69,10 +68,8 @@ export function EditableText({
       listening={true}
       x={x}
       y={y}
-      width={width}
       scaleX={scaleX}
       scaleY={scaleY}
-      height={height}
       text={text}
       fontSize={24}
       fontFamily="Arial"
