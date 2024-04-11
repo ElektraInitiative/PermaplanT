@@ -74,7 +74,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add documentation for adding a new field to an entity _(Christoph Schreiner)_
 - _()_
 - Add tooltips to show keybindings _(Daniel Steinkogler)_
-- _()_
+- Added fill patterns, labels and images to drawing layer _(Daniel Steinkogler, Jannis Adamek)_
 - Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
 - _()_
 - Use integer for plant spread and height _(Christoph Schreiner)_
