@@ -199,13 +199,25 @@ export function UniqueNameFromPlant(props: { uniqueName: string }): ReactElement
   );
 }
 
-/**
- * Make sure that the common name starts with a capital letter.
+/*
+ * Capitalize the first letter of each word in the plant name.
+ * Excludes some non-capital words like 'of', 'the', etc.
  *
  * @param commonName The common name
  */
-function capitalizeCommonName(commonName: string[] | undefined): string | undefined {
-  return commonName?.[0]?.charAt(0).toUpperCase().concat(commonName?.[0]?.slice(1));
+export function capitalizeCommonName(commonName: string[] | undefined): string | undefined {
+  const words = commonName?.[0]?.split(' ');
+  const nonCapitalWords = ['of', 'the', 'in', 'on', 'to', 'for', 'and', 'or', 'a', 'an', 'im'];
+
+  if (words) {
+    for (let i = 0; i < words.length; i++) {
+      if (i === 0 || !nonCapitalWords.includes(words[i])) {
+        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+      }
+    }
+  }
+
+  return words?.join(' ');
 }
 
 /**

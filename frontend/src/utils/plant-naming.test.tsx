@@ -9,6 +9,7 @@ import {
   PlantNameFromAdditionalNameAndPlant,
   PlantNameFromPlant,
   PlantNameFromSeedAndPlant,
+  capitalizeCommonName,
 } from '@/utils/plant-naming';
 
 it('generates the english common name', function () {
@@ -116,7 +117,7 @@ it('generates a plant name without additional name', function () {
     common_name_en: ['Italian broccoli'],
   };
 
-  expect(getNameFromPlant(plant, 'en')).toEqual('Italian broccoli (Brassica oleracea italica)');
+  expect(getNameFromPlant(plant, 'en')).toEqual('Italian Broccoli (Brassica oleracea italica)');
 });
 
 it('generates formatted unique name', function () {
@@ -141,7 +142,7 @@ it('generates formated plant name without additional name', function () {
   expect(ReactTestRenderer.create(PlantNameFromPlant({ plant, language: 'en' })).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
-        <>Italian broccoli</> (<i>Brassica oleracea italica</i>)
+        <>Italian Broccoli</> (<i>Brassica oleracea italica</i>)
       </>,
     ).toJSON(),
   );
@@ -157,7 +158,7 @@ it('generates plant name with cultivar', function () {
   expect(ReactTestRenderer.create(PlantNameFromPlant({ plant, language: 'en' })).toJSON()).toEqual(
     ReactTestRenderer.create(
       <>
-        <>Italian broccoli</> (<i>Brassica oleracea italica</i>
+        <>Italian Broccoli</> (<i>Brassica oleracea italica</i>
         <> &apos;Ramoso calabrese&apos;</>)
       </>,
     ).toJSON(),
@@ -202,7 +203,7 @@ it('generates a complete plant name', function () {
   const seed = generateTestSeed('violett');
 
   expect(getPlantNameFromSeedAndPlant(seed, plant, 'en')).toEqual(
-    'Italian broccoli - violett (Brassica oleracea italica)',
+    'Italian Broccoli - violett (Brassica oleracea italica)',
   );
 });
 
@@ -216,7 +217,7 @@ it('generates complete plant name', function () {
   const additionalName = 'violett';
 
   expect(getPlantNameFromAdditionalNameAndPlant(additionalName, plant, 'en')).toEqual(
-    'Italian broccoli - violett (Brassica oleracea italica)',
+    'Italian Broccoli - violett (Brassica oleracea italica)',
   );
 });
 
@@ -254,7 +255,7 @@ it('generates a formatted plant name', function () {
   ).toEqual(
     ReactTestRenderer.create(
       <>
-        <>Italian broccoli</> - <>violett</> (<i>Brassica oleracea italica</i>)
+        <>Italian Broccoli</> - <>violett</> (<i>Brassica oleracea italica</i>)
       </>,
     ).toJSON(),
   );
@@ -298,10 +299,20 @@ it('generates a formatted plant name', function () {
   ).toEqual(
     ReactTestRenderer.create(
       <>
-        <>Italian broccoli</> - <>violett</> (<i>Brassica oleracea italica</i>)
+        <>Italian Broccoli</> - <>violett</> (<i>Brassica oleracea italica</i>)
       </>,
     ).toJSON(),
   );
+});
+
+it('capitalizes a common name', function () {
+  expect(capitalizeCommonName(['king of the garden'])).toEqual('King of the Garden');
+});
+
+it('capitalizes a common name', function () {
+  expect(capitalizeCommonName(undefined)).toEqual(undefined);
+  expect(capitalizeCommonName([])).toEqual(undefined);
+  expect(capitalizeCommonName([''])).toEqual('');
 });
 
 function generateTestSeed(seed_name: string): SeedDto {
