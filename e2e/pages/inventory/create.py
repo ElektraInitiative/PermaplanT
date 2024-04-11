@@ -27,7 +27,7 @@ class SeedCreatePage(AbstractPage):
 
     def create_a_seed(
         self,
-        plant_name="Indian abelia (Abelia triflora)",
+        plant_name="Indian Abelia (Abelia triflora)",
         additional_name="SUT create",
         harvest_year="2022",
         amount="Enough",
