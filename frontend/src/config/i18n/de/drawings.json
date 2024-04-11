@@ -19,6 +19,7 @@
   "add_date": "Hinzugefügt am",
   "remove_date": "Entfernt am",
   "color": "Farbe",
+  "text": "Text",
   "strokeWidth": "Stärke",
   "fillEnabled": "Form füllen",
   "error_invalid_add_remove_date": "Das Entfernungsdatum muss nach dem Hinzufügungsdatum liegen.",

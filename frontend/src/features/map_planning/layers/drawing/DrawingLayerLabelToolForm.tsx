@@ -31,9 +31,9 @@ export function DrawingLayerLabelToolForm() {
         <div className="flex flex-row gap-1">
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedShape === DrawingShapeType.Text}
+            renderAsActive={selectedShape === DrawingShapeType.LabelText}
             onClick={() => {
-              activateDrawingMode(DrawingShapeType.Text);
+              activateDrawingMode(DrawingShapeType.LabelText);
               setStatusPanelContent(
                 <DrawingLayerStatusPanelContent text={t('drawings:place_text_hint')} />,
               );

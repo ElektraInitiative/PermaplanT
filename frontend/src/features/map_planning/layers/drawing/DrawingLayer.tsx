@@ -3,17 +3,19 @@ import { LayerConfig } from 'konva/lib/Layer';
 import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
 import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Ellipse, Layer, Line, Rect } from 'react-konva';
+import { Ellipse, Layer, Line, Rect, Text } from 'react-konva';
 import * as uuid from 'uuid';
 import {
   DrawingDto,
   DrawingShapeType,
   LayerType,
+  FillPatternType,
+  RectangleProperties,
   EllipseProperties,
   FreeLineProperties,
-  ImageProperties,
   LabelTextProperties,
-  RectangleProperties,
+  ImageProperties,
+  PolygonProperties,
 } from '@/api_types/definitions';
 import {
   KEYBINDINGS_SCOPE_DRAWING_LAYER,
@@ -34,7 +36,7 @@ type DrawingLayerProps = LayerConfig;
 
 type Rectangle = {
   color: string;
-  fillPattern: string;
+  fillPattern: FillPatternType;
   strokeWidth: number;
   x1: number;
   y1: number;
@@ -43,7 +45,7 @@ type Rectangle = {
 };
 
 type Ellipse = {
-  fillPattern: string;
+  fillPattern: FillPatternType;
   strokeWidth: number;
   color: string;
   x: number;
@@ -55,7 +57,7 @@ type Ellipse = {
 type Line = {
   color: string;
   strokeWidth: number;
-  fillPattern: string;
+  fillPattern: FillPatternType;
   x: number;
   y: number;
   points: number[][];
@@ -104,6 +106,8 @@ function DrawingLayer(props: DrawingLayerProps) {
   const isDrawingLayerActive = useIsDrawingLayerActive();
 
   const mapScale = useMapStore.getState().stageRef.current?.scale();
+  const mapScaleX = mapScale?.x || 1;
+  const mapScaleY = mapScale?.y || 1;
 
   const selectDrawings = useMapStore((state) => state.selectDrawings);
 
@@ -111,59 +115,27 @@ function DrawingLayer(props: DrawingLayerProps) {
 
   const { ...layerProps } = props;
 
-  const rectangles = drawingObjects
-    .filter((object) => object.variant.type === DrawingShapeType.Rectangle)
-    .map((object) => {
-      return {
-        ...object,
-        properties: object.variant.properties as RectangleProperties,
-      };
-    });
+  const rectangles = drawingObjects.filter(
+    (object) => object.variant.type === DrawingShapeType.Rectangle,
+  );
 
-  const ellipses = drawingObjects
-    .filter((object) => object.variant.type === DrawingShapeType.Ellipse)
-    .map((object) => {
-      return {
-        ...object,
-        properties: object.variant.properties as EllipseProperties,
-      };
-    });
+  const ellipses = drawingObjects.filter(
+    (object) => object.variant.type === DrawingShapeType.Ellipse,
+  );
 
-  const lines = drawingObjects
-    .filter((object) => object.variant.type === DrawingShapeType.FreeLine)
-    .map((object) => {
-      return {
-        ...object,
-        properties: object.variant.properties as FreeLineProperties,
-      };
-    });
+  const lines = drawingObjects.filter(
+    (object) => object.variant.type === DrawingShapeType.FreeLine,
+  );
 
-  const bezierLines = drawingObjects
-    .filter((object) => object.variant.type === DrawingShapeType.BezierPolygon)
-    .map((object) => {
-      return {
-        ...object,
-        properties: object.variant.properties as FreeLineProperties,
-      };
-    });
+  const bezierLines = drawingObjects.filter(
+    (object) => object.variant.type === DrawingShapeType.BezierPolygon,
+  );
 
-  const textLabels = drawingObjects
-    .filter((object) => object.variant.type === DrawingShapeType.LabelText)
-    .map((object) => {
-      return {
-        ...object,
-        properties: object.variant.properties as LabelTextProperties,
-      };
-    });
+  const textLabels = drawingObjects.filter(
+    (object) => object.variant.type === DrawingShapeType.LabelText,
+  );
 
-  const images = drawingObjects
-    .filter((object) => object.variant.type === DrawingShapeType.Image)
-    .map((object) => {
-      return {
-        ...object,
-        properties: object.variant.properties as ImageProperties,
-      };
-    });
+  const images = drawingObjects.filter((object) => object.variant.type === DrawingShapeType.Image);
 
   const [newLine, setNewLine] = useState<Line>();
   const [newBezierLine, setNewBezierLine] = useState<Line>();
@@ -193,23 +165,22 @@ function DrawingLayer(props: DrawingLayerProps) {
           {
             id: uuid.v4(),
             layerId: getSelectedLayerId() ?? -1,
-            shapeType: DrawingShapeType.Rectangle,
+            variant: {
+              type: DrawingShapeType.Rectangle,
+              properties: {
+                width: rectangle.x2 - rectangle.x1,
+                height: rectangle.y2 - rectangle.y1,
+                color: rectangle.color,
+                fillPattern: rectangle.fillPattern,
+                strokeWidth: rectangle.strokeWidth,
+              },
+            },
             rotation: 0,
             addDate: timelineDate,
             x: Math.round(rectangle.x1),
             y: Math.round(rectangle.y1),
             scaleX: 1,
             scaleY: 1,
-            color: rectangle.color,
-            fillPattern: rectangle.fillPattern,
-            strokeWidth: rectangle.strokeWidth,
-            properties: {
-              width: rectangle.x2 - rectangle.x1,
-              height: rectangle.y2 - rectangle.y1,
-              color: rectangle.color,
-              fillPattern: rectangle.fillPattern,
-              strokeWidth: rectangle.strokeWidth,
-            },
           },
         ]),
       );
@@ -226,21 +197,20 @@ function DrawingLayer(props: DrawingLayerProps) {
             layerId: getSelectedLayerId() ?? -1,
             rotation: 0,
             addDate: timelineDate,
-            shapeType: DrawingShapeType.Ellipse,
+            variant: {
+              type: DrawingShapeType.Ellipse,
+              properties: {
+                radiusX: ellipse.radiusX,
+                radiusY: ellipse.radiusY,
+                color: ellipse.color,
+                fillPattern: ellipse.fillPattern,
+                strokeWidth: ellipse.strokeWidth,
+              },
+            },
             scaleX: 1,
             scaleY: 1,
             x: Math.round(ellipse.x),
             y: Math.round(ellipse.y),
-            color: ellipse.variant.color,
-            fillPattern: ellipse.fillPattern,
-            strokeWidth: ellipse.strokeWidth,
-            properties: {
-              radiusX: ellipse.radiusX,
-              radiusY: ellipse.radiusY,
-              color: ellipse.variant.color,
-              fillPattern: ellipse.fillPattern,
-              strokeWidth: ellipse.strokeWidth,
-            },
           },
         ]),
       );
@@ -257,20 +227,19 @@ function DrawingLayer(props: DrawingLayerProps) {
             layerId: getSelectedLayerId() ?? -1,
             rotation: 0,
             addDate: timelineDate,
-            shapeType: DrawingShapeType.FreeLine,
+            variant: {
+              type: DrawingShapeType.FreeLine,
+              properties: {
+                points: line.points,
+                color: line.color,
+                fillPattern: line.fillPattern,
+                strokeWidth: line.strokeWidth,
+              },
+            },
             scaleX: 1,
             scaleY: 1,
             x: Math.round(line.x),
             y: Math.round(line.y),
-            fillPattern: line.fillPattern,
-            color: line.color,
-            strokeWidth: line.strokeWidth,
-            properties: {
-              points: line.points,
-              color: line.color,
-              fillPattern: line.fillPattern,
-              strokeWidth: line.strokeWidth,
-            },
           },
         ]),
       );
@@ -287,20 +256,19 @@ function DrawingLayer(props: DrawingLayerProps) {
             layerId: getSelectedLayerId() ?? -1,
             rotation: 0,
             addDate: timelineDate,
-            shapeType: DrawingShapeType.BezierPolygon,
+            variant: {
+              type: DrawingShapeType.BezierPolygon,
+              properties: {
+                points: line.points,
+                color: line.color,
+                fillPattern: line.fillPattern,
+                strokeWidth: line.strokeWidth,
+              },
+            },
             scaleX: 1,
             scaleY: 1,
             x: 0,
             y: 0,
-            fillPattern: line.fillPattern,
-            color: line.color,
-            strokeWidth: line.strokeWidth,
-            properties: {
-              points: line.points,
-              color: line.color,
-              fillPattern: line.fillPattern,
-              strokeWidth: line.strokeWidth,
-            },
           },
         ]),
       );
@@ -317,18 +285,19 @@ function DrawingLayer(props: DrawingLayerProps) {
             layerId: getSelectedLayerId() ?? -1,
             rotation: 0,
             addDate: timelineDate,
-            shapeType: DrawingShapeType.Text,
+            variant: {
+              type: DrawingShapeType.LabelText,
+              properties: {
+                text: text.text,
+                color: text.color,
+                width: 100,
+                height: 0,
+              },
+            },
             scaleX: text.scaleX,
             scaleY: text.scaleY,
             x: Math.round(text.x),
             y: Math.round(text.y),
-            fillPattern: 'none',
-            color: text.color,
-            strokeWidth: 0,
-            properties: {
-              text: text.text,
-              color: text.color,
-            },
           },
         ]),
       );
@@ -345,18 +314,16 @@ function DrawingLayer(props: DrawingLayerProps) {
             layerId: getSelectedLayerId() ?? -1,
             rotation: 0,
             addDate: timelineDate,
-            shapeType: DrawingShapeType.Image,
+            variant: {
+              type: DrawingShapeType.Image,
+              properties: {
+                path: image.path,
+              },
+            },
             scaleX: image.scaleX,
             scaleY: image.scaleY,
             x: Math.round(image.x),
             y: Math.round(image.y),
-            fillPattern: 'none',
-            color: '',
-            strokeWidth: 0,
-            properties: {
-              path: image.path,
-              color: undefined,
-            },
           },
         ]),
       );
@@ -460,7 +427,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             points: [],
           });
         }
-      } else if (selectedShape == DrawingShapeType.Text) {
+      } else if (selectedShape == DrawingShapeType.LabelText) {
         if (newLabelText && newLabelText.text.length > 0) {
           createTextLabel(newLabelText);
           setNewLabelText(undefined);
@@ -726,6 +693,15 @@ function DrawingLayer(props: DrawingLayerProps) {
     e.target.moveToTop();
   };
 
+  const handleUnselectDrawing: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback((e) => {
+    // only unselect if we are clicking on the background
+    if (e.target instanceof Konva.Shape) {
+      return;
+    }
+
+    useMapStore.getState().selectDrawings([]);
+  }, []);
+
   const handleSelectDrawing: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
     const selectedDrawings = (foundDrawings: DrawingDto[], konvaNode: Konva.Node) => {
       const drawingNode = konvaNode.getAttr('object');
@@ -793,19 +769,25 @@ function DrawingLayer(props: DrawingLayerProps) {
       const updates = [
         {
           ...bezierLine,
-          properties: {
-            points: points,
+          variant: {
+            ...bezierLine.variant,
+            properties: {
+              ...bezierLine.variant.properties,
+              points: points,
+            },
           },
         },
       ];
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       executeAction(new UpdateDrawingAction(updates));
     },
     [bezierLines, executeAction],
   );
 
   useEffect(() => {
-    if (selectedShape != DrawingShapeType.Text && newLabelText) {
+    if (selectedShape != DrawingShapeType.LabelText && newLabelText) {
       if (newLabelText.text.length > 0) {
         createTextLabel(newLabelText);
       }
@@ -830,6 +812,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     useMapStore.getState().stageRef.current?.on('mousemove.draw', handleMouseMove);
     useMapStore.getState().stageRef.current?.on('mouseup.endDrawing', handleMouseUp);
     useMapStore.getState().stageRef.current?.on('mouseup.selectDrawing', handleSelectDrawing);
+    useMapStore.getState().stageRef.current?.on('click.unselectDrawing', handleUnselectDrawing);
     transformerActions.addEventListener('dragend.drawings', handleMoveDrawing);
     transformerActions.addEventListener('transformend.drawings', handleTransformDrawing);
 
@@ -838,6 +821,7 @@ function DrawingLayer(props: DrawingLayerProps) {
       useMapStore.getState().stageRef.current?.off('mousemove.draw');
       useMapStore.getState().stageRef.current?.off('mouseup.endDrawing');
       useMapStore.getState().stageRef.current?.off('mouseup.selectDrawing');
+      useMapStore.getState().stageRef.current?.off('click.unselectDrawing');
       transformerActions.removeEventListener('dragend.drawings');
       transformerActions.removeEventListener('transformend.drawings');
     };
@@ -848,6 +832,7 @@ function DrawingLayer(props: DrawingLayerProps) {
     handleMoveDrawing,
     handleSelectDrawing,
     handleTransformDrawing,
+    handleUnselectDrawing,
     props.listening,
   ]);
 
@@ -864,26 +849,29 @@ function DrawingLayer(props: DrawingLayerProps) {
   return (
     <>
       <Layer {...layerProps} name={`${LayerType.Drawing}`}>
-        {bezierLines.map((bezierLine, i) => (
-          <BezierPolygon
-            key={`bezier-line-${i}`}
-            transformerRef={transformerRef}
-            id={bezierLine.id}
-            object={bezierLine}
-            editMode={editDrawingId === bezierLine.id ? editMode : undefined}
-            onPointsChanged={(p) => handleBezierPointsChanged(bezierLine.id, p)}
-            initialPoints={bezierLine.properties.points}
-            strokeWidth={bezierLine.strokeWidth}
-            onLineClick={handleShapeClicked}
-            color={bezierLine.color}
-            fillPattern={bezierLine.fillPattern}
-            x={bezierLine.x}
-            y={bezierLine.y}
-            scaleX={bezierLine.scaleX}
-            scaleY={bezierLine.scaleY}
-            onDragStart={moveToTop}
-          ></BezierPolygon>
-        ))}
+        {bezierLines.map((bezierLine, i) => {
+          const properties = bezierLine.variant.properties as PolygonProperties;
+          return (
+            <BezierPolygon
+              key={`bezier-line-${i}`}
+              transformerRef={transformerRef}
+              id={bezierLine.id}
+              object={bezierLine}
+              editMode={editDrawingId === bezierLine.id ? editMode : undefined}
+              onPointsChanged={(p) => handleBezierPointsChanged(bezierLine.id, p)}
+              initialPoints={properties.points}
+              strokeWidth={properties.strokeWidth}
+              onLineClick={handleShapeClicked}
+              color={properties.color}
+              fillPattern={properties.fillPattern}
+              x={bezierLine.x}
+              y={bezierLine.y}
+              scaleX={bezierLine.scaleX}
+              scaleY={bezierLine.scaleY}
+              onDragStart={moveToTop}
+            ></BezierPolygon>
+          );
+        })}
 
         {newBezierLine && (
           <BezierPolygon
@@ -902,36 +890,42 @@ function DrawingLayer(props: DrawingLayerProps) {
           ></BezierPolygon>
         )}
 
-        {lines.map((line, i) => (
-          <Line
-            id={line.id}
-            listening={true}
-            object={line}
-            hitStrokeWidth={(line.strokeWidth ? 1 : 0) + 100}
-            key={i}
-            x={line.x}
-            y={line.y}
-            scaleX={line.scaleX}
-            scaleY={line.scaleY}
-            points={line.properties.points.flat()}
-            stroke={line.color}
-            fillPattern={line.fillPattern}
-            fill={line.fillPattern == 'fill' ? line.color : undefined}
-            fillPatternImage={getFillPattern(line.fillPattern, line.color)}
-            fillPatternRepeat="repeat"
-            closed={line.fillPattern !== 'none'}
-            strokeWidth={line.strokeWidth}
-            tension={0.1}
-            lineCap="round"
-            lineJoin="round"
-            onClick={handleShapeClicked}
-            draggable
-            onDragStart={moveToTop}
-            bezier
-            rotation={line.rotation}
-            globalCompositeOperation="source-over"
-          />
-        ))}
+        {lines.map((line, i) => {
+          const properties = line.variant.properties as FreeLineProperties;
+          return (
+            <Line
+              id={line.id}
+              listening={true}
+              object={line}
+              hitStrokeWidth={(properties.strokeWidth ? 1 : 0) + 100}
+              key={i}
+              x={line.x}
+              y={line.y}
+              scaleX={line.scaleX}
+              scaleY={line.scaleY}
+              points={properties.points.flat()}
+              stroke={properties.color}
+              fillPattern={properties.fillPattern}
+              fillPa
+              fill={properties.fillPattern == 'fill' ? properties.color : undefined}
+              fillPatternImage={getFillPattern(properties.fillPattern, properties.color)}
+              fillPatternRepeat="repeat"
+              fillPatternScaleX={1 / (line.scaleX * mapScaleX)}
+              fillPatternScaleY={1 / (line.scaleY * mapScaleY)}
+              closed={properties.fillPattern !== 'none'}
+              strokeWidth={properties.strokeWidth}
+              tension={0.1}
+              lineCap="round"
+              lineJoin="round"
+              onClick={handleShapeClicked}
+              draggable
+              onDragStart={moveToTop}
+              bezier
+              rotation={line.rotation}
+              globalCompositeOperation="source-over"
+            />
+          );
+        })}
 
         {newLine && (
           <Line
@@ -953,32 +947,37 @@ function DrawingLayer(props: DrawingLayerProps) {
           />
         )}
 
-        {rectangles.map((rectangle, i) => (
-          <Rect
-            id={rectangle.id}
-            canBeDistorted={true}
-            listening={true}
-            object={rectangle}
-            hitStrokeWidth={rectangle.variant.strokeWidth + 40}
-            cornerRadius={5}
-            key={`rect-${i}`}
-            x={rectangle.x}
-            y={rectangle.y}
-            rotation={rectangle.rotation}
-            width={rectangle.properties.width}
-            height={rectangle.properties.height}
-            stroke={rectangle.color}
-            fill={rectangle.fillPattern == 'fill' ? rectangle.color : undefined}
-            fillPatternImage={getFillPattern(rectangle.fillPattern, rectangle.color)}
-            fillPatternRepeat="repeat"
-            strokeWidth={rectangle.strokeWidth}
-            scaleX={rectangle.scaleX}
-            scaleY={rectangle.scaleY}
-            onClick={handleShapeClicked}
-            draggable
-            onDragStart={moveToTop}
-          ></Rect>
-        ))}
+        {rectangles.map((rectangle, i) => {
+          const properties = rectangle.variant.properties as RectangleProperties;
+          return (
+            <Rect
+              id={rectangle.id}
+              canBeDistorted={true}
+              listening={true}
+              object={rectangle}
+              hitStrokeWidth={properties.strokeWidth + 40}
+              cornerRadius={5}
+              key={`rect-${i}`}
+              x={rectangle.x}
+              y={rectangle.y}
+              rotation={rectangle.rotation}
+              width={properties.width}
+              height={properties.height}
+              stroke={properties.color}
+              fill={properties.fillPattern == 'fill' ? properties.color : undefined}
+              fillPatternImage={getFillPattern(properties.fillPattern, properties.color)}
+              fillPatternScaleX={1 / (rectangle.scaleX * mapScaleX)}
+              fillPatternScaleY={1 / (rectangle.scaleY * mapScaleY)}
+              fillPatternRepeat="repeat"
+              strokeWidth={properties.strokeWidth}
+              scaleX={rectangle.scaleX}
+              scaleY={rectangle.scaleY}
+              onClick={handleShapeClicked}
+              draggable
+              onDragStart={moveToTop}
+            ></Rect>
+          );
+        })}
 
         {previewRectangle && (
           <Rect
@@ -996,32 +995,37 @@ function DrawingLayer(props: DrawingLayerProps) {
           ></Rect>
         )}
 
-        {ellipses.map((ellipse, i) => (
-          <Ellipse
-            id={ellipse.id}
-            listening={true}
-            object={ellipse}
-            canBeDistorted={true}
-            key={`ellipse-${i}`}
-            x={ellipse.x}
-            hitStrokeWidth={ellipse.strokeWidth + 40}
-            y={ellipse.y}
-            rotation={ellipse.rotation}
-            scaleX={ellipse.scaleX}
-            scaleY={ellipse.scaleY}
-            radiusX={ellipse.properties.radiusX}
-            radiusY={ellipse.properties.radiusY}
-            fill={ellipse.fillPattern == 'fill' ? ellipse.variant.color : undefined}
-            fillPatternImage={getFillPattern(ellipse.fillPattern, ellipse.variant.color)}
-            fillPatternRepeat="repeat"
-            stroke={ellipse.variant.color}
-            fillPattern={ellipse.fillPattern}
-            strokeWidth={ellipse.strokeWidth}
-            onClick={handleShapeClicked}
-            draggable
-            onDragStart={moveToTop}
-          />
-        ))}
+        {ellipses.map((ellipse, i) => {
+          const properties = ellipse.variant.properties as EllipseProperties;
+          return (
+            <Ellipse
+              id={ellipse.id}
+              listening={true}
+              object={ellipse}
+              canBeDistorted={true}
+              key={`ellipse-${i}`}
+              x={ellipse.x}
+              hitStrokeWidth={properties.strokeWidth + 2}
+              y={ellipse.y}
+              rotation={ellipse.rotation}
+              scaleX={ellipse.scaleX}
+              scaleY={ellipse.scaleY}
+              fillPatternScaleX={1 / (ellipse.scaleX * mapScaleX)}
+              fillPatternScaleY={1 / (ellipse.scaleY * mapScaleY)}
+              radiusX={properties.radiusX}
+              radiusY={properties.radiusY}
+              fill={properties.fillPattern == 'fill' ? properties.color : undefined}
+              fillPatternImage={getFillPattern(properties.fillPattern, properties.color)}
+              fillPatternRepeat="repeat"
+              stroke={properties.color}
+              fillPattern={properties.fillPattern}
+              strokeWidth={properties.strokeWidth}
+              onClick={handleShapeClicked}
+              draggable
+              onDragStart={moveToTop}
+            ></Ellipse>
+          );
+        })}
 
         {previewEllipse && (
           <Ellipse
@@ -1030,38 +1034,37 @@ function DrawingLayer(props: DrawingLayerProps) {
             y={previewEllipse.y}
             radiusX={previewEllipse.radiusX}
             radiusY={previewEllipse.radiusY}
-            stroke={previewellipse.variant.color}
+            stroke={previewEllipse.color}
             strokeWidth={previewEllipse.strokeWidth}
-            fill={previewEllipse.fillPattern == 'fill' ? previewellipse.variant.color : undefined}
-            fillPatternImage={getFillPattern(
-              previewEllipse.fillPattern,
-              previewellipse.variant.color,
-            )}
+            fill={previewEllipse.fillPattern == 'fill' ? previewEllipse.color : undefined}
+            fillPatternImage={getFillPattern(previewEllipse.fillPattern, previewEllipse.color)}
             fillPatternRepeat="repeat"
             fillPattern={previewEllipse.fillPattern}
           />
         )}
 
-        {textLabels.map((text, i) => (
-          <EditableText
-            id={text.id}
-            object={text}
-            x={text.x}
-            y={text.y}
-            text={text.properties.text}
-            width={text.properties.width}
-            height={text.properties.height}
-            scaleX={text.scaleX}
-            scaleY={text.scaleY}
-            key={`text-${i}`}
-            color={text.color}
-            isEditing={editDrawingId === text.id}
-            onEndEdit={console.log}
-            onToggleEdit={console.log}
-            onChange={console.log}
-            onClick={handleShapeClicked}
-          ></EditableText>
-        ))}
+        {textLabels.map((text, i) => {
+          const properties = text.variant.properties as LabelTextProperties;
+          return (
+            <EditableText
+              id={text.id}
+              object={text}
+              x={text.x}
+              y={text.y}
+              text={properties.text}
+              width={properties.width}
+              height={properties.height}
+              scaleX={text.scaleX}
+              scaleY={text.scaleY}
+              key={`text-${i}`}
+              color={properties.color}
+              isEditing={editDrawingId === text.id}
+              onEndEdit={console.log}
+              onChange={console.log}
+              onClick={handleShapeClicked}
+            ></EditableText>
+          );
+        })}
 
         {newLabelText && (
           <EditableText
@@ -1073,7 +1076,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             color={newLabelText.color}
             scaleX={newLabelText.scaleX}
             scaleY={newLabelText.scaleY}
-            isEditing={selectedShape == DrawingShapeType.Text}
+            isEditing={selectedShape == DrawingShapeType.LabelText}
             onToggleEdit={console.log}
             onChange={(text) => {
               setNewLabelText({ ...newLabelText, text: text });
@@ -1093,20 +1096,23 @@ function DrawingLayer(props: DrawingLayerProps) {
           />
         )}
 
-        {images.map((image, i) => (
-          <NextcloudKonvaImage
-            key={`image-${i}`}
-            object={image}
-            id={image.id}
-            path={image.properties.path}
-            scaleX={image.scaleX}
-            scaleY={image.scaleY}
-            x={image.x}
-            y={image.y}
-            onClick={handleShapeClicked}
-            draggable
-          />
-        ))}
+        {images.map((image, i) => {
+          const properties = image.variant.properties as ImageProperties;
+          return (
+            <NextcloudKonvaImage
+              key={`image-${i}`}
+              object={image}
+              id={image.id}
+              path={properties.path}
+              scaleX={image.scaleX}
+              scaleY={image.scaleY}
+              x={image.x}
+              y={image.y}
+              onClick={handleShapeClicked}
+              draggable
+            />
+          );
+        })}
       </Layer>
     </>
   );

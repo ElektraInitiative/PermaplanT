@@ -1,8 +1,10 @@
-export function getFillPattern(fillPatternType: string, color: string) {
+import { FillPatternType } from '@/api_types/definitions';
+
+export function getFillPattern(fillPatternType: FillPatternType | undefined, color: string) {
   switch (fillPatternType) {
-    case 'hatch':
+    case FillPatternType.Hatch:
       return getHatchFillPattern(color);
-    case 'crosshatch':
+    case FillPatternType.CrossHatch:
       return getCrosshatchFillPattern(color);
     default:
       return undefined;
