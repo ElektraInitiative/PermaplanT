@@ -5,10 +5,10 @@ import { range } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import React from 'react';
 import { Circle, Line } from 'react-konva';
+import { DrawingDto, FillPatternType } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DrawingLayerEditMode } from '@/features/map_planning/store/MapStoreTypes';
 import { getFillPattern } from '@/utils/fillPatterns';
-import { DrawingDto, FillPatternType } from '../types';
 
 export type BezierPolygonProps = {
   transformerRef?: React.MutableRefObject<Konva.Transformer | null>;

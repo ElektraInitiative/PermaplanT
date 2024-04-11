@@ -10,8 +10,8 @@ use utoipa_swagger_ui::SwaggerUi;
 use super::auth::Config;
 use crate::{
     controller::{
-        base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer, plantings,
-        plants, seed, timeline, users,
+        base_layer_image, blossoms, config, drawings, guided_tours, layers, map, plant_layer,
+        plantings, plants, seed, timeline, users,
     },
     model::{
         dto::{
@@ -19,6 +19,11 @@ use crate::{
                 ActionDtoWrapperDeleteDrawings, ActionDtoWrapperDeletePlantings,
                 ActionDtoWrapperNewPlantings, ActionDtoWrapperUpdatePlantings,
                 TimelinePagePlantingsDto,
+            },
+            drawings::{
+                DrawingDto, EllipseProperties, FreeLineProperties, ImageProperties,
+                LabelTextProperties, PolygonProperties, RectangleProperties,
+                UpdateAddDateDrawingDto, UpdateRemoveDateDrawingDto,
             },
             plantings::{
                 MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto,
@@ -256,6 +261,32 @@ struct BlossomsApiDoc;
 )]
 struct TimelineApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for drawings endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        drawings::find,
+        drawings::create,
+        drawings::update,
+        drawings::delete,
+    ),
+    components(
+        schemas(
+            DrawingDto,
+            RectangleProperties,
+            EllipseProperties,
+            FreeLineProperties,
+            PolygonProperties,
+            LabelTextProperties,
+            ImageProperties,
+            UpdateAddDateDrawingDto,
+            UpdateRemoveDateDrawingDto
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct DrawingsApiDoc;
+
 /// Merges `OpenApi` and then serves it using `Swagger`.
 pub fn config(cfg: &mut web::ServiceConfig) {
     let mut openapi = ConfigApiDoc::openapi();
@@ -268,6 +299,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(PlantingsApiDoc::openapi());
     openapi.merge(UsersApiDoc::openapi());
     openapi.merge(TimelineApiDoc::openapi());
+    openapi.merge(DrawingsApiDoc::openapi());
 
     cfg.service(SwaggerUi::new("/doc/api/swagger/ui/{_:.*}").url("/doc/api/openapi.json", openapi));
 }
