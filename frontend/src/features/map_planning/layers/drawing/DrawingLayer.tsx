@@ -5,7 +5,16 @@ import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Ellipse, Layer, Line, Rect } from 'react-konva';
 import * as uuid from 'uuid';
-import { DrawingDto, DrawingShapeType, LayerType } from '@/api_types/definitions';
+import {
+  DrawingDto,
+  DrawingShapeType,
+  LayerType,
+  EllipseProperties,
+  FreeLineProperties,
+  ImageProperties,
+  LabelTextProperties,
+  RectangleProperties,
+} from '@/api_types/definitions';
 import {
   KEYBINDINGS_SCOPE_DRAWING_LAYER,
   createKeyBindingsAccordingToConfig,
@@ -20,13 +29,6 @@ import { CreateDrawingAction, UpdateDrawingAction } from './actions';
 import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
 import { EditableText } from './labels/EditableText';
 import BezierPolygon from './shapes/BezierPolygon';
-import {
-  EllipseProperties,
-  FreeLineProperties,
-  ImageProperties,
-  LabelTextProperties,
-  RectangleProperties,
-} from './types';
 
 type DrawingLayerProps = LayerConfig;
 
@@ -110,56 +112,56 @@ function DrawingLayer(props: DrawingLayerProps) {
   const { ...layerProps } = props;
 
   const rectangles = drawingObjects
-    .filter((object) => object.shapeType === DrawingShapeType.Rectangle)
+    .filter((object) => object.variant.type === DrawingShapeType.Rectangle)
     .map((object) => {
       return {
         ...object,
-        properties: object.properties as RectangleProperties,
+        properties: object.variant.properties as RectangleProperties,
       };
     });
 
   const ellipses = drawingObjects
-    .filter((object) => object.shapeType === DrawingShapeType.Ellipse)
+    .filter((object) => object.variant.type === DrawingShapeType.Ellipse)
     .map((object) => {
       return {
         ...object,
-        properties: object.properties as EllipseProperties,
+        properties: object.variant.properties as EllipseProperties,
       };
     });
 
   const lines = drawingObjects
-    .filter((object) => object.shapeType === DrawingShapeType.FreeLine)
+    .filter((object) => object.variant.type === DrawingShapeType.FreeLine)
     .map((object) => {
       return {
         ...object,
-        properties: object.properties as FreeLineProperties,
+        properties: object.variant.properties as FreeLineProperties,
       };
     });
 
   const bezierLines = drawingObjects
-    .filter((object) => object.shapeType === DrawingShapeType.BezierPolygon)
+    .filter((object) => object.variant.type === DrawingShapeType.BezierPolygon)
     .map((object) => {
       return {
         ...object,
-        properties: object.properties as FreeLineProperties,
+        properties: object.variant.properties as FreeLineProperties,
       };
     });
 
   const textLabels = drawingObjects
-    .filter((object) => object.shapeType === DrawingShapeType.Text)
+    .filter((object) => object.variant.type === DrawingShapeType.LabelText)
     .map((object) => {
       return {
         ...object,
-        properties: object.properties as LabelTextProperties,
+        properties: object.variant.properties as LabelTextProperties,
       };
     });
 
   const images = drawingObjects
-    .filter((object) => object.shapeType === DrawingShapeType.Image)
+    .filter((object) => object.variant.type === DrawingShapeType.Image)
     .map((object) => {
       return {
         ...object,
-        properties: object.properties as ImageProperties,
+        properties: object.variant.properties as ImageProperties,
       };
     });
 
@@ -229,13 +231,13 @@ function DrawingLayer(props: DrawingLayerProps) {
             scaleY: 1,
             x: Math.round(ellipse.x),
             y: Math.round(ellipse.y),
-            color: ellipse.color,
+            color: ellipse.variant.color,
             fillPattern: ellipse.fillPattern,
             strokeWidth: ellipse.strokeWidth,
             properties: {
               radiusX: ellipse.radiusX,
               radiusY: ellipse.radiusY,
-              color: ellipse.color,
+              color: ellipse.variant.color,
               fillPattern: ellipse.fillPattern,
               strokeWidth: ellipse.strokeWidth,
             },
@@ -957,7 +959,7 @@ function DrawingLayer(props: DrawingLayerProps) {
             canBeDistorted={true}
             listening={true}
             object={rectangle}
-            hitStrokeWidth={rectangle.strokeWidth + 40}
+            hitStrokeWidth={rectangle.variant.strokeWidth + 40}
             cornerRadius={5}
             key={`rect-${i}`}
             x={rectangle.x}
@@ -1009,10 +1011,10 @@ function DrawingLayer(props: DrawingLayerProps) {
             scaleY={ellipse.scaleY}
             radiusX={ellipse.properties.radiusX}
             radiusY={ellipse.properties.radiusY}
-            fill={ellipse.fillPattern == 'fill' ? ellipse.color : undefined}
-            fillPatternImage={getFillPattern(ellipse.fillPattern, ellipse.color)}
+            fill={ellipse.fillPattern == 'fill' ? ellipse.variant.color : undefined}
+            fillPatternImage={getFillPattern(ellipse.fillPattern, ellipse.variant.color)}
             fillPatternRepeat="repeat"
-            stroke={ellipse.color}
+            stroke={ellipse.variant.color}
             fillPattern={ellipse.fillPattern}
             strokeWidth={ellipse.strokeWidth}
             onClick={handleShapeClicked}
@@ -1028,10 +1030,13 @@ function DrawingLayer(props: DrawingLayerProps) {
             y={previewEllipse.y}
             radiusX={previewEllipse.radiusX}
             radiusY={previewEllipse.radiusY}
-            stroke={previewEllipse.color}
+            stroke={previewellipse.variant.color}
             strokeWidth={previewEllipse.strokeWidth}
-            fill={previewEllipse.fillPattern == 'fill' ? previewEllipse.color : undefined}
-            fillPatternImage={getFillPattern(previewEllipse.fillPattern, previewEllipse.color)}
+            fill={previewEllipse.fillPattern == 'fill' ? previewellipse.variant.color : undefined}
+            fillPatternImage={getFillPattern(
+              previewEllipse.fillPattern,
+              previewellipse.variant.color,
+            )}
             fillPatternRepeat="repeat"
             fillPattern={previewEllipse.fillPattern}
           />

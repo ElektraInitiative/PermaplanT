@@ -4,15 +4,15 @@ use typeshare::typeshare;
 use utoipa::ToSchema;
 use uuid::Uuid;
 
-use crate::model::r#enum::drawing_shape_type::DrawingShapeType;
-
 /// Represents user drawing.
 #[typeshare]
 #[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DrawingDto {
     pub id: Uuid,
-    pub shape_type: DrawingShapeType,
+
+    pub variant: DrawingVariant,
+
     pub layer_id: i32,
     pub add_date: Option<NaiveDate>,
     pub remove_date: Option<NaiveDate>,
@@ -21,10 +21,87 @@ pub struct DrawingDto {
     pub scale_y: f32,
     pub x: i32,
     pub y: i32,
+}
+
+#[typeshare]
+#[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RectangleProperties {
+    pub width: f32,
+    pub height: f32,
     pub color: String,
-    pub fill_pattern: String,
+    pub fill_pattern: FillPatternType,
     pub stroke_width: f32,
-    pub properties: serde_json::Value,
+}
+
+#[typeshare]
+#[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EllipseProperties {
+    pub radius_x: f32,
+    pub radius_y: f32,
+    pub color: String,
+    pub fill_pattern: FillPatternType,
+    pub stroke_width: f32,
+}
+
+#[typeshare]
+#[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FreeLineProperties {
+    pub points: Vec<Vec<f32>>,
+    pub color: String,
+    pub fill_pattern: FillPatternType,
+    pub stroke_width: f32,
+}
+
+#[typeshare]
+#[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PolygonProperties {
+    pub points: Vec<Vec<f32>>,
+    pub color: String,
+    pub fill_pattern: FillPatternType,
+    pub stroke_width: f32,
+}
+
+#[typeshare]
+#[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LabelTextProperties {
+    pub text: String,
+    pub width: i32,
+    pub height: i32,
+    pub color: String,
+}
+
+#[typeshare]
+#[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImageProperties {
+    pub path: String,
+}
+
+/// Represents user drawing.
+#[typeshare]
+#[derive(Debug, Clone, Deserialize, ToSchema, Serialize)]
+#[serde(tag = "type", content = "properties")]
+pub enum DrawingVariant {
+    Rectangle(RectangleProperties),
+    Ellipse(EllipseProperties),
+    FreeLine(FreeLineProperties),
+    BezierPolygon(PolygonProperties),
+    LabelText(LabelTextProperties),
+    Image(ImageProperties),
+}
+
+#[typeshare]
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub enum FillPatternType {
+    #[serde(rename = "fill")]
+    Fill,
+    #[serde(rename = "none")]
+    None,
 }
 
 /// Used to change the `add_date` of a drawing.
