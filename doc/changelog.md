@@ -88,6 +88,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: updated unsafe packages for release & fixed release github template _(4ydan, Filip Markovic)_
 - _()_
 - Fixed German common names not being used when language is set to German _(Christoph Schreiner)_
+- added manual testing for 0.3.7 (successful) _(Filip Markovic)_
 - Fixed map label and common name capitalization issues _(Christoph Schreiner)_
 - _()_
 - _()_
