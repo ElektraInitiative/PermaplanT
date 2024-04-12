@@ -100,6 +100,11 @@ export function generatePointsPatternAsImage(color: string) {
       <circle cx="85.11372096049774" cy="45.924120674059735" r="2.5" fill="${color}"/>
       <circle cx="70.9198898448658" cy="69.06750627339662" r="3" fill="${color}"/>
       <circle cx="62.633589456291114" cy="32.57946503528527" r="1.5" fill="${color}"/>
+
+      <circle cx="29.07989251213112" cy="49.6915538951041" r="4" fill="${color}"/>
+      <circle cx="55.11372096049774" cy="20.924120674059735" r="3.5" fill="${color}"/>
+      <circle cx="80.9198898448658" cy="9.06750627339662" r="3" fill="${color}"/>
+      <circle cx="12.633589456291114" cy="32.57946503528527" r="4.5" fill="${color}"/>
     </svg>`;
 
   const imageUrl = 'data:image/svg+xml;base64,' + btoa(svgString);

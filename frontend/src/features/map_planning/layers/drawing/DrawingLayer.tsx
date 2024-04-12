@@ -992,6 +992,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             fill={previewRectangle.fillPattern == 'fill' ? previewRectangle.color : undefined}
             fillPatternImage={getFillPattern(previewRectangle.fillPattern, previewRectangle.color)}
             fillPatternRepeat="repeat"
+            fillPatternScaleX={1 / mapScaleX}
+            fillPatternScaleY={1 / mapScaleY}
           ></Rect>
         )}
 
@@ -1039,6 +1041,8 @@ function DrawingLayer(props: DrawingLayerProps) {
             fill={previewEllipse.fillPattern == 'fill' ? previewEllipse.color : undefined}
             fillPatternImage={getFillPattern(previewEllipse.fillPattern, previewEllipse.color)}
             fillPatternRepeat="repeat"
+            fillPatternScaleX={1 / mapScaleX}
+            fillPatternScaleY={1 / mapScaleY}
             fillPattern={previewEllipse.fillPattern}
           />
         )}
