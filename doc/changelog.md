@@ -102,6 +102,14 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Added planting notes to planting details _(Daniel Steinkogler)_
 - _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- CI: mark duplicate code _(4ydan & Filip Markovic)_
+- _()_
+- _()_
 - Added keybinding configuration for macOS _(Daniel Steinkogler)_
 - Up the rust version to 1.74 _(4ydan)_
 - Display a rectangle for area of plantings _(Paul)_
