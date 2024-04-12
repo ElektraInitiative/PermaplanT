@@ -262,7 +262,7 @@ export const EditorMap = ({ layers }: MapProps) => {
               <div>
                 <IconButton
                   isToolboxIcon={true}
-                  className={`${!canUndo ? 'opacity-50' : ''}`}
+                  className={`ml-2 ${!canUndo ? 'opacity-50' : ''}`}
                   disabled={isReadOnlyMode || !canUndo}
                   onClick={() => undo()}
                   title={useGetFormattedKeybindingDescriptionForAction(

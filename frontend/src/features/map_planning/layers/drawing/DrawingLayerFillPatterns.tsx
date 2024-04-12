@@ -2,8 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { FillPatternType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import NoFillIcon from '@/svg/icons/forbid.svg?react';
+import PointsPatternIcon from '@/svg/icons/points.svg?react';
 import SquareFilled from '@/svg/icons/square-filled.svg?react';
-import TextureIcon from '@/svg/icons/texture.svg?react';
+import HatchDownIcon from '@/svg/icons/texture_down.svg?react';
+import HatchUpIcon from '@/svg/icons/texture_up.svg?react';
 import CrosshatchIcon from '@/svg/icons/track.svg?react';
 
 interface DrawingLayerFillPatternProps {
@@ -21,45 +23,60 @@ export function DrawingLayerFillPatterns({
     <>
       <div>
         <span className="mb-2 block text-sm font-medium">{t('drawings:fillPattern')}</span>
-        <div className="flex flex-row gap-1">
+        <div className="flex flex-row flex-wrap gap-1">
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedPattern === 'none'}
+            renderAsActive={selectedPattern === FillPatternType.None}
             onClick={() => {
               onChange(FillPatternType.None);
             }}
-            title={t('drawings:draw_free_line_tooltip')}
           >
             <NoFillIcon></NoFillIcon>
           </IconButton>
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedPattern === 'hatch'}
+            renderAsActive={selectedPattern === FillPatternType.HatchDown}
             onClick={() => {
-              onChange(FillPatternType.Hatch);
+              onChange(FillPatternType.HatchDown);
             }}
-            title={t('drawings:draw_free_line_tooltip')}
           >
-            <TextureIcon></TextureIcon>
+            <HatchDownIcon></HatchDownIcon>
           </IconButton>
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedPattern === 'crosshatch'}
+            renderAsActive={selectedPattern === FillPatternType.HatchUp}
+            onClick={() => {
+              onChange(FillPatternType.HatchUp);
+            }}
+          >
+            <HatchUpIcon></HatchUpIcon>
+          </IconButton>
+          <IconButton
+            isToolboxIcon={true}
+            renderAsActive={selectedPattern === FillPatternType.CrossHatch}
             onClick={() => {
               onChange(FillPatternType.CrossHatch);
             }}
-            title={t('drawings:draw_rectangle_tooltip')}
           >
             <CrosshatchIcon></CrosshatchIcon>
           </IconButton>
 
           <IconButton
             isToolboxIcon={true}
-            renderAsActive={selectedPattern === 'fill'}
+            renderAsActive={selectedPattern === FillPatternType.Points}
+            onClick={() => {
+              onChange(FillPatternType.Points);
+            }}
+          >
+            <PointsPatternIcon></PointsPatternIcon>
+          </IconButton>
+
+          <IconButton
+            isToolboxIcon={true}
+            renderAsActive={selectedPattern === FillPatternType.Fill}
             onClick={() => {
               onChange(FillPatternType.Fill);
             }}
-            title={t('drawings:draw_ellipse_tooltip')}
           >
             <SquareFilled></SquareFilled>
           </IconButton>
