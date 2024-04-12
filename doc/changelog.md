@@ -43,6 +43,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 11.03.2024 9:00 _(Markus Raab, Jannis)_
 - Added Meeting Agenda&Notes for 25.03.2024 9:00 _(Markus Raab, Moritz)_
 - Added Meeting Agenda&Notes for 02.04.2024 9:00 _(Markus Raab, Lukas)_
+- Added Meeting Agenda&Notes for 08.04.2024 9:00 _(Markus Raab, Filip)_
 - _()_
 - _()_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
@@ -88,8 +89,10 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: updated unsafe packages for release & fixed release github template _(4ydan, Filip Markovic)_
 - _()_
 - Fixed German common names not being used when language is set to German _(Christoph Schreiner)_
+- added manual testing for 0.3.7 (successful) _(Filip Markovic)_
+- Fixed map label and common name capitalization issues _(Christoph Schreiner)_
 - _()_
-- _()_
+- fixed broken tour and blog date for release _(Filip Markovic)_
 - CI: added deployment of doc and README links to doc _(Filip Markovic)_
 - _()_
 - Add decision for polygon libraries _(Daniel Steinkogler)_
@@ -98,6 +101,14 @@ Syntax: `- short text describing the change _(Your Name)_`
 - E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
 - _()_
 - Added planting notes to planting details _(Daniel Steinkogler)_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- _()_
+- CI: mark duplicate code _(4ydan & Filip Markovic)_
+- _()_
 - _()_
 - Added keybinding configuration for macOS _(Daniel Steinkogler)_
 - Up the rust version to 1.74 _(4ydan)_

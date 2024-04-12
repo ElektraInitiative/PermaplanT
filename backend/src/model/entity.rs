@@ -160,15 +160,15 @@ pub struct Plants {
     pub soil_texture: Option<Vec<Option<SoilTexture>>>,
 
     /*
-    /// - *Used* in hydrology layer.
+    /// - *NOT used* in hydrology layer
+    ///   as it has poor quality and no additional data compared to water_requirement
+    /// - *Fill ratio:* 37%
     /// - *Fetched from* PracticalPlants
     /// - wet = drowned, (often) flooded or in general very moist, e.g. swamp
     /// - moist = humid, can hold some water, e.g. flat bed with humus
     /// - well drained = dry, low capacity to hold water, e.g. sandhill.
-    /// - *Fill ratio:* 37%
     pub soil_water_retention: Option<Vec<Option<SoilWaterRetention>>>,
-    */
-    /*
+
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
     /// - gives information about environmental conditions, such as drought or wind tolerance
@@ -258,7 +258,7 @@ pub struct Plants {
     /// - *Fill ratio:* 100%
     pub updated_at: NaiveDateTime,
 
-    /// - *Used* in hydrology layer.
+    /// - *Used* in watering layer.
     /// - Fetched from PracticalPlants and merged with \`has_drought_tolerance\` of Permapeople.
     /// - *Fill ratio:* 57%
     pub has_drought_tolerance: Option<bool>,
@@ -318,7 +318,10 @@ pub struct Plants {
 
     /// - *Used* in hydrology layer.
     /// - *Fetched from* PracticalPlants and Permapeople (merged with `water` of PracticalPlants).
-    /// - water = completely aquatic; wet = drowned, (often) flooded or in general very moist, e.g. swamp; moist = humid, regular water supply, e.g. flat bed with humus; well drained = dry, little water input.
+    /// - water = completely aquatic;
+    /// - wet = drowned, (often) flooded or in general very moist, e.g. swamp;
+    /// - moist = humid, regular water supply, e.g. flat bed with humus;
+    /// - well drained = dry, little water input.
     /// - *Fill ratio:* 88%
     pub water_requirement: Option<Vec<Option<WaterRequirement>>>,
 

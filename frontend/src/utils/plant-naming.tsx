@@ -23,6 +23,20 @@ export function getCommonName(plant: PlantsSummaryDto, language: string): string
 }
 
 /**
+ * Gets the common name from a PlantsSummaryDto according to the language.
+ *
+ * Uses the english common name as a fallback, if no german common name is available.
+ * If no common name is available either, the unique name is returned.
+ *
+ * @param plant DTO containing the most essential information of a plant.
+ */
+export function getCommonOrUniqueName(plant: PlantsSummaryDto, language: string): string {
+  const commonName = getCommonName(plant, language);
+
+  return commonName ? commonName : plant.unique_name;
+}
+
+/**
  * Generate a partial plant name from a PlantsSummaryDto.
  * Chooses the common name according to the language
  * Format:
@@ -185,13 +199,25 @@ export function UniqueNameFromPlant(props: { uniqueName: string }): ReactElement
   );
 }
 
-/**
- * Make sure that the common name starts with a capital letter.
+/*
+ * Capitalize the first letter of each word in the plant name.
+ * Excludes some non-capital words like 'of', 'the', etc.
  *
  * @param commonName The common name
  */
-function capitalizeCommonName(commonName: string[] | undefined): string | undefined {
-  return commonName?.[0]?.charAt(0).toUpperCase().concat(commonName?.[0]?.slice(1));
+export function capitalizeCommonName(commonName: string[] | undefined): string | undefined {
+  const words = commonName?.[0]?.split(' ');
+  const nonCapitalWords = ['of', 'the', 'in', 'on', 'to', 'for', 'and', 'or', 'a', 'an', 'im'];
+
+  if (words) {
+    for (let i = 0; i < words.length; i++) {
+      if (i === 0 || !nonCapitalWords.includes(words[i])) {
+        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+      }
+    }
+  }
+
+  return words?.join(' ');
 }
 
 /**
