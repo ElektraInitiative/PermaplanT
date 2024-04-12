@@ -9,7 +9,6 @@ impl From<Seed> for SeedDto {
         Self {
             id: seed.id,
             name: seed.name,
-            variety: seed.variety,
             plant_id: seed.plant_id,
             harvest_year: seed.harvest_year,
             quantity: seed.quantity,
@@ -32,7 +31,6 @@ impl From<(f32, Seed)> for SeedDto {
         Self {
             id: seed.id,
             name: seed.name,
-            variety: seed.variety,
             plant_id: seed.plant_id,
             harvest_year: seed.harvest_year,
             quantity: seed.quantity,

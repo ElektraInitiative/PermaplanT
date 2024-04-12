@@ -5,46 +5,37 @@ use uuid::Uuid;
 
 use crate::model::entity::plantings::{Planting, UpdatePlanting};
 
-use super::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
+use super::plantings::{
+    MovePlantingDto, NewPlantingDto, PlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
+    UpdatePlantingDto, UpdatePlantingNoteDto, UpdateRemoveDatePlantingDto,
+};
 
 impl From<(Planting, Option<String>)> for PlantingDto {
-    fn from(entities: (Planting, Option<String>)) -> Self {
+    fn from((planting, additional_name): (Planting, Option<String>)) -> Self {
         Self {
-            id: entities.0.id,
-            plant_id: entities.0.plant_id,
-            layer_id: entities.0.layer_id,
-            x: entities.0.x,
-            y: entities.0.y,
-            width: entities.0.width,
-            height: entities.0.height,
-            rotation: entities.0.rotation,
-            scale_x: entities.0.scale_x,
-            scale_y: entities.0.scale_y,
-            add_date: entities.0.add_date,
-            remove_date: entities.0.remove_date,
-            seed_id: entities.0.seed_id,
-            additional_name: entities.1,
+            additional_name,
+            ..planting.into()
         }
     }
 }
 
 impl From<Planting> for PlantingDto {
-    fn from(entities: Planting) -> Self {
+    fn from(planting: Planting) -> Self {
         Self {
-            id: entities.id,
-            plant_id: entities.plant_id,
-            layer_id: entities.layer_id,
-            x: entities.x,
-            y: entities.y,
-            width: entities.width,
-            height: entities.height,
-            rotation: entities.rotation,
-            scale_x: entities.scale_x,
-            scale_y: entities.scale_y,
-            add_date: entities.add_date,
-            remove_date: entities.remove_date,
-            seed_id: entities.seed_id,
+            id: planting.id,
+            plant_id: planting.plant_id,
+            layer_id: planting.layer_id,
+            x: planting.x,
+            y: planting.y,
+            size_x: planting.size_x,
+            size_y: planting.size_y,
+            rotation: planting.rotation,
+            add_date: planting.add_date,
+            remove_date: planting.remove_date,
+            seed_id: planting.seed_id,
+            is_area: planting.is_area,
             additional_name: None,
+            planting_notes: planting.notes,
         }
     }
 }
@@ -57,44 +48,83 @@ impl From<NewPlantingDto> for Planting {
             layer_id: dto.layer_id,
             x: dto.x,
             y: dto.y,
-            width: dto.width,
-            height: dto.height,
+            size_x: dto.size_x,
+            size_y: dto.size_y,
             rotation: dto.rotation,
-            scale_x: dto.scale_x,
-            scale_y: dto.scale_y,
             add_date: dto.add_date,
             remove_date: None,
             seed_id: dto.seed_id,
+            is_area: dto.is_area,
             //create_date: Utc::now().date_naive(),
             //delete_date: None,
+            notes: None,
         }
     }
 }
 
-impl From<UpdatePlantingDto> for UpdatePlanting {
+impl From<TransformPlantingDto> for UpdatePlanting {
+    fn from(dto: TransformPlantingDto) -> Self {
+        Self {
+            id: dto.id,
+            x: Some(dto.x),
+            y: Some(dto.y),
+            rotation: Some(dto.rotation),
+            size_x: Some(dto.size_x),
+            size_y: Some(dto.size_y),
+            ..Default::default()
+        }
+    }
+}
+
+impl From<MovePlantingDto> for UpdatePlanting {
+    fn from(dto: MovePlantingDto) -> Self {
+        Self {
+            id: dto.id,
+            x: Some(dto.x),
+            y: Some(dto.y),
+            ..Default::default()
+        }
+    }
+}
+
+impl From<UpdateAddDatePlantingDto> for UpdatePlanting {
+    fn from(dto: UpdateAddDatePlantingDto) -> Self {
+        Self {
+            id: dto.id,
+            add_date: Some(dto.add_date),
+            ..Default::default()
+        }
+    }
+}
+
+impl From<UpdateRemoveDatePlantingDto> for UpdatePlanting {
+    fn from(dto: UpdateRemoveDatePlantingDto) -> Self {
+        Self {
+            id: dto.id,
+            remove_date: Some(dto.remove_date),
+            ..Default::default()
+        }
+    }
+}
+
+impl From<UpdatePlantingNoteDto> for UpdatePlanting {
+    fn from(dto: UpdatePlantingNoteDto) -> Self {
+        Self {
+            id: dto.id,
+            notes: Some(dto.notes),
+            ..Default::default()
+        }
+    }
+}
+
+impl From<UpdatePlantingDto> for Vec<UpdatePlanting> {
     fn from(dto: UpdatePlantingDto) -> Self {
         match dto {
-            UpdatePlantingDto::Transform(dto) => Self {
-                x: Some(dto.x),
-                y: Some(dto.y),
-                rotation: Some(dto.rotation),
-                scale_x: Some(dto.scale_x),
-                scale_y: Some(dto.scale_y),
-                ..Default::default()
-            },
-            UpdatePlantingDto::Move(dto) => Self {
-                x: Some(dto.x),
-                y: Some(dto.y),
-                ..Default::default()
-            },
-            UpdatePlantingDto::UpdateAddDate(dto) => Self {
-                add_date: Some(dto.add_date),
-                ..Default::default()
-            },
-            UpdatePlantingDto::UpdateRemoveDate(dto) => Self {
-                remove_date: Some(dto.remove_date),
-                ..Default::default()
-            },
+            UpdatePlantingDto::Transform(vec) => vec.into_iter().map(Into::into).collect(),
+            UpdatePlantingDto::Move(vec) => vec.into_iter().map(Into::into).collect(),
+            UpdatePlantingDto::UpdateAddDate(vec) => vec.into_iter().map(Into::into).collect(),
+            UpdatePlantingDto::UpdateRemoveDate(vec) => vec.into_iter().map(Into::into).collect(),
+            UpdatePlantingDto::UpdateNote(vec) => vec.into_iter().map(Into::into).collect(),
         }
     }
 }

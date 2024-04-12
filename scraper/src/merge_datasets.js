@@ -4,27 +4,10 @@ import csv from "csvtojson";
 import permapeopleColumnMapping from "./helpers/column_mapping_permapeople.js";
 import {
   sanitizeColumnNames,
+  processMeasurement,
   getSoilPH,
-  getHeightEnumTyp,
-  getSpreadEnumTyp,
-  fetchGermanName,
+  cleanUpJsonForCsv,
 } from "./helpers/helpers.js";
-
-/**
- * Fetches the German names for the plants from Wikidata API
- */
-const fetchGermanNames = async (plants) => {
-  return Promise.all(
-    plants.map(async (plant) => {
-      if (plant["common_name_de"]) {
-        return plant;
-      }
-      const germanName = await fetchGermanName(plant["unique_name"]);
-      plant["common_name_de"] = germanName;
-      return plant;
-    })
-  );
-};
 
 /**
  *  Custom rules to unify the value format of merged datasets.
@@ -36,10 +19,7 @@ const unifyValueFormat = (plants, columnMapping) => {
   const mappedColumns = Object.keys(columnMapping).filter(
     (key) => columnMapping[key] !== null
   );
-  //console.log(mappedColumns)
   plants.forEach((plant) => {
-    //console.log(plant)
-
     mappedColumns.forEach((column) => {
       if (plant[column]) {
         if (!!columnMapping[column]["valueMapping"]) {
@@ -73,37 +53,15 @@ const unifyValueFormat = (plants, columnMapping) => {
     });
 
     if ("height" in plant) {
-      plant["height"] = getHeightEnumTyp(plant["height"]);
+      plant["height"] = processMeasurement(plant["height"]);
     }
 
     if ("spread" in plant) {
-      plant["spread"] = getSpreadEnumTyp(plant["spread"]);
+      plant["spread"] = processMeasurement(plant["spread"]);
     }
 
     if ("width" in plant) {
-      plant["spread"] = getSpreadEnumTyp(plant["width"]);
-    }
-
-    if (plant["unique_name"].startsWith("Papaver somnif. paeonifl.")) {
-      plant["unique_name"] = plant["unique_name"].replace(
-        "Papaver somnif. paeonifl.",
-        "Papaver somniferum paeoniflorum"
-      );
-    } else if (plant["unique_name"].startsWith("Alcea rosea fl. pl.")) {
-      plant["unique_name"] = plant["unique_name"].replace(
-        "Alcea rosea fl. pl.",
-        "Alcea rosea flore pleno"
-      );
-    } else if (plant["unique_name"].startsWith("Campanula lat. macr.")) {
-      plant["unique_name"] = plant["unique_name"].replace(
-        "Campanula lat. macr.",
-        "Campanula latifolia macrantha"
-      );
-    } else if (plant["unique_name"].startsWith("Malva sylvestris ssp. maur.")) {
-      plant["unique_name"] = plant["unique_name"].replace(
-        "Malva sylvestris ssp. maur.",
-        "Malva sylvestris mauritiana"
-      );
+      plant["spread"] = processMeasurement(plant["width"]);
     }
   });
 
@@ -221,6 +179,17 @@ async function mergeDatasets() {
 
   practicalPlants.forEach((plant) => {
     const scientific_name = plant["scientific_name"];
+
+    // some plants are duplicates in the practicalplants dataset (detail.csv)
+    const mergedPlant = allPlants.find(
+      (plant) => plant["scientific_name"] === scientific_name
+    );
+
+    // stop processing plant if we already have it in the merged dataset
+    if (mergedPlant !== undefined) {
+      return;
+    }
+
     const plantInPermapeople = permapeople.find(
       (plant) => plant["scientific_name"] === scientific_name
     );
@@ -302,8 +271,7 @@ async function writePlantsToCsv(plants) {
   }
 
   let updatedPlants = unifyValueFormat(plants, permapeopleColumnMapping);
-
-  updatedPlants = await fetchGermanNames(updatedPlants);
+  cleanUpJsonForCsv(updatedPlants);
 
   console.log("[INFO] Writing merged dataset to CSV file...");
   console.log("[INFO] Total number of plants: ", updatedPlants.length);

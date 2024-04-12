@@ -4,11 +4,15 @@ import dbPlantsColumns from "./helpers/dp_plants_columns.js";
 import { sanitizeColumnNames } from "./helpers/helpers.js";
 
 import { config } from "dotenv";
-config();
+
+config({
+  path: ".env.local",
+});
+
 const pgp = pgPromise({});
 
 const db = pgp(process.env.DATABASE_URL);
-const plantsFilePath = process.argv[2] || "data/mergedDatasets.csv";
+const plantsFilePath = process.argv[2] || "data/finalDataset.csv";
 
 /**
  * Sanitizes the values of the json array

@@ -72,6 +72,7 @@ Following shade suggestions should be used as a starting point for coloring new 
 ### Design
 
 - Cancel should be blue and on the left bottom.
+- Labels should be shown above edit fields.
 - Display a left aligned heading if the form is representing a whole page, e.g. PermaplanT's forms to create maps and seeds.
 - Add a capitalized label above each field.
 - Align labels to the left of their corresponding fields.
@@ -155,7 +156,7 @@ Messages shown to the user should strive to fulfill following criteria:
 - Headlines, Sub-headlines and Labels should be capitalized
 - **Minimize hyphenation** of words
 - English: **American English**
-- German: **Neue Rechtschreibung**
+- German: **Neue Rechtschreibung**, informal "du"
 - use **plural** to avoid gendering, i.e. use _we_/_they_, avoid _he_/_she_
 
 ## Error Messages

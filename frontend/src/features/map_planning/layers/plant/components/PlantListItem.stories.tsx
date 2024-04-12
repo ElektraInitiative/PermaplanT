@@ -1,6 +1,6 @@
+import type { Meta, StoryObj } from '@storybook/react';
 import { PlantListItem } from './PlantListItem';
 import { PlantSuggestionList } from './PlantSuggestionList';
-import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof PlantListItem> = {
   component: PlantListItem,
@@ -39,7 +39,6 @@ export const InPlantSuggestionList: Story = {
   render: (args) => (
     <PlantSuggestionList
       header="A List of Plants"
-      hasContent={true}
       isLoading={false}
       noContentElement={<div>No Content</div>}
     >

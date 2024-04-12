@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, remove and delete fertilizers in their map in the layer.
-- **Assignee:** Moritz
+- **Assignee:** Moritz, Lukas
 
 ## Scenarios
 
@@ -24,5 +24,6 @@
 - **Postcondition:**
   The user has successfully added, edited, moved, removed and deleted fertilizers in the fertilization layer.
 - **Non-functional Constraints:**
+  - Non-semantic
   - Offline availability
   - Performance: Map sizes with more than 1ha in 10000 raster elements (m²) per year should be usable without noticeable delays and acceptable memory overhead

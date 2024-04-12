@@ -1,17 +1,20 @@
-import { convertToDate } from '../utils/date-utils';
-import { filterVisibleObjects } from '../utils/filterVisibleObjects';
-import {
-  BoundsRect,
-  TrackedMapSlice,
-  UNTRACKED_DEFAULT_STATE,
-  UntrackedMapSlice,
-} from './MapStoreTypes';
-import { clearInvalidSelection } from './utils';
-import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
+import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
+import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
+import { convertToDate } from '../utils/date-utils';
+import { filterVisibleObjects } from '../utils/filterVisibleObjects';
+import { isOneAreaOfPlanting } from '../utils/planting-utils';
+import {
+  ViewRect,
+  TrackedMapSlice,
+  UNTRACKED_DEFAULT_STATE,
+  UntrackedMapSlice,
+} from './MapStoreTypes';
+import { TransformerStore, useTransformerStore } from './transformer/TransformerStore';
+import { clearInvalidSelection } from './utils';
 
 export const createUntrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -22,19 +25,50 @@ export const createUntrackedMapSlice: StateCreator<
   untrackedState: UNTRACKED_DEFAULT_STATE,
   stageRef: createRef<Konva.Stage>(),
   tooltipRef: createRef(),
-  updateMapBounds(bounds: BoundsRect) {
+  selectionRectAttributes: {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    isVisible: false,
+    boundingBox: {
+      x1: 0,
+      y1: 0,
+      x2: 0,
+      y2: 0,
+    },
+  },
+  updateSelectionRect(update: React.SetStateAction<SelectionRectAttrs>) {
+    if (typeof update === 'function') {
+      set((state) => ({
+        ...state,
+        selectionRectAttributes: update(state.selectionRectAttributes),
+      }));
+    } else {
+      set((state) => ({
+        ...state,
+        selectionRectAttributes: {
+          ...state.selectionRectAttributes,
+          ...update,
+        },
+      }));
+    }
+  },
+  updateViewRect(bounds: ViewRect) {
     set((state) => ({
       ...state,
       untrackedState: {
         ...state.untrackedState,
-        editorBounds: bounds,
+        editorViewRect: bounds,
       },
     }));
   },
   lastActions: [],
   updateSelectedLayer(selectedLayer) {
     // Clear the transformer's nodes.
-    get().transformer.current?.nodes([]);
+    useTransformerStore.getState().actions.clearSelection();
+    get().baseLayerDeactivatePolygonManipulation();
+    get().clearStatusPanelContent();
 
     set((state) => ({
       ...state,
@@ -53,6 +87,12 @@ export const createUntrackedMapSlice: StateCreator<
             measurePoint1: null,
             measurePoint2: null,
             measureStep: 'inactive',
+          },
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedDrawings: null,
+            selectedShape: null,
+            editMode: undefined,
           },
         },
       },
@@ -104,7 +144,15 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-  selectPlantings(plantings) {
+  selectPlantings(plantings, transformerStore?: TransformerStore) {
+    if (transformerStore) {
+      if (isOneAreaOfPlanting(plantings)) {
+        transformerStore.actions.enableAllAnchors();
+      } else {
+        transformerStore.actions.enableDefaultAnchors();
+      }
+    }
+
     set((state) => ({
       ...state,
       untrackedState: {
@@ -147,6 +195,7 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+
   async updateTimelineDate(date) {
     const bounds = get().untrackedState.timelineBounds;
     const from = convertToDate(bounds.from);
@@ -179,6 +228,11 @@ export const createUntrackedMapSlice: StateCreator<
       date,
     );
 
+    const drawingsVisibleRelativeToTimelineDate = filterVisibleObjects(
+      get().trackedState.layers.drawing.loadedObjects,
+      date,
+    );
+
     set((state) => ({
       ...state,
       trackedState: {
@@ -189,9 +243,14 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.trackedState.layers.plants,
             objects: plantsVisibleRelativeToTimelineDate,
           },
+          drawing: {
+            ...state.trackedState.layers.drawing,
+            objects: drawingsVisibleRelativeToTimelineDate,
+          },
         },
       },
     }));
+
     clearInvalidSelection(get);
   },
   setTooltipText(content) {
@@ -216,6 +275,7 @@ export const createUntrackedMapSlice: StateCreator<
    * Allow the user to make measurement inputs on the base layer.
    */
   baseLayerActivateMeasurement() {
+    get().baseLayerDeactivatePolygonManipulation();
     set((state) => ({
       ...state,
       untrackedState: {
@@ -224,9 +284,11 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           base: {
             ...state.untrackedState.layers.base,
-            measurePoint1: null,
-            measurePoint2: null,
-            measureStep: 'none selected',
+            autoScale: {
+              measurePoint1: null,
+              measurePoint2: null,
+              measureStep: 'none selected',
+            },
           },
         },
       },
@@ -244,9 +306,11 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           base: {
             ...state.untrackedState.layers.base,
-            measurePoint1: null,
-            measurePoint2: null,
-            measureStep: 'inactive',
+            autoScale: {
+              measurePoint1: null,
+              measurePoint2: null,
+              measureStep: 'inactive',
+            },
           },
         },
       },
@@ -259,15 +323,15 @@ export const createUntrackedMapSlice: StateCreator<
     set((state) => {
       // This function should only be called if one of these two states is active.
       if (
-        state.untrackedState.layers.base.measureStep !== 'none selected' &&
-        state.untrackedState.layers.base.measureStep !== 'one selected'
+        state.untrackedState.layers.base.autoScale.measureStep !== 'none selected' &&
+        state.untrackedState.layers.base.autoScale.measureStep !== 'one selected'
       )
         return state;
 
       // Measurement step 'one selected' being active implies that measurePoint1 must not be null.
-      const measureStep = state.untrackedState.layers.base.measureStep;
-      const measurePoint1 = state.untrackedState.layers.base.measurePoint1;
-      const measurePoint2 = state.untrackedState.layers.base.measurePoint2;
+      const measureStep = state.untrackedState.layers.base.autoScale.measureStep;
+      const measurePoint1 = state.untrackedState.layers.base.autoScale.measurePoint1;
+      const measurePoint2 = state.untrackedState.layers.base.autoScale.measurePoint2;
 
       return {
         ...state,
@@ -277,14 +341,244 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers,
             base: {
               ...state.untrackedState.layers.base,
-              measurePoint1: measureStep === 'none selected' ? point : measurePoint1,
-              measurePoint2: measureStep === 'none selected' ? measurePoint2 : point,
-              measureStep: measureStep === 'none selected' ? 'one selected' : 'both selected',
+              autoScale: {
+                measurePoint1: measureStep === 'none selected' ? point : measurePoint1,
+                measurePoint2: measureStep === 'none selected' ? measurePoint2 : point,
+                measureStep: measureStep === 'none selected' ? 'one selected' : 'both selected',
+              },
             },
           },
         },
       };
     });
+  },
+  baseLayerActivateAddPolygonPoints() {
+    get().baseLayerDeactivateMeasurement();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          base: {
+            ...state.untrackedState.layers.base,
+            mapGeometry: {
+              ...state.untrackedState.layers.base.mapGeometry,
+              editMode: 'add',
+            },
+          },
+        },
+      },
+    }));
+  },
+  baseLayerActivateDeletePolygonPoints() {
+    get().baseLayerDeactivateMeasurement();
+    useTransformerStore.getState().actions.enableRotation(false);
+    useTransformerStore.getState().actions.enableResizing(false);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          base: {
+            ...state.untrackedState.layers.base,
+            mapGeometry: {
+              ...state.untrackedState.layers.base.mapGeometry,
+              editMode: 'remove',
+            },
+          },
+        },
+      },
+    }));
+  },
+  baseLayerActivateMovePolygonPoints() {
+    get().baseLayerDeactivateMeasurement();
+    useTransformerStore.getState().actions.enableRotation(false);
+    useTransformerStore.getState().actions.enableResizing(false);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          base: {
+            ...state.untrackedState.layers.base,
+            mapGeometry: {
+              ...state.untrackedState.layers.base.mapGeometry,
+              editMode: 'move',
+            },
+          },
+        },
+      },
+    }));
+  },
+  baseLayerDeactivatePolygonManipulation() {
+    useTransformerStore.getState().actions.enableRotation(true);
+    useTransformerStore.getState().actions.enableResizing(true);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          base: {
+            ...state.untrackedState.layers.base,
+            mapGeometry: {
+              ...state.untrackedState.layers.base.mapGeometry,
+              editMode: 'inactive',
+            },
+          },
+        },
+      },
+    }));
+  },
+
+  disableShapeSelection() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        shapeSelectionEnabled: false,
+      },
+    }));
+  },
+
+  enableShapeSelection() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        shapeSelectionEnabled: true,
+      },
+    }));
+  },
+
+  drawingLayerSetSelectedColor(color) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedColor: color,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetFillEnabled(fill: boolean) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            fillEnabled: fill,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetSelectedStrokeWidth(strokeWidth) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedStrokeWidth: strokeWidth,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerActivateDrawingMode(shape) {
+    get().drawingLayerClearSelectedShape();
+    get().disableShapeSelection();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedShape: shape,
+            selectedDrawings: null,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetEditMode(drawingId, editMode) {
+    if (drawingId != undefined) {
+      get().disableShapeSelection();
+    }
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            editDrawingId: drawingId,
+            editMode: editMode,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerClearSelectedShape() {
+    get().enableShapeSelection();
+    get().clearStatusPanelContent();
+    useTransformerStore.getState().actions.clearSelection();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedShape: null,
+            editMode: undefined,
+          },
+        },
+      },
+    }));
+  },
+  selectDrawings(drawings, transformerStore?: TransformerStore) {
+    if (transformerStore) {
+      transformerStore.actions.enableAllAnchors();
+    }
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedDrawings: drawings,
+          },
+        },
+      },
+    }));
   },
   getSelectedLayerType() {
     const selectedLayer = get().untrackedState.selectedLayer;
@@ -317,8 +611,6 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   __removeLastAction({ actionId, entityId }) {
-    console.log('Removing action', actionId, entityId);
-
     set((state) => ({
       ...state,
       lastActions: state.lastActions.filter(

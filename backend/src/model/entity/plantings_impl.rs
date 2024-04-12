@@ -6,14 +6,19 @@ use diesel::{
     debug_query, BoolExpressionMethods, ExpressionMethods, NullableExpressionMethods, QueryDsl,
     QueryResult,
 };
-use diesel_async::{AsyncPgConnection, RunQueryDsl};
+use diesel_async::{AsyncConnection, AsyncPgConnection, RunQueryDsl};
+use futures_util::Future;
 use log::debug;
 use uuid::Uuid;
 
-use crate::model::dto::plantings::{NewPlantingDto, PlantingDto, UpdatePlantingDto};
-use crate::model::entity::plantings::{Planting, UpdatePlanting};
+use crate::model::dto::plantings::{
+    DeletePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto,
+};
+use crate::model::entity::plantings::Planting;
 use crate::schema::plantings::{self, layer_id, plant_id};
 use crate::schema::seeds;
+
+use super::plantings::UpdatePlanting;
 
 /// Arguments for the database layer find plantings function.
 pub struct FindPlantingsParameters {
@@ -94,45 +99,48 @@ impl Planting {
     /// # Errors
     /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
-    ///
-    /// # Panics
-    /// Clippy thinks this function can panic because is makes use of unwrap.
-    /// But because we only unwrap after the relevant Result was checked,
-    /// this should never happen.
-    #[allow(clippy::unwrap_used)]
     pub async fn create(
-        dto: NewPlantingDto,
+        dto_vec: Vec<NewPlantingDto>,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<PlantingDto> {
-        let planting = Self::from(dto);
-        let query = diesel::insert_into(plantings::table).values(&planting);
-        let query_result = query.get_result::<Self>(conn).await.map(Into::into);
+    ) -> QueryResult<Vec<PlantingDto>> {
+        let planting_creations: Vec<Self> = dto_vec.into_iter().map(Into::into).collect();
+        let query = diesel::insert_into(plantings::table).values(&planting_creations);
 
         debug!("{}", debug_query::<Pg, _>(&query));
 
-        if planting.seed_id.is_none() || query_result.is_err() {
-            return query_result;
-        }
+        let query_result: Vec<Self> = query.get_results(conn).await?;
+
+        let seed_ids = query_result
+            .iter()
+            .map(|planting| planting.seed_id)
+            .collect::<Vec<_>>();
 
         // There seems to be no way of retrieving the additional name using the insert query
         // above.
-        let additional_name_query = seeds::table
-            .select(seeds::name.nullable())
-            .filter(seeds::id.eq(planting.seed_id.unwrap()));
+        let additional_names_query = seeds::table
+            .filter(seeds::id.nullable().eq_any(&seed_ids))
+            .select((seeds::id, seeds::name));
 
-        debug!("{}", debug_query::<Pg, _>(&additional_name_query));
+        debug!("{}", debug_query::<Pg, _>(&additional_names_query));
 
-        let mut query_result_unwrapped = query_result.unwrap();
-        match additional_name_query
-            .get_result::<Option<String>>(conn)
-            .await
-            .map(Into::into)
-        {
-            Ok(additional_name) => query_result_unwrapped.additional_name = additional_name,
-            Err(e) => return Err(e), // Should not be necessary, but required by the rust compiler.
-        }
+        let seed_ids_names: Vec<(i32, String)> = additional_names_query.get_results(conn).await?;
 
-        Ok(query_result_unwrapped)
+        let seed_ids_to_names = seed_ids_names
+            .into_iter()
+            .collect::<std::collections::HashMap<_, _>>();
+
+        let result_vec = query_result
+            .into_iter()
+            .map(PlantingDto::from)
+            .map(|mut dto| {
+                if let Some(seed_id) = dto.seed_id {
+                    dto.additional_name = seed_ids_to_names.get(&seed_id).cloned();
+                }
+                dto
+            })
+            .collect::<Vec<_>>();
+
+        Ok(result_vec)
     }
 
     /// Partially update a planting in the database.
@@ -140,22 +148,58 @@ impl Planting {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn update(
-        planting_id: Uuid,
         dto: UpdatePlantingDto,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<PlantingDto> {
-        let planting = UpdatePlanting::from(dto);
-        let query = diesel::update(plantings::table.find(planting_id)).set(&planting);
-        debug!("{}", debug_query::<Pg, _>(&query));
-        query.get_result::<Self>(conn).await.map(Into::into)
+    ) -> QueryResult<Vec<PlantingDto>> {
+        let planting_updates = Vec::from(dto);
+
+        let result = conn
+            .transaction(|transaction| {
+                Box::pin(async {
+                    let futures = Self::do_update(planting_updates, transaction);
+
+                    let results = futures_util::future::try_join_all(futures).await?;
+
+                    Ok(results) as QueryResult<Vec<Self>>
+                })
+            })
+            .await?;
+
+        Ok(result.into_iter().map(Into::into).collect())
     }
 
-    /// Delete the planting from the database.
+    /// Performs the actual update of the plantings using pipelined requests.
+    /// See [`diesel_async::AsyncPgConnection`] for more information.
+    /// Because the type system can not easily infer the type of futures
+    /// this helper function is needed, with explicit type annotations.
+    fn do_update(
+        updates: Vec<UpdatePlanting>,
+        conn: &mut AsyncPgConnection,
+    ) -> Vec<impl Future<Output = QueryResult<Self>>> {
+        let mut futures = Vec::with_capacity(updates.len());
+
+        for update in updates {
+            let updated_planting = diesel::update(plantings::table.find(update.id))
+                .set(update)
+                .get_result::<Self>(conn);
+
+            futures.push(updated_planting);
+        }
+
+        futures
+    }
+
+    /// Delete the plantings from the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn delete_by_id(id: Uuid, conn: &mut AsyncPgConnection) -> QueryResult<usize> {
-        let query = diesel::delete(plantings::table.find(id));
+    pub async fn delete_by_ids(
+        dto: Vec<DeletePlantingDto>,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<usize> {
+        let ids: Vec<Uuid> = dto.iter().map(|&DeletePlantingDto { id }| id).collect();
+
+        let query = diesel::delete(plantings::table.filter(plantings::id.eq_any(ids)));
         debug!("{}", debug_query::<Pg, _>(&query));
         query.execute(conn).await
     }

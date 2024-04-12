@@ -1,3 +1,9 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { FileStat } from 'webdav';
+import { z } from 'zod';
 import { BaseLayerImageDto } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton from '@/components/Button/SimpleButton';
@@ -6,15 +12,10 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 import { useFileExists } from '@/features/nextcloud_integration/hooks/useFileExists';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
-import { ReactComponent as CheckIcon } from '@/svg/icons/check.svg';
-import { ReactComponent as CircleDottedIcon } from '@/svg/icons/circle-dotted.svg';
-import { ReactComponent as CloseIcon, ReactComponent as CrossIcon } from '@/svg/icons/close.svg';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { FileStat } from 'webdav';
-import { z } from 'zod';
+import CheckIcon from '@/svg/icons/check.svg?react';
+import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
+import CloseIcon from '@/svg/icons/close.svg?react';
+import CrossIcon from '@/svg/icons/close.svg?react';
 
 export const TEST_IDS = Object.freeze({
   BACKGROUND_INPUT: 'base-layer-right-toolbar__background-input',
@@ -45,7 +46,9 @@ export function BaseLayerAttributeEditForm({ onChange, isReadOnlyMode }: BaseLay
   const deactivateMeasurement = useMapStore((state) => state.baseLayerDeactivateMeasurement);
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
   const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
-  const measureStep = useMapStore((state) => state.untrackedState.layers.base.measureStep);
+  const measureStep = useMapStore(
+    (state) => state.untrackedState.layers.base.autoScale.measureStep,
+  );
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
 
   const { register, handleSubmit, watch, setValue, formState } =

@@ -2,6 +2,8 @@
 
 pub mod base_layer_images_impl;
 pub mod blossoms_impl;
+pub mod drawings;
+pub mod drawings_impl;
 pub mod guided_tours_impl;
 pub mod layer_impl;
 pub mod map_impl;
@@ -10,6 +12,7 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod timeline;
 pub mod users_impl;
 
 use chrono::NaiveDate;
@@ -36,8 +39,8 @@ use super::r#enum::{
     fertility::Fertility, /*flower_type::FlowerType, */ growth_rate::GrowthRate,
     herbaceous_or_woody::HerbaceousOrWoody, layer_type::LayerType, life_cycle::LifeCycle,
     light_requirement::LightRequirement, /*nutrition_demand::NutritionDemand,*/
-    plant_height::PlantHeight, plant_spread::PlantSpread, propagation_method::PropagationMethod,
-    quality::Quality, quantity::Quantity, shade::Shade, soil_ph::SoilPh, soil_texture::SoilTexture,
+    propagation_method::PropagationMethod, quality::Quality, quantity::Quantity, shade::Shade,
+    soil_ph::SoilPh, soil_texture::SoilTexture,
     /*soil_water_retention::SoilWaterRetention, */ water_requirement::WaterRequirement,
 };
 
@@ -157,15 +160,15 @@ pub struct Plants {
     pub soil_texture: Option<Vec<Option<SoilTexture>>>,
 
     /*
-    /// - *Used* in hydrology layer.
+    /// - *NOT used* in hydrology layer
+    ///   as it has poor quality and no additional data compared to water_requirement
+    /// - *Fill ratio:* 37%
     /// - *Fetched from* PracticalPlants
     /// - wet = drowned, (often) flooded or in general very moist, e.g. swamp
     /// - moist = humid, can hold some water, e.g. flat bed with humus
     /// - well drained = dry, low capacity to hold water, e.g. sandhill.
-    /// - *Fill ratio:* 37%
     pub soil_water_retention: Option<Vec<Option<SoilWaterRetention>>>,
-    */
-    /*
+
     /// - Only informational.
     /// - *Fetched from* PracticalPlants
     /// - gives information about environmental conditions, such as drought or wind tolerance
@@ -216,9 +219,9 @@ pub struct Plants {
 
     /// - Only informational.
     /// - *Fetched from* PracticalPlants as `mature_size_height` and merged with Permapeople.
-    /// - informs about the maximum height that the plant gains
+    /// - informs about the maximum height that the plant gains in cm
     /// - *Fill ratio:* 80%
-    pub height: Option<PlantHeight>,
+    pub height: Option<i32>,
 
     /*
     /// - Determines how large the plant can grow in diameter.
@@ -255,7 +258,7 @@ pub struct Plants {
     /// - *Fill ratio:* 100%
     pub updated_at: NaiveDateTime,
 
-    /// - *Used* in hydrology layer.
+    /// - *Used* in watering layer.
     /// - Fetched from PracticalPlants and merged with \`has_drought_tolerance\` of Permapeople.
     /// - *Fill ratio:* 57%
     pub has_drought_tolerance: Option<bool>,
@@ -315,7 +318,10 @@ pub struct Plants {
 
     /// - *Used* in hydrology layer.
     /// - *Fetched from* PracticalPlants and Permapeople (merged with `water` of PracticalPlants).
-    /// - water = completely aquatic; wet = drowned, (often) flooded or in general very moist, e.g. swamp; moist = humid, regular water supply, e.g. flat bed with humus; well drained = dry, little water input.
+    /// - water = completely aquatic;
+    /// - wet = drowned, (often) flooded or in general very moist, e.g. swamp;
+    /// - moist = humid, regular water supply, e.g. flat bed with humus;
+    /// - well drained = dry, little water input.
     /// - *Fill ratio:* 88%
     pub water_requirement: Option<Vec<Option<WaterRequirement>>>,
 
@@ -436,9 +442,10 @@ pub struct Plants {
     //pub slug: Option<String>,
     */
     /// - To be used.
+    /// - How far a plant spreads (The 'width' of a plant) in cm
     /// - *Fetched from* Permapeople.
     /// - *Fill ratio:* 0.1%
-    pub spread: Option<PlantSpread>,
+    pub spread: Option<i32>,
 
     /*
     /// - Not used.
@@ -710,8 +717,6 @@ pub struct Seed {
     pub generation: Option<i16>,
     /// Notes about the seeds.
     pub notes: Option<String>,
-    /// The variety of the seed. Currently unused.
-    pub variety: Option<String>,
     /// The id of the plant this seed belongs to.
     pub plant_id: Option<i32>,
     /// The id of the owner of the seed.
@@ -738,7 +743,6 @@ pub struct NewSeed {
     pub price: Option<i16>,
     pub generation: Option<i16>,
     pub notes: Option<String>,
-    pub variety: Option<String>,
     pub owner_id: Uuid,
 }
 
@@ -824,6 +828,14 @@ pub struct UpdateMap {
     pub description: Option<String>,
     /// The location of the map as a latitude/longitude point.
     pub location: Option<Point>,
+}
+
+/// The `UpdateMapGeometry` entity.
+#[derive(AsChangeset)]
+#[diesel(table_name = maps)]
+pub struct UpdateMapGeometry {
+    /// New Map Bounds
+    pub geometry: Polygon<Point>,
 }
 
 /// The `Layer` entity.

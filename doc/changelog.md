@@ -8,74 +8,119 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.3.7 - UNRELEASED
 
-- _()_
-- _()_
+- needs new migrations
+- needs new scraper data (integer for plant spread and height)
+- pin python package versions for e2e tests #1200 _(4ydan)_
+- Remove variety from table seeds _(Jannis Adamek)_
+- Add timeline API that summarizes plantings #967 _(Jannis Adamek)_
+- Add migration to add drawing layer to existing maps #1234 _(Jannis Adamek)_
 - Refactor react query error handling _(Daniel Steinkogler)_
-- _()_
+- Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
 - Enable automatic image scaling in base layer _(Moritz)_
 - _()_
 - Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Fix ref warning in PlantLabel, center labels as intended _(Paul)_
+- Fix planting cursor preventing the placement of an area of plants _(Paul)_
+- Refactor nearly all api calls to idiomatic react query _(Paul)_
+- Add an area of plant indicator _(Paul)_
 - _()_
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
 - Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
+- Added Meeting Agenda&Notes for 04.12. 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 11.12. 9:00 _(Markus Raab)_
+- Added Meeting Agenda&Notes for 18.12. 9:00 _(Markus Raab, Christoph)_
+- Added Meeting Agenda&Notes for 27.12.2023 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 02.01.2024 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 08.01.2024 9:00 _(Markus Raab, Christoph @chr_schr)_
+- Added Meeting Agenda&Notes for 15.01.2024 9:00 _(Markus Raab, Moritz)_
+- Added Meeting Agenda&Notes for 22.01.2024 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 29.01.2024 9:00 _(Markus Raab, Jannis)_
+- Added Meeting Agenda&Notes for 05.02.2024 9:00 _(Markus Raab, Christoph)_
+- Added Meeting Agenda&Notes for 12.02.2024 9:00 _(Markus Raab, Christoph)_
+- Added Meeting Agenda&Notes for 19.02.2024 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 11.03.2024 9:00 _(Markus Raab, Jannis)_
+- Added Meeting Agenda&Notes for 25.03.2024 9:00 _(Markus Raab, Moritz)_
+- Added Meeting Agenda&Notes for 02.04.2024 9:00 _(Markus Raab, Lukas)_
+- Added Meeting Agenda&Notes for 08.04.2024 9:00 _(Markus Raab, Filip)_
 - _()_
 - _()_
+- Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
+- _()_
+- Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
+- Fix broken .env reading for scraper _(Paul)_
+- Add a dev env variable for react query when developing in offline env (e.g. plane) _(Paul)_
+- Collect events from planting layer and add it to timeline _(Daniel Steinkogler)_
+- Flatten bezier polygon line after deleting point _(Daniel Steinkogler)_
+- _()_
+- Remove error messages in console if a seed was not found _(Moritz)_
+- Add drawing layer functionality including rectangles, ellipses, lines and bezier polygons _(Daniel Steinkogler, Jannis Adamek)_
+- _()_
+- Landing page: Added blog entries, updated team members, minor text changes _(Christoph Schreiner)_
+- _()_
+- Fix the markdown so that mdbook tests pass _(Daniel Steinkogler)_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Improved the scraper: Fixed a bug and improved cleaning for German common names _(temmey)_
+- Scraper: Separate fetching of German common names from merging datasets _(Christoph Schreiner)_
+- Scraper: Allow applying overrides to merged dataset _(Christoph Schreiner)_
+- Make map geometry viewable and editable _(Moritz)_
+- Improve documentation of schema.rs patch workflow. _(Jannis @horenso, Christoph @chr_schr)_
+- Prevent propagating enft key on markdown editor _(Daniel Steinkogler)_
 - Enable deletion of selected plants via DEL shortcut _(Daniel Steinkogler)_
 - _()_
+- Fix link to Plant image for Openstreetmap _(Andrei Dinu)_
+- Add key combinations for map geometry _(Daniel Steinkogler)_
+- Add documentation for adding a new field to an entity _(Christoph Schreiner)_
 - _()_
+- Add tooltips to show keybindings _(Daniel Steinkogler)_
 - _()_
+- Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Use integer for plant spread and height _(Christoph Schreiner)_
 - _()_
 - Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
 - _()_
+- Added PermaplanT logo to link previews in meta tag and replaced default React logo _(Andrei Dinu)_
+- wrap api queries using react query _(Daniel Steinkogler)_
+- CI: running pr deployment only on pr and not master branch _(Filip Markovic)_
+- CI: unstash schemas in release pipeline in build-backend _(4ydan)_
+- CI: updated unsafe packages for release & fixed release github template _(4ydan, Filip Markovic)_
+- _()_
+- Fixed German common names not being used when language is set to German _(Christoph Schreiner)_
+- added manual testing for 0.3.7 (successful) _(Filip Markovic)_
+- Fixed map label and common name capitalization issues _(Christoph Schreiner)_
+- _()_
+- fixed broken tour and blog date for release _(Filip Markovic)_
+- CI: added deployment of doc and README links to doc _(Filip Markovic)_
+- _()_
+- Add decision for polygon libraries _(Daniel Steinkogler)_
+- _()_
+- Added keybindings for undo and redo _(Daniel Steinkogler)_
+- E2E: fix planting cursor tests _(4ydan & absurd-turtle)_
+- _()_
+- Added planting notes to planting details _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
 - _()_
+- CI: mark duplicate code _(4ydan & Filip Markovic)_
 - _()_
 - _()_
-- _()_
-- _()_
-- _()_
-- CI: mark duplicate code _(4ydan)_
-- _()_
-- _()_
+- Added keybinding configuration for macOS _(Daniel Steinkogler)_
 - Up the rust version to 1.74 _(4ydan)_
+- Display a rectangle for area of plantings _(Paul)_
+- Refactor the planting api to batch processing _(Paul, Jannis)_
 - _()_
+- Area of plants resizing. Rename width & height of plantings to `size_x` & `size_y`. Remove `scale` from plantings. _(Paul)_
+- Refactor transformer into a separate store _(Paul)_
+- Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
+- Fix broken dark mode for LanguageSwitcher, SelectMenu & PaginatedSelectMenu _(Lukas Anton Lakits)_
 - _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
-- _()_
+- Fixed small issues in the documentation (typos/links/phrasing) _(Andrei Dinu)_
 
 ## 0.3.6 - 21.11.2023 (151 commits)
 

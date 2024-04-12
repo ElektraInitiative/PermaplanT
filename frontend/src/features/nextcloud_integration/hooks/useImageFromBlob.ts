@@ -3,9 +3,9 @@
  *
  * @module @ignore
  */
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { errorToastGrouped } from '@/features/toasts/groupedToast';
 
 type UseImageFromBlobOptions = {
   /**
@@ -59,7 +59,6 @@ export function useImageFromBlob({
     if (isError) {
       if (showErrorMessage) {
         errorToastGrouped(t('nextcloudIntegration:load_image_failed'), {
-          autoClose: false,
           toastId: 'ncError',
         });
       }

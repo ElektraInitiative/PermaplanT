@@ -1,4 +1,5 @@
-import { UpdateBaseLayerAction } from '../../../layers/base/actions';
+import { SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { BaseLayerImageDto } from '@/api_types/definitions';
 import {
   BaseLayerAttributeEditForm,
@@ -8,12 +9,12 @@ import {
   BaseLayerDistanceModalAttributes,
   DistanceMeasurementModal,
 } from '@/features/map_planning/layers/base/components/DistanceMeasurementModal';
+import { MapGeometryToolForm } from '@/features/map_planning/layers/base/components/MapGeometryToolForm';
 import { calculateDistance, calculateScale } from '@/features/map_planning/layers/base/util';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 import { errorToastGrouped } from '@/features/toasts/groupedToast';
-import { SubmitHandler } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { UpdateBaseLayerAction } from '../../../layers/base/actions';
 
 class ValidationError extends Error {
   constructor(msg: string) {
@@ -55,7 +56,7 @@ export const BaseLayerRightToolbar = () => {
 
   const baseLayerState = useMapStore((state) => state.trackedState.layers.base);
   const { measureStep, measurePoint1, measurePoint2 } = useMapStore(
-    (state) => state.untrackedState.layers.base,
+    (state) => state.untrackedState.layers.base.autoScale,
   );
   const executeAction = useMapStore((state) => state.executeAction);
   const step = useMapStore((state) => state.step);
@@ -121,6 +122,7 @@ export const BaseLayerRightToolbar = () => {
         onChange={onBaseLayerFormChange}
         isReadOnlyMode={isReadOnlyMode}
       />
+      <MapGeometryToolForm />
     </div>
   );
 };

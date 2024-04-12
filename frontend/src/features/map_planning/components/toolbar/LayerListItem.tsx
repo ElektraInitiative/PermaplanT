@@ -1,13 +1,13 @@
-import useMapStore from '../../store/MapStore';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LayerDto, LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import { NamedSlider } from '@/components/Slider/NamedSlider';
-import { ReactComponent as CaretDownIcon } from '@/svg/icons/caret-down.svg';
-import { ReactComponent as CaretRightIcon } from '@/svg/icons/caret-right.svg';
-import { ReactComponent as EyeOffIcon } from '@/svg/icons/eye-off.svg';
-import { ReactComponent as EyeIcon } from '@/svg/icons/eye.svg';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import CaretDownIcon from '@/svg/icons/caret-down.svg?react';
+import CaretRightIcon from '@/svg/icons/caret-right.svg?react';
+import EyeOffIcon from '@/svg/icons/eye-off.svg?react';
+import EyeIcon from '@/svg/icons/eye.svg?react';
+import useMapStore from '../../store/MapStore';
 
 interface LayerListProps {
   /** layer which is controlled by this list element */

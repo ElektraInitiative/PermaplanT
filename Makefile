@@ -29,8 +29,8 @@ help:
 
 
 .PHONY: run-frontend
-run-frontend: build-frontend ## Build & Run frontend
-	@cd frontend && npm run dev -- --host
+run-frontend: ## Build & Run frontend
+	@cd frontend && npm run generate-api-types && npm run dev -- --host
 
 .PHONY: run-backend
 run-backend: build-backend ## Build & Run backend
@@ -79,11 +79,11 @@ doc-storybook: install-frontend ## Storybook doc
 	@cd frontend && npm run build-storybook
 
 .PHONY: doc-backend
-doc-backend: install-backend ## Backend src doc
-	@echo "Not implemented yet."
+doc-backend: install-types install-backend ## Backend src doc
+	@cd backend && cargo doc --document-private-items
 
 .PHONY: doc-frontend
-doc-frontend: install-frontend ## Frontend src doc
+doc-frontend: install-types install-frontend ## Frontend src doc
 	@cd frontend && npm run doc
 
 
@@ -95,7 +95,7 @@ install: install-pre-commit install-backend install-mdbook install-frontend inst
 	@echo "Installation completed."
 
 .PHONY: install-types
-install-types: ## Install types
+install-types: ## Run migrations and generate types for frontend
 	@make migration -C ./backend
 	@cd frontend && npm run generate-api-types
 

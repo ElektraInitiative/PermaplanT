@@ -1,16 +1,15 @@
-import useMapStore from '../../store/MapStore';
-import { LayerListItem } from './LayerListItem';
-import { LayerDto } from '@/api_types/definitions';
-
 /* TODO: these imports should be added again when the corresponding functionality of the buttons is implemented */
 // import IconButton from '@/components/Button/IconButton';
 // import { NamedSlider } from '@/components/Slider/NamedSlider';
-// import { ReactComponent as CaretDownIcon } from '@/svg/icons/caret-down.svg';
-// import { ReactComponent as CaretRightIcon } from '@/svg/icons/caret-right.svg';
-// import { ReactComponent as EyeOffIcon } from '@/svg/icons/eye-off.svg';
-// import { ReactComponent as EyeIcon } from '@/svg/icons/eye.svg';
+// import CaretDownIcon  from '@/svg/icons/caret-down.svg?react';
+// import CaretRightIcon  from '@/svg/icons/caret-right.svg?react';
+// import EyeOffIcon  from '@/svg/icons/eye-off.svg?react';
+// import EyeIcon  from '@/svg/icons/eye.svg?react';
 // import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LayerDto } from '@/api_types/definitions';
+import useMapStore from '../../store/MapStore';
+import { LayerListItem } from './LayerListItem';
 
 export type LayerListProps = {
   layers: LayerDto[];

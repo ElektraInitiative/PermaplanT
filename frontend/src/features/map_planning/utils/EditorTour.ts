@@ -86,26 +86,6 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
     },
   },
   {
-    id: 'baseLayerIntro',
-    title: `${t('guidedTour:mapEditor.base_layer_title')} (1/2)`,
-    text: t('guidedTour:mapEditor.base_layer_intro'),
-    buttons: standardButtons,
-    attachTo: {
-      element: '[data-tourid="bottom_right_toolbar"]',
-      on: 'left',
-    },
-  },
-  {
-    id: 'baseLayerToolbar',
-    title: `${t('guidedTour:mapEditor.base_layer_title')} (2/2)`,
-    text: t('guidedTour:mapEditor.base_layer_toolbar'),
-    buttons: standardButtons,
-    attachTo: {
-      element: '[data-tourid="bottom_right_toolbar"]',
-      on: 'left',
-    },
-  },
-  {
     id: 'plantsLayerSelect',
     title: `${t('guidedTour:mapEditor.plants_layer_title')} (1/16)`,
     text: actionText(
@@ -226,12 +206,12 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
       t('guidedTour:mapEditor.plants_layer_change_date_text'),
     ),
     attachTo: {
-      element: '[data-tourid="date_picker"]',
+      element: '[data-tourid="timeline"]',
       on: 'top',
     },
     advanceOn: {
-      selector: '[data-tourid="date_picker"]',
-      event: 'change',
+      selector: '[data-tourid="timeline"]',
+      event: 'dateChanged',
     },
     classes: 'action-step',
     canClickTarget: true,
@@ -392,12 +372,12 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
     title: `${t('guidedTour:mapEditor.plants_layer_title')} (16/16)`,
     text: actionText(t('guidedTour:mapEditor.plants_layer_revert_date_action')),
     attachTo: {
-      element: '[data-tourid="date_picker"]',
+      element: '[data-tourid="timeline"]',
       on: 'top',
     },
     advanceOn: {
-      selector: '[data-tourid="date_picker"]',
-      event: 'change',
+      selector: '[data-tourid="timeline"]',
+      event: 'dateChanged',
     },
     classes: 'action-step',
     canClickTarget: true,

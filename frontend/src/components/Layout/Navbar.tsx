@@ -1,15 +1,15 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LoginButton } from '@/features/auth/components/LoginButton';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
+import LogoSmallGraySVG from '@/svg/permaplant-logo-gray.svg?react';
+import LogoSmallSVG from '@/svg/permaplant-logo.svg?react';
 import { DarkModeSwitcher } from '../../features/dark_mode';
 import { useDarkModeStore } from '../../features/dark_mode';
 import LanguageSwitcher from '../../features/landing_page/components/LanguageSwitcher';
 import ButtonLink from '../Button/ButtonLink';
 import IconButton from '../Button/IconButton';
 import FullPageNav from './FullPageNav';
-import { LoginButton } from '@/features/auth/components/LoginButton';
-import { useSafeAuth } from '@/hooks/useSafeAuth';
-import { ReactComponent as LogoSmallGraySVG } from '@/svg/permaplant-logo-gray.svg';
-import { ReactComponent as LogoSmallSVG } from '@/svg/permaplant-logo.svg';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 /**
  * The navigation component that is fixed on the top.

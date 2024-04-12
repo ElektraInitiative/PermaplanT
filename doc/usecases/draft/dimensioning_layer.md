@@ -22,6 +22,7 @@
 - **Postcondition:**
   Dimensions are added.
 - **Non-functional Constraints:**
+  - Non-semantic
   - Must be printable.
   - New Layers can be created.
   - Performance: at least 100 elements per year should be usable without noticeable delays and acceptable memory overhead

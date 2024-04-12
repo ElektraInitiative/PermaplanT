@@ -4,18 +4,19 @@ This folder contains all use cases of PermaplanT.
 
 They are structured in folders by progress:
 
-- `draft`: not yet ready for implementation
-- `assigned`: use case is part of PermaplanT 1.0
 - `current`: use case is currently worked on
+- `assigned`: use case is part of PermaplanT 1.0 (June 2024)
 - `done`: use case was successfully implemented
+- `later`: currently not being worked on due to priorities
+- `draft`: not being worked on and not yet ready for implementation
 
 ## Done
 
 A use case is done iff:
 
-- documentation: clear for others how changes/extensions should be done
-- issues closed or written about left-overs in notes of use case
-- write in Changelog about finished UC and add a link to it
-- extend the [test protocol](../tests/manual/protocol.md)
-- add links from use case to implementation/documentation/test protocol
-- move use case to folder "done"
+- documented how changes/extensions should be done
+- closed all issues or wrote about left-overs in notes of use case
+- wrote in changelog about finished UC and added a link to it
+- wrote e2e test cases or extended the [test protocol](../tests/manual/protocol.md)
+- added links from use case to implementation/documentation/test protocol
+- moved use case to folder "done"

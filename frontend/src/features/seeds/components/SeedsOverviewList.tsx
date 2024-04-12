@@ -1,16 +1,15 @@
-import { Quality, SeedDto } from '@/api_types/definitions';
-import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
-import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
-import { findPlantById } from '@/features/seeds/api/findPlantById';
-import { useTranslateQuality } from '@/hooks/useTranslateQuality';
-import { useTranslateQuantity } from '@/hooks/useTranslateQuantity';
-import { ReactComponent as ArchiveIcon } from '@/svg/icons/archive-off.svg';
-import { ReactComponent as EditIcon } from '@/svg/icons/edit.svg';
-import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
-import { useQuery } from '@tanstack/react-query';
 import { Suspense, UIEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Quality, SeedDto } from '@/api_types/definitions';
+import IconButton, { ButtonVariant } from '@/components/Button/IconButton';
+import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
+import { useTranslateQuality } from '@/hooks/useTranslateQuality';
+import { useTranslateQuantity } from '@/hooks/useTranslateQuantity';
+import ArchiveIcon from '@/svg/icons/archive-off.svg?react';
+import EditIcon from '@/svg/icons/edit.svg?react';
+import { PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 
 interface SeedsOverviewListProps {
   seeds: SeedDto[];
@@ -140,23 +139,28 @@ const SeedsOverviewList = ({ seeds, handleArchiveSeed, pageFetcher }: SeedsOverv
   );
 };
 
-const CompletePlantNameFromSeed = (props: { seed: SeedDto }) => {
+const CompletePlantNameFromSeed = ({ seed }: { seed: SeedDto }) => {
   const { t } = useTranslation(['common']);
+  const { i18n } = useTranslation();
 
-  const { isLoading, isError, data } = useQuery(
-    ['plant', props.seed.plant_id],
-    () => findPlantById(props.seed.plant_id ?? -1),
-    { cacheTime: Infinity, staleTime: Infinity },
-  );
+  const {
+    data: plant,
+    isLoading: isPlantLoading,
+    isError: hasPlantError,
+  } = useFindPlantById({
+    // cast is fine because the query can only execute if plant_id is defined
+    plantId: seed.plant_id as number,
+    enabled: seed.plant_id !== undefined,
+  });
 
-  if (isLoading)
+  if (isPlantLoading)
     return (
       <div className="w-[20px]">
         <LoadingSpinner />
       </div>
     );
-  else if (isError) return <span>{t('common:error')}</span>;
-  else return <PlantNameFromSeedAndPlant plant={data} seed={props.seed} />;
+  else if (hasPlantError) return <span>{t('common:error')}</span>;
+  else return <PlantNameFromSeedAndPlant plant={plant} seed={seed} language={i18n.language} />;
 };
 
 export default SeedsOverviewList;

@@ -1,6 +1,6 @@
-import PageTitle from './PageTitle';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
+import PageTitle from './PageTitle';
 
 it('renders correctly', () => {
   const tree = renderer

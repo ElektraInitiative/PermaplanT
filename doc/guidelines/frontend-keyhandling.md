@@ -4,7 +4,7 @@ This document gives guidelines on how to implement keybindings in the frontend.
 
 ### Keybinding Configuration
 
-The file `config/keybindings/keybindings.json` contains all keybindings that are used in the application and serves the following characteristics:
+The files `config/keybindings/keybindings_windows_linux` and `config/keybindings/keybindings_macos` contains all keybindings that are used in the application and serves the following characteristics:
 
 - for all features add commonly-used and vim-like bindings
 - we generally try to provide several keybindings for the same functionality, to make the functionality easier accessible
@@ -16,7 +16,9 @@ The file `config/keybindings/keybindings.json` contains all keybindings that are
   - `_just_for_documentation_`:
     Keybindings that are only used for documentation purposes since the keybinding is hardcoded in the component.
     For example, the search field can be cleared by pressing the Escape key, which is typically a native browser action and should not be configurable in the keybindings file.
-- modifier keys are supported (Shift, Alt, Ctrl, Meta)
+- modifier keys are supported:
+  - Windows and Linux: Shift, Ctrl, Alt, Meta
+  - macOS: Shift, Ctrl, Opt, Cmd
   - they can be used in combination with other keys by using the '+' sign (e.g. 'Alt+P', 'Shift+A')
 - multiple keybindings can be assigned to one action
 
@@ -51,7 +53,7 @@ Structure:
 
 Example:
 
-```
+```typescript
     const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
       const action = getActionNameFromKeyEvent(<scope>, event);
       if(action === "doSomething"){
@@ -72,7 +74,7 @@ Example:
 
 Example:
 
-```
+```typescript
 const keyHandlerActions: Record<string, () => void> = {
   exitPlantingMode: () => {
     exitPlantingMode();

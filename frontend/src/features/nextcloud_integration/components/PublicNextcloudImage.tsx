@@ -1,6 +1,8 @@
-import { usePublicImage } from '../hooks/usePublicImage';
-import { RetryValue } from '@tanstack/query-core/build/lib/retryer';
+import { QueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { usePublicImage } from '../hooks/usePublicImage';
+
+type RetryValue<TError> = QueryOptions<unknown, TError>['retry'];
 
 interface PublicNextcloudImageProps extends React.ComponentPropsWithoutRef<'img'> {
   // relative path starting at the public share directory to the image in Nextcloud

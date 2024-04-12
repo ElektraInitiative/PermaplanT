@@ -1,6 +1,6 @@
-import PageLayout from './PageLayout';
-import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
 import type { Meta, StoryObj } from '@storybook/react';
+import { reactRouterDecorator } from '@/utils/stories/react-router-decorators';
+import PageLayout from './PageLayout';
 
 const meta: Meta<typeof PageLayout> = {
   title: 'Components/Layout/PageLayout',

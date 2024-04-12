@@ -1,10 +1,9 @@
-import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenuTypes';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { GroupBase, StylesConfig } from 'react-select';
+import type { ClassNamesConfig, StylesConfig, GroupBase } from 'react-select';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
-import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
+import filterObject from '../../utils/filterObject';
+import { SelectOption } from './SelectMenu';
 
 /**
  * Contains the information needed by react-select-async-paginate for loading a single page.
@@ -106,12 +105,14 @@ export default function PaginatedSelectMenu<
   const customStyles: StylesConfig<Option, IsMulti, GroupBase<Option>> = {
     // remove css attributes from predefined styles
     // this needs to be done so the custom css classes take effect
+    menu: (styles) => filterObject(styles, ['backgroundColor', 'color']),
     control: (styles) =>
       filterObject(styles, [
         'border',
         'borderColor',
         'borderRadius',
         'boxShadow',
+        'backgroundColor',
         'color',
         '&:hover',
       ]),

@@ -1,4 +1,19 @@
-import axios from "axios";
+/**
+ * Capitalizes the first character of every word in a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The string with first characters of every word capitalized.
+ */
+function capitalizeWords(str) {
+  const wordsArray = str.split(" ");
+
+  for (let i = 0; i < wordsArray.length; i++) {
+    const word = wordsArray[i];
+    wordsArray[i] = word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  return wordsArray.join(" ");
+}
 
 /**
  * Sanitizes the column names of the json array
@@ -78,65 +93,44 @@ function getSoilPH(pH) {
 }
 
 /**
- * Returns the height enum typ based on the height
+ * Returns a plant measurement (height or spread) in cm
  *
- * @param {string} height String containing the height value in meter
+ * @param {string} measurement String containing the spread/width value in meter
  * @returns {string}
  */
-function getHeightEnumTyp(height) {
-  const value = processValue(height);
-  if (value === null) return null;
+function processMeasurement(value) {
+  const processedValue = processValue(value);
+  if (processedValue === null) return null;
 
-  return value <= 0.25 ? "low" : value <= 0.61 ? "medium" : "high";
+  return Math.round(processedValue * 100);
 }
 
 /**
- * Returns the spread enum typ based on the spread/width
+ * Cleans up a JSON array entries for smoother CSV export.
+ * - Changes empty strings to null
+ * - Removes the subfamily column
+ * - Trims unique_name column
  *
- * @param {string} spread String containing the spread/width value in meter
- * @returns {string}
+ * @param {Array} plants - Array of plants
  */
-function getSpreadEnumTyp(spread) {
-  const value = processValue(spread);
-  if (value === null) return null;
-
-  return value <= 0.15 ? "narrow" : value <= 0.61 ? "medium" : "wide";
-}
-
-/**
- * Fetches the German name of the plant from wikidata API.
- *
- * @param {*} binomialName
- * @returns {Promise<string>} German name of the plant
- */
-async function fetchGermanName(binomialName) {
-  try {
-    const url = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${binomialName}&language=en&format=json`;
-    const response = await axios.get(url);
-    const data = response.data;
-    const results = data.search;
-    if (results.length === 0) {
-      return null;
-    }
-    const result = results[0];
-    const id = result.id;
-    const url2 = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${id}&languages=de&format=json`;
-    const response2 = await axios.get(url2);
-    const data2 = response2.data;
-    const entities = data2.entities;
-    const entity = entities[id];
-    const dewiki = await entity["sitelinks"]["dewiki"];
-    if (dewiki) {
-      return dewiki.title;
-    }
-  } catch (error) {}
-  return null;
+function cleanUpJsonForCsv(plants) {
+  const columns = Object.keys(plants[0]);
+  plants.forEach((plant, index) => {
+    delete plant.subfamily;
+    columns.forEach((column) => {
+      if (plant[column] === "") {
+        plant[column] = null;
+      } else if (column === "unique_name") {
+        plant[column] = plant[column].trim();
+      }
+    });
+  });
 }
 
 export {
   sanitizeColumnNames,
   getSoilPH,
-  getHeightEnumTyp,
-  getSpreadEnumTyp,
-  fetchGermanName,
+  capitalizeWords,
+  cleanUpJsonForCsv,
+  processMeasurement,
 };

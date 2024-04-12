@@ -1,8 +1,8 @@
-import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { Shape, ShapeConfig } from 'konva/lib/Shape';
 import { Stage } from 'konva/lib/Stage';
 import { Util } from 'konva/lib/Util';
 import { Transformer } from 'konva/lib/shapes/Transformer';
+import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 
 // Keep track of our previously selected shapes so we can trigger the selection
 // only if we have new shapes in our bounds. This fixes a bug where deselection
@@ -31,7 +31,7 @@ export const selectIntersectingShapes = (
       // To exclude Konva's transformer, check if node contains children.
       // 'listening' is explicitly checked for '!== false' because
       // Konva treats it as true if it's undefined or missing at all.
-      return shape?.attrs.listening !== false && shape?.hasChildren();
+      return shape?.attrs.listening !== false;
     });
 
   if (!allShapes) return;

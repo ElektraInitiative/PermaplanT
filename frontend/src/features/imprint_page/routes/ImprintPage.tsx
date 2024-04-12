@@ -1,14 +1,14 @@
+import { useTranslation } from 'react-i18next';
 import Footer from '@/components/Layout/Footer';
 import PageLayout from '@/components/Layout/PageLayout';
 import Contact from '@/features/landing_page/components/Contact';
-import { useTranslation } from 'react-i18next';
 
 export function ImprintPage() {
   const { t } = useTranslation(['imprint']);
 
   return (
     <PageLayout styleNames="body-font relative w-full text-center">
-      <h1 className="title-font mb-8 text-3xl font-medium text-primary-500 dark:text-primary-300 sm:text-4xl">
+      <h1 className="title-font mb-8 text-3xl font-medium text-primary-500 sm:text-4xl dark:text-primary-300">
         {t('imprint:title')}
       </h1>
       <section

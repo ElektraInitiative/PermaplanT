@@ -1,6 +1,6 @@
-import { ChatMessage } from '../api/chat';
-import { useSafeAuth } from '@/hooks/useSafeAuth';
 import { AuthContextProps } from 'react-oidc-context';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
+import { ChatMessage } from '../api/chat';
 
 /**
  * generate classes to align the logged in users messages right

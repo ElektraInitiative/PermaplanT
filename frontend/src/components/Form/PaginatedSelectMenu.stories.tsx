@@ -1,7 +1,7 @@
-import PaginatedSelectMenu from '@/components/Form/PaginatedSelectMenu';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { useForm } from 'react-hook-form';
+import PaginatedSelectMenu from '@/components/Form/PaginatedSelectMenu';
 
 const meta: Meta<typeof PaginatedSelectMenu> = {
   title: 'Components/Form/SelectMenu/PaginatedSelectMenu',

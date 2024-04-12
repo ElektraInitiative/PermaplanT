@@ -1,9 +1,19 @@
-import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenuTypes';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import Select, { ActionMeta, GroupBase, MultiValue, SingleValue, StylesConfig } from 'react-select';
-import { ClassNamesConfig } from 'react-select/dist/declarations/src/styles';
+import Select, {
+  ActionMeta,
+  ClassNamesConfig,
+  GroupBase,
+  MultiValue,
+  SingleValue,
+  StylesConfig,
+} from 'react-select';
+import filterObject from '../../utils/filterObject';
+
+export interface SelectOption {
+  value: string | number;
+  label: string;
+}
 
 export interface SelectMenuProps<
   T extends FieldValues,
@@ -92,12 +102,14 @@ export default function SelectMenu<
   const customStyles: StylesConfig<Option, IsMulti, GroupBase<Option>> = {
     // remove css attributes from predefined styles
     // this needs to be done so the custom css classes take effect
+    menu: (styles) => filterObject(styles, ['backgroundColor', 'color']),
     control: (styles) =>
       filterObject(styles, [
         'border',
         'borderColor',
         'borderRadius',
         'boxShadow',
+        'backgroundColor',
         'color',
         '&:hover',
       ]),

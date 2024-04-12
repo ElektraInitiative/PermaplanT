@@ -1,3 +1,5 @@
+import { AxiosError } from 'axios';
+import { useTranslation } from 'react-i18next';
 import { PlantsSummaryDto } from '@/api_types/definitions';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
 import defaultImageUrl from '@/svg/plant.svg';
@@ -5,7 +7,7 @@ import { PlantNameFromPlant } from '@/utils/plant-naming';
 
 export type PlantListElementProps = {
   plant: PlantsSummaryDto;
-  onClick: () => void;
+  onClick: (plant: PlantsSummaryDto) => void;
   isHighlighted?: boolean;
   disabled?: boolean;
 };
@@ -19,6 +21,7 @@ export function PlantListItem({
   const highlightedClass = isHighlighted
     ? 'text-primary-400 stroke-primary-400 ring-4 ring-primary-300 '
     : undefined;
+  const { i18n } = useTranslation();
 
   return (
     <li
@@ -27,7 +30,7 @@ export function PlantListItem({
     >
       <button
         disabled={disabled}
-        onClick={() => onClick()}
+        onClick={() => onClick(plant)}
         className={`${highlightedClass} flex flex-1 items-center gap-2 rounded-md stroke-neutral-400 px-2 py-1 hover:bg-neutral-200 hover:stroke-primary-400 hover:text-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-300 disabled:cursor-not-allowed disabled:border-neutral-300 disabled:bg-neutral-300 disabled:text-neutral-500 dark:hover:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:bg-neutral-300-dark dark:disabled:text-neutral-500-dark`}
       >
         <PublicNextcloudImage
@@ -35,13 +38,17 @@ export function PlantListItem({
           defaultImageUrl={defaultImageUrl}
           path={`Icons/${plant?.unique_name}.png`}
           shareToken="2arzyJZYj2oNnHX"
-          retry={(failureCount, error) => error.response?.status !== 404}
+          retry={shouldImageLoadingRetry}
           showErrorMessage={false}
         />
         <div className="text-left">
-          <PlantNameFromPlant plant={plant} />
+          <PlantNameFromPlant plant={plant} language={i18n.language} />
         </div>
       </button>
     </li>
   );
+}
+
+function shouldImageLoadingRetry(_: unknown, error: AxiosError) {
+  return error.response?.status !== 404;
 }

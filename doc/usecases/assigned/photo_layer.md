@@ -6,7 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, move, remove and delete pictures in a map in the photo layer.
-- **Assignee:** Samuel
+- **Assignee:** Daniel
 
 ## Scenarios
 
@@ -29,4 +29,5 @@
 - **Non-functional Constraints:**
   - Elements automatically get removed after one year.
 - **Linked Use Cases:**
+  - Non-semantic
   - [Map Webcam](../draft/map_webcam.md)

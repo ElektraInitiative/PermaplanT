@@ -1,3 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import IconButton from '@/components/Button/IconButton';
+import SimpleButton from '@/components/Button/SimpleButton';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import ModalContainer from '@/components/Modals/ModalContainer';
+import TransparentBackground from '@/components/TransparentBackground';
+import AddIcon from '@/svg/icons/add.svg?react';
 import {
   ChatMessage,
   getChatMessages,
@@ -8,16 +18,6 @@ import {
 } from '../api/chat';
 import ConversationForm from './ConversationForm';
 import { MessageList } from './MessageList';
-import IconButton from '@/components/Button/IconButton';
-import SimpleButton from '@/components/Button/SimpleButton';
-import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import ModalContainer from '@/components/Modals/ModalContainer';
-import TransparentBackground from '@/components/TransparentBackground';
-import { ReactComponent as AddIcon } from '@/svg/icons/add.svg';
-import { useQuery } from '@tanstack/react-query';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 
 /**
  * Prototypical chat component implementation

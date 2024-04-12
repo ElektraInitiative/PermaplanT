@@ -2,7 +2,7 @@
 
 ## Libraries
 
-PermaplanT uses the [Jest](https://jestjs.io) testing framework.
+PermaplanT uses the [Vitest](https://vitest.dev/) testing framework.
 
 [React Test Renderer](https://legacy.reactjs.org/docs/test-renderer.html), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and [User Event](https://testing-library.com/docs/user-event/intro) are available as companion libraries.
 
@@ -42,6 +42,10 @@ If possible, [User Event](https://testing-library.com/docs/user-event/intro) sho
 
 ## Logic Tests
 
-The remaining tests are used to test our frontends endpoints, helper functions and in general code that is not tied to the DOM.
+The remaining tests are used to test our helper functions and in general code that is not tied to the DOM.
 
-[Jest](https://jestjs.io) provides plenty of APIs that can be used to mock functions and backend routes for this purpose.
+[Vitest](https://vitest.dev/) provides plenty of APIs that can be used to mock functions for this purpose.
+
+Mocking API requests should be done with [MSW](https://mswjs.io/docs/).
+There is an example of this in `src/__test_utils__/msw_handlers/plants.ts`.
+The gist is, MSW intercepts all requests, for which a handler is defined returns the handler's response instead of the backend's.

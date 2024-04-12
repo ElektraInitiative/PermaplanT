@@ -1,29 +1,28 @@
-import { getAuthInfo } from './features/auth';
-import { errorToastGrouped } from '@/features/toasts/groupedToast';
 import { QueryCache, QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactNode } from 'react';
 import { AuthProvider } from 'react-oidc-context';
 import { BrowserRouter } from 'react-router-dom';
-
-declare module '@tanstack/query-core' {
-  interface QueryMeta {
-    autoClose?: false | number;
-    errorMessage?: string;
-  }
-}
+import { onError } from '@/config/react_query';
+import { queryOffline } from './config';
+import { getAuthInfo } from './features/auth';
 
 interface ProviderProps {
   children: ReactNode;
 }
 
 const queryClient = new QueryClient({
-  queryCache: new QueryCache({
-    onError: (error, query) => {
-      if (query.meta?.errorMessage && typeof query.meta.errorMessage === 'string') {
-        errorToastGrouped(query.meta.errorMessage, { autoClose: query.meta.autoClose });
-      }
+  // even when no internet connection is available, send stuff
+  defaultOptions: {
+    queries: {
+      networkMode: queryOffline ? 'always' : undefined,
     },
+    mutations: {
+      networkMode: queryOffline ? 'always' : undefined,
+    },
+  },
+  queryCache: new QueryCache({
+    onError: onError,
   }),
 });
 

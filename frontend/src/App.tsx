@@ -1,11 +1,11 @@
-import NavContainer from './components/Layout/NavContainer';
-import { useSafeAuth } from './hooks/useSafeAuth';
-import Pages from './routes/Pages';
-import './styles/guidedTour.css';
-import { errorToastGrouped, infoToastGrouped } from '@/features/toasts/groupedToast';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
+import NavContainer from '@/components/Layout/NavContainer';
+import { errorToastGrouped, infoToastGrouped } from '@/features/toasts/groupedToast';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
+import Pages from './routes/Pages';
+import './styles/guidedTour.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'shepherd.js/dist/css/shepherd.css';
 
@@ -48,7 +48,22 @@ const useAuthEffect = () => {
   }, [isAuth, t, preferredUsername]);
 };
 
+const handleGlobalKeyDown = (event: KeyboardEvent): void => {
+  // Prevent the default behavior of Ctrl+A to select all text
+  if (event.ctrlKey && event.key === 'a') {
+    event.preventDefault();
+  }
+};
+
+const useGlobalKeyHandlers = () => {
+  document.addEventListener('keydown', handleGlobalKeyDown);
+  return () => {
+    document.removeEventListener('keydown', handleGlobalKeyDown);
+  };
+};
+
 function App() {
+  useGlobalKeyHandlers();
   useInitDarkMode();
   useAuthEffect();
   return (

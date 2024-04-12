@@ -1,11 +1,11 @@
-import { UploadFile } from './UploadFile';
-import SimpleFormInput from '@/components/Form/SimpleFormInput';
-import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
-import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileStat, WebDAVClient } from 'webdav';
+import SimpleFormInput from '@/components/Form/SimpleFormInput';
+import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
+import { UploadFile } from './UploadFile';
 
 type FileSelectorProps = {
   /** path to the directory starting from the users root */

@@ -71,6 +71,7 @@ pub struct TestInsertablePlant {
     pub id: i32,
     pub unique_name: String,
     pub common_name_en: Option<Vec<Option<String>>>,
+    pub common_name_de: Option<Vec<Option<String>>>,
 }
 
 impl Default for TestInsertablePlant {
@@ -79,6 +80,7 @@ impl Default for TestInsertablePlant {
             id: -1,
             unique_name: "Test Plant 1".to_owned(),
             common_name_en: Some(vec![Some("Testplant".to_owned())]),
+            common_name_de: Some(vec![Some("Testpflanze".to_owned())]),
         }
     }
 }
@@ -91,11 +93,9 @@ pub struct TestInsertablePlanting {
     pub plant_id: i32,
     pub x: i32,
     pub y: i32,
-    pub width: i32,
-    pub height: i32,
+    pub size_x: i32,
+    pub size_y: i32,
     pub rotation: f32,
-    pub scale_x: f32,
-    pub scale_y: f32,
     pub add_date: Option<NaiveDate>,
     pub remove_date: Option<NaiveDate>,
 }
@@ -108,11 +108,9 @@ impl Default for TestInsertablePlanting {
             plant_id: -1,
             x: 0,
             y: 0,
-            width: 0,
-            height: 0,
+            size_x: 0,
+            size_y: 0,
             rotation: 0.0,
-            scale_x: 0.0,
-            scale_y: 0.0,
             add_date: None,
             remove_date: None,
         }

@@ -1,25 +1,25 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import Konva from 'konva';
+import { KonvaEventObject } from 'konva/lib/Node';
+import React, { useEffect, useRef, useState } from 'react';
+import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { useDimensions } from '@/hooks/useDimensions';
+import { colors } from '@/utils/colors';
 import { useSelectedLayerVisibility } from '../hooks/useSelectedLayerVisibility';
 import useMapStore from '../store/MapStore';
-import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
-import { MapLabel } from '../utils/MapLabel';
+import { useTransformerStore } from '../store/transformer/TransformerStore';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
+  SELECTION_RECTANGLE_NAME,
   hideSelectionRectangle,
   initializeSelectionRectangle,
-  resetSelection,
-  resetSelectionRectangleSize,
   selectIntersectingShapes,
   updateSelectionRectangle,
 } from '../utils/ShapesSelection';
 import { handleScroll, handleZoom } from '../utils/StageTransform';
 import { setTooltipPositionToMouseCursor } from '../utils/Tooltip';
 import { isPlacementModeActive } from '../utils/planting-utils';
-import { useDimensions } from '@/hooks/useDimensions';
-import { AnimatePresence, motion } from 'framer-motion';
-import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { useEffect, useRef, useState } from 'react';
-import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { CursorTooltip } from './CursorTooltip';
 
 export const TEST_IDS = Object.freeze({
   CANVAS: 'base-stage__canvas',
@@ -67,23 +67,13 @@ export const BaseStage = ({
   });
 
   // Represents the state of the current selection rectangle
-  const [selectionRectAttrs, setSelectionRectAttrs] = useState<SelectionRectAttrs>({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-    isVisible: false,
-    boundingBox: {
-      x1: 0,
-      y1: 0,
-      x2: 0,
-      y2: 0,
-    },
-  });
+  const selectionRectAttrs = useMapStore((store) => store.selectionRectAttributes);
+  const setSelectionRectAttrs = useMapStore((store) => store.updateSelectionRect);
+  const transformerActions = useTransformerStore((store) => store.actions);
 
   const transformerRef = useRef<Konva.Transformer>(null);
   useEffect(() => {
-    useMapStore.setState({ transformer: transformerRef });
+    useTransformerStore.getState().actions.initialize(transformerRef);
   }, [transformerRef]);
 
   // https://konvajs.org/docs/react/Access_Konva_Nodes.html
@@ -102,20 +92,17 @@ export const BaseStage = ({
 
   const { isSelectedLayerVisible } = useSelectedLayerVisibility();
 
-  const updateMapBounds = useMapStore((store) => store.updateMapBounds);
-  const mapBounds = useMapStore((store) => store.untrackedState.editorBounds);
+  const updateViewRect = useMapStore((store) => store.updateViewRect);
+  const viewRect = useMapStore((store) => store.untrackedState.editorViewRect);
   useEffect(() => {
-    if (mapBounds.width !== 0 || mapBounds.height !== 0) return;
-    updateMapBounds({
+    if (viewRect.width !== 0 || viewRect.height !== 0) return;
+    updateViewRect({
       x: 0,
       y: 0,
       width: Math.floor(window.innerWidth / stage.scale),
       height: Math.floor(window.innerHeight / stage.scale),
     });
   });
-
-  const tooltipContent = useMapStore((store) => store.untrackedState.tooltipContent);
-  const tooltipPosition = useMapStore((state) => state.untrackedState.tooltipPosition);
 
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
@@ -143,7 +130,7 @@ export const BaseStage = ({
 
     if (stageRef.current === null) return;
 
-    updateMapBounds({
+    updateViewRect({
       x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
       y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
       width: Math.floor(window.innerWidth / stage.scale),
@@ -169,7 +156,7 @@ export const BaseStage = ({
     listeners?.stageDragEndListeners.forEach((listener) => listener(e));
     if (stageRef.current === null) return;
 
-    updateMapBounds({
+    updateViewRect({
       x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
       y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
       width: Math.floor(window.innerWidth / stage.scale),
@@ -202,7 +189,6 @@ export const BaseStage = ({
       if (e.target instanceof Konva.Shape) {
         return false;
       }
-
       return isStageSelectable && isSelectedLayerVisible;
     };
 
@@ -229,11 +215,9 @@ export const BaseStage = ({
   // Event listener responsible for stopping a possible stage-dragging mode
   // and for hiding the selection rectangle
   const onStageMouseUp = (e: KonvaEventObject<MouseEvent>) => {
-    listeners?.stageMouseUpListeners.forEach((listener) => listener(e));
     renderDefaultMouseCursor();
 
     stopStageDraggingMode(e);
-    resetSelectionRectangleSize(stageRef);
 
     if (selectable) {
       hideSelectionRectangle(setSelectionRectAttrs, selectionRectAttrs);
@@ -245,10 +229,8 @@ export const BaseStage = ({
     listeners?.stageClickListeners.forEach((listener) => listener(e));
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 
-    const nodeSize = transformerRef.current?.getNodes().length ?? 0;
-
-    if (nodeSize > 0 && isEventTriggeredFromStage(e)) {
-      resetSelection(transformerRef);
+    if (transformerActions.hasSelection() && isEventTriggeredFromStage(e)) {
+      transformerActions.clearSelection();
     }
   };
 
@@ -279,26 +261,18 @@ export const BaseStage = ({
       >
         {children}
         <Layer>
-          {/* Tooltip */}
-          <MapLabel
-            content={tooltipContent}
-            visible={tooltipContent !== ''}
-            scaleX={2 / stage.scale}
-            scaleY={2 / stage.scale}
-            x={tooltipPosition.x}
-            y={tooltipPosition.y}
-          />
+          <CursorTooltip />
           <Rect
             x={selectionRectAttrs.x}
             y={selectionRectAttrs.y}
             width={selectionRectAttrs.width}
             height={selectionRectAttrs.height}
-            fill={'blue'}
+            fill={colors.secondary[500]}
             visible={selectionRectAttrs.isVisible}
             opacity={0.2}
-            name="selectionRect"
+            name={SELECTION_RECTANGLE_NAME}
           />
-          <Transformer
+          <Transformer // DO NOT CONDITIONALLY RENDER THIS COMPONENT
             listening={!isReadOnly}
             // We need to manually disable selection when we are transforming
             onTransformStart={() => {
@@ -316,12 +290,11 @@ export const BaseStage = ({
             ref={transformerRef}
             name="transformer"
             anchorSize={8}
-            enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
           />
         </Layer>
       </Stage>
       {/** Panel to display something from different layers */}
-      <div className="absolute bottom-24 left-1/2 z-10 -translate-x-1/2">
+      <div className="absolute bottom-36 left-1/2 z-10 -translate-x-1/2">
         <AnimatePresence mode="wait">
           {bottomStatusPanelContent && (
             <BottomStatusPanel>{bottomStatusPanelContent}</BottomStatusPanel>
@@ -362,14 +335,12 @@ function preventStageDragging(konvaEvent: KonvaEventObject<DragEvent>): void {
 }
 
 function preventDraggingOfNonSelectedShapes(konvaEvent: KonvaEventObject<DragEvent>): void {
-  if (!transformerContainsNode(konvaEvent.target)) {
+  if (
+    !konvaEvent.target.attrs.isControlElement &&
+    !useTransformerStore.getState().actions.isNodeSelected(konvaEvent.target)
+  ) {
     konvaEvent.target.stopDrag();
   }
-}
-
-function transformerContainsNode(konvaNode: Konva.Stage | Konva.Shape): boolean {
-  const currentTransformerNodes = useMapStore.getState().transformer.current?.nodes() ?? [];
-  return currentTransformerNodes.includes(konvaNode);
 }
 
 function initializeStageDraggingMode(

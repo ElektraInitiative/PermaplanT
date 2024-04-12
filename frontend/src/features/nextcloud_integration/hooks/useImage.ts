@@ -1,9 +1,9 @@
-import { getImage } from '../api/getImages';
-import { useImageFromBlob } from './useImageFromBlob';
-import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
-import errorImageSource from '@/svg/icons/photo-off.svg';
 import { useQuery } from '@tanstack/react-query';
 import { WebDAVClient } from 'webdav';
+import { useNextcloudWebDavClient } from '@/config/nextcloud_client';
+import errorImageSource from '@/svg/icons/photo-off.svg';
+import { getImage } from '../api/getImages';
+import { useImageFromBlob } from './useImageFromBlob';
 
 type UseImageOptions = {
   /** relative path starting at the user's Nextcloud root directory */

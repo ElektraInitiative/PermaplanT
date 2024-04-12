@@ -1,41 +1,46 @@
-import { PlantingDto } from '@/api_types/definitions';
-import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/useFindPlantById';
-import { MapLabel } from '@/features/map_planning/utils/MapLabel';
-import { commonName } from '@/utils/plant-naming';
 import Konva from 'konva';
-import { useEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Label } from 'react-konva';
+import { PlantingDto } from '@/api_types/definitions';
+import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
+import { MapLabel } from '@/features/map_planning/utils/MapLabel';
+import { getCommonOrUniqueName } from '@/utils/plant-naming';
 
 export interface PlantLabelProps {
   /** Contains plant name that will be displayed on the label. */
   planting: PlantingDto;
 }
 
-export const PlantLabel = ({ planting }: PlantLabelProps) => {
+export const PlantLabel = React.memo(function PlantLabel({ planting }: PlantLabelProps) {
   const labelRef = useRef<Konva.Label>(null);
-  const [labelWidth, setLabelWidth] = useState<number>(0);
+  const [labelWidth, setLabelWidth] = useState(0);
+  const { data: plant } = useFindPlantById({ plantId: planting.plantId });
+  const { i18n } = useTranslation();
 
-  useEffect(() => {
-    if (labelRef.current === null) return;
+  useLayoutEffect(() => {
+    if (labelRef.current !== null) {
+      setLabelWidth(labelRef.current.width());
+    }
+  }, [plant]);
 
-    setLabelWidth(labelRef.current.width());
-  }, [labelRef]);
-
-  const { plant } = useFindPlantById(planting.plantId);
   if (plant === undefined) {
     return <Label></Label>;
   }
 
-  const labelOffsetX = labelWidth / 2;
-  const labelOffsetY = (planting.height / 2) * planting.scaleY * 1.1;
+  const labelOffsetXArea = planting.sizeX / 2 - labelWidth / 2;
+  const labelOffsetYArea = planting.sizeY + 10;
+
+  const labelOffsetX = -labelWidth / 2;
+  const labelOffsetY = planting.sizeY / 2 + 10;
 
   return (
     <MapLabel
       listening={false}
       ref={labelRef}
-      x={planting.x - labelOffsetX}
-      y={planting.y + labelOffsetY}
-      content={commonName(plant)}
+      x={planting.x + (planting.isArea ? labelOffsetXArea : labelOffsetX)}
+      y={planting.y + (planting.isArea ? labelOffsetYArea : labelOffsetY)}
+      content={getCommonOrUniqueName(plant, i18n.language)}
     />
   );
-};
+});
