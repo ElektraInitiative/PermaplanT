@@ -91,7 +91,7 @@ stage('Build in Docker') {
 
                     stash includes: 'backend/target/release/backend', name: 'backend'
 
-                    sh 'cargo doc --document-private-items'
+                    sh 'cd backend && cargo doc --document-private-items'
                     stash includes: 'backend/target/doc/**/*', name: 'cargodoc'
                 }
             }
